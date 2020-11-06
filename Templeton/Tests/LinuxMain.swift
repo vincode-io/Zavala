@@ -1,7 +1,7 @@
 import XCTest
 
-import CentralParkTests
+import TempletonTests
 
 var tests = [XCTestCaseEntry]()
-tests += CentralParkTests.allTests()
+tests += TempletonTests.allTests()
 XCTMain(tests)

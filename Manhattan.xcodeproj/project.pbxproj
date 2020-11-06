@@ -57,7 +57,7 @@
 		51C4C3AF2555E964004E0206 /* Manhattan_iOSapp_target.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Manhattan_iOSapp_target.xcconfig; sourceTree = "<group>"; };
 		51C4C3B02555E964004E0206 /* Manhattan_project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Manhattan_project.xcconfig; sourceTree = "<group>"; };
 		51C4C3CD2555F07A004E0206 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
-		51C4C3D52555F45F004E0206 /* CentralPark */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CentralPark; sourceTree = "<group>"; };
+		51C4C3E025560E09004E0206 /* Templeton */ = {isa = PBXFileReference; lastKnownFileType = text; path = Templeton; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,7 +95,7 @@
 				51C4C3CC2555F07A004E0206 /* Frameworks */,
 				5181A9352554D92000C153E8 /* Products */,
 				51C4C3AB2555E8EA004E0206 /* xcconfig */,
-				51C4C3D52555F45F004E0206 /* CentralPark */,
+				51C4C3E025560E09004E0206 /* Templeton */,
 			);
 			sourceTree = "<group>";
 		};

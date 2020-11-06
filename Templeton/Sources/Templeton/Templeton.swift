@@ -1,3 +1,3 @@
-struct CentralPark {
+struct Templeton {
     var text = "Hello, World!"
 }

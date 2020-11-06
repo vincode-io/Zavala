@@ -1,12 +1,12 @@
 import XCTest
-@testable import CentralPark
+@testable import Templeton
 
-final class CentralParkTests: XCTestCase {
+final class TempletonTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(CentralPark().text, "Hello, World!")
+        XCTAssertEqual(Templeton().text, "Hello, World!")
     }
 
     static var allTests = [
