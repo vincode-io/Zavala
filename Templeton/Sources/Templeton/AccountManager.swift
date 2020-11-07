@@ -10,10 +10,11 @@ import Foundation
 public final class AccountManager {
 	public static var shared: AccountManager!
 
-	private var accountsDictionary = [AccountType: Account]()
 	private var accountsFolder: URL
 	private var accountFiles = [AccountType: AccountFile]()
 	
+	var accountsDictionary = [AccountType: Account]()
+
 	public var accounts: [Account] {
 		return Array(accountsDictionary.values)
 	}
@@ -23,7 +24,6 @@ public final class AccountManager {
 	}
 
 	public var activeAccounts: [Account] {
-		assert(Thread.isMainThread)
 		return Array(accountsDictionary.values.filter { $0.isActive })
 	}
 

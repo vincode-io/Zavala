@@ -74,13 +74,13 @@ private extension AccountFile {
 		}
 
 		BatchUpdate.shared.perform {
-			AccountManager.shared.accounts[accountType] = account
+			AccountManager.shared.accountsDictionary[accountType] = account
 		}
 	}
 	
 	func saveCallback() {
 		
-		let account = AccountManager.shared.accounts[accountType]
+		guard let account = AccountManager.shared.accountsDictionary[accountType] else { return }
 		let encoder = JSONEncoder()
 		let accountData: Data
 		do {
