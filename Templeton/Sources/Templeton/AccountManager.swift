@@ -10,10 +10,26 @@ import Foundation
 public final class AccountManager {
 	public static var shared: AccountManager!
 
-	var accounts = [AccountType: Account]()
-
+	private var accountsDictionary = [AccountType: Account]()
 	private var accountsFolder: URL
 	private var accountFiles = [AccountType: AccountFile]()
+	
+	public var accounts: [Account] {
+		return Array(accountsDictionary.values)
+	}
+
+	public var sortedAccounts: [Account] {
+		return sort(accounts)
+	}
+
+	public var activeAccounts: [Account] {
+		assert(Thread.isMainThread)
+		return Array(accountsDictionary.values.filter { $0.isActive })
+	}
+
+	public var sortedActiveAccounts: [Account] {
+		return sort(activeAccounts)
+	}
 	
 	public init(accountsFolderPath: String) {
 		self.accountsFolder = URL(fileURLWithPath: accountsFolderPath, isDirectory: true)
@@ -35,7 +51,7 @@ public final class AccountManager {
 			}
 			
 			let localAccount = Account(accountType: .local)
-			accounts[.local] = localAccount
+			accountsDictionary[.local] = localAccount
 			initializeFile(file: localAccountFile, accountType: .local)
 			localAccount.createFolder("Outlines") { _ in }
 		}
@@ -68,6 +84,18 @@ private extension AccountManager {
 		let managedFile = AccountFile(fileURL: file, accountType: accountType)
 		managedFile.load()
 		accountFiles[accountType] = managedFile
+	}
+
+	func sort(_ accounts: [Account]) -> [Account] {
+		return accounts.sorted { (account1, account2) -> Bool in
+			if account1.type == .local {
+				return true
+			}
+			if account2.type == .local {
+				return false
+			}
+			return (account1.name as NSString).localizedStandardCompare(account2.name) == .orderedAscending
+		}
 	}
 	
 }

@@ -17,6 +17,10 @@ public final class Account: Identifiable, Codable {
 		type.rawValue
 	}
 	
+	public var name: String {
+		return type.name
+	}
+	
 	public var type: AccountType
 	public var isActive: Bool
 	public var folders: [Folder]?
