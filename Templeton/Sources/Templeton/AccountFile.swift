@@ -1,0 +1,107 @@
+//
+//  AccountFile.swift
+//  
+//
+//  Created by Maurice Parker on 11/6/20.
+//
+
+import Foundation
+import os.log
+import RSCore
+
+final class AccountFile {
+	
+	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "opmlFile")
+
+	private let fileURL: URL
+	private let accountType: AccountType
+	private lazy var managedFile = ManagedResourceFile(fileURL: fileURL, load: loadCallback, save: saveCallback)
+	
+	init(filename: String, accountType: AccountType) {
+		self.fileURL = URL(fileURLWithPath: filename)
+		self.accountType = accountType
+	}
+	
+	func markAsDirty() {
+		managedFile.markAsDirty()
+	}
+	
+	func load() {
+		managedFile.load()
+	}
+	
+	func save() {
+		managedFile.saveIfNecessary()
+	}
+	
+}
+
+private extension AccountFile {
+
+	func loadCallback() {
+		var fileData: Data? = nil
+		let errorPointer: NSErrorPointer = nil
+		let fileCoordinator = NSFileCoordinator(filePresenter: managedFile)
+		
+		fileCoordinator.coordinate(readingItemAt: fileURL, options: [], error: errorPointer, byAccessor: { readURL in
+			do {
+				fileData = try Data(contentsOf: readURL)
+			} catch {
+				// Commented out because it’s not an error on first run.
+				// TODO: make it so we know if it’s first run or not.
+				//NSApplication.shared.presentError(error)
+				os_log(.error, log: log, "Account read from disk failed: %@.", error.localizedDescription)
+			}
+		})
+		
+		if let error = errorPointer?.pointee {
+			os_log(.error, log: log, "Account read from disk coordination failed: %@.", error.localizedDescription)
+		}
+
+		guard let accountData = fileData else {
+			return
+		}
+
+		let decoder = JSONDecoder()
+		let account: Account
+		do {
+			account = try decoder.decode(Account.self, from: accountData)
+		} catch {
+			os_log(.error, log: log, "Account read deserialization failed: %@.", error.localizedDescription)
+			return
+		}
+
+		BatchUpdate.shared.perform {
+			AccountManager.shared.accounts[accountType] = account
+		}
+	}
+	
+	func saveCallback() {
+		
+		let account = AccountManager.shared.accounts[accountType]
+		let encoder = JSONEncoder()
+		let accountData: Data
+		do {
+			accountData = try encoder.encode(account)
+		} catch {
+			os_log(.error, log: log, "Account read deserialization failed: %@.", error.localizedDescription)
+			return
+		}
+
+		let errorPointer: NSErrorPointer = nil
+		let fileCoordinator = NSFileCoordinator(filePresenter: managedFile)
+		
+		fileCoordinator.coordinate(writingItemAt: fileURL, options: [], error: errorPointer, byAccessor: { writeURL in
+			do {
+				try accountData.write(to: writeURL)
+			} catch let error as NSError {
+				os_log(.error, log: log, "OPML save to disk failed: %@.", error.localizedDescription)
+			}
+		})
+		
+		if let error = errorPointer?.pointee {
+			os_log(.error, log: log, "OPML save to disk coordination failed: %@.", error.localizedDescription)
+		}
+	}
+	
+}

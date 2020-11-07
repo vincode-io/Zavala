@@ -8,7 +8,8 @@
 import Foundation
 
 public final class AccountManager {
-	var accounts: [Account]?
-	
+	public static var shared: AccountManager!
+
+	var accounts = [AccountType: Account]()
 	
 }

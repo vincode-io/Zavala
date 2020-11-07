@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,8 @@
 		5181A94F2554D92100C153E8 /* ManhattanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A94E2554D92100C153E8 /* ManhattanTests.swift */; };
 		5181A95A2554D92100C153E8 /* ManhattanUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9592554D92100C153E8 /* ManhattanUITests.swift */; };
 		51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51C4C3CD2555F07A004E0206 /* CloudKit.framework */; };
+		51C4C3EF25565281004E0206 /* RSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3EE25565281004E0206 /* RSCore */; };
+		51C4C3F025565281004E0206 /* RSCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3EE25565281004E0206 /* RSCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +36,20 @@
 			remoteInfo = Manhattan;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		51C4C3F125565282004E0206 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				51C4C3F025565281004E0206 /* RSCore in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5181A9342554D92000C153E8 /* Manhattan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Manhattan.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51C4C3EF25565281004E0206 /* RSCore in Frameworks */,
 				51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -173,12 +190,16 @@
 				5181A9312554D92000C153E8 /* Frameworks */,
 				5181A9322554D92000C153E8 /* Resources */,
 				51C4C3C22555EB4D004E0206 /* Run VerifyNoBuildSettings */,
+				51C4C3F125565282004E0206 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Manhattan;
+			packageProductDependencies = (
+				51C4C3EE25565281004E0206 /* RSCore */,
+			);
 			productName = Manhattan;
 			productReference = 5181A9342554D92000C153E8 /* Manhattan.app */;
 			productType = "com.apple.product-type.application";
@@ -250,6 +271,9 @@
 				Base,
 			);
 			mainGroup = 5181A92B2554D92000C153E8;
+			packageReferences = (
+				51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */,
+			);
 			productRefGroup = 5181A9352554D92000C153E8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -463,6 +487,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Ranchero-Software/RSCore.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = "1.0.0-beta3";
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		51C4C3EE25565281004E0206 /* RSCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */;
+			productName = RSCore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5181A92C2554D92000C153E8 /* Project object */;
 }

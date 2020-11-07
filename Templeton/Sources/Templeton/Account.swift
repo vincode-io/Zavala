@@ -9,7 +9,7 @@ import Foundation
 
 public final class Account: Identifiable, Codable {
 
-	public var type: AccountType
+	weak var manager: AccountManager?
 	
 	public var id: String {
 		if type == .local {
@@ -19,7 +19,8 @@ public final class Account: Identifiable, Codable {
 		}
 	}
 	
-	var folders: [Folder]?
+	public var type: AccountType
+	public var folders: [Folder]?
 	
 	enum CodingKeys: String, CodingKey {
 		case type = "type"
