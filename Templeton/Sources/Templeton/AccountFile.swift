@@ -15,13 +15,15 @@ final class AccountFile {
 	
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "accountFile")
 
+	private weak var accountManager: AccountManager?
 	private let fileURL: URL
 	private let accountType: AccountType
 	private lazy var managedFile = ManagedResourceFile(fileURL: fileURL, load: loadCallback, save: saveCallback)
 	
-	init(fileURL: URL, accountType: AccountType) {
+	init(fileURL: URL, accountType: AccountType, accountManager: AccountManager) {
 		self.fileURL = fileURL
 		self.accountType = accountType
+		self.accountManager = accountManager
 	}
 	
 	func markAsDirty() {
@@ -74,7 +76,7 @@ private extension AccountFile {
 		}
 
 		BatchUpdate.shared.perform {
-			AccountManager.shared.accountsDictionary[accountType] = account
+			accountManager?.accountsDictionary[accountType] = account
 		}
 	}
 	

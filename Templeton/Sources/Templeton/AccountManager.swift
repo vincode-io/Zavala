@@ -81,7 +81,7 @@ private extension AccountManager {
 	// MARK: Helpers
 	
 	func initializeFile(file: URL, accountType: AccountType) {
-		let managedFile = AccountFile(fileURL: file, accountType: accountType)
+		let managedFile = AccountFile(fileURL: file, accountType: accountType, accountManager: self)
 		managedFile.load()
 		accountFiles[accountType] = managedFile
 	}
