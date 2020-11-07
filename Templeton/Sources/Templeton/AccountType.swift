@@ -28,5 +28,14 @@ public enum AccountType: Int, Codable {
 			return NSLocalizedString("iCloud", comment: "iCloud")
 		}
 	}
+
+	var folderNmae: String {
+		switch self {
+		case .local:
+			return "local"
+		case .cloudKit:
+			return "cloudKit"
+		}
+	}
 	
 }

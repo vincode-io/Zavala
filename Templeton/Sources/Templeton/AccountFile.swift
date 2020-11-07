@@ -11,14 +11,16 @@ import RSCore
 
 final class AccountFile {
 	
+	public static let filenameComponent = "account.json"
+	
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "opmlFile")
 
 	private let fileURL: URL
 	private let accountType: AccountType
 	private lazy var managedFile = ManagedResourceFile(fileURL: fileURL, load: loadCallback, save: saveCallback)
 	
-	init(filename: String, accountType: AccountType) {
-		self.fileURL = URL(fileURLWithPath: filename)
+	init(fileURL: URL, accountType: AccountType) {
+		self.fileURL = fileURL
 		self.accountType = accountType
 	}
 	
