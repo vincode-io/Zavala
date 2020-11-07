@@ -52,9 +52,18 @@ public final class Account: Identifiable, Codable {
 	}
 	
 	public func createFolder(_ name: String, completion: @escaping (Result<Folder, Error>) -> Void) {
-		let folder = Folder(name: name)
-		folders?.append(folder)
-		accountDidChange()
+		func createFolder() {
+			let folder = Folder(name: name)
+			folders?.append(folder)
+			accountDidChange()
+			completion(.success(folder))
+		}
+		
+		if type == .cloudKit {
+			createFolder()
+		} else {
+			createFolder()
+		}
 	}
 	
 	public func removeFolder(_ folder: Folder, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -62,18 +71,46 @@ public final class Account: Identifiable, Codable {
 			completion(.success(()))
 			return
 		}
-		self.folders = folders.filter { $0 != folder }
-		accountDidChange()
+		
+		func removeFolder() {
+			self.folders = folders.filter { $0 != folder }
+			accountDidChange()
+			completion(.success(()))
+		}
+		
+		if type == .cloudKit {
+			removeFolder()
+		} else {
+			removeFolder()
+		}
 	}
 	
 	public func renameFolder(_ folder: Folder, to name: String, completion: @escaping (Result<Void, Error>) -> Void) {
-		folder.name = name
-		accountDidChange()
+		func renameFolder() {
+			folder.name = name
+			accountDidChange()
+			completion(.success(()))
+		}
+		
+		if type == .cloudKit {
+			renameFolder()
+		} else {
+			renameFolder()
+		}
 	}
 
 	public func restoreFolder(_ folder: Folder, completion: @escaping (Result<Void, Error>) -> Void) {
-		folders?.append(folder)
-		accountDidChange()
+		func restoreFolder() {
+			folders?.append(folder)
+			accountDidChange()
+			completion(.success(()))
+		}
+
+		if type == .cloudKit {
+			restoreFolder()
+		} else {
+			restoreFolder()
+		}
 	}
 	
 }
