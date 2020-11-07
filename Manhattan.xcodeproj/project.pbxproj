@@ -16,9 +16,9 @@
 		5181A94F2554D92100C153E8 /* ManhattanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A94E2554D92100C153E8 /* ManhattanTests.swift */; };
 		5181A95A2554D92100C153E8 /* ManhattanUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9592554D92100C153E8 /* ManhattanUITests.swift */; };
 		51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51C4C3CD2555F07A004E0206 /* CloudKit.framework */; };
-		51C4C3EF25565281004E0206 /* RSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3EE25565281004E0206 /* RSCore */; };
-		51C4C3F025565281004E0206 /* RSCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3EE25565281004E0206 /* RSCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		51C4C3F92557470B004E0206 /* Templeton in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3F82557470B004E0206 /* Templeton */; };
+		51C4C40125576631004E0206 /* RSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C40025576631004E0206 /* RSCore */; };
+		51C4C40225576632004E0206 /* RSCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C40025576631004E0206 /* RSCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +45,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				51C4C3F025565281004E0206 /* RSCore in Embed Frameworks */,
+				51C4C40225576632004E0206 /* RSCore in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -83,7 +83,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51C4C3F92557470B004E0206 /* Templeton in Frameworks */,
-				51C4C3EF25565281004E0206 /* RSCore in Frameworks */,
+				51C4C40125576631004E0206 /* RSCore in Frameworks */,
 				51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -200,8 +200,8 @@
 			);
 			name = Manhattan;
 			packageProductDependencies = (
-				51C4C3EE25565281004E0206 /* RSCore */,
 				51C4C3F82557470B004E0206 /* Templeton */,
+				51C4C40025576631004E0206 /* RSCore */,
 			);
 			productName = Manhattan;
 			productReference = 5181A9342554D92000C153E8 /* Manhattan.app */;
@@ -503,14 +503,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		51C4C3EE25565281004E0206 /* RSCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */;
-			productName = RSCore;
-		};
 		51C4C3F82557470B004E0206 /* Templeton */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Templeton;
+		};
+		51C4C40025576631004E0206 /* RSCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */;
+			productName = RSCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -14,7 +14,9 @@ let package = Package(
     targets: [
         .target(
             name: "Templeton",
-            dependencies: []),
+            dependencies: [
+				"RSCore",
+			]),
         .testTarget(
             name: "TempletonTests",
             dependencies: ["Templeton"]),
