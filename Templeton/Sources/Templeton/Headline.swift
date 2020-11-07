@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class Headline: Identifiable, Codable {
+public final class Headline: Identifiable, Equatable, Codable {
 	
 	public var id: String?
 	public var text: Data?
@@ -19,4 +19,7 @@ public final class Headline: Identifiable, Codable {
 		case headlines = "headlines"
 	}
 	
+	public static func == (lhs: Headline, rhs: Headline) -> Bool {
+		return lhs.id == rhs.id
+	}
 }

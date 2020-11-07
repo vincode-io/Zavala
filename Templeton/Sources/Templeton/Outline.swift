@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class Outline: Identifiable, Codable {
+public final class Outline: Identifiable, Equatable, Codable {
 	
 	public var id: String?
 	public var name: String?
@@ -19,6 +19,10 @@ public final class Outline: Identifiable, Codable {
 		case name = "name"
 		case created = "created"
 		case updated = "updated"
+	}
+	
+	public static func == (lhs: Outline, rhs: Outline) -> Bool {
+		return lhs.id == rhs.id
 	}
 	
 }

@@ -18,6 +18,8 @@ public final class AccountManager {
 	public init(accountsFolderPath: String) {
 		self.accountsFolder = URL(fileURLWithPath: accountsFolderPath, isDirectory: true)
 
+		NotificationCenter.default.addObserver(self, selector: #selector(accountDidChange(_:)), name: .AccountDidChange, object: nil)
+		
 		// The local account must always exist, even if it's empty.
 		let localAccountFolder = accountsFolder.appendingPathComponent(AccountType.local.folderNmae)
 		let localAccountFile = localAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
@@ -27,14 +29,15 @@ public final class AccountManager {
 		} else {
 			do {
 				try FileManager.default.createDirectory(atPath: localAccountFolder.path, withIntermediateDirectories: true, attributes: nil)
-			}
-			catch {
-				assertionFailure("Could not create folder for OnMyMac account.")
+			} catch {
+				assertionFailure("Could not create folder for local account.")
 				abort()
 			}
 			
-			accounts[.local] = Account(accountType: .local)
+			let localAccount = Account(accountType: .local)
+			accounts[.local] = localAccount
 			initializeFile(file: localAccountFile, accountType: .local)
+			localAccount.createFolder("Outlines") { _ in }
 		}
 		
 		let cloudKitAccountFolder = accountsFolder.appendingPathComponent(AccountType.cloudKit.folderNmae)
@@ -47,7 +50,19 @@ public final class AccountManager {
 
 }
 
+// MARK: Private
+
 private extension AccountManager {
+	
+	// MARK: Notifications
+	
+	@objc func accountDidChange(_ note: Notification) {
+		let account = note.object as! Account
+		let accountFile = accountFiles[account.type]!
+		accountFile.markAsDirty()
+	}
+	
+	// MARK: Helpers
 	
 	func initializeFile(file: URL, accountType: AccountType) {
 		let managedFile = AccountFile(fileURL: file, accountType: accountType)
