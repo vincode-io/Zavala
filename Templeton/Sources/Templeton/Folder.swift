@@ -11,12 +11,12 @@ public final class Folder: Identifiable, Codable {
 
 	public var id: String?
 	public var name: String?
-	public var outlineIDs: [Outline.ID]?
+	public var outlines: [Outline]?
 	
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case name = "name"
-		case outlineIDs = "outlineIDs"
+		case outlines = "outlines"
 	}
 	
 }

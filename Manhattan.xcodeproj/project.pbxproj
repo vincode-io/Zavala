@@ -18,6 +18,7 @@
 		51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51C4C3CD2555F07A004E0206 /* CloudKit.framework */; };
 		51C4C3EF25565281004E0206 /* RSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3EE25565281004E0206 /* RSCore */; };
 		51C4C3F025565281004E0206 /* RSCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3EE25565281004E0206 /* RSCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		51C4C3F92557470B004E0206 /* Templeton in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3F82557470B004E0206 /* Templeton */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51C4C3F92557470B004E0206 /* Templeton in Frameworks */,
 				51C4C3EF25565281004E0206 /* RSCore in Frameworks */,
 				51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */,
 			);
@@ -199,6 +201,7 @@
 			name = Manhattan;
 			packageProductDependencies = (
 				51C4C3EE25565281004E0206 /* RSCore */,
+				51C4C3F82557470B004E0206 /* Templeton */,
 			);
 			productName = Manhattan;
 			productReference = 5181A9342554D92000C153E8 /* Manhattan.app */;
@@ -504,6 +507,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */;
 			productName = RSCore;
+		};
+		51C4C3F82557470B004E0206 /* Templeton */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Templeton;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

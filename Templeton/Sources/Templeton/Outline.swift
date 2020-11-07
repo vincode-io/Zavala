@@ -10,15 +10,15 @@ import Foundation
 public final class Outline: Identifiable, Codable {
 	
 	public var id: String?
+	public var name: String?
 	public var created: Date?
 	public var updated: Date?
-	public var headlines: [Headline]?
 	
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
+		case name = "name"
 		case created = "created"
 		case updated = "updated"
-		case headlines = "headlines"
 	}
 	
 }

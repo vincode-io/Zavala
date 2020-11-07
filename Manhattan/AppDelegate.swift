@@ -6,11 +6,19 @@
 //
 
 import UIKit
+import Templeton
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+	override init() {
+		super.init()
+		
+		let documentAccountURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+		let documentAccountsFolder = documentAccountURL.appendingPathComponent("Accounts").absoluteString
+		let documentAccountsFolderPath = String(documentAccountsFolder.suffix(from: documentAccountsFolder.index(documentAccountsFolder.startIndex, offsetBy: 7)))
+		AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath)
+	}
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.

@@ -13,7 +13,7 @@ final class AccountFile {
 	
 	public static let filenameComponent = "account.json"
 	
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "opmlFile")
+	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "accountFile")
 
 	private let fileURL: URL
 	private let accountType: AccountType
@@ -97,12 +97,12 @@ private extension AccountFile {
 			do {
 				try accountData.write(to: writeURL)
 			} catch let error as NSError {
-				os_log(.error, log: log, "OPML save to disk failed: %@.", error.localizedDescription)
+				os_log(.error, log: log, "Account save to disk failed: %@.", error.localizedDescription)
 			}
 		})
 		
 		if let error = errorPointer?.pointee {
-			os_log(.error, log: log, "OPML save to disk coordination failed: %@.", error.localizedDescription)
+			os_log(.error, log: log, "Account save to disk coordination failed: %@.", error.localizedDescription)
 		}
 	}
 	
