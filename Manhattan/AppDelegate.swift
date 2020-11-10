@@ -62,6 +62,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.toggleOutlineIsFavorite(sender)
 	}
 	
+	@objc func toggleSidebar(_ sender: Any?) {
+		mainSplitViewController?.toggleSidebar(sender)
+	}
+
 	override func buildMenu(with builder: UIMenuBuilder) {
 		super.buildMenu(with: builder)
 		guard builder.system == UIMenuSystem.main else { return }
@@ -87,6 +91,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newFolderCommand])
 		builder.insertChild(newItemsMenu, atStartOfMenu: .file)
 
+		// View Menu
+		let toggleSidebarCommand = UIKeyCommand(title: NSLocalizedString("Toggle Sidebar", comment: "Toggle Sidebar"),
+											action: #selector(toggleSidebar(_:)),
+											input: "s",
+											modifierFlags: [.control, .command])
+		let toggleSidebarMenu = UIMenu(title: "", options: .displayInline, children: [toggleSidebarCommand])
+		builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)
 	}
 	
 }

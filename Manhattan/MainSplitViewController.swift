@@ -40,4 +40,11 @@ class MainSplitViewController: UISplitViewController {
 	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
 		
 	}
+	
+	@objc func toggleSidebar(_ sender: Any?) {
+		UIView.animate(withDuration: 0.25) {
+			self.preferredDisplayMode = self.displayMode == .twoBesideSecondary ? .secondaryOnly : .twoBesideSecondary
+		}
+	}
+	
 }
