@@ -9,6 +9,12 @@ import UIKit
 import Combine
 import Templeton
 
+protocol SidebarDelegate: class {
+	func sidebarSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?)
+	func sidebarInvalidatedRestorationState(_: SidebarViewController)
+}
+
+
 class SidebarViewController: UICollectionViewController {
 
 	private enum SidebarSection: Int {
@@ -25,6 +31,13 @@ class SidebarViewController: UICollectionViewController {
 		let title: String?
 		let image: UIImage?
 		
+		var entityID: EntityID? {
+			if case .outlineProvider(let entityID) = id {
+				return entityID
+			}
+			return nil
+		}
+		
 		static func header(title: String, id: ID) -> Self {
 			return SidebarItem(id: id, title: title, image: nil)
 		}
@@ -38,13 +51,12 @@ class SidebarViewController: UICollectionViewController {
 	private var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 	private var collectionsSubscriber: AnyCancellable?
 
-	private var outlineListViewController: OutlineListViewController? {
-		guard
-			let splitViewController = self.splitViewController,
-			let outlineListViewController = splitViewController.viewController(for: .supplementary)
-		else { return nil }
-		
-		return outlineListViewController as? OutlineListViewController
+	private var currentFolder: Folder? {
+		guard let indexPath = collectionView.indexPathsForSelectedItems?.first,
+			  let item = dataSource.itemIdentifier(for: indexPath),
+			  let entityID = item.entityID else { return nil }
+			  
+		return AccountManager.shared.findFolder(entityID)
 	}
 	
 	override var canBecomeFirstResponder: Bool {
@@ -88,11 +100,39 @@ class SidebarViewController: UICollectionViewController {
 
 	// MARK: Actions
 	
-	@objc func createOutline(_ sender: Any?) {
-		
+	@objc func createFolder(_ sender: Any?) {
+
 	}
 	
-	@objc func createFolder(_ sender: Any?) {
+	override func delete(_ sender: Any?) {
+		guard let folder = self.currentFolder else { return }
+		
+		let deleteTitle = NSLocalizedString("Delete", comment: "Delete")
+		let deleteAction = UIAlertAction(title: deleteTitle, style: .destructive) { (action) in
+			folder.account?.removeFolder(folder) { _ in }
+		}
+		
+		let cancelTitle = NSLocalizedString("Cancel", comment: "Cancel")
+		let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
+		
+		#if targetEnvironment(macCatalyst)
+		let preferredStyle = UIAlertController.Style.alert
+		#else
+		let preferredStyle = UIAlertController.Style.actionSheet
+		#endif
+		
+		let localizedInformativeText = NSLocalizedString("Are you sure you want to delete the “%@” folder?", comment: "Folder delete text")
+		let formattedInformativeText = NSString.localizedStringWithFormat(localizedInformativeText as NSString, folder.name ?? "") as String
+
+		let alert = UIAlertController(title: formattedInformativeText, message: nil, preferredStyle: preferredStyle)
+		alert.addAction(cancelAction)
+		alert.addAction(deleteAction)
+		
+		if let popoverPresentationController = alert.popoverPresentationController {
+			popoverPresentationController.barButtonItem = sender as? UIBarButtonItem
+		}
+		
+		present(alert, animated: true, completion: nil)
 		
 	}
 }

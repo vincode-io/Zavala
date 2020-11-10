@@ -10,6 +10,19 @@ import Templeton
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+	
+	var mainSplitViewController: MainSplitViewController? {
+		var keyScene: UIScene?
+		let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+		
+		for windowScene in windowScenes {
+			if !windowScene.windows.filter({ $0.isKeyWindow }).isEmpty {
+				keyScene = windowScene
+			}
+		}
+		
+		return (keyScene?.delegate as? SceneDelegate)?.mainSplitViewController
+	}
 
 	func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
 		let documentAccountURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -32,21 +45,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	// MARK: Actions
 
-	@objc func createOutline(_ sender: Any) {
-		
-	}
-	
-	@objc func createFolder(_ sender: Any) {
-		
-	}
-	
-	@objc func newWindow(_ sender: Any) {
+	@objc func newWindow(_ sender: Any?) {
 		let userActivity = NSUserActivity(activityType: "io.vincode.Manhattan.create")
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: userActivity, options: nil, errorHandler: nil)
 	}
 	
-	@objc func toggleOutlineIsFavorite(_ sender: Any) {
-		
+	@objc func createFolder(_ sender: Any?) {
+		mainSplitViewController?.createFolder(sender)
+	}
+	
+	@objc func createOutline(_ sender: Any?) {
+		mainSplitViewController?.createOutline(sender)
+	}
+	
+	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
+		mainSplitViewController?.toggleOutlineIsFavorite(sender)
 	}
 	
 	override func buildMenu(with builder: UIMenuBuilder) {

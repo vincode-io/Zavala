@@ -11,7 +11,7 @@ public final class AccountManager {
 	public static var shared: AccountManager!
 	
 	public var localAccount: Account? {
-		guard let local = accountsDictionary[.local], local.isActive else { return nil }
+		guard let local = accountsDictionary[AccountType.local.rawValue], local.isActive else { return nil }
 		return local
 	}
 
@@ -28,9 +28,9 @@ public final class AccountManager {
 	}
 	
 	private var accountsFolder: URL
-	private var accountFiles = [AccountType: AccountFile]()
+	private var accountFiles = [Int: AccountFile]()
 	
-	var accountsDictionary = [AccountType: Account]()
+	var accountsDictionary = [Int: Account]()
 
 	public var accounts: [Account] {
 		return Array(accountsDictionary.values)
@@ -68,7 +68,7 @@ public final class AccountManager {
 			}
 			
 			let localAccount = Account(accountType: .local)
-			accountsDictionary[.local] = localAccount
+			accountsDictionary[AccountType.local.rawValue] = localAccount
 			initializeFile(file: localAccountFile, accountType: .local)
 			localAccount.createFolder("Outlines") { _ in }
 		}
@@ -81,6 +81,18 @@ public final class AccountManager {
 		}
 	}
 
+	// MARK: API
+	public func findAccount(accountID: Int) -> Account? {
+		return accountsDictionary[accountID]
+	}
+	
+	public func findFolder(_ entityID: EntityID) -> Folder? {
+		if case .folder(let accountID, let folderID) = entityID, let account = accountsDictionary[accountID] {
+			return account.findFolder(folderID: folderID)
+		}
+		return nil
+	}
+	
 }
 
 // MARK: Private
@@ -91,7 +103,7 @@ private extension AccountManager {
 	
 	@objc func accountDidChange(_ note: Notification) {
 		let account = note.object as! Account
-		let accountFile = accountFiles[account.type]!
+		let accountFile = accountFiles[account.type.rawValue]!
 		accountFile.markAsDirty()
 	}
 	
@@ -100,7 +112,7 @@ private extension AccountManager {
 	func initializeFile(file: URL, accountType: AccountType) {
 		let managedFile = AccountFile(fileURL: file, accountType: accountType, accountManager: self)
 		managedFile.load()
-		accountFiles[accountType] = managedFile
+		accountFiles[accountType.rawValue] = managedFile
 	}
 
 	func sort(_ accounts: [Account]) -> [Account] {

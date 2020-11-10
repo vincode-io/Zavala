@@ -24,4 +24,10 @@ class OutlineListViewController: UICollectionViewController {
 		navigationController?.setNavigationBarHidden(true, animated: animated)
 		#endif
 	}
+
+	// MARK: Actions
+	
+	@objc func createOutline(_ sender: Any?) {
+	}
+
 }

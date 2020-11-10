@@ -22,4 +22,9 @@ class OutlineDetailViewController: UIViewController {
 		#endif
 	}
 
+	// MARK: Actions
+	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
+		
+	}
+	
 }

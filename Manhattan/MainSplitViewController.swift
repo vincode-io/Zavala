@@ -9,6 +9,18 @@ import UIKit
 
 class MainSplitViewController: UISplitViewController {
 
+	var sidebarViewController: SidebarViewController? {
+		viewController(for: .primary) as? SidebarViewController
+	}
+	
+	var outlineListViewController: OutlineListViewController? {
+		viewController(for: .supplementary) as? OutlineListViewController
+	}
+	
+	var outlineDetailViewController: OutlineDetailViewController? {
+		viewController(for: .supplementary) as? OutlineDetailViewController
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -17,12 +29,12 @@ class MainSplitViewController: UISplitViewController {
 
 	// MARK: Actions
 	
-	@objc func createOutline(_ sender: Any?) {
-		
+	@objc func createFolder(_ sender: Any?) {
+		sidebarViewController?.createFolder(sender)
 	}
 	
-	@objc func createFolder(_ sender: Any?) {
-		
+	@objc func createOutline(_ sender: Any?) {
+		outlineListViewController?.createOutline(sender)
 	}
 	
 	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
