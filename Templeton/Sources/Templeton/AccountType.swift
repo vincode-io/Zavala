@@ -11,7 +11,7 @@ public enum AccountType: Int, Codable {
 	case local = 0
 	case cloudKit = 1
 	
-	var name: String {
+	public var name: String {
 		switch self {
 		case .local:
 			switch UIDevice.current.userInterfaceIdiom {

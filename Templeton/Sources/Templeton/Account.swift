@@ -57,7 +57,7 @@ public final class Account: Identifiable, Codable {
 	
 	public func createFolder(_ name: String, completion: @escaping (Result<Folder, Error>) -> Void) {
 		func createFolder() {
-			let folder = Folder(name: name)
+			let folder = Folder(accountID: id, name: name)
 			folders?.append(folder)
 			accountDidChange()
 			completion(.success(folder))

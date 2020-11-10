@@ -9,7 +9,24 @@ import Foundation
 
 public final class AccountManager {
 	public static var shared: AccountManager!
+	
+	public var localAccount: Account? {
+		guard let local = accountsDictionary[.local], local.isActive else { return nil }
+		return local
+	}
 
+	public var allOutlineProvider: OutlineProvider {
+		return LazyOutlineProvider(id: .all, callback: { return [Outline]() })
+	}
+	
+	public var recentsOutlineProvider: OutlineProvider {
+		return LazyOutlineProvider(id: .recents, callback: { return [Outline]() })
+	}
+	
+	public var favoritesOutlineProvider: OutlineProvider {
+		return LazyOutlineProvider(id: .favorites, callback: { return [Outline]() })
+	}
+	
 	private var accountsFolder: URL
 	private var accountFiles = [AccountType: AccountFile]()
 	

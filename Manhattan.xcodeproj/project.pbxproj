@@ -19,6 +19,7 @@
 		51C4C3F92557470B004E0206 /* Templeton in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3F82557470B004E0206 /* Templeton */; };
 		51C4C40125576631004E0206 /* RSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C40025576631004E0206 /* RSCore */; };
 		51C4C40225576632004E0206 /* RSCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C40025576631004E0206 /* RSCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		51C4C442255A0DE1004E0206 /* OutlineListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C441255A0DE1004E0206 /* OutlineListViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 		51C4C3B02555E964004E0206 /* Manhattan_project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Manhattan_project.xcconfig; sourceTree = "<group>"; };
 		51C4C3CD2555F07A004E0206 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		51C4C3E025560E09004E0206 /* Templeton */ = {isa = PBXFileReference; lastKnownFileType = text; path = Templeton; sourceTree = SOURCE_ROOT; };
+		51C4C441255A0DE1004E0206 /* OutlineListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineListViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,13 +134,14 @@
 			isa = PBXGroup;
 			children = (
 				5181A96A2554D93B00C153E8 /* Manhattan.entitlements */,
+				5181A9452554D92100C153E8 /* Info.plist */,
 				5181A9372554D92000C153E8 /* AppDelegate.swift */,
+				51C4C441255A0DE1004E0206 /* OutlineListViewController.swift */,
 				5181A9392554D92000C153E8 /* SceneDelegate.swift */,
 				5181A93B2554D92000C153E8 /* SidebarViewController.swift */,
-				5181A93D2554D92000C153E8 /* Main.storyboard */,
 				5181A9402554D92100C153E8 /* Assets.xcassets */,
 				5181A9422554D92100C153E8 /* LaunchScreen.storyboard */,
-				5181A9452554D92100C153E8 /* Info.plist */,
+				5181A93D2554D92000C153E8 /* Main.storyboard */,
 			);
 			path = Manhattan;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
+				51C4C442255A0DE1004E0206 /* OutlineListViewController.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */,
 			);
