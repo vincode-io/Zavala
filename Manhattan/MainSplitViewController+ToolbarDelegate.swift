@@ -9,11 +9,21 @@ import UIKit
 
 #if targetEnvironment(macCatalyst)
 
+extension NSToolbarItem.Identifier {
+	static let newOutline = NSToolbarItem.Identifier("io.vincode.Manhattan.newOutline")
+	static let toggleOutlineIsFavorite = NSToolbarItem.Identifier("io.vincode.Manhattan.toggleOutlineIsFavorite")
+}
+
 extension MainSplitViewController: NSToolbarDelegate {
 	
 	func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
 		let identifiers: [NSToolbarItem.Identifier] = [
-			.toggleSidebar
+			.toggleSidebar,
+			.flexibleSpace,
+			.newOutline,
+			.supplementarySidebarTrackingSeparatorItemIdentifier,
+			.flexibleSpace,
+			.toggleOutlineIsFavorite
 		]
 		return identifiers
 	}
@@ -27,6 +37,22 @@ extension MainSplitViewController: NSToolbarDelegate {
 		var toolbarItem: NSToolbarItem?
 		
 		switch itemIdentifier {
+		case .newOutline:
+			let item = NSToolbarItem(itemIdentifier: itemIdentifier)
+			item.autovalidates = true
+			item.image = UIImage(systemName: "square.and.pencil")
+			item.label = NSLocalizedString("New Outline", comment: "New Outline")
+			item.action = #selector(newOutline(_:))
+			item.target = self
+			toolbarItem = item
+		case .toggleOutlineIsFavorite:
+			let item = NSToolbarItem(itemIdentifier: itemIdentifier)
+			item.autovalidates = true
+			item.image = UIImage(systemName: "heart")
+			item.label = NSLocalizedString("Toggle Favorite", comment: "Toggle Favorite")
+			item.action = #selector(toggleOutlineIsFavorite(_:))
+			item.target = self
+			toolbarItem = item
 		case .toggleSidebar:
 			toolbarItem = NSToolbarItem(itemIdentifier: itemIdentifier)
 			
