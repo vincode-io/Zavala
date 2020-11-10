@@ -11,15 +11,14 @@ import Templeton
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-	override init() {
-		super.init()
-		
+	func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
 		let documentAccountURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 		let documentAccountsFolder = documentAccountURL.appendingPathComponent("Accounts").absoluteString
 		let documentAccountsFolderPath = String(documentAccountsFolder.suffix(from: documentAccountsFolder.index(documentAccountsFolder.startIndex, offsetBy: 7)))
 		AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath)
+		return true
 	}
-
+	
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
 		return true
@@ -28,17 +27,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// MARK: UISceneSession Lifecycle
 
 	func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-		// Called when a new scene session is being created.
-		// Use this method to select a configuration to create the new scene with.
 		return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
 	}
 
-	func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-		// Called when the user discards a scene session.
-		// If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-		// Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+	// MARK: Actions
+
+	@objc func newOutline(_ sender: Any) {
+		
 	}
+	
+	@objc func newFolder(_ sender: Any) {
+		
+	}
+	
+	@objc func newWindow(_ sender: Any) {
+		let userActivity = NSUserActivity(activityType: "io.vincode.Manhattan.create")
+		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: userActivity, options: nil, errorHandler: nil)
+	}
+	
+	@objc func toggleOutlineIsFavorite(_ sender: Any) {
+		
+	}
+	
+	override func buildMenu(with builder: UIMenuBuilder) {
+		super.buildMenu(with: builder)
+		guard builder.system == UIMenuSystem.main else { return }
+		
+		builder.remove(menu: .newScene)
 
+		// File Menu
+		let newWindowCommand = UIKeyCommand(title: NSLocalizedString("New Window", comment: "New Window"),
+											action: #selector(newWindow(_:)),
+											input: "n",
+											modifierFlags: [.alternate, .command])
+		let newWindowMenu = UIMenu(title: "", options: .displayInline, children: [newWindowCommand])
+		builder.insertChild(newWindowMenu, atStartOfMenu: .file)
 
+		let newOutlineCommand = UIKeyCommand(title: NSLocalizedString("New Outline", comment: "New Outline"),
+											action: #selector(newOutline(_:)),
+											input: "n",
+											modifierFlags: [.command])
+		let newFolderCommand = UIKeyCommand(title: NSLocalizedString("New Folder", comment: "New Folder"),
+											action: #selector(newFolder(_:)),
+											input: "n",
+											modifierFlags: [.shift, .command])
+		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newFolderCommand])
+		builder.insertChild(newItemsMenu, atStartOfMenu: .file)
+
+	}
+	
 }
 
