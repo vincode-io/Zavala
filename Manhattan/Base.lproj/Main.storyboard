@@ -77,10 +77,10 @@
             </objects>
             <point key="canvasLocation" x="-275" y="-117"/>
         </scene>
-        <!--Split View Controller-->
+        <!--Main Split View Controller-->
         <scene sceneID="eSm-MO-bGt">
             <objects>
-                <splitViewController allowDoubleColumnStyle="YES" preferredDisplayMode="twoBeside" id="vQK-Gr-dVw" sceneMemberID="viewController">
+                <splitViewController allowDoubleColumnStyle="YES" preferredDisplayMode="twoBeside" id="vQK-Gr-dVw" customClass="MainSplitViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
                         <segue destination="z5C-Ut-9oe" kind="relationship" relationship="detailViewController" id="nnE-3b-gHC"/>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="masterViewController" id="FMQ-Cn-Jfy"/>
