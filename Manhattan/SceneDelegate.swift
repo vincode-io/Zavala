@@ -18,8 +18,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		}
 		self.mainSplitViewController = splitViewController
 		
-		splitViewController.primaryBackgroundStyle = .sidebar
-		
 		#if targetEnvironment(macCatalyst)
 		guard let windowScene = scene as? UIWindowScene else { return }
 		

@@ -23,8 +23,11 @@ class MainSplitViewController: UISplitViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+		primaryBackgroundStyle = .sidebar
+		if traitCollection.userInterfaceIdiom == .mac {
+			preferredPrimaryColumnWidth = 200
+			preferredSupplementaryColumnWidth = 300
+		}
     }
 
 	// MARK: Actions
