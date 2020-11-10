@@ -21,6 +21,8 @@
 		51C4C40225576632004E0206 /* RSCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C40025576631004E0206 /* RSCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		51C4C442255A0DE1004E0206 /* OutlineListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C441255A0DE1004E0206 /* OutlineListViewController.swift */; };
 		51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C448255AA215004E0206 /* MainSplitViewController.swift */; };
+		51C4C455255AC883004E0206 /* MainSplitViewController+ToolbarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C454255AC883004E0206 /* MainSplitViewController+ToolbarDelegate.swift */; };
+		51C4C45B255ACA1B004E0206 /* OutlineDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C45A255ACA1B004E0206 /* OutlineDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +81,8 @@
 		51C4C3E025560E09004E0206 /* Templeton */ = {isa = PBXFileReference; lastKnownFileType = text; path = Templeton; sourceTree = SOURCE_ROOT; };
 		51C4C441255A0DE1004E0206 /* OutlineListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineListViewController.swift; sourceTree = "<group>"; };
 		51C4C448255AA215004E0206 /* MainSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSplitViewController.swift; sourceTree = "<group>"; };
+		51C4C454255AC883004E0206 /* MainSplitViewController+ToolbarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainSplitViewController+ToolbarDelegate.swift"; sourceTree = "<group>"; };
+		51C4C45A255ACA1B004E0206 /* OutlineDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +143,8 @@
 				5181A9452554D92100C153E8 /* Info.plist */,
 				5181A9372554D92000C153E8 /* AppDelegate.swift */,
 				51C4C448255AA215004E0206 /* MainSplitViewController.swift */,
+				51C4C454255AC883004E0206 /* MainSplitViewController+ToolbarDelegate.swift */,
+				51C4C45A255ACA1B004E0206 /* OutlineDetailViewController.swift */,
 				51C4C441255A0DE1004E0206 /* OutlineListViewController.swift */,
 				5181A9392554D92000C153E8 /* SceneDelegate.swift */,
 				5181A93B2554D92000C153E8 /* SidebarViewController.swift */,
@@ -349,9 +355,11 @@
 			files = (
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
+				51C4C455255AC883004E0206 /* MainSplitViewController+ToolbarDelegate.swift in Sources */,
 				51C4C442255A0DE1004E0206 /* OutlineListViewController.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */,
+				51C4C45B255ACA1B004E0206 /* OutlineDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

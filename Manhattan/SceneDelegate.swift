@@ -11,13 +11,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	var window: UIWindow?
 
-
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-		guard let splitViewController = window?.rootViewController as? UISplitViewController else {
+		guard let splitViewController = window?.rootViewController as? MainSplitViewController else {
 			return
 		}
 		
 		splitViewController.primaryBackgroundStyle = .sidebar
+		
+		#if targetEnvironment(macCatalyst)
+		guard let windowScene = scene as? UIWindowScene else { return }
+		
+		let toolbar = NSToolbar(identifier: "main")
+		toolbar.delegate = splitViewController
+		toolbar.displayMode = .iconOnly
+		
+		if let titlebar = windowScene.titlebar {
+			titlebar.toolbar = toolbar
+			titlebar.toolbarStyle = .automatic
+		}
+		#endif
 	}
 
 	func sceneDidDisconnect(_ scene: UIScene) {

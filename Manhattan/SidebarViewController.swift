@@ -68,6 +68,14 @@ class SidebarViewController: UIViewController {
 //				self.dataSource.apply(snapshot, to: .collections, animatingDifferences: true)
 //			}
 	}
+
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		
+		#if targetEnvironment(macCatalyst)
+		navigationController?.setNavigationBarHidden(true, animated: animated)
+		#endif
+	}
 	
 }
 

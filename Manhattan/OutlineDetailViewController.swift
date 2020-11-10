@@ -1,22 +1,19 @@
 //
-//  OutlineListViewController.swift
+//  OutlineDetailViewController.swift
 //  Manhattan
 //
-//  Created by Maurice Parker on 11/9/20.
+//  Created by Maurice Parker on 11/10/20.
 //
 
 import UIKit
-import Templeton
 
-class OutlineListViewController: UICollectionViewController {
+class OutlineDetailViewController: UIViewController {
 
-	var folder: Folder?
-	
     override func viewDidLoad() {
         super.viewDidLoad()
 
     }
-
+    
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
@@ -24,4 +21,5 @@ class OutlineListViewController: UICollectionViewController {
 		navigationController?.setNavigationBarHidden(true, animated: animated)
 		#endif
 	}
+
 }
