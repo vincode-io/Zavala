@@ -17,7 +17,11 @@ class MainSplitViewController: UISplitViewController {
 
 	// MARK: Actions
 	
-	@objc func newOutline(_ sender: Any?) {
+	@objc func createOutline(_ sender: Any?) {
+		
+	}
+	
+	@objc func createFolder(_ sender: Any?) {
 		
 	}
 	

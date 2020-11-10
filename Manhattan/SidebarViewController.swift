@@ -47,6 +47,10 @@ class SidebarViewController: UICollectionViewController {
 		return outlineListViewController as? OutlineListViewController
 	}
 	
+	override var canBecomeFirstResponder: Bool {
+		return true
+	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
@@ -76,10 +80,21 @@ class SidebarViewController: UICollectionViewController {
 		#endif
 	}
 	
+	// MARK: Collection View
+	
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
 	}
 
+	// MARK: Actions
+	
+	@objc func createOutline(_ sender: Any?) {
+		
+	}
+	
+	@objc func createFolder(_ sender: Any?) {
+		
+	}
 }
 
 extension SidebarViewController {
@@ -94,10 +109,6 @@ extension SidebarViewController {
 		}
 		return layout
 	}
-	
-}
-
-extension SidebarViewController {
 	
 	private func configureDataSource() {
 		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, SidebarItem> {

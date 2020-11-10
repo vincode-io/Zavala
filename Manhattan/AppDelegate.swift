@@ -32,11 +32,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	// MARK: Actions
 
-	@objc func newOutline(_ sender: Any) {
+	@objc func createOutline(_ sender: Any) {
 		
 	}
 	
-	@objc func newFolder(_ sender: Any) {
+	@objc func createFolder(_ sender: Any) {
 		
 	}
 	
@@ -64,11 +64,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertChild(newWindowMenu, atStartOfMenu: .file)
 
 		let newOutlineCommand = UIKeyCommand(title: NSLocalizedString("New Outline", comment: "New Outline"),
-											action: #selector(newOutline(_:)),
+											action: #selector(createOutline(_:)),
 											input: "n",
 											modifierFlags: [.command])
 		let newFolderCommand = UIKeyCommand(title: NSLocalizedString("New Folder", comment: "New Folder"),
-											action: #selector(newFolder(_:)),
+											action: #selector(createFolder(_:)),
 											input: "n",
 											modifierFlags: [.shift, .command])
 		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newFolderCommand])

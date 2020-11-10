@@ -42,7 +42,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.autovalidates = true
 			item.image = UIImage(systemName: "square.and.pencil")
 			item.label = NSLocalizedString("New Outline", comment: "New Outline")
-			item.action = #selector(newOutline(_:))
+			item.action = #selector(createOutline(_:))
 			item.target = self
 			toolbarItem = item
 		case .toggleOutlineIsFavorite:
