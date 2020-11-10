@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import Templeton
 
-class SidebarViewController: UIViewController {
+class SidebarViewController: UICollectionViewController {
 
 	private enum SidebarSection: Int {
 		case library, localAccount, cloudKitAccount
@@ -35,7 +35,6 @@ class SidebarViewController: UIViewController {
 		}
 	}
 
-	private var collectionView: UICollectionView!
 	private var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 	private var collectionsSubscriber: AnyCancellable?
 
@@ -51,7 +50,7 @@ class SidebarViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		configureCollectionView()
+		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
 		applyInitialSnapshot()
 		
@@ -77,17 +76,13 @@ class SidebarViewController: UIViewController {
 		#endif
 	}
 	
+	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
+	}
+
 }
 
 extension SidebarViewController {
-	
-	private func configureCollectionView() {
-		collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-		collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-		collectionView.backgroundColor = .systemBackground
-		collectionView.delegate = self
-		view.addSubview(collectionView)
-	}
 	
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
@@ -98,14 +93,6 @@ extension SidebarViewController {
 			return section
 		}
 		return layout
-	}
-	
-}
-
-extension SidebarViewController: UICollectionViewDelegate {
-	
-	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
 	}
 	
 }
