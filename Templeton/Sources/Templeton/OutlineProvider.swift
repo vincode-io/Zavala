@@ -8,15 +8,8 @@
 import Foundation
 import RSCore
 
-public enum OutlineProviderID: Hashable, Equatable {
-	case all
-	case favorites
-	case recents
-	case folder(Int, String) // Account.ID, Folder.ID
-}
-
 public protocol OutlineProvider {
-	var outlineProviderID: OutlineProviderID { get }
+	var id: EntityID { get }
 	var name: String? { get }
 	var image: RSImage? { get }
 	var outlines: [Outline]? { get }
@@ -24,10 +17,10 @@ public protocol OutlineProvider {
 
 public struct LazyOutlineProvider: OutlineProvider {
 	
-	public var outlineProviderID: OutlineProviderID
+	public var id: EntityID
 	
 	public var name: String? {
-		switch outlineProviderID {
+		switch id {
 		case .all:
 			return NSLocalizedString("All", comment: "All")
 		case .favorites:
@@ -40,7 +33,7 @@ public struct LazyOutlineProvider: OutlineProvider {
 	}
 	
 	public var image: RSImage? {
-		switch outlineProviderID {
+		switch id {
 		case .all:
 			return RSImage(systemName: "tray")
 		case .favorites:
@@ -58,8 +51,8 @@ public struct LazyOutlineProvider: OutlineProvider {
 	
 	private var outlineCallback: (() -> [Outline])
 	
-	init(id: OutlineProviderID, callback: @escaping (() -> [Outline])) {
-		self.outlineProviderID = id
+	init(id: EntityID, callback: @escaping (() -> [Outline])) {
+		self.id = id
 		self.outlineCallback = callback
 	}
 	

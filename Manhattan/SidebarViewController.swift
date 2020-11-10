@@ -18,7 +18,7 @@ class SidebarViewController: UIViewController {
 	private struct SidebarItem: Hashable, Identifiable {
 		enum ID: Hashable {
 			case header(SidebarSection)
-			case outlineProvider(OutlineProviderID)
+			case outlineProvider(EntityID)
 		}
 		
 		let id: SidebarItem.ID
@@ -30,7 +30,7 @@ class SidebarViewController: UIViewController {
 		}
 		
 		static func outlineProvider(_ outlineProvider: OutlineProvider) -> Self {
-			let id = SidebarItem.ID.outlineProvider(outlineProvider.outlineProviderID)
+			let id = SidebarItem.ID.outlineProvider(outlineProvider.id)
 			return SidebarItem(id: id, title: outlineProvider.name, image: outlineProvider.image)
 		}
 	}

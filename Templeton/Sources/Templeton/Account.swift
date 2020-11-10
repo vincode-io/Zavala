@@ -13,8 +13,8 @@ public extension Notification.Name {
 
 public final class Account: Identifiable, Codable {
 
-	public var id: Int {
-		type.rawValue
+	public var id: EntityID {
+		return EntityID.account(type.rawValue)
 	}
 	
 	public var name: String {
