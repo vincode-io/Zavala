@@ -10,7 +10,7 @@ import Templeton
 
 class OutlineListViewController: UICollectionViewController {
 
-	var folder: Folder?
+	var outlineProvider: OutlineProvider?
 	
     override func viewDidLoad() {
         super.viewDidLoad()
