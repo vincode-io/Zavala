@@ -23,7 +23,7 @@ class OutlineListViewController: UICollectionViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-
+		updateUI()
     }
 
 	override func viewWillAppear(_ animated: Bool) {
