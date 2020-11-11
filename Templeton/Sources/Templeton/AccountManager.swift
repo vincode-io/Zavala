@@ -86,6 +86,21 @@ public final class AccountManager {
 		return accountsDictionary[accountID]
 	}
 	
+	public func findOutlineProvider(_ entityID: EntityID) -> OutlineProvider? {
+		switch entityID {
+		case .all:
+			return allOutlineProvider
+		case .favorites:
+			return favoritesOutlineProvider
+		case .recents:
+			return recentsOutlineProvider
+		case .folder:
+			return findFolder(entityID)
+		default:
+			fatalError()
+		}
+	}
+	
 	public func findFolder(_ entityID: EntityID) -> Folder? {
 		if case .folder(let accountID, let folderID) = entityID, let account = accountsDictionary[accountID] {
 			return account.findFolder(folderID: folderID)

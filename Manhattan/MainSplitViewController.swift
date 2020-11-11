@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Templeton
 
 class MainSplitViewController: UISplitViewController {
 
 	var sidebarViewController: SidebarViewController? {
-		viewController(for: .primary) as? SidebarViewController
+		let navController = viewController(for: .primary) as? UINavigationController
+		return navController?.topViewController as? SidebarViewController
 	}
 	
 	var outlineListViewController: OutlineListViewController? {
@@ -28,8 +30,11 @@ class MainSplitViewController: UISplitViewController {
 			preferredPrimaryColumnWidth = 200
 			preferredSupplementaryColumnWidth = 300
 		}
-    }
 
+		sidebarViewController?.delegate = self
+		outlineListViewController?.delegate = self
+    }
+	
 	// MARK: Actions
 	
 	@objc func createFolder(_ sender: Any?) {
@@ -48,6 +53,27 @@ class MainSplitViewController: UISplitViewController {
 		UIView.animate(withDuration: 0.25) {
 			self.preferredDisplayMode = self.displayMode == .twoBesideSecondary ? .secondaryOnly : .twoBesideSecondary
 		}
+	}
+	
+}
+
+// MARK: SidebarDelegate
+
+extension MainSplitViewController: SidebarDelegate {
+	
+	func sidebarSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?) {
+		outlineListViewController?.outlineProvider = outlineProvider
+		show(.supplementary)
+	}
+	
+}
+
+// MARK: OutlineListDelegate
+
+extension MainSplitViewController: OutlineListDelegate {
+	
+	func outlineSelectionDidChange(_: OutlineListViewController, outline: Outline) {
+		
 	}
 	
 }

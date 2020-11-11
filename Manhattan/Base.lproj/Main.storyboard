@@ -35,10 +35,10 @@
             </objects>
             <point key="canvasLocation" x="-1063" y="255"/>
         </scene>
-        <!--Outline List View Controller-->
+        <!--Outlines-->
         <scene sceneID="DuZ-tW-ztJ">
             <objects>
-                <collectionViewController id="ACt-yd-5XI" customClass="OutlineListViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="OutlineListViewController" title="Outlines" id="ACt-yd-5XI" customClass="OutlineListViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="zj1-RR-HeS">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -59,23 +59,23 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zr4-Sd-dZy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="587" y="-117"/>
+            <point key="canvasLocation" x="163" y="-107"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="mnU-f9-dLf">
             <objects>
                 <navigationController id="Emx-lc-Y6t" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="HoN-oP-KWP">
-                        <rect key="frame" x="0.0" y="44" width="428" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="HoN-oP-KWP">
+                        <rect key="frame" x="0.0" y="44" width="428" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="ACt-yd-5XI" kind="relationship" relationship="rootViewController" id="dIp-0d-lpD"/>
+                        <segue destination="IH1-qU-b0t" kind="relationship" relationship="rootViewController" id="SR9-Ci-StZ"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JWB-Fk-m1t" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-275" y="-117"/>
+            <point key="canvasLocation" x="-1137" y="-470"/>
         </scene>
         <!--Main Split View Controller-->
         <scene sceneID="eSm-MO-bGt">
@@ -83,18 +83,18 @@
                 <splitViewController allowDoubleColumnStyle="YES" preferredDisplayMode="twoBeside" id="vQK-Gr-dVw" customClass="MainSplitViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
                         <segue destination="z5C-Ut-9oe" kind="relationship" relationship="detailViewController" id="nnE-3b-gHC"/>
-                        <segue destination="Emx-lc-Y6t" kind="relationship" relationship="supplementaryViewController" id="bFr-2Z-rSb"/>
-                        <segue destination="IH1-qU-b0t" kind="relationship" relationship="masterViewController" id="oEJ-e3-jNF"/>
+                        <segue destination="Emx-lc-Y6t" kind="relationship" relationship="masterViewController" id="oPb-kD-AKH"/>
+                        <segue destination="ACt-yd-5XI" kind="relationship" relationship="supplementaryViewController" id="TQB-ue-4Ih"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e3g-H2-RVK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1841" y="-117"/>
         </scene>
-        <!--Sidebar View Controller-->
+        <!--Folders-->
         <scene sceneID="xI7-xC-228">
             <objects>
-                <collectionViewController id="IH1-qU-b0t" customClass="SidebarViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController title="Folders" id="IH1-qU-b0t" customClass="SidebarViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="8wb-92-AvW">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -106,13 +106,21 @@
                             <outlet property="delegate" destination="IH1-qU-b0t" id="ZWb-Jf-p9Y"/>
                         </connections>
                     </collectionView>
+                    <navigationItem key="navigationItem" id="JsX-sV-JPs">
+                        <barButtonItem key="rightBarButtonItem" image="folder.badge.plus" catalog="system" id="pan-C8-ZLD">
+                            <connections>
+                                <action selector="createFolder:" destination="IH1-qU-b0t" id="eMs-zq-UxZ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l9h-fx-tjO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1110" y="-467"/>
+            <point key="canvasLocation" x="-489" y="-470"/>
         </scene>
     </scenes>
     <resources>
+        <image name="folder.badge.plus" catalog="system" width="128" height="91"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

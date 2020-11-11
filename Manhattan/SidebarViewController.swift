@@ -11,9 +11,7 @@ import Templeton
 
 protocol SidebarDelegate: class {
 	func sidebarSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?)
-	func sidebarInvalidatedRestorationState(_: SidebarViewController)
 }
-
 
 class SidebarViewController: UICollectionViewController {
 
@@ -59,6 +57,8 @@ class SidebarViewController: UICollectionViewController {
 		return AccountManager.shared.findFolder(entityID)
 	}
 	
+	weak var delegate: SidebarDelegate?
+	
 	override var canBecomeFirstResponder: Bool {
 		return true
 	}
@@ -66,25 +66,13 @@ class SidebarViewController: UICollectionViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
+		navigationItem.title = NSLocalizedString("Folders", comment: "Folders")
+		
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
 		applyInitialSnapshot()
 		
-		// Select the first item in the Library section.
-		let indexPath = IndexPath(item: 1, section: SidebarSection.library.rawValue)
-		collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-		self.collectionView(collectionView, didSelectItemAt: indexPath)
-
-		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidChange(_:)), name: .AccountDidChange, object: nil)
-
-//		collectionsSubscriber = dataStore.$collections
-//			.receive(on: RunLoop.main)
-//			.sink { [weak self] _ in
-//				guard let self = self else { return }
-//				let snapshot = self.collectionsSnapshot()
-//				self.dataSource.apply(snapshot, to: .collections, animatingDifferences: true)
-//			}
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -105,11 +93,16 @@ class SidebarViewController: UICollectionViewController {
 	
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
+		
+		if case .outlineProvider(let entityID) = sidebarItem.id {
+			let outlineProvider = AccountManager.shared.findOutlineProvider(entityID)
+			delegate?.sidebarSelectionDidChange(self, outlineProvider: outlineProvider)
+		}
 	}
 
 	// MARK: Actions
 	
-	@objc func createFolder(_ sender: Any?) {
+	@IBAction func createFolder(_ sender: Any?) {
 		let addNavViewController = UIStoryboard.add.instantiateViewController(withIdentifier: "AddFolderViewControllerNav") as! UINavigationController
 		addNavViewController.modalPresentationStyle = .formSheet
 		addNavViewController.preferredContentSize = UIStoryboard.preferredContentSizeForFormSheetDisplay

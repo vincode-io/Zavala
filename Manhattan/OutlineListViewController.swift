@@ -8,9 +8,18 @@
 import UIKit
 import Templeton
 
-class OutlineListViewController: UICollectionViewController {
+protocol OutlineListDelegate: class  {
+	func outlineSelectionDidChange(_: OutlineListViewController, outline: Outline)
+}
 
-	var outlineProvider: OutlineProvider?
+class OutlineListViewController: UICollectionViewController {
+	
+	weak var delegate: OutlineListDelegate?
+	var outlineProvider: OutlineProvider? {
+		didSet {
+			updateUI()
+		}
+	}
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +28,7 @@ class OutlineListViewController: UICollectionViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		
+
 		#if targetEnvironment(macCatalyst)
 		navigationController?.setNavigationBarHidden(true, animated: animated)
 		#endif
@@ -30,4 +39,13 @@ class OutlineListViewController: UICollectionViewController {
 	@objc func createOutline(_ sender: Any?) {
 	}
 
+}
+
+private extension OutlineListViewController {
+	
+	private func updateUI() {
+		guard isViewLoaded else { return }
+		navigationItem.title = outlineProvider?.name ?? NSLocalizedString("Outlines", comment: "Outlines")
+	}
+	
 }
