@@ -7,15 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		514BB9B8255B558400C8DBDF /* AddComboTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9A5255B558400C8DBDF /* AddComboTableViewCell.swift */; };
-		514BB9BD255B558400C8DBDF /* Add.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 514BB9AB255B558400C8DBDF /* Add.storyboard */; };
-		514BB9BF255B558400C8DBDF /* AddFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9AD255B558400C8DBDF /* AddFolderViewController.swift */; };
-		514BB9C0255B558400C8DBDF /* AddOutlineSelectFolderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9AE255B558400C8DBDF /* AddOutlineSelectFolderTableViewCell.swift */; };
-		514BB9C6255B558400C8DBDF /* AddOutlineSelectFolderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 514BB9B5255B558400C8DBDF /* AddOutlineSelectFolderTableViewCell.xib */; };
-		514BB9C8255B558400C8DBDF /* SelectComboTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9B7255B558400C8DBDF /* SelectComboTableViewCell.swift */; };
 		514BB9D7255B599E00C8DBDF /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9D6255B599E00C8DBDF /* UIViewController+.swift */; };
 		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
+		515F162C255C12BE00FD98B8 /* Add.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 515F162B255C12BE00FD98B8 /* Add.storyboard */; };
+		515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F1631255C16E700FD98B8 /* AddFolderViewController.swift */; };
 		5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9372554D92000C153E8 /* AppDelegate.swift */; };
 		5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9392554D92000C153E8 /* SceneDelegate.swift */; };
 		5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A93B2554D92000C153E8 /* SidebarViewController.swift */; };
@@ -66,17 +62,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		514BB9A5255B558400C8DBDF /* AddComboTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddComboTableViewCell.swift; sourceTree = "<group>"; };
-		514BB9AB255B558400C8DBDF /* Add.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Add.storyboard; sourceTree = "<group>"; };
-		514BB9AC255B558400C8DBDF /* AddOutlineFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddOutlineFolderViewController.swift; sourceTree = "<group>"; };
-		514BB9AD255B558400C8DBDF /* AddFolderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFolderViewController.swift; sourceTree = "<group>"; };
-		514BB9AE255B558400C8DBDF /* AddOutlineSelectFolderTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddOutlineSelectFolderTableViewCell.swift; sourceTree = "<group>"; };
-		514BB9B5255B558400C8DBDF /* AddOutlineSelectFolderTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddOutlineSelectFolderTableViewCell.xib; sourceTree = "<group>"; };
-		514BB9B6255B558400C8DBDF /* AddOutlineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddOutlineViewController.swift; sourceTree = "<group>"; };
-		514BB9B7255B558400C8DBDF /* SelectComboTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectComboTableViewCell.swift; sourceTree = "<group>"; };
 		514BB9D6255B599E00C8DBDF /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
+		515F162B255C12BE00FD98B8 /* Add.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Add.storyboard; sourceTree = "<group>"; };
+		515F1631255C16E700FD98B8 /* AddFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFolderViewController.swift; sourceTree = "<group>"; };
 		5181A9342554D92000C153E8 /* Manhattan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Manhattan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5181A9372554D92000C153E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5181A9392554D92000C153E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -133,21 +123,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		514BB9A4255B558400C8DBDF /* Add */ = {
-			isa = PBXGroup;
-			children = (
-				514BB9AB255B558400C8DBDF /* Add.storyboard */,
-				514BB9A5255B558400C8DBDF /* AddComboTableViewCell.swift */,
-				514BB9AD255B558400C8DBDF /* AddFolderViewController.swift */,
-				514BB9AC255B558400C8DBDF /* AddOutlineFolderViewController.swift */,
-				514BB9AE255B558400C8DBDF /* AddOutlineSelectFolderTableViewCell.swift */,
-				514BB9B6255B558400C8DBDF /* AddOutlineViewController.swift */,
-				514BB9B7255B558400C8DBDF /* SelectComboTableViewCell.swift */,
-				514BB9B5255B558400C8DBDF /* AddOutlineSelectFolderTableViewCell.xib */,
-			);
-			path = Add;
-			sourceTree = "<group>";
-		};
 		514BB9D5255B595300C8DBDF /* UIKitExtensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,6 +160,10 @@
 			children = (
 				5181A96A2554D93B00C153E8 /* Manhattan.entitlements */,
 				5181A9452554D92100C153E8 /* Info.plist */,
+				515F162B255C12BE00FD98B8 /* Add.storyboard */,
+				5181A9422554D92100C153E8 /* LaunchScreen.storyboard */,
+				5181A93D2554D92000C153E8 /* Main.storyboard */,
+				515F1631255C16E700FD98B8 /* AddFolderViewController.swift */,
 				514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */,
 				5181A9372554D92000C153E8 /* AppDelegate.swift */,
 				51C4C448255AA215004E0206 /* MainSplitViewController.swift */,
@@ -194,9 +173,6 @@
 				5181A9392554D92000C153E8 /* SceneDelegate.swift */,
 				5181A93B2554D92000C153E8 /* SidebarViewController.swift */,
 				5181A9402554D92100C153E8 /* Assets.xcassets */,
-				514BB9A4255B558400C8DBDF /* Add */,
-				5181A9422554D92100C153E8 /* LaunchScreen.storyboard */,
-				5181A93D2554D92000C153E8 /* Main.storyboard */,
 				514BB9D5255B595300C8DBDF /* UIKitExtensions */,
 			);
 			path = Manhattan;
@@ -353,9 +329,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */,
-				514BB9C6255B558400C8DBDF /* AddOutlineSelectFolderTableViewCell.xib in Resources */,
-				514BB9BD255B558400C8DBDF /* Add.storyboard in Resources */,
 				5181A9412554D92100C153E8 /* Assets.xcassets in Resources */,
+				515F162C255C12BE00FD98B8 /* Add.storyboard in Resources */,
 				5181A93F2554D92000C153E8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,15 +377,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */,
 				514BB9D7255B599E00C8DBDF /* UIViewController+.swift in Sources */,
-				514BB9C8255B558400C8DBDF /* SelectComboTableViewCell.swift in Sources */,
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
-				514BB9B8255B558400C8DBDF /* AddComboTableViewCell.swift in Sources */,
-				514BB9C0255B558400C8DBDF /* AddOutlineSelectFolderTableViewCell.swift in Sources */,
 				51C4C455255AC883004E0206 /* MainSplitViewController+ToolbarDelegate.swift in Sources */,
 				51C4C442255A0DE1004E0206 /* OutlineListViewController.swift in Sources */,
-				514BB9BF255B558400C8DBDF /* AddFolderViewController.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,
 				5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */,

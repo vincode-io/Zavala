@@ -29,9 +29,9 @@ class OutlineListViewController: UICollectionViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 
-		#if targetEnvironment(macCatalyst)
-		navigationController?.setNavigationBarHidden(true, animated: animated)
-		#endif
+		if traitCollection.userInterfaceIdiom == .mac {
+			navigationController?.setNavigationBarHidden(true, animated: animated)
+		}
 	}
 
 	// MARK: Actions

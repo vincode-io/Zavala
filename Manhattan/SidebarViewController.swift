@@ -78,9 +78,9 @@ class SidebarViewController: UICollectionViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		#if targetEnvironment(macCatalyst)
-		navigationController?.setNavigationBarHidden(true, animated: animated)
-		#endif
+		if traitCollection.userInterfaceIdiom == .mac {
+			navigationController?.setNavigationBarHidden(true, animated: animated)
+		}
 	}
 	
 	// MARK: Notifications
@@ -104,10 +104,9 @@ class SidebarViewController: UICollectionViewController {
 	
 	@IBAction func createFolder(_ sender: Any?) {
 		let addNavViewController = UIStoryboard.add.instantiateViewController(withIdentifier: "AddFolderViewControllerNav") as! UINavigationController
-		addNavViewController.modalPresentationStyle = .formSheet
-		addNavViewController.preferredContentSize = UIStoryboard.preferredContentSizeForFormSheetDisplay
+//		addNavViewController.modalPresentationStyle = .formSheet
+//		addNavViewController.preferredContentSize = AddFolderViewController.preferredSize
 		present(addNavViewController, animated: true)
-
 	}
 	
 	override func delete(_ sender: Any?) {
