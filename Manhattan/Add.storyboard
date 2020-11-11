@@ -78,7 +78,7 @@
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                 <state key="normal" title="Add Folder"/>
                                                 <connections>
-                                                    <action selector="add:" destination="Hfq-v2-Yap" eventType="touchUpInside" id="XNH-TX-UlF"/>
+                                                    <action selector="submit:" destination="Hfq-v2-Yap" eventType="touchUpInside" id="XNH-TX-UlF"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -112,7 +112,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" enabled="NO" title="Add" id="6oN-wj-chW">
                             <connections>
-                                <action selector="add:" destination="Hfq-v2-Yap" id="IMV-Mr-iEk"/>
+                                <action selector="submit:" destination="Hfq-v2-Yap" id="IMV-Mr-iEk"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

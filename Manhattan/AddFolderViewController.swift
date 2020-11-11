@@ -12,6 +12,13 @@ class AddFolderViewController: UIViewController {
 
 	public static let preferredSize = CGSize(width: 600, height: 150)
 	
+	override var keyCommands: [UIKeyCommand]? {
+		[
+			UIKeyCommand(action: #selector(cancel(_:)), input: UIKeyCommand.inputEscape),
+			UIKeyCommand(action: #selector(submit(_:)), input: "\r"),
+		]
+	}
+	
 	@IBOutlet weak var nameTextField: UITextField!
 	
 	@IBOutlet weak var addBarButtonItem: UIBarButtonItem!
@@ -26,6 +33,7 @@ class AddFolderViewController: UIViewController {
 		if traitCollection.userInterfaceIdiom == .mac {
 			nameTextField.placeholder = nil
 			navigationController?.setNavigationBarHidden(true, animated: false)
+			addButton.role = .primary
 		} else {
 			nameLabel.isHidden = true
 			cancelButton.isHidden = true
@@ -50,8 +58,8 @@ class AddFolderViewController: UIViewController {
 		dismiss(animated: true)
 	}
 	
-	@IBAction func add(_ sender: Any) {
-		guard let folderName = nameTextField.text else {
+	@IBAction func submit(_ sender: Any) {
+		guard let folderName = nameTextField.text, !folderName.isEmpty else {
 			return
 		}
 		
@@ -73,11 +81,7 @@ class AddFolderViewController: UIViewController {
 extension AddFolderViewController: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		if traitCollection.userInterfaceIdiom == .mac {
-			add(self)
-		} else {
-			textField.resignFirstResponder()
-		}
+		textField.resignFirstResponder()
 		return true
 	}
 	
