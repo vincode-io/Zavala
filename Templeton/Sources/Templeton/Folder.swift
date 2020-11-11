@@ -20,6 +20,7 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	public var account: Account? {
 		return AccountManager.shared.findAccount(accountID: id.accountID)
 	}
+	
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case name = "name"

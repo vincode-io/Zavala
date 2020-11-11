@@ -11,7 +11,7 @@ public extension Notification.Name {
 	static let AccountDidChange = Notification.Name(rawValue: "AccountDidChange")
 }
 
-public final class Account: Identifiable, Codable {
+public final class Account: Identifiable, Equatable, Codable {
 
 	public var id: EntityID {
 		return EntityID.account(type.rawValue)
@@ -24,6 +24,11 @@ public final class Account: Identifiable, Codable {
 	public var type: AccountType
 	public var isActive: Bool
 	public var folders: [Folder]?
+	
+	public var sortedFolders: [Folder] {
+		guard let folders = folders else { return [Folder]() }
+		return folders.sorted(by: { $0.name ?? "" < $1.name ?? "" })
+	}
 	
 	enum CodingKeys: String, CodingKey {
 		case type = "type"
@@ -119,6 +124,10 @@ public final class Account: Identifiable, Codable {
 		} else {
 			restoreFolder()
 		}
+	}
+	
+	public static func == (lhs: Account, rhs: Account) -> Bool {
+		return lhs.id == rhs.id
 	}
 	
 }

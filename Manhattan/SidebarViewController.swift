@@ -74,7 +74,10 @@ class SidebarViewController: UICollectionViewController {
 		let indexPath = IndexPath(item: 1, section: SidebarSection.library.rawValue)
 		collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
 		self.collectionView(collectionView, didSelectItemAt: indexPath)
+
 		
+		NotificationCenter.default.addObserver(self, selector: #selector(accountDidChange(_:)), name: .AccountDidChange, object: nil)
+
 //		collectionsSubscriber = dataStore.$collections
 //			.receive(on: RunLoop.main)
 //			.sink { [weak self] _ in
@@ -92,6 +95,12 @@ class SidebarViewController: UICollectionViewController {
 		#endif
 	}
 	
+	// MARK: Notifications
+	
+	@objc func accountDidChange(_ note: Notification) {
+		applyChangeSnapshot()
+	}
+	
 	// MARK: Collection View
 	
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -101,6 +110,10 @@ class SidebarViewController: UICollectionViewController {
 	// MARK: Actions
 	
 	@objc func createFolder(_ sender: Any?) {
+		let addNavViewController = UIStoryboard.add.instantiateViewController(withIdentifier: "AddFolderViewControllerNav") as! UINavigationController
+		addNavViewController.modalPresentationStyle = .formSheet
+		addNavViewController.preferredContentSize = UIStoryboard.preferredContentSizeForFormSheetDisplay
+		present(addNavViewController, animated: true)
 
 	}
 	
@@ -206,7 +219,7 @@ extension SidebarViewController {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
 		let header = SidebarItem.header(title: AccountType.local.name, id: .header(.localAccount))
 		
-		let folders = localAccount.folders ?? [Folder]()
+		let folders = localAccount.sortedFolders ?? [Folder]()
 		let items = folders.map { SidebarItem.outlineProvider($0) }
 		
 		snapshot.append([header])
@@ -219,6 +232,12 @@ extension SidebarViewController {
 		dataSource.apply(librarySnapshot(), to: .library, animatingDifferences: false)
 		if let snapshot = localAccountSnapshot() {
 			dataSource.apply(snapshot, to: .localAccount, animatingDifferences: false)
+		}
+	}
+	
+	private func applyChangeSnapshot() {
+		if let snapshot = localAccountSnapshot() {
+			dataSource.apply(snapshot, to: .localAccount, animatingDifferences: true)
 		}
 	}
 	

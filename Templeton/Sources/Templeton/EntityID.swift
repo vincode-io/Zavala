@@ -83,6 +83,33 @@ public enum EntityID: Hashable, Equatable, Codable {
 		}
 	}
 	
+	public init?(userInfo: [AnyHashable: AnyHashable]) {
+		guard let type = userInfo["type"] as? String else { return nil }
+		
+		switch type {
+		case "all":
+			self = .all
+		case "favorites":
+			self = .favorites
+		case "recents":
+			self = .recents
+		case "account":
+			guard let accountID = userInfo["accountID"] as? Int else { return nil }
+			self = .account(accountID)
+		case "folder":
+			guard let accountID = userInfo["accountID"] as? Int else { return nil }
+			guard let folderID = userInfo["folderID"] as? String else { return nil }
+			self = .folder(accountID, folderID)
+		case "outline":
+			guard let accountID = userInfo["accountID"] as? Int else { return nil }
+			guard let folderID = userInfo["folderID"] as? String else { return nil }
+			guard let outlineID = userInfo["outlineID"] as? String else { return nil }
+			self = .outline(accountID, folderID, outlineID)
+		default:
+			return nil
+		}
+	}
+
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -108,4 +135,34 @@ public enum EntityID: Hashable, Equatable, Codable {
 		}
 	}
 	
+	public var userInfo: [AnyHashable: AnyHashable] {
+		switch self {
+		case .all:
+			return ["type": "all"]
+		case .favorites:
+			return ["type": "favorites"]
+		case .recents:
+			return ["type": "recents"]
+		case .account(let accountID):
+			return [
+				"type": "account",
+				"accountID": accountID
+			]
+		case .folder(let accountID, let folderID):
+			return [
+				"type": "folder",
+				"accountID": accountID,
+				"folderID": folderID
+			]
+		case .outline(let accountID, let folderID, let outlineID):
+			return [
+				"type": "outline",
+				"accountID": accountID,
+				"folderID": folderID,
+				"outlineID": outlineID
+			]
+		}
+	}
+	
+
 }
