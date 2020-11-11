@@ -104,8 +104,6 @@ class SidebarViewController: UICollectionViewController {
 	
 	@IBAction func createFolder(_ sender: Any?) {
 		let addNavViewController = UIStoryboard.add.instantiateViewController(withIdentifier: "AddFolderViewControllerNav") as! UINavigationController
-//		addNavViewController.modalPresentationStyle = .formSheet
-//		addNavViewController.preferredContentSize = AddFolderViewController.preferredSize
 		present(addNavViewController, animated: true)
 	}
 	
