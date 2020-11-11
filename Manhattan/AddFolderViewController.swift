@@ -8,17 +8,8 @@
 import UIKit
 import Templeton
 
-class AddFolderViewController: UIViewController {
+class AddFolderViewController: FormViewController {
 
-	public static let preferredSize = CGSize(width: 600, height: 150)
-	
-	override var keyCommands: [UIKeyCommand]? {
-		[
-			UIKeyCommand(action: #selector(cancel(_:)), input: UIKeyCommand.inputEscape),
-			UIKeyCommand(action: #selector(submit(_:)), input: "\r"),
-		]
-	}
-	
 	@IBOutlet weak var nameTextField: UITextField!
 	
 	@IBOutlet weak var addBarButtonItem: UIBarButtonItem!
@@ -54,11 +45,7 @@ class AddFolderViewController: UIViewController {
 		addButton.isEnabled = isReady
 	}
 	
-	@IBAction func cancel(_ sender: Any) {
-		dismiss(animated: true)
-	}
-	
-	@IBAction func submit(_ sender: Any) {
+	@IBAction override func submit(_ sender: Any) {
 		guard let folderName = nameTextField.text, !folderName.isEmpty else {
 			return
 		}
