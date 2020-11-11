@@ -47,7 +47,6 @@ class SidebarViewController: UICollectionViewController {
 	}
 
 	private var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
-	private var collectionsSubscriber: AnyCancellable?
 
 	private var currentFolder: Folder? {
 		guard let indexPath = collectionView.indexPathsForSelectedItems?.first,
