@@ -27,8 +27,8 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		case outlines = "outlines"
 	}
 	
-	init(accountID: EntityID, name: String) {
-		self.id = EntityID.folder(accountID.accountID, UUID().uuidString)
+	init(parentID: EntityID, name: String) {
+		self.id = EntityID.folder(parentID.accountID, UUID().uuidString)
 		self.name = name
 		self.outlines = [Outline]()
 	}
@@ -36,4 +36,12 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	public static func == (lhs: Folder, rhs: Folder) -> Bool {
 		return lhs.id == rhs.id
 	}
+}
+
+extension Folder {
+	
+	func findOutline(outlineID: String) -> Outline? {
+		return outlines?.first(where: { $0.id?.outlineID == outlineID })
+	}
+
 }

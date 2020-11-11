@@ -13,6 +13,15 @@ public protocol OutlineProvider {
 	var name: String? { get }
 	var image: RSImage? { get }
 	var outlines: [Outline]? { get }
+	var sortedOutlines: [Outline]? { get }
+}
+
+public extension OutlineProvider {
+
+	var sortedOutlines: [Outline]? {
+		return outlines?.sorted(by: { $0.created ?? Date.distantPast < $1.created  ?? Date.distantPast })
+	}
+
 }
 
 public struct LazyOutlineProvider: OutlineProvider {

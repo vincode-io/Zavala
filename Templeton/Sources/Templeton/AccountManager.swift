@@ -108,6 +108,15 @@ public final class AccountManager {
 		return nil
 	}
 	
+	public func findOutline(_ entityID: EntityID) -> Outline? {
+		if case .outline(let accountID, let folderID, let outlineID) = entityID,
+		   let account = accountsDictionary[accountID],
+		   let folder = account.findFolder(folderID: folderID) {
+			return folder.findOutline(outlineID: outlineID)
+		}
+		return nil
+	}
+	
 }
 
 // MARK: Private

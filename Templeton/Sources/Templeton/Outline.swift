@@ -9,7 +9,7 @@ import Foundation
 
 public final class Outline: Identifiable, Equatable, Codable {
 	
-	public var id: String?
+	public var id: EntityID?
 	public var name: String?
 	public var created: Date?
 	public var updated: Date?
@@ -23,6 +23,13 @@ public final class Outline: Identifiable, Equatable, Codable {
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
 		return lhs.id == rhs.id
+	}
+	
+	init(parentID: EntityID, name: String) {
+		self.id = EntityID.outline(parentID.accountID, parentID.folderID, UUID().uuidString)
+		self.name = name
+		self.created = Date()
+		self.updated = Date()
 	}
 	
 }

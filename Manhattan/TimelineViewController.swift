@@ -14,6 +14,25 @@ protocol TimelineDelegate: class  {
 
 class TimelineViewController: UICollectionViewController {
 	
+	private struct TimelineItem: Hashable, Identifiable {
+		let id: EntityID
+		let title: String?
+//		let updateDate: String?
+		
+		static func timelineItem(_ outline: Outline) -> Self {
+			return TimelineItem(id: outline.id!, title: outline.name)
+		}
+	}
+
+	private var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
+
+	private var currentOutline: Outline? {
+		guard let indexPath = collectionView.indexPathsForSelectedItems?.first,
+			  let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
+			  
+		return AccountManager.shared.findOutline(item.id)
+	}
+	
 	weak var delegate: TimelineDelegate?
 	var outlineProvider: OutlineProvider? {
 		didSet {
@@ -28,6 +47,10 @@ class TimelineViewController: UICollectionViewController {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		}
 
+		collectionView.collectionViewLayout = createLayout()
+		configureDataSource()
+		applySnapshot()
+		
 		updateUI()
 	}
 
@@ -38,7 +61,7 @@ class TimelineViewController: UICollectionViewController {
 
 }
 
-private extension TimelineViewController {
+extension TimelineViewController {
 	
 	private func updateUI() {
 		guard isViewLoaded else { return }
@@ -47,3 +70,43 @@ private extension TimelineViewController {
 	}
 	
 }
+
+extension TimelineViewController {
+	
+	private func createLayout() -> UICollectionViewLayout {
+		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
+			let configuration = UICollectionLayoutListConfiguration(appearance: .plain)
+			return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
+		}
+		return layout
+	}
+	
+	private func configureDataSource() {
+		let rowRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, TimelineItem> { (cell, indexPath, item) in
+			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
+			contentConfiguration.text = item.title
+			cell.contentConfiguration = contentConfiguration
+		}
+		
+		dataSource = UICollectionViewDiffableDataSource<Int, TimelineItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
+			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: item)
+		}
+	}
+	
+	private func snapshot() -> NSDiffableDataSourceSectionSnapshot<TimelineItem>? {
+		var snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
+		let outlines = outlineProvider?.sortedOutlines ?? [Outline]()
+		let items = outlines.map { TimelineItem.timelineItem($0) }
+		snapshot.append(items)
+		return snapshot
+	}
+	
+	private func applySnapshot() {
+		if let snapshot = snapshot() {
+			dataSource.apply(snapshot, to: 0, animatingDifferences: true)
+		}
+	}
+	
+}
+
+

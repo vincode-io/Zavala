@@ -60,13 +60,9 @@ public final class Account: Identifiable, Equatable, Codable {
 	public func restoreOutline(_ outline: Outline, folder: Folder, completion: @escaping (Result<Void, Error>) -> Void) {
 	}
 	
-	public func findFolder(folderID: String) -> Folder? {
-		return folders?.first(where: { $0.id.folderID == folderID })
-	}
-	
 	public func createFolder(_ name: String, completion: @escaping (Result<Folder, Error>) -> Void) {
 		func createFolder() {
-			let folder = Folder(accountID: id, name: name)
+			let folder = Folder(parentID: id, name: name)
 			folders?.append(folder)
 			accountDidChange()
 			completion(.success(folder))
@@ -132,8 +128,18 @@ public final class Account: Identifiable, Equatable, Codable {
 	
 }
 
+extension Account {
+
+	func findFolder(folderID: String) -> Folder? {
+		return folders?.first(where: { $0.id.folderID == folderID })
+	}
+
+}
+
 private extension Account {
+	
 	func accountDidChange() {
 		NotificationCenter.default.post(name: .AccountDidChange, object: self, userInfo: nil)
 	}
+	
 }
