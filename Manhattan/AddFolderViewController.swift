@@ -23,6 +23,7 @@ class AddFolderViewController: FormViewController {
 	
 		if traitCollection.userInterfaceIdiom == .mac {
 			nameTextField.placeholder = nil
+			nameTextField.borderStyle = .bezel
 			navigationController?.setNavigationBarHidden(true, animated: false)
 			addButton.role = .primary
 		} else {
