@@ -18,16 +18,13 @@
 		5181A93F2554D92000C153E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5181A93D2554D92000C153E8 /* Main.storyboard */; };
 		5181A9412554D92100C153E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5181A9402554D92100C153E8 /* Assets.xcassets */; };
 		5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5181A9422554D92100C153E8 /* LaunchScreen.storyboard */; };
-		5181A94F2554D92100C153E8 /* ManhattanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A94E2554D92100C153E8 /* ManhattanTests.swift */; };
-		5181A95A2554D92100C153E8 /* ManhattanUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9592554D92100C153E8 /* ManhattanUITests.swift */; };
 		51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51C4C3CD2555F07A004E0206 /* CloudKit.framework */; };
 		51C4C3F92557470B004E0206 /* Templeton in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3F82557470B004E0206 /* Templeton */; };
 		51C4C40125576631004E0206 /* RSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C40025576631004E0206 /* RSCore */; };
 		51C4C40225576632004E0206 /* RSCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C40025576631004E0206 /* RSCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		51C4C442255A0DE1004E0206 /* OutlineListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C441255A0DE1004E0206 /* OutlineListViewController.swift */; };
+		51C4C442255A0DE1004E0206 /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C441255A0DE1004E0206 /* TimelineViewController.swift */; };
 		51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C448255AA215004E0206 /* MainSplitViewController.swift */; };
-		51C4C455255AC883004E0206 /* MainSplitViewController+ToolbarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C454255AC883004E0206 /* MainSplitViewController+ToolbarDelegate.swift */; };
-		51C4C45B255ACA1B004E0206 /* OutlineDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C45A255ACA1B004E0206 /* OutlineDetailViewController.swift */; };
+		51C4C45B255ACA1B004E0206 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C45A255ACA1B004E0206 /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,11 +73,7 @@
 		5181A9432554D92100C153E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5181A9452554D92100C153E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5181A94A2554D92100C153E8 /* .xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5181A94E2554D92100C153E8 /* ManhattanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManhattanTests.swift; sourceTree = "<group>"; };
-		5181A9502554D92100C153E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5181A9552554D92100C153E8 /* .xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5181A9592554D92100C153E8 /* ManhattanUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManhattanUITests.swift; sourceTree = "<group>"; };
-		5181A95B2554D92100C153E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5181A96A2554D93B00C153E8 /* Manhattan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Manhattan.entitlements; sourceTree = "<group>"; };
 		51C4C3AC2555E964004E0206 /* Manhattan_project_debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Manhattan_project_debug.xcconfig; sourceTree = "<group>"; };
 		51C4C3AD2555E964004E0206 /* Manhattan_ios_target_common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Manhattan_ios_target_common.xcconfig; sourceTree = "<group>"; };
@@ -89,10 +82,9 @@
 		51C4C3B02555E964004E0206 /* Manhattan_project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Manhattan_project.xcconfig; sourceTree = "<group>"; };
 		51C4C3CD2555F07A004E0206 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		51C4C3E025560E09004E0206 /* Templeton */ = {isa = PBXFileReference; lastKnownFileType = text; path = Templeton; sourceTree = SOURCE_ROOT; };
-		51C4C441255A0DE1004E0206 /* OutlineListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineListViewController.swift; sourceTree = "<group>"; };
+		51C4C441255A0DE1004E0206 /* TimelineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
 		51C4C448255AA215004E0206 /* MainSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSplitViewController.swift; sourceTree = "<group>"; };
-		51C4C454255AC883004E0206 /* MainSplitViewController+ToolbarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainSplitViewController+ToolbarDelegate.swift"; sourceTree = "<group>"; };
-		51C4C45A255ACA1B004E0206 /* OutlineDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineDetailViewController.swift; sourceTree = "<group>"; };
+		51C4C45A255ACA1B004E0206 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,12 +124,20 @@
 			path = UIKitExtensions;
 			sourceTree = "<group>";
 		};
+		515F163B255C536600FD98B8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5181A96A2554D93B00C153E8 /* Manhattan.entitlements */,
+				5181A9452554D92100C153E8 /* Info.plist */,
+				5181A9402554D92100C153E8 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		5181A92B2554D92000C153E8 = {
 			isa = PBXGroup;
 			children = (
 				5181A9362554D92000C153E8 /* Manhattan */,
-				5181A94D2554D92100C153E8 /* ManhattanTests */,
-				5181A9582554D92100C153E8 /* ManhattanUITests */,
 				51C4C3CC2555F07A004E0206 /* Frameworks */,
 				5181A9352554D92000C153E8 /* Products */,
 				51C4C3AB2555E8EA004E0206 /* xcconfig */,
@@ -158,42 +158,21 @@
 		5181A9362554D92000C153E8 /* Manhattan */ = {
 			isa = PBXGroup;
 			children = (
-				5181A96A2554D93B00C153E8 /* Manhattan.entitlements */,
-				5181A9452554D92100C153E8 /* Info.plist */,
 				515F162B255C12BE00FD98B8 /* Add.storyboard */,
-				5181A9422554D92100C153E8 /* LaunchScreen.storyboard */,
-				5181A93D2554D92000C153E8 /* Main.storyboard */,
 				515F1631255C16E700FD98B8 /* AddFolderViewController.swift */,
 				514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */,
 				5181A9372554D92000C153E8 /* AppDelegate.swift */,
+				51C4C45A255ACA1B004E0206 /* DetailViewController.swift */,
 				51C4C448255AA215004E0206 /* MainSplitViewController.swift */,
-				51C4C454255AC883004E0206 /* MainSplitViewController+ToolbarDelegate.swift */,
-				51C4C45A255ACA1B004E0206 /* OutlineDetailViewController.swift */,
-				51C4C441255A0DE1004E0206 /* OutlineListViewController.swift */,
 				5181A9392554D92000C153E8 /* SceneDelegate.swift */,
 				5181A93B2554D92000C153E8 /* SidebarViewController.swift */,
-				5181A9402554D92100C153E8 /* Assets.xcassets */,
+				51C4C441255A0DE1004E0206 /* TimelineViewController.swift */,
+				5181A9422554D92100C153E8 /* LaunchScreen.storyboard */,
+				5181A93D2554D92000C153E8 /* Main.storyboard */,
+				515F163B255C536600FD98B8 /* Resources */,
 				514BB9D5255B595300C8DBDF /* UIKitExtensions */,
 			);
 			path = Manhattan;
-			sourceTree = "<group>";
-		};
-		5181A94D2554D92100C153E8 /* ManhattanTests */ = {
-			isa = PBXGroup;
-			children = (
-				5181A94E2554D92100C153E8 /* ManhattanTests.swift */,
-				5181A9502554D92100C153E8 /* Info.plist */,
-			);
-			path = ManhattanTests;
-			sourceTree = "<group>";
-		};
-		5181A9582554D92100C153E8 /* ManhattanUITests */ = {
-			isa = PBXGroup;
-			children = (
-				5181A9592554D92100C153E8 /* ManhattanUITests.swift */,
-				5181A95B2554D92100C153E8 /* Info.plist */,
-			);
-			path = ManhattanUITests;
 			sourceTree = "<group>";
 		};
 		51C4C3AB2555E8EA004E0206 /* xcconfig */ = {
@@ -381,13 +360,12 @@
 				514BB9D7255B599E00C8DBDF /* UIViewController+.swift in Sources */,
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
-				51C4C455255AC883004E0206 /* MainSplitViewController+ToolbarDelegate.swift in Sources */,
-				51C4C442255A0DE1004E0206 /* OutlineListViewController.swift in Sources */,
+				51C4C442255A0DE1004E0206 /* TimelineViewController.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,
 				5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */,
 				514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */,
-				51C4C45B255ACA1B004E0206 /* OutlineDetailViewController.swift in Sources */,
+				51C4C45B255ACA1B004E0206 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,7 +373,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5181A94F2554D92100C153E8 /* ManhattanTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,7 +380,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5181A95A2554D92100C153E8 /* ManhattanUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

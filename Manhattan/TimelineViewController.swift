@@ -1,5 +1,5 @@
 //
-//  OutlineListViewController.swift
+//  TimelineViewController.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 11/9/20.
@@ -8,13 +8,13 @@
 import UIKit
 import Templeton
 
-protocol OutlineListDelegate: class  {
-	func outlineSelectionDidChange(_: OutlineListViewController, outline: Outline)
+protocol TimelineDelegate: class  {
+	func outlineSelectionDidChange(_: TimelineViewController, outline: Outline)
 }
 
-class OutlineListViewController: UICollectionViewController {
+class TimelineViewController: UICollectionViewController {
 	
-	weak var delegate: OutlineListDelegate?
+	weak var delegate: TimelineDelegate?
 	var outlineProvider: OutlineProvider? {
 		didSet {
 			updateUI()
@@ -41,7 +41,7 @@ class OutlineListViewController: UICollectionViewController {
 
 }
 
-private extension OutlineListViewController {
+private extension TimelineViewController {
 	
 	private func updateUI() {
 		guard isViewLoaded else { return }

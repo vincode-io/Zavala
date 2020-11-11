@@ -8,8 +8,8 @@ PROVISIONING_PROFILE_SPECIFIER =
 #include "./Manhattan_ios_target_common.xcconfig"
 
 LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks
-INFOPLIST_FILE = Manhattan/Info.plist
-CODE_SIGN_ENTITLEMENTS = Manhattan/Manhattan.entitlements
+INFOPLIST_FILE = Manhattan/Resources/Info.plist
+CODE_SIGN_ENTITLEMENTS = Manhattan/Resources/Manhattan.entitlements
 PRODUCT_BUNDLE_IDENTIFIER = io.vincode.Manhattan
 PRODUCT_NAME = Manhattan
 

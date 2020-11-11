@@ -1,5 +1,5 @@
 //
-//  OutlineDetailViewController.swift
+//  DetailViewController.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 11/10/20.
@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-class OutlineDetailViewController: UIViewController {
+class DetailViewController: UIViewController {
 
 	var outline: Outline?
 	
