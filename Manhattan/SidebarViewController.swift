@@ -148,16 +148,13 @@ extension SidebarViewController {
 			var configuration = UICollectionLayoutListConfiguration(appearance: .sidebar)
 			configuration.showsSeparators = false
 			configuration.headerMode = .firstItemInSection
-			let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
-			return section
+			return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
 		}
 		return layout
 	}
 	
 	private func configureDataSource() {
-		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, SidebarItem> {
-			(cell, indexPath, item) in
-			
+		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, SidebarItem> {	(cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarHeader()
 			contentConfiguration.text = item.title
 			contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .subheadline)
@@ -167,9 +164,7 @@ extension SidebarViewController {
 			cell.accessories = [.outlineDisclosure()]
 		}
 		
-		let rowRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, SidebarItem> {
-			(cell, indexPath, item) in
-			
+		let rowRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, SidebarItem> { (cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
 			contentConfiguration.text = item.title
 			contentConfiguration.image = item.image
@@ -177,9 +172,7 @@ extension SidebarViewController {
 			cell.contentConfiguration = contentConfiguration
 		}
 		
-		dataSource = UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>(collectionView: collectionView) {
-			(collectionView, indexPath, item) -> UICollectionViewCell in
-			
+		dataSource = UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
 			switch item.id {
 			case .header:
 				return collectionView.dequeueConfiguredReusableCell(using: headerRegistration, for: indexPath, item: item)
