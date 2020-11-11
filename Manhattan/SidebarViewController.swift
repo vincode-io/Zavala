@@ -36,11 +36,11 @@ class SidebarViewController: UICollectionViewController {
 			return nil
 		}
 		
-		static func header(title: String, id: ID) -> Self {
+		static func sidebarItem(title: String, id: ID) -> Self {
 			return SidebarItem(id: id, title: title, image: nil)
 		}
 		
-		static func outlineProvider(_ outlineProvider: OutlineProvider) -> Self {
+		static func sidebarItem(_ outlineProvider: OutlineProvider) -> Self {
 			let id = SidebarItem.ID.outlineProvider(outlineProvider.id)
 			return SidebarItem(id: id, title: outlineProvider.name, image: outlineProvider.image)
 		}
@@ -177,11 +177,11 @@ extension SidebarViewController {
 	
 	private func librarySnapshot() -> NSDiffableDataSourceSectionSnapshot<SidebarItem> {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
-		let header = SidebarItem.header(title: "Library", id: .header(.library))
+		let header = SidebarItem.sidebarItem(title: "Library", id: .header(.library))
 		let items: [SidebarItem] = [
-			.outlineProvider(AccountManager.shared.allOutlineProvider),
-			.outlineProvider(AccountManager.shared.favoritesOutlineProvider),
-			.outlineProvider(AccountManager.shared.recentsOutlineProvider)
+			.sidebarItem(AccountManager.shared.allOutlineProvider),
+			.sidebarItem(AccountManager.shared.favoritesOutlineProvider),
+			.sidebarItem(AccountManager.shared.recentsOutlineProvider)
 		]
 		
 		snapshot.append([header])
@@ -194,9 +194,9 @@ extension SidebarViewController {
 		guard let localAccount = AccountManager.shared.localAccount else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
-		let header = SidebarItem.header(title: AccountType.local.name, id: .header(.localAccount))
+		let header = SidebarItem.sidebarItem(title: AccountType.local.name, id: .header(.localAccount))
 		
-		let items = localAccount.sortedFolders.map { SidebarItem.outlineProvider($0) }
+		let items = localAccount.sortedFolders.map { SidebarItem.sidebarItem($0) }
 		
 		snapshot.append([header])
 		snapshot.expand([header])
