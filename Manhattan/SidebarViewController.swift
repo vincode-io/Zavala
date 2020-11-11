@@ -219,8 +219,7 @@ extension SidebarViewController {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
 		let header = SidebarItem.header(title: AccountType.local.name, id: .header(.localAccount))
 		
-		let folders = localAccount.sortedFolders ?? [Folder]()
-		let items = folders.map { SidebarItem.outlineProvider($0) }
+		let items = localAccount.sortedFolders.map { SidebarItem.outlineProvider($0) }
 		
 		snapshot.append([header])
 		snapshot.expand([header])
