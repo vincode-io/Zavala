@@ -128,8 +128,9 @@ class SidebarViewController: UICollectionViewController {
 		
 		let localizedInformativeText = NSLocalizedString("Are you sure you want to delete the “%@” folder?", comment: "Folder delete text")
 		let formattedInformativeText = NSString.localizedStringWithFormat(localizedInformativeText as NSString, folder.name ?? "") as String
-
-		let alert = UIAlertController(title: formattedInformativeText, message: nil, preferredStyle: preferredStyle)
+		let localizedMessageText = NSLocalizedString("Any Outlines in this folder will also be deleted and unrecoverable.", comment: "Delete Message")
+		
+		let alert = UIAlertController(title: formattedInformativeText, message: localizedMessageText, preferredStyle: preferredStyle)
 		alert.addAction(cancelAction)
 		alert.addAction(deleteAction)
 		
