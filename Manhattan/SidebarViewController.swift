@@ -66,21 +66,15 @@ class SidebarViewController: UICollectionViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		navigationItem.title = NSLocalizedString("Folders", comment: "Folders")
-		
+		if traitCollection.userInterfaceIdiom == .mac {
+			navigationController?.setNavigationBarHidden(true, animated: false)
+		}
+
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
 		applyInitialSnapshot()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidChange(_:)), name: .AccountDidChange, object: nil)
-	}
-
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-		
-		if traitCollection.userInterfaceIdiom == .mac {
-			navigationController?.setNavigationBarHidden(true, animated: animated)
-		}
 	}
 	
 	// MARK: Notifications

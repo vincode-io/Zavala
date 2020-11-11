@@ -10,24 +10,34 @@ import Templeton
 
 class DetailViewController: UIViewController {
 
-	var outline: Outline?
+	var outline: Outline? {
+		didSet {
+			updateUI()
+		}
+	}
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-
-    }
-    
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
 		
 		if traitCollection.userInterfaceIdiom == .mac {
-			navigationController?.setNavigationBarHidden(true, animated: animated)
+			navigationController?.setNavigationBarHidden(true, animated: false)
 		}
+		
+		updateUI()
 	}
 
 	// MARK: Actions
 	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
 		
+	}
+	
+}
+
+private extension DetailViewController {
+	
+	private func updateUI() {
+		guard isViewLoaded else { return }
+		navigationItem.title = outline?.name
 	}
 	
 }

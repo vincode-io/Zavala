@@ -23,15 +23,12 @@ class TimelineViewController: UICollectionViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-		updateUI()
-    }
-
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
 
 		if traitCollection.userInterfaceIdiom == .mac {
-			navigationController?.setNavigationBarHidden(true, animated: animated)
+			navigationController?.setNavigationBarHidden(true, animated: false)
 		}
+
+		updateUI()
 	}
 
 	// MARK: Actions
@@ -45,6 +42,7 @@ private extension TimelineViewController {
 	
 	private func updateUI() {
 		guard isViewLoaded else { return }
+		navigationItem.title = outlineProvider?.name
 		view.window?.windowScene?.title = outlineProvider?.name
 	}
 	
