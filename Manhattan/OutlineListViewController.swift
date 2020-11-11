@@ -45,7 +45,7 @@ private extension OutlineListViewController {
 	
 	private func updateUI() {
 		guard isViewLoaded else { return }
-		navigationItem.title = outlineProvider?.name ?? NSLocalizedString("Outlines", comment: "Outlines")
+		view.window?.windowScene?.title = outlineProvider?.name
 	}
 	
 }
