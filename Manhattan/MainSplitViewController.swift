@@ -31,6 +31,7 @@ class MainSplitViewController: UISplitViewController {
 			preferredSupplementaryColumnWidth = 300
 		}
 
+		delegate = self
 		sidebarViewController?.delegate = self
 		outlineListViewController?.delegate = self
     }
@@ -74,6 +75,35 @@ extension MainSplitViewController: OutlineListDelegate {
 	
 	func outlineSelectionDidChange(_: OutlineListViewController, outline: Outline) {
 		
+	}
+	
+}
+
+// MARK: UISplitViewControllerDelegate
+
+extension MainSplitViewController: UISplitViewControllerDelegate {
+	
+	func splitViewController(_ svc: UISplitViewController, topColumnForCollapsingToProposedTopColumn proposedTopColumn: UISplitViewController.Column) -> UISplitViewController.Column {
+		switch proposedTopColumn {
+		case .supplementary:
+			if outlineListViewController?.outlineProvider != nil {
+				return .supplementary
+			} else {
+				return .primary
+			}
+		case .secondary:
+			if outlineDetailViewController?.outline != nil {
+				return .secondary
+			} else {
+				if outlineListViewController?.outlineProvider != nil {
+					return .supplementary
+				} else {
+					return .primary
+				}
+			}
+		default:
+			return .primary
+		}
 	}
 	
 }

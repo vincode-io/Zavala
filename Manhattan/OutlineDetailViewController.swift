@@ -6,9 +6,12 @@
 //
 
 import UIKit
+import Templeton
 
 class OutlineDetailViewController: UIViewController {
 
+	var outline: Outline?
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
