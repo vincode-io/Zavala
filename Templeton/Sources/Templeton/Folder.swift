@@ -74,9 +74,6 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	public func renameOutline(_ outline: Outline, to name: String, completion: @escaping (Result<Void, Error>) -> Void) {
 	}
 	
-	public func restoreOutline(_ outline: Outline, folder: Folder, completion: @escaping (Result<Void, Error>) -> Void) {
-	}
-	
 	public static func == (lhs: Folder, rhs: Folder) -> Bool {
 		return lhs.id == rhs.id
 	}

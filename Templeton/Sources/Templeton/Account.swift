@@ -89,20 +89,6 @@ public final class Account: Identifiable, Equatable, Codable {
 			renameFolder()
 		}
 	}
-
-	public func restoreFolder(_ folder: Folder, completion: @escaping (Result<Void, Error>) -> Void) {
-		func restoreFolder() {
-			folders?.append(folder)
-			accountDidChange()
-			completion(.success(()))
-		}
-
-		if type == .cloudKit {
-			restoreFolder()
-		} else {
-			restoreFolder()
-		}
-	}
 	
 	public static func == (lhs: Account, rhs: Account) -> Bool {
 		return lhs.id == rhs.id
