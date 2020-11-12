@@ -128,10 +128,20 @@ extension TimelineViewController {
 	}
 	
 	private func configureDataSource() {
-		let rowRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, TimelineItem> { (cell, indexPath, item) in
+		let rowRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, TimelineItem> { [weak self] (cell, indexPath, item) in
+			guard let self = self else { return }
+			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 			contentConfiguration.text = item.title
 			contentConfiguration.secondaryText = item.updateDate
+			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
+			
+			if self.traitCollection.userInterfaceIdiom == .mac {
+				contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .body)
+				contentConfiguration.secondaryTextProperties.font = .preferredFont(forTextStyle: .footnote)
+				contentConfiguration.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 10, bottom: 8, trailing: 10)
+			}
+			
 			cell.contentConfiguration = contentConfiguration
 		}
 		
