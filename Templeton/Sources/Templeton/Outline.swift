@@ -9,7 +9,7 @@ import Foundation
 
 public final class Outline: Identifiable, Equatable, Codable {
 	
-	public var id: EntityID?
+	public var id: EntityID
 	public var name: String?
 	public var created: Date?
 	public var updated: Date?
@@ -19,6 +19,15 @@ public final class Outline: Identifiable, Equatable, Codable {
 		case name = "name"
 		case created = "created"
 		case updated = "updated"
+	}
+	
+	public var account: Account? {
+		return AccountManager.shared.findAccount(accountID: id.accountID)
+	}
+	
+	public var folder: Folder? {
+		let folderID = EntityID.folder(id.accountID, id.folderID)
+		return AccountManager.shared.findFolder(folderID)
 	}
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {

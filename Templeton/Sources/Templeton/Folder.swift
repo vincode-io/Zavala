@@ -57,7 +57,7 @@ extension Folder {
 	}
 	
 	func findOutline(outlineID: String) -> Outline? {
-		return outlines?.first(where: { $0.id?.outlineID == outlineID })
+		return outlines?.first(where: { $0.id.outlineID == outlineID })
 	}
 
 }

@@ -46,7 +46,7 @@ class TimelineViewController: UICollectionViewController {
 
 		static func timelineItem(_ outline: Outline) -> Self {
 			let updateDate = Self.dateString(outline.updated)
-			return TimelineItem(id: outline.id!, title: outline.name, updateDate: updateDate)
+			return TimelineItem(id: outline.id, title: outline.name, updateDate: updateDate)
 		}
 		
 	}
@@ -163,6 +163,26 @@ extension TimelineViewController {
 	private func updateUI() {
 		navigationItem.title = outlineProvider?.name
 		view.window?.windowScene?.title = outlineProvider?.name
+	}
+	
+	private func deleteOutline(_ outline: Outline) {
+		let deleteTitle = NSLocalizedString("Delete", comment: "Delete")
+		let deleteAction = UIAlertAction(title: deleteTitle, style: .destructive) { (action) in
+			outline.account?.removeOutline(outline) { _ in }
+		}
+		
+		let cancelTitle = NSLocalizedString("Cancel", comment: "Cancel")
+		let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
+		
+		let localizedInformativeText = NSLocalizedString("Are you sure you want to delete the “%@” outline?", comment: "Outline delete text")
+		let formattedInformativeText = NSString.localizedStringWithFormat(localizedInformativeText as NSString, outline.name ?? "") as String
+		let localizedMessageText = NSLocalizedString("This outline will be deleted and unrecoverable.", comment: "Outline delete Message")
+		
+		let alert = UIAlertController(title: formattedInformativeText, message: localizedMessageText, preferredStyle: .alert)
+		alert.addAction(cancelAction)
+		alert.addAction(deleteAction)
+		
+		present(alert, animated: true, completion: nil)
 	}
 	
 }
