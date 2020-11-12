@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-class DetailViewController: UIViewController {
+class DetailViewController: UICollectionViewController {
 
 	var outline: Outline? {
 		didSet {
