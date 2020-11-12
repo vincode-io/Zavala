@@ -71,6 +71,10 @@ class TimelineViewController: UICollectionViewController {
 		}
 	}
 	
+	override var canBecomeFirstResponder: Bool {
+		return true
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -111,14 +115,7 @@ class TimelineViewController: UICollectionViewController {
 
 }
 
-extension TimelineViewController {
-	
-	private func updateUI() {
-		navigationItem.title = outlineProvider?.name
-		view.window?.windowScene?.title = outlineProvider?.name
-	}
-	
-}
+// MARK: Collection View
 
 extension TimelineViewController {
 		
@@ -159,4 +156,13 @@ extension TimelineViewController {
 	
 }
 
+// MARK: Helper Functions
 
+extension TimelineViewController {
+	
+	private func updateUI() {
+		navigationItem.title = outlineProvider?.name
+		view.window?.windowScene?.title = outlineProvider?.name
+	}
+	
+}
