@@ -12,6 +12,7 @@ class DetailViewController: UIViewController {
 
 	var outline: Outline? {
 		didSet {
+			guard isViewLoaded else { return }
 			updateUI()
 		}
 	}
@@ -36,7 +37,6 @@ class DetailViewController: UIViewController {
 private extension DetailViewController {
 	
 	private func updateUI() {
-		guard isViewLoaded else { return }
 		navigationItem.title = outline?.name
 	}
 	
