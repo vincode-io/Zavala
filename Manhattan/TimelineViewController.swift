@@ -71,10 +71,6 @@ class TimelineViewController: UICollectionViewController {
 		}
 	}
 	
-	override var canBecomeFirstResponder: Bool {
-		return true
-	}
-	
     override func viewDidLoad() {
         super.viewDidLoad()
 

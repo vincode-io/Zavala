@@ -58,10 +58,6 @@ class SidebarViewController: UICollectionViewController {
 	
 	weak var delegate: SidebarDelegate?
 	
-	override var canBecomeFirstResponder: Bool {
-		return true
-	}
-	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
