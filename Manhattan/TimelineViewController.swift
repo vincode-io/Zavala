@@ -13,17 +13,46 @@ protocol TimelineDelegate: class  {
 }
 
 class TimelineViewController: UICollectionViewController {
-	
+
 	private struct TimelineItem: Hashable, Identifiable {
 		let id: EntityID
 		let title: String?
-//		let updateDate: String?
+		let updateDate: String?
+
+		private static let dateFormatter: DateFormatter = {
+			let formatter = DateFormatter()
+			formatter.dateStyle = .medium
+			formatter.timeStyle = .none
+			return formatter
+		}()
+
+		private static let timeFormatter: DateFormatter = {
+			let formatter = DateFormatter()
+			formatter.dateStyle = .none
+			formatter.timeStyle = .short
+			return formatter
+		}()
 		
-		static func timelineItem(_ outline: Outline) -> Self {
-			return TimelineItem(id: outline.id!, title: outline.name)
+		private static func dateString(_ date: Date?) -> String {
+			guard let date = date else {
+				return NSLocalizedString("Not Available", comment: "Not Available")
+			}
+			
+			if Calendar.dateIsToday(date) {
+				return timeFormatter.string(from: date)
+			}
+			return dateFormatter.string(from: date)
 		}
+
+		static func timelineItem(_ outline: Outline) -> Self {
+			let updateDate = Self.dateString(outline.updated)
+			return TimelineItem(id: outline.id!, title: outline.name, updateDate: updateDate)
+		}
+		
 	}
 
+	private var addBarButtonItem: UIBarButtonItem?
+	
 	private var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
 
 	private var currentOutline: Outline? {
@@ -36,7 +65,8 @@ class TimelineViewController: UICollectionViewController {
 	weak var delegate: TimelineDelegate?
 	var outlineProvider: OutlineProvider? {
 		didSet {
-			applySnapshot()
+			guard isViewLoaded else { return }
+			applySnapshot(animated: false)
 			updateUI()
 		}
 	}
@@ -46,11 +76,14 @@ class TimelineViewController: UICollectionViewController {
 
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
+		} else {
+			addBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: #selector(createOutline(_:)))
+			navigationItem.setRightBarButton(addBarButtonItem, animated: false)
 		}
 
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
-		applySnapshot()
+		applySnapshot(animated: false)
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(outlinesDidChange(_:)), name: .OutlinesDidChange, object: nil)
 
@@ -61,12 +94,12 @@ class TimelineViewController: UICollectionViewController {
 	
 	@objc func outlinesDidChange(_ note: Notification) {
 		guard let op = outlineProvider, !op.isSmartProvider else {
-			applySnapshot()
+			applySnapshot(animated: true)
 			return
 		}
 		
 		guard let noteOP = note.object as? OutlineProvider, op.id == noteOP.id else { return }
-		applySnapshot()
+		applySnapshot(animated: true)
 	}
 	
 	// MARK: Actions
@@ -81,7 +114,6 @@ class TimelineViewController: UICollectionViewController {
 extension TimelineViewController {
 	
 	private func updateUI() {
-		guard isViewLoaded else { return }
 		navigationItem.title = outlineProvider?.name
 		view.window?.windowScene?.title = outlineProvider?.name
 	}
@@ -89,7 +121,7 @@ extension TimelineViewController {
 }
 
 extension TimelineViewController {
-	
+		
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 			let configuration = UICollectionLayoutListConfiguration(appearance: .plain)
@@ -100,8 +132,9 @@ extension TimelineViewController {
 	
 	private func configureDataSource() {
 		let rowRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, TimelineItem> { (cell, indexPath, item) in
-			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
+			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 			contentConfiguration.text = item.title
+			contentConfiguration.secondaryText = item.updateDate
 			cell.contentConfiguration = contentConfiguration
 		}
 		
@@ -118,9 +151,9 @@ extension TimelineViewController {
 		return snapshot
 	}
 	
-	private func applySnapshot() {
+	private func applySnapshot(animated: Bool) {
 		if let snapshot = snapshot() {
-			dataSource.apply(snapshot, to: 0, animatingDifferences: true)
+			dataSource.apply(snapshot, to: 0, animatingDifferences: animated)
 		}
 	}
 	
