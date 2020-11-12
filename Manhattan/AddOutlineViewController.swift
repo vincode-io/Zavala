@@ -9,6 +9,8 @@ import UIKit
 import Templeton
 
 class AddOutlineViewController: FormViewController {
+	
+	var folder: Folder?
 
 	@IBOutlet weak var addBarButtonItem: UIBarButtonItem!
 	
@@ -47,14 +49,9 @@ class AddOutlineViewController: FormViewController {
 	}
 	
 	@IBAction override func submit(_ sender: Any) {
-
-		guard let outlineName = nameTextField.text, !outlineName.isEmpty else {
-			return
-		}
+		guard let folder = folder, let outlineName = nameTextField.text, !outlineName.isEmpty else { return }
 		
-		guard let folder = AccountManager.shared.findAccount(accountID: AccountType.local.rawValue)?.folders?.first else { return }
-		
-		folder.createOutline(name: outlineName, folder: folder) { result in
+		folder.createOutline(name: outlineName) { result in
 			switch result {
 			case .success:
 				self.dismiss(animated: true)

@@ -105,7 +105,12 @@ class TimelineViewController: UICollectionViewController {
 	// MARK: Actions
 	
 	@objc func createOutline(_ sender: Any?) {
+		guard let folder = outlineProvider as? Folder else { return }
+
 		let addNavViewController = UIStoryboard.add.instantiateViewController(withIdentifier: "AddOutlineViewControllerNav") as! UINavigationController
+		let addViewController = addNavViewController.topViewController as! AddOutlineViewController
+		addViewController.folder = folder
+
 		present(addNavViewController, animated: true)
 	}
 

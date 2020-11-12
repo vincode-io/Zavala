@@ -39,9 +39,9 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		self.outlines = [Outline]()
 	}
 
-	public func createOutline(name: String, folder: Folder, completion: @escaping (Result<Outline, Error>) -> Void) {
+	public func createOutline(name: String, completion: @escaping (Result<Outline, Error>) -> Void) {
 		func createOutline() {
-			let outline = Outline(parentID: folder.id, name: name)
+			let outline = Outline(parentID: id, name: name)
 			outlines?.append(outline)
 			outlinesDidChange()
 			completion(.success(outline))
