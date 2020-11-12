@@ -89,11 +89,6 @@ class SidebarViewController: UICollectionViewController {
 		present(addNavViewController, animated: true)
 	}
 	
-	override func delete(_ sender: Any?) {
-		guard let folder = self.currentFolder else { return }
-		deleteFolder(folder)
-	}
-	
 }
 
 // MARK: Collection View
