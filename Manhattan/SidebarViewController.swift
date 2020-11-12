@@ -82,17 +82,6 @@ class SidebarViewController: UICollectionViewController {
 		applyChangeSnapshot()
 	}
 	
-	// MARK: Collection View
-	
-	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
-		
-		if case .outlineProvider(let entityID) = sidebarItem.id {
-			let outlineProvider = AccountManager.shared.findOutlineProvider(entityID)
-			delegate?.sidebarSelectionDidChange(self, outlineProvider: outlineProvider)
-		}
-	}
-
 	// MARK: Actions
 	
 	@IBAction func createFolder(_ sender: Any?) {
@@ -102,39 +91,23 @@ class SidebarViewController: UICollectionViewController {
 	
 	override func delete(_ sender: Any?) {
 		guard let folder = self.currentFolder else { return }
-		
-		let deleteTitle = NSLocalizedString("Delete", comment: "Delete")
-		let deleteAction = UIAlertAction(title: deleteTitle, style: .destructive) { (action) in
-			folder.account?.removeFolder(folder) { _ in }
-		}
-		
-		let cancelTitle = NSLocalizedString("Cancel", comment: "Cancel")
-		let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
-		
-		#if targetEnvironment(macCatalyst)
-		let preferredStyle = UIAlertController.Style.alert
-		#else
-		let preferredStyle = UIAlertController.Style.actionSheet
-		#endif
-		
-		let localizedInformativeText = NSLocalizedString("Are you sure you want to delete the “%@” folder?", comment: "Folder delete text")
-		let formattedInformativeText = NSString.localizedStringWithFormat(localizedInformativeText as NSString, folder.name ?? "") as String
-		let localizedMessageText = NSLocalizedString("Any Outlines in this folder will also be deleted and unrecoverable.", comment: "Delete Message")
-		
-		let alert = UIAlertController(title: formattedInformativeText, message: localizedMessageText, preferredStyle: preferredStyle)
-		alert.addAction(cancelAction)
-		alert.addAction(deleteAction)
-		
-		if let popoverPresentationController = alert.popoverPresentationController {
-			popoverPresentationController.barButtonItem = sender as? UIBarButtonItem
-		}
-		
-		present(alert, animated: true, completion: nil)
-		
+		deleteFolder(folder)
 	}
+	
 }
 
+// MARK: Collection View
+
 extension SidebarViewController {
+	
+	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
+		
+		if case .outlineProvider(let entityID) = sidebarItem.id {
+			let outlineProvider = AccountManager.shared.findOutlineProvider(entityID)
+			delegate?.sidebarSelectionDidChange(self, outlineProvider: outlineProvider)
+		}
+	}
 	
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
@@ -215,6 +188,38 @@ extension SidebarViewController {
 		if let snapshot = localAccountSnapshot() {
 			dataSource.apply(snapshot, to: .localAccount, animatingDifferences: true)
 		}
+	}
+	
+}
+
+// MARK: Helper Functions
+
+extension SidebarViewController {
+	
+	private func deleteFolder(_ folder: Folder) {
+		let deleteTitle = NSLocalizedString("Delete", comment: "Delete")
+		let deleteAction = UIAlertAction(title: deleteTitle, style: .destructive) { (action) in
+			folder.account?.removeFolder(folder) { _ in }
+		}
+		
+		let cancelTitle = NSLocalizedString("Cancel", comment: "Cancel")
+		let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
+		
+		#if targetEnvironment(macCatalyst)
+		let preferredStyle = UIAlertController.Style.alert
+		#else
+		let preferredStyle = UIAlertController.Style.actionSheet
+		#endif
+		
+		let localizedInformativeText = NSLocalizedString("Are you sure you want to delete the “%@” folder?", comment: "Folder delete text")
+		let formattedInformativeText = NSString.localizedStringWithFormat(localizedInformativeText as NSString, folder.name ?? "") as String
+		let localizedMessageText = NSLocalizedString("Any Outlines in this folder will also be deleted and unrecoverable.", comment: "Delete Message")
+		
+		let alert = UIAlertController(title: formattedInformativeText, message: localizedMessageText, preferredStyle: preferredStyle)
+		alert.addAction(cancelAction)
+		alert.addAction(deleteAction)
+		
+		present(alert, animated: true, completion: nil)
 	}
 	
 }
