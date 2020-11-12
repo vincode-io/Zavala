@@ -36,6 +36,7 @@ class TimelineViewController: UICollectionViewController {
 	weak var delegate: TimelineDelegate?
 	var outlineProvider: OutlineProvider? {
 		didSet {
+			applySnapshot()
 			updateUI()
 		}
 	}
@@ -51,12 +52,28 @@ class TimelineViewController: UICollectionViewController {
 		configureDataSource()
 		applySnapshot()
 		
+		NotificationCenter.default.addObserver(self, selector: #selector(outlinesDidChange(_:)), name: .OutlinesDidChange, object: nil)
+
 		updateUI()
 	}
 
+	// MARK: Notifications
+	
+	@objc func outlinesDidChange(_ note: Notification) {
+		guard let op = outlineProvider, !op.isSmartProvider else {
+			applySnapshot()
+			return
+		}
+		
+		guard let noteOP = note.object as? OutlineProvider, op.id == noteOP.id else { return }
+		applySnapshot()
+	}
+	
 	// MARK: Actions
 	
 	@objc func createOutline(_ sender: Any?) {
+		let addNavViewController = UIStoryboard.add.instantiateViewController(withIdentifier: "AddOutlineViewControllerNav") as! UINavigationController
+		present(addNavViewController, animated: true)
 	}
 
 }

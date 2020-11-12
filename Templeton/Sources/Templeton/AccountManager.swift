@@ -52,7 +52,9 @@ public final class AccountManager {
 		self.accountsFolder = URL(fileURLWithPath: accountsFolderPath, isDirectory: true)
 
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidChange(_:)), name: .AccountDidChange, object: nil)
-		
+		NotificationCenter.default.addObserver(self, selector: #selector(folderDidChange(_:)), name: .FolderDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlinesDidChange(_:)), name: .OutlinesDidChange, object: nil)
+
 		// The local account must always exist, even if it's empty.
 		let localAccountFolder = accountsFolder.appendingPathComponent(AccountType.local.folderNmae)
 		let localAccountFile = localAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
@@ -127,8 +129,17 @@ private extension AccountManager {
 	
 	@objc func accountDidChange(_ note: Notification) {
 		let account = note.object as! Account
-		let accountFile = accountFiles[account.type.rawValue]!
-		accountFile.markAsDirty()
+		markAsDirty(account)
+	}
+
+	@objc func folderDidChange(_ note: Notification) {
+		guard let account = (note.object as? Folder)?.account else { return }
+		markAsDirty(account)
+	}
+
+	@objc func outlinesDidChange(_ note: Notification) {
+		guard let account = (note.object as? Folder)?.account else { return }
+		markAsDirty(account)
 	}
 	
 	// MARK: Helpers
@@ -149,6 +160,11 @@ private extension AccountManager {
 			}
 			return (account1.name as NSString).localizedStandardCompare(account2.name) == .orderedAscending
 		}
+	}
+	
+	func markAsDirty(_ account: Account) {
+		let accountFile = accountFiles[account.type.rawValue]!
+		accountFile.markAsDirty()
 	}
 	
 }

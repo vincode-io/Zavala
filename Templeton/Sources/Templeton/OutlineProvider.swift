@@ -8,10 +8,16 @@
 import Foundation
 import RSCore
 
+public extension Notification.Name {
+	static let OutlinesDidChange = Notification.Name(rawValue: "OutlinesDidChange")
+}
+
 public protocol OutlineProvider {
 	var id: EntityID { get }
 	var name: String? { get }
 	var image: RSImage? { get }
+	
+	var isSmartProvider: Bool { get } 
 	var outlines: [Outline]? { get }
 	var sortedOutlines: [Outline]? { get }
 }
@@ -20,6 +26,10 @@ public extension OutlineProvider {
 
 	var sortedOutlines: [Outline]? {
 		return outlines?.sorted(by: { $0.created ?? Date.distantPast < $1.created  ?? Date.distantPast })
+	}
+	
+	func outlinesDidChange() {
+		NotificationCenter.default.post(name: .OutlinesDidChange, object: self, userInfo: nil)
 	}
 
 }
@@ -53,7 +63,9 @@ public struct LazyOutlineProvider: OutlineProvider {
 			fatalError()
 		}
 	}
-	
+
+	public let isSmartProvider = true
+
 	public var outlines: [Outline]? {
 		return outlineCallback()
 	}

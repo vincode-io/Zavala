@@ -46,9 +46,30 @@ public final class Account: Identifiable, Equatable, Codable {
 	}
 
 	public func createOutline(name: String, folder: Folder, completion: @escaping (Result<Outline, Error>) -> Void) {
+		func createOutline() {
+			let outline = Outline(parentID: folder.id, name: name)
+			folder.addOutline(outline)
+			completion(.success(outline))
+		}
+		
+		if type == .cloudKit {
+			createOutline()
+		} else {
+			createOutline()
+		}
 	}
 	
 	public func removeOutline(_ outline: Outline, from folder: Folder, completion: @escaping (Result<Void, Error>) -> Void) {
+		func removeOutline() {
+			folder.removeOutline(outline)
+			completion(.success(()))
+		}
+		
+		if type == .cloudKit {
+			removeOutline()
+		} else {
+			removeOutline()
+		}
 	}
 	
 	public func moveOutline(_ outline: Outline, from: Folder, to: Folder, completion: @escaping (Result<Void, Error>) -> Void) {

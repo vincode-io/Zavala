@@ -8,6 +8,10 @@
 import Foundation
 import RSCore
 
+public extension Notification.Name {
+	static let FolderDidChange = Notification.Name(rawValue: "FolderDidChange")
+}
+
 public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	
 	public var id: EntityID
@@ -15,6 +19,8 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	public var image: RSImage? {
 		return RSImage(systemName: "folder")
 	}
+	
+	public let isSmartProvider = false
 	public var outlines: [Outline]?
 
 	public var account: Account? {
@@ -40,8 +46,26 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 
 extension Folder {
 	
+	func addOutline(_ outline: Outline) {
+		outlines?.append(outline)
+		outlinesDidChange()
+	}
+	
+	func removeOutline(_ outline: Outline) {
+		outlines = outlines?.filter({ $0 != outline })
+		outlinesDidChange()
+	}
+	
 	func findOutline(outlineID: String) -> Outline? {
 		return outlines?.first(where: { $0.id?.outlineID == outlineID })
 	}
 
+}
+
+private extension Folder {
+	
+	func folderDidChange() {
+		NotificationCenter.default.post(name: .FolderDidChange, object: self, userInfo: nil)
+	}
+	
 }

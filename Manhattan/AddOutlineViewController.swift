@@ -1,5 +1,5 @@
 //
-//  AddFolderViewController.swift
+//  AddOutlineViewController.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 11/11/20.
@@ -8,18 +8,18 @@
 import UIKit
 import Templeton
 
-class AddFolderViewController: FormViewController {
+class AddOutlineViewController: FormViewController {
 
+	@IBOutlet weak var addBarButtonItem: UIBarButtonItem!
+	
 	@IBOutlet weak var nameTextField: UITextField!
 	
-	@IBOutlet weak var addBarButtonItem: UIBarButtonItem!
-
 	@IBOutlet weak var nameLabel: UILabel!
 	@IBOutlet weak var cancelButton: UIButton!
 	@IBOutlet weak var submitButton: UIButton!
 	
 	override func viewDidLoad() {
-        super.viewDidLoad()
+		super.viewDidLoad()
 	
 		if traitCollection.userInterfaceIdiom == .mac {
 			nameTextField.placeholder = nil
@@ -47,13 +47,14 @@ class AddFolderViewController: FormViewController {
 	}
 	
 	@IBAction override func submit(_ sender: Any) {
-		guard let folderName = nameTextField.text, !folderName.isEmpty else {
+
+		guard let outlineName = nameTextField.text, !outlineName.isEmpty else {
 			return
 		}
 		
-		guard let account = AccountManager.shared.findAccount(accountID: AccountType.local.rawValue) else { return }
+		guard let folder = AccountManager.shared.findAccount(accountID: AccountType.local.rawValue)?.folders?.first else { return }
 		
-		account.createFolder(folderName) { result in
+		folder.account?.createOutline(name: outlineName, folder: folder) { result in
 			switch result {
 			case .success:
 				self.dismiss(animated: true)
@@ -62,11 +63,12 @@ class AddFolderViewController: FormViewController {
 				self.dismiss(animated: true)
 			}
 		}
+		
 	}
 	
 }
 
-extension AddFolderViewController: UITextFieldDelegate {
+extension AddOutlineViewController: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()

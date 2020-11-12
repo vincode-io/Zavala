@@ -124,7 +124,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.newOutline,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
 			.flexibleSpace,
-			.toggleOutlineIsFavorite
+//			.toggleOutlineIsFavorite
 		]
 		return identifiers
 	}
