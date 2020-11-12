@@ -10,6 +10,8 @@ import Templeton
 
 class AddFolderViewController: FormViewController {
 
+	var account: Account?
+	
 	@IBOutlet weak var nameTextField: UITextField!
 	
 	@IBOutlet weak var addBarButtonItem: UIBarButtonItem!
@@ -47,11 +49,7 @@ class AddFolderViewController: FormViewController {
 	}
 	
 	@IBAction override func submit(_ sender: Any) {
-		guard let folderName = nameTextField.text, !folderName.isEmpty else {
-			return
-		}
-		
-		guard let account = AccountManager.shared.findAccount(accountID: AccountType.local.rawValue) else { return }
+		guard let account = account, let folderName = nameTextField.text, !folderName.isEmpty else { return	}
 		
 		account.createFolder(folderName) { result in
 			switch result {

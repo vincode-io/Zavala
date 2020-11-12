@@ -48,6 +48,14 @@ class SidebarViewController: UICollectionViewController {
 
 	private var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 
+	private var currentAccount: Account? {
+		let activeAccounts = AccountManager.shared.activeAccounts
+		guard activeAccounts.count != 1 else {
+			return activeAccounts.first
+		}
+		return currentFolder?.account
+	}
+	
 	private var currentFolder: Folder? {
 		guard let indexPath = collectionView.indexPathsForSelectedItems?.first,
 			  let item = dataSource.itemIdentifier(for: indexPath),
@@ -81,7 +89,12 @@ class SidebarViewController: UICollectionViewController {
 	// MARK: Actions
 	
 	@IBAction func createFolder(_ sender: Any?) {
+		guard let account = currentAccount else { return }
+
 		let addNavViewController = UIStoryboard.add.instantiateViewController(withIdentifier: "AddFolderViewControllerNav") as! UINavigationController
+		let addViewController = addNavViewController.topViewController as! AddFolderViewController
+
+		addViewController.account = account
 		present(addNavViewController, animated: true)
 	}
 	
