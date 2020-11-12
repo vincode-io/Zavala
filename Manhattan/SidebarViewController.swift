@@ -205,17 +205,11 @@ extension SidebarViewController {
 		let cancelTitle = NSLocalizedString("Cancel", comment: "Cancel")
 		let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
 		
-		#if targetEnvironment(macCatalyst)
-		let preferredStyle = UIAlertController.Style.alert
-		#else
-		let preferredStyle = UIAlertController.Style.actionSheet
-		#endif
-		
 		let localizedInformativeText = NSLocalizedString("Are you sure you want to delete the “%@” folder?", comment: "Folder delete text")
 		let formattedInformativeText = NSString.localizedStringWithFormat(localizedInformativeText as NSString, folder.name ?? "") as String
 		let localizedMessageText = NSLocalizedString("Any Outlines in this folder will also be deleted and unrecoverable.", comment: "Delete Message")
 		
-		let alert = UIAlertController(title: formattedInformativeText, message: localizedMessageText, preferredStyle: preferredStyle)
+		let alert = UIAlertController(title: formattedInformativeText, message: localizedMessageText, preferredStyle: .alert)
 		alert.addAction(cancelAction)
 		alert.addAction(deleteAction)
 		
