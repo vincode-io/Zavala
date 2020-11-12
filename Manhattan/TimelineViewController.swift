@@ -168,7 +168,11 @@ extension TimelineViewController {
 	private func deleteOutline(_ outline: Outline) {
 		let deleteTitle = NSLocalizedString("Delete", comment: "Delete")
 		let deleteAction = UIAlertAction(title: deleteTitle, style: .destructive) { (action) in
-			outline.account?.removeOutline(outline) { _ in }
+			outline.folder?.removeOutline(outline) { result in
+				if case .failure(let error) = result {
+					self.presentError(error)
+				}
+			}
 		}
 		
 		let cancelTitle = NSLocalizedString("Cancel", comment: "Cancel")

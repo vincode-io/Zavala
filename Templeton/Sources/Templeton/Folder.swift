@@ -38,6 +38,44 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		self.name = name
 		self.outlines = [Outline]()
 	}
+
+	public func createOutline(name: String, folder: Folder, completion: @escaping (Result<Outline, Error>) -> Void) {
+		func createOutline() {
+			let outline = Outline(parentID: folder.id, name: name)
+			outlines?.append(outline)
+			outlinesDidChange()
+			completion(.success(outline))
+		}
+		
+		if account?.type == .cloudKit {
+			createOutline()
+		} else {
+			createOutline()
+		}
+	}
+	
+	public func removeOutline(_ outline: Outline, completion: @escaping (Result<Void, Error>) -> Void) {
+		func removeOutline() {
+			outlines = outlines?.filter({ $0 != outline })
+			outlinesDidChange()
+			completion(.success(()))
+		}
+		
+		if account?.type == .cloudKit {
+			removeOutline()
+		} else {
+			removeOutline()
+		}
+	}
+	
+	public func moveOutline(_ outline: Outline, from: Folder, to: Folder, completion: @escaping (Result<Void, Error>) -> Void) {
+	}
+	
+	public func renameOutline(_ outline: Outline, to name: String, completion: @escaping (Result<Void, Error>) -> Void) {
+	}
+	
+	public func restoreOutline(_ outline: Outline, folder: Folder, completion: @escaping (Result<Void, Error>) -> Void) {
+	}
 	
 	public static func == (lhs: Folder, rhs: Folder) -> Bool {
 		return lhs.id == rhs.id
@@ -45,16 +83,6 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 }
 
 extension Folder {
-	
-	func addOutline(_ outline: Outline) {
-		outlines?.append(outline)
-		outlinesDidChange()
-	}
-	
-	func removeOutline(_ outline: Outline) {
-		outlines = outlines?.filter({ $0 != outline })
-		outlinesDidChange()
-	}
 	
 	func findOutline(outlineID: String) -> Outline? {
 		return outlines?.first(where: { $0.id.outlineID == outlineID })

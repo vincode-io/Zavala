@@ -54,7 +54,7 @@ class AddOutlineViewController: FormViewController {
 		
 		guard let folder = AccountManager.shared.findAccount(accountID: AccountType.local.rawValue)?.folders?.first else { return }
 		
-		folder.account?.createOutline(name: outlineName, folder: folder) { result in
+		folder.createOutline(name: outlineName, folder: folder) { result in
 			switch result {
 			case .success:
 				self.dismiss(animated: true)

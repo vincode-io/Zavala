@@ -199,7 +199,11 @@ extension SidebarViewController {
 	private func deleteFolder(_ folder: Folder) {
 		let deleteTitle = NSLocalizedString("Delete", comment: "Delete")
 		let deleteAction = UIAlertAction(title: deleteTitle, style: .destructive) { (action) in
-			folder.account?.removeFolder(folder) { _ in }
+			folder.account?.removeFolder(folder) { result in
+				if case .failure(let error) = result {
+					self.presentError(error)
+				}
+			}
 		}
 		
 		let cancelTitle = NSLocalizedString("Cancel", comment: "Cancel")
