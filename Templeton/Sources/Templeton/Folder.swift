@@ -72,6 +72,17 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	}
 	
 	public func renameOutline(_ outline: Outline, to name: String, completion: @escaping (Result<Void, Error>) -> Void) {
+		func renameOutline() {
+			outline.name = name
+			outlinesDidChange()
+			completion(.success(()))
+		}
+		
+		if account?.type == .cloudKit {
+			renameOutline()
+		} else {
+			renameOutline()
+		}
 	}
 	
 	public static func == (lhs: Folder, rhs: Folder) -> Bool {
