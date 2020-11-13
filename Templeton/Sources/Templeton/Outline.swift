@@ -35,6 +35,13 @@ public final class Outline: Identifiable, Equatable, Codable {
 		return AccountManager.shared.findFolder(folderID)
 	}
 
+	init(parentID: EntityID, name: String) {
+		self.id = EntityID.outline(parentID.accountID, parentID.folderID, UUID().uuidString)
+		self.name = name
+		self.created = Date()
+		self.updated = Date()
+	}
+
 	public func update(name: String, completion: @escaping (Result<Void, Error>) -> Void) {
 		func update() {
 			self.name = name
@@ -52,13 +59,6 @@ public final class Outline: Identifiable, Equatable, Codable {
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
 		return lhs.id == rhs.id
-	}
-	
-	init(parentID: EntityID, name: String) {
-		self.id = EntityID.outline(parentID.accountID, parentID.folderID, UUID().uuidString)
-		self.name = name
-		self.created = Date()
-		self.updated = Date()
 	}
 	
 }
