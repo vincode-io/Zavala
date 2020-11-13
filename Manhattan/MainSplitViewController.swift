@@ -10,16 +10,16 @@ import Templeton
 
 class MainSplitViewController: UISplitViewController {
 
-	var sidebarViewController: SidebarViewController? {
+	private var sidebarViewController: SidebarViewController? {
 		let navController = viewController(for: .primary) as? UINavigationController
 		return navController?.topViewController as? SidebarViewController
 	}
 	
-	var outlineListViewController: TimelineViewController? {
+	private var outlineListViewController: TimelineViewController? {
 		viewController(for: .supplementary) as? TimelineViewController
 	}
 	
-	var outlineDetailViewController: DetailViewController? {
+	private var outlineDetailViewController: DetailViewController? {
 		viewController(for: .supplementary) as? DetailViewController
 	}
 	
