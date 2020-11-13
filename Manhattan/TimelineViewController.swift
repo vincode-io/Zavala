@@ -106,7 +106,6 @@ class TimelineViewController: UICollectionViewController {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
 			addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
-			navigationItem.setRightBarButton(addBarButtonItem, animated: false)
 		}
 
 		collectionView.collectionViewLayout = createLayout()
@@ -221,6 +220,12 @@ extension TimelineViewController {
 	private func updateUI() {
 		navigationItem.title = outlineProvider?.name
 		view.window?.windowScene?.title = outlineProvider?.name
+		
+		if isCreateOutlineUnavailable {
+			navigationItem.rightBarButtonItem = nil
+		} else {
+			navigationItem.rightBarButtonItem = addBarButtonItem
+		}
 	}
 	
 	private func makeOutlineContextMenu(item: TimelineItem) -> UIContextMenuConfiguration {
