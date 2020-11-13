@@ -22,6 +22,42 @@ public enum EntityID: Hashable, Equatable, Codable {
 		case outlineID
 	}
 	
+	var isSmartProvider: Bool {
+		switch self {
+		case .all, .favorites, .recents:
+			return true
+		default:
+			return false
+		}
+	}
+	
+	var isAccount: Bool {
+		switch self {
+		case .account(_):
+			return true
+		default:
+			return false
+		}
+	}
+	
+	var isFolder: Bool {
+		switch self {
+		case .folder(_, _):
+			return true
+		default:
+			return false
+		}
+	}
+	
+	var isOutline: Bool {
+		switch self {
+		case .outline(_, _, _):
+			return true
+		default:
+			return false
+		}
+	}
+	
 	var accountID: Int {
 		switch self {
 		case .account(let accountID):

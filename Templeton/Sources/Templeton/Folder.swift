@@ -20,7 +20,6 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		return RSImage(systemName: "folder")
 	}
 	
-	public let isSmartProvider = false
 	public var outlines: [Outline]?
 
 	public var account: Account? {

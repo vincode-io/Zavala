@@ -23,6 +23,10 @@ public protocol OutlineProvider {
 }
 
 public extension OutlineProvider {
+	
+	var isSmartProvider: Bool {
+		return id.isSmartProvider
+	}
 
 	var sortedOutlines: [Outline]? {
 		return outlines?.sorted(by: { $0.created ?? Date.distantPast > $1.created  ?? Date.distantPast })
@@ -63,8 +67,6 @@ public struct LazyOutlineProvider: OutlineProvider {
 			fatalError()
 		}
 	}
-
-	public let isSmartProvider = true
 
 	public var outlines: [Outline]? {
 		return outlineCallback()

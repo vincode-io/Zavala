@@ -19,7 +19,8 @@ class SidebarViewController: UICollectionViewController {
 		case library, localAccount, cloudKitAccount
 	}
 	
-	private struct SidebarItem: Hashable, Identifiable {
+	private final class SidebarItem: NSObject, NSCopying, Identifiable {
+		
 		enum ID: Hashable {
 			case header(SidebarSection)
 			case outlineProvider(EntityID)
@@ -36,14 +37,35 @@ class SidebarViewController: UICollectionViewController {
 			return nil
 		}
 		
-		static func sidebarItem(title: String, id: ID) -> Self {
+		var isFolder: Bool {
+			guard let entityID = entityID else { return false }
+			switch entityID {
+			case .folder(_, _):
+				return true
+			default:
+				return false
+			}
+		}
+		
+		init(id: ID, title: String?, image: UIImage?) {
+			self.id = id
+			self.title = title
+			self.image = image
+		}
+		
+		static func sidebarItem(title: String, id: ID) -> SidebarViewController.SidebarItem {
 			return SidebarItem(id: id, title: title, image: nil)
 		}
 		
-		static func sidebarItem(_ outlineProvider: OutlineProvider) -> Self {
+		static func sidebarItem(_ outlineProvider: OutlineProvider) -> SidebarViewController.SidebarItem {
 			let id = SidebarItem.ID.outlineProvider(outlineProvider.id)
 			return SidebarItem(id: id, title: outlineProvider.name, image: outlineProvider.image)
 		}
+
+		func copy(with zone: NSZone? = nil) -> Any {
+			return self
+		}
+		
 	}
 
 	private var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
@@ -111,6 +133,11 @@ extension SidebarViewController {
 			let outlineProvider = AccountManager.shared.findOutlineProvider(entityID)
 			delegate?.sidebarSelectionDidChange(self, outlineProvider: outlineProvider)
 		}
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath), sidebarItem.isFolder else { return nil }
+		return makeFolderContextMenu(item: sidebarItem)
 	}
 	
 	private func createLayout() -> UICollectionViewLayout {
@@ -200,6 +227,44 @@ extension SidebarViewController {
 
 extension SidebarViewController {
 	
+	private func makeFolderContextMenu(item: SidebarItem) -> UIContextMenuConfiguration {
+		return UIContextMenuConfiguration(identifier: item as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
+			guard let self = self else { return nil }
+			
+			let actions = [
+				self.deleteAction(item: item),
+				self.renameAction(item: item)
+			]
+
+			return UIMenu(title: "", children: actions.compactMap { $0 })
+		})
+	}
+	
+	private func deleteAction(item: SidebarItem) -> UIAction? {
+		guard let entityID = item.entityID else { return nil }
+		
+		let title = NSLocalizedString("Delete", comment: "Delete")
+		let action = UIAction(title: title, image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] action in
+			if let folder = AccountManager.shared.findFolder(entityID) {
+				self?.deleteFolder(folder)
+			}
+		}
+		
+		return action
+	}
+	
+	private func renameAction(item: SidebarItem) -> UIAction? {
+		guard let entityID = item.entityID else { return nil }
+
+		let title = NSLocalizedString("Rename", comment: "Rename")
+		let action = UIAction(title: title, image: UIImage(systemName: "square.and.pencil")) { [weak self] action in
+			if let folder = AccountManager.shared.findFolder(entityID) {
+				self?.renameFolder(folder)
+			}
+		}
+		return action
+	}
+	
 	private func deleteFolder(_ folder: Folder) {
 		func deleteFolder() {
 			folder.account?.removeFolder(folder) { result in
@@ -231,6 +296,9 @@ extension SidebarViewController {
 		alert.addAction(deleteAction)
 		
 		present(alert, animated: true, completion: nil)
+	}
+	
+	private func renameFolder(_ folder: Folder) {
 	}
 	
 }
