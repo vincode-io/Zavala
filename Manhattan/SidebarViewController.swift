@@ -167,7 +167,7 @@ extension SidebarViewController {
 			configuration.trailingSwipeActionsConfigurationProvider = { indexPath in
 				guard let sidebarItem = self.dataSource.itemIdentifier(for: indexPath), sidebarItem.isFolder else { return nil }
 				let actions = [
-					self.deleteContextualAction(item: sidebarItem)
+					self.deleteFolderContextualAction(item: sidebarItem)
 				]
 				return UISwipeActionsConfiguration(actions: actions.compactMap { $0 })
 			}
@@ -258,16 +258,16 @@ extension SidebarViewController {
 		return UIContextMenuConfiguration(identifier: item as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
 			guard let self = self else { return nil }
 			
-			let actions = [
-				self.getInfoAction(item: item),
-				self.deleteAction(item: item)
+			let menuItems = [
+				UIMenu(title: "", options: .displayInline, children: [self.getInfoFolderAction(item: item)]),
+				UIMenu(title: "", options: .displayInline, children: [self.deleteFolderAction(item: item)])
 			]
 
-			return UIMenu(title: "", children: actions.compactMap { $0 })
+			return UIMenu(title: "", children: menuItems)
 		})
 	}
 	
-	private func deleteContextualAction(item: SidebarItem) -> UIContextualAction? {
+	private func deleteFolderContextualAction(item: SidebarItem) -> UIContextualAction? {
 		guard let entityID = item.entityID else { return nil }
 		
 		let title = NSLocalizedString("Delete", comment: "Delete")
@@ -280,24 +280,20 @@ extension SidebarViewController {
 		return action
 	}
 	
-	private func getInfoAction(item: SidebarItem) -> UIAction? {
-		guard let entityID = item.entityID else { return nil }
-
+	private func getInfoFolderAction(item: SidebarItem) -> UIAction {
 		let title = NSLocalizedString("Get Info", comment: "Get Info")
-		let action = UIAction(title: title, image: AppAssets.updateEntity) { [weak self] action in
-			if let folder = AccountManager.shared.findFolder(entityID) {
+		let action = UIAction(title: title, image: AppAssets.getInfoEntity) { [weak self] action in
+			if let folder = AccountManager.shared.findFolder(item.entityID!) {
 				self?.getInfoForFolder(folder)
 			}
 		}
 		return action
 	}
 	
-	private func deleteAction(item: SidebarItem) -> UIAction? {
-		guard let entityID = item.entityID else { return nil }
-		
+	private func deleteFolderAction(item: SidebarItem) -> UIAction {
 		let title = NSLocalizedString("Delete", comment: "Delete")
 		let action = UIAction(title: title, image: AppAssets.removeEntity, attributes: .destructive) { [weak self] action in
-			if let folder = AccountManager.shared.findFolder(entityID) {
+			if let folder = AccountManager.shared.findFolder(item.entityID!) {
 				self?.deleteFolder(folder)
 			}
 		}

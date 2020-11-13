@@ -223,12 +223,12 @@ extension TimelineViewController {
 		return UIContextMenuConfiguration(identifier: item as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
 			guard let self = self else { return nil }
 			
-			let actions = [
-				self.getInfoAction(item: item),
-				self.deleteAction(item: item)
+			let menuItems = [
+				UIMenu(title: "", options: .displayInline, children: [self.getInfoOutlineAction(item: item)]),
+				UIMenu(title: "", options: .displayInline, children: [self.deleteOutlineAction(item: item)])
 			]
 
-			return UIMenu(title: "", children: actions.compactMap { $0 })
+			return UIMenu(title: "", children: menuItems.compactMap { $0 })
 		})
 	}
 	
@@ -243,7 +243,17 @@ extension TimelineViewController {
 		return action
 	}
 	
-	private func deleteAction(item: TimelineItem) -> UIAction? {
+	private func getInfoOutlineAction(item: TimelineItem) -> UIAction {
+		let title = NSLocalizedString("Get Info", comment: "Get Info")
+		let action = UIAction(title: title, image: AppAssets.getInfoEntity) { [weak self] action in
+			if let outline = AccountManager.shared.findOutline(item.id) {
+				self?.getInfoForOutline(outline)
+			}
+		}
+		return action
+	}
+	
+	private func deleteOutlineAction(item: TimelineItem) -> UIAction {
 		let title = NSLocalizedString("Delete", comment: "Delete")
 		let action = UIAction(title: title, image: AppAssets.removeEntity, attributes: .destructive) { [weak self] action in
 			if let outline = AccountManager.shared.findOutline(item.id) {
@@ -251,16 +261,6 @@ extension TimelineViewController {
 			}
 		}
 		
-		return action
-	}
-	
-	private func getInfoAction(item: TimelineItem) -> UIAction? {
-		let title = NSLocalizedString("Rename", comment: "Rename")
-		let action = UIAction(title: title, image: AppAssets.updateEntity) { [weak self] action in
-			if let outline = AccountManager.shared.findOutline(item.id) {
-				self?.getInfoForOutline(outline)
-			}
-		}
 		return action
 	}
 	
