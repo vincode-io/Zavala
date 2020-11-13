@@ -50,21 +50,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: userActivity, options: nil, errorHandler: nil)
 	}
 	
-	@objc func createFolder(_ sender: Any?) {
+	@objc func createFolderCommand(_ sender: Any?) {
 		mainSplitViewController?.createFolder(sender)
 	}
 	
-	@objc func createOutline(_ sender: Any?) {
+	@objc func createOutlineCommand(_ sender: Any?) {
 		mainSplitViewController?.createOutline(sender)
 	}
 	
-	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
+	@objc func toggleOutlineIsFavoriteCommand(_ sender: Any?) {
 		mainSplitViewController?.toggleOutlineIsFavorite(sender)
 	}
 	
-	@objc func toggleSidebar(_ sender: Any?) {
+	@objc func toggleSidebarCommand(_ sender: Any?) {
 		mainSplitViewController?.toggleSidebar(sender)
 	}
+	
+	// MARK: Validations
+	
+	override func validate(_ command: UICommand) {
+		switch command.action {
+		case #selector(createFolderCommand(_:)):
+			if mainSplitViewController?.isCreateFolderUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(createOutlineCommand(_:)):
+			if mainSplitViewController?.isCreateOutlineUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		default:
+			break
+		}
+	}
+	
+	// MARK: Menu
 
 	override func buildMenu(with builder: UIMenuBuilder) {
 		super.buildMenu(with: builder)
@@ -81,11 +100,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertChild(newWindowMenu, atStartOfMenu: .file)
 
 		let newOutlineCommand = UIKeyCommand(title: NSLocalizedString("New Outline", comment: "New Outline"),
-											action: #selector(createOutline(_:)),
+											action: #selector(createOutlineCommand(_:)),
 											input: "n",
 											modifierFlags: [.command])
 		let newFolderCommand = UIKeyCommand(title: NSLocalizedString("New Folder", comment: "New Folder"),
-											action: #selector(createFolder(_:)),
+											action: #selector(createFolderCommand(_:)),
 											input: "n",
 											modifierFlags: [.shift, .command])
 		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newFolderCommand])
@@ -93,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		// View Menu
 		let toggleSidebarCommand = UIKeyCommand(title: NSLocalizedString("Toggle Sidebar", comment: "Toggle Sidebar"),
-											action: #selector(toggleSidebar(_:)),
+											action: #selector(toggleSidebarCommand(_:)),
 											input: "s",
 											modifierFlags: [.control, .command])
 		let toggleSidebarMenu = UIMenu(title: "", options: .displayInline, children: [toggleSidebarCommand])

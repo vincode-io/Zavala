@@ -95,6 +95,10 @@ class TimelineViewController: UICollectionViewController {
 		}
 	}
 	
+	var isCreateOutlineUnavailable: Bool {
+		return !(outlineProvider is Folder)
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 

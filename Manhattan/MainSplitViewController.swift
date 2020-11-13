@@ -15,12 +15,20 @@ class MainSplitViewController: UISplitViewController {
 		return navController?.topViewController as? SidebarViewController
 	}
 	
-	private var outlineListViewController: TimelineViewController? {
+	private var timelineViewController: TimelineViewController? {
 		viewController(for: .supplementary) as? TimelineViewController
 	}
 	
-	private var outlineDetailViewController: DetailViewController? {
+	private var detailViewController: DetailViewController? {
 		viewController(for: .supplementary) as? DetailViewController
+	}
+	
+	var isCreateFolderUnavailable: Bool {
+		return sidebarViewController?.isCreateFolderUnavailable ?? true
+	}
+	
+	var isCreateOutlineUnavailable: Bool {
+		return timelineViewController?.isCreateOutlineUnavailable ?? true
 	}
 	
     override func viewDidLoad() {
@@ -33,7 +41,7 @@ class MainSplitViewController: UISplitViewController {
 
 		delegate = self
 		sidebarViewController?.delegate = self
-		outlineListViewController?.delegate = self
+		timelineViewController?.delegate = self
     }
 	
 	// MARK: Actions
@@ -43,7 +51,7 @@ class MainSplitViewController: UISplitViewController {
 	}
 	
 	@objc func createOutline(_ sender: Any?) {
-		outlineListViewController?.createOutline(sender)
+		timelineViewController?.createOutline(sender)
 	}
 	
 	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
@@ -63,7 +71,7 @@ class MainSplitViewController: UISplitViewController {
 extension MainSplitViewController: SidebarDelegate {
 	
 	func sidebarSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?) {
-		outlineListViewController?.outlineProvider = outlineProvider
+		timelineViewController?.outlineProvider = outlineProvider
 		show(.supplementary)
 	}
 	
@@ -86,16 +94,16 @@ extension MainSplitViewController: UISplitViewControllerDelegate {
 	func splitViewController(_ svc: UISplitViewController, topColumnForCollapsingToProposedTopColumn proposedTopColumn: UISplitViewController.Column) -> UISplitViewController.Column {
 		switch proposedTopColumn {
 		case .supplementary:
-			if outlineListViewController?.outlineProvider != nil {
+			if timelineViewController?.outlineProvider != nil {
 				return .supplementary
 			} else {
 				return .primary
 			}
 		case .secondary:
-			if outlineDetailViewController?.outline != nil {
+			if detailViewController?.outline != nil {
 				return .secondary
 			} else {
-				if outlineListViewController?.outlineProvider != nil {
+				if timelineViewController?.outlineProvider != nil {
 					return .supplementary
 				} else {
 					return .primary

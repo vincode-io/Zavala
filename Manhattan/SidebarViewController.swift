@@ -101,6 +101,10 @@ class SidebarViewController: UICollectionViewController {
 	
 	weak var delegate: SidebarDelegate?
 	
+	var isCreateFolderUnavailable: Bool {
+		return currentAccount == nil
+	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
