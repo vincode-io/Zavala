@@ -1,5 +1,5 @@
 //
-//  RenameFolderViewController.swift
+//  GetInfoFolderViewController.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 11/12/20.
@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Templeton
 
-class RenameFolderViewController: FormViewController {
+class GetInfoFolderViewController: FormViewController {
 
 	var folder: Folder?
 	
@@ -54,7 +54,7 @@ class RenameFolderViewController: FormViewController {
 	@IBAction override func submit(_ sender: Any) {
 		guard let folder = folder, let folderName = nameTextField.text, !folderName.isEmpty else { return	}
 		
-		folder.rename(to: folderName) { result in
+		folder.update(name: folderName) { result in
 			switch result {
 			case .success:
 				self.dismiss(animated: true)
@@ -67,7 +67,7 @@ class RenameFolderViewController: FormViewController {
 	
 }
 
-extension RenameFolderViewController: UITextFieldDelegate {
+extension GetInfoFolderViewController: UITextFieldDelegate {
 	
 	func updateUI() {
 		let isReady = !(nameTextField.text?.isEmpty ?? false)

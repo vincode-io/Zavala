@@ -136,7 +136,7 @@ class TimelineViewController: UICollectionViewController {
 	@objc func createOutline(_ sender: Any?) {
 		guard let folder = outlineProvider as? Folder else { return }
 
-		let addNavViewController = UIStoryboard.add.instantiateViewController(withIdentifier: "AddOutlineViewControllerNav") as! UINavigationController
+		let addNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "AddOutlineViewControllerNav") as! UINavigationController
 		let addViewController = addNavViewController.topViewController as! AddOutlineViewController
 		addViewController.folder = folder
 
@@ -161,8 +161,7 @@ extension TimelineViewController {
 			configuration.trailingSwipeActionsConfigurationProvider = { indexPath in
 				guard let timelineItem = self.dataSource.itemIdentifier(for: indexPath) else { return nil }
 				let actions = [
-					self.deleteContextualAction(item: timelineItem),
-					self.renameContextualAction(item: timelineItem)
+					self.deleteContextualAction(item: timelineItem)
 				]
 				return UISwipeActionsConfiguration(actions: actions.compactMap { $0 })
 			}
@@ -225,8 +224,8 @@ extension TimelineViewController {
 			guard let self = self else { return nil }
 			
 			let actions = [
-				self.deleteAction(item: item),
-				self.renameAction(item: item)
+				self.getInfoAction(item: item),
+				self.deleteAction(item: item)
 			]
 
 			return UIMenu(title: "", children: actions.compactMap { $0 })
@@ -255,21 +254,11 @@ extension TimelineViewController {
 		return action
 	}
 	
-	private func renameContextualAction(item: TimelineItem) -> UIContextualAction? {
-		let title = NSLocalizedString("Rename", comment: "Rename")
-		let action = UIContextualAction(style: .normal, title: title) { [weak self] _, _, completion in
-			if let outline = AccountManager.shared.findOutline(item.id) {
-				self?.renameOutline(outline, completion: completion)
-			}
-		}
-		return action
-	}
-	
-	private func renameAction(item: TimelineItem) -> UIAction? {
+	private func getInfoAction(item: TimelineItem) -> UIAction? {
 		let title = NSLocalizedString("Rename", comment: "Rename")
 		let action = UIAction(title: title, image: AppAssets.updateEntity) { [weak self] action in
 			if let outline = AccountManager.shared.findOutline(item.id) {
-				self?.renameOutline(outline)
+				self?.getInfoForOutline(outline)
 			}
 		}
 		return action
@@ -308,11 +297,11 @@ extension TimelineViewController {
 		present(alert, animated: true, completion: nil)
 	}
 	
-	private func renameOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
-		let renameNavViewController = UIStoryboard.add.instantiateViewController(withIdentifier: "RenameOutlineViewControllerNav") as! UINavigationController
-		let renameViewController = renameNavViewController.topViewController as! RenameOutlineViewController
-		renameViewController.outline = outline
-		present(renameNavViewController, animated: true) {
+	private func getInfoForOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
+		let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoOutlineViewControllerNav") as! UINavigationController
+		let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoOutlineViewController
+		getInfoViewController.outline = outline
+		present(getInfoNavViewController, animated: true) {
 			completion?(true)
 		}
 

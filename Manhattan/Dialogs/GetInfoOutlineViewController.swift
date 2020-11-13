@@ -1,5 +1,5 @@
 //
-//  RenameOutlineViewController.swift
+//  GetInfoOutlineViewController.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 11/12/20.
@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-class RenameOutlineViewController: FormViewController {
+class GetInfoOutlineViewController: FormViewController {
 	
 	var outline: Outline?
 
@@ -52,7 +52,7 @@ class RenameOutlineViewController: FormViewController {
 	@IBAction override func submit(_ sender: Any) {
 		guard let outline = outline, let outlineName = nameTextField.text, !outlineName.isEmpty else { return }
 		
-		outline.rename(to: outlineName) { result in
+		outline.update(name: outlineName) { result in
 			switch result {
 			case .success:
 				self.dismiss(animated: true)
@@ -66,7 +66,7 @@ class RenameOutlineViewController: FormViewController {
 	
 }
 
-extension RenameOutlineViewController: UITextFieldDelegate {
+extension GetInfoOutlineViewController: UITextFieldDelegate {
 	
 	func updateUI() {
 		let isReady = !(nameTextField.text?.isEmpty ?? false)

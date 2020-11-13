@@ -131,7 +131,7 @@ class SidebarViewController: UICollectionViewController {
 	@IBAction func createFolder(_ sender: Any?) {
 		guard let account = currentAccount else { return }
 
-		let addNavViewController = UIStoryboard.add.instantiateViewController(withIdentifier: "AddFolderViewControllerNav") as! UINavigationController
+		let addNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "AddFolderViewControllerNav") as! UINavigationController
 		let addViewController = addNavViewController.topViewController as! AddFolderViewController
 
 		addViewController.account = account
@@ -167,8 +167,7 @@ extension SidebarViewController {
 			configuration.trailingSwipeActionsConfigurationProvider = { indexPath in
 				guard let sidebarItem = self.dataSource.itemIdentifier(for: indexPath), sidebarItem.isFolder else { return nil }
 				let actions = [
-					self.deleteContextualAction(item: sidebarItem),
-					self.renameContextualAction(item: sidebarItem)
+					self.deleteContextualAction(item: sidebarItem)
 				]
 				return UISwipeActionsConfiguration(actions: actions.compactMap { $0 })
 			}
@@ -260,8 +259,8 @@ extension SidebarViewController {
 			guard let self = self else { return nil }
 			
 			let actions = [
-				self.deleteAction(item: item),
-				self.renameAction(item: item)
+				self.getInfoAction(item: item),
+				self.deleteAction(item: item)
 			]
 
 			return UIMenu(title: "", children: actions.compactMap { $0 })
@@ -281,6 +280,18 @@ extension SidebarViewController {
 		return action
 	}
 	
+	private func getInfoAction(item: SidebarItem) -> UIAction? {
+		guard let entityID = item.entityID else { return nil }
+
+		let title = NSLocalizedString("Get Info", comment: "Get Info")
+		let action = UIAction(title: title, image: AppAssets.updateEntity) { [weak self] action in
+			if let folder = AccountManager.shared.findFolder(entityID) {
+				self?.getInfoForFolder(folder)
+			}
+		}
+		return action
+	}
+	
 	private func deleteAction(item: SidebarItem) -> UIAction? {
 		guard let entityID = item.entityID else { return nil }
 		
@@ -291,30 +302,6 @@ extension SidebarViewController {
 			}
 		}
 		
-		return action
-	}
-	
-	private func renameContextualAction(item: SidebarItem) -> UIContextualAction? {
-		guard let entityID = item.entityID else { return nil }
-
-		let title = NSLocalizedString("Rename", comment: "Rename")
-		let action = UIContextualAction(style: .normal, title: title) { [weak self] _, _, completion in
-			if let folder = AccountManager.shared.findFolder(entityID) {
-				self?.renameFolder(folder, completion: completion)
-			}
-		}
-		return action
-	}
-	
-	private func renameAction(item: SidebarItem) -> UIAction? {
-		guard let entityID = item.entityID else { return nil }
-
-		let title = NSLocalizedString("Rename", comment: "Rename")
-		let action = UIAction(title: title, image: AppAssets.updateEntity) { [weak self] action in
-			if let folder = AccountManager.shared.findFolder(entityID) {
-				self?.renameFolder(folder)
-			}
-		}
 		return action
 	}
 	
@@ -356,11 +343,11 @@ extension SidebarViewController {
 		present(alert, animated: true, completion: nil)
 	}
 	
-	private func renameFolder(_ folder: Folder, completion: ((Bool) -> Void)? = nil) {
-		let renameNavViewController = UIStoryboard.add.instantiateViewController(withIdentifier: "RenameFolderViewControllerNav") as! UINavigationController
-		let renameViewController = renameNavViewController.topViewController as! RenameFolderViewController
-		renameViewController.folder = folder
-		present(renameNavViewController, animated: true) {
+	private func getInfoForFolder(_ folder: Folder, completion: ((Bool) -> Void)? = nil) {
+		let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoFolderViewControllerNav") as! UINavigationController
+		let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoFolderViewController
+		getInfoViewController.folder = folder
+		present(getInfoNavViewController, animated: true) {
 			completion?(true)
 		}
 

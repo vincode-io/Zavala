@@ -39,17 +39,17 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		self.outlines = [Outline]()
 	}
 
-	public func rename(to name: String, completion: @escaping (Result<Void, Error>) -> Void) {
-		func rename() {
+	public func update(name: String, completion: @escaping (Result<Void, Error>) -> Void) {
+		func update() {
 			self.name = name
 			folderMetaDataDidChange()
 			completion(.success(()))
 		}
 		
 		if account?.type == .cloudKit {
-			rename()
+			update()
 		} else {
-			rename()
+			update()
 		}
 	}
 	

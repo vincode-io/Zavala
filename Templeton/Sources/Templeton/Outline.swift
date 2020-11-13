@@ -35,8 +35,8 @@ public final class Outline: Identifiable, Equatable, Codable {
 		return AccountManager.shared.findFolder(folderID)
 	}
 
-	public func rename(to name: String, completion: @escaping (Result<Void, Error>) -> Void) {
-		func rename() {
+	public func update(name: String, completion: @escaping (Result<Void, Error>) -> Void) {
+		func update() {
 			self.name = name
 			self.updated = Date()
 			outlineMetaDataDidChange()
@@ -44,9 +44,9 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 		
 		if account?.type == .cloudKit {
-			rename()
+			update()
 		} else {
-			rename()
+			update()
 		}
 	}
 	

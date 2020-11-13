@@ -15,8 +15,8 @@ extension UIStoryboard {
 		return UIStoryboard(name: "Main", bundle: nil)
 	}
 	
-	static var add: UIStoryboard {
-		return UIStoryboard(name: "Add", bundle: nil)
+	static var dialog: UIStoryboard {
+		return UIStoryboard(name: "Dialog", bundle: nil)
 	}
 	
 	func instantiateController<T>(ofType type: T.Type = T.self) -> T where T: UIViewController {

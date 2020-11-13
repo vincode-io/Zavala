@@ -273,7 +273,7 @@
         <!--Navigation Controller-->
         <scene sceneID="giR-8d-GmR">
             <objects>
-                <navigationController storyboardIdentifier="RenameFolderViewControllerNav" modalPresentationStyle="formSheet" id="LSH-nf-cv8" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="GetInfoFolderViewControllerNav" modalPresentationStyle="formSheet" id="LSH-nf-cv8" sceneMemberID="viewController">
                     <value key="contentSizeForViewInPopover" type="size" width="450" height="250"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="n9e-zV-IdY">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -287,10 +287,10 @@
             </objects>
             <point key="canvasLocation" x="693" y="23"/>
         </scene>
-        <!--Rename Folder-->
+        <!--Folder Info-->
         <scene sceneID="N5f-ZQ-ZVA">
             <objects>
-                <viewController id="5fG-xR-KKE" customClass="RenameFolderViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="5fG-xR-KKE" customClass="GetInfoFolderViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="V5f-Se-Jaz">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -335,10 +335,10 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Gt3-Mp-qZE">
-                                        <rect key="frame" x="242" y="50" width="132" height="33"/>
+                                        <rect key="frame" x="254" y="50" width="120" height="33"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eJu-4N-opw">
-                                                <rect key="frame" x="0.0" y="0.0" width="62" height="33"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="56" height="33"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                 <state key="normal" title="Cancel"/>
                                                 <connections>
@@ -346,9 +346,9 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gdK-Eo-iVr">
-                                                <rect key="frame" x="70" y="0.0" width="62" height="33"/>
+                                                <rect key="frame" x="64" y="0.0" width="56" height="33"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                <state key="normal" title="Rename"/>
+                                                <state key="normal" title="Update"/>
                                                 <connections>
                                                     <action selector="submit:" destination="5fG-xR-KKE" eventType="touchUpInside" id="oRV-dS-MLj"/>
                                                 </connections>
@@ -376,13 +376,13 @@
                             <constraint firstItem="ho0-qX-6so" firstAttribute="centerX" secondItem="V5f-Se-Jaz" secondAttribute="centerX" id="vrH-gy-fUe"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Rename Folder" id="O6i-es-vHQ">
+                    <navigationItem key="navigationItem" title="Folder Info" id="O6i-es-vHQ">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="c1I-n6-QLx">
                             <connections>
                                 <action selector="cancel:" destination="5fG-xR-KKE" id="4z5-ad-rav"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Rename" id="BLy-Mb-34Q">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Update" id="BLy-Mb-34Q">
                             <connections>
                                 <action selector="submit:" destination="5fG-xR-KKE" id="IXa-EH-0fE"/>
                             </connections>
@@ -403,7 +403,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Agh-WL-A0I">
             <objects>
-                <navigationController storyboardIdentifier="RenameOutlineViewControllerNav" modalPresentationStyle="formSheet" id="qYw-x0-KRl" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="GetInfoOutlineViewControllerNav" modalPresentationStyle="formSheet" id="qYw-x0-KRl" sceneMemberID="viewController">
                     <value key="contentSizeForViewInPopover" type="size" width="450" height="250"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="bwD-dN-w3f">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -417,10 +417,10 @@
             </objects>
             <point key="canvasLocation" x="693" y="688"/>
         </scene>
-        <!--Add Outline-->
+        <!--Outline Info-->
         <scene sceneID="kf0-On-ugu">
             <objects>
-                <viewController id="l7V-nf-Btr" customClass="RenameOutlineViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="l7V-nf-Btr" customClass="GetInfoOutlineViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ko4-nc-dMn">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -465,10 +465,10 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="CJ9-tz-N19">
-                                        <rect key="frame" x="242" y="50" width="132" height="33"/>
+                                        <rect key="frame" x="254" y="50" width="120" height="33"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="naw-Qg-gLp">
-                                                <rect key="frame" x="0.0" y="0.0" width="62" height="33"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="56" height="33"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                 <state key="normal" title="Cancel"/>
                                                 <connections>
@@ -476,9 +476,9 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2AZ-iM-CNn">
-                                                <rect key="frame" x="70" y="0.0" width="62" height="33"/>
+                                                <rect key="frame" x="64" y="0.0" width="56" height="33"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                <state key="normal" title="Rename"/>
+                                                <state key="normal" title="Update"/>
                                                 <connections>
                                                     <action selector="submit:" destination="l7V-nf-Btr" eventType="touchUpInside" id="FoJ-MF-Eee"/>
                                                 </connections>
@@ -506,13 +506,13 @@
                             <constraint firstItem="ef3-2B-bly" firstAttribute="trailing" secondItem="P83-SI-cfC" secondAttribute="trailing" constant="20" id="ZtR-bo-nd6"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Add Outline" id="Bjb-LG-McK">
+                    <navigationItem key="navigationItem" title="Outline Info" id="Bjb-LG-McK">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="pEc-Bm-lcj">
                             <connections>
                                 <action selector="cancel:" destination="l7V-nf-Btr" id="SR8-av-e5T"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Rename" id="NPs-9Z-nC8">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Update" id="NPs-9Z-nC8">
                             <connections>
                                 <action selector="submit:" destination="l7V-nf-Btr" id="1QK-bn-Vh0"/>
                             </connections>
