@@ -82,6 +82,13 @@ extension MainSplitViewController: SidebarDelegate {
 	
 	func sidebarSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?) {
 		timelineViewController?.outlineProvider = outlineProvider
+
+		guard let outlineProvider = outlineProvider else {
+			activityManager.invalidateSelectOutlineProvider()
+			return
+		}
+
+		activityManager.selectingOutlineProvider(outlineProvider)
 		show(.supplementary)
 	}
 	
@@ -91,8 +98,16 @@ extension MainSplitViewController: SidebarDelegate {
 
 extension MainSplitViewController: TimelineDelegate {
 	
-	func outlineSelectionDidChange(_: TimelineViewController, outline: Outline) {
-		
+	func outlineSelectionDidChange(_: TimelineViewController, outlineProvider: OutlineProvider, outline: Outline?) {
+		detailViewController?.outline = outline
+
+		guard let outline = outline else {
+			activityManager.invalidateSelectOutline()
+			return
+		}
+
+		activityManager.selectingOutline(outlineProvider, outline)
+		show(.secondary)
 	}
 	
 }

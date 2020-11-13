@@ -12,18 +12,18 @@ import Templeton
 
 enum ActivityType: String {
 	case restoration = "Restoration"
-	case selectFolder = "SelectFolder"
+	case selectOutlineProvider = "SelectOutlineProvider"
 	case selectOutline = "SelectOutline"
 }
 
 struct ActivityUserInfoKeys {
-	static let folderID = "folderID"
+	static let outlineProviderID = "outlineProviderID"
 	static let outlineID = "outlineID"
 }
 
 class ActivityManager {
 	
-	private var selectFolderActivity: NSUserActivity?
+	private var selectOutlineProviderActivity: NSUserActivity?
 	private var selectOutlineActivity: NSUserActivity?
 
 	var stateRestorationActivity: NSUserActivity {
@@ -31,7 +31,7 @@ class ActivityManager {
 			return activity
 		}
 		
-		if let activity = selectFolderActivity {
+		if let activity = selectOutlineProviderActivity {
 			return activity
 		}
 		
@@ -46,21 +46,21 @@ class ActivityManager {
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineDidDelete(_:)), name: .OutlineDidDelete, object: nil)
 	}
 
-	func selectingFolder(_ folder: Folder) {
-		invalidateSelectFolder()
-		selectFolderActivity = makeSelectFolderActivity(folder)
-		donate(selectFolderActivity!)
+	func selectingOutlineProvider(_ outlineProvider: OutlineProvider) {
+		invalidateSelectOutlineProvider()
+		selectOutlineProviderActivity = makeSelectOutlineProviderActivity(outlineProvider)
+		donate(selectOutlineProviderActivity!)
 	}
 	
-	func invalidateSelectFolder() {
+	func invalidateSelectOutlineProvider() {
 		invalidateSelectOutline()
-		selectFolderActivity?.invalidate()
-		selectFolderActivity = nil
+		selectOutlineProviderActivity?.invalidate()
+		selectOutlineProviderActivity = nil
 	}
 
-	func selectingOutline(folder: Folder, outline: Outline) {
+	func selectingOutline(_ outlineProvider: OutlineProvider, _ outline: Outline) {
 		invalidateSelectOutline()
-		selectOutlineActivity = makeSelectOutlineActivity(folder, outline)
+		selectOutlineActivity = makeSelectOutlineActivity(outlineProvider, outline)
 		donate(selectOutlineActivity!)
 	}
 	
@@ -91,29 +91,29 @@ extension ActivityManager {
 		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [outline.id.description])
 	}
 	
-	private func makeSelectFolderActivity(_ folder: Folder) -> NSUserActivity {
-		let activity = NSUserActivity(activityType: ActivityType.selectFolder.rawValue)
+	private func makeSelectOutlineProviderActivity(_ outlineProvider: OutlineProvider) -> NSUserActivity {
+		let activity = NSUserActivity(activityType: ActivityType.selectOutlineProvider.rawValue)
 		
 		let localizedText = NSLocalizedString("See outlines in  “%@”", comment: "See outlines in Folder")
-		let title = NSString.localizedStringWithFormat(localizedText as NSString, folder.name ?? "") as String
+		let title = NSString.localizedStringWithFormat(localizedText as NSString, outlineProvider.name ?? "") as String
 		activity.title = title
 		
 		activity.keywords = Set(makeKeywords(title))
 		activity.isEligibleForSearch = true
 		
-		activity.userInfo = [ActivityUserInfoKeys.folderID: folder.id.userInfo]
+		activity.userInfo = [ActivityUserInfoKeys.outlineProviderID: outlineProvider.id.userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 
 		activity.isEligibleForPrediction = true
 		
-		let idString = folder.id.description
+		let idString = outlineProvider.id.description
 		activity.persistentIdentifier = idString
 		activity.contentAttributeSet?.relatedUniqueIdentifier = idString
 		
 		return activity
 	}
 	
-	private func makeSelectOutlineActivity(_ folder: Folder, _ outline: Outline) -> NSUserActivity {
+	private func makeSelectOutlineActivity(_ outlineProvider: OutlineProvider, _ outline: Outline) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: ActivityType.selectOutline.rawValue)
 
 		let localizedText = NSLocalizedString("Edit outline “%@”", comment: "Edit outline")
@@ -123,7 +123,7 @@ extension ActivityManager {
 		activity.keywords = Set(makeKeywords(title))
 		activity.isEligibleForSearch = true
 		
-		activity.userInfo = [ActivityUserInfoKeys.outlineID: outline.id.userInfo]
+		activity.userInfo = [ActivityUserInfoKeys.outlineProviderID: outlineProvider.id, ActivityUserInfoKeys.outlineID: outline.id]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 
 		activity.isEligibleForPrediction = true

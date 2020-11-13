@@ -9,7 +9,7 @@ import UIKit
 import Templeton
 
 protocol TimelineDelegate: class  {
-	func outlineSelectionDidChange(_: TimelineViewController, outline: Outline)
+	func outlineSelectionDidChange(_: TimelineViewController, outlineProvider: OutlineProvider, outline: Outline?)
 }
 
 class TimelineViewController: UICollectionViewController {
