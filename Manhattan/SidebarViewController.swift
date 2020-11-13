@@ -145,6 +145,16 @@ extension SidebarViewController {
 			var configuration = UICollectionLayoutListConfiguration(appearance: .sidebar)
 			configuration.showsSeparators = false
 			configuration.headerMode = .firstItemInSection
+			
+			configuration.trailingSwipeActionsConfigurationProvider = { indexPath in
+				guard let sidebarItem = self.dataSource.itemIdentifier(for: indexPath), sidebarItem.isFolder else { return nil }
+				let actions = [
+					self.deleteContextualAction(item: sidebarItem),
+					self.renameContextualAction(item: sidebarItem)
+				]
+				return UISwipeActionsConfiguration(actions: actions.compactMap { $0 })
+			}
+			
 			return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
 		}
 		return layout
@@ -240,11 +250,24 @@ extension SidebarViewController {
 		})
 	}
 	
+	private func deleteContextualAction(item: SidebarItem) -> UIContextualAction? {
+		guard let entityID = item.entityID else { return nil }
+		
+		let title = NSLocalizedString("Delete", comment: "Delete")
+		let action = UIContextualAction(style: .destructive, title: title) { [weak self] _, _, completion in
+			if let folder = AccountManager.shared.findFolder(entityID) {
+				self?.deleteFolder(folder, completion: completion)
+			}
+		}
+		
+		return action
+	}
+	
 	private func deleteAction(item: SidebarItem) -> UIAction? {
 		guard let entityID = item.entityID else { return nil }
 		
 		let title = NSLocalizedString("Delete", comment: "Delete")
-		let action = UIAction(title: title, image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] action in
+		let action = UIAction(title: title, image: AppAssets.removeEntity, attributes: .destructive) { [weak self] action in
 			if let folder = AccountManager.shared.findFolder(entityID) {
 				self?.deleteFolder(folder)
 			}
@@ -253,11 +276,23 @@ extension SidebarViewController {
 		return action
 	}
 	
+	private func renameContextualAction(item: SidebarItem) -> UIContextualAction? {
+		guard let entityID = item.entityID else { return nil }
+
+		let title = NSLocalizedString("Rename", comment: "Rename")
+		let action = UIContextualAction(style: .normal, title: title) { [weak self] _, _, completion in
+			if let folder = AccountManager.shared.findFolder(entityID) {
+				self?.renameFolder(folder, completion: completion)
+			}
+		}
+		return action
+	}
+	
 	private func renameAction(item: SidebarItem) -> UIAction? {
 		guard let entityID = item.entityID else { return nil }
 
 		let title = NSLocalizedString("Rename", comment: "Rename")
-		let action = UIAction(title: title, image: UIImage(systemName: "square.and.pencil")) { [weak self] action in
+		let action = UIAction(title: title, image: AppAssets.updateEntity) { [weak self] action in
 			if let folder = AccountManager.shared.findFolder(entityID) {
 				self?.renameFolder(folder)
 			}
@@ -265,11 +300,14 @@ extension SidebarViewController {
 		return action
 	}
 	
-	private func deleteFolder(_ folder: Folder) {
+	private func deleteFolder(_ folder: Folder, completion: ((Bool) -> Void)? = nil) {
 		func deleteFolder() {
 			folder.account?.removeFolder(folder) { result in
 				if case .failure(let error) = result {
 					self.presentError(error)
+					completion?(false)
+				} else {
+					completion?(true)
 				}
 			}
 		}
@@ -298,7 +336,8 @@ extension SidebarViewController {
 		present(alert, animated: true, completion: nil)
 	}
 	
-	private func renameFolder(_ folder: Folder) {
+	private func renameFolder(_ folder: Folder, completion: ((Bool) -> Void)? = nil) {
+		completion?(false)
 	}
 	
 }

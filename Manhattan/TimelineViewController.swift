@@ -77,7 +77,7 @@ class TimelineViewController: UICollectionViewController {
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
-			addBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"), style: .plain, target: self, action: #selector(createOutline(_:)))
+			addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
 			navigationItem.setRightBarButton(addBarButtonItem, animated: false)
 		}
 

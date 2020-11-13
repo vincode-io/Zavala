@@ -141,7 +141,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 		case .newOutline:
 			let item = NSToolbarItem(itemIdentifier: itemIdentifier)
 			item.autovalidates = true
-			item.image = UIImage(systemName: "square.and.pencil")
+			item.image = AppAssets.createEntity
 			item.label = NSLocalizedString("New Outline", comment: "New Outline")
 			item.action = #selector(createOutline(_:))
 			item.target = self
@@ -149,7 +149,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 		case .toggleOutlineIsFavorite:
 			let item = NSToolbarItem(itemIdentifier: itemIdentifier)
 			item.autovalidates = true
-			item.image = UIImage(systemName: "heart")
+			item.image = AppAssets.favoriteUnselected
 			item.label = NSLocalizedString("Toggle Favorite", comment: "Toggle Favorite")
 			item.action = #selector(toggleOutlineIsFavorite(_:))
 			item.target = self
