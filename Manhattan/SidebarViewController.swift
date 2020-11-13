@@ -323,12 +323,14 @@ extension SidebarViewController {
 		}
 		
 		let deleteTitle = NSLocalizedString("Delete", comment: "Delete")
-		let deleteAction = UIAlertAction(title: deleteTitle, style: .destructive) { (action) in
+		let deleteAction = UIAlertAction(title: deleteTitle, style: .destructive) { _ in
 			deleteFolder()
 		}
 		
 		let cancelTitle = NSLocalizedString("Cancel", comment: "Cancel")
-		let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
+		let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel) { _ in
+			completion?(true)
+		}
 		
 		let localizedInformativeText = NSLocalizedString("Are you sure you want to delete the “%@” folder?", comment: "Folder delete text")
 		let formattedInformativeText = NSString.localizedStringWithFormat(localizedInformativeText as NSString, folder.name ?? "") as String
