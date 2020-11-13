@@ -66,6 +66,7 @@ public final class Account: Identifiable, Equatable, Codable {
 		func removeFolder() {
 			self.folders = folders.filter { $0 != folder }
 			accountDidChange()
+			folder.folderDidDelete()
 			completion(.success(()))
 		}
 		

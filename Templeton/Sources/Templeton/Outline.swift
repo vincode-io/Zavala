@@ -10,6 +10,7 @@ import Foundation
 public extension Notification.Name {
 	static let OutlineMetaDataDidChange = Notification.Name(rawValue: "OutlineMetaDataDidChange")
 	static let OutlineBodyDidChange = Notification.Name(rawValue: "OutlineBodyDidChange")
+	static let OutlineDidDelete = Notification.Name(rawValue: "OutlineDidDelete")
 }
 
 public final class Outline: Identifiable, Equatable, Codable {
@@ -40,6 +41,10 @@ public final class Outline: Identifiable, Equatable, Codable {
 		self.name = name
 		self.created = Date()
 		self.updated = Date()
+	}
+
+	func outlineDidDelete() {
+		NotificationCenter.default.post(name: .OutlineDidDelete, object: self, userInfo: nil)
 	}
 
 	public func update(name: String, completion: @escaping (Result<Void, Error>) -> Void) {

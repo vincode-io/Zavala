@@ -40,6 +40,11 @@ class ActivityManager {
 		activity.becomeCurrent()
 		return activity
 	}
+	
+	init() {
+		NotificationCenter.default.addObserver(self, selector: #selector(folderDidDelete(_:)), name: .FolderDidDelete, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineDidDelete(_:)), name: .OutlineDidDelete, object: nil)
+	}
 
 	func selectingFolder(_ folder: Folder) {
 		invalidateSelectFolder()
@@ -67,8 +72,26 @@ class ActivityManager {
 }
 
 extension ActivityManager {
+
+	@objc func folderDidDelete(_ note: Notification) {
+		guard let folder = note.object as? Folder else { return }
+
+		var ids = [String]()
+		ids.append(folder.id.description)
+		
+		for outline in folder.outlines ?? [Outline]() {
+			ids.append(outline.id.description)
+		}
+		
+		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: ids)
+	}
 	
-	func makeSelectFolderActivity(_ folder: Folder) -> NSUserActivity {
+	@objc func outlineDidDelete(_ note: Notification) {
+		guard let outline = note.object as? Outline else { return }
+		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [outline.id.description])
+	}
+	
+	private func makeSelectFolderActivity(_ folder: Folder) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: ActivityType.selectFolder.rawValue)
 		
 		let localizedText = NSLocalizedString("See outlines in  “%@”", comment: "See outlines in Folder")
@@ -90,7 +113,7 @@ extension ActivityManager {
 		return activity
 	}
 	
-	func makeSelectOutlineActivity(_ folder: Folder, _ outline: Outline) -> NSUserActivity {
+	private func makeSelectOutlineActivity(_ folder: Folder, _ outline: Outline) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: ActivityType.selectOutline.rawValue)
 
 		let localizedText = NSLocalizedString("Edit outline “%@”", comment: "Edit outline")
@@ -109,11 +132,10 @@ extension ActivityManager {
 		activity.persistentIdentifier = idString
 		activity.contentAttributeSet?.relatedUniqueIdentifier = idString
 		
-		
 		return activity
 	}
 	
-	func makeKeywords(_ value: String?) -> [String] {
+	private func makeKeywords(_ value: String?) -> [String] {
 		return value?.components(separatedBy: " ").filter { $0.count > 2 } ?? []
 	}
 	

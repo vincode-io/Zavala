@@ -11,6 +11,7 @@ import RSCore
 public extension Notification.Name {
 	static let FolderMetaDataDidChange = Notification.Name(rawValue: "FolderMetaDataDidChange")
 	static let FolderOutlinesDidChange = Notification.Name(rawValue: "FolderOutlinesDidChange")
+	static let FolderDidDelete = Notification.Name(rawValue: "FolderDidDelete")
 }
 
 public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
@@ -39,6 +40,10 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		self.outlines = [Outline]()
 	}
 
+	func folderDidDelete() {
+		NotificationCenter.default.post(name: .FolderDidDelete, object: self, userInfo: nil)
+	}
+	
 	public func update(name: String, completion: @escaping (Result<Void, Error>) -> Void) {
 		func update() {
 			self.name = name
@@ -72,6 +77,7 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		func removeOutline() {
 			outlines = outlines?.filter({ $0 != outline })
 			folderOutlinesDidChange()
+			outline.outlineDidDelete()
 			completion(.success(()))
 		}
 		
