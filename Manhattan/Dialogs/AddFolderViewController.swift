@@ -43,9 +43,7 @@ class AddFolderViewController: FormViewController {
 	}
 	
 	@objc func nameTextFieldDidChange(textField: UITextField) {
-		let isReady = !(nameTextField.text?.isEmpty ?? false)
-		addBarButtonItem.isEnabled = isReady
-		submitButton.isEnabled = isReady
+		updateUI()
 	}
 	
 	@IBAction override func submit(_ sender: Any) {
@@ -66,6 +64,12 @@ class AddFolderViewController: FormViewController {
 
 extension AddFolderViewController: UITextFieldDelegate {
 	
+	func updateUI() {
+		let isReady = !(nameTextField.text?.isEmpty ?? false)
+		addBarButtonItem.isEnabled = isReady
+		submitButton.isEnabled = isReady
+	}
+
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()
 		return true

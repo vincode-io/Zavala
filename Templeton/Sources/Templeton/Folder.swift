@@ -9,7 +9,8 @@ import Foundation
 import RSCore
 
 public extension Notification.Name {
-	static let FolderDidChange = Notification.Name(rawValue: "FolderDidChange")
+	static let FolderMetaDataDidChange = Notification.Name(rawValue: "FolderMetaDataDidChange")
+	static let FolderOutlinesDidChange = Notification.Name(rawValue: "FolderOutlinesDidChange")
 }
 
 public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
@@ -38,11 +39,25 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		self.outlines = [Outline]()
 	}
 
+	public func rename(to name: String, completion: @escaping (Result<Void, Error>) -> Void) {
+		func rename() {
+			self.name = name
+			folderMetaDataDidChange()
+			completion(.success(()))
+		}
+		
+		if account?.type == .cloudKit {
+			rename()
+		} else {
+			rename()
+		}
+	}
+	
 	public func createOutline(name: String, completion: @escaping (Result<Outline, Error>) -> Void) {
 		func createOutline() {
 			let outline = Outline(parentID: id, name: name)
 			outlines?.append(outline)
-			outlinesDidChange()
+			folderOutlinesDidChange()
 			completion(.success(outline))
 		}
 		
@@ -56,7 +71,7 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	public func removeOutline(_ outline: Outline, completion: @escaping (Result<Void, Error>) -> Void) {
 		func removeOutline() {
 			outlines = outlines?.filter({ $0 != outline })
-			outlinesDidChange()
+			folderOutlinesDidChange()
 			completion(.success(()))
 		}
 		
@@ -68,20 +83,6 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	}
 	
 	public func moveOutline(_ outline: Outline, from: Folder, to: Folder, completion: @escaping (Result<Void, Error>) -> Void) {
-	}
-	
-	public func renameOutline(_ outline: Outline, to name: String, completion: @escaping (Result<Void, Error>) -> Void) {
-		func renameOutline() {
-			outline.name = name
-			outlinesDidChange()
-			completion(.success(()))
-		}
-		
-		if account?.type == .cloudKit {
-			renameOutline()
-		} else {
-			renameOutline()
-		}
 	}
 	
 	public static func == (lhs: Folder, rhs: Folder) -> Bool {
@@ -99,8 +100,12 @@ extension Folder {
 
 private extension Folder {
 	
-	func folderDidChange() {
-		NotificationCenter.default.post(name: .FolderDidChange, object: self, userInfo: nil)
+	func folderMetaDataDidChange() {
+		NotificationCenter.default.post(name: .FolderMetaDataDidChange, object: self, userInfo: nil)
+	}
+	
+	func folderOutlinesDidChange() {
+		NotificationCenter.default.post(name: .FolderOutlinesDidChange, object: self, userInfo: nil)
 	}
 	
 }

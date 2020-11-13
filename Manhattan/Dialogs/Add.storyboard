@@ -270,6 +270,136 @@
             </objects>
             <point key="canvasLocation" x="-17" y="687"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="giR-8d-GmR">
+            <objects>
+                <navigationController storyboardIdentifier="RenameFolderViewControllerNav" modalPresentationStyle="formSheet" id="LSH-nf-cv8" sceneMemberID="viewController">
+                    <value key="contentSizeForViewInPopover" type="size" width="450" height="250"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="n9e-zV-IdY">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="5fG-xR-KKE" kind="relationship" relationship="rootViewController" id="c4L-O7-Ava"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ITn-4c-gjW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="693" y="23"/>
+        </scene>
+        <!--Rename Folder-->
+        <scene sceneID="N5f-ZQ-ZVA">
+            <objects>
+                <viewController id="5fG-xR-KKE" customClass="RenameFolderViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="V5f-Se-Jaz">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ho0-qX-6so">
+                                <rect key="frame" x="137.5" y="104" width="139.5" height="40"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="c1x-tR-2j2">
+                                        <rect key="frame" x="0.0" y="1" width="40" height="37.5"/>
+                                        <color key="tintColor" systemColor="labelColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="jiH-jB-fUd"/>
+                                            <constraint firstAttribute="width" constant="40" id="rnz-eJ-KxC"/>
+                                        </constraints>
+                                        <imageReference key="image" image="folder" catalog="system" renderingMode="template"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Folder" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8I0-dl-sub">
+                                        <rect key="frame" x="48" y="0.0" width="91.5" height="40"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="fpk-kB-7lq">
+                                <rect key="frame" x="20" y="152" width="374" height="83"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="mFT-SS-KKT">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="34"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MWN-X0-mvy">
+                                                <rect key="frame" x="0.0" y="0.0" width="52" height="34"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Folder Name" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zjD-Mj-afs">
+                                                <rect key="frame" x="60" y="0.0" width="314" height="34"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Gt3-Mp-qZE">
+                                        <rect key="frame" x="242" y="50" width="132" height="33"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eJu-4N-opw">
+                                                <rect key="frame" x="0.0" y="0.0" width="62" height="33"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <state key="normal" title="Cancel"/>
+                                                <connections>
+                                                    <action selector="cancel:" destination="5fG-xR-KKE" eventType="touchUpInside" id="LlI-8I-UdG"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gdK-Eo-iVr">
+                                                <rect key="frame" x="70" y="0.0" width="62" height="33"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <state key="normal" title="Rename"/>
+                                                <connections>
+                                                    <action selector="submit:" destination="5fG-xR-KKE" eventType="touchUpInside" id="oRV-dS-MLj"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="eJu-4N-opw" firstAttribute="width" secondItem="gdK-Eo-iVr" secondAttribute="width" id="N24-bz-FMw"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="mFT-SS-KKT" secondAttribute="trailing" id="89F-hP-hHG"/>
+                                    <constraint firstItem="mFT-SS-KKT" firstAttribute="leading" secondItem="fpk-kB-7lq" secondAttribute="leading" id="Hs8-7j-3RE"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="F50-Hp-w2p"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="fpk-kB-7lq" firstAttribute="top" secondItem="ho0-qX-6so" secondAttribute="bottom" constant="8" symbolic="YES" id="7tE-Z9-Kh2"/>
+                            <constraint firstItem="fpk-kB-7lq" firstAttribute="leading" secondItem="F50-Hp-w2p" secondAttribute="leading" constant="20" id="Jbm-bW-IxG"/>
+                            <constraint firstItem="F50-Hp-w2p" firstAttribute="trailing" secondItem="fpk-kB-7lq" secondAttribute="trailing" constant="20" id="XEY-WV-pfS"/>
+                            <constraint firstItem="F50-Hp-w2p" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="fpk-kB-7lq" secondAttribute="bottom" constant="20" id="dQc-hM-hR2"/>
+                            <constraint firstItem="ho0-qX-6so" firstAttribute="top" secondItem="F50-Hp-w2p" secondAttribute="top" constant="16" id="vk2-Gm-hfL"/>
+                            <constraint firstItem="ho0-qX-6so" firstAttribute="centerX" secondItem="V5f-Se-Jaz" secondAttribute="centerX" id="vrH-gy-fUe"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Rename Folder" id="O6i-es-vHQ">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="c1I-n6-QLx">
+                            <connections>
+                                <action selector="cancel:" destination="5fG-xR-KKE" id="4z5-ad-rav"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Rename" id="BLy-Mb-34Q">
+                            <connections>
+                                <action selector="submit:" destination="5fG-xR-KKE" id="IXa-EH-0fE"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="addBarButtonItem" destination="BLy-Mb-34Q" id="A2V-ZO-TKH"/>
+                        <outlet property="cancelButton" destination="eJu-4N-opw" id="wew-fv-Qiu"/>
+                        <outlet property="nameLabel" destination="MWN-X0-mvy" id="D0j-dx-tqX"/>
+                        <outlet property="nameTextField" destination="zjD-Mj-afs" id="EC7-lw-85B"/>
+                        <outlet property="submitButton" destination="gdK-Eo-iVr" id="3DL-W1-UeJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ETW-HG-WbP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1464" y="23"/>
+        </scene>
     </scenes>
     <resources>
         <image name="folder" catalog="system" width="128" height="97"/>

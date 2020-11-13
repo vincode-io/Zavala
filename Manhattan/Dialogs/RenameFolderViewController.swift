@@ -1,21 +1,23 @@
 //
-//  AddOutlineViewController.swift
+//  RenameFolderViewController.swift
 //  Manhattan
 //
-//  Created by Maurice Parker on 11/11/20.
+//  Created by Maurice Parker on 11/12/20.
 //
+
+import Foundation
 
 import UIKit
 import Templeton
 
-class AddOutlineViewController: FormViewController {
-	
-	var folder: Folder?
+class RenameFolderViewController: FormViewController {
 
-	@IBOutlet weak var addBarButtonItem: UIBarButtonItem!
+	var folder: Folder?
 	
 	@IBOutlet weak var nameTextField: UITextField!
 	
+	@IBOutlet weak var addBarButtonItem: UIBarButtonItem!
+
 	@IBOutlet weak var nameLabel: UILabel!
 	@IBOutlet weak var cancelButton: UIButton!
 	@IBOutlet weak var submitButton: UIButton!
@@ -34,8 +36,11 @@ class AddOutlineViewController: FormViewController {
 			submitButton.isHidden = true
 		}
 
+		nameTextField.text = folder?.name
 		nameTextField.addTarget(self, action: #selector(nameTextFieldDidChange), for: .editingChanged)
 		nameTextField.delegate = self
+		
+		updateUI()
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -47,9 +52,9 @@ class AddOutlineViewController: FormViewController {
 	}
 	
 	@IBAction override func submit(_ sender: Any) {
-		guard let folder = folder, let outlineName = nameTextField.text, !outlineName.isEmpty else { return }
+		guard let folder = folder, let folderName = nameTextField.text, !folderName.isEmpty else { return	}
 		
-		folder.createOutline(name: outlineName) { result in
+		folder.rename(to: folderName) { result in
 			switch result {
 			case .success:
 				self.dismiss(animated: true)
@@ -58,19 +63,18 @@ class AddOutlineViewController: FormViewController {
 				self.dismiss(animated: true)
 			}
 		}
-		
 	}
 	
 }
 
-extension AddOutlineViewController: UITextFieldDelegate {
+extension RenameFolderViewController: UITextFieldDelegate {
 	
 	func updateUI() {
 		let isReady = !(nameTextField.text?.isEmpty ?? false)
 		addBarButtonItem.isEnabled = isReady
 		submitButton.isEnabled = isReady
 	}
-
+	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()
 		return true

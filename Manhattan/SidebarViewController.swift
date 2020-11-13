@@ -99,12 +99,17 @@ class SidebarViewController: UICollectionViewController {
 		configureDataSource()
 		applyInitialSnapshot()
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(accountDidChange(_:)), name: .AccountDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountFoldersDidChange(_:)), name: .AccountFoldersDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(folderMetaDataDidChange(_:)), name: .FolderMetaDataDidChange, object: nil)
 	}
 	
 	// MARK: Notifications
 	
-	@objc func accountDidChange(_ note: Notification) {
+	@objc func accountFoldersDidChange(_ note: Notification) {
+		applyChangeSnapshot()
+	}
+	
+	@objc func folderMetaDataDidChange(_ note: Notification) {
 		applyChangeSnapshot()
 	}
 	
@@ -305,7 +310,7 @@ extension SidebarViewController {
 			folder.account?.removeFolder(folder) { result in
 				if case .failure(let error) = result {
 					self.presentError(error)
-					completion?(false)
+					completion?(true)
 				} else {
 					completion?(true)
 				}
@@ -337,7 +342,13 @@ extension SidebarViewController {
 	}
 	
 	private func renameFolder(_ folder: Folder, completion: ((Bool) -> Void)? = nil) {
-		completion?(false)
+		let renameNavViewController = UIStoryboard.add.instantiateViewController(withIdentifier: "RenameFolderViewControllerNav") as! UINavigationController
+		let renameViewController = renameNavViewController.topViewController as! RenameFolderViewController
+		renameViewController.folder = folder
+		present(renameNavViewController, animated: true) {
+			completion?(true)
+		}
+
 	}
 	
 }

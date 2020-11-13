@@ -8,7 +8,7 @@
 import Foundation
 
 public extension Notification.Name {
-	static let AccountDidChange = Notification.Name(rawValue: "AccountDidChange")
+	static let AccountFoldersDidChange = Notification.Name(rawValue: "AccountFoldersDidChange")
 }
 
 public final class Account: Identifiable, Equatable, Codable {
@@ -76,20 +76,6 @@ public final class Account: Identifiable, Equatable, Codable {
 		}
 	}
 	
-	public func renameFolder(_ folder: Folder, to name: String, completion: @escaping (Result<Void, Error>) -> Void) {
-		func renameFolder() {
-			folder.name = name
-			accountDidChange()
-			completion(.success(()))
-		}
-		
-		if type == .cloudKit {
-			renameFolder()
-		} else {
-			renameFolder()
-		}
-	}
-	
 	public static func == (lhs: Account, rhs: Account) -> Bool {
 		return lhs.id == rhs.id
 	}
@@ -107,7 +93,7 @@ extension Account {
 private extension Account {
 	
 	func accountDidChange() {
-		NotificationCenter.default.post(name: .AccountDidChange, object: self, userInfo: nil)
+		NotificationCenter.default.post(name: .AccountFoldersDidChange, object: self, userInfo: nil)
 	}
 	
 }

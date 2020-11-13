@@ -51,9 +51,10 @@ public final class AccountManager {
 	public init(accountsFolderPath: String) {
 		self.accountsFolder = URL(fileURLWithPath: accountsFolderPath, isDirectory: true)
 
-		NotificationCenter.default.addObserver(self, selector: #selector(accountDidChange(_:)), name: .AccountDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(folderDidChange(_:)), name: .FolderDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlinesDidChange(_:)), name: .OutlinesDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountFoldersDidChange(_:)), name: .AccountFoldersDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(folderMetadataDidChange(_:)), name: .FolderMetaDataDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(folderOutlinesDidChange(_:)), name: .FolderOutlinesDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineMetadataDidChange(_:)), name: .OutlinesDidChange, object: nil)
 
 		// The local account must always exist, even if it's empty.
 		let localAccountFolder = accountsFolder.appendingPathComponent(AccountType.local.folderNmae)
@@ -127,21 +128,26 @@ private extension AccountManager {
 	
 	// MARK: Notifications
 	
-	@objc func accountDidChange(_ note: Notification) {
+	@objc func accountFoldersDidChange(_ note: Notification) {
 		let account = note.object as! Account
 		markAsDirty(account)
 	}
 
-	@objc func folderDidChange(_ note: Notification) {
+	@objc func folderMetadataDidChange(_ note: Notification) {
 		guard let account = (note.object as? Folder)?.account else { return }
 		markAsDirty(account)
 	}
 
-	@objc func outlinesDidChange(_ note: Notification) {
+	@objc func folderOutlinesDidChange(_ note: Notification) {
 		guard let account = (note.object as? Folder)?.account else { return }
 		markAsDirty(account)
 	}
 	
+	@objc func outlineMetadataDidChange(_ note: Notification) {
+		guard let account = (note.object as? Outline)?.account else { return }
+		markAsDirty(account)
+	}
+
 	// MARK: Helpers
 	
 	func initializeFile(file: URL, accountType: AccountType) {
