@@ -38,6 +38,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 	public func rename(to name: String, completion: @escaping (Result<Void, Error>) -> Void) {
 		func rename() {
 			self.name = name
+			self.updated = Date()
 			outlineMetaDataDidChange()
 			completion(.success(()))
 		}

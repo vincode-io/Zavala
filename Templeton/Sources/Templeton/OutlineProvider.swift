@@ -25,7 +25,7 @@ public extension OutlineProvider {
 	}
 
 	var sortedOutlines: [Outline]? {
-		return outlines?.sorted(by: { $0.created ?? Date.distantPast > $1.created  ?? Date.distantPast })
+		return outlines?.sorted(by: { $0.created ?? Date.distantPast > $1.created ?? Date.distantPast })
 	}
 
 }

@@ -34,6 +34,7 @@ class RenameOutlineViewController: FormViewController {
 			submitButton.isHidden = true
 		}
 
+		nameTextField.text = outline?.name
 		nameTextField.addTarget(self, action: #selector(nameTextFieldDidChange), for: .editingChanged)
 		nameTextField.delegate = self
 		
