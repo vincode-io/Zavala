@@ -7,6 +7,8 @@
 
 import UIKit
 
+#if targetEnvironment(macCatalyst)
+
 public class ValidatingToolbarItem: NSToolbarItem {
 
 	var checkForUnavailable: (() -> Bool)?
@@ -20,3 +22,5 @@ public class ValidatingToolbarItem: NSToolbarItem {
 	}
 	
 }
+
+#endif
