@@ -62,6 +62,19 @@ class SidebarViewController: UICollectionViewController {
 			return SidebarItem(id: id, title: outlineProvider.name, image: outlineProvider.image)
 		}
 
+		override func isEqual(_ object: Any?) -> Bool {
+			guard let other = object as? SidebarItem else { return false }
+			if self === other { return true }
+			return id == other.id && title == other.title
+		}
+		
+		override var hash: Int {
+			var hasher = Hasher()
+			hasher.combine(id)
+			hasher.combine(title)
+			return hasher.finalize()
+		}
+		
 		func copy(with zone: NSZone? = nil) -> Any {
 			return self
 		}
