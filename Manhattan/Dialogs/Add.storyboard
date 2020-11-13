@@ -400,6 +400,136 @@
             </objects>
             <point key="canvasLocation" x="1464" y="23"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Agh-WL-A0I">
+            <objects>
+                <navigationController storyboardIdentifier="RenameOutlineViewControllerNav" modalPresentationStyle="formSheet" id="qYw-x0-KRl" sceneMemberID="viewController">
+                    <value key="contentSizeForViewInPopover" type="size" width="450" height="250"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="bwD-dN-w3f">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="l7V-nf-Btr" kind="relationship" relationship="rootViewController" id="kQG-yd-WTR"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FaE-kE-KJ1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="693" y="688"/>
+        </scene>
+        <!--Add Outline-->
+        <scene sceneID="kf0-On-ugu">
+            <objects>
+                <viewController id="l7V-nf-Btr" customClass="RenameOutlineViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ko4-nc-dMn">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="3aN-BY-NuW">
+                                <rect key="frame" x="130" y="104" width="154" height="40"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WfR-cn-1Id">
+                                        <rect key="frame" x="0.0" y="2.5" width="40" height="34.5"/>
+                                        <color key="tintColor" systemColor="labelColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="Gea-oX-IDm"/>
+                                            <constraint firstAttribute="width" constant="40" id="kJe-83-oYK"/>
+                                        </constraints>
+                                        <imageReference key="image" image="list.bullet.indent" catalog="system" renderingMode="template"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Outline" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z9w-cu-OqK">
+                                        <rect key="frame" x="48" y="0.0" width="106" height="40"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="P83-SI-cfC">
+                                <rect key="frame" x="20" y="160" width="374" height="83"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="rNS-V0-7ye">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="34"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="251" text="Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U0e-8K-u0t">
+                                                <rect key="frame" x="0.0" y="0.0" width="52" height="34"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Outline Name" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3Yi-FV-Oi2">
+                                                <rect key="frame" x="60" y="0.0" width="314" height="34"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="CJ9-tz-N19">
+                                        <rect key="frame" x="242" y="50" width="132" height="33"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="naw-Qg-gLp">
+                                                <rect key="frame" x="0.0" y="0.0" width="62" height="33"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <state key="normal" title="Cancel"/>
+                                                <connections>
+                                                    <action selector="cancel:" destination="l7V-nf-Btr" eventType="touchUpInside" id="W1E-iY-gaa"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2AZ-iM-CNn">
+                                                <rect key="frame" x="70" y="0.0" width="62" height="33"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <state key="normal" title="Rename"/>
+                                                <connections>
+                                                    <action selector="submit:" destination="l7V-nf-Btr" eventType="touchUpInside" id="FoJ-MF-Eee"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="naw-Qg-gLp" firstAttribute="width" secondItem="2AZ-iM-CNn" secondAttribute="width" id="RqP-jX-SBq"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="rNS-V0-7ye" secondAttribute="trailing" id="NZq-Ne-7ZI"/>
+                                    <constraint firstItem="rNS-V0-7ye" firstAttribute="leading" secondItem="P83-SI-cfC" secondAttribute="leading" id="RnV-1B-3Cl"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ef3-2B-bly"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="3aN-BY-NuW" firstAttribute="top" secondItem="ef3-2B-bly" secondAttribute="top" constant="16" id="5Fz-Be-UN2"/>
+                            <constraint firstItem="ef3-2B-bly" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="P83-SI-cfC" secondAttribute="bottom" constant="20" id="8Kc-Gd-0o7"/>
+                            <constraint firstItem="P83-SI-cfC" firstAttribute="top" secondItem="3aN-BY-NuW" secondAttribute="bottom" constant="16" id="Jud-7M-r7o"/>
+                            <constraint firstItem="P83-SI-cfC" firstAttribute="leading" secondItem="ef3-2B-bly" secondAttribute="leading" constant="20" id="NTf-PO-i3Q"/>
+                            <constraint firstItem="3aN-BY-NuW" firstAttribute="centerX" secondItem="Ko4-nc-dMn" secondAttribute="centerX" id="TWX-Ep-jNF"/>
+                            <constraint firstItem="ef3-2B-bly" firstAttribute="trailing" secondItem="P83-SI-cfC" secondAttribute="trailing" constant="20" id="ZtR-bo-nd6"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Add Outline" id="Bjb-LG-McK">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="pEc-Bm-lcj">
+                            <connections>
+                                <action selector="cancel:" destination="l7V-nf-Btr" id="SR8-av-e5T"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Rename" id="NPs-9Z-nC8">
+                            <connections>
+                                <action selector="submit:" destination="l7V-nf-Btr" id="1QK-bn-Vh0"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="addBarButtonItem" destination="NPs-9Z-nC8" id="mJr-TF-Nfy"/>
+                        <outlet property="cancelButton" destination="naw-Qg-gLp" id="V5J-hW-KIG"/>
+                        <outlet property="nameLabel" destination="U0e-8K-u0t" id="pFu-8n-QNj"/>
+                        <outlet property="nameTextField" destination="3Yi-FV-Oi2" id="3s5-wz-7Dr"/>
+                        <outlet property="submitButton" destination="2AZ-iM-CNn" id="b4T-gp-6ES"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bt6-F1-eJ4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1464" y="688"/>
+        </scene>
     </scenes>
     <resources>
         <image name="folder" catalog="system" width="128" height="97"/>
