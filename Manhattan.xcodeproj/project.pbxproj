@@ -127,7 +127,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		514BB9D5255B595300C8DBDF /* UIKitExtensions */ = {
+		514BB9D5255B595300C8DBDF /* LanguageExtensions */ = {
 			isa = PBXGroup;
 			children = (
 				515F164A255C9F8E00FD98B8 /* FormViewController.swift */,
@@ -135,7 +135,7 @@
 				514BB9D6255B599E00C8DBDF /* UIViewController+.swift */,
 				51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */,
 			);
-			path = UIKitExtensions;
+			path = LanguageExtensions;
 			sourceTree = "<group>";
 		};
 		515F163B255C536600FD98B8 /* Resources */ = {
@@ -183,7 +183,7 @@
 				5181A93B2554D92000C153E8 /* SidebarViewController.swift */,
 				51C4C441255A0DE1004E0206 /* TimelineViewController.swift */,
 				51F13F01255E13D1004B85CA /* Dialogs */,
-				514BB9D5255B595300C8DBDF /* UIKitExtensions */,
+				514BB9D5255B595300C8DBDF /* LanguageExtensions */,
 				515F163B255C536600FD98B8 /* Resources */,
 			);
 			path = Manhattan;

@@ -9,14 +9,14 @@ import UIKit
 
 public class ValidatingToolbarItem: NSToolbarItem {
 
-	var validator: (() -> Bool)?
+	var checkForUnavailable: (() -> Bool)?
 	
 	override public func validate() {
-		guard let validator = validator else {
+		guard let checkForUnavailable = checkForUnavailable else {
 			isEnabled = false
 			return
 		}
-		isEnabled = validator()
+		isEnabled = !checkForUnavailable()
 	}
 	
 }

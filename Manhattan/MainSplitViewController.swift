@@ -147,16 +147,17 @@ extension MainSplitViewController: NSToolbarDelegate {
 		
 		switch itemIdentifier {
 		case .newOutline:
-			let item = NSToolbarItem(itemIdentifier: itemIdentifier)
-			item.autovalidates = true
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] in
+				return self?.timelineViewController?.isCreateOutlineUnavailable ?? true
+			}
 			item.image = AppAssets.createEntity
 			item.label = NSLocalizedString("New Outline", comment: "New Outline")
 			item.action = #selector(createOutline(_:))
 			item.target = self
 			toolbarItem = item
 		case .toggleOutlineIsFavorite:
-			let item = NSToolbarItem(itemIdentifier: itemIdentifier)
-			item.autovalidates = true
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.image = AppAssets.favoriteUnselected
 			item.label = NSLocalizedString("Toggle Favorite", comment: "Toggle Favorite")
 			item.action = #selector(toggleOutlineIsFavorite(_:))
