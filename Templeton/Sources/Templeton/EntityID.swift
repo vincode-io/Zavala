@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum EntityID: Hashable, Equatable, Codable {
+public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 	case all
 	case favorites
 	case recents
@@ -88,6 +88,23 @@ public enum EntityID: Hashable, Equatable, Codable {
 			return outlineID
 		default:
 			fatalError()
+		}
+	}
+	
+	public var description: String {
+		switch self {
+		case .all:
+			return "all:"
+		case .favorites:
+			return "favorites:"
+		case .recents:
+			return "recents:"
+		case .account(let id):
+			return "account: \(id)"
+		case .folder(let accountID, let folderID):
+			return "folder: \(accountID)_\(folderID)"
+		case .outline(let accountID, let folderID, let outlineID):
+			return "folder: \(accountID)_\(folderID)_\(outlineID)"
 		}
 	}
 	

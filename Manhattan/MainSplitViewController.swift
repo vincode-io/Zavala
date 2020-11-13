@@ -23,6 +23,16 @@ class MainSplitViewController: UISplitViewController {
 		viewController(for: .supplementary) as? DetailViewController
 	}
 	
+	private var activityManager = ActivityManager()
+
+	var stateRestorationActivity: NSUserActivity {
+		let activity = activityManager.stateRestorationActivity
+//		var userInfo = activity.userInfo == nil ? [AnyHashable: Any]() : activity.userInfo
+//		userInfo![UserInfoKey.windowState] = windowState()
+//		activity.userInfo = userInfo
+		return activity
+	}
+	
 	var isCreateFolderUnavailable: Bool {
 		return sidebarViewController?.isCreateFolderUnavailable ?? true
 	}

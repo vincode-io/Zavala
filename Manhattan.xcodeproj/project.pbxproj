@@ -30,6 +30,7 @@
 		51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C448255AA215004E0206 /* MainSplitViewController.swift */; };
 		51C4C45B255ACA1B004E0206 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C45A255ACA1B004E0206 /* DetailViewController.swift */; };
 		51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */; };
+		51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F22255F2D7F00320EDB /* ActivityManager.swift */; };
 		51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F13EFD255E13A9004B85CA /* AppAssets.swift */; };
 /* End PBXBuildFile section */
 
@@ -96,6 +97,7 @@
 		51C4C448255AA215004E0206 /* MainSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSplitViewController.swift; sourceTree = "<group>"; };
 		51C4C45A255ACA1B004E0206 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatingToolbarItem.swift; sourceTree = "<group>"; };
+		51E14F22255F2D7F00320EDB /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
 		51F13EFD255E13A9004B85CA /* AppAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAssets.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -174,6 +176,7 @@
 			children = (
 				5181A9422554D92100C153E8 /* LaunchScreen.storyboard */,
 				5181A93D2554D92000C153E8 /* Main.storyboard */,
+				51E14F22255F2D7F00320EDB /* ActivityManager.swift */,
 				51F13EFD255E13A9004B85CA /* AppAssets.swift */,
 				514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */,
 				5181A9372554D92000C153E8 /* AppDelegate.swift */,
@@ -394,6 +397,7 @@
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,
 				51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */,
+				51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */,
 				5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */,
 				514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */,
 				51C3FA2B255E1DD5008F587A /* GetInfoFolderViewController.swift in Sources */,
