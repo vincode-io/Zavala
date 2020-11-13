@@ -8,10 +8,6 @@
 import Foundation
 import RSCore
 
-public extension Notification.Name {
-	static let OutlinesDidChange = Notification.Name(rawValue: "OutlinesDidChange")
-}
-
 public protocol OutlineProvider {
 	var id: EntityID { get }
 	var name: String? { get }
@@ -30,10 +26,6 @@ public extension OutlineProvider {
 
 	var sortedOutlines: [Outline]? {
 		return outlines?.sorted(by: { $0.created ?? Date.distantPast > $1.created  ?? Date.distantPast })
-	}
-	
-	func outlinesDidChange() {
-		NotificationCenter.default.post(name: .OutlinesDidChange, object: self, userInfo: nil)
 	}
 
 }

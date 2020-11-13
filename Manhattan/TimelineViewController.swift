@@ -85,14 +85,14 @@ class TimelineViewController: UICollectionViewController {
 		configureDataSource()
 		applySnapshot(animated: false)
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(outlinesDidChange(_:)), name: .OutlinesDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(folderOutlinesDidChange(_:)), name: .FolderOutlinesDidChange, object: nil)
 
 		updateUI()
 	}
 
 	// MARK: Notifications
 	
-	@objc func outlinesDidChange(_ note: Notification) {
+	@objc func folderOutlinesDidChange(_ note: Notification) {
 		guard let op = outlineProvider, !op.isSmartProvider else {
 			applySnapshot(animated: true)
 			return
