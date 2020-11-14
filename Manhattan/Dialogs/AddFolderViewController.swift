@@ -51,7 +51,10 @@ class AddFolderViewController: FormViewController {
 		
 		account.createFolder(folderName) { result in
 			switch result {
-			case .success:
+			case .success(let folder):
+				var userInfo = [AnyHashable: Any]()
+				userInfo[UserInfoKeys.folder] = folder
+				NotificationCenter.default.post(name: .UserDidAddFolder, object: self, userInfo: userInfo)
 				self.dismiss(animated: true)
 			case .failure(let error):
 				self.presentError(error)

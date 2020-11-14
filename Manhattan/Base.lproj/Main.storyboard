@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vQK-Gr-dVw">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -11,7 +12,7 @@
             <objects>
                 <collectionViewController id="uD6-P4-hfD" customClass="EditorViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="W4g-xo-5XK">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="DYt-cd-ChA">
@@ -36,7 +37,7 @@
             <objects>
                 <collectionViewController storyboardIdentifier="OutlineListViewController" title="Outlines" id="ACt-yd-5XI" customClass="TimelineViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="zj1-RR-HeS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="1rU-Uu-BaW">
@@ -62,7 +63,7 @@
             <objects>
                 <navigationController id="Emx-lc-Y6t" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="HoN-oP-KWP">
-                        <rect key="frame" x="0.0" y="44" width="428" height="96"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -92,7 +93,7 @@
             <objects>
                 <collectionViewController title="Folders" id="IH1-qU-b0t" customClass="SidebarViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="8wb-92-AvW">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <collectionViewLayout key="collectionViewLayout" id="PgF-dK-2JK"/>
@@ -102,7 +103,13 @@
                             <outlet property="delegate" destination="IH1-qU-b0t" id="ZWb-Jf-p9Y"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Folders" id="JsX-sV-JPs"/>
+                    <navigationItem key="navigationItem" title="Folders" id="JsX-sV-JPs">
+                        <barButtonItem key="rightBarButtonItem" image="folder.badge.plus" catalog="system" id="HAO-a9-Zvq">
+                            <connections>
+                                <action selector="createFolder:" destination="IH1-qU-b0t" id="F7Z-vw-nJ0"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l9h-fx-tjO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -110,6 +117,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="folder.badge.plus" catalog="system" width="128" height="91"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

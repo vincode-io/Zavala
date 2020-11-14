@@ -8,6 +8,11 @@
 import UIKit
 import Templeton
 
+public extension Notification.Name {
+	static let UserDidAddFolder = Notification.Name(rawValue: "UserDidAddFolder")
+	static let UserDidAddOutline = Notification.Name(rawValue: "UserDidAddOutline")
+}
+
 class MainSplitViewController: UISplitViewController {
 
 	private var sidebarViewController: SidebarViewController? {
@@ -50,6 +55,9 @@ class MainSplitViewController: UISplitViewController {
 		}
 
 		delegate = self
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(userDidAddFolder(_:)), name: .UserDidAddFolder, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(userDidAddOutline(_:)), name: .UserDidAddOutline, object: nil)
     }
 	
 	// MARK: API
@@ -61,17 +69,29 @@ class MainSplitViewController: UISplitViewController {
 	
 	func handle(_ activity: NSUserActivity) {
 		guard let userInfo = activity.userInfo,
-			  let outlineProviderUserInfo = userInfo[ActivityUserInfoKeys.outlineProviderID] as? [AnyHashable : AnyHashable],
+			  let outlineProviderUserInfo = userInfo[UserInfoKeys.outlineProviderID] as? [AnyHashable : AnyHashable],
 			  let outlineProviderID = EntityID(userInfo: outlineProviderUserInfo),
 			  let outlineProvider = AccountManager.shared.findOutlineProvider(outlineProviderID) else { return }
 
 		sidebarViewController?.selectOutlineProvider(outlineProvider, animated: false)
 
-		guard let outlineUserInfo = userInfo[ActivityUserInfoKeys.outlineID] as? [AnyHashable : AnyHashable],
+		guard let outlineUserInfo = userInfo[UserInfoKeys.outlineID] as? [AnyHashable : AnyHashable],
 			  let outlineID = EntityID(userInfo: outlineUserInfo),
 			  let outline = AccountManager.shared.findOutline(outlineID) else { return }
 		
 		timelineViewController?.selectOutline(outline, animated: false)
+	}
+	
+	// MARK: Notifications
+	
+	@objc func userDidAddFolder(_ note: Notification) {
+		guard let folder = note.userInfo?[UserInfoKeys.folder] as? Folder else { return }
+		sidebarViewController?.selectOutlineProvider(folder, animated: true)
+	}
+	
+	@objc func userDidAddOutline(_ note: Notification) {
+		guard let outline = note.userInfo?[UserInfoKeys.outline] as? Outline else { return }
+		timelineViewController?.selectOutline(outline, animated: true)
 	}
 	
 	// MARK: Actions

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
 		514BB9D7255B599E00C8DBDF /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9D6255B599E00C8DBDF /* UIViewController+.swift */; };
 		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
@@ -71,6 +72,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5122294B25609C47008041AF /* UserInfoKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoKeys.swift; sourceTree = "<group>"; };
 		514BB9D6255B599E00C8DBDF /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				51F13EFD255E13A9004B85CA /* AppAssets.swift */,
 				514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */,
 				5181A9372554D92000C153E8 /* AppDelegate.swift */,
+				5122294B25609C47008041AF /* UserInfoKeys.swift */,
 				5181A9392554D92000C153E8 /* SceneDelegate.swift */,
 				51C4C448255AA215004E0206 /* MainSplitViewController.swift */,
 				51E14F282560727C00320EDB /* Sidebar */,
@@ -426,6 +429,7 @@
 			files = (
 				51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */,
 				515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */,
+				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
 				51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */,
 				515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */,
 				514BB9D7255B599E00C8DBDF /* UIViewController+.swift in Sources */,

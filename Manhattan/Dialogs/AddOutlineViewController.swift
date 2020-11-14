@@ -51,7 +51,10 @@ class AddOutlineViewController: FormViewController {
 		
 		folder.createOutline(name: outlineName) { result in
 			switch result {
-			case .success:
+			case .success(let outline):
+				var userInfo = [AnyHashable: Any]()
+				userInfo[UserInfoKeys.outline] = outline
+				NotificationCenter.default.post(name: .UserDidAddOutline, object: self, userInfo: userInfo)
 				self.dismiss(animated: true)
 			case .failure(let error):
 				self.presentError(error)

@@ -16,11 +16,6 @@ enum ActivityType: String {
 	case selectOutline = "SelectOutline"
 }
 
-struct ActivityUserInfoKeys {
-	static let outlineProviderID = "outlineProviderID"
-	static let outlineID = "outlineID"
-}
-
 class ActivityManager {
 	
 	private var selectOutlineProviderActivity: NSUserActivity?
@@ -101,7 +96,7 @@ extension ActivityManager {
 		activity.keywords = Set(makeKeywords(title))
 		activity.isEligibleForSearch = true
 		
-		activity.userInfo = [ActivityUserInfoKeys.outlineProviderID: outlineProvider.id.userInfo]
+		activity.userInfo = [UserInfoKeys.outlineProviderID: outlineProvider.id.userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 
 		activity.isEligibleForPrediction = true
@@ -123,7 +118,7 @@ extension ActivityManager {
 		activity.keywords = Set(makeKeywords(title))
 		activity.isEligibleForSearch = true
 		
-		activity.userInfo = [ActivityUserInfoKeys.outlineProviderID: outlineProvider.id.userInfo, ActivityUserInfoKeys.outlineID: outline.id.userInfo]
+		activity.userInfo = [UserInfoKeys.outlineProviderID: outlineProvider.id.userInfo, UserInfoKeys.outlineID: outline.id.userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 
 		activity.isEligibleForPrediction = true
