@@ -159,21 +159,12 @@ extension TimelineViewController {
 		}
 	}
 	
-	private func snapshot() -> NSDiffableDataSourceSectionSnapshot<TimelineItem>? {
+	func applySnapshot(animated: Bool) {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
 		let outlines = outlineProvider?.sortedOutlines ?? [Outline]()
 		let items = outlines.map { TimelineItem.timelineItem($0) }
 		snapshot.append(items)
-		return snapshot
-	}
-	
-	private func applySnapshot(animated: Bool) {
-		if let snapshot = snapshot() {
-			applySnapshot(snapshot, animated: animated)
-		}
-	}
-
-	func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<TimelineItem>, animated: Bool) {
+		
 		dataSourceQueue.add(ApplySnapshotOperation(dataSource: dataSource, section: 0, snapshot: snapshot, animated: animated))
 	}
 	
