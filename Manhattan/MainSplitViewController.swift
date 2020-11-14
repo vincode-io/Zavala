@@ -54,6 +54,25 @@ class MainSplitViewController: UISplitViewController {
 		timelineViewController?.delegate = self
     }
 	
+	// MARK: API
+	func startUp(completion: @escaping (() -> Void)) {
+		sidebarViewController?.startUp() {
+			completion()
+		}
+	}
+	
+	func handle(_ activity: NSUserActivity) {
+		guard let activityType = ActivityType(rawValue: activity.activityType) else { return }
+		switch activityType {
+		case .restoration:
+			break
+		case .selectOutlineProvider:
+			handleSelectOutlineProvider(activity.userInfo)
+		case .selectOutline:
+			break
+		}
+	}
+	
 	// MARK: Actions
 	
 	@objc func createFolder(_ sender: Any?) {
@@ -139,6 +158,21 @@ extension MainSplitViewController: UISplitViewControllerDelegate {
 		}
 	}
 	
+}
+
+// MARK: Helpers
+
+extension MainSplitViewController {
+	
+	private func handleSelectOutlineProvider(_ userInfo: [AnyHashable : Any]?) {
+		guard let userInfo = userInfo,
+			  let outlineProviderUserInfo = userInfo[ActivityUserInfoKeys.outlineProviderID] as? [AnyHashable : AnyHashable],
+			  let outlineProviderID = EntityID(userInfo: outlineProviderUserInfo) else {
+			return
+		}
+		
+		sidebarViewController?.selectOutlineProvider(outlineProviderID)
+	}
 }
 
 #if targetEnvironment(macCatalyst)

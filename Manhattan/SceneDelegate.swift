@@ -13,16 +13,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	var mainSplitViewController: MainSplitViewController!
 	
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-		guard let splitViewController = window?.rootViewController as? MainSplitViewController else {
+		guard let mainSplitViewController = window?.rootViewController as? MainSplitViewController else {
 			return
 		}
-		self.mainSplitViewController = splitViewController
+		self.mainSplitViewController = mainSplitViewController
 		
 		#if targetEnvironment(macCatalyst)
 		guard let windowScene = scene as? UIWindowScene else { return }
 		
 		let toolbar = NSToolbar(identifier: "main")
-		toolbar.delegate = splitViewController
+		toolbar.delegate = mainSplitViewController
 		toolbar.displayMode = .iconOnly
 		
 		if let titlebar = windowScene.titlebar {
@@ -30,10 +30,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			titlebar.toolbarStyle = .automatic
 		}
 		#endif
+
+		mainSplitViewController.startUp() {
+			if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
+				mainSplitViewController.handle(userActivity)
+			}
+		}
+		
 	}
 
 	func stateRestorationActivity(for scene: UIScene) -> NSUserActivity? {
 		return mainSplitViewController.stateRestorationActivity
+	}
+	
+	func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+		mainSplitViewController.handle(userActivity)
 	}
 	
 	func sceneDidDisconnect(_ scene: UIScene) {

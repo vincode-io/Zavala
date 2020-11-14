@@ -111,13 +111,25 @@ class SidebarViewController: UICollectionViewController {
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		}
-
-		collectionView.collectionViewLayout = createLayout()
-		configureDataSource()
-		applyInitialSnapshot()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountFoldersDidChange(_:)), name: .AccountFoldersDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(folderMetaDataDidChange(_:)), name: .FolderMetaDataDidChange, object: nil)
+	}
+	
+	// MARK: API
+	
+	func startUp(completion: @escaping (() -> Void)) {
+		collectionView.collectionViewLayout = createLayout()
+		configureDataSource()
+		applyInitialSnapshot(completion: completion)
+	}
+	
+	func selectOutlineProvider(_ id: EntityID) {
+		guard let outlineProvider = AccountManager.shared.findOutlineProvider(id) else { return }
+		let sidebarItem = SidebarItem.sidebarItem(outlineProvider)
+		let indexPath = dataSource.indexPath(for: sidebarItem)
+		self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .centeredVertically)
+		delegate?.sidebarSelectionDidChange(self, outlineProvider: outlineProvider)
 	}
 	
 	// MARK: Notifications
@@ -239,10 +251,13 @@ extension SidebarViewController {
 		return snapshot
 	}
 	
-	private func applyInitialSnapshot() {
-		dataSource.apply(librarySnapshot(), to: .library, animatingDifferences: false)
-		if let snapshot = localAccountSnapshot() {
-			dataSource.apply(snapshot, to: .localAccount, animatingDifferences: false)
+	private func applyInitialSnapshot(completion: @escaping (() -> Void)) {
+		dataSource.apply(librarySnapshot(), to: .library, animatingDifferences: false) {
+			DispatchQueue.main.async {
+				if let snapshot = self.localAccountSnapshot() {
+					self.dataSource.apply(snapshot, to: .localAccount, animatingDifferences: false, completion: completion)
+				}
+			}
 		}
 	}
 	
