@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RSCore
 import Templeton
 
 protocol TimelineDelegate: class  {
@@ -14,69 +15,9 @@ protocol TimelineDelegate: class  {
 
 class TimelineViewController: UICollectionViewController {
 
-	private final class TimelineItem:  NSObject, NSCopying, Identifiable {
-		let id: EntityID
-		let title: String?
-		let updateDate: String?
-
-		init(id: EntityID, title: String?, updateDate: String?) {
-			self.id = id
-			self.title = title
-			self.updateDate = updateDate
-		}
-		
-		private static let dateFormatter: DateFormatter = {
-			let formatter = DateFormatter()
-			formatter.dateStyle = .medium
-			formatter.timeStyle = .none
-			return formatter
-		}()
-
-		private static let timeFormatter: DateFormatter = {
-			let formatter = DateFormatter()
-			formatter.dateStyle = .none
-			formatter.timeStyle = .short
-			return formatter
-		}()
-		
-		private static func dateString(_ date: Date?) -> String {
-			guard let date = date else {
-				return NSLocalizedString("Not Available", comment: "Not Available")
-			}
-			
-			if Calendar.dateIsToday(date) {
-				return timeFormatter.string(from: date)
-			}
-			return dateFormatter.string(from: date)
-		}
-
-		static func timelineItem(_ outline: Outline) -> TimelineViewController.TimelineItem {
-			let updateDate = Self.dateString(outline.updated)
-			return TimelineItem(id: outline.id, title: outline.name, updateDate: updateDate)
-		}
-
-		override func isEqual(_ object: Any?) -> Bool {
-			guard let other = object as? TimelineItem else { return false }
-			if self === other { return true }
-			return id == other.id && title == other.title && updateDate == other.updateDate
-		}
-		
-		override var hash: Int {
-			var hasher = Hasher()
-			hasher.combine(id)
-			hasher.combine(title)
-			hasher.combine(updateDate)
-			return hasher.finalize()
-		}
-		
-		func copy(with zone: NSZone? = nil) -> Any {
-			return self
-		}
-
-	}
-
 	private var addBarButtonItem: UIBarButtonItem?
 	
+	private let dataSourceQueue = MainThreadOperationQueue()
 	private var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
 
 	private var currentOutline: Outline? {
@@ -113,21 +54,22 @@ class TimelineViewController: UICollectionViewController {
 	}
 	
 	// MARK: API
-	func changeOutlineProvider(_ outlineProvider: OutlineProvider?, completion: @escaping (() -> Void)) {
+	func changeOutlineProvider(_ outlineProvider: OutlineProvider?) {
 		self.outlineProvider = outlineProvider
 		updateUI()
-		applySnapshot(animated: false, completion: completion)
+		applySnapshot(animated: false)
 	}
 
-	func selectOutline(_ id: EntityID) {
+	func selectOutline(_ outline: Outline?, animated: Bool) {
 		guard let outlineProvider = outlineProvider else { return }
-		guard let outline = AccountManager.shared.findOutline(id) else { return }
-		
-		let timelineItem = TimelineItem.timelineItem(outline)
-		let indexPath = dataSource.indexPath(for: timelineItem)
-		self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .centeredVertically)
-		
+
+		var timelineItem: TimelineItem? = nil
+		if let outline = outline {
+			timelineItem = TimelineItem.timelineItem(outline)
+		}
+
 		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline)
+		updateSelection(item: timelineItem, animated: animated)
 	}
 	
 	// MARK: Notifications
@@ -225,12 +167,19 @@ extension TimelineViewController {
 		return snapshot
 	}
 	
-	private func applySnapshot(animated: Bool, completion: (() -> Void)? = nil) {
+	private func applySnapshot(animated: Bool) {
 		if let snapshot = snapshot() {
-			dataSource.apply(snapshot, to: 0, animatingDifferences: animated, completion: completion)
+			applySnapshot(snapshot, animated: animated)
 		}
 	}
+
+	func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<TimelineItem>, animated: Bool) {
+		dataSourceQueue.add(ApplySnapshotOperation(dataSource: dataSource, section: 0, snapshot: snapshot, animated: animated))
+	}
 	
+	func updateSelection(item: TimelineItem?, animated: Bool) {
+		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: item, animated: animated))
+	}
 }
 
 // MARK: Helper Functions

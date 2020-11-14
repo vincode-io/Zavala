@@ -8,23 +8,23 @@
 import UIKit
 import RSCore
 
-class SidebarApplySnapshotOperation: MainThreadOperation {
+class ApplySnapshotOperation<S: Hashable, I: Hashable>: MainThreadOperation {
 	
 	// MainThreadOperation
 	public var isCanceled = false
 	public var id: Int?
 	public weak var operationDelegate: MainThreadOperationDelegate?
-	public var name: String? = "SidebarApplySnapshotOperation"
+	public var name: String? = "ApplySnapshotOperation"
 	public var completionBlock: MainThreadOperation.MainThreadOperationCompletionBlock?
 
-	private var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>
-	private var section: SidebarSection
-	private var snapshot: NSDiffableDataSourceSectionSnapshot<SidebarItem>
+	private var dataSource: UICollectionViewDiffableDataSource<S, I>
+	private var section: S
+	private var snapshot: NSDiffableDataSourceSectionSnapshot<I>
 	private var animated: Bool
 	
-	init(dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>,
-		 section: SidebarSection,
-		 snapshot: NSDiffableDataSourceSectionSnapshot<SidebarItem>,
+	init(dataSource: UICollectionViewDiffableDataSource<S, I>,
+		 section: S,
+		 snapshot: NSDiffableDataSourceSectionSnapshot<I>,
 		 animated: Bool) {
 		
 		self.dataSource = dataSource

@@ -190,24 +190,24 @@ extension SidebarViewController {
 	}
 	
 	private func applyInitialSnapshot() {
-		applySnapshot(section: .library, snapshot: librarySnapshot(), animated: false)
+		applySnapshot(librarySnapshot(), section: .library, animated: false)
 		if let snapshot = self.localAccountSnapshot() {
-			applySnapshot(section: .localAccount, snapshot: snapshot, animated: false)
+			applySnapshot(snapshot, section: .localAccount, animated: false)
 		}
 	}
 	
 	private func applyChangeSnapshot() {
 		if let snapshot = localAccountSnapshot() {
-			applySnapshot(section: .localAccount, snapshot: snapshot, animated: true)
+			applySnapshot(snapshot, section: .localAccount, animated: true)
 		}
 	}
 	
-	func applySnapshot(section: SidebarSection, snapshot: NSDiffableDataSourceSectionSnapshot<SidebarItem>, animated: Bool) {
-		dataSourceQueue.add(SidebarApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated))
+	func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<SidebarItem>, section: SidebarSection, animated: Bool) {
+		dataSourceQueue.add(ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated))
 	}
 	
 	func updateSelection(item: SidebarItem?, animated: Bool) {
-		dataSourceQueue.add(SidebarUpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: item, animated: animated))
+		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: item, animated: animated))
 	}
 }
 

@@ -20,6 +20,7 @@
 		5181A93F2554D92000C153E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5181A93D2554D92000C153E8 /* Main.storyboard */; };
 		5181A9412554D92100C153E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5181A9402554D92100C153E8 /* Assets.xcassets */; };
 		5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5181A9422554D92100C153E8 /* LaunchScreen.storyboard */; };
+		519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F004A25608EF9009DC1F0 /* TimelineItem.swift */; };
 		51C3FA2B255E1DD5008F587A /* GetInfoFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */; };
 		51C3FA2F255E31E6008F587A /* GetInfoOutlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3FA2E255E31E6008F587A /* GetInfoOutlineViewController.swift */; };
 		51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51C4C3CD2555F07A004E0206 /* CloudKit.framework */; };
@@ -33,8 +34,8 @@
 		51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F22255F2D7F00320EDB /* ActivityManager.swift */; };
 		51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F2D2560730000320EDB /* SidebarSection.swift */; };
 		51E14F342560732F00320EDB /* SidebarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F332560732F00320EDB /* SidebarItem.swift */; };
-		51E14F382560738E00320EDB /* SidebarUpdateSelectionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F372560738E00320EDB /* SidebarUpdateSelectionOperation.swift */; };
-		51E14F3C256073D100320EDB /* SidebarApplySnapshotOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F3B256073D100320EDB /* SidebarApplySnapshotOperation.swift */; };
+		51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */; };
+		51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */; };
 		51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F13EFD255E13A9004B85CA /* AppAssets.swift */; };
 /* End PBXBuildFile section */
 
@@ -88,6 +89,7 @@
 		5181A94A2554D92100C153E8 /* .xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5181A9552554D92100C153E8 /* .xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5181A96A2554D93B00C153E8 /* Manhattan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Manhattan.entitlements; sourceTree = "<group>"; };
+		519F004A25608EF9009DC1F0 /* TimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItem.swift; sourceTree = "<group>"; };
 		51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoFolderViewController.swift; sourceTree = "<group>"; };
 		51C3FA2E255E31E6008F587A /* GetInfoOutlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoOutlineViewController.swift; sourceTree = "<group>"; };
 		51C4C3AC2555E964004E0206 /* Manhattan_project_debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Manhattan_project_debug.xcconfig; sourceTree = "<group>"; };
@@ -104,8 +106,8 @@
 		51E14F22255F2D7F00320EDB /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
 		51E14F2D2560730000320EDB /* SidebarSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSection.swift; sourceTree = "<group>"; };
 		51E14F332560732F00320EDB /* SidebarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarItem.swift; sourceTree = "<group>"; };
-		51E14F372560738E00320EDB /* SidebarUpdateSelectionOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarUpdateSelectionOperation.swift; sourceTree = "<group>"; };
-		51E14F3B256073D100320EDB /* SidebarApplySnapshotOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarApplySnapshotOperation.swift; sourceTree = "<group>"; };
+		51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSelectionOperation.swift; sourceTree = "<group>"; };
+		51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplySnapshotOperation.swift; sourceTree = "<group>"; };
 		51F13EFD255E13A9004B85CA /* AppAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAssets.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -140,9 +142,11 @@
 		514BB9D5255B595300C8DBDF /* LanguageExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */,
 				515F164A255C9F8E00FD98B8 /* FormViewController.swift */,
 				514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */,
 				514BB9D6255B599E00C8DBDF /* UIViewController+.swift */,
+				51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */,
 				51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */,
 			);
 			path = LanguageExtensions;
@@ -223,10 +227,8 @@
 		51E14F282560727C00320EDB /* Sidebar */ = {
 			isa = PBXGroup;
 			children = (
-				51E14F3B256073D100320EDB /* SidebarApplySnapshotOperation.swift */,
 				51E14F332560732F00320EDB /* SidebarItem.swift */,
 				51E14F2D2560730000320EDB /* SidebarSection.swift */,
-				51E14F372560738E00320EDB /* SidebarUpdateSelectionOperation.swift */,
 				5181A93B2554D92000C153E8 /* SidebarViewController.swift */,
 			);
 			path = Sidebar;
@@ -235,6 +237,7 @@
 		51E14F292560728B00320EDB /* Timeline */ = {
 			isa = PBXGroup;
 			children = (
+				519F004A25608EF9009DC1F0 /* TimelineItem.swift */,
 				51C4C441255A0DE1004E0206 /* TimelineViewController.swift */,
 			);
 			path = Timeline;
@@ -429,13 +432,14 @@
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
-				51E14F382560738E00320EDB /* SidebarUpdateSelectionOperation.swift in Sources */,
+				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
+				519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */,
 				51C3FA2F255E31E6008F587A /* GetInfoOutlineViewController.swift in Sources */,
 				515F1651255CAC5600FD98B8 /* AddOutlineViewController.swift in Sources */,
 				51C4C442255A0DE1004E0206 /* TimelineViewController.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,
-				51E14F3C256073D100320EDB /* SidebarApplySnapshotOperation.swift in Sources */,
+				51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */,
 				51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */,
 				51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */,
 				5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */,

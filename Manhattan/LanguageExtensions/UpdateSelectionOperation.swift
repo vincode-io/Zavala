@@ -1,5 +1,5 @@
 //
-//  SidebarUpdateSelectionOperation.swift
+//  UpdateSelectionOperation.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 11/14/20.
@@ -8,21 +8,21 @@
 import UIKit
 import RSCore
 
-class SidebarUpdateSelectionOperation: MainThreadOperation {
+class UpdateSelectionOperation<S: Hashable, I: Hashable>: MainThreadOperation {
 	
 	// MainThreadOperation
 	public var isCanceled = false
 	public var id: Int?
 	public weak var operationDelegate: MainThreadOperationDelegate?
-	public var name: String? = "SidebarUpdateSelectionOperation"
+	public var name: String? = "UpdateSelectionOperation"
 	public var completionBlock: MainThreadOperation.MainThreadOperationCompletionBlock?
 
-	private var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>
+	private var dataSource: UICollectionViewDiffableDataSource<S, I>
 	private var collectionView: UICollectionView
-	private var item: SidebarItem?
+	private var item: I?
 	private var animated: Bool
 	
-	init(dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>, collectionView: UICollectionView, item: SidebarItem?, animated: Bool) {
+	init(dataSource: UICollectionViewDiffableDataSource<S, I>, collectionView: UICollectionView, item: I?, animated: Bool) {
 		self.dataSource = dataSource
 		self.collectionView = collectionView
 		self.item = item
