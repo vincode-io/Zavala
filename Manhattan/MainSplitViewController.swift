@@ -50,12 +50,12 @@ class MainSplitViewController: UISplitViewController {
 		}
 
 		delegate = self
-		sidebarViewController?.delegate = self
-		timelineViewController?.delegate = self
     }
 	
 	// MARK: API
 	func startUp() {
+		sidebarViewController?.delegate = self
+		timelineViewController?.delegate = self
 		sidebarViewController?.startUp()
 	}
 	
