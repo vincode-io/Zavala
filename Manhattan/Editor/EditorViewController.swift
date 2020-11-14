@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-class DetailViewController: UICollectionViewController {
+class EditorViewController: UICollectionViewController {
 
 	var outline: Outline? {
 		didSet {
@@ -34,7 +34,7 @@ class DetailViewController: UICollectionViewController {
 	
 }
 
-private extension DetailViewController {
+private extension EditorViewController {
 	
 	private func updateUI() {
 		navigationItem.title = outline?.name

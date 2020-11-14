@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RSCore
 import Combine
 import Templeton
 
@@ -15,72 +16,7 @@ protocol SidebarDelegate: class {
 
 class SidebarViewController: UICollectionViewController {
 
-	private enum SidebarSection: Int {
-		case library, localAccount, cloudKitAccount
-	}
-	
-	private final class SidebarItem: NSObject, NSCopying, Identifiable {
-		
-		enum ID: Hashable {
-			case header(SidebarSection)
-			case outlineProvider(EntityID)
-		}
-		
-		let id: SidebarItem.ID
-		let title: String?
-		let image: UIImage?
-		
-		var entityID: EntityID? {
-			if case .outlineProvider(let entityID) = id {
-				return entityID
-			}
-			return nil
-		}
-		
-		var isFolder: Bool {
-			guard let entityID = entityID else { return false }
-			switch entityID {
-			case .folder(_, _):
-				return true
-			default:
-				return false
-			}
-		}
-		
-		init(id: ID, title: String?, image: UIImage?) {
-			self.id = id
-			self.title = title
-			self.image = image
-		}
-		
-		static func sidebarItem(title: String, id: ID) -> SidebarViewController.SidebarItem {
-			return SidebarItem(id: id, title: title, image: nil)
-		}
-		
-		static func sidebarItem(_ outlineProvider: OutlineProvider) -> SidebarViewController.SidebarItem {
-			let id = SidebarItem.ID.outlineProvider(outlineProvider.id)
-			return SidebarItem(id: id, title: outlineProvider.name, image: outlineProvider.image)
-		}
-
-		override func isEqual(_ object: Any?) -> Bool {
-			guard let other = object as? SidebarItem else { return false }
-			if self === other { return true }
-			return id == other.id && title == other.title
-		}
-		
-		override var hash: Int {
-			var hasher = Hasher()
-			hasher.combine(id)
-			hasher.combine(title)
-			return hasher.finalize()
-		}
-		
-		func copy(with zone: NSZone? = nil) -> Any {
-			return self
-		}
-		
-	}
-
+	private let dataSourceQueue = MainThreadOperationQueue()
 	private var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 
 	private var currentAccount: Account? {
@@ -118,17 +54,15 @@ class SidebarViewController: UICollectionViewController {
 	
 	// MARK: API
 	
-	func startUp(completion: @escaping (() -> Void)) {
+	func startUp() {
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
-		applyInitialSnapshot(completion: completion)
+		applyInitialSnapshot()
 	}
 	
-	func selectOutlineProvider(_ id: EntityID) {
-		guard let outlineProvider = AccountManager.shared.findOutlineProvider(id) else { return }
+	func selectOutlineProvider(_ outlineProvider: OutlineProvider) {
 		let sidebarItem = SidebarItem.sidebarItem(outlineProvider)
-		let indexPath = dataSource.indexPath(for: sidebarItem)
-		self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .centeredVertically)
+		updateSelection(item: sidebarItem, animated: false)
 		delegate?.outlineProviderSelectionDidChange(self, outlineProvider: outlineProvider)
 	}
 	
@@ -251,22 +185,26 @@ extension SidebarViewController {
 		return snapshot
 	}
 	
-	private func applyInitialSnapshot(completion: @escaping (() -> Void)) {
-		dataSource.apply(librarySnapshot(), to: .library, animatingDifferences: false) {
-			DispatchQueue.main.async {
-				if let snapshot = self.localAccountSnapshot() {
-					self.dataSource.apply(snapshot, to: .localAccount, animatingDifferences: false, completion: completion)
-				}
-			}
+	private func applyInitialSnapshot() {
+		applySnapshot(section: .library, snapshot: librarySnapshot(), animated: false)
+		if let snapshot = self.localAccountSnapshot() {
+			applySnapshot(section: .localAccount, snapshot: snapshot, animated: false)
 		}
 	}
 	
 	private func applyChangeSnapshot() {
 		if let snapshot = localAccountSnapshot() {
-			dataSource.apply(snapshot, to: .localAccount, animatingDifferences: true)
+			applySnapshot(section: .localAccount, snapshot: snapshot, animated: true)
 		}
 	}
 	
+	func applySnapshot(section: SidebarSection, snapshot: NSDiffableDataSourceSectionSnapshot<SidebarItem>, animated: Bool) {
+		dataSourceQueue.add(SidebarApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated))
+	}
+	
+	func updateSelection(item: SidebarItem?, animated: Bool) {
+		dataSourceQueue.add(SidebarUpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: item, animated: animated))
+	}
 }
 
 // MARK: Helper Functions
@@ -369,4 +307,3 @@ extension SidebarViewController {
 	}
 	
 }
-

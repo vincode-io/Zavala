@@ -31,10 +31,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		}
 		#endif
 
-		mainSplitViewController.startUp() {
-			if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
-				mainSplitViewController.handle(userActivity)
-			}
+		mainSplitViewController.startUp()
+
+		if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
+			mainSplitViewController.handle(userActivity)
 		}
 		
 	}

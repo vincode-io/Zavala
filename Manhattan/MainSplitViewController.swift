@@ -19,8 +19,8 @@ class MainSplitViewController: UISplitViewController {
 		viewController(for: .supplementary) as? TimelineViewController
 	}
 	
-	private var detailViewController: DetailViewController? {
-		viewController(for: .secondary) as? DetailViewController
+	private var detailViewController: EditorViewController? {
+		viewController(for: .secondary) as? EditorViewController
 	}
 	
 	private var activityManager = ActivityManager()
@@ -55,10 +55,8 @@ class MainSplitViewController: UISplitViewController {
     }
 	
 	// MARK: API
-	func startUp(completion: @escaping (() -> Void)) {
-		sidebarViewController?.startUp() {
-			completion()
-		}
+	func startUp() {
+		sidebarViewController?.startUp()
 	}
 	
 	func handle(_ activity: NSUserActivity) {
@@ -166,23 +164,25 @@ extension MainSplitViewController {
 	private func handleSelectOutlineProvider(_ userInfo: [AnyHashable : Any]?) {
 		guard let userInfo = userInfo,
 			  let outlineProviderUserInfo = userInfo[ActivityUserInfoKeys.outlineProviderID] as? [AnyHashable : AnyHashable],
-			  let outlineProviderID = EntityID(userInfo: outlineProviderUserInfo) else {
+			  let outlineProviderID = EntityID(userInfo: outlineProviderUserInfo),
+			  let outlineProvider = AccountManager.shared.findOutlineProvider(outlineProviderID) else {
 			return
 		}
 		
-		sidebarViewController?.selectOutlineProvider(outlineProviderID)
+		sidebarViewController?.selectOutlineProvider(outlineProvider)
 	}
 	
 	private func handleSelectOutline(_ userInfo: [AnyHashable : Any]?) {
 		guard let userInfo = userInfo,
 			  let outlineProviderUserInfo = userInfo[ActivityUserInfoKeys.outlineProviderID] as? [AnyHashable : AnyHashable],
 			  let outlineProviderID = EntityID(userInfo: outlineProviderUserInfo),
+			  let outlineProvider = AccountManager.shared.findOutlineProvider(outlineProviderID),
 			  let outlineUserInfo = userInfo[ActivityUserInfoKeys.outlineID] as? [AnyHashable : AnyHashable],
 			  let outlineID = EntityID(userInfo: outlineUserInfo) else {
 			return
 		}
 		
-		sidebarViewController?.selectOutlineProvider(outlineProviderID)
+		sidebarViewController?.selectOutlineProvider(outlineProvider)
 		timelineViewController?.selectOutline(outlineID)
 	}
 	
