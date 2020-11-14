@@ -60,9 +60,13 @@ class SidebarViewController: UICollectionViewController {
 		applyInitialSnapshot()
 	}
 	
-	func selectOutlineProvider(_ outlineProvider: OutlineProvider) {
-		let sidebarItem = SidebarItem.sidebarItem(outlineProvider)
-		updateSelection(item: sidebarItem, animated: false)
+	func selectOutlineProvider(_ outlineProvider: OutlineProvider?, animated: Bool) {
+		var sidebarItem: SidebarItem? = nil
+		if let outlineProvider = outlineProvider {
+			sidebarItem = SidebarItem.sidebarItem(outlineProvider)
+		}
+		
+		updateSelection(item: sidebarItem, animated: animated)
 		delegate?.outlineProviderSelectionDidChange(self, outlineProvider: outlineProvider)
 	}
 	
