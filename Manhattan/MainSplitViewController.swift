@@ -19,7 +19,7 @@ class MainSplitViewController: UISplitViewController {
 		viewController(for: .supplementary) as? TimelineViewController
 	}
 	
-	private var detailViewController: EditorViewController? {
+	private var editorViewController: EditorViewController? {
 		viewController(for: .secondary) as? EditorViewController
 	}
 	
@@ -126,7 +126,7 @@ extension MainSplitViewController: TimelineDelegate {
 
 		activityManager.selectingOutline(outlineProvider, outline)
 		show(.secondary)
-		detailViewController?.outline = outline
+		editorViewController?.outline = outline
 	}
 	
 }
@@ -144,7 +144,7 @@ extension MainSplitViewController: UISplitViewControllerDelegate {
 				return .primary
 			}
 		case .secondary:
-			if detailViewController?.outline != nil {
+			if editorViewController?.outline != nil {
 				return .secondary
 			} else {
 				if timelineViewController?.outlineProvider != nil {

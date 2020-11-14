@@ -68,8 +68,8 @@ class TimelineViewController: UICollectionViewController {
 			timelineItem = TimelineItem.timelineItem(outline)
 		}
 
-		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline)
 		updateSelection(item: timelineItem, animated: animated)
+		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline)
 	}
 	
 	// MARK: Notifications
