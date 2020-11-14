@@ -87,13 +87,7 @@ class TimelineViewController: UICollectionViewController {
 	}
 	
 	weak var delegate: TimelineDelegate?
-	var outlineProvider: OutlineProvider? {
-		didSet {
-			guard isViewLoaded else { return }
-			applySnapshot(animated: false)
-			updateUI()
-		}
-	}
+	var outlineProvider: OutlineProvider?
 	
 	var isCreateOutlineUnavailable: Bool {
 		return !(outlineProvider is Folder)
@@ -117,7 +111,25 @@ class TimelineViewController: UICollectionViewController {
 
 		updateUI()
 	}
+	
+	// MARK: API
+	func changeOutlineProvider(_ outlineProvider: OutlineProvider?, completion: @escaping (() -> Void)) {
+		self.outlineProvider = outlineProvider
+		updateUI()
+		applySnapshot(animated: false, completion: completion)
+	}
 
+	func selectOutline(_ id: EntityID) {
+		guard let outlineProvider = outlineProvider else { return }
+		guard let outline = AccountManager.shared.findOutline(id) else { return }
+		
+		let timelineItem = TimelineItem.timelineItem(outline)
+		let indexPath = dataSource.indexPath(for: timelineItem)
+		self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .centeredVertically)
+		
+		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline)
+	}
+	
 	// MARK: Notifications
 	
 	@objc func folderOutlinesDidChange(_ note: Notification) {
@@ -152,6 +164,14 @@ class TimelineViewController: UICollectionViewController {
 
 extension TimelineViewController {
 		
+	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		guard let outlineProvider = outlineProvider else { return }
+		guard let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
+		
+		let outline = AccountManager.shared.findOutline(timelineItem.id)
+		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline)
+	}
+	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
 		guard let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return nil }
 		return makeOutlineContextMenu(item: timelineItem)
@@ -205,9 +225,9 @@ extension TimelineViewController {
 		return snapshot
 	}
 	
-	private func applySnapshot(animated: Bool) {
+	private func applySnapshot(animated: Bool, completion: (() -> Void)? = nil) {
 		if let snapshot = snapshot() {
-			dataSource.apply(snapshot, to: 0, animatingDifferences: animated)
+			dataSource.apply(snapshot, to: 0, animatingDifferences: animated, completion: completion)
 		}
 	}
 	

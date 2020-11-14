@@ -123,7 +123,7 @@ extension ActivityManager {
 		activity.keywords = Set(makeKeywords(title))
 		activity.isEligibleForSearch = true
 		
-		activity.userInfo = [ActivityUserInfoKeys.outlineProviderID: outlineProvider.id, ActivityUserInfoKeys.outlineID: outline.id]
+		activity.userInfo = [ActivityUserInfoKeys.outlineProviderID: outlineProvider.id.userInfo, ActivityUserInfoKeys.outlineID: outline.id.userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 
 		activity.isEligibleForPrediction = true

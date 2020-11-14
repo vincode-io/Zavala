@@ -20,7 +20,7 @@ class MainSplitViewController: UISplitViewController {
 	}
 	
 	private var detailViewController: DetailViewController? {
-		viewController(for: .supplementary) as? DetailViewController
+		viewController(for: .secondary) as? DetailViewController
 	}
 	
 	private var activityManager = ActivityManager()
@@ -69,7 +69,7 @@ class MainSplitViewController: UISplitViewController {
 		case .selectOutlineProvider:
 			handleSelectOutlineProvider(activity.userInfo)
 		case .selectOutline:
-			break
+			handleSelectOutline(activity.userInfo)
 		}
 	}
 	
@@ -99,16 +99,16 @@ class MainSplitViewController: UISplitViewController {
 
 extension MainSplitViewController: SidebarDelegate {
 	
-	func sidebarSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?) {
-		timelineViewController?.outlineProvider = outlineProvider
+	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?) {
+		timelineViewController?.changeOutlineProvider(outlineProvider) { [weak self] in
+			guard let outlineProvider = outlineProvider else {
+				self?.activityManager.invalidateSelectOutlineProvider()
+				return
+			}
 
-		guard let outlineProvider = outlineProvider else {
-			activityManager.invalidateSelectOutlineProvider()
-			return
+			self?.activityManager.selectingOutlineProvider(outlineProvider)
+			self?.show(.supplementary)
 		}
-
-		activityManager.selectingOutlineProvider(outlineProvider)
-		show(.supplementary)
 	}
 	
 }
@@ -118,8 +118,6 @@ extension MainSplitViewController: SidebarDelegate {
 extension MainSplitViewController: TimelineDelegate {
 	
 	func outlineSelectionDidChange(_: TimelineViewController, outlineProvider: OutlineProvider, outline: Outline?) {
-		detailViewController?.outline = outline
-
 		guard let outline = outline else {
 			activityManager.invalidateSelectOutline()
 			return
@@ -127,6 +125,7 @@ extension MainSplitViewController: TimelineDelegate {
 
 		activityManager.selectingOutline(outlineProvider, outline)
 		show(.secondary)
+		detailViewController?.outline = outline
 	}
 	
 }
@@ -173,6 +172,20 @@ extension MainSplitViewController {
 		
 		sidebarViewController?.selectOutlineProvider(outlineProviderID)
 	}
+	
+	private func handleSelectOutline(_ userInfo: [AnyHashable : Any]?) {
+		guard let userInfo = userInfo,
+			  let outlineProviderUserInfo = userInfo[ActivityUserInfoKeys.outlineProviderID] as? [AnyHashable : AnyHashable],
+			  let outlineProviderID = EntityID(userInfo: outlineProviderUserInfo),
+			  let outlineUserInfo = userInfo[ActivityUserInfoKeys.outlineID] as? [AnyHashable : AnyHashable],
+			  let outlineID = EntityID(userInfo: outlineUserInfo) else {
+			return
+		}
+		
+		sidebarViewController?.selectOutlineProvider(outlineProviderID)
+		timelineViewController?.selectOutline(outlineID)
+	}
+	
 }
 
 #if targetEnvironment(macCatalyst)

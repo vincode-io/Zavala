@@ -10,7 +10,7 @@ import Combine
 import Templeton
 
 protocol SidebarDelegate: class {
-	func sidebarSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?)
+	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?)
 }
 
 class SidebarViewController: UICollectionViewController {
@@ -129,7 +129,7 @@ class SidebarViewController: UICollectionViewController {
 		let sidebarItem = SidebarItem.sidebarItem(outlineProvider)
 		let indexPath = dataSource.indexPath(for: sidebarItem)
 		self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .centeredVertically)
-		delegate?.sidebarSelectionDidChange(self, outlineProvider: outlineProvider)
+		delegate?.outlineProviderSelectionDidChange(self, outlineProvider: outlineProvider)
 	}
 	
 	// MARK: Notifications
@@ -165,7 +165,7 @@ extension SidebarViewController {
 		
 		if case .outlineProvider(let entityID) = sidebarItem.id {
 			let outlineProvider = AccountManager.shared.findOutlineProvider(entityID)
-			delegate?.sidebarSelectionDidChange(self, outlineProvider: outlineProvider)
+			delegate?.outlineProviderSelectionDidChange(self, outlineProvider: outlineProvider)
 		}
 	}
 	
