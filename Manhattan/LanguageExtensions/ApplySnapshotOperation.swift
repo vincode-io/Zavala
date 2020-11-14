@@ -1,5 +1,5 @@
 //
-//  SidebarApplySnapshotOperation.swift
+//  ApplySnapshotOperation.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 11/14/20.
