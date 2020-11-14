@@ -38,6 +38,7 @@ private extension DetailViewController {
 	
 	private func updateUI() {
 		navigationItem.title = outline?.name
+		navigationItem.largeTitleDisplayMode = .never
 	}
 	
 }
