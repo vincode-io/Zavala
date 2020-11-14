@@ -14,7 +14,7 @@ class SidebarApplySnapshotOperation: MainThreadOperation {
 	public var isCanceled = false
 	public var id: Int?
 	public weak var operationDelegate: MainThreadOperationDelegate?
-	public var name: String? = "MasterFeedDataSourceOperation"
+	public var name: String? = "SidebarApplySnapshotOperation"
 	public var completionBlock: MainThreadOperation.MainThreadOperationCompletionBlock?
 
 	private var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>

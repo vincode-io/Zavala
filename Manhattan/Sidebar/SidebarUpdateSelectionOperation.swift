@@ -14,7 +14,7 @@ class SidebarUpdateSelectionOperation: MainThreadOperation {
 	public var isCanceled = false
 	public var id: Int?
 	public weak var operationDelegate: MainThreadOperationDelegate?
-	public var name: String? = "UpdateSelectionOperation"
+	public var name: String? = "SidebarUpdateSelectionOperation"
 	public var completionBlock: MainThreadOperation.MainThreadOperationCompletionBlock?
 
 	private var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>
