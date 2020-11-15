@@ -22,11 +22,11 @@ struct AppAssets {
 	}()
 
 	static var favoriteUnselected: UIImage = {
-		return UIImage(systemName: "heart")!
+		return UIImage(systemName: "star")!
 	}()
 
 	static var favoriteSelected: UIImage = {
-		return UIImage(systemName: "heart.fill")!
+		return UIImage(systemName: "star.fill")!
 	}()
 
 }

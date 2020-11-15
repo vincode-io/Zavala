@@ -56,7 +56,7 @@ public struct LazyOutlineProvider: OutlineProvider {
 		case .all:
 			return RSImage(systemName: "tray")
 		case .favorites:
-			return RSImage(systemName: "heart.circle")
+			return RSImage(systemName: "star.circle")
 		case .recents:
 			return RSImage(systemName: "clock")
 		default:
