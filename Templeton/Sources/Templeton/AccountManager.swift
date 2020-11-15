@@ -133,6 +133,11 @@ public final class AccountManager {
 		return nil
 	}
 	
+	public func suspend() {
+		accountFiles.values.forEach { $0.save() }
+		outlines.forEach { $0.suspend() }
+	}
+	
 }
 
 // MARK: Private

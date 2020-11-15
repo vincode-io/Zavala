@@ -78,6 +78,10 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 	}
 	
+	public func suspend() {
+		
+	}
+	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
 		return lhs.id == rhs.id
 	}
