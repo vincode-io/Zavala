@@ -58,30 +58,14 @@
             </objects>
             <point key="canvasLocation" x="163" y="-107"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="mnU-f9-dLf">
-            <objects>
-                <navigationController id="Emx-lc-Y6t" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="HoN-oP-KWP">
-                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="IH1-qU-b0t" kind="relationship" relationship="rootViewController" id="SR9-Ci-StZ"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="JWB-Fk-m1t" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1137" y="-470"/>
-        </scene>
         <!--Main Split View Controller-->
         <scene sceneID="eSm-MO-bGt">
             <objects>
                 <splitViewController allowDoubleColumnStyle="YES" preferredDisplayMode="twoBeside" id="vQK-Gr-dVw" customClass="MainSplitViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
-                        <segue destination="Emx-lc-Y6t" kind="relationship" relationship="masterViewController" id="oPb-kD-AKH"/>
                         <segue destination="ACt-yd-5XI" kind="relationship" relationship="supplementaryViewController" id="TQB-ue-4Ih"/>
                         <segue destination="uD6-P4-hfD" kind="relationship" relationship="detailViewController" id="JlK-Wg-Fo4"/>
+                        <segue destination="IH1-qU-b0t" kind="relationship" relationship="masterViewController" id="74Q-CI-tJx"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e3g-H2-RVK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -113,7 +97,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l9h-fx-tjO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-489" y="-470"/>
+            <point key="canvasLocation" x="-820" y="-456"/>
         </scene>
     </scenes>
     <resources>

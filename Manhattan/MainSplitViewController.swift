@@ -16,8 +16,7 @@ public extension Notification.Name {
 class MainSplitViewController: UISplitViewController {
 
 	private var sidebarViewController: SidebarViewController? {
-		let navController = viewController(for: .primary) as? UINavigationController
-		return navController?.topViewController as? SidebarViewController
+		return viewController(for: .primary) as? SidebarViewController
 	}
 	
 	private var timelineViewController: TimelineViewController? {
@@ -79,8 +78,9 @@ class MainSplitViewController: UISplitViewController {
 	
 	// MARK: API
 	func startUp() {
-		(viewController(for: .primary) as? UINavigationController)?.delegate = self
+		sidebarViewController?.navigationController?.delegate = self
 		sidebarViewController?.delegate = self
+		timelineViewController?.navigationController?.delegate = self
 		timelineViewController?.delegate = self
 		sidebarViewController?.startUp()
 	}
@@ -227,13 +227,13 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 		// If we are showing the Feeds and only the feeds start clearing stuff
 		if isCollapsed && viewController === sidebarViewController {
 			activityManager.invalidateSelectOutlineProvider()
-			sidebarViewController?.selectOutlineProvider(nil, animated: true)
+			sidebarViewController?.selectOutlineProvider(nil, animated: false)
 			return
 		}
 
-		if isCollapsed, let navController = viewController as? UINavigationController, navController.topViewController === timelineViewController {
+		if isCollapsed && viewController === timelineViewController {
 			activityManager.invalidateSelectOutline()
-			timelineViewController?.selectOutline(nil, animated: true)
+			timelineViewController?.selectOutline(nil, animated: false)
 			return
 		}
 	}
