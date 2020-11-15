@@ -29,7 +29,7 @@ public extension OutlineProvider {
 	}
 
 	static func sortByName(_ outlines: [Outline]) -> [Outline] {
-		return outlines.sorted(by: { $0.name ?? "" < $1.name ?? "" })
+		return outlines.sorted(by: { ($0.name ?? "").caseInsensitiveCompare($1.name ?? "") == .orderedAscending })
 	}
 
 }
