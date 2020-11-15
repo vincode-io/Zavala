@@ -32,9 +32,12 @@ class MainSplitViewController: UISplitViewController {
 
 	var stateRestorationActivity: NSUserActivity {
 		let activity = activityManager.stateRestorationActivity
-//		var userInfo = activity.userInfo == nil ? [AnyHashable: Any]() : activity.userInfo
-//		userInfo![UserInfoKey.windowState] = windowState()
-//		activity.userInfo = userInfo
+		if traitCollection.userInterfaceIdiom == .mac {
+			var userInfo = activity.userInfo == nil ? [AnyHashable: Any]() : activity.userInfo
+			userInfo![UserInfoKeys.sidebarWidth] = primaryColumnWidth
+			userInfo![UserInfoKeys.timelineWidth] = supplementaryColumnWidth
+			activity.userInfo = userInfo
+		}
 		return activity
 	}
 	
@@ -53,9 +56,19 @@ class MainSplitViewController: UISplitViewController {
 	override func viewDidLoad() {
         super.viewDidLoad()
 		primaryBackgroundStyle = .sidebar
+
+		if traitCollection.userInterfaceIdiom == .pad {
+			preferredPrimaryColumnWidthFraction = 0.3
+			preferredSupplementaryColumnWidthFraction = 0.3
+		}
+
 		if traitCollection.userInterfaceIdiom == .mac {
-			preferredPrimaryColumnWidth = 200
-			preferredSupplementaryColumnWidth = 300
+			if preferredPrimaryColumnWidth < 1 {
+				preferredPrimaryColumnWidth = 200
+			}
+			if preferredSupplementaryColumnWidth < 1 {
+				preferredSupplementaryColumnWidth = 300
+			}
 		}
 
 		delegate = self
@@ -72,8 +85,16 @@ class MainSplitViewController: UISplitViewController {
 	}
 	
 	func handle(_ activity: NSUserActivity) {
-		guard let userInfo = activity.userInfo,
-			  let outlineProviderUserInfo = userInfo[UserInfoKeys.outlineProviderID] as? [AnyHashable : AnyHashable],
+		guard let userInfo = activity.userInfo else { return }
+		
+		if let sidebarWidth = userInfo[UserInfoKeys.sidebarWidth] as? CGFloat {
+			preferredPrimaryColumnWidth = sidebarWidth
+		}
+		if let timelineWidth = userInfo[UserInfoKeys.timelineWidth] as? CGFloat {
+			preferredSupplementaryColumnWidth = timelineWidth
+		}
+
+		guard let outlineProviderUserInfo = userInfo[UserInfoKeys.outlineProviderID] as? [AnyHashable : AnyHashable],
 			  let outlineProviderID = EntityID(userInfo: outlineProviderUserInfo),
 			  let outlineProvider = AccountManager.shared.findOutlineProvider(outlineProviderID) else { return }
 
