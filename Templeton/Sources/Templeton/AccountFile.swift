@@ -51,9 +51,6 @@ private extension AccountFile {
 			do {
 				fileData = try Data(contentsOf: readURL)
 			} catch {
-				// Commented out because it’s not an error on first run.
-				// TODO: make it so we know if it’s first run or not.
-				//NSApplication.shared.presentError(error)
 				os_log(.error, log: log, "Account read from disk failed: %@.", error.localizedDescription)
 			}
 		})
