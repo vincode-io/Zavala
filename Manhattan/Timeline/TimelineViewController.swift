@@ -15,18 +15,6 @@ protocol TimelineDelegate: class  {
 
 class TimelineViewController: UICollectionViewController {
 
-	private var addBarButtonItem: UIBarButtonItem?
-	
-	private let dataSourceQueue = MainThreadOperationQueue()
-	private var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
-
-	private var currentOutline: Outline? {
-		guard let indexPath = collectionView.indexPathsForSelectedItems?.first,
-			  let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
-			  
-		return AccountManager.shared.findOutline(item.id)
-	}
-	
 	weak var delegate: TimelineDelegate?
 	var outlineProvider: OutlineProvider? {
 		didSet {
@@ -37,6 +25,18 @@ class TimelineViewController: UICollectionViewController {
 	
 	var isCreateOutlineUnavailable: Bool {
 		return !(outlineProvider is Folder)
+	}
+	
+	private var addBarButtonItem: UIBarButtonItem?
+	
+	private let dataSourceQueue = MainThreadOperationQueue()
+	private var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
+
+	private var currentOutline: Outline? {
+		guard let indexPath = collectionView.indexPathsForSelectedItems?.first,
+			  let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
+			  
+		return AccountManager.shared.findOutline(item.id)
 	}
 	
     override func viewDidLoad() {

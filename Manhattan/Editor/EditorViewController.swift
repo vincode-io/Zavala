@@ -21,11 +21,16 @@ class EditorViewController: UICollectionViewController {
 		}
 	}
 	
-    override func viewDidLoad() {
+	private var favoriteBarButtonItem: UIBarButtonItem?
+
+	override func viewDidLoad() {
         super.viewDidLoad()
 		
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
+		} else {
+			favoriteBarButtonItem = UIBarButtonItem(image: AppAssets.favoriteUnselected, style: .plain, target: self, action: #selector(toggleOutlineIsFavorite(_:)))
+			navigationItem.rightBarButtonItem = favoriteBarButtonItem
 		}
 		
 		updateUI()
@@ -37,6 +42,7 @@ class EditorViewController: UICollectionViewController {
 			if case .failure(let error) = result {
 				self.presentError(error)
 			}
+			self.updateUI()
 		})
 	}
 	
@@ -47,6 +53,12 @@ private extension EditorViewController {
 	private func updateUI() {
 		navigationItem.title = outline?.name
 		navigationItem.largeTitleDisplayMode = .never
+		
+		if outline?.isFavorite ?? false {
+			favoriteBarButtonItem?.image = AppAssets.favoriteSelected
+		} else {
+			favoriteBarButtonItem?.image = AppAssets.favoriteUnselected
+		}
 	}
 	
 }
