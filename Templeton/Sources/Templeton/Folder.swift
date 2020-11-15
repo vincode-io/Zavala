@@ -24,6 +24,10 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	
 	public var outlines: [Outline]?
 
+	public var sortedOutlines: [Outline] {
+		return Self.sortByUpdate(outlines ?? [Outline]())
+	}
+
 	public var account: Account? {
 		return AccountManager.shared.findAccount(accountID: id.accountID)
 	}

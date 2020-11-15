@@ -8,6 +8,11 @@
 import Foundation
 
 public final class AccountManager {
+	
+	private var outlines: [Outline] {
+		return activeAccounts.reduce(into: [Outline]()) { $0.append(contentsOf: $1.outlines ) }
+	}
+	
 	public static var shared: AccountManager!
 	
 	public var localAccount: Account? {
@@ -16,11 +21,16 @@ public final class AccountManager {
 	}
 
 	public var allOutlineProvider: OutlineProvider {
-		return LazyOutlineProvider(id: .all, callback: { return [Outline]() })
+		return LazyOutlineProvider(id: .all, callback: { [weak self] in
+			return self?.outlines.sorted(by: { $0.name ?? "" < $1.name ?? "" }) ?? [Outline]()
+		})
 	}
 	
 	public var recentsOutlineProvider: OutlineProvider {
-		return LazyOutlineProvider(id: .recents, callback: { return [Outline]() })
+		return LazyOutlineProvider(id: .recents, callback: { [weak self] in
+			let sorted = LazyOutlineProvider.sortByUpdate(self?.outlines ?? [Outline]())
+			return Array(sorted.prefix(10))
+		})
 	}
 	
 	public var favoritesOutlineProvider: OutlineProvider {

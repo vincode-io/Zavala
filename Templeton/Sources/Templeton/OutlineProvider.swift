@@ -15,7 +15,7 @@ public protocol OutlineProvider {
 	
 	var isSmartProvider: Bool { get } 
 	var outlines: [Outline]? { get }
-	var sortedOutlines: [Outline]? { get }
+	var sortedOutlines: [Outline] { get }
 }
 
 public extension OutlineProvider {
@@ -24,10 +24,9 @@ public extension OutlineProvider {
 		return id.isSmartProvider
 	}
 
-	var sortedOutlines: [Outline]? {
-		return outlines?.sorted(by: { $0.updated ?? Date.distantPast > $1.updated ?? Date.distantPast })
+	static func sortByUpdate(_ outlines: [Outline]) -> [Outline] {
+		return outlines.sorted(by: { $0.updated ?? Date.distantPast > $1.updated ?? Date.distantPast })
 	}
-
 }
 
 public struct LazyOutlineProvider: OutlineProvider {
@@ -61,6 +60,10 @@ public struct LazyOutlineProvider: OutlineProvider {
 	}
 
 	public var outlines: [Outline]? {
+		return outlineCallback()
+	}
+	
+	public var sortedOutlines: [Outline] {
 		return outlineCallback()
 	}
 	
