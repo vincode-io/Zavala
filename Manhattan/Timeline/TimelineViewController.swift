@@ -28,7 +28,12 @@ class TimelineViewController: UICollectionViewController {
 	}
 	
 	weak var delegate: TimelineDelegate?
-	var outlineProvider: OutlineProvider?
+	var outlineProvider: OutlineProvider? {
+		didSet {
+			updateUI()
+			applySnapshot(animated: false)
+		}
+	}
 	
 	var isCreateOutlineUnavailable: Bool {
 		return !(outlineProvider is Folder)
@@ -54,11 +59,6 @@ class TimelineViewController: UICollectionViewController {
 	}
 	
 	// MARK: API
-	func changeOutlineProvider(_ outlineProvider: OutlineProvider?) {
-		self.outlineProvider = outlineProvider
-		updateUI()
-		applySnapshot(animated: false)
-	}
 
 	func selectOutline(_ outline: Outline?, animated: Bool) {
 		guard let outlineProvider = outlineProvider else { return }
