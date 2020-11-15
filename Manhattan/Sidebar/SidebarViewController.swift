@@ -274,6 +274,9 @@ extension SidebarViewController {
 	
 	private func deleteFolder(_ folder: Folder, completion: ((Bool) -> Void)? = nil) {
 		func deleteFolder() {
+			if self.currentFolder == folder {
+				self.delegate?.outlineProviderSelectionDidChange(self, outlineProvider: nil)
+			}
 			folder.account?.removeFolder(folder) { result in
 				if case .failure(let error) = result {
 					self.presentError(error)
