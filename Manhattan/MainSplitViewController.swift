@@ -79,6 +79,7 @@ class MainSplitViewController: UISplitViewController {
 	
 	// MARK: API
 	func startUp() {
+		(viewController(for: .primary) as? UINavigationController)?.delegate = self
 		sidebarViewController?.delegate = self
 		timelineViewController?.delegate = self
 		sidebarViewController?.startUp()
@@ -214,6 +215,30 @@ extension MainSplitViewController: UISplitViewControllerDelegate {
 	
 }
 
+// MARK: UINavigationControllerDelegate
+
+extension MainSplitViewController: UINavigationControllerDelegate {
+	
+	func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+		if UIApplication.shared.applicationState == .background {
+			return
+		}
+
+		// If we are showing the Feeds and only the feeds start clearing stuff
+		if isCollapsed && viewController === sidebarViewController {
+			activityManager.invalidateSelectOutlineProvider()
+			sidebarViewController?.selectOutlineProvider(nil, animated: true)
+			return
+		}
+
+		if isCollapsed, let navController = viewController as? UINavigationController, navController.topViewController === timelineViewController {
+			activityManager.invalidateSelectOutline()
+			timelineViewController?.selectOutline(nil, animated: true)
+			return
+		}
+	}
+	
+}
 // MARK: Helpers
 
 extension MainSplitViewController {

@@ -35,7 +35,7 @@
         <!--Outlines-->
         <scene sceneID="DuZ-tW-ztJ">
             <objects>
-                <collectionViewController storyboardIdentifier="OutlineListViewController" title="Outlines" id="ACt-yd-5XI" customClass="TimelineViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="OutlineListViewController" title="Outlines" clearsSelectionOnViewWillAppear="NO" id="ACt-yd-5XI" customClass="TimelineViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="zj1-RR-HeS">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -91,7 +91,7 @@
         <!--Folders-->
         <scene sceneID="xI7-xC-228">
             <objects>
-                <collectionViewController title="Folders" id="IH1-qU-b0t" customClass="SidebarViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController title="Folders" clearsSelectionOnViewWillAppear="NO" id="IH1-qU-b0t" customClass="SidebarViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="8wb-92-AvW">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
