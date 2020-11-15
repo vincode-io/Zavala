@@ -56,11 +56,6 @@ class MainSplitViewController: UISplitViewController {
         super.viewDidLoad()
 		primaryBackgroundStyle = .sidebar
 
-		if traitCollection.userInterfaceIdiom == .pad {
-			preferredPrimaryColumnWidthFraction = 0.3
-			preferredSupplementaryColumnWidthFraction = 0.3
-		}
-
 		if traitCollection.userInterfaceIdiom == .mac {
 			if preferredPrimaryColumnWidth < 1 {
 				preferredPrimaryColumnWidth = 200
