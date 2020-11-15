@@ -27,6 +27,10 @@ class TimelineViewController: UICollectionViewController {
 		return !(outlineProvider is Folder)
 	}
 	
+	var isDeleteEntityUnavailable: Bool {
+		return currentOutline == nil
+	}
+	
 	private var addBarButtonItem: UIBarButtonItem?
 	
 	private let dataSourceQueue = MainThreadOperationQueue()
@@ -70,6 +74,11 @@ class TimelineViewController: UICollectionViewController {
 
 		updateSelection(item: timelineItem, animated: animated)
 		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline)
+	}
+	
+	func deleteCurrentOutline() {
+		guard let outline = currentOutline else { return }
+		deleteOutline(outline)
 	}
 	
 	// MARK: Notifications

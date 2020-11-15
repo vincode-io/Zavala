@@ -46,7 +46,11 @@ class MainSplitViewController: UISplitViewController {
 		return timelineViewController?.isCreateOutlineUnavailable ?? true
 	}
 	
-    override func viewDidLoad() {
+	var isDeleteEntityUnavailable: Bool {
+		return (sidebarViewController?.isDeleteEntityUnavailable ?? true) && (timelineViewController?.isDeleteEntityUnavailable ?? true)
+	}
+
+	override func viewDidLoad() {
         super.viewDidLoad()
 		primaryBackgroundStyle = .sidebar
 		if traitCollection.userInterfaceIdiom == .mac {
@@ -102,6 +106,14 @@ class MainSplitViewController: UISplitViewController {
 	
 	@objc func createOutline(_ sender: Any?) {
 		timelineViewController?.createOutline(sender)
+	}
+	
+	@objc func deleteEntity(_ sender: Any?) {
+		if timelineViewController?.isDeleteEntityUnavailable ?? true {
+			sidebarViewController?.deleteCurrentFolder()
+		} else {
+			timelineViewController?.deleteCurrentOutline()
+		}
 	}
 	
 	@objc func toggleOutlineIsFavorite(_ sender: Any?) {

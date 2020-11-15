@@ -58,6 +58,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.createOutline(sender)
 	}
 	
+	@objc func deleteEntityCommand(_ sender: Any?) {
+		mainSplitViewController?.deleteEntity(sender)
+	}
+	
 	@objc func toggleOutlineIsFavoriteCommand(_ sender: Any?) {
 		mainSplitViewController?.toggleOutlineIsFavorite(sender)
 	}
@@ -76,6 +80,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(createOutlineCommand(_:)):
 			if mainSplitViewController?.isCreateOutlineUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(deleteEntityCommand(_:)):
+			if mainSplitViewController?.isDeleteEntityUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		default:
@@ -109,6 +117,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											modifierFlags: [.shift, .command])
 		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newFolderCommand])
 		builder.insertChild(newItemsMenu, atStartOfMenu: .file)
+
+		// Standard Edit Menu (Use backspace to trigger delete key)
+		builder.replaceChildren(ofMenu: .standardEdit) { oldElements in
+			var newElements = [UIMenuElement]()
+			for oldElement in oldElements {
+				if oldElement.title == "Delete" {
+					let delete = UIKeyCommand(title: oldElement.title, action: #selector(deleteEntityCommand(_:)), input: "\u{8}", modifierFlags: [])
+					newElements.append(delete)
+				} else {
+					newElements.append(oldElement)
+				}
+			}
+			return newElements
+		}
 		
 		// View Menu
 		let toggleSidebarCommand = UIKeyCommand(title: NSLocalizedString("Toggle Sidebar", comment: "Toggle Sidebar"),

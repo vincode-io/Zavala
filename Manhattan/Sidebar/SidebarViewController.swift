@@ -16,6 +16,17 @@ protocol SidebarDelegate: class {
 
 class SidebarViewController: UICollectionViewController {
 
+	
+	weak var delegate: SidebarDelegate?
+	
+	var isCreateFolderUnavailable: Bool {
+		return currentAccount == nil
+	}
+
+	var isDeleteEntityUnavailable: Bool {
+		return currentFolder == nil
+	}
+
 	private let dataSourceQueue = MainThreadOperationQueue()
 	private var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 
@@ -33,12 +44,6 @@ class SidebarViewController: UICollectionViewController {
 			  let entityID = item.entityID else { return nil }
 			  
 		return AccountManager.shared.findFolder(entityID)
-	}
-	
-	weak var delegate: SidebarDelegate?
-	
-	var isCreateFolderUnavailable: Bool {
-		return currentAccount == nil
 	}
 	
 	override func viewDidLoad() {
@@ -68,6 +73,11 @@ class SidebarViewController: UICollectionViewController {
 		
 		updateSelection(item: sidebarItem, animated: animated)
 		delegate?.outlineProviderSelectionDidChange(self, outlineProvider: outlineProvider)
+	}
+	
+	func deleteCurrentFolder() {
+		guard let folder = currentFolder else { return }
+		deleteFolder(folder)
 	}
 	
 	// MARK: Notifications
