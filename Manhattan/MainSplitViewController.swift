@@ -239,11 +239,8 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 	}
 	
 }
-// MARK: Helpers
 
-extension MainSplitViewController {
-	
-}
+// MARK: Helpers
 
 #if targetEnvironment(macCatalyst)
 
