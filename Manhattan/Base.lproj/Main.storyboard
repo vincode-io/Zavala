@@ -30,7 +30,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Dy-VE-ovi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-820" y="293"/>
+            <point key="canvasLocation" x="-1068" y="260"/>
         </scene>
         <!--Outlines-->
         <scene sceneID="DuZ-tW-ztJ">
@@ -56,7 +56,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zr4-Sd-dZy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="163" y="-107"/>
+            <point key="canvasLocation" x="-322" y="-117"/>
         </scene>
         <!--Main Split View Controller-->
         <scene sceneID="eSm-MO-bGt">
@@ -97,7 +97,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l9h-fx-tjO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-820" y="-456"/>
+            <point key="canvasLocation" x="-1068" y="-476"/>
         </scene>
     </scenes>
     <resources>
