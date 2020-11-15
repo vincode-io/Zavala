@@ -21,6 +21,12 @@ public final class Outline: Identifiable, Equatable, Codable {
 	public var created: Date?
 	public var updated: Date?
 	
+	public var headlines: [Headline]? {
+		didSet {
+			outlineBodyDidChange()
+		}
+	}
+	
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case name = "name"
@@ -93,5 +99,9 @@ private extension Outline {
 	func outlineMetaDataDidChange() {
 		NotificationCenter.default.post(name: .OutlineMetaDataDidChange, object: self, userInfo: nil)
 	}
-	
+
+	func outlineBodyDidChange() {
+		NotificationCenter.default.post(name: .OutlineBodyDidChange, object: self, userInfo: nil)
+	}
+
 }

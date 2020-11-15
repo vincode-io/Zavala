@@ -29,7 +29,7 @@ public enum AccountType: Int, Codable {
 		}
 	}
 
-	var folderNmae: String {
+	var folderName: String {
 		switch self {
 		case .local:
 			return "local"

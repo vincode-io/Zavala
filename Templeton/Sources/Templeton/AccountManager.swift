@@ -9,10 +9,6 @@ import Foundation
 
 public final class AccountManager {
 	
-	private var outlines: [Outline] {
-		return activeAccounts.reduce(into: [Outline]()) { $0.append(contentsOf: $1.outlines ) }
-	}
-	
 	public static var shared: AccountManager!
 	
 	public var localAccount: Account? {
@@ -40,9 +36,6 @@ public final class AccountManager {
 		})
 	}
 	
-	private var accountsFolder: URL
-	private var accountFiles = [Int: AccountFile]()
-	
 	var accountsDictionary = [Int: Account]()
 
 	public var accounts: [Account] {
@@ -61,6 +54,14 @@ public final class AccountManager {
 		return sort(activeAccounts)
 	}
 	
+	var accountsFolder: URL
+
+	private var accountFiles = [Int: AccountFile]()
+	
+	private var outlines: [Outline] {
+		return activeAccounts.reduce(into: [Outline]()) { $0.append(contentsOf: $1.outlines ) }
+	}
+	
 	public init(accountsFolderPath: String) {
 		self.accountsFolder = URL(fileURLWithPath: accountsFolderPath, isDirectory: true)
 
@@ -70,7 +71,7 @@ public final class AccountManager {
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineMetadataDidChange(_:)), name: .OutlineMetaDataDidChange, object: nil)
 
 		// The local account must always exist, even if it's empty.
-		let localAccountFolder = accountsFolder.appendingPathComponent(AccountType.local.folderNmae)
+		let localAccountFolder = accountsFolder.appendingPathComponent(AccountType.local.folderName)
 		let localAccountFile = localAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
 		
 		if FileManager.default.fileExists(atPath: localAccountFile.path) {
@@ -89,7 +90,7 @@ public final class AccountManager {
 			localAccount.createFolder("Outlines") { _ in }
 		}
 		
-		let cloudKitAccountFolder = accountsFolder.appendingPathComponent(AccountType.cloudKit.folderNmae)
+		let cloudKitAccountFolder = accountsFolder.appendingPathComponent(AccountType.cloudKit.folderName)
 		let cloudKitAccountFile = cloudKitAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
 		
 		if FileManager.default.fileExists(atPath: cloudKitAccountFile.path) {
