@@ -27,6 +27,11 @@ public extension OutlineProvider {
 	static func sortByUpdate(_ outlines: [Outline]) -> [Outline] {
 		return outlines.sorted(by: { $0.updated ?? Date.distantPast > $1.updated ?? Date.distantPast })
 	}
+
+	static func sortByName(_ outlines: [Outline]) -> [Outline] {
+		return outlines.sorted(by: { $0.name ?? "" < $1.name ?? "" })
+	}
+
 }
 
 public struct LazyOutlineProvider: OutlineProvider {

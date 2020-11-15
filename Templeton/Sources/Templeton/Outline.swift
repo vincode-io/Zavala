@@ -17,12 +17,14 @@ public final class Outline: Identifiable, Equatable, Codable {
 	
 	public var id: EntityID
 	public var name: String?
+	public var isFavorite: Bool?
 	public var created: Date?
 	public var updated: Date?
 	
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case name = "name"
+		case isFavorite = "isFavorite"
 		case created = "created"
 		case updated = "updated"
 	}
@@ -47,6 +49,20 @@ public final class Outline: Identifiable, Equatable, Codable {
 		NotificationCenter.default.post(name: .OutlineDidDelete, object: self, userInfo: nil)
 	}
 
+	public func toggleFavorite(completion: @escaping (Result<Void, Error>) -> Void) {
+		func toggleFavorite() {
+			isFavorite = !(isFavorite ?? false)
+			outlineMetaDataDidChange()
+			completion(.success(()))
+		}
+		
+		if account?.type == .cloudKit {
+			toggleFavorite()
+		} else {
+			toggleFavorite()
+		}
+	}
+	
 	public func update(name: String, completion: @escaping (Result<Void, Error>) -> Void) {
 		func update() {
 			self.name = name

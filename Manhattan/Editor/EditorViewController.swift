@@ -10,6 +10,10 @@ import Templeton
 
 class EditorViewController: UICollectionViewController {
 
+	public var isToggleFavoriteUnavailable: Bool {
+		return outline == nil
+	}
+	
 	var outline: Outline? {
 		didSet {
 			guard isViewLoaded else { return }
@@ -29,7 +33,11 @@ class EditorViewController: UICollectionViewController {
 
 	// MARK: Actions
 	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
-		
+		outline?.toggleFavorite(completion: { result in
+			if case .failure(let error) = result {
+				self.presentError(error)
+			}
+		})
 	}
 	
 }

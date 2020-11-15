@@ -105,7 +105,7 @@ class MainSplitViewController: UISplitViewController {
 	}
 	
 	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
-		
+		editorViewController?.toggleOutlineIsFavorite(sender)
 	}
 	
 	@objc func toggleSidebar(_ sender: Any?) {
@@ -202,7 +202,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.newOutline,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
 			.flexibleSpace,
-//			.toggleOutlineIsFavorite
+			.toggleOutlineIsFavorite
 		]
 		return identifiers
 	}
@@ -218,7 +218,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 		switch itemIdentifier {
 		case .newOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] in
+			item.checkForUnavailable = { [weak self] _ in
 				return self?.timelineViewController?.isCreateOutlineUnavailable ?? true
 			}
 			item.image = AppAssets.createEntity
@@ -228,6 +228,14 @@ extension MainSplitViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .toggleOutlineIsFavorite:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] item in
+				if self?.editorViewController?.outline?.isFavorite ?? false {
+					item.image = AppAssets.favoriteSelected
+				} else {
+					item.image = AppAssets.favoriteUnselected
+				}
+				return self?.editorViewController?.isToggleFavoriteUnavailable ?? true
+			}
 			item.image = AppAssets.favoriteUnselected
 			item.label = NSLocalizedString("Toggle Favorite", comment: "Toggle Favorite")
 			item.action = #selector(toggleOutlineIsFavorite(_:))
