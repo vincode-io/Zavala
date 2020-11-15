@@ -19,11 +19,18 @@ public final class ManagedResourceFile: NSObject, NSFilePresenter {
 	private var isLoading = false
 	private let fileURL: URL
 	private let operationQueue: OperationQueue
-	private let saveQueue = CoalescingQueue(name: "Save Queue", interval: 5.0)
+	private var saveQueue: CoalescingQueue
 
 	private let loadCallback: () -> Void
 	private let saveCallback: () -> Void
 
+	public var saveInterval: TimeInterval = 5.0 {
+		didSet {
+			saveQueue.performCallsImmediately()
+			saveQueue = CoalescingQueue(name: "ManagedResourceFile Save Queue", interval: saveInterval)
+		}
+	}
+	
 	public var presentedItemURL: URL? {
 		return fileURL
 	}
@@ -38,6 +45,7 @@ public final class ManagedResourceFile: NSObject, NSFilePresenter {
 		self.loadCallback = load
 		self.saveCallback = save
 		
+		saveQueue = CoalescingQueue(name: "ManagedResourceFile Save Queue", interval: saveInterval)
 		operationQueue = OperationQueue()
 		operationQueue.maxConcurrentOperationCount = 1
 	
