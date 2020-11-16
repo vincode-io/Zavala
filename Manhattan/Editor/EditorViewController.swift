@@ -100,7 +100,8 @@ extension EditorViewController {
 	
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
-			let configuration = UICollectionLayoutListConfiguration(appearance: .plain)
+			var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
+			configuration.showsSeparators = false
 			return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
 		}
 		return layout

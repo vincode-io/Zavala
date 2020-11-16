@@ -131,6 +131,7 @@ extension TimelineViewController {
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 			var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
+			configuration.showsSeparators = false
 
 			configuration.trailingSwipeActionsConfigurationProvider = { indexPath in
 				guard let timelineItem = self.dataSource.itemIdentifier(for: indexPath) else { return nil }
