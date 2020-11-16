@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
+		51222956256204C6008041AF /* EditorItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51222955256204C6008041AF /* EditorItem.swift */; };
 		514BB9D7255B599E00C8DBDF /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9D6255B599E00C8DBDF /* UIViewController+.swift */; };
 		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
@@ -73,6 +74,7 @@
 
 /* Begin PBXFileReference section */
 		5122294B25609C47008041AF /* UserInfoKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoKeys.swift; sourceTree = "<group>"; };
+		51222955256204C6008041AF /* EditorItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorItem.swift; sourceTree = "<group>"; };
 		514BB9D6255B599E00C8DBDF /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 		51E14F2A2560729900320EDB /* Editor */ = {
 			isa = PBXGroup;
 			children = (
+				51222955256204C6008041AF /* EditorItem.swift */,
 				51C4C45A255ACA1B004E0206 /* EditorViewController.swift */,
 			);
 			path = Editor;
@@ -444,6 +447,7 @@
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,
 				51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */,
+				51222956256204C6008041AF /* EditorItem.swift in Sources */,
 				51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */,
 				51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */,
 				5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */,

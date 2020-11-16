@@ -9,7 +9,7 @@ import Foundation
 
 public final class Headline: Identifiable, Equatable, Codable {
 	
-	public var id: String?
+	public var id: String
 	public var text: Data?
 	public var headlines: [Headline]?
 
@@ -17,6 +17,10 @@ public final class Headline: Identifiable, Equatable, Codable {
 		case id = "id"
 		case text = "text"
 		case headlines = "headlines"
+	}
+
+	init(_ id: String) {
+		self.id = id
 	}
 	
 	public static func == (lhs: Headline, rhs: Headline) -> Bool {
