@@ -19,8 +19,10 @@ public final class Headline: Identifiable, Equatable, Codable {
 		case headlines = "headlines"
 	}
 
-	init(_ id: String) {
-		self.id = id
+	public init(plainText: String) {
+		self.id = UUID().uuidString
+		text = plainText.data(using: .utf8)
+		headlines = [Headline]()
 	}
 	
 	public static func == (lhs: Headline, rhs: Headline) -> Bool {
