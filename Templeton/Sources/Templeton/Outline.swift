@@ -27,14 +27,6 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 	}
 	
-	enum CodingKeys: String, CodingKey {
-		case id = "id"
-		case name = "name"
-		case isFavorite = "isFavorite"
-		case created = "created"
-		case updated = "updated"
-	}
-	
 	public var account: Account? {
 		return AccountManager.shared.findAccount(accountID: id.accountID)
 	}
@@ -44,6 +36,16 @@ public final class Outline: Identifiable, Equatable, Codable {
 		return AccountManager.shared.findFolder(folderID)
 	}
 
+	enum CodingKeys: String, CodingKey {
+		case id = "id"
+		case name = "name"
+		case isFavorite = "isFavorite"
+		case created = "created"
+		case updated = "updated"
+	}
+
+	private var headlinesFile: HeadlinesFile?
+	
 	init(parentID: EntityID, name: String) {
 		self.id = EntityID.outline(parentID.accountID, parentID.folderID, UUID().uuidString)
 		self.name = name
@@ -84,8 +86,18 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 	}
 	
+	public func load() {
+		headlinesFile = HeadlinesFile(outline: self)
+		headlinesFile!.load()
+	}
+	
+	public func save() {
+		headlinesFile?.save()
+	}
+	
 	public func suspend() {
-		
+		headlinesFile?.save()
+		headlinesFile = nil
 	}
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {

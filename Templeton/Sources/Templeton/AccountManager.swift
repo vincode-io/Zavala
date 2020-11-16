@@ -136,7 +136,7 @@ public final class AccountManager {
 	
 	public func suspend() {
 		accountFiles.values.forEach { $0.save() }
-		outlines.forEach { $0.suspend() }
+		outlines.forEach { $0.save() }
 	}
 	
 }
