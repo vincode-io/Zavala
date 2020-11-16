@@ -74,6 +74,7 @@ class EditorViewController: UICollectionViewController {
 		
 		loadOutline()
 		
+		collectionView.allowsSelection = false
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
 		applySnapshot(animated: false)
