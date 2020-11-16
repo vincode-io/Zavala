@@ -33,7 +33,13 @@ class EditorViewController: UICollectionViewController {
 		
 		let headline1 = Headline(plainText: "Headline 1")
 		headlines.append(headline1)
-		headline1.headlines?.append(Headline(plainText: "Headline 1.1"))
+		
+		let headline11 = Headline(plainText: "Headline 1.1")
+		headline1.headlines?.append(headline11)
+		headline11.headlines?.append(Headline(plainText: "Headline 1.1.1"))
+		headline11.headlines?.append(Headline(plainText: "Headline 1.1.2"))
+		headline11.headlines?.append(Headline(plainText: "Headline 1.1.3"))
+
 		headline1.headlines?.append(Headline(plainText: "Headline 1.2"))
 		headline1.headlines?.append(Headline(plainText: "Headline 1.3"))
 		
@@ -133,12 +139,19 @@ extension EditorViewController {
 		
 		if let items = outline?.headlines?.map({ EditorItem.editorItem($0) }) {
 			snapshot.append(items)
-			for item in items {
-				snapshot.append(item.children, to: item)
-			}
+			applySnapshot(&snapshot, items: items)
 		}
 		
 		dataSource.apply(snapshot, to: 0, animatingDifferences: animated)
+	}
+	
+	private func applySnapshot( _ snapshot: inout NSDiffableDataSourceSectionSnapshot<EditorItem>, items: [EditorItem]) {
+		for item in items {
+			snapshot.append(item.children, to: item)
+			if !item.children.isEmpty {
+				applySnapshot(&snapshot, items: item.children)
+			}
+		}
 	}
 	
 }
