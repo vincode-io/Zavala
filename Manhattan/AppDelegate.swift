@@ -119,18 +119,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertChild(newItemsMenu, atStartOfMenu: .file)
 
 		// Standard Edit Menu (Use backspace to trigger delete key)
-		builder.replaceChildren(ofMenu: .standardEdit) { oldElements in
-			var newElements = [UIMenuElement]()
-			for oldElement in oldElements {
-				if oldElement.title == "Delete" {
-					let delete = UIKeyCommand(title: oldElement.title, action: #selector(deleteEntityCommand(_:)), input: "\u{8}", modifierFlags: [])
-					newElements.append(delete)
-				} else {
-					newElements.append(oldElement)
-				}
-			}
-			return newElements
-		}
+//		builder.replaceChildren(ofMenu: .standardEdit) { oldElements in
+//			var newElements = [UIMenuElement]()
+//			for oldElement in oldElements {
+//				if oldElement.title == "Delete" {
+//					let delete = UIKeyCommand(title: oldElement.title, action: #selector(deleteEntityCommand(_:)), input: "\u{8}", modifierFlags: [])
+//					newElements.append(delete)
+//				} else {
+//					newElements.append(oldElement)
+//				}
+//			}
+//			return newElements
+//		}
 		
 		// View Menu
 		let toggleSidebarCommand = UIKeyCommand(title: NSLocalizedString("Toggle Sidebar", comment: "Toggle Sidebar"),
