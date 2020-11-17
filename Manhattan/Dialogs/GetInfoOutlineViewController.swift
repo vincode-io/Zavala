@@ -10,6 +10,8 @@ import Templeton
 
 class GetInfoOutlineViewController: FormViewController {
 	
+	static let preferredContentSize = CGSize(width: 400, height: 200)
+
 	var outline: Outline?
 
 	@IBOutlet weak var addBarButtonItem: UIBarButtonItem!

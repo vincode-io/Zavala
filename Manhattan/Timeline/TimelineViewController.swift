@@ -103,6 +103,8 @@ class TimelineViewController: UICollectionViewController {
 		guard let folder = outlineProvider as? Folder else { return }
 
 		let addNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "AddOutlineViewControllerNav") as! UINavigationController
+		addNavViewController.preferredContentSize = AddOutlineViewController.preferredContentSize
+		addNavViewController.modalPresentationStyle = .formSheet
 		let addViewController = addNavViewController.topViewController as! AddOutlineViewController
 		addViewController.folder = folder
 
@@ -278,6 +280,8 @@ extension TimelineViewController {
 	
 	private func getInfoForOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
 		let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoOutlineViewControllerNav") as! UINavigationController
+		getInfoNavViewController.preferredContentSize = GetInfoOutlineViewController.preferredContentSize
+		getInfoNavViewController.modalPresentationStyle = .formSheet
 		let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoOutlineViewController
 		getInfoViewController.outline = outline
 		present(getInfoNavViewController, animated: true) {

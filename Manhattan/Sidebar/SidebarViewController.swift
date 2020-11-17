@@ -96,6 +96,8 @@ class SidebarViewController: UICollectionViewController {
 		guard let account = currentAccount else { return }
 
 		let addNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "AddFolderViewControllerNav") as! UINavigationController
+		addNavViewController.preferredContentSize = AddFolderViewController.preferredContentSize
+		addNavViewController.modalPresentationStyle = .formSheet
 		let addViewController = addNavViewController.topViewController as! AddFolderViewController
 
 		addViewController.account = account
@@ -315,6 +317,8 @@ extension SidebarViewController {
 	
 	private func getInfoForFolder(_ folder: Folder, completion: ((Bool) -> Void)? = nil) {
 		let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoFolderViewControllerNav") as! UINavigationController
+		getInfoNavViewController.preferredContentSize = GetInfoFolderViewController.preferredContentSize
+		getInfoNavViewController.modalPresentationStyle = .formSheet
 		let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoFolderViewController
 		getInfoViewController.folder = folder
 		present(getInfoNavViewController, animated: true) {

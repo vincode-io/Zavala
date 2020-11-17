@@ -12,6 +12,8 @@ import Templeton
 
 class GetInfoFolderViewController: FormViewController {
 
+	static let preferredContentSize = CGSize(width: 400, height: 200)
+
 	var folder: Folder?
 	
 	@IBOutlet weak var nameTextField: UITextField!

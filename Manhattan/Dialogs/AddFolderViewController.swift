@@ -10,6 +10,8 @@ import Templeton
 
 class AddFolderViewController: FormViewController {
 
+	static let preferredContentSize = CGSize(width: 400, height: 200)
+
 	var account: Account?
 	
 	@IBOutlet weak var nameTextField: UITextField!
