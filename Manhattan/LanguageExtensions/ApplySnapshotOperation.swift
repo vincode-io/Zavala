@@ -8,15 +8,8 @@
 import UIKit
 import RSCore
 
-class ApplySnapshotOperation<S: Hashable, I: Hashable>: MainThreadOperation {
+class ApplySnapshotOperation<S: Hashable, I: Hashable>: MainThreadOperationBase {
 	
-	// MainThreadOperation
-	public var isCanceled = false
-	public var id: Int?
-	public weak var operationDelegate: MainThreadOperationDelegate?
-	public var name: String? = "ApplySnapshotOperation"
-	public var completionBlock: MainThreadOperation.MainThreadOperationCompletionBlock?
-
 	private var dataSource: UICollectionViewDiffableDataSource<S, I>
 	private var section: S
 	private var snapshot: NSDiffableDataSourceSectionSnapshot<I>
@@ -34,7 +27,7 @@ class ApplySnapshotOperation<S: Hashable, I: Hashable>: MainThreadOperation {
 		
 	}
 	
-	func run() {
+	override func run() {
 		dataSource.apply(snapshot, to: section, animatingDifferences: animated) { [weak self] in
 			guard let self = self else { return }
 			self.operationDelegate?.operationDidComplete(self)

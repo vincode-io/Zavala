@@ -66,6 +66,7 @@ class EditorViewController: UICollectionViewController {
 	
 	private var favoriteBarButtonItem: UIBarButtonItem?
 	
+	private let dataSourceQueue = MainThreadOperationQueue()
 	private var dataSource: UICollectionViewDiffableDataSource<Int, EditorItem>!
 	
 	override func viewDidLoad() {
@@ -142,7 +143,7 @@ extension EditorViewController {
 			applySnapshot(&snapshot, items: items)
 		}
 		
-		dataSource.apply(snapshot, to: 0, animatingDifferences: animated)
+		dataSourceQueue.add(ApplySnapshotOperation(dataSource: dataSource, section: 0, snapshot: snapshot, animated: animated))
 	}
 	
 	private func applySnapshot( _ snapshot: inout NSDiffableDataSourceSectionSnapshot<EditorItem>, items: [EditorItem]) {
@@ -167,21 +168,11 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	func moveUp(item: EditorItem) {
-		let visibleItems = dataSource.snapshot(for: 0).visibleItems
-		guard let itemIndex = visibleItems.firstIndex(of: item), itemIndex - 1 > -1 else { return }
-		let nextItem = visibleItems[itemIndex - 1]
-		guard let indexPath = dataSource.indexPath(for: nextItem) else { return }
-		guard let editorCell = collectionView.cellForItem(at: indexPath) as? EditorCollectionViewCell else { return }
-		editorCell.takeCursor()
+		dataSourceQueue.add(EditorMoveCursorOperation(dataSource: dataSource, collectionView: collectionView, item: item, direction: .up))
 	}
 	
 	func moveDown(item: EditorItem) {
-		let visibleItems = dataSource.snapshot(for: 0).visibleItems
-		guard let itemIndex = visibleItems.firstIndex(of: item), itemIndex + 1 != visibleItems.count else { return }
-		let nextItem = visibleItems[itemIndex + 1]
-		guard let indexPath = dataSource.indexPath(for: nextItem) else { return }
-		guard let editorCell = collectionView.cellForItem(at: indexPath) as? EditorCollectionViewCell else { return }
-		editorCell.takeCursor()
+		dataSourceQueue.add(EditorMoveCursorOperation(dataSource: dataSource, collectionView: collectionView, item: item, direction: .down))
 	}
 	
 	func newHeadline(item: EditorItem) {

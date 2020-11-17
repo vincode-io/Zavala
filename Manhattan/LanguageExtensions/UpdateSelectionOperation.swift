@@ -8,15 +8,8 @@
 import UIKit
 import RSCore
 
-class UpdateSelectionOperation<S: Hashable, I: Hashable>: MainThreadOperation {
+class UpdateSelectionOperation<S: Hashable, I: Hashable>: MainThreadOperationBase {
 	
-	// MainThreadOperation
-	public var isCanceled = false
-	public var id: Int?
-	public weak var operationDelegate: MainThreadOperationDelegate?
-	public var name: String? = "UpdateSelectionOperation"
-	public var completionBlock: MainThreadOperation.MainThreadOperationCompletionBlock?
-
 	private var dataSource: UICollectionViewDiffableDataSource<S, I>
 	private var collectionView: UICollectionView
 	private var item: I?
@@ -29,7 +22,7 @@ class UpdateSelectionOperation<S: Hashable, I: Hashable>: MainThreadOperation {
 		self.animated = animated
 	}
 	
-	func run() {
+	override func run() {
 		if dataSource.snapshot().numberOfItems > 0 {
 			if let item = item, let indexPath = dataSource.indexPath(for: item) {
 				CATransaction.begin()
