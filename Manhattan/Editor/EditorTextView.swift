@@ -21,7 +21,7 @@ class EditorTextView: UITextView {
 	override var keyCommands: [UIKeyCommand]? {
 		[
 			UIKeyCommand(action: #selector(upArrowPressed(_:)), input: UIKeyCommand.inputUpArrow),
-			UIKeyCommand(action: #selector(downArrowPressed(_:)), input: UIKeyCommand.inputPageDown),
+			UIKeyCommand(action: #selector(downArrowPressed(_:)), input: UIKeyCommand.inputDownArrow),
 			UIKeyCommand(action: #selector(tabPressed(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(shiftTabPressed(_:)))
 		]
