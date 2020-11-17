@@ -14,16 +14,11 @@ class ReloadItemsOperation<S: Hashable, I: Hashable>: MainThreadOperationBase {
 	private var items: [I]
 	private var animated: Bool
 	
-	init(dataSource: UICollectionViewDiffableDataSource<S, I>,
-		 section: S,
-		 items: [I],
-		 animated: Bool) {
-		
+	init(dataSource: UICollectionViewDiffableDataSource<S, I>, section: S, items: [I], animated: Bool) {
 		self.dataSource = dataSource
 		self.section = section
 		self.items = items
 		self.animated = animated
-		
 	}
 	
 	override func run() {
