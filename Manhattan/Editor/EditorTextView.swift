@@ -29,23 +29,23 @@ class EditorTextView: UITextView {
 		]
 	}
 
-	@IBAction func returnPressed(_ sender: Any) {
+	@objc func returnPressed(_ sender: Any) {
 		editorDelegate?.newHeadline(self)
 	}
 	
-	@IBAction func tabPressed(_ sender: Any) {
+	@objc func tabPressed(_ sender: Any) {
 		editorDelegate?.indent(self)
 	}
 	
-	@IBAction func shiftTabPressed(_ sender: Any) {
+	@objc func shiftTabPressed(_ sender: Any) {
 		editorDelegate?.outdent(self)
 	}
 	
-	@IBAction func upArrowPressed(_ sender: Any) {
+	@objc func upArrowPressed(_ sender: Any) {
 		editorDelegate?.moveUp(self)
 	}
 	
-	@IBAction func downArrowPressed(_ sender: Any) {
+	@objc func downArrowPressed(_ sender: Any) {
 		editorDelegate?.moveDown(self)
 	}
 	
