@@ -92,6 +92,11 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 	}
 	
+	public func update(headlineID: String, text: Data) {
+		headlineDictionary[headlineID]?.text = text
+		outlineBodyDidChange()
+	}
+	
 	public func load() {
 		headlinesFile = HeadlinesFile(outline: self)
 		headlinesFile!.load()
@@ -122,7 +127,6 @@ private extension Outline {
 	}
 
 	func outlineBodyDidChange() {
-		headlineDictionariesNeedUpdate = true
 		NotificationCenter.default.post(name: .OutlineBodyDidChange, object: self, userInfo: nil)
 	}
 	

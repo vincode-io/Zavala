@@ -40,6 +40,7 @@
 		51C4C45B255ACA1B004E0206 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C45A255ACA1B004E0206 /* EditorViewController.swift */; };
 		51DA54C225643BDA00732942 /* EditorMoveCursorOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DA54C125643BDA00732942 /* EditorMoveCursorOperation.swift */; };
 		51DA54C825643E3400732942 /* MainThreadOperationBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DA54C725643E3400732942 /* MainThreadOperationBase.swift */; };
+		51DA54D02564549000732942 /* ReloadItemsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DA54CF2564549000732942 /* ReloadItemsOperation.swift */; };
 		51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */; };
 		51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F22255F2D7F00320EDB /* ActivityManager.swift */; };
 		51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F2D2560730000320EDB /* SidebarSection.swift */; };
@@ -122,6 +123,7 @@
 		51C4C45A255ACA1B004E0206 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
 		51DA54C125643BDA00732942 /* EditorMoveCursorOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorMoveCursorOperation.swift; sourceTree = "<group>"; };
 		51DA54C725643E3400732942 /* MainThreadOperationBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainThreadOperationBase.swift; sourceTree = "<group>"; };
+		51DA54CF2564549000732942 /* ReloadItemsOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReloadItemsOperation.swift; sourceTree = "<group>"; };
 		51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatingToolbarItem.swift; sourceTree = "<group>"; };
 		51E14F22255F2D7F00320EDB /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
 		51E14F2D2560730000320EDB /* SidebarSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSection.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */,
 				515F164A255C9F8E00FD98B8 /* FormViewController.swift */,
 				51DA54C725643E3400732942 /* MainThreadOperationBase.swift */,
+				51DA54CF2564549000732942 /* ReloadItemsOperation.swift */,
 				51B2B2DB25641E700090C56B /* UIResponder+.swift */,
 				514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */,
 				51B2B2D52563AB9F0090C56B /* UIView+.swift */,
@@ -464,6 +467,7 @@
 				515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */,
 				514BB9D7255B599E00C8DBDF /* UIViewController+.swift in Sources */,
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
+				51DA54D02564549000732942 /* ReloadItemsOperation.swift in Sources */,
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
 				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,

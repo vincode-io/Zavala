@@ -39,13 +39,12 @@ final class EditorItem:  NSObject, NSCopying, Identifiable {
 	override func isEqual(_ object: Any?) -> Bool {
 		guard let other = object as? EditorItem else { return false }
 		if self === other { return true }
-		return id == other.id && text == other.text
+		return id == other.id
 	}
 	
 	override var hash: Int {
 		var hasher = Hasher()
 		hasher.combine(id)
-		hasher.combine(text)
 		return hasher.finalize()
 	}
 	

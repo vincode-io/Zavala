@@ -60,7 +60,13 @@ class EditorContentView: UIView, UIContentView {
 // MARK: UITextViewDelegate
 
 extension EditorContentView: UITextViewDelegate {
-
+	
+	func textViewDidEndEditing(_ textView: UITextView) {
+		// Temp until we implement attributed strings
+		let textData = textView.text.data(using: .utf8) ?? Data()
+		appliedConfiguration.delegate?.textChanged(item: appliedConfiguration.editorItem!, text: textData)
+	}
+	
 }
 
 // MARK: EditorTextViewDelegate

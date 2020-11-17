@@ -135,6 +135,10 @@ extension EditorViewController {
 		}
 	}
 	
+	private func reload(items: [EditorItem], animated: Bool) {
+		dataSourceQueue.add(ReloadItemsOperation(dataSource: dataSource, section: 0, items: items, animated: animated))
+	}
+
 	private func applySnapshot(animated: Bool) {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<EditorItem>()
 		
@@ -158,6 +162,14 @@ extension EditorViewController {
 }
 
 extension EditorViewController: EditorCollectionViewCellDelegate {
+
+	func textChanged(item: EditorItem, text: Data) {
+		if item.text != text {
+			outline?.update(headlineID: item.id, text: text)
+			item.text = text
+			reload(items: [item], animated: false)
+		}
+	}
 	
 	func newHeadline(item: EditorItem) {
 		
