@@ -36,7 +36,13 @@ class EditorViewController: UICollectionViewController {
 		
 		let headline11 = Headline(plainText: "Headline 1.1")
 		headline1.headlines?.append(headline11)
-		headline11.headlines?.append(Headline(plainText: "Headline 1.1.1"))
+		let headline111 = Headline(plainText: "Headline 1.1.1")
+		headline11.headlines?.append(headline111)
+
+		headline111.headlines?.append(Headline(plainText: "Headline 1.1.1.1"))
+		headline111.headlines?.append(Headline(plainText: "Headline 1.1.1.2"))
+		headline111.headlines?.append(Headline(plainText: "Headline 1.1.1.3"))
+
 		headline11.headlines?.append(Headline(plainText: "Headline 1.1.2"))
 		headline11.headlines?.append(Headline(plainText: "Headline 1.1.3"))
 
