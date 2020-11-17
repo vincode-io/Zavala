@@ -161,7 +161,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		514BB9D5255B595300C8DBDF /* LanguageExtensions */ = {
+		514BB9D5255B595300C8DBDF /* Utility */ = {
 			isa = PBXGroup;
 			children = (
 				51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */,
@@ -175,7 +175,7 @@
 				51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */,
 				51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */,
 			);
-			path = LanguageExtensions;
+			path = Utility;
 			sourceTree = "<group>";
 		};
 		515F163B255C536600FD98B8 /* Resources */ = {
@@ -225,7 +225,7 @@
 				51E14F292560728B00320EDB /* Timeline */,
 				51E14F2A2560729900320EDB /* Editor */,
 				51F13F01255E13D1004B85CA /* Dialogs */,
-				514BB9D5255B595300C8DBDF /* LanguageExtensions */,
+				514BB9D5255B595300C8DBDF /* Utility */,
 				515F163B255C536600FD98B8 /* Resources */,
 			);
 			path = Manhattan;
