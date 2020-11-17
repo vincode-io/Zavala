@@ -18,6 +18,7 @@
 		515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F1631255C16E700FD98B8 /* AddFolderViewController.swift */; };
 		515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F164A255C9F8E00FD98B8 /* FormViewController.swift */; };
 		515F1651255CAC5600FD98B8 /* AddOutlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F1650255CAC5600FD98B8 /* AddOutlineViewController.swift */; };
+		516E2D8F256492F400CE51C6 /* DeleteItemsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516E2D8E256492F400CE51C6 /* DeleteItemsOperation.swift */; };
 		5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9372554D92000C153E8 /* AppDelegate.swift */; };
 		5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9392554D92000C153E8 /* SceneDelegate.swift */; };
 		5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A93B2554D92000C153E8 /* SidebarViewController.swift */; };
@@ -94,6 +95,7 @@
 		515F1631255C16E700FD98B8 /* AddFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFolderViewController.swift; sourceTree = "<group>"; };
 		515F164A255C9F8E00FD98B8 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
 		515F1650255CAC5600FD98B8 /* AddOutlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddOutlineViewController.swift; sourceTree = "<group>"; };
+		516E2D8E256492F400CE51C6 /* DeleteItemsOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteItemsOperation.swift; sourceTree = "<group>"; };
 		5181A9342554D92000C153E8 /* Manhattan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Manhattan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5181A9372554D92000C153E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5181A9392554D92000C153E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */,
+				516E2D8E256492F400CE51C6 /* DeleteItemsOperation.swift */,
 				515F164A255C9F8E00FD98B8 /* FormViewController.swift */,
 				5146687125647333005CCD6F /* InsertItemsOperation.swift */,
 				51DA54C725643E3400732942 /* MainThreadOperationBase.swift */,
@@ -472,6 +475,7 @@
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
 				51DA54D02564549000732942 /* ReloadItemsOperation.swift in Sources */,
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,
+				516E2D8F256492F400CE51C6 /* DeleteItemsOperation.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
 				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
 				519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */,

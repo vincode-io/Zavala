@@ -92,6 +92,32 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 	}
 	
+	public func deleteHeadline(parentHeadlineID: String?, headlineID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+		func deleteHeadline() {
+			var headlines = self.headlines ?? [Headline]()
+			
+			if let parentHeadlineID = parentHeadlineID {
+				headlines = headlineDictionary[parentHeadlineID]?.headlines ?? [Headline]()
+			}
+			
+			headlines = headlines.filter { $0.id != headlineID }
+			
+			if let parentHeadlineID = parentHeadlineID {
+				headlineDictionary[parentHeadlineID]?.headlines = headlines
+			} else {
+				self.headlines = headlines
+			}
+			
+			completion(.success(()))
+		}
+
+		if account?.type == .cloudKit {
+			deleteHeadline()
+		} else {
+			deleteHeadline()
+		}
+	}
+	
 	public func createHeadline(parentHeadlineID: String?, afterHeadlineID: String, completion: @escaping (Result<Headline, Error>) -> Void) {
 		func createHeadline() {
 			var headlines = self.headlines ?? [Headline]()

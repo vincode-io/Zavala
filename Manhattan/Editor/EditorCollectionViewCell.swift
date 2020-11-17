@@ -9,6 +9,7 @@ import UIKit
 
 protocol EditorCollectionViewCellDelegate: class {
 	func textChanged(item: EditorItem, text: Data)
+	func deleteHeadline(item: EditorItem)
 	func newHeadline(item: EditorItem)
 	func indent(item: EditorItem)
 	func outdent(item: EditorItem)

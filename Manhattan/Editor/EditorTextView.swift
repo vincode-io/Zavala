@@ -8,6 +8,7 @@
 import UIKit
 
 protocol EditorTextViewDelegate: class {
+	func deleteHeadline(_: EditorTextView)
 	func newHeadline(_: EditorTextView)
 	func indent(_: EditorTextView)
 	func outdent(_: EditorTextView)
@@ -20,15 +21,23 @@ class EditorTextView: UITextView {
 	weak var editorDelegate: EditorTextViewDelegate?
 	
 	override var keyCommands: [UIKeyCommand]? {
-		[
+		var keys = [
 			UIKeyCommand(action: #selector(upArrowPressed(_:)), input: UIKeyCommand.inputUpArrow),
 			UIKeyCommand(action: #selector(downArrowPressed(_:)), input: UIKeyCommand.inputDownArrow),
 			UIKeyCommand(action: #selector(returnPressed(_:)), input: "\r"),
 			UIKeyCommand(action: #selector(tabPressed(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(shiftTabPressed(_:)))
 		]
+		if text.isEmpty {
+			keys.append(UIKeyCommand(action: #selector(deletePressed(_:)), input: "\u{8}"))
+		}
+		return keys
 	}
 
+	@objc func deletePressed(_ sender: Any) {
+		editorDelegate?.deleteHeadline(self)
+	}
+	
 	@objc func returnPressed(_ sender: Any) {
 		editorDelegate?.newHeadline(self)
 	}

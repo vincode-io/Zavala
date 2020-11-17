@@ -135,6 +135,10 @@ extension EditorViewController {
 		}
 	}
 	
+	private func delete(items: [EditorItem], animated: Bool) {
+		dataSourceQueue.add(DeleteItemsOperation(dataSource: dataSource, section: 0, items: items, animated: animated))
+	}
+
 	private func insert(items: [EditorItem], afterItem: EditorItem, animated: Bool) {
 		dataSourceQueue.add(InsertItemsOperation(dataSource: dataSource, section: 0, items: items, afterItem: afterItem, animated: animated))
 	}
@@ -181,6 +185,18 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 				case .failure(let error):
 					self.presentError(error)
 				}
+			}
+		}
+	}
+	
+	func deleteHeadline(item: EditorItem) {
+		outline?.deleteHeadline(parentHeadlineID: item.parentHeadline?.id, headlineID: item.id) { result in
+			switch result {
+			case .success:
+				self.moveCursor(item: item, direction: .up)
+				self.delete(items: [item], animated: true)
+			case .failure(let error):
+				self.presentError(error)
 			}
 		}
 	}
