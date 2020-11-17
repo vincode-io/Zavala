@@ -22,7 +22,7 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 		var content = EditorContentConfiguration().updated(for: state)
 		content.editableText = editableText
 		if traitCollection.userInterfaceIdiom == .mac && accessories.isEmpty {
-			content.indentationWidth = indentationWidth
+			content.indentationWidth = indentationWidth + 16
 		}
 		contentConfiguration = content
 	}
