@@ -92,9 +92,46 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 	}
 	
-	public func update(headlineID: String, text: Data) {
-		headlineDictionary[headlineID]?.text = text
-		outlineBodyDidChange()
+	public func createHeadline(parentHeadlineID: String?, afterHeadlineID: String, completion: @escaping (Result<Headline, Error>) -> Void) {
+		func createHeadline() {
+			var headlines = self.headlines ?? [Headline]()
+			
+			if let parentHeadlineID = parentHeadlineID {
+				headlines = headlineDictionary[parentHeadlineID]?.headlines ?? [Headline]()
+			}
+			
+			let insertIndex = headlines.firstIndex(where: { $0.id == afterHeadlineID })!
+			let headline = Headline()
+			headlines.insert(headline, at: insertIndex)
+			
+			if let parentHeadlineID = parentHeadlineID {
+				headlineDictionary[parentHeadlineID]?.headlines = headlines
+			} else {
+				self.headlines = headlines
+			}
+			
+			completion(.success((headline)))
+		}
+
+		if account?.type == .cloudKit {
+			createHeadline()
+		} else {
+			createHeadline()
+		}
+	}
+	
+	public func update(headlineID: String, text: Data, completion: @escaping (Result<Void, Error>) -> Void) {
+		func update() {
+			headlineDictionary[headlineID]?.text = text
+			outlineBodyDidChange()
+			completion(.success(()))
+		}
+
+		if account?.type == .cloudKit {
+			update()
+		} else {
+			update()
+		}
 	}
 	
 	public func load() {

@@ -10,7 +10,7 @@ import Templeton
 
 final class EditorItem:  NSObject, NSCopying, Identifiable {
 	var id: String
-	var parentID: String?
+	weak var parentHeadline: Headline?
 	var text: Data?
 	var children: [EditorItem]
 
@@ -24,16 +24,16 @@ final class EditorItem:  NSObject, NSCopying, Identifiable {
 		}
 	}
 	
-	init(id: String, parentID: String?, text: Data?, children: [EditorItem]) {
+	init(id: String, parentHeadline: Headline?, text: Data?, children: [EditorItem]) {
 		self.id = id
-		self.parentID = parentID
+		self.parentHeadline = parentHeadline
 		self.text = text
 		self.children = children
 	}
 	
-	static func editorItem(_ headline: Headline, parent: Headline?) -> EditorItem {
-		let children = headline.headlines?.map { editorItem($0, parent: headline) } ?? [EditorItem]()
-		return EditorItem(id: headline.id, parentID: parent?.id, text: headline.text, children: children)
+	static func editorItem(_ headline: Headline, parentHeadline: Headline?) -> EditorItem {
+		let children = headline.headlines?.map { editorItem($0, parentHeadline: headline) } ?? [EditorItem]()
+		return EditorItem(id: headline.id, parentHeadline: parentHeadline, text: headline.text, children: children)
 	}
 
 	override func isEqual(_ object: Any?) -> Bool {

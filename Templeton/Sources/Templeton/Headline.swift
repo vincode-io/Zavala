@@ -19,6 +19,11 @@ public final class Headline: Identifiable, Equatable, Codable {
 		case headlines = "headlines"
 	}
 
+	public init() {
+		self.id = UUID().uuidString
+		headlines = [Headline]()
+	}
+	
 	public init(plainText: String) {
 		self.id = UUID().uuidString
 		text = plainText.data(using: .utf8)

@@ -135,14 +135,22 @@ extension EditorViewController {
 		}
 	}
 	
+	private func insert(items: [EditorItem], afterItem: EditorItem, animated: Bool) {
+		dataSourceQueue.add(InsertItemsOperation(dataSource: dataSource, section: 0, items: items, afterItem: afterItem, animated: animated))
+	}
+
 	private func reload(items: [EditorItem], animated: Bool) {
 		dataSourceQueue.add(ReloadItemsOperation(dataSource: dataSource, section: 0, items: items, animated: animated))
 	}
 
+	private func moveCursor(item: EditorItem, direction: EditorMoveCursorOperation.Direction) {
+		dataSourceQueue.add(EditorMoveCursorOperation(dataSource: dataSource, collectionView: collectionView, item: item, direction: direction))
+	}
+	
 	private func applySnapshot(animated: Bool) {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<EditorItem>()
 		
-		if let items = outline?.headlines?.map({ EditorItem.editorItem($0, parent: nil) }) {
+		if let items = outline?.headlines?.map({ EditorItem.editorItem($0, parentHeadline: nil) }) {
 			snapshot.append(items)
 			applySnapshot(&snapshot, items: items)
 		}
@@ -165,14 +173,29 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 
 	func textChanged(item: EditorItem, text: Data) {
 		if item.text != text {
-			outline?.update(headlineID: item.id, text: text)
-			item.text = text
-			reload(items: [item], animated: false)
+			outline?.update(headlineID: item.id, text: text) { result in
+				switch result {
+				case .success:
+					item.text = text
+					self.reload(items: [item], animated: false)
+				case .failure(let error):
+					self.presentError(error)
+				}
+			}
 		}
 	}
 	
 	func newHeadline(item: EditorItem) {
-		
+		outline?.createHeadline(parentHeadlineID: item.parentHeadline?.id, afterHeadlineID: item.id) { result in
+			switch result {
+			case .success(let headline):
+				let newItem = EditorItem.editorItem(headline, parentHeadline: item.parentHeadline)
+				self.insert(items: [newItem], afterItem: item, animated: false)
+				self.moveCursor(item: newItem, direction: .none)
+			case .failure(let error):
+				self.presentError(error)
+			}
+		}
 	}
 	
 	func indent(item: EditorItem) {
@@ -184,11 +207,11 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	func moveUp(item: EditorItem) {
-		dataSourceQueue.add(EditorMoveCursorOperation(dataSource: dataSource, collectionView: collectionView, item: item, direction: .up))
+		moveCursor(item: item, direction: .up)
 	}
 	
 	func moveDown(item: EditorItem) {
-		dataSourceQueue.add(EditorMoveCursorOperation(dataSource: dataSource, collectionView: collectionView, item: item, direction: .down))
+		moveCursor(item: item, direction: .down)
 	}
 	
 }
