@@ -44,17 +44,23 @@ public final class Outline: Identifiable, Equatable, Codable {
 		case updated = "updated"
 	}
 
+	public var headlineDictionary: [String: Headline] {
+		if headlineDictionariesNeedUpdate {
+			rebuildHeadlineDictionary()
+		}
+		return _headlineDictionary
+	}
+	private var headlineDictionariesNeedUpdate = true
+	private var _headlineDictionary = [String: Headline]()
+
 	private var headlinesFile: HeadlinesFile?
 	
+
 	init(parentID: EntityID, name: String) {
 		self.id = EntityID.outline(parentID.accountID, parentID.folderID, UUID().uuidString)
 		self.name = name
 		self.created = Date()
 		self.updated = Date()
-	}
-
-	func outlineDidDelete() {
-		NotificationCenter.default.post(name: .OutlineDidDelete, object: self, userInfo: nil)
 	}
 
 	public func toggleFavorite(completion: @escaping (Result<Void, Error>) -> Void) {
@@ -104,6 +110,9 @@ public final class Outline: Identifiable, Equatable, Codable {
 		return lhs.id == rhs.id
 	}
 	
+	func outlineDidDelete() {
+		NotificationCenter.default.post(name: .OutlineDidDelete, object: self, userInfo: nil)
+	}
 }
 
 private extension Outline {
@@ -113,7 +122,21 @@ private extension Outline {
 	}
 
 	func outlineBodyDidChange() {
+		headlineDictionariesNeedUpdate = true
 		NotificationCenter.default.post(name: .OutlineBodyDidChange, object: self, userInfo: nil)
+	}
+	
+	func rebuildHeadlineDictionary() {
+		var idDictionary = [String: Headline]()
+
+		func add(_ headline: Headline) {
+			idDictionary[headline.id] = headline
+			headline.headlines?.forEach { add($0) }
+		}
+		headlines?.forEach { add($0) }
+
+		_headlineDictionary = idDictionary
+		headlineDictionariesNeedUpdate = false
 	}
 
 }
