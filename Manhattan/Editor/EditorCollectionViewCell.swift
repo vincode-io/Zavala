@@ -8,11 +8,11 @@
 import UIKit
 
 protocol EditorCollectionViewCellDelegate: class {
+	func newHeadline(item: EditorItem)
 	func indent(item: EditorItem)
 	func outdent(item: EditorItem)
 	func moveUp(item: EditorItem)
 	func moveDown(item: EditorItem)
-	func newHeadline(item: EditorItem)
 }
 
 class EditorCollectionViewCell: UICollectionViewListCell {

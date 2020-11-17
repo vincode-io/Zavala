@@ -8,6 +8,7 @@
 import UIKit
 
 protocol EditorTextViewDelegate: class {
+	func newHeadline(_: EditorTextView)
 	func indent(_: EditorTextView)
 	func outdent(_: EditorTextView)
 	func moveUp(_: EditorTextView)
@@ -22,11 +23,16 @@ class EditorTextView: UITextView {
 		[
 			UIKeyCommand(action: #selector(upArrowPressed(_:)), input: UIKeyCommand.inputUpArrow),
 			UIKeyCommand(action: #selector(downArrowPressed(_:)), input: UIKeyCommand.inputDownArrow),
+			UIKeyCommand(action: #selector(returnPressed(_:)), input: "\r"),
 			UIKeyCommand(action: #selector(tabPressed(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(shiftTabPressed(_:)))
 		]
 	}
 
+	@IBAction func returnPressed(_ sender: Any) {
+		editorDelegate?.newHeadline(self)
+	}
+	
 	@IBAction func tabPressed(_ sender: Any) {
 		editorDelegate?.indent(self)
 	}

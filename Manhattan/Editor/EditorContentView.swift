@@ -60,17 +60,16 @@ class EditorContentView: UIView, UIContentView {
 // MARK: UITextViewDelegate
 
 extension EditorContentView: UITextViewDelegate {
-	
-	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		appliedConfiguration.delegate?.newHeadline(item: appliedConfiguration.editorItem!)
-		return false
-	}
-	
+
 }
 
 // MARK: EditorTextViewDelegate
 
 extension EditorContentView: EditorTextViewDelegate {
+	
+	func newHeadline(_: EditorTextView) {
+		appliedConfiguration.delegate?.newHeadline(item: appliedConfiguration.editorItem!)
+	}
 	
 	func indent(_: EditorTextView) {
 		appliedConfiguration.delegate?.indent(item: appliedConfiguration.editorItem!)
