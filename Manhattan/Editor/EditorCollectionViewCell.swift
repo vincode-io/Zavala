@@ -5,13 +5,19 @@
 //  Created by Maurice Parker on 11/16/20.
 //
 
-import Foundation
-
 import UIKit
+
+protocol EditorCollectionViewCellDelegate: class {
+	func indent(item: EditorItem)
+	func outdent(item: EditorItem)
+	func moveUp(item: EditorItem)
+	func moveDown(item: EditorItem)
+	func newHeadline(item: EditorItem)
+}
 
 class EditorCollectionViewCell: UICollectionViewListCell {
 
-	var editableText: String? {
+	weak var editorItem: EditorItem? {
 		didSet {
 			setNeedsUpdateConfiguration()
 		}
@@ -19,11 +25,14 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 	
 	override func updateConfiguration(using state: UICellConfigurationState) {
 		super.updateConfiguration(using: state)
+		
 		var content = EditorContentConfiguration().updated(for: state)
-		content.editableText = editableText
+		content.editorItem = editorItem
+		
 		if traitCollection.userInterfaceIdiom == .mac && accessories.isEmpty {
 			content.indentationWidth = indentationWidth + 16
 		}
+		
 		contentConfiguration = content
 	}
 
@@ -31,7 +40,7 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 
 struct EditorContentConfiguration: UIContentConfiguration, Hashable {
 
-	var editableText: String? = nil
+	weak var editorItem: EditorItem? = nil
 	var indentationWidth: CGFloat? = nil
 	
 	func makeContentView() -> UIView & UIContentView {
@@ -41,16 +50,25 @@ struct EditorContentConfiguration: UIContentConfiguration, Hashable {
 	func updated(for state: UIConfigurationState) -> Self {
 		return self
 	}
+	
 }
 
 class EditorContentView: UIView, UIContentView {
 
-	private let textView = UITextView()
+	private let textView = EditorTextView()
 	private var appliedConfiguration: EditorContentConfiguration!
 
 	init(configuration: EditorContentConfiguration) {
 		super.init(frame: .zero)
-		setupInternalViews()
+
+		textView.isScrollEnabled = false
+		textView.textContainer.lineFragmentPadding = 0
+		textView.textContainerInset = .zero
+		textView.font = UIFont.preferredFont(forTextStyle: .body)
+		
+		addSubview(textView)
+		textView.translatesAutoresizingMaskIntoConstraints = false
+
 		apply(configuration: configuration)
 	}
 	
@@ -66,20 +84,10 @@ class EditorContentView: UIView, UIContentView {
 		}
 	}
 	
-	private func setupInternalViews() {
-		textView.isScrollEnabled = false
-		textView.textContainer.lineFragmentPadding = 0
-		textView.textContainerInset = .zero
-		textView.font = UIFont.preferredFont(forTextStyle: .body)
-		
-		addSubview(textView)
-		textView.translatesAutoresizingMaskIntoConstraints = false
-	}
-		
 	private func apply(configuration: EditorContentConfiguration) {
-		guard appliedConfiguration != configuration else { return }
+		guard appliedConfiguration != configuration, let editorItem = configuration.editorItem else { return }
 		appliedConfiguration = configuration
-		textView.text = configuration.editableText
+		textView.text = editorItem.plainText
 
 		textView.removeConstraintsAssociatedWithSuperView()
 		NSLayoutConstraint.activate([

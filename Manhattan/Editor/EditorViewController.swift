@@ -116,11 +116,11 @@ extension EditorViewController {
 	private func configureDataSource() {
 		let groupRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, EditorItem> { (cell, indexPath, item) in
 			cell.accessories = [.outlineDisclosure(options: .init(style: .cell))]
-			cell.editableText = item.plainText
+			cell.editorItem = item
 		}
 
 		let individualRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, EditorItem> { (cell, indexPath, item) in
-			cell.editableText = item.plainText
+			cell.editorItem = item
 		}
 
 		dataSource = UICollectionViewDiffableDataSource<Int, EditorItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
