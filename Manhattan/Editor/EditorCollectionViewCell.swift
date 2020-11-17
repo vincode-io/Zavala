@@ -36,6 +36,10 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 		contentConfiguration = content
 	}
 
+	func takeCursor() {
+		(contentView as? EditorContentView)?.textView.becomeFirstResponder()
+	}
+	
 }
 
 struct EditorContentConfiguration: UIContentConfiguration, Hashable {
@@ -55,8 +59,8 @@ struct EditorContentConfiguration: UIContentConfiguration, Hashable {
 
 class EditorContentView: UIView, UIContentView {
 
-	private let textView = EditorTextView()
-	private var appliedConfiguration: EditorContentConfiguration!
+	let textView = EditorTextView()
+	var appliedConfiguration: EditorContentConfiguration!
 
 	init(configuration: EditorContentConfiguration) {
 		super.init(frame: .zero)
