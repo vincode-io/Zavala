@@ -138,7 +138,7 @@ extension EditorViewController {
 	private func applySnapshot(animated: Bool) {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<EditorItem>()
 		
-		if let items = outline?.headlines?.map({ EditorItem.editorItem($0) }) {
+		if let items = outline?.headlines?.map({ EditorItem.editorItem($0, parent: nil) }) {
 			snapshot.append(items)
 			applySnapshot(&snapshot, items: items)
 		}
@@ -159,6 +159,10 @@ extension EditorViewController {
 
 extension EditorViewController: EditorCollectionViewCellDelegate {
 	
+	func newHeadline(item: EditorItem) {
+		
+	}
+	
 	func indent(item: EditorItem) {
 		
 	}
@@ -173,10 +177,6 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	
 	func moveDown(item: EditorItem) {
 		dataSourceQueue.add(EditorMoveCursorOperation(dataSource: dataSource, collectionView: collectionView, item: item, direction: .down))
-	}
-	
-	func newHeadline(item: EditorItem) {
-		
 	}
 	
 }
