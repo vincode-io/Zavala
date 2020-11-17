@@ -15,6 +15,9 @@ class EditorContentView: UIView, UIContentView {
 	init(configuration: EditorContentConfiguration) {
 		super.init(frame: .zero)
 
+		textView.delegate = self
+		textView.editorDelegate = self
+		
 		textView.isScrollEnabled = false
 		textView.textContainer.lineFragmentPadding = 0
 		textView.textContainerInset = .zero
