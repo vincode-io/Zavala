@@ -64,16 +64,16 @@ class AddOutlineViewController: FormViewController {
 		
 	}
 	
-}
-
-extension AddOutlineViewController: UITextFieldDelegate {
-	
 	func updateUI() {
 		let isReady = !(nameTextField.text?.isEmpty ?? false)
 		addBarButtonItem.isEnabled = isReady
 		submitButton.isEnabled = isReady
 	}
 
+}
+
+extension AddOutlineViewController: UITextFieldDelegate {
+	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()
 		return true

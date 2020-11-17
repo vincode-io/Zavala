@@ -65,15 +65,15 @@ class GetInfoFolderViewController: FormViewController {
 		}
 	}
 	
-}
-
-extension GetInfoFolderViewController: UITextFieldDelegate {
-	
 	func updateUI() {
 		let isReady = !(nameTextField.text?.isEmpty ?? false)
 		addBarButtonItem.isEnabled = isReady
 		submitButton.isEnabled = isReady
 	}
+	
+}
+
+extension GetInfoFolderViewController: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()
