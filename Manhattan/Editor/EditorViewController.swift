@@ -108,28 +108,18 @@ extension EditorViewController {
 	}
 	
 	private func configureDataSource() {
-		let groupRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, EditorItem> { (cell, indexPath, item) in
-			var contentConfiguration = cell.defaultContentConfiguration()
-			contentConfiguration.text = item.plainText
+		let groupRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, EditorItem> { (cell, indexPath, item) in
 			cell.accessories = [.outlineDisclosure(options: .init(style: .cell))]
-			if self.traitCollection.userInterfaceIdiom == .mac {
-				contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .body)
-			}
-			cell.contentConfiguration = contentConfiguration
+			cell.editableText = item.plainText
 		}
-		
-		let leafRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, EditorItem> { (cell, indexPath, item) in
-			var contentConfiguration = cell.defaultContentConfiguration()
-			contentConfiguration.text = item.plainText
-			if self.traitCollection.userInterfaceIdiom == .mac {
-				contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .body)
-			}
-			cell.contentConfiguration = contentConfiguration
+
+		let individualRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, EditorItem> { (cell, indexPath, item) in
+			cell.editableText = item.plainText
 		}
-		
+
 		dataSource = UICollectionViewDiffableDataSource<Int, EditorItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
 			if item.children.isEmpty {
-				return collectionView.dequeueConfiguredReusableCell(using: leafRegistration, for: indexPath, item: item)
+				return collectionView.dequeueConfiguredReusableCell(using: individualRegistration, for: indexPath, item: item)
 			} else {
 				return collectionView.dequeueConfiguredReusableCell(using: groupRegistration, for: indexPath, item: item)
 			}
