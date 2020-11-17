@@ -13,6 +13,7 @@ class EditorMoveCursorOperation: MainThreadOperationBase {
 	enum Direction {
 		case up
 		case down
+		case none
 	}
 	
 	private var dataSource: UICollectionViewDiffableDataSource<Int, EditorItem>
@@ -30,20 +31,23 @@ class EditorMoveCursorOperation: MainThreadOperationBase {
 	override func run() {
 		let nextItem: EditorItem
 
-		if direction == .up {
+		switch direction {
+		case .up:
 			let visibleItems = dataSource.snapshot(for: 0).visibleItems
 			guard let itemIndex = visibleItems.firstIndex(of: item), itemIndex - 1 > -1 else {
 				self.operationDelegate?.operationDidComplete(self)
 				return
 			}
 			nextItem = visibleItems[itemIndex - 1]
-		} else {
+		case .down:
 			let visibleItems = dataSource.snapshot(for: 0).visibleItems
 			guard let itemIndex = visibleItems.firstIndex(of: item), itemIndex + 1 != visibleItems.count else {
 				self.operationDelegate?.operationDidComplete(self)
 				return
 			}
 			nextItem = visibleItems[itemIndex + 1]
+		case .none:
+			nextItem = item
 		}
 
 		guard let indexPath = dataSource.indexPath(for: nextItem) else { return }
