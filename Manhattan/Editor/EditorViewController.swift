@@ -117,10 +117,12 @@ extension EditorViewController {
 		let groupRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, EditorItem> { (cell, indexPath, item) in
 			cell.accessories = [.outlineDisclosure(options: .init(style: .cell))]
 			cell.editorItem = item
+			cell.delegate = self
 		}
 
 		let individualRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, EditorItem> { (cell, indexPath, item) in
 			cell.editorItem = item
+			cell.delegate = self
 		}
 
 		dataSource = UICollectionViewDiffableDataSource<Int, EditorItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
@@ -150,6 +152,40 @@ extension EditorViewController {
 				applySnapshot(&snapshot, items: item.children)
 			}
 		}
+	}
+	
+}
+
+extension EditorViewController: EditorCollectionViewCellDelegate {
+	
+	func indent(item: EditorItem) {
+		
+	}
+	
+	func outdent(item: EditorItem) {
+		
+	}
+	
+	func moveUp(item: EditorItem) {
+		let visibleItems = dataSource.snapshot(for: 0).visibleItems
+		guard let itemIndex = visibleItems.firstIndex(of: item), itemIndex - 1 > -1 else { return }
+		let nextItem = visibleItems[itemIndex - 1]
+		guard let indexPath = dataSource.indexPath(for: nextItem) else { return }
+		guard let editorCell = collectionView.cellForItem(at: indexPath) as? EditorCollectionViewCell else { return }
+		editorCell.takeCursor()
+	}
+	
+	func moveDown(item: EditorItem) {
+		let visibleItems = dataSource.snapshot(for: 0).visibleItems
+		guard let itemIndex = visibleItems.firstIndex(of: item), itemIndex + 1 != visibleItems.count else { return }
+		let nextItem = visibleItems[itemIndex + 1]
+		guard let indexPath = dataSource.indexPath(for: nextItem) else { return }
+		guard let editorCell = collectionView.cellForItem(at: indexPath) as? EditorCollectionViewCell else { return }
+		editorCell.takeCursor()
+	}
+	
+	func newHeadline(item: EditorItem) {
+		
 	}
 	
 }
