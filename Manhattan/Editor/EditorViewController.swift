@@ -154,7 +154,7 @@ extension EditorViewController {
 	private func applySnapshot(animated: Bool) {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<EditorItem>()
 		
-		if let items = outline?.headlines?.map({ EditorItem.editorItem($0, parentHeadline: nil) }) {
+		if let items = outline?.headlines?.map({ EditorItem.editorItem($0, parentID: nil) }) {
 			snapshot.append(items)
 			applySnapshot(&snapshot, items: items)
 		}
@@ -190,7 +190,7 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	func deleteHeadline(item: EditorItem) {
-		outline?.deleteHeadline(parentHeadlineID: item.parentHeadline?.id, headlineID: item.id) { result in
+		outline?.deleteHeadline(parentHeadlineID: item.parentID, headlineID: item.id) { result in
 			switch result {
 			case .success:
 				self.moveCursor(item: item, direction: .up)
@@ -203,10 +203,10 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	
 	// TODO: Need to take into consideration expanded state when placing the new Headline
 	func newHeadline(item: EditorItem) {
-		outline?.createHeadline(parentHeadlineID: item.parentHeadline?.id, afterHeadlineID: item.id) { result in
+		outline?.createHeadline(parentHeadlineID: item.parentID, afterHeadlineID: item.id) { result in
 			switch result {
 			case .success(let headline):
-				let newItem = EditorItem.editorItem(headline, parentHeadline: item.parentHeadline)
+				let newItem = EditorItem.editorItem(headline, parentID: item.parentID)
 				self.insert(items: [newItem], afterItem: item, animated: false)
 				self.moveCursor(item: newItem, direction: .none)
 			case .failure(let error):
