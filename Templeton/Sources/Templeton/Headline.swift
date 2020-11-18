@@ -11,6 +11,7 @@ public final class Headline: Identifiable, Equatable, Codable {
 	
 	public var id: String
 	public var text: Data?
+	public weak var parent: Headline?
 	public var headlines: [Headline]?
 
 	enum CodingKeys: String, CodingKey {
@@ -52,4 +53,10 @@ public final class Headline: Identifiable, Equatable, Codable {
 	public static func == (lhs: Headline, rhs: Headline) -> Bool {
 		return lhs.id == rhs.id
 	}
+	
+	func visit(visitor: (Headline) -> Void) {
+		visitor(self)
+		headlines?.forEach { $0.visit(visitor: visitor) }
+	}
+	
 }

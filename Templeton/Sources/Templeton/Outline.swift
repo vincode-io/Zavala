@@ -23,6 +23,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 	
 	public var headlines: [Headline]? {
 		didSet {
+			visitHeadlines()
 			outlineBodyDidChange()
 		}
 	}
@@ -183,6 +184,8 @@ public final class Outline: Identifiable, Equatable, Codable {
 	}
 }
 
+// MARK: Helpers
+
 private extension Outline {
 	
 	func outlineMetaDataDidChange() {
@@ -206,4 +209,12 @@ private extension Outline {
 		headlineDictionariesNeedUpdate = false
 	}
 
+	func visitHeadlines() {
+		headlines?.forEach { headline in
+			headline.visit(visitor: { visited in
+				visited.headlines?.forEach { $0.parent = visited }
+			})
+		}
+	}
+	
 }
