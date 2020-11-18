@@ -176,11 +176,11 @@ extension EditorViewController {
 extension EditorViewController: EditorCollectionViewCellDelegate {
 
 	func textChanged(item: EditorItem, text: Data) {
-		if item.text != text {
+		if item.headline?.text != text {
 			outline?.update(headlineID: item.id, text: text) { result in
 				switch result {
 				case .success:
-					item.text = text
+					item.headline?.text = text
 					self.reload(items: [item], animated: false)
 				case .failure(let error):
 					self.presentError(error)
@@ -201,16 +201,34 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 		}
 	}
 	
+	// TODO: Need to take into consideration expanded state when placing the new Headline
 	func newHeadline(item: EditorItem) {
-		outline?.createHeadline(parentHeadlineID: item.parentHeadline?.id, afterHeadlineID: item.id) { result in
-			switch result {
-			case .success(let headline):
-				let newItem = EditorItem.editorItem(headline, parentHeadline: item.parentHeadline)
-				self.insert(items: [newItem], afterItem: item, animated: false)
-				self.moveCursor(item: newItem, direction: .none)
-			case .failure(let error):
-				self.presentError(error)
+		if item.children.isEmpty {
+			
+			outline?.createHeadline(parentHeadlineID: item.parentHeadline?.id, afterHeadlineID: item.id) { result in
+				switch result {
+				case .success(let headline):
+					let newItem = EditorItem.editorItem(headline, parentHeadline: item.parentHeadline)
+					self.insert(items: [newItem], afterItem: item, animated: false)
+					self.moveCursor(item: newItem, direction: .none)
+				case .failure(let error):
+					self.presentError(error)
+				}
 			}
+			
+		} else {
+			
+			outline?.createHeadline(parentHeadlineID: item.id, afterHeadlineID: nil) { result in
+				switch result {
+				case .success(let headline):
+					let newItem = EditorItem.editorItem(headline, parentHeadline: item.headline)
+					self.insert(items: [newItem], afterItem: item, animated: false)
+					self.moveCursor(item: newItem, direction: .none)
+				case .failure(let error):
+					self.presentError(error)
+				}
+			}
+
 		}
 	}
 	

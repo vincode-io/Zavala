@@ -118,7 +118,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 	}
 	
-	public func createHeadline(parentHeadlineID: String?, afterHeadlineID: String, completion: @escaping (Result<Headline, Error>) -> Void) {
+	public func createHeadline(parentHeadlineID: String?, afterHeadlineID: String? = nil, completion: @escaping (Result<Headline, Error>) -> Void) {
 		func createHeadline() {
 			var headlines = self.headlines ?? [Headline]()
 			
@@ -126,7 +126,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 				headlines = headlineDictionary[parentHeadlineID]?.headlines ?? [Headline]()
 			}
 			
-			let insertIndex = headlines.firstIndex(where: { $0.id == afterHeadlineID })!
+			let insertIndex = headlines.firstIndex(where: { $0.id == afterHeadlineID }) ?? 0
 			let headline = Headline()
 			headlines.insert(headline, at: insertIndex)
 			

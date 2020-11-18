@@ -23,7 +23,8 @@ class DeleteItemsOperation<S: Hashable, I: Hashable>: MainThreadOperationBase {
 	
 	override func run() {
 		var sectionSnapshot = dataSource.snapshot(for: section)
-		sectionSnapshot.delete(items)
+		let visibleItems = items.filter { sectionSnapshot.visibleItems.contains($0) }
+		sectionSnapshot.delete(visibleItems)
 		dataSource.apply(sectionSnapshot, to: section, animatingDifferences: animated) { [weak self] in
 			guard let self = self else { return }
 			self.operationDelegate?.operationDidComplete(self)

@@ -10,30 +10,30 @@ import Templeton
 
 final class EditorItem:  NSObject, NSCopying, Identifiable {
 	var id: String
+	weak var headline: Headline?
 	weak var parentHeadline: Headline?
-	var text: Data?
 	var children: [EditorItem]
 
 	var plainText: String? {
 		get {
-			guard let text = text else { return nil }
+			guard let text = headline?.text else { return nil }
 			return String(data: text, encoding: .utf8)
 		}
 		set {
-			text = newValue?.data(using: .utf8)
+			headline?.text = newValue?.data(using: .utf8)
 		}
 	}
 	
-	init(id: String, parentHeadline: Headline?, text: Data?, children: [EditorItem]) {
-		self.id = id
+	init(headline: Headline, parentHeadline: Headline?, children: [EditorItem]) {
+		self.id = headline.id
+		self.headline = headline
 		self.parentHeadline = parentHeadline
-		self.text = text
 		self.children = children
 	}
 	
 	static func editorItem(_ headline: Headline, parentHeadline: Headline?) -> EditorItem {
 		let children = headline.headlines?.map { editorItem($0, parentHeadline: headline) } ?? [EditorItem]()
-		return EditorItem(id: headline.id, parentHeadline: parentHeadline, text: headline.text, children: children)
+		return EditorItem(headline: headline, parentHeadline: parentHeadline, children: children)
 	}
 
 	override func isEqual(_ object: Any?) -> Bool {
