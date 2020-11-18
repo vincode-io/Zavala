@@ -149,17 +149,17 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 	}
 	
-	public func update(headlineID: String, attributedText: NSAttributedString, completion: @escaping (Result<Void, Error>) -> Void) {
-		func update() {
+	public func updateHeadline(headlineID: String, attributedText: NSAttributedString, completion: @escaping (Result<Void, Error>) -> Void) {
+		func updateHeadline() {
 			headlineDictionary[headlineID]?.attributedText = attributedText
 			outlineBodyDidChange()
 			completion(.success(()))
 		}
 
 		if account?.type == .cloudKit {
-			update()
+			updateHeadline()
 		} else {
-			update()
+			updateHeadline()
 		}
 	}
 	

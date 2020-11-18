@@ -177,7 +177,7 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 
 	func textChanged(item: EditorItem, attributedText: NSAttributedString) {
 		if item.attributedText != attributedText {
-			outline?.update(headlineID: item.id, attributedText: attributedText) { result in
+			outline?.updateHeadline(headlineID: item.id, attributedText: attributedText) { result in
 				switch result {
 				case .success:
 					item.attributedText = attributedText
