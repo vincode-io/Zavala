@@ -177,24 +177,13 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 
 	func textChanged(item: EditorItem, attributedText: NSAttributedString) {
 		if item.attributedText != attributedText {
-			if attributedText.length == 0 {
-				outline?.deleteHeadline(parentHeadlineID: item.parentID, headlineID: item.id) { result in
-					switch result {
-					case .success:
-						self.delete(items: [item], animated: true)
-					case .failure(let error):
-						self.presentError(error)
-					}
-				}
-			} else {
-				outline?.update(headlineID: item.id, attributedText: attributedText) { result in
-					switch result {
-					case .success:
-						item.attributedText = attributedText
-						self.reload(items: [item], animated: false)
-					case .failure(let error):
-						self.presentError(error)
-					}
+			outline?.update(headlineID: item.id, attributedText: attributedText) { result in
+				switch result {
+				case .success:
+					item.attributedText = attributedText
+					self.reload(items: [item], animated: false)
+				case .failure(let error):
+					self.presentError(error)
 				}
 			}
 		}
