@@ -65,6 +65,16 @@ extension EditorContentView: UITextViewDelegate {
 		appliedConfiguration.delegate?.textChanged(item: appliedConfiguration.editorItem!, attributedText: textView.attributedText)
 	}
 	
+	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+		switch text {
+		case "\n":
+			appliedConfiguration.delegate?.newHeadline(item: appliedConfiguration.editorItem!)
+			return false
+		default:
+			return true
+		}
+	}
+	
 }
 
 // MARK: EditorTextViewDelegate

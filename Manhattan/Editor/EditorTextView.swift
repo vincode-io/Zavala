@@ -26,26 +26,20 @@ class EditorTextView: UITextView, TextCursorSource {
 	}
 
 	override var keyCommands: [UIKeyCommand]? {
-		var keys = [
+		let keys = [
 			UIKeyCommand(action: #selector(upArrowPressed(_:)), input: UIKeyCommand.inputUpArrow),
 			UIKeyCommand(action: #selector(downArrowPressed(_:)), input: UIKeyCommand.inputDownArrow),
-			UIKeyCommand(action: #selector(returnPressed(_:)), input: "\r"),
 			UIKeyCommand(action: #selector(tabPressed(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(shiftTabPressed(_:)))
 		]
-		if text.isEmpty {
-			keys.append(UIKeyCommand(action: #selector(deletePressed(_:)), input: "\u{8}"))
-		}
 		return keys
 	}
 
-	@objc func deletePressed(_ sender: Any) {
-		editorDelegate?.deleteHeadline(self)
-	}
-	
-	@objc func returnPressed(_ sender: Any) {
-		guard attributedText.length > 0 else { return }
-		editorDelegate?.newHeadline(self)
+	override func deleteBackward() {
+		super.deleteBackward()
+		if attributedText.length == 0 {
+			editorDelegate?.deleteHeadline(self)
+		}
 	}
 	
 	@objc func tabPressed(_ sender: Any) {
