@@ -93,10 +93,11 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 	}
 	
-	public func deleteHeadline(parentHeadlineID: String?, headlineID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+	public func deleteHeadline(headlineID: String, completion: @escaping (Result<Void, Error>) -> Void) {
 		func deleteHeadline() {
 			var headlines = self.headlines ?? [Headline]()
 			
+			let parentHeadlineID = headlineDictionary[headlineID]?.parent?.id
 			if let parentHeadlineID = parentHeadlineID {
 				headlines = headlineDictionary[parentHeadlineID]?.headlines ?? [Headline]()
 			}
@@ -119,10 +120,11 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 	}
 	
-	public func createHeadline(parentHeadlineID: String?, afterHeadlineID: String? = nil, completion: @escaping (Result<Headline, Error>) -> Void) {
+	public func createHeadline(afterHeadlineID: String? = nil, completion: @escaping (Result<Headline, Error>) -> Void) {
 		func createHeadline() {
 			var headlines = self.headlines ?? [Headline]()
 			
+			let parentHeadlineID = afterHeadlineID != nil ? headlineDictionary[afterHeadlineID!]?.parent?.id : nil
 			if let parentHeadlineID = parentHeadlineID {
 				headlines = headlineDictionary[parentHeadlineID]?.headlines ?? [Headline]()
 			}
