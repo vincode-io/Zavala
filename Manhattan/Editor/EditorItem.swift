@@ -10,23 +10,23 @@ import Templeton
 
 final class EditorItem:  NSObject, NSCopying, Identifiable {
 	var id: String
-	weak var headline: Headline?
+	var text: Data?
 	weak var parentHeadline: Headline?
 	var children: [EditorItem]
 
 	var plainText: String? {
 		get {
-			guard let text = headline?.text else { return nil }
+			guard let text = text else { return nil }
 			return String(data: text, encoding: .utf8)
 		}
 		set {
-			headline?.text = newValue?.data(using: .utf8)
+			text = newValue?.data(using: .utf8)
 		}
 	}
 	
 	init(headline: Headline, parentHeadline: Headline?, children: [EditorItem]) {
 		self.id = headline.id
-		self.headline = headline
+		self.text = headline.text
 		self.parentHeadline = parentHeadline
 		self.children = children
 	}
