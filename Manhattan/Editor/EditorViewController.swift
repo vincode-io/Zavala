@@ -91,12 +91,7 @@ class EditorViewController: UICollectionViewController {
 
 	// MARK: Actions
 	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
-		outline?.toggleFavorite(completion: { result in
-			if case .failure(let error) = result {
-				self.presentError(error)
-			}
-			self.updateUI()
-		})
+		outline?.toggleFavorite()
 	}
 	
 }
@@ -177,42 +172,24 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 
 	func textChanged(item: EditorItem, attributedText: NSAttributedString) {
 		if item.attributedText != attributedText {
-			outline?.updateHeadline(headlineID: item.id, attributedText: attributedText) { result in
-				switch result {
-				case .success:
-					item.attributedText = attributedText
-					self.reload(items: [item], animated: false)
-				case .failure(let error):
-					self.presentError(error)
-				}
-			}
+			outline?.updateHeadline(headlineID: item.id, attributedText: attributedText)
+			item.attributedText = attributedText
+			self.reload(items: [item], animated: false)
 		}
 	}
 	
 	func deleteHeadline(item: EditorItem) {
-		outline?.deleteHeadline(headlineID: item.id) { result in
-			switch result {
-			case .success:
-				self.moveCursor(item: item, direction: .up)
-				self.delete(items: [item], animated: true)
-			case .failure(let error):
-				self.presentError(error)
-			}
-		}
+		outline?.deleteHeadline(headlineID: item.id)
+		self.moveCursor(item: item, direction: .up)
+		self.delete(items: [item], animated: true)
 	}
 	
 	// TODO: Need to take into consideration expanded state when placing the new Headline
 	func createHeadline(item: EditorItem) {
-		outline?.createHeadline(afterHeadlineID: item.id) { result in
-			switch result {
-			case .success(let headline):
-				let newItem = EditorItem.editorItem(headline)
-				self.insert(items: [newItem], afterItem: item, animated: false)
-				self.moveCursor(item: newItem, direction: .none)
-			case .failure(let error):
-				self.presentError(error)
-			}
-		}
+		guard let headline = outline?.createHeadline(afterHeadlineID: item.id) else { return }
+		let newItem = EditorItem.editorItem(headline)
+		self.insert(items: [newItem], afterItem: item, animated: false)
+		self.moveCursor(item: newItem, direction: .none)
 	}
 	
 	func indent(item: EditorItem) {

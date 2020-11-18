@@ -51,18 +51,13 @@ class AddFolderViewController: FormViewController {
 	@IBAction override func submit(_ sender: Any) {
 		guard let account = account, let folderName = nameTextField.text, !folderName.isEmpty else { return	}
 		
-		account.createFolder(folderName) { result in
-			switch result {
-			case .success(let folder):
-				var userInfo = [AnyHashable: Any]()
-				userInfo[UserInfoKeys.folder] = folder
-				NotificationCenter.default.post(name: .UserDidAddFolder, object: self, userInfo: userInfo)
-				self.dismiss(animated: true)
-			case .failure(let error):
-				self.presentError(error)
-				self.dismiss(animated: true)
-			}
-		}
+		let folder = account.createFolder(folderName)
+		
+		var userInfo = [AnyHashable: Any]()
+		userInfo[UserInfoKeys.folder] = folder
+		NotificationCenter.default.post(name: .UserDidAddFolder, object: self, userInfo: userInfo)
+
+		dismiss(animated: true)
 	}
 	
 	func updateUI() {

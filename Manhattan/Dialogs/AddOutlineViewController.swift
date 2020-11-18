@@ -51,19 +51,13 @@ class AddOutlineViewController: FormViewController {
 	@IBAction override func submit(_ sender: Any) {
 		guard let folder = folder, let outlineName = nameTextField.text, !outlineName.isEmpty else { return }
 		
-		folder.createOutline(name: outlineName) { result in
-			switch result {
-			case .success(let outline):
-				var userInfo = [AnyHashable: Any]()
-				userInfo[UserInfoKeys.outline] = outline
-				NotificationCenter.default.post(name: .UserDidAddOutline, object: self, userInfo: userInfo)
-				self.dismiss(animated: true)
-			case .failure(let error):
-				self.presentError(error)
-				self.dismiss(animated: true)
-			}
-		}
+		let outline = folder.createOutline(name: outlineName)
 		
+		var userInfo = [AnyHashable: Any]()
+		userInfo[UserInfoKeys.outline] = outline
+		NotificationCenter.default.post(name: .UserDidAddOutline, object: self, userInfo: userInfo)
+
+		dismiss(animated: true)
 	}
 	
 	func updateUI() {

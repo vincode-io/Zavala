@@ -87,7 +87,7 @@ public final class AccountManager {
 			let localAccount = Account(accountType: .local)
 			accountsDictionary[AccountType.local.rawValue] = localAccount
 			initializeFile(file: localAccountFile, accountType: .local)
-			localAccount.createFolder("Outlines") { _ in }
+			let _ = localAccount.createFolder("Outlines")
 		}
 		
 		let cloudKitAccountFolder = accountsFolder.appendingPathComponent(AccountType.cloudKit.folderName)

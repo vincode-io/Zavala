@@ -54,16 +54,8 @@ class GetInfoOutlineViewController: FormViewController {
 	@IBAction override func submit(_ sender: Any) {
 		guard let outline = outline, let outlineName = nameTextField.text, !outlineName.isEmpty else { return }
 		
-		outline.update(name: outlineName) { result in
-			switch result {
-			case .success:
-				self.dismiss(animated: true)
-			case .failure(let error):
-				self.presentError(error)
-				self.dismiss(animated: true)
-			}
-		}
-		
+		outline.update(name: outlineName)
+		dismiss(animated: true)
 	}
 	
 	func updateUI() {

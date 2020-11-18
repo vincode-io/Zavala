@@ -55,16 +55,8 @@ class GetInfoFolderViewController: FormViewController {
 	
 	@IBAction override func submit(_ sender: Any) {
 		guard let folder = folder, let folderName = nameTextField.text, !folderName.isEmpty else { return	}
-		
-		folder.update(name: folderName) { result in
-			switch result {
-			case .success:
-				self.dismiss(animated: true)
-			case .failure(let error):
-				self.presentError(error)
-				self.dismiss(animated: true)
-			}
-		}
+		folder.update(name: folderName)
+		dismiss(animated: true)
 	}
 	
 	func updateUI() {

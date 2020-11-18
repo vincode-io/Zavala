@@ -46,39 +46,21 @@ public final class Account: Identifiable, Equatable, Codable {
 		self.folders = [Folder]()
 	}
 	
-	public func createFolder(_ name: String, completion: @escaping (Result<Folder, Error>) -> Void) {
-		func createFolder() {
-			let folder = Folder(parentID: id, name: name)
-			folders?.append(folder)
-			accountDidChange()
-			completion(.success(folder))
-		}
-		
-		if type == .cloudKit {
-			createFolder()
-		} else {
-			createFolder()
-		}
+	public func createFolder(_ name: String) -> Folder {
+		let folder = Folder(parentID: id, name: name)
+		folders?.append(folder)
+		accountFoldersDidChange()
+		return folder
 	}
 	
-	public func deleteFolder(_ folder: Folder, completion: @escaping (Result<Void, Error>) -> Void) {
+	public func deleteFolder(_ folder: Folder) {
 		guard let folders = folders else {
-			completion(.success(()))
 			return
 		}
 		
-		func deleteFolder() {
-			self.folders = folders.filter { $0 != folder }
-			accountDidChange()
-			folder.folderDidDelete()
-			completion(.success(()))
-		}
-		
-		if type == .cloudKit {
-			deleteFolder()
-		} else {
-			deleteFolder()
-		}
+		self.folders = folders.filter { $0 != folder }
+		accountFoldersDidChange()
+		folder.folderDidDelete()
 	}
 	
 	public static func == (lhs: Account, rhs: Account) -> Bool {
@@ -97,7 +79,7 @@ extension Account {
 
 private extension Account {
 	
-	func accountDidChange() {
+	func accountFoldersDidChange() {
 		NotificationCenter.default.post(name: .AccountFoldersDidChange, object: self, userInfo: nil)
 	}
 	

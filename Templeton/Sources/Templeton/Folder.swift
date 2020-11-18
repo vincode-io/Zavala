@@ -48,51 +48,25 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		NotificationCenter.default.post(name: .FolderDidDelete, object: self, userInfo: nil)
 	}
 	
-	public func update(name: String, completion: @escaping (Result<Void, Error>) -> Void) {
-		func update() {
-			self.name = name
-			folderMetaDataDidChange()
-			completion(.success(()))
-		}
-		
-		if account?.type == .cloudKit {
-			update()
-		} else {
-			update()
-		}
+	public func update(name: String) {
+		self.name = name
+		folderMetaDataDidChange()
 	}
 	
-	public func createOutline(name: String, completion: @escaping (Result<Outline, Error>) -> Void) {
-		func createOutline() {
-			let outline = Outline(parentID: id, name: name)
-			outlines?.append(outline)
-			folderOutlinesDidChange()
-			completion(.success(outline))
-		}
-		
-		if account?.type == .cloudKit {
-			createOutline()
-		} else {
-			createOutline()
-		}
+	public func createOutline(name: String) -> Outline {
+		let outline = Outline(parentID: id, name: name)
+		outlines?.append(outline)
+		folderOutlinesDidChange()
+		return outline
 	}
 	
-	public func deleteOutline(_ outline: Outline, completion: @escaping (Result<Void, Error>) -> Void) {
-		func deleteOutline() {
-			outlines = outlines?.filter({ $0 != outline })
-			folderOutlinesDidChange()
-			outline.outlineDidDelete()
-			completion(.success(()))
-		}
-		
-		if account?.type == .cloudKit {
-			deleteOutline()
-		} else {
-			deleteOutline()
-		}
+	public func deleteOutline(_ outline: Outline) {
+		outlines = outlines?.filter({ $0 != outline })
+		folderOutlinesDidChange()
+		outline.outlineDidDelete()
 	}
 	
-	public func moveOutline(_ outline: Outline, from: Folder, to: Folder, completion: @escaping (Result<Void, Error>) -> Void) {
+	public func moveOutline(_ outline: Outline, from: Folder, to: Folder) {
 	}
 	
 	public static func == (lhs: Folder, rhs: Folder) -> Bool {

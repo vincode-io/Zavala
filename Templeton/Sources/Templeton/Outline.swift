@@ -64,103 +64,58 @@ public final class Outline: Identifiable, Equatable, Codable {
 		self.updated = Date()
 	}
 
-	public func toggleFavorite(completion: @escaping (Result<Void, Error>) -> Void) {
-		func toggleFavorite() {
-			isFavorite = !(isFavorite ?? false)
-			outlineMetaDataDidChange()
-			completion(.success(()))
+	public func toggleFavorite() {
+		isFavorite = !(isFavorite ?? false)
+		outlineMetaDataDidChange()
+	}
+	
+	public func update(name: String) {
+		self.name = name
+		self.updated = Date()
+		outlineMetaDataDidChange()
+	}
+	
+	public func deleteHeadline(headlineID: String) {
+		var headlines = self.headlines ?? [Headline]()
+		
+		let parentHeadlineID = headlineDictionary[headlineID]?.parent?.id
+		if let parentHeadlineID = parentHeadlineID {
+			headlines = headlineDictionary[parentHeadlineID]?.headlines ?? [Headline]()
 		}
 		
-		if account?.type == .cloudKit {
-			toggleFavorite()
+		headlines = headlines.filter { $0.id != headlineID }
+		
+		if let parentHeadlineID = parentHeadlineID {
+			headlineDictionary[parentHeadlineID]?.headlines = headlines
 		} else {
-			toggleFavorite()
+			self.headlines = headlines
 		}
 	}
 	
-	public func update(name: String, completion: @escaping (Result<Void, Error>) -> Void) {
-		func update() {
-			self.name = name
-			self.updated = Date()
-			outlineMetaDataDidChange()
-			completion(.success(()))
+	public func createHeadline(afterHeadlineID: String? = nil) -> Headline {
+		var headlines = self.headlines ?? [Headline]()
+		
+		let parentHeadlineID = afterHeadlineID != nil ? headlineDictionary[afterHeadlineID!]?.parent?.id : nil
+		if let parentHeadlineID = parentHeadlineID {
+			headlines = headlineDictionary[parentHeadlineID]?.headlines ?? [Headline]()
 		}
 		
-		if account?.type == .cloudKit {
-			update()
+		let insertIndex = headlines.firstIndex(where: { $0.id == afterHeadlineID }) ?? 0
+		let headline = Headline()
+		headlines.insert(headline, at: insertIndex)
+		
+		if let parentHeadlineID = parentHeadlineID {
+			headlineDictionary[parentHeadlineID]?.headlines = headlines
 		} else {
-			update()
+			self.headlines = headlines
 		}
+		
+		return headline
 	}
 	
-	public func deleteHeadline(headlineID: String, completion: @escaping (Result<Void, Error>) -> Void) {
-		func deleteHeadline() {
-			var headlines = self.headlines ?? [Headline]()
-			
-			let parentHeadlineID = headlineDictionary[headlineID]?.parent?.id
-			if let parentHeadlineID = parentHeadlineID {
-				headlines = headlineDictionary[parentHeadlineID]?.headlines ?? [Headline]()
-			}
-			
-			headlines = headlines.filter { $0.id != headlineID }
-			
-			if let parentHeadlineID = parentHeadlineID {
-				headlineDictionary[parentHeadlineID]?.headlines = headlines
-			} else {
-				self.headlines = headlines
-			}
-			
-			completion(.success(()))
-		}
-
-		if account?.type == .cloudKit {
-			deleteHeadline()
-		} else {
-			deleteHeadline()
-		}
-	}
-	
-	public func createHeadline(afterHeadlineID: String? = nil, completion: @escaping (Result<Headline, Error>) -> Void) {
-		func createHeadline() {
-			var headlines = self.headlines ?? [Headline]()
-			
-			let parentHeadlineID = afterHeadlineID != nil ? headlineDictionary[afterHeadlineID!]?.parent?.id : nil
-			if let parentHeadlineID = parentHeadlineID {
-				headlines = headlineDictionary[parentHeadlineID]?.headlines ?? [Headline]()
-			}
-			
-			let insertIndex = headlines.firstIndex(where: { $0.id == afterHeadlineID }) ?? 0
-			let headline = Headline()
-			headlines.insert(headline, at: insertIndex)
-			
-			if let parentHeadlineID = parentHeadlineID {
-				headlineDictionary[parentHeadlineID]?.headlines = headlines
-			} else {
-				self.headlines = headlines
-			}
-			
-			completion(.success((headline)))
-		}
-
-		if account?.type == .cloudKit {
-			createHeadline()
-		} else {
-			createHeadline()
-		}
-	}
-	
-	public func updateHeadline(headlineID: String, attributedText: NSAttributedString, completion: @escaping (Result<Void, Error>) -> Void) {
-		func updateHeadline() {
-			headlineDictionary[headlineID]?.attributedText = attributedText
-			outlineBodyDidChange()
-			completion(.success(()))
-		}
-
-		if account?.type == .cloudKit {
-			updateHeadline()
-		} else {
-			updateHeadline()
-		}
+	public func updateHeadline(headlineID: String, attributedText: NSAttributedString) {
+		headlineDictionary[headlineID]?.attributedText = attributedText
+		outlineBodyDidChange()
 	}
 	
 	public func load() {
