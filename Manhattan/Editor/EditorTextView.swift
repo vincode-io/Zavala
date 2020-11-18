@@ -44,6 +44,7 @@ class EditorTextView: UITextView, TextCursorSource {
 	}
 	
 	@objc func returnPressed(_ sender: Any) {
+		guard attributedText.length > 0 else { return }
 		editorDelegate?.newHeadline(self)
 	}
 	
