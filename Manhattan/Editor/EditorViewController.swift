@@ -144,11 +144,11 @@ extension EditorViewController {
 	}
 
 	private func reload(items: [EditorItem], animated: Bool) {
-		dataSourceQueue.add(ReloadItemsOperation(dataSource: dataSource, section: 0, items: items, animated: animated))
+		dataSourceQueue.add(ReloadItemsOperation(dataSource: dataSource, collectionView: collectionView, section: 0, items: items, animated: animated))
 	}
 
-	private func moveCursor(item: EditorItem, direction: EditorMoveCursorOperation.Direction) {
-		dataSourceQueue.add(EditorMoveCursorOperation(dataSource: dataSource, collectionView: collectionView, item: item, direction: direction))
+	private func moveCursor(item: EditorItem, direction: MoveCursorOperation.Direction) {
+		dataSourceQueue.add(MoveCursorOperation(dataSource: dataSource, collectionView: collectionView, item: item, direction: direction))
 	}
 	
 	private func applySnapshot(animated: Bool) {

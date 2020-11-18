@@ -1,5 +1,5 @@
 //
-//  EditorMoveCursorOperation.swift
+//  MoveCursorOperation.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 11/17/20.
@@ -8,7 +8,7 @@
 import UIKit
 import RSCore
 
-class EditorMoveCursorOperation: MainThreadOperationBase {
+class MoveCursorOperation: MainThreadOperationBase {
 	
 	enum Direction {
 		case up
@@ -51,12 +51,12 @@ class EditorMoveCursorOperation: MainThreadOperationBase {
 		}
 
 		guard let indexPath = dataSource.indexPath(for: nextItem) else { return }
-		guard let editorCell = collectionView.cellForItem(at: indexPath) as? EditorCollectionViewCell else {
+		guard let editorCell = collectionView.cellForItem(at: indexPath) as? TextCursorTarget else {
 			self.operationDelegate?.operationDidComplete(self)
 			return
 		}
 
-		editorCell.takeCursor()
+		editorCell.moveToEnd()
 		self.operationDelegate?.operationDidComplete(self)
 	}
 	

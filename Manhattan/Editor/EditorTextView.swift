@@ -8,6 +8,7 @@
 import UIKit
 
 protocol EditorTextViewDelegate: class {
+	var item: EditorItem? { get }
 	func deleteHeadline(_: EditorTextView)
 	func newHeadline(_: EditorTextView)
 	func indent(_: EditorTextView)
@@ -16,10 +17,14 @@ protocol EditorTextViewDelegate: class {
 	func moveDown(_: EditorTextView)
 }
 
-class EditorTextView: UITextView {
+class EditorTextView: UITextView, TextCursorSource {
 	
 	weak var editorDelegate: EditorTextViewDelegate?
 	
+	var identifier: Any? {
+		return editorDelegate?.item
+	}
+
 	override var keyCommands: [UIKeyCommand]? {
 		var keys = [
 			UIKeyCommand(action: #selector(upArrowPressed(_:)), input: UIKeyCommand.inputUpArrow),

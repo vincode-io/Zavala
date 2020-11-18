@@ -73,6 +73,10 @@ extension EditorContentView: UITextViewDelegate {
 
 extension EditorContentView: EditorTextViewDelegate {
 	
+	var item: EditorItem? {
+		return appliedConfiguration.editorItem
+	}
+	
 	func deleteHeadline(_: EditorTextView) {
 		appliedConfiguration.delegate?.deleteHeadline(item: appliedConfiguration.editorItem!)
 	}
