@@ -77,8 +77,8 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		}
 	}
 	
-	public func removeOutline(_ outline: Outline, completion: @escaping (Result<Void, Error>) -> Void) {
-		func removeOutline() {
+	public func deleteOutline(_ outline: Outline, completion: @escaping (Result<Void, Error>) -> Void) {
+		func deleteOutline() {
 			outlines = outlines?.filter({ $0 != outline })
 			folderOutlinesDidChange()
 			outline.outlineDidDelete()
@@ -86,9 +86,9 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		}
 		
 		if account?.type == .cloudKit {
-			removeOutline()
+			deleteOutline()
 		} else {
-			removeOutline()
+			deleteOutline()
 		}
 	}
 	

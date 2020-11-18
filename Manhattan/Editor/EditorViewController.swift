@@ -202,7 +202,7 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	// TODO: Need to take into consideration expanded state when placing the new Headline
-	func newHeadline(item: EditorItem) {
+	func createHeadline(item: EditorItem) {
 		outline?.createHeadline(afterHeadlineID: item.id) { result in
 			switch result {
 			case .success(let headline):

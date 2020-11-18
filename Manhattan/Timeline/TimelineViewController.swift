@@ -247,7 +247,7 @@ extension TimelineViewController {
 	
 	private func deleteOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
 		func deleteOutline() {
-			outline.folder?.removeOutline(outline) { result in
+			outline.folder?.deleteOutline(outline) { result in
 				if case .failure(let error) = result {
 					self.presentError(error)
 					completion?(true)

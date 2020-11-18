@@ -279,7 +279,7 @@ extension SidebarViewController {
 			if self.currentFolder == folder {
 				self.delegate?.outlineProviderSelectionDidChange(self, outlineProvider: nil)
 			}
-			folder.account?.removeFolder(folder) { result in
+			folder.account?.deleteFolder(folder) { result in
 				if case .failure(let error) = result {
 					self.presentError(error)
 					completion?(true)

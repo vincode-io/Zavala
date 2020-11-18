@@ -10,7 +10,7 @@ import UIKit
 protocol EditorTextViewDelegate: class {
 	var item: EditorItem? { get }
 	func deleteHeadline(_: EditorTextView)
-	func newHeadline(_: EditorTextView)
+	func createHeadline(_: EditorTextView)
 	func indent(_: EditorTextView)
 	func outdent(_: EditorTextView)
 	func moveUp(_: EditorTextView)

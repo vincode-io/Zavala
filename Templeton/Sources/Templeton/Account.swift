@@ -61,13 +61,13 @@ public final class Account: Identifiable, Equatable, Codable {
 		}
 	}
 	
-	public func removeFolder(_ folder: Folder, completion: @escaping (Result<Void, Error>) -> Void) {
+	public func deleteFolder(_ folder: Folder, completion: @escaping (Result<Void, Error>) -> Void) {
 		guard let folders = folders else {
 			completion(.success(()))
 			return
 		}
 		
-		func removeFolder() {
+		func deleteFolder() {
 			self.folders = folders.filter { $0 != folder }
 			accountDidChange()
 			folder.folderDidDelete()
@@ -75,9 +75,9 @@ public final class Account: Identifiable, Equatable, Codable {
 		}
 		
 		if type == .cloudKit {
-			removeFolder()
+			deleteFolder()
 		} else {
-			removeFolder()
+			deleteFolder()
 		}
 	}
 	

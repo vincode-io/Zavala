@@ -68,7 +68,7 @@ extension EditorContentView: UITextViewDelegate {
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
 		switch text {
 		case "\n":
-			appliedConfiguration.delegate?.newHeadline(item: appliedConfiguration.editorItem!)
+			appliedConfiguration.delegate?.createHeadline(item: appliedConfiguration.editorItem!)
 			return false
 		default:
 			return true
@@ -89,8 +89,8 @@ extension EditorContentView: EditorTextViewDelegate {
 		appliedConfiguration.delegate?.deleteHeadline(item: appliedConfiguration.editorItem!)
 	}
 	
-	func newHeadline(_: EditorTextView) {
-		appliedConfiguration.delegate?.newHeadline(item: appliedConfiguration.editorItem!)
+	func createHeadline(_: EditorTextView) {
+		appliedConfiguration.delegate?.createHeadline(item: appliedConfiguration.editorItem!)
 	}
 	
 	func indent(_: EditorTextView) {
