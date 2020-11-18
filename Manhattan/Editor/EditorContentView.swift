@@ -44,7 +44,7 @@ class EditorContentView: UIView, UIContentView {
 	private func apply(configuration: EditorContentConfiguration) {
 		guard appliedConfiguration != configuration, let editorItem = configuration.editorItem else { return }
 		appliedConfiguration = configuration
-		textView.text = editorItem.plainText
+		textView.attributedText = editorItem.attributedText
 
 		textView.removeConstraintsIncludingOwnedBySuperview()
 		NSLayoutConstraint.activate([
@@ -62,9 +62,7 @@ class EditorContentView: UIView, UIContentView {
 extension EditorContentView: UITextViewDelegate {
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
-		// Temp until we implement attributed strings
-		let textData = textView.text.data(using: .utf8) ?? Data()
-		appliedConfiguration.delegate?.textChanged(item: appliedConfiguration.editorItem!, text: textData)
+		appliedConfiguration.delegate?.textChanged(item: appliedConfiguration.editorItem!, attributedText: textView.attributedText)
 	}
 	
 }

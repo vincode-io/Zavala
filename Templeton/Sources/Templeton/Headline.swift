@@ -5,7 +5,7 @@
 //  Created by Maurice Parker on 11/6/20.
 //
 
-import Foundation
+import UIKit
 
 public final class Headline: Identifiable, Equatable, Codable {
 	
@@ -26,8 +26,27 @@ public final class Headline: Identifiable, Equatable, Codable {
 	
 	public init(plainText: String) {
 		self.id = UUID().uuidString
-		text = plainText.data(using: .utf8)
+		
+		var attributes = [NSAttributedString.Key: AnyObject]()
+		attributes[.foregroundColor] = UIColor.label
+		attributes[.font] = UIFont.preferredFont(forTextStyle: .body)
+		attributedText = NSAttributedString(string: plainText, attributes: attributes)
+											
 		headlines = [Headline]()
+	}
+	
+	public var attributedText: NSAttributedString? {
+		get {
+			guard let text = text else { return nil }
+			return try? NSAttributedString(data: text, options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
+		}
+		set {
+			if let attrText = newValue {
+				text = try? attrText.data(from: .init(location: 0, length: attrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+			} else {
+				text = nil
+			}
+		}
 	}
 	
 	public static func == (lhs: Headline, rhs: Headline) -> Bool {

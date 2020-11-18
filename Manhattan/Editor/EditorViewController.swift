@@ -175,9 +175,9 @@ extension EditorViewController {
 
 extension EditorViewController: EditorCollectionViewCellDelegate {
 
-	func textChanged(item: EditorItem, text: Data) {
-		if item.text != text {
-			if text.isEmpty {
+	func textChanged(item: EditorItem, attributedText: NSAttributedString) {
+		if item.attributedText != attributedText {
+			if attributedText.length == 0 {
 				outline?.deleteHeadline(parentHeadlineID: item.parentID, headlineID: item.id) { result in
 					switch result {
 					case .success:
@@ -187,10 +187,10 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 					}
 				}
 			} else {
-				outline?.update(headlineID: item.id, text: text) { result in
+				outline?.update(headlineID: item.id, attributedText: attributedText) { result in
 					switch result {
 					case .success:
-						item.text = text
+						item.attributedText = attributedText
 						self.reload(items: [item], animated: false)
 					case .failure(let error):
 						self.presentError(error)

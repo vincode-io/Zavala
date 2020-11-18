@@ -146,9 +146,9 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 	}
 	
-	public func update(headlineID: String, text: Data, completion: @escaping (Result<Void, Error>) -> Void) {
+	public func update(headlineID: String, attributedText: NSAttributedString, completion: @escaping (Result<Void, Error>) -> Void) {
 		func update() {
-			headlineDictionary[headlineID]?.text = text
+			headlineDictionary[headlineID]?.attributedText = attributedText
 			outlineBodyDidChange()
 			completion(.success(()))
 		}

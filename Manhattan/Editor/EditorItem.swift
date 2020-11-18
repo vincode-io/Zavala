@@ -11,22 +11,12 @@ import Templeton
 final class EditorItem:  NSObject, NSCopying, Identifiable {
 	var id: String
 	var parentID: String?
-	var text: Data?
+	var attributedText: NSAttributedString?
 	var children: [EditorItem]
-
-	var plainText: String? {
-		get {
-			guard let text = text else { return nil }
-			return String(data: text, encoding: .utf8)
-		}
-		set {
-			text = newValue?.data(using: .utf8)
-		}
-	}
 	
 	init(headline: Headline, parentID: String?, children: [EditorItem]) {
 		self.id = headline.id
-		self.text = headline.text
+		self.attributedText = headline.attributedText
 		self.parentID = parentID
 		self.children = children
 	}
