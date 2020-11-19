@@ -78,7 +78,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 	public func deleteHeadline(headlineID: String) {
 		var headlines = self.headlines ?? [Headline]()
 		
-		let parentHeadlineID = headlineDictionary[headlineID]?.parent?.id
+		let parentHeadlineID = headlineDictionary[headlineID]?.parentID
 		if let parentHeadlineID = parentHeadlineID {
 			headlines = headlineDictionary[parentHeadlineID]?.headlines ?? [Headline]()
 		}
@@ -98,7 +98,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 	public func createHeadline(afterHeadlineID: String? = nil) -> Headline {
 		var headlines = self.headlines ?? [Headline]()
 		
-		let parentHeadlineID = afterHeadlineID != nil ? headlineDictionary[afterHeadlineID!]?.parent?.id : nil
+		let parentHeadlineID = afterHeadlineID != nil ? headlineDictionary[afterHeadlineID!]?.parentID : nil
 		if let parentHeadlineID = parentHeadlineID {
 			headlines = headlineDictionary[parentHeadlineID]?.headlines ?? [Headline]()
 		}
@@ -126,11 +126,13 @@ public final class Outline: Identifiable, Equatable, Codable {
 	
 	public func indentHeadline(headlineID: String) -> Headline? {
 		guard let headline = headlineDictionary[headlineID],
-			  let headlineIndex = headline.parent?.headlines?.firstIndex(of: headline),
+			  let parentID = headline.parentID,
+			  let parentHeadline = headlineDictionary[parentID],
+			  let headlineIndex = parentHeadline.headlines?.firstIndex(of: headline),
 			  headlineIndex > 0,
-			  let sibling = headline.parent?.headlines?[headlineIndex - 1] else { return nil }
+			  let sibling = parentHeadline.headlines?[headlineIndex - 1] else { return nil }
 		
-		headline.parent?.headlines = headline.parent?.headlines?.filter { $0.id != headline.id }
+		parentHeadline.headlines = parentHeadline.headlines?.filter { $0.id != headline.id }
 		var siblingHeadlines = sibling.headlines ?? [Headline]()
 		siblingHeadlines.insert(headline, at: 0)
 		sibling.headlines = siblingHeadlines
@@ -191,7 +193,7 @@ private extension Outline {
 	func updateHeadlines() {
 		headlines?.forEach { headline in
 			headline.visit(visitor: { visited in
-				visited.headlines?.forEach { $0.parent = visited }
+				visited.headlines?.forEach { $0.parentID = visited.id }
 			})
 		}
 	}

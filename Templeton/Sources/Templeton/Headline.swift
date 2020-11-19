@@ -10,8 +10,8 @@ import UIKit
 public final class Headline: Identifiable, Equatable, Codable {
 	
 	public var id: String
+	public var parentID: String?
 	public var text: Data?
-	public weak var parent: Headline?
 	public var headlines: [Headline]? {
 		didSet {
 			updateHeadlines()
@@ -20,6 +20,7 @@ public final class Headline: Identifiable, Equatable, Codable {
 
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
+		case parentID = "parentID"
 		case text = "text"
 		case headlines = "headlines"
 	}
@@ -75,9 +76,9 @@ private extension Headline {
 	
 	func updateHeadlines() {
 		headlines?.forEach { headline in
-			headline.parent = self
+			headline.parentID = self.id
 			headline.visit(visitor: { visited in
-				visited.headlines?.forEach { $0.parent = visited }
+				visited.headlines?.forEach { $0.parentID = visited.id }
 			})
 		}
 	}
