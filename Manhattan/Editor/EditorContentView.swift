@@ -93,12 +93,12 @@ extension EditorContentView: EditorTextViewDelegate {
 		appliedConfiguration.delegate?.createHeadline(item: appliedConfiguration.editorItem!)
 	}
 	
-	func indent(_: EditorTextView) {
-		appliedConfiguration.delegate?.indent(item: appliedConfiguration.editorItem!)
+	func indent(_: EditorTextView, attributedText: NSAttributedString) {
+		appliedConfiguration.delegate?.indent(item: appliedConfiguration.editorItem!, attributedText: attributedText)
 	}
 	
-	func outdent(_: EditorTextView) {
-		appliedConfiguration.delegate?.outdent(item: appliedConfiguration.editorItem!)
+	func outdent(_: EditorTextView, attributedText: NSAttributedString) {
+		appliedConfiguration.delegate?.outdent(item: appliedConfiguration.editorItem!, attributedText: attributedText)
 	}
 	
 	func moveUp(_: EditorTextView) {

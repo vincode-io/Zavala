@@ -192,11 +192,14 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 		self.moveCursor(item: newItem, direction: .none)
 	}
 	
-	func indent(item: EditorItem) {
-		
+	func indent(item: EditorItem, attributedText: NSAttributedString) {
+		guard let updateHeadline = outline?.indentHeadline(headlineID: item.id) else { return }
+		outline?.updateHeadline(headlineID: item.id, attributedText: attributedText)
+		// TODO: only reload the necessary cells
+		self.applySnapshot(animated: true)
 	}
 	
-	func outdent(item: EditorItem) {
+	func outdent(item: EditorItem, attributedText: NSAttributedString) {
 		
 	}
 	

@@ -12,7 +12,11 @@ public final class Headline: Identifiable, Equatable, Codable {
 	public var id: String
 	public var text: Data?
 	public weak var parent: Headline?
-	public var headlines: [Headline]?
+	public var headlines: [Headline]? {
+		didSet {
+			updateHeadlines()
+		}
+	}
 
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
@@ -36,6 +40,10 @@ public final class Headline: Identifiable, Equatable, Codable {
 		headlines = [Headline]()
 	}
 	
+	public var plainText: String? {
+		return attributedText?.string
+	}
+	
 	public var attributedText: NSAttributedString? {
 		get {
 			guard let text = text else { return nil }
@@ -57,6 +65,21 @@ public final class Headline: Identifiable, Equatable, Codable {
 	func visit(visitor: (Headline) -> Void) {
 		visitor(self)
 		headlines?.forEach { $0.visit(visitor: visitor) }
+	}
+	
+}
+
+// MARK: Helpers
+
+private extension Headline {
+	
+	func updateHeadlines() {
+		headlines?.forEach { headline in
+			headline.parent = self
+			headline.visit(visitor: { visited in
+				visited.headlines?.forEach { $0.parent = visited }
+			})
+		}
 	}
 	
 }

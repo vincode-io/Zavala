@@ -11,8 +11,8 @@ protocol EditorCollectionViewCellDelegate: class {
 	func textChanged(item: EditorItem, attributedText: NSAttributedString)
 	func deleteHeadline(item: EditorItem)
 	func createHeadline(item: EditorItem)
-	func indent(item: EditorItem)
-	func outdent(item: EditorItem)
+	func indent(item: EditorItem, attributedText: NSAttributedString)
+	func outdent(item: EditorItem, attributedText: NSAttributedString)
 	func moveUp(item: EditorItem)
 	func moveDown(item: EditorItem)
 }

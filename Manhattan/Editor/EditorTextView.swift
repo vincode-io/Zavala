@@ -11,8 +11,8 @@ protocol EditorTextViewDelegate: class {
 	var item: EditorItem? { get }
 	func deleteHeadline(_: EditorTextView)
 	func createHeadline(_: EditorTextView)
-	func indent(_: EditorTextView)
-	func outdent(_: EditorTextView)
+	func indent(_: EditorTextView, attributedText: NSAttributedString)
+	func outdent(_: EditorTextView, attributedText: NSAttributedString)
 	func moveUp(_: EditorTextView)
 	func moveDown(_: EditorTextView)
 }
@@ -43,11 +43,11 @@ class EditorTextView: UITextView, TextCursorSource {
 	}
 	
 	@objc func tabPressed(_ sender: Any) {
-		editorDelegate?.indent(self)
+		editorDelegate?.indent(self, attributedText: attributedText)
 	}
 	
 	@objc func shiftTabPressed(_ sender: Any) {
-		editorDelegate?.outdent(self)
+		editorDelegate?.outdent(self, attributedText: attributedText)
 	}
 	
 	@objc func upArrowPressed(_ sender: Any) {

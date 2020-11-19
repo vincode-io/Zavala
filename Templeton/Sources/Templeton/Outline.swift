@@ -23,7 +23,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 	
 	public var headlines: [Headline]? {
 		didSet {
-			visitHeadlines()
+			updateHeadlines()
 			outlineBodyDidChange()
 		}
 	}
@@ -90,6 +90,9 @@ public final class Outline: Identifiable, Equatable, Codable {
 		} else {
 			self.headlines = headlines
 		}
+		
+		headlineDictionariesNeedUpdate = true
+		self.updated = Date()
 	}
 	
 	public func createHeadline(afterHeadlineID: String? = nil) -> Headline {
@@ -102,7 +105,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 		
 		let insertIndex = headlines.firstIndex(where: { $0.id == afterHeadlineID }) ?? 0
 		let headline = Headline()
-		headlines.insert(headline, at: insertIndex)
+		headlines.insert(headline, at: insertIndex + 1)
 		
 		if let parentHeadlineID = parentHeadlineID {
 			headlineDictionary[parentHeadlineID]?.headlines = headlines
@@ -110,12 +113,31 @@ public final class Outline: Identifiable, Equatable, Codable {
 			self.headlines = headlines
 		}
 		
+		headlineDictionariesNeedUpdate = true
+		self.updated = Date()
 		return headline
 	}
 	
 	public func updateHeadline(headlineID: String, attributedText: NSAttributedString) {
 		headlineDictionary[headlineID]?.attributedText = attributedText
 		outlineBodyDidChange()
+		self.updated = Date()
+	}
+	
+	public func indentHeadline(headlineID: String) -> Headline? {
+		guard let headline = headlineDictionary[headlineID],
+			  let headlineIndex = headline.parent?.headlines?.firstIndex(of: headline),
+			  headlineIndex > 0,
+			  let sibling = headline.parent?.headlines?[headlineIndex - 1] else { return nil }
+		
+		headline.parent?.headlines = headline.parent?.headlines?.filter { $0.id != headline.id }
+		var siblingHeadlines = sibling.headlines ?? [Headline]()
+		siblingHeadlines.insert(headline, at: 0)
+		sibling.headlines = siblingHeadlines
+
+		outlineBodyDidChange()
+		self.updated = Date()
+		return sibling
 	}
 	
 	public func load() {
@@ -166,7 +188,7 @@ private extension Outline {
 		headlineDictionariesNeedUpdate = false
 	}
 
-	func visitHeadlines() {
+	func updateHeadlines() {
 		headlines?.forEach { headline in
 			headline.visit(visitor: { visited in
 				visited.headlines?.forEach { $0.parent = visited }
