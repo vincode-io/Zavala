@@ -128,6 +128,15 @@ extension EditorViewController {
 				return collectionView.dequeueConfiguredReusableCell(using: groupRegistration, for: indexPath, item: item)
 			}
 		}
+		
+		dataSource.sectionSnapshotHandlers.willExpandItem = { [weak self] item in
+			self?.outline?.expandHeadline(headlineID: item.id)
+		}
+		
+		dataSource.sectionSnapshotHandlers.willCollapseItem = { [weak self] item in
+			self?.outline?.collapseHeadline(headlineID: item.id)
+		}
+		
 	}
 	
 	private func delete(items: [EditorItem], animated: Bool) {

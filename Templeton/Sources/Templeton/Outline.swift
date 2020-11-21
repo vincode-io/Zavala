@@ -124,6 +124,18 @@ public final class Outline: Identifiable, Equatable, Codable {
 		self.updated = Date()
 	}
 	
+	public func expandHeadline(headlineID: String) {
+		headlineDictionary[headlineID]?.isExpanded = true
+		outlineBodyDidChange()
+		self.updated = Date()
+	}
+	
+	public func collapseHeadline(headlineID: String) {
+		headlineDictionary[headlineID]?.isExpanded = false
+		outlineBodyDidChange()
+		self.updated = Date()
+	}
+	
 	public func indentHeadline(headlineID: String) -> Headline? {
 		guard let headline = headlineDictionary[headlineID],
 			  let parentID = headline.parentID,
