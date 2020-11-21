@@ -24,7 +24,6 @@ public final class Outline: Identifiable, Equatable, Codable {
 	public var headlines: [Headline]? {
 		didSet {
 			updateHeadlines()
-			outlineBodyDidChange()
 		}
 	}
 	
@@ -56,7 +55,6 @@ public final class Outline: Identifiable, Equatable, Codable {
 
 	private var headlinesFile: HeadlinesFile?
 	
-
 	init(parentID: EntityID, name: String) {
 		self.id = EntityID.outline(parentID.accountID, parentID.folderID, UUID().uuidString)
 		self.name = name
@@ -92,7 +90,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 		
 		headlineDictionariesNeedUpdate = true
-		self.updated = Date()
+		outlineBodyDidChange()
 	}
 	
 	public func createHeadline(afterHeadlineID: String? = nil) -> Headline {
@@ -114,26 +112,23 @@ public final class Outline: Identifiable, Equatable, Codable {
 		}
 		
 		headlineDictionariesNeedUpdate = true
-		self.updated = Date()
+		outlineBodyDidChange()
 		return headline
 	}
 	
 	public func updateHeadline(headlineID: String, attributedText: NSAttributedString) {
 		headlineDictionary[headlineID]?.attributedText = attributedText
 		outlineBodyDidChange()
-		self.updated = Date()
 	}
 	
 	public func expandHeadline(headlineID: String) {
 		headlineDictionary[headlineID]?.isExpanded = true
 		outlineBodyDidChange()
-		self.updated = Date()
 	}
 	
 	public func collapseHeadline(headlineID: String) {
 		headlineDictionary[headlineID]?.isExpanded = false
 		outlineBodyDidChange()
-		self.updated = Date()
 	}
 	
 	public func indentHeadline(headlineID: String) -> Headline? {
@@ -150,7 +145,6 @@ public final class Outline: Identifiable, Equatable, Codable {
 		sibling.headlines = siblingHeadlines
 
 		outlineBodyDidChange()
-		self.updated = Date()
 		return sibling
 	}
 	
@@ -186,6 +180,9 @@ private extension Outline {
 	}
 
 	func outlineBodyDidChange() {
+		self.updated = Date()
+		outlineMetaDataDidChange()
+		headlinesFile?.markAsDirty()
 		NotificationCenter.default.post(name: .OutlineBodyDidChange, object: self, userInfo: nil)
 	}
 	

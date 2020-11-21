@@ -11,7 +11,7 @@ import RSCore
 
 final class HeadlinesFile {
 	
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "headlinesFile")
+	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "HeadlinesFile")
 
 	private weak var outline: Outline?
 	private let fileURL: URL
@@ -19,9 +19,8 @@ final class HeadlinesFile {
 	
 	init(outline: Outline) {
 		self.outline = outline
-
 		let localAccountFolder = AccountManager.shared.accountsFolder.appendingPathComponent(outline.account!.type.folderName)
-		fileURL = localAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
+		fileURL = localAccountFolder.appendingPathComponent("\(outline.id).json")
 	}
 	
 	func markAsDirty() {
@@ -66,7 +65,7 @@ private extension HeadlinesFile {
 		do {
 			headlines = try decoder.decode([Headline].self, from: headlinesData)
 		} catch {
-			os_log(.error, log: log, "Account read deserialization failed: %@.", error.localizedDescription)
+			os_log(.error, log: log, "Headlines read deserialization failed: %@.", error.localizedDescription)
 			return
 		}
 

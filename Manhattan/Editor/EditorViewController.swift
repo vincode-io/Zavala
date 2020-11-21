@@ -24,52 +24,19 @@ class EditorViewController: UICollectionViewController {
 		}
 		
 		didSet {
-			guard isViewLoaded else { return }
 			if oldValue != outline {
-				loadOutline()
+				oldValue?.save()
+				oldValue?.headlines = nil
+				outline?.load()
+				
+				guard isViewLoaded else { return }
+				createOneHeadlineIfNecessary()
 				updateUI()
 				applySnapshot(animated: false)
+				moveCursorToInitialPosition()
 			}
 		}
 		
-	}
-	
-	private func loadOutline() {
-		guard let outline = outline, outline.headlines == nil else { return }
-		
-		var headlines = [Headline]()
-		
-		let headline1 = Headline(plainText: "Headline 1")
-		headlines.append(headline1)
-		
-		let headline11 = Headline(plainText: "Headline 1.1")
-		headline1.headlines?.append(headline11)
-		let headline111 = Headline(plainText: "Headline 1.1.1")
-		headline11.headlines?.append(headline111)
-
-		headline111.headlines?.append(Headline(plainText: "Headline 1.1.1.1"))
-		headline111.headlines?.append(Headline(plainText: "Headline 1.1.1.2"))
-		headline111.headlines?.append(Headline(plainText: "Headline 1.1.1.3"))
-
-		headline11.headlines?.append(Headline(plainText: "Headline 1.1.2"))
-		headline11.headlines?.append(Headline(plainText: "Headline 1.1.3"))
-
-		headline1.headlines?.append(Headline(plainText: "Headline 1.2"))
-		headline1.headlines?.append(Headline(plainText: "Headline 1.3"))
-		
-		let headline2 = Headline(plainText: "Headline 2")
-		headlines.append(headline2)
-		headline2.headlines?.append(Headline(plainText: "Headline 2.1"))
-		headline2.headlines?.append(Headline(plainText: "Headline 2.2"))
-		headline2.headlines?.append(Headline(plainText: "Headline 2.3"))
-		
-		let headline3 = Headline(plainText: "Headline 3")
-		headlines.append(headline3)
-		headline3.headlines?.append(Headline(plainText: "Headline 3.1"))
-		headline3.headlines?.append(Headline(plainText: "Headline 3.2"))
-		headline3.headlines?.append(Headline(plainText: "Headline 3.3"))
-		
-		outline.headlines = headlines
 	}
 	
 	private var favoriteBarButtonItem: UIBarButtonItem?
@@ -87,14 +54,14 @@ class EditorViewController: UICollectionViewController {
 			navigationItem.rightBarButtonItem = favoriteBarButtonItem
 		}
 		
-		loadOutline()
-		
 		collectionView.allowsSelection = false
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
-		applySnapshot(animated: false)
 
+		createOneHeadlineIfNecessary()
 		updateUI()
+		applySnapshot(animated: false)
+		moveCursorToInitialPosition()
 	}
 
 	// MARK: Actions
@@ -214,23 +181,23 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	
 	func deleteHeadline(item: EditorItem) {
 		outline?.deleteHeadline(headlineID: item.id)
-		self.moveCursor(item: item, direction: .up)
-		self.delete(items: [item], animated: true)
+		moveCursor(item: item, direction: .up)
+		delete(items: [item], animated: true)
 	}
 	
 	// TODO: Need to take into consideration expanded state when placing the new Headline
 	func createHeadline(item: EditorItem) {
 		guard let headline = outline?.createHeadline(afterHeadlineID: item.id) else { return }
 		let newItem = EditorItem.editorItem(headline)
-		self.insert(items: [newItem], afterItem: item, animated: false)
-		self.moveCursor(item: newItem, direction: .none)
+		insert(items: [newItem], afterItem: item, animated: false)
+		moveCursor(item: newItem, direction: .none)
 	}
 	
 	func indent(item: EditorItem, attributedText: NSAttributedString) {
 		guard let updateHeadline = outline?.indentHeadline(headlineID: item.id) else { return }
 		outline?.updateHeadline(headlineID: item.id, attributedText: attributedText)
 		// TODO: only reload the necessary cells
-		self.applySnapshot(animated: true)
+		applySnapshot(animated: true)
 	}
 	
 	func outdent(item: EditorItem, attributedText: NSAttributedString) {
@@ -250,6 +217,20 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 // MARK: Helpers
 
 private extension EditorViewController {
+	
+	private func createOneHeadlineIfNecessary() {
+		if outline?.headlines?.isEmpty ?? true {
+			var headlines = [Headline]()
+			headlines.append(Headline())
+			outline?.headlines = headlines
+		}
+	}
+	
+	private func moveCursorToInitialPosition() {
+		guard let headline = outline?.headlines?.first else { return }
+		let item = EditorItem.editorItem(headline)
+		moveCursor(item: item, direction: .none)
+	}
 	
 	private func updateUI() {
 		navigationItem.title = outline?.name
