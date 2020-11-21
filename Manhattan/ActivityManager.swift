@@ -93,7 +93,8 @@ extension ActivityManager {
 		let title = NSString.localizedStringWithFormat(localizedText as NSString, outlineProvider.name ?? "") as String
 		activity.title = title
 		
-		activity.keywords = Set(makeKeywords(title))
+		let keywords = makeKeywords(title)
+		activity.keywords = Set(keywords)
 		activity.isEligibleForSearch = true
 		
 		activity.userInfo = [UserInfoKeys.outlineProviderID: outlineProvider.id.userInfo]
@@ -103,7 +104,12 @@ extension ActivityManager {
 		
 		let idString = outlineProvider.id.description
 		activity.persistentIdentifier = idString
-		activity.contentAttributeSet?.relatedUniqueIdentifier = idString
+
+		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeCompositeContent as String)
+		attributeSet.title = title
+		attributeSet.keywords = keywords
+		attributeSet.relatedUniqueIdentifier = idString
+		activity.contentAttributeSet = attributeSet
 		
 		return activity
 	}
@@ -115,7 +121,8 @@ extension ActivityManager {
 		let title = NSString.localizedStringWithFormat(localizedText as NSString, outline.name ?? "") as String
 		activity.title = title
 		
-		activity.keywords = Set(makeKeywords(title))
+		let keywords = makeKeywords(title)
+		activity.keywords = Set(keywords)
 		activity.isEligibleForSearch = true
 		
 		activity.userInfo = [UserInfoKeys.outlineProviderID: outlineProvider.id.userInfo, UserInfoKeys.outlineID: outline.id.userInfo]
@@ -125,7 +132,12 @@ extension ActivityManager {
 		
 		let idString = outline.id.description
 		activity.persistentIdentifier = idString
-		activity.contentAttributeSet?.relatedUniqueIdentifier = idString
+		
+		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeCompositeContent as String)
+		attributeSet.title = title
+		attributeSet.keywords = keywords
+		attributeSet.relatedUniqueIdentifier = idString
+		activity.contentAttributeSet = attributeSet
 		
 		return activity
 	}
@@ -139,8 +151,7 @@ extension ActivityManager {
 		// itself because the relatedUniqueIdentifier on the activity attributeset is populated.
 		if let attributeSet = activity.contentAttributeSet {
 			let identifier = attributeSet.relatedUniqueIdentifier
-			let tempAttributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
-			let searchableItem = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: nil, attributeSet: tempAttributeSet)
+			let searchableItem = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: nil, attributeSet: attributeSet)
 			CSSearchableIndex.default().indexSearchableItems([searchableItem])
 		}
 		
