@@ -27,7 +27,7 @@ class EditorViewController: UICollectionViewController {
 	}
 	
 	private func loadOutline() {
-		guard let outline = outline else { return }
+		guard let outline = outline, outline.headlines == nil else { return }
 		
 		var headlines = [Headline]()
 		
