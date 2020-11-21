@@ -16,6 +16,13 @@ class EditorViewController: UICollectionViewController {
 	}
 	
 	var outline: Outline? {
+		
+		willSet {
+			if let textField = UIResponder.currentFirstResponder as? EditorTextView {
+				textField.endEditing(true)
+			}
+		}
+		
 		didSet {
 			guard isViewLoaded else { return }
 			if oldValue != outline {
@@ -24,6 +31,7 @@ class EditorViewController: UICollectionViewController {
 				applySnapshot(animated: false)
 			}
 		}
+		
 	}
 	
 	private func loadOutline() {
