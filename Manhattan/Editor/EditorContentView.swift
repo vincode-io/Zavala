@@ -10,6 +10,7 @@ import UIKit
 class EditorContentView: UIView, UIContentView {
 
 	let textView = EditorTextView()
+	var barViews = [UIView]()
 	var appliedConfiguration: EditorContentConfiguration!
 
 	init(configuration: EditorContentConfiguration) {
@@ -48,11 +49,25 @@ class EditorContentView: UIView, UIContentView {
 
 		textView.removeConstraintsIncludingOwnedBySuperview()
 		NSLayoutConstraint.activate([
-			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: configuration.indentationWidth ?? 0.0),
+			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: configuration.indentationWidth),
 			textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
 			textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
 			textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
 		])
+
+		// TODO: Figure out how to only remove the necessary barViews
+		for barView in barViews {
+			barView.removeFromSuperview()
+		}
+		barViews = [UIView]()
+
+		// TODO: Rework to be more readable.  Right now, I can't even remember why the following where clause works.
+		// I originally added it so that only the necessary barViews would get added and be more efficient.  Removing
+		// it shouldn't break the code, but it does.  Try to only add the necessary barViews and remove the ones we don't need.
+		for i in (0...configuration.indentionLevel) where barViews.count < i {
+			addBarView(indentLevel: i, hasChevron: !(configuration.editorItem?.children.isEmpty ?? true))
+		}
+
 	}
 	
 }
@@ -107,6 +122,37 @@ extension EditorContentView: EditorTextViewDelegate {
 	
 	func moveDown(_: EditorTextView) {
 		appliedConfiguration.delegate?.moveDown(item: appliedConfiguration.editorItem!)
+	}
+	
+}
+
+// MARK: Helpers
+
+extension EditorContentView {
+	
+	private func addBarView(indentLevel: Int, hasChevron: Bool) {
+		let barView = UIView()
+		barView.backgroundColor = .quaternaryLabel
+		barView.translatesAutoresizingMaskIntoConstraints = false
+		addSubview(barView)
+		barViews.append(barView)
+
+		var indention: CGFloat
+		if traitCollection.userInterfaceIdiom == .mac {
+			indention = CGFloat(22 - (indentLevel * 13))
+			if hasChevron {
+				indention = indention - 29
+			}
+		} else {
+			indention = CGFloat(19 - (indentLevel * 10))
+		}
+
+		NSLayoutConstraint.activate([
+			barView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: indention),
+			barView.widthAnchor.constraint(equalToConstant: 2),
+			barView.topAnchor.constraint(equalTo: topAnchor),
+			barView.bottomAnchor.constraint(equalTo: bottomAnchor)
+		])
 	}
 	
 }

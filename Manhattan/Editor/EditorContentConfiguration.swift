@@ -11,7 +11,8 @@ struct EditorContentConfiguration: UIContentConfiguration, Hashable {
 
 	weak var editorItem: EditorItem? = nil
 	weak var delegate: EditorCollectionViewCellDelegate? = nil
-	var indentationWidth: CGFloat? = nil
+	var indentionLevel: Int
+	var indentationWidth: CGFloat
 	
 	func makeContentView() -> UIView & UIContentView {
 		return EditorContentView(configuration: self)

@@ -33,15 +33,17 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 	
 	override func updateConfiguration(using state: UICellConfigurationState) {
 		super.updateConfiguration(using: state)
-		
-		var content = EditorContentConfiguration().updated(for: state)
-		content.editorItem = editorItem
-		content.delegate = delegate
-		
+
+		let adjustedIndentionWidth: CGFloat
 		if traitCollection.userInterfaceIdiom == .mac && accessories.isEmpty {
-			content.indentationWidth = indentationWidth + 16
+			adjustedIndentionWidth = indentationWidth + 16
+		} else {
+			adjustedIndentionWidth = indentationWidth
 		}
 		
+		var content = EditorContentConfiguration(indentionLevel: indentationLevel, indentationWidth: adjustedIndentionWidth).updated(for: state)
+		content.editorItem = editorItem
+		content.delegate = delegate
 		contentConfiguration = content
 	}
 
