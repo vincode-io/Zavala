@@ -13,7 +13,7 @@ final class AccountFile {
 	
 	public static let filenameComponent = "account.json"
 	
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "accountFile")
+	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "AccountFile")
 
 	private weak var accountManager: AccountManager?
 	private let fileURL: URL
