@@ -12,6 +12,7 @@ public final class Headline: Identifiable, Equatable, Codable {
 	public var id: String
 	public var parentID: String?
 	public var text: Data?
+	public var isExpanded: Bool?
 	public var headlines: [Headline]? {
 		didSet {
 			updateHeadlines()
@@ -22,6 +23,7 @@ public final class Headline: Identifiable, Equatable, Codable {
 		case id = "id"
 		case parentID = "parentID"
 		case text = "text"
+		case isExpanded = "isExpanded"
 		case headlines = "headlines"
 	}
 

@@ -1,5 +1,5 @@
 //
-//  DetailViewController.swift
+//  EditorViewController.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 11/10/20.
@@ -158,12 +158,29 @@ extension EditorViewController {
 	}
 	
 	private func applySnapshot( _ snapshot: inout NSDiffableDataSourceSectionSnapshot<EditorItem>, items: [EditorItem]) {
+		expandAndCollapse(snapshot: &snapshot, items: items)
 		for item in items {
 			snapshot.append(item.children, to: item)
 			if !item.children.isEmpty {
 				applySnapshot(&snapshot, items: item.children)
 			}
 		}
+	}
+	
+	private func expandAndCollapse(snapshot: inout NSDiffableDataSourceSectionSnapshot<EditorItem>, items: [EditorItem]) {
+		var expandItems = [EditorItem]()
+		var collapseItems = [EditorItem]()
+		
+		for item in items {
+			if item.isExpanded {
+				expandItems.append(item)
+			} else {
+				collapseItems.append(item)
+			}
+		}
+		
+		snapshot.expand(expandItems)
+		snapshot.collapse(collapseItems)
 	}
 	
 }

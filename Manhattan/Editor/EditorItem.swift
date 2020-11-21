@@ -11,11 +11,13 @@ import Templeton
 final class EditorItem:  NSObject, NSCopying, Identifiable {
 	var id: String
 	var attributedText: NSAttributedString?
+	var isExpanded: Bool
 	var children: [EditorItem]
 	
 	init(headline: Headline, children: [EditorItem]) {
 		self.id = headline.id
 		self.attributedText = headline.attributedText
+		self.isExpanded = headline.isExpanded ?? true
 		self.children = children
 	}
 	
