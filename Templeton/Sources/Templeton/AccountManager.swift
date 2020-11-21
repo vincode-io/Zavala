@@ -119,17 +119,17 @@ public final class AccountManager {
 	}
 	
 	public func findFolder(_ entityID: EntityID) -> Folder? {
-		if case .folder(let accountID, let folderID) = entityID, let account = accountsDictionary[accountID] {
-			return account.findFolder(folderID: folderID)
+		if case .folder(let accountID, let folderUUID) = entityID, let account = accountsDictionary[accountID] {
+			return account.findFolder(folderUUID: folderUUID)
 		}
 		return nil
 	}
 	
 	public func findOutline(_ entityID: EntityID) -> Outline? {
-		if case .outline(let accountID, let folderID, let outlineID) = entityID,
+		if case .outline(let accountID, let folderUUID, let outlineUUID) = entityID,
 		   let account = accountsDictionary[accountID],
-		   let folder = account.findFolder(folderID: folderID) {
-			return folder.findOutline(outlineID: outlineID)
+		   let folder = account.findFolder(folderUUID: folderUUID) {
+			return folder.findOutline(outlineUUID: outlineUUID)
 		}
 		return nil
 	}

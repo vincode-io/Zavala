@@ -32,7 +32,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 	}
 	
 	public var folder: Folder? {
-		let folderID = EntityID.folder(id.accountID, id.folderID)
+		let folderID = EntityID.folder(id.accountID, id.folderUUID)
 		return AccountManager.shared.findFolder(folderID)
 	}
 
@@ -56,7 +56,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 	private var headlinesFile: HeadlinesFile?
 	
 	init(parentID: EntityID, name: String) {
-		self.id = EntityID.outline(parentID.accountID, parentID.folderID, UUID().uuidString)
+		self.id = EntityID.outline(parentID.accountID, parentID.folderUUID, UUID().uuidString)
 		self.name = name
 		self.created = Date()
 		self.updated = Date()

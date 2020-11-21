@@ -71,8 +71,8 @@ public final class Account: Identifiable, Equatable, Codable {
 
 extension Account {
 
-	func findFolder(folderID: String) -> Folder? {
-		return folders?.first(where: { $0.id.folderID == folderID })
+	func findFolder(folderUUID: String) -> Folder? {
+		return folders?.first(where: { $0.id.folderUUID == folderUUID })
 	}
 
 }

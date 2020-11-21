@@ -71,7 +71,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		}
 	}
 
-	var folderID: String {
+	var folderUUID: String {
 		switch self {
 		case .folder(_, let folderID):
 			return folderID
@@ -82,7 +82,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		}
 	}
 	
-	var outlineID: String {
+	var outlineUUID: String {
 		switch self {
 		case .outline(_, _, let outlineID):
 			return outlineID

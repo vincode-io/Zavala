@@ -76,8 +76,8 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 
 extension Folder {
 	
-	func findOutline(outlineID: String) -> Outline? {
-		return outlines?.first(where: { $0.id.outlineID == outlineID })
+	func findOutline(outlineUUID: String) -> Outline? {
+		return outlines?.first(where: { $0.id.outlineUUID == outlineUUID })
 	}
 
 }
