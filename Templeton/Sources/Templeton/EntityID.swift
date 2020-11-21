@@ -104,7 +104,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case .folder(let accountID, let folderID):
 			return "folder: \(accountID)_\(folderID)"
 		case .outline(let accountID, let folderID, let outlineID):
-			return "folder: \(accountID)_\(folderID)_\(outlineID)"
+			return "outline: \(accountID)_\(folderID)_\(outlineID)"
 		}
 	}
 	
