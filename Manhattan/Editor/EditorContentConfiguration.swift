@@ -13,6 +13,7 @@ struct EditorContentConfiguration: UIContentConfiguration, Hashable {
 	weak var delegate: EditorCollectionViewCellDelegate? = nil
 	var indentionLevel: Int
 	var indentationWidth: CGFloat
+	var isChevronShowing = false
 	
 	func makeContentView() -> UIView & UIContentView {
 		return EditorContentView(configuration: self)

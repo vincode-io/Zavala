@@ -47,9 +47,20 @@ class EditorContentView: UIView, UIContentView {
 		appliedConfiguration = configuration
 		textView.attributedText = editorItem.attributedText
 
+		let adjustedIndentionWidth: CGFloat
+		if traitCollection.userInterfaceIdiom == .mac {
+			if configuration.isChevronShowing {
+				adjustedIndentionWidth = configuration.indentationWidth - 12
+			} else {
+				adjustedIndentionWidth = configuration.indentationWidth + 16
+			}
+		} else {
+			adjustedIndentionWidth = configuration.indentationWidth
+		}
+		
 		textView.removeConstraintsIncludingOwnedBySuperview()
 		NSLayoutConstraint.activate([
-			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: configuration.indentationWidth),
+			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedIndentionWidth),
 			textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
 			textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
 			textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
