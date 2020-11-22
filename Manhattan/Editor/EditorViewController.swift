@@ -21,7 +21,7 @@ class EditorViewController: UICollectionViewController {
 			if let textField = UIResponder.currentFirstResponder as? EditorTextView {
 				textField.endEditing(true)
 			}
-			outline?.save()
+			outline?.suspend()
 			outline?.headlines = nil
 		}
 		
