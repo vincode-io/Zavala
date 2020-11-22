@@ -18,8 +18,11 @@ final class AccountFile {
 	private weak var accountManager: AccountManager?
 	private let fileURL: URL
 	private let accountType: AccountType
-	private lazy var managedFile = ManagedResourceFile(fileURL: fileURL, load: loadCallback, save: saveCallback)
-	
+	private lazy var managedFile = ManagedResourceFile(fileURL: fileURL,
+													   load: { [weak self] in self?.loadCallback() },
+													   save: { [weak self] in self?.saveCallback() })
+	private var lastModificationDate: Date?
+
 	init(fileURL: URL, accountType: AccountType, accountManager: AccountManager) {
 		self.fileURL = fileURL
 		self.accountType = accountType
@@ -49,6 +52,12 @@ private extension AccountFile {
 		
 		fileCoordinator.coordinate(readingItemAt: fileURL, options: [], error: errorPointer, byAccessor: { readURL in
 			do {
+				let resourceValues = try readURL.resourceValues(forKeys: [.contentModificationDateKey])
+				guard lastModificationDate != resourceValues.contentModificationDate else {
+					return
+				}
+				lastModificationDate = resourceValues.contentModificationDate
+
 				fileData = try Data(contentsOf: readURL)
 			} catch {
 				os_log(.error, log: log, "Account read from disk failed: %@.", error.localizedDescription)
@@ -95,6 +104,8 @@ private extension AccountFile {
 		fileCoordinator.coordinate(writingItemAt: fileURL, options: [], error: errorPointer, byAccessor: { writeURL in
 			do {
 				try accountData.write(to: writeURL)
+				let resourceValues = try writeURL.resourceValues(forKeys: [.contentModificationDateKey])
+				lastModificationDate = resourceValues.contentModificationDate
 			} catch let error as NSError {
 				os_log(.error, log: log, "Account save to disk failed: %@.", error.localizedDescription)
 			}
