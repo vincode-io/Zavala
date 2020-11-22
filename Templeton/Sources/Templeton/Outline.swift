@@ -9,6 +9,7 @@ import Foundation
 
 public extension Notification.Name {
 	static let OutlineMetaDataDidChange = Notification.Name(rawValue: "OutlineMetaDataDidChange")
+	static let OutlineUpdatedDidChange = Notification.Name(rawValue: "OutlineUpdatedDidChange")
 	static let OutlineBodyDidChange = Notification.Name(rawValue: "OutlineBodyDidChange")
 	static let OutlineDidDelete = Notification.Name(rawValue: "OutlineDidDelete")
 }
@@ -181,7 +182,7 @@ private extension Outline {
 
 	func outlineBodyDidChange() {
 		self.updated = Date()
-		outlineMetaDataDidChange()
+		NotificationCenter.default.post(name: .OutlineUpdatedDidChange, object: self, userInfo: nil)
 		headlinesFile?.markAsDirty()
 		NotificationCenter.default.post(name: .OutlineBodyDidChange, object: self, userInfo: nil)
 	}
