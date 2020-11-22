@@ -52,6 +52,7 @@ class TimelineViewController: UICollectionViewController {
 			addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
 		}
 
+		collectionView.remembersLastFocusedIndexPath = true
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
 		applySnapshot(animated: false)

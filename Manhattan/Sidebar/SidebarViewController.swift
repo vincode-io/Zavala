@@ -60,6 +60,7 @@ class SidebarViewController: UICollectionViewController {
 	// MARK: API
 	
 	func startUp() {
+		collectionView.remembersLastFocusedIndexPath = true
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
 		applyInitialSnapshot()
