@@ -9,6 +9,10 @@ import UIKit
 
 struct AppAssets {
 	
+	static var accentColor: UIColor = {
+		return UIColor(named: "AccentColor")!
+	}()
+	
 	static var createEntity: UIImage = {
 		return UIImage(systemName: "square.and.pencil")!
 	}()

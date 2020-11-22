@@ -10,6 +10,7 @@ import UIKit
 class EditorContentView: UIView, UIContentView {
 
 	let textView = EditorTextView()
+	var bulletView: UIImageView?
 	var barViews = [UIView]()
 	var appliedConfiguration: EditorContentConfiguration!
 
@@ -72,11 +73,16 @@ class EditorContentView: UIView, UIContentView {
 		}
 		barViews = [UIView]()
 
-		// TODO: Rework to be more readable.  Right now, I can't even remember why the following where clause works.
-		// I originally added it so that only the necessary barViews would get added and be more efficient.  Removing
-		// it shouldn't break the code, but it does.  Try to only add the necessary barViews and remove the ones we don't need.
-		for i in (0...configuration.indentionLevel) where barViews.count < i {
-			addBarView(indentLevel: i, hasChevron: !(configuration.editorItem?.children.isEmpty ?? true))
+		for i in (0...configuration.indentionLevel) {
+			if i == 0 {
+				if configuration.isChevronShowing {
+					removeBullet()
+				} else {
+					addBullet()
+				}
+			} else {
+				addBarView(indentLevel: i, hasChevron: configuration.isChevronShowing)
+			}
 		}
 
 	}
@@ -140,6 +146,39 @@ extension EditorContentView: EditorTextViewDelegate {
 // MARK: Helpers
 
 extension EditorContentView {
+	
+	private func removeBullet() {
+		guard let bulletView = bulletView else { return }
+		bulletView.removeFromSuperview()
+		self.bulletView = nil
+	}
+	
+	private func addBullet() {
+		guard bulletView == nil else { return }
+		
+		bulletView = UIImageView()
+		bulletView!.image = UIImage(systemName: "circle.fill")
+		bulletView!.translatesAutoresizingMaskIntoConstraints = false
+		addSubview(bulletView!)
+
+		if traitCollection.userInterfaceIdiom == .mac {
+			bulletView!.tintColor = .quaternaryLabel
+			NSLayoutConstraint.activate([
+				bulletView!.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 21),
+				bulletView!.widthAnchor.constraint(equalToConstant: 4),
+				bulletView!.heightAnchor.constraint(equalToConstant: 4),
+				bulletView!.centerYAnchor.constraint(equalTo: centerYAnchor)
+			])
+		} else {
+			bulletView!.tintColor = AppAssets.accentColor
+			NSLayoutConstraint.activate([
+				bulletView!.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+				bulletView!.widthAnchor.constraint(equalToConstant: 4),
+				bulletView!.heightAnchor.constraint(equalToConstant: 4),
+				bulletView!.centerYAnchor.constraint(equalTo: centerYAnchor)
+			])
+		}
+	}
 	
 	private func addBarView(indentLevel: Int, hasChevron: Bool) {
 		let barView = UIView()
