@@ -179,6 +179,14 @@ public final class Outline: Identifiable, Equatable, Codable {
 		headlinesFile?.save()
 	}
 	
+	public func delete() {
+		if headlinesFile == nil {
+			headlinesFile = HeadlinesFile(outline: self)
+		}
+		headlinesFile?.delete()
+		headlinesFile = nil
+	}
+	
 	public func suspend() {
 		headlinesFile?.save()
 		headlinesFile = nil
@@ -188,9 +196,6 @@ public final class Outline: Identifiable, Equatable, Codable {
 		return lhs.id == rhs.id
 	}
 	
-	func outlineDidDelete() {
-		NotificationCenter.default.post(name: .OutlineDidDelete, object: self, userInfo: nil)
-	}
 }
 
 // MARK: Helpers
@@ -212,6 +217,10 @@ private extension Outline {
 		NotificationCenter.default.post(name: .OutlineBodyDidChange, object: self, userInfo: nil)
 	}
 	
+	func outlineDidDelete() {
+		NotificationCenter.default.post(name: .OutlineDidDelete, object: self, userInfo: nil)
+	}
+
 	func rebuildHeadlineDictionary() {
 		var idDictionary = [String: Headline]()
 

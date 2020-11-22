@@ -38,6 +38,14 @@ final class HeadlinesFile {
 		managedFile.saveIfNecessary()
 	}
 	
+	func delete() {
+		do {
+			try FileManager.default.removeItem(atPath: fileURL.path)
+		} catch {
+			os_log(.error, log: log, "Delete headline file from disk failed: %@.", error.localizedDescription)
+		}
+	}
+	
 }
 
 private extension HeadlinesFile {
