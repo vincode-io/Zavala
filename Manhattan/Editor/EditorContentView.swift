@@ -47,7 +47,11 @@ class EditorContentView: UIView, UIContentView {
 	private func apply(configuration: EditorContentConfiguration) {
 		guard appliedConfiguration != configuration, let editorItem = configuration.editorItem else { return }
 		appliedConfiguration = configuration
-		textView.attributedText = editorItem.attributedText
+		
+		// Don't overlay the default attributed text field for new Headlines
+		if let attrText = editorItem.attributedText {
+			textView.attributedText = attrText
+		}
 
 		let adjustedIndentionWidth: CGFloat
 		if traitCollection.userInterfaceIdiom == .mac {
