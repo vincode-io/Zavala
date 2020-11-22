@@ -33,8 +33,4 @@ struct AppAssets {
 		return UIImage(systemName: "star.fill")!
 	}()
 
-	static var textColor: UIColor = {
-		return UIColor(named: "TextColor")!
-	}()
-	
 }

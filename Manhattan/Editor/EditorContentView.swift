@@ -24,7 +24,6 @@ class EditorContentView: UIView, UIContentView {
 		textView.textContainer.lineFragmentPadding = 0
 		textView.textContainerInset = .zero
 		textView.font = UIFont.preferredFont(forTextStyle: .body)
-		textView.attributedText = NSAttributedString(string: "", attributes: [.foregroundColor: AppAssets.textColor])
 		
 		addSubview(textView)
 		textView.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +49,12 @@ class EditorContentView: UIView, UIContentView {
 		
 		// Don't overlay the default attributed text field for new Headlines
 		if let attrText = editorItem.attributedText {
-			textView.attributedText = attrText
+			let mutableAttrText = NSMutableAttributedString(attributedString: attrText)
+			let range = NSRange(location: 0, length: mutableAttrText.length)
+			mutableAttrText.addAttributes([.foregroundColor:UIColor.label], range: range)
+			textView.attributedText = mutableAttrText
+		} else {
+			textView.attributedText = NSAttributedString(string: "", attributes: [.foregroundColor: UIColor.label])
 		}
 
 		let adjustedIndentionWidth: CGFloat

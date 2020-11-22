@@ -50,7 +50,9 @@ public final class Headline: Identifiable, Equatable, Codable {
 	public var attributedText: NSAttributedString? {
 		get {
 			guard let text = text else { return nil }
-			return try? NSAttributedString(data: text, options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
+			return try? NSAttributedString(data: text,
+										   options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
+										   documentAttributes: nil)
 		}
 		set {
 			if let attrText = newValue {
