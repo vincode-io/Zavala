@@ -125,6 +125,10 @@ class MainSplitViewController: UISplitViewController {
 		timelineViewController?.createOutline(sender)
 	}
 	
+	@objc func importOPML(_ sender: Any?) {
+		timelineViewController?.importOPML(sender)
+	}
+	
 	@objc func deleteEntity(_ sender: Any?) {
 		if timelineViewController?.isDeleteEntityUnavailable ?? true {
 			sidebarViewController?.deleteCurrentFolder()

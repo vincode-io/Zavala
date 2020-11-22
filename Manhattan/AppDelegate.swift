@@ -45,6 +45,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	// MARK: Actions
 
+	@objc func importOPMLCommand(_ sender: Any?) {
+		mainSplitViewController?.importOPML(sender)
+	}
+
 	@objc func newWindow(_ sender: Any?) {
 		let userActivity = NSUserActivity(activityType: "io.vincode.Manhattan.create")
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: userActivity, options: nil, errorHandler: nil)
@@ -74,6 +78,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
+		case #selector(importOPMLCommand(_:)):
+			if mainSplitViewController?.isCreateOutlineUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		case #selector(createFolderCommand(_:)):
 			if mainSplitViewController?.isCreateFolderUnavailable ?? true {
 				command.attributes = .disabled
@@ -107,6 +115,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.remove(menu: .newScene)
 
 		// File Menu
+		let importOPMLCommand = UIKeyCommand(title: NSLocalizedString("Import OPML", comment: "Import OPML"),
+											action: #selector(importOPMLCommand(_:)),
+											input: "i",
+											modifierFlags: [.control, .command])
+		let importOPMLMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand])
+		builder.insertChild(importOPMLMenu, atStartOfMenu: .file)
+
 		let newWindowCommand = UIKeyCommand(title: NSLocalizedString("New Window", comment: "New Window"),
 											action: #selector(newWindow(_:)),
 											input: "n",
