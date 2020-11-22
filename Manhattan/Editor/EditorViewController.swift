@@ -30,7 +30,6 @@ class EditorViewController: UICollectionViewController {
 				outline?.load()
 				
 				guard isViewLoaded else { return }
-				createOneHeadlineIfNecessary()
 				updateUI()
 				applySnapshot(animated: false)
 				moveCursorToInitialPosition()
@@ -58,7 +57,6 @@ class EditorViewController: UICollectionViewController {
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
 
-		createOneHeadlineIfNecessary()
 		updateUI()
 		applySnapshot(animated: false)
 		moveCursorToInitialPosition()
@@ -217,14 +215,6 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 // MARK: Helpers
 
 private extension EditorViewController {
-	
-	private func createOneHeadlineIfNecessary() {
-		if outline?.headlines?.isEmpty ?? true {
-			var headlines = [Headline]()
-			headlines.append(Headline())
-			outline?.headlines = headlines
-		}
-	}
 	
 	private func moveCursorToInitialPosition() {
 		guard let headline = outline?.headlines?.first else { return }

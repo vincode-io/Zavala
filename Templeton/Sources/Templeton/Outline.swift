@@ -133,17 +133,33 @@ public final class Outline: Identifiable, Equatable, Codable {
 	}
 	
 	public func indentHeadline(headlineID: String) -> Headline? {
-		guard let headline = headlineDictionary[headlineID],
-			  let parentID = headline.parentID,
-			  let parentHeadline = headlineDictionary[parentID],
-			  let headlineIndex = parentHeadline.headlines?.firstIndex(of: headline),
-			  headlineIndex > 0,
-			  let sibling = parentHeadline.headlines?[headlineIndex - 1] else { return nil }
+		guard let headline = headlineDictionary[headlineID] else { return nil }
 		
-		parentHeadline.headlines = parentHeadline.headlines?.filter { $0.id != headline.id }
+		if let parentID = headline.parentID,
+		   let parentHeadline = headlineDictionary[parentID],
+		   let headlineIndex = parentHeadline.headlines?.firstIndex(of: headline),
+		   headlineIndex > 0,
+		   let sibling = parentHeadline.headlines?[headlineIndex - 1] {
+			
+			var siblingHeadlines = sibling.headlines ?? [Headline]()
+			siblingHeadlines.insert(headline, at: 0)
+			sibling.headlines = siblingHeadlines
+			parentHeadline.headlines = parentHeadline.headlines?.filter { $0.id != headline.id }
+
+			outlineBodyDidChange()
+			return sibling
+		}
+		
+		// This is a top level moving to the next one down
+		
+		guard let headlineIndex = headlines?.firstIndex(of: headline),
+			  headlineIndex > 0,
+			  let sibling = headlines?[headlineIndex - 1] else { return nil }
+		
 		var siblingHeadlines = sibling.headlines ?? [Headline]()
 		siblingHeadlines.insert(headline, at: 0)
 		sibling.headlines = siblingHeadlines
+		headlines = headlines?.filter { $0.id != headline.id }
 
 		outlineBodyDidChange()
 		return sibling
@@ -152,6 +168,11 @@ public final class Outline: Identifiable, Equatable, Codable {
 	public func load() {
 		headlinesFile = HeadlinesFile(outline: self)
 		headlinesFile!.load()
+		
+		if headlines?.isEmpty ?? true {
+			headlines = [Headline()]
+			headlineDictionariesNeedUpdate = true
+		}
 	}
 	
 	public func save() {
