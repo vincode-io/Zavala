@@ -9,7 +9,7 @@ import Foundation
 
 public extension Notification.Name {
 	static let OutlineMetaDataDidChange = Notification.Name(rawValue: "OutlineMetaDataDidChange")
-	static let OutlineUpdatedDidChange = Notification.Name(rawValue: "OutlineUpdatedDidChange")
+	static let OutlineNameDidChange = Notification.Name(rawValue: "OutlineNameDidChange")
 	static let OutlineBodyDidChange = Notification.Name(rawValue: "OutlineBodyDidChange")
 	static let OutlineDidDelete = Notification.Name(rawValue: "OutlineDidDelete")
 }
@@ -71,7 +71,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 	public func update(name: String) {
 		self.name = name
 		self.updated = Date()
-		outlineMetaDataDidChange()
+		outlineNameDidChange()
 	}
 	
 	public func deleteHeadline(headlineID: String) {
@@ -176,13 +176,17 @@ public final class Outline: Identifiable, Equatable, Codable {
 
 private extension Outline {
 	
+	func outlineNameDidChange() {
+		NotificationCenter.default.post(name: .OutlineNameDidChange, object: self, userInfo: nil)
+	}
+
 	func outlineMetaDataDidChange() {
 		NotificationCenter.default.post(name: .OutlineMetaDataDidChange, object: self, userInfo: nil)
 	}
 
 	func outlineBodyDidChange() {
 		self.updated = Date()
-		NotificationCenter.default.post(name: .OutlineUpdatedDidChange, object: self, userInfo: nil)
+		outlineMetaDataDidChange()
 		headlinesFile?.markAsDirty()
 		NotificationCenter.default.post(name: .OutlineBodyDidChange, object: self, userInfo: nil)
 	}
