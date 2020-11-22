@@ -33,9 +33,9 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 	
 	override func updateConfiguration(using state: UICellConfigurationState) {
 		super.updateConfiguration(using: state)
+		guard let editorItem = editorItem else { return }
 	
-		var content = EditorContentConfiguration(indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
-		content.editorItem = editorItem
+		var content = EditorContentConfiguration(editorItem: editorItem, indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
 		content.delegate = delegate
 		content.isChevronShowing = !accessories.isEmpty
 		contentConfiguration = content

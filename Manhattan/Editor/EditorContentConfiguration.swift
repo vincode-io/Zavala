@@ -9,8 +9,9 @@ import UIKit
 
 struct EditorContentConfiguration: UIContentConfiguration, Hashable {
 
-	weak var editorItem: EditorItem? = nil
 	weak var delegate: EditorCollectionViewCellDelegate? = nil
+
+	var editorItem: EditorItem
 	var indentionLevel: Int
 	var indentationWidth: CGFloat
 	var isChevronShowing = false

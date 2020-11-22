@@ -44,8 +44,9 @@ class EditorContentView: UIView, UIContentView {
 	}
 	
 	private func apply(configuration: EditorContentConfiguration) {
-		guard appliedConfiguration != configuration, let editorItem = configuration.editorItem else { return }
+		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
+		let editorItem = configuration.editorItem
 		
 		// Don't overlay the default attributed text field for new Headlines
 		if let attrText = editorItem.attributedText {
@@ -103,13 +104,13 @@ class EditorContentView: UIView, UIContentView {
 extension EditorContentView: UITextViewDelegate {
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
-		appliedConfiguration.delegate?.textChanged(item: appliedConfiguration.editorItem!, attributedText: textView.attributedText)
+		appliedConfiguration.delegate?.textChanged(item: appliedConfiguration.editorItem, attributedText: textView.attributedText)
 	}
 	
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
 		switch text {
 		case "\n":
-			appliedConfiguration.delegate?.createHeadline(item: appliedConfiguration.editorItem!)
+			appliedConfiguration.delegate?.createHeadline(item: appliedConfiguration.editorItem)
 			return false
 		default:
 			return true
@@ -127,27 +128,27 @@ extension EditorContentView: EditorTextViewDelegate {
 	}
 	
 	func deleteHeadline(_: EditorTextView) {
-		appliedConfiguration.delegate?.deleteHeadline(item: appliedConfiguration.editorItem!)
+		appliedConfiguration.delegate?.deleteHeadline(item: appliedConfiguration.editorItem)
 	}
 	
 	func createHeadline(_: EditorTextView) {
-		appliedConfiguration.delegate?.createHeadline(item: appliedConfiguration.editorItem!)
+		appliedConfiguration.delegate?.createHeadline(item: appliedConfiguration.editorItem)
 	}
 	
 	func indent(_: EditorTextView, attributedText: NSAttributedString) {
-		appliedConfiguration.delegate?.indent(item: appliedConfiguration.editorItem!, attributedText: attributedText)
+		appliedConfiguration.delegate?.indent(item: appliedConfiguration.editorItem, attributedText: attributedText)
 	}
 	
 	func outdent(_: EditorTextView, attributedText: NSAttributedString) {
-		appliedConfiguration.delegate?.outdent(item: appliedConfiguration.editorItem!, attributedText: attributedText)
+		appliedConfiguration.delegate?.outdent(item: appliedConfiguration.editorItem, attributedText: attributedText)
 	}
 	
 	func moveUp(_: EditorTextView) {
-		appliedConfiguration.delegate?.moveUp(item: appliedConfiguration.editorItem!)
+		appliedConfiguration.delegate?.moveUp(item: appliedConfiguration.editorItem)
 	}
 	
 	func moveDown(_: EditorTextView) {
-		appliedConfiguration.delegate?.moveDown(item: appliedConfiguration.editorItem!)
+		appliedConfiguration.delegate?.moveDown(item: appliedConfiguration.editorItem)
 	}
 	
 }

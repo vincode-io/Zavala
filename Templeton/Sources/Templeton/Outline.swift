@@ -132,7 +132,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 		outlineBodyDidChange()
 	}
 	
-	public func indentHeadline(headlineID: String) -> Headline? {
+	public func indentHeadline(headlineID: String) -> (Headline, Headline)? {
 		guard let headline = headlineDictionary[headlineID] else { return nil }
 		
 		if let parentID = headline.parentID,
@@ -147,7 +147,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 			parentHeadline.headlines = parentHeadline.headlines?.filter { $0.id != headline.id }
 
 			outlineBodyDidChange()
-			return sibling
+			return (headline, sibling)
 		}
 		
 		// This is a top level moving to the next one down
@@ -162,7 +162,7 @@ public final class Outline: Identifiable, Equatable, Codable {
 		headlines = headlines?.filter { $0.id != headline.id }
 
 		outlineBodyDidChange()
-		return sibling
+		return (headline, sibling)
 	}
 	
 	public func load() {

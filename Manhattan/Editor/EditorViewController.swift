@@ -21,12 +21,12 @@ class EditorViewController: UICollectionViewController {
 			if let textField = UIResponder.currentFirstResponder as? EditorTextView {
 				textField.endEditing(true)
 			}
+			outline?.save()
+			outline?.headlines = nil
 		}
 		
 		didSet {
 			if oldValue != outline {
-				oldValue?.save()
-				oldValue?.headlines = nil
 				outline?.load()
 				
 				guard isViewLoaded else { return }
@@ -120,6 +120,10 @@ extension EditorViewController {
 		dataSourceQueue.add(InsertItemsOperation(dataSource: dataSource, section: 0, items: items, afterItem: afterItem, animated: animated))
 	}
 
+	private func indent(items: [EditorItem], newParentItem: EditorItem, animated: Bool) {
+		dataSourceQueue.add(IndentItemsOperation(dataSource: dataSource, section: 0, items: items, newParentItem: newParentItem, animated: animated))
+	}
+
 	private func reload(items: [EditorItem], animated: Bool) {
 		dataSourceQueue.add(ReloadItemsOperation(dataSource: dataSource, collectionView: collectionView, section: 0, items: items, animated: animated))
 	}
@@ -192,10 +196,12 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	func indent(item: EditorItem, attributedText: NSAttributedString) {
-		guard let updateHeadline = outline?.indentHeadline(headlineID: item.id) else { return }
 		outline?.updateHeadline(headlineID: item.id, attributedText: attributedText)
-		// TODO: only reload the necessary cells
-		applySnapshot(animated: true)
+		guard let (headline, newParentHeadline) = outline?.indentHeadline(headlineID: item.id) else { return }
+
+		let headlineItem = EditorItem.editorItem(headline)
+		let newParentItem = EditorItem.editorItem(newParentHeadline)
+		indent(items: [headlineItem], newParentItem: newParentItem, animated: true)
 	}
 	
 	func outdent(item: EditorItem, attributedText: NSAttributedString) {
