@@ -250,6 +250,9 @@ extension TimelineViewController {
 	private func deleteOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
 		let deleteTitle = NSLocalizedString("Delete", comment: "Delete")
 		let deleteAction = UIAlertAction(title: deleteTitle, style: .destructive) { _ in
+			if outline == self.currentOutline, let outlineProvider = self.outlineProvider {
+				self.delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: nil)
+			}
 			outline.folder?.deleteOutline(outline)
 		}
 		
