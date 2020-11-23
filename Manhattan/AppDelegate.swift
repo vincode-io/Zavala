@@ -118,7 +118,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let importOPMLCommand = UIKeyCommand(title: NSLocalizedString("Import OPML", comment: "Import OPML"),
 											action: #selector(importOPMLCommand(_:)),
 											input: "i",
-											modifierFlags: [.control, .command])
+											modifierFlags: [.shift, .command])
 		let importOPMLMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand])
 		builder.insertChild(importOPMLMenu, atStartOfMenu: .file)
 
