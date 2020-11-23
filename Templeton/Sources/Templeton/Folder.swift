@@ -15,6 +15,20 @@ public extension Notification.Name {
 	static let FolderDidDelete = Notification.Name(rawValue: "FolderDidDelete")
 }
 
+public enum FolderError: LocalizedError {
+	case securityScopeError
+	case fileReadError
+	
+	public var errorDescription: String? {
+		switch self {
+		case .securityScopeError:
+			return NSLocalizedString("Unable to access security scoped resource.", comment: "Security Scope Error")
+		case .fileReadError:
+			return NSLocalizedString("Unable to read the import file.", comment: "File Read Error")
+		}
+	}
+}
+
 public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	
 	public var id: EntityID
@@ -55,7 +69,19 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	}
 	
 	public func importOPML(_ url: URL) throws -> Outline {
-		let opmlData = try Data(contentsOf: url)
+		guard url.startAccessingSecurityScopedResource() else { throw FolderError.securityScopeError }
+		defer {
+			url.stopAccessingSecurityScopedResource()
+		}
+		
+		var fileData: Data?
+		var fileError: NSError? = nil
+		NSFileCoordinator().coordinate(readingItemAt: url, error: &fileError) { (url) in
+			fileData = try? Data(contentsOf: url)
+		}
+		
+		guard fileError == nil else { throw fileError! }
+		guard let opmlData = fileData else { throw FolderError.fileReadError }
 		
 		let opml = SWXMLHash.config({ config in
 			config.caseInsensitive = true
@@ -76,6 +102,7 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		let outline = createOutline(name: title!)
 		outline.importOPML(outlineIndexers)
 		return outline
+
 	}
 	
 	public func createOutline(name: String) -> Outline {
