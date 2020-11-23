@@ -198,6 +198,35 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	
 }
 
+// MARK: CustomDebugStringConvertible
+
+extension Outline: CustomDebugStringConvertible {
+	
+	public var debugDescription: String {
+		var output = ""
+		for headline in headlines ?? [Headline]() {
+			output.append(dumpHeadline(level: 0, headline: headline))
+		}
+		return output
+	}
+	
+	private func dumpHeadline(level: Int, headline: Headline) -> String {
+		var output = ""
+		for _ in 0..<level {
+			output.append(" -- ")
+		}
+		output.append(headline.debugDescription)
+		output.append("\n")
+		
+		for child in headline.headlines ?? [Headline]() {
+			output.append(dumpHeadline(level: level + 1, headline: child))
+		}
+		
+		return output
+	}
+	
+}
+
 // MARK: Helpers
 
 private extension Outline {

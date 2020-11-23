@@ -74,6 +74,14 @@ public final class Headline: HeadlineContainer, Identifiable, Equatable, Codable
 	
 }
 
+// MARK: CustomDebugStringConvertible
+
+extension Headline: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		return "\(plainText ?? "") (\(parentID ?? "nil"), \(id))"
+	}
+}
+
 // MARK: Helpers
 
 private extension Headline {
