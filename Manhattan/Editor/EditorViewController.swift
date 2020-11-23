@@ -107,7 +107,7 @@ extension EditorViewController {
 	}
 
 	private func insert(items: [EditorItem], afterItem: EditorItem, animated: Bool) {
-		dataSourceQueue.add(InsertItemsOperation(dataSource: dataSource, section: 0, items: items, afterItem: afterItem, animated: animated))
+		dataSourceQueue.add(InsertItemsOperation(dataSource: dataSource, collectionView: collectionView, section: 0, items: items, afterItem: afterItem, animated: animated))
 	}
 
 	private func indent(items: [EditorItem], newParentItem: EditorItem, animated: Bool) {
@@ -182,7 +182,6 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 		guard let headline = outline?.createHeadline(afterHeadlineID: item.id) else { return }
 		let newItem = EditorItem.editorItem(headline)
 		insert(items: [newItem], afterItem: item, animated: false)
-		moveCursor(item: newItem, direction: .none)
 	}
 	
 	func indent(item: EditorItem, attributedText: NSAttributedString) {
