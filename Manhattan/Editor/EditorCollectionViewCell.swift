@@ -35,9 +35,14 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 		super.updateConfiguration(using: state)
 		guard let editorItem = editorItem else { return }
 	
+		if editorItem.children.isEmpty {
+			accessories = []
+		} else {
+			accessories = [.outlineDisclosure(options: .init(style: .cell))]
+		}
+		
 		var content = EditorContentConfiguration(editorItem: editorItem, indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
 		content.delegate = delegate
-		content.isChevronShowing = !accessories.isEmpty
 		contentConfiguration = content
 	}
 

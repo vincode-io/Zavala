@@ -14,7 +14,9 @@ struct EditorContentConfiguration: UIContentConfiguration, Hashable {
 	var editorItem: EditorItem
 	var indentionLevel: Int
 	var indentationWidth: CGFloat
-	var isChevronShowing = false
+	var isChevronShowing: Bool {
+		return !editorItem.children.isEmpty
+	}
 	
 	func makeContentView() -> UIView & UIContentView {
 		return EditorContentView(configuration: self)

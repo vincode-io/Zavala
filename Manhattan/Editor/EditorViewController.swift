@@ -83,23 +83,13 @@ extension EditorViewController {
 	}
 	
 	private func configureDataSource() {
-		let groupRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, EditorItem> { (cell, indexPath, item) in
-			cell.accessories = [.outlineDisclosure(options: .init(style: .cell))]
-			cell.editorItem = item
-			cell.delegate = self
-		}
-
-		let individualRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, EditorItem> { (cell, indexPath, item) in
+		let editorRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, EditorItem> { (cell, indexPath, item) in
 			cell.editorItem = item
 			cell.delegate = self
 		}
 
 		dataSource = UICollectionViewDiffableDataSource<Int, EditorItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
-			if item.children.isEmpty {
-				return collectionView.dequeueConfiguredReusableCell(using: individualRegistration, for: indexPath, item: item)
-			} else {
-				return collectionView.dequeueConfiguredReusableCell(using: groupRegistration, for: indexPath, item: item)
-			}
+			return collectionView.dequeueConfiguredReusableCell(using: editorRegistration, for: indexPath, item: item)
 		}
 		
 		dataSource.sectionSnapshotHandlers.willExpandItem = { [weak self] item in
