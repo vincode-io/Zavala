@@ -17,7 +17,7 @@ public extension Notification.Name {
 public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable {
 	
 	public var id: EntityID
-	public var name: String?
+	public var title: String?
 	public var isFavorite: Bool?
 	public var created: Date?
 	public var updated: Date?
@@ -39,7 +39,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
-		case name = "name"
+		case title = "title"
 		case isFavorite = "isFavorite"
 		case created = "created"
 		case updated = "updated"
@@ -56,9 +56,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 	private var headlinesFile: HeadlinesFile?
 	
-	init(parentID: EntityID, name: String) {
+	init(parentID: EntityID, title: String) {
 		self.id = EntityID.outline(parentID.accountID, parentID.folderUUID, UUID().uuidString)
-		self.name = name
+		self.title = title
 		self.created = Date()
 		self.updated = Date()
 	}
@@ -68,8 +68,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		outlineMetaDataDidChange()
 	}
 	
-	public func update(name: String) {
-		self.name = name
+	public func update(title: String) {
+		self.title = title
 		self.updated = Date()
 		outlineNameDidChange()
 	}

@@ -118,7 +118,7 @@ extension ActivityManager {
 		let activity = NSUserActivity(activityType: ActivityType.selectOutline.rawValue)
 
 		let localizedText = NSLocalizedString("Edit outline “%@”", comment: "Edit outline")
-		let title = NSString.localizedStringWithFormat(localizedText as NSString, outline.name ?? "") as String
+		let title = NSString.localizedStringWithFormat(localizedText as NSString, outline.title ?? "") as String
 		activity.title = title
 		
 		let keywords = makeKeywords(title)

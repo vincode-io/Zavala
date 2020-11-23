@@ -18,7 +18,7 @@ public final class AccountManager {
 
 	public var allOutlineProvider: OutlineProvider {
 		return LazyOutlineProvider(id: .all, callback: { [weak self] in
-			return LazyOutlineProvider.sortByName(self?.outlines ?? [Outline]())
+			return LazyOutlineProvider.sortByTitle(self?.outlines ?? [Outline]())
 		})
 	}
 	
@@ -32,7 +32,7 @@ public final class AccountManager {
 	public var favoritesOutlineProvider: OutlineProvider {
 		return LazyOutlineProvider(id: .favorites, callback: { [weak self] in
 			let favorites = self?.outlines.filter { $0.isFavorite ?? false }
-			return LazyOutlineProvider.sortByName(favorites ?? [Outline]())
+			return LazyOutlineProvider.sortByTitle(favorites ?? [Outline]())
 		})
 	}
 	

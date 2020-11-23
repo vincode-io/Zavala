@@ -293,7 +293,7 @@ extension TimelineViewController {
 		}
 		
 		let localizedInformativeText = NSLocalizedString("Are you sure you want to delete the “%@” outline?", comment: "Folder delete text")
-		let formattedInformativeText = NSString.localizedStringWithFormat(localizedInformativeText as NSString, outline.name ?? "") as String
+		let formattedInformativeText = NSString.localizedStringWithFormat(localizedInformativeText as NSString, outline.title ?? "") as String
 		let localizedMessageText = NSLocalizedString("The outline be deleted and unrecoverable.", comment: "Delete Message")
 		
 		let alert = UIAlertController(title: formattedInformativeText, message: localizedMessageText, preferredStyle: .alert)

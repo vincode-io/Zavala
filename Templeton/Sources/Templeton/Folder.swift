@@ -79,7 +79,7 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	}
 	
 	public func createOutline(name: String) -> Outline {
-		let outline = Outline(parentID: id, name: name)
+		let outline = Outline(parentID: id, title: name)
 		outlines?.append(outline)
 		folderOutlinesDidChange()
 		return outline

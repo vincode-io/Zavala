@@ -229,7 +229,7 @@ private extension EditorViewController {
 	}
 	
 	private func updateUI() {
-		navigationItem.title = outline?.name
+		navigationItem.title = outline?.title
 		navigationItem.largeTitleDisplayMode = .never
 		
 		if outline?.isFavorite ?? false {

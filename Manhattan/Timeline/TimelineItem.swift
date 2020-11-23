@@ -46,7 +46,7 @@ final class TimelineItem:  NSObject, NSCopying, Identifiable {
 
 	static func timelineItem(_ outline: Outline) -> TimelineItem {
 		let updateDate = Self.dateString(outline.updated)
-		return TimelineItem(id: outline.id, title: outline.name, updateDate: updateDate)
+		return TimelineItem(id: outline.id, title: outline.title, updateDate: updateDate)
 	}
 
 	override func isEqual(_ object: Any?) -> Bool {

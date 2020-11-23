@@ -36,7 +36,7 @@ class GetInfoOutlineViewController: FormViewController {
 			submitButton.isHidden = true
 		}
 
-		nameTextField.text = outline?.name
+		nameTextField.text = outline?.title
 		nameTextField.addTarget(self, action: #selector(nameTextFieldDidChange), for: .editingChanged)
 		nameTextField.delegate = self
 		
@@ -54,7 +54,7 @@ class GetInfoOutlineViewController: FormViewController {
 	@IBAction override func submit(_ sender: Any) {
 		guard let outline = outline, let outlineName = nameTextField.text, !outlineName.isEmpty else { return }
 		
-		outline.update(name: outlineName)
+		outline.update(title: outlineName)
 		dismiss(animated: true)
 	}
 	

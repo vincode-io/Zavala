@@ -28,8 +28,8 @@ public extension OutlineProvider {
 		return outlines.sorted(by: { $0.updated ?? Date.distantPast > $1.updated ?? Date.distantPast })
 	}
 
-	static func sortByName(_ outlines: [Outline]) -> [Outline] {
-		return outlines.sorted(by: { ($0.name ?? "").caseInsensitiveCompare($1.name ?? "") == .orderedAscending })
+	static func sortByTitle(_ outlines: [Outline]) -> [Outline] {
+		return outlines.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
 	}
 
 }
