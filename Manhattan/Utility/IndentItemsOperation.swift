@@ -41,12 +41,12 @@ class IndentItemsOperation<S: Hashable, I: Hashable>: MainThreadOperationBase {
 		let textCursorSource = UIResponder.currentFirstResponder as? TextCursorSource
 		let item = textCursorSource?.identifier as? I
 		let selectedRange = textCursorSource?.selectedTextRange
+		textCursorSource?.resignFirstResponder()
 		
 		dataSource.apply(sectionSnapshot, to: section, animatingDifferences: animated) { [weak self] in
 			guard let self = self else { return }
 			
 			if let item = item, let indexPath = self.dataSource.indexPath(for: item), let textCursor = self.collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
-				textCursor.releaseCursor()
 				if let selectedRange = selectedRange {
 					textCursor.restoreSelection(selectedRange)
 				} else {
