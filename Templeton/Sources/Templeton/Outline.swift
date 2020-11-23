@@ -171,8 +171,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		
 		if headlines?.isEmpty ?? true {
 			headlines = [Headline()]
-			headlineDictionariesNeedUpdate = true
 		}
+
+		headlineDictionariesNeedUpdate = true
 	}
 	
 	public func save() {
