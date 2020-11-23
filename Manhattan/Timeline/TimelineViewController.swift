@@ -133,14 +133,19 @@ extension TimelineViewController: UIDocumentPickerDelegate {
 	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
 		guard let folder = outlineProvider as? Folder else { return }
 
+		var outline: Outline?
 		for url in urls {
 			do {
-				try folder.importOPML(url)
+				outline = try folder.importOPML(url)
 			} catch {
 				let title = NSLocalizedString("Import Failed", comment: "Import Failed")
 				let message = NSLocalizedString("We were unable to process the selected file.  Please ensure that it is a properly formatted OPML file.", comment: "Import Failed Message")
 				self.presentError(title: title, message: message)
 			}
+		}
+		
+		if let outline = outline {
+			selectOutline(outline, animated: false)
 		}
 	}
 	

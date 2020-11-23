@@ -54,12 +54,11 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		folderMetaDataDidChange()
 	}
 	
-	public func importOPML(_ url: URL) throws {
+	public func importOPML(_ url: URL) throws -> Outline {
 		let opmlData = try Data(contentsOf: url)
 		
 		let opml = SWXMLHash.config({ config in
 			config.caseInsensitive = true
-//			config.shouldProcessLazily = true
 		}).parse(opmlData)["opml"]
 		
 		let headIndexer = opml["head"]
@@ -76,6 +75,7 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		
 		let outline = createOutline(name: title!)
 		outline.importOPML(outlineIndexers)
+		return outline
 	}
 	
 	public func createOutline(name: String) -> Outline {
