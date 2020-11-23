@@ -32,8 +32,9 @@ class TimelineViewController: UICollectionViewController {
 		return currentOutline == nil
 	}
 	
-	private var addBarButtonItem: UIBarButtonItem?
-	
+	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
+	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importEntity, style: .plain, target: self, action: #selector(importOPML(_:)))
+
 	private let dataSourceQueue = MainThreadOperationQueue()
 	private var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
 
@@ -49,8 +50,6 @@ class TimelineViewController: UICollectionViewController {
 
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
-		} else {
-			addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
 		}
 
 		collectionView.remembersLastFocusedIndexPath = true
@@ -232,9 +231,9 @@ extension TimelineViewController {
 		view.window?.windowScene?.title = outlineProvider?.name
 		
 		if isCreateOutlineUnavailable {
-			navigationItem.rightBarButtonItem = nil
+			navigationItem.rightBarButtonItems = nil
 		} else {
-			navigationItem.rightBarButtonItem = addBarButtonItem
+			navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
 		}
 	}
 	

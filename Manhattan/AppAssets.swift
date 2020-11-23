@@ -17,20 +17,24 @@ struct AppAssets {
 		return UIImage(systemName: "square.and.pencil")!
 	}()
 
-	static var removeEntity: UIImage = {
-		return UIImage(systemName: "trash")!
-	}()
-
-	static var getInfoEntity: UIImage = {
-		return UIImage(systemName: "info.circle")!
+	static var favoriteSelected: UIImage = {
+		return UIImage(systemName: "star.fill")!
 	}()
 
 	static var favoriteUnselected: UIImage = {
 		return UIImage(systemName: "star")!
 	}()
 
-	static var favoriteSelected: UIImage = {
-		return UIImage(systemName: "star.fill")!
+	static var getInfoEntity: UIImage = {
+		return UIImage(systemName: "info.circle")!
+	}()
+
+	static var importEntity: UIImage = {
+		return UIImage(systemName: "square.and.arrow.down")!
+	}()
+
+	static var removeEntity: UIImage = {
+		return UIImage(systemName: "trash")!
 	}()
 
 }
