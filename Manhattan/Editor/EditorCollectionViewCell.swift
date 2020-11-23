@@ -45,6 +45,11 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 
 extension EditorCollectionViewCell: TextCursorTarget {
 	
+	func releaseCursor() {
+		guard let textView = (contentView as? EditorContentView)?.textView else { return }
+		textView.resignFirstResponder()
+	}
+	
 	func restoreSelection(_ textRange: UITextRange) {
 		guard let textView = (contentView as? EditorContentView)?.textView else { return }
 		textView.becomeFirstResponder()

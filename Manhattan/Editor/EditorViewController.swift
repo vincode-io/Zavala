@@ -121,7 +121,7 @@ extension EditorViewController {
 	}
 
 	private func indent(items: [EditorItem], newParentItem: EditorItem, animated: Bool) {
-		dataSourceQueue.add(IndentItemsOperation(dataSource: dataSource, section: 0, items: items, newParentItem: newParentItem, animated: animated))
+		dataSourceQueue.add(IndentItemsOperation(dataSource: dataSource, collectionView: collectionView, section: 0, items: items, newParentItem: newParentItem, animated: animated))
 	}
 
 	private func reload(items: [EditorItem], animated: Bool) {
