@@ -14,7 +14,7 @@ public extension Notification.Name {
 	static let OutlineDidDelete = Notification.Name(rawValue: "OutlineDidDelete")
 }
 
-public final class Outline: Identifiable, Equatable, Codable {
+public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable {
 	
 	public var id: EntityID
 	public var name: String?

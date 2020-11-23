@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 import RSCore
 import Templeton
 
@@ -116,7 +117,31 @@ class TimelineViewController: UICollectionViewController {
 
 	
 	@objc func importOPML(_ sender: Any?) {
-		print("boom!!!")
+		let opmlType = UTType(exportedAs: "org.opml.opml")
+		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [opmlType, .xml])
+		docPicker.delegate = self
+		docPicker.modalPresentationStyle = .formSheet
+		self.present(docPicker, animated: true)
+	}
+	
+}
+
+// MARK: UIDocumentPickerDelegate
+
+extension TimelineViewController: UIDocumentPickerDelegate {
+	
+	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+		guard let folder = outlineProvider as? Folder else { return }
+
+		for url in urls {
+			do {
+				try folder.importOPML(url)
+			} catch {
+				let title = NSLocalizedString("Import Failed", comment: "Import Failed")
+				let message = NSLocalizedString("We were unable to process the selected file.  Please ensure that it is a properly formatted OPML file.", comment: "Import Failed Message")
+				self.presentError(title: title, message: message)
+			}
+		}
 	}
 	
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class Headline: Identifiable, Equatable, Codable {
+public final class Headline: HeadlineContainer, Identifiable, Equatable, Codable {
 	
 	public var id: String
 	public var parentID: String?

@@ -7,6 +7,7 @@
 
 import Foundation
 import RSCore
+import SWXMLHash
 
 public extension Notification.Name {
 	static let FolderMetaDataDidChange = Notification.Name(rawValue: "FolderMetaDataDidChange")
@@ -51,6 +52,30 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	public func update(name: String) {
 		self.name = name
 		folderMetaDataDidChange()
+	}
+	
+	public func importOPML(_ url: URL) throws {
+		let opmlData = try Data(contentsOf: url)
+		
+		let opml = SWXMLHash.config({ config in
+			config.caseInsensitive = true
+//			config.shouldProcessLazily = true
+		}).parse(opmlData)["opml"]
+		
+		let headIndexer = opml["head"]
+		let bodyIndexer = opml["body"]
+		let outlineIndexers = bodyIndexer["outline"].all
+		
+		var title = headIndexer["title"].element?.text
+		if (title == nil || title!.isEmpty) && outlineIndexers.count > 0 {
+			title = outlineIndexers[0].element?.attribute(by: "text")?.text
+		}
+		if title == nil {
+			title = NSLocalizedString("Unavailable", comment: "Unavailable")
+		}
+		
+		let outline = createOutline(name: title!)
+		outline.importOPML(outlineIndexers)
 	}
 	
 	public func createOutline(name: String) -> Outline {
