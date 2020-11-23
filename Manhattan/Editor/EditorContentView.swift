@@ -61,21 +61,24 @@ class EditorContentView: UIView, UIContentView {
 			textView.attributedText = NSAttributedString(string: "", attributes: attrs)
 		}
 
-		let adjustedIndentionWidth: CGFloat
+		let adjustedLeadingIndention: CGFloat
+		let adjustedTrailingIndention: CGFloat
 		if traitCollection.userInterfaceIdiom == .mac {
 			if configuration.isChevronShowing {
-				adjustedIndentionWidth = configuration.indentationWidth - 12
+				adjustedLeadingIndention = configuration.indentationWidth - 12
 			} else {
-				adjustedIndentionWidth = configuration.indentationWidth + 16
+				adjustedLeadingIndention = configuration.indentationWidth + 16
 			}
+			adjustedTrailingIndention = 0
 		} else {
-			adjustedIndentionWidth = configuration.indentationWidth
+			adjustedLeadingIndention = configuration.indentationWidth
+			adjustedTrailingIndention = -25
 		}
 		
 		textView.removeConstraintsIncludingOwnedBySuperview()
 		NSLayoutConstraint.activate([
-			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedIndentionWidth),
-			textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+			textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
 			textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
 			textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
 		])
@@ -185,7 +188,7 @@ extension EditorContentView {
 		} else {
 			bulletView!.tintColor = AppAssets.accentColor
 			NSLayoutConstraint.activate([
-				bulletView!.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+				bulletView!.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -21),
 				bulletView!.widthAnchor.constraint(equalToConstant: 4),
 				bulletView!.heightAnchor.constraint(equalToConstant: 4),
 				bulletView!.centerYAnchor.constraint(equalTo: centerYAnchor)
