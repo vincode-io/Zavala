@@ -185,12 +185,13 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			headlinesFile = HeadlinesFile(outline: self)
 		}
 		headlinesFile?.delete()
-		headlinesFile = nil
 	}
 	
 	public func suspend() {
 		headlinesFile?.save()
 		headlinesFile = nil
+		_headlineDictionary = [String: Headline]()
+		headlineDictionariesNeedUpdate = true
 	}
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
