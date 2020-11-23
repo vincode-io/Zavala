@@ -197,7 +197,11 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	
 	func indent(item: EditorItem, attributedText: NSAttributedString) {
 		outline?.updateHeadline(headlineID: item.id, attributedText: attributedText)
+//		print("================================")
+//		print(outline!)
 		guard let (headline, newParentHeadline) = outline?.indentHeadline(headlineID: item.id) else { return }
+//		print(outline!)
+//		print("================================")
 
 		let headlineItem = EditorItem.editorItem(headline)
 		let newParentItem = EditorItem.editorItem(newParentHeadline)
