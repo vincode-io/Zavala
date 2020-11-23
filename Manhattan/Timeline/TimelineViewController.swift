@@ -138,7 +138,7 @@ extension TimelineViewController: UIDocumentPickerDelegate {
 				outline = try folder.importOPML(url)
 			} catch {
 				let title = NSLocalizedString("Import Failed", comment: "Import Failed")
-				let message = NSLocalizedString("We were unable to process the selected file.  Please ensure that it is a properly formatted OPML file.", comment: "Import Failed Message")
+				let message = NSLocalizedString(error.localizedDescription, comment: "Import Failed Message")
 				self.presentError(title: title, message: message)
 			}
 		}
