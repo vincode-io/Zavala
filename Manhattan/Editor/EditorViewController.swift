@@ -56,6 +56,7 @@ class EditorViewController: UICollectionViewController {
 		collectionView.dataSource = self
 
 		editorRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, Headline> { (cell, indexPath, headline) in
+			cell.indentationLevel = headline.indentLevel ?? 0
 			cell.headline = headline
 			cell.delegate = self
 		}
@@ -85,12 +86,11 @@ extension EditorViewController {
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return 10
+		return outline?.shadowTable?.count ?? 0
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		// TODO: Do a look up for the Headline in the Outline
-		let headline = Headline(plainText: "Just some testing...")
+		let headline = outline!.shadowTable![indexPath.row]
 		return collectionView.dequeueConfiguredReusableCell(using: editorRegistration!, for: indexPath, item: headline)
 	}
 	

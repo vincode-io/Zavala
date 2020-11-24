@@ -70,7 +70,6 @@ public final class Headline: HeadlineContainer, Identifiable, Equatable, Hashabl
 	
 	func visit(visitor: (Headline) -> Void) {
 		visitor(self)
-		headlines?.forEach { $0.visit(visitor: visitor) }
 	}
 	
 }

@@ -22,7 +22,12 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public var created: Date?
 	public var updated: Date?
 	
-	public var headlines: [Headline]?
+	public var headlines: [Headline]? {
+		didSet {
+			visitHeadlines()
+		}
+	}
+	
 	public var shadowTable: [Headline]?
 	
 	public var account: Account? {
@@ -237,41 +242,43 @@ private extension Outline {
 
 	func visitHeadlines() {
 		var shadowTable = [Headline]()
+		
+		var addingToShadowTable = true
+		var level = 0
+
+		func visitor(_ visited: Headline) {
+
+			var addingToShadowTableSuspended = false
+			
+			// Add to the Shadow Table if we haven't hit a collapsed entry
+			if addingToShadowTable {
+				shadowTable.append(visited)
+				if !(visited.isExpanded ?? true) {
+					addingToShadowTable = false
+					addingToShadowTableSuspended = true
+				}
+			}
+			
+			// Set the indent level for the Headline
+			visited.indentLevel = level
+			level = level + 1
+
+			// Set all the Headline's children's parent and visit them
+			visited.headlines?.forEach {
+				$0.parent = visited
+				$0.visit(visitor: visitor)
+			}
+
+			level = level - 1
+
+			if addingToShadowTableSuspended {
+				addingToShadowTable = true
+			}
+			
+		}
 
 		headlines?.forEach { headline in
-			
-			var addingToShadowTable = true
-			var level = 0
-			headline.indentLevel = level
-			
-			headline.visit(visitor: { visited in
-
-				var addingToShadowTableSuspended = false
-				
-				// Add to the Shadow Table if we haven't hit a collapsed entry
-				if addingToShadowTable {
-					shadowTable.append(visited)
-					if !(visited.isExpanded ?? true) {
-						addingToShadowTable = false
-						addingToShadowTableSuspended = true
-					}
-				}
-				
-				// Set the indent level for the Headline
-				level = level + 1
-				visited.indentLevel = level
-				
-				// Set all the Headline's children's parent
-				visited.headlines?.forEach { $0.parent = visited }
-				
-				level = level - -1
-
-				if addingToShadowTableSuspended {
-					addingToShadowTable = true
-				}
-				
-			})
-			
+			headline.visit(visitor: visitor)
 		}
 		
 		self.shadowTable = shadowTable
