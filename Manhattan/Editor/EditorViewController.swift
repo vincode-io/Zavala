@@ -32,8 +32,6 @@ class EditorViewController: UICollectionViewController {
 				guard isViewLoaded else { return }
 				updateUI()
 				collectionView.reloadData()
-//				applySnapshot(animated: false)
-//				moveCursorToInitialPosition()
 			}
 		}
 		
@@ -62,12 +60,8 @@ class EditorViewController: UICollectionViewController {
 			cell.delegate = self
 		}
 		
-//		configureDataSource()
-
 		updateUI()
 		collectionView.reloadData()
-//		applySnapshot(animated: false)
-//		moveCursorToInitialPosition()
 	}
 
 	// MARK: Actions
@@ -98,28 +92,6 @@ extension EditorViewController {
 		let editorItem = EditorItem.editorItem(Headline(plainText: "This is a test..."))
 		return collectionView.dequeueConfiguredReusableCell(using: editorRegistration!, for: indexPath, item: editorItem)
 	}
-	
-	
-	
-//	private func configureDataSource() {
-//		let editorRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, EditorItem> { (cell, indexPath, item) in
-//			cell.editorItem = item
-//			cell.delegate = self
-//		}
-//
-//		dataSource = UICollectionViewDiffableDataSource<Int, EditorItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
-//			return collectionView.dequeueConfiguredReusableCell(using: editorRegistration, for: indexPath, item: item)
-//		}
-//
-//		dataSource.sectionSnapshotHandlers.willExpandItem = { [weak self] item in
-//			self?.outline?.expandHeadline(headlineID: item.id)
-//		}
-//
-//		dataSource.sectionSnapshotHandlers.willCollapseItem = { [weak self] item in
-//			self?.outline?.collapseHeadline(headlineID: item.id)
-//		}
-//
-//	}
 	
 }
 
