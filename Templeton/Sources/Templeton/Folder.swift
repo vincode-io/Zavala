@@ -101,6 +101,7 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		
 		let outline = createOutline(name: title!)
 		outline.importOPML(outlineIndexers)
+		outline.forceSave()
 		return outline
 
 	}

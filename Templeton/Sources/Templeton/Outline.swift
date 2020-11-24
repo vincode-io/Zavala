@@ -54,6 +54,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		self.title = title
 		self.created = Date()
 		self.updated = Date()
+		headlinesFile = HeadlinesFile(outline: self)
 	}
 
 	public func toggleFavorite() {
@@ -165,6 +166,11 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	}
 	
 	public func save() {
+		headlinesFile?.save()
+	}
+	
+	public func forceSave() {
+		headlinesFile?.markAsDirty()
 		headlinesFile?.save()
 	}
 	
