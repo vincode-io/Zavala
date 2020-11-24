@@ -6,20 +6,21 @@
 //
 
 import UIKit
+import Templeton
 
 protocol EditorCollectionViewCellDelegate: class {
-	func textChanged(item: EditorItem, attributedText: NSAttributedString)
-	func deleteHeadline(item: EditorItem)
-	func createHeadline(item: EditorItem)
-	func indent(item: EditorItem, attributedText: NSAttributedString)
-	func outdent(item: EditorItem, attributedText: NSAttributedString)
-	func moveUp(item: EditorItem)
-	func moveDown(item: EditorItem)
+	func textChanged(headline: Headline, attributedText: NSAttributedString)
+	func deleteHeadline(headline: Headline)
+	func createHeadline(headline: Headline)
+	func indent(headline: Headline, attributedText: NSAttributedString)
+	func outdent(headline: Headline, attributedText: NSAttributedString)
+	func moveUp(headline: Headline)
+	func moveDown(headline: Headline)
 }
 
 class EditorCollectionViewCell: UICollectionViewListCell {
 
-	var editorItem: EditorItem? {
+	var headline: Headline? {
 		didSet {
 			setNeedsUpdateConfiguration()
 		}
@@ -59,9 +60,9 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 	
 	override func updateConfiguration(using state: UICellConfigurationState) {
 		super.updateConfiguration(using: state)
-		guard let editorItem = editorItem else { return }
+		guard let headline = headline else { return }
 	
-		if editorItem.children.isEmpty {
+		if headline.headlines?.isEmpty ?? true {
 			accessories = []
 		} else {
 			let placement: UICellAccessory.Placement
@@ -74,7 +75,8 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 			accessories = [.customView(configuration: accessoryConfig)]
 		}
 		
-		var content = EditorContentConfiguration(editorItem: editorItem, indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
+		var content = EditorContentConfiguration(indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
+		content.headline = headline
 		content.delegate = delegate
 		contentConfiguration = content
 	}

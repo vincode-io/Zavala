@@ -7,10 +7,9 @@
 
 import UIKit
 
-public final class Headline: HeadlineContainer, Identifiable, Equatable, Codable {
+public final class Headline: HeadlineContainer, Identifiable, Equatable, Hashable, Codable {
 	
 	public var id: String
-	public var parentID: String?
 	public var text: Data?
 	public var isExpanded: Bool?
 	public var headlines: [Headline]? {
@@ -19,9 +18,11 @@ public final class Headline: HeadlineContainer, Identifiable, Equatable, Codable
 		}
 	}
 
+	public weak var parent: Headline?
+	public var indentLevel: Int?
+
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
-		case parentID = "parentID"
 		case text = "text"
 		case isExpanded = "isExpanded"
 		case headlines = "headlines"
@@ -63,6 +64,10 @@ public final class Headline: HeadlineContainer, Identifiable, Equatable, Codable
 		}
 	}
 	
+	public func hash(into hasher: inout Hasher) {
+		hasher.combine(id)
+	}
+	
 	public static func == (lhs: Headline, rhs: Headline) -> Bool {
 		return lhs.id == rhs.id
 	}
@@ -78,7 +83,7 @@ public final class Headline: HeadlineContainer, Identifiable, Equatable, Codable
 
 extension Headline: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		return "\(plainText ?? "") (\(parentID ?? "nil"), \(id))"
+		return "\(plainText ?? "") (\(id))"
 	}
 }
 
@@ -88,9 +93,9 @@ private extension Headline {
 	
 	func updateHeadlines() {
 		headlines?.forEach { headline in
-			headline.parentID = self.id
+			headline.parent = self
 			headline.visit(visitor: { visited in
-				visited.headlines?.forEach { $0.parentID = visited.id }
+				visited.headlines?.forEach { $0.parent = visited }
 			})
 		}
 	}

@@ -39,7 +39,7 @@ class EditorViewController: UICollectionViewController {
 	
 	private var favoriteBarButtonItem: UIBarButtonItem?
 	
-	private var editorRegistration: UICollectionView.CellRegistration<EditorCollectionViewCell, EditorItem>?
+	private var editorRegistration: UICollectionView.CellRegistration<EditorCollectionViewCell, Headline>?
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,8 +55,8 @@ class EditorViewController: UICollectionViewController {
 		collectionView.collectionViewLayout = createLayout()
 		collectionView.dataSource = self
 
-		editorRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, EditorItem> { (cell, indexPath, editorItem) in
-			cell.editorItem = editorItem
+		editorRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, Headline> { (cell, indexPath, headline) in
+			cell.headline = headline
 			cell.delegate = self
 		}
 		
@@ -89,43 +89,43 @@ extension EditorViewController {
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		let editorItem = EditorItem.editorItem(Headline(plainText: "This is a test..."))
-		return collectionView.dequeueConfiguredReusableCell(using: editorRegistration!, for: indexPath, item: editorItem)
+		// TODO: Do a look up for the Headline in the Outline
+		let headline = Headline(plainText: "Just some testing...")
+		return collectionView.dequeueConfiguredReusableCell(using: editorRegistration!, for: indexPath, item: headline)
 	}
 	
 }
 
 extension EditorViewController: EditorCollectionViewCellDelegate {
 
-	func textChanged(item: EditorItem, attributedText: NSAttributedString) {
-		if item.attributedText != attributedText {
-			outline?.updateHeadline(headlineID: item.id, attributedText: attributedText)
+	func textChanged(headline: Headline, attributedText: NSAttributedString) {
+		if headline.attributedText != attributedText {
+			outline?.updateHeadline(headline: headline, attributedText: attributedText)
 		}
 	}
 	
-	func deleteHeadline(item: EditorItem) {
-		outline?.deleteHeadline(headlineID: item.id)
+	func deleteHeadline(headline: Headline) {
+		outline?.deleteHeadline(headline: headline)
 	}
 	
 	// TODO: Need to take into consideration expanded state when placing the new Headline
-	func createHeadline(item: EditorItem) {
-//		guard let headline = outline?.createHeadline(afterHeadlineID: item.id) else { return }
+	func createHeadline(headline: Headline) {
+		outline?.createHeadline(afterHeadline: headline)
 	}
 	
-	func indent(item: EditorItem, attributedText: NSAttributedString) {
-		outline?.updateHeadline(headlineID: item.id, attributedText: attributedText)
-		guard let (headline, newParentHeadline) = outline?.indentHeadline(headlineID: item.id) else { return }
-
+	func indent(headline: Headline, attributedText: NSAttributedString) {
+//		outline?.updateHeadline(headline: headline, attributedText: attributedText)
+//		outline?.indentHeadline(headline: headline)
 	}
 	
-	func outdent(item: EditorItem, attributedText: NSAttributedString) {
+	func outdent(headline: Headline, attributedText: NSAttributedString) {
 		
 	}
 	
-	func moveUp(item: EditorItem) {
+	func moveUp(headline: Headline) {
 	}
 	
-	func moveDown(item: EditorItem) {
+	func moveDown(headline: Headline) {
 	}
 	
 }

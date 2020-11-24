@@ -13,5 +13,5 @@ protocol TextCursorTarget {
 }
 
 protocol TextCursorSource: UITextView {
-	var identifier: Any? { get }
+	var model: Any? { get }
 }

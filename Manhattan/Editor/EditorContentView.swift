@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Templeton
 
 class EditorContentView: UIView, UIContentView {
 
@@ -44,15 +45,14 @@ class EditorContentView: UIView, UIContentView {
 	}
 	
 	private func apply(configuration: EditorContentConfiguration) {
-		guard appliedConfiguration != configuration else { return }
+		guard appliedConfiguration != configuration, let headline = configuration.headline else { return }
 		appliedConfiguration = configuration
-		let editorItem = configuration.editorItem
 		
 		var attrs = [NSAttributedString.Key : Any]()
 		attrs[.foregroundColor] = UIColor.label
 		attrs[.font] = UIFont.preferredFont(forTextStyle: .body)
 		
-		if let attrText = editorItem.attributedText {
+		if let attrText = headline.attributedText {
 			let mutableAttrText = NSMutableAttributedString(attributedString: attrText)
 			let range = NSRange(location: 0, length: mutableAttrText.length)
 			mutableAttrText.addAttributes(attrs, range: range)
@@ -110,13 +110,15 @@ class EditorContentView: UIView, UIContentView {
 extension EditorContentView: UITextViewDelegate {
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
-		appliedConfiguration.delegate?.textChanged(item: appliedConfiguration.editorItem, attributedText: textView.attributedText)
+		guard let headline = appliedConfiguration.headline else { return }
+		appliedConfiguration.delegate?.textChanged(headline: headline, attributedText: textView.attributedText)
 	}
 	
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+		guard let headline = appliedConfiguration.headline else { return true }
 		switch text {
 		case "\n":
-			appliedConfiguration.delegate?.createHeadline(item: appliedConfiguration.editorItem)
+			appliedConfiguration.delegate?.createHeadline(headline: headline)
 			return false
 		default:
 			return true
@@ -129,32 +131,38 @@ extension EditorContentView: UITextViewDelegate {
 
 extension EditorContentView: EditorTextViewDelegate {
 	
-	var item: EditorItem? {
-		return appliedConfiguration.editorItem
+	var headline: Headline? {
+		return appliedConfiguration.headline
 	}
 	
 	func deleteHeadline(_: EditorTextView) {
-		appliedConfiguration.delegate?.deleteHeadline(item: appliedConfiguration.editorItem)
+		guard let headline = appliedConfiguration.headline else { return }
+		appliedConfiguration.delegate?.deleteHeadline(headline: headline)
 	}
 	
 	func createHeadline(_: EditorTextView) {
-		appliedConfiguration.delegate?.createHeadline(item: appliedConfiguration.editorItem)
+		guard let headline = appliedConfiguration.headline else { return }
+		appliedConfiguration.delegate?.createHeadline(headline: headline)
 	}
 	
 	func indent(_: EditorTextView, attributedText: NSAttributedString) {
-		appliedConfiguration.delegate?.indent(item: appliedConfiguration.editorItem, attributedText: attributedText)
+		guard let headline = appliedConfiguration.headline else { return }
+		appliedConfiguration.delegate?.indent(headline: headline, attributedText: attributedText)
 	}
 	
 	func outdent(_: EditorTextView, attributedText: NSAttributedString) {
-		appliedConfiguration.delegate?.outdent(item: appliedConfiguration.editorItem, attributedText: attributedText)
+		guard let headline = appliedConfiguration.headline else { return }
+		appliedConfiguration.delegate?.outdent(headline: headline, attributedText: attributedText)
 	}
 	
 	func moveUp(_: EditorTextView) {
-		appliedConfiguration.delegate?.moveUp(item: appliedConfiguration.editorItem)
+		guard let headline = appliedConfiguration.headline else { return }
+		appliedConfiguration.delegate?.moveUp(headline: headline)
 	}
 	
 	func moveDown(_: EditorTextView) {
-		appliedConfiguration.delegate?.moveDown(item: appliedConfiguration.editorItem)
+		guard let headline = appliedConfiguration.headline else { return }
+		appliedConfiguration.delegate?.moveDown(headline: headline)
 	}
 	
 }

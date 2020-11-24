@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import Templeton
 
 protocol EditorTextViewDelegate: class {
-	var item: EditorItem? { get }
+	var headline: Headline? { get }
 	func deleteHeadline(_: EditorTextView)
 	func createHeadline(_: EditorTextView)
 	func indent(_: EditorTextView, attributedText: NSAttributedString)
@@ -21,8 +22,8 @@ class EditorTextView: UITextView, TextCursorSource {
 	
 	weak var editorDelegate: EditorTextViewDelegate?
 	
-	var identifier: Any? {
-		return editorDelegate?.item
+	var model: Any? {
+		return editorDelegate?.headline
 	}
 
 	override var keyCommands: [UIKeyCommand]? {

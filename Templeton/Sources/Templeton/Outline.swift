@@ -45,15 +45,6 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		case updated = "updated"
 	}
 
-	public var headlineDictionary: [String: Headline] {
-		if headlineDictionariesNeedUpdate {
-			rebuildHeadlineDictionary()
-		}
-		return _headlineDictionary
-	}
-	private var headlineDictionariesNeedUpdate = true
-	private var _headlineDictionary = [String: Headline]()
-
 	private var headlinesFile: HeadlinesFile?
 	
 	init(parentID: EntityID, title: String) {
@@ -74,95 +65,90 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		outlineNameDidChange()
 	}
 	
-	public func deleteHeadline(headlineID: String) {
+	public func deleteHeadline(headline: Headline) {
 		var headlines = self.headlines ?? [Headline]()
 		
-		let parentHeadlineID = headlineDictionary[headlineID]?.parentID
-		if let parentHeadlineID = parentHeadlineID {
-			headlines = headlineDictionary[parentHeadlineID]?.headlines ?? [Headline]()
+		if let parent = headline.parent {
+			headlines = parent.headlines ?? [Headline]()
 		}
 		
-		headlines = headlines.filter { $0.id != headlineID }
+		headlines = headlines.filter { $0 != headline }
 		
-		if let parentHeadlineID = parentHeadlineID {
-			headlineDictionary[parentHeadlineID]?.headlines = headlines
+		if let parent = headline.parent {
+			parent.headlines = headlines
 		} else {
 			self.headlines = headlines
 		}
 		
-		headlineDictionariesNeedUpdate = true
 		outlineBodyDidChange()
 	}
 	
-	public func createHeadline(afterHeadlineID: String? = nil) -> Headline {
+	public func createHeadline(afterHeadline: Headline? = nil) {
 		var headlines = self.headlines ?? [Headline]()
 		
-		let parentHeadlineID = afterHeadlineID != nil ? headlineDictionary[afterHeadlineID!]?.parentID : nil
-		if let parentHeadlineID = parentHeadlineID {
-			headlines = headlineDictionary[parentHeadlineID]?.headlines ?? [Headline]()
+		if let parent = afterHeadline?.parent {
+			headlines = parent.headlines ?? [Headline]()
 		}
 		
-		let insertIndex = headlines.firstIndex(where: { $0.id == afterHeadlineID }) ?? 0
+		let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? 0
 		let headline = Headline()
 		headlines.insert(headline, at: insertIndex + 1)
 		
-		if let parentHeadlineID = parentHeadlineID {
-			headlineDictionary[parentHeadlineID]?.headlines = headlines
+		if let parent = afterHeadline?.parent {
+			parent.headlines = headlines
 		} else {
 			self.headlines = headlines
 		}
 		
-		headlineDictionariesNeedUpdate = true
-		outlineBodyDidChange()
-		return headline
-	}
-	
-	public func updateHeadline(headlineID: String, attributedText: NSAttributedString) {
-		headlineDictionary[headlineID]?.attributedText = attributedText
 		outlineBodyDidChange()
 	}
 	
-	public func expandHeadline(headlineID: String) {
-		headlineDictionary[headlineID]?.isExpanded = true
+	public func updateHeadline(headline: Headline, attributedText: NSAttributedString) {
+		headline.attributedText = attributedText
 		outlineBodyDidChange()
 	}
 	
-	public func collapseHeadline(headlineID: String) {
-		headlineDictionary[headlineID]?.isExpanded = false
+	public func expandHeadline(headline: Headline) {
+		headline.isExpanded = true
 		outlineBodyDidChange()
 	}
 	
-	public func indentHeadline(headlineID: String) -> (Headline, Headline)? {
-		guard let headline = headlineDictionary[headlineID] else { return nil }
-		
-		if let parentID = headline.parentID,
-		   let parentHeadline = headlineDictionary[parentID],
-		   let headlineIndex = parentHeadline.headlines?.firstIndex(of: headline),
-		   headlineIndex > 0,
-		   let sibling = parentHeadline.headlines?[headlineIndex - 1] {
-			
-			var siblingHeadlines = sibling.headlines ?? [Headline]()
-			siblingHeadlines.insert(headline, at: 0)
-			sibling.headlines = siblingHeadlines
-			parentHeadline.headlines = parentHeadline.headlines?.filter { $0.id != headline.id }
-
-			outlineBodyDidChange()
-			return (headline, sibling)
-		}
-		
-		// This is a top level moving to the next one down
-		
-		guard let headlineIndex = headlines?.firstIndex(of: headline),
-			  headlineIndex > 0,
-			  let sibling = headlines?[headlineIndex - 1] else { return nil }
-		
-		var siblingHeadlines = sibling.headlines ?? [Headline]()
-		siblingHeadlines.insert(headline, at: 0)
-		sibling.headlines = siblingHeadlines
-		headlines = headlines?.filter { $0.id != headline.id }
-
+	public func collapseHeadline(headline: Headline) {
+		headline.isExpanded = false
 		outlineBodyDidChange()
-		return (headline, sibling)
+	}
+	
+	public func indentHeadline(headlineID: String) {
+//		guard let headline = headlineDictionary[headlineID] else { return nil }
+//
+//		if let parentID = headline.parentID,
+//		   let parentHeadline = headlineDictionary[parentID],
+//		   let headlineIndex = parentHeadline.headlines?.firstIndex(of: headline),
+//		   headlineIndex > 0,
+//		   let sibling = parentHeadline.headlines?[headlineIndex - 1] {
+//
+//			var siblingHeadlines = sibling.headlines ?? [Headline]()
+//			siblingHeadlines.insert(headline, at: 0)
+//			sibling.headlines = siblingHeadlines
+//			parentHeadline.headlines = parentHeadline.headlines?.filter { $0.id != headline.id }
+//
+//			outlineBodyDidChange()
+//			return (headline, sibling)
+//		}
+//
+//		// This is a top level moving to the next one down
+//
+//		guard let headlineIndex = headlines?.firstIndex(of: headline),
+//			  headlineIndex > 0,
+//			  let sibling = headlines?[headlineIndex - 1] else { return nil }
+//
+//		var siblingHeadlines = sibling.headlines ?? [Headline]()
+//		siblingHeadlines.insert(headline, at: 0)
+//		sibling.headlines = siblingHeadlines
+//		headlines = headlines?.filter { $0.id != headline.id }
+//
+//		outlineBodyDidChange()
+//		return (headline, sibling)
 	}
 	
 	public func load() {
@@ -172,8 +158,6 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		if headlines?.isEmpty ?? true {
 			headlines = [Headline()]
 		}
-
-		headlineDictionariesNeedUpdate = true
 	}
 	
 	public func save() {
@@ -190,8 +174,6 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func suspend() {
 		headlinesFile?.save()
 		headlinesFile = nil
-		_headlineDictionary = [String: Headline]()
-		headlineDictionariesNeedUpdate = true
 	}
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
@@ -252,23 +234,10 @@ private extension Outline {
 		NotificationCenter.default.post(name: .OutlineDidDelete, object: self, userInfo: nil)
 	}
 
-	func rebuildHeadlineDictionary() {
-		var idDictionary = [String: Headline]()
-
-		func add(_ headline: Headline) {
-			idDictionary[headline.id] = headline
-			headline.headlines?.forEach { add($0) }
-		}
-		headlines?.forEach { add($0) }
-
-		_headlineDictionary = idDictionary
-		headlineDictionariesNeedUpdate = false
-	}
-
 	func updateHeadlines() {
 		headlines?.forEach { headline in
 			headline.visit(visitor: { visited in
-				visited.headlines?.forEach { $0.parentID = visited.id }
+				visited.headlines?.forEach { $0.parent = visited }
 			})
 		}
 	}

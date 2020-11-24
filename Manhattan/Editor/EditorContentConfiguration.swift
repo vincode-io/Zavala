@@ -6,16 +6,17 @@
 //
 
 import UIKit
+import Templeton
 
 struct EditorContentConfiguration: UIContentConfiguration, Hashable {
 
+	weak var headline: Headline? = nil
 	weak var delegate: EditorCollectionViewCellDelegate? = nil
 
-	var editorItem: EditorItem
 	var indentionLevel: Int
 	var indentationWidth: CGFloat
 	var isChevronShowing: Bool {
-		return !editorItem.children.isEmpty
+		return !(headline?.headlines?.isEmpty ?? true)
 	}
 	
 	func makeContentView() -> UIView & UIContentView {
@@ -27,10 +28,10 @@ struct EditorContentConfiguration: UIContentConfiguration, Hashable {
 	}
 
 	func hash(into hasher: inout Hasher) {
-		hasher.combine(editorItem)
+		hasher.combine(headline)
 	}
 	
 	static func == (lhs: EditorContentConfiguration, rhs: EditorContentConfiguration) -> Bool {
-		return lhs.editorItem == rhs.editorItem
+		return lhs.headline == rhs.headline
 	}
 }
