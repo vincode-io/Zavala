@@ -186,7 +186,7 @@ extension EditorContentView {
 				bulletView!.centerYAnchor.constraint(equalTo: centerYAnchor)
 			])
 		} else {
-			bulletView!.tintColor = AppAssets.accentColor
+			bulletView!.tintColor = AppAssets.accent
 			NSLayoutConstraint.activate([
 				bulletView!.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -21),
 				bulletView!.widthAnchor.constraint(equalToConstant: 4),

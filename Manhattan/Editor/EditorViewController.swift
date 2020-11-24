@@ -103,6 +103,8 @@ extension EditorViewController {
 		return collectionView.dequeueConfiguredReusableCell(using: editorRegistration!, for: indexPath, item: editorItem)
 	}
 	
+	
+	
 //	private func configureDataSource() {
 //		let editorRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, EditorItem> { (cell, indexPath, item) in
 //			cell.editorItem = item
