@@ -65,7 +65,7 @@ private extension HeadlinesFile {
 
 				fileData = try Data(contentsOf: readURL)
 			} catch {
-				os_log(.error, log: log, "Headlines read from disk failed: %@.", error.localizedDescription)
+				// Ignore this.  It will get called everytime we create a new Outline
 			}
 		})
 		
