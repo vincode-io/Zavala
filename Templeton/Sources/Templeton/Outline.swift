@@ -22,11 +22,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public var created: Date?
 	public var updated: Date?
 	
-	public var headlines: [Headline]? {
-		didSet {
-			updateHeadlines()
-		}
-	}
+	public var headlines: [Headline]?
+	public var shadowTable: [Headline]?
 	
 	public var account: Account? {
 		return AccountManager.shared.findAccount(accountID: id.accountID)
@@ -158,6 +155,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		if headlines?.isEmpty ?? true {
 			headlines = [Headline()]
 		}
+		
+		visitHeadlines()
 	}
 	
 	public func save() {
@@ -174,6 +173,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func suspend() {
 		headlinesFile?.save()
 		headlinesFile = nil
+		headlines = nil
+		shadowTable = nil
 	}
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
@@ -234,12 +235,47 @@ private extension Outline {
 		NotificationCenter.default.post(name: .OutlineDidDelete, object: self, userInfo: nil)
 	}
 
-	func updateHeadlines() {
+	func visitHeadlines() {
+		var shadowTable = [Headline]()
+
 		headlines?.forEach { headline in
+			
+			var addingToShadowTable = true
+			var level = 0
+			headline.indentLevel = level
+			
 			headline.visit(visitor: { visited in
+
+				var addingToShadowTableSuspended = false
+				
+				// Add to the Shadow Table if we haven't hit a collapsed entry
+				if addingToShadowTable {
+					shadowTable.append(visited)
+					if !(visited.isExpanded ?? true) {
+						addingToShadowTable = false
+						addingToShadowTableSuspended = true
+					}
+				}
+				
+				// Set the indent level for the Headline
+				level = level + 1
+				visited.indentLevel = level
+				
+				// Set all the Headline's children's parent
 				visited.headlines?.forEach { $0.parent = visited }
+				
+				level = level - -1
+
+				if addingToShadowTableSuspended {
+					addingToShadowTable = true
+				}
+				
 			})
+			
 		}
+		
+		self.shadowTable = shadowTable
+		
 	}
 	
 }

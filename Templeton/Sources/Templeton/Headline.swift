@@ -9,17 +9,13 @@ import UIKit
 
 public final class Headline: HeadlineContainer, Identifiable, Equatable, Hashable, Codable {
 	
+	public weak var parent: Headline?
+	public var indentLevel: Int?
+
 	public var id: String
 	public var text: Data?
 	public var isExpanded: Bool?
-	public var headlines: [Headline]? {
-		didSet {
-			updateHeadlines()
-		}
-	}
-
-	public weak var parent: Headline?
-	public var indentLevel: Int?
+	public var headlines: [Headline]?
 
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
@@ -85,19 +81,4 @@ extension Headline: CustomDebugStringConvertible {
 	public var debugDescription: String {
 		return "\(plainText ?? "") (\(id))"
 	}
-}
-
-// MARK: Helpers
-
-private extension Headline {
-	
-	func updateHeadlines() {
-		headlines?.forEach { headline in
-			headline.parent = self
-			headline.visit(visitor: { visited in
-				visited.headlines?.forEach { $0.parent = visited }
-			})
-		}
-	}
-	
 }
