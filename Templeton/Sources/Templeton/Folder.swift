@@ -103,7 +103,6 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		outline.importOPML(outlineIndexers)
 		outline.forceSave()
 		return outline
-
 	}
 	
 	public func createOutline(name: String) -> Outline {
