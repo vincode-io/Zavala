@@ -19,7 +19,7 @@ protocol EditorCollectionViewCellDelegate: class {
 
 class EditorCollectionViewCell: UICollectionViewListCell {
 
-	weak var editorItem: EditorItem? {
+	var editorItem: EditorItem? {
 		didSet {
 			setNeedsUpdateConfiguration()
 		}
