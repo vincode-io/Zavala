@@ -109,39 +109,23 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	func deleteHeadline(headline: Headline) {
-		var index: Int?
-		
-		UIView.performWithoutAnimation {
-			collectionView.performBatchUpdates {
-				if let deleteIndex = outline?.deleteHeadline(headline: headline) {
-					index = deleteIndex
-					collectionView.deleteItems(at: [IndexPath(row: deleteIndex, section: 0)])
-				}
-			} completion: { [weak self] _ in
-				if let index = index, index > 0, let textCursor = self?.collectionView.cellForItem(at: IndexPath(row: index - 1, section: 0)) as? TextCursorTarget {
-					textCursor.moveToEnd()
-				}
+		if let deleteIndex = outline?.deleteHeadline(headline: headline) {
+			collectionView.deleteItems(at: [IndexPath(row: deleteIndex, section: 0)])
+			if deleteIndex > 0, let textCursor = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 0)) as? TextCursorTarget {
+				textCursor.moveToEnd()
 			}
 		}
 	}
 	
 	// TODO: Need to take into consideration expanded state when placing the new Headline
 	func createHeadline(headline: Headline) {
-		var indexPath: IndexPath?
-		
-		UIView.performWithoutAnimation {
-			collectionView.performBatchUpdates {
-				if let insertIndex = outline?.createHeadline(afterHeadline: headline) {
-					indexPath = IndexPath(row: insertIndex, section: 0)
-					collectionView.insertItems(at: [indexPath!])
-				}
-			} completion: { [weak self] _ in
-				if let indexPath = indexPath, let textCursor = self?.collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
-					textCursor.moveToEnd()
-				}
+		if let insertIndex = outline?.createHeadline(afterHeadline: headline) {
+			let indexPath = IndexPath(row: insertIndex, section: 0)
+			collectionView.insertItems(at: [indexPath])
+			if let textCursor = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+				textCursor.moveToEnd()
 			}
 		}
-
 	}
 	
 	func indent(headline: Headline, attributedText: NSAttributedString) {
