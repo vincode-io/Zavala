@@ -111,26 +111,27 @@ extension EditorCollectionViewCell {
 	}
 	
 	private func setDisclosure(isExpanded: Bool, animated: Bool) {
+		guard isDisclosed != isExpanded else { return }
 		isDisclosed = isExpanded
 
-		if self.isDisclosed {
-			self.disclosureIndicator.accessibilityLabel = NSLocalizedString("Collapse", comment: "Collapse")
+		if isDisclosed {
+			disclosureIndicator.accessibilityLabel = NSLocalizedString("Collapse", comment: "Collapse")
 			if animated {
 				UIView.animate(withDuration: 0.3) {
 					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
 				}
 			} else {
-				self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
+				disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
 
 			}
 		} else {
-			self.disclosureIndicator.accessibilityLabel = NSLocalizedString("Expand", comment: "Expand")
+			disclosureIndicator.accessibilityLabel = NSLocalizedString("Expand", comment: "Expand")
 			if animated {
 				UIView.animate(withDuration: 0.3) {
 					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
 				}
 			} else {
-				self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
+				disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
 			}
 		}
 	}
