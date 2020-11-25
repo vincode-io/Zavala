@@ -60,8 +60,11 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 	
 	override func updateConfiguration(using state: UICellConfigurationState) {
 		super.updateConfiguration(using: state)
+		
+		layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+
 		guard let headline = headline else { return }
-	
+
 		if headline.headlines?.isEmpty ?? true {
 			accessories = []
 		} else {

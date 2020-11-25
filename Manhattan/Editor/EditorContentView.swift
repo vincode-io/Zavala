@@ -65,9 +65,9 @@ class EditorContentView: UIView, UIContentView {
 		let adjustedTrailingIndention: CGFloat
 		if traitCollection.userInterfaceIdiom == .mac {
 			if configuration.isChevronShowing {
-				adjustedLeadingIndention = configuration.indentationWidth - 20
+				adjustedLeadingIndention = configuration.indentationWidth - 18
 			} else {
-				adjustedLeadingIndention = configuration.indentationWidth + 20
+				adjustedLeadingIndention = configuration.indentationWidth + 16
 			}
 			adjustedTrailingIndention = 0
 		} else {
@@ -188,7 +188,7 @@ extension EditorContentView {
 		if traitCollection.userInterfaceIdiom == .mac {
 			bulletView!.tintColor = .quaternaryLabel
 			NSLayoutConstraint.activate([
-				bulletView!.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 27),
+				bulletView!.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 21),
 				bulletView!.widthAnchor.constraint(equalToConstant: 4),
 				bulletView!.heightAnchor.constraint(equalToConstant: 4),
 				bulletView!.centerYAnchor.constraint(equalTo: centerYAnchor)
@@ -213,9 +213,9 @@ extension EditorContentView {
 
 		var indention: CGFloat
 		if traitCollection.userInterfaceIdiom == .mac {
-			indention = CGFloat(28 - (indentLevel * 13))
+			indention = CGFloat(22 - (indentLevel * 13))
 			if hasChevron {
-				indention = indention - 40
+				indention = indention - 34
 			}
 		} else {
 			indention = CGFloat(19 - (indentLevel * 10))
