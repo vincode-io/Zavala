@@ -266,8 +266,25 @@ private extension Outline {
 	}
 
 	private func expandHeadline(headline: Headline) -> ShadowTableChanges {
+		guard let headlineShadowTableIndex = headline.shadowTableIndex else {
+			return ShadowTableChanges(deletes: nil, inserts: nil)
+		}
+		
 		headline.isExpanded = true
+
+		let expand = ExpandHeadlineVisitor()
+		headline.headlines?.forEach { headline in
+			headline.visit(visitor: expand.visitor(_:))
+		}
+		
 		var inserts = [Int]()
+		for i in 0..<expand.shadowTableInserts.count {
+			let newIndex = i + headlineShadowTableIndex + 1
+			shadowTable?.insert(expand.shadowTableInserts[i], at: newIndex)
+			inserts.append(newIndex)
+		}
+		
+		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
 		return ShadowTableChanges(deletes: nil, inserts: inserts)
 	}
 	
@@ -280,7 +297,10 @@ private extension Outline {
 		}
 		
 		shadowTable?.remove(atOffsets: IndexSet(collapse.shadowTableIndexes))
-		resetShadowTableIndexes()
+		
+		if let startingAt = headline.shadowTableIndex {
+			resetShadowTableIndexes(startingAt: startingAt)
+		}
 		return ShadowTableChanges(deletes: collapse.shadowTableIndexes, inserts: nil)
 	}
 	
@@ -292,9 +312,9 @@ private extension Outline {
 		self.shadowTable = transient.shadowTable
 	}
 	
-	func resetShadowTableIndexes() {
+	func resetShadowTableIndexes(startingAt: Int = 0) {
 		guard let shadowTable = shadowTable else { return }
-		for i in 0..<shadowTable.count {
+		for i in startingAt..<shadowTable.count {
 			shadowTable[i].shadowTableIndex = i
 		}
 	}
