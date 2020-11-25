@@ -188,7 +188,7 @@ extension EditorContentView {
 		if traitCollection.userInterfaceIdiom == .mac {
 			bulletView!.tintColor = .quaternaryLabel
 			NSLayoutConstraint.activate([
-				bulletView!.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 21),
+				bulletView!.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
 				bulletView!.widthAnchor.constraint(equalToConstant: 4),
 				bulletView!.heightAnchor.constraint(equalToConstant: 4),
 				bulletView!.centerYAnchor.constraint(equalTo: centerYAnchor)
@@ -213,7 +213,7 @@ extension EditorContentView {
 
 		var indention: CGFloat
 		if traitCollection.userInterfaceIdiom == .mac {
-			indention = CGFloat(22 - (indentLevel * 13))
+			indention = CGFloat(21 - (indentLevel * 13))
 			if hasChevron {
 				indention = indention - 34
 			}
