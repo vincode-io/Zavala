@@ -11,6 +11,7 @@ public final class Headline: HeadlineContainer, Identifiable, Equatable, Hashabl
 	
 	public weak var parent: Headline?
 	public var indentLevel: Int?
+	public var shadowTableIndex: Int?
 
 	public var id: String
 	public var text: Data?

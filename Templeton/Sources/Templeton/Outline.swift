@@ -258,11 +258,14 @@ private extension Outline {
 			
 			// Add to the Shadow Table if we haven't hit a collapsed entry
 			if addingToShadowTable {
+				visited.shadowTableIndex = shadowTable.count
 				shadowTable.append(visited)
 				if !(visited.isExpanded ?? true) {
 					addingToShadowTable = false
 					addingToShadowTableSuspended = true
 				}
+			} else {
+				visited.shadowTableIndex = nil
 			}
 			
 			// Set the indent level for the Headline
