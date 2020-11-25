@@ -272,15 +272,26 @@ private extension Outline {
 		
 		headline.isExpanded = true
 
-		let expand = ExpandHeadlineVisitor()
+		var shadowTableInserts = [Headline]()
+
+		func visitor(_ visited: Headline) {
+			shadowTableInserts.append(visited)
+
+			if visited.isExpanded ?? true {
+				visited.headlines?.forEach {
+					$0.visit(visitor: visitor)
+				}
+			}
+		}
+
 		headline.headlines?.forEach { headline in
-			headline.visit(visitor: expand.visitor(_:))
+			headline.visit(visitor: visitor(_:))
 		}
 		
 		var inserts = [Int]()
-		for i in 0..<expand.shadowTableInserts.count {
+		for i in 0..<shadowTableInserts.count {
 			let newIndex = i + headlineShadowTableIndex + 1
-			shadowTable?.insert(expand.shadowTableInserts[i], at: newIndex)
+			shadowTable?.insert(shadowTableInserts[i], at: newIndex)
 			inserts.append(newIndex)
 		}
 		
@@ -291,17 +302,30 @@ private extension Outline {
 	private func collapseHeadline(headline: Headline) -> ShadowTableChanges {
 		headline.isExpanded = false
 			
-		let collapse = CollapseHeadlineVisitor()
-		headline.headlines?.forEach { headline in
-			headline.visit(visitor: collapse.visitor(_:))
+		var shadowTableIndexes = [Int]()
+
+		func visitor(_ visited: Headline) {
+			if let shadowTableIndex = visited.shadowTableIndex {
+				shadowTableIndexes.append(shadowTableIndex)
+			}
+
+			if visited.isExpanded ?? true {
+				visited.headlines?.forEach {
+					$0.visit(visitor: visitor)
+				}
+			}
 		}
 		
-		shadowTable?.remove(atOffsets: IndexSet(collapse.shadowTableIndexes))
+		headline.headlines?.forEach { headline in
+			headline.visit(visitor: visitor(_:))
+		}
+		
+		shadowTable?.remove(atOffsets: IndexSet(shadowTableIndexes))
 		
 		if let startingAt = headline.shadowTableIndex {
 			resetShadowTableIndexes(startingAt: startingAt)
 		}
-		return ShadowTableChanges(deletes: collapse.shadowTableIndexes, inserts: nil)
+		return ShadowTableChanges(deletes: shadowTableIndexes, inserts: nil)
 	}
 	
 	func rebuildTransientData() {
