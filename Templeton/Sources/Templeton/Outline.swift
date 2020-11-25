@@ -16,6 +16,19 @@ public extension Notification.Name {
 
 public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable {
 	
+	public struct ShadowTableChanges {
+		let deletes: [Int]?
+		let inserts: [Int]?
+		
+		var sortedDeletes: [Int] {
+			return (deletes ?? [Int]()).sorted(by: { $0 > $1 })
+		}
+
+		var sortedInserts: [Int] {
+			return (inserts ?? [Int]()).sorted(by: { $0 < $1 })
+		}
+	}
+	
 	public var id: EntityID
 	public var title: String?
 	public var isFavorite: Bool?
@@ -111,16 +124,18 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		outlineBodyDidChange()
 	}
 	
-	public func expandHeadline(headline: Headline) {
-		headline.isExpanded = true
+	public func toggleDisclosure(headline: Headline) -> ShadowTableChanges {
+		let changes: ShadowTableChanges
+		if headline.isExpanded ?? true {
+			changes = collapseHeadline(headline: headline)
+		} else {
+			changes = expandHeadline(headline: headline)
+		}
+		
 		outlineBodyDidChange()
+		return changes
 	}
-	
-	public func collapseHeadline(headline: Headline) {
-		headline.isExpanded = false
-		outlineBodyDidChange()
-	}
-	
+
 	public func indentHeadline(headlineID: String) {
 //		guard let headline = headlineDictionary[headlineID] else { return nil }
 //
@@ -246,6 +261,16 @@ private extension Outline {
 		NotificationCenter.default.post(name: .OutlineDidDelete, object: self, userInfo: nil)
 	}
 
+	private func expandHeadline(headline: Headline) -> ShadowTableChanges {
+		var inserts = [Int]()
+		return ShadowTableChanges(deletes: nil, inserts: inserts)
+	}
+	
+	private func collapseHeadline(headline: Headline) -> ShadowTableChanges {
+		var deletes = [Int]()
+		return ShadowTableChanges(deletes: deletes, inserts: nil)
+	}
+	
 	func visitHeadlines() {
 		let transient = TransientDataVisitor()
 		headlines?.forEach { headline in
