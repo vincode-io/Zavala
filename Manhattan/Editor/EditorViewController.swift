@@ -111,14 +111,16 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	func deleteHeadline(headline: Headline) {
 		var index: Int?
 		
-		collectionView.performBatchUpdates {
-			if let deleteIndex = outline?.deleteHeadline(headline: headline) {
-				index = deleteIndex
-				collectionView.deleteItems(at: [IndexPath(row: deleteIndex, section: 0)])
-			}
-		} completion: { [weak self] _ in
-			if let index = index, index > 0, let textCursor = self?.collectionView.cellForItem(at: IndexPath(row: index - 1, section: 0)) as? TextCursorTarget {
-				textCursor.moveToEnd()
+		UIView.performWithoutAnimation {
+			collectionView.performBatchUpdates {
+				if let deleteIndex = outline?.deleteHeadline(headline: headline) {
+					index = deleteIndex
+					collectionView.deleteItems(at: [IndexPath(row: deleteIndex, section: 0)])
+				}
+			} completion: { [weak self] _ in
+				if let index = index, index > 0, let textCursor = self?.collectionView.cellForItem(at: IndexPath(row: index - 1, section: 0)) as? TextCursorTarget {
+					textCursor.moveToEnd()
+				}
 			}
 		}
 	}
