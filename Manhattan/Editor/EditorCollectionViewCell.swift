@@ -73,6 +73,8 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 			accessories = [.customView(configuration: accessoryConfig)]
 		}
 		
+		setDisclosure(isExpanded: headline.isExpanded ?? true, animated: false)
+		
 		var content = EditorContentConfiguration(indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
 		content.headline = headline
 		content.delegate = delegate
@@ -110,14 +112,24 @@ extension EditorCollectionViewCell {
 	
 	private func setDisclosure(isExpanded: Bool, animated: Bool) {
 		isDisclosed = isExpanded
-		let duration = animated ? 0.3 : 0.0
 
-		UIView.animate(withDuration: duration) {
-			if self.isDisclosed {
-				self.disclosureIndicator.accessibilityLabel = NSLocalizedString("Collapse", comment: "Collapse")
-				self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
+		if self.isDisclosed {
+			self.disclosureIndicator.accessibilityLabel = NSLocalizedString("Collapse", comment: "Collapse")
+			if animated {
+				UIView.animate(withDuration: 0.3) {
+					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
+				}
 			} else {
-				self.disclosureIndicator.accessibilityLabel = NSLocalizedString("Expand", comment: "Expand")
+				self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
+
+			}
+		} else {
+			self.disclosureIndicator.accessibilityLabel = NSLocalizedString("Expand", comment: "Expand")
+			if animated {
+				UIView.animate(withDuration: 0.3) {
+					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
+				}
+			} else {
 				self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
 			}
 		}
