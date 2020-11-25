@@ -17,16 +17,8 @@ public extension Notification.Name {
 public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable {
 	
 	public struct ShadowTableChanges {
-		let deletes: [Int]?
-		let inserts: [Int]?
-		
-		var sortedDeletes: [Int] {
-			return (deletes ?? [Int]()).sorted(by: { $0 > $1 })
-		}
-
-		var sortedInserts: [Int] {
-			return (inserts ?? [Int]()).sorted(by: { $0 < $1 })
-		}
+		public let deletes: [Int]?
+		public let inserts: [Int]?
 	}
 	
 	public var id: EntityID
@@ -139,10 +131,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func toggleDisclosure(headline: Headline) -> ShadowTableChanges {
 		let changes: ShadowTableChanges
 		if headline.isExpanded ?? true {
-			headline.isExpanded = false
 			changes = collapseHeadline(headline: headline)
 		} else {
-			headline.isExpanded = true
 			changes = expandHeadline(headline: headline)
 		}
 
@@ -191,7 +181,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			headlines = [Headline()]
 		}
 		
-		visitHeadlines()
+		resetTransientData()
 	}
 	
 	public func save() {
@@ -276,16 +266,24 @@ private extension Outline {
 	}
 
 	private func expandHeadline(headline: Headline) -> ShadowTableChanges {
+		headline.isExpanded = true
 		var inserts = [Int]()
 		return ShadowTableChanges(deletes: nil, inserts: inserts)
 	}
 	
 	private func collapseHeadline(headline: Headline) -> ShadowTableChanges {
-		var deletes = [Int]()
-		return ShadowTableChanges(deletes: deletes, inserts: nil)
+		headline.isExpanded = false
+			
+		let collapse = CollapseHeadlineVisitor()
+		headline.headlines?.forEach { headline in
+			headline.visit(visitor: collapse.visitor(_:))
+		}
+		
+		resetTransientData()
+		return ShadowTableChanges(deletes: collapse.shadowTableIndexes, inserts: nil)
 	}
 	
-	func visitHeadlines() {
+	func resetTransientData() {
 		let transient = TransientDataVisitor()
 		headlines?.forEach { headline in
 			headline.visit(visitor: transient.visitor(_:))

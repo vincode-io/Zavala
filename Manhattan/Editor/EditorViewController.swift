@@ -99,7 +99,18 @@ extension EditorViewController {
 extension EditorViewController: EditorCollectionViewCellDelegate {
 
 	func toggleDisclosure(headline: Headline) {
+		guard let outline = outline else { return }
+		let changes = outline.toggleDisclosure(headline: headline)
 		
+		if let deletes = changes.deletes {
+			let indexPaths = deletes.map { IndexPath(row: $0, section: 0) }
+			collectionView.deleteItems(at: indexPaths)
+		}
+
+		if let inserts = changes.inserts {
+			let indexPaths = inserts.map { IndexPath(row: $0, section: 0) }
+			collectionView.insertItems(at: indexPaths)
+		}
 	}
 
 	func textChanged(headline: Headline, attributedText: NSAttributedString) {
