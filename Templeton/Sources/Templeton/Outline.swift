@@ -181,7 +181,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			headlines = [Headline()]
 		}
 		
-		resetTransientData()
+		rebuildTransientData()
 	}
 	
 	public func save() {
@@ -279,16 +279,24 @@ private extension Outline {
 			headline.visit(visitor: collapse.visitor(_:))
 		}
 		
-		resetTransientData()
+		shadowTable?.remove(atOffsets: IndexSet(collapse.shadowTableIndexes))
+		resetShadowTableIndexes()
 		return ShadowTableChanges(deletes: collapse.shadowTableIndexes, inserts: nil)
 	}
 	
-	func resetTransientData() {
+	func rebuildTransientData() {
 		let transient = TransientDataVisitor()
 		headlines?.forEach { headline in
 			headline.visit(visitor: transient.visitor(_:))
 		}
 		self.shadowTable = transient.shadowTable
+	}
+	
+	func resetShadowTableIndexes() {
+		guard let shadowTable = shadowTable else { return }
+		for i in 0..<shadowTable.count {
+			shadowTable[i].shadowTableIndex = i
+		}
 	}
 	
 }
