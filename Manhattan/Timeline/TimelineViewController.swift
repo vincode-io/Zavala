@@ -230,10 +230,12 @@ extension TimelineViewController {
 		navigationItem.title = outlineProvider?.name
 		view.window?.windowScene?.title = outlineProvider?.name
 		
-		if isCreateOutlineUnavailable {
-			navigationItem.rightBarButtonItems = nil
-		} else {
-			navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
+		if traitCollection.userInterfaceIdiom != .mac {
+			if isCreateOutlineUnavailable {
+				navigationItem.rightBarButtonItems = nil
+			} else {
+				navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
+			}
 		}
 	}
 	
