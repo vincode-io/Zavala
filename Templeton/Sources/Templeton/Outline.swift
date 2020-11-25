@@ -77,7 +77,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		outlineNameDidChange()
 	}
 	
-	public func deleteHeadline(headline: Headline) {
+	public func deleteHeadline(headline: Headline) -> Int? {
 		var headlines = self.headlines ?? [Headline]()
 		
 		if let parent = headline.parent {
@@ -93,6 +93,10 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		}
 		
 		outlineBodyDidChange()
+		
+		guard let shadowTableIndex = headline.shadowTableIndex else { return nil }
+		shadowTable?.remove(at: shadowTableIndex)
+		return shadowTableIndex
 	}
 	
 	public func createHeadline(afterHeadline: Headline? = nil) -> Int {
