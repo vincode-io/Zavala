@@ -35,19 +35,13 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 	private var isDisclosed = false
 
 	private lazy var disclosureIndicator: UIView = {
-		let indicator = UIImageView(image: AppAssets.disclosure)
+		let indicator = FixedSizeImageView(image: AppAssets.disclosure)
 		
 		if traitCollection.userInterfaceIdiom == .mac {
-			NSLayoutConstraint.activate([
-				indicator.widthAnchor.constraint(greaterThanOrEqualToConstant: 25),
-				indicator.heightAnchor.constraint(greaterThanOrEqualToConstant: 25)
-			])
+			indicator.dimension = 25
 			indicator.tintColor = .systemGray2
 		} else {
-			NSLayoutConstraint.activate([
-				indicator.widthAnchor.constraint(greaterThanOrEqualToConstant: 44),
-				indicator.heightAnchor.constraint(greaterThanOrEqualToConstant: 44)
-			])
+			indicator.dimension = 44
 		}
 		
 		indicator.isUserInteractionEnabled = true
