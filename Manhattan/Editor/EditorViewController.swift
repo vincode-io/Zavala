@@ -122,8 +122,8 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	func deleteHeadline(headline: Headline) {
 		if let deleteIndex = outline?.deleteHeadline(headline: headline) {
 			collectionView.deleteItems(at: [IndexPath(row: deleteIndex, section: 0)])
-			if deleteIndex > 0, let textCursor = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 0)) as? TextCursorTarget {
-				textCursor.moveToEnd()
+			if deleteIndex > 0, let target = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 0)) as? TextCursorTarget {
+				target.moveToEnd()
 			}
 		}
 	}
@@ -149,9 +149,19 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	func moveUp(headline: Headline) {
+		guard let shadowTableIndex = headline.shadowTableIndex, shadowTableIndex > 0 else { return }
+		let indexPath = IndexPath(row: shadowTableIndex - 1, section: 0)
+		if let target = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+			target.moveToEnd()
+		}
 	}
 	
 	func moveDown(headline: Headline) {
+		guard let shadowTableIndex = headline.shadowTableIndex, let shadowTable = outline?.shadowTable, shadowTableIndex < (shadowTable.count - 1) else { return }
+		let indexPath = IndexPath(row: shadowTableIndex + 1, section: 0)
+		if let target = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+			target.moveToEnd()
+		}
 	}
 	
 }
