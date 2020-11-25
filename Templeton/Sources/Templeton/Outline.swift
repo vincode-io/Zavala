@@ -86,27 +86,33 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		
 		outlineBodyDidChange()
 		
-		guard let shadowTableIndex = headline.shadowTableIndex else { return nil }
-		shadowTable?.remove(at: shadowTableIndex)
-		return shadowTableIndex
+		guard let headlineShadowTableIndex = headline.shadowTableIndex else { return nil }
+		shadowTable?.remove(at: headlineShadowTableIndex)
+		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
+		return headlineShadowTableIndex
 	}
 	
 	public func createHeadline(afterHeadline: Headline? = nil) -> Int {
-		
-		var headlines = self.headlines ?? [Headline]()
-		
-		if let parent = afterHeadline?.parent {
-			headlines = parent.headlines ?? [Headline]()
-		}
-		
-		let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? 0
 		let headline = Headline()
-		
-		headlines.insert(headline, at: insertIndex + 1)
-		
-		if let parent = afterHeadline?.parent {
+
+		if afterHeadline?.isExpanded ?? true && !(afterHeadline?.headlines?.isEmpty ?? true) {
+			afterHeadline!.headlines!.insert(headline, at: 0)
+			headline.indentLevel = (afterHeadline?.indentLevel ?? 0) + 1
+			headline.parent = afterHeadline
+		} else if let parent = afterHeadline?.parent {
+			var headlines = parent.headlines ?? [Headline]()
+			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? 0
+			headlines.insert(headline, at: insertIndex + 1)
+			headline.indentLevel = afterHeadline?.indentLevel ?? 0
+			headline.parent = afterHeadline?.parent
 			parent.headlines = headlines
 		} else {
+			var headlines = self.headlines ?? [Headline]()
+			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? 0
+			let headline = Headline()
+			headlines.insert(headline, at: insertIndex + 1)
+			headline.indentLevel = afterHeadline?.indentLevel ?? 0
+			headline.parent = afterHeadline?.parent
 			self.headlines = headlines
 		}
 		
@@ -115,9 +121,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		let afterShadowTableIndex = afterHeadline?.shadowTableIndex ?? 0
 		let headlineShadowTableIndex = afterShadowTableIndex + 1
 		shadowTable?.insert(headline, at: headlineShadowTableIndex)
-		
-		headline.parent = afterHeadline?.parent
-		headline.indentLevel = afterHeadline?.indentLevel ?? 0
+		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
+
 		headline.shadowTableIndex = headlineShadowTableIndex
 		
 		return headlineShadowTableIndex
@@ -294,8 +299,8 @@ private extension Outline {
 			shadowTable?.insert(shadowTableInserts[i], at: newIndex)
 			inserts.append(newIndex)
 		}
-		
 		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
+		
 		return ShadowTableChanges(deletes: nil, inserts: inserts)
 	}
 	
@@ -321,10 +326,10 @@ private extension Outline {
 		}
 		
 		shadowTable?.remove(atOffsets: IndexSet(shadowTableIndexes))
-		
 		if let startingAt = headline.shadowTableIndex {
 			resetShadowTableIndexes(startingAt: startingAt)
 		}
+		
 		return ShadowTableChanges(deletes: shadowTableIndexes, inserts: nil)
 	}
 	
