@@ -35,11 +35,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public var created: Date?
 	public var updated: Date?
 	
-	public var headlines: [Headline]? {
-		didSet {
-			visitHeadlines()
-		}
-	}
+	public var headlines: [Headline]?
 	
 	public var shadowTable: [Headline]?
 	
@@ -109,6 +105,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		
 		let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? 0
 		let headline = Headline()
+		
 		headlines.insert(headline, at: insertIndex + 1)
 		
 		if let parent = afterHeadline?.parent {
@@ -119,8 +116,15 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		
 		outlineBodyDidChange()
 
-		let afterIndex = afterHeadline?.shadowTableIndex ?? 0
-		return afterIndex + 1
+		let afterShadowTableIndex = afterHeadline?.shadowTableIndex ?? 0
+		let headlineShadowTableIndex = afterShadowTableIndex + 1
+		shadowTable?.insert(headline, at: headlineShadowTableIndex)
+		
+		headline.parent = afterHeadline?.parent
+		headline.indentLevel = afterHeadline?.indentLevel ?? 0
+		headline.shadowTableIndex = headlineShadowTableIndex
+		
+		return headlineShadowTableIndex
 	}
 	
 	public func updateHeadline(headline: Headline, attributedText: NSAttributedString) {

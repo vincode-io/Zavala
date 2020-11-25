@@ -114,7 +114,21 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	
 	// TODO: Need to take into consideration expanded state when placing the new Headline
 	func createHeadline(headline: Headline) {
-		outline?.createHeadline(afterHeadline: headline)
+		var indexPath: IndexPath?
+		UIView.performWithoutAnimation {
+			collectionView.performBatchUpdates {
+				if let insertIndex = outline?.createHeadline(afterHeadline: headline) {
+					indexPath = IndexPath(row: insertIndex, section: 0)
+					collectionView.insertItems(at: [indexPath!])
+				}
+			} completion: { [weak self] _ in
+				if let indexPath = indexPath, let textCursor = self?.collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+					textCursor.moveToEnd()
+				}
+			}
+
+		}
+
 	}
 	
 	func indent(headline: Headline, attributedText: NSAttributedString) {
