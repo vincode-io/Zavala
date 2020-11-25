@@ -99,7 +99,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		outlineBodyDidChange()
 	}
 	
-	public func createHeadline(afterHeadline: Headline? = nil) {
+	public func createHeadline(afterHeadline: Headline? = nil) -> ShadowTableChanges {
+		
 		var headlines = self.headlines ?? [Headline]()
 		
 		if let parent = afterHeadline?.parent {
@@ -117,6 +118,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		}
 		
 		outlineBodyDidChange()
+
+		let afterIndex = afterHeadline?.shadowTableIndex ?? 0
+		return ShadowTableChanges(deletes: nil, inserts: [afterIndex + 1])
 	}
 	
 	public func updateHeadline(headline: Headline, attributedText: NSAttributedString) {
