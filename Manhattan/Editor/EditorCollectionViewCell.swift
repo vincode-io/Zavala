@@ -9,6 +9,7 @@ import UIKit
 import Templeton
 
 protocol EditorCollectionViewCellDelegate: class {
+	func toggleDisclosure(headline: Headline)
 	func textChanged(headline: Headline, attributedText: NSAttributedString)
 	func deleteHeadline(headline: Headline)
 	func createHeadline(headline: Headline)
@@ -102,9 +103,9 @@ extension EditorCollectionViewCell: TextCursorTarget {
 extension EditorCollectionViewCell {
 	
 	@objc func toggleDisclosure(_ sender: UITapGestureRecognizer) {
-		guard sender.state == .ended else { return }
+		guard sender.state == .ended, let headline = headline else { return }
 		setDisclosure(isExpanded: !isDisclosed, animated: true)
-//		delegate?.masterFeedTableViewCellDisclosureDidToggle(self, expanding: isDisclosureExpanded)
+		delegate?.toggleDisclosure(headline: headline)
 	}
 	
 	private func setDisclosure(isExpanded: Bool, animated: Bool) {

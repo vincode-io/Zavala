@@ -98,6 +98,10 @@ extension EditorViewController {
 
 extension EditorViewController: EditorCollectionViewCellDelegate {
 
+	func toggleDisclosure(headline: Headline) {
+		
+	}
+
 	func textChanged(headline: Headline, attributedText: NSAttributedString) {
 		if headline.attributedText != attributedText {
 			outline?.updateHeadline(headline: headline, attributedText: attributedText)
