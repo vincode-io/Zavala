@@ -99,7 +99,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		outlineBodyDidChange()
 	}
 	
-	public func createHeadline(afterHeadline: Headline? = nil) -> ShadowTableChanges {
+	public func createHeadline(afterHeadline: Headline? = nil) -> Int {
 		
 		var headlines = self.headlines ?? [Headline]()
 		
@@ -120,7 +120,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		outlineBodyDidChange()
 
 		let afterIndex = afterHeadline?.shadowTableIndex ?? 0
-		return ShadowTableChanges(deletes: nil, inserts: [afterIndex + 1])
+		return afterIndex + 1
 	}
 	
 	public func updateHeadline(headline: Headline, attributedText: NSAttributedString) {
@@ -131,11 +131,13 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func toggleDisclosure(headline: Headline) -> ShadowTableChanges {
 		let changes: ShadowTableChanges
 		if headline.isExpanded ?? true {
+			headline.isExpanded = false
 			changes = collapseHeadline(headline: headline)
 		} else {
+			headline.isExpanded = true
 			changes = expandHeadline(headline: headline)
 		}
-		
+
 		outlineBodyDidChange()
 		return changes
 	}
