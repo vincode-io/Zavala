@@ -8,6 +8,7 @@
 import UIKit
 
 protocol TextCursorTarget {
+	var selectionRange: UITextRange? { get }
 	func restoreSelection(_ textRange: UITextRange)
 	func moveToEnd()
 }

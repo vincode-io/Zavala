@@ -60,7 +60,8 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 		layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 
 		guard let headline = headline else { return }
-
+		indentationLevel = headline.indentLevel ?? 0
+		
 		if headline.headlines?.isEmpty ?? true {
 			accessories = []
 		} else {
@@ -75,7 +76,7 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 		}
 		
 		setDisclosure(isExpanded: headline.isExpanded ?? true, animated: false)
-		
+
 		var content = EditorContentConfiguration(indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
 		content.headline = headline
 		content.delegate = delegate
@@ -85,6 +86,11 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 }
 
 extension EditorCollectionViewCell: TextCursorTarget {
+	
+	var selectionRange: UITextRange? {
+		guard let textView = (contentView as? EditorContentView)?.textView else { return nil }
+		return textView.selectedTextRange
+	}
 	
 	func restoreSelection(_ textRange: UITextRange) {
 		guard let textView = (contentView as? EditorContentView)?.textView else { return }

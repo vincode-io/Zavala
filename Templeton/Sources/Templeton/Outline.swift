@@ -109,7 +109,6 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		} else {
 			var headlines = self.headlines ?? [Headline]()
 			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? 0
-			let headline = Headline()
 			headlines.insert(headline, at: insertIndex + 1)
 			headline.indentLevel = afterHeadline?.indentLevel ?? 0
 			headline.parent = afterHeadline?.parent
@@ -145,37 +144,46 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return changes
 	}
 
-	public func indentHeadline(headlineID: String) {
-//		guard let headline = headlineDictionary[headlineID] else { return nil }
-//
-//		if let parentID = headline.parentID,
-//		   let parentHeadline = headlineDictionary[parentID],
-//		   let headlineIndex = parentHeadline.headlines?.firstIndex(of: headline),
-//		   headlineIndex > 0,
-//		   let sibling = parentHeadline.headlines?[headlineIndex - 1] {
-//
-//			var siblingHeadlines = sibling.headlines ?? [Headline]()
-//			siblingHeadlines.insert(headline, at: 0)
-//			sibling.headlines = siblingHeadlines
-//			parentHeadline.headlines = parentHeadline.headlines?.filter { $0.id != headline.id }
-//
-//			outlineBodyDidChange()
-//			return (headline, sibling)
-//		}
-//
-//		// This is a top level moving to the next one down
-//
-//		guard let headlineIndex = headlines?.firstIndex(of: headline),
-//			  headlineIndex > 0,
-//			  let sibling = headlines?[headlineIndex - 1] else { return nil }
-//
-//		var siblingHeadlines = sibling.headlines ?? [Headline]()
-//		siblingHeadlines.insert(headline, at: 0)
-//		sibling.headlines = siblingHeadlines
-//		headlines = headlines?.filter { $0.id != headline.id }
-//
-//		outlineBodyDidChange()
-//		return (headline, sibling)
+	public func indentHeadline(headline: Headline, attributedText: NSAttributedString) -> [Int]? {
+		headline.attributedText = attributedText
+
+		if let oldParentHeadline = headline.parent,
+		   let headlineShadowTableIndex = headline.shadowTableIndex,
+		   let headlineIndex = oldParentHeadline.headlines?.firstIndex(of: headline),
+		   headlineIndex > 0,
+		   let newParentHeadline = oldParentHeadline.headlines?[headlineIndex - 1],
+		   let newParentHeadlineShadowTableIndex = newParentHeadline.shadowTableIndex {
+
+			var siblingHeadlines = newParentHeadline.headlines ?? [Headline]()
+			headline.indentLevel = (headline.indentLevel ?? 0) + 1
+			headline.parent = newParentHeadline
+			siblingHeadlines.insert(headline, at: 0)
+			newParentHeadline.headlines = siblingHeadlines
+			oldParentHeadline.headlines = oldParentHeadline.headlines?.filter { $0 != headline }
+
+			newParentHeadline.isExpanded = true
+			outlineBodyDidChange()
+			return [newParentHeadlineShadowTableIndex, headlineShadowTableIndex]
+		}
+
+		// This is a top level moving to the next one down
+
+		guard let headlineIndex = headlines?.firstIndex(of: headline),
+			  headlineIndex > 0,
+			  let newParentHeadline = headlines?[headlineIndex - 1],
+			  let headlineShadowTableIndex = headline.shadowTableIndex,
+			  let newParentHeadlineShadowTableIndex = newParentHeadline.shadowTableIndex else { return nil }
+
+		var siblingHeadlines = newParentHeadline.headlines ?? [Headline]()
+		headline.indentLevel = (headline.indentLevel ?? 0) + 1
+		headline.parent = newParentHeadline
+		siblingHeadlines.insert(headline, at: 0)
+		newParentHeadline.headlines = siblingHeadlines
+		headlines = headlines?.filter { $0 != headline }
+
+		newParentHeadline.isExpanded = true
+		outlineBodyDidChange()
+		return [newParentHeadlineShadowTableIndex, headlineShadowTableIndex]
 	}
 	
 	public func load() {

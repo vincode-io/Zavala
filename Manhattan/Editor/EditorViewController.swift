@@ -58,7 +58,6 @@ class EditorViewController: UICollectionViewController {
 		collectionView.dataSource = self
 
 		editorRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, Headline> { (cell, indexPath, headline) in
-			cell.indentationLevel = headline.indentLevel ?? 0
 			cell.headline = headline
 			cell.delegate = self
 		}
@@ -175,8 +174,22 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	func indentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
-//		outline?.updateHeadline(headline: headline, attributedText: attributedText)
-//		outline?.indentHeadline(headline: headline)
+		guard let headlineShadowTableIndex = headline.shadowTableIndex else { return }
+		
+		if let reloadIndexes = outline?.indentHeadline(headline: headline, attributedText: attributedText) {
+			var textRange: UITextRange? = nil
+			let indexPath = IndexPath(row: headlineShadowTableIndex, section: 0)
+			if let textCursor = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+				textRange = textCursor.selectionRange
+			}
+			
+			let indexPaths = reloadIndexes.map { IndexPath(row: $0, section: 0) }
+			collectionView.reloadItems(at: indexPaths)
+			
+			if let textRange = textRange, let textCursor = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+				textCursor.restoreSelection(textRange)
+			}
+		}
 	}
 	
 	func outdentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
