@@ -49,10 +49,11 @@ class EditorTextView: UITextView {
 	}
 
 	override func deleteBackward() {
-		super.deleteBackward()
 		guard let headline = headline else { return }
 		if attributedText.length == 0 {
 			editorDelegate?.deleteHeadline(headline)
+		} else {
+			super.deleteBackward()
 		}
 	}
 	
