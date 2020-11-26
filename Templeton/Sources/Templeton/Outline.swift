@@ -322,7 +322,7 @@ private extension Outline {
 		}
 		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
 		
-		return ShadowTableChanges()
+		return ShadowTableChanges(inserts: inserts)
 	}
 	
 	private func collapseHeadline(headline: Headline) -> ShadowTableChanges {
