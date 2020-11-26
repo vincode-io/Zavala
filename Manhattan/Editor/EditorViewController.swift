@@ -226,10 +226,12 @@ private extension EditorViewController {
 		navigationItem.title = outline?.title
 		navigationItem.largeTitleDisplayMode = .never
 		
-		if outline?.isFavorite ?? false {
-			favoriteBarButtonItem?.image = AppAssets.favoriteSelected
-		} else {
-			favoriteBarButtonItem?.image = AppAssets.favoriteUnselected
+		if traitCollection.userInterfaceIdiom != .mac {
+			if outline?.isFavorite ?? false {
+				favoriteBarButtonItem?.image = AppAssets.favoriteSelected
+			} else {
+				favoriteBarButtonItem?.image = AppAssets.favoriteUnselected
+			}
 		}
 	}
 	
