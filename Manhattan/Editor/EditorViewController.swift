@@ -135,16 +135,7 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	func toggleDisclosure(headline: Headline) {
 		guard let outline = outline else { return }
 		let changes = outline.toggleDisclosure(headline: headline)
-		
-		if let deletes = changes.deletes {
-			let indexPaths = deletes.map { IndexPath(row: $0, section: 0) }
-			collectionView.deleteItems(at: indexPaths)
-		}
-
-		if let inserts = changes.inserts {
-			let indexPaths = inserts.map { IndexPath(row: $0, section: 0) }
-			collectionView.insertItems(at: indexPaths)
-		}
+		applyShadowTableChanges(changes)
 	}
 
 	func textChanged(headline: Headline, attributedText: NSAttributedString) {
@@ -156,11 +147,10 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	func deleteHeadline(_ headline: Headline) {
 		guard let outline = outline else { return }
 		let changes = outline.deleteHeadline(headline: headline)
+
+		applyShadowTableChanges(changes)
+
 		if let deleteIndex = changes.deletes?.first {
-			collectionView.deleteItems(at: [IndexPath(row: deleteIndex, section: 0)])
-			if let reload = changes.reloads?.first {
-				collectionView.reloadItems(at: [IndexPath(row: reload, section: 0)])
-			}
 			if deleteIndex > 0, let target = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 0)) as? TextCursorTarget {
 				target.moveToEnd()
 			}
@@ -168,27 +158,29 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	func createHeadline(_ headline: Headline) {
-		if let insertIndex = outline?.createHeadline(afterHeadline: headline) {
-			let indexPath = IndexPath(row: insertIndex, section: 0)
-			collectionView.insertItems(at: [indexPath])
-			if let textCursor = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+		guard let outline = outline else { return }
+		let changes = outline.createHeadline(afterHeadline: headline)
+
+		applyShadowTableChanges(changes)
+
+		if let insert = changes.insertIndexPaths?.first {
+			if let textCursor = collectionView.cellForItem(at: insert) as? TextCursorTarget {
 				textCursor.moveToEnd()
 			}
 		}
 	}
 	
 	func indentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
-		guard let headlineShadowTableIndex = headline.shadowTableIndex else { return }
-		
-		if let reloadIndexes = outline?.indentHeadline(headline: headline, attributedText: attributedText) {
+		guard let outline = outline, let headlineShadowTableIndex = headline.shadowTableIndex else { return }
+		let changes = outline.indentHeadline(headline: headline, attributedText: attributedText)
+		if !changes.isEmpty {
 			var textRange: UITextRange? = nil
 			let indexPath = IndexPath(row: headlineShadowTableIndex, section: 0)
 			if let textCursor = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
 				textRange = textCursor.selectionRange
 			}
 			
-			let indexPaths = reloadIndexes.map { IndexPath(row: $0, section: 0) }
-			collectionView.reloadItems(at: indexPaths)
+			applyShadowTableChanges(changes)
 			
 			if let textRange = textRange, let textCursor = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
 				textCursor.restoreSelection(textRange)
@@ -232,6 +224,18 @@ private extension EditorViewController {
 			} else {
 				favoriteBarButtonItem?.image = AppAssets.favoriteUnselected
 			}
+		}
+	}
+	
+	private func applyShadowTableChanges(_ changes: Outline.ShadowTableChanges) {
+		if let deletes = changes.deleteIndexPaths {
+			collectionView.deleteItems(at: deletes)
+		}
+		if let reloads = changes.reloadIndexPaths {
+			collectionView.reloadItems(at: reloads)
+		}
+		if let inserts = changes.insertIndexPaths {
+			collectionView.insertItems(at: inserts)
 		}
 	}
 	
