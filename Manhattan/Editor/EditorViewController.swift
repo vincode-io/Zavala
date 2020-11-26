@@ -189,7 +189,21 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	func outdentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
-		
+		guard let outline = outline, let headlineShadowTableIndex = headline.shadowTableIndex else { return }
+		let changes = outline.outdentHeadline(headline: headline, attributedText: attributedText)
+		if !changes.isEmpty {
+			var textRange: UITextRange? = nil
+			let indexPath = IndexPath(row: headlineShadowTableIndex, section: 0)
+			if let textCursor = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+				textRange = textCursor.selectionRange
+			}
+			
+			applyShadowTableChanges(changes)
+			
+			if let textRange = textRange, let textCursor = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+				textCursor.restoreSelection(textRange)
+			}
+		}
 	}
 	
 	func moveCursorUp(headline: Headline) {
