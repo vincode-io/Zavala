@@ -245,6 +245,11 @@ private extension EditorViewController {
 		if let deletes = changes.deleteIndexPaths {
 			collectionView.deleteItems(at: deletes)
 		}
+		if let moves = changes.moveIndexPaths {
+			for move in moves {
+				collectionView.moveItem(at: move.0, to: move.1)
+			}
+		}
 		if let reloads = changes.reloadIndexPaths {
 			collectionView.reloadItems(at: reloads)
 		}

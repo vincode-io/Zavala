@@ -10,8 +10,17 @@ import UIKit
 public final class Headline: HeadlineContainer, Identifiable, Equatable, Hashable, Codable {
 	
 	public weak var parent: Headline?
-	public var indentLevel: Int?
 	public var shadowTableIndex: Int?
+	
+	public var indentLevel: Int {
+		var parentCount = 0
+		var p = parent
+		while p != nil {
+			parentCount = parentCount + 1
+			p = p?.parent
+		}
+		return parentCount
+	}
 
 	public var id: String
 	public var text: Data?

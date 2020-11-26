@@ -11,7 +11,6 @@ class TransientDataVisitor {
 	
 	var shadowTable = [Headline]()
 	var addingToShadowTable = true
-	var level = 0
 
 	func visitor(_ visited: Headline) {
 
@@ -29,17 +28,11 @@ class TransientDataVisitor {
 			visited.shadowTableIndex = nil
 		}
 		
-		// Set the indent level for the Headline
-		visited.indentLevel = level
-		level = level + 1
-
 		// Set all the Headline's children's parent and visit them
 		visited.headlines?.forEach {
 			$0.parent = visited
 			$0.visit(visitor: visitor)
 		}
-
-		level = level - 1
 
 		if addingToShadowTableSuspended {
 			addingToShadowTable = true

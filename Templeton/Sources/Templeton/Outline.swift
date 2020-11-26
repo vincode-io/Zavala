@@ -19,6 +19,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public struct ShadowTableChanges {
 		public let deletes: [Int]?
 		public let inserts: [Int]?
+		public let moves: [(Int, Int)]?
 		public let reloads: [Int]?
 		
 		public var isEmpty: Bool {
@@ -35,14 +36,20 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			return inserts.map { IndexPath(row: $0, section: 0) }
 		}
 		
+		public var moveIndexPaths: [(IndexPath, IndexPath)]? {
+			guard let moves = moves else { return nil }
+			return moves.map { (IndexPath(row: $0.0, section: 0), IndexPath(row: $0.1, section: 0)) }
+		}
+		
 		public var reloadIndexPaths: [IndexPath]? {
 			guard let reloads = reloads else { return nil }
 			return reloads.map { IndexPath(row: $0, section: 0) }
 		}
 		
-		init(deletes: [Int]? = nil, inserts: [Int]? = nil, reloads: [Int]? = nil) {
+		init(deletes: [Int]? = nil, inserts: [Int]? = nil, moves: [(Int, Int)]? = nil, reloads: [Int]? = nil) {
 			self.deletes = deletes
 			self.inserts = inserts
+			self.moves = moves
 			self.reloads = reloads
 		}
 	}
@@ -129,20 +136,17 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 		if afterHeadline?.isExpanded ?? true && !(afterHeadline?.headlines?.isEmpty ?? true) {
 			afterHeadline!.headlines!.insert(headline, at: 0)
-			headline.indentLevel = (afterHeadline?.indentLevel ?? 0) + 1
 			headline.parent = afterHeadline
 		} else if let parent = afterHeadline?.parent {
 			var headlines = parent.headlines ?? [Headline]()
 			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? 0
 			headlines.insert(headline, at: insertIndex + 1)
-			headline.indentLevel = afterHeadline?.indentLevel ?? 0
 			headline.parent = afterHeadline?.parent
 			parent.headlines = headlines
 		} else {
 			var headlines = self.headlines ?? [Headline]()
 			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? 0
 			headlines.insert(headline, at: insertIndex + 1)
-			headline.indentLevel = afterHeadline?.indentLevel ?? 0
 			headline.parent = afterHeadline?.parent
 			self.headlines = headlines
 		}
@@ -182,8 +186,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		var reloads = [Int]()
 		
 		func visitor(_ visited: Headline) {
-			if let indentLevel = visited.indentLevel, let index = visited.shadowTableIndex {
-				visited.indentLevel = indentLevel + 1
+			if let index = visited.shadowTableIndex {
 				reloads.append(index)
 			}
 		}
@@ -196,7 +199,6 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		   let newParentHeadlineShadowTableIndex = newParentHeadline.shadowTableIndex {
 
 			var siblingHeadlines = newParentHeadline.headlines ?? [Headline]()
-			headline.indentLevel = (headline.indentLevel ?? 0) + 1
 			headline.parent = newParentHeadline
 			siblingHeadlines.insert(headline, at: 0)
 			newParentHeadline.headlines = siblingHeadlines
@@ -224,7 +226,6 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			  let newParentHeadlineShadowTableIndex = newParentHeadline.shadowTableIndex else { return ShadowTableChanges() }
 
 		var siblingHeadlines = newParentHeadline.headlines ?? [Headline]()
-		headline.indentLevel = (headline.indentLevel ?? 0) + 1
 		headline.parent = newParentHeadline
 		siblingHeadlines.insert(headline, at: 0)
 		newParentHeadline.headlines = siblingHeadlines
@@ -246,22 +247,42 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		headline.attributedText = attributedText
 
 		guard let oldParent = headline.parent,
+			  let oldParentHeadlines = oldParent.headlines,
 			  let oldParentShadowTableIndex = oldParent.shadowTableIndex,
-			  let headlineShadowTableIndex = headline.shadowTableIndex,
-			  let indentLevel = headline.indentLevel else { return ShadowTableChanges() }
+			  let originalHeadlineShadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
 		
+		guard let oldHeadlineIndex = oldParentHeadlines.firstIndex(of: headline) else { return ShadowTableChanges() }
+		var siblingsToMove = [Headline]()
+		for i in (oldHeadlineIndex + 1)..<oldParentHeadlines.count {
+			siblingsToMove.append(oldParentHeadlines[i])
+		}
+
 		oldParent.headlines = oldParent.headlines?.filter { $0 != headline }
-		headline.indentLevel = indentLevel - 1
 
 		if let newParent = oldParent.parent, let oldParentIndex = newParent.headlines?.firstIndex(of: oldParent) {
+			
 			newParent.headlines?.insert(headline, at: oldParentIndex + 1)
 			headline.parent = newParent
 
-			var reloads = [oldParentShadowTableIndex, headlineShadowTableIndex]
+			var reloads = [oldParentShadowTableIndex]
+			var moves = [(Int, Int)]()
+			var workingShadowTableIndex = originalHeadlineShadowTableIndex
+			if siblingsToMove.isEmpty {
+				reloads.append(originalHeadlineShadowTableIndex)
+			} else {
+				shadowTable?.remove(at: originalHeadlineShadowTableIndex)
+				for sibling in siblingsToMove {
+					if let siblineShadowTableIndex = sibling.shadowTableIndex {
+						moves.append((siblineShadowTableIndex, workingShadowTableIndex))
+						workingShadowTableIndex = siblineShadowTableIndex
+					}
+				}
+				moves.append((originalHeadlineShadowTableIndex, workingShadowTableIndex))
+				shadowTable?.insert(headline, at: workingShadowTableIndex)
+			}
 			
 			func visitor(_ visited: Headline) {
-				if let indentLevel = visited.indentLevel, let index = visited.shadowTableIndex {
-					visited.indentLevel = indentLevel - 1
+				if let index = visited.shadowTableIndex {
 					reloads.append(index)
 				}
 			}
@@ -270,7 +291,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 				headline.visit(visitor: visitor(_:))
 			}
 			
-			return ShadowTableChanges(reloads: reloads)
+			return ShadowTableChanges(moves: moves, reloads: reloads)
 		} else if let oldParentIndex = headlines?.firstIndex(of: oldParent) {
 			headlines?.insert(headline, at: oldParentIndex + 1)
 			headline.parent = nil
