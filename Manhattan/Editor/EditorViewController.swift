@@ -37,6 +37,8 @@ class EditorViewController: UICollectionViewController {
 		
 	}
 	
+	var currentKeyPresses = Set<UIKeyboardHIDUsage>()
+	
 	private var favoriteBarButtonItem: UIBarButtonItem?
 	
 	private var editorRegistration: UICollectionView.CellRegistration<EditorCollectionViewCell, Headline>?
@@ -65,7 +67,40 @@ class EditorViewController: UICollectionViewController {
 		collectionView.reloadData()
 	}
 
+	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+		super.pressesBegan(presses, with: event)
+
+		guard let key = presses.first?.key else { return }
+		switch key.keyCode {
+		case .keyboardUpArrow:
+			currentKeyPresses.insert(key.keyCode)
+			if let headline = (UIResponder.currentFirstResponder as? EditorTextView)?.headline {
+				moveCursorUp(headline: headline)
+			}
+		case .keyboardDownArrow:
+			currentKeyPresses.insert(key.keyCode)
+			if let headline = (UIResponder.currentFirstResponder as? EditorTextView)?.headline {
+				moveCursorDown(headline: headline)
+			}
+		default:
+			break
+		}
+	}
+	
+	override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+		super.pressesEnded(presses, with: event)
+
+		guard let key = presses.first?.key else { return }
+		switch key.keyCode {
+		case .keyboardUpArrow, .keyboardDownArrow:
+			currentKeyPresses.remove(key.keyCode)
+		default:
+			break
+		}
+	}
+	
 	// MARK: Actions
+	
 	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
 		outline?.toggleFavorite()
 	}
@@ -119,7 +154,7 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 		}
 	}
 	
-	func deleteHeadline(headline: Headline) {
+	func deleteHeadline(_ headline: Headline) {
 		if let deleteIndex = outline?.deleteHeadline(headline: headline) {
 			collectionView.deleteItems(at: [IndexPath(row: deleteIndex, section: 0)])
 			if deleteIndex > 0, let target = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 0)) as? TextCursorTarget {
@@ -129,7 +164,7 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	// TODO: Need to take into consideration expanded state when placing the new Headline
-	func createHeadline(headline: Headline) {
+	func createHeadline(_ headline: Headline) {
 		if let insertIndex = outline?.createHeadline(afterHeadline: headline) {
 			let indexPath = IndexPath(row: insertIndex, section: 0)
 			collectionView.insertItems(at: [indexPath])
@@ -139,16 +174,16 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 		}
 	}
 	
-	func indent(headline: Headline, attributedText: NSAttributedString) {
+	func indentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
 //		outline?.updateHeadline(headline: headline, attributedText: attributedText)
 //		outline?.indentHeadline(headline: headline)
 	}
 	
-	func outdent(headline: Headline, attributedText: NSAttributedString) {
+	func outdentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
 		
 	}
 	
-	func moveUp(headline: Headline) {
+	func moveCursorUp(headline: Headline) {
 		guard let shadowTableIndex = headline.shadowTableIndex, shadowTableIndex > 0 else { return }
 		let indexPath = IndexPath(row: shadowTableIndex - 1, section: 0)
 		if let target = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
@@ -156,7 +191,7 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 		}
 	}
 	
-	func moveDown(headline: Headline) {
+	func moveCursorDown(headline: Headline) {
 		guard let shadowTableIndex = headline.shadowTableIndex, let shadowTable = outline?.shadowTable, shadowTableIndex < (shadowTable.count - 1) else { return }
 		let indexPath = IndexPath(row: shadowTableIndex + 1, section: 0)
 		if let target = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {

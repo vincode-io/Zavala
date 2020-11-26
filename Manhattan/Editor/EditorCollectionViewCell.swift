@@ -9,14 +9,15 @@ import UIKit
 import Templeton
 
 protocol EditorCollectionViewCellDelegate: class {
+	var currentKeyPresses: Set<UIKeyboardHIDUsage> { get }
 	func toggleDisclosure(headline: Headline)
 	func textChanged(headline: Headline, attributedText: NSAttributedString)
-	func deleteHeadline(headline: Headline)
-	func createHeadline(headline: Headline)
-	func indent(headline: Headline, attributedText: NSAttributedString)
-	func outdent(headline: Headline, attributedText: NSAttributedString)
-	func moveUp(headline: Headline)
-	func moveDown(headline: Headline)
+	func deleteHeadline(_ headline: Headline)
+	func createHeadline(_ headline: Headline)
+	func indentHeadline(_ headline: Headline, attributedText: NSAttributedString)
+	func outdentHeadline(_ headline: Headline, attributedText: NSAttributedString)
+	func moveCursorUp(headline: Headline)
+	func moveCursorDown(headline: Headline)
 }
 
 class EditorCollectionViewCell: UICollectionViewListCell {

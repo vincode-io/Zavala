@@ -11,7 +11,3 @@ protocol TextCursorTarget {
 	func restoreSelection(_ textRange: UITextRange)
 	func moveToEnd()
 }
-
-protocol TextCursorSource: UITextView {
-	var model: Any? { get }
-}

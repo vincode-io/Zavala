@@ -48,6 +48,8 @@ class EditorContentView: UIView, UIContentView {
 		guard appliedConfiguration != configuration, let headline = configuration.headline else { return }
 		appliedConfiguration = configuration
 		
+		textView.headline = configuration.headline
+		
 		var attrs = [NSAttributedString.Key : Any]()
 		attrs[.foregroundColor] = UIColor.label
 		attrs[.font] = UIFont.preferredFont(forTextStyle: .body)
@@ -118,7 +120,7 @@ extension EditorContentView: UITextViewDelegate {
 		guard let headline = appliedConfiguration.headline else { return true }
 		switch text {
 		case "\n":
-			appliedConfiguration.delegate?.createHeadline(headline: headline)
+			appliedConfiguration.delegate?.createHeadline(headline)
 			return false
 		default:
 			return true
@@ -131,38 +133,32 @@ extension EditorContentView: UITextViewDelegate {
 
 extension EditorContentView: EditorTextViewDelegate {
 	
-	var headline: Headline? {
-		return appliedConfiguration.headline
+	var currentKeyPresses: Set<UIKeyboardHIDUsage> {
+		appliedConfiguration.delegate?.currentKeyPresses ?? Set<UIKeyboardHIDUsage>()
 	}
 	
-	func deleteHeadline(_: EditorTextView) {
-		guard let headline = appliedConfiguration.headline else { return }
-		appliedConfiguration.delegate?.deleteHeadline(headline: headline)
+	func deleteHeadline(_ headline: Headline) {
+		appliedConfiguration.delegate?.deleteHeadline(headline)
 	}
 	
-	func createHeadline(_: EditorTextView) {
-		guard let headline = appliedConfiguration.headline else { return }
-		appliedConfiguration.delegate?.createHeadline(headline: headline)
+	func createHeadline(_ headline: Headline) {
+		appliedConfiguration.delegate?.createHeadline(headline)
 	}
 	
-	func indent(_: EditorTextView, attributedText: NSAttributedString) {
-		guard let headline = appliedConfiguration.headline else { return }
-		appliedConfiguration.delegate?.indent(headline: headline, attributedText: attributedText)
+	func indentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
+		appliedConfiguration.delegate?.indentHeadline(headline, attributedText: attributedText)
 	}
 	
-	func outdent(_: EditorTextView, attributedText: NSAttributedString) {
-		guard let headline = appliedConfiguration.headline else { return }
-		appliedConfiguration.delegate?.outdent(headline: headline, attributedText: attributedText)
+	func outdentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
+		appliedConfiguration.delegate?.outdentHeadline(headline, attributedText: attributedText)
 	}
 	
-	func moveUp(_: EditorTextView) {
-		guard let headline = appliedConfiguration.headline else { return }
-		appliedConfiguration.delegate?.moveUp(headline: headline)
+	func moveCursorUp(headline: Headline) {
+		appliedConfiguration.delegate?.moveCursorUp(headline: headline)
 	}
 	
-	func moveDown(_: EditorTextView) {
-		guard let headline = appliedConfiguration.headline else { return }
-		appliedConfiguration.delegate?.moveDown(headline: headline)
+	func moveCursorDown(headline: Headline) {
+		appliedConfiguration.delegate?.moveCursorDown(headline: headline)
 	}
 	
 }

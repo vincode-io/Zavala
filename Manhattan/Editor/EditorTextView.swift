@@ -9,54 +9,61 @@ import UIKit
 import Templeton
 
 protocol EditorTextViewDelegate: class {
-	var headline: Headline? { get }
-	func deleteHeadline(_: EditorTextView)
-	func createHeadline(_: EditorTextView)
-	func indent(_: EditorTextView, attributedText: NSAttributedString)
-	func outdent(_: EditorTextView, attributedText: NSAttributedString)
-	func moveUp(_: EditorTextView)
-	func moveDown(_: EditorTextView)
+	var currentKeyPresses: Set<UIKeyboardHIDUsage> { get }
+	func deleteHeadline(_: Headline)
+	func createHeadline(_: Headline)
+	func indentHeadline(_: Headline, attributedText: NSAttributedString)
+	func outdentHeadline(_: Headline, attributedText: NSAttributedString)
+	func moveCursorUp(headline: Headline)
+	func moveCursorDown(headline: Headline)
 }
 
-class EditorTextView: UITextView, TextCursorSource {
+class EditorTextView: UITextView {
 	
 	weak var editorDelegate: EditorTextViewDelegate?
-	
-	var model: Any? {
-		return editorDelegate?.headline
-	}
+	weak var headline: Headline?
 
 	override var keyCommands: [UIKeyCommand]? {
 		let keys = [
-			UIKeyCommand(action: #selector(upArrowPressed(_:)), input: UIKeyCommand.inputUpArrow),
-			UIKeyCommand(action: #selector(downArrowPressed(_:)), input: UIKeyCommand.inputDownArrow),
 			UIKeyCommand(action: #selector(tabPressed(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(shiftTabPressed(_:)))
 		]
 		return keys
 	}
+	
+	@discardableResult
+	override func becomeFirstResponder() -> Bool {
+		let result = super.becomeFirstResponder()
+		guard let headline = headline else { return result }
+
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+			if self.editorDelegate?.currentKeyPresses.contains(.keyboardUpArrow) ?? false {
+				self.editorDelegate?.moveCursorUp(headline: headline)
+			}
+			if self.editorDelegate?.currentKeyPresses.contains(.keyboardDownArrow) ?? false {
+				self.editorDelegate?.moveCursorDown(headline: headline)
+			}
+		}
+		
+		return result
+	}
 
 	override func deleteBackward() {
 		super.deleteBackward()
+		guard let headline = headline else { return }
 		if attributedText.length == 0 {
-			editorDelegate?.deleteHeadline(self)
+			editorDelegate?.deleteHeadline(headline)
 		}
 	}
 	
 	@objc func tabPressed(_ sender: Any) {
-		editorDelegate?.indent(self, attributedText: attributedText)
+		guard let headline = headline else { return }
+		editorDelegate?.indentHeadline(headline, attributedText: attributedText)
 	}
 	
 	@objc func shiftTabPressed(_ sender: Any) {
-		editorDelegate?.outdent(self, attributedText: attributedText)
-	}
-	
-	@objc func upArrowPressed(_ sender: Any) {
-		editorDelegate?.moveUp(self)
-	}
-	
-	@objc func downArrowPressed(_ sender: Any) {
-		editorDelegate?.moveDown(self)
+		guard let headline = headline else { return }
+		editorDelegate?.outdentHeadline(headline, attributedText: attributedText)
 	}
 	
 }
