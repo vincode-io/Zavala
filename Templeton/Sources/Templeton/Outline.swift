@@ -200,7 +200,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 			var siblingHeadlines = newParentHeadline.headlines ?? [Headline]()
 			headline.parent = newParentHeadline
-			siblingHeadlines.insert(headline, at: 0)
+			siblingHeadlines.append(headline)
 			newParentHeadline.headlines = siblingHeadlines
 			oldParentHeadline.headlines = oldParentHeadline.headlines?.filter { $0 != headline }
 
@@ -227,7 +227,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 		var siblingHeadlines = newParentHeadline.headlines ?? [Headline]()
 		headline.parent = newParentHeadline
-		siblingHeadlines.insert(headline, at: 0)
+		siblingHeadlines.append(headline)
 		newParentHeadline.headlines = siblingHeadlines
 		headlines = headlines?.filter { $0 != headline }
 
@@ -267,6 +267,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			var reloads = [oldParentShadowTableIndex]
 			var moves = [(Int, Int)]()
 			var workingShadowTableIndex = originalHeadlineShadowTableIndex
+			
 			if siblingsToMove.isEmpty {
 				reloads.append(originalHeadlineShadowTableIndex)
 			} else {
@@ -282,8 +283,14 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			}
 			
 			func visitor(_ visited: Headline) {
-				if let index = visited.shadowTableIndex {
-					reloads.append(index)
+				if let visitedShadowTableIndex = visited.shadowTableIndex {
+					workingShadowTableIndex = workingShadowTableIndex + 1
+					moves.append((visitedShadowTableIndex, workingShadowTableIndex))
+				}
+				if visited.isExpanded ?? true {
+					visited.headlines?.forEach {
+						$0.visit(visitor: visitor)
+					}
 				}
 			}
 
@@ -291,6 +298,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 				headline.visit(visitor: visitor(_:))
 			}
 			
+			resetShadowTableIndexes(startingAt: originalHeadlineShadowTableIndex)
 			return ShadowTableChanges(moves: moves, reloads: reloads)
 		} else if let oldParentIndex = headlines?.firstIndex(of: oldParent) {
 			headlines?.insert(headline, at: oldParentIndex + 1)
