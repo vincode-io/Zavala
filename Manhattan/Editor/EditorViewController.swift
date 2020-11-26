@@ -154,15 +154,19 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	func deleteHeadline(_ headline: Headline) {
-		if let deleteIndex = outline?.deleteHeadline(headline: headline) {
+		guard let outline = outline else { return }
+		let changes = outline.deleteHeadline(headline: headline)
+		if let deleteIndex = changes.deletes?.first {
 			collectionView.deleteItems(at: [IndexPath(row: deleteIndex, section: 0)])
+			if let reload = changes.reloads?.first {
+				collectionView.reloadItems(at: [IndexPath(row: reload, section: 0)])
+			}
 			if deleteIndex > 0, let target = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 0)) as? TextCursorTarget {
 				target.moveToEnd()
 			}
 		}
 	}
 	
-	// TODO: Need to take into consideration expanded state when placing the new Headline
 	func createHeadline(_ headline: Headline) {
 		if let insertIndex = outline?.createHeadline(afterHeadline: headline) {
 			let indexPath = IndexPath(row: insertIndex, section: 0)

@@ -19,6 +19,13 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public struct ShadowTableChanges {
 		public let deletes: [Int]?
 		public let inserts: [Int]?
+		public let reloads: [Int]?
+		
+		init(deletes: [Int]? = nil, inserts: [Int]? = nil, reloads: [Int]? = nil) {
+			self.deletes = deletes
+			self.inserts = inserts
+			self.reloads = reloads
+		}
 	}
 	
 	public var id: EntityID
@@ -69,7 +76,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		outlineNameDidChange()
 	}
 	
-	public func deleteHeadline(headline: Headline) -> Int? {
+	public func deleteHeadline(headline: Headline) -> ShadowTableChanges {
 		var headlines = self.headlines ?? [Headline]()
 		
 		if let parent = headline.parent {
@@ -86,10 +93,16 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		
 		outlineBodyDidChange()
 		
-		guard let headlineShadowTableIndex = headline.shadowTableIndex else { return nil }
+		guard let headlineShadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
 		shadowTable?.remove(at: headlineShadowTableIndex)
 		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
-		return headlineShadowTableIndex
+		
+		if headlineShadowTableIndex > 0 {
+			return ShadowTableChanges(deletes: [headlineShadowTableIndex], reloads: [headlineShadowTableIndex - 1])
+		} else {
+			return ShadowTableChanges(deletes: [headlineShadowTableIndex])
+		}
+			
 	}
 	
 	public func createHeadline(afterHeadline: Headline? = nil) -> Int {
@@ -280,7 +293,7 @@ private extension Outline {
 
 	private func expandHeadline(headline: Headline) -> ShadowTableChanges {
 		guard let headlineShadowTableIndex = headline.shadowTableIndex else {
-			return ShadowTableChanges(deletes: nil, inserts: nil)
+			return ShadowTableChanges()
 		}
 		
 		headline.isExpanded = true
@@ -309,7 +322,7 @@ private extension Outline {
 		}
 		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
 		
-		return ShadowTableChanges(deletes: nil, inserts: inserts)
+		return ShadowTableChanges()
 	}
 	
 	private func collapseHeadline(headline: Headline) -> ShadowTableChanges {
@@ -338,7 +351,7 @@ private extension Outline {
 			resetShadowTableIndexes(startingAt: startingAt)
 		}
 		
-		return ShadowTableChanges(deletes: shadowTableIndexes, inserts: nil)
+		return ShadowTableChanges(deletes: shadowTableIndexes)
 	}
 	
 	func rebuildTransientData() {
