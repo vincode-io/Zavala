@@ -36,7 +36,7 @@ class EditorTextView: UITextView {
 		let result = super.becomeFirstResponder()
 		guard let headline = headline else { return result }
 
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 			if self.editorDelegate?.currentKeyPresses.contains(.keyboardUpArrow) ?? false {
 				self.editorDelegate?.moveCursorUp(headline: headline)
 			}
