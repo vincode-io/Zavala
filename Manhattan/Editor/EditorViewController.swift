@@ -102,6 +102,7 @@ class EditorViewController: UICollectionViewController {
 	
 	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
 		outline?.toggleFavorite()
+		updateUI()
 	}
 	
 }
