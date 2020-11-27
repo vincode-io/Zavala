@@ -17,10 +17,10 @@ public extension Notification.Name {
 public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable {
 	
 	public struct ShadowTableChanges {
-		public let deletes: [Int]?
-		public let inserts: [Int]?
-		public let moves: [(Int, Int)]?
-		public let reloads: [Int]?
+		public var deletes: [Int]?
+		public var inserts: [Int]?
+		public var moves: [(Int, Int)]?
+		public var reloads: [Int]?
 		
 		public var isEmpty: Bool {
 			return deletes == nil && inserts == nil && reloads == nil
@@ -51,6 +51,40 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			self.inserts = inserts
 			self.moves = moves
 			self.reloads = reloads
+		}
+		
+		mutating func append(_ changes: ShadowTableChanges) {
+			if let changeDeletes = changes.deletes {
+				if deletes == nil {
+					deletes = changeDeletes
+				} else {
+					self.deletes!.append(contentsOf: changeDeletes)
+				}
+			}
+
+			if let changeInserts = changes.inserts {
+				if inserts == nil {
+					inserts = changeInserts
+				} else {
+					self.inserts!.append(contentsOf: changeInserts)
+				}
+			}
+
+			if let changeMoves = changes.moves {
+				if moves == nil {
+					moves = changeMoves
+				} else {
+					self.moves!.append(contentsOf: changeMoves)
+				}
+			}
+			
+			if let changeReloads = changes.reloads {
+				if reloads == nil {
+					reloads = changeReloads
+				} else {
+					self.reloads!.append(contentsOf: changeReloads)
+				}
+			}
 		}
 	}
 	
