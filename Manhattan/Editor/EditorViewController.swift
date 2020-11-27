@@ -32,6 +32,7 @@ class EditorViewController: UICollectionViewController {
 				guard isViewLoaded else { return }
 				updateUI()
 				collectionView.reloadData()
+				setCursor()
 			}
 		}
 		
@@ -64,6 +65,7 @@ class EditorViewController: UICollectionViewController {
 		
 		updateUI()
 		collectionView.reloadData()
+		setCursor()
 	}
 
 	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -242,6 +244,14 @@ private extension EditorViewController {
 				favoriteBarButtonItem?.image = AppAssets.favoriteSelected
 			} else {
 				favoriteBarButtonItem?.image = AppAssets.favoriteUnselected
+			}
+		}
+	}
+	
+	private func setCursor() {
+		DispatchQueue.main.async {
+			if let textCursor = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? TextCursorTarget {
+				textCursor.moveToEnd()
 			}
 		}
 	}
