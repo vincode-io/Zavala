@@ -309,21 +309,22 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 				moves.append((originalHeadlineShadowTableIndex, workingShadowTableIndex))
 				reloads.append(workingShadowTableIndex)
 				shadowTable?.insert(headline, at: workingShadowTableIndex)
-			}
-			
-			func shadowTableInsertVisitor(_ visited: Headline) {
-				if let visitedShadowTableIndex = visited.shadowTableIndex {
-					workingShadowTableIndex = workingShadowTableIndex + 1
-					shadowTable?.insert(visited, at: workingShadowTableIndex)
-					moves.append((visitedShadowTableIndex, workingShadowTableIndex))
-					reloads.append(workingShadowTableIndex)
-				}
-				if visited.isExpanded ?? true {
-					visited.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor) }
-				}
-			}
 
-			headline.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor(_:)) }
+				func shadowTableInsertVisitor(_ visited: Headline) {
+					if let visitedShadowTableIndex = visited.shadowTableIndex {
+						workingShadowTableIndex = workingShadowTableIndex + 1
+						shadowTable?.insert(visited, at: workingShadowTableIndex)
+						moves.append((visitedShadowTableIndex, workingShadowTableIndex))
+						reloads.append(workingShadowTableIndex)
+					}
+					if visited.isExpanded ?? true {
+						visited.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor) }
+					}
+				}
+
+				headline.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor(_:)) }
+				
+			}
 			
 			resetShadowTableIndexes(startingAt: originalHeadlineShadowTableIndex)
 			return ShadowTableChanges(moves: moves, reloads: reloads)
