@@ -115,25 +115,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.remove(menu: .newScene)
 
 		// File Menu
-		let importOPMLCommand = UIKeyCommand(title: NSLocalizedString("Import OPML", comment: "Import OPML"),
+		let importOPMLCommand = UIKeyCommand(title: L10n.importOPML,
 											action: #selector(importOPMLCommand(_:)),
 											input: "i",
 											modifierFlags: [.shift, .command])
 		let importOPMLMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand])
 		builder.insertChild(importOPMLMenu, atStartOfMenu: .file)
 
-		let newWindowCommand = UIKeyCommand(title: NSLocalizedString("New Window", comment: "New Window"),
+		let newWindowCommand = UIKeyCommand(title: L10n.newWindow,
 											action: #selector(newWindow(_:)),
 											input: "n",
 											modifierFlags: [.alternate, .command])
 		let newWindowMenu = UIMenu(title: "", options: .displayInline, children: [newWindowCommand])
 		builder.insertChild(newWindowMenu, atStartOfMenu: .file)
 
-		let newOutlineCommand = UIKeyCommand(title: NSLocalizedString("New Outline", comment: "New Outline"),
+		let newOutlineCommand = UIKeyCommand(title: L10n.newOutline,
 											action: #selector(createOutlineCommand(_:)),
 											input: "n",
 											modifierFlags: [.command])
-		let newFolderCommand = UIKeyCommand(title: NSLocalizedString("New Folder", comment: "New Folder"),
+		let newFolderCommand = UIKeyCommand(title: L10n.newFolder,
 											action: #selector(createFolderCommand(_:)),
 											input: "n",
 											modifierFlags: [.shift, .command])
@@ -155,7 +155,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		
 		// View Menu
-		let toggleSidebarCommand = UIKeyCommand(title: NSLocalizedString("Toggle Sidebar", comment: "Toggle Sidebar"),
+		let toggleSidebarCommand = UIKeyCommand(title: L10n.toggleSidebar,
 											action: #selector(toggleSidebarCommand(_:)),
 											input: "s",
 											modifierFlags: [.control, .command])

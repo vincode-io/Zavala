@@ -39,6 +39,9 @@
 		51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C448255AA215004E0206 /* MainSplitViewController.swift */; };
 		51C4C45B255ACA1B004E0206 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C45A255ACA1B004E0206 /* EditorViewController.swift */; };
 		51CF10A0256DEE1B005D6D88 /* FixedSizeImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */; };
+		51CF10A82571BA66005D6D88 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10A72571BA66005D6D88 /* Localizable.strings */; };
+		51CF10AC2571BA9A005D6D88 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */; };
+		51CF10C22571C22C005D6D88 /* Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CF10C12571C22C005D6D88 /* Localized.swift */; };
 		51DA54C825643E3400732942 /* MainThreadOperationBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DA54C725643E3400732942 /* MainThreadOperationBase.swift */; };
 		51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */; };
 		51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F22255F2D7F00320EDB /* ActivityManager.swift */; };
@@ -120,6 +123,9 @@
 		51C4C448255AA215004E0206 /* MainSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSplitViewController.swift; sourceTree = "<group>"; };
 		51C4C45A255ACA1B004E0206 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
 		51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSizeImageView.swift; sourceTree = "<group>"; };
+		51CF10A72571BA66005D6D88 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
+		51CF10C12571C22C005D6D88 /* Localized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Localized.swift; sourceTree = "<group>"; };
 		51DA54C725643E3400732942 /* MainThreadOperationBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainThreadOperationBase.swift; sourceTree = "<group>"; };
 		51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatingToolbarItem.swift; sourceTree = "<group>"; };
 		51E14F22255F2D7F00320EDB /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
@@ -179,9 +185,12 @@
 		515F163B255C536600FD98B8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5181A96A2554D93B00C153E8 /* Manhattan.entitlements */,
-				5181A9452554D92100C153E8 /* Info.plist */,
 				5181A9402554D92100C153E8 /* Assets.xcassets */,
+				5181A9452554D92100C153E8 /* Info.plist */,
+				51CF10A72571BA66005D6D88 /* Localizable.strings */,
+				51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */,
+				51CF10C12571C22C005D6D88 /* Localized.swift */,
+				5181A96A2554D93B00C153E8 /* Manhattan.entitlements */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -304,6 +313,7 @@
 				5181A9322554D92000C153E8 /* Resources */,
 				51C4C3C22555EB4D004E0206 /* Run VerifyNoBuildSettings */,
 				51C4C3F125565282004E0206 /* Embed Frameworks */,
+				51CF10AF2571BB1E005D6D88 /* Run Swiftgen */,
 			);
 			buildRules = (
 			);
@@ -406,10 +416,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51CF10A82571BA66005D6D88 /* Localizable.strings in Resources */,
 				5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */,
 				5181A9412554D92100C153E8 /* Assets.xcassets in Resources */,
 				515F162C255C12BE00FD98B8 /* Dialog.storyboard in Resources */,
 				5181A93F2554D92000C153E8 /* Main.storyboard in Resources */,
+				51CF10AC2571BA9A005D6D88 /* Localizable.stringsdict in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,7 +458,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "xcrun -sdk macosx swiftc -target x86_64-macosx10.11  buildscripts/VerifyNoBuildSettings.swift -o $CONFIGURATION_TEMP_DIR/VerifyNoBS\n$CONFIGURATION_TEMP_DIR/VerifyNoBS ${PROJECT_NAME}.xcodeproj/project.pbxproj\n\n\nif [ $? -ne 0 ]\nthen\n   echo \"error: Build Setting were found in the project.pbxproj file.  Most likely you didn't intend to change this file and should revert it.\"\n   exit 1\nfi\n";
+			shellScript = "xcrun -sdk macosx swiftc -target x86_64-macosx10.11  tools/VerifyNoBuildSettings.swift -o $CONFIGURATION_TEMP_DIR/VerifyNoBS\n$CONFIGURATION_TEMP_DIR/VerifyNoBS ${PROJECT_NAME}.xcodeproj/project.pbxproj\n\n\nif [ $? -ne 0 ]\nthen\n   echo \"error: Build Setting were found in the project.pbxproj file.  Most likely you didn't intend to change this file and should revert it.\"\n   exit 1\nfi\n";
+		};
+		51CF10AF2571BB1E005D6D88 /* Run Swiftgen */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Swiftgen";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if ! command -v \"$PROJECT_DIR/buildscripts/swiftgen-6.4.0/bin/swiftgen\" &> /dev/null\nthen\n    echo \"swiftgen could not be found\"\n    exit\nfi\n\n\"$PROJECT_DIR/buildscripts/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Manhattan/Resources/Localizable.strings\" \"$PROJECT_DIR/Manhattan/Resources/Localizable.stringsdict\" --output \"$PROJECT_DIR/Manhattan/Resources/Localized.swift\";\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -456,6 +486,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51DA54C825643E3400732942 /* MainThreadOperationBase.swift in Sources */,
+				51CF10C22571C22C005D6D88 /* Localized.swift in Sources */,
 				51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */,
 				515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */,
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,

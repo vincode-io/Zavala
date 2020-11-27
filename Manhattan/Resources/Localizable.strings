@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  Manhattan
+
+  Created by Maurice Parker on 11/27/20.
+  
+*/
+
+/* Menu Items */
+"Import_OPML" = "Import OPML";
+"New_Window" = "New Window";
+"New_Outline" = "New Outline";
+"New_Folder" = "New Folder";
+"Toggle_Sidebar" = "Toggle Sidebar";
