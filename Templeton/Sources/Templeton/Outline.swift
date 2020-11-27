@@ -210,8 +210,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			reloads.append(newParentHeadlineShadowTableIndex)
 			reloads.append(headlineShadowTableIndex)
 
-			headline.headlines?.forEach { headline in
-				headline.visit(visitor: visitor(_:))
+			if headline.isExpanded ?? true {
+				headline.headlines?.forEach { $0.visit(visitor: visitor(_:)) }
 			}
 
 			return ShadowTableChanges(reloads: reloads)
@@ -237,8 +237,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		reloads.append(newParentHeadlineShadowTableIndex)
 		reloads.append(headlineShadowTableIndex)
 
-		headline.headlines?.forEach { headline in
-			headline.visit(visitor: visitor(_:))
+		if headline.isExpanded ?? true {
+			headline.headlines?.forEach { $0.visit(visitor: visitor(_:)) }
 		}
 
 		return ShadowTableChanges(reloads: reloads)	}
