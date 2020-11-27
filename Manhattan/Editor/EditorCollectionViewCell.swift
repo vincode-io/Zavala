@@ -60,7 +60,7 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 		layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 
 		guard let headline = headline else { return }
-		indentationLevel = headline.indentLevel ?? 0
+		indentationLevel = headline.indentLevel
 		
 		if headline.headlines?.isEmpty ?? true {
 			accessories = []
