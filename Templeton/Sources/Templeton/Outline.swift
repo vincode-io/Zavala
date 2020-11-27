@@ -277,7 +277,6 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 						visited.headlines?.reversed().forEach {	$0.visit(visitor: shadowTableRemoveVisitor)	}
 					}
 					if let visitedShadowTableIndex = visited.shadowTableIndex {
-						print("Removing: \(visitedShadowTableIndex) | \(visited)")
 						shadowTable?.remove(at: visitedShadowTableIndex)
 					}
 				}
@@ -314,7 +313,6 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 				func shadowTableInsertVisitor(_ visited: Headline) {
 					if let visitedShadowTableIndex = visited.shadowTableIndex {
 						workingShadowTableIndex = workingShadowTableIndex + 1
-						print("Inserting: \(visited)")
 						shadowTable?.insert(visited, at: workingShadowTableIndex)
 						moves.append((visitedShadowTableIndex, workingShadowTableIndex))
 						reloads.append(workingShadowTableIndex)
