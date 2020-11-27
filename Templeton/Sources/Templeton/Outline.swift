@@ -272,33 +272,58 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 				reloads.append(originalHeadlineShadowTableIndex)
 			} else {
 				shadowTable?.remove(at: originalHeadlineShadowTableIndex)
+				
+				func shadowTableRemoveVisitor(_ visited: Headline) {
+					if visited.isExpanded ?? true {
+						visited.headlines?.reversed().forEach {
+							$0.visit(visitor: movingUpVisitor)
+						}
+					}
+					if let visitedShadowTableIndex = visited.shadowTableIndex {
+						shadowTable?.remove(at: visitedShadowTableIndex)
+					}
+				}
+
+				headline.headlines?.reversed().forEach { $0.visit(visitor: shadowTableRemoveVisitor(_:)) }
+				
+				func movingUpVisitor(_ visited: Headline) {
+					if let visitedShadowTableIndex = visited.shadowTableIndex {
+						moves.append((visitedShadowTableIndex, workingShadowTableIndex))
+						workingShadowTableIndex = workingShadowTableIndex + 1
+					}
+					if visited.isExpanded ?? true {
+						visited.headlines?.forEach {
+							$0.visit(visitor: movingUpVisitor)
+						}
+					}
+				}
+
 				for sibling in siblingsToMove {
 					if let siblineShadowTableIndex = sibling.shadowTableIndex {
 						moves.append((siblineShadowTableIndex, workingShadowTableIndex))
-						workingShadowTableIndex = siblineShadowTableIndex
+						workingShadowTableIndex = workingShadowTableIndex + 1
+						sibling.headlines?.forEach { $0.visit(visitor: movingUpVisitor(_:)) }
 					}
 				}
+				
 				moves.append((originalHeadlineShadowTableIndex, workingShadowTableIndex))
 				reloads.append(workingShadowTableIndex)
 				shadowTable?.insert(headline, at: workingShadowTableIndex)
 			}
 			
-			func visitor(_ visited: Headline) {
+			func shadowTableInsertVisitor(_ visited: Headline) {
 				if let visitedShadowTableIndex = visited.shadowTableIndex {
 					workingShadowTableIndex = workingShadowTableIndex + 1
+					shadowTable?.insert(visited, at: workingShadowTableIndex)
 					moves.append((visitedShadowTableIndex, workingShadowTableIndex))
 					reloads.append(workingShadowTableIndex)
 				}
 				if visited.isExpanded ?? true {
-					visited.headlines?.forEach {
-						$0.visit(visitor: visitor)
-					}
+					visited.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor) }
 				}
 			}
 
-			headline.headlines?.forEach { headline in
-				headline.visit(visitor: visitor(_:))
-			}
+			headline.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor(_:)) }
 			
 			resetShadowTableIndexes(startingAt: originalHeadlineShadowTableIndex)
 			return ShadowTableChanges(moves: moves, reloads: reloads)
