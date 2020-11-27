@@ -279,6 +279,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 					}
 				}
 				moves.append((originalHeadlineShadowTableIndex, workingShadowTableIndex))
+				reloads.append(workingShadowTableIndex)
 				shadowTable?.insert(headline, at: workingShadowTableIndex)
 			}
 			
@@ -286,6 +287,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 				if let visitedShadowTableIndex = visited.shadowTableIndex {
 					workingShadowTableIndex = workingShadowTableIndex + 1
 					moves.append((visitedShadowTableIndex, workingShadowTableIndex))
+					reloads.append(workingShadowTableIndex)
 				}
 				if visited.isExpanded ?? true {
 					visited.headlines?.forEach {
