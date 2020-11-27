@@ -63,6 +63,7 @@ class MainSplitViewController: UISplitViewController {
 			if preferredSupplementaryColumnWidth < 1 {
 				preferredSupplementaryColumnWidth = 300
 			}
+			presentsWithGesture = false
 		}
 
 		delegate = self
