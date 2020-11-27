@@ -168,7 +168,7 @@ extension MainSplitViewController: SidebarDelegate {
 	
 }
 
-// MARK: OutlineListDelegate
+// MARK: TimelineDelegate
 
 extension MainSplitViewController: TimelineDelegate {
 	
