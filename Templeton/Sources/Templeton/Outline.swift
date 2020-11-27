@@ -275,9 +275,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 				
 				func shadowTableRemoveVisitor(_ visited: Headline) {
 					if visited.isExpanded ?? true {
-						visited.headlines?.reversed().forEach {
-							$0.visit(visitor: movingUpVisitor)
-						}
+						visited.headlines?.reversed().forEach {	$0.visit(visitor: shadowTableRemoveVisitor)	}
 					}
 					if let visitedShadowTableIndex = visited.shadowTableIndex {
 						shadowTable?.remove(at: visitedShadowTableIndex)
@@ -292,9 +290,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 						workingShadowTableIndex = workingShadowTableIndex + 1
 					}
 					if visited.isExpanded ?? true {
-						visited.headlines?.forEach {
-							$0.visit(visitor: movingUpVisitor)
-						}
+						visited.headlines?.forEach { $0.visit(visitor: movingUpVisitor)	}
 					}
 				}
 
