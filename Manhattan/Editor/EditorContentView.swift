@@ -29,6 +29,14 @@ class EditorContentView: UIView, UIContentView {
 		addSubview(textView)
 		textView.translatesAutoresizingMaskIntoConstraints = false
 
+		let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft(_:)))
+		swipeLeftGesture.direction = .left
+		addGestureRecognizer(swipeLeftGesture)
+		
+		let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipedRight(_:)))
+		swipeRightGesture.direction = .right
+		addGestureRecognizer(swipeRightGesture)
+		
 		apply(configuration: configuration)
 	}
 	
@@ -166,6 +174,16 @@ extension EditorContentView: EditorTextViewDelegate {
 // MARK: Helpers
 
 extension EditorContentView {
+	
+	@objc func swipedLeft(_ sender: UISwipeGestureRecognizer) {
+		guard let headline = appliedConfiguration.headline else { return }
+		appliedConfiguration.delegate?.outdentHeadline(headline, attributedText: textView.attributedText)
+	}
+	
+	@objc func swipedRight(_ sender: UISwipeGestureRecognizer) {
+		guard let headline = appliedConfiguration.headline else { return }
+		appliedConfiguration.delegate?.indentHeadline(headline, attributedText: textView.attributedText)
+	}
 	
 	private func removeBullet() {
 		guard let bulletView = bulletView else { return }
