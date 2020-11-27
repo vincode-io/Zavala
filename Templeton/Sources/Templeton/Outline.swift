@@ -282,7 +282,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 					}
 				}
 
-				headline.headlines?.reversed().forEach { $0.visit(visitor: shadowTableRemoveVisitor(_:)) }
+				if headline.isExpanded ?? true {
+					headline.headlines?.reversed().forEach { $0.visit(visitor: shadowTableRemoveVisitor(_:)) }
+				}
 				shadowTable?.remove(at: originalHeadlineShadowTableIndex)
 
 				func movingUpVisitor(_ visited: Headline) {
@@ -299,7 +301,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 					if let siblineShadowTableIndex = sibling.shadowTableIndex {
 						moves.append((siblineShadowTableIndex, workingShadowTableIndex))
 						workingShadowTableIndex = workingShadowTableIndex + 1
-						sibling.headlines?.forEach { $0.visit(visitor: movingUpVisitor(_:)) }
+						if sibling.isExpanded ?? true {
+							sibling.headlines?.forEach { $0.visit(visitor: movingUpVisitor(_:)) }
+						}
 					}
 				}
 				
@@ -320,8 +324,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 					}
 				}
 
-				headline.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor(_:)) }
-				
+				if headline.isExpanded ?? true {
+					headline.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor(_:)) }
+				}
 			}
 			
 			resetShadowTableIndexes(startingAt: originalHeadlineShadowTableIndex)
