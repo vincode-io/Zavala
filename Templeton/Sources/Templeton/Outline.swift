@@ -219,12 +219,12 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		
 		var reloads = [Int]()
 		
-		func visitor(_ visited: Headline) {
+		func reloadVisitor(_ visited: Headline) {
 			if let index = visited.shadowTableIndex {
 				reloads.append(index)
 			}
 			if visited.isExpanded ?? true {
-				visited.headlines?.forEach { $0.visit(visitor: visitor) }
+				visited.headlines?.forEach { $0.visit(visitor: reloadVisitor) }
 			}
 		}
 
@@ -248,7 +248,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			reloads.append(headlineShadowTableIndex)
 
 			if headline.isExpanded ?? true {
-				headline.headlines?.forEach { $0.visit(visitor: visitor(_:)) }
+				headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 			}
 
 			return ShadowTableChanges(reloads: reloads)
@@ -275,7 +275,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		reloads.append(headlineShadowTableIndex)
 
 		if headline.isExpanded ?? true {
-			headline.headlines?.forEach { $0.visit(visitor: visitor(_:)) }
+			headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 		}
 
 		return ShadowTableChanges(reloads: reloads)	}
@@ -311,6 +311,19 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		
 		if siblingsToMove.isEmpty {
 			reloads.append(originalHeadlineShadowTableIndex)
+			
+			func reloadVisitor(_ visited: Headline) {
+				if let index = visited.shadowTableIndex {
+					reloads.append(index)
+				}
+				if visited.isExpanded ?? true {
+					visited.headlines?.forEach { $0.visit(visitor: reloadVisitor) }
+				}
+			}
+			
+			if headline.isExpanded ?? true {
+				headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+			}
 		} else {
 			
 			func shadowTableRemoveVisitor(_ visited: Headline) {
