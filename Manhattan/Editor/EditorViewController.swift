@@ -182,7 +182,8 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 			
 			applyShadowTableChanges(changes)
 			
-			if let textRange = textRange, let textCursor = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+			if let textRange = textRange,
+			   let textCursor = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
 				textCursor.restoreSelection(textRange)
 			}
 		}
@@ -200,7 +201,9 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 			
 			applyShadowTableChanges(changes)
 			
-			if let textRange = textRange, let textCursor = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+			if let textRange = textRange,
+			   let updated = headline.shadowTableIndex,
+			   let textCursor = collectionView.cellForItem(at: IndexPath(row: updated, section: 0)) as? TextCursorTarget {
 				textCursor.restoreSelection(textRange)
 			}
 		}
