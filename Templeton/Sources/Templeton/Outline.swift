@@ -294,82 +294,79 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		oldParent.headlines = oldParent.headlines?.filter { $0 != headline }
 
 		if let newParent = oldParent.parent, let oldParentIndex = newParent.headlines?.firstIndex(of: oldParent) {
-			
 			newParent.headlines?.insert(headline, at: oldParentIndex + 1)
-			headline.parent = newParent
+		} else {
+			if let oldParentIndex = headlines?.firstIndex(of: oldParent) {
+				headlines?.insert(headline, at: oldParentIndex + 1)
+			}
+		}
+		headline.parent = oldParent.parent
 
-			var reloads = [oldParentShadowTableIndex]
-			var moves = [(Int, Int)]()
-			var workingShadowTableIndex = originalHeadlineShadowTableIndex
+		var reloads = [oldParentShadowTableIndex]
+		var moves = [(Int, Int)]()
+		var workingShadowTableIndex = originalHeadlineShadowTableIndex
+		
+		if siblingsToMove.isEmpty {
+			reloads.append(originalHeadlineShadowTableIndex)
+		} else {
 			
-			if siblingsToMove.isEmpty {
-				reloads.append(originalHeadlineShadowTableIndex)
-			} else {
-				
-				func shadowTableRemoveVisitor(_ visited: Headline) {
-					if visited.isExpanded ?? true {
-						visited.headlines?.reversed().forEach {	$0.visit(visitor: shadowTableRemoveVisitor)	}
-					}
-					if let visitedShadowTableIndex = visited.shadowTableIndex {
-						shadowTable?.remove(at: visitedShadowTableIndex)
-					}
+			func shadowTableRemoveVisitor(_ visited: Headline) {
+				if visited.isExpanded ?? true {
+					visited.headlines?.reversed().forEach {	$0.visit(visitor: shadowTableRemoveVisitor)	}
 				}
-
-				if headline.isExpanded ?? true {
-					headline.headlines?.reversed().forEach { $0.visit(visitor: shadowTableRemoveVisitor(_:)) }
+				if let visitedShadowTableIndex = visited.shadowTableIndex {
+					shadowTable?.remove(at: visitedShadowTableIndex)
 				}
-				shadowTable?.remove(at: originalHeadlineShadowTableIndex)
+			}
 
-				func movingUpVisitor(_ visited: Headline) {
-					if let visitedShadowTableIndex = visited.shadowTableIndex {
-						moves.append((visitedShadowTableIndex, workingShadowTableIndex))
-						workingShadowTableIndex = workingShadowTableIndex + 1
-					}
-					if visited.isExpanded ?? true {
-						visited.headlines?.forEach { $0.visit(visitor: movingUpVisitor)	}
-					}
+			if headline.isExpanded ?? true {
+				headline.headlines?.reversed().forEach { $0.visit(visitor: shadowTableRemoveVisitor(_:)) }
+			}
+			shadowTable?.remove(at: originalHeadlineShadowTableIndex)
+
+			func movingUpVisitor(_ visited: Headline) {
+				if let visitedShadowTableIndex = visited.shadowTableIndex {
+					moves.append((visitedShadowTableIndex, workingShadowTableIndex))
+					workingShadowTableIndex = workingShadowTableIndex + 1
 				}
-
-				for sibling in siblingsToMove {
-					if let siblineShadowTableIndex = sibling.shadowTableIndex {
-						moves.append((siblineShadowTableIndex, workingShadowTableIndex))
-						workingShadowTableIndex = workingShadowTableIndex + 1
-						if sibling.isExpanded ?? true {
-							sibling.headlines?.forEach { $0.visit(visitor: movingUpVisitor(_:)) }
-						}
-					}
+				if visited.isExpanded ?? true {
+					visited.headlines?.forEach { $0.visit(visitor: movingUpVisitor)	}
 				}
-				
-				moves.append((originalHeadlineShadowTableIndex, workingShadowTableIndex))
-				reloads.append(workingShadowTableIndex)
-				shadowTable?.insert(headline, at: workingShadowTableIndex)
+			}
 
-				func shadowTableInsertVisitor(_ visited: Headline) {
-					if let visitedShadowTableIndex = visited.shadowTableIndex {
-						workingShadowTableIndex = workingShadowTableIndex + 1
-						shadowTable?.insert(visited, at: workingShadowTableIndex)
-						moves.append((visitedShadowTableIndex, workingShadowTableIndex))
-						reloads.append(workingShadowTableIndex)
+			for sibling in siblingsToMove {
+				if let siblineShadowTableIndex = sibling.shadowTableIndex {
+					moves.append((siblineShadowTableIndex, workingShadowTableIndex))
+					workingShadowTableIndex = workingShadowTableIndex + 1
+					if sibling.isExpanded ?? true {
+						sibling.headlines?.forEach { $0.visit(visitor: movingUpVisitor(_:)) }
 					}
-					if visited.isExpanded ?? true {
-						visited.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor) }
-					}
-				}
-
-				if headline.isExpanded ?? true {
-					headline.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor(_:)) }
 				}
 			}
 			
-			resetShadowTableIndexes(startingAt: originalHeadlineShadowTableIndex)
-			return ShadowTableChanges(moves: moves, reloads: reloads)
-		} else if let oldParentIndex = headlines?.firstIndex(of: oldParent) {
-			headlines?.insert(headline, at: oldParentIndex + 1)
-			headline.parent = nil
-			
+			moves.append((originalHeadlineShadowTableIndex, workingShadowTableIndex))
+			reloads.append(workingShadowTableIndex)
+			shadowTable?.insert(headline, at: workingShadowTableIndex)
+
+			func shadowTableInsertVisitor(_ visited: Headline) {
+				if let visitedShadowTableIndex = visited.shadowTableIndex {
+					workingShadowTableIndex = workingShadowTableIndex + 1
+					shadowTable?.insert(visited, at: workingShadowTableIndex)
+					moves.append((visitedShadowTableIndex, workingShadowTableIndex))
+					reloads.append(workingShadowTableIndex)
+				}
+				if visited.isExpanded ?? true {
+					visited.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor) }
+				}
+			}
+
+			if headline.isExpanded ?? true {
+				headline.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor(_:)) }
+			}
 		}
 		
-		return ShadowTableChanges()
+		resetShadowTableIndexes(startingAt: originalHeadlineShadowTableIndex)
+		return ShadowTableChanges(moves: moves, reloads: reloads)
 	}
 	
 	public func load() {
