@@ -223,6 +223,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			if let index = visited.shadowTableIndex {
 				reloads.append(index)
 			}
+			if visited.isExpanded ?? true {
+				visited.headlines?.forEach { $0.visit(visitor: visitor) }
+			}
 		}
 
 		if let oldParentHeadline = headline.parent,
