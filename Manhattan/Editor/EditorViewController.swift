@@ -255,11 +255,11 @@ private extension EditorViewController {
 				}
 			}
 		}
-		if let reloads = changes.reloadIndexPaths {
-			collectionView.reloadItems(at: reloads)
-		}
 		if let inserts = changes.insertIndexPaths {
 			collectionView.insertItems(at: inserts)
+		}
+		if let reloads = changes.reloadIndexPaths {
+			collectionView.reloadItems(at: reloads)
 		}
 	}
 	

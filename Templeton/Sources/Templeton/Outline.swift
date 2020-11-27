@@ -229,12 +229,15 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		}
 
 		if let oldParentHeadline = headline.parent,
-		   let headlineShadowTableIndex = headline.shadowTableIndex,
 		   let headlineIndex = oldParentHeadline.headlines?.firstIndex(of: headline),
 		   headlineIndex > 0,
-		   let newParentHeadline = oldParentHeadline.headlines?[headlineIndex - 1],
-		   let newParentHeadlineShadowTableIndex = newParentHeadline.shadowTableIndex {
+		   let newParentHeadline = oldParentHeadline.headlines?[headlineIndex - 1] {
 
+			var expandChange = expandHeadline(headline: newParentHeadline)
+			
+			guard let headlineShadowTableIndex = headline.shadowTableIndex,
+				  let newParentHeadlineShadowTableIndex = newParentHeadline.shadowTableIndex else { return expandChange }
+			
 			var siblingHeadlines = newParentHeadline.headlines ?? [Headline]()
 			headline.parent = newParentHeadline
 			siblingHeadlines.append(headline)
@@ -251,16 +254,20 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 				headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 			}
 
-			return ShadowTableChanges(reloads: reloads)
+			expandChange.append(ShadowTableChanges(reloads: reloads))
+			return expandChange
 		}
 
 		// This is a top level moving to the next one down
 
 		guard let headlineIndex = headlines?.firstIndex(of: headline),
 			  headlineIndex > 0,
-			  let newParentHeadline = headlines?[headlineIndex - 1],
-			  let headlineShadowTableIndex = headline.shadowTableIndex,
-			  let newParentHeadlineShadowTableIndex = newParentHeadline.shadowTableIndex else { return ShadowTableChanges() }
+			  let newParentHeadline = headlines?[headlineIndex - 1] else { return ShadowTableChanges() }
+
+		var expandChange = expandHeadline(headline: newParentHeadline)
+
+		guard let headlineShadowTableIndex = headline.shadowTableIndex,
+			  let newParentHeadlineShadowTableIndex = newParentHeadline.shadowTableIndex else { return expandChange }
 
 		var siblingHeadlines = newParentHeadline.headlines ?? [Headline]()
 		headline.parent = newParentHeadline
@@ -278,7 +285,10 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 		}
 
-		return ShadowTableChanges(reloads: reloads)	}
+		expandChange.append(ShadowTableChanges(reloads: reloads))
+		return expandChange
+
+	}
 	
 	public func outdentHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
 		headline.attributedText = attributedText
@@ -478,7 +488,7 @@ private extension Outline {
 	}
 
 	private func expandHeadline(headline: Headline) -> ShadowTableChanges {
-		guard let headlineShadowTableIndex = headline.shadowTableIndex else {
+		guard !(headline.isExpanded ?? true), let headlineShadowTableIndex = headline.shadowTableIndex else {
 			return ShadowTableChanges()
 		}
 		
@@ -512,6 +522,8 @@ private extension Outline {
 	}
 	
 	private func collapseHeadline(headline: Headline) -> ShadowTableChanges {
+		guard headline.isExpanded ?? true else { return ShadowTableChanges() }
+
 		headline.isExpanded = false
 			
 		var shadowTableIndexes = [Int]()
