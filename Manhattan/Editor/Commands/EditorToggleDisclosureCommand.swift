@@ -34,13 +34,13 @@ final class EditorToggleDisclosureCommand: EditorOutlineCommand {
 	
 	func perform() {
 		let changes = outline.toggleDisclosure(headline: headline)
-		delegate?.applyShadowTableChanges(changes)
+		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	func undo() {
 		let changes = outline.toggleDisclosure(headline: headline)
-		delegate?.applyShadowTableChanges(changes)
+		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()
 	}
 	

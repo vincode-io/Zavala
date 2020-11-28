@@ -11,6 +11,7 @@
 		512229682563507E008041AF /* EditorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorCollectionViewCell.swift */; };
 		514287302571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */; };
 		514287362571FCBD00F16B78 /* EditorOutlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */; };
+		5142873A2572B06B00F16B78 /* EditorTextChangedCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514287392572B06B00F16B78 /* EditorTextChangedCommand.swift */; };
 		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
 		515F162C255C12BE00FD98B8 /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 515F162B255C12BE00FD98B8 /* Dialog.storyboard */; };
@@ -90,6 +91,7 @@
 		512229672563507E008041AF /* EditorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCollectionViewCell.swift; sourceTree = "<group>"; };
 		5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorToggleDisclosureCommand.swift; sourceTree = "<group>"; };
 		514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorOutlineCommand.swift; sourceTree = "<group>"; };
+		514287392572B06B00F16B78 /* EditorTextChangedCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextChangedCommand.swift; sourceTree = "<group>"; };
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
 		515F162B255C12BE00FD98B8 /* Dialog.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
@@ -172,8 +174,9 @@
 		5142872E2571F86700F16B78 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
-				5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */,
 				514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */,
+				514287392572B06B00F16B78 /* EditorTextChangedCommand.swift */,
+				5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -511,6 +514,7 @@
 				51CF10A0256DEE1B005D6D88 /* FixedSizeImageView.swift in Sources */,
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
+				5142873A2572B06B00F16B78 /* EditorTextChangedCommand.swift in Sources */,
 				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
 				519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */,
 				51C3FA2F255E31E6008F587A /* GetInfoOutlineViewController.swift in Sources */,

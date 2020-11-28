@@ -16,6 +16,7 @@
 "Delete" = "Delete";
 "Cancel" = "Cancel";
 "Get_Info" = "Get Info";
+"Typing" = "Typing";
 
 /* Activity Manager */
 "See_Outlines_In" = "See outlines in “%@”";

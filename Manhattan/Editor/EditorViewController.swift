@@ -141,21 +141,31 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 
 	func toggleDisclosure(headline: Headline) {
 		guard let undoManager = undoManager, let outline = outline else { return }
-		let command = EditorToggleDisclosureCommand(undoManager: undoManager, delegate: self, outline: outline, headline: headline)
+		let command = EditorToggleDisclosureCommand(undoManager: undoManager,
+													delegate: self,
+													outline: outline,
+													headline: headline)
 		runCommand(command)
 	}
 
 	func textChanged(headline: Headline, attributedText: NSAttributedString) {
-		if headline.attributedText != attributedText {
-			outline?.updateHeadline(headline: headline, attributedText: attributedText)
-		}
+		guard let undoManager = undoManager,
+			  let outline = outline,
+			  headline.attributedText != attributedText else { return }
+		
+		let command = EditorTextChangedCommand(undoManager: undoManager,
+											   delegate: self,
+											   outline: outline,
+											   headline: headline,
+											   attributedText: attributedText)
+		runCommand(command)
 	}
 	
 	func deleteHeadline(_ headline: Headline) {
 		guard let outline = outline else { return }
 		let changes = outline.deleteHeadline(headline: headline)
 
-		applyShadowTableChanges(changes)
+		applyChanges(changes)
 
 		if let deleteIndex = changes.deletes?.first {
 			if deleteIndex > 0, let target = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 0)) as? TextCursorTarget {
@@ -168,7 +178,7 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 		guard let outline = outline else { return }
 		let changes = outline.createHeadline(afterHeadline: headline)
 
-		applyShadowTableChanges(changes)
+		applyChanges(changes)
 
 		if let insert = changes.insertIndexPaths?.first {
 			if let textCursor = collectionView.cellForItem(at: insert) as? TextCursorTarget {
@@ -187,7 +197,7 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 				textRange = textCursor.selectionRange
 			}
 			
-			applyShadowTableChanges(changes)
+			applyChanges(changes)
 			
 			if let textRange = textRange,
 			   let updated = headline.shadowTableIndex,
@@ -207,7 +217,7 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 				textRange = textCursor.selectionRange
 			}
 			
-			applyShadowTableChanges(changes)
+			applyChanges(changes)
 			
 			if let textRange = textRange,
 			   let updated = headline.shadowTableIndex,
@@ -239,7 +249,7 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 
 extension EditorViewController: EditorOutlineCommandDelegate {
 	
-	func applyShadowTableChanges(_ changes: Outline.ShadowTableChanges) {
+	func applyChanges(_ changes: Outline.ShadowTableChanges) {
 		if let deletes = changes.deleteIndexPaths {
 			collectionView.deleteItems(at: deletes)
 		}
@@ -258,6 +268,22 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 		}
 	}
 	
+	func applyChangesRestoringCursor(_ changes: Outline.ShadowTableChanges) {
+		var textRange: UITextRange? = nil
+		var cursorHeadline: Headline? = nil
+		if let editorTextView = UIResponder.currentFirstResponder as? EditorTextView {
+			textRange = editorTextView.selectedTextRange
+			cursorHeadline = editorTextView.headline
+		}
+		
+		applyChanges(changes)
+		
+		if let textRange = textRange,
+		   let updated = cursorHeadline?.shadowTableIndex,
+		   let textCursor = collectionView.cellForItem(at: IndexPath(row: updated, section: 0)) as? TextCursorTarget {
+			textCursor.restoreSelection(textRange)
+		}
+	}
 }
 
 // MARK: Helpers

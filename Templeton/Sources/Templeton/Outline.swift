@@ -197,9 +197,11 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return ShadowTableChanges(inserts: [headlineShadowTableIndex])
 	}
 	
-	public func updateHeadline(headline: Headline, attributedText: NSAttributedString) {
+	public func updateHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
 		headline.attributedText = attributedText
 		outlineBodyDidChange()
+		guard let shadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
+		return ShadowTableChanges(reloads: [shadowTableIndex])
 	}
 	
 	public func toggleDisclosure(headline: Headline) -> ShadowTableChanges {
