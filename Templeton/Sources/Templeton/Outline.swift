@@ -230,44 +230,22 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			}
 		}
 
-		if let oldParentHeadline = headline.parent,
-		   let headlineIndex = oldParentHeadline.headlines?.firstIndex(of: headline),
-		   headlineIndex > 0,
-		   let newParentHeadline = oldParentHeadline.headlines?[headlineIndex - 1] {
-
-			var expandChange = expandHeadline(headline: newParentHeadline)
-			
-			guard let headlineShadowTableIndex = headline.shadowTableIndex,
-				  let newParentHeadlineShadowTableIndex = newParentHeadline.shadowTableIndex else { return expandChange }
-			
-			var siblingHeadlines = newParentHeadline.headlines ?? [Headline]()
-			headline.parent = newParentHeadline
-			siblingHeadlines.append(headline)
-			newParentHeadline.headlines = siblingHeadlines
-			oldParentHeadline.headlines = oldParentHeadline.headlines?.filter { $0 != headline }
-
-			newParentHeadline.isExpanded = true
-			outlineBodyDidChange()
-			
-			reloads.append(newParentHeadlineShadowTableIndex)
-			reloads.append(headlineShadowTableIndex)
-
-			if headline.isExpanded ?? true {
-				headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
-			}
-
-			expandChange.append(ShadowTableChanges(reloads: reloads))
-			return expandChange
+		let container: HeadlineContainer
+		if let oldParentHeadline = headline.parent {
+			container = oldParentHeadline
+		} else {
+			container = self
 		}
 
-		// This is a top level moving to the next one down
-
-		guard let headlineIndex = headlines?.firstIndex(of: headline),
+		guard let headlineIndex = container.headlines?.firstIndex(of: headline),
 			  headlineIndex > 0,
-			  let newParentHeadline = headlines?[headlineIndex - 1] else { return ShadowTableChanges() }
+			  let newParentHeadline = container.headlines?[headlineIndex - 1] else { return ShadowTableChanges() }
 
 		var expandChange = expandHeadline(headline: newParentHeadline)
-
+		
+		// Null out the chevron row reload since we are going to add it below
+		expandChange.reloads = nil
+		
 		guard let headlineShadowTableIndex = headline.shadowTableIndex,
 			  let newParentHeadlineShadowTableIndex = newParentHeadline.shadowTableIndex else { return expandChange }
 
@@ -275,7 +253,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		headline.parent = newParentHeadline
 		siblingHeadlines.append(headline)
 		newParentHeadline.headlines = siblingHeadlines
-		headlines = headlines?.filter { $0 != headline }
+		container.headlines = container.headlines?.filter { $0 != headline }
 
 		newParentHeadline.isExpanded = true
 		outlineBodyDidChange()
