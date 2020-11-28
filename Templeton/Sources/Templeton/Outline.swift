@@ -518,9 +518,9 @@ private extension Outline {
 			shadowTable?.insert(shadowTableInserts[i], at: newIndex)
 			inserts.append(newIndex)
 		}
-		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
 		
-		return ShadowTableChanges(inserts: inserts)
+		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
+		return ShadowTableChanges(inserts: inserts, reloads: [headlineShadowTableIndex])
 	}
 	
 	private func collapseHeadline(headline: Headline) -> ShadowTableChanges {
@@ -547,11 +547,10 @@ private extension Outline {
 		}
 		
 		shadowTable?.remove(atOffsets: IndexSet(shadowTableIndexes))
-		if let startingAt = headline.shadowTableIndex {
-			resetShadowTableIndexes(startingAt: startingAt)
-		}
 		
-		return ShadowTableChanges(deletes: shadowTableIndexes)
+		guard let headlineShadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
+		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
+		return ShadowTableChanges(deletes: shadowTableIndexes, reloads: [headlineShadowTableIndex])
 	}
 	
 	func rebuildTransientData() {
