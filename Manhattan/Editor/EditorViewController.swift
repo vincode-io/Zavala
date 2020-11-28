@@ -160,12 +160,16 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	func deleteHeadline(_ headline: Headline) {
-		guard let outline = outline else { return }
-		let changes = outline.deleteHeadline(headline: headline)
+		guard let undoManager = undoManager, let outline = outline else { return }
 
-		applyChanges(changes)
+		let command = EditorDeleteHeadlineCommand(undoManager: undoManager,
+												  delegate: self,
+												  outline: outline,
+												  headline: headline)
 
-		if let deleteIndex = changes.deletes?.first {
+		runCommand(command)
+		
+		if let deleteIndex = command.changes?.deletes?.first {
 			if deleteIndex > 0, let target = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 0)) as? TextCursorTarget {
 				target.moveToEnd()
 			}
