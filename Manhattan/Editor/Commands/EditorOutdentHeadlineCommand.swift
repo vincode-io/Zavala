@@ -17,6 +17,7 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 	weak var delegate: EditorOutlineCommandDelegate?
 	var outline: Outline
 	var headline: Headline
+	var oldParentIndex: Int?
 	var oldAttributedText: NSAttributedString
 	var newAttributedText: NSAttributedString
 	
@@ -27,6 +28,10 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 		self.headline = headline
 		self.undoActionName = L10n.outdent
 		self.redoActionName = L10n.outdent
+		
+		if headline != headline.parent?.headlines?.last {
+			oldParentIndex = headline.parent?.headlines?.firstIndex(of: headline)
+		}
 		
 		if headline.attributedText == nil {
 			oldAttributedText = NSAttributedString()
@@ -43,7 +48,7 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 	}
 	
 	func undo() {
-		let changes = outline.indentHeadline(headline: headline, attributedText: oldAttributedText)
+		let changes = outline.indentHeadline(headline: headline, attributedText: oldAttributedText, parentIndex: oldParentIndex)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()
 	}
