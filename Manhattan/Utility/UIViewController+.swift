@@ -11,7 +11,7 @@ import RSCore
 extension UIViewController {
 	
 	func presentError(_ error: Error, dismiss: (() -> Void)? = nil) {
-		let errorTitle = NSLocalizedString("Error", comment: "Error")
+		let errorTitle = L10n.error
 		presentError(title: errorTitle, message: error.localizedDescription, dismiss: dismiss)
 	}
 

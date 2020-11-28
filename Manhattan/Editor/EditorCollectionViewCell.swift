@@ -122,7 +122,7 @@ extension EditorCollectionViewCell {
 		isDisclosed = isExpanded
 
 		if isDisclosed {
-			disclosureIndicator.accessibilityLabel = NSLocalizedString("Collapse", comment: "Collapse")
+			disclosureIndicator.accessibilityLabel = L10n.collapse
 			if animated {
 				UIView.animate(withDuration: 0.15) {
 					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
@@ -132,7 +132,7 @@ extension EditorCollectionViewCell {
 
 			}
 		} else {
-			disclosureIndicator.accessibilityLabel = NSLocalizedString("Expand", comment: "Expand")
+			disclosureIndicator.accessibilityLabel = L10n.expand
 			if animated {
 				UIView.animate(withDuration: 0.15) {
 					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)

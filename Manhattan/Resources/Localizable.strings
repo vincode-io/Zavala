@@ -6,11 +6,34 @@
   
 */
 
-/* Menu Items */
+/* Menu Items & Toolbars */
 "Import_OPML" = "Import OPML";
 "New_Window" = "New Window";
 "New_Outline" = "New Outline";
 "New_Folder" = "New Folder";
 "Toggle_Sidebar" = "Toggle Sidebar";
+"Toggle_Favorite" = "Toggle Favorite";
+"Delete" = "Delete";
+"Cancel" = "Cancel";
+"Get_Info" = "Get Info";
+
+/* Activity Manager */
 "See_Outlines_In" = "See outlines in “%@”";
 "Edit_Outline" = "Edit outline “%@”";
+
+/* Sidebar */
+"Delete_Folder_Prompt" = "Are you sure you want to delete the “%@” folder?";
+"Delete_Folder_Message" = "Any Outlines in this folder will also be deleted and unrecoverable.";
+
+/* Timeline */
+"Not_Available" = "Not Available";
+"Import Failed" = "Import Failed";
+"Delete_Outline_Prompt" = "Are you sure you want to delete the “%@” outline?";
+"Delete_Outline_Message" = "The outline be deleted and unrecoverable.";
+
+/* Editor */
+"Collapse" = "Collapse";
+"Expand" = "Expand";
+
+/* Generic Eror Handling */
+"Error" = "Error";

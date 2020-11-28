@@ -35,7 +35,7 @@ final class TimelineItem:  NSObject, NSCopying, Identifiable {
 	
 	private static func dateString(_ date: Date?) -> String {
 		guard let date = date else {
-			return NSLocalizedString("Not Available", comment: "Not Available")
+			return L10n.notAvailable
 		}
 		
 		if Calendar.dateIsToday(date) {

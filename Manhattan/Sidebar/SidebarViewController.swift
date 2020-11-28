@@ -244,8 +244,7 @@ extension SidebarViewController {
 	private func deleteFolderContextualAction(item: SidebarItem) -> UIContextualAction? {
 		guard let entityID = item.entityID else { return nil }
 		
-		let title = NSLocalizedString("Delete", comment: "Delete")
-		let action = UIContextualAction(style: .destructive, title: title) { [weak self] _, _, completion in
+		let action = UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
 			if let folder = AccountManager.shared.findFolder(entityID) {
 				self?.deleteFolder(folder, completion: completion)
 			}
@@ -255,8 +254,7 @@ extension SidebarViewController {
 	}
 	
 	private func getInfoFolderAction(item: SidebarItem) -> UIAction {
-		let title = NSLocalizedString("Get Info", comment: "Get Info")
-		let action = UIAction(title: title, image: AppAssets.getInfoEntity) { [weak self] action in
+		let action = UIAction(title: L10n.getInfo, image: AppAssets.getInfoEntity) { [weak self] action in
 			if let folder = AccountManager.shared.findFolder(item.entityID!) {
 				self?.getInfoForFolder(folder)
 			}
@@ -265,8 +263,7 @@ extension SidebarViewController {
 	}
 	
 	private func deleteFolderAction(item: SidebarItem) -> UIAction {
-		let title = NSLocalizedString("Delete", comment: "Delete")
-		let action = UIAction(title: title, image: AppAssets.removeEntity, attributes: .destructive) { [weak self] action in
+		let action = UIAction(title: L10n.delete, image: AppAssets.removeEntity, attributes: .destructive) { [weak self] action in
 			if let folder = AccountManager.shared.findFolder(item.entityID!) {
 				self?.deleteFolder(folder)
 			}
@@ -289,21 +286,15 @@ extension SidebarViewController {
 			return
 		}
 		
-		let deleteTitle = NSLocalizedString("Delete", comment: "Delete")
-		let deleteAction = UIAlertAction(title: deleteTitle, style: .destructive) { _ in
+		let deleteAction = UIAlertAction(title: L10n.delete, style: .destructive) { _ in
 			deleteFolder()
 		}
 		
-		let cancelTitle = NSLocalizedString("Cancel", comment: "Cancel")
-		let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel) { _ in
+		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel) { _ in
 			completion?(true)
 		}
 		
-		let localizedInformativeText = NSLocalizedString("Are you sure you want to delete the “%@” folder?", comment: "Folder delete text")
-		let formattedInformativeText = NSString.localizedStringWithFormat(localizedInformativeText as NSString, folder.name ?? "") as String
-		let localizedMessageText = NSLocalizedString("Any Outlines in this folder will also be deleted and unrecoverable.", comment: "Delete Message")
-		
-		let alert = UIAlertController(title: formattedInformativeText, message: localizedMessageText, preferredStyle: .alert)
+		let alert = UIAlertController(title: L10n.deleteFolderPrompt(folder.name ?? ""), message: L10n.deleteFolderMessage, preferredStyle: .alert)
 		alert.addAction(cancelAction)
 		alert.addAction(deleteAction)
 		

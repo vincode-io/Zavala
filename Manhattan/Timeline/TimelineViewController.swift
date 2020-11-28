@@ -137,9 +137,7 @@ extension TimelineViewController: UIDocumentPickerDelegate {
 			do {
 				outline = try folder.importOPML(url)
 			} catch {
-				let title = NSLocalizedString("Import Failed", comment: "Import Failed")
-				let message = NSLocalizedString(error.localizedDescription, comment: "Import Failed Message")
-				self.presentError(title: title, message: message)
+				self.presentError(title: L10n.importFailed, message: error.localizedDescription)
 			}
 		}
 		
@@ -253,8 +251,7 @@ extension TimelineViewController {
 	}
 	
 	private func deleteContextualAction(item: TimelineItem) -> UIContextualAction? {
-		let title = NSLocalizedString("Delete", comment: "Delete")
-		let action = UIContextualAction(style: .destructive, title: title) { [weak self] _, _, completion in
+		let action = UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
 			if let outline = AccountManager.shared.findOutline(item.id) {
 				self?.deleteOutline(outline, completion: completion)
 			}
@@ -264,8 +261,7 @@ extension TimelineViewController {
 	}
 	
 	private func getInfoOutlineAction(item: TimelineItem) -> UIAction {
-		let title = NSLocalizedString("Get Info", comment: "Get Info")
-		let action = UIAction(title: title, image: AppAssets.getInfoEntity) { [weak self] action in
+		let action = UIAction(title: L10n.getInfo, image: AppAssets.getInfoEntity) { [weak self] action in
 			if let outline = AccountManager.shared.findOutline(item.id) {
 				self?.getInfoForOutline(outline)
 			}
@@ -274,8 +270,7 @@ extension TimelineViewController {
 	}
 	
 	private func deleteOutlineAction(item: TimelineItem) -> UIAction {
-		let title = NSLocalizedString("Delete", comment: "Delete")
-		let action = UIAction(title: title, image: AppAssets.removeEntity, attributes: .destructive) { [weak self] action in
+		let action = UIAction(title: L10n.delete, image: AppAssets.removeEntity, attributes: .destructive) { [weak self] action in
 			if let outline = AccountManager.shared.findOutline(item.id) {
 				self?.deleteOutline(outline)
 			}
@@ -285,24 +280,18 @@ extension TimelineViewController {
 	}
 	
 	private func deleteOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
-		let deleteTitle = NSLocalizedString("Delete", comment: "Delete")
-		let deleteAction = UIAlertAction(title: deleteTitle, style: .destructive) { _ in
+		let deleteAction = UIAlertAction(title: L10n.delete, style: .destructive) { _ in
 			if outline == self.currentOutline, let outlineProvider = self.outlineProvider {
 				self.delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: nil)
 			}
 			outline.folder?.deleteOutline(outline)
 		}
 		
-		let cancelTitle = NSLocalizedString("Cancel", comment: "Cancel")
-		let cancelAction = UIAlertAction(title: cancelTitle, style: .cancel) { _ in
+		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel) { _ in
 			completion?(true)
 		}
 		
-		let localizedInformativeText = NSLocalizedString("Are you sure you want to delete the “%@” outline?", comment: "Folder delete text")
-		let formattedInformativeText = NSString.localizedStringWithFormat(localizedInformativeText as NSString, outline.title ?? "") as String
-		let localizedMessageText = NSLocalizedString("The outline be deleted and unrecoverable.", comment: "Delete Message")
-		
-		let alert = UIAlertController(title: formattedInformativeText, message: localizedMessageText, preferredStyle: .alert)
+		let alert = UIAlertController(title: L10n.deleteOutlinePrompt(outline.title ?? ""), message: L10n.deleteOutlineMessage, preferredStyle: .alert)
 		alert.addAction(cancelAction)
 		alert.addAction(deleteAction)
 		

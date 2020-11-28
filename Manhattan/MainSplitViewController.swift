@@ -277,7 +277,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				return self?.timelineViewController?.isCreateOutlineUnavailable ?? true
 			}
 			item.image = AppAssets.createEntity
-			item.label = NSLocalizedString("New Outline", comment: "New Outline")
+			item.label = L10n.newOutline
 			item.action = #selector(createOutline(_:))
 			item.target = self
 			toolbarItem = item
@@ -292,7 +292,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				return self?.editorViewController?.isToggleFavoriteUnavailable ?? true
 			}
 			item.image = AppAssets.favoriteUnselected
-			item.label = NSLocalizedString("Toggle Favorite", comment: "Toggle Favorite")
+			item.label = L10n.toggleFavorite
 			item.action = #selector(toggleOutlineIsFavorite(_:))
 			item.target = self
 			toolbarItem = item

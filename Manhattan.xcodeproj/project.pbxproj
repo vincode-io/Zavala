@@ -308,12 +308,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5181A95E2554D92100C153E8 /* Build configuration list for PBXNativeTarget "Manhattan" */;
 			buildPhases = (
+				51CF10AF2571BB1E005D6D88 /* Run Swiftgen */,
 				5181A9302554D92000C153E8 /* Sources */,
 				5181A9312554D92000C153E8 /* Frameworks */,
 				5181A9322554D92000C153E8 /* Resources */,
 				51C4C3C22555EB4D004E0206 /* Run VerifyNoBuildSettings */,
 				51C4C3F125565282004E0206 /* Embed Frameworks */,
-				51CF10AF2571BB1E005D6D88 /* Run Swiftgen */,
 			);
 			buildRules = (
 			);
