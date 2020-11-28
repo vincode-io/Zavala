@@ -19,6 +19,7 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 	var headline: Headline
 	var oldAttributedText: NSAttributedString
 	var newAttributedText: NSAttributedString
+	var applyChanges = false
 	
 	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedText: NSAttributedString) {
 		self.undoManager = undoManager
@@ -38,7 +39,10 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 	
 	func perform() {
 		let changes = outline.updateHeadline(headline: headline, attributedText: newAttributedText)
-		delegate?.applyChangesRestoringCursor(changes)
+		if applyChanges {
+			delegate?.applyChangesRestoringCursor(changes)
+		}
+		applyChanges = true
 		registerUndo()
 	}
 	
