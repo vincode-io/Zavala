@@ -10,6 +10,10 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum L10n {
+  /// Edit outline “%@”
+  internal static func editOutline(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "Edit_Outline", String(describing: p1))
+  }
   /// Import OPML
   internal static let importOPML = L10n.tr("Localizable", "Import_OPML")
   /// New Folder
@@ -18,6 +22,10 @@ internal enum L10n {
   internal static let newOutline = L10n.tr("Localizable", "New_Outline")
   /// New Window
   internal static let newWindow = L10n.tr("Localizable", "New_Window")
+  /// See outlines in “%@”
+  internal static func seeOutlinesIn(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "See_Outlines_In", String(describing: p1))
+  }
   /// Toggle Sidebar
   internal static let toggleSidebar = L10n.tr("Localizable", "Toggle_Sidebar")
 }

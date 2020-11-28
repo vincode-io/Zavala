@@ -89,8 +89,7 @@ extension ActivityManager {
 	private func makeSelectOutlineProviderActivity(_ outlineProvider: OutlineProvider) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: ActivityType.selectOutlineProvider.rawValue)
 		
-		let localizedText = NSLocalizedString("See outlines in  “%@”", comment: "See outlines in Folder")
-		let title = NSString.localizedStringWithFormat(localizedText as NSString, outlineProvider.name ?? "") as String
+		let title = L10n.seeOutlinesIn(outlineProvider.name ?? "")
 		activity.title = title
 		
 		let keywords = makeKeywords(title)
@@ -117,8 +116,7 @@ extension ActivityManager {
 	private func makeSelectOutlineActivity(_ outlineProvider: OutlineProvider, _ outline: Outline) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: ActivityType.selectOutline.rawValue)
 
-		let localizedText = NSLocalizedString("Edit outline “%@”", comment: "Edit outline")
-		let title = NSString.localizedStringWithFormat(localizedText as NSString, outline.title ?? "") as String
+		let title = L10n.editOutline(outline.title ?? "")
 		activity.title = title
 		
 		let keywords = makeKeywords(title)
