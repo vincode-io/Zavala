@@ -177,12 +177,16 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 	
 	func createHeadline(_ headline: Headline) {
-		guard let outline = outline else { return }
-		let changes = outline.createHeadline(afterHeadline: headline)
+		guard let undoManager = undoManager, let outline = outline else { return }
 
-		applyChanges(changes)
-
-		if let insert = changes.insertIndexPaths?.first {
+		let command = EditorCreateHeadlineCommand(undoManager: undoManager,
+												  delegate: self,
+												  outline: outline,
+												  afterHeadline: headline)
+		
+		runCommand(command)
+		
+		if let insert = command.changes?.insertIndexPaths?.first {
 			if let textCursor = collectionView.cellForItem(at: insert) as? TextCursorTarget {
 				textCursor.moveToEnd()
 			}

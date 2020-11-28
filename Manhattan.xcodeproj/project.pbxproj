@@ -13,6 +13,7 @@
 		514287362571FCBD00F16B78 /* EditorOutlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */; };
 		5142873A2572B06B00F16B78 /* EditorTextChangedCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514287392572B06B00F16B78 /* EditorTextChangedCommand.swift */; };
 		514287402572FD0200F16B78 /* EditorDeleteHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142873F2572FD0200F16B78 /* EditorDeleteHeadlineCommand.swift */; };
+		5142874625730AD600F16B78 /* EditorCreateHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142874525730AD600F16B78 /* EditorCreateHeadlineCommand.swift */; };
 		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
 		515F162C255C12BE00FD98B8 /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 515F162B255C12BE00FD98B8 /* Dialog.storyboard */; };
@@ -94,6 +95,7 @@
 		514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorOutlineCommand.swift; sourceTree = "<group>"; };
 		514287392572B06B00F16B78 /* EditorTextChangedCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextChangedCommand.swift; sourceTree = "<group>"; };
 		5142873F2572FD0200F16B78 /* EditorDeleteHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDeleteHeadlineCommand.swift; sourceTree = "<group>"; };
+		5142874525730AD600F16B78 /* EditorCreateHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCreateHeadlineCommand.swift; sourceTree = "<group>"; };
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
 		515F162B255C12BE00FD98B8 /* Dialog.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 		5142872E2571F86700F16B78 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
+				5142874525730AD600F16B78 /* EditorCreateHeadlineCommand.swift */,
 				5142873F2572FD0200F16B78 /* EditorDeleteHeadlineCommand.swift */,
 				514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */,
 				514287392572B06B00F16B78 /* EditorTextChangedCommand.swift */,
@@ -512,6 +515,7 @@
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
 				51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */,
 				515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */,
+				5142874625730AD600F16B78 /* EditorCreateHeadlineCommand.swift in Sources */,
 				51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */,
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
 				51CF10A0256DEE1B005D6D88 /* FixedSizeImageView.swift in Sources */,
