@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
 		512229682563507E008041AF /* EditorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorCollectionViewCell.swift */; };
+		514287302571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */; };
+		514287362571FCBD00F16B78 /* EditorOutlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */; };
 		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
 		515F162C255C12BE00FD98B8 /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 515F162B255C12BE00FD98B8 /* Dialog.storyboard */; };
@@ -86,6 +88,8 @@
 /* Begin PBXFileReference section */
 		5122294B25609C47008041AF /* UserInfoKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoKeys.swift; sourceTree = "<group>"; };
 		512229672563507E008041AF /* EditorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCollectionViewCell.swift; sourceTree = "<group>"; };
+		5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorToggleDisclosureCommand.swift; sourceTree = "<group>"; };
+		514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorOutlineCommand.swift; sourceTree = "<group>"; };
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
 		515F162B255C12BE00FD98B8 /* Dialog.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
@@ -165,6 +169,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5142872E2571F86700F16B78 /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+				5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */,
+				514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */,
+			);
+			path = Commands;
+			sourceTree = "<group>";
+		};
 		514BB9D5255B595300C8DBDF /* Utility */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,6 +298,7 @@
 				51B2B2D12563AB190090C56B /* EditorContentView.swift */,
 				51B2B2C72563A2180090C56B /* EditorTextView.swift */,
 				51C4C45A255ACA1B004E0206 /* EditorViewController.swift */,
+				5142872E2571F86700F16B78 /* Commands */,
 			);
 			path = Editor;
 			sourceTree = "<group>";
@@ -505,6 +519,8 @@
 				51C4C442255A0DE1004E0206 /* TimelineViewController.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,
+				514287302571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift in Sources */,
+				514287362571FCBD00F16B78 /* EditorOutlineCommand.swift in Sources */,
 				51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */,
 				512229682563507E008041AF /* EditorCollectionViewCell.swift in Sources */,
 				51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */,

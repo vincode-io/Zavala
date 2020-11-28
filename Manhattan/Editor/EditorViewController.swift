@@ -9,7 +9,7 @@ import UIKit
 import RSCore
 import Templeton
 
-class EditorViewController: UICollectionViewController {
+class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 
 	public var isToggleFavoriteUnavailable: Bool {
 		return outline == nil
@@ -23,6 +23,7 @@ class EditorViewController: UICollectionViewController {
 			}
 			outline?.suspend()
 			outline?.headlines = nil
+			clearUndoableCommands()
 		}
 		
 		didSet {
@@ -38,7 +39,10 @@ class EditorViewController: UICollectionViewController {
 		
 	}
 	
+	var undoableCommands = [UndoableCommand]()
 	var currentKeyPresses = Set<UIKeyboardHIDUsage>()
+	
+	override var canBecomeFirstResponder: Bool { return true }
 	
 	private var favoriteBarButtonItem: UIBarButtonItem?
 	
@@ -136,9 +140,9 @@ extension EditorViewController {
 extension EditorViewController: EditorCollectionViewCellDelegate {
 
 	func toggleDisclosure(headline: Headline) {
-		guard let outline = outline else { return }
-		let changes = outline.toggleDisclosure(headline: headline)
-		applyShadowTableChanges(changes)
+		guard let undoManager = undoManager, let outline = outline else { return }
+		let command = EditorToggleDisclosureCommand(undoManager: undoManager, delegate: self, outline: outline, headline: headline)
+		runCommand(command)
 	}
 
 	func textChanged(headline: Headline, attributedText: NSAttributedString) {
@@ -231,6 +235,31 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	
 }
 
+// MARK: EditorOutlineCommandDelegate
+
+extension EditorViewController: EditorOutlineCommandDelegate {
+	
+	func applyShadowTableChanges(_ changes: Outline.ShadowTableChanges) {
+		if let deletes = changes.deleteIndexPaths {
+			collectionView.deleteItems(at: deletes)
+		}
+		if let moves = changes.moveIndexPaths {
+			collectionView.performBatchUpdates {
+				for move in moves {
+					collectionView.moveItem(at: move.0, to: move.1)
+				}
+			}
+		}
+		if let inserts = changes.insertIndexPaths {
+			collectionView.insertItems(at: inserts)
+		}
+		if let reloads = changes.reloadIndexPaths {
+			collectionView.reloadItems(at: reloads)
+		}
+	}
+	
+}
+
 // MARK: Helpers
 
 private extension EditorViewController {
@@ -253,25 +282,6 @@ private extension EditorViewController {
 			if let textCursor = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? TextCursorTarget {
 				textCursor.moveToEnd()
 			}
-		}
-	}
-	
-	private func applyShadowTableChanges(_ changes: Outline.ShadowTableChanges) {
-		if let deletes = changes.deleteIndexPaths {
-			collectionView.deleteItems(at: deletes)
-		}
-		if let moves = changes.moveIndexPaths {
-			collectionView.performBatchUpdates {
-				for move in moves {
-					collectionView.moveItem(at: move.0, to: move.1)
-				}
-			}
-		}
-		if let inserts = changes.insertIndexPaths {
-			collectionView.insertItems(at: inserts)
-		}
-		if let reloads = changes.reloadIndexPaths {
-			collectionView.reloadItems(at: reloads)
 		}
 	}
 	
