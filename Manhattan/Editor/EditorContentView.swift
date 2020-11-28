@@ -14,7 +14,8 @@ class EditorContentView: UIView, UIContentView {
 	var bulletView: UIImageView?
 	var barViews = [UIView]()
 	var appliedConfiguration: EditorContentConfiguration!
-
+	var isTextChanged = false
+	
 	init(configuration: EditorContentConfiguration) {
 		super.init(frame: .zero)
 
@@ -120,8 +121,9 @@ class EditorContentView: UIView, UIContentView {
 extension EditorContentView: UITextViewDelegate {
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
-		guard let headline = appliedConfiguration.headline else { return }
+		guard isTextChanged, let headline = appliedConfiguration.headline else { return }
 		appliedConfiguration.delegate?.textChanged(headline: headline, attributedText: textView.attributedText)
+		isTextChanged = false
 	}
 	
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -131,6 +133,7 @@ extension EditorContentView: UITextViewDelegate {
 			appliedConfiguration.delegate?.createHeadline(headline)
 			return false
 		default:
+			isTextChanged = true
 			return true
 		}
 	}

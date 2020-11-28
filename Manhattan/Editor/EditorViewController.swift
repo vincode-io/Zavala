@@ -149,9 +149,7 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 
 	func textChanged(headline: Headline, attributedText: NSAttributedString) {
-		guard let undoManager = undoManager,
-			  let outline = outline,
-			  headline.attributedText != attributedText else { return }
+		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = EditorTextChangedCommand(undoManager: undoManager,
 											   delegate: self,
