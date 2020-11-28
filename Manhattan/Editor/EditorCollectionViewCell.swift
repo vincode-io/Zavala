@@ -14,7 +14,7 @@ protocol EditorCollectionViewCellDelegate: class {
 	func toggleDisclosure(headline: Headline)
 	func textChanged(headline: Headline, attributedText: NSAttributedString)
 	func deleteHeadline(_ headline: Headline)
-	func createHeadline(_ headline: Headline)
+	func createHeadline(_ afterHeadline: Headline)
 	func indentHeadline(_ headline: Headline, attributedText: NSAttributedString)
 	func outdentHeadline(_ headline: Headline, attributedText: NSAttributedString)
 	func moveCursorUp(headline: Headline)

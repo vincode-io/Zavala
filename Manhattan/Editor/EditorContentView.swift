@@ -156,8 +156,8 @@ extension EditorContentView: EditorTextViewDelegate {
 		appliedConfiguration.delegate?.deleteHeadline(headline)
 	}
 	
-	func createHeadline(_ headline: Headline) {
-		appliedConfiguration.delegate?.createHeadline(headline)
+	func createHeadline(_ afterHeadline: Headline) {
+		appliedConfiguration.delegate?.createHeadline(afterHeadline)
 	}
 	
 	func indentHeadline(_ headline: Headline, attributedText: NSAttributedString) {

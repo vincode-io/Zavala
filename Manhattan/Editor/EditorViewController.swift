@@ -176,13 +176,13 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 		}
 	}
 	
-	func createHeadline(_ headline: Headline) {
+	func createHeadline(_ afterHeadline: Headline) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = EditorCreateHeadlineCommand(undoManager: undoManager,
 												  delegate: self,
 												  outline: outline,
-												  afterHeadline: headline)
+												  afterHeadline: afterHeadline)
 		
 		runCommand(command)
 		
