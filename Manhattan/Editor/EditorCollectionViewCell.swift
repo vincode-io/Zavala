@@ -9,6 +9,7 @@ import UIKit
 import Templeton
 
 protocol EditorCollectionViewCellDelegate: class {
+	var undoManager: UndoManager? { get }
 	var currentKeyPresses: Set<UIKeyboardHIDUsage> { get }
 	func toggleDisclosure(headline: Headline)
 	func textChanged(headline: Headline, attributedText: NSAttributedString)

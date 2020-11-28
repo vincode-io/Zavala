@@ -141,6 +141,10 @@ extension EditorContentView: UITextViewDelegate {
 
 extension EditorContentView: EditorTextViewDelegate {
 	
+	override var undoManager: UndoManager? {
+		appliedConfiguration.delegate?.undoManager
+	}
+	
 	var currentKeyPresses: Set<UIKeyboardHIDUsage> {
 		appliedConfiguration.delegate?.currentKeyPresses ?? Set<UIKeyboardHIDUsage>()
 	}

@@ -9,6 +9,7 @@ import UIKit
 import Templeton
 
 protocol EditorTextViewDelegate: class {
+	var undoManager: UndoManager? { get }
 	var currentKeyPresses: Set<UIKeyboardHIDUsage> { get }
 	func deleteHeadline(_: Headline)
 	func createHeadline(_: Headline)
@@ -19,6 +20,14 @@ protocol EditorTextViewDelegate: class {
 }
 
 class EditorTextView: UITextView {
+	
+	override var undoManager: UndoManager? {
+		if super.undoManager?.canUndo ?? false || super.undoManager?.canRedo ?? false {
+			return super.undoManager
+		} else {
+			return editorDelegate?.undoManager
+		}
+	}
 	
 	weak var editorDelegate: EditorTextViewDelegate?
 	weak var headline: Headline?
