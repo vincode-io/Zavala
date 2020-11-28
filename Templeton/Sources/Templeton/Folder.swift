@@ -22,9 +22,9 @@ public enum FolderError: LocalizedError {
 	public var errorDescription: String? {
 		switch self {
 		case .securityScopeError:
-			return NSLocalizedString("Unable to access security scoped resource.", comment: "Security Scope Error")
+			return L10n.folderErrorScopedResource
 		case .fileReadError:
-			return NSLocalizedString("Unable to read the import file.", comment: "File Read Error")
+			return L10n.folderErrorImportRead
 		}
 	}
 }

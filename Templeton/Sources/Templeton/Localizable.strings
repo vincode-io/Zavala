@@ -1,0 +1,19 @@
+/*
+  Localizable.strings
+  Templton
+
+  Created by Maurice Parker on 11/27/20.
+  
+*/
+
+"Account_On_My_Mac" = "On My Mac";
+"Account_On_My_iPad" = "On My iPad";
+"Account_On_My_iPhone" = "On My iPhone";
+"Account_iCloud" = "iCloud";
+
+"Provider_All" = "All";
+"Provider_Favorites" = "Favorites";
+"Provider_Recents" = "Recents";
+
+"Folder_Error_Scoped_Resource" = "Unable to access security scoped resource.";
+"Folder_Error_Import_Read" = "Unable to read the import file.";

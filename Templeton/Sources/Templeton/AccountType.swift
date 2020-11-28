@@ -16,16 +16,16 @@ public enum AccountType: Int, Codable {
 		case .local:
 			switch UIDevice.current.userInterfaceIdiom {
 			case .mac:
-				return NSLocalizedString("On My Mac", comment: "Mac account name")
+				return L10n.accountOnMyMac
 			case .pad:
-				return NSLocalizedString("On My iPad", comment: "iPad account name")
+				return L10n.accountOnMyIPad
 			case .phone:
-				return NSLocalizedString("On My iPhone", comment: "iPhone account name")
+				return L10n.accountOnMyIPhone
 			default:
 				fatalError()
 			}
 		case .cloudKit:
-			return NSLocalizedString("iCloud", comment: "iCloud")
+			return L10n.accountICloud
 		}
 	}
 

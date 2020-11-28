@@ -41,11 +41,11 @@ public struct LazyOutlineProvider: OutlineProvider {
 	public var name: String? {
 		switch id {
 		case .all:
-			return NSLocalizedString("All", comment: "All")
+			return L10n.providerAll
 		case .favorites:
-			return NSLocalizedString("Favorites", comment: "Favorites")
+			return L10n.providerFavorites
 		case .recents:
-			return NSLocalizedString("Recents", comment: "Recents")
+			return L10n.providerRecents
 		default:
 			fatalError()
 		}

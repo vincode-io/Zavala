@@ -19,7 +19,8 @@ let package = Package(
             dependencies: [
 				"RSCore",
 				"SWXMLHash"
-			]),
+			],
+			resources: [.copy("Localizable.strings")]),
         .testTarget(
             name: "TempletonTests",
             dependencies: ["Templeton"]),
