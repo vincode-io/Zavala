@@ -41,7 +41,7 @@
 		51CF10A0256DEE1B005D6D88 /* FixedSizeImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */; };
 		51CF10A82571BA66005D6D88 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10A72571BA66005D6D88 /* Localizable.strings */; };
 		51CF10AC2571BA9A005D6D88 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */; };
-		51CF10C22571C22C005D6D88 /* Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CF10C12571C22C005D6D88 /* Localized.swift */; };
+		51CF10C22571C22C005D6D88 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CF10C12571C22C005D6D88 /* L10n.swift */; };
 		51DA54C825643E3400732942 /* MainThreadOperationBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DA54C725643E3400732942 /* MainThreadOperationBase.swift */; };
 		51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */; };
 		51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F22255F2D7F00320EDB /* ActivityManager.swift */; };
@@ -125,7 +125,7 @@
 		51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSizeImageView.swift; sourceTree = "<group>"; };
 		51CF10A72571BA66005D6D88 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
-		51CF10C12571C22C005D6D88 /* Localized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Localized.swift; sourceTree = "<group>"; };
+		51CF10C12571C22C005D6D88 /* L10n.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
 		51DA54C725643E3400732942 /* MainThreadOperationBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainThreadOperationBase.swift; sourceTree = "<group>"; };
 		51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatingToolbarItem.swift; sourceTree = "<group>"; };
 		51E14F22255F2D7F00320EDB /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
@@ -185,12 +185,11 @@
 		515F163B255C536600FD98B8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5181A9402554D92100C153E8 /* Assets.xcassets */,
+				5181A96A2554D93B00C153E8 /* Manhattan.entitlements */,
 				5181A9452554D92100C153E8 /* Info.plist */,
 				51CF10A72571BA66005D6D88 /* Localizable.strings */,
 				51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */,
-				51CF10C12571C22C005D6D88 /* Localized.swift */,
-				5181A96A2554D93B00C153E8 /* Manhattan.entitlements */,
+				5181A9402554D92100C153E8 /* Assets.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -225,6 +224,7 @@
 				51F13EFD255E13A9004B85CA /* AppAssets.swift */,
 				514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */,
 				5181A9372554D92000C153E8 /* AppDelegate.swift */,
+				51CF10C12571C22C005D6D88 /* L10n.swift */,
 				5122294B25609C47008041AF /* UserInfoKeys.swift */,
 				5181A9392554D92000C153E8 /* SceneDelegate.swift */,
 				51C4C448255AA215004E0206 /* MainSplitViewController.swift */,
@@ -476,7 +476,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if ! command -v \"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" &> /dev/null\nthen\n    echo \"swiftgen could not be found\"\n    exit\nfi\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Manhattan/Resources/Localizable.strings\" \"$PROJECT_DIR/Manhattan/Resources/Localizable.stringsdict\" --output \"$PROJECT_DIR/Manhattan/Resources/Localized.swift\";\n";
+			shellScript = "if ! command -v \"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" &> /dev/null\nthen\n    echo \"swiftgen could not be found\"\n    exit\nfi\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Manhattan/Resources/Localizable.strings\" \"$PROJECT_DIR/Manhattan/Resources/Localizable.stringsdict\" --output \"$PROJECT_DIR/Manhattan/L10n.swift\";\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -486,7 +486,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51DA54C825643E3400732942 /* MainThreadOperationBase.swift in Sources */,
-				51CF10C22571C22C005D6D88 /* Localized.swift in Sources */,
+				51CF10C22571C22C005D6D88 /* L10n.swift in Sources */,
 				51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */,
 				515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */,
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
