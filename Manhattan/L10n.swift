@@ -42,6 +42,8 @@ internal enum L10n {
   internal static let importFailed = L10n.tr("Localizable", "Import Failed")
   /// Import OPML
   internal static let importOPML = L10n.tr("Localizable", "Import_OPML")
+  /// Indent
+  internal static let indent = L10n.tr("Localizable", "Indent")
   /// New Folder
   internal static let newFolder = L10n.tr("Localizable", "New_Folder")
   /// New Outline
@@ -50,6 +52,8 @@ internal enum L10n {
   internal static let newWindow = L10n.tr("Localizable", "New_Window")
   /// Not Available
   internal static let notAvailable = L10n.tr("Localizable", "Not_Available")
+  /// Outdent
+  internal static let outdent = L10n.tr("Localizable", "Outdent")
   /// See outlines in “%@”
   internal static func seeOutlinesIn(_ p1: Any) -> String {
     return L10n.tr("Localizable", "See_Outlines_In", String(describing: p1))

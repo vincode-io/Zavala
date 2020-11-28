@@ -17,6 +17,8 @@
 "Cancel" = "Cancel";
 "Get_Info" = "Get Info";
 "Typing" = "Typing";
+"Indent" = "Indent";
+"Outdent" = "Outdent";
 
 /* Activity Manager */
 "See_Outlines_In" = "See outlines in “%@”";
