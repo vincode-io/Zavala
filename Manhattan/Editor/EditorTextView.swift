@@ -22,11 +22,11 @@ protocol EditorTextViewDelegate: class {
 class EditorTextView: UITextView {
 	
 	override var undoManager: UndoManager? {
-		if super.undoManager?.canUndo ?? false || super.undoManager?.canRedo ?? false {
-			return super.undoManager
-		} else {
-			return editorDelegate?.undoManager
+		guard let textViewUndoManager = super.undoManager, let controllerUndoManager = editorDelegate?.undoManager else { return nil }
+		if stackedUndoManager == nil {
+			stackedUndoManager = StackedUndoManger(mainUndoManager: textViewUndoManager, fallBackUndoManager: controllerUndoManager)
 		}
+		return stackedUndoManager
 	}
 	
 	weak var editorDelegate: EditorTextViewDelegate?
@@ -39,6 +39,8 @@ class EditorTextView: UITextView {
 		]
 		return keys
 	}
+	
+	private var stackedUndoManager: UndoManager?
 	
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
