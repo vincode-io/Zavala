@@ -9,10 +9,20 @@ import Foundation
 
 public struct ShadowTableChanges {
 	
-	public var deletes: [Int]?
-	public var inserts: [Int]?
-	public var moves: [(Int, Int)]?
-	public var reloads: [Int]?
+	public struct Move: Hashable {
+		var from: Int
+		var to: Int
+		
+		init(_ from: Int, _ to: Int) {
+			self.from = from
+			self.to = to
+		}
+	}
+	
+	public var deletes: Set<Int>?
+	public var inserts: Set<Int>?
+	public var moves: Set<Move>?
+	public var reloads: Set<Int>?
 	
 	public var isEmpty: Bool {
 		return deletes == nil && inserts == nil && reloads == nil
@@ -30,7 +40,7 @@ public struct ShadowTableChanges {
 	
 	public var moveIndexPaths: [(IndexPath, IndexPath)]? {
 		guard let moves = moves else { return nil }
-		return moves.map { (IndexPath(row: $0.0, section: 0), IndexPath(row: $0.1, section: 0)) }
+		return moves.map { (IndexPath(row: $0.from, section: 0), IndexPath(row: $0.to, section: 0)) }
 	}
 	
 	public var reloadIndexPaths: [IndexPath]? {
@@ -38,7 +48,7 @@ public struct ShadowTableChanges {
 		return reloads.map { IndexPath(row: $0, section: 0) }
 	}
 	
-	init(deletes: [Int]? = nil, inserts: [Int]? = nil, moves: [(Int, Int)]? = nil, reloads: [Int]? = nil) {
+	init(deletes: Set<Int>? = nil, inserts: Set<Int>? = nil, moves: Set<Move>? = nil, reloads: Set<Int>? = nil) {
 		self.deletes = deletes
 		self.inserts = inserts
 		self.moves = moves
@@ -50,7 +60,7 @@ public struct ShadowTableChanges {
 			if deletes == nil {
 				deletes = changeDeletes
 			} else {
-				self.deletes!.append(contentsOf: changeDeletes)
+				self.deletes!.formUnion(changeDeletes)
 			}
 		}
 
@@ -58,7 +68,7 @@ public struct ShadowTableChanges {
 			if inserts == nil {
 				inserts = changeInserts
 			} else {
-				self.inserts!.append(contentsOf: changeInserts)
+				self.inserts!.formUnion(changeInserts)
 			}
 		}
 
@@ -66,7 +76,7 @@ public struct ShadowTableChanges {
 			if moves == nil {
 				moves = changeMoves
 			} else {
-				self.moves!.append(contentsOf: changeMoves)
+				self.moves!.formUnion(changeMoves)
 			}
 		}
 		
@@ -74,7 +84,7 @@ public struct ShadowTableChanges {
 			if reloads == nil {
 				reloads = changeReloads
 			} else {
-				self.reloads!.append(contentsOf: changeReloads)
+				self.reloads!.formUnion(changeReloads)
 			}
 		}
 	}

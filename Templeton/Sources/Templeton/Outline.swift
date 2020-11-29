@@ -147,11 +147,11 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func indentHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
 		headline.attributedText = attributedText
 		
-		var reloads = [Int]()
+		var reloads = Set<Int>()
 		
 		func reloadVisitor(_ visited: Headline) {
 			if let index = visited.shadowTableIndex {
-				reloads.append(index)
+				reloads.insert(index)
 			}
 			if visited.isExpanded ?? true {
 				visited.headlines?.forEach { $0.visit(visitor: reloadVisitor) }
@@ -186,8 +186,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		newParentHeadline.isExpanded = true
 		outlineBodyDidChange()
 		
-		reloads.append(newParentHeadlineShadowTableIndex)
-		reloads.append(headlineShadowTableIndex)
+		reloads.insert(newParentHeadlineShadowTableIndex)
+		reloads.insert(headlineShadowTableIndex)
 
 		if headline.isExpanded ?? true {
 			headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
@@ -223,16 +223,16 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		}
 		headline.parent = oldParent.parent
 
-		var reloads = [oldParentShadowTableIndex]
-		var moves = [(Int, Int)]()
+		var reloads = Set([oldParentShadowTableIndex])
+		var moves = Set<ShadowTableChanges.Move>()
 		var workingShadowTableIndex = originalHeadlineShadowTableIndex
 		
 		if siblingsToMove.isEmpty {
-			reloads.append(originalHeadlineShadowTableIndex)
+			reloads.insert(originalHeadlineShadowTableIndex)
 			
 			func reloadVisitor(_ visited: Headline) {
 				if let index = visited.shadowTableIndex {
-					reloads.append(index)
+					reloads.insert(index)
 				}
 				if visited.isExpanded ?? true {
 					visited.headlines?.forEach { $0.visit(visitor: reloadVisitor) }
@@ -260,7 +260,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 			func movingUpVisitor(_ visited: Headline) {
 				if let visitedShadowTableIndex = visited.shadowTableIndex {
-					moves.append((visitedShadowTableIndex, workingShadowTableIndex))
+					moves.insert(ShadowTableChanges.Move(visitedShadowTableIndex, workingShadowTableIndex))
 					workingShadowTableIndex = workingShadowTableIndex + 1
 				}
 				if visited.isExpanded ?? true {
@@ -270,7 +270,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 			for sibling in siblingsToMove {
 				if let siblineShadowTableIndex = sibling.shadowTableIndex {
-					moves.append((siblineShadowTableIndex, workingShadowTableIndex))
+					moves.insert(ShadowTableChanges.Move(siblineShadowTableIndex, workingShadowTableIndex))
 					workingShadowTableIndex = workingShadowTableIndex + 1
 					if sibling.isExpanded ?? true {
 						sibling.headlines?.forEach { $0.visit(visitor: movingUpVisitor(_:)) }
@@ -278,16 +278,16 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 				}
 			}
 			
-			moves.append((originalHeadlineShadowTableIndex, workingShadowTableIndex))
-			reloads.append(workingShadowTableIndex)
+			moves.insert(ShadowTableChanges.Move(originalHeadlineShadowTableIndex, workingShadowTableIndex))
+			reloads.insert(workingShadowTableIndex)
 			shadowTable?.insert(headline, at: workingShadowTableIndex)
 
 			func shadowTableInsertVisitor(_ visited: Headline) {
 				if let visitedShadowTableIndex = visited.shadowTableIndex {
 					workingShadowTableIndex = workingShadowTableIndex + 1
 					shadowTable?.insert(visited, at: workingShadowTableIndex)
-					moves.append((visitedShadowTableIndex, workingShadowTableIndex))
-					reloads.append(workingShadowTableIndex)
+					moves.insert(ShadowTableChanges.Move(visitedShadowTableIndex, workingShadowTableIndex))
+					reloads.insert(workingShadowTableIndex)
 				}
 				if visited.isExpanded ?? true {
 					visited.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor) }
@@ -324,29 +324,33 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		guard let oldShadowTable = shadowTable else { return ShadowTableChanges() }
 		rebuildTransientData()
 		
-		var moves = [(Int, Int)]()
-		var inserts = [Int]()
-		var deletes = [Int]()
+		var moves = Set<ShadowTableChanges.Move>()
+		var inserts = Set<Int>()
+		var deletes = Set<Int>()
 		
 		let diff = shadowTable!.difference(from: oldShadowTable).inferringMoves()
 		for change in diff {
 			switch change {
 			case .insert(let offset, _, let associated):
 				if let associated = associated {
-					moves.append((associated, offset))
+					moves.insert(ShadowTableChanges.Move(associated, offset))
 				} else {
-					inserts.append(offset)
+					inserts.insert(offset)
 				}
 			case .remove(let offset, _, let associated):
 				if let associated = associated {
-//					moves.append((offset, associated))
+					moves.insert(ShadowTableChanges.Move(offset, associated))
 				} else {
-//					deletes.append(offset)
+					deletes.insert(offset)
 				}
 			}
 		}
 		
-		let reloads = moves.map { $0.0 }
+		var reloads = Set<Int>()
+		moves.forEach {
+			reloads.insert($0.from)
+			reloads.insert($0.to)
+		}
 		
 		return ShadowTableChanges(deletes: deletes, inserts: inserts, moves: moves, reloads: reloads)
 	}
@@ -466,11 +470,11 @@ private extension Outline {
 			headline.visit(visitor: visitor(_:))
 		}
 		
-		var inserts = [Int]()
+		var inserts = Set<Int>()
 		for i in 0..<shadowTableInserts.count {
 			let newIndex = i + headlineShadowTableIndex + 1
 			shadowTable?.insert(shadowTableInserts[i], at: newIndex)
-			inserts.append(newIndex)
+			inserts.insert(newIndex)
 		}
 		
 		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
@@ -482,11 +486,11 @@ private extension Outline {
 
 		headline.isExpanded = false
 			
-		var shadowTableIndexes = [Int]()
+		var reloads = Set<Int>()
 
 		func visitor(_ visited: Headline) {
 			if let shadowTableIndex = visited.shadowTableIndex {
-				shadowTableIndexes.append(shadowTableIndex)
+				reloads.insert(shadowTableIndex)
 			}
 
 			if visited.isExpanded ?? true {
@@ -500,11 +504,11 @@ private extension Outline {
 			headline.visit(visitor: visitor(_:))
 		}
 		
-		shadowTable?.remove(atOffsets: IndexSet(shadowTableIndexes))
+		shadowTable?.remove(atOffsets: IndexSet(reloads))
 		
 		guard let headlineShadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
 		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
-		return ShadowTableChanges(deletes: shadowTableIndexes, reloads: [headlineShadowTableIndex])
+		return ShadowTableChanges(deletes: reloads, reloads: Set([headlineShadowTableIndex]))
 	}
 	
 	func rebuildTransientData() {
