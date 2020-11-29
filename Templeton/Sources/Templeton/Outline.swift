@@ -216,7 +216,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return changes
 	}
 
-	public func indentHeadline(headline: Headline, attributedText: NSAttributedString, parentIndex: Int? = nil) -> ShadowTableChanges {
+	public func indentHeadline(headline: Headline, attributedText: NSAttributedString, childIndex: Int? = nil) -> ShadowTableChanges {
 		headline.attributedText = attributedText
 		
 		var reloads = [Int]()
