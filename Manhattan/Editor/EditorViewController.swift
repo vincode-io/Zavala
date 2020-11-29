@@ -131,7 +131,12 @@ extension EditorViewController {
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		let headline = outline!.shadowTable![indexPath.row]
+		let headline: Headline
+		if let shadowTableEntry = outline?.shadowTable?[indexPath.row] {
+			headline = shadowTableEntry
+		} else {
+			headline = Headline()
+		}
 		return collectionView.dequeueConfiguredReusableCell(using: editorRegistration!, for: indexPath, item: headline)
 	}
 	
