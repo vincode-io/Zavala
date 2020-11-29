@@ -10,8 +10,8 @@ import RSCore
 import Templeton
 
 protocol EditorOutlineCommandDelegate: class {
-	func applyChanges(_: Outline.ShadowTableChanges)
-	func applyChangesRestoringCursor(_: Outline.ShadowTableChanges)
+	func applyChanges(_: ShadowTableChanges)
+	func applyChangesRestoringCursor(_: ShadowTableChanges)
 }
 
 protocol EditorOutlineCommand: UndoableCommand {

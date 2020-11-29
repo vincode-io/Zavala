@@ -18,7 +18,7 @@ final class EditorDeleteHeadlineCommand: EditorOutlineCommand {
 	var outline: Outline
 	var headline: Headline
 	var afterHeadline: Headline?
-	var changes: Outline.ShadowTableChanges?
+	var changes: ShadowTableChanges?
 	
 	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline) {
 		self.undoManager = undoManager

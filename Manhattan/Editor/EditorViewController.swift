@@ -244,7 +244,7 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 
 extension EditorViewController: EditorOutlineCommandDelegate {
 	
-	func applyChanges(_ changes: Outline.ShadowTableChanges) {
+	func applyChanges(_ changes: ShadowTableChanges) {
 		if let deletes = changes.deleteIndexPaths {
 			collectionView.deleteItems(at: deletes)
 		}
@@ -263,7 +263,7 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 		}
 	}
 	
-	func applyChangesRestoringCursor(_ changes: Outline.ShadowTableChanges) {
+	func applyChangesRestoringCursor(_ changes: ShadowTableChanges) {
 		var textRange: UITextRange? = nil
 		var cursorHeadline: Headline? = nil
 		if let editorTextView = UIResponder.currentFirstResponder as? EditorTextView {
