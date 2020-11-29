@@ -8,13 +8,13 @@
 import Foundation
 import SWXMLHash
 
-protocol HeadlineContainer: class {
+public protocol HeadlineContainer: class {
 	var headlines: [Headline]? { get set }
 }
 
-extension HeadlineContainer {
+public extension HeadlineContainer {
 	
-	public func importOPML(_ headlineIndexers: [XMLIndexer]) {
+	func importOPML(_ headlineIndexers: [XMLIndexer]) {
 		var headlines = [Headline]()
 		for headlineIndexer in headlineIndexers {
 			let headline = Headline(plainText: headlineIndexer.element?.attribute(by: "text")?.text ?? "")

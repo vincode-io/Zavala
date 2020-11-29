@@ -17,6 +17,7 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 	weak var delegate: EditorOutlineCommandDelegate?
 	var outline: Outline
 	var headline: Headline
+	var oldParent: Headline?
 	var oldChildIndex: Int?
 	var oldAttributedText: NSAttributedString
 	var newAttributedText: NSAttributedString
@@ -29,7 +30,9 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 		self.undoActionName = L10n.outdent
 		self.redoActionName = L10n.outdent
 		
+		// This is going to move, so we save the parent and child index
 		if headline != headline.parent?.headlines?.last {
+			oldParent = headline.parent
 			oldChildIndex = headline.parent?.headlines?.firstIndex(of: headline)
 		}
 		
@@ -48,8 +51,13 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 	}
 	
 	func undo() {
-		let changes = outline.indentHeadline(headline: headline, attributedText: oldAttributedText, childIndex: oldChildIndex)
-		delegate?.applyChangesRestoringCursor(changes)
+		if let oldParent = oldParent, let oldChildIndex = oldChildIndex {
+			let changes = outline.moveHeadline(headline, attributedText: oldAttributedText, toParent: oldParent, childIndex: oldChildIndex)
+			delegate?.applyChangesRestoringCursor(changes)
+		} else {
+			let changes = outline.indentHeadline(headline: headline, attributedText: oldAttributedText)
+			delegate?.applyChangesRestoringCursor(changes)
+		}
 		registerRedo()
 	}
 	

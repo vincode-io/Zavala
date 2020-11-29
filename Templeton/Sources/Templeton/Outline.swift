@@ -216,7 +216,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return changes
 	}
 
-	public func indentHeadline(headline: Headline, attributedText: NSAttributedString, childIndex: Int? = nil) -> ShadowTableChanges {
+	public func indentHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
 		headline.attributedText = attributedText
 		
 		var reloads = [Int]()
@@ -373,6 +373,54 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		
 		resetShadowTableIndexes(startingAt: originalHeadlineShadowTableIndex)
 		return ShadowTableChanges(moves: moves, reloads: reloads)
+	}
+	
+	public func moveHeadline(_ headline: Headline, attributedText: NSAttributedString, toParent: HeadlineContainer, childIndex: Int) -> ShadowTableChanges {
+		headline.attributedText = attributedText
+
+		let fromParent: HeadlineContainer
+		if let oldParentHeadline = headline.parent {
+			fromParent = oldParentHeadline
+		} else {
+			fromParent = self
+		}
+		
+		// Move the headline in the tree
+		fromParent.headlines = fromParent.headlines?.filter{ $0 != headline }
+		if toParent.headlines == nil {
+			toParent.headlines = [headline]
+		} else {
+			toParent.headlines!.insert(headline, at: childIndex)
+		}
+		
+		guard let oldShadowTable = shadowTable else { return ShadowTableChanges() }
+		rebuildTransientData()
+		
+		var moves = [(Int, Int)]()
+		var inserts = [Int]()
+		var deletes = [Int]()
+		
+		let diff = shadowTable!.difference(from: oldShadowTable).inferringMoves()
+		for change in diff {
+			switch change {
+			case .insert(let offset, _, let associated):
+				if let associated = associated {
+					moves.append((associated, offset))
+				} else {
+					inserts.append(offset)
+				}
+			case .remove(let offset, _, let associated):
+				if let associated = associated {
+//					moves.append((offset, associated))
+				} else {
+//					deletes.append(offset)
+				}
+			}
+		}
+		
+		let reloads = moves.map { $0.0 }
+		
+		return ShadowTableChanges(deletes: deletes, inserts: inserts, moves: moves, reloads: reloads)
 	}
 	
 	public func load() {
