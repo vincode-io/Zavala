@@ -157,7 +157,20 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		headline.attributedText = attributedText
 		headline.isComplete = !(headline.isComplete ?? false)
 		outlineBodyDidChange()
-		return ShadowTableChanges(reloads: Set([shadowTableIndex]))
+		
+		var reloads = Set([shadowTableIndex])
+		
+		func ancestorMarkingVisitor(_ visited: Headline) {
+			if let index = visited.shadowTableIndex {
+				reloads.insert(index)
+			}
+			visited.isAncestorComplete = headline.isComplete ?? false
+			visited.headlines?.forEach { $0.visit(visitor: ancestorMarkingVisitor) }
+		}
+		
+		headline.headlines?.forEach { $0.visit(visitor: ancestorMarkingVisitor(_:)) }
+		
+		return ShadowTableChanges(reloads: reloads)
 	}
 
 	public func indentHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {

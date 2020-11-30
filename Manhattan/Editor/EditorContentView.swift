@@ -60,12 +60,17 @@ class EditorContentView: UIView, UIContentView {
 		textView.headline = configuration.headline
 		
 		var attrs = [NSAttributedString.Key : Any]()
-		attrs[.foregroundColor] = UIColor.label
+		if headline.isComplete ?? false || headline.isAncestorComplete ?? false {
+			attrs[.foregroundColor] = UIColor.secondaryLabel
+		} else {
+			attrs[.foregroundColor] = UIColor.label
+		}
+		
 		attrs[.font] = UIFont.preferredFont(forTextStyle: .body)
 		
 		if headline.isComplete ?? false {
 			attrs[.strikethroughStyle] = 1
-			attrs[.strikethroughColor] = UIColor.label
+			attrs[.strikethroughColor] = UIColor.secondaryLabel
 		} else {
 			attrs[.strikethroughStyle] = 0
 		}

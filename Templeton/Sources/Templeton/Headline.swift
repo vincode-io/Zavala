@@ -11,6 +11,7 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 	
 	public weak var parent: Headline?
 	public var shadowTableIndex: Int?
+	public var isAncestorComplete: Bool?
 	
 	public var indentLevel: Int {
 		var parentCount = 0
