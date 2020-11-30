@@ -13,6 +13,10 @@ struct AppAssets {
 		return UIColor(named: "AccentColor")!
 	}()
 	
+	static var completeHeadline: UIImage = {
+		return UIImage(systemName: "checkmark.square")!
+	}()
+
 	static var createEntity: UIImage = {
 		return UIImage(systemName: "square.and.pencil")!
 	}()

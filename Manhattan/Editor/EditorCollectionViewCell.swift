@@ -35,6 +35,10 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 			setNeedsUpdateConfiguration()
 		}
 	}
+	
+	var attributedText: NSAttributedString? {
+		return (contentView as? EditorContentView)?.textView.attributedText
+	}
 
 	private var isDisclosed = false
 

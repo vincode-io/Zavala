@@ -33,7 +33,7 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 				guard isViewLoaded else { return }
 				updateUI()
 				collectionView.reloadData()
-				setCursor()
+				moveCursorToFirstItem()
 			}
 		}
 		
@@ -68,7 +68,7 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 		
 		updateUI()
 		collectionView.reloadData()
-		setCursor()
+		moveCursorToFirstItem()
 	}
 
 	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -144,6 +144,14 @@ extension EditorViewController {
 			text.moveToEnd()
 		}
 		collectionView.deselectItem(at: indexPath, animated: false)
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+		guard let editorCell = collectionView.cellForItem(at: indexPath) as? EditorCollectionViewCell,
+			  let headline = editorCell.headline,
+			  let attributedText = editorCell.attributedText else { return nil }
+		
+		return makeHeadlineContextMenu(headline: headline, attributedText: attributedText)
 	}
 	
 }
@@ -316,7 +324,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	private func setCursor() {
+	private func moveCursorToFirstItem() {
 		DispatchQueue.main.async {
 			if let textCursor = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? TextCursorTarget {
 				textCursor.moveToEnd()
@@ -324,4 +332,23 @@ private extension EditorViewController {
 		}
 	}
 	
+	private func makeHeadlineContextMenu(headline: Headline, attributedText: NSAttributedString) -> UIContextMenuConfiguration {
+		return UIContextMenuConfiguration(identifier: headline as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
+			guard let self = self else { return nil }
+			
+			let menuItems = [
+				UIMenu(title: "", options: .displayInline, children: [self.getToggleCompleteAction(headline: headline, attributedText: attributedText)]),
+			]
+
+			return UIMenu(title: "", children: menuItems.compactMap { $0 })
+		})
+	}
+	
+	private func getToggleCompleteAction(headline: Headline, attributedText: NSAttributedString) -> UIAction {
+		let title = headline.isComplete ?? false ? L10n.uncomplete : L10n.complete
+		let action = UIAction(title: title, image: AppAssets.completeHeadline) { [weak self] action in
+			self?.toggleCompleteHeadline(headline, attributedText: attributedText)
+		}
+		return action
+	}
 }

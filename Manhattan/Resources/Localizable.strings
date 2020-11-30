@@ -20,6 +20,7 @@
 "Indent" = "Indent";
 "Outdent" = "Outdent";
 "Complete" = "Complete";
+"Uncomplete" = "Uncomplete";
 
 /* Activity Manager */
 "See_Outlines_In" = "See outlines in “%@”";

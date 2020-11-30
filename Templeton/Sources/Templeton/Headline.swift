@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class Headline: HeadlineContainer, Identifiable, Equatable, Hashable, Codable {
+public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiable, Codable {
 	
 	public weak var parent: Headline?
 	public var shadowTableIndex: Int?
@@ -36,14 +36,16 @@ public final class Headline: HeadlineContainer, Identifiable, Equatable, Hashabl
 		case headlines = "headlines"
 	}
 
-	public init() {
+	public override init() {
 		self.id = UUID().uuidString
+		super.init()
 		headlines = [Headline]()
 	}
 	
 	public init(plainText: String) {
 		self.id = UUID().uuidString
-		
+		super.init()
+
 		var attributes = [NSAttributedString.Key: AnyObject]()
 		attributes[.foregroundColor] = UIColor.label
 		attributes[.font] = UIFont.preferredFont(forTextStyle: .body)
@@ -72,12 +74,20 @@ public final class Headline: HeadlineContainer, Identifiable, Equatable, Hashabl
 		}
 	}
 	
-	public func hash(into hasher: inout Hasher) {
-		hasher.combine(id)
+	public override func isEqual(_ object: Any?) -> Bool {
+		guard let other = object as? Headline else { return false }
+		if self === other { return true }
+		return id == other.id
 	}
 	
-	public static func == (lhs: Headline, rhs: Headline) -> Bool {
-		return lhs.id == rhs.id
+	public override var hash: Int {
+		var hasher = Hasher()
+		hasher.combine(id)
+		return hasher.finalize()
+	}
+	
+	public func copy(with zone: NSZone? = nil) -> Any {
+		return self
 	}
 	
 	func visit(visitor: (Headline) -> Void) {
@@ -88,8 +98,8 @@ public final class Headline: HeadlineContainer, Identifiable, Equatable, Hashabl
 
 // MARK: CustomDebugStringConvertible
 
-extension Headline: CustomDebugStringConvertible {
-	public var debugDescription: String {
+extension Headline {
+	override public var debugDescription: String {
 		return "\(plainText ?? "") (\(id))"
 	}
 }
