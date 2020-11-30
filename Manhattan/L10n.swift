@@ -40,6 +40,8 @@ internal enum L10n {
   internal static let expand = L10n.tr("Localizable", "Expand")
   /// Get Info
   internal static let getInfo = L10n.tr("Localizable", "Get_Info")
+  /// Hide Completed
+  internal static let hideCompleted = L10n.tr("Localizable", "Hide Completed")
   /// Import Failed
   internal static let importFailed = L10n.tr("Localizable", "Import Failed")
   /// Import OPML
@@ -60,6 +62,8 @@ internal enum L10n {
   internal static func seeOutlinesIn(_ p1: Any) -> String {
     return L10n.tr("Localizable", "See_Outlines_In", String(describing: p1))
   }
+  /// Show Completed
+  internal static let showCompleted = L10n.tr("Localizable", "Show Completed")
   /// Toggle Favorite
   internal static let toggleFavorite = L10n.tr("Localizable", "Toggle_Favorite")
   /// Toggle Sidebar

@@ -19,6 +19,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public var id: EntityID
 	public var title: String?
 	public var isFavorite: Bool?
+	public var isFiltered: Bool?
 	public var created: Date?
 	public var updated: Date?
 	
@@ -39,6 +40,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		case id = "id"
 		case title = "title"
 		case isFavorite = "isFavorite"
+		case isFiltered = "isFiltered"
 		case created = "created"
 		case updated = "updated"
 	}
@@ -55,6 +57,11 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 	public func toggleFavorite() {
 		isFavorite = !(isFavorite ?? false)
+		outlineMetaDataDidChange()
+	}
+	
+	public func toggleFilter() {
+		isFiltered = !(isFiltered ?? false)
 		outlineMetaDataDidChange()
 	}
 	

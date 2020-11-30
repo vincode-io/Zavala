@@ -142,6 +142,10 @@ class MainSplitViewController: UISplitViewController {
 		editorViewController?.toggleOutlineIsFavorite(sender)
 	}
 	
+	@objc func toggleOutlineFilter(_ sender: Any?) {
+		editorViewController?.toggleOutlineFilter(sender)
+	}
+	
 	@objc func toggleSidebar(_ sender: Any?) {
 		UIView.animate(withDuration: 0.25) {
 			self.preferredDisplayMode = self.displayMode == .twoBesideSecondary ? .secondaryOnly : .twoBesideSecondary
@@ -245,6 +249,7 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 
 extension NSToolbarItem.Identifier {
 	static let newOutline = NSToolbarItem.Identifier("io.vincode.Manhattan.newOutline")
+	static let toggleOutlineFilter = NSToolbarItem.Identifier("io.vincode.Manhattan.toggleOutlineFilter")
 	static let toggleOutlineIsFavorite = NSToolbarItem.Identifier("io.vincode.Manhattan.toggleOutlineIsFavorite")
 }
 
@@ -256,6 +261,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.flexibleSpace,
 			.newOutline,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
+			.toggleOutlineFilter,
 			.flexibleSpace,
 			.toggleOutlineIsFavorite
 		]
@@ -281,6 +287,23 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.action = #selector(createOutline(_:))
 			item.target = self
 			toolbarItem = item
+		case .toggleOutlineFilter:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] item in
+				if self?.editorViewController?.outline?.isFiltered ?? false {
+					item.image = AppAssets.filterActive
+					item.label = L10n.showCompleted
+				} else {
+					item.image = AppAssets.filterInactive
+					item.label = L10n.hideCompleted
+				}
+				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			}
+			item.image = AppAssets.filterInactive
+			item.label = L10n.hideCompleted
+			item.action = #selector(toggleOutlineFilter(_:))
+			item.target = self
+			toolbarItem = item
 		case .toggleOutlineIsFavorite:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
@@ -289,7 +312,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				} else {
 					item.image = AppAssets.favoriteUnselected
 				}
-				return self?.editorViewController?.isToggleFavoriteUnavailable ?? true
+				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
 			item.image = AppAssets.favoriteUnselected
 			item.label = L10n.toggleFavorite

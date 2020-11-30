@@ -11,7 +11,7 @@ import Templeton
 
 class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 
-	public var isToggleFavoriteUnavailable: Bool {
+	public var isOutlineFunctionsUnavailable: Bool {
 		return outline == nil
 	}
 	
@@ -107,6 +107,11 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 	
 	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
 		outline?.toggleFavorite()
+		updateUI()
+	}
+	
+	@objc func toggleOutlineFilter(_ sender: Any?) {
+		outline?.toggleFilter()
 		updateUI()
 	}
 	

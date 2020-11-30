@@ -21,6 +21,8 @@
 "Outdent" = "Outdent";
 "Complete" = "Complete";
 "Uncomplete" = "Uncomplete";
+"Show Completed" = "Show Completed";
+"Hide Completed" = "Hide Completed";
 
 /* Activity Manager */
 "See_Outlines_In" = "See outlines in “%@”";

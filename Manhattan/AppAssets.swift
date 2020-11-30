@@ -37,6 +37,14 @@ struct AppAssets {
 		return UIImage(systemName: "star")!
 	}()
 
+	static var filterActive: UIImage = {
+		return UIImage(systemName: "line.horizontal.3.decrease.circle.fill")!
+	}()
+
+	static var filterInactive: UIImage = {
+		return UIImage(systemName: "line.horizontal.3.decrease.circle")!
+	}()
+
 	static var getInfoEntity: UIImage = {
 		return UIImage(systemName: "info.circle")!
 	}()
