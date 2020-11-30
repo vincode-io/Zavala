@@ -85,4 +85,8 @@ class EditorTextView: UITextView {
 		editorDelegate?.outdentHeadline(headline, attributedText: attributedText)
 	}
 	
+	var isSelecting: Bool {
+		return !(selectedTextRange?.isEmpty ?? true)
+	}
+	
 }

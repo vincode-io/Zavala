@@ -58,7 +58,6 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 			navigationItem.rightBarButtonItem = favoriteBarButtonItem
 		}
 		
-//		collectionView.allowsSelection = false
 		collectionView.collectionViewLayout = createLayout()
 		collectionView.dataSource = self
 
@@ -79,12 +78,12 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 		switch key.keyCode {
 		case .keyboardUpArrow:
 			currentKeyPresses.insert(key.keyCode)
-			if let headline = (UIResponder.currentFirstResponder as? EditorTextView)?.headline {
+			if let textView = UIResponder.currentFirstResponder as? EditorTextView, !textView.isSelecting, let headline = textView.headline {
 				moveCursorUp(headline: headline)
 			}
 		case .keyboardDownArrow:
 			currentKeyPresses.insert(key.keyCode)
-			if let headline = (UIResponder.currentFirstResponder as? EditorTextView)?.headline {
+			if let textView = UIResponder.currentFirstResponder as? EditorTextView, !textView.isSelecting, let headline = textView.headline {
 				moveCursorDown(headline: headline)
 			}
 		default:
