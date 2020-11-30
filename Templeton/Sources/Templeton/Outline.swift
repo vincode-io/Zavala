@@ -527,7 +527,7 @@ private extension Outline {
 	}
 	
 	func rebuildTransientData() {
-		let transient = TransientDataVisitor()
+		let transient = TransientDataVisitor(isFiltered: isFiltered ?? false)
 		headlines?.forEach { headline in
 			headline.visit(visitor: transient.visitor(_:))
 		}
