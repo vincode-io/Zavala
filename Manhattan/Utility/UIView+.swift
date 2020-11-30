@@ -10,13 +10,12 @@ import UIKit
 extension UIView {
 
 	/// Removes all constrains for this view as long as unowned ones only relate to the superview
-	func removeConstraintsIncludingOwnedBySuperview() {
+	func removeConstraintsOwnedBySuperview() {
 		let constraints = self.superview?.constraints.filter{
 			$0.firstItem as? UIView == self || $0.secondItem as? UIView == self
 		} ?? []
 
 		self.superview?.removeConstraints(constraints)
-		self.removeConstraints(self.constraints)
 	}
 	
 }

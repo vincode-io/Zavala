@@ -86,10 +86,10 @@ class EditorContentView: UIView, UIContentView {
 			adjustedTrailingIndention = -25
 		}
 		
-		textView.removeConstraintsIncludingOwnedBySuperview()
+		textView.removeConstraintsOwnedBySuperview()
 		NSLayoutConstraint.activate([
 			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-			textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+			textView.trailingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
 			textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
 			textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
 		])

@@ -58,7 +58,7 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 			navigationItem.rightBarButtonItem = favoriteBarButtonItem
 		}
 		
-		collectionView.allowsSelection = false
+//		collectionView.allowsSelection = false
 		collectionView.collectionViewLayout = createLayout()
 		collectionView.dataSource = self
 
@@ -138,6 +138,13 @@ extension EditorViewController {
 			headline = Headline()
 		}
 		return collectionView.dequeueConfiguredReusableCell(using: editorRegistration!, for: indexPath, item: headline)
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		if let text = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+			text.moveToEnd()
+		}
+		collectionView.deselectItem(at: indexPath, animated: false)
 	}
 	
 }

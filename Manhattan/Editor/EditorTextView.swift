@@ -40,6 +40,13 @@ class EditorTextView: UITextView {
 		return keys
 	}
 	
+	override var intrinsicContentSize: CGSize {
+		// We have to add one to the intrinsic content width or the cursor won't show
+		var size = super.intrinsicContentSize
+		size.width = size.width + 1
+		return size
+	}
+	
 	private var stackedUndoManager: UndoManager?
 	
 	@discardableResult
