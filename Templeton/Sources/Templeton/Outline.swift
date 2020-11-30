@@ -60,9 +60,10 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		outlineMetaDataDidChange()
 	}
 	
-	public func toggleFilter() {
+	public func toggleFilter() -> ShadowTableChanges {
 		isFiltered = !(isFiltered ?? false)
 		outlineMetaDataDidChange()
+		return rebuildShadowTable()
 	}
 	
 	public func update(title: String) {
@@ -336,38 +337,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			toParent.headlines!.insert(headline, at: childIndex)
 		}
 		
-		guard let oldShadowTable = shadowTable else { return ShadowTableChanges() }
-		rebuildTransientData()
-		
-		var moves = Set<ShadowTableChanges.Move>()
-		var inserts = Set<Int>()
-		var deletes = Set<Int>()
-		
-		let diff = shadowTable!.difference(from: oldShadowTable).inferringMoves()
-		for change in diff {
-			switch change {
-			case .insert(let offset, _, let associated):
-				if let associated = associated {
-					moves.insert(ShadowTableChanges.Move(associated, offset))
-				} else {
-					inserts.insert(offset)
-				}
-			case .remove(let offset, _, let associated):
-				if let associated = associated {
-					moves.insert(ShadowTableChanges.Move(offset, associated))
-				} else {
-					deletes.insert(offset)
-				}
-			}
-		}
-		
-		var reloads = Set<Int>()
-		moves.forEach {
-			reloads.insert($0.from)
-			reloads.insert($0.to)
-		}
-		
-		return ShadowTableChanges(deletes: deletes, inserts: inserts, moves: moves, reloads: reloads)
+		return rebuildShadowTable(reloadEverything: true)
 	}
 	
 	public func load() {
@@ -526,7 +496,44 @@ private extension Outline {
 		return ShadowTableChanges(deletes: reloads, reloads: Set([headlineShadowTableIndex]))
 	}
 	
-	func rebuildTransientData() {
+	private func rebuildShadowTable(reloadEverything: Bool = false) -> ShadowTableChanges {
+		guard let oldShadowTable = shadowTable else { return ShadowTableChanges() }
+		rebuildTransientData()
+		
+		var moves = Set<ShadowTableChanges.Move>()
+		var inserts = Set<Int>()
+		var deletes = Set<Int>()
+		
+		let diff = shadowTable!.difference(from: oldShadowTable).inferringMoves()
+		for change in diff {
+			switch change {
+			case .insert(let offset, _, let associated):
+				if let associated = associated {
+					moves.insert(ShadowTableChanges.Move(associated, offset))
+				} else {
+					inserts.insert(offset)
+				}
+			case .remove(let offset, _, let associated):
+				if let associated = associated {
+					moves.insert(ShadowTableChanges.Move(offset, associated))
+				} else {
+					deletes.insert(offset)
+				}
+			}
+		}
+		
+		var reloads = Set<Int>()
+		if reloadEverything {
+			moves.forEach {
+				reloads.insert($0.from)
+				reloads.insert($0.to)
+			}
+		}
+		
+		return ShadowTableChanges(deletes: deletes, inserts: inserts, moves: moves, reloads: reloads)
+	}
+	
+	private func rebuildTransientData() {
 		let transient = TransientDataVisitor(isFiltered: isFiltered ?? false)
 		headlines?.forEach { headline in
 			headline.visit(visitor: transient.visitor(_:))
@@ -534,7 +541,7 @@ private extension Outline {
 		self.shadowTable = transient.shadowTable
 	}
 	
-	func resetShadowTableIndexes(startingAt: Int = 0) {
+	private func resetShadowTableIndexes(startingAt: Int = 0) {
 		guard let shadowTable = shadowTable else { return }
 		for i in startingAt..<shadowTable.count {
 			shadowTable[i].shadowTableIndex = i

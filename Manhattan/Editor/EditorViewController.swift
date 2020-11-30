@@ -111,8 +111,9 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 	}
 	
 	@objc func toggleOutlineFilter(_ sender: Any?) {
-		outline?.toggleFilter()
+		guard let changes = outline?.toggleFilter() else { return }
 		updateUI()
+		applyChangesRestoringCursor(changes)
 	}
 	
 }
@@ -276,20 +277,20 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 extension EditorViewController: EditorOutlineCommandDelegate {
 	
 	func applyChanges(_ changes: ShadowTableChanges) {
-		if let deletes = changes.deleteIndexPaths {
+		if let deletes = changes.deleteIndexPaths, !deletes.isEmpty {
 			collectionView.deleteItems(at: deletes)
 		}
-		if let moves = changes.moveIndexPaths {
+		if let inserts = changes.insertIndexPaths, !inserts.isEmpty {
+			collectionView.insertItems(at: inserts)
+		}
+		if let moves = changes.moveIndexPaths, !moves.isEmpty {
 			collectionView.performBatchUpdates {
 				for move in moves {
 					collectionView.moveItem(at: move.0, to: move.1)
 				}
 			}
 		}
-		if let inserts = changes.insertIndexPaths {
-			collectionView.insertItems(at: inserts)
-		}
-		if let reloads = changes.reloadIndexPaths {
+		if let reloads = changes.reloadIndexPaths, !reloads.isEmpty {
 			collectionView.reloadItems(at: reloads)
 		}
 	}
