@@ -15,6 +15,7 @@ protocol EditorTextViewDelegate: class {
 	func createHeadline(_: Headline)
 	func indentHeadline(_: Headline, attributedText: NSAttributedString)
 	func outdentHeadline(_: Headline, attributedText: NSAttributedString)
+	func toggleCompleteHeadline(_: Headline, attributedText: NSAttributedString)
 	func moveCursorUp(headline: Headline)
 	func moveCursorDown(headline: Headline)
 }
@@ -35,7 +36,8 @@ class EditorTextView: UITextView {
 	override var keyCommands: [UIKeyCommand]? {
 		let keys = [
 			UIKeyCommand(action: #selector(tabPressed(_:)), input: "\t"),
-			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(shiftTabPressed(_:)))
+			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(shiftTabPressed(_:))),
+			UIKeyCommand(input: "\r", modifierFlags: [.command], action: #selector(commandReturnPressed(_:)))
 		]
 		return keys
 	}
@@ -74,7 +76,12 @@ class EditorTextView: UITextView {
 			super.deleteBackward()
 		}
 	}
-	
+
+	@objc func commandReturnPressed(_ sender: Any) {
+		guard let headline = headline else { return }
+		editorDelegate?.toggleCompleteHeadline(headline, attributedText: attributedText)
+	}
+
 	@objc func tabPressed(_ sender: Any) {
 		guard let headline = headline else { return }
 		editorDelegate?.indentHeadline(headline, attributedText: attributedText)

@@ -63,6 +63,13 @@ class EditorContentView: UIView, UIContentView {
 		attrs[.foregroundColor] = UIColor.label
 		attrs[.font] = UIFont.preferredFont(forTextStyle: .body)
 		
+		if headline.isComplete ?? false {
+			attrs[.strikethroughStyle] = 1
+			attrs[.strikethroughColor] = UIColor.label
+		} else {
+			attrs[.strikethroughStyle] = 0
+		}
+		
 		if let attrText = headline.attributedText {
 			let mutableAttrText = NSMutableAttributedString(attributedString: attrText)
 			let range = NSRange(location: 0, length: mutableAttrText.length)
@@ -166,6 +173,10 @@ extension EditorContentView: EditorTextViewDelegate {
 	
 	func outdentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
 		appliedConfiguration.delegate?.outdentHeadline(headline, attributedText: attributedText)
+	}
+	
+	func toggleCompleteHeadline(_ headline: Headline, attributedText: NSAttributedString) {
+		appliedConfiguration.delegate?.toggleCompleteHeadline(headline, attributedText: attributedText)
 	}
 	
 	func moveCursorUp(headline: Headline) {

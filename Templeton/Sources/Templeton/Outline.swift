@@ -144,6 +144,14 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return changes
 	}
 
+	public func toggleComplete(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
+		guard let shadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
+		headline.attributedText = attributedText
+		headline.isComplete = !(headline.isComplete ?? false)
+		outlineBodyDidChange()
+		return ShadowTableChanges(reloads: Set([shadowTableIndex]))
+	}
+
 	public func indentHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
 		headline.attributedText = attributedText
 		

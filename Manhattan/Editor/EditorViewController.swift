@@ -228,6 +228,18 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 		runCommand(command)
 	}
 	
+	func toggleCompleteHeadline(_ headline: Headline, attributedText: NSAttributedString) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = EditorToggleCompleteHeadlineCommand(undoManager: undoManager,
+														  delegate: self,
+														  outline: outline,
+														  headline: headline,
+														  attributedText: attributedText)
+		
+		runCommand(command)
+	}
+	
 	func moveCursorUp(headline: Headline) {
 		guard let shadowTableIndex = headline.shadowTableIndex, shadowTableIndex > 0 else { return }
 		let indexPath = IndexPath(row: shadowTableIndex - 1, section: 0)

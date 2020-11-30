@@ -19,6 +19,7 @@
 "Typing" = "Typing";
 "Indent" = "Indent";
 "Outdent" = "Outdent";
+"Complete" = "Complete";
 
 /* Activity Manager */
 "See_Outlines_In" = "See outlines in “%@”";

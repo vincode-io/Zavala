@@ -30,6 +30,7 @@
 		5181A93F2554D92000C153E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5181A93D2554D92000C153E8 /* Main.storyboard */; };
 		5181A9412554D92100C153E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5181A9402554D92100C153E8 /* Assets.xcassets */; };
 		5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5181A9422554D92100C153E8 /* LaunchScreen.storyboard */; };
+		5187A1E7257593EA00DB0E99 /* EditorToggleCompleteHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5187A1E6257593EA00DB0E99 /* EditorToggleCompleteHeadlineCommand.swift */; };
 		519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F004A25608EF9009DC1F0 /* TimelineItem.swift */; };
 		51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */; };
 		51B2B2C82563A2180090C56B /* EditorTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2C72563A2180090C56B /* EditorTextView.swift */; };
@@ -120,6 +121,7 @@
 		5181A94A2554D92100C153E8 /* .xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5181A9552554D92100C153E8 /* .xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = .xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5181A96A2554D93B00C153E8 /* Manhattan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Manhattan.entitlements; sourceTree = "<group>"; };
+		5187A1E6257593EA00DB0E99 /* EditorToggleCompleteHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorToggleCompleteHeadlineCommand.swift; sourceTree = "<group>"; };
 		519F004A25608EF9009DC1F0 /* TimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItem.swift; sourceTree = "<group>"; };
 		51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedUndoManager.swift; sourceTree = "<group>"; };
 		51B2B2C72563A2180090C56B /* EditorTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextView.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				5142875125730ECE00F16B78 /* EditorOutdentHeadlineCommand.swift */,
 				514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */,
 				514287392572B06B00F16B78 /* EditorTextChangedCommand.swift */,
+				5187A1E6257593EA00DB0E99 /* EditorToggleCompleteHeadlineCommand.swift */,
 				5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */,
 			);
 			path = Commands;
@@ -528,6 +531,7 @@
 				5142874625730AD600F16B78 /* EditorCreateHeadlineCommand.swift in Sources */,
 				51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */,
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
+				5187A1E7257593EA00DB0E99 /* EditorToggleCompleteHeadlineCommand.swift in Sources */,
 				51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */,
 				51CF10A0256DEE1B005D6D88 /* FixedSizeImageView.swift in Sources */,
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,

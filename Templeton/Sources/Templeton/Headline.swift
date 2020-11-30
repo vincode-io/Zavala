@@ -25,12 +25,14 @@ public final class Headline: HeadlineContainer, Identifiable, Equatable, Hashabl
 	public var id: String
 	public var text: Data?
 	public var isExpanded: Bool?
+	public var isComplete: Bool?
 	public var headlines: [Headline]?
 
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case text = "text"
 		case isExpanded = "isExpanded"
+		case isComplete = "isComplete"
 		case headlines = "headlines"
 	}
 

@@ -14,6 +14,8 @@ internal enum L10n {
   internal static let cancel = L10n.tr("Localizable", "Cancel")
   /// Collapse
   internal static let collapse = L10n.tr("Localizable", "Collapse")
+  /// Complete
+  internal static let complete = L10n.tr("Localizable", "Complete")
   /// Delete
   internal static let delete = L10n.tr("Localizable", "Delete")
   /// Any Outlines in this folder will also be deleted and unrecoverable.
