@@ -53,13 +53,13 @@ class EditorContentView: UIView, UIContentView {
 	}
 	
 	private func apply(configuration: EditorContentConfiguration) {
-		guard appliedConfiguration != configuration, let headline = configuration.headline else { return }
+		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
 		
 		textView.headline = configuration.headline
 		
 		var attrs = [NSAttributedString.Key : Any]()
-		if headline.isComplete ?? false || headline.isAncestorComplete ?? false {
+		if configuration.isComplete || configuration.isAncestorComplete {
 			attrs[.foregroundColor] = UIColor.secondaryLabel
 		} else {
 			attrs[.foregroundColor] = UIColor.label
@@ -67,21 +67,17 @@ class EditorContentView: UIView, UIContentView {
 		
 		attrs[.font] = UIFont.preferredFont(forTextStyle: .body)
 		
-		if headline.isComplete ?? false {
+		if configuration.isComplete {
 			attrs[.strikethroughStyle] = 1
 			attrs[.strikethroughColor] = UIColor.secondaryLabel
 		} else {
 			attrs[.strikethroughStyle] = 0
 		}
 		
-		if let attrText = headline.attributedText {
-			let mutableAttrText = NSMutableAttributedString(attributedString: attrText)
-			let range = NSRange(location: 0, length: mutableAttrText.length)
-			mutableAttrText.addAttributes(attrs, range: range)
-			textView.attributedText = mutableAttrText
-		} else {
-			textView.attributedText = NSAttributedString(string: "", attributes: attrs)
-		}
+		let mutableAttrText = NSMutableAttributedString(attributedString: configuration.attributedText)
+		let range = NSRange(location: 0, length: mutableAttrText.length)
+		mutableAttrText.addAttributes(attrs, range: range)
+		textView.attributedText = mutableAttrText
 
 		let adjustedLeadingIndention: CGFloat
 		let adjustedTrailingIndention: CGFloat

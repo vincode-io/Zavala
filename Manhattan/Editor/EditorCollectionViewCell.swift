@@ -83,8 +83,7 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 		
 		setDisclosure(isExpanded: headline.isExpanded ?? true, animated: false)
 
-		var content = EditorContentConfiguration(indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
-		content.headline = headline
+		var content = EditorContentConfiguration(headline: headline, indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content
 	}
