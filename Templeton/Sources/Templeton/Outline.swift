@@ -460,11 +460,15 @@ private extension Outline {
 		var shadowTableInserts = [Headline]()
 
 		func visitor(_ visited: Headline) {
-			shadowTableInserts.append(visited)
+			let shouldFilter = isFiltered ?? false && visited.isComplete ?? false
+			
+			if !shouldFilter {
+				shadowTableInserts.append(visited)
 
-			if visited.isExpanded ?? true {
-				visited.headlines?.forEach {
-					$0.visit(visitor: visitor)
+				if visited.isExpanded ?? true {
+					visited.headlines?.forEach {
+						$0.visit(visitor: visitor)
+					}
 				}
 			}
 		}
