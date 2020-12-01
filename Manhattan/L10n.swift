@@ -48,6 +48,8 @@ internal enum L10n {
   internal static let importOPML = L10n.tr("Localizable", "Import_OPML")
   /// Indent
   internal static let indent = L10n.tr("Localizable", "Indent")
+  /// Mark as Favorite
+  internal static let markAsFavorite = L10n.tr("Localizable", "Mark_As_Favorite")
   /// New Folder
   internal static let newFolder = L10n.tr("Localizable", "New_Folder")
   /// New Outline
@@ -64,14 +66,14 @@ internal enum L10n {
   }
   /// Show Completed
   internal static let showCompleted = L10n.tr("Localizable", "Show Completed")
-  /// Toggle Favorite
-  internal static let toggleFavorite = L10n.tr("Localizable", "Toggle_Favorite")
   /// Toggle Sidebar
   internal static let toggleSidebar = L10n.tr("Localizable", "Toggle_Sidebar")
   /// Typing
   internal static let typing = L10n.tr("Localizable", "Typing")
   /// Uncomplete
   internal static let uncomplete = L10n.tr("Localizable", "Uncomplete")
+  /// Unmark as Favorite
+  internal static let unmarkAsFavorite = L10n.tr("Localizable", "Unmark_As_Favorite")
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

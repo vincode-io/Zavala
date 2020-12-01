@@ -12,7 +12,8 @@
 "New_Outline" = "New Outline";
 "New_Folder" = "New Folder";
 "Toggle_Sidebar" = "Toggle Sidebar";
-"Toggle_Favorite" = "Toggle Favorite";
+"Mark_As_Favorite" = "Mark as Favorite";
+"Unmark_As_Favorite" = "Unmark as Favorite";
 "Delete" = "Delete";
 "Cancel" = "Cancel";
 "Get_Info" = "Get Info";

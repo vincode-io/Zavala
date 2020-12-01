@@ -284,6 +284,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 			}
 			item.image = AppAssets.createEntity
 			item.label = L10n.newOutline
+			item.toolTip = L10n.newOutline
+			item.isBordered = true
 			item.action = #selector(createOutline(_:))
 			item.target = self
 			toolbarItem = item
@@ -293,14 +295,18 @@ extension MainSplitViewController: NSToolbarDelegate {
 				if self?.editorViewController?.outline?.isFiltered ?? false {
 					item.image = AppAssets.filterActive
 					item.label = L10n.showCompleted
+					item.toolTip = L10n.showCompleted
 				} else {
 					item.image = AppAssets.filterInactive
 					item.label = L10n.hideCompleted
+					item.toolTip = L10n.hideCompleted
 				}
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
 			item.image = AppAssets.filterInactive
 			item.label = L10n.hideCompleted
+			item.toolTip = L10n.hideCompleted
+			item.isBordered = true
 			item.action = #selector(toggleOutlineFilter(_:))
 			item.target = self
 			toolbarItem = item
@@ -309,13 +315,19 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] item in
 				if self?.editorViewController?.outline?.isFavorite ?? false {
 					item.image = AppAssets.favoriteSelected
+					item.label = L10n.unmarkAsFavorite
+					item.toolTip = L10n.unmarkAsFavorite
 				} else {
 					item.image = AppAssets.favoriteUnselected
+					item.label = L10n.markAsFavorite
+					item.toolTip = L10n.markAsFavorite
 				}
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
 			item.image = AppAssets.favoriteUnselected
-			item.label = L10n.toggleFavorite
+			item.label = L10n.markAsFavorite
+			item.toolTip = L10n.markAsFavorite
+			item.isBordered = true
 			item.action = #selector(toggleOutlineIsFavorite(_:))
 			item.target = self
 			toolbarItem = item
