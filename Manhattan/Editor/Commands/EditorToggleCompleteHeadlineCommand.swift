@@ -19,6 +19,7 @@ final class EditorToggleCompleteHeadlineCommand: EditorOutlineCommand {
 	var headline: Headline
 	var oldAttributedText: NSAttributedString
 	var newAttributedText: NSAttributedString
+	var changes: ShadowTableChanges?
 	
 	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedText: NSAttributedString) {
 		self.undoManager = undoManager
@@ -37,8 +38,8 @@ final class EditorToggleCompleteHeadlineCommand: EditorOutlineCommand {
 	}
 	
 	func perform() {
-		let changes = outline.toggleComplete(headline: headline, attributedText: newAttributedText)
-		delegate?.applyChangesRestoringCursor(changes)
+		changes = outline.toggleComplete(headline: headline, attributedText: newAttributedText)
+		delegate?.applyChangesRestoringCursor(changes!)
 		registerUndo()
 	}
 	

@@ -254,6 +254,14 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 														  attributedText: attributedText)
 		
 		runCommand(command)
+		
+		if let deleteIndex = command.changes?.deletes?.first {
+			let cursorIndex = deleteIndex < outline.shadowTable?.count ?? 0 ? deleteIndex : (outline.shadowTable?.count ?? 1) - 1
+			if let target = collectionView.cellForItem(at: IndexPath(row: cursorIndex, section: 0)) as? TextCursorTarget {
+				target.moveToEnd()
+			}
+		}
+		
 	}
 	
 	func moveCursorUp(headline: Headline) {
