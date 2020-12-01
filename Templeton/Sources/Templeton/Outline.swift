@@ -153,11 +153,15 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	}
 
 	public func toggleComplete(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
-		guard let shadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
 		headline.attributedText = attributedText
 		headline.isComplete = !(headline.isComplete ?? false)
 		outlineBodyDidChange()
 		
+		if isFiltered ?? false {
+			return rebuildShadowTable()
+		}
+		
+		guard let shadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
 		var shadowTableIndexes = Set([shadowTableIndex])
 		
 		func ancestorMarkingVisitor(_ visited: Headline) {
@@ -169,13 +173,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		}
 		
 		headline.headlines?.forEach { $0.visit(visitor: ancestorMarkingVisitor(_:)) }
-		
-		if isFiltered ?? false && headline.isComplete ?? false {
-			shadowTableIndexes.reversed().forEach { shadowTable?.remove(at: $0) }
-			return ShadowTableChanges(deletes: shadowTableIndexes)
-		} else {
-			return ShadowTableChanges(reloads: shadowTableIndexes)
-		}
+		return ShadowTableChanges(reloads: shadowTableIndexes)
 	}
 
 	public func indentHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
@@ -429,24 +427,24 @@ extension Outline: CustomDebugStringConvertible {
 
 // MARK: Helpers
 
-private extension Outline {
+extension Outline {
 	
-	func outlineNameDidChange() {
+	private func outlineNameDidChange() {
 		NotificationCenter.default.post(name: .OutlineNameDidChange, object: self, userInfo: nil)
 	}
 
-	func outlineMetaDataDidChange() {
+	private func outlineMetaDataDidChange() {
 		NotificationCenter.default.post(name: .OutlineMetaDataDidChange, object: self, userInfo: nil)
 	}
 
-	func outlineBodyDidChange() {
+	private func outlineBodyDidChange() {
 		self.updated = Date()
 		outlineMetaDataDidChange()
 		headlinesFile?.markAsDirty()
 		NotificationCenter.default.post(name: .OutlineBodyDidChange, object: self, userInfo: nil)
 	}
 	
-	func outlineDidDelete() {
+	private func outlineDidDelete() {
 		NotificationCenter.default.post(name: .OutlineDidDelete, object: self, userInfo: nil)
 	}
 
