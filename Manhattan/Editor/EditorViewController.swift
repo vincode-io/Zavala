@@ -45,7 +45,8 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 	override var canBecomeFirstResponder: Bool { return true }
 	
 	private var favoriteBarButtonItem: UIBarButtonItem?
-	
+	private var filterBarButtonItem: UIBarButtonItem?
+
 	private var editorRegistration: UICollectionView.CellRegistration<EditorCollectionViewCell, Headline>?
 	
 	override func viewDidLoad() {
@@ -55,7 +56,8 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
 			favoriteBarButtonItem = UIBarButtonItem(image: AppAssets.favoriteUnselected, style: .plain, target: self, action: #selector(toggleOutlineIsFavorite(_:)))
-			navigationItem.rightBarButtonItem = favoriteBarButtonItem
+			filterBarButtonItem = UIBarButtonItem(image: AppAssets.filterInactive, style: .plain, target: self, action: #selector(toggleOutlineFilter(_:)))
+			navigationItem.rightBarButtonItems = [favoriteBarButtonItem!, filterBarButtonItem!]
 		}
 		
 		collectionView.collectionViewLayout = createLayout()
@@ -326,6 +328,11 @@ private extension EditorViewController {
 				favoriteBarButtonItem?.image = AppAssets.favoriteSelected
 			} else {
 				favoriteBarButtonItem?.image = AppAssets.favoriteUnselected
+			}
+			if outline?.isFiltered ?? false {
+				filterBarButtonItem?.image = AppAssets.filterActive
+			} else {
+				filterBarButtonItem?.image = AppAssets.filterInactive
 			}
 		}
 	}
