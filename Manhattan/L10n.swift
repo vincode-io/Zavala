@@ -50,6 +50,8 @@ internal enum L10n {
   internal static let indent = L10n.tr("Localizable", "Indent")
   /// Mark as Favorite
   internal static let markAsFavorite = L10n.tr("Localizable", "Mark_As_Favorite")
+  /// Move
+  internal static let move = L10n.tr("Localizable", "Move")
   /// New Folder
   internal static let newFolder = L10n.tr("Localizable", "New_Folder")
   /// New Outline

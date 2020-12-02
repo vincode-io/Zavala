@@ -20,6 +20,7 @@
 "Typing" = "Typing";
 "Indent" = "Indent";
 "Outdent" = "Outdent";
+"Move" = "Move";
 "Complete" = "Complete";
 "Uncomplete" = "Uncomplete";
 "Show Completed" = "Show Completed";

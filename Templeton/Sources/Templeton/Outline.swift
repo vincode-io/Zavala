@@ -335,8 +335,10 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return ShadowTableChanges(moves: moves, reloads: reloads)
 	}
 	
-	public func moveHeadline(_ headline: Headline, attributedText: NSAttributedString, toParent: HeadlineContainer, childIndex: Int) -> ShadowTableChanges {
-		headline.attributedText = attributedText
+	public func moveHeadline(_ headline: Headline, attributedText: NSAttributedString? = nil, toParent: HeadlineContainer, childIndex: Int) -> ShadowTableChanges {
+		if let text = attributedText {
+			headline.attributedText = text
+		}
 
 		let fromParent: HeadlineContainer
 		if let oldParentHeadline = headline.parent {
