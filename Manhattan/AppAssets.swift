@@ -13,6 +13,10 @@ struct AppAssets {
 		return UIColor(named: "AccentColor")!
 	}()
 	
+	static var bullet: UIImage = {
+		return UIImage(systemName: "circle.fill")!.applyingSymbolConfiguration(.init(pointSize: 4, weight: .heavy))!
+	}()
+
 	static var completeHeadline: UIImage = {
 		return UIImage(systemName: "checkmark.square")!
 	}()

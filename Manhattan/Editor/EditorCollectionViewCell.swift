@@ -60,6 +60,17 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 		return indicator
 	}()
 	
+	private lazy var bullet: UIView = {
+		let bulletView = FixedSizeImageView(image: AppAssets.bullet)
+		bulletView.dimension = 4
+
+		if traitCollection.userInterfaceIdiom == .mac {
+			bulletView.tintColor = .quaternaryLabel
+		}
+		
+		return bulletView
+	}()
+	
 	override func updateConfiguration(using state: UICellConfigurationState) {
 		super.updateConfiguration(using: state)
 		
@@ -68,15 +79,17 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 		guard let headline = headline else { return }
 		indentationLevel = headline.indentLevel
 		
-		if headline.headlines?.isEmpty ?? true {
-			accessories = []
+		let placement: UICellAccessory.Placement
+		if traitCollection.userInterfaceIdiom == .mac {
+			placement = .leading(displayed: .always, at: { _ in return 0 })
 		} else {
-			let placement: UICellAccessory.Placement
-			if traitCollection.userInterfaceIdiom == .mac {
-				placement = .leading(displayed: .always, at: { _ in return 0 })
-			} else {
-				placement = .trailing(displayed: .always, at: { _ in return 0 })
-			}
+			placement = .trailing(displayed: .always, at: { _ in return 0 })
+		}
+
+		if headline.headlines?.isEmpty ?? true {
+			let accessoryConfig = UICellAccessory.CustomViewConfiguration(customView: bullet, placement: placement)
+			accessories = [.customView(configuration: accessoryConfig)]
+		} else {
 			let accessoryConfig = UICellAccessory.CustomViewConfiguration(customView: disclosureIndicator, placement: placement)
 			accessories = [.customView(configuration: accessoryConfig)]
 		}

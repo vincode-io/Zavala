@@ -82,11 +82,7 @@ class EditorContentView: UIView, UIContentView {
 		let adjustedLeadingIndention: CGFloat
 		let adjustedTrailingIndention: CGFloat
 		if traitCollection.userInterfaceIdiom == .mac {
-			if configuration.isChevronShowing {
-				adjustedLeadingIndention = configuration.indentationWidth - 18
-			} else {
-				adjustedLeadingIndention = configuration.indentationWidth + 16
-			}
+			adjustedLeadingIndention = configuration.indentationWidth - 18
 			adjustedTrailingIndention = 0
 		} else {
 			adjustedLeadingIndention = configuration.indentationWidth
@@ -101,24 +97,21 @@ class EditorContentView: UIView, UIContentView {
 			textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
 		])
 
-		// TODO: Figure out how to only remove the necessary barViews
-		for barView in barViews {
-			barView.removeFromSuperview()
-		}
-		barViews = [UIView]()
-
-		for i in (0...configuration.indentionLevel) {
-			if i == 0 {
-				if configuration.isChevronShowing {
-					removeBullet()
-				} else {
-					addBullet()
-				}
-			} else {
-				addBarView(indentLevel: i, hasChevron: configuration.isChevronShowing)
+		if configuration.indentionLevel < barViews.count {
+			for i in (configuration.indentionLevel..<barViews.count).reversed() {
+				barViews[i].removeFromSuperview()
+				barViews.remove(at: i)
 			}
 		}
 
+		if configuration.indentionLevel > 0 {
+			let barViewsCount = barViews.count
+			for i in (1...configuration.indentionLevel) {
+				if i > barViewsCount {
+					addBarView(indentLevel: i, hasChevron: configuration.isChevronShowing)
+				}
+			}
+		}
 	}
 	
 }
@@ -203,39 +196,6 @@ extension EditorContentView {
 		appliedConfiguration.delegate?.indentHeadline(headline, attributedText: textView.attributedText)
 	}
 	
-	private func removeBullet() {
-		guard let bulletView = bulletView else { return }
-		bulletView.removeFromSuperview()
-		self.bulletView = nil
-	}
-	
-	private func addBullet() {
-		guard bulletView == nil else { return }
-		
-		bulletView = UIImageView()
-		bulletView!.image = UIImage(systemName: "circle.fill")
-		bulletView!.translatesAutoresizingMaskIntoConstraints = false
-		addSubview(bulletView!)
-
-		if traitCollection.userInterfaceIdiom == .mac {
-			bulletView!.tintColor = .quaternaryLabel
-			NSLayoutConstraint.activate([
-				bulletView!.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-				bulletView!.widthAnchor.constraint(equalToConstant: 4),
-				bulletView!.heightAnchor.constraint(equalToConstant: 4),
-				bulletView!.centerYAnchor.constraint(equalTo: centerYAnchor)
-			])
-		} else {
-			bulletView!.tintColor = AppAssets.accent
-			NSLayoutConstraint.activate([
-				bulletView!.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -21),
-				bulletView!.widthAnchor.constraint(equalToConstant: 4),
-				bulletView!.heightAnchor.constraint(equalToConstant: 4),
-				bulletView!.centerYAnchor.constraint(equalTo: centerYAnchor)
-			])
-		}
-	}
-	
 	private func addBarView(indentLevel: Int, hasChevron: Bool) {
 		let barView = UIView()
 		barView.backgroundColor = .quaternaryLabel
@@ -245,10 +205,7 @@ extension EditorContentView {
 
 		var indention: CGFloat
 		if traitCollection.userInterfaceIdiom == .mac {
-			indention = CGFloat(21 - (indentLevel * 13))
-			if hasChevron {
-				indention = indention - 34
-			}
+			indention = CGFloat(0 - ((indentLevel + 1) * 13))
 		} else {
 			indention = CGFloat(19 - (indentLevel * 10))
 		}
