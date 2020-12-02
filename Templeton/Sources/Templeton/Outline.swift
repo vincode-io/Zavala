@@ -258,6 +258,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		}
 		headline.parent = oldParent.parent
 
+		outlineBodyDidChange()
+
 		var reloads = Set([oldParentShadowTableIndex])
 		var moves = Set<ShadowTableChanges.Move>()
 		var workingShadowTableIndex = originalHeadlineShadowTableIndex
@@ -357,7 +359,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		} else {
 			toParent.headlines!.insert(headline, at: childIndex)
 		}
-		
+
+		outlineBodyDidChange()
+
 		return rebuildShadowTable(reloadEverything: true)
 	}
 	
