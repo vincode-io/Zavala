@@ -12,7 +12,6 @@ class TransientDataVisitor {
 	let isFiltered: Bool
 	var shadowTable = [Headline]()
 	var addingToShadowTable = true
-	var ancestorIsComplete = false
 	
 	init(isFiltered: Bool) {
 		self.isFiltered = isFiltered
@@ -45,15 +44,6 @@ class TransientDataVisitor {
 			
 		}
 		
-		visited.isAncestorComplete = ancestorIsComplete
-		
-		var markingChildrenAsAncestorCompleted = false
-		
-		if visited.isComplete ?? false {
-			ancestorIsComplete = true
-			markingChildrenAsAncestorCompleted = true
-		}
-		
 		// Set all the Headline's children's parent and visit them
 		visited.headlines?.forEach {
 			$0.parent = visited
@@ -62,10 +52,6 @@ class TransientDataVisitor {
 
 		if addingToShadowTableSuspended {
 			addingToShadowTable = true
-		}
-		
-		if markingChildrenAsAncestorCompleted {
-			ancestorIsComplete = false
 		}
 		
 	}

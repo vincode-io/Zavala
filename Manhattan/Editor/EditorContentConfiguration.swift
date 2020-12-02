@@ -29,7 +29,7 @@ struct EditorContentConfiguration: UIContentConfiguration, Hashable {
 		self.id = headline.id
 		self.isChevronShowing = !(headline.headlines?.isEmpty ?? true)
 		self.isComplete = headline.isComplete ?? false
-		self.isAncestorComplete = headline.isAncestorComplete ?? false
+		self.isAncestorComplete = headline.isAncestorComplete
 		self.attributedText = headline.attributedText ?? NSAttributedString(string: "")
 	}
 	

@@ -162,18 +162,22 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		}
 		
 		guard let shadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
-		var shadowTableIndexes = Set([shadowTableIndex])
+		var reloads = Set([shadowTableIndex])
 		
-		func ancestorMarkingVisitor(_ visited: Headline) {
+		func reloadVisitor(_ visited: Headline) {
 			if let index = visited.shadowTableIndex {
-				shadowTableIndexes.insert(index)
+				reloads.insert(index)
 			}
-			visited.isAncestorComplete = headline.isComplete ?? false
-			visited.headlines?.forEach { $0.visit(visitor: ancestorMarkingVisitor) }
+			if visited.isExpanded ?? true {
+				visited.headlines?.forEach { $0.visit(visitor: reloadVisitor) }
+			}
+		}
+
+		if headline.isExpanded ?? true {
+			headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 		}
 		
-		headline.headlines?.forEach { $0.visit(visitor: ancestorMarkingVisitor(_:)) }
-		return ShadowTableChanges(reloads: shadowTableIndexes)
+		return ShadowTableChanges(reloads: reloads)
 	}
 
 	public func indentHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
@@ -200,7 +204,6 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 		var siblingHeadlines = newParentHeadline.headlines ?? [Headline]()
 		headline.parent = newParentHeadline
-		headline.isAncestorComplete = newParentHeadline.isComplete ?? false
 		siblingHeadlines.append(headline)
 		newParentHeadline.headlines = siblingHeadlines
 		container.headlines = container.headlines?.filter { $0 != headline }
@@ -208,13 +211,6 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		newParentHeadline.isExpanded = true
 		outlineBodyDidChange()
 		
-		func ancestorMarkingVisitor(_ visited: Headline) {
-			visited.isAncestorComplete = newParentHeadline.isComplete ?? false
-			visited.headlines?.forEach { $0.visit(visitor: ancestorMarkingVisitor) }
-		}
-		
-		headline.headlines?.forEach { $0.visit(visitor: ancestorMarkingVisitor(_:)) }
-
 		var reloads = Set<Int>()
 		reloads.insert(newParentHeadlineShadowTableIndex)
 		reloads.insert(headlineShadowTableIndex)
