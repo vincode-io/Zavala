@@ -179,17 +179,6 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func indentHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
 		headline.attributedText = attributedText
 		
-		var reloads = Set<Int>()
-		
-		func reloadVisitor(_ visited: Headline) {
-			if let index = visited.shadowTableIndex {
-				reloads.insert(index)
-			}
-			if visited.isExpanded ?? true {
-				visited.headlines?.forEach { $0.visit(visitor: reloadVisitor) }
-			}
-		}
-
 		let container: HeadlineContainer
 		if let oldParentHeadline = headline.parent {
 			container = oldParentHeadline
@@ -211,6 +200,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 		var siblingHeadlines = newParentHeadline.headlines ?? [Headline]()
 		headline.parent = newParentHeadline
+		headline.isAncestorComplete = newParentHeadline.isComplete ?? false
 		siblingHeadlines.append(headline)
 		newParentHeadline.headlines = siblingHeadlines
 		container.headlines = container.headlines?.filter { $0 != headline }
@@ -218,8 +208,25 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		newParentHeadline.isExpanded = true
 		outlineBodyDidChange()
 		
+		func ancestorMarkingVisitor(_ visited: Headline) {
+			visited.isAncestorComplete = newParentHeadline.isComplete ?? false
+			visited.headlines?.forEach { $0.visit(visitor: ancestorMarkingVisitor) }
+		}
+		
+		headline.headlines?.forEach { $0.visit(visitor: ancestorMarkingVisitor(_:)) }
+
+		var reloads = Set<Int>()
 		reloads.insert(newParentHeadlineShadowTableIndex)
 		reloads.insert(headlineShadowTableIndex)
+
+		func reloadVisitor(_ visited: Headline) {
+			if let index = visited.shadowTableIndex {
+				reloads.insert(index)
+			}
+			if visited.isExpanded ?? true {
+				visited.headlines?.forEach { $0.visit(visitor: reloadVisitor) }
+			}
+		}
 
 		if headline.isExpanded ?? true {
 			headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
