@@ -301,16 +301,13 @@ extension SidebarViewController {
 		present(alert, animated: true, completion: nil)
 	}
 	
-	private func getInfoForFolder(_ folder: Folder, completion: ((Bool) -> Void)? = nil) {
+	private func getInfoForFolder(_ folder: Folder) {
 		let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoFolderViewControllerNav") as! UINavigationController
 		getInfoNavViewController.preferredContentSize = GetInfoFolderViewController.preferredContentSize
 		getInfoNavViewController.modalPresentationStyle = .formSheet
 		let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoFolderViewController
 		getInfoViewController.folder = folder
-		present(getInfoNavViewController, animated: true) {
-			completion?(true)
-		}
-
+		present(getInfoNavViewController, animated: true)
 	}
 	
 }
