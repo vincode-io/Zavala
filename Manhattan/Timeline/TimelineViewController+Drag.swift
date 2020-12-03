@@ -13,6 +13,8 @@ extension TimelineViewController: UICollectionViewDragDelegate {
 	func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
 		guard let outline = currentOutline else { return [UIDragItem]() }
 		
+		session.localContext = outline
+		
 		let itemProvider = NSItemProvider()
 		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
 			let data = outline.markdown().data(using: .utf8)

@@ -387,6 +387,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	}
 	
 	public func forceSave() {
+		if headlinesFile == nil {
+			headlinesFile = HeadlinesFile(outline: self)
+		}
 		headlinesFile?.markAsDirty()
 		headlinesFile?.save()
 	}
@@ -396,6 +399,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			headlinesFile = HeadlinesFile(outline: self)
 		}
 		headlinesFile?.delete()
+		headlinesFile = nil
 	}
 	
 	public func suspend() {

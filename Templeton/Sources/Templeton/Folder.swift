@@ -112,13 +112,16 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		return outline
 	}
 	
+	public func createOutline(_ outline: Outline) {
+		outline.id = EntityID.outline(id.accountID, id.folderUUID, outline.id.outlineUUID)
+		outlines?.append(outline)
+		folderOutlinesDidChange()
+	}
+	
 	public func deleteOutline(_ outline: Outline) {
 		outlines = outlines?.filter({ $0 != outline })
 		folderOutlinesDidChange()
 		outline.delete()
-	}
-	
-	public func moveOutline(_ outline: Outline, from: Folder, to: Folder) {
 	}
 	
 	public static func == (lhs: Folder, rhs: Folder) -> Bool {

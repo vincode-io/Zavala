@@ -55,6 +55,7 @@
 		51D28D2C257730DB0039DDFC /* EditorViewController+Drag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D28D2B257730DB0039DDFC /* EditorViewController+Drag.swift */; };
 		51D28D32257731DC0039DDFC /* EditorViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D28D31257731DC0039DDFC /* EditorViewController+Drop.swift */; };
 		51D28D38257735120039DDFC /* EditorMoveHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D28D37257735120039DDFC /* EditorMoveHeadlineCommand.swift */; };
+		51D4E2A12578C0DD00A59145 /* SidebarViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D4E2A02578C0DD00A59145 /* SidebarViewController+Drop.swift */; };
 		51DA54C825643E3400732942 /* MainThreadOperationBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DA54C725643E3400732942 /* MainThreadOperationBase.swift */; };
 		51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */; };
 		51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F22255F2D7F00320EDB /* ActivityManager.swift */; };
@@ -152,6 +153,7 @@
 		51D28D2B257730DB0039DDFC /* EditorViewController+Drag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Drag.swift"; sourceTree = "<group>"; };
 		51D28D31257731DC0039DDFC /* EditorViewController+Drop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Drop.swift"; sourceTree = "<group>"; };
 		51D28D37257735120039DDFC /* EditorMoveHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorMoveHeadlineCommand.swift; sourceTree = "<group>"; };
+		51D4E2A02578C0DD00A59145 /* SidebarViewController+Drop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SidebarViewController+Drop.swift"; sourceTree = "<group>"; };
 		51DA54C725643E3400732942 /* MainThreadOperationBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainThreadOperationBase.swift; sourceTree = "<group>"; };
 		51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatingToolbarItem.swift; sourceTree = "<group>"; };
 		51E14F22255F2D7F00320EDB /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				51E14F332560732F00320EDB /* SidebarItem.swift */,
 				51E14F2D2560730000320EDB /* SidebarSection.swift */,
 				5181A93B2554D92000C153E8 /* SidebarViewController.swift */,
+				51D4E2A02578C0DD00A59145 /* SidebarViewController+Drop.swift */,
 			);
 			path = Sidebar;
 			sourceTree = "<group>";
@@ -538,6 +541,7 @@
 				515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */,
 				5142875225730ECE00F16B78 /* EditorOutdentHeadlineCommand.swift in Sources */,
 				51D28D38257735120039DDFC /* EditorMoveHeadlineCommand.swift in Sources */,
+				51D4E2A12578C0DD00A59145 /* SidebarViewController+Drop.swift in Sources */,
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
 				51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */,
 				515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */,

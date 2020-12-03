@@ -17,7 +17,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
 		guard let headline = session.localDragSession?.localContext as? Headline,
 			let toParent = destinationHeadlineContainer(destinationIndexPath) else {
-			return UICollectionViewDropProposal(operation: .forbidden)
+			return UICollectionViewDropProposal(operation: .cancel)
 		}
 		
 		if let toHeadline = toParent as? Headline {

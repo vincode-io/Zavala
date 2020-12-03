@@ -15,7 +15,6 @@ protocol SidebarDelegate: class {
 }
 
 class SidebarViewController: UICollectionViewController {
-
 	
 	weak var delegate: SidebarDelegate?
 	
@@ -27,8 +26,8 @@ class SidebarViewController: UICollectionViewController {
 		return currentFolder == nil
 	}
 
+	var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
-	private var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 
 	private var currentAccount: Account? {
 		let activeAccounts = AccountManager.shared.activeAccounts
@@ -60,6 +59,7 @@ class SidebarViewController: UICollectionViewController {
 	// MARK: API
 	
 	func startUp() {
+		collectionView.dropDelegate = self
 		collectionView.remembersLastFocusedIndexPath = true
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
