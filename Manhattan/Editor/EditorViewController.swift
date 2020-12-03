@@ -22,7 +22,6 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 				textField.endEditing(true)
 			}
 			outline?.suspend()
-			outline?.headlines = nil
 			clearUndoableCommands()
 		}
 		
