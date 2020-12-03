@@ -61,6 +61,10 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 		headlines = [Headline]()
 	}
 	
+	public var isEmpty: Bool {
+		return plainText?.isEmpty ?? true
+	}
+	
 	public var plainText: String? {
 		return attributedText?.string
 	}

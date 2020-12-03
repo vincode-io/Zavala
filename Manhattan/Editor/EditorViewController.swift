@@ -33,7 +33,6 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 				guard isViewLoaded else { return }
 				updateUI()
 				collectionView.reloadData()
-				moveCursorToFirstItem()
 			}
 		}
 		
@@ -72,9 +71,18 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 		
 		updateUI()
 		collectionView.reloadData()
-		moveCursorToFirstItem()
 	}
 
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+
+		if outline?.isEmpty ?? false {
+			if let textCursor = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? TextCursorTarget {
+				textCursor.moveToEnd()
+			}
+		}
+	}
+	
 	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
 		super.pressesBegan(presses, with: event)
 
@@ -343,14 +351,6 @@ private extension EditorViewController {
 				filterBarButtonItem?.image = AppAssets.filterActive
 			} else {
 				filterBarButtonItem?.image = AppAssets.filterInactive
-			}
-		}
-	}
-	
-	private func moveCursorToFirstItem() {
-		DispatchQueue.main.async {
-			if let textCursor = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? TextCursorTarget {
-				textCursor.moveToEnd()
 			}
 		}
 	}

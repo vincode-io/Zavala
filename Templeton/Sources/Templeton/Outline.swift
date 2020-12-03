@@ -27,6 +27,12 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	
 	public var shadowTable: [Headline]?
 	
+	public var isEmpty: Bool {
+		return headlines?.count == 1 &&
+			headlines?[0].headlines?.count ?? 0 == 0 &&
+			headlines?[0].isEmpty ?? true
+	}
+	
 	public var account: Account? {
 		return AccountManager.shared.findAccount(accountID: id.accountID)
 	}
