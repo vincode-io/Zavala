@@ -28,6 +28,10 @@ class TimelineViewController: UICollectionViewController {
 		return !(outlineProvider is Folder)
 	}
 	
+	var isExportOutlineUnavailable: Bool {
+		return currentOutline == nil
+	}
+	
 	var isDeleteEntityUnavailable: Bool {
 		return currentOutline == nil
 	}
@@ -115,7 +119,6 @@ class TimelineViewController: UICollectionViewController {
 		present(addNavViewController, animated: true)
 	}
 
-	
 	@objc func importOPML(_ sender: Any?) {
 		let opmlType = UTType(exportedAs: "org.opml.opml")
 		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [opmlType, .xml])
@@ -123,7 +126,17 @@ class TimelineViewController: UICollectionViewController {
 		docPicker.modalPresentationStyle = .formSheet
 		self.present(docPicker, animated: true)
 	}
-	
+
+	@objc func exportMarkdown(_ sender: Any?) {
+		guard let currentOutline = currentOutline else { return }
+		exportMarkdownForOutline(currentOutline)
+	}
+
+	@objc func exportOPML(_ sender: Any?) {
+		guard let currentOutline = currentOutline else { return }
+		exportOPMLForOutline(currentOutline)
+	}
+
 }
 
 // MARK: UIDocumentPickerDelegate
@@ -244,11 +257,39 @@ extension TimelineViewController {
 			
 			let menuItems = [
 				UIMenu(title: "", options: .displayInline, children: [self.getInfoOutlineAction(item: item)]),
+				UIMenu(title: "", options: .displayInline, children: [self.getExportMarkdownAction(item: item), self.getExportOPMLAction(item: item)]),
 				UIMenu(title: "", options: .displayInline, children: [self.deleteOutlineAction(item: item)])
 			]
 
 			return UIMenu(title: "", children: menuItems.compactMap { $0 })
 		})
+	}
+	
+	private func getInfoOutlineAction(item: TimelineItem) -> UIAction {
+		let action = UIAction(title: L10n.getInfo, image: AppAssets.getInfoEntity) { [weak self] action in
+			if let outline = AccountManager.shared.findOutline(item.id) {
+				self?.getInfoForOutline(outline)
+			}
+		}
+		return action
+	}
+
+	private func getExportMarkdownAction(item: TimelineItem) -> UIAction {
+		let action = UIAction(title: L10n.exportMarkdown, image: AppAssets.exportMarkdown) { [weak self] action in
+			if let outline = AccountManager.shared.findOutline(item.id) {
+				self?.exportMarkdownForOutline(outline)
+			}
+		}
+		return action
+	}
+	
+	private func getExportOPMLAction(item: TimelineItem) -> UIAction {
+		let action = UIAction(title: L10n.exportOPML, image: AppAssets.exportOPML) { [weak self] action in
+			if let outline = AccountManager.shared.findOutline(item.id) {
+				self?.exportOPMLForOutline(outline)
+			}
+		}
+		return action
 	}
 	
 	private func deleteContextualAction(item: TimelineItem) -> UIContextualAction? {
@@ -261,15 +302,6 @@ extension TimelineViewController {
 		return action
 	}
 	
-	private func getInfoOutlineAction(item: TimelineItem) -> UIAction {
-		let action = UIAction(title: L10n.getInfo, image: AppAssets.getInfoEntity) { [weak self] action in
-			if let outline = AccountManager.shared.findOutline(item.id) {
-				self?.getInfoForOutline(outline)
-			}
-		}
-		return action
-	}
-	
 	private func deleteOutlineAction(item: TimelineItem) -> UIAction {
 		let action = UIAction(title: L10n.delete, image: AppAssets.removeEntity, attributes: .destructive) { [weak self] action in
 			if let outline = AccountManager.shared.findOutline(item.id) {
@@ -278,6 +310,26 @@ extension TimelineViewController {
 		}
 		
 		return action
+	}
+	
+	private func exportMarkdownForOutline(_ outline: Outline) {
+		print("Export Markdown")
+	}
+	
+	private func exportOPMLForOutline(_ outline: Outline) {
+		print("Export OPML")
+	}
+	
+	private func getInfoForOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
+		let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoOutlineViewControllerNav") as! UINavigationController
+		getInfoNavViewController.preferredContentSize = GetInfoOutlineViewController.preferredContentSize
+		getInfoNavViewController.modalPresentationStyle = .formSheet
+		let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoOutlineViewController
+		getInfoViewController.outline = outline
+		present(getInfoNavViewController, animated: true) {
+			completion?(true)
+		}
+
 	}
 	
 	private func deleteOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
@@ -298,18 +350,5 @@ extension TimelineViewController {
 		
 		present(alert, animated: true, completion: nil)
 	}
-	
-	private func getInfoForOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
-		let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoOutlineViewControllerNav") as! UINavigationController
-		getInfoNavViewController.preferredContentSize = GetInfoOutlineViewController.preferredContentSize
-		getInfoNavViewController.modalPresentationStyle = .formSheet
-		let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoOutlineViewController
-		getInfoViewController.outline = outline
-		present(getInfoNavViewController, animated: true) {
-			completion?(true)
-		}
-
-	}
-	
-	
+		
 }

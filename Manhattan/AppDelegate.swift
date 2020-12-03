@@ -49,6 +49,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.importOPML(sender)
 	}
 
+	@objc func exportMarkdownCommand(_ sender: Any?) {
+		mainSplitViewController?.exportMarkdown(sender)
+	}
+
+	@objc func exportOPMLCommand(_ sender: Any?) {
+		mainSplitViewController?.exportOPML(sender)
+	}
+
 	@objc func newWindow(_ sender: Any?) {
 		let userActivity = NSUserActivity(activityType: "io.vincode.Manhattan.create")
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: userActivity, options: nil, errorHandler: nil)
@@ -78,15 +86,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(importOPMLCommand(_:)):
-			if mainSplitViewController?.isCreateOutlineUnavailable ?? true {
+		case #selector(exportOPMLCommand(_:)), #selector(exportOPMLCommand(_:)):
+			if mainSplitViewController?.isExportOutlineUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(createFolderCommand(_:)):
 			if mainSplitViewController?.isCreateFolderUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(createOutlineCommand(_:)):
+		case #selector(createOutlineCommand(_:)), #selector(importOPMLCommand(_:)):
 			if mainSplitViewController?.isCreateOutlineUnavailable ?? true {
 				command.attributes = .disabled
 			}
@@ -115,12 +123,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.remove(menu: .newScene)
 
 		// File Menu
+		let exportOPMLCommand = UIKeyCommand(title: L10n.exportOPML,
+											action: #selector(exportOPMLCommand(_:)),
+											input: "e",
+											modifierFlags: [.shift, .command])
+		let exportMarkdownCommand = UIKeyCommand(title: L10n.exportMarkdown,
+												 action: #selector(exportMarkdownCommand(_:)),
+												 input: "e",
+												 modifierFlags: [.control, .command])
 		let importOPMLCommand = UIKeyCommand(title: L10n.importOPML,
 											action: #selector(importOPMLCommand(_:)),
 											input: "i",
 											modifierFlags: [.shift, .command])
-		let importOPMLMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand])
-		builder.insertChild(importOPMLMenu, atStartOfMenu: .file)
+		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMarkdownCommand, exportOPMLCommand])
+		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 
 		let newWindowCommand = UIKeyCommand(title: L10n.newWindow,
 											action: #selector(newWindow(_:)),

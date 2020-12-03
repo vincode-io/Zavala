@@ -38,6 +38,10 @@ internal enum L10n {
   internal static let error = L10n.tr("Localizable", "Error")
   /// Expand
   internal static let expand = L10n.tr("Localizable", "Expand")
+  /// Export Markdown
+  internal static let exportMarkdown = L10n.tr("Localizable", "Export_Markdown")
+  /// Export OPML
+  internal static let exportOPML = L10n.tr("Localizable", "Export_OPML")
   /// Get Info
   internal static let getInfo = L10n.tr("Localizable", "Get_Info")
   /// Hide Completed

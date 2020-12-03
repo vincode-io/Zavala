@@ -48,6 +48,10 @@ class MainSplitViewController: UISplitViewController {
 		return timelineViewController?.isCreateOutlineUnavailable ?? true
 	}
 	
+	var isExportOutlineUnavailable: Bool {
+		return timelineViewController?.isExportOutlineUnavailable ?? true
+	}
+	
 	var isDeleteEntityUnavailable: Bool {
 		return (sidebarViewController?.isDeleteEntityUnavailable ?? true) && (timelineViewController?.isDeleteEntityUnavailable ?? true)
 	}
@@ -128,6 +132,14 @@ class MainSplitViewController: UISplitViewController {
 	
 	@objc func importOPML(_ sender: Any?) {
 		timelineViewController?.importOPML(sender)
+	}
+	
+	@objc func exportMarkdown(_ sender: Any?) {
+		timelineViewController?.exportMarkdown(sender)
+	}
+	
+	@objc func exportOPML(_ sender: Any?) {
+		timelineViewController?.exportOPML(sender)
 	}
 	
 	@objc func deleteEntity(_ sender: Any?) {

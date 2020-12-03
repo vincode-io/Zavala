@@ -8,6 +8,8 @@
 
 /* Menu Items & Toolbars */
 "Import_OPML" = "Import OPML";
+"Export_Markdown" = "Export Markdown";
+"Export_OPML" = "Export OPML";
 "New_Window" = "New Window";
 "New_Outline" = "New Outline";
 "New_Folder" = "New Folder";

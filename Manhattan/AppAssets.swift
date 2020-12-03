@@ -33,6 +33,14 @@ struct AppAssets {
 		#endif
 	}()
 
+	static var exportMarkdown: UIImage = {
+		return UIImage(systemName: "doc.plaintext")!
+	}()
+
+	static var exportOPML: UIImage = {
+		return UIImage(named: "OPML")!
+	}()
+
 	static var favoriteSelected: UIImage = {
 		return UIImage(systemName: "star.fill")!
 	}()
