@@ -15,6 +15,21 @@ extension EditorViewController: UICollectionViewDropDelegate {
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+		guard let headline = session.localDragSession?.localContext as? Headline,
+			let toParent = destinationHeadlineContainer(destinationIndexPath) else {
+			return UICollectionViewDropProposal(operation: .forbidden)
+		}
+		
+		if let toHeadline = toParent as? Headline {
+			if toHeadline == headline {
+				return UICollectionViewDropProposal(operation: .cancel)
+			}
+			if toHeadline.isDecendent(headline) {
+				return UICollectionViewDropProposal(operation: .forbidden)
+			}
+		}
+		
+		
 		return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
 	}
 	
@@ -22,20 +37,10 @@ extension EditorViewController: UICollectionViewDropDelegate {
 		guard let dragItem = coordinator.items.first?.dragItem,
 			  let headline = dragItem.localObject as? Headline,
 			  let undoManager = undoManager,
-			  let outline = outline else { return }
+			  let outline = outline,
+			  let toParent = destinationHeadlineContainer(coordinator.destinationIndexPath) else { return }
 		
-		let destinationIndex = coordinator.destinationIndexPath?.row ?? 0
-		
-		let toParent: HeadlineContainer
-		let toChildIndex: Int
-		if destinationIndex == 0 {
-			toParent = outline
-		} else if destinationIndex >= outline.shadowTable!.count {
-			toParent = outline.shadowTable!.last!
-		} else {
-			toParent = outline.shadowTable![destinationIndex - 1]
-		}
-		toChildIndex = 0
+		let toChildIndex = 0
 		
 		let command = EditorMoveHeadlineCommand(undoManager: undoManager,
 												delegate: self,
@@ -50,5 +55,28 @@ extension EditorViewController: UICollectionViewDropDelegate {
 //		coordinator.drop(dragItem, toItemAt: IndexPath(row: destinationIndex, section: 0))
 	}
 	
+	
+}
+
+// MARK: Helpers
+
+extension EditorViewController {
+	
+	private func destinationHeadlineContainer(_ indexPath: IndexPath?) -> HeadlineContainer? {
+		guard let outline = outline, let shadowTable = outline.shadowTable else { return nil }
+		
+		let destinationIndex = indexPath?.row ?? 0
+		
+		let destination: HeadlineContainer?
+		if destinationIndex == 0 {
+			destination = outline
+		} else if destinationIndex >= outline.shadowTable!.count {
+			destination = shadowTable.last
+		} else {
+			destination = shadowTable[destinationIndex - 1]
+		}
+
+		return destination
+	}
 	
 }

@@ -81,6 +81,13 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 		}
 	}
 	
+	public func isDecendent(_ headline: Headline) -> Bool {
+		if parent == headline || parent?.isDecendent(headline) ?? false {
+			return true
+		}
+		return false
+	}
+	
 	public override func isEqual(_ object: Any?) -> Bool {
 		guard let other = object as? Headline else { return false }
 		if self === other { return true }
