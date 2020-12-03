@@ -23,7 +23,7 @@ final class HeadlinesFile {
 	init(outline: Outline) {
 		self.outline = outline
 		let localAccountFolder = AccountManager.shared.accountsFolder.appendingPathComponent(outline.account!.type.folderName)
-		fileURL = localAccountFolder.appendingPathComponent("\(outline.id.outlineUUID).json")
+		fileURL = localAccountFolder.appendingPathComponent("\(outline.id.outlineUUID).plist")
 	}
 	
 	func markAsDirty() {
@@ -77,7 +77,7 @@ private extension HeadlinesFile {
 			return
 		}
 
-		let decoder = JSONDecoder()
+		let decoder = PropertyListDecoder()
 		let headlines: [Headline]
 		do {
 			headlines = try decoder.decode([Headline].self, from: headlinesData)
@@ -91,7 +91,10 @@ private extension HeadlinesFile {
 	
 	func saveCallback() {
 		guard let headlines = outline?.headlines else { return }
-		let encoder = JSONEncoder()
+
+		let encoder = PropertyListEncoder()
+		encoder.outputFormat = .binary
+
 		let headlinesData: Data
 		do {
 			headlinesData = try encoder.encode(headlines)

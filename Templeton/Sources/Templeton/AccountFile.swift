@@ -11,7 +11,7 @@ import RSCore
 
 final class AccountFile {
 	
-	public static let filenameComponent = "account.json"
+	public static let filenameComponent = "account.plist"
 	
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "AccountFile")
 
@@ -72,7 +72,7 @@ private extension AccountFile {
 			return
 		}
 
-		let decoder = JSONDecoder()
+		let decoder = PropertyListDecoder()
 		let account: Account
 		do {
 			account = try decoder.decode(Account.self, from: accountData)
@@ -89,7 +89,10 @@ private extension AccountFile {
 	func saveCallback() {
 		
 		guard let account = AccountManager.shared.accountsDictionary[accountType.rawValue] else { return }
-		let encoder = JSONEncoder()
+
+		let encoder = PropertyListEncoder()
+		encoder.outputFormat = .binary
+
 		let accountData: Data
 		do {
 			accountData = try encoder.encode(account)
