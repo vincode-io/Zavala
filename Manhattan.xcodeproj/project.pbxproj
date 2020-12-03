@@ -18,6 +18,7 @@
 		5142875225730ECE00F16B78 /* EditorOutdentHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142875125730ECE00F16B78 /* EditorOutdentHeadlineCommand.swift */; };
 		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
+		515B9F412578B2F3009C5DE4 /* TimelineViewController+Drag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515B9F402578B2F3009C5DE4 /* TimelineViewController+Drag.swift */; };
 		515F162C255C12BE00FD98B8 /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 515F162B255C12BE00FD98B8 /* Dialog.storyboard */; };
 		515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F1631255C16E700FD98B8 /* AddFolderViewController.swift */; };
 		515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F164A255C9F8E00FD98B8 /* FormViewController.swift */; };
@@ -107,6 +108,7 @@
 		5142875125730ECE00F16B78 /* EditorOutdentHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorOutdentHeadlineCommand.swift; sourceTree = "<group>"; };
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
+		515B9F402578B2F3009C5DE4 /* TimelineViewController+Drag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimelineViewController+Drag.swift"; sourceTree = "<group>"; };
 		515F162B255C12BE00FD98B8 /* Dialog.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
 		515F1631255C16E700FD98B8 /* AddFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFolderViewController.swift; sourceTree = "<group>"; };
 		515F164A255C9F8E00FD98B8 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
@@ -314,6 +316,7 @@
 			children = (
 				519F004A25608EF9009DC1F0 /* TimelineItem.swift */,
 				51C4C441255A0DE1004E0206 /* TimelineViewController.swift */,
+				515B9F402578B2F3009C5DE4 /* TimelineViewController+Drag.swift */,
 			);
 			path = Timeline;
 			sourceTree = "<group>";
@@ -568,6 +571,7 @@
 				51B2B2D62563AB9F0090C56B /* UIView+.swift in Sources */,
 				516E2D952564A91800CE51C6 /* TextCursor.swift in Sources */,
 				514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */,
+				515B9F412578B2F3009C5DE4 /* TimelineViewController+Drag.swift in Sources */,
 				51C3FA2B255E1DD5008F587A /* GetInfoFolderViewController.swift in Sources */,
 				514287402572FD0200F16B78 /* EditorDeleteHeadlineCommand.swift in Sources */,
 				51B2B2C82563A2180090C56B /* EditorTextView.swift in Sources */,

@@ -32,19 +32,19 @@ class TimelineViewController: UICollectionViewController {
 		return currentOutline == nil
 	}
 	
-	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
-	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importEntity, style: .plain, target: self, action: #selector(importOPML(_:)))
-
-	private let dataSourceQueue = MainThreadOperationQueue()
-	private var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
-
-	private var currentOutline: Outline? {
+	var currentOutline: Outline? {
 		guard let indexPath = collectionView.indexPathsForSelectedItems?.first,
 			  let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
 			  
 		return AccountManager.shared.findOutline(item.id)
 	}
 	
+	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
+	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importEntity, style: .plain, target: self, action: #selector(importOPML(_:)))
+
+	private let dataSourceQueue = MainThreadOperationQueue()
+	private var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -52,6 +52,7 @@ class TimelineViewController: UICollectionViewController {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		}
 
+		collectionView.dragDelegate = self
 		collectionView.remembersLastFocusedIndexPath = true
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()

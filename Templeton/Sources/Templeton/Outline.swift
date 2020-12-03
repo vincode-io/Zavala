@@ -55,6 +55,12 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		headlinesFile = HeadlinesFile(outline: self)
 	}
 
+	public func markdown(indentLevel: Int = 0) -> String {
+		var md = "# \(title ?? "")\n\n"
+		headlines?.forEach { md.append($0.markdown(indentLevel: 0)) }
+		return md
+	}
+	
 	public func toggleFavorite() {
 		isFavorite = !(isFavorite ?? false)
 		outlineMetaDataDidChange()

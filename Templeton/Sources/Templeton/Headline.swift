@@ -28,7 +28,7 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 		}
 		return parentCount
 	}
-
+	
 	public var id: String
 	public var text: Data?
 	public var isExpanded: Bool?
@@ -81,6 +81,13 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 		}
 	}
 	
+	public func markdown(indentLevel: Int = 0) -> String {
+		var md = String(repeating: " ", count: indentLevel * 2)
+		md.append("* \(plainText ?? "")\n")
+		headlines?.forEach { md.append($0.markdown(indentLevel: indentLevel + 1)) }
+		return md
+	}
+
 	public func isDecendent(_ headline: Headline) -> Bool {
 		if parent == headline || parent?.isDecendent(headline) ?? false {
 			return true
