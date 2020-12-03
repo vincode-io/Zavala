@@ -323,7 +323,7 @@ extension TimelineViewController {
 		do {
 			try markdown.write(to: tempFile, atomically: true, encoding: String.Encoding.utf8)
 		} catch {
-			self.presentError(title: "OPML Export Error", message: error.localizedDescription)
+			self.presentError(title: "Markdown Export Error", message: error.localizedDescription)
 		}
 		
 		let docPicker = UIDocumentPickerViewController(forExporting: [tempFile])
