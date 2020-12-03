@@ -335,16 +335,13 @@ extension TimelineViewController {
 		print("Export OPML")
 	}
 	
-	private func getInfoForOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
+	private func getInfoForOutline(_ outline: Outline) {
 		let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoOutlineViewControllerNav") as! UINavigationController
 		getInfoNavViewController.preferredContentSize = GetInfoOutlineViewController.preferredContentSize
 		getInfoNavViewController.modalPresentationStyle = .formSheet
 		let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoOutlineViewController
 		getInfoViewController.outline = outline
-		present(getInfoNavViewController, animated: true) {
-			completion?(true)
-		}
-
+		present(getInfoNavViewController, animated: true)
 	}
 	
 	private func deleteOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
