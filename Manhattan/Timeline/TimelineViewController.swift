@@ -313,7 +313,22 @@ extension TimelineViewController {
 	}
 	
 	private func exportMarkdownForOutline(_ outline: Outline) {
-		print("Export Markdown")
+		let markdown = outline.markdown()
+		
+		var filename = outline.title ?? "Outline"
+		filename = filename.replacingOccurrences(of: " ", with: "").trimmingCharacters(in: .whitespaces)
+		filename = "\(filename).md"
+		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+		
+		do {
+			try markdown.write(to: tempFile, atomically: true, encoding: String.Encoding.utf8)
+		} catch {
+			self.presentError(title: "OPML Export Error", message: error.localizedDescription)
+		}
+		
+		let docPicker = UIDocumentPickerViewController(forExporting: [tempFile])
+		docPicker.modalPresentationStyle = .formSheet
+		self.present(docPicker, animated: true)
 	}
 	
 	private func exportOPMLForOutline(_ outline: Outline) {

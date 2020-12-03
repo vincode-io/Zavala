@@ -62,8 +62,19 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	}
 
 	public func markdown(indentLevel: Int = 0) -> String {
+		var returnToSuspend = false
+		if headlines == nil {
+			returnToSuspend = true
+			load()
+		}
+		
 		var md = "# \(title ?? "")\n\n"
 		headlines?.forEach { md.append($0.markdown(indentLevel: 0)) }
+		
+		if returnToSuspend {
+			suspend()
+		}
+		
 		return md
 	}
 	
