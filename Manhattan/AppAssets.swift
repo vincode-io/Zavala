@@ -61,4 +61,9 @@ struct AppAssets {
 		return UIImage(systemName: "trash")!
 	}()
 
+	static var uncompleteHeadline: UIImage = {
+		return UIImage(systemName: "square")!
+	}()
+
+
 }

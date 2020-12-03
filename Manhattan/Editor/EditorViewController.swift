@@ -369,7 +369,8 @@ private extension EditorViewController {
 	
 	private func getToggleCompleteAction(headline: Headline, attributedText: NSAttributedString) -> UIAction {
 		let title = headline.isComplete ?? false ? L10n.uncomplete : L10n.complete
-		let action = UIAction(title: title, image: AppAssets.completeHeadline) { [weak self] action in
+		let image = headline.isComplete ?? false ? AppAssets.uncompleteHeadline : AppAssets.completeHeadline
+		let action = UIAction(title: title, image: image) { [weak self] action in
 			self?.toggleCompleteHeadline(headline, attributedText: attributedText)
 		}
 		return action
