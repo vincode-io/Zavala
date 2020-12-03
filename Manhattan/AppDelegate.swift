@@ -86,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(exportOPMLCommand(_:)), #selector(exportOPMLCommand(_:)):
+		case #selector(exportMarkdownCommand(_:)), #selector(exportOPMLCommand(_:)):
 			if mainSplitViewController?.isExportOutlineUnavailable ?? true {
 				command.attributes = .disabled
 			}
