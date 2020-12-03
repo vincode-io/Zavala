@@ -11,6 +11,7 @@ import SWXMLHash
 public protocol HeadlineContainer: class {
 	var headlines: [Headline]? { get set }
 	func markdown(indentLevel: Int) -> String
+	func opml() -> String
 }
 
 public extension HeadlineContainer {

@@ -314,25 +314,29 @@ extension TimelineViewController {
 	
 	private func exportMarkdownForOutline(_ outline: Outline) {
 		let markdown = outline.markdown()
-		
-		var filename = outline.title ?? "Outline"
+		export(markdown, title: outline.title, fileSuffix: "md")
+	}
+	
+	private func exportOPMLForOutline(_ outline: Outline) {
+		let opml = outline.opml()
+		export(opml, title: outline.title, fileSuffix: "opml")
+	}
+	
+	private func export(_ string: String, title: String?, fileSuffix: String) {
+		var filename = title ?? "Outline"
 		filename = filename.replacingOccurrences(of: " ", with: "").trimmingCharacters(in: .whitespaces)
-		filename = "\(filename).md"
+		filename = "\(filename).\(fileSuffix)"
 		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
 		
 		do {
-			try markdown.write(to: tempFile, atomically: true, encoding: String.Encoding.utf8)
+			try string.write(to: tempFile, atomically: true, encoding: String.Encoding.utf8)
 		} catch {
-			self.presentError(title: "Markdown Export Error", message: error.localizedDescription)
+			self.presentError(title: "Export Error", message: error.localizedDescription)
 		}
 		
 		let docPicker = UIDocumentPickerViewController(forExporting: [tempFile])
 		docPicker.modalPresentationStyle = .formSheet
 		self.present(docPicker, animated: true)
-	}
-	
-	private func exportOPMLForOutline(_ outline: Outline) {
-		print("Export OPML")
 	}
 	
 	private func getInfoForOutline(_ outline: Outline) {
