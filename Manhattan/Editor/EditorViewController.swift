@@ -388,7 +388,7 @@ private extension EditorViewController {
 	}
 	
 	private func addAction(headline: Headline) -> UIAction {
-		let action = UIAction(title: L10n.add, image: AppAssets.add) { [weak self] action in
+		let action = UIAction(title: L10n.addRow, image: AppAssets.add) { [weak self] action in
 			// Have to let the text field get the first responder by getting it away from this
 			// action which appears to be holding on to it.
 			DispatchQueue.main.async {

@@ -10,8 +10,8 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum L10n {
-  /// Add
-  internal static let add = L10n.tr("Localizable", "Add")
+  /// Add Row
+  internal static let addRow = L10n.tr("Localizable", "Add_Row")
   /// Cancel
   internal static let cancel = L10n.tr("Localizable", "Cancel")
   /// Collapse
@@ -47,7 +47,7 @@ internal enum L10n {
   /// Get Info
   internal static let getInfo = L10n.tr("Localizable", "Get_Info")
   /// Hide Completed
-  internal static let hideCompleted = L10n.tr("Localizable", "Hide Completed")
+  internal static let hideCompleted = L10n.tr("Localizable", "Hide_Completed")
   /// Import Failed
   internal static let importFailed = L10n.tr("Localizable", "Import Failed")
   /// Import OPML
@@ -73,7 +73,7 @@ internal enum L10n {
     return L10n.tr("Localizable", "See_Outlines_In", String(describing: p1))
   }
   /// Show Completed
-  internal static let showCompleted = L10n.tr("Localizable", "Show Completed")
+  internal static let showCompleted = L10n.tr("Localizable", "Show_Completed")
   /// Toggle Sidebar
   internal static let toggleSidebar = L10n.tr("Localizable", "Toggle_Sidebar")
   /// Typing
