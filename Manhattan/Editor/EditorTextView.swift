@@ -27,8 +27,6 @@ class EditorTextView: UITextView {
 		commonInit()
 	}
 
-	var gesture = UIPanGestureRecognizer()
-	
 	func commonInit() {
 		textDropDelegate = self
 		
