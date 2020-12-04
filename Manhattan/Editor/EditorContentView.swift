@@ -26,6 +26,7 @@ class EditorContentView: UIView, UIContentView {
 		textView.textContainer.lineFragmentPadding = 0
 		textView.textContainerInset = .zero
 		textView.font = UIFont.preferredFont(forTextStyle: .body)
+		textView.backgroundColor = .clear
 		
 		addSubview(textView)
 		textView.translatesAutoresizingMaskIntoConstraints = false
