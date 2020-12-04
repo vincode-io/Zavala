@@ -49,6 +49,8 @@ class TimelineViewController: UICollectionViewController {
 	private let dataSourceQueue = MainThreadOperationQueue()
 	private var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
 
+	override var canBecomeFirstResponder: Bool { return true }
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
