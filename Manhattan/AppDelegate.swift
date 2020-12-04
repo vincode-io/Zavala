@@ -110,17 +110,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	let toggleCompleteHeadlineCommand = UIKeyCommand(title: L10n.complete,
 										action: #selector(toggleCompleteHeadlineCommand(_:)),
-										input: "`",
+										input: "\n",
 										modifierFlags: [.command])
 
 	let completeHeadlineCommand = UIKeyCommand(title: L10n.complete,
 										action: #selector(toggleCompleteHeadlineCommand(_:)),
-										input: "`",
+										input: "\n",
 										modifierFlags: [.command])
 
 	let uncompleteHeadlineCommand = UIKeyCommand(title: L10n.uncomplete,
 										action: #selector(toggleCompleteHeadlineCommand(_:)),
-										input: "`",
+										input: "\n",
 										modifierFlags: [.command])
 
 	var mainSplitViewController: MainSplitViewController? {
