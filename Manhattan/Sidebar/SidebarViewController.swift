@@ -155,7 +155,7 @@ extension SidebarViewController {
 			cell.accessories = [.outlineDisclosure()]
 		}
 		
-		let rowRegistration = UICollectionView.CellRegistration<AccentedCollectionViewListCell, SidebarItem> { (cell, indexPath, item) in
+		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, SidebarItem> { (cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
 			contentConfiguration.text = item.title
 			contentConfiguration.image = item.image

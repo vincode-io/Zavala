@@ -197,7 +197,7 @@ extension TimelineViewController {
 	}
 	
 	private func configureDataSource() {
-		let rowRegistration = UICollectionView.CellRegistration<AccentedCollectionViewListCell, TimelineItem> { [weak self] (cell, indexPath, item) in
+		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, TimelineItem> { [weak self] (cell, indexPath, item) in
 			guard let self = self else { return }
 			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()

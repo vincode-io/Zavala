@@ -1,5 +1,5 @@
 //
-//  AccentedCollectionViewListCell.swift
+//  ConsistentCollectionViewListCell.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 12/4/20.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AccentedCollectionViewListCell : UICollectionViewListCell {
+class ConsistentCollectionViewListCell : UICollectionViewListCell {
 	
 	var insetBackground = false
 	
