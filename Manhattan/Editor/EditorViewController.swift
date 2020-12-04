@@ -359,6 +359,11 @@ private extension EditorViewController {
 			guard let self = self else { return nil }
 			
 			let menuItems = [
+				UIMenu(title: "", options: .displayInline, children: [
+						self.addAction(headline: headline),
+						self.indentAction(headline: headline, attributedText: attributedText),
+						self.outdentAction(headline: headline, attributedText: attributedText)
+				]),
 				UIMenu(title: "", options: .displayInline, children: [self.toggleCompleteAction(headline: headline, attributedText: attributedText)]),
 				UIMenu(title: "", options: .displayInline, children: [self.deleteAction(headline: headline)]),
 			]
@@ -367,6 +372,31 @@ private extension EditorViewController {
 		})
 	}
 	
+	private func addAction(headline: Headline) -> UIAction {
+		let action = UIAction(title: L10n.add, image: AppAssets.add) { [weak self] action in
+			// Have to let the text field get the first responder by getting it away from this
+			// action which appears to be holding on to it.
+			DispatchQueue.main.async {
+				self?.createHeadline(headline)
+			}
+		}
+		return action
+	}
+
+	private func indentAction(headline: Headline, attributedText: NSAttributedString) -> UIAction {
+		let action = UIAction(title: L10n.indent, image: AppAssets.indent) { [weak self] action in
+			self?.indentHeadline(headline, attributedText: attributedText)
+		}
+		return action
+	}
+
+	private func outdentAction(headline: Headline, attributedText: NSAttributedString) -> UIAction {
+		let action = UIAction(title: L10n.outdent, image: AppAssets.outdent) { [weak self] action in
+			self?.outdentHeadline(headline, attributedText: attributedText)
+		}
+		return action
+	}
+
 	private func toggleCompleteAction(headline: Headline, attributedText: NSAttributedString) -> UIAction {
 		let title = headline.isComplete ?? false ? L10n.uncomplete : L10n.complete
 		let image = headline.isComplete ?? false ? AppAssets.uncompleteHeadline : AppAssets.completeHeadline

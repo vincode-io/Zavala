@@ -27,6 +27,9 @@
 "Uncomplete" = "Uncomplete";
 "Show Completed" = "Show Completed";
 "Hide Completed" = "Hide Completed";
+"Collapse" = "Collapse";
+"Expand" = "Expand";
+"Add" = "Add";
 
 /* Activity Manager */
 "See_Outlines_In" = "See outlines in “%@”";
@@ -41,10 +44,6 @@
 "Import Failed" = "Import Failed";
 "Delete_Outline_Prompt" = "Are you sure you want to delete the “%@” outline?";
 "Delete_Outline_Message" = "The outline be deleted and unrecoverable.";
-
-/* Editor */
-"Collapse" = "Collapse";
-"Expand" = "Expand";
 
 /* Generic Eror Handling */
 "Error" = "Error";

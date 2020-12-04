@@ -13,6 +13,10 @@ struct AppAssets {
 		return UIColor(named: "AccentColor")!
 	}()
 	
+	static var add: UIImage = {
+		return UIImage(systemName: "plus")!
+	}()
+	
 	static var bullet: UIImage = {
 		return UIImage(systemName: "circle.fill")!.applyingSymbolConfiguration(.init(pointSize: 4, weight: .heavy))!
 	}()
@@ -67,6 +71,14 @@ struct AppAssets {
 
 	static var importEntity: UIImage = {
 		return UIImage(systemName: "square.and.arrow.down")!
+	}()
+
+	static var indent: UIImage = {
+		return UIImage(systemName: "arrow.right.to.line")!
+	}()
+
+	static var outdent: UIImage = {
+		return UIImage(systemName: "arrow.left.to.line")!
 	}()
 
 	static var removeEntity: UIImage = {
