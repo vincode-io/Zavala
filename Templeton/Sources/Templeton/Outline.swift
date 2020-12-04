@@ -137,7 +137,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			headlines = parent.headlines ?? [Headline]()
 		}
 		
-		headlines = headlines.filter { $0 != headline }
+		headlines.removeFirst(object: headline)
 		
 		if let parent = headline.parent {
 			parent.headlines = headlines
@@ -279,7 +279,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		headline.parent = newParentHeadline
 		siblingHeadlines.append(headline)
 		newParentHeadline.headlines = siblingHeadlines
-		container.headlines = container.headlines?.filter { $0 != headline }
+		container.headlines?.removeFirst(object: headline)
 
 		newParentHeadline.isExpanded = true
 		outlineBodyDidChange()
@@ -324,7 +324,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			siblingsToMove.append(oldParentHeadlines[i])
 		}
 
-		oldParent.headlines = oldParent.headlines?.filter { $0 != headline }
+		oldParent.headlines?.removeFirst(object: headline)
 
 		if let newParent = oldParent.parent, let oldParentIndex = newParent.headlines?.firstIndex(of: oldParent) {
 			newParent.headlines?.insert(headline, at: oldParentIndex + 1)
@@ -430,7 +430,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		}
 		
 		// Move the headline in the tree
-		fromParent.headlines = fromParent.headlines?.filter{ $0 != headline }
+		fromParent.headlines?.removeFirst(object: headline)
 		if toParent.headlines == nil {
 			toParent.headlines = [headline]
 		} else {
