@@ -30,6 +30,8 @@ class EditorTextView: UITextView {
 	var gesture = UIPanGestureRecognizer()
 	
 	func commonInit() {
+		textDropDelegate = self
+		
 		// These gesture recognizers will conflict with context menu preview dragging if not removed.
 		gestureRecognizers?.forEach {
 			if $0.name == "dragInitiation"
@@ -117,6 +119,19 @@ class EditorTextView: UITextView {
 	
 	var isSelecting: Bool {
 		return !(selectedTextRange?.isEmpty ?? true)
+	}
+	
+}
+
+extension EditorTextView: UITextDropDelegate {
+	
+	// We dont' allow local text drops because regular dragging and dropping of Headlines was dropping Markdown into our text view
+	func textDroppableView(_ textDroppableView: UIView & UITextDroppable, proposalForDrop drop: UITextDropRequest) -> UITextDropProposal {
+		if drop.dropSession.localDragSession == nil {
+			return UITextDropProposal(operation: .copy)
+		} else {
+			return UITextDropProposal(operation: .cancel)
+		}
 	}
 	
 }
