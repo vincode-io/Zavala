@@ -22,7 +22,7 @@ class SidebarViewController: UICollectionViewController {
 		return currentAccount == nil
 	}
 
-	var isDeleteEntityUnavailable: Bool {
+	var isDeleteCurrentFolderUnavailable: Bool {
 		return currentFolder == nil
 	}
 

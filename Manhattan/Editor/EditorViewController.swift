@@ -15,6 +15,10 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 		return outline == nil
 	}
 	
+	var isDeleteCurrentHeadlineUnavailable: Bool {
+		return currentHeadline == nil
+	}
+	
 	var outline: Outline? {
 		
 		willSet {
@@ -35,6 +39,10 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 			}
 		}
 		
+	}
+	
+	var currentHeadline: Headline? {
+		return (UIResponder.currentFirstResponder as? EditorTextView)?.headline
 	}
 	
 	var undoableCommands = [UndoableCommand]()
@@ -112,6 +120,13 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 		default:
 			break
 		}
+	}
+	
+	// MARK: API
+	
+	func deleteCurrentHeadline() {
+		guard let headline = currentHeadline else { return }
+		deleteHeadline(headline)
 	}
 	
 	// MARK: Actions

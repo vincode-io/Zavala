@@ -32,7 +32,7 @@ class TimelineViewController: UICollectionViewController {
 		return currentOutline == nil
 	}
 	
-	var isDeleteEntityUnavailable: Bool {
+	var isDeleteCurrentOutlineUnavailable: Bool {
 		return currentOutline == nil
 	}
 	

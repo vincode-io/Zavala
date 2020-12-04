@@ -53,7 +53,9 @@ class MainSplitViewController: UISplitViewController {
 	}
 	
 	var isDeleteEntityUnavailable: Bool {
-		return (sidebarViewController?.isDeleteEntityUnavailable ?? true) && (timelineViewController?.isDeleteEntityUnavailable ?? true)
+		return (sidebarViewController?.isDeleteCurrentFolderUnavailable ?? true) &&
+			(timelineViewController?.isDeleteCurrentOutlineUnavailable ?? true) &&
+			(editorViewController?.isDeleteCurrentHeadlineUnavailable ?? true) 
 	}
 
 	override func viewDidLoad() {
@@ -77,6 +79,7 @@ class MainSplitViewController: UISplitViewController {
     }
 	
 	// MARK: API
+	
 	func startUp() {
 		sidebarViewController?.navigationController?.delegate = self
 		sidebarViewController?.delegate = self
@@ -122,6 +125,20 @@ class MainSplitViewController: UISplitViewController {
 	
 	// MARK: Actions
 	
+	override func delete(_ sender: Any?) {
+		guard editorViewController?.isDeleteCurrentHeadlineUnavailable ?? true else {
+			editorViewController?.deleteCurrentHeadline()
+			return
+		}
+		
+		guard timelineViewController?.isDeleteCurrentOutlineUnavailable ?? true else {
+			timelineViewController?.deleteCurrentOutline()
+			return
+		}
+		
+		sidebarViewController?.deleteCurrentFolder()
+	}
+	
 	@objc func createFolder(_ sender: Any?) {
 		sidebarViewController?.createFolder(sender)
 	}
@@ -142,14 +159,6 @@ class MainSplitViewController: UISplitViewController {
 		timelineViewController?.exportOPML(sender)
 	}
 	
-	@objc func deleteEntity(_ sender: Any?) {
-		if timelineViewController?.isDeleteEntityUnavailable ?? true {
-			sidebarViewController?.deleteCurrentFolder()
-		} else {
-			timelineViewController?.deleteCurrentOutline()
-		}
-	}
-	
 	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
 		editorViewController?.toggleOutlineIsFavorite(sender)
 	}
@@ -164,6 +173,19 @@ class MainSplitViewController: UISplitViewController {
 		}
 	}
 	
+	// MARK: Validations
+	
+	override func validate(_ command: UICommand) {
+		print(command)
+		switch command.action {
+		case #selector(delete(_:)):
+			if isDeleteEntityUnavailable {
+				command.attributes = .disabled
+			}
+		default:
+			break
+		}
+	}
 }
 
 // MARK: SidebarDelegate
