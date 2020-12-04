@@ -11,6 +11,62 @@ import Templeton
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
+	override var keyCommands: [UIKeyCommand]? {
+		#if targetEnvironment(macCatalyst)
+		return nil
+		#else
+		var menuKeyCommands = [UIKeyCommand]()
+		
+		if !(mainSplitViewController?.isCreateOutlineUnavailable ?? true) {
+			menuKeyCommands.append(newOutlineCommand)
+			menuKeyCommands.append(importOPMLCommand)
+		}
+		
+		if !(mainSplitViewController?.isCreateFolderUnavailable ?? true) {
+			menuKeyCommands.append(newFolderCommand)
+		}
+		
+		if !(mainSplitViewController?.isExportOutlineUnavailable ?? true) {
+			menuKeyCommands.append(exportMarkdownCommand)
+			menuKeyCommands.append(exportOPMLCommand)
+		}
+		
+		menuKeyCommands.append(newWindowCommand)
+		menuKeyCommands.append(toggleSidebarCommand)
+		
+		return menuKeyCommands
+		#endif
+	}
+	
+	let exportOPMLCommand = UIKeyCommand(title: L10n.exportOPML,
+										action: #selector(exportOPMLCommand(_:)),
+										input: "e",
+										modifierFlags: [.shift, .command])
+	let exportMarkdownCommand = UIKeyCommand(title: L10n.exportMarkdown,
+											 action: #selector(exportMarkdownCommand(_:)),
+											 input: "e",
+											 modifierFlags: [.control, .command])
+	let importOPMLCommand = UIKeyCommand(title: L10n.importOPML,
+										action: #selector(importOPMLCommand(_:)),
+										input: "i",
+										modifierFlags: [.shift, .command])
+	let newWindowCommand = UIKeyCommand(title: L10n.newWindow,
+										action: #selector(newWindow(_:)),
+										input: "n",
+										modifierFlags: [.alternate, .command])
+	let newOutlineCommand = UIKeyCommand(title: L10n.newOutline,
+										action: #selector(createOutlineCommand(_:)),
+										input: "n",
+										modifierFlags: [.command])
+	let newFolderCommand = UIKeyCommand(title: L10n.newFolder,
+										action: #selector(createFolderCommand(_:)),
+										input: "n",
+										modifierFlags: [.shift, .command])
+	let toggleSidebarCommand = UIKeyCommand(title: L10n.toggleSidebar,
+										action: #selector(toggleSidebarCommand(_:)),
+										input: "s",
+										modifierFlags: [.control, .command])
+
 	var mainSplitViewController: MainSplitViewController? {
 		var keyScene: UIScene?
 		let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
@@ -123,36 +179,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.remove(menu: .newScene)
 
 		// File Menu
-		let exportOPMLCommand = UIKeyCommand(title: L10n.exportOPML,
-											action: #selector(exportOPMLCommand(_:)),
-											input: "e",
-											modifierFlags: [.shift, .command])
-		let exportMarkdownCommand = UIKeyCommand(title: L10n.exportMarkdown,
-												 action: #selector(exportMarkdownCommand(_:)),
-												 input: "e",
-												 modifierFlags: [.control, .command])
-		let importOPMLCommand = UIKeyCommand(title: L10n.importOPML,
-											action: #selector(importOPMLCommand(_:)),
-											input: "i",
-											modifierFlags: [.shift, .command])
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMarkdownCommand, exportOPMLCommand])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 
-		let newWindowCommand = UIKeyCommand(title: L10n.newWindow,
-											action: #selector(newWindow(_:)),
-											input: "n",
-											modifierFlags: [.alternate, .command])
 		let newWindowMenu = UIMenu(title: "", options: .displayInline, children: [newWindowCommand])
 		builder.insertChild(newWindowMenu, atStartOfMenu: .file)
 
-		let newOutlineCommand = UIKeyCommand(title: L10n.newOutline,
-											action: #selector(createOutlineCommand(_:)),
-											input: "n",
-											modifierFlags: [.command])
-		let newFolderCommand = UIKeyCommand(title: L10n.newFolder,
-											action: #selector(createFolderCommand(_:)),
-											input: "n",
-											modifierFlags: [.shift, .command])
 		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newFolderCommand])
 		builder.insertChild(newItemsMenu, atStartOfMenu: .file)
 
@@ -171,10 +203,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		
 		// View Menu
-		let toggleSidebarCommand = UIKeyCommand(title: L10n.toggleSidebar,
-											action: #selector(toggleSidebarCommand(_:)),
-											input: "s",
-											modifierFlags: [.control, .command])
 		let toggleSidebarMenu = UIMenu(title: "", options: .displayInline, children: [toggleSidebarCommand])
 		builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)
 	}
