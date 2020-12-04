@@ -19,6 +19,28 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 		return currentHeadline == nil
 	}
 	
+	var isCreateHeadlineUnavailable: Bool {
+		return currentHeadline == nil
+	}
+	
+	var isIndentHeadlineUnavailable: Bool {
+		guard let outline = outline, let headline = currentHeadline else { return true }
+		return outline.isIndentHeadlineUnavailable(headline: headline)
+	}
+
+	var isOutdentHeadlineUnavailable: Bool {
+		guard let outline = outline, let headline = currentHeadline else { return true }
+		return outline.isOutdentHeadlineUnavailable(headline: headline)
+	}
+
+	var isToggleHeadlineCompleteUnavailable: Bool {
+		return currentHeadline == nil
+	}
+
+	var isCurrentHeadlineComplete: Bool {
+		return currentHeadline?.isComplete ?? false
+	}
+	
 	var outline: Outline? {
 		
 		willSet {
@@ -43,6 +65,10 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 	
 	var currentHeadline: Headline? {
 		return (UIResponder.currentFirstResponder as? EditorTextView)?.headline
+	}
+	
+	var currentAttributedText: NSAttributedString? {
+		return (UIResponder.currentFirstResponder as? EditorTextView)?.attributedText
 	}
 	
 	var undoableCommands = [UndoableCommand]()
@@ -127,6 +153,26 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 	func deleteCurrentHeadline() {
 		guard let headline = currentHeadline else { return }
 		deleteHeadline(headline)
+	}
+	
+	func createHeadline() {
+		guard let headline = currentHeadline else { return }
+		createHeadline(headline)
+	}
+	
+	func indentHeadline() {
+		guard let headline = currentHeadline, let attributedText = currentAttributedText else { return }
+		indentHeadline(headline, attributedText: attributedText)
+	}
+	
+	func outdentHeadline() {
+		guard let headline = currentHeadline, let attributedText = currentAttributedText else { return }
+		outdentHeadline(headline, attributedText: attributedText)
+	}
+	
+	func toggleCompleteHeadline() {
+		guard let headline = currentHeadline, let attributedText = currentAttributedText else { return }
+		toggleCompleteHeadline(headline, attributedText: attributedText)
 	}
 	
 	// MARK: Actions
@@ -371,14 +417,21 @@ private extension EditorViewController {
 	
 	private func makeHeadlineContextMenu(headline: Headline, attributedText: NSAttributedString) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: headline as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
-			guard let self = self else { return nil }
+			guard let self = self, let outline = self.outline else { return nil }
+			
+			var mainActions = [UIAction]()
+			mainActions.append(self.addAction(headline: headline))
+
+			if !outline.isIndentHeadlineUnavailable(headline: headline) {
+				mainActions.append(self.indentAction(headline: headline, attributedText: attributedText))
+			}
+			
+			if !outline.isOutdentHeadlineUnavailable(headline: headline) {
+				mainActions.append(self.outdentAction(headline: headline, attributedText: attributedText))
+			}
 			
 			let menuItems = [
-				UIMenu(title: "", options: .displayInline, children: [
-						self.addAction(headline: headline),
-						self.indentAction(headline: headline, attributedText: attributedText),
-						self.outdentAction(headline: headline, attributedText: attributedText)
-				]),
+				UIMenu(title: "", options: .displayInline, children: mainActions),
 				UIMenu(title: "", options: .displayInline, children: [self.toggleCompleteAction(headline: headline, attributedText: attributedText)]),
 				UIMenu(title: "", options: .displayInline, children: [self.deleteAction(headline: headline)]),
 			]

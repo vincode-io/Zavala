@@ -238,6 +238,21 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return ShadowTableChanges(reloads: reloads)
 	}
 
+	public func isIndentHeadlineUnavailable(headline: Headline) -> Bool {
+		let container: HeadlineContainer
+		if let oldParentHeadline = headline.parent {
+			container = oldParentHeadline
+		} else {
+			container = self
+		}
+		
+		if let headlineIndex = container.headlines?.firstIndex(of: headline), headlineIndex > 0 {
+			return false
+		}
+		
+		return true
+	}
+	
 	public func indentHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
 		headline.attributedText = attributedText
 		
@@ -291,6 +306,10 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 	}
 	
+	public func isOutdentHeadlineUnavailable(headline: Headline) -> Bool {
+		return headline.indentLevel == 0
+	}
+		
 	public func outdentHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
 		headline.attributedText = attributedText
 

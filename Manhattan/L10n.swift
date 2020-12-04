@@ -68,6 +68,8 @@ internal enum L10n {
   internal static let notAvailable = L10n.tr("Localizable", "Not_Available")
   /// Outdent
   internal static let outdent = L10n.tr("Localizable", "Outdent")
+  /// Outline
+  internal static let outline = L10n.tr("Localizable", "Outline")
   /// See outlines in “%@”
   internal static func seeOutlinesIn(_ p1: Any) -> String {
     return L10n.tr("Localizable", "See_Outlines_In", String(describing: p1))

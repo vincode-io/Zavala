@@ -58,6 +58,26 @@ class MainSplitViewController: UISplitViewController {
 			(editorViewController?.isDeleteCurrentHeadlineUnavailable ?? true) 
 	}
 
+	var isCreateHeadlineUnavailable: Bool {
+		return editorViewController?.isCreateHeadlineUnavailable ?? true
+	}
+	
+	var isIndentHeadlineUnavailable: Bool {
+		return editorViewController?.isIndentHeadlineUnavailable ?? true
+	}
+
+	var isOutdentHeadlineUnavailable: Bool {
+		return editorViewController?.isOutdentHeadlineUnavailable ?? true
+	}
+
+	var isToggleHeadlineCompleteUnavailable: Bool {
+		return editorViewController?.isToggleHeadlineCompleteUnavailable ?? true
+	}
+	
+	var isCurrentHeadlineComplete: Bool {
+		return editorViewController?.isCurrentHeadlineComplete ?? false
+	}
+
 	override func viewDidLoad() {
         super.viewDidLoad()
 		primaryBackgroundStyle = .sidebar
@@ -171,6 +191,22 @@ class MainSplitViewController: UISplitViewController {
 		UIView.animate(withDuration: 0.25) {
 			self.preferredDisplayMode = self.displayMode == .twoBesideSecondary ? .secondaryOnly : .twoBesideSecondary
 		}
+	}
+	
+	@objc func createHeadline(_ sender: Any?) {
+		editorViewController?.createHeadline()
+	}
+	
+	@objc func indentHeadline(_ sender: Any?) {
+		editorViewController?.indentHeadline()
+	}
+	
+	@objc func outdentHeadline(_ sender: Any?) {
+		editorViewController?.outdentHeadline()
+	}
+	
+	@objc func toggleCompleteHeadline(_ sender: Any?) {
+		editorViewController?.toggleCompleteHeadline()
 	}
 	
 	// MARK: Validations
