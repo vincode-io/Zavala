@@ -359,14 +359,15 @@ private extension EditorViewController {
 			guard let self = self else { return nil }
 			
 			let menuItems = [
-				UIMenu(title: "", options: .displayInline, children: [self.getToggleCompleteAction(headline: headline, attributedText: attributedText)]),
+				UIMenu(title: "", options: .displayInline, children: [self.toggleCompleteAction(headline: headline, attributedText: attributedText)]),
+				UIMenu(title: "", options: .displayInline, children: [self.deleteAction(headline: headline)]),
 			]
 
-			return UIMenu(title: "", children: menuItems.compactMap { $0 })
+			return UIMenu(title: "", children: menuItems)
 		})
 	}
 	
-	private func getToggleCompleteAction(headline: Headline, attributedText: NSAttributedString) -> UIAction {
+	private func toggleCompleteAction(headline: Headline, attributedText: NSAttributedString) -> UIAction {
 		let title = headline.isComplete ?? false ? L10n.uncomplete : L10n.complete
 		let image = headline.isComplete ?? false ? AppAssets.uncompleteHeadline : AppAssets.completeHeadline
 		let action = UIAction(title: title, image: image) { [weak self] action in
@@ -374,4 +375,12 @@ private extension EditorViewController {
 		}
 		return action
 	}
+
+	private func deleteAction(headline: Headline) -> UIAction {
+		let action = UIAction(title: L10n.delete, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
+			self?.deleteHeadline(headline)
+		}
+		return action
+	}
+
 }

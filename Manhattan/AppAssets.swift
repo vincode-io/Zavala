@@ -25,6 +25,10 @@ struct AppAssets {
 		return UIImage(systemName: "square.and.pencil")!
 	}()
 
+	static var delete: UIImage = {
+		return UIImage(systemName: "trash")!
+	}()
+
 	static var disclosure: UIImage = {
 		#if targetEnvironment(macCatalyst)
 		return UIImage(systemName: "chevron.right")!.applyingSymbolConfiguration(.init(pointSize: 9, weight: .heavy))!
