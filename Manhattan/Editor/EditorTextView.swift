@@ -22,6 +22,29 @@ protocol EditorTextViewDelegate: class {
 
 class EditorTextView: UITextView {
 	
+	override init(frame: CGRect, textContainer: NSTextContainer?) {
+		super.init(frame: frame, textContainer: textContainer)
+		commonInit()
+	}
+
+	var gesture = UIPanGestureRecognizer()
+	
+	func commonInit() {
+		// These gesture recognizers will conflict with context menu preview dragging if not removed.
+		gestureRecognizers?.forEach {
+			if $0.name == "dragInitiation"
+				|| $0.name == "dragExclusionRelationships"
+				|| $0.name == "dragFailureRelationships"
+				|| $0.name == "com.apple.UIKit.longPressClickDriverPrimary" {
+				removeGestureRecognizer($0)
+			}
+		}
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
 	override var undoManager: UndoManager? {
 		guard let textViewUndoManager = super.undoManager, let controllerUndoManager = editorDelegate?.undoManager else { return nil }
 		if stackedUndoManager == nil {
