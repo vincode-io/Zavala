@@ -96,6 +96,7 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 		collectionView.dataSource = self
 		collectionView.dragDelegate = self
 		collectionView.dropDelegate = self
+		collectionView.dragInteractionEnabled = true
 
 		editorRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, Headline> { (cell, indexPath, headline) in
 			cell.headline = headline
