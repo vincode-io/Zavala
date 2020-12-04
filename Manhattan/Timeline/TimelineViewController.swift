@@ -181,16 +181,13 @@ extension TimelineViewController {
 	}
 	
 	private func createLayout() -> UICollectionViewLayout {
-		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
+		let layout = UICollectionViewCompositionalLayout() { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 			var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
 			configuration.showsSeparators = false
 
 			configuration.trailingSwipeActionsConfigurationProvider = { indexPath in
-				guard let timelineItem = self.dataSource.itemIdentifier(for: indexPath) else { return nil }
-				let actions = [
-					self.deleteContextualAction(item: timelineItem)
-				]
-				return UISwipeActionsConfiguration(actions: actions.compactMap { $0 })
+				guard let self = self, let timelineItem = self.dataSource.itemIdentifier(for: indexPath) else { return nil }
+				return UISwipeActionsConfiguration(actions: [self.deleteContextualAction(item: timelineItem)])
 			}
 
 			return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
@@ -293,14 +290,12 @@ extension TimelineViewController {
 		return action
 	}
 	
-	private func deleteContextualAction(item: TimelineItem) -> UIContextualAction? {
-		let action = UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
+	private func deleteContextualAction(item: TimelineItem) -> UIContextualAction {
+		return UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
 			if let outline = AccountManager.shared.findOutline(item.id) {
 				self?.deleteOutline(outline, completion: completion)
 			}
 		}
-		
-		return action
 	}
 	
 	private func deleteOutlineAction(item: TimelineItem) -> UIAction {
