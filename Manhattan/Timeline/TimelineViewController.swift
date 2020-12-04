@@ -261,7 +261,7 @@ extension TimelineViewController {
 				UIMenu(title: "", options: .displayInline, children: [self.deleteOutlineAction(item: item)])
 			]
 
-			return UIMenu(title: "", children: menuItems.compactMap { $0 })
+			return UIMenu(title: "", children: menuItems)
 		})
 	}
 	
