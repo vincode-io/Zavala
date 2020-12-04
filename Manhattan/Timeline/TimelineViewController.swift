@@ -182,7 +182,8 @@ extension TimelineViewController {
 	
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
-			var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
+			let isMac = layoutEnvironment.traitCollection.userInterfaceIdiom == .mac
+			var configuration = UICollectionLayoutListConfiguration(appearance: isMac ? .plain : .sidebar)
 			configuration.showsSeparators = false
 
 			configuration.trailingSwipeActionsConfigurationProvider = { indexPath in
@@ -196,7 +197,7 @@ extension TimelineViewController {
 	}
 	
 	private func configureDataSource() {
-		let rowRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, TimelineItem> { [weak self] (cell, indexPath, item) in
+		let rowRegistration = UICollectionView.CellRegistration<AccentedCollectionViewListCell, TimelineItem> { [weak self] (cell, indexPath, item) in
 			guard let self = self else { return }
 			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
@@ -205,9 +206,10 @@ extension TimelineViewController {
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			
 			if self.traitCollection.userInterfaceIdiom == .mac {
+				cell.insetBackground = true
 				contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .body)
 				contentConfiguration.secondaryTextProperties.font = .preferredFont(forTextStyle: .footnote)
-				contentConfiguration.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 10, bottom: 8, trailing: 10)
+				contentConfiguration.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
 			}
 			
 			cell.contentConfiguration = contentConfiguration
