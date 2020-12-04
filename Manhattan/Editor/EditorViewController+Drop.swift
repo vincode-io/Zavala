@@ -50,9 +50,6 @@ extension EditorViewController: UICollectionViewDropDelegate {
 												toChildIndex: toChildIndex)
 		
 		runCommand(command)
-		
-// This needs some work.  We need to be able to do moves in a performing batch updates for it to work
-//		coordinator.drop(dragItem, toItemAt: IndexPath(row: destinationIndex, section: 0))
 	}
 	
 	
