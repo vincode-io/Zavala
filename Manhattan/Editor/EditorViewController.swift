@@ -233,6 +233,14 @@ extension EditorViewController {
 		return makeHeadlineContextMenu(headline: headline, attributedText: attributedText)
 	}
 	
+	override func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+		guard let headline = configuration.identifier as? Headline,
+			  let row = headline.shadowTableIndex,
+			  let cell = collectionView.cellForItem(at: IndexPath(row: row, section: 0)) as? EditorCollectionViewCell else { return nil }
+		
+		return UITargetedPreview(view: cell, parameters: EditorCellHighlightPreviewParameters(cell: cell, headline: headline))
+	}
+	
 }
 
 extension EditorViewController: EditorCollectionViewCellDelegate {

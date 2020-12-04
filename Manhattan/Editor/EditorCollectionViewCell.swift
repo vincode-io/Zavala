@@ -39,6 +39,10 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 	var attributedText: NSAttributedString? {
 		return (contentView as? EditorContentView)?.textView.attributedText
 	}
+	
+	var textWidth: CGFloat? {
+		return (contentView as? EditorContentView)?.textView.intrinsicContentSize.width
+	}
 
 	private var isDisclosed = false
 
