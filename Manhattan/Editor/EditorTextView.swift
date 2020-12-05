@@ -10,14 +10,11 @@ import Templeton
 
 protocol EditorTextViewDelegate: class {
 	var undoManager: UndoManager? { get }
-	var currentKeyPresses: Set<UIKeyboardHIDUsage> { get }
 	func deleteHeadline(_: Headline)
 	func createHeadline(_: Headline)
 	func indentHeadline(_: Headline, attributedText: NSAttributedString)
 	func outdentHeadline(_: Headline, attributedText: NSAttributedString)
 	func toggleCompleteHeadline(_: Headline, attributedText: NSAttributedString)
-	func moveCursorUp(headline: Headline)
-	func moveCursorDown(headline: Headline)
 }
 
 class EditorTextView: UITextView {
@@ -73,23 +70,6 @@ class EditorTextView: UITextView {
 	}
 	
 	private var stackedUndoManager: UndoManager?
-	
-	@discardableResult
-	override func becomeFirstResponder() -> Bool {
-		let result = super.becomeFirstResponder()
-		guard let headline = headline else { return result }
-
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-			if self.editorDelegate?.currentKeyPresses.contains(.keyboardUpArrow) ?? false {
-				self.editorDelegate?.moveCursorUp(headline: headline)
-			}
-			if self.editorDelegate?.currentKeyPresses.contains(.keyboardDownArrow) ?? false {
-				self.editorDelegate?.moveCursorDown(headline: headline)
-			}
-		}
-		
-		return result
-	}
 
 	override func deleteBackward() {
 		guard let headline = headline else { return }

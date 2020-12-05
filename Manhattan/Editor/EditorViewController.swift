@@ -124,29 +124,20 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 		switch key.keyCode {
 		case .keyboardUpArrow:
 			currentKeyPresses.insert(key.keyCode)
-			if let textView = UIResponder.currentFirstResponder as? EditorTextView, !textView.isSelecting, let headline = textView.headline {
-				moveCursorUp(headline: headline)
-			}
+			repeatMoveCursorUp()
 		case .keyboardDownArrow:
 			currentKeyPresses.insert(key.keyCode)
-			if let textView = UIResponder.currentFirstResponder as? EditorTextView, !textView.isSelecting, let headline = textView.headline {
-				moveCursorDown(headline: headline)
-			}
+			repeatMoveCursorDown()
 		default:
 			break
 		}
+		
 	}
 	
 	override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
 		super.pressesEnded(presses, with: event)
-
-		guard let key = presses.first?.key else { return }
-		switch key.keyCode {
-		case .keyboardUpArrow, .keyboardDownArrow:
-			currentKeyPresses.remove(key.keyCode)
-		default:
-			break
-		}
+		let keyCodes = presses.compactMap { $0.key?.keyCode }
+		keyCodes.forEach { currentKeyPresses.remove($0) }
 	}
 	
 	// MARK: API
@@ -187,6 +178,28 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 		guard let changes = outline?.toggleFilter() else { return }
 		updateUI()
 		applyChangesRestoringCursor(changes)
+	}
+	
+	@objc func repeatMoveCursorUp() {
+		if currentKeyPresses.contains(.keyboardUpArrow) {
+			if let textView = UIResponder.currentFirstResponder as? EditorTextView, !textView.isSelecting, let headline = textView.headline {
+				moveCursorUp(headline: headline)
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+					self.repeatMoveCursorUp()
+				}
+			}
+		}
+	}
+
+	@objc func repeatMoveCursorDown() {
+		if currentKeyPresses.contains(.keyboardDownArrow) {
+			if let textView = UIResponder.currentFirstResponder as? EditorTextView, !textView.isSelecting, let headline = textView.headline {
+				moveCursorDown(headline: headline)
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+					self.repeatMoveCursorDown()
+				}
+			}
+		}
 	}
 	
 }
@@ -343,22 +356,6 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 		
 	}
 	
-	func moveCursorUp(headline: Headline) {
-		guard let shadowTableIndex = headline.shadowTableIndex, shadowTableIndex > 0 else { return }
-		let indexPath = IndexPath(row: shadowTableIndex - 1, section: 0)
-		if let target = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
-			target.moveToEnd()
-		}
-	}
-	
-	func moveCursorDown(headline: Headline) {
-		guard let shadowTableIndex = headline.shadowTableIndex, let shadowTable = outline?.shadowTable, shadowTableIndex < (shadowTable.count - 1) else { return }
-		let indexPath = IndexPath(row: shadowTableIndex + 1, section: 0)
-		if let target = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
-			target.moveToEnd()
-		}
-	}
-	
 }
 
 // MARK: EditorOutlineCommandDelegate
@@ -490,4 +487,20 @@ private extension EditorViewController {
 		return action
 	}
 
+	func moveCursorUp(headline: Headline) {
+		guard let shadowTableIndex = headline.shadowTableIndex, shadowTableIndex > 0 else { return }
+		let indexPath = IndexPath(row: shadowTableIndex - 1, section: 0)
+		if let target = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+			target.moveToEnd()
+		}
+	}
+	
+	func moveCursorDown(headline: Headline) {
+		guard let shadowTableIndex = headline.shadowTableIndex, let shadowTable = outline?.shadowTable, shadowTableIndex < (shadowTable.count - 1) else { return }
+		let indexPath = IndexPath(row: shadowTableIndex + 1, section: 0)
+		if let target = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
+			target.moveToEnd()
+		}
+	}
+	
 }

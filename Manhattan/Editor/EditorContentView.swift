@@ -150,10 +150,6 @@ extension EditorContentView: EditorTextViewDelegate {
 		appliedConfiguration.delegate?.undoManager
 	}
 	
-	var currentKeyPresses: Set<UIKeyboardHIDUsage> {
-		appliedConfiguration.delegate?.currentKeyPresses ?? Set<UIKeyboardHIDUsage>()
-	}
-	
 	func deleteHeadline(_ headline: Headline) {
 		appliedConfiguration.delegate?.deleteHeadline(headline)
 	}
@@ -172,14 +168,6 @@ extension EditorContentView: EditorTextViewDelegate {
 	
 	func toggleCompleteHeadline(_ headline: Headline, attributedText: NSAttributedString) {
 		appliedConfiguration.delegate?.toggleCompleteHeadline(headline, attributedText: attributedText)
-	}
-	
-	func moveCursorUp(headline: Headline) {
-		appliedConfiguration.delegate?.moveCursorUp(headline: headline)
-	}
-	
-	func moveCursorDown(headline: Headline) {
-		appliedConfiguration.delegate?.moveCursorDown(headline: headline)
 	}
 	
 }

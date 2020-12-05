@@ -10,7 +10,6 @@ import Templeton
 
 protocol EditorCollectionViewCellDelegate: class {
 	var undoManager: UndoManager? { get }
-	var currentKeyPresses: Set<UIKeyboardHIDUsage> { get }
 	func toggleDisclosure(headline: Headline)
 	func textChanged(headline: Headline, attributedText: NSAttributedString)
 	func deleteHeadline(_ headline: Headline)
@@ -18,8 +17,6 @@ protocol EditorCollectionViewCellDelegate: class {
 	func indentHeadline(_ headline: Headline, attributedText: NSAttributedString)
 	func outdentHeadline(_ headline: Headline, attributedText: NSAttributedString)
 	func toggleCompleteHeadline(_: Headline, attributedText: NSAttributedString)
-	func moveCursorUp(headline: Headline)
-	func moveCursorDown(headline: Headline)
 }
 
 class EditorCollectionViewCell: UICollectionViewListCell {
