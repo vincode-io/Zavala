@@ -97,6 +97,7 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 		collectionView.dragDelegate = self
 		collectionView.dropDelegate = self
 		collectionView.dragInteractionEnabled = true
+		collectionView.allowsSelection = false
 
 		editorRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, Headline> { (cell, indexPath, headline) in
 			cell.headline = headline
@@ -229,13 +230,6 @@ extension EditorViewController {
 			headline = Headline()
 		}
 		return collectionView.dequeueConfiguredReusableCell(using: editorRegistration!, for: indexPath, item: headline)
-	}
-	
-	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		if let text = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
-			text.moveToEnd()
-		}
-		collectionView.deselectItem(at: indexPath, animated: false)
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
