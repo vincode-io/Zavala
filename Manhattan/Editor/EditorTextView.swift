@@ -49,9 +49,6 @@ class EditorTextView: UITextView {
 		return stackedUndoManager
 	}
 	
-	weak var editorDelegate: EditorTextViewDelegate?
-	var headline: Headline?
-
 	override var keyCommands: [UIKeyCommand]? {
 		let keys = [
 			UIKeyCommand(action: #selector(tabPressed(_:)), input: "\t"),
@@ -61,6 +58,13 @@ class EditorTextView: UITextView {
 		return keys
 	}
 	
+	weak var editorDelegate: EditorTextViewDelegate?
+	var headline: Headline?
+	
+	var isSelecting: Bool {
+		return !(selectedTextRange?.isEmpty ?? true)
+	}
+
 	private var stackedUndoManager: UndoManager?
 
 	override func deleteBackward() {
@@ -84,10 +88,6 @@ class EditorTextView: UITextView {
 	
 	@objc func optionReturnPressed(_ sender: Any) {
 		insertText("\n")
-	}
-	
-	var isSelecting: Bool {
-		return !(selectedTextRange?.isEmpty ?? true)
 	}
 	
 }
