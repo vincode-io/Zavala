@@ -10,6 +10,7 @@ import Templeton
 
 protocol EditorCollectionViewCellDelegate: class {
 	var undoManager: UndoManager? { get }
+	func invalidateLayout()
 	func toggleDisclosure(headline: Headline)
 	func textChanged(headline: Headline, attributedText: NSAttributedString)
 	func deleteHeadline(_ headline: Headline)

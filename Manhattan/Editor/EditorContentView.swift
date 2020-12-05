@@ -11,6 +11,7 @@ import Templeton
 class EditorContentView: UIView, UIContentView {
 
 	let textView = EditorTextView()
+	var textViewHeight: CGFloat?
 	var bulletView: UIImageView?
 	var barViews = [UIView]()
 	var appliedConfiguration: EditorContentConfiguration!
@@ -94,7 +95,7 @@ class EditorContentView: UIView, UIContentView {
 		textView.removeConstraintsOwnedBySuperview()
 		NSLayoutConstraint.activate([
 			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-			textView.trailingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+			textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
 			textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
 			textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
 		])
@@ -122,6 +123,12 @@ class EditorContentView: UIView, UIContentView {
 
 extension EditorContentView: UITextViewDelegate {
 	
+	func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
+		textViewHeight = fittingSize.height
+		return true
+	}
+	
 	func textViewDidEndEditing(_ textView: UITextView) {
 		guard isTextChanged, let headline = appliedConfiguration.headline else { return }
 		appliedConfiguration.delegate?.textChanged(headline: headline, attributedText: textView.attributedText)
@@ -137,6 +144,15 @@ extension EditorContentView: UITextViewDelegate {
 		default:
 			isTextChanged = true
 			return true
+		}
+	}
+	
+	func textViewDidChange(_ textView: UITextView) {
+		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
+		if textViewHeight != fittingSize.height {
+			textViewHeight = fittingSize.height
+			invalidateIntrinsicContentSize()
+			appliedConfiguration.delegate?.invalidateLayout()
 		}
 	}
 	

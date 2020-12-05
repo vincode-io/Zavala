@@ -258,6 +258,10 @@ extension EditorViewController {
 
 extension EditorViewController: EditorCollectionViewCellDelegate {
 
+	func invalidateLayout() {
+		collectionView.collectionViewLayout.invalidateLayout()
+	}
+
 	func toggleDisclosure(headline: Headline) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		let command = EditorToggleDisclosureCommand(undoManager: undoManager,
