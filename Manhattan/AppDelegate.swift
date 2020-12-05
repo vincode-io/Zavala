@@ -123,6 +123,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										input: "\n",
 										modifierFlags: [.command])
 
+	let splitHeadlineCommand = UIKeyCommand(title: L10n.splitRow,
+										action: #selector(splitHeadlineCommand(_:)),
+										input: "\n",
+										modifierFlags: [.shift, .alternate])
+
 	var mainSplitViewController: MainSplitViewController? {
 		var keyScene: UIScene?
 		let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
@@ -206,6 +211,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.toggleCompleteHeadline(sender)
 	}
 	
+	@objc func splitHeadlineCommand(_ sender: Any?) {
+		mainSplitViewController?.splitHeadline(sender)
+	}
+	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
@@ -243,6 +252,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainSplitViewController?.isToggleHeadlineCompleteUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(splitHeadlineCommand(_:)):
+			if mainSplitViewController?.isSplitHeadlineUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		default:
 			break
 		}
@@ -272,7 +285,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		// Outline Menu
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteHeadlineCommand])
-		let mainOutlineMenu = UIMenu(title: "", options: .displayInline, children: [createHeadlineCommand, indentHeadlineCommand, outdentHeadlineCommand])
+		let mainOutlineMenu = UIMenu(title: "", options: .displayInline, children: [createHeadlineCommand, splitHeadlineCommand, indentHeadlineCommand, outdentHeadlineCommand])
 		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, completeMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 

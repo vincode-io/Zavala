@@ -76,6 +76,8 @@ internal enum L10n {
   }
   /// Show Completed
   internal static let showCompleted = L10n.tr("Localizable", "Show_Completed")
+  /// Split Row
+  internal static let splitRow = L10n.tr("Localizable", "Split_Row")
   /// Toggle Sidebar
   internal static let toggleSidebar = L10n.tr("Localizable", "Toggle_Sidebar")
   /// Typing

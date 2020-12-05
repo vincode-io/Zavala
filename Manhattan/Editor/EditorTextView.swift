@@ -14,6 +14,7 @@ protocol EditorTextViewDelegate: class {
 	func createHeadline(_: Headline)
 	func indentHeadline(_: Headline, attributedText: NSAttributedString)
 	func outdentHeadline(_: Headline, attributedText: NSAttributedString)
+	func splitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)
 }
 
 class EditorTextView: UITextView {
@@ -53,7 +54,8 @@ class EditorTextView: UITextView {
 		let keys = [
 			UIKeyCommand(action: #selector(tabPressed(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(shiftTabPressed(_:))),
-			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(optionReturnPressed(_:)))
+			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(optionReturnPressed(_:))),
+			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(shiftOptionReturnPressed(_:)))
 		]
 		return keys
 	}
@@ -63,6 +65,10 @@ class EditorTextView: UITextView {
 	
 	var isSelecting: Bool {
 		return !(selectedTextRange?.isEmpty ?? true)
+	}
+	
+	var cursorPosition: Int {
+		return selectedRange.location
 	}
 
 	private var stackedUndoManager: UndoManager?
@@ -88,6 +94,11 @@ class EditorTextView: UITextView {
 	
 	@objc func optionReturnPressed(_ sender: Any) {
 		insertText("\n")
+	}
+	
+	@objc func shiftOptionReturnPressed(_ sender: Any) {
+		guard let headline = headline else { return }
+		editorDelegate?.splitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
 	}
 	
 }

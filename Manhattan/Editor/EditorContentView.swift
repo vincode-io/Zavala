@@ -182,6 +182,10 @@ extension EditorContentView: EditorTextViewDelegate {
 		appliedConfiguration.delegate?.outdentHeadline(headline, attributedText: attributedText)
 	}
 	
+	func splitHeadline(_ headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) {
+		appliedConfiguration.delegate?.splitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
+	}
+	
 }
 
 // MARK: Helpers

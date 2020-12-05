@@ -78,6 +78,10 @@ class MainSplitViewController: UISplitViewController {
 		return editorViewController?.isCurrentHeadlineComplete ?? false
 	}
 
+	var isSplitHeadlineUnavailable: Bool {
+		return editorViewController?.isSplitHeadlineUnavailable ?? true
+	}
+	
 	override func viewDidLoad() {
         super.viewDidLoad()
 		primaryBackgroundStyle = .sidebar
@@ -207,6 +211,10 @@ class MainSplitViewController: UISplitViewController {
 	
 	@objc func toggleCompleteHeadline(_ sender: Any?) {
 		editorViewController?.toggleCompleteHeadline()
+	}
+	
+	@objc func splitHeadline(_ sender: Any?) {
+		editorViewController?.splitHeadline()
 	}
 	
 	// MARK: Validations

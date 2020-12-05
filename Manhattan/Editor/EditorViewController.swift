@@ -37,6 +37,10 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 		return currentHeadline == nil
 	}
 
+	var isSplitHeadlineUnavailable: Bool {
+		return currentHeadline == nil
+	}
+
 	var isCurrentHeadlineComplete: Bool {
 		return currentHeadline?.isComplete ?? false
 	}
@@ -63,12 +67,20 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 		
 	}
 	
+	var currentTextView: EditorTextView? {
+		return UIResponder.currentFirstResponder as? EditorTextView
+	}
+	
 	var currentHeadline: Headline? {
-		return (UIResponder.currentFirstResponder as? EditorTextView)?.headline
+		return currentTextView?.headline
 	}
 	
 	var currentAttributedText: NSAttributedString? {
-		return (UIResponder.currentFirstResponder as? EditorTextView)?.attributedText
+		return currentTextView?.attributedText
+	}
+	
+	var currentCursorPosition: Int? {
+		return currentTextView?.cursorPosition
 	}
 	
 	var undoableCommands = [UndoableCommand]()
@@ -154,18 +166,28 @@ class EditorViewController: UICollectionViewController, UndoableCommandRunner {
 	}
 	
 	func indentHeadline() {
-		guard let headline = currentHeadline, let attributedText = currentAttributedText else { return }
+		guard let headline = currentHeadline,
+			  let attributedText = currentAttributedText else { return }
 		indentHeadline(headline, attributedText: attributedText)
 	}
 	
 	func outdentHeadline() {
-		guard let headline = currentHeadline, let attributedText = currentAttributedText else { return }
+		guard let headline = currentHeadline,
+			  let attributedText = currentAttributedText else { return }
 		outdentHeadline(headline, attributedText: attributedText)
 	}
 	
 	func toggleCompleteHeadline() {
-		guard let headline = currentHeadline, let attributedText = currentAttributedText else { return }
+		guard let headline = currentHeadline,
+			  let attributedText = currentAttributedText else { return }
 		toggleCompleteHeadline(headline, attributedText: attributedText)
+	}
+	
+	func splitHeadline() {
+		guard let headline = currentHeadline,
+			  let attributedText = currentAttributedText,
+			  let cursorPosition = currentCursorPosition else { return }
+		splitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
 	}
 	
 	// MARK: Actions
@@ -332,6 +354,10 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 												  attributedText: attributedText)
 		
 		runCommand(command)
+	}
+
+	func splitHeadline(_ headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) {
+		print("Cursor position: \(cursorPosition)")
 	}
 	
 }
@@ -501,4 +527,5 @@ private extension EditorViewController {
 		
 	}
 	
+
 }
