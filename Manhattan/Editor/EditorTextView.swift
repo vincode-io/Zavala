@@ -51,7 +51,7 @@ class EditorTextView: UITextView {
 	}
 	
 	weak var editorDelegate: EditorTextViewDelegate?
-	weak var headline: Headline?
+	var headline: Headline?
 
 	override var keyCommands: [UIKeyCommand]? {
 		let keys = [
