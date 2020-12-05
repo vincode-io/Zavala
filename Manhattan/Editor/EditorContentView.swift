@@ -86,7 +86,7 @@ class EditorContentView: UIView, UIContentView {
 		let adjustedTrailingIndention: CGFloat
 		if traitCollection.userInterfaceIdiom == .mac {
 			adjustedLeadingIndention = configuration.indentationWidth - 18
-			adjustedTrailingIndention = 0
+			adjustedTrailingIndention = -8
 		} else {
 			adjustedLeadingIndention = configuration.indentationWidth
 			adjustedTrailingIndention = -25
