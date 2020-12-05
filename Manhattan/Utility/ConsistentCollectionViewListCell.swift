@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ConsistentCollectionViewListCell : UICollectionViewListCell {
+class ConsistentCollectionViewListCell: UICollectionViewListCell {
 	
 	var insetBackground = false
 	
