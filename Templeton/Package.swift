@@ -12,13 +12,15 @@ let package = Package(
     dependencies: [
 		.package(url: "https://github.com/Ranchero-Software/RSCore.git", .upToNextMajor(from: "1.0.0-beta9")),
 		.package(url: "https://github.com/drmohundro/SWXMLHash.git", .upToNextMajor(from: "5.0.1")),
+		.package(url: "https://github.com/vincode-io/ZipArchive.git", .branch("master")),
     ],
     targets: [
         .target(
             name: "Templeton",
             dependencies: [
 				"RSCore",
-				"SWXMLHash"
+				"SWXMLHash",
+				"ZipArchive"
 			],
 			resources: [.copy("Localizable.strings")]),
         .testTarget(

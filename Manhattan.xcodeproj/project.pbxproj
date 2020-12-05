@@ -41,6 +41,7 @@
 		51B2B2CE2563AAF60090C56B /* EditorContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2CD2563AAF60090C56B /* EditorContentConfiguration.swift */; };
 		51B2B2D22563AB190090C56B /* EditorContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2D12563AB190090C56B /* EditorContentView.swift */; };
 		51B2B2D62563AB9F0090C56B /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2D52563AB9F0090C56B /* UIView+.swift */; };
+		51B4EBC7257C3CD100378CAB /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 51B4EBC6257C3CD100378CAB /* ZipArchive */; };
 		51B5861C256B245300ACF99B /* SWXMLHash in Frameworks */ = {isa = PBXBuildFile; productRef = 51B5861B256B245300ACF99B /* SWXMLHash */; };
 		51C3FA2B255E1DD5008F587A /* GetInfoFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */; };
 		51C3FA2F255E31E6008F587A /* GetInfoOutlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3FA2E255E31E6008F587A /* GetInfoOutlineViewController.swift */; };
@@ -141,6 +142,7 @@
 		51B2B2CD2563AAF60090C56B /* EditorContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorContentConfiguration.swift; sourceTree = "<group>"; };
 		51B2B2D12563AB190090C56B /* EditorContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorContentView.swift; sourceTree = "<group>"; };
 		51B2B2D52563AB9F0090C56B /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
+		51B4EBCB257C3D9700378CAB /* ZipArchive */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ZipArchive; path = ../ZipArchive; sourceTree = "<group>"; };
 		51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoFolderViewController.swift; sourceTree = "<group>"; };
 		51C3FA2E255E31E6008F587A /* GetInfoOutlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoOutlineViewController.swift; sourceTree = "<group>"; };
 		51C4C3AC2555E964004E0206 /* Manhattan_project_debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Manhattan_project_debug.xcconfig; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51B4EBC7257C3CD100378CAB /* ZipArchive in Frameworks */,
 				51B5861C256B245300ACF99B /* SWXMLHash in Frameworks */,
 				51C4C3F92557470B004E0206 /* Templeton in Frameworks */,
 				51C4C40125576631004E0206 /* RSCore in Frameworks */,
@@ -252,6 +255,7 @@
 		5181A92B2554D92000C153E8 = {
 			isa = PBXGroup;
 			children = (
+				51B4EBCB257C3D9700378CAB /* ZipArchive */,
 				5181A9362554D92000C153E8 /* Manhattan */,
 				51C4C3CC2555F07A004E0206 /* Frameworks */,
 				5181A9352554D92000C153E8 /* Products */,
@@ -386,6 +390,7 @@
 				51C4C3F82557470B004E0206 /* Templeton */,
 				51C4C40025576631004E0206 /* RSCore */,
 				51B5861B256B245300ACF99B /* SWXMLHash */,
+				51B4EBC6257C3CD100378CAB /* ZipArchive */,
 			);
 			productName = Manhattan;
 			productReference = 5181A9342554D92000C153E8 /* Manhattan.app */;
@@ -461,6 +466,7 @@
 			packageReferences = (
 				51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */,
 				51B5861A256B245300ACF99B /* XCRemoteSwiftPackageReference "SWXMLHash" */,
+				51B4EBC5257C3CD100378CAB /* XCRemoteSwiftPackageReference "ZipArchive" */,
 			);
 			productRefGroup = 5181A9352554D92000C153E8 /* Products */;
 			projectDirPath = "";
@@ -743,6 +749,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		51B4EBC5257C3CD100378CAB /* XCRemoteSwiftPackageReference "ZipArchive" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vincode-io/ZipArchive.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		51B5861A256B245300ACF99B /* XCRemoteSwiftPackageReference "SWXMLHash" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/drmohundro/SWXMLHash.git";
@@ -762,6 +776,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		51B4EBC6257C3CD100378CAB /* ZipArchive */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 51B4EBC5257C3CD100378CAB /* XCRemoteSwiftPackageReference "ZipArchive" */;
+			productName = ZipArchive;
+		};
 		51B5861B256B245300ACF99B /* SWXMLHash */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 51B5861A256B245300ACF99B /* XCRemoteSwiftPackageReference "SWXMLHash" */;

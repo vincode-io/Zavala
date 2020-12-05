@@ -135,9 +135,13 @@ public final class AccountManager {
 		return nil
 	}
 	
-	public func suspend() {
+	public func save() {
 		accountFiles.values.forEach { $0.save() }
 		outlines.forEach { $0.save() }
+	}
+	
+	public func archiveAccount(type: AccountType) -> URL? {
+		return accountsDictionary[type.rawValue]?.archive()
 	}
 	
 }

@@ -128,6 +128,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										input: "\n",
 										modifierFlags: [.shift, .alternate])
 
+	let archiveLocalCommand = UIKeyCommand(title: L10n.archiveAccount(AccountType.local.name),
+										action: #selector(archiveLocalCommand(_:)),
+										input: "1",
+										modifierFlags: [.control, .command])
+	
 	var mainSplitViewController: MainSplitViewController? {
 		var keyScene: UIScene?
 		let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
@@ -215,6 +220,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.splitHeadline(sender)
 	}
 	
+	@objc func archiveLocalCommand(_ sender: Any?) {
+		mainSplitViewController?.archiveAccount(type: .local)
+	}
+	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
@@ -270,6 +279,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.remove(menu: .newScene)
 
 		// File Menu
+		let archiveMenu = UIMenu(title: "", options: .displayInline, children: [archiveLocalCommand])
+		builder.insertChild(archiveMenu, atStartOfMenu: .file)
+
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMarkdownCommand, exportOPMLCommand])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 

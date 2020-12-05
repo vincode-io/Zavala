@@ -81,6 +81,8 @@ private extension AccountFile {
 			return
 		}
 
+		account.folder = fileURL.deletingLastPathComponent()
+		
 		BatchUpdate.shared.perform {
 			accountManager?.accountsDictionary[accountType.rawValue] = account
 		}

@@ -230,6 +230,13 @@ class MainSplitViewController: UISplitViewController {
 			break
 		}
 	}
+	
+	// MARK: API
+	
+	func archiveAccount(type: AccountType) {
+		sidebarViewController?.archiveAccount(type: type)
+	}
+	
 }
 
 // MARK: SidebarDelegate

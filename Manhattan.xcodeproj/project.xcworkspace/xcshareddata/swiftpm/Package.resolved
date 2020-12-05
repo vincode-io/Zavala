@@ -18,6 +18,15 @@
           "revision": "a4931e5c3bafbedeb1601d3bb76bbe835c6d475a",
           "version": "5.0.1"
         }
+      },
+      {
+        "package": "ZipArchive",
+        "repositoryURL": "https://github.com/vincode-io/ZipArchive.git",
+        "state": {
+          "branch": "master",
+          "revision": "f49211b7daf312fecfbd9741900ee5c94c774faf",
+          "version": null
+        }
       }
     ]
   },

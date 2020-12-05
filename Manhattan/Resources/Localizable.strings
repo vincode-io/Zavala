@@ -32,6 +32,7 @@
 "Expand" = "Expand";
 "Add_Row" = "Add Row";
 "Split_Row" = "Split Row";
+"Archive_Account" = "Archive %@ Account";
 
 /* Activity Manager */
 "See_Outlines_In" = "See outlines in “%@”";

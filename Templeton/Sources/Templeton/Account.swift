@@ -6,12 +6,14 @@
 //
 
 import Foundation
+import os.log
+import ZipArchive
 
 public extension Notification.Name {
 	static let AccountFoldersDidChange = Notification.Name(rawValue: "AccountFoldersDidChange")
 }
 
-public final class Account: Identifiable, Equatable, Codable {
+public final class Account: NSObject, Identifiable, Codable {
 
 	public var id: EntityID {
 		return EntityID.account(type.rawValue)
@@ -39,6 +41,10 @@ public final class Account: Identifiable, Equatable, Codable {
 		case isActive = "isActive"
 		case folders = "folders"
 	}
+	
+	var folder: URL?
+	private let operationQueue = OperationQueue()
+	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Account")
 
 	init(accountType: AccountType) {
 		self.type = accountType
@@ -69,10 +75,50 @@ public final class Account: Identifiable, Equatable, Codable {
 	
 }
 
+// MARK: NSFilePresenter
+
+extension Account: NSFilePresenter {
+	
+	public var presentedItemURL: URL? {
+		return folder
+	}
+	
+	public var presentedItemOperationQueue: OperationQueue {
+		return operationQueue
+	}
+	
+}
+
+// MARK: Helpers
+
 extension Account {
 
 	func findFolder(folderUUID: String) -> Folder? {
 		return folders?.first(where: { $0.id.folderUUID == folderUUID })
+	}
+	
+	func archive() -> URL? {
+		guard let folder = folder else { return nil }
+		
+		var filename = type.name.replacingOccurrences(of: " ", with: "").trimmingCharacters(in: .whitespaces)
+		let formatter = DateFormatter()
+		formatter.dateFormat = "yyyy-MM-dd-HH-mm-ss"
+		filename = "Manhattan_\(filename)_\(formatter.string(from: Date())).manarc"
+		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+
+		let errorPointer: NSErrorPointer = nil
+		let fileCoordinator = NSFileCoordinator(filePresenter: self)
+		
+		fileCoordinator.coordinate(readingItemAt: folder, options: [], error: errorPointer, byAccessor: { readURL in
+			SSZipArchive.createZipFile(atPath: tempFile.path, withContentsOfDirectory: readURL.path)
+		})
+
+		if let error = errorPointer?.pointee {
+			os_log(.error, log: log, "Account archive coordination failed: %@.", error.localizedDescription)
+			return nil
+		}
+
+		return tempFile
 	}
 
 }

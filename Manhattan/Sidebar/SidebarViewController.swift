@@ -81,6 +81,14 @@ class SidebarViewController: UICollectionViewController {
 		deleteFolder(folder)
 	}
 	
+	func archiveAccount(type: AccountType) {
+		guard let archiveFile = AccountManager.shared.archiveAccount(type: type) else { return }
+		
+		let docPicker = UIDocumentPickerViewController(forExporting: [archiveFile])
+		docPicker.modalPresentationStyle = .formSheet
+		self.present(docPicker, animated: true)
+	}
+	
 	// MARK: Notifications
 	
 	@objc func accountFoldersDidChange(_ note: Notification) {
