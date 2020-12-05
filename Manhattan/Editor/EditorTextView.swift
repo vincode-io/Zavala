@@ -57,7 +57,8 @@ class EditorTextView: UITextView {
 		let keys = [
 			UIKeyCommand(action: #selector(tabPressed(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(shiftTabPressed(_:))),
-			UIKeyCommand(input: "\r", modifierFlags: [.command], action: #selector(commandReturnPressed(_:)))
+			UIKeyCommand(input: "\r", modifierFlags: [.command], action: #selector(commandReturnPressed(_:))),
+			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(optionReturnPressed(_:)))
 		]
 		return keys
 	}
@@ -93,6 +94,10 @@ class EditorTextView: UITextView {
 	@objc func shiftTabPressed(_ sender: Any) {
 		guard let headline = headline else { return }
 		editorDelegate?.outdentHeadline(headline, attributedText: attributedText)
+	}
+	
+	@objc func optionReturnPressed(_ sender: Any) {
+		insertText("\n")
 	}
 	
 	var isSelecting: Bool {
