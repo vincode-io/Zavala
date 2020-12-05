@@ -30,7 +30,7 @@
         <!--Add Folder-->
         <scene sceneID="1K1-wS-EXc">
             <objects>
-                <viewController id="Hfq-v2-Yap" customClass="AddFolderViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddFolderViewController" id="Hfq-v2-Yap" customClass="AddFolderViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZR1-3E-fuo">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -160,7 +160,7 @@
         <!--Add Outline-->
         <scene sceneID="7JN-r9-nFW">
             <objects>
-                <viewController id="lyw-6o-pFO" customClass="AddOutlineViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddOutlineViewController" id="lyw-6o-pFO" customClass="AddOutlineViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="y4I-qw-TAF">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -290,7 +290,7 @@
         <!--Folder Info-->
         <scene sceneID="N5f-ZQ-ZVA">
             <objects>
-                <viewController id="5fG-xR-KKE" customClass="GetInfoFolderViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GetInfoFolderViewController" id="5fG-xR-KKE" customClass="GetInfoFolderViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="V5f-Se-Jaz">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -420,7 +420,7 @@
         <!--Outline Info-->
         <scene sceneID="kf0-On-ugu">
             <objects>
-                <viewController id="l7V-nf-Btr" customClass="GetInfoOutlineViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GetInfoOutlineViewController" id="l7V-nf-Btr" customClass="GetInfoOutlineViewController" customModule="Manhattan" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ko4-nc-dMn">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

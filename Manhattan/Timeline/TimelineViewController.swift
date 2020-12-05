@@ -113,13 +113,24 @@ class TimelineViewController: UICollectionViewController {
 	@objc func createOutline(_ sender: Any?) {
 		guard let folder = outlineProvider as? Folder else { return }
 
-		let addNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "AddOutlineViewControllerNav") as! UINavigationController
-		addNavViewController.preferredContentSize = AddOutlineViewController.preferredContentSize
-		addNavViewController.modalPresentationStyle = .formSheet
-		let addViewController = addNavViewController.topViewController as! AddOutlineViewController
-		addViewController.folder = folder
+		if traitCollection.userInterfaceIdiom == .mac {
+			
+			let addViewController = UIStoryboard.dialog.instantiateController(ofType: AddOutlineViewController.self)
+			addViewController.folder = folder
+			addViewController.preferredContentSize = AddOutlineViewController.preferredContentSize
+			present(addViewController, animated: true)
 
-		present(addNavViewController, animated: true)
+		} else {
+	
+			let addNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "AddOutlineViewControllerNav") as! UINavigationController
+			addNavViewController.preferredContentSize = AddOutlineViewController.preferredContentSize
+			addNavViewController.modalPresentationStyle = .formSheet
+			
+			let addViewController = addNavViewController.topViewController as! AddOutlineViewController
+			addViewController.folder = folder
+			present(addNavViewController, animated: true)
+			
+		}
 	}
 
 	@objc func importOPML(_ sender: Any?) {
@@ -340,12 +351,26 @@ extension TimelineViewController {
 	}
 	
 	private func getInfoForOutline(_ outline: Outline) {
-		let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoOutlineViewControllerNav") as! UINavigationController
-		getInfoNavViewController.preferredContentSize = GetInfoOutlineViewController.preferredContentSize
-		getInfoNavViewController.modalPresentationStyle = .formSheet
-		let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoOutlineViewController
-		getInfoViewController.outline = outline
-		present(getInfoNavViewController, animated: true)
+		
+		if traitCollection.userInterfaceIdiom == .mac {
+			
+			let getInfoViewController = UIStoryboard.dialog.instantiateController(ofType: GetInfoOutlineViewController.self)
+			getInfoViewController.preferredContentSize = GetInfoOutlineViewController.preferredContentSize
+			getInfoViewController.outline = outline
+			present(getInfoViewController, animated: true)
+
+		} else {
+
+			let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoOutlineViewControllerNav") as! UINavigationController
+			getInfoNavViewController.preferredContentSize = GetInfoOutlineViewController.preferredContentSize
+			getInfoNavViewController.modalPresentationStyle = .formSheet
+
+			let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoOutlineViewController
+			getInfoViewController.outline = outline
+			present(getInfoNavViewController, animated: true)
+
+		}
+		
 	}
 	
 	private func deleteOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {

@@ -10,7 +10,7 @@ import Templeton
 
 class GetInfoOutlineViewController: FormViewController {
 	
-	static let preferredContentSize = CGSize(width: 400, height: 200)
+	static let preferredContentSize = CGSize(width: 400, height: 150)
 
 	var outline: Outline?
 

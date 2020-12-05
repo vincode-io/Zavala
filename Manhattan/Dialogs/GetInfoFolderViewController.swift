@@ -12,7 +12,7 @@ import Templeton
 
 class GetInfoFolderViewController: FormViewController {
 
-	static let preferredContentSize = CGSize(width: 400, height: 200)
+	static let preferredContentSize = CGSize(width: 400, height: 150)
 
 	var folder: Folder?
 	

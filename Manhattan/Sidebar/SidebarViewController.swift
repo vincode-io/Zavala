@@ -96,13 +96,23 @@ class SidebarViewController: UICollectionViewController {
 	@IBAction func createFolder(_ sender: Any?) {
 		guard let account = currentAccount else { return }
 
-		let addNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "AddFolderViewControllerNav") as! UINavigationController
-		addNavViewController.preferredContentSize = AddFolderViewController.preferredContentSize
-		addNavViewController.modalPresentationStyle = .formSheet
-		let addViewController = addNavViewController.topViewController as! AddFolderViewController
+		if traitCollection.userInterfaceIdiom == .mac {
+			
+			let addViewController = UIStoryboard.dialog.instantiateController(ofType: AddFolderViewController.self)
+			addViewController.preferredContentSize = AddFolderViewController.preferredContentSize
+			addViewController.account = account
+			present(addViewController, animated: true)
+			
+		} else {
+			
+			let addNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "AddFolderViewControllerNav") as! UINavigationController
+			addNavViewController.preferredContentSize = AddFolderViewController.preferredContentSize
+			addNavViewController.modalPresentationStyle = .formSheet
 
-		addViewController.account = account
-		present(addNavViewController, animated: true)
+			let addViewController = addNavViewController.topViewController as! AddFolderViewController
+			addViewController.account = account
+			present(addNavViewController, animated: true)
+		}
 	}
 	
 }
@@ -302,12 +312,25 @@ extension SidebarViewController {
 	}
 	
 	private func getInfoForFolder(_ folder: Folder) {
-		let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoFolderViewControllerNav") as! UINavigationController
-		getInfoNavViewController.preferredContentSize = GetInfoFolderViewController.preferredContentSize
-		getInfoNavViewController.modalPresentationStyle = .formSheet
-		let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoFolderViewController
-		getInfoViewController.folder = folder
-		present(getInfoNavViewController, animated: true)
+		
+		if traitCollection.userInterfaceIdiom == .mac {
+			
+			let getInfoViewController = UIStoryboard.dialog.instantiateController(ofType: GetInfoFolderViewController.self)
+			getInfoViewController.preferredContentSize = GetInfoFolderViewController.preferredContentSize
+			getInfoViewController.folder = folder
+			present(getInfoViewController, animated: true)
+			
+		} else {
+			
+			let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoFolderViewControllerNav") as! UINavigationController
+			getInfoNavViewController.preferredContentSize = GetInfoFolderViewController.preferredContentSize
+			getInfoNavViewController.modalPresentationStyle = .formSheet
+
+			let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoFolderViewController
+			getInfoViewController.folder = folder
+			present(getInfoNavViewController, animated: true)
+
+		}
 	}
 	
 }
