@@ -334,26 +334,6 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 		runCommand(command)
 	}
 	
-	func toggleCompleteHeadline(_ headline: Headline, attributedText: NSAttributedString) {
-		guard let undoManager = undoManager, let outline = outline else { return }
-		
-		let command = EditorToggleCompleteHeadlineCommand(undoManager: undoManager,
-														  delegate: self,
-														  outline: outline,
-														  headline: headline,
-														  attributedText: attributedText)
-		
-		runCommand(command)
-		
-		if let deleteIndex = command.changes?.deletes?.first {
-			let cursorIndex = deleteIndex < outline.shadowTable?.count ?? 0 ? deleteIndex : (outline.shadowTable?.count ?? 1) - 1
-			if let target = collectionView.cellForItem(at: IndexPath(row: cursorIndex, section: 0)) as? TextCursorTarget {
-				target.moveToEnd()
-			}
-		}
-		
-	}
-	
 }
 
 // MARK: EditorOutlineCommandDelegate
@@ -499,6 +479,26 @@ private extension EditorViewController {
 		if let target = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
 			target.moveToEnd()
 		}
+	}
+	
+	func toggleCompleteHeadline(_ headline: Headline, attributedText: NSAttributedString) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = EditorToggleCompleteHeadlineCommand(undoManager: undoManager,
+														  delegate: self,
+														  outline: outline,
+														  headline: headline,
+														  attributedText: attributedText)
+		
+		runCommand(command)
+		
+		if let deleteIndex = command.changes?.deletes?.first {
+			let cursorIndex = deleteIndex < outline.shadowTable?.count ?? 0 ? deleteIndex : (outline.shadowTable?.count ?? 1) - 1
+			if let target = collectionView.cellForItem(at: IndexPath(row: cursorIndex, section: 0)) as? TextCursorTarget {
+				target.moveToEnd()
+			}
+		}
+		
 	}
 	
 }

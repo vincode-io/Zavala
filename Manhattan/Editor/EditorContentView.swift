@@ -182,10 +182,6 @@ extension EditorContentView: EditorTextViewDelegate {
 		appliedConfiguration.delegate?.outdentHeadline(headline, attributedText: attributedText)
 	}
 	
-	func toggleCompleteHeadline(_ headline: Headline, attributedText: NSAttributedString) {
-		appliedConfiguration.delegate?.toggleCompleteHeadline(headline, attributedText: attributedText)
-	}
-	
 }
 
 // MARK: Helpers

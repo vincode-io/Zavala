@@ -17,7 +17,6 @@ protocol EditorCollectionViewCellDelegate: class {
 	func createHeadline(_ afterHeadline: Headline)
 	func indentHeadline(_ headline: Headline, attributedText: NSAttributedString)
 	func outdentHeadline(_ headline: Headline, attributedText: NSAttributedString)
-	func toggleCompleteHeadline(_: Headline, attributedText: NSAttributedString)
 }
 
 class EditorCollectionViewCell: UICollectionViewListCell {
