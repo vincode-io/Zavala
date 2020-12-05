@@ -15,10 +15,6 @@ class ApplySnapshotOperation<S: Hashable, I: Hashable>: MainThreadOperationBase 
 	private var snapshot: NSDiffableDataSourceSectionSnapshot<I>
 	private var animated: Bool
 	
-	/**
-	The collection view is optional.  It if itsn't passed, then no cursor management will happen which
-	is typically what we want.
-	*/
 	init(dataSource: UICollectionViewDiffableDataSource<S, I>,
 		 section: S,
 		 snapshot: NSDiffableDataSourceSectionSnapshot<I>,
