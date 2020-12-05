@@ -39,10 +39,19 @@ final class HeadlinesFile {
 	}
 	
 	func delete() {
-		do {
-			try FileManager.default.removeItem(atPath: fileURL.path)
-		} catch {
-			os_log(.error, log: log, "Delete headline file from disk failed: %@.", error.localizedDescription)
+		let errorPointer: NSErrorPointer = nil
+		let fileCoordinator = NSFileCoordinator(filePresenter: managedFile)
+		
+		fileCoordinator.coordinate(writingItemAt: fileURL, options: [.forDeleting], error: errorPointer, byAccessor: { writeURL in
+			do {
+				try FileManager.default.removeItem(atPath: writeURL.path)
+			} catch let error as NSError {
+				os_log(.error, log: log, "Headlines delete from disk failed: %@.", error.localizedDescription)
+			}
+		})
+		
+		if let error = errorPointer?.pointee {
+			os_log(.error, log: log, "Headlines delete from disk coordination failed: %@.", error.localizedDescription)
 		}
 	}
 	
@@ -99,7 +108,7 @@ private extension HeadlinesFile {
 		do {
 			headlinesData = try encoder.encode(headlines)
 		} catch {
-			os_log(.error, log: log, "Account read deserialization failed: %@.", error.localizedDescription)
+			os_log(.error, log: log, "Headlines read deserialization failed: %@.", error.localizedDescription)
 			return
 		}
 
@@ -112,12 +121,12 @@ private extension HeadlinesFile {
 				let resourceValues = try writeURL.resourceValues(forKeys: [.contentModificationDateKey])
 				lastModificationDate = resourceValues.contentModificationDate
 			} catch let error as NSError {
-				os_log(.error, log: log, "Account save to disk failed: %@.", error.localizedDescription)
+				os_log(.error, log: log, "Headlines save to disk failed: %@.", error.localizedDescription)
 			}
 		})
 		
 		if let error = errorPointer?.pointee {
-			os_log(.error, log: log, "Account save to disk coordination failed: %@.", error.localizedDescription)
+			os_log(.error, log: log, "Headlines save to disk coordination failed: %@.", error.localizedDescription)
 		}
 	}
 	
