@@ -118,6 +118,13 @@ extension EditorCollectionViewCell: TextCursorTarget {
 		textView.selectedTextRange = textRange
 	}
 	
+	func moveToStart() {
+		guard let textView = (contentView as? EditorContentView)?.textView else { return }
+		textView.becomeFirstResponder()
+		let startPosition = textView.beginningOfDocument
+		textView.selectedTextRange = textView.textRange(from: startPosition, to: startPosition)
+	}
+	
 	func moveToEnd() {
 		guard let textView = (contentView as? EditorContentView)?.textView else { return }
 		textView.becomeFirstResponder()

@@ -357,7 +357,23 @@ extension EditorViewController: EditorCollectionViewCellDelegate {
 	}
 
 	func splitHeadline(_ headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) {
-		print("Cursor position: \(cursorPosition)")
+		guard let undoManager = undoManager, let outline = outline else { return }
+
+		let command = EditorSplitHeadlineCommand(undoManager: undoManager,
+												 delegate: self,
+												 outline: outline,
+												 headline: headline,
+												 attributedText: attributedText,
+												 cursorPosition: cursorPosition)
+												  
+		
+		runCommand(command)
+		
+		if let insert = command.changes?.insertIndexPaths?.first {
+			if let textCursor = collectionView.cellForItem(at: insert) as? TextCursorTarget {
+				textCursor.moveToStart()
+			}
+		}
 	}
 	
 }

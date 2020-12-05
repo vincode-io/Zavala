@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
 		512229682563507E008041AF /* EditorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorCollectionViewCell.swift */; };
+		51365302257BC94600DA3585 /* EditorSplitHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51365301257BC94600DA3585 /* EditorSplitHeadlineCommand.swift */; };
 		514287302571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */; };
 		514287362571FCBD00F16B78 /* EditorOutlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */; };
 		5142873A2572B06B00F16B78 /* EditorTextChangedCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514287392572B06B00F16B78 /* EditorTextChangedCommand.swift */; };
@@ -103,6 +104,7 @@
 /* Begin PBXFileReference section */
 		5122294B25609C47008041AF /* UserInfoKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoKeys.swift; sourceTree = "<group>"; };
 		512229672563507E008041AF /* EditorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCollectionViewCell.swift; sourceTree = "<group>"; };
+		51365301257BC94600DA3585 /* EditorSplitHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSplitHeadlineCommand.swift; sourceTree = "<group>"; };
 		5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorToggleDisclosureCommand.swift; sourceTree = "<group>"; };
 		514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorOutlineCommand.swift; sourceTree = "<group>"; };
 		514287392572B06B00F16B78 /* EditorTextChangedCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextChangedCommand.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				51D28D37257735120039DDFC /* EditorMoveHeadlineCommand.swift */,
 				5142875125730ECE00F16B78 /* EditorOutdentHeadlineCommand.swift */,
 				514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */,
+				51365301257BC94600DA3585 /* EditorSplitHeadlineCommand.swift */,
 				514287392572B06B00F16B78 /* EditorTextChangedCommand.swift */,
 				5187A1E6257593EA00DB0E99 /* EditorToggleCompleteHeadlineCommand.swift */,
 				5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */,
@@ -552,6 +555,7 @@
 				51D28D38257735120039DDFC /* EditorMoveHeadlineCommand.swift in Sources */,
 				518F2E34257AD38A00D05D99 /* TimelineViewController+Drop.swift in Sources */,
 				51D4E2A12578C0DD00A59145 /* SidebarViewController+Drop.swift in Sources */,
+				51365302257BC94600DA3585 /* EditorSplitHeadlineCommand.swift in Sources */,
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
 				51D977FA257A2E4F00D98490 /* EditorCellPreviewParameters.swift in Sources */,
 				51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */,

@@ -159,7 +159,21 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			
 	}
 	
-	public func createHeadline(headline: Headline = Headline(), afterHeadline: Headline? = nil) -> ShadowTableChanges {
+	public func joinHeadline(topHeadline: Headline, bottomHeadline: Headline) -> ShadowTableChanges {
+		guard let topText = topHeadline.attributedText,
+			  let topShadowTableIndex = topHeadline.shadowTableIndex,
+			  let bottomText = bottomHeadline.attributedText else { return ShadowTableChanges() }
+		
+		let mutableText = NSMutableAttributedString(attributedString: topText)
+		mutableText.append(bottomText)
+		topHeadline.attributedText = mutableText
+		
+		var changes = deleteHeadline(headline: bottomHeadline)
+		changes.append(ShadowTableChanges(reloads: Set([topShadowTableIndex])))
+		return changes
+	}
+	
+	public func createHeadline(headline: Headline, afterHeadline: Headline? = nil) -> ShadowTableChanges {
 		if let parent = headline.parent, parent == afterHeadline {
 			parent.headlines?.insert(headline, at: 0)
 		} else if afterHeadline?.isExpanded ?? true && !(afterHeadline?.headlines?.isEmpty ?? true) {
@@ -191,6 +205,22 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return ShadowTableChanges(inserts: [headlineShadowTableIndex])
 	}
 	
+	public func splitHeadline(newHeadline: Headline, headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) -> ShadowTableChanges {
+		let newHeadlineRange = NSRange(location: cursorPosition, length: attributedText.length - cursorPosition)
+		let newHeadlineText = attributedText.attributedSubstring(from: newHeadlineRange)
+		newHeadline.attributedText = newHeadlineText
+		
+		let headlineRange = NSRange(location: 0, length: cursorPosition)
+		let headlineText = attributedText.attributedSubstring(from: headlineRange)
+		headline.attributedText = headlineText
+
+		var changes = createHeadline(headline: newHeadline, afterHeadline: headline)
+		if let headlineShadowTableIndex = headline.shadowTableIndex {
+			changes.append(ShadowTableChanges(reloads: Set([headlineShadowTableIndex])))
+		}
+		return changes
+	}
+
 	public func updateHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
 		headline.attributedText = attributedText
 		outlineBodyDidChange()
