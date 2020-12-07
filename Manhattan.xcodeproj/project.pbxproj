@@ -44,6 +44,7 @@
 		51B4EBC7257C3CD100378CAB /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 51B4EBC6257C3CD100378CAB /* ZipArchive */; };
 		51B5861C256B245300ACF99B /* SWXMLHash in Frameworks */ = {isa = PBXBuildFile; productRef = 51B5861B256B245300ACF99B /* SWXMLHash */; };
 		51C0309B257E04A200609262 /* ShadowTableChanges+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C0309A257E04A200609262 /* ShadowTableChanges+.swift */; };
+		51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */; };
 		51C3FA2B255E1DD5008F587A /* GetInfoFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */; };
 		51C3FA2F255E31E6008F587A /* GetInfoOutlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3FA2E255E31E6008F587A /* GetInfoOutlineViewController.swift */; };
 		51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51C4C3CD2555F07A004E0206 /* CloudKit.framework */; };
@@ -144,6 +145,7 @@
 		51B2B2D12563AB190090C56B /* EditorHeadlineContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorHeadlineContentView.swift; sourceTree = "<group>"; };
 		51B2B2D52563AB9F0090C56B /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		51C0309A257E04A200609262 /* ShadowTableChanges+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShadowTableChanges+.swift"; sourceTree = "<group>"; };
+		51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReloadItemsOperation.swift; sourceTree = "<group>"; };
 		51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoFolderViewController.swift; sourceTree = "<group>"; };
 		51C3FA2E255E31E6008F587A /* GetInfoOutlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoOutlineViewController.swift; sourceTree = "<group>"; };
 		51C4C3AC2555E964004E0206 /* Manhattan_project_debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Manhattan_project_debug.xcconfig; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */,
 				515F164A255C9F8E00FD98B8 /* FormViewController.swift */,
 				51DA54C725643E3400732942 /* MainThreadOperationBase.swift */,
+				51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */,
 				51C0309A257E04A200609262 /* ShadowTableChanges+.swift */,
 				51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */,
 				516E2D942564A91800CE51C6 /* TextCursor.swift */,
@@ -565,6 +568,7 @@
 				51DA54C825643E3400732942 /* MainThreadOperationBase.swift in Sources */,
 				51CF10C22571C22C005D6D88 /* L10n.swift in Sources */,
 				51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */,
+				51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */,
 				515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */,
 				5142875225730ECE00F16B78 /* EditorOutdentHeadlineCommand.swift in Sources */,
 				51D28D38257735120039DDFC /* EditorMoveHeadlineCommand.swift in Sources */,

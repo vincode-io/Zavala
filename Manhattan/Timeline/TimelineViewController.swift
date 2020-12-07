@@ -106,7 +106,8 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	}
 	
 	@objc func outlineTitleDidChange(_ note: Notification) {
-		applySnapshot(animated: true)
+		guard let outline = note.object as? Outline else { return }
+		reload(outline: outline)
 	}
 	
 	// MARK: Actions
@@ -212,11 +213,11 @@ extension TimelineViewController {
 	
 	private func configureDataSource() {
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, TimelineItem> { [weak self] (cell, indexPath, item) in
-			guard let self = self else { return }
+			guard let self = self, let outline = AccountManager.shared.findOutline(item.id) else { return }
 			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
-			contentConfiguration.text = item.title
-			contentConfiguration.secondaryText = item.updateDate
+			contentConfiguration.text = outline.title
+			contentConfiguration.secondaryText = Self.dateString(outline.updated)
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			
 			if self.traitCollection.userInterfaceIdiom == .mac {
@@ -232,6 +233,11 @@ extension TimelineViewController {
 		dataSource = UICollectionViewDiffableDataSource<Int, TimelineItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
 			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: item)
 		}
+	}
+	
+	func reload(outline: Outline) {
+		let timelineItem = TimelineItem.timelineItem(outline)
+		dataSourceQueue.add(ReloadItemsOperation(dataSource: dataSource, section: 0, items: [timelineItem], animated: true))
 	}
 	
 	func applySnapshot(animated: Bool) {
@@ -263,6 +269,31 @@ extension TimelineViewController {
 				navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
 			}
 		}
+	}
+	
+	private static let dateFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.dateStyle = .medium
+		formatter.timeStyle = .none
+		return formatter
+	}()
+
+	private static let timeFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.dateStyle = .none
+		formatter.timeStyle = .short
+		return formatter
+	}()
+	
+	private static func dateString(_ date: Date?) -> String {
+		guard let date = date else {
+			return L10n.notAvailable
+		}
+		
+		if Calendar.dateIsToday(date) {
+			return timeFormatter.string(from: date)
+		}
+		return dateFormatter.string(from: date)
 	}
 	
 	private func makeOutlineContextMenu(item: TimelineItem) -> UIContextMenuConfiguration {
