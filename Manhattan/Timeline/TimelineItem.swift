@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-final class TimelineItem:  NSObject, NSCopying, Identifiable {
+final class TimelineItem: NSObject, NSCopying, Identifiable {
 	let id: EntityID
 	let title: String?
 	let updateDate: String?
