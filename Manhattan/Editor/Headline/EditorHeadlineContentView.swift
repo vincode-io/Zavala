@@ -1,5 +1,5 @@
 //
-//  EditorContentView.swift
+//  EditorHeadlineContentView.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 11/17/20.
@@ -8,16 +8,16 @@
 import UIKit
 import Templeton
 
-class EditorContentView: UIView, UIContentView {
+class EditorHeadlineContentView: UIView, UIContentView {
 
-	let textView = EditorTextView()
+	let textView = EditorHeadlineTextView()
 	var textViewHeight: CGFloat?
 	var bulletView: UIImageView?
 	var barViews = [UIView]()
-	var appliedConfiguration: EditorContentConfiguration!
+	var appliedConfiguration: EditorHeadlineContentConfiguration!
 	var isTextChanged = false
 	
-	init(configuration: EditorContentConfiguration) {
+	init(configuration: EditorHeadlineContentConfiguration) {
 		super.init(frame: .zero)
 
 		textView.delegate = self
@@ -50,12 +50,12 @@ class EditorContentView: UIView, UIContentView {
 	var configuration: UIContentConfiguration {
 		get { appliedConfiguration }
 		set {
-			guard let newConfig = newValue as? EditorContentConfiguration else { return }
+			guard let newConfig = newValue as? EditorHeadlineContentConfiguration else { return }
 			apply(configuration: newConfig)
 		}
 	}
 	
-	private func apply(configuration: EditorContentConfiguration) {
+	private func apply(configuration: EditorHeadlineContentConfiguration) {
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
 		
@@ -126,7 +126,7 @@ class EditorContentView: UIView, UIContentView {
 
 // MARK: UITextViewDelegate
 
-extension EditorContentView: UITextViewDelegate {
+extension EditorHeadlineContentView: UITextViewDelegate {
 	
 	func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
 		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
@@ -165,7 +165,7 @@ extension EditorContentView: UITextViewDelegate {
 
 // MARK: EditorTextViewDelegate
 
-extension EditorContentView: EditorTextViewDelegate {
+extension EditorHeadlineContentView: EditorHeadlineTextViewDelegate {
 	
 	override var undoManager: UndoManager? {
 		appliedConfiguration.delegate?.undoManager
@@ -195,7 +195,7 @@ extension EditorContentView: EditorTextViewDelegate {
 
 // MARK: Helpers
 
-extension EditorContentView {
+extension EditorHeadlineContentView {
 	
 	@objc func swipedLeft(_ sender: UISwipeGestureRecognizer) {
 		guard let headline = appliedConfiguration.headline else { return }

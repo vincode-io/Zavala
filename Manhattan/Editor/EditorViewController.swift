@@ -49,7 +49,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	var outline: Outline? {
 		
 		willSet {
-			if let textField = UIResponder.currentFirstResponder as? EditorTextView {
+			if let textField = UIResponder.currentFirstResponder as? EditorHeadlineTextView {
 				textField.endEditing(true)
 			}
 			outline?.suspend()
@@ -68,8 +68,8 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		
 	}
 	
-	var currentTextView: EditorTextView? {
-		return UIResponder.currentFirstResponder as? EditorTextView
+	var currentTextView: EditorHeadlineTextView? {
+		return UIResponder.currentFirstResponder as? EditorHeadlineTextView
 	}
 	
 	var currentHeadline: Headline? {
@@ -92,7 +92,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	private var favoriteBarButtonItem: UIBarButtonItem?
 	private var filterBarButtonItem: UIBarButtonItem?
 
-	private var editorRegistration: UICollectionView.CellRegistration<EditorCollectionViewCell, Headline>?
+	private var editorRegistration: UICollectionView.CellRegistration<EditorHeadlineViewCell, Headline>?
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,7 +112,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		collectionView.dragInteractionEnabled = true
 		collectionView.allowsSelection = false
 
-		editorRegistration = UICollectionView.CellRegistration<EditorCollectionViewCell, Headline> { (cell, indexPath, headline) in
+		editorRegistration = UICollectionView.CellRegistration<EditorHeadlineViewCell, Headline> { (cell, indexPath, headline) in
 			cell.headline = headline
 			cell.delegate = self
 		}
@@ -206,7 +206,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	
 	@objc func repeatMoveCursorUp() {
 		if currentKeyPresses.contains(.keyboardUpArrow) {
-			if let textView = UIResponder.currentFirstResponder as? EditorTextView, !textView.isSelecting, let headline = textView.headline {
+			if let textView = UIResponder.currentFirstResponder as? EditorHeadlineTextView, !textView.isSelecting, let headline = textView.headline {
 				moveCursorUp(headline: headline)
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
 					self.repeatMoveCursorUp()
@@ -217,7 +217,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 
 	@objc func repeatMoveCursorDown() {
 		if currentKeyPresses.contains(.keyboardDownArrow) {
-			if let textView = UIResponder.currentFirstResponder as? EditorTextView, !textView.isSelecting, let headline = textView.headline {
+			if let textView = UIResponder.currentFirstResponder as? EditorHeadlineTextView, !textView.isSelecting, let headline = textView.headline {
 				moveCursorDown(headline: headline)
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
 					self.repeatMoveCursorDown()
@@ -256,7 +256,7 @@ extension EditorViewController {
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-		guard let editorCell = collectionView.cellForItem(at: indexPath) as? EditorCollectionViewCell,
+		guard let editorCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell,
 			  let headline = editorCell.headline,
 			  let attributedText = editorCell.attributedText else { return nil }
 		
@@ -266,14 +266,14 @@ extension EditorViewController {
 	override func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
 		guard let headline = configuration.identifier as? Headline,
 			  let row = headline.shadowTableIndex,
-			  let cell = collectionView.cellForItem(at: IndexPath(row: row, section: 0)) as? EditorCollectionViewCell else { return nil }
+			  let cell = collectionView.cellForItem(at: IndexPath(row: row, section: 0)) as? EditorHeadlineViewCell else { return nil }
 		
-		return UITargetedPreview(view: cell, parameters: EditorCellPreviewParameters(cell: cell, headline: headline))
+		return UITargetedPreview(view: cell, parameters: EditorHeadlinePreviewParameters(cell: cell, headline: headline))
 	}
 	
 }
 
-extension EditorViewController: EditorCollectionViewCellDelegate {
+extension EditorViewController: EditorHeadlineViewCellDelegate {
 
 	func invalidateLayout() {
 		collectionView.collectionViewLayout.invalidateLayout()
@@ -405,7 +405,7 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 	func applyChangesRestoringCursor(_ changes: ShadowTableChanges) {
 		var textRange: UITextRange? = nil
 		var cursorHeadline: Headline? = nil
-		if let editorTextView = UIResponder.currentFirstResponder as? EditorTextView {
+		if let editorTextView = UIResponder.currentFirstResponder as? EditorHeadlineTextView {
 			textRange = editorTextView.selectedTextRange
 			cursorHeadline = editorTextView.headline
 		}

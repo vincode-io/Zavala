@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-protocol EditorCollectionViewCellDelegate: class {
+protocol EditorHeadlineViewCellDelegate: class {
 	var undoManager: UndoManager? { get }
 	func invalidateLayout()
 	func toggleDisclosure(headline: Headline)
@@ -20,7 +20,7 @@ protocol EditorCollectionViewCellDelegate: class {
 	func splitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)
 }
 
-class EditorCollectionViewCell: UICollectionViewListCell {
+class EditorHeadlineViewCell: UICollectionViewListCell {
 
 	var headline: Headline? {
 		didSet {
@@ -28,18 +28,18 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 		}
 	}
 	
-	weak var delegate: EditorCollectionViewCellDelegate? {
+	weak var delegate: EditorHeadlineViewCellDelegate? {
 		didSet {
 			setNeedsUpdateConfiguration()
 		}
 	}
 	
 	var attributedText: NSAttributedString? {
-		return (contentView as? EditorContentView)?.textView.attributedText
+		return (contentView as? EditorHeadlineContentView)?.textView.attributedText
 	}
 	
 	var textWidth: CGFloat? {
-		return (contentView as? EditorContentView)?.textView.intrinsicContentSize.width
+		return (contentView as? EditorHeadlineContentView)?.textView.intrinsicContentSize.width
 	}
 
 	private var isDisclosed = false
@@ -98,35 +98,35 @@ class EditorCollectionViewCell: UICollectionViewListCell {
 		
 		setDisclosure(isExpanded: headline.isExpanded ?? true, animated: false)
 
-		var content = EditorContentConfiguration(headline: headline, indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
+		var content = EditorHeadlineContentConfiguration(headline: headline, indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content
 	}
 
 }
 
-extension EditorCollectionViewCell: TextCursorTarget {
+extension EditorHeadlineViewCell: TextCursorTarget {
 	
 	var selectionRange: UITextRange? {
-		guard let textView = (contentView as? EditorContentView)?.textView else { return nil }
+		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return nil }
 		return textView.selectedTextRange
 	}
 	
 	func restoreSelection(_ textRange: UITextRange) {
-		guard let textView = (contentView as? EditorContentView)?.textView else { return }
+		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return }
 		textView.becomeFirstResponder()
 		textView.selectedTextRange = textRange
 	}
 	
 	func moveToStart() {
-		guard let textView = (contentView as? EditorContentView)?.textView else { return }
+		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return }
 		textView.becomeFirstResponder()
 		let startPosition = textView.beginningOfDocument
 		textView.selectedTextRange = textView.textRange(from: startPosition, to: startPosition)
 	}
 	
 	func moveToEnd() {
-		guard let textView = (contentView as? EditorContentView)?.textView else { return }
+		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return }
 		textView.becomeFirstResponder()
 		let endPosition = textView.endOfDocument
 		textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
@@ -136,7 +136,7 @@ extension EditorCollectionViewCell: TextCursorTarget {
 
 // MARK: Helpers
 
-extension EditorCollectionViewCell {
+extension EditorHeadlineViewCell {
 	
 	@objc func toggleDisclosure(_ sender: UITapGestureRecognizer) {
 		guard sender.state == .ended, let headline = headline else { return }

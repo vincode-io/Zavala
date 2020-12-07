@@ -1,5 +1,5 @@
 //
-//  EditorCellPreviewParameters.swift
+//  EditorHeadlinePreviewParameters.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 12/4/20.
@@ -8,13 +8,13 @@
 import UIKit
 import Templeton
 
-class EditorCellPreviewParameters: UIDragPreviewParameters {
+class EditorHeadlinePreviewParameters: UIDragPreviewParameters {
 	
 	override init() {
 		super.init()
 	}
 	
-	init(cell: EditorCollectionViewCell, headline: Headline) {
+	init(cell: EditorHeadlineViewCell, headline: Headline) {
 		super.init()
 
 //		#if !targetEnvironment(macCatalyst)

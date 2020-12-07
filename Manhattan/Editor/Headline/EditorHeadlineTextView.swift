@@ -1,5 +1,5 @@
 //
-//  EditorTextView.swift
+//  EditorHeadlineTextView.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 11/17/20.
@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-protocol EditorTextViewDelegate: class {
+protocol EditorHeadlineTextViewDelegate: class {
 	var undoManager: UndoManager? { get }
 	func deleteHeadline(_: Headline)
 	func createHeadline(_: Headline)
@@ -17,7 +17,7 @@ protocol EditorTextViewDelegate: class {
 	func splitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)
 }
 
-class EditorTextView: UITextView {
+class EditorHeadlineTextView: UITextView {
 	
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
@@ -60,7 +60,7 @@ class EditorTextView: UITextView {
 		return keys
 	}
 	
-	weak var editorDelegate: EditorTextViewDelegate?
+	weak var editorDelegate: EditorHeadlineTextViewDelegate?
 	var headline: Headline?
 	
 	var isSelecting: Bool {
@@ -103,7 +103,7 @@ class EditorTextView: UITextView {
 	
 }
 
-extension EditorTextView: UITextDropDelegate {
+extension EditorHeadlineTextView: UITextDropDelegate {
 	
 	// We dont' allow local text drops because regular dragging and dropping of Headlines was dropping Markdown into our text view
 	func textDroppableView(_ textDroppableView: UIView & UITextDroppable, proposalForDrop drop: UITextDropRequest) -> UITextDropProposal {

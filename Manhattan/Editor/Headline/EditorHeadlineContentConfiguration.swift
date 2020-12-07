@@ -1,5 +1,5 @@
 //
-//  EditorContentConfiguration.swift
+//  EditorHeadlineContentConfiguration.swift
 //  Manhattan
 //
 //  Created by Maurice Parker on 11/17/20.
@@ -8,10 +8,10 @@
 import UIKit
 import Templeton
 
-struct EditorContentConfiguration: UIContentConfiguration, Hashable {
+struct EditorHeadlineContentConfiguration: UIContentConfiguration, Hashable {
 
 	weak var headline: Headline? = nil
-	weak var delegate: EditorCollectionViewCellDelegate? = nil
+	weak var delegate: EditorHeadlineViewCellDelegate? = nil
 
 	var id: String
 	var indentionLevel: Int
@@ -34,7 +34,7 @@ struct EditorContentConfiguration: UIContentConfiguration, Hashable {
 	}
 	
 	func makeContentView() -> UIView & UIContentView {
-		return EditorContentView(configuration: self)
+		return EditorHeadlineContentView(configuration: self)
 	}
 	
 	func updated(for state: UIConfigurationState) -> Self {
@@ -51,7 +51,7 @@ struct EditorContentConfiguration: UIContentConfiguration, Hashable {
 		hasher.combine(attributedText)
 	}
 	
-	static func == (lhs: EditorContentConfiguration, rhs: EditorContentConfiguration) -> Bool {
+	static func == (lhs: EditorHeadlineContentConfiguration, rhs: EditorHeadlineContentConfiguration) -> Bool {
 		return lhs.id == rhs.id &&
 			lhs.indentionLevel == rhs.indentionLevel &&
 			lhs.indentationWidth == rhs.indentationWidth &&
