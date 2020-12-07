@@ -86,7 +86,7 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 	}
 	
 	public func markdown(indentLevel: Int = 0) -> String {
-		var md = String(repeating: " ", count: indentLevel * 2)
+		var md = String(repeating: "\t", count: indentLevel)
 		md.append("* \(plainText ?? "")\n")
 		headlines?.forEach { md.append($0.markdown(indentLevel: indentLevel + 1)) }
 		return md
