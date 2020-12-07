@@ -17,34 +17,10 @@ protocol EditorHeadlineTextViewDelegate: class {
 	func splitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)
 }
 
-class EditorHeadlineTextView: UITextView {
+class EditorHeadlineTextView: OutlineTextView {
 	
-	override init(frame: CGRect, textContainer: NSTextContainer?) {
-		super.init(frame: frame, textContainer: textContainer)
-
-		textDropDelegate = self
-		
-		// These gesture recognizers will conflict with context menu preview dragging if not removed.
-		gestureRecognizers?.forEach {
-			if $0.name == "dragInitiation"
-				|| $0.name == "dragExclusionRelationships"
-				|| $0.name == "dragFailureRelationships"
-				|| $0.name == "com.apple.UIKit.longPressClickDriverPrimary" {
-				removeGestureRecognizer($0)
-			}
-		}
-	}
-	
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-	override var undoManager: UndoManager? {
-		guard let textViewUndoManager = super.undoManager, let controllerUndoManager = editorDelegate?.undoManager else { return nil }
-		if stackedUndoManager == nil {
-			stackedUndoManager = StackedUndoManger(mainUndoManager: textViewUndoManager, fallBackUndoManager: controllerUndoManager)
-		}
-		return stackedUndoManager
+	override var editorUndoManager: UndoManager? {
+		return editorDelegate?.undoManager
 	}
 	
 	override var keyCommands: [UIKeyCommand]? {
@@ -60,16 +36,24 @@ class EditorHeadlineTextView: UITextView {
 	weak var editorDelegate: EditorHeadlineTextViewDelegate?
 	var headline: Headline?
 	
-	var isSelecting: Bool {
-		return !(selectedTextRange?.isEmpty ?? true)
+	override init(frame: CGRect, textContainer: NSTextContainer?) {
+		super.init(frame: frame, textContainer: textContainer)
+
+		// These gesture recognizers will conflict with context menu preview dragging if not removed.
+		gestureRecognizers?.forEach {
+			if $0.name == "dragInitiation"
+				|| $0.name == "dragExclusionRelationships"
+				|| $0.name == "dragFailureRelationships"
+				|| $0.name == "com.apple.UIKit.longPressClickDriverPrimary" {
+				removeGestureRecognizer($0)
+			}
+		}
 	}
 	
-	var cursorPosition: Int {
-		return selectedRange.location
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
 	}
-
-	private var stackedUndoManager: UndoManager?
-
+	
 	override func deleteBackward() {
 		guard let headline = headline else { return }
 		if attributedText.length == 0 {
@@ -96,19 +80,6 @@ class EditorHeadlineTextView: UITextView {
 	@objc func shiftOptionReturnPressed(_ sender: Any) {
 		guard let headline = headline else { return }
 		editorDelegate?.splitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
-	}
-	
-}
-
-extension EditorHeadlineTextView: UITextDropDelegate {
-	
-	// We dont' allow local text drops because regular dragging and dropping of Headlines was dropping Markdown into our text view
-	func textDroppableView(_ textDroppableView: UIView & UITextDroppable, proposalForDrop drop: UITextDropRequest) -> UITextDropProposal {
-		if drop.dropSession.localDragSession == nil {
-			return UITextDropProposal(operation: .copy)
-		} else {
-			return UITextDropProposal(operation: .cancel)
-		}
 	}
 	
 }
