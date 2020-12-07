@@ -501,6 +501,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		}
 		headlinesFile?.delete()
 		headlinesFile = nil
+		outlineDidDelete()
 	}
 	
 	public func suspend() {

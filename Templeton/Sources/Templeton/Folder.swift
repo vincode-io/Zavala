@@ -119,7 +119,7 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	}
 	
 	public func deleteOutline(_ outline: Outline) {
-		outlines = outlines?.filter({ $0 != outline })
+		outlines?.removeFirst(object: outline)
 		folderOutlinesDidChange()
 		outline.delete()
 	}
