@@ -14,7 +14,8 @@ protocol SidebarDelegate: class {
 	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?)
 }
 
-class SidebarViewController: UICollectionViewController {
+class SidebarViewController: UICollectionViewController, MainControllerIdentifiable {
+	var mainControllerIdentifer: MainControllerIdentifier { return .sidebar }
 	
 	weak var delegate: SidebarDelegate?
 	

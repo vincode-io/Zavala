@@ -13,6 +13,17 @@ public extension Notification.Name {
 	static let UserDidAddOutline = Notification.Name(rawValue: "UserDidAddOutline")
 }
 
+protocol MainControllerIdentifiable {
+	var mainControllerIdentifer: MainControllerIdentifier { get }
+}
+
+enum MainControllerIdentifier {
+	case none
+	case sidebar
+	case timeline
+	case editor
+}
+
 class MainSplitViewController: UISplitViewController {
 
 	private var sidebarViewController: SidebarViewController? {
@@ -26,6 +37,8 @@ class MainSplitViewController: UISplitViewController {
 	private var editorViewController: EditorViewController? {
 		viewController(for: .secondary) as? EditorViewController
 	}
+	
+	private var lastMainControllerToAppear = MainControllerIdentifier.none
 	
 	private var activityManager = ActivityManager()
 
@@ -311,15 +324,23 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 		if UIApplication.shared.applicationState == .background {
 			return
 		}
+		
+		defer {
+			if let mainController = viewController as? MainControllerIdentifiable {
+				lastMainControllerToAppear = mainController.mainControllerIdentifer
+			} else if let mainController = (viewController as? UINavigationController)?.topViewController as? MainControllerIdentifiable {
+				lastMainControllerToAppear = mainController.mainControllerIdentifer
+			}
+		}
 
 		// If we are showing the Feeds and only the feeds start clearing stuff
-		if isCollapsed && viewController === sidebarViewController {
+		if isCollapsed && viewController === sidebarViewController && lastMainControllerToAppear == .timeline {
 			activityManager.invalidateSelectOutlineProvider()
 			sidebarViewController?.selectOutlineProvider(nil, animated: false)
 			return
 		}
 
-		if isCollapsed && viewController === timelineViewController {
+		if isCollapsed && viewController === timelineViewController && lastMainControllerToAppear == .editor {
 			activityManager.invalidateSelectOutline()
 			timelineViewController?.selectOutline(nil, animated: false)
 			return

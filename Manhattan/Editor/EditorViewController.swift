@@ -9,7 +9,8 @@ import UIKit
 import RSCore
 import Templeton
 
-class EditorViewController: UICollectionViewController, UndoableCommandRunner {
+class EditorViewController: UICollectionViewController, MainControllerIdentifiable, UndoableCommandRunner {
+	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
 
 	public var isOutlineFunctionsUnavailable: Bool {
 		return outline == nil

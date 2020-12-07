@@ -14,7 +14,8 @@ protocol TimelineDelegate: class  {
 	func outlineSelectionDidChange(_: TimelineViewController, outlineProvider: OutlineProvider, outline: Outline?)
 }
 
-class TimelineViewController: UICollectionViewController {
+class TimelineViewController: UICollectionViewController, MainControllerIdentifiable {
+	var mainControllerIdentifer: MainControllerIdentifier { return .timeline }
 
 	weak var delegate: TimelineDelegate?
 	var outlineProvider: OutlineProvider? {
