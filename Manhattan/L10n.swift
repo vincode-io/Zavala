@@ -12,7 +12,7 @@ import Foundation
 internal enum L10n {
   /// Add Row
   internal static let addRow = L10n.tr("Localizable", "Add_Row")
-  /// Archive %@ Account
+  /// Archive %@
   internal static func archiveAccount(_ p1: Any) -> String {
     return L10n.tr("Localizable", "Archive_Account", String(describing: p1))
   }
