@@ -92,15 +92,15 @@ extension ActivityManager {
 		let title = L10n.seeOutlinesIn(outlineProvider.name ?? "")
 		activity.title = title
 		
+		activity.userInfo = [UserInfoKeys.outlineProviderID: outlineProvider.id.userInfo]
+		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
+	
 		let keywords = makeKeywords(title)
 		activity.keywords = Set(keywords)
 		activity.isEligibleForSearch = true
-		
-		activity.userInfo = [UserInfoKeys.outlineProviderID: outlineProvider.id.userInfo]
-		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
-
 		activity.isEligibleForPrediction = true
-		
+		activity.isEligibleForHandoff = true
+
 		let idString = outlineProvider.id.description
 		activity.persistentIdentifier = idString
 
@@ -119,15 +119,15 @@ extension ActivityManager {
 		let title = L10n.editOutline(outline.title ?? "")
 		activity.title = title
 		
+		activity.userInfo = [UserInfoKeys.outlineProviderID: outlineProvider.id.userInfo, UserInfoKeys.outlineID: outline.id.userInfo]
+		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
+		
 		let keywords = makeKeywords(title)
 		activity.keywords = Set(keywords)
 		activity.isEligibleForSearch = true
-		
-		activity.userInfo = [UserInfoKeys.outlineProviderID: outlineProvider.id.userInfo, UserInfoKeys.outlineID: outline.id.userInfo]
-		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
-
 		activity.isEligibleForPrediction = true
-		
+		activity.isEligibleForHandoff = true
+
 		let idString = outline.id.description
 		activity.persistentIdentifier = idString
 		
@@ -149,7 +149,8 @@ extension ActivityManager {
 		// itself because the relatedUniqueIdentifier on the activity attributeset is populated.
 		if let attributeSet = activity.contentAttributeSet {
 			let identifier = attributeSet.relatedUniqueIdentifier
-			let searchableItem = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: nil, attributeSet: attributeSet)
+			let tempAttributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
+			let searchableItem = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: nil, attributeSet: tempAttributeSet)
 			CSSearchableIndex.default().indexSearchableItems([searchableItem])
 		}
 		
