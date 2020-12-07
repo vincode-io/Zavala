@@ -79,20 +79,30 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 		layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 
 		guard let headline = headline else { return }
+
 		indentationLevel = headline.indentLevel
+
+		// We make the indentation width the same regardless of device if not compact
+		if traitCollection.horizontalSizeClass != .compact {
+			indentationWidth = 13
+		} else {
+			indentationWidth = 10
+		}
 		
 		let placement: UICellAccessory.Placement
-		if traitCollection.userInterfaceIdiom == .mac {
+		if traitCollection.horizontalSizeClass != .compact {
 			placement = .leading(displayed: .always, at: { _ in return 0 })
 		} else {
 			placement = .trailing(displayed: .always, at: { _ in return 0 })
 		}
 
 		if headline.headlines?.isEmpty ?? true {
-			let accessoryConfig = UICellAccessory.CustomViewConfiguration(customView: bullet, placement: placement)
+			var accessoryConfig = UICellAccessory.CustomViewConfiguration(customView: bullet, placement: placement)
+			accessoryConfig.tintColor = AppAssets.accessory
 			accessories = [.customView(configuration: accessoryConfig)]
 		} else {
-			let accessoryConfig = UICellAccessory.CustomViewConfiguration(customView: disclosureIndicator, placement: placement)
+			var accessoryConfig = UICellAccessory.CustomViewConfiguration(customView: disclosureIndicator, placement: placement)
+			accessoryConfig.tintColor = AppAssets.accessory
 			accessories = [.customView(configuration: accessoryConfig)]
 		}
 		

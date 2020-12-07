@@ -13,6 +13,10 @@ struct AppAssets {
 		return UIColor(named: "AccentColor")!
 	}()
 	
+	static var accessory: UIColor = {
+		return .tertiaryLabel
+	}()
+	
 	static var add: UIImage = {
 		return UIImage(systemName: "plus")!
 	}()

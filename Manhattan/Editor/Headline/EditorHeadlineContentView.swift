@@ -89,7 +89,7 @@ class EditorHeadlineContentView: UIView, UIContentView {
 
 		let adjustedLeadingIndention: CGFloat
 		let adjustedTrailingIndention: CGFloat
-		if traitCollection.userInterfaceIdiom == .mac {
+		if traitCollection.horizontalSizeClass != .compact {
 			adjustedLeadingIndention = configuration.indentationWidth - 18
 			adjustedTrailingIndention = -8
 		} else {
@@ -112,13 +112,16 @@ class EditorHeadlineContentView: UIView, UIContentView {
 			}
 		}
 
-		if configuration.indentionLevel > 0 {
-			let barViewsCount = barViews.count
-			for i in (1...configuration.indentionLevel) {
-				if i > barViewsCount {
-					addBarView(indentLevel: i, hasChevron: configuration.isChevronShowing)
-				}
+		addBarViews()
+	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		if traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
+			for i in 0..<barViews.count {
+				barViews[i].removeFromSuperview()
 			}
+			barViews.removeAll()
+			addBarViews()
 		}
 	}
 	
@@ -207,15 +210,28 @@ extension EditorHeadlineContentView {
 		appliedConfiguration.delegate?.indentHeadline(headline, attributedText: textView.attributedText)
 	}
 	
+	private func addBarViews() {
+		let configuration = appliedConfiguration as EditorHeadlineContentConfiguration
+		
+		if configuration.indentionLevel > 0 {
+			let barViewsCount = barViews.count
+			for i in (1...configuration.indentionLevel) {
+				if i > barViewsCount {
+					addBarView(indentLevel: i, hasChevron: configuration.isChevronShowing)
+				}
+			}
+		}
+	}
+	
 	private func addBarView(indentLevel: Int, hasChevron: Bool) {
 		let barView = UIView()
-		barView.backgroundColor = .quaternaryLabel
+		barView.backgroundColor = AppAssets.accessory
 		barView.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(barView)
 		barViews.append(barView)
 
 		var indention: CGFloat
-		if traitCollection.userInterfaceIdiom == .mac {
+		if traitCollection.horizontalSizeClass != .compact {
 			indention = CGFloat(0 - ((indentLevel + 1) * 13))
 		} else {
 			indention = CGFloat(19 - (indentLevel * 10))
