@@ -142,7 +142,6 @@
 		51B2B2CD2563AAF60090C56B /* EditorContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorContentConfiguration.swift; sourceTree = "<group>"; };
 		51B2B2D12563AB190090C56B /* EditorContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorContentView.swift; sourceTree = "<group>"; };
 		51B2B2D52563AB9F0090C56B /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
-		51B4EBCB257C3D9700378CAB /* ZipArchive */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ZipArchive; path = ../ZipArchive; sourceTree = "<group>"; };
 		51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoFolderViewController.swift; sourceTree = "<group>"; };
 		51C3FA2E255E31E6008F587A /* GetInfoOutlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoOutlineViewController.swift; sourceTree = "<group>"; };
 		51C4C3AC2555E964004E0206 /* Manhattan_project_debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Manhattan_project_debug.xcconfig; sourceTree = "<group>"; };
@@ -255,7 +254,6 @@
 		5181A92B2554D92000C153E8 = {
 			isa = PBXGroup;
 			children = (
-				51B4EBCB257C3D9700378CAB /* ZipArchive */,
 				5181A9362554D92000C153E8 /* Manhattan */,
 				51C4C3CC2555F07A004E0206 /* Frameworks */,
 				5181A9352554D92000C153E8 /* Products */,
