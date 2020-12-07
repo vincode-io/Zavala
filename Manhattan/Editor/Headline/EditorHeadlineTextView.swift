@@ -21,10 +21,7 @@ class EditorHeadlineTextView: UITextView {
 	
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
-		commonInit()
-	}
 
-	func commonInit() {
 		textDropDelegate = self
 		
 		// These gesture recognizers will conflict with context menu preview dragging if not removed.
