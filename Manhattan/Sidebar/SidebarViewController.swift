@@ -11,7 +11,7 @@ import Combine
 import Templeton
 
 protocol SidebarDelegate: class {
-	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?)
+	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?, animated: Bool)
 }
 
 class SidebarViewController: UICollectionViewController, MainControllerIdentifiable {
@@ -74,7 +74,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		}
 		
 		updateSelection(item: sidebarItem, animated: animated)
-		delegate?.outlineProviderSelectionDidChange(self, outlineProvider: outlineProvider)
+		delegate?.outlineProviderSelectionDidChange(self, outlineProvider: outlineProvider, animated: animated)
 	}
 	
 	func deleteCurrentFolder() {
@@ -135,7 +135,7 @@ extension SidebarViewController {
 		
 		if case .outlineProvider(let entityID) = sidebarItem.id {
 			let outlineProvider = AccountManager.shared.findOutlineProvider(entityID)
-			delegate?.outlineProviderSelectionDidChange(self, outlineProvider: outlineProvider)
+			delegate?.outlineProviderSelectionDidChange(self, outlineProvider: outlineProvider, animated: true)
 		}
 	}
 	
@@ -294,7 +294,7 @@ extension SidebarViewController {
 	private func deleteFolder(_ folder: Folder, completion: ((Bool) -> Void)? = nil) {
 		func deleteFolder() {
 			if self.currentFolder == folder {
-				self.delegate?.outlineProviderSelectionDidChange(self, outlineProvider: nil)
+				self.delegate?.outlineProviderSelectionDidChange(self, outlineProvider: nil, animated: true)
 			}
 			folder.account?.deleteFolder(folder)
 			completion?(true)

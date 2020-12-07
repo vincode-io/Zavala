@@ -139,6 +139,10 @@ class MainSplitViewController: UISplitViewController {
 			  let outlineProviderID = EntityID(userInfo: outlineProviderUserInfo),
 			  let outlineProvider = AccountManager.shared.findOutlineProvider(outlineProviderID) else { return }
 
+		UIView.performWithoutAnimation {
+			show(.primary)
+		}
+
 		sidebarViewController?.selectOutlineProvider(outlineProvider, animated: false)
 
 		guard let outlineUserInfo = userInfo[UserInfoKeys.outlineID] as? [AnyHashable : AnyHashable],
@@ -256,7 +260,7 @@ class MainSplitViewController: UISplitViewController {
 
 extension MainSplitViewController: SidebarDelegate {
 	
-	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?) {
+	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?, animated: Bool) {
 		timelineViewController?.outlineProvider = outlineProvider
 		editorViewController?.outline = nil
 
@@ -266,7 +270,13 @@ extension MainSplitViewController: SidebarDelegate {
 		}
 
 		activityManager.selectingOutlineProvider(outlineProvider)
-		show(.supplementary)
+		if animated {
+			show(.supplementary)
+		} else {
+			UIView.performWithoutAnimation {
+				show(.supplementary)
+			}
+		}
 	}
 	
 }
@@ -275,10 +285,16 @@ extension MainSplitViewController: SidebarDelegate {
 
 extension MainSplitViewController: TimelineDelegate {
 	
-	func outlineSelectionDidChange(_: TimelineViewController, outlineProvider: OutlineProvider, outline: Outline?) {
+	func outlineSelectionDidChange(_: TimelineViewController, outlineProvider: OutlineProvider, outline: Outline?, animated: Bool) {
 		if let outline = outline {
 			activityManager.selectingOutline(outlineProvider, outline)
-			show(.secondary)
+			if animated {
+				show(.secondary)
+			} else {
+				UIView.performWithoutAnimation {
+					show(.secondary)
+				}
+			}
 		} else {
 			activityManager.invalidateSelectOutline()
 		}

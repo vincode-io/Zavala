@@ -11,7 +11,7 @@ import RSCore
 import Templeton
 
 protocol TimelineDelegate: class  {
-	func outlineSelectionDidChange(_: TimelineViewController, outlineProvider: OutlineProvider, outline: Outline?)
+	func outlineSelectionDidChange(_: TimelineViewController, outlineProvider: OutlineProvider, outline: Outline?, animated: Bool)
 }
 
 class TimelineViewController: UICollectionViewController, MainControllerIdentifiable {
@@ -85,7 +85,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		}
 
 		updateSelection(item: timelineItem, animated: animated)
-		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline)
+		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline, animated: animated)
 	}
 	
 	func deleteCurrentOutline() {
@@ -186,7 +186,7 @@ extension TimelineViewController {
 		guard let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
 		
 		let outline = AccountManager.shared.findOutline(timelineItem.id)
-		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline)
+		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline, animated: true)
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -377,7 +377,7 @@ extension TimelineViewController {
 	private func deleteOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
 		let deleteAction = UIAlertAction(title: L10n.delete, style: .destructive) { _ in
 			if outline == self.currentOutline, let outlineProvider = self.outlineProvider {
-				self.delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: nil)
+				self.delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: nil, animated: true)
 			}
 			outline.folder?.deleteOutline(outline)
 		}
