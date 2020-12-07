@@ -99,7 +99,6 @@ extension ActivityManager {
 		activity.keywords = Set(keywords)
 		activity.isEligibleForSearch = true
 		activity.isEligibleForPrediction = true
-		activity.isEligibleForHandoff = true
 
 		let idString = outlineProvider.id.description
 		activity.persistentIdentifier = idString
@@ -126,7 +125,10 @@ extension ActivityManager {
 		activity.keywords = Set(keywords)
 		activity.isEligibleForSearch = true
 		activity.isEligibleForPrediction = true
-		activity.isEligibleForHandoff = true
+		
+		if outline.account?.type == .cloudKit {
+			activity.isEligibleForHandoff = true
+		}
 
 		let idString = outline.id.description
 		activity.persistentIdentifier = idString
