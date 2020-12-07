@@ -208,7 +208,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		if currentKeyPresses.contains(.keyboardUpArrow) {
 			if let textView = UIResponder.currentFirstResponder as? EditorHeadlineTextView, !textView.isSelecting, let headline = textView.headline {
 				moveCursorUp(headline: headline)
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 					self.repeatMoveCursorUp()
 				}
 			}
@@ -219,7 +219,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		if currentKeyPresses.contains(.keyboardDownArrow) {
 			if let textView = UIResponder.currentFirstResponder as? EditorHeadlineTextView, !textView.isSelecting, let headline = textView.headline {
 				moveCursorDown(headline: headline)
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 					self.repeatMoveCursorDown()
 				}
 			}
