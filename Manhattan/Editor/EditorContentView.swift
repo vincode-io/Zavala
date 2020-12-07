@@ -28,9 +28,9 @@ class EditorContentView: UIView, UIContentView {
 		textView.textContainerInset = .zero
 		textView.font = UIFont.preferredFont(forTextStyle: .body)
 		textView.backgroundColor = .clear
+		textView.translatesAutoresizingMaskIntoConstraints = false
 		
 		addSubview(textView)
-		textView.translatesAutoresizingMaskIntoConstraints = false
 
 		let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft(_:)))
 		swipeLeftGesture.direction = .left
@@ -68,7 +68,12 @@ class EditorContentView: UIView, UIContentView {
 			attrs[.foregroundColor] = UIColor.label
 		}
 		
-		attrs[.font] = UIFont.preferredFont(forTextStyle: .body)
+		if traitCollection.userInterfaceIdiom == .mac {
+			let bodyFont = UIFont.preferredFont(forTextStyle: .body)
+			attrs[.font] = bodyFont.withSize(bodyFont.pointSize + 1)
+		} else {
+			attrs[.font] = UIFont.preferredFont(forTextStyle: .body)
+		}
 		
 		if configuration.isComplete {
 			attrs[.strikethroughStyle] = 1
