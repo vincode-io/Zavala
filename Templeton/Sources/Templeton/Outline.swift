@@ -9,7 +9,7 @@ import Foundation
 
 public extension Notification.Name {
 	static let OutlineMetaDataDidChange = Notification.Name(rawValue: "OutlineMetaDataDidChange")
-	static let OutlineNameDidChange = Notification.Name(rawValue: "OutlineNameDidChange")
+	static let OutlineTitleDidChange = Notification.Name(rawValue: "OutlineTitleDidChange")
 	static let OutlineBodyDidChange = Notification.Name(rawValue: "OutlineBodyDidChange")
 	static let OutlineDidDelete = Notification.Name(rawValue: "OutlineDidDelete")
 }
@@ -127,7 +127,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func update(title: String) {
 		self.title = title
 		self.updated = Date()
-		outlineNameDidChange()
+		outlineTitleDidChange()
 	}
 	
 	public func deleteHeadline(headline: Headline) -> ShadowTableChanges {
@@ -550,8 +550,8 @@ extension Outline: CustomDebugStringConvertible {
 
 extension Outline {
 	
-	private func outlineNameDidChange() {
-		NotificationCenter.default.post(name: .OutlineNameDidChange, object: self, userInfo: nil)
+	private func outlineTitleDidChange() {
+		NotificationCenter.default.post(name: .OutlineTitleDidChange, object: self, userInfo: nil)
 	}
 
 	private func outlineMetaDataDidChange() {

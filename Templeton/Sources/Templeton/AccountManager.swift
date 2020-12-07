@@ -68,7 +68,7 @@ public final class AccountManager {
 		NotificationCenter.default.addObserver(self, selector: #selector(accountFoldersDidChange(_:)), name: .AccountFoldersDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(folderMetadataDidChange(_:)), name: .FolderMetaDataDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(folderOutlinesDidChange(_:)), name: .FolderOutlinesDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlineNameDidChange(_:)), name: .OutlineNameDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineTitleDidChange(_:)), name: .OutlineTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineMetadataDidChange(_:)), name: .OutlineMetaDataDidChange, object: nil)
 
 		// The local account must always exist, even if it's empty.
@@ -167,7 +167,7 @@ private extension AccountManager {
 		markAsDirty(account)
 	}
 	
-	@objc func outlineNameDidChange(_ note: Notification) {
+	@objc func outlineTitleDidChange(_ note: Notification) {
 		guard let account = (note.object as? Outline)?.account else { return }
 		markAsDirty(account)
 	}

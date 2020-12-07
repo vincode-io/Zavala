@@ -67,7 +67,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		applySnapshot(animated: false)
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(folderOutlinesDidChange(_:)), name: .FolderOutlinesDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlineNameDidChange(_:)), name: .OutlineNameDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineTitleDidChange(_:)), name: .OutlineTitleDidChange, object: nil)
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -105,7 +105,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		applySnapshot(animated: true)
 	}
 	
-	@objc func outlineNameDidChange(_ note: Notification) {
+	@objc func outlineTitleDidChange(_ note: Notification) {
 		applySnapshot(animated: true)
 	}
 	
