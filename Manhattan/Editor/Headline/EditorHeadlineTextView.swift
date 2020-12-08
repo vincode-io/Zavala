@@ -40,12 +40,14 @@ class EditorHeadlineTextView: OutlineTextView {
 		super.init(frame: frame, textContainer: textContainer)
 
 		// These gesture recognizers will conflict with context menu preview dragging if not removed.
-		gestureRecognizers?.forEach {
-			if $0.name == "dragInitiation"
-				|| $0.name == "dragExclusionRelationships"
-				|| $0.name == "dragFailureRelationships"
-				|| $0.name == "com.apple.UIKit.longPressClickDriverPrimary" {
-				removeGestureRecognizer($0)
+		if traitCollection.userInterfaceIdiom != .mac {
+			gestureRecognizers?.forEach {
+				if $0.name == "dragInitiation"
+					|| $0.name == "dragExclusionRelationships"
+					|| $0.name == "dragFailureRelationships"
+					|| $0.name == "com.apple.UIKit.longPressClickDriverPrimary" {
+					removeGestureRecognizer($0)
+				}
 			}
 		}
 	}
