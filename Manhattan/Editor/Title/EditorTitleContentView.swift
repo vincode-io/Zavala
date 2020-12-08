@@ -83,6 +83,8 @@ extension EditorTitleContentView: UITextViewDelegate {
 	}
 	
 	func textViewDidChange(_ textView: UITextView) {
+		outline.update(title: textView.text)
+		
 		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
 		if textViewHeight != fittingSize.height {
 			textViewHeight = fittingSize.height
