@@ -24,7 +24,7 @@ class EditorTitleContentView: UIView, UIContentView {
 		textView.isScrollEnabled = false
 		textView.textContainer.lineFragmentPadding = 0
 		textView.textContainerInset = .zero
-		textView.font = UIFont.preferredFont(forTextStyle: .headline)
+		textView.font = UIFont.preferredFont(forTextStyle: .largeTitle)
 		textView.textAlignment = .center
 		textView.backgroundColor = .clear
 		textView.translatesAutoresizingMaskIntoConstraints = false

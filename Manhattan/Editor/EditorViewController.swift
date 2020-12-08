@@ -92,7 +92,8 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	private var favoriteBarButtonItem: UIBarButtonItem?
 	private var filterBarButtonItem: UIBarButtonItem?
 
-	private var editorRegistration: UICollectionView.CellRegistration<EditorHeadlineViewCell, Headline>?
+	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
+	private var headerRegistration: UICollectionView.CellRegistration<EditorHeadlineViewCell, Headline>?
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,7 +113,11 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		collectionView.dragInteractionEnabled = true
 		collectionView.allowsSelection = false
 
-		editorRegistration = UICollectionView.CellRegistration<EditorHeadlineViewCell, Headline> { (cell, indexPath, headline) in
+		titleRegistration = UICollectionView.CellRegistration<EditorTitleViewCell, Outline> { (cell, indexPath, outline) in
+			cell.outline = outline
+		}
+		
+		headerRegistration = UICollectionView.CellRegistration<EditorHeadlineViewCell, Headline> { (cell, indexPath, headline) in
 			cell.headline = headline
 			cell.delegate = self
 		}
@@ -241,18 +246,25 @@ extension EditorViewController {
 		return layout
 	}
 	
+	override func numberOfSections(in collectionView: UICollectionView) -> Int {
+		return 2
+	}
+	
 	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return outline?.shadowTable?.count ?? 0
+		if section == 0 {
+			return outline == nil ? 0 : 1
+		} else {
+			return outline?.shadowTable?.count ?? 0
+		}
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		let headline: Headline
-		if let shadowTableEntry = outline?.shadowTable?[indexPath.row] {
-			headline = shadowTableEntry
+		if indexPath.section == 0 {
+			return collectionView.dequeueConfiguredReusableCell(using: titleRegistration!, for: indexPath, item: outline)
 		} else {
-			headline = Headline()
+			let headline = outline?.shadowTable?[indexPath.row] ?? Headline()
+			return collectionView.dequeueConfiguredReusableCell(using: headerRegistration!, for: indexPath, item: headline)
 		}
-		return collectionView.dequeueConfiguredReusableCell(using: editorRegistration!, for: indexPath, item: headline)
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
