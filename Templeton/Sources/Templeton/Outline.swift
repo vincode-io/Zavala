@@ -28,9 +28,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public var shadowTable: [Headline]?
 	
 	public var isEmpty: Bool {
-		return headlines?.count == 1 &&
-			headlines?[0].headlines?.count ?? 0 == 0 &&
-			headlines?[0].isEmpty ?? true
+		return (title == nil || title?.isEmpty ?? true) && (headlines == nil || headlines?.isEmpty ?? true)
 	}
 	
 	public var account: Account? {
@@ -475,11 +473,6 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func load() {
 		headlinesFile = HeadlinesFile(outline: self)
 		headlinesFile!.load()
-		
-		if headlines?.isEmpty ?? true {
-			headlines = [Headline()]
-		}
-		
 		rebuildTransientData()
 	}
 	

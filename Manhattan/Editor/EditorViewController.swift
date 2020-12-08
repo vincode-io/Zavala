@@ -46,27 +46,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return currentHeadline?.isComplete ?? false
 	}
 	
-	var outline: Outline? {
-		
-		willSet {
-			if let textField = UIResponder.currentFirstResponder as? EditorHeadlineTextView {
-				textField.endEditing(true)
-			}
-			outline?.suspend()
-			clearUndoableCommands()
-		}
-		
-		didSet {
-			if oldValue != outline {
-				outline?.load()
-				
-				guard isViewLoaded else { return }
-				updateUI()
-				collectionView.reloadData()
-			}
-		}
-		
-	}
+	var outline: Outline?
 	
 	var currentTextView: EditorHeadlineTextView? {
 		return UIResponder.currentFirstResponder as? EditorHeadlineTextView
@@ -126,16 +106,6 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		collectionView.reloadData()
 	}
 
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-
-		if outline?.isEmpty ?? false {
-			if let textCursor = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 1)) as? TextCursorTarget {
-				textCursor.moveToEnd()
-			}
-		}
-	}
-	
 	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
 		super.pressesBegan(presses, with: event)
 
@@ -160,6 +130,34 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 	
 	// MARK: API
+	
+	func edit(_ outline: Outline?, isNew: Bool) {
+		guard self.outline != outline else { return }
+		
+		self.outline = outline
+		
+		if let textField = UIResponder.currentFirstResponder as? EditorHeadlineTextView {
+			textField.endEditing(true)
+		}
+		
+		outline?.suspend()
+		clearUndoableCommands()
+	
+		outline?.load()
+			
+		guard isViewLoaded else { return }
+		updateUI()
+		collectionView.reloadData()
+
+		if isNew {
+			DispatchQueue.main.async {
+				if let titleCell = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? EditorTitleViewCell {
+					titleCell.takeCursor()
+				}
+			}
+		}
+
+	}
 	
 	func deleteCurrentHeadline() {
 		guard let headline = currentHeadline else { return }

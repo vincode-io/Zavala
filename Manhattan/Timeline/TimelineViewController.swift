@@ -11,7 +11,7 @@ import RSCore
 import Templeton
 
 protocol TimelineDelegate: class  {
-	func outlineSelectionDidChange(_: TimelineViewController, outlineProvider: OutlineProvider, outline: Outline?, animated: Bool)
+	func outlineSelectionDidChange(_: TimelineViewController, outlineProvider: OutlineProvider, outline: Outline?, isNew: Bool, animated: Bool)
 }
 
 class TimelineViewController: UICollectionViewController, MainControllerIdentifiable {
@@ -76,7 +76,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	
 	// MARK: API
 
-	func selectOutline(_ outline: Outline?, animated: Bool) {
+	func selectOutline(_ outline: Outline?, isNew: Bool = false, animated: Bool) {
 		guard let outlineProvider = outlineProvider else { return }
 
 		var timelineItem: TimelineItem? = nil
@@ -85,7 +85,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		}
 
 		updateSelection(item: timelineItem, animated: animated)
-		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline, animated: animated)
+		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline, isNew: isNew, animated: animated)
 	}
 	
 	func deleteCurrentOutline() {
@@ -115,7 +115,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	@objc func createOutline(_ sender: Any?) {
 		guard let folder = outlineProvider as? Folder else { return }
 		let outline = folder.createOutline()
-		selectOutline(outline, animated: true)
+		selectOutline(outline, isNew: true, animated: true)
 	}
 
 	@objc func importOPML(_ sender: Any?) {
@@ -170,7 +170,7 @@ extension TimelineViewController {
 		guard let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
 		
 		let outline = AccountManager.shared.findOutline(timelineItem.id)
-		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline, animated: true)
+		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline, isNew: false, animated: true)
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -356,11 +356,20 @@ extension TimelineViewController {
 	}
 	
 	private func deleteOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
-		let deleteAction = UIAlertAction(title: L10n.delete, style: .destructive) { _ in
+		func delete() {
 			if outline == self.currentOutline, let outlineProvider = self.outlineProvider {
-				self.delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: nil, animated: true)
+				self.delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: nil, isNew: false, animated: true)
 			}
 			outline.folder?.deleteOutline(outline)
+		}
+
+		guard !outline.isEmpty else {
+			delete()
+			return
+		}
+		
+		let deleteAction = UIAlertAction(title: L10n.delete, style: .destructive) { _ in
+			delete()
 		}
 		
 		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel) { _ in

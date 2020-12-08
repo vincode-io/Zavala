@@ -39,4 +39,8 @@ class EditorTitleViewCell: UICollectionViewListCell {
 		contentConfiguration = content
 	}
 
+	func takeCursor() {
+		(contentView as? EditorTitleContentView)?.textView.becomeFirstResponder()
+	}
+	
 }
