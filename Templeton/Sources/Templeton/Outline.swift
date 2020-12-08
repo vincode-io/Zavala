@@ -185,7 +185,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			parent.headlines = headlines
 		} else {
 			var headlines = self.headlines ?? [Headline]()
-			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? 0
+			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? -1
 			headlines.insert(headline, at: insertIndex + 1)
 			headline.parent = afterHeadline?.parent
 			self.headlines = headlines
@@ -193,7 +193,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		
 		outlineBodyDidChange()
 
-		let afterShadowTableIndex = afterHeadline?.shadowTableIndex ?? 0
+		let afterShadowTableIndex = afterHeadline?.shadowTableIndex ?? -1
 		let headlineShadowTableIndex = afterShadowTableIndex + 1
 		shadowTable?.insert(headline, at: headlineShadowTableIndex)
 		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)

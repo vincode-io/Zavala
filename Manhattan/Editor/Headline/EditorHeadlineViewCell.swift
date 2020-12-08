@@ -9,15 +9,15 @@ import UIKit
 import Templeton
 
 protocol EditorHeadlineViewCellDelegate: class {
-	var undoManager: UndoManager? { get }
-	func invalidateLayout()
-	func toggleDisclosure(headline: Headline)
-	func textChanged(headline: Headline, attributedText: NSAttributedString)
-	func deleteHeadline(_ headline: Headline)
-	func createHeadline(_ afterHeadline: Headline)
-	func indentHeadline(_ headline: Headline, attributedText: NSAttributedString)
-	func outdentHeadline(_ headline: Headline, attributedText: NSAttributedString)
-	func splitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)
+	var editorHeadlineUndoManager: UndoManager? { get }
+	func editorHeadlineInvalidateLayout()
+	func editorHeadlineToggleDisclosure(headline: Headline)
+	func editorHeadlineTextChanged(headline: Headline, attributedText: NSAttributedString)
+	func editorHeadlineDeleteHeadline(_ headline: Headline)
+	func editorHeadlineCreateHeadline(_ afterHeadline: Headline?)
+	func editorHeadlineIndentHeadline(_ headline: Headline, attributedText: NSAttributedString)
+	func editorHeadlineOutdentHeadline(_ headline: Headline, attributedText: NSAttributedString)
+	func editorHeadlineSplitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)
 }
 
 class EditorHeadlineViewCell: UICollectionViewListCell {
@@ -151,7 +151,7 @@ extension EditorHeadlineViewCell {
 	@objc func toggleDisclosure(_ sender: UITapGestureRecognizer) {
 		guard sender.state == .ended, let headline = headline else { return }
 		setDisclosure(isExpanded: !isDisclosed, animated: true)
-		delegate?.toggleDisclosure(headline: headline)
+		delegate?.editorHeadlineToggleDisclosure(headline: headline)
 	}
 	
 	private func setDisclosure(isExpanded: Bool, animated: Bool) {

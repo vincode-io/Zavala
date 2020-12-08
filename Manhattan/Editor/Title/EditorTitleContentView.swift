@@ -89,7 +89,7 @@ extension EditorTitleContentView: UITextViewDelegate {
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
 		switch text {
 		case "\n":
-			appliedConfiguration.delegate?.createHeadline()
+			appliedConfiguration.delegate?.editorTitleCreateHeadline()
 			return false
 		default:
 			return true
@@ -103,7 +103,7 @@ extension EditorTitleContentView: UITextViewDelegate {
 		if textViewHeight != fittingSize.height {
 			textViewHeight = fittingSize.height
 			invalidateIntrinsicContentSize()
-			appliedConfiguration.delegate?.invalidateLayout()
+			appliedConfiguration.delegate?.editorTitleInvalidateLayout()
 		}
 		
 		updateAdjustingSeparatorWidthContraint()

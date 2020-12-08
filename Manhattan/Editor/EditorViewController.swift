@@ -95,6 +95,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 
 		titleRegistration = UICollectionView.CellRegistration<EditorTitleViewCell, Outline> { (cell, indexPath, outline) in
 			cell.outline = outline
+			cell.delegate = self
 		}
 		
 		headerRegistration = UICollectionView.CellRegistration<EditorHeadlineViewCell, Headline> { (cell, indexPath, headline) in
@@ -283,108 +284,59 @@ extension EditorViewController {
 	
 }
 
-extension EditorViewController: EditorHeadlineViewCellDelegate {
-
-	func invalidateLayout() {
+extension EditorViewController: EditorTitleViewCellDelegate {
+	
+	var editorTitleundoManager: UndoManager? {
+		return undoManager
+	}
+	
+	func editorTitleInvalidateLayout() {
 		collectionView.collectionViewLayout.invalidateLayout()
 	}
-
-	func toggleDisclosure(headline: Headline) {
-		guard let undoManager = undoManager, let outline = outline else { return }
-		let command = EditorToggleDisclosureCommand(undoManager: undoManager,
-													delegate: self,
-													outline: outline,
-													headline: headline)
-		runCommand(command)
-	}
-
-	func textChanged(headline: Headline, attributedText: NSAttributedString) {
-		guard let undoManager = undoManager, let outline = outline else { return }
-		
-		let command = EditorTextChangedCommand(undoManager: undoManager,
-											   delegate: self,
-											   outline: outline,
-											   headline: headline,
-											   attributedText: attributedText)
-		runCommand(command)
+	
+	func editorTitleCreateHeadline() {
+		createHeadline(nil)
 	}
 	
-	func deleteHeadline(_ headline: Headline) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+	
+}
 
-		let command = EditorDeleteHeadlineCommand(undoManager: undoManager,
-												  delegate: self,
-												  outline: outline,
-												  headline: headline)
+extension EditorViewController: EditorHeadlineViewCellDelegate {
 
-		runCommand(command)
-		
-		if let deleteIndex = command.changes?.deletes?.first {
-			if deleteIndex > 0, let target = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 1)) as? TextCursorTarget {
-				target.moveToEnd()
-			}
-		}
+	var editorHeadlineUndoManager: UndoManager? {
+		return undoManager
 	}
 	
-	func createHeadline(_ afterHeadline: Headline) {
-		guard let undoManager = undoManager, let outline = outline else { return }
-
-		let command = EditorCreateHeadlineCommand(undoManager: undoManager,
-												  delegate: self,
-												  outline: outline,
-												  afterHeadline: afterHeadline)
-		
-		runCommand(command)
-		
-		if let insert = command.changes?.insertIndexPaths?.first {
-			if let textCursor = collectionView.cellForItem(at: insert) as? TextCursorTarget {
-				textCursor.moveToEnd()
-			}
-		}
+	func editorHeadlineInvalidateLayout() {
+		collectionView.collectionViewLayout.invalidateLayout()
 	}
 	
-	func indentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
-		guard let undoManager = undoManager, let outline = outline else { return }
-		
-		let command = EditorIndentHeadlineCommand(undoManager: undoManager,
-												  delegate: self,
-												  outline: outline,
-												  headline: headline,
-												  attributedText: attributedText)
-		
-		runCommand(command)
+	func editorHeadlineToggleDisclosure(headline: Headline) {
+		toggleDisclosure(headline: headline)
 	}
 	
-	func outdentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
-		guard let undoManager = undoManager, let outline = outline else { return }
-		
-		let command = EditorOutdentHeadlineCommand(undoManager: undoManager,
-												  delegate: self,
-												  outline: outline,
-												  headline: headline,
-												  attributedText: attributedText)
-		
-		runCommand(command)
+	func editorHeadlineTextChanged(headline: Headline, attributedText: NSAttributedString) {
+		textChanged(headline: headline, attributedText: attributedText)
 	}
-
-	func splitHeadline(_ headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) {
-		guard let undoManager = undoManager, let outline = outline else { return }
-
-		let command = EditorSplitHeadlineCommand(undoManager: undoManager,
-												 delegate: self,
-												 outline: outline,
-												 headline: headline,
-												 attributedText: attributedText,
-												 cursorPosition: cursorPosition)
-												  
-		
-		runCommand(command)
-		
-		if let insert = command.changes?.insertIndexPaths?.first {
-			if let textCursor = collectionView.cellForItem(at: insert) as? TextCursorTarget {
-				textCursor.moveToStart()
-			}
-		}
+	
+	func editorHeadlineDeleteHeadline(_ headline: Headline) {
+		deleteHeadline(headline)
+	}
+	
+	func editorHeadlineCreateHeadline(_ afterHeadline: Headline?) {
+		createHeadline(afterHeadline)
+	}
+	
+	func editorHeadlineIndentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
+		indentHeadline(headline, attributedText: attributedText)
+	}
+	
+	func editorHeadlineOutdentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
+		outdentHeadline(headline, attributedText: attributedText)
+	}
+	
+	func editorHeadlineSplitHeadline(_ headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) {
+		splitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
 	}
 	
 }
@@ -534,6 +486,104 @@ private extension EditorViewController {
 		}
 	}
 	
+	func toggleDisclosure(headline: Headline) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		let command = EditorToggleDisclosureCommand(undoManager: undoManager,
+													delegate: self,
+													outline: outline,
+													headline: headline)
+		runCommand(command)
+	}
+
+	func textChanged(headline: Headline, attributedText: NSAttributedString) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = EditorTextChangedCommand(undoManager: undoManager,
+											   delegate: self,
+											   outline: outline,
+											   headline: headline,
+											   attributedText: attributedText)
+		runCommand(command)
+	}
+	
+	func deleteHeadline(_ headline: Headline) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+
+		let command = EditorDeleteHeadlineCommand(undoManager: undoManager,
+												  delegate: self,
+												  outline: outline,
+												  headline: headline)
+
+		runCommand(command)
+		
+		if let deleteIndex = command.changes?.deletes?.first {
+			if deleteIndex > 0, let target = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 1)) as? TextCursorTarget {
+				target.moveToEnd()
+			}
+		}
+	}
+	
+	func createHeadline(_ afterHeadline: Headline?) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+
+		let command = EditorCreateHeadlineCommand(undoManager: undoManager,
+												  delegate: self,
+												  outline: outline,
+												  afterHeadline: afterHeadline)
+		
+		runCommand(command)
+		
+		if let insert = command.changes?.insertIndexPaths?.first {
+			if let textCursor = collectionView.cellForItem(at: insert) as? TextCursorTarget {
+				textCursor.moveToEnd()
+			}
+		}
+	}
+	
+	func indentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = EditorIndentHeadlineCommand(undoManager: undoManager,
+												  delegate: self,
+												  outline: outline,
+												  headline: headline,
+												  attributedText: attributedText)
+		
+		runCommand(command)
+	}
+	
+	func outdentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = EditorOutdentHeadlineCommand(undoManager: undoManager,
+												  delegate: self,
+												  outline: outline,
+												  headline: headline,
+												  attributedText: attributedText)
+		
+		runCommand(command)
+	}
+
+	func splitHeadline(_ headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+
+		let command = EditorSplitHeadlineCommand(undoManager: undoManager,
+												 delegate: self,
+												 outline: outline,
+												 headline: headline,
+												 attributedText: attributedText,
+												 cursorPosition: cursorPosition)
+												  
+		
+		runCommand(command)
+		
+		if let insert = command.changes?.insertIndexPaths?.first {
+			if let textCursor = collectionView.cellForItem(at: insert) as? TextCursorTarget {
+				textCursor.moveToStart()
+			}
+		}
+	}
+
 	func toggleCompleteHeadline(_ headline: Headline, attributedText: NSAttributedString) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		

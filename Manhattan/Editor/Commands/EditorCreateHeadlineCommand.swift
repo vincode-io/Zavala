@@ -17,10 +17,10 @@ final class EditorCreateHeadlineCommand: EditorOutlineCommand {
 	weak var delegate: EditorOutlineCommandDelegate?
 	var outline: Outline
 	var headline: Headline?
-	var afterHeadline: Headline
+	var afterHeadline: Headline?
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, afterHeadline: Headline) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, afterHeadline: Headline?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
