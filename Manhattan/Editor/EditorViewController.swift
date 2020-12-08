@@ -75,6 +75,8 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var headerRegistration: UICollectionView.CellRegistration<EditorHeadlineViewCell, Headline>?
 	
+	private var isOutlineNewFlag = false
+	
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
@@ -105,6 +107,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		
 		updateUI()
 		collectionView.reloadData()
+		moveCursorToTitleOnNew()
 	}
 
 	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -134,6 +137,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	
 	func edit(_ outline: Outline?, isNew: Bool) {
 		guard self.outline != outline else { return }
+		isOutlineNewFlag = isNew
 		
 		// Get ready for the new outline, buy saving the current one
 		if let textField = UIResponder.currentFirstResponder as? EditorHeadlineTextView {
@@ -151,7 +155,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		guard isViewLoaded else { return }
 		updateUI()
 		collectionView.reloadData()
-
+		moveCursorToTitleOnNew()
 	}
 	
 	func deleteCurrentHeadline() {
@@ -395,6 +399,17 @@ private extension EditorViewController {
 			} else {
 				filterBarButtonItem?.image = AppAssets.filterInactive
 			}
+		}
+	}
+	
+	private func moveCursorToTitleOnNew() {
+		if isOutlineNewFlag {
+			DispatchQueue.main.async {
+				if let titleCell = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? EditorTitleViewCell {
+					titleCell.takeCursor()
+				}
+			}
+			isOutlineNewFlag = false
 		}
 	}
 	
