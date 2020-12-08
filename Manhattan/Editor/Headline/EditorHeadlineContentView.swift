@@ -26,7 +26,14 @@ class EditorHeadlineContentView: UIView, UIContentView {
 		textView.isScrollEnabled = false
 		textView.textContainer.lineFragmentPadding = 0
 		textView.textContainerInset = .zero
-		textView.font = UIFont.preferredFont(forTextStyle: .body)
+
+		if traitCollection.userInterfaceIdiom == .mac {
+			let bodyFont = UIFont.preferredFont(forTextStyle: .body)
+			textView.font = bodyFont.withSize(bodyFont.pointSize + 1)
+		} else {
+			textView.font = UIFont.preferredFont(forTextStyle: .body)
+		}
+
 		textView.backgroundColor = .clear
 		textView.translatesAutoresizingMaskIntoConstraints = false
 		
