@@ -12,6 +12,8 @@ class EditorTitleContentView: UIView, UIContentView {
 
 	let textView = UITextView()
 	var textViewHeight: CGFloat?
+	var adjustingSeparatorWidthContraint: NSLayoutConstraint?
+	
 	var outline: Outline
 	var appliedConfiguration: EditorTitleContentConfiguration!
 	
@@ -20,7 +22,6 @@ class EditorTitleContentView: UIView, UIContentView {
 		super.init(frame: .zero)
 
 		textView.delegate = self
-		
 		textView.isScrollEnabled = false
 		textView.textContainer.lineFragmentPadding = 0
 		textView.textContainerInset = .zero
@@ -28,14 +29,26 @@ class EditorTitleContentView: UIView, UIContentView {
 		textView.textAlignment = .center
 		textView.backgroundColor = .clear
 		textView.translatesAutoresizingMaskIntoConstraints = false
-		
 		addSubview(textView)
 
+		let separator = UIView()
+		separator.backgroundColor = AppAssets.accessory
+		separator.translatesAutoresizingMaskIntoConstraints = false
+		addSubview(separator)
+		
+		adjustingSeparatorWidthContraint = separator.widthAnchor.constraint(greaterThanOrEqualToConstant: 44)
+		
 		NSLayoutConstraint.activate([
 			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
 			textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
 			textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-			textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+			textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+			
+			separator.heightAnchor.constraint(equalToConstant: 2),
+			adjustingSeparatorWidthContraint!,
+			separator.widthAnchor.constraint(greaterThanOrEqualToConstant: 44),
+			separator.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: 4),
+			separator.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor)
 		])
 
 		apply(configuration: configuration)
@@ -58,6 +71,7 @@ class EditorTitleContentView: UIView, UIContentView {
 		appliedConfiguration = configuration
 		outline = configuration.outline
 		textView.text = outline.title
+		updateAdjustingSeparatorWidthContraint()
 	}
 	
 }
@@ -91,6 +105,19 @@ extension EditorTitleContentView: UITextViewDelegate {
 			invalidateIntrinsicContentSize()
 			appliedConfiguration.delegate?.invalidateLayout()
 		}
+		
+		updateAdjustingSeparatorWidthContraint()
+	}
+	
+}
+
+// MARK: Helpers
+
+extension EditorTitleContentView {
+	
+	func updateAdjustingSeparatorWidthContraint() {
+		let fittingSize = textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: textView.frame.height))
+		adjustingSeparatorWidthContraint?.constant = fittingSize.width
 	}
 	
 }
