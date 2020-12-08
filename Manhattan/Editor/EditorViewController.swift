@@ -135,28 +135,22 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	func edit(_ outline: Outline?, isNew: Bool) {
 		guard self.outline != outline else { return }
 		
-		self.outline = outline
-		
+		// Get ready for the new outline, buy saving the current one
 		if let textField = UIResponder.currentFirstResponder as? EditorHeadlineTextView {
 			textField.endEditing(true)
 		}
 		
-		outline?.suspend()
+		self.outline?.suspend()
 		clearUndoableCommands()
 	
+		// Assign the new Outline and load it
+		self.outline = outline
+		
 		outline?.load()
 			
 		guard isViewLoaded else { return }
 		updateUI()
 		collectionView.reloadData()
-
-		if isNew {
-			DispatchQueue.main.async {
-				if let titleCell = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? EditorTitleViewCell {
-					titleCell.takeCursor()
-				}
-			}
-		}
 
 	}
 	
