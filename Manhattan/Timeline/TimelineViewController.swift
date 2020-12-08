@@ -114,25 +114,8 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	
 	@objc func createOutline(_ sender: Any?) {
 		guard let folder = outlineProvider as? Folder else { return }
-
-		if traitCollection.userInterfaceIdiom == .mac {
-			
-			let addViewController = UIStoryboard.dialog.instantiateController(ofType: AddOutlineViewController.self)
-			addViewController.folder = folder
-			addViewController.preferredContentSize = AddOutlineViewController.preferredContentSize
-			present(addViewController, animated: true)
-
-		} else {
-	
-			let addNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "AddOutlineViewControllerNav") as! UINavigationController
-			addNavViewController.preferredContentSize = AddOutlineViewController.preferredContentSize
-			addNavViewController.modalPresentationStyle = .formSheet
-			
-			let addViewController = addNavViewController.topViewController as! AddOutlineViewController
-			addViewController.folder = folder
-			present(addNavViewController, animated: true)
-			
-		}
+		let outline = folder.createOutline()
+		selectOutline(outline, animated: true)
 	}
 
 	@objc func importOPML(_ sender: Any?) {
@@ -216,7 +199,7 @@ extension TimelineViewController {
 			guard let self = self, let outline = AccountManager.shared.findOutline(item.id) else { return }
 			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
-			contentConfiguration.text = outline.title
+			contentConfiguration.text = outline.title ?? ""
 			contentConfiguration.secondaryText = Self.dateString(outline.updated)
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			
@@ -301,7 +284,6 @@ extension TimelineViewController {
 			guard let self = self else { return nil }
 			
 			let menuItems = [
-				UIMenu(title: "", options: .displayInline, children: [self.getInfoOutlineAction(item: item)]),
 				UIMenu(title: "", options: .displayInline, children: [self.getExportMarkdownAction(item: item), self.getExportOPMLAction(item: item)]),
 				UIMenu(title: "", options: .displayInline, children: [self.deleteOutlineAction(item: item)])
 			]
@@ -310,15 +292,6 @@ extension TimelineViewController {
 		})
 	}
 	
-	private func getInfoOutlineAction(item: TimelineItem) -> UIAction {
-		let action = UIAction(title: L10n.getInfo, image: AppAssets.getInfoEntity) { [weak self] action in
-			if let outline = AccountManager.shared.findOutline(item.id) {
-				self?.getInfoForOutline(outline)
-			}
-		}
-		return action
-	}
-
 	private func getExportMarkdownAction(item: TimelineItem) -> UIAction {
 		let action = UIAction(title: L10n.exportMarkdown, image: AppAssets.exportMarkdown) { [weak self] action in
 			if let outline = AccountManager.shared.findOutline(item.id) {
@@ -380,29 +353,6 @@ extension TimelineViewController {
 		let docPicker = UIDocumentPickerViewController(forExporting: [tempFile])
 		docPicker.modalPresentationStyle = .formSheet
 		self.present(docPicker, animated: true)
-	}
-	
-	private func getInfoForOutline(_ outline: Outline) {
-		
-		if traitCollection.userInterfaceIdiom == .mac {
-			
-			let getInfoViewController = UIStoryboard.dialog.instantiateController(ofType: GetInfoOutlineViewController.self)
-			getInfoViewController.preferredContentSize = GetInfoOutlineViewController.preferredContentSize
-			getInfoViewController.outline = outline
-			present(getInfoViewController, animated: true)
-
-		} else {
-
-			let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoOutlineViewControllerNav") as! UINavigationController
-			getInfoNavViewController.preferredContentSize = GetInfoOutlineViewController.preferredContentSize
-			getInfoNavViewController.modalPresentationStyle = .formSheet
-
-			let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoOutlineViewController
-			getInfoViewController.outline = outline
-			present(getInfoNavViewController, animated: true)
-
-		}
-		
 	}
 	
 	private func deleteOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {

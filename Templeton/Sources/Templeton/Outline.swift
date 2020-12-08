@@ -53,7 +53,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 	private var headlinesFile: HeadlinesFile?
 	
-	init(parentID: EntityID, title: String) {
+	init(parentID: EntityID, title: String?) {
 		self.id = EntityID.outline(parentID.accountID, parentID.folderUUID, UUID().uuidString)
 		self.title = title
 		self.created = Date()

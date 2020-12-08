@@ -10,7 +10,6 @@ import Templeton
 
 public extension Notification.Name {
 	static let UserDidAddFolder = Notification.Name(rawValue: "UserDidAddFolder")
-	static let UserDidAddOutline = Notification.Name(rawValue: "UserDidAddOutline")
 }
 
 protocol MainControllerIdentifiable {
@@ -112,7 +111,6 @@ class MainSplitViewController: UISplitViewController {
 		delegate = self
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(userDidAddFolder(_:)), name: .UserDidAddFolder, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(userDidAddOutline(_:)), name: .UserDidAddOutline, object: nil)
     }
 	
 	// MARK: API
@@ -157,11 +155,6 @@ class MainSplitViewController: UISplitViewController {
 	@objc func userDidAddFolder(_ note: Notification) {
 		guard let folder = note.userInfo?[UserInfoKeys.folder] as? Folder else { return }
 		sidebarViewController?.selectOutlineProvider(folder, animated: true)
-	}
-	
-	@objc func userDidAddOutline(_ note: Notification) {
-		guard let outline = note.userInfo?[UserInfoKeys.outline] as? Outline else { return }
-		timelineViewController?.selectOutline(outline, animated: true)
 	}
 	
 	// MARK: Actions

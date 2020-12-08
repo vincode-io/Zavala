@@ -99,14 +99,14 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 			title = NSLocalizedString("Unavailable", comment: "Unavailable")
 		}
 		
-		let outline = createOutline(name: title!)
+		let outline = createOutline(title: title!)
 		outline.importOPML(outlineIndexers)
 		outline.forceSave()
 		return outline
 	}
 	
-	public func createOutline(name: String) -> Outline {
-		let outline = Outline(parentID: id, title: name)
+	public func createOutline(title: String? = nil) -> Outline {
+		let outline = Outline(parentID: id, title: title)
 		outlines?.append(outline)
 		folderOutlinesDidChange()
 		return outline

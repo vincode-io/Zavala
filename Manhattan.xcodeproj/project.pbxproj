@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
 		512229682563507E008041AF /* EditorHeadlineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorHeadlineViewCell.swift */; };
+		51278E77257F37AC0034F1CB /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51278E76257F37AC0034F1CB /* Dialog.storyboard */; };
 		51365302257BC94600DA3585 /* EditorSplitHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51365301257BC94600DA3585 /* EditorSplitHeadlineCommand.swift */; };
 		514287302571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */; };
 		514287362571FCBD00F16B78 /* EditorOutlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */; };
@@ -20,10 +21,8 @@
 		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
 		515B9F412578B2F3009C5DE4 /* TimelineViewController+Drag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515B9F402578B2F3009C5DE4 /* TimelineViewController+Drag.swift */; };
-		515F162C255C12BE00FD98B8 /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 515F162B255C12BE00FD98B8 /* Dialog.storyboard */; };
 		515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F1631255C16E700FD98B8 /* AddFolderViewController.swift */; };
 		515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F164A255C9F8E00FD98B8 /* FormViewController.swift */; };
-		515F1651255CAC5600FD98B8 /* AddOutlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F1650255CAC5600FD98B8 /* AddOutlineViewController.swift */; };
 		51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51692B0B25681AD3006B755F /* UIViewController+.swift */; };
 		516E2D952564A91800CE51C6 /* TextCursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516E2D942564A91800CE51C6 /* TextCursor.swift */; };
 		5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9372554D92000C153E8 /* AppDelegate.swift */; };
@@ -51,7 +50,6 @@
 		51C030B8257E198B00609262 /* EditorTitleTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030B7257E198B00609262 /* EditorTitleTextView.swift */; };
 		51C030BE257E1B9400609262 /* OutlineTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030BD257E1B9400609262 /* OutlineTextView.swift */; };
 		51C3FA2B255E1DD5008F587A /* GetInfoFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */; };
-		51C3FA2F255E31E6008F587A /* GetInfoOutlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3FA2E255E31E6008F587A /* GetInfoOutlineViewController.swift */; };
 		51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51C4C3CD2555F07A004E0206 /* CloudKit.framework */; };
 		51C4C3F92557470B004E0206 /* Templeton in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3F82557470B004E0206 /* Templeton */; };
 		51C4C40125576631004E0206 /* RSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C40025576631004E0206 /* RSCore */; };
@@ -112,6 +110,7 @@
 /* Begin PBXFileReference section */
 		5122294B25609C47008041AF /* UserInfoKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoKeys.swift; sourceTree = "<group>"; };
 		512229672563507E008041AF /* EditorHeadlineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorHeadlineViewCell.swift; sourceTree = "<group>"; };
+		51278E76257F37AC0034F1CB /* Dialog.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
 		51365301257BC94600DA3585 /* EditorSplitHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSplitHeadlineCommand.swift; sourceTree = "<group>"; };
 		5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorToggleDisclosureCommand.swift; sourceTree = "<group>"; };
 		514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorOutlineCommand.swift; sourceTree = "<group>"; };
@@ -123,10 +122,8 @@
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
 		515B9F402578B2F3009C5DE4 /* TimelineViewController+Drag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimelineViewController+Drag.swift"; sourceTree = "<group>"; };
-		515F162B255C12BE00FD98B8 /* Dialog.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
 		515F1631255C16E700FD98B8 /* AddFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFolderViewController.swift; sourceTree = "<group>"; };
 		515F164A255C9F8E00FD98B8 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
-		515F1650255CAC5600FD98B8 /* AddOutlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddOutlineViewController.swift; sourceTree = "<group>"; };
 		51692B0B25681AD3006B755F /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		516E2D942564A91800CE51C6 /* TextCursor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCursor.swift; sourceTree = "<group>"; };
 		5181A9342554D92000C153E8 /* Manhattan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Manhattan.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,7 +154,6 @@
 		51C030B7257E198B00609262 /* EditorTitleTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleTextView.swift; sourceTree = "<group>"; };
 		51C030BD257E1B9400609262 /* OutlineTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineTextView.swift; sourceTree = "<group>"; };
 		51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoFolderViewController.swift; sourceTree = "<group>"; };
-		51C3FA2E255E31E6008F587A /* GetInfoOutlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoOutlineViewController.swift; sourceTree = "<group>"; };
 		51C4C3AC2555E964004E0206 /* Manhattan_project_debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Manhattan_project_debug.xcconfig; sourceTree = "<group>"; };
 		51C4C3AD2555E964004E0206 /* Manhattan_ios_target_common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Manhattan_ios_target_common.xcconfig; sourceTree = "<group>"; };
 		51C4C3AE2555E964004E0206 /* Manhattan_project_release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Manhattan_project_release.xcconfig; sourceTree = "<group>"; };
@@ -393,11 +389,9 @@
 		51F13F01255E13D1004B85CA /* Dialogs */ = {
 			isa = PBXGroup;
 			children = (
-				515F162B255C12BE00FD98B8 /* Dialog.storyboard */,
+				51278E76257F37AC0034F1CB /* Dialog.storyboard */,
 				515F1631255C16E700FD98B8 /* AddFolderViewController.swift */,
-				515F1650255CAC5600FD98B8 /* AddOutlineViewController.swift */,
 				51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */,
-				51C3FA2E255E31E6008F587A /* GetInfoOutlineViewController.swift */,
 			);
 			path = Dialogs;
 			sourceTree = "<group>";
@@ -522,8 +516,8 @@
 				51CF10A82571BA66005D6D88 /* Localizable.strings in Resources */,
 				5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */,
 				5181A9412554D92100C153E8 /* Assets.xcassets in Resources */,
-				515F162C255C12BE00FD98B8 /* Dialog.storyboard in Resources */,
 				5181A93F2554D92000C153E8 /* Main.storyboard in Resources */,
+				51278E77257F37AC0034F1CB /* Dialog.storyboard in Resources */,
 				51CF10AC2571BA9A005D6D88 /* Localizable.stringsdict in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -615,10 +609,8 @@
 				5142873A2572B06B00F16B78 /* EditorTextChangedCommand.swift in Sources */,
 				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
 				519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */,
-				51C3FA2F255E31E6008F587A /* GetInfoOutlineViewController.swift in Sources */,
 				51B2B2CE2563AAF60090C56B /* EditorHeadlineContentConfiguration.swift in Sources */,
 				51C0309B257E04A200609262 /* ShadowTableChanges+.swift in Sources */,
-				515F1651255CAC5600FD98B8 /* AddOutlineViewController.swift in Sources */,
 				51C030BE257E1B9400609262 /* OutlineTextView.swift in Sources */,
 				51C4C442255A0DE1004E0206 /* TimelineViewController.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
