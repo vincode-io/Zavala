@@ -69,14 +69,19 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 		return attributedText?.string
 	}
 	
+	private var _attributedText: NSAttributedString?
 	public var attributedText: NSAttributedString? {
 		get {
 			guard let text = text else { return nil }
-			return try? NSAttributedString(data: text,
-										   options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
-										   documentAttributes: nil)
+			if _attributedText == nil {
+				_attributedText = try? NSAttributedString(data: text,
+														  options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
+														  documentAttributes: nil)
+			}
+			return _attributedText
 		}
 		set {
+			_attributedText = newValue
 			if let attrText = newValue {
 				text = try? attrText.data(from: .init(location: 0, length: attrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 			} else {
