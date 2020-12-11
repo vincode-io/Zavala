@@ -120,12 +120,14 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 
 	func restoreSelection(_ textRange: UITextRange) {
 		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return }
+		UIResponder.resignCurrentFirstResponder()
 		textView.becomeFirstResponder()
 		textView.selectedTextRange = textRange
 	}
 	
 	func moveToStart() {
 		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return }
+		UIResponder.resignCurrentFirstResponder()
 		textView.becomeFirstResponder()
 		let startPosition = textView.beginningOfDocument
 		textView.selectedTextRange = textView.textRange(from: startPosition, to: startPosition)
@@ -133,6 +135,7 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 	
 	func moveToEnd() {
 		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return }
+		UIResponder.resignCurrentFirstResponder()
 		textView.becomeFirstResponder()
 		let endPosition = textView.endOfDocument
 		textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)

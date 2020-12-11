@@ -40,6 +40,7 @@ class EditorTitleViewCell: UICollectionViewListCell {
 	}
 
 	func takeCursor() {
+		UIResponder.resignCurrentFirstResponder()
 		(contentView as? EditorTitleContentView)?.textView.becomeFirstResponder()
 	}
 	
