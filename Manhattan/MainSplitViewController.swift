@@ -193,10 +193,6 @@ class MainSplitViewController: UISplitViewController {
 		timelineViewController?.exportOPML(sender)
 	}
 	
-	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
-		editorViewController?.toggleOutlineIsFavorite(sender)
-	}
-	
 	@objc func toggleOutlineFilter(_ sender: Any?) {
 		editorViewController?.toggleOutlineFilter(sender)
 	}
@@ -374,11 +370,10 @@ extension MainSplitViewController: NSToolbarDelegate {
 		let identifiers: [NSToolbarItem.Identifier] = [
 			.toggleSidebar,
 			.flexibleSpace,
-			.newOutline,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
-			.toggleOutlineFilter,
+			.newOutline,
 			.flexibleSpace,
-			.toggleOutlineIsFavorite
+			.toggleOutlineFilter,
 		]
 		return identifiers
 	}
@@ -423,27 +418,6 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = L10n.hideCompleted
 			item.isBordered = true
 			item.action = #selector(toggleOutlineFilter(_:))
-			item.target = self
-			toolbarItem = item
-		case .toggleOutlineIsFavorite:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] item in
-				if self?.editorViewController?.outline?.isFavorite ?? false {
-					item.image = AppAssets.favoriteSelected
-					item.label = L10n.unmarkAsFavorite
-					item.toolTip = L10n.unmarkAsFavorite
-				} else {
-					item.image = AppAssets.favoriteUnselected
-					item.label = L10n.markAsFavorite
-					item.toolTip = L10n.markAsFavorite
-				}
-				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
-			}
-			item.image = AppAssets.favoriteUnselected
-			item.label = L10n.markAsFavorite
-			item.toolTip = L10n.markAsFavorite
-			item.isBordered = true
-			item.action = #selector(toggleOutlineIsFavorite(_:))
 			item.target = self
 			toolbarItem = item
 		case .toggleSidebar:

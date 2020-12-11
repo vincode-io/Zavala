@@ -69,7 +69,6 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	
 	override var canBecomeFirstResponder: Bool { return true }
 	
-	private var favoriteBarButtonItem: UIBarButtonItem?
 	private var filterBarButtonItem: UIBarButtonItem?
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
@@ -83,9 +82,8 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
-			favoriteBarButtonItem = UIBarButtonItem(image: AppAssets.favoriteUnselected, style: .plain, target: self, action: #selector(toggleOutlineIsFavorite(_:)))
 			filterBarButtonItem = UIBarButtonItem(image: AppAssets.filterInactive, style: .plain, target: self, action: #selector(toggleOutlineFilter(_:)))
-			navigationItem.rightBarButtonItems = [favoriteBarButtonItem!, filterBarButtonItem!]
+			navigationItem.rightBarButtonItems = [filterBarButtonItem!]
 		}
 		
 		collectionView.collectionViewLayout = createLayout()
@@ -198,11 +196,6 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 	
 	// MARK: Actions
-	
-	@objc func toggleOutlineIsFavorite(_ sender: Any?) {
-		outline?.toggleFavorite()
-		updateUI()
-	}
 	
 	@objc func toggleOutlineFilter(_ sender: Any?) {
 		guard let changes = outline?.toggleFilter() else { return }
@@ -397,11 +390,6 @@ private extension EditorViewController {
 		navigationItem.largeTitleDisplayMode = .never
 		
 		if traitCollection.userInterfaceIdiom != .mac {
-			if outline?.isFavorite ?? false {
-				favoriteBarButtonItem?.image = AppAssets.favoriteSelected
-			} else {
-				favoriteBarButtonItem?.image = AppAssets.favoriteUnselected
-			}
 			if outline?.isFiltered ?? false {
 				filterBarButtonItem?.image = AppAssets.filterActive
 			} else {

@@ -281,31 +281,37 @@ extension TimelineViewController {
 	
 	private func makeOutlineContextMenu(item: TimelineItem) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: item as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
-			guard let self = self else { return nil }
+			guard let self = self, let outline = AccountManager.shared.findOutline(item.id) else { return nil }
 			
 			let menuItems = [
-				UIMenu(title: "", options: .displayInline, children: [self.getExportMarkdownAction(item: item), self.getExportOPMLAction(item: item)]),
-				UIMenu(title: "", options: .displayInline, children: [self.deleteOutlineAction(item: item)])
+				UIMenu(title: "", options: .displayInline, children: [self.toggleFavoriteAction(outline: outline)]),
+				UIMenu(title: "", options: .displayInline, children: [self.exportMarkdownAction(outline: outline), self.exportOPMLAction(outline: outline)]),
+				UIMenu(title: "", options: .displayInline, children: [self.deleteOutlineAction(outline: outline)])
 			]
 
 			return UIMenu(title: "", children: menuItems)
 		})
 	}
 	
-	private func getExportMarkdownAction(item: TimelineItem) -> UIAction {
-		let action = UIAction(title: L10n.exportMarkdown, image: AppAssets.exportMarkdown) { [weak self] action in
-			if let outline = AccountManager.shared.findOutline(item.id) {
-				self?.exportMarkdownForOutline(outline)
-			}
+	private func toggleFavoriteAction(outline: Outline) -> UIAction {
+		let title = outline.isFavorite ?? false ? L10n.unmarkAsFavorite : L10n.markAsFavorite
+		let image = outline.isFavorite ?? false ? AppAssets.favoriteUnselected : AppAssets.favoriteSelected
+		let action = UIAction(title: title, image: image) { action in
+			outline.toggleFavorite()
 		}
 		return action
 	}
 	
-	private func getExportOPMLAction(item: TimelineItem) -> UIAction {
+	private func exportMarkdownAction(outline: Outline) -> UIAction {
+		let action = UIAction(title: L10n.exportMarkdown, image: AppAssets.exportMarkdown) { [weak self] action in
+			self?.exportMarkdownForOutline(outline)
+		}
+		return action
+	}
+	
+	private func exportOPMLAction(outline: Outline) -> UIAction {
 		let action = UIAction(title: L10n.exportOPML, image: AppAssets.exportOPML) { [weak self] action in
-			if let outline = AccountManager.shared.findOutline(item.id) {
-				self?.exportOPMLForOutline(outline)
-			}
+			self?.exportOPMLForOutline(outline)
 		}
 		return action
 	}
@@ -318,11 +324,9 @@ extension TimelineViewController {
 		}
 	}
 	
-	private func deleteOutlineAction(item: TimelineItem) -> UIAction {
+	private func deleteOutlineAction(outline: Outline) -> UIAction {
 		let action = UIAction(title: L10n.delete, image: AppAssets.removeEntity, attributes: .destructive) { [weak self] action in
-			if let outline = AccountManager.shared.findOutline(item.id) {
-				self?.deleteOutline(outline)
-			}
+			self?.deleteOutline(outline)
 		}
 		
 		return action

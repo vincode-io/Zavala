@@ -192,10 +192,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.createOutline(sender)
 	}
 	
-	@objc func toggleOutlineIsFavoriteCommand(_ sender: Any?) {
-		mainSplitViewController?.toggleOutlineIsFavorite(sender)
-	}
-	
 	@objc func toggleSidebarCommand(_ sender: Any?) {
 		mainSplitViewController?.toggleSidebar(sender)
 	}
