@@ -70,7 +70,7 @@ class EditorHeadlineContentView: UIView, UIContentView {
 		
 		var attrs = [NSAttributedString.Key : Any]()
 		if configuration.isComplete || configuration.isAncestorComplete {
-			attrs[.foregroundColor] = UIColor.secondaryLabel
+			attrs[.foregroundColor] = UIColor.tertiaryLabel
 		} else {
 			attrs[.foregroundColor] = UIColor.label
 		}
@@ -84,7 +84,7 @@ class EditorHeadlineContentView: UIView, UIContentView {
 		
 		if configuration.isComplete {
 			attrs[.strikethroughStyle] = 1
-			attrs[.strikethroughColor] = UIColor.secondaryLabel
+			attrs[.strikethroughColor] = UIColor.tertiaryLabel
 		} else {
 			attrs[.strikethroughStyle] = 0
 		}
