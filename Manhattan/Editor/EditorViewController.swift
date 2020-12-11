@@ -229,8 +229,8 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 					self.repeatMoveCursorDown()
 				}
 			} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting, outline?.shadowTable?.count ?? 0 > 0 {
-				if let target = collectionView.cellForItem(at: IndexPath(row: 0, section: 1)) as? TextCursorTarget {
-					target.moveToEnd()
+				if let headlineCell = collectionView.cellForItem(at: IndexPath(row: 0, section: 1)) as? EditorHeadlineViewCell {
+					headlineCell.moveToEnd()
 				}
 			}
 		}
@@ -382,8 +382,8 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 		
 		if let textRange = textRange,
 		   let updated = cursorHeadline?.shadowTableIndex,
-		   let textCursor = collectionView.cellForItem(at: IndexPath(row: updated, section: 1)) as? TextCursorTarget {
-			textCursor.restoreSelection(textRange)
+		   let headlineCell = collectionView.cellForItem(at: IndexPath(row: updated, section: 1)) as? EditorHeadlineViewCell {
+			headlineCell.restoreSelection(textRange)
 		}
 	}
 }
@@ -498,16 +498,16 @@ private extension EditorViewController {
 		}
 		
 		let indexPath = IndexPath(row: shadowTableIndex - 1, section: 1)
-		if let target = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
-			target.moveToEnd()
+		if let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell {
+			headlineCell.moveToEnd()
 		}
 	}
 	
 	func moveCursorDown(headline: Headline) {
 		guard let shadowTableIndex = headline.shadowTableIndex, let shadowTable = outline?.shadowTable, shadowTableIndex < (shadowTable.count - 1) else { return }
 		let indexPath = IndexPath(row: shadowTableIndex + 1, section: 1)
-		if let target = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
-			target.moveToEnd()
+		if let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell {
+			headlineCell.moveToEnd()
 		}
 	}
 	
@@ -542,8 +542,8 @@ private extension EditorViewController {
 		runCommand(command)
 		
 		if let deleteIndex = command.changes?.deletes?.first {
-			if deleteIndex > 0, let target = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 1)) as? TextCursorTarget {
-				target.moveToEnd()
+			if deleteIndex > 0, let headlineCell = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 1)) as? EditorHeadlineViewCell {
+				headlineCell.moveToEnd()
 			} else {
 				moveCursorToTitle()
 			}
@@ -561,8 +561,8 @@ private extension EditorViewController {
 		runCommand(command)
 		
 		if let insert = command.changes?.insertIndexPaths?.first {
-			if let textCursor = collectionView.cellForItem(at: insert) as? TextCursorTarget {
-				textCursor.moveToEnd()
+			if let headlineCell = collectionView.cellForItem(at: insert) as? EditorHeadlineViewCell {
+				headlineCell.moveToEnd()
 			}
 		}
 	}
@@ -605,8 +605,8 @@ private extension EditorViewController {
 		runCommand(command)
 		
 		if let insert = command.changes?.insertIndexPaths?.first {
-			if let textCursor = collectionView.cellForItem(at: insert) as? TextCursorTarget {
-				textCursor.moveToStart()
+			if let headlineCell = collectionView.cellForItem(at: insert) as? EditorHeadlineViewCell {
+				headlineCell.moveToStart()
 			}
 		}
 	}
@@ -624,8 +624,8 @@ private extension EditorViewController {
 		
 		if let deleteIndex = command.changes?.deletes?.first {
 			let cursorIndex = deleteIndex < outline.shadowTable?.count ?? 0 ? deleteIndex : (outline.shadowTable?.count ?? 1) - 1
-			if let target = collectionView.cellForItem(at: IndexPath(row: cursorIndex, section: 1)) as? TextCursorTarget {
-				target.moveToEnd()
+			if let headlineCell = collectionView.cellForItem(at: IndexPath(row: cursorIndex, section: 1)) as? EditorHeadlineViewCell {
+				headlineCell.moveToEnd()
 			}
 		}
 		

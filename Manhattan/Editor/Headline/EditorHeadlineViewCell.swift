@@ -41,6 +41,11 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 	var textWidth: CGFloat? {
 		return (contentView as? EditorHeadlineContentView)?.textView.intrinsicContentSize.width
 	}
+	
+	var selectionRange: UITextRange? {
+		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return nil }
+		return textView.selectedTextRange
+	}
 
 	private var isDisclosed = false
 
@@ -113,15 +118,6 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 		contentConfiguration = content
 	}
 
-}
-
-extension EditorHeadlineViewCell: TextCursorTarget {
-	
-	var selectionRange: UITextRange? {
-		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return nil }
-		return textView.selectedTextRange
-	}
-	
 	func restoreSelection(_ textRange: UITextRange) {
 		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return }
 		textView.becomeFirstResponder()

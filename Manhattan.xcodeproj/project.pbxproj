@@ -24,7 +24,6 @@
 		515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F1631255C16E700FD98B8 /* AddFolderViewController.swift */; };
 		515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F164A255C9F8E00FD98B8 /* FormViewController.swift */; };
 		51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51692B0B25681AD3006B755F /* UIViewController+.swift */; };
-		516E2D952564A91800CE51C6 /* TextCursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516E2D942564A91800CE51C6 /* TextCursor.swift */; };
 		5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9372554D92000C153E8 /* AppDelegate.swift */; };
 		5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9392554D92000C153E8 /* SceneDelegate.swift */; };
 		5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A93B2554D92000C153E8 /* SidebarViewController.swift */; };
@@ -125,7 +124,6 @@
 		515F1631255C16E700FD98B8 /* AddFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFolderViewController.swift; sourceTree = "<group>"; };
 		515F164A255C9F8E00FD98B8 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
 		51692B0B25681AD3006B755F /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
-		516E2D942564A91800CE51C6 /* TextCursor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCursor.swift; sourceTree = "<group>"; };
 		5181A9342554D92000C153E8 /* Manhattan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Manhattan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5181A9372554D92000C153E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5181A9392554D92000C153E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -242,7 +240,6 @@
 				51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */,
 				51C0309A257E04A200609262 /* ShadowTableChanges+.swift */,
 				51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */,
-				516E2D942564A91800CE51C6 /* TextCursor.swift */,
 				514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */,
 				51B2B2D52563AB9F0090C56B /* UIView+.swift */,
 				51692B0B25681AD3006B755F /* UIViewController+.swift */,
@@ -627,7 +624,6 @@
 				51B2B2D22563AB190090C56B /* EditorHeadlineContentView.swift in Sources */,
 				51D28D32257731DC0039DDFC /* EditorViewController+Drop.swift in Sources */,
 				51B2B2D62563AB9F0090C56B /* UIView+.swift in Sources */,
-				516E2D952564A91800CE51C6 /* TextCursor.swift in Sources */,
 				514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */,
 				515B9F412578B2F3009C5DE4 /* TimelineViewController+Drag.swift in Sources */,
 				51C3FA2B255E1DD5008F587A /* GetInfoFolderViewController.swift in Sources */,
