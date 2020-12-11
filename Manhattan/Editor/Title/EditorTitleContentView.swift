@@ -28,6 +28,8 @@ class EditorTitleContentView: UIView, UIContentView {
 		textView.font = UIFont.preferredFont(forTextStyle: .largeTitle)
 		textView.textAlignment = .center
 		textView.backgroundColor = .clear
+		textView.tintColor = AppAssets.accent
+		textView.autocapitalizationType = .words
 		textView.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(textView)
 

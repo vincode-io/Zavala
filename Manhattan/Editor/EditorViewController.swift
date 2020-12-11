@@ -107,9 +107,13 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		
 		updateUI()
 		collectionView.reloadData()
-		moveCursorToTitleOnNew()
 	}
 
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		moveCursorToTitleOnNew()
+	}
+	
 	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
 		super.pressesBegan(presses, with: event)
 
@@ -404,13 +408,13 @@ private extension EditorViewController {
 	
 	private func moveCursorToTitleOnNew() {
 		if isOutlineNewFlag {
-			DispatchQueue.main.async {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
 				if let titleCell = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? EditorTitleViewCell {
 					titleCell.takeCursor()
 				}
 			}
-			isOutlineNewFlag = false
 		}
+		isOutlineNewFlag = false
 	}
 	
 	private func makeHeadlineContextMenu(headline: Headline, attributedText: NSAttributedString) -> UIContextMenuConfiguration {
