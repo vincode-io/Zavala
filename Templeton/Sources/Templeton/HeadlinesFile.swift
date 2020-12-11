@@ -44,7 +44,9 @@ final class HeadlinesFile {
 		
 		fileCoordinator.coordinate(writingItemAt: fileURL, options: [.forDeleting], error: errorPointer, byAccessor: { writeURL in
 			do {
-				try FileManager.default.removeItem(atPath: writeURL.path)
+				if FileManager.default.fileExists(atPath: writeURL.path) {
+					try FileManager.default.removeItem(atPath: writeURL.path)
+				}
 			} catch let error as NSError {
 				os_log(.error, log: log, "Headlines delete from disk failed: %@.", error.localizedDescription)
 			}
