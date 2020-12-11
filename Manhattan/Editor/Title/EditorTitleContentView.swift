@@ -10,7 +10,7 @@ import Templeton
 
 class EditorTitleContentView: UIView, UIContentView {
 
-	let textView = UITextView()
+	let textView = EditorTitleTextView()
 	var textViewHeight: CGFloat?
 	var adjustingSeparatorWidthContraint: NSLayoutConstraint?
 	

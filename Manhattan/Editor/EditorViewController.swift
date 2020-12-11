@@ -228,6 +228,10 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 					self.repeatMoveCursorDown()
 				}
+			} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting, outline?.shadowTable?.count ?? 0 > 0 {
+				if let target = collectionView.cellForItem(at: IndexPath(row: 0, section: 1)) as? TextCursorTarget {
+					target.moveToEnd()
+				}
 			}
 		}
 	}
@@ -409,12 +413,16 @@ private extension EditorViewController {
 	private func moveCursorToTitleOnNew() {
 		if isOutlineNewFlag {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-				if let titleCell = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? EditorTitleViewCell {
-					titleCell.takeCursor()
-				}
+				self.moveCursorToTitle()
 			}
 		}
 		isOutlineNewFlag = false
+	}
+	
+	private func moveCursorToTitle() {
+		if let titleCell = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? EditorTitleViewCell {
+			titleCell.takeCursor()
+		}
 	}
 	
 	private func makeHeadlineContextMenu(headline: Headline, attributedText: NSAttributedString) -> UIContextMenuConfiguration {
@@ -484,7 +492,11 @@ private extension EditorViewController {
 	}
 
 	func moveCursorUp(headline: Headline) {
-		guard let shadowTableIndex = headline.shadowTableIndex, shadowTableIndex > 0 else { return }
+		guard let shadowTableIndex = headline.shadowTableIndex, shadowTableIndex > 0 else {
+			moveCursorToTitle()
+			return
+		}
+		
 		let indexPath = IndexPath(row: shadowTableIndex - 1, section: 1)
 		if let target = collectionView.cellForItem(at: indexPath) as? TextCursorTarget {
 			target.moveToEnd()
@@ -532,6 +544,8 @@ private extension EditorViewController {
 		if let deleteIndex = command.changes?.deletes?.first {
 			if deleteIndex > 0, let target = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 1)) as? TextCursorTarget {
 				target.moveToEnd()
+			} else {
+				moveCursorToTitle()
 			}
 		}
 	}
