@@ -32,6 +32,7 @@
 "Expand" = "Expand";
 "Add_Row" = "Add Row";
 "Split_Row" = "Split Row";
+"Restore_Archive" = "Restore Archive";
 "Archive_Account" = "Archive %@";
 
 /* Activity Manager */

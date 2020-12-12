@@ -128,6 +128,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										input: "\n",
 										modifierFlags: [.shift, .alternate])
 
+	let restoreArchiveCommand = UIKeyCommand(title: L10n.restoreArchive,
+											 action: #selector(restoreArchiveCommand(_:)),
+											 input: "0",
+											 modifierFlags: [.control, .command])
+	
 	let archiveLocalCommand = UIKeyCommand(title: L10n.archiveAccount(AccountType.local.name),
 										action: #selector(archiveLocalCommand(_:)),
 										input: "1",
@@ -216,6 +221,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.splitHeadline(sender)
 	}
 	
+	@objc func restoreArchiveCommand(_ sender: Any?) {
+		mainSplitViewController?.restoreArchive()
+	}
+	
 	@objc func archiveLocalCommand(_ sender: Any?) {
 		mainSplitViewController?.archiveAccount(type: .local)
 	}
@@ -275,7 +284,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.remove(menu: .newScene)
 
 		// File Menu
-		let archiveMenu = UIMenu(title: "", options: .displayInline, children: [archiveLocalCommand])
+		let archiveMenu = UIMenu(title: "", options: .displayInline, children: [restoreArchiveCommand, archiveLocalCommand])
 		builder.insertChild(archiveMenu, atStartOfMenu: .file)
 
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMarkdownCommand, exportOPMLCommand])

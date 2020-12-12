@@ -82,6 +82,10 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		deleteFolder(folder)
 	}
 	
+	func restoreArchive() {
+		
+	}
+	
 	func archiveAccount(type: AccountType) {
 		guard let archiveFile = AccountManager.shared.archiveAccount(type: type) else { return }
 		
