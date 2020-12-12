@@ -22,6 +22,7 @@ class EditorTitleContentView: UIView, UIContentView {
 		super.init(frame: .zero)
 
 		textView.delegate = self
+		textView.editorDelegate = self
 		textView.isScrollEnabled = false
 		textView.textContainer.lineFragmentPadding = 0
 		textView.textContainerInset = .zero
@@ -76,6 +77,14 @@ class EditorTitleContentView: UIView, UIContentView {
 		updateAdjustingSeparatorWidthContraint()
 	}
 	
+}
+
+// MARK: EditorTitleTextViewDelegate
+
+extension EditorTitleContentView: EditorTitleTextViewDelegate {
+	override var undoManager: UndoManager? {
+		return appliedConfiguration.delegate?.editorTitleUndoManager
+	}
 }
 
 // MARK: UITextViewDelegate

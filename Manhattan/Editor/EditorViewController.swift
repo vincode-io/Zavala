@@ -285,7 +285,7 @@ extension EditorViewController {
 
 extension EditorViewController: EditorTitleViewCellDelegate {
 	
-	var editorTitleundoManager: UndoManager? {
+	var editorTitleUndoManager: UndoManager? {
 		return undoManager
 	}
 	

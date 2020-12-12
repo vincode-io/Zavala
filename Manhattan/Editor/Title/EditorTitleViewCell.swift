@@ -9,7 +9,7 @@ import UIKit
 import Templeton
 
 protocol EditorTitleViewCellDelegate: class {
-	var editorTitleundoManager: UndoManager? { get }
+	var editorTitleUndoManager: UndoManager? { get }
 	func editorTitleInvalidateLayout()
 	func editorTitleCreateHeadline()
 }
