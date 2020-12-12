@@ -181,8 +181,8 @@ extension EditorHeadlineContentView: EditorHeadlineTextViewDelegate {
 		appliedConfiguration.delegate?.editorHeadlineUndoManager
 	}
 	
-	func deleteHeadline(_ headline: Headline) {
-		appliedConfiguration.delegate?.editorHeadlineDeleteHeadline(headline)
+	func deleteHeadline(_ headline: Headline, attributedText: NSAttributedString) {
+		appliedConfiguration.delegate?.editorHeadlineDeleteHeadline(headline, attributedText: attributedText)
 	}
 	
 	func createHeadline(_ afterHeadline: Headline) {

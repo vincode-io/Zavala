@@ -20,11 +20,12 @@ final class EditorDeleteHeadlineCommand: EditorOutlineCommand {
 	var afterHeadline: Headline?
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedText: NSAttributedString) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
 		self.headline = headline
+		self.headline.attributedText = attributedText
 		undoActionName = L10n.delete
 		redoActionName = L10n.delete
 	}

@@ -161,8 +161,9 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 	
 	func deleteCurrentHeadline() {
-		guard let headline = currentHeadline else { return }
-		deleteHeadline(headline)
+		guard let headline = currentHeadline,
+			  let attributedText = currentAttributedText else { return }
+		deleteHeadline(headline, attributedText: attributedText)
 	}
 	
 	func createHeadline() {
@@ -318,8 +319,8 @@ extension EditorViewController: EditorHeadlineViewCellDelegate {
 		textChanged(headline: headline, attributedText: attributedText)
 	}
 	
-	func editorHeadlineDeleteHeadline(_ headline: Headline) {
-		deleteHeadline(headline)
+	func editorHeadlineDeleteHeadline(_ headline: Headline, attributedText: NSAttributedString) {
+		deleteHeadline(headline, attributedText: attributedText)
 	}
 	
 	func editorHeadlineCreateHeadline(_ afterHeadline: Headline?) {
@@ -431,7 +432,7 @@ private extension EditorViewController {
 			let menuItems = [
 				UIMenu(title: "", options: .displayInline, children: mainActions),
 				UIMenu(title: "", options: .displayInline, children: [self.toggleCompleteAction(headline: headline, attributedText: attributedText)]),
-				UIMenu(title: "", options: .displayInline, children: [self.deleteAction(headline: headline)]),
+				UIMenu(title: "", options: .displayInline, children: [self.deleteAction(headline: headline, attributedText: attributedText)]),
 			]
 
 			return UIMenu(title: "", children: menuItems)
@@ -472,9 +473,9 @@ private extension EditorViewController {
 		return action
 	}
 
-	private func deleteAction(headline: Headline) -> UIAction {
+	private func deleteAction(headline: Headline, attributedText: NSAttributedString) -> UIAction {
 		let action = UIAction(title: L10n.delete, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
-			self?.deleteHeadline(headline)
+			self?.deleteHeadline(headline, attributedText: attributedText)
 		}
 		return action
 	}
@@ -519,13 +520,14 @@ private extension EditorViewController {
 		runCommand(command)
 	}
 	
-	func deleteHeadline(_ headline: Headline) {
+	func deleteHeadline(_ headline: Headline, attributedText: NSAttributedString) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = EditorDeleteHeadlineCommand(undoManager: undoManager,
 												  delegate: self,
 												  outline: outline,
-												  headline: headline)
+												  headline: headline,
+												  attributedText: attributedText)
 
 		runCommand(command)
 		

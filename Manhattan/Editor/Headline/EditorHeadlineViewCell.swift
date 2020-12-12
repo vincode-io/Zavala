@@ -13,7 +13,7 @@ protocol EditorHeadlineViewCellDelegate: class {
 	func editorHeadlineInvalidateLayout()
 	func editorHeadlineToggleDisclosure(headline: Headline)
 	func editorHeadlineTextChanged(headline: Headline, attributedText: NSAttributedString)
-	func editorHeadlineDeleteHeadline(_ headline: Headline)
+	func editorHeadlineDeleteHeadline(_ headline: Headline, attributedText: NSAttributedString)
 	func editorHeadlineCreateHeadline(_ afterHeadline: Headline?)
 	func editorHeadlineIndentHeadline(_ headline: Headline, attributedText: NSAttributedString)
 	func editorHeadlineOutdentHeadline(_ headline: Headline, attributedText: NSAttributedString)

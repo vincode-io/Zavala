@@ -10,7 +10,7 @@ import Templeton
 
 protocol EditorHeadlineTextViewDelegate: class {
 	var undoManager: UndoManager? { get }
-	func deleteHeadline(_: Headline)
+	func deleteHeadline(_: Headline, attributedText: NSAttributedString)
 	func createHeadline(_: Headline)
 	func indentHeadline(_: Headline, attributedText: NSAttributedString)
 	func outdentHeadline(_: Headline, attributedText: NSAttributedString)
@@ -59,7 +59,7 @@ class EditorHeadlineTextView: OutlineTextView {
 	override func deleteBackward() {
 		guard let headline = headline else { return }
 		if attributedText.length == 0 {
-			editorDelegate?.deleteHeadline(headline)
+			editorDelegate?.deleteHeadline(headline, attributedText: attributedText)
 		} else {
 			super.deleteBackward()
 		}
