@@ -146,13 +146,31 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		outlineBodyDidChange()
 		
 		guard let headlineShadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
-		shadowTable?.remove(at: headlineShadowTableIndex)
+		var deletes = [headlineShadowTableIndex]
+		
+		func deleteVisitor(_ visited: Headline) {
+			if let index = visited.shadowTableIndex {
+				deletes.append(index)
+			}
+			if visited.isExpanded ?? true {
+				visited.headlines?.forEach { $0.visit(visitor: deleteVisitor) }
+			}
+		}
+
+		if headline.isExpanded ?? true {
+			headline.headlines?.forEach { $0.visit(visitor: deleteVisitor(_:)) }
+		}
+
+		for index in deletes.reversed() {
+			shadowTable?.remove(at: index)
+		}
+		
 		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
 		
 		if headlineShadowTableIndex > 0 {
-			return ShadowTableChanges(deletes: [headlineShadowTableIndex], reloads: [headlineShadowTableIndex - 1])
+			return ShadowTableChanges(deletes: Set(deletes), reloads: [headlineShadowTableIndex - 1])
 		} else {
-			return ShadowTableChanges(deletes: [headlineShadowTableIndex])
+			return ShadowTableChanges(deletes: Set(deletes))
 		}
 			
 	}
