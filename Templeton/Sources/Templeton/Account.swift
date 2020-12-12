@@ -10,6 +10,8 @@ import os.log
 import ZipArchive
 
 public extension Notification.Name {
+	static let AccountDidInitialize = Notification.Name(rawValue: "AccountDidInitialize")
+	static let AccountMetadataDidChange = Notification.Name(rawValue: "AccountMetadataDidChange")
 	static let AccountFoldersDidChange = Notification.Name(rawValue: "AccountFoldersDidChange")
 }
 
@@ -52,6 +54,18 @@ public final class Account: NSObject, Identifiable, Codable {
 		self.folders = [Folder]()
 	}
 	
+	public func activate() {
+		guard isActive == false else { return }
+		isActive = true
+		accountMetadataDidChange()
+	}
+	
+	public func deactivate() {
+		guard isActive == true else { return }
+		isActive = false
+		accountMetadataDidChange()
+	}
+	
 	public func createFolder(_ name: String) -> Folder {
 		let folder = Folder(parentID: id, name: name)
 		folders?.append(folder)
@@ -67,6 +81,10 @@ public final class Account: NSObject, Identifiable, Codable {
 		self.folders = folders.filter { $0 != folder }
 		accountFoldersDidChange()
 		folder.folderDidDelete()
+	}
+	
+	func accountDidInitialize() {
+		NotificationCenter.default.post(name: .AccountDidInitialize, object: self, userInfo: nil)
 	}
 	
 	public static func == (lhs: Account, rhs: Account) -> Bool {
@@ -124,6 +142,10 @@ extension Account {
 }
 
 private extension Account {
+	
+	func accountMetadataDidChange() {
+		NotificationCenter.default.post(name: .AccountMetadataDidChange, object: self, userInfo: nil)
+	}
 	
 	func accountFoldersDidChange() {
 		NotificationCenter.default.post(name: .AccountFoldersDidChange, object: self, userInfo: nil)

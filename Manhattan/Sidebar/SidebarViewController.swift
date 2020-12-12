@@ -54,6 +54,8 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		}
 		
+		NotificationCenter.default.addObserver(self, selector: #selector(accountDidInitialize(_:)), name: .AccountDidInitialize, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountFoldersDidChange(_:)), name: .AccountFoldersDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(folderMetaDataDidChange(_:)), name: .FolderMetaDataDidChange, object: nil)
 	}
@@ -101,6 +103,14 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	}
 	
 	// MARK: Notifications
+	
+	@objc func accountDidInitialize(_ note: Notification) {
+		applyChangeSnapshot()
+	}
+	
+	@objc func accountMetadataDidChange(_ note: Notification) {
+		applyChangeSnapshot()
+	}
 	
 	@objc func accountFoldersDidChange(_ note: Notification) {
 		applyChangeSnapshot()
@@ -267,8 +277,11 @@ extension SidebarViewController: UIDocumentPickerDelegate {
 			return
 		}
 		
-		let restoreAction = UIAlertAction(title: L10n.restore, style: .default) { _ in
-			AccountManager.shared.restoreArchive(unpackURL: unpackResult.1)
+		let restoreAction = UIAlertAction(title: L10n.restore, style: .default) { [weak self] _ in
+			guard let self = self else { return }
+			self.collectionView.selectItem(at: nil, animated: true, scrollPosition: .top)
+			self.delegate?.outlineProviderSelectionDidChange(self, outlineProvider: nil, animated: true)
+			AccountManager.shared.restoreArchive(accountType: unpackResult.0, unpackURL: unpackResult.1)
 		}
 		
 		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel) { _ in
@@ -281,7 +294,6 @@ extension SidebarViewController: UIDocumentPickerDelegate {
 		alert.addAction(restoreAction)
 		
 		present(alert, animated: true, completion: nil)
-		
 	}
 	
 }

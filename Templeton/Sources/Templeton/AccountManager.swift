@@ -64,6 +64,10 @@ public final class AccountManager {
 	var accountsDictionary = [Int: Account]()
 
 	var accountsFolder: URL
+	var localAccountFolder: URL
+	var localAccountFile: URL
+	var cloudKitAccountFolder: URL
+	var cloudKitAccountFile: URL
 
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "AccountManager")
 
@@ -75,7 +79,11 @@ public final class AccountManager {
 	
 	public init(accountsFolderPath: String) {
 		self.accountsFolder = URL(fileURLWithPath: accountsFolderPath, isDirectory: true)
-
+		self.localAccountFolder = accountsFolder.appendingPathComponent(AccountType.local.folderName)
+		self.localAccountFile = localAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
+		self.cloudKitAccountFolder = accountsFolder.appendingPathComponent(AccountType.cloudKit.folderName)
+		self.cloudKitAccountFile = cloudKitAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
+		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountFoldersDidChange(_:)), name: .AccountFoldersDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(folderMetadataDidChange(_:)), name: .FolderMetaDataDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(folderOutlinesDidChange(_:)), name: .FolderOutlinesDidChange, object: nil)
@@ -83,11 +91,8 @@ public final class AccountManager {
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineMetadataDidChange(_:)), name: .OutlineMetaDataDidChange, object: nil)
 
 		// The local account must always exist, even if it's empty.
-		let localAccountFolder = accountsFolder.appendingPathComponent(AccountType.local.folderName)
-		let localAccountFile = localAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
-		
 		if FileManager.default.fileExists(atPath: localAccountFile.path) {
-			initializeFile(file: localAccountFile, accountType: .local)
+			initializeFile(accountType: .local)
 		} else {
 			do {
 				try FileManager.default.createDirectory(atPath: localAccountFolder.path, withIntermediateDirectories: true, attributes: nil)
@@ -98,19 +103,20 @@ public final class AccountManager {
 			
 			let localAccount = Account(accountType: .local)
 			accountsDictionary[AccountType.local.rawValue] = localAccount
-			initializeFile(file: localAccountFile, accountType: .local)
+			initializeFile(accountType: .local)
 			let _ = localAccount.createFolder("Outlines")
 		}
 		
-		let cloudKitAccountFolder = accountsFolder.appendingPathComponent(AccountType.cloudKit.folderName)
-		let cloudKitAccountFile = cloudKitAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
-		
 		if FileManager.default.fileExists(atPath: cloudKitAccountFile.path) {
-			initializeFile(file: cloudKitAccountFile, accountType: .cloudKit)
+			initializeFile(accountType: .cloudKit)
 		}
 	}
 
 	// MARK: API
+	public func findAccount(accountType: AccountType) -> Account? {
+		return accountsDictionary[accountType.rawValue]
+	}
+
 	public func findAccount(accountID: Int) -> Account? {
 		return accountsDictionary[accountID]
 	}
@@ -176,8 +182,26 @@ public final class AccountManager {
 		try? FileManager.default.removeItem(at: unpackURL)
 	}
 	
-	public func restoreArchive(unpackURL: URL) {
+	public func restoreArchive(accountType: AccountType, unpackURL: URL) {
+		var account = accountsDictionary[accountType.rawValue]
+		account?.deactivate()
+		accountFiles.removeValue(forKey: accountType.rawValue)
+		accountsDictionary.removeValue(forKey: accountType.rawValue)
+		account = nil
 		
+		let accountFolder: URL
+		if accountType == .local {
+			accountFolder = localAccountFolder
+		} else {
+			accountFolder = cloudKitAccountFile
+		}
+		
+		try? FileManager.default.removeItem(at: accountFolder)
+		try? FileManager.default.moveItem(at: unpackURL, to: accountFolder)
+		
+		initializeFile(accountType: accountType)
+		account = accountsDictionary[accountType.rawValue]
+		account?.accountDidInitialize()
 	}
 	
 	public func archiveAccount(type: AccountType) -> URL? {
@@ -219,7 +243,14 @@ private extension AccountManager {
 
 	// MARK: Helpers
 	
-	func initializeFile(file: URL, accountType: AccountType) {
+	func initializeFile(accountType: AccountType) {
+		let file: URL
+		if accountType == .local {
+			file = localAccountFile
+		} else {
+			file = cloudKitAccountFile
+		}
+		
 		let managedFile = AccountFile(fileURL: file, accountType: accountType, accountManager: self)
 		managedFile.load()
 		accountFiles[accountType.rawValue] = managedFile
