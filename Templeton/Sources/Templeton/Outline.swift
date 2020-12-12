@@ -211,14 +211,34 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		
 		outlineBodyDidChange()
 
+		
+		var headlines = [headline]
+		
+		func insertVisitor(_ visited: Headline) {
+			headlines.append(visited)
+			if visited.isExpanded ?? true {
+				visited.headlines?.forEach { $0.visit(visitor: insertVisitor) }
+			}
+		}
+
+		if headline.isExpanded ?? true {
+			headline.headlines?.forEach { $0.visit(visitor: insertVisitor(_:)) }
+		}
+		
 		let afterShadowTableIndex = afterHeadline?.shadowTableIndex ?? -1
 		let headlineShadowTableIndex = afterShadowTableIndex + 1
-		shadowTable?.insert(headline, at: headlineShadowTableIndex)
-		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
 
-		headline.shadowTableIndex = headlineShadowTableIndex
+		var inserts = Set<Int>()
+		for i in 0..<headlines.count {
+			let shadowTableIndex = headlineShadowTableIndex + i
+			inserts.insert(shadowTableIndex)
+			shadowTable?.insert(headlines[i], at: shadowTableIndex)
+		}
 		
-		return ShadowTableChanges(inserts: [headlineShadowTableIndex])
+		headline.shadowTableIndex = headlineShadowTableIndex
+		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
+		
+		return ShadowTableChanges(inserts: inserts)
 	}
 	
 	public func splitHeadline(newHeadline: Headline, headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) -> ShadowTableChanges {
