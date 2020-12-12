@@ -180,6 +180,11 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func createHeadline(headline: Headline, afterHeadline: Headline? = nil) -> ShadowTableChanges {
 		if let parent = headline.parent, parent as? Headline == afterHeadline {
 			parent.headlines?.insert(headline, at: 0)
+		} else if let parent = headline.parent {
+			var headlines = parent.headlines ?? [Headline]()
+			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? headlines.count - 1
+			headlines.insert(headline, at: insertIndex + 1)
+			parent.headlines = headlines
 		} else if afterHeadline?.isExpanded ?? true && !(afterHeadline?.headlines?.isEmpty ?? true) {
 			afterHeadline!.headlines!.insert(headline, at: 0)
 			headline.parent = afterHeadline
