@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 import RSCore
 import Combine
 import Templeton
@@ -83,7 +84,12 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	}
 	
 	func restoreArchive() {
-		
+		let manarcType = UTType(exportedAs: "io.vincode.Manhattan.archive")
+		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [manarcType])
+		docPicker.delegate = self
+		docPicker.modalPresentationStyle = .formSheet
+		docPicker.allowsMultipleSelection = false
+		self.present(docPicker, animated: true)
 	}
 	
 	func archiveAccount(type: AccountType) {
@@ -245,6 +251,16 @@ extension SidebarViewController {
 	func updateSelection(item: SidebarItem?, animated: Bool) {
 		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: item, animated: animated))
 	}
+}
+
+// MARK: UIDocumentPickerDelegate
+
+extension SidebarViewController: UIDocumentPickerDelegate {
+	
+	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+
+	}
+	
 }
 
 // MARK: Helper Functions
