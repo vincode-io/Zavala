@@ -253,7 +253,7 @@ extension MainSplitViewController: SidebarDelegate {
 	
 	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?, animated: Bool) {
 		timelineViewController?.outlineProvider = outlineProvider
-		editorViewController?.outline = nil
+		editorViewController?.edit(nil, isNew: false)
 
 		guard let outlineProvider = outlineProvider else {
 			activityManager.invalidateSelectOutlineProvider()
