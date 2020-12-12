@@ -485,7 +485,18 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 		outlineBodyDidChange()
 
-		return rebuildShadowTable(reloadEverything: true)
+		let changes = rebuildShadowTable(reloadEverything: true)
+		
+		// If there weren't any shadow table changes, we need to reload the headline row and the one above it
+		if changes.isEmpty, let shadowTableIndex = shadowTable?.firstIndex(of: headline) {
+			if shadowTableIndex > 0 {
+				return ShadowTableChanges(reloads: [shadowTableIndex, shadowTableIndex - 1])
+			} else {
+				return ShadowTableChanges(reloads: [shadowTableIndex])
+			}
+		} else {
+			return changes
+		}
 	}
 	
 	public func load() {

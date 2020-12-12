@@ -25,7 +25,7 @@ public struct ShadowTableChanges {
 	public var reloads: Set<Int>?
 	
 	public var isEmpty: Bool {
-		return deletes == nil && inserts == nil && reloads == nil
+		return (deletes?.isEmpty ?? true) && (inserts?.isEmpty ?? true) && (moves?.isEmpty ?? true) && (reloads?.isEmpty ?? true)
 	}
 	
 	init(deletes: Set<Int>? = nil, inserts: Set<Int>? = nil, moves: Set<Move>? = nil, reloads: Set<Int>? = nil) {

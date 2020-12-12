@@ -38,11 +38,7 @@ final class EditorMoveHeadlineCommand: EditorOutlineCommand {
 		self.undoActionName = L10n.move
 		self.redoActionName = L10n.move
 
-		if let parent = headline.parent {
-			oldParent = parent
-		} else {
-			oldParent = outline
-		}
+		oldParent = headline.parent
 		oldChildIndex = oldParent?.headlines?.firstIndex(of: headline)
 	}
 	

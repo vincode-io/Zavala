@@ -16,11 +16,11 @@ extension EditorViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
 		guard let headline = session.localDragSession?.localContext as? Headline,
-			let toParent = destinationHeadlineContainer(destinationIndexPath) else {
+			let destContainer = destinationHeadlineContainer(destinationIndexPath) else {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
 		
-		if let toHeadline = toParent as? Headline {
+		if let toHeadline = destContainer as? Headline {
 			if toHeadline == headline {
 				return UICollectionViewDropProposal(operation: .cancel)
 			}
@@ -29,8 +29,11 @@ extension EditorViewController: UICollectionViewDropDelegate {
 			}
 		}
 		
-		
-		return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+		if let destIndexPath = destinationIndexPath, let destCell = collectionView.cellForItem(at: destIndexPath), session.location(in: destCell).y >= destCell.bounds.height / 2 {
+			return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
+		} else {
+			return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+		}
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
@@ -38,9 +41,22 @@ extension EditorViewController: UICollectionViewDropDelegate {
 			  let headline = dragItem.localObject as? Headline,
 			  let undoManager = undoManager,
 			  let outline = outline,
-			  let toParent = destinationHeadlineContainer(coordinator.destinationIndexPath) else { return }
+			  let destContainer = destinationHeadlineContainer(coordinator.destinationIndexPath) else { return }
 		
-		let toChildIndex = 0
+		let toParent: HeadlineContainer
+		let toChildIndex: Int
+		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let shadowTable = outline.shadowTable, let destIndexPath = coordinator.destinationIndexPath {
+			toParent = shadowTable[destIndexPath.row]
+			toChildIndex = 0
+		} else {
+			if let destSibling = (destContainer as? Headline), let destParent = destSibling.parent {
+				toParent = destParent
+				let headlines = destParent.headlines ?? [Headline]()
+				toChildIndex = (headlines.firstIndex(of: destSibling) ?? -1) + 1
+			} else {
+				return
+			}
+		}
 		
 		let command = EditorMoveHeadlineCommand(undoManager: undoManager,
 												delegate: self,
