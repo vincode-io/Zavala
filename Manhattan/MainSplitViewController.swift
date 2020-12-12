@@ -142,12 +142,14 @@ class MainSplitViewController: UISplitViewController {
 		}
 
 		sidebarViewController?.selectOutlineProvider(outlineProvider, animated: false)
+		lastMainControllerToAppear = .timeline
 
 		guard let outlineUserInfo = userInfo[UserInfoKeys.outlineID] as? [AnyHashable : AnyHashable],
 			  let outlineID = EntityID(userInfo: outlineUserInfo),
 			  let outline = AccountManager.shared.findOutline(outlineID) else { return }
 		
 		timelineViewController?.selectOutline(outline, animated: false)
+		lastMainControllerToAppear = .editor
 	}
 	
 	// MARK: Notifications
