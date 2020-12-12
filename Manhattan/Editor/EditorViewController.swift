@@ -46,7 +46,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return currentHeadline?.isComplete ?? false
 	}
 	
-	var outline: Outline?
+	private(set) var outline: Outline?
 	
 	var currentTextView: EditorHeadlineTextView? {
 		return UIResponder.currentFirstResponder as? EditorHeadlineTextView
