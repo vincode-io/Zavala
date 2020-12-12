@@ -123,6 +123,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [opmlType, .xml])
 		docPicker.delegate = self
 		docPicker.modalPresentationStyle = .formSheet
+		docPicker.allowsMultipleSelection = true
 		self.present(docPicker, animated: true)
 	}
 
