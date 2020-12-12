@@ -145,8 +145,14 @@ extension EditorHeadlineContentView: UITextViewDelegate {
 	}
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
-		guard isTextChanged, let headline = appliedConfiguration.headline else { return }
-		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, attributedText: textView.attributedText)
+		guard isTextChanged, let headline = appliedConfiguration.headline, let editorTextView = textView as? EditorHeadlineTextView else { return }
+		
+		if editorTextView.isSavingTextUnnecessary {
+			editorTextView.isSavingTextUnnecessary = false
+		} else {
+			appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, attributedText: textView.attributedText)
+		}
+		
 		isTextChanged = false
 	}
 	

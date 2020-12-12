@@ -35,6 +35,7 @@ class EditorHeadlineTextView: OutlineTextView {
 	
 	weak var editorDelegate: EditorHeadlineTextViewDelegate?
 	var headline: Headline?
+	var isSavingTextUnnecessary = false
 	
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
@@ -81,6 +82,7 @@ class EditorHeadlineTextView: OutlineTextView {
 	
 	@objc func shiftOptionReturnPressed(_ sender: Any) {
 		guard let headline = headline else { return }
+		isSavingTextUnnecessary = true
 		editorDelegate?.splitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
 	}
 	
