@@ -15,5 +15,7 @@
 "Provider_Favorites" = "Favorites";
 "Provider_Recents" = "Recents";
 
+"Check_Archive_Error" = "This doesn't appear to be a Manhattan archive.  We're unable to restore from this file.";
+
 "Folder_Error_Scoped_Resource" = "Unable to access security scoped resource.";
 "Folder_Error_Import_Read" = "Unable to read the import file.";

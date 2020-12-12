@@ -32,6 +32,7 @@
 "Expand" = "Expand";
 "Add_Row" = "Add Row";
 "Split_Row" = "Split Row";
+"Restore" = "Restore";
 "Restore_Archive" = "Restore Archive";
 "Archive_Account" = "Archive %@";
 
@@ -42,6 +43,8 @@
 /* Sidebar */
 "Delete_Folder_Prompt" = "Are you sure you want to delete the “%@” folder?";
 "Delete_Folder_Message" = "Any Outlines in this folder will also be deleted and unrecoverable.";
+"Restore_Account_Prompt" = "Are you sure you want to restore the “%@” account?";
+"Restore_Account_Message" = "Your current account data will be lost and unrecoverable.";
 
 /* Timeline */
 "Not_Available" = "Not Available";

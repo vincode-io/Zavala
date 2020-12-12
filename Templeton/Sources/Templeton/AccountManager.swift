@@ -6,6 +6,15 @@
 //
 
 import Foundation
+import os.log
+import ZipArchive
+
+public enum AccountManagerError: LocalizedError {
+	case readArchiveError
+	public var errorDescription: String? {
+		return L10n.checkArchiveError
+	}
+}
 
 public final class AccountManager {
 	
@@ -36,8 +45,6 @@ public final class AccountManager {
 		})
 	}
 	
-	var accountsDictionary = [Int: Account]()
-
 	public var accounts: [Account] {
 		return Array(accountsDictionary.values)
 	}
@@ -54,7 +61,11 @@ public final class AccountManager {
 		return sort(activeAccounts)
 	}
 	
+	var accountsDictionary = [Int: Account]()
+
 	var accountsFolder: URL
+
+	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "AccountManager")
 
 	private var accountFiles = [Int: AccountFile]()
 	
@@ -138,6 +149,35 @@ public final class AccountManager {
 	public func save() {
 		accountFiles.values.forEach { $0.save() }
 		outlines.forEach { $0.save() }
+	}
+	
+	public func unpackArchive(_ archiveURL: URL) throws -> (AccountType, URL) {
+		let restoreFolder = accountsFolder.appendingPathComponent("restore")
+		
+		guard SSZipArchive.unzipFile(atPath: archiveURL.path, toDestination: restoreFolder.path) else {
+			os_log(.error, log: log, "Archive unzip failed.")
+			throw AccountManagerError.readArchiveError
+		}
+		
+		let accountFile = restoreFolder.appendingPathComponent(AccountFile.filenameComponent)
+		let decoder = PropertyListDecoder()
+
+		do {
+			let accountData = try Data(contentsOf: accountFile)
+			let account = try decoder.decode(Account.self, from: accountData)
+			return (account.type, restoreFolder)
+		} catch {
+			os_log(.error, log: log, "Archive account read deserialization failed: %@.", error.localizedDescription)
+			throw AccountManagerError.readArchiveError
+		}
+	}
+	
+	public func cleanUpArchive(unpackURL: URL) {
+		try? FileManager.default.removeItem(at: unpackURL)
+	}
+	
+	public func restoreArchive(unpackURL: URL) {
+		
 	}
 	
 	public func archiveAccount(type: AccountType) -> URL? {

@@ -18,6 +18,8 @@ internal enum L10n {
   internal static let accountOnMyIPhone = L10n.tr("Localizable", "Account_On_My_iPhone")
   /// On My Mac
   internal static let accountOnMyMac = L10n.tr("Localizable", "Account_On_My_Mac")
+  /// This doesn't appear to be a Manhattan archive.  We're unable to restore from this file.
+  internal static let checkArchiveError = L10n.tr("Localizable", "Check_Archive_Error")
   /// Unable to read the import file.
   internal static let folderErrorImportRead = L10n.tr("Localizable", "Folder_Error_Import_Read")
   /// Unable to access security scoped resource.

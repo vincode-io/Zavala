@@ -74,6 +74,14 @@ internal enum L10n {
   internal static let outdent = L10n.tr("Localizable", "Outdent")
   /// Outline
   internal static let outline = L10n.tr("Localizable", "Outline")
+  /// Restore
+  internal static let restore = L10n.tr("Localizable", "Restore")
+  /// Your current account data will be lost and unrecoverable.
+  internal static let restoreAccountMessage = L10n.tr("Localizable", "Restore_Account_Message")
+  /// Are you sure you want to restore the “%@” account?
+  internal static func restoreAccountPrompt(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "Restore_Account_Prompt", String(describing: p1))
+  }
   /// Restore Archive
   internal static let restoreArchive = L10n.tr("Localizable", "Restore_Archive")
   /// See outlines in “%@”
