@@ -9,22 +9,22 @@ import UIKit
 
 public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiable, Codable {
 	
-	public weak var parent: Headline?
+	public weak var parent: HeadlineContainer?
 	public var shadowTableIndex: Int?
 
 	public var isAncestorComplete: Bool {
-		if let parent = parent {
-			return parent.isComplete ?? false || parent.isAncestorComplete
+		if let parentHeadline = parent as? Headline {
+			return parentHeadline.isComplete ?? false || parentHeadline.isAncestorComplete
 		}
 		return false
 	}
 	
 	public var indentLevel: Int {
 		var parentCount = 0
-		var p = parent
+		var p = parent as? Headline
 		while p != nil {
 			parentCount = parentCount + 1
-			p = p?.parent
+			p = p?.parent as? Headline
 		}
 		return parentCount
 	}
@@ -112,7 +112,7 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 	}
 
 	public func isDecendent(_ headline: Headline) -> Bool {
-		if parent == headline || parent?.isDecendent(headline) ?? false {
+		if let parentHeadline = parent as? Headline, parentHeadline == headline || parentHeadline.isDecendent(headline) {
 			return true
 		}
 		return false

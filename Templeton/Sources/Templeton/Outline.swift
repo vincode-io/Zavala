@@ -129,19 +129,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	}
 	
 	public func deleteHeadline(headline: Headline) -> ShadowTableChanges {
-		var headlines = self.headlines ?? [Headline]()
-		
-		if let parent = headline.parent {
-			headlines = parent.headlines ?? [Headline]()
-		}
-		
-		headlines.removeFirst(object: headline)
-		
-		if let parent = headline.parent {
-			parent.headlines = headlines
-		} else {
-			self.headlines = headlines
-		}
+		headline.parent?.headlines?.removeFirst(object: headline)
 		
 		outlineBodyDidChange()
 		
@@ -190,7 +178,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	}
 	
 	public func createHeadline(headline: Headline, afterHeadline: Headline? = nil) -> ShadowTableChanges {
-		if let parent = headline.parent, parent == afterHeadline {
+		if let parent = headline.parent, parent as? Headline == afterHeadline {
 			parent.headlines?.insert(headline, at: 0)
 		} else if afterHeadline?.isExpanded ?? true && !(afterHeadline?.headlines?.isEmpty ?? true) {
 			afterHeadline!.headlines!.insert(headline, at: 0)
@@ -205,7 +193,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			var headlines = self.headlines ?? [Headline]()
 			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? -1
 			headlines.insert(headline, at: insertIndex + 1)
-			headline.parent = afterHeadline?.parent
+			headline.parent = self
 			self.headlines = headlines
 		}
 		
@@ -322,14 +310,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func indentHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
 		headline.attributedText = attributedText
 		
-		let container: HeadlineContainer
-		if let oldParentHeadline = headline.parent {
-			container = oldParentHeadline
-		} else {
-			container = self
-		}
-
-		guard let headlineIndex = container.headlines?.firstIndex(of: headline),
+		guard let container = headline.parent,
+			  let headlineIndex = container.headlines?.firstIndex(of: headline),
 			  headlineIndex > 0,
 			  let newParentHeadline = container.headlines?[headlineIndex - 1] else { return ShadowTableChanges() }
 
@@ -379,7 +361,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func outdentHeadline(headline: Headline, attributedText: NSAttributedString) -> ShadowTableChanges {
 		headline.attributedText = attributedText
 
-		guard let oldParent = headline.parent,
+		guard let oldParent = headline.parent as? Headline,
 			  let oldParentHeadlines = oldParent.headlines,
 			  let oldParentShadowTableIndex = oldParent.shadowTableIndex,
 			  let originalHeadlineShadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
@@ -488,15 +470,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			headline.attributedText = text
 		}
 
-		let fromParent: HeadlineContainer
-		if let oldParentHeadline = headline.parent {
-			fromParent = oldParentHeadline
-		} else {
-			fromParent = self
-		}
-		
 		// Move the headline in the tree
-		fromParent.headlines?.removeFirst(object: headline)
+		headline.parent?.headlines?.removeFirst(object: headline)
 		if toParent.headlines == nil {
 			toParent.headlines = [headline]
 		} else {
@@ -708,6 +683,7 @@ extension Outline {
 	private func rebuildTransientData() {
 		let transient = TransientDataVisitor(isFiltered: isFiltered ?? false)
 		headlines?.forEach { headline in
+			headline.parent = self
 			headline.visit(visitor: transient.visitor(_:))
 		}
 		self.shadowTable = transient.shadowTable

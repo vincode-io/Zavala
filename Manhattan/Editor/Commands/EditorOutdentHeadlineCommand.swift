@@ -32,7 +32,7 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 		
 		// This is going to move, so we save the parent and child index
 		if headline != headline.parent?.headlines?.last {
-			oldParent = headline.parent
+			oldParent = headline.parent as? Headline
 			oldChildIndex = headline.parent?.headlines?.firstIndex(of: headline)
 		}
 		
