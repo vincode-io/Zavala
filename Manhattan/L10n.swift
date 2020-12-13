@@ -10,6 +10,8 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum L10n {
+  /// Add Note
+  internal static let addNote = L10n.tr("Localizable", "Add_Note")
   /// Add Row
   internal static let addRow = L10n.tr("Localizable", "Add_Row")
   /// Archive %@
@@ -30,6 +32,8 @@ internal enum L10n {
   internal static func deleteFolderPrompt(_ p1: Any) -> String {
     return L10n.tr("Localizable", "Delete_Folder_Prompt", String(describing: p1))
   }
+  /// Delete Note
+  internal static let deleteNote = L10n.tr("Localizable", "Delete_Note")
   /// The outline be deleted and unrecoverable.
   internal static let deleteOutlineMessage = L10n.tr("Localizable", "Delete_Outline_Message")
   /// Are you sure you want to delete the “%@” outline?

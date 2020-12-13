@@ -38,14 +38,22 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return currentHeadline == nil
 	}
 
-	var isSplitHeadlineUnavailable: Bool {
-		return currentHeadline == nil
-	}
-
 	var isCurrentHeadlineComplete: Bool {
 		return currentHeadline?.isComplete ?? false
 	}
 	
+	var isToggleHeadlineNoteUnavailable: Bool {
+		return currentHeadline == nil
+	}
+
+	var isCurrentHeadlineNoteEmpty: Bool {
+		return currentHeadline?.isNoteEmpty ?? false
+	}
+	
+	var isSplitHeadlineUnavailable: Bool {
+		return currentHeadline == nil
+	}
+
 	private(set) var outline: Outline?
 	
 	var currentTextView: EditorHeadlineTextView? {
@@ -187,6 +195,12 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		guard let headline = currentHeadline,
 			  let attributedText = currentAttributedText else { return }
 		toggleCompleteHeadline(headline, attributedText: attributedText)
+	}
+	
+	func toggleHeadlineNote() {
+		guard let headline = currentHeadline,
+			  let attributedText = currentAttributedText else { return }
+		toggleHeadlineNote(headline, attributedText: attributedText)
 	}
 	
 	func splitHeadline() {
@@ -431,7 +445,10 @@ private extension EditorViewController {
 			
 			let menuItems = [
 				UIMenu(title: "", options: .displayInline, children: mainActions),
-				UIMenu(title: "", options: .displayInline, children: [self.toggleCompleteAction(headline: headline, attributedText: attributedText)]),
+				UIMenu(title: "", options: .displayInline, children: [
+						self.toggleCompleteAction(headline: headline, attributedText: attributedText),
+						self.toggleNoteAction(headline: headline, attributedText: attributedText)
+				]),
 				UIMenu(title: "", options: .displayInline, children: [self.deleteAction(headline: headline, attributedText: attributedText)]),
 			]
 
@@ -469,6 +486,16 @@ private extension EditorViewController {
 		let image = headline.isComplete ?? false ? AppAssets.uncompleteHeadline : AppAssets.completeHeadline
 		let action = UIAction(title: title, image: image) { [weak self] action in
 			self?.toggleCompleteHeadline(headline, attributedText: attributedText)
+		}
+		return action
+	}
+	
+	private func toggleNoteAction(headline: Headline, attributedText: NSAttributedString) -> UIAction {
+		let title = headline.isNoteEmpty ? L10n.addNote : L10n.deleteNote
+		let image = headline.isNoteEmpty ? AppAssets.note : AppAssets.delete
+		let attributes = headline.isNoteEmpty ? [] : UIMenuElement.Attributes.destructive
+		let action = UIAction(title: title, image: image, attributes: attributes) { [weak self] action in
+			self?.toggleHeadlineNote(headline, attributedText: attributedText)
 		}
 		return action
 	}
@@ -621,5 +648,10 @@ private extension EditorViewController {
 		
 	}
 	
+	func toggleHeadlineNote(_ headline: Headline, attributedText: NSAttributedString) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		// TODO:
+	}
 
 }

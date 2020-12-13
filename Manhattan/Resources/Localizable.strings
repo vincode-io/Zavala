@@ -31,6 +31,8 @@
 "Collapse" = "Collapse";
 "Expand" = "Expand";
 "Add_Row" = "Add Row";
+"Add_Note" = "Add Note";
+"Delete_Note" = "Delete Note";
 "Split_Row" = "Split Row";
 "Restore" = "Restore";
 "Restore_Archive" = "Restore Archive";

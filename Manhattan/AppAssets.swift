@@ -85,6 +85,10 @@ struct AppAssets {
 		return UIImage(systemName: "arrow.right.to.line")!
 	}()
 
+	static var note: UIImage = {
+		return UIImage(systemName: "doc.text")!
+	}()
+
 	static var outdent: UIImage = {
 		return UIImage(systemName: "arrow.left.to.line")!
 	}()

@@ -54,6 +54,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		}
 		
+		if !(mainSplitViewController?.isToggleHeadlineCompleteUnavailable ?? true) {
+			if mainSplitViewController?.isCurrentHeadlineNoteEmpty ?? true {
+				menuKeyCommands.append(deleteHeadlineNoteCommand)
+			} else {
+				menuKeyCommands.append(createHeadlineNoteCommand)
+			}
+		}
+		
 		return menuKeyCommands
 		#endif
 	}
@@ -122,6 +130,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										action: #selector(toggleCompleteHeadlineCommand(_:)),
 										input: "\n",
 										modifierFlags: [.command])
+
+	let createHeadlineNoteCommand = UIKeyCommand(title: L10n.addNote,
+										action: #selector(createHeadlineNoteCommand(_:)),
+										input: "\n",
+										modifierFlags: [.shift])
+
+	let deleteHeadlineNoteCommand = UIKeyCommand(title: L10n.deleteNote,
+										action: #selector(deleteHeadlineNoteCommand(_:)),
+										input: "\u{8}",
+										modifierFlags: [.shift])
 
 	let splitHeadlineCommand = UIKeyCommand(title: L10n.splitRow,
 										action: #selector(splitHeadlineCommand(_:)),
@@ -217,6 +235,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.toggleCompleteHeadline(sender)
 	}
 	
+	@objc func createHeadlineNoteCommand(_ sender: Any?) {
+		mainSplitViewController?.toggleHeadlineNote(sender)
+	}
+	
+	@objc func deleteHeadlineNoteCommand(_ sender: Any?) {
+		mainSplitViewController?.toggleHeadlineNote(sender)
+	}
+	
 	@objc func splitHeadlineCommand(_ sender: Any?) {
 		mainSplitViewController?.splitHeadline(sender)
 	}
@@ -266,6 +292,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainSplitViewController?.isToggleHeadlineCompleteUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(createHeadlineNoteCommand(_:)):
+			if mainSplitViewController?.isToggleHeadlineCompleteUnavailable ?? true || !(mainSplitViewController?.isCurrentHeadlineNoteEmpty ?? true) {
+				command.attributes = .disabled
+			}
+		case #selector(deleteHeadlineNoteCommand(_:)):
+			if mainSplitViewController?.isToggleHeadlineCompleteUnavailable ?? true || mainSplitViewController?.isCurrentHeadlineNoteEmpty ?? true {
+				command.attributes = .disabled
+			}
 		case #selector(splitHeadlineCommand(_:)):
 			if mainSplitViewController?.isSplitHeadlineUnavailable ?? true {
 				command.attributes = .disabled
@@ -301,7 +335,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)
 		
 		// Outline Menu
-		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteHeadlineCommand])
+		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteHeadlineCommand, createHeadlineNoteCommand, deleteHeadlineNoteCommand])
 		let mainOutlineMenu = UIMenu(title: "", options: .displayInline, children: [createHeadlineCommand, splitHeadlineCommand, indentHeadlineCommand, outdentHeadlineCommand])
 		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, completeMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)

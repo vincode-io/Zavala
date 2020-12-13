@@ -31,6 +31,7 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 	
 	public var id: String
 	public var text: Data?
+	public var noteText: Data?
 	public var isExpanded: Bool?
 	public var isComplete: Bool?
 	public var headlines: [Headline]?
@@ -38,6 +39,7 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case text = "text"
+		case noteText = "noteText"
 		case isExpanded = "isExpanded"
 		case isComplete = "isComplete"
 		case headlines = "headlines"
@@ -61,12 +63,16 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 		headlines = [Headline]()
 	}
 	
-	public var isEmpty: Bool {
-		return plainText?.isEmpty ?? true
+	public var isNoteEmpty: Bool {
+		return notePlainText?.isEmpty ?? true
 	}
 	
 	public var plainText: String? {
 		return attributedText?.string
+	}
+	
+	public var notePlainText: String? {
+		return noteAttributedText?.string
 	}
 	
 	private var _attributedText: NSAttributedString?
@@ -86,6 +92,27 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 				text = try? attrText.data(from: .init(location: 0, length: attrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 			} else {
 				text = nil
+			}
+		}
+	}
+	
+	private var _noteAttributedText: NSAttributedString?
+	public var noteAttributedText: NSAttributedString? {
+		get {
+			guard let noteText = noteText else { return nil }
+			if _noteAttributedText == nil {
+				_noteAttributedText = try? NSAttributedString(data: noteText,
+															  options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
+															  documentAttributes: nil)
+			}
+			return _noteAttributedText
+		}
+		set {
+			_noteAttributedText = newValue
+			if let noteAttrText = newValue {
+				noteText = try? noteAttrText.data(from: .init(location: 0, length: noteAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+			} else {
+				noteText = nil
 			}
 		}
 	}
