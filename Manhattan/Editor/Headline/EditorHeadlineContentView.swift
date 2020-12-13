@@ -11,11 +11,9 @@ import Templeton
 class EditorHeadlineContentView: UIView, UIContentView {
 
 	let textView = EditorHeadlineTextView()
-	var textViewHeight: CGFloat?
 	var bulletView: UIImageView?
 	var barViews = [UIView]()
 	var appliedConfiguration: EditorHeadlineContentConfiguration!
-	var isTextChanged = false
 	
 	var attributedTexts: HeadlineTexts {
 		return HeadlineTexts(text: textView.attributedText, note: nil)
@@ -24,7 +22,7 @@ class EditorHeadlineContentView: UIView, UIContentView {
 	init(configuration: EditorHeadlineContentConfiguration) {
 		super.init(frame: .zero)
 
-		textView.delegate = self
+		textView.delegate = textView
 		textView.editorDelegate = self
 		
 		textView.isScrollEnabled = false
@@ -138,80 +136,44 @@ class EditorHeadlineContentView: UIView, UIContentView {
 	
 }
 
-// MARK: UITextViewDelegate
-
-extension EditorHeadlineContentView: UITextViewDelegate {
-	
-	func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
-		textViewHeight = fittingSize.height
-		return true
-	}
-	
-	func textViewDidEndEditing(_ textView: UITextView) {
-		guard isTextChanged, let headline = appliedConfiguration.headline, let editorTextView = textView as? EditorHeadlineTextView else { return }
-		
-		if editorTextView.isSavingTextUnnecessary {
-			editorTextView.isSavingTextUnnecessary = false
-		} else {
-			appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, attributedTexts: attributedTexts)
-		}
-		
-		isTextChanged = false
-	}
-	
-	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-		guard let headline = appliedConfiguration.headline else { return true }
-		switch text {
-		case "\n":
-			appliedConfiguration.delegate?.editorHeadlineCreateHeadline(headline, attributedTexts: attibutedTexts)
-			return false
-		default:
-			isTextChanged = true
-			return true
-		}
-	}
-	
-	func textViewDidChange(_ textView: UITextView) {
-		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
-		if textViewHeight != fittingSize.height {
-			textViewHeight = fittingSize.height
-			invalidateIntrinsicContentSize()
-			appliedConfiguration.delegate?.editorHeadlineInvalidateLayout()
-		}
-	}
-	
-}
-
 // MARK: EditorTextViewDelegate
 
 extension EditorHeadlineContentView: EditorHeadlineTextViewDelegate {
 	
-	override var undoManager: UndoManager? {
+	var editorHeadlineTextViewUndoManager: UndoManager? {
 		return appliedConfiguration.delegate?.editorHeadlineUndoManager
 	}
 	
-	var attibutedTexts: HeadlineTexts {
+	var editorHeadlineTextViewAttibutedTexts: HeadlineTexts {
 		return attributedTexts
 	}
 	
-	func deleteHeadline(_ headline: Headline) {
+	func invalidateLayout(_: EditorHeadlineTextView) {
+		invalidateIntrinsicContentSize()
+		appliedConfiguration.delegate?.editorHeadlineInvalidateLayout()
+	}
+	
+	func textChanged(_: EditorHeadlineTextView, headline: Headline) {
+		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, attributedTexts: editorHeadlineTextViewAttibutedTexts)
+	}
+	
+	func deleteHeadline(_: EditorHeadlineTextView, headline: Headline) {
 		appliedConfiguration.delegate?.editorHeadlineDeleteHeadline(headline, attributedTexts: attributedTexts)
 	}
 	
-	func createHeadline(_ afterHeadline: Headline) {
-		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(afterHeadline, attributedTexts: attibutedTexts)
+	func createHeadline(_: EditorHeadlineTextView, afterHeadline: Headline) {
+		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(afterHeadline, attributedTexts: editorHeadlineTextViewAttibutedTexts)
 	}
 	
-	func indentHeadline(_ headline: Headline) {
+	func indentHeadline(_: EditorHeadlineTextView, headline: Headline) {
 		appliedConfiguration.delegate?.editorHeadlineIndentHeadline(headline, attributedTexts: attributedTexts)
 	}
 	
-	func outdentHeadline(_ headline: Headline) {
+	func outdentHeadline(_: EditorHeadlineTextView, headline: Headline) {
 		appliedConfiguration.delegate?.editorHeadlineOutdentHeadline(headline, attributedTexts: attributedTexts)
 	}
 	
-	func splitHeadline(_ headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) {
+	func splitHeadline(_: EditorHeadlineTextView, headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) {
 		appliedConfiguration.delegate?.editorHeadlineSplitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
 	}
 	

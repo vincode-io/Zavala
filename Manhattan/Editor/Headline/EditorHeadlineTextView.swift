@@ -9,19 +9,21 @@ import UIKit
 import Templeton
 
 protocol EditorHeadlineTextViewDelegate: class {
-	var undoManager: UndoManager? { get }
-	var attibutedTexts: HeadlineTexts { get }
-	func deleteHeadline(_: Headline)
-	func createHeadline(_: Headline)
-	func indentHeadline(_: Headline)
-	func outdentHeadline(_: Headline)
-	func splitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)
+	var editorHeadlineTextViewUndoManager: UndoManager? { get }
+	var editorHeadlineTextViewAttibutedTexts: HeadlineTexts { get }
+	func invalidateLayout(_: EditorHeadlineTextView)
+	func textChanged(_: EditorHeadlineTextView, headline: Headline)
+	func deleteHeadline(_: EditorHeadlineTextView, headline: Headline)
+	func createHeadline(_: EditorHeadlineTextView, afterHeadline: Headline)
+	func indentHeadline(_: EditorHeadlineTextView, headline: Headline)
+	func outdentHeadline(_: EditorHeadlineTextView, headline: Headline)
+	func splitHeadline(_: EditorHeadlineTextView, headline: Headline, attributedText: NSAttributedString, cursorPosition: Int)
 }
 
 class EditorHeadlineTextView: OutlineTextView {
 	
 	override var editorUndoManager: UndoManager? {
-		return editorDelegate?.undoManager
+		return editorDelegate?.editorHeadlineTextViewUndoManager
 	}
 	
 	override var keyCommands: [UIKeyCommand]? {
@@ -35,10 +37,9 @@ class EditorHeadlineTextView: OutlineTextView {
 	}
 	
 	weak var editorDelegate: EditorHeadlineTextViewDelegate?
-	var isSavingTextUnnecessary = false
 	
 	override var attributedTexts: HeadlineTexts? {
-		return editorDelegate?.attibutedTexts
+		return editorDelegate?.editorHeadlineTextViewAttibutedTexts
 	}
 	
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
@@ -57,6 +58,10 @@ class EditorHeadlineTextView: OutlineTextView {
 		}
 	}
 	
+	private var textViewHeight: CGFloat?
+	private var isTextChanged = false
+	private var isSavingTextUnnecessary = false
+
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
@@ -64,7 +69,7 @@ class EditorHeadlineTextView: OutlineTextView {
 	override func deleteBackward() {
 		guard let headline = headline else { return }
 		if attributedText.length == 0 {
-			editorDelegate?.deleteHeadline(headline)
+			editorDelegate?.deleteHeadline(self, headline: headline)
 		} else {
 			super.deleteBackward()
 		}
@@ -72,12 +77,12 @@ class EditorHeadlineTextView: OutlineTextView {
 
 	@objc func tabPressed(_ sender: Any) {
 		guard let headline = headline else { return }
-		editorDelegate?.indentHeadline(headline)
+		editorDelegate?.indentHeadline(self, headline: headline)
 	}
 	
 	@objc func shiftTabPressed(_ sender: Any) {
 		guard let headline = headline else { return }
-		editorDelegate?.outdentHeadline(headline)
+		editorDelegate?.outdentHeadline(self, headline: headline)
 	}
 	
 	@objc func optionReturnPressed(_ sender: Any) {
@@ -87,7 +92,51 @@ class EditorHeadlineTextView: OutlineTextView {
 	@objc func shiftOptionReturnPressed(_ sender: Any) {
 		guard let headline = headline else { return }
 		isSavingTextUnnecessary = true
-		editorDelegate?.splitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
+		editorDelegate?.splitHeadline(self, headline: headline, attributedText: attributedText, cursorPosition: cursorPosition)
+	}
+	
+}
+
+// MARK: UITextViewDelegate
+
+extension EditorHeadlineTextView: UITextViewDelegate {
+	
+	func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
+		textViewHeight = fittingSize.height
+		return true
+	}
+	
+	func textViewDidEndEditing(_ textView: UITextView) {
+		guard isTextChanged, let headline = headline else { return }
+		
+		if isSavingTextUnnecessary {
+			isSavingTextUnnecessary = false
+		} else {
+			editorDelegate?.textChanged(self, headline: headline)
+		}
+		
+		isTextChanged = false
+	}
+	
+	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+		guard let headline = headline else { return true }
+		switch text {
+		case "\n":
+			editorDelegate?.createHeadline(self, afterHeadline: headline)
+			return false
+		default:
+			isTextChanged = true
+			return true
+		}
+	}
+	
+	func textViewDidChange(_ textView: UITextView) {
+		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
+		if textViewHeight != fittingSize.height {
+			textViewHeight = fittingSize.height
+			editorDelegate?.invalidateLayout(self)
+		}
 	}
 	
 }
