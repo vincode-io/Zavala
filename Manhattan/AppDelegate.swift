@@ -54,12 +54,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		}
 		
-		if !(mainSplitViewController?.isToggleHeadlineCompleteUnavailable ?? true) {
-			if mainSplitViewController?.isCurrentHeadlineNoteEmpty ?? true {
-				menuKeyCommands.append(deleteHeadlineNoteCommand)
-			} else {
-				menuKeyCommands.append(createHeadlineNoteCommand)
-			}
+		if !(mainSplitViewController?.isCreateHeadlineNoteUnavailable ?? true) {
+			menuKeyCommands.append(createHeadlineNoteCommand)
+		}
+
+		if !(mainSplitViewController?.isDeleteHeadlineNoteUnavailable ?? true) {
+			menuKeyCommands.append(deleteHeadlineNoteCommand)
 		}
 		
 		return menuKeyCommands
@@ -236,11 +236,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	@objc func createHeadlineNoteCommand(_ sender: Any?) {
-		mainSplitViewController?.toggleHeadlineNote(sender)
+		mainSplitViewController?.createHeadlineNote(sender)
 	}
 	
 	@objc func deleteHeadlineNoteCommand(_ sender: Any?) {
-		mainSplitViewController?.toggleHeadlineNote(sender)
+		mainSplitViewController?.deleteHeadlineNote(sender)
 	}
 	
 	@objc func splitHeadlineCommand(_ sender: Any?) {
@@ -293,11 +293,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				command.attributes = .disabled
 			}
 		case #selector(createHeadlineNoteCommand(_:)):
-			if mainSplitViewController?.isToggleHeadlineCompleteUnavailable ?? true || !(mainSplitViewController?.isCurrentHeadlineNoteEmpty ?? true) {
+			if mainSplitViewController?.isCreateHeadlineNoteUnavailable ?? true  {
 				command.attributes = .disabled
 			}
 		case #selector(deleteHeadlineNoteCommand(_:)):
-			if mainSplitViewController?.isToggleHeadlineCompleteUnavailable ?? true || mainSplitViewController?.isCurrentHeadlineNoteEmpty ?? true {
+			if mainSplitViewController?.isDeleteHeadlineNoteUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(splitHeadlineCommand(_:)):

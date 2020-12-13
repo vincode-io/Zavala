@@ -42,8 +42,12 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return currentHeadline?.isComplete ?? false
 	}
 	
-	var isToggleHeadlineNoteUnavailable: Bool {
-		return currentHeadline == nil
+	var isCreateHeadlineNoteUnavailable: Bool {
+		return currentHeadline == nil || !currentHeadline!.isNoteEmpty
+	}
+
+	var isDeleteHeadlineNoteUnavailable: Bool {
+		return currentHeadline == nil || currentHeadline!.isNoteEmpty
 	}
 
 	var isCurrentHeadlineNoteEmpty: Bool {
@@ -198,10 +202,16 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		toggleCompleteHeadline(headline, attributedTexts: attributedTexts)
 	}
 	
-	func toggleHeadlineNote() {
+	func createHeadlineNote() {
 		guard let headline = currentHeadline,
 			  let attributedTexts = currentAttributedTexts else { return }
-		toggleHeadlineNote(headline, attributedTexts: attributedTexts)
+		createHeadlineNote(headline, attributedTexts: attributedTexts)
+	}
+	
+	func deleteHeadlineNote() {
+		guard let headline = currentHeadline,
+			  let attributedTexts = currentAttributedTexts else { return }
+		deleteHeadlineNote(headline, attributedTexts: attributedTexts)
 	}
 	
 	func splitHeadline() {
@@ -458,54 +468,51 @@ private extension EditorViewController {
 	}
 	
 	private func addAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
-		let action = UIAction(title: L10n.addRow, image: AppAssets.add) { [weak self] action in
+		return UIAction(title: L10n.addRow, image: AppAssets.add) { [weak self] action in
 			// Have to let the text field get the first responder by getting it away from this
 			// action which appears to be holding on to it.
 			DispatchQueue.main.async {
 				self?.createHeadline(headline, attributedTexts: attributedTexts)
 			}
 		}
-		return action
 	}
 
 	private func indentAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
-		let action = UIAction(title: L10n.indent, image: AppAssets.indent) { [weak self] action in
+		return UIAction(title: L10n.indent, image: AppAssets.indent) { [weak self] action in
 			self?.indentHeadline(headline, attributedTexts: attributedTexts)
 		}
-		return action
 	}
 
 	private func outdentAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
-		let action = UIAction(title: L10n.outdent, image: AppAssets.outdent) { [weak self] action in
+		return UIAction(title: L10n.outdent, image: AppAssets.outdent) { [weak self] action in
 			self?.outdentHeadline(headline, attributedTexts: attributedTexts)
 		}
-		return action
 	}
 
 	private func toggleCompleteAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
 		let title = headline.isComplete ?? false ? L10n.uncomplete : L10n.complete
 		let image = headline.isComplete ?? false ? AppAssets.uncompleteHeadline : AppAssets.completeHeadline
-		let action = UIAction(title: title, image: image) { [weak self] action in
+		return UIAction(title: title, image: image) { [weak self] action in
 			self?.toggleCompleteHeadline(headline, attributedTexts: attributedTexts)
 		}
-		return action
 	}
 	
 	private func toggleNoteAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
-		let title = headline.isNoteEmpty ? L10n.addNote : L10n.deleteNote
-		let image = headline.isNoteEmpty ? AppAssets.note : AppAssets.delete
-		let attributes = headline.isNoteEmpty ? [] : UIMenuElement.Attributes.destructive
-		let action = UIAction(title: title, image: image, attributes: attributes) { [weak self] action in
-			self?.toggleHeadlineNote(headline, attributedTexts: attributedTexts)
+		if headline.isNoteEmpty {
+			return UIAction(title: L10n.addNote, image: AppAssets.note) { [weak self] action in
+				self?.createHeadlineNote(headline, attributedTexts: attributedTexts)
+			}
+		} else {
+			return UIAction(title: L10n.deleteNote, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
+				self?.createHeadlineNote(headline, attributedTexts: attributedTexts)
+			}
 		}
-		return action
 	}
 
 	private func deleteAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
-		let action = UIAction(title: L10n.delete, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
+		return UIAction(title: L10n.delete, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
 			self?.deleteHeadline(headline, attributedTexts: attributedTexts)
 		}
-		return action
 	}
 
 	func moveCursorUp(headline: Headline) {
@@ -650,10 +657,30 @@ private extension EditorViewController {
 		
 	}
 	
-	func toggleHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts) {
+	func createHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		// TODO:
+		let command = EditorCreateNoteCommand(undoManager: undoManager,
+											  delegate: self,
+											  outline: outline,
+											  headline: headline,
+											  attributedTexts: attributedTexts)
+		
+		runCommand(command)
+		
+		// TODO move the cursor to the new note field
+	}
+
+	func deleteHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = EditorDeleteNoteCommand(undoManager: undoManager,
+											  delegate: self,
+											  outline: outline,
+											  headline: headline,
+											  attributedTexts: attributedTexts)
+		
+		runCommand(command)
 	}
 
 }

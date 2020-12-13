@@ -91,7 +91,11 @@ class MainSplitViewController: UISplitViewController {
 	}
 
 	var isCreateHeadlineNoteUnavailable: Bool {
-		return editorViewController?.isToggleHeadlineNoteUnavailable ?? true
+		return editorViewController?.isCreateHeadlineNoteUnavailable ?? true
+	}
+	
+	var isDeleteHeadlineNoteUnavailable: Bool {
+		return editorViewController?.isDeleteHeadlineNoteUnavailable ?? true
 	}
 	
 	var isCurrentHeadlineNoteEmpty: Bool {
@@ -229,8 +233,12 @@ class MainSplitViewController: UISplitViewController {
 		editorViewController?.toggleCompleteHeadline()
 	}
 	
-	@objc func toggleHeadlineNote(_ sender: Any?) {
-		editorViewController?.toggleHeadlineNote()
+	@objc func createHeadlineNote(_ sender: Any?) {
+		editorViewController?.createHeadlineNote()
+	}
+	
+	@objc func deleteHeadlineNote(_ sender: Any?) {
+		editorViewController?.deleteHeadlineNote()
 	}
 	
 	@objc func splitHeadline(_ sender: Any?) {
