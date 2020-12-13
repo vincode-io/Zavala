@@ -10,10 +10,11 @@ import Templeton
 
 protocol EditorHeadlineTextViewDelegate: class {
 	var undoManager: UndoManager? { get }
-	func deleteHeadline(_: Headline, attributedText: NSAttributedString)
+	var attibutedTexts: HeadlineTexts { get }
+	func deleteHeadline(_: Headline)
 	func createHeadline(_: Headline)
-	func indentHeadline(_: Headline, attributedText: NSAttributedString)
-	func outdentHeadline(_: Headline, attributedText: NSAttributedString)
+	func indentHeadline(_: Headline)
+	func outdentHeadline(_: Headline)
 	func splitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)
 }
 
@@ -34,8 +35,11 @@ class EditorHeadlineTextView: OutlineTextView {
 	}
 	
 	weak var editorDelegate: EditorHeadlineTextViewDelegate?
-	var headline: Headline?
 	var isSavingTextUnnecessary = false
+	
+	override var attributedTexts: HeadlineTexts? {
+		return editorDelegate?.attibutedTexts
+	}
 	
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
@@ -60,7 +64,7 @@ class EditorHeadlineTextView: OutlineTextView {
 	override func deleteBackward() {
 		guard let headline = headline else { return }
 		if attributedText.length == 0 {
-			editorDelegate?.deleteHeadline(headline, attributedText: attributedText)
+			editorDelegate?.deleteHeadline(headline)
 		} else {
 			super.deleteBackward()
 		}
@@ -68,12 +72,12 @@ class EditorHeadlineTextView: OutlineTextView {
 
 	@objc func tabPressed(_ sender: Any) {
 		guard let headline = headline else { return }
-		editorDelegate?.indentHeadline(headline, attributedText: attributedText)
+		editorDelegate?.indentHeadline(headline)
 	}
 	
 	@objc func shiftTabPressed(_ sender: Any) {
 		guard let headline = headline else { return }
-		editorDelegate?.outdentHeadline(headline, attributedText: attributedText)
+		editorDelegate?.outdentHeadline(headline)
 	}
 	
 	@objc func optionReturnPressed(_ sender: Any) {

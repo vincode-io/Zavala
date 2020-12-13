@@ -17,28 +17,24 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 	weak var delegate: EditorOutlineCommandDelegate?
 	var outline: Outline
 	var headline: Headline
-	var oldAttributedText: NSAttributedString
-	var newAttributedText: NSAttributedString
+	var oldAttributedTexts: HeadlineTexts
+	var newAttributedTexts: HeadlineTexts
 	var applyChanges = false
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedText: NSAttributedString) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedTexts: HeadlineTexts) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
 		self.headline = headline
 		self.undoActionName = L10n.typing
 		self.redoActionName = L10n.typing
-		
-		if headline.attributedText == nil {
-			oldAttributedText = NSAttributedString()
-		} else {
-			oldAttributedText = headline.attributedText!
-		}
-		newAttributedText = attributedText
+
+		oldAttributedTexts = headline.attributedTexts
+		newAttributedTexts = attributedTexts
 	}
 	
 	func perform() {
-		let changes = outline.updateHeadline(headline: headline, attributedText: newAttributedText)
+		let changes = outline.updateHeadline(headline: headline, attributedTexts: newAttributedTexts)
 		if applyChanges {
 			delegate?.applyChangesRestoringCursor(changes)
 		}
@@ -47,7 +43,7 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 	}
 	
 	func undo() {
-		let changes = outline.updateHeadline(headline: headline, attributedText: oldAttributedText)
+		let changes = outline.updateHeadline(headline: headline, attributedTexts: oldAttributedTexts)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()
 	}

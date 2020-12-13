@@ -19,10 +19,10 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 	var headline: Headline
 	var oldParent: Headline?
 	var oldChildIndex: Int?
-	var oldAttributedText: NSAttributedString
-	var newAttributedText: NSAttributedString
+	var oldAttributedTexts: HeadlineTexts
+	var newAttributedTexts: HeadlineTexts
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedText: NSAttributedString) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedTexts: HeadlineTexts) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -36,26 +36,22 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 			oldChildIndex = headline.parent?.headlines?.firstIndex(of: headline)
 		}
 		
-		if headline.attributedText == nil {
-			oldAttributedText = NSAttributedString()
-		} else {
-			oldAttributedText = headline.attributedText!
-		}
-		newAttributedText = attributedText
+		oldAttributedTexts = headline.attributedTexts
+		newAttributedTexts = attributedTexts
 	}
 	
 	func perform() {
-		let changes = outline.outdentHeadline(headline: headline, attributedText: newAttributedText)
+		let changes = outline.outdentHeadline(headline: headline, attributedTexts: newAttributedTexts)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	func undo() {
 		if let oldParent = oldParent, let oldChildIndex = oldChildIndex {
-			let changes = outline.moveHeadline(headline, attributedText: oldAttributedText, toParent: oldParent, childIndex: oldChildIndex)
+			let changes = outline.moveHeadline(headline, attributedTexts: oldAttributedTexts, toParent: oldParent, childIndex: oldChildIndex)
 			delegate?.applyChangesRestoringCursor(changes)
 		} else {
-			let changes = outline.indentHeadline(headline: headline, attributedText: oldAttributedText)
+			let changes = outline.indentHeadline(headline: headline, attributedTexts: oldAttributedTexts)
 			delegate?.applyChangesRestoringCursor(changes)
 		}
 		registerRedo()

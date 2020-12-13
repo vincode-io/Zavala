@@ -17,6 +17,10 @@ class EditorHeadlineContentView: UIView, UIContentView {
 	var appliedConfiguration: EditorHeadlineContentConfiguration!
 	var isTextChanged = false
 	
+	var attributedTexts: HeadlineTexts {
+		return HeadlineTexts(text: textView.attributedText, note: nil)
+	}
+	
 	init(configuration: EditorHeadlineContentConfiguration) {
 		super.init(frame: .zero)
 
@@ -150,7 +154,7 @@ extension EditorHeadlineContentView: UITextViewDelegate {
 		if editorTextView.isSavingTextUnnecessary {
 			editorTextView.isSavingTextUnnecessary = false
 		} else {
-			appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, attributedText: textView.attributedText)
+			appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, attributedTexts: attributedTexts)
 		}
 		
 		isTextChanged = false
@@ -184,23 +188,27 @@ extension EditorHeadlineContentView: UITextViewDelegate {
 extension EditorHeadlineContentView: EditorHeadlineTextViewDelegate {
 	
 	override var undoManager: UndoManager? {
-		appliedConfiguration.delegate?.editorHeadlineUndoManager
+		return appliedConfiguration.delegate?.editorHeadlineUndoManager
 	}
 	
-	func deleteHeadline(_ headline: Headline, attributedText: NSAttributedString) {
-		appliedConfiguration.delegate?.editorHeadlineDeleteHeadline(headline, attributedText: attributedText)
+	var attibutedTexts: HeadlineTexts {
+		return attributedTexts
+	}
+	
+	func deleteHeadline(_ headline: Headline) {
+		appliedConfiguration.delegate?.editorHeadlineDeleteHeadline(headline, attributedTexts: attributedTexts)
 	}
 	
 	func createHeadline(_ afterHeadline: Headline) {
 		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(afterHeadline)
 	}
 	
-	func indentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
-		appliedConfiguration.delegate?.editorHeadlineIndentHeadline(headline, attributedText: attributedText)
+	func indentHeadline(_ headline: Headline) {
+		appliedConfiguration.delegate?.editorHeadlineIndentHeadline(headline, attributedTexts: attributedTexts)
 	}
 	
-	func outdentHeadline(_ headline: Headline, attributedText: NSAttributedString) {
-		appliedConfiguration.delegate?.editorHeadlineOutdentHeadline(headline, attributedText: attributedText)
+	func outdentHeadline(_ headline: Headline) {
+		appliedConfiguration.delegate?.editorHeadlineOutdentHeadline(headline, attributedTexts: attributedTexts)
 	}
 	
 	func splitHeadline(_ headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) {
@@ -215,12 +223,12 @@ extension EditorHeadlineContentView {
 	
 	@objc func swipedLeft(_ sender: UISwipeGestureRecognizer) {
 		guard let headline = appliedConfiguration.headline else { return }
-		appliedConfiguration.delegate?.editorHeadlineOutdentHeadline(headline, attributedText: textView.attributedText)
+		appliedConfiguration.delegate?.editorHeadlineOutdentHeadline(headline, attributedTexts: attributedTexts)
 	}
 	
 	@objc func swipedRight(_ sender: UISwipeGestureRecognizer) {
 		guard let headline = appliedConfiguration.headline else { return }
-		appliedConfiguration.delegate?.editorHeadlineIndentHeadline(headline, attributedText: textView.attributedText)
+		appliedConfiguration.delegate?.editorHeadlineIndentHeadline(headline, attributedTexts: attributedTexts)
 	}
 	
 	private func addBarViews() {

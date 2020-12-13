@@ -17,10 +17,10 @@ final class EditorIndentHeadlineCommand: EditorOutlineCommand {
 	weak var delegate: EditorOutlineCommandDelegate?
 	var outline: Outline
 	var headline: Headline
-	var oldAttributedText: NSAttributedString
-	var newAttributedText: NSAttributedString
+	var oldAttributedTexts: HeadlineTexts
+	var newAttributedTexts: HeadlineTexts
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedText: NSAttributedString) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedTexts: HeadlineTexts) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -28,22 +28,18 @@ final class EditorIndentHeadlineCommand: EditorOutlineCommand {
 		self.undoActionName = L10n.indent
 		self.redoActionName = L10n.indent
 		
-		if headline.attributedText == nil {
-			oldAttributedText = NSAttributedString()
-		} else {
-			oldAttributedText = headline.attributedText!
-		}
-		newAttributedText = attributedText
+		oldAttributedTexts = headline.attributedTexts
+		newAttributedTexts = attributedTexts
 	}
 	
 	func perform() {
-		let changes = outline.indentHeadline(headline: headline, attributedText: newAttributedText)
+		let changes = outline.indentHeadline(headline: headline, attributedTexts: newAttributedTexts)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	func undo() {
-		let changes = outline.outdentHeadline(headline: headline, attributedText: oldAttributedText)
+		let changes = outline.outdentHeadline(headline: headline, attributedTexts: oldAttributedTexts)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()
 	}

@@ -12,11 +12,11 @@ protocol EditorHeadlineViewCellDelegate: class {
 	var editorHeadlineUndoManager: UndoManager? { get }
 	func editorHeadlineInvalidateLayout()
 	func editorHeadlineToggleDisclosure(headline: Headline)
-	func editorHeadlineTextChanged(headline: Headline, attributedText: NSAttributedString)
-	func editorHeadlineDeleteHeadline(_ headline: Headline, attributedText: NSAttributedString)
+	func editorHeadlineTextChanged(headline: Headline, attributedTexts: HeadlineTexts)
+	func editorHeadlineDeleteHeadline(_ headline: Headline, attributedTexts: HeadlineTexts)
 	func editorHeadlineCreateHeadline(_ afterHeadline: Headline?)
-	func editorHeadlineIndentHeadline(_ headline: Headline, attributedText: NSAttributedString)
-	func editorHeadlineOutdentHeadline(_ headline: Headline, attributedText: NSAttributedString)
+	func editorHeadlineIndentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts)
+	func editorHeadlineOutdentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts)
 	func editorHeadlineSplitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)
 }
 
@@ -34,8 +34,8 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 		}
 	}
 	
-	var attributedText: NSAttributedString? {
-		return (contentView as? EditorHeadlineContentView)?.textView.attributedText
+	var attributedTexts: HeadlineTexts? {
+		return (contentView as? EditorHeadlineContentView)?.attributedTexts
 	}
 	
 	var textWidth: CGFloat? {

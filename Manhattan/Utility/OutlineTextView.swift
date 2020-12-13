@@ -6,9 +6,12 @@
 //
 
 import UIKit
+import Templeton
 
 class OutlineTextView: UITextView {
 	
+	var headline: Headline?
+
 	var editorUndoManager: UndoManager? {
 		fatalError("editorUndoManager has not been implemented")
 	}
@@ -27,6 +30,10 @@ class OutlineTextView: UITextView {
 	
 	var cursorPosition: Int {
 		return selectedRange.location
+	}
+	
+	var attributedTexts: HeadlineTexts? {
+		fatalError("attibutedTexts has not been implemented")
 	}
 
 	private var stackedUndoManager: UndoManager?

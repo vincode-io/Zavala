@@ -7,6 +7,16 @@
 
 import UIKit
 
+public struct HeadlineTexts {
+	public var text: NSAttributedString?
+	public var note: NSAttributedString?
+	
+	public init(text: NSAttributedString?, note: NSAttributedString?) {
+		self.text = text
+		self.note = note
+	}
+}
+
 public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiable, Codable {
 	
 	public weak var parent: HeadlineContainer?
@@ -31,7 +41,7 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 	
 	public var id: String
 	public var text: Data?
-	public var noteText: Data?
+	public var note: Data?
 	public var isExpanded: Bool?
 	public var isComplete: Bool?
 	public var headlines: [Headline]?
@@ -39,7 +49,7 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case text = "text"
-		case noteText = "noteText"
+		case note = "note"
 		case isExpanded = "isExpanded"
 		case isComplete = "isComplete"
 		case headlines = "headlines"
@@ -99,7 +109,7 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 	private var _noteAttributedText: NSAttributedString?
 	public var noteAttributedText: NSAttributedString? {
 		get {
-			guard let noteText = noteText else { return nil }
+			guard let noteText = note else { return nil }
 			if _noteAttributedText == nil {
 				_noteAttributedText = try? NSAttributedString(data: noteText,
 															  options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
@@ -110,10 +120,20 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 		set {
 			_noteAttributedText = newValue
 			if let noteAttrText = newValue {
-				noteText = try? noteAttrText.data(from: .init(location: 0, length: noteAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+				note = try? noteAttrText.data(from: .init(location: 0, length: noteAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 			} else {
-				noteText = nil
+				note = nil
 			}
+		}
+	}
+	
+	public var attributedTexts: HeadlineTexts {
+		get {
+			return HeadlineTexts(text: attributedText, note: noteAttributedText)
+		}
+		set {
+			attributedText = newValue.text
+			noteAttributedText = newValue.note
 		}
 	}
 	

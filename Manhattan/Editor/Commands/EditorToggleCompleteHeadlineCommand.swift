@@ -17,11 +17,11 @@ final class EditorToggleCompleteHeadlineCommand: EditorOutlineCommand {
 	weak var delegate: EditorOutlineCommandDelegate?
 	var outline: Outline
 	var headline: Headline
-	var oldAttributedText: NSAttributedString
-	var newAttributedText: NSAttributedString
+	var oldAttributedTexts: HeadlineTexts
+	var newAttributedTexts: HeadlineTexts
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedText: NSAttributedString) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedTexts: HeadlineTexts) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -29,22 +29,18 @@ final class EditorToggleCompleteHeadlineCommand: EditorOutlineCommand {
 		self.undoActionName = L10n.complete
 		self.redoActionName = L10n.complete
 		
-		if headline.attributedText == nil {
-			oldAttributedText = NSAttributedString()
-		} else {
-			oldAttributedText = headline.attributedText!
-		}
-		newAttributedText = attributedText
+		oldAttributedTexts = headline.attributedTexts
+		newAttributedTexts = attributedTexts
 	}
 	
 	func perform() {
-		changes = outline.toggleComplete(headline: headline, attributedText: newAttributedText)
+		changes = outline.toggleComplete(headline: headline, attributedTexts: newAttributedTexts)
 		delegate?.applyChangesRestoringCursor(changes!)
 		registerUndo()
 	}
 	
 	func undo() {
-		let changes = outline.toggleComplete(headline: headline, attributedText: oldAttributedText)
+		let changes = outline.toggleComplete(headline: headline, attributedTexts: oldAttributedTexts)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()
 	}

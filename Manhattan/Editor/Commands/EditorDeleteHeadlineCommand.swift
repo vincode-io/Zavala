@@ -17,15 +17,16 @@ final class EditorDeleteHeadlineCommand: EditorOutlineCommand {
 	weak var delegate: EditorOutlineCommandDelegate?
 	var outline: Outline
 	var headline: Headline
+	var attributedTexts: HeadlineTexts
 	var afterHeadline: Headline?
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedText: NSAttributedString) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedTexts: HeadlineTexts) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
 		self.headline = headline
-		self.headline.attributedText = attributedText
+		self.attributedTexts = attributedTexts
 		undoActionName = L10n.delete
 		redoActionName = L10n.delete
 	}
@@ -35,7 +36,7 @@ final class EditorDeleteHeadlineCommand: EditorOutlineCommand {
 			afterHeadline = outline.shadowTable?[headlineShadowTableIndex - 1]
 		}
 		
-		changes = outline.deleteHeadline(headline: headline)
+		changes = outline.deleteHeadline(headline: headline, attributedTexts: attributedTexts)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
