@@ -211,7 +211,6 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		
 		outlineBodyDidChange()
 
-		
 		var headlines = [headline]
 		
 		func insertVisitor(_ visited: Headline) {
