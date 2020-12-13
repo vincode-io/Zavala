@@ -487,16 +487,31 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 		let changes = rebuildShadowTable(reloadEverything: true)
 		
-		// If there weren't any shadow table changes, we need to reload the headline row and the one above it
-		if changes.isEmpty, let shadowTableIndex = shadowTable?.firstIndex(of: headline) {
-			if shadowTableIndex > 0 {
-				return ShadowTableChanges(reloads: [shadowTableIndex, shadowTableIndex - 1])
-			} else {
-				return ShadowTableChanges(reloads: [shadowTableIndex])
-			}
-		} else {
+		guard changes.isEmpty, let shadowTableIndex = shadowTable?.firstIndex(of: headline) else {
 			return changes
 		}
+
+		// If there weren't any shadow table changes, we need to reload the headline row, its children, and the one above it
+
+		var reloads = [shadowTableIndex]
+		if shadowTableIndex > 0 {
+			reloads.append(shadowTableIndex - 1)
+		}
+		
+		func reloadVisitor(_ visited: Headline) {
+			if let index = visited.shadowTableIndex {
+				reloads.append(index)
+			}
+			if visited.isExpanded ?? true {
+				visited.headlines?.forEach { $0.visit(visitor: reloadVisitor) }
+			}
+		}
+
+		if headline.isExpanded ?? true {
+			headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+		}
+
+		return ShadowTableChanges(reloads: Set(reloads))
 	}
 	
 	public func load() {
