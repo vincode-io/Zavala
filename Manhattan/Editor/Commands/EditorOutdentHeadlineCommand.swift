@@ -32,12 +32,12 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 		
 		// This is going to move, so we save the parent and child index
 		if headline != headline.parent?.headlines?.last {
-			oldParent = headline.parent as? Headline
-			oldChildIndex = headline.parent?.headlines?.firstIndex(of: headline)
+			self.oldParent = headline.parent as? Headline
+			self.oldChildIndex = headline.parent?.headlines?.firstIndex(of: headline)
 		}
 		
-		oldAttributedTexts = headline.attributedTexts
-		newAttributedTexts = attributedTexts
+		self.oldAttributedTexts = headline.attributedTexts
+		self.newAttributedTexts = attributedTexts
 	}
 	
 	func perform() {
