@@ -255,31 +255,6 @@ extension TimelineViewController {
 		}
 	}
 	
-	private static let dateFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateStyle = .medium
-		formatter.timeStyle = .none
-		return formatter
-	}()
-
-	private static let timeFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateStyle = .none
-		formatter.timeStyle = .short
-		return formatter
-	}()
-	
-	private static func dateString(_ date: Date?) -> String {
-		guard let date = date else {
-			return L10n.notAvailable
-		}
-		
-		if Calendar.dateIsToday(date) {
-			return timeFormatter.string(from: date)
-		}
-		return dateFormatter.string(from: date)
-	}
-	
 	private func makeOutlineContextMenu(item: TimelineItem) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: item as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
 			guard let self = self, let outline = AccountManager.shared.findOutline(item.id) else { return nil }
@@ -388,4 +363,29 @@ extension TimelineViewController {
 		present(alert, animated: true, completion: nil)
 	}
 		
+	private static let dateFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.dateStyle = .medium
+		formatter.timeStyle = .none
+		return formatter
+	}()
+
+	private static let timeFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.dateStyle = .none
+		formatter.timeStyle = .short
+		return formatter
+	}()
+	
+	private static func dateString(_ date: Date?) -> String {
+		guard let date = date else {
+			return L10n.notAvailable
+		}
+		
+		if Calendar.dateIsToday(date) {
+			return timeFormatter.string(from: date)
+		}
+		return dateFormatter.string(from: date)
+	}
+	
 }
