@@ -100,7 +100,7 @@ extension EditorTitleContentView: UITextViewDelegate {
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
 		switch text {
 		case "\n":
-			appliedConfiguration.delegate?.editorTitleCreateHeadline()
+			appliedConfiguration.delegate?.editorTitleCreateHeadline(attibutedTexts: nil)
 			return false
 		default:
 			return true

@@ -14,7 +14,7 @@ protocol EditorHeadlineViewCellDelegate: class {
 	func editorHeadlineToggleDisclosure(headline: Headline)
 	func editorHeadlineTextChanged(headline: Headline, attributedTexts: HeadlineTexts)
 	func editorHeadlineDeleteHeadline(_ headline: Headline, attributedTexts: HeadlineTexts)
-	func editorHeadlineCreateHeadline(_ afterHeadline: Headline?)
+	func editorHeadlineCreateHeadline(_ afterHeadline: Headline?, attributedTexts: HeadlineTexts?)
 	func editorHeadlineIndentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts)
 	func editorHeadlineOutdentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts)
 	func editorHeadlineSplitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)

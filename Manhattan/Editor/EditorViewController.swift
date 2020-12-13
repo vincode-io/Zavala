@@ -175,8 +175,9 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 	
 	func createHeadline() {
-		guard let headline = currentHeadline else { return }
-		createHeadline(headline)
+		guard let headline = currentHeadline,
+			  let attributedTexts = currentAttributedTexts else { return }
+		createHeadline(headline, attributedTexts: attributedTexts)
 	}
 	
 	func indentHeadline() {
@@ -308,8 +309,8 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 		collectionView.collectionViewLayout.invalidateLayout()
 	}
 	
-	func editorTitleCreateHeadline() {
-		createHeadline(nil)
+	func editorTitleCreateHeadline(attibutedTexts: HeadlineTexts?) {
+		createHeadline(nil, attributedTexts: attibutedTexts)
 	}
 	
 	
@@ -337,8 +338,8 @@ extension EditorViewController: EditorHeadlineViewCellDelegate {
 		deleteHeadline(headline, attributedTexts: attributedTexts)
 	}
 	
-	func editorHeadlineCreateHeadline(_ afterHeadline: Headline?) {
-		createHeadline(afterHeadline)
+	func editorHeadlineCreateHeadline(_ afterHeadline: Headline?, attributedTexts: HeadlineTexts?) {
+		createHeadline(afterHeadline, attributedTexts: attributedTexts)
 	}
 	
 	func editorHeadlineIndentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts) {
@@ -433,7 +434,7 @@ private extension EditorViewController {
 			guard let self = self, let outline = self.outline else { return nil }
 			
 			var mainActions = [UIAction]()
-			mainActions.append(self.addAction(headline: headline))
+			mainActions.append(self.addAction(headline: headline, attributedTexts: attributedTexts))
 
 			if !outline.isIndentHeadlineUnavailable(headline: headline) {
 				mainActions.append(self.indentAction(headline: headline, attributedTexts: attributedTexts))
@@ -456,12 +457,12 @@ private extension EditorViewController {
 		})
 	}
 	
-	private func addAction(headline: Headline) -> UIAction {
+	private func addAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
 		let action = UIAction(title: L10n.addRow, image: AppAssets.add) { [weak self] action in
 			// Have to let the text field get the first responder by getting it away from this
 			// action which appears to be holding on to it.
 			DispatchQueue.main.async {
-				self?.createHeadline(headline)
+				self?.createHeadline(headline, attributedTexts: attributedTexts)
 			}
 		}
 		return action
@@ -567,13 +568,14 @@ private extension EditorViewController {
 		}
 	}
 	
-	func createHeadline(_ afterHeadline: Headline?) {
+	func createHeadline(_ afterHeadline: Headline?, attributedTexts: HeadlineTexts?) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = EditorCreateHeadlineCommand(undoManager: undoManager,
 												  delegate: self,
 												  outline: outline,
-												  afterHeadline: afterHeadline)
+												  afterHeadline: afterHeadline,
+												  attributedTexts: attributedTexts)
 		
 		runCommand(command)
 		

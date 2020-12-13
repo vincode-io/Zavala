@@ -18,13 +18,15 @@ final class EditorCreateHeadlineCommand: EditorOutlineCommand {
 	var outline: Outline
 	var headline: Headline?
 	var afterHeadline: Headline?
+	var attributedTexts: HeadlineTexts?
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, afterHeadline: Headline?) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, afterHeadline: Headline?, attributedTexts: HeadlineTexts?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
 		self.afterHeadline = afterHeadline
+		self.attributedTexts = attributedTexts
 		undoActionName = L10n.delete
 		redoActionName = L10n.delete
 	}
@@ -33,7 +35,7 @@ final class EditorCreateHeadlineCommand: EditorOutlineCommand {
 		if headline == nil {
 			headline = Headline()
 		}
-		changes = outline.createHeadline(headline: headline!, afterHeadline: afterHeadline)
+		changes = outline.createHeadline(headline: headline!, afterHeadline: afterHeadline, attributedTexts: attributedTexts)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}

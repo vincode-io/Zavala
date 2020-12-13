@@ -164,7 +164,7 @@ extension EditorHeadlineContentView: UITextViewDelegate {
 		guard let headline = appliedConfiguration.headline else { return true }
 		switch text {
 		case "\n":
-			appliedConfiguration.delegate?.editorHeadlineCreateHeadline(headline)
+			appliedConfiguration.delegate?.editorHeadlineCreateHeadline(headline, attributedTexts: attibutedTexts)
 			return false
 		default:
 			isTextChanged = true
@@ -200,7 +200,7 @@ extension EditorHeadlineContentView: EditorHeadlineTextViewDelegate {
 	}
 	
 	func createHeadline(_ afterHeadline: Headline) {
-		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(afterHeadline)
+		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(afterHeadline, attributedTexts: attibutedTexts)
 	}
 	
 	func indentHeadline(_ headline: Headline) {
