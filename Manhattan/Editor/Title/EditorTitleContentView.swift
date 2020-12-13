@@ -82,7 +82,7 @@ class EditorTitleContentView: UIView, UIContentView {
 // MARK: EditorTitleTextViewDelegate
 
 extension EditorTitleContentView: EditorTitleTextViewDelegate {
-	override var undoManager: UndoManager? {
+	var EditorTitleTextViewUndoManager: UndoManager? {
 		return appliedConfiguration.delegate?.editorTitleUndoManager
 	}
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol EditorTitleTextViewDelegate: class {
-	var undoManager: UndoManager? { get }
+	var EditorTitleTextViewUndoManager: UndoManager? { get }
 }
 
 class EditorTitleTextView: OutlineTextView {
@@ -16,7 +16,7 @@ class EditorTitleTextView: OutlineTextView {
 	weak var editorDelegate: EditorTitleTextViewDelegate?
 
 	override var editorUndoManager: UndoManager? {
-		return editorDelegate?.undoManager
+		return editorDelegate?.EditorTitleTextViewUndoManager
 	}
 
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
