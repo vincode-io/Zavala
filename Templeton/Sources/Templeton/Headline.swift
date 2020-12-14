@@ -61,14 +61,14 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 		headlines = [Headline]()
 	}
 	
-	public init(plainText: String) {
+	public init(plainText: String, notePlainText: String? = nil) {
 		self.id = UUID().uuidString
 		super.init()
 
-		var attributes = [NSAttributedString.Key: AnyObject]()
-		attributes[.foregroundColor] = UIColor.label
-		attributes[.font] = UIFont.preferredFont(forTextStyle: .body)
-		attributedText = NSAttributedString(string: plainText, attributes: attributes)
+		attributedText = NSAttributedString(string: plainText)
+		if let notePlainText = notePlainText {
+			noteAttributedText = NSAttributedString(string: notePlainText)
+		}
 											
 		headlines = [Headline]()
 	}
