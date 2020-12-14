@@ -11,12 +11,14 @@ import Templeton
 class EditorHeadlineContentView: UIView, UIContentView {
 
 	let textView = EditorHeadlineTextView()
+	var noteTextView: EditorHeadlineNoteTextView?
 	var bulletView: UIImageView?
 	var barViews = [UIView]()
+	
 	var appliedConfiguration: EditorHeadlineContentConfiguration!
 	
 	var attributedTexts: HeadlineTexts {
-		return HeadlineTexts(text: textView.attributedText, note: nil)
+		return HeadlineTexts(text: textView.attributedText, note: noteTextView?.attributedText)
 	}
 	
 	init(configuration: EditorHeadlineContentConfiguration) {
@@ -52,34 +54,9 @@ class EditorHeadlineContentView: UIView, UIContentView {
 	private func apply(configuration: EditorHeadlineContentConfiguration) {
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
-		
-		textView.headline = configuration.headline
-		
-		var attrs = [NSAttributedString.Key : Any]()
-		if configuration.isComplete || configuration.isAncestorComplete {
-			attrs[.foregroundColor] = UIColor.tertiaryLabel
-		} else {
-			attrs[.foregroundColor] = UIColor.label
-		}
-		
-		if traitCollection.userInterfaceIdiom == .mac {
-			let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-			attrs[.font] = bodyFont.withSize(bodyFont.pointSize + 1)
-		} else {
-			attrs[.font] = UIFont.preferredFont(forTextStyle: .body)
-		}
-		
-		if configuration.isComplete {
-			attrs[.strikethroughStyle] = 1
-			attrs[.strikethroughColor] = UIColor.tertiaryLabel
-		} else {
-			attrs[.strikethroughStyle] = 0
-		}
-		
-		let mutableAttrText = NSMutableAttributedString(attributedString: configuration.attributedText)
-		let range = NSRange(location: 0, length: mutableAttrText.length)
-		mutableAttrText.addAttributes(attrs, range: range)
-		textView.attributedText = mutableAttrText
+
+		configureTextView(configuration: configuration)
+		configureNoteTextView(configuration: configuration)
 
 		let adjustedLeadingIndention: CGFloat
 		let adjustedTrailingIndention: CGFloat
@@ -90,14 +67,29 @@ class EditorHeadlineContentView: UIView, UIContentView {
 			adjustedLeadingIndention = configuration.indentationWidth
 			adjustedTrailingIndention = -25
 		}
-		
+
 		textView.removeConstraintsOwnedBySuperview()
-		NSLayoutConstraint.activate([
-			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-			textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-			textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-			textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
-		])
+		
+		if let noteTextView = noteTextView {
+			noteTextView.removeConstraintsOwnedBySuperview()
+			NSLayoutConstraint.activate([
+				textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+				textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+				textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+				textView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: -4),
+				noteTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+				noteTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+				noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+
+			])
+		} else {
+			NSLayoutConstraint.activate([
+				textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+				textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+				textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+				textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+			])
+		}
 
 		if configuration.indentionLevel < barViews.count {
 			for i in (configuration.indentionLevel..<barViews.count).reversed() {
@@ -201,6 +193,69 @@ extension EditorHeadlineContentView {
 	@objc func swipedRight(_ sender: UISwipeGestureRecognizer) {
 		guard let headline = appliedConfiguration.headline else { return }
 		appliedConfiguration.delegate?.editorHeadlineIndentHeadline(headline, attributedTexts: attributedTexts)
+	}
+	
+	private func configureTextView(configuration: EditorHeadlineContentConfiguration) {
+		textView.headline = configuration.headline
+		
+		var attrs = [NSAttributedString.Key : Any]()
+		if configuration.isComplete || configuration.isAncestorComplete {
+			attrs[.foregroundColor] = UIColor.tertiaryLabel
+		} else {
+			attrs[.foregroundColor] = UIColor.label
+		}
+		
+		if traitCollection.userInterfaceIdiom == .mac {
+			let bodyFont = UIFont.preferredFont(forTextStyle: .body)
+			attrs[.font] = bodyFont.withSize(bodyFont.pointSize + 1)
+		} else {
+			attrs[.font] = UIFont.preferredFont(forTextStyle: .body)
+		}
+		
+		if configuration.isComplete {
+			attrs[.strikethroughStyle] = 1
+			attrs[.strikethroughColor] = UIColor.tertiaryLabel
+		} else {
+			attrs[.strikethroughStyle] = 0
+		}
+		
+		let mutableAttrText = NSMutableAttributedString(attributedString: configuration.attributedText)
+		let range = NSRange(location: 0, length: mutableAttrText.length)
+		mutableAttrText.addAttributes(attrs, range: range)
+		textView.attributedText = mutableAttrText
+
+	}
+	
+	private func configureNoteTextView(configuration: EditorHeadlineContentConfiguration) {
+		guard let noteAttributedText = configuration.headline?.noteAttributedText else {
+			noteTextView?.removeFromSuperview()
+			noteTextView = nil
+			return
+		}
+		
+		var attrs = [NSAttributedString.Key : Any]()
+		attrs[.foregroundColor] = UIColor.secondaryLabel
+		
+		if traitCollection.userInterfaceIdiom == .mac {
+			attrs[.font] = UIFont.preferredFont(forTextStyle: .body)
+		} else {
+			let bodyFont = UIFont.preferredFont(forTextStyle: .body)
+			attrs[.font] = bodyFont.withSize(bodyFont.pointSize - 1)
+		}
+		
+		let mutableAttrText = NSMutableAttributedString(attributedString: noteAttributedText)
+		let range = NSRange(location: 0, length: mutableAttrText.length)
+		mutableAttrText.addAttributes(attrs, range: range)
+		
+		if noteTextView == nil {
+			noteTextView = EditorHeadlineNoteTextView()
+			noteTextView!.editorDelegate = self
+			noteTextView!.translatesAutoresizingMaskIntoConstraints = false
+			addSubview(noteTextView!)
+		}
+		
+		noteTextView!.headline = configuration.headline
+		noteTextView!.attributedText = mutableAttrText
 	}
 	
 	private func addBarViews() {

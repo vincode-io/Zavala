@@ -139,6 +139,13 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 		textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
 	}
 	
+	func moveToNote() {
+		guard let textView = (contentView as? EditorHeadlineContentView)?.noteTextView else { return }
+		textView.becomeFirstResponder()
+		let endPosition = textView.endOfDocument
+		textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
+	}
+	
 }
 
 // MARK: Helpers

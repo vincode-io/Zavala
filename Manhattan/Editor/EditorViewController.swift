@@ -154,7 +154,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		isOutlineNewFlag = isNew
 		
 		// Get ready for the new outline, buy saving the current one
-		if let textField = UIResponder.currentFirstResponder as? EditorHeadlineTextView {
+		if let textField = UIResponder.currentFirstResponder as? OutlineTextView {
 			textField.endEditing(true)
 		}
 		
@@ -658,7 +658,6 @@ private extension EditorViewController {
 				headlineCell.moveToEnd()
 			}
 		}
-		
 	}
 	
 	func createHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts) {
@@ -672,7 +671,11 @@ private extension EditorViewController {
 		
 		runCommand(command)
 		
-		// TODO move the cursor to the new note field
+		if let reloadIndex = command.changes?.reloads?.first {
+			if let headlineCell = collectionView.cellForItem(at: IndexPath(row: reloadIndex, section: 1)) as? EditorHeadlineViewCell {
+				headlineCell.moveToNote()
+			}
+		}
 	}
 
 	func deleteHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts) {
@@ -685,6 +688,12 @@ private extension EditorViewController {
 											  attributedTexts: attributedTexts)
 		
 		runCommand(command)
+
+		if let reloadIndex = command.changes?.reloads?.first {
+			if let headlineCell = collectionView.cellForItem(at: IndexPath(row: reloadIndex, section: 1)) as? EditorHeadlineViewCell {
+				headlineCell.moveToEnd()
+			}
+		}
 	}
 
 }

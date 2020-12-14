@@ -43,11 +43,14 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 			self.font = bodyFont.withSize(bodyFont.pointSize - 1)
 		}
 
+		self.textColor = .secondaryLabel
+		
 		self.backgroundColor = .clear
 	}
 	
 	private var textViewHeight: CGFloat?
 	private var isTextChanged = false
+	private var isSavingTextUnnecessary = false
 
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
@@ -56,6 +59,7 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 	override func deleteBackward() {
 		guard let headline = headline else { return }
 		if attributedText.length == 0 {
+			isSavingTextUnnecessary = true
 			editorDelegate?.deleteHeadlineNote(self, headline: headline)
 		} else {
 			super.deleteBackward()
@@ -76,7 +80,13 @@ extension EditorHeadlineNoteTextView: UITextViewDelegate {
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
 		guard isTextChanged, let headline = headline else { return }
-		editorDelegate?.textChanged(self, headline: headline)
+		
+		if isSavingTextUnnecessary {
+			isSavingTextUnnecessary = false
+		} else {
+			editorDelegate?.textChanged(self, headline: headline)
+		}
+		
 		isTextChanged = false
 	}
 	
