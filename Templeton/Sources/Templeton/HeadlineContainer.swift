@@ -18,11 +18,16 @@ public extension HeadlineContainer {
 	
 	func importOPML(_ headlineIndexers: [XMLIndexer]) {
 		var headlines = [Headline]()
+		
 		for headlineIndexer in headlineIndexers {
-			let headline = Headline(plainText: headlineIndexer.element?.attribute(by: "text")?.text ?? "")
+			let plainText = headlineIndexer.element?.attribute(by: "text")?.text ?? ""
+			let notePlainText = headlineIndexer.element?.attribute(by: "_note")?.text
+			
+			let headline = Headline(plainText: plainText, notePlainText: notePlainText)
 			headline.importOPML(headlineIndexer["outline"].all)
 			headlines.append(headline)
 		}
+		
 		self.headlines = headlines
 	}
 
