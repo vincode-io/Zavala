@@ -154,14 +154,20 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 		let indent = String(repeating: " ", count: (indentLevel + 1) * 2)
 		let escapedText = plainText?.escapingSpecialXMLCharacters ?? ""
 		
+		var opml = indent + "<outline text=\"\(escapedText)\""
+		if let notePlainText = notePlainText {
+			opml.append(" _note=\"\(notePlainText)\"")
+		}
+
 		if headlines?.count ?? 0 == 0 {
-			return indent + "<outline text=\"\(escapedText)\" />\n"
+			opml.append("/>\n")
 		} else {
-			var opml = indent + "<outline text=\"\(escapedText)\">\n"
+			opml.append(">\n")
 			headlines?.forEach { opml.append($0.opml()) }
 			opml.append(indent + "</outline>\n")
-			return opml
 		}
+		
+		return opml
 	}
 
 	public func isDecendent(_ headline: Headline) -> Bool {
