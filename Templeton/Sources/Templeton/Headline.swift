@@ -155,8 +155,8 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 		let escapedText = plainText?.escapingSpecialXMLCharacters ?? ""
 		
 		var opml = indent + "<outline text=\"\(escapedText)\""
-		if let notePlainText = notePlainText {
-			opml.append(" _note=\"\(notePlainText)\"")
+		if let escapedNote = notePlainText?.escapingSpecialXMLCharacters {
+			opml.append(" _note=\"\(escapedNote)\"")
 		}
 
 		if headlines?.count ?? 0 == 0 {
