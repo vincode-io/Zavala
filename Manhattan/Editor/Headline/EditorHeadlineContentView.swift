@@ -22,23 +22,8 @@ class EditorHeadlineContentView: UIView, UIContentView {
 	init(configuration: EditorHeadlineContentConfiguration) {
 		super.init(frame: .zero)
 
-		textView.delegate = textView
 		textView.editorDelegate = self
-		
-		textView.isScrollEnabled = false
-		textView.textContainer.lineFragmentPadding = 0
-		textView.textContainerInset = .zero
-
-		if traitCollection.userInterfaceIdiom == .mac {
-			let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-			textView.font = bodyFont.withSize(bodyFont.pointSize + 1)
-		} else {
-			textView.font = UIFont.preferredFont(forTextStyle: .body)
-		}
-
-		textView.backgroundColor = .clear
 		textView.translatesAutoresizingMaskIntoConstraints = false
-		
 		addSubview(textView)
 
 		let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft(_:)))
