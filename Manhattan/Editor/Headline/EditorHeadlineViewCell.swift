@@ -18,6 +18,7 @@ protocol EditorHeadlineViewCellDelegate: class {
 	func editorHeadlineIndentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts)
 	func editorHeadlineOutdentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts)
 	func editorHeadlineSplitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)
+	func editorHeadlineCreateHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts)
 	func editorHeadlineDeleteHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts)
 }
 

@@ -154,6 +154,10 @@ extension EditorHeadlineContentView: EditorHeadlineTextViewDelegate {
 		appliedConfiguration.delegate?.editorHeadlineSplitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
 	}
 	
+	func createHeadlineNote(_: EditorHeadlineTextView, headline: Headline) {
+		appliedConfiguration.delegate?.editorHeadlineCreateHeadlineNote(headline, attributedTexts: attributedTexts)
+	}
+	
 }
 
 extension EditorHeadlineContentView: EditorHeadlineNoteTextViewDelegate {

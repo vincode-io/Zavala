@@ -364,6 +364,10 @@ extension EditorViewController: EditorHeadlineViewCellDelegate {
 		splitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
 	}
 	
+	func editorHeadlineCreateHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts) {
+		createHeadlineNote(headline, attributedTexts: attributedTexts)
+	}
+	
 	func editorHeadlineDeleteHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts) {
 		deleteHeadlineNote(headline, attributedTexts: attributedTexts)
 	}

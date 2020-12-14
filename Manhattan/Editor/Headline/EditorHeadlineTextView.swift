@@ -18,6 +18,7 @@ protocol EditorHeadlineTextViewDelegate: class {
 	func indentHeadline(_: EditorHeadlineTextView, headline: Headline)
 	func outdentHeadline(_: EditorHeadlineTextView, headline: Headline)
 	func splitHeadline(_: EditorHeadlineTextView, headline: Headline, attributedText: NSAttributedString, cursorPosition: Int)
+	func createHeadlineNote(_: EditorHeadlineTextView, headline: Headline)
 }
 
 class EditorHeadlineTextView: OutlineTextView {
@@ -31,6 +32,7 @@ class EditorHeadlineTextView: OutlineTextView {
 			UIKeyCommand(action: #selector(tabPressed(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(shiftTabPressed(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(optionReturnPressed(_:))),
+			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(shiftReturnPressed(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(shiftOptionReturnPressed(_:)))
 		]
 		return keys
@@ -101,6 +103,12 @@ class EditorHeadlineTextView: OutlineTextView {
 	
 	@objc func optionReturnPressed(_ sender: Any) {
 		insertText("\n")
+	}
+	
+	@objc func shiftReturnPressed(_ sender: Any) {
+		guard let headline = headline else { return }
+		isSavingTextUnnecessary = true
+		editorDelegate?.createHeadlineNote(self, headline: headline)
 	}
 	
 	@objc func shiftOptionReturnPressed(_ sender: Any) {
