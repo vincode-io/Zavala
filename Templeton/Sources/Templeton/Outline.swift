@@ -130,8 +130,13 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	
 	public func createNote(headline: Headline, attributedTexts: HeadlineTexts) -> ShadowTableChanges {
 		headline.attributedTexts = attributedTexts
-		headline.noteAttributedText = NSAttributedString()
+		
+		if headline.noteAttributedText == nil {
+			headline.noteAttributedText = NSAttributedString()
+		}
+		
 		outlineBodyDidChange()
+		
 		guard let shadowTableIndex = shadowTable?.firstIndex(of: headline) else { return ShadowTableChanges() }
 		return ShadowTableChanges(reloads: [shadowTableIndex])
 	}
@@ -139,7 +144,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func deleteNote(headline: Headline, attributedTexts: HeadlineTexts) -> ShadowTableChanges {
 		headline.attributedTexts = attributedTexts
 		headline.noteAttributedText = nil
+		
 		outlineBodyDidChange()
+		
 		guard let shadowTableIndex = shadowTable?.firstIndex(of: headline) else { return ShadowTableChanges() }
 		return ShadowTableChanges(reloads: [shadowTableIndex])
 	}
