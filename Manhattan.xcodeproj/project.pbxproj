@@ -75,6 +75,7 @@
 		51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F13EFD255E13A9004B85CA /* AppAssets.swift */; };
 		51F2DC6F2586C04A003BD5CE /* EditorCreateNoteCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2DC6E2586C04A003BD5CE /* EditorCreateNoteCommand.swift */; };
 		51F2DC752586CF0D003BD5CE /* EditorDeleteNoteCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2DC742586CF0D003BD5CE /* EditorDeleteNoteCommand.swift */; };
+		51F2DC7B2586E101003BD5CE /* EditorHeadlineNoteTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2DC7A2586E101003BD5CE /* EditorHeadlineNoteTextView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -183,6 +184,7 @@
 		51F13EFD255E13A9004B85CA /* AppAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAssets.swift; sourceTree = "<group>"; };
 		51F2DC6E2586C04A003BD5CE /* EditorCreateNoteCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCreateNoteCommand.swift; sourceTree = "<group>"; };
 		51F2DC742586CF0D003BD5CE /* EditorDeleteNoteCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDeleteNoteCommand.swift; sourceTree = "<group>"; };
+		51F2DC7A2586E101003BD5CE /* EditorHeadlineNoteTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorHeadlineNoteTextView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -316,6 +318,7 @@
 			children = (
 				51B2B2CD2563AAF60090C56B /* EditorHeadlineContentConfiguration.swift */,
 				51B2B2D12563AB190090C56B /* EditorHeadlineContentView.swift */,
+				51F2DC7A2586E101003BD5CE /* EditorHeadlineNoteTextView.swift */,
 				51D977F9257A2E4F00D98490 /* EditorHeadlinePreviewParameters.swift */,
 				51B2B2C72563A2180090C56B /* EditorHeadlineTextView.swift */,
 				512229672563507E008041AF /* EditorHeadlineViewCell.swift */,
@@ -602,6 +605,7 @@
 				51C030B8257E198B00609262 /* EditorTitleTextView.swift in Sources */,
 				51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */,
 				515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */,
+				51F2DC7B2586E101003BD5CE /* EditorHeadlineNoteTextView.swift in Sources */,
 				5142874625730AD600F16B78 /* EditorCreateHeadlineCommand.swift in Sources */,
 				51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */,
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,

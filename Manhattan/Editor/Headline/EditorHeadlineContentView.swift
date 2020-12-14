@@ -139,7 +139,7 @@ extension EditorHeadlineContentView: EditorHeadlineTextViewDelegate {
 	}
 	
 	func textChanged(_: EditorHeadlineTextView, headline: Headline) {
-		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, attributedTexts: editorHeadlineTextViewAttibutedTexts)
+		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, attributedTexts: attributedTexts)
 	}
 	
 	func deleteHeadline(_: EditorHeadlineTextView, headline: Headline) {
@@ -147,7 +147,7 @@ extension EditorHeadlineContentView: EditorHeadlineTextViewDelegate {
 	}
 	
 	func createHeadline(_: EditorHeadlineTextView, afterHeadline: Headline) {
-		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(afterHeadline, attributedTexts: editorHeadlineTextViewAttibutedTexts)
+		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(afterHeadline, attributedTexts: attributedTexts)
 	}
 	
 	func indentHeadline(_: EditorHeadlineTextView, headline: Headline) {
@@ -160,6 +160,31 @@ extension EditorHeadlineContentView: EditorHeadlineTextViewDelegate {
 	
 	func splitHeadline(_: EditorHeadlineTextView, headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) {
 		appliedConfiguration.delegate?.editorHeadlineSplitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
+	}
+	
+}
+
+extension EditorHeadlineContentView: EditorHeadlineNoteTextViewDelegate {
+
+	var editorHeadlineNoteTextViewUndoManager: UndoManager? {
+		return appliedConfiguration.delegate?.editorHeadlineUndoManager
+	}
+	
+	var editorHeadlineNoteTextViewAttibutedTexts: HeadlineTexts {
+		return attributedTexts
+	}
+	
+	func invalidateLayout(_: EditorHeadlineNoteTextView) {
+		invalidateIntrinsicContentSize()
+		appliedConfiguration.delegate?.editorHeadlineInvalidateLayout()
+	}
+	
+	func textChanged(_: EditorHeadlineNoteTextView, headline: Headline) {
+		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, attributedTexts: attributedTexts)
+	}
+	
+	func deleteHeadlineNote(_: EditorHeadlineNoteTextView, headline: Headline) {
+		appliedConfiguration.delegate?.editorHeadlineDeleteHeadlineNote(headline, attributedTexts: attributedTexts)
 	}
 	
 }
