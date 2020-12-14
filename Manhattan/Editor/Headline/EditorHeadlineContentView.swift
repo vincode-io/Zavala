@@ -183,6 +183,14 @@ extension EditorHeadlineContentView: EditorHeadlineNoteTextViewDelegate {
 		appliedConfiguration.delegate?.editorHeadlineDeleteHeadlineNote(headline, attributedTexts: attributedTexts)
 	}
 	
+	func moveCursorTo(_: EditorHeadlineNoteTextView, headline: Headline) {
+		appliedConfiguration.delegate?.editorHeadlineMoveCursorTo(headline: headline)
+	}
+	
+	func moveCursorDown(_: EditorHeadlineNoteTextView, headline: Headline) {
+		appliedConfiguration.delegate?.editorHeadlineMoveCursorDown(headline: headline)
+	}
+	
 }
 
 // MARK: Helpers

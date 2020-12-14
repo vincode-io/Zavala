@@ -14,12 +14,25 @@ protocol EditorHeadlineNoteTextViewDelegate: class {
 	func invalidateLayout(_ : EditorHeadlineNoteTextView)
 	func textChanged(_ : EditorHeadlineNoteTextView, headline: Headline)
 	func deleteHeadlineNote(_ : EditorHeadlineNoteTextView, headline: Headline)
+	func moveCursorTo(_ : EditorHeadlineNoteTextView, headline: Headline)
+	func moveCursorDown(_ : EditorHeadlineNoteTextView, headline: Headline)
 }
 
 class EditorHeadlineNoteTextView: OutlineTextView {
 	
 	override var editorUndoManager: UndoManager? {
 		return editorDelegate?.editorHeadlineNoteTextViewUndoManager
+	}
+	
+	override var keyCommands: [UIKeyCommand]? {
+		var keys = [UIKeyCommand]()
+		if cursorPosition == 0 {
+			keys.append(UIKeyCommand(action: #selector(upArrowPressed(_:)), input: UIKeyCommand.inputUpArrow))
+		}
+		if cursorPosition == attributedText.length {
+			keys.append(UIKeyCommand(action: #selector(downArrowPressed(_:)), input: UIKeyCommand.inputDownArrow))
+		}
+		return keys
 	}
 	
 	weak var editorDelegate: EditorHeadlineNoteTextViewDelegate?
@@ -66,6 +79,16 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 		}
 	}
 
+	@objc func upArrowPressed(_ sender: Any) {
+		guard let headline = headline else { return }
+		editorDelegate?.moveCursorTo(self, headline: headline)
+	}
+	
+	@objc func downArrowPressed(_ sender: Any) {
+		guard let headline = headline else { return }
+		editorDelegate?.moveCursorDown(self, headline: headline)
+	}
+	
 }
 
 // MARK: UITextViewDelegate

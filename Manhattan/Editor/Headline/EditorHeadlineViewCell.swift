@@ -12,6 +12,8 @@ protocol EditorHeadlineViewCellDelegate: class {
 	var editorHeadlineUndoManager: UndoManager? { get }
 	func editorHeadlineInvalidateLayout()
 	func editorHeadlineToggleDisclosure(headline: Headline)
+	func editorHeadlineMoveCursorTo(headline: Headline)
+	func editorHeadlineMoveCursorDown(headline: Headline)
 	func editorHeadlineTextChanged(headline: Headline, attributedTexts: HeadlineTexts)
 	func editorHeadlineDeleteHeadline(_ headline: Headline, attributedTexts: HeadlineTexts)
 	func editorHeadlineCreateHeadline(_ afterHeadline: Headline?, attributedTexts: HeadlineTexts?)

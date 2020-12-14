@@ -87,6 +87,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	private var headerRegistration: UICollectionView.CellRegistration<EditorHeadlineViewCell, Headline>?
 	
 	private var isOutlineNewFlag = false
+	private var hasAlreadyMovedThisKeyPressFlag = false
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -230,6 +231,14 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 	
 	@objc func repeatMoveCursorUp() {
+		guard !hasAlreadyMovedThisKeyPressFlag else {
+			hasAlreadyMovedThisKeyPressFlag = false
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+				self.repeatMoveCursorUp()
+			}
+			return
+		}
+		
 		if currentKeyPresses.contains(.keyboardUpArrow) {
 			if let textView = UIResponder.currentFirstResponder as? EditorHeadlineTextView, !textView.isSelecting, let headline = textView.headline {
 				moveCursorUp(headline: headline)
@@ -241,6 +250,14 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 
 	@objc func repeatMoveCursorDown() {
+		guard !hasAlreadyMovedThisKeyPressFlag else {
+			hasAlreadyMovedThisKeyPressFlag = false
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+				self.repeatMoveCursorUp()
+			}
+			return
+		}
+		
 		if currentKeyPresses.contains(.keyboardDownArrow) {
 			if let textView = UIResponder.currentFirstResponder as? EditorHeadlineTextView, !textView.isSelecting, let headline = textView.headline {
 				moveCursorDown(headline: headline)
@@ -372,6 +389,16 @@ extension EditorViewController: EditorHeadlineViewCellDelegate {
 		deleteHeadlineNote(headline, attributedTexts: attributedTexts)
 	}
 	
+	func editorHeadlineMoveCursorTo(headline: Headline) {
+		moveCursorTo(headline: headline)
+		hasAlreadyMovedThisKeyPressFlag = true
+	}
+	
+	func editorHeadlineMoveCursorDown(headline: Headline) {
+		moveCursorDown(headline: headline)
+		hasAlreadyMovedThisKeyPressFlag = true
+	}
+
 }
 
 // MARK: EditorOutlineCommandDelegate
@@ -523,6 +550,17 @@ private extension EditorViewController {
 		}
 	}
 
+	func moveCursorTo(headline: Headline) {
+		guard let shadowTableIndex = headline.shadowTableIndex else {
+			return
+		}
+		
+		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
+		if let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell {
+			headlineCell.moveToEnd()
+		}
+	}
+	
 	func moveCursorUp(headline: Headline) {
 		guard let shadowTableIndex = headline.shadowTableIndex, shadowTableIndex > 0 else {
 			moveCursorToTitle()
