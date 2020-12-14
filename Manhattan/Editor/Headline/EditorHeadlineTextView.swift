@@ -57,19 +57,19 @@ class EditorHeadlineTextView: OutlineTextView {
 			}
 		}
 		
-		delegate = self
-		isScrollEnabled = false
-		textContainer?.lineFragmentPadding = 0
-		textContainerInset = .zero
+		self.delegate = self
+		self.isScrollEnabled = false
+		self.textContainer.lineFragmentPadding = 0
+		self.textContainerInset = .zero
 
 		if traitCollection.userInterfaceIdiom == .mac {
 			let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-			font = bodyFont.withSize(bodyFont.pointSize + 1)
+			self.font = bodyFont.withSize(bodyFont.pointSize + 1)
 		} else {
-			font = UIFont.preferredFont(forTextStyle: .body)
+			self.font = UIFont.preferredFont(forTextStyle: .body)
 		}
 
-		backgroundColor = .clear
+		self.backgroundColor = .clear
 	}
 	
 	private var textViewHeight: CGFloat?
