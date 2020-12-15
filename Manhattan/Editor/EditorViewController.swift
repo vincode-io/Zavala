@@ -539,7 +539,7 @@ private extension EditorViewController {
 			}
 		} else {
 			return UIAction(title: L10n.deleteNote, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
-				self?.createHeadlineNote(headline, attributedTexts: attributedTexts)
+				self?.deleteHeadlineNote(headline, attributedTexts: attributedTexts)
 			}
 		}
 	}
