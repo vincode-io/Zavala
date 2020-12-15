@@ -15,58 +15,84 @@ extension EditorViewController: UICollectionViewDropDelegate {
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+		if destinationIndexPath == nil || (destinationIndexPath?.section == 0 && destinationIndexPath?.row == 1) {
+			return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+		}
+
 		guard destinationIndexPath?.section ?? 0 != 0,
-			let headline = session.localDragSession?.localContext as? Headline,
-			let destContainer = destinationHeadlineContainer(destinationIndexPath) else {
+			  let headline = session.localDragSession?.localContext as? Headline,
+			  let headlineShadowTableIndex = headline.shadowTableIndex,
+			  let shadowTable = outline?.shadowTable,
+			  let targetIndexPath = destinationIndexPath else {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
 		
-		if let toHeadline = destContainer as? Headline {
-			if toHeadline == headline {
+		var droppingInto = false
+		if headlineShadowTableIndex > targetIndexPath.row {
+			if let destCell = collectionView.cellForItem(at: targetIndexPath) {
+				droppingInto = session.location(in: destCell).y >= destCell.bounds.height / 2
+			}
+		}
+		if headlineShadowTableIndex < targetIndexPath.row {
+			if let destCell = collectionView.cellForItem(at: targetIndexPath) {
+				droppingInto = session.location(in: destCell).y <= destCell.bounds.height / 2
+			}
+		}
+
+		if droppingInto {
+			let dropInHeadline = shadowTable[targetIndexPath.row]
+			if dropInHeadline == headline {
 				return UICollectionViewDropProposal(operation: .cancel)
 			}
-			if toHeadline.isDecendent(headline) {
+
+			if dropInHeadline.isDecendent(headline) {
+				return UICollectionViewDropProposal(operation: .forbidden)
+			}
+			
+			return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
+		}
+		
+		if let proposedParent = shadowTable[targetIndexPath.row].parent as? Headline {
+			if proposedParent == headline {
+				return UICollectionViewDropProposal(operation: .cancel)
+			}
+			
+			if proposedParent.isDecendent(headline) {
 				return UICollectionViewDropProposal(operation: .forbidden)
 			}
 		}
 		
-		if let destIndexPath = destinationIndexPath, let destCell = collectionView.cellForItem(at: destIndexPath), session.location(in: destCell).y >= destCell.bounds.height / 2 {
-			return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
-		} else {
-			return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-		}
+		return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
 		guard let dragItem = coordinator.items.first?.dragItem,
 			  let headline = dragItem.localObject as? Headline,
-			  let undoManager = undoManager,
 			  let outline = outline,
-			  let destContainer = destinationHeadlineContainer(coordinator.destinationIndexPath) else { return }
+			  let shadowTable = outline.shadowTable else { return }
 		
-		let toParent: HeadlineContainer
-		let toChildIndex: Int
-		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let shadowTable = outline.shadowTable, let destIndexPath = coordinator.destinationIndexPath {
-			toParent = shadowTable[destIndexPath.row]
-			toChildIndex = 0
-		} else {
-			if let destSibling = (destContainer as? Headline), let destParent = destSibling.parent {
-				toParent = destParent
-				let headlines = destParent.headlines ?? [Headline]()
-				toChildIndex = (headlines.firstIndex(of: destSibling) ?? -1) + 1
-			} else {
-				return
-			}
+		// Dropping into a Headline is easy peasy
+		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = coordinator.destinationIndexPath {
+			runEditorMoveHeadlineCommand(headline: headline, toParent: shadowTable[dropInIndexPath.row], toChildIndex: 0)
+			return
 		}
 		
-		let command = EditorMoveHeadlineCommand(undoManager: undoManager,
-												delegate: self,
-												outline: outline,
-												headline: headline,
-												toParent: toParent,
-												toChildIndex: toChildIndex)
+		// Drop into the first entry in the Outline
+		if coordinator.destinationIndexPath == IndexPath(row: 1, section: 0) {
+			runEditorMoveHeadlineCommand(headline: headline, toParent: outline, toChildIndex: 0)
+			return
+		}
 		
-		runCommand(command)
+		// If we don't have a destination index, drop it at the back
+		guard let targetIndexPath = coordinator.destinationIndexPath else {
+			runEditorMoveHeadlineCommand(headline: headline, toParent: outline, toChildIndex: outline.headlines?.count ?? 0)
+			return
+		}
+
+		// THis is where most of the sibling moves happen at
+		let newSibling = shadowTable[targetIndexPath.row]
+		guard let newParent = newSibling.parent, let newIndex = newParent.headlines?.firstIndex(of: newSibling) else { return }
+		runEditorMoveHeadlineCommand(headline: headline, toParent: newParent, toChildIndex: newIndex)
 	}
 	
 	
@@ -76,21 +102,17 @@ extension EditorViewController: UICollectionViewDropDelegate {
 
 extension EditorViewController {
 	
-	private func destinationHeadlineContainer(_ indexPath: IndexPath?) -> HeadlineContainer? {
-		guard let outline = outline, let shadowTable = outline.shadowTable else { return nil }
-		
-		let destinationIndex = indexPath?.row ?? 0
-		
-		let destination: HeadlineContainer?
-		if destinationIndex == 0 {
-			destination = outline
-		} else if destinationIndex >= outline.shadowTable!.count {
-			destination = shadowTable.last
-		} else {
-			destination = shadowTable[destinationIndex - 1]
-		}
+	private func runEditorMoveHeadlineCommand(headline: Headline, toParent: HeadlineContainer, toChildIndex: Int) {
+		guard let undoManager = undoManager, let outline = outline else { return }
 
-		return destination
+		let command = EditorMoveHeadlineCommand(undoManager: undoManager,
+												delegate: self,
+												outline: outline,
+												headline: headline,
+												toParent: toParent,
+												toChildIndex: toChildIndex)
+		
+		runCommand(command)
 	}
 	
 }
