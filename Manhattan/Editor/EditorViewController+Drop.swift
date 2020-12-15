@@ -68,6 +68,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
 		guard let dragItem = coordinator.items.first?.dragItem,
 			  let headline = dragItem.localObject as? Headline,
+			  let headlineShadowTableIndex = headline.shadowTableIndex,
 			  let outline = outline,
 			  let shadowTable = outline.shadowTable else { return }
 		
@@ -91,7 +92,13 @@ extension EditorViewController: UICollectionViewDropDelegate {
 
 		// THis is where most of the sibling moves happen at
 		let newSibling = shadowTable[targetIndexPath.row]
-		guard let newParent = newSibling.parent, let newIndex = newParent.headlines?.firstIndex(of: newSibling) else { return }
+		guard let newParent = newSibling.parent, var newIndex = newParent.headlines?.firstIndex(of: newSibling) else { return }
+		
+		// I don't know why this works.  This is definately in the category of, "Just try stuff until it works.".
+		if headline.parent !== newParent && headlineShadowTableIndex < targetIndexPath.row {
+			newIndex = newIndex + 1
+		}
+		
 		runEditorMoveHeadlineCommand(headline: headline, toParent: newParent, toChildIndex: newIndex)
 	}
 	
