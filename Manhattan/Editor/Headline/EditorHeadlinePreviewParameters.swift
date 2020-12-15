@@ -19,9 +19,13 @@ class EditorHeadlinePreviewParameters: UIDragPreviewParameters {
 
 //		#if !targetEnvironment(macCatalyst)
 		let x = CGFloat(11 + (cell.indentationLevel * 10))
-		let width = (cell.textWidth ?? cell.bounds.width) + 12
-		let newBounds = CGRect(x: x, y: 0, width: width, height: cell.bounds.height)
-		let visiblePath = UIBezierPath(roundedRect: newBounds, cornerRadius: 10)
+		
+		let cellSize = cell.textSize ?? cell.bounds.size
+		let height = cellSize.height + 4
+		let width = cellSize.width + 12
+		
+		let newBounds = CGRect(x: x, y: 6, width: width, height: height)
+		let visiblePath = UIBezierPath(roundedRect: newBounds, cornerRadius: 8)
 		self.visiblePath = visiblePath
 //		#endif
 	}

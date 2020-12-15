@@ -42,8 +42,8 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 		return (contentView as? EditorHeadlineContentView)?.attributedTexts
 	}
 	
-	var textWidth: CGFloat? {
-		return (contentView as? EditorHeadlineContentView)?.textView.intrinsicContentSize.width
+	var textSize: CGSize? {
+		return (contentView as? EditorHeadlineContentView)?.textView.intrinsicContentSize
 	}
 	
 	var selectionRange: UITextRange? {
