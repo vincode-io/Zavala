@@ -535,13 +535,11 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 		outlineBodyDidChange()
 
-		let changes = rebuildShadowTable(reloadEverything: true)
+		var changes = rebuildShadowTable()
 		
-		guard changes.isEmpty, let shadowTableIndex = shadowTable?.firstIndex(of: headline) else {
+		guard let shadowTableIndex = shadowTable?.firstIndex(of: headline) else {
 			return changes
 		}
-
-		// If there weren't any shadow table changes, we need to reload the headline row, its children, and the one above it
 
 		var reloads = [shadowTableIndex]
 		if shadowTableIndex > 0 {
@@ -561,7 +559,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 		}
 
-		return ShadowTableChanges(reloads: Set(reloads))
+		changes.append(ShadowTableChanges(reloads: Set(reloads)))
+		return changes
 	}
 	
 	public func load() {
@@ -724,7 +723,7 @@ extension Outline {
 		return ShadowTableChanges(deletes: reloads, reloads: Set([headlineShadowTableIndex]))
 	}
 	
-	private func rebuildShadowTable(reloadEverything: Bool = false) -> ShadowTableChanges {
+	private func rebuildShadowTable() -> ShadowTableChanges {
 		guard let oldShadowTable = shadowTable else { return ShadowTableChanges() }
 		rebuildTransientData()
 		
@@ -750,15 +749,7 @@ extension Outline {
 			}
 		}
 		
-		var reloads = Set<Int>()
-		if reloadEverything {
-			moves.forEach {
-				reloads.insert($0.from)
-				reloads.insert($0.to)
-			}
-		}
-		
-		return ShadowTableChanges(deletes: deletes, inserts: inserts, moves: moves, reloads: reloads)
+		return ShadowTableChanges(deletes: deletes, inserts: inserts, moves: moves)
 	}
 	
 	private func rebuildTransientData() {
