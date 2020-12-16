@@ -14,6 +14,7 @@ protocol EditorHeadlineTextViewDelegate: class {
 	func invalidateLayout(_: EditorHeadlineTextView)
 	func textChanged(_: EditorHeadlineTextView, headline: Headline)
 	func deleteHeadline(_: EditorHeadlineTextView, headline: Headline)
+	func createHeadline(_: EditorHeadlineTextView, beforeHeadline: Headline)
 	func createHeadline(_: EditorHeadlineTextView, afterHeadline: Headline)
 	func indentHeadline(_: EditorHeadlineTextView, headline: Headline)
 	func outdentHeadline(_: EditorHeadlineTextView, headline: Headline)
@@ -113,8 +114,14 @@ class EditorHeadlineTextView: OutlineTextView {
 	
 	@objc func shiftOptionReturnPressed(_ sender: Any) {
 		guard let headline = headline else { return }
+		
 		isSavingTextUnnecessary = true
-		editorDelegate?.splitHeadline(self, headline: headline, attributedText: attributedText, cursorPosition: cursorPosition)
+		
+		if cursorPosition == 0 {
+			editorDelegate?.createHeadline(self, beforeHeadline: headline)
+		} else {
+			editorDelegate?.splitHeadline(self, headline: headline, attributedText: attributedText, cursorPosition: cursorPosition)
+		}
 	}
 	
 }

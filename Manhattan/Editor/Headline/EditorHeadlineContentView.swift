@@ -138,8 +138,12 @@ extension EditorHeadlineContentView: EditorHeadlineTextViewDelegate {
 		appliedConfiguration.delegate?.editorHeadlineDeleteHeadline(headline, attributedTexts: attributedTexts)
 	}
 	
+	func createHeadline(_: EditorHeadlineTextView, beforeHeadline: Headline) {
+		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(beforeHeadline: beforeHeadline, attributedTexts: attributedTexts)
+	}
+	
 	func createHeadline(_: EditorHeadlineTextView, afterHeadline: Headline) {
-		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(afterHeadline, attributedTexts: attributedTexts)
+		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(afterHeadline: afterHeadline, attributedTexts: attributedTexts)
 	}
 	
 	func indentHeadline(_: EditorHeadlineTextView, headline: Headline) {

@@ -182,7 +182,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	func createHeadline() {
 		guard let headline = currentHeadline,
 			  let attributedTexts = currentAttributedTexts else { return }
-		createHeadline(headline, attributedTexts: attributedTexts)
+		createHeadline(afterHeadline: headline, attributedTexts: attributedTexts)
 	}
 	
 	func indentHeadline() {
@@ -337,7 +337,7 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	}
 	
 	func editorTitleCreateHeadline(attibutedTexts: HeadlineTexts?) {
-		createHeadline(nil, attributedTexts: attibutedTexts)
+		createHeadline(afterHeadline: nil, attributedTexts: attibutedTexts)
 	}
 	
 	
@@ -365,8 +365,12 @@ extension EditorViewController: EditorHeadlineViewCellDelegate {
 		deleteHeadline(headline, attributedTexts: attributedTexts)
 	}
 	
-	func editorHeadlineCreateHeadline(_ afterHeadline: Headline?, attributedTexts: HeadlineTexts?) {
-		createHeadline(afterHeadline, attributedTexts: attributedTexts)
+	func editorHeadlineCreateHeadline(beforeHeadline: Headline, attributedTexts: HeadlineTexts?) {
+		createHeadline(beforeHeadline: beforeHeadline, attributedTexts: attributedTexts)
+	}
+	
+	func editorHeadlineCreateHeadline(afterHeadline: Headline?, attributedTexts: HeadlineTexts?) {
+		createHeadline(afterHeadline: afterHeadline, attributedTexts: attributedTexts)
 	}
 	
 	func editorHeadlineIndentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts) {
@@ -507,7 +511,7 @@ private extension EditorViewController {
 			// Have to let the text field get the first responder by getting it away from this
 			// action which appears to be holding on to it.
 			DispatchQueue.main.async {
-				self?.createHeadline(headline, attributedTexts: attributedTexts)
+				self?.createHeadline(afterHeadline: headline, attributedTexts: attributedTexts)
 			}
 		}
 	}
@@ -621,10 +625,28 @@ private extension EditorViewController {
 		}
 	}
 	
-	func createHeadline(_ afterHeadline: Headline?, attributedTexts: HeadlineTexts?) {
+	func createHeadline(beforeHeadline: Headline, attributedTexts: HeadlineTexts?) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = EditorCreateHeadlineBeforeCommand(undoManager: undoManager,
+														delegate: self,
+														outline: outline,
+														beforeHeadline: beforeHeadline,
+														attributedTexts: attributedTexts)
+		
+		runCommand(command)
+		
+		if let insert = command.changes?.insertIndexPaths?.first {
+			if let headlineCell = collectionView.cellForItem(at: insert) as? EditorHeadlineViewCell {
+				headlineCell.moveToEnd()
+			}
+		}
+	}
+	
+	func createHeadline(afterHeadline: Headline?, attributedTexts: HeadlineTexts?) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = EditorCreateHeadlineCommand(undoManager: undoManager,
+		let command = EditorCreateHeadlineAfterCommand(undoManager: undoManager,
 												  delegate: self,
 												  outline: outline,
 												  afterHeadline: afterHeadline,

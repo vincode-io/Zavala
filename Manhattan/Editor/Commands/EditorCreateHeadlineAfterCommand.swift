@@ -9,7 +9,7 @@ import Foundation
 import RSCore
 import Templeton
 
-final class EditorCreateHeadlineCommand: EditorOutlineCommand {
+final class EditorCreateHeadlineAfterCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
@@ -27,8 +27,8 @@ final class EditorCreateHeadlineCommand: EditorOutlineCommand {
 		self.outline = outline
 		self.afterHeadline = afterHeadline
 		self.attributedTexts = attributedTexts
-		undoActionName = L10n.delete
-		redoActionName = L10n.delete
+		undoActionName = L10n.addRow
+		redoActionName = L10n.addRow
 	}
 	
 	func perform() {
