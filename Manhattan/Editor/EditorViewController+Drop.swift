@@ -93,6 +93,11 @@ extension EditorViewController: UICollectionViewDropDelegate {
 		// THis is where most of the sibling moves happen at
 		let newSibling = shadowTable[targetIndexPath.row]
 		guard let newParent = newSibling.parent, var newIndex = newParent.headlines?.firstIndex(of: newSibling) else { return }
+
+		// This shouldn't happen, but does.  We probably need to beef up the dropSessionDidUpdate code to prevent it.
+		if let newParentHeadline = newParent as? Headline, newParentHeadline == headline || newParentHeadline.isDecendent(headline) {
+			return
+		}
 		
 		// I don't know why this works.  This is definately in the category of, "Just try stuff until it works.".
 		if headline.parent !== newParent && headlineShadowTableIndex < targetIndexPath.row {
