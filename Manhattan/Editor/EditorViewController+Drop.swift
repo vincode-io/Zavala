@@ -74,19 +74,19 @@ extension EditorViewController: UICollectionViewDropDelegate {
 		
 		// Dropping into a Headline is easy peasy
 		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = coordinator.destinationIndexPath {
-			runEditorMoveHeadlineCommand(headline: headline, toParent: shadowTable[dropInIndexPath.row], toChildIndex: 0)
+			drop(coordinator: coordinator, headline: headline, toParent: shadowTable[dropInIndexPath.row], toChildIndex: 0)
 			return
 		}
 		
 		// Drop into the first entry in the Outline
 		if coordinator.destinationIndexPath == IndexPath(row: 1, section: 0) {
-			runEditorMoveHeadlineCommand(headline: headline, toParent: outline, toChildIndex: 0)
+			drop(coordinator: coordinator, headline: headline, toParent: outline, toChildIndex: 0)
 			return
 		}
 		
 		// If we don't have a destination index, drop it at the back
 		guard let targetIndexPath = coordinator.destinationIndexPath else {
-			runEditorMoveHeadlineCommand(headline: headline, toParent: outline, toChildIndex: outline.headlines?.count ?? 0)
+			drop(coordinator: coordinator, headline: headline, toParent: outline, toChildIndex: outline.headlines?.count ?? 0)
 			return
 		}
 
@@ -104,7 +104,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 			newIndex = newIndex + 1
 		}
 		
-		runEditorMoveHeadlineCommand(headline: headline, toParent: newParent, toChildIndex: newIndex)
+		drop(coordinator: coordinator, headline: headline, toParent: newParent, toChildIndex: newIndex)
 	}
 	
 	
@@ -114,10 +114,12 @@ extension EditorViewController: UICollectionViewDropDelegate {
 
 extension EditorViewController {
 	
-	private func runEditorMoveHeadlineCommand(headline: Headline, toParent: HeadlineContainer, toChildIndex: Int) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+	private func drop(coordinator: UICollectionViewDropCoordinator, headline: Headline, toParent: HeadlineContainer, toChildIndex: Int) {
+		guard let undoManager = undoManager,
+			  let outline = outline,
+			  let dragItem = coordinator.items.first?.dragItem else { return }
 
-		let command = EditorMoveHeadlineCommand(undoManager: undoManager,
+		let command = EditorDropHeadlineCommand(undoManager: undoManager,
 												delegate: self,
 												outline: outline,
 												headline: headline,
@@ -125,6 +127,19 @@ extension EditorViewController {
 												toChildIndex: toChildIndex)
 		
 		runCommand(command)
+		
+		let targetIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: outline.shadowTable!.count - 1, section: 1)
+
+		if let moves = command.shadowTableChanges?.moveIndexPaths, !moves.isEmpty {
+			collectionView.performBatchUpdates({
+				for move in moves {
+					collectionView.moveItem(at: move.0, to: move.1)
+				}
+			}, completion: { _ in
+				coordinator.drop(dragItem, toItemAt: targetIndexPath)
+			})
+		}
+
 	}
 	
 }
