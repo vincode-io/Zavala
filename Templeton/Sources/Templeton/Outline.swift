@@ -203,6 +203,27 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return changes
 	}
 	
+	public func createHeadline(beforeHeadline: Headline, attributedTexts: HeadlineTexts? = nil) -> ShadowTableChanges {
+		if let texts = attributedTexts {
+			beforeHeadline.attributedTexts = texts
+		}
+
+		guard let parent = beforeHeadline.parent,
+			  let index = parent.headlines?.firstIndex(of: beforeHeadline),
+			  let shadowTableIndex = beforeHeadline.shadowTableIndex else {
+			return ShadowTableChanges()
+		}
+		
+		let headline = Headline()
+		parent.headlines?.insert(headline, at: index)
+		
+		outlineBodyDidChange()
+
+		shadowTable?.insert(headline, at: shadowTableIndex)
+		
+		return ShadowTableChanges(inserts: [shadowTableIndex])
+	}
+	
 	public func createHeadline(headline: Headline, afterHeadline: Headline? = nil, attributedTexts: HeadlineTexts? = nil) -> ShadowTableChanges {
 		if let texts = attributedTexts {
 			afterHeadline?.attributedTexts = texts
