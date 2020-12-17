@@ -221,13 +221,6 @@ extension EditorHeadlineContentView {
 			attrs[.foregroundColor] = UIColor.label
 		}
 		
-		if traitCollection.userInterfaceIdiom == .mac {
-			let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-			attrs[.font] = bodyFont.withSize(bodyFont.pointSize + 1)
-		} else {
-			attrs[.font] = UIFont.preferredFont(forTextStyle: .body)
-		}
-		
 		if configuration.isComplete {
 			attrs[.strikethroughStyle] = 1
 			attrs[.strikethroughColor] = UIColor.tertiaryLabel
@@ -251,13 +244,6 @@ extension EditorHeadlineContentView {
 		
 		var attrs = [NSAttributedString.Key : Any]()
 		attrs[.foregroundColor] = UIColor.secondaryLabel
-		
-		if traitCollection.userInterfaceIdiom == .mac {
-			attrs[.font] = UIFont.preferredFont(forTextStyle: .body)
-		} else {
-			let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-			attrs[.font] = bodyFont.withSize(bodyFont.pointSize - 1)
-		}
 		
 		let mutableAttrText = NSMutableAttributedString(attributedString: noteAttributedText)
 		let range = NSRange(location: 0, length: mutableAttrText.length)
