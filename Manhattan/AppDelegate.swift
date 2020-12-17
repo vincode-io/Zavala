@@ -338,6 +338,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainSplitViewController?.isSplitHeadlineUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(toggleBoldCommand(_:)), #selector(toggleItalicsCommand(_:)):
+			if mainSplitViewController?.isFormatUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		default:
 			break
 		}
