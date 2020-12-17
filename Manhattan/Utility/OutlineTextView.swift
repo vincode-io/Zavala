@@ -102,7 +102,6 @@ class OutlineTextView: UITextView {
 	
 	override func buildMenu(with builder: UIMenuBuilder) {
 		super.buildMenu(with: builder)
-		
 		let formattingMenu = UIMenu(title: "", options: .displayInline, children: [toggleBoldCommand, toggleItalicsCommand, toggleUnderlineCommand])
 		builder.insertSibling(formattingMenu, afterMenu: .standardEdit)
 	}
