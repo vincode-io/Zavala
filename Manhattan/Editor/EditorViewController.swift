@@ -58,6 +58,10 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return currentHeadline == nil
 	}
 
+	var isFormatUnavailable: Bool {
+		return currentTextView == nil
+	}
+
 	private(set) var outline: Outline?
 	
 	var currentTextView: OutlineTextView? {
@@ -220,6 +224,18 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 			  let attributedText = currentAttributedTexts?.text,
 			  let cursorPosition = currentCursorPosition else { return }
 		splitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
+	}
+	
+	func outlineToggleBoldface() {
+		currentTextView?.toggleBoldface(self)
+	}
+	
+	func outlineToggleItalics() {
+		currentTextView?.toggleItalics(self)
+	}
+	
+	func outlineToggleUnderline() {
+		currentTextView?.toggleUnderline(self)
 	}
 	
 	// MARK: Actions

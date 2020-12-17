@@ -54,6 +54,8 @@ internal enum L10n {
   internal static let exportMarkdown = L10n.tr("Localizable", "Export_Markdown")
   /// Export OPML
   internal static let exportOPML = L10n.tr("Localizable", "Export_OPML")
+  /// Format
+  internal static let format = L10n.tr("Localizable", "Format")
   /// Get Info
   internal static let getInfo = L10n.tr("Localizable", "Get_Info")
   /// Hide Completed

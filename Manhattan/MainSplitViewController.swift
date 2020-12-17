@@ -106,6 +106,10 @@ class MainSplitViewController: UISplitViewController {
 		return editorViewController?.isSplitHeadlineUnavailable ?? true
 	}
 	
+	var isFormatUnavailable: Bool {
+		return editorViewController?.isFormatUnavailable ?? true
+	}
+	
 	override func viewDidLoad() {
         super.viewDidLoad()
 		primaryBackgroundStyle = .sidebar
@@ -243,6 +247,18 @@ class MainSplitViewController: UISplitViewController {
 	
 	@objc func splitHeadline(_ sender: Any?) {
 		editorViewController?.splitHeadline()
+	}
+	
+	@objc func outlineToggleBoldface(_ sender: Any?) {
+		editorViewController?.outlineToggleBoldface()
+	}
+	
+	@objc func outlineToggleItalics(_ sender: Any?) {
+		editorViewController?.outlineToggleItalics()
+	}
+	
+	@objc func outlineToggleUnderline(_ sender: Any?) {
+		editorViewController?.outlineToggleUnderline()
 	}
 	
 	// MARK: Validations

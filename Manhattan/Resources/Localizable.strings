@@ -37,6 +37,7 @@
 "Restore" = "Restore";
 "Restore_Archive" = "Restore Archive";
 "Archive_Account" = "Archive %@";
+"Format" = "Format";
 "Bold" = "Bold";
 "Italics" = "Italics";
 "Underline" = "Underline";

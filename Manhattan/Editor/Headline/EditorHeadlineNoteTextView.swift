@@ -32,6 +32,9 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 		if cursorPosition == attributedText.length {
 			keys.append(UIKeyCommand(action: #selector(downArrowPressed(_:)), input: UIKeyCommand.inputDownArrow))
 		}
+		keys.append(toggleBoldCommand)
+		keys.append(toggleItalicsCommand)
+		keys.append(toggleUnderlineCommand)
 		return keys
 	}
 	

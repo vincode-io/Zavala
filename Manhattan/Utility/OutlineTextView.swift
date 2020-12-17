@@ -44,12 +44,12 @@ class OutlineTextView: UITextView {
 		fatalError("attibutedTexts has not been implemented")
 	}
 
+	let toggleBoldCommand = UIKeyCommand(title: L10n.bold, action: .toggleBoldface, input: "b", modifierFlags: [.command])
+	let toggleItalicsCommand = UIKeyCommand(title: L10n.italics, action: .toggleItalics, input: "i", modifierFlags: [.command])
+	let toggleUnderlineCommand = UIKeyCommand(title: L10n.underline, action: .toggleUnderline, input: "u", modifierFlags: [.command])
+
 	private var stackedUndoManager: UndoManager?
 	private static let dropDelegate = OutlineTextDropDelegate()
-
-	private let toggleBoldCommand = UIKeyCommand(title: L10n.bold, action: .toggleBoldface, input: "b", modifierFlags: [.command])
-	private let toggleItalicsCommand = UIKeyCommand(title: L10n.italics, action: .toggleItalics, input: "i", modifierFlags: [.command])
-	private let toggleUnderlineCommand = UIKeyCommand(title: L10n.underline, action: .toggleUnderline, input: "u", modifierFlags: [.command])
 
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)

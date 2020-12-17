@@ -156,6 +156,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										   input: "1",
 										   modifierFlags: [.control, .command])
 	
+	let toggleBoldCommand = UIKeyCommand(title: L10n.bold,
+										 action: #selector(toggleBoldCommand(_:)),
+										 input: "b",
+										 modifierFlags: [.command])
+	
+	let toggleItalicsCommand = UIKeyCommand(title: L10n.italics,
+											action: #selector(toggleItalicsCommand(_:)),
+											input: "i",
+											modifierFlags: [.command])
+	
+	let toggleUnderlineCommand = UIKeyCommand(title: L10n.underline,
+											  action: #selector(toggleUnderlineCommand(_:)),
+											  input: "u",
+											  modifierFlags: [.command])
+	
 	var mainSplitViewController: MainSplitViewController? {
 		var keyScene: UIScene?
 		let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
@@ -262,6 +277,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.archiveAccount(type: .local)
 	}
 	
+	@objc func toggleBoldCommand(_ sender: Any?) {
+		mainSplitViewController?.outlineToggleBoldface(sender)
+	}
+	
+	@objc func toggleItalicsCommand(_ sender: Any?) {
+		mainSplitViewController?.outlineToggleItalics(sender)
+	}
+	
+	@objc func toggleUnderlineCommand(_ sender: Any?) {
+		mainSplitViewController?.outlineToggleUnderline(sender)
+	}
+	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
@@ -336,7 +363,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newFolderCommand])
 		builder.insertChild(newItemsMenu, atStartOfMenu: .file)
-		
+
+		// Format
+		builder.remove(menu: .format)
+		let formatMenu = UIMenu(title: L10n.format, children: [toggleBoldCommand, toggleItalicsCommand, toggleUnderlineCommand])
+		builder.insertSibling(formatMenu, afterMenu: .edit)
+
 		// View Menu
 		let toggleSidebarMenu = UIMenu(title: "", options: .displayInline, children: [toggleSidebarCommand])
 		builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)

@@ -34,7 +34,10 @@ class EditorHeadlineTextView: OutlineTextView {
 			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(shiftTabPressed(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(optionReturnPressed(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(shiftReturnPressed(_:))),
-			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(shiftOptionReturnPressed(_:)))
+			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(shiftOptionReturnPressed(_:))),
+			toggleBoldCommand,
+			toggleItalicsCommand,
+			toggleUnderlineCommand
 		]
 		return keys
 	}
