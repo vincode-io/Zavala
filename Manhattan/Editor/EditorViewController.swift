@@ -446,14 +446,27 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 	}
 
 	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates) {
-		guard let shadowTableIndex = cursorCoordinates.headline.shadowTableIndex,
-			  let headlineCell = collectionView.cellForItem(at: IndexPath(row: shadowTableIndex, section: 1)) as? EditorHeadlineViewCell else { return }
-		
-		if !collectionView.visibleCells.contains(headlineCell) {
-			collectionView.scrollRectToVisible(headlineCell.frame, animated: true)
+		guard let shadowTableIndex = cursorCoordinates.headline.shadowTableIndex else { return }
+		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
+
+		func restoreCursor() {
+			guard let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell else { return	}
+			headlineCell.restoreCursor(cursorCoordinates)
 		}
 		
-		headlineCell.restoreCursor(cursorCoordinates)
+		if !collectionView.indexPathsForVisibleItems.contains(indexPath) {
+			CATransaction.begin()
+			CATransaction.setCompletionBlock {
+				// Got to wait or the headline cell won't be found
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+					restoreCursor()
+				}
+			}
+			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+			CATransaction.commit()
+		} else {
+			restoreCursor()
+		}
 	}
 	
 }
