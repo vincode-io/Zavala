@@ -137,7 +137,6 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 			textView = (contentView as? EditorHeadlineContentView)?.textView
 		}
 		
-		print("Trying to restore to \(cursorCoordinates.cursorPosition)")
 		if let textView = textView, let textPosition = textView.position(from: textView.beginningOfDocument, offset: cursorCoordinates.cursorPosition) {
 			textView.becomeFirstResponder()
 			textView.selectedTextRange = textView.textRange(from: textPosition, to: textPosition)
