@@ -13,8 +13,9 @@ final class EditorDeleteHeadlineCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
-
 	weak var delegate: EditorOutlineCommandDelegate?
+	var cursorCoordinates: CursorCoordinates?
+	
 	var outline: Outline
 	var headline: Headline
 	var attributedTexts: HeadlineTexts
@@ -32,6 +33,7 @@ final class EditorDeleteHeadlineCommand: EditorOutlineCommand {
 	}
 	
 	func perform() {
+		saveCursorCoordinates()
 		if let headlineShadowTableIndex = headline.shadowTableIndex, headlineShadowTableIndex > 0 {
 			afterHeadline = outline.shadowTable?[headlineShadowTableIndex - 1]
 		}
@@ -45,6 +47,7 @@ final class EditorDeleteHeadlineCommand: EditorOutlineCommand {
 		let changes = outline.createHeadline(headline: headline, afterHeadline: afterHeadline)
 		delegate?.applyChanges(changes)
 		registerRedo()
+		restoreCursorPosition()
 	}
 	
 }

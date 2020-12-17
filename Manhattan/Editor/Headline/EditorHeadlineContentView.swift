@@ -130,8 +130,8 @@ extension EditorHeadlineContentView: EditorHeadlineTextViewDelegate {
 		appliedConfiguration.delegate?.editorHeadlineInvalidateLayout()
 	}
 	
-	func textChanged(_: EditorHeadlineTextView, headline: Headline) {
-		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, attributedTexts: attributedTexts)
+	func textChanged(_: EditorHeadlineTextView, headline: Headline, isInNotes: Bool, cursorPosition: Int) {
+		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, attributedTexts: attributedTexts, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
 	func deleteHeadline(_: EditorHeadlineTextView, headline: Headline) {
@@ -179,8 +179,8 @@ extension EditorHeadlineContentView: EditorHeadlineNoteTextViewDelegate {
 		appliedConfiguration.delegate?.editorHeadlineInvalidateLayout()
 	}
 	
-	func textChanged(_: EditorHeadlineNoteTextView, headline: Headline) {
-		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, attributedTexts: attributedTexts)
+	func textChanged(_: EditorHeadlineNoteTextView, headline: Headline, isInNotes: Bool, cursorPosition: Int) {
+		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, attributedTexts: attributedTexts, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
 	func deleteHeadlineNote(_: EditorHeadlineNoteTextView, headline: Headline) {

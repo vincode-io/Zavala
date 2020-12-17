@@ -13,15 +13,16 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
-
 	weak var delegate: EditorOutlineCommandDelegate?
+	var cursorCoordinates: CursorCoordinates?
+	
 	var outline: Outline
 	var headline: Headline
 	var oldAttributedTexts: HeadlineTexts
 	var newAttributedTexts: HeadlineTexts
 	var applyChanges = false
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedTexts: HeadlineTexts) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedTexts: HeadlineTexts, isInNotes: Bool, cursorPosition: Int) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -31,6 +32,8 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 
 		oldAttributedTexts = headline.attributedTexts
 		newAttributedTexts = attributedTexts
+		
+		cursorCoordinates = CursorCoordinates(headline: headline, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
 	func perform() {
@@ -46,6 +49,7 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 		let changes = outline.updateHeadline(headline: headline, attributedTexts: oldAttributedTexts)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()
+		restoreCursorPosition()
 	}
 	
 }

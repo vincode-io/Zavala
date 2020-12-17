@@ -13,8 +13,9 @@ final class EditorDeleteNoteCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
-
 	weak var delegate: EditorOutlineCommandDelegate?
+	var cursorCoordinates: CursorCoordinates?
+	
 	var outline: Outline
 	var headline: Headline
 	var oldAttributedTexts: HeadlineTexts
@@ -33,6 +34,7 @@ final class EditorDeleteNoteCommand: EditorOutlineCommand {
 	}
 	
 	func perform() {
+		saveCursorCoordinates()
 		changes = outline.deleteNote(headline: headline, attributedTexts: newAttributedTexts)
 		delegate?.applyChanges(changes!)
 		registerUndo()
@@ -42,6 +44,7 @@ final class EditorDeleteNoteCommand: EditorOutlineCommand {
 		let changes = outline.createNote(headline: headline, attributedTexts: oldAttributedTexts)
 		delegate?.applyChanges(changes)
 		registerRedo()
+		restoreCursorPosition()
 	}
 	
 }

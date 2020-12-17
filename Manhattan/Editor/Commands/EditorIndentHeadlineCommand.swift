@@ -13,8 +13,9 @@ final class EditorIndentHeadlineCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
-
 	weak var delegate: EditorOutlineCommandDelegate?
+	var cursorCoordinates: CursorCoordinates?
+	
 	var outline: Outline
 	var headline: Headline
 	var oldAttributedTexts: HeadlineTexts
@@ -33,6 +34,7 @@ final class EditorIndentHeadlineCommand: EditorOutlineCommand {
 	}
 	
 	func perform() {
+		saveCursorCoordinates()
 		let changes = outline.indentHeadline(headline: headline, attributedTexts: newAttributedTexts)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
@@ -42,6 +44,7 @@ final class EditorIndentHeadlineCommand: EditorOutlineCommand {
 		let changes = outline.outdentHeadline(headline: headline, attributedTexts: oldAttributedTexts)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()
+		restoreCursorPosition()
 	}
 	
 }

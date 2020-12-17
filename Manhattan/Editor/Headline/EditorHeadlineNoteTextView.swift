@@ -12,7 +12,7 @@ protocol EditorHeadlineNoteTextViewDelegate: class {
 	var editorHeadlineNoteTextViewUndoManager: UndoManager? { get }
 	var editorHeadlineNoteTextViewAttibutedTexts: HeadlineTexts { get }
 	func invalidateLayout(_ : EditorHeadlineNoteTextView)
-	func textChanged(_ : EditorHeadlineNoteTextView, headline: Headline)
+	func textChanged(_ : EditorHeadlineNoteTextView, headline: Headline, isInNotes: Bool, cursorPosition: Int)
 	func deleteHeadlineNote(_ : EditorHeadlineNoteTextView, headline: Headline)
 	func moveCursorTo(_ : EditorHeadlineNoteTextView, headline: Headline)
 	func moveCursorDown(_ : EditorHeadlineNoteTextView, headline: Headline)
@@ -118,7 +118,7 @@ extension EditorHeadlineNoteTextView: UITextViewDelegate {
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false
 		} else {
-			editorDelegate?.textChanged(self, headline: headline)
+			editorDelegate?.textChanged(self, headline: headline, isInNotes: true, cursorPosition: lastCursorPosition)
 		}
 		
 		isTextChanged = false

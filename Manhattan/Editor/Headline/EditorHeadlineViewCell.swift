@@ -14,7 +14,7 @@ protocol EditorHeadlineViewCellDelegate: class {
 	func editorHeadlineToggleDisclosure(headline: Headline)
 	func editorHeadlineMoveCursorTo(headline: Headline)
 	func editorHeadlineMoveCursorDown(headline: Headline)
-	func editorHeadlineTextChanged(headline: Headline, attributedTexts: HeadlineTexts)
+	func editorHeadlineTextChanged(headline: Headline, attributedTexts: HeadlineTexts, isInNotes: Bool, cursorPosition: Int)
 	func editorHeadlineDeleteHeadline(_ headline: Headline, attributedTexts: HeadlineTexts)
 	func editorHeadlineCreateHeadline(beforeHeadline: Headline, attributedTexts: HeadlineTexts?)
 	func editorHeadlineCreateHeadline(afterHeadline: Headline?, attributedTexts: HeadlineTexts?)
@@ -127,6 +127,25 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return }
 		textView.becomeFirstResponder()
 		textView.selectedTextRange = textRange
+	}
+	
+	func restoreCursor(_ cursorCoordinates: CursorCoordinates) {
+		let textView: OutlineTextView?
+		if cursorCoordinates.isInNotes {
+			textView = (contentView as? EditorHeadlineContentView)?.noteTextView
+		} else {
+			textView = (contentView as? EditorHeadlineContentView)?.textView
+		}
+		
+		print("Trying to restore to \(cursorCoordinates.cursorPosition)")
+		if let textView = textView, let textPosition = textView.position(from: textView.beginningOfDocument, offset: cursorCoordinates.cursorPosition) {
+			textView.becomeFirstResponder()
+			textView.selectedTextRange = textView.textRange(from: textPosition, to: textPosition)
+		} else if let textView = textView {
+			textView.becomeFirstResponder()
+			let endPosition = textView.endOfDocument
+			textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
+		}
 	}
 	
 	func moveToStart() {

@@ -32,6 +32,8 @@ class OutlineTextView: UITextView {
 		return selectedRange.location
 	}
 	
+	var lastCursorPosition = 0
+	
 	var attributedTexts: HeadlineTexts? {
 		fatalError("attibutedTexts has not been implemented")
 	}
@@ -45,6 +47,11 @@ class OutlineTextView: UITextView {
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
+	}
+	
+	override func resignFirstResponder() -> Bool {
+		lastCursorPosition = cursorPosition
+		return super.resignFirstResponder()
 	}
 	
 }

@@ -13,8 +13,9 @@ final class EditorMoveHeadlineCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
-
 	weak var delegate: EditorOutlineCommandDelegate?
+	var cursorCoordinates: CursorCoordinates?
+	
 	var outline: Outline
 	var headline: Headline
 	var oldParent: HeadlineContainer?
@@ -43,6 +44,7 @@ final class EditorMoveHeadlineCommand: EditorOutlineCommand {
 	}
 	
 	func perform() {
+		saveCursorCoordinates()
 		let changes = outline.moveHeadline(headline, toParent: toParent, childIndex: toChildIndex)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
@@ -54,6 +56,7 @@ final class EditorMoveHeadlineCommand: EditorOutlineCommand {
 			delegate?.applyChangesRestoringCursor(changes)
 		}
 		registerRedo()
+		restoreCursorPosition()
 	}
 	
 }

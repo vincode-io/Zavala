@@ -357,8 +357,8 @@ extension EditorViewController: EditorHeadlineViewCellDelegate {
 		toggleDisclosure(headline: headline)
 	}
 	
-	func editorHeadlineTextChanged(headline: Headline, attributedTexts: HeadlineTexts) {
-		textChanged(headline: headline, attributedTexts: attributedTexts)
+	func editorHeadlineTextChanged(headline: Headline, attributedTexts: HeadlineTexts, isInNotes: Bool, cursorPosition: Int) {
+		textChanged(headline: headline, attributedTexts: attributedTexts, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
 	func editorHeadlineDeleteHeadline(_ headline: Headline, attributedTexts: HeadlineTexts) {
@@ -444,6 +444,18 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 			headlineCell.restoreSelection(textRange)
 		}
 	}
+
+	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates) {
+		guard let shadowTableIndex = cursorCoordinates.headline.shadowTableIndex,
+			  let headlineCell = collectionView.cellForItem(at: IndexPath(row: shadowTableIndex, section: 1)) as? EditorHeadlineViewCell else { return }
+		
+		if !collectionView.visibleCells.contains(headlineCell) {
+			collectionView.scrollRectToVisible(headlineCell.frame, animated: true)
+		}
+		
+		headlineCell.restoreCursor(cursorCoordinates)
+	}
+	
 }
 
 // MARK: Helpers
@@ -594,14 +606,16 @@ private extension EditorViewController {
 		runCommand(command)
 	}
 
-	func textChanged(headline: Headline, attributedTexts: HeadlineTexts) {
+	func textChanged(headline: Headline, attributedTexts: HeadlineTexts, isInNotes: Bool, cursorPosition: Int) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = EditorTextChangedCommand(undoManager: undoManager,
 											   delegate: self,
 											   outline: outline,
 											   headline: headline,
-											   attributedTexts: attributedTexts)
+											   attributedTexts: attributedTexts,
+											   isInNotes: isInNotes,
+											   cursorPosition: cursorPosition)
 		runCommand(command)
 	}
 	

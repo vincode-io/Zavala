@@ -13,8 +13,9 @@ final class EditorSplitHeadlineCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
-
 	weak var delegate: EditorOutlineCommandDelegate?
+	var cursorCoordinates: CursorCoordinates?
+	
 	var outline: Outline
 	var newHeadline: Headline?
 	var headline: Headline
@@ -34,6 +35,7 @@ final class EditorSplitHeadlineCommand: EditorOutlineCommand {
 	}
 	
 	func perform() {
+		saveCursorCoordinates()
 		if newHeadline == nil {
 			newHeadline = Headline()
 		}
@@ -47,6 +49,7 @@ final class EditorSplitHeadlineCommand: EditorOutlineCommand {
 		let changes = outline.joinHeadline(topHeadline: headline, bottomHeadline: newHeadline)
 		delegate?.applyChanges(changes)
 		registerRedo()
+		restoreCursorPosition()
 	}
 	
 }

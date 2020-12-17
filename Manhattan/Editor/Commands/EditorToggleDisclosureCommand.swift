@@ -13,8 +13,9 @@ final class EditorToggleDisclosureCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
-
 	weak var delegate: EditorOutlineCommandDelegate?
+	var cursorCoordinates: CursorCoordinates?
+	
 	var outline: Outline
 	var headline: Headline
 	
@@ -33,6 +34,7 @@ final class EditorToggleDisclosureCommand: EditorOutlineCommand {
 	}
 	
 	func perform() {
+		saveCursorCoordinates()
 		let changes = outline.toggleDisclosure(headline: headline)
 		delegate?.applyChanges(changes)
 		registerUndo()
@@ -42,6 +44,7 @@ final class EditorToggleDisclosureCommand: EditorOutlineCommand {
 		let changes = outline.toggleDisclosure(headline: headline)
 		delegate?.applyChanges(changes)
 		registerRedo()
+		restoreCursorPosition()
 	}
 	
 }
