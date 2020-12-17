@@ -257,10 +257,6 @@ class MainSplitViewController: UISplitViewController {
 		editorViewController?.outlineToggleItalics()
 	}
 	
-	@objc func outlineToggleUnderline(_ sender: Any?) {
-		editorViewController?.outlineToggleUnderline()
-	}
-	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {

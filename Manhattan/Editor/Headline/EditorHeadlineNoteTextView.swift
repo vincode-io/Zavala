@@ -34,7 +34,6 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 		}
 		keys.append(toggleBoldCommand)
 		keys.append(toggleItalicsCommand)
-		keys.append(toggleUnderlineCommand)
 		return keys
 	}
 	

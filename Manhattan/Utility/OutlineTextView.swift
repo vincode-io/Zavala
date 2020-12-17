@@ -11,7 +11,6 @@ import Templeton
 extension Selector {
 	static let toggleBoldface = #selector(OutlineTextView.outlineToggleBoldface(_:))
 	static let toggleItalics = #selector(OutlineTextView.outlineToggleItalics(_:))
-	static let toggleUnderline = #selector(OutlineTextView.outlineToggleUnderline(_:))
 }
 
 class OutlineTextView: UITextView {
@@ -46,7 +45,6 @@ class OutlineTextView: UITextView {
 
 	let toggleBoldCommand = UIKeyCommand(title: L10n.bold, action: .toggleBoldface, input: "b", modifierFlags: [.command])
 	let toggleItalicsCommand = UIKeyCommand(title: L10n.italics, action: .toggleItalics, input: "i", modifierFlags: [.command])
-	let toggleUnderlineCommand = UIKeyCommand(title: L10n.underline, action: .toggleUnderline, input: "u", modifierFlags: [.command])
 
 	private var stackedUndoManager: UndoManager?
 	private static let dropDelegate = OutlineTextDropDelegate()
@@ -81,7 +79,7 @@ class OutlineTextView: UITextView {
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
-		case .toggleBoldface, .toggleItalics, .toggleUnderline:
+		case .toggleBoldface, .toggleItalics:
 			return isSelecting
 		default:
 			return super.canPerformAction(action, withSender: sender)
@@ -96,13 +94,9 @@ class OutlineTextView: UITextView {
 		super.toggleItalics(sender)
 	}
 	
-	@objc func outlineToggleUnderline(_ sender: Any?) {
-		super.toggleUnderline(sender)
-	}
-	
 	override func buildMenu(with builder: UIMenuBuilder) {
 		super.buildMenu(with: builder)
-		let formattingMenu = UIMenu(title: "", options: .displayInline, children: [toggleBoldCommand, toggleItalicsCommand, toggleUnderlineCommand])
+		let formattingMenu = UIMenu(title: "", options: .displayInline, children: [toggleBoldCommand, toggleItalicsCommand])
 		builder.insertSibling(formattingMenu, afterMenu: .standardEdit)
 	}
 	

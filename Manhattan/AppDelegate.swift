@@ -166,11 +166,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											input: "i",
 											modifierFlags: [.command])
 	
-	let toggleUnderlineCommand = UIKeyCommand(title: L10n.underline,
-											  action: #selector(toggleUnderlineCommand(_:)),
-											  input: "u",
-											  modifierFlags: [.command])
-	
 	var mainSplitViewController: MainSplitViewController? {
 		var keyScene: UIScene?
 		let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
@@ -198,7 +193,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		var menuItems = [UIMenuItem]()
 		menuItems.append(UIMenuItem(title: L10n.bold, action: .toggleBoldface))
 		menuItems.append(UIMenuItem(title: L10n.italics, action: .toggleItalics))
-		menuItems.append(UIMenuItem(title: L10n.underline, action: .toggleUnderline))
 		UIMenuController.shared.menuItems = menuItems
 
 		return true
@@ -285,10 +279,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.outlineToggleItalics(sender)
 	}
 	
-	@objc func toggleUnderlineCommand(_ sender: Any?) {
-		mainSplitViewController?.outlineToggleUnderline(sender)
-	}
-	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
@@ -370,7 +360,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		// Format
 		builder.remove(menu: .format)
-		let formatMenu = UIMenu(title: L10n.format, children: [toggleBoldCommand, toggleItalicsCommand, toggleUnderlineCommand])
+		let formatMenu = UIMenu(title: L10n.format, children: [toggleBoldCommand, toggleItalicsCommand])
 		builder.insertSibling(formatMenu, afterMenu: .edit)
 
 		// View Menu

@@ -37,7 +37,6 @@ class EditorHeadlineTextView: OutlineTextView {
 			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(shiftOptionReturnPressed(_:))),
 			toggleBoldCommand,
 			toggleItalicsCommand,
-			toggleUnderlineCommand
 		]
 		return keys
 	}

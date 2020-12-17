@@ -40,7 +40,6 @@
 "Format" = "Format";
 "Bold" = "Bold";
 "Italics" = "Italics";
-"Underline" = "Underline";
 
 /* Activity Manager */
 "See_Outlines_In" = "See outlines in “%@”";

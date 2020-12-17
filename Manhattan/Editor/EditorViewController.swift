@@ -234,10 +234,6 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		currentTextView?.toggleItalics(self)
 	}
 	
-	func outlineToggleUnderline() {
-		currentTextView?.toggleUnderline(self)
-	}
-	
 	// MARK: Actions
 	
 	@objc func toggleOutlineFilter(_ sender: Any?) {

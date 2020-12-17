@@ -108,8 +108,6 @@ internal enum L10n {
   internal static let typing = L10n.tr("Localizable", "Typing")
   /// Uncomplete
   internal static let uncomplete = L10n.tr("Localizable", "Uncomplete")
-  /// Underline
-  internal static let underline = L10n.tr("Localizable", "Underline")
   /// Unmark as Favorite
   internal static let unmarkAsFavorite = L10n.tr("Localizable", "Unmark_As_Favorite")
 }
