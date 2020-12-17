@@ -161,6 +161,8 @@ extension EditorHeadlineTextView: UITextViewDelegate {
 	
 	func textViewDidChange(_ textView: UITextView) {
 		isTextChanged = true
+		lastCursorPosition = cursorPosition
+
 		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
 		if textViewHeight != fittingSize.height {
 			textViewHeight = fittingSize.height

@@ -49,11 +49,6 @@ class OutlineTextView: UITextView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	override func resignFirstResponder() -> Bool {
-		lastCursorPosition = cursorPosition
-		return super.resignFirstResponder()
-	}
-	
 }
 
 extension OutlineTextView: UITextDropDelegate {
