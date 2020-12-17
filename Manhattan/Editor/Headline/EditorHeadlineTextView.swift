@@ -155,12 +155,12 @@ extension EditorHeadlineTextView: UITextViewDelegate {
 			editorDelegate?.createHeadline(self, afterHeadline: headline)
 			return false
 		default:
-			isTextChanged = true
 			return true
 		}
 	}
 	
 	func textViewDidChange(_ textView: UITextView) {
+		isTextChanged = true
 		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
 		if textViewHeight != fittingSize.height {
 			textViewHeight = fittingSize.height
