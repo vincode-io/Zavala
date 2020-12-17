@@ -179,6 +179,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		AppDefaults.registerDefaults()
+
+		var menuItems = [UIMenuItem]()
+		menuItems.append(UIMenuItem(title: "Bold", action: .toggleBoldface))
+		menuItems.append(UIMenuItem(title: "Italics", action: .toggleItalics))
+		menuItems.append(UIMenuItem(title: "Underline", action: .toggleUnderline))
+		UIMenuController.shared.menuItems = menuItems
+
 		return true
 	}
 

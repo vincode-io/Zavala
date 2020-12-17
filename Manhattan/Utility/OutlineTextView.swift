@@ -8,6 +8,12 @@
 import UIKit
 import Templeton
 
+extension Selector {
+	static let toggleBoldface = #selector(OutlineTextView.toggleBoldface(_:))
+	static let toggleItalics = #selector(OutlineTextView.toggleItalics(_:))
+	static let toggleUnderline = #selector(OutlineTextView.toggleUnderline(_:))
+}
+
 class OutlineTextView: UITextView {
 	
 	var headline: Headline?
@@ -62,10 +68,24 @@ class OutlineTextView: UITextView {
 		self.textContainer.lineFragmentPadding = 0
 		self.textContainerInset = .zero
 		self.backgroundColor = .clear
+		self.adjustsFontForContentSizeCategory = true
 	}
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
+	}
+	
+	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+		if traitCollection.userInterfaceIdiom != .mac {
+			switch action {
+			case .toggleBoldface, .toggleItalics, .toggleUnderline:
+				return isSelecting
+			default:
+				return super.canPerformAction(action, withSender: sender)
+			}
+		} else {
+			return super.canPerformAction(action, withSender: sender)
+		}
 	}
 	
 }
