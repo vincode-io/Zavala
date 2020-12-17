@@ -60,6 +60,7 @@
 		51C568BD258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568BC258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift */; };
 		51C568C3258AC8F700AA7B93 /* CursorCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568C2258AC8F700AA7B93 /* CursorCoordinates.swift */; };
 		51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */; };
+		51C568D5258C085400AA7B93 /* MarkdownAttributedString in Frameworks */ = {isa = PBXBuildFile; productRef = 51C568D4258C085400AA7B93 /* MarkdownAttributedString */; };
 		51CF10A0256DEE1B005D6D88 /* FixedSizeImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */; };
 		51CF10A82571BA66005D6D88 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10A72571BA66005D6D88 /* Localizable.strings */; };
 		51CF10AC2571BA9A005D6D88 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */; };
@@ -200,6 +201,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51C568D5258C085400AA7B93 /* MarkdownAttributedString in Frameworks */,
 				51B4EBC7257C3CD100378CAB /* ZipArchive in Frameworks */,
 				51B5861C256B245300ACF99B /* SWXMLHash in Frameworks */,
 				51C4C3F92557470B004E0206 /* Templeton in Frameworks */,
@@ -438,6 +440,7 @@
 				51C4C40025576631004E0206 /* RSCore */,
 				51B5861B256B245300ACF99B /* SWXMLHash */,
 				51B4EBC6257C3CD100378CAB /* ZipArchive */,
+				51C568D4258C085400AA7B93 /* MarkdownAttributedString */,
 			);
 			productName = Manhattan;
 			productReference = 5181A9342554D92000C153E8 /* Manhattan.app */;
@@ -514,6 +517,7 @@
 				51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */,
 				51B5861A256B245300ACF99B /* XCRemoteSwiftPackageReference "SWXMLHash" */,
 				51B4EBC5257C3CD100378CAB /* XCRemoteSwiftPackageReference "ZipArchive" */,
+				51C568D3258C085400AA7B93 /* XCRemoteSwiftPackageReference "MarkdownAttributedString" */,
 			);
 			productRefGroup = 5181A9352554D92000C153E8 /* Products */;
 			projectDirPath = "";
@@ -831,6 +835,14 @@
 				kind = branch;
 			};
 		};
+		51C568D3258C085400AA7B93 /* XCRemoteSwiftPackageReference "MarkdownAttributedString" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vincode-io/MarkdownAttributedString.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -852,6 +864,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */;
 			productName = RSCore;
+		};
+		51C568D4258C085400AA7B93 /* MarkdownAttributedString */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 51C568D3258C085400AA7B93 /* XCRemoteSwiftPackageReference "MarkdownAttributedString" */;
+			productName = MarkdownAttributedString;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

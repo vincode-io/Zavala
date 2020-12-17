@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MarkdownAttributedString
 
 public struct HeadlineTexts {
 	public var text: NSAttributedString?
@@ -78,11 +79,11 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 	}
 	
 	public var plainText: String? {
-		return attributedText?.string
+		return attributedText?.markdownRepresentation
 	}
 	
 	public var notePlainText: String? {
-		return noteAttributedText?.string
+		return noteAttributedText?.markdownRepresentation
 	}
 	
 	private var _attributedText: NSAttributedString?

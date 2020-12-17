@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "MarkdownAttributedString",
+        "repositoryURL": "https://github.com/vincode-io/MarkdownAttributedString.git",
+        "state": {
+          "branch": "master",
+          "revision": "2b284b2fb6ac3d58c5e9d58763d7517dbd84ee2b",
+          "version": null
+        }
+      },
+      {
         "package": "RSCore",
         "repositoryURL": "https://github.com/Ranchero-Software/RSCore.git",
         "state": {

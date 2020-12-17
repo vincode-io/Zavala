@@ -13,6 +13,7 @@ let package = Package(
 		.package(url: "https://github.com/Ranchero-Software/RSCore.git", .upToNextMajor(from: "1.0.0-beta9")),
 		.package(url: "https://github.com/drmohundro/SWXMLHash.git", .upToNextMajor(from: "5.0.1")),
 		.package(url: "https://github.com/vincode-io/ZipArchive.git", .branch("master")),
+		.package(url: "https://github.com/vincode-io/MarkdownAttributedString.git", .branch("master")),
     ],
     targets: [
         .target(
@@ -20,7 +21,8 @@ let package = Package(
             dependencies: [
 				"RSCore",
 				"SWXMLHash",
-				"ZipArchive"
+				"ZipArchive",
+				"MarkdownAttributedString"
 			],
 			resources: [.copy("Localizable.strings")]),
         .testTarget(
