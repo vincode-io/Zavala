@@ -18,6 +18,8 @@ internal enum L10n {
   internal static func archiveAccount(_ p1: Any) -> String {
     return L10n.tr("Localizable", "Archive_Account", String(describing: p1))
   }
+  /// Bold
+  internal static let bold = L10n.tr("Localizable", "Bold")
   /// Cancel
   internal static let cancel = L10n.tr("Localizable", "Cancel")
   /// Collapse
@@ -62,6 +64,8 @@ internal enum L10n {
   internal static let importOPML = L10n.tr("Localizable", "Import_OPML")
   /// Indent
   internal static let indent = L10n.tr("Localizable", "Indent")
+  /// Italics
+  internal static let italics = L10n.tr("Localizable", "Italics")
   /// Mark as Favorite
   internal static let markAsFavorite = L10n.tr("Localizable", "Mark_As_Favorite")
   /// Move
@@ -102,6 +106,8 @@ internal enum L10n {
   internal static let typing = L10n.tr("Localizable", "Typing")
   /// Uncomplete
   internal static let uncomplete = L10n.tr("Localizable", "Uncomplete")
+  /// Underline
+  internal static let underline = L10n.tr("Localizable", "Underline")
   /// Unmark as Favorite
   internal static let unmarkAsFavorite = L10n.tr("Localizable", "Unmark_As_Favorite")
 }

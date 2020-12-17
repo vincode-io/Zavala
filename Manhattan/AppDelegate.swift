@@ -67,9 +67,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	let exportOPMLCommand = UIKeyCommand(title: L10n.exportOPML,
-										action: #selector(exportOPMLCommand(_:)),
-										input: "e",
-										modifierFlags: [.shift, .command])
+										 action: #selector(exportOPMLCommand(_:)),
+										 input: "e",
+										 modifierFlags: [.shift, .command])
 	
 	let exportMarkdownCommand = UIKeyCommand(title: L10n.exportMarkdown,
 											 action: #selector(exportMarkdownCommand(_:)),
@@ -77,9 +77,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											 modifierFlags: [.control, .command])
 	
 	let importOPMLCommand = UIKeyCommand(title: L10n.importOPML,
-										action: #selector(importOPMLCommand(_:)),
-										input: "i",
-										modifierFlags: [.shift, .command])
+										 action: #selector(importOPMLCommand(_:)),
+										 input: "i",
+										 modifierFlags: [.shift, .command])
 	
 	let newWindowCommand = UIKeyCommand(title: L10n.newWindow,
 										action: #selector(newWindow(_:)),
@@ -87,9 +87,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										modifierFlags: [.alternate, .command])
 	
 	let newOutlineCommand = UIKeyCommand(title: L10n.newOutline,
-										action: #selector(createOutlineCommand(_:)),
-										input: "n",
-										modifierFlags: [.command])
+										 action: #selector(createOutlineCommand(_:)),
+										 input: "n",
+										 modifierFlags: [.command])
 	
 	let newFolderCommand = UIKeyCommand(title: L10n.newFolder,
 										action: #selector(createFolderCommand(_:)),
@@ -97,64 +97,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										modifierFlags: [.shift, .command])
 	
 	let toggleSidebarCommand = UIKeyCommand(title: L10n.toggleSidebar,
-										action: #selector(toggleSidebarCommand(_:)),
-										input: "s",
-										modifierFlags: [.control, .command])
-
+											action: #selector(toggleSidebarCommand(_:)),
+											input: "s",
+											modifierFlags: [.control, .command])
+	
 	let createHeadlineCommand = UIKeyCommand(title: L10n.addRow,
-										action: #selector(createHeadlineCommand(_:)),
-										input: "\n",
-										modifierFlags: [])
-
+											 action: #selector(createHeadlineCommand(_:)),
+											 input: "\n",
+											 modifierFlags: [])
+	
 	let indentHeadlineCommand = UIKeyCommand(title: L10n.indent,
-										action: #selector(indentHeadlineCommand(_:)),
-										input: "]",
-										modifierFlags: [.command])
-
+											 action: #selector(indentHeadlineCommand(_:)),
+											 input: "]",
+											 modifierFlags: [.command])
+	
 	let outdentHeadlineCommand = UIKeyCommand(title: L10n.outdent,
-										action: #selector(outdentHeadlineCommand(_:)),
-										input: "[",
-										modifierFlags: [.command])
-
+											  action: #selector(outdentHeadlineCommand(_:)),
+											  input: "[",
+											  modifierFlags: [.command])
+	
 	let toggleCompleteHeadlineCommand = UIKeyCommand(title: L10n.complete,
-										action: #selector(toggleCompleteHeadlineCommand(_:)),
-										input: "\n",
-										modifierFlags: [.command])
-
+													 action: #selector(toggleCompleteHeadlineCommand(_:)),
+													 input: "\n",
+													 modifierFlags: [.command])
+	
 	let completeHeadlineCommand = UIKeyCommand(title: L10n.complete,
-										action: #selector(toggleCompleteHeadlineCommand(_:)),
-										input: "\n",
-										modifierFlags: [.command])
-
+											   action: #selector(toggleCompleteHeadlineCommand(_:)),
+											   input: "\n",
+											   modifierFlags: [.command])
+	
 	let uncompleteHeadlineCommand = UIKeyCommand(title: L10n.uncomplete,
-										action: #selector(toggleCompleteHeadlineCommand(_:)),
-										input: "\n",
-										modifierFlags: [.command])
-
+												 action: #selector(toggleCompleteHeadlineCommand(_:)),
+												 input: "\n",
+												 modifierFlags: [.command])
+	
 	let createHeadlineNoteCommand = UIKeyCommand(title: L10n.addNote,
-										action: #selector(createHeadlineNoteCommand(_:)),
-										input: "\n",
-										modifierFlags: [.shift])
-
+												 action: #selector(createHeadlineNoteCommand(_:)),
+												 input: "\n",
+												 modifierFlags: [.shift])
+	
 	let deleteHeadlineNoteCommand = UIKeyCommand(title: L10n.deleteNote,
-										action: #selector(deleteHeadlineNoteCommand(_:)),
-										input: "\u{8}",
-										modifierFlags: [.shift])
-
+												 action: #selector(deleteHeadlineNoteCommand(_:)),
+												 input: "\u{8}",
+												 modifierFlags: [.shift])
+	
 	let splitHeadlineCommand = UIKeyCommand(title: L10n.splitRow,
-										action: #selector(splitHeadlineCommand(_:)),
-										input: "\n",
-										modifierFlags: [.shift, .alternate])
-
+											action: #selector(splitHeadlineCommand(_:)),
+											input: "\n",
+											modifierFlags: [.shift, .alternate])
+	
 	let restoreArchiveCommand = UIKeyCommand(title: L10n.restoreArchive,
 											 action: #selector(restoreArchiveCommand(_:)),
 											 input: "0",
 											 modifierFlags: [.control, .command])
 	
 	let archiveLocalCommand = UIKeyCommand(title: L10n.archiveAccount(AccountType.local.name),
-										action: #selector(archiveLocalCommand(_:)),
-										input: "1",
-										modifierFlags: [.control, .command])
+										   action: #selector(archiveLocalCommand(_:)),
+										   input: "1",
+										   modifierFlags: [.control, .command])
 	
 	var mainSplitViewController: MainSplitViewController? {
 		var keyScene: UIScene?
@@ -181,9 +181,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		AppDefaults.registerDefaults()
 
 		var menuItems = [UIMenuItem]()
-		menuItems.append(UIMenuItem(title: "Bold", action: .toggleBoldface))
-		menuItems.append(UIMenuItem(title: "Italics", action: .toggleItalics))
-		menuItems.append(UIMenuItem(title: "Underline", action: .toggleUnderline))
+		menuItems.append(UIMenuItem(title: L10n.bold, action: .toggleBoldface))
+		menuItems.append(UIMenuItem(title: L10n.italics, action: .toggleItalics))
+		menuItems.append(UIMenuItem(title: L10n.underline, action: .toggleUnderline))
 		UIMenuController.shared.menuItems = menuItems
 
 		return true

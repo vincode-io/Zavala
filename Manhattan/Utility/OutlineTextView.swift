@@ -9,9 +9,9 @@ import UIKit
 import Templeton
 
 extension Selector {
-	static let toggleBoldface = #selector(OutlineTextView.toggleBoldface(_:))
-	static let toggleItalics = #selector(OutlineTextView.toggleItalics(_:))
-	static let toggleUnderline = #selector(OutlineTextView.toggleUnderline(_:))
+	static let toggleBoldface = #selector(OutlineTextView.outlineToggleBoldface(_:))
+	static let toggleItalics = #selector(OutlineTextView.outlineToggleItalics(_:))
+	static let toggleUnderline = #selector(OutlineTextView.outlineToggleUnderline(_:))
 }
 
 class OutlineTextView: UITextView {
@@ -46,7 +46,11 @@ class OutlineTextView: UITextView {
 
 	private var stackedUndoManager: UndoManager?
 	private static let dropDelegate = OutlineTextDropDelegate()
-	
+
+	private let toggleBoldCommand = UIKeyCommand(title: L10n.bold, action: .toggleBoldface, input: "b", modifierFlags: [.command])
+	private let toggleItalicsCommand = UIKeyCommand(title: L10n.italics, action: .toggleItalics, input: "i", modifierFlags: [.command])
+	private let toggleUnderlineCommand = UIKeyCommand(title: L10n.underline, action: .toggleUnderline, input: "u", modifierFlags: [.command])
+
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 
@@ -76,16 +80,31 @@ class OutlineTextView: UITextView {
 	}
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-		if traitCollection.userInterfaceIdiom != .mac {
-			switch action {
-			case .toggleBoldface, .toggleItalics, .toggleUnderline:
-				return isSelecting
-			default:
-				return super.canPerformAction(action, withSender: sender)
-			}
-		} else {
+		switch action {
+		case .toggleBoldface, .toggleItalics, .toggleUnderline:
+			return isSelecting
+		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
+	}
+	
+	@objc func outlineToggleBoldface(_ sender: Any?) {
+		super.toggleBoldface(sender)
+	}
+	
+	@objc func outlineToggleItalics(_ sender: Any?) {
+		super.toggleItalics(sender)
+	}
+	
+	@objc func outlineToggleUnderline(_ sender: Any?) {
+		super.toggleUnderline(sender)
+	}
+	
+	override func buildMenu(with builder: UIMenuBuilder) {
+		super.buildMenu(with: builder)
+		
+		let formattingMenu = UIMenu(title: "", options: .displayInline, children: [toggleBoldCommand, toggleItalicsCommand, toggleUnderlineCommand])
+		builder.insertSibling(formattingMenu, afterMenu: .standardEdit)
 	}
 	
 }
