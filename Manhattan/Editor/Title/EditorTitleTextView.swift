@@ -11,16 +11,28 @@ protocol EditorTitleTextViewDelegate: class {
 	var EditorTitleTextViewUndoManager: UndoManager? { get }
 }
 
-class EditorTitleTextView: OutlineTextView {
+class EditorTitleTextView: UITextView {
 	
 	weak var editorDelegate: EditorTitleTextViewDelegate?
 
-	override var editorUndoManager: UndoManager? {
-		return editorDelegate?.EditorTitleTextViewUndoManager
+	override var undoManager: UndoManager? {
+		guard let textViewUndoManager = super.undoManager, let controllerUndoManager = editorDelegate?.EditorTitleTextViewUndoManager else { return nil }
+		if stackedUndoManager == nil {
+			stackedUndoManager = StackedUndoManger(mainUndoManager: textViewUndoManager, fallBackUndoManager: controllerUndoManager)
+		}
+		return stackedUndoManager
 	}
+	
+	var isSelecting: Bool {
+		return !(selectedTextRange?.isEmpty ?? true)
+	}
+
+	private var stackedUndoManager: UndoManager?
+	private static let dropDelegate = OutlineTextDropDelegate()
 
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
+		textDropDelegate = Self.dropDelegate
 	}
 	
 	required init?(coder: NSCoder) {

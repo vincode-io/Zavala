@@ -59,6 +59,7 @@
 		51C4C45B255ACA1B004E0206 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C45A255ACA1B004E0206 /* EditorViewController.swift */; };
 		51C568BD258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568BC258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift */; };
 		51C568C3258AC8F700AA7B93 /* CursorCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568C2258AC8F700AA7B93 /* CursorCoordinates.swift */; };
+		51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */; };
 		51CF10A0256DEE1B005D6D88 /* FixedSizeImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */; };
 		51CF10A82571BA66005D6D88 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10A72571BA66005D6D88 /* Localizable.strings */; };
 		51CF10AC2571BA9A005D6D88 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */; };
@@ -171,6 +172,7 @@
 		51C4C45A255ACA1B004E0206 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
 		51C568BC258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDropHeadlineCommand.swift; sourceTree = "<group>"; };
 		51C568C2258AC8F700AA7B93 /* CursorCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorCoordinates.swift; sourceTree = "<group>"; };
+		51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineTextDropDelegate.swift; sourceTree = "<group>"; };
 		51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSizeImageView.swift; sourceTree = "<group>"; };
 		51CF10A72571BA66005D6D88 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 				51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */,
 				515F164A255C9F8E00FD98B8 /* FormViewController.swift */,
 				51DA54C725643E3400732942 /* MainThreadOperationBase.swift */,
+				51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */,
 				51C030BD257E1B9400609262 /* OutlineTextView.swift */,
 				51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */,
 				51C0309A257E04A200609262 /* ShadowTableChanges+.swift */,
@@ -618,6 +621,7 @@
 				515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */,
 				51F2DC7B2586E101003BD5CE /* EditorHeadlineNoteTextView.swift in Sources */,
 				51C568BD258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift in Sources */,
+				51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */,
 				5142874625730AD600F16B78 /* EditorCreateHeadlineAfterCommand.swift in Sources */,
 				51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */,
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,

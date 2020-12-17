@@ -39,27 +39,33 @@ class OutlineTextView: UITextView {
 	}
 
 	private var stackedUndoManager: UndoManager?
-
+	private static let dropDelegate = OutlineTextDropDelegate()
+	
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
-		textDropDelegate = self
+
+		textDropDelegate = Self.dropDelegate
+
+		// These gesture recognizers will conflict with context menu preview dragging if not removed.
+		if traitCollection.userInterfaceIdiom != .mac {
+			gestureRecognizers?.forEach {
+				if $0.name == "dragInitiation"
+					|| $0.name == "dragExclusionRelationships"
+					|| $0.name == "dragFailureRelationships"
+					|| $0.name == "com.apple.UIKit.longPressClickDriverPrimary" {
+					removeGestureRecognizer($0)
+				}
+			}
+		}
+
+		self.isScrollEnabled = false
+		self.textContainer.lineFragmentPadding = 0
+		self.textContainerInset = .zero
+		self.backgroundColor = .clear
 	}
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
-	}
-	
-}
-
-extension OutlineTextView: UITextDropDelegate {
-	
-	// We dont' allow local text drops because regular dragging and dropping of Headlines was dropping Markdown into our text view
-	func textDroppableView(_ textDroppableView: UIView & UITextDroppable, proposalForDrop drop: UITextDropRequest) -> UITextDropProposal {
-		if drop.dropSession.localDragSession == nil {
-			return UITextDropProposal(operation: .copy)
-		} else {
-			return UITextDropProposal(operation: .cancel)
-		}
 	}
 	
 }

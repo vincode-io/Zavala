@@ -44,21 +44,7 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 		
-		if traitCollection.userInterfaceIdiom != .mac {
-			gestureRecognizers?.forEach {
-				if $0.name == "dragInitiation"
-					|| $0.name == "dragExclusionRelationships"
-					|| $0.name == "dragFailureRelationships"
-					|| $0.name == "com.apple.UIKit.longPressClickDriverPrimary" {
-					removeGestureRecognizer($0)
-				}
-			}
-		}
-
 		self.delegate = self
-		self.isScrollEnabled = false
-		self.textContainer.lineFragmentPadding = 0
-		self.textContainerInset = .zero
 
 		if traitCollection.userInterfaceIdiom == .mac {
 			self.font = UIFont.preferredFont(forTextStyle: .body)
@@ -68,8 +54,6 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 		}
 
 		self.textColor = .secondaryLabel
-		
-		self.backgroundColor = .clear
 	}
 	
 	private var textViewHeight: CGFloat?

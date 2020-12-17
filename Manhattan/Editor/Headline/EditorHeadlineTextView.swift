@@ -48,22 +48,7 @@ class EditorHeadlineTextView: OutlineTextView {
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 
-		// These gesture recognizers will conflict with context menu preview dragging if not removed.
-		if traitCollection.userInterfaceIdiom != .mac {
-			gestureRecognizers?.forEach {
-				if $0.name == "dragInitiation"
-					|| $0.name == "dragExclusionRelationships"
-					|| $0.name == "dragFailureRelationships"
-					|| $0.name == "com.apple.UIKit.longPressClickDriverPrimary" {
-					removeGestureRecognizer($0)
-				}
-			}
-		}
-		
 		self.delegate = self
-		self.isScrollEnabled = false
-		self.textContainer.lineFragmentPadding = 0
-		self.textContainerInset = .zero
 
 		if traitCollection.userInterfaceIdiom == .mac {
 			let bodyFont = UIFont.preferredFont(forTextStyle: .body)
@@ -72,7 +57,6 @@ class EditorHeadlineTextView: OutlineTextView {
 			self.font = UIFont.preferredFont(forTextStyle: .body)
 		}
 
-		self.backgroundColor = .clear
 	}
 	
 	private var textViewHeight: CGFloat?
