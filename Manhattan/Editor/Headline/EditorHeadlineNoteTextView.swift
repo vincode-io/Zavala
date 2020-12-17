@@ -124,10 +124,6 @@ extension EditorHeadlineNoteTextView: UITextViewDelegate {
 		isTextChanged = false
 	}
 	
-	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-		return true
-	}
-	
 	func textViewDidChange(_ textView: UITextView) {
 		isTextChanged = true
 		lastCursorPosition = cursorPosition
