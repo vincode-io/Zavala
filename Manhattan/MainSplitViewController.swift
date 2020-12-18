@@ -407,7 +407,9 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 extension NSToolbarItem.Identifier {
 	static let newOutline = NSToolbarItem.Identifier("io.vincode.Manhattan.newOutline")
 	static let toggleOutlineFilter = NSToolbarItem.Identifier("io.vincode.Manhattan.toggleOutlineFilter")
-	static let toggleOutlineIsFavorite = NSToolbarItem.Identifier("io.vincode.Manhattan.toggleOutlineIsFavorite")
+	static let link = NSToolbarItem.Identifier("io.vincode.Manhattan.link")
+	static let boldface = NSToolbarItem.Identifier("io.vincode.Manhattan.boldface")
+	static let italic = NSToolbarItem.Identifier("io.vincode.Manhattan.italic")
 }
 
 extension MainSplitViewController: NSToolbarDelegate {
@@ -418,6 +420,10 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.flexibleSpace,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
 			.newOutline,
+			.space,
+			.link,
+			.boldface,
+			.italic,
 			.flexibleSpace,
 			.toggleOutlineFilter,
 		]
@@ -443,6 +449,42 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = L10n.newOutline
 			item.isBordered = true
 			item.action = #selector(createOutline(_:))
+			item.target = self
+			toolbarItem = item
+		case .link:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isLinkUnavailable ?? true
+			}
+			item.image = AppAssets.link
+			item.label = L10n.link
+			item.toolTip = L10n.link
+			item.isBordered = true
+			item.action = #selector(link(_:))
+			item.target = self
+			toolbarItem = item
+		case .boldface:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isFormatUnavailable ?? true
+			}
+			item.image = AppAssets.bold
+			item.label = L10n.bold
+			item.toolTip = L10n.bold
+			item.isBordered = true
+			item.action = #selector(outlineToggleBoldface(_:))
+			item.target = self
+			toolbarItem = item
+		case .italic:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isFormatUnavailable ?? true
+			}
+			item.image = AppAssets.italic
+			item.label = L10n.italic
+			item.toolTip = L10n.italic
+			item.isBordered = true
+			item.action = #selector(outlineToggleItalics(_:))
 			item.target = self
 			toolbarItem = item
 		case .toggleOutlineFilter:

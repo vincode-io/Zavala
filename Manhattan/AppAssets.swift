@@ -21,6 +21,10 @@ struct AppAssets {
 		return UIImage(systemName: "plus")!
 	}()
 	
+	static var bold: UIImage = {
+		return UIImage(named: "Bold-Large")!
+	}()
+	
 	static var bullet: UIImage = {
 		return UIImage(systemName: "circle.fill")!.applyingSymbolConfiguration(.init(pointSize: 4, weight: .heavy))!
 	}()
@@ -83,6 +87,14 @@ struct AppAssets {
 
 	static var indent: UIImage = {
 		return UIImage(systemName: "arrow.right.to.line")!
+	}()
+	
+	static var italic: UIImage = {
+		return UIImage(named: "Italic-Large")!
+	}()
+
+	static var link: UIImage = {
+		return UIImage(named: "Link-Large")!
 	}()
 
 	static var note: UIImage = {

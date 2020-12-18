@@ -66,8 +66,8 @@ internal enum L10n {
   internal static let importOPML = L10n.tr("Localizable", "Import_OPML")
   /// Indent
   internal static let indent = L10n.tr("Localizable", "Indent")
-  /// Italics
-  internal static let italics = L10n.tr("Localizable", "Italics")
+  /// Italic
+  internal static let italic = L10n.tr("Localizable", "Italic")
   /// Link
   internal static let link = L10n.tr("Localizable", "Link")
   /// Mark as Favorite
