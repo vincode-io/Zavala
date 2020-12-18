@@ -59,7 +59,11 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 
 	var isFormatUnavailable: Bool {
-		return currentTextView == nil
+		return currentTextView == nil || !(currentTextView?.isSelecting ?? false)
+	}
+
+	var isLinkUnavailable: Bool {
+		return currentTextView == nil || !(currentTextView?.isSelecting ?? false)
 	}
 
 	private(set) var outline: Outline?
@@ -232,6 +236,10 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	
 	func outlineToggleItalics() {
 		currentTextView?.toggleItalics(self)
+	}
+	
+	func link() {
+		currentTextView?.editLink(self)
 	}
 	
 	// MARK: Actions

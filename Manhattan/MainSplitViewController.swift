@@ -110,6 +110,10 @@ class MainSplitViewController: UISplitViewController {
 		return editorViewController?.isFormatUnavailable ?? true
 	}
 	
+	var isLinkUnavailable: Bool {
+		return editorViewController?.isLinkUnavailable ?? true
+	}
+	
 	override func viewDidLoad() {
         super.viewDidLoad()
 		primaryBackgroundStyle = .sidebar
@@ -255,6 +259,10 @@ class MainSplitViewController: UISplitViewController {
 	
 	@objc func outlineToggleItalics(_ sender: Any?) {
 		editorViewController?.outlineToggleItalics()
+	}
+	
+	@objc func link(_ sender: Any?) {
+		editorViewController?.link()
 	}
 	
 	// MARK: Validations

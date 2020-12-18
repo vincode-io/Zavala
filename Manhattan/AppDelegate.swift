@@ -166,6 +166,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											input: "i",
 											modifierFlags: [.command])
 	
+	let linkCommand = UIKeyCommand(title: L10n.link,
+								   action: #selector(linkCommand(_:)),
+								   input: "k",
+								   modifierFlags: [.command])
+	
 	var mainSplitViewController: MainSplitViewController? {
 		var keyScene: UIScene?
 		let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
@@ -280,6 +285,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.outlineToggleItalics(sender)
 	}
 	
+	@objc func linkCommand(_ sender: Any?) {
+		mainSplitViewController?.link(sender)
+	}
+
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
@@ -333,6 +342,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainSplitViewController?.isFormatUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(linkCommand(_:)):
+			if mainSplitViewController?.isLinkUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		default:
 			break
 		}
@@ -358,6 +371,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newFolderCommand])
 		builder.insertChild(newItemsMenu, atStartOfMenu: .file)
+
+		// Edit
+		let linkMenu = UIMenu(title: "", options: .displayInline, children: [linkCommand])
+		builder.insertSibling(linkMenu, afterMenu: .standardEdit)
 
 		// Format
 		builder.remove(menu: .format)
