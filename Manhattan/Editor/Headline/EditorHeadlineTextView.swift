@@ -60,6 +60,8 @@ class EditorHeadlineTextView: OutlineTextView {
 		} else {
 			self.font = UIFont.preferredFont(forTextStyle: .body)
 		}
+		
+		self.linkTextAttributes = [.foregroundColor: UIColor.label, .underlineStyle: 1]
 	}
 	
 	private var textViewHeight: CGFloat?

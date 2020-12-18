@@ -58,6 +58,7 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 		}
 
 		self.textColor = .secondaryLabel
+		self.linkTextAttributes = [.foregroundColor: UIColor.secondaryLabel, .underlineStyle: 1]
 	}
 	
 	private var textViewHeight: CGFloat?
