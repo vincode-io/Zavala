@@ -415,8 +415,8 @@ extension EditorViewController: EditorHeadlineViewCellDelegate {
 		hasAlreadyMovedThisKeyPressFlag = true
 	}
 	
-	func editorHeadlineEditLink(_ link: String?) {
-		editLink(link: link)
+	func editorHeadlineEditLink(_ link: String?, range: NSRange) {
+		editLink(link, range: range)
 	}
 
 }
@@ -491,15 +491,15 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 
 extension EditorViewController: LinkViewControllerDelegate {
 	
-	func updateLink(_: LinkViewController, cursorCoordinates: CursorCoordinates, link: String?) {
+	func updateLink(_: LinkViewController, cursorCoordinates: CursorCoordinates, link: String?, range: NSRange) {
 		guard let shadowTableIndex = cursorCoordinates.headline.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
 		guard let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell else { return	}
 		
 		if cursorCoordinates.isInNotes {
-			headlineCell.noteTextView?.updateLinkForCurrentSelection(link: link)
+			headlineCell.noteTextView?.updateLinkForCurrentSelection(link: link, range: range)
 		} else {
-			headlineCell.textView?.updateLinkForCurrentSelection(link: link)
+			headlineCell.textView?.updateLinkForCurrentSelection(link: link, range: range)
 		}
 	}
 	
@@ -537,13 +537,14 @@ private extension EditorViewController {
 		}
 	}
 	
-	private func editLink(link: String?) {
+	private func editLink(_ link: String?, range: NSRange) {
 		if traitCollection.userInterfaceIdiom == .mac {
 		
 			let linkViewController = UIStoryboard.dialog.instantiateController(ofType: LinkViewController.self)
 			linkViewController.preferredContentSize = LinkViewController.preferredContentSize
-			linkViewController.cursorCoordinates = CursorCoordinates.currentCoordinates
+			linkViewController.cursorCoordinates = CursorCoordinates.bestCoordinates
 			linkViewController.link = link
+			linkViewController.range = range
 			linkViewController.delegate = self
 			present(linkViewController, animated: true)
 		
@@ -554,8 +555,9 @@ private extension EditorViewController {
 			linkNavViewController.modalPresentationStyle = .formSheet
 
 			let linkViewController = linkNavViewController.topViewController as! LinkViewController
-			linkViewController.cursorCoordinates = CursorCoordinates.currentCoordinates
+			linkViewController.cursorCoordinates = CursorCoordinates.bestCoordinates
 			linkViewController.link = link
+			linkViewController.range = range
 			linkViewController.delegate = self
 			present(linkNavViewController, animated: true)
 			

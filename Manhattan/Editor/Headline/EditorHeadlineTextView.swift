@@ -20,7 +20,7 @@ protocol EditorHeadlineTextViewDelegate: class {
 	func outdentHeadline(_: EditorHeadlineTextView, headline: Headline)
 	func splitHeadline(_: EditorHeadlineTextView, headline: Headline, attributedText: NSAttributedString, cursorPosition: Int)
 	func createHeadlineNote(_: EditorHeadlineTextView, headline: Headline)
-	func editLink(_: EditorHeadlineTextView, _ link: String?)
+	func editLink(_: EditorHeadlineTextView, _ link: String?, range: NSRange)
 }
 
 class EditorHeadlineTextView: OutlineTextView {
@@ -72,6 +72,13 @@ class EditorHeadlineTextView: OutlineTextView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	override func resignFirstResponder() -> Bool {
+		if let headline = headline {
+			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(headline: headline, isInNotes: false, cursorPosition: lastCursorPosition)
+		}
+		return super.resignFirstResponder()
+	}
+
 	override func deleteBackward() {
 		guard let headline = headline else { return }
 		if attributedText.length == 0 {
@@ -114,12 +121,12 @@ class EditorHeadlineTextView: OutlineTextView {
 	}
 	
 	@objc override func editLink(_ sender: Any?) {
-		let link = findAndSelectLink()
-		editorDelegate?.editLink(self, link)
+		let result = findAndSelectLink()
+		editorDelegate?.editLink(self, result.0, range: result.1)
 	}
 	
-	override func updateLinkForCurrentSelection(link: String?) {
-		super.updateLinkForCurrentSelection(link: link)
+	override func updateLinkForCurrentSelection(link: String?, range: NSRange) {
+		super.updateLinkForCurrentSelection(link: link, range: range)
 		isTextChanged = true
 	}
 	

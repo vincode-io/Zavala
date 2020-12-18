@@ -79,18 +79,20 @@ class OutlineTextView: UITextView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	func findAndSelectLink() -> String? {
+	func findAndSelectLink() -> (String?, NSRange) {
 		var effectiveRange = NSRange()
-		guard let link = textStorage.attribute(.link, at: cursorPosition, effectiveRange: &effectiveRange) as? String else { return nil }
-		selectedRange = effectiveRange
-		return link
+		let link = textStorage.attribute(.link, at: cursorPosition, effectiveRange: &effectiveRange) as? String
+		if link != nil {
+			selectedRange = effectiveRange
+		}
+		return (link, selectedRange)
 	}
 	
-	func updateLinkForCurrentSelection(link: String?) {
+	func updateLinkForCurrentSelection(link: String?, range: NSRange) {
 		if let link = link {
-			textStorage.addAttribute(.link, value: link, range: selectedRange)
+			textStorage.addAttribute(.link, value: link, range: range)
 		} else {
-			textStorage.removeAttribute(.link, range: selectedRange)
+			textStorage.removeAttribute(.link, range: range)
 		}
 	}
 	

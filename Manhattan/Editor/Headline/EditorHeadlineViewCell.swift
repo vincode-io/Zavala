@@ -23,7 +23,7 @@ protocol EditorHeadlineViewCellDelegate: class {
 	func editorHeadlineSplitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)
 	func editorHeadlineCreateHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts)
 	func editorHeadlineDeleteHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts)
-	func editorHeadlineEditLink(_ link: String?)
+	func editorHeadlineEditLink(_ link: String?, range: NSRange)
 }
 
 class EditorHeadlineViewCell: UICollectionViewListCell {

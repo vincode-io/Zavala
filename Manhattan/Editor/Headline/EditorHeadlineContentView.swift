@@ -162,8 +162,8 @@ extension EditorHeadlineContentView: EditorHeadlineTextViewDelegate {
 		appliedConfiguration.delegate?.editorHeadlineCreateHeadlineNote(headline, attributedTexts: attributedTexts)
 	}
 	
-	func editLink(_: EditorHeadlineTextView, _ link: String?) {
-		appliedConfiguration.delegate?.editorHeadlineEditLink(link)
+	func editLink(_: EditorHeadlineTextView, _ link: String?, range: NSRange) {
+		appliedConfiguration.delegate?.editorHeadlineEditLink(link, range: range)
 	}
 	
 }
@@ -199,8 +199,8 @@ extension EditorHeadlineContentView: EditorHeadlineNoteTextViewDelegate {
 		appliedConfiguration.delegate?.editorHeadlineMoveCursorDown(headline: headline)
 	}
 	
-	func editLink(_: EditorHeadlineNoteTextView, _ link: String?) {
-		appliedConfiguration.delegate?.editorHeadlineEditLink(link)
+	func editLink(_: EditorHeadlineNoteTextView, _ link: String?, range: NSRange) {
+		appliedConfiguration.delegate?.editorHeadlineEditLink(link, range: range)
 	}
 	
 }

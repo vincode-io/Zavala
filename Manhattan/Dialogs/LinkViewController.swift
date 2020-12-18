@@ -10,7 +10,7 @@ import RSCore
 import Templeton
 
 protocol LinkViewControllerDelegate: class {
-	func updateLink(_: LinkViewController, cursorCoordinates: CursorCoordinates, link: String?)
+	func updateLink(_: LinkViewController, cursorCoordinates: CursorCoordinates, link: String?, range: NSRange)
 }
 
 class LinkViewController: FormViewController {
@@ -20,6 +20,7 @@ class LinkViewController: FormViewController {
 	weak var delegate: LinkViewControllerDelegate?
 	var cursorCoordinates: CursorCoordinates?
 	var link: String?
+	var range: NSRange?
 	
 	@IBOutlet weak var nameTextField: UITextField!
 	
@@ -52,12 +53,12 @@ class LinkViewController: FormViewController {
 	}
 	
 	@IBAction override func submit(_ sender: Any) {
-		guard let cursorCoordinates = cursorCoordinates else { return }
+		guard let cursorCoordinates = cursorCoordinates, let range = range else { return }
 		
 		if let newLink = nameTextField.text, !newLink.trimmingWhitespace.isEmpty {
-			delegate?.updateLink(self, cursorCoordinates: cursorCoordinates, link: newLink.trimmingWhitespace)
+			delegate?.updateLink(self, cursorCoordinates: cursorCoordinates, link: newLink.trimmingWhitespace, range: range)
 		} else {
-			delegate?.updateLink(self, cursorCoordinates: cursorCoordinates, link: nil)
+			delegate?.updateLink(self, cursorCoordinates: cursorCoordinates, link: nil, range: range)
 		}
 		
 		dismiss(animated: true)

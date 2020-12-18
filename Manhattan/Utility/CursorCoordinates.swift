@@ -14,6 +14,8 @@ struct CursorCoordinates {
 	var isInNotes: Bool
 	var cursorPosition: Int
 
+	static var lastKnownCoordinates: CursorCoordinates?
+
 	static var currentCoordinates: CursorCoordinates? {
 		if let textView = UIResponder.currentFirstResponder as? OutlineTextView, let headline = textView.headline {
 			let isInNotes = textView is EditorHeadlineNoteTextView
@@ -21,4 +23,12 @@ struct CursorCoordinates {
 		}
 		return nil
 	}
+
+	static var bestCoordinates: CursorCoordinates? {
+		if let current = currentCoordinates {
+			return current
+		}
+		return lastKnownCoordinates
+	}
+	
 }

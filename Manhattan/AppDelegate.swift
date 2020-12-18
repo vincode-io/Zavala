@@ -193,6 +193,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		var menuItems = [UIMenuItem]()
 		menuItems.append(UIMenuItem(title: L10n.bold, action: .toggleBoldface))
 		menuItems.append(UIMenuItem(title: L10n.italics, action: .toggleItalics))
+		menuItems.append(UIMenuItem(title: L10n.link, action: .editLink))
 		UIMenuController.shared.menuItems = menuItems
 
 		return true
