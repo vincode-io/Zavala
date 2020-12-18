@@ -68,6 +68,8 @@ internal enum L10n {
   internal static let indent = L10n.tr("Localizable", "Indent")
   /// Italics
   internal static let italics = L10n.tr("Localizable", "Italics")
+  /// Link
+  internal static let link = L10n.tr("Localizable", "Link")
   /// Mark as Favorite
   internal static let markAsFavorite = L10n.tr("Localizable", "Mark_As_Favorite")
   /// Move

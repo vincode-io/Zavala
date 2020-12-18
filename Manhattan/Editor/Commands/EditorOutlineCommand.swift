@@ -23,10 +23,7 @@ protocol EditorOutlineCommand: UndoableCommand {
 extension EditorOutlineCommand {
 	
 	func saveCursorCoordinates() {
-		if let textView = UIResponder.currentFirstResponder as? OutlineTextView, let headline = textView.headline {
-			let isInNotes = textView is EditorHeadlineNoteTextView
-			cursorCoordinates = CursorCoordinates(headline: headline, isInNotes: isInNotes, cursorPosition: textView.cursorPosition)
-		}
+		cursorCoordinates = CursorCoordinates.currentCoordinates
 	}
 	
 	func restoreCursorPosition() {

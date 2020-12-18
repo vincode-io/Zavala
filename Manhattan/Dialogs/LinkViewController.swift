@@ -1,18 +1,25 @@
 //
-//  GetInfoFolderViewController.swift
+//  LinkViewController.swift
 //  Manhattan
 //
-//  Created by Maurice Parker on 11/12/20.
+//  Created by Maurice Parker on 12/17/20.
 //
 
 import UIKit
+import RSCore
 import Templeton
 
-class GetInfoFolderViewController: FormViewController {
+protocol LinkViewControllerDelegate: class {
+	func updateLink(_: LinkViewController, cursorCoordinates: CursorCoordinates, link: String?)
+}
+
+class LinkViewController: FormViewController {
 
 	static let preferredContentSize = CGSize(width: 400, height: 150)
 
-	var folder: Folder?
+	weak var delegate: LinkViewControllerDelegate?
+	var cursorCoordinates: CursorCoordinates?
+	var link: String?
 	
 	@IBOutlet weak var nameTextField: UITextField!
 	
@@ -36,36 +43,29 @@ class GetInfoFolderViewController: FormViewController {
 			submitButton.isHidden = true
 		}
 
-		nameTextField.text = folder?.name
-		nameTextField.addTarget(self, action: #selector(nameTextFieldDidChange), for: .editingChanged)
+		nameTextField.text = link
 		nameTextField.delegate = self
-		
-		updateUI()
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
 		nameTextField.becomeFirstResponder()
 	}
 	
-	@objc func nameTextFieldDidChange(textField: UITextField) {
-		updateUI()
-	}
-	
 	@IBAction override func submit(_ sender: Any) {
-		guard let folder = folder, let folderName = nameTextField.text, !folderName.isEmpty else { return	}
-		folder.update(name: folderName)
+		guard let cursorCoordinates = cursorCoordinates else { return }
+		
+		if let newLink = nameTextField.text, !newLink.trimmingWhitespace.isEmpty {
+			delegate?.updateLink(self, cursorCoordinates: cursorCoordinates, link: newLink.trimmingWhitespace)
+		} else {
+			delegate?.updateLink(self, cursorCoordinates: cursorCoordinates, link: nil)
+		}
+		
 		dismiss(animated: true)
-	}
-	
-	func updateUI() {
-		let isReady = !(nameTextField.text?.isEmpty ?? false)
-		addBarButtonItem.isEnabled = isReady
-		submitButton.isEnabled = isReady
 	}
 	
 }
 
-extension GetInfoFolderViewController: UITextFieldDelegate {
+extension LinkViewController: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()

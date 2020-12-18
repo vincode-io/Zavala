@@ -11,6 +11,7 @@ import Templeton
 extension Selector {
 	static let toggleBoldface = #selector(OutlineTextView.outlineToggleBoldface(_:))
 	static let toggleItalics = #selector(OutlineTextView.outlineToggleItalics(_:))
+	static let editLink = #selector(OutlineTextView.editLink(_:))
 }
 
 class OutlineTextView: UITextView {
@@ -45,6 +46,7 @@ class OutlineTextView: UITextView {
 
 	let toggleBoldCommand = UIKeyCommand(title: L10n.bold, action: .toggleBoldface, input: "b", modifierFlags: [.command])
 	let toggleItalicsCommand = UIKeyCommand(title: L10n.italics, action: .toggleItalics, input: "i", modifierFlags: [.command])
+	let editLinkCommand = UIKeyCommand(title: L10n.link, action: .editLink, input: "k", modifierFlags: [.command])
 
 	private var stackedUndoManager: UndoManager?
 	private static let dropDelegate = OutlineTextDropDelegate()
@@ -77,6 +79,21 @@ class OutlineTextView: UITextView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	func findAndSelectLink() -> String? {
+		var effectiveRange = NSRange()
+		guard let link = textStorage.attribute(.link, at: cursorPosition, effectiveRange: &effectiveRange) as? String else { return nil }
+		selectedRange = effectiveRange
+		return link
+	}
+	
+	func updateLinkForCurrentSelection(link: String?) {
+		if let link = link {
+			textStorage.addAttribute(.link, value: link, range: selectedRange)
+		} else {
+			textStorage.removeAttribute(.link, range: selectedRange)
+		}
+	}
+	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
 		case .toggleBoldface, .toggleItalics:
@@ -90,12 +107,20 @@ class OutlineTextView: UITextView {
 		super.toggleBoldface(sender)
 	}
 	
+	@objc func editLink(_ sender: Any?) {
+		fatalError("editLink has not been implemented")
+	}
+	
 	@objc func outlineToggleItalics(_ sender: Any?) {
 		super.toggleItalics(sender)
 	}
 	
 	override func buildMenu(with builder: UIMenuBuilder) {
 		super.buildMenu(with: builder)
+		
+		let editMenu = UIMenu(title: "", options: .displayInline, children: [editLinkCommand])
+		builder.insertSibling(editMenu, afterMenu: .standardEdit)
+		
 		let formattingMenu = UIMenu(title: "", options: .displayInline, children: [toggleBoldCommand, toggleItalicsCommand])
 		builder.insertSibling(formattingMenu, afterMenu: .standardEdit)
 	}

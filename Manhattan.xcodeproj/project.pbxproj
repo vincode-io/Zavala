@@ -61,6 +61,7 @@
 		51C568C3258AC8F700AA7B93 /* CursorCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568C2258AC8F700AA7B93 /* CursorCoordinates.swift */; };
 		51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */; };
 		51C568D5258C085400AA7B93 /* MarkdownAttributedString in Frameworks */ = {isa = PBXBuildFile; productRef = 51C568D4258C085400AA7B93 /* MarkdownAttributedString */; };
+		51C568D9258C1CD200AA7B93 /* LinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568D8258C1CD200AA7B93 /* LinkViewController.swift */; };
 		51CF10A0256DEE1B005D6D88 /* FixedSizeImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */; };
 		51CF10A82571BA66005D6D88 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10A72571BA66005D6D88 /* Localizable.strings */; };
 		51CF10AC2571BA9A005D6D88 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */; };
@@ -174,6 +175,7 @@
 		51C568BC258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDropHeadlineCommand.swift; sourceTree = "<group>"; };
 		51C568C2258AC8F700AA7B93 /* CursorCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorCoordinates.swift; sourceTree = "<group>"; };
 		51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineTextDropDelegate.swift; sourceTree = "<group>"; };
+		51C568D8258C1CD200AA7B93 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
 		51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSizeImageView.swift; sourceTree = "<group>"; };
 		51CF10A72571BA66005D6D88 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
@@ -412,6 +414,7 @@
 				51278E76257F37AC0034F1CB /* Dialog.storyboard */,
 				515F1631255C16E700FD98B8 /* AddFolderViewController.swift */,
 				51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */,
+				51C568D8258C1CD200AA7B93 /* LinkViewController.swift */,
 			);
 			path = Dialogs;
 			sourceTree = "<group>";
@@ -624,6 +627,7 @@
 				51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */,
 				515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */,
 				51F2DC7B2586E101003BD5CE /* EditorHeadlineNoteTextView.swift in Sources */,
+				51C568D9258C1CD200AA7B93 /* LinkViewController.swift in Sources */,
 				51C568BD258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift in Sources */,
 				51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */,
 				5142874625730AD600F16B78 /* EditorCreateHeadlineAfterCommand.swift in Sources */,

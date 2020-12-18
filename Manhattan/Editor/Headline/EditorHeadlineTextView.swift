@@ -20,6 +20,7 @@ protocol EditorHeadlineTextViewDelegate: class {
 	func outdentHeadline(_: EditorHeadlineTextView, headline: Headline)
 	func splitHeadline(_: EditorHeadlineTextView, headline: Headline, attributedText: NSAttributedString, cursorPosition: Int)
 	func createHeadlineNote(_: EditorHeadlineTextView, headline: Headline)
+	func editLink(_: EditorHeadlineTextView, _ link: String?)
 }
 
 class EditorHeadlineTextView: OutlineTextView {
@@ -37,6 +38,7 @@ class EditorHeadlineTextView: OutlineTextView {
 			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(shiftOptionReturnPressed(_:))),
 			toggleBoldCommand,
 			toggleItalicsCommand,
+			editLinkCommand
 		]
 		return keys
 	}
@@ -58,7 +60,6 @@ class EditorHeadlineTextView: OutlineTextView {
 		} else {
 			self.font = UIFont.preferredFont(forTextStyle: .body)
 		}
-
 	}
 	
 	private var textViewHeight: CGFloat?
@@ -108,6 +109,11 @@ class EditorHeadlineTextView: OutlineTextView {
 		} else {
 			editorDelegate?.splitHeadline(self, headline: headline, attributedText: attributedText, cursorPosition: cursorPosition)
 		}
+	}
+	
+	@objc override func editLink(_ sender: Any?) {
+		let link = findAndSelectLink()
+		editorDelegate?.editLink(self, link)
 	}
 	
 }

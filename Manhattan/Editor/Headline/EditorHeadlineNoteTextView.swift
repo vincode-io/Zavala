@@ -16,6 +16,7 @@ protocol EditorHeadlineNoteTextViewDelegate: class {
 	func deleteHeadlineNote(_ : EditorHeadlineNoteTextView, headline: Headline)
 	func moveCursorTo(_ : EditorHeadlineNoteTextView, headline: Headline)
 	func moveCursorDown(_ : EditorHeadlineNoteTextView, headline: Headline)
+	func editLink(_: EditorHeadlineNoteTextView, _ link: String?)
 }
 
 class EditorHeadlineNoteTextView: OutlineTextView {
@@ -34,6 +35,7 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 		}
 		keys.append(toggleBoldCommand)
 		keys.append(toggleItalicsCommand)
+		keys.append(editLinkCommand)
 		return keys
 	}
 	
@@ -84,6 +86,11 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 	@objc func downArrowPressed(_ sender: Any) {
 		guard let headline = headline else { return }
 		editorDelegate?.moveCursorDown(self, headline: headline)
+	}
+
+	@objc override func editLink(_ sender: Any?) {
+		let link = findAndSelectLink()
+		editorDelegate?.editLink(self, link)
 	}
 	
 }

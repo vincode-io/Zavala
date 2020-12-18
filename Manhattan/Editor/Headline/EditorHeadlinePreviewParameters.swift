@@ -20,7 +20,7 @@ class EditorHeadlinePreviewParameters: UIDragPreviewParameters {
 //		#if !targetEnvironment(macCatalyst)
 		let x = CGFloat(11 + (cell.indentationLevel * 10))
 		
-		let cellSize = cell.textSize ?? cell.bounds.size
+		let cellSize = cell.textView?.intrinsicContentSize ?? cell.bounds.size
 		let height = cellSize.height + 4
 		let width = cellSize.width + 12
 		

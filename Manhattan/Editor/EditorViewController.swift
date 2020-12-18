@@ -414,6 +414,10 @@ extension EditorViewController: EditorHeadlineViewCellDelegate {
 		moveCursorDown(headline: headline)
 		hasAlreadyMovedThisKeyPressFlag = true
 	}
+	
+	func editorHeadlineEditLink(_ link: String?) {
+		editLink(link: link)
+	}
 
 }
 
@@ -483,6 +487,24 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 	
 }
 
+// MARK: LinkViewControllerDelegate
+
+extension EditorViewController: LinkViewControllerDelegate {
+	
+	func updateLink(_: LinkViewController, cursorCoordinates: CursorCoordinates, link: String?) {
+		guard let shadowTableIndex = cursorCoordinates.headline.shadowTableIndex else { return }
+		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
+		guard let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell else { return	}
+		
+		if cursorCoordinates.isInNotes {
+			headlineCell.noteTextView?.updateLinkForCurrentSelection(link: link)
+		} else {
+			headlineCell.textView?.updateLinkForCurrentSelection(link: link)
+		}
+	}
+	
+}
+
 // MARK: Helpers
 
 private extension EditorViewController {
@@ -512,6 +534,31 @@ private extension EditorViewController {
 	private func moveCursorToTitle() {
 		if let titleCell = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? EditorTitleViewCell {
 			titleCell.takeCursor()
+		}
+	}
+	
+	private func editLink(link: String?) {
+		if traitCollection.userInterfaceIdiom == .mac {
+		
+			let linkViewController = UIStoryboard.dialog.instantiateController(ofType: LinkViewController.self)
+			linkViewController.preferredContentSize = LinkViewController.preferredContentSize
+			linkViewController.cursorCoordinates = CursorCoordinates.currentCoordinates
+			linkViewController.link = link
+			linkViewController.delegate = self
+			present(linkViewController, animated: true)
+		
+		} else {
+			
+			let linkNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "LinkViewControllerNav") as! UINavigationController
+			linkNavViewController.preferredContentSize = LinkViewController.preferredContentSize
+			linkNavViewController.modalPresentationStyle = .formSheet
+
+			let linkViewController = linkNavViewController.topViewController as! LinkViewController
+			linkViewController.cursorCoordinates = CursorCoordinates.currentCoordinates
+			linkViewController.link = link
+			linkViewController.delegate = self
+			present(linkNavViewController, animated: true)
+			
 		}
 	}
 	

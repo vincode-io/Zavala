@@ -23,6 +23,7 @@ protocol EditorHeadlineViewCellDelegate: class {
 	func editorHeadlineSplitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)
 	func editorHeadlineCreateHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts)
 	func editorHeadlineDeleteHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts)
+	func editorHeadlineEditLink(_ link: String?)
 }
 
 class EditorHeadlineViewCell: UICollectionViewListCell {
@@ -43,15 +44,14 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 		return (contentView as? EditorHeadlineContentView)?.attributedTexts
 	}
 	
-	var textSize: CGSize? {
-		return (contentView as? EditorHeadlineContentView)?.textView.intrinsicContentSize
+	var textView: EditorHeadlineTextView? {
+		return (contentView as? EditorHeadlineContentView)?.textView
 	}
 	
-	var selectionRange: UITextRange? {
-		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return nil }
-		return textView.selectedTextRange
+	var noteTextView: EditorHeadlineNoteTextView? {
+		return (contentView as? EditorHeadlineContentView)?.noteTextView
 	}
-
+	
 	private var isDisclosed = false
 
 	private lazy var disclosureIndicator: UIView = {
