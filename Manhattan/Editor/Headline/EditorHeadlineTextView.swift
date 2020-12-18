@@ -54,13 +54,7 @@ class EditorHeadlineTextView: OutlineTextView {
 
 		self.delegate = self
 
-		if traitCollection.userInterfaceIdiom == .mac {
-			let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-			self.font = bodyFont.withSize(bodyFont.pointSize + 1)
-		} else {
-			self.font = UIFont.preferredFont(forTextStyle: .body)
-		}
-		
+		self.font = HeadlineFont.text
 		self.linkTextAttributes = [.foregroundColor: UIColor.label, .underlineStyle: 1]
 	}
 	

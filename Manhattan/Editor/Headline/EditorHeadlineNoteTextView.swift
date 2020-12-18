@@ -50,13 +50,7 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 		
 		self.delegate = self
 
-		if traitCollection.userInterfaceIdiom == .mac {
-			self.font = UIFont.preferredFont(forTextStyle: .body)
-		} else {
-			let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-			self.font = bodyFont.withSize(bodyFont.pointSize - 1)
-		}
-
+		self.font = HeadlineFont.note
 		self.textColor = .secondaryLabel
 		self.linkTextAttributes = [.foregroundColor: UIColor.secondaryLabel, .underlineStyle: 1]
 	}
