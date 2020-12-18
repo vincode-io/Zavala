@@ -94,6 +94,11 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 		editorDelegate?.editLink(self, link)
 	}
 	
+	override func updateLinkForCurrentSelection(link: String?) {
+		super.updateLinkForCurrentSelection(link: link)
+		isTextChanged = true
+	}
+	
 }
 
 // MARK: UITextViewDelegate
