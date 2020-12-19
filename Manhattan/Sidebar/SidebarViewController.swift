@@ -94,6 +94,34 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		self.present(docPicker, animated: true)
 	}
 	
+	func restoreArchive(url: URL) {
+		let unpackResult : (AccountType, URL)
+		do {
+			unpackResult = try AccountManager.shared.unpackArchive(url)
+		} catch {
+			presentError(error)
+			return
+		}
+		
+		let restoreAction = UIAlertAction(title: L10n.restore, style: .default) { [weak self] _ in
+			guard let self = self else { return }
+			self.collectionView.selectItem(at: nil, animated: true, scrollPosition: .top)
+			self.delegate?.outlineProviderSelectionDidChange(self, outlineProvider: nil, animated: true)
+			AccountManager.shared.restoreArchive(accountType: unpackResult.0, unpackURL: unpackResult.1)
+		}
+		
+		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel) { _ in
+			AccountManager.shared.cleanUpArchive(unpackURL: unpackResult.1)
+		}
+		
+		let title = L10n.restoreAccountPrompt(unpackResult.0.name)
+		let alert = UIAlertController(title: title, message: L10n.restoreAccountMessage, preferredStyle: .alert)
+		alert.addAction(cancelAction)
+		alert.addAction(restoreAction)
+		
+		present(alert, animated: true, completion: nil)
+	}
+	
 	func archiveAccount(type: AccountType) {
 		guard let archiveFile = AccountManager.shared.archiveAccount(type: type) else { return }
 		
@@ -268,32 +296,7 @@ extension SidebarViewController {
 extension SidebarViewController: UIDocumentPickerDelegate {
 	
 	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-		
-		let unpackResult : (AccountType, URL)
-		do {
-			unpackResult = try AccountManager.shared.unpackArchive(urls[0])
-		} catch {
-			presentError(error)
-			return
-		}
-		
-		let restoreAction = UIAlertAction(title: L10n.restore, style: .default) { [weak self] _ in
-			guard let self = self else { return }
-			self.collectionView.selectItem(at: nil, animated: true, scrollPosition: .top)
-			self.delegate?.outlineProviderSelectionDidChange(self, outlineProvider: nil, animated: true)
-			AccountManager.shared.restoreArchive(accountType: unpackResult.0, unpackURL: unpackResult.1)
-		}
-		
-		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel) { _ in
-			AccountManager.shared.cleanUpArchive(unpackURL: unpackResult.1)
-		}
-		
-		let title = L10n.restoreAccountPrompt(unpackResult.0.name)
-		let alert = UIAlertController(title: title, message: L10n.restoreAccountMessage, preferredStyle: .alert)
-		alert.addAction(cancelAction)
-		alert.addAction(restoreAction)
-		
-		present(alert, animated: true, completion: nil)
+		restoreArchive(url: urls[0])
 	}
 	
 }

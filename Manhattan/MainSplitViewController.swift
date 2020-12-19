@@ -285,6 +285,10 @@ class MainSplitViewController: UISplitViewController {
 		sidebarViewController?.restoreArchive()
 	}
 	
+	func restoreArchive(url: URL) {
+		sidebarViewController?.restoreArchive(url: url)
+	}
+	
 	func archiveAccount(type: AccountType) {
 		sidebarViewController?.archiveAccount(type: type)
 	}
