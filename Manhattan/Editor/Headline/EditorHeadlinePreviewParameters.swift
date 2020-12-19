@@ -25,7 +25,7 @@ class EditorHeadlinePreviewParameters: UIDragPreviewParameters {
 		let width = cellSize.width + 12
 		
 		let newBounds = CGRect(x: x, y: 6, width: width, height: height)
-		let visiblePath = UIBezierPath(roundedRect: newBounds, cornerRadius: 8)
+		let visiblePath = UIBezierPath(roundedRect: newBounds, cornerRadius: 4)
 		self.visiblePath = visiblePath
 //		#endif
 	}
