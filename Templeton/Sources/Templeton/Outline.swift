@@ -241,7 +241,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			headline.parent = afterHeadline
 		} else if let parent = afterHeadline?.parent {
 			var headlines = parent.headlines ?? [Headline]()
-			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? 0
+			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? -1
 			headlines.insert(headline, at: insertIndex + 1)
 			headline.parent = afterHeadline?.parent
 			parent.headlines = headlines
