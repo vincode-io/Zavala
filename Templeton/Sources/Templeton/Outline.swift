@@ -17,14 +17,59 @@ public extension Notification.Name {
 public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable {
 	
 	public var id: EntityID
-	public var title: String?
-	public var created: Date?
-	public var updated: Date?
-	public var ownerName: String?
-	public var ownerEmail: String?
-	public var ownerURL: String?
-	public var isFavorite: Bool?
-	public var isFiltered: Bool?
+	public var title: String? {
+		didSet {
+			outlineMetaDataDidChange()
+		}
+	}
+	
+	public var created: Date? {
+		didSet {
+			outlineMetaDataDidChange()
+		}
+	}
+	
+	public var updated: Date? {
+		didSet {
+			outlineMetaDataDidChange()
+		}
+	}
+	
+	public var ownerName: String? {
+		didSet {
+			outlineMetaDataDidChange()
+		}
+	}
+	
+	public var ownerEmail: String? {
+		didSet {
+			outlineMetaDataDidChange()
+		}
+	}
+	
+	public var ownerURL: String? {
+		didSet {
+			outlineMetaDataDidChange()
+		}
+	}
+	
+	public var verticleScrollState: Int? {
+		didSet {
+			outlineMetaDataDidChange()
+		}
+	}
+	
+	public var isFavorite: Bool? {
+		didSet {
+			outlineMetaDataDidChange()
+		}
+	}
+	
+	public var isFiltered: Bool? {
+		didSet {
+			outlineMetaDataDidChange()
+		}
+	}
 
 	public var headlines: [Headline]?
 	
@@ -86,6 +131,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		case ownerName = "ownerName"
 		case ownerEmail = "ownerEmail"
 		case ownerURL = "ownerURL"
+		case verticleScrollState = "verticleScrollState"
 		case isFavorite = "isFavorite"
 		case isFiltered = "isFiltered"
 	}

@@ -94,6 +94,15 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var headerRegistration: UICollectionView.CellRegistration<EditorHeadlineViewCell, Headline>?
 	
+	private var firstVisibleShadowTableIndex: Int? {
+		let visibleRect = collectionView.layoutMarginsGuide.layoutFrame
+		let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.minY)
+		if let indexPath = collectionView.indexPathForItem(at: visiblePoint), indexPath.section == 1 {
+			return indexPath.row
+		}
+		return nil
+	}
+
 	private var isOutlineNewFlag = false
 	private var hasAlreadyMovedThisKeyPressFlag = false
 	
@@ -128,9 +137,18 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		collectionView.reloadData()
 	}
 
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		restoreScrollPosition()
+	}
+	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		moveCursorToTitleOnNew()
+	}
+	
+	override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		self.outline?.verticleScrollState = firstVisibleShadowTableIndex
 	}
 	
 	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -178,6 +196,8 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		guard isViewLoaded else { return }
 		updateUI()
 		collectionView.reloadData()
+		
+		restoreScrollPosition()
 		moveCursorToTitleOnNew()
 	}
 	
@@ -527,6 +547,14 @@ private extension EditorViewController {
 			} else {
 				filterBarButtonItem?.image = AppAssets.filterInactive
 			}
+		}
+	}
+	
+	private func restoreScrollPosition() {
+		if let verticleScrollState = outline?.verticleScrollState, verticleScrollState != 0 {
+			// This seems te get more an more inaccurate the farther down you scroll in Catalyst.
+			// File a bug report for this one...
+			collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: 1), at: .top, animated: false)
 		}
 	}
 	
