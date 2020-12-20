@@ -138,6 +138,15 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 	private var headlinesFile: HeadlinesFile?
 	
+	private var headlineDictionaryNeedUpdate = true
+	private var _idToHeadlineDictionary = [String: Headline]()
+	private var idToHeadlineDictionary: [String: Headline] {
+		if headlineDictionaryNeedUpdate {
+			rebuildHeadlineDictionary()
+		}
+		return _idToHeadlineDictionary
+	}
+	
 	init(parentID: EntityID, title: String?) {
 		self.id = EntityID.outline(parentID.accountID, parentID.folderUUID, UUID().uuidString)
 		self.title = title
@@ -146,6 +155,10 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		headlinesFile = HeadlinesFile(outline: self)
 	}
 
+	public func findHeadline(id: String) -> Headline? {
+		return idToHeadlineDictionary[id]
+	}
+	
 	public func markdown(indentLevel: Int = 0) -> String {
 		var returnToSuspend = false
 		if headlines == nil {
@@ -743,6 +756,7 @@ extension Outline {
 	private func outlineBodyDidChange() {
 		self.updated = Date()
 		outlineMetaDataDidChange()
+		headlineDictionaryNeedUpdate = true
 		headlinesFile?.markAsDirty()
 		NotificationCenter.default.post(name: .OutlineBodyDidChange, object: self, userInfo: nil)
 	}
@@ -817,6 +831,20 @@ extension Outline {
 		guard let headlineShadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
 		resetShadowTableIndexes(startingAt: headlineShadowTableIndex)
 		return ShadowTableChanges(deletes: reloads, reloads: Set([headlineShadowTableIndex]))
+	}
+	
+	func rebuildHeadlineDictionary() {
+		var idDictionary = [String: Headline]()
+		
+		func dictBuildVisitor(_ visited: Headline) {
+			idDictionary[visited.id] = visited
+			visited.headlines?.forEach { $0.visit(visitor: dictBuildVisitor) }
+		}
+
+		headlines?.forEach { $0.visit(visitor: dictBuildVisitor(_:)) }
+		
+		_idToHeadlineDictionary = idDictionary
+		headlineDictionaryNeedUpdate = false
 	}
 	
 	private func rebuildShadowTable() -> ShadowTableChanges {
