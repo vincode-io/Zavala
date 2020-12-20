@@ -682,7 +682,7 @@ private extension EditorViewController {
 	}
 
 	private func deleteAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
-		return UIAction(title: L10n.delete, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
+		return UIAction(title: L10n.deleteRow, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
 			self?.deleteHeadline(headline, attributedTexts: attributedTexts)
 		}
 	}
