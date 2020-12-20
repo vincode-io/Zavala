@@ -16,7 +16,7 @@ public protocol HeadlineContainer: class {
 
 public extension HeadlineContainer {
 	
-	func importOPML(_ headlineIndexers: [XMLIndexer]) {
+	func importHeadlines(_ headlineIndexers: [XMLIndexer]) {
 		var headlines = [Headline]()
 		
 		for headlineIndexer in headlineIndexers {
@@ -24,7 +24,7 @@ public extension HeadlineContainer {
 			let notePlainText = headlineIndexer.element?.attribute(by: "_note")?.text
 			
 			let headline = Headline(plainText: plainText, notePlainText: notePlainText)
-			headline.importOPML(headlineIndexer["outline"].all)
+			headline.importHeadlines(headlineIndexer["outline"].all)
 			headlines.append(headline)
 		}
 		

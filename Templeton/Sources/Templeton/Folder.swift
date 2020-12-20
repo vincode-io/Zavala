@@ -110,10 +110,14 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		outline.ownerEmail = headIndexer["ownerEmail"].element?.text
 		outline.ownerURL = headIndexer["ownerID"].element?.text
 
+		outline.importHeadlines(outlineIndexers)
+
+		if let expansionState = headIndexer["expansionState"].element?.text {
+			outline.expansionState = expansionState
+		}
+
 		outlines?.append(outline)
 		folderOutlinesDidChange()
-		
-		outline.importOPML(outlineIndexers)
 		outline.forceSave()
 		return outline
 	}

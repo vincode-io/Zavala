@@ -43,6 +43,41 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return AccountManager.shared.findFolder(folderID)
 	}
 
+	public var expansionState: String {
+		get {
+			var currentRow = 0
+			var expandedRows = [String]()
+			
+			func expandedRowVisitor(_ visited: Headline) {
+				if visited.isExpanded ?? true {
+					expandedRows.append(String(currentRow))
+				}
+				currentRow = currentRow + 1
+				visited.headlines?.forEach { $0.visit(visitor: expandedRowVisitor) }
+			}
+
+			headlines?.forEach { $0.visit(visitor: expandedRowVisitor(_:)) }
+			
+			return expandedRows.joined(separator: ",")
+		}
+		set {
+			let expandedRows = newValue.split(separator: ",")
+				.map({ String($0).trimmingWhitespace })
+				.filter({ !$0.isEmpty })
+				.compactMap({ Int($0) })
+			
+			var currentRow = 0
+			
+			func expandedRowVisitor(_ visited: Headline) {
+				visited.isExpanded = expandedRows.contains(currentRow)
+				currentRow = currentRow + 1
+				visited.headlines?.forEach { $0.visit(visitor: expandedRowVisitor) }
+			}
+
+			headlines?.forEach { $0.visit(visitor: expandedRowVisitor(_:)) }
+		}
+	}
+	
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case title = "title"
@@ -109,6 +144,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		if let ownerURL = ownerURL {
 			opml.append("  <ownerID>\(ownerURL)</ownerID>\n")
 		}
+		opml.append("  <expansionState>\(expansionState)</expansionState>\n")
 		opml.append("</head>\n")
 		opml.append("<body>\n")
 		headlines?.forEach { opml.append($0.opml()) }
