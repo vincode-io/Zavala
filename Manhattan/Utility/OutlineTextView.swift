@@ -72,7 +72,6 @@ class OutlineTextView: UITextView {
 		self.textContainer.lineFragmentPadding = 0
 		self.textContainerInset = .zero
 		self.backgroundColor = .clear
-		self.adjustsFontForContentSizeCategory = true
 	}
 	
 	required init?(coder: NSCoder) {

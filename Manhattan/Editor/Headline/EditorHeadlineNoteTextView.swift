@@ -63,6 +63,13 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+			textStorage.replaceFont(with: HeadlineFont.note)
+		}
+	}
+	
 	override func resignFirstResponder() -> Bool {
 		if let headline = headline {
 			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(headline: headline, isInNotes: false, cursorPosition: lastCursorPosition)

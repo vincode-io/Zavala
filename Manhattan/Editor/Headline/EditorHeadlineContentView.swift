@@ -239,6 +239,7 @@ extension EditorHeadlineContentView {
 		let mutableAttrText = NSMutableAttributedString(attributedString: configuration.attributedText)
 		let range = NSRange(location: 0, length: mutableAttrText.length)
 		mutableAttrText.addAttributes(attrs, range: range)
+		mutableAttrText.replaceFont(with: HeadlineFont.text)
 		textView.attributedText = mutableAttrText
 
 	}
@@ -255,6 +256,7 @@ extension EditorHeadlineContentView {
 		
 		let mutableAttrText = NSMutableAttributedString(attributedString: noteAttributedText)
 		let range = NSRange(location: 0, length: mutableAttrText.length)
+		mutableAttrText.replaceFont(with: HeadlineFont.note)
 		mutableAttrText.addAttributes(attrs, range: range)
 		
 		if noteTextView == nil {

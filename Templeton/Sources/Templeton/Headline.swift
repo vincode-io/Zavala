@@ -66,9 +66,9 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 		self.id = UUID().uuidString
 		super.init()
 
-		attributedText = NSAttributedString(markdownRepresentation: plainText, attributes: [.font : HeadlineFont.text])
+		attributedText = NSAttributedString(markdownRepresentation: plainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		if let notePlainText = notePlainText {
-			noteAttributedText = NSAttributedString(markdownRepresentation: notePlainText, attributes: [.font : HeadlineFont.note])
+			noteAttributedText = NSAttributedString(markdownRepresentation: notePlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		}
 											
 		headlines = [Headline]()

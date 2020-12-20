@@ -41,6 +41,8 @@
 		5196BA442589CFFC00F8FFF5 /* EditorCreateHeadlineBeforeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5196BA432589CFFC00F8FFF5 /* EditorCreateHeadlineBeforeCommand.swift */; };
 		519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F004A25608EF9009DC1F0 /* TimelineItem.swift */; };
 		51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */; };
+		51AE547E258FF28A006DA301 /* HeadlineFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AE547D258FF28A006DA301 /* HeadlineFont.swift */; };
+		51AE5482258FF35F006DA301 /* NSMutableAttributedString+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AE5481258FF35F006DA301 /* NSMutableAttributedString+.swift */; };
 		51B2B2C82563A2180090C56B /* EditorHeadlineTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2C72563A2180090C56B /* EditorHeadlineTextView.swift */; };
 		51B2B2CE2563AAF60090C56B /* EditorHeadlineContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2CD2563AAF60090C56B /* EditorHeadlineContentConfiguration.swift */; };
 		51B2B2D22563AB190090C56B /* EditorHeadlineContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2D12563AB190090C56B /* EditorHeadlineContentView.swift */; };
@@ -160,6 +162,8 @@
 		5196BA432589CFFC00F8FFF5 /* EditorCreateHeadlineBeforeCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCreateHeadlineBeforeCommand.swift; sourceTree = "<group>"; };
 		519F004A25608EF9009DC1F0 /* TimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItem.swift; sourceTree = "<group>"; };
 		51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedUndoManager.swift; sourceTree = "<group>"; };
+		51AE547D258FF28A006DA301 /* HeadlineFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadlineFont.swift; sourceTree = "<group>"; };
+		51AE5481258FF35F006DA301 /* NSMutableAttributedString+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+.swift"; sourceTree = "<group>"; };
 		51B2B2C72563A2180090C56B /* EditorHeadlineTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorHeadlineTextView.swift; sourceTree = "<group>"; };
 		51B2B2CD2563AAF60090C56B /* EditorHeadlineContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorHeadlineContentConfiguration.swift; sourceTree = "<group>"; };
 		51B2B2D12563AB190090C56B /* EditorHeadlineContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorHeadlineContentView.swift; sourceTree = "<group>"; };
@@ -268,7 +272,9 @@
 				51C568C2258AC8F700AA7B93 /* CursorCoordinates+.swift */,
 				51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */,
 				515F164A255C9F8E00FD98B8 /* FormViewController.swift */,
+				51AE547D258FF28A006DA301 /* HeadlineFont.swift */,
 				51DA54C725643E3400732942 /* MainThreadOperationBase.swift */,
+				51AE5481258FF35F006DA301 /* NSMutableAttributedString+.swift */,
 				51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */,
 				51C030BD257E1B9400609262 /* OutlineTextView.swift */,
 				51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */,
@@ -627,6 +633,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51AE5482258FF35F006DA301 /* NSMutableAttributedString+.swift in Sources */,
 				51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */,
 				51DA54C825643E3400732942 /* MainThreadOperationBase.swift in Sources */,
 				51CF10C22571C22C005D6D88 /* L10n.swift in Sources */,
@@ -644,6 +651,7 @@
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
 				51D977FA257A2E4F00D98490 /* EditorHeadlinePreviewParameters.swift in Sources */,
 				51C030B8257E198B00609262 /* EditorTitleTextView.swift in Sources */,
+				51AE547E258FF28A006DA301 /* HeadlineFont.swift in Sources */,
 				51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */,
 				515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */,
 				51F2DC7B2586E101003BD5CE /* EditorHeadlineNoteTextView.swift in Sources */,
