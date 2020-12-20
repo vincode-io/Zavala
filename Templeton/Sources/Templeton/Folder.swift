@@ -109,6 +109,9 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		outline.ownerName = headIndexer["ownerName"].element?.text
 		outline.ownerEmail = headIndexer["ownerEmail"].element?.text
 		outline.ownerURL = headIndexer["ownerID"].element?.text
+		if let verticleScrollState = headIndexer["vertScrollState"].element?.text {
+			outline.verticleScrollState = Int(verticleScrollState)
+		}
 
 		outline.importHeadlines(outlineIndexers)
 

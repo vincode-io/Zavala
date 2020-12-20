@@ -191,6 +191,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			opml.append("  <ownerID>\(ownerURL)</ownerID>\n")
 		}
 		opml.append("  <expansionState>\(expansionState)</expansionState>\n")
+		if let verticleScrollState = verticleScrollState {
+			opml.append("  <vertScrollState>\(verticleScrollState)</vertScrollState>\n")
+		}
 		opml.append("</head>\n")
 		opml.append("<body>\n")
 		headlines?.forEach { opml.append($0.opml()) }
