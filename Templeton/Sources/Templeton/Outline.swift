@@ -123,6 +123,23 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		}
 	}
 	
+	public var cursorCoordinates: CursorCoordinates? {
+		get {
+			guard let headlineID = cursorHeadlineID,
+				  let headline = findHeadline(id: headlineID),
+				  let isInNotes = cursorIsInNotes,
+				  let position = cursorPosition else {
+				return nil
+			}
+			return CursorCoordinates(headline: headline, isInNotes: isInNotes, cursorPosition: position)
+		}
+		set {
+			cursorHeadlineID = newValue?.headline.id
+			cursorIsInNotes = newValue?.isInNotes
+			cursorPosition = newValue?.cursorPosition
+		}
+	}
+	
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case title = "title"
@@ -134,8 +151,15 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		case verticleScrollState = "verticleScrollState"
 		case isFavorite = "isFavorite"
 		case isFiltered = "isFiltered"
+		case cursorHeadlineID = "cursorHeadlineID"
+		case cursorIsInNotes = "cursorIsInNotes"
+		case cursorPosition = "cursorPosition"
 	}
 
+	private var cursorHeadlineID: String?
+	private var cursorIsInNotes: Bool?
+	private var cursorPosition: Int?
+	
 	private var headlinesFile: HeadlinesFile?
 	
 	private var headlineDictionaryNeedUpdate = true

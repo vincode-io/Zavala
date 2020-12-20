@@ -63,7 +63,7 @@
 		51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C448255AA215004E0206 /* MainSplitViewController.swift */; };
 		51C4C45B255ACA1B004E0206 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C45A255ACA1B004E0206 /* EditorViewController.swift */; };
 		51C568BD258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568BC258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift */; };
-		51C568C3258AC8F700AA7B93 /* CursorCoordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568C2258AC8F700AA7B93 /* CursorCoordinates.swift */; };
+		51C568C3258AC8F700AA7B93 /* CursorCoordinates+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568C2258AC8F700AA7B93 /* CursorCoordinates+.swift */; };
 		51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */; };
 		51C568D5258C085400AA7B93 /* MarkdownAttributedString in Frameworks */ = {isa = PBXBuildFile; productRef = 51C568D4258C085400AA7B93 /* MarkdownAttributedString */; };
 		51C568D9258C1CD200AA7B93 /* LinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568D8258C1CD200AA7B93 /* LinkViewController.swift */; };
@@ -183,7 +183,7 @@
 		51C4C448255AA215004E0206 /* MainSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSplitViewController.swift; sourceTree = "<group>"; };
 		51C4C45A255ACA1B004E0206 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
 		51C568BC258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDropHeadlineCommand.swift; sourceTree = "<group>"; };
-		51C568C2258AC8F700AA7B93 /* CursorCoordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorCoordinates.swift; sourceTree = "<group>"; };
+		51C568C2258AC8F700AA7B93 /* CursorCoordinates+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CursorCoordinates+.swift"; sourceTree = "<group>"; };
 		51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineTextDropDelegate.swift; sourceTree = "<group>"; };
 		51C568D8258C1CD200AA7B93 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
 		51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSizeImageView.swift; sourceTree = "<group>"; };
@@ -265,7 +265,7 @@
 			children = (
 				51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */,
 				518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */,
-				51C568C2258AC8F700AA7B93 /* CursorCoordinates.swift */,
+				51C568C2258AC8F700AA7B93 /* CursorCoordinates+.swift */,
 				51CF109F256DEE1B005D6D88 /* FixedSizeImageView.swift */,
 				515F164A255C9F8E00FD98B8 /* FormViewController.swift */,
 				51DA54C725643E3400732942 /* MainThreadOperationBase.swift */,
@@ -630,7 +630,7 @@
 				51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */,
 				51DA54C825643E3400732942 /* MainThreadOperationBase.swift in Sources */,
 				51CF10C22571C22C005D6D88 /* L10n.swift in Sources */,
-				51C568C3258AC8F700AA7B93 /* CursorCoordinates.swift in Sources */,
+				51C568C3258AC8F700AA7B93 /* CursorCoordinates+.swift in Sources */,
 				51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */,
 				51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */,
 				515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */,

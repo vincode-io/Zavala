@@ -8,11 +8,7 @@
 import UIKit
 import Templeton
 
-struct CursorCoordinates {
-
-	var headline: Headline
-	var isInNotes: Bool
-	var cursorPosition: Int
+extension CursorCoordinates {
 
 	static var lastKnownCoordinates: CursorCoordinates?
 
