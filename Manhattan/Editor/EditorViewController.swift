@@ -552,9 +552,10 @@ private extension EditorViewController {
 	
 	private func restoreScrollPosition() {
 		if let verticleScrollState = outline?.verticleScrollState, verticleScrollState != 0 {
-			// This seems te get more an more inaccurate the farther down you scroll in Catalyst.
-			// File a bug report for this one...
 			collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: 1), at: .top, animated: false)
+			DispatchQueue.main.async {
+				self.collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: 1), at: .top, animated: false)
+			}
 		}
 	}
 	
