@@ -71,7 +71,11 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		}
 	}
 
-	public var headlines: [Headline]?
+	public var headlines: [Headline]? {
+		didSet {
+			headlineDictionaryNeedUpdate = true
+		}
+	}
 	
 	public var shadowTable: [Headline]?
 	
@@ -728,6 +732,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		headlinesFile = nil
 		headlines = nil
 		shadowTable = nil
+		_idToHeadlineDictionary = [String: Headline]()
 	}
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
