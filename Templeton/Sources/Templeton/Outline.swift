@@ -141,6 +141,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			cursorHeadlineID = newValue?.headline.id
 			cursorIsInNotes = newValue?.isInNotes
 			cursorPosition = newValue?.cursorPosition
+			outlineMetaDataDidChange()
 		}
 	}
 	

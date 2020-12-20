@@ -139,6 +139,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		restoreOutlineCursorPosition()
 		restoreScrollPosition()
 	}
 	
@@ -176,20 +177,22 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	
 	// MARK: API
 	
-	func edit(_ outline: Outline?, isNew: Bool) {
-		guard self.outline != outline else { return }
+	func edit(_ newOutline: Outline?, isNew: Bool) {
+		guard outline != newOutline else { return }
 		isOutlineNewFlag = isNew
 		
 		// Get ready for the new outline, buy saving the current one
+		outline?.cursorCoordinates = CursorCoordinates.currentCoordinates
+		
 		if let textField = UIResponder.currentFirstResponder as? OutlineTextView {
 			textField.endEditing(true)
 		}
 		
-		self.outline?.suspend()
+		outline?.suspend()
 		clearUndoableCommands()
 	
 		// Assign the new Outline and load it
-		self.outline = outline
+		outline = newOutline
 		
 		outline?.load()
 			
@@ -197,6 +200,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		updateUI()
 		collectionView.reloadData()
 		
+		restoreOutlineCursorPosition()
 		restoreScrollPosition()
 		moveCursorToTitleOnNew()
 	}
@@ -547,6 +551,12 @@ private extension EditorViewController {
 			} else {
 				filterBarButtonItem?.image = AppAssets.filterInactive
 			}
+		}
+	}
+	
+	private func restoreOutlineCursorPosition() {
+		if let cursorCoordinates = outline?.cursorCoordinates {
+			restoreCursorPosition(cursorCoordinates)
 		}
 	}
 	
