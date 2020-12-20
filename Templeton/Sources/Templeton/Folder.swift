@@ -99,7 +99,20 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 			title = NSLocalizedString("Unavailable", comment: "Unavailable")
 		}
 		
-		let outline = createOutline(title: title!)
+		let outline = Outline(parentID: id, title: title)
+		if let created = headIndexer["dateCreated"].element?.text {
+			outline.created = Date.dateFromRFC822(rfc822String: created)
+		}
+		if let updated = headIndexer["dateModified"].element?.text {
+			outline.updated = Date.dateFromRFC822(rfc822String: updated)
+		}
+		outline.ownerName = headIndexer["ownerName"].element?.text
+		outline.ownerEmail = headIndexer["ownerEmail"].element?.text
+		outline.ownerURL = headIndexer["ownerID"].element?.text
+
+		outlines?.append(outline)
+		folderOutlinesDidChange()
+		
 		outline.importOPML(outlineIndexers)
 		outline.forceSave()
 		return outline

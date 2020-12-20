@@ -100,6 +100,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		if let dateModified = updated?.rfc822String {
 			opml.append("  <dateModified>\(dateModified)</dateModified>\n")
 		}
+		if let ownerName = ownerName {
+			opml.append("  <ownerName>\(ownerName)</ownerName>\n")
+		}
 		if let ownerEmail = ownerEmail {
 			opml.append("  <ownerEmail>\(ownerEmail)</ownerEmail>\n")
 		}
