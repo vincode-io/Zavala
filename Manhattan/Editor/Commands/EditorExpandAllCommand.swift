@@ -38,7 +38,7 @@ final class EditorExpandAllCommand: EditorOutlineCommand {
 		saveCursorCoordinates()
 		let (expanded, changes) = outline.expandAll(container: container)
 		expandedHeadlines = expanded
-		delegate?.applyChanges(changes)
+		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	

@@ -36,7 +36,7 @@ final class EditorToggleDisclosureCommand: EditorOutlineCommand {
 	func perform() {
 		saveCursorCoordinates()
 		let changes = outline.toggleDisclosure(headline: headline)
-		delegate?.applyChanges(changes)
+		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	

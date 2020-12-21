@@ -38,7 +38,7 @@ final class EditorCollapseAllCommand: EditorOutlineCommand {
 		saveCursorCoordinates()
 		let (expanded, changes) = outline.collapseAll(container: container)
 		collapsedHeadlines = expanded
-		delegate?.applyChanges(changes)
+		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
