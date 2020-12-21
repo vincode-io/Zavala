@@ -505,16 +505,24 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			visited.headlines?.forEach { $0.visit(visitor: collapseVisitor) }
 		}
 
-		container.headlines?.forEach { $0.visit(visitor: collapseVisitor(_:)) }
+		var reloads: [Headline]
+		if let headline = container as? Headline {
+			reloads = [headline]
+		} else {
+			reloads = [Headline]()
+		}
+		
+		container.headlines?.forEach {
+			reloads.append($0)
+			$0.visit(visitor: collapseVisitor(_:))
+		}
 		
 		outlineBodyDidChange()
 
 		var changes = rebuildShadowTable()
-		
-		if let headline = container as? Headline, let shadowTableIndex = headline.shadowTableIndex {
-			let reloads = Set([shadowTableIndex])
-			changes.append(ShadowTableChanges(reloads: reloads))
-		}
+	
+		let reloadIndexes = Set(reloads.compactMap { $0.shadowTableIndex })
+		changes.append(ShadowTableChanges(reloads: reloadIndexes))
 		
 		return (collapsed, changes)
 	}
