@@ -12,8 +12,12 @@ import Templeton
 class EditorViewController: UICollectionViewController, MainControllerIdentifiable, UndoableCommandRunner {
 	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
 
-	public var isOutlineFunctionsUnavailable: Bool {
+	var isOutlineFunctionsUnavailable: Bool {
 		return outline == nil
+	}
+	
+	var isOutlineFiltered: Bool {
+		return outline?.isFiltered ?? false
 	}
 	
 	var isDeleteCurrentHeadlineUnavailable: Bool {

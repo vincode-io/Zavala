@@ -17,6 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		#else
 		var menuKeyCommands = [UIKeyCommand]()
 		
+		if !(mainSplitViewController?.isOutlineFunctionsUnavailable ?? true) {
+			if mainSplitViewController?.isOutlineFiltered ?? false {
+				menuKeyCommands.append(showCompletedCommand)
+			} else {
+				menuKeyCommands.append(hideCompletedCommand)
+			}
+		}
+		
 		if !(mainSplitViewController?.isCreateOutlineUnavailable ?? true) {
 			menuKeyCommands.append(newOutlineCommand)
 			menuKeyCommands.append(importOPMLCommand)
@@ -195,6 +203,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 								   input: "k",
 								   modifierFlags: [.command])
 	
+	let toggleOutlineFilterCommand = UIKeyCommand(title: L10n.hideCompleted,
+												  action: #selector(toggleOutlineFilterCommand(_:)),
+												  input: "h",
+												  modifierFlags: [.shift, .command])
+	
+	let hideCompletedCommand = UIKeyCommand(title: L10n.hideCompleted,
+											action: #selector(toggleOutlineFilterCommand(_:)),
+											input: "h",
+											modifierFlags: [.shift, .command])
+	
+	let showCompletedCommand = UIKeyCommand(title: L10n.showCompleted,
+											action: #selector(toggleOutlineFilterCommand(_:)),
+											input: "h",
+											modifierFlags: [.shift, .command])
+	
 	let expandAllInOutlineCommand = UIKeyCommand(title: L10n.expandAllInOutline,
 												 action: #selector(expandAllInOutlineCommand(_:)),
 												 input: "9",
@@ -343,6 +366,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.link(sender)
 	}
 
+	@objc func toggleOutlineFilterCommand(_ sender: Any?) {
+		mainSplitViewController?.toggleOutlineFilter(sender)
+	}
+
 	@objc func expandAllInOutlineCommand(_ sender: Any?) {
 		mainSplitViewController?.expandAllInOutline(sender)
 	}
@@ -424,6 +451,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainSplitViewController?.isLinkUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(toggleOutlineFilterCommand(_:)):
+			if mainSplitViewController?.isOutlineFiltered ?? false {
+				command.title = L10n.showCompleted
+			} else {
+				command.title = L10n.hideCompleted
+			}
+			if mainSplitViewController?.isOutlineFunctionsUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		case #selector(expandAllInOutlineCommand(_:)):
 			if mainSplitViewController?.isExpandAllInOutlineUnavailable ?? true {
 				command.attributes = .disabled
@@ -488,6 +524,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										options: .displayInline,
 										children: [expandAllInOutlineCommand, expandAllCommand, expandCommand, collapseAllInOutlineCommand, collapseAllCommand, collapseCommand])
 		builder.insertChild(expandCollapseMenu, atStartOfMenu: .view)
+		let toggleFilterOutlineMenu = UIMenu(title: "", options: .displayInline, children: [toggleOutlineFilterCommand])
+		builder.insertChild(toggleFilterOutlineMenu, atStartOfMenu: .view)
 		let toggleSidebarMenu = UIMenu(title: "", options: .displayInline, children: [toggleSidebarCommand])
 		builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)
 		

@@ -52,6 +52,14 @@ class MainSplitViewController: UISplitViewController {
 		return activity
 	}
 	
+	var isOutlineFunctionsUnavailable: Bool {
+		return editorViewController?.isOutlineFunctionsUnavailable ?? true
+	}
+	
+	var isOutlineFiltered: Bool {
+		return editorViewController?.isOutlineFiltered ?? false
+	}
+	
 	var isCreateFolderUnavailable: Bool {
 		return sidebarViewController?.isCreateFolderUnavailable ?? true
 	}
@@ -542,7 +550,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 		case .toggleOutlineFilter:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
-				if self?.editorViewController?.outline?.isFiltered ?? false {
+				if self?.editorViewController?.isOutlineFiltered ?? false {
 					item.image = AppAssets.filterActive
 					item.label = L10n.showCompleted
 					item.toolTip = L10n.showCompleted
