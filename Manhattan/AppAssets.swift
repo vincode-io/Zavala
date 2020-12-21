@@ -30,7 +30,7 @@ struct AppAssets {
 	}()
 
 	static var collapseAll: UIImage = {
-		return UIImage(systemName: "chevron.right")!
+		return UIImage(systemName: "arrow.down.right.and.arrow.up.left")!
 	}()
 
 	static var completeHeadline: UIImage = {
@@ -54,7 +54,7 @@ struct AppAssets {
 	}()
 	
 	static var expandAll: UIImage = {
-		return UIImage(systemName: "chevron.down")!
+		return UIImage(systemName: "arrow.up.left.and.arrow.down.right")!
 	}()
 
 	static var exportMarkdown: UIImage = {
