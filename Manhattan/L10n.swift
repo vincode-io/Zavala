@@ -24,6 +24,10 @@ internal enum L10n {
   internal static let cancel = L10n.tr("Localizable", "Cancel")
   /// Collapse
   internal static let collapse = L10n.tr("Localizable", "Collapse")
+  /// Collapse_All
+  internal static let collapseAll = L10n.tr("Localizable", "Collapse_All")
+  /// Collapse All in Outline
+  internal static let collapseAllInOutline = L10n.tr("Localizable", "Collapse_All_In_Outline")
   /// Complete
   internal static let complete = L10n.tr("Localizable", "Complete")
   /// Delete
@@ -52,6 +56,10 @@ internal enum L10n {
   internal static let error = L10n.tr("Localizable", "Error")
   /// Expand
   internal static let expand = L10n.tr("Localizable", "Expand")
+  /// Expand All
+  internal static let expandAll = L10n.tr("Localizable", "Expand_All")
+  /// Expand All in Outline
+  internal static let expandAllInOutline = L10n.tr("Localizable", "Expand_All_In_Outline")
   /// Export Markdown
   internal static let exportMarkdown = L10n.tr("Localizable", "Export_Markdown")
   /// Export OPML

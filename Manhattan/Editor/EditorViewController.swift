@@ -266,6 +266,16 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		currentTextView?.editLink(self)
 	}
 	
+	func expandAllInOutline() {
+		guard let outline = outline else { return }
+		expandAll(container: outline)
+	}
+	
+	func collapseAllInOutline() {
+		guard let outline = outline else { return }
+		collapseAll(container: outline)
+	}
+	
 	// MARK: Actions
 	
 	@objc func toggleOutlineFilter(_ sender: Any?) {
@@ -720,10 +730,34 @@ private extension EditorViewController {
 	
 	func toggleDisclosure(headline: Headline) {
 		guard let undoManager = undoManager, let outline = outline else { return }
+		
 		let command = EditorToggleDisclosureCommand(undoManager: undoManager,
 													delegate: self,
 													outline: outline,
 													headline: headline)
+		
+		runCommand(command)
+	}
+
+	func expandAll(container: HeadlineContainer) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = EditorExpandAllCommand(undoManager: undoManager,
+											 delegate: self,
+											 outline: outline,
+											 container: container)
+		
+		runCommand(command)
+	}
+
+	func collapseAll(container: HeadlineContainer) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = EditorCollapseAllCommand(undoManager: undoManager,
+											   delegate: self,
+											   outline: outline,
+											   container: container)
+
 		runCommand(command)
 	}
 

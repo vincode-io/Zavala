@@ -456,7 +456,73 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		outlineBodyDidChange()
 		return changes
 	}
+	
+	public func expandAll(container: HeadlineContainer) -> ([Headline], ShadowTableChanges) {
+		var expanded = [Headline]()
+		
+		if let headline = container as? Headline, !(headline.isExpanded ?? true) {
+			headline.isExpanded = true
+			expanded.append(headline)
+		}
+		
+		func expandVisitor(_ visited: Headline) {
+			if !(visited.isExpanded ?? true) {
+				visited.isExpanded = true
+				expanded.append(visited)
+			}
+			visited.headlines?.forEach { $0.visit(visitor: expandVisitor) }
+		}
 
+		container.headlines?.forEach { $0.visit(visitor: expandVisitor(_:)) }
+		
+		outlineBodyDidChange()
+
+		var changes = rebuildShadowTable()
+		
+		let reloads = Set(expanded.compactMap { $0.shadowTableIndex })
+		changes.append(ShadowTableChanges(reloads: reloads))
+		
+		return (expanded, changes)
+	}
+
+//	public func expand(headlines: [Headline]) -> ShadowTableChanges {
+//
+//	}
+
+	public func collapseAll(container: HeadlineContainer) -> ([Headline], ShadowTableChanges) {
+		var collapsed = [Headline]()
+		
+		if let headline = container as? Headline, headline.isExpanded ?? true {
+			headline.isExpanded = false
+			collapsed.append(headline)
+		}
+		
+		func collapseVisitor(_ visited: Headline) {
+			if visited.isExpanded ?? true {
+				visited.isExpanded = false
+				collapsed.append(visited)
+			}
+			visited.headlines?.forEach { $0.visit(visitor: collapseVisitor) }
+		}
+
+		container.headlines?.forEach { $0.visit(visitor: collapseVisitor(_:)) }
+		
+		outlineBodyDidChange()
+
+		var changes = rebuildShadowTable()
+		
+		if let headline = container as? Headline, let shadowTableIndex = headline.shadowTableIndex {
+			let reloads = Set([shadowTableIndex])
+			changes.append(ShadowTableChanges(reloads: reloads))
+		}
+		
+		return (collapsed, changes)
+	}
+
+//	public func collapse(headlines: [Headline]) -> ShadowTableChanges {
+//
+//	}
+	
 	public func toggleComplete(headline: Headline, attributedTexts: HeadlineTexts) -> ShadowTableChanges {
 		headline.attributedTexts = attributedTexts
 		headline.isComplete = !(headline.isComplete ?? false)
