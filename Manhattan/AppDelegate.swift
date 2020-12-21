@@ -188,12 +188,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												   input: "0",
 												   modifierFlags: [.control, .command])
 	
-	let expandAllCommand = UIKeyCommand(title: L10n.expandAll,
+	let expandAllCommand = UIKeyCommand(title: L10n.expandAllInRow,
 										action: #selector(expandAllCommand(_:)),
 										input: "9",
 										modifierFlags: [.alternate, .command])
 	
-	let collapseAllCommand = UIKeyCommand(title: L10n.collapseAll,
+	let collapseAllCommand = UIKeyCommand(title: L10n.collapseAllInRow,
 										  action: #selector(collapseAllCommand(_:)),
 										  input: "0",
 										  modifierFlags: [.alternate, .command])

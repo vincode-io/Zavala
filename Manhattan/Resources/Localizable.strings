@@ -30,9 +30,11 @@
 "Hide_Completed" = "Hide Completed";
 "Expand" = "Expand";
 "Expand_All" = "Expand All";
+"Expand_All_In_Row" = "Expand All in Row";
 "Expand_All_In_Outline" = "Expand All in Outline";
 "Collapse" = "Collapse";
 "Collapse_All" = "Collapse All";
+"Collapse_All_In_Row" = "Collapse All in Row";
 "Collapse_All_In_Outline" = "Collapse All in Outline";
 "Add_Row" = "Add Row";
 "Delete_Row" = "Delete Row";

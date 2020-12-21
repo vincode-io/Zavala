@@ -28,6 +28,8 @@ internal enum L10n {
   internal static let collapseAll = L10n.tr("Localizable", "Collapse_All")
   /// Collapse All in Outline
   internal static let collapseAllInOutline = L10n.tr("Localizable", "Collapse_All_In_Outline")
+  /// Collapse All in Row
+  internal static let collapseAllInRow = L10n.tr("Localizable", "Collapse_All_In_Row")
   /// Complete
   internal static let complete = L10n.tr("Localizable", "Complete")
   /// Delete
@@ -60,6 +62,8 @@ internal enum L10n {
   internal static let expandAll = L10n.tr("Localizable", "Expand_All")
   /// Expand All in Outline
   internal static let expandAllInOutline = L10n.tr("Localizable", "Expand_All_In_Outline")
+  /// Expand All in Row
+  internal static let expandAllInRow = L10n.tr("Localizable", "Expand_All_In_Row")
   /// Export Markdown
   internal static let exportMarkdown = L10n.tr("Localizable", "Export_Markdown")
   /// Export OPML
