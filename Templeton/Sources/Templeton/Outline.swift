@@ -485,9 +485,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return (expanded, changes)
 	}
 
-//	public func expand(headlines: [Headline]) -> ShadowTableChanges {
-//
-//	}
+	public func expand(headlines: [Headline]) -> ShadowTableChanges {
+		expandCollapse(headlines: headlines, isExpanded: true)
+	}
 
 	public func collapseAll(container: HeadlineContainer) -> ([Headline], ShadowTableChanges) {
 		var collapsed = [Headline]()
@@ -519,9 +519,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return (collapsed, changes)
 	}
 
-//	public func collapse(headlines: [Headline]) -> ShadowTableChanges {
-//
-//	}
+	public func collapse(headlines: [Headline]) -> ShadowTableChanges {
+		expandCollapse(headlines: headlines, isExpanded: false)
+	}
 	
 	public func toggleComplete(headline: Headline, attributedTexts: HeadlineTexts) -> ShadowTableChanges {
 		headline.attributedTexts = attributedTexts
@@ -861,6 +861,21 @@ extension Outline {
 		NotificationCenter.default.post(name: .OutlineDidDelete, object: self, userInfo: nil)
 	}
 
+	private func expandCollapse(headlines: [Headline], isExpanded: Bool) -> ShadowTableChanges {
+		for headline in headlines {
+			headline.isExpanded = isExpanded
+		}
+		
+		outlineBodyDidChange()
+
+		var changes = rebuildShadowTable()
+		
+		let reloads = Set(headlines.compactMap { $0.shadowTableIndex })
+		changes.append(ShadowTableChanges(reloads: reloads))
+		
+		return changes
+	}
+	
 	private func expandHeadline(headline: Headline) -> ShadowTableChanges {
 		guard !(headline.isExpanded ?? true), let headlineShadowTableIndex = headline.shadowTableIndex else {
 			return ShadowTableChanges()

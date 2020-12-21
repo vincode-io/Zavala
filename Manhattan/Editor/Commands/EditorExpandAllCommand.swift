@@ -43,10 +43,11 @@ final class EditorExpandAllCommand: EditorOutlineCommand {
 	}
 	
 	func undo() {
-//		let changes = outline.toggleDisclosure(headline: headline)
-//		delegate?.applyChanges(changes)
-//		registerRedo()
-//		restoreCursorPosition()
+		guard let expandedHeadlines = expandedHeadlines else { return }
+		let changes = outline.collapse(headlines: expandedHeadlines)
+		delegate?.applyChanges(changes)
+		registerRedo()
+		restoreCursorPosition()
 	}
 	
 }
