@@ -66,6 +66,32 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return currentTextView == nil || !(currentTextView?.isSelecting ?? false)
 	}
 
+	var isExpandAllInOutlineUnavailable: Bool {
+		return outline == nil || outline!.isExpandAllUnavailable(container: outline!)
+	}
+
+	var isCollapseAllInOutlineUnavailable: Bool {
+		return outline == nil || outline!.isCollapseAllUnavailable(container: outline!)
+	}
+
+	var isExpandAllUnavailable: Bool {
+		guard let outline = outline, let headline = currentHeadline else { return true }
+		return outline.isExpandAllUnavailable(container: headline)
+	}
+
+	var isCollapseAllUnavailable: Bool {
+		guard let outline = outline, let headline = currentHeadline else { return true }
+		return outline.isCollapseAllUnavailable(container: headline)
+	}
+
+	var isExpandUnavailable: Bool {
+		return !(currentHeadline?.isExpandable ?? false)
+	}
+
+	var isCollapseUnavailable: Bool {
+		return !(currentHeadline?.isCollapsable ?? false)
+	}
+
 	private(set) var outline: Outline?
 	
 	var currentTextView: OutlineTextView? {

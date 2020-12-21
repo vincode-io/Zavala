@@ -47,6 +47,16 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 	public var isComplete: Bool?
 	public var headlines: [Headline]?
 
+	public var isExpandable: Bool {
+		guard let headlines = headlines, !headlines.isEmpty else { return false }
+		return !(isExpanded ?? true)
+	}
+
+	public var isCollapsable: Bool {
+		guard let headlines = headlines, !headlines.isEmpty else { return false }
+		return isExpanded ?? true
+	}
+
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case text = "text"
@@ -55,7 +65,7 @@ public final class Headline: NSObject, NSCopying, HeadlineContainer, Identifiabl
 		case isComplete = "isComplete"
 		case headlines = "headlines"
 	}
-
+	
 	public override init() {
 		self.id = UUID().uuidString
 		super.init()

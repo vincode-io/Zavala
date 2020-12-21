@@ -457,16 +457,50 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return changes
 	}
 	
+	public func isExpandAllUnavailable(container: HeadlineContainer) -> Bool {
+		if let headline = container as? Headline, headline.isExpandable {
+			return false
+		}
+
+		var unavailable = true
+		
+		func expandedRowVisitor(_ visited: Headline) {
+			for headline in visited.headlines ?? [Headline]() {
+				unavailable = !headline.isExpandable
+				if !unavailable {
+					break
+				}
+				headline.visit(visitor: expandedRowVisitor)
+				if !unavailable {
+					break
+				}
+			}
+		}
+
+		for headline in container.headlines ?? [Headline]() {
+			unavailable = !headline.isExpandable
+			if !unavailable {
+				break
+			}
+			headline.visit(visitor: expandedRowVisitor)
+			if !unavailable {
+				break
+			}
+		}
+		
+		return unavailable
+	}
+	
 	public func expandAll(container: HeadlineContainer) -> ([Headline], ShadowTableChanges) {
 		var expanded = [Headline]()
 		
-		if let headline = container as? Headline, !(headline.isExpanded ?? true) {
+		if let headline = container as? Headline, headline.isExpandable {
 			headline.isExpanded = true
 			expanded.append(headline)
 		}
 		
 		func expandVisitor(_ visited: Headline) {
-			if !(visited.isExpanded ?? true) {
+			if visited.isExpandable {
 				visited.isExpanded = true
 				expanded.append(visited)
 			}
@@ -488,17 +522,51 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func expand(headlines: [Headline]) -> ShadowTableChanges {
 		expandCollapse(headlines: headlines, isExpanded: true)
 	}
+	
+	public func isCollapseAllUnavailable(container: HeadlineContainer) -> Bool {
+		if let headline = container as? Headline, headline.isCollapsable {
+			return false
+		}
+		
+		var unavailable = true
+		
+		func collapsedRowVisitor(_ visited: Headline) {
+			for headline in visited.headlines ?? [Headline]() {
+				unavailable = !headline.isCollapsable
+				if !unavailable {
+					break
+				}
+				headline.visit(visitor: collapsedRowVisitor)
+				if !unavailable {
+					break
+				}
+			}
+		}
 
+		for headline in container.headlines ?? [Headline]() {
+			unavailable = !headline.isCollapsable
+			if !unavailable {
+				break
+			}
+			headline.visit(visitor: collapsedRowVisitor)
+			if !unavailable {
+				break
+			}
+		}
+		
+		return unavailable
+	}
+	
 	public func collapseAll(container: HeadlineContainer) -> ([Headline], ShadowTableChanges) {
 		var collapsed = [Headline]()
 		
-		if let headline = container as? Headline, headline.isExpanded ?? true {
+		if let headline = container as? Headline, headline.isCollapsable {
 			headline.isExpanded = false
 			collapsed.append(headline)
 		}
 		
 		func collapseVisitor(_ visited: Headline) {
-			if visited.isExpanded ?? true {
+			if visited.isCollapsable {
 				visited.isExpanded = false
 				collapsed.append(visited)
 			}

@@ -62,12 +62,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(deleteHeadlineNoteCommand)
 		}
 
-		menuKeyCommands.append(expandAllInOutlineCommand)
-		menuKeyCommands.append(collapseAllInOutlineCommand)
-		menuKeyCommands.append(expandAllCommand)
-		menuKeyCommands.append(collapseAllCommand)
-		menuKeyCommands.append(expandCommand)
-		menuKeyCommands.append(collapseCommand)
+		if !(mainSplitViewController?.isExpandAllInOutlineUnavailable ?? true) {
+			menuKeyCommands.append(expandAllInOutlineCommand)
+		}
+		
+		if !(mainSplitViewController?.isCollapseAllInOutlineUnavailable ?? true) {
+			menuKeyCommands.append(collapseAllInOutlineCommand)
+		}
+
+		if !(mainSplitViewController?.isExpandAllUnavailable ?? true) {
+			menuKeyCommands.append(expandAllCommand)
+		}
+		
+		if !(mainSplitViewController?.isCollapseAllUnavailable ?? true) {
+			menuKeyCommands.append(collapseAllCommand)
+		}
+		
+		if !(mainSplitViewController?.isExpandUnavailable ?? true) {
+			menuKeyCommands.append(expandCommand)
+		}
+		
+		if !(mainSplitViewController?.isCollapseUnavailable ?? true) {
+			menuKeyCommands.append(collapseCommand)
+		}
 
 		return menuKeyCommands
 		#endif
@@ -405,6 +422,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(linkCommand(_:)):
 			if mainSplitViewController?.isLinkUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(expandAllInOutlineCommand(_:)):
+			if mainSplitViewController?.isExpandAllInOutlineUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(collapseAllInOutlineCommand(_:)):
+			if mainSplitViewController?.isCollapseAllInOutlineUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(expandAllCommand(_:)):
+			if mainSplitViewController?.isExpandAllUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(collapseAllCommand(_:)):
+			if mainSplitViewController?.isCollapseAllUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(expandCommand(_:)):
+			if mainSplitViewController?.isExpandUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(collapseCommand(_:)):
+			if mainSplitViewController?.isCollapseUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		default:

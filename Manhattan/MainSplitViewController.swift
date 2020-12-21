@@ -114,6 +114,30 @@ class MainSplitViewController: UISplitViewController {
 		return editorViewController?.isLinkUnavailable ?? true
 	}
 	
+	var isExpandAllInOutlineUnavailable: Bool {
+		return editorViewController?.isExpandAllInOutlineUnavailable ?? true
+	}
+
+	var isCollapseAllInOutlineUnavailable: Bool {
+		return editorViewController?.isCollapseAllInOutlineUnavailable ?? true
+	}
+
+	var isExpandAllUnavailable: Bool {
+		return editorViewController?.isExpandAllUnavailable ?? true
+	}
+
+	var isCollapseAllUnavailable: Bool {
+		return editorViewController?.isCollapseAllUnavailable ?? true
+	}
+
+	var isExpandUnavailable: Bool {
+		return editorViewController?.isExpandUnavailable ?? true
+	}
+
+	var isCollapseUnavailable: Bool {
+		return editorViewController?.isCollapseUnavailable ?? true
+	}
+	
 	override func viewDidLoad() {
         super.viewDidLoad()
 		primaryBackgroundStyle = .sidebar
