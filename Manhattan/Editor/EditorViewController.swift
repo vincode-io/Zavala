@@ -671,25 +671,34 @@ private extension EditorViewController {
 		return UIContextMenuConfiguration(identifier: headline as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
 			guard let self = self, let outline = self.outline else { return nil }
 			
-			var mainActions = [UIAction]()
-			mainActions.append(self.addAction(headline: headline, attributedTexts: attributedTexts))
+			var menuItems = [UIMenu]()
 
+			var firstOutlineActions = [UIAction]()
+			firstOutlineActions.append(self.addAction(headline: headline, attributedTexts: attributedTexts))
 			if !outline.isIndentHeadlineUnavailable(headline: headline) {
-				mainActions.append(self.indentAction(headline: headline, attributedTexts: attributedTexts))
+				firstOutlineActions.append(self.indentAction(headline: headline, attributedTexts: attributedTexts))
 			}
-			
 			if !outline.isOutdentHeadlineUnavailable(headline: headline) {
-				mainActions.append(self.outdentAction(headline: headline, attributedTexts: attributedTexts))
+				firstOutlineActions.append(self.outdentAction(headline: headline, attributedTexts: attributedTexts))
 			}
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: firstOutlineActions))
 			
-			let menuItems = [
-				UIMenu(title: "", options: .displayInline, children: mainActions),
-				UIMenu(title: "", options: .displayInline, children: [
-						self.toggleCompleteAction(headline: headline, attributedTexts: attributedTexts),
-						self.toggleNoteAction(headline: headline, attributedTexts: attributedTexts)
-				]),
-				UIMenu(title: "", options: .displayInline, children: [self.deleteAction(headline: headline, attributedTexts: attributedTexts)]),
-			]
+			var secondOutlineActions = [UIAction]()
+			secondOutlineActions.append(self.toggleCompleteAction(headline: headline, attributedTexts: attributedTexts))
+			secondOutlineActions.append(self.toggleNoteAction(headline: headline, attributedTexts: attributedTexts))
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: secondOutlineActions))
+
+			var viewActions = [UIAction]()
+			if !outline.isExpandAllUnavailable(container: headline) {
+				viewActions.append(self.expandAllAction(headline: headline))
+			}
+			if !outline.isCollapseAllUnavailable(container: headline) {
+				viewActions.append(self.collapseAllAction(headline: headline))
+			}
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: viewActions))
+			
+			let deleteAction = self.deleteAction(headline: headline, attributedTexts: attributedTexts)
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: [deleteAction]))
 
 			return UIMenu(title: "", children: menuItems)
 		})
@@ -714,6 +723,18 @@ private extension EditorViewController {
 	private func outdentAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
 		return UIAction(title: L10n.outdent, image: AppAssets.outdent) { [weak self] action in
 			self?.outdentHeadline(headline, attributedTexts: attributedTexts)
+		}
+	}
+
+	private func expandAllAction(headline: Headline) -> UIAction {
+		return UIAction(title: L10n.expandAll, image: AppAssets.expandAll) { [weak self] action in
+			self?.expandAll(container: headline)
+		}
+	}
+
+	private func collapseAllAction(headline: Headline) -> UIAction {
+		return UIAction(title: L10n.collapseAll, image: AppAssets.collapseAll) { [weak self] action in
+			self?.collapseAll(container: headline)
 		}
 	}
 

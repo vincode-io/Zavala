@@ -29,6 +29,10 @@ struct AppAssets {
 		return UIImage(systemName: "circle.fill")!.applyingSymbolConfiguration(.init(pointSize: 4, weight: .heavy))!
 	}()
 
+	static var collapseAll: UIImage = {
+		return UIImage(systemName: "chevron.right")!
+	}()
+
 	static var completeHeadline: UIImage = {
 		return UIImage(systemName: "checkmark.square")!
 	}()
@@ -47,6 +51,10 @@ struct AppAssets {
 		#else
 		return UIImage(systemName: "chevron.right")!.applyingSymbolConfiguration(.init(pointSize: 14, weight: .medium))!
 		#endif
+	}()
+	
+	static var expandAll: UIImage = {
+		return UIImage(systemName: "chevron.down")!
 	}()
 
 	static var exportMarkdown: UIImage = {
