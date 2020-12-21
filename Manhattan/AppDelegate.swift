@@ -64,6 +64,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		menuKeyCommands.append(expandAllInOutlineCommand)
 		menuKeyCommands.append(collapseAllInOutlineCommand)
+		menuKeyCommands.append(expandAllCommand)
+		menuKeyCommands.append(collapseAllCommand)
+		menuKeyCommands.append(expandCommand)
+		menuKeyCommands.append(collapseCommand)
 
 		return menuKeyCommands
 		#endif
@@ -183,6 +187,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												   action: #selector(collapseAllInOutlineCommand(_:)),
 												   input: "0",
 												   modifierFlags: [.control, .command])
+	
+	let expandAllCommand = UIKeyCommand(title: L10n.expandAll,
+										action: #selector(expandAllCommand(_:)),
+										input: "9",
+										modifierFlags: [.alternate, .command])
+	
+	let collapseAllCommand = UIKeyCommand(title: L10n.collapseAll,
+										  action: #selector(collapseAllCommand(_:)),
+										  input: "0",
+										  modifierFlags: [.alternate, .command])
+	
+	let expandCommand = UIKeyCommand(title: L10n.expand,
+									 action: #selector(expandCommand(_:)),
+									 input: "9",
+									 modifierFlags: [.command])
+	
+	let collapseCommand = UIKeyCommand(title: L10n.collapse,
+									   action: #selector(collapseCommand(_:)),
+									   input: "0",
+									   modifierFlags: [.command])
 	
 	var mainSplitViewController: MainSplitViewController? {
 		var keyScene: UIScene?
@@ -310,6 +334,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.collapseAllInOutline(sender)
 	}
 
+	@objc func expandAllCommand(_ sender: Any?) {
+		mainSplitViewController?.expandAll(sender)
+	}
+
+	@objc func collapseAllCommand(_ sender: Any?) {
+		mainSplitViewController?.collapseAll(sender)
+	}
+
+	@objc func expandCommand(_ sender: Any?) {
+		mainSplitViewController?.expand(sender)
+	}
+
+	@objc func collapseCommand(_ sender: Any?) {
+		mainSplitViewController?.collapse(sender)
+	}
+
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
@@ -403,7 +443,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(formatMenu, afterMenu: .edit)
 
 		// View Menu
-		let expandCollapseMenu = UIMenu(title: "", options: .displayInline, children: [expandAllInOutlineCommand, collapseAllInOutlineCommand])
+		let expandCollapseMenu = UIMenu(title: "",
+										options: .displayInline,
+										children: [expandAllInOutlineCommand, expandAllCommand, expandCommand, collapseAllInOutlineCommand, collapseAllCommand, collapseCommand])
 		builder.insertChild(expandCollapseMenu, atStartOfMenu: .view)
 		let toggleSidebarMenu = UIMenu(title: "", options: .displayInline, children: [toggleSidebarCommand])
 		builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)

@@ -24,7 +24,7 @@ internal enum L10n {
   internal static let cancel = L10n.tr("Localizable", "Cancel")
   /// Collapse
   internal static let collapse = L10n.tr("Localizable", "Collapse")
-  /// Collapse_All
+  /// Collapse All
   internal static let collapseAll = L10n.tr("Localizable", "Collapse_All")
   /// Collapse All in Outline
   internal static let collapseAllInOutline = L10n.tr("Localizable", "Collapse_All_In_Outline")

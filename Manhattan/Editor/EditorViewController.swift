@@ -276,6 +276,26 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		collapseAll(container: outline)
 	}
 	
+	func expandAll() {
+		guard let headline = currentHeadline else { return }
+		expandAll(container: headline)
+	}
+	
+	func collapseAll() {
+		guard let headline = currentHeadline else { return }
+		collapseAll(container: headline)
+	}
+	
+	func expand() {
+		guard let headline = currentHeadline else { return }
+		toggleDisclosure(headline: headline)
+	}
+	
+	func collapse() {
+		guard let headline = currentHeadline else { return }
+		toggleDisclosure(headline: headline)
+	}
+	
 	// MARK: Actions
 	
 	@objc func toggleOutlineFilter(_ sender: Any?) {

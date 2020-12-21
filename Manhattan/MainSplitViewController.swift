@@ -273,6 +273,22 @@ class MainSplitViewController: UISplitViewController {
 		editorViewController?.collapseAllInOutline()
 	}
 	
+	@objc func expandAll(_ sender: Any?) {
+		editorViewController?.expandAll()
+	}
+	
+	@objc func collapseAll(_ sender: Any?) {
+		editorViewController?.collapseAll()
+	}
+	
+	@objc func expand(_ sender: Any?) {
+		editorViewController?.expand()
+	}
+	
+	@objc func collapse(_ sender: Any?) {
+		editorViewController?.collapse()
+	}
+	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
