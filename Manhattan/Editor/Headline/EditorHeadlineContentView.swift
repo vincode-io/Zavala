@@ -235,12 +235,22 @@ extension EditorHeadlineContentView {
 		} else {
 			attrs[.strikethroughStyle] = 0
 		}
-		
-		let mutableAttrText = NSMutableAttributedString(attributedString: configuration.attributedText)
-		let range = NSRange(location: 0, length: mutableAttrText.length)
-		mutableAttrText.addAttributes(attrs, range: range)
-		mutableAttrText.replaceFont(with: HeadlineFont.text)
-		textView.attributedText = mutableAttrText
+
+		// This is a bit of a hack to make sure that the reused UITextView gets cleared out for the empty attributed string
+		if configuration.attributedText.length < 1 {
+			let mutableAttrText = NSMutableAttributedString(string: " ")
+			let range = NSRange(location: 0, length: mutableAttrText.length)
+			attrs[.font] = HeadlineFont.text
+			mutableAttrText.addAttributes(attrs, range: range)
+			textView.attributedText = mutableAttrText
+			textView.attributedText = configuration.attributedText
+		} else {
+			let mutableAttrText = NSMutableAttributedString(attributedString: configuration.attributedText)
+			let range = NSRange(location: 0, length: mutableAttrText.length)
+			mutableAttrText.addAttributes(attrs, range: range)
+			mutableAttrText.replaceFont(with: HeadlineFont.text)
+			textView.attributedText = mutableAttrText
+		}
 
 	}
 	
