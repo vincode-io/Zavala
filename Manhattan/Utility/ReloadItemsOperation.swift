@@ -22,8 +22,11 @@ class ReloadItemsOperation<S: Hashable, I: Hashable>: MainThreadOperationBase {
 	}
 	
 	override func run() {
+		let sectionSnapshot = dataSource.snapshot(for: section)
+		let visibleItems = items.filter { sectionSnapshot.visibleItems.contains($0) }
+
 		var snapshot = dataSource.snapshot()
-		snapshot.reloadItems(items)
+		snapshot.reloadItems(visibleItems)
 		
 		dataSource.apply(snapshot, animatingDifferences: animated) { [weak self] in
 			guard let self = self else { return }
