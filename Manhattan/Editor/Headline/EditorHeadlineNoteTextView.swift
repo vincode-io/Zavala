@@ -28,11 +28,12 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 	override var keyCommands: [UIKeyCommand]? {
 		var keys = [UIKeyCommand]()
 		if cursorPosition == 0 {
-			keys.append(UIKeyCommand(action: #selector(upArrowPressed(_:)), input: UIKeyCommand.inputUpArrow))
+			keys.append(UIKeyCommand(action: #selector(moveCursorToText(_:)), input: UIKeyCommand.inputUpArrow))
 		}
 		if cursorPosition == attributedText.length {
-			keys.append(UIKeyCommand(action: #selector(downArrowPressed(_:)), input: UIKeyCommand.inputDownArrow))
+			keys.append(UIKeyCommand(action: #selector(moveCursorDown(_:)), input: UIKeyCommand.inputDownArrow))
 		}
+		keys.append(UIKeyCommand(action: #selector(moveCursorToText(_:)), input: UIKeyCommand.inputEscape))
 		keys.append(toggleBoldCommand)
 		keys.append(toggleItalicsCommand)
 		keys.append(editLinkCommand)
@@ -87,12 +88,12 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 		}
 	}
 
-	@objc func upArrowPressed(_ sender: Any) {
+	@objc func moveCursorToText(_ sender: Any) {
 		guard let headline = headline else { return }
 		editorDelegate?.moveCursorTo(self, headline: headline)
 	}
 	
-	@objc func downArrowPressed(_ sender: Any) {
+	@objc func moveCursorDown(_ sender: Any) {
 		guard let headline = headline else { return }
 		editorDelegate?.moveCursorDown(self, headline: headline)
 	}

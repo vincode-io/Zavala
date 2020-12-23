@@ -31,12 +31,12 @@ class EditorHeadlineTextView: OutlineTextView {
 	
 	override var keyCommands: [UIKeyCommand]? {
 		let keys = [
-			UIKeyCommand(action: #selector(tabPressed(_:)), input: "\t"),
-			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(shiftTabPressed(_:))),
-			UIKeyCommand(input: "\t", modifierFlags: [.alternate], action: #selector(optionTabPressed(_:))),
-			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(optionReturnPressed(_:))),
-			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(shiftReturnPressed(_:))),
-			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(shiftOptionReturnPressed(_:))),
+			UIKeyCommand(action: #selector(indent(_:)), input: "\t"),
+			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(outdent(_:))),
+			UIKeyCommand(input: "\t", modifierFlags: [.alternate], action: #selector(insertTab(_:))),
+			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(insertReturn(_:))),
+			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(addNote(_:))),
+			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(split(_:))),
 			toggleBoldCommand,
 			toggleItalicsCommand,
 			editLinkCommand
@@ -90,31 +90,31 @@ class EditorHeadlineTextView: OutlineTextView {
 		}
 	}
 
-	@objc func tabPressed(_ sender: Any) {
+	@objc func indent(_ sender: Any) {
 		guard let headline = headline else { return }
 		editorDelegate?.indentHeadline(self, headline: headline)
 	}
 	
-	@objc func shiftTabPressed(_ sender: Any) {
+	@objc func outdent(_ sender: Any) {
 		guard let headline = headline else { return }
 		editorDelegate?.outdentHeadline(self, headline: headline)
 	}
 	
-	@objc func optionTabPressed(_ sender: Any) {
+	@objc func insertTab(_ sender: Any) {
 		insertText("\t")
 	}
 	
-	@objc func optionReturnPressed(_ sender: Any) {
+	@objc func insertReturn(_ sender: Any) {
 		insertText("\n")
 	}
 	
-	@objc func shiftReturnPressed(_ sender: Any) {
+	@objc func addNote(_ sender: Any) {
 		guard let headline = headline else { return }
 		isSavingTextUnnecessary = true
 		editorDelegate?.createHeadlineNote(self, headline: headline)
 	}
 	
-	@objc func shiftOptionReturnPressed(_ sender: Any) {
+	@objc func split(_ sender: Any) {
 		guard let headline = headline else { return }
 		
 		isSavingTextUnnecessary = true
