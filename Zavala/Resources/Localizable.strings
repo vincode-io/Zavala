@@ -1,0 +1,69 @@
+/* 
+  Localizable.strings
+  Zavala
+
+  Created by Maurice Parker on 11/27/20.
+  
+*/
+
+/* Menu Items & Toolbars */
+"Outline" = "Outline";
+"Import_OPML" = "Import OPML";
+"Export_Markdown" = "Export Markdown";
+"Export_OPML" = "Export OPML";
+"New_Window" = "New Window";
+"New_Outline" = "New Outline";
+"New_Folder" = "New Folder";
+"Toggle_Sidebar" = "Toggle Sidebar";
+"Mark_As_Favorite" = "Mark as Favorite";
+"Unmark_As_Favorite" = "Unmark as Favorite";
+"Delete" = "Delete";
+"Cancel" = "Cancel";
+"Get_Info" = "Get Info";
+"Typing" = "Typing";
+"Indent" = "Indent";
+"Outdent" = "Outdent";
+"Move" = "Move";
+"Complete" = "Complete";
+"Uncomplete" = "Uncomplete";
+"Show_Completed" = "Show Completed";
+"Hide_Completed" = "Hide Completed";
+"Expand" = "Expand";
+"Expand_All" = "Expand All";
+"Expand_All_In_Row" = "Expand All in Row";
+"Expand_All_In_Outline" = "Expand All in Outline";
+"Collapse" = "Collapse";
+"Collapse_All" = "Collapse All";
+"Collapse_All_In_Row" = "Collapse All in Row";
+"Collapse_All_In_Outline" = "Collapse All in Outline";
+"Add_Row" = "Add Row";
+"Delete_Row" = "Delete Row";
+"Add_Note" = "Add Note";
+"Delete_Note" = "Delete Note";
+"Split_Row" = "Split Row";
+"Restore" = "Restore";
+"Restore_Archive" = "Restore Archive";
+"Archive_Account" = "Archive %@";
+"Format" = "Format";
+"Bold" = "Bold";
+"Italic" = "Italic";
+"Link" = "Link";
+
+/* Activity Manager */
+"See_Outlines_In" = "See outlines in “%@”";
+"Edit_Outline" = "Edit outline “%@”";
+
+/* Sidebar */
+"Delete_Folder_Prompt" = "Are you sure you want to delete the “%@” folder?";
+"Delete_Folder_Message" = "Any Outlines in this folder will also be deleted and unrecoverable.";
+"Restore_Account_Prompt" = "Are you sure you want to restore the “%@” account?";
+"Restore_Account_Message" = "Your current account data will be lost and unrecoverable.";
+
+/* Timeline */
+"Not_Available" = "Not Available";
+"Import Failed" = "Import Failed";
+"Delete_Outline_Prompt" = "Are you sure you want to delete the “%@” outline?";
+"Delete_Outline_Message" = "The outline be deleted and unrecoverable.";
+
+/* Generic Eror Handling */
+"Error" = "Error";

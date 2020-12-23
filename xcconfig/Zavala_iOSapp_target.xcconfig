@@ -1,0 +1,16 @@
+CODE_SIGN_IDENTITY= iPhone Developer
+DEVELOPMENT_TEAM = SHJK2V3AJG
+CODE_SIGN_STYLE = Automatic
+ORGANIZATION_IDENTIFIER = io.vincode
+DEVELOPER_ENTITLEMENTS =
+PROVISIONING_PROFILE_SPECIFIER =
+
+#include "./Zavala_ios_target_common.xcconfig"
+
+LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks
+INFOPLIST_FILE = Zavala/Resources/Info.plist
+CODE_SIGN_ENTITLEMENTS = Zavala/Resources/Zavala.entitlements
+PRODUCT_BUNDLE_IDENTIFIER = io.vincode.Zavala
+PRODUCT_NAME = Zavala
+
+ORGANIZATION_IDENTIFIER = io.vincode
