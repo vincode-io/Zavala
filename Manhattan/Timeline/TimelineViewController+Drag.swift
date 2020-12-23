@@ -7,11 +7,13 @@
 
 import UIKit
 import MobileCoreServices
+import Templeton
 
 extension TimelineViewController: UICollectionViewDragDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-		guard let outline = currentOutline else { return [UIDragItem]() }
+		guard let timelineItem = dataSource.itemIdentifier(for: indexPath),
+			  let outline = AccountManager.shared.findOutline(timelineItem.id) else { return [UIDragItem]() }
 		
 		session.localContext = outline
 		

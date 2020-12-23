@@ -48,7 +48,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importEntity, style: .plain, target: self, action: #selector(importOPML(_:)))
 
 	private let dataSourceQueue = MainThreadOperationQueue()
-	private var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
+	var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
 
 	override var canBecomeFirstResponder: Bool { return true }
 	
