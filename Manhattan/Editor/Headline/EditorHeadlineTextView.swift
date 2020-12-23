@@ -33,6 +33,7 @@ class EditorHeadlineTextView: OutlineTextView {
 		let keys = [
 			UIKeyCommand(action: #selector(tabPressed(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(shiftTabPressed(_:))),
+			UIKeyCommand(input: "\t", modifierFlags: [.alternate], action: #selector(optionTabPressed(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(optionReturnPressed(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(shiftReturnPressed(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(shiftOptionReturnPressed(_:))),
@@ -97,6 +98,10 @@ class EditorHeadlineTextView: OutlineTextView {
 	@objc func shiftTabPressed(_ sender: Any) {
 		guard let headline = headline else { return }
 		editorDelegate?.outdentHeadline(self, headline: headline)
+	}
+	
+	@objc func optionTabPressed(_ sender: Any) {
+		insertText("\t")
 	}
 	
 	@objc func optionReturnPressed(_ sender: Any) {
