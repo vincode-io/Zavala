@@ -83,6 +83,11 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		guard fileError == nil else { throw fileError! }
 		guard let opmlData = fileData else { throw FolderError.fileReadError }
 		
+		return importOPML(opmlData)
+	}
+
+	@discardableResult
+	public func importOPML(_ opmlData: Data) -> Outline {
 		let opml = SWXMLHash.config({ config in
 			config.caseInsensitive = true
 		}).parse(opmlData)["opml"]
