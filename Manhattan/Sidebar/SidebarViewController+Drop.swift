@@ -10,13 +10,8 @@ import Templeton
 
 extension SidebarViewController: UICollectionViewDropDelegate {
 	
-	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
-		return session.localDragSession != nil
-	}
-	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-		guard let outline = session.localDragSession?.localContext as? Outline,
-			  let destinationIndexPath = destinationIndexPath,
+		guard let destinationIndexPath = destinationIndexPath,
 			  let sidebarItem = dataSource.itemIdentifier(for: destinationIndexPath),
 			  let folderEntityID = sidebarItem.entityID,
 			  let folder = AccountManager.shared.findFolder(folderEntityID) else {
@@ -27,25 +22,40 @@ extension SidebarViewController: UICollectionViewDropDelegate {
 			return UICollectionViewDropProposal(operation: .forbidden)
 		}
 		
-		if folder == outline.folder {
+		if let outline = session.localDragSession?.localContext as? Outline, folder == outline.folder {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
 		
-		return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
+		if session.localDragSession == nil {
+			return UICollectionViewDropProposal(operation: .copy, intent: .insertIntoDestinationIndexPath)
+		} else {
+			return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
+		}
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
 		guard let dragItem = coordinator.items.first?.dragItem,
-			  let outline = dragItem.localObject as? Outline,
 			  let destinationIndexPath = coordinator.destinationIndexPath,
 			  let sidebarItem = dataSource.itemIdentifier(for: destinationIndexPath),
 			  let folderEntityID = sidebarItem.entityID,
 			  let folder = AccountManager.shared.findFolder(folderEntityID) else { return }
 		
-		outline.load()
-		outline.folder?.deleteOutline(outline)
-		folder.createOutline(outline)
-		outline.forceSave()
+		if let outline = dragItem.localObject as? Outline {
+			outline.load()
+			outline.folder?.deleteOutline(outline)
+			folder.createOutline(outline)
+			outline.forceSave()
+		} else {
+			for dropItem in coordinator.items {
+				let provider = dropItem.dragItem.itemProvider
+				provider.loadDataRepresentation(forTypeIdentifier: "org.opml.opml") { (opmlData, error) in
+					guard let opmlData = opmlData else { return }
+					DispatchQueue.main.async {
+						folder.importOPML(opmlData)
+					}
+				}
+			}
+		}
 
 	}
 	
