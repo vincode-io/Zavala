@@ -9,9 +9,7 @@ import Foundation
 
 public extension Notification.Name {
 	static let OutlineMetaDataDidChange = Notification.Name(rawValue: "OutlineMetaDataDidChange")
-	static let OutlineTitleDidChange = Notification.Name(rawValue: "OutlineTitleDidChange")
 	static let OutlineBodyDidChange = Notification.Name(rawValue: "OutlineBodyDidChange")
-	static let OutlineDidDelete = Notification.Name(rawValue: "OutlineDidDelete")
 }
 
 public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable {
@@ -177,7 +175,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	}
 	
 	init(parentID: EntityID, title: String?) {
-		self.id = EntityID.outline(parentID.accountID, parentID.folderUUID, UUID().uuidString)
+		self.id = EntityID.document(parentID.accountID, parentID.folderUUID, UUID().uuidString)
 		self.title = title
 		self.created = Date()
 		self.updated = Date()
@@ -918,7 +916,7 @@ extension Outline: CustomDebugStringConvertible {
 extension Outline {
 	
 	private func outlineTitleDidChange() {
-		NotificationCenter.default.post(name: .OutlineTitleDidChange, object: self, userInfo: nil)
+		NotificationCenter.default.post(name: .DocumentTitleDidChange, object: Document.outline(self), userInfo: nil)
 	}
 
 	private func outlineMetaDataDidChange() {
@@ -934,7 +932,7 @@ extension Outline {
 	}
 	
 	private func outlineDidDelete() {
-		NotificationCenter.default.post(name: .OutlineDidDelete, object: self, userInfo: nil)
+		NotificationCenter.default.post(name: .DocumentDidDelete, object: Document.outline(self), userInfo: nil)
 	}
 
 	private func expandCollapse(headlines: [Headline], isExpanded: Bool) -> ShadowTableChanges {

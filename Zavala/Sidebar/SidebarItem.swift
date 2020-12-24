@@ -46,7 +46,7 @@ final class SidebarItem: NSObject, NSCopying, Identifiable {
 		return SidebarItem(id: id, title: title, image: nil)
 	}
 	
-	static func sidebarItem(_ outlineProvider: OutlineProvider) -> SidebarItem {
+	static func sidebarItem(_ outlineProvider: DocumentContainer) -> SidebarItem {
 		let id = SidebarItem.ID.outlineProvider(outlineProvider.id)
 		return SidebarItem(id: id, title: outlineProvider.name, image: outlineProvider.image)
 	}

@@ -185,22 +185,22 @@ class MainSplitViewController: UISplitViewController {
 			preferredSupplementaryColumnWidth = timelineWidth
 		}
 
-		guard let outlineProviderUserInfo = userInfo[UserInfoKeys.outlineProviderID] as? [AnyHashable : AnyHashable],
-			  let outlineProviderID = EntityID(userInfo: outlineProviderUserInfo),
-			  let outlineProvider = AccountManager.shared.findOutlineProvider(outlineProviderID) else { return }
+		guard let documentContainerUserInfo = userInfo[UserInfoKeys.documentContainerID] as? [AnyHashable : AnyHashable],
+			  let documentContainerID = EntityID(userInfo: documentContainerUserInfo),
+			  let documentContainer = AccountManager.shared.findOutlineProvider(documentContainerID) else { return }
 
 		UIView.performWithoutAnimation {
 			show(.primary)
 		}
 
-		sidebarViewController?.selectOutlineProvider(outlineProvider, animated: false)
+		sidebarViewController?.selectOutlineProvider(documentContainer, animated: false)
 		lastMainControllerToAppear = .timeline
 
-		guard let outlineUserInfo = userInfo[UserInfoKeys.outlineID] as? [AnyHashable : AnyHashable],
-			  let outlineID = EntityID(userInfo: outlineUserInfo),
-			  let outline = AccountManager.shared.findOutline(outlineID) else { return }
+		guard let documentUserInfo = userInfo[UserInfoKeys.documentID] as? [AnyHashable : AnyHashable],
+			  let documentID = EntityID(userInfo: documentUserInfo),
+			  let document = AccountManager.shared.findDocument(documentID) else { return }
 		
-		timelineViewController?.selectOutline(outline, animated: false)
+		timelineViewController?.selectDocument(document, animated: false)
 		lastMainControllerToAppear = .editor
 	}
 	
@@ -355,16 +355,16 @@ class MainSplitViewController: UISplitViewController {
 
 extension MainSplitViewController: SidebarDelegate {
 	
-	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?, animated: Bool) {
-		timelineViewController?.outlineProvider = outlineProvider
+	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: DocumentContainer?, animated: Bool) {
+		timelineViewController?.documentContainer = outlineProvider
 		editorViewController?.edit(nil, isNew: false)
 
 		guard let outlineProvider = outlineProvider else {
-			activityManager.invalidateSelectOutlineProvider()
+			activityManager.invalidateSelectDocumentContainer()
 			return
 		}
 
-		activityManager.selectingOutlineProvider(outlineProvider)
+		activityManager.selectingDocumentContainer(outlineProvider)
 		if animated {
 			show(.supplementary)
 		} else {
@@ -380,9 +380,9 @@ extension MainSplitViewController: SidebarDelegate {
 
 extension MainSplitViewController: TimelineDelegate {
 	
-	func outlineSelectionDidChange(_: TimelineViewController, outlineProvider: OutlineProvider, outline: Outline?, isNew: Bool, animated: Bool) {
-		if let outline = outline {
-			activityManager.selectingOutline(outlineProvider, outline)
+	func outlineSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool) {
+		if let document = document {
+			activityManager.selectingDocument(documentContainer, document)
 			if animated {
 				show(.secondary)
 			} else {
@@ -391,8 +391,14 @@ extension MainSplitViewController: TimelineDelegate {
 				}
 			}
 		} else {
-			activityManager.invalidateSelectOutline()
+			activityManager.invalidateSelectDocument()
 		}
+		
+		guard let outline = document?.outline else {
+			editorViewController?.edit(nil, isNew: isNew)
+			return
+		}
+		
 		editorViewController?.edit(outline, isNew: isNew)
 	}
 	
@@ -405,7 +411,7 @@ extension MainSplitViewController: UISplitViewControllerDelegate {
 	func splitViewController(_ svc: UISplitViewController, topColumnForCollapsingToProposedTopColumn proposedTopColumn: UISplitViewController.Column) -> UISplitViewController.Column {
 		switch proposedTopColumn {
 		case .supplementary:
-			if timelineViewController?.outlineProvider != nil {
+			if timelineViewController?.documentContainer != nil {
 				return .supplementary
 			} else {
 				return .primary
@@ -414,7 +420,7 @@ extension MainSplitViewController: UISplitViewControllerDelegate {
 			if editorViewController?.outline != nil {
 				return .secondary
 			} else {
-				if timelineViewController?.outlineProvider != nil {
+				if timelineViewController?.documentContainer != nil {
 					return .supplementary
 				} else {
 					return .primary
@@ -446,14 +452,14 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 
 		// If we are showing the Feeds and only the feeds start clearing stuff
 		if isCollapsed && viewController === sidebarViewController && lastMainControllerToAppear == .timeline {
-			activityManager.invalidateSelectOutlineProvider()
+			activityManager.invalidateSelectDocumentContainer()
 			sidebarViewController?.selectOutlineProvider(nil, animated: false)
 			return
 		}
 
 		if isCollapsed && viewController === timelineViewController && lastMainControllerToAppear == .editor {
-			activityManager.invalidateSelectOutline()
-			timelineViewController?.selectOutline(nil, animated: false)
+			activityManager.invalidateSelectDocument()
+			timelineViewController?.selectDocument(nil, animated: false)
 			return
 		}
 	}

@@ -25,23 +25,23 @@ public final class AccountManager {
 		return local
 	}
 
-	public var allOutlineProvider: OutlineProvider {
-		return LazyOutlineProvider(id: .all, callback: { [weak self] in
-			return LazyOutlineProvider.sortByTitle(self?.outlines ?? [Outline]())
+	public var allOutlineProvider: DocumentContainer {
+		return LazyDocumentContainer(id: .all, callback: { [weak self] in
+			return LazyDocumentContainer.sortByTitle(self?.outlines ?? [Document]())
 		})
 	}
 	
-	public var recentsOutlineProvider: OutlineProvider {
-		return LazyOutlineProvider(id: .recents, callback: { [weak self] in
-			let sorted = LazyOutlineProvider.sortByUpdate(self?.outlines ?? [Outline]())
+	public var recentsOutlineProvider: DocumentContainer {
+		return LazyDocumentContainer(id: .recents, callback: { [weak self] in
+			let sorted = LazyDocumentContainer.sortByUpdate(self?.outlines ?? [Document]())
 			return Array(sorted.prefix(10))
 		})
 	}
 	
-	public var favoritesOutlineProvider: OutlineProvider {
-		return LazyOutlineProvider(id: .favorites, callback: { [weak self] in
+	public var favoritesOutlineProvider: DocumentContainer {
+		return LazyDocumentContainer(id: .favorites, callback: { [weak self] in
 			let favorites = self?.outlines.filter { $0.isFavorite ?? false }
-			return LazyOutlineProvider.sortByTitle(favorites ?? [Outline]())
+			return LazyDocumentContainer.sortByTitle(favorites ?? [Document]())
 		})
 	}
 	
@@ -73,8 +73,8 @@ public final class AccountManager {
 
 	private var accountFiles = [Int: AccountFile]()
 	
-	private var outlines: [Outline] {
-		return activeAccounts.reduce(into: [Outline]()) { $0.append(contentsOf: $1.outlines ) }
+	private var outlines: [Document] {
+		return activeAccounts.reduce(into: [Document]()) { $0.append(contentsOf: $1.outlines ) }
 	}
 	
 	public init(accountsFolderPath: String) {
@@ -87,7 +87,7 @@ public final class AccountManager {
 		NotificationCenter.default.addObserver(self, selector: #selector(accountFoldersDidChange(_:)), name: .AccountFoldersDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(folderMetadataDidChange(_:)), name: .FolderMetaDataDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(folderOutlinesDidChange(_:)), name: .FolderOutlinesDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlineTitleDidChange(_:)), name: .OutlineTitleDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineMetadataDidChange(_:)), name: .OutlineMetaDataDidChange, object: nil)
 
 		// The local account must always exist, even if it's empty.
@@ -121,7 +121,7 @@ public final class AccountManager {
 		return accountsDictionary[accountID]
 	}
 	
-	public func findOutlineProvider(_ entityID: EntityID) -> OutlineProvider? {
+	public func findOutlineProvider(_ entityID: EntityID) -> DocumentContainer? {
 		switch entityID {
 		case .all:
 			return allOutlineProvider
@@ -143,11 +143,11 @@ public final class AccountManager {
 		return nil
 	}
 	
-	public func findOutline(_ entityID: EntityID) -> Outline? {
-		if case .outline(let accountID, let folderUUID, let outlineUUID) = entityID,
+	public func findDocument(_ entityID: EntityID) -> Document? {
+		if case .document(let accountID, let folderUUID, let documentUUID) = entityID,
 		   let account = accountsDictionary[accountID],
 		   let folder = account.findFolder(folderUUID: folderUUID) {
-			return folder.findOutline(outlineUUID: outlineUUID)
+			return folder.findDocument(documentUUID: documentUUID)
 		}
 		return nil
 	}
@@ -231,7 +231,7 @@ private extension AccountManager {
 		markAsDirty(account)
 	}
 	
-	@objc func outlineTitleDidChange(_ note: Notification) {
+	@objc func documentTitleDidChange(_ note: Notification) {
 		guard let account = (note.object as? Outline)?.account else { return }
 		markAsDirty(account)
 	}

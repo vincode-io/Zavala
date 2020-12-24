@@ -23,7 +23,7 @@ final class HeadlinesFile {
 	init(outline: Outline) {
 		self.outline = outline
 		let localAccountFolder = AccountManager.shared.accountsFolder.appendingPathComponent(outline.account!.type.folderName)
-		fileURL = localAccountFolder.appendingPathComponent("\(outline.id.outlineUUID).plist")
+		fileURL = localAccountFolder.appendingPathComponent("\(outline.id.documentUUID).plist")
 	}
 	
 	func markAsDirty() {

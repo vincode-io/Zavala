@@ -34,8 +34,8 @@ public final class Account: NSObject, Identifiable, Codable {
 		return folders.sorted(by: { $0.name ?? "" < $1.name ?? "" })
 	}
 	
-	public var outlines: [Outline] {
-		return folders?.reduce(into: [Outline]()) { $0.append(contentsOf: $1.outlines ?? [Outline]()) } ?? [Outline]()
+	public var outlines: [Document] {
+		return folders?.reduce(into: [Document]()) { $0.append(contentsOf: $1.outlines ?? [Document]()) } ?? [Document]()
 	}
 	
 	enum CodingKeys: String, CodingKey {

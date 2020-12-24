@@ -11,14 +11,14 @@ import RSCore
 import Templeton
 
 protocol TimelineDelegate: class  {
-	func outlineSelectionDidChange(_: TimelineViewController, outlineProvider: OutlineProvider, outline: Outline?, isNew: Bool, animated: Bool)
+	func outlineSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool)
 }
 
 class TimelineViewController: UICollectionViewController, MainControllerIdentifiable {
 	var mainControllerIdentifer: MainControllerIdentifier { return .timeline }
 
 	weak var delegate: TimelineDelegate?
-	var outlineProvider: OutlineProvider? {
+	var documentContainer: DocumentContainer? {
 		didSet {
 			updateUI()
 			applySnapshot(animated: false)
@@ -26,22 +26,22 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	}
 	
 	var isCreateOutlineUnavailable: Bool {
-		return !(outlineProvider is Folder)
+		return !(documentContainer is Folder)
 	}
 	
 	var isExportOutlineUnavailable: Bool {
-		return currentOutline == nil
+		return currentDocument == nil
 	}
 	
 	var isDeleteCurrentOutlineUnavailable: Bool {
-		return currentOutline == nil
+		return currentDocument == nil
 	}
 	
-	var currentOutline: Outline? {
+	var currentDocument: Document? {
 		guard let indexPath = collectionView.indexPathsForSelectedItems?.first,
 			  let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
 			  
-		return AccountManager.shared.findOutline(item.id)
+		return AccountManager.shared.findDocument(item.id)
 	}
 	
 	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
@@ -67,7 +67,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		applySnapshot(animated: false)
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(folderOutlinesDidChange(_:)), name: .FolderOutlinesDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlineTitleDidChange(_:)), name: .OutlineTitleDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -76,46 +76,46 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	
 	// MARK: API
 
-	func selectOutline(_ outline: Outline?, isNew: Bool = false, animated: Bool) {
-		guard let outlineProvider = outlineProvider else { return }
+	func selectDocument(_ document: Document?, isNew: Bool = false, animated: Bool) {
+		guard let documentContainer = documentContainer else { return }
 
 		var timelineItem: TimelineItem? = nil
-		if let outline = outline {
-			timelineItem = TimelineItem.timelineItem(outline)
+		if let document = document {
+			timelineItem = TimelineItem.timelineItem(document)
 		}
 
 		updateSelection(item: timelineItem, animated: animated)
-		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline, isNew: isNew, animated: animated)
+		delegate?.outlineSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: isNew, animated: animated)
 	}
 	
 	func deleteCurrentOutline() {
-		guard let outline = currentOutline else { return }
-		deleteOutline(outline)
+		guard let document = currentDocument else { return }
+		deleteDocument(document)
 	}
 	
 	// MARK: Notifications
 	
 	@objc func folderOutlinesDidChange(_ note: Notification) {
-		guard let op = outlineProvider, !op.isSmartProvider else {
+		guard let op = documentContainer, !op.isSmartProvider else {
 			applySnapshot(animated: true)
 			return
 		}
 		
-		guard let noteOP = note.object as? OutlineProvider, op.id == noteOP.id else { return }
+		guard let noteOP = note.object as? DocumentContainer, op.id == noteOP.id else { return }
 		applySnapshot(animated: true)
 	}
 	
-	@objc func outlineTitleDidChange(_ note: Notification) {
-		guard let outline = note.object as? Outline else { return }
-		reload(outline: outline)
+	@objc func documentTitleDidChange(_ note: Notification) {
+		guard let document = note.object as? Document else { return }
+		reload(document: document)
 	}
 	
 	// MARK: Actions
 	
 	@objc func createOutline(_ sender: Any?) {
-		guard let folder = outlineProvider as? Folder else { return }
+		guard let folder = documentContainer as? Folder else { return }
 		let outline = folder.createOutline()
-		selectOutline(outline, isNew: true, animated: true)
+		selectDocument(outline, isNew: true, animated: true)
 	}
 
 	@objc func importOPML(_ sender: Any?) {
@@ -128,12 +128,12 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	}
 
 	@objc func exportMarkdown(_ sender: Any?) {
-		guard let currentOutline = currentOutline else { return }
+		guard let currentOutline = currentDocument?.outline else { return }
 		exportMarkdownForOutline(currentOutline)
 	}
 
 	@objc func exportOPML(_ sender: Any?) {
-		guard let currentOutline = currentOutline else { return }
+		guard let currentOutline = currentDocument?.outline else { return }
 		exportOPMLForOutline(currentOutline)
 	}
 
@@ -144,19 +144,19 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 extension TimelineViewController: UIDocumentPickerDelegate {
 	
 	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-		guard let folder = outlineProvider as? Folder else { return }
+		guard let folder = documentContainer as? Folder else { return }
 
-		var outline: Outline?
+		var document: Document?
 		for url in urls {
 			do {
-				outline = try folder.importOPML(url)
+				document = try folder.importOPML(url)
 			} catch {
 				self.presentError(title: L10n.importFailed, message: error.localizedDescription)
 			}
 		}
 		
-		if let outline = outline {
-			selectOutline(outline, animated: false)
+		if let document = document {
+			selectDocument(document, animated: false)
 		}
 	}
 	
@@ -167,11 +167,11 @@ extension TimelineViewController: UIDocumentPickerDelegate {
 extension TimelineViewController {
 		
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		guard let outlineProvider = outlineProvider else { return }
+		guard let documentContainer = documentContainer else { return }
 		guard let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
 		
-		let outline = AccountManager.shared.findOutline(timelineItem.id)
-		delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: outline, isNew: false, animated: true)
+		let document = AccountManager.shared.findDocument(timelineItem.id)
+		delegate?.outlineSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: false, animated: true)
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -197,11 +197,11 @@ extension TimelineViewController {
 	
 	private func configureDataSource() {
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, TimelineItem> { [weak self] (cell, indexPath, item) in
-			guard let self = self, let outline = AccountManager.shared.findOutline(item.id) else { return }
+			guard let self = self, let document = AccountManager.shared.findDocument(item.id) else { return }
 			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
-			contentConfiguration.text = outline.title ?? ""
-			contentConfiguration.secondaryText = Self.dateString(outline.updated)
+			contentConfiguration.text = document.title ?? ""
+			contentConfiguration.secondaryText = Self.dateString(document.updated)
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			
 			if self.traitCollection.userInterfaceIdiom == .mac {
@@ -219,14 +219,14 @@ extension TimelineViewController {
 		}
 	}
 	
-	func reload(outline: Outline) {
-		let timelineItem = TimelineItem.timelineItem(outline)
+	func reload(document: Document) {
+		let timelineItem = TimelineItem.timelineItem(document)
 		dataSourceQueue.add(ReloadItemsOperation(dataSource: dataSource, section: 0, items: [timelineItem], animated: true))
 	}
 	
 	func applySnapshot(animated: Bool) {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
-		let outlines = outlineProvider?.sortedOutlines ?? [Outline]()
+		let outlines = documentContainer?.sortedOutlines ?? [Document]()
 		let items = outlines.map { TimelineItem.timelineItem($0) }
 		snapshot.append(items)
 		
@@ -243,8 +243,8 @@ extension TimelineViewController {
 extension TimelineViewController {
 	
 	private func updateUI() {
-		navigationItem.title = outlineProvider?.name
-		view.window?.windowScene?.title = outlineProvider?.name
+		navigationItem.title = documentContainer?.name
+		view.window?.windowScene?.title = documentContainer?.name
 		
 		if traitCollection.userInterfaceIdiom != .mac {
 			if isCreateOutlineUnavailable {
@@ -257,23 +257,26 @@ extension TimelineViewController {
 	
 	private func makeOutlineContextMenu(item: TimelineItem) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: item as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
-			guard let self = self, let outline = AccountManager.shared.findOutline(item.id) else { return nil }
+			guard let self = self, let document = AccountManager.shared.findDocument(item.id) else { return nil }
 			
-			let menuItems = [
-				UIMenu(title: "", options: .displayInline, children: [self.toggleFavoriteAction(outline: outline)]),
-				UIMenu(title: "", options: .displayInline, children: [self.exportMarkdownAction(outline: outline), self.exportOPMLAction(outline: outline)]),
-				UIMenu(title: "", options: .displayInline, children: [self.deleteOutlineAction(outline: outline)])
-			]
+			var menuItems = [UIMenu]()
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.toggleFavoriteAction(document: document)]))
 
+			if let outline = document.outline {
+				menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.exportMarkdownAction(outline: outline), self.exportOPMLAction(outline: outline)]))
+			}
+			
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.deleteOutlineAction(document: document)]))
+			
 			return UIMenu(title: "", children: menuItems)
 		})
 	}
 	
-	private func toggleFavoriteAction(outline: Outline) -> UIAction {
-		let title = outline.isFavorite ?? false ? L10n.unmarkAsFavorite : L10n.markAsFavorite
-		let image = outline.isFavorite ?? false ? AppAssets.favoriteUnselected : AppAssets.favoriteSelected
+	private func toggleFavoriteAction(document: Document) -> UIAction {
+		let title = document.isFavorite ?? false ? L10n.unmarkAsFavorite : L10n.markAsFavorite
+		let image = document.isFavorite ?? false ? AppAssets.favoriteUnselected : AppAssets.favoriteSelected
 		let action = UIAction(title: title, image: image) { action in
-			outline.toggleFavorite()
+			document.toggleFavorite()
 		}
 		return action
 	}
@@ -294,15 +297,15 @@ extension TimelineViewController {
 	
 	private func deleteContextualAction(item: TimelineItem) -> UIContextualAction {
 		return UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
-			if let outline = AccountManager.shared.findOutline(item.id) {
-				self?.deleteOutline(outline, completion: completion)
+			if let document = AccountManager.shared.findDocument(item.id) {
+				self?.deleteDocument(document, completion: completion)
 			}
 		}
 	}
 	
-	private func deleteOutlineAction(outline: Outline) -> UIAction {
+	private func deleteOutlineAction(document: Document) -> UIAction {
 		let action = UIAction(title: L10n.delete, image: AppAssets.removeEntity, attributes: .destructive) { [weak self] action in
-			self?.deleteOutline(outline)
+			self?.deleteDocument(document)
 		}
 		
 		return action
@@ -335,15 +338,15 @@ extension TimelineViewController {
 		self.present(docPicker, animated: true)
 	}
 	
-	private func deleteOutline(_ outline: Outline, completion: ((Bool) -> Void)? = nil) {
+	private func deleteDocument(_ document: Document, completion: ((Bool) -> Void)? = nil) {
 		func delete() {
-			if outline == self.currentOutline, let outlineProvider = self.outlineProvider {
-				self.delegate?.outlineSelectionDidChange(self, outlineProvider: outlineProvider, outline: nil, isNew: false, animated: true)
+			if document == self.currentDocument, let documentContainer = self.documentContainer {
+				self.delegate?.outlineSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, animated: true)
 			}
-			outline.folder?.deleteOutline(outline)
+			document.folder?.deleteDocument(document)
 		}
 
-		guard !outline.isEmpty else {
+		guard !document.isEmpty else {
 			delete()
 			return
 		}
@@ -356,7 +359,7 @@ extension TimelineViewController {
 			completion?(true)
 		}
 		
-		let alert = UIAlertController(title: L10n.deleteOutlinePrompt(outline.title ?? ""), message: L10n.deleteOutlineMessage, preferredStyle: .alert)
+		let alert = UIAlertController(title: L10n.deleteOutlinePrompt(document.title ?? ""), message: L10n.deleteOutlineMessage, preferredStyle: .alert)
 		alert.addAction(cancelAction)
 		alert.addAction(deleteAction)
 		

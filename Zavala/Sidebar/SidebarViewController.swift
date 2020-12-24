@@ -12,7 +12,7 @@ import Combine
 import Templeton
 
 protocol SidebarDelegate: class {
-	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: OutlineProvider?, animated: Bool)
+	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: DocumentContainer?, animated: Bool)
 }
 
 class SidebarViewController: UICollectionViewController, MainControllerIdentifiable {
@@ -70,7 +70,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		applyInitialSnapshot()
 	}
 	
-	func selectOutlineProvider(_ outlineProvider: OutlineProvider?, animated: Bool) {
+	func selectOutlineProvider(_ outlineProvider: DocumentContainer?, animated: Bool) {
 		var sidebarItem: SidebarItem? = nil
 		if let outlineProvider = outlineProvider {
 			sidebarItem = SidebarItem.sidebarItem(outlineProvider)

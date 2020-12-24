@@ -11,12 +11,12 @@ import Templeton
 extension TimelineViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
-		guard outlineProvider is Folder else { return false }
+		guard documentContainer is Folder else { return false }
 		return session.hasItemsConforming(toTypeIdentifiers: ["org.opml.opml"])
 	}
 		
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-		guard let folder = outlineProvider as? Folder else { return }
+		guard let folder = documentContainer as? Folder else { return }
 
 		for dropItem in coordinator.items {
 			let provider = dropItem.dragItem.itemProvider

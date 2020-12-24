@@ -13,19 +13,23 @@ extension TimelineViewController: UICollectionViewDragDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
 		guard let timelineItem = dataSource.itemIdentifier(for: indexPath),
-			  let outline = AccountManager.shared.findOutline(timelineItem.id) else { return [UIDragItem]() }
+			  let document = AccountManager.shared.findDocument(timelineItem.id) else { return [UIDragItem]() }
 		
-		session.localContext = outline
+		session.localContext = document
 		
 		let itemProvider = NSItemProvider()
-		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
-			let data = outline.markdown().data(using: .utf8)
-			completion(data, nil)
-			return nil
+
+		switch document {
+		case .outline(let outline):
+			itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+				let data = outline.markdown().data(using: .utf8)
+				completion(data, nil)
+				return nil
+			}
 		}
 		
 		let dragItem = UIDragItem(itemProvider: itemProvider)
-		dragItem.localObject = outline
+		dragItem.localObject = document
 		return [dragItem]
 	}
 	

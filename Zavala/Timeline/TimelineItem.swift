@@ -16,8 +16,8 @@ final class TimelineItem: NSObject, NSCopying, Identifiable {
 		self.id = id
 	}
 
-	static func timelineItem(_ outline: Outline) -> TimelineItem {
-		return TimelineItem(id: outline.id)
+	static func timelineItem(_ document: Document) -> TimelineItem {
+		return TimelineItem(id: document.id)
 	}
 
 	override func isEqual(_ object: Any?) -> Bool {

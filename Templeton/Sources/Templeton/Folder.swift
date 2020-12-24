@@ -29,7 +29,7 @@ public enum FolderError: LocalizedError {
 	}
 }
 
-public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
+public final class Folder: Identifiable, Equatable, Codable, DocumentContainer {
 	
 	public var id: EntityID
 	public var name: String?
@@ -37,10 +37,10 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		return RSImage(systemName: "folder")
 	}
 	
-	public var outlines: [Outline]?
+	public var outlines: [Document]?
 
-	public var sortedOutlines: [Outline] {
-		return Self.sortByUpdate(outlines ?? [Outline]())
+	public var sortedOutlines: [Document] {
+		return Self.sortByUpdate(outlines ?? [Document]())
 	}
 
 	public var account: Account? {
@@ -56,7 +56,7 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	init(parentID: EntityID, name: String) {
 		self.id = EntityID.folder(parentID.accountID, UUID().uuidString)
 		self.name = name
-		self.outlines = [Outline]()
+		self.outlines = [Document]()
 	}
 
 	func folderDidDelete() {
@@ -68,7 +68,7 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 		folderMetaDataDidChange()
 	}
 	
-	public func importOPML(_ url: URL) throws -> Outline {
+	public func importOPML(_ url: URL) throws -> Document {
 		guard url.startAccessingSecurityScopedResource() else { throw FolderError.securityScopeError }
 		defer {
 			url.stopAccessingSecurityScopedResource()
@@ -87,7 +87,7 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 	}
 
 	@discardableResult
-	public func importOPML(_ opmlData: Data) -> Outline {
+	public func importOPML(_ opmlData: Data) -> Document {
 		let opml = SWXMLHash.config({ config in
 			config.caseInsensitive = true
 		}).parse(opmlData)["opml"]
@@ -124,29 +124,29 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 			outline.expansionState = expansionState
 		}
 
-		outlines?.append(outline)
+		outlines?.append(.outline(outline))
 		folderOutlinesDidChange()
 		outline.forceSave()
-		return outline
+		return .outline(outline)
 	}
 	
-	public func createOutline(title: String? = nil) -> Outline {
+	public func createOutline(title: String? = nil) -> Document {
 		let outline = Outline(parentID: id, title: title)
-		outlines?.append(outline)
+		outlines?.append(.outline(outline))
 		folderOutlinesDidChange()
-		return outline
+		return .outline(outline)
 	}
 	
-	public func createOutline(_ outline: Outline) {
-		outline.id = EntityID.outline(id.accountID, id.folderUUID, outline.id.outlineUUID)
-		outlines?.append(outline)
+	public func createDocument(_ document: Document) {
+		document.reassignID(EntityID.document(id.accountID, id.folderUUID, document.id.documentUUID))
+		outlines?.append(document)
 		folderOutlinesDidChange()
 	}
 	
-	public func deleteOutline(_ outline: Outline) {
-		outlines?.removeFirst(object: outline)
+	public func deleteDocument(_ document: Document) {
+		outlines?.removeFirst(object: document)
 		folderOutlinesDidChange()
-		outline.delete()
+		document.delete()
 	}
 	
 	public static func == (lhs: Folder, rhs: Folder) -> Bool {
@@ -156,8 +156,11 @@ public final class Folder: Identifiable, Equatable, Codable, OutlineProvider {
 
 extension Folder {
 	
-	func findOutline(outlineUUID: String) -> Outline? {
-		return outlines?.first(where: { $0.id.outlineUUID == outlineUUID })
+	func findDocument(documentUUID: String) -> Document? {
+		if let document = outlines?.first(where: { $0.id.documentUUID == documentUUID }) {
+			return document
+		}
+		return nil
 	}
 
 }

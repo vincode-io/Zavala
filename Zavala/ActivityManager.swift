@@ -18,15 +18,15 @@ enum ActivityType: String {
 
 class ActivityManager {
 	
-	private var selectOutlineProviderActivity: NSUserActivity?
-	private var selectOutlineActivity: NSUserActivity?
+	private var selectDocumentContainerActivity: NSUserActivity?
+	private var selectDocumentActivity: NSUserActivity?
 
 	var stateRestorationActivity: NSUserActivity {
-		if let activity = selectOutlineActivity {
+		if let activity = selectDocumentActivity {
 			return activity
 		}
 		
-		if let activity = selectOutlineProviderActivity {
+		if let activity = selectDocumentContainerActivity {
 			return activity
 		}
 		
@@ -38,30 +38,30 @@ class ActivityManager {
 	
 	init() {
 		NotificationCenter.default.addObserver(self, selector: #selector(folderDidDelete(_:)), name: .FolderDidDelete, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlineDidDelete(_:)), name: .OutlineDidDelete, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineDidDelete(_:)), name: .DocumentDidDelete, object: nil)
 	}
 
-	func selectingOutlineProvider(_ outlineProvider: OutlineProvider) {
-		invalidateSelectOutlineProvider()
-		selectOutlineProviderActivity = makeSelectOutlineProviderActivity(outlineProvider)
-		donate(selectOutlineProviderActivity!)
+	func selectingDocumentContainer(_ documentContainer: DocumentContainer) {
+		invalidateSelectDocumentContainer()
+		selectDocumentContainerActivity = makeSelectDocumentContainerActivity(documentContainer)
+		donate(selectDocumentContainerActivity!)
 	}
 	
-	func invalidateSelectOutlineProvider() {
-		invalidateSelectOutline()
-		selectOutlineProviderActivity?.invalidate()
-		selectOutlineProviderActivity = nil
+	func invalidateSelectDocumentContainer() {
+		invalidateSelectDocument()
+		selectDocumentContainerActivity?.invalidate()
+		selectDocumentContainerActivity = nil
 	}
 
-	func selectingOutline(_ outlineProvider: OutlineProvider, _ outline: Outline) {
-		invalidateSelectOutline()
-		selectOutlineActivity = makeSelectOutlineActivity(outlineProvider, outline)
-		donate(selectOutlineActivity!)
+	func selectingDocument(_ documentContainer: DocumentContainer, _ document: Document) {
+		invalidateSelectDocument()
+		selectDocumentActivity = makeSelectDocumentActivity(documentContainer, document)
+		donate(selectDocumentActivity!)
 	}
 	
-	func invalidateSelectOutline() {
-		selectOutlineActivity?.invalidate()
-		selectOutlineActivity = nil
+	func invalidateSelectDocument() {
+		selectDocumentActivity?.invalidate()
+		selectDocumentActivity = nil
 	}
 
 }
@@ -74,7 +74,7 @@ extension ActivityManager {
 		var ids = [String]()
 		ids.append(folder.id.description)
 		
-		for outline in folder.outlines ?? [Outline]() {
+		for outline in folder.outlines ?? [Document]() {
 			ids.append(outline.id.description)
 		}
 		
@@ -82,17 +82,17 @@ extension ActivityManager {
 	}
 	
 	@objc func outlineDidDelete(_ note: Notification) {
-		guard let outline = note.object as? Outline else { return }
-		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [outline.id.description])
+		guard let document = note.object as? Document else { return }
+		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [document.id.description])
 	}
 	
-	private func makeSelectOutlineProviderActivity(_ outlineProvider: OutlineProvider) -> NSUserActivity {
+	private func makeSelectDocumentContainerActivity(_ documentContainer: DocumentContainer) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: ActivityType.selectOutlineProvider.rawValue)
 		
-		let title = L10n.seeOutlinesIn(outlineProvider.name ?? "")
+		let title = L10n.seeOutlinesIn(documentContainer.name ?? "")
 		activity.title = title
 		
-		activity.userInfo = [UserInfoKeys.outlineProviderID: outlineProvider.id.userInfo]
+		activity.userInfo = [UserInfoKeys.documentContainerID: documentContainer.id.userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 	
 		let keywords = makeKeywords(title)
@@ -100,7 +100,7 @@ extension ActivityManager {
 		activity.isEligibleForSearch = true
 		activity.isEligibleForPrediction = true
 
-		let idString = outlineProvider.id.description
+		let idString = documentContainer.id.description
 		activity.persistentIdentifier = idString
 
 		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeCompositeContent as String)
@@ -112,13 +112,13 @@ extension ActivityManager {
 		return activity
 	}
 	
-	private func makeSelectOutlineActivity(_ outlineProvider: OutlineProvider, _ outline: Outline) -> NSUserActivity {
+	private func makeSelectDocumentActivity(_ outlineProvider: DocumentContainer, _ document: Document) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: ActivityType.selectOutline.rawValue)
 
-		let title = L10n.editOutline(outline.title ?? "")
+		let title = L10n.editOutline(document.title ?? "")
 		activity.title = title
 		
-		activity.userInfo = [UserInfoKeys.outlineProviderID: outlineProvider.id.userInfo, UserInfoKeys.outlineID: outline.id.userInfo]
+		activity.userInfo = [UserInfoKeys.documentContainerID: outlineProvider.id.userInfo, UserInfoKeys.documentID: document.id.userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 		
 		let keywords = makeKeywords(title)
@@ -126,11 +126,11 @@ extension ActivityManager {
 		activity.isEligibleForSearch = true
 		activity.isEligibleForPrediction = true
 		
-		if outline.account?.type == .cloudKit {
+		if document.account?.type == .cloudKit {
 			activity.isEligibleForHandoff = true
 		}
 
-		let idString = outline.id.description
+		let idString = document.id.description
 		activity.persistentIdentifier = idString
 		
 		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeCompositeContent as String)

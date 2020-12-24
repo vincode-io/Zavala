@@ -40,11 +40,11 @@ extension SidebarViewController: UICollectionViewDropDelegate {
 			  let folderEntityID = sidebarItem.entityID,
 			  let folder = AccountManager.shared.findFolder(folderEntityID) else { return }
 		
-		if let outline = dragItem.localObject as? Outline {
-			outline.load()
-			outline.folder?.deleteOutline(outline)
-			folder.createOutline(outline)
-			outline.forceSave()
+		if let document = dragItem.localObject as? Document {
+			document.load()
+			document.folder?.deleteDocument(document)
+			folder.createDocument(document)
+			document.forceSave()
 		} else {
 			for dropItem in coordinator.items {
 				let provider = dropItem.dragItem.itemProvider

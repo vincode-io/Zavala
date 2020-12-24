@@ -8,33 +8,33 @@
 import Foundation
 import RSCore
 
-public protocol OutlineProvider {
+public protocol DocumentContainer {
 	var id: EntityID { get }
 	var name: String? { get }
 	var image: RSImage? { get }
 	
 	var isSmartProvider: Bool { get } 
-	var outlines: [Outline]? { get }
-	var sortedOutlines: [Outline] { get }
+	var outlines: [Document]? { get }
+	var sortedOutlines: [Document] { get }
 }
 
-public extension OutlineProvider {
+public extension DocumentContainer {
 	
 	var isSmartProvider: Bool {
 		return id.isSmartProvider
 	}
 
-	static func sortByUpdate(_ outlines: [Outline]) -> [Outline] {
+	static func sortByUpdate(_ outlines: [Document]) -> [Document] {
 		return outlines.sorted(by: { $0.updated ?? Date.distantPast > $1.updated ?? Date.distantPast })
 	}
 
-	static func sortByTitle(_ outlines: [Outline]) -> [Outline] {
+	static func sortByTitle(_ outlines: [Document]) -> [Document] {
 		return outlines.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
 	}
 
 }
 
-public struct LazyOutlineProvider: OutlineProvider {
+public struct LazyDocumentContainer: DocumentContainer {
 	
 	public var id: EntityID
 	
@@ -64,17 +64,17 @@ public struct LazyOutlineProvider: OutlineProvider {
 		}
 	}
 
-	public var outlines: [Outline]? {
+	public var outlines: [Document]? {
 		return outlineCallback()
 	}
 	
-	public var sortedOutlines: [Outline] {
+	public var sortedOutlines: [Document] {
 		return outlineCallback()
 	}
 	
-	private var outlineCallback: (() -> [Outline])
+	private var outlineCallback: (() -> [Document])
 	
-	init(id: EntityID, callback: @escaping (() -> [Outline])) {
+	init(id: EntityID, callback: @escaping (() -> [Document])) {
 		self.id = id
 		self.outlineCallback = callback
 	}

@@ -13,13 +13,13 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 	case recents
 	case account(Int)
 	case folder(Int, String) // Account, Folder
-	case outline(Int, String, String) // Account, Folder, Outline
+	case document(Int, String, String) // Account, Folder, Document
 
 	private enum CodingKeys: String, CodingKey {
 		case type
 		case accountID
 		case folderID
-		case outlineID
+		case documentID
 	}
 	
 	var isSmartProvider: Bool {
@@ -49,9 +49,9 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		}
 	}
 	
-	var isOutline: Bool {
+	var isDocument: Bool {
 		switch self {
-		case .outline(_, _, _):
+		case .document(_, _, _):
 			return true
 		default:
 			return false
@@ -64,7 +64,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return accountID
 		case .folder(let accountID, _):
 			return accountID
-		case .outline(let accountID, _, _):
+		case .document(let accountID, _, _):
 			return accountID
 		default:
 			fatalError()
@@ -75,17 +75,17 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		switch self {
 		case .folder(_, let folderID):
 			return folderID
-		case .outline(_, let folderID, _):
+		case .document(_, let folderID, _):
 			return folderID
 		default:
 			fatalError()
 		}
 	}
 	
-	var outlineUUID: String {
+	var documentUUID: String {
 		switch self {
-		case .outline(_, _, let outlineID):
-			return outlineID
+		case .document(_, _, let documentID):
+			return documentID
 		default:
 			fatalError()
 		}
@@ -103,8 +103,8 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return "account: \(id)"
 		case .folder(let accountID, let folderID):
 			return "folder: \(accountID)_\(folderID)"
-		case .outline(let accountID, let folderID, let outlineID):
-			return "outline: \(accountID)_\(folderID)_\(outlineID)"
+		case .document(let accountID, let folderID, let documentID):
+			return "outline: \(accountID)_\(folderID)_\(documentID)"
 		}
 	}
 	
@@ -129,8 +129,8 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case "outline":
 			let accountID = try container.decode(Int.self, forKey: .accountID)
 			let folderID = try container.decode(String.self, forKey: .folderID)
-			let outlineID = try container.decode(String.self, forKey: .outlineID)
-			self = .outline(accountID, folderID, outlineID)
+			let documentID = try container.decode(String.self, forKey: .documentID)
+			self = .document(accountID, folderID, documentID)
 		default:
 			fatalError()
 		}
@@ -156,8 +156,8 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case "outline":
 			guard let accountID = userInfo["accountID"] as? Int else { return nil }
 			guard let folderID = userInfo["folderID"] as? String else { return nil }
-			guard let outlineID = userInfo["outlineID"] as? String else { return nil }
-			self = .outline(accountID, folderID, outlineID)
+			guard let documentID = userInfo["documentID"] as? String else { return nil }
+			self = .document(accountID, folderID, documentID)
 		default:
 			return nil
 		}
@@ -180,11 +180,11 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			try container.encode("folder", forKey: .type)
 			try container.encode(accountID, forKey: .accountID)
 			try container.encode(folderID, forKey: .folderID)
-		case .outline(let accountID, let folderID, let outlineID):
+		case .document(let accountID, let folderID, let documentID):
 			try container.encode("outline", forKey: .type)
 			try container.encode(accountID, forKey: .accountID)
 			try container.encode(folderID, forKey: .folderID)
-			try container.encode(outlineID, forKey: .outlineID)
+			try container.encode(documentID, forKey: .documentID)
 		}
 	}
 	
@@ -207,12 +207,12 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 				"accountID": accountID,
 				"folderID": folderID
 			]
-		case .outline(let accountID, let folderID, let outlineID):
+		case .document(let accountID, let folderID, let documentID):
 			return [
 				"type": "outline",
 				"accountID": accountID,
 				"folderID": folderID,
-				"outlineID": outlineID
+				"documentID": documentID
 			]
 		}
 	}
