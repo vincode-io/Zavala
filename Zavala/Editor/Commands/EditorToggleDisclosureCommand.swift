@@ -17,9 +17,9 @@ final class EditorToggleDisclosureCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: Headline
+	var headline: TextRow
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: TextRow) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline

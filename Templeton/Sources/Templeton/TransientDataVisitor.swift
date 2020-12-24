@@ -10,14 +10,14 @@ import Foundation
 class TransientDataVisitor {
 	
 	let isFiltered: Bool
-	var shadowTable = [Headline]()
+	var shadowTable = [TextRow]()
 	var addingToShadowTable = true
 	
 	init(isFiltered: Bool) {
 		self.isFiltered = isFiltered
 	}
 	
-	func visitor(_ visited: Headline) {
+	func visitor(_ visited: TextRow) {
 
 		var addingToShadowTableSuspended = false
 		
@@ -45,7 +45,7 @@ class TransientDataVisitor {
 		}
 		
 		// Set all the Headline's children's parent and visit them
-		visited.headlines?.forEach {
+		visited.rows?.forEach {
 			$0.parent = visited
 			$0.visit(visitor: visitor)
 		}

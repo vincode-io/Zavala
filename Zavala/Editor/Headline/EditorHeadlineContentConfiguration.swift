@@ -10,7 +10,7 @@ import Templeton
 
 struct EditorHeadlineContentConfiguration: UIContentConfiguration, Hashable {
 
-	weak var headline: Headline? = nil
+	weak var headline: TextRow? = nil
 	weak var delegate: EditorHeadlineViewCellDelegate? = nil
 
 	var id: String
@@ -21,16 +21,16 @@ struct EditorHeadlineContentConfiguration: UIContentConfiguration, Hashable {
 	var isAncestorComplete: Bool
 	var attributedText: NSAttributedString
 	
-	init(headline: Headline, indentionLevel: Int, indentationWidth: CGFloat) {
+	init(headline: TextRow, indentionLevel: Int, indentationWidth: CGFloat) {
 		self.headline = headline
 		self.indentionLevel = indentionLevel
 		self.indentationWidth = indentationWidth
 		
 		self.id = headline.id
-		self.isChevronShowing = !(headline.headlines?.isEmpty ?? true)
+		self.isChevronShowing = !(headline.rows?.isEmpty ?? true)
 		self.isComplete = headline.isComplete ?? false
 		self.isAncestorComplete = headline.isAncestorComplete
-		self.attributedText = headline.attributedText ?? NSAttributedString(string: "")
+		self.attributedText = headline.topicAttributedText ?? NSAttributedString(string: "")
 	}
 	
 	func makeContentView() -> UIView & UIContentView {

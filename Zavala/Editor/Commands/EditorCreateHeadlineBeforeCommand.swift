@@ -17,18 +17,16 @@ final class EditorCreateHeadlineBeforeCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: Headline
-	var beforeHeadline: Headline
-	var attributedTexts: HeadlineTexts?
+	var headline: TextRow
+	var beforeHeadline: TextRow
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, beforeHeadline: Headline, attributedTexts: HeadlineTexts?) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, beforeHeadline: TextRow) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.headline = Headline()
+		self.headline = TextRow()
 		self.beforeHeadline = beforeHeadline
-		self.attributedTexts = attributedTexts
 		undoActionName = L10n.addRow
 		redoActionName = L10n.addRow
 	}

@@ -11,24 +11,24 @@ import Templeton
 protocol EditorHeadlineViewCellDelegate: class {
 	var editorHeadlineUndoManager: UndoManager? { get }
 	func editorHeadlineInvalidateLayout()
-	func editorHeadlineToggleDisclosure(headline: Headline)
-	func editorHeadlineMoveCursorTo(headline: Headline)
-	func editorHeadlineMoveCursorDown(headline: Headline)
-	func editorHeadlineTextChanged(headline: Headline, attributedTexts: HeadlineTexts, isInNotes: Bool, cursorPosition: Int)
-	func editorHeadlineDeleteHeadline(_ headline: Headline, attributedTexts: HeadlineTexts)
-	func editorHeadlineCreateHeadline(beforeHeadline: Headline, attributedTexts: HeadlineTexts?)
-	func editorHeadlineCreateHeadline(afterHeadline: Headline?, attributedTexts: HeadlineTexts?)
-	func editorHeadlineIndentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts)
-	func editorHeadlineOutdentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts)
-	func editorHeadlineSplitHeadline(_: Headline, attributedText: NSAttributedString, cursorPosition: Int)
-	func editorHeadlineCreateHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts)
-	func editorHeadlineDeleteHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts)
+	func editorHeadlineToggleDisclosure(headline: TextRow)
+	func editorHeadlineMoveCursorTo(headline: TextRow)
+	func editorHeadlineMoveCursorDown(headline: TextRow)
+	func editorHeadlineTextChanged(headline: TextRow, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int)
+	func editorHeadlineDeleteHeadline(_ headline: TextRow, textRowStrings: TextRowStrings)
+	func editorHeadlineCreateHeadline(beforeHeadline: TextRow)
+	func editorHeadlineCreateHeadline(afterHeadline: TextRow?, textRowStrings: TextRowStrings?)
+	func editorHeadlineIndentHeadline(_ headline: TextRow, textRowStrings: TextRowStrings)
+	func editorHeadlineOutdentHeadline(_ headline: TextRow, textRowStrings: TextRowStrings)
+	func editorHeadlineSplitHeadline(_: TextRow, topic: NSAttributedString, cursorPosition: Int)
+	func editorHeadlineCreateHeadlineNote(_ headline: TextRow, textRowStrings: TextRowStrings)
+	func editorHeadlineDeleteHeadlineNote(_ headline: TextRow, textRowStrings: TextRowStrings)
 	func editorHeadlineEditLink(_ link: String?, range: NSRange)
 }
 
 class EditorHeadlineViewCell: UICollectionViewListCell {
 
-	var headline: Headline? {
+	var headline: TextRow? {
 		didSet {
 			setNeedsUpdateConfiguration()
 		}
@@ -40,8 +40,8 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 		}
 	}
 	
-	var attributedTexts: HeadlineTexts? {
-		return (contentView as? EditorHeadlineContentView)?.attributedTexts
+	var textRowStrings: TextRowStrings? {
+		return (contentView as? EditorHeadlineContentView)?.textRowStrings
 	}
 	
 	var textView: EditorHeadlineTextView? {
@@ -106,7 +106,7 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 			placement = .trailing(displayed: .always, at: { _ in return 0 })
 		}
 
-		if headline.headlines?.isEmpty ?? true {
+		if headline.rows?.isEmpty ?? true {
 			var accessoryConfig = UICellAccessory.CustomViewConfiguration(customView: bullet, placement: placement)
 			accessoryConfig.tintColor = AppAssets.accessory
 			accessories = [.customView(configuration: accessoryConfig)]

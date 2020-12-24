@@ -17,17 +17,17 @@ final class EditorMoveHeadlineCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: Headline
-	var oldParent: HeadlineContainer?
+	var headline: TextRow
+	var oldParent: RowContainer?
 	var oldChildIndex: Int?
-	var toParent: HeadlineContainer
+	var toParent: RowContainer
 	var toChildIndex: Int
 	
 	init(undoManager: UndoManager,
 		 delegate: EditorOutlineCommandDelegate,
 		 outline: Outline,
-		 headline: Headline,
-		 toParent: HeadlineContainer,
+		 headline: TextRow,
+		 toParent: RowContainer,
 		 toChildIndex: Int) {
 		
 		self.undoManager = undoManager
@@ -40,7 +40,7 @@ final class EditorMoveHeadlineCommand: EditorOutlineCommand {
 		self.redoActionName = L10n.move
 
 		oldParent = headline.parent
-		oldChildIndex = oldParent?.headlines?.firstIndex(of: headline)
+		oldChildIndex = oldParent?.rows?.firstIndex(of: headline)
 	}
 	
 	func perform() {

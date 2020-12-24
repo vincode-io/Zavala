@@ -10,16 +10,16 @@ import Templeton
 
 protocol EditorHeadlineTextViewDelegate: class {
 	var editorHeadlineTextViewUndoManager: UndoManager? { get }
-	var editorHeadlineTextViewAttibutedTexts: HeadlineTexts { get }
+	var editorHeadlineTextViewTextRowStrings: TextRowStrings { get }
 	func invalidateLayout(_: EditorHeadlineTextView)
-	func textChanged(_: EditorHeadlineTextView, headline: Headline, isInNotes: Bool, cursorPosition: Int)
-	func deleteHeadline(_: EditorHeadlineTextView, headline: Headline)
-	func createHeadline(_: EditorHeadlineTextView, beforeHeadline: Headline)
-	func createHeadline(_: EditorHeadlineTextView, afterHeadline: Headline)
-	func indentHeadline(_: EditorHeadlineTextView, headline: Headline)
-	func outdentHeadline(_: EditorHeadlineTextView, headline: Headline)
-	func splitHeadline(_: EditorHeadlineTextView, headline: Headline, attributedText: NSAttributedString, cursorPosition: Int)
-	func createHeadlineNote(_: EditorHeadlineTextView, headline: Headline)
+	func textChanged(_: EditorHeadlineTextView, headline: TextRow, isInNotes: Bool, cursorPosition: Int)
+	func deleteHeadline(_: EditorHeadlineTextView, headline: TextRow)
+	func createHeadline(_: EditorHeadlineTextView, beforeHeadline: TextRow)
+	func createHeadline(_: EditorHeadlineTextView, afterHeadline: TextRow)
+	func indentHeadline(_: EditorHeadlineTextView, headline: TextRow)
+	func outdentHeadline(_: EditorHeadlineTextView, headline: TextRow)
+	func splitHeadline(_: EditorHeadlineTextView, headline: TextRow, topic: NSAttributedString, cursorPosition: Int)
+	func createHeadlineNote(_: EditorHeadlineTextView, headline: TextRow)
 	func editLink(_: EditorHeadlineTextView, _ link: String?, range: NSRange)
 }
 
@@ -46,8 +46,8 @@ class EditorHeadlineTextView: OutlineTextView {
 	
 	weak var editorDelegate: EditorHeadlineTextViewDelegate?
 	
-	override var attributedTexts: HeadlineTexts? {
-		return editorDelegate?.editorHeadlineTextViewAttibutedTexts
+	override var textRowStrings: TextRowStrings? {
+		return editorDelegate?.editorHeadlineTextViewTextRowStrings
 	}
 	
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
@@ -122,7 +122,7 @@ class EditorHeadlineTextView: OutlineTextView {
 		if cursorPosition == 0 {
 			editorDelegate?.createHeadline(self, beforeHeadline: headline)
 		} else {
-			editorDelegate?.splitHeadline(self, headline: headline, attributedText: attributedText, cursorPosition: cursorPosition)
+			editorDelegate?.splitHeadline(self, headline: headline, topic: attributedText, cursorPosition: cursorPosition)
 		}
 	}
 	

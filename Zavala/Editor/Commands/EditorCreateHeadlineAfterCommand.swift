@@ -17,17 +17,17 @@ final class EditorCreateHeadlineAfterCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: Headline?
-	var afterHeadline: Headline?
-	var attributedTexts: HeadlineTexts?
+	var headline: TextRow?
+	var afterHeadline: TextRow?
+	var textRowStrings: TextRowStrings?
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, afterHeadline: Headline?, attributedTexts: HeadlineTexts?) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, afterHeadline: TextRow?, textRowStrings: TextRowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
 		self.afterHeadline = afterHeadline
-		self.attributedTexts = attributedTexts
+		self.textRowStrings = textRowStrings
 		undoActionName = L10n.addRow
 		redoActionName = L10n.addRow
 	}
@@ -35,9 +35,9 @@ final class EditorCreateHeadlineAfterCommand: EditorOutlineCommand {
 	func perform() {
 		saveCursorCoordinates()
 		if headline == nil {
-			headline = Headline()
+			headline = TextRow()
 		}
-		changes = outline.createHeadline(headline: headline!, afterHeadline: afterHeadline, attributedTexts: attributedTexts)
+		changes = outline.createHeadline(headline: headline!, afterHeadline: afterHeadline, textRowStrings: textRowStrings)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}

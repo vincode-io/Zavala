@@ -17,12 +17,12 @@ final class EditorToggleCompleteHeadlineCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: Headline
-	var oldAttributedTexts: HeadlineTexts
-	var newAttributedTexts: HeadlineTexts
+	var headline: TextRow
+	var oldTextRowStrings: TextRowStrings
+	var newTextRowStrings: TextRowStrings
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedTexts: HeadlineTexts) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: TextRow, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -30,19 +30,19 @@ final class EditorToggleCompleteHeadlineCommand: EditorOutlineCommand {
 		self.undoActionName = L10n.complete
 		self.redoActionName = L10n.complete
 		
-		oldAttributedTexts = headline.attributedTexts
-		newAttributedTexts = attributedTexts
+		oldTextRowStrings = headline.textRowStrings
+		newTextRowStrings = textRowStrings
 	}
 	
 	func perform() {
 		saveCursorCoordinates()
-		changes = outline.toggleComplete(headline: headline, attributedTexts: newAttributedTexts)
+		changes = outline.toggleComplete(headline: headline, textRowStrings: newTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes!)
 		registerUndo()
 	}
 	
 	func undo() {
-		let changes = outline.toggleComplete(headline: headline, attributedTexts: oldAttributedTexts)
+		let changes = outline.toggleComplete(headline: headline, textRowStrings: oldTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()
 		restoreCursorPosition()

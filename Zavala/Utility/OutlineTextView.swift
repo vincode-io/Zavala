@@ -16,7 +16,7 @@ extension Selector {
 
 class OutlineTextView: UITextView {
 	
-	var headline: Headline?
+	var headline: TextRow?
 
 	var editorUndoManager: UndoManager? {
 		fatalError("editorUndoManager has not been implemented")
@@ -40,7 +40,7 @@ class OutlineTextView: UITextView {
 	
 	var lastCursorPosition = 0
 	
-	var attributedTexts: HeadlineTexts? {
+	var textRowStrings: TextRowStrings? {
 		fatalError("attibutedTexts has not been implemented")
 	}
 

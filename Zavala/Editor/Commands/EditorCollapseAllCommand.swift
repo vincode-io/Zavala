@@ -17,10 +17,10 @@ final class EditorCollapseAllCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var container: HeadlineContainer
-	var collapsedHeadlines: [Headline]?
+	var container: RowContainer
+	var collapsedHeadlines: [TextRow]?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, container: HeadlineContainer) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, container: RowContainer) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline

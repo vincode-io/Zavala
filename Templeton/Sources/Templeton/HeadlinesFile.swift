@@ -89,19 +89,19 @@ private extension HeadlinesFile {
 		}
 
 		let decoder = PropertyListDecoder()
-		let headlines: [Headline]
+		let headlines: [TextRow]
 		do {
-			headlines = try decoder.decode([Headline].self, from: headlinesData)
+			headlines = try decoder.decode([TextRow].self, from: headlinesData)
 		} catch {
 			os_log(.error, log: log, "Headlines read deserialization failed: %@.", error.localizedDescription)
 			return
 		}
 
-		outline?.headlines = headlines
+		outline?.rows = headlines
 	}
 	
 	func saveCallback() {
-		guard let headlines = outline?.headlines else { return }
+		guard let headlines = outline?.rows else { return }
 
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary

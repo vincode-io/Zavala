@@ -17,18 +17,18 @@ final class EditorSplitHeadlineCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var newHeadline: Headline?
-	var headline: Headline
-	var attributedText: NSAttributedString
+	var newHeadline: TextRow?
+	var headline: TextRow
+	var topic: NSAttributedString
 	var cursorPosition: Int
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: TextRow, topic: NSAttributedString, cursorPosition: Int) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
 		self.headline = headline
-		self.attributedText = attributedText
+		self.topic = topic
 		self.cursorPosition = cursorPosition
 		undoActionName = L10n.splitRow
 		redoActionName = L10n.splitRow
@@ -37,9 +37,9 @@ final class EditorSplitHeadlineCommand: EditorOutlineCommand {
 	func perform() {
 		saveCursorCoordinates()
 		if newHeadline == nil {
-			newHeadline = Headline()
+			newHeadline = TextRow()
 		}
-		changes = outline.splitHeadline(newHeadline: newHeadline!, headline: headline, attributedText: attributedText, cursorPosition: cursorPosition)
+		changes = outline.splitHeadline(newHeadline: newHeadline!, headline: headline, topic: topic, cursorPosition: cursorPosition)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}

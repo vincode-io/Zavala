@@ -17,13 +17,13 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: Headline
-	var oldParent: Headline?
+	var headline: TextRow
+	var oldParent: TextRow?
 	var oldChildIndex: Int?
-	var oldAttributedTexts: HeadlineTexts
-	var newAttributedTexts: HeadlineTexts
+	var oldTextRowStrings: TextRowStrings
+	var newTextRowStrings: TextRowStrings
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedTexts: HeadlineTexts) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: TextRow, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -32,28 +32,28 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 		self.redoActionName = L10n.outdent
 		
 		// This is going to move, so we save the parent and child index
-		if headline != headline.parent?.headlines?.last {
-			self.oldParent = headline.parent as? Headline
-			self.oldChildIndex = headline.parent?.headlines?.firstIndex(of: headline)
+		if headline != headline.parent?.rows?.last {
+			self.oldParent = headline.parent as? TextRow
+			self.oldChildIndex = headline.parent?.rows?.firstIndex(of: headline)
 		}
 		
-		self.oldAttributedTexts = headline.attributedTexts
-		self.newAttributedTexts = attributedTexts
+		self.oldTextRowStrings = headline.textRowStrings
+		self.newTextRowStrings = textRowStrings
 	}
 	
 	func perform() {
 		saveCursorCoordinates()
-		let changes = outline.outdentHeadline(headline: headline, attributedTexts: newAttributedTexts)
+		let changes = outline.outdentHeadline(headline: headline, textRowStrings: newTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	func undo() {
 		if let oldParent = oldParent, let oldChildIndex = oldChildIndex {
-			let changes = outline.moveHeadline(headline, attributedTexts: oldAttributedTexts, toParent: oldParent, childIndex: oldChildIndex)
+			let changes = outline.moveHeadline(headline, textRowStrings: oldTextRowStrings, toParent: oldParent, childIndex: oldChildIndex)
 			delegate?.applyChangesRestoringCursor(changes)
 		} else {
-			let changes = outline.indentHeadline(headline: headline, attributedTexts: oldAttributedTexts)
+			let changes = outline.indentHeadline(headline: headline, textRowStrings: oldTextRowStrings)
 			delegate?.applyChangesRestoringCursor(changes)
 		}
 		registerRedo()

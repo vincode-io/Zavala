@@ -17,17 +17,17 @@ final class EditorDeleteHeadlineCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: Headline
-	var attributedTexts: HeadlineTexts
-	var afterHeadline: Headline?
+	var headline: TextRow
+	var textRowStrings: TextRowStrings
+	var afterHeadline: TextRow?
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: Headline, attributedTexts: HeadlineTexts) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: TextRow, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
 		self.headline = headline
-		self.attributedTexts = attributedTexts
+		self.textRowStrings = textRowStrings
 		undoActionName = L10n.delete
 		redoActionName = L10n.delete
 	}
@@ -38,7 +38,7 @@ final class EditorDeleteHeadlineCommand: EditorOutlineCommand {
 			afterHeadline = outline.shadowTable?[headlineShadowTableIndex - 1]
 		}
 		
-		changes = outline.deleteHeadline(headline: headline, attributedTexts: attributedTexts)
+		changes = outline.deleteHeadline(headline: headline, textRowStrings: textRowStrings)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}

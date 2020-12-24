@@ -10,12 +10,12 @@ import Templeton
 
 protocol EditorHeadlineNoteTextViewDelegate: class {
 	var editorHeadlineNoteTextViewUndoManager: UndoManager? { get }
-	var editorHeadlineNoteTextViewAttibutedTexts: HeadlineTexts { get }
+	var editorHeadlineNoteTextViewAttibutedTexts: TextRowStrings { get }
 	func invalidateLayout(_ : EditorHeadlineNoteTextView)
-	func textChanged(_ : EditorHeadlineNoteTextView, headline: Headline, isInNotes: Bool, cursorPosition: Int)
-	func deleteHeadlineNote(_ : EditorHeadlineNoteTextView, headline: Headline)
-	func moveCursorTo(_ : EditorHeadlineNoteTextView, headline: Headline)
-	func moveCursorDown(_ : EditorHeadlineNoteTextView, headline: Headline)
+	func textChanged(_ : EditorHeadlineNoteTextView, headline: TextRow, isInNotes: Bool, cursorPosition: Int)
+	func deleteHeadlineNote(_ : EditorHeadlineNoteTextView, headline: TextRow)
+	func moveCursorTo(_ : EditorHeadlineNoteTextView, headline: TextRow)
+	func moveCursorDown(_ : EditorHeadlineNoteTextView, headline: TextRow)
 	func editLink(_: EditorHeadlineNoteTextView, _ link: String?, range: NSRange)
 }
 
@@ -42,7 +42,7 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 	
 	weak var editorDelegate: EditorHeadlineNoteTextViewDelegate?
 	
-	override var attributedTexts: HeadlineTexts? {
+	override var textRowStrings: TextRowStrings? {
 		return editorDelegate?.editorHeadlineNoteTextViewAttibutedTexts
 	}
 	

@@ -11,7 +11,7 @@ public extension Notification.Name {
 	static let OutlineBodyDidChange = Notification.Name(rawValue: "OutlineBodyDidChange")
 }
 
-public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable {
+public final class Outline: RowContainer, Identifiable, Equatable, Codable {
 	
 	public var id: EntityID
 	public var title: String? {
@@ -68,16 +68,16 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		}
 	}
 
-	public var headlines: [Headline]? {
+	public var rows: [TextRow]? {
 		didSet {
 			headlineDictionaryNeedUpdate = true
 		}
 	}
 	
-	public var shadowTable: [Headline]?
+	public var shadowTable: [TextRow]?
 	
 	public var isEmpty: Bool {
-		return (title == nil || title?.isEmpty ?? true) && (headlines == nil || headlines?.isEmpty ?? true)
+		return (title == nil || title?.isEmpty ?? true) && (rows == nil || rows?.isEmpty ?? true)
 	}
 	
 	public var account: Account? {
@@ -94,15 +94,15 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			var currentRow = 0
 			var expandedRows = [String]()
 			
-			func expandedRowVisitor(_ visited: Headline) {
+			func expandedRowVisitor(_ visited: TextRow) {
 				if visited.isExpanded ?? true {
 					expandedRows.append(String(currentRow))
 				}
 				currentRow = currentRow + 1
-				visited.headlines?.forEach { $0.visit(visitor: expandedRowVisitor) }
+				visited.rows?.forEach { $0.visit(visitor: expandedRowVisitor) }
 			}
 
-			headlines?.forEach { $0.visit(visitor: expandedRowVisitor(_:)) }
+			rows?.forEach { $0.visit(visitor: expandedRowVisitor(_:)) }
 			
 			return expandedRows.joined(separator: ",")
 		}
@@ -114,13 +114,13 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			
 			var currentRow = 0
 			
-			func expandedRowVisitor(_ visited: Headline) {
+			func expandedRowVisitor(_ visited: TextRow) {
 				visited.isExpanded = expandedRows.contains(currentRow)
 				currentRow = currentRow + 1
-				visited.headlines?.forEach { $0.visit(visitor: expandedRowVisitor) }
+				visited.rows?.forEach { $0.visit(visitor: expandedRowVisitor) }
 			}
 
-			headlines?.forEach { $0.visit(visitor: expandedRowVisitor(_:)) }
+			rows?.forEach { $0.visit(visitor: expandedRowVisitor(_:)) }
 		}
 	}
 	
@@ -165,8 +165,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	private var headlinesFile: HeadlinesFile?
 	
 	private var headlineDictionaryNeedUpdate = true
-	private var _idToHeadlineDictionary = [String: Headline]()
-	private var idToHeadlineDictionary: [String: Headline] {
+	private var _idToHeadlineDictionary = [String: TextRow]()
+	private var idToHeadlineDictionary: [String: TextRow] {
 		if headlineDictionaryNeedUpdate {
 			rebuildHeadlineDictionary()
 		}
@@ -181,19 +181,19 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		headlinesFile = HeadlinesFile(outline: self)
 	}
 
-	public func findHeadline(id: String) -> Headline? {
+	public func findHeadline(id: String) -> TextRow? {
 		return idToHeadlineDictionary[id]
 	}
 	
 	public func markdown(indentLevel: Int = 0) -> String {
 		var returnToSuspend = false
-		if headlines == nil {
+		if rows == nil {
 			returnToSuspend = true
 			load()
 		}
 		
 		var md = "# \(title ?? "")\n\n"
-		headlines?.forEach { md.append($0.markdown(indentLevel: 0)) }
+		rows?.forEach { md.append($0.markdown(indentLevel: 0)) }
 		
 		if returnToSuspend {
 			suspend()
@@ -204,7 +204,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	
 	public func opml() -> String {
 		var returnToSuspend = false
-		if headlines == nil {
+		if rows == nil {
 			returnToSuspend = true
 			load()
 		}
@@ -235,7 +235,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		}
 		opml.append("</head>\n")
 		opml.append("<body>\n")
-		headlines?.forEach { opml.append($0.opml()) }
+		rows?.forEach { opml.append($0.opml()) }
 		opml.append("</body>\n")
 		opml.append("</opml>\n")
 
@@ -263,8 +263,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		documentTitleDidChange()
 	}
 	
-	public func createNote(headline: Headline, attributedTexts: HeadlineTexts) -> ShadowTableChanges {
-		headline.attributedTexts = attributedTexts
+	public func createNote(headline: TextRow, textRowStrings: TextRowStrings) -> ShadowTableChanges {
+		headline.textRowStrings = textRowStrings
 		
 		if headline.noteAttributedText == nil {
 			headline.noteAttributedText = NSAttributedString()
@@ -276,8 +276,8 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return ShadowTableChanges(reloads: [shadowTableIndex])
 	}
 	
-	public func deleteNote(headline: Headline, attributedTexts: HeadlineTexts) -> ShadowTableChanges {
-		headline.attributedTexts = attributedTexts
+	public func deleteNote(headline: TextRow, textRowStrings: TextRowStrings) -> ShadowTableChanges {
+		headline.textRowStrings = textRowStrings
 		headline.noteAttributedText = nil
 		
 		outlineBodyDidChange()
@@ -286,28 +286,28 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return ShadowTableChanges(reloads: [shadowTableIndex])
 	}
 	
-	public func deleteHeadline(headline: Headline, attributedTexts: HeadlineTexts? = nil) -> ShadowTableChanges {
-		if let texts = attributedTexts {
-			headline.attributedTexts = texts
+	public func deleteHeadline(headline: TextRow, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
+		if let texts = textRowStrings {
+			headline.textRowStrings = texts
 		}
-		headline.parent?.headlines?.removeFirst(object: headline)
+		headline.parent?.rows?.removeFirst(object: headline)
 		
 		outlineBodyDidChange()
 		
 		guard let headlineShadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
 		var deletes = [headlineShadowTableIndex]
 		
-		func deleteVisitor(_ visited: Headline) {
+		func deleteVisitor(_ visited: TextRow) {
 			if let index = visited.shadowTableIndex {
 				deletes.append(index)
 			}
 			if visited.isExpanded ?? true {
-				visited.headlines?.forEach { $0.visit(visitor: deleteVisitor) }
+				visited.rows?.forEach { $0.visit(visitor: deleteVisitor) }
 			}
 		}
 
 		if headline.isExpanded ?? true {
-			headline.headlines?.forEach { $0.visit(visitor: deleteVisitor(_:)) }
+			headline.rows?.forEach { $0.visit(visitor: deleteVisitor(_:)) }
 		}
 
 		for index in deletes.reversed() {
@@ -324,32 +324,32 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			
 	}
 	
-	public func joinHeadline(topHeadline: Headline, bottomHeadline: Headline) -> ShadowTableChanges {
-		guard let topText = topHeadline.attributedText,
+	public func joinHeadline(topHeadline: TextRow, bottomHeadline: TextRow) -> ShadowTableChanges {
+		guard let topText = topHeadline.topicAttributedText,
 			  let topShadowTableIndex = topHeadline.shadowTableIndex,
-			  let bottomText = bottomHeadline.attributedText else { return ShadowTableChanges() }
+			  let bottomText = bottomHeadline.topicAttributedText else { return ShadowTableChanges() }
 		
 		let mutableText = NSMutableAttributedString(attributedString: topText)
 		mutableText.append(bottomText)
-		topHeadline.attributedText = mutableText
+		topHeadline.topicAttributedText = mutableText
 		
 		var changes = deleteHeadline(headline: bottomHeadline)
 		changes.append(ShadowTableChanges(reloads: Set([topShadowTableIndex])))
 		return changes
 	}
 	
-	public func createHeadline(headline: Headline, beforeHeadline: Headline, attributedTexts: HeadlineTexts? = nil) -> ShadowTableChanges {
-		if let texts = attributedTexts {
-			beforeHeadline.attributedTexts = texts
+	public func createHeadline(headline: TextRow, beforeHeadline: TextRow, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
+		if let texts = textRowStrings {
+			beforeHeadline.textRowStrings = texts
 		}
 
 		guard let parent = beforeHeadline.parent,
-			  let index = parent.headlines?.firstIndex(of: beforeHeadline),
+			  let index = parent.rows?.firstIndex(of: beforeHeadline),
 			  let shadowTableIndex = beforeHeadline.shadowTableIndex else {
 			return ShadowTableChanges()
 		}
 		
-		parent.headlines?.insert(headline, at: index)
+		parent.rows?.insert(headline, at: index)
 		headline.parent = parent
 		
 		outlineBodyDidChange()
@@ -359,48 +359,48 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return ShadowTableChanges(inserts: [shadowTableIndex])
 	}
 	
-	public func createHeadline(headline: Headline, afterHeadline: Headline? = nil, attributedTexts: HeadlineTexts? = nil) -> ShadowTableChanges {
-		if let texts = attributedTexts {
-			afterHeadline?.attributedTexts = texts
+	public func createHeadline(headline: TextRow, afterHeadline: TextRow? = nil, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
+		if let texts = textRowStrings {
+			afterHeadline?.textRowStrings = texts
 		}
 
-		if let parent = headline.parent, parent as? Headline == afterHeadline {
-			parent.headlines?.insert(headline, at: 0)
+		if let parent = headline.parent, parent as? TextRow == afterHeadline {
+			parent.rows?.insert(headline, at: 0)
 		} else if let parent = headline.parent {
-			var headlines = parent.headlines ?? [Headline]()
+			var headlines = parent.rows ?? [TextRow]()
 			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? headlines.count - 1
 			headlines.insert(headline, at: insertIndex + 1)
-			parent.headlines = headlines
-		} else if afterHeadline?.isExpanded ?? true && !(afterHeadline?.headlines?.isEmpty ?? true) {
-			afterHeadline!.headlines!.insert(headline, at: 0)
+			parent.rows = headlines
+		} else if afterHeadline?.isExpanded ?? true && !(afterHeadline?.rows?.isEmpty ?? true) {
+			afterHeadline!.rows!.insert(headline, at: 0)
 			headline.parent = afterHeadline
 		} else if let parent = afterHeadline?.parent {
-			var headlines = parent.headlines ?? [Headline]()
+			var headlines = parent.rows ?? [TextRow]()
 			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? -1
 			headlines.insert(headline, at: insertIndex + 1)
 			headline.parent = afterHeadline?.parent
-			parent.headlines = headlines
+			parent.rows = headlines
 		} else {
-			var headlines = self.headlines ?? [Headline]()
+			var headlines = self.rows ?? [TextRow]()
 			let insertIndex = headlines.firstIndex(where: { $0 == afterHeadline}) ?? -1
 			headlines.insert(headline, at: insertIndex + 1)
 			headline.parent = self
-			self.headlines = headlines
+			self.rows = headlines
 		}
 		
 		outlineBodyDidChange()
 
 		var headlines = [headline]
 		
-		func insertVisitor(_ visited: Headline) {
+		func insertVisitor(_ visited: TextRow) {
 			headlines.append(visited)
 			if visited.isExpanded ?? true {
-				visited.headlines?.forEach { $0.visit(visitor: insertVisitor) }
+				visited.rows?.forEach { $0.visit(visitor: insertVisitor) }
 			}
 		}
 
 		if headline.isExpanded ?? true {
-			headline.headlines?.forEach { $0.visit(visitor: insertVisitor(_:)) }
+			headline.rows?.forEach { $0.visit(visitor: insertVisitor(_:)) }
 		}
 		
 		let afterShadowTableIndex = afterHeadline?.shadowTableIndex ?? -1
@@ -419,14 +419,14 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return ShadowTableChanges(inserts: inserts)
 	}
 	
-	public func splitHeadline(newHeadline: Headline, headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) -> ShadowTableChanges {
-		let newHeadlineRange = NSRange(location: cursorPosition, length: attributedText.length - cursorPosition)
-		let newHeadlineText = attributedText.attributedSubstring(from: newHeadlineRange)
-		newHeadline.attributedText = newHeadlineText
+	public func splitHeadline(newHeadline: TextRow, headline: TextRow, topic: NSAttributedString, cursorPosition: Int) -> ShadowTableChanges {
+		let newTopicRange = NSRange(location: cursorPosition, length: topic.length - cursorPosition)
+		let newTopicText = topic.attributedSubstring(from: newTopicRange)
+		newHeadline.topicAttributedText = newTopicText
 		
 		let headlineRange = NSRange(location: 0, length: cursorPosition)
-		let headlineText = attributedText.attributedSubstring(from: headlineRange)
-		headline.attributedText = headlineText
+		let headlineText = topic.attributedSubstring(from: headlineRange)
+		headline.topicAttributedText = headlineText
 
 		var changes = createHeadline(headline: newHeadline, afterHeadline: headline)
 		if let headlineShadowTableIndex = headline.shadowTableIndex {
@@ -435,14 +435,14 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return changes
 	}
 
-	public func updateHeadline(headline: Headline, attributedTexts: HeadlineTexts) -> ShadowTableChanges {
-		headline.attributedTexts = attributedTexts
+	public func updateHeadline(headline: TextRow, textRowStrings: TextRowStrings) -> ShadowTableChanges {
+		headline.textRowStrings = textRowStrings
 		outlineBodyDidChange()
 		guard let shadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
 		return ShadowTableChanges(reloads: [shadowTableIndex])
 	}
 	
-	public func toggleDisclosure(headline: Headline) -> ShadowTableChanges {
+	public func toggleDisclosure(headline: TextRow) -> ShadowTableChanges {
 		let changes: ShadowTableChanges
 		if headline.isExpanded ?? true {
 			changes = collapseHeadline(headline: headline)
@@ -454,15 +454,15 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return changes
 	}
 	
-	public func isExpandAllUnavailable(container: HeadlineContainer) -> Bool {
-		if let headline = container as? Headline, headline.isExpandable {
+	public func isExpandAllUnavailable(container: RowContainer) -> Bool {
+		if let headline = container as? TextRow, headline.isExpandable {
 			return false
 		}
 
 		var unavailable = true
 		
-		func expandedRowVisitor(_ visited: Headline) {
-			for headline in visited.headlines ?? [Headline]() {
+		func expandedRowVisitor(_ visited: TextRow) {
+			for headline in visited.rows ?? [TextRow]() {
 				unavailable = !headline.isExpandable
 				if !unavailable {
 					break
@@ -474,7 +474,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			}
 		}
 
-		for headline in container.headlines ?? [Headline]() {
+		for headline in container.rows ?? [TextRow]() {
 			unavailable = !headline.isExpandable
 			if !unavailable {
 				break
@@ -488,23 +488,23 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return unavailable
 	}
 	
-	public func expandAll(container: HeadlineContainer) -> ([Headline], ShadowTableChanges) {
-		var expanded = [Headline]()
+	public func expandAll(container: RowContainer) -> ([TextRow], ShadowTableChanges) {
+		var expanded = [TextRow]()
 		
-		if let headline = container as? Headline, headline.isExpandable {
+		if let headline = container as? TextRow, headline.isExpandable {
 			headline.isExpanded = true
 			expanded.append(headline)
 		}
 		
-		func expandVisitor(_ visited: Headline) {
+		func expandVisitor(_ visited: TextRow) {
 			if visited.isExpandable {
 				visited.isExpanded = true
 				expanded.append(visited)
 			}
-			visited.headlines?.forEach { $0.visit(visitor: expandVisitor) }
+			visited.rows?.forEach { $0.visit(visitor: expandVisitor) }
 		}
 
-		container.headlines?.forEach { $0.visit(visitor: expandVisitor(_:)) }
+		container.rows?.forEach { $0.visit(visitor: expandVisitor(_:)) }
 		
 		outlineBodyDidChange()
 
@@ -516,19 +516,19 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return (expanded, changes)
 	}
 
-	public func expand(headlines: [Headline]) -> ShadowTableChanges {
+	public func expand(headlines: [TextRow]) -> ShadowTableChanges {
 		expandCollapse(headlines: headlines, isExpanded: true)
 	}
 	
-	public func isCollapseAllUnavailable(container: HeadlineContainer) -> Bool {
-		if let headline = container as? Headline, headline.isCollapsable {
+	public func isCollapseAllUnavailable(container: RowContainer) -> Bool {
+		if let headline = container as? TextRow, headline.isCollapsable {
 			return false
 		}
 		
 		var unavailable = true
 		
-		func collapsedRowVisitor(_ visited: Headline) {
-			for headline in visited.headlines ?? [Headline]() {
+		func collapsedRowVisitor(_ visited: TextRow) {
+			for headline in visited.rows ?? [TextRow]() {
 				unavailable = !headline.isCollapsable
 				if !unavailable {
 					break
@@ -540,7 +540,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			}
 		}
 
-		for headline in container.headlines ?? [Headline]() {
+		for headline in container.rows ?? [TextRow]() {
 			unavailable = !headline.isCollapsable
 			if !unavailable {
 				break
@@ -554,30 +554,30 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return unavailable
 	}
 	
-	public func collapseAll(container: HeadlineContainer) -> ([Headline], ShadowTableChanges) {
-		var collapsed = [Headline]()
+	public func collapseAll(container: RowContainer) -> ([TextRow], ShadowTableChanges) {
+		var collapsed = [TextRow]()
 		
-		if let headline = container as? Headline, headline.isCollapsable {
+		if let headline = container as? TextRow, headline.isCollapsable {
 			headline.isExpanded = false
 			collapsed.append(headline)
 		}
 		
-		func collapseVisitor(_ visited: Headline) {
+		func collapseVisitor(_ visited: TextRow) {
 			if visited.isCollapsable {
 				visited.isExpanded = false
 				collapsed.append(visited)
 			}
-			visited.headlines?.forEach { $0.visit(visitor: collapseVisitor) }
+			visited.rows?.forEach { $0.visit(visitor: collapseVisitor) }
 		}
 
-		var reloads: [Headline]
-		if let headline = container as? Headline {
+		var reloads: [TextRow]
+		if let headline = container as? TextRow {
 			reloads = [headline]
 		} else {
-			reloads = [Headline]()
+			reloads = [TextRow]()
 		}
 		
-		container.headlines?.forEach {
+		container.rows?.forEach {
 			reloads.append($0)
 			$0.visit(visitor: collapseVisitor(_:))
 		}
@@ -592,12 +592,12 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return (collapsed, changes)
 	}
 
-	public func collapse(headlines: [Headline]) -> ShadowTableChanges {
+	public func collapse(headlines: [TextRow]) -> ShadowTableChanges {
 		expandCollapse(headlines: headlines, isExpanded: false)
 	}
 	
-	public func toggleComplete(headline: Headline, attributedTexts: HeadlineTexts) -> ShadowTableChanges {
-		headline.attributedTexts = attributedTexts
+	public func toggleComplete(headline: TextRow, textRowStrings: TextRowStrings) -> ShadowTableChanges {
+		headline.textRowStrings = textRowStrings
 		headline.isComplete = !(headline.isComplete ?? false)
 		outlineBodyDidChange()
 		
@@ -608,44 +608,44 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		guard let shadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
 		var reloads = Set([shadowTableIndex])
 		
-		func reloadVisitor(_ visited: Headline) {
+		func reloadVisitor(_ visited: TextRow) {
 			if let index = visited.shadowTableIndex {
 				reloads.insert(index)
 			}
 			if visited.isExpanded ?? true {
-				visited.headlines?.forEach { $0.visit(visitor: reloadVisitor) }
+				visited.rows?.forEach { $0.visit(visitor: reloadVisitor) }
 			}
 		}
 
 		if headline.isExpanded ?? true {
-			headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+			headline.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 		}
 		
 		return ShadowTableChanges(reloads: reloads)
 	}
 
-	public func isIndentHeadlineUnavailable(headline: Headline) -> Bool {
-		let container: HeadlineContainer
+	public func isIndentHeadlineUnavailable(headline: TextRow) -> Bool {
+		let container: RowContainer
 		if let oldParentHeadline = headline.parent {
 			container = oldParentHeadline
 		} else {
 			container = self
 		}
 		
-		if let headlineIndex = container.headlines?.firstIndex(of: headline), headlineIndex > 0 {
+		if let headlineIndex = container.rows?.firstIndex(of: headline), headlineIndex > 0 {
 			return false
 		}
 		
 		return true
 	}
 	
-	public func indentHeadline(headline: Headline, attributedTexts: HeadlineTexts) -> ShadowTableChanges {
-		headline.attributedTexts = attributedTexts
+	public func indentHeadline(headline: TextRow, textRowStrings: TextRowStrings) -> ShadowTableChanges {
+		headline.textRowStrings = textRowStrings
 		
 		guard let container = headline.parent,
-			  let headlineIndex = container.headlines?.firstIndex(of: headline),
+			  let headlineIndex = container.rows?.firstIndex(of: headline),
 			  headlineIndex > 0,
-			  let newParentHeadline = container.headlines?[headlineIndex - 1] else { return ShadowTableChanges() }
+			  let newParentHeadline = container.rows?[headlineIndex - 1] else { return ShadowTableChanges() }
 
 		var expandChange = expandHeadline(headline: newParentHeadline)
 		
@@ -655,11 +655,11 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		guard let headlineShadowTableIndex = headline.shadowTableIndex,
 			  let newParentHeadlineShadowTableIndex = newParentHeadline.shadowTableIndex else { return expandChange }
 
-		var siblingHeadlines = newParentHeadline.headlines ?? [Headline]()
+		var siblingHeadlines = newParentHeadline.rows ?? [TextRow]()
 		headline.parent = newParentHeadline
 		siblingHeadlines.append(headline)
-		newParentHeadline.headlines = siblingHeadlines
-		container.headlines?.removeFirst(object: headline)
+		newParentHeadline.rows = siblingHeadlines
+		container.rows?.removeFirst(object: headline)
 
 		newParentHeadline.isExpanded = true
 		outlineBodyDidChange()
@@ -668,17 +668,17 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		reloads.insert(newParentHeadlineShadowTableIndex)
 		reloads.insert(headlineShadowTableIndex)
 
-		func reloadVisitor(_ visited: Headline) {
+		func reloadVisitor(_ visited: TextRow) {
 			if let index = visited.shadowTableIndex {
 				reloads.insert(index)
 			}
 			if visited.isExpanded ?? true {
-				visited.headlines?.forEach { $0.visit(visitor: reloadVisitor) }
+				visited.rows?.forEach { $0.visit(visitor: reloadVisitor) }
 			}
 		}
 
 		if headline.isExpanded ?? true {
-			headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+			headline.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 		}
 
 		expandChange.append(ShadowTableChanges(reloads: reloads))
@@ -686,31 +686,31 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 
 	}
 	
-	public func isOutdentHeadlineUnavailable(headline: Headline) -> Bool {
+	public func isOutdentHeadlineUnavailable(headline: TextRow) -> Bool {
 		return headline.indentLevel == 0
 	}
 		
-	public func outdentHeadline(headline: Headline, attributedTexts: HeadlineTexts) -> ShadowTableChanges {
-		headline.attributedTexts = attributedTexts
+	public func outdentHeadline(headline: TextRow, textRowStrings: TextRowStrings) -> ShadowTableChanges {
+		headline.textRowStrings = textRowStrings
 
-		guard let oldParent = headline.parent as? Headline,
-			  let oldParentHeadlines = oldParent.headlines,
+		guard let oldParent = headline.parent as? TextRow,
+			  let oldParentHeadlines = oldParent.rows,
 			  let oldParentShadowTableIndex = oldParent.shadowTableIndex,
 			  let originalHeadlineShadowTableIndex = headline.shadowTableIndex else { return ShadowTableChanges() }
 		
 		guard let oldHeadlineIndex = oldParentHeadlines.firstIndex(of: headline) else { return ShadowTableChanges() }
-		var siblingsToMove = [Headline]()
+		var siblingsToMove = [TextRow]()
 		for i in (oldHeadlineIndex + 1)..<oldParentHeadlines.count {
 			siblingsToMove.append(oldParentHeadlines[i])
 		}
 
-		oldParent.headlines?.removeFirst(object: headline)
+		oldParent.rows?.removeFirst(object: headline)
 
-		if let newParent = oldParent.parent, let oldParentIndex = newParent.headlines?.firstIndex(of: oldParent) {
-			newParent.headlines?.insert(headline, at: oldParentIndex + 1)
+		if let newParent = oldParent.parent, let oldParentIndex = newParent.rows?.firstIndex(of: oldParent) {
+			newParent.rows?.insert(headline, at: oldParentIndex + 1)
 		} else {
-			if let oldParentIndex = headlines?.firstIndex(of: oldParent) {
-				headlines?.insert(headline, at: oldParentIndex + 1)
+			if let oldParentIndex = rows?.firstIndex(of: oldParent) {
+				rows?.insert(headline, at: oldParentIndex + 1)
 			}
 		}
 		headline.parent = oldParent.parent
@@ -724,23 +724,23 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		if siblingsToMove.isEmpty {
 			reloads.insert(originalHeadlineShadowTableIndex)
 			
-			func reloadVisitor(_ visited: Headline) {
+			func reloadVisitor(_ visited: TextRow) {
 				if let index = visited.shadowTableIndex {
 					reloads.insert(index)
 				}
 				if visited.isExpanded ?? true {
-					visited.headlines?.forEach { $0.visit(visitor: reloadVisitor) }
+					visited.rows?.forEach { $0.visit(visitor: reloadVisitor) }
 				}
 			}
 			
 			if headline.isExpanded ?? true {
-				headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+				headline.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 			}
 		} else {
 			
-			func shadowTableRemoveVisitor(_ visited: Headline) {
+			func shadowTableRemoveVisitor(_ visited: TextRow) {
 				if visited.isExpanded ?? true {
-					visited.headlines?.reversed().forEach {	$0.visit(visitor: shadowTableRemoveVisitor)	}
+					visited.rows?.reversed().forEach {	$0.visit(visitor: shadowTableRemoveVisitor)	}
 				}
 				if let visitedShadowTableIndex = visited.shadowTableIndex {
 					shadowTable?.remove(at: visitedShadowTableIndex)
@@ -748,17 +748,17 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			}
 
 			if headline.isExpanded ?? true {
-				headline.headlines?.reversed().forEach { $0.visit(visitor: shadowTableRemoveVisitor(_:)) }
+				headline.rows?.reversed().forEach { $0.visit(visitor: shadowTableRemoveVisitor(_:)) }
 			}
 			shadowTable?.remove(at: originalHeadlineShadowTableIndex)
 
-			func movingUpVisitor(_ visited: Headline) {
+			func movingUpVisitor(_ visited: TextRow) {
 				if let visitedShadowTableIndex = visited.shadowTableIndex {
 					moves.insert(ShadowTableChanges.Move(visitedShadowTableIndex, workingShadowTableIndex))
 					workingShadowTableIndex = workingShadowTableIndex + 1
 				}
 				if visited.isExpanded ?? true {
-					visited.headlines?.forEach { $0.visit(visitor: movingUpVisitor)	}
+					visited.rows?.forEach { $0.visit(visitor: movingUpVisitor)	}
 				}
 			}
 
@@ -767,7 +767,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 					moves.insert(ShadowTableChanges.Move(siblineShadowTableIndex, workingShadowTableIndex))
 					workingShadowTableIndex = workingShadowTableIndex + 1
 					if sibling.isExpanded ?? true {
-						sibling.headlines?.forEach { $0.visit(visitor: movingUpVisitor(_:)) }
+						sibling.rows?.forEach { $0.visit(visitor: movingUpVisitor(_:)) }
 					}
 				}
 			}
@@ -776,7 +776,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			reloads.insert(workingShadowTableIndex)
 			shadowTable?.insert(headline, at: workingShadowTableIndex)
 
-			func shadowTableInsertVisitor(_ visited: Headline) {
+			func shadowTableInsertVisitor(_ visited: TextRow) {
 				if let visitedShadowTableIndex = visited.shadowTableIndex {
 					workingShadowTableIndex = workingShadowTableIndex + 1
 					shadowTable?.insert(visited, at: workingShadowTableIndex)
@@ -784,12 +784,12 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 					reloads.insert(workingShadowTableIndex)
 				}
 				if visited.isExpanded ?? true {
-					visited.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor) }
+					visited.rows?.forEach { $0.visit(visitor: shadowTableInsertVisitor) }
 				}
 			}
 
 			if headline.isExpanded ?? true {
-				headline.headlines?.forEach { $0.visit(visitor: shadowTableInsertVisitor(_:)) }
+				headline.rows?.forEach { $0.visit(visitor: shadowTableInsertVisitor(_:)) }
 			}
 		}
 		
@@ -797,17 +797,17 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 		return ShadowTableChanges(moves: moves, reloads: reloads)
 	}
 	
-	public func moveHeadline(_ headline: Headline, attributedTexts: HeadlineTexts? = nil, toParent: HeadlineContainer, childIndex: Int) -> ShadowTableChanges {
-		if let texts = attributedTexts {
-			headline.attributedTexts = texts
+	public func moveHeadline(_ headline: TextRow, textRowStrings: TextRowStrings? = nil, toParent: RowContainer, childIndex: Int) -> ShadowTableChanges {
+		if let texts = textRowStrings {
+			headline.textRowStrings = texts
 		}
 
 		// Move the headline in the tree
-		headline.parent?.headlines?.removeFirst(object: headline)
-		if toParent.headlines == nil {
-			toParent.headlines = [headline]
+		headline.parent?.rows?.removeFirst(object: headline)
+		if toParent.rows == nil {
+			toParent.rows = [headline]
 		} else {
-			toParent.headlines!.insert(headline, at: childIndex)
+			toParent.rows!.insert(headline, at: childIndex)
 		}
 
 		outlineBodyDidChange()
@@ -823,17 +823,17 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			reloads.append(shadowTableIndex - 1)
 		}
 		
-		func reloadVisitor(_ visited: Headline) {
+		func reloadVisitor(_ visited: TextRow) {
 			if let index = visited.shadowTableIndex {
 				reloads.append(index)
 			}
 			if visited.isExpanded ?? true {
-				visited.headlines?.forEach { $0.visit(visitor: reloadVisitor) }
+				visited.rows?.forEach { $0.visit(visitor: reloadVisitor) }
 			}
 		}
 
 		if headline.isExpanded ?? true {
-			headline.headlines?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+			headline.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 		}
 
 		changes.append(ShadowTableChanges(reloads: Set(reloads)))
@@ -870,9 +870,9 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public func suspend() {
 		headlinesFile?.save()
 		headlinesFile = nil
-		headlines = nil
+		rows = nil
 		shadowTable = nil
-		_idToHeadlineDictionary = [String: Headline]()
+		_idToHeadlineDictionary = [String: TextRow]()
 	}
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
@@ -887,13 +887,13 @@ extension Outline: CustomDebugStringConvertible {
 	
 	public var debugDescription: String {
 		var output = ""
-		for headline in headlines ?? [Headline]() {
+		for headline in rows ?? [TextRow]() {
 			output.append(dumpHeadline(level: 0, headline: headline))
 		}
 		return output
 	}
 	
-	private func dumpHeadline(level: Int, headline: Headline) -> String {
+	private func dumpHeadline(level: Int, headline: TextRow) -> String {
 		var output = ""
 		for _ in 0..<level {
 			output.append(" -- ")
@@ -901,7 +901,7 @@ extension Outline: CustomDebugStringConvertible {
 		output.append(headline.debugDescription)
 		output.append("\n")
 		
-		for child in headline.headlines ?? [Headline]() {
+		for child in headline.rows ?? [TextRow]() {
 			output.append(dumpHeadline(level: level + 1, headline: child))
 		}
 		
@@ -934,7 +934,7 @@ extension Outline {
 		NotificationCenter.default.post(name: .DocumentDidDelete, object: Document.outline(self), userInfo: nil)
 	}
 
-	private func expandCollapse(headlines: [Headline], isExpanded: Bool) -> ShadowTableChanges {
+	private func expandCollapse(headlines: [TextRow], isExpanded: Bool) -> ShadowTableChanges {
 		for headline in headlines {
 			headline.isExpanded = isExpanded
 		}
@@ -949,30 +949,30 @@ extension Outline {
 		return changes
 	}
 	
-	private func expandHeadline(headline: Headline) -> ShadowTableChanges {
+	private func expandHeadline(headline: TextRow) -> ShadowTableChanges {
 		guard !(headline.isExpanded ?? true), let headlineShadowTableIndex = headline.shadowTableIndex else {
 			return ShadowTableChanges()
 		}
 		
 		headline.isExpanded = true
 
-		var shadowTableInserts = [Headline]()
+		var shadowTableInserts = [TextRow]()
 
-		func visitor(_ visited: Headline) {
+		func visitor(_ visited: TextRow) {
 			let shouldFilter = isFiltered ?? false && visited.isComplete ?? false
 			
 			if !shouldFilter {
 				shadowTableInserts.append(visited)
 
 				if visited.isExpanded ?? true {
-					visited.headlines?.forEach {
+					visited.rows?.forEach {
 						$0.visit(visitor: visitor)
 					}
 				}
 			}
 		}
 
-		headline.headlines?.forEach { headline in
+		headline.rows?.forEach { headline in
 			headline.visit(visitor: visitor(_:))
 		}
 		
@@ -987,26 +987,26 @@ extension Outline {
 		return ShadowTableChanges(inserts: inserts, reloads: [headlineShadowTableIndex])
 	}
 	
-	private func collapseHeadline(headline: Headline) -> ShadowTableChanges {
+	private func collapseHeadline(headline: TextRow) -> ShadowTableChanges {
 		guard headline.isExpanded ?? true else { return ShadowTableChanges() }
 
 		headline.isExpanded = false
 			
 		var reloads = Set<Int>()
 
-		func visitor(_ visited: Headline) {
+		func visitor(_ visited: TextRow) {
 			if let shadowTableIndex = visited.shadowTableIndex {
 				reloads.insert(shadowTableIndex)
 			}
 
 			if visited.isExpanded ?? true {
-				visited.headlines?.forEach {
+				visited.rows?.forEach {
 					$0.visit(visitor: visitor)
 				}
 			}
 		}
 		
-		headline.headlines?.forEach { headline in
+		headline.rows?.forEach { headline in
 			headline.visit(visitor: visitor(_:))
 		}
 		
@@ -1018,14 +1018,14 @@ extension Outline {
 	}
 	
 	func rebuildHeadlineDictionary() {
-		var idDictionary = [String: Headline]()
+		var idDictionary = [String: TextRow]()
 		
-		func dictBuildVisitor(_ visited: Headline) {
+		func dictBuildVisitor(_ visited: TextRow) {
 			idDictionary[visited.id] = visited
-			visited.headlines?.forEach { $0.visit(visitor: dictBuildVisitor) }
+			visited.rows?.forEach { $0.visit(visitor: dictBuildVisitor) }
 		}
 
-		headlines?.forEach { $0.visit(visitor: dictBuildVisitor(_:)) }
+		rows?.forEach { $0.visit(visitor: dictBuildVisitor(_:)) }
 		
 		_idToHeadlineDictionary = idDictionary
 		headlineDictionaryNeedUpdate = false
@@ -1062,7 +1062,7 @@ extension Outline {
 	
 	private func rebuildTransientData() {
 		let transient = TransientDataVisitor(isFiltered: isFiltered ?? false)
-		headlines?.forEach { headline in
+		rows?.forEach { headline in
 			headline.parent = self
 			headline.visit(visitor: transient.visitor(_:))
 		}

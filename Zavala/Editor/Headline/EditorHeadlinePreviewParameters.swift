@@ -14,7 +14,7 @@ class EditorHeadlinePreviewParameters: UIDragPreviewParameters {
 		super.init()
 	}
 	
-	init(cell: EditorHeadlineViewCell, headline: Headline) {
+	init(cell: EditorHeadlineViewCell, headline: TextRow) {
 		super.init()
 
 //		#if !targetEnvironment(macCatalyst)

@@ -20,7 +20,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 		}
 
 		guard destinationIndexPath?.section ?? 0 != 0,
-			  let headline = session.localDragSession?.localContext as? Headline,
+			  let headline = session.localDragSession?.localContext as? TextRow,
 			  let headlineShadowTableIndex = headline.shadowTableIndex,
 			  let shadowTable = outline?.shadowTable,
 			  let targetIndexPath = destinationIndexPath else {
@@ -52,7 +52,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 			return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
 		}
 		
-		if let proposedParent = shadowTable[targetIndexPath.row].parent as? Headline {
+		if let proposedParent = shadowTable[targetIndexPath.row].parent as? TextRow {
 			if proposedParent == headline {
 				return UICollectionViewDropProposal(operation: .cancel)
 			}
@@ -67,7 +67,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
 		guard let dragItem = coordinator.items.first?.dragItem,
-			  let headline = dragItem.localObject as? Headline,
+			  let headline = dragItem.localObject as? TextRow,
 			  let headlineShadowTableIndex = headline.shadowTableIndex,
 			  let outline = outline,
 			  let shadowTable = outline.shadowTable else { return }
@@ -86,16 +86,16 @@ extension EditorViewController: UICollectionViewDropDelegate {
 		
 		// If we don't have a destination index, drop it at the back
 		guard let targetIndexPath = coordinator.destinationIndexPath else {
-			drop(coordinator: coordinator, headline: headline, toParent: outline, toChildIndex: outline.headlines?.count ?? 0)
+			drop(coordinator: coordinator, headline: headline, toParent: outline, toChildIndex: outline.rows?.count ?? 0)
 			return
 		}
 
 		// THis is where most of the sibling moves happen at
 		let newSibling = shadowTable[targetIndexPath.row]
-		guard let newParent = newSibling.parent, var newIndex = newParent.headlines?.firstIndex(of: newSibling) else { return }
+		guard let newParent = newSibling.parent, var newIndex = newParent.rows?.firstIndex(of: newSibling) else { return }
 
 		// This shouldn't happen, but does.  We probably need to beef up the dropSessionDidUpdate code to prevent it.
-		if let newParentHeadline = newParent as? Headline, newParentHeadline == headline || newParentHeadline.isDecendent(headline) {
+		if let newParentHeadline = newParent as? TextRow, newParentHeadline == headline || newParentHeadline.isDecendent(headline) {
 			return
 		}
 		
@@ -114,7 +114,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 
 extension EditorViewController {
 	
-	private func drop(coordinator: UICollectionViewDropCoordinator, headline: Headline, toParent: HeadlineContainer, toChildIndex: Int) {
+	private func drop(coordinator: UICollectionViewDropCoordinator, headline: TextRow, toParent: RowContainer, toChildIndex: Int) {
 		guard let undoManager = undoManager,
 			  let outline = outline,
 			  let dragItem = coordinator.items.first?.dragItem else { return }

@@ -102,12 +102,12 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return UIResponder.currentFirstResponder as? OutlineTextView
 	}
 	
-	var currentHeadline: Headline? {
+	var currentHeadline: TextRow? {
 		return currentTextView?.headline
 	}
 	
-	var currentAttributedTexts: HeadlineTexts? {
-		return currentTextView?.attributedTexts
+	var currentTextRowStrings: TextRowStrings? {
+		return currentTextView?.textRowStrings
 	}
 	
 	var currentCursorPosition: Int? {
@@ -122,7 +122,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	private var filterBarButtonItem: UIBarButtonItem?
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
-	private var headerRegistration: UICollectionView.CellRegistration<EditorHeadlineViewCell, Headline>?
+	private var headerRegistration: UICollectionView.CellRegistration<EditorHeadlineViewCell, TextRow>?
 	
 	private var firstVisibleShadowTableIndex: Int? {
 		let visibleRect = collectionView.layoutMarginsGuide.layoutFrame
@@ -158,7 +158,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 			cell.delegate = self
 		}
 		
-		headerRegistration = UICollectionView.CellRegistration<EditorHeadlineViewCell, Headline> { (cell, indexPath, headline) in
+		headerRegistration = UICollectionView.CellRegistration<EditorHeadlineViewCell, TextRow> { (cell, indexPath, headline) in
 			cell.headline = headline
 			cell.delegate = self
 		}
@@ -237,51 +237,51 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	
 	func deleteCurrentHeadline() {
 		guard let headline = currentHeadline,
-			  let attributedTexts = currentAttributedTexts else { return }
-		deleteHeadline(headline, attributedTexts: attributedTexts)
+			  let textRowStrings = currentTextRowStrings else { return }
+		deleteHeadline(headline, textRowStrings: textRowStrings)
 	}
 	
 	func createHeadline() {
 		guard let headline = currentHeadline,
-			  let attributedTexts = currentAttributedTexts else { return }
-		createHeadline(afterHeadline: headline, attributedTexts: attributedTexts)
+			  let textRowStrings = currentTextRowStrings else { return }
+		createHeadline(afterHeadline: headline, textRowStrings: textRowStrings)
 	}
 	
 	func indentHeadline() {
 		guard let headline = currentHeadline,
-			  let attributedTexts = currentAttributedTexts else { return }
-		indentHeadline(headline, attributedTexts: attributedTexts)
+			  let textRowStrings = currentTextRowStrings else { return }
+		indentHeadline(headline, textRowStrings: textRowStrings)
 	}
 	
 	func outdentHeadline() {
 		guard let headline = currentHeadline,
-			  let attributedTexts = currentAttributedTexts else { return }
-		outdentHeadline(headline, attributedTexts: attributedTexts)
+			  let textRowStrings = currentTextRowStrings else { return }
+		outdentHeadline(headline, textRowStrings: textRowStrings)
 	}
 	
 	func toggleCompleteHeadline() {
 		guard let headline = currentHeadline,
-			  let attributedTexts = currentAttributedTexts else { return }
-		toggleCompleteHeadline(headline, attributedTexts: attributedTexts)
+			  let textRowStrings = currentTextRowStrings else { return }
+		toggleCompleteHeadline(headline, textRowStrings: textRowStrings)
 	}
 	
 	func createHeadlineNote() {
 		guard let headline = currentHeadline,
-			  let attributedTexts = currentAttributedTexts else { return }
-		createHeadlineNote(headline, attributedTexts: attributedTexts)
+			  let textRowStrings = currentTextRowStrings else { return }
+		createHeadlineNote(headline, textRowStrings: textRowStrings)
 	}
 	
 	func deleteHeadlineNote() {
 		guard let headline = currentHeadline,
-			  let attributedTexts = currentAttributedTexts else { return }
-		deleteHeadlineNote(headline, attributedTexts: attributedTexts)
+			  let textRowStrings = currentTextRowStrings else { return }
+		deleteHeadlineNote(headline, textRowStrings: textRowStrings)
 	}
 	
 	func splitHeadline() {
 		guard let headline = currentHeadline,
-			  let attributedText = currentAttributedTexts?.text,
+			  let topic = currentTextRowStrings?.topic,
 			  let cursorPosition = currentCursorPosition else { return }
-		splitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
+		splitHeadline(headline, topic: topic, cursorPosition: cursorPosition)
 	}
 	
 	func outlineToggleBoldface() {
@@ -407,7 +407,7 @@ extension EditorViewController {
 		if indexPath.section == 0 {
 			return collectionView.dequeueConfiguredReusableCell(using: titleRegistration!, for: indexPath, item: outline)
 		} else {
-			let headline = outline?.shadowTable?[indexPath.row] ?? Headline()
+			let headline = outline?.shadowTable?[indexPath.row] ?? TextRow()
 			return collectionView.dequeueConfiguredReusableCell(using: headerRegistration!, for: indexPath, item: headline)
 		}
 	}
@@ -415,13 +415,13 @@ extension EditorViewController {
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
 		guard let editorCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell,
 			  let headline = editorCell.headline,
-			  let attributedTexts = editorCell.attributedTexts else { return nil }
+			  let textRowStrings = editorCell.textRowStrings else { return nil }
 		
-		return makeHeadlineContextMenu(headline: headline, attributedTexts: attributedTexts)
+		return makeHeadlineContextMenu(headline: headline, textRowStrings: textRowStrings)
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-		guard let headline = configuration.identifier as? Headline,
+		guard let headline = configuration.identifier as? TextRow,
 			  let row = headline.shadowTableIndex,
 			  let cell = collectionView.cellForItem(at: IndexPath(row: row, section: 1)) as? EditorHeadlineViewCell else { return nil }
 		
@@ -440,8 +440,8 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 		collectionView.collectionViewLayout.invalidateLayout()
 	}
 	
-	func editorTitleCreateHeadline(attibutedTexts: HeadlineTexts?) {
-		createHeadline(afterHeadline: nil, attributedTexts: attibutedTexts)
+	func editorTitleCreateHeadline(attibutedTexts: TextRowStrings?) {
+		createHeadline(afterHeadline: nil, textRowStrings: attibutedTexts)
 	}
 	
 	
@@ -457,52 +457,52 @@ extension EditorViewController: EditorHeadlineViewCellDelegate {
 		collectionView.collectionViewLayout.invalidateLayout()
 	}
 	
-	func editorHeadlineToggleDisclosure(headline: Headline) {
+	func editorHeadlineToggleDisclosure(headline: TextRow) {
 		toggleDisclosure(headline: headline)
 	}
 	
-	func editorHeadlineTextChanged(headline: Headline, attributedTexts: HeadlineTexts, isInNotes: Bool, cursorPosition: Int) {
-		textChanged(headline: headline, attributedTexts: attributedTexts, isInNotes: isInNotes, cursorPosition: cursorPosition)
+	func editorHeadlineTextChanged(headline: TextRow, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
+		textChanged(headline: headline, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
-	func editorHeadlineDeleteHeadline(_ headline: Headline, attributedTexts: HeadlineTexts) {
-		deleteHeadline(headline, attributedTexts: attributedTexts)
+	func editorHeadlineDeleteHeadline(_ headline: TextRow, textRowStrings: TextRowStrings) {
+		deleteHeadline(headline, textRowStrings: textRowStrings)
 	}
 	
-	func editorHeadlineCreateHeadline(beforeHeadline: Headline, attributedTexts: HeadlineTexts?) {
-		createHeadline(beforeHeadline: beforeHeadline, attributedTexts: attributedTexts)
+	func editorHeadlineCreateHeadline(beforeHeadline: TextRow) {
+		createHeadline(beforeHeadline: beforeHeadline)
 	}
 	
-	func editorHeadlineCreateHeadline(afterHeadline: Headline?, attributedTexts: HeadlineTexts?) {
-		createHeadline(afterHeadline: afterHeadline, attributedTexts: attributedTexts)
+	func editorHeadlineCreateHeadline(afterHeadline: TextRow?, textRowStrings: TextRowStrings?) {
+		createHeadline(afterHeadline: afterHeadline, textRowStrings: textRowStrings)
 	}
 	
-	func editorHeadlineIndentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts) {
-		indentHeadline(headline, attributedTexts: attributedTexts)
+	func editorHeadlineIndentHeadline(_ headline: TextRow, textRowStrings: TextRowStrings) {
+		indentHeadline(headline, textRowStrings: textRowStrings)
 	}
 	
-	func editorHeadlineOutdentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts) {
-		outdentHeadline(headline, attributedTexts: attributedTexts)
+	func editorHeadlineOutdentHeadline(_ headline: TextRow, textRowStrings: TextRowStrings) {
+		outdentHeadline(headline, textRowStrings: textRowStrings)
 	}
 	
-	func editorHeadlineSplitHeadline(_ headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) {
-		splitHeadline(headline, attributedText: attributedText, cursorPosition: cursorPosition)
+	func editorHeadlineSplitHeadline(_ headline: TextRow, topic: NSAttributedString, cursorPosition: Int) {
+		splitHeadline(headline, topic: topic, cursorPosition: cursorPosition)
 	}
 	
-	func editorHeadlineCreateHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts) {
-		createHeadlineNote(headline, attributedTexts: attributedTexts)
+	func editorHeadlineCreateHeadlineNote(_ headline: TextRow, textRowStrings: TextRowStrings) {
+		createHeadlineNote(headline, textRowStrings: textRowStrings)
 	}
 	
-	func editorHeadlineDeleteHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts) {
-		deleteHeadlineNote(headline, attributedTexts: attributedTexts)
+	func editorHeadlineDeleteHeadlineNote(_ headline: TextRow, textRowStrings: TextRowStrings) {
+		deleteHeadlineNote(headline, textRowStrings: textRowStrings)
 	}
 	
-	func editorHeadlineMoveCursorTo(headline: Headline) {
+	func editorHeadlineMoveCursorTo(headline: TextRow) {
 		moveCursorTo(headline: headline)
 		hasAlreadyMovedThisKeyPressFlag = true
 	}
 	
-	func editorHeadlineMoveCursorDown(headline: Headline) {
+	func editorHeadlineMoveCursorDown(headline: TextRow) {
 		moveCursorDown(headline: headline)
 		hasAlreadyMovedThisKeyPressFlag = true
 	}
@@ -538,7 +538,7 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 	
 	func applyChangesRestoringCursor(_ changes: ShadowTableChanges) {
 		var textRange: UITextRange? = nil
-		var cursorHeadline: Headline? = nil
+		var cursorHeadline: TextRow? = nil
 		if let editorTextView = UIResponder.currentFirstResponder as? EditorHeadlineTextView {
 			textRange = editorTextView.selectedTextRange
 			cursorHeadline = editorTextView.headline
@@ -671,25 +671,25 @@ private extension EditorViewController {
 		}
 	}
 	
-	private func makeHeadlineContextMenu(headline: Headline, attributedTexts: HeadlineTexts) -> UIContextMenuConfiguration {
+	private func makeHeadlineContextMenu(headline: TextRow, textRowStrings: TextRowStrings) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: headline as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
 			guard let self = self, let outline = self.outline else { return nil }
 			
 			var menuItems = [UIMenu]()
 
 			var firstOutlineActions = [UIAction]()
-			firstOutlineActions.append(self.addAction(headline: headline, attributedTexts: attributedTexts))
+			firstOutlineActions.append(self.addAction(headline: headline, textRowStrings: textRowStrings))
 			if !outline.isIndentHeadlineUnavailable(headline: headline) {
-				firstOutlineActions.append(self.indentAction(headline: headline, attributedTexts: attributedTexts))
+				firstOutlineActions.append(self.indentAction(headline: headline, textRowStrings: textRowStrings))
 			}
 			if !outline.isOutdentHeadlineUnavailable(headline: headline) {
-				firstOutlineActions.append(self.outdentAction(headline: headline, attributedTexts: attributedTexts))
+				firstOutlineActions.append(self.outdentAction(headline: headline, textRowStrings: textRowStrings))
 			}
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: firstOutlineActions))
 			
 			var secondOutlineActions = [UIAction]()
-			secondOutlineActions.append(self.toggleCompleteAction(headline: headline, attributedTexts: attributedTexts))
-			secondOutlineActions.append(self.toggleNoteAction(headline: headline, attributedTexts: attributedTexts))
+			secondOutlineActions.append(self.toggleCompleteAction(headline: headline, textRowStrings: textRowStrings))
+			secondOutlineActions.append(self.toggleNoteAction(headline: headline, textRowStrings: textRowStrings))
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: secondOutlineActions))
 
 			var viewActions = [UIAction]()
@@ -701,74 +701,74 @@ private extension EditorViewController {
 			}
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: viewActions))
 			
-			let deleteAction = self.deleteAction(headline: headline, attributedTexts: attributedTexts)
+			let deleteAction = self.deleteAction(headline: headline, textRowStrings: textRowStrings)
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [deleteAction]))
 
 			return UIMenu(title: "", children: menuItems)
 		})
 	}
 	
-	private func addAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
+	private func addAction(headline: TextRow, textRowStrings: TextRowStrings) -> UIAction {
 		return UIAction(title: L10n.addRow, image: AppAssets.add) { [weak self] action in
 			// Have to let the text field get the first responder by getting it away from this
 			// action which appears to be holding on to it.
 			DispatchQueue.main.async {
-				self?.createHeadline(afterHeadline: headline, attributedTexts: attributedTexts)
+				self?.createHeadline(afterHeadline: headline, textRowStrings: textRowStrings)
 			}
 		}
 	}
 
-	private func indentAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
+	private func indentAction(headline: TextRow, textRowStrings: TextRowStrings) -> UIAction {
 		return UIAction(title: L10n.indent, image: AppAssets.indent) { [weak self] action in
-			self?.indentHeadline(headline, attributedTexts: attributedTexts)
+			self?.indentHeadline(headline, textRowStrings: textRowStrings)
 		}
 	}
 
-	private func outdentAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
+	private func outdentAction(headline: TextRow, textRowStrings: TextRowStrings) -> UIAction {
 		return UIAction(title: L10n.outdent, image: AppAssets.outdent) { [weak self] action in
-			self?.outdentHeadline(headline, attributedTexts: attributedTexts)
+			self?.outdentHeadline(headline, textRowStrings: textRowStrings)
 		}
 	}
 
-	private func expandAllAction(headline: Headline) -> UIAction {
+	private func expandAllAction(headline: TextRow) -> UIAction {
 		return UIAction(title: L10n.expandAll, image: AppAssets.expandAll) { [weak self] action in
 			self?.expandAll(container: headline)
 		}
 	}
 
-	private func collapseAllAction(headline: Headline) -> UIAction {
+	private func collapseAllAction(headline: TextRow) -> UIAction {
 		return UIAction(title: L10n.collapseAll, image: AppAssets.collapseAll) { [weak self] action in
 			self?.collapseAll(container: headline)
 		}
 	}
 
-	private func toggleCompleteAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
+	private func toggleCompleteAction(headline: TextRow, textRowStrings: TextRowStrings) -> UIAction {
 		let title = headline.isComplete ?? false ? L10n.uncomplete : L10n.complete
 		let image = headline.isComplete ?? false ? AppAssets.uncompleteHeadline : AppAssets.completeHeadline
 		return UIAction(title: title, image: image) { [weak self] action in
-			self?.toggleCompleteHeadline(headline, attributedTexts: attributedTexts)
+			self?.toggleCompleteHeadline(headline, textRowStrings: textRowStrings)
 		}
 	}
 	
-	private func toggleNoteAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
+	private func toggleNoteAction(headline: TextRow, textRowStrings: TextRowStrings) -> UIAction {
 		if headline.isNoteEmpty {
 			return UIAction(title: L10n.addNote, image: AppAssets.note) { [weak self] action in
-				self?.createHeadlineNote(headline, attributedTexts: attributedTexts)
+				self?.createHeadlineNote(headline, textRowStrings: textRowStrings)
 			}
 		} else {
 			return UIAction(title: L10n.deleteNote, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
-				self?.deleteHeadlineNote(headline, attributedTexts: attributedTexts)
+				self?.deleteHeadlineNote(headline, textRowStrings: textRowStrings)
 			}
 		}
 	}
 
-	private func deleteAction(headline: Headline, attributedTexts: HeadlineTexts) -> UIAction {
+	private func deleteAction(headline: TextRow, textRowStrings: TextRowStrings) -> UIAction {
 		return UIAction(title: L10n.deleteRow, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
-			self?.deleteHeadline(headline, attributedTexts: attributedTexts)
+			self?.deleteHeadline(headline, textRowStrings: textRowStrings)
 		}
 	}
 
-	func moveCursorTo(headline: Headline) {
+	func moveCursorTo(headline: TextRow) {
 		guard let shadowTableIndex = headline.shadowTableIndex else {
 			return
 		}
@@ -779,7 +779,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	func moveCursorUp(headline: Headline) {
+	func moveCursorUp(headline: TextRow) {
 		guard let shadowTableIndex = headline.shadowTableIndex, shadowTableIndex > 0 else {
 			moveCursorToTitle()
 			return
@@ -791,7 +791,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	func moveCursorDown(headline: Headline) {
+	func moveCursorDown(headline: TextRow) {
 		guard let shadowTableIndex = headline.shadowTableIndex, let shadowTable = outline?.shadowTable, shadowTableIndex < (shadowTable.count - 1) else { return }
 		let indexPath = IndexPath(row: shadowTableIndex + 1, section: 1)
 		if let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell {
@@ -799,7 +799,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	func toggleDisclosure(headline: Headline) {
+	func toggleDisclosure(headline: TextRow) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = EditorToggleDisclosureCommand(undoManager: undoManager,
@@ -810,7 +810,7 @@ private extension EditorViewController {
 		runCommand(command)
 	}
 
-	func expandAll(container: HeadlineContainer) {
+	func expandAll(container: RowContainer) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = EditorExpandAllCommand(undoManager: undoManager,
@@ -821,7 +821,7 @@ private extension EditorViewController {
 		runCommand(command)
 	}
 
-	func collapseAll(container: HeadlineContainer) {
+	func collapseAll(container: RowContainer) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = EditorCollapseAllCommand(undoManager: undoManager,
@@ -832,27 +832,27 @@ private extension EditorViewController {
 		runCommand(command)
 	}
 
-	func textChanged(headline: Headline, attributedTexts: HeadlineTexts, isInNotes: Bool, cursorPosition: Int) {
+	func textChanged(headline: TextRow, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = EditorTextChangedCommand(undoManager: undoManager,
 											   delegate: self,
 											   outline: outline,
 											   headline: headline,
-											   attributedTexts: attributedTexts,
+											   textRowStrings: textRowStrings,
 											   isInNotes: isInNotes,
 											   cursorPosition: cursorPosition)
 		runCommand(command)
 	}
 	
-	func deleteHeadline(_ headline: Headline, attributedTexts: HeadlineTexts) {
+	func deleteHeadline(_ headline: TextRow, textRowStrings: TextRowStrings) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = EditorDeleteHeadlineCommand(undoManager: undoManager,
 												  delegate: self,
 												  outline: outline,
 												  headline: headline,
-												  attributedTexts: attributedTexts)
+												  textRowStrings: textRowStrings)
 
 		runCommand(command)
 		
@@ -865,14 +865,13 @@ private extension EditorViewController {
 		}
 	}
 	
-	func createHeadline(beforeHeadline: Headline, attributedTexts: HeadlineTexts?) {
+	func createHeadline(beforeHeadline: TextRow) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = EditorCreateHeadlineBeforeCommand(undoManager: undoManager,
 														delegate: self,
 														outline: outline,
-														beforeHeadline: beforeHeadline,
-														attributedTexts: attributedTexts)
+														beforeHeadline: beforeHeadline)
 		
 		runCommand(command)
 		
@@ -883,14 +882,14 @@ private extension EditorViewController {
 		}
 	}
 	
-	func createHeadline(afterHeadline: Headline?, attributedTexts: HeadlineTexts?) {
+	func createHeadline(afterHeadline: TextRow?, textRowStrings: TextRowStrings?) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = EditorCreateHeadlineAfterCommand(undoManager: undoManager,
 												  delegate: self,
 												  outline: outline,
 												  afterHeadline: afterHeadline,
-												  attributedTexts: attributedTexts)
+												  textRowStrings: textRowStrings)
 		
 		runCommand(command)
 		
@@ -901,38 +900,38 @@ private extension EditorViewController {
 		}
 	}
 	
-	func indentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts) {
+	func indentHeadline(_ headline: TextRow, textRowStrings: TextRowStrings) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = EditorIndentHeadlineCommand(undoManager: undoManager,
 												  delegate: self,
 												  outline: outline,
 												  headline: headline,
-												  attributedTexts: attributedTexts)
+												  textRowStrings: textRowStrings)
 		
 		runCommand(command)
 	}
 	
-	func outdentHeadline(_ headline: Headline, attributedTexts: HeadlineTexts) {
+	func outdentHeadline(_ headline: TextRow, textRowStrings: TextRowStrings) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = EditorOutdentHeadlineCommand(undoManager: undoManager,
 												  delegate: self,
 												  outline: outline,
 												  headline: headline,
-												  attributedTexts: attributedTexts)
+												  textRowStrings: textRowStrings)
 		
 		runCommand(command)
 	}
 
-	func splitHeadline(_ headline: Headline, attributedText: NSAttributedString, cursorPosition: Int) {
+	func splitHeadline(_ headline: TextRow, topic: NSAttributedString, cursorPosition: Int) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = EditorSplitHeadlineCommand(undoManager: undoManager,
 												 delegate: self,
 												 outline: outline,
 												 headline: headline,
-												 attributedText: attributedText,
+												 topic: topic,
 												 cursorPosition: cursorPosition)
 												  
 		
@@ -945,14 +944,14 @@ private extension EditorViewController {
 		}
 	}
 
-	func toggleCompleteHeadline(_ headline: Headline, attributedTexts: HeadlineTexts) {
+	func toggleCompleteHeadline(_ headline: TextRow, textRowStrings: TextRowStrings) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = EditorToggleCompleteHeadlineCommand(undoManager: undoManager,
 														  delegate: self,
 														  outline: outline,
 														  headline: headline,
-														  attributedTexts: attributedTexts)
+														  textRowStrings: textRowStrings)
 		
 		runCommand(command)
 		
@@ -964,14 +963,14 @@ private extension EditorViewController {
 		}
 	}
 	
-	func createHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts) {
+	func createHeadlineNote(_ headline: TextRow, textRowStrings: TextRowStrings) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = EditorCreateNoteCommand(undoManager: undoManager,
 											  delegate: self,
 											  outline: outline,
 											  headline: headline,
-											  attributedTexts: attributedTexts)
+											  textRowStrings: textRowStrings)
 		
 		runCommand(command)
 		
@@ -982,14 +981,14 @@ private extension EditorViewController {
 		}
 	}
 
-	func deleteHeadlineNote(_ headline: Headline, attributedTexts: HeadlineTexts) {
+	func deleteHeadlineNote(_ headline: TextRow, textRowStrings: TextRowStrings) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = EditorDeleteNoteCommand(undoManager: undoManager,
 											  delegate: self,
 											  outline: outline,
 											  headline: headline,
-											  attributedTexts: attributedTexts)
+											  textRowStrings: textRowStrings)
 		
 		runCommand(command)
 
