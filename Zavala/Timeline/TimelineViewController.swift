@@ -330,7 +330,7 @@ extension TimelineViewController {
 			self.presentError(title: "Export Error", message: error.localizedDescription)
 		}
 		
-		let docPicker = UIDocumentPickerViewController(forExporting: [tempFile])
+		let docPicker = UIDocumentPickerViewController(forExporting: [tempFile], asCopy: true)
 		docPicker.modalPresentationStyle = .formSheet
 		self.present(docPicker, animated: true)
 	}
