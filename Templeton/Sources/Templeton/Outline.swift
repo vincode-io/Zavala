@@ -8,7 +8,6 @@
 import Foundation
 
 public extension Notification.Name {
-	static let OutlineMetaDataDidChange = Notification.Name(rawValue: "OutlineMetaDataDidChange")
 	static let OutlineBodyDidChange = Notification.Name(rawValue: "OutlineBodyDidChange")
 }
 
@@ -17,55 +16,55 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	public var id: EntityID
 	public var title: String? {
 		didSet {
-			outlineMetaDataDidChange()
+			documentMetaDataDidChange()
 		}
 	}
 	
 	public var created: Date? {
 		didSet {
-			outlineMetaDataDidChange()
+			documentMetaDataDidChange()
 		}
 	}
 	
 	public var updated: Date? {
 		didSet {
-			outlineMetaDataDidChange()
+			documentMetaDataDidChange()
 		}
 	}
 	
 	public var ownerName: String? {
 		didSet {
-			outlineMetaDataDidChange()
+			documentMetaDataDidChange()
 		}
 	}
 	
 	public var ownerEmail: String? {
 		didSet {
-			outlineMetaDataDidChange()
+			documentMetaDataDidChange()
 		}
 	}
 	
 	public var ownerURL: String? {
 		didSet {
-			outlineMetaDataDidChange()
+			documentMetaDataDidChange()
 		}
 	}
 	
 	public var verticleScrollState: Int? {
 		didSet {
-			outlineMetaDataDidChange()
+			documentMetaDataDidChange()
 		}
 	}
 	
 	public var isFavorite: Bool? {
 		didSet {
-			outlineMetaDataDidChange()
+			documentMetaDataDidChange()
 		}
 	}
 	
 	public var isFiltered: Bool? {
 		didSet {
-			outlineMetaDataDidChange()
+			documentMetaDataDidChange()
 		}
 	}
 
@@ -139,7 +138,7 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 			cursorHeadlineID = newValue?.headline.id
 			cursorIsInNotes = newValue?.isInNotes
 			cursorPosition = newValue?.cursorPosition
-			outlineMetaDataDidChange()
+			documentMetaDataDidChange()
 		}
 	}
 	
@@ -249,19 +248,19 @@ public final class Outline: HeadlineContainer, Identifiable, Equatable, Codable 
 	
 	public func toggleFavorite() {
 		isFavorite = !(isFavorite ?? false)
-		outlineMetaDataDidChange()
+		documentMetaDataDidChange()
 	}
 	
 	public func toggleFilter() -> ShadowTableChanges {
 		isFiltered = !(isFiltered ?? false)
-		outlineMetaDataDidChange()
+		documentMetaDataDidChange()
 		return rebuildShadowTable()
 	}
 	
 	public func update(title: String) {
 		self.title = title
 		self.updated = Date()
-		outlineTitleDidChange()
+		documentTitleDidChange()
 	}
 	
 	public func createNote(headline: Headline, attributedTexts: HeadlineTexts) -> ShadowTableChanges {
@@ -915,17 +914,17 @@ extension Outline: CustomDebugStringConvertible {
 
 extension Outline {
 	
-	private func outlineTitleDidChange() {
+	private func documentTitleDidChange() {
 		NotificationCenter.default.post(name: .DocumentTitleDidChange, object: Document.outline(self), userInfo: nil)
 	}
 
-	private func outlineMetaDataDidChange() {
-		NotificationCenter.default.post(name: .OutlineMetaDataDidChange, object: self, userInfo: nil)
+	private func documentMetaDataDidChange() {
+		NotificationCenter.default.post(name: .DocumentMetaDataDidChange, object: Document.outline(self), userInfo: nil)
 	}
 
 	private func outlineBodyDidChange() {
 		self.updated = Date()
-		outlineMetaDataDidChange()
+		documentMetaDataDidChange()
 		headlineDictionaryNeedUpdate = true
 		headlinesFile?.markAsDirty()
 		NotificationCenter.default.post(name: .OutlineBodyDidChange, object: self, userInfo: nil)

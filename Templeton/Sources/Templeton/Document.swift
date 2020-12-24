@@ -9,6 +9,7 @@ import Foundation
 
 public extension Notification.Name {
 	static let DocumentTitleDidChange = Notification.Name(rawValue: "DocumentTitleDidChange")
+	static let DocumentMetaDataDidChange = Notification.Name(rawValue: "DocumentMetaDataDidChange")
 	static let DocumentDidDelete = Notification.Name(rawValue: "DocumentDidDelete")
 }
 

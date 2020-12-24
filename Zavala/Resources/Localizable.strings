@@ -50,8 +50,8 @@
 "Link" = "Link";
 
 /* Activity Manager */
-"See_Outlines_In" = "See outlines in “%@”";
-"Edit_Outline" = "Edit outline “%@”";
+"See_Documents_In" = "See documents in “%@”";
+"Edit_Document" = "Edit document “%@”";
 
 /* Sidebar */
 "Delete_Folder_Prompt" = "Are you sure you want to delete the “%@” folder?";

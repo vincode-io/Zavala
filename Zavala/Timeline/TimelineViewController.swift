@@ -11,7 +11,7 @@ import RSCore
 import Templeton
 
 protocol TimelineDelegate: class  {
-	func outlineSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool)
+	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool)
 }
 
 class TimelineViewController: UICollectionViewController, MainControllerIdentifiable {
@@ -66,7 +66,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		configureDataSource()
 		applySnapshot(animated: false)
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(folderOutlinesDidChange(_:)), name: .FolderOutlinesDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(folderDocumentsDidChange(_:)), name: .FolderDocumentsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 	}
 	
@@ -85,7 +85,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		}
 
 		updateSelection(item: timelineItem, animated: animated)
-		delegate?.outlineSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: isNew, animated: animated)
+		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: isNew, animated: animated)
 	}
 	
 	func deleteCurrentOutline() {
@@ -95,7 +95,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	
 	// MARK: Notifications
 	
-	@objc func folderOutlinesDidChange(_ note: Notification) {
+	@objc func folderDocumentsDidChange(_ note: Notification) {
 		guard let op = documentContainer, !op.isSmartProvider else {
 			applySnapshot(animated: true)
 			return
@@ -171,7 +171,7 @@ extension TimelineViewController {
 		guard let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
 		
 		let document = AccountManager.shared.findDocument(timelineItem.id)
-		delegate?.outlineSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: false, animated: true)
+		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: false, animated: true)
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -226,8 +226,8 @@ extension TimelineViewController {
 	
 	func applySnapshot(animated: Bool) {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
-		let outlines = documentContainer?.sortedOutlines ?? [Document]()
-		let items = outlines.map { TimelineItem.timelineItem($0) }
+		let documents = documentContainer?.sortedDocuments ?? [Document]()
+		let items = documents.map { TimelineItem.timelineItem($0) }
 		snapshot.append(items)
 		
 		dataSourceQueue.add(ApplySnapshotOperation(dataSource: dataSource, section: 0, snapshot: snapshot, animated: animated))
@@ -341,7 +341,7 @@ extension TimelineViewController {
 	private func deleteDocument(_ document: Document, completion: ((Bool) -> Void)? = nil) {
 		func delete() {
 			if document == self.currentDocument, let documentContainer = self.documentContainer {
-				self.delegate?.outlineSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, animated: true)
+				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, animated: true)
 			}
 			document.folder?.deleteDocument(document)
 		}

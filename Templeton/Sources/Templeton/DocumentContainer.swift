@@ -14,8 +14,8 @@ public protocol DocumentContainer {
 	var image: RSImage? { get }
 	
 	var isSmartProvider: Bool { get } 
-	var outlines: [Document]? { get }
-	var sortedOutlines: [Document] { get }
+	var documents: [Document]? { get }
+	var sortedDocuments: [Document] { get }
 }
 
 public extension DocumentContainer {
@@ -24,12 +24,12 @@ public extension DocumentContainer {
 		return id.isSmartProvider
 	}
 
-	static func sortByUpdate(_ outlines: [Document]) -> [Document] {
-		return outlines.sorted(by: { $0.updated ?? Date.distantPast > $1.updated ?? Date.distantPast })
+	static func sortByUpdate(_ documents: [Document]) -> [Document] {
+		return documents.sorted(by: { $0.updated ?? Date.distantPast > $1.updated ?? Date.distantPast })
 	}
 
-	static func sortByTitle(_ outlines: [Document]) -> [Document] {
-		return outlines.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
+	static func sortByTitle(_ documents: [Document]) -> [Document] {
+		return documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
 	}
 
 }
@@ -64,19 +64,19 @@ public struct LazyDocumentContainer: DocumentContainer {
 		}
 	}
 
-	public var outlines: [Document]? {
-		return outlineCallback()
+	public var documents: [Document]? {
+		return documentCallback()
 	}
 	
-	public var sortedOutlines: [Document] {
-		return outlineCallback()
+	public var sortedDocuments: [Document] {
+		return documentCallback()
 	}
 	
-	private var outlineCallback: (() -> [Document])
+	private var documentCallback: (() -> [Document])
 	
 	init(id: EntityID, callback: @escaping (() -> [Document])) {
 		self.id = id
-		self.outlineCallback = callback
+		self.documentCallback = callback
 	}
 	
 }

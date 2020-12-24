@@ -50,9 +50,9 @@ internal enum L10n {
   }
   /// Delete Row
   internal static let deleteRow = L10n.tr("Localizable", "Delete_Row")
-  /// Edit outline “%@”
-  internal static func editOutline(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "Edit_Outline", String(describing: p1))
+  /// Edit document “%@”
+  internal static func editDocument(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "Edit_Document", String(describing: p1))
   }
   /// Error
   internal static let error = L10n.tr("Localizable", "Error")
@@ -110,9 +110,9 @@ internal enum L10n {
   }
   /// Restore Archive
   internal static let restoreArchive = L10n.tr("Localizable", "Restore_Archive")
-  /// See outlines in “%@”
-  internal static func seeOutlinesIn(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "See_Outlines_In", String(describing: p1))
+  /// See documents in “%@”
+  internal static func seeDocumentsIn(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "See_Documents_In", String(describing: p1))
   }
   /// Show Completed
   internal static let showCompleted = L10n.tr("Localizable", "Show_Completed")

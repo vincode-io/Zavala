@@ -19,32 +19,32 @@ final class AppDefaults {
 		return UserDefaults.init(suiteName: suiteName)!
 	}()
 	
-	struct Key {
-		static let addFolderAccountID = "addFolderAccountID"
-		static let addOutlineFeedFolderID = "addOutlineFeedAccountID"
-	}
-
-	var addFolderAccountID: EntityID? {
-		get {
-			guard let userInfo = UserDefaults.standard.object(forKey: Key.addFolderAccountID) as? [AnyHashable : AnyHashable] else { return nil }
-			return EntityID(userInfo: userInfo)
-		}
-		set {
-			guard let userInfo = newValue?.userInfo else { return }
-			UserDefaults.standard.set(userInfo, forKey: Key.addFolderAccountID)
-		}
-	}
-
-	var addOutlineFeedFolderID: EntityID? {
-		get {
-			guard let userInfo = UserDefaults.standard.object(forKey: Key.addOutlineFeedFolderID) as? [AnyHashable : AnyHashable] else { return nil }
-			return EntityID(userInfo: userInfo)
-		}
-		set {
-			guard let userInfo = newValue?.userInfo else { return }
-			UserDefaults.standard.set(userInfo, forKey: Key.addOutlineFeedFolderID)
-		}
-	}
+//	struct Key {
+//		static let addFolderAccountID = "addFolderAccountID"
+//		static let addOutlineFeedFolderID = "addOutlineFeedAccountID"
+//	}
+//
+//	var addFolderAccountID: EntityID? {
+//		get {
+//			guard let userInfo = UserDefaults.standard.object(forKey: Key.addFolderAccountID) as? [AnyHashable : AnyHashable] else { return nil }
+//			return EntityID(userInfo: userInfo)
+//		}
+//		set {
+//			guard let userInfo = newValue?.userInfo else { return }
+//			UserDefaults.standard.set(userInfo, forKey: Key.addFolderAccountID)
+//		}
+//	}
+//
+//	var addOutlineFeedFolderID: EntityID? {
+//		get {
+//			guard let userInfo = UserDefaults.standard.object(forKey: Key.addOutlineFeedFolderID) as? [AnyHashable : AnyHashable] else { return nil }
+//			return EntityID(userInfo: userInfo)
+//		}
+//		set {
+//			guard let userInfo = newValue?.userInfo else { return }
+//			UserDefaults.standard.set(userInfo, forKey: Key.addOutlineFeedFolderID)
+//		}
+//	}
 	
 	static func registerDefaults() {
 //		let defaults: [String : Any] = [Key.userInterfaceColorPalette: UserInterfaceColorPalette.automatic.rawValue,

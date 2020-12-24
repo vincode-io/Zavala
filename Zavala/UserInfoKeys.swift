@@ -11,7 +11,6 @@ struct UserInfoKeys {
 	static let documentContainerID = "outlineProviderID"
 	static let documentID = "outlineID"
 	static let folder = "folder"
-	static let outline = "outline"
 	
 	static let sidebarWidth = "sidebarWidth"
 	static let timelineWidth = "timelineWidth"

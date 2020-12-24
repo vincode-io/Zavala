@@ -22,7 +22,7 @@ extension SidebarViewController: UICollectionViewDropDelegate {
 			return UICollectionViewDropProposal(operation: .forbidden)
 		}
 		
-		if let outline = session.localDragSession?.localContext as? Outline, folder == outline.folder {
+		if let outline = session.localDragSession?.localContext as? Document, folder == outline.folder {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
 		

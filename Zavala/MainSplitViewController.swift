@@ -187,13 +187,13 @@ class MainSplitViewController: UISplitViewController {
 
 		guard let documentContainerUserInfo = userInfo[UserInfoKeys.documentContainerID] as? [AnyHashable : AnyHashable],
 			  let documentContainerID = EntityID(userInfo: documentContainerUserInfo),
-			  let documentContainer = AccountManager.shared.findOutlineProvider(documentContainerID) else { return }
+			  let documentContainer = AccountManager.shared.findDocumentContainer(documentContainerID) else { return }
 
 		UIView.performWithoutAnimation {
 			show(.primary)
 		}
 
-		sidebarViewController?.selectOutlineProvider(documentContainer, animated: false)
+		sidebarViewController?.selectDocumentContainer(documentContainer, animated: false)
 		lastMainControllerToAppear = .timeline
 
 		guard let documentUserInfo = userInfo[UserInfoKeys.documentID] as? [AnyHashable : AnyHashable],
@@ -208,7 +208,7 @@ class MainSplitViewController: UISplitViewController {
 	
 	@objc func userDidAddFolder(_ note: Notification) {
 		guard let folder = note.userInfo?[UserInfoKeys.folder] as? Folder else { return }
-		sidebarViewController?.selectOutlineProvider(folder, animated: true)
+		sidebarViewController?.selectDocumentContainer(folder, animated: true)
 	}
 	
 	// MARK: Actions
@@ -355,16 +355,16 @@ class MainSplitViewController: UISplitViewController {
 
 extension MainSplitViewController: SidebarDelegate {
 	
-	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: DocumentContainer?, animated: Bool) {
-		timelineViewController?.documentContainer = outlineProvider
+	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool) {
+		timelineViewController?.documentContainer = documentContainer
 		editorViewController?.edit(nil, isNew: false)
 
-		guard let outlineProvider = outlineProvider else {
+		guard let documentContainer = documentContainer else {
 			activityManager.invalidateSelectDocumentContainer()
 			return
 		}
 
-		activityManager.selectingDocumentContainer(outlineProvider)
+		activityManager.selectingDocumentContainer(documentContainer)
 		if animated {
 			show(.supplementary)
 		} else {
@@ -380,7 +380,7 @@ extension MainSplitViewController: SidebarDelegate {
 
 extension MainSplitViewController: TimelineDelegate {
 	
-	func outlineSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool) {
+	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool) {
 		if let document = document {
 			activityManager.selectingDocument(documentContainer, document)
 			if animated {
@@ -453,7 +453,7 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 		// If we are showing the Feeds and only the feeds start clearing stuff
 		if isCollapsed && viewController === sidebarViewController && lastMainControllerToAppear == .timeline {
 			activityManager.invalidateSelectDocumentContainer()
-			sidebarViewController?.selectOutlineProvider(nil, animated: false)
+			sidebarViewController?.selectDocumentContainer(nil, animated: false)
 			return
 		}
 

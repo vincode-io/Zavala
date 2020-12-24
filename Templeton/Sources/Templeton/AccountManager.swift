@@ -25,22 +25,22 @@ public final class AccountManager {
 		return local
 	}
 
-	public var allOutlineProvider: DocumentContainer {
+	public var allDocumentContainer: DocumentContainer {
 		return LazyDocumentContainer(id: .all, callback: { [weak self] in
-			return LazyDocumentContainer.sortByTitle(self?.outlines ?? [Document]())
+			return LazyDocumentContainer.sortByTitle(self?.documents ?? [Document]())
 		})
 	}
 	
-	public var recentsOutlineProvider: DocumentContainer {
+	public var recentsDocumentContainer: DocumentContainer {
 		return LazyDocumentContainer(id: .recents, callback: { [weak self] in
-			let sorted = LazyDocumentContainer.sortByUpdate(self?.outlines ?? [Document]())
+			let sorted = LazyDocumentContainer.sortByUpdate(self?.documents ?? [Document]())
 			return Array(sorted.prefix(10))
 		})
 	}
 	
-	public var favoritesOutlineProvider: DocumentContainer {
+	public var favoritesDocumentContainer: DocumentContainer {
 		return LazyDocumentContainer(id: .favorites, callback: { [weak self] in
-			let favorites = self?.outlines.filter { $0.isFavorite ?? false }
+			let favorites = self?.documents.filter { $0.isFavorite ?? false }
 			return LazyDocumentContainer.sortByTitle(favorites ?? [Document]())
 		})
 	}
@@ -73,8 +73,8 @@ public final class AccountManager {
 
 	private var accountFiles = [Int: AccountFile]()
 	
-	private var outlines: [Document] {
-		return activeAccounts.reduce(into: [Document]()) { $0.append(contentsOf: $1.outlines ) }
+	private var documents: [Document] {
+		return activeAccounts.reduce(into: [Document]()) { $0.append(contentsOf: $1.documents ) }
 	}
 	
 	public init(accountsFolderPath: String) {
@@ -86,9 +86,9 @@ public final class AccountManager {
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountFoldersDidChange(_:)), name: .AccountFoldersDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(folderMetadataDidChange(_:)), name: .FolderMetaDataDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(folderOutlinesDidChange(_:)), name: .FolderOutlinesDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(folderDocumentsDidChange(_:)), name: .FolderDocumentsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlineMetadataDidChange(_:)), name: .OutlineMetaDataDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(documentMetadataDidChange(_:)), name: .DocumentMetaDataDidChange, object: nil)
 
 		// The local account must always exist, even if it's empty.
 		if FileManager.default.fileExists(atPath: localAccountFile.path) {
@@ -121,14 +121,14 @@ public final class AccountManager {
 		return accountsDictionary[accountID]
 	}
 	
-	public func findOutlineProvider(_ entityID: EntityID) -> DocumentContainer? {
+	public func findDocumentContainer(_ entityID: EntityID) -> DocumentContainer? {
 		switch entityID {
 		case .all:
-			return allOutlineProvider
+			return allDocumentContainer
 		case .favorites:
-			return favoritesOutlineProvider
+			return favoritesDocumentContainer
 		case .recents:
-			return recentsOutlineProvider
+			return recentsDocumentContainer
 		case .folder:
 			return findFolder(entityID)
 		default:
@@ -154,7 +154,7 @@ public final class AccountManager {
 	
 	public func save() {
 		accountFiles.values.forEach { $0.save() }
-		outlines.forEach { $0.save() }
+		documents.forEach { $0.save() }
 	}
 	
 	public func unpackArchive(_ archiveURL: URL) throws -> (AccountType, URL) {
@@ -226,18 +226,18 @@ private extension AccountManager {
 		markAsDirty(account)
 	}
 
-	@objc func folderOutlinesDidChange(_ note: Notification) {
+	@objc func folderDocumentsDidChange(_ note: Notification) {
 		guard let account = (note.object as? Folder)?.account else { return }
 		markAsDirty(account)
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
-		guard let account = (note.object as? Outline)?.account else { return }
+		guard let account = (note.object as? Document)?.account else { return }
 		markAsDirty(account)
 	}
 	
-	@objc func outlineMetadataDidChange(_ note: Notification) {
-		guard let account = (note.object as? Outline)?.account else { return }
+	@objc func documentMetadataDidChange(_ note: Notification) {
+		guard let account = (note.object as? Document)?.account else { return }
 		markAsDirty(account)
 	}
 

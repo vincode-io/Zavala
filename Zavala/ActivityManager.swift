@@ -12,8 +12,8 @@ import Templeton
 
 enum ActivityType: String {
 	case restoration = "Restoration"
-	case selectOutlineProvider = "SelectOutlineProvider"
-	case selectOutline = "SelectOutline"
+	case selectDocumentContainer = "SelectDocumentContainer"
+	case selectDocument = "SelectDocument"
 }
 
 class ActivityManager {
@@ -38,7 +38,7 @@ class ActivityManager {
 	
 	init() {
 		NotificationCenter.default.addObserver(self, selector: #selector(folderDidDelete(_:)), name: .FolderDidDelete, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlineDidDelete(_:)), name: .DocumentDidDelete, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(documentDidDelete(_:)), name: .DocumentDidDelete, object: nil)
 	}
 
 	func selectingDocumentContainer(_ documentContainer: DocumentContainer) {
@@ -74,22 +74,22 @@ extension ActivityManager {
 		var ids = [String]()
 		ids.append(folder.id.description)
 		
-		for outline in folder.outlines ?? [Document]() {
-			ids.append(outline.id.description)
+		for document in folder.documents ?? [Document]() {
+			ids.append(document.id.description)
 		}
 		
 		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: ids)
 	}
 	
-	@objc func outlineDidDelete(_ note: Notification) {
+	@objc func documentDidDelete(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
 		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [document.id.description])
 	}
 	
 	private func makeSelectDocumentContainerActivity(_ documentContainer: DocumentContainer) -> NSUserActivity {
-		let activity = NSUserActivity(activityType: ActivityType.selectOutlineProvider.rawValue)
+		let activity = NSUserActivity(activityType: ActivityType.selectDocumentContainer.rawValue)
 		
-		let title = L10n.seeOutlinesIn(documentContainer.name ?? "")
+		let title = L10n.seeDocumentsIn(documentContainer.name ?? "")
 		activity.title = title
 		
 		activity.userInfo = [UserInfoKeys.documentContainerID: documentContainer.id.userInfo]
@@ -112,13 +112,13 @@ extension ActivityManager {
 		return activity
 	}
 	
-	private func makeSelectDocumentActivity(_ outlineProvider: DocumentContainer, _ document: Document) -> NSUserActivity {
-		let activity = NSUserActivity(activityType: ActivityType.selectOutline.rawValue)
+	private func makeSelectDocumentActivity(_ documentContainer: DocumentContainer, _ document: Document) -> NSUserActivity {
+		let activity = NSUserActivity(activityType: ActivityType.selectDocument.rawValue)
 
-		let title = L10n.editOutline(document.title ?? "")
+		let title = L10n.editDocument(document.title ?? "")
 		activity.title = title
 		
-		activity.userInfo = [UserInfoKeys.documentContainerID: outlineProvider.id.userInfo, UserInfoKeys.documentID: document.id.userInfo]
+		activity.userInfo = [UserInfoKeys.documentContainerID: documentContainer.id.userInfo, UserInfoKeys.documentID: document.id.userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 		
 		let keywords = makeKeywords(title)

@@ -12,7 +12,7 @@ import Combine
 import Templeton
 
 protocol SidebarDelegate: class {
-	func outlineProviderSelectionDidChange(_: SidebarViewController, outlineProvider: DocumentContainer?, animated: Bool)
+	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool)
 }
 
 class SidebarViewController: UICollectionViewController, MainControllerIdentifiable {
@@ -70,14 +70,14 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		applyInitialSnapshot()
 	}
 	
-	func selectOutlineProvider(_ outlineProvider: DocumentContainer?, animated: Bool) {
+	func selectDocumentContainer(_ documentContainer: DocumentContainer?, animated: Bool) {
 		var sidebarItem: SidebarItem? = nil
-		if let outlineProvider = outlineProvider {
+		if let outlineProvider = documentContainer {
 			sidebarItem = SidebarItem.sidebarItem(outlineProvider)
 		}
 		
 		updateSelection(item: sidebarItem, animated: animated)
-		delegate?.outlineProviderSelectionDidChange(self, outlineProvider: outlineProvider, animated: animated)
+		delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, animated: animated)
 	}
 	
 	func deleteCurrentFolder() {
@@ -106,7 +106,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		let restoreAction = UIAlertAction(title: L10n.restore, style: .default) { [weak self] _ in
 			guard let self = self else { return }
 			self.collectionView.selectItem(at: nil, animated: true, scrollPosition: .top)
-			self.delegate?.outlineProviderSelectionDidChange(self, outlineProvider: nil, animated: true)
+			self.delegate?.documentContainerSelectionDidChange(self, documentContainer: nil, animated: true)
 			AccountManager.shared.restoreArchive(accountType: unpackResult.0, unpackURL: unpackResult.1)
 		}
 		
@@ -181,9 +181,9 @@ extension SidebarViewController {
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
 		
-		if case .outlineProvider(let entityID) = sidebarItem.id {
-			let outlineProvider = AccountManager.shared.findOutlineProvider(entityID)
-			delegate?.outlineProviderSelectionDidChange(self, outlineProvider: outlineProvider, animated: true)
+		if case .documentContainer(let entityID) = sidebarItem.id {
+			let documentContainer = AccountManager.shared.findDocumentContainer(entityID)
+			delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, animated: true)
 		}
 	}
 	
@@ -244,9 +244,9 @@ extension SidebarViewController {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
 		let header = SidebarItem.sidebarItem(title: "Library", id: .header(.library))
 		let items: [SidebarItem] = [
-			.sidebarItem(AccountManager.shared.allOutlineProvider),
-			.sidebarItem(AccountManager.shared.favoritesOutlineProvider),
-			.sidebarItem(AccountManager.shared.recentsOutlineProvider)
+			.sidebarItem(AccountManager.shared.allDocumentContainer),
+			.sidebarItem(AccountManager.shared.favoritesDocumentContainer),
+			.sidebarItem(AccountManager.shared.recentsDocumentContainer)
 		]
 		
 		snapshot.append([header])
@@ -352,13 +352,13 @@ extension SidebarViewController {
 	private func deleteFolder(_ folder: Folder, completion: ((Bool) -> Void)? = nil) {
 		func deleteFolder() {
 			if self.currentFolder == folder {
-				self.delegate?.outlineProviderSelectionDidChange(self, outlineProvider: nil, animated: true)
+				self.delegate?.documentContainerSelectionDidChange(self, documentContainer: nil, animated: true)
 			}
 			folder.account?.deleteFolder(folder)
 			completion?(true)
 		}
 		
-		guard !(folder.outlines?.isEmpty ?? true) else {
+		guard !(folder.documents?.isEmpty ?? true) else {
 			deleteFolder()
 			return
 		}

@@ -12,7 +12,7 @@ final class SidebarItem: NSObject, NSCopying, Identifiable {
 	
 	enum ID: Hashable {
 		case header(SidebarSection)
-		case outlineProvider(EntityID)
+		case documentContainer(EntityID)
 	}
 	
 	let id: SidebarItem.ID
@@ -20,7 +20,7 @@ final class SidebarItem: NSObject, NSCopying, Identifiable {
 	let image: UIImage?
 	
 	var entityID: EntityID? {
-		if case .outlineProvider(let entityID) = id {
+		if case .documentContainer(let entityID) = id {
 			return entityID
 		}
 		return nil
@@ -46,9 +46,9 @@ final class SidebarItem: NSObject, NSCopying, Identifiable {
 		return SidebarItem(id: id, title: title, image: nil)
 	}
 	
-	static func sidebarItem(_ outlineProvider: DocumentContainer) -> SidebarItem {
-		let id = SidebarItem.ID.outlineProvider(outlineProvider.id)
-		return SidebarItem(id: id, title: outlineProvider.name, image: outlineProvider.image)
+	static func sidebarItem(_ documentContainer: DocumentContainer) -> SidebarItem {
+		let id = SidebarItem.ID.documentContainer(documentContainer.id)
+		return SidebarItem(id: id, title: documentContainer.name, image: documentContainer.image)
 	}
 
 	override func isEqual(_ object: Any?) -> Bool {

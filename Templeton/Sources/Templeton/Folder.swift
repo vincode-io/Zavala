@@ -11,7 +11,7 @@ import SWXMLHash
 
 public extension Notification.Name {
 	static let FolderMetaDataDidChange = Notification.Name(rawValue: "FolderMetaDataDidChange")
-	static let FolderOutlinesDidChange = Notification.Name(rawValue: "FolderOutlinesDidChange")
+	static let FolderDocumentsDidChange = Notification.Name(rawValue: "FolderDocumentsDidChange")
 	static let FolderDidDelete = Notification.Name(rawValue: "FolderDidDelete")
 }
 
@@ -37,10 +37,10 @@ public final class Folder: Identifiable, Equatable, Codable, DocumentContainer {
 		return RSImage(systemName: "folder")
 	}
 	
-	public var outlines: [Document]?
+	public var documents: [Document]?
 
-	public var sortedOutlines: [Document] {
-		return Self.sortByUpdate(outlines ?? [Document]())
+	public var sortedDocuments: [Document] {
+		return Self.sortByUpdate(documents ?? [Document]())
 	}
 
 	public var account: Account? {
@@ -50,13 +50,13 @@ public final class Folder: Identifiable, Equatable, Codable, DocumentContainer {
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case name = "name"
-		case outlines = "outlines"
+		case documents = "documents"
 	}
 	
 	init(parentID: EntityID, name: String) {
 		self.id = EntityID.folder(parentID.accountID, UUID().uuidString)
 		self.name = name
-		self.outlines = [Document]()
+		self.documents = [Document]()
 	}
 
 	func folderDidDelete() {
@@ -124,28 +124,28 @@ public final class Folder: Identifiable, Equatable, Codable, DocumentContainer {
 			outline.expansionState = expansionState
 		}
 
-		outlines?.append(.outline(outline))
-		folderOutlinesDidChange()
+		documents?.append(.outline(outline))
+		folderDocumentsDidChange()
 		outline.forceSave()
 		return .outline(outline)
 	}
 	
 	public func createOutline(title: String? = nil) -> Document {
 		let outline = Outline(parentID: id, title: title)
-		outlines?.append(.outline(outline))
-		folderOutlinesDidChange()
+		documents?.append(.outline(outline))
+		folderDocumentsDidChange()
 		return .outline(outline)
 	}
 	
 	public func createDocument(_ document: Document) {
 		document.reassignID(EntityID.document(id.accountID, id.folderUUID, document.id.documentUUID))
-		outlines?.append(document)
-		folderOutlinesDidChange()
+		documents?.append(document)
+		folderDocumentsDidChange()
 	}
 	
 	public func deleteDocument(_ document: Document) {
-		outlines?.removeFirst(object: document)
-		folderOutlinesDidChange()
+		documents?.removeFirst(object: document)
+		folderDocumentsDidChange()
 		document.delete()
 	}
 	
@@ -157,7 +157,7 @@ public final class Folder: Identifiable, Equatable, Codable, DocumentContainer {
 extension Folder {
 	
 	func findDocument(documentUUID: String) -> Document? {
-		if let document = outlines?.first(where: { $0.id.documentUUID == documentUUID }) {
+		if let document = documents?.first(where: { $0.id.documentUUID == documentUUID }) {
 			return document
 		}
 		return nil
@@ -171,8 +171,8 @@ private extension Folder {
 		NotificationCenter.default.post(name: .FolderMetaDataDidChange, object: self, userInfo: nil)
 	}
 	
-	func folderOutlinesDidChange() {
-		NotificationCenter.default.post(name: .FolderOutlinesDidChange, object: self, userInfo: nil)
+	func folderDocumentsDidChange() {
+		NotificationCenter.default.post(name: .FolderDocumentsDidChange, object: self, userInfo: nil)
 	}
 	
 }
