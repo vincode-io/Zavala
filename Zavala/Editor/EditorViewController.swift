@@ -554,7 +554,7 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 	}
 
 	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates) {
-		guard let shadowTableIndex = cursorCoordinates.headline.shadowTableIndex else { return }
+		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
 
 		func restoreCursor() {
@@ -584,7 +584,7 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 extension EditorViewController: LinkViewControllerDelegate {
 	
 	func updateLink(_: LinkViewController, cursorCoordinates: CursorCoordinates, link: String?, range: NSRange) {
-		guard let shadowTableIndex = cursorCoordinates.headline.shadowTableIndex else { return }
+		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
 		guard let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell else { return	}
 		

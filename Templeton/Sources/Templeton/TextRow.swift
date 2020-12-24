@@ -1,5 +1,5 @@
 //
-//  Headline.swift
+//  TextRow.swift
 //  
 //
 //  Created by Maurice Parker on 11/6/20.
@@ -24,8 +24,8 @@ public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Cod
 	public var shadowTableIndex: Int?
 
 	public var isAncestorComplete: Bool {
-		if let parentHeadline = parent as? TextRow {
-			return parentHeadline.isComplete ?? false || parentHeadline.isAncestorComplete
+		if let parentRow = parent as? TextRow {
+			return parentRow.isComplete ?? false || parentRow.isAncestorComplete
 		}
 		return false
 	}
@@ -53,7 +53,7 @@ public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Cod
 	}
 
 	public var isCollapsable: Bool {
-		guard let headlines = rows, !headlines.isEmpty else { return false }
+		guard let rows = rows, !rows.isEmpty else { return false }
 		return isExpanded ?? true
 	}
 
@@ -181,8 +181,8 @@ public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Cod
 		return opml
 	}
 
-	public func isDecendent(_ headline: TextRow) -> Bool {
-		if let parentHeadline = parent as? TextRow, parentHeadline == headline || parentHeadline.isDecendent(headline) {
+	public func isDecendent(_ row: TextRow) -> Bool {
+		if let parentRow = parent as? TextRow, parentRow == row || parentRow.isDecendent(row) {
 			return true
 		}
 		return false

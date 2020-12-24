@@ -1,5 +1,5 @@
 //
-//  HeadlinesFile.swift
+//  RowsFile.swift
 //  
 //
 //  Created by Maurice Parker on 11/15/20.
@@ -9,9 +9,9 @@ import Foundation
 import os.log
 import RSCore
 
-final class HeadlinesFile {
+final class RowsFile {
 	
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "HeadlinesFile")
+	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "RowsFile")
 
 	private weak var outline: Outline?
 	private let fileURL: URL
@@ -48,18 +48,18 @@ final class HeadlinesFile {
 					try FileManager.default.removeItem(atPath: writeURL.path)
 				}
 			} catch let error as NSError {
-				os_log(.error, log: log, "Headlines delete from disk failed: %@.", error.localizedDescription)
+				os_log(.error, log: log, "RowsFile delete from disk failed: %@.", error.localizedDescription)
 			}
 		})
 		
 		if let error = errorPointer?.pointee {
-			os_log(.error, log: log, "Headlines delete from disk coordination failed: %@.", error.localizedDescription)
+			os_log(.error, log: log, "RowsFile delete from disk coordination failed: %@.", error.localizedDescription)
 		}
 	}
 	
 }
 
-private extension HeadlinesFile {
+private extension RowsFile {
 
 	func loadCallback() {
 		var fileData: Data? = nil
@@ -81,19 +81,19 @@ private extension HeadlinesFile {
 		})
 		
 		if let error = errorPointer?.pointee {
-			os_log(.error, log: log, "Headlines read from disk coordination failed: %@.", error.localizedDescription)
+			os_log(.error, log: log, "RowsFile read from disk coordination failed: %@.", error.localizedDescription)
 		}
 
-		guard let headlinesData = fileData else {
+		guard let rowsData = fileData else {
 			return
 		}
 
 		let decoder = PropertyListDecoder()
 		let headlines: [TextRow]
 		do {
-			headlines = try decoder.decode([TextRow].self, from: headlinesData)
+			headlines = try decoder.decode([TextRow].self, from: rowsData)
 		} catch {
-			os_log(.error, log: log, "Headlines read deserialization failed: %@.", error.localizedDescription)
+			os_log(.error, log: log, "RowsFile read deserialization failed: %@.", error.localizedDescription)
 			return
 		}
 
@@ -110,7 +110,7 @@ private extension HeadlinesFile {
 		do {
 			headlinesData = try encoder.encode(headlines)
 		} catch {
-			os_log(.error, log: log, "Headlines read deserialization failed: %@.", error.localizedDescription)
+			os_log(.error, log: log, "RowsFile read deserialization failed: %@.", error.localizedDescription)
 			return
 		}
 
@@ -123,12 +123,12 @@ private extension HeadlinesFile {
 				let resourceValues = try writeURL.resourceValues(forKeys: [.contentModificationDateKey])
 				lastModificationDate = resourceValues.contentModificationDate
 			} catch let error as NSError {
-				os_log(.error, log: log, "Headlines save to disk failed: %@.", error.localizedDescription)
+				os_log(.error, log: log, "RowsFile save to disk failed: %@.", error.localizedDescription)
 			}
 		})
 		
 		if let error = errorPointer?.pointee {
-			os_log(.error, log: log, "Headlines save to disk coordination failed: %@.", error.localizedDescription)
+			os_log(.error, log: log, "RowsFile save to disk coordination failed: %@.", error.localizedDescription)
 		}
 	}
 	

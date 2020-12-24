@@ -70,7 +70,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Codable {
 
 	public var rows: [TextRow]? {
 		didSet {
-			headlineDictionaryNeedUpdate = true
+			rowDictionaryNeedUpdate = true
 		}
 	}
 	
@@ -126,16 +126,16 @@ public final class Outline: RowContainer, Identifiable, Equatable, Codable {
 	
 	public var cursorCoordinates: CursorCoordinates? {
 		get {
-			guard let headlineID = cursorHeadlineID,
-				  let headline = findHeadline(id: headlineID),
+			guard let rowID = cursorRowID,
+				  let row = findRow(id: rowID),
 				  let isInNotes = cursorIsInNotes,
 				  let position = cursorPosition else {
 				return nil
 			}
-			return CursorCoordinates(headline: headline, isInNotes: isInNotes, cursorPosition: position)
+			return CursorCoordinates(row: row, isInNotes: isInNotes, cursorPosition: position)
 		}
 		set {
-			cursorHeadlineID = newValue?.headline.id
+			cursorRowID = newValue?.row.id
 			cursorIsInNotes = newValue?.isInNotes
 			cursorPosition = newValue?.cursorPosition
 			documentMetaDataDidChange()
@@ -153,24 +153,24 @@ public final class Outline: RowContainer, Identifiable, Equatable, Codable {
 		case verticleScrollState = "verticleScrollState"
 		case isFavorite = "isFavorite"
 		case isFiltered = "isFiltered"
-		case cursorHeadlineID = "cursorHeadlineID"
+		case cursorRowID = "cursorRowID"
 		case cursorIsInNotes = "cursorIsInNotes"
 		case cursorPosition = "cursorPosition"
 	}
 
-	private var cursorHeadlineID: String?
+	private var cursorRowID: String?
 	private var cursorIsInNotes: Bool?
 	private var cursorPosition: Int?
 	
-	private var headlinesFile: HeadlinesFile?
+	private var rowsFile: RowsFile?
 	
-	private var headlineDictionaryNeedUpdate = true
-	private var _idToHeadlineDictionary = [String: TextRow]()
-	private var idToHeadlineDictionary: [String: TextRow] {
-		if headlineDictionaryNeedUpdate {
+	private var rowDictionaryNeedUpdate = true
+	private var _idToRowDictionary = [String: TextRow]()
+	private var idToRowDictionary: [String: TextRow] {
+		if rowDictionaryNeedUpdate {
 			rebuildHeadlineDictionary()
 		}
-		return _idToHeadlineDictionary
+		return _idToRowDictionary
 	}
 	
 	init(parentID: EntityID, title: String?) {
@@ -178,11 +178,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Codable {
 		self.title = title
 		self.created = Date()
 		self.updated = Date()
-		headlinesFile = HeadlinesFile(outline: self)
+		rowsFile = RowsFile(outline: self)
 	}
 
-	public func findHeadline(id: String) -> TextRow? {
-		return idToHeadlineDictionary[id]
+	public func findRow(id: String) -> TextRow? {
+		return idToRowDictionary[id]
 	}
 	
 	public func markdown(indentLevel: Int = 0) -> String {
@@ -841,38 +841,38 @@ public final class Outline: RowContainer, Identifiable, Equatable, Codable {
 	}
 	
 	public func load() {
-		headlinesFile = HeadlinesFile(outline: self)
-		headlinesFile!.load()
+		rowsFile = RowsFile(outline: self)
+		rowsFile!.load()
 		rebuildTransientData()
 	}
 	
 	public func save() {
-		headlinesFile?.save()
+		rowsFile?.save()
 	}
 	
 	public func forceSave() {
-		if headlinesFile == nil {
-			headlinesFile = HeadlinesFile(outline: self)
+		if rowsFile == nil {
+			rowsFile = RowsFile(outline: self)
 		}
-		headlinesFile?.markAsDirty()
-		headlinesFile?.save()
+		rowsFile?.markAsDirty()
+		rowsFile?.save()
 	}
 	
 	public func delete() {
-		if headlinesFile == nil {
-			headlinesFile = HeadlinesFile(outline: self)
+		if rowsFile == nil {
+			rowsFile = RowsFile(outline: self)
 		}
-		headlinesFile?.delete()
-		headlinesFile = nil
+		rowsFile?.delete()
+		rowsFile = nil
 		outlineDidDelete()
 	}
 	
 	public func suspend() {
-		headlinesFile?.save()
-		headlinesFile = nil
+		rowsFile?.save()
+		rowsFile = nil
 		rows = nil
 		shadowTable = nil
-		_idToHeadlineDictionary = [String: TextRow]()
+		_idToRowDictionary = [String: TextRow]()
 	}
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
@@ -925,8 +925,8 @@ extension Outline {
 	private func outlineBodyDidChange() {
 		self.updated = Date()
 		documentMetaDataDidChange()
-		headlineDictionaryNeedUpdate = true
-		headlinesFile?.markAsDirty()
+		rowDictionaryNeedUpdate = true
+		rowsFile?.markAsDirty()
 		NotificationCenter.default.post(name: .OutlineBodyDidChange, object: self, userInfo: nil)
 	}
 	
@@ -1027,8 +1027,8 @@ extension Outline {
 
 		rows?.forEach { $0.visit(visitor: dictBuildVisitor(_:)) }
 		
-		_idToHeadlineDictionary = idDictionary
-		headlineDictionaryNeedUpdate = false
+		_idToRowDictionary = idDictionary
+		rowDictionaryNeedUpdate = false
 	}
 	
 	private func rebuildShadowTable() -> ShadowTableChanges {

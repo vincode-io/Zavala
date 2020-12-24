@@ -33,7 +33,7 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 		oldTextRowStrings = headline.textRowStrings
 		newTextRowStrings = textRowStrings
 		
-		cursorCoordinates = CursorCoordinates(headline: headline, isInNotes: isInNotes, cursorPosition: cursorPosition)
+		cursorCoordinates = CursorCoordinates(row: headline, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
 	func perform() {

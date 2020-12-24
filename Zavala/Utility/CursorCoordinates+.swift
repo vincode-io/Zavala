@@ -13,9 +13,9 @@ extension CursorCoordinates {
 	static var lastKnownCoordinates: CursorCoordinates?
 
 	static var currentCoordinates: CursorCoordinates? {
-		if let textView = UIResponder.currentFirstResponder as? OutlineTextView, let headline = textView.headline {
+		if let textView = UIResponder.currentFirstResponder as? OutlineTextView, let row = textView.headline {
 			let isInNotes = textView is EditorHeadlineNoteTextView
-			return CursorCoordinates(headline: headline, isInNotes: isInNotes, cursorPosition: textView.cursorPosition)
+			return CursorCoordinates(row: row, isInNotes: isInNotes, cursorPosition: textView.cursorPosition)
 		}
 		return nil
 	}

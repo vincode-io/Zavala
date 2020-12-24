@@ -76,7 +76,7 @@ class EditorHeadlineTextView: OutlineTextView {
 	
 	override func resignFirstResponder() -> Bool {
 		if let headline = headline {
-			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(headline: headline, isInNotes: false, cursorPosition: lastCursorPosition)
+			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: headline, isInNotes: false, cursorPosition: lastCursorPosition)
 		}
 		return super.resignFirstResponder()
 	}
