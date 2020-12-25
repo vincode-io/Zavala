@@ -18,7 +18,7 @@ final class EditorExpandAllCommand: EditorOutlineCommand {
 	
 	var outline: Outline
 	var container: RowContainer
-	var expandedRows: [TextRow]?
+	var expandedRows: [Row]?
 	
 	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, container: RowContainer) {
 		self.undoManager = undoManager

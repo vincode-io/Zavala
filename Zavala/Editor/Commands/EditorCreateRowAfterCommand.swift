@@ -17,12 +17,12 @@ final class EditorCreateRowAfterCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var row: TextRow?
-	var afterRow: TextRow?
+	var row: Row?
+	var afterRow: Row?
 	var textRowStrings: TextRowStrings?
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, afterRow: TextRow?, textRowStrings: TextRowStrings?) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, afterRow: Row?, textRowStrings: TextRowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -35,7 +35,7 @@ final class EditorCreateRowAfterCommand: EditorOutlineCommand {
 	func perform() {
 		saveCursorCoordinates()
 		if row == nil {
-			row = TextRow()
+			row = Row.text(TextRow())
 		}
 		changes = outline.createRow(row!, afterRow: afterRow, textRowStrings: textRowStrings)
 		delegate?.applyChanges(changes!)

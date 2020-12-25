@@ -11,24 +11,24 @@ import Templeton
 protocol EditorTextRowViewCellDelegate: class {
 	var editorTextRowUndoManager: UndoManager? { get }
 	func editorTextRowInvalidateLayout()
-	func editorTextRowToggleDisclosure(row: TextRow)
-	func editorTextRowMoveCursorTo(row: TextRow)
-	func editorTextRowMoveCursorDown(row: TextRow)
-	func editorTextRowTextChanged(row: TextRow, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int)
-	func editorTextRowDeleteRow(_ row: TextRow, textRowStrings: TextRowStrings)
-	func editorTextRowCreateRow(beforeRow: TextRow)
-	func editorTextRowCreateRow(afterRow: TextRow?, textRowStrings: TextRowStrings?)
-	func editorTextRowIndentRow(_ row: TextRow, textRowStrings: TextRowStrings)
-	func editorTextRowOutdentRow(_ row: TextRow, textRowStrings: TextRowStrings)
-	func editorTextRowSplitRow(_: TextRow, topic: NSAttributedString, cursorPosition: Int)
-	func editorTextRowCreateRowNote(_ row: TextRow, textRowStrings: TextRowStrings)
-	func editorTextRowDeleteRowNote(_ row: TextRow, textRowStrings: TextRowStrings)
+	func editorTextRowToggleDisclosure(row: Row)
+	func editorTextRowMoveCursorTo(row: Row)
+	func editorTextRowMoveCursorDown(row: Row)
+	func editorTextRowTextChanged(row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int)
+	func editorTextRowDeleteRow(_ row: Row, textRowStrings: TextRowStrings)
+	func editorTextRowCreateRow(beforeRow: Row)
+	func editorTextRowCreateRow(afterRow: Row?, textRowStrings: TextRowStrings?)
+	func editorTextRowIndentRow(_ row: Row, textRowStrings: TextRowStrings)
+	func editorTextRowOutdentRow(_ row: Row, textRowStrings: TextRowStrings)
+	func editorTextRowSplitRow(_: Row, topic: NSAttributedString, cursorPosition: Int)
+	func editorTextRowCreateRowNote(_ row: Row, textRowStrings: TextRowStrings)
+	func editorTextRowDeleteRowNote(_ row: Row, textRowStrings: TextRowStrings)
 	func editorTextRowEditLink(_ link: String?, range: NSRange)
 }
 
 class EditorTextRowViewCell: UICollectionViewListCell {
 
-	var textRow: TextRow? {
+	var row: Row? {
 		didSet {
 			setNeedsUpdateConfiguration()
 		}
@@ -88,9 +88,9 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 		
 		layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 
-		guard let textRow = textRow else { return }
+		guard let row = row else { return }
 
-		indentationLevel = textRow.indentLevel
+		indentationLevel = row.indentLevel
 
 		// We make the indentation width the same regardless of device if not compact
 		if traitCollection.horizontalSizeClass != .compact {
@@ -106,7 +106,7 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 			placement = .trailing(displayed: .always, at: { _ in return 0 })
 		}
 
-		if textRow.rows?.isEmpty ?? true {
+		if row.rows?.isEmpty ?? true {
 			var accessoryConfig = UICellAccessory.CustomViewConfiguration(customView: bullet, placement: placement)
 			accessoryConfig.tintColor = AppAssets.accessory
 			accessories = [.customView(configuration: accessoryConfig)]
@@ -116,9 +116,9 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 			accessories = [.customView(configuration: accessoryConfig)]
 		}
 		
-		setDisclosure(isExpanded: textRow.isExpanded ?? true, animated: false)
+		setDisclosure(isExpanded: row.isExpanded ?? true, animated: false)
 
-		var content = EditorTextRowContentConfiguration(row: textRow, indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
+		var content = EditorTextRowContentConfiguration(row: row, indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content
 	}
@@ -175,9 +175,9 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 extension EditorTextRowViewCell {
 	
 	@objc func toggleDisclosure(_ sender: UITapGestureRecognizer) {
-		guard sender.state == .ended, let textRow = textRow else { return }
+		guard sender.state == .ended, let row = row else { return }
 		setDisclosure(isExpanded: !isDisclosed, animated: true)
-		delegate?.editorTextRowToggleDisclosure(row: textRow)
+		delegate?.editorTextRowToggleDisclosure(row: row)
 	}
 	
 	private func setDisclosure(isExpanded: Bool, animated: Bool) {

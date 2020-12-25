@@ -130,35 +130,35 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowInvalidateLayout()
 	}
 	
-	func textChanged(_: EditorTextRowTopicTextView, row: TextRow, isInNotes: Bool, cursorPosition: Int) {
+	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, cursorPosition: Int) {
 		appliedConfiguration.delegate?.editorTextRowTextChanged(row: row, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
-	func deleteRow(_: EditorTextRowTopicTextView, row: TextRow) {
+	func deleteRow(_: EditorTextRowTopicTextView, row: Row) {
 		appliedConfiguration.delegate?.editorTextRowDeleteRow(row, textRowStrings: textRowStrings)
 	}
 	
-	func createRow(_: EditorTextRowTopicTextView, beforeRow: TextRow) {
+	func createRow(_: EditorTextRowTopicTextView, beforeRow: Row) {
 		appliedConfiguration.delegate?.editorTextRowCreateRow(beforeRow: beforeRow)
 	}
 	
-	func createRow(_: EditorTextRowTopicTextView, afterRow: TextRow) {
+	func createRow(_: EditorTextRowTopicTextView, afterRow: Row) {
 		appliedConfiguration.delegate?.editorTextRowCreateRow(afterRow: afterRow, textRowStrings: textRowStrings)
 	}
 	
-	func indentRow(_: EditorTextRowTopicTextView, row: TextRow) {
+	func indentRow(_: EditorTextRowTopicTextView, row: Row) {
 		appliedConfiguration.delegate?.editorTextRowIndentRow(row, textRowStrings: textRowStrings)
 	}
 	
-	func outdentRow(_: EditorTextRowTopicTextView, row: TextRow) {
+	func outdentRow(_: EditorTextRowTopicTextView, row: Row) {
 		appliedConfiguration.delegate?.editorTextRowOutdentRow(row, textRowStrings: textRowStrings)
 	}
 	
-	func splitRow(_: EditorTextRowTopicTextView, row: TextRow, topic: NSAttributedString, cursorPosition: Int) {
+	func splitRow(_: EditorTextRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		appliedConfiguration.delegate?.editorTextRowSplitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
-	func createRowNote(_: EditorTextRowTopicTextView, row: TextRow) {
+	func createRowNote(_: EditorTextRowTopicTextView, row: Row) {
 		appliedConfiguration.delegate?.editorTextRowCreateRowNote(row, textRowStrings: textRowStrings)
 	}
 	
@@ -183,19 +183,19 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowInvalidateLayout()
 	}
 	
-	func textChanged(_: EditorTextRowNoteTextView, row: TextRow, isInNotes: Bool, cursorPosition: Int) {
+	func textChanged(_: EditorTextRowNoteTextView, row: Row, isInNotes: Bool, cursorPosition: Int) {
 		appliedConfiguration.delegate?.editorTextRowTextChanged(row: row, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
-	func deleteRowNote(_: EditorTextRowNoteTextView, row: TextRow) {
+	func deleteRowNote(_: EditorTextRowNoteTextView, row: Row) {
 		appliedConfiguration.delegate?.editorTextRowDeleteRowNote(row, textRowStrings: textRowStrings)
 	}
 	
-	func moveCursorTo(_: EditorTextRowNoteTextView, row: TextRow) {
+	func moveCursorTo(_: EditorTextRowNoteTextView, row: Row) {
 		appliedConfiguration.delegate?.editorTextRowMoveCursorTo(row: row)
 	}
 	
-	func moveCursorDown(_: EditorTextRowNoteTextView, row: TextRow) {
+	func moveCursorDown(_: EditorTextRowNoteTextView, row: Row) {
 		appliedConfiguration.delegate?.editorTextRowMoveCursorDown(row: row)
 	}
 	
@@ -220,7 +220,9 @@ extension EditorTextRowContentView {
 	}
 	
 	private func configureTopicTextView(configuration: EditorTextRowContentConfiguration) {
-		topicTextView.textRow = configuration.row
+		topicTextView.row = configuration.row
+		
+		let topic = configuration.topic ?? NSAttributedString(string: "")
 		
 		var attrs = [NSAttributedString.Key : Any]()
 		if configuration.isComplete || configuration.isAncestorComplete {
@@ -237,7 +239,7 @@ extension EditorTextRowContentView {
 		}
 
 		// This is a bit of a hack to make sure that the reused UITextView gets cleared out for the empty attributed string
-		if configuration.topic.length < 1 {
+		if topic.length < 1 {
 			let mutableAttrText = NSMutableAttributedString(string: " ")
 			let range = NSRange(location: 0, length: mutableAttrText.length)
 			attrs[.font] = OutlineFont.topic
@@ -245,7 +247,7 @@ extension EditorTextRowContentView {
 			topicTextView.attributedText = mutableAttrText
 			topicTextView.attributedText = configuration.topic
 		} else {
-			let mutableAttrText = NSMutableAttributedString(attributedString: configuration.topic)
+			let mutableAttrText = NSMutableAttributedString(attributedString: topic)
 			let range = NSRange(location: 0, length: mutableAttrText.length)
 			mutableAttrText.addAttributes(attrs, range: range)
 			mutableAttrText.replaceFont(with: OutlineFont.topic)
@@ -255,7 +257,7 @@ extension EditorTextRowContentView {
 	}
 	
 	private func configureNoteTextView(configuration: EditorTextRowContentConfiguration) {
-		guard let noteAttributedText = configuration.row?.note else {
+		guard let noteAttributedText = configuration.row?.textRow?.note else {
 			noteTextView?.removeFromSuperview()
 			noteTextView = nil
 			return
@@ -276,7 +278,7 @@ extension EditorTextRowContentView {
 			addSubview(noteTextView!)
 		}
 		
-		noteTextView!.textRow = configuration.row
+		noteTextView!.row = configuration.row
 		noteTextView!.attributedText = mutableAttrText
 	}
 	

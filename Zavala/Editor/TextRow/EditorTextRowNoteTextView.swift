@@ -12,10 +12,10 @@ protocol EditorTextRowNoteTextViewDelegate: class {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewTextRowStrings: TextRowStrings { get }
 	func invalidateLayout(_ : EditorTextRowNoteTextView)
-	func textChanged(_ : EditorTextRowNoteTextView, row: TextRow, isInNotes: Bool, cursorPosition: Int)
-	func deleteRowNote(_ : EditorTextRowNoteTextView, row: TextRow)
-	func moveCursorTo(_ : EditorTextRowNoteTextView, row: TextRow)
-	func moveCursorDown(_ : EditorTextRowNoteTextView, row: TextRow)
+	func textChanged(_ : EditorTextRowNoteTextView, row: Row, isInNotes: Bool, cursorPosition: Int)
+	func deleteRowNote(_ : EditorTextRowNoteTextView, row: Row)
+	func moveCursorTo(_ : EditorTextRowNoteTextView, row: Row)
+	func moveCursorDown(_ : EditorTextRowNoteTextView, row: Row)
 	func editLink(_: EditorTextRowNoteTextView, _ link: String?, range: NSRange)
 }
 
@@ -72,14 +72,14 @@ class EditorTextRowNoteTextView: OutlineTextView {
 	}
 	
 	override func resignFirstResponder() -> Bool {
-		if let row = textRow {
+		if let row = row {
 			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: row, isInNotes: false, cursorPosition: lastCursorPosition)
 		}
 		return super.resignFirstResponder()
 	}
 
 	override func deleteBackward() {
-		guard let textRow = textRow else { return }
+		guard let textRow = row else { return }
 		if attributedText.length == 0 {
 			isSavingTextUnnecessary = true
 			editorDelegate?.deleteRowNote(self, row: textRow)
@@ -89,12 +89,12 @@ class EditorTextRowNoteTextView: OutlineTextView {
 	}
 
 	@objc func moveCursorToText(_ sender: Any) {
-		guard let textRow = textRow else { return }
+		guard let textRow = row else { return }
 		editorDelegate?.moveCursorTo(self, row: textRow)
 	}
 	
 	@objc func moveCursorDown(_ sender: Any) {
-		guard let textRow = textRow else { return }
+		guard let textRow = row else { return }
 		editorDelegate?.moveCursorDown(self, row: textRow)
 	}
 
@@ -121,7 +121,7 @@ extension EditorTextRowNoteTextView: UITextViewDelegate {
 	}
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
-		guard isTextChanged, let textRow = textRow else { return }
+		guard isTextChanged, let textRow = row else { return }
 		
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false

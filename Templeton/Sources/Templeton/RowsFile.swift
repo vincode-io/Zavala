@@ -89,15 +89,15 @@ private extension RowsFile {
 		}
 
 		let decoder = PropertyListDecoder()
-		let headlines: [TextRow]
+		let rows: [Row]
 		do {
-			headlines = try decoder.decode([TextRow].self, from: rowsData)
+			rows = try decoder.decode([Row].self, from: rowsData)
 		} catch {
 			os_log(.error, log: log, "RowsFile read deserialization failed: %@.", error.localizedDescription)
 			return
 		}
 
-		outline?.rows = headlines
+		outline?.rows = rows
 	}
 	
 	func saveCallback() {

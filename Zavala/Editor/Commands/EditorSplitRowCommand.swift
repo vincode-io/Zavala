@@ -17,13 +17,13 @@ final class EditorSplitRowCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var newRow: TextRow?
-	var row: TextRow
+	var newRow: Row?
+	var row: Row
 	var topic: NSAttributedString
 	var cursorPosition: Int
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: TextRow, topic: NSAttributedString, cursorPosition: Int) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -37,7 +37,7 @@ final class EditorSplitRowCommand: EditorOutlineCommand {
 	func perform() {
 		saveCursorCoordinates()
 		if newRow == nil {
-			newRow = TextRow()
+			newRow = Row.text(TextRow())
 		}
 		changes = outline.splitRow(newRow: newRow!, row: row, topic: topic, cursorPosition: cursorPosition)
 		delegate?.applyChanges(changes!)

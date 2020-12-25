@@ -17,13 +17,13 @@ final class EditorOutdentRowCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var row: TextRow
-	var oldParent: TextRow?
+	var row: Row
+	var oldParent: Row?
 	var oldChildIndex: Int?
-	var oldTextRowStrings: TextRowStrings
+	var oldTextRowStrings: TextRowStrings?
 	var newTextRowStrings: TextRowStrings
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: TextRow, textRowStrings: TextRowStrings) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -33,11 +33,11 @@ final class EditorOutdentRowCommand: EditorOutlineCommand {
 		
 		// This is going to move, so we save the parent and child index
 		if row != row.parent?.rows?.last {
-			self.oldParent = row.parent as? TextRow
+			self.oldParent = row.parent as? Row
 			self.oldChildIndex = row.parent?.rows?.firstIndex(of: row)
 		}
 		
-		self.oldTextRowStrings = row.textRowStrings
+		self.oldTextRowStrings = row.textRow?.textRowStrings
 		self.newTextRowStrings = textRowStrings
 	}
 	

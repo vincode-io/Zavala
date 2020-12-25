@@ -18,7 +18,7 @@ final class EditorCollapseAllCommand: EditorOutlineCommand {
 	
 	var outline: Outline
 	var container: RowContainer
-	var collapsedRows: [TextRow]?
+	var collapsedRows: [Row]?
 	
 	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, container: RowContainer) {
 		self.undoManager = undoManager

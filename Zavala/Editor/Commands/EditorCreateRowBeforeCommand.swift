@@ -17,15 +17,15 @@ final class EditorCreateRowBeforeCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var row: TextRow
-	var beforeRow: TextRow
+	var row: Row
+	var beforeRow: Row
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, beforeRow: TextRow) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, beforeRow: Row) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.row = TextRow()
+		self.row = Row.text(TextRow())
 		self.beforeRow = beforeRow
 		undoActionName = L10n.addRow
 		redoActionName = L10n.addRow

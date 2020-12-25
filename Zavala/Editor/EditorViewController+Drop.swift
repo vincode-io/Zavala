@@ -20,7 +20,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 		}
 
 		guard destinationIndexPath?.section ?? 0 != 0,
-			  let row = session.localDragSession?.localContext as? TextRow,
+			  let row = session.localDragSession?.localContext as? Row,
 			  let rowShadowTableIndex = row.shadowTableIndex,
 			  let shadowTable = outline?.shadowTable,
 			  let targetIndexPath = destinationIndexPath else {
@@ -52,7 +52,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 			return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
 		}
 		
-		if let proposedParent = shadowTable[targetIndexPath.row].parent as? TextRow {
+		if let proposedParent = shadowTable[targetIndexPath.row].parent as? Row {
 			if proposedParent == row {
 				return UICollectionViewDropProposal(operation: .cancel)
 			}
@@ -67,7 +67,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
 		guard let dragItem = coordinator.items.first?.dragItem,
-			  let row = dragItem.localObject as? TextRow,
+			  let row = dragItem.localObject as? Row,
 			  let rowShadowTableIndex = row.shadowTableIndex,
 			  let outline = outline,
 			  let shadowTable = outline.shadowTable else { return }
@@ -95,12 +95,12 @@ extension EditorViewController: UICollectionViewDropDelegate {
 		guard let newParent = newSibling.parent, var newIndex = newParent.rows?.firstIndex(of: newSibling) else { return }
 
 		// This shouldn't happen, but does.  We probably need to beef up the dropSessionDidUpdate code to prevent it.
-		if let newParentRow = newParent as? TextRow, newParentRow == row || newParentRow.isDecendent(row) {
+		if let newParentRow = newParent as? Row, newParentRow == row || newParentRow.isDecendent(row) {
 			return
 		}
 		
 		// I don't know why this works.  This is definately in the category of, "Just try stuff until it works.".
-		if row.parent !== newParent && rowShadowTableIndex < targetIndexPath.row {
+		if (row.parent as? Row) != (newParent as? Row) && rowShadowTableIndex < targetIndexPath.row {
 			newIndex = newIndex + 1
 		}
 		
@@ -114,7 +114,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 
 extension EditorViewController {
 	
-	private func drop(coordinator: UICollectionViewDropCoordinator, row: TextRow, toParent: RowContainer, toChildIndex: Int) {
+	private func drop(coordinator: UICollectionViewDropCoordinator, row: Row, toParent: RowContainer, toChildIndex: Int) {
 		guard let undoManager = undoManager,
 			  let outline = outline,
 			  let dragItem = coordinator.items.first?.dragItem else { return }

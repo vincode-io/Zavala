@@ -12,14 +12,14 @@ protocol EditorTextRowTopicTextViewDelegate: class {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
 	var editorRowTopicTextViewTextRowStrings: TextRowStrings { get }
 	func invalidateLayout(_: EditorTextRowTopicTextView)
-	func textChanged(_: EditorTextRowTopicTextView, row: TextRow, isInNotes: Bool, cursorPosition: Int)
-	func deleteRow(_: EditorTextRowTopicTextView, row: TextRow)
-	func createRow(_: EditorTextRowTopicTextView, beforeRow: TextRow)
-	func createRow(_: EditorTextRowTopicTextView, afterRow: TextRow)
-	func indentRow(_: EditorTextRowTopicTextView, row: TextRow)
-	func outdentRow(_: EditorTextRowTopicTextView, row: TextRow)
-	func splitRow(_: EditorTextRowTopicTextView, row: TextRow, topic: NSAttributedString, cursorPosition: Int)
-	func createRowNote(_: EditorTextRowTopicTextView, row: TextRow)
+	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, cursorPosition: Int)
+	func deleteRow(_: EditorTextRowTopicTextView, row: Row)
+	func createRow(_: EditorTextRowTopicTextView, beforeRow: Row)
+	func createRow(_: EditorTextRowTopicTextView, afterRow: Row)
+	func indentRow(_: EditorTextRowTopicTextView, row: Row)
+	func outdentRow(_: EditorTextRowTopicTextView, row: Row)
+	func splitRow(_: EditorTextRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
+	func createRowNote(_: EditorTextRowTopicTextView, row: Row)
 	func editLink(_: EditorTextRowTopicTextView, _ link: String?, range: NSRange)
 }
 
@@ -75,14 +75,14 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	}
 	
 	override func resignFirstResponder() -> Bool {
-		if let textRow = textRow {
+		if let textRow = row {
 			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: textRow, isInNotes: false, cursorPosition: lastCursorPosition)
 		}
 		return super.resignFirstResponder()
 	}
 
 	override func deleteBackward() {
-		guard let textRow = textRow else { return }
+		guard let textRow = row else { return }
 		if attributedText.length == 0 {
 			editorDelegate?.deleteRow(self, row: textRow)
 		} else {
@@ -91,12 +91,12 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	}
 
 	@objc func indent(_ sender: Any) {
-		guard let textRow = textRow else { return }
+		guard let textRow = row else { return }
 		editorDelegate?.indentRow(self, row: textRow)
 	}
 	
 	@objc func outdent(_ sender: Any) {
-		guard let textRow = textRow else { return }
+		guard let textRow = row else { return }
 		editorDelegate?.outdentRow(self, row: textRow)
 	}
 	
@@ -109,13 +109,13 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	}
 	
 	@objc func addNote(_ sender: Any) {
-		guard let textRow = textRow else { return }
+		guard let textRow = row else { return }
 		isSavingTextUnnecessary = true
 		editorDelegate?.createRowNote(self, row: textRow)
 	}
 	
 	@objc func split(_ sender: Any) {
-		guard let textRow = textRow else { return }
+		guard let textRow = row else { return }
 		
 		isSavingTextUnnecessary = true
 		
@@ -149,7 +149,7 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 	}
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
-		guard isTextChanged, let textRow = textRow else { return }
+		guard isTextChanged, let textRow = row else { return }
 		
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false
@@ -161,7 +161,7 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 	}
 	
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-		guard let textRow = textRow else { return true }
+		guard let textRow = row else { return true }
 		switch text {
 		case "\n":
 			editorDelegate?.createRow(self, afterRow: textRow)

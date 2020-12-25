@@ -9,11 +9,11 @@ import Foundation
 
 public struct CursorCoordinates {
 
-	public var row: TextRow
+	public var row: Row
 	public var isInNotes: Bool
 	public var cursorPosition: Int
 	
-	public init(row: TextRow, isInNotes: Bool, cursorPosition: Int) {
+	public init(row: Row, isInNotes: Bool, cursorPosition: Int) {
 		self.row = row
 		self.isInNotes = isInNotes
 		self.cursorPosition = cursorPosition

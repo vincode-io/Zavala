@@ -10,15 +10,16 @@ import Foundation
 class TransientDataVisitor {
 	
 	let isFiltered: Bool
-	var shadowTable = [TextRow]()
+	var shadowTable = [Row]()
 	var addingToShadowTable = true
 	
 	init(isFiltered: Bool) {
 		self.isFiltered = isFiltered
 	}
 	
-	func visitor(_ visited: TextRow) {
+	func visitor(_ visited: Row) {
 
+		var mutatingVisited = visited
 		var addingToShadowTableSuspended = false
 		
 		// Add to the Shadow Table if we haven't hit a collapsed entry
@@ -27,9 +28,9 @@ class TransientDataVisitor {
 			let shouldFilter = isFiltered && visited.isComplete ?? false
 			
 			if shouldFilter {
-				visited.shadowTableIndex = nil
+				mutatingVisited.shadowTableIndex = nil
 			} else {
-				visited.shadowTableIndex = shadowTable.count
+				mutatingVisited.shadowTableIndex = shadowTable.count
 				shadowTable.append(visited)
 			}
 			
@@ -40,14 +41,15 @@ class TransientDataVisitor {
 			
 		} else {
 			
-			visited.shadowTableIndex = nil
+			mutatingVisited.shadowTableIndex = nil
 			
 		}
 		
 		// Set all the Headline's children's parent and visit them
-		visited.rows?.forEach {
-			$0.parent = visited
-			$0.visit(visitor: visitor)
+		visited.rows?.forEach { row in
+			var mutatingRow = row
+			mutatingRow.parent = visited
+			mutatingRow.visit(visitor: visitor)
 		}
 
 		if addingToShadowTableSuspended {

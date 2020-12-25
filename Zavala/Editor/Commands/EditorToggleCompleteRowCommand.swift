@@ -17,12 +17,12 @@ final class EditorToggleCompleteRowCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var row: TextRow
-	var oldTextRowStrings: TextRowStrings
+	var row: Row
+	var oldTextRowStrings: TextRowStrings?
 	var newTextRowStrings: TextRowStrings
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: TextRow, textRowStrings: TextRowStrings) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -30,7 +30,7 @@ final class EditorToggleCompleteRowCommand: EditorOutlineCommand {
 		self.undoActionName = L10n.complete
 		self.redoActionName = L10n.complete
 		
-		oldTextRowStrings = row.textRowStrings
+		oldTextRowStrings = row.textRow?.textRowStrings
 		newTextRowStrings = textRowStrings
 	}
 	

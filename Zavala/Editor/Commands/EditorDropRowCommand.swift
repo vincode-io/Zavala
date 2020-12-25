@@ -17,7 +17,7 @@ final class EditorDropRowCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var row: TextRow
+	var row: Row
 	var oldParent: RowContainer?
 	var oldChildIndex: Int?
 	var toParent: RowContainer
@@ -27,7 +27,7 @@ final class EditorDropRowCommand: EditorOutlineCommand {
 	init(undoManager: UndoManager,
 		 delegate: EditorOutlineCommandDelegate,
 		 outline: Outline,
-		 row: TextRow,
+		 row: Row,
 		 toParent: RowContainer,
 		 toChildIndex: Int) {
 		

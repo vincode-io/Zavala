@@ -18,42 +18,15 @@ public struct TextRowStrings {
 	}
 }
 
-public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Codable {
+public final class TextRow: NSObject, NSCopying, OPMLImporter, Identifiable, Codable {
 	
-	public weak var parent: RowContainer?
+	public var parent: RowContainer?
 	public var shadowTableIndex: Int?
 
-	public var isAncestorComplete: Bool {
-		if let parentRow = parent as? TextRow {
-			return parentRow.isComplete ?? false || parentRow.isAncestorComplete
-		}
-		return false
-	}
-	
-	public var indentLevel: Int {
-		var parentCount = 0
-		var p = parent as? TextRow
-		while p != nil {
-			parentCount = parentCount + 1
-			p = p?.parent as? TextRow
-		}
-		return parentCount
-	}
-	
 	public var id: String
 	public var isExpanded: Bool?
 	public var isComplete: Bool?
-	public var rows: [TextRow]?
-
-	public var isExpandable: Bool {
-		guard let rows = rows, !rows.isEmpty else { return false }
-		return !(isExpanded ?? true)
-	}
-
-	public var isCollapsable: Bool {
-		guard let rows = rows, !rows.isEmpty else { return false }
-		return isExpanded ?? true
-	}
+	public var rows: [Row]?
 
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
@@ -70,7 +43,7 @@ public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Cod
 	public override init() {
 		self.id = UUID().uuidString
 		super.init()
-		rows = [TextRow]()
+		rows = [Row]()
 	}
 	
 	public init(topicPlainText: String, notePlainText: String? = nil) {
@@ -82,7 +55,7 @@ public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Cod
 			note = NSAttributedString(markdownRepresentation: notePlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		}
 											
-		rows = [TextRow]()
+		rows = [Row]()
 	}
 	
 	public var isNoteEmpty: Bool {
@@ -162,7 +135,7 @@ public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Cod
 		return md
 	}
 	
-	public func opml() -> String {
+	public func opml(indentLevel: Int = 0) -> String {
 		let indent = String(repeating: " ", count: (indentLevel + 1) * 2)
 		let escapedText = topicPlainText?.escapingSpecialXMLCharacters ?? ""
 		
@@ -182,13 +155,6 @@ public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Cod
 		return opml
 	}
 
-	public func isDecendent(_ row: TextRow) -> Bool {
-		if let parentRow = parent as? TextRow, parentRow == row || parentRow.isDecendent(row) {
-			return true
-		}
-		return false
-	}
-	
 	public override func isEqual(_ object: Any?) -> Bool {
 		guard let other = object as? TextRow else { return false }
 		if self === other { return true }
@@ -203,10 +169,6 @@ public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Cod
 	
 	public func copy(with zone: NSZone? = nil) -> Any {
 		return self
-	}
-	
-	func visit(visitor: (TextRow) -> Void) {
-		visitor(self)
 	}
 	
 }

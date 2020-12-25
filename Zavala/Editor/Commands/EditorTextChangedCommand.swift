@@ -17,12 +17,12 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var row: TextRow
-	var oldTextRowStrings: TextRowStrings
+	var row: Row
+	var oldTextRowStrings: TextRowStrings?
 	var newTextRowStrings: TextRowStrings
 	var applyChanges = false
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: TextRow, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -30,7 +30,7 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 		self.undoActionName = L10n.typing
 		self.redoActionName = L10n.typing
 
-		oldTextRowStrings = row.textRowStrings
+		oldTextRowStrings = row.textRow?.textRowStrings
 		newTextRowStrings = textRowStrings
 		
 		cursorCoordinates = CursorCoordinates(row: row, isInNotes: isInNotes, cursorPosition: cursorPosition)

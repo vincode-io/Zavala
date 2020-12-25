@@ -17,11 +17,11 @@ final class EditorIndentRowCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var row: TextRow
-	var oldTextRowStrings: TextRowStrings
+	var row: Row
+	var oldTextRowStrings: TextRowStrings?
 	var newTextRowStrings: TextRowStrings
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: TextRow, textRowStrings: TextRowStrings) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -29,7 +29,7 @@ final class EditorIndentRowCommand: EditorOutlineCommand {
 		self.undoActionName = L10n.indent
 		self.redoActionName = L10n.indent
 		
-		oldTextRowStrings = row.textRowStrings
+		oldTextRowStrings = row.textRow?.textRowStrings
 		newTextRowStrings = textRowStrings
 	}
 	

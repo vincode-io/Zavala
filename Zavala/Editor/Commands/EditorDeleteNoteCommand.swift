@@ -17,17 +17,17 @@ final class EditorDeleteNoteCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var row: TextRow
-	var oldTextRowStrings: TextRowStrings
+	var row: Row
+	var oldTextRowStrings: TextRowStrings?
 	var newTextRowStrings: TextRowStrings
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: TextRow, textRowStrings: TextRowStrings) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
 		self.row = row
-		self.oldTextRowStrings = row.textRowStrings
+		self.oldTextRowStrings = row.textRow?.textRowStrings
 		self.newTextRowStrings = textRowStrings
 		undoActionName = L10n.deleteNote
 		redoActionName = L10n.deleteNote
