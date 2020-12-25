@@ -1,27 +1,26 @@
 //
-//  EditorCreateRowBeforeCommand.swift
-//  Zavala
+//  CreateRowBeforeCommand.swift
 //
 //  Created by Maurice Parker on 12/15/20.
 //
 
 import Foundation
 import RSCore
-import Templeton
 
-final class EditorCreateRowBeforeCommand: EditorOutlineCommand {
-	var undoActionName: String
-	var redoActionName: String
-	var undoManager: UndoManager
-	weak var delegate: EditorOutlineCommandDelegate?
-	var cursorCoordinates: CursorCoordinates?
+public final class CreateRowBeforeCommand: OutlineCommand {
+	public var undoActionName: String
+	public var redoActionName: String
+	public var undoManager: UndoManager
+	weak public var delegate: OutlineCommandDelegate?
+	public var cursorCoordinates: CursorCoordinates?
 	
+	public var changes: ShadowTableChanges?
+
 	var outline: Outline
 	var row: Row
 	var beforeRow: Row
-	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, beforeRow: Row) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, beforeRow: Row) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -31,14 +30,14 @@ final class EditorCreateRowBeforeCommand: EditorOutlineCommand {
 		redoActionName = L10n.addRow
 	}
 	
-	func perform() {
+	public func perform() {
 		saveCursorCoordinates()
 		changes = outline.createRow(row, beforeRow: beforeRow)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
-	func undo() {
+	public func undo() {
 		let changes = outline.deleteRow(row)
 		delegate?.applyChanges(changes)
 		registerRedo()

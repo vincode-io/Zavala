@@ -119,7 +119,7 @@ extension EditorViewController {
 			  let outline = outline,
 			  let dragItem = coordinator.items.first?.dragItem else { return }
 
-		let command = EditorDropRowCommand(undoManager: undoManager,
+		let command = DropRowCommand(undoManager: undoManager,
 										   delegate: self,
 										   outline: outline,
 										   row: row,
@@ -130,7 +130,7 @@ extension EditorViewController {
 		
 		let targetIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: outline.shadowTable!.count - 1, section: 1)
 
-		if let moves = command.shadowTableChanges?.moveIndexPaths, !moves.isEmpty {
+		if let moves = command.changes?.moveIndexPaths, !moves.isEmpty {
 			collectionView.performBatchUpdates({
 				for move in moves {
 					collectionView.moveItem(at: move.0, to: move.1)

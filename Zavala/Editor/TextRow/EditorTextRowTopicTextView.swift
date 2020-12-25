@@ -50,6 +50,10 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		return editorDelegate?.editorRowTopicTextViewTextRowStrings
 	}
 	
+	private var textViewHeight: CGFloat?
+	private var isTextChanged = false
+	private var isSavingTextUnnecessary = false
+
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 
@@ -59,10 +63,6 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		self.linkTextAttributes = [.foregroundColor: UIColor.label, .underlineStyle: 1]
 	}
 	
-	private var textViewHeight: CGFloat?
-	private var isTextChanged = false
-	private var isSavingTextUnnecessary = false
-
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
@@ -136,6 +136,19 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		isTextChanged = true
 	}
 	
+}
+
+// MARK: CursorCoordinatesProvider
+
+extension EditorTextRowTopicTextView: CursorCoordinatesProvider {
+
+	var coordinates: CursorCoordinates? {
+		if let row = row {
+			return CursorCoordinates(row: row, isInNotes: false, cursorPosition: cursorPosition)
+		}
+		return nil
+	}
+
 }
 
 // MARK: UITextViewDelegate

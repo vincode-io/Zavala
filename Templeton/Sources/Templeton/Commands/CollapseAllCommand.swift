@@ -1,26 +1,24 @@
 //
-//  EditorCollapseAllCommand.swift
-//  Zavala
+//  CollapseAllCommand.swift
 //
 //  Created by Maurice Parker on 12/20/20.
 //
 
 import Foundation
 import RSCore
-import Templeton
 
-final class EditorCollapseAllCommand: EditorOutlineCommand {
-	var undoActionName: String
-	var redoActionName: String
-	var undoManager: UndoManager
-	weak var delegate: EditorOutlineCommandDelegate?
-	var cursorCoordinates: CursorCoordinates?
+public final class CollapseAllCommand: OutlineCommand {
+	public var undoActionName: String
+	public var redoActionName: String
+	public var undoManager: UndoManager
+	public weak var delegate: OutlineCommandDelegate?
+	public var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
 	var container: RowContainer
 	var collapsedRows: [Row]?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, container: RowContainer) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, container: RowContainer) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -34,7 +32,7 @@ final class EditorCollapseAllCommand: EditorOutlineCommand {
 		}
 	}
 	
-	func perform() {
+	public func perform() {
 		saveCursorCoordinates()
 		let (expanded, changes) = outline.collapseAll(container: container)
 		collapsedRows = expanded
@@ -42,7 +40,7 @@ final class EditorCollapseAllCommand: EditorOutlineCommand {
 		registerUndo()
 	}
 	
-	func undo() {
+	public func undo() {
 		guard let collapsedRows = collapsedRows else { return }
 		let changes = outline.expand(rows: collapsedRows)
 		delegate?.applyChanges(changes)

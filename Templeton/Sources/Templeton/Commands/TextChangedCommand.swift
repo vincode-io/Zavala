@@ -1,20 +1,18 @@
 //
-//  EditorTextChangedCommand.swift
-//  Zavala
+//  TextChangedCommand.swift
 //
 //  Created by Maurice Parker on 11/28/20.
 //
 
 import Foundation
 import RSCore
-import Templeton
 
-final class EditorTextChangedCommand: EditorOutlineCommand {
-	var undoActionName: String
-	var redoActionName: String
-	var undoManager: UndoManager
-	weak var delegate: EditorOutlineCommandDelegate?
-	var cursorCoordinates: CursorCoordinates?
+public final class TextChangedCommand: OutlineCommand {
+	public var undoActionName: String
+	public var redoActionName: String
+	public var undoManager: UndoManager
+	weak public var delegate: OutlineCommandDelegate?
+	public var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
 	var row: Row
@@ -22,7 +20,7 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 	var newTextRowStrings: TextRowStrings
 	var applyChanges = false
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -36,7 +34,7 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 		cursorCoordinates = CursorCoordinates(row: row, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
-	func perform() {
+	public func perform() {
 		let changes = outline.updateRow(row, textRowStrings: newTextRowStrings)
 		if applyChanges {
 			delegate?.applyChangesRestoringCursor(changes)
@@ -45,7 +43,7 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 		registerUndo()
 	}
 	
-	func undo() {
+	public func undo() {
 		let changes = outline.updateRow(row, textRowStrings: oldTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()

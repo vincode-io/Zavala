@@ -1,28 +1,27 @@
 //
-//  EditorCreateNoteCommand.swift
-//  Zavala
+//  CreateNoteCommand.swift
 //
 //  Created by Maurice Parker on 12/13/20.
 //
 
 import Foundation
 import RSCore
-import Templeton
 
-final class EditorCreateNoteCommand: EditorOutlineCommand {
-	var undoActionName: String
-	var redoActionName: String
-	var undoManager: UndoManager
-	weak var delegate: EditorOutlineCommandDelegate?
-	var cursorCoordinates: CursorCoordinates?
+public final class CreateNoteCommand: OutlineCommand {
+	public var undoActionName: String
+	public var redoActionName: String
+	public var undoManager: UndoManager
+	public weak var delegate: OutlineCommandDelegate?
+	public var cursorCoordinates: CursorCoordinates?
 	
+	public var changes: ShadowTableChanges?
+
 	var outline: Outline
 	var row: Row
 	var oldTextRowStrings: TextRowStrings?
 	var newTextRowStrings: TextRowStrings
-	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -33,14 +32,14 @@ final class EditorCreateNoteCommand: EditorOutlineCommand {
 		redoActionName = L10n.addNote
 	}
 	
-	func perform() {
+	public func perform() {
 		saveCursorCoordinates()
 		changes = outline.createNote(row: row, textRowStrings: newTextRowStrings)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
-	func undo() {
+	public func undo() {
 		let changes = outline.deleteNote(row: row, textRowStrings: oldTextRowStrings)
 		delegate?.applyChanges(changes)
 		registerRedo()

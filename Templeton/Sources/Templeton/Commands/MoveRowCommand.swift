@@ -1,20 +1,18 @@
 //
-//  EditorMoveRowCommand.swift
-//  Zavala
+//  MoveRowCommand.swift
 //
 //  Created by Maurice Parker on 12/1/20.
 //
 
 import Foundation
 import RSCore
-import Templeton
 
-final class EditorMoveRowCommand: EditorOutlineCommand {
-	var undoActionName: String
-	var redoActionName: String
-	var undoManager: UndoManager
-	weak var delegate: EditorOutlineCommandDelegate?
-	var cursorCoordinates: CursorCoordinates?
+public final class MoveRowCommand: OutlineCommand {
+	public var undoActionName: String
+	public var redoActionName: String
+	public var undoManager: UndoManager
+	weak public var delegate: OutlineCommandDelegate?
+	public var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
 	var row: Row
@@ -23,12 +21,12 @@ final class EditorMoveRowCommand: EditorOutlineCommand {
 	var toParent: RowContainer
 	var toChildIndex: Int
 	
-	init(undoManager: UndoManager,
-		 delegate: EditorOutlineCommandDelegate,
-		 outline: Outline,
-		 row: Row,
-		 toParent: RowContainer,
-		 toChildIndex: Int) {
+	public init(undoManager: UndoManager,
+				delegate: OutlineCommandDelegate,
+				outline: Outline,
+				row: Row,
+				toParent: RowContainer,
+				toChildIndex: Int) {
 		
 		self.undoManager = undoManager
 		self.delegate = delegate
@@ -43,14 +41,14 @@ final class EditorMoveRowCommand: EditorOutlineCommand {
 		oldChildIndex = oldParent?.rows?.firstIndex(of: row)
 	}
 	
-	func perform() {
+	public func perform() {
 		saveCursorCoordinates()
 		let changes = outline.moveRow(row, toParent: toParent, childIndex: toChildIndex)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
-	func undo() {
+	public func undo() {
 		if let oldParent = oldParent, let oldChildIndex = oldChildIndex {
 			let changes = outline.moveRow(row, toParent: oldParent, childIndex: oldChildIndex)
 			delegate?.applyChangesRestoringCursor(changes)

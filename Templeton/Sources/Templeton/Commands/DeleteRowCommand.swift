@@ -1,38 +1,37 @@
 //
-//  EditorDeleteRowCommand.swift
-//  Zavala
+//  DeleteRowCommand.swift
 //
 //  Created by Maurice Parker on 11/28/20.
 //
 
 import Foundation
 import RSCore
-import Templeton
 
-final class EditorDeleteRowCommand: EditorOutlineCommand {
-	var undoActionName: String
-	var redoActionName: String
-	var undoManager: UndoManager
-	weak var delegate: EditorOutlineCommandDelegate?
-	var cursorCoordinates: CursorCoordinates?
+public final class DeleteRowCommand: OutlineCommand {
+	public var undoActionName: String
+	public var redoActionName: String
+	public var undoManager: UndoManager
+	weak public var delegate: OutlineCommandDelegate?
+	public var cursorCoordinates: CursorCoordinates?
 	
+	public var changes: ShadowTableChanges?
+
 	var outline: Outline
 	var row: Row
 	var textRowStrings: TextRowStrings
 	var afterRows: Row?
-	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
 		self.row = row
 		self.textRowStrings = textRowStrings
-		undoActionName = L10n.delete
-		redoActionName = L10n.delete
+		undoActionName = L10n.deleteRow
+		redoActionName = L10n.deleteRow
 	}
 	
-	func perform() {
+	public func perform() {
 		saveCursorCoordinates()
 		if let rowShadowTableIndex = row.shadowTableIndex, rowShadowTableIndex > 0 {
 			afterRows = outline.shadowTable?[rowShadowTableIndex - 1]
@@ -43,7 +42,7 @@ final class EditorDeleteRowCommand: EditorOutlineCommand {
 		registerUndo()
 	}
 	
-	func undo() {
+	public func undo() {
 		let changes = outline.createRow(row, afterRow: afterRows)
 		delegate?.applyChanges(changes)
 		registerRedo()

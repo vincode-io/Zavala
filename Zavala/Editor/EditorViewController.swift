@@ -514,7 +514,7 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 
 // MARK: EditorOutlineCommandDelegate
 
-extension EditorViewController: EditorOutlineCommandDelegate {
+extension EditorViewController: OutlineCommandDelegate {
 	
 	func applyChanges(_ changes: ShadowTableChanges) {
 		if let deletes = changes.deleteIndexPaths, !deletes.isEmpty {
@@ -805,7 +805,7 @@ private extension EditorViewController {
 	func toggleDisclosure(row: Row) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = EditorToggleDisclosureCommand(undoManager: undoManager,
+		let command = ToggleDisclosureCommand(undoManager: undoManager,
 													delegate: self,
 													outline: outline,
 													row: row)
@@ -816,7 +816,7 @@ private extension EditorViewController {
 	func expandAll(container: RowContainer) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = EditorExpandAllCommand(undoManager: undoManager,
+		let command = ExpandAllCommand(undoManager: undoManager,
 											 delegate: self,
 											 outline: outline,
 											 container: container)
@@ -827,7 +827,7 @@ private extension EditorViewController {
 	func collapseAll(container: RowContainer) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = EditorCollapseAllCommand(undoManager: undoManager,
+		let command = CollapseAllCommand(undoManager: undoManager,
 											   delegate: self,
 											   outline: outline,
 											   container: container)
@@ -838,7 +838,7 @@ private extension EditorViewController {
 	func textChanged(row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = EditorTextChangedCommand(undoManager: undoManager,
+		let command = TextChangedCommand(undoManager: undoManager,
 											   delegate: self,
 											   outline: outline,
 											   row: row,
@@ -851,7 +851,7 @@ private extension EditorViewController {
 	func deleteRow(_ row: Row, textRowStrings: TextRowStrings) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = EditorDeleteRowCommand(undoManager: undoManager,
+		let command = DeleteRowCommand(undoManager: undoManager,
 												  delegate: self,
 												  outline: outline,
 												  row: row,
@@ -871,7 +871,7 @@ private extension EditorViewController {
 	func createRow(beforeRow: Row) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = EditorCreateRowBeforeCommand(undoManager: undoManager,
+		let command = CreateRowBeforeCommand(undoManager: undoManager,
 														delegate: self,
 														outline: outline,
 														beforeRow: beforeRow)
@@ -888,7 +888,7 @@ private extension EditorViewController {
 	func createRow(afterRow: Row?, textRowStrings: TextRowStrings?) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = EditorCreateRowAfterCommand(undoManager: undoManager,
+		let command = CreateRowAfterCommand(undoManager: undoManager,
 												  delegate: self,
 												  outline: outline,
 												  afterRow: afterRow,
@@ -906,7 +906,7 @@ private extension EditorViewController {
 	func indentRow(_ row: Row, textRowStrings: TextRowStrings) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = EditorIndentRowCommand(undoManager: undoManager,
+		let command = IndentRowCommand(undoManager: undoManager,
 												  delegate: self,
 												  outline: outline,
 												  row: row,
@@ -918,7 +918,7 @@ private extension EditorViewController {
 	func outdentRow(_ row: Row, textRowStrings: TextRowStrings) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = EditorOutdentRowCommand(undoManager: undoManager,
+		let command = OutdentRowCommand(undoManager: undoManager,
 												  delegate: self,
 												  outline: outline,
 												  row: row,
@@ -930,7 +930,7 @@ private extension EditorViewController {
 	func splitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = EditorSplitRowCommand(undoManager: undoManager,
+		let command = SplitRowCommand(undoManager: undoManager,
 												 delegate: self,
 												 outline: outline,
 												 row: row,
@@ -950,7 +950,7 @@ private extension EditorViewController {
 	func toggleCompleteRow(_ row: Row, textRowStrings: TextRowStrings) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = EditorToggleCompleteRowCommand(undoManager: undoManager,
+		let command = ToggleCompleteRowCommand(undoManager: undoManager,
 														  delegate: self,
 														  outline: outline,
 														  row: row,
@@ -969,7 +969,7 @@ private extension EditorViewController {
 	func createRowNote(_ row: Row, textRowStrings: TextRowStrings) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = EditorCreateNoteCommand(undoManager: undoManager,
+		let command = CreateNoteCommand(undoManager: undoManager,
 											  delegate: self,
 											  outline: outline,
 											  row: row,
@@ -987,7 +987,7 @@ private extension EditorViewController {
 	func deleteRowNote(_ row: Row, textRowStrings: TextRowStrings) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = EditorDeleteNoteCommand(undoManager: undoManager,
+		let command = DeleteNoteCommand(undoManager: undoManager,
 											  delegate: self,
 											  outline: outline,
 											  row: row,

@@ -1,20 +1,18 @@
 //
-//  EditorOutdentRowCommand.swift
-//  Zavala
+//  OutdentRowCommand.swift
 //
 //  Created by Maurice Parker on 11/28/20.
 //
 
 import Foundation
 import RSCore
-import Templeton
 
-final class EditorOutdentRowCommand: EditorOutlineCommand {
-	var undoActionName: String
-	var redoActionName: String
-	var undoManager: UndoManager
-	weak var delegate: EditorOutlineCommandDelegate?
-	var cursorCoordinates: CursorCoordinates?
+public final class OutdentRowCommand: OutlineCommand {
+	public var undoActionName: String
+	public var redoActionName: String
+	public var undoManager: UndoManager
+	weak public var delegate: OutlineCommandDelegate?
+	public var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
 	var row: Row
@@ -23,7 +21,7 @@ final class EditorOutdentRowCommand: EditorOutlineCommand {
 	var oldTextRowStrings: TextRowStrings?
 	var newTextRowStrings: TextRowStrings
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -41,14 +39,14 @@ final class EditorOutdentRowCommand: EditorOutlineCommand {
 		self.newTextRowStrings = textRowStrings
 	}
 	
-	func perform() {
+	public func perform() {
 		saveCursorCoordinates()
 		let changes = outline.outdentRow(row, textRowStrings: newTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
-	func undo() {
+	public func undo() {
 		if let oldParent = oldParent, let oldChildIndex = oldChildIndex {
 			let changes = outline.moveRow(row, textRowStrings: oldTextRowStrings, toParent: oldParent, childIndex: oldChildIndex)
 			delegate?.applyChangesRestoringCursor(changes)

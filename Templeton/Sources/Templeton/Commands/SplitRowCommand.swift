@@ -1,29 +1,28 @@
 //
-//  EditorSplitRowCommand.swift
-//  Zavala
+//  SplitRowCommand.swift
 //
 //  Created by Maurice Parker on 12/5/20.
 //
 
 import Foundation
 import RSCore
-import Templeton
 
-final class EditorSplitRowCommand: EditorOutlineCommand {
-	var undoActionName: String
-	var redoActionName: String
-	var undoManager: UndoManager
-	weak var delegate: EditorOutlineCommandDelegate?
-	var cursorCoordinates: CursorCoordinates?
+public final class SplitRowCommand: OutlineCommand {
+	public var undoActionName: String
+	public var redoActionName: String
+	public var undoManager: UndoManager
+	weak public var delegate: OutlineCommandDelegate?
+	public var cursorCoordinates: CursorCoordinates?
 	
+	public var changes: ShadowTableChanges?
+
 	var outline: Outline
 	var newRow: Row?
 	var row: Row
 	var topic: NSAttributedString
 	var cursorPosition: Int
-	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: Row, topic: NSAttributedString, cursorPosition: Int) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -34,7 +33,7 @@ final class EditorSplitRowCommand: EditorOutlineCommand {
 		redoActionName = L10n.splitRow
 	}
 	
-	func perform() {
+	public func perform() {
 		saveCursorCoordinates()
 		if newRow == nil {
 			newRow = Row.text(TextRow())
@@ -44,7 +43,7 @@ final class EditorSplitRowCommand: EditorOutlineCommand {
 		registerUndo()
 	}
 	
-	func undo() {
+	public func undo() {
 		guard let newHeadline = newRow else { return }
 		let changes = outline.joinRows(topRow: row, bottomRow: newHeadline)
 		delegate?.applyChanges(changes)

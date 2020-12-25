@@ -1,26 +1,24 @@
 //
-//  EditorExpandAllCommand.swift
-//  Zavala
+//  ExpandAllCommand.swift
 //
 //  Created by Maurice Parker on 12/20/20.
 //
 
 import Foundation
 import RSCore
-import Templeton
 
-final class EditorExpandAllCommand: EditorOutlineCommand {
-	var undoActionName: String
-	var redoActionName: String
-	var undoManager: UndoManager
-	weak var delegate: EditorOutlineCommandDelegate?
-	var cursorCoordinates: CursorCoordinates?
+public final class ExpandAllCommand: OutlineCommand {
+	public var undoActionName: String
+	public var redoActionName: String
+	public var undoManager: UndoManager
+	weak public var delegate: OutlineCommandDelegate?
+	public var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
 	var container: RowContainer
 	var expandedRows: [Row]?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, container: RowContainer) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, container: RowContainer) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -34,7 +32,7 @@ final class EditorExpandAllCommand: EditorOutlineCommand {
 		}
 	}
 	
-	func perform() {
+	public func perform() {
 		saveCursorCoordinates()
 		let (expanded, changes) = outline.expandAll(container: container)
 		expandedRows = expanded
@@ -42,7 +40,7 @@ final class EditorExpandAllCommand: EditorOutlineCommand {
 		registerUndo()
 	}
 	
-	func undo() {
+	public func undo() {
 		guard let expandedHeadlines = expandedRows else { return }
 		let changes = outline.collapse(rows: expandedHeadlines)
 		delegate?.applyChanges(changes)

@@ -46,6 +46,10 @@ class EditorTextRowNoteTextView: OutlineTextView {
 		return editorDelegate?.editorRowNoteTextViewTextRowStrings
 	}
 	
+	private var textViewHeight: CGFloat?
+	private var isTextChanged = false
+	private var isSavingTextUnnecessary = false
+
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 		
@@ -56,10 +60,6 @@ class EditorTextRowNoteTextView: OutlineTextView {
 		self.linkTextAttributes = [.foregroundColor: UIColor.secondaryLabel, .underlineStyle: 1]
 	}
 	
-	private var textViewHeight: CGFloat?
-	private var isTextChanged = false
-	private var isSavingTextUnnecessary = false
-
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
@@ -108,6 +108,19 @@ class EditorTextRowNoteTextView: OutlineTextView {
 		isTextChanged = true
 	}
 	
+}
+
+// MARK: CursorCoordinatesProvider
+
+extension EditorTextRowNoteTextView: CursorCoordinatesProvider {
+
+	var coordinates: CursorCoordinates? {
+		if let row = row {
+			return CursorCoordinates(row: row, isInNotes: true, cursorPosition: cursorPosition)
+		}
+		return nil
+	}
+
 }
 
 // MARK: UITextViewDelegate

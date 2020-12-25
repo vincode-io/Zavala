@@ -19,3 +19,21 @@
 
 "Folder_Error_Scoped_Resource" = "Unable to access security scoped resource.";
 "Folder_Error_Import_Read" = "Unable to read the import file.";
+
+/* Commands */
+"Collapse_All_In_Outline" = "Collapse All in Outline";
+"Collapse_All" = "Collapse All";
+"Collapse" = "Collapse";
+"Expand_All_In_Outline" = "Expand All in Outline";
+"Expand_All" = "Expand All";
+"Expand" = "Expand";
+"Add_Note" = "Add Note";
+"Add_Row" = "Add Row";
+"Delete_Note" = "Delete Note";
+"Delete_Row" = "Delete Row";
+"Move" = "Move";
+"Indent" = "Indent";
+"Outdent" = "Outdent";
+"Split_Row" = "Split Row";
+"Typing" = "Typing";
+"Complete" = "Complete";

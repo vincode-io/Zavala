@@ -1,25 +1,23 @@
 //
-//  EditorToggleDisclosureCommand.swift
-//  Zavala
+//  ToggleDisclosureCommand.swift
 //
 //  Created by Maurice Parker on 11/27/20.
 //
 
 import Foundation
 import RSCore
-import Templeton
 
-final class EditorToggleDisclosureCommand: EditorOutlineCommand {
-	var undoActionName: String
-	var redoActionName: String
-	var undoManager: UndoManager
-	weak var delegate: EditorOutlineCommandDelegate?
-	var cursorCoordinates: CursorCoordinates?
+public final class ToggleDisclosureCommand: OutlineCommand {
+	public var undoActionName: String
+	public var redoActionName: String
+	public var undoManager: UndoManager
+	weak public var delegate: OutlineCommandDelegate?
+	public var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
 	var row: Row
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: Row) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -33,14 +31,14 @@ final class EditorToggleDisclosureCommand: EditorOutlineCommand {
 		}
 	}
 	
-	func perform() {
+	public func perform() {
 		saveCursorCoordinates()
 		let changes = outline.toggleDisclosure(row: row)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
-	func undo() {
+	public func undo() {
 		let changes = outline.toggleDisclosure(row: row)
 		delegate?.applyChanges(changes)
 		registerRedo()

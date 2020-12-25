@@ -1,26 +1,24 @@
 //
-//  EditorOutlineCommand.swift
-//  Zavala
+//  OutlineCommand.swift
 //
 //  Created by Maurice Parker on 11/27/20.
 //
 
-import UIKit
+import Foundation
 import RSCore
-import Templeton
 
-protocol EditorOutlineCommandDelegate: class {
+public protocol OutlineCommandDelegate: class {
 	func applyChanges(_: ShadowTableChanges)
 	func applyChangesRestoringCursor(_: ShadowTableChanges)
 	func restoreCursorPosition(_: CursorCoordinates)
 }
 
-protocol EditorOutlineCommand: UndoableCommand {
-	var delegate: EditorOutlineCommandDelegate? { get }
+public protocol OutlineCommand: UndoableCommand {
+	var delegate: OutlineCommandDelegate? { get }
 	var cursorCoordinates: CursorCoordinates? { get set }
 }
 
-extension EditorOutlineCommand {
+public extension OutlineCommand {
 	
 	func saveCursorCoordinates() {
 		cursorCoordinates = CursorCoordinates.currentCoordinates
