@@ -46,13 +46,13 @@ final class EditorDropHeadlineCommand: EditorOutlineCommand {
 	
 	func perform() {
 		saveCursorCoordinates()
-		shadowTableChanges = outline.moveHeadline(headline, toParent: toParent, childIndex: toChildIndex)
+		shadowTableChanges = outline.moveRow(headline, toParent: toParent, childIndex: toChildIndex)
 		registerUndo()
 	}
 	
 	func undo() {
 		if let oldParent = oldParent, let oldChildIndex = oldChildIndex {
-			let changes = outline.moveHeadline(headline, toParent: oldParent, childIndex: oldChildIndex)
+			let changes = outline.moveRow(headline, toParent: oldParent, childIndex: oldChildIndex)
 			delegate?.applyChangesRestoringCursor(changes)
 		}
 		registerRedo()

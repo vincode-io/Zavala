@@ -118,7 +118,7 @@ public final class Folder: Identifiable, Equatable, Codable, DocumentContainer {
 			outline.verticleScrollState = Int(verticleScrollState)
 		}
 
-		outline.importHeadlines(outlineIndexers)
+		outline.importRows(outlineIndexers)
 
 		if let expansionState = headIndexer["expansionState"].element?.text {
 			outline.expansionState = expansionState

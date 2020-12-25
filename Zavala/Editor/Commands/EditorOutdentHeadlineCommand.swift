@@ -43,17 +43,17 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 	
 	func perform() {
 		saveCursorCoordinates()
-		let changes = outline.outdentHeadline(headline: headline, textRowStrings: newTextRowStrings)
+		let changes = outline.outdentRow(headline, textRowStrings: newTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	func undo() {
 		if let oldParent = oldParent, let oldChildIndex = oldChildIndex {
-			let changes = outline.moveHeadline(headline, textRowStrings: oldTextRowStrings, toParent: oldParent, childIndex: oldChildIndex)
+			let changes = outline.moveRow(headline, textRowStrings: oldTextRowStrings, toParent: oldParent, childIndex: oldChildIndex)
 			delegate?.applyChangesRestoringCursor(changes)
 		} else {
-			let changes = outline.indentHeadline(headline: headline, textRowStrings: oldTextRowStrings)
+			let changes = outline.indentRow(headline, textRowStrings: oldTextRowStrings)
 			delegate?.applyChangesRestoringCursor(changes)
 		}
 		registerRedo()

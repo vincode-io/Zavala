@@ -38,13 +38,13 @@ final class EditorDeleteHeadlineCommand: EditorOutlineCommand {
 			afterHeadline = outline.shadowTable?[headlineShadowTableIndex - 1]
 		}
 		
-		changes = outline.deleteHeadline(headline: headline, textRowStrings: textRowStrings)
+		changes = outline.deleteRow(headline, textRowStrings: textRowStrings)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	func undo() {
-		let changes = outline.createHeadline(headline: headline, afterHeadline: afterHeadline)
+		let changes = outline.createRow(headline, afterRow: afterHeadline)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()

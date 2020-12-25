@@ -35,13 +35,13 @@ final class EditorIndentHeadlineCommand: EditorOutlineCommand {
 	
 	func perform() {
 		saveCursorCoordinates()
-		let changes = outline.indentHeadline(headline: headline, textRowStrings: newTextRowStrings)
+		let changes = outline.indentRow(headline, textRowStrings: newTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	func undo() {
-		let changes = outline.outdentHeadline(headline: headline, textRowStrings: oldTextRowStrings)
+		let changes = outline.outdentRow(headline, textRowStrings: oldTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()
 		restoreCursorPosition()

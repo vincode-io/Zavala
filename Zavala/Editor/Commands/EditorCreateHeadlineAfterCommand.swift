@@ -37,14 +37,14 @@ final class EditorCreateHeadlineAfterCommand: EditorOutlineCommand {
 		if headline == nil {
 			headline = TextRow()
 		}
-		changes = outline.createHeadline(headline: headline!, afterHeadline: afterHeadline, textRowStrings: textRowStrings)
+		changes = outline.createRow(headline!, afterRow: afterHeadline, textRowStrings: textRowStrings)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	func undo() {
 		guard let headline = headline else { return }
-		let changes = outline.deleteHeadline(headline: headline)
+		let changes = outline.deleteRow(headline)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()

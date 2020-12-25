@@ -16,15 +16,15 @@ public protocol RowContainer: class {
 
 public extension RowContainer {
 	
-	func importHeadlines(_ headlineIndexers: [XMLIndexer]) {
+	func importRows(_ rowIndexers: [XMLIndexer]) {
 		var headlines = [TextRow]()
 		
-		for headlineIndexer in headlineIndexers {
-			let plainText = headlineIndexer.element?.attribute(by: "text")?.text ?? ""
-			let notePlainText = headlineIndexer.element?.attribute(by: "_note")?.text
+		for rowIndexer in rowIndexers {
+			let topicPlainText = rowIndexer.element?.attribute(by: "text")?.text ?? ""
+			let notePlainText = rowIndexer.element?.attribute(by: "_note")?.text
 			
-			let headline = TextRow(plainText: plainText, notePlainText: notePlainText)
-			headline.importHeadlines(headlineIndexer["outline"].all)
+			let headline = TextRow(topicPlainText: topicPlainText, notePlainText: notePlainText)
+			headline.importRows(rowIndexer["outline"].all)
 			headlines.append(headline)
 		}
 		

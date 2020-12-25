@@ -44,7 +44,7 @@ final class EditorCollapseAllCommand: EditorOutlineCommand {
 	
 	func undo() {
 		guard let collapsedHeadlines = collapsedHeadlines else { return }
-		let changes = outline.expand(headlines: collapsedHeadlines)
+		let changes = outline.expand(rows: collapsedHeadlines)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()

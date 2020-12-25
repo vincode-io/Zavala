@@ -39,14 +39,14 @@ final class EditorSplitHeadlineCommand: EditorOutlineCommand {
 		if newHeadline == nil {
 			newHeadline = TextRow()
 		}
-		changes = outline.splitHeadline(newHeadline: newHeadline!, headline: headline, topic: topic, cursorPosition: cursorPosition)
+		changes = outline.splitRow(newRow: newHeadline!, row: headline, topic: topic, cursorPosition: cursorPosition)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	func undo() {
 		guard let newHeadline = newHeadline else { return }
-		let changes = outline.joinHeadline(topHeadline: headline, bottomHeadline: newHeadline)
+		let changes = outline.joinRows(topRow: headline, bottomRow: newHeadline)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()

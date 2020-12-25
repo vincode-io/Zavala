@@ -36,13 +36,13 @@ final class EditorToggleCompleteHeadlineCommand: EditorOutlineCommand {
 	
 	func perform() {
 		saveCursorCoordinates()
-		changes = outline.toggleComplete(headline: headline, textRowStrings: newTextRowStrings)
+		changes = outline.toggleComplete(row: headline, textRowStrings: newTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes!)
 		registerUndo()
 	}
 	
 	func undo() {
-		let changes = outline.toggleComplete(headline: headline, textRowStrings: oldTextRowStrings)
+		let changes = outline.toggleComplete(row: headline, textRowStrings: oldTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()
 		restoreCursorPosition()

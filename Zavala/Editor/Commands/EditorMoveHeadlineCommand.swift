@@ -45,14 +45,14 @@ final class EditorMoveHeadlineCommand: EditorOutlineCommand {
 	
 	func perform() {
 		saveCursorCoordinates()
-		let changes = outline.moveHeadline(headline, toParent: toParent, childIndex: toChildIndex)
+		let changes = outline.moveRow(headline, toParent: toParent, childIndex: toChildIndex)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	func undo() {
 		if let oldParent = oldParent, let oldChildIndex = oldChildIndex {
-			let changes = outline.moveHeadline(headline, toParent: oldParent, childIndex: oldChildIndex)
+			let changes = outline.moveRow(headline, toParent: oldParent, childIndex: oldChildIndex)
 			delegate?.applyChangesRestoringCursor(changes)
 		}
 		registerRedo()

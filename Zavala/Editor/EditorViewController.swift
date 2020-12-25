@@ -30,12 +30,12 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	
 	var isIndentHeadlineUnavailable: Bool {
 		guard let outline = outline, let headline = currentHeadline else { return true }
-		return outline.isIndentHeadlineUnavailable(headline: headline)
+		return outline.isIndentRowUnavailable(row: headline)
 	}
 
 	var isOutdentHeadlineUnavailable: Bool {
 		guard let outline = outline, let headline = currentHeadline else { return true }
-		return outline.isOutdentHeadlineUnavailable(headline: headline)
+		return outline.isOutdentRowUnavailable(row: headline)
 	}
 
 	var isToggleHeadlineCompleteUnavailable: Bool {
@@ -679,10 +679,10 @@ private extension EditorViewController {
 
 			var firstOutlineActions = [UIAction]()
 			firstOutlineActions.append(self.addAction(headline: headline, textRowStrings: textRowStrings))
-			if !outline.isIndentHeadlineUnavailable(headline: headline) {
+			if !outline.isIndentRowUnavailable(row: headline) {
 				firstOutlineActions.append(self.indentAction(headline: headline, textRowStrings: textRowStrings))
 			}
-			if !outline.isOutdentHeadlineUnavailable(headline: headline) {
+			if !outline.isOutdentRowUnavailable(row: headline) {
 				firstOutlineActions.append(self.outdentAction(headline: headline, textRowStrings: textRowStrings))
 			}
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: firstOutlineActions))

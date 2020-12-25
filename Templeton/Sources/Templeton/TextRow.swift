@@ -72,11 +72,11 @@ public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Cod
 		rows = [TextRow]()
 	}
 	
-	public init(plainText: String, notePlainText: String? = nil) {
+	public init(topicPlainText: String, notePlainText: String? = nil) {
 		self.id = UUID().uuidString
 		super.init()
 
-		topicAttributedText = NSAttributedString(markdownRepresentation: plainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
+		topicAttributedText = NSAttributedString(markdownRepresentation: topicPlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		if let notePlainText = notePlainText {
 			noteAttributedText = NSAttributedString(markdownRepresentation: notePlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		}

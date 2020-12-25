@@ -33,13 +33,13 @@ final class EditorCreateHeadlineBeforeCommand: EditorOutlineCommand {
 	
 	func perform() {
 		saveCursorCoordinates()
-		changes = outline.createHeadline(headline: headline, beforeHeadline: beforeHeadline)
+		changes = outline.createRow(headline, beforeRow: beforeHeadline)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	func undo() {
-		let changes = outline.deleteHeadline(headline: headline)
+		let changes = outline.deleteRow(headline)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()

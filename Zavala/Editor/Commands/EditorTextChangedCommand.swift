@@ -37,7 +37,7 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 	}
 	
 	func perform() {
-		let changes = outline.updateHeadline(headline: headline, textRowStrings: newTextRowStrings)
+		let changes = outline.updateRow(headline, textRowStrings: newTextRowStrings)
 		if applyChanges {
 			delegate?.applyChangesRestoringCursor(changes)
 		}
@@ -46,7 +46,7 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 	}
 	
 	func undo() {
-		let changes = outline.updateHeadline(headline: headline, textRowStrings: oldTextRowStrings)
+		let changes = outline.updateRow(headline, textRowStrings: oldTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()
 		restoreCursorPosition()

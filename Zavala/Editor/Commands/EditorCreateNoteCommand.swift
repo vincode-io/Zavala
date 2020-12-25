@@ -35,13 +35,13 @@ final class EditorCreateNoteCommand: EditorOutlineCommand {
 	
 	func perform() {
 		saveCursorCoordinates()
-		changes = outline.createNote(headline: headline, textRowStrings: newTextRowStrings)
+		changes = outline.createNote(row: headline, textRowStrings: newTextRowStrings)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	func undo() {
-		let changes = outline.deleteNote(headline: headline, textRowStrings: oldTextRowStrings)
+		let changes = outline.deleteNote(row: headline, textRowStrings: oldTextRowStrings)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()
