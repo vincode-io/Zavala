@@ -17,7 +17,7 @@ final class EditorCreateRowBeforeCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: TextRow
+	var row: TextRow
 	var beforeRow: TextRow
 	var changes: ShadowTableChanges?
 	
@@ -25,7 +25,7 @@ final class EditorCreateRowBeforeCommand: EditorOutlineCommand {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.headline = TextRow()
+		self.row = TextRow()
 		self.beforeRow = beforeRow
 		undoActionName = L10n.addRow
 		redoActionName = L10n.addRow
@@ -33,13 +33,13 @@ final class EditorCreateRowBeforeCommand: EditorOutlineCommand {
 	
 	func perform() {
 		saveCursorCoordinates()
-		changes = outline.createRow(headline, beforeRow: beforeRow)
+		changes = outline.createRow(row, beforeRow: beforeRow)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	func undo() {
-		let changes = outline.deleteRow(headline)
+		let changes = outline.deleteRow(row)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()

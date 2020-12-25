@@ -85,10 +85,6 @@ struct AppAssets {
 		return UIImage(systemName: "info.circle")!
 	}()
 
-	static var headlineChildren: UIImage = {
-		return UIImage(systemName: "list.bullet.indent")!
-	}()
-
 	static var importEntity: UIImage = {
 		return UIImage(systemName: "square.and.arrow.down")!
 	}()
