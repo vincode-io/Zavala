@@ -78,39 +78,39 @@ class MainSplitViewController: UISplitViewController {
 			(editorViewController?.isDeleteCurrentRowUnavailable ?? true) 
 	}
 
-	var isCreateHeadlineUnavailable: Bool {
+	var isCreateRowUnavailable: Bool {
 		return editorViewController?.isCreateRowUnavailable ?? true
 	}
 	
-	var isIndentHeadlineUnavailable: Bool {
+	var isIndentRowUnavailable: Bool {
 		return editorViewController?.isIndentRowUnavailable ?? true
 	}
 
-	var isOutdentHeadlineUnavailable: Bool {
+	var isOutdentRowUnavailable: Bool {
 		return editorViewController?.isOutdentRowUnavailable ?? true
 	}
 
-	var isToggleHeadlineCompleteUnavailable: Bool {
+	var isToggleRowCompleteUnavailable: Bool {
 		return editorViewController?.isToggleRowCompleteUnavailable ?? true
 	}
 	
-	var isCurrentHeadlineComplete: Bool {
+	var isCurrentRowComplete: Bool {
 		return editorViewController?.isCurrentRowComplete ?? false
 	}
 
-	var isCreateHeadlineNoteUnavailable: Bool {
+	var isCreateRowNoteUnavailable: Bool {
 		return editorViewController?.isCreateRowNoteUnavailable ?? true
 	}
 	
-	var isDeleteHeadlineNoteUnavailable: Bool {
+	var isDeleteRowNoteUnavailable: Bool {
 		return editorViewController?.isDeleteRowNoteUnavailable ?? true
 	}
 	
-	var isCurrentHeadlineNoteEmpty: Bool {
+	var isCurrentRowNoteEmpty: Bool {
 		return editorViewController?.isCurrentRowNoteEmpty ?? false
 	}
 
-	var isSplitHeadlineUnavailable: Bool {
+	var isSplitRowUnavailable: Bool {
 		return editorViewController?.isSplitRowUnavailable ?? true
 	}
 	
@@ -257,31 +257,31 @@ class MainSplitViewController: UISplitViewController {
 		}
 	}
 	
-	@objc func createHeadline(_ sender: Any?) {
+	@objc func createRow(_ sender: Any?) {
 		editorViewController?.createRow()
 	}
 	
-	@objc func indentHeadline(_ sender: Any?) {
+	@objc func indentRow(_ sender: Any?) {
 		editorViewController?.indentRow()
 	}
 	
-	@objc func outdentHeadline(_ sender: Any?) {
+	@objc func outdentRow(_ sender: Any?) {
 		editorViewController?.outdentRow()
 	}
 	
-	@objc func toggleCompleteHeadline(_ sender: Any?) {
+	@objc func toggleCompleteRow(_ sender: Any?) {
 		editorViewController?.toggleCompleteRow()
 	}
 	
-	@objc func createHeadlineNote(_ sender: Any?) {
+	@objc func createRowNote(_ sender: Any?) {
 		editorViewController?.createRowNote()
 	}
 	
-	@objc func deleteHeadlineNote(_ sender: Any?) {
+	@objc func deleteRowNote(_ sender: Any?) {
 		editorViewController?.deleteRowNote()
 	}
 	
-	@objc func splitHeadline(_ sender: Any?) {
+	@objc func splitRow(_ sender: Any?) {
 		editorViewController?.splitRow()
 	}
 	

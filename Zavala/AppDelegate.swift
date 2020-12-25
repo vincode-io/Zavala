@@ -42,32 +42,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		menuKeyCommands.append(newWindowCommand)
 		menuKeyCommands.append(toggleSidebarCommand)
 		
-		if !(mainSplitViewController?.isCreateHeadlineUnavailable ?? true) {
-			menuKeyCommands.append(createHeadlineCommand)
+		if !(mainSplitViewController?.isCreateRowUnavailable ?? true) {
+			menuKeyCommands.append(createRowCommand)
 		}
 		
-		if !(mainSplitViewController?.isIndentHeadlineUnavailable ?? true) {
-			menuKeyCommands.append(indentHeadlineCommand)
+		if !(mainSplitViewController?.isIndentRowUnavailable ?? true) {
+			menuKeyCommands.append(indentRowCommand)
 		}
 		
-		if !(mainSplitViewController?.isOutdentHeadlineUnavailable ?? true) {
-			menuKeyCommands.append(outdentHeadlineCommand)
+		if !(mainSplitViewController?.isOutdentRowUnavailable ?? true) {
+			menuKeyCommands.append(outdentRowCommand)
 		}
 		
-		if !(mainSplitViewController?.isToggleHeadlineCompleteUnavailable ?? true) {
-			if mainSplitViewController?.isCurrentHeadlineComplete ?? false {
-				menuKeyCommands.append(uncompleteHeadlineCommand)
+		if !(mainSplitViewController?.isToggleRowCompleteUnavailable ?? true) {
+			if mainSplitViewController?.isCurrentrowComplete ?? false {
+				menuKeyCommands.append(uncompleteRowCommand)
 			} else {
-				menuKeyCommands.append(completeHeadlineCommand)
+				menuKeyCommands.append(completeRowCommand)
 			}
 		}
 		
-		if !(mainSplitViewController?.isCreateHeadlineNoteUnavailable ?? true) {
-			menuKeyCommands.append(createHeadlineNoteCommand)
+		if !(mainSplitViewController?.isCreateRowNoteUnavailable ?? true) {
+			menuKeyCommands.append(createRowNoteCommand)
 		}
 
-		if !(mainSplitViewController?.isDeleteHeadlineNoteUnavailable ?? true) {
-			menuKeyCommands.append(deleteHeadlineNoteCommand)
+		if !(mainSplitViewController?.isDeleteRowNoteUnavailable ?? true) {
+			menuKeyCommands.append(deleteRowNoteCommand)
 		}
 
 		if !(mainSplitViewController?.isExpandAllInOutlineUnavailable ?? true) {
@@ -133,50 +133,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											input: "s",
 											modifierFlags: [.control, .command])
 	
-	let createHeadlineCommand = UIKeyCommand(title: L10n.addRow,
-											 action: #selector(createHeadlineCommand(_:)),
-											 input: "\n",
-											 modifierFlags: [])
+	let createRowCommand = UIKeyCommand(title: L10n.addRow,
+										action: #selector(createRowCommand(_:)),
+										input: "\n",
+										modifierFlags: [])
 	
-	let indentHeadlineCommand = UIKeyCommand(title: L10n.indent,
-											 action: #selector(indentHeadlineCommand(_:)),
-											 input: "]",
-											 modifierFlags: [.command])
+	let indentRowCommand = UIKeyCommand(title: L10n.indent,
+										action: #selector(indentRowCommand(_:)),
+										input: "]",
+										modifierFlags: [.command])
 	
-	let outdentHeadlineCommand = UIKeyCommand(title: L10n.outdent,
-											  action: #selector(outdentHeadlineCommand(_:)),
-											  input: "[",
-											  modifierFlags: [.command])
+	let outdentRowCommand = UIKeyCommand(title: L10n.outdent,
+										 action: #selector(outdentRowCommand(_:)),
+										 input: "[",
+										 modifierFlags: [.command])
 	
-	let toggleCompleteHeadlineCommand = UIKeyCommand(title: L10n.complete,
-													 action: #selector(toggleCompleteHeadlineCommand(_:)),
-													 input: "\n",
-													 modifierFlags: [.command])
+	let toggleCompleteRowCommand = UIKeyCommand(title: L10n.complete,
+												action: #selector(toggleCompleteRowCommand(_:)),
+												input: "\n",
+												modifierFlags: [.command])
 	
-	let completeHeadlineCommand = UIKeyCommand(title: L10n.complete,
-											   action: #selector(toggleCompleteHeadlineCommand(_:)),
-											   input: "\n",
-											   modifierFlags: [.command])
+	let completeRowCommand = UIKeyCommand(title: L10n.complete,
+										  action: #selector(toggleCompleteRowCommand(_:)),
+										  input: "\n",
+										  modifierFlags: [.command])
 	
-	let uncompleteHeadlineCommand = UIKeyCommand(title: L10n.uncomplete,
-												 action: #selector(toggleCompleteHeadlineCommand(_:)),
-												 input: "\n",
-												 modifierFlags: [.command])
-	
-	let createHeadlineNoteCommand = UIKeyCommand(title: L10n.addNote,
-												 action: #selector(createHeadlineNoteCommand(_:)),
-												 input: "\n",
-												 modifierFlags: [.shift])
-	
-	let deleteHeadlineNoteCommand = UIKeyCommand(title: L10n.deleteNote,
-												 action: #selector(deleteHeadlineNoteCommand(_:)),
-												 input: "\u{8}",
-												 modifierFlags: [.shift])
-	
-	let splitHeadlineCommand = UIKeyCommand(title: L10n.splitRow,
-											action: #selector(splitHeadlineCommand(_:)),
+	let uncompleteRowCommand = UIKeyCommand(title: L10n.uncomplete,
+											action: #selector(toggleCompleteRowCommand(_:)),
 											input: "\n",
-											modifierFlags: [.shift, .alternate])
+											modifierFlags: [.command])
+	
+	let createRowNoteCommand = UIKeyCommand(title: L10n.addNote,
+											action: #selector(createRowNoteCommand(_:)),
+											input: "\n",
+											modifierFlags: [.shift])
+	
+	let deleteRowNoteCommand = UIKeyCommand(title: L10n.deleteNote,
+											action: #selector(deleteRowNoteCommand(_:)),
+											input: "\u{8}",
+											modifierFlags: [.shift])
+	
+	let splitRowCommand = UIKeyCommand(title: L10n.splitRow,
+									   action: #selector(splitRowCommand(_:)),
+									   input: "\n",
+									   modifierFlags: [.shift, .alternate])
 	
 	let restoreArchiveCommand = UIKeyCommand(title: L10n.restoreArchive,
 											 action: #selector(restoreArchiveCommand(_:)),
@@ -318,32 +318,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.toggleSidebar(sender)
 	}
 	
-	@objc func createHeadlineCommand(_ sender: Any?) {
-		mainSplitViewController?.createHeadline(sender)
+	@objc func createRowCommand(_ sender: Any?) {
+		mainSplitViewController?.createRow(sender)
 	}
 	
-	@objc func indentHeadlineCommand(_ sender: Any?) {
-		mainSplitViewController?.indentHeadline(sender)
+	@objc func indentRowCommand(_ sender: Any?) {
+		mainSplitViewController?.indentRow(sender)
 	}
 	
-	@objc func outdentHeadlineCommand(_ sender: Any?) {
-		mainSplitViewController?.outdentHeadline(sender)
+	@objc func outdentRowCommand(_ sender: Any?) {
+		mainSplitViewController?.outdentRow(sender)
 	}
 	
-	@objc func toggleCompleteHeadlineCommand(_ sender: Any?) {
-		mainSplitViewController?.toggleCompleteHeadline(sender)
+	@objc func toggleCompleteRowCommand(_ sender: Any?) {
+		mainSplitViewController?.toggleCompleteRow(sender)
 	}
 	
-	@objc func createHeadlineNoteCommand(_ sender: Any?) {
-		mainSplitViewController?.createHeadlineNote(sender)
+	@objc func createRowNoteCommand(_ sender: Any?) {
+		mainSplitViewController?.createRowNote(sender)
 	}
 	
-	@objc func deleteHeadlineNoteCommand(_ sender: Any?) {
-		mainSplitViewController?.deleteHeadlineNote(sender)
+	@objc func deleteRowNoteCommand(_ sender: Any?) {
+		mainSplitViewController?.deleteRowNote(sender)
 	}
 	
-	@objc func splitHeadlineCommand(_ sender: Any?) {
-		mainSplitViewController?.splitHeadline(sender)
+	@objc func splitRowCommand(_ sender: Any?) {
+		mainSplitViewController?.splitRow(sender)
 	}
 	
 	@objc func restoreArchiveCommand(_ sender: Any?) {
@@ -410,37 +410,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainSplitViewController?.isCreateOutlineUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(createHeadlineCommand(_:)):
-			if mainSplitViewController?.isCreateHeadlineUnavailable ?? true {
+		case #selector(createRowCommand(_:)):
+			if mainSplitViewController?.isCreateRowUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(indentHeadlineCommand(_:)):
-			if mainSplitViewController?.isIndentHeadlineUnavailable ?? true {
+		case #selector(indentRowCommand(_:)):
+			if mainSplitViewController?.isIndentRowUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(outdentHeadlineCommand(_:)):
-			if mainSplitViewController?.isOutdentHeadlineUnavailable ?? true {
+		case #selector(outdentRowCommand(_:)):
+			if mainSplitViewController?.isOutdentRowUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(toggleCompleteHeadlineCommand(_:)):
-			if mainSplitViewController?.isCurrentHeadlineComplete ?? false {
+		case #selector(toggleCompleteRowCommand(_:)):
+			if mainSplitViewController?.isCurrentRowComplete ?? false {
 				command.title = L10n.uncomplete
 			} else {
 				command.title = L10n.complete
 			}
-			if mainSplitViewController?.isToggleHeadlineCompleteUnavailable ?? true {
+			if mainSplitViewController?.isToggleRowCompleteUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(createHeadlineNoteCommand(_:)):
-			if mainSplitViewController?.isCreateHeadlineNoteUnavailable ?? true  {
+		case #selector(createRowNoteCommand(_:)):
+			if mainSplitViewController?.isCreateRowNoteUnavailable ?? true  {
 				command.attributes = .disabled
 			}
-		case #selector(deleteHeadlineNoteCommand(_:)):
-			if mainSplitViewController?.isDeleteHeadlineNoteUnavailable ?? true {
+		case #selector(deleteRowNoteCommand(_:)):
+			if mainSplitViewController?.isDeleteRowNoteUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(splitHeadlineCommand(_:)):
-			if mainSplitViewController?.isSplitHeadlineUnavailable ?? true {
+		case #selector(splitRowCommand(_:)):
+			if mainSplitViewController?.isSplitRowUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(toggleBoldCommand(_:)), #selector(toggleItalicsCommand(_:)):
@@ -530,8 +530,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)
 		
 		// Outline Menu
-		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteHeadlineCommand, createHeadlineNoteCommand, deleteHeadlineNoteCommand])
-		let mainOutlineMenu = UIMenu(title: "", options: .displayInline, children: [createHeadlineCommand, splitHeadlineCommand, indentHeadlineCommand, outdentHeadlineCommand])
+		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowCommand, createRowNoteCommand, deleteRowNoteCommand])
+		let mainOutlineMenu = UIMenu(title: "", options: .displayInline, children: [createRowCommand, splitRowCommand, indentRowCommand, outdentRowCommand])
 		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, completeMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 
