@@ -1,15 +1,15 @@
 //
-//  EditorCreateHeadlineCommand.swift
+//  EditorCreateRowBeforeCommand.swift
 //  Zavala
 //
-//  Created by Maurice Parker on 11/28/20.
+//  Created by Maurice Parker on 12/15/20.
 //
 
 import Foundation
 import RSCore
 import Templeton
 
-final class EditorCreateHeadlineAfterCommand: EditorOutlineCommand {
+final class EditorCreateRowBeforeCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
@@ -17,33 +17,28 @@ final class EditorCreateHeadlineAfterCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: TextRow?
-	var afterHeadline: TextRow?
-	var textRowStrings: TextRowStrings?
+	var headline: TextRow
+	var beforeRow: TextRow
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, afterHeadline: TextRow?, textRowStrings: TextRowStrings?) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, beforeRow: TextRow) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.afterHeadline = afterHeadline
-		self.textRowStrings = textRowStrings
+		self.headline = TextRow()
+		self.beforeRow = beforeRow
 		undoActionName = L10n.addRow
 		redoActionName = L10n.addRow
 	}
 	
 	func perform() {
 		saveCursorCoordinates()
-		if headline == nil {
-			headline = TextRow()
-		}
-		changes = outline.createRow(headline!, afterRow: afterHeadline, textRowStrings: textRowStrings)
+		changes = outline.createRow(headline, beforeRow: beforeRow)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	func undo() {
-		guard let headline = headline else { return }
 		let changes = outline.deleteRow(headline)
 		delegate?.applyChanges(changes)
 		registerRedo()

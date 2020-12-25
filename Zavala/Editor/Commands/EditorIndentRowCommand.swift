@@ -1,5 +1,5 @@
 //
-//  EditorIndentHeadlineCommand.swift
+//  EditorIndentRowCommand.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/28/20.
@@ -9,7 +9,7 @@ import Foundation
 import RSCore
 import Templeton
 
-final class EditorIndentHeadlineCommand: EditorOutlineCommand {
+final class EditorIndentRowCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
@@ -17,31 +17,31 @@ final class EditorIndentHeadlineCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: TextRow
+	var row: TextRow
 	var oldTextRowStrings: TextRowStrings
 	var newTextRowStrings: TextRowStrings
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: TextRow, textRowStrings: TextRowStrings) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: TextRow, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.headline = headline
+		self.row = row
 		self.undoActionName = L10n.indent
 		self.redoActionName = L10n.indent
 		
-		oldTextRowStrings = headline.textRowStrings
+		oldTextRowStrings = row.textRowStrings
 		newTextRowStrings = textRowStrings
 	}
 	
 	func perform() {
 		saveCursorCoordinates()
-		let changes = outline.indentRow(headline, textRowStrings: newTextRowStrings)
+		let changes = outline.indentRow(row, textRowStrings: newTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	func undo() {
-		let changes = outline.outdentRow(headline, textRowStrings: oldTextRowStrings)
+		let changes = outline.outdentRow(row, textRowStrings: oldTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()
 		restoreCursorPosition()

@@ -1,5 +1,5 @@
 //
-//  EditorDropHeadlineCommand.swift
+//  EditorDropRowCommand.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/16/20.
@@ -9,7 +9,7 @@ import Foundation
 import RSCore
 import Templeton
 
-final class EditorDropHeadlineCommand: EditorOutlineCommand {
+final class EditorDropRowCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
@@ -17,7 +17,7 @@ final class EditorDropHeadlineCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: TextRow
+	var row: TextRow
 	var oldParent: RowContainer?
 	var oldChildIndex: Int?
 	var toParent: RowContainer
@@ -27,32 +27,32 @@ final class EditorDropHeadlineCommand: EditorOutlineCommand {
 	init(undoManager: UndoManager,
 		 delegate: EditorOutlineCommandDelegate,
 		 outline: Outline,
-		 headline: TextRow,
+		 row: TextRow,
 		 toParent: RowContainer,
 		 toChildIndex: Int) {
 		
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.headline = headline
+		self.row = row
 		self.toParent = toParent
 		self.toChildIndex = toChildIndex
 		self.undoActionName = L10n.move
 		self.redoActionName = L10n.move
 
-		oldParent = headline.parent
-		oldChildIndex = oldParent?.rows?.firstIndex(of: headline)
+		oldParent = row.parent
+		oldChildIndex = oldParent?.rows?.firstIndex(of: row)
 	}
 	
 	func perform() {
 		saveCursorCoordinates()
-		shadowTableChanges = outline.moveRow(headline, toParent: toParent, childIndex: toChildIndex)
+		shadowTableChanges = outline.moveRow(row, toParent: toParent, childIndex: toChildIndex)
 		registerUndo()
 	}
 	
 	func undo() {
 		if let oldParent = oldParent, let oldChildIndex = oldChildIndex {
-			let changes = outline.moveRow(headline, toParent: oldParent, childIndex: oldChildIndex)
+			let changes = outline.moveRow(row, toParent: oldParent, childIndex: oldChildIndex)
 			delegate?.applyChangesRestoringCursor(changes)
 		}
 		registerRedo()

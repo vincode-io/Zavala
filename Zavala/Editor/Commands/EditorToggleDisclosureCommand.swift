@@ -17,14 +17,14 @@ final class EditorToggleDisclosureCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: TextRow
+	var row: TextRow
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: TextRow) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: TextRow) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.headline = headline
-		if headline.isExpanded ?? true {
+		self.row = row
+		if row.isExpanded ?? true {
 			undoActionName = L10n.collapse
 			redoActionName = L10n.collapse
 		} else {
@@ -35,13 +35,13 @@ final class EditorToggleDisclosureCommand: EditorOutlineCommand {
 	
 	func perform() {
 		saveCursorCoordinates()
-		let changes = outline.toggleDisclosure(row: headline)
+		let changes = outline.toggleDisclosure(row: row)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	func undo() {
-		let changes = outline.toggleDisclosure(row: headline)
+		let changes = outline.toggleDisclosure(row: row)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()

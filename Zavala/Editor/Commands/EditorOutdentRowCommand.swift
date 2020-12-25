@@ -1,5 +1,5 @@
 //
-//  EditorOutdentHeadlineCommand.swift
+//  EditorOutdentRowCommand.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/28/20.
@@ -9,7 +9,7 @@ import Foundation
 import RSCore
 import Templeton
 
-final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
+final class EditorOutdentRowCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
@@ -17,43 +17,43 @@ final class EditorOutdentHeadlineCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: TextRow
+	var row: TextRow
 	var oldParent: TextRow?
 	var oldChildIndex: Int?
 	var oldTextRowStrings: TextRowStrings
 	var newTextRowStrings: TextRowStrings
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: TextRow, textRowStrings: TextRowStrings) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: TextRow, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.headline = headline
+		self.row = row
 		self.undoActionName = L10n.outdent
 		self.redoActionName = L10n.outdent
 		
 		// This is going to move, so we save the parent and child index
-		if headline != headline.parent?.rows?.last {
-			self.oldParent = headline.parent as? TextRow
-			self.oldChildIndex = headline.parent?.rows?.firstIndex(of: headline)
+		if row != row.parent?.rows?.last {
+			self.oldParent = row.parent as? TextRow
+			self.oldChildIndex = row.parent?.rows?.firstIndex(of: row)
 		}
 		
-		self.oldTextRowStrings = headline.textRowStrings
+		self.oldTextRowStrings = row.textRowStrings
 		self.newTextRowStrings = textRowStrings
 	}
 	
 	func perform() {
 		saveCursorCoordinates()
-		let changes = outline.outdentRow(headline, textRowStrings: newTextRowStrings)
+		let changes = outline.outdentRow(row, textRowStrings: newTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	func undo() {
 		if let oldParent = oldParent, let oldChildIndex = oldChildIndex {
-			let changes = outline.moveRow(headline, textRowStrings: oldTextRowStrings, toParent: oldParent, childIndex: oldChildIndex)
+			let changes = outline.moveRow(row, textRowStrings: oldTextRowStrings, toParent: oldParent, childIndex: oldChildIndex)
 			delegate?.applyChangesRestoringCursor(changes)
 		} else {
-			let changes = outline.indentRow(headline, textRowStrings: oldTextRowStrings)
+			let changes = outline.indentRow(row, textRowStrings: oldTextRowStrings)
 			delegate?.applyChangesRestoringCursor(changes)
 		}
 		registerRedo()

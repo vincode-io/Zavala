@@ -1,5 +1,5 @@
 //
-//  EditorSplitHeadlineCommand.swift
+//  EditorSplitRowCommand.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/5/20.
@@ -9,7 +9,7 @@ import Foundation
 import RSCore
 import Templeton
 
-final class EditorSplitHeadlineCommand: EditorOutlineCommand {
+final class EditorSplitRowCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
@@ -17,17 +17,17 @@ final class EditorSplitHeadlineCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var newHeadline: TextRow?
-	var headline: TextRow
+	var newRow: TextRow?
+	var row: TextRow
 	var topic: NSAttributedString
 	var cursorPosition: Int
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: TextRow, topic: NSAttributedString, cursorPosition: Int) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: TextRow, topic: NSAttributedString, cursorPosition: Int) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.headline = headline
+		self.row = row
 		self.topic = topic
 		self.cursorPosition = cursorPosition
 		undoActionName = L10n.splitRow
@@ -36,17 +36,17 @@ final class EditorSplitHeadlineCommand: EditorOutlineCommand {
 	
 	func perform() {
 		saveCursorCoordinates()
-		if newHeadline == nil {
-			newHeadline = TextRow()
+		if newRow == nil {
+			newRow = TextRow()
 		}
-		changes = outline.splitRow(newRow: newHeadline!, row: headline, topic: topic, cursorPosition: cursorPosition)
+		changes = outline.splitRow(newRow: newRow!, row: row, topic: topic, cursorPosition: cursorPosition)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	func undo() {
-		guard let newHeadline = newHeadline else { return }
-		let changes = outline.joinRows(topRow: headline, bottomRow: newHeadline)
+		guard let newHeadline = newRow else { return }
+		let changes = outline.joinRows(topRow: row, bottomRow: newHeadline)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()

@@ -18,7 +18,7 @@ final class EditorExpandAllCommand: EditorOutlineCommand {
 	
 	var outline: Outline
 	var container: RowContainer
-	var expandedHeadlines: [TextRow]?
+	var expandedRows: [TextRow]?
 	
 	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, container: RowContainer) {
 		self.undoManager = undoManager
@@ -37,13 +37,13 @@ final class EditorExpandAllCommand: EditorOutlineCommand {
 	func perform() {
 		saveCursorCoordinates()
 		let (expanded, changes) = outline.expandAll(container: container)
-		expandedHeadlines = expanded
+		expandedRows = expanded
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	func undo() {
-		guard let expandedHeadlines = expandedHeadlines else { return }
+		guard let expandedHeadlines = expandedRows else { return }
 		let changes = outline.collapse(rows: expandedHeadlines)
 		delegate?.applyChanges(changes)
 		registerRedo()

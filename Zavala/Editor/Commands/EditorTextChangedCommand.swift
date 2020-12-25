@@ -17,27 +17,27 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: TextRow
+	var row: TextRow
 	var oldTextRowStrings: TextRowStrings
 	var newTextRowStrings: TextRowStrings
 	var applyChanges = false
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: TextRow, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: TextRow, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.headline = headline
+		self.row = row
 		self.undoActionName = L10n.typing
 		self.redoActionName = L10n.typing
 
-		oldTextRowStrings = headline.textRowStrings
+		oldTextRowStrings = row.textRowStrings
 		newTextRowStrings = textRowStrings
 		
-		cursorCoordinates = CursorCoordinates(row: headline, isInNotes: isInNotes, cursorPosition: cursorPosition)
+		cursorCoordinates = CursorCoordinates(row: row, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
 	func perform() {
-		let changes = outline.updateRow(headline, textRowStrings: newTextRowStrings)
+		let changes = outline.updateRow(row, textRowStrings: newTextRowStrings)
 		if applyChanges {
 			delegate?.applyChangesRestoringCursor(changes)
 		}
@@ -46,7 +46,7 @@ final class EditorTextChangedCommand: EditorOutlineCommand {
 	}
 	
 	func undo() {
-		let changes = outline.updateRow(headline, textRowStrings: oldTextRowStrings)
+		let changes = outline.updateRow(row, textRowStrings: oldTextRowStrings)
 		delegate?.applyChangesRestoringCursor(changes)
 		registerRedo()
 		restoreCursorPosition()

@@ -17,17 +17,17 @@ final class EditorCreateNoteCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: TextRow
+	var row: TextRow
 	var oldTextRowStrings: TextRowStrings
 	var newTextRowStrings: TextRowStrings
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: TextRow, textRowStrings: TextRowStrings) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: TextRow, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.headline = headline
-		self.oldTextRowStrings = headline.textRowStrings
+		self.row = row
+		self.oldTextRowStrings = row.textRowStrings
 		self.newTextRowStrings = textRowStrings
 		undoActionName = L10n.addNote
 		redoActionName = L10n.addNote
@@ -35,13 +35,13 @@ final class EditorCreateNoteCommand: EditorOutlineCommand {
 	
 	func perform() {
 		saveCursorCoordinates()
-		changes = outline.createNote(row: headline, textRowStrings: newTextRowStrings)
+		changes = outline.createNote(row: row, textRowStrings: newTextRowStrings)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	func undo() {
-		let changes = outline.deleteNote(row: headline, textRowStrings: oldTextRowStrings)
+		let changes = outline.deleteNote(row: row, textRowStrings: oldTextRowStrings)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()

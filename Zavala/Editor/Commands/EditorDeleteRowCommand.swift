@@ -1,5 +1,5 @@
 //
-//  EditorDeleteHeadlineCommand.swift
+//  EditorDeleteRowCommand.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/28/20.
@@ -9,7 +9,7 @@ import Foundation
 import RSCore
 import Templeton
 
-final class EditorDeleteHeadlineCommand: EditorOutlineCommand {
+final class EditorDeleteRowCommand: EditorOutlineCommand {
 	var undoActionName: String
 	var redoActionName: String
 	var undoManager: UndoManager
@@ -17,16 +17,16 @@ final class EditorDeleteHeadlineCommand: EditorOutlineCommand {
 	var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var headline: TextRow
+	var row: TextRow
 	var textRowStrings: TextRowStrings
-	var afterHeadline: TextRow?
+	var afterRows: TextRow?
 	var changes: ShadowTableChanges?
 	
-	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, headline: TextRow, textRowStrings: TextRowStrings) {
+	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, row: TextRow, textRowStrings: TextRowStrings) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.headline = headline
+		self.row = row
 		self.textRowStrings = textRowStrings
 		undoActionName = L10n.delete
 		redoActionName = L10n.delete
@@ -34,17 +34,17 @@ final class EditorDeleteHeadlineCommand: EditorOutlineCommand {
 	
 	func perform() {
 		saveCursorCoordinates()
-		if let headlineShadowTableIndex = headline.shadowTableIndex, headlineShadowTableIndex > 0 {
-			afterHeadline = outline.shadowTable?[headlineShadowTableIndex - 1]
+		if let rowShadowTableIndex = row.shadowTableIndex, rowShadowTableIndex > 0 {
+			afterRows = outline.shadowTable?[rowShadowTableIndex - 1]
 		}
 		
-		changes = outline.deleteRow(headline, textRowStrings: textRowStrings)
+		changes = outline.deleteRow(row, textRowStrings: textRowStrings)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	func undo() {
-		let changes = outline.createRow(headline, afterRow: afterHeadline)
+		let changes = outline.createRow(row, afterRow: afterRows)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()

@@ -18,7 +18,7 @@ final class EditorCollapseAllCommand: EditorOutlineCommand {
 	
 	var outline: Outline
 	var container: RowContainer
-	var collapsedHeadlines: [TextRow]?
+	var collapsedRows: [TextRow]?
 	
 	init(undoManager: UndoManager, delegate: EditorOutlineCommandDelegate, outline: Outline, container: RowContainer) {
 		self.undoManager = undoManager
@@ -37,14 +37,14 @@ final class EditorCollapseAllCommand: EditorOutlineCommand {
 	func perform() {
 		saveCursorCoordinates()
 		let (expanded, changes) = outline.collapseAll(container: container)
-		collapsedHeadlines = expanded
+		collapsedRows = expanded
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	func undo() {
-		guard let collapsedHeadlines = collapsedHeadlines else { return }
-		let changes = outline.expand(rows: collapsedHeadlines)
+		guard let collapsedRows = collapsedRows else { return }
+		let changes = outline.expand(rows: collapsedRows)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()

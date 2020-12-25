@@ -15,14 +15,14 @@
 		5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
 		512229682563507E008041AF /* EditorHeadlineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorHeadlineViewCell.swift */; };
 		51278E77257F37AC0034F1CB /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51278E76257F37AC0034F1CB /* Dialog.storyboard */; };
-		51365302257BC94600DA3585 /* EditorSplitHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51365301257BC94600DA3585 /* EditorSplitHeadlineCommand.swift */; };
+		51365302257BC94600DA3585 /* EditorSplitRowCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51365301257BC94600DA3585 /* EditorSplitRowCommand.swift */; };
 		514287302571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */; };
 		514287362571FCBD00F16B78 /* EditorOutlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */; };
 		5142873A2572B06B00F16B78 /* EditorTextChangedCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514287392572B06B00F16B78 /* EditorTextChangedCommand.swift */; };
-		514287402572FD0200F16B78 /* EditorDeleteHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142873F2572FD0200F16B78 /* EditorDeleteHeadlineCommand.swift */; };
-		5142874625730AD600F16B78 /* EditorCreateHeadlineAfterCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142874525730AD600F16B78 /* EditorCreateHeadlineAfterCommand.swift */; };
-		5142874C25730DA700F16B78 /* EditorIndentHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142874B25730DA700F16B78 /* EditorIndentHeadlineCommand.swift */; };
-		5142875225730ECE00F16B78 /* EditorOutdentHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142875125730ECE00F16B78 /* EditorOutdentHeadlineCommand.swift */; };
+		514287402572FD0200F16B78 /* EditorDeleteRowCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142873F2572FD0200F16B78 /* EditorDeleteRowCommand.swift */; };
+		5142874625730AD600F16B78 /* EditorCreateRowAfterCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142874525730AD600F16B78 /* EditorCreateRowAfterCommand.swift */; };
+		5142874C25730DA700F16B78 /* EditorIndentRowCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142874B25730DA700F16B78 /* EditorIndentRowCommand.swift */; };
+		5142875225730ECE00F16B78 /* EditorOutdentRowCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142875125730ECE00F16B78 /* EditorOutdentRowCommand.swift */; };
 		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
 		514DDE1B25902016001D1B62 /* EditorExpandAllCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514DDE1A25902016001D1B62 /* EditorExpandAllCommand.swift */; };
@@ -37,10 +37,10 @@
 		5181A93F2554D92000C153E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5181A93D2554D92000C153E8 /* Main.storyboard */; };
 		5181A9412554D92100C153E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5181A9402554D92100C153E8 /* Assets.xcassets */; };
 		5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5181A9422554D92100C153E8 /* LaunchScreen.storyboard */; };
-		5187A1E7257593EA00DB0E99 /* EditorToggleCompleteHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5187A1E6257593EA00DB0E99 /* EditorToggleCompleteHeadlineCommand.swift */; };
+		5187A1E7257593EA00DB0E99 /* EditorToggleCompleteRowCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5187A1E6257593EA00DB0E99 /* EditorToggleCompleteRowCommand.swift */; };
 		518F2E34257AD38A00D05D99 /* TimelineViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F2E33257AD38A00D05D99 /* TimelineViewController+Drop.swift */; };
 		518F2E38257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */; };
-		5196BA442589CFFC00F8FFF5 /* EditorCreateHeadlineBeforeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5196BA432589CFFC00F8FFF5 /* EditorCreateHeadlineBeforeCommand.swift */; };
+		5196BA442589CFFC00F8FFF5 /* EditorCreateRowBeforeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5196BA432589CFFC00F8FFF5 /* EditorCreateRowBeforeCommand.swift */; };
 		519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F004A25608EF9009DC1F0 /* TimelineItem.swift */; };
 		51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */; };
 		51AE547E258FF28A006DA301 /* HeadlineFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AE547D258FF28A006DA301 /* HeadlineFont.swift */; };
@@ -66,7 +66,7 @@
 		51C4C442255A0DE1004E0206 /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C441255A0DE1004E0206 /* TimelineViewController.swift */; };
 		51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C448255AA215004E0206 /* MainSplitViewController.swift */; };
 		51C4C45B255ACA1B004E0206 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C45A255ACA1B004E0206 /* EditorViewController.swift */; };
-		51C568BD258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568BC258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift */; };
+		51C568BD258A9A4A00AA7B93 /* EditorDropRowCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568BC258A9A4A00AA7B93 /* EditorDropRowCommand.swift */; };
 		51C568C3258AC8F700AA7B93 /* CursorCoordinates+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568C2258AC8F700AA7B93 /* CursorCoordinates+.swift */; };
 		51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */; };
 		51C568D5258C085400AA7B93 /* MarkdownAttributedString in Frameworks */ = {isa = PBXBuildFile; productRef = 51C568D4258C085400AA7B93 /* MarkdownAttributedString */; };
@@ -77,7 +77,7 @@
 		51CF10C22571C22C005D6D88 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CF10C12571C22C005D6D88 /* L10n.swift */; };
 		51D28D2C257730DB0039DDFC /* EditorViewController+Drag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D28D2B257730DB0039DDFC /* EditorViewController+Drag.swift */; };
 		51D28D32257731DC0039DDFC /* EditorViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D28D31257731DC0039DDFC /* EditorViewController+Drop.swift */; };
-		51D28D38257735120039DDFC /* EditorMoveHeadlineCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D28D37257735120039DDFC /* EditorMoveHeadlineCommand.swift */; };
+		51D28D38257735120039DDFC /* EditorMoveRowCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D28D37257735120039DDFC /* EditorMoveRowCommand.swift */; };
 		51D4E2A12578C0DD00A59145 /* SidebarViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D4E2A02578C0DD00A59145 /* SidebarViewController+Drop.swift */; };
 		51D977FA257A2E4F00D98490 /* EditorHeadlinePreviewParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D977F9257A2E4F00D98490 /* EditorHeadlinePreviewParameters.swift */; };
 		51DA54C825643E3400732942 /* MainThreadOperationBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DA54C725643E3400732942 /* MainThreadOperationBase.swift */; };
@@ -116,15 +116,15 @@
 		5122294B25609C47008041AF /* UserInfoKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoKeys.swift; sourceTree = "<group>"; };
 		512229672563507E008041AF /* EditorHeadlineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorHeadlineViewCell.swift; sourceTree = "<group>"; };
 		51278E76257F37AC0034F1CB /* Dialog.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
-		51365301257BC94600DA3585 /* EditorSplitHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSplitHeadlineCommand.swift; sourceTree = "<group>"; };
+		51365301257BC94600DA3585 /* EditorSplitRowCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSplitRowCommand.swift; sourceTree = "<group>"; };
 		513F32A12594062C0003048F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorToggleDisclosureCommand.swift; sourceTree = "<group>"; };
 		514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorOutlineCommand.swift; sourceTree = "<group>"; };
 		514287392572B06B00F16B78 /* EditorTextChangedCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextChangedCommand.swift; sourceTree = "<group>"; };
-		5142873F2572FD0200F16B78 /* EditorDeleteHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDeleteHeadlineCommand.swift; sourceTree = "<group>"; };
-		5142874525730AD600F16B78 /* EditorCreateHeadlineAfterCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCreateHeadlineAfterCommand.swift; sourceTree = "<group>"; };
-		5142874B25730DA700F16B78 /* EditorIndentHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorIndentHeadlineCommand.swift; sourceTree = "<group>"; };
-		5142875125730ECE00F16B78 /* EditorOutdentHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorOutdentHeadlineCommand.swift; sourceTree = "<group>"; };
+		5142873F2572FD0200F16B78 /* EditorDeleteRowCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDeleteRowCommand.swift; sourceTree = "<group>"; };
+		5142874525730AD600F16B78 /* EditorCreateRowAfterCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCreateRowAfterCommand.swift; sourceTree = "<group>"; };
+		5142874B25730DA700F16B78 /* EditorIndentRowCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorIndentRowCommand.swift; sourceTree = "<group>"; };
+		5142875125730ECE00F16B78 /* EditorOutdentRowCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorOutdentRowCommand.swift; sourceTree = "<group>"; };
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
 		514DDE1A25902016001D1B62 /* EditorExpandAllCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorExpandAllCommand.swift; sourceTree = "<group>"; };
@@ -142,10 +142,10 @@
 		5181A9432554D92100C153E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5181A9452554D92100C153E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5181A96A2554D93B00C153E8 /* Zavala.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Zavala.entitlements; sourceTree = "<group>"; };
-		5187A1E6257593EA00DB0E99 /* EditorToggleCompleteHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorToggleCompleteHeadlineCommand.swift; sourceTree = "<group>"; };
+		5187A1E6257593EA00DB0E99 /* EditorToggleCompleteRowCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorToggleCompleteRowCommand.swift; sourceTree = "<group>"; };
 		518F2E33257AD38A00D05D99 /* TimelineViewController+Drop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimelineViewController+Drop.swift"; sourceTree = "<group>"; };
 		518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistentCollectionViewListCell.swift; sourceTree = "<group>"; };
-		5196BA432589CFFC00F8FFF5 /* EditorCreateHeadlineBeforeCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCreateHeadlineBeforeCommand.swift; sourceTree = "<group>"; };
+		5196BA432589CFFC00F8FFF5 /* EditorCreateRowBeforeCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCreateRowBeforeCommand.swift; sourceTree = "<group>"; };
 		519F004A25608EF9009DC1F0 /* TimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItem.swift; sourceTree = "<group>"; };
 		51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedUndoManager.swift; sourceTree = "<group>"; };
 		51AE547D258FF28A006DA301 /* HeadlineFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadlineFont.swift; sourceTree = "<group>"; };
@@ -172,7 +172,7 @@
 		51C4C441255A0DE1004E0206 /* TimelineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
 		51C4C448255AA215004E0206 /* MainSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSplitViewController.swift; sourceTree = "<group>"; };
 		51C4C45A255ACA1B004E0206 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
-		51C568BC258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDropHeadlineCommand.swift; sourceTree = "<group>"; };
+		51C568BC258A9A4A00AA7B93 /* EditorDropRowCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDropRowCommand.swift; sourceTree = "<group>"; };
 		51C568C2258AC8F700AA7B93 /* CursorCoordinates+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CursorCoordinates+.swift"; sourceTree = "<group>"; };
 		51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineTextDropDelegate.swift; sourceTree = "<group>"; };
 		51C568D8258C1CD200AA7B93 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
@@ -182,7 +182,7 @@
 		51CF10C12571C22C005D6D88 /* L10n.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
 		51D28D2B257730DB0039DDFC /* EditorViewController+Drag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Drag.swift"; sourceTree = "<group>"; };
 		51D28D31257731DC0039DDFC /* EditorViewController+Drop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Drop.swift"; sourceTree = "<group>"; };
-		51D28D37257735120039DDFC /* EditorMoveHeadlineCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorMoveHeadlineCommand.swift; sourceTree = "<group>"; };
+		51D28D37257735120039DDFC /* EditorMoveRowCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorMoveRowCommand.swift; sourceTree = "<group>"; };
 		51D4E2A02578C0DD00A59145 /* SidebarViewController+Drop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SidebarViewController+Drop.swift"; sourceTree = "<group>"; };
 		51D977F9257A2E4F00D98490 /* EditorHeadlinePreviewParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorHeadlinePreviewParameters.swift; sourceTree = "<group>"; };
 		51DA54C725643E3400732942 /* MainThreadOperationBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainThreadOperationBase.swift; sourceTree = "<group>"; };
@@ -219,20 +219,20 @@
 			isa = PBXGroup;
 			children = (
 				514DDE20259039A5001D1B62 /* EditorCollapseAllCommand.swift */,
-				5142874525730AD600F16B78 /* EditorCreateHeadlineAfterCommand.swift */,
-				5196BA432589CFFC00F8FFF5 /* EditorCreateHeadlineBeforeCommand.swift */,
+				5142874525730AD600F16B78 /* EditorCreateRowAfterCommand.swift */,
+				5196BA432589CFFC00F8FFF5 /* EditorCreateRowBeforeCommand.swift */,
 				51F2DC6E2586C04A003BD5CE /* EditorCreateNoteCommand.swift */,
-				5142873F2572FD0200F16B78 /* EditorDeleteHeadlineCommand.swift */,
+				5142873F2572FD0200F16B78 /* EditorDeleteRowCommand.swift */,
 				51F2DC742586CF0D003BD5CE /* EditorDeleteNoteCommand.swift */,
-				51C568BC258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift */,
+				51C568BC258A9A4A00AA7B93 /* EditorDropRowCommand.swift */,
 				514DDE1A25902016001D1B62 /* EditorExpandAllCommand.swift */,
-				5142874B25730DA700F16B78 /* EditorIndentHeadlineCommand.swift */,
-				51D28D37257735120039DDFC /* EditorMoveHeadlineCommand.swift */,
-				5142875125730ECE00F16B78 /* EditorOutdentHeadlineCommand.swift */,
+				5142874B25730DA700F16B78 /* EditorIndentRowCommand.swift */,
+				51D28D37257735120039DDFC /* EditorMoveRowCommand.swift */,
+				5142875125730ECE00F16B78 /* EditorOutdentRowCommand.swift */,
 				514287352571FCBD00F16B78 /* EditorOutlineCommand.swift */,
-				51365301257BC94600DA3585 /* EditorSplitHeadlineCommand.swift */,
+				51365301257BC94600DA3585 /* EditorSplitRowCommand.swift */,
 				514287392572B06B00F16B78 /* EditorTextChangedCommand.swift */,
-				5187A1E6257593EA00DB0E99 /* EditorToggleCompleteHeadlineCommand.swift */,
+				5187A1E6257593EA00DB0E99 /* EditorToggleCompleteRowCommand.swift */,
 				5142872F2571F8DA00F16B78 /* EditorToggleDisclosureCommand.swift */,
 			);
 			path = Commands;
@@ -554,12 +554,12 @@
 				51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */,
 				51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */,
 				515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */,
-				5142875225730ECE00F16B78 /* EditorOutdentHeadlineCommand.swift in Sources */,
-				51D28D38257735120039DDFC /* EditorMoveHeadlineCommand.swift in Sources */,
+				5142875225730ECE00F16B78 /* EditorOutdentRowCommand.swift in Sources */,
+				51D28D38257735120039DDFC /* EditorMoveRowCommand.swift in Sources */,
 				518F2E34257AD38A00D05D99 /* TimelineViewController+Drop.swift in Sources */,
-				5196BA442589CFFC00F8FFF5 /* EditorCreateHeadlineBeforeCommand.swift in Sources */,
+				5196BA442589CFFC00F8FFF5 /* EditorCreateRowBeforeCommand.swift in Sources */,
 				51D4E2A12578C0DD00A59145 /* SidebarViewController+Drop.swift in Sources */,
-				51365302257BC94600DA3585 /* EditorSplitHeadlineCommand.swift in Sources */,
+				51365302257BC94600DA3585 /* EditorSplitRowCommand.swift in Sources */,
 				51F2DC6F2586C04A003BD5CE /* EditorCreateNoteCommand.swift in Sources */,
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
 				51D977FA257A2E4F00D98490 /* EditorHeadlinePreviewParameters.swift in Sources */,
@@ -570,13 +570,13 @@
 				515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */,
 				51F2DC7B2586E101003BD5CE /* EditorHeadlineNoteTextView.swift in Sources */,
 				51C568D9258C1CD200AA7B93 /* LinkViewController.swift in Sources */,
-				51C568BD258A9A4A00AA7B93 /* EditorDropHeadlineCommand.swift in Sources */,
+				51C568BD258A9A4A00AA7B93 /* EditorDropRowCommand.swift in Sources */,
 				514DDE1B25902016001D1B62 /* EditorExpandAllCommand.swift in Sources */,
 				51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */,
-				5142874625730AD600F16B78 /* EditorCreateHeadlineAfterCommand.swift in Sources */,
+				5142874625730AD600F16B78 /* EditorCreateRowAfterCommand.swift in Sources */,
 				51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */,
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
-				5187A1E7257593EA00DB0E99 /* EditorToggleCompleteHeadlineCommand.swift in Sources */,
+				5187A1E7257593EA00DB0E99 /* EditorToggleCompleteRowCommand.swift in Sources */,
 				51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */,
 				51CF10A0256DEE1B005D6D88 /* FixedSizeImageView.swift in Sources */,
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,
@@ -606,11 +606,11 @@
 				51F2DC752586CF0D003BD5CE /* EditorDeleteNoteCommand.swift in Sources */,
 				515B9F412578B2F3009C5DE4 /* TimelineViewController+Drag.swift in Sources */,
 				51C3FA2B255E1DD5008F587A /* GetInfoFolderViewController.swift in Sources */,
-				514287402572FD0200F16B78 /* EditorDeleteHeadlineCommand.swift in Sources */,
+				514287402572FD0200F16B78 /* EditorDeleteRowCommand.swift in Sources */,
 				51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */,
 				51B2B2C82563A2180090C56B /* EditorHeadlineTextView.swift in Sources */,
 				518F2E38257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift in Sources */,
-				5142874C25730DA700F16B78 /* EditorIndentHeadlineCommand.swift in Sources */,
+				5142874C25730DA700F16B78 /* EditorIndentRowCommand.swift in Sources */,
 				51C4C45B255ACA1B004E0206 /* EditorViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
