@@ -1,5 +1,5 @@
 //
-//  EditorHeadlineNoteTextView.swift
+//  EditorTextRowNoteTextView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/13/20.
@@ -8,21 +8,21 @@
 import UIKit
 import Templeton
 
-protocol EditorHeadlineNoteTextViewDelegate: class {
-	var editorHeadlineNoteTextViewUndoManager: UndoManager? { get }
-	var editorHeadlineNoteTextViewAttibutedTexts: TextRowStrings { get }
-	func invalidateLayout(_ : EditorHeadlineNoteTextView)
-	func textChanged(_ : EditorHeadlineNoteTextView, headline: TextRow, isInNotes: Bool, cursorPosition: Int)
-	func deleteHeadlineNote(_ : EditorHeadlineNoteTextView, headline: TextRow)
-	func moveCursorTo(_ : EditorHeadlineNoteTextView, headline: TextRow)
-	func moveCursorDown(_ : EditorHeadlineNoteTextView, headline: TextRow)
-	func editLink(_: EditorHeadlineNoteTextView, _ link: String?, range: NSRange)
+protocol EditorTextRowNoteTextViewDelegate: class {
+	var editorRowNoteTextViewUndoManager: UndoManager? { get }
+	var editorRowNoteTextViewTextRowStrings: TextRowStrings { get }
+	func invalidateLayout(_ : EditorTextRowNoteTextView)
+	func textChanged(_ : EditorTextRowNoteTextView, row: TextRow, isInNotes: Bool, cursorPosition: Int)
+	func deleteRowNote(_ : EditorTextRowNoteTextView, row: TextRow)
+	func moveCursorTo(_ : EditorTextRowNoteTextView, row: TextRow)
+	func moveCursorDown(_ : EditorTextRowNoteTextView, row: TextRow)
+	func editLink(_: EditorTextRowNoteTextView, _ link: String?, range: NSRange)
 }
 
-class EditorHeadlineNoteTextView: OutlineTextView {
+class EditorTextRowNoteTextView: OutlineTextView {
 	
 	override var editorUndoManager: UndoManager? {
-		return editorDelegate?.editorHeadlineNoteTextViewUndoManager
+		return editorDelegate?.editorRowNoteTextViewUndoManager
 	}
 	
 	override var keyCommands: [UIKeyCommand]? {
@@ -40,10 +40,10 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 		return keys
 	}
 	
-	weak var editorDelegate: EditorHeadlineNoteTextViewDelegate?
+	weak var editorDelegate: EditorTextRowNoteTextViewDelegate?
 	
 	override var textRowStrings: TextRowStrings? {
-		return editorDelegate?.editorHeadlineNoteTextViewAttibutedTexts
+		return editorDelegate?.editorRowNoteTextViewTextRowStrings
 	}
 	
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
@@ -51,7 +51,7 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 		
 		self.delegate = self
 
-		self.font = HeadlineFont.note
+		self.font = OutlineFont.note
 		self.textColor = .secondaryLabel
 		self.linkTextAttributes = [.foregroundColor: UIColor.secondaryLabel, .underlineStyle: 1]
 	}
@@ -67,35 +67,35 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 		super.traitCollectionDidChange(previousTraitCollection)
 		if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-			textStorage.replaceFont(with: HeadlineFont.note)
+			textStorage.replaceFont(with: OutlineFont.note)
 		}
 	}
 	
 	override func resignFirstResponder() -> Bool {
-		if let row = headline {
+		if let row = textRow {
 			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: row, isInNotes: false, cursorPosition: lastCursorPosition)
 		}
 		return super.resignFirstResponder()
 	}
 
 	override func deleteBackward() {
-		guard let headline = headline else { return }
+		guard let headline = textRow else { return }
 		if attributedText.length == 0 {
 			isSavingTextUnnecessary = true
-			editorDelegate?.deleteHeadlineNote(self, headline: headline)
+			editorDelegate?.deleteRowNote(self, row: headline)
 		} else {
 			super.deleteBackward()
 		}
 	}
 
 	@objc func moveCursorToText(_ sender: Any) {
-		guard let headline = headline else { return }
-		editorDelegate?.moveCursorTo(self, headline: headline)
+		guard let headline = textRow else { return }
+		editorDelegate?.moveCursorTo(self, row: headline)
 	}
 	
 	@objc func moveCursorDown(_ sender: Any) {
-		guard let headline = headline else { return }
-		editorDelegate?.moveCursorDown(self, headline: headline)
+		guard let headline = textRow else { return }
+		editorDelegate?.moveCursorDown(self, row: headline)
 	}
 
 	@objc override func editLink(_ sender: Any?) {
@@ -112,7 +112,7 @@ class EditorHeadlineNoteTextView: OutlineTextView {
 
 // MARK: UITextViewDelegate
 
-extension EditorHeadlineNoteTextView: UITextViewDelegate {
+extension EditorTextRowNoteTextView: UITextViewDelegate {
 	
 	func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
 		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
@@ -121,12 +121,12 @@ extension EditorHeadlineNoteTextView: UITextViewDelegate {
 	}
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
-		guard isTextChanged, let headline = headline else { return }
+		guard isTextChanged, let headline = textRow else { return }
 		
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false
 		} else {
-			editorDelegate?.textChanged(self, headline: headline, isInNotes: true, cursorPosition: lastCursorPosition)
+			editorDelegate?.textChanged(self, row: headline, isInNotes: true, cursorPosition: lastCursorPosition)
 		}
 		
 		isTextChanged = false

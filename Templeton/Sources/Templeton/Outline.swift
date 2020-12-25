@@ -266,8 +266,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Codable {
 	public func createNote(row: TextRow, textRowStrings: TextRowStrings) -> ShadowTableChanges {
 		row.textRowStrings = textRowStrings
 		
-		if row.noteAttributedText == nil {
-			row.noteAttributedText = NSAttributedString()
+		if row.note == nil {
+			row.note = NSAttributedString()
 		}
 		
 		outlineBodyDidChange()
@@ -278,7 +278,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Codable {
 	
 	public func deleteNote(row: TextRow, textRowStrings: TextRowStrings) -> ShadowTableChanges {
 		row.textRowStrings = textRowStrings
-		row.noteAttributedText = nil
+		row.note = nil
 		
 		outlineBodyDidChange()
 		
@@ -325,13 +325,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Codable {
 	}
 	
 	public func joinRows(topRow: TextRow, bottomRow: TextRow) -> ShadowTableChanges {
-		guard let topTopic = topRow.topicAttributedText,
+		guard let topTopic = topRow.topic,
 			  let topShadowTableIndex = topRow.shadowTableIndex,
-			  let bottomTopic = bottomRow.topicAttributedText else { return ShadowTableChanges() }
+			  let bottomTopic = bottomRow.topic else { return ShadowTableChanges() }
 		
 		let mutableText = NSMutableAttributedString(attributedString: topTopic)
 		mutableText.append(bottomTopic)
-		topRow.topicAttributedText = mutableText
+		topRow.topic = mutableText
 		
 		var changes = deleteRow(bottomRow)
 		changes.append(ShadowTableChanges(reloads: Set([topShadowTableIndex])))
@@ -422,11 +422,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Codable {
 	public func splitRow(newRow: TextRow, row: TextRow, topic: NSAttributedString, cursorPosition: Int) -> ShadowTableChanges {
 		let newTopicRange = NSRange(location: cursorPosition, length: topic.length - cursorPosition)
 		let newTopicText = topic.attributedSubstring(from: newTopicRange)
-		newRow.topicAttributedText = newTopicText
+		newRow.topic = newTopicText
 		
 		let topicRange = NSRange(location: 0, length: cursorPosition)
 		let topicText = topic.attributedSubstring(from: topicRange)
-		row.topicAttributedText = topicText
+		row.topic = topicText
 
 		var changes = createRow(newRow, afterRow: row)
 		if let rowShadowTableIndex = row.shadowTableIndex {

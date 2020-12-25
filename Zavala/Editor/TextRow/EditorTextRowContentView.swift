@@ -1,5 +1,5 @@
 //
-//  EditorHeadlineContentView.swift
+//  EditorTextRowContentView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/17/20.
@@ -8,25 +8,25 @@
 import UIKit
 import Templeton
 
-class EditorHeadlineContentView: UIView, UIContentView {
+class EditorTextRowContentView: UIView, UIContentView {
 
-	let textView = EditorHeadlineTextView()
-	var noteTextView: EditorHeadlineNoteTextView?
+	let topicTextView = EditorTextRowTopicTextView()
+	var noteTextView: EditorTextRowNoteTextView?
 	var bulletView: UIImageView?
 	var barViews = [UIView]()
 	
-	var appliedConfiguration: EditorHeadlineContentConfiguration!
+	var appliedConfiguration: EditorTextRowContentConfiguration!
 	
 	var textRowStrings: TextRowStrings {
-		return TextRowStrings(topic: textView.attributedText, note: noteTextView?.attributedText)
+		return TextRowStrings(topic: topicTextView.attributedText, note: noteTextView?.attributedText)
 	}
 	
-	init(configuration: EditorHeadlineContentConfiguration) {
+	init(configuration: EditorTextRowContentConfiguration) {
 		super.init(frame: .zero)
 
-		textView.editorDelegate = self
-		textView.translatesAutoresizingMaskIntoConstraints = false
-		addSubview(textView)
+		topicTextView.editorDelegate = self
+		topicTextView.translatesAutoresizingMaskIntoConstraints = false
+		addSubview(topicTextView)
 
 		let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft(_:)))
 		swipeLeftGesture.direction = .left
@@ -46,16 +46,16 @@ class EditorHeadlineContentView: UIView, UIContentView {
 	var configuration: UIContentConfiguration {
 		get { appliedConfiguration }
 		set {
-			guard let newConfig = newValue as? EditorHeadlineContentConfiguration else { return }
+			guard let newConfig = newValue as? EditorTextRowContentConfiguration else { return }
 			apply(configuration: newConfig)
 		}
 	}
 	
-	private func apply(configuration: EditorHeadlineContentConfiguration) {
+	private func apply(configuration: EditorTextRowContentConfiguration) {
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
 
-		configureTextView(configuration: configuration)
+		configureTopicTextView(configuration: configuration)
 		configureNoteTextView(configuration: configuration)
 
 		let adjustedLeadingIndention: CGFloat
@@ -68,15 +68,15 @@ class EditorHeadlineContentView: UIView, UIContentView {
 			adjustedTrailingIndention = -25
 		}
 
-		textView.removeConstraintsOwnedBySuperview()
+		topicTextView.removeConstraintsOwnedBySuperview()
 		
 		if let noteTextView = noteTextView {
 			noteTextView.removeConstraintsOwnedBySuperview()
 			NSLayoutConstraint.activate([
-				textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-				textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-				textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-				textView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: -4),
+				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+				topicTextView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: -4),
 				noteTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
 				noteTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
 				noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
@@ -84,10 +84,10 @@ class EditorHeadlineContentView: UIView, UIContentView {
 			])
 		} else {
 			NSLayoutConstraint.activate([
-				textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-				textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-				textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-				textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+				topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
 			])
 		}
 
@@ -115,91 +115,91 @@ class EditorHeadlineContentView: UIView, UIContentView {
 
 // MARK: EditorTextViewDelegate
 
-extension EditorHeadlineContentView: EditorHeadlineTextViewDelegate {
+extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 	
-	var editorHeadlineTextViewUndoManager: UndoManager? {
+	var editorRowTopicTextViewUndoManager: UndoManager? {
 		return appliedConfiguration.delegate?.editorHeadlineUndoManager
 	}
 	
-	var editorHeadlineTextViewTextRowStrings: TextRowStrings {
+	var editorRowTopicTextViewTextRowStrings: TextRowStrings {
 		return textRowStrings
 	}
 	
-	func invalidateLayout(_: EditorHeadlineTextView) {
+	func invalidateLayout(_: EditorTextRowTopicTextView) {
 		invalidateIntrinsicContentSize()
 		appliedConfiguration.delegate?.editorHeadlineInvalidateLayout()
 	}
 	
-	func textChanged(_: EditorHeadlineTextView, headline: TextRow, isInNotes: Bool, cursorPosition: Int) {
-		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
+	func textChanged(_: EditorTextRowTopicTextView, row: TextRow, isInNotes: Bool, cursorPosition: Int) {
+		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: row, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
-	func deleteHeadline(_: EditorHeadlineTextView, headline: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineDeleteHeadline(headline, textRowStrings: textRowStrings)
+	func deleteRow(_: EditorTextRowTopicTextView, row: TextRow) {
+		appliedConfiguration.delegate?.editorHeadlineDeleteHeadline(row, textRowStrings: textRowStrings)
 	}
 	
-	func createHeadline(_: EditorHeadlineTextView, beforeHeadline: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(beforeHeadline: beforeHeadline)
+	func createRow(_: EditorTextRowTopicTextView, beforeRow: TextRow) {
+		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(beforeHeadline: beforeRow)
 	}
 	
-	func createHeadline(_: EditorHeadlineTextView, afterHeadline: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(afterHeadline: afterHeadline, textRowStrings: textRowStrings)
+	func createRow(_: EditorTextRowTopicTextView, afterRow: TextRow) {
+		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(afterHeadline: afterRow, textRowStrings: textRowStrings)
 	}
 	
-	func indentHeadline(_: EditorHeadlineTextView, headline: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineIndentHeadline(headline, textRowStrings: textRowStrings)
+	func indentRow(_: EditorTextRowTopicTextView, row: TextRow) {
+		appliedConfiguration.delegate?.editorHeadlineIndentHeadline(row, textRowStrings: textRowStrings)
 	}
 	
-	func outdentHeadline(_: EditorHeadlineTextView, headline: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineOutdentHeadline(headline, textRowStrings: textRowStrings)
+	func outdentRow(_: EditorTextRowTopicTextView, row: TextRow) {
+		appliedConfiguration.delegate?.editorHeadlineOutdentHeadline(row, textRowStrings: textRowStrings)
 	}
 	
-	func splitHeadline(_: EditorHeadlineTextView, headline: TextRow, topic: NSAttributedString, cursorPosition: Int) {
-		appliedConfiguration.delegate?.editorHeadlineSplitHeadline(headline, topic: topic, cursorPosition: cursorPosition)
+	func splitRow(_: EditorTextRowTopicTextView, row: TextRow, topic: NSAttributedString, cursorPosition: Int) {
+		appliedConfiguration.delegate?.editorHeadlineSplitHeadline(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
-	func createHeadlineNote(_: EditorHeadlineTextView, headline: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineCreateHeadlineNote(headline, textRowStrings: textRowStrings)
+	func createRowNote(_: EditorTextRowTopicTextView, row: TextRow) {
+		appliedConfiguration.delegate?.editorHeadlineCreateHeadlineNote(row, textRowStrings: textRowStrings)
 	}
 	
-	func editLink(_: EditorHeadlineTextView, _ link: String?, range: NSRange) {
+	func editLink(_: EditorTextRowTopicTextView, _ link: String?, range: NSRange) {
 		appliedConfiguration.delegate?.editorHeadlineEditLink(link, range: range)
 	}
 	
 }
 
-extension EditorHeadlineContentView: EditorHeadlineNoteTextViewDelegate {
+extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 
-	var editorHeadlineNoteTextViewUndoManager: UndoManager? {
+	var editorRowNoteTextViewUndoManager: UndoManager? {
 		return appliedConfiguration.delegate?.editorHeadlineUndoManager
 	}
 	
-	var editorHeadlineNoteTextViewAttibutedTexts: TextRowStrings {
+	var editorRowNoteTextViewTextRowStrings: TextRowStrings {
 		return textRowStrings
 	}
 	
-	func invalidateLayout(_: EditorHeadlineNoteTextView) {
+	func invalidateLayout(_: EditorTextRowNoteTextView) {
 		invalidateIntrinsicContentSize()
 		appliedConfiguration.delegate?.editorHeadlineInvalidateLayout()
 	}
 	
-	func textChanged(_: EditorHeadlineNoteTextView, headline: TextRow, isInNotes: Bool, cursorPosition: Int) {
-		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: headline, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
+	func textChanged(_: EditorTextRowNoteTextView, row: TextRow, isInNotes: Bool, cursorPosition: Int) {
+		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: row, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
-	func deleteHeadlineNote(_: EditorHeadlineNoteTextView, headline: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineDeleteHeadlineNote(headline, textRowStrings: textRowStrings)
+	func deleteRowNote(_: EditorTextRowNoteTextView, row: TextRow) {
+		appliedConfiguration.delegate?.editorHeadlineDeleteHeadlineNote(row, textRowStrings: textRowStrings)
 	}
 	
-	func moveCursorTo(_: EditorHeadlineNoteTextView, headline: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineMoveCursorTo(headline: headline)
+	func moveCursorTo(_: EditorTextRowNoteTextView, row: TextRow) {
+		appliedConfiguration.delegate?.editorHeadlineMoveCursorTo(headline: row)
 	}
 	
-	func moveCursorDown(_: EditorHeadlineNoteTextView, headline: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineMoveCursorDown(headline: headline)
+	func moveCursorDown(_: EditorTextRowNoteTextView, row: TextRow) {
+		appliedConfiguration.delegate?.editorHeadlineMoveCursorDown(headline: row)
 	}
 	
-	func editLink(_: EditorHeadlineNoteTextView, _ link: String?, range: NSRange) {
+	func editLink(_: EditorTextRowNoteTextView, _ link: String?, range: NSRange) {
 		appliedConfiguration.delegate?.editorHeadlineEditLink(link, range: range)
 	}
 	
@@ -207,20 +207,20 @@ extension EditorHeadlineContentView: EditorHeadlineNoteTextViewDelegate {
 
 // MARK: Helpers
 
-extension EditorHeadlineContentView {
+extension EditorTextRowContentView {
 	
 	@objc func swipedLeft(_ sender: UISwipeGestureRecognizer) {
-		guard let headline = appliedConfiguration.headline else { return }
+		guard let headline = appliedConfiguration.row else { return }
 		appliedConfiguration.delegate?.editorHeadlineOutdentHeadline(headline, textRowStrings: textRowStrings)
 	}
 	
 	@objc func swipedRight(_ sender: UISwipeGestureRecognizer) {
-		guard let headline = appliedConfiguration.headline else { return }
+		guard let headline = appliedConfiguration.row else { return }
 		appliedConfiguration.delegate?.editorHeadlineIndentHeadline(headline, textRowStrings: textRowStrings)
 	}
 	
-	private func configureTextView(configuration: EditorHeadlineContentConfiguration) {
-		textView.headline = configuration.headline
+	private func configureTopicTextView(configuration: EditorTextRowContentConfiguration) {
+		topicTextView.textRow = configuration.row
 		
 		var attrs = [NSAttributedString.Key : Any]()
 		if configuration.isComplete || configuration.isAncestorComplete {
@@ -237,25 +237,25 @@ extension EditorHeadlineContentView {
 		}
 
 		// This is a bit of a hack to make sure that the reused UITextView gets cleared out for the empty attributed string
-		if configuration.attributedText.length < 1 {
+		if configuration.topic.length < 1 {
 			let mutableAttrText = NSMutableAttributedString(string: " ")
 			let range = NSRange(location: 0, length: mutableAttrText.length)
-			attrs[.font] = HeadlineFont.text
+			attrs[.font] = OutlineFont.topic
 			mutableAttrText.addAttributes(attrs, range: range)
-			textView.attributedText = mutableAttrText
-			textView.attributedText = configuration.attributedText
+			topicTextView.attributedText = mutableAttrText
+			topicTextView.attributedText = configuration.topic
 		} else {
-			let mutableAttrText = NSMutableAttributedString(attributedString: configuration.attributedText)
+			let mutableAttrText = NSMutableAttributedString(attributedString: configuration.topic)
 			let range = NSRange(location: 0, length: mutableAttrText.length)
 			mutableAttrText.addAttributes(attrs, range: range)
-			mutableAttrText.replaceFont(with: HeadlineFont.text)
-			textView.attributedText = mutableAttrText
+			mutableAttrText.replaceFont(with: OutlineFont.topic)
+			topicTextView.attributedText = mutableAttrText
 		}
 
 	}
 	
-	private func configureNoteTextView(configuration: EditorHeadlineContentConfiguration) {
-		guard let noteAttributedText = configuration.headline?.noteAttributedText else {
+	private func configureNoteTextView(configuration: EditorTextRowContentConfiguration) {
+		guard let noteAttributedText = configuration.row?.note else {
 			noteTextView?.removeFromSuperview()
 			noteTextView = nil
 			return
@@ -266,22 +266,22 @@ extension EditorHeadlineContentView {
 		
 		let mutableAttrText = NSMutableAttributedString(attributedString: noteAttributedText)
 		let range = NSRange(location: 0, length: mutableAttrText.length)
-		mutableAttrText.replaceFont(with: HeadlineFont.note)
+		mutableAttrText.replaceFont(with: OutlineFont.note)
 		mutableAttrText.addAttributes(attrs, range: range)
 		
 		if noteTextView == nil {
-			noteTextView = EditorHeadlineNoteTextView()
+			noteTextView = EditorTextRowNoteTextView()
 			noteTextView!.editorDelegate = self
 			noteTextView!.translatesAutoresizingMaskIntoConstraints = false
 			addSubview(noteTextView!)
 		}
 		
-		noteTextView!.headline = configuration.headline
+		noteTextView!.textRow = configuration.row
 		noteTextView!.attributedText = mutableAttrText
 	}
 	
 	private func addBarViews() {
-		let configuration = appliedConfiguration as EditorHeadlineContentConfiguration
+		let configuration = appliedConfiguration as EditorTextRowContentConfiguration
 		
 		if configuration.indentionLevel > 0 {
 			let barViewsCount = barViews.count

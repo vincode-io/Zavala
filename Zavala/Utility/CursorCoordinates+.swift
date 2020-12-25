@@ -13,8 +13,8 @@ extension CursorCoordinates {
 	static var lastKnownCoordinates: CursorCoordinates?
 
 	static var currentCoordinates: CursorCoordinates? {
-		if let textView = UIResponder.currentFirstResponder as? OutlineTextView, let row = textView.headline {
-			let isInNotes = textView is EditorHeadlineNoteTextView
+		if let textView = UIResponder.currentFirstResponder as? OutlineTextView, let row = textView.textRow {
+			let isInNotes = textView is EditorTextRowNoteTextView
 			return CursorCoordinates(row: row, isInNotes: isInNotes, cursorPosition: textView.cursorPosition)
 		}
 		return nil

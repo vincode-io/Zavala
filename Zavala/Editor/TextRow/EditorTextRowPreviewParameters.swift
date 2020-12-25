@@ -1,5 +1,5 @@
 //
-//  EditorHeadlinePreviewParameters.swift
+//  EditorTextRowPreviewParameters.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/4/20.
@@ -8,13 +8,13 @@
 import UIKit
 import Templeton
 
-class EditorHeadlinePreviewParameters: UIDragPreviewParameters {
+class EditorTextRowPreviewParameters: UIDragPreviewParameters {
 	
 	override init() {
 		super.init()
 	}
 	
-	init(cell: EditorHeadlineViewCell, headline: TextRow) {
+	init(cell: EditorTextRowViewCell, headline: TextRow) {
 		super.init()
 
 //		#if !targetEnvironment(macCatalyst)

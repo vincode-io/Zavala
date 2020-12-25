@@ -103,7 +103,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 	
 	var currentHeadline: TextRow? {
-		return currentTextView?.headline
+		return currentTextView?.textRow
 	}
 	
 	var currentTextRowStrings: TextRowStrings? {
@@ -122,7 +122,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	private var filterBarButtonItem: UIBarButtonItem?
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
-	private var headerRegistration: UICollectionView.CellRegistration<EditorHeadlineViewCell, TextRow>?
+	private var headerRegistration: UICollectionView.CellRegistration<EditorTextRowViewCell, TextRow>?
 	
 	private var firstVisibleShadowTableIndex: Int? {
 		let visibleRect = collectionView.layoutMarginsGuide.layoutFrame
@@ -158,7 +158,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 			cell.delegate = self
 		}
 		
-		headerRegistration = UICollectionView.CellRegistration<EditorHeadlineViewCell, TextRow> { (cell, indexPath, headline) in
+		headerRegistration = UICollectionView.CellRegistration<EditorTextRowViewCell, TextRow> { (cell, indexPath, headline) in
 			cell.headline = headline
 			cell.delegate = self
 		}
@@ -344,7 +344,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		}
 		
 		if currentKeyPresses.contains(.keyboardUpArrow) {
-			if let textView = UIResponder.currentFirstResponder as? EditorHeadlineTextView, !textView.isSelecting, let headline = textView.headline {
+			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, !textView.isSelecting, let headline = textView.textRow {
 				moveCursorUp(row: headline)
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 					self.repeatMoveCursorUp()
@@ -363,13 +363,13 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		}
 		
 		if currentKeyPresses.contains(.keyboardDownArrow) {
-			if let textView = UIResponder.currentFirstResponder as? EditorHeadlineTextView, !textView.isSelecting, let headline = textView.headline {
+			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, !textView.isSelecting, let headline = textView.textRow {
 				moveCursorDown(row: headline)
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 					self.repeatMoveCursorDown()
 				}
 			} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting, outline?.shadowTable?.count ?? 0 > 0 {
-				if let headlineCell = collectionView.cellForItem(at: IndexPath(row: 0, section: 1)) as? EditorHeadlineViewCell {
+				if let headlineCell = collectionView.cellForItem(at: IndexPath(row: 0, section: 1)) as? EditorTextRowViewCell {
 					headlineCell.moveToEnd()
 				}
 			}
@@ -413,7 +413,7 @@ extension EditorViewController {
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-		guard let editorCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell,
+		guard let editorCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell,
 			  let headline = editorCell.headline,
 			  let textRowStrings = editorCell.textRowStrings else { return nil }
 		
@@ -423,9 +423,9 @@ extension EditorViewController {
 	override func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
 		guard let headline = configuration.identifier as? TextRow,
 			  let row = headline.shadowTableIndex,
-			  let cell = collectionView.cellForItem(at: IndexPath(row: row, section: 1)) as? EditorHeadlineViewCell else { return nil }
+			  let cell = collectionView.cellForItem(at: IndexPath(row: row, section: 1)) as? EditorTextRowViewCell else { return nil }
 		
-		return UITargetedPreview(view: cell, parameters: EditorHeadlinePreviewParameters(cell: cell, headline: headline))
+		return UITargetedPreview(view: cell, parameters: EditorTextRowPreviewParameters(cell: cell, headline: headline))
 	}
 	
 }
@@ -539,16 +539,16 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 	func applyChangesRestoringCursor(_ changes: ShadowTableChanges) {
 		var textRange: UITextRange? = nil
 		var cursorHeadline: TextRow? = nil
-		if let editorTextView = UIResponder.currentFirstResponder as? EditorHeadlineTextView {
+		if let editorTextView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView {
 			textRange = editorTextView.selectedTextRange
-			cursorHeadline = editorTextView.headline
+			cursorHeadline = editorTextView.textRow
 		}
 		
 		applyChanges(changes)
 		
 		if let textRange = textRange,
 		   let updated = cursorHeadline?.shadowTableIndex,
-		   let headlineCell = collectionView.cellForItem(at: IndexPath(row: updated, section: 1)) as? EditorHeadlineViewCell {
+		   let headlineCell = collectionView.cellForItem(at: IndexPath(row: updated, section: 1)) as? EditorTextRowViewCell {
 			headlineCell.restoreSelection(textRange)
 		}
 	}
@@ -558,7 +558,7 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
 
 		func restoreCursor() {
-			guard let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell else { return	}
+			guard let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
 			headlineCell.restoreCursor(cursorCoordinates)
 		}
 		
@@ -586,7 +586,7 @@ extension EditorViewController: LinkViewControllerDelegate {
 	func updateLink(_: LinkViewController, cursorCoordinates: CursorCoordinates, link: String?, range: NSRange) {
 		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
-		guard let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell else { return	}
+		guard let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
 		
 		if cursorCoordinates.isInNotes {
 			headlineCell.noteTextView?.updateLinkForCurrentSelection(link: link, range: range)
@@ -774,7 +774,7 @@ private extension EditorViewController {
 		}
 		
 		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
-		if let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell {
+		if let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
 			headlineCell.moveToEnd()
 		}
 	}
@@ -786,7 +786,7 @@ private extension EditorViewController {
 		}
 		
 		let indexPath = IndexPath(row: shadowTableIndex - 1, section: 1)
-		if let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell {
+		if let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
 			headlineCell.moveToEnd()
 		}
 	}
@@ -794,7 +794,7 @@ private extension EditorViewController {
 	func moveCursorDown(row: TextRow) {
 		guard let shadowTableIndex = row.shadowTableIndex, let shadowTable = outline?.shadowTable, shadowTableIndex < (shadowTable.count - 1) else { return }
 		let indexPath = IndexPath(row: shadowTableIndex + 1, section: 1)
-		if let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorHeadlineViewCell {
+		if let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
 			headlineCell.moveToEnd()
 		}
 	}
@@ -857,7 +857,7 @@ private extension EditorViewController {
 		runCommand(command)
 		
 		if let deleteIndex = command.changes?.deletes?.first {
-			if deleteIndex > 0, let rowCell = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 1)) as? EditorHeadlineViewCell {
+			if deleteIndex > 0, let rowCell = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 1)) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
 			} else {
 				moveCursorToTitle()
@@ -876,7 +876,7 @@ private extension EditorViewController {
 		runCommand(command)
 		
 		if let insert = command.changes?.insertIndexPaths?.first {
-			if let rowCell = collectionView.cellForItem(at: insert) as? EditorHeadlineViewCell {
+			if let rowCell = collectionView.cellForItem(at: insert) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}
@@ -894,7 +894,7 @@ private extension EditorViewController {
 		runCommand(command)
 		
 		if let insert = command.changes?.insertIndexPaths?.first {
-			if let rowCell = collectionView.cellForItem(at: insert) as? EditorHeadlineViewCell {
+			if let rowCell = collectionView.cellForItem(at: insert) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}
@@ -938,7 +938,7 @@ private extension EditorViewController {
 		runCommand(command)
 		
 		if let insert = command.changes?.insertIndexPaths?.first {
-			if let rowCell = collectionView.cellForItem(at: insert) as? EditorHeadlineViewCell {
+			if let rowCell = collectionView.cellForItem(at: insert) as? EditorTextRowViewCell {
 				rowCell.moveToStart()
 			}
 		}
@@ -957,7 +957,7 @@ private extension EditorViewController {
 		
 		if let deleteIndex = command.changes?.deletes?.first {
 			let cursorIndex = deleteIndex < outline.shadowTable?.count ?? 0 ? deleteIndex : (outline.shadowTable?.count ?? 1) - 1
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: cursorIndex, section: 1)) as? EditorHeadlineViewCell {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: cursorIndex, section: 1)) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}
@@ -975,7 +975,7 @@ private extension EditorViewController {
 		runCommand(command)
 		
 		if let reloadIndex = command.changes?.reloads?.first {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: reloadIndex, section: 1)) as? EditorHeadlineViewCell {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: reloadIndex, section: 1)) as? EditorTextRowViewCell {
 				rowCell.moveToNote()
 			}
 		}
@@ -993,7 +993,7 @@ private extension EditorViewController {
 		runCommand(command)
 
 		if let reloadIndex = command.changes?.reloads?.first {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: reloadIndex, section: 1)) as? EditorHeadlineViewCell {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: reloadIndex, section: 1)) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}

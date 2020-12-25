@@ -41,8 +41,6 @@ public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Cod
 	}
 	
 	public var id: String
-	public var topic: Data?
-	public var note: Data?
 	public var isExpanded: Bool?
 	public var isComplete: Bool?
 	public var rows: [TextRow]?
@@ -59,13 +57,16 @@ public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Cod
 
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
-		case topic = "topic"
-		case note = "note"
+		case topicData = "topicData"
+		case noteData = "noteData"
 		case isExpanded = "isExpanded"
 		case isComplete = "isComplete"
 		case rows = "rows"
 	}
 	
+	private var topicData: Data?
+	private var noteData: Data?
+
 	public override init() {
 		self.id = UUID().uuidString
 		super.init()
@@ -76,9 +77,9 @@ public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Cod
 		self.id = UUID().uuidString
 		super.init()
 
-		topicAttributedText = NSAttributedString(markdownRepresentation: topicPlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
+		topic = NSAttributedString(markdownRepresentation: topicPlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		if let notePlainText = notePlainText {
-			noteAttributedText = NSAttributedString(markdownRepresentation: notePlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
+			note = NSAttributedString(markdownRepresentation: notePlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		}
 											
 		rows = [TextRow]()
@@ -89,62 +90,62 @@ public final class TextRow: NSObject, NSCopying, RowContainer, Identifiable, Cod
 	}
 	
 	public var topicPlainText: String? {
-		return topicAttributedText?.markdownRepresentation
+		return topic?.markdownRepresentation
 	}
 	
 	public var notePlainText: String? {
-		return noteAttributedText?.markdownRepresentation
+		return note?.markdownRepresentation
 	}
 	
-	private var _topicAttributedText: NSAttributedString?
-	public var topicAttributedText: NSAttributedString? {
+	private var _topic: NSAttributedString?
+	public var topic: NSAttributedString? {
 		get {
-			guard let topic = topic else { return nil }
-			if _topicAttributedText == nil {
-				_topicAttributedText = try? NSAttributedString(data: topic,
+			guard let topic = topicData else { return nil }
+			if _topic == nil {
+				_topic = try? NSAttributedString(data: topic,
 															   options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
 															   documentAttributes: nil)
 			}
-			return _topicAttributedText
+			return _topic
 		}
 		set {
-			_topicAttributedText = newValue
+			_topic = newValue
 			if let attrText = newValue {
-				topic = try? attrText.data(from: .init(location: 0, length: attrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+				topicData = try? attrText.data(from: .init(location: 0, length: attrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 			} else {
-				topic = nil
+				topicData = nil
 			}
 		}
 	}
 	
-	private var _noteAttributedText: NSAttributedString?
-	public var noteAttributedText: NSAttributedString? {
+	private var _note: NSAttributedString?
+	public var note: NSAttributedString? {
 		get {
-			guard let note = note else { return nil }
-			if _noteAttributedText == nil {
-				_noteAttributedText = try? NSAttributedString(data: note,
+			guard let note = noteData else { return nil }
+			if _note == nil {
+				_note = try? NSAttributedString(data: note,
 															  options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
 															  documentAttributes: nil)
 			}
-			return _noteAttributedText
+			return _note
 		}
 		set {
-			_noteAttributedText = newValue
+			_note = newValue
 			if let noteAttrText = newValue {
-				note = try? noteAttrText.data(from: .init(location: 0, length: noteAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+				noteData = try? noteAttrText.data(from: .init(location: 0, length: noteAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 			} else {
-				note = nil
+				noteData = nil
 			}
 		}
 	}
 	
 	public var textRowStrings: TextRowStrings {
 		get {
-			return TextRowStrings(topic: topicAttributedText, note: noteAttributedText)
+			return TextRowStrings(topic: topic, note: note)
 		}
 		set {
-			topicAttributedText = newValue.topic
-			noteAttributedText = newValue.note
+			topic = newValue.topic
+			note = newValue.note
 		}
 	}
 	

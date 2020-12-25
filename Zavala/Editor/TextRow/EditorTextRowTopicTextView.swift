@@ -1,5 +1,5 @@
 //
-//  EditorHeadlineTextView.swift
+//  EditorTextRowTopicTextView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/17/20.
@@ -8,25 +8,25 @@
 import UIKit
 import Templeton
 
-protocol EditorHeadlineTextViewDelegate: class {
-	var editorHeadlineTextViewUndoManager: UndoManager? { get }
-	var editorHeadlineTextViewTextRowStrings: TextRowStrings { get }
-	func invalidateLayout(_: EditorHeadlineTextView)
-	func textChanged(_: EditorHeadlineTextView, headline: TextRow, isInNotes: Bool, cursorPosition: Int)
-	func deleteHeadline(_: EditorHeadlineTextView, headline: TextRow)
-	func createHeadline(_: EditorHeadlineTextView, beforeHeadline: TextRow)
-	func createHeadline(_: EditorHeadlineTextView, afterHeadline: TextRow)
-	func indentHeadline(_: EditorHeadlineTextView, headline: TextRow)
-	func outdentHeadline(_: EditorHeadlineTextView, headline: TextRow)
-	func splitHeadline(_: EditorHeadlineTextView, headline: TextRow, topic: NSAttributedString, cursorPosition: Int)
-	func createHeadlineNote(_: EditorHeadlineTextView, headline: TextRow)
-	func editLink(_: EditorHeadlineTextView, _ link: String?, range: NSRange)
+protocol EditorTextRowTopicTextViewDelegate: class {
+	var editorRowTopicTextViewUndoManager: UndoManager? { get }
+	var editorRowTopicTextViewTextRowStrings: TextRowStrings { get }
+	func invalidateLayout(_: EditorTextRowTopicTextView)
+	func textChanged(_: EditorTextRowTopicTextView, row: TextRow, isInNotes: Bool, cursorPosition: Int)
+	func deleteRow(_: EditorTextRowTopicTextView, row: TextRow)
+	func createRow(_: EditorTextRowTopicTextView, beforeRow: TextRow)
+	func createRow(_: EditorTextRowTopicTextView, afterRow: TextRow)
+	func indentRow(_: EditorTextRowTopicTextView, row: TextRow)
+	func outdentRow(_: EditorTextRowTopicTextView, row: TextRow)
+	func splitRow(_: EditorTextRowTopicTextView, row: TextRow, topic: NSAttributedString, cursorPosition: Int)
+	func createRowNote(_: EditorTextRowTopicTextView, row: TextRow)
+	func editLink(_: EditorTextRowTopicTextView, _ link: String?, range: NSRange)
 }
 
-class EditorHeadlineTextView: OutlineTextView {
+class EditorTextRowTopicTextView: OutlineTextView {
 	
 	override var editorUndoManager: UndoManager? {
-		return editorDelegate?.editorHeadlineTextViewUndoManager
+		return editorDelegate?.editorRowTopicTextViewUndoManager
 	}
 	
 	override var keyCommands: [UIKeyCommand]? {
@@ -44,10 +44,10 @@ class EditorHeadlineTextView: OutlineTextView {
 		return keys
 	}
 	
-	weak var editorDelegate: EditorHeadlineTextViewDelegate?
+	weak var editorDelegate: EditorTextRowTopicTextViewDelegate?
 	
 	override var textRowStrings: TextRowStrings? {
-		return editorDelegate?.editorHeadlineTextViewTextRowStrings
+		return editorDelegate?.editorRowTopicTextViewTextRowStrings
 	}
 	
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
@@ -55,7 +55,7 @@ class EditorHeadlineTextView: OutlineTextView {
 
 		self.delegate = self
 
-		self.font = HeadlineFont.text
+		self.font = OutlineFont.topic
 		self.linkTextAttributes = [.foregroundColor: UIColor.label, .underlineStyle: 1]
 	}
 	
@@ -70,34 +70,34 @@ class EditorHeadlineTextView: OutlineTextView {
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 		super.traitCollectionDidChange(previousTraitCollection)
 		if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-			textStorage.replaceFont(with: HeadlineFont.text)
+			textStorage.replaceFont(with: OutlineFont.topic)
 		}
 	}
 	
 	override func resignFirstResponder() -> Bool {
-		if let headline = headline {
-			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: headline, isInNotes: false, cursorPosition: lastCursorPosition)
+		if let textRow = textRow {
+			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: textRow, isInNotes: false, cursorPosition: lastCursorPosition)
 		}
 		return super.resignFirstResponder()
 	}
 
 	override func deleteBackward() {
-		guard let headline = headline else { return }
+		guard let textRow = textRow else { return }
 		if attributedText.length == 0 {
-			editorDelegate?.deleteHeadline(self, headline: headline)
+			editorDelegate?.deleteRow(self, row: textRow)
 		} else {
 			super.deleteBackward()
 		}
 	}
 
 	@objc func indent(_ sender: Any) {
-		guard let headline = headline else { return }
-		editorDelegate?.indentHeadline(self, headline: headline)
+		guard let textRow = textRow else { return }
+		editorDelegate?.indentRow(self, row: textRow)
 	}
 	
 	@objc func outdent(_ sender: Any) {
-		guard let headline = headline else { return }
-		editorDelegate?.outdentHeadline(self, headline: headline)
+		guard let textRow = textRow else { return }
+		editorDelegate?.outdentRow(self, row: textRow)
 	}
 	
 	@objc func insertTab(_ sender: Any) {
@@ -109,20 +109,20 @@ class EditorHeadlineTextView: OutlineTextView {
 	}
 	
 	@objc func addNote(_ sender: Any) {
-		guard let headline = headline else { return }
+		guard let textRow = textRow else { return }
 		isSavingTextUnnecessary = true
-		editorDelegate?.createHeadlineNote(self, headline: headline)
+		editorDelegate?.createRowNote(self, row: textRow)
 	}
 	
 	@objc func split(_ sender: Any) {
-		guard let headline = headline else { return }
+		guard let textRow = textRow else { return }
 		
 		isSavingTextUnnecessary = true
 		
 		if cursorPosition == 0 {
-			editorDelegate?.createHeadline(self, beforeHeadline: headline)
+			editorDelegate?.createRow(self, beforeRow: textRow)
 		} else {
-			editorDelegate?.splitHeadline(self, headline: headline, topic: attributedText, cursorPosition: cursorPosition)
+			editorDelegate?.splitRow(self, row: textRow, topic: attributedText, cursorPosition: cursorPosition)
 		}
 	}
 	
@@ -140,7 +140,7 @@ class EditorHeadlineTextView: OutlineTextView {
 
 // MARK: UITextViewDelegate
 
-extension EditorHeadlineTextView: UITextViewDelegate {
+extension EditorTextRowTopicTextView: UITextViewDelegate {
 	
 	func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
 		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
@@ -149,22 +149,22 @@ extension EditorHeadlineTextView: UITextViewDelegate {
 	}
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
-		guard isTextChanged, let headline = headline else { return }
+		guard isTextChanged, let textRow = textRow else { return }
 		
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false
 		} else {
-			editorDelegate?.textChanged(self, headline: headline, isInNotes: false, cursorPosition: lastCursorPosition)
+			editorDelegate?.textChanged(self, row: textRow, isInNotes: false, cursorPosition: lastCursorPosition)
 		}
 		
 		isTextChanged = false
 	}
 	
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-		guard let headline = headline else { return true }
+		guard let textRow = textRow else { return true }
 		switch text {
 		case "\n":
-			editorDelegate?.createHeadline(self, afterHeadline: headline)
+			editorDelegate?.createRow(self, afterRow: textRow)
 			return false
 		default:
 			return true

@@ -7,9 +7,9 @@
 
 import UIKit
 
-public struct HeadlineFont {
+public struct OutlineFont {
 	
-	public static var text: UIFont {
+	public static var topic: UIFont {
 		#if targetEnvironment(macCatalyst)
 		let bodyFont = UIFont.preferredFont(forTextStyle: .body)
 		return bodyFont.withSize(bodyFont.pointSize + 1)

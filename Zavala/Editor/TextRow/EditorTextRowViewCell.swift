@@ -1,5 +1,5 @@
 //
-//  EditorCollectionViewCell.swift
+//  EditorTextRowViewCell.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/16/20.
@@ -26,7 +26,7 @@ protocol EditorHeadlineViewCellDelegate: class {
 	func editorHeadlineEditLink(_ link: String?, range: NSRange)
 }
 
-class EditorHeadlineViewCell: UICollectionViewListCell {
+class EditorTextRowViewCell: UICollectionViewListCell {
 
 	var headline: TextRow? {
 		didSet {
@@ -41,15 +41,15 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 	}
 	
 	var textRowStrings: TextRowStrings? {
-		return (contentView as? EditorHeadlineContentView)?.textRowStrings
+		return (contentView as? EditorTextRowContentView)?.textRowStrings
 	}
 	
-	var textView: EditorHeadlineTextView? {
-		return (contentView as? EditorHeadlineContentView)?.textView
+	var textView: EditorTextRowTopicTextView? {
+		return (contentView as? EditorTextRowContentView)?.topicTextView
 	}
 	
-	var noteTextView: EditorHeadlineNoteTextView? {
-		return (contentView as? EditorHeadlineContentView)?.noteTextView
+	var noteTextView: EditorTextRowNoteTextView? {
+		return (contentView as? EditorTextRowContentView)?.noteTextView
 	}
 	
 	private var isDisclosed = false
@@ -118,13 +118,13 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 		
 		setDisclosure(isExpanded: headline.isExpanded ?? true, animated: false)
 
-		var content = EditorHeadlineContentConfiguration(headline: headline, indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
+		var content = EditorTextRowContentConfiguration(row: headline, indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content
 	}
 
 	func restoreSelection(_ textRange: UITextRange) {
-		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return }
+		guard let textView = (contentView as? EditorTextRowContentView)?.topicTextView else { return }
 		textView.becomeFirstResponder()
 		textView.selectedTextRange = textRange
 	}
@@ -132,9 +132,9 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 	func restoreCursor(_ cursorCoordinates: CursorCoordinates) {
 		let textView: OutlineTextView?
 		if cursorCoordinates.isInNotes {
-			textView = (contentView as? EditorHeadlineContentView)?.noteTextView
+			textView = (contentView as? EditorTextRowContentView)?.noteTextView
 		} else {
-			textView = (contentView as? EditorHeadlineContentView)?.textView
+			textView = (contentView as? EditorTextRowContentView)?.topicTextView
 		}
 		
 		if let textView = textView, let textPosition = textView.position(from: textView.beginningOfDocument, offset: cursorCoordinates.cursorPosition) {
@@ -148,21 +148,21 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 	}
 	
 	func moveToStart() {
-		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return }
+		guard let textView = (contentView as? EditorTextRowContentView)?.topicTextView else { return }
 		textView.becomeFirstResponder()
 		let startPosition = textView.beginningOfDocument
 		textView.selectedTextRange = textView.textRange(from: startPosition, to: startPosition)
 	}
 	
 	func moveToEnd() {
-		guard let textView = (contentView as? EditorHeadlineContentView)?.textView else { return }
+		guard let textView = (contentView as? EditorTextRowContentView)?.topicTextView else { return }
 		textView.becomeFirstResponder()
 		let endPosition = textView.endOfDocument
 		textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
 	}
 	
 	func moveToNote() {
-		guard let textView = (contentView as? EditorHeadlineContentView)?.noteTextView else { return }
+		guard let textView = (contentView as? EditorTextRowContentView)?.noteTextView else { return }
 		textView.becomeFirstResponder()
 		let endPosition = textView.endOfDocument
 		textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
@@ -172,7 +172,7 @@ class EditorHeadlineViewCell: UICollectionViewListCell {
 
 // MARK: Helpers
 
-extension EditorHeadlineViewCell {
+extension EditorTextRowViewCell {
 	
 	@objc func toggleDisclosure(_ sender: UITapGestureRecognizer) {
 		guard sender.state == .ended, let headline = headline else { return }
