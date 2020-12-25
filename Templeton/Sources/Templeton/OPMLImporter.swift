@@ -23,6 +23,11 @@ public extension OPMLImporter {
 			let notePlainText = rowIndexer.element?.attribute(by: "_note")?.text
 			
 			let textRow = TextRow(topicPlainText: topicPlainText, notePlainText: notePlainText)
+			
+			if rowIndexer.element?.attribute(by: "_status")?.text == "checked" {
+				textRow.isComplete = true
+			}
+			
 			textRow.importRows(rowIndexer["outline"].all)
 			row.append(.text(textRow))
 		}

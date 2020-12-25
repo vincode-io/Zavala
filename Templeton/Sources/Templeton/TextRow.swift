@@ -76,8 +76,8 @@ public final class TextRow: NSObject, NSCopying, OPMLImporter, Identifiable, Cod
 			guard let topic = topicData else { return nil }
 			if _topic == nil {
 				_topic = try? NSAttributedString(data: topic,
-															   options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
-															   documentAttributes: nil)
+												 options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
+												 documentAttributes: nil)
 			}
 			return _topic
 		}
@@ -97,8 +97,8 @@ public final class TextRow: NSObject, NSCopying, OPMLImporter, Identifiable, Cod
 			guard let note = noteData else { return nil }
 			if _note == nil {
 				_note = try? NSAttributedString(data: note,
-															  options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
-															  documentAttributes: nil)
+												options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
+												documentAttributes: nil)
 			}
 			return _note
 		}
@@ -144,6 +144,10 @@ public final class TextRow: NSObject, NSCopying, OPMLImporter, Identifiable, Cod
 			opml.append(" _note=\"\(escapedNote)\"")
 		}
 
+		if isComplete ?? false {
+			opml.append(" _status=\"checked\"")
+		}
+		
 		if rows?.count ?? 0 == 0 {
 			opml.append("/>\n")
 		} else {
