@@ -20,46 +20,46 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return outline?.isFiltered ?? false
 	}
 	
-	var isDeleteCurrentHeadlineUnavailable: Bool {
-		return currentHeadline == nil
+	var isDeleteCurrentRowUnavailable: Bool {
+		return currentRow == nil
 	}
 	
-	var isCreateHeadlineUnavailable: Bool {
-		return currentHeadline == nil
+	var isCreateRowUnavailable: Bool {
+		return currentRow == nil
 	}
 	
-	var isIndentHeadlineUnavailable: Bool {
-		guard let outline = outline, let headline = currentHeadline else { return true }
-		return outline.isIndentRowUnavailable(row: headline)
+	var isIndentRowUnavailable: Bool {
+		guard let outline = outline, let row = currentRow else { return true }
+		return outline.isIndentRowUnavailable(row: row)
 	}
 
-	var isOutdentHeadlineUnavailable: Bool {
-		guard let outline = outline, let headline = currentHeadline else { return true }
-		return outline.isOutdentRowUnavailable(row: headline)
+	var isOutdentRowUnavailable: Bool {
+		guard let outline = outline, let row = currentRow else { return true }
+		return outline.isOutdentRowUnavailable(row: row)
 	}
 
-	var isToggleHeadlineCompleteUnavailable: Bool {
-		return currentHeadline == nil
+	var isToggleRowCompleteUnavailable: Bool {
+		return currentRow == nil
 	}
 
-	var isCurrentHeadlineComplete: Bool {
-		return currentHeadline?.isComplete ?? false
+	var isCurrentRowComplete: Bool {
+		return currentRow?.isComplete ?? false
 	}
 	
-	var isCreateHeadlineNoteUnavailable: Bool {
-		return currentHeadline == nil || !currentHeadline!.isNoteEmpty
+	var isCreateRowNoteUnavailable: Bool {
+		return currentRow == nil || !currentRow!.isNoteEmpty
 	}
 
-	var isDeleteHeadlineNoteUnavailable: Bool {
-		return currentHeadline == nil || currentHeadline!.isNoteEmpty
+	var isDeleteRowNoteUnavailable: Bool {
+		return currentRow == nil || currentRow!.isNoteEmpty
 	}
 
-	var isCurrentHeadlineNoteEmpty: Bool {
-		return currentHeadline?.isNoteEmpty ?? false
+	var isCurrentRowNoteEmpty: Bool {
+		return currentRow?.isNoteEmpty ?? false
 	}
 	
-	var isSplitHeadlineUnavailable: Bool {
-		return currentHeadline == nil
+	var isSplitRowUnavailable: Bool {
+		return currentRow == nil
 	}
 
 	var isFormatUnavailable: Bool {
@@ -79,21 +79,21 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 
 	var isExpandAllUnavailable: Bool {
-		guard let outline = outline, let headline = currentHeadline else { return true }
-		return outline.isExpandAllUnavailable(container: headline)
+		guard let outline = outline, let row = currentRow else { return true }
+		return outline.isExpandAllUnavailable(container: row)
 	}
 
 	var isCollapseAllUnavailable: Bool {
-		guard let outline = outline, let headline = currentHeadline else { return true }
-		return outline.isCollapseAllUnavailable(container: headline)
+		guard let outline = outline, let row = currentRow else { return true }
+		return outline.isCollapseAllUnavailable(container: row)
 	}
 
 	var isExpandUnavailable: Bool {
-		return !(currentHeadline?.isExpandable ?? false)
+		return !(currentRow?.isExpandable ?? false)
 	}
 
 	var isCollapseUnavailable: Bool {
-		return !(currentHeadline?.isCollapsable ?? false)
+		return !(currentRow?.isCollapsable ?? false)
 	}
 
 	private(set) var outline: Outline?
@@ -102,7 +102,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return UIResponder.currentFirstResponder as? OutlineTextView
 	}
 	
-	var currentHeadline: TextRow? {
+	var currentRow: TextRow? {
 		return currentTextView?.textRow
 	}
 	
@@ -158,8 +158,8 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 			cell.delegate = self
 		}
 		
-		headerRegistration = UICollectionView.CellRegistration<EditorTextRowViewCell, TextRow> { (cell, indexPath, headline) in
-			cell.headline = headline
+		headerRegistration = UICollectionView.CellRegistration<EditorTextRowViewCell, TextRow> { (cell, indexPath, row) in
+			cell.textRow = row
 			cell.delegate = self
 		}
 		
@@ -235,53 +235,53 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		moveCursorToTitleOnNew()
 	}
 	
-	func deleteCurrentHeadline() {
-		guard let headline = currentHeadline,
+	func deleteCurrentRow() {
+		guard let row = currentRow,
 			  let textRowStrings = currentTextRowStrings else { return }
-		deleteRow(headline, textRowStrings: textRowStrings)
+		deleteRow(row, textRowStrings: textRowStrings)
 	}
 	
-	func createHeadline() {
-		guard let headline = currentHeadline,
+	func createRow() {
+		guard let row = currentRow,
 			  let textRowStrings = currentTextRowStrings else { return }
-		createRow(afterRow: headline, textRowStrings: textRowStrings)
+		createRow(afterRow: row, textRowStrings: textRowStrings)
 	}
 	
-	func indentHeadline() {
-		guard let headline = currentHeadline,
+	func indentRow() {
+		guard let row = currentRow,
 			  let textRowStrings = currentTextRowStrings else { return }
-		indentRow(headline, textRowStrings: textRowStrings)
+		indentRow(row, textRowStrings: textRowStrings)
 	}
 	
-	func outdentHeadline() {
-		guard let headline = currentHeadline,
+	func outdentRow() {
+		guard let row = currentRow,
 			  let textRowStrings = currentTextRowStrings else { return }
-		outdentRow(headline, textRowStrings: textRowStrings)
+		outdentRow(row, textRowStrings: textRowStrings)
 	}
 	
-	func toggleCompleteHeadline() {
-		guard let headline = currentHeadline,
+	func toggleCompleteRow() {
+		guard let row = currentRow,
 			  let textRowStrings = currentTextRowStrings else { return }
-		toggleCompleteRow(headline, textRowStrings: textRowStrings)
+		toggleCompleteRow(row, textRowStrings: textRowStrings)
 	}
 	
-	func createHeadlineNote() {
-		guard let headline = currentHeadline,
+	func createRowNote() {
+		guard let row = currentRow,
 			  let textRowStrings = currentTextRowStrings else { return }
-		createRowNote(headline, textRowStrings: textRowStrings)
+		createRowNote(row, textRowStrings: textRowStrings)
 	}
 	
-	func deleteHeadlineNote() {
-		guard let headline = currentHeadline,
+	func deleteRowNote() {
+		guard let row = currentRow,
 			  let textRowStrings = currentTextRowStrings else { return }
-		deleteRowNote(headline, textRowStrings: textRowStrings)
+		deleteRowNote(row, textRowStrings: textRowStrings)
 	}
 	
-	func splitHeadline() {
-		guard let headline = currentHeadline,
+	func splitRow() {
+		guard let row = currentRow,
 			  let topic = currentTextRowStrings?.topic,
 			  let cursorPosition = currentCursorPosition else { return }
-		splitRow(headline, topic: topic, cursorPosition: cursorPosition)
+		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
 	func outlineToggleBoldface() {
@@ -307,23 +307,23 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 	
 	func expandAll() {
-		guard let headline = currentHeadline else { return }
-		expandAll(container: headline)
+		guard let row = currentRow else { return }
+		expandAll(container: row)
 	}
 	
 	func collapseAll() {
-		guard let headline = currentHeadline else { return }
-		collapseAll(container: headline)
+		guard let row = currentRow else { return }
+		collapseAll(container: row)
 	}
 	
 	func expand() {
-		guard let headline = currentHeadline else { return }
-		toggleDisclosure(row: headline)
+		guard let row = currentRow else { return }
+		toggleDisclosure(row: row)
 	}
 	
 	func collapse() {
-		guard let headline = currentHeadline else { return }
-		toggleDisclosure(row: headline)
+		guard let row = currentRow else { return }
+		toggleDisclosure(row: row)
 	}
 	
 	// MARK: Actions
@@ -344,8 +344,8 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		}
 		
 		if currentKeyPresses.contains(.keyboardUpArrow) {
-			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, !textView.isSelecting, let headline = textView.textRow {
-				moveCursorUp(row: headline)
+			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, !textView.isSelecting, let row = textView.textRow {
+				moveCursorUp(row: row)
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 					self.repeatMoveCursorUp()
 				}
@@ -363,14 +363,14 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		}
 		
 		if currentKeyPresses.contains(.keyboardDownArrow) {
-			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, !textView.isSelecting, let headline = textView.textRow {
-				moveCursorDown(row: headline)
+			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, !textView.isSelecting, let row = textView.textRow {
+				moveCursorDown(row: row)
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 					self.repeatMoveCursorDown()
 				}
 			} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting, outline?.shadowTable?.count ?? 0 > 0 {
-				if let headlineCell = collectionView.cellForItem(at: IndexPath(row: 0, section: 1)) as? EditorTextRowViewCell {
-					headlineCell.moveToEnd()
+				if let rowCell = collectionView.cellForItem(at: IndexPath(row: 0, section: 1)) as? EditorTextRowViewCell {
+					rowCell.moveToEnd()
 				}
 			}
 		}
@@ -407,25 +407,25 @@ extension EditorViewController {
 		if indexPath.section == 0 {
 			return collectionView.dequeueConfiguredReusableCell(using: titleRegistration!, for: indexPath, item: outline)
 		} else {
-			let headline = outline?.shadowTable?[indexPath.row] ?? TextRow()
-			return collectionView.dequeueConfiguredReusableCell(using: headerRegistration!, for: indexPath, item: headline)
+			let row = outline?.shadowTable?[indexPath.row] ?? TextRow()
+			return collectionView.dequeueConfiguredReusableCell(using: headerRegistration!, for: indexPath, item: row)
 		}
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
 		guard let editorCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell,
-			  let headline = editorCell.headline,
+			  let row = editorCell.textRow,
 			  let textRowStrings = editorCell.textRowStrings else { return nil }
 		
-		return makeHeadlineContextMenu(row: headline, textRowStrings: textRowStrings)
+		return makeRowContextMenu(row: row, textRowStrings: textRowStrings)
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-		guard let headline = configuration.identifier as? TextRow,
-			  let row = headline.shadowTableIndex,
-			  let cell = collectionView.cellForItem(at: IndexPath(row: row, section: 1)) as? EditorTextRowViewCell else { return nil }
+		guard let row = configuration.identifier as? TextRow,
+			  let rowShadowTableIndex = row.shadowTableIndex,
+			  let cell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: 1)) as? EditorTextRowViewCell else { return nil }
 		
-		return UITargetedPreview(view: cell, parameters: EditorTextRowPreviewParameters(cell: cell, headline: headline))
+		return UITargetedPreview(view: cell, parameters: EditorTextRowPreviewParameters(cell: cell, row: row))
 	}
 	
 }
@@ -440,74 +440,73 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 		collectionView.collectionViewLayout.invalidateLayout()
 	}
 	
-	func editorTitleCreateHeadline(attibutedTexts: TextRowStrings?) {
-		createRow(afterRow: nil, textRowStrings: attibutedTexts)
+	func editorTitleCreateRow(textRowStrings: TextRowStrings?) {
+		createRow(afterRow: nil, textRowStrings: textRowStrings)
 	}
-	
 	
 }
 
-extension EditorViewController: EditorHeadlineViewCellDelegate {
+extension EditorViewController: EditorTextRowViewCellDelegate {
 
-	var editorHeadlineUndoManager: UndoManager? {
+	var editorTextRowUndoManager: UndoManager? {
 		return undoManager
 	}
 	
-	func editorHeadlineInvalidateLayout() {
+	func editorTextRowInvalidateLayout() {
 		collectionView.collectionViewLayout.invalidateLayout()
 	}
 	
-	func editorHeadlineToggleDisclosure(headline: TextRow) {
-		toggleDisclosure(row: headline)
+	func editorTextRowToggleDisclosure(row: TextRow) {
+		toggleDisclosure(row: row)
 	}
 	
-	func editorHeadlineTextChanged(headline: TextRow, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
-		textChanged(row: headline, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
+	func editorTextRowTextChanged(row: TextRow, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
+		textChanged(row: row, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
-	func editorHeadlineDeleteHeadline(_ headline: TextRow, textRowStrings: TextRowStrings) {
-		deleteRow(headline, textRowStrings: textRowStrings)
+	func editorTextRowDeleteRow(_ row: TextRow, textRowStrings: TextRowStrings) {
+		deleteRow(row, textRowStrings: textRowStrings)
 	}
 	
-	func editorHeadlineCreateHeadline(beforeHeadline: TextRow) {
-		createRow(beforeRow: beforeHeadline)
+	func editorTextRowCreateRow(beforeRow: TextRow) {
+		createRow(beforeRow: beforeRow)
 	}
 	
-	func editorHeadlineCreateHeadline(afterHeadline: TextRow?, textRowStrings: TextRowStrings?) {
-		createRow(afterRow: afterHeadline, textRowStrings: textRowStrings)
+	func editorTextRowCreateRow(afterRow: TextRow?, textRowStrings: TextRowStrings?) {
+		createRow(afterRow: afterRow, textRowStrings: textRowStrings)
 	}
 	
-	func editorHeadlineIndentHeadline(_ headline: TextRow, textRowStrings: TextRowStrings) {
-		indentRow(headline, textRowStrings: textRowStrings)
+	func editorTextRowIndentRow(_ row: TextRow, textRowStrings: TextRowStrings) {
+		indentRow(row, textRowStrings: textRowStrings)
 	}
 	
-	func editorHeadlineOutdentHeadline(_ headline: TextRow, textRowStrings: TextRowStrings) {
-		outdentRow(headline, textRowStrings: textRowStrings)
+	func editorTextRowOutdentRow(_ row: TextRow, textRowStrings: TextRowStrings) {
+		outdentRow(row, textRowStrings: textRowStrings)
 	}
 	
-	func editorHeadlineSplitHeadline(_ headline: TextRow, topic: NSAttributedString, cursorPosition: Int) {
-		splitRow(headline, topic: topic, cursorPosition: cursorPosition)
+	func editorTextRowSplitRow(_ row: TextRow, topic: NSAttributedString, cursorPosition: Int) {
+		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
-	func editorHeadlineCreateHeadlineNote(_ headline: TextRow, textRowStrings: TextRowStrings) {
-		createRowNote(headline, textRowStrings: textRowStrings)
+	func editorTextRowCreateRowNote(_ row: TextRow, textRowStrings: TextRowStrings) {
+		createRowNote(row, textRowStrings: textRowStrings)
 	}
 	
-	func editorHeadlineDeleteHeadlineNote(_ headline: TextRow, textRowStrings: TextRowStrings) {
-		deleteRowNote(headline, textRowStrings: textRowStrings)
+	func editorTextRowDeleteRowNote(_ row: TextRow, textRowStrings: TextRowStrings) {
+		deleteRowNote(row, textRowStrings: textRowStrings)
 	}
 	
-	func editorHeadlineMoveCursorTo(headline: TextRow) {
-		moveCursorTo(row: headline)
+	func editorTextRowMoveCursorTo(row: TextRow) {
+		moveCursorTo(row: row)
 		hasAlreadyMovedThisKeyPressFlag = true
 	}
 	
-	func editorHeadlineMoveCursorDown(headline: TextRow) {
-		moveCursorDown(row: headline)
+	func editorTextRowMoveCursorDown(row: TextRow) {
+		moveCursorDown(row: row)
 		hasAlreadyMovedThisKeyPressFlag = true
 	}
 	
-	func editorHeadlineEditLink(_ link: String?, range: NSRange) {
+	func editorTextRowEditLink(_ link: String?, range: NSRange) {
 		editLink(link, range: range)
 	}
 
@@ -538,18 +537,18 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 	
 	func applyChangesRestoringCursor(_ changes: ShadowTableChanges) {
 		var textRange: UITextRange? = nil
-		var cursorHeadline: TextRow? = nil
+		var cursorRow: TextRow? = nil
 		if let editorTextView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView {
 			textRange = editorTextView.selectedTextRange
-			cursorHeadline = editorTextView.textRow
+			cursorRow = editorTextView.textRow
 		}
 		
 		applyChanges(changes)
 		
 		if let textRange = textRange,
-		   let updated = cursorHeadline?.shadowTableIndex,
-		   let headlineCell = collectionView.cellForItem(at: IndexPath(row: updated, section: 1)) as? EditorTextRowViewCell {
-			headlineCell.restoreSelection(textRange)
+		   let updated = cursorRow?.shadowTableIndex,
+		   let rowCell = collectionView.cellForItem(at: IndexPath(row: updated, section: 1)) as? EditorTextRowViewCell {
+			rowCell.restoreSelection(textRange)
 		}
 	}
 
@@ -558,14 +557,14 @@ extension EditorViewController: EditorOutlineCommandDelegate {
 		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
 
 		func restoreCursor() {
-			guard let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
-			headlineCell.restoreCursor(cursorCoordinates)
+			guard let rowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
+			rowCell.restoreCursor(cursorCoordinates)
 		}
 		
 		if !collectionView.indexPathsForVisibleItems.contains(indexPath) {
 			CATransaction.begin()
 			CATransaction.setCompletionBlock {
-				// Got to wait or the headline cell won't be found
+				// Got to wait or the row cell won't be found
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 					restoreCursor()
 				}
@@ -586,12 +585,12 @@ extension EditorViewController: LinkViewControllerDelegate {
 	func updateLink(_: LinkViewController, cursorCoordinates: CursorCoordinates, link: String?, range: NSRange) {
 		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
-		guard let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
+		guard let textRowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
 		
 		if cursorCoordinates.isInNotes {
-			headlineCell.noteTextView?.updateLinkForCurrentSelection(link: link, range: range)
+			textRowCell.noteTextView?.updateLinkForCurrentSelection(link: link, range: range)
 		} else {
-			headlineCell.textView?.updateLinkForCurrentSelection(link: link, range: range)
+			textRowCell.topicTextView?.updateLinkForCurrentSelection(link: link, range: range)
 		}
 	}
 	
@@ -671,7 +670,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	private func makeHeadlineContextMenu(row: TextRow, textRowStrings: TextRowStrings) -> UIContextMenuConfiguration {
+	private func makeRowContextMenu(row: TextRow, textRowStrings: TextRowStrings) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: row as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
 			guard let self = self, let outline = self.outline else { return nil }
 			
@@ -744,7 +743,7 @@ private extension EditorViewController {
 
 	private func toggleCompleteAction(row: TextRow, textRowStrings: TextRowStrings) -> UIAction {
 		let title = row.isComplete ?? false ? L10n.uncomplete : L10n.complete
-		let image = row.isComplete ?? false ? AppAssets.uncompleteHeadline : AppAssets.completeHeadline
+		let image = row.isComplete ?? false ? AppAssets.uncompleteRow : AppAssets.completeRow
 		return UIAction(title: title, image: image) { [weak self] action in
 			self?.toggleCompleteRow(row, textRowStrings: textRowStrings)
 		}
@@ -774,8 +773,8 @@ private extension EditorViewController {
 		}
 		
 		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
-		if let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
-			headlineCell.moveToEnd()
+		if let rowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
+			rowCell.moveToEnd()
 		}
 	}
 	
@@ -786,16 +785,16 @@ private extension EditorViewController {
 		}
 		
 		let indexPath = IndexPath(row: shadowTableIndex - 1, section: 1)
-		if let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
-			headlineCell.moveToEnd()
+		if let rowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
+			rowCell.moveToEnd()
 		}
 	}
 	
 	func moveCursorDown(row: TextRow) {
 		guard let shadowTableIndex = row.shadowTableIndex, let shadowTable = outline?.shadowTable, shadowTableIndex < (shadowTable.count - 1) else { return }
 		let indexPath = IndexPath(row: shadowTableIndex + 1, section: 1)
-		if let headlineCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
-			headlineCell.moveToEnd()
+		if let rowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
+			rowCell.moveToEnd()
 		}
 	}
 	

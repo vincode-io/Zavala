@@ -79,23 +79,23 @@ class EditorTextRowNoteTextView: OutlineTextView {
 	}
 
 	override func deleteBackward() {
-		guard let headline = textRow else { return }
+		guard let textRow = textRow else { return }
 		if attributedText.length == 0 {
 			isSavingTextUnnecessary = true
-			editorDelegate?.deleteRowNote(self, row: headline)
+			editorDelegate?.deleteRowNote(self, row: textRow)
 		} else {
 			super.deleteBackward()
 		}
 	}
 
 	@objc func moveCursorToText(_ sender: Any) {
-		guard let headline = textRow else { return }
-		editorDelegate?.moveCursorTo(self, row: headline)
+		guard let textRow = textRow else { return }
+		editorDelegate?.moveCursorTo(self, row: textRow)
 	}
 	
 	@objc func moveCursorDown(_ sender: Any) {
-		guard let headline = textRow else { return }
-		editorDelegate?.moveCursorDown(self, row: headline)
+		guard let textRow = textRow else { return }
+		editorDelegate?.moveCursorDown(self, row: textRow)
 	}
 
 	@objc override func editLink(_ sender: Any?) {
@@ -121,12 +121,12 @@ extension EditorTextRowNoteTextView: UITextViewDelegate {
 	}
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
-		guard isTextChanged, let headline = textRow else { return }
+		guard isTextChanged, let textRow = textRow else { return }
 		
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false
 		} else {
-			editorDelegate?.textChanged(self, row: headline, isInNotes: true, cursorPosition: lastCursorPosition)
+			editorDelegate?.textChanged(self, row: textRow, isInNotes: true, cursorPosition: lastCursorPosition)
 		}
 		
 		isTextChanged = false

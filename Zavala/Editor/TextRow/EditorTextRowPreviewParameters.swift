@@ -14,13 +14,13 @@ class EditorTextRowPreviewParameters: UIDragPreviewParameters {
 		super.init()
 	}
 	
-	init(cell: EditorTextRowViewCell, headline: TextRow) {
+	init(cell: EditorTextRowViewCell, row: TextRow) {
 		super.init()
 
 //		#if !targetEnvironment(macCatalyst)
 		let x = CGFloat(11 + (cell.indentationLevel * 10))
 		
-		let cellSize = cell.textView?.intrinsicContentSize ?? cell.bounds.size
+		let cellSize = cell.topicTextView?.intrinsicContentSize ?? cell.bounds.size
 		let height = cellSize.height + 4
 		let width = cellSize.width + 12
 		

@@ -33,7 +33,7 @@ struct AppAssets {
 		return UIImage(systemName: "arrow.down.right.and.arrow.up.left")!
 	}()
 
-	static var completeHeadline: UIImage = {
+	static var completeRow: UIImage = {
 		return UIImage(systemName: "checkmark.square")!
 	}()
 
@@ -117,7 +117,7 @@ struct AppAssets {
 		return UIImage(systemName: "trash")!
 	}()
 
-	static var uncompleteHeadline: UIImage = {
+	static var uncompleteRow: UIImage = {
 		return UIImage(systemName: "square")!
 	}()
 

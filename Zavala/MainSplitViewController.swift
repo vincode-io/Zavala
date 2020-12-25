@@ -75,43 +75,43 @@ class MainSplitViewController: UISplitViewController {
 	var isDeleteEntityUnavailable: Bool {
 		return (sidebarViewController?.isDeleteCurrentFolderUnavailable ?? true) &&
 			(timelineViewController?.isDeleteCurrentOutlineUnavailable ?? true) &&
-			(editorViewController?.isDeleteCurrentHeadlineUnavailable ?? true) 
+			(editorViewController?.isDeleteCurrentRowUnavailable ?? true) 
 	}
 
 	var isCreateHeadlineUnavailable: Bool {
-		return editorViewController?.isCreateHeadlineUnavailable ?? true
+		return editorViewController?.isCreateRowUnavailable ?? true
 	}
 	
 	var isIndentHeadlineUnavailable: Bool {
-		return editorViewController?.isIndentHeadlineUnavailable ?? true
+		return editorViewController?.isIndentRowUnavailable ?? true
 	}
 
 	var isOutdentHeadlineUnavailable: Bool {
-		return editorViewController?.isOutdentHeadlineUnavailable ?? true
+		return editorViewController?.isOutdentRowUnavailable ?? true
 	}
 
 	var isToggleHeadlineCompleteUnavailable: Bool {
-		return editorViewController?.isToggleHeadlineCompleteUnavailable ?? true
+		return editorViewController?.isToggleRowCompleteUnavailable ?? true
 	}
 	
 	var isCurrentHeadlineComplete: Bool {
-		return editorViewController?.isCurrentHeadlineComplete ?? false
+		return editorViewController?.isCurrentRowComplete ?? false
 	}
 
 	var isCreateHeadlineNoteUnavailable: Bool {
-		return editorViewController?.isCreateHeadlineNoteUnavailable ?? true
+		return editorViewController?.isCreateRowNoteUnavailable ?? true
 	}
 	
 	var isDeleteHeadlineNoteUnavailable: Bool {
-		return editorViewController?.isDeleteHeadlineNoteUnavailable ?? true
+		return editorViewController?.isDeleteRowNoteUnavailable ?? true
 	}
 	
 	var isCurrentHeadlineNoteEmpty: Bool {
-		return editorViewController?.isCurrentHeadlineNoteEmpty ?? false
+		return editorViewController?.isCurrentRowNoteEmpty ?? false
 	}
 
 	var isSplitHeadlineUnavailable: Bool {
-		return editorViewController?.isSplitHeadlineUnavailable ?? true
+		return editorViewController?.isSplitRowUnavailable ?? true
 	}
 	
 	var isFormatUnavailable: Bool {
@@ -214,8 +214,8 @@ class MainSplitViewController: UISplitViewController {
 	// MARK: Actions
 	
 	override func delete(_ sender: Any?) {
-		guard editorViewController?.isDeleteCurrentHeadlineUnavailable ?? true else {
-			editorViewController?.deleteCurrentHeadline()
+		guard editorViewController?.isDeleteCurrentRowUnavailable ?? true else {
+			editorViewController?.deleteCurrentRow()
 			return
 		}
 		
@@ -258,31 +258,31 @@ class MainSplitViewController: UISplitViewController {
 	}
 	
 	@objc func createHeadline(_ sender: Any?) {
-		editorViewController?.createHeadline()
+		editorViewController?.createRow()
 	}
 	
 	@objc func indentHeadline(_ sender: Any?) {
-		editorViewController?.indentHeadline()
+		editorViewController?.indentRow()
 	}
 	
 	@objc func outdentHeadline(_ sender: Any?) {
-		editorViewController?.outdentHeadline()
+		editorViewController?.outdentRow()
 	}
 	
 	@objc func toggleCompleteHeadline(_ sender: Any?) {
-		editorViewController?.toggleCompleteHeadline()
+		editorViewController?.toggleCompleteRow()
 	}
 	
 	@objc func createHeadlineNote(_ sender: Any?) {
-		editorViewController?.createHeadlineNote()
+		editorViewController?.createRowNote()
 	}
 	
 	@objc func deleteHeadlineNote(_ sender: Any?) {
-		editorViewController?.deleteHeadlineNote()
+		editorViewController?.deleteRowNote()
 	}
 	
 	@objc func splitHeadline(_ sender: Any?) {
-		editorViewController?.splitHeadline()
+		editorViewController?.splitRow()
 	}
 	
 	@objc func outlineToggleBoldface(_ sender: Any?) {

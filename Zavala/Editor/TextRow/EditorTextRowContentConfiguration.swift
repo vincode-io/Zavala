@@ -11,7 +11,7 @@ import Templeton
 struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 
 	weak var row: TextRow? = nil
-	weak var delegate: EditorHeadlineViewCellDelegate? = nil
+	weak var delegate: EditorTextRowViewCellDelegate? = nil
 
 	var id: String
 	var indentionLevel: Int

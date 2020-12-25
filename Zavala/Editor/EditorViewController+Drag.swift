@@ -12,23 +12,23 @@ extension EditorViewController: UICollectionViewDragDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
 		guard indexPath.section == 1 else { return [] }
-		guard let headline = outline?.shadowTable?[indexPath.row] else { return [UIDragItem]() }
+		guard let row = outline?.shadowTable?[indexPath.row] else { return [UIDragItem]() }
 		
-		session.localContext = headline
+		session.localContext = row
 		
 		let itemProvider = NSItemProvider()
 		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
-			let data = headline.markdown().data(using: .utf8)
+			let data = row.markdown().data(using: .utf8)
 			completion(data, nil)
 			return nil
 		}
 		
 		let dragItem = UIDragItem(itemProvider: itemProvider)
-		dragItem.localObject = headline
+		dragItem.localObject = row
 		
 		dragItem.previewProvider = { () -> UIDragPreview? in
 			guard let cell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return nil}
-			return UIDragPreview(view: cell, parameters: EditorTextRowPreviewParameters(cell: cell, headline: headline))
+			return UIDragPreview(view: cell, parameters: EditorTextRowPreviewParameters(cell: cell, row: row))
 		}
 		
 		return [dragItem]

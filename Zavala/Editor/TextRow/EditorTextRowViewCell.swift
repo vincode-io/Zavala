@@ -8,33 +8,33 @@
 import UIKit
 import Templeton
 
-protocol EditorHeadlineViewCellDelegate: class {
-	var editorHeadlineUndoManager: UndoManager? { get }
-	func editorHeadlineInvalidateLayout()
-	func editorHeadlineToggleDisclosure(headline: TextRow)
-	func editorHeadlineMoveCursorTo(headline: TextRow)
-	func editorHeadlineMoveCursorDown(headline: TextRow)
-	func editorHeadlineTextChanged(headline: TextRow, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int)
-	func editorHeadlineDeleteHeadline(_ headline: TextRow, textRowStrings: TextRowStrings)
-	func editorHeadlineCreateHeadline(beforeHeadline: TextRow)
-	func editorHeadlineCreateHeadline(afterHeadline: TextRow?, textRowStrings: TextRowStrings?)
-	func editorHeadlineIndentHeadline(_ headline: TextRow, textRowStrings: TextRowStrings)
-	func editorHeadlineOutdentHeadline(_ headline: TextRow, textRowStrings: TextRowStrings)
-	func editorHeadlineSplitHeadline(_: TextRow, topic: NSAttributedString, cursorPosition: Int)
-	func editorHeadlineCreateHeadlineNote(_ headline: TextRow, textRowStrings: TextRowStrings)
-	func editorHeadlineDeleteHeadlineNote(_ headline: TextRow, textRowStrings: TextRowStrings)
-	func editorHeadlineEditLink(_ link: String?, range: NSRange)
+protocol EditorTextRowViewCellDelegate: class {
+	var editorTextRowUndoManager: UndoManager? { get }
+	func editorTextRowInvalidateLayout()
+	func editorTextRowToggleDisclosure(row: TextRow)
+	func editorTextRowMoveCursorTo(row: TextRow)
+	func editorTextRowMoveCursorDown(row: TextRow)
+	func editorTextRowTextChanged(row: TextRow, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int)
+	func editorTextRowDeleteRow(_ row: TextRow, textRowStrings: TextRowStrings)
+	func editorTextRowCreateRow(beforeRow: TextRow)
+	func editorTextRowCreateRow(afterRow: TextRow?, textRowStrings: TextRowStrings?)
+	func editorTextRowIndentRow(_ row: TextRow, textRowStrings: TextRowStrings)
+	func editorTextRowOutdentRow(_ row: TextRow, textRowStrings: TextRowStrings)
+	func editorTextRowSplitRow(_: TextRow, topic: NSAttributedString, cursorPosition: Int)
+	func editorTextRowCreateRowNote(_ row: TextRow, textRowStrings: TextRowStrings)
+	func editorTextRowDeleteRowNote(_ row: TextRow, textRowStrings: TextRowStrings)
+	func editorTextRowEditLink(_ link: String?, range: NSRange)
 }
 
 class EditorTextRowViewCell: UICollectionViewListCell {
 
-	var headline: TextRow? {
+	var textRow: TextRow? {
 		didSet {
 			setNeedsUpdateConfiguration()
 		}
 	}
 	
-	weak var delegate: EditorHeadlineViewCellDelegate? {
+	weak var delegate: EditorTextRowViewCellDelegate? {
 		didSet {
 			setNeedsUpdateConfiguration()
 		}
@@ -44,7 +44,7 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 		return (contentView as? EditorTextRowContentView)?.textRowStrings
 	}
 	
-	var textView: EditorTextRowTopicTextView? {
+	var topicTextView: EditorTextRowTopicTextView? {
 		return (contentView as? EditorTextRowContentView)?.topicTextView
 	}
 	
@@ -88,9 +88,9 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 		
 		layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 
-		guard let headline = headline else { return }
+		guard let textRow = textRow else { return }
 
-		indentationLevel = headline.indentLevel
+		indentationLevel = textRow.indentLevel
 
 		// We make the indentation width the same regardless of device if not compact
 		if traitCollection.horizontalSizeClass != .compact {
@@ -106,7 +106,7 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 			placement = .trailing(displayed: .always, at: { _ in return 0 })
 		}
 
-		if headline.rows?.isEmpty ?? true {
+		if textRow.rows?.isEmpty ?? true {
 			var accessoryConfig = UICellAccessory.CustomViewConfiguration(customView: bullet, placement: placement)
 			accessoryConfig.tintColor = AppAssets.accessory
 			accessories = [.customView(configuration: accessoryConfig)]
@@ -116,9 +116,9 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 			accessories = [.customView(configuration: accessoryConfig)]
 		}
 		
-		setDisclosure(isExpanded: headline.isExpanded ?? true, animated: false)
+		setDisclosure(isExpanded: textRow.isExpanded ?? true, animated: false)
 
-		var content = EditorTextRowContentConfiguration(row: headline, indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
+		var content = EditorTextRowContentConfiguration(row: textRow, indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content
 	}
@@ -175,9 +175,9 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 extension EditorTextRowViewCell {
 	
 	@objc func toggleDisclosure(_ sender: UITapGestureRecognizer) {
-		guard sender.state == .ended, let headline = headline else { return }
+		guard sender.state == .ended, let textRow = textRow else { return }
 		setDisclosure(isExpanded: !isDisclosed, animated: true)
-		delegate?.editorHeadlineToggleDisclosure(headline: headline)
+		delegate?.editorTextRowToggleDisclosure(row: textRow)
 	}
 	
 	private func setDisclosure(isExpanded: Bool, animated: Bool) {

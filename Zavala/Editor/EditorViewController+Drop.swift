@@ -20,32 +20,32 @@ extension EditorViewController: UICollectionViewDropDelegate {
 		}
 
 		guard destinationIndexPath?.section ?? 0 != 0,
-			  let headline = session.localDragSession?.localContext as? TextRow,
-			  let headlineShadowTableIndex = headline.shadowTableIndex,
+			  let row = session.localDragSession?.localContext as? TextRow,
+			  let rowShadowTableIndex = row.shadowTableIndex,
 			  let shadowTable = outline?.shadowTable,
 			  let targetIndexPath = destinationIndexPath else {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
 		
 		var droppingInto = false
-		if headlineShadowTableIndex > targetIndexPath.row {
+		if rowShadowTableIndex > targetIndexPath.row {
 			if let destCell = collectionView.cellForItem(at: targetIndexPath) {
 				droppingInto = session.location(in: destCell).y >= destCell.bounds.height / 2
 			}
 		}
-		if headlineShadowTableIndex < targetIndexPath.row {
+		if rowShadowTableIndex < targetIndexPath.row {
 			if let destCell = collectionView.cellForItem(at: targetIndexPath) {
 				droppingInto = session.location(in: destCell).y <= destCell.bounds.height / 2
 			}
 		}
 
 		if droppingInto {
-			let dropInHeadline = shadowTable[targetIndexPath.row]
-			if dropInHeadline == headline {
+			let dropInRow = shadowTable[targetIndexPath.row]
+			if dropInRow == row {
 				return UICollectionViewDropProposal(operation: .cancel)
 			}
 
-			if dropInHeadline.isDecendent(headline) {
+			if dropInRow.isDecendent(row) {
 				return UICollectionViewDropProposal(operation: .forbidden)
 			}
 			
@@ -53,11 +53,11 @@ extension EditorViewController: UICollectionViewDropDelegate {
 		}
 		
 		if let proposedParent = shadowTable[targetIndexPath.row].parent as? TextRow {
-			if proposedParent == headline {
+			if proposedParent == row {
 				return UICollectionViewDropProposal(operation: .cancel)
 			}
 			
-			if proposedParent.isDecendent(headline) {
+			if proposedParent.isDecendent(row) {
 				return UICollectionViewDropProposal(operation: .forbidden)
 			}
 		}
@@ -72,7 +72,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 			  let outline = outline,
 			  let shadowTable = outline.shadowTable else { return }
 		
-		// Dropping into a Headline is easy peasy
+		// Dropping into a Row is easy peasy
 		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = coordinator.destinationIndexPath {
 			drop(coordinator: coordinator, row: row, toParent: shadowTable[dropInIndexPath.row], toChildIndex: 0)
 			return
@@ -95,7 +95,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 		guard let newParent = newSibling.parent, var newIndex = newParent.rows?.firstIndex(of: newSibling) else { return }
 
 		// This shouldn't happen, but does.  We probably need to beef up the dropSessionDidUpdate code to prevent it.
-		if let newParentHeadline = newParent as? TextRow, newParentHeadline == row || newParentHeadline.isDecendent(row) {
+		if let newParentRow = newParent as? TextRow, newParentRow == row || newParentRow.isDecendent(row) {
 			return
 		}
 		

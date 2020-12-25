@@ -118,7 +118,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 	
 	var editorRowTopicTextViewUndoManager: UndoManager? {
-		return appliedConfiguration.delegate?.editorHeadlineUndoManager
+		return appliedConfiguration.delegate?.editorTextRowUndoManager
 	}
 	
 	var editorRowTopicTextViewTextRowStrings: TextRowStrings {
@@ -127,43 +127,43 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 	
 	func invalidateLayout(_: EditorTextRowTopicTextView) {
 		invalidateIntrinsicContentSize()
-		appliedConfiguration.delegate?.editorHeadlineInvalidateLayout()
+		appliedConfiguration.delegate?.editorTextRowInvalidateLayout()
 	}
 	
 	func textChanged(_: EditorTextRowTopicTextView, row: TextRow, isInNotes: Bool, cursorPosition: Int) {
-		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: row, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
+		appliedConfiguration.delegate?.editorTextRowTextChanged(row: row, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
 	func deleteRow(_: EditorTextRowTopicTextView, row: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineDeleteHeadline(row, textRowStrings: textRowStrings)
+		appliedConfiguration.delegate?.editorTextRowDeleteRow(row, textRowStrings: textRowStrings)
 	}
 	
 	func createRow(_: EditorTextRowTopicTextView, beforeRow: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(beforeHeadline: beforeRow)
+		appliedConfiguration.delegate?.editorTextRowCreateRow(beforeRow: beforeRow)
 	}
 	
 	func createRow(_: EditorTextRowTopicTextView, afterRow: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineCreateHeadline(afterHeadline: afterRow, textRowStrings: textRowStrings)
+		appliedConfiguration.delegate?.editorTextRowCreateRow(afterRow: afterRow, textRowStrings: textRowStrings)
 	}
 	
 	func indentRow(_: EditorTextRowTopicTextView, row: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineIndentHeadline(row, textRowStrings: textRowStrings)
+		appliedConfiguration.delegate?.editorTextRowIndentRow(row, textRowStrings: textRowStrings)
 	}
 	
 	func outdentRow(_: EditorTextRowTopicTextView, row: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineOutdentHeadline(row, textRowStrings: textRowStrings)
+		appliedConfiguration.delegate?.editorTextRowOutdentRow(row, textRowStrings: textRowStrings)
 	}
 	
 	func splitRow(_: EditorTextRowTopicTextView, row: TextRow, topic: NSAttributedString, cursorPosition: Int) {
-		appliedConfiguration.delegate?.editorHeadlineSplitHeadline(row, topic: topic, cursorPosition: cursorPosition)
+		appliedConfiguration.delegate?.editorTextRowSplitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
 	func createRowNote(_: EditorTextRowTopicTextView, row: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineCreateHeadlineNote(row, textRowStrings: textRowStrings)
+		appliedConfiguration.delegate?.editorTextRowCreateRowNote(row, textRowStrings: textRowStrings)
 	}
 	
 	func editLink(_: EditorTextRowTopicTextView, _ link: String?, range: NSRange) {
-		appliedConfiguration.delegate?.editorHeadlineEditLink(link, range: range)
+		appliedConfiguration.delegate?.editorTextRowEditLink(link, range: range)
 	}
 	
 }
@@ -171,7 +171,7 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 
 	var editorRowNoteTextViewUndoManager: UndoManager? {
-		return appliedConfiguration.delegate?.editorHeadlineUndoManager
+		return appliedConfiguration.delegate?.editorTextRowUndoManager
 	}
 	
 	var editorRowNoteTextViewTextRowStrings: TextRowStrings {
@@ -180,27 +180,27 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 	
 	func invalidateLayout(_: EditorTextRowNoteTextView) {
 		invalidateIntrinsicContentSize()
-		appliedConfiguration.delegate?.editorHeadlineInvalidateLayout()
+		appliedConfiguration.delegate?.editorTextRowInvalidateLayout()
 	}
 	
 	func textChanged(_: EditorTextRowNoteTextView, row: TextRow, isInNotes: Bool, cursorPosition: Int) {
-		appliedConfiguration.delegate?.editorHeadlineTextChanged(headline: row, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
+		appliedConfiguration.delegate?.editorTextRowTextChanged(row: row, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
 	
 	func deleteRowNote(_: EditorTextRowNoteTextView, row: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineDeleteHeadlineNote(row, textRowStrings: textRowStrings)
+		appliedConfiguration.delegate?.editorTextRowDeleteRowNote(row, textRowStrings: textRowStrings)
 	}
 	
 	func moveCursorTo(_: EditorTextRowNoteTextView, row: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineMoveCursorTo(headline: row)
+		appliedConfiguration.delegate?.editorTextRowMoveCursorTo(row: row)
 	}
 	
 	func moveCursorDown(_: EditorTextRowNoteTextView, row: TextRow) {
-		appliedConfiguration.delegate?.editorHeadlineMoveCursorDown(headline: row)
+		appliedConfiguration.delegate?.editorTextRowMoveCursorDown(row: row)
 	}
 	
 	func editLink(_: EditorTextRowNoteTextView, _ link: String?, range: NSRange) {
-		appliedConfiguration.delegate?.editorHeadlineEditLink(link, range: range)
+		appliedConfiguration.delegate?.editorTextRowEditLink(link, range: range)
 	}
 	
 }
@@ -210,13 +210,13 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 extension EditorTextRowContentView {
 	
 	@objc func swipedLeft(_ sender: UISwipeGestureRecognizer) {
-		guard let headline = appliedConfiguration.row else { return }
-		appliedConfiguration.delegate?.editorHeadlineOutdentHeadline(headline, textRowStrings: textRowStrings)
+		guard let row = appliedConfiguration.row else { return }
+		appliedConfiguration.delegate?.editorTextRowOutdentRow(row, textRowStrings: textRowStrings)
 	}
 	
 	@objc func swipedRight(_ sender: UISwipeGestureRecognizer) {
-		guard let headline = appliedConfiguration.row else { return }
-		appliedConfiguration.delegate?.editorHeadlineIndentHeadline(headline, textRowStrings: textRowStrings)
+		guard let row = appliedConfiguration.row else { return }
+		appliedConfiguration.delegate?.editorTextRowIndentRow(row, textRowStrings: textRowStrings)
 	}
 	
 	private func configureTopicTextView(configuration: EditorTextRowContentConfiguration) {
