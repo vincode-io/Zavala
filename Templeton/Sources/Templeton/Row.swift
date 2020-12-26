@@ -53,7 +53,7 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 	
 	public var isComplete: Bool? {
 		get {
-			associatedRow.isComplete
+			textRow?.isComplete
 		}
 	}
 	
@@ -93,7 +93,7 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
-	public var associatedRow: TextRow {
+	public var associatedRow: BaseRow {
 		switch self {
 		case .text(let row):
 			return row
