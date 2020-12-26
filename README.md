@@ -13,6 +13,11 @@ this README when we get to that point.
 Let's talk outliners!  Head over to the Github Forums for outliner discussion and to express what you would like
 to see in an outliner application.  Be sure to read our [Code of Conduct](/documentation/CodeOfConduct.md).
 
+## Project Documents
+
+* [Definitions](/documentation/Definitions.md)
+* [Architecture Notebook](/documentation/ArchitectureNotebook.md)
+
 ## Building
 
 You can build and test Zavala without a paid developer account.
