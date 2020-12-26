@@ -10,7 +10,7 @@ this README when we get to that point.
 
 ## Community
 
-Let's talk outliners!  Head over to the Github Forums for outliner discussion and to express what you would like
+Let's talk outliners!  Head over to [Discussions](/discussions) for outliner discussion and to express what you would like
 to see in an outliner application.  Be sure to read our [Code of Conduct](/documentation/CodeOfConduct.md).
 
 ## Project Documents
@@ -75,4 +75,4 @@ the Zavala Xcode project.  This is a special build of Zavala with some
 functionality disabled.  For example iCloud syncing is disabled because you need
 a paid developer account to build for it.
 
-If you have any problems, we will help you out in the Github Forums.
+If you have any problems, we will help you out in [Discussions](/discussions).
