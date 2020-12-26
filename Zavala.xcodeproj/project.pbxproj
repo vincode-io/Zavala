@@ -579,11 +579,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 51C4C3AF2555E964004E0206 /* Zavala_iOSapp_target.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/tools/swiftgen-6.4.0/lib",
-				);
-				PRODUCT_NAME = Zavala;
 			};
 			name = Debug;
 		};
@@ -591,11 +586,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 51C4C3AF2555E964004E0206 /* Zavala_iOSapp_target.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/tools/swiftgen-6.4.0/lib",
-				);
-				PRODUCT_NAME = Zavala;
 			};
 			name = Release;
 		};
