@@ -115,7 +115,7 @@ extension EditorTitleContentView: UITextViewDelegate {
 		if textViewHeight != fittingSize.height {
 			textViewHeight = fittingSize.height
 			invalidateIntrinsicContentSize()
-			appliedConfiguration.delegate?.editorTitleInvalidateLayout()
+			appliedConfiguration.delegate?.editorTitleLayoutEditor()
 		}
 		
 		updateAdjustingSeparatorWidthContraint()

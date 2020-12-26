@@ -436,8 +436,8 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 		return undoManager
 	}
 	
-	func editorTitleInvalidateLayout() {
-		collectionView.collectionViewLayout.invalidateLayout()
+	func editorTitleLayoutEditor() {
+		layoutEditor()
 	}
 	
 	func editorTitleCreateRow(textRowStrings: TextRowStrings?) {
@@ -452,8 +452,8 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		return undoManager
 	}
 	
-	func editorTextRowInvalidateLayout() {
-		collectionView.collectionViewLayout.invalidateLayout()
+	func editorTextRowLayoutEditor() {
+		layoutEditor()
 	}
 	
 	func editorTextRowToggleDisclosure(row: Row) {
@@ -611,6 +611,13 @@ private extension EditorViewController {
 				filterBarButtonItem?.image = AppAssets.filterInactive
 			}
 		}
+	}
+	
+	private func layoutEditor() {
+		let contentOffset = collectionView.contentOffset
+		collectionView.collectionViewLayout.invalidateLayout()
+		collectionView.layoutIfNeeded()
+		collectionView.contentOffset = contentOffset
 	}
 	
 	private func restoreOutlineCursorPosition() {

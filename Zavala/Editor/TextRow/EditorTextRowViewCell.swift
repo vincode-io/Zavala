@@ -10,7 +10,7 @@ import Templeton
 
 protocol EditorTextRowViewCellDelegate: class {
 	var editorTextRowUndoManager: UndoManager? { get }
-	func editorTextRowInvalidateLayout()
+	func editorTextRowLayoutEditor()
 	func editorTextRowToggleDisclosure(row: Row)
 	func editorTextRowMoveCursorTo(row: Row)
 	func editorTextRowMoveCursorDown(row: Row)
