@@ -12,6 +12,15 @@ platforms we feel that we can create a better product than if we tried to also s
 So when we say Cross Platform, we mean within Apple’s platforms. This is a matter of economics. The more
 code we can share the better, so we are trying to use a portable Toolkit within Apple platforms.
 
+### Match Platform Conventions
+We will try as best we can to match each Apple platform's conventions.  We do this to make it easier to
+learn how the application works as it will match other apps people use.  We also do it to make it easier
+to update the app as platform conventions change and evolve.
+
+### Accessible
+All people have the right to express themselves.  We will work to make sure that Zavala will work as best
+we can make it for all peoples regardless of their physical or mental differences.
+
 ### Scriptable
 This hasn’t been fully determined, but we would like to embed a scripting environment to manipulate the Outlines. AppleScript and Shortcuts support will be made available as well.
 
