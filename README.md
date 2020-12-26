@@ -16,6 +16,7 @@ Let's talk outliners!  Head over to [Discussions](https://github.com/vincode-io/
 
 * [Definitions](https://github.com/vincode-io/Zavala/wiki/Definitions)
 * [Architecture Notebook](https://github.com/vincode-io/Zavala/wiki/Architecture-Notebook)
+* [Dependencies](https://github.com/vincode-io/Zavala/wiki/Dependencies)
 
 ## Building
 
