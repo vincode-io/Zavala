@@ -15,12 +15,12 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>manarc</string>
+				<string>zalarc</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>File.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>Manarc</string>
+			<string>zalarc</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>????</string>
@@ -155,7 +155,7 @@
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>manarc</string>
+					<string>zalarc</string>
 				</array>
 			</dict>
 		</dict>
@@ -201,7 +201,7 @@
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>manarc</string>
+					<string>zalarc</string>
 				</array>
 			</dict>
 		</dict>

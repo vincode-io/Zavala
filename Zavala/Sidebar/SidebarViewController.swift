@@ -86,8 +86,8 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	}
 	
 	func restoreArchive() {
-		let manarcType = UTType(exportedAs: "io.vincode.Zavala.archive")
-		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [manarcType])
+		let zalarcType = UTType(exportedAs: "io.vincode.Zavala.archive")
+		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [zalarcType])
 		docPicker.delegate = self
 		docPicker.modalPresentationStyle = .formSheet
 		docPicker.allowsMultipleSelection = false

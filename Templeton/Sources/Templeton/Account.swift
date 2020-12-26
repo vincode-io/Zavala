@@ -121,7 +121,7 @@ extension Account {
 		var filename = type.name.replacingOccurrences(of: " ", with: "").trimmingCharacters(in: .whitespaces)
 		let formatter = DateFormatter()
 		formatter.dateFormat = "yyyy-MM-dd-HH-mm-ss"
-		filename = "Zavala_\(filename)_\(formatter.string(from: Date())).manarc"
+		filename = "Zavala_\(filename)_\(formatter.string(from: Date())).zalarc"
 		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
 
 		let errorPointer: NSErrorPointer = nil
