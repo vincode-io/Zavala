@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  OPMLImporter.swift
 //  
 //
 //  Created by Maurice Parker on 12/25/20.
