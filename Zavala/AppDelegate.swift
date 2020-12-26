@@ -529,6 +529,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		guard builder.system == UIMenuSystem.main else { return }
 		
 		builder.remove(menu: .newScene)
+		builder.remove(menu: .openRecent)
 
 		// File Menu
 		let archiveMenu = UIMenu(title: "", options: .displayInline, children: [restoreArchiveCommand, archiveLocalCommand])
