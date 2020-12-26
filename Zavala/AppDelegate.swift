@@ -55,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		
 		if !(mainSplitViewController?.isToggleRowCompleteUnavailable ?? true) {
-			if mainSplitViewController?.isCurrentrowComplete ?? false {
+			if mainSplitViewController?.isCurrentRowComplete ?? false {
 				menuKeyCommands.append(uncompleteRowCommand)
 			} else {
 				menuKeyCommands.append(completeRowCommand)
