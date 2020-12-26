@@ -70,7 +70,7 @@ worked pretty well. Not as good on the Mac as an AppKit implementation, but not 
 ## Dependencies
 
 ### [RSCore](https://github.com/Ranchero-Software/RSCore)
-Used to supplement Foundation.  Also used by NetNewsWire.  Thanks Brent!
+Used to supplement Apple's core frameworks like Foundation, AppKit, UIKIt, etc...  Also used by NetNewsWire.  Thanks Brent!
 
 ### [MarkdownAttributedString](https://github.com/vincode-io/MarkdownAttributedString)
 This is used for import and export of markdown strings. These are used in markdown file exports and OPML imports and exports.  Thanks CHOCK!
