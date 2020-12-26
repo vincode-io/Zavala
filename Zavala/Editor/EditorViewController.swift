@@ -133,6 +133,9 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return nil
 	}
 
+	// This is used to keep the collection view from scrolling to the top as its layout gets invalidated.
+	private var transitionContentOffset: CGPoint?
+	
 	private var isOutlineNewFlag = false
 	private var hasAlreadyMovedThisKeyPressFlag = false
 	
@@ -180,6 +183,18 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	
 	override func scrollViewDidScroll(_ scrollView: UIScrollView) {
 		self.outline?.verticleScrollState = firstVisibleShadowTableIndex
+	}
+	
+	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+		super.viewWillTransition(to: size, with: coordinator)
+		transitionContentOffset = collectionView.contentOffset
+	}
+	
+	override func viewDidLayoutSubviews() {
+		if let offset = transitionContentOffset {
+			collectionView.contentOffset = offset
+			transitionContentOffset = nil
+		}
 	}
 	
 	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
