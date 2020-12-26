@@ -60,6 +60,10 @@ class MainSplitViewController: UISplitViewController {
 		return editorViewController?.isOutlineFiltered ?? false
 	}
 	
+	var isOutlineNotesHidden: Bool {
+		return editorViewController?.isOutlineNotesHidden ?? false
+	}
+	
 	var isCreateFolderUnavailable: Bool {
 		return sidebarViewController?.isCreateFolderUnavailable ?? true
 	}
@@ -249,6 +253,10 @@ class MainSplitViewController: UISplitViewController {
 	
 	@objc func toggleOutlineFilter(_ sender: Any?) {
 		editorViewController?.toggleOutlineFilter(sender)
+	}
+	
+	@objc func toggleOutlineHideNotes(_ sender: Any?) {
+		editorViewController?.toggleOutlineHideNotes(sender)
 	}
 	
 	@objc func toggleSidebar(_ sender: Any?) {
@@ -473,6 +481,7 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 extension NSToolbarItem.Identifier {
 	static let newOutline = NSToolbarItem.Identifier("io.vincode.Zavala.newOutline")
 	static let toggleOutlineFilter = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineFilter")
+	static let toggleOutlineNotesHidden = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineNotesHidden")
 	static let link = NSToolbarItem.Identifier("io.vincode.Zavala.link")
 	static let boldface = NSToolbarItem.Identifier("io.vincode.Zavala.boldface")
 	static let italic = NSToolbarItem.Identifier("io.vincode.Zavala.italic")
@@ -481,7 +490,7 @@ extension NSToolbarItem.Identifier {
 extension MainSplitViewController: NSToolbarDelegate {
 	
 	func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-		let identifiers: [NSToolbarItem.Identifier] = [
+		return [
 			.toggleSidebar,
 			.flexibleSpace,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
@@ -493,11 +502,21 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.flexibleSpace,
 			.toggleOutlineFilter,
 		]
-		return identifiers
 	}
 	
 	func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-		return toolbarDefaultItemIdentifiers(toolbar)
+		return [
+			.toggleSidebar,
+			.supplementarySidebarTrackingSeparatorItemIdentifier,
+			.newOutline,
+			.link,
+			.boldface,
+			.italic,
+			.toggleOutlineNotesHidden,
+			.toggleOutlineFilter,
+			.space,
+			.flexibleSpace
+		]
 	}
 	
 	func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
@@ -572,6 +591,27 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = L10n.hideCompleted
 			item.isBordered = true
 			item.action = #selector(toggleOutlineFilter(_:))
+			item.target = self
+			toolbarItem = item
+		case .toggleOutlineNotesHidden:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] item in
+				if self?.editorViewController?.isOutlineNotesHidden ?? false {
+					item.image = AppAssets.hideNotesActive
+					item.label = L10n.showNotes
+					item.toolTip = L10n.showNotes
+				} else {
+					item.image = AppAssets.hideNotesInactive
+					item.label = L10n.hideNotes
+					item.toolTip = L10n.hideNotes
+				}
+				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			}
+			item.image = AppAssets.hideNotesInactive
+			item.label = L10n.hideNotes
+			item.toolTip = L10n.hideNotes
+			item.isBordered = true
+			item.action = #selector(toggleOutlineHideNotes(_:))
 			item.target = self
 			toolbarItem = item
 		case .toggleSidebar:

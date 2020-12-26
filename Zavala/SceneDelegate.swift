@@ -25,6 +25,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		let toolbar = NSToolbar(identifier: "main")
 		toolbar.delegate = mainSplitViewController
 		toolbar.displayMode = .iconOnly
+		toolbar.allowsUserCustomization = true
+		toolbar.autosavesConfiguration = true
 		
 		if let titlebar = windowScene.titlebar {
 			titlebar.toolbar = toolbar

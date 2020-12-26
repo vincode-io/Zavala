@@ -34,6 +34,12 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 		}
 	}
 	
+	var isNotesHidden: Bool? {
+		didSet {
+			setNeedsUpdateConfiguration()
+		}
+	}
+	
 	weak var delegate: EditorTextRowViewCellDelegate? {
 		didSet {
 			setNeedsUpdateConfiguration()
@@ -118,7 +124,8 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 		
 		setDisclosure(isExpanded: row.isExpanded ?? true, animated: false)
 
-		var content = EditorTextRowContentConfiguration(row: row, indentionLevel: indentationLevel, indentationWidth: indentationWidth).updated(for: state)
+		var content = EditorTextRowContentConfiguration(row: row, indentionLevel: indentationLevel, indentationWidth: indentationWidth, isNotesHidden: isNotesHidden ?? false)
+		content = content.updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content
 	}

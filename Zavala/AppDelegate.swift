@@ -23,6 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			} else {
 				menuKeyCommands.append(hideCompletedCommand)
 			}
+			if mainSplitViewController?.isOutlineNotesHidden ?? false {
+				menuKeyCommands.append(showNotesCommand)
+			} else {
+				menuKeyCommands.append(hideNotesCommand)
+			}
 		}
 		
 		if !(mainSplitViewController?.isCreateOutlineUnavailable ?? true) {
@@ -217,6 +222,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											action: #selector(toggleOutlineFilterCommand(_:)),
 											input: "h",
 											modifierFlags: [.shift, .command])
+
+	let toggleOutlineHideNotesCommand = UIKeyCommand(title: L10n.hideNotes,
+												  action: #selector(toggleOutlineHideNotesCommand(_:)),
+												  input: "h",
+												  modifierFlags: [.shift, .alternate, .command])
+	
+	let hideNotesCommand = UIKeyCommand(title: L10n.hideNotes,
+											action: #selector(toggleOutlineHideNotesCommand(_:)),
+											input: "h",
+											modifierFlags: [.shift, .alternate, .command])
+	
+	let showNotesCommand = UIKeyCommand(title: L10n.showNotes,
+											action: #selector(toggleOutlineHideNotesCommand(_:)),
+											input: "h",
+											modifierFlags: [.shift, .alternate, .command])
 	
 	let expandAllInOutlineCommand = UIKeyCommand(title: L10n.expandAllInOutline,
 												 action: #selector(expandAllInOutlineCommand(_:)),
@@ -370,6 +390,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.toggleOutlineFilter(sender)
 	}
 
+	@objc func toggleOutlineHideNotesCommand(_ sender: Any?) {
+		mainSplitViewController?.toggleOutlineHideNotes(sender)
+	}
+
 	@objc func expandAllInOutlineCommand(_ sender: Any?) {
 		mainSplitViewController?.expandAllInOutline(sender)
 	}
@@ -460,6 +484,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainSplitViewController?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(toggleOutlineHideNotesCommand(_:)):
+			if mainSplitViewController?.isOutlineNotesHidden ?? false {
+				command.title = L10n.showNotes
+			} else {
+				command.title = L10n.hideNotes
+			}
+			if mainSplitViewController?.isOutlineFunctionsUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		case #selector(expandAllInOutlineCommand(_:)):
 			if mainSplitViewController?.isExpandAllInOutlineUnavailable ?? true {
 				command.attributes = .disabled
@@ -524,7 +557,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										options: .displayInline,
 										children: [expandAllInOutlineCommand, expandAllCommand, expandCommand, collapseAllInOutlineCommand, collapseAllCommand, collapseCommand])
 		builder.insertChild(expandCollapseMenu, atStartOfMenu: .view)
-		let toggleFilterOutlineMenu = UIMenu(title: "", options: .displayInline, children: [toggleOutlineFilterCommand])
+		let toggleFilterOutlineMenu = UIMenu(title: "", options: .displayInline, children: [toggleOutlineFilterCommand, toggleOutlineHideNotesCommand])
 		builder.insertChild(toggleFilterOutlineMenu, atStartOfMenu: .view)
 		let toggleSidebarMenu = UIMenu(title: "", options: .displayInline, children: [toggleSidebarCommand])
 		builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)

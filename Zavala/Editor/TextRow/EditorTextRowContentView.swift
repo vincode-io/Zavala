@@ -257,7 +257,7 @@ extension EditorTextRowContentView {
 	}
 	
 	private func configureNoteTextView(configuration: EditorTextRowContentConfiguration) {
-		guard let noteAttributedText = configuration.row?.textRow?.note else {
+		guard !configuration.isNotesHidden, let noteAttributedText = configuration.row?.textRow?.note else {
 			noteTextView?.removeFromSuperview()
 			noteTextView = nil
 			return

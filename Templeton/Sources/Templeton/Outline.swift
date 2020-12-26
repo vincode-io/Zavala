@@ -68,6 +68,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 	}
 
+	public var isNotesHidden: Bool? {
+		didSet {
+			documentMetaDataDidChange()
+		}
+	}
+
 	public var rows: [Row]? {
 		didSet {
 			rowDictionaryNeedUpdate = true
@@ -154,6 +160,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		case verticleScrollState = "verticleScrollState"
 		case isFavorite = "isFavorite"
 		case isFiltered = "isFiltered"
+		case isNotesHidden = "isNotesHidden"
 		case cursorRowID = "cursorRowID"
 		case cursorIsInNotes = "cursorIsInNotes"
 		case cursorPosition = "cursorPosition"
@@ -256,6 +263,17 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		isFiltered = !(isFiltered ?? false)
 		documentMetaDataDidChange()
 		return rebuildShadowTable()
+	}
+	
+	public func toggleNotesHidden() -> ShadowTableChanges {
+		isNotesHidden = !(isNotesHidden ?? false)
+		documentMetaDataDidChange()
+		
+		if let reloads = shadowTable?.filter({ !(($0.associatedRow as? TextRow)?.isNoteEmpty ?? true) }).compactMap({ $0.shadowTableIndex }) {
+			return ShadowTableChanges(reloads: Set(reloads))
+		} else {
+			return ShadowTableChanges()
+		}
 	}
 	
 	public func update(title: String) {

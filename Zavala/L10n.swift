@@ -74,6 +74,8 @@ internal enum L10n {
   internal static let getInfo = L10n.tr("Localizable", "Get_Info")
   /// Hide Completed
   internal static let hideCompleted = L10n.tr("Localizable", "Hide_Completed")
+  /// Hide Notes
+  internal static let hideNotes = L10n.tr("Localizable", "Hide_Notes")
   /// Import Failed
   internal static let importFailed = L10n.tr("Localizable", "Import Failed")
   /// Import OPML
@@ -116,6 +118,8 @@ internal enum L10n {
   }
   /// Show Completed
   internal static let showCompleted = L10n.tr("Localizable", "Show_Completed")
+  /// Show Notes
+  internal static let showNotes = L10n.tr("Localizable", "Show_Notes")
   /// Split Row
   internal static let splitRow = L10n.tr("Localizable", "Split_Row")
   /// Toggle Sidebar

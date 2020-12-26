@@ -20,6 +20,10 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return outline?.isFiltered ?? false
 	}
 	
+	var isOutlineNotesHidden: Bool {
+		return outline?.isNotesHidden ?? false
+	}
+	
 	var isDeleteCurrentRowUnavailable: Bool {
 		return currentRow == nil
 	}
@@ -156,13 +160,14 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		collectionView.dragInteractionEnabled = true
 		collectionView.allowsSelection = false
 
-		titleRegistration = UICollectionView.CellRegistration<EditorTitleViewCell, Outline> { (cell, indexPath, outline) in
+		titleRegistration = UICollectionView.CellRegistration<EditorTitleViewCell, Outline> { [weak self] (cell, indexPath, outline) in
 			cell.outline = outline
 			cell.delegate = self
 		}
 		
-		headerRegistration = UICollectionView.CellRegistration<EditorTextRowViewCell, Row> { (cell, indexPath, row) in
+		headerRegistration = UICollectionView.CellRegistration<EditorTextRowViewCell, Row> { [weak self] (cell, indexPath, row) in
 			cell.row = row
+			cell.isNotesHidden = self?.outline?.isNotesHidden
 			cell.delegate = self
 		}
 		
@@ -345,6 +350,12 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	
 	@objc func toggleOutlineFilter(_ sender: Any?) {
 		guard let changes = outline?.toggleFilter() else { return }
+		updateUI()
+		applyChangesRestoringCursor(changes)
+	}
+	
+	@objc func toggleOutlineHideNotes(_ sender: Any?) {
+		guard let changes = outline?.toggleNotesHidden() else { return }
 		updateUI()
 		applyChangesRestoringCursor(changes)
 	}

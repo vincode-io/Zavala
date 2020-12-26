@@ -28,6 +28,8 @@
 "Uncomplete" = "Uncomplete";
 "Show_Completed" = "Show Completed";
 "Hide_Completed" = "Hide Completed";
+"Show_Notes" = "Show Notes";
+"Hide_Notes" = "Hide Notes";
 "Expand" = "Expand";
 "Expand_All" = "Expand All";
 "Expand_All_In_Row" = "Expand All in Row";

@@ -97,6 +97,14 @@ struct AppAssets {
 		return UIImage(named: "Italic-Large")!
 	}()
 
+	static var hideNotesActive: UIImage = {
+		return UIImage(systemName: "doc.text.fill")!
+	}()
+
+	static var hideNotesInactive: UIImage = {
+		return UIImage(systemName: "doc.text")!
+	}()
+
 	static var link: UIImage = {
 		return UIImage(named: "Link-Large")!
 	}()
