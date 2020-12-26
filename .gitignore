@@ -42,4 +42,4 @@ playground.xcworkspace
 # Package.pins
 .build/
 
-tools/swiftgen-6.4.0
+#tools/swiftgen-6.4.0
