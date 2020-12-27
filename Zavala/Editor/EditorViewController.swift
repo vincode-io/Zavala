@@ -822,16 +822,20 @@ private extension EditorViewController {
 		}
 		
 		let indexPath = IndexPath(row: shadowTableIndex - 1, section: 1)
-		if let rowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
-			rowCell.moveToEnd()
+		makeCellVisibleIfNecessary(indexPath: indexPath) {
+			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
+				rowCell.moveToEnd()
+			}
 		}
 	}
 	
 	func moveCursorDown(row: Row) {
 		guard let shadowTableIndex = row.shadowTableIndex, let shadowTable = outline?.shadowTable, shadowTableIndex < (shadowTable.count - 1) else { return }
 		let indexPath = IndexPath(row: shadowTableIndex + 1, section: 1)
-		if let rowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
-			rowCell.moveToEnd()
+		makeCellVisibleIfNecessary(indexPath: indexPath) {
+			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
+				rowCell.moveToEnd()
+			}
 		}
 	}
 	
@@ -930,8 +934,10 @@ private extension EditorViewController {
 		runCommand(command)
 		
 		if let insert = command.changes?.insertIndexPaths?.first {
-			if let rowCell = collectionView.cellForItem(at: insert) as? EditorTextRowViewCell {
-				rowCell.moveToEnd()
+			makeCellVisibleIfNecessary(indexPath: insert) {
+				if let rowCell = self.collectionView.cellForItem(at: insert) as? EditorTextRowViewCell {
+					rowCell.moveToEnd()
+				}
 			}
 		}
 	}
@@ -1035,4 +1041,27 @@ private extension EditorViewController {
 		}
 	}
 
+	func makeCellVisibleIfNecessary(indexPath: IndexPath, completion: @escaping () -> Void) {
+		guard let frame = collectionView.layoutAttributesForItem(at: indexPath)?.frame else {
+			completion()
+			return
+		}
+		
+		let top = collectionView.contentOffset.y
+		let bottom = collectionView.contentOffset.y + collectionView.frame.size.height
+		
+		guard frame.minY < top || frame.maxY > bottom else {
+			completion()
+			return
+		}
+		
+		CATransaction.begin()
+		CATransaction.setCompletionBlock {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+				completion()
+			}
+		}
+		collectionView.scrollRectToVisible(frame, animated: true)
+		CATransaction.commit()
+	}
 }
