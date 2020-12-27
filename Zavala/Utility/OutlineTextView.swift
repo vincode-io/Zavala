@@ -97,7 +97,7 @@ class OutlineTextView: UITextView {
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
-		case .toggleBoldface, .toggleItalics:
+		case .toggleBoldface, .toggleItalics, .editLink:
 			return isSelecting
 		default:
 			return super.canPerformAction(action, withSender: sender)
@@ -119,11 +119,13 @@ class OutlineTextView: UITextView {
 	override func buildMenu(with builder: UIMenuBuilder) {
 		super.buildMenu(with: builder)
 		
-		let formattingMenu = UIMenu(title: "", options: .displayInline, children: [toggleBoldCommand, toggleItalicsCommand])
-		builder.insertSibling(formattingMenu, afterMenu: .standardEdit)
-		
-		let editMenu = UIMenu(title: "", options: .displayInline, children: [editLinkCommand])
-		builder.insertSibling(editMenu, afterMenu: .standardEdit)
+		if isSelecting {
+			let formattingMenu = UIMenu(title: "", options: .displayInline, children: [toggleBoldCommand, toggleItalicsCommand])
+			builder.insertSibling(formattingMenu, afterMenu: .standardEdit)
+			
+			let editMenu = UIMenu(title: "", options: .displayInline, children: [editLinkCommand])
+			builder.insertSibling(editMenu, afterMenu: .standardEdit)
+		}
 	}
 	
 }
