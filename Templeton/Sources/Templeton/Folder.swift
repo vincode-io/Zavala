@@ -40,7 +40,7 @@ public final class Folder: Identifiable, Equatable, Codable, DocumentContainer {
 	public var documents: [Document]?
 
 	public var sortedDocuments: [Document] {
-		return Self.sortByUpdate(documents ?? [Document]())
+		return Self.sortByTitle(documents ?? [Document]())
 	}
 
 	public var account: Account? {
