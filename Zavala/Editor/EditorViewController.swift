@@ -439,6 +439,10 @@ extension EditorViewController {
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+		if !(collectionView.indexPathsForSelectedItems?.contains(indexPath) ?? false) {
+			deselectAll()
+		}
+		
 		guard let editorCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell,
 			  let row = editorCell.row,
 			  let textRowStrings = editorCell.textRowStrings else { return nil }
