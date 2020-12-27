@@ -24,6 +24,7 @@ If there was a mission statement for Zavala, that would be it.
 
 ## Project Documents
 
+* [Planned Features](https://github.com/vincode-io/Zavala/wiki/Planned-Features)
 * [Definitions](https://github.com/vincode-io/Zavala/wiki/Definitions)
 * [Architecture Notebook](https://github.com/vincode-io/Zavala/wiki/Architecture-Notebook)
 * [Dependencies](https://github.com/vincode-io/Zavala/wiki/Dependencies)
