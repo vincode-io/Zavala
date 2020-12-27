@@ -193,6 +193,26 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return idToRowDictionary[id]
 	}
 	
+	public func childrenIndexes(forIndex: Int) -> [Int] {
+		guard let row = shadowTable?[forIndex] else { return [Int]() }
+		var children = [Int]()
+		
+		func childrenVisitor(_ visited: Row) {
+			if let index = visited.shadowTableIndex {
+				children.append(index)
+			}
+			if visited.isExpanded ?? true {
+				visited.rows?.forEach { $0.visit(visitor: childrenVisitor) }
+			}
+		}
+
+		if row.isExpanded ?? true {
+			row.rows?.forEach { $0.visit(visitor: childrenVisitor(_:)) }
+		}
+		
+		return children
+	}
+	
 	public func markdown(indentLevel: Int = 0) -> String {
 		var returnToSuspend = false
 		if rows == nil {

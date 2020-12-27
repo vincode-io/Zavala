@@ -11,6 +11,7 @@ import Templeton
 protocol EditorTextRowTopicTextViewDelegate: class {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
 	var editorRowTopicTextViewTextRowStrings: TextRowStrings { get }
+	func didBecomeActive(_: EditorTextRowTopicTextView)
 	func invalidateLayout(_: EditorTextRowTopicTextView)
 	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, cursorPosition: Int)
 	func deleteRow(_: EditorTextRowTopicTextView, row: Row)
@@ -72,6 +73,12 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
 			textStorage.replaceFont(with: OutlineFont.topic)
 		}
+	}
+	
+	@discardableResult
+	override func becomeFirstResponder() -> Bool {
+		editorDelegate?.didBecomeActive(self)
+		return super.becomeFirstResponder()
 	}
 	
 	override func resignFirstResponder() -> Bool {

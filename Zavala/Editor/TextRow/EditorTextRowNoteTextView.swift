@@ -12,6 +12,7 @@ protocol EditorTextRowNoteTextViewDelegate: class {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewTextRowStrings: TextRowStrings { get }
 	func invalidateLayout(_ : EditorTextRowNoteTextView)
+	func didBecomeActive(_ : EditorTextRowNoteTextView)
 	func textChanged(_ : EditorTextRowNoteTextView, row: Row, isInNotes: Bool, cursorPosition: Int)
 	func deleteRowNote(_ : EditorTextRowNoteTextView, row: Row)
 	func moveCursorTo(_ : EditorTextRowNoteTextView, row: Row)
@@ -69,6 +70,12 @@ class EditorTextRowNoteTextView: OutlineTextView {
 		if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
 			textStorage.replaceFont(with: OutlineFont.note)
 		}
+	}
+
+	@discardableResult
+	override func becomeFirstResponder() -> Bool {
+		editorDelegate?.didBecomeActive(self)
+		return super.becomeFirstResponder()
 	}
 	
 	override func resignFirstResponder() -> Bool {

@@ -130,6 +130,10 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowLayoutEditor()
 	}
 	
+	func didBecomeActive(_: EditorTextRowTopicTextView) {
+		appliedConfiguration.delegate?.editorTextRowTextFieldDidBecomeActive()
+	}
+
 	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, cursorPosition: Int) {
 		appliedConfiguration.delegate?.editorTextRowTextChanged(row: row, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
 	}
@@ -181,6 +185,10 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 	func invalidateLayout(_: EditorTextRowNoteTextView) {
 		invalidateIntrinsicContentSize()
 		appliedConfiguration.delegate?.editorTextRowLayoutEditor()
+	}
+	
+	func didBecomeActive(_: EditorTextRowNoteTextView) {
+		appliedConfiguration.delegate?.editorTextRowTextFieldDidBecomeActive()
 	}
 	
 	func textChanged(_: EditorTextRowNoteTextView, row: Row, isInNotes: Bool, cursorPosition: Int) {

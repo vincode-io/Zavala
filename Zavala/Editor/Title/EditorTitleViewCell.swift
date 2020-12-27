@@ -11,6 +11,7 @@ import Templeton
 protocol EditorTitleViewCellDelegate: class {
 	var editorTitleUndoManager: UndoManager? { get }
 	func editorTitleLayoutEditor()
+	func editorTitleTextFieldDidBecomeActive()
 	func editorTitleCreateRow(textRowStrings: TextRowStrings?)
 }
 

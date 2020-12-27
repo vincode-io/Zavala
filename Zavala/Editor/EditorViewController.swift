@@ -158,7 +158,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		collectionView.dragDelegate = self
 		collectionView.dropDelegate = self
 		collectionView.dragInteractionEnabled = true
-		collectionView.allowsSelection = false
+		collectionView.allowsMultipleSelection = true
 
 		titleRegistration = UICollectionView.CellRegistration<EditorTitleViewCell, Outline> { [weak self] (cell, indexPath, outline) in
 			cell.outline = outline
@@ -454,6 +454,12 @@ extension EditorViewController {
 		return UITargetedPreview(view: cell, parameters: EditorTextRowPreviewParameters(cell: cell, row: row))
 	}
 	
+	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		outline?.childrenIndexes(forIndex: indexPath.row).forEach { rowIndex in
+			collectionView.selectItem(at: IndexPath(row: rowIndex, section: 1), animated: false, scrollPosition: [])
+		}
+	}
+	
 }
 
 extension EditorViewController: EditorTitleViewCellDelegate {
@@ -464,6 +470,10 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	
 	func editorTitleLayoutEditor() {
 		layoutEditor()
+	}
+	
+	func editorTitleTextFieldDidBecomeActive() {
+		deselectAll()
 	}
 	
 	func editorTitleCreateRow(textRowStrings: TextRowStrings?) {
@@ -482,6 +492,10 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		layoutEditor()
 	}
 	
+	func editorTextRowTextFieldDidBecomeActive() {
+		deselectAll()
+	}
+
 	func editorTextRowToggleDisclosure(row: Row) {
 		toggleDisclosure(row: row)
 	}
@@ -676,6 +690,12 @@ private extension EditorViewController {
 		}
 	}
 	
+	private func deselectAll() {
+		collectionView.indexPathsForSelectedItems?.forEach { indexPath in
+			collectionView.deselectItem(at: indexPath, animated: true)
+		}
+	}
+	
 	private func editLink(_ link: String?, range: NSRange) {
 		if traitCollection.userInterfaceIdiom == .mac {
 		
@@ -841,6 +861,7 @@ private extension EditorViewController {
 	
 	func toggleDisclosure(row: Row) {
 		guard let undoManager = undoManager, let outline = outline else { return }
+		deselectAll()
 		
 		let command = ToggleDisclosureCommand(undoManager: undoManager,
 													delegate: self,

@@ -83,9 +83,15 @@ class EditorTitleContentView: UIView, UIContentView {
 // MARK: EditorTitleTextViewDelegate
 
 extension EditorTitleContentView: EditorTitleTextViewDelegate {
-	var EditorTitleTextViewUndoManager: UndoManager? {
+	
+	var editorTitleTextViewUndoManager: UndoManager? {
 		return appliedConfiguration.delegate?.editorTitleUndoManager
 	}
+	
+	func didBecomeActive(_: EditorTitleTextView) {
+		appliedConfiguration.delegate?.editorTitleTextFieldDidBecomeActive()
+	}
+	
 }
 
 // MARK: UITextViewDelegate

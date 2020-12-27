@@ -8,7 +8,8 @@
 import UIKit
 
 protocol EditorTitleTextViewDelegate: class {
-	var EditorTitleTextViewUndoManager: UndoManager? { get }
+	var editorTitleTextViewUndoManager: UndoManager? { get }
+	func didBecomeActive(_: EditorTitleTextView)
 }
 
 class EditorTitleTextView: UITextView {
@@ -16,7 +17,7 @@ class EditorTitleTextView: UITextView {
 	weak var editorDelegate: EditorTitleTextViewDelegate?
 
 	override var undoManager: UndoManager? {
-		guard let textViewUndoManager = super.undoManager, let controllerUndoManager = editorDelegate?.EditorTitleTextViewUndoManager else { return nil }
+		guard let textViewUndoManager = super.undoManager, let controllerUndoManager = editorDelegate?.editorTitleTextViewUndoManager else { return nil }
 		if stackedUndoManager == nil {
 			stackedUndoManager = StackedUndoManger(mainUndoManager: textViewUndoManager, fallBackUndoManager: controllerUndoManager)
 		}
@@ -39,5 +40,10 @@ class EditorTitleTextView: UITextView {
 		fatalError("init(coder:) has not been implemented")
 	}
 
+	@discardableResult
+	override func becomeFirstResponder() -> Bool {
+		editorDelegate?.didBecomeActive(self)
+		return super.becomeFirstResponder()
+	}
 
 }
