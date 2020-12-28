@@ -302,6 +302,15 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		documentTitleDidChange()
 	}
 	
+	public func isCreateNoteUnavailable(rows: [Row]) -> Bool {
+		for row in rows {
+			if let textRow = row.textRow, textRow.isNoteEmpty {
+				return false
+			}
+		}
+		return true
+	}
+	
 	public func createNote(row: Row, textRowStrings: TextRowStrings?) -> ShadowTableChanges {
 		guard let textRow = row.textRow else { return ShadowTableChanges() }
 		if let textRowStrings = textRowStrings {
@@ -316,6 +325,15 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		guard let shadowTableIndex = shadowTable?.firstIndex(of: row) else { return ShadowTableChanges() }
 		return ShadowTableChanges(reloads: [shadowTableIndex])
+	}
+	
+	public func isDeleteNoteUnavailable(rows: [Row]) -> Bool {
+		for row in rows {
+			if let textRow = row.textRow, !textRow.isNoteEmpty {
+				return false
+			}
+		}
+		return true
 	}
 	
 	public func deleteNote(row: Row, textRowStrings: TextRowStrings?) -> ShadowTableChanges {
@@ -500,148 +518,98 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return ShadowTableChanges(reloads: [shadowTableIndex])
 	}
 	
-	public func toggleDisclosure(row: Row) -> ShadowTableChanges {
-		let changes: ShadowTableChanges
-		if row.isExpanded ?? true {
-			changes = collapseRow(row)
-		} else {
-			changes = expandRow(row)
+	public func expand(rows: [Row]) -> ([Row], ShadowTableChanges) {
+		if rows.count == 1, let row = rows.first {
+			return ([row], expand(row: row))
 		}
-
-		outlineBodyDidChange()
-		return changes
+		return expandCollapse(rows: rows, isExpanded: true)
 	}
 	
-	public func isExpandAllUnavailable(container: RowContainer) -> Bool {
-		if let row = container as? Row, row.isExpandable {
-			return false
+	public func collapse(rows: [Row]) -> ([Row], ShadowTableChanges) {
+		if rows.count == 1, let row = rows.first {
+			return ([row], collapse(row: row))
 		}
-
-		var unavailable = true
-		
-		func expandedRowVisitor(_ visited: Row) {
-			for row in visited.rows ?? [Row]() {
-				unavailable = !row.isExpandable
-				if !unavailable {
-					break
-				}
-				row.visit(visitor: expandedRowVisitor)
-				if !unavailable {
-					break
-				}
-			}
-		}
-
-		for row in container.rows ?? [Row]() {
-			unavailable = !row.isExpandable
-			if !unavailable {
-				break
-			}
-			row.visit(visitor: expandedRowVisitor)
-			if !unavailable {
-				break
-			}
-		}
-		
-		return unavailable
+		return expandCollapse(rows: rows, isExpanded: false)
 	}
 	
-	public func expandAll(container: RowContainer) -> ([Row], ShadowTableChanges) {
-		var expanded = [Row]()
-		
-		if let row = container as? Row, row.isExpandable {
-			var mutatingRow = row
-			mutatingRow.isExpanded = true
-			expanded.append(row)
-		}
-		
-		func expandVisitor(_ visited: Row) {
-			if visited.isExpandable {
-				var mutatingVisited = visited
-				mutatingVisited.isExpanded = true
-				expanded.append(visited)
+	public func isExpandAllUnavailable(containers: [RowContainer]) -> Bool {
+		for container in containers {
+			if !isExpandAllUnavailable(container: container) {
+				return false
 			}
-			visited.rows?.forEach { $0.visit(visitor: expandVisitor) }
+		}
+		return true
+	}
+	
+	public func expandAll(containers: [RowContainer]) -> ([Row], ShadowTableChanges) {
+		var impacted = [Row]()
+		
+		for container in containers {
+			if let row = container as? Row, row.isExpandable {
+				var mutatingRow = row
+				mutatingRow.isExpanded = true
+				impacted.append(row)
+			}
+			
+			func expandVisitor(_ visited: Row) {
+				if visited.isExpandable {
+					var mutatingVisited = visited
+					mutatingVisited.isExpanded = true
+					impacted.append(visited)
+				}
+				visited.rows?.forEach { $0.visit(visitor: expandVisitor) }
+			}
+
+			container.rows?.forEach { $0.visit(visitor: expandVisitor(_:)) }
 		}
 
-		container.rows?.forEach { $0.visit(visitor: expandVisitor(_:)) }
-		
 		outlineBodyDidChange()
 
 		var changes = rebuildShadowTable()
 		
-		let reloads = Set(expanded.compactMap { $0.shadowTableIndex })
+		let reloads = Set(impacted.compactMap { $0.shadowTableIndex })
 		changes.append(ShadowTableChanges(reloads: reloads))
 		
-		return (expanded, changes)
+		return (impacted, changes)
 	}
 
-	public func expand(rows: [Row]) -> ShadowTableChanges {
-		expandCollapse(rows: rows, isExpanded: true)
-	}
-	
-	public func isCollapseAllUnavailable(container: RowContainer) -> Bool {
-		if let row = container as? Row, row.isCollapsable {
-			return false
-		}
-		
-		var unavailable = true
-		
-		func collapsedRowVisitor(_ visited: Row) {
-			for row in visited.rows ?? [Row]() {
-				unavailable = !row.isCollapsable
-				if !unavailable {
-					break
-				}
-				row.visit(visitor: collapsedRowVisitor)
-				if !unavailable {
-					break
-				}
+	public func isCollapseAllUnavailable(containers: [RowContainer]) -> Bool {
+		for container in containers {
+			if !isCollapseAllUnavailable(container: container) {
+				return false
 			}
 		}
-
-		for row in container.rows ?? [Row]() {
-			unavailable = !row.isCollapsable
-			if !unavailable {
-				break
-			}
-			row.visit(visitor: collapsedRowVisitor)
-			if !unavailable {
-				break
-			}
-		}
-		
-		return unavailable
+		return true
 	}
 	
-	public func collapseAll(container: RowContainer) -> ([Row], ShadowTableChanges) {
-		var collapsed = [Row]()
-		
-		if let row = container as? Row, row.isCollapsable {
-			var mutatingRow = row
-			mutatingRow.isExpanded = false
-			collapsed.append(row)
-		}
-		
-		func collapseVisitor(_ visited: Row) {
-			if visited.isCollapsable {
-				var mutatingVisited = visited
-				mutatingVisited.isExpanded = false
-				collapsed.append(visited)
-			}
-			visited.rows?.forEach { $0.visit(visitor: collapseVisitor) }
-		}
+	public func collapseAll(containers: [RowContainer]) -> ([Row], ShadowTableChanges) {
+		var impacted = [Row]()
+		var reloads = [Row]()
 
-		var reloads: [Row]
-		if let row = container as? Row {
-			reloads = [row]
-		} else {
-			reloads = [Row]()
-		}
-		
-		container.rows?.forEach {
-			reloads.append($0)
-			$0.visit(visitor: collapseVisitor(_:))
+		for container in containers {
+			if let row = container as? Row, row.isCollapsable {
+				var mutatingRow = row
+				mutatingRow.isExpanded = false
+				impacted.append(row)
+			}
+			
+			func collapseVisitor(_ visited: Row) {
+				if visited.isCollapsable {
+					var mutatingVisited = visited
+					mutatingVisited.isExpanded = false
+					impacted.append(visited)
+				}
+				visited.rows?.forEach { $0.visit(visitor: collapseVisitor) }
+			}
+
+			if let row = container as? Row {
+				reloads.append(row)
+			}
+			
+			container.rows?.forEach {
+				reloads.append($0)
+				$0.visit(visitor: collapseVisitor(_:))
+			}
 		}
 		
 		outlineBodyDidChange()
@@ -651,13 +619,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let reloadIndexes = Set(reloads.compactMap { $0.shadowTableIndex })
 		changes.append(ShadowTableChanges(reloads: reloadIndexes))
 		
-		return (collapsed, changes)
+		return (impacted, changes)
 	}
 
-	public func collapse(rows: [Row]) -> ShadowTableChanges {
-		expandCollapse(rows: rows, isExpanded: false)
-	}
-	
 	public func toggleComplete(row: Row, textRowStrings: TextRowStrings?) -> ShadowTableChanges {
 		guard let textRow = row.textRow else { return ShadowTableChanges() }
 		
@@ -690,18 +654,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return ShadowTableChanges(reloads: reloads)
 	}
 
-	public func isIndentRowUnavailable(row: Row) -> Bool {
-		let container: RowContainer
-		if let oldParentRow = row.parent {
-			container = oldParentRow
-		} else {
-			container = self
+	public func isIndentRowsUnavailable(rows: [Row]) -> Bool {
+		for row in rows {
+			if let rowIndex = row.parent?.rows?.firstIndex(of: row), rowIndex > 0 {
+				return false
+			}
 		}
-		
-		if let rowIndex = container.rows?.firstIndex(of: row), rowIndex > 0 {
-			return false
-		}
-		
 		return true
 	}
 	
@@ -715,7 +673,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			  rowIndex > 0,
 			  var newParentRow = container.rows?[rowIndex - 1] else { return ShadowTableChanges() }
 
-		var expandChange = expandRow(newParentRow)
+		var expandChange = expand(row: newParentRow)
 		
 		// Null out the chevron row reload since we are going to add it below
 		expandChange.reloads = nil
@@ -755,8 +713,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 	}
 	
-	public func isOutdentRowUnavailable(row: Row) -> Bool {
-		return row.indentLevel == 0
+	public func isOutdentRowsUnavailable(rows: [Row]) -> Bool {
+		for row in rows {
+			if row.indentLevel != 0 {
+				return false
+			}
+		}
+		return true
 	}
 		
 	public func outdentRow(_ row: Row, textRowStrings: TextRowStrings?) -> ShadowTableChanges {
@@ -1009,10 +972,49 @@ extension Outline {
 		NotificationCenter.default.post(name: .DocumentDidDelete, object: Document.outline(self), userInfo: nil)
 	}
 
-	private func expandCollapse(rows: [Row], isExpanded: Bool) -> ShadowTableChanges {
+	private func isExpandAllUnavailable(container: RowContainer) -> Bool {
+		if let row = container as? Row, row.isExpandable {
+			return false
+		}
+
+		var unavailable = true
+		
+		func expandedRowVisitor(_ visited: Row) {
+			for row in visited.rows ?? [Row]() {
+				unavailable = !row.isExpandable
+				if !unavailable {
+					break
+				}
+				row.visit(visitor: expandedRowVisitor)
+				if !unavailable {
+					break
+				}
+			}
+		}
+
+		for row in container.rows ?? [Row]() {
+			unavailable = !row.isExpandable
+			if !unavailable {
+				break
+			}
+			row.visit(visitor: expandedRowVisitor)
+			if !unavailable {
+				break
+			}
+		}
+		
+		return unavailable
+	}
+	
+	private func expandCollapse(rows: [Row], isExpanded: Bool) -> ([Row], ShadowTableChanges) {
+		var impacted = [Row]()
+		
 		for row in rows {
-			var mutatingRow = row
-			mutatingRow.isExpanded = isExpanded
+			if isExpanded != row.isExpanded ?? true {
+				var mutatingRow = row
+				mutatingRow.isExpanded = isExpanded
+				impacted.append(mutatingRow)
+			}
 		}
 		
 		outlineBodyDidChange()
@@ -1022,10 +1024,10 @@ extension Outline {
 		let reloads = Set(rows.compactMap { $0.shadowTableIndex })
 		changes.append(ShadowTableChanges(reloads: reloads))
 		
-		return changes
+		return (impacted, changes)
 	}
 	
-	private func expandRow(_ row: Row) -> ShadowTableChanges {
+	private func expand(row: Row) -> ShadowTableChanges {
 		guard !(row.isExpanded ?? true), let rowShadowTableIndex = row.shadowTableIndex else {
 			return ShadowTableChanges()
 		}
@@ -1063,8 +1065,42 @@ extension Outline {
 		resetShadowTableIndexes(startingAt: rowShadowTableIndex)
 		return ShadowTableChanges(inserts: inserts, reloads: [rowShadowTableIndex])
 	}
+
+	private func isCollapseAllUnavailable(container: RowContainer) -> Bool {
+		if let row = container as? Row, row.isCollapsable {
+			return false
+		}
+		
+		var unavailable = true
+		
+		func collapsedRowVisitor(_ visited: Row) {
+			for row in visited.rows ?? [Row]() {
+				unavailable = !row.isCollapsable
+				if !unavailable {
+					break
+				}
+				row.visit(visitor: collapsedRowVisitor)
+				if !unavailable {
+					break
+				}
+			}
+		}
+
+		for row in container.rows ?? [Row]() {
+			unavailable = !row.isCollapsable
+			if !unavailable {
+				break
+			}
+			row.visit(visitor: collapsedRowVisitor)
+			if !unavailable {
+				break
+			}
+		}
+		
+		return unavailable
+	}
 	
-	private func collapseRow(_ row: Row) -> ShadowTableChanges {
+	private func collapse(row: Row) -> ShadowTableChanges {
 		guard row.isExpanded ?? true else { return ShadowTableChanges() }
 
 		var mutatingRow = row

@@ -51,28 +51,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(createRowCommand)
 		}
 		
-		if !(mainSplitViewController?.isIndentRowUnavailable ?? true) {
-			menuKeyCommands.append(indentRowCommand)
+		if !(mainSplitViewController?.isIndentRowsUnavailable ?? true) {
+			menuKeyCommands.append(indentRowsCommand)
 		}
 		
-		if !(mainSplitViewController?.isOutdentRowUnavailable ?? true) {
-			menuKeyCommands.append(outdentRowCommand)
+		if !(mainSplitViewController?.isOutdentRowsUnavailable ?? true) {
+			menuKeyCommands.append(outdentRowsCommand)
 		}
 		
 		if !(mainSplitViewController?.isToggleRowCompleteUnavailable ?? true) {
-			if mainSplitViewController?.isCurrentRowComplete ?? false {
-				menuKeyCommands.append(uncompleteRowCommand)
+			if mainSplitViewController?.isCurrentRowsComplete ?? false {
+				menuKeyCommands.append(uncompleteRowsCommand)
 			} else {
-				menuKeyCommands.append(completeRowCommand)
+				menuKeyCommands.append(completeRowsCommand)
 			}
 		}
 		
-		if !(mainSplitViewController?.isCreateRowNoteUnavailable ?? true) {
-			menuKeyCommands.append(createRowNoteCommand)
+		if !(mainSplitViewController?.isCreateRowNotesUnavailable ?? true) {
+			menuKeyCommands.append(createRowNotesCommand)
 		}
 
-		if !(mainSplitViewController?.isDeleteRowNoteUnavailable ?? true) {
-			menuKeyCommands.append(deleteRowNoteCommand)
+		if !(mainSplitViewController?.isDeleteRowNotesUnavailable ?? true) {
+			menuKeyCommands.append(deleteRowNotesCommand)
 		}
 
 		if !(mainSplitViewController?.isExpandAllInOutlineUnavailable ?? true) {
@@ -143,40 +143,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										input: "\n",
 										modifierFlags: [])
 	
-	let indentRowCommand = UIKeyCommand(title: L10n.indent,
-										action: #selector(indentRowCommand(_:)),
-										input: "]",
-										modifierFlags: [.command])
-	
-	let outdentRowCommand = UIKeyCommand(title: L10n.outdent,
-										 action: #selector(outdentRowCommand(_:)),
-										 input: "[",
+	let indentRowsCommand = UIKeyCommand(title: L10n.indent,
+										 action: #selector(indentRowsCommand(_:)),
+										 input: "]",
 										 modifierFlags: [.command])
 	
-	let toggleCompleteRowCommand = UIKeyCommand(title: L10n.complete,
-												action: #selector(toggleCompleteRowCommand(_:)),
-												input: "\n",
-												modifierFlags: [.command])
-	
-	let completeRowCommand = UIKeyCommand(title: L10n.complete,
-										  action: #selector(toggleCompleteRowCommand(_:)),
-										  input: "\n",
+	let outdentRowsCommand = UIKeyCommand(title: L10n.outdent,
+										  action: #selector(outdentRowsCommand(_:)),
+										  input: "[",
 										  modifierFlags: [.command])
 	
-	let uncompleteRowCommand = UIKeyCommand(title: L10n.uncomplete,
-											action: #selector(toggleCompleteRowCommand(_:)),
-											input: "\n",
-											modifierFlags: [.command])
+	let toggleCompleteRowsCommand = UIKeyCommand(title: L10n.complete,
+												 action: #selector(toggleCompleteRowsCommand(_:)),
+												 input: "\n",
+												 modifierFlags: [.command])
 	
-	let createRowNoteCommand = UIKeyCommand(title: L10n.addNote,
-											action: #selector(createRowNoteCommand(_:)),
-											input: "\n",
-											modifierFlags: [.shift])
+	let completeRowsCommand = UIKeyCommand(title: L10n.complete,
+										   action: #selector(toggleCompleteRowsCommand(_:)),
+										   input: "\n",
+										   modifierFlags: [.command])
 	
-	let deleteRowNoteCommand = UIKeyCommand(title: L10n.deleteNote,
-											action: #selector(deleteRowNoteCommand(_:)),
-											input: "\u{8}",
-											modifierFlags: [.shift])
+	let uncompleteRowsCommand = UIKeyCommand(title: L10n.uncomplete,
+											 action: #selector(toggleCompleteRowsCommand(_:)),
+											 input: "\n",
+											 modifierFlags: [.command])
+	
+	let createRowNotesCommand = UIKeyCommand(title: L10n.addNote,
+											 action: #selector(createRowNotesCommand(_:)),
+											 input: "\n",
+											 modifierFlags: [.shift])
+	
+	let deleteRowNotesCommand = UIKeyCommand(title: L10n.deleteNote,
+											 action: #selector(deleteRowNotesCommand(_:)),
+											 input: "\u{8}",
+											 modifierFlags: [.shift])
 	
 	let splitRowCommand = UIKeyCommand(title: L10n.splitRow,
 									   action: #selector(splitRowCommand(_:)),
@@ -342,24 +342,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.createRow(sender)
 	}
 	
-	@objc func indentRowCommand(_ sender: Any?) {
-		mainSplitViewController?.indentRow(sender)
+	@objc func indentRowsCommand(_ sender: Any?) {
+		mainSplitViewController?.indentRows(sender)
 	}
 	
-	@objc func outdentRowCommand(_ sender: Any?) {
-		mainSplitViewController?.outdentRow(sender)
+	@objc func outdentRowsCommand(_ sender: Any?) {
+		mainSplitViewController?.outdentRows(sender)
 	}
 	
-	@objc func toggleCompleteRowCommand(_ sender: Any?) {
-		mainSplitViewController?.toggleCompleteRow(sender)
+	@objc func toggleCompleteRowsCommand(_ sender: Any?) {
+		mainSplitViewController?.toggleCompleteRows(sender)
 	}
 	
-	@objc func createRowNoteCommand(_ sender: Any?) {
-		mainSplitViewController?.createRowNote(sender)
+	@objc func createRowNotesCommand(_ sender: Any?) {
+		mainSplitViewController?.createRowNotes(sender)
 	}
 	
-	@objc func deleteRowNoteCommand(_ sender: Any?) {
-		mainSplitViewController?.deleteRowNote(sender)
+	@objc func deleteRowNotesCommand(_ sender: Any?) {
+		mainSplitViewController?.deleteRowNotes(sender)
 	}
 	
 	@objc func splitRowCommand(_ sender: Any?) {
@@ -438,16 +438,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainSplitViewController?.isCreateRowUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(indentRowCommand(_:)):
-			if mainSplitViewController?.isIndentRowUnavailable ?? true {
+		case #selector(indentRowsCommand(_:)):
+			if mainSplitViewController?.isIndentRowsUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(outdentRowCommand(_:)):
-			if mainSplitViewController?.isOutdentRowUnavailable ?? true {
+		case #selector(outdentRowsCommand(_:)):
+			if mainSplitViewController?.isOutdentRowsUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(toggleCompleteRowCommand(_:)):
-			if mainSplitViewController?.isCurrentRowComplete ?? false {
+		case #selector(toggleCompleteRowsCommand(_:)):
+			if mainSplitViewController?.isCurrentRowsComplete ?? false {
 				command.title = L10n.uncomplete
 			} else {
 				command.title = L10n.complete
@@ -455,12 +455,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainSplitViewController?.isToggleRowCompleteUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(createRowNoteCommand(_:)):
-			if mainSplitViewController?.isCreateRowNoteUnavailable ?? true  {
+		case #selector(createRowNotesCommand(_:)):
+			if mainSplitViewController?.isCreateRowNotesUnavailable ?? true  {
 				command.attributes = .disabled
 			}
-		case #selector(deleteRowNoteCommand(_:)):
-			if mainSplitViewController?.isDeleteRowNoteUnavailable ?? true {
+		case #selector(deleteRowNotesCommand(_:)):
+			if mainSplitViewController?.isDeleteRowNotesUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(splitRowCommand(_:)):
@@ -564,8 +564,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)
 		
 		// Outline Menu
-		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowCommand, createRowNoteCommand, deleteRowNoteCommand])
-		let mainOutlineMenu = UIMenu(title: "", options: .displayInline, children: [createRowCommand, splitRowCommand, indentRowCommand, outdentRowCommand])
+		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, createRowNotesCommand, deleteRowNotesCommand])
+		let mainOutlineMenu = UIMenu(title: "", options: .displayInline, children: [createRowCommand, splitRowCommand, indentRowsCommand, outdentRowsCommand])
 		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, completeMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 

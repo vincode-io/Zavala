@@ -15,15 +15,15 @@ public final class ExpandAllCommand: OutlineCommand {
 	public var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var container: RowContainer
+	var containers: [RowContainer]
 	var expandedRows: [Row]?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, container: RowContainer) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, containers: [RowContainer]) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.container = container
-		if container is Outline {
+		self.containers = containers
+		if containers.first is Outline {
 			undoActionName = L10n.expandAllInOutline
 			redoActionName = L10n.expandAllInOutline
 		} else {
@@ -34,15 +34,15 @@ public final class ExpandAllCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (expanded, changes) = outline.expandAll(container: container)
-		expandedRows = expanded
+		let (impacted, changes) = outline.expandAll(containers: containers)
+		expandedRows = impacted
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	public func undo() {
-		guard let expandedHeadlines = expandedRows else { return }
-		let changes = outline.collapse(rows: expandedHeadlines)
+		guard let expandedRows = expandedRows else { return }
+		let (_, changes) = outline.collapse(rows: expandedRows)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()

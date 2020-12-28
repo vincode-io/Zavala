@@ -86,34 +86,30 @@ class MainSplitViewController: UISplitViewController {
 		return editorViewController?.isCreateRowUnavailable ?? true
 	}
 	
-	var isIndentRowUnavailable: Bool {
-		return editorViewController?.isIndentRowUnavailable ?? true
+	var isIndentRowsUnavailable: Bool {
+		return editorViewController?.isIndentRowsUnavailable ?? true
 	}
 
-	var isOutdentRowUnavailable: Bool {
-		return editorViewController?.isOutdentRowUnavailable ?? true
+	var isOutdentRowsUnavailable: Bool {
+		return editorViewController?.isOutdentRowsUnavailable ?? true
 	}
 
 	var isToggleRowCompleteUnavailable: Bool {
 		return editorViewController?.isToggleRowCompleteUnavailable ?? true
 	}
 	
-	var isCurrentRowComplete: Bool {
-		return editorViewController?.isCurrentRowComplete ?? false
+	var isCurrentRowsComplete: Bool {
+		return editorViewController?.isCurrentRowsComplete ?? false
 	}
 
-	var isCreateRowNoteUnavailable: Bool {
-		return editorViewController?.isCreateRowNoteUnavailable ?? true
+	var isCreateRowNotesUnavailable: Bool {
+		return editorViewController?.isCreateRowNotesUnavailable ?? true
 	}
 	
-	var isDeleteRowNoteUnavailable: Bool {
-		return editorViewController?.isDeleteRowNoteUnavailable ?? true
+	var isDeleteRowNotesUnavailable: Bool {
+		return editorViewController?.isDeleteRowNotesUnavailable ?? true
 	}
 	
-	var isCurrentRowNoteEmpty: Bool {
-		return editorViewController?.isCurrentRowNoteEmpty ?? false
-	}
-
 	var isSplitRowUnavailable: Bool {
 		return editorViewController?.isSplitRowUnavailable ?? true
 	}
@@ -219,7 +215,7 @@ class MainSplitViewController: UISplitViewController {
 	
 	override func delete(_ sender: Any?) {
 		guard editorViewController?.isDeleteCurrentRowUnavailable ?? true else {
-			editorViewController?.deleteCurrentRow()
+			editorViewController?.deleteCurrentRows()
 			return
 		}
 		
@@ -269,24 +265,24 @@ class MainSplitViewController: UISplitViewController {
 		editorViewController?.createRow()
 	}
 	
-	@objc func indentRow(_ sender: Any?) {
-		editorViewController?.indentRow()
+	@objc func indentRows(_ sender: Any?) {
+		editorViewController?.indentRows()
 	}
 	
-	@objc func outdentRow(_ sender: Any?) {
-		editorViewController?.outdentRow()
+	@objc func outdentRows(_ sender: Any?) {
+		editorViewController?.outdentRows()
 	}
 	
-	@objc func toggleCompleteRow(_ sender: Any?) {
-		editorViewController?.toggleCompleteRow()
+	@objc func toggleCompleteRows(_ sender: Any?) {
+		editorViewController?.toggleCompleteRows()
 	}
 	
-	@objc func createRowNote(_ sender: Any?) {
-		editorViewController?.createRowNote()
+	@objc func createRowNotes(_ sender: Any?) {
+		editorViewController?.createRowNotes()
 	}
 	
-	@objc func deleteRowNote(_ sender: Any?) {
-		editorViewController?.deleteRowNote()
+	@objc func deleteRowNotes(_ sender: Any?) {
+		editorViewController?.deleteRowNotes()
 	}
 	
 	@objc func splitRow(_ sender: Any?) {
