@@ -52,7 +52,7 @@ aDirectory/
   SharedXcodeSettings/
     DeveloperSettings.xcconfig
   Zavala
-    Zavala.xcworkspace
+    Zavala.xcodeproj
 ```
 Example:
 
