@@ -23,6 +23,8 @@ extension EditorViewController: UICollectionViewDragDelegate {
 			return nil
 		}
 		
+		var dragItems = [UIDragItem]()
+		
 		let dragItem = UIDragItem(itemProvider: itemProvider)
 		dragItem.localObject = row
 		
@@ -31,7 +33,15 @@ extension EditorViewController: UICollectionViewDragDelegate {
 			return UIDragPreview(view: cell, parameters: EditorTextRowPreviewParameters(cell: cell, row: row.associatedRow))
 		}
 		
-		return [dragItem]
+		dragItems.append(dragItem)
+		
+//		outline?.childrenRows(forRow: row).forEach { child in
+//			let itemProvider = NSItemProvider()
+//			let dragItem = UIDragItem(itemProvider: itemProvider)
+//			dragItems.append(dragItem)
+//		}
+		
+		return dragItems
 	}
 	
 }

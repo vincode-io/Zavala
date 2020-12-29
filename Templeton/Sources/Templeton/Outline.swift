@@ -219,6 +219,18 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return children
 	}
 	
+	public func childrenRows(forRow row: Row) -> [Row] {
+		var children = [Row]()
+		
+		func childrenVisitor(_ visited: Row) {
+			children.append(visited)
+			visited.rows?.forEach { $0.visit(visitor: childrenVisitor) }
+		}
+
+		row.rows?.forEach { $0.visit(visitor: childrenVisitor(_:)) }
+		return children
+	}
+	
 	public func markdown(indentLevel: Int = 0) -> String {
 		var returnToSuspend = false
 		if rows == nil {

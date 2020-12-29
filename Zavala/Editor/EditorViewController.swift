@@ -499,9 +499,9 @@ extension EditorViewController {
 	
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		selectedIndexes.insert(indexPath.row)
-		outline?.childrenIndexes(forIndex: indexPath.row).forEach { rowIndex in
-			collectionView.selectItem(at: IndexPath(row: rowIndex, section: 1), animated: false, scrollPosition: [])
-		}
+//		outline?.childrenIndexes(forIndex: indexPath.row).forEach { rowIndex in
+//			collectionView.selectItem(at: IndexPath(row: rowIndex, section: 1), animated: false, scrollPosition: [])
+//		}
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -691,7 +691,6 @@ extension EditorViewController: LinkViewControllerDelegate {
 private extension EditorViewController {
 	
 	private func updateUI() {
-		navigationItem.title = outline?.title
 		navigationItem.largeTitleDisplayMode = .never
 		
 		if traitCollection.userInterfaceIdiom != .mac {
