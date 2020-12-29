@@ -279,27 +279,23 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 	
 	func deleteCurrentRows() {
-		guard let rows = currentRows,
-			  let textRowStrings = currentTextRowStrings else { return }
-		deleteRows(rows, textRowStrings: textRowStrings)
+		guard let rows = currentRows else { return }
+		deleteRows(rows)
 	}
 	
 	func createRow() {
-		guard let row = currentRows?.last,
-			  let textRowStrings = currentTextRowStrings else { return }
-		createRow(afterRow: row, textRowStrings: textRowStrings)
+		guard let row = currentRows?.last else { return }
+		createRow(afterRow: row)
 	}
 	
 	func indentRows() {
-		guard let rows = currentRows,
-			  let textRowStrings = currentTextRowStrings else { return }
-		indentRows(rows, textRowStrings: textRowStrings)
+		guard let rows = currentRows else { return }
+		indentRows(rows)
 	}
 	
 	func outdentRows() {
-		guard let rows = currentRows,
-			  let textRowStrings = currentTextRowStrings else { return }
-		outdentRows(rows, textRowStrings: textRowStrings)
+		guard let rows = currentRows else { return }
+		outdentRows(rows)
 	}
 	
 	func toggleCompleteRows() {
@@ -312,15 +308,13 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 	
 	func createRowNotes() {
-		guard let rows = currentRows,
-			  let textRowStrings = currentTextRowStrings else { return }
-		createRowNotes(rows, textRowStrings: textRowStrings)
+		guard let rows = currentRows else { return }
+		createRowNotes(rows)
 	}
 	
 	func deleteRowNotes() {
-		guard let rows = currentRows,
-			  let textRowStrings = currentTextRowStrings else { return }
-		deleteRowNotes(rows, textRowStrings: textRowStrings)
+		guard let rows = currentRows else { return }
+		deleteRowNotes(rows)
 	}
 	
 	func splitRow() {
@@ -465,6 +459,12 @@ extension EditorViewController {
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+		// Force save the text if the context menu has been requested so that we don't lose our
+		// text changes when the cell configuration gets applied
+		if let textView = UIResponder.currentFirstResponder as? OutlineTextView {
+			textView.endEditing(true)
+		}
+		
 		if !(collectionView.indexPathsForSelectedItems?.contains(indexPath) ?? false) {
 			deselectAll()
 		}
