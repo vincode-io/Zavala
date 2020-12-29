@@ -21,9 +21,10 @@ extension TimelineViewController: UICollectionViewDragDelegate {
 
 		switch document {
 		case .outline(let outline):
-			
+
+//			let fileName = outline.fileName(withSuffix: "opml")
+//			itemProvider.suggestedName = fileName
 //			itemProvider.registerFileRepresentation(forTypeIdentifier: "org.opml.opml", visibility: .all) { (completionHandler) -> Progress? in
-//				let fileName = outline.fileName(withSuffix: "opml")
 //				let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
 //				do {
 //					let opml = outline.opml()
