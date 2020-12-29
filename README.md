@@ -1,6 +1,6 @@
 # Zavala
 
-A dedicated outliner for macOS, iPadOS and iOS.
+A dedicated outliner for macOS, iPadOS, and iOS.
 
 ## Contributing
 
