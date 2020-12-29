@@ -62,6 +62,8 @@ internal enum L10n {
   internal static let splitRow = L10n.tr("Localizable", "Split_Row")
   /// Typing
   internal static let typing = L10n.tr("Localizable", "Typing")
+  /// Uncomplete
+  internal static let uncomplete = L10n.tr("Localizable", "Uncomplete")
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

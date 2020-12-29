@@ -98,8 +98,8 @@ class MainSplitViewController: UISplitViewController {
 		return editorViewController?.isToggleRowCompleteUnavailable ?? true
 	}
 	
-	var isCurrentRowsComplete: Bool {
-		return editorViewController?.isCurrentRowsComplete ?? false
+	var isCompleteRowsAvailable: Bool {
+		return editorViewController?.isCompleteRowsAvailable ?? false
 	}
 
 	var isCreateRowNotesUnavailable: Bool {

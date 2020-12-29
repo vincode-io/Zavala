@@ -84,6 +84,16 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		return isExpanded ?? true
 	}
 	
+	public var isCompletable: Bool {
+		guard let textRow = textRow else { return false }
+		return !(textRow.isComplete ?? false)
+	}
+	
+	public var isUncompletable: Bool {
+		guard let textRow = textRow else { return false }
+		return textRow.isComplete ?? false
+	}
+	
 	public var rows: [Row]? {
 		get {
 			associatedRow.rows

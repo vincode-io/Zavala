@@ -43,17 +43,13 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 
 	var isToggleRowCompleteUnavailable: Bool {
-		return currentRows == nil
+		guard let outline = outline, let rows = currentRows else { return true }
+		return outline.isCompleteUnavailable(rows: rows) && outline.isUncompleteUnavailable(rows: rows)
 	}
 
-	var isCurrentRowsComplete: Bool {
-		guard let rows = currentRows else { return false }
-		for row in rows {
-			if !(row.isComplete ?? false) {
-				return false
-			}
-		}
-		return true
+	var isCompleteRowsAvailable: Bool {
+		guard let outline = outline, let rows = currentRows else { return true }
+		return !outline.isCompleteUnavailable(rows: rows)
 	}
 	
 	var isCreateRowNotesUnavailable: Bool {
@@ -301,9 +297,12 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 	
 	func toggleCompleteRows() {
-		guard let rows = currentRows,
-			  let textRowStrings = currentTextRowStrings else { return }
-		toggleCompleteRows(rows, textRowStrings: textRowStrings)
+		guard let outline = outline, let rows = currentRows else { return }
+		if !outline.isCompleteUnavailable(rows: rows) {
+			completeRows(rows)
+		} else if !outline.isUncompleteUnavailable(rows: rows) {
+			uncompleteRows(rows)
+		}
 	}
 	
 	func createRowNotes() {
@@ -757,7 +756,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	private func makeRowsContextMenu(rows: [Row], textRowStrings: TextRowStrings) -> UIContextMenuConfiguration? {
+	private func makeRowsContextMenu(rows: [Row]) -> UIContextMenuConfiguration? {
 		guard let firstRow = rows.first, let lastRow = rows.last else { return nil }
 		
 		return UIContextMenuConfiguration(identifier: firstRow.associatedRow as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
@@ -767,31 +766,39 @@ private extension EditorViewController {
 
 			var firstOutlineActions = [UIAction]()
 			firstOutlineActions.append(self.addAction(row: lastRow))
-			if !outline.isIndentRowUnavailable(row: row) {
-				firstOutlineActions.append(self.indentAction(row: row, textRowStrings: textRowStrings))
+			if !outline.isIndentRowsUnavailable(rows: rows) {
+				firstOutlineActions.append(self.indentAction(rows: rows))
 			}
-			if !outline.isOutdentRowUnavailable(row: row) {
-				firstOutlineActions.append(self.outdentAction(row: row, textRowStrings: textRowStrings))
+			if !outline.isOutdentRowsUnavailable(rows: rows) {
+				firstOutlineActions.append(self.outdentAction(rows: rows))
 			}
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: firstOutlineActions))
 			
 			var secondOutlineActions = [UIAction]()
-			secondOutlineActions.append(self.toggleCompleteAction(row: row, textRowStrings: textRowStrings))
-			if let noteAction = self.toggleNoteAction(row: row, textRowStrings: textRowStrings) {
-				secondOutlineActions.append(noteAction)
+			if !outline.isCompleteUnavailable(rows: rows) {
+				secondOutlineActions.append(self.completeAction(rows: rows))
+			}
+			if !outline.isUncompleteUnavailable(rows: rows) {
+				secondOutlineActions.append(self.uncompleteAction(rows: rows))
+			}
+			if !outline.isCreateNoteUnavailable(rows: rows) {
+				secondOutlineActions.append(self.createNoteAction(rows: rows))
+			}
+			if !outline.isDeleteNoteUnavailable(rows: rows) {
+				secondOutlineActions.append(self.deleteNoteAction(rows: rows))
 			}
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: secondOutlineActions))
 
 			var viewActions = [UIAction]()
-			if !outline.isExpandAllUnavailable(container: row) {
-				viewActions.append(self.expandAllAction(row: row))
+			if !outline.isExpandAllUnavailable(containers: rows) {
+				viewActions.append(self.expandAllAction(rows: rows))
 			}
-			if !outline.isCollapseAllUnavailable(container: row) {
-				viewActions.append(self.collapseAllAction(row: row))
+			if !outline.isCollapseAllUnavailable(containers: rows) {
+				viewActions.append(self.collapseAllAction(rows: rows))
 			}
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: viewActions))
 			
-			let deleteAction = self.deleteAction(row: row, textRowStrings: textRowStrings)
+			let deleteAction = self.deleteAction(rows: rows)
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [deleteAction]))
 
 			return UIMenu(title: "", children: menuItems)
@@ -834,7 +841,7 @@ private extension EditorViewController {
 
 	private func completeAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.complete, image: AppAssets.completeRow) { [weak self] action in
-			self?.completeRow(rows)
+			self?.completeRows(rows)
 		}
 	}
 	
@@ -844,7 +851,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	private func addNoteAction(rows: [Row]) -> UIAction {
+	private func createNoteAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.addNote, image: AppAssets.note) { [weak self] action in
 			self?.createRowNotes(rows)
 		}
@@ -856,7 +863,7 @@ private extension EditorViewController {
 		}
 	}
 
-	private func deleteAction(rows: [Row], textRowStrings: TextRowStrings) -> UIAction {
+	private func deleteAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.deleteRow, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
 			self?.deleteRows(rows)
 		}
@@ -1065,14 +1072,14 @@ private extension EditorViewController {
 		}
 	}
 
-	func toggleCompleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
+	func completeRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = ToggleCompleteRowCommand(undoManager: undoManager,
-											   delegate: self,
-											   outline: outline,
-											   rows: rows,
-											   textRowStrings: textRowStrings)
+		let command = CompleteCommand(undoManager: undoManager,
+									  delegate: self,
+									  outline: outline,
+									  rows: rows,
+									  textRowStrings: textRowStrings)
 		
 		runCommand(command)
 		
@@ -1082,6 +1089,18 @@ private extension EditorViewController {
 				rowCell.moveToEnd()
 			}
 		}
+	}
+	
+	func uncompleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = UncompleteCommand(undoManager: undoManager,
+										delegate: self,
+										outline: outline,
+										rows: rows,
+										textRowStrings: textRowStrings)
+		
+		runCommand(command)
 	}
 	
 	func createRowNotes(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {

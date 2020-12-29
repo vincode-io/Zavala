@@ -60,10 +60,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		
 		if !(mainSplitViewController?.isToggleRowCompleteUnavailable ?? true) {
-			if mainSplitViewController?.isCurrentRowsComplete ?? false {
-				menuKeyCommands.append(uncompleteRowsCommand)
-			} else {
+			if mainSplitViewController?.isCompleteRowsAvailable ?? false {
 				menuKeyCommands.append(completeRowsCommand)
+			} else {
+				menuKeyCommands.append(uncompleteRowsCommand)
 			}
 		}
 		
@@ -447,10 +447,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				command.attributes = .disabled
 			}
 		case #selector(toggleCompleteRowsCommand(_:)):
-			if mainSplitViewController?.isCurrentRowsComplete ?? false {
-				command.title = L10n.uncomplete
-			} else {
+			if mainSplitViewController?.isCompleteRowsAvailable ?? false {
 				command.title = L10n.complete
+			} else {
+				command.title = L10n.uncomplete
 			}
 			if mainSplitViewController?.isToggleRowCompleteUnavailable ?? true {
 				command.attributes = .disabled

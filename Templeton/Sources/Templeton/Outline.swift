@@ -622,38 +622,32 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return (impacted, changes)
 	}
 
-	public func toggleComplete(row: Row, textRowStrings: TextRowStrings?) -> ShadowTableChanges {
-		guard let textRow = row.textRow else { return ShadowTableChanges() }
-		
-		if let textRowStrings = textRowStrings {
-			textRow.textRowStrings = textRowStrings
-		}
-		textRow.isComplete = !(row.isComplete ?? false)
-		outlineBodyDidChange()
-		
-		if isFiltered ?? false {
-			return rebuildShadowTable()
-		}
-		
-		guard let shadowTableIndex = row.shadowTableIndex else { return ShadowTableChanges() }
-		var reloads = Set([shadowTableIndex])
-		
-		func reloadVisitor(_ visited: Row) {
-			if let index = visited.shadowTableIndex {
-				reloads.insert(index)
-			}
-			if visited.isExpanded ?? true {
-				visited.rows?.forEach { $0.visit(visitor: reloadVisitor) }
+	public func isCompleteUnavailable(rows: [Row]) -> Bool {
+		for row in rows {
+			if row.isCompletable {
+				return false
 			}
 		}
-
-		if row.isExpanded ?? true {
-			row.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
-		}
-		
-		return ShadowTableChanges(reloads: reloads)
+		return true
 	}
-
+	
+	public func complete(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+		return completeUncomplete(rows: rows, isComplete: true, textRowStrings: textRowStrings)
+	}
+	
+	public func isUncompleteUnavailable(rows: [Row]) -> Bool {
+		for row in rows {
+			if row.isUncompletable {
+				return false
+			}
+		}
+		return true
+	}
+	
+	public func uncomplete(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+		return completeUncomplete(rows: rows, isComplete: false, textRowStrings: textRowStrings)
+	}
+	
 	public func isIndentRowsUnavailable(rows: [Row]) -> Bool {
 		for row in rows {
 			if let rowIndex = row.parent?.rows?.firstIndex(of: row), rowIndex > 0 {
@@ -970,6 +964,50 @@ extension Outline {
 	
 	private func outlineDidDelete() {
 		NotificationCenter.default.post(name: .DocumentDidDelete, object: Document.outline(self), userInfo: nil)
+	}
+	
+	private func completeUncomplete(rows: [Row], isComplete: Bool, textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+		if rows.count == 1, let textRow = rows.first?.textRow, let textRowStrings = textRowStrings {
+			textRow.textRowStrings = textRowStrings
+		}
+		
+		var impacted = [Row]()
+		
+		for row in rows {
+			if isComplete != row.isComplete ?? false {
+				row.textRow?.isComplete = isComplete
+				impacted.append(row)
+			}
+		}
+		
+		outlineBodyDidChange()
+		
+		if isFiltered ?? false {
+			return (impacted, rebuildShadowTable())
+		}
+		
+		var reloads = Set<Int>()
+		
+		for row in impacted {
+			if let shadowTableIndex = row.shadowTableIndex {
+				reloads.insert(shadowTableIndex)
+			
+				func reloadVisitor(_ visited: Row) {
+					if let index = visited.shadowTableIndex {
+						reloads.insert(index)
+					}
+					if visited.isExpanded ?? true {
+						visited.rows?.forEach { $0.visit(visitor: reloadVisitor) }
+					}
+				}
+
+				if row.isExpanded ?? true {
+					row.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+				}
+			}
+		}
+		
+		return (impacted, ShadowTableChanges(reloads: reloads))
 	}
 
 	private func isExpandAllUnavailable(container: RowContainer) -> Bool {
