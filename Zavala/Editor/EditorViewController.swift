@@ -213,7 +213,9 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)
-		transitionContentOffset = collectionView.contentOffset
+		if collectionView.contentOffset != .zero {
+			transitionContentOffset = collectionView.contentOffset
+		}
 	}
 	
 	override func viewDidLayoutSubviews() {
