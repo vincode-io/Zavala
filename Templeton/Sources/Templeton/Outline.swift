@@ -759,7 +759,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			textRow.textRowStrings = texts
 		}
 
-		let sortedRows = rows.sorted(by: { $0.shadowTableIndex ?? -1 < $1.shadowTableIndex ?? -1 })
+		let sortedRows = rows.sorted(by: { $0.shadowTableIndex ?? -1 > $1.shadowTableIndex ?? -1 })
 
 		var impacted = [Row]()
 
