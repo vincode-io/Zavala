@@ -195,6 +195,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		rowsFile = RowsFile(outline: self)
 	}
 
+	public func fileName(withSuffix suffix: String) -> String {
+		var filename = title ?? "Outline"
+		filename = filename.replacingOccurrences(of: " ", with: "").trimmingCharacters(in: .whitespaces)
+		filename = "\(filename).\(suffix)"
+		return filename
+	}
+	
 	public func findRow(id: String) -> Row? {
 		return idToRowDictionary[id]
 	}

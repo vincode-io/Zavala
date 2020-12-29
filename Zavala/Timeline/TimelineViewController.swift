@@ -313,19 +313,16 @@ extension TimelineViewController {
 	
 	private func exportMarkdownForOutline(_ outline: Outline) {
 		let markdown = outline.markdown()
-		export(markdown, title: outline.title, fileSuffix: "md")
+		export(markdown, fileName: outline.fileName(withSuffix: "md"))
 	}
 	
 	private func exportOPMLForOutline(_ outline: Outline) {
 		let opml = outline.opml()
-		export(opml, title: outline.title, fileSuffix: "opml")
+		export(opml, fileName: outline.fileName(withSuffix: "opml"))
 	}
 	
-	private func export(_ string: String, title: String?, fileSuffix: String) {
-		var filename = title ?? "Outline"
-		filename = filename.replacingOccurrences(of: " ", with: "").trimmingCharacters(in: .whitespaces)
-		filename = "\(filename).\(fileSuffix)"
-		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+	private func export(_ string: String, fileName: String) {
+		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
 		
 		do {
 			try string.write(to: tempFile, atomically: true, encoding: String.Encoding.utf8)

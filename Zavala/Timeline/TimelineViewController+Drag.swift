@@ -21,11 +21,26 @@ extension TimelineViewController: UICollectionViewDragDelegate {
 
 		switch document {
 		case .outline(let outline):
+			
+//			itemProvider.registerFileRepresentation(forTypeIdentifier: "org.opml.opml", visibility: .all) { (completionHandler) -> Progress? in
+//				let fileName = outline.fileName(withSuffix: "opml")
+//				let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+//				do {
+//					let opml = outline.opml()
+//					try opml.write(to: tempFile, atomically: true, encoding: String.Encoding.utf8)
+//					completionHandler(tempFile, true, nil)
+//				} catch {
+//					completionHandler(nil, false, error)
+//				}
+//				return nil
+//			}
+			
 			itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
 				let data = outline.markdown().data(using: .utf8)
 				completion(data, nil)
 				return nil
 			}
+			
 		}
 		
 		let dragItem = UIDragItem(itemProvider: itemProvider)
