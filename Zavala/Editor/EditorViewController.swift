@@ -54,12 +54,12 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	
 	var isCreateRowNotesUnavailable: Bool {
 		guard let outline = outline, let rows = currentRows else { return true }
-		return outline.isCreateNoteUnavailable(rows: rows)
+		return outline.isCreateNotesUnavailable(rows: rows)
 	}
 
 	var isDeleteRowNotesUnavailable: Bool {
 		guard let outline = outline, let rows = currentRows else { return true }
-		return outline.isDeleteNoteUnavailable(rows: rows)
+		return outline.isDeleteNotesUnavailable(rows: rows)
 	}
 
 	var isSplitRowUnavailable: Bool {
@@ -795,10 +795,10 @@ private extension EditorViewController {
 			if !outline.isUncompleteUnavailable(rows: rows) {
 				secondOutlineActions.append(self.uncompleteAction(rows: rows))
 			}
-			if !outline.isCreateNoteUnavailable(rows: rows) {
+			if !outline.isCreateNotesUnavailable(rows: rows) {
 				secondOutlineActions.append(self.createNoteAction(rows: rows))
 			}
-			if !outline.isDeleteNoteUnavailable(rows: rows) {
+			if !outline.isDeleteNotesUnavailable(rows: rows) {
 				secondOutlineActions.append(self.deleteNoteAction(rows: rows))
 			}
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: secondOutlineActions))

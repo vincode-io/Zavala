@@ -302,7 +302,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		documentTitleDidChange()
 	}
 	
-	public func isCreateNoteUnavailable(rows: [Row]) -> Bool {
+	public func isCreateNotesUnavailable(rows: [Row]) -> Bool {
 		for row in rows {
 			if let textRow = row.textRow, textRow.isNoteEmpty {
 				return false
@@ -311,23 +311,26 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	public func createNote(row: Row, textRowStrings: TextRowStrings?) -> ShadowTableChanges {
-		guard let textRow = row.textRow else { return ShadowTableChanges() }
-		if let textRowStrings = textRowStrings {
-			textRow.textRowStrings = textRowStrings
+	public func createNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
+			textRow.textRowStrings = texts
 		}
 
-		if textRow.note == nil {
-			textRow.note = NSAttributedString()
+		var impacted = [Row]()
+		for row in rows {
+			if let textRow = row.textRow, textRow.note == nil {
+				textRow.note = NSAttributedString()
+				impacted.append(row)
+			}
 		}
 		
 		outlineBodyDidChange()
 		
-		guard let shadowTableIndex = shadowTable?.firstIndex(of: row) else { return ShadowTableChanges() }
-		return ShadowTableChanges(reloads: [shadowTableIndex])
+		let reloads = impacted.compactMap { $0.shadowTableIndex }
+		return (impacted, ShadowTableChanges(reloads: Set(reloads)))
 	}
 	
-	public func isDeleteNoteUnavailable(rows: [Row]) -> Bool {
+	public func isDeleteNotesUnavailable(rows: [Row]) -> Bool {
 		for row in rows {
 			if let textRow = row.textRow, !textRow.isNoteEmpty {
 				return false
@@ -336,17 +339,34 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	public func deleteNote(row: Row, textRowStrings: TextRowStrings?) -> ShadowTableChanges {
-		guard let textRow = row.textRow else { return ShadowTableChanges() }
-		if let textRowStrings = textRowStrings {
-			textRow.textRowStrings = textRowStrings
+	public func deleteNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row: NSAttributedString], ShadowTableChanges) {
+		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
+			textRow.textRowStrings = texts
 		}
-		textRow.note = nil
-		
+
+		var impacted = [Row: NSAttributedString]()
+		for row in rows {
+			if let textRow = row.textRow, textRow.note != nil {
+				impacted[row] = textRow.note
+				textRow.note = nil
+			}
+		}
+
 		outlineBodyDidChange()
 		
-		guard let shadowTableIndex = shadowTable?.firstIndex(of: row) else { return ShadowTableChanges() }
-		return ShadowTableChanges(reloads: [shadowTableIndex])
+		let reloads = impacted.keys.compactMap { $0.shadowTableIndex }
+		return (impacted, ShadowTableChanges(reloads: Set(reloads)))
+	}
+	
+	public func restoreNotes(_ notes: [Row: NSAttributedString]) -> ShadowTableChanges {
+		for (row, note) in notes {
+			row.textRow?.note = note
+		}
+
+		outlineBodyDidChange()
+		
+		let reloads = notes.keys.compactMap { $0.shadowTableIndex }
+		return ShadowTableChanges(reloads: Set(reloads))
 	}
 	
 	public func deleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {

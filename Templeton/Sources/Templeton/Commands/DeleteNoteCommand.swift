@@ -17,30 +17,36 @@ public final class DeleteNoteCommand: OutlineCommand {
 	public var changes: ShadowTableChanges?
 
 	var outline: Outline
-	var row: Row
+	var rows: [Row]
 	var oldTextRowStrings: TextRowStrings?
-	var newTextRowStrings: TextRowStrings
+	var newTextRowStrings: TextRowStrings?
+	var deletedRowNotes: [Row: NSAttributedString]?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], textRowStrings: TextRowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.row = row
-		self.oldTextRowStrings = row.textRow?.textRowStrings
-		self.newTextRowStrings = textRowStrings
+		self.rows = rows
 		undoActionName = L10n.deleteNote
 		redoActionName = L10n.deleteNote
+		
+		if rows.count == 1, let textRow = rows.first?.textRow {
+			self.oldTextRowStrings = textRow.textRowStrings
+			self.newTextRowStrings = textRowStrings
+		}
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		changes = outline.deleteNote(row: row, textRowStrings: newTextRowStrings)
-		delegate?.applyChanges(changes!)
+		let (impacted, changes) = outline.deleteNotes(rows: rows, textRowStrings: newTextRowStrings)
+		deletedRowNotes = impacted
+		self.changes = changes
+		delegate?.applyChanges(changes)
 		registerUndo()
 	}
 	
 	public func undo() {
-		let changes = outline.createNote(row: row, textRowStrings: oldTextRowStrings)
+		let changes = outline.restoreNotes(deletedRowNotes ?? [Row: NSAttributedString]())
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()
