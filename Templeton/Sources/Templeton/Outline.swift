@@ -13,6 +13,12 @@ public extension Notification.Name {
 
 public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable, Codable {
 	
+	public struct RowMove {
+		public var row: Row
+		public var toParent: RowContainer
+		public var toChildIndex: Int
+	}
+	
 	public var id: EntityID
 	public var title: String? {
 		didSet {
@@ -683,38 +689,43 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	public func indentRow(_ row: Row, textRowStrings: TextRowStrings?) -> ShadowTableChanges {
-		if let textRow = row.textRow, let textRowStrings = textRowStrings {
-			textRow.textRowStrings = textRowStrings
+	public func indentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
+			textRow.textRowStrings = texts
 		}
 		
-		guard var container = row.parent,
-			  let rowIndex = container.rows?.firstIndex(of: row),
-			  rowIndex > 0,
-			  var newParentRow = container.rows?[rowIndex - 1] else { return ShadowTableChanges() }
+		let sortedRows = rows.sorted(by: { $0.shadowTableIndex ?? -1 < $1.shadowTableIndex ?? -1 })
 
-		var expandChange = expand(row: newParentRow)
+		var impacted = [Row]()
+		var changes = ShadowTableChanges()
+		var reloads = Set<Int>()
+
+		for row in sortedRows {
+			guard var container = row.parent,
+				  let rowIndex = container.rows?.firstIndex(of: row),
+				  rowIndex > 0,
+				  var newParentRow = container.rows?[rowIndex - 1],
+				  let rowShadowTableIndex = row.shadowTableIndex,
+				  let newParentRowShadowTableIndex = newParentRow.shadowTableIndex else { continue }
+
+			impacted.append(row)
+			changes.append(expand(row: newParentRow))
+			
+			var siblingRows = newParentRow.rows ?? [Row]()
+			var mutatingRow = row
+			mutatingRow.parent = newParentRow
+			siblingRows.append(row)
+			newParentRow.rows = siblingRows
+			container.rows?.removeFirst(object: row)
+
+			newParentRow.isExpanded = true
+
+			reloads.insert(newParentRowShadowTableIndex)
+			reloads.insert(rowShadowTableIndex)
+		}
 		
-		// Null out the chevron row reload since we are going to add it below
-		expandChange.reloads = nil
-		
-		guard let rowShadowTableIndex = row.shadowTableIndex,
-			  let newParentRowShadowTableIndex = newParentRow.shadowTableIndex else { return expandChange }
-
-		var siblingRows = newParentRow.rows ?? [Row]()
-		var mutatingRow = row
-		mutatingRow.parent = newParentRow
-		siblingRows.append(row)
-		newParentRow.rows = siblingRows
-		container.rows?.removeFirst(object: row)
-
-		newParentRow.isExpanded = true
 		outlineBodyDidChange()
 		
-		var reloads = Set<Int>()
-		reloads.insert(newParentRowShadowTableIndex)
-		reloads.insert(rowShadowTableIndex)
-
 		func reloadVisitor(_ visited: Row) {
 			if let index = visited.shadowTableIndex {
 				reloads.insert(index)
@@ -724,13 +735,14 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 
-		if row.isExpanded ?? true {
-			row.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+		for row in impacted {
+			if row.isExpanded ?? true {
+				row.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+			}
 		}
 
-		expandChange.append(ShadowTableChanges(reloads: reloads))
-		return expandChange
-
+		changes.append(ShadowTableChanges(reloads: reloads))
+		return (impacted, changes)
 	}
 	
 	public func isOutdentRowsUnavailable(rows: [Row]) -> Bool {
@@ -742,159 +754,97 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 		
-	public func outdentRow(_ row: Row, textRowStrings: TextRowStrings?) -> ShadowTableChanges {
-		if let textRow = row.textRow, let textRowStrings = textRowStrings {
-			textRow.textRowStrings = textRowStrings
-		}
-
-		guard var oldParent = row.parent as? Row,
-			  let oldParentRows = oldParent.rows,
-			  let oldParentShadowTableIndex = oldParent.shadowTableIndex,
-			  let originalRowShadowTableIndex = row.shadowTableIndex else { return ShadowTableChanges() }
-		
-		guard let oldRowIndex = oldParentRows.firstIndex(of: row) else { return ShadowTableChanges() }
-		var siblingsToMove = [Row]()
-		for i in (oldRowIndex + 1)..<oldParentRows.count {
-			siblingsToMove.append(oldParentRows[i])
-		}
-
-		oldParent.rows?.removeFirst(object: row)
-
-		if var newParent = oldParent.parent, let oldParentIndex = newParent.rows?.firstIndex(of: oldParent) {
-			newParent.rows?.insert(row, at: oldParentIndex + 1)
-		} else {
-			if let oldParentIndex = rows?.firstIndex(of: oldParent) {
-				rows?.insert(row, at: oldParentIndex + 1)
-			}
-		}
-		
-		var mutatingRow = row
-		mutatingRow.parent = oldParent.parent
-
-		outlineBodyDidChange()
-
-		var reloads = Set([oldParentShadowTableIndex])
-		var moves = Set<ShadowTableChanges.Move>()
-		var workingShadowTableIndex = originalRowShadowTableIndex
-		
-		if siblingsToMove.isEmpty {
-			reloads.insert(originalRowShadowTableIndex)
-			
-			func reloadVisitor(_ visited: Row) {
-				if let index = visited.shadowTableIndex {
-					reloads.insert(index)
-				}
-				if visited.isExpanded ?? true {
-					visited.rows?.forEach { $0.visit(visitor: reloadVisitor) }
-				}
-			}
-			
-			if row.isExpanded ?? true {
-				row.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
-			}
-		} else {
-			
-			func shadowTableRemoveVisitor(_ visited: Row) {
-				if visited.isExpanded ?? true {
-					visited.rows?.reversed().forEach {	$0.visit(visitor: shadowTableRemoveVisitor)	}
-				}
-				if let visitedShadowTableIndex = visited.shadowTableIndex {
-					shadowTable?.remove(at: visitedShadowTableIndex)
-				}
-			}
-
-			if row.isExpanded ?? true {
-				row.rows?.reversed().forEach { $0.visit(visitor: shadowTableRemoveVisitor(_:)) }
-			}
-			shadowTable?.remove(at: originalRowShadowTableIndex)
-
-			func movingUpVisitor(_ visited: Row) {
-				if let visitedShadowTableIndex = visited.shadowTableIndex {
-					moves.insert(ShadowTableChanges.Move(visitedShadowTableIndex, workingShadowTableIndex))
-					workingShadowTableIndex = workingShadowTableIndex + 1
-				}
-				if visited.isExpanded ?? true {
-					visited.rows?.forEach { $0.visit(visitor: movingUpVisitor)	}
-				}
-			}
-
-			for sibling in siblingsToMove {
-				if let siblineShadowTableIndex = sibling.shadowTableIndex {
-					moves.insert(ShadowTableChanges.Move(siblineShadowTableIndex, workingShadowTableIndex))
-					workingShadowTableIndex = workingShadowTableIndex + 1
-					if sibling.isExpanded ?? true {
-						sibling.rows?.forEach { $0.visit(visitor: movingUpVisitor(_:)) }
-					}
-				}
-			}
-			
-			moves.insert(ShadowTableChanges.Move(originalRowShadowTableIndex, workingShadowTableIndex))
-			reloads.insert(workingShadowTableIndex)
-			shadowTable?.insert(row, at: workingShadowTableIndex)
-
-			func shadowTableInsertVisitor(_ visited: Row) {
-				if let visitedShadowTableIndex = visited.shadowTableIndex {
-					workingShadowTableIndex = workingShadowTableIndex + 1
-					shadowTable?.insert(visited, at: workingShadowTableIndex)
-					moves.insert(ShadowTableChanges.Move(visitedShadowTableIndex, workingShadowTableIndex))
-					reloads.insert(workingShadowTableIndex)
-				}
-				if visited.isExpanded ?? true {
-					visited.rows?.forEach { $0.visit(visitor: shadowTableInsertVisitor) }
-				}
-			}
-
-			if row.isExpanded ?? true {
-				row.rows?.forEach { $0.visit(visitor: shadowTableInsertVisitor(_:)) }
-			}
-		}
-		
-		resetShadowTableIndexes(startingAt: originalRowShadowTableIndex)
-		return ShadowTableChanges(moves: moves, reloads: reloads)
-	}
-	
-	public func moveRow(_ row: Row, textRowStrings: TextRowStrings? = nil, toParent: RowContainer, childIndex: Int) -> ShadowTableChanges {
-		if let textRow = row.textRow, let texts = textRowStrings {
+	public func outdentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
 
-		// Move the row in the tree
-		var mutatingRow = row
-		var mutatingToParent = toParent
-		mutatingRow.parent?.rows?.removeFirst(object: row)
-		if toParent.rows == nil {
-			mutatingToParent.rows = [row]
-		} else {
-			mutatingToParent.rows!.insert(row, at: childIndex)
+		let sortedRows = rows.sorted(by: { $0.shadowTableIndex ?? -1 < $1.shadowTableIndex ?? -1 })
+
+		var impacted = [Row]()
+
+		for row in sortedRows {
+			guard var oldParent = row.parent as? Row,
+				  let oldParentRows = oldParent.rows,
+				  let oldRowIndex = oldParentRows.firstIndex(of: row),
+				  var newParent = oldParent.parent,
+				  let oldParentIndex = newParent.rows?.firstIndex(of: oldParent) else { continue }
+			
+			impacted.append(row)
+			
+			var siblingsToMove = [Row]()
+			for i in (oldRowIndex + 1)..<oldParentRows.count {
+				siblingsToMove.append(oldParentRows[i])
+			}
+
+			oldParent.rows?.removeFirst(object: row)
+			newParent.rows?.insert(row, at: oldParentIndex + 1)
+			
+			var mutatingRow = row
+			mutatingRow.parent = oldParent.parent
 		}
 
 		outlineBodyDidChange()
 
 		var changes = rebuildShadowTable()
+		let reloads = reloadsForParentAndChildren(rows: impacted)
+		changes.append(ShadowTableChanges(reloads: reloads))
 		
-		guard let shadowTableIndex = shadowTable?.firstIndex(of: row) else {
-			return changes
+		return (impacted, changes)
+	}
+	
+	public func moveRows(_ rowMoves: [RowMove], textRowStrings: TextRowStrings?) -> ShadowTableChanges {
+		if rowMoves.count == 1, let textRow = rowMoves.first?.row.textRow, let texts = textRowStrings {
+			textRow.textRowStrings = texts
 		}
 
-		var reloads = [shadowTableIndex]
-		if shadowTableIndex > 0 {
-			reloads.append(shadowTableIndex - 1)
+		var oldParentReloads = Set<Int>()
+
+		let sortedRowMoves = rowMoves.sorted { (lhs, rhs) -> Bool in
+			if lhs.toParent is Outline && rhs.toParent is Outline {
+				return lhs.toChildIndex < rhs.toChildIndex
+			}
+			
+			if lhs.toParent is Row && rhs.toParent is Outline {
+				return true
+			}
+			
+			if lhs.toParent is Outline && rhs.toParent is Row {
+				return false
+			}
+			
+			guard let lhsToParentRow = lhs.toParent as? Row, let rhsToParentRow = rhs.toParent as? Row else { fatalError() }
+			
+			if lhsToParentRow == rhsToParentRow {
+				return lhs.toChildIndex < rhs.toChildIndex
+			}
+			
+			return lhsToParentRow.shadowTableIndex ?? -1 < rhsToParentRow.shadowTableIndex ?? -1
 		}
 		
-		func reloadVisitor(_ visited: Row) {
-			if let index = visited.shadowTableIndex {
-				reloads.append(index)
+		// Move the rows in the tree
+		for rowMove in sortedRowMoves {
+			var mutatingRow = rowMove.row
+			var mutatingToParent = rowMove.toParent
+			
+			mutatingRow.parent?.rows?.removeFirst(object: rowMove.row)
+			if let oldParentShadowTableIndex = (mutatingRow.parent as? Row)?.shadowTableIndex {
+				oldParentReloads.insert(oldParentShadowTableIndex)
 			}
-			if visited.isExpanded ?? true {
-				visited.rows?.forEach { $0.visit(visitor: reloadVisitor) }
+			
+			if mutatingToParent.rows == nil {
+				mutatingToParent.rows = [mutatingRow]
+			} else {
+				mutatingToParent.rows!.insert(mutatingRow, at: rowMove.toChildIndex)
 			}
 		}
 
-		if row.isExpanded ?? true {
-			row.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
-		}
+		outlineBodyDidChange()
 
-		changes.append(ShadowTableChanges(reloads: Set(reloads)))
+		var changes = rebuildShadowTable()
+		var reloads = reloadsForParentAndChildren(rows: rowMoves.map { $0.row })
+		reloads.formUnion(oldParentReloads)
+		changes.append(ShadowTableChanges(reloads: reloads))
 		return changes
 	}
 	
@@ -1253,6 +1203,34 @@ extension Outline {
 		for i in startingAt..<shadowTable.count {
 			shadowTable[i].shadowTableIndex = i
 		}
+	}
+	
+	private func reloadsForParentAndChildren(rows: [Row]) -> Set<Int> {
+		var reloads = Set<Int>()
+		
+		for row in rows {
+			guard let shadowTableIndex = row.shadowTableIndex else { continue }
+			
+			reloads.insert(shadowTableIndex)
+			if shadowTableIndex > 0 {
+				reloads.insert(shadowTableIndex - 1)
+			}
+			
+			func reloadVisitor(_ visited: Row) {
+				if let index = visited.shadowTableIndex {
+					reloads.insert(index)
+				}
+				if visited.isExpanded ?? true {
+					visited.rows?.forEach { $0.visit(visitor: reloadVisitor) }
+				}
+			}
+
+			if row.isExpanded ?? true {
+				row.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+			}
+		}
+
+		return reloads
 	}
 	
 }

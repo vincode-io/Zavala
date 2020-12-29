@@ -15,32 +15,37 @@ public final class IndentRowCommand: OutlineCommand {
 	public var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var row: Row
+	var rows: [Row]
+	var indentedRows: [Row]?
 	var oldTextRowStrings: TextRowStrings?
-	var newTextRowStrings: TextRowStrings
+	var newTextRowStrings: TextRowStrings?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], textRowStrings: TextRowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.row = row
+		self.rows = rows
 		self.undoActionName = L10n.indent
 		self.redoActionName = L10n.indent
 		
-		oldTextRowStrings = row.textRow?.textRowStrings
-		newTextRowStrings = textRowStrings
+		if rows.count == 1, let textRow = rows.first?.textRow {
+			self.oldTextRowStrings = textRow.textRowStrings
+			self.newTextRowStrings = textRowStrings
+		}
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let changes = outline.indentRow(row, textRowStrings: newTextRowStrings)
+		let (impacted, changes) = outline.indentRows(rows, textRowStrings: newTextRowStrings)
+		indentedRows = impacted
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	public func undo() {
-		let changes = outline.outdentRow(row, textRowStrings: oldTextRowStrings)
-		delegate?.applyChangesRestoringCursor(changes)
+		guard let indentedRows = indentedRows else { return }
+		let (_, changes) = outline.outdentRows(indentedRows, textRowStrings: oldTextRowStrings)
+		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()
 	}

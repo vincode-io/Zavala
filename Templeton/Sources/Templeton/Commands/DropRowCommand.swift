@@ -17,43 +17,38 @@ public final class DropRowCommand: OutlineCommand {
 	public var changes: ShadowTableChanges?
 
 	var outline: Outline
-	var row: Row
-	var oldParent: RowContainer?
-	var oldChildIndex: Int?
-	var toParent: RowContainer
-	var toChildIndex: Int
+	var rowMoves = [Outline.RowMove]()
+	var restoreMoves = [Outline.RowMove]()
 	
 	public init(undoManager: UndoManager,
 		 delegate: OutlineCommandDelegate,
 		 outline: Outline,
-		 row: Row,
+		 rows: [Row],
 		 toParent: RowContainer,
 		 toChildIndex: Int) {
 		
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.row = row
-		self.toParent = toParent
-		self.toChildIndex = toChildIndex
 		self.undoActionName = L10n.move
 		self.redoActionName = L10n.move
 
-		oldParent = row.parent
-		oldChildIndex = oldParent?.rows?.firstIndex(of: row)
+		for row in rows {
+			rowMoves.append(Outline.RowMove(row: row, toParent: toParent, toChildIndex: toChildIndex))
+			guard let oldParent = row.parent, let oldChildIndex = oldParent.rows?.firstIndex(of: row) else { continue }
+			restoreMoves.append(Outline.RowMove(row: row, toParent: oldParent, toChildIndex: oldChildIndex))
+		}
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		changes = outline.moveRow(row, toParent: toParent, childIndex: toChildIndex)
+		changes = outline.moveRows(rowMoves, textRowStrings: nil)
 		registerUndo()
 	}
 	
 	public func undo() {
-		if let oldParent = oldParent, let oldChildIndex = oldChildIndex {
-			let changes = outline.moveRow(row, toParent: oldParent, childIndex: oldChildIndex)
-			delegate?.applyChangesRestoringCursor(changes)
-		}
+		let changes = outline.moveRows(restoreMoves, textRowStrings: nil)
+		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()
 	}

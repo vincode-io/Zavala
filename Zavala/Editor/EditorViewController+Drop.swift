@@ -120,11 +120,11 @@ extension EditorViewController {
 			  let dragItem = coordinator.items.first?.dragItem else { return }
 
 		let command = DropRowCommand(undoManager: undoManager,
-										   delegate: self,
-										   outline: outline,
-										   row: row,
-										   toParent: toParent,
-										   toChildIndex: toChildIndex)
+									 delegate: self,
+									 outline: outline,
+									 rows: [row],
+									 toParent: toParent,
+									 toChildIndex: toChildIndex)
 		
 		runCommand(command)
 		

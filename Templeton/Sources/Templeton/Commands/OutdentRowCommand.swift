@@ -15,45 +15,46 @@ public final class OutdentRowCommand: OutlineCommand {
 	public var cursorCoordinates: CursorCoordinates?
 	
 	var outline: Outline
-	var row: Row
-	var oldParent: Row?
-	var oldChildIndex: Int?
+	var rows: [Row]
+	var restoreMoves = [Outline.RowMove]()
+	var outdentedRows: [Row]?
+
 	var oldTextRowStrings: TextRowStrings?
-	var newTextRowStrings: TextRowStrings
+	var newTextRowStrings: TextRowStrings?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], textRowStrings: TextRowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.row = row
+		self.rows = rows
 		self.undoActionName = L10n.outdent
 		self.redoActionName = L10n.outdent
 		
-		// This is going to move, so we save the parent and child index
-		if row != row.parent?.rows?.last {
-			self.oldParent = row.parent as? Row
-			self.oldChildIndex = row.parent?.rows?.firstIndex(of: row)
+		for row in rows {
+			guard let oldParent = row.parent, let oldChildIndex = oldParent.rows?.firstIndex(of: row) else { continue }
+			restoreMoves.append(Outline.RowMove(row: row, toParent: oldParent, toChildIndex: oldChildIndex))
 		}
 		
-		self.oldTextRowStrings = row.textRow?.textRowStrings
-		self.newTextRowStrings = textRowStrings
+		if rows.count == 1, let textRow = rows.first?.textRow {
+			self.oldTextRowStrings = textRow.textRowStrings
+			self.newTextRowStrings = textRowStrings
+		}
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let changes = outline.outdentRow(row, textRowStrings: newTextRowStrings)
+		let (impacted, changes) = outline.outdentRows(rows, textRowStrings: newTextRowStrings)
+		outdentedRows = impacted
 		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	public func undo() {
-		if let oldParent = oldParent, let oldChildIndex = oldChildIndex {
-			let changes = outline.moveRow(row, textRowStrings: oldTextRowStrings, toParent: oldParent, childIndex: oldChildIndex)
-			delegate?.applyChangesRestoringCursor(changes)
-		} else {
-			let changes = outline.indentRow(row, textRowStrings: oldTextRowStrings)
-			delegate?.applyChangesRestoringCursor(changes)
-		}
+		guard let outdentedRows = outdentedRows else { return }
+		let outdented = Set(outdentedRows)
+		let outdentRestore = restoreMoves.filter { outdented.contains($0.row) }
+		let changes = outline.moveRows(outdentRestore, textRowStrings: oldTextRowStrings)
+		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()
 	}
