@@ -605,6 +605,8 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 extension EditorViewController: OutlineCommandDelegate {
 	
 	func applyChanges(_ changes: ShadowTableChanges) {
+		deselectAll()
+		
 		if let deletes = changes.deleteIndexPaths, !deletes.isEmpty {
 			collectionView.deleteItems(at: deletes)
 		}
@@ -930,7 +932,6 @@ private extension EditorViewController {
 
 	func expand(rows: [Row]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
-		deselectAll()
 		
 		let command = ExpandCommand(undoManager: undoManager,
 									delegate: self,
@@ -942,8 +943,7 @@ private extension EditorViewController {
 
 	func collapse(rows: [Row]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
-		deselectAll()
-		
+
 		let command = CollapseCommand(undoManager: undoManager,
 									  delegate: self,
 									  outline: outline,
