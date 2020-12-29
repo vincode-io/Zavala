@@ -349,44 +349,50 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return ShadowTableChanges(reloads: [shadowTableIndex])
 	}
 	
-	public func deleteRow(_ row: Row, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
-		if let textRow = row.textRow, let texts = textRowStrings {
+	public func deleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
+		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
-		
-		var mutatingRow = row
-		mutatingRow.parent?.rows?.removeFirst(object: row)
-		
+
+		var deletes = [Int]()
+		var reloads = [Int]()
+
+		for row in rows {
+			var mutatingRow = row
+			mutatingRow.parent?.rows?.removeFirst(object: row)
+			
+			guard let rowShadowTableIndex = row.shadowTableIndex else { return ShadowTableChanges() }
+			deletes.append(rowShadowTableIndex)
+			
+			if rowShadowTableIndex > 0 {
+				reloads.append(rowShadowTableIndex - 1)
+			}
+			
+			func deleteVisitor(_ visited: Row) {
+				if let index = visited.shadowTableIndex {
+					deletes.append(index)
+				}
+				if visited.isExpanded ?? true {
+					visited.rows?.forEach { $0.visit(visitor: deleteVisitor) }
+				}
+			}
+
+			if row.isExpanded ?? true {
+				row.rows?.forEach { $0.visit(visitor: deleteVisitor(_:)) }
+			}
+		}
+
 		outlineBodyDidChange()
 		
-		guard let rowShadowTableIndex = row.shadowTableIndex else { return ShadowTableChanges() }
-		var deletes = [rowShadowTableIndex]
-		
-		func deleteVisitor(_ visited: Row) {
-			if let index = visited.shadowTableIndex {
-				deletes.append(index)
-			}
-			if visited.isExpanded ?? true {
-				visited.rows?.forEach { $0.visit(visitor: deleteVisitor) }
-			}
-		}
-
-		if row.isExpanded ?? true {
-			row.rows?.forEach { $0.visit(visitor: deleteVisitor(_:)) }
-		}
-
-		for index in deletes.reversed() {
+		deletes.sort(by: { $0 > $1 })
+		for index in deletes {
 			shadowTable?.remove(at: index)
 		}
 		
-		resetShadowTableIndexes(startingAt: rowShadowTableIndex)
+		guard let lowestShadowTableIndex = deletes.last else { return ShadowTableChanges() }
+		resetShadowTableIndexes(startingAt: lowestShadowTableIndex)
 		
-		if rowShadowTableIndex > 0 {
-			return ShadowTableChanges(deletes: Set(deletes), reloads: [rowShadowTableIndex - 1])
-		} else {
-			return ShadowTableChanges(deletes: Set(deletes))
-		}
-			
+		return ShadowTableChanges(deletes: Set(deletes), reloads: Set(reloads))
 	}
 	
 	public func joinRows(topRow: Row, bottomRow: Row) -> ShadowTableChanges {
@@ -399,7 +405,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		mutableText.append(bottomTopic)
 		topTextRow.topic = mutableText
 		
-		var changes = deleteRow(bottomRow)
+		var changes = deleteRows([bottomRow])
 		changes.append(ShadowTableChanges(reloads: Set([topShadowTableIndex])))
 		return changes
 	}

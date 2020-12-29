@@ -17,15 +17,22 @@ public final class DeleteRowCommand: OutlineCommand {
 	public var changes: ShadowTableChanges?
 
 	var outline: Outline
-	var row: Row
-	var textRowStrings: TextRowStrings
-	var afterRows: Row?
+	var rows: [Row]
+	var textRowStrings: TextRowStrings?
+	var afterRows = [Row: Row]()
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], textRowStrings: TextRowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.row = row
+		self.rows = rows
+
+		for row in rows {
+			if let rowShadowTableIndex = row.shadowTableIndex, rowShadowTableIndex > 0, let afterRow = outline.shadowTable?[rowShadowTableIndex - 1] {
+				afterRows[row] = afterRow
+			}
+		}
+
 		self.textRowStrings = textRowStrings
 		undoActionName = L10n.deleteRow
 		redoActionName = L10n.deleteRow
@@ -33,18 +40,16 @@ public final class DeleteRowCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		if let rowShadowTableIndex = row.shadowTableIndex, rowShadowTableIndex > 0 {
-			afterRows = outline.shadowTable?[rowShadowTableIndex - 1]
-		}
-		
-		changes = outline.deleteRow(row, textRowStrings: textRowStrings)
+		changes = outline.deleteRows(rows, textRowStrings: textRowStrings)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	public func undo() {
-		let changes = outline.createRow(row, afterRow: afterRows)
-		delegate?.applyChanges(changes)
+		for row in rows {
+			let changes = outline.createRow(row, afterRow: afterRows[row])
+			delegate?.applyChanges(changes)
+		}
 		registerRedo()
 		restoreCursorPosition()
 	}

@@ -112,33 +112,37 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return true
 	}
 
+	var undoableCommands = [UndoableCommand]()
+	override var canBecomeFirstResponder: Bool { return true }
+
 	private(set) var outline: Outline?
 	
-	var currentTextView: OutlineTextView? {
+	private var currentTextView: OutlineTextView? {
 		return UIResponder.currentFirstResponder as? OutlineTextView
 	}
 	
-	var currentRows: [Row]? {
-		if let selectedItems = collectionView.indexPathsForSelectedItems {
-			return selectedItems.compactMap { outline?.shadowTable?[$0.row] }
+	// This is the ones that the user has selected without the ones we programmatically select
+	private var selectedIndexes = Set<Int>()
+
+	private var currentRows: [Row]? {
+		if !selectedIndexes.isEmpty {
+			return selectedIndexes.compactMap { outline?.shadowTable?[$0] }
 		} else if let currentRow = currentTextView?.row {
 			return [currentRow]
 		}
 		return nil
 	}
 	
-	var currentTextRowStrings: TextRowStrings? {
+	private var currentTextRowStrings: TextRowStrings? {
 		return currentTextView?.textRowStrings
 	}
 	
-	var currentCursorPosition: Int? {
+	private var currentCursorPosition: Int? {
 		return currentTextView?.cursorPosition
 	}
 	
-	var undoableCommands = [UndoableCommand]()
-	var currentKeyPresses = Set<UIKeyboardHIDUsage>()
+	private var currentKeyPresses = Set<UIKeyboardHIDUsage>()
 	
-	override var canBecomeFirstResponder: Bool { return true }
 	
 	private var filterBarButtonItem: UIBarButtonItem?
 
@@ -153,7 +157,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		}
 		return nil
 	}
-
+	
 	// This is used to keep the collection view from scrolling to the top as its layout gets invalidated.
 	private var transitionContentOffset: CGPoint?
 	
@@ -487,10 +491,19 @@ extension EditorViewController {
 		return UITargetedPreview(view: cell, parameters: EditorTextRowPreviewParameters(cell: cell, row: row))
 	}
 	
+	override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+		return indexPath.section == 1
+	}
+	
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		selectedIndexes.insert(indexPath.row)
 		outline?.childrenIndexes(forIndex: indexPath.row).forEach { rowIndex in
 			collectionView.selectItem(at: IndexPath(row: rowIndex, section: 1), animated: false, scrollPosition: [])
 		}
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+		selectedIndexes.remove(indexPath.row)
 	}
 	
 }
@@ -724,6 +737,7 @@ private extension EditorViewController {
 	}
 	
 	private func deselectAll() {
+		selectedIndexes.removeAll()
 		collectionView.indexPathsForSelectedItems?.forEach { indexPath in
 			collectionView.deselectItem(at: indexPath, animated: true)
 		}
