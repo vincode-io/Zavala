@@ -778,11 +778,26 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			textRow.textRowStrings = texts
 		}
 
-		let sortedRows = rows.sorted(by: { $0.shadowTableIndex ?? -1 > $1.shadowTableIndex ?? -1 })
-
+		let sortedRows = rows.sorted(by: { $0.shadowTableIndex ?? -1 < $1.shadowTableIndex ?? -1 })
+		
+		// If we have a decendent, remove it because it will get outdented by its ancestor
+		var filteredRows = [Row]()
+		for row in sortedRows {
+			var decendent = false
+			for filteredRow in filteredRows {
+				if row.isDecendent(filteredRow) {
+					decendent = true
+					break
+				}
+			}
+			if !decendent {
+				filteredRows.append(row)
+			}
+		}
+		
 		var impacted = [Row]()
 
-		for row in sortedRows {
+		for row in filteredRows.reversed() {
 			guard var oldParent = row.parent as? Row,
 				  let oldParentRows = oldParent.rows,
 				  let oldRowIndex = oldParentRows.firstIndex(of: row),
