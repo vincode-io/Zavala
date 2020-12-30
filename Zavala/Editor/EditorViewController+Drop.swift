@@ -28,8 +28,19 @@ extension EditorViewController: UICollectionViewDropDelegate {
 			}
 		}
 
+		// The destinationIndexPath is worthless.  See https://stackoverflow.com/a/58038185
+		let location = session.location(in: collectionView)
+		var correctDestination: IndexPath?
+		collectionView.performUsingPresentationValues {
+			correctDestination = collectionView.indexPathForItem(at: location)
+		}
+		
+		guard let targetIndexPath = correctDestination else {
+			return UICollectionViewDropProposal(operation: .cancel, intent: .unspecified)
+		}
+		
 		if session.localDragSession != nil {
-			return localDropProposal(session: session, destinationIndexPath: destinationIndexPath)
+			return localDropProposal(session: session, destinationIndexPath: targetIndexPath)
 		} else {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
@@ -84,35 +95,29 @@ extension EditorViewController: UICollectionViewDropDelegate {
 
 extension EditorViewController {
 	
-	private func localDropProposal(session: UIDropSession, destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-		
+	private func localDropProposal(session: UIDropSession, destinationIndexPath: IndexPath) -> UICollectionViewDropProposal {
 		guard let localDragSession = session.localDragSession,
-			  let shadowTable = outline?.shadowTable,
-			  let targetIndexPath = destinationIndexPath else {
+			  let shadowTable = outline?.shadowTable else {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
 		
+		let rows = localDragSession.items.compactMap { $0.localObject as? Row }
+		
 		var droppingInto = false
-		if let destCell = collectionView.cellForItem(at: targetIndexPath) {
-			let fractionHeight = destCell.bounds.height / 5
+		if let destCell = collectionView.cellForItem(at: destinationIndexPath) {
+			let fractionHeight = destCell.bounds.height / 20
 			let yInCell = session.location(in: destCell).y
-			droppingInto =  yInCell > fractionHeight && yInCell < fractionHeight * 4
+			droppingInto = fractionHeight < yInCell && yInCell < fractionHeight * 19
 		}
 
-		print("into: \(droppingInto) \(Date())")
-		
-		let rows = localDragSession.items.compactMap { $0.localObject as? Row }
-
 		if droppingInto {
-			let dropInRow = shadowTable[targetIndexPath.row]
+			let dropInRow = shadowTable[destinationIndexPath.row]
 
 			for row in rows {
 				if dropInRow == row {
-					print("dropInto: equal rows")
 					return UICollectionViewDropProposal(operation: .cancel)
 				}
 				if dropInRow.isDecendent(row) {
-					print("dropInto: decendent")
 					return UICollectionViewDropProposal(operation: .forbidden)
 				}
 			}
@@ -120,7 +125,7 @@ extension EditorViewController {
 			return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
 		}
 		
-		if let proposedParent = shadowTable[targetIndexPath.row].parent as? Row {
+		if let proposedParent = shadowTable[destinationIndexPath.row].parent as? Row {
 
 			for row in rows {
 				if proposedParent == row {
@@ -134,7 +139,6 @@ extension EditorViewController {
 		}
 		
 		return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-
 	}
 	
 	private func drop(coordinator: UICollectionViewDropCoordinator, row: Row, toParent: RowContainer, toChildIndex: Int) {
