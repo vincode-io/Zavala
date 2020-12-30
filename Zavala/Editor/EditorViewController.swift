@@ -121,12 +121,9 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return UIResponder.currentFirstResponder as? OutlineTextView
 	}
 	
-	// This is the ones that the user has selected without the ones we programmatically select
-	private var selectedIndexes = Set<Int>()
-
 	private var currentRows: [Row]? {
-		if !selectedIndexes.isEmpty {
-			return selectedIndexes.compactMap { outline?.shadowTable?[$0] }
+		if let selected = collectionView.indexPathsForSelectedItems {
+			return selected.compactMap { outline?.shadowTable?[$0.row] }
 		} else if let currentRow = currentTextView?.row {
 			return [currentRow]
 		}
@@ -497,17 +494,6 @@ extension EditorViewController {
 		return indexPath.section == 1
 	}
 	
-	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		selectedIndexes.insert(indexPath.row)
-//		outline?.childrenIndexes(forIndex: indexPath.row).forEach { rowIndex in
-//			collectionView.selectItem(at: IndexPath(row: rowIndex, section: 1), animated: false, scrollPosition: [])
-//		}
-	}
-	
-	override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-		selectedIndexes.remove(indexPath.row)
-	}
-	
 }
 
 extension EditorViewController: EditorTitleViewCellDelegate {
@@ -688,7 +674,7 @@ extension EditorViewController: LinkViewControllerDelegate {
 
 // MARK: Helpers
 
-private extension EditorViewController {
+extension EditorViewController {
 	
 	private func updateUI() {
 		navigationItem.largeTitleDisplayMode = .never
@@ -739,8 +725,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	private func deselectAll() {
-		selectedIndexes.removeAll()
+	func deselectAll() {
 		collectionView.indexPathsForSelectedItems?.forEach { indexPath in
 			collectionView.deselectItem(at: indexPath, animated: true)
 		}

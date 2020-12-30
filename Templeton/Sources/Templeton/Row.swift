@@ -10,10 +10,7 @@ import Foundation
 public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 	case text(TextRow)
 	
-	private enum CodingKeys: String, CodingKey {
-		case type
-		case textRow
-	}
+	public static let typeIdentifier = "io.vincode.Zavala.Row"
 	
 	public var parent: RowContainer? {
 		get {
@@ -116,6 +113,16 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 			return row
 		}
 	}
+	
+	private enum CodingKeys: String, CodingKey {
+		case type
+		case textRow
+	}
+	
+	public init(from data: Data) throws {
+		let decoder = PropertyListDecoder()
+		self = try decoder.decode(Row.self, from: data)
+	}
 
 	public init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -138,6 +145,12 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 			try container.encode("text", forKey: .type)
 			try container.encode(textRow, forKey: .textRow)
 		}
+	}
+	
+	public func asData() throws -> Data {
+		let encoder = PropertyListEncoder()
+		encoder.outputFormat = .binary
+		return try encoder.encode(self)
 	}
 
 	public func isDecendent(_ row: Row) -> Bool {

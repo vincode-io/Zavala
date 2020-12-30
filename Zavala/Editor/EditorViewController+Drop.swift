@@ -11,58 +11,28 @@ import Templeton
 extension EditorViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
-		return session.localDragSession != nil
+		guard session.localDragSession == nil else { return true }
+		return session.hasItemsConforming(toTypeIdentifiers: [Row.typeIdentifier])
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-		if destinationIndexPath == nil || (destinationIndexPath?.section == 0 && destinationIndexPath?.row == 1) {
-			return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-		}
-
-		guard destinationIndexPath?.section ?? 0 != 0,
-			  let row = session.localDragSession?.localContext as? Row,
-			  let rowShadowTableIndex = row.shadowTableIndex,
-			  let shadowTable = outline?.shadowTable,
-			  let targetIndexPath = destinationIndexPath else {
+		guard !(destinationIndexPath?.section == 0 && destinationIndexPath?.row == 0) else {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
 		
-		var droppingInto = false
-		if rowShadowTableIndex > targetIndexPath.row {
-			if let destCell = collectionView.cellForItem(at: targetIndexPath) {
-				droppingInto = session.location(in: destCell).y >= destCell.bounds.height / 2
-			}
-		}
-		if rowShadowTableIndex < targetIndexPath.row {
-			if let destCell = collectionView.cellForItem(at: targetIndexPath) {
-				droppingInto = session.location(in: destCell).y <= destCell.bounds.height / 2
+		if destinationIndexPath == nil || (destinationIndexPath?.section == 0 && destinationIndexPath?.row == 1) {
+			if session.localDragSession != nil {
+				return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+			} else {
+				return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
 			}
 		}
 
-		if droppingInto {
-			let dropInRow = shadowTable[targetIndexPath.row]
-			if dropInRow == row {
-				return UICollectionViewDropProposal(operation: .cancel)
-			}
-
-			if dropInRow.isDecendent(row) {
-				return UICollectionViewDropProposal(operation: .forbidden)
-			}
-			
-			return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
+		if session.localDragSession != nil {
+			return localDropProposal(session: session, destinationIndexPath: destinationIndexPath)
+		} else {
+			return UICollectionViewDropProposal(operation: .cancel)
 		}
-		
-		if let proposedParent = shadowTable[targetIndexPath.row].parent as? Row {
-			if proposedParent == row {
-				return UICollectionViewDropProposal(operation: .cancel)
-			}
-			
-			if proposedParent.isDecendent(row) {
-				return UICollectionViewDropProposal(operation: .forbidden)
-			}
-		}
-		
-		return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
@@ -114,6 +84,59 @@ extension EditorViewController: UICollectionViewDropDelegate {
 
 extension EditorViewController {
 	
+	private func localDropProposal(session: UIDropSession, destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+		
+		guard let localDragSession = session.localDragSession,
+			  let shadowTable = outline?.shadowTable,
+			  let targetIndexPath = destinationIndexPath else {
+			return UICollectionViewDropProposal(operation: .cancel)
+		}
+		
+		var droppingInto = false
+		if let destCell = collectionView.cellForItem(at: targetIndexPath) {
+			let fractionHeight = destCell.bounds.height / 5
+			let yInCell = session.location(in: destCell).y
+			droppingInto =  yInCell > fractionHeight && yInCell < fractionHeight * 4
+		}
+
+		print("into: \(droppingInto) \(Date())")
+		
+		let rows = localDragSession.items.compactMap { $0.localObject as? Row }
+
+		if droppingInto {
+			let dropInRow = shadowTable[targetIndexPath.row]
+
+			for row in rows {
+				if dropInRow == row {
+					print("dropInto: equal rows")
+					return UICollectionViewDropProposal(operation: .cancel)
+				}
+				if dropInRow.isDecendent(row) {
+					print("dropInto: decendent")
+					return UICollectionViewDropProposal(operation: .forbidden)
+				}
+			}
+			
+			return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
+		}
+		
+		if let proposedParent = shadowTable[targetIndexPath.row].parent as? Row {
+
+			for row in rows {
+				if proposedParent == row {
+					return UICollectionViewDropProposal(operation: .cancel)
+				}
+				if proposedParent.isDecendent(row) {
+					return UICollectionViewDropProposal(operation: .forbidden)
+				}
+			}
+			
+		}
+		
+		return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+
+	}
+	
 	private func drop(coordinator: UICollectionViewDropCoordinator, row: Row, toParent: RowContainer, toChildIndex: Int) {
 		guard let undoManager = undoManager,
 			  let outline = outline,
@@ -140,6 +163,7 @@ extension EditorViewController {
 			})
 		}
 
+		deselectAll()
 	}
 	
 }
