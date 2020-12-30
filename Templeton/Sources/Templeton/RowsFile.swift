@@ -101,14 +101,14 @@ private extension RowsFile {
 	}
 	
 	func saveCallback() {
-		guard let headlines = outline?.rows else { return }
+		guard let rows = outline?.rows else { return }
 
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary
 
-		let headlinesData: Data
+		let rowsData: Data
 		do {
-			headlinesData = try encoder.encode(headlines)
+			rowsData = try encoder.encode(rows)
 		} catch {
 			os_log(.error, log: log, "RowsFile read deserialization failed: %@.", error.localizedDescription)
 			return
@@ -119,7 +119,7 @@ private extension RowsFile {
 		
 		fileCoordinator.coordinate(writingItemAt: fileURL, options: [], error: errorPointer, byAccessor: { writeURL in
 			do {
-				try headlinesData.write(to: writeURL)
+				try rowsData.write(to: writeURL)
 				let resourceValues = try writeURL.resourceValues(forKeys: [.contentModificationDateKey])
 				lastModificationDate = resourceValues.contentModificationDate
 			} catch let error as NSError {
