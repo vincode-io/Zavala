@@ -857,7 +857,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		
 		// Move the rows in the tree
-		for rowMove in sortedRowMoves {
+		for rowMove in sortedRowMoves.reversed() {
 			var mutatingRow = rowMove.row
 			var mutatingToParent = rowMove.toParent
 			
