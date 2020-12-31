@@ -33,8 +33,9 @@ public final class DropRowCommand: OutlineCommand {
 		self.undoActionName = L10n.move
 		self.redoActionName = L10n.move
 
-		for row in rows {
-			rowMoves.append(Outline.RowMove(row: row, toParent: toParent, toChildIndex: toChildIndex))
+		for i in 0..<rows.count {
+			let row = rows[i]
+			rowMoves.append(Outline.RowMove(row: row, toParent: toParent, toChildIndex: toChildIndex + i))
 			guard let oldParent = row.parent, let oldChildIndex = oldParent.rows?.firstIndex(of: row) else { continue }
 			restoreMoves.append(Outline.RowMove(row: row, toParent: oldParent, toChildIndex: oldChildIndex))
 		}
