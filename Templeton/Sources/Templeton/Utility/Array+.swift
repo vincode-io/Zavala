@@ -13,4 +13,8 @@ public extension Array where Element == Row {
 		return sorted(by: { $0.shadowTableIndex ?? -1 < $1.shadowTableIndex ?? -1 })
 	}
 	
+	func sortedByReverseDisplayOrder() -> Array {
+		return sorted(by: { $0.shadowTableIndex ?? -1 > $1.shadowTableIndex ?? -1 })
+	}
+	
 }

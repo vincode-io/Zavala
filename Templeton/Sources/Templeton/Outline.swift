@@ -400,7 +400,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		var deletes = [Int]()
-		var reloads = [Int]()
 
 		for row in rows {
 			var mutatingRow = row
@@ -408,10 +407,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			
 			guard let rowShadowTableIndex = row.shadowTableIndex else { return ShadowTableChanges() }
 			deletes.append(rowShadowTableIndex)
-			
-			if rowShadowTableIndex > 0 {
-				reloads.append(rowShadowTableIndex - 1)
-			}
 			
 			func deleteVisitor(_ visited: Row) {
 				if let index = visited.shadowTableIndex {
@@ -429,13 +424,19 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		outlineBodyDidChange()
 		
+		var deletedRows = [Row]()
+		
 		deletes.sort(by: { $0 > $1 })
 		for index in deletes {
-			shadowTable?.remove(at: index)
+			if let deletedRow = shadowTable?.remove(at: index) {
+				deletedRows.append(deletedRow)
+			}
 		}
 		
 		guard let lowestShadowTableIndex = deletes.last else { return ShadowTableChanges() }
 		resetShadowTableIndexes(startingAt: lowestShadowTableIndex)
+		
+		let reloads = deletedRows.compactMap { ($0.parent as? Row)?.shadowTableIndex }
 		
 		return ShadowTableChanges(deletes: Set(deletes), reloads: Set(reloads))
 	}
@@ -482,7 +483,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			afterTextRow.textRowStrings = texts
 		}
 
-		for row in rows.reversed() {
+		for row in rows.sortedByReverseDisplayOrder() {
 			if var parent = row.parent, parent as? Row == afterRow {
 				parent.rows?.insert(row, at: 0)
 			} else if var parent = row.parent {
@@ -539,7 +540,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			shadowTable?.insert(insertedRows[i], at: shadowTableIndex)
 		}
 		
-		resetShadowTableIndexes(startingAt: afterShadowTableIndex)
+		resetShadowTableIndexes(startingAt: afterRow?.shadowTableIndex ?? 0)
 		
 		return ShadowTableChanges(inserts: inserts)
 	}
