@@ -116,28 +116,26 @@ extension EditorViewController {
 	}
 	
 	private func localDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
-		guard let dragItem = coordinator.items.first?.dragItem,
-			  let row = dragItem.localObject as? Row,
-			  let rowShadowTableIndex = row.shadowTableIndex,
-			  let outline = outline,
-			  let shadowTable = outline.shadowTable else { return }
+		guard let outline = outline, let shadowTable = outline.shadowTable else { return }
 		
+		let rows = coordinator.items.compactMap { $0.dragItem.localObject as? Row }
+
 		// Dropping into a Row is easy peasy
 		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = targetIndexPath {
-			drop(coordinator: coordinator, row: row, toParent: shadowTable[dropInIndexPath.row], toChildIndex: 0)
+			drop(coordinator: coordinator, rows: rows, toParent: shadowTable[dropInIndexPath.row], toChildIndex: 0)
 			return
 		}
 		
 		// Drop into the first entry in the Outline
 		if targetIndexPath == IndexPath(row: 1, section: 0) {
-			drop(coordinator: coordinator, row: row, toParent: outline, toChildIndex: 0)
+			drop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: 0)
 			return
 		}
 		
 		// If we don't have a destination index, drop it at the back
 		guard let targetIndexPath = targetIndexPath else {
 			if let outlineRows = outline.rows {
-				drop(coordinator: coordinator, row: row, toParent: outline, toChildIndex: outlineRows.count - 1)
+				drop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: outlineRows.count - 1)
 			}
 			return
 		}
@@ -146,20 +144,17 @@ extension EditorViewController {
 		let newSibling = shadowTable[targetIndexPath.row]
 		guard let newParent = newSibling.parent, var newIndex = newParent.rows?.firstIndex(of: newSibling) else { return }
 
-		// This shouldn't happen, but does.  We probably need to beef up the dropSessionDidUpdate code to prevent it.
-		if let newParentRow = newParent as? Row, newParentRow == row || newParentRow.isDecendent(row) {
-			return
+		// Adjust for items we are moving that share a common parent
+		for row in rows {
+			if (row.parent as? Row) != (newParent as? Row) && row.shadowTableIndex ?? 0 < targetIndexPath.row {
+				newIndex = newIndex + 1
+			}
 		}
 		
-		// I don't know why this works.  This is definately in the category of, "Just try stuff until it works.".
-		if (row.parent as? Row) != (newParent as? Row) && rowShadowTableIndex < targetIndexPath.row {
-			newIndex = newIndex + 1
-		}
-		
-		drop(coordinator: coordinator, row: row, toParent: newParent, toChildIndex: newIndex)
+		drop(coordinator: coordinator, rows: rows, toParent: newParent, toChildIndex: newIndex)
 	}
 	
-	private func drop(coordinator: UICollectionViewDropCoordinator, row: Row, toParent: RowContainer, toChildIndex: Int) {
+	private func drop(coordinator: UICollectionViewDropCoordinator, rows: [Row], toParent: RowContainer, toChildIndex: Int) {
 		guard let undoManager = undoManager,
 			  let outline = outline,
 			  let dragItem = coordinator.items.first?.dragItem else { return }
@@ -167,7 +162,7 @@ extension EditorViewController {
 		let command = DropRowCommand(undoManager: undoManager,
 									 delegate: self,
 									 outline: outline,
-									 rows: [row],
+									 rows: rows,
 									 toParent: toParent,
 									 toChildIndex: toChildIndex)
 		
