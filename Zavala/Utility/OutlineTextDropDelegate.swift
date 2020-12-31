@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import Templeton
 
 class OutlineTextDropDelegate: NSObject, UITextDropDelegate {
 	
 	// We dont' allow local text drops because regular dragging and dropping of Headlines was dropping Markdown into our text view
 	func textDroppableView(_ textDroppableView: UIView & UITextDroppable, proposalForDrop drop: UITextDropRequest) -> UITextDropProposal {
-		if drop.dropSession.localDragSession == nil {
+		if drop.dropSession.localDragSession == nil && !drop.dropSession.hasItemsConforming(toTypeIdentifiers: [Row.typeIdentifier]) {
 			return UITextDropProposal(operation: .copy)
 		} else {
 			return UITextDropProposal(operation: .cancel)
