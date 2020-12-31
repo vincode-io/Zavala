@@ -44,9 +44,9 @@ extension EditorViewController: UICollectionViewDropDelegate {
 		let targetIndexPath = correctDestinationIndexPath(session: coordinator.session)
 
 		if coordinator.session.localDragSession != nil {
-			localDrop(coordinator: coordinator, targetIndexPath: targetIndexPath)
+			localRowDrop(coordinator: coordinator, targetIndexPath: targetIndexPath)
 		} else {
-			remoteDrop(coordinator: coordinator, targetIndexPath: targetIndexPath)
+			remoteRowDrop(coordinator: coordinator, targetIndexPath: targetIndexPath)
 		}
 	}
 	
@@ -125,27 +125,27 @@ extension EditorViewController {
 		}
 	}
 	
-	private func localDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
+	private func localRowDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
 		guard let outline = outline, let shadowTable = outline.shadowTable else { return }
 		
 		let rows = coordinator.items.compactMap { $0.dragItem.localObject as? Row }
 
 		// Dropping into a Row is easy peasy
 		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = targetIndexPath {
-			localDrop(coordinator: coordinator, rows: rows, toParent: shadowTable[dropInIndexPath.row], toChildIndex: 0)
+			localRowDrop(coordinator: coordinator, rows: rows, toParent: shadowTable[dropInIndexPath.row], toChildIndex: 0)
 			return
 		}
 		
 		// Drop into the first entry in the Outline
 		if targetIndexPath == IndexPath(row: 1, section: 0) {
-			localDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: 0)
+			localRowDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: 0)
 			return
 		}
 		
 		// If we don't have a destination index, drop it at the back
 		guard let targetIndexPath = targetIndexPath else {
 			if let outlineRows = outline.rows {
-				localDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: outlineRows.count - 1)
+				localRowDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: outlineRows.count - 1)
 			}
 			return
 		}
@@ -162,10 +162,10 @@ extension EditorViewController {
 			}
 		}
 		
-		localDrop(coordinator: coordinator, rows: rows, toParent: newParent, toChildIndex: newIndex)
+		localRowDrop(coordinator: coordinator, rows: rows, toParent: newParent, toChildIndex: newIndex)
 	}
 	
-	private func localDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], toParent: RowContainer, toChildIndex: Int) {
+	private func localRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], toParent: RowContainer, toChildIndex: Int) {
 		guard let undoManager = undoManager,
 			  let outline = outline,
 			  let dragItem = coordinator.items.first?.dragItem else { return }
@@ -194,7 +194,7 @@ extension EditorViewController {
 		deselectAll()
 	}
 	
-	private func remoteDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
+	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
 		guard let outline = outline, let shadowTable = outline.shadowTable else { return }
 		
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
@@ -237,13 +237,13 @@ extension EditorViewController {
 					mutableRow.parent = newParent
 				}
 				
-				self.remoteDrop(coordinator: coordinator, rows: rows, afterRow: newParent)
+				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: newParent)
 				return
 			}
 			
 			// Drop into the first entry in the Outline
 			if targetIndexPath == IndexPath(row: 1, section: 0) {
-				self.remoteDrop(coordinator: coordinator, rows: rows, afterRow: nil)
+				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
 				return
 			}
 			
@@ -251,23 +251,23 @@ extension EditorViewController {
 			guard let targetIndexPath = targetIndexPath else {
 				if let outlineRows = outline.rows {
 					if outlineRows.count > 0 {
-						self.remoteDrop(coordinator: coordinator, rows: rows, afterRow: outline.rows?[outline.rows?.count ?? 0])
+						self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: outline.rows?[outline.rows?.count ?? 0])
 					} else {
-						self.remoteDrop(coordinator: coordinator, rows: rows, afterRow: nil)
+						self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
 					}
 				}
 				return
 			}
 
 			if shadowTable.count > 0 {
-				self.remoteDrop(coordinator: coordinator, rows: rows, afterRow: shadowTable[targetIndexPath.row - 1])
+				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: shadowTable[targetIndexPath.row - 1])
 			} else {
-				self.remoteDrop(coordinator: coordinator, rows: rows, afterRow: nil)
+				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
 			}
 		}
 	}
 
-	private func remoteDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], afterRow: Row?) {
+	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], afterRow: Row?) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = RemoteDropRowCommand(undoManager: undoManager,
