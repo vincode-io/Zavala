@@ -236,13 +236,17 @@ extension EditorViewController {
 
 	private func remoteDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], toParent: RowContainer, toChildIndex: Int) {
 		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		var afterRow: Row? = nil
+		if toChildIndex > 0 {
+			afterRow = toParent.rows?[toChildIndex - 1]
+		}
 
 		let command = RemoteDropRowCommand(undoManager: undoManager,
 										   delegate: self,
 										   outline: outline,
 										   rows: rows,
-										   toParent: toParent,
-										   toChildIndex: toChildIndex)
+										   afterRow: afterRow)
 		
 		runCommand(command)
 		deselectAll()

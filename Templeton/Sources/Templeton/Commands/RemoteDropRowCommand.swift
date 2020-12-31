@@ -15,34 +15,34 @@ public final class RemoteDropRowCommand: OutlineCommand {
 	weak public var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	public var changes: ShadowTableChanges?
-
 	var outline: Outline
-	var rowMoves = [Outline.RowMove]()
-	var restoreMoves = [Outline.RowMove]()
+	var rows: [Row]
+	var afterRow: Row?
 	
 	public init(undoManager: UndoManager,
 		 delegate: OutlineCommandDelegate,
 		 outline: Outline,
 		 rows: [Row],
-		 toParent: RowContainer,
-		 toChildIndex: Int) {
+		 afterRow: Row?) {
 		
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
+		self.rows = rows
+		self.afterRow = afterRow
 		self.undoActionName = L10n.copy
 		self.redoActionName = L10n.copy
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		changes = outline.moveRows(rowMoves, textRowStrings: nil)
+		let changes = outline.createRows(rows, afterRow: afterRow)
+		delegate?.applyChanges(changes)
 		registerUndo()
 	}
 	
 	public func undo() {
-		let changes = outline.moveRows(restoreMoves, textRowStrings: nil)
+		let changes = outline.deleteRows(rows)
 		delegate?.applyChanges(changes)
 		registerRedo()
 		restoreCursorPosition()
