@@ -144,10 +144,11 @@ extension EditorViewController {
 		let newSibling = shadowTable[targetIndexPath.row]
 		guard let newParent = newSibling.parent, var newIndex = newParent.rows?.firstIndex(of: newSibling) else { return }
 
-		// Adjust for items we are moving that share a common parent
+		// I don't know why this works.  This is definately in the category of, "Just try stuff until it works.".
 		for row in rows {
 			if (row.parent as? Row) != (newParent as? Row) && row.shadowTableIndex ?? 0 < targetIndexPath.row {
 				newIndex = newIndex + 1
+				break
 			}
 		}
 		
