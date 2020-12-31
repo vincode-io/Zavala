@@ -197,50 +197,78 @@ extension EditorViewController {
 	private func remoteDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
 		guard let outline = outline, let shadowTable = outline.shadowTable else { return }
 		
-		let rows = coordinator.items.compactMap { $0.dragItem.localObject as? Row }
-
-		// Dropping into a Row is easy peasy
-		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = targetIndexPath {
-			localDrop(coordinator: coordinator, rows: rows, toParent: shadowTable[dropInIndexPath.row], toChildIndex: 0)
-			return
-		}
-		
-		// Drop into the first entry in the Outline
-		if targetIndexPath == IndexPath(row: 1, section: 0) {
-			localDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: 0)
-			return
-		}
-		
-		// If we don't have a destination index, drop it at the back
-		guard let targetIndexPath = targetIndexPath else {
-			if let outlineRows = outline.rows {
-				localDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: outlineRows.count - 1)
+		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
+			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(Row.typeIdentifier) {
+				return dropItem.dragItem.itemProvider
 			}
-			return
+			return nil
 		}
+		
+		guard !itemProviders.isEmpty else { return }
 
-		// THis is where most of the sibling moves happen at
-		let newSibling = shadowTable[targetIndexPath.row]
-		guard let newParent = newSibling.parent, var newIndex = newParent.rows?.firstIndex(of: newSibling) else { return }
-
-		// I don't know why this works.  This is definately in the category of, "Just try stuff until it works.".
-		for row in rows {
-			if (row.parent as? Row) != (newParent as? Row) && row.shadowTableIndex ?? 0 < targetIndexPath.row {
-				newIndex = newIndex + 1
-				break
+		let group = DispatchGroup()
+		var rows = [Row]()
+		
+		for itemProvider in itemProviders {
+			group.enter()
+			itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
+				if let data = data {
+					do {
+						rows.append(try Row(from: data))
+						group.leave()
+					} catch {
+						self?.presentError(error)
+						group.leave()
+					}
+				}
 			}
 		}
-		
-		localDrop(coordinator: coordinator, rows: rows, toParent: newParent, toChildIndex: newIndex)
+
+		group.notify(queue: DispatchQueue.main) {
+			guard !rows.isEmpty else { return }
+			
+			// Dropping into a Row is easy peasy
+			if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = targetIndexPath {
+				let newParent = shadowTable[dropInIndexPath.row]
+				
+				// We only have to set the parent for dropping into.  Otherwise Templeton figures it out on its own.
+				rows.forEach { row in
+					var mutableRow = row
+					mutableRow.parent = newParent
+				}
+				
+				self.remoteDrop(coordinator: coordinator, rows: rows, afterRow: newParent)
+				return
+			}
+			
+			// Drop into the first entry in the Outline
+			if targetIndexPath == IndexPath(row: 1, section: 0) {
+				self.remoteDrop(coordinator: coordinator, rows: rows, afterRow: nil)
+				return
+			}
+			
+			// If we don't have a destination index, drop it at the back
+			guard let targetIndexPath = targetIndexPath else {
+				if let outlineRows = outline.rows {
+					if outlineRows.count > 0 {
+						self.remoteDrop(coordinator: coordinator, rows: rows, afterRow: outline.rows?[outline.rows?.count ?? 0])
+					} else {
+						self.remoteDrop(coordinator: coordinator, rows: rows, afterRow: nil)
+					}
+				}
+				return
+			}
+
+			if shadowTable.count > 0 {
+				self.remoteDrop(coordinator: coordinator, rows: rows, afterRow: shadowTable[targetIndexPath.row - 1])
+			} else {
+				self.remoteDrop(coordinator: coordinator, rows: rows, afterRow: nil)
+			}
+		}
 	}
 
-	private func remoteDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], toParent: RowContainer, toChildIndex: Int) {
+	private func remoteDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], afterRow: Row?) {
 		guard let undoManager = undoManager, let outline = outline else { return }
-		
-		var afterRow: Row? = nil
-		if toChildIndex > 0 {
-			afterRow = toParent.rows?[toChildIndex - 1]
-		}
 
 		let command = RemoteDropRowCommand(undoManager: undoManager,
 										   delegate: self,

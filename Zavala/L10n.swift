@@ -48,7 +48,7 @@ internal enum L10n {
   internal static func deleteOutlinePrompt(_ p1: Any) -> String {
     return L10n.tr("Localizable", "Delete_Outline_Prompt", String(describing: p1))
   }
-  /// Delete Row
+  /// Delete
   internal static let deleteRow = L10n.tr("Localizable", "Delete_Row")
   /// Edit document “%@”
   internal static func editDocument(_ p1: Any) -> String {
