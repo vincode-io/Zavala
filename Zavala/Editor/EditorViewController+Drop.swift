@@ -36,7 +36,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 		if session.localDragSession != nil {
 			return localDropProposal(session: session, targetIndexPath: targetIndexPath)
 		} else {
-			return UICollectionViewDropProposal(operation: .cancel)
+			return remoteDropProposal(session: session, targetIndexPath: targetIndexPath)
 		}
 	}
 	
@@ -69,6 +69,15 @@ extension EditorViewController {
 		return correctDestination
 	}
 	
+	private func droppingInto(session: UIDropSession, targetIndexPath: IndexPath) -> Bool {
+		if let destCell = collectionView.cellForItem(at: targetIndexPath) {
+			let fractionHeight = destCell.bounds.height / 20
+			let yInCell = session.location(in: destCell).y
+			return fractionHeight < yInCell && yInCell < fractionHeight * 19
+		}
+		return false
+	}
+	
 	private func localDropProposal(session: UIDropSession, targetIndexPath: IndexPath) -> UICollectionViewDropProposal {
 		guard let localDragSession = session.localDragSession,
 			  let shadowTable = outline?.shadowTable else {
@@ -76,15 +85,9 @@ extension EditorViewController {
 		}
 		
 		let rows = localDragSession.items.compactMap { $0.localObject as? Row }
+		let isDroppingInto = droppingInto(session: session, targetIndexPath: targetIndexPath)
 		
-		var droppingInto = false
-		if let destCell = collectionView.cellForItem(at: targetIndexPath) {
-			let fractionHeight = destCell.bounds.height / 20
-			let yInCell = session.location(in: destCell).y
-			droppingInto = fractionHeight < yInCell && yInCell < fractionHeight * 19
-		}
-
-		if droppingInto {
+		if isDroppingInto {
 			let dropInRow = shadowTable[targetIndexPath.row]
 
 			for row in rows {
@@ -113,6 +116,14 @@ extension EditorViewController {
 		}
 		
 		return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+	}
+	
+	private func remoteDropProposal(session: UIDropSession, targetIndexPath: IndexPath) -> UICollectionViewDropProposal {
+		if droppingInto(session: session, targetIndexPath: targetIndexPath) {
+			return UICollectionViewDropProposal(operation: .copy, intent: .insertIntoDestinationIndexPath)
+		} else {
+			return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+		}
 	}
 	
 	private func localDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
