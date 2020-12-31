@@ -36,7 +36,7 @@ public final class CreateRowAfterCommand: OutlineCommand {
 		if row == nil {
 			row = Row.text(TextRow())
 		}
-		changes = outline.createRow(row!, afterRow: afterRow, textRowStrings: textRowStrings)
+		changes = outline.createRows([row!], afterRow: afterRow, textRowStrings: textRowStrings)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}

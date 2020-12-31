@@ -281,8 +281,8 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 	
 	func createRow() {
-		guard let row = currentRows?.last else { return }
-		createRow(afterRow: row)
+		guard let rows = currentRows else { return }
+		createRows(afterRows: rows)
 	}
 	
 	func indentRows() {
@@ -511,7 +511,7 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	}
 	
 	func editorTitleCreateRow(textRowStrings: TextRowStrings?) {
-		createRow(afterRow: nil, textRowStrings: textRowStrings)
+		createRows(afterRows: nil)
 	}
 	
 }
@@ -547,7 +547,8 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	}
 	
 	func editorTextRowCreateRow(afterRow: Row?, textRowStrings: TextRowStrings?) {
-		createRow(afterRow: afterRow, textRowStrings: textRowStrings)
+		let afterRows = afterRow == nil ? nil : [afterRow!]
+		createRows(afterRows: afterRows, textRowStrings: textRowStrings)
 	}
 	
 	func editorTextRowIndentRow(_ row: Row, textRowStrings: TextRowStrings) {
@@ -759,7 +760,7 @@ extension EditorViewController {
 	}
 	
 	private func makeRowsContextMenu(rows: [Row]) -> UIContextMenuConfiguration? {
-		guard let firstRow = rows.first, let lastRow = rows.last else { return nil }
+		guard let firstRow = rows.sortedByDisplayOrder().first else { return nil }
 		
 		return UIContextMenuConfiguration(identifier: firstRow.associatedRow as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
 			guard let self = self, let outline = self.outline else { return nil }
@@ -767,7 +768,7 @@ extension EditorViewController {
 			var menuItems = [UIMenu]()
 
 			var firstOutlineActions = [UIAction]()
-			firstOutlineActions.append(self.addAction(row: lastRow))
+			firstOutlineActions.append(self.addAction(rows: rows))
 			if !outline.isIndentRowsUnavailable(rows: rows) {
 				firstOutlineActions.append(self.indentAction(rows: rows))
 			}
@@ -807,12 +808,12 @@ extension EditorViewController {
 		})
 	}
 	
-	private func addAction(row: Row) -> UIAction {
+	private func addAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.addRow, image: AppAssets.add) { [weak self] action in
 			// Have to let the text field get the first responder by getting it away from this
 			// action which appears to be holding on to it.
 			DispatchQueue.main.async {
-				self?.createRow(afterRow: row)
+				self?.createRows(afterRows: rows)
 			}
 		}
 	}
@@ -1008,9 +1009,11 @@ extension EditorViewController {
 		}
 	}
 	
-	func createRow(afterRow: Row?, textRowStrings: TextRowStrings? = nil) {
+	func createRows(afterRows: [Row]?, textRowStrings: TextRowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
+		let afterRow = afterRows?.sortedByDisplayOrder().last
+		
 		let command = CreateRowAfterCommand(undoManager: undoManager,
 											delegate: self,
 											outline: outline,

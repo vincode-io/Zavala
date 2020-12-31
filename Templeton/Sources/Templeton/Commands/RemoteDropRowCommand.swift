@@ -1,13 +1,14 @@
 //
-//  DropRowCommand.swift
+//  RemoteDropRowCommand.swift
+//  
 //
-//  Created by Maurice Parker on 12/16/20.
+//  Created by Maurice Parker on 12/30/20.
 //
 
 import Foundation
 import RSCore
 
-public final class DropRowCommand: OutlineCommand {
+public final class RemoteDropRowCommand: OutlineCommand {
 	public var undoActionName: String
 	public var redoActionName: String
 	public var undoManager: UndoManager
@@ -30,15 +31,8 @@ public final class DropRowCommand: OutlineCommand {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.undoActionName = L10n.move
-		self.redoActionName = L10n.move
-
-		for i in 0..<rows.count {
-			let row = rows[i]
-			rowMoves.append(Outline.RowMove(row: row, toParent: toParent, toChildIndex: toChildIndex + i))
-			guard let oldParent = row.parent, let oldChildIndex = oldParent.rows?.firstIndex(of: row) else { continue }
-			restoreMoves.append(Outline.RowMove(row: row, toParent: oldParent, toChildIndex: oldChildIndex))
-		}
+		self.undoActionName = L10n.copy
+		self.redoActionName = L10n.copy
 	}
 	
 	public func perform() {

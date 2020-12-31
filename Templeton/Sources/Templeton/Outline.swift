@@ -477,67 +477,69 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return ShadowTableChanges(inserts: [shadowTableIndex])
 	}
 	
-	func createRow(_ row: Row, afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
+	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
 		if let afterTextRow = afterRow?.textRow, let texts = textRowStrings {
 			afterTextRow.textRowStrings = texts
 		}
 
-		if var parent = row.parent, parent as? Row == afterRow {
-			parent.rows?.insert(row, at: 0)
-		} else if var parent = row.parent {
-			var rows = parent.rows ?? [Row]()
-			let insertIndex = rows.firstIndex(where: { $0 == afterRow}) ?? rows.count - 1
-			rows.insert(row, at: insertIndex + 1)
-			parent.rows = rows
-		} else if afterRow?.isExpanded ?? true && !(afterRow?.rows?.isEmpty ?? true) {
-			var mutatingAfterRow = afterRow
-			mutatingAfterRow!.rows!.insert(row, at: 0)
-			var mutatingRow = row
-			mutatingRow.parent = afterRow
-		} else if var parent = afterRow?.parent {
-			var rows = parent.rows ?? [Row]()
-			let insertIndex = rows.firstIndex(where: { $0 == afterRow}) ?? -1
-			rows.insert(row, at: insertIndex + 1)
-			var mutatingRow = row
-			mutatingRow.parent = afterRow?.parent
-			parent.rows = rows
-		} else {
-			var rows = self.rows ?? [Row]()
-			let insertIndex = rows.firstIndex(where: { $0 == afterRow}) ?? -1
-			rows.insert(row, at: insertIndex + 1)
-			var mutatingRow = row
-			mutatingRow.parent = self
-			self.rows = rows
+		for row in rows.reversed() {
+			if var parent = row.parent, parent as? Row == afterRow {
+				parent.rows?.insert(row, at: 0)
+			} else if var parent = row.parent {
+				var rows = parent.rows ?? [Row]()
+				let insertIndex = rows.firstIndex(where: { $0 == afterRow}) ?? rows.count - 1
+				rows.insert(row, at: insertIndex + 1)
+				parent.rows = rows
+			} else if afterRow?.isExpanded ?? true && !(afterRow?.rows?.isEmpty ?? true) {
+				var mutatingAfterRow = afterRow
+				mutatingAfterRow!.rows!.insert(row, at: 0)
+				var mutatingRow = row
+				mutatingRow.parent = afterRow
+			} else if var parent = afterRow?.parent {
+				var rows = parent.rows ?? [Row]()
+				let insertIndex = rows.firstIndex(where: { $0 == afterRow}) ?? -1
+				rows.insert(row, at: insertIndex + 1)
+				var mutatingRow = row
+				mutatingRow.parent = afterRow?.parent
+				parent.rows = rows
+			} else {
+				var rows = self.rows ?? [Row]()
+				let insertIndex = rows.firstIndex(where: { $0 == afterRow}) ?? -1
+				rows.insert(row, at: insertIndex + 1)
+				var mutatingRow = row
+				mutatingRow.parent = self
+				self.rows = rows
+			}
 		}
 		
 		outlineBodyDidChange()
 
-		var rows = [row]
+		var insertedRows = rows
 		
 		func insertVisitor(_ visited: Row) {
-			rows.append(visited)
+			insertedRows.append(visited)
 			if visited.isExpanded ?? true {
 				visited.rows?.forEach { $0.visit(visitor: insertVisitor) }
 			}
 		}
 
-		if row.isExpanded ?? true {
-			row.rows?.forEach { $0.visit(visitor: insertVisitor(_:)) }
+		for row in rows {
+			if row.isExpanded ?? true {
+				row.rows?.forEach { $0.visit(visitor: insertVisitor(_:)) }
+			}
 		}
 		
 		let afterShadowTableIndex = afterRow?.shadowTableIndex ?? -1
 		let rowShadowTableIndex = afterShadowTableIndex + 1
 
 		var inserts = Set<Int>()
-		for i in 0..<rows.count {
+		for i in 0..<insertedRows.count {
 			let shadowTableIndex = rowShadowTableIndex + i
 			inserts.insert(shadowTableIndex)
-			shadowTable?.insert(rows[i], at: shadowTableIndex)
+			shadowTable?.insert(insertedRows[i], at: shadowTableIndex)
 		}
 		
-		var mututingRow = row
-		mututingRow.shadowTableIndex = rowShadowTableIndex
-		resetShadowTableIndexes(startingAt: rowShadowTableIndex)
+		resetShadowTableIndexes(startingAt: afterShadowTableIndex)
 		
 		return ShadowTableChanges(inserts: inserts)
 	}
@@ -553,7 +555,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let topicText = topic.attributedSubstring(from: topicRange)
 		textRow.topic = topicText
 
-		var changes = createRow(newRow, afterRow: row)
+		var changes = createRows([newRow], afterRow: row)
 		if let rowShadowTableIndex = textRow.shadowTableIndex {
 			changes.append(ShadowTableChanges(reloads: Set([rowShadowTableIndex])))
 		}
@@ -1265,14 +1267,6 @@ extension Outline {
 		}
 
 		return reloads
-	}
-	
-}
-
-extension Array where Element == Row {
-	
-	func sortedByDisplayOrder() -> Array {
-		return sorted(by: { $0.shadowTableIndex ?? -1 < $1.shadowTableIndex ?? -1 })
 	}
 	
 }

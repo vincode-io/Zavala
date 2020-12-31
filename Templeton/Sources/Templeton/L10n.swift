@@ -32,6 +32,8 @@ internal enum L10n {
   internal static let collapseAllInOutline = L10n.tr("Localizable", "Collapse_All_In_Outline")
   /// Complete
   internal static let complete = L10n.tr("Localizable", "Complete")
+  /// Copy
+  internal static let copy = L10n.tr("Localizable", "Copy")
   /// Delete Note
   internal static let deleteNote = L10n.tr("Localizable", "Delete_Note")
   /// Delete Row

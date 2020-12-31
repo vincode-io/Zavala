@@ -47,7 +47,7 @@ public final class DeleteRowCommand: OutlineCommand {
 	
 	public func undo() {
 		for row in rows {
-			let changes = outline.createRow(row, afterRow: afterRows[row])
+			let changes = outline.createRows([row], afterRow: afterRows[row])
 			delegate?.applyChanges(changes)
 		}
 		registerRedo()
