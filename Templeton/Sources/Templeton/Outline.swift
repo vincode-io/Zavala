@@ -336,7 +336,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	public func createNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+	func createNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
 		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -364,7 +364,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	public func deleteNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row: NSAttributedString], ShadowTableChanges) {
+	func deleteNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row: NSAttributedString], ShadowTableChanges) {
 		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -383,7 +383,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return (impacted, ShadowTableChanges(reloads: Set(reloads)))
 	}
 	
-	public func restoreNotes(_ notes: [Row: NSAttributedString]) -> ShadowTableChanges {
+	func restoreNotes(_ notes: [Row: NSAttributedString]) -> ShadowTableChanges {
 		for (row, note) in notes {
 			row.textRow?.note = note
 		}
@@ -394,7 +394,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return ShadowTableChanges(reloads: Set(reloads))
 	}
 	
-	public func deleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
+	func deleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
 		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -440,7 +440,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return ShadowTableChanges(deletes: Set(deletes), reloads: Set(reloads))
 	}
 	
-	public func joinRows(topRow: Row, bottomRow: Row) -> ShadowTableChanges {
+	func joinRows(topRow: Row, bottomRow: Row) -> ShadowTableChanges {
 		guard let topTextRow = topRow.textRow,
 			  let topTopic = topTextRow.topic,
 			  let topShadowTableIndex = topRow.shadowTableIndex,
@@ -455,7 +455,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return changes
 	}
 	
-	public func createRow(_ row: Row, beforeRow: Row, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
+	func createRow(_ row: Row, beforeRow: Row, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
 		if let beforeTextRow = beforeRow.textRow, let texts = textRowStrings {
 			beforeTextRow.textRowStrings = texts
 		}
@@ -477,7 +477,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return ShadowTableChanges(inserts: [shadowTableIndex])
 	}
 	
-	public func createRow(_ row: Row, afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
+	func createRow(_ row: Row, afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
 		if let afterTextRow = afterRow?.textRow, let texts = textRowStrings {
 			afterTextRow.textRowStrings = texts
 		}
@@ -542,7 +542,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return ShadowTableChanges(inserts: inserts)
 	}
 	
-	public func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) -> ShadowTableChanges {
+	func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) -> ShadowTableChanges {
 		guard let newTextRow = newRow.textRow, let textRow = row.textRow else { return ShadowTableChanges() }
 		
 		let newTopicRange = NSRange(location: cursorPosition, length: topic.length - cursorPosition)
@@ -560,7 +560,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return changes
 	}
 
-	public func updateRow(_ row: Row, textRowStrings: TextRowStrings?) -> ShadowTableChanges {
+	func updateRow(_ row: Row, textRowStrings: TextRowStrings?) -> ShadowTableChanges {
 		if let textRow = row.textRow, let textRowStrings = textRowStrings {
 			textRow.textRowStrings = textRowStrings
 		}
@@ -576,7 +576,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return expandCollapse(rows: rows, isExpanded: true)
 	}
 	
-	public func collapse(rows: [Row]) -> ([Row], ShadowTableChanges) {
+	func collapse(rows: [Row]) -> ([Row], ShadowTableChanges) {
 		if rows.count == 1, let row = rows.first {
 			return ([row], collapse(row: row))
 		}
@@ -592,7 +592,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	public func expandAll(containers: [RowContainer]) -> ([Row], ShadowTableChanges) {
+	func expandAll(containers: [RowContainer]) -> ([Row], ShadowTableChanges) {
 		var impacted = [Row]()
 		
 		for container in containers {
@@ -633,7 +633,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	public func collapseAll(containers: [RowContainer]) -> ([Row], ShadowTableChanges) {
+	func collapseAll(containers: [RowContainer]) -> ([Row], ShadowTableChanges) {
 		var impacted = [Row]()
 		var reloads = [Row]()
 
@@ -682,7 +682,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	public func complete(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+	func complete(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
 		return completeUncomplete(rows: rows, isComplete: true, textRowStrings: textRowStrings)
 	}
 	
@@ -695,7 +695,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	public func uncomplete(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+	func uncomplete(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
 		return completeUncomplete(rows: rows, isComplete: false, textRowStrings: textRowStrings)
 	}
 	
@@ -708,7 +708,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	public func indentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+	func indentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
 		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -773,7 +773,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 		
-	public func outdentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+	func outdentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
 		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -827,7 +827,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return (impacted, changes)
 	}
 	
-	public func moveRows(_ rowMoves: [RowMove], textRowStrings: TextRowStrings?) -> ShadowTableChanges {
+	func moveRows(_ rowMoves: [RowMove], textRowStrings: TextRowStrings?) -> ShadowTableChanges {
 		if rowMoves.count == 1, let textRow = rowMoves.first?.row.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
