@@ -713,7 +713,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			textRow.textRowStrings = texts
 		}
 		
-		let sortedRows = rows.sorted(by: { $0.shadowTableIndex ?? -1 < $1.shadowTableIndex ?? -1 })
+		let sortedRows = rows.sortedByDisplayOrder()
 
 		var impacted = [Row]()
 		var changes = ShadowTableChanges()
@@ -778,7 +778,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			textRow.textRowStrings = texts
 		}
 
-		let sortedRows = rows.sorted(by: { $0.shadowTableIndex ?? -1 < $1.shadowTableIndex ?? -1 })
+		let sortedRows = rows.sortedByDisplayOrder()
 		
 		// If we have a decendent, remove it because it will get outdented by its ancestor
 		var filteredRows = [Row]()
@@ -1265,6 +1265,14 @@ extension Outline {
 		}
 
 		return reloads
+	}
+	
+}
+
+extension Array where Element == Row {
+	
+	func sortedByDisplayOrder() -> Array {
+		return sorted(by: { $0.shadowTableIndex ?? -1 < $1.shadowTableIndex ?? -1 })
 	}
 	
 }
