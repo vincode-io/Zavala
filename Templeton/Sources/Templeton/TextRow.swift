@@ -144,8 +144,8 @@ public final class TextRow: BaseRow, Codable {
 		}
 		
 		rows?.forEach {
-			md.append($0.markdown(indentLevel: indentLevel + 1))
 			md.append("\n")
+			md.append($0.markdown(indentLevel: indentLevel + 1))
 		}
 		
 		return md
