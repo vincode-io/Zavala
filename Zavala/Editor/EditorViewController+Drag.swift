@@ -28,12 +28,6 @@ extension EditorViewController: UICollectionViewDragDelegate {
 		
 		dragItems.append(dragItem)
 		
-//		outline?.childrenRows(forRow: row).forEach { child in
-//			let itemProvider = NSItemProvider()
-//			let dragItem = UIDragItem(itemProvider: itemProvider)
-//			dragItems.append(dragItem)
-//		}
-		
 		return dragItems
 	}
 	
