@@ -233,8 +233,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 	
 	override func paste(_ sender: Any?) {
-		guard let rows = currentRows else { return }
-		pasteRows(rows)
+		pasteRows(afterRows: currentRows)
 	}
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -856,7 +855,7 @@ extension EditorViewController {
 
 	private func pasteAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.paste, image: AppAssets.paste) { [weak self] action in
-			self?.pasteRows(rows)
+			self?.pasteRows(afterRows: rows)
 		}
 	}
 
@@ -1041,8 +1040,8 @@ extension EditorViewController {
 		UIPasteboard.general.setItemProviders(itemProviders, localOnly: false, expirationDate: nil)
 	}
 
-	private func pasteRows(_ rows: [Row]) {
-		guard let undoManager = undoManager, let outline = outline, let lastRow = rows.last else { return }
+	private func pasteRows(afterRows: [Row]?) {
+		guard let undoManager = undoManager, let outline = outline else { return }
 		guard let rowProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [Row.typeIdentifier]) else { return }
 		
 		let group = DispatchGroup()
@@ -1069,7 +1068,7 @@ extension EditorViewController {
 										  delegate: self,
 										  outline: outline,
 										  rows: rows,
-										  afterRow: lastRow)
+										  afterRow: afterRows?.last)
 
 			self.runCommand(command)
 		}

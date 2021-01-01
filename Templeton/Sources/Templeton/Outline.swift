@@ -487,7 +487,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		for row in rows.sortedByReverseDisplayOrder() {
-			if var parent = row.parent, parent as? Row == afterRow {
+			if afterRow == nil {
+				var rows = self.rows ?? [Row]()
+				rows.append(row)
+				var mutatingRow = row
+				mutatingRow.parent = self
+				self.rows = rows
+			} else if var parent = row.parent, parent as? Row == afterRow {
 				parent.rows?.insert(row, at: 0)
 			} else if var parent = row.parent {
 				var rows = parent.rows ?? [Row]()
@@ -533,8 +539,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 		
-		let afterShadowTableIndex = afterRow?.shadowTableIndex ?? -1
-		let rowShadowTableIndex = afterShadowTableIndex + 1
+		let rowShadowTableIndex = afterRow?.shadowTableIndex ?? shadowTable?.count ?? 0
 
 		var inserts = Set<Int>()
 		for i in 0..<insertedRows.count {
