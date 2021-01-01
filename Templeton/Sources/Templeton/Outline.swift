@@ -246,7 +246,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		
 		var md = "# \(title ?? "")\n\n"
-		rows?.forEach { md.append($0.markdown(indentLevel: 0)) }
+		rows?.forEach {
+			md.append($0.markdown(indentLevel: 0))
+			md.append("\n")
+		}
 		
 		if returnToSuspend {
 			suspend()

@@ -137,13 +137,16 @@ public final class TextRow: BaseRow, Codable {
 	
 	public override func markdown(indentLevel: Int = 0) -> String {
 		var md = String(repeating: "\t", count: indentLevel)
-		md.append("* \(topicPlainText ?? "")\n")
+		md.append("* \(topicPlainText ?? "")")
 		
 		if let notePlainText = notePlainText {
-			md.append("  \(notePlainText)\n")
+			md.append("\n  \(notePlainText)")
 		}
 		
-		rows?.forEach { md.append($0.markdown(indentLevel: indentLevel + 1)) }
+		rows?.forEach {
+			md.append($0.markdown(indentLevel: indentLevel + 1))
+			md.append("\n")
+		}
 		
 		return md
 	}
