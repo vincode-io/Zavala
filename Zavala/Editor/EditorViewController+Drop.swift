@@ -251,7 +251,7 @@ extension EditorViewController {
 			guard let targetIndexPath = targetIndexPath else {
 				if let outlineRows = outline.rows {
 					if outlineRows.count > 0 {
-						self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: outline.rows?[outline.rows?.count ?? 0])
+						self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: outlineRows[outlineRows.count - 1])
 					} else {
 						self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
 					}
