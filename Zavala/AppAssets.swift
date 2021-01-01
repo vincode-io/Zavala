@@ -37,8 +37,16 @@ struct AppAssets {
 		return UIImage(systemName: "checkmark.square")!
 	}()
 
+	static var copy: UIImage = {
+		return UIImage(systemName: "doc.on.doc")!
+	}()
+
 	static var createEntity: UIImage = {
 		return UIImage(systemName: "square.and.pencil")!
+	}()
+	
+	static var cut: UIImage = {
+		return UIImage(systemName: "scissors")!
 	}()
 
 	static var delete: UIImage = {
@@ -115,6 +123,10 @@ struct AppAssets {
 
 	static var outdent: UIImage = {
 		return UIImage(systemName: "arrow.left.to.line")!
+	}()
+
+	static var paste: UIImage = {
+		return UIImage(systemName: "doc.on.clipboard")!
 	}()
 
 	static var removeEntity: UIImage = {

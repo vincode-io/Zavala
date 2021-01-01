@@ -222,6 +222,32 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		}
 	}
 	
+	override func cut(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		cutRows(rows)
+	}
+	
+	override func copy(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		copyRows(rows)
+	}
+	
+	override func paste(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		pasteRows(rows)
+	}
+	
+	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+		switch action {
+		case .cut, .copy:
+			return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
+		case .paste:
+			return UIPasteboard.general.contains(pasteboardTypes: [Row.typeIdentifier])
+		default:
+			return super.canPerformAction(action, withSender: sender)
+		}
+	}
+	
 	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
 		super.pressesBegan(presses, with: event)
 
@@ -767,6 +793,14 @@ extension EditorViewController {
 			
 			var menuItems = [UIMenu]()
 
+			var standardEditActions = [UIAction]()
+			standardEditActions.append(self.cutAction(rows: rows))
+			standardEditActions.append(self.copyAction(rows: rows))
+			if self.canPerformAction(.paste, withSender: nil) {
+				standardEditActions.append(self.pasteAction(rows: rows))
+			}
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: standardEditActions))
+
 			var firstOutlineActions = [UIAction]()
 			firstOutlineActions.append(self.addAction(rows: rows))
 			if !outline.isIndentRowsUnavailable(rows: rows) {
@@ -808,6 +842,24 @@ extension EditorViewController {
 		})
 	}
 	
+	private func cutAction(rows: [Row]) -> UIAction {
+		return UIAction(title: L10n.cut, image: AppAssets.cut) { [weak self] action in
+			self?.cutRows(rows)
+		}
+	}
+
+	private func copyAction(rows: [Row]) -> UIAction {
+		return UIAction(title: L10n.copy, image: AppAssets.copy) { [weak self] action in
+			self?.copyRows(rows)
+		}
+	}
+
+	private func pasteAction(rows: [Row]) -> UIAction {
+		return UIAction(title: L10n.paste, image: AppAssets.paste) { [weak self] action in
+			self?.pasteRows(rows)
+		}
+	}
+
 	private func addAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.addRow, image: AppAssets.add) { [weak self] action in
 			// Have to let the text field get the first responder by getting it away from this
@@ -872,7 +924,7 @@ extension EditorViewController {
 		}
 	}
 
-	func moveCursorTo(row: Row) {
+	private func moveCursorTo(row: Row) {
 		guard let shadowTableIndex = row.shadowTableIndex else {
 			return
 		}
@@ -883,7 +935,7 @@ extension EditorViewController {
 		}
 	}
 	
-	func moveCursorUp(row: Row) {
+	private func moveCursorUp(row: Row) {
 		guard let shadowTableIndex = row.shadowTableIndex, shadowTableIndex > 0 else {
 			moveCursorToTitle()
 			return
@@ -897,7 +949,7 @@ extension EditorViewController {
 		}
 	}
 	
-	func moveCursorDown(row: Row) {
+	private func moveCursorDown(row: Row) {
 		guard let shadowTableIndex = row.shadowTableIndex, let shadowTable = outline?.shadowTable, shadowTableIndex < (shadowTable.count - 1) else { return }
 		let indexPath = IndexPath(row: shadowTableIndex + 1, section: 1)
 		makeCellVisibleIfNecessary(indexPath: indexPath) {
@@ -907,7 +959,7 @@ extension EditorViewController {
 		}
 	}
 	
-	func toggleDisclosure(row: Row) {
+	private func toggleDisclosure(row: Row) {
 		if row.isExpandable {
 			expand(rows: [row])
 		} else {
@@ -915,7 +967,7 @@ extension EditorViewController {
 		}
 	}
 
-	func expand(rows: [Row]) {
+	private func expand(rows: [Row]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = ExpandCommand(undoManager: undoManager,
@@ -926,7 +978,7 @@ extension EditorViewController {
 		runCommand(command)
 	}
 
-	func collapse(rows: [Row]) {
+	private func collapse(rows: [Row]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = CollapseCommand(undoManager: undoManager,
@@ -937,7 +989,7 @@ extension EditorViewController {
 		runCommand(command)
 	}
 
-	func expandAll(containers: [RowContainer]) {
+	private func expandAll(containers: [RowContainer]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = ExpandAllCommand(undoManager: undoManager,
@@ -948,7 +1000,7 @@ extension EditorViewController {
 		runCommand(command)
 	}
 
-	func collapseAll(containers: [RowContainer]) {
+	private func collapseAll(containers: [RowContainer]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = CollapseAllCommand(undoManager: undoManager,
@@ -959,7 +1011,7 @@ extension EditorViewController {
 		runCommand(command)
 	}
 
-	func textChanged(row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
+	private func textChanged(row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = TextChangedCommand(undoManager: undoManager,
@@ -971,8 +1023,43 @@ extension EditorViewController {
 										 cursorPosition: cursorPosition)
 		runCommand(command)
 	}
-	
-	func deleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
+
+	private func cutRows(_ rows: [Row]) {
+		copyRows(rows)
+	}
+
+	private func copyRows(_ rows: [Row]) {
+		let itemProviders = rows.map { NSItemProvider(row: $0) }
+		UIPasteboard.general.setItemProviders(itemProviders, localOnly: false, expirationDate: nil)
+	}
+
+	private func pasteRows(_ rows: [Row]) {
+		guard let rowProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [Row.typeIdentifier]) else { return }
+		
+		let group = DispatchGroup()
+		var rows = [Row]()
+		
+		for index in rowProviderIndexes {
+			let itemProvider = UIPasteboard.general.itemProviders[index]
+			group.enter()
+			itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
+				if let data = data {
+					do {
+						rows.append(try Row(from: data))
+						group.leave()
+					} catch {
+						self?.presentError(error)
+						group.leave()
+					}
+				}
+			}
+		}
+
+		group.notify(queue: DispatchQueue.main) {
+		}
+	}
+
+	private func deleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = DeleteRowCommand(undoManager: undoManager,
@@ -992,7 +1079,7 @@ extension EditorViewController {
 		}
 	}
 	
-	func createRow(beforeRow: Row) {
+	private func createRow(beforeRow: Row) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = CreateRowBeforeCommand(undoManager: undoManager,
@@ -1009,7 +1096,7 @@ extension EditorViewController {
 		}
 	}
 	
-	func createRows(afterRows: [Row]?, textRowStrings: TextRowStrings? = nil) {
+	private func createRows(afterRows: [Row]?, textRowStrings: TextRowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let afterRow = afterRows?.sortedByDisplayOrder().last
@@ -1031,7 +1118,7 @@ extension EditorViewController {
 		}
 	}
 	
-	func indentRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
+	private func indentRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = IndentRowCommand(undoManager: undoManager,
@@ -1043,7 +1130,7 @@ extension EditorViewController {
 		runCommand(command)
 	}
 	
-	func outdentRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
+	private func outdentRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = OutdentRowCommand(undoManager: undoManager,
@@ -1055,7 +1142,7 @@ extension EditorViewController {
 		runCommand(command)
 	}
 
-	func splitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
+	private func splitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = SplitRowCommand(undoManager: undoManager,
@@ -1075,7 +1162,7 @@ extension EditorViewController {
 		}
 	}
 
-	func completeRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
+	private func completeRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = CompleteCommand(undoManager: undoManager,
@@ -1094,7 +1181,7 @@ extension EditorViewController {
 		}
 	}
 	
-	func uncompleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
+	private func uncompleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = UncompleteCommand(undoManager: undoManager,
@@ -1106,7 +1193,7 @@ extension EditorViewController {
 		runCommand(command)
 	}
 	
-	func createRowNotes(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
+	private func createRowNotes(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = CreateNoteCommand(undoManager: undoManager,
@@ -1124,7 +1211,7 @@ extension EditorViewController {
 		}
 	}
 
-	func deleteRowNotes(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
+	private func deleteRowNotes(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = DeleteNoteCommand(undoManager: undoManager,
@@ -1142,7 +1229,7 @@ extension EditorViewController {
 		}
 	}
 
-	func makeCellVisibleIfNecessary(indexPath: IndexPath, completion: @escaping () -> Void) {
+	private func makeCellVisibleIfNecessary(indexPath: IndexPath, completion: @escaping () -> Void) {
 		guard let frame = collectionView.layoutAttributesForItem(at: indexPath)?.frame else {
 			completion()
 			return

@@ -17,24 +17,7 @@ extension EditorViewController: UICollectionViewDragDelegate {
 		var dragItems = [UIDragItem]()
 		let row = shadowTable[indexPath.row]
 
-		let itemProvider = NSItemProvider()
-
-		itemProvider.registerDataRepresentation(forTypeIdentifier: Row.typeIdentifier, visibility: .ownProcess) { completion in
-			do {
-				let data = try row.asData()
-				completion(data, nil)
-			} catch {
-				completion(nil, error)
-			}
-			return nil
-		}
-
-		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
-			let data = row.markdown().data(using: .utf8)
-			completion(data, nil)
-			return nil
-		}
-	
+		let itemProvider = NSItemProvider(row: row)
 		let dragItem = UIDragItem(itemProvider: itemProvider)
 		dragItem.localObject = row
 	

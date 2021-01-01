@@ -32,6 +32,10 @@ internal enum L10n {
   internal static let collapseAllInRow = L10n.tr("Localizable", "Collapse_All_In_Row")
   /// Complete
   internal static let complete = L10n.tr("Localizable", "Complete")
+  /// Copy
+  internal static let copy = L10n.tr("Localizable", "Copy")
+  /// Cut
+  internal static let cut = L10n.tr("Localizable", "Cut")
   /// Delete
   internal static let delete = L10n.tr("Localizable", "Delete")
   /// Any Outlines in this folder will also be deleted and unrecoverable.
@@ -102,6 +106,8 @@ internal enum L10n {
   internal static let outdent = L10n.tr("Localizable", "Outdent")
   /// Outline
   internal static let outline = L10n.tr("Localizable", "Outline")
+  /// Paste
+  internal static let paste = L10n.tr("Localizable", "Paste")
   /// Restore
   internal static let restore = L10n.tr("Localizable", "Restore")
   /// Your current account data will be lost and unrecoverable.

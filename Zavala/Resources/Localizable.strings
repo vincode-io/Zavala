@@ -50,6 +50,9 @@
 "Bold" = "Bold";
 "Italic" = "Italic";
 "Link" = "Link";
+"Cut" = "Cut";
+"Copy" = "Copy";
+"Paste" = "Paste";
 
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";
