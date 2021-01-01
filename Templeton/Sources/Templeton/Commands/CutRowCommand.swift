@@ -1,13 +1,14 @@
 //
-//  DeleteRowCommand.swift
+//  CutRowCommand.swift
+//  
 //
-//  Created by Maurice Parker on 11/28/20.
+//  Created by Maurice Parker on 12/31/20.
 //
 
 import Foundation
 import RSCore
 
-public final class DeleteRowCommand: OutlineCommand {
+public final class CutRowCommand: OutlineCommand {
 	public var undoActionName: String
 	public var redoActionName: String
 	public var undoManager: UndoManager
@@ -18,29 +19,26 @@ public final class DeleteRowCommand: OutlineCommand {
 
 	var outline: Outline
 	var rows: [Row]
-	var textRowStrings: TextRowStrings?
 	var afterRows = [Row: Row]()
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], textRowStrings: TextRowStrings?) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row]) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
 		self.rows = rows
-		self.undoActionName = L10n.deleteRow
-		self.redoActionName = L10n.deleteRow
+		self.undoActionName = L10n.cut
+		self.redoActionName = L10n.cut
 
 		for row in rows {
 			if let rowShadowTableIndex = row.shadowTableIndex, rowShadowTableIndex > 0, let afterRow = outline.shadowTable?[rowShadowTableIndex - 1] {
 				afterRows[row] = afterRow
 			}
 		}
-
-		self.textRowStrings = textRowStrings
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		changes = outline.deleteRows(rows, textRowStrings: textRowStrings)
+		changes = outline.deleteRows(rows)
 		delegate?.applyChanges(changes!)
 		registerUndo()
 	}

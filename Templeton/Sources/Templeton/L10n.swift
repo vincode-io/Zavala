@@ -34,6 +34,8 @@ internal enum L10n {
   internal static let complete = L10n.tr("Localizable", "Complete")
   /// Copy
   internal static let copy = L10n.tr("Localizable", "Copy")
+  /// Cut
+  internal static let cut = L10n.tr("Localizable", "Cut")
   /// Delete Note
   internal static let deleteNote = L10n.tr("Localizable", "Delete_Note")
   /// Delete Row
@@ -54,6 +56,8 @@ internal enum L10n {
   internal static let move = L10n.tr("Localizable", "Move")
   /// Outdent
   internal static let outdent = L10n.tr("Localizable", "Outdent")
+  /// Paste
+  internal static let paste = L10n.tr("Localizable", "Paste")
   /// All
   internal static let providerAll = L10n.tr("Localizable", "Provider_All")
   /// Favorites

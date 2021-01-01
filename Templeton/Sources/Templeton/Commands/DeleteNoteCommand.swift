@@ -27,8 +27,8 @@ public final class DeleteNoteCommand: OutlineCommand {
 		self.delegate = delegate
 		self.outline = outline
 		self.rows = rows
-		undoActionName = L10n.deleteNote
-		redoActionName = L10n.deleteNote
+		self.undoActionName = L10n.deleteNote
+		self.redoActionName = L10n.deleteNote
 		
 		if rows.count == 1, let textRow = rows.first?.textRow {
 			self.oldTextRowStrings = textRow.textRowStrings

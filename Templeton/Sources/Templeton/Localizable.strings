@@ -31,7 +31,9 @@
 "Add_Row" = "Add Row";
 "Delete_Note" = "Delete Note";
 "Delete_Row" = "Delete Row";
+"Cut" = "Cut";
 "Copy" = "Copy";
+"Paste" = "Paste";
 "Move" = "Move";
 "Indent" = "Indent";
 "Outdent" = "Outdent";

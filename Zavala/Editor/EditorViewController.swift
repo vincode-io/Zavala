@@ -1025,15 +1025,24 @@ extension EditorViewController {
 	}
 
 	private func cutRows(_ rows: [Row]) {
+		guard let undoManager = undoManager, let outline = outline else { return }
 		copyRows(rows)
+
+		let command = CutRowCommand(undoManager: undoManager,
+									delegate: self,
+									outline: outline,
+									rows: rows)
+
+		runCommand(command)
 	}
 
 	private func copyRows(_ rows: [Row]) {
-		let itemProviders = rows.map { NSItemProvider(row: $0) }
+		let itemProviders = rows.sortedByDisplayOrder().map { NSItemProvider(row: $0) }
 		UIPasteboard.general.setItemProviders(itemProviders, localOnly: false, expirationDate: nil)
 	}
 
 	private func pasteRows(_ rows: [Row]) {
+		guard let undoManager = undoManager, let outline = outline, let lastRow = rows.last else { return }
 		guard let rowProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [Row.typeIdentifier]) else { return }
 		
 		let group = DispatchGroup()
@@ -1056,6 +1065,13 @@ extension EditorViewController {
 		}
 
 		group.notify(queue: DispatchQueue.main) {
+			let command = PasteRowCommand(undoManager: undoManager,
+										  delegate: self,
+										  outline: outline,
+										  rows: rows,
+										  afterRow: lastRow)
+
+			self.runCommand(command)
 		}
 	}
 
