@@ -439,7 +439,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		guard let lowestShadowTableIndex = deletes.last else { return ShadowTableChanges() }
 		resetShadowTableIndexes(startingAt: lowestShadowTableIndex)
 		
-		let reloads = deletedRows.compactMap { ($0.parent as? Row)?.shadowTableIndex }
+		let reloads = rows.compactMap { ($0.parent as? Row)?.shadowTableIndex }
 		
 		return ShadowTableChanges(deletes: Set(deletes), reloads: Set(reloads))
 	}
