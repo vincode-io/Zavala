@@ -6,13 +6,14 @@
 //
 
 import UIKit
+import MobileCoreServices
 import Templeton
 
 extension EditorViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
 		guard session.localDragSession == nil else { return true }
-		return session.hasItemsConforming(toTypeIdentifiers: [Row.typeIdentifier])
+		return session.hasItemsConforming(toTypeIdentifiers: [kUTTypeUTF8PlainText as String, Row.typeIdentifier])
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
@@ -45,8 +46,10 @@ extension EditorViewController: UICollectionViewDropDelegate {
 
 		if coordinator.session.localDragSession != nil {
 			localRowDrop(coordinator: coordinator, targetIndexPath: targetIndexPath)
-		} else {
+		} else if coordinator.session.hasItemsConforming(toTypeIdentifiers: [Row.typeIdentifier]) {
 			remoteRowDrop(coordinator: coordinator, targetIndexPath: targetIndexPath)
+		} else {
+			remoteTextDrop(coordinator: coordinator, targetIndexPath: targetIndexPath)
 		}
 	}
 	
@@ -280,5 +283,7 @@ extension EditorViewController {
 		deselectAll()
 	}
 	
-
+	private func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
+	}
+	
 }
