@@ -539,7 +539,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 		
-		let rowShadowTableIndex = afterRow?.shadowTableIndex ?? shadowTable?.count ?? 0
+		let rowShadowTableIndex: Int
+		if let afterRowShadowTableIndex = afterRow?.shadowTableIndex {
+			rowShadowTableIndex = afterRowShadowTableIndex + 1
+		} else {
+			rowShadowTableIndex = shadowTable?.count ?? 0
+		}
 
 		var inserts = Set<Int>()
 		for i in 0..<insertedRows.count {
