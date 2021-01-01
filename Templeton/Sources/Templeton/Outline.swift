@@ -522,6 +522,22 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 		
+		func parentVisitor(_ visited: Row) {
+			visited.rows?.forEach {
+				var mutatingRow = $0
+				mutatingRow.parent = visited
+				$0.visit(visitor: parentVisitor)
+			}
+		}
+
+		for row in rows {
+			row.rows?.forEach {
+				var mutatingRow = $0
+				mutatingRow.parent = row
+				$0.visit(visitor: parentVisitor(_:))
+			}
+		}
+
 		outlineBodyDidChange()
 
 		var insertedRows = rows
