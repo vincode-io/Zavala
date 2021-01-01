@@ -10,7 +10,7 @@ import Foundation
 public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 	case text(TextRow)
 	
-	public static let typeIdentifier = "io.vincode.Zavala.Row"
+	public static let typeIdentifier = "io.vincode.Zavala.Rows"
 	
 	public var parent: RowContainer? {
 		get {
