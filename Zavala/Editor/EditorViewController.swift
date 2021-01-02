@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MobileCoreServices
 import RSCore
 import Templeton
 
@@ -811,30 +812,27 @@ extension EditorViewController {
 			}
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: standardEditActions))
 
-			var firstOutlineActions = [UIAction]()
-			firstOutlineActions.append(self.addAction(rows: rows))
+			var outlineActions = [UIAction]()
+			outlineActions.append(self.addAction(rows: rows))
 			if !outline.isIndentRowsUnavailable(rows: rows) {
-				firstOutlineActions.append(self.indentAction(rows: rows))
+				outlineActions.append(self.indentAction(rows: rows))
 			}
 			if !outline.isOutdentRowsUnavailable(rows: rows) {
-				firstOutlineActions.append(self.outdentAction(rows: rows))
+				outlineActions.append(self.outdentAction(rows: rows))
 			}
-			menuItems.append(UIMenu(title: "", options: .displayInline, children: firstOutlineActions))
-			
-			var secondOutlineActions = [UIAction]()
 			if !outline.isCompleteUnavailable(rows: rows) {
-				secondOutlineActions.append(self.completeAction(rows: rows))
+				outlineActions.append(self.completeAction(rows: rows))
 			}
 			if !outline.isUncompleteUnavailable(rows: rows) {
-				secondOutlineActions.append(self.uncompleteAction(rows: rows))
+				outlineActions.append(self.uncompleteAction(rows: rows))
 			}
 			if !outline.isCreateNotesUnavailable(rows: rows) {
-				secondOutlineActions.append(self.createNoteAction(rows: rows))
+				outlineActions.append(self.createNoteAction(rows: rows))
 			}
 			if !outline.isDeleteNotesUnavailable(rows: rows) {
-				secondOutlineActions.append(self.deleteNoteAction(rows: rows))
+				outlineActions.append(self.deleteNoteAction(rows: rows))
 			}
-			menuItems.append(UIMenu(title: "", options: .displayInline, children: secondOutlineActions))
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: outlineActions))
 
 			var viewActions = [UIAction]()
 			if !outline.isExpandAllUnavailable(containers: rows) {
