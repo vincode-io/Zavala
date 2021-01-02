@@ -1039,7 +1039,7 @@ extension EditorViewController {
 	private func copyRows(_ rows: [Row]) {
 		var itemProviders = [NSItemProvider]()
 
-		for row in rows.sortedByDisplayOrder() {
+		for row in rows.sortedWithDecendentsFiltered() {
 			let itemProvider = NSItemProvider()
 			
 			// We only register the text representation on the first one, since it looks like most text editors only support 1 dragged text item
