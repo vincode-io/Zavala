@@ -1040,7 +1040,9 @@ extension Outline {
 		outlineBodyDidChange()
 		
 		if isFiltered ?? false {
-			return (impacted, rebuildShadowTable())
+			let changes = rebuildShadowTable()
+			shadowTableDidChange(changes)
+			return (impacted, changes)
 		}
 		
 		var reloads = Set<Int>()

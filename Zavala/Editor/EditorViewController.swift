@@ -281,7 +281,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		}
 	}
 	
-	// MARK: API
+	// MARK: API	
 	
 	func edit(_ newOutline: Outline?, isNew: Bool) {
 		guard outline != newOutline else { return }
