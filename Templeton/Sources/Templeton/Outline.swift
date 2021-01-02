@@ -540,7 +540,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		outlineBodyDidChange()
 
-		var insertedRows = rows
+		var insertedRows = [Row]()
 		
 		func insertVisitor(_ visited: Row) {
 			insertedRows.append(visited)
@@ -550,6 +550,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		for row in rows {
+			insertedRows.append(row)
 			if row.isExpanded ?? true {
 				row.rows?.forEach { $0.visit(visitor: insertVisitor(_:)) }
 			}
@@ -810,26 +811,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			textRow.textRowStrings = texts
 		}
 
-		let sortedRows = rows.sortedByDisplayOrder()
-		
-		// If we have a decendent, remove it because it will get outdented by its ancestor
-		var filteredRows = [Row]()
-		for row in sortedRows {
-			var decendent = false
-			for filteredRow in filteredRows {
-				if row.isDecendent(filteredRow) {
-					decendent = true
-					break
-				}
-			}
-			if !decendent {
-				filteredRows.append(row)
-			}
-		}
-		
 		var impacted = [Row]()
 
-		for row in filteredRows.reversed() {
+		for row in rows.sortedWithDecendentsFiltered().reversed() {
 			guard var oldParent = row.parent as? Row,
 				  let oldParentRows = oldParent.rows,
 				  let oldRowIndex = oldParentRows.firstIndex(of: row),
