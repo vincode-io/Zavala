@@ -14,7 +14,7 @@ public final class DeleteRowCommand: OutlineCommand {
 	weak public var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	public var changes: ShadowTableChanges?
+	public var newCursorIndex: Int?
 
 	var outline: Outline
 	var rows: [Row]
@@ -40,7 +40,7 @@ public final class DeleteRowCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		changes = outline.deleteRows(rows, textRowStrings: textRowStrings)
+		newCursorIndex = outline.deleteRows(rows, textRowStrings: textRowStrings)
 		registerUndo()
 	}
 	

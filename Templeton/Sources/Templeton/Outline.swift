@@ -404,7 +404,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	@discardableResult
-	func deleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
+	func deleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) -> Int? {
 		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -415,7 +415,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			var mutatingRow = row
 			mutatingRow.parent?.rows?.removeFirst(object: row)
 			
-			guard let rowShadowTableIndex = row.shadowTableIndex else { return ShadowTableChanges() }
+			guard let rowShadowTableIndex = row.shadowTableIndex else { return nil }
 			deletes.append(rowShadowTableIndex)
 			
 			func deleteVisitor(_ visited: Row) {
@@ -443,14 +443,19 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 		
-		guard let lowestShadowTableIndex = deletes.last else { return ShadowTableChanges() }
+		guard let lowestShadowTableIndex = deletes.last else { return nil }
 		resetShadowTableIndexes(startingAt: lowestShadowTableIndex)
 		
 		let reloads = rows.compactMap { ($0.parent as? Row)?.shadowTableIndex }
 		
 		let changes = ShadowTableChanges(deletes: Set(deletes), reloads: Set(reloads))
 		shadowTableDidChange(changes)
-		return changes
+		
+		if let firstDelete = deletes.first, firstDelete > 0 {
+			return firstDelete - 1
+		} else {
+			return nil
+		}
 	}
 	
 	func joinRows(topRow: Row, bottomRow: Row) {

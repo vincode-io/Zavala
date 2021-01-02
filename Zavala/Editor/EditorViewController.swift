@@ -1124,12 +1124,10 @@ extension EditorViewController {
 
 		runCommand(command)
 		
-		if let deleteIndex = command.changes?.deletes?.first {
-			if deleteIndex > 0, let rowCell = collectionView.cellForItem(at: IndexPath(row: deleteIndex - 1, section: 1)) as? EditorTextRowViewCell {
-				rowCell.moveToEnd()
-			} else {
-				moveCursorToTitle()
-			}
+		if let newCursorIndex = command.newCursorIndex, let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: 1)) as? EditorTextRowViewCell {
+			rowCell.moveToEnd()
+		} else {
+			moveCursorToTitle()
 		}
 	}
 	
@@ -1306,4 +1304,5 @@ extension EditorViewController {
 		collectionView.scrollRectToVisible(frame, animated: true)
 		CATransaction.commit()
 	}
+	
 }
