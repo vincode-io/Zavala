@@ -600,10 +600,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		textRow.topic = topicText
 
 		var changes = createRows([newRow], afterRow: row)
+
 		if let rowShadowTableIndex = textRow.shadowTableIndex {
-			changes.append(ShadowTableChanges(reloads: Set([rowShadowTableIndex])))
+			let reloadChanges = ShadowTableChanges(reloads: Set([rowShadowTableIndex]))
+			shadowTableDidChange(reloadChanges)
+			changes.append(reloadChanges)
 		}
-		shadowTableDidChange(changes)
+
 		return changes
 	}
 
