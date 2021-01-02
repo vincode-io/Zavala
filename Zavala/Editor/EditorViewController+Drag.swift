@@ -15,9 +15,35 @@ extension EditorViewController: UICollectionViewDragDelegate {
 		guard indexPath.section == 1, let shadowTable = outline?.shadowTable else { return [] }
 		
 		var dragItems = [UIDragItem]()
+		
 		let row = shadowTable[indexPath.row]
+		let rows = currentRows?.sortedByDisplayOrder() ?? [row]
 
-		let itemProvider = NSItemProvider(row: row)
+		let itemProvider = NSItemProvider()
+		
+		// We only register the text representation on the first one, since it looks like most text editors only support 1 dragged text item
+		if row == rows[0] {
+			itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+				var markdowns = [String]()
+				for row in rows {
+					markdowns.append(row.markdown())
+				}
+				let data = markdowns.joined(separator: "\n").data(using: .utf8)
+				completion(data, nil)
+				return nil
+			}
+		}
+		
+		itemProvider.registerDataRepresentation(forTypeIdentifier: Row.typeIdentifier, visibility: .ownProcess) { completion in
+			do {
+				let data = try row.asData()
+				completion(data, nil)
+			} catch {
+				completion(nil, error)
+			}
+			return nil
+		}
+		
 		let dragItem = UIDragItem(itemProvider: itemProvider)
 		dragItem.localObject = row
 	

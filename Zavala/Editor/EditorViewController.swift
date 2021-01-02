@@ -112,22 +112,23 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		return true
 	}
 
-	var undoableCommands = [UndoableCommand]()
-	override var canBecomeFirstResponder: Bool { return true }
-
-	private(set) var outline: Outline?
-	
-	private var currentTextView: OutlineTextView? {
-		return UIResponder.currentFirstResponder as? OutlineTextView
-	}
-	
-	private var currentRows: [Row]? {
+	var currentRows: [Row]? {
 		if let selected = collectionView.indexPathsForSelectedItems, !selected.isEmpty {
 			return selected.compactMap { outline?.shadowTable?[$0.row] }
 		} else if let currentRow = currentTextView?.row {
 			return [currentRow]
 		}
 		return nil
+	}
+	
+	var undoableCommands = [UndoableCommand]()
+	
+	override var canBecomeFirstResponder: Bool { return true }
+
+	private(set) var outline: Outline?
+	
+	private var currentTextView: OutlineTextView? {
+		return UIResponder.currentFirstResponder as? OutlineTextView
 	}
 	
 	private var currentTextRowStrings: TextRowStrings? {
