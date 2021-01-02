@@ -9,6 +9,8 @@ import Foundation
 
 public struct ShadowTableChanges {
 	
+	public static let userInfoKey = "shadowTableChanges"
+	
 	public struct Move: Hashable {
 		public var from: Int
 		public var to: Int

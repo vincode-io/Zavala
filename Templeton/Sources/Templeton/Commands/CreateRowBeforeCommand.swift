@@ -33,13 +33,11 @@ public final class CreateRowBeforeCommand: OutlineCommand {
 	public func perform() {
 		saveCursorCoordinates()
 		changes = outline.createRow(row, beforeRow: beforeRow)
-		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	public func undo() {
-		let changes = outline.deleteRows([row])
-		delegate?.applyChanges(changes)
+		outline.deleteRows([row])
 		registerRedo()
 		restoreCursorPosition()
 	}

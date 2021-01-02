@@ -41,14 +41,12 @@ public final class DeleteRowCommand: OutlineCommand {
 	public func perform() {
 		saveCursorCoordinates()
 		changes = outline.deleteRows(rows, textRowStrings: textRowStrings)
-		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	public func undo() {
 		for row in rows.sortedByDisplayOrder() {
-			let changes = outline.createRows([row], afterRow: afterRows[row])
-			delegate?.applyChanges(changes)
+			outline.createRows([row], afterRow: afterRows[row])
 		}
 		registerRedo()
 		restoreCursorPosition()

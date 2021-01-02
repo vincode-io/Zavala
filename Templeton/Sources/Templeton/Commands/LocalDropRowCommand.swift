@@ -14,8 +14,6 @@ public final class LocalDropRowCommand: OutlineCommand {
 	weak public var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	public var changes: ShadowTableChanges?
-
 	var outline: Outline
 	var rowMoves = [Outline.RowMove]()
 	var restoreMoves = [Outline.RowMove]()
@@ -43,13 +41,12 @@ public final class LocalDropRowCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		changes = outline.moveRows(rowMoves, textRowStrings: nil)
+		outline.moveRows(rowMoves, textRowStrings: nil)
 		registerUndo()
 	}
 	
 	public func undo() {
-		let changes = outline.moveRows(restoreMoves, textRowStrings: nil)
-		delegate?.applyChanges(changes)
+		outline.moveRows(restoreMoves, textRowStrings: nil)
 		registerRedo()
 		restoreCursorPosition()
 	}

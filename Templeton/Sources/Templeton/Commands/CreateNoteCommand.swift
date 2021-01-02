@@ -42,13 +42,11 @@ public final class CreateNoteCommand: OutlineCommand {
 		let (impacted, changes) = outline.createNotes(rows: rows, textRowStrings: newTextRowStrings)
 		noteCreatedRows = impacted
 		self.changes = changes
-		delegate?.applyChanges(changes)
 		registerUndo()
 	}
 	
 	public func undo() {
-		let (_, changes) = outline.deleteNotes(rows: noteCreatedRows ?? [Row](), textRowStrings: oldTextRowStrings)
-		delegate?.applyChanges(changes)
+		outline.deleteNotes(rows: noteCreatedRows ?? [Row](), textRowStrings: oldTextRowStrings)
 		registerRedo()
 		restoreCursorPosition()
 	}

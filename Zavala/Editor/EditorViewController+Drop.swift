@@ -169,9 +169,7 @@ extension EditorViewController {
 	}
 	
 	private func localRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], toParent: RowContainer, toChildIndex: Int) {
-		guard let undoManager = undoManager,
-			  let outline = outline,
-			  let dragItem = coordinator.items.first?.dragItem else { return }
+		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = LocalDropRowCommand(undoManager: undoManager,
 									 delegate: self,
@@ -181,20 +179,6 @@ extension EditorViewController {
 									 toChildIndex: toChildIndex)
 		
 		runCommand(command)
-		
-		let targetIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: outline.shadowTable!.count - 1, section: 1)
-
-		if let moves = command.changes?.moveIndexPaths, !moves.isEmpty {
-			collectionView.performBatchUpdates({
-				for move in moves {
-					collectionView.moveItem(at: move.0, to: move.1)
-				}
-			}, completion: { _ in
-				coordinator.drop(dragItem, toItemAt: targetIndexPath)
-			})
-		}
-
-		deselectAll()
 	}
 	
 	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {

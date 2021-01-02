@@ -39,14 +39,12 @@ public final class SplitRowCommand: OutlineCommand {
 			newRow = Row.text(TextRow())
 		}
 		changes = outline.splitRow(newRow: newRow!, row: row, topic: topic, cursorPosition: cursorPosition)
-		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	public func undo() {
 		guard let newHeadline = newRow else { return }
-		let changes = outline.joinRows(topRow: row, bottomRow: newHeadline)
-		delegate?.applyChanges(changes)
+		outline.joinRows(topRow: row, bottomRow: newHeadline)
 		registerRedo()
 		restoreCursorPosition()
 	}

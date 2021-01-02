@@ -34,16 +34,13 @@ public final class ExpandAllCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (impacted, changes) = outline.expandAll(containers: containers)
-		expandedRows = impacted
-		delegate?.applyChangesRestoringCursor(changes)
+		expandedRows = outline.expandAll(containers: containers)
 		registerUndo()
 	}
 	
 	public func undo() {
 		guard let expandedRows = expandedRows else { return }
-		let (_, changes) = outline.collapse(rows: expandedRows)
-		delegate?.applyChanges(changes)
+		outline.collapse(rows: expandedRows)
 		registerRedo()
 		restoreCursorPosition()
 	}

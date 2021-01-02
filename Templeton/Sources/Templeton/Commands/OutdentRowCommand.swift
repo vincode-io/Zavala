@@ -43,9 +43,7 @@ public final class OutdentRowCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (impacted, changes) = outline.outdentRows(rows, textRowStrings: newTextRowStrings)
-		outdentedRows = impacted
-		delegate?.applyChangesRestoringCursor(changes)
+		outdentedRows = outline.outdentRows(rows, textRowStrings: newTextRowStrings)
 		registerUndo()
 	}
 	
@@ -53,8 +51,7 @@ public final class OutdentRowCommand: OutlineCommand {
 		guard let outdentedRows = outdentedRows else { return }
 		let outdented = Set(outdentedRows)
 		let outdentRestore = restoreMoves.filter { outdented.contains($0.row) }
-		let changes = outline.moveRows(outdentRestore, textRowStrings: oldTextRowStrings)
-		delegate?.applyChanges(changes)
+		outline.moveRows(outdentRestore, textRowStrings: oldTextRowStrings)
 		registerRedo()
 		restoreCursorPosition()
 	}

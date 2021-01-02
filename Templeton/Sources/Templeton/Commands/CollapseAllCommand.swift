@@ -34,16 +34,13 @@ public final class CollapseAllCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (impacted, changes) = outline.collapseAll(containers: containers)
-		collapsedRows = impacted
-		delegate?.applyChangesRestoringCursor(changes)
+		collapsedRows = outline.collapseAll(containers: containers)
 		registerUndo()
 	}
 	
 	public func undo() {
 		guard let collapsedRows = collapsedRows else { return }
-		let (_, changes) = outline.expand(rows: collapsedRows)
-		delegate?.applyChanges(changes)
+		outline.expand(rows: collapsedRows)
 		registerRedo()
 		restoreCursorPosition()
 	}

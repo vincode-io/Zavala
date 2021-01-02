@@ -36,14 +36,12 @@ public final class PasteRowCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let changes = outline.createRows(rows, afterRow: afterRow)
-		delegate?.applyChanges(changes)
+		outline.createRows(rows, afterRow: afterRow)
 		registerUndo()
 	}
 	
 	public func undo() {
-		let changes = outline.deleteRows(rows)
-		delegate?.applyChanges(changes)
+		outline.deleteRows(rows)
 		registerRedo()
 		restoreCursorPosition()
 	}

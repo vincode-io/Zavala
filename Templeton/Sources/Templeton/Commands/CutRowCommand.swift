@@ -15,8 +15,6 @@ public final class CutRowCommand: OutlineCommand {
 	weak public var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	public var changes: ShadowTableChanges?
-
 	var outline: Outline
 	var rows: [Row]
 	var afterRows = [Row: Row]()
@@ -38,15 +36,13 @@ public final class CutRowCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		changes = outline.deleteRows(rows)
-		delegate?.applyChanges(changes!)
+		outline.deleteRows(rows)
 		registerUndo()
 	}
 	
 	public func undo() {
 		for row in rows.sortedByDisplayOrder() {
-			let changes = outline.createRows([row], afterRow: afterRows[row])
-			delegate?.applyChanges(changes)
+			outline.createRows([row], afterRow: afterRows[row])
 		}
 		registerRedo()
 		restoreCursorPosition()

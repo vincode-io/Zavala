@@ -38,16 +38,14 @@ public final class UncompleteCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (impacted, changes) = outline.uncomplete(rows: rows, textRowStrings: newTextRowStrings)
+		let (impacted, _) = outline.uncomplete(rows: rows, textRowStrings: newTextRowStrings)
 		completedRows = impacted
-		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	public func undo() {
 		guard let completedRows = completedRows else { return }
-		let (_, changes) = outline.complete(rows: completedRows, textRowStrings: oldTextRowStrings)
-		delegate?.applyChanges(changes)
+		outline.complete(rows: completedRows, textRowStrings: oldTextRowStrings)
 		registerRedo()
 		restoreCursorPosition()
 	}

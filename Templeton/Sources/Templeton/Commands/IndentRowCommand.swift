@@ -36,16 +36,13 @@ public final class IndentRowCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (impacted, changes) = outline.indentRows(rows, textRowStrings: newTextRowStrings)
-		indentedRows = impacted
-		delegate?.applyChangesRestoringCursor(changes)
+		indentedRows = outline.indentRows(rows, textRowStrings: newTextRowStrings)
 		registerUndo()
 	}
 	
 	public func undo() {
 		guard let indentedRows = indentedRows else { return }
-		let (_, changes) = outline.outdentRows(indentedRows, textRowStrings: oldTextRowStrings)
-		delegate?.applyChanges(changes)
+		outline.outdentRows(indentedRows, textRowStrings: oldTextRowStrings)
 		registerRedo()
 		restoreCursorPosition()
 	}

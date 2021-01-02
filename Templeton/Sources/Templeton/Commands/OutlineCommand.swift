@@ -8,8 +8,6 @@ import Foundation
 import RSCore
 
 public protocol OutlineCommandDelegate: class {
-	func applyChanges(_: ShadowTableChanges)
-	func applyChangesRestoringCursor(_: ShadowTableChanges)
 	func restoreCursorPosition(_: CursorCoordinates)
 }
 

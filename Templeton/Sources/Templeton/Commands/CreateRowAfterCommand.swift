@@ -37,14 +37,12 @@ public final class CreateRowAfterCommand: OutlineCommand {
 			row = Row.text(TextRow())
 		}
 		changes = outline.createRows([row!], afterRow: afterRow, textRowStrings: textRowStrings)
-		delegate?.applyChanges(changes!)
 		registerUndo()
 	}
 	
 	public func undo() {
 		guard let row = row else { return }
-		let changes = outline.deleteRows([row])
-		delegate?.applyChanges(changes)
+		outline.deleteRows([row])
 		registerRedo()
 		restoreCursorPosition()
 	}

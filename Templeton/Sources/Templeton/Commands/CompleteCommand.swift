@@ -42,14 +42,12 @@ public final class CompleteCommand: OutlineCommand {
 		let (impacted, changes) = outline.complete(rows: rows, textRowStrings: newTextRowStrings)
 		completedRows = impacted
 		self.changes = changes
-		delegate?.applyChangesRestoringCursor(changes)
 		registerUndo()
 	}
 	
 	public func undo() {
 		guard let completedRows = completedRows else { return }
-		let (_, changes) = outline.uncomplete(rows: completedRows, textRowStrings: oldTextRowStrings)
-		delegate?.applyChanges(changes)
+		outline.uncomplete(rows: completedRows, textRowStrings: oldTextRowStrings)
 		registerRedo()
 		restoreCursorPosition()
 	}

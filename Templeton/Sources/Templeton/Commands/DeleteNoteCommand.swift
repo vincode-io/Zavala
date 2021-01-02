@@ -41,13 +41,11 @@ public final class DeleteNoteCommand: OutlineCommand {
 		let (impacted, changes) = outline.deleteNotes(rows: rows, textRowStrings: newTextRowStrings)
 		deletedRowNotes = impacted
 		self.changes = changes
-		delegate?.applyChanges(changes)
 		registerUndo()
 	}
 	
 	public func undo() {
-		let changes = outline.restoreNotes(deletedRowNotes ?? [Row: NSAttributedString]())
-		delegate?.applyChanges(changes)
+		outline.restoreNotes(deletedRowNotes ?? [Row: NSAttributedString]())
 		registerRedo()
 		restoreCursorPosition()
 	}

@@ -30,16 +30,13 @@ public final class ExpandCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (impacted, changes) = outline.expand(rows: rows)
-		expandedRows = impacted
-		delegate?.applyChangesRestoringCursor(changes)
+		expandedRows = outline.expand(rows: rows)
 		registerUndo()
 	}
 	
 	public func undo() {
 		guard let expandedRows = expandedRows else { return }
-		let (_, changes) = outline.collapse(rows: expandedRows)
-		delegate?.applyChanges(changes)
+		outline.collapse(rows: expandedRows)
 		registerRedo()
 		restoreCursorPosition()
 	}

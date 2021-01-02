@@ -192,6 +192,8 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		
 		updateUI()
 		collectionView.reloadData()
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(shadowTableDidChange(_:)), name: .ShadowTableDidChange, object: nil)
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -269,6 +271,14 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		super.pressesEnded(presses, with: event)
 		let keyCodes = presses.compactMap { $0.key?.keyCode }
 		keyCodes.forEach { currentKeyPresses.remove($0) }
+	}
+	
+	// MARK: Notifications
+	@objc func shadowTableDidChange(_ note: Notification) {
+		if note.object as? Outline == outline {
+			guard let changes = note.userInfo?[ShadowTableChanges.userInfoKey] as? ShadowTableChanges else { return }
+			applyChangesRestoringCursor(changes)
+		}
 	}
 	
 	// MARK: API
@@ -617,44 +627,6 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 
 extension EditorViewController: OutlineCommandDelegate {
 	
-	func applyChanges(_ changes: ShadowTableChanges) {
-		deselectAll()
-		
-		if let deletes = changes.deleteIndexPaths, !deletes.isEmpty {
-			collectionView.deleteItems(at: deletes)
-		}
-		if let inserts = changes.insertIndexPaths, !inserts.isEmpty {
-			collectionView.insertItems(at: inserts)
-		}
-		if let moves = changes.moveIndexPaths, !moves.isEmpty {
-			collectionView.performBatchUpdates {
-				for move in moves {
-					collectionView.moveItem(at: move.0, to: move.1)
-				}
-			}
-		}
-		if let reloads = changes.reloadIndexPaths, !reloads.isEmpty {
-			collectionView.reloadItems(at: reloads)
-		}
-	}
-	
-	func applyChangesRestoringCursor(_ changes: ShadowTableChanges) {
-		var textRange: UITextRange? = nil
-		var cursorRow: Row? = nil
-		if let editorTextView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView {
-			textRange = editorTextView.selectedTextRange
-			cursorRow = editorTextView.row
-		}
-		
-		applyChanges(changes)
-		
-		if let textRange = textRange,
-		   let updated = cursorRow?.shadowTableIndex,
-		   let rowCell = collectionView.cellForItem(at: IndexPath(row: updated, section: 1)) as? EditorTextRowViewCell {
-			rowCell.restoreSelection(textRange)
-		}
-	}
-
 	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates) {
 		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
@@ -722,6 +694,44 @@ extension EditorViewController {
 		collectionView.contentOffset = contentOffset
 	}
 	
+	private func applyChanges(_ changes: ShadowTableChanges) {
+		deselectAll()
+		
+		if let deletes = changes.deleteIndexPaths, !deletes.isEmpty {
+			collectionView.deleteItems(at: deletes)
+		}
+		if let inserts = changes.insertIndexPaths, !inserts.isEmpty {
+			collectionView.insertItems(at: inserts)
+		}
+		if let moves = changes.moveIndexPaths, !moves.isEmpty {
+			collectionView.performBatchUpdates {
+				for move in moves {
+					collectionView.moveItem(at: move.0, to: move.1)
+				}
+			}
+		}
+		if let reloads = changes.reloadIndexPaths, !reloads.isEmpty {
+			collectionView.reloadItems(at: reloads)
+		}
+	}
+	
+	private func applyChangesRestoringCursor(_ changes: ShadowTableChanges) {
+		var textRange: UITextRange? = nil
+		var cursorRow: Row? = nil
+		if let editorTextView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView {
+			textRange = editorTextView.selectedTextRange
+			cursorRow = editorTextView.row
+		}
+		
+		applyChanges(changes)
+		
+		if let textRange = textRange,
+		   let updated = cursorRow?.shadowTableIndex,
+		   let rowCell = collectionView.cellForItem(at: IndexPath(row: updated, section: 1)) as? EditorTextRowViewCell {
+			rowCell.restoreSelection(textRange)
+		}
+	}
+
 	private func restoreOutlineCursorPosition() {
 		if let cursorCoordinates = outline?.cursorCoordinates {
 			restoreCursorPosition(cursorCoordinates)

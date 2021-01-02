@@ -8,7 +8,7 @@
 import Foundation
 
 public extension Notification.Name {
-	static let OutlineBodyDidChange = Notification.Name(rawValue: "OutlineBodyDidChange")
+	static let ShadowTableDidChange = Notification.Name(rawValue: "ShadowTableDidChange")
 }
 
 public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable, Codable {
@@ -355,7 +355,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineBodyDidChange()
 		
 		let reloads = impacted.compactMap { $0.shadowTableIndex }
-		return (impacted, ShadowTableChanges(reloads: Set(reloads)))
+		let changes = ShadowTableChanges(reloads: Set(reloads))
+		shadowTableDidChange(changes)
+		return (impacted, changes)
 	}
 	
 	public func isDeleteNotesUnavailable(rows: [Row]) -> Bool {
@@ -367,6 +369,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
+	@discardableResult
 	func deleteNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row: NSAttributedString], ShadowTableChanges) {
 		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
@@ -383,10 +386,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineBodyDidChange()
 		
 		let reloads = impacted.keys.compactMap { $0.shadowTableIndex }
-		return (impacted, ShadowTableChanges(reloads: Set(reloads)))
+		let changes = ShadowTableChanges(reloads: Set(reloads))
+		shadowTableDidChange(changes)
+		return (impacted, changes)
 	}
 	
-	func restoreNotes(_ notes: [Row: NSAttributedString]) -> ShadowTableChanges {
+	func restoreNotes(_ notes: [Row: NSAttributedString]) {
 		for (row, note) in notes {
 			row.textRow?.note = note
 		}
@@ -394,9 +399,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineBodyDidChange()
 		
 		let reloads = notes.keys.compactMap { $0.shadowTableIndex }
-		return ShadowTableChanges(reloads: Set(reloads))
+		let changes = ShadowTableChanges(reloads: Set(reloads))
+		shadowTableDidChange(changes)
 	}
 	
+	@discardableResult
 	func deleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
 		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
@@ -441,22 +448,24 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		let reloads = rows.compactMap { ($0.parent as? Row)?.shadowTableIndex }
 		
-		return ShadowTableChanges(deletes: Set(deletes), reloads: Set(reloads))
+		let changes = ShadowTableChanges(deletes: Set(deletes), reloads: Set(reloads))
+		shadowTableDidChange(changes)
+		return changes
 	}
 	
-	func joinRows(topRow: Row, bottomRow: Row) -> ShadowTableChanges {
+	func joinRows(topRow: Row, bottomRow: Row) {
 		guard let topTextRow = topRow.textRow,
 			  let topTopic = topTextRow.topic,
 			  let topShadowTableIndex = topRow.shadowTableIndex,
-			  let bottomTopic = bottomRow.textRow?.topic else { return ShadowTableChanges() }
+			  let bottomTopic = bottomRow.textRow?.topic else { return }
 		
 		let mutableText = NSMutableAttributedString(attributedString: topTopic)
 		mutableText.append(bottomTopic)
 		topTextRow.topic = mutableText
 		
-		var changes = deleteRows([bottomRow])
-		changes.append(ShadowTableChanges(reloads: Set([topShadowTableIndex])))
-		return changes
+		deleteRows([bottomRow])
+		let changes = ShadowTableChanges(reloads: Set([topShadowTableIndex]))
+		shadowTableDidChange(changes)
 	}
 	
 	func createRow(_ row: Row, beforeRow: Row, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
@@ -478,9 +487,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		shadowTable?.insert(row, at: shadowTableIndex)
 		resetShadowTableIndexes(startingAt: shadowTableIndex)
-		return ShadowTableChanges(inserts: [shadowTableIndex])
+		let changes = ShadowTableChanges(inserts: [shadowTableIndex])
+		shadowTableDidChange(changes)
+		return changes
 	}
 	
+	@discardableResult
 	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
 		if let afterTextRow = afterRow?.textRow, let texts = textRowStrings {
 			afterTextRow.textRowStrings = texts
@@ -571,8 +583,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		
 		resetShadowTableIndexes(startingAt: afterRow?.shadowTableIndex ?? 0)
-		
-		return ShadowTableChanges(inserts: inserts)
+		let changes = ShadowTableChanges(inserts: inserts)
+		shadowTableDidChange(changes)
+		return changes
 	}
 	
 	func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) -> ShadowTableChanges {
@@ -590,28 +603,36 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		if let rowShadowTableIndex = textRow.shadowTableIndex {
 			changes.append(ShadowTableChanges(reloads: Set([rowShadowTableIndex])))
 		}
+		shadowTableDidChange(changes)
 		return changes
 	}
 
-	func updateRow(_ row: Row, textRowStrings: TextRowStrings?) -> ShadowTableChanges {
+	func updateRow(_ row: Row, textRowStrings: TextRowStrings?) {
 		if let textRow = row.textRow, let textRowStrings = textRowStrings {
 			textRow.textRowStrings = textRowStrings
 		}
+		
 		outlineBodyDidChange()
-		guard let shadowTableIndex = row.shadowTableIndex else { return ShadowTableChanges() }
-		return ShadowTableChanges(reloads: [shadowTableIndex])
+		
+		guard let shadowTableIndex = row.shadowTableIndex else { return }
+		let changes = ShadowTableChanges(reloads: [shadowTableIndex])
+		shadowTableDidChange(changes)
 	}
 	
-	public func expand(rows: [Row]) -> ([Row], ShadowTableChanges) {
+	@discardableResult
+	public func expand(rows: [Row]) -> [Row] {
 		if rows.count == 1, let row = rows.first {
-			return ([row], expand(row: row))
+			expand(row: row)
+			return [row]
 		}
 		return expandCollapse(rows: rows, isExpanded: true)
 	}
 	
-	func collapse(rows: [Row]) -> ([Row], ShadowTableChanges) {
+	@discardableResult
+	func collapse(rows: [Row]) -> [Row] {
 		if rows.count == 1, let row = rows.first {
-			return ([row], collapse(row: row))
+			collapse(row: row)
+			return [row]
 		}
 		return expandCollapse(rows: rows, isExpanded: false)
 	}
@@ -625,7 +646,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	func expandAll(containers: [RowContainer]) -> ([Row], ShadowTableChanges) {
+	func expandAll(containers: [RowContainer]) -> [Row] {
 		var impacted = [Row]()
 		
 		for container in containers {
@@ -653,8 +674,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		let reloads = Set(impacted.compactMap { $0.shadowTableIndex })
 		changes.append(ShadowTableChanges(reloads: reloads))
-		
-		return (impacted, changes)
+		shadowTableDidChange(changes)
+		return impacted
 	}
 
 	public func isCollapseAllUnavailable(containers: [RowContainer]) -> Bool {
@@ -666,7 +687,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	func collapseAll(containers: [RowContainer]) -> ([Row], ShadowTableChanges) {
+	func collapseAll(containers: [RowContainer]) -> [Row] {
 		var impacted = [Row]()
 		var reloads = [Row]()
 
@@ -703,7 +724,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let reloadIndexes = Set(reloads.compactMap { $0.shadowTableIndex })
 		changes.append(ShadowTableChanges(reloads: reloadIndexes))
 		
-		return (impacted, changes)
+		shadowTableDidChange(changes)
+		return impacted
 	}
 
 	public func isCompleteUnavailable(rows: [Row]) -> Bool {
@@ -715,6 +737,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
+	@discardableResult
 	func complete(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
 		return completeUncomplete(rows: rows, isComplete: true, textRowStrings: textRowStrings)
 	}
@@ -728,6 +751,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
+	@discardableResult
 	func uncomplete(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
 		return completeUncomplete(rows: rows, isComplete: false, textRowStrings: textRowStrings)
 	}
@@ -741,7 +765,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	func indentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+	func indentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> [Row] {
 		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -749,7 +773,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let sortedRows = rows.sortedByDisplayOrder()
 
 		var impacted = [Row]()
-		var changes = ShadowTableChanges()
 		var reloads = Set<Int>()
 
 		for row in sortedRows {
@@ -761,7 +784,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 				  let newParentRowShadowTableIndex = newParentRow.shadowTableIndex else { continue }
 
 			impacted.append(row)
-			changes.append(expand(row: newParentRow))
+			expand(row: newParentRow)
 			
 			var siblingRows = newParentRow.rows ?? [Row]()
 			var mutatingRow = row
@@ -793,8 +816,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 
-		changes.append(ShadowTableChanges(reloads: reloads))
-		return (impacted, changes)
+		let changes = ShadowTableChanges(reloads: reloads)
+		shadowTableDidChange(changes)
+		return impacted
 	}
 	
 	public func isOutdentRowsUnavailable(rows: [Row]) -> Bool {
@@ -806,7 +830,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 		
-	func outdentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+	@discardableResult
+	func outdentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> [Row] {
 		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -839,11 +864,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var changes = rebuildShadowTable()
 		let reloads = reloadsForParentAndChildren(rows: impacted)
 		changes.append(ShadowTableChanges(reloads: reloads))
+		shadowTableDidChange(changes)
 		
-		return (impacted, changes)
+		return impacted
 	}
 	
-	func moveRows(_ rowMoves: [RowMove], textRowStrings: TextRowStrings?) -> ShadowTableChanges {
+	func moveRows(_ rowMoves: [RowMove], textRowStrings: TextRowStrings?) {
 		if rowMoves.count == 1, let textRow = rowMoves.first?.row.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -895,7 +921,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var reloads = reloadsForParentAndChildren(rows: rowMoves.map { $0.row })
 		reloads.formUnion(oldParentReloads)
 		changes.append(ShadowTableChanges(reloads: reloads))
-		return changes
+		shadowTableDidChange(changes)
 	}
 	
 	public func load() {
@@ -985,9 +1011,14 @@ extension Outline {
 		documentMetaDataDidChange()
 		rowDictionaryNeedUpdate = true
 		rowsFile?.markAsDirty()
-		NotificationCenter.default.post(name: .OutlineBodyDidChange, object: self, userInfo: nil)
 	}
 	
+	private func shadowTableDidChange(_ changes: ShadowTableChanges) {
+		var userInfo = [AnyHashable: Any]()
+		userInfo[ShadowTableChanges.userInfoKey] = changes
+		NotificationCenter.default.post(name: .ShadowTableDidChange, object: self, userInfo: userInfo)
+	}
+
 	private func outlineDidDelete() {
 		NotificationCenter.default.post(name: .DocumentDidDelete, object: Document.outline(self), userInfo: nil)
 	}
@@ -1033,7 +1064,9 @@ extension Outline {
 			}
 		}
 		
-		return (impacted, ShadowTableChanges(reloads: reloads))
+		let changes = ShadowTableChanges(reloads: reloads)
+		shadowTableDidChange(changes)
+		return (impacted, changes)
 	}
 
 	private func isExpandAllUnavailable(container: RowContainer) -> Bool {
@@ -1070,7 +1103,7 @@ extension Outline {
 		return unavailable
 	}
 	
-	private func expandCollapse(rows: [Row], isExpanded: Bool) -> ([Row], ShadowTableChanges) {
+	private func expandCollapse(rows: [Row], isExpanded: Bool) -> [Row] {
 		var impacted = [Row]()
 		
 		for row in rows {
@@ -1088,13 +1121,12 @@ extension Outline {
 		let reloads = Set(rows.compactMap { $0.shadowTableIndex })
 		changes.append(ShadowTableChanges(reloads: reloads))
 		
-		return (impacted, changes)
+		shadowTableDidChange(changes)
+		return impacted
 	}
 	
-	private func expand(row: Row) -> ShadowTableChanges {
-		guard !(row.isExpanded ?? true), let rowShadowTableIndex = row.shadowTableIndex else {
-			return ShadowTableChanges()
-		}
+	private func expand(row: Row) {
+		guard !(row.isExpanded ?? true), let rowShadowTableIndex = row.shadowTableIndex else { return }
 		
 		var mutatingRow = row
 		mutatingRow.isExpanded = true
@@ -1127,7 +1159,8 @@ extension Outline {
 		}
 		
 		resetShadowTableIndexes(startingAt: rowShadowTableIndex)
-		return ShadowTableChanges(inserts: inserts, reloads: [rowShadowTableIndex])
+		let changes = ShadowTableChanges(inserts: inserts, reloads: [rowShadowTableIndex])
+		shadowTableDidChange(changes)
 	}
 
 	private func isCollapseAllUnavailable(container: RowContainer) -> Bool {
@@ -1164,8 +1197,8 @@ extension Outline {
 		return unavailable
 	}
 	
-	private func collapse(row: Row) -> ShadowTableChanges {
-		guard row.isExpanded ?? true else { return ShadowTableChanges() }
+	private func collapse(row: Row)  {
+		guard row.isExpanded ?? true else { return  }
 
 		var mutatingRow = row
 		mutatingRow.isExpanded = false
@@ -1190,9 +1223,10 @@ extension Outline {
 		
 		shadowTable?.remove(atOffsets: IndexSet(reloads))
 		
-		guard let rowShadowTableIndex = row.shadowTableIndex else { return ShadowTableChanges() }
+		guard let rowShadowTableIndex = row.shadowTableIndex else { return }
 		resetShadowTableIndexes(startingAt: rowShadowTableIndex)
-		return ShadowTableChanges(deletes: reloads, reloads: Set([rowShadowTableIndex]))
+		let changes = ShadowTableChanges(deletes: reloads, reloads: Set([rowShadowTableIndex]))
+		shadowTableDidChange(changes)
 	}
 	
 	func rebuildRowDictionary() {
