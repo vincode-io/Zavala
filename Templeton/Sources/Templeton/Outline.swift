@@ -473,7 +473,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		shadowTableDidChange(changes)
 	}
 	
-	func createRow(_ row: Row, beforeRow: Row, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
+	func createRow(_ row: Row, beforeRow: Row, textRowStrings: TextRowStrings? = nil) -> Int? {
 		if let beforeTextRow = beforeRow.textRow, let texts = textRowStrings {
 			beforeTextRow.textRowStrings = texts
 		}
@@ -481,7 +481,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		guard var parent = beforeRow.parent,
 			  let index = parent.rows?.firstIndex(of: beforeRow),
 			  let shadowTableIndex = beforeRow.shadowTableIndex else {
-			return ShadowTableChanges()
+			return nil
 		}
 		
 		parent.rows?.insert(row, at: index)
@@ -494,11 +494,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		resetShadowTableIndexes(startingAt: shadowTableIndex)
 		let changes = ShadowTableChanges(inserts: [shadowTableIndex])
 		shadowTableDidChange(changes)
-		return changes
+		
+		return shadowTableIndex
 	}
 	
 	@discardableResult
-	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil) -> ShadowTableChanges {
+	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil) -> Int? {
 		if let afterTextRow = afterRow?.textRow, let texts = textRowStrings {
 			afterTextRow.textRowStrings = texts
 		}
@@ -580,21 +581,22 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			rowShadowTableIndex = shadowTable?.count ?? 0
 		}
 
-		var inserts = Set<Int>()
+		var inserts = [Int]()
 		for i in 0..<insertedRows.count {
 			let shadowTableIndex = rowShadowTableIndex + i
-			inserts.insert(shadowTableIndex)
+			inserts.append(shadowTableIndex)
 			shadowTable?.insert(insertedRows[i], at: shadowTableIndex)
 		}
 		
 		resetShadowTableIndexes(startingAt: afterRow?.shadowTableIndex ?? 0)
-		let changes = ShadowTableChanges(inserts: inserts)
+		let changes = ShadowTableChanges(inserts: Set(inserts))
 		shadowTableDidChange(changes)
-		return changes
+		
+		return inserts.count > 0 ? inserts[0] : nil
 	}
 	
-	func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) -> ShadowTableChanges {
-		guard let newTextRow = newRow.textRow, let textRow = row.textRow else { return ShadowTableChanges() }
+	func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) -> Int? {
+		guard let newTextRow = newRow.textRow, let textRow = row.textRow else { return nil }
 		
 		let newTopicRange = NSRange(location: cursorPosition, length: topic.length - cursorPosition)
 		let newTopicText = topic.attributedSubstring(from: newTopicRange)
@@ -604,15 +606,14 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let topicText = topic.attributedSubstring(from: topicRange)
 		textRow.topic = topicText
 
-		var changes = createRows([newRow], afterRow: row)
+		let newCursorIndex = createRows([newRow], afterRow: row)
 
 		if let rowShadowTableIndex = textRow.shadowTableIndex {
 			let reloadChanges = ShadowTableChanges(reloads: Set([rowShadowTableIndex]))
 			shadowTableDidChange(reloadChanges)
-			changes.append(reloadChanges)
 		}
 
-		return changes
+		return newCursorIndex
 	}
 
 	func updateRow(_ row: Row, textRowStrings: TextRowStrings?, applyChanges: Bool) {

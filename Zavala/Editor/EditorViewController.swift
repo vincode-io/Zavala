@@ -1141,8 +1141,8 @@ extension EditorViewController {
 		
 		runCommand(command)
 		
-		if let insert = command.changes?.insertIndexPaths?.first {
-			if let rowCell = collectionView.cellForItem(at: insert) as? EditorTextRowViewCell {
+		if let newCursorIndex = command.newCursorIndex {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: 1)) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}
@@ -1161,9 +1161,10 @@ extension EditorViewController {
 		
 		runCommand(command)
 		
-		if let insert = command.changes?.insertIndexPaths?.first {
-			makeCellVisibleIfNecessary(indexPath: insert) {
-				if let rowCell = self.collectionView.cellForItem(at: insert) as? EditorTextRowViewCell {
+		if let newCursorIndex = command.newCursorIndex {
+			let newCursorIndexPath = IndexPath(row: newCursorIndex, section: 1)
+			makeCellVisibleIfNecessary(indexPath: newCursorIndexPath) {
+				if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorTextRowViewCell {
 					rowCell.moveToEnd()
 				}
 			}
@@ -1207,8 +1208,8 @@ extension EditorViewController {
 		
 		runCommand(command)
 		
-		if let insert = command.changes?.insertIndexPaths?.first {
-			if let rowCell = collectionView.cellForItem(at: insert) as? EditorTextRowViewCell {
+		if let newCursorIndex = command.newCursorIndex {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: 1)) as? EditorTextRowViewCell {
 				rowCell.moveToStart()
 			}
 		}

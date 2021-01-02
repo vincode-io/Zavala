@@ -14,7 +14,7 @@ public final class SplitRowCommand: OutlineCommand {
 	weak public var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	public var changes: ShadowTableChanges?
+	public var newCursorIndex: Int?
 
 	var outline: Outline
 	var newRow: Row?
@@ -38,7 +38,7 @@ public final class SplitRowCommand: OutlineCommand {
 		if newRow == nil {
 			newRow = Row.text(TextRow())
 		}
-		changes = outline.splitRow(newRow: newRow!, row: row, topic: topic, cursorPosition: cursorPosition)
+		newCursorIndex = outline.splitRow(newRow: newRow!, row: row, topic: topic, cursorPosition: cursorPosition)
 		registerUndo()
 	}
 	

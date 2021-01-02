@@ -14,7 +14,7 @@ public final class CreateRowBeforeCommand: OutlineCommand {
 	weak public var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	public var changes: ShadowTableChanges?
+	public var newCursorIndex: Int?
 
 	var outline: Outline
 	var row: Row
@@ -32,7 +32,7 @@ public final class CreateRowBeforeCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		changes = outline.createRow(row, beforeRow: beforeRow)
+		newCursorIndex = outline.createRow(row, beforeRow: beforeRow)
 		registerUndo()
 	}
 	

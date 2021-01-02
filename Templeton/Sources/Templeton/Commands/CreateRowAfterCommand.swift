@@ -14,7 +14,7 @@ public final class CreateRowAfterCommand: OutlineCommand {
 	public weak var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	public var changes: ShadowTableChanges?
+	public var newCursorIndex: Int?
 
 	var outline: Outline
 	var row: Row?
@@ -36,7 +36,7 @@ public final class CreateRowAfterCommand: OutlineCommand {
 		if row == nil {
 			row = Row.text(TextRow())
 		}
-		changes = outline.createRows([row!], afterRow: afterRow, textRowStrings: textRowStrings)
+		newCursorIndex = outline.createRows([row!], afterRow: afterRow, textRowStrings: textRowStrings)
 		registerUndo()
 	}
 	
