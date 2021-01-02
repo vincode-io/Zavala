@@ -8,8 +8,8 @@
 import Foundation
 
 struct UserInfoKeys {
-	static let documentContainerID = "outlineProviderID"
-	static let documentID = "outlineID"
+	static let documentContainerID = "documentContainerID"
+	static let documentID = "documentID"
 	static let folder = "folder"
 	
 	static let sidebarWidth = "sidebarWidth"
