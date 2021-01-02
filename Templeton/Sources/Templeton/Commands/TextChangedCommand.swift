@@ -18,6 +18,7 @@ public final class TextChangedCommand: OutlineCommand {
 	var row: Row
 	var oldTextRowStrings: TextRowStrings?
 	var newTextRowStrings: TextRowStrings
+	var applyChanges = false
 	
 	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
 		self.undoManager = undoManager
@@ -34,12 +35,13 @@ public final class TextChangedCommand: OutlineCommand {
 	}
 	
 	public func perform() {
-		outline.updateRow(row, textRowStrings: newTextRowStrings)
+		outline.updateRow(row, textRowStrings: newTextRowStrings, applyChanges: applyChanges)
+		applyChanges = true
 		registerUndo()
 	}
 	
 	public func undo() {
-		outline.updateRow(row, textRowStrings: oldTextRowStrings)
+		outline.updateRow(row, textRowStrings: oldTextRowStrings, applyChanges: applyChanges)
 		registerRedo()
 		restoreCursorPosition()
 	}

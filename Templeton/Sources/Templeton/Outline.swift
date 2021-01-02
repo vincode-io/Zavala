@@ -607,16 +607,18 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return changes
 	}
 
-	func updateRow(_ row: Row, textRowStrings: TextRowStrings?) {
+	func updateRow(_ row: Row, textRowStrings: TextRowStrings?, applyChanges: Bool) {
 		if let textRow = row.textRow, let textRowStrings = textRowStrings {
 			textRow.textRowStrings = textRowStrings
 		}
 		
 		outlineBodyDidChange()
 		
-		guard let shadowTableIndex = row.shadowTableIndex else { return }
-		let changes = ShadowTableChanges(reloads: [shadowTableIndex])
-		shadowTableDidChange(changes)
+		if applyChanges {
+			guard let shadowTableIndex = row.shadowTableIndex else { return }
+			let changes = ShadowTableChanges(reloads: [shadowTableIndex])
+			shadowTableDidChange(changes)
+		}
 	}
 	
 	@discardableResult
