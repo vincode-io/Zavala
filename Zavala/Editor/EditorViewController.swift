@@ -1037,7 +1037,37 @@ extension EditorViewController {
 	}
 
 	private func copyRows(_ rows: [Row]) {
-		let itemProviders = rows.sortedByDisplayOrder().map { NSItemProvider(row: $0) }
+		var itemProviders = [NSItemProvider]()
+
+		for row in rows.sortedByDisplayOrder() {
+			let itemProvider = NSItemProvider()
+			
+			// We only register the text representation on the first one, since it looks like most text editors only support 1 dragged text item
+			if row == rows[0] {
+				itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+					var markdowns = [String]()
+					for row in rows {
+						markdowns.append(row.markdown())
+					}
+					let data = markdowns.joined(separator: "\n").data(using: .utf8)
+					completion(data, nil)
+					return nil
+				}
+			}
+			
+			itemProvider.registerDataRepresentation(forTypeIdentifier: Row.typeIdentifier, visibility: .ownProcess) { completion in
+				do {
+					let data = try row.asData()
+					completion(data, nil)
+				} catch {
+					completion(nil, error)
+				}
+				return nil
+			}
+			
+			itemProviders.append(itemProvider)
+		}
+		
 		UIPasteboard.general.setItemProviders(itemProviders, localOnly: false, expirationDate: nil)
 	}
 
