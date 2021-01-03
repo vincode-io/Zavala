@@ -182,8 +182,6 @@ extension EditorViewController {
 	}
 	
 	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
-		guard let outline = outline, let shadowTable = outline.shadowTable else { return }
-		
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
 			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(Row.typeIdentifier) {
 				return dropItem.dragItem.itemProvider
@@ -212,64 +210,11 @@ extension EditorViewController {
 		}
 
 		group.notify(queue: DispatchQueue.main) {
-			guard !rows.isEmpty else { return }
-			
-			// Dropping into a Row is easy peasy
-			if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = targetIndexPath {
-				let newParent = shadowTable[dropInIndexPath.row]
-				
-				// We only have to set the parent for dropping into.  Otherwise Templeton figures it out on its own.
-				rows.forEach { row in
-					var mutableRow = row
-					mutableRow.parent = newParent
-				}
-				
-				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: newParent)
-				return
-			}
-			
-			// Drop into the first entry in the Outline
-			if targetIndexPath == IndexPath(row: 1, section: 0) {
-				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
-				return
-			}
-			
-			// If we don't have a destination index, drop it at the back
-			guard let targetIndexPath = targetIndexPath else {
-				if let outlineRows = outline.rows {
-					if outlineRows.count > 0 {
-						self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: outlineRows[outlineRows.count - 1])
-					} else {
-						self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
-					}
-				}
-				return
-			}
-
-			if shadowTable.count > 0 && targetIndexPath.row > 0 {
-				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: shadowTable[targetIndexPath.row - 1])
-			} else {
-				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
-			}
+			self.remoteRowDrop(coordinator: coordinator, rows: rows, targetIndexPath: targetIndexPath)
 		}
 	}
 
-	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], afterRow: Row?) {
-		guard let undoManager = undoManager, let outline = outline else { return }
-
-		let command = RemoteDropRowCommand(undoManager: undoManager,
-										   delegate: self,
-										   outline: outline,
-										   rows: rows,
-										   afterRow: afterRow)
-		
-		runCommand(command)
-		deselectAll()
-	}
-	
 	private func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
-		guard let outline = outline, let shadowTable = outline.shadowTable else { return }
-		
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
 			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(kUTTypeUTF8PlainText as String) {
 				return dropItem.dragItem.itemProvider
@@ -292,51 +237,69 @@ extension EditorViewController {
 			}
 		}
 
-		let text = texts.joined(separator: "\n")
-		
 		group.notify(queue: DispatchQueue.main) {
+			let text = texts.joined(separator: "\n")
 			guard !text.isEmpty else { return }
 			
-			// Dropping into a Row is easy peasy
-			if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = targetIndexPath {
-				self.remoteTextDrop(coordinator: coordinator, text: text, afterRow: shadowTable[dropInIndexPath.row])
-				return
+			var rows = [Row]()
+			let textRows = text.split(separator: "\n").map { String($0) }
+			for textRow in textRows {
+				let row = Row.text(TextRow(topicPlainText: textRow.trimmingWhitespace))
+				rows.append(row)
 			}
 			
-			// Drop into the first entry in the Outline
-			if targetIndexPath == IndexPath(row: 1, section: 0) {
-				self.remoteTextDrop(coordinator: coordinator, text: text, afterRow: nil)
-				return
-			}
-			
-			// If we don't have a destination index, drop it at the back
-			guard let targetIndexPath = targetIndexPath else {
-				if let outlineRows = outline.rows {
-					if outlineRows.count > 0 {
-						self.remoteTextDrop(coordinator: coordinator, text: text, afterRow: outlineRows[outlineRows.count - 1])
-					} else {
-						self.remoteTextDrop(coordinator: coordinator, text: text, afterRow: nil)
-					}
-				}
-				return
-			}
-
-			if shadowTable.count > 0 && targetIndexPath.row > 0 {
-				self.remoteTextDrop(coordinator: coordinator, text: text, afterRow: shadowTable[targetIndexPath.row - 1])
-			} else {
-				self.remoteTextDrop(coordinator: coordinator, text: text, afterRow: nil)
-			}
+			self.remoteRowDrop(coordinator: coordinator, rows: rows, targetIndexPath: targetIndexPath)
 		}
 	}
 	
-	private func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, text: String, afterRow: Row?) {
+	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], targetIndexPath: IndexPath?) {
+		guard !rows.isEmpty, let outline = self.outline, let shadowTable = outline.shadowTable else { return }
+
+		// Dropping into a Row is easy peasy
+		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = targetIndexPath {
+			let newParent = shadowTable[dropInIndexPath.row]
+			
+			// We only have to set the parent for dropping into.  Otherwise Templeton figures it out on its own.
+			rows.forEach { row in
+				var mutableRow = row
+				mutableRow.parent = newParent
+			}
+			
+			self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: newParent)
+			return
+		}
+		
+		// Drop into the first entry in the Outline
+		if targetIndexPath == IndexPath(row: 1, section: 0) {
+			self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
+			return
+		}
+		
+		// If we don't have a destination index, drop it at the back
+		guard let targetIndexPath = targetIndexPath else {
+			if shadowTable.count > 0 {
+				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: shadowTable[shadowTable.count - 1])
+			} else {
+				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
+			}
+			return
+		}
+
+		if shadowTable.count > 0 && targetIndexPath.row > 0 {
+			self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: shadowTable[targetIndexPath.row - 1])
+		} else {
+			self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
+		}
+	}
+	
+	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], afterRow: Row?) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = RemoteDropTextCommand(undoManager: undoManager,
-											delegate: self,
-											outline: outline,
-											text: text,
-											afterRow: afterRow)
+		let command = RemoteDropRowCommand(undoManager: undoManager,
+										   delegate: self,
+										   outline: outline,
+										   rows: rows,
+										   afterRow: afterRow)
 		
 		runCommand(command)
 		deselectAll()
