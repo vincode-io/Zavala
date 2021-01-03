@@ -246,7 +246,7 @@ extension EditorViewController {
 				return
 			}
 
-			if shadowTable.count > 0 {
+			if shadowTable.count > 0 && targetIndexPath.row > 0 {
 				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: shadowTable[targetIndexPath.row - 1])
 			} else {
 				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)

@@ -42,7 +42,7 @@ public final class CutRowCommand: OutlineCommand {
 	
 	public func undo() {
 		for row in rows.sortedByDisplayOrder() {
-			outline.createRows([row], afterRow: afterRows[row], preferBeginningInsert: true)
+			outline.createRows([row], afterRow: afterRows[row])
 		}
 		registerRedo()
 		restoreCursorPosition()
