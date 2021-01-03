@@ -124,7 +124,7 @@ extension EditorViewController {
 		if droppingInto(session: session, targetIndexPath: targetIndexPath) {
 			return UICollectionViewDropProposal(operation: .copy, intent: .insertIntoDestinationIndexPath)
 		} else {
-			return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+			return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
 		}
 	}
 	
