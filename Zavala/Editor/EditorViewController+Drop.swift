@@ -268,6 +268,76 @@ extension EditorViewController {
 	}
 	
 	private func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
+		guard let outline = outline, let shadowTable = outline.shadowTable else { return }
+		
+		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
+			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(kUTTypeUTF8PlainText as String) {
+				return dropItem.dragItem.itemProvider
+			}
+			return nil
+		}
+		
+		guard !itemProviders.isEmpty else { return }
+
+		let group = DispatchGroup()
+		var text = ""
+		
+		for itemProvider in itemProviders {
+			group.enter()
+			itemProvider.loadDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String) { (data, error) in
+				if let data = data, let itemText = String(data: data, encoding: .utf8) {
+					text.append(itemText)
+					group.leave()
+				}
+			}
+		}
+
+		group.notify(queue: DispatchQueue.main) {
+			guard !text.isEmpty else { return }
+			
+			// Dropping into a Row is easy peasy
+			if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = targetIndexPath {
+				self.remoteTextDrop(coordinator: coordinator, text: text, afterRow: shadowTable[dropInIndexPath.row])
+				return
+			}
+			
+			// Drop into the first entry in the Outline
+			if targetIndexPath == IndexPath(row: 1, section: 0) {
+				self.remoteTextDrop(coordinator: coordinator, text: text, afterRow: nil)
+				return
+			}
+			
+			// If we don't have a destination index, drop it at the back
+			guard let targetIndexPath = targetIndexPath else {
+				if let outlineRows = outline.rows {
+					if outlineRows.count > 0 {
+						self.remoteTextDrop(coordinator: coordinator, text: text, afterRow: outlineRows[outlineRows.count - 1])
+					} else {
+						self.remoteTextDrop(coordinator: coordinator, text: text, afterRow: nil)
+					}
+				}
+				return
+			}
+
+			if shadowTable.count > 0 && targetIndexPath.row > 0 {
+				self.remoteTextDrop(coordinator: coordinator, text: text, afterRow: shadowTable[targetIndexPath.row - 1])
+			} else {
+				self.remoteTextDrop(coordinator: coordinator, text: text, afterRow: nil)
+			}
+		}
+	}
+	
+	private func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, text: String, afterRow: Row?) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+
+		let command = RemoteDropTextCommand(undoManager: undoManager,
+											delegate: self,
+											outline: outline,
+											text: text,
+											afterRow: afterRow)
+		
+		runCommand(command)
+		deselectAll()
 	}
 	
 }
