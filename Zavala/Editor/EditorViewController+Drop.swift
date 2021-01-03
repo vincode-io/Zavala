@@ -280,18 +280,20 @@ extension EditorViewController {
 		guard !itemProviders.isEmpty else { return }
 
 		let group = DispatchGroup()
-		var text = ""
+		var texts = [String]()
 		
 		for itemProvider in itemProviders {
 			group.enter()
 			itemProvider.loadDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String) { (data, error) in
 				if let data = data, let itemText = String(data: data, encoding: .utf8) {
-					text.append(itemText)
+					texts.append(itemText)
 					group.leave()
 				}
 			}
 		}
 
+		let text = texts.joined(separator: "\n")
+		
 		group.notify(queue: DispatchQueue.main) {
 			guard !text.isEmpty else { return }
 			
