@@ -603,10 +603,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return inserts.count > 0 ? inserts[0] : nil
 	}
 	
-	func createRows(text: String, afterRow: Row?) -> [Row] {
-		return []
-	}
-	
 	func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) -> Int? {
 		guard let newTextRow = newRow.textRow, let textRow = row.textRow else { return nil }
 		
