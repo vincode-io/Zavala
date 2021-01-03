@@ -148,7 +148,7 @@ extension EditorViewController {
 		// If we don't have a destination index, drop it at the back
 		guard let targetIndexPath = targetIndexPath else {
 			if let outlineRows = outline.rows {
-				localRowDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: outlineRows.count - 1)
+				localRowDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: outlineRows.count)
 			}
 			return
 		}
@@ -172,11 +172,11 @@ extension EditorViewController {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = LocalDropRowCommand(undoManager: undoManager,
-									 delegate: self,
-									 outline: outline,
-									 rows: rows,
-									 toParent: toParent,
-									 toChildIndex: toChildIndex)
+										  delegate: self,
+										  outline: outline,
+										  rows: rows,
+										  toParent: toParent,
+										  toChildIndex: toChildIndex)
 		
 		runCommand(command)
 	}
@@ -277,11 +277,7 @@ extension EditorViewController {
 		
 		// If we don't have a destination index, drop it at the back
 		guard let targetIndexPath = targetIndexPath else {
-			if shadowTable.count > 0 {
-				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: shadowTable[shadowTable.count - 1], prefersEnd: true)
-			} else {
-				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil, prefersEnd: true)
-			}
+			self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil, prefersEnd: true)
 			return
 		}
 
