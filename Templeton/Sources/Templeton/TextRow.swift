@@ -23,7 +23,7 @@ public final class TextRow: BaseRow, Codable {
 	public var isComplete: Bool?
 
 	public var isNoteEmpty: Bool {
-		return notePlainText?.isEmpty ?? true
+		return notePlainText == nil
 	}
 	
 	public var topicPlainText: String? {

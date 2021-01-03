@@ -339,7 +339,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	func createNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+	func createNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], Int?) {
 		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -357,7 +357,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let reloads = impacted.compactMap { $0.shadowTableIndex }
 		let changes = ShadowTableChanges(reloads: Set(reloads))
 		shadowTableDidChange(changes)
-		return (impacted, changes)
+		return (impacted, reloads.sorted().first)
 	}
 	
 	public func isDeleteNotesUnavailable(rows: [Row]) -> Bool {
@@ -370,7 +370,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	@discardableResult
-	func deleteNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row: NSAttributedString], ShadowTableChanges) {
+	func deleteNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row: NSAttributedString], Int?) {
 		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -388,7 +388,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let reloads = impacted.keys.compactMap { $0.shadowTableIndex }
 		let changes = ShadowTableChanges(reloads: Set(reloads))
 		shadowTableDidChange(changes)
-		return (impacted, changes)
+		return (impacted, reloads.sorted().first)
 	}
 	
 	func restoreNotes(_ notes: [Row: NSAttributedString]) {

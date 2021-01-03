@@ -1256,8 +1256,8 @@ extension EditorViewController {
 		
 		runCommand(command)
 		
-		if let reloadIndex = command.changes?.reloads?.first {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: reloadIndex, section: 1)) as? EditorTextRowViewCell {
+		if let newCursorIndex = command.newCursorIndex {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: 1)) as? EditorTextRowViewCell {
 				rowCell.moveToNote()
 			}
 		}
@@ -1274,8 +1274,8 @@ extension EditorViewController {
 		
 		runCommand(command)
 
-		if let reloadIndex = command.changes?.reloads?.first {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: reloadIndex, section: 1)) as? EditorTextRowViewCell {
+		if let newCursorIndex = command.newCursorIndex {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: 1)) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}

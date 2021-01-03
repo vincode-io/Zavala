@@ -14,7 +14,7 @@ public final class CreateNoteCommand: OutlineCommand {
 	public weak var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	public var changes: ShadowTableChanges?
+	public var newCursorIndex: Int?
 
 	var outline: Outline
 	var rows: [Row]
@@ -39,9 +39,9 @@ public final class CreateNoteCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (impacted, changes) = outline.createNotes(rows: rows, textRowStrings: newTextRowStrings)
+		let (impacted, newCursorIndex) = outline.createNotes(rows: rows, textRowStrings: newTextRowStrings)
 		noteCreatedRows = impacted
-		self.changes = changes
+		self.newCursorIndex = newCursorIndex
 		registerUndo()
 	}
 	

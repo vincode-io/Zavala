@@ -14,7 +14,7 @@ public final class DeleteNoteCommand: OutlineCommand {
 	weak public var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	public var changes: ShadowTableChanges?
+	public var newCursorIndex: Int?
 
 	var outline: Outline
 	var rows: [Row]
@@ -38,9 +38,9 @@ public final class DeleteNoteCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (impacted, changes) = outline.deleteNotes(rows: rows, textRowStrings: newTextRowStrings)
+		let (impacted, newCursorIndex) = outline.deleteNotes(rows: rows, textRowStrings: newTextRowStrings)
 		deletedRowNotes = impacted
-		self.changes = changes
+		self.newCursorIndex = newCursorIndex
 		registerUndo()
 	}
 	
