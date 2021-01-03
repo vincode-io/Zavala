@@ -46,7 +46,7 @@ public final class DeleteRowCommand: OutlineCommand {
 	
 	public func undo() {
 		for row in rows.sortedByDisplayOrder() {
-			outline.createRows([row], afterRow: afterRows[row])
+			outline.createRows([row], afterRow: afterRows[row], preferBeginningInsert: true)
 		}
 		registerRedo()
 		restoreCursorPosition()

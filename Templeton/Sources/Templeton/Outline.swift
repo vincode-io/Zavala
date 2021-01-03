@@ -499,7 +499,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	@discardableResult
-	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil) -> Int? {
+	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil, preferBeginningInsert: Bool = false) -> Int? {
 		if let afterTextRow = afterRow?.textRow, let texts = textRowStrings {
 			afterTextRow.textRowStrings = texts
 		}
@@ -507,7 +507,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		for row in rows.sortedByReverseDisplayOrder() {
 			if afterRow == nil {
 				var rows = self.rows ?? [Row]()
-				rows.append(row)
+				if preferBeginningInsert {
+					rows.insert(row, at: 0)
+				} else {
+					rows.append(row)
+				}
 				var mutatingRow = row
 				mutatingRow.parent = self
 				self.rows = rows
@@ -578,7 +582,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		if let afterRowShadowTableIndex = afterRow?.shadowTableIndex {
 			rowShadowTableIndex = afterRowShadowTableIndex + 1
 		} else {
-			rowShadowTableIndex = shadowTable?.count ?? 0
+			if preferBeginningInsert {
+				rowShadowTableIndex = 0
+			} else {
+				rowShadowTableIndex = shadowTable?.count ?? 0
+			}
 		}
 
 		var inserts = [Int]()
