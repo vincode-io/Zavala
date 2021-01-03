@@ -38,8 +38,7 @@ public final class UncompleteCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (impacted, _) = outline.uncomplete(rows: rows, textRowStrings: newTextRowStrings)
-		completedRows = impacted
+		completedRows = outline.uncomplete(rows: rows, textRowStrings: newTextRowStrings)
 		registerUndo()
 	}
 	

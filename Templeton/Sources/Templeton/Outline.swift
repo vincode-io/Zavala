@@ -749,7 +749,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	@discardableResult
-	func complete(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+	func complete(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], Int?) {
 		return completeUncomplete(rows: rows, isComplete: true, textRowStrings: textRowStrings)
 	}
 	
@@ -763,8 +763,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	@discardableResult
-	func uncomplete(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
-		return completeUncomplete(rows: rows, isComplete: false, textRowStrings: textRowStrings)
+	func uncomplete(rows: [Row], textRowStrings: TextRowStrings?) -> [Row] {
+		let (impacted, _) = completeUncomplete(rows: rows, isComplete: false, textRowStrings: textRowStrings)
+		return impacted
 	}
 	
 	public func isIndentRowsUnavailable(rows: [Row]) -> Bool {
@@ -1034,7 +1035,7 @@ extension Outline {
 		NotificationCenter.default.post(name: .DocumentDidDelete, object: Document.outline(self), userInfo: nil)
 	}
 	
-	private func completeUncomplete(rows: [Row], isComplete: Bool, textRowStrings: TextRowStrings?) -> ([Row], ShadowTableChanges) {
+	private func completeUncomplete(rows: [Row], isComplete: Bool, textRowStrings: TextRowStrings?) -> ([Row], Int?) {
 		if rows.count == 1, let textRow = rows.first?.textRow, let textRowStrings = textRowStrings {
 			textRow.textRowStrings = textRowStrings
 		}
@@ -1053,7 +1054,11 @@ extension Outline {
 		if isFiltered ?? false {
 			let changes = rebuildShadowTable()
 			shadowTableDidChange(changes)
-			return (impacted, changes)
+			if let firstComplete = changes.deletes?.sorted().first, firstComplete > 0 {
+				return (impacted, firstComplete - 1)
+			} else {
+				return (impacted, 0)
+			}
 		}
 		
 		var reloads = Set<Int>()
@@ -1079,7 +1084,7 @@ extension Outline {
 		
 		let changes = ShadowTableChanges(reloads: reloads)
 		shadowTableDidChange(changes)
-		return (impacted, changes)
+		return (impacted, nil)
 	}
 
 	private func isExpandAllUnavailable(container: RowContainer) -> Bool {

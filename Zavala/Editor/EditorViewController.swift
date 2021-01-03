@@ -1226,9 +1226,8 @@ extension EditorViewController {
 		
 		runCommand(command)
 		
-		if let deleteIndex = command.changes?.deletes?.first {
-			let cursorIndex = deleteIndex < outline.shadowTable?.count ?? 0 ? deleteIndex : (outline.shadowTable?.count ?? 1) - 1
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: cursorIndex, section: 1)) as? EditorTextRowViewCell {
+		if let newCursorIndex = command.newCursorIndex {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: 1)) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}

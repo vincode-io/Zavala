@@ -18,7 +18,8 @@ public final class CompleteCommand: OutlineCommand {
 	var outline: Outline
 	var rows: [Row]
 	var completedRows: [Row]?
-	public var changes: ShadowTableChanges?
+	
+	public var newCursorIndex: Int?
 	
 	var oldTextRowStrings: TextRowStrings?
 	var newTextRowStrings: TextRowStrings?
@@ -39,9 +40,9 @@ public final class CompleteCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (impacted, changes) = outline.complete(rows: rows, textRowStrings: newTextRowStrings)
+		let (impacted, newCursorIndex) = outline.complete(rows: rows, textRowStrings: newTextRowStrings)
 		completedRows = impacted
-		self.changes = changes
+		self.newCursorIndex = newCursorIndex
 		registerUndo()
 	}
 	
