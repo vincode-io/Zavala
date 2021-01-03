@@ -12,12 +12,13 @@ protocol EditorTitleViewCellDelegate: class {
 	var editorTitleUndoManager: UndoManager? { get }
 	func editorTitleLayoutEditor()
 	func editorTitleTextFieldDidBecomeActive()
+	func editorTitleDidUpdate(title: String)
 	func editorTitleCreateRow(textRowStrings: TextRowStrings?)
 }
 
 class EditorTitleViewCell: UICollectionViewListCell {
 
-	var outline: Outline? {
+	var title: String? {
 		didSet {
 			setNeedsUpdateConfiguration()
 		}
@@ -34,8 +35,7 @@ class EditorTitleViewCell: UICollectionViewListCell {
 		
 		layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 
-		guard let outline = outline else { return }
-		var content = EditorTitleContentConfiguration(outline: outline).updated(for: state)
+		var content = EditorTitleContentConfiguration(title: title).updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content
 	}

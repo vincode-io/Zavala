@@ -14,11 +14,13 @@ class EditorTitleContentView: UIView, UIContentView {
 	var textViewHeight: CGFloat?
 	var adjustingSeparatorWidthContraint: NSLayoutConstraint?
 	
-	var outline: Outline
+	var title: String?
+	weak var delegate: EditorTitleViewCellDelegate?
+	
 	var appliedConfiguration: EditorTitleContentConfiguration!
 	
 	init(configuration: EditorTitleContentConfiguration) {
-		self.outline = configuration.outline
+		self.delegate = configuration.delegate
 		super.init(frame: .zero)
 
 		textView.delegate = self
@@ -73,8 +75,7 @@ class EditorTitleContentView: UIView, UIContentView {
 	private func apply(configuration: EditorTitleContentConfiguration) {
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
-		outline = configuration.outline
-		textView.text = outline.title
+		textView.text = configuration.title
 		updateAdjustingSeparatorWidthContraint()
 	}
 	
@@ -115,7 +116,7 @@ extension EditorTitleContentView: UITextViewDelegate {
 	}
 	
 	func textViewDidChange(_ textView: UITextView) {
-		outline.update(title: textView.text)
+		delegate?.editorTitleDidUpdate(title: textView.text)
 		
 		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
 		if textViewHeight != fittingSize.height {

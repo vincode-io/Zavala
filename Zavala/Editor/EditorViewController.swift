@@ -181,7 +181,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		collectionView.allowsMultipleSelection = true
 
 		titleRegistration = UICollectionView.CellRegistration<EditorTitleViewCell, Outline> { [weak self] (cell, indexPath, outline) in
-			cell.outline = outline
+			cell.title = outline.title
 			cell.delegate = self
 		}
 		
@@ -194,6 +194,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		updateUI()
 		collectionView.reloadData()
 		
+		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(shadowTableDidChange(_:)), name: .ShadowTableDidChange, object: nil)
 	}
 
@@ -275,6 +276,15 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	}
 	
 	// MARK: Notifications
+	
+	@objc func documentTitleDidChange(_ note: Notification) {
+		guard let document = note.object as? Document,
+			  let updatedOutline = document.outline,
+			  updatedOutline == outline,
+			  !(view.window?.isKeyWindow ?? false) else { return }
+		collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
+	}
+	
 	@objc func shadowTableDidChange(_ note: Notification) {
 		if note.object as? Outline == outline {
 			guard let changes = note.userInfo?[ShadowTableChanges.userInfoKey] as? ShadowTableChanges else { return }
@@ -545,6 +555,10 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	
 	func editorTitleTextFieldDidBecomeActive() {
 		deselectAll()
+	}
+	
+	func editorTitleDidUpdate(title: String) {
+		outline?.update(title: title)
 	}
 	
 	func editorTitleCreateRow(textRowStrings: TextRowStrings?) {

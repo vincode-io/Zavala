@@ -10,11 +10,11 @@ import Templeton
 
 struct EditorTitleContentConfiguration: UIContentConfiguration, Hashable {
 
-	var outline: Outline
+	var title: String?
 	weak var delegate: EditorTitleViewCellDelegate?
 	
-	init(outline: Outline) {
-		self.outline = outline
+	init(title: String?) {
+		self.title = title
 	}
 	
 	func makeContentView() -> UIView & UIContentView {
@@ -26,13 +26,11 @@ struct EditorTitleContentConfiguration: UIContentConfiguration, Hashable {
 	}
 
 	func hash(into hasher: inout Hasher) {
-		hasher.combine(outline.id)
-		hasher.combine(outline.title)
+		hasher.combine(title)
 	}
 	
 	static func == (lhs: EditorTitleContentConfiguration, rhs: EditorTitleContentConfiguration) -> Bool {
-		return lhs.outline.id == rhs.outline.id &&
-			lhs.outline.title == rhs.outline.title
+		return lhs.title == rhs.title
 	}
 	
 }
