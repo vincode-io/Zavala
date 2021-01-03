@@ -278,9 +278,9 @@ extension EditorViewController {
 		// If we don't have a destination index, drop it at the back
 		guard let targetIndexPath = targetIndexPath else {
 			if shadowTable.count > 0 {
-				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: shadowTable[shadowTable.count - 1])
+				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: shadowTable[shadowTable.count - 1], prefersEnd: true)
 			} else {
-				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
+				self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil, prefersEnd: true)
 			}
 			return
 		}
@@ -292,14 +292,15 @@ extension EditorViewController {
 		}
 	}
 	
-	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], afterRow: Row?) {
+	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], afterRow: Row?, prefersEnd: Bool = false) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = RemoteDropRowCommand(undoManager: undoManager,
 										   delegate: self,
 										   outline: outline,
 										   rows: rows,
-										   afterRow: afterRow)
+										   afterRow: afterRow,
+										   prefersEnd: prefersEnd)
 		
 		runCommand(command)
 		deselectAll()

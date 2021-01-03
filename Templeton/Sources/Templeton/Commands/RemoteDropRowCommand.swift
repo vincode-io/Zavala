@@ -18,25 +18,28 @@ public final class RemoteDropRowCommand: OutlineCommand {
 	var outline: Outline
 	var rows: [Row]
 	var afterRow: Row?
+	var prefersEnd: Bool
 	
 	public init(undoManager: UndoManager,
 		 delegate: OutlineCommandDelegate,
 		 outline: Outline,
 		 rows: [Row],
-		 afterRow: Row?) {
+		 afterRow: Row?,
+		 prefersEnd: Bool) {
 		
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
 		self.rows = rows
 		self.afterRow = afterRow
+		self.prefersEnd = prefersEnd
 		self.undoActionName = L10n.copy
 		self.redoActionName = L10n.copy
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		outline.createRows(rows, afterRow: afterRow)
+		outline.createRows(rows, afterRow: afterRow, prefersEnd: prefersEnd)
 		registerUndo()
 	}
 	

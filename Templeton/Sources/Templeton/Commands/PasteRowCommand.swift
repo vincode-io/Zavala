@@ -36,7 +36,7 @@ public final class PasteRowCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		outline.createRows(rows, afterRow: afterRow)
+		outline.createRows(rows, afterRow: afterRow, prefersEnd: true)
 		registerUndo()
 	}
 	
