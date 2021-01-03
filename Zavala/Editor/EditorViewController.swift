@@ -245,7 +245,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		case .cut, .copy:
 			return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
 		case .paste:
-			return UIPasteboard.general.contains(pasteboardTypes: [Row.typeIdentifier])
+			return UIPasteboard.general.contains(pasteboardTypes: [kUTTypeUTF8PlainText as String, Row.typeIdentifier])
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -1081,35 +1081,73 @@ extension EditorViewController {
 
 	private func pasteRows(afterRows: [Row]?) {
 		guard let undoManager = undoManager, let outline = outline else { return }
-		guard let rowProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [Row.typeIdentifier]) else { return }
-		
-		let group = DispatchGroup()
-		var rows = [Row]()
-		
-		for index in rowProviderIndexes {
-			let itemProvider = UIPasteboard.general.itemProviders[index]
-			group.enter()
-			itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
-				if let data = data {
-					do {
-						rows.append(try Row(from: data))
-						group.leave()
-					} catch {
-						self?.presentError(error)
+
+		if let rowProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [Row.typeIdentifier]), !rowProviderIndexes.isEmpty {
+			let group = DispatchGroup()
+			var rows = [Row]()
+			
+			for index in rowProviderIndexes {
+				let itemProvider = UIPasteboard.general.itemProviders[index]
+				group.enter()
+				itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
+					if let data = data {
+						do {
+							rows.append(try Row(from: data))
+							group.leave()
+						} catch {
+							self?.presentError(error)
+							group.leave()
+						}
+					}
+				}
+			}
+
+			group.notify(queue: DispatchQueue.main) {
+				let command = PasteRowCommand(undoManager: undoManager,
+											  delegate: self,
+											  outline: outline,
+											  rows: rows,
+											  afterRow: afterRows?.last)
+
+				self.runCommand(command)
+			}
+			
+		} else if let stringProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [kUTTypeUTF8PlainText as String]), !stringProviderIndexes.isEmpty {
+			
+			let group = DispatchGroup()
+			var texts = [String]()
+			
+			for index in stringProviderIndexes {
+				let itemProvider = UIPasteboard.general.itemProviders[index]
+				group.enter()
+				itemProvider.loadDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String) { (data, error) in
+					if let data = data, let itemText = String(data: data, encoding: .utf8) {
+						texts.append(itemText)
 						group.leave()
 					}
 				}
 			}
-		}
 
-		group.notify(queue: DispatchQueue.main) {
-			let command = PasteRowCommand(undoManager: undoManager,
-										  delegate: self,
-										  outline: outline,
-										  rows: rows,
-										  afterRow: afterRows?.last)
+			group.notify(queue: DispatchQueue.main) {
+				let text = texts.joined(separator: "\n")
+				guard !text.isEmpty else { return }
+				
+				var rows = [Row]()
+				let textRows = text.split(separator: "\n").map { String($0) }
+				for textRow in textRows {
+					let row = Row.text(TextRow(topicPlainText: textRow.trimmingWhitespace))
+					rows.append(row)
+				}
+				
+				let command = PasteRowCommand(undoManager: undoManager,
+											  delegate: self,
+											  outline: outline,
+											  rows: rows,
+											  afterRow: afterRows?.last)
 
-			self.runCommand(command)
+				self.runCommand(command)
+			}
+
 		}
 	}
 
