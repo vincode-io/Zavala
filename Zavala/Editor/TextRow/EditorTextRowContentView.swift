@@ -16,23 +16,20 @@ class EditorTextRowContentView: UIView, UIContentView {
 
 	private var isDisclosed = false
 	
-	private var disclosureIndicatorDimension: Int {
-		if traitCollection.userInterfaceIdiom == .mac {
-			return 25
-		} else {
-			return 44
-		}
-	}
-
 	private lazy var disclosureIndicator: UIView = {
-		let indicator = FixedSizeImageView(image: AppAssets.disclosure)
+		let indicator = UIImageView(image: AppAssets.disclosure)
 		
 		indicator.tintColor = .systemGray2
-		indicator.dimension = disclosureIndicatorDimension
 		indicator.isUserInteractionEnabled = true
 		indicator.contentMode = .center
 		indicator.clipsToBounds = false
 		indicator.translatesAutoresizingMaskIntoConstraints = false
+
+		let dimension: CGFloat = traitCollection.userInterfaceIdiom == .mac ? 25 : 44
+		NSLayoutConstraint.activate([
+			indicator.widthAnchor.constraint(equalToConstant: dimension),
+			indicator.heightAnchor.constraint(equalToConstant: dimension)
+		])
 		
 		let tap = UITapGestureRecognizer(target: self, action:#selector(toggleDisclosure(_:)))
 		indicator.addGestureRecognizer(tap)
@@ -40,9 +37,13 @@ class EditorTextRowContentView: UIView, UIContentView {
 	}()
 	
 	private lazy var bullet: UIView = {
-		let bulletView = FixedSizeImageView(image: AppAssets.bullet)
+		let bulletView = UIImageView(image: AppAssets.bullet)
 		
-		bulletView.dimension = 4
+		NSLayoutConstraint.activate([
+			bulletView.widthAnchor.constraint(equalToConstant: 4),
+			bulletView.heightAnchor.constraint(equalToConstant: 4)
+		])
+
 		bulletView.tintColor = .quaternaryLabel
 		bulletView.translatesAutoresizingMaskIntoConstraints = false
 		
@@ -94,12 +95,17 @@ class EditorTextRowContentView: UIView, UIContentView {
 
 		let adjustedLeadingIndention: CGFloat
 		let adjustedTrailingIndention: CGFloat
-		if traitCollection.horizontalSizeClass != .compact {
+		if traitCollection.userInterfaceIdiom == .mac {
 			adjustedLeadingIndention = configuration.indentationWidth + 8
 			adjustedTrailingIndention = -8
 		} else {
-			adjustedLeadingIndention = configuration.indentationWidth
-			adjustedTrailingIndention = -25
+			if traitCollection.horizontalSizeClass != .compact {
+				adjustedLeadingIndention = configuration.indentationWidth + 12
+				adjustedTrailingIndention = -8
+			} else {
+				adjustedLeadingIndention = configuration.indentationWidth
+				adjustedTrailingIndention = -25
+			}
 		}
 
 		topicTextView.removeConstraintsOwnedBySuperview()
@@ -125,26 +131,26 @@ class EditorTextRowContentView: UIView, UIContentView {
 			])
 		}
 
-//		let placement: UICellAccessory.Placement
-//		if traitCollection.horizontalSizeClass != .compact {
-//			placement = .leading(displayed: .always, at: { _ in return 0 })
-//		} else {
-//			placement = .trailing(displayed: .always, at: { _ in return 0 })
-//		}
-
+		bullet.removeFromSuperview()
+		disclosureIndicator.removeFromSuperview()
+		
 		if configuration.row?.rows?.isEmpty ?? true {
-			disclosureIndicator.removeFromSuperview()
 			addSubview(bullet)
 			
-			let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? 0 : 3
 			let baseLineConstant = 0 - (OutlineFont.topicCapHeight - 4) / 2
-			
-			NSLayoutConstraint.activate([
-				bullet.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth + indentAdjustment),
-				bullet.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)
-			])
+			if traitCollection.horizontalSizeClass != .compact {
+				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? 1 : 3
+				NSLayoutConstraint.activate([
+					bullet.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth + indentAdjustment),
+					bullet.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)
+				])
+			} else {
+				NSLayoutConstraint.activate([
+					bullet.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
+					bullet.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)
+				])
+			}
 		} else {
-			bullet.removeFromSuperview()
 			addSubview(disclosureIndicator)
 			
 			let baseLineConstant: CGFloat
@@ -154,10 +160,18 @@ class EditorTextRowContentView: UIView, UIContentView {
 				baseLineConstant = 0 - (OutlineFont.topicCapHeight - 12) / 2
 			}
 			
-			NSLayoutConstraint.activate([
-				disclosureIndicator.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth),
-				disclosureIndicator.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)
-			])
+			if traitCollection.horizontalSizeClass != .compact {
+				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -9 : -16
+				NSLayoutConstraint.activate([
+					disclosureIndicator.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth + indentAdjustment),
+					disclosureIndicator.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)
+				])
+			} else {
+				NSLayoutConstraint.activate([
+					disclosureIndicator.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: 0),
+					disclosureIndicator.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)
+				])
+			}
 			setDisclosure(isExpanded: configuration.row?.isExpanded ?? true, animated: false)
 		}
 		
@@ -419,6 +433,7 @@ extension EditorTextRowContentView {
 			if traitCollection.horizontalSizeClass != .compact {
 				indention = CGFloat(30 - ((indentLevel + 1) * 13))
 			} else {
+//				indention = CGFloat(25 - ((indentLevel + 1) * 10))
 				indention = CGFloat(19 - (indentLevel * 10))
 			}
 		}
