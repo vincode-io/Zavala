@@ -433,7 +433,6 @@ extension EditorTextRowContentView {
 			if traitCollection.horizontalSizeClass != .compact {
 				indention = CGFloat(30 - ((indentLevel + 1) * 13))
 			} else {
-//				indention = CGFloat(25 - ((indentLevel + 1) * 10))
 				indention = CGFloat(19 - (indentLevel * 10))
 			}
 		}
