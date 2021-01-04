@@ -59,37 +59,6 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 		return (contentView as? EditorTextRowContentView)?.noteTextView
 	}
 	
-	private var isDisclosed = false
-
-	private lazy var disclosureIndicator: UIView = {
-		let indicator = FixedSizeImageView(image: AppAssets.disclosure)
-		
-		if traitCollection.userInterfaceIdiom == .mac {
-			indicator.dimension = 25
-			indicator.tintColor = .systemGray2
-		} else {
-			indicator.dimension = 44
-		}
-		
-		indicator.isUserInteractionEnabled = true
-		indicator.contentMode = .center
-		indicator.clipsToBounds = false
-		let tap = UITapGestureRecognizer(target: self, action:#selector(toggleDisclosure(_:)))
-		indicator.addGestureRecognizer(tap)
-		return indicator
-	}()
-	
-	private lazy var bullet: UIView = {
-		let bulletView = FixedSizeImageView(image: AppAssets.bullet)
-		bulletView.dimension = 4
-
-		if traitCollection.userInterfaceIdiom == .mac {
-			bulletView.tintColor = .quaternaryLabel
-		}
-		
-		return bulletView
-	}()
-	
 	override func updateConfiguration(using state: UICellConfigurationState) {
 		super.updateConfiguration(using: state)
 		
@@ -106,25 +75,6 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 			indentationWidth = 10
 		}
 		
-		let placement: UICellAccessory.Placement
-		if traitCollection.horizontalSizeClass != .compact {
-			placement = .leading(displayed: .always, at: { _ in return 0 })
-		} else {
-			placement = .trailing(displayed: .always, at: { _ in return 0 })
-		}
-
-		if row.rows?.isEmpty ?? true {
-			var accessoryConfig = UICellAccessory.CustomViewConfiguration(customView: bullet, placement: placement)
-			accessoryConfig.tintColor = AppAssets.accessory
-			accessories = [.customView(configuration: accessoryConfig)]
-		} else {
-			var accessoryConfig = UICellAccessory.CustomViewConfiguration(customView: disclosureIndicator, placement: placement)
-			accessoryConfig.tintColor = AppAssets.accessory
-			accessories = [.customView(configuration: accessoryConfig)]
-		}
-		
-		setDisclosure(isExpanded: row.isExpanded ?? true, animated: false)
-
 		var content = EditorTextRowContentConfiguration(row: row, indentionLevel: indentationLevel, indentationWidth: indentationWidth, isNotesHidden: isNotesHidden ?? false)
 		content = content.updated(for: state)
 		content.delegate = delegate
@@ -174,44 +124,6 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 		textView.becomeFirstResponder()
 		let endPosition = textView.endOfDocument
 		textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
-	}
-	
-}
-
-// MARK: Helpers
-
-extension EditorTextRowViewCell {
-	
-	@objc func toggleDisclosure(_ sender: UITapGestureRecognizer) {
-		guard sender.state == .ended, let row = row else { return }
-		setDisclosure(isExpanded: !isDisclosed, animated: true)
-		delegate?.editorTextRowToggleDisclosure(row: row)
-	}
-	
-	private func setDisclosure(isExpanded: Bool, animated: Bool) {
-		guard isDisclosed != isExpanded else { return }
-		isDisclosed = isExpanded
-
-		if isDisclosed {
-			disclosureIndicator.accessibilityLabel = L10n.collapse
-			if animated {
-				UIView.animate(withDuration: 0.15) {
-					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
-				}
-			} else {
-				disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
-
-			}
-		} else {
-			disclosureIndicator.accessibilityLabel = L10n.expand
-			if animated {
-				UIView.animate(withDuration: 0.15) {
-					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
-				}
-			} else {
-				disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
-			}
-		}
 	}
 	
 }

@@ -12,8 +12,42 @@ class EditorTextRowContentView: UIView, UIContentView {
 
 	let topicTextView = EditorTextRowTopicTextView()
 	var noteTextView: EditorTextRowNoteTextView?
-	var bulletView: UIImageView?
 	var barViews = [UIView]()
+
+	private var isDisclosed = false
+	
+	private var disclosureIndicatorDimension: Int {
+		if traitCollection.userInterfaceIdiom == .mac {
+			return 25
+		} else {
+			return 44
+		}
+	}
+
+	private lazy var disclosureIndicator: UIView = {
+		let indicator = FixedSizeImageView(image: AppAssets.disclosure)
+		
+		indicator.tintColor = .systemGray2
+		indicator.dimension = disclosureIndicatorDimension
+		indicator.isUserInteractionEnabled = true
+		indicator.contentMode = .center
+		indicator.clipsToBounds = false
+		indicator.translatesAutoresizingMaskIntoConstraints = false
+		
+		let tap = UITapGestureRecognizer(target: self, action:#selector(toggleDisclosure(_:)))
+		indicator.addGestureRecognizer(tap)
+		return indicator
+	}()
+	
+	private lazy var bullet: UIView = {
+		let bulletView = FixedSizeImageView(image: AppAssets.bullet)
+		
+		bulletView.dimension = 4
+		bulletView.tintColor = .quaternaryLabel
+		bulletView.translatesAutoresizingMaskIntoConstraints = false
+		
+		return bulletView
+	}()
 	
 	var appliedConfiguration: EditorTextRowContentConfiguration!
 	
@@ -61,7 +95,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 		let adjustedLeadingIndention: CGFloat
 		let adjustedTrailingIndention: CGFloat
 		if traitCollection.horizontalSizeClass != .compact {
-			adjustedLeadingIndention = configuration.indentationWidth - 18
+			adjustedLeadingIndention = configuration.indentationWidth + 8
 			adjustedTrailingIndention = -8
 		} else {
 			adjustedLeadingIndention = configuration.indentationWidth
@@ -91,6 +125,42 @@ class EditorTextRowContentView: UIView, UIContentView {
 			])
 		}
 
+//		let placement: UICellAccessory.Placement
+//		if traitCollection.horizontalSizeClass != .compact {
+//			placement = .leading(displayed: .always, at: { _ in return 0 })
+//		} else {
+//			placement = .trailing(displayed: .always, at: { _ in return 0 })
+//		}
+
+		if configuration.row?.rows?.isEmpty ?? true {
+			disclosureIndicator.removeFromSuperview()
+			addSubview(bullet)
+			
+			let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? 0 : 3
+			let baseLineConstant = 0 - (OutlineFont.topicCapHeight - 4) / 2
+			
+			NSLayoutConstraint.activate([
+				bullet.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth + indentAdjustment),
+				bullet.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)
+			])
+		} else {
+			bullet.removeFromSuperview()
+			addSubview(disclosureIndicator)
+			
+			let baseLineConstant: CGFloat
+			if traitCollection.userInterfaceIdiom == .mac {
+				baseLineConstant = 0 - (OutlineFont.topicCapHeight - 8) / 2
+			} else {
+				baseLineConstant = 0 - (OutlineFont.topicCapHeight - 12) / 2
+			}
+			
+			NSLayoutConstraint.activate([
+				disclosureIndicator.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth),
+				disclosureIndicator.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)
+			])
+			setDisclosure(isExpanded: configuration.row?.isExpanded ?? true, animated: false)
+		}
+		
 		if configuration.indentionLevel < barViews.count {
 			for i in (configuration.indentionLevel..<barViews.count).reversed() {
 				barViews[i].removeFromSuperview()
@@ -216,6 +286,38 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 // MARK: Helpers
 
 extension EditorTextRowContentView {
+
+	@objc func toggleDisclosure(_ sender: UITapGestureRecognizer) {
+		guard sender.state == .ended, let row = appliedConfiguration.row else { return }
+		setDisclosure(isExpanded: !isDisclosed, animated: true)
+		appliedConfiguration.delegate?.editorTextRowToggleDisclosure(row: row)
+	}
+	
+	private func setDisclosure(isExpanded: Bool, animated: Bool) {
+		guard isDisclosed != isExpanded else { return }
+		isDisclosed = isExpanded
+
+		if isDisclosed {
+			disclosureIndicator.accessibilityLabel = L10n.collapse
+			if animated {
+				UIView.animate(withDuration: 0.15) {
+					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
+				}
+			} else {
+				disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
+
+			}
+		} else {
+			disclosureIndicator.accessibilityLabel = L10n.expand
+			if animated {
+				UIView.animate(withDuration: 0.15) {
+					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
+				}
+			} else {
+				disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
+			}
+		}
+	}
 	
 	@objc func swipedLeft(_ sender: UISwipeGestureRecognizer) {
 		guard let row = appliedConfiguration.row else { return }
@@ -297,13 +399,13 @@ extension EditorTextRowContentView {
 			let barViewsCount = barViews.count
 			for i in (1...configuration.indentionLevel) {
 				if i > barViewsCount {
-					addBarView(indentLevel: i, hasChevron: configuration.isChevronShowing)
+					addBarView(indentLevel: i, indentWidth: configuration.indentationWidth, hasChevron: configuration.isChevronShowing)
 				}
 			}
 		}
 	}
 	
-	private func addBarView(indentLevel: Int, hasChevron: Bool) {
+	private func addBarView(indentLevel: Int, indentWidth: CGFloat, hasChevron: Bool) {
 		let barView = UIView()
 		barView.backgroundColor = AppAssets.accessory
 		barView.translatesAutoresizingMaskIntoConstraints = false
@@ -311,10 +413,14 @@ extension EditorTextRowContentView {
 		barViews.append(barView)
 
 		var indention: CGFloat
-		if traitCollection.horizontalSizeClass != .compact {
-			indention = CGFloat(0 - ((indentLevel + 1) * 13))
+		if traitCollection.userInterfaceIdiom == .mac {
+			indention = CGFloat(28 - ((indentLevel + 1) * 13))
 		} else {
-			indention = CGFloat(19 - (indentLevel * 10))
+			if traitCollection.horizontalSizeClass != .compact {
+				indention = CGFloat(30 - ((indentLevel + 1) * 13))
+			} else {
+				indention = CGFloat(19 - (indentLevel * 10))
+			}
 		}
 
 		NSLayoutConstraint.activate([

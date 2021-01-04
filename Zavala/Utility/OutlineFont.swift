@@ -9,6 +9,10 @@ import UIKit
 
 public struct OutlineFont {
 	
+	public static var topicCapHeight: CGFloat {
+		return topic.capHeight
+	}
+	
 	public static var topic: UIFont {
 		#if targetEnvironment(macCatalyst)
 		let bodyFont = UIFont.preferredFont(forTextStyle: .body)
