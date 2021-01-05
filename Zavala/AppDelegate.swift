@@ -103,6 +103,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		#endif
 	}
 	
+	
+	#if targetEnvironment(macCatalyst)
+	let checkForUpdates = UIKeyCommand(title: L10n.checkForUpdates,
+										 action: #selector(checkForUpdates(_:)),
+										 input: ".",
+										 modifierFlags: [.command])
+	#endif
+	
 	let exportOPMLCommand = UIKeyCommand(title: L10n.exportOPML,
 										 action: #selector(exportOPMLCommand(_:)),
 										 input: "e",
@@ -280,6 +288,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		return (keyScene?.delegate as? SceneDelegate)?.mainSplitViewController
 	}
+	
+	#if targetEnvironment(macCatalyst)
+	var sparklePlugin: SparklePlugin?
+	#endif
 
 	func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
 		let documentAccountURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -292,12 +304,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		AppDefaults.registerDefaults()
 
+		
 		var menuItems = [UIMenuItem]()
 		menuItems.append(UIMenuItem(title: L10n.bold, action: .toggleBoldface))
 		menuItems.append(UIMenuItem(title: L10n.italic, action: .toggleItalics))
 		menuItems.append(UIMenuItem(title: L10n.link, action: .editLink))
 		UIMenuController.shared.menuItems = menuItems
 
+		#if targetEnvironment(macCatalyst)
+		guard let pluginPath = (Bundle.main.builtInPlugInsPath as NSString?)?.appendingPathComponent("SparklePlugin.bundle"),
+			  let bundle = Bundle(path: pluginPath),
+			  let cls = bundle.principalClass as? NSObject.Type,
+			  let sparklePlugin = cls.init() as? SparklePlugin else { return true }
+		
+		self.sparklePlugin = sparklePlugin
+		sparklePlugin.start()
+		#endif
+		
 		return true
 	}
 
@@ -308,6 +331,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	// MARK: Actions
+
+	#if targetEnvironment(macCatalyst)
+	@objc func checkForUpdates(_ sender: Any?) {
+		sparklePlugin?.checkForUpdates()
+	}
+	#endif
 
 	@objc func importOPMLCommand(_ sender: Any?) {
 		mainSplitViewController?.importOPML(sender)
@@ -530,6 +559,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		builder.remove(menu: .newScene)
 		builder.remove(menu: .openRecent)
+		
+		// Application Menu
+		let appMenu = UIMenu(title: "", options: .displayInline, children: [checkForUpdates])
+		builder.insertSibling(appMenu, afterMenu: .about)
 
 		// File Menu
 		let archiveMenu = UIMenu(title: "", options: .displayInline, children: [restoreArchiveCommand, archiveLocalCommand])

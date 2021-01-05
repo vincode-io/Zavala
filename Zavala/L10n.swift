@@ -22,6 +22,8 @@ internal enum L10n {
   internal static let bold = L10n.tr("Localizable", "Bold")
   /// Cancel
   internal static let cancel = L10n.tr("Localizable", "Cancel")
+  /// Check For Updates...
+  internal static let checkForUpdates = L10n.tr("Localizable", "Check_For_Updates")
   /// Collapse
   internal static let collapse = L10n.tr("Localizable", "Collapse")
   /// Collapse All

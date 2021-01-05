@@ -55,6 +55,12 @@
 	<true/>
 	<key>OrganizationIdentifier</key>
 	<string>$(ORGANIZATION_IDENTIFIER)</string>
+	<key>SUFeedURL</key>
+	<string></string>
+	<key>SUShowReleaseNotes</key>
+	<false/>
+	<key>SUAllowsAutomaticUpdates</key>
+	<false/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

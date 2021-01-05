@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "RSSparkle",
+        "repositoryURL": "https://github.com/vincode-io/Sparkle-Binary.git",
+        "state": {
+          "branch": "main",
+          "revision": "4585dbc12fa8df26d8bfef6a32e9699a6d175fd9",
+          "version": null
+        }
+      },
+      {
         "package": "SWXMLHash",
         "repositoryURL": "https://github.com/drmohundro/SWXMLHash.git",
         "state": {

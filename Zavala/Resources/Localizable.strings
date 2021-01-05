@@ -7,6 +7,7 @@
 */
 
 /* Menu Items & Toolbars */
+"Check_For_Updates" = "Check For Updates...";
 "Outline" = "Outline";
 "Import_OPML" = "Import OPML";
 "Export_Markdown" = "Export Markdown";
