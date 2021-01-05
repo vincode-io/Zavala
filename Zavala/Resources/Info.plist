@@ -56,7 +56,7 @@
 	<key>OrganizationIdentifier</key>
 	<string>$(ORGANIZATION_IDENTIFIER)</string>
 	<key>SUFeedURL</key>
-	<string></string>
+	<string>https://vincode-io.github.io/Zavala/zavala-beta.xml</string>
 	<key>SUShowReleaseNotes</key>
 	<false/>
 	<key>SUAllowsAutomaticUpdates</key>
