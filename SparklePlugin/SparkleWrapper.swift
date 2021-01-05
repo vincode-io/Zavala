@@ -6,9 +6,12 @@
 //
 
 import AppKit
+import os.log
 import Sparkle
 
 @objc class SparkleWrapper: NSResponder, SparklePlugin, SPUUpdaterDelegate, SPUStandardUserDriverDelegate {
+
+	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "SparkleWrapper")
 	
 	private var softwareUpdater: SPUUpdater!
 
@@ -20,7 +23,7 @@ import Sparkle
 		do {
 			try self.softwareUpdater.start()
 		} catch {
-			NSLog("Failed to start software updater with error: \(error)")
+			os_log(.error, log: log, "Failed to start software updater with error: %@.", error.localizedDescription)
 		}
 	}
 	
