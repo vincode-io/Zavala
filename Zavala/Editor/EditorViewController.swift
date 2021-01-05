@@ -506,7 +506,7 @@ extension EditorViewController {
 		// Force save the text if the context menu has been requested so that we don't lose our
 		// text changes when the cell configuration gets applied
 		if let textView = UIResponder.currentFirstResponder as? OutlineTextView {
-			textView.endEditing(true)
+			textView.saveText()
 		}
 		
 		if !(collectionView.indexPathsForSelectedItems?.contains(indexPath) ?? false) {

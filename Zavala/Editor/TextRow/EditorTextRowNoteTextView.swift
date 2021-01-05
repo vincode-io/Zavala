@@ -110,6 +110,18 @@ class EditorTextRowNoteTextView: OutlineTextView {
 		editorDelegate?.editLink(self, result.0, range: result.1)
 	}
 	
+	override func saveText() {
+		guard isTextChanged, let textRow = row else { return }
+		
+		if isSavingTextUnnecessary {
+			isSavingTextUnnecessary = false
+		} else {
+			editorDelegate?.textChanged(self, row: textRow, isInNotes: true, cursorPosition: lastCursorPosition)
+		}
+		
+		isTextChanged = false
+	}
+	
 	override func updateLinkForCurrentSelection(link: String?, range: NSRange) {
 		super.updateLinkForCurrentSelection(link: link, range: range)
 		isTextChanged = true
@@ -141,15 +153,7 @@ extension EditorTextRowNoteTextView: UITextViewDelegate {
 	}
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
-		guard isTextChanged, let textRow = row else { return }
-		
-		if isSavingTextUnnecessary {
-			isSavingTextUnnecessary = false
-		} else {
-			editorDelegate?.textChanged(self, row: textRow, isInNotes: true, cursorPosition: lastCursorPosition)
-		}
-		
-		isTextChanged = false
+		saveText()
 	}
 	
 	func textViewDidChange(_ textView: UITextView) {

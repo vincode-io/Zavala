@@ -78,6 +78,10 @@ class OutlineTextView: UITextView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	func saveText() {
+		fatalError("saveText has not been implemented")
+	}
+	
 	func findAndSelectLink() -> (String?, NSRange) {
 		var effectiveRange = NSRange()
 		let link = textStorage.attribute(.link, at: cursorPosition, effectiveRange: &effectiveRange) as? String

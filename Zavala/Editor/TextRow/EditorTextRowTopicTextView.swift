@@ -138,6 +138,18 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		editorDelegate?.editLink(self, result.0, range: result.1)
 	}
 	
+	override func saveText() {
+		guard isTextChanged, let textRow = row else { return }
+		
+		if isSavingTextUnnecessary {
+			isSavingTextUnnecessary = false
+		} else {
+			editorDelegate?.textChanged(self, row: textRow, isInNotes: false, cursorPosition: lastCursorPosition)
+		}
+		
+		isTextChanged = false
+	}
+	
 	override func updateLinkForCurrentSelection(link: String?, range: NSRange) {
 		super.updateLinkForCurrentSelection(link: link, range: range)
 		isTextChanged = true
@@ -169,15 +181,7 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 	}
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
-		guard isTextChanged, let textRow = row else { return }
-		
-		if isSavingTextUnnecessary {
-			isSavingTextUnnecessary = false
-		} else {
-			editorDelegate?.textChanged(self, row: textRow, isInNotes: false, cursorPosition: lastCursorPosition)
-		}
-		
-		isTextChanged = false
+		saveText()
 	}
 	
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
