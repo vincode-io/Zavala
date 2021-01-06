@@ -38,6 +38,7 @@ this README when we get to that point.
 * [Definitions](https://github.com/vincode-io/Zavala/wiki/Definitions)
 * [Architecture Notebook](https://github.com/vincode-io/Zavala/wiki/Architecture-Notebook)
 * [Dependencies](https://github.com/vincode-io/Zavala/wiki/Dependencies)
+* [Accessibility](https://github.com/vincode-io/Zavala/wiki/Accessibility)
 
 ## Credits
 
