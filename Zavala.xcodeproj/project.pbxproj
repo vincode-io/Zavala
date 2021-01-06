@@ -68,11 +68,11 @@
 		51DFDC18259EA8D300C068C6 /* Selector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DFDC17259EA8D300C068C6 /* Selector+.swift */; };
 		51E060C125A454B900194066 /* RSSparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 51E060C025A454B900194066 /* RSSparkle */; };
 		51E060CE25A45AA800194066 /* SparklePlugin.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 51E060AF25A4547400194066 /* SparklePlugin.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		51E060E025A4AE8400194066 /* org.sparkle-project.InstallerStatus.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 51E060A325A4506300194066 /* org.sparkle-project.InstallerStatus.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		51E060E125A4AE8400194066 /* org.sparkle-project.InstallerLauncher.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 51E060A425A4506300194066 /* org.sparkle-project.InstallerLauncher.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		51E060E225A4AE8400194066 /* org.sparkle-project.Downloader.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 51E060A525A4506300194066 /* org.sparkle-project.Downloader.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		51E060E325A4AE8400194066 /* org.sparkle-project.InstallerConnection.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 51E060A225A4506300194066 /* org.sparkle-project.InstallerConnection.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		51E060EE25A4B5E600194066 /* SparkleWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E060ED25A4B5E600194066 /* SparkleWrapper.swift */; };
+		51E0612D25A544C400194066 /* org.sparkle-project.Downloader.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 51E060A525A4506300194066 /* org.sparkle-project.Downloader.xpc */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		51E0612E25A544C400194066 /* org.sparkle-project.InstallerConnection.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 51E060A225A4506300194066 /* org.sparkle-project.InstallerConnection.xpc */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		51E0612F25A544C400194066 /* org.sparkle-project.InstallerLauncher.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 51E060A425A4506300194066 /* org.sparkle-project.InstallerLauncher.xpc */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		51E0613025A544C400194066 /* org.sparkle-project.InstallerStatus.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 51E060A325A4506300194066 /* org.sparkle-project.InstallerStatus.xpc */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */; };
 		51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F22255F2D7F00320EDB /* ActivityManager.swift */; };
 		51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F2D2560730000320EDB /* SidebarSection.swift */; };
@@ -116,16 +116,16 @@
 			name = "Embed PlugIns";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		51E060D925A4AE4E00194066 /* Embed XPC Services */ = {
+		51E0612C25A544AA00194066 /* Embed XPC Services */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
 			dstSubfolderSpec = 16;
 			files = (
-				51E060E325A4AE8400194066 /* org.sparkle-project.InstallerConnection.xpc in Embed XPC Services */,
-				51E060E125A4AE8400194066 /* org.sparkle-project.InstallerLauncher.xpc in Embed XPC Services */,
-				51E060E225A4AE8400194066 /* org.sparkle-project.Downloader.xpc in Embed XPC Services */,
-				51E060E025A4AE8400194066 /* org.sparkle-project.InstallerStatus.xpc in Embed XPC Services */,
+				51E0612D25A544C400194066 /* org.sparkle-project.Downloader.xpc in Embed XPC Services */,
+				51E0612E25A544C400194066 /* org.sparkle-project.InstallerConnection.xpc in Embed XPC Services */,
+				51E0612F25A544C400194066 /* org.sparkle-project.InstallerLauncher.xpc in Embed XPC Services */,
+				51E0613025A544C400194066 /* org.sparkle-project.InstallerStatus.xpc in Embed XPC Services */,
 			);
 			name = "Embed XPC Services";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -280,6 +280,10 @@
 				51CF10A72571BA66005D6D88 /* Localizable.strings */,
 				51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */,
 				5181A9402554D92100C153E8 /* Assets.xcassets */,
+				51E060A525A4506300194066 /* org.sparkle-project.Downloader.xpc */,
+				51E060A225A4506300194066 /* org.sparkle-project.InstallerConnection.xpc */,
+				51E060A425A4506300194066 /* org.sparkle-project.InstallerLauncher.xpc */,
+				51E060A325A4506300194066 /* org.sparkle-project.InstallerStatus.xpc */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -382,10 +386,6 @@
 				51E060F225A4C13B00194066 /* BridgingHeader.h */,
 				51E060F325A4C13B00194066 /* SparklePlugin.h */,
 				51E060ED25A4B5E600194066 /* SparkleWrapper.swift */,
-				51E060A525A4506300194066 /* org.sparkle-project.Downloader.xpc */,
-				51E060A225A4506300194066 /* org.sparkle-project.InstallerConnection.xpc */,
-				51E060A425A4506300194066 /* org.sparkle-project.InstallerLauncher.xpc */,
-				51E060A325A4506300194066 /* org.sparkle-project.InstallerStatus.xpc */,
 				51E060B125A4547400194066 /* Info.plist */,
 			);
 			path = SparklePlugin;
@@ -447,9 +447,11 @@
 				5181A9302554D92000C153E8 /* Sources */,
 				5181A9312554D92000C153E8 /* Frameworks */,
 				5181A9322554D92000C153E8 /* Resources */,
+				51E0612C25A544AA00194066 /* Embed XPC Services */,
 				51C4C3C22555EB4D004E0206 /* Run VerifyNoBuildSettings */,
 				51C4C3F125565282004E0206 /* Embed Frameworks */,
 				51E060D125A45AA800194066 /* Embed PlugIns */,
+				51E0613325A5450400194066 /* Sign Sparkle XPC Services */,
 			);
 			buildRules = (
 			);
@@ -474,9 +476,7 @@
 			buildPhases = (
 				51E060AB25A4547400194066 /* Sources */,
 				51E060AC25A4547400194066 /* Frameworks */,
-				51E060D925A4AE4E00194066 /* Embed XPC Services */,
 				51E060AD25A4547400194066 /* Resources */,
-				51E060E725A4AF2400194066 /* Run Code Sign Sparkle */,
 			);
 			buildRules = (
 			);
@@ -599,7 +599,7 @@
 			shellPath = /bin/sh;
 			shellScript = "if ! command -v \"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" &> /dev/null\nthen\n    echo \"swiftgen could not be found\"\n    exit\nfi\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Zavala/Resources/Localizable.strings\" \"$PROJECT_DIR/Zavala/Resources/Localizable.stringsdict\" --output \"$PROJECT_DIR/Zavala/L10n.swift\";\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Templeton/Sources/Templeton/Localizable.strings\" --output \"$PROJECT_DIR/Templeton/Sources/Templeton/L10n.swift\";\n";
 		};
-		51E060E725A4AF2400194066 /* Run Code Sign Sparkle */ = {
+		51E0613325A5450400194066 /* Sign Sparkle XPC Services */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -608,14 +608,14 @@
 			);
 			inputPaths = (
 			);
-			name = "Run Code Sign Sparkle";
+			name = "Sign Sparkle XPC Services";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Remove unused Sparkle components\nSPARKLE_DIR=\"${CODESIGNING_FOLDER_PATH}/Contents/Frameworks/Sparkle.framework\"\nfind \"${SPARKLE_DIR}\" -name Updater.app -execdir rm -rf {} \\;\nfind \"${SPARKLE_DIR}\" -name Autoupdate -execdir rm -rf {} \\;\n\nPLUGINS_DIR=\"${CODESIGNING_FOLDER_PATH}/Contents/PlugIns\"\nXPC_DIR=\"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices\"\nfind \"${PLUGINS_DIR}\" -name Sparkle* -execdir rm -rf {} \\;\nfind \"${XPC_DIR}\" -name Sparkle* -execdir rm -rf {} \\;\n\n# Sign XPC Helpers and their internal binaries\ncodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Updater.app\"\ncodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Autoupdate\"\n \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.Downloader.xpc\"\ncodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc\"\ncodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerConnection.xpc\"\ncodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerStatus.xpc\"\n";
+			shellScript = "codesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Updater.app\"\ncodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Autoupdate\"\n \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.Downloader.xpc\"\ncodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc\"\ncodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerConnection.xpc\"\ncodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerStatus.xpc\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
