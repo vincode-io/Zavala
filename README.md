@@ -10,7 +10,7 @@ this README when we get to that point.
 
 ## Community
 
-Let's talk outliners! Head over to [Discussions](https://github.com/vincode-io/Zavala/discussions) for outliner discussion and to express what you would like to see in an outliner application. Be sure to read our [Code of Conduct](/documentation/CodeOfConduct.md).
+Let's talk outliners! Head over to [Discussions](https://github.com/vincode-io/Zavala/discussions) for outliner discussion and to express what you would like to see in an outliner application. Be sure to read our [Code of Conduct](https://github.com/vincode-io/Zavala/wiki/Code-of-Conduct).
 
 ## Credits
 
@@ -75,7 +75,7 @@ PROVISIONING_PROFILE_SPECIFIER =
 ```
 
 Set `DEVELOPMENT_TEAM` to your Apple supplied development team.  You can use Keychain
-Access to [find your development team ID](/documentation/FindingYourDevelopmentTeamID.md).
+Access to [find your development team ID](https://github.com/vincode-io/Zavala/wiki/Finding-Your-Development-Team-ID).
 Set `ORGANIZATION_IDENTIFIER` to a reversed domain name that you control or have made up.
 Note that `PROVISIONING_PROFILE_SPECIFIER` should not have a value associated with it.
 
