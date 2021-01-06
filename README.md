@@ -2,15 +2,15 @@
 
 A dedicated outliner for macOS, iPadOS, and iOS.
 
-## Contributing
-
-We are not currently looking for additional contributors yet. The project is in such an early state of development
-that too many people working on the code would be chaotic. That will change as the project matures. I'll update
-this README when we get to that point.
-
 ## Community
 
 Let's talk outliners! Head over to [Discussions](https://github.com/vincode-io/Zavala/discussions) for outliner discussion and to express what you would like to see in an outliner application. Be sure to read our [Code of Conduct](https://github.com/vincode-io/Zavala/wiki/Code-of-Conduct).
+
+## Code Contributions
+
+We are not currently looking for additional code contributors yet. The project is in such an early state of development
+that too many people working on the code would be chaotic. That will change as the project matures. I'll update
+this README when we get to that point.
 
 ## Project Documents
 
