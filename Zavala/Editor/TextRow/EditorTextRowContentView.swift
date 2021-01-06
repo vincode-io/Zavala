@@ -155,7 +155,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 			
 			let baseLineConstant: CGFloat
 			if traitCollection.userInterfaceIdiom == .mac {
-				baseLineConstant = 0 - (OutlineFont.topicCapHeight - 8) / 2
+				baseLineConstant = 0 - (OutlineFont.topicCapHeight - 6) / 2
 			} else {
 				baseLineConstant = 0 - (OutlineFont.topicCapHeight - 12) / 2
 			}
