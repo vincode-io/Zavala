@@ -7,6 +7,7 @@
 
 import UIKit
 import Templeton
+import SafariServices
 
 public extension Notification.Name {
 	static let UserDidAddFolder = Notification.Name(rawValue: "UserDidAddFolder")
@@ -353,6 +354,11 @@ class MainSplitViewController: UISplitViewController {
 		sidebarViewController?.archiveAccount(type: type)
 	}
 	
+	func showReleaseNotes() {
+		let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"]! as! String
+		openURL("https://github.com/vincode-io/Zavala/releases/tag/\(version)")
+	}
+	
 }
 
 // MARK: SidebarDelegate
@@ -471,6 +477,17 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 }
 
 // MARK: Helpers
+
+extension MainSplitViewController {
+	
+	private func openURL(_ urlString: String) {
+		guard let url = URL(string: urlString) else { return }
+		let vc = SFSafariViewController(url: url)
+		vc.modalPresentationStyle = .pageSheet
+		present(vc, animated: true)
+	}
+
+}
 
 #if targetEnvironment(macCatalyst)
 

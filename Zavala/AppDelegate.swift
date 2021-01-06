@@ -276,6 +276,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									   input: "0",
 									   modifierFlags: [.command])
 	
+	let showReleaseNotesCommand = UIKeyCommand(title: L10n.releaseNotes,
+											   action: #selector(showReleaseNotes(_:)),
+											   input: "r",
+											   modifierFlags: [.alternate, .command])
+	
 	var mainSplitViewController: MainSplitViewController? {
 		var keyScene: UIScene?
 		let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
@@ -446,6 +451,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	@objc func collapseCommand(_ sender: Any?) {
 		mainSplitViewController?.collapse(sender)
 	}
+	
+	@objc func showReleaseNotes(_ sender: Any?) {
+		mainSplitViewController?.showReleaseNotes()
+	}
 
 	// MARK: Validations
 	
@@ -602,6 +611,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, completeMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 
+		// Help Menu
+		let helpMenu = UIMenu(title: "", options: .displayInline, children: [showReleaseNotesCommand])
+		builder.insertChild(helpMenu, atStartOfMenu: .help)
 	}
 	
 }
