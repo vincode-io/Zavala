@@ -9,7 +9,7 @@
 <item>
     <title>Zavala 0.9.1</title>
     <pubDate>Tue, 05 Jan 2021 18:30:00 -0600</pubDate>
-    <enclosure url="https://github.com/vincode-io/Zavala/releases/download/0.9.1/Zavala.app.zip" sparkle:version="10" sparkle:shortVersionString="0.9.1" length="4208809" type="application/zip" />
+    <enclosure url="https://github.com/vincode-io/Zavala/releases/download/0.9.2/Zavala.app.zip" sparkle:version="11" sparkle:shortVersionString="0.9.2" length="4208809" type="application/zip" />
     <sparkle:minimumSystemVersion>11.0.0</sparkle:minimumSystemVersion>
 </item>
 
