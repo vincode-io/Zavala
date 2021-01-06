@@ -562,8 +562,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 	// MARK: Menu
 
+	#if targetEnvironment(macCatalyst)
 	override func buildMenu(with builder: UIMenuBuilder) {
 		super.buildMenu(with: builder)
+
 		guard builder.system == UIMenuSystem.main else { return }
 		
 		builder.remove(menu: .newScene)
@@ -615,6 +617,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let helpMenu = UIMenu(title: "", options: .displayInline, children: [showReleaseNotesCommand])
 		builder.insertChild(helpMenu, atStartOfMenu: .help)
 	}
+	#endif
 	
 }
 
