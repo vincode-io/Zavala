@@ -25,7 +25,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 		indicator.addTarget(self, action: #selector(toggleDisclosure(_:)), for: UIControl.Event.touchUpInside)
 		#endif
 
-		indicator.tintColor = .systemGray2
+		indicator.tintColor = AppAssets.accessory
 		indicator.imageView?.contentMode = .center
 		indicator.imageView?.clipsToBounds = false
 		indicator.translatesAutoresizingMaskIntoConstraints = false
@@ -48,7 +48,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 			bulletView.heightAnchor.constraint(equalToConstant: 4)
 		])
 
-		bulletView.tintColor = .quaternaryLabel
+		bulletView.tintColor = AppAssets.accessory
 		bulletView.translatesAutoresizingMaskIntoConstraints = false
 		
 		return bulletView
