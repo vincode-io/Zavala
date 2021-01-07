@@ -60,6 +60,16 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		NotificationCenter.default.addObserver(self, selector: #selector(folderMetaDataDidChange(_:)), name: .FolderMetaDataDidChange, object: nil)
 	}
 	
+	override func viewWillAppear(_ animated: Bool) {
+		// If we haven't gotten anything selected this is probably the first run.  To make things more friendly by selecting the first
+		// Folder, unless we are on the iPhone (collapsed on launch) which would just be confusing.
+		if !(splitViewController?.isCollapsed ?? false) && collectionView.indexPathsForSelectedItems?.isEmpty ?? true {
+			if let localAccount = AccountManager.shared.localAccount, let folder = localAccount.folders?.first {
+				selectDocumentContainer(folder, animated: false)
+			}
+		}
+	}
+	
 	// MARK: API
 	
 	func startUp() {
