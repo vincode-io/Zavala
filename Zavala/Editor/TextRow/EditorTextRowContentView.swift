@@ -156,14 +156,14 @@ class EditorTextRowContentView: UIView, UIContentView {
 			}
 		} else {
 			addSubview(disclosureIndicator)
-			
+
 			let baseLineConstant: CGFloat
 			if traitCollection.userInterfaceIdiom == .mac {
 				baseLineConstant = 0 - (OutlineFont.topicCapHeight - 6) / 2
 			} else {
 				baseLineConstant = 0 - (OutlineFont.topicCapHeight - 12) / 2
 			}
-			
+
 			if traitCollection.horizontalSizeClass != .compact {
 				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -9 : -16
 				NSLayoutConstraint.activate([
@@ -176,6 +176,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 					disclosureIndicator.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)
 				])
 			}
+			
 			setDisclosure(isExpanded: configuration.row?.isExpanded ?? true, animated: false)
 		}
 		
@@ -339,20 +340,19 @@ extension EditorTextRowContentView {
 			disclosureIndicator.accessibilityLabel = L10n.collapse
 			if animated {
 				UIView.animate(withDuration: 0.15) {
-					self.disclosureIndicator.imageView?.transform = CGAffineTransform(rotationAngle: 1.570796)
+					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
 				}
 			} else {
-				disclosureIndicator.imageView?.transform = CGAffineTransform(rotationAngle: 1.570796)
-
+				disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
 			}
 		} else {
 			disclosureIndicator.accessibilityLabel = L10n.expand
 			if animated {
 				UIView.animate(withDuration: 0.15) {
-					self.disclosureIndicator.imageView?.transform = CGAffineTransform(rotationAngle: 0)
+					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
 				}
 			} else {
-				disclosureIndicator.imageView?.transform = CGAffineTransform(rotationAngle: 0)
+				disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
 			}
 		}
 	}
