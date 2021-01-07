@@ -116,22 +116,39 @@ class EditorTextRowContentView: UIView, UIContentView {
 		
 		if let noteTextView = noteTextView {
 			noteTextView.removeConstraintsOwnedBySuperview()
+
+			// Change these priorities so that they aren't 1000 or we get tons of warnings
+			let topicTrailingConstraint = topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention)
+			topicTrailingConstraint.priority = .defaultHigh
+			let topicNoteSpacerConstraint = topicTextView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: -4)
+			topicNoteSpacerConstraint.priority = .defaultHigh
+			let noteTrailingConstraint = noteTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention)
+			noteTrailingConstraint.priority = .defaultHigh
+			let noteBottomConstraint = noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+			noteBottomConstraint.priority = .defaultHigh
+
 			NSLayoutConstraint.activate([
 				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+				topicTrailingConstraint,
 				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-				topicTextView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: -4),
+				topicNoteSpacerConstraint,
 				noteTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-				noteTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-				noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
-
+				noteTrailingConstraint,
+				noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+				noteBottomConstraint
 			])
 		} else {
+			// Change these priorities so that they aren't 1000 or we get tons of warnings
+			let topicTrailingConstraint = topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention)
+			topicTrailingConstraint.priority = .defaultHigh
+			let topicBottomConstraint = topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+			topicBottomConstraint.priority = .defaultHigh
+
 			NSLayoutConstraint.activate([
 				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+				topicTrailingConstraint,
 				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-				topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+				topicBottomConstraint
 			])
 		}
 
