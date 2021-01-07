@@ -17,6 +17,8 @@
 		51278E77257F37AC0034F1CB /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51278E76257F37AC0034F1CB /* Dialog.storyboard */; };
 		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
+		514EF15F25A78A8C00B1FFB6 /* CrashReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */; };
+		514EF16325A78BCC00B1FFB6 /* CrashReporter in Frameworks */ = {isa = PBXBuildFile; platformFilter = maccatalyst; productRef = 514EF16225A78BCC00B1FFB6 /* CrashReporter */; };
 		515B9F412578B2F3009C5DE4 /* TimelineViewController+Drag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515B9F402578B2F3009C5DE4 /* TimelineViewController+Drag.swift */; };
 		515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F1631255C16E700FD98B8 /* AddFolderViewController.swift */; };
 		515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F164A255C9F8E00FD98B8 /* FormViewController.swift */; };
@@ -144,6 +146,7 @@
 		513F32A12594062C0003048F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
+		514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporter.swift; sourceTree = "<group>"; };
 		515B9F402578B2F3009C5DE4 /* TimelineViewController+Drag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimelineViewController+Drag.swift"; sourceTree = "<group>"; };
 		515F1631255C16E700FD98B8 /* AddFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFolderViewController.swift; sourceTree = "<group>"; };
 		515F164A255C9F8E00FD98B8 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
@@ -224,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51C568D5258C085400AA7B93 /* MarkdownAttributedString in Frameworks */,
+				514EF16325A78BCC00B1FFB6 /* CrashReporter in Frameworks */,
 				51B4EBC7257C3CD100378CAB /* ZipArchive in Frameworks */,
 				51B5861C256B245300ACF99B /* SWXMLHash in Frameworks */,
 				51C4C3F92557470B004E0206 /* Templeton in Frameworks */,
@@ -248,6 +252,7 @@
 			children = (
 				51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */,
 				518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */,
+				514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */,
 				515F164A255C9F8E00FD98B8 /* FormViewController.swift */,
 				51DA54C725643E3400732942 /* MainThreadOperationBase.swift */,
 				51AE5481258FF35F006DA301 /* NSMutableAttributedString+.swift */,
@@ -465,6 +470,7 @@
 				51B5861B256B245300ACF99B /* SWXMLHash */,
 				51B4EBC6257C3CD100378CAB /* ZipArchive */,
 				51C568D4258C085400AA7B93 /* MarkdownAttributedString */,
+				514EF16225A78BCC00B1FFB6 /* CrashReporter */,
 			);
 			productName = Manhattan;
 			productReference = 5181A9342554D92000C153E8 /* Zavala.app */;
@@ -523,6 +529,7 @@
 				51B4EBC5257C3CD100378CAB /* XCRemoteSwiftPackageReference "ZipArchive" */,
 				51C568D3258C085400AA7B93 /* XCRemoteSwiftPackageReference "MarkdownAttributedString" */,
 				51E060AA25A4516100194066 /* XCRemoteSwiftPackageReference "Sparkle-Binary" */,
+				514EF16125A78BCC00B1FFB6 /* XCRemoteSwiftPackageReference "plcrashreporter" */,
 			);
 			productRefGroup = 5181A9352554D92000C153E8 /* Products */;
 			projectDirPath = "";
@@ -646,6 +653,7 @@
 				51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */,
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
 				51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */,
+				514EF15F25A78A8C00B1FFB6 /* CrashReporter.swift in Sources */,
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
 				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
@@ -790,6 +798,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		514EF16125A78BCC00B1FFB6 /* XCRemoteSwiftPackageReference "plcrashreporter" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/microsoft/plcrashreporter.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.8.1;
+			};
+		};
 		51B4EBC5257C3CD100378CAB /* XCRemoteSwiftPackageReference "ZipArchive" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/vincode-io/ZipArchive.git";
@@ -833,6 +849,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		514EF16225A78BCC00B1FFB6 /* CrashReporter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 514EF16125A78BCC00B1FFB6 /* XCRemoteSwiftPackageReference "plcrashreporter" */;
+			productName = CrashReporter;
+		};
 		51B4EBC6257C3CD100378CAB /* ZipArchive */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 51B4EBC5257C3CD100378CAB /* XCRemoteSwiftPackageReference "ZipArchive" */;

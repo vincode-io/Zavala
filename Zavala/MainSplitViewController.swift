@@ -26,22 +26,6 @@ enum MainControllerIdentifier {
 
 class MainSplitViewController: UISplitViewController {
 
-	private var sidebarViewController: SidebarViewController? {
-		return viewController(for: .primary) as? SidebarViewController
-	}
-	
-	private var timelineViewController: TimelineViewController? {
-		viewController(for: .supplementary) as? TimelineViewController
-	}
-	
-	private var editorViewController: EditorViewController? {
-		viewController(for: .secondary) as? EditorViewController
-	}
-	
-	private var lastMainControllerToAppear = MainControllerIdentifier.none
-	
-	private var activityManager = ActivityManager()
-
 	var stateRestorationActivity: NSUserActivity {
 		let activity = activityManager.stateRestorationActivity
 		if traitCollection.userInterfaceIdiom == .mac {
@@ -147,6 +131,26 @@ class MainSplitViewController: UISplitViewController {
 		return editorViewController?.isCollapseUnavailable ?? true
 	}
 	
+	private var sidebarViewController: SidebarViewController? {
+		return viewController(for: .primary) as? SidebarViewController
+	}
+	
+	private var timelineViewController: TimelineViewController? {
+		viewController(for: .supplementary) as? TimelineViewController
+	}
+	
+	private var editorViewController: EditorViewController? {
+		viewController(for: .secondary) as? EditorViewController
+	}
+	
+	private var lastMainControllerToAppear = MainControllerIdentifier.none
+	
+	private var activityManager = ActivityManager()
+	
+	#if targetEnvironment(macCatalyst)
+	private var crashReporter = CrashReporter()
+	#endif
+	
 	override func viewDidLoad() {
         super.viewDidLoad()
 		primaryBackgroundStyle = .sidebar
@@ -174,6 +178,12 @@ class MainSplitViewController: UISplitViewController {
 		timelineViewController?.navigationController?.delegate = self
 		timelineViewController?.delegate = self
 		sidebarViewController?.startUp()
+
+		#if targetEnvironment(macCatalyst)
+		DispatchQueue.main.async {
+			self.crashReporter.check(presentingController: self)
+		}
+		#endif
 	}
 	
 	func handle(_ activity: NSUserActivity) {

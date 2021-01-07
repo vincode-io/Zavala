@@ -36,6 +36,10 @@ internal enum L10n {
   internal static let complete = L10n.tr("Localizable", "Complete")
   /// Copy
   internal static let copy = L10n.tr("Localizable", "Copy")
+  /// To help us fix crashing bugs, click “Email It” below. You will have a chance to review the email message before it is sent.
+  internal static let crashReporterMessage = L10n.tr("Localizable", "Crash_Reporter_Message")
+  /// Crash Log Found
+  internal static let crashReporterTitle = L10n.tr("Localizable", "Crash_Reporter_Title")
   /// Cut
   internal static let cut = L10n.tr("Localizable", "Cut")
   /// Delete
@@ -60,6 +64,8 @@ internal enum L10n {
   internal static func editDocument(_ p1: Any) -> String {
     return L10n.tr("Localizable", "Edit_Document", String(describing: p1))
   }
+  /// Email It
+  internal static let emailIt = L10n.tr("Localizable", "Email_It")
   /// Error
   internal static let error = L10n.tr("Localizable", "Error")
   /// Expand

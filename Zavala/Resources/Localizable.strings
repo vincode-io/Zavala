@@ -6,7 +6,7 @@
   
 */
 
-/* Menu Items & Toolbars */
+/* Menu Items, Toolbars, & Buttons */
 "Check_For_Updates" = "Check For Updates...";
 "Outline" = "Outline";
 "Import_OPML" = "Import OPML";
@@ -74,3 +74,9 @@
 
 /* Generic Eror Handling */
 "Error" = "Error";
+
+/* Crash Reporter */
+"Email_It" = "Email It";
+"Crash_Reporter_Title" = "Crash Log Found";
+"Crash_Reporter_Message" = "To help us fix crashing bugs, click “Email It” below. You will have a chance to review the email message before it is sent.";
+
