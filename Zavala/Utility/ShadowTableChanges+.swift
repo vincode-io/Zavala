@@ -10,6 +10,10 @@ import Templeton
 
 extension ShadowTableChanges {
 	
+	var isOnlyReloads: Bool {
+		return (deletes?.isEmpty ?? true) && (inserts?.isEmpty ?? true) && (moves?.isEmpty ?? true)
+	}
+	
 	public var deleteIndexPaths: [IndexPath]? {
 		guard let deletes = deletes else { return nil }
 		return deletes.map { IndexPath(row: $0, section: 1) }

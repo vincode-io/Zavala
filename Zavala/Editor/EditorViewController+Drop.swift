@@ -299,7 +299,6 @@ extension EditorViewController {
 										   prefersEnd: prefersEnd)
 		
 		runCommand(command)
-		deselectAll()
 	}
 	
 }

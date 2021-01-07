@@ -288,7 +288,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	@objc func shadowTableDidChange(_ note: Notification) {
 		if note.object as? Outline == outline {
 			guard let changes = note.userInfo?[ShadowTableChanges.userInfoKey] as? ShadowTableChanges else { return }
-			applyChangesRestoringCursor(changes)
+			applyChangesRestoringState(changes)
 		}
 	}
 	
@@ -415,13 +415,13 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	@objc func toggleOutlineFilter(_ sender: Any?) {
 		guard let changes = outline?.toggleFilter() else { return }
 		updateUI()
-		applyChangesRestoringCursor(changes)
+		applyChangesRestoringState(changes)
 	}
 	
 	@objc func toggleOutlineHideNotes(_ sender: Any?) {
 		guard let changes = outline?.toggleNotesHidden() else { return }
 		updateUI()
-		applyChangesRestoringCursor(changes)
+		applyChangesRestoringState(changes)
 	}
 	
 	@objc func repeatMoveCursorUp() {
@@ -710,14 +710,14 @@ extension EditorViewController {
 	}
 	
 	private func applyChanges(_ changes: ShadowTableChanges) {
-		deselectAll()
-		
 		if let deletes = changes.deleteIndexPaths, !deletes.isEmpty {
 			collectionView.deleteItems(at: deletes)
 		}
+		
 		if let inserts = changes.insertIndexPaths, !inserts.isEmpty {
 			collectionView.insertItems(at: inserts)
 		}
+		
 		if let moves = changes.moveIndexPaths, !moves.isEmpty {
 			collectionView.performBatchUpdates {
 				for move in moves {
@@ -725,12 +725,13 @@ extension EditorViewController {
 				}
 			}
 		}
+		
 		if let reloads = changes.reloadIndexPaths, !reloads.isEmpty {
 			collectionView.reloadItems(at: reloads)
 		}
 	}
 	
-	private func applyChangesRestoringCursor(_ changes: ShadowTableChanges) {
+	private func applyChangesRestoringState(_ changes: ShadowTableChanges) {
 		var textRange: UITextRange? = nil
 		var cursorRow: Row? = nil
 		if let editorTextView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView {
@@ -738,12 +739,20 @@ extension EditorViewController {
 			cursorRow = editorTextView.row
 		}
 		
+		let selectedIndexPaths = collectionView.indexPathsForSelectedItems
+		
 		applyChanges(changes)
 		
 		if let textRange = textRange,
 		   let updated = cursorRow?.shadowTableIndex,
 		   let rowCell = collectionView.cellForItem(at: IndexPath(row: updated, section: 1)) as? EditorTextRowViewCell {
 			rowCell.restoreSelection(textRange)
+		}
+		
+		if changes.isOnlyReloads, let indexPaths = selectedIndexPaths {
+			for indexPath in indexPaths {
+				collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+			}
 		}
 	}
 
