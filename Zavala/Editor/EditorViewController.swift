@@ -514,16 +514,14 @@ extension EditorViewController {
 		}
 		
 		let rows: [Row]
-		if let currentRows = currentRows {
-			rows = currentRows
+		if let selected = collectionView.indexPathsForSelectedItems, !selected.isEmpty {
+			rows = selected.compactMap { outline?.shadowTable?[$0.row] }
 		} else {
-			if let editorCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell,
-			   let row = editorCell.row {
+			if let row = outline?.shadowTable?[indexPath.row] {
 				rows = [row]
 			} else {
 				rows = [Row]()
 			}
-
 		}
 		
 		return makeRowsContextMenu(rows: rows)
