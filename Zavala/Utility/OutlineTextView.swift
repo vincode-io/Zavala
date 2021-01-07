@@ -84,16 +84,17 @@ class OutlineTextView: UITextView {
 	
 	func findAndSelectLink() -> (String?, NSRange) {
 		var effectiveRange = NSRange()
-		let link = textStorage.attribute(.link, at: cursorPosition, effectiveRange: &effectiveRange) as? String
-		if link != nil {
-			selectedRange = effectiveRange
+		for i in selectedRange.lowerBound..<selectedRange.upperBound {
+			if let link = textStorage.attribute(.link, at: i, effectiveRange: &effectiveRange) as? URL {
+				return (link.absoluteString, effectiveRange)
+			}
 		}
-		return (link, selectedRange)
+		return (nil, selectedRange)
 	}
 	
 	func updateLinkForCurrentSelection(link: String?, range: NSRange) {
-		if let link = link {
-			textStorage.addAttribute(.link, value: link, range: range)
+		if let link = link, let url = URL(string: link) {
+			textStorage.addAttribute(.link, value: url, range: range)
 		} else {
 			textStorage.removeAttribute(.link, range: range)
 		}

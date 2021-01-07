@@ -153,6 +153,7 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	override func updateLinkForCurrentSelection(link: String?, range: NSRange) {
 		super.updateLinkForCurrentSelection(link: link, range: range)
 		isTextChanged = true
+		saveText()
 	}
 	
 }
