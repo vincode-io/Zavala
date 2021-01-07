@@ -1157,6 +1157,8 @@ extension Outline {
 		var mutatingRow = row
 		mutatingRow.isExpanded = true
 
+		outlineBodyDidChange()
+		
 		var shadowTableInserts = [Row]()
 
 		func visitor(_ visited: Row) {
@@ -1229,6 +1231,8 @@ extension Outline {
 		var mutatingRow = row
 		mutatingRow.isExpanded = false
 			
+		outlineBodyDidChange()
+		
 		var reloads = Set<Int>()
 
 		func visitor(_ visited: Row) {
