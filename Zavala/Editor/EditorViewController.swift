@@ -10,7 +10,10 @@ import MobileCoreServices
 import RSCore
 import Templeton
 
-class EditorViewController: UICollectionViewController, MainControllerIdentifiable, UndoableCommandRunner {
+class EditorViewController: UIViewController, MainControllerIdentifiable, UndoableCommandRunner {
+
+	@IBOutlet weak var collectionView: UICollectionView!
+	
 	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
 
 	var isOutlineFunctionsUnavailable: Bool {
@@ -174,6 +177,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 		}
 		
 		collectionView.collectionViewLayout = createLayout()
+		collectionView.delegate = self
 		collectionView.dataSource = self
 		collectionView.dragDelegate = self
 		collectionView.dropDelegate = self
@@ -207,10 +211,6 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		moveCursorToTitleOnNew()
-	}
-	
-	override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-		self.outline?.verticleScrollState = firstVisibleShadowTableIndex
 	}
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -470,7 +470,7 @@ class EditorViewController: UICollectionViewController, MainControllerIdentifiab
 
 // MARK: Collection View
 
-extension EditorViewController {
+extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 	
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
@@ -481,11 +481,15 @@ extension EditorViewController {
 		return layout
 	}
 	
-	override func numberOfSections(in collectionView: UICollectionView) -> Int {
+	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		self.outline?.verticleScrollState = firstVisibleShadowTableIndex
+	}
+	
+	func numberOfSections(in collectionView: UICollectionView) -> Int {
 		return 2
 	}
 	
-	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		if section == 0 {
 			return outline == nil ? 0 : 1
 		} else {
@@ -493,7 +497,7 @@ extension EditorViewController {
 		}
 	}
 	
-	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		if indexPath.section == 0 {
 			return collectionView.dequeueConfiguredReusableCell(using: titleRegistration!, for: indexPath, item: outline)
 		} else {
@@ -502,7 +506,7 @@ extension EditorViewController {
 		}
 	}
 	
-	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+	func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
 		// Force save the text if the context menu has been requested so that we don't lose our
 		// text changes when the cell configuration gets applied
 		if let textView = UIResponder.currentFirstResponder as? OutlineTextView {
@@ -527,7 +531,7 @@ extension EditorViewController {
 		return makeRowsContextMenu(rows: rows)
 	}
 	
-	override func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+	func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
 		guard let row = configuration.identifier as? TextRow,
 			  let rowShadowTableIndex = row.shadowTableIndex,
 			  let cell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: 1)) as? EditorTextRowViewCell else { return nil }
@@ -535,7 +539,7 @@ extension EditorViewController {
 		return UITargetedPreview(view: cell, parameters: EditorTextRowPreviewParameters(cell: cell, row: row))
 	}
 	
-	override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+	func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
 		return indexPath.section == 1
 	}
 	
@@ -762,9 +766,11 @@ extension EditorViewController {
 	
 	private func restoreScrollPosition() {
 		if let verticleScrollState = outline?.verticleScrollState, verticleScrollState != 0 {
+			collectionView.isHidden = true
 			collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: 1), at: .top, animated: false)
 			DispatchQueue.main.async {
 				self.collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: 1), at: .top, animated: false)
+				self.collectionView.isHidden = false
 			}
 		}
 	}
