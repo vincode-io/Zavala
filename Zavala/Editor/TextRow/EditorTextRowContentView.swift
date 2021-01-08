@@ -14,29 +14,9 @@ class EditorTextRowContentView: UIView, UIContentView {
 	var noteTextView: EditorTextRowNoteTextView?
 	var barViews = [UIView]()
 
-	private var isDisclosed = true
-	
-	private lazy var disclosureIndicator: UIButton = {
-		let indicator = UIButton()
-		indicator.setImage(AppAssets.disclosure, for: .normal)
-		#if targetEnvironment(macCatalyst)
-		indicator.addTarget(self, action: #selector(toggleDisclosure(_:)), for: UIControl.Event.touchDown)
-		#else
+	private lazy var disclosureIndicator: EditorViewDisclosureButton = {
+		let indicator = EditorViewDisclosureButton()
 		indicator.addTarget(self, action: #selector(toggleDisclosure(_:)), for: UIControl.Event.touchUpInside)
-		#endif
-
-		indicator.tintColor = AppAssets.accessory
-		indicator.imageView?.contentMode = .center
-		indicator.imageView?.clipsToBounds = false
-		indicator.translatesAutoresizingMaskIntoConstraints = false
-		indicator.addInteraction(UIPointerInteraction(delegate: self))
-		
-		let dimension: CGFloat = traitCollection.userInterfaceIdiom == .mac ? 25 : 44
-		NSLayoutConstraint.activate([
-			indicator.widthAnchor.constraint(equalToConstant: dimension),
-			indicator.heightAnchor.constraint(equalToConstant: dimension)
-		])
-		
 		return indicator
 	}()
 	
@@ -177,7 +157,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 				])
 			}
 			
-			setDisclosure(isExpanded: configuration.row?.isExpanded ?? true, animated: false)
+			disclosureIndicator.setDisclosure(isExpanded: configuration.row?.isExpanded ?? true, animated: false)
 		}
 		
 		if configuration.indentionLevel < barViews.count {
@@ -302,60 +282,14 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 	
 }
 
-// MARK: UIPointerInteractionDelegate
-
-extension EditorTextRowContentView: UIPointerInteractionDelegate {
-	func pointerInteraction(_ interaction: UIPointerInteraction, styleFor region: UIPointerRegion) -> UIPointerStyle? {
-		var pointerStyle: UIPointerStyle? = nil
-
-		if let interactionView = interaction.view {
-			
-			let parameters = UIPreviewParameters()
-			let newBounds = CGRect(x: 8, y: 8, width: 28, height: 28)
-			let visiblePath = UIBezierPath(roundedRect: newBounds, cornerRadius: 10)
-			parameters.visiblePath = visiblePath
-			
-			let targetedPreview = UITargetedPreview(view: interactionView, parameters: parameters)
-			pointerStyle = UIPointerStyle(effect: UIPointerEffect.automatic(targetedPreview))
-		}
-		return pointerStyle
-	}
-}
-
 // MARK: Helpers
 
 extension EditorTextRowContentView {
 
 	@objc func toggleDisclosure(_ sender: Any?) {
 		guard let row = appliedConfiguration.row else { return }
-		setDisclosure(isExpanded: !isDisclosed, animated: true)
+		disclosureIndicator.toggleDisclosure()
 		appliedConfiguration.delegate?.editorTextRowToggleDisclosure(row: row)
-	}
-	
-	private func setDisclosure(isExpanded: Bool, animated: Bool) {
-		guard isDisclosed != isExpanded else { return }
-		isDisclosed = isExpanded
-
-		if isDisclosed {
-			disclosureIndicator.accessibilityLabel = L10n.collapse
-			if animated {
-				UIView.animate(withDuration: 0.15) {
-					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
-				}
-			} else {
-				disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
-			}
-		} else {
-			disclosureIndicator.accessibilityLabel = L10n.expand
-			let rotationAngle: CGFloat = traitCollection.horizontalSizeClass == .compact ? 1.570796 : -1.570796
-			if animated {
-				UIView.animate(withDuration: 0.15) {
-					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: rotationAngle)
-				}
-			} else {
-				disclosureIndicator.transform = CGAffineTransform(rotationAngle: rotationAngle)
-			}
-		}
 	}
 	
 	@objc func swipedLeft(_ sender: UISwipeGestureRecognizer) {

@@ -117,7 +117,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 
 	var currentRows: [Row]? {
-		if let selected = collectionView.indexPathsForSelectedItems, !selected.isEmpty {
+		if let selected = collectionView?.indexPathsForSelectedItems, !selected.isEmpty {
 			return selected.compactMap { outline?.shadowTable?[$0.row] }
 		} else if let currentRow = currentTextView?.row {
 			return [currentRow]
