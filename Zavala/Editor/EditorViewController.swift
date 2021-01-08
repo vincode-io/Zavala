@@ -645,27 +645,7 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 extension EditorViewController: OutlineCommandDelegate {
 	
 	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates) {
-		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
-		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
-
-		func restoreCursor() {
-			guard let rowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
-			rowCell.restoreCursor(cursorCoordinates)
-		}
-		
-		if !collectionView.indexPathsForVisibleItems.contains(indexPath) {
-			CATransaction.begin()
-			CATransaction.setCompletionBlock {
-				// Got to wait or the row cell won't be found
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-					restoreCursor()
-				}
-			}
-			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
-			CATransaction.commit()
-		} else {
-			restoreCursor()
-		}
+		restoreCursorPosition(cursorCoordinates, animated: true)
 	}
 	
 }
@@ -760,7 +740,31 @@ extension EditorViewController {
 
 	private func restoreOutlineCursorPosition() {
 		if let cursorCoordinates = outline?.cursorCoordinates {
-			restoreCursorPosition(cursorCoordinates)
+			restoreCursorPosition(cursorCoordinates, animated: false)
+		}
+	}
+
+	private func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates, animated: Bool) {
+		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
+		let indexPath = IndexPath(row: shadowTableIndex, section: 1)
+
+		func restoreCursor() {
+			guard let rowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
+			rowCell.restoreCursor(cursorCoordinates)
+		}
+		
+		if !collectionView.indexPathsForVisibleItems.contains(indexPath) {
+			CATransaction.begin()
+			CATransaction.setCompletionBlock {
+				// Got to wait or the row cell won't be found
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+					restoreCursor()
+				}
+			}
+			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: animated)
+			CATransaction.commit()
+		} else {
+			restoreCursor()
 		}
 	}
 	
