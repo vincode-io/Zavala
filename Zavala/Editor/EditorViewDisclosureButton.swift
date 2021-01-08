@@ -36,10 +36,11 @@ class EditorViewDisclosureButton: UIButton {
 	
 	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
 		// This is a really questionable hack to allow right clicks to go through the button
-		if event == nil, let view = superview?.hitTest(point, with: event) {
-			return view
+		let view = super.hitTest(point, with: event)
+		if view == self && event == nil {
+			return nil
 		}
-		return super.hitTest(point, with: event)
+		return view
 	}
 	
 	func toggleDisclosure() {
