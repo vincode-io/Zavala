@@ -22,7 +22,7 @@ Keep in mind, this is an application in the very early stages of development.  Y
 to it.  It is buggy and incomplete.  It may be very frustrating to use right now.  Here is the application for only the bravest
 of users to try out.
 
-[Pre-release Download](https://github.com/vincode-io/Zavala/releases/latest/download/Zavala.app.zip)
+[Pre-release Download](https://github.com/vincode-io/Zavala/releases/latest/download/Zavala.app.zip) (Requires macOS 11 Big Sur)
 
 ## Code Contributions
 
