@@ -176,6 +176,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			navigationItem.rightBarButtonItems = [filterBarButtonItem!]
 		}
 		
+		collectionView.layer.speed = 1.25
 		collectionView.collectionViewLayout = createLayout()
 		collectionView.delegate = self
 		collectionView.dataSource = self
