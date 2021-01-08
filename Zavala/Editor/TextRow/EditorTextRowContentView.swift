@@ -371,8 +371,6 @@ extension EditorTextRowContentView {
 	private func configureTopicTextView(configuration: EditorTextRowContentConfiguration) {
 		topicTextView.row = configuration.row
 		
-		let topic = configuration.topic ?? NSAttributedString(string: "")
-		
 		var attrs = [NSAttributedString.Key : Any]()
 		if configuration.isComplete || configuration.isAncestorComplete {
 			attrs[.foregroundColor] = UIColor.tertiaryLabel
@@ -387,19 +385,19 @@ extension EditorTextRowContentView {
 			attrs[.strikethroughStyle] = 0
 		}
 
-		// This is a bit of a hack to make sure that the reused UITextView gets cleared out for the empty attributed string
-		if topic.length < 1 {
-			let mutableAttrText = NSMutableAttributedString(string: " ")
-			let range = NSRange(location: 0, length: mutableAttrText.length)
-			attrs[.font] = OutlineFont.topic
-			mutableAttrText.addAttributes(attrs, range: range)
-			topicTextView.attributedText = mutableAttrText
-			topicTextView.attributedText = configuration.topic
-		} else {
+		if let topic = configuration.topic {
 			let mutableAttrText = NSMutableAttributedString(attributedString: topic)
 			let range = NSRange(location: 0, length: mutableAttrText.length)
 			mutableAttrText.addAttributes(attrs, range: range)
 			mutableAttrText.replaceFont(with: OutlineFont.topic)
+			topicTextView.attributedText = mutableAttrText
+		} else {
+			// This is a bit of a hack to make sure that the reused UITextView gets cleared out for the
+			// empty attributed string and the bullet correctly aligns on the first baseline
+			let mutableAttrText = NSMutableAttributedString(string: " ")
+			let range = NSRange(location: 0, length: mutableAttrText.length)
+			attrs[.font] = OutlineFont.topic
+			mutableAttrText.addAttributes(attrs, range: range)
 			topicTextView.attributedText = mutableAttrText
 		}
 
