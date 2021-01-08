@@ -60,16 +60,6 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		NotificationCenter.default.addObserver(self, selector: #selector(folderMetaDataDidChange(_:)), name: .FolderMetaDataDidChange, object: nil)
 	}
 	
-	override func viewWillAppear(_ animated: Bool) {
-		// If we haven't gotten anything selected this is probably the first run.  To make things more friendly by selecting the first
-		// Folder, unless we are on the iPhone (collapsed on launch) which would just be confusing.
-		if !(splitViewController?.isCollapsed ?? false) && collectionView.indexPathsForSelectedItems?.isEmpty ?? true {
-			if let localAccount = AccountManager.shared.localAccount, let folder = localAccount.folders?.first {
-				selectDocumentContainer(folder, animated: false)
-			}
-		}
-	}
-	
 	// MARK: API
 	
 	func startUp() {
@@ -78,6 +68,14 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
 		applyInitialSnapshot()
+
+		// Select the first folder.  This will be changed by state restoration, but in the case that it isn't, this
+		// is probably the first run.  Selecting a folder will make it easier to figure out how to add an initial Outline.
+		if !(splitViewController?.isCollapsed ?? false) {
+			if let localAccount = AccountManager.shared.localAccount, let folder = localAccount.folders?.first {
+				selectDocumentContainer(folder, animated: false)
+			}
+		}
 	}
 	
 	func selectDocumentContainer(_ documentContainer: DocumentContainer?, animated: Bool) {
