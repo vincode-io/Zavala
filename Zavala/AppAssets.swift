@@ -55,9 +55,9 @@ struct AppAssets {
 
 	static var disclosure: UIImage = {
 		#if targetEnvironment(macCatalyst)
-		return UIImage(systemName: "chevron.right")!.applyingSymbolConfiguration(.init(pointSize: 9, weight: .heavy))!
+		return UIImage(systemName: "chevron.down")!.applyingSymbolConfiguration(.init(pointSize: 9, weight: .heavy))!
 		#else
-		return UIImage(systemName: "chevron.right")!.applyingSymbolConfiguration(.init(pointSize: 14, weight: .medium))!
+		return UIImage(systemName: "chevron.down")!.applyingSymbolConfiguration(.init(pointSize: 14, weight: .medium))!
 		#endif
 	}()
 	

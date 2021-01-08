@@ -14,7 +14,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 	var noteTextView: EditorTextRowNoteTextView?
 	var barViews = [UIView]()
 
-	private var isDisclosed = false
+	private var isDisclosed = true
 	
 	private lazy var disclosureIndicator: UIButton = {
 		let indicator = UIButton()
@@ -340,19 +340,20 @@ extension EditorTextRowContentView {
 			disclosureIndicator.accessibilityLabel = L10n.collapse
 			if animated {
 				UIView.animate(withDuration: 0.15) {
-					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
-				}
-			} else {
-				disclosureIndicator.transform = CGAffineTransform(rotationAngle: 1.570796)
-			}
-		} else {
-			disclosureIndicator.accessibilityLabel = L10n.expand
-			if animated {
-				UIView.animate(withDuration: 0.15) {
 					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
 				}
 			} else {
 				disclosureIndicator.transform = CGAffineTransform(rotationAngle: 0)
+			}
+		} else {
+			disclosureIndicator.accessibilityLabel = L10n.expand
+			let rotationAngle: CGFloat = traitCollection.horizontalSizeClass == .compact ? 1.570796 : -1.570796
+			if animated {
+				UIView.animate(withDuration: 0.15) {
+					self.disclosureIndicator.transform = CGAffineTransform(rotationAngle: rotationAngle)
+				}
+			} else {
+				disclosureIndicator.transform = CGAffineTransform(rotationAngle: rotationAngle)
 			}
 		}
 	}
