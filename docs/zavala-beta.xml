@@ -7,6 +7,13 @@
         <language>en</language>
 
 <item>
+    <title>Zavala 0.10.0</title>
+    <pubDate>Fri, 08 Jan 2021 17:30:00 -0600</pubDate>
+    <enclosure url="https://github.com/vincode-io/Zavala/releases/download/0.10.0/Zavala.app.zip" sparkle:version="11" sparkle:shortVersionString="0.10.0" length="3414016" type="application/zip" />
+    <sparkle:minimumSystemVersion>11.0.0</sparkle:minimumSystemVersion>
+</item>
+
+<item>
     <title>Zavala 0.9.1</title>
     <pubDate>Tue, 05 Jan 2021 18:30:00 -0600</pubDate>
     <enclosure url="https://github.com/vincode-io/Zavala/releases/download/0.9.2/Zavala.app.zip" sparkle:version="11" sparkle:shortVersionString="0.9.2" length="4208809" type="application/zip" />
