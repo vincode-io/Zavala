@@ -139,13 +139,13 @@ class EditorTextRowContentView: UIView, UIContentView {
 
 			let baseLineConstant: CGFloat
 			if traitCollection.userInterfaceIdiom == .mac {
-				baseLineConstant = 0 - (OutlineFont.topicCapHeight - 6) / 2
+				baseLineConstant = 0 - (OutlineFont.topicCapHeight - 8) / 2
 			} else {
 				baseLineConstant = 0 - (OutlineFont.topicCapHeight - 12) / 2
 			}
 
 			if traitCollection.horizontalSizeClass != .compact {
-				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -9 : -16
+				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -6 : -16
 				NSLayoutConstraint.activate([
 					disclosureIndicator.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth + indentAdjustment),
 					disclosureIndicator.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)

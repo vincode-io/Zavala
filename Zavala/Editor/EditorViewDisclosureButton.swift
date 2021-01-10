@@ -23,7 +23,7 @@ class EditorViewDisclosureButton: UIButton {
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.addInteraction(UIPointerInteraction(delegate: pointerInteractionDelegate))
 		
-		let dimension: CGFloat = traitCollection.userInterfaceIdiom == .mac ? 25 : 44
+		let dimension: CGFloat = traitCollection.userInterfaceIdiom == .mac ? 19 : 44
 		NSLayoutConstraint.activate([
 			self.widthAnchor.constraint(equalToConstant: dimension),
 			self.heightAnchor.constraint(equalToConstant: dimension)
