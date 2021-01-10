@@ -47,6 +47,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		menuKeyCommands.append(newWindowCommand)
 		menuKeyCommands.append(toggleSidebarCommand)
 		
+		if !(mainSplitViewController?.isInsertRowUnavailable ?? true) {
+			menuKeyCommands.append(insertRowCommand)
+		}
+		
 		if !(mainSplitViewController?.isCreateRowUnavailable ?? true) {
 			menuKeyCommands.append(createRowCommand)
 		}
@@ -146,7 +150,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											input: "s",
 											modifierFlags: [.control, .command])
 	
-	let createRowCommand = UIKeyCommand(title: L10n.addRow,
+	let insertRowCommand = UIKeyCommand(title: L10n.addRowAbove,
+										action: #selector(insertRowCommand(_:)),
+										input: "\n",
+										modifierFlags: [.shift])
+	
+	let createRowCommand = UIKeyCommand(title: L10n.addRowBelow,
 										action: #selector(createRowCommand(_:)),
 										input: "\n",
 										modifierFlags: [])
@@ -178,13 +187,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let createRowNotesCommand = UIKeyCommand(title: L10n.addNote,
 											 action: #selector(createRowNotesCommand(_:)),
-											 input: "\n",
-											 modifierFlags: [.shift])
+											 input: "-",
+											 modifierFlags: [.control])
 	
 	let deleteRowNotesCommand = UIKeyCommand(title: L10n.deleteNote,
 											 action: #selector(deleteRowNotesCommand(_:)),
-											 input: "\u{8}",
-											 modifierFlags: [.shift])
+											 input: "=",
+											 modifierFlags: [.control])
 	
 	let splitRowCommand = UIKeyCommand(title: L10n.splitRow,
 									   action: #selector(splitRowCommand(_:)),
@@ -372,6 +381,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.toggleSidebar(sender)
 	}
 	
+	@objc func insertRowCommand(_ sender: Any?) {
+		mainSplitViewController?.insertRow(sender)
+	}
+	
 	@objc func createRowCommand(_ sender: Any?) {
 		mainSplitViewController?.createRow(sender)
 	}
@@ -470,6 +483,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(createOutlineCommand(_:)), #selector(importOPMLCommand(_:)):
 			if mainSplitViewController?.isCreateOutlineUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(insertRowCommand(_:)):
+			if mainSplitViewController?.isInsertRowUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(createRowCommand(_:)):
@@ -609,7 +626,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		// Outline Menu
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, createRowNotesCommand, deleteRowNotesCommand])
-		let mainOutlineMenu = UIMenu(title: "", options: .displayInline, children: [createRowCommand, splitRowCommand, indentRowsCommand, outdentRowsCommand])
+		let mainOutlineMenu = UIMenu(title: "", options: .displayInline, children: [insertRowCommand, createRowCommand, splitRowCommand, indentRowsCommand, outdentRowsCommand])
 		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, completeMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 

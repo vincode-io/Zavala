@@ -32,6 +32,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return currentRows == nil
 	}
 	
+	var isInsertRowUnavailable: Bool {
+		return currentRows == nil
+	}
+	
 	var isCreateRowUnavailable: Bool {
 		return currentRows == nil
 	}
@@ -328,9 +332,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		deleteRows(rows)
 	}
 	
+	func insertRow() {
+		guard let rows = currentRows else { return }
+		createRow(beforeRows: rows)
+	}
+	
 	func createRow() {
 		guard let rows = currentRows else { return }
-		createRows(afterRows: rows)
+		createRow(afterRows: rows)
 	}
 	
 	func indentRows() {
@@ -565,7 +574,7 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	}
 	
 	func editorTitleCreateRow(textRowStrings: TextRowStrings?) {
-		createRows(afterRows: nil)
+		createRow(afterRows: nil)
 	}
 	
 }
@@ -597,12 +606,12 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	}
 	
 	func editorTextRowCreateRow(beforeRow: Row) {
-		createRow(beforeRow: beforeRow)
+		createRow(beforeRows: [beforeRow])
 	}
 	
 	func editorTextRowCreateRow(afterRow: Row?, textRowStrings: TextRowStrings?) {
 		let afterRows = afterRow == nil ? nil : [afterRow!]
-		createRows(afterRows: afterRows, textRowStrings: textRowStrings)
+		createRow(afterRows: afterRows, textRowStrings: textRowStrings)
 	}
 	
 	func editorTextRowIndentRow(_ row: Row, textRowStrings: TextRowStrings) {
@@ -905,7 +914,7 @@ extension EditorViewController {
 			// Have to let the text field get the first responder by getting it away from this
 			// action which appears to be holding on to it.
 			DispatchQueue.main.async {
-				self?.createRows(afterRows: rows)
+				self?.createRow(afterRows: rows)
 			}
 		}
 	}
@@ -1201,9 +1210,9 @@ extension EditorViewController {
 		}
 	}
 	
-	private func createRow(beforeRow: Row) {
-		guard let undoManager = undoManager, let outline = outline else { return }
-		
+	private func createRow(beforeRows: [Row]) {
+		guard let undoManager = undoManager, let outline = outline, let beforeRow = beforeRows.sortedByDisplayOrder().first else { return }
+
 		let command = CreateRowBeforeCommand(undoManager: undoManager,
 											 delegate: self,
 											 outline: outline,
@@ -1218,7 +1227,7 @@ extension EditorViewController {
 		}
 	}
 	
-	private func createRows(afterRows: [Row]?, textRowStrings: TextRowStrings? = nil) {
+	private func createRow(afterRows: [Row]?, textRowStrings: TextRowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let afterRow = afterRows?.sortedByDisplayOrder().last
@@ -1326,7 +1335,7 @@ extension EditorViewController {
 		
 		runCommand(command)
 		
-		if let newCursorIndex = command.newCursorIndex {
+		if let newCursorIndex = command.newCursorIndex ?? rows.first?.shadowTableIndex {
 			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: 1)) as? EditorTextRowViewCell {
 				rowCell.moveToNote()
 			}

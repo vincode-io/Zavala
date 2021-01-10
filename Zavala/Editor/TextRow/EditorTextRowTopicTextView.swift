@@ -36,8 +36,9 @@ class EditorTextRowTopicTextView: OutlineTextView {
 			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(outdent(_:))),
 			UIKeyCommand(input: "\t", modifierFlags: [.alternate], action: #selector(insertTab(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(insertReturn(_:))),
-			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(addNote(_:))),
+			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(insertRow(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(split(_:))),
+			UIKeyCommand(input: "-", modifierFlags: [.control], action: #selector(addNote(_:))),
 			toggleBoldCommand,
 			toggleItalicsCommand,
 			editLinkCommand
@@ -117,6 +118,12 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	
 	@objc func insertReturn(_ sender: Any) {
 		insertText("\n")
+	}
+	
+	@objc func insertRow(_ sender: Any) {
+		guard let textRow = row else { return }
+		isSavingTextUnnecessary = true
+		editorDelegate?.createRow(self, beforeRow: textRow)
 	}
 	
 	@objc func addNote(_ sender: Any) {

@@ -331,12 +331,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public func isCreateNotesUnavailable(rows: [Row]) -> Bool {
-		for row in rows {
-			if let textRow = row.textRow, textRow.isNoteEmpty {
-				return false
-			}
-		}
-		return true
+		return rows.isEmpty
 	}
 	
 	func createNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], Int?) {

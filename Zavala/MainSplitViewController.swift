@@ -67,6 +67,10 @@ class MainSplitViewController: UISplitViewController {
 			(editorViewController?.isDeleteCurrentRowUnavailable ?? true) 
 	}
 
+	var isInsertRowUnavailable: Bool {
+		return editorViewController?.isInsertRowUnavailable ?? true
+	}
+	
 	var isCreateRowUnavailable: Bool {
 		return editorViewController?.isCreateRowUnavailable ?? true
 	}
@@ -270,6 +274,10 @@ class MainSplitViewController: UISplitViewController {
 		UIView.animate(withDuration: 0.25) {
 			self.preferredDisplayMode = self.displayMode == .twoBesideSecondary ? .secondaryOnly : .twoBesideSecondary
 		}
+	}
+	
+	@objc func insertRow(_ sender: Any?) {
+		editorViewController?.insertRow()
 	}
 	
 	@objc func createRow(_ sender: Any?) {
