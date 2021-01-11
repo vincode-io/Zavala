@@ -240,7 +240,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public func markdown(indentLevel: Int = 0) -> String {
 		var returnToSuspend = false
-		if rows == nil {
+		if rowsFile == nil {
 			returnToSuspend = true
 			load()
 		}
@@ -260,7 +260,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public func opml() -> String {
 		var returnToSuspend = false
-		if rows == nil {
+		if rowsFile == nil {
 			returnToSuspend = true
 			load()
 		}
