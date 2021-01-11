@@ -107,7 +107,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			var expandedRows = [String]()
 			
 			func expandedRowVisitor(_ visited: Row) {
-				if visited.isExpanded ?? true {
+				if visited.isCollapsable {
 					expandedRows.append(String(currentRow))
 				}
 				currentRow = currentRow + 1
