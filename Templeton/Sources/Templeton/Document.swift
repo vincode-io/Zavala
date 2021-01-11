@@ -56,6 +56,13 @@ public enum Document: Equatable, Codable {
 		}
 	}
 	
+	public var content: String? {
+		switch self {
+		case .outline(let outline):
+			return outline.markdown()
+		}
+	}
+	
 	public var updated: Date? {
 		switch self {
 		case .outline(let outline):

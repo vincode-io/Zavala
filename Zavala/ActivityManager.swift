@@ -42,9 +42,11 @@ class ActivityManager {
 	}
 
 	func selectingDocumentContainer(_ documentContainer: DocumentContainer) {
-		invalidateSelectDocumentContainer()
-		selectDocumentContainerActivity = makeSelectDocumentContainerActivity(documentContainer)
-		donate(selectDocumentContainerActivity!)
+		DispatchQueue.main.async {
+			self.invalidateSelectDocumentContainer()
+			self.selectDocumentContainerActivity = self.makeSelectDocumentContainerActivity(documentContainer)
+			self.donate(self.selectDocumentContainerActivity!)
+		}
 	}
 	
 	func invalidateSelectDocumentContainer() {
@@ -54,9 +56,11 @@ class ActivityManager {
 	}
 
 	func selectingDocument(_ documentContainer: DocumentContainer, _ document: Document) {
-		invalidateSelectDocument()
-		selectDocumentActivity = makeSelectDocumentActivity(documentContainer, document)
-		donate(selectDocumentActivity!)
+		DispatchQueue.main.async {
+			self.invalidateSelectDocument()
+			self.selectDocumentActivity = self.makeSelectDocumentActivity(documentContainer, document)
+			self.donate(self.selectDocumentActivity!)
+		}
 	}
 	
 	func invalidateSelectDocument() {
@@ -133,10 +137,11 @@ extension ActivityManager {
 		let idString = document.id.description
 		activity.persistentIdentifier = idString
 		
-		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeCompositeContent as String)
+		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
 		attributeSet.title = title
 		attributeSet.keywords = keywords
 		attributeSet.relatedUniqueIdentifier = idString
+		attributeSet.textContent = document.content
 		activity.contentAttributeSet = attributeSet
 		
 		return activity
