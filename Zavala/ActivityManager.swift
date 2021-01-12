@@ -68,6 +68,13 @@ class ActivityManager {
 		selectDocumentActivity = nil
 	}
 
+	func updateIndex(forDocument document: Document) {
+		let attributeSet = makeSearchableItemAttributes(forDocument: document)
+		let identifier = attributeSet.relatedUniqueIdentifier
+		let searchableItem = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "io.vincode", attributeSet: attributeSet)
+		CSSearchableIndex.default().indexSearchableItems([searchableItem])
+	}
+	
 }
 
 extension ActivityManager {
@@ -125,7 +132,7 @@ extension ActivityManager {
 		activity.userInfo = [UserInfoKeys.documentContainerID: documentContainer.id.userInfo, UserInfoKeys.documentID: document.id.userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 		
-		let keywords = makeKeywords(title)
+		let keywords = makeKeywords(document.title ?? "")
 		activity.keywords = Set(keywords)
 		activity.isEligibleForSearch = true
 		activity.isEligibleForPrediction = true
@@ -134,17 +141,19 @@ extension ActivityManager {
 			activity.isEligibleForHandoff = true
 		}
 
-		let idString = document.id.description
-		activity.persistentIdentifier = idString
-		
-		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
-		attributeSet.title = title
-		attributeSet.keywords = keywords
-		attributeSet.relatedUniqueIdentifier = idString
-		attributeSet.textContent = document.content
-		activity.contentAttributeSet = attributeSet
+		activity.persistentIdentifier = document.id.description
+		activity.contentAttributeSet = makeSearchableItemAttributes(forDocument: document)
 		
 		return activity
+	}
+	
+	private func makeSearchableItemAttributes(forDocument document: Document) -> CSSearchableItemAttributeSet {
+		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
+		attributeSet.title = document.title ?? ""
+		attributeSet.keywords = makeKeywords(document.title ?? "")
+		attributeSet.relatedUniqueIdentifier = document.id.description
+		attributeSet.textContent = document.content
+		return attributeSet
 	}
 	
 	private func makeKeywords(_ value: String?) -> [String] {
@@ -157,7 +166,7 @@ extension ActivityManager {
 		if let attributeSet = activity.contentAttributeSet {
 			let identifier = attributeSet.relatedUniqueIdentifier
 			let tempAttributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
-			let searchableItem = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: nil, attributeSet: tempAttributeSet)
+			let searchableItem = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "io.vincode", attributeSet: tempAttributeSet)
 			CSSearchableIndex.default().indexSearchableItems([searchableItem])
 		}
 		

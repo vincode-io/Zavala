@@ -205,6 +205,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(shadowTableDidChange(_:)), name: .ShadowTableDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -297,7 +298,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
-	// MARK: API	
+	@objc func applicationWillTerminate(_ note: Notification) {
+		updateSpotlightIndex()
+	}
+	
+	// MARK: API
 	
 	func edit(_ newOutline: Outline?, isNew: Bool) {
 		guard outline != newOutline else { return }
@@ -310,6 +315,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			textField.endEditing(true)
 		}
 		
+		updateSpotlightIndex()
 		outline?.suspend()
 		clearUndoableCommands()
 	
@@ -1382,6 +1388,12 @@ extension EditorViewController {
 		}
 		collectionView.scrollRectToVisible(frame, animated: true)
 		CATransaction.commit()
+	}
+	
+	private func updateSpotlightIndex() {
+		if let outline = outline {
+			(splitViewController as? MainSplitViewController)?.activityManager.updateIndex(forDocument: .outline(outline))
+		}
 	}
 	
 }

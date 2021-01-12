@@ -135,6 +135,8 @@ class MainSplitViewController: UISplitViewController {
 		return editorViewController?.isCollapseUnavailable ?? true
 	}
 	
+	var activityManager = ActivityManager()
+	
 	private var sidebarViewController: SidebarViewController? {
 		return viewController(for: .primary) as? SidebarViewController
 	}
@@ -148,8 +150,6 @@ class MainSplitViewController: UISplitViewController {
 	}
 	
 	private var lastMainControllerToAppear = MainControllerIdentifier.none
-	
-	private var activityManager = ActivityManager()
 	
 	#if targetEnvironment(macCatalyst)
 	private var crashReporter = CrashReporter()
