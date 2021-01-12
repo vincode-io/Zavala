@@ -19,12 +19,6 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	var mainControllerIdentifer: MainControllerIdentifier { return .timeline }
 
 	weak var delegate: TimelineDelegate?
-	var documentContainer: DocumentContainer? {
-		didSet {
-			updateUI()
-			applySnapshot(animated: false)
-		}
-	}
 	
 	var isCreateOutlineUnavailable: Bool {
 		return !(documentContainer is Folder)
@@ -48,6 +42,8 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
 
 	override var canBecomeFirstResponder: Bool { return true }
+
+	private(set) var documentContainer: DocumentContainer?
 
 	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
 	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importEntity, style: .plain, target: self, action: #selector(importOPML(_:)))
@@ -77,6 +73,12 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	}
 	
 	// MARK: API
+	
+	func setDocumentContainer(_ documentContainer: DocumentContainer?, completion: (() -> Void)? = nil) {
+		self.documentContainer = documentContainer
+		updateUI()
+		applySnapshot(animated: false, completion: completion)
+	}
 
 	func selectDocument(_ document: Document?, isNew: Bool = false, animated: Bool) {
 		guard let documentContainer = documentContainer else { return }
@@ -226,7 +228,7 @@ extension TimelineViewController {
 		dataSourceQueue.add(ReloadItemsOperation(dataSource: dataSource, section: 0, items: [timelineItem], animated: true))
 	}
 	
-	func applySnapshot(animated: Bool) {
+	func applySnapshot(animated: Bool, completion: (() -> Void)? = nil) {
 		guard let documentContainer = documentContainer else {
 			let snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
 			self.dataSourceQueue.add(ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: animated))
@@ -240,7 +242,9 @@ extension TimelineViewController {
 			var snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
 			snapshot.append(items)
 
-			self.dataSourceQueue.add(ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: animated))
+			let snapshotOp = ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: animated)
+			snapshotOp.completionBlock = { _ in completion?() }
+			self.dataSourceQueue.add(snapshotOp)
 		}
 	}
 	

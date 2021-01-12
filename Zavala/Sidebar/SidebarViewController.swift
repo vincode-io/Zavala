@@ -12,7 +12,7 @@ import Combine
 import Templeton
 
 protocol SidebarDelegate: class {
-	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool)
+	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool, completion: (() -> Void)?)
 }
 
 class SidebarViewController: UICollectionViewController, MainControllerIdentifiable {
@@ -78,7 +78,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		}
 	}
 	
-	func selectDocumentContainer(_ documentContainer: DocumentContainer?, animated: Bool) {
+	func selectDocumentContainer(_ documentContainer: DocumentContainer?, animated: Bool, completion: (() -> Void)? = nil) {
 		if let search = documentContainer as? Search {
 			DispatchQueue.main.async {
 				if let searchCellIndexPath = self.dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {
@@ -95,7 +95,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		}
 		updateSelection(item: sidebarItem, animated: animated)
 		
-		delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, animated: animated)
+		delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, animated: animated, completion: completion)
 	}
 	
 	func deleteCurrentFolder() {
@@ -124,7 +124,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		let restoreAction = UIAlertAction(title: L10n.restore, style: .default) { [weak self] _ in
 			guard let self = self else { return }
 			self.collectionView.selectItem(at: nil, animated: true, scrollPosition: .top)
-			self.delegate?.documentContainerSelectionDidChange(self, documentContainer: nil, animated: true)
+			self.delegate?.documentContainerSelectionDidChange(self, documentContainer: nil, animated: true, completion: nil)
 			AccountManager.shared.restoreArchive(accountType: unpackResult.0, unpackURL: unpackResult.1)
 		}
 		
@@ -208,7 +208,7 @@ extension SidebarViewController {
 		
 		if case .documentContainer(let entityID) = sidebarItem.id {
 			let documentContainer = AccountManager.shared.findDocumentContainer(entityID)
-			delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, animated: true)
+			delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, animated: true, completion: nil)
 		}
 	}
 	
@@ -414,7 +414,7 @@ extension SidebarViewController {
 	private func deleteFolder(_ folder: Folder, completion: ((Bool) -> Void)? = nil) {
 		func deleteFolder() {
 			if self.currentFolder == folder {
-				self.delegate?.documentContainerSelectionDidChange(self, documentContainer: nil, animated: true)
+				self.delegate?.documentContainerSelectionDidChange(self, documentContainer: nil, animated: true, completion: nil)
 			}
 			folder.account?.deleteFolder(folder)
 			completion?(true)

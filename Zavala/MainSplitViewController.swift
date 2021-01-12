@@ -208,15 +208,16 @@ class MainSplitViewController: UISplitViewController {
 			show(.primary)
 		}
 
-		sidebarViewController?.selectDocumentContainer(documentContainer, animated: false)
-		lastMainControllerToAppear = .timeline
+		sidebarViewController?.selectDocumentContainer(documentContainer, animated: false) {
+			self.lastMainControllerToAppear = .timeline
 
-		guard let documentUserInfo = userInfo[UserInfoKeys.documentID] as? [AnyHashable : AnyHashable],
-			  let documentID = EntityID(userInfo: documentUserInfo),
-			  let document = AccountManager.shared.findDocument(documentID) else { return }
-		
-		timelineViewController?.selectDocument(document, animated: false)
-		lastMainControllerToAppear = .editor
+			guard let documentUserInfo = userInfo[UserInfoKeys.documentID] as? [AnyHashable : AnyHashable],
+				  let documentID = EntityID(userInfo: documentUserInfo),
+				  let document = AccountManager.shared.findDocument(documentID) else { return }
+			
+			self.timelineViewController?.selectDocument(document, animated: false)
+			self.lastMainControllerToAppear = .editor
+		}
 	}
 	
 	// MARK: Notifications
@@ -383,8 +384,8 @@ class MainSplitViewController: UISplitViewController {
 
 extension MainSplitViewController: SidebarDelegate {
 	
-	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool) {
-		timelineViewController?.documentContainer = documentContainer
+	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool, completion: (() -> Void)? = nil) {
+		timelineViewController?.setDocumentContainer(documentContainer, completion: completion)
 		editorViewController?.edit(nil, isNew: false)
 
 		guard let documentContainer = documentContainer else {
