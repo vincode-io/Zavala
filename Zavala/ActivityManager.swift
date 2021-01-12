@@ -155,6 +155,7 @@ extension ActivityManager {
 		attributeSet.keywords = makeKeywords(document.title ?? "")
 		attributeSet.relatedUniqueIdentifier = document.id.description
 		attributeSet.textContent = document.content
+		attributeSet.contentModificationDate = document.updated
 		return attributeSet
 	}
 	
