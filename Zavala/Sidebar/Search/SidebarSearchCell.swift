@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SidebarSearchCellDelegate: class {
-	func sidebarSearchDidBecomeActive(searchText: String)
+	func sidebarSearchDidBecomeActive()
 	func sidebarSearchDidUpdate(searchText: String?)
 }
 

@@ -64,7 +64,9 @@ class SidebarSearchContentView: UIView, UIContentView {
 extension SidebarSearchContentView: UITextFieldDelegate {
 	
 	func textFieldDidBeginEditing(_ textField: UITextField) {
-		appliedConfiguration.delegate?.sidebarSearchDidBecomeActive(searchText: textField.text ?? "")
+		if textField.text == nil || textField.text!.isEmpty {
+			appliedConfiguration.delegate?.sidebarSearchDidBecomeActive()
+		}
 	}
 	
 }
