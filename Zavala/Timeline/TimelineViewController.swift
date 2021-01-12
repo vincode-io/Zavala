@@ -227,7 +227,13 @@ extension TimelineViewController {
 	}
 	
 	func applySnapshot(animated: Bool) {
-		documentContainer?.sortedDocuments { [weak self] result in
+		guard let documentContainer = documentContainer else {
+			let snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
+			self.dataSourceQueue.add(ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: animated))
+			return
+		}
+		
+		documentContainer.sortedDocuments { [weak self] result in
 			guard let self = self, let documents = try? result.get() else { return }
 
 			let items = documents.map { TimelineItem.timelineItem($0) }
