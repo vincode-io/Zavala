@@ -383,10 +383,6 @@ class MainSplitViewController: UISplitViewController {
 
 extension MainSplitViewController: SidebarDelegate {
 	
-	func searchQueryDidChange(_: SidebarViewController, searchQuery: String?) {
-		timelineViewController?.runSearch(text: searchQuery)
-	}
-	
 	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool) {
 		timelineViewController?.documentContainer = documentContainer
 		editorViewController?.edit(nil, isNew: false)

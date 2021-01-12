@@ -36,4 +36,8 @@ class SidebarSearchCell: UICollectionViewListCell {
 		contentConfiguration = content
 	}
 	
+	func clearSearchField() {
+		(contentView as? SidebarSearchContentView)?.searchTextField.text = nil
+	}
+	
 }

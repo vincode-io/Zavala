@@ -11,12 +11,14 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 	case all
 	case favorites
 	case recents
+	case search(String)
 	case account(Int)
 	case folder(Int, String) // Account, Folder
 	case document(Int, String, String) // Account, Folder, Document
 
 	private enum CodingKeys: String, CodingKey {
 		case type
+		case searchText
 		case accountID
 		case folderID
 		case documentID
@@ -99,6 +101,8 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return "favorites:"
 		case .recents:
 			return "recents:"
+		case .search(let searchText):
+			return "search:\(searchText)"
 		case .account(let id):
 			return "account:\(id)"
 		case .folder(let accountID, let folderID):
@@ -117,6 +121,10 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return
 		} else if description.starts(with: "recents:") {
 			self = .recents
+			return
+		} else if description.starts(with: "search:") {
+			let searchText = description.suffix(from: description.index(description.startIndex, offsetBy: 7))
+			self = .search(String(searchText))
 			return
 		} else if description.starts(with: "account:") {
 			let idString = description.suffix(from: description.index(description.startIndex, offsetBy: 8))
@@ -153,6 +161,9 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			self = .favorites
 		case "recents":
 			self = .recents
+		case "search":
+			let searchText = try container.decode(String.self, forKey: .searchText)
+			self = .search(searchText)
 		case "account":
 			let accountID = try container.decode(Int.self, forKey: .accountID)
 			self = .account(accountID)
@@ -180,6 +191,9 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			self = .favorites
 		case "recents":
 			self = .recents
+		case "search":
+			guard let searchText = userInfo["searchText"] as? String else { return nil }
+			self = .search(searchText)
 		case "account":
 			guard let accountID = userInfo["accountID"] as? Int else { return nil }
 			self = .account(accountID)
@@ -207,6 +221,9 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			try container.encode("favorites", forKey: .type)
 		case .recents:
 			try container.encode("recents", forKey: .type)
+		case .search(let searchText):
+			try container.encode("search", forKey: .type)
+			try container.encode(searchText, forKey: .searchText)
 		case .account(let accountID):
 			try container.encode("account", forKey: .type)
 			try container.encode(accountID, forKey: .accountID)
@@ -230,6 +247,11 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return ["type": "favorites"]
 		case .recents:
 			return ["type": "recents"]
+		case .search(let searchText):
+			return [
+				"type": "search",
+				"searchText": searchText
+			]
 		case .account(let accountID):
 			return [
 				"type": "account",

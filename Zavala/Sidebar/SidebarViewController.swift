@@ -12,7 +12,6 @@ import Combine
 import Templeton
 
 protocol SidebarDelegate: class {
-	func searchQueryDidChange(_: SidebarViewController, searchQuery: String?)
 	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool)
 }
 
@@ -189,6 +188,12 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 extension SidebarViewController {
 	
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		if let searchCellIndexPath = dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {
+			if let searchCell = collectionView.cellForItem(at: searchCellIndexPath) as? SidebarSearchCell {
+				searchCell.clearSearchField()
+			}
+		}
+		
 		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
 		
 		if case .documentContainer(let entityID) = sidebarItem.id {
@@ -339,7 +344,11 @@ extension SidebarViewController: SidebarSearchCellDelegate {
 	}
 
 	func sidebarSearchDidUpdate(searchText: String?) {
-		delegate?.searchQueryDidChange(self, searchQuery: searchText)
+		if let searchText = searchText {
+			selectDocumentContainer(Search(searchText: searchText), animated: true)
+		} else {
+			selectDocumentContainer(nil, animated: false)
+		}
 	}
 	
 }
