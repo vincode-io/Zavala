@@ -69,10 +69,12 @@ class ActivityManager {
 	}
 
 	func updateIndex(forDocument document: Document) {
-		let attributeSet = makeSearchableItemAttributes(forDocument: document)
-		let identifier = attributeSet.relatedUniqueIdentifier
-		let searchableItem = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "io.vincode", attributeSet: attributeSet)
-		CSSearchableIndex.default().indexSearchableItems([searchableItem])
+		DispatchQueue.main.async {
+			let attributeSet = self.makeSearchableItemAttributes(forDocument: document)
+			let identifier = attributeSet.relatedUniqueIdentifier
+			let searchableItem = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "io.vincode", attributeSet: attributeSet)
+			CSSearchableIndex.default().indexSearchableItems([searchableItem])
+		}
 	}
 	
 }
