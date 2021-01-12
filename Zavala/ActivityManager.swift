@@ -170,6 +170,7 @@ extension ActivityManager {
 			let identifier = attributeSet.relatedUniqueIdentifier
 			let tempAttributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
 			let searchableItem = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "io.vincode", attributeSet: tempAttributeSet)
+			searchableItem.expirationDate = .distantFuture
 			CSSearchableIndex.default().indexSearchableItems([searchableItem])
 		}
 		

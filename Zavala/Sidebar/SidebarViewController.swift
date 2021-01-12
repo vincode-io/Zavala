@@ -12,6 +12,7 @@ import Combine
 import Templeton
 
 protocol SidebarDelegate: class {
+	func searchQueryDidChange(_: SidebarViewController, searchQuery: String?)
 	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool)
 }
 
@@ -338,7 +339,7 @@ extension SidebarViewController: SidebarSearchCellDelegate {
 	}
 
 	func sidebarSearchDidUpdate(searchText: String?) {
-		print(searchText ?? "")
+		delegate?.searchQueryDidChange(self, searchQuery: searchText)
 	}
 	
 }

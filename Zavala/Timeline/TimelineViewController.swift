@@ -7,6 +7,7 @@
 
 import UIKit
 import UniformTypeIdentifiers
+import CoreSpotlight
 import RSCore
 import Templeton
 
@@ -44,13 +45,16 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		return AccountManager.shared.findDocument(item.id)
 	}
 	
+	var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
+
+	override var canBecomeFirstResponder: Bool { return true }
+
 	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
 	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importEntity, style: .plain, target: self, action: #selector(importOPML(_:)))
 
 	private let dataSourceQueue = MainThreadOperationQueue()
-	var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
 
-	override var canBecomeFirstResponder: Bool { return true }
+	private var searchQuery: CSSearchQuery?
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,6 +95,33 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	func deleteCurrentOutline() {
 		guard let document = currentDocument else { return }
 		deleteDocument(document)
+	}
+	
+	func runSearch(text: String?) {
+		var searchableItems = [CSSearchableItem]()
+
+		guard let text = text, text.count > 2 else {
+			searchQuery?.cancel()
+			applySearchSnapshot(items: searchableItems)
+			return
+		}
+		
+		searchQuery?.cancel()
+
+		let queryString = "title == \"*\(text)*\"c || textContent == \"*\(text)*\"c"
+		searchQuery = CSSearchQuery(queryString: queryString, attributes: nil)
+
+		searchQuery?.foundItemsHandler = { items in
+			searchableItems.append(contentsOf: items)
+		}
+
+		searchQuery?.completionHandler = { error in
+			DispatchQueue.main.async { [weak self] in
+				self?.applySearchSnapshot(items: searchableItems)
+			}
+		}
+
+		searchQuery?.start()
 	}
 	
 	// MARK: Notifications
@@ -231,6 +262,14 @@ extension TimelineViewController {
 		snapshot.append(items)
 		
 		dataSourceQueue.add(ApplySnapshotOperation(dataSource: dataSource, section: 0, snapshot: snapshot, animated: animated))
+	}
+	
+	func applySearchSnapshot(items: [CSSearchableItem]) {
+		var snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
+		let timelineItems = items.compactMap { TimelineItem.timelineItem($0) }
+		snapshot.append(timelineItems)
+		
+		dataSourceQueue.add(ApplySnapshotOperation(dataSource: dataSource, section: 0, snapshot: snapshot, animated: true))
 	}
 	
 	func updateSelection(item: TimelineItem?, animated: Bool) {

@@ -100,12 +100,46 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case .recents:
 			return "recents:"
 		case .account(let id):
-			return "account: \(id)"
+			return "account:\(id)"
 		case .folder(let accountID, let folderID):
-			return "folder: \(accountID)_\(folderID)"
+			return "folder:\(accountID)_\(folderID)"
 		case .document(let accountID, let folderID, let documentID):
-			return "outline: \(accountID)_\(folderID)_\(documentID)"
+			return "document:\(accountID)_\(folderID)_\(documentID)"
 		}
+	}
+	
+	public init?(description: String) {
+		if description.starts(with: "all:") {
+			self = .all
+			return
+		} else if description.starts(with: "favorites:") {
+			self = .favorites
+			return
+		} else if description.starts(with: "recents:") {
+			self = .recents
+			return
+		} else if description.starts(with: "account:") {
+			let idString = description.suffix(from: description.index(description.startIndex, offsetBy: 8))
+			if let accountID = Int(idString) {
+				self = .account(accountID)
+				return
+			}
+		} else if description.starts(with: "folder:") {
+			let idString = description.suffix(from: description.index(description.startIndex, offsetBy: 7))
+			let ids = idString.split(separator: "_")
+			if let accountID = Int(ids[0]) {
+				self = .folder(accountID, String(ids[1]))
+				return
+			}
+		} else if description.starts(with: "document:") {
+			let idString = description.suffix(from: description.index(description.startIndex, offsetBy: 9))
+			let ids = idString.split(separator: "_")
+			if let accountID = Int(ids[0]) {
+				self = .document(accountID, String(ids[1]), String(ids[2]))
+				return
+			}
+		}
+		return nil
 	}
 	
 	public init(from decoder: Decoder) throws {
