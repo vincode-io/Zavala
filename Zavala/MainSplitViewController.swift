@@ -426,12 +426,7 @@ extension MainSplitViewController: TimelineDelegate {
 			activityManager.invalidateSelectDocument()
 		}
 		
-		guard let outline = document?.outline else {
-			editorViewController?.edit(nil, isNew: isNew)
-			return
-		}
-		
-		editorViewController?.edit(outline, isNew: isNew)
+		editorViewController?.edit(document?.outline, isNew: isNew)
 	}
 	
 }
