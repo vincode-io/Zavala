@@ -12,6 +12,7 @@ final class SidebarItem: NSObject, NSCopying, Identifiable {
 	
 	enum ID: Hashable {
 		case header(SidebarSection)
+		case search
 		case documentContainer(EntityID)
 	}
 	
@@ -40,6 +41,10 @@ final class SidebarItem: NSObject, NSCopying, Identifiable {
 		self.id = id
 		self.title = title
 		self.image = image
+	}
+	
+	static func searchSidebarItem() -> SidebarItem {
+		return SidebarItem(id: .search, title: nil, image: nil)
 	}
 	
 	static func sidebarItem(title: String, id: ID) -> SidebarItem {

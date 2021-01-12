@@ -57,6 +57,7 @@
 "Copy" = "Copy";
 "Paste" = "Paste";
 "Release_Notes" = "Release Notes";
+"Search" = "Search";
 
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";

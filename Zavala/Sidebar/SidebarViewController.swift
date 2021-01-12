@@ -220,6 +220,12 @@ extension SidebarViewController {
 	}
 	
 	private func configureDataSource() {
+		let searchRegistration = UICollectionView.CellRegistration<SidebarSearchCell, SidebarItem> { (cell, indexPath, item) in
+			var contentConfiguration = SidebarSearchContentConfiguration(searchText: nil)
+			contentConfiguration.delegate = self
+			cell.contentConfiguration = contentConfiguration
+		}
+
 		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, SidebarItem> {	(cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarHeader()
 			contentConfiguration.text = item.title
@@ -240,12 +246,20 @@ extension SidebarViewController {
 		
 		dataSource = UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
 			switch item.id {
+			case .search:
+				return collectionView.dequeueConfiguredReusableCell(using: searchRegistration, for: indexPath, item: item)
 			case .header:
 				return collectionView.dequeueConfiguredReusableCell(using: headerRegistration, for: indexPath, item: item)
 			default:
 				return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: item)
 			}
 		}
+	}
+	
+	private func searchSnapshot() -> NSDiffableDataSourceSectionSnapshot<SidebarItem> {
+		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
+		snapshot.append([SidebarItem.searchSidebarItem()])
+		return snapshot
 	}
 	
 	private func librarySnapshot() -> NSDiffableDataSourceSectionSnapshot<SidebarItem> {
@@ -278,7 +292,12 @@ extension SidebarViewController {
 	}
 	
 	private func applyInitialSnapshot() {
+		if traitCollection.userInterfaceIdiom == .mac {
+			applySnapshot(searchSnapshot(), section: .search, animated: false)
+		}
+		
 		applySnapshot(librarySnapshot(), section: .library, animated: false)
+		
 		if let snapshot = self.localAccountSnapshot() {
 			applySnapshot(snapshot, section: .localAccount, animated: false)
 		}
@@ -305,6 +324,20 @@ extension SidebarViewController: UIDocumentPickerDelegate {
 	
 	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
 		restoreArchive(url: urls[0])
+	}
+	
+}
+
+// MARK: SidebarSearchCellDelegate
+
+extension SidebarViewController: SidebarSearchCellDelegate {
+
+	func sidebarSearchDidBecomeActive() {
+		selectDocumentContainer(nil, animated: false)
+	}
+
+	func sidebarSearchDidUpdate(searchText: String?) {
+		print(searchText ?? "")
 	}
 	
 }

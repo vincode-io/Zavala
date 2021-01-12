@@ -132,6 +132,8 @@ internal enum L10n {
   }
   /// Restore Archive
   internal static let restoreArchive = L10n.tr("Localizable", "Restore_Archive")
+  /// Search
+  internal static let search = L10n.tr("Localizable", "Search")
   /// See documents in “%@”
   internal static func seeDocumentsIn(_ p1: Any) -> String {
     return L10n.tr("Localizable", "See_Documents_In", String(describing: p1))

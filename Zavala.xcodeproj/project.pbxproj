@@ -83,6 +83,9 @@
 		51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */; };
 		51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */; };
 		51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F13EFD255E13A9004B85CA /* AppAssets.swift */; };
+		51F2859425AD11100019C573 /* SidebarSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859325AD11100019C573 /* SidebarSearchCell.swift */; };
+		51F2859725AD11DB0019C573 /* SidebarSearchContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859625AD11DB0019C573 /* SidebarSearchContentConfiguration.swift */; };
+		51F2859B25AD12800019C573 /* SidebarSearchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859A25AD12800019C573 /* SidebarSearchContentView.swift */; };
 		51F2DC7B2586E101003BD5CE /* EditorTextRowNoteTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2DC7A2586E101003BD5CE /* EditorTextRowNoteTextView.swift */; };
 /* End PBXBuildFile section */
 
@@ -220,6 +223,9 @@
 		51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSelectionOperation.swift; sourceTree = "<group>"; };
 		51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplySnapshotOperation.swift; sourceTree = "<group>"; };
 		51F13EFD255E13A9004B85CA /* AppAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAssets.swift; sourceTree = "<group>"; };
+		51F2859325AD11100019C573 /* SidebarSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSearchCell.swift; sourceTree = "<group>"; };
+		51F2859625AD11DB0019C573 /* SidebarSearchContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSearchContentConfiguration.swift; sourceTree = "<group>"; };
+		51F2859A25AD12800019C573 /* SidebarSearchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSearchContentView.swift; sourceTree = "<group>"; };
 		51F2DC7A2586E101003BD5CE /* EditorTextRowNoteTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowNoteTextView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -405,6 +411,7 @@
 				51E14F2D2560730000320EDB /* SidebarSection.swift */,
 				5181A93B2554D92000C153E8 /* SidebarViewController.swift */,
 				51D4E2A02578C0DD00A59145 /* SidebarViewController+Drop.swift */,
+				51F2859D25AD12860019C573 /* Search */,
 			);
 			path = Sidebar;
 			sourceTree = "<group>";
@@ -442,6 +449,16 @@
 				51C568D8258C1CD200AA7B93 /* LinkViewController.swift */,
 			);
 			path = Dialogs;
+			sourceTree = "<group>";
+		};
+		51F2859D25AD12860019C573 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				51F2859325AD11100019C573 /* SidebarSearchCell.swift */,
+				51F2859625AD11DB0019C573 /* SidebarSearchContentConfiguration.swift */,
+				51F2859A25AD12800019C573 /* SidebarSearchContentView.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -645,9 +662,11 @@
 				51D4E2A12578C0DD00A59145 /* SidebarViewController+Drop.swift in Sources */,
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
 				51D977FA257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift in Sources */,
+				51F2859B25AD12800019C573 /* SidebarSearchContentView.swift in Sources */,
 				51C030B8257E198B00609262 /* EditorTitleTextView.swift in Sources */,
 				51AE547E258FF28A006DA301 /* OutlineFont.swift in Sources */,
 				51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */,
+				51F2859425AD11100019C573 /* SidebarSearchCell.swift in Sources */,
 				51DFDC18259EA8D300C068C6 /* Selector+.swift in Sources */,
 				515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */,
 				51F2DC7B2586E101003BD5CE /* EditorTextRowNoteTextView.swift in Sources */,
@@ -658,6 +677,7 @@
 				51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */,
 				51B9D51725A9080A00579D19 /* EditorViewDisclosureButton.swift in Sources */,
 				514EF15F25A78A8C00B1FFB6 /* CrashReporter.swift in Sources */,
+				51F2859725AD11DB0019C573 /* SidebarSearchContentConfiguration.swift in Sources */,
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
 				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
