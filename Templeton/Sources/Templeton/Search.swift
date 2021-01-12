@@ -15,7 +15,8 @@ public final class Search: Identifiable, DocumentContainer {
 	public var name: String? = L10n.search
 	public var image: RSImage?
 
-	private var searchText: String
+	public var searchText: String
+	
 	private var searchQuery: CSSearchQuery?
 
 	public init(searchText: String) {

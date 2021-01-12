@@ -530,7 +530,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		}
 		
 		if !(collectionView.indexPathsForSelectedItems?.contains(indexPath) ?? false) {
-			deselectAll()
+			collectionView.deselectAll()
 		}
 		
 		let rows: [Row]
@@ -572,7 +572,7 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	}
 	
 	func editorTitleTextFieldDidBecomeActive() {
-		deselectAll()
+		collectionView.deselectAll()
 	}
 	
 	func editorTitleDidUpdate(title: String) {
@@ -596,7 +596,7 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	}
 	
 	func editorTextRowTextFieldDidBecomeActive() {
-		deselectAll()
+		collectionView.deselectAll()
 	}
 
 	func editorTextRowToggleDisclosure(row: Row) {
@@ -807,12 +807,6 @@ extension EditorViewController {
 	private func moveCursorToTitle() {
 		if let titleCell = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? EditorTitleViewCell {
 			titleCell.takeCursor()
-		}
-	}
-	
-	func deselectAll() {
-		collectionView.indexPathsForSelectedItems?.forEach { indexPath in
-			collectionView.deselectItem(at: indexPath, animated: true)
 		}
 	}
 	

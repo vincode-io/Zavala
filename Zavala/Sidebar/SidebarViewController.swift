@@ -79,12 +79,22 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	}
 	
 	func selectDocumentContainer(_ documentContainer: DocumentContainer?, animated: Bool) {
-		var sidebarItem: SidebarItem? = nil
-		if let outlineProvider = documentContainer {
-			sidebarItem = SidebarItem.sidebarItem(outlineProvider)
+		if let search = documentContainer as? Search {
+			DispatchQueue.main.async {
+				if let searchCellIndexPath = self.dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {
+					if let searchCell = self.collectionView.cellForItem(at: searchCellIndexPath) as? SidebarSearchCell {
+						searchCell.setSearchField(searchText: search.searchText)
+					}
+				}
+			}
 		}
-		
+
+		var sidebarItem: SidebarItem? = nil
+		if let documentContainer = documentContainer {
+			sidebarItem = SidebarItem.sidebarItem(documentContainer)
+		}
 		updateSelection(item: sidebarItem, animated: animated)
+		
 		delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, animated: animated)
 	}
 	
@@ -340,7 +350,7 @@ extension SidebarViewController: UIDocumentPickerDelegate {
 extension SidebarViewController: SidebarSearchCellDelegate {
 
 	func sidebarSearchDidBecomeActive() {
-		selectDocumentContainer(Search(searchText: ""), animated: false)
+		collectionView.deselectAll()
 	}
 
 	func sidebarSearchDidUpdate(searchText: String?) {

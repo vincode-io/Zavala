@@ -129,6 +129,8 @@ public final class AccountManager {
 			return favoritesDocumentContainer
 		case .recents:
 			return recentsDocumentContainer
+		case .search(let searchText):
+			return Search(searchText: searchText)
 		case .folder:
 			return findFolder(entityID)
 		default:
