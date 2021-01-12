@@ -45,7 +45,7 @@ class ActivityManager {
 		DispatchQueue.main.async {
 			self.invalidateSelectDocumentContainer()
 			self.selectDocumentContainerActivity = self.makeSelectDocumentContainerActivity(documentContainer)
-			self.donate(self.selectDocumentContainerActivity!)
+			self.selectDocumentContainerActivity!.becomeCurrent()
 		}
 	}
 	
@@ -59,7 +59,8 @@ class ActivityManager {
 		DispatchQueue.main.async {
 			self.invalidateSelectDocument()
 			self.selectDocumentActivity = self.makeSelectDocumentActivity(documentContainer, document)
-			self.donate(self.selectDocumentActivity!)
+			self.selectDocumentActivity!.becomeCurrent()
+			self.updateIndex(forDocument: document)
 		}
 	}
 	
@@ -163,20 +164,6 @@ extension ActivityManager {
 	
 	private func makeKeywords(_ value: String?) -> [String] {
 		return value?.components(separatedBy: " ").filter { $0.count > 2 } ?? []
-	}
-	
-	private func donate(_ activity: NSUserActivity) {
-		// You have to put the search item in the index or the activity won't index
-		// itself because the relatedUniqueIdentifier on the activity attributeset is populated.
-		if let attributeSet = activity.contentAttributeSet {
-			let identifier = attributeSet.relatedUniqueIdentifier
-			let tempAttributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeItem as String)
-			let searchableItem = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "io.vincode", attributeSet: tempAttributeSet)
-			searchableItem.expirationDate = .distantFuture
-			CSSearchableIndex.default().indexSearchableItems([searchableItem])
-		}
-		
-		activity.becomeCurrent()
 	}
 	
 }
