@@ -37,12 +37,6 @@ public final class Folder: Identifiable, Equatable, Codable, DocumentContainer {
 		return RSImage(systemName: "folder")
 	}
 	
-	public var documents: [Document]?
-
-	public var sortedDocuments: [Document] {
-		return Self.sortByTitle(documents ?? [Document]())
-	}
-
 	public var account: Account? {
 		return AccountManager.shared.findAccount(accountID: id.accountID)
 	}
@@ -53,12 +47,30 @@ public final class Folder: Identifiable, Equatable, Codable, DocumentContainer {
 		case documents = "documents"
 	}
 	
+	var documents: [Document]?
+
+	var sortedDocuments: [Document] {
+		return Self.sortByTitle(documents ?? [Document]())
+	}
+
 	init(parentID: EntityID, name: String) {
 		self.id = EntityID.folder(parentID.accountID, UUID().uuidString)
 		self.name = name
 		self.documents = [Document]()
 	}
 
+	public func documents(completion: @escaping (Result<[Document], Error>) -> Void) {
+		if let documents = documents {
+			completion(.success(documents))
+		} else {
+			completion(.success([Document]()))
+		}
+	}
+	
+	public func sortedDocuments(completion: @escaping (Result<[Document], Error>) -> Void) {
+		completion(.success(sortedDocuments))
+	}
+	
 	func folderDidDelete() {
 		NotificationCenter.default.post(name: .FolderDidDelete, object: self, userInfo: nil)
 	}

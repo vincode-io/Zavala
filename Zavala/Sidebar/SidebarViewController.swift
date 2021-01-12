@@ -401,24 +401,28 @@ extension SidebarViewController {
 			completion?(true)
 		}
 		
-		guard !(folder.documents?.isEmpty ?? true) else {
-			deleteFolder()
-			return
+		folder.documents { [weak self] result in
+			guard let documents = try? result.get() else { return }
+			
+			guard !(documents.isEmpty) else {
+				deleteFolder()
+				return
+			}
+			
+			let deleteAction = UIAlertAction(title: L10n.delete, style: .destructive) { _ in
+				deleteFolder()
+			}
+			
+			let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel) { _ in
+				completion?(true)
+			}
+			
+			let alert = UIAlertController(title: L10n.deleteFolderPrompt(folder.name ?? ""), message: L10n.deleteFolderMessage, preferredStyle: .alert)
+			alert.addAction(cancelAction)
+			alert.addAction(deleteAction)
+			
+			self?.present(alert, animated: true, completion: nil)
 		}
-		
-		let deleteAction = UIAlertAction(title: L10n.delete, style: .destructive) { _ in
-			deleteFolder()
-		}
-		
-		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel) { _ in
-			completion?(true)
-		}
-		
-		let alert = UIAlertController(title: L10n.deleteFolderPrompt(folder.name ?? ""), message: L10n.deleteFolderMessage, preferredStyle: .alert)
-		alert.addAction(cancelAction)
-		alert.addAction(deleteAction)
-		
-		present(alert, animated: true, completion: nil)
 	}
 	
 	private func getInfoForFolder(_ folder: Folder) {

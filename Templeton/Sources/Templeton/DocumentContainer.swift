@@ -14,8 +14,8 @@ public protocol DocumentContainer {
 	var image: RSImage? { get }
 	
 	var isSmartProvider: Bool { get } 
-	var documents: [Document]? { get }
-	var sortedDocuments: [Document] { get }
+	func documents(completion: @escaping (Result<[Document], Error>) -> Void)
+	func sortedDocuments(completion: @escaping (Result<[Document], Error>) -> Void)
 }
 
 public extension DocumentContainer {
@@ -64,12 +64,12 @@ public struct LazyDocumentContainer: DocumentContainer {
 		}
 	}
 
-	public var documents: [Document]? {
-		return documentCallback()
+	public func documents(completion: @escaping (Result<[Document], Error>) -> Void) {
+		completion(.success(documentCallback()))
 	}
 	
-	public var sortedDocuments: [Document] {
-		return documentCallback()
+	public func sortedDocuments(completion: @escaping (Result<[Document], Error>) -> Void) {
+		completion(.success(documentCallback()))
 	}
 	
 	private var documentCallback: (() -> [Document])

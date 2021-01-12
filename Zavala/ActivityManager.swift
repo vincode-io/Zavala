@@ -86,12 +86,14 @@ extension ActivityManager {
 
 		var ids = [String]()
 		ids.append(folder.id.description)
-		
-		for document in folder.documents ?? [Document]() {
-			ids.append(document.id.description)
+
+		folder.documents { result in
+			guard let documents = try? result.get() else { return }
+			for document in documents {
+				ids.append(document.id.description)
+			}
+			CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: ids)
 		}
-		
-		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: ids)
 	}
 	
 	@objc func documentDidDelete(_ note: Notification) {
