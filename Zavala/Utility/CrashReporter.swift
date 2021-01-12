@@ -26,7 +26,7 @@ struct CrashReporter {
 			  let crashReport = try? PLCrashReport(data: crashData),
 			  let crashLogText = PLCrashReportTextFormatter.stringValue(for: crashReport, with: PLCrashReportTextFormatiOS) else { return }
 
-		let restoreAction = UIAlertAction(title: L10n.emailIt, style: .default) { _ in
+		let emailItAction = UIAlertAction(title: L10n.emailIt, style: .default) { _ in
 			emailIt(crashLogText: crashLogText)
 			reporter.purgePendingCrashReport()
 		}
@@ -37,7 +37,8 @@ struct CrashReporter {
 		
 		let alert = UIAlertController(title: L10n.crashReporterTitle, message: L10n.crashReporterMessage, preferredStyle: .alert)
 		alert.addAction(cancelAction)
-		alert.addAction(restoreAction)
+		alert.addAction(emailItAction)
+		alert.preferredAction = emailItAction
 		
 		presentingController.present(alert, animated: true, completion: nil)
 	}

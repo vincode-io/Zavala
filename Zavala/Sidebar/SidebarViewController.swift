@@ -126,6 +126,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		let alert = UIAlertController(title: title, message: L10n.restoreAccountMessage, preferredStyle: .alert)
 		alert.addAction(cancelAction)
 		alert.addAction(restoreAction)
+		alert.preferredAction = restoreAction
 		
 		present(alert, animated: true, completion: nil)
 	}
