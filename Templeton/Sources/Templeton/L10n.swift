@@ -64,6 +64,8 @@ internal enum L10n {
   internal static let providerFavorites = L10n.tr("Localizable", "Provider_Favorites")
   /// Recents
   internal static let providerRecents = L10n.tr("Localizable", "Provider_Recents")
+  /// Search
+  internal static let search = L10n.tr("Localizable", "Search")
   /// Split Row
   internal static let splitRow = L10n.tr("Localizable", "Split_Row")
   /// Typing

@@ -12,7 +12,7 @@ import RSCore
 public final class Search: Identifiable, DocumentContainer {
 	
 	public var id: EntityID
-	public var name: String?
+	public var name: String? = L10n.search
 	public var image: RSImage?
 
 	private var searchText: String

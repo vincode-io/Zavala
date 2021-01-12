@@ -340,14 +340,14 @@ extension SidebarViewController: UIDocumentPickerDelegate {
 extension SidebarViewController: SidebarSearchCellDelegate {
 
 	func sidebarSearchDidBecomeActive() {
-		selectDocumentContainer(nil, animated: false)
+		selectDocumentContainer(Search(searchText: ""), animated: false)
 	}
 
 	func sidebarSearchDidUpdate(searchText: String?) {
 		if let searchText = searchText {
 			selectDocumentContainer(Search(searchText: searchText), animated: true)
 		} else {
-			selectDocumentContainer(nil, animated: false)
+			selectDocumentContainer(Search(searchText: ""), animated: false)
 		}
 	}
 	
