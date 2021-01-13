@@ -29,8 +29,6 @@ class SidebarSearchCell: UICollectionViewListCell {
 	override func updateConfiguration(using state: UICellConfigurationState) {
 		super.updateConfiguration(using: state)
 		
-		layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
-		
 		var content = SidebarSearchContentConfiguration(searchText: searchText).updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content
