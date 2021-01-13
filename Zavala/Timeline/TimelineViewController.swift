@@ -44,7 +44,9 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	override var canBecomeFirstResponder: Bool { return true }
 
 	private(set) var documentContainer: DocumentContainer?
+	private var heldDocumentContainer: DocumentContainer?
 
+	private let searchController = UISearchController(searchResultsController: nil)
 	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
 	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importEntity, style: .plain, target: self, action: #selector(importOPML(_:)))
 
@@ -55,6 +57,15 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
+		} else {
+			// Setup the Search Controller
+			searchController.delegate = self
+			searchController.searchResultsUpdater = self
+			searchController.obscuresBackgroundDuringPresentation = false
+//			searchController.searchBar.delegate = self
+			searchController.searchBar.placeholder = L10n.search
+			navigationItem.searchController = searchController
+			definesPresentationContext = true
 		}
 
 		collectionView.dragDelegate = self
@@ -251,6 +262,32 @@ extension TimelineViewController {
 	func updateSelection(item: TimelineItem?, animated: Bool) {
 		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: item, animated: animated))
 	}
+}
+
+// MARK: UISearchControllerDelegate
+
+extension TimelineViewController: UISearchControllerDelegate {
+
+	func willPresentSearchController(_ searchController: UISearchController) {
+		heldDocumentContainer = documentContainer
+		setDocumentContainer(Search(searchText: ""))
+	}
+
+	func didDismissSearchController(_ searchController: UISearchController) {
+		setDocumentContainer(heldDocumentContainer)
+		heldDocumentContainer = nil
+	}
+
+}
+
+// MARK: UISearchResultsUpdating
+
+extension TimelineViewController: UISearchResultsUpdating {
+
+	func updateSearchResults(for searchController: UISearchController) {
+		setDocumentContainer(Search(searchText: searchController.searchBar.text!))
+	}
+
 }
 
 // MARK: Helper Functions
