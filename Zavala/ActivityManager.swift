@@ -42,11 +42,9 @@ class ActivityManager {
 	}
 
 	func selectingDocumentContainer(_ documentContainer: DocumentContainer) {
-		DispatchQueue.main.async {
-			self.invalidateSelectDocumentContainer()
-			self.selectDocumentContainerActivity = self.makeSelectDocumentContainerActivity(documentContainer)
-			self.selectDocumentContainerActivity!.becomeCurrent()
-		}
+		self.invalidateSelectDocumentContainer()
+		self.selectDocumentContainerActivity = self.makeSelectDocumentContainerActivity(documentContainer)
+		self.selectDocumentContainerActivity!.becomeCurrent()
 	}
 	
 	func invalidateSelectDocumentContainer() {
@@ -56,12 +54,10 @@ class ActivityManager {
 	}
 
 	func selectingDocument(_ documentContainer: DocumentContainer, _ document: Document) {
-		DispatchQueue.main.async {
-			self.invalidateSelectDocument()
-			self.selectDocumentActivity = self.makeSelectDocumentActivity(documentContainer, document)
-			self.selectDocumentActivity!.becomeCurrent()
-			self.updateIndex(forDocument: document)
-		}
+		self.invalidateSelectDocument()
+		self.selectDocumentActivity = self.makeSelectDocumentActivity(documentContainer, document)
+		self.selectDocumentActivity!.becomeCurrent()
+		self.updateIndex(forDocument: document)
 	}
 	
 	func invalidateSelectDocument() {
@@ -147,7 +143,6 @@ extension ActivityManager {
 		}
 
 		activity.persistentIdentifier = document.id.description
-		activity.contentAttributeSet = makeSearchableItemAttributes(forDocument: document)
 		
 		return activity
 	}
