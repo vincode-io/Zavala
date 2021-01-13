@@ -100,7 +100,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	// MARK: Notifications
 	
 	@objc func folderDocumentsDidChange(_ note: Notification) {
-		guard let op = documentContainer, !op.isSmartProvider else {
+		guard let op = documentContainer, !op.isSmartContainer else {
 			applySnapshot(animated: true)
 			return
 		}

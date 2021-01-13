@@ -24,9 +24,9 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case documentID
 	}
 	
-	var isSmartProvider: Bool {
+	var isSmartContainer: Bool {
 		switch self {
-		case .all, .favorites, .recents:
+		case .all, .favorites, .recents, .search:
 			return true
 		default:
 			return false

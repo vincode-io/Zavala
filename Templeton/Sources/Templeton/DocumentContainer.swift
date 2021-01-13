@@ -13,15 +13,15 @@ public protocol DocumentContainer {
 	var name: String? { get }
 	var image: RSImage? { get }
 	
-	var isSmartProvider: Bool { get } 
+	var isSmartContainer: Bool { get } 
 	func documents(completion: @escaping (Result<[Document], Error>) -> Void)
 	func sortedDocuments(completion: @escaping (Result<[Document], Error>) -> Void)
 }
 
 public extension DocumentContainer {
 	
-	var isSmartProvider: Bool {
-		return id.isSmartProvider
+	var isSmartContainer: Bool {
+		return id.isSmartContainer
 	}
 
 	static func sortByUpdate(_ documents: [Document]) -> [Document] {
