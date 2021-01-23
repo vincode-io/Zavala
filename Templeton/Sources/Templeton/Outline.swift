@@ -583,6 +583,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 				rowShadowTableIndex = 0
 			}
 		}
+		
+		var reloads = [Int]()
+		if let reload = afterRow?.shadowTableIndex {
+			reloads.append(reload)
+		}
 
 		var inserts = [Int]()
 		for i in 0..<insertedRows.count {
@@ -592,7 +597,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		
 		resetShadowTableIndexes(startingAt: afterRow?.shadowTableIndex ?? 0)
-		let changes = ShadowTableChanges(inserts: Set(inserts))
+		let changes = ShadowTableChanges(inserts: Set(inserts), reloads: Set(reloads))
 		shadowTableDidChange(changes)
 		
 		return inserts.count > 0 ? inserts[0] : nil
