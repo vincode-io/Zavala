@@ -149,7 +149,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	private var currentKeyPresses = Set<UIKeyboardHIDUsage>()
 	
-	
 	private var filterBarButtonItem: UIBarButtonItem?
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
