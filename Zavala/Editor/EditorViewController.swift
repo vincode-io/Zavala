@@ -187,6 +187,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		collectionView.dropDelegate = self
 		collectionView.dragInteractionEnabled = true
 		collectionView.allowsMultipleSelection = true
+		collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 40, right: 0)
 
 		titleRegistration = UICollectionView.CellRegistration<EditorTitleViewCell, Outline> { [weak self] (cell, indexPath, outline) in
 			cell.title = outline.title
@@ -724,7 +725,12 @@ extension EditorViewController {
 		}
 		
 		if let reloads = changes.reloadIndexPaths, !reloads.isEmpty {
-			collectionView.reloadItems(at: reloads)
+			// This is to prevent jumping when reloading the last item in the collection
+			UIView.performWithoutAnimation {
+				let contentOffset = collectionView.contentOffset
+				collectionView.reloadItems(at: reloads)
+				collectionView.contentOffset = contentOffset
+			}
 		}
 	}
 	
