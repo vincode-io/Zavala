@@ -59,8 +59,8 @@
 	<string>https://vincode-io.github.io/Zavala/zavala-beta.xml</string>
 	<key>SUShowReleaseNotes</key>
 	<false/>
-	<key>SUAllowsAutomaticUpdates</key>
-	<false/>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
