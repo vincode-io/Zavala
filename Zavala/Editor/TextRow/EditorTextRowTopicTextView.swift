@@ -32,6 +32,7 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	
 	override var keyCommands: [UIKeyCommand]? {
 		let keys = [
+			UIKeyCommand(action: #selector(doNothing(_:)), input: UIKeyCommand.inputEscape),
 			UIKeyCommand(action: #selector(indent(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(outdent(_:))),
 			UIKeyCommand(input: "\t", modifierFlags: [.alternate], action: #selector(insertTab(_:))),
@@ -102,6 +103,9 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		}
 	}
 
+	@objc func doNothing(_ sender: Any) {
+	}
+	
 	@objc func indent(_ sender: Any) {
 		guard let textRow = row else { return }
 		editorDelegate?.indentRow(self, row: textRow)
