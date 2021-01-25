@@ -147,6 +147,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return currentTextView?.cursorPosition
 	}
 	
+	private var cancelledKeyPresses = Set<UIKeyboardHIDUsage>()
 	private var currentKeyPresses = Set<UIKeyboardHIDUsage>()
 	
 	private var filterBarButtonItem: UIBarButtonItem?
@@ -187,6 +188,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		collectionView.dropDelegate = self
 		collectionView.dragInteractionEnabled = true
 		collectionView.allowsMultipleSelection = true
+		collectionView.selectionFollowsFocus = false
 		collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 40, right: 0)
 
 		titleRegistration = UICollectionView.CellRegistration<EditorTitleViewCell, Outline> { [weak self] (cell, indexPath, outline) in
@@ -259,26 +261,23 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-		super.pressesBegan(presses, with: event)
-
-		guard let key = presses.first?.key else { return }
-		switch key.keyCode {
-		case .keyboardUpArrow:
-			currentKeyPresses.insert(key.keyCode)
-			repeatMoveCursorUp()
-		case .keyboardDownArrow:
-			currentKeyPresses.insert(key.keyCode)
-			repeatMoveCursorDown()
-		default:
-			break
+		if collectionView.indexPathsForSelectedItems?.isEmpty ?? true {
+			pressesBeganForEditMode(presses, with: event)
+		} else {
+			pressesBeganForSelectMode(presses, with: event)
 		}
-		
 	}
 	
 	override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
 		super.pressesEnded(presses, with: event)
 		let keyCodes = presses.compactMap { $0.key?.keyCode }
 		keyCodes.forEach { currentKeyPresses.remove($0) }
+	}
+	
+	override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+		super.pressesCancelled(presses, with: event)
+		let keyCodes = presses.compactMap { $0.key?.keyCode }
+		keyCodes.forEach { cancelledKeyPresses.insert($0)	}
 	}
 	
 	// MARK: Notifications
@@ -450,7 +449,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 		
 		if currentKeyPresses.contains(.keyboardUpArrow) {
-			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, !textView.isSelecting, let row = textView.row {
+			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, let row = textView.row {
 				moveCursorUp(row: row)
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 					self.repeatMoveCursorUp()
@@ -469,7 +468,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 		
 		if currentKeyPresses.contains(.keyboardDownArrow) {
-			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, !textView.isSelecting, let row = textView.row {
+			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, let row = textView.row {
 				moveCursorDown(row: row)
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 					self.repeatMoveCursorDown()
@@ -697,6 +696,79 @@ extension EditorViewController {
 			} else {
 				filterBarButtonItem?.image = AppAssets.filterInactive
 			}
+		}
+	}
+	
+	private func pressesBeganForEditMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+		if presses.count == 1, presses.first?.key?.modifierFlags.subtracting(.numericPad).isEmpty ?? true, let keyCode = presses.first?.key?.keyCode {
+			guard cancelledKeyPresses.remove(keyCode) == nil else {
+				return
+			}
+			
+			switch keyCode {
+			case .keyboardUpArrow:
+				currentKeyPresses.insert(keyCode)
+				repeatMoveCursorUp()
+			case .keyboardDownArrow:
+				currentKeyPresses.insert(keyCode)
+				repeatMoveCursorDown()
+			default:
+				super.pressesBegan(presses, with: event)
+			}
+		} else {
+			super.pressesBegan(presses, with: event)
+		}
+	}
+	
+	private func pressesBeganForSelectMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+		if presses.count == 1, let keyCode = presses.first?.key?.keyCode {
+			guard cancelledKeyPresses.remove(keyCode) == nil else {
+				return
+			}
+			
+			switch keyCode {
+			case .keyboardUpArrow:
+				if let first = collectionView.indexPathsForSelectedItems?.sorted().first {
+					if first.row > 0 {
+						if let cell = collectionView.cellForItem(at: IndexPath(row: first.row - 1, section: first.section)) as? EditorTextRowViewCell {
+							cell.moveToEnd()
+						}
+					} else {
+						if let cell = collectionView.cellForItem(at: first) as? EditorTextRowViewCell {
+							cell.moveToStart()
+						}
+					}
+				}
+			case .keyboardDownArrow:
+				if let last = collectionView.indexPathsForSelectedItems?.sorted().last {
+					if last.row + 1 < outline?.shadowTable?.count ?? 0 {
+						if let cell = collectionView.cellForItem(at: IndexPath(row: last.row + 1, section: last.section)) as? EditorTextRowViewCell {
+							cell.moveToStart()
+						}
+					} else {
+						if let cell = collectionView.cellForItem(at: last) as? EditorTextRowViewCell {
+							cell.moveToEnd()
+						}
+					}
+				}
+			case .keyboardLeftArrow:
+				if let first = collectionView.indexPathsForSelectedItems?.sorted().first {
+					if let cell = collectionView.cellForItem(at: first) as? EditorTextRowViewCell {
+						cell.moveToStart()
+					}
+				}
+			case .keyboardRightArrow:
+				if let last = collectionView.indexPathsForSelectedItems?.sorted().last {
+					if let cell = collectionView.cellForItem(at: last) as? EditorTextRowViewCell {
+						cell.moveToEnd()
+					}
+				}
+			default:
+				super.pressesBegan(presses, with: event)
+			}
+			
+		} else {
+			super.pressesBegan(presses, with: event)
 		}
 	}
 	
