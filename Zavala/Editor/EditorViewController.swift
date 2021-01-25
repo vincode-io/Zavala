@@ -700,7 +700,11 @@ extension EditorViewController {
 	}
 	
 	private func pressesBeganForEditMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-		if presses.count == 1, presses.first?.key?.modifierFlags.subtracting(.numericPad).isEmpty ?? true, let keyCode = presses.first?.key?.keyCode {
+		if !(CursorCoordinates.currentCoordinates?.isInNotes ?? false),
+		   presses.count == 1,
+		   presses.first?.key?.modifierFlags.subtracting(.numericPad).isEmpty ?? true,
+		   let keyCode = presses.first?.key?.keyCode {
+			
 			guard cancelledKeyPresses.remove(keyCode) == nil else {
 				return
 			}
@@ -715,8 +719,11 @@ extension EditorViewController {
 			default:
 				super.pressesBegan(presses, with: event)
 			}
+			
 		} else {
+			
 			super.pressesBegan(presses, with: event)
+			
 		}
 	}
 	
