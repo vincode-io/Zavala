@@ -168,7 +168,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var transitionContentOffset: CGPoint?
 	
 	private var isOutlineNewFlag = false
-	private var hasAlreadyMovedThisKeyPressFlag = false
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -440,14 +439,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func repeatMoveCursorUp() {
-		guard !hasAlreadyMovedThisKeyPressFlag else {
-			hasAlreadyMovedThisKeyPressFlag = false
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-				self.repeatMoveCursorUp()
-			}
-			return
-		}
-		
 		if currentKeyPresses.contains(.keyboardUpArrow) {
 			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, let row = textView.row {
 				moveCursorUp(row: row)
@@ -459,14 +450,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 
 	@objc func repeatMoveCursorDown() {
-		guard !hasAlreadyMovedThisKeyPressFlag else {
-			hasAlreadyMovedThisKeyPressFlag = false
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-				self.repeatMoveCursorUp()
-			}
-			return
-		}
-		
 		if currentKeyPresses.contains(.keyboardDownArrow) {
 			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, let row = textView.row {
 				moveCursorDown(row: row)
@@ -641,12 +624,10 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	
 	func editorTextRowMoveCursorTo(row: Row) {
 		moveCursorTo(row: row)
-		hasAlreadyMovedThisKeyPressFlag = true
 	}
 	
 	func editorTextRowMoveCursorDown(row: Row) {
 		moveCursorDown(row: row)
-		hasAlreadyMovedThisKeyPressFlag = true
 	}
 	
 	func editorTextRowEditLink(_ link: String?, range: NSRange) {
