@@ -13,7 +13,6 @@ public protocol DocumentContainer {
 	var name: String? { get }
 	var image: RSImage? { get }
 	
-	func documents(completion: @escaping (Result<[Document], Error>) -> Void)
 	func sortedDocuments(completion: @escaping (Result<[Document], Error>) -> Void)
 }
 
