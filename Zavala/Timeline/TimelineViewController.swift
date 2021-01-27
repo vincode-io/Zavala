@@ -68,8 +68,6 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 			definesPresentationContext = true
 		}
 
-		collectionView.dragDelegate = self
-		collectionView.dropDelegate = self
 		collectionView.remembersLastFocusedIndexPath = true
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
