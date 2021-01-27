@@ -279,21 +279,6 @@ extension SidebarViewController {
 		return snapshot
 	}
 	
-	private func librarySnapshot() -> NSDiffableDataSourceSectionSnapshot<SidebarItem> {
-		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
-		let header = SidebarItem.sidebarItem(title: "Library", id: .header(.library))
-		let items: [SidebarItem] = [
-			.sidebarItem(AccountManager.shared.allDocumentContainer),
-			.sidebarItem(AccountManager.shared.favoritesDocumentContainer),
-			.sidebarItem(AccountManager.shared.recentsDocumentContainer)
-		]
-		
-		snapshot.append([header])
-		snapshot.expand([header])
-		snapshot.append(items, to: header)
-		return snapshot
-	}
-	
 	private func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<SidebarItem>? {
 		guard let localAccount = AccountManager.shared.localAccount else { return nil }
 		
@@ -312,9 +297,6 @@ extension SidebarViewController {
 		if traitCollection.userInterfaceIdiom == .mac {
 			applySnapshot(searchSnapshot(), section: .search, animated: false)
 		}
-		
-		applySnapshot(librarySnapshot(), section: .library, animated: false)
-		
 		if let snapshot = self.localAccountSnapshot() {
 			applySnapshot(snapshot, section: .localAccount, animated: false)
 		}

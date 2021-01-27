@@ -70,13 +70,6 @@ public enum Document: Equatable, Codable {
 		}
 	}
 	
-	public var isFavorite: Bool? {
-		switch self {
-		case .outline(let outline):
-			return outline.isFavorite
-		}
-	}
-	
 	public var isEmpty: Bool {
 		switch self {
 		case .outline(let outline):
@@ -111,13 +104,6 @@ public enum Document: Equatable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.id = entityID
-		}
-	}
-
-	public func toggleFavorite() {
-		switch self {
-		case .outline(let outline):
-			return outline.toggleFavorite()
 		}
 	}
 

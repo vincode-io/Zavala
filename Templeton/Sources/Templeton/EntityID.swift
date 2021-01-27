@@ -8,9 +8,6 @@
 import Foundation
 
 public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
-	case all
-	case favorites
-	case recents
 	case search(String)
 	case account(Int)
 	case folder(Int, String) // Account, Folder
@@ -22,15 +19,6 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case accountID
 		case folderID
 		case documentID
-	}
-	
-	var isSmartContainer: Bool {
-		switch self {
-		case .all, .favorites, .recents, .search:
-			return true
-		default:
-			return false
-		}
 	}
 	
 	var isAccount: Bool {
@@ -95,12 +83,6 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 	
 	public var description: String {
 		switch self {
-		case .all:
-			return "all:"
-		case .favorites:
-			return "favorites:"
-		case .recents:
-			return "recents:"
 		case .search(let searchText):
 			return "search:\(searchText)"
 		case .account(let id):
@@ -113,16 +95,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 	}
 	
 	public init?(description: String) {
-		if description.starts(with: "all:") {
-			self = .all
-			return
-		} else if description.starts(with: "favorites:") {
-			self = .favorites
-			return
-		} else if description.starts(with: "recents:") {
-			self = .recents
-			return
-		} else if description.starts(with: "search:") {
+		if description.starts(with: "search:") {
 			let searchText = description.suffix(from: description.index(description.startIndex, offsetBy: 7))
 			self = .search(String(searchText))
 			return
@@ -155,12 +128,6 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		let type = try container.decode(String.self, forKey: .type)
 		
 		switch type {
-		case "all":
-			self = .all
-		case "favorites":
-			self = .favorites
-		case "recents":
-			self = .recents
 		case "search":
 			let searchText = try container.decode(String.self, forKey: .searchText)
 			self = .search(searchText)
@@ -185,12 +152,6 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		guard let type = userInfo["type"] as? String else { return nil }
 		
 		switch type {
-		case "all":
-			self = .all
-		case "favorites":
-			self = .favorites
-		case "recents":
-			self = .recents
 		case "search":
 			guard let searchText = userInfo["searchText"] as? String else { return nil }
 			self = .search(searchText)
@@ -215,12 +176,6 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 
 		switch self {
-		case .all:
-			try container.encode("all", forKey: .type)
-		case .favorites:
-			try container.encode("favorites", forKey: .type)
-		case .recents:
-			try container.encode("recents", forKey: .type)
 		case .search(let searchText):
 			try container.encode("search", forKey: .type)
 			try container.encode(searchText, forKey: .searchText)
@@ -241,12 +196,6 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 	
 	public var userInfo: [AnyHashable: AnyHashable] {
 		switch self {
-		case .all:
-			return ["type": "all"]
-		case .favorites:
-			return ["type": "favorites"]
-		case .recents:
-			return ["type": "recents"]
 		case .search(let searchText):
 			return [
 				"type": "search",

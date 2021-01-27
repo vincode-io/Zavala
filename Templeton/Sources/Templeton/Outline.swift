@@ -62,12 +62,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 	}
 	
-	public var isFavorite: Bool? {
-		didSet {
-			documentMetaDataDidChange()
-		}
-	}
-	
 	public var isFiltered: Bool? {
 		didSet {
 			documentMetaDataDidChange()
@@ -164,7 +158,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		case ownerEmail = "ownerEmail"
 		case ownerURL = "ownerURL"
 		case verticleScrollState = "verticleScrollState"
-		case isFavorite = "isFavorite"
 		case isFiltered = "isFiltered"
 		case isNotesHidden = "isNotesHidden"
 		case cursorRowID = "cursorRowID"
@@ -300,11 +293,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		return opml
-	}
-	
-	public func toggleFavorite() {
-		isFavorite = !(isFavorite ?? false)
-		documentMetaDataDidChange()
 	}
 	
 	public func toggleFilter() -> ShadowTableChanges {

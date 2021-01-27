@@ -25,26 +25,6 @@ public final class AccountManager {
 		return local
 	}
 
-	public var allDocumentContainer: DocumentContainer {
-		return LazyDocumentContainer(id: .all, callback: { [weak self] in
-			return LazyDocumentContainer.sortByTitle(self?.documents ?? [Document]())
-		})
-	}
-	
-	public var recentsDocumentContainer: DocumentContainer {
-		return LazyDocumentContainer(id: .recents, callback: { [weak self] in
-			let sorted = LazyDocumentContainer.sortByUpdate(self?.documents ?? [Document]())
-			return Array(sorted.prefix(10))
-		})
-	}
-	
-	public var favoritesDocumentContainer: DocumentContainer {
-		return LazyDocumentContainer(id: .favorites, callback: { [weak self] in
-			let favorites = self?.documents.filter { $0.isFavorite ?? false }
-			return LazyDocumentContainer.sortByTitle(favorites ?? [Document]())
-		})
-	}
-	
 	public var accounts: [Account] {
 		return Array(accountsDictionary.values)
 	}
@@ -123,12 +103,6 @@ public final class AccountManager {
 	
 	public func findDocumentContainer(_ entityID: EntityID) -> DocumentContainer? {
 		switch entityID {
-		case .all:
-			return allDocumentContainer
-		case .favorites:
-			return favoritesDocumentContainer
-		case .recents:
-			return recentsDocumentContainer
 		case .search(let searchText):
 			return Search(searchText: searchText)
 		case .folder:

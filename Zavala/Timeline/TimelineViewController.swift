@@ -111,12 +111,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	// MARK: Notifications
 	
 	@objc func folderDocumentsDidChange(_ note: Notification) {
-		guard let op = documentContainer, !op.isSmartContainer else {
-			applySnapshot(animated: true)
-			return
-		}
-		
-		guard let noteOP = note.object as? DocumentContainer, op.id == noteOP.id else { return }
+		guard let op = documentContainer, let noteOP = note.object as? DocumentContainer, op.id == noteOP.id else { return }
 		applySnapshot(animated: true)
 	}
 	
@@ -312,7 +307,6 @@ extension TimelineViewController {
 			guard let self = self, let document = AccountManager.shared.findDocument(item.id) else { return nil }
 			
 			var menuItems = [UIMenu]()
-			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.toggleFavoriteAction(document: document)]))
 
 			if let outline = document.outline {
 				menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.exportMarkdownAction(outline: outline), self.exportOPMLAction(outline: outline)]))
@@ -322,15 +316,6 @@ extension TimelineViewController {
 			
 			return UIMenu(title: "", children: menuItems)
 		})
-	}
-	
-	private func toggleFavoriteAction(document: Document) -> UIAction {
-		let title = document.isFavorite ?? false ? L10n.unmarkAsFavorite : L10n.markAsFavorite
-		let image = document.isFavorite ?? false ? AppAssets.favoriteUnselected : AppAssets.favoriteSelected
-		let action = UIAction(title: title, image: image) { action in
-			document.toggleFavorite()
-		}
-		return action
 	}
 	
 	private func exportMarkdownAction(outline: Outline) -> UIAction {
