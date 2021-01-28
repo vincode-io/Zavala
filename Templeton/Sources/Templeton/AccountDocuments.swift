@@ -14,7 +14,7 @@ public final class AccountDocuments: Identifiable, DocumentContainer {
 	public var name: String? = L10n.all
 	public var image: RSImage? = UIImage(systemName: "tray")!
 
-	weak private var account: Account?
+	public weak var account: Account?
 	
 	public init(account: Account) {
 		self.id = .accountDocuments(account.id.accountID)

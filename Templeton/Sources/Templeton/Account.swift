@@ -142,14 +142,20 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	public func createOutline(title: String? = nil) -> Document {
 		let outline = Outline(parentID: id, title: title)
-		documents?.append(.outline(outline))
+		if documents == nil {
+			documents = [Document]()
+		}
+		documents!.append(.outline(outline))
 		accountDocumentsDidChange()
 		return .outline(outline)
 	}
 	
 	public func createDocument(_ document: Document) {
 		document.reassignID(EntityID.document(id.accountID, document.id.documentUUID))
-		documents?.append(document)
+		if documents == nil {
+			documents = [Document]()
+		}
+		documents!.append(document)
 		accountDocumentsDidChange()
 	}
 

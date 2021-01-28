@@ -113,14 +113,20 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	
 	// MARK: Actions
 	
-//	@objc func importOPML(_ sender: Any?) {
-//		let opmlType = UTType(exportedAs: "org.opml.opml")
-//		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [opmlType, .xml])
-//		docPicker.delegate = self
-//		docPicker.modalPresentationStyle = .formSheet
-//		docPicker.allowsMultipleSelection = true
-//		self.present(docPicker, animated: true)
-//	}
+	@objc func createOutline(_ sender: Any?) {
+		guard let account = documentContainer?.account else { return }
+		let outline = account.createOutline()
+		selectDocument(outline, isNew: true, animated: true)
+	}
+
+	@objc func importOPML(_ sender: Any?) {
+		let opmlType = UTType(exportedAs: "org.opml.opml")
+		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [opmlType, .xml])
+		docPicker.delegate = self
+		docPicker.modalPresentationStyle = .formSheet
+		docPicker.allowsMultipleSelection = true
+		self.present(docPicker, animated: true)
+	}
 
 	@objc func exportMarkdown(_ sender: Any?) {
 		guard let currentOutline = currentDocument?.outline else { return }
@@ -136,26 +142,26 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 
 // MARK: UIDocumentPickerDelegate
 
-//extension TimelineViewController: UIDocumentPickerDelegate {
-//
-//	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-//		guard let folder = documentContainer as? Folder else { return }
-//
-//		var document: Document?
-//		for url in urls {
-//			do {
-//				document = try folder.importOPML(url)
-//			} catch {
-//				self.presentError(title: L10n.importFailed, message: error.localizedDescription)
-//			}
-//		}
-//
-//		if let document = document {
-//			selectDocument(document, animated: false)
-//		}
-//	}
-//
-//}
+extension TimelineViewController: UIDocumentPickerDelegate {
+	
+	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+		guard let account = documentContainer?.account else { return }
+
+		var document: Document?
+		for url in urls {
+			do {
+				document = try account.importOPML(url)
+			} catch {
+				self.presentError(title: L10n.importFailed, message: error.localizedDescription)
+			}
+		}
+		
+		if let document = document {
+			selectDocument(document, animated: false)
+		}
+	}
+	
+}
 
 // MARK: Collection View
 

@@ -13,11 +13,30 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 	case accountDocuments(Int) // Account
 	case search(String) // Search String
 
-	private enum CodingKeys: String, CodingKey {
-		case type
-		case searchText
-		case accountID
-		case documentID
+	public var accountID: Int {
+		switch self {
+		case .account(let accountID):
+			return accountID
+		case .document(let accountID, _):
+			return accountID
+		case .accountDocuments(let accountID):
+			return accountID
+		default:
+			fatalError()
+		}
+	}
+
+	public var description: String {
+		switch self {
+		case .account(let id):
+			return "account:\(id)"
+		case .document(let accountID, let documentID):
+			return "document:\(accountID)_\(documentID)"
+		case .search(let searchText):
+			return "search:\(searchText)"
+		case .accountDocuments(let id):
+			return "accountDocuments:\(id)"
+		}
 	}
 	
 	var isAccount: Bool {
@@ -38,19 +57,6 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		}
 	}
 	
-	var accountID: Int {
-		switch self {
-		case .account(let accountID):
-			return accountID
-		case .document(let accountID, _):
-			return accountID
-		case .accountDocuments(let accountID):
-			return accountID
-		default:
-			fatalError()
-		}
-	}
-
 	var documentUUID: String {
 		switch self {
 		case .document(_, let documentID):
@@ -60,17 +66,11 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		}
 	}
 	
-	public var description: String {
-		switch self {
-		case .account(let id):
-			return "account:\(id)"
-		case .document(let accountID, let documentID):
-			return "document:\(accountID)_\(documentID)"
-		case .search(let searchText):
-			return "search:\(searchText)"
-		case .accountDocuments(let id):
-			return "accountDocuments:\(id)"
-		}
+	private enum CodingKeys: String, CodingKey {
+		case type
+		case searchText
+		case accountID
+		case documentID
 	}
 	
 	public init?(description: String) {

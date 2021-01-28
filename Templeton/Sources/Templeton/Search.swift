@@ -14,6 +14,7 @@ public final class Search: Identifiable, DocumentContainer {
 	public var id: EntityID
 	public var name: String? = L10n.search
 	public var image: RSImage?
+	public var account: Account? = nil
 
 	public var searchText: String
 	

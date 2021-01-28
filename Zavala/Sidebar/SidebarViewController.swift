@@ -20,6 +20,15 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	
 	weak var delegate: SidebarDelegate?
 	
+	var selectedAccount: Account? {
+		guard let selectedIndexPath = collectionView.indexPathsForSelectedItems?.first,
+			  let entityID = dataSource.itemIdentifier(for: selectedIndexPath)?.entityID,
+			  let documentContainer = AccountManager.shared.findDocumentContainer(entityID) else {
+			return nil
+		}
+		return documentContainer.account
+	}
+	
 	var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
 

@@ -19,11 +19,19 @@ final class AppDefaults {
 		return UserDefaults.init(suiteName: suiteName)!
 	}()
 	
-//	struct Key {
-//		static let addFolderAccountID = "addFolderAccountID"
-//		static let addOutlineFeedFolderID = "addOutlineFeedAccountID"
-//	}
-//
+	struct Key {
+		static let lastSelectedAccountID = "lastSelectedAccountID"
+	}
+	
+	var lastSelectedAccountID: Int {
+		get {
+			return Self.int(for: Key.lastSelectedAccountID)
+		}
+		set {
+			Self.setInt(for: Key.lastSelectedAccountID, newValue)
+		}
+	}
+
 //	var addFolderAccountID: EntityID? {
 //		get {
 //			guard let userInfo = UserDefaults.standard.object(forKey: Key.addFolderAccountID) as? [AnyHashable : AnyHashable] else { return nil }

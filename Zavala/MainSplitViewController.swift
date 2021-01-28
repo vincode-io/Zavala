@@ -220,11 +220,15 @@ class MainSplitViewController: UISplitViewController {
 	}
 	
 	@objc func createOutline(_ sender: Any?) {
-//		timelineViewController?.createOutline(sender)
+		selectDefaultDocumentContainerIfNecessary() {
+			self.timelineViewController?.createOutline(sender)
+		}
 	}
 	
 	@objc func importOPML(_ sender: Any?) {
-//		timelineViewController?.importOPML(sender)
+		selectDefaultDocumentContainerIfNecessary() {
+			self.timelineViewController?.importOPML(sender)
+		}
 	}
 	
 	@objc func exportMarkdown(_ sender: Any?) {
@@ -357,6 +361,10 @@ class MainSplitViewController: UISplitViewController {
 extension MainSplitViewController: SidebarDelegate {
 	
 	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool, completion: (() -> Void)? = nil) {
+		if let accountID = documentContainer?.account?.id.accountID {
+			AppDefaults.shared.lastSelectedAccountID = accountID
+		}
+		
 		timelineViewController?.setDocumentContainer(documentContainer, completion: completion)
 		editorViewController?.edit(nil, isNew: false)
 
@@ -473,6 +481,26 @@ extension MainSplitViewController {
 		present(vc, animated: true)
 	}
 
+	private func selectDefaultDocumentContainerIfNecessary(completion: @escaping () -> Void) {
+		guard sidebarViewController?.selectedAccount == nil else {
+			completion()
+			return
+		}
+		
+		let accountID = AppDefaults.shared.lastSelectedAccountID
+		
+		guard let account = AccountManager.shared.findAccount(accountID: accountID) else {
+			completion()
+			return
+		}
+		
+		let documentContainer = account.documentContainers[0]
+		
+		sidebarViewController?.selectDocumentContainer(documentContainer, animated: true) {
+			completion()
+		}
+	}
+	
 }
 
 #if targetEnvironment(macCatalyst)
