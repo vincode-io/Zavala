@@ -60,6 +60,15 @@ public final class Account: NSObject, Identifiable, Codable {
 	private let operationQueue = OperationQueue()
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Account")
 
+	private var documentsDictionaryNeedUpdate = true
+	private var _idToDocumentsDictionary = [String: Document]()
+	private var idToDocumentsDictionary: [String: Document] {
+		if documentsDictionaryNeedUpdate {
+			rebuildDocumentsDictionary()
+		}
+		return _idToDocumentsDictionary
+	}
+
 	init(accountType: AccountType) {
 		self.type = accountType
 		self.isActive = true
@@ -175,12 +184,33 @@ public final class Account: NSObject, Identifiable, Codable {
 	}
 	
 	public func findDocument(documentUUID: String) -> Document? {
-		if let document = documents?.first(where: { $0.id.documentUUID == documentUUID }) {
-			return document
-		}
-		return nil
+		return idToDocumentsDictionary[documentUUID]
 	}
 	
+	func archive() -> URL? {
+		guard let folder = folder else { return nil }
+		
+		var filename = type.name.replacingOccurrences(of: " ", with: "").trimmingCharacters(in: .whitespaces)
+		let formatter = DateFormatter()
+		formatter.dateFormat = "yyyy-MM-dd-HH-mm-ss"
+		filename = "Zavala_\(filename)_\(formatter.string(from: Date())).zalarc"
+		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+
+		let errorPointer: NSErrorPointer = nil
+		let fileCoordinator = NSFileCoordinator(filePresenter: self)
+		
+		fileCoordinator.coordinate(readingItemAt: folder, options: [], error: errorPointer, byAccessor: { readURL in
+			SSZipArchive.createZipFile(atPath: tempFile.path, withContentsOfDirectory: readURL.path)
+		})
+
+		if let error = errorPointer?.pointee {
+			os_log(.error, log: log, "Account archive coordination failed: %@.", error.localizedDescription)
+			return nil
+		}
+
+		return tempFile
+	}
+
 	func accountDidInitialize() {
 		NotificationCenter.default.post(name: .AccountDidInitialize, object: self, userInfo: nil)
 	}
@@ -207,34 +237,6 @@ extension Account: NSFilePresenter {
 
 // MARK: Helpers
 
-extension Account {
-
-	func archive() -> URL? {
-		guard let folder = folder else { return nil }
-		
-		var filename = type.name.replacingOccurrences(of: " ", with: "").trimmingCharacters(in: .whitespaces)
-		let formatter = DateFormatter()
-		formatter.dateFormat = "yyyy-MM-dd-HH-mm-ss"
-		filename = "Zavala_\(filename)_\(formatter.string(from: Date())).zalarc"
-		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
-
-		let errorPointer: NSErrorPointer = nil
-		let fileCoordinator = NSFileCoordinator(filePresenter: self)
-		
-		fileCoordinator.coordinate(readingItemAt: folder, options: [], error: errorPointer, byAccessor: { readURL in
-			SSZipArchive.createZipFile(atPath: tempFile.path, withContentsOfDirectory: readURL.path)
-		})
-
-		if let error = errorPointer?.pointee {
-			os_log(.error, log: log, "Account archive coordination failed: %@.", error.localizedDescription)
-			return nil
-		}
-
-		return tempFile
-	}
-
-}
-
 private extension Account {
 	
 	func accountMetadataDidChange() {
@@ -242,7 +244,18 @@ private extension Account {
 	}
 	
 	func accountDocumentsDidChange() {
+		documentsDictionaryNeedUpdate = true
 		NotificationCenter.default.post(name: .AccountDocumentsDidChange, object: self, userInfo: nil)
 	}
 	
+	func rebuildDocumentsDictionary() {
+		var idDictionary = [String: Document]()
+		
+		for doc in documents ?? [Document]() {
+			idDictionary[doc.id.documentUUID] = doc
+		}
+		
+		_idToDocumentsDictionary = idDictionary
+		documentsDictionaryNeedUpdate = false
+	}
 }
