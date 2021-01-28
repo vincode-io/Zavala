@@ -731,7 +731,7 @@ extension EditorViewController {
 				if let last = collectionView.indexPathsForSelectedItems?.sorted().last {
 					if last.row + 1 < outline?.shadowTable?.count ?? 0 {
 						if let cell = collectionView.cellForItem(at: IndexPath(row: last.row + 1, section: last.section)) as? EditorTextRowViewCell {
-							cell.moveToStart()
+							cell.moveToEnd()
 						}
 					} else {
 						if let cell = collectionView.cellForItem(at: last) as? EditorTextRowViewCell {
