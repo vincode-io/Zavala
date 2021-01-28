@@ -914,7 +914,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			if mutatingToParent.rows == nil {
 				mutatingToParent.rows = [mutatingRow]
 			} else {
-				mutatingToParent.rows!.insert(mutatingRow, at: rowMove.toChildIndex)
+				if rowMove.toChildIndex >= mutatingToParent.rows!.count {
+					mutatingToParent.rows!.append(mutatingRow)
+				} else {
+					mutatingToParent.rows!.insert(mutatingRow, at: rowMove.toChildIndex)
+				}
 			}
 		}
 
