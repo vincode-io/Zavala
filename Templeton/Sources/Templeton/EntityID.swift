@@ -154,7 +154,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			try container.encode("account", forKey: .type)
 			try container.encode(accountID, forKey: .accountID)
 		case .document(let accountID, let documentID):
-			try container.encode("outline", forKey: .type)
+			try container.encode("document", forKey: .type)
 			try container.encode(accountID, forKey: .accountID)
 			try container.encode(documentID, forKey: .documentID)
 		case .search(let searchText):
@@ -175,7 +175,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			]
 		case .document(let accountID, let documentID):
 			return [
-				"type": "outline",
+				"type": "document",
 				"accountID": accountID,
 				"documentID": documentID
 			]
