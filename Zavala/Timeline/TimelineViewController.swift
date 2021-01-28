@@ -20,10 +20,6 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 
 	weak var delegate: TimelineDelegate?
 	
-	var isCreateOutlineUnavailable: Bool {
-		return !(documentContainer is Folder)
-	}
-	
 	var isExportOutlineUnavailable: Bool {
 		return currentDocument == nil
 	}
@@ -47,8 +43,6 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	private var heldDocumentContainer: DocumentContainer?
 
 	private let searchController = UISearchController(searchResultsController: nil)
-	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
-	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importEntity, style: .plain, target: self, action: #selector(importOPML(_:)))
 
 	private let dataSourceQueue = MainThreadOperationQueue()
 
@@ -73,7 +67,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		configureDataSource()
 		applySnapshot(animated: false)
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(folderDocumentsDidChange(_:)), name: .FolderDocumentsDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 	}
 	
@@ -108,8 +102,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	
 	// MARK: Notifications
 	
-	@objc func folderDocumentsDidChange(_ note: Notification) {
-		guard let op = documentContainer, let noteOP = note.object as? DocumentContainer, op.id == noteOP.id else { return }
+	@objc func accountDocumentsDidChange(_ note: Notification) {
 		applySnapshot(animated: true)
 	}
 	
@@ -120,20 +113,14 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	
 	// MARK: Actions
 	
-	@objc func createOutline(_ sender: Any?) {
-		guard let folder = documentContainer as? Folder else { return }
-		let outline = folder.createOutline()
-		selectDocument(outline, isNew: true, animated: true)
-	}
-
-	@objc func importOPML(_ sender: Any?) {
-		let opmlType = UTType(exportedAs: "org.opml.opml")
-		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [opmlType, .xml])
-		docPicker.delegate = self
-		docPicker.modalPresentationStyle = .formSheet
-		docPicker.allowsMultipleSelection = true
-		self.present(docPicker, animated: true)
-	}
+//	@objc func importOPML(_ sender: Any?) {
+//		let opmlType = UTType(exportedAs: "org.opml.opml")
+//		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [opmlType, .xml])
+//		docPicker.delegate = self
+//		docPicker.modalPresentationStyle = .formSheet
+//		docPicker.allowsMultipleSelection = true
+//		self.present(docPicker, animated: true)
+//	}
 
 	@objc func exportMarkdown(_ sender: Any?) {
 		guard let currentOutline = currentDocument?.outline else { return }
@@ -149,26 +136,26 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 
 // MARK: UIDocumentPickerDelegate
 
-extension TimelineViewController: UIDocumentPickerDelegate {
-	
-	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-		guard let folder = documentContainer as? Folder else { return }
-
-		var document: Document?
-		for url in urls {
-			do {
-				document = try folder.importOPML(url)
-			} catch {
-				self.presentError(title: L10n.importFailed, message: error.localizedDescription)
-			}
-		}
-		
-		if let document = document {
-			selectDocument(document, animated: false)
-		}
-	}
-	
-}
+//extension TimelineViewController: UIDocumentPickerDelegate {
+//
+//	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+//		guard let folder = documentContainer as? Folder else { return }
+//
+//		var document: Document?
+//		for url in urls {
+//			do {
+//				document = try folder.importOPML(url)
+//			} catch {
+//				self.presentError(title: L10n.importFailed, message: error.localizedDescription)
+//			}
+//		}
+//
+//		if let document = document {
+//			selectDocument(document, animated: false)
+//		}
+//	}
+//
+//}
 
 // MARK: Collection View
 
@@ -290,14 +277,6 @@ extension TimelineViewController {
 	private func updateUI() {
 		navigationItem.title = documentContainer?.name
 		view.window?.windowScene?.title = documentContainer?.name
-		
-		if traitCollection.userInterfaceIdiom != .mac {
-			if isCreateOutlineUnavailable {
-				navigationItem.rightBarButtonItems = nil
-			} else {
-				navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
-			}
-		}
 	}
 	
 	private func makeOutlineContextMenu(item: TimelineItem) -> UIContextMenuConfiguration {
@@ -375,7 +354,7 @@ extension TimelineViewController {
 			if document == self.currentDocument, let documentContainer = self.documentContainer {
 				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, animated: true)
 			}
-			document.folder?.deleteDocument(document)
+			document.account?.deleteDocument(document)
 		}
 
 		guard !document.isEmpty else {

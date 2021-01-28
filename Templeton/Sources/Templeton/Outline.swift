@@ -90,11 +90,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return AccountManager.shared.findAccount(accountID: id.accountID)
 	}
 	
-	public var folder: Folder? {
-		let folderID = EntityID.folder(id.accountID, id.folderUUID)
-		return AccountManager.shared.findFolder(folderID)
-	}
-
 	public var expansionState: String {
 		get {
 			var currentRow = 0
@@ -181,7 +176,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	init(parentID: EntityID, title: String?) {
-		self.id = EntityID.document(parentID.accountID, parentID.folderUUID, UUID().uuidString)
+		self.id = EntityID.document(parentID.accountID, UUID().uuidString)
 		self.title = title
 		self.created = Date()
 		self.updated = Date()

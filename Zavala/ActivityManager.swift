@@ -37,7 +37,6 @@ class ActivityManager {
 	}
 	
 	init() {
-		NotificationCenter.default.addObserver(self, selector: #selector(folderDidDelete(_:)), name: .FolderDidDelete, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentDidDelete(_:)), name: .DocumentDidDelete, object: nil)
 	}
 
@@ -78,21 +77,6 @@ class ActivityManager {
 
 extension ActivityManager {
 
-	@objc func folderDidDelete(_ note: Notification) {
-		guard let folder = note.object as? Folder else { return }
-
-		var ids = [String]()
-		ids.append(folder.id.description)
-
-		folder.documents { result in
-			guard let documents = try? result.get() else { return }
-			for document in documents {
-				ids.append(document.id.description)
-			}
-			CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: ids)
-		}
-	}
-	
 	@objc func documentDidDelete(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
 		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [document.id.description])

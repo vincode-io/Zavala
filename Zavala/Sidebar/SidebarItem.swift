@@ -27,16 +27,6 @@ final class SidebarItem: NSObject, NSCopying, Identifiable {
 		return nil
 	}
 	
-	var isFolder: Bool {
-		guard let entityID = entityID else { return false }
-		switch entityID {
-		case .folder(_, _):
-			return true
-		default:
-			return false
-		}
-	}
-	
 	init(id: ID, title: String?, image: UIImage?) {
 		self.id = id
 		self.title = title

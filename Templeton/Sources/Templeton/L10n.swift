@@ -10,6 +10,10 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum L10n {
+  /// Unable to read the import file.
+  internal static let accountErrorImportRead = L10n.tr("Localizable", "Account_Error_Import_Read")
+  /// Unable to access security scoped resource.
+  internal static let accountErrorScopedResource = L10n.tr("Localizable", "Account_Error_Scoped_Resource")
   /// iCloud
   internal static let accountICloud = L10n.tr("Localizable", "Account_iCloud")
   /// On My iPad
@@ -22,6 +26,8 @@ internal enum L10n {
   internal static let addNote = L10n.tr("Localizable", "Add_Note")
   /// Add Row
   internal static let addRow = L10n.tr("Localizable", "Add_Row")
+  /// All
+  internal static let all = L10n.tr("Localizable", "All")
   /// This doesn't appear to be a Zavala archive.  We're unable to restore from this file.
   internal static let checkArchiveError = L10n.tr("Localizable", "Check_Archive_Error")
   /// Collapse
@@ -46,10 +52,6 @@ internal enum L10n {
   internal static let expandAll = L10n.tr("Localizable", "Expand_All")
   /// Expand All in Outline
   internal static let expandAllInOutline = L10n.tr("Localizable", "Expand_All_In_Outline")
-  /// Unable to read the import file.
-  internal static let folderErrorImportRead = L10n.tr("Localizable", "Folder_Error_Import_Read")
-  /// Unable to access security scoped resource.
-  internal static let folderErrorScopedResource = L10n.tr("Localizable", "Folder_Error_Scoped_Resource")
   /// Indent
   internal static let indent = L10n.tr("Localizable", "Indent")
   /// Move
@@ -58,12 +60,6 @@ internal enum L10n {
   internal static let outdent = L10n.tr("Localizable", "Outdent")
   /// Paste
   internal static let paste = L10n.tr("Localizable", "Paste")
-  /// All
-  internal static let providerAll = L10n.tr("Localizable", "Provider_All")
-  /// Favorites
-  internal static let providerFavorites = L10n.tr("Localizable", "Provider_Favorites")
-  /// Recents
-  internal static let providerRecents = L10n.tr("Localizable", "Provider_Recents")
   /// Search
   internal static let search = L10n.tr("Localizable", "Search")
   /// Split Row

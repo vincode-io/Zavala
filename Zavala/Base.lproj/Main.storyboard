@@ -95,13 +95,7 @@
                             <outlet property="delegate" destination="IH1-qU-b0t" id="ZWb-Jf-p9Y"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Collections" id="JsX-sV-JPs">
-                        <barButtonItem key="rightBarButtonItem" image="folder.badge.plus" catalog="system" id="HAO-a9-Zvq">
-                            <connections>
-                                <action selector="createFolder:" destination="IH1-qU-b0t" id="F7Z-vw-nJ0"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Collections" id="JsX-sV-JPs"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l9h-fx-tjO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -109,7 +103,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="folder.badge.plus" catalog="system" width="128" height="91"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

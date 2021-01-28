@@ -7,12 +7,27 @@
 
 import Foundation
 import os.log
+import SWXMLHash
 import ZipArchive
 
 public extension Notification.Name {
 	static let AccountDidInitialize = Notification.Name(rawValue: "AccountDidInitialize")
 	static let AccountMetadataDidChange = Notification.Name(rawValue: "AccountMetadataDidChange")
-	static let AccountFoldersDidChange = Notification.Name(rawValue: "AccountFoldersDidChange")
+	static let AccountDocumentsDidChange = Notification.Name(rawValue: "AccountDocumentsDidChange")
+}
+
+public enum AccountError: LocalizedError {
+	case securityScopeError
+	case fileReadError
+	
+	public var errorDescription: String? {
+		switch self {
+		case .securityScopeError:
+			return L10n.accountErrorScopedResource
+		case .fileReadError:
+			return L10n.accountErrorImportRead
+		}
+	}
 }
 
 public final class Account: NSObject, Identifiable, Codable {
@@ -27,21 +42,12 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	public var type: AccountType
 	public var isActive: Bool
-	public var folders: [Folder]?
-	
-	public var sortedFolders: [Folder] {
-		guard let folders = folders else { return [Folder]() }
-		return folders.sorted(by: { $0.name ?? "" < $1.name ?? "" })
-	}
-	
-	public var documents: [Document] {
-		return folders?.reduce(into: [Document]()) { $0.append(contentsOf: $1.documents ?? [Document]()) } ?? [Document]()
-	}
+	public var documents: [Document]?
 	
 	enum CodingKeys: String, CodingKey {
 		case type = "type"
 		case isActive = "isActive"
-		case folders = "folders"
+		case documents = "documents"
 	}
 	
 	var folder: URL?
@@ -51,7 +57,7 @@ public final class Account: NSObject, Identifiable, Codable {
 	init(accountType: AccountType) {
 		self.type = accountType
 		self.isActive = true
-		self.folders = [Folder]()
+		self.documents = [Document]()
 	}
 	
 	public func activate() {
@@ -66,21 +72,92 @@ public final class Account: NSObject, Identifiable, Codable {
 		accountMetadataDidChange()
 	}
 	
-	public func createFolder(_ name: String) -> Folder {
-		let folder = Folder(parentID: id, name: name)
-		folders?.append(folder)
-		accountFoldersDidChange()
-		return folder
-	}
-	
-	public func deleteFolder(_ folder: Folder) {
-		guard let folders = folders else {
-			return
+	public func importOPML(_ url: URL) throws -> Document {
+		guard url.startAccessingSecurityScopedResource() else { throw AccountError.securityScopeError }
+		defer {
+			url.stopAccessingSecurityScopedResource()
 		}
 		
-		self.folders = folders.filter { $0 != folder }
-		accountFoldersDidChange()
-		folder.folderDidDelete()
+		var fileData: Data?
+		var fileError: NSError? = nil
+		NSFileCoordinator().coordinate(readingItemAt: url, error: &fileError) { (url) in
+			fileData = try? Data(contentsOf: url)
+		}
+		
+		guard fileError == nil else { throw fileError! }
+		guard let opmlData = fileData else { throw AccountError.fileReadError }
+		
+		return importOPML(opmlData)
+	}
+
+	@discardableResult
+	public func importOPML(_ opmlData: Data) -> Document {
+		let opml = SWXMLHash.config({ config in
+			config.caseInsensitive = true
+		}).parse(opmlData)["opml"]
+		
+		let headIndexer = opml["head"]
+		let bodyIndexer = opml["body"]
+		let outlineIndexers = bodyIndexer["outline"].all
+		
+		var title = headIndexer["title"].element?.text
+		if (title == nil || title!.isEmpty) && outlineIndexers.count > 0 {
+			title = outlineIndexers[0].element?.attribute(by: "text")?.text
+		}
+		if title == nil {
+			title = NSLocalizedString("Unavailable", comment: "Unavailable")
+		}
+		
+		let outline = Outline(parentID: id, title: title)
+		if let created = headIndexer["dateCreated"].element?.text {
+			outline.created = Date.dateFromRFC822(rfc822String: created)
+		}
+		if let updated = headIndexer["dateModified"].element?.text {
+			outline.updated = Date.dateFromRFC822(rfc822String: updated)
+		}
+		outline.ownerName = headIndexer["ownerName"].element?.text
+		outline.ownerEmail = headIndexer["ownerEmail"].element?.text
+		outline.ownerURL = headIndexer["ownerID"].element?.text
+		if let verticleScrollState = headIndexer["vertScrollState"].element?.text {
+			outline.verticleScrollState = Int(verticleScrollState)
+		}
+
+		outline.importRows(outlineIndexers)
+
+		if let expansionState = headIndexer["expansionState"].element?.text {
+			outline.expansionState = expansionState
+		}
+
+		documents?.append(.outline(outline))
+		accountDocumentsDidChange()
+		outline.forceSave()
+		return .outline(outline)
+	}
+	
+	public func createOutline(title: String? = nil) -> Document {
+		let outline = Outline(parentID: id, title: title)
+		documents?.append(.outline(outline))
+		accountDocumentsDidChange()
+		return .outline(outline)
+	}
+	
+	public func createDocument(_ document: Document) {
+		document.reassignID(EntityID.document(id.accountID, document.id.documentUUID))
+		documents?.append(document)
+		accountDocumentsDidChange()
+	}
+
+	public func deleteDocument(_ document: Document) {
+		documents?.removeFirst(object: document)
+		accountDocumentsDidChange()
+		document.delete()
+	}
+	
+	public func findDocument(documentUUID: String) -> Document? {
+		if let document = documents?.first(where: { $0.id.documentUUID == documentUUID }) {
+			return document
+		}
+		return nil
 	}
 	
 	func accountDidInitialize() {
@@ -111,10 +188,6 @@ extension Account: NSFilePresenter {
 
 extension Account {
 
-	func findFolder(folderUUID: String) -> Folder? {
-		return folders?.first(where: { $0.id.folderUUID == folderUUID })
-	}
-	
 	func archive() -> URL? {
 		guard let folder = folder else { return nil }
 		
@@ -147,8 +220,8 @@ private extension Account {
 		NotificationCenter.default.post(name: .AccountMetadataDidChange, object: self, userInfo: nil)
 	}
 	
-	func accountFoldersDidChange() {
-		NotificationCenter.default.post(name: .AccountFoldersDidChange, object: self, userInfo: nil)
+	func accountDocumentsDidChange() {
+		NotificationCenter.default.post(name: .AccountDocumentsDidChange, object: self, userInfo: nil)
 	}
 	
 }

@@ -140,11 +140,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 input: "n",
 										 modifierFlags: [.command])
 	
-	let newFolderCommand = UIKeyCommand(title: L10n.newFolder,
-										action: #selector(createFolderCommand(_:)),
-										input: "n",
-										modifierFlags: [.shift, .command])
-	
 	let toggleSidebarCommand = UIKeyCommand(title: L10n.toggleSidebar,
 											action: #selector(toggleSidebarCommand(_:)),
 											input: "s",
@@ -369,10 +364,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: userActivity, options: nil, errorHandler: nil)
 	}
 	
-	@objc func createFolderCommand(_ sender: Any?) {
-		mainSplitViewController?.createFolder(sender)
-	}
-	
 	@objc func createOutlineCommand(_ sender: Any?) {
 		mainSplitViewController?.createOutline(sender)
 	}
@@ -475,14 +466,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		switch command.action {
 		case #selector(exportMarkdownCommand(_:)), #selector(exportOPMLCommand(_:)):
 			if mainSplitViewController?.isExportOutlineUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(createFolderCommand(_:)):
-			if mainSplitViewController?.isCreateFolderUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(createOutlineCommand(_:)), #selector(importOPMLCommand(_:)):
-			if mainSplitViewController?.isCreateOutlineUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(insertRowCommand(_:)):
@@ -602,7 +585,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let newWindowMenu = UIMenu(title: "", options: .displayInline, children: [newWindowCommand])
 		builder.insertChild(newWindowMenu, atStartOfMenu: .file)
 
-		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newFolderCommand])
+		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand])
 		builder.insertChild(newItemsMenu, atStartOfMenu: .file)
 
 		// Edit

@@ -12,14 +12,12 @@
 "Account_iCloud" = "iCloud";
 
 "Search" = "Search";
-"Provider_All" = "All";
-"Provider_Favorites" = "Favorites";
-"Provider_Recents" = "Recents";
+"All" = "All";
 
 "Check_Archive_Error" = "This doesn't appear to be a Zavala archive.  We're unable to restore from this file.";
 
-"Folder_Error_Scoped_Resource" = "Unable to access security scoped resource.";
-"Folder_Error_Import_Read" = "Unable to read the import file.";
+"Account_Error_Scoped_Resource" = "Unable to access security scoped resource.";
+"Account_Error_Import_Read" = "Unable to read the import file.";
 
 /* Commands */
 "Collapse_All_In_Outline" = "Collapse All in Outline";

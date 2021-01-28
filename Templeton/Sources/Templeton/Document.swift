@@ -35,13 +35,6 @@ public enum Document: Equatable, Codable {
 		return nil
 	}
 	
-	public var folder: Folder? {
-		if case .outline(let outline) = self {
-			return outline.folder
-		}
-		return nil
-	}
-	
 	public var outline: Outline? {
 		if case .outline(let outline) = self {
 			return outline

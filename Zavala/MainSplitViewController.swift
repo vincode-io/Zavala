@@ -9,10 +9,6 @@ import UIKit
 import Templeton
 import SafariServices
 
-public extension Notification.Name {
-	static let UserDidAddFolder = Notification.Name(rawValue: "UserDidAddFolder")
-}
-
 protocol MainControllerIdentifiable {
 	var mainControllerIdentifer: MainControllerIdentifier { get }
 }
@@ -49,21 +45,12 @@ class MainSplitViewController: UISplitViewController {
 		return editorViewController?.isOutlineNotesHidden ?? false
 	}
 	
-	var isCreateFolderUnavailable: Bool {
-		return sidebarViewController?.isCreateFolderUnavailable ?? true
-	}
-	
-	var isCreateOutlineUnavailable: Bool {
-		return timelineViewController?.isCreateOutlineUnavailable ?? true
-	}
-	
 	var isExportOutlineUnavailable: Bool {
 		return timelineViewController?.isExportOutlineUnavailable ?? true
 	}
 	
 	var isDeleteEntityUnavailable: Bool {
-		return (sidebarViewController?.isDeleteCurrentFolderUnavailable ?? true) &&
-			(timelineViewController?.isDeleteCurrentOutlineUnavailable ?? true) &&
+		return (timelineViewController?.isDeleteCurrentOutlineUnavailable ?? true) &&
 			(editorViewController?.isDeleteCurrentRowUnavailable ?? true) 
 	}
 
@@ -170,8 +157,6 @@ class MainSplitViewController: UISplitViewController {
 		}
 
 		delegate = self
-		
-		NotificationCenter.default.addObserver(self, selector: #selector(userDidAddFolder(_:)), name: .UserDidAddFolder, object: nil)
     }
 	
 	// MARK: API
@@ -220,13 +205,6 @@ class MainSplitViewController: UISplitViewController {
 		}
 	}
 	
-	// MARK: Notifications
-	
-	@objc func userDidAddFolder(_ note: Notification) {
-		guard let folder = note.userInfo?[UserInfoKeys.folder] as? Folder else { return }
-		sidebarViewController?.selectDocumentContainer(folder, animated: true)
-	}
-	
 	// MARK: Actions
 	
 	override func delete(_ sender: Any?) {
@@ -239,20 +217,14 @@ class MainSplitViewController: UISplitViewController {
 			timelineViewController?.deleteCurrentOutline()
 			return
 		}
-		
-		sidebarViewController?.deleteCurrentFolder()
-	}
-	
-	@objc func createFolder(_ sender: Any?) {
-		sidebarViewController?.createFolder(sender)
 	}
 	
 	@objc func createOutline(_ sender: Any?) {
-		timelineViewController?.createOutline(sender)
+//		timelineViewController?.createOutline(sender)
 	}
 	
 	@objc func importOPML(_ sender: Any?) {
-		timelineViewController?.importOPML(sender)
+//		timelineViewController?.importOPML(sender)
 	}
 	
 	@objc func exportMarkdown(_ sender: Any?) {
@@ -553,9 +525,6 @@ extension MainSplitViewController: NSToolbarDelegate {
 		switch itemIdentifier {
 		case .newOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.timelineViewController?.isCreateOutlineUnavailable ?? true
-			}
 			item.image = AppAssets.createEntity
 			item.label = L10n.newOutline
 			item.toolTip = L10n.newOutline

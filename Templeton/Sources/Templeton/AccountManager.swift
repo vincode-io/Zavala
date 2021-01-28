@@ -54,7 +54,7 @@ public final class AccountManager {
 	private var accountFiles = [Int: AccountFile]()
 	
 	private var documents: [Document] {
-		return activeAccounts.reduce(into: [Document]()) { $0.append(contentsOf: $1.documents ) }
+		return activeAccounts.reduce(into: [Document]()) { $0.append(contentsOf: $1.documents ?? [Document]() ) }
 	}
 	
 	public init(accountsFolderPath: String) {
@@ -64,9 +64,7 @@ public final class AccountManager {
 		self.cloudKitAccountFolder = accountsFolder.appendingPathComponent(AccountType.cloudKit.folderName)
 		self.cloudKitAccountFile = cloudKitAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(accountFoldersDidChange(_:)), name: .AccountFoldersDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(folderMetadataDidChange(_:)), name: .FolderMetaDataDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(folderDocumentsDidChange(_:)), name: .FolderDocumentsDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentMetadataDidChange(_:)), name: .DocumentMetaDataDidChange, object: nil)
 
@@ -84,7 +82,6 @@ public final class AccountManager {
 			let localAccount = Account(accountType: .local)
 			accountsDictionary[AccountType.local.rawValue] = localAccount
 			initializeFile(accountType: .local)
-			let _ = localAccount.createFolder("Outlines")
 		}
 		
 		if FileManager.default.fileExists(atPath: cloudKitAccountFile.path) {
@@ -105,25 +102,15 @@ public final class AccountManager {
 		switch entityID {
 		case .search(let searchText):
 			return Search(searchText: searchText)
-		case .folder:
-			return findFolder(entityID)
 		default:
 			fatalError()
 		}
 	}
 	
-	public func findFolder(_ entityID: EntityID) -> Folder? {
-		if case .folder(let accountID, let folderUUID) = entityID, let account = accountsDictionary[accountID] {
-			return account.findFolder(folderUUID: folderUUID)
-		}
-		return nil
-	}
-	
 	public func findDocument(_ entityID: EntityID) -> Document? {
-		if case .document(let accountID, let folderUUID, let documentUUID) = entityID,
-		   let account = accountsDictionary[accountID],
-		   let folder = account.findFolder(folderUUID: folderUUID) {
-			return folder.findDocument(documentUUID: documentUUID)
+		if case .document(let accountID, let documentUUID) = entityID,
+		   let account = accountsDictionary[accountID] {
+			return account.findDocument(documentUUID: documentUUID)
 		}
 		return nil
 	}
@@ -192,21 +179,11 @@ private extension AccountManager {
 	
 	// MARK: Notifications
 	
-	@objc func accountFoldersDidChange(_ note: Notification) {
+	@objc func accountDocumentsDidChange(_ note: Notification) {
 		let account = note.object as! Account
 		markAsDirty(account)
 	}
 
-	@objc func folderMetadataDidChange(_ note: Notification) {
-		guard let account = (note.object as? Folder)?.account else { return }
-		markAsDirty(account)
-	}
-
-	@objc func folderDocumentsDidChange(_ note: Notification) {
-		guard let account = (note.object as? Folder)?.account else { return }
-		markAsDirty(account)
-	}
-	
 	@objc func documentTitleDidChange(_ note: Notification) {
 		guard let account = (note.object as? Document)?.account else { return }
 		markAsDirty(account)

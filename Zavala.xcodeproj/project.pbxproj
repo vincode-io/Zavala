@@ -19,7 +19,6 @@
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
 		514EF15F25A78A8C00B1FFB6 /* CrashReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */; };
 		514EF16325A78BCC00B1FFB6 /* CrashReporter in Frameworks */ = {isa = PBXBuildFile; platformFilter = maccatalyst; productRef = 514EF16225A78BCC00B1FFB6 /* CrashReporter */; };
-		515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F1631255C16E700FD98B8 /* AddFolderViewController.swift */; };
 		515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F164A255C9F8E00FD98B8 /* FormViewController.swift */; };
 		51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51692B0B25681AD3006B755F /* UIViewController+.swift */; };
 		5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5169928925AE4F5C00760C9D /* UICollectionView+.swift */; };
@@ -48,7 +47,6 @@
 		51C030B4257E192100609262 /* EditorTitleViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030B3257E192100609262 /* EditorTitleViewCell.swift */; };
 		51C030B8257E198B00609262 /* EditorTitleTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030B7257E198B00609262 /* EditorTitleTextView.swift */; };
 		51C030BE257E1B9400609262 /* OutlineTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030BD257E1B9400609262 /* OutlineTextView.swift */; };
-		51C3FA2B255E1DD5008F587A /* GetInfoFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */; };
 		51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51C4C3CD2555F07A004E0206 /* CloudKit.framework */; };
 		51C4C3F92557470B004E0206 /* Templeton in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3F82557470B004E0206 /* Templeton */; };
 		51C4C40125576631004E0206 /* RSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C40025576631004E0206 /* RSCore */; };
@@ -149,7 +147,6 @@
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
 		514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporter.swift; sourceTree = "<group>"; };
-		515F1631255C16E700FD98B8 /* AddFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFolderViewController.swift; sourceTree = "<group>"; };
 		515F164A255C9F8E00FD98B8 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
 		51692B0B25681AD3006B755F /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		5169928925AE4F5C00760C9D /* UICollectionView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+.swift"; sourceTree = "<group>"; };
@@ -179,7 +176,6 @@
 		51C030B3257E192100609262 /* EditorTitleViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleViewCell.swift; sourceTree = "<group>"; };
 		51C030B7257E198B00609262 /* EditorTitleTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleTextView.swift; sourceTree = "<group>"; };
 		51C030BD257E1B9400609262 /* OutlineTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineTextView.swift; sourceTree = "<group>"; };
-		51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoFolderViewController.swift; sourceTree = "<group>"; };
 		51C4C3AC2555E964004E0206 /* Zavala_project_debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Zavala_project_debug.xcconfig; sourceTree = "<group>"; };
 		51C4C3AD2555E964004E0206 /* Zavala_ios_target_common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Zavala_ios_target_common.xcconfig; sourceTree = "<group>"; };
 		51C4C3AE2555E964004E0206 /* Zavala_project_release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Zavala_project_release.xcconfig; sourceTree = "<group>"; };
@@ -438,8 +434,6 @@
 			isa = PBXGroup;
 			children = (
 				51278E76257F37AC0034F1CB /* Dialog.storyboard */,
-				515F1631255C16E700FD98B8 /* AddFolderViewController.swift */,
-				51C3FA2A255E1DD5008F587A /* GetInfoFolderViewController.swift */,
 				51C568D8258C1CD200AA7B93 /* LinkViewController.swift */,
 			);
 			path = Dialogs;
@@ -651,7 +645,6 @@
 				51CF10C22571C22C005D6D88 /* L10n.swift in Sources */,
 				51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */,
 				51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */,
-				515F1632255C16E700FD98B8 /* AddFolderViewController.swift in Sources */,
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
 				51D977FA257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift in Sources */,
 				51F2859B25AD12800019C573 /* SidebarSearchContentView.swift in Sources */,
@@ -692,7 +685,6 @@
 				51D28D32257731DC0039DDFC /* EditorViewController+Drop.swift in Sources */,
 				51B2B2D62563AB9F0090C56B /* UIView+.swift in Sources */,
 				514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */,
-				51C3FA2B255E1DD5008F587A /* GetInfoFolderViewController.swift in Sources */,
 				51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */,
 				51B2B2C82563A2180090C56B /* EditorTextRowTopicTextView.swift in Sources */,
 				518F2E38257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift in Sources */,

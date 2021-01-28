@@ -20,33 +20,9 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	
 	weak var delegate: SidebarDelegate?
 	
-	var isCreateFolderUnavailable: Bool {
-		return currentAccount == nil
-	}
-
-	var isDeleteCurrentFolderUnavailable: Bool {
-		return currentFolder == nil
-	}
-
 	var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
 
-	private var currentAccount: Account? {
-		let activeAccounts = AccountManager.shared.activeAccounts
-		guard activeAccounts.count != 1 else {
-			return activeAccounts.first
-		}
-		return currentFolder?.account
-	}
-	
-	private var currentFolder: Folder? {
-		guard let indexPath = collectionView.indexPathsForSelectedItems?.first,
-			  let item = dataSource.itemIdentifier(for: indexPath),
-			  let entityID = item.entityID else { return nil }
-			  
-		return AccountManager.shared.findFolder(entityID)
-	}
-	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
@@ -56,8 +32,6 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidInitialize(_:)), name: .AccountDidInitialize, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(accountFoldersDidChange(_:)), name: .AccountFoldersDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(folderMetaDataDidChange(_:)), name: .FolderMetaDataDidChange, object: nil)
 	}
 	
 	// MARK: API
@@ -67,14 +41,6 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
 		applyInitialSnapshot()
-
-		// Select the first folder.  This will be changed by state restoration, but in the case that it isn't, this
-		// is probably the first run.  Selecting a folder will make it easier to figure out how to add an initial Outline.
-		if !(splitViewController?.isCollapsed ?? false) {
-			if let localAccount = AccountManager.shared.localAccount, let folder = localAccount.folders?.first {
-				selectDocumentContainer(folder, animated: false)
-			}
-		}
 	}
 	
 	func selectDocumentContainer(_ documentContainer: DocumentContainer?, animated: Bool, completion: (() -> Void)? = nil) {
@@ -95,11 +61,6 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		updateSelection(item: sidebarItem, animated: animated)
 		
 		delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, animated: animated, completion: completion)
-	}
-	
-	func deleteCurrentFolder() {
-		guard let folder = currentFolder else { return }
-		deleteFolder(folder)
 	}
 	
 	func restoreArchive() {
@@ -158,38 +119,6 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		applyChangeSnapshot()
 	}
 	
-	@objc func accountFoldersDidChange(_ note: Notification) {
-		applyChangeSnapshot()
-	}
-	
-	@objc func folderMetaDataDidChange(_ note: Notification) {
-		applyChangeSnapshot()
-	}
-	
-	// MARK: Actions
-	
-	@IBAction func createFolder(_ sender: Any?) {
-		guard let account = currentAccount else { return }
-
-		if traitCollection.userInterfaceIdiom == .mac {
-			
-			let addViewController = UIStoryboard.dialog.instantiateController(ofType: AddFolderViewController.self)
-			addViewController.preferredContentSize = AddFolderViewController.preferredContentSize
-			addViewController.account = account
-			present(addViewController, animated: true)
-			
-		} else {
-			
-			let addNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "AddFolderViewControllerNav") as! UINavigationController
-			addNavViewController.preferredContentSize = AddFolderViewController.preferredContentSize
-			addNavViewController.modalPresentationStyle = .formSheet
-
-			let addViewController = addNavViewController.topViewController as! AddFolderViewController
-			addViewController.account = account
-			present(addNavViewController, animated: true)
-		}
-	}
-	
 }
 
 // MARK: Collection View
@@ -211,25 +140,11 @@ extension SidebarViewController {
 		}
 	}
 	
-	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath), sidebarItem.isFolder else { return nil }
-		return makeFolderContextMenu(item: sidebarItem)
-	}
-	
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 			var configuration = UICollectionLayoutListConfiguration(appearance: .sidebar)
 			configuration.showsSeparators = false
 			configuration.headerMode = .firstItemInSection
-			
-			configuration.trailingSwipeActionsConfigurationProvider = { indexPath in
-				guard let sidebarItem = self.dataSource.itemIdentifier(for: indexPath), sidebarItem.isFolder else { return nil }
-				let actions = [
-					self.deleteFolderContextualAction(item: sidebarItem)
-				]
-				return UISwipeActionsConfiguration(actions: actions.compactMap { $0 })
-			}
-			
 			return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
 		}
 		return layout
@@ -284,11 +199,11 @@ extension SidebarViewController {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
 		let header = SidebarItem.sidebarItem(title: AccountType.local.name, id: .header(.localAccount))
 		
-		let items = localAccount.sortedFolders.map { SidebarItem.sidebarItem($0) }
-		
-		snapshot.append([header])
-		snapshot.expand([header])
-		snapshot.append(items, to: header)
+//		let items = localAccount.sortedFolders.map { SidebarItem.sidebarItem($0) }
+//		
+//		snapshot.append([header])
+//		snapshot.expand([header])
+//		snapshot.append(items, to: header)
 		return snapshot
 	}
 	
@@ -347,104 +262,5 @@ extension SidebarViewController: SidebarSearchCellDelegate {
 // MARK: Helper Functions
 
 extension SidebarViewController {
-	
-	private func makeFolderContextMenu(item: SidebarItem) -> UIContextMenuConfiguration {
-		return UIContextMenuConfiguration(identifier: item as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
-			guard let self = self else { return nil }
-			
-			let menuItems = [
-				UIMenu(title: "", options: .displayInline, children: [self.getInfoFolderAction(item: item)]),
-				UIMenu(title: "", options: .displayInline, children: [self.deleteFolderAction(item: item)])
-			]
-
-			return UIMenu(title: "", children: menuItems)
-		})
-	}
-	
-	private func deleteFolderContextualAction(item: SidebarItem) -> UIContextualAction? {
-		guard let entityID = item.entityID else { return nil }
-		
-		let action = UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
-			if let folder = AccountManager.shared.findFolder(entityID) {
-				self?.deleteFolder(folder, completion: completion)
-			}
-		}
-		
-		return action
-	}
-	
-	private func getInfoFolderAction(item: SidebarItem) -> UIAction {
-		let action = UIAction(title: L10n.getInfo, image: AppAssets.getInfoEntity) { [weak self] action in
-			if let folder = AccountManager.shared.findFolder(item.entityID!) {
-				self?.getInfoForFolder(folder)
-			}
-		}
-		return action
-	}
-	
-	private func deleteFolderAction(item: SidebarItem) -> UIAction {
-		let action = UIAction(title: L10n.delete, image: AppAssets.removeEntity, attributes: .destructive) { [weak self] action in
-			if let folder = AccountManager.shared.findFolder(item.entityID!) {
-				self?.deleteFolder(folder)
-			}
-		}
-		
-		return action
-	}
-	
-	private func deleteFolder(_ folder: Folder, completion: ((Bool) -> Void)? = nil) {
-		func deleteFolder() {
-			if self.currentFolder == folder {
-				self.delegate?.documentContainerSelectionDidChange(self, documentContainer: nil, animated: true, completion: nil)
-			}
-			folder.account?.deleteFolder(folder)
-			completion?(true)
-		}
-		
-		folder.documents { [weak self] result in
-			guard let documents = try? result.get() else { return }
-			
-			guard !(documents.isEmpty) else {
-				deleteFolder()
-				return
-			}
-			
-			let deleteAction = UIAlertAction(title: L10n.delete, style: .destructive) { _ in
-				deleteFolder()
-			}
-			
-			let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel) { _ in
-				completion?(true)
-			}
-			
-			let alert = UIAlertController(title: L10n.deleteFolderPrompt(folder.name ?? ""), message: L10n.deleteFolderMessage, preferredStyle: .alert)
-			alert.addAction(cancelAction)
-			alert.addAction(deleteAction)
-			
-			self?.present(alert, animated: true, completion: nil)
-		}
-	}
-	
-	private func getInfoForFolder(_ folder: Folder) {
-		
-		if traitCollection.userInterfaceIdiom == .mac {
-			
-			let getInfoViewController = UIStoryboard.dialog.instantiateController(ofType: GetInfoFolderViewController.self)
-			getInfoViewController.preferredContentSize = GetInfoFolderViewController.preferredContentSize
-			getInfoViewController.folder = folder
-			present(getInfoViewController, animated: true)
-			
-		} else {
-			
-			let getInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "GetInfoFolderViewControllerNav") as! UINavigationController
-			getInfoNavViewController.preferredContentSize = GetInfoFolderViewController.preferredContentSize
-			getInfoNavViewController.modalPresentationStyle = .formSheet
-
-			let getInfoViewController = getInfoNavViewController.topViewController as! GetInfoFolderViewController
-			getInfoViewController.folder = folder
-			present(getInfoNavViewController, animated: true)
-
-		}
-	}
 	
 }
