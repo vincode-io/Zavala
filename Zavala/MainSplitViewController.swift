@@ -525,6 +525,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 		switch itemIdentifier {
 		case .newOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { _ in
+				return false
+			}
 			item.image = AppAssets.createEntity
 			item.label = L10n.newOutline
 			item.toolTip = L10n.newOutline
