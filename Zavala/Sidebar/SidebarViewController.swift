@@ -199,11 +199,11 @@ extension SidebarViewController {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
 		let header = SidebarItem.sidebarItem(title: AccountType.local.name, id: .header(.localAccount))
 		
-//		let items = localAccount.sortedFolders.map { SidebarItem.sidebarItem($0) }
-//		
-//		snapshot.append([header])
-//		snapshot.expand([header])
-//		snapshot.append(items, to: header)
+		let items = localAccount.documentContainers.map { SidebarItem.sidebarItem($0) }
+		
+		snapshot.append([header])
+		snapshot.expand([header])
+		snapshot.append(items, to: header)
 		return snapshot
 	}
 	

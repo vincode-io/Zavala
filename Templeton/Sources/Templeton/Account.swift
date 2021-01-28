@@ -44,6 +44,12 @@ public final class Account: NSObject, Identifiable, Codable {
 	public var isActive: Bool
 	public var documents: [Document]?
 	
+	public var documentContainers: [DocumentContainer] {
+		var containers = [DocumentContainer]()
+		containers.append(AccountDocuments(account: self))
+		return containers
+	}
+	
 	enum CodingKeys: String, CodingKey {
 		case type = "type"
 		case isActive = "isActive"
@@ -151,6 +157,15 @@ public final class Account: NSObject, Identifiable, Codable {
 		documents?.removeFirst(object: document)
 		accountDocumentsDidChange()
 		document.delete()
+	}
+	
+	public func findDocumentContainer(_ entityID: EntityID) -> DocumentContainer? {
+		switch entityID {
+		case .accountDocuments:
+			return AccountDocuments(account: self)
+		default:
+			fatalError()
+		}
 	}
 	
 	public func findDocument(documentUUID: String) -> Document? {
