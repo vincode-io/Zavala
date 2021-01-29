@@ -12,6 +12,10 @@ import Templeton
 
 class EditorViewController: UIViewController, MainControllerIdentifiable, UndoableCommandRunner {
 
+	static let titleSection = 0
+	static let tagSection = 1
+	static let rowSection = 2
+	
 	@IBOutlet weak var collectionView: UICollectionView!
 	
 	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
@@ -168,10 +172,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var transitionContentOffset: CGPoint?
 	
 	private var isOutlineNewFlag = false
-	
-	private static let titleSection = 0
-	private static let tagSection = 1
-	private static let rowSection = 2
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
