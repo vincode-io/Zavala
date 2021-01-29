@@ -10,7 +10,7 @@ import Foundation
 public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 	case account(Int)
 	case document(Int, String) // Account, Document
-	case accountDocuments(Int) // Account
+	case allDocuments(Int) // Account
 	case search(String) // Search String
 
 	public var accountID: Int {
@@ -19,7 +19,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return accountID
 		case .document(let accountID, _):
 			return accountID
-		case .accountDocuments(let accountID):
+		case .allDocuments(let accountID):
 			return accountID
 		default:
 			fatalError()
@@ -34,8 +34,8 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return "document:\(accountID)_\(documentID)"
 		case .search(let searchText):
 			return "search:\(searchText)"
-		case .accountDocuments(let id):
-			return "accountDocuments:\(id)"
+		case .allDocuments(let id):
+			return "allDocuments:\(id)"
 		}
 	}
 	
@@ -91,10 +91,10 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			let searchText = description.suffix(from: description.index(description.startIndex, offsetBy: 7))
 			self = .search(String(searchText))
 			return
-		} else if description.starts(with: "accountDocuments:") {
+		} else if description.starts(with: "allDocuments:") {
 			let idString = description.suffix(from: description.index(description.startIndex, offsetBy: 18))
 			if let accountID = Int(idString) {
-				self = .accountDocuments(accountID)
+				self = .allDocuments(accountID)
 				return
 			}
 		}
@@ -116,9 +116,9 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case "search":
 			let searchText = try container.decode(String.self, forKey: .searchText)
 			self = .search(searchText)
-		case "accountDocuments":
+		case "allDocuments":
 			let accountID = try container.decode(Int.self, forKey: .accountID)
-			self = .accountDocuments(accountID)
+			self = .allDocuments(accountID)
 		default:
 			fatalError()
 		}
@@ -138,9 +138,9 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case "search":
 			guard let searchText = userInfo["searchText"] as? String else { return nil }
 			self = .search(searchText)
-		case "accountDocuments":
+		case "allDocuments":
 			guard let accountID = userInfo["accountID"] as? Int else { return nil }
-			self = .accountDocuments(accountID)
+			self = .allDocuments(accountID)
 		default:
 			return nil
 		}
@@ -160,8 +160,8 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case .search(let searchText):
 			try container.encode("search", forKey: .type)
 			try container.encode(searchText, forKey: .searchText)
-		case .accountDocuments(let accountID):
-			try container.encode("accountDocuments", forKey: .type)
+		case .allDocuments(let accountID):
+			try container.encode("allDocuments", forKey: .type)
 			try container.encode(accountID, forKey: .accountID)
 		}
 	}
@@ -184,9 +184,9 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 				"type": "search",
 				"searchText": searchText
 			]
-		case .accountDocuments(let accountID):
+		case .allDocuments(let accountID):
 			return [
-				"type": "accountDocuments",
+				"type": "allDocuments",
 				"accountID": accountID
 			]
 		}

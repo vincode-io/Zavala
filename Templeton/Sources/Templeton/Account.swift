@@ -46,7 +46,7 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	public var documentContainers: [DocumentContainer] {
 		var containers = [DocumentContainer]()
-		containers.append(AccountDocuments(account: self))
+		containers.append(AllDocuments(account: self))
 		return containers
 	}
 	
@@ -176,8 +176,8 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	public func findDocumentContainer(_ entityID: EntityID) -> DocumentContainer? {
 		switch entityID {
-		case .accountDocuments:
-			return AccountDocuments(account: self)
+		case .allDocuments:
+			return AllDocuments(account: self)
 		default:
 			fatalError()
 		}

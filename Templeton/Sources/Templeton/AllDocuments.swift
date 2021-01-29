@@ -8,7 +8,7 @@
 import UIKit
 import RSCore
 
-public final class AccountDocuments: Identifiable, DocumentContainer {
+public final class AllDocuments: Identifiable, DocumentContainer {
 
 	public var id: EntityID
 	public var name: String? = L10n.all
@@ -17,7 +17,7 @@ public final class AccountDocuments: Identifiable, DocumentContainer {
 	public weak var account: Account?
 	
 	public init(account: Account) {
-		self.id = .accountDocuments(account.id.accountID)
+		self.id = .allDocuments(account.id.accountID)
 		self.account = account
 	}
 	
