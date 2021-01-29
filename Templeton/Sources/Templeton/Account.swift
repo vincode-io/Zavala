@@ -14,6 +14,7 @@ public extension Notification.Name {
 	static let AccountDidInitialize = Notification.Name(rawValue: "AccountDidInitialize")
 	static let AccountMetadataDidChange = Notification.Name(rawValue: "AccountMetadataDidChange")
 	static let AccountDocumentsDidChange = Notification.Name(rawValue: "AccountDocumentsDidChange")
+	static let AccountTagsDidChange = Notification.Name(rawValue: "AccountTagsDidChange")
 }
 
 public enum AccountError: LocalizedError {
@@ -42,6 +43,7 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	public var type: AccountType
 	public var isActive: Bool
+	public var tags: [Tag]?
 	public var documents: [Document]?
 	
 	public var documentContainers: [DocumentContainer] {
@@ -53,6 +55,7 @@ public final class Account: NSObject, Identifiable, Codable {
 	enum CodingKeys: String, CodingKey {
 		case type = "type"
 		case isActive = "isActive"
+		case tags = "tags"
 		case documents = "documents"
 	}
 	
@@ -67,6 +70,15 @@ public final class Account: NSObject, Identifiable, Codable {
 			rebuildDocumentsDictionary()
 		}
 		return _idToDocumentsDictionary
+	}
+
+	private var tagsDictionaryNeedUpdate = true
+	private var _idToTagsDictionary = [String: Tag]()
+	private var idToTagsDictionary: [String: Tag] {
+		if tagsDictionaryNeedUpdate {
+			rebuildTagsDictionary()
+		}
+		return _idToTagsDictionary
 	}
 
 	init(accountType: AccountType) {
@@ -187,6 +199,23 @@ public final class Account: NSObject, Identifiable, Codable {
 		return idToDocumentsDictionary[documentUUID]
 	}
 	
+	public func createTag(name: String) -> Tag {
+		let tag = Tag(name: name)
+
+		if tags == nil {
+			tags = [Tag]()
+		}
+		tags?.append(tag)
+		tags?.sort(by: { $0.name < $1.name })
+		accountTagsDidChange()
+		
+		return tag
+	}
+	
+	public func findTag(tagID: String) -> Tag? {
+		return idToTagsDictionary[tagID]
+	}
+	
 	func archive() -> URL? {
 		guard let folder = folder else { return nil }
 		
@@ -248,6 +277,11 @@ private extension Account {
 		NotificationCenter.default.post(name: .AccountDocumentsDidChange, object: self, userInfo: nil)
 	}
 	
+	func accountTagsDidChange() {
+		tagsDictionaryNeedUpdate = true
+		NotificationCenter.default.post(name: .AccountTagsDidChange, object: self, userInfo: nil)
+	}
+	
 	func rebuildDocumentsDictionary() {
 		var idDictionary = [String: Document]()
 		
@@ -257,5 +291,16 @@ private extension Account {
 		
 		_idToDocumentsDictionary = idDictionary
 		documentsDictionaryNeedUpdate = false
+	}
+
+	func rebuildTagsDictionary() {
+		var idDictionary = [String: Tag]()
+		
+		for tag in tags ?? [Tag]() {
+			idDictionary[tag.id] = tag
+		}
+		
+		_idToTagsDictionary = idDictionary
+		tagsDictionaryNeedUpdate = false
 	}
 }

@@ -90,6 +90,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return AccountManager.shared.findAccount(accountID: id.accountID)
 	}
 	
+	public var tags: [Tag] {
+		guard let account = account else { return [Tag]() }
+		return tagIDs?.compactMap { account.findTag(tagID: $0) } ?? [Tag]()
+	}
+	
 	public var expansionState: String {
 		get {
 			var currentRow = 0
@@ -158,11 +163,14 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		case cursorRowID = "cursorRowID"
 		case cursorIsInNotes = "cursorIsInNotes"
 		case cursorPosition = "cursorPosition"
+		case tagIDs = "tagIDS"
 	}
 
 	private var cursorRowID: String?
 	private var cursorIsInNotes: Bool?
 	private var cursorPosition: Int?
+	
+	private var tagIDs: [String]?
 	
 	private var rowsFile: RowsFile?
 	
@@ -183,6 +191,19 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		rowsFile = RowsFile(outline: self)
 	}
 
+	public func addTag(_ tag: Tag) {
+		if tagIDs == nil {
+			tagIDs = [String]()
+		}
+		tagIDs!.append(tag.id)
+		documentMetaDataDidChange()
+	}
+	
+	public func removeTag(_ tag: Tag) {
+		tagIDs?.removeFirst(object: tag.id)
+		documentMetaDataDidChange()
+	}
+	
 	public func fileName(withSuffix suffix: String) -> String {
 		var filename = title ?? "Outline"
 		filename = filename.replacingOccurrences(of: " ", with: "").trimmingCharacters(in: .whitespaces)
