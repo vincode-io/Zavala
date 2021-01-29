@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Templeton
 
 struct EditorTitleContentConfiguration: UIContentConfiguration, Hashable {
 
