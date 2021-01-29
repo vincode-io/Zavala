@@ -14,7 +14,6 @@ class EditorTitleContentView: UIView, UIContentView {
 	var textViewHeight: CGFloat?
 	var adjustingSeparatorWidthContraint: NSLayoutConstraint?
 	
-	var title: String?
 	weak var delegate: EditorTitleViewCellDelegate?
 	
 	var appliedConfiguration: EditorTitleContentConfiguration!
