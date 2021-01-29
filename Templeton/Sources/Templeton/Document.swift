@@ -100,6 +100,20 @@ public enum Document: Equatable, Codable {
 		}
 	}
 
+	public func addTag(_ tag: Tag) {
+		switch self {
+		case .outline(let outline):
+			return outline.addTag(tag)
+		}
+	}
+	
+	public func removeTag(_ tag: Tag) {
+		switch self {
+		case .outline(let outline):
+			return outline.removeTag(tag)
+		}
+	}
+	
 	public func load() {
 		switch self {
 		case .outline(let outline):
