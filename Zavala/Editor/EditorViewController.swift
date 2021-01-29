@@ -170,7 +170,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var isOutlineNewFlag = false
 	
 	private static let titleSection = 0
-	private static let rowSection = 1
+	private static let tagSection = 1
+	private static let rowSection = 2
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -475,10 +476,28 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
-			var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
-			configuration.showsSeparators = false
-			return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
+			
+			if sectionIndex == Self.tagSection {
+				
+				let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(50), heightDimension: .estimated(100))
+				let item = NSCollectionLayoutItem(layoutSize: itemSize)
+				item.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: nil, top: .fixed(4), trailing: .fixed(8), bottom: .fixed(4))
+				
+				let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100))
+				let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+				
+				return NSCollectionLayoutSection(group: group)
+				
+			} else {
+				
+				var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
+				configuration.showsSeparators = false
+				return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
+				
+			}
+			
 		}
+		
 		return layout
 	}
 	
@@ -487,13 +506,16 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 	
 	func numberOfSections(in collectionView: UICollectionView) -> Int {
-		return 2
+		return 3
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		if section == Self.titleSection {
+		switch section {
+		case Self.titleSection:
 			return outline == nil ? 0 : 1
-		} else {
+		case Self.tagSection:
+			return 0
+		default:
 			return outline?.shadowTable?.count ?? 0
 		}
 	}
