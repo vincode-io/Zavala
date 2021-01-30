@@ -9,7 +9,7 @@ import UIKit
 
 class EditorTagInputContentView: UIView, UIContentView {
 
-	let textField = UITextField()
+	let textField = EditorTagInputTextField()
 	weak var delegate: EditorTagInputViewCellDelegate?
 	
 	var appliedConfiguration: EditorTagInputContentConfiguration!
