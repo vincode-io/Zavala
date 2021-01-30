@@ -159,7 +159,7 @@ extension TimelineViewController: UIDocumentPickerDelegate {
 		}
 		
 		if let document = document {
-			selectDocument(document, animated: false)
+			selectDocument(document, animated: true)
 		}
 	}
 	
