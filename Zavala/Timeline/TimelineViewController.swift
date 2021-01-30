@@ -43,6 +43,8 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	private var heldDocumentContainer: DocumentContainer?
 
 	private let searchController = UISearchController(searchResultsController: nil)
+	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
+	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importEntity, style: .plain, target: self, action: #selector(importOPML(_:)))
 
 	private let dataSourceQueue = MainThreadOperationQueue()
 
@@ -52,16 +54,16 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
-			// Setup the Search Controller
 			searchController.delegate = self
 			searchController.searchResultsUpdater = self
 			searchController.obscuresBackgroundDuringPresentation = false
-//			searchController.searchBar.delegate = self
 			searchController.searchBar.placeholder = L10n.search
 			navigationItem.searchController = searchController
 			definesPresentationContext = true
-		}
 
+			navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
+		}
+		
 		collectionView.remembersLastFocusedIndexPath = true
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
