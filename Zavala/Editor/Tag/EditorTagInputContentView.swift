@@ -22,9 +22,14 @@ class EditorTagInputContentView: UIView, UIContentView {
 		addSubview(view)
 		
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.layer.cornerRadius = 10
 		view.layer.borderWidth = 1
 		view.layer.borderColor = AppAssets.accessory.cgColor
+
+		if traitCollection.userInterfaceIdiom == .mac {
+			view.layer.cornerRadius = 10
+		} else {
+			view.layer.cornerRadius = 13
+		}
 
 		view.addSubview(textField)
 		textField.translatesAutoresizingMaskIntoConstraints = false
