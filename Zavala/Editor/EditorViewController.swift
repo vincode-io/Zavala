@@ -158,6 +158,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
+	private var tagInputRegistration: UICollectionView.CellRegistration<EditorTagInputViewCell, EntityID>?
 	private var rowRegistration: UICollectionView.CellRegistration<EditorTextRowViewCell, Row>?
 	
 	private var firstVisibleShadowTableIndex: Int? {
@@ -203,6 +204,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		tagRegistration = UICollectionView.CellRegistration<EditorTagViewCell, String> { (cell, indexPath, name) in
 			cell.name = name
 //			cell.delegate = self
+		}
+		
+		tagInputRegistration = UICollectionView.CellRegistration<EditorTagInputViewCell, EntityID> { (cell, indexPath, outlineID) in
+			cell.outlineID = outlineID
+			cell.delegate = self
 		}
 		
 		rowRegistration = UICollectionView.CellRegistration<EditorTextRowViewCell, Row> { [weak self] (cell, indexPath, row) in
@@ -513,7 +519,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Self.titleSection:
 			return outline == nil ? 0 : 1
 		case Self.tagSection:
-			return 1
+			return outline == nil ? 0 : 2
 		default:
 			return outline?.shadowTable?.count ?? 0
 		}
@@ -524,7 +530,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Self.titleSection:
 			return collectionView.dequeueConfiguredReusableCell(using: titleRegistration!, for: indexPath, item: outline)
 		case Self.tagSection:
-			return collectionView.dequeueConfiguredReusableCell(using: tagRegistration!, for: indexPath, item: "Zavala")
+			if indexPath.row == 0 {
+				return collectionView.dequeueConfiguredReusableCell(using: tagRegistration!, for: indexPath, item: "Zavala")
+			} else {
+				return collectionView.dequeueConfiguredReusableCell(using: tagInputRegistration!, for: indexPath, item: outline!.id)
+			}
 		default:
 			let row = outline?.shadowTable?[indexPath.row] ?? Row.text(TextRow())
 			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration!, for: indexPath, item: row)
@@ -592,6 +602,22 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	
 	func editorTitleCreateRow(textRowStrings: TextRowStrings?) {
 		createRow(afterRows: nil)
+	}
+	
+}
+
+extension EditorViewController: EditorTagInputViewCellDelegate {
+	
+	var editorTagInputUndoManager: UndoManager? {
+		return undoManager
+	}
+	
+	func editorTagInputLayoutEditor() {
+		layoutEditor()
+	}
+	
+	func editorTagInputTextFieldDidBecomeActive() {
+		collectionView.deselectAll()
 	}
 	
 }

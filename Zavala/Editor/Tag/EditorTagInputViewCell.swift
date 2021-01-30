@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Templeton
 
 protocol EditorTagInputViewCellDelegate: class {
 	var editorTagInputUndoManager: UndoManager? { get }
@@ -13,6 +14,25 @@ protocol EditorTagInputViewCellDelegate: class {
 	func editorTagInputTextFieldDidBecomeActive()
 }
 
-class EditorTagInputView: UICollectionViewCell {
+class EditorTagInputViewCell: UICollectionViewCell {
+	
+	var outlineID: EntityID? {
+		didSet {
+			setNeedsUpdateConfiguration()
+		}
+	}
+
+	weak var delegate: EditorTagInputViewCellDelegate? {
+		didSet {
+			setNeedsUpdateConfiguration()
+		}
+	}
+
+	override func updateConfiguration(using state: UICellConfigurationState) {
+		super.updateConfiguration(using: state)
+		var content = EditorTagInputContentConfiguration(outlineID: outlineID).updated(for: state)
+		content.delegate = delegate
+		contentConfiguration = content
+	}
 	
 }

@@ -6,10 +6,16 @@
 //
 
 import UIKit
+import Templeton
 
 struct EditorTagInputContentConfiguration: UIContentConfiguration, Hashable {
 
+	var outlineID: EntityID?
 	weak var delegate: EditorTagInputViewCellDelegate?
+	
+	init(outlineID: EntityID?) {
+		self.outlineID = outlineID
+	}
 	
 	func makeContentView() -> UIView & UIContentView {
 		return EditorTagInputContentView(configuration: self)
@@ -20,11 +26,11 @@ struct EditorTagInputContentConfiguration: UIContentConfiguration, Hashable {
 	}
 
 	func hash(into hasher: inout Hasher) {
-		hasher.combine("onlyone")
+		hasher.combine(outlineID)
 	}
 	
 	static func == (lhs: EditorTagInputContentConfiguration, rhs: EditorTagInputContentConfiguration) -> Bool {
-		return true
+		return lhs.outlineID == rhs.outlineID
 	}
 	
 }

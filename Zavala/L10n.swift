@@ -144,6 +144,8 @@ internal enum L10n {
   internal static let showNotes = L10n.tr("Localizable", "Show_Notes")
   /// Split Row
   internal static let splitRow = L10n.tr("Localizable", "Split_Row")
+  /// Tag
+  internal static let tag = L10n.tr("Localizable", "Tag")
   /// Toggle Sidebar
   internal static let toggleSidebar = L10n.tr("Localizable", "Toggle_Sidebar")
   /// Typing

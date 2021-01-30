@@ -25,6 +25,7 @@
 		514F221825C4D076004E02CD /* EditorTagInputViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F221725C4D076004E02CD /* EditorTagInputViewCell.swift */; };
 		514F221B25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F221A25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift */; };
 		514F221E25C4D0A8004E02CD /* EditorTagInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F221D25C4D0A8004E02CD /* EditorTagInputContentView.swift */; };
+		514F222625C4FD23004E02CD /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F222525C4FD23004E02CD /* UITextField.swift */; };
 		515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F164A255C9F8E00FD98B8 /* FormViewController.swift */; };
 		51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51692B0B25681AD3006B755F /* UIViewController+.swift */; };
 		5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5169928925AE4F5C00760C9D /* UICollectionView+.swift */; };
@@ -159,6 +160,7 @@
 		514F221725C4D076004E02CD /* EditorTagInputViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagInputViewCell.swift; sourceTree = "<group>"; };
 		514F221A25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagInputContentConfiguration.swift; sourceTree = "<group>"; };
 		514F221D25C4D0A8004E02CD /* EditorTagInputContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagInputContentView.swift; sourceTree = "<group>"; };
+		514F222525C4FD23004E02CD /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		515F164A255C9F8E00FD98B8 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
 		51692B0B25681AD3006B755F /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		5169928925AE4F5C00760C9D /* UICollectionView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+.swift"; sourceTree = "<group>"; };
@@ -277,6 +279,7 @@
 				51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */,
 				5169928925AE4F5C00760C9D /* UICollectionView+.swift */,
 				514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */,
+				514F222525C4FD23004E02CD /* UITextField.swift */,
 				51B2B2D52563AB9F0090C56B /* UIView+.swift */,
 				51692B0B25681AD3006B755F /* UIViewController+.swift */,
 				51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */,
@@ -694,6 +697,7 @@
 				514F221125C4CCE4004E02CD /* EditorTagContentConfiguration.swift in Sources */,
 				51F2859725AD11DB0019C573 /* SidebarSearchContentConfiguration.swift in Sources */,
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,
+				514F222625C4FD23004E02CD /* UITextField.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
 				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
 				519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */,
