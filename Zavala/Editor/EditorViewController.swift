@@ -157,7 +157,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var filterBarButtonItem: UIBarButtonItem?
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
-	private var headerRegistration: UICollectionView.CellRegistration<EditorTextRowViewCell, Row>?
+	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
+	private var rowRegistration: UICollectionView.CellRegistration<EditorTextRowViewCell, Row>?
 	
 	private var firstVisibleShadowTableIndex: Int? {
 		let visibleRect = collectionView.layoutMarginsGuide.layoutFrame
@@ -199,7 +200,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			cell.delegate = self
 		}
 		
-		headerRegistration = UICollectionView.CellRegistration<EditorTextRowViewCell, Row> { [weak self] (cell, indexPath, row) in
+		tagRegistration = UICollectionView.CellRegistration<EditorTagViewCell, String> { (cell, indexPath, name) in
+			cell.name = name
+//			cell.delegate = self
+		}
+		
+		rowRegistration = UICollectionView.CellRegistration<EditorTextRowViewCell, Row> { [weak self] (cell, indexPath, row) in
 			cell.row = row
 			cell.isNotesHidden = self?.outline?.isNotesHidden
 			cell.delegate = self
@@ -478,22 +484,15 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 			
 			if sectionIndex == Self.tagSection {
-				
 				let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(50), heightDimension: .estimated(100))
 				let item = NSCollectionLayoutItem(layoutSize: itemSize)
-				item.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: nil, top: .fixed(4), trailing: .fixed(8), bottom: .fixed(4))
-				
 				let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100))
 				let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-				
 				return NSCollectionLayoutSection(group: group)
-				
 			} else {
-				
 				var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
 				configuration.showsSeparators = false
 				return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
-				
 			}
 			
 		}
@@ -514,22 +513,27 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Self.titleSection:
 			return outline == nil ? 0 : 1
 		case Self.tagSection:
-			return 0
+			return 1
 		default:
 			return outline?.shadowTable?.count ?? 0
 		}
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		if indexPath.section == 0 {
+		switch indexPath.section {
+		case Self.titleSection:
 			return collectionView.dequeueConfiguredReusableCell(using: titleRegistration!, for: indexPath, item: outline)
-		} else {
+		case Self.tagSection:
+			return collectionView.dequeueConfiguredReusableCell(using: tagRegistration!, for: indexPath, item: "Zavala")
+		default:
 			let row = outline?.shadowTable?[indexPath.row] ?? Row.text(TextRow())
-			return collectionView.dequeueConfiguredReusableCell(using: headerRegistration!, for: indexPath, item: row)
+			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration!, for: indexPath, item: row)
 		}
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+		guard indexPath.section == Self.rowSection else { return nil }
+		
 		// Force save the text if the context menu has been requested so that we don't lose our
 		// text changes when the cell configuration gets applied
 		if let textView = UIResponder.currentFirstResponder as? OutlineTextView {
