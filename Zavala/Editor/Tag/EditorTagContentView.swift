@@ -21,9 +21,14 @@ class EditorTagContentView: UIView, UIContentView {
 		addSubview(button)
 		
 		button.translatesAutoresizingMaskIntoConstraints = false
-		button.layer.cornerRadius = 10
 		button.backgroundColor = AppAssets.accessory
 		button.contentEdgeInsets = UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8)
+
+		if traitCollection.userInterfaceIdiom == .mac {
+			button.layer.cornerRadius = 10
+		} else {
+			button.layer.cornerRadius = 13
+		}
 		
 		NSLayoutConstraint.activate([
 			button.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
