@@ -519,7 +519,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Self.titleSection:
 			return outline == nil ? 0 : 1
 		case Self.tagSection:
-			return outline == nil ? 0 : 2
+			if let outline = outline {
+				return outline.tags.count + 1
+			} else {
+				return 0
+			}
 		default:
 			return outline?.shadowTable?.count ?? 0
 		}
@@ -530,8 +534,9 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Self.titleSection:
 			return collectionView.dequeueConfiguredReusableCell(using: titleRegistration!, for: indexPath, item: outline)
 		case Self.tagSection:
-			if indexPath.row == 0 {
-				return collectionView.dequeueConfiguredReusableCell(using: tagRegistration!, for: indexPath, item: "Zavala")
+			if let outline = outline, indexPath.row < outline.tags.count {
+				let tag = outline.tags[indexPath.row]
+				return collectionView.dequeueConfiguredReusableCell(using: tagRegistration!, for: indexPath, item: tag.name)
 			} else {
 				return collectionView.dequeueConfiguredReusableCell(using: tagInputRegistration!, for: indexPath, item: outline!.id)
 			}
