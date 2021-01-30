@@ -30,14 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		}
 		
-		if !(mainSplitViewController?.isCreateOutlineUnavailable ?? true) {
-			menuKeyCommands.append(newOutlineCommand)
-			menuKeyCommands.append(importOPMLCommand)
-		}
-		
-		if !(mainSplitViewController?.isCreateFolderUnavailable ?? true) {
-			menuKeyCommands.append(newFolderCommand)
-		}
+		menuKeyCommands.append(newOutlineCommand)
+		menuKeyCommands.append(importOPMLCommand)
 		
 		if !(mainSplitViewController?.isExportOutlineUnavailable ?? true) {
 			menuKeyCommands.append(exportMarkdownCommand)
