@@ -41,7 +41,10 @@ class EditorTitleViewCell: UICollectionViewListCell {
 	}
 
 	func takeCursor() {
-		(contentView as? EditorTitleContentView)?.textView.becomeFirstResponder()
+		guard let textView = (contentView as? EditorTitleContentView)?.textView else { return }
+		textView.becomeFirstResponder()
+		let endPosition = textView.endOfDocument
+		textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
 	}
 	
 }
