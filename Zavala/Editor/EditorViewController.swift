@@ -458,9 +458,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if currentKeyPresses.contains(.keyboardUpArrow) {
 			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, let row = textView.row {
 				moveCursorUp(row: row)
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-					self.repeatMoveCursorUp()
-				}
+			} else if UIResponder.currentFirstResponder is EditorTagInputTextField {
+				moveCursorToTitle()
+			}
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+				self.repeatMoveCursorUp()
 			}
 		}
 	}
@@ -469,13 +471,15 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if currentKeyPresses.contains(.keyboardDownArrow) {
 			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, let row = textView.row {
 				moveCursorDown(row: row)
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-					self.repeatMoveCursorDown()
-				}
-			} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting, outline?.shadowTable?.count ?? 0 > 0 {
+			} else if UIResponder.currentFirstResponder is EditorTagInputTextField, outline?.shadowTable?.count ?? 0 > 0 {
 				if let rowCell = collectionView.cellForItem(at: IndexPath(row: 0, section: Self.rowSection)) as? EditorTextRowViewCell {
 					rowCell.moveToEnd()
 				}
+			} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting, outline?.shadowTable?.count ?? 0 > 0 {
+				moveCursorToTagInput()
+			}
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+				self.repeatMoveCursorDown()
 			}
 		}
 	}
@@ -935,6 +939,15 @@ extension EditorViewController {
 		}
 	}
 	
+	private func moveCursorToTagInput() {
+		if let outline = outline {
+			let indexPath = IndexPath(row: outline.tags.count, section: Self.tagSection)
+			if let tagInputCell = collectionView.cellForItem(at: indexPath) as? EditorTagInputViewCell {
+				tagInputCell.takeCursor()
+			}
+		}
+	}
+	
 	private func editLink(_ link: String?, range: NSRange) {
 		if traitCollection.userInterfaceIdiom == .mac {
 		
@@ -1111,7 +1124,7 @@ extension EditorViewController {
 	
 	private func moveCursorUp(row: Row) {
 		guard let shadowTableIndex = row.shadowTableIndex, shadowTableIndex > 0 else {
-			moveCursorToTitle()
+			moveCursorToTagInput()
 			return
 		}
 		

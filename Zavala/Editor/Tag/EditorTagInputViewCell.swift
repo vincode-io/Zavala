@@ -34,5 +34,10 @@ class EditorTagInputViewCell: UICollectionViewCell {
 		content.delegate = delegate
 		contentConfiguration = content
 	}
+
+	func takeCursor() {
+		guard let textField = (contentView as? EditorTagInputContentView)?.textField else { return }
+		textField.becomeFirstResponder()
+	}
 	
 }
