@@ -609,10 +609,10 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 		outline?.update(title: title)
 	}
 	
-	func editorTitleCreateRow(textRowStrings: TextRowStrings?) {
-		createRow(afterRows: nil)
+	func editorTitleMoveToTagInput() {
+		moveCursorToTagInput()
 	}
-	
+
 }
 
 extension EditorViewController: EditorTagInputViewCellDelegate {
@@ -627,6 +627,14 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 	
 	func editorTagInputTextFieldDidBecomeActive() {
 		collectionView.deselectAll()
+	}
+	
+	func editorTagInputTextFieldDidBecomeInactive() {
+		// TODO: Add save tag code here...
+	}
+	
+	func editorTagInputTextFieldCreateRow() {
+		createRow(afterRows: nil)
 	}
 	
 }
@@ -1344,7 +1352,7 @@ extension EditorViewController {
 		if let newCursorIndex = command.newCursorIndex, let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: Self.rowSection)) as? EditorTextRowViewCell {
 			rowCell.moveToEnd()
 		} else {
-			moveCursorToTitle()
+			moveCursorToTagInput()
 		}
 	}
 	

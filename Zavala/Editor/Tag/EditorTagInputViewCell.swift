@@ -12,6 +12,8 @@ protocol EditorTagInputViewCellDelegate: class {
 	var editorTagInputUndoManager: UndoManager? { get }
 	func editorTagInputLayoutEditor()
 	func editorTagInputTextFieldDidBecomeActive()
+	func editorTagInputTextFieldDidBecomeInactive()
+	func editorTagInputTextFieldCreateRow()
 }
 
 class EditorTagInputViewCell: UICollectionViewCell {

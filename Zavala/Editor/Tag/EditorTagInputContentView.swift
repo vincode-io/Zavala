@@ -36,6 +36,7 @@ class EditorTagInputContentView: UIView, UIContentView {
 		textField.placeholder = L10n.tag
 		textField.borderStyle = .none
 		textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+		textField.editorDelegate = self
 		
 		NSLayoutConstraint.activate([
 			view.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
@@ -71,7 +72,27 @@ class EditorTagInputContentView: UIView, UIContentView {
 	
 	@objc func textFieldDidChange(_ textField: UITextField) {
 		textField.invalidateIntrinsicContentSize()
-		self.appliedConfiguration.delegate?.editorTagInputLayoutEditor()
+		appliedConfiguration.delegate?.editorTagInputLayoutEditor()
+	}
+	
+}
+
+extension EditorTagInputContentView: EditorTagInputTextFieldDelegate {
+	
+	var editorTagInputTextFieldUndoManager: UndoManager? {
+		return appliedConfiguration.delegate?.editorTagInputUndoManager
+	}
+	
+	func didBecomeActive(_: EditorTagInputTextField) {
+		appliedConfiguration.delegate?.editorTagInputTextFieldDidBecomeActive()
+	}
+	
+	func didBecomeInactive(_: EditorTagInputTextField) {
+		appliedConfiguration.delegate?.editorTagInputTextFieldDidBecomeInactive()
+	}
+	
+	func createRow(_: EditorTagInputTextField) {
+		appliedConfiguration.delegate?.editorTagInputTextFieldCreateRow()
 	}
 	
 }

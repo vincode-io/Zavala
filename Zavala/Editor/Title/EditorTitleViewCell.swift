@@ -13,7 +13,7 @@ protocol EditorTitleViewCellDelegate: class {
 	func editorTitleLayoutEditor()
 	func editorTitleTextFieldDidBecomeActive()
 	func editorTitleDidUpdate(title: String)
-	func editorTitleCreateRow(textRowStrings: TextRowStrings?)
+	func editorTitleMoveToTagInput()
 }
 
 class EditorTitleViewCell: UICollectionViewListCell {
