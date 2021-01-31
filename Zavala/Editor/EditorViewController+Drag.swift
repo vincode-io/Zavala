@@ -12,7 +12,7 @@ import Templeton
 extension EditorViewController: UICollectionViewDragDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-		guard indexPath.section == 1, let shadowTable = outline?.shadowTable else { return [] }
+		guard indexPath.section == Self.rowSection, let shadowTable = outline?.shadowTable else { return [] }
 		
 		var dragItems = [UIDragItem]()
 		
