@@ -40,8 +40,21 @@ class EditorTagInputTextField: SearchTextField {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		
-		textDropDelegate = Self.dropDelegate
-		delegate = self
+		self.textDropDelegate = Self.dropDelegate
+		self.delegate = self
+		
+		self.placeholder = L10n.tag
+		self.borderStyle = .none
+		self.autocorrectionType = .no
+		self.filterStrings(["Home", "Work", "Project", "Zavala"])
+		self.startVisible = true
+		self.interactedWith = true
+		self.tableXOffset = -8
+		self.tableYOffset = 3
+		
+		if traitCollection.userInterfaceStyle == .dark {
+			self.theme = .darkTheme()
+		}
 	}
 	
 	required init?(coder: NSCoder) {

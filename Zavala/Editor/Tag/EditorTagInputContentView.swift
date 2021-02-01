@@ -33,18 +33,7 @@ class EditorTagInputContentView: UIView, UIContentView {
 
 		view.addSubview(textField)
 		textField.translatesAutoresizingMaskIntoConstraints = false
-		textField.placeholder = L10n.tag
-		textField.borderStyle = .none
 		textField.editorDelegate = self
-		textField.filterStrings(["Home", "Work", "Project", "Zavala"])
-		textField.startVisible = true
-		textField.interactedWith = true
-		textField.tableXOffset = -8
-		textField.tableYOffset = 3
-		
-		if traitCollection.userInterfaceStyle == .dark {
-			textField.theme = .darkTheme()
-		}
 		
 		NSLayoutConstraint.activate([
 			view.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
