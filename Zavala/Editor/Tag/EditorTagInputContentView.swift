@@ -38,6 +38,7 @@ class EditorTagInputContentView: UIView, UIContentView {
 		textField.editorDelegate = self
 		textField.filterStrings(["Home", "Work", "Project", "Zavala"])
 		textField.startVisible = true
+		textField.tableYOffset = 3
 		
 		NSLayoutConstraint.activate([
 			view.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
