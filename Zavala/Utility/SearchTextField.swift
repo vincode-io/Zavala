@@ -130,7 +130,7 @@ open class SearchTextField: UITextField {
     // Move the table around to customize for your layout
     open var tableXOffset: CGFloat = 0.0
     open var tableYOffset: CGFloat = 0.0
-    open var tableCornerRadius: CGFloat = 2.0
+    open var tableCornerRadius: CGFloat = 5.0
     open var tableBottomMargin: CGFloat = 10.0
     
     ////////////////////////////////////////////////////////////////////////
@@ -160,6 +160,17 @@ open class SearchTextField: UITextField {
     }
     
     fileprivate var currentInlineItem = ""
+	
+	fileprivate var widestFilteredResult: CGFloat {
+		var widest: CGFloat = 0
+		for item in filteredResults {
+			let itemWidth = item.title.width(withConstrainedHeight: .greatestFiniteMagnitude, font: theme.font)
+			if itemWidth > widest {
+				widest = itemWidth
+			}
+		}
+		return widest
+	}
     
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -281,7 +292,10 @@ open class SearchTextField: UITextField {
             tableView.estimatedRowHeight = theme.cellHeight
             if self.direction == .down {
                 
-                var tableHeight: CGFloat = 0
+				let widest = widestFilteredResult + 20
+				let tableWidth = min((widest), (UIScreen.main.bounds.size.width - frame.origin.x - widest))
+
+				var tableHeight: CGFloat = 0
                 if keyboardIsShowing, let keyboardHeight = keyboardFrame?.size.height {
                     tableHeight = min((tableView.contentSize.height), (UIScreen.main.bounds.size.height - frame.origin.y - frame.height - keyboardHeight))
                 } else {
@@ -297,7 +311,7 @@ open class SearchTextField: UITextField {
                     tableHeight -= tableBottomMargin
                 }
                 
-                var tableViewFrame = CGRect(x: 0, y: 0, width: frame.size.width - 4, height: tableHeight)
+                var tableViewFrame = CGRect(x: 0, y: 0, width: tableWidth - 4, height: tableHeight)
                 tableViewFrame.origin = self.convert(tableViewFrame.origin, to: nil)
                 tableViewFrame.origin.x += 2 + tableXOffset
                 tableViewFrame.origin.y += frame.size.height + 2 + tableYOffset
@@ -306,7 +320,7 @@ open class SearchTextField: UITextField {
                     self?.tableView?.frame = tableViewFrame
                 })
                 
-                var shadowFrame = CGRect(x: 0, y: 0, width: frame.size.width - 6, height: 1)
+                var shadowFrame = CGRect(x: 0, y: 0, width: tableWidth - 6, height: 1)
                 shadowFrame.origin = self.convert(shadowFrame.origin, to: nil)
                 shadowFrame.origin.x += 3
                 shadowFrame.origin.y = tableView.frame.origin.y
@@ -452,11 +466,11 @@ open class SearchTextField: UITextField {
                     item.attributedTitle = NSMutableAttributedString(string: item.title)
                     item.attributedSubtitle = NSMutableAttributedString(string: (item.subtitle != nil ? item.subtitle! : ""))
                     
-                    item.attributedTitle!.setAttributes(highlightAttributes, range: titleFilterRange)
-                    
-                    if subtitleFilterRange.location != NSNotFound {
-                        item.attributedSubtitle!.setAttributes(highlightAttributesForSubtitle(), range: subtitleFilterRange)
-                    }
+//                    item.attributedTitle!.setAttributes(highlightAttributes, range: titleFilterRange)
+//                    
+//                    if subtitleFilterRange.location != NSNotFound {
+//                        item.attributedSubtitle!.setAttributes(highlightAttributesForSubtitle(), range: subtitleFilterRange)
+//                    }
                     
                     filteredResults.append(item)
                 }
@@ -633,11 +647,21 @@ public struct SearchTextFieldTheme {
     }
     
     public static func lightTheme() -> SearchTextFieldTheme {
-        return SearchTextFieldTheme(cellHeight: 30, bgColor: UIColor (red: 1, green: 1, blue: 1, alpha: 0.6), borderColor: UIColor (red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0), separatorColor: UIColor.clear, font: UIFont.systemFont(ofSize: 10), fontColor: UIColor.black)
+        return SearchTextFieldTheme(cellHeight: 30,
+									bgColor: UIColor (red: 1, green: 1, blue: 1, alpha: 0.9),
+									borderColor: UIColor (red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0),
+									separatorColor: UIColor.clear,
+									font: UIFont.systemFont(ofSize: 13),
+									fontColor: UIColor.black)
     }
     
     public static func darkTheme() -> SearchTextFieldTheme {
-        return SearchTextFieldTheme(cellHeight: 30, bgColor: UIColor (red: 0.8, green: 0.8, blue: 0.8, alpha: 0.6), borderColor: UIColor (red: 0.7, green: 0.7, blue: 0.7, alpha: 1.0), separatorColor: UIColor.clear, font: UIFont.systemFont(ofSize: 10), fontColor: UIColor.white)
+        return SearchTextFieldTheme(cellHeight: 30,
+									bgColor: UIColor (red: 0.1, green: 0.1, blue: 0.1, alpha: 0.9),
+									borderColor: UIColor (red: 0.7, green: 0.7, blue: 0.7, alpha: 1.0),
+									separatorColor: UIColor.clear,
+									font: UIFont.systemFont(ofSize: 13),
+									fontColor: UIColor.white)
     }
 }
 

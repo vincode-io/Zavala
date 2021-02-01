@@ -38,7 +38,12 @@ class EditorTagInputContentView: UIView, UIContentView {
 		textField.editorDelegate = self
 		textField.filterStrings(["Home", "Work", "Project", "Zavala"])
 		textField.startVisible = true
+		textField.tableXOffset = -8
 		textField.tableYOffset = 3
+		
+		if traitCollection.userInterfaceStyle == .dark {
+			textField.theme = .darkTheme()
+		}
 		
 		NSLayoutConstraint.activate([
 			view.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
