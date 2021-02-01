@@ -9,12 +9,13 @@ import UIKit
 
 protocol EditorTagInputTextFieldDelegate: class {
 	var editorTagInputTextFieldUndoManager: UndoManager? { get }
+	func invalidateLayout(_: EditorTagInputTextField)
 	func didBecomeActive(_ : EditorTagInputTextField)
 	func didBecomeInactive(_ : EditorTagInputTextField)
 	func createRow(_ : EditorTagInputTextField)
 }
 
-class EditorTagInputTextField: UITextField {
+class EditorTagInputTextField: SearchTextField {
 
 	#if targetEnvironment(macCatalyst)
 	@objc(_focusRingType)
@@ -57,6 +58,12 @@ class EditorTagInputTextField: UITextField {
 	override func resignFirstResponder() -> Bool {
 		editorDelegate?.didBecomeInactive(self)
 		return super.resignFirstResponder()
+	}
+	
+	override func textFieldDidChange() {
+		super.textFieldDidChange()
+		invalidateIntrinsicContentSize()
+		editorDelegate?.invalidateLayout(self)
 	}
 
 }
