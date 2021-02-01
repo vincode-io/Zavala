@@ -512,6 +512,9 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
 		self.outline?.verticleScrollState = firstVisibleShadowTableIndex
+		if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
+			tagInput.setNeedsLayout()
+		}
 	}
 	
 	func numberOfSections(in collectionView: UICollectionView) -> Int {
