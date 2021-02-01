@@ -530,7 +530,8 @@ open class SearchTextField: UITextField {
     // MARK: - Prepare for draw table result
     
     fileprivate func prepareDrawTableResult() {
-        guard let frame = self.superview?.convert(self.frame, to: UIApplication.shared.keyWindow) else { return }
+		guard let window = window else { return }
+        guard let frame = self.superview?.convert(self.frame, to: window) else { return }
         if let keyboardFrame = keyboardFrame {
             var newFrame = frame
             newFrame.size.height += theme.cellHeight
@@ -543,7 +544,7 @@ open class SearchTextField: UITextField {
             
             redrawSearchTableView()
         } else {
-            if self.center.y + theme.cellHeight > UIApplication.shared.keyWindow!.frame.size.height {
+            if self.center.y + theme.cellHeight > window.frame.size.height {
                 direction = .up
             } else {
                 direction = .down
