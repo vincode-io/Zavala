@@ -83,10 +83,6 @@ extension EditorTagInputContentView: EditorTagInputTextFieldDelegate {
 		appliedConfiguration.delegate?.editorTagInputTextFieldDidBecomeActive()
 	}
 	
-	func didBecomeInactive(_: EditorTagInputTextField) {
-		appliedConfiguration.delegate?.editorTagInputTextFieldDidBecomeInactive()
-	}
-	
 	func createRow(_: EditorTagInputTextField) {
 		appliedConfiguration.delegate?.editorTagInputTextFieldCreateRow()
 	}

@@ -11,7 +11,6 @@ protocol EditorTagInputTextFieldDelegate: class {
 	var editorTagInputTextFieldUndoManager: UndoManager? { get }
 	func invalidateLayout(_: EditorTagInputTextField)
 	func didBecomeActive(_ : EditorTagInputTextField)
-	func didBecomeInactive(_ : EditorTagInputTextField)
 	func createRow(_ : EditorTagInputTextField)
 	func createTag(_ : EditorTagInputTextField, name: String)
 }
@@ -79,12 +78,6 @@ class EditorTagInputTextField: SearchTextField {
 	override func becomeFirstResponder() -> Bool {
 		editorDelegate?.didBecomeActive(self)
 		return super.becomeFirstResponder()
-	}
-	
-	@discardableResult
-	override func resignFirstResponder() -> Bool {
-		editorDelegate?.didBecomeInactive(self)
-		return super.resignFirstResponder()
 	}
 	
 	override func textFieldDidChange() {

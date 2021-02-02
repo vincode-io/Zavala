@@ -628,10 +628,6 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 		collectionView.deselectAll()
 	}
 	
-	func editorTagInputTextFieldDidBecomeInactive() {
-		// TODO: Add save tag code here...
-	}
-	
 	func editorTagInputTextFieldCreateRow() {
 		createRow(afterRows: nil)
 	}
