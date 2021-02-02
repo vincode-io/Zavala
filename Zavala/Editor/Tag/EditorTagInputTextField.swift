@@ -65,6 +65,8 @@ class EditorTagInputTextField: SearchTextField {
 		
 		self.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in
 			guard let self = self else { return }
+			self.text = nil
+			self.invalidateIntrinsicContentSize()
 			let name = filteredResults[index].title
 			self.editorDelegate?.createTag(self, name: name)
 		}
@@ -98,6 +100,11 @@ class EditorTagInputTextField: SearchTextField {
 extension EditorTagInputTextField: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		if let name = text, !name.isEmpty {
+			text = nil
+			invalidateIntrinsicContentSize()
+			editorDelegate?.createTag(self, name: name)
+		}
 		editorDelegate?.createRow(self)
 		return false
 	}
