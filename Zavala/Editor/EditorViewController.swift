@@ -217,7 +217,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		collectionView.reloadData()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(shadowTableDidChange(_:)), name: .ShadowTableDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineElementsDidChange(_:)), name: .OutlineElementsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
 	}
 
@@ -301,7 +301,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		collectionView.reloadItems(at: [IndexPath(row: 0, section: Outline.Section.title.rawValue)])
 	}
 	
-	@objc func shadowTableDidChange(_ note: Notification) {
+	@objc func outlineElementsDidChange(_ note: Notification) {
 		if note.object as? Outline == outline {
 			guard let changes = note.userInfo?[OutlineElementChanges.userInfoKey] as? OutlineElementChanges else { return }
 			applyChangesRestoringState(changes)

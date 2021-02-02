@@ -8,7 +8,7 @@
 import Foundation
 
 public extension Notification.Name {
-	static let ShadowTableDidChange = Notification.Name(rawValue: "ShadowTableDidChange")
+	static let OutlineElementsDidChange = Notification.Name(rawValue: "OutlineElementsDidChange")
 }
 
 public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable, Codable {
@@ -366,7 +366,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		let reloads = impacted.compactMap { $0.shadowTableIndex }
 		let changes = OutlineElementChanges(reloads: Set(reloads))
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 		return (impacted, reloads.sorted().first)
 	}
 	
@@ -397,7 +397,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		let reloads = impacted.keys.compactMap { $0.shadowTableIndex }
 		let changes = OutlineElementChanges(reloads: Set(reloads))
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 		return (impacted, reloads.sorted().first)
 	}
 	
@@ -410,7 +410,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		let reloads = notes.keys.compactMap { $0.shadowTableIndex }
 		let changes = OutlineElementChanges(reloads: Set(reloads))
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 	}
 	
 	@discardableResult
@@ -459,7 +459,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let reloads = rows.compactMap { ($0.parent as? Row)?.shadowTableIndex }
 		
 		let changes = OutlineElementChanges(deletes: Set(deletes), reloads: Set(reloads))
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 		
 		if let firstDelete = deletes.first, firstDelete > 0 {
 			return firstDelete - 1
@@ -480,7 +480,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		deleteRows([bottomRow])
 		let changes = OutlineElementChanges(reloads: Set([topShadowTableIndex]))
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 	}
 	
 	func createRow(_ row: Row, beforeRow: Row, textRowStrings: TextRowStrings? = nil) -> Int? {
@@ -503,7 +503,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		shadowTable?.insert(row, at: shadowTableIndex)
 		resetShadowTableIndexes(startingAt: shadowTableIndex)
 		let changes = OutlineElementChanges(inserts: [shadowTableIndex])
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 		
 		return shadowTableIndex
 	}
@@ -613,7 +613,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		resetShadowTableIndexes(startingAt: afterRow?.shadowTableIndex ?? 0)
 		let changes = OutlineElementChanges(inserts: Set(inserts), reloads: Set(reloads))
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 		
 		return inserts.count > 0 ? inserts[0] : nil
 	}
@@ -633,7 +633,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		if let rowShadowTableIndex = textRow.shadowTableIndex {
 			let reloadChanges = OutlineElementChanges(reloads: Set([rowShadowTableIndex]))
-			shadowTableDidChange(reloadChanges)
+			outlineElementsDidChange(reloadChanges)
 		}
 
 		return newCursorIndex
@@ -649,7 +649,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		if applyChanges {
 			guard let shadowTableIndex = row.shadowTableIndex else { return }
 			let changes = OutlineElementChanges(reloads: [shadowTableIndex])
-			shadowTableDidChange(changes)
+			outlineElementsDidChange(changes)
 		}
 	}
 	
@@ -708,7 +708,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		let reloads = Set(impacted.compactMap { $0.shadowTableIndex })
 		changes.append(OutlineElementChanges(reloads: reloads))
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 		return impacted
 	}
 
@@ -758,7 +758,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let reloadIndexes = Set(reloads.compactMap { $0.shadowTableIndex })
 		changes.append(OutlineElementChanges(reloads: reloadIndexes))
 		
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 		return impacted
 	}
 
@@ -852,7 +852,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		let changes = OutlineElementChanges(reloads: reloads)
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 		return impacted
 	}
 	
@@ -899,7 +899,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var changes = rebuildShadowTable()
 		let reloads = reloadsForParentAndChildren(rows: impacted)
 		changes.append(OutlineElementChanges(reloads: reloads))
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 		
 		return impacted
 	}
@@ -960,7 +960,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var reloads = reloadsForParentAndChildren(rows: rowMoves.map { $0.row })
 		reloads.formUnion(oldParentReloads)
 		changes.append(OutlineElementChanges(reloads: reloads))
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 	}
 	
 	public func load() {
@@ -1052,10 +1052,10 @@ extension Outline {
 		rowsFile?.markAsDirty()
 	}
 	
-	private func shadowTableDidChange(_ changes: OutlineElementChanges) {
+	private func outlineElementsDidChange(_ changes: OutlineElementChanges) {
 		var userInfo = [AnyHashable: Any]()
 		userInfo[OutlineElementChanges.userInfoKey] = changes
-		NotificationCenter.default.post(name: .ShadowTableDidChange, object: self, userInfo: userInfo)
+		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
 	}
 
 	private func outlineDidDelete() {
@@ -1080,7 +1080,7 @@ extension Outline {
 		
 		if isFiltered ?? false {
 			let changes = rebuildShadowTable()
-			shadowTableDidChange(changes)
+			outlineElementsDidChange(changes)
 			if let firstComplete = changes.deletes?.sorted().first, firstComplete > 0 {
 				return (impacted, firstComplete - 1)
 			} else {
@@ -1110,7 +1110,7 @@ extension Outline {
 		}
 		
 		let changes = OutlineElementChanges(reloads: reloads)
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 		return (impacted, nil)
 	}
 
@@ -1166,7 +1166,7 @@ extension Outline {
 		let reloads = Set(rows.compactMap { $0.shadowTableIndex })
 		changes.append(OutlineElementChanges(reloads: reloads))
 		
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 		return impacted
 	}
 	
@@ -1207,7 +1207,7 @@ extension Outline {
 		
 		resetShadowTableIndexes(startingAt: rowShadowTableIndex)
 		let changes = OutlineElementChanges(inserts: inserts, reloads: [rowShadowTableIndex])
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 	}
 
 	private func isCollapseAllUnavailable(container: RowContainer) -> Bool {
@@ -1275,7 +1275,7 @@ extension Outline {
 		guard let rowShadowTableIndex = row.shadowTableIndex else { return }
 		resetShadowTableIndexes(startingAt: rowShadowTableIndex)
 		let changes = OutlineElementChanges(deletes: reloads, reloads: Set([rowShadowTableIndex]))
-		shadowTableDidChange(changes)
+		outlineElementsDidChange(changes)
 	}
 	
 	func rebuildRowDictionary() {
