@@ -197,7 +197,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		rowsFile = RowsFile(outline: self)
 	}
 
-	public func addTag(_ tag: Tag) {
+	public func createTag(_ tag: Tag) {
 		if tagIDs == nil {
 			tagIDs = [String]()
 		}

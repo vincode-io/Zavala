@@ -41,7 +41,7 @@ public final class DeleteTagCommand: OutlineCommand {
 	public func undo() {
 		guard let tag = tag else { return }
 		outline.account?.createTag(tag)
-		outline.addTag(tag)
+		outline.createTag(tag)
 		registerRedo()
 	}
 	

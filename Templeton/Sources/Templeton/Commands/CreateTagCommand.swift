@@ -33,7 +33,7 @@ public final class CreateTagCommand: OutlineCommand {
 	public func perform() {
 		guard let tag = outline.account?.createTag(name: tagName) else { return }
 		self.tag = tag
-		outline.addTag(tag)
+		outline.createTag(tag)
 		registerUndo()
 	}
 	

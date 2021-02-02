@@ -100,10 +100,10 @@ public enum Document: Equatable, Codable {
 		}
 	}
 
-	public func addTag(_ tag: Tag) {
+	public func createTag(_ tag: Tag) {
 		switch self {
 		case .outline(let outline):
-			outline.addTag(tag)
+			outline.createTag(tag)
 		}
 	}
 	
