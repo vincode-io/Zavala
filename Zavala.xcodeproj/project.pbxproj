@@ -49,7 +49,6 @@
 		51B4EBC7257C3CD100378CAB /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 51B4EBC6257C3CD100378CAB /* ZipArchive */; };
 		51B5861C256B245300ACF99B /* SWXMLHash in Frameworks */ = {isa = PBXBuildFile; productRef = 51B5861B256B245300ACF99B /* SWXMLHash */; };
 		51B9D51725A9080A00579D19 /* EditorViewDisclosureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D51625A9080A00579D19 /* EditorViewDisclosureButton.swift */; };
-		51C0309B257E04A200609262 /* ShadowTableChanges+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C0309A257E04A200609262 /* ShadowTableChanges+.swift */; };
 		51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */; };
 		51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A5257E084E00609262 /* EditorTitleContentView.swift */; };
 		51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */; };
@@ -187,7 +186,6 @@
 		51B2B2D12563AB190090C56B /* EditorTextRowContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowContentView.swift; sourceTree = "<group>"; };
 		51B2B2D52563AB9F0090C56B /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		51B9D51625A9080A00579D19 /* EditorViewDisclosureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewDisclosureButton.swift; sourceTree = "<group>"; };
-		51C0309A257E04A200609262 /* ShadowTableChanges+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShadowTableChanges+.swift"; sourceTree = "<group>"; };
 		51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentConfiguration.swift; sourceTree = "<group>"; };
 		51C030A5257E084E00609262 /* EditorTitleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentView.swift; sourceTree = "<group>"; };
 		51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReloadItemsOperation.swift; sourceTree = "<group>"; };
@@ -280,7 +278,6 @@
 				51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */,
 				5163ADF125C78CFB008F25CA /* SearchTextField.swift */,
 				51DFDC17259EA8D300C068C6 /* Selector+.swift */,
-				51C0309A257E04A200609262 /* ShadowTableChanges+.swift */,
 				51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */,
 				5163ADF425C79B69008F25CA /* String+.swift */,
 				5169928925AE4F5C00760C9D /* UICollectionView+.swift */,
@@ -708,7 +705,6 @@
 				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
 				519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */,
 				51B2B2CE2563AAF60090C56B /* EditorTextRowContentConfiguration.swift in Sources */,
-				51C0309B257E04A200609262 /* ShadowTableChanges+.swift in Sources */,
 				51C030BE257E1B9400609262 /* OutlineTextView.swift in Sources */,
 				514F221B25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift in Sources */,
 				51C4C442255A0DE1004E0206 /* TimelineViewController.swift in Sources */,

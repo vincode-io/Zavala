@@ -17,7 +17,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-		guard !(destinationIndexPath?.section == Self.titleSection || destinationIndexPath?.section == Self.tagSection) else {
+		guard !(destinationIndexPath?.section == Outline.Section.title.rawValue || destinationIndexPath?.section == Outline.Section.tags.rawValue) else {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
 		
@@ -140,7 +140,7 @@ extension EditorViewController {
 		}
 		
 		// Drop into the first entry in the Outline
-		if targetIndexPath == IndexPath(row: 0, section: Self.rowSection) {
+		if targetIndexPath == IndexPath(row: 0, section: Outline.Section.rows.rawValue) {
 			localRowDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: 0)
 			return
 		}
@@ -270,7 +270,7 @@ extension EditorViewController {
 		}
 		
 		// Drop into the first entry in the Outline
-		if targetIndexPath == IndexPath(row: 0, section: Self.rowSection) {
+		if targetIndexPath == IndexPath(row: 0, section: Outline.Section.rows.rawValue) {
 			self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
 			return
 		}
