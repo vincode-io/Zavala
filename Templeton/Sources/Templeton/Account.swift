@@ -43,8 +43,6 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	public var type: AccountType
 	public var isActive: Bool
-	public var tags: [Tag]?
-	public var documents: [Document]?
 	
 	public var documentContainers: [DocumentContainer] {
 		var containers = [DocumentContainer]()
@@ -59,7 +57,10 @@ public final class Account: NSObject, Identifiable, Codable {
 		case documents = "documents"
 	}
 	
+	var tags: [Tag]?
+	var documents: [Document]?
 	var folder: URL?
+	
 	private let operationQueue = OperationQueue()
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Account")
 
@@ -199,16 +200,26 @@ public final class Account: NSObject, Identifiable, Codable {
 		return idToDocumentsDictionary[documentUUID]
 	}
 	
-	public func createTag(name: String) -> Tag {
+	@discardableResult
+	func createTag(name: String) -> Tag {
 		if let tag = tags?.first(where: { $0.name == name }) {
 			return tag
 		}
 		
 		let tag = Tag(name: name)
+		return createTag(tag)
+	}
+	
+	@discardableResult
+	func createTag(_ tag: Tag) -> Tag {
+		if let tag = tags?.first(where: { $0 == tag }) {
+			return tag
+		}
 
 		if tags == nil {
 			tags = [Tag]()
 		}
+		
 		tags?.append(tag)
 		tags?.sort(by: { $0.name < $1.name })
 		accountTagsDidChange()
@@ -216,7 +227,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		return tag
 	}
 	
-	public func deleteTag(_ tag: Tag) {
+	func deleteTag(_ tag: Tag) {
 		for doc in documents ?? [Document]() {
 			if doc.hasTag(tag) {
 				return
@@ -227,7 +238,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		accountTagsDidChange()
 	}
 	
-	public func findTag(tagID: String) -> Tag? {
+	func findTag(tagID: String) -> Tag? {
 		return idToTagsDictionary[tagID]
 	}
 	

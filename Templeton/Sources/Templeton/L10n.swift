@@ -26,6 +26,8 @@ internal enum L10n {
   internal static let addNote = L10n.tr("Localizable", "Add_Note")
   /// Add Row
   internal static let addRow = L10n.tr("Localizable", "Add_Row")
+  /// Add Tag
+  internal static let addTag = L10n.tr("Localizable", "Add_Tag")
   /// All
   internal static let all = L10n.tr("Localizable", "All")
   /// This doesn't appear to be a Zavala archive.  We're unable to restore from this file.
@@ -46,6 +48,8 @@ internal enum L10n {
   internal static let deleteNote = L10n.tr("Localizable", "Delete_Note")
   /// Delete Row
   internal static let deleteRow = L10n.tr("Localizable", "Delete_Row")
+  /// Delete Tag
+  internal static let deleteTag = L10n.tr("Localizable", "Delete_Tag")
   /// Expand
   internal static let expand = L10n.tr("Localizable", "Expand")
   /// Expand All
