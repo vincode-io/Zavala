@@ -203,11 +203,19 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		tagIDs!.append(tag.id)
 		documentMetaDataDidChange()
+
+		let inserted = tagIDs!.count - 1
+		let changes = OutlineElementChanges(section: .tags, inserts: Set([inserted]))
+		outlineElementsDidChange(changes)
 	}
 	
 	public func removeTag(_ tag: Tag) {
-		tagIDs?.removeFirst(object: tag.id)
+		guard let index = tagIDs?.firstIndex(where: { $0 == tag.id }) else { return }
+		tagIDs?.remove(at: index)
 		documentMetaDataDidChange()
+
+		let changes = OutlineElementChanges(section: .tags, deletes: Set([index]))
+		outlineElementsDidChange(changes)
 	}
 	
 	public func hasTag(_ tag: Tag) -> Bool {
