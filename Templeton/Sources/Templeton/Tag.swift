@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class Tag: Identifiable, Codable {
+public class Tag: Identifiable, Codable, Equatable {
 	
 	public var id: String
 	public var name: String
@@ -20,6 +20,10 @@ public class Tag: Identifiable, Codable {
 	public init(name: String) {
 		self.id = UUID().uuidString
 		self.name = name
+	}
+	
+	public static func == (lhs: Tag, rhs: Tag) -> Bool {
+		return lhs.id == rhs.id
 	}
 	
 }

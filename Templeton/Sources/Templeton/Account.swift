@@ -200,6 +200,10 @@ public final class Account: NSObject, Identifiable, Codable {
 	}
 	
 	public func createTag(name: String) -> Tag {
+		if let tag = tags?.first(where: { $0.name == name }) {
+			return tag
+		}
+		
 		let tag = Tag(name: name)
 
 		if tags == nil {
@@ -210,6 +214,17 @@ public final class Account: NSObject, Identifiable, Codable {
 		accountTagsDidChange()
 		
 		return tag
+	}
+	
+	public func deleteTag(_ tag: Tag) {
+		for doc in documents ?? [Document]() {
+			if doc.hasTag(tag) {
+				return
+			}
+		}
+		
+		tags?.removeFirst(object: tag)
+		accountTagsDidChange()
 	}
 	
 	public func findTag(tagID: String) -> Tag? {

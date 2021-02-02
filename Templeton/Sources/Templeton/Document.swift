@@ -96,49 +96,56 @@ public enum Document: Equatable, Codable {
 	public func reassignID(_ entityID: EntityID) {
 		switch self {
 		case .outline(let outline):
-			return outline.id = entityID
+			outline.id = entityID
 		}
 	}
 
 	public func addTag(_ tag: Tag) {
 		switch self {
 		case .outline(let outline):
-			return outline.addTag(tag)
+			outline.addTag(tag)
 		}
 	}
 	
 	public func removeTag(_ tag: Tag) {
 		switch self {
 		case .outline(let outline):
-			return outline.removeTag(tag)
+			outline.removeTag(tag)
+		}
+	}
+	
+	public func hasTag(_ tag: Tag) -> Bool {
+		switch self {
+		case .outline(let outline):
+			return outline.hasTag(tag)
 		}
 	}
 	
 	public func load() {
 		switch self {
 		case .outline(let outline):
-			return outline.load()
+			outline.load()
 		}
 	}
 
 	public func save() {
 		switch self {
 		case .outline(let outline):
-			return outline.save()
+			outline.save()
 		}
 	}
 
 	public func forceSave() {
 		switch self {
 		case .outline(let outline):
-			return outline.forceSave()
+			outline.forceSave()
 		}
 	}
 
 	public func delete() {
 		switch self {
 		case .outline(let outline):
-			return outline.delete()
+			outline.delete()
 		}
 	}
 	

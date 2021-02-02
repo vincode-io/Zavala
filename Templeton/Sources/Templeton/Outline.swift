@@ -204,6 +204,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		documentMetaDataDidChange()
 	}
 	
+	public func hasTag(_ tag: Tag) -> Bool {
+		guard let tagIDs = tagIDs else { return false }
+		return tagIDs.contains(tag.id)
+	}
+	
 	public func fileName(withSuffix suffix: String) -> String {
 		var filename = title ?? "Outline"
 		filename = filename.replacingOccurrences(of: " ", with: "").trimmingCharacters(in: .whitespaces)
