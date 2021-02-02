@@ -91,4 +91,8 @@ extension EditorTagInputContentView: EditorTagInputTextFieldDelegate {
 		appliedConfiguration.delegate?.editorTagInputTextFieldCreateRow()
 	}
 	
+	func createTag(_: EditorTagInputTextField, name: String) {
+		appliedConfiguration.delegate?.editorTagInputTextFieldCreateTag(name: name)
+	}
+	
 }

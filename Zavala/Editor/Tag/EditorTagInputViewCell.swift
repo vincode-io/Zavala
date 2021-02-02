@@ -14,6 +14,7 @@ protocol EditorTagInputViewCellDelegate: class {
 	func editorTagInputTextFieldDidBecomeActive()
 	func editorTagInputTextFieldDidBecomeInactive()
 	func editorTagInputTextFieldCreateRow()
+	func editorTagInputTextFieldCreateTag(name: String)
 }
 
 class EditorTagInputViewCell: UICollectionViewCell {

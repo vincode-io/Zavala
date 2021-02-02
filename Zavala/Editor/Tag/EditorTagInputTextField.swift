@@ -13,6 +13,7 @@ protocol EditorTagInputTextFieldDelegate: class {
 	func didBecomeActive(_ : EditorTagInputTextField)
 	func didBecomeInactive(_ : EditorTagInputTextField)
 	func createRow(_ : EditorTagInputTextField)
+	func createTag(_ : EditorTagInputTextField, name: String)
 }
 
 class EditorTagInputTextField: SearchTextField {
@@ -32,6 +33,13 @@ class EditorTagInputTextField: SearchTextField {
 			stackedUndoManager = StackedUndoManger(mainUndoManager: textViewUndoManager, fallBackUndoManager: controllerUndoManager)
 		}
 		return stackedUndoManager
+	}
+	
+	override var keyCommands: [UIKeyCommand]? {
+		let keys = [
+			UIKeyCommand(action: #selector(createTag(_:)), input: "\t")
+		]
+		return keys
 	}
 	
 	private var stackedUndoManager: UndoManager?
@@ -54,6 +62,12 @@ class EditorTagInputTextField: SearchTextField {
 		
 		if traitCollection.userInterfaceStyle == .dark {
 			self.theme = .darkTheme()
+		}
+		
+		self.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in
+			guard let self = self else { return }
+			let name = filteredResults[index].title
+			self.editorDelegate?.createTag(self, name: name)
 		}
 	}
 	
@@ -79,6 +93,13 @@ class EditorTagInputTextField: SearchTextField {
 		editorDelegate?.invalidateLayout(self)
 	}
 
+	@objc func createTag(_ sender: Any) {
+		guard let name = text, !name.isEmpty else { return }
+		text = nil
+		invalidateIntrinsicContentSize()
+		editorDelegate?.createTag(self, name: name)
+	}
+	
 }
 
 extension EditorTagInputTextField: UITextFieldDelegate {

@@ -636,6 +636,10 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 		createRow(afterRows: nil)
 	}
 	
+	func editorTagInputTextFieldCreateTag(name: String) {
+		createTag(name: name)
+	}
+	
 }
 
 extension EditorViewController: EditorTextRowViewCellDelegate {
