@@ -1174,11 +1174,16 @@ extension EditorViewController {
 									   tagName: name)
 		
 		runCommand(command)
-		reloadTags()
+
+		let row = outline.tags.count - 1
+		let indexPath = IndexPath(row: row, section: Self.tagSection)
+		collectionView.insertItems(at: [indexPath])
 	}
 
 	private func removeTag(name: String) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager = undoManager,
+			  let outline = outline,
+			  let row = outline.tags.firstIndex(where: { $0.name == name }) else { return }
 		
 		let command = DeleteTagCommand(undoManager: undoManager,
 									   delegate: self,
@@ -1186,14 +1191,11 @@ extension EditorViewController {
 									   tagName: name)
 		
 		runCommand(command)
-		reloadTags()
+		
+		let indexPath = IndexPath(row: row, section: Self.tagSection)
+		collectionView.deleteItems(at: [indexPath])
 	}
 	
-	private func reloadTags() {
-		let indexPath = IndexPath(row: 0, section: Self.tagSection)
-		collectionView.reloadItems(at: [indexPath])
-	}
-
 	private func expand(rows: [Row]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
