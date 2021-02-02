@@ -238,6 +238,10 @@ public final class Account: NSObject, Identifiable, Codable {
 		accountTagsDidChange()
 	}
 	
+	func findTag(name: String) -> Tag? {
+		return tags?.first(where: { $0.name == name })
+	}
+	
 	func findTag(tagID: String) -> Tag? {
 		return idToTagsDictionary[tagID]
 	}

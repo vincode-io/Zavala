@@ -1165,6 +1165,35 @@ extension EditorViewController {
 		}
 	}
 
+	private func createTag(name: String) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = CreateTagCommand(undoManager: undoManager,
+									   delegate: self,
+									   outline: outline,
+									   tagName: name)
+		
+		runCommand(command)
+		reloadTags()
+	}
+
+	private func removeTag(name: String) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = DeleteTagCommand(undoManager: undoManager,
+									   delegate: self,
+									   outline: outline,
+									   tagName: name)
+		
+		runCommand(command)
+		reloadTags()
+	}
+	
+	private func reloadTags() {
+		let indexPath = IndexPath(row: 0, section: Self.tagSection)
+		collectionView.reloadItems(at: [indexPath])
+	}
+
 	private func expand(rows: [Row]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
