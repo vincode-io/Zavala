@@ -91,8 +91,6 @@ extension ActivityManager {
 		activity.userInfo = [UserInfoKeys.documentContainerID: documentContainer.id.userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 	
-		let keywords = makeKeywords(title)
-		activity.keywords = Set(keywords)
 		activity.isEligibleForSearch = true
 		activity.isEligibleForPrediction = true
 
@@ -101,7 +99,6 @@ extension ActivityManager {
 
 		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeCompositeContent as String)
 		attributeSet.title = title
-		attributeSet.keywords = keywords
 		attributeSet.relatedUniqueIdentifier = idString
 		activity.contentAttributeSet = attributeSet
 		
@@ -117,8 +114,9 @@ extension ActivityManager {
 		activity.userInfo = [UserInfoKeys.documentContainerID: documentContainer.id.userInfo, UserInfoKeys.documentID: document.id.userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 		
-		let keywords = makeKeywords(document.title ?? "")
-		activity.keywords = Set(keywords)
+		if let keywords = document.tags?.map({ $0.name }) {
+			activity.keywords = Set(keywords)
+		}
 		activity.isEligibleForSearch = true
 		activity.isEligibleForPrediction = true
 		
@@ -134,15 +132,13 @@ extension ActivityManager {
 	private func makeSearchableItemAttributes(forDocument document: Document) -> CSSearchableItemAttributeSet {
 		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
 		attributeSet.title = document.title ?? ""
-		attributeSet.keywords = makeKeywords(document.title ?? "")
+		if let keywords = document.tags?.map({ $0.name }) {
+			attributeSet.keywords = keywords
+		}
 		attributeSet.relatedUniqueIdentifier = document.id.description
 		attributeSet.textContent = document.content
 		attributeSet.contentModificationDate = document.updated
 		return attributeSet
-	}
-	
-	private func makeKeywords(_ value: String?) -> [String] {
-		return value?.components(separatedBy: " ").filter { $0.count > 2 } ?? []
 	}
 	
 }

@@ -56,6 +56,13 @@ public enum Document: Equatable, Codable {
 		}
 	}
 	
+	public var tags: [Tag]? {
+		switch self {
+		case .outline(let outline):
+			return outline.tags
+		}
+	}
+	
 	public var updated: Date? {
 		switch self {
 		case .outline(let outline):
