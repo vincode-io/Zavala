@@ -305,17 +305,24 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			opml.append("  <dateModified>\(dateModified)</dateModified>\n")
 		}
 		if let ownerName = ownerName {
-			opml.append("  <ownerName>\(ownerName)</ownerName>\n")
+			opml.append("  <ownerName>\(ownerName.escapingSpecialXMLCharacters)</ownerName>\n")
 		}
 		if let ownerEmail = ownerEmail {
-			opml.append("  <ownerEmail>\(ownerEmail)</ownerEmail>\n")
+			opml.append("  <ownerEmail>\(ownerEmail.escapingSpecialXMLCharacters)</ownerEmail>\n")
 		}
 		if let ownerURL = ownerURL {
-			opml.append("  <ownerID>\(ownerURL)</ownerID>\n")
+			opml.append("  <ownerID>\(ownerURL.escapingSpecialXMLCharacters)</ownerID>\n")
 		}
 		opml.append("  <expansionState>\(expansionState)</expansionState>\n")
 		if let verticleScrollState = verticleScrollState {
 			opml.append("  <vertScrollState>\(verticleScrollState)</vertScrollState>\n")
+		}
+		if !(tagIDs?.isEmpty ?? true) {
+			opml.append("  <tags>\n")
+			for tag in tags {
+				opml.append("    <tag>\(tag.name.escapingSpecialXMLCharacters)</tag>\n")
+			}
+			opml.append("  </tags>\n")
 		}
 		opml.append("</head>\n")
 		opml.append("<body>\n")
