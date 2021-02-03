@@ -170,11 +170,16 @@ public final class Account: NSObject, Identifiable, Codable {
 		return .outline(outline)
 	}
 	
-	public func createOutline(title: String? = nil) -> Document {
+	public func createOutline(title: String? = nil, tag: Tag? = nil) -> Document {
 		let outline = Outline(parentID: id, title: title)
+		if let tag = tag {
+			outline.createTag(tag)
+		}
+		
 		if documents == nil {
 			documents = [Document]()
 		}
+		
 		documents!.append(.outline(outline))
 		accountDocumentsDidChange()
 		return .outline(outline)

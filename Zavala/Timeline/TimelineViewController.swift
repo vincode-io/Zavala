@@ -117,7 +117,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	
 	@objc func createOutline(_ sender: Any?) {
 		guard let account = documentContainer?.account else { return }
-		let outline = account.createOutline()
+		let outline = account.createOutline(tag: (documentContainer as? TagDocuments)?.tag)
 		selectDocument(outline, isNew: true, animated: true)
 	}
 
