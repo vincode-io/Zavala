@@ -97,7 +97,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: isNew, animated: animated)
 	}
 	
-	func deleteCurrentOutline() {
+	func deleteCurrentDocument() {
 		guard let document = currentDocument else { return }
 		deleteDocument(document)
 	}

@@ -214,7 +214,7 @@ class MainSplitViewController: UISplitViewController {
 		}
 		
 		guard timelineViewController?.isDeleteCurrentOutlineUnavailable ?? true else {
-			timelineViewController?.deleteCurrentOutline()
+			timelineViewController?.deleteCurrentDocument()
 			return
 		}
 	}
