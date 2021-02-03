@@ -471,7 +471,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				if let rowCell = collectionView.cellForItem(at: IndexPath(row: 0, section: Outline.Section.rows.rawValue)) as? EditorTextRowViewCell {
 					rowCell.moveToEnd()
 				}
-			} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting, outline?.shadowTable?.count ?? 0 > 0 {
+			} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting {
 				moveCursorToTagInput()
 			}
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
