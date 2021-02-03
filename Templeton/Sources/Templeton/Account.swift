@@ -158,6 +158,14 @@ public final class Account: NSObject, Identifiable, Codable {
 		if let verticleScrollState = headIndexer["vertScrollState"].element?.text {
 			outline.verticleScrollState = Int(verticleScrollState)
 		}
+		
+		let tagIndexers = headIndexer["tags"]["tag"].all
+		for tagIndexer in tagIndexers {
+			if let tagName = tagIndexer.element?.text {
+				let tag = createTag(name: tagName)
+				outline.createTag(tag)
+			}
+		}
 
 		outline.importRows(outlineIndexers)
 
@@ -165,7 +173,7 @@ public final class Account: NSObject, Identifiable, Codable {
 			outline.expansionState = expansionState
 		}
 		
-		if let tag = tag {
+		if let tag = tag, !outline.hasTag(tag) {
 			outline.createTag(tag)
 		}
 
