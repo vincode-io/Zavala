@@ -10,6 +10,7 @@ import Templeton
 
 protocol EditorTagInputViewCellDelegate: class {
 	var editorTagInputUndoManager: UndoManager? { get }
+	var editorTagInputTags: [Tag]? { get }
 	func editorTagInputLayoutEditor()
 	func editorTagInputTextFieldDidBecomeActive()
 	func editorTagInputTextFieldCreateRow()

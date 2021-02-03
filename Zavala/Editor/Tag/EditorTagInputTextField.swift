@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import Templeton
 
 protocol EditorTagInputTextFieldDelegate: class {
 	var editorTagInputTextFieldUndoManager: UndoManager? { get }
+	var editorTagInputTextFieldTags: [Tag]? { get }
 	func invalidateLayout(_: EditorTagInputTextField)
 	func didBecomeActive(_ : EditorTagInputTextField)
 	func createRow(_ : EditorTagInputTextField)
@@ -53,10 +55,9 @@ class EditorTagInputTextField: SearchTextField {
 		self.placeholder = L10n.tag
 		self.borderStyle = .none
 		self.autocorrectionType = .no
-		self.filterStrings(["Home", "Work", "Project", "Zavala"])
 		self.tableXOffset = -8
 		self.tableYOffset = 3
-		
+
 		if traitCollection.userInterfaceStyle == .dark {
 			self.theme = .darkTheme()
 		}
@@ -77,6 +78,7 @@ class EditorTagInputTextField: SearchTextField {
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
 		editorDelegate?.didBecomeActive(self)
+		resetFilterStrings()
 		return super.becomeFirstResponder()
 	}
 	
@@ -91,6 +93,7 @@ class EditorTagInputTextField: SearchTextField {
 		text = nil
 		invalidateIntrinsicContentSize()
 		editorDelegate?.createTag(self, name: name)
+		resetFilterStrings()
 	}
 	
 }
@@ -102,9 +105,21 @@ extension EditorTagInputTextField: UITextFieldDelegate {
 			text = nil
 			invalidateIntrinsicContentSize()
 			editorDelegate?.createTag(self, name: name)
+			resetFilterStrings()
 		}
 		editorDelegate?.createRow(self)
 		return false
+	}
+	
+}
+
+// MARK: Helpers
+
+extension EditorTagInputTextField {
+	
+	private func resetFilterStrings() {
+		let filterStrings = editorDelegate?.editorTagInputTextFieldTags?.compactMap({ $0.name }) ?? [String]()
+		self.filterStrings(filterStrings)
 	}
 	
 }

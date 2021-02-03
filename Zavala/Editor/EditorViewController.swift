@@ -620,6 +620,11 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 		return undoManager
 	}
 	
+	var editorTagInputTags: [Tag]? {
+		guard let outlineTags = outline?.tags else { return nil }
+		return outline?.account?.tags?.filter({ !outlineTags.contains($0) })
+	}
+	
 	func editorTagInputLayoutEditor() {
 		layoutEditor()
 	}

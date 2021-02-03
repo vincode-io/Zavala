@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Templeton
 
 class EditorTagInputContentView: UIView, UIContentView {
 
@@ -73,6 +74,10 @@ extension EditorTagInputContentView: EditorTagInputTextFieldDelegate {
 
 	var editorTagInputTextFieldUndoManager: UndoManager? {
 		return appliedConfiguration.delegate?.editorTagInputUndoManager
+	}
+	
+	var editorTagInputTextFieldTags: [Tag]? {
+		return appliedConfiguration.delegate?.editorTagInputTags
 	}
 	
 	func invalidateLayout(_: EditorTagInputTextField) {

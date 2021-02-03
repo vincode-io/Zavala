@@ -44,6 +44,8 @@ public final class Account: NSObject, Identifiable, Codable {
 	public var type: AccountType
 	public var isActive: Bool
 	
+	public var tags: [Tag]?
+	
 	public var documentContainers: [DocumentContainer] {
 		var containers = [DocumentContainer]()
 		containers.append(AllDocuments(account: self))
@@ -57,7 +59,6 @@ public final class Account: NSObject, Identifiable, Codable {
 		case documents = "documents"
 	}
 	
-	var tags: [Tag]?
 	var documents: [Document]?
 	var folder: URL?
 	
