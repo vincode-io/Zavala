@@ -11,6 +11,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 	case account(Int)
 	case document(Int, String) // Account, Document
 	case allDocuments(Int) // Account
+	case recentDocuments(Int) // Account
 	case tagDocuments(Int, String) // Tag
 	case search(String) // Search String
 
@@ -21,6 +22,8 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case .document(let accountID, _):
 			return accountID
 		case .allDocuments(let accountID):
+			return accountID
+		case .recentDocuments(let accountID):
 			return accountID
 		case .tagDocuments(let accountID, _):
 			return accountID
@@ -39,6 +42,8 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return "search:\(searchText)"
 		case .allDocuments(let id):
 			return "allDocuments:\(id)"
+		case .recentDocuments(let id):
+			return "recentDocuments:\(id)"
 		case .tagDocuments(let accountID, let tagID):
 			return "tagDocuments:\(accountID)_\(tagID)"
 		}
@@ -98,13 +103,19 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			self = .search(String(searchText))
 			return
 		} else if description.starts(with: "allDocuments:") {
-			let idString = description.suffix(from: description.index(description.startIndex, offsetBy: 18))
+			let idString = description.suffix(from: description.index(description.startIndex, offsetBy: 13))
 			if let accountID = Int(idString) {
 				self = .allDocuments(accountID)
 				return
 			}
+		} else if description.starts(with: "recentDocuments:") {
+			let idString = description.suffix(from: description.index(description.startIndex, offsetBy: 16))
+			if let accountID = Int(idString) {
+				self = .recentDocuments(accountID)
+				return
+			}
 		} else if description.starts(with: "tagDocuments:") {
-			let idString = description.suffix(from: description.index(description.startIndex, offsetBy: 18))
+			let idString = description.suffix(from: description.index(description.startIndex, offsetBy: 13))
 			let ids = idString.split(separator: "_")
 			if let accountID = Int(ids[0]) {
 				self = .tagDocuments(accountID, String(ids[1]))
@@ -132,6 +143,9 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case "allDocuments":
 			let accountID = try container.decode(Int.self, forKey: .accountID)
 			self = .allDocuments(accountID)
+		case "recentDocuments":
+			let accountID = try container.decode(Int.self, forKey: .accountID)
+			self = .recentDocuments(accountID)
 		case "tagDocuments":
 			let accountID = try container.decode(Int.self, forKey: .accountID)
 			let tagID = try container.decode(String.self, forKey: .tagID)
@@ -158,6 +172,9 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case "allDocuments":
 			guard let accountID = userInfo["accountID"] as? Int else { return nil }
 			self = .allDocuments(accountID)
+		case "recentDocuments":
+			guard let accountID = userInfo["accountID"] as? Int else { return nil }
+			self = .recentDocuments(accountID)
 		case "tagDocuments":
 			guard let accountID = userInfo["accountID"] as? Int else { return nil }
 			guard let tagID = userInfo["tagID"] as? String else { return nil }
@@ -183,6 +200,9 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			try container.encode(searchText, forKey: .searchText)
 		case .allDocuments(let accountID):
 			try container.encode("allDocuments", forKey: .type)
+			try container.encode(accountID, forKey: .accountID)
+		case .recentDocuments(let accountID):
+			try container.encode("recentDocuments", forKey: .type)
 			try container.encode(accountID, forKey: .accountID)
 		case .tagDocuments(let accountID, let tagID):
 			try container.encode("tagDocuments", forKey: .type)
@@ -212,6 +232,11 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case .allDocuments(let accountID):
 			return [
 				"type": "allDocuments",
+				"accountID": accountID
+			]
+		case .recentDocuments(let accountID):
+			return [
+				"type": "recentDocuments",
 				"accountID": accountID
 			]
 		case .tagDocuments(let accountID, let tagID):

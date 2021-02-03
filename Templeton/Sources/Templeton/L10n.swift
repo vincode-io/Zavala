@@ -64,6 +64,8 @@ internal enum L10n {
   internal static let outdent = L10n.tr("Localizable", "Outdent")
   /// Paste
   internal static let paste = L10n.tr("Localizable", "Paste")
+  /// Recent
+  internal static let recent = L10n.tr("Localizable", "Recent")
   /// Search
   internal static let search = L10n.tr("Localizable", "Search")
   /// Split Row

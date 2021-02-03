@@ -202,7 +202,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			tagIDs = [String]()
 		}
 		tagIDs!.append(tag.id)
-		documentMetaDataDidChange()
+		self.updated = Date()
 
 		let inserted = tagIDs!.count - 1
 		let changes = OutlineElementChanges(section: .tags, inserts: Set([inserted]))
@@ -212,7 +212,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	public func deleteTag(_ tag: Tag) {
 		guard let index = tagIDs?.firstIndex(where: { $0 == tag.id }) else { return }
 		tagIDs?.remove(at: index)
-		documentMetaDataDidChange()
+		self.updated = Date()
 
 		let changes = OutlineElementChanges(section: .tags, deletes: Set([index]))
 		outlineElementsDidChange(changes)
