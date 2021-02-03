@@ -49,6 +49,13 @@ public final class Account: NSObject, Identifiable, Codable {
 	public var documentContainers: [DocumentContainer] {
 		var containers = [DocumentContainer]()
 		containers.append(AllDocuments(account: self))
+		
+		for tagDocuments in tags?
+			.sorted(by: { $0.name < $1.name })
+			.compactMap({ TagDocuments(account: self, tag: $0) }) ?? [TagDocuments]() {
+			containers.append(tagDocuments)
+		}
+		
 		return containers
 	}
 	
@@ -192,6 +199,9 @@ public final class Account: NSObject, Identifiable, Codable {
 		switch entityID {
 		case .allDocuments:
 			return AllDocuments(account: self)
+		case .tagDocuments(_, let tagID):
+			guard let tag = findTag(tagID: tagID) else { return nil }
+			return TagDocuments(account: self, tag: tag)
 		default:
 			fatalError()
 		}

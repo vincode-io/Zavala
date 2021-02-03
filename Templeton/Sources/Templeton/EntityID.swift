@@ -11,6 +11,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 	case account(Int)
 	case document(Int, String) // Account, Document
 	case allDocuments(Int) // Account
+	case tagDocuments(Int, String) // Tag
 	case search(String) // Search String
 
 	public var accountID: Int {
@@ -20,6 +21,8 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case .document(let accountID, _):
 			return accountID
 		case .allDocuments(let accountID):
+			return accountID
+		case .tagDocuments(let accountID, _):
 			return accountID
 		default:
 			fatalError()
@@ -36,6 +39,8 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return "search:\(searchText)"
 		case .allDocuments(let id):
 			return "allDocuments:\(id)"
+		case .tagDocuments(let accountID, let tagID):
+			return "tagDocuments:\(accountID)_\(tagID)"
 		}
 	}
 	
@@ -71,6 +76,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case searchText
 		case accountID
 		case documentID
+		case tagID
 	}
 	
 	public init?(description: String) {
@@ -97,6 +103,13 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 				self = .allDocuments(accountID)
 				return
 			}
+		} else if description.starts(with: "tagDocuments:") {
+			let idString = description.suffix(from: description.index(description.startIndex, offsetBy: 18))
+			let ids = idString.split(separator: "_")
+			if let accountID = Int(ids[0]) {
+				self = .tagDocuments(accountID, String(ids[1]))
+				return
+			}
 		}
 		return nil
 	}
@@ -119,6 +132,10 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case "allDocuments":
 			let accountID = try container.decode(Int.self, forKey: .accountID)
 			self = .allDocuments(accountID)
+		case "tagDocuments":
+			let accountID = try container.decode(Int.self, forKey: .accountID)
+			let tagID = try container.decode(String.self, forKey: .tagID)
+			self = .tagDocuments(accountID, tagID)
 		default:
 			fatalError()
 		}
@@ -141,6 +158,10 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case "allDocuments":
 			guard let accountID = userInfo["accountID"] as? Int else { return nil }
 			self = .allDocuments(accountID)
+		case "tagDocuments":
+			guard let accountID = userInfo["accountID"] as? Int else { return nil }
+			guard let tagID = userInfo["tagID"] as? String else { return nil }
+			self = .tagDocuments(accountID, tagID)
 		default:
 			return nil
 		}
@@ -163,6 +184,10 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case .allDocuments(let accountID):
 			try container.encode("allDocuments", forKey: .type)
 			try container.encode(accountID, forKey: .accountID)
+		case .tagDocuments(let accountID, let tagID):
+			try container.encode("tagDocuments", forKey: .type)
+			try container.encode(accountID, forKey: .accountID)
+			try container.encode(tagID, forKey: .tagID)
 		}
 	}
 	
@@ -188,6 +213,12 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return [
 				"type": "allDocuments",
 				"accountID": accountID
+			]
+		case .tagDocuments(let accountID, let tagID):
+			return [
+				"type": "tagDocuments",
+				"accountID": accountID,
+				"tagID": tagID
 			]
 		}
 	}

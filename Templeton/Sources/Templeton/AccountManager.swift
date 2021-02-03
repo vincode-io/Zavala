@@ -102,7 +102,7 @@ public final class AccountManager {
 		switch entityID {
 		case .search(let searchText):
 			return Search(searchText: searchText)
-		case .allDocuments(let accountID):
+		case .allDocuments(let accountID), .tagDocuments(let accountID, _):
 			return accountsDictionary[accountID]?.findDocumentContainer(entityID)
 		default:
 			fatalError()
