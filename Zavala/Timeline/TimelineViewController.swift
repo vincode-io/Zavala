@@ -152,7 +152,8 @@ extension TimelineViewController: UIDocumentPickerDelegate {
 		var document: Document?
 		for url in urls {
 			do {
-				document = try account.importOPML(url)
+				let tag = (documentContainer as? TagDocuments)?.tag
+				document = try account.importOPML(url, tag: tag)
 			} catch {
 				self.presentError(title: L10n.importFailed, message: error.localizedDescription)
 			}

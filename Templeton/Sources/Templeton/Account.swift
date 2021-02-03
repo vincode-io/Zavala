@@ -109,7 +109,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		accountMetadataDidChange()
 	}
 	
-	public func importOPML(_ url: URL) throws -> Document {
+	public func importOPML(_ url: URL, tag: Tag?) throws -> Document {
 		guard url.startAccessingSecurityScopedResource() else { throw AccountError.securityScopeError }
 		defer {
 			url.stopAccessingSecurityScopedResource()
@@ -124,11 +124,11 @@ public final class Account: NSObject, Identifiable, Codable {
 		guard fileError == nil else { throw fileError! }
 		guard let opmlData = fileData else { throw AccountError.fileReadError }
 		
-		return importOPML(opmlData)
+		return importOPML(opmlData, tag: tag)
 	}
 
 	@discardableResult
-	public func importOPML(_ opmlData: Data) -> Document {
+	public func importOPML(_ opmlData: Data, tag: Tag?) -> Document {
 		let opml = SWXMLHash.config({ config in
 			config.caseInsensitive = true
 		}).parse(opmlData)["opml"]
@@ -163,6 +163,10 @@ public final class Account: NSObject, Identifiable, Codable {
 
 		if let expansionState = headIndexer["expansionState"].element?.text {
 			outline.expansionState = expansionState
+		}
+		
+		if let tag = tag {
+			outline.createTag(tag)
 		}
 
 		documents?.append(.outline(outline))
