@@ -41,6 +41,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidInitialize(_:)), name: .AccountDidInitialize, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountTagsDidChange(_:)), name: .AccountTagsDidChange, object: nil)
 	}
 	
 	// MARK: API
@@ -125,6 +126,10 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	}
 	
 	@objc func accountMetadataDidChange(_ note: Notification) {
+		applyChangeSnapshot()
+	}
+	
+	@objc func accountTagsDidChange(_ note: Notification) {
 		applyChangeSnapshot()
 	}
 	
