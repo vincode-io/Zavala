@@ -23,7 +23,7 @@ public final class RecentDocuments: Identifiable, DocumentContainer {
 	
 	public func sortedDocuments(completion: @escaping (Result<[Document], Error>) -> Void) {
 		let sortedDocuments = Self.sortByUpdate(account?.documents ?? [Document]())
-		let suffix = Array(sortedDocuments.suffix(10))
+		let suffix = Array(sortedDocuments.prefix(10))
 		completion(.success(suffix))
 	}
 	
