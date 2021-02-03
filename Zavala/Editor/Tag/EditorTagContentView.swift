@@ -21,7 +21,8 @@ class EditorTagContentView: UIView, UIContentView {
 		addSubview(button)
 		
 		button.translatesAutoresizingMaskIntoConstraints = false
-		button.backgroundColor = AppAssets.accessory
+		button.backgroundColor = .tertiarySystemBackground
+		button.setTitleColor(.secondaryLabel, for: .normal)
 		button.contentEdgeInsets = UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8)
 
 		if traitCollection.userInterfaceIdiom == .mac {

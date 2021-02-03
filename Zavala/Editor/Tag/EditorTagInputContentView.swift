@@ -10,7 +10,9 @@ import Templeton
 
 class EditorTagInputContentView: UIView, UIContentView {
 
+	let borderView = UIView()
 	let textField = EditorTagInputTextField()
+	
 	weak var delegate: EditorTagInputViewCellDelegate?
 	
 	var appliedConfiguration: EditorTagInputContentConfiguration!
@@ -19,32 +21,31 @@ class EditorTagInputContentView: UIView, UIContentView {
 		self.delegate = configuration.delegate
 		super.init(frame: .zero)
 
-		let view = UIView()
-		addSubview(view)
+		addSubview(borderView)
 		
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.layer.borderWidth = 1
-		view.layer.borderColor = AppAssets.accessory.cgColor
+		borderView.translatesAutoresizingMaskIntoConstraints = false
+		borderView.layer.borderWidth = 1
+		borderView.layer.borderColor = UIColor.tertiarySystemBackground.cgColor
 
 		if traitCollection.userInterfaceIdiom == .mac {
-			view.layer.cornerRadius = 10
+			borderView.layer.cornerRadius = 10
 		} else {
-			view.layer.cornerRadius = 13
+			borderView.layer.cornerRadius = 13
 		}
 
-		view.addSubview(textField)
+		borderView.addSubview(textField)
 		textField.translatesAutoresizingMaskIntoConstraints = false
 		textField.editorDelegate = self
 		
 		NSLayoutConstraint.activate([
-			view.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-			view.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-			view.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-			view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
-			textField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-			textField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-			textField.topAnchor.constraint(equalTo: view.topAnchor, constant: 2.5),
-			textField.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -2.5),
+			borderView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+			borderView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+			borderView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+			borderView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+			textField.leadingAnchor.constraint(equalTo: borderView.leadingAnchor, constant: 8),
+			textField.trailingAnchor.constraint(equalTo: borderView.trailingAnchor, constant: -8),
+			textField.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 2.5),
+			textField.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -2.5),
 		])
 		
 		apply(configuration: configuration)
@@ -52,6 +53,12 @@ class EditorTagInputContentView: UIView, UIContentView {
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
+	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) ?? false {
+			borderView.layer.borderColor = UIColor.tertiarySystemBackground.cgColor
+		}
 	}
 	
 	var configuration: UIContentConfiguration {

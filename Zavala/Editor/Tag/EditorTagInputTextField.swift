@@ -57,6 +57,7 @@ class EditorTagInputTextField: SearchTextField {
 		self.autocorrectionType = .no
 		self.tableXOffset = -8
 		self.tableYOffset = 3
+		self.textColor = .secondaryLabel
 
 		if traitCollection.userInterfaceStyle == .dark {
 			self.theme = .darkTheme()
