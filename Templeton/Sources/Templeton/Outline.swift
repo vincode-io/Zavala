@@ -209,7 +209,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineElementsDidChange(changes)
 	}
 	
-	public func removeTag(_ tag: Tag) {
+	public func deleteTag(_ tag: Tag) {
 		guard let index = tagIDs?.firstIndex(where: { $0 == tag.id }) else { return }
 		tagIDs?.remove(at: index)
 		documentMetaDataDidChange()

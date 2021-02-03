@@ -8,8 +8,7 @@
 import UIKit
 
 protocol EditorTagViewCellDelegate: class {
-	var editorTagUndoManager: UndoManager? { get }
-	func editorTagLayoutEditor()
+	func editorTagDeleteTag(name: String)
 }
 
 class EditorTagViewCell: UICollectionViewCell {

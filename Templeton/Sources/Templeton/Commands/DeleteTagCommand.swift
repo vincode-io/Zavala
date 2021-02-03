@@ -31,9 +31,9 @@ public final class DeleteTagCommand: OutlineCommand {
 	}
 	
 	public func perform() {
-		guard let tag = outline.account?.findTag(tagID: tagName) else { return }
+		guard let tag = outline.account?.findTag(name: tagName) else { return }
 		self.tag = tag
-		outline.removeTag(tag)
+		outline.deleteTag(tag)
 		outline.account?.deleteTag(tag)
 		registerUndo()
 	}

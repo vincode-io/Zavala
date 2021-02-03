@@ -29,7 +29,15 @@ class EditorTagContentView: UIView, UIContentView {
 		} else {
 			button.layer.cornerRadius = 13
 		}
-		
+
+		let deleteAction = UIAction(title: L10n.delete, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in
+			guard let self = self, let name = self.button.currentTitle else { return }
+			self.delegate?.editorTagDeleteTag(name: name)
+		}
+		let menu = UIMenu(title: "Add Item", image: nil, identifier: nil, options: [], children: [deleteAction])
+		button.menu = menu
+		button.showsMenuAsPrimaryAction = true
+
 		NSLayoutConstraint.activate([
 			button.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
 			button.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
@@ -55,6 +63,7 @@ class EditorTagContentView: UIView, UIContentView {
 	private func apply(configuration: EditorTagContentConfiguration) {
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
+		delegate = configuration.delegate
 		button.setTitle(configuration.name, for: .normal)
 	}
 	

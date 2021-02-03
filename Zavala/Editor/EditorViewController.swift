@@ -199,7 +199,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		tagRegistration = UICollectionView.CellRegistration<EditorTagViewCell, String> { (cell, indexPath, name) in
 			cell.name = name
-//			cell.delegate = self
+			cell.delegate = self
 		}
 		
 		tagInputRegistration = UICollectionView.CellRegistration<EditorTagInputViewCell, EntityID> { (cell, indexPath, outlineID) in
@@ -634,6 +634,14 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 	
 	func editorTagInputTextFieldCreateTag(name: String) {
 		createTag(name: name)
+	}
+	
+}
+
+extension EditorViewController: EditorTagViewCellDelegate {
+	
+	func editorTagDeleteTag(name: String) {
+		deleteTag(name: name)
 	}
 	
 }
@@ -1172,7 +1180,7 @@ extension EditorViewController {
 		runCommand(command)
 	}
 
-	private func removeTag(name: String) {
+	private func deleteTag(name: String) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = DeleteTagCommand(undoManager: undoManager,
