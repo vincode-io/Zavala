@@ -54,8 +54,6 @@ class EditorTagInputTextField: SearchTextField {
 		self.borderStyle = .none
 		self.autocorrectionType = .no
 		self.filterStrings(["Home", "Work", "Project", "Zavala"])
-		self.startVisible = true
-		self.interactedWith = true
 		self.tableXOffset = -8
 		self.tableYOffset = 3
 		
