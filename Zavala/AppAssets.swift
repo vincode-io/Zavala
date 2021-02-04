@@ -132,6 +132,10 @@ struct AppAssets {
 	static var removeEntity: UIImage = {
 		return UIImage(systemName: "trash")!
 	}()
+	
+	static var selectColor: UIColor = {
+		return UIColor(named: "SelectColor")!
+	}()
 
 	static var uncompleteRow: UIImage = {
 		return UIImage(systemName: "square")!

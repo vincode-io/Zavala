@@ -176,6 +176,13 @@ open class SearchTextField: UITextField {
 		return widest
 	}
     
+	private var selectedBackgroundView: UIView = {
+		let view = UIView()
+		view.layer.cornerRadius = 5
+		view.backgroundColor = AppAssets.selectColor
+		return view
+	}()
+	
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -188,6 +195,12 @@ open class SearchTextField: UITextField {
     override open func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
         
+		if traitCollection.userInterfaceStyle == .dark {
+			self.theme = .darkTheme()
+		} else {
+			self.theme = .lightTheme()
+		}
+		
         self.addTarget(self, action: #selector(SearchTextField.textFieldDidChange), for: .editingChanged)
         self.addTarget(self, action: #selector(SearchTextField.textFieldDidBeginEditing), for: .editingDidBegin)
         self.addTarget(self, action: #selector(SearchTextField.textFieldDidEndEditing), for: .editingDidEnd)
@@ -217,6 +230,16 @@ open class SearchTextField: UITextField {
         rightFrame.origin.x -= 5
         return rightFrame
     }
+	
+	open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) ?? false {
+			if traitCollection.userInterfaceStyle == .dark {
+				self.theme = .darkTheme()
+			} else {
+				self.theme = .lightTheme()
+			}
+		}
+	}
     
     // Create the filter table and shadow view
     fileprivate func buildSearchTableView() {
@@ -625,6 +648,8 @@ extension SearchTextField: UITableViewDelegate, UITableViewDataSource {
         cell!.detailTextLabel?.attributedText = filteredResults[(indexPath as NSIndexPath).row].attributedSubtitle
         
         cell!.imageView?.image = filteredResults[(indexPath as NSIndexPath).row].image
+		
+		cell!.selectedBackgroundView = selectedBackgroundView
         
         return cell!
     }
@@ -672,7 +697,7 @@ public struct SearchTextFieldTheme {
     
     public static func lightTheme() -> SearchTextFieldTheme {
         return SearchTextFieldTheme(cellHeight: 30,
-									bgColor: UIColor (red: 1, green: 1, blue: 1, alpha: 0.9),
+									bgColor: UIColor (red: 0.8, green: 0.8, blue: 0.8, alpha: 0.9),
 									borderColor: UIColor (red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0),
 									separatorColor: UIColor.clear,
 									font: UIFont.systemFont(ofSize: 13),
