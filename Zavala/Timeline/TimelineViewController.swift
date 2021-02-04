@@ -64,6 +64,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 			navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
 		}
 		
+		collectionView.dragDelegate = self
 		collectionView.remembersLastFocusedIndexPath = true
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
