@@ -451,32 +451,44 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func repeatMoveCursorUp() {
-		if currentKeyPresses.contains(.keyboardUpArrow) {
-			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, let row = textView.row {
-				moveCursorUp(row: row)
-			} else if UIResponder.currentFirstResponder is EditorTagInputTextField {
+		guard currentKeyPresses.contains(.keyboardUpArrow) else { return }
+
+		if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, let row = textView.row {
+			moveCursorUp(row: row)
+		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
+			if tagInput.isShowingResults {
+				tagInput.selectAbove()
+				return
+			} else {
 				moveCursorToTitle()
 			}
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-				self.repeatMoveCursorUp()
-			}
+		}
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+			self.repeatMoveCursorUp()
 		}
 	}
 
 	@objc func repeatMoveCursorDown() {
-		if currentKeyPresses.contains(.keyboardDownArrow) {
-			if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, let row = textView.row {
-				moveCursorDown(row: row)
-			} else if UIResponder.currentFirstResponder is EditorTagInputTextField, outline?.shadowTable?.count ?? 0 > 0 {
+		guard currentKeyPresses.contains(.keyboardDownArrow) else { return }
+		
+		if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, let row = textView.row {
+			moveCursorDown(row: row)
+		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
+			if tagInput.isShowingResults {
+				tagInput.selectBelow()
+				return
+			} else if outline?.shadowTable?.count ?? 0 > 0 {
 				if let rowCell = collectionView.cellForItem(at: IndexPath(row: 0, section: Outline.Section.rows.rawValue)) as? EditorTextRowViewCell {
 					rowCell.moveToEnd()
 				}
-			} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting {
-				moveCursorToTagInput()
 			}
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-				self.repeatMoveCursorDown()
-			}
+		} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting {
+			moveCursorToTagInput()
+		}
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+			self.repeatMoveCursorDown()
 		}
 	}
 	
@@ -1183,6 +1195,7 @@ extension EditorViewController {
 									   tagName: name)
 		
 		runCommand(command)
+		moveCursorToTagInput()
 	}
 
 	private func deleteTag(name: String) {

@@ -204,8 +204,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		tagIDs!.append(tag.id)
 		self.updated = Date()
 
-		let inserted = tagIDs!.count - 1
-		let changes = OutlineElementChanges(section: .tags, inserts: Set([inserted]))
+		let reload = tagIDs!.count
+		let inserted = reload - 1
+		let changes = OutlineElementChanges(section: .tags, inserts: Set([inserted]), reloads: Set([reload]))
 		outlineElementsDidChange(changes)
 	}
 	
@@ -214,7 +215,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		tagIDs?.remove(at: index)
 		self.updated = Date()
 
-		let changes = OutlineElementChanges(section: .tags, deletes: Set([index]))
+		let reload = tagIDs?.count ?? 1
+		let changes = OutlineElementChanges(section: .tags, deletes: Set([index]), reloads: Set([reload]))
 		outlineElementsDidChange(changes)
 	}
 	

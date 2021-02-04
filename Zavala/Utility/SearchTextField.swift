@@ -133,10 +133,14 @@ open class SearchTextField: UITextField {
     open var tableCornerRadius: CGFloat = 5.0
     open var tableBottomMargin: CGFloat = 10.0
     
+	open var isShowingResults: Bool {
+		return !filteredResults.isEmpty
+	}
+	
     ////////////////////////////////////////////////////////////////////////
     // Private implementation
     
-    fileprivate var tableView: UITableView?
+    fileprivate var tableView: KeyboardTableView?
     fileprivate var shadowView: UIView?
     fileprivate var direction: Direction = .down
     fileprivate var fontConversionRate: CGFloat = 0.7
@@ -217,7 +221,7 @@ open class SearchTextField: UITextField {
     // Create the filter table and shadow view
     fileprivate func buildSearchTableView() {
         guard let tableView = tableView, let shadowView = shadowView else {
-            self.tableView = UITableView(frame: CGRect.zero)
+            self.tableView = KeyboardTableView(frame: CGRect.zero)
             self.shadowView = UIView(frame: CGRect.zero)
             buildSearchTableView()
             return
@@ -435,7 +439,23 @@ open class SearchTextField: UITextField {
             }
         }
     }
-    
+	
+	open func selectAbove() {
+		tableView?.selectAbove()
+	}
+	
+	open func selectBelow() {
+		tableView?.selectBelow()
+	}
+
+	open func activateSelection() {
+		tableView?.activateSelection()
+	}
+	
+	open func clearSelection() {
+		tableView?.clearSelection()
+	}
+	
     open func hideResultsList() {
         if let tableFrame:CGRect = tableView?.frame {
             let newFrame = CGRect(x: tableFrame.origin.x, y: tableFrame.origin.y, width: tableFrame.size.width, height: 0.0)
@@ -601,8 +621,6 @@ extension SearchTextField: UITableViewDelegate, UITableViewDataSource {
         
         cell!.imageView?.image = filteredResults[(indexPath as NSIndexPath).row].image
         
-        cell!.selectionStyle = .none
-        
         return cell!
     }
     
@@ -620,6 +638,7 @@ extension SearchTextField: UITableViewDelegate, UITableViewDataSource {
         
         clearResults()
     }
+	
 }
 
 ////////////////////////////////////////////////////////////////////////

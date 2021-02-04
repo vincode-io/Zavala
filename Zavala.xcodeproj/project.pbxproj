@@ -15,6 +15,7 @@
 		5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
 		512229682563507E008041AF /* EditorTextRowViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorTextRowViewCell.swift */; };
 		51278E77257F37AC0034F1CB /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51278E76257F37AC0034F1CB /* Dialog.storyboard */; };
+		5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */; };
 		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
 		514EF15F25A78A8C00B1FFB6 /* CrashReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */; };
@@ -152,6 +153,7 @@
 		512229672563507E008041AF /* EditorTextRowViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowViewCell.swift; sourceTree = "<group>"; };
 		51278E76257F37AC0034F1CB /* Dialog.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
 		513F32A12594062C0003048F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTableView.swift; sourceTree = "<group>"; };
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
 		514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporter.swift; sourceTree = "<group>"; };
@@ -270,6 +272,7 @@
 				518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */,
 				514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */,
 				515F164A255C9F8E00FD98B8 /* FormViewController.swift */,
+				5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */,
 				51DA54C725643E3400732942 /* MainThreadOperationBase.swift */,
 				51AE5481258FF35F006DA301 /* NSMutableAttributedString+.swift */,
 				51AE547D258FF28A006DA301 /* OutlineFont.swift */,
@@ -676,6 +679,7 @@
 				51DA54C825643E3400732942 /* MainThreadOperationBase.swift in Sources */,
 				51CF10C22571C22C005D6D88 /* L10n.swift in Sources */,
 				51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */,
+				5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */,
 				51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */,
 				514F222A25C4FF02004E02CD /* EditorTagInputTextField.swift in Sources */,
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,

@@ -38,7 +38,8 @@ class EditorTagInputTextField: SearchTextField {
 	
 	override var keyCommands: [UIKeyCommand]? {
 		let keys = [
-			UIKeyCommand(action: #selector(createTag(_:)), input: "\t")
+			UIKeyCommand(action: #selector(createTag(_:)), input: "\t"),
+			UIKeyCommand(action: #selector(clearSelection(_:)), input: UIKeyCommand.inputEscape)
 		]
 		return keys
 	}
@@ -97,18 +98,28 @@ class EditorTagInputTextField: SearchTextField {
 		resetFilterStrings()
 	}
 	
+	@objc func clearSelection(_ sender: Any) {
+		clearSelection()
+	}
 }
 
 extension EditorTagInputTextField: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		guard !isShowingResults else {
+			activateSelection()
+			return false
+		}
+		
 		if let name = text, !name.isEmpty {
 			text = nil
 			invalidateIntrinsicContentSize()
 			editorDelegate?.createTag(self, name: name)
 			resetFilterStrings()
 		}
+		
 		editorDelegate?.createRow(self)
+		
 		return false
 	}
 	
