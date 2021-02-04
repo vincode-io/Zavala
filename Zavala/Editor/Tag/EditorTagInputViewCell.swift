@@ -10,9 +10,12 @@ import Templeton
 
 protocol EditorTagInputViewCellDelegate: class {
 	var editorTagInputUndoManager: UndoManager? { get }
+	var editorTagInputIsAddShowing: Bool { get }
 	var editorTagInputTags: [Tag]? { get }
 	func editorTagInputLayoutEditor()
 	func editorTagInputTextFieldDidBecomeActive()
+	func editorTagInputTextFieldShowAdd()
+	func editorTagInputTextFieldHideAdd()
 	func editorTagInputTextFieldCreateRow()
 	func editorTagInputTextFieldCreateTag(name: String)
 }
@@ -41,6 +44,11 @@ class EditorTagInputViewCell: UICollectionViewCell {
 	func takeCursor() {
 		guard let textField = (contentView as? EditorTagInputContentView)?.textField else { return }
 		textField.becomeFirstResponder()
+	}
+	
+	func createTag() {
+		guard let textField = (contentView as? EditorTagInputContentView)?.textField else { return }
+		textField.createTag(self)
 	}
 	
 }

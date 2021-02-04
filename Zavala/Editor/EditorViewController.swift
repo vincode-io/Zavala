@@ -155,6 +155,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
 	private var tagInputRegistration: UICollectionView.CellRegistration<EditorTagInputViewCell, EntityID>?
+	private var tagAddRegistration: UICollectionView.CellRegistration<EditorTagAddViewCell, EntityID>?
 	private var rowRegistration: UICollectionView.CellRegistration<EditorTextRowViewCell, Row>?
 	
 	private var firstVisibleShadowTableIndex: Int? {
@@ -170,6 +171,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var transitionContentOffset: CGPoint?
 	
 	private var isOutlineNewFlag = false
+	private var isShowingAddButton = false
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -203,6 +205,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 		
 		tagInputRegistration = UICollectionView.CellRegistration<EditorTagInputViewCell, EntityID> { (cell, indexPath, outlineID) in
+			cell.outlineID = outlineID
+			cell.delegate = self
+		}
+		
+		tagAddRegistration = UICollectionView.CellRegistration<EditorTagAddViewCell, EntityID> { (cell, indexPath, outlineID) in
 			cell.outlineID = outlineID
 			cell.delegate = self
 		}
@@ -535,7 +542,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			return outline == nil ? 0 : 1
 		case Outline.Section.tags.rawValue:
 			if let outline = outline {
-				return outline.tags.count + 1
+				if isShowingAddButton {
+					return outline.tags.count + 2
+				} else {
+					return outline.tags.count + 1
+				}
 			} else {
 				return 0
 			}
@@ -549,11 +560,13 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Outline.Section.title.rawValue:
 			return collectionView.dequeueConfiguredReusableCell(using: titleRegistration!, for: indexPath, item: outline)
 		case Outline.Section.tags.rawValue:
-			if let outline = outline, indexPath.row < outline.tags.count {
+			if let outline = outline, indexPath.row < outline.tagCount {
 				let tag = outline.tags[indexPath.row]
 				return collectionView.dequeueConfiguredReusableCell(using: tagRegistration!, for: indexPath, item: tag.name)
+			} else if let outline = outline, indexPath.row == outline.tagCount {
+				return collectionView.dequeueConfiguredReusableCell(using: tagInputRegistration!, for: indexPath, item: outline.id)
 			} else {
-				return collectionView.dequeueConfiguredReusableCell(using: tagInputRegistration!, for: indexPath, item: outline!.id)
+				return collectionView.dequeueConfiguredReusableCell(using: tagAddRegistration!, for: indexPath, item: outline!.id)
 			}
 		default:
 			let row = outline?.shadowTable?[indexPath.row] ?? Row.text(TextRow())
@@ -632,6 +645,10 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 		return undoManager
 	}
 	
+	var editorTagInputIsAddShowing: Bool {
+		return isShowingAddButton
+	}
+	
 	var editorTagInputTags: [Tag]? {
 		guard let outlineTags = outline?.tags else { return nil }
 		return outline?.account?.tags?.filter({ !outlineTags.contains($0) })
@@ -645,12 +662,39 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 		collectionView.deselectAll()
 	}
 	
+	func editorTagInputTextFieldShowAdd() {
+		guard let tagCount = outline?.tagCount else { return }
+		isShowingAddButton = true
+		let indexPath = IndexPath(row: tagCount + 1, section: Outline.Section.tags.rawValue)
+		collectionView.insertItems(at: [indexPath])
+	}
+	
+	func editorTagInputTextFieldHideAdd() {
+		guard isShowingAddButton, let tagCount = outline?.tagCount else { return }
+		isShowingAddButton = false
+		let indexPath = IndexPath(row: tagCount + 1, section: Outline.Section.tags.rawValue)
+		collectionView.deleteItems(at: [indexPath])
+	}
+	
 	func editorTagInputTextFieldCreateRow() {
 		createRow(afterRows: nil)
 	}
 	
 	func editorTagInputTextFieldCreateTag(name: String) {
 		createTag(name: name)
+	}
+	
+}
+
+extension EditorViewController: EditorTagAddViewCellDelegate {
+	
+	func editorTagAddAddTag() {
+		if let outline = outline {
+			let indexPath = IndexPath(row: outline.tags.count, section: Outline.Section.tags.rawValue)
+			if let tagInputCell = collectionView.cellForItem(at: indexPath) as? EditorTagInputViewCell {
+				tagInputCell.createTag()
+			}
+		}
 	}
 	
 }

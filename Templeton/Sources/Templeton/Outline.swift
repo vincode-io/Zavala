@@ -101,6 +101,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return tagIDs?.compactMap { account.findTag(tagID: $0) } ?? [Tag]()
 	}
 	
+	public var tagCount: Int {
+		return tagIDs?.count ?? 0
+	}
+	
 	public var expansionState: String {
 		get {
 			var currentRow = 0

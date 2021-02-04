@@ -83,6 +83,10 @@ extension EditorTagInputContentView: EditorTagInputTextFieldDelegate {
 		return appliedConfiguration.delegate?.editorTagInputUndoManager
 	}
 	
+	var editorTagInputTextFieldIsAddShowing: Bool {
+		return appliedConfiguration.delegate?.editorTagInputIsAddShowing ?? false
+	}
+	
 	var editorTagInputTextFieldTags: [Tag]? {
 		return appliedConfiguration.delegate?.editorTagInputTags
 	}
@@ -93,6 +97,14 @@ extension EditorTagInputContentView: EditorTagInputTextFieldDelegate {
 	
 	func didBecomeActive(_: EditorTagInputTextField) {
 		appliedConfiguration.delegate?.editorTagInputTextFieldDidBecomeActive()
+	}
+	
+	func showAdd(_: EditorTagInputTextField) {
+		appliedConfiguration.delegate?.editorTagInputTextFieldShowAdd()
+	}
+	
+	func hideAdd(_: EditorTagInputTextField) {
+		appliedConfiguration.delegate?.editorTagInputTextFieldHideAdd()
 	}
 	
 	func createRow(_: EditorTagInputTextField) {
