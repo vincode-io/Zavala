@@ -52,7 +52,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		containers.append(RecentDocuments(account: self)
 		)
 		for tagDocuments in tags?
-			.sorted(by: { $0.name < $1.name })
+			.sorted(by: { $0.name.caseInsensitiveCompare($1.name) == .orderedAscending })
 			.compactMap({ TagDocuments(account: self, tag: $0) }) ?? [TagDocuments]() {
 			containers.append(tagDocuments)
 		}
