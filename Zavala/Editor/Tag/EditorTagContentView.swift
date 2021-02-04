@@ -35,7 +35,7 @@ class EditorTagContentView: UIView, UIContentView {
 			guard let self = self, let name = self.button.currentTitle else { return }
 			self.delegate?.editorTagDeleteTag(name: name)
 		}
-		let menu = UIMenu(title: "Add Item", image: nil, identifier: nil, options: [], children: [deleteAction])
+		let menu = UIMenu(title: "", image: nil, identifier: nil, options: [], children: [deleteAction])
 		button.menu = menu
 		button.showsMenuAsPrimaryAction = true
 
