@@ -95,7 +95,7 @@ class EditorTextRowTopicTextView: OutlineTextView {
 
 	override func deleteBackward() {
 		guard let textRow = row else { return }
-		if attributedText.length == 0 {
+		if attributedText.length == 0 && textRow.rows?.isEmpty ?? false {
 			editorDelegate?.deleteRow(self, row: textRow)
 		} else {
 			super.deleteBackward()
