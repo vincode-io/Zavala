@@ -64,6 +64,8 @@ public final class AccountManager {
 		self.cloudKitAccountFolder = accountsFolder.appendingPathComponent(AccountType.cloudKit.folderName)
 		self.cloudKitAccountFile = cloudKitAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
 		
+		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountTagsDidChange(_:)), name: .AccountTagsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentMetadataDidChange(_:)), name: .DocumentMetaDataDidChange, object: nil)
@@ -181,6 +183,16 @@ private extension AccountManager {
 	
 	// MARK: Notifications
 	
+	@objc func accountMetadataDidChange(_ note: Notification) {
+		let account = note.object as! Account
+		markAsDirty(account)
+	}
+
+	@objc func accountTagsDidChange(_ note: Notification) {
+		let account = note.object as! Account
+		markAsDirty(account)
+	}
+
 	@objc func accountDocumentsDidChange(_ note: Notification) {
 		let account = note.object as! Account
 		markAsDirty(account)
