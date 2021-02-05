@@ -114,7 +114,7 @@ public enum Document: Equatable, Codable {
 		}
 	}
 	
-	public func removeTag(_ tag: Tag) {
+	public func deleteTag(_ tag: Tag) {
 		switch self {
 		case .outline(let outline):
 			outline.deleteTag(tag)

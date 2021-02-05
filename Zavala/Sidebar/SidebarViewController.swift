@@ -48,6 +48,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	
 	func startUp() {
 		collectionView.remembersLastFocusedIndexPath = true
+		collectionView.dropDelegate = self
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
 		applyInitialSnapshot()

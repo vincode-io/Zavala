@@ -232,7 +232,7 @@ public final class Account: NSObject, Identifiable, Codable {
 	}
 	
 	@discardableResult
-	func createTag(name: String) -> Tag {
+	public func createTag(name: String) -> Tag {
 		if let tag = tags?.first(where: { $0.name == name }) {
 			return tag
 		}
@@ -258,7 +258,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		return tag
 	}
 	
-	func deleteTag(_ tag: Tag) {
+	public func deleteTag(_ tag: Tag) {
 		for doc in documents ?? [Document]() {
 			if doc.hasTag(tag) {
 				return

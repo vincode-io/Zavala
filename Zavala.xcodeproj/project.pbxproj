@@ -21,6 +21,7 @@
 		5147D0BB25CCAFC3004673C3 /* EditorTagAddViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0BA25CCAFC3004673C3 /* EditorTagAddViewCell.swift */; };
 		5147D0BE25CCAFD2004673C3 /* EditorTagAddContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0BD25CCAFD2004673C3 /* EditorTagAddContentConfiguration.swift */; };
 		5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0C025CCAFEA004673C3 /* EditorTagAddContentView.swift */; };
+		5147D0C525CCD6AA004673C3 /* SidebarViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0C425CCD6AA004673C3 /* SidebarViewController+Drop.swift */; };
 		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
 		514EF15F25A78A8C00B1FFB6 /* CrashReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */; };
@@ -164,6 +165,7 @@
 		5147D0BA25CCAFC3004673C3 /* EditorTagAddViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagAddViewCell.swift; sourceTree = "<group>"; };
 		5147D0BD25CCAFD2004673C3 /* EditorTagAddContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagAddContentConfiguration.swift; sourceTree = "<group>"; };
 		5147D0C025CCAFEA004673C3 /* EditorTagAddContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagAddContentView.swift; sourceTree = "<group>"; };
+		5147D0C425CCD6AA004673C3 /* SidebarViewController+Drop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SidebarViewController+Drop.swift"; sourceTree = "<group>"; };
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
 		514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporter.swift; sourceTree = "<group>"; };
@@ -450,6 +452,7 @@
 				51E14F332560732F00320EDB /* SidebarItem.swift */,
 				51E14F2D2560730000320EDB /* SidebarSection.swift */,
 				5181A93B2554D92000C153E8 /* SidebarViewController.swift */,
+				5147D0C425CCD6AA004673C3 /* SidebarViewController+Drop.swift */,
 				51F2859D25AD12860019C573 /* Search */,
 			);
 			path = Sidebar;
@@ -750,6 +753,7 @@
 				5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */,
 				51B2B2C82563A2180090C56B /* EditorTextRowTopicTextView.swift in Sources */,
 				518F2E38257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift in Sources */,
+				5147D0C525CCD6AA004673C3 /* SidebarViewController+Drop.swift in Sources */,
 				5163ADF525C79B69008F25CA /* String+.swift in Sources */,
 				51C4C45B255ACA1B004E0206 /* EditorViewController.swift in Sources */,
 				514F220D25C4CCA7004E02CD /* EditorTagViewCell.swift in Sources */,
