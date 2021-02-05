@@ -119,7 +119,7 @@ class EditorTagInputTextField: SearchTextField {
 extension EditorTagInputTextField: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		guard !isShowingResults else {
+		guard !isSelecting else {
 			activateSelection()
 			return false
 		}

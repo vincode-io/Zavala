@@ -12,6 +12,10 @@ class KeyboardTableView: UITableView {
 		return true
 	}
 
+	@objc var isSelecting: Bool {
+		return indexPathForSelectedRow != nil
+	}
+	
 	@objc func selectAbove() {
 		if let oldSelectedIndexPath = indexPathForSelectedRow {
 			selectRowAtIndex(oldSelectedIndexPath.row - 1)

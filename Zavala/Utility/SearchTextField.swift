@@ -468,6 +468,10 @@ open class SearchTextField: UITextField {
         }
     }
 	
+	open var isSelecting: Bool {
+		tableView?.isSelecting ?? false
+	}
+	
 	open func selectAbove() {
 		tableView?.selectAbove()
 	}
