@@ -193,6 +193,7 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 	}
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
+		detectData()
 		saveText()
 	}
 	

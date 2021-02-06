@@ -154,6 +154,7 @@ extension EditorTextRowNoteTextView: UITextViewDelegate {
 	}
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
+		detectData()
 		saveText()
 	}
 	

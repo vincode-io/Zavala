@@ -82,6 +82,20 @@ class OutlineTextView: UITextView {
 		fatalError("saveText has not been implemented")
 	}
 	
+	func detectData() {
+		guard let text = attributedText?.string, !text.isEmpty else { return }
+		
+		let detector = NSDataDetector(dataTypes: [.url])
+		detector.enumerateMatches(in: text) { (range, match) in
+			switch match {
+			case .url(let url), .email(_, let url):
+				textStorage.addAttribute(.link, value: url, range: range)
+			default:
+				break
+			}
+		}
+	}
+	
 	func findAndSelectLink() -> (String?, NSRange) {
 		var effectiveRange = NSRange()
 		for i in selectedRange.lowerBound..<selectedRange.upperBound {
