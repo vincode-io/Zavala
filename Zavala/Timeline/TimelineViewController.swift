@@ -288,6 +288,14 @@ extension TimelineViewController {
 	private func updateUI() {
 		navigationItem.title = documentContainer?.name
 		view.window?.windowScene?.title = documentContainer?.name
+		
+		if traitCollection.userInterfaceIdiom != .mac {
+			if documentContainer?.account == nil {
+				navigationItem.rightBarButtonItems = nil
+			} else {
+				navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
+			}
+		}
 	}
 	
 	private func makeOutlineContextMenu(item: TimelineItem) -> UIContextMenuConfiguration {
