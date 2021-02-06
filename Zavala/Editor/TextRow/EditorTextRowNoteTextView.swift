@@ -48,7 +48,6 @@ class EditorTextRowNoteTextView: OutlineTextView {
 	}
 	
 	private var textViewHeight: CGFloat?
-	private var isTextChanged = false
 	private var isSavingTextUnnecessary = false
 
 	override init(frame: CGRect, textContainer: NSTextContainer?) {

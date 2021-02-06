@@ -38,6 +38,7 @@ class OutlineTextView: UITextView {
 		return selectedRange.location
 	}
 	
+	var isTextChanged = false
 	var lastCursorPosition = 0
 	
 	var textRowStrings: TextRowStrings? {
@@ -89,7 +90,17 @@ class OutlineTextView: UITextView {
 		detector.enumerateMatches(in: text) { (range, match) in
 			switch match {
 			case .url(let url), .email(_, let url):
-				textStorage.addAttribute(.link, value: url, range: range)
+				var effectiveRange = NSRange()
+				if let link = textStorage.attribute(.link, at: range.location, effectiveRange: &effectiveRange) as? URL {
+					if range != effectiveRange || link != url {
+						isTextChanged = true
+						textStorage.removeAttribute(.link, range: effectiveRange)
+						textStorage.addAttribute(.link, value: url, range: range)
+					}
+				} else {
+					isTextChanged = true
+					textStorage.addAttribute(.link, value: url, range: range)
+				}
 			default:
 				break
 			}
