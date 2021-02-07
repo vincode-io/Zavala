@@ -25,6 +25,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		public var toChildIndex: Int
 	}
 	
+	public var isBeingViewed = false
+	
 	public var id: EntityID {
 		didSet {
 			documentMetaDataDidChange()
@@ -1018,6 +1020,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public func suspend() {
 		rowsFile?.save()
+		
+		guard !isBeingViewed else { return }
+		
 		rowsFile = nil
 		rows = nil
 		shadowTable = nil

@@ -149,6 +149,13 @@ public enum Document: Equatable, Codable {
 		}
 	}
 
+	public func suspend() {
+		switch self {
+		case .outline(let outline):
+			outline.suspend()
+		}
+	}
+
 	public func delete() {
 		switch self {
 		case .outline(let outline):
