@@ -25,7 +25,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		public var toChildIndex: Int
 	}
 	
-	public var id: EntityID
+	public var id: EntityID {
+		didSet {
+			documentMetaDataDidChange()
+		}
+	}
+	
 	public var title: String? {
 		didSet {
 			documentMetaDataDidChange()
