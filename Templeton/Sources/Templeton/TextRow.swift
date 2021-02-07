@@ -95,8 +95,8 @@ public final class TextRow: BaseRow, Codable {
 		case rows = "rows"
 	}
 	
-	private var topicData: Data?
-	private var noteData: Data?
+	var topicData: Data?
+	var noteData: Data?
 	
 	public override init() {
 		super.init()
