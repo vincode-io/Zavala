@@ -200,9 +200,15 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	public func createDocument(_ document: Document) {
 		document.reassignID(EntityID.document(id.accountID, document.id.documentUUID))
+		
 		if documents == nil {
 			documents = [Document]()
 		}
+		
+		for tag in document.tags ?? [Tag]() {
+			createTag(tag)
+		}
+		
 		documents!.append(document)
 		accountDocumentsDidChange()
 	}
@@ -210,6 +216,11 @@ public final class Account: NSObject, Identifiable, Codable {
 	public func deleteDocument(_ document: Document) {
 		documents?.removeFirst(object: document)
 		accountDocumentsDidChange()
+
+		for tag in document.tags ?? [Tag]() {
+			deleteTag(tag)
+		}
+
 		document.delete()
 	}
 	
