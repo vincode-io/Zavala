@@ -62,5 +62,11 @@ final class CloudKitOutlineZone: CloudKitZone {
 		self.database = container.privateCloudDatabase
 		self.zoneID = CKRecordZone.ID(zoneName: "Outline", ownerName: CKCurrentUserDefaultName)
 	}
-	
+
+	init(container: CKContainer, database: CKDatabase, zoneID: CKRecordZone.ID) {
+		self.container = container
+		self.database = database
+		self.zoneID = zoneID
+	}
+
 }
