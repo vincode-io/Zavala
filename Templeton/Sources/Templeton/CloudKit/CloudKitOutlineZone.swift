@@ -19,11 +19,9 @@ enum CloudKitOutlineZoneError: LocalizedError {
 
 final class CloudKitOutlineZone: CloudKitZone {
 
-	static var zoneID: CKRecordZone.ID {
-		return CKRecordZone.ID(zoneName: "Outline", ownerName: CKCurrentUserDefaultName)
-	}
-	
 	var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "CloudKit")
+
+	var zoneID: CKRecordZone.ID
 
 	weak var container: CKContainer?
 	weak var database: CKDatabase?
@@ -62,6 +60,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 	init(container: CKContainer) {
 		self.container = container
 		self.database = container.privateCloudDatabase
+		self.zoneID = CKRecordZone.ID(zoneName: "Outline", ownerName: CKCurrentUserDefaultName)
 	}
 	
 }

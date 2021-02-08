@@ -24,7 +24,7 @@
         "repositoryURL": "https://github.com/Ranchero-Software/RSCore.git",
         "state": {
           "branch": "main",
-          "revision": "6ab1d18bb6188347ba8f7ae8baa2420a4ceba1af",
+          "revision": "3fb97de5901d10e6afede307a31957f7579042e5",
           "version": null
         }
       },
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/drmohundro/SWXMLHash.git",
         "state": {
           "branch": null,
-          "revision": "a4931e5c3bafbedeb1601d3bb76bbe835c6d475a",
-          "version": "5.0.1"
+          "revision": "9183170d20857753d4f331b0ca63f73c60764bf3",
+          "version": "5.0.2"
         }
       },
       {
