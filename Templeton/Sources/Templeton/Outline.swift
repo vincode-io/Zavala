@@ -86,11 +86,27 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			documentMetaDataDidChange()
 		}
 	}
+	
+	public var cloudKitZoneName: String? {
+		didSet {
+			documentMetaDataDidChange()
+		}
+	}
+
+	public var cloudKitZoneOwner: String? {
+		didSet {
+			documentMetaDataDidChange()
+		}
+	}
 
 	public var rows: [Row]? {
 		didSet {
 			rowDictionaryNeedUpdate = true
 		}
+	}
+
+	public var isCloudKit: Bool {
+		return AccountType(rawValue: id.accountID) == .cloudKit
 	}
 	
 	public var shadowTable: [Row]?
@@ -181,6 +197,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		case cursorIsInNotes = "cursorIsInNotes"
 		case cursorPosition = "cursorPosition"
 		case tagIDs = "tagIDS"
+		case cloudKitZoneName = "cloudKitZoneName"
+		case cloudKitZoneOwner = "cloudKitZoneOwner"
 	}
 
 	private var cursorRowID: String?
