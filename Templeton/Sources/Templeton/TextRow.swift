@@ -92,7 +92,8 @@ public final class TextRow: BaseRow, Codable {
 		case noteData = "noteData"
 		case isExpanded = "isExpanded"
 		case isComplete = "isComplete"
-		case rows = "rows"
+		case rowOrder = "rowOrder"
+		case rowData = "rowData"
 	}
 	
 	var topicData: Data?
@@ -122,7 +123,8 @@ public final class TextRow: BaseRow, Codable {
 		noteData = try? container.decode(Data.self, forKey: .noteData)
 		isExpanded = try? container.decode(Bool.self, forKey: .isExpanded)
 		isComplete = try? container.decode(Bool.self, forKey: .isComplete)
-		rows = try? container.decode([Row].self, forKey: .rows)
+		rowOrder = try? container.decode([String].self, forKey: .rowOrder)
+		rowData = try? container.decode([String: Row].self, forKey: .rowData)
 	}
 	
 	public func encode(to encoder: Encoder) throws {
@@ -132,7 +134,8 @@ public final class TextRow: BaseRow, Codable {
 		try container.encode(noteData, forKey: .noteData)
 		try container.encode(isExpanded, forKey: .isExpanded)
 		try container.encode(isComplete, forKey: .isComplete)
-		try container.encode(rows, forKey: .rows)
+		try container.encode(rowOrder, forKey: .rowOrder)
+		try container.encode(rowData, forKey: .rowData)
 	}
 	
 	public override func markdown(indentLevel: Int = 0) -> String {

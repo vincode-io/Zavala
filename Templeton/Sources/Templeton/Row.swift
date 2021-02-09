@@ -147,6 +147,18 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
+	public func insertRow(_ row: Row, at: Int) {
+		associatedRow.insertRow(row, at: at)
+	}
+
+	public func removeRow(_ row: Row) {
+		associatedRow.removeRow(row)
+	}
+	
+	public func appendRow(_ row: Row) {
+		associatedRow.appendRow(row)
+	}
+	
 	public func asData() throws -> Data {
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary

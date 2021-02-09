@@ -100,8 +100,27 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 
 	public var rows: [Row]? {
-		didSet {
-			rowDictionaryNeedUpdate = true
+		get {
+			if let rowOrder = rowOrder, let rowData = rowData {
+				return rowOrder.compactMap { rowData[$0] }
+			} else {
+				return nil
+			}
+		}
+		set {
+			if let rows = newValue {
+				var order = [String]()
+				var data = [String: Row]()
+				for row in rows {
+					order.append(row.id)
+					data[row.id] = row
+				}
+				rowOrder = order
+				rowData = data
+			} else {
+				rowOrder = nil
+				rowData = nil
+			}
 		}
 	}
 
@@ -112,7 +131,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	public var shadowTable: [Row]?
 	
 	public var isEmpty: Bool {
-		return (title == nil || title?.isEmpty ?? true) && (rows == nil || rows?.isEmpty ?? true)
+		return (title == nil || title?.isEmpty ?? true) && (rowOrder == nil || rowOrder?.isEmpty ?? true)
 	}
 	
 	public var account: Account? {
@@ -209,14 +228,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	private var rowsFile: RowsFile?
 	
-	private var rowDictionaryNeedUpdate = true
-	private var _idToRowDictionary = [String: Row]()
-	private var idToRowDictionary: [String: Row] {
-		if rowDictionaryNeedUpdate {
-			rebuildRowDictionary()
-		}
-		return _idToRowDictionary
-	}
+	var rowOrder: [String]?
+	var rowData: [String: Row]?
 	
 	init(parentID: EntityID, title: String?) {
 		self.id = EntityID.document(parentID.accountID, UUID().uuidString)
@@ -226,6 +239,33 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		rowsFile = RowsFile(outline: self)
 	}
 
+	public func insertRow(_ row: Row, at: Int) {
+		if rowOrder == nil {
+			rowOrder = [String]()
+		}
+		if rowData == nil {
+			rowData = [String: Row]()
+		}
+		rowOrder?.insert(row.id, at: at)
+		rowData?[row.id] = row
+	}
+
+	public func removeRow(_ row: Row) {
+		rowOrder?.removeFirst(object: row.id)
+		rowData?.removeValue(forKey: row.id)
+	}
+
+	public func appendRow(_ row: Row) {
+		if rowOrder == nil {
+			rowOrder = [String]()
+		}
+		if rowData == nil {
+			rowData = [String: Row]()
+		}
+		rowOrder?.append(row.id)
+		rowData?[row.id] = row
+	}
+	
 	public func createTag(_ tag: Tag) {
 		if tagIDs == nil {
 			tagIDs = [String]()
@@ -262,7 +302,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public func findRow(id: String) -> Row? {
-		return idToRowDictionary[id]
+		return rowData?[id]
 	}
 	
 	public func childrenIndexes(forIndex: Int) -> [Int] {
@@ -468,8 +508,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var deletes = [Int]()
 
 		for row in rows {
-			var mutatingRow = row
-			mutatingRow.parent?.rows?.removeFirst(object: row)
+			row.parent?.removeRow(row)
 			
 			guard let rowShadowTableIndex = row.shadowTableIndex else { return nil }
 			deletes.append(rowShadowTableIndex)
@@ -534,13 +573,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			beforeTextRow.textRowStrings = texts
 		}
 
-		guard var parent = beforeRow.parent,
+		guard let parent = beforeRow.parent,
 			  let index = parent.rows?.firstIndex(of: beforeRow),
 			  let shadowTableIndex = beforeRow.shadowTableIndex else {
 			return nil
 		}
 		
-		parent.rows?.insert(row, at: index)
+		parent.insertRow(row, at: index)
 		var mutatingRow = row
 		mutatingRow.parent = parent
 		
@@ -560,6 +599,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			afterTextRow.textRowStrings = texts
 		}
 
+		// TODO: Go through here and change to use insertRow on this object
 		for row in rows.sortedByReverseDisplayOrder() {
 			if afterRow == nil {
 				var rows = self.rows ?? [Row]()
@@ -571,16 +611,15 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 				var mutatingRow = row
 				mutatingRow.parent = self
 				self.rows = rows
-			} else if var parent = row.parent, parent as? Row == afterRow {
-				parent.rows?.insert(row, at: 0)
+			} else if let parent = row.parent, parent as? Row == afterRow {
+				parent.insertRow(row, at: 0)
 			} else if var parent = row.parent {
 				var rows = parent.rows ?? [Row]()
 				let insertIndex = rows.firstIndex(where: { $0 == afterRow}) ?? rows.count - 1
 				rows.insert(row, at: insertIndex + 1)
 				parent.rows = rows
 			} else if afterRow?.isExpanded ?? true && !(afterRow?.rows?.isEmpty ?? true) {
-				var mutatingAfterRow = afterRow
-				mutatingAfterRow!.rows!.insert(row, at: 0)
+				afterRow?.insertRow(row, at: 0)
 				var mutatingRow = row
 				mutatingRow.parent = afterRow
 			} else if var parent = afterRow?.parent {
@@ -857,7 +896,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var reloads = Set<Int>()
 
 		for row in sortedRows {
-			guard var container = row.parent,
+			guard let container = row.parent,
 				  let rowIndex = container.rows?.firstIndex(of: row),
 				  rowIndex > 0,
 				  var newParentRow = container.rows?[rowIndex - 1],
@@ -867,12 +906,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			impacted.append(row)
 			expand(row: newParentRow)
 			
-			var siblingRows = newParentRow.rows ?? [Row]()
+			let siblingRows = newParentRow.rows ?? [Row]()
 			var mutatingRow = row
 			mutatingRow.parent = newParentRow
-			siblingRows.append(row)
+			newParentRow.appendRow(row)
 			newParentRow.rows = siblingRows
-			container.rows?.removeFirst(object: row)
+			container.removeRow(row)
 
 			newParentRow.isExpanded = true
 
@@ -920,10 +959,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var impacted = [Row]()
 
 		for row in rows.sortedWithDecendentsFiltered().reversed() {
-			guard var oldParent = row.parent as? Row,
+			guard let oldParent = row.parent as? Row,
 				  let oldParentRows = oldParent.rows,
 				  let oldRowIndex = oldParentRows.firstIndex(of: row),
-				  var newParent = oldParent.parent,
+				  let newParent = oldParent.parent,
 				  let oldParentIndex = newParent.rows?.firstIndex(of: oldParent) else { continue }
 			
 			impacted.append(row)
@@ -933,8 +972,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 				siblingsToMove.append(oldParentRows[i])
 			}
 
-			oldParent.rows?.removeFirst(object: row)
-			newParent.rows?.insert(row, at: oldParentIndex + 1)
+			oldParent.removeRow(row)
+			newParent.insertRow(row, at: oldParentIndex + 1)
 			
 			var mutatingRow = row
 			mutatingRow.parent = oldParent.parent
@@ -981,21 +1020,20 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		// Move the rows in the tree
 		for rowMove in sortedRowMoves {
-			var mutatingRow = rowMove.row
 			var mutatingToParent = rowMove.toParent
 			
-			mutatingRow.parent?.rows?.removeFirst(object: rowMove.row)
-			if let oldParentShadowTableIndex = (mutatingRow.parent as? Row)?.shadowTableIndex {
+			rowMove.row.parent?.removeRow(rowMove.row)
+			if let oldParentShadowTableIndex = (rowMove.row.parent as? Row)?.shadowTableIndex {
 				oldParentReloads.insert(oldParentShadowTableIndex)
 			}
 			
 			if mutatingToParent.rows == nil {
-				mutatingToParent.rows = [mutatingRow]
+				mutatingToParent.rows = [rowMove.row]
 			} else {
 				if rowMove.toChildIndex >= mutatingToParent.rows!.count {
-					mutatingToParent.rows!.append(mutatingRow)
+					mutatingToParent.appendRow(rowMove.row)
 				} else {
-					mutatingToParent.rows!.insert(mutatingRow, at: rowMove.toChildIndex)
+					mutatingToParent.insertRow(rowMove.row, at: rowMove.toChildIndex)
 				}
 			}
 		}
@@ -1042,9 +1080,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		guard !isBeingViewed else { return }
 		
 		rowsFile = nil
-		rows = nil
 		shadowTable = nil
-		_idToRowDictionary = [String: Row]()
+		rowOrder = nil
+		rowData = nil
 	}
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
@@ -1097,7 +1135,6 @@ extension Outline {
 	private func outlineBodyDidChange() {
 		self.updated = Date()
 		documentMetaDataDidChange()
-		rowDictionaryNeedUpdate = true
 		rowsFile?.markAsDirty()
 	}
 	
@@ -1325,20 +1362,6 @@ extension Outline {
 		resetShadowTableIndexes(startingAt: rowShadowTableIndex)
 		let changes = OutlineElementChanges(deletes: reloads, reloads: Set([rowShadowTableIndex]))
 		outlineElementsDidChange(changes)
-	}
-	
-	func rebuildRowDictionary() {
-		var idDictionary = [String: Row]()
-		
-		func dictBuildVisitor(_ visited: Row) {
-			idDictionary[visited.id] = visited
-			visited.rows?.forEach { $0.visit(visitor: dictBuildVisitor) }
-		}
-
-		rows?.forEach { $0.visit(visitor: dictBuildVisitor(_:)) }
-		
-		_idToRowDictionary = idDictionary
-		rowDictionaryNeedUpdate = false
 	}
 	
 	private func rebuildShadowTable() -> OutlineElementChanges {

@@ -9,6 +9,11 @@ import Foundation
 import os.log
 import RSCore
 
+struct OutlineRows: Codable {
+	var rowOrder: [String]
+	var rowData: [String: Row]
+}
+
 final class RowsFile {
 	
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "RowsFile")
@@ -89,26 +94,28 @@ private extension RowsFile {
 		}
 
 		let decoder = PropertyListDecoder()
-		let rows: [Row]
+		let outlineRows: OutlineRows
 		do {
-			rows = try decoder.decode([Row].self, from: rowsData)
+			outlineRows = try decoder.decode(OutlineRows.self, from: rowsData)
 		} catch {
 			os_log(.error, log: log, "RowsFile read deserialization failed: %@.", error.localizedDescription)
 			return
 		}
 
-		outline?.rows = rows
+		outline?.rowOrder = outlineRows.rowOrder
+		outline?.rowData = outlineRows.rowData
 	}
 	
 	func saveCallback() {
-		guard let rows = outline?.rows else { return }
+		guard let rowOrder = outline?.rowOrder, let rowData = outline?.rowData else { return }
+		let outlineRows = OutlineRows(rowOrder: rowOrder, rowData: rowData)
 
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary
 
 		let rowsData: Data
 		do {
-			rowsData = try encoder.encode(rows)
+			rowsData = try encoder.encode(outlineRows)
 		} catch {
 			os_log(.error, log: log, "RowsFile read deserialization failed: %@.", error.localizedDescription)
 			return
