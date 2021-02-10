@@ -333,13 +333,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 		
 		updateSpotlightIndex()
-		outline?.isBeingViewed = false
+		outline?.beingViewedCount = outline?.beingViewedCount ?? 1 - 1
 		outline?.suspend()
 		clearUndoableCommands()
 	
 		// Assign the new Outline and load it
 		outline = newOutline
-		outline?.isBeingViewed = true
+		outline?.beingViewedCount = outline?.beingViewedCount ?? 0 + 1
 		outline?.load()
 			
 		guard isViewLoaded else { return }
