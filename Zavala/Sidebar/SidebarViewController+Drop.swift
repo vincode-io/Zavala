@@ -53,11 +53,13 @@ extension SidebarViewController: UICollectionViewDropDelegate {
 		guard let document = dragItem.localObject as? Document else {
 			for dropItem in coordinator.items {
 				let provider = dropItem.dragItem.itemProvider
-				provider.loadDataRepresentation(forTypeIdentifier: "org.opml.opml") { (opmlData, error) in
+				provider.loadDataRepresentation(forTypeIdentifier: "org.opml.opml") { [weak self] (opmlData, error) in
 					guard let opmlData = opmlData else { return }
 					DispatchQueue.main.async {
 						let tag = (container as? TagDocuments)?.tag
-						container.account?.importOPML(opmlData, tag: tag)
+						if let document = container.account?.importOPML(opmlData, tag: tag) {
+							(self?.splitViewController as? MainSplitViewController)?.activityManager.updateIndex(forDocument: document)
+						}
 					}
 				}
 			}

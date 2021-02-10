@@ -56,7 +56,6 @@ class ActivityManager {
 		self.invalidateSelectDocument()
 		self.selectDocumentActivity = self.makeSelectDocumentActivity(documentContainer, document)
 		self.selectDocumentActivity!.becomeCurrent()
-		self.updateIndex(forDocument: document)
 	}
 	
 	func invalidateSelectDocument() {
