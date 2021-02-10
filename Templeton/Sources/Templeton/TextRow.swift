@@ -127,6 +127,11 @@ public final class TextRow: BaseRow, Codable {
 		rowData = try? container.decode([String: Row].self, forKey: .rowData)
 	}
 	
+	init(id: String) {
+		super.init()
+		self.id = id
+	}
+	
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 		try container.encode(id, forKey: .id)

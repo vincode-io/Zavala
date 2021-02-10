@@ -121,7 +121,8 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 	
 	public init(from data: Data) throws {
 		let decoder = PropertyListDecoder()
-		self = try decoder.decode(Row.self, from: data)
+		let rowData = try decoder.decode(RowData.self, from: data)
+		self = rowData.row
 	}
 
 	public init(from decoder: Decoder) throws {
@@ -162,7 +163,7 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 	public func asData() throws -> Data {
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary
-		return try encoder.encode(self)
+		return try encoder.encode(RowData(row: self))
 	}
 
 	public func isDecendent(_ row: Row) -> Bool {
