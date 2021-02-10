@@ -300,6 +300,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let documentAccountURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 		let documentAccountsFolder = documentAccountURL.appendingPathComponent("Accounts").absoluteString
 		let documentAccountsFolderPath = String(documentAccountsFolder.suffix(from: documentAccountsFolder.index(documentAccountsFolder.startIndex, offsetBy: 7)))
+		
+		if !AppDefaults.shared.deletedLocalForV14 {
+			try? FileManager.default.removeItem(atPath: documentAccountsFolderPath)
+			AppDefaults.shared.deletedLocalForV14 = true
+		}
+		
 		AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath)
 		return true
 	}

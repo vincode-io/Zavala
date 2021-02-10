@@ -99,35 +99,33 @@ public final class TextRow: BaseRow, Codable {
 	var topicData: Data?
 	var noteData: Data?
 	
-	public override init() {
+	public init(document: Document) {
 		super.init()
-		self.id = UUID().uuidString
-		rows = [Row]()
+		self.id = .row(document.id.accountID, document.id.documentUUID, UUID().uuidString)
 	}
 
-	public init(topicPlainText: String, notePlainText: String? = nil) {
+	public init(document: Document, topicPlainText: String, notePlainText: String? = nil) {
 		super.init()
-		self.id = UUID().uuidString
+		self.id = .row(document.id.accountID, document.id.documentUUID, UUID().uuidString)
 		topic = NSAttributedString(markdownRepresentation: topicPlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		if let notePlainText = notePlainText {
 			note = NSAttributedString(markdownRepresentation: notePlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		}
-		rows = [Row]()
 	}
 	
 	public init(from decoder: Decoder) throws {
 		super.init()
 		let container = try decoder.container(keyedBy: CodingKeys.self)
-		id = try container.decode(String.self, forKey: .id)
+		id = try container.decode(EntityID.self, forKey: .id)
 		topicData = try? container.decode(Data.self, forKey: .topicData)
 		noteData = try? container.decode(Data.self, forKey: .noteData)
 		isExpanded = try? container.decode(Bool.self, forKey: .isExpanded)
 		isComplete = try? container.decode(Bool.self, forKey: .isComplete)
-		rowOrder = try? container.decode([String].self, forKey: .rowOrder)
-		rowData = try? container.decode([String: Row].self, forKey: .rowData)
+		rowOrder = try? container.decode([EntityID].self, forKey: .rowOrder)
+		rowData = try? container.decode([EntityID: Row].self, forKey: .rowData)
 	}
 	
-	init(id: String) {
+	init(id: EntityID) {
 		super.init()
 		self.id = id
 	}

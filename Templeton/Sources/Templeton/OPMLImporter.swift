@@ -8,31 +8,27 @@
 import Foundation
 import SWXMLHash
 
-public protocol OPMLImporter: class {
+public protocol OPMLImporter: RowContainer {
 	var rows: [Row]? { get set }
-	func importRows(_ rowIndexers: [XMLIndexer])
+	func importRows(outline: Outline, rowIndexers: [XMLIndexer])
 }
 
 public extension OPMLImporter {
 	
-	func importRows(_ rowIndexers: [XMLIndexer]) {
-		var row = [Row]()
-		
+	func importRows(outline: Outline, rowIndexers: [XMLIndexer]) {
 		for rowIndexer in rowIndexers {
 			let topicPlainText = rowIndexer.element?.attribute(by: "text")?.text ?? ""
 			let notePlainText = rowIndexer.element?.attribute(by: "_note")?.text
 			
-			let textRow = TextRow(topicPlainText: topicPlainText, notePlainText: notePlainText)
-			
+			let textRow = TextRow(document: .outline(outline), topicPlainText: topicPlainText, notePlainText: notePlainText)
+
 			if rowIndexer.element?.attribute(by: "_status")?.text == "checked" {
 				textRow.isComplete = true
 			}
 			
-			textRow.importRows(rowIndexer["outline"].all)
-			row.append(.text(textRow))
+			appendRow(.text(textRow))
+			textRow.importRows(outline: outline, rowIndexers: rowIndexer["outline"].all)
 		}
-		
-		self.rows = row
 	}
 	
 }

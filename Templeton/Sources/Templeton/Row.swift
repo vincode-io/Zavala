@@ -8,6 +8,7 @@
 import Foundation
 
 public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
+	case blank
 	case text(TextRow)
 	
 	public static let typeIdentifier = "io.vincode.Zavala.Row"
@@ -30,7 +31,7 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 
-	public var id: String {
+	public var id: EntityID {
 		get {
 			associatedRow.id
 		}
@@ -104,6 +105,8 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		switch self {
 		case .text(let row):
 			return row
+		default:
+			fatalError()
 		}
 	}
 	
@@ -111,6 +114,8 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		switch self {
 		case .text(let row):
 			return row
+		default:
+			fatalError()
 		}
 	}
 	
@@ -145,6 +150,8 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		case .text(let textRow):
 			try container.encode("text", forKey: .type)
 			try container.encode(textRow, forKey: .textRow)
+		default:
+			fatalError()
 		}
 	}
 	
@@ -177,7 +184,7 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		return associatedRow.markdown(indentLevel: indentLevel)
 	}
 	
-	public func opml() -> String {
+	public func opml(indentLevel: Int = 0) -> String {
 		return associatedRow.opml(indentLevel: indentLevel)
 	}
 	

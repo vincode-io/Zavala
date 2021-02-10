@@ -109,8 +109,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		set {
 			if let rows = newValue {
-				var order = [String]()
-				var data = [String: Row]()
+				var order = [EntityID]()
+				var data = [EntityID: Row]()
 				for row in rows {
 					order.append(row.id)
 					data[row.id] = row
@@ -220,7 +220,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		case cloudKitZoneOwner = "cloudKitZoneOwner"
 	}
 
-	private var cursorRowID: String?
+	private var cursorRowID: EntityID?
 	private var cursorIsInNotes: Bool?
 	private var cursorPosition: Int?
 	
@@ -228,8 +228,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	private var rowsFile: RowsFile?
 	
-	var rowOrder: [String]?
-	var rowData: [String: Row]?
+	var rowOrder: [EntityID]?
+	var rowData: [EntityID: Row]?
 	
 	init(parentID: EntityID, title: String?) {
 		self.id = EntityID.document(parentID.accountID, UUID().uuidString)
@@ -241,10 +241,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 	public func insertRow(_ row: Row, at: Int) {
 		if rowOrder == nil {
-			rowOrder = [String]()
+			rowOrder = [EntityID]()
 		}
 		if rowData == nil {
-			rowData = [String: Row]()
+			rowData = [EntityID: Row]()
 		}
 		rowOrder?.insert(row.id, at: at)
 		rowData?[row.id] = row
@@ -257,10 +257,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 	public func appendRow(_ row: Row) {
 		if rowOrder == nil {
-			rowOrder = [String]()
+			rowOrder = [EntityID]()
 		}
 		if rowData == nil {
-			rowData = [String: Row]()
+			rowData = [EntityID: Row]()
 		}
 		rowOrder?.append(row.id)
 		rowData?[row.id] = row
@@ -301,7 +301,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return filename
 	}
 	
-	public func findRow(id: String) -> Row? {
+	public func findRow(id: EntityID) -> Row? {
 		return rowData?[id]
 	}
 	
@@ -357,7 +357,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return md
 	}
 	
-	public func opml() -> String {
+	public func opml(indentLevel: Int = 0) -> String {
 		var returnToSuspend = false
 		if rowsFile == nil {
 			returnToSuspend = true

@@ -9,7 +9,7 @@ import Foundation
 
 struct TextRowData: Codable {
 	
-	private var id: String
+	private var id: EntityID
 	private var topicData: Data?
 	private var noteData: Data?
 	private var isExpanded: Bool?

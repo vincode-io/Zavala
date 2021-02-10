@@ -10,8 +10,8 @@ import os.log
 import RSCore
 
 struct OutlineRows: Codable {
-	var rowOrder: [String]
-	var rowData: [String: Row]
+	var rowOrder: [EntityID]
+	var rowData: [EntityID: Row]
 }
 
 final class RowsFile {

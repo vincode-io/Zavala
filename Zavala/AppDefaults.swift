@@ -21,6 +21,7 @@ final class AppDefaults {
 	
 	struct Key {
 		static let lastSelectedAccountID = "lastSelectedAccountID"
+		static let deletedLocalForV14 = "deletedLocalForV14"
 	}
 	
 	var lastSelectedAccountID: Int {
@@ -29,6 +30,15 @@ final class AppDefaults {
 		}
 		set {
 			Self.setInt(for: Key.lastSelectedAccountID, newValue)
+		}
+	}
+	
+	var deletedLocalForV14: Bool {
+		get {
+			return Self.bool(for: Key.deletedLocalForV14)
+		}
+		set {
+			Self.setBool(for: Key.deletedLocalForV14, newValue)
 		}
 	}
 

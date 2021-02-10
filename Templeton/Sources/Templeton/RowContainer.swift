@@ -13,5 +13,5 @@ public protocol RowContainer {
 	func removeRow(_: Row)
 	func appendRow(_: Row)
 	func markdown(indentLevel: Int) -> String
-	func opml() -> String
+	func opml(indentLevel: Int) -> String
 }

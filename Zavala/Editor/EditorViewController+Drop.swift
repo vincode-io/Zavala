@@ -215,6 +215,8 @@ extension EditorViewController {
 	}
 
 	private func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
+		guard let outline = outline else { return }
+		
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
 			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(kUTTypeUTF8PlainText as String) {
 				return dropItem.dragItem.itemProvider
@@ -244,7 +246,7 @@ extension EditorViewController {
 			var rows = [Row]()
 			let textRows = text.split(separator: "\n").map { String($0) }
 			for textRow in textRows {
-				let row = Row.text(TextRow(topicPlainText: textRow.trimmingWhitespace))
+				let row = Row.text(TextRow(document: .outline(outline), topicPlainText: textRow.trimmingWhitespace))
 				rows.append(row)
 			}
 			

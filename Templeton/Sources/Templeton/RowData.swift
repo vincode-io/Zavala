@@ -39,6 +39,8 @@ enum RowData: Codable {
 		switch row {
 		case .text(let textRow):
 			self = .text(TextRowData(textRow: textRow))
+		default:
+			fatalError()
 		}
 	}
 	

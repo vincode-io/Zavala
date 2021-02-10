@@ -12,7 +12,7 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 	public var parent: RowContainer?
 	public var shadowTableIndex: Int?
 
-	public var id: String
+	public var id: EntityID
 	public var isExpanded: Bool?
 	public var rows: [Row]? {
 		get {
@@ -24,8 +24,8 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		}
 		set {
 			if let rows = newValue {
-				var order = [String]()
-				var data = [String: Row]()
+				var order = [EntityID]()
+				var data = [EntityID: Row]()
 				for row in rows {
 					order.append(row.id)
 					data[row.id] = row
@@ -39,45 +39,57 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		}
 	}
 	
-	var rowOrder: [String]?
-	var rowData: [String: Row]?
-
-	public override init() {
-		self.id = ""
+	public var account: Account? {
+		return AccountManager.shared.findAccount(accountID: id.accountID)
 	}
 	
-	func insertRow(_ row: Row, at: Int) {
+	public var outline: Outline? {
+		let document = account?.findDocument(documentUUID: id.documentUUID)
+		if case .outline(let outline) = document {
+			return outline
+		}
+		return nil
+	}
+	
+	var rowOrder: [EntityID]?
+	var rowData: [EntityID: Row]?
+
+	public override init() {
+		self.id = .row(0, "", "")
+	}
+	
+	public func insertRow(_ row: Row, at: Int) {
 		if rowOrder == nil {
-			rowOrder = [String]()
+			rowOrder = [EntityID]()
 		}
 		if rowData == nil {
-			rowData = [String: Row]()
+			rowData = [EntityID: Row]()
 		}
 		rowOrder?.insert(row.id, at: at)
 		rowData?[row.id] = row
 	}
 
-	func removeRow(_ row: Row) {
+	public func removeRow(_ row: Row) {
 		rowOrder?.removeFirst(object: row.id)
 		rowData?.removeValue(forKey: row.id)
 	}
 
-	func appendRow(_ row: Row) {
+	public func appendRow(_ row: Row) {
 		if rowOrder == nil {
-			rowOrder = [String]()
+			rowOrder = [EntityID]()
 		}
 		if rowData == nil {
-			rowData = [String: Row]()
+			rowData = [EntityID: Row]()
 		}
 		rowOrder?.append(row.id)
 		rowData?[row.id] = row
 	}
 
-	public func markdown(indentLevel: Int = 0) -> String {
+	public func markdown(indentLevel: Int) -> String {
 		fatalError("markdown not implemented")
 	}
 	
-	public func opml(indentLevel: Int = 0) -> String {
+	public func opml(indentLevel: Int) -> String {
 		fatalError("opml not implemented")
 	}
 

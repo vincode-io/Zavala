@@ -167,7 +167,7 @@ public final class Account: NSObject, Identifiable, Codable {
 			}
 		}
 
-		outline.importRows(outlineIndexers)
+		outline.importRows(outline: outline, rowIndexers: outlineIndexers)
 
 		if let expansionState = headIndexer["expansionState"].element?.text {
 			outline.expansionState = expansionState

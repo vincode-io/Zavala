@@ -570,7 +570,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 				return collectionView.dequeueConfiguredReusableCell(using: tagAddRegistration!, for: indexPath, item: outline!.id)
 			}
 		default:
-			let row = outline?.shadowTable?[indexPath.row] ?? Row.text(TextRow())
+			let row = outline?.shadowTable?[indexPath.row] ?? Row.blank
 			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration!, for: indexPath, item: row)
 		}
 	}
@@ -1414,7 +1414,7 @@ extension EditorViewController {
 				var rows = [Row]()
 				let textRows = text.split(separator: "\n").map { String($0) }
 				for textRow in textRows {
-					let row = Row.text(TextRow(topicPlainText: textRow.trimmingWhitespace))
+					let row = Row.text(TextRow(document: .outline(outline), topicPlainText: textRow.trimmingWhitespace))
 					rows.append(row)
 				}
 				
