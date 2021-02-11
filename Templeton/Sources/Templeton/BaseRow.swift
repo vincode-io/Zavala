@@ -16,25 +16,29 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 	public var isExpanded: Bool?
 	public var rows: [Row]? {
 		get {
-			if let rowOrder = rowOrder, let rowData = rowData {
-				return rowOrder.compactMap { rowData[$0] }
+			if let rowOrder = rowOrder {
+				guard let outline = outline else { return nil }
+				return rowOrder.compactMap { outline.keyedRows?[$0] }
 			} else {
 				return nil
 			}
 		}
 		set {
+			guard let outline = outline else { return }
+
+			for id in rowOrder ?? [EntityID]() {
+				outline.keyedRows?.removeValue(forKey: id)
+			}
+
 			if let rows = newValue {
 				var order = [EntityID]()
-				var data = [EntityID: Row]()
 				for row in rows {
 					order.append(row.id)
-					data[row.id] = row
+					outline.keyedRows?[row.id] = row
 				}
 				rowOrder = order
-				rowData = data
 			} else {
 				rowOrder = nil
-				rowData = nil
 			}
 		}
 	}
@@ -52,7 +56,6 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 	}
 	
 	var rowOrder: [EntityID]?
-	var rowData: [EntityID: Row]?
 
 	public override init() {
 		self.id = .row(0, "", "")
@@ -62,27 +65,21 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		if rowOrder == nil {
 			rowOrder = [EntityID]()
 		}
-		if rowData == nil {
-			rowData = [EntityID: Row]()
-		}
 		rowOrder?.insert(row.id, at: at)
-		rowData?[row.id] = row
+		outline?.keyedRows?[row.id] = row
 	}
 
 	public func removeRow(_ row: Row) {
 		rowOrder?.removeFirst(object: row.id)
-		rowData?.removeValue(forKey: row.id)
+		outline?.keyedRows?.removeValue(forKey: row.id)
 	}
 
 	public func appendRow(_ row: Row) {
 		if rowOrder == nil {
 			rowOrder = [EntityID]()
 		}
-		if rowData == nil {
-			rowData = [EntityID: Row]()
-		}
 		rowOrder?.append(row.id)
-		rowData?[row.id] = row
+		outline?.keyedRows?[row.id] = row
 	}
 
 	public func markdown(indentLevel: Int) -> String {

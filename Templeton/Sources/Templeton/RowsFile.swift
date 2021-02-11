@@ -11,7 +11,7 @@ import RSCore
 
 struct OutlineRows: Codable {
 	var rowOrder: [EntityID]
-	var rowData: [EntityID: Row]
+	var keyedRows: [EntityID: Row]
 }
 
 final class RowsFile {
@@ -103,12 +103,12 @@ private extension RowsFile {
 		}
 
 		outline?.rowOrder = outlineRows.rowOrder
-		outline?.rowData = outlineRows.rowData
+		outline?.keyedRows = outlineRows.keyedRows
 	}
 	
 	func saveCallback() {
-		guard let rowOrder = outline?.rowOrder, let rowData = outline?.rowData else { return }
-		let outlineRows = OutlineRows(rowOrder: rowOrder, rowData: rowData)
+		guard let rowOrder = outline?.rowOrder, let keyedRows = outline?.keyedRows else { return }
+		let outlineRows = OutlineRows(rowOrder: rowOrder, keyedRows: keyedRows)
 
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary

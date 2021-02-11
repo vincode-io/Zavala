@@ -93,7 +93,6 @@ public final class TextRow: BaseRow, Codable {
 		case isExpanded = "isExpanded"
 		case isComplete = "isComplete"
 		case rowOrder = "rowOrder"
-		case rowData = "rowData"
 	}
 	
 	var topicData: Data?
@@ -122,7 +121,6 @@ public final class TextRow: BaseRow, Codable {
 		isExpanded = try? container.decode(Bool.self, forKey: .isExpanded)
 		isComplete = try? container.decode(Bool.self, forKey: .isComplete)
 		rowOrder = try? container.decode([EntityID].self, forKey: .rowOrder)
-		rowData = try? container.decode([EntityID: Row].self, forKey: .rowData)
 	}
 	
 	init(id: EntityID) {
@@ -138,7 +136,6 @@ public final class TextRow: BaseRow, Codable {
 		try container.encode(isExpanded, forKey: .isExpanded)
 		try container.encode(isComplete, forKey: .isComplete)
 		try container.encode(rowOrder, forKey: .rowOrder)
-		try container.encode(rowData, forKey: .rowData)
 	}
 	
 	public override func markdown(indentLevel: Int = 0) -> String {

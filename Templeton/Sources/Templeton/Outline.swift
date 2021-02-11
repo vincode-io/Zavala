@@ -102,7 +102,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 	public var rows: [Row]? {
 		get {
-			if let rowOrder = rowOrder, let rowData = rowData {
+			if let rowOrder = rowOrder, let rowData = keyedRows {
 				return rowOrder.compactMap { rowData[$0] }
 			} else {
 				return nil
@@ -117,10 +117,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 					data[row.id] = row
 				}
 				rowOrder = order
-				rowData = data
+				keyedRows = data
 			} else {
 				rowOrder = nil
-				rowData = nil
+				keyedRows = nil
 			}
 		}
 	}
@@ -222,7 +222,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 
 	var rowOrder: [EntityID]?
-	var rowData: [EntityID: Row]?
+	var keyedRows: [EntityID: Row]?
 	
 	private var cursorRowID: EntityID?
 	private var cursorIsInNotes: Bool?
@@ -239,31 +239,35 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		rowsFile = RowsFile(outline: self)
 	}
 
+	public func findRow(id: EntityID) -> Row? {
+		return keyedRows?[id]
+	}
+	
 	public func insertRow(_ row: Row, at: Int) {
 		if rowOrder == nil {
 			rowOrder = [EntityID]()
 		}
-		if rowData == nil {
-			rowData = [EntityID: Row]()
+		if keyedRows == nil {
+			keyedRows = [EntityID: Row]()
 		}
 		rowOrder?.insert(row.id, at: at)
-		rowData?[row.id] = row
+		keyedRows?[row.id] = row
 	}
 
 	public func removeRow(_ row: Row) {
 		rowOrder?.removeFirst(object: row.id)
-		rowData?.removeValue(forKey: row.id)
+		keyedRows?.removeValue(forKey: row.id)
 	}
 
 	public func appendRow(_ row: Row) {
 		if rowOrder == nil {
 			rowOrder = [EntityID]()
 		}
-		if rowData == nil {
-			rowData = [EntityID: Row]()
+		if keyedRows == nil {
+			keyedRows = [EntityID: Row]()
 		}
 		rowOrder?.append(row.id)
-		rowData?[row.id] = row
+		keyedRows?[row.id] = row
 	}
 	
 	public func createTag(_ tag: Tag) {
@@ -299,10 +303,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		filename = filename.replacingOccurrences(of: " ", with: "").trimmingCharacters(in: .whitespaces)
 		filename = "\(filename).\(suffix)"
 		return filename
-	}
-	
-	public func findRow(id: EntityID) -> Row? {
-		return rowData?[id]
 	}
 	
 	public func childrenIndexes(forIndex: Int) -> [Int] {
@@ -1069,7 +1069,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		rowsFile = nil
 		shadowTable = nil
 		rowOrder = nil
-		rowData = nil
+		keyedRows = nil
 	}
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
