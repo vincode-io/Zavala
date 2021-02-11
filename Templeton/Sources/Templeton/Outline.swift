@@ -109,19 +109,25 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 		set {
+			if keyedRows == nil {
+				keyedRows = [EntityID: Row]()
+			}
+			
+			for id in rowOrder ?? [EntityID]() {
+				keyedRows?.removeValue(forKey: id)
+			}
+
 			if let rows = newValue {
 				var order = [EntityID]()
-				var data = [EntityID: Row]()
 				for row in rows {
 					order.append(row.id)
-					data[row.id] = row
+					keyedRows?[row.id] = row
 				}
 				rowOrder = order
-				keyedRows = data
 			} else {
 				rowOrder = nil
-				keyedRows = nil
 			}
+			
 		}
 	}
 
