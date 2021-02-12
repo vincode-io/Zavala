@@ -9,6 +9,11 @@ import Foundation
 
 public class CloudKitManager {
 	
+	enum Action {
+		case add
+		case change
+		case delete
+	}
 	
 	
 }

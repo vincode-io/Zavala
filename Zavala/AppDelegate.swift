@@ -572,9 +572,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.remove(menu: .openRecent)
 		
 		// Application Menu
-		let appMenu = UIMenu(title: "", options: .displayInline, children: [checkForUpdates])
-		builder.insertSibling(appMenu, afterMenu: .about)
-
+		if let preferencesMenu = builder.menu(for: .preferences)?.children[0] {
+			let appMenu = UIMenu(title: "", options: .displayInline, children: [preferencesMenu, checkForUpdates])
+			builder.replace(menu: .preferences, with: appMenu)
+		}
+		
 		// File Menu
 		let archiveMenu = UIMenu(title: "", options: .displayInline, children: [restoreArchiveCommand, archiveLocalCommand])
 		builder.insertChild(archiveMenu, atStartOfMenu: .file)

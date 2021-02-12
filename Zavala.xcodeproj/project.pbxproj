@@ -23,6 +23,7 @@
 		5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0C025CCAFEA004673C3 /* EditorTagAddContentView.swift */; };
 		5147D0C525CCD6AA004673C3 /* SidebarViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0C425CCD6AA004673C3 /* SidebarViewController+Drop.swift */; };
 		5147D0C825CE28AE004673C3 /* NSDataDetector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */; };
+		514954EA25D5F82100D64E54 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 514954E925D5F82100D64E54 /* Settings.bundle */; };
 		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
 		514EF15F25A78A8C00B1FFB6 /* CrashReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */; };
@@ -168,6 +169,7 @@
 		5147D0C025CCAFEA004673C3 /* EditorTagAddContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagAddContentView.swift; sourceTree = "<group>"; };
 		5147D0C425CCD6AA004673C3 /* SidebarViewController+Drop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SidebarViewController+Drop.swift"; sourceTree = "<group>"; };
 		5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDataDetector+.swift"; sourceTree = "<group>"; };
+		514954E925D5F82100D64E54 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
 		514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporter.swift; sourceTree = "<group>"; };
@@ -351,6 +353,7 @@
 			children = (
 				513F32A12594062C0003048F /* README.md */,
 				5181A9362554D92000C153E8 /* Zavala */,
+				514954E925D5F82100D64E54 /* Settings.bundle */,
 				51E060B025A4547400194066 /* SparklePlugin */,
 				51C4C3CC2555F07A004E0206 /* Frameworks */,
 				5181A9352554D92000C153E8 /* Products */,
@@ -614,6 +617,7 @@
 				510655BF258E8DE1000E7A53 /* File.icns in Resources */,
 				5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */,
 				510655D1258E91BA000E7A53 /* file44x58.png in Resources */,
+				514954EA25D5F82100D64E54 /* Settings.bundle in Resources */,
 				510655D5258E922A000E7A53 /* file22x29.png in Resources */,
 				5181A9412554D92100C153E8 /* Assets.xcassets in Resources */,
 				510655C9258E906E000E7A53 /* file320x320.png in Resources */,
