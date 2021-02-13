@@ -96,7 +96,8 @@ public final class AccountManager {
 	}
 
 	public func findAccount(accountID: Int) -> Account? {
-		return accountsDictionary[accountID]
+		guard let account = accountsDictionary[accountID] else { return nil }
+		return account.isActive ? account : nil
 	}
 	
 	public func findDocumentContainer(_ entityID: EntityID) -> DocumentContainer? {
@@ -104,7 +105,7 @@ public final class AccountManager {
 		case .search(let searchText):
 			return Search(searchText: searchText)
 		case .allDocuments(let accountID), .recentDocuments(let accountID), .tagDocuments(let accountID, _):
-			return accountsDictionary[accountID]?.findDocumentContainer(entityID)
+			return findAccount(accountID: accountID)?.findDocumentContainer(entityID)
 		default:
 			fatalError()
 		}
@@ -112,7 +113,7 @@ public final class AccountManager {
 	
 	public func findDocument(_ entityID: EntityID) -> Document? {
 		if case .document(let accountID, let documentUUID) = entityID,
-		   let account = accountsDictionary[accountID] {
+		   let account = findAccount(accountID: accountID) {
 			return account.findDocument(documentUUID: documentUUID)
 		}
 		return nil
