@@ -22,6 +22,8 @@ final class AppDefaults {
 	struct Key {
 		static let lastSelectedAccountID = "lastSelectedAccountID"
 		static let deletedLocalForV14 = "deletedLocalForV14"
+		static let enableCloudKit = "enableCloudKit"
+		static let hideLocalAccount = "hideLocalAccount"
 	}
 	
 	var lastSelectedAccountID: Int {
@@ -39,6 +41,24 @@ final class AppDefaults {
 		}
 		set {
 			Self.setBool(for: Key.deletedLocalForV14, newValue)
+		}
+	}
+
+	var enableCloudKit: Bool {
+		get {
+			return Self.bool(for: Key.enableCloudKit)
+		}
+		set {
+			Self.setBool(for: Key.enableCloudKit, newValue)
+		}
+	}
+
+	var hideLocalAccount: Bool {
+		get {
+			return Self.bool(for: Key.hideLocalAccount)
+		}
+		set {
+			Self.setBool(for: Key.hideLocalAccount, newValue)
 		}
 	}
 
