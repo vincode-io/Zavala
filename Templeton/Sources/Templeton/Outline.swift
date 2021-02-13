@@ -245,6 +245,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		rowsFile = RowsFile(outline: self)
 	}
 
+	public func prepareForViewing() {
+		rebuildTransientData()
+	}
+	
 	public func findRow(id: EntityID) -> Row? {
 		return keyedRows?[id]
 	}
@@ -1043,7 +1047,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		guard rowsFile == nil else { return }
 		rowsFile = RowsFile(outline: self)
 		rowsFile!.load()
-		rebuildTransientData()
 	}
 	
 	public func save() {

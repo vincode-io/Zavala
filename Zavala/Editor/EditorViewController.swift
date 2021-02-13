@@ -339,8 +339,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 		// Assign the new Outline and load it
 		outline = newOutline
-		outline?.beingViewedCount = outline?.beingViewedCount ?? 0 + 1
+		outline?.beingViewedCount = (outline?.beingViewedCount ?? 0) + 1
 		outline?.load()
+		outline?.prepareForViewing()
 			
 		guard isViewLoaded else { return }
 		updateUI()
