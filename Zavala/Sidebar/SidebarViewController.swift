@@ -209,7 +209,9 @@ extension SidebarViewController {
 	}
 	
 	private func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<SidebarItem>? {
-		guard let localAccount = AccountManager.shared.localAccount else { return nil }
+		let localAccount = AccountManager.shared.localAccount
+		
+		guard localAccount.isActive else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
 		let header = SidebarItem.sidebarItem(title: AccountType.local.name, id: .header(.localAccount))
@@ -228,12 +230,16 @@ extension SidebarViewController {
 		}
 		if let snapshot = self.localAccountSnapshot() {
 			applySnapshot(snapshot, section: .localAccount, animated: false)
+		} else {
+			applySnapshot(NSDiffableDataSourceSectionSnapshot<SidebarItem>(), section: .localAccount, animated: false)
 		}
 	}
 	
 	private func applyChangeSnapshot() {
 		if let snapshot = localAccountSnapshot() {
 			applySnapshot(snapshot, section: .localAccount, animated: true)
+		} else {
+			applySnapshot(NSDiffableDataSourceSectionSnapshot<SidebarItem>(), section: .localAccount, animated: true)
 		}
 	}
 	

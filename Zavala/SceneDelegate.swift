@@ -17,6 +17,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		guard let mainSplitViewController = window?.rootViewController as? MainSplitViewController else {
 			return
 		}
+
+		NotificationCenter.default.addObserver(self, selector: #selector(checkForUserDefaultsChanges), name: UserDefaults.didChangeNotification, object: nil)
+
 		self.mainSplitViewController = mainSplitViewController
 		
 		#if targetEnvironment(macCatalyst)
@@ -49,7 +52,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
 		mainSplitViewController.handle(userActivity)
 	}
-
+	
+	func sceneWillEnterForeground(_ scene: UIScene) {
+		checkForUserDefaultsChanges()
+	}
+	
 	func sceneDidEnterBackground(_ scene: UIScene) {
 		AccountManager.shared.save()
 	}
@@ -61,3 +68,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
+extension SceneDelegate {
+	
+	@objc private func checkForUserDefaultsChanges() {
+		let localAccount = AccountManager.shared.localAccount
+		
+		if !AppDefaults.shared.hideLocalAccount != localAccount.isActive {
+			if AppDefaults.shared.hideLocalAccount {
+				localAccount.deactivate()
+			} else {
+				localAccount.activate()
+			}
+		}
+	}
+	
+}

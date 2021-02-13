@@ -20,9 +20,8 @@ public final class AccountManager {
 	
 	public static var shared: AccountManager!
 	
-	public var localAccount: Account? {
-		guard let local = accountsDictionary[AccountType.local.rawValue], local.isActive else { return nil }
-		return local
+	public var localAccount: Account {
+		return accountsDictionary[AccountType.local.rawValue]!
 	}
 
 	public var accounts: [Account] {
