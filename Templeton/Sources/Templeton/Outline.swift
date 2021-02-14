@@ -542,8 +542,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let changes = OutlineElementChanges(deletes: Set(deletes), reloads: Set(reloads))
 		outlineElementsDidChange(changes)
 		
-		if let firstDelete = deletes.first, firstDelete > 0 {
-			return firstDelete - 1
+		if deletedRows.contains(where: { $0.id == cursorRowID }) {
+			if let firstDelete = deletes.first, firstDelete > 0 {
+				return firstDelete - 1
+			} else {
+				return -1
+			}
 		} else {
 			return nil
 		}

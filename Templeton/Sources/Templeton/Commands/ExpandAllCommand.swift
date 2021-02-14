@@ -14,7 +14,7 @@ public final class ExpandAllCommand: OutlineCommand {
 	weak public var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	var outline: Outline
+	public var outline: Outline
 	var containers: [RowContainer]
 	var expandedRows: [Row]?
 	

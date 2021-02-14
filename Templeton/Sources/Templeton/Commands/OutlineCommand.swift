@@ -13,13 +13,16 @@ public protocol OutlineCommandDelegate: class {
 
 public protocol OutlineCommand: UndoableCommand {
 	var delegate: OutlineCommandDelegate? { get }
+	var outline: Outline { get }
 	var cursorCoordinates: CursorCoordinates? { get set }
 }
 
 public extension OutlineCommand {
 	
 	func saveCursorCoordinates() {
-		cursorCoordinates = CursorCoordinates.currentCoordinates
+		let coordinates = CursorCoordinates.currentCoordinates
+		cursorCoordinates = coordinates
+		outline.cursorCoordinates = coordinates
 	}
 	
 	func restoreCursorPosition() {

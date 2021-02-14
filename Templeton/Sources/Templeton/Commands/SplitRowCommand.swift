@@ -16,7 +16,7 @@ public final class SplitRowCommand: OutlineCommand {
 	
 	public var newCursorIndex: Int?
 
-	var outline: Outline
+	public var outline: Outline
 	var newRow: Row?
 	var row: Row
 	var topic: NSAttributedString

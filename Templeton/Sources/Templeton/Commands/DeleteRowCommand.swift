@@ -16,7 +16,7 @@ public final class DeleteRowCommand: OutlineCommand {
 	
 	public var newCursorIndex: Int?
 
-	var outline: Outline
+	public var outline: Outline
 	var rows: [Row]
 	var textRowStrings: TextRowStrings?
 	var afterRows = [Row: Row]()

@@ -17,7 +17,7 @@ public final class CreateTagCommand: OutlineCommand {
 	
 	public var newCursorIndex: Int?
 
-	var outline: Outline
+	public var outline: Outline
 	var tagName: String
 	var tag: Tag?
 	

@@ -14,7 +14,7 @@ public final class CollapseAllCommand: OutlineCommand {
 	public weak var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	var outline: Outline
+	public var outline: Outline
 	var containers: [RowContainer]
 	var collapsedRows: [Row]?
 	

@@ -1442,10 +1442,14 @@ extension EditorViewController {
 
 		runCommand(command)
 		
-		if let newCursorIndex = command.newCursorIndex, let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: Outline.Section.rows.rawValue)) as? EditorTextRowViewCell {
-			rowCell.moveToEnd()
-		} else {
-			moveCursorToTagInput()
+		if let newCursorIndex = command.newCursorIndex {
+			if newCursorIndex == -1 {
+				moveCursorToTagInput()
+			} else {
+				if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: Outline.Section.rows.rawValue)) as? EditorTextRowViewCell {
+					rowCell.moveToEnd()
+				}
+			}
 		}
 	}
 	

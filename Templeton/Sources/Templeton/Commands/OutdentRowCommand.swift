@@ -14,7 +14,7 @@ public final class OutdentRowCommand: OutlineCommand {
 	weak public var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	var outline: Outline
+	public var outline: Outline
 	var rows: [Row]
 	var restoreMoves = [Outline.RowMove]()
 	var outdentedRows: [Row]?

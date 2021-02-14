@@ -16,7 +16,7 @@ public final class CreateRowBeforeCommand: OutlineCommand {
 	
 	public var newCursorIndex: Int?
 
-	var outline: Outline
+	public var outline: Outline
 	var row: Row
 	var beforeRow: Row
 	

@@ -14,7 +14,7 @@ public final class LocalDropRowCommand: OutlineCommand {
 	weak public var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	var outline: Outline
+	public var outline: Outline
 	var rowMoves = [Outline.RowMove]()
 	var restoreMoves = [Outline.RowMove]()
 	

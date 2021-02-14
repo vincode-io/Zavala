@@ -15,7 +15,7 @@ public final class UncompleteCommand: OutlineCommand {
 	weak public var delegate: OutlineCommandDelegate?
 	public var cursorCoordinates: CursorCoordinates?
 	
-	var outline: Outline
+	public var outline: Outline
 	var rows: [Row]
 	var completedRows: [Row]?
 	

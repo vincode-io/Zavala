@@ -16,7 +16,7 @@ public final class CreateRowAfterCommand: OutlineCommand {
 	
 	public var newCursorIndex: Int?
 
-	var outline: Outline
+	public var outline: Outline
 	var row: Row?
 	var afterRow: Row?
 	var textRowStrings: TextRowStrings?
