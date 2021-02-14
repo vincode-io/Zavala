@@ -906,12 +906,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			impacted.append(row)
 			expand(row: newParentRow)
 			
-			let siblingRows = newParentRow.rows ?? [Row]()
 			var mutatingRow = row
 			mutatingRow.parent = newParentRow
-			newParentRow.appendRow(row)
-			newParentRow.rows = siblingRows
-			container.removeRow(row)
+			container.removeRow(mutatingRow)
+			newParentRow.appendRow(mutatingRow)
 
 			newParentRow.isExpanded = true
 
