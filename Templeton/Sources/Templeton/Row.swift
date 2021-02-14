@@ -197,12 +197,12 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 	public func ancestorSibling(_ row: Row) -> Row? {
 		guard let parent = parent else { return nil }
 		
-		if parent.containsRow(row) {
+		if parent.containsRow(row) || containsRow(row) {
 			return self
 		}
 		
-		if let row = parent as? Row {
-			return row.ancestorSibling(row)
+		if let parentRow = parent as? Row {
+			return parentRow.ancestorSibling(row)
 		}
 		
 		return nil

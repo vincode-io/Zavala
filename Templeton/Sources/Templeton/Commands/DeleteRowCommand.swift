@@ -31,7 +31,7 @@ public final class DeleteRowCommand: OutlineCommand {
 
 		for row in rows {
 			if let rowShadowTableIndex = row.shadowTableIndex, rowShadowTableIndex > 0, let afterRow = outline.shadowTable?[rowShadowTableIndex - 1] {
-				afterRows[row] = afterRow
+				afterRows[row] = afterRow.ancestorSibling(row)
 			}
 		}
 

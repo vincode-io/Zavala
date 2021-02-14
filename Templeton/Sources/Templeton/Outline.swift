@@ -622,13 +622,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 				mutatingRow.parent = self
 			} else if let parent = row.parent, parent as? Row == afterRow {
 				parent.insertRow(row, at: 0)
-			} else if let parent = row.parent {
-				if let ancestorSibling = afterRow?.ancestorSibling(row) {
-					let insertIndex = parent.firstIndexOfRow(ancestorSibling) ?? parent.rowCount - 1
-					parent.insertRow(row, at: insertIndex + 1)
-				} else {
-					parent.appendRow(row)
-				}
+			} else if let parent = row.parent, let afterRow = afterRow {
+				let insertIndex = parent.firstIndexOfRow(afterRow) ?? parent.rowCount - 1
+				parent.insertRow(row, at: insertIndex + 1)
 			} else if afterRow?.isExpanded ?? true && !(afterRow?.rows?.isEmpty ?? true) {
 				afterRow?.insertRow(row, at: 0)
 				var mutatingRow = row
@@ -667,50 +663,18 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		outlineBodyDidChange()
-
-		var insertedRows = [Row]()
 		
-		func insertVisitor(_ visited: Row) {
-			insertedRows.append(visited)
-			if visited.isExpanded ?? true {
-				visited.rows?.forEach { $0.visit(visitor: insertVisitor) }
-			}
-		}
-
-		for row in rows {
-			insertedRows.append(row)
-			if row.isExpanded ?? true {
-				row.rows?.forEach { $0.visit(visitor: insertVisitor(_:)) }
-			}
-		}
+		var changes = rebuildShadowTable()
 		
-		let rowShadowTableIndex: Int
-		if let afterRowShadowTableIndex = afterRow?.shadowTableIndex {
-			rowShadowTableIndex = afterRowShadowTableIndex + 1
-		} else {
-			if prefersEnd {
-				rowShadowTableIndex = shadowTable?.count ?? 0
-			} else {
-				rowShadowTableIndex = 0
-			}
-		}
-		
-		var reloads = [Int]()
+		var reloads = Set<Int>()
 		if let reload = afterRow?.shadowTableIndex {
-			reloads.append(reload)
+			reloads.insert(reload)
 		}
-
-		var inserts = [Int]()
-		for i in 0..<insertedRows.count {
-			let shadowTableIndex = rowShadowTableIndex + i
-			inserts.append(shadowTableIndex)
-			shadowTable?.insert(insertedRows[i], at: shadowTableIndex)
-		}
+		changes.append(OutlineElementChanges(reloads: reloads))
 		
-		resetShadowTableIndexes(startingAt: afterRow?.shadowTableIndex ?? 0)
-		let changes = OutlineElementChanges(inserts: Set(inserts), reloads: Set(reloads))
 		outlineElementsDidChange(changes)
 		
+		let inserts = Array(changes.inserts ?? Set<Int>()).sorted()
 		return inserts.count > 0 ? inserts[0] : nil
 	}
 	
