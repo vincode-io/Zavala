@@ -130,6 +130,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			
 		}
 	}
+	
+	public var rowCount: Int {
+		return rowOrder?.count ?? 0
+	}
 
 	public var isCloudKit: Bool {
 		return AccountType(rawValue: id.accountID) == .cloudKit
@@ -253,6 +257,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return keyedRows?[id]
 	}
 	
+	public func firstIndexOfRow(_ row: Row) -> Int? {
+		return rowOrder?.firstIndex(of: row.id)
+	}
+
 	public func containsRow(_ row: Row) -> Bool {
 		return rowOrder?.contains(row.id) ?? false
 	}
@@ -578,7 +586,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		guard let parent = beforeRow.parent,
-			  let index = parent.rows?.firstIndex(of: beforeRow),
+			  let index = parent.firstIndexOfRow(beforeRow),
 			  let shadowTableIndex = beforeRow.shadowTableIndex else {
 			return nil
 		}
@@ -603,47 +611,42 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			afterTextRow.textRowStrings = texts
 		}
 
-		// TODO: Go through here and change to use insertRow on this object
 		for row in rows.sortedByReverseDisplayOrder() {
 			if afterRow == nil {
-				var rows = self.rows ?? [Row]()
 				if prefersEnd {
-					rows.append(row)
+					appendRow(row)
 				} else {
-					rows.insert(row, at: 0)
+					insertRow(row, at: 0)
 				}
 				var mutatingRow = row
 				mutatingRow.parent = self
-				self.rows = rows
 			} else if let parent = row.parent, parent as? Row == afterRow {
 				parent.insertRow(row, at: 0)
-			} else if var parent = row.parent {
-				var rows = parent.rows ?? [Row]()
+			} else if let parent = row.parent {
 				if let ancestorSibling = afterRow?.ancestorSibling(row) {
-					let insertIndex = rows.firstIndex(where: { $0 == ancestorSibling}) ?? rows.count - 1
-					rows.insert(row, at: insertIndex + 1)
+					let insertIndex = parent.firstIndexOfRow(ancestorSibling) ?? parent.rowCount - 1
+					parent.insertRow(row, at: insertIndex + 1)
 				} else {
-					rows.append(row)
+					parent.appendRow(row)
 				}
-				parent.rows = rows
 			} else if afterRow?.isExpanded ?? true && !(afterRow?.rows?.isEmpty ?? true) {
 				afterRow?.insertRow(row, at: 0)
 				var mutatingRow = row
 				mutatingRow.parent = afterRow
-			} else if var parent = afterRow?.parent {
-				var rows = parent.rows ?? [Row]()
-				let insertIndex = rows.firstIndex(where: { $0 == afterRow}) ?? -1
-				rows.insert(row, at: insertIndex + 1)
+			} else if let afterRow = afterRow, let parent = afterRow.parent {
+				let insertIndex = parent.firstIndexOfRow(afterRow) ?? -1
+				parent.insertRow(row, at: insertIndex + 1)
 				var mutatingRow = row
-				mutatingRow.parent = afterRow?.parent
-				parent.rows = rows
-			} else {
-				var rows = self.rows ?? [Row]()
-				let insertIndex = rows.firstIndex(where: { $0 == afterRow}) ?? -1
-				rows.insert(row, at: insertIndex + 1)
+				mutatingRow.parent = afterRow.parent
+			} else if let afterRow = afterRow {
+				let insertIndex = firstIndexOfRow(afterRow) ?? -1
+				insertRow(row, at: insertIndex + 1)
 				var mutatingRow = row
 				mutatingRow.parent = self
-				self.rows = rows
+			} else {
+				insertRow(row, at: 0)
+				var mutatingRow = row
+				mutatingRow.parent = self
 			}
 		}
 		
@@ -886,7 +889,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public func isIndentRowsUnavailable(rows: [Row]) -> Bool {
 		for row in rows {
-			if let rowIndex = row.parent?.rows?.firstIndex(of: row), rowIndex > 0 {
+			if let rowIndex = row.parent?.firstIndexOfRow(row), rowIndex > 0 {
 				return false
 			}
 		}
@@ -905,7 +908,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		for row in sortedRows {
 			guard let container = row.parent,
-				  let rowIndex = container.rows?.firstIndex(of: row),
+				  let rowIndex = container.firstIndexOfRow(row),
 				  rowIndex > 0,
 				  var newParentRow = container.rows?[rowIndex - 1],
 				  let rowShadowTableIndex = row.shadowTableIndex,

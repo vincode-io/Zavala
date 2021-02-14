@@ -31,7 +31,7 @@ public final class OutdentRowCommand: OutlineCommand {
 		self.redoActionName = L10n.outdent
 		
 		for row in rows {
-			guard let oldParent = row.parent, let oldChildIndex = oldParent.rows?.firstIndex(of: row) else { continue }
+			guard let oldParent = row.parent, let oldChildIndex = oldParent.firstIndexOfRow(row) else { continue }
 			restoreMoves.append(Outline.RowMove(row: row, toParent: oldParent, toChildIndex: oldChildIndex))
 		}
 		

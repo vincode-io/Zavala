@@ -155,7 +155,7 @@ extension EditorViewController {
 
 		// THis is where most of the sibling moves happen at
 		let newSibling = shadowTable[targetIndexPath.row]
-		guard let newParent = newSibling.parent, var newIndex = newParent.rows?.firstIndex(of: newSibling) else { return }
+		guard let newParent = newSibling.parent, var newIndex = newParent.firstIndexOfRow(newSibling) else { return }
 
 		// I don't know why this works.  This is definately in the category of, "Just try stuff until it works.".
 		for row in rows {

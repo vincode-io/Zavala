@@ -43,6 +43,10 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		}
 	}
 	
+	public var rowCount: Int {
+		return rowOrder?.count ?? 0
+	}
+
 	public var account: Account? {
 		return AccountManager.shared.findAccount(accountID: id.accountID)
 	}
@@ -59,6 +63,10 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 
 	public override init() {
 		self.id = .row(0, "", "")
+	}
+	
+	public func firstIndexOfRow(_ row: Row) -> Int? {
+		return rowOrder?.firstIndex(of: row.id)
 	}
 	
 	public func containsRow(_ row: Row) -> Bool {

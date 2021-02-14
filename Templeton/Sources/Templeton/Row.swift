@@ -101,6 +101,11 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
+	public var rowCount: Int {
+		return associatedRow.rowCount
+	}
+
+
 	public var associatedRow: BaseRow {
 		switch self {
 		case .text(let row):
@@ -155,6 +160,10 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
+	public func firstIndexOfRow(_ row: Row) -> Int? {
+		return associatedRow.firstIndexOfRow(row)
+	}
+
 	public func containsRow(_ row: Row) -> Bool {
 		return associatedRow.containsRow(row)
 	}
