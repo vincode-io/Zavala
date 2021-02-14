@@ -155,6 +155,10 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
+	public func containsRow(_ row: Row) -> Bool {
+		return associatedRow.containsRow(row)
+	}
+
 	public func insertRow(_ row: Row, at: Int) {
 		associatedRow.insertRow(row, at: at)
 	}
@@ -178,6 +182,21 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 			return true
 		}
 		return false
+	}
+	
+	/// Returns itself or the first ancestor that shares a parent with the given row
+	public func ancestorSibling(_ row: Row) -> Row? {
+		guard let parent = parent else { return nil }
+		
+		if parent.containsRow(row) {
+			return self
+		}
+		
+		if let row = parent as? Row {
+			return row.ancestorSibling(row)
+		}
+		
+		return nil
 	}
 	
 	public func markdown(indentLevel: Int = 0) -> String {

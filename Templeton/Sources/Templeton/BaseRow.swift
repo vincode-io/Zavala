@@ -61,6 +61,10 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		self.id = .row(0, "", "")
 	}
 	
+	public func containsRow(_ row: Row) -> Bool {
+		return rowOrder?.contains(row.id) ?? false
+	}
+	
 	public func insertRow(_ row: Row, at: Int) {
 		if rowOrder == nil {
 			rowOrder = [EntityID]()

@@ -253,6 +253,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return keyedRows?[id]
 	}
 	
+	public func containsRow(_ row: Row) -> Bool {
+		return rowOrder?.contains(row.id) ?? false
+	}
+
 	public func insertRow(_ row: Row, at: Int) {
 		if rowOrder == nil {
 			rowOrder = [EntityID]()
@@ -615,8 +619,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 				parent.insertRow(row, at: 0)
 			} else if var parent = row.parent {
 				var rows = parent.rows ?? [Row]()
-				let insertIndex = rows.firstIndex(where: { $0 == afterRow}) ?? rows.count - 1
-				rows.insert(row, at: insertIndex + 1)
+				if let ancestorSibling = afterRow?.ancestorSibling(row) {
+					let insertIndex = rows.firstIndex(where: { $0 == ancestorSibling}) ?? rows.count - 1
+					rows.insert(row, at: insertIndex + 1)
+				} else {
+					rows.append(row)
+				}
 				parent.rows = rows
 			} else if afterRow?.isExpanded ?? true && !(afterRow?.rows?.isEmpty ?? true) {
 				afterRow?.insertRow(row, at: 0)
