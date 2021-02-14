@@ -39,6 +39,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		}
 		
+		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange(_:)), name: .AccountManagerAccountsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidInitialize(_:)), name: .AccountDidInitialize, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountTagsDidChange(_:)), name: .AccountTagsDidChange, object: nil)
@@ -122,6 +123,10 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	
 	// MARK: Notifications
 	
+	@objc func accountManagerAccountsDidChange(_ note: Notification) {
+		applyChangeSnapshot()
+	}
+
 	@objc func accountDidInitialize(_ note: Notification) {
 		applyChangeSnapshot()
 	}
@@ -224,15 +229,25 @@ extension SidebarViewController {
 		return snapshot
 	}
 	
+	private func cloudKitAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<SidebarItem>? {
+		guard let cloudKitAccount = AccountManager.shared.cloudKitAccount else { return nil }
+		
+		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
+		let header = SidebarItem.sidebarItem(title: AccountType.cloudKit.name, id: .header(.cloudKitAccount))
+		
+		let items = cloudKitAccount.documentContainers.map { SidebarItem.sidebarItem($0) }
+		
+		snapshot.append([header])
+		snapshot.expand([header])
+		snapshot.append(items, to: header)
+		return snapshot
+	}
+	
 	private func applyInitialSnapshot() {
 		if traitCollection.userInterfaceIdiom == .mac {
 			applySnapshot(searchSnapshot(), section: .search, animated: false)
 		}
-		if let snapshot = self.localAccountSnapshot() {
-			applySnapshot(snapshot, section: .localAccount, animated: false)
-		} else {
-			applySnapshot(NSDiffableDataSourceSectionSnapshot<SidebarItem>(), section: .localAccount, animated: false)
-		}
+		applyChangeSnapshot()
 	}
 	
 	private func applyChangeSnapshot() {
@@ -241,10 +256,33 @@ extension SidebarViewController {
 		} else {
 			applySnapshot(NSDiffableDataSourceSectionSnapshot<SidebarItem>(), section: .localAccount, animated: true)
 		}
+
+		if let snapshot = self.cloudKitAccountSnapshot() {
+			applySnapshot(snapshot, section: .cloudKitAccount, animated: false)
+		} else {
+			applySnapshot(NSDiffableDataSourceSectionSnapshot<SidebarItem>(), section: .cloudKitAccount, animated: false)
+		}
 	}
 	
 	func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<SidebarItem>, section: SidebarSection, animated: Bool) {
-		dataSourceQueue.add(ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated))
+		let selectedItems = collectionView.indexPathsForSelectedItems?.compactMap { dataSource.itemIdentifier(for: $0) }
+		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
+
+		operation.completionBlock = { [weak self] _ in
+			guard let self = self else { return }
+			
+			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) }
+			
+			if selectedIndexPaths?.isEmpty ?? true {
+				self.delegate?.documentContainerSelectionDidChange(self, documentContainer: nil, animated: true, completion: {})
+			} else {
+				for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
+					self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
+				}
+			}
+		}
+		
+		dataSourceQueue.add(operation)
 	}
 	
 	func updateSelection(item: SidebarItem?, animated: Bool) {

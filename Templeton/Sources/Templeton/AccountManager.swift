@@ -16,12 +16,20 @@ public enum AccountManagerError: LocalizedError {
 	}
 }
 
+public extension Notification.Name {
+	static let AccountManagerAccountsDidChange = Notification.Name(rawValue: "AccountManagerAccountsDidChange")
+}
+
 public final class AccountManager {
 	
 	public static var shared: AccountManager!
 	
 	public var localAccount: Account {
 		return accountsDictionary[AccountType.local.rawValue]!
+	}
+
+	public var cloudKitAccount: Account? {
+		return accountsDictionary[AccountType.cloudKit.rawValue]
 	}
 
 	public var accounts: [Account] {
@@ -91,6 +99,31 @@ public final class AccountManager {
 	}
 
 	// MARK: API
+	
+	public func createCloudKitAccount() {
+		do {
+			try FileManager.default.createDirectory(atPath: cloudKitAccountFolder.path, withIntermediateDirectories: true, attributes: nil)
+		} catch {
+			assertionFailure("Could not create folder for CloudKit account.")
+			abort()
+		}
+		
+		let cloudKitAccount = Account(accountType: .cloudKit)
+		accountsDictionary[AccountType.cloudKit.rawValue] = cloudKitAccount
+		initializeFile(accountType: .cloudKit)
+		
+		accountManagerAccountsDidChange()
+	}
+	
+	public func deleteCloudKitAccount() {
+		accountsDictionary[AccountType.cloudKit.rawValue] = nil
+		accountFiles[AccountType.cloudKit.rawValue] = nil
+
+		try? FileManager.default.removeItem(atPath: cloudKitAccountFolder.path)
+
+		accountManagerAccountsDidChange()
+	}
+	
 	public func findAccount(accountType: AccountType) -> Account? {
 		return accountsDictionary[accountType.rawValue]
 	}
@@ -181,6 +214,10 @@ public final class AccountManager {
 
 private extension AccountManager {
 	
+	func accountManagerAccountsDidChange() {
+		NotificationCenter.default.post(name: .AccountManagerAccountsDidChange, object: self, userInfo: nil)
+	}
+
 	// MARK: Notifications
 	
 	@objc func accountMetadataDidChange(_ note: Notification) {

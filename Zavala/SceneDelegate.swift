@@ -80,6 +80,15 @@ extension SceneDelegate {
 				localAccount.activate()
 			}
 		}
+		
+		let cloudKitAccount = AccountManager.shared.cloudKitAccount
+		
+		if AppDefaults.shared.enableCloudKit && cloudKitAccount == nil {
+			AccountManager.shared.createCloudKitAccount()
+		} else if !AppDefaults.shared.enableCloudKit && cloudKitAccount != nil {
+			AccountManager.shared.deleteCloudKitAccount()
+		}
+		
 	}
 	
 }
