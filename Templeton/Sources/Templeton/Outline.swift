@@ -1047,6 +1047,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineDidDelete()
 	}
 	
+	public func outlineDidDelete() {
+		NotificationCenter.default.post(name: .DocumentDidDelete, object: Document.outline(self), userInfo: nil)
+	}
+	
 	public func suspend() {
 		rowsFile?.save()
 		
@@ -1117,10 +1121,6 @@ extension Outline {
 		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
 	}
 
-	private func outlineDidDelete() {
-		NotificationCenter.default.post(name: .DocumentDidDelete, object: Document.outline(self), userInfo: nil)
-	}
-	
 	private func completeUncomplete(rows: [Row], isComplete: Bool, textRowStrings: TextRowStrings?) -> ([Row], Int?) {
 		if rows.count == 1, let textRow = rows.first?.textRow, let textRowStrings = textRowStrings {
 			textRow.textRowStrings = textRowStrings

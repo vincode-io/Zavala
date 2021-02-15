@@ -163,4 +163,11 @@ public enum Document: Equatable, Codable {
 		}
 	}
 	
+	public func documentDidDelete() {
+		switch self {
+		case .outline(let outline):
+			outline.outlineDidDelete()
+		}
+	}
+	
 }

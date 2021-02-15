@@ -116,6 +116,9 @@ public final class AccountManager {
 	}
 	
 	public func deleteCloudKitAccount() {
+		// Send out all the document delete events for this account to clean up the search index
+		cloudKitAccount?.documents?.forEach { $0.documentDidDelete() }
+		
 		accountsDictionary[AccountType.cloudKit.rawValue] = nil
 		accountFiles[AccountType.cloudKit.rawValue] = nil
 
