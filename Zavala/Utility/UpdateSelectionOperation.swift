@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import Templeton
 import RSCore
 
-class UpdateSelectionOperation<S: Hashable, I: Hashable>: MainThreadOperationBase {
+class UpdateSelectionOperation<S: Hashable, I: Hashable>: BaseMainThreadOperation {
 	
 	private var dataSource: UICollectionViewDiffableDataSource<S, I>
 	private var collectionView: UICollectionView

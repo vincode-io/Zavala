@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import Templeton
 import RSCore
 
-class ApplySnapshotOperation<S: Hashable, I: Hashable>: MainThreadOperationBase {
+class ApplySnapshotOperation<S: Hashable, I: Hashable>: BaseMainThreadOperation {
 	
 	private var dataSource: UICollectionViewDiffableDataSource<S, I>
 	private var section: S
@@ -24,7 +25,8 @@ class ApplySnapshotOperation<S: Hashable, I: Hashable>: MainThreadOperationBase 
 		self.section = section
 		self.snapshot = snapshot
 		self.animated = animated
-		
+
+		super.init()
 	}
 	
 	override func run() {		

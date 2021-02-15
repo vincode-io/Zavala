@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import Templeton
 
-class ReloadItemsOperation<S: Hashable, I: Hashable>: MainThreadOperationBase {
+class ReloadItemsOperation<S: Hashable, I: Hashable>: BaseMainThreadOperation {
 	
 	private var dataSource: UICollectionViewDiffableDataSource<S, I>
 	private var section: S

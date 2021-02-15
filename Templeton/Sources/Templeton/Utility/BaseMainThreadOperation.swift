@@ -1,16 +1,14 @@
 //
-//  MainThreadOperationBase.swift
+//  BaseMainThreadOperation.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/17/20.
 //
 
 import Foundation
-
-import UIKit
 import RSCore
 
-class MainThreadOperationBase: MainThreadOperation {
+open class BaseMainThreadOperation: MainThreadOperation {
 	
 	public var isCanceled = false
 	public var id: Int?
@@ -24,7 +22,11 @@ class MainThreadOperationBase: MainThreadOperation {
 	}
 	public var completionBlock: MainThreadOperation.MainThreadOperationCompletionBlock?
 	
-	func run() {
+	public init() {
+		
+	}
+	
+	open func run() {
 		self.operationDelegate?.operationDidComplete(self)
 	}
 	
