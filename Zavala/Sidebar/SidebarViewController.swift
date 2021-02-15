@@ -66,13 +66,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 			}
 		}
 
-		var sidebarItem: SidebarItem? = nil
-		if let documentContainer = documentContainer {
-			sidebarItem = SidebarItem.sidebarItem(documentContainer)
-		}
-		updateSelection(item: sidebarItem, animated: animated)
-		
-		delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, animated: animated, completion: completion)
+		updateSelection(documentContainer, animated: animated, completion: completion)
 	}
 	
 	func restoreArchive() {
@@ -285,8 +279,19 @@ extension SidebarViewController {
 		dataSourceQueue.add(operation)
 	}
 	
-	func updateSelection(item: SidebarItem?, animated: Bool) {
-		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: item, animated: animated))
+	func updateSelection(_ documentContainer: DocumentContainer?, animated: Bool, completion: (() -> Void)?) {
+		var sidebarItem: SidebarItem? = nil
+		if let documentContainer = documentContainer {
+			sidebarItem = SidebarItem.sidebarItem(documentContainer)
+		}
+
+		let operation = UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: sidebarItem, animated: animated)
+		
+		operation.completionBlock = { [weak self] _ in
+			guard let self = self else { return }
+			self.delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, animated: animated, completion: completion)
+		}
+		dataSourceQueue.add(operation)
 	}
 }
 
