@@ -189,16 +189,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									   input: "\n",
 									   modifierFlags: [.shift, .alternate])
 	
-	let restoreArchiveCommand = UIKeyCommand(title: L10n.restoreArchive,
-											 action: #selector(restoreArchiveCommand(_:)),
-											 input: "~",
-											 modifierFlags: [.control, .command])
-	
-	let archiveLocalCommand = UIKeyCommand(title: L10n.archiveAccount(AccountType.local.name),
-										   action: #selector(archiveLocalCommand(_:)),
-										   input: "1",
-										   modifierFlags: [.control, .command])
-	
 	let toggleBoldCommand = UIKeyCommand(title: L10n.bold,
 										 action: #selector(toggleBoldCommand(_:)),
 										 input: "b",
@@ -404,14 +394,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.splitRow(sender)
 	}
 	
-	@objc func restoreArchiveCommand(_ sender: Any?) {
-		mainSplitViewController?.restoreArchive()
-	}
-	
-	@objc func archiveLocalCommand(_ sender: Any?) {
-		mainSplitViewController?.archiveAccount(type: .local)
-	}
-	
 	@objc func toggleBoldCommand(_ sender: Any?) {
 		mainSplitViewController?.outlineToggleBoldface(sender)
 	}
@@ -578,9 +560,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		
 		// File Menu
-		let archiveMenu = UIMenu(title: "", options: .displayInline, children: [restoreArchiveCommand, archiveLocalCommand])
-		builder.insertChild(archiveMenu, atStartOfMenu: .file)
-
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMarkdownCommand, exportOPMLCommand])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 

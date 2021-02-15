@@ -7,7 +7,6 @@
 
 import Foundation
 import os.log
-import ZipArchive
 
 public enum AccountManagerError: LocalizedError {
 	case readArchiveError
@@ -158,57 +157,6 @@ public final class AccountManager {
 	public func save() {
 		accountFiles.values.forEach { $0.save() }
 		documents.forEach { $0.save() }
-	}
-	
-	public func unpackArchive(_ archiveURL: URL) throws -> (AccountType, URL) {
-		let restoreFolder = accountsFolder.appendingPathComponent("restore")
-		
-		guard SSZipArchive.unzipFile(atPath: archiveURL.path, toDestination: restoreFolder.path) else {
-			os_log(.error, log: log, "Archive unzip failed.")
-			throw AccountManagerError.readArchiveError
-		}
-		
-		let accountFile = restoreFolder.appendingPathComponent(AccountFile.filenameComponent)
-		let decoder = PropertyListDecoder()
-
-		do {
-			let accountData = try Data(contentsOf: accountFile)
-			let account = try decoder.decode(Account.self, from: accountData)
-			return (account.type, restoreFolder)
-		} catch {
-			os_log(.error, log: log, "Archive account read deserialization failed: %@.", error.localizedDescription)
-			throw AccountManagerError.readArchiveError
-		}
-	}
-	
-	public func cleanUpArchive(unpackURL: URL) {
-		try? FileManager.default.removeItem(at: unpackURL)
-	}
-	
-	public func restoreArchive(accountType: AccountType, unpackURL: URL) {
-		var account = accountsDictionary[accountType.rawValue]
-		account?.deactivate()
-		accountFiles.removeValue(forKey: accountType.rawValue)
-		accountsDictionary.removeValue(forKey: accountType.rawValue)
-		account = nil
-		
-		let accountFolder: URL
-		if accountType == .local {
-			accountFolder = localAccountFolder
-		} else {
-			accountFolder = cloudKitAccountFile
-		}
-		
-		try? FileManager.default.removeItem(at: accountFolder)
-		try? FileManager.default.moveItem(at: unpackURL, to: accountFolder)
-		
-		initializeFile(accountType: accountType)
-		account = accountsDictionary[accountType.rawValue]
-		account?.accountDidInitialize()
-	}
-	
-	public func archiveAccount(type: AccountType) -> URL? {
-		return accountsDictionary[type.rawValue]?.archive()
 	}
 	
 }

@@ -69,52 +69,6 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		updateSelection(documentContainer, animated: animated, completion: completion)
 	}
 	
-	func restoreArchive() {
-		let zalarcType = UTType(exportedAs: "io.vincode.Zavala.archive")
-		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [zalarcType])
-		docPicker.delegate = self
-		docPicker.modalPresentationStyle = .formSheet
-		docPicker.allowsMultipleSelection = false
-		self.present(docPicker, animated: true)
-	}
-	
-	func restoreArchive(url: URL) {
-		let unpackResult : (AccountType, URL)
-		do {
-			unpackResult = try AccountManager.shared.unpackArchive(url)
-		} catch {
-			presentError(error)
-			return
-		}
-		
-		let restoreAction = UIAlertAction(title: L10n.restore, style: .default) { [weak self] _ in
-			guard let self = self else { return }
-			self.collectionView.selectItem(at: nil, animated: true, scrollPosition: .top)
-			self.delegate?.documentContainerSelectionDidChange(self, documentContainer: nil, animated: true, completion: nil)
-			AccountManager.shared.restoreArchive(accountType: unpackResult.0, unpackURL: unpackResult.1)
-		}
-		
-		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel) { _ in
-			AccountManager.shared.cleanUpArchive(unpackURL: unpackResult.1)
-		}
-		
-		let title = L10n.restoreAccountPrompt(unpackResult.0.name)
-		let alert = UIAlertController(title: title, message: L10n.restoreAccountMessage, preferredStyle: .alert)
-		alert.addAction(cancelAction)
-		alert.addAction(restoreAction)
-		alert.preferredAction = restoreAction
-		
-		present(alert, animated: true, completion: nil)
-	}
-	
-	func archiveAccount(type: AccountType) {
-		guard let archiveFile = AccountManager.shared.archiveAccount(type: type) else { return }
-		
-		let docPicker = UIDocumentPickerViewController(forExporting: [archiveFile])
-		docPicker.modalPresentationStyle = .formSheet
-		self.present(docPicker, animated: true)
-	}
-	
 	// MARK: Notifications
 	
 	@objc func accountManagerAccountsDidChange(_ note: Notification) {
@@ -293,16 +247,6 @@ extension SidebarViewController {
 		}
 		dataSourceQueue.add(operation)
 	}
-}
-
-// MARK: UIDocumentPickerDelegate
-
-extension SidebarViewController: UIDocumentPickerDelegate {
-	
-	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-		restoreArchive(url: urls[0])
-	}
-	
 }
 
 // MARK: SidebarSearchCellDelegate

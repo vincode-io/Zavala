@@ -55,7 +55,6 @@
 		51B2B2CE2563AAF60090C56B /* EditorTextRowContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2CD2563AAF60090C56B /* EditorTextRowContentConfiguration.swift */; };
 		51B2B2D22563AB190090C56B /* EditorTextRowContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2D12563AB190090C56B /* EditorTextRowContentView.swift */; };
 		51B2B2D62563AB9F0090C56B /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2D52563AB9F0090C56B /* UIView+.swift */; };
-		51B4EBC7257C3CD100378CAB /* ZipArchive in Frameworks */ = {isa = PBXBuildFile; productRef = 51B4EBC6257C3CD100378CAB /* ZipArchive */; };
 		51B5861C256B245300ACF99B /* SWXMLHash in Frameworks */ = {isa = PBXBuildFile; productRef = 51B5861B256B245300ACF99B /* SWXMLHash */; };
 		51B9D51725A9080A00579D19 /* EditorViewDisclosureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D51625A9080A00579D19 /* EditorViewDisclosureButton.swift */; };
 		51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */; };
@@ -262,7 +261,6 @@
 			files = (
 				51C568D5258C085400AA7B93 /* MarkdownAttributedString in Frameworks */,
 				514EF16325A78BCC00B1FFB6 /* CrashReporter in Frameworks */,
-				51B4EBC7257C3CD100378CAB /* ZipArchive in Frameworks */,
 				51B5861C256B245300ACF99B /* SWXMLHash in Frameworks */,
 				51C4C3F92557470B004E0206 /* Templeton in Frameworks */,
 				51C4C40125576631004E0206 /* RSCore in Frameworks */,
@@ -535,7 +533,6 @@
 				51C4C3F82557470B004E0206 /* Templeton */,
 				51C4C40025576631004E0206 /* RSCore */,
 				51B5861B256B245300ACF99B /* SWXMLHash */,
-				51B4EBC6257C3CD100378CAB /* ZipArchive */,
 				51C568D4258C085400AA7B93 /* MarkdownAttributedString */,
 				514EF16225A78BCC00B1FFB6 /* CrashReporter */,
 			);
@@ -593,7 +590,6 @@
 			packageReferences = (
 				51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */,
 				51B5861A256B245300ACF99B /* XCRemoteSwiftPackageReference "SWXMLHash" */,
-				51B4EBC5257C3CD100378CAB /* XCRemoteSwiftPackageReference "ZipArchive" */,
 				51C568D3258C085400AA7B93 /* XCRemoteSwiftPackageReference "MarkdownAttributedString" */,
 				51E060AA25A4516100194066 /* XCRemoteSwiftPackageReference "Sparkle-Binary" */,
 				514EF16125A78BCC00B1FFB6 /* XCRemoteSwiftPackageReference "plcrashreporter" */,
@@ -890,14 +886,6 @@
 				minimumVersion = 1.8.1;
 			};
 		};
-		51B4EBC5257C3CD100378CAB /* XCRemoteSwiftPackageReference "ZipArchive" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/vincode-io/ZipArchive.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		51B5861A256B245300ACF99B /* XCRemoteSwiftPackageReference "SWXMLHash" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/drmohundro/SWXMLHash.git";
@@ -937,11 +925,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 514EF16125A78BCC00B1FFB6 /* XCRemoteSwiftPackageReference "plcrashreporter" */;
 			productName = CrashReporter;
-		};
-		51B4EBC6257C3CD100378CAB /* ZipArchive */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 51B4EBC5257C3CD100378CAB /* XCRemoteSwiftPackageReference "ZipArchive" */;
-			productName = ZipArchive;
 		};
 		51B5861B256B245300ACF99B /* SWXMLHash */ = {
 			isa = XCSwiftPackageProductDependency;

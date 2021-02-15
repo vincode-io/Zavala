@@ -8,7 +8,6 @@
 import Foundation
 import os.log
 import SWXMLHash
-import ZipArchive
 
 public extension Notification.Name {
 	static let AccountDidInitialize = Notification.Name(rawValue: "AccountDidInitialize")
@@ -286,30 +285,6 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	func findTag(tagID: String) -> Tag? {
 		return idToTagsDictionary[tagID]
-	}
-	
-	func archive() -> URL? {
-		guard let folder = folder else { return nil }
-		
-		var filename = type.name.replacingOccurrences(of: " ", with: "").trimmingCharacters(in: .whitespaces)
-		let formatter = DateFormatter()
-		formatter.dateFormat = "yyyy-MM-dd-HH-mm-ss"
-		filename = "Zavala_\(filename)_\(formatter.string(from: Date())).zalarc"
-		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
-
-		let errorPointer: NSErrorPointer = nil
-		let fileCoordinator = NSFileCoordinator(filePresenter: self)
-		
-		fileCoordinator.coordinate(readingItemAt: folder, options: [], error: errorPointer, byAccessor: { readURL in
-			SSZipArchive.createZipFile(atPath: tempFile.path, withContentsOfDirectory: readURL.path)
-		})
-
-		if let error = errorPointer?.pointee {
-			os_log(.error, log: log, "Account archive coordination failed: %@.", error.localizedDescription)
-			return nil
-		}
-
-		return tempFile
 	}
 
 	func accountDidInitialize() {

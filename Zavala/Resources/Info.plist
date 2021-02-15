@@ -151,30 +151,6 @@
 				</array>
 			</dict>
 		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>Zavala Archive</string>
-			<key>UTTypeIconFiles</key>
-			<array>
-				<string>file320x320.png</string>
-				<string>file64x64.png</string>
-				<string>file44x58.png</string>
-				<string>file22x29.png</string>
-			</array>
-			<key>UTTypeIdentifier</key>
-			<string>io.vincode.Zavala.archive</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>zalarc</string>
-				</array>
-			</dict>
-		</dict>
 	</array>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
@@ -194,30 +170,6 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>opml</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>Zavala Archive</string>
-			<key>UTTypeIconFiles</key>
-			<array>
-				<string>file320x320.png</string>
-				<string>file64x64.png</string>
-				<string>file44x58.png</string>
-				<string>file22x29.png</string>
-			</array>
-			<key>UTTypeIdentifier</key>
-			<string>io.vincode.Zavala.archive</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>zalarc</string>
 				</array>
 			</dict>
 		</dict>

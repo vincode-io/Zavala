@@ -337,18 +337,6 @@ class MainSplitViewController: UISplitViewController {
 	
 	// MARK: API
 	
-	func restoreArchive() {
-		sidebarViewController?.restoreArchive()
-	}
-	
-	func restoreArchive(url: URL) {
-		sidebarViewController?.restoreArchive(url: url)
-	}
-	
-	func archiveAccount(type: AccountType) {
-		sidebarViewController?.archiveAccount(type: type)
-	}
-	
 	func showReleaseNotes() {
 		let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"]! as! String
 		openURL("https://github.com/vincode-io/Zavala/releases/tag/\(version)")

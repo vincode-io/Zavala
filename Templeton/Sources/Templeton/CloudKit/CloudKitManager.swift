@@ -15,5 +15,9 @@ public class CloudKitManager {
 		case delete
 	}
 	
+	struct ActionRequest {
+		let action: Action
+		let id: EntityID
+	}
 	
 }
