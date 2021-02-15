@@ -43,7 +43,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 			static let ownerName = "ownerName"
 			static let ownerEmail = "ownerEmail"
 			static let ownerURL = "ownerURL"
-			static let tagExternalIDs = "tagExternalIDs"
+			static let tagIDs = "tagIDs"
 		}
 	}
 	
@@ -54,6 +54,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 			static let topicData = "topicData"
 			static let noteData = "noteData"
 			static let isComplete = "isComplete"
+			static let rowOrder = "rowOrder"
 		}
 	}
 	
