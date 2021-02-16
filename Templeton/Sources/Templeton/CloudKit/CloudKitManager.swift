@@ -7,18 +7,12 @@
 
 import Foundation
 import CloudKit
+import RSCore
 
 public class CloudKitManager {
-	
-	enum Action {
-		case add
-		case change
-		case delete
-	}
-	
-	struct ActionRequest {
-		let action: Action
-		let id: EntityID
+
+	static var actionRequestFile: URL {
+		return AccountManager.shared.cloudKitAccountFolder.appendingPathComponent("cloudKitRequests.plist")
 	}
 
 	private let container: CKContainer = {
@@ -27,14 +21,14 @@ public class CloudKitManager {
 	}()
 
 	private let defaultZone: CloudKitOutlineZone
+	private let queue = MainThreadOperationQueue()
 
 	init() {
 		defaultZone = CloudKitOutlineZone(container: container)
 	}
 	
-	func addRequest(action: Action, id: EntityID) {
-		let actionRequest = ActionRequest(action: action, id: id)
-		// Now do something with it
+	public func addEntityIDs(_ entityIDs: Set<EntityID>) {
+		queue.add(CloudKitAddActionRequestsOperation(entityIDs: entityIDs))
 	}
 	
 	func accountDidInitialize(_ account: Account) {
