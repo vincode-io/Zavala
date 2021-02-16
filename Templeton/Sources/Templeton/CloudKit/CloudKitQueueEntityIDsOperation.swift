@@ -1,5 +1,5 @@
 //
-//  CloudKitAddActionRequestsOperation.swift
+//  CloudKitQueueEntityIDsOperation.swift
 //  
 //
 //  Created by Maurice Parker on 2/15/21.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CloudKitAddActionRequestsOperation: BaseMainThreadOperation {
+class CloudKitQueueEntityIDsOperation: BaseMainThreadOperation {
 	
 	let entityIDs: Set<EntityID>
 	
@@ -23,7 +23,7 @@ class CloudKitAddActionRequestsOperation: BaseMainThreadOperation {
 	
 }
 
-extension CloudKitAddActionRequestsOperation {
+extension CloudKitQueueEntityIDsOperation {
 	
 	private func processEntityIDs() {
 		let queuedIDs: Set<EntityID>

@@ -28,7 +28,7 @@ public class CloudKitManager {
 	}
 	
 	public func addEntityIDs(_ entityIDs: Set<EntityID>) {
-		queue.add(CloudKitAddActionRequestsOperation(entityIDs: entityIDs))
+		queue.add(CloudKitQueueEntityIDsOperation(entityIDs: entityIDs))
 	}
 	
 	func accountDidInitialize(_ account: Account) {
