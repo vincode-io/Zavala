@@ -34,7 +34,6 @@ public final class TextRow: BaseRow, Codable {
 		return note?.markdownRepresentation
 	}
 	
-	private var _topic: NSAttributedString?
 	public var topic: NSAttributedString? {
 		get {
 			guard let topic = topicData else { return nil }
@@ -55,7 +54,6 @@ public final class TextRow: BaseRow, Codable {
 		}
 	}
 	
-	private var _note: NSAttributedString?
 	public var note: NSAttributedString? {
 		get {
 			guard let note = noteData else { return nil }
@@ -86,6 +84,9 @@ public final class TextRow: BaseRow, Codable {
 		}
 	}
 	
+	var topicData: Data?
+	var noteData: Data?
+	
 	private enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case topicData = "topicData"
@@ -95,9 +96,9 @@ public final class TextRow: BaseRow, Codable {
 		case rowOrder = "rowOrder"
 	}
 	
-	var topicData: Data?
-	var noteData: Data?
-	
+	private var _topic: NSAttributedString?
+	private var _note: NSAttributedString?
+
 	public init(document: Document) {
 		super.init()
 		self.id = .row(document.id.accountID, document.id.documentUUID, UUID().uuidString)
