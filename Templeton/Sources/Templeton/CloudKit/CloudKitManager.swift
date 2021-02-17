@@ -5,7 +5,7 @@
 //  Created by Maurice Parker on 2/6/21.
 //
 
-import Foundation
+import UIKit
 import CloudKit
 import RSCore
 
@@ -27,14 +27,20 @@ public class CloudKitManager {
 		self.defaultZone = CloudKitOutlineZone(container: container)
 		defaultZone.delegate = CloudKitAcountZoneDelegate(account: account)
 		self.zones[defaultZone.zoneID] = defaultZone
+		sendModifications()
 	}
 	
 	public func addRequests(_ requests: Set<CloudKitActionRequest>) {
-		queue.add(CloudKitQueueRequestsOperation(requests: requests))
+		let operation = CloudKitQueueRequestsOperation(requests: requests)
+		operation.completionBlock = { [weak self] op in
+			if let error = (op as? BaseMainThreadOperation)?.error {
+				self?.presentError(error)
+			}
+		}
+		queue.add(operation)
 	}
 	
-	func findZone(zoneName: String, ownerName: String) -> CloudKitOutlineZone? {
-		let zoneID = CKRecordZone.ID(zoneName: zoneName, ownerName: ownerName)
+	func findZone(zoneID: CKRecordZone.ID) -> CloudKitOutlineZone? {
 		if let zone = zones[zoneID] {
 			return zone
 		}
@@ -49,6 +55,32 @@ public class CloudKitManager {
 	
 	func accountWillBeDeleted(_ account: Account) {
 		defaultZone.resetChangeToken()
+	}
+	
+}
+
+extension CloudKitManager {
+	
+	private func presentError(_ error: Error) {
+		if let controller = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController {
+			if controller.presentedViewController == nil {
+				controller.presentError(title: "CloudKit Syncing Error", message: error.localizedDescription)
+			}
+		}
+	}
+	
+	private func sendModifications() {
+		let operation = CloudKitModifyOperation()
+		operation.completionBlock = { [weak self] op in
+			if let error = (op as? BaseMainThreadOperation)?.error {
+				self?.presentError(error)
+			}
+		}
+		queue.add(operation)
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+			self?.sendModifications()
+		}
 	}
 	
 }

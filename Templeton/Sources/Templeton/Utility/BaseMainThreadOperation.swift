@@ -21,6 +21,7 @@ open class BaseMainThreadOperation: MainThreadOperation {
 		}
 	}
 	public var completionBlock: MainThreadOperation.MainThreadOperationCompletionBlock?
+	public var error: Error?
 	
 	public init() {
 		

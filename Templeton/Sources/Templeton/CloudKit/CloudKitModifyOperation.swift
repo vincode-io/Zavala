@@ -13,7 +13,8 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 	var modifications = [CKRecordZone.ID: ([CKRecord], [CKRecord.ID])]()
 
 	override func run() {
-		guard let account = AccountManager.shared.cloudKitAccount else { return }
+		guard let account = AccountManager.shared.cloudKitAccount,
+			  let cloudKitManager = account.cloudKitManager else { return }
 		
 		var (documentRequests, documentRowRequests) = loadRequests()
 		
@@ -31,7 +32,21 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 		
 		// TODO: Add row processing here...
 		
-		// TODO: Look up zones and send modifies
+		for zoneID in modifications.keys {
+			if let cloudKitZone = cloudKitManager.findZone(zoneID: zoneID) {
+				let (saves, deletes) = modifications[zoneID]!
+				cloudKitZone.modify(recordsToSave: saves, recordIDsToDelete: deletes) { result in
+					switch result {
+					case .success:
+						self.deleteRequests()
+						self.operationDelegate?.operationDidComplete(self)
+					case .failure(let error):
+						self.error = error
+						self.operationDelegate?.operationDidComplete(self)
+					}
+				}
+			}
+		}
 	}
 	
 }
@@ -71,6 +86,10 @@ extension CloudKitModifyOperation {
 		}
 		
 		return (documentRequests, documentRowRequests)
+	}
+	
+	private func deleteRequests() {
+		try? FileManager.default.removeItem(at: CloudKitActionRequest.actionRequestFile)
 	}
 	
 	private func addSave(_ document: Document) {
