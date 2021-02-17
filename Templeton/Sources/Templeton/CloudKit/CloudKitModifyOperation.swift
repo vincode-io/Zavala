@@ -10,28 +10,22 @@ import CloudKit
 
 class CloudKitModifyOperation: BaseMainThreadOperation {
 	
-	private var zone: CloudKitOutlineZone
-	
-	init(zone: CloudKitOutlineZone) {
-		self.zone = zone
-	}
-	
 	override func run() {
 		guard let account = AccountManager.shared.cloudKitAccount else { return }
 		
 		var recordsToSave = [CKRecord]()
 		var recordIDsToDelete = [CKRecord.ID]()
-		var (documentIDs, documentRowIDs) = loadRequests()
+		var (documentRequests, documentRowRequests) = loadRequests()
 		
-		guard !documentIDs.isEmpty || !documentRowIDs.isEmpty else { return }
+		guard !documentRequests.isEmpty || !documentRowRequests.isEmpty else { return }
 		
-		for documentID in documentIDs {
-			let id = documentID.documentUUID
+		for documentRequest in documentRequests {
+			let id = documentRequest.id.documentUUID
 			if let document = account.findDocument(documentUUID: id) {
 				// Create modify record
 			} else {
 				// Create delete id
-				documentRowIDs.removeValue(forKey: id)
+				documentRowRequests.removeValue(forKey: id)
 			}
 		}
 		
@@ -41,7 +35,7 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 
 extension CloudKitModifyOperation {
 	
-	private func loadRequests() -> (CloudKitActionRequest, [String: [CloudKitActionRequest]]) {
+	private func loadRequests() -> ([CloudKitActionRequest], [String: [CloudKitActionRequest]]) {
 		var queuedRequests: Set<CloudKitActionRequest>? = nil
 		if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
 			let decoder = PropertyListDecoder()
@@ -56,7 +50,7 @@ extension CloudKitModifyOperation {
 		guard !(queuedRequests?.isEmpty ?? true) else { return (documentRequests, documentRowRequests) }
 		
 		for queuedRequest in queuedRequests! {
-			switch queuedRequest {
+			switch queuedRequest.id {
 			case .document:
 				documentRequests.append(queuedRequest)
 			case .row(_, let documentUUID, _):
