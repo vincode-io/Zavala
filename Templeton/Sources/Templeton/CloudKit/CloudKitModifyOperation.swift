@@ -6,35 +6,74 @@
 //
 
 import Foundation
+import CloudKit
 
 class CloudKitModifyOperation: BaseMainThreadOperation {
 	
-	init() {
+	private var zone: CloudKitOutlineZone
+	
+	init(zone: CloudKitOutlineZone) {
+		self.zone = zone
 	}
 	
 	override func run() {
-		DispatchQueue.global().async {
-			self.processEntityIDs()
+		guard let account = AccountManager.shared.cloudKitAccount else { return }
+		
+		var recordsToSave = [CKRecord]()
+		var recordIDsToDelete = [CKRecord.ID]()
+		var (documentIDs, documentRowIDs) = loadRequests()
+		
+		guard !documentIDs.isEmpty || !documentRowIDs.isEmpty else { return }
+		
+		for documentID in documentIDs {
+			let id = documentID.documentUUID
+			if let document = account.findDocument(documentUUID: id) {
+				// Create modify record
+			} else {
+				// Create delete id
+				documentRowIDs.removeValue(forKey: id)
+			}
 		}
+		
 	}
 	
 }
 
 extension CloudKitModifyOperation {
 	
-	private func processEntityIDs() {
-		let queuedIDs: Set<EntityID>?
-		if let fileData = try? Data(contentsOf: CloudKitManager.actionRequestFile) {
+	private func loadRequests() -> (CloudKitActionRequest, [String: [CloudKitActionRequest]]) {
+		var queuedRequests: Set<CloudKitActionRequest>? = nil
+		if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
 			let decoder = PropertyListDecoder()
-			if let decodedIDs = try? decoder.decode(Set<EntityID>.self, from: fileData) {
-				queuedIDs = decodedIDs
-			} else {
-				queuedIDs = Set<EntityID>()
+			if let decodedRequests = try? decoder.decode(Set<CloudKitActionRequest>.self, from: fileData) {
+				queuedRequests = decodedRequests
 			}
-		} else {
-			queuedIDs = Set<EntityID>()
+		}
+
+		var documentRequests = [CloudKitActionRequest]()
+		var documentRowRequests = [String: [CloudKitActionRequest]]()
+		
+		guard !(queuedRequests?.isEmpty ?? true) else { return (documentRequests, documentRowRequests) }
+		
+		for queuedRequest in queuedRequests! {
+			switch queuedRequest {
+			case .document:
+				documentRequests.append(queuedRequest)
+			case .row(_, let documentUUID, _):
+				if var rowIDs = documentRowRequests[documentUUID] {
+					rowIDs.append(queuedRequest)
+					documentRowRequests[documentUUID] = rowIDs
+				} else {
+					var rowIDs = [CloudKitActionRequest]()
+					rowIDs.append(queuedRequest)
+					documentRowRequests[documentUUID] = rowIDs
+				}
+			default:
+				fatalError()
+			}
 		}
 		
-		
+		return (documentRequests, documentRowRequests)
 	}
+	
 }
