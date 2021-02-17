@@ -68,6 +68,7 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	var documents: [Document]?
 	var folder: URL?
+	var cloudKitManager: CloudKitManager?
 	
 	private let operationQueue = OperationQueue()
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Account")
@@ -94,6 +95,10 @@ public final class Account: NSObject, Identifiable, Codable {
 		self.type = accountType
 		self.isActive = true
 		self.documents = [Document]()
+	}
+	
+	func initializeCloudKit() {
+		cloudKitManager = CloudKitManager(account: self)
 	}
 	
 	public func activate() {

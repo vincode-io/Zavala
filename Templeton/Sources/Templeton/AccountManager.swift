@@ -94,6 +94,7 @@ public final class AccountManager {
 		
 		if FileManager.default.fileExists(atPath: cloudKitAccountFile.path) {
 			initializeFile(accountType: .cloudKit)
+			findAccount(accountType: .cloudKit)?.initializeCloudKit()
 		}
 	}
 
@@ -110,7 +111,8 @@ public final class AccountManager {
 		let cloudKitAccount = Account(accountType: .cloudKit)
 		accountsDictionary[AccountType.cloudKit.rawValue] = cloudKitAccount
 		initializeFile(accountType: .cloudKit)
-		
+		findAccount(accountType: .cloudKit)?.initializeCloudKit()
+
 		accountManagerAccountsDidChange()
 	}
 	
