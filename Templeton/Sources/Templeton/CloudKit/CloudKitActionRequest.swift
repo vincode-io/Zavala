@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CloudKit
 
 public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 
@@ -16,6 +17,10 @@ public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 	let zoneName: String
 	let zoneOwner: String
 	let id: EntityID
+	
+	var zoneID: CKRecordZone.ID {
+		return CKRecordZone.ID(zoneName: zoneName, ownerName: zoneOwner)
+	}
 
 	enum CodingKeys: String, CodingKey {
 		case zoneName = "zoneName"

@@ -27,23 +27,15 @@ final class CloudKitOutlineZone: CloudKitZone {
 	weak var database: CKDatabase?
 	var delegate: CloudKitZoneDelegate?
 	
-	struct CloudKitTag {
-		static let recordType = "Tag"
-		struct Fields {
-			static let name = "name"
-		}
-	}
-	
 	struct CloudKitOutline {
 		static let recordType = "Outline"
 		struct Fields {
 			static let title = "title"
-			static let created = "created"
-			static let updated = "updated"
 			static let ownerName = "ownerName"
 			static let ownerEmail = "ownerEmail"
 			static let ownerURL = "ownerURL"
-			static let tagIDs = "tagIDs"
+			static let tagNames = "tagNames"
+			static let rowOrder = "rowOrder"
 		}
 	}
 	
