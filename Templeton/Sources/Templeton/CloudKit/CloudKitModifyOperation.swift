@@ -93,11 +93,8 @@ extension CloudKitModifyOperation {
 	}
 	
 	private func addSave(_ document: Document) {
-		guard let outline = document.outline,
-			  let zoneName = outline.cloudKitZoneName,
-			  let zoneOwner = outline.cloudKitZoneOwner else { return }
+		guard let outline = document.outline, let zoneID = outline.zoneID else { return }
 		
-		let zoneID = CKRecordZone.ID(zoneName: zoneName, ownerName: zoneOwner)
 		let recordID = CKRecord.ID(recordName: outline.id.documentUUID, zoneID: zoneID)
 		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitOutline.recordType, recordID: recordID)
 		

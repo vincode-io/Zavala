@@ -11,6 +11,8 @@ import RSCore
 
 public class CloudKitManager {
 
+	let defaultZone: CloudKitOutlineZone
+
 	private let container: CKContainer = {
 		let orgID = Bundle.main.object(forInfoDictionaryKey: "OrganizationIdentifier") as! String
 		return CKContainer(identifier: "iCloud.\(orgID).Zavala")
@@ -18,7 +20,6 @@ public class CloudKitManager {
 
 	private weak var account: Account?
 	
-	private let defaultZone: CloudKitOutlineZone
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
 	private let queue = MainThreadOperationQueue()
 
@@ -27,7 +28,10 @@ public class CloudKitManager {
 		self.defaultZone = CloudKitOutlineZone(container: container)
 		defaultZone.delegate = CloudKitAcountZoneDelegate(account: account)
 		self.zones[defaultZone.zoneID] = defaultZone
-		sendModifications()
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+			self?.sendModifications()
+		}
 	}
 	
 	public func addRequests(_ requests: Set<CloudKitActionRequest>) {

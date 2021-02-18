@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CloudKit
 
 public extension Notification.Name {
 	static let DocumentTitleDidChange = Notification.Name(rawValue: "DocumentTitleDidChange")
@@ -74,6 +75,21 @@ public enum Document: Equatable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.isEmpty
+		}
+	}
+	
+	var zoneID: CKRecordZone.ID? {
+		get {
+			switch self {
+			case .outline(let outline):
+				return outline.zoneID
+			}
+		}
+		set {
+			switch self {
+			case .outline(let outline):
+				outline.zoneID = newValue
+			}
 		}
 	}
 	

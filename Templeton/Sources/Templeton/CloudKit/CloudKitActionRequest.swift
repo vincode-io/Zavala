@@ -34,4 +34,10 @@ public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 		self.id = id
 	}
 	
+	public init(zoneID: CKRecordZone.ID, id: EntityID) {
+		self.zoneName = zoneID.zoneName
+		self.zoneOwner = zoneID.ownerName
+		self.id = id
+	}
+	
 }

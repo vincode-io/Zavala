@@ -7,6 +7,7 @@
 
 import Foundation
 import RSCore
+import CloudKit
 
 public extension Notification.Name {
 	static let OutlineElementsDidChange = Notification.Name(rawValue: "OutlineElementsDidChange")
@@ -231,6 +232,17 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		case cloudKitZoneOwner = "cloudKitZoneOwner"
 	}
 
+	var zoneID: CKRecordZone.ID? {
+		get {
+			guard let zoneName = cloudKitZoneName, let zoneOwner = cloudKitZoneOwner else { return nil }
+			return CKRecordZone.ID(zoneName: zoneName, ownerName: zoneOwner)
+		}
+		set {
+			cloudKitZoneName = newValue?.zoneName
+			cloudKitZoneOwner = newValue?.ownerName
+		}
+	}
+	
 	var rowOrder: [EntityID]?
 	var keyedRows: [EntityID: Row]?
 	

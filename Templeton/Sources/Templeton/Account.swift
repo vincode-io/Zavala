@@ -183,8 +183,14 @@ public final class Account: NSObject, Identifiable, Codable {
 		accountDocumentsDidChange()
 
 		outline.importRows(outline: outline, rowIndexers: outlineIndexers)
-		outline.forceSave()
-		return .outline(outline)
+		
+		outline.zoneID = cloudKitManager?.defaultZone.zoneID
+		let document = Document.outline(outline)
+		saveToCloudKit(document)
+		
+		outline.suspend()
+		
+		return document
 	}
 	
 	public func createOutline(title: String? = nil, tag: Tag? = nil) -> Document {
@@ -197,9 +203,12 @@ public final class Account: NSObject, Identifiable, Codable {
 			documents = [Document]()
 		}
 		
-		documents!.append(.outline(outline))
+		let document = Document.outline(outline)
+		documents!.append(document)
 		accountDocumentsDidChange()
-		return .outline(outline)
+		saveToCloudKit(document)
+		
+		return document
 	}
 	
 	public func createDocument(_ document: Document) {
@@ -215,11 +224,13 @@ public final class Account: NSObject, Identifiable, Codable {
 		
 		documents!.append(document)
 		accountDocumentsDidChange()
+		saveToCloudKit(document)
 	}
 
 	public func deleteDocument(_ document: Document) {
 		documents?.removeFirst(object: document)
 		accountDocumentsDidChange()
+		deleteFromCloudKit(document)
 
 		for tag in document.tags ?? [Tag]() {
 			deleteTag(tag)
@@ -355,4 +366,30 @@ private extension Account {
 		_idToTagsDictionary = idDictionary
 		tagsDictionaryNeedUpdate = false
 	}
+	
+	func saveToCloudKit(_ document: Document) {
+		guard let cloudKitManager = cloudKitManager, let zoneID = document.zoneID else { return }
+		
+		var requests = Set<CloudKitActionRequest>()
+		requests.insert(CloudKitActionRequest(zoneID: zoneID, id: document.id))
+		
+		switch document {
+		case .outline(let outline):
+			if let rows = outline.keyedRows?.values {
+				for row in rows {
+					requests.insert(CloudKitActionRequest(zoneID: zoneID, id: row.id))
+				}
+			}
+		}
+		
+		cloudKitManager.addRequests(requests)
+	}
+	
+	func deleteFromCloudKit(_ document: Document) {
+		guard let cloudKitManager = cloudKitManager, let zoneID = document.zoneID else { return }
+		var requests = Set<CloudKitActionRequest>()
+		requests.insert(CloudKitActionRequest(zoneID: zoneID, id: document.id))
+		cloudKitManager.addRequests(requests)
+	}
+	
 }
