@@ -632,7 +632,7 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	}
 	
 	func editorTitleDidUpdate(title: String) {
-		outline?.update(title: title)
+		outline?.title = title
 	}
 	
 	func editorTitleMoveToTagInput() {

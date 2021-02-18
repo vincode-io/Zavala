@@ -37,6 +37,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public var title: String? {
 		didSet {
+			self.updated = Date()
+			documentTitleDidChange()
 			documentMetaDataDidChange()
 		}
 	}
@@ -465,12 +467,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		} else {
 			return OutlineElementChanges()
 		}
-	}
-	
-	public func update(title: String) {
-		self.title = title
-		self.updated = Date()
-		documentTitleDidChange()
 	}
 	
 	public func isCreateNotesUnavailable(rows: [Row]) -> Bool {
