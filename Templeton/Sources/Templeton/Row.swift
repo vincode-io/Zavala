@@ -148,6 +148,10 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
+	public func reassignAccount(_ accountID: Int) {
+		associatedRow.reassignAccount(accountID)
+	}
+	
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 

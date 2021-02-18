@@ -254,13 +254,35 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	private var rowsFile: RowsFile?
 	
 	init(parentID: EntityID, title: String?) {
-		self.id = EntityID.document(parentID.accountID, UUID().uuidString)
+		self.id = .document(parentID.accountID, UUID().uuidString)
 		self.title = title
 		self.created = Date()
 		self.updated = Date()
 		rowsFile = RowsFile(outline: self)
 	}
 
+	public func reassignAccount(_ accountID: Int) {
+		self.id = .document(accountID, id.documentUUID)
+
+		guard let keyedRows = keyedRows else { return }
+
+		var newOrder = [EntityID]()
+		for row in rowOrder ?? [EntityID]() {
+			newOrder.append(.row(accountID, row.documentUUID, row.rowUUID))
+		}
+		rowOrder = newOrder
+
+		var newKeyedRows = [EntityID: Row]()
+		for key in keyedRows.keys {
+			if let row = keyedRows[key] {
+				row.reassignAccount(accountID)
+				newKeyedRows[row.id] = row
+			}
+		}
+		
+		self.keyedRows = newKeyedRows
+	}
+	
 	public func prepareForViewing() {
 		rebuildTransientData()
 	}

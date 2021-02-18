@@ -65,6 +65,15 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		self.id = .row(0, "", "")
 	}
 	
+	func reassignAccount(_ accountID: Int) {
+		self.id = .row(accountID, id.documentUUID, id.rowUUID)
+		var newOrder = [EntityID]()
+		for row in rowOrder ?? [EntityID]() {
+			newOrder.append(.row(accountID, row.documentUUID, row.rowUUID))
+		}
+		rowOrder = newOrder
+	}
+	
 	public func firstIndexOfRow(_ row: Row) -> Int? {
 		return rowOrder?.firstIndex(of: row.id)
 	}

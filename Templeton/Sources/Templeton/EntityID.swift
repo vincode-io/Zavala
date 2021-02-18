@@ -83,6 +83,15 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		}
 	}
 	
+	var rowUUID: String {
+		switch self {
+		case .row(_, _, let rowID):
+			return rowID
+		default:
+			fatalError()
+		}
+	}
+	
 	private enum CodingKeys: String, CodingKey {
 		case type
 		case searchText

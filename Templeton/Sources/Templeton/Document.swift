@@ -116,10 +116,10 @@ public enum Document: Equatable, Codable {
 		}
 	}
 	
-	public func reassignID(_ entityID: EntityID) {
+	public func reassignAccount(_ accountID: Int) {
 		switch self {
 		case .outline(let outline):
-			outline.id = entityID
+			outline.reassignAccount(accountID)
 		}
 	}
 
