@@ -97,8 +97,11 @@ public final class Account: NSObject, Identifiable, Codable {
 		self.documents = [Document]()
 	}
 	
-	func initializeCloudKit() {
+	func initializeCloudKit(firstTime: Bool) {
 		cloudKitManager = CloudKitManager(account: self)
+		if firstTime {
+			cloudKitManager?.firstTimeSetup()
+		}
 	}
 	
 	public func activate() {
@@ -188,6 +191,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		let document = Document.outline(outline)
 		saveToCloudKit(document)
 		
+		outline.forceSave()
 		outline.suspend()
 		
 		return document
@@ -203,6 +207,7 @@ public final class Account: NSObject, Identifiable, Codable {
 			documents = [Document]()
 		}
 		
+		outline.zoneID = cloudKitManager?.defaultZone.zoneID
 		let document = Document.outline(outline)
 		documents!.append(document)
 		accountDocumentsDidChange()
@@ -222,9 +227,12 @@ public final class Account: NSObject, Identifiable, Codable {
 			createTag(tag)
 		}
 		
-		documents!.append(document)
+		var mutableDocument = document
+		mutableDocument.zoneID = cloudKitManager?.defaultZone.zoneID
+			
+		documents!.append(mutableDocument)
 		accountDocumentsDidChange()
-		saveToCloudKit(document)
+		saveToCloudKit(mutableDocument)
 	}
 
 	public func deleteDocument(_ document: Document) {

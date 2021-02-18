@@ -14,11 +14,17 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 
 	override func run() {
 		guard let account = AccountManager.shared.cloudKitAccount,
-			  let cloudKitManager = account.cloudKitManager else { return }
+			  let cloudKitManager = account.cloudKitManager else {
+			operationDelegate?.operationDidComplete(self)
+			return
+		}
 		
 		var (documentRequests, documentRowRequests) = loadRequests()
 		
-		guard !documentRequests.isEmpty || !documentRowRequests.isEmpty else { return }
+		guard !documentRequests.isEmpty || !documentRowRequests.isEmpty else {
+			operationDelegate?.operationDidComplete(self)
+			return
+		}
 		
 		for documentRequest in documentRequests {
 			let id = documentRequest.id.documentUUID
@@ -32,20 +38,27 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 		
 		// TODO: Add row processing here...
 		
+		let group = DispatchGroup()
+		
 		for zoneID in modifications.keys {
-			if let cloudKitZone = cloudKitManager.findZone(zoneID: zoneID) {
-				let (saves, deletes) = modifications[zoneID]!
-				cloudKitZone.modify(recordsToSave: saves, recordIDsToDelete: deletes) { result in
-					switch result {
-					case .success:
-						self.deleteRequests()
-						self.operationDelegate?.operationDidComplete(self)
-					case .failure(let error):
-						self.error = error
-						self.operationDelegate?.operationDidComplete(self)
-					}
+			group.enter()
+
+			let cloudKitZone = cloudKitManager.findZone(zoneID: zoneID)
+			let (saves, deletes) = modifications[zoneID]!
+
+			cloudKitZone.modify(recordsToSave: saves, recordIDsToDelete: deletes) { result in
+				if case .failure(let error) = result {
+					self.error = error
 				}
+				group.leave()
 			}
+		}
+		
+		group.notify(queue: DispatchQueue.main) {
+			if self.error == nil {
+				self.deleteRequests()
+			}
+			self.operationDelegate?.operationDidComplete(self)
 		}
 	}
 	

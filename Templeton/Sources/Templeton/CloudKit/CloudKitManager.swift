@@ -34,7 +34,18 @@ public class CloudKitManager {
 		}
 	}
 	
-	public func addRequests(_ requests: Set<CloudKitActionRequest>) {
+	func firstTimeSetup() {
+		defaultZone.fetchZoneRecord {  [weak self] result in
+			switch result {
+			case .success:
+				self?.defaultZone.subscribeToZoneChanges()
+			case .failure(let error):
+				self?.presentError(error)
+			}
+		}
+	}
+	
+	func addRequests(_ requests: Set<CloudKitActionRequest>) {
 		let operation = CloudKitQueueRequestsOperation(requests: requests)
 		operation.completionBlock = { [weak self] op in
 			if let error = (op as? BaseMainThreadOperation)?.error {
@@ -44,15 +55,13 @@ public class CloudKitManager {
 		queue.add(operation)
 	}
 	
-	func findZone(zoneID: CKRecordZone.ID) -> CloudKitOutlineZone? {
+	func findZone(zoneID: CKRecordZone.ID) -> CloudKitOutlineZone {
 		if let zone = zones[zoneID] {
 			return zone
 		}
 		
-		guard let account = account else { return nil }
-		
 		let zone = CloudKitOutlineZone(container: container, database: container.sharedCloudDatabase, zoneID: zoneID)
-		zone.delegate = CloudKitAcountZoneDelegate(account: account)
+		zone.delegate = CloudKitAcountZoneDelegate(account: account!)
 		zones[zoneID] = zone
 		return zone
 	}

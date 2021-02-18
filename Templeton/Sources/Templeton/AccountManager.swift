@@ -94,8 +94,7 @@ public final class AccountManager {
 		
 		if FileManager.default.fileExists(atPath: cloudKitAccountFile.path) {
 			initializeFile(accountType: .cloudKit)
-			findAccount(accountType: .cloudKit)?.initializeCloudKit()
-			cloudKitAccount?.initializeCloudKit()
+			cloudKitAccount?.initializeCloudKit(firstTime: false)
 		}
 	}
 
@@ -112,7 +111,7 @@ public final class AccountManager {
 		let cloudKitAccount = Account(accountType: .cloudKit)
 		accountsDictionary[AccountType.cloudKit.rawValue] = cloudKitAccount
 		initializeFile(accountType: .cloudKit)
-		cloudKitAccount.initializeCloudKit()
+		cloudKitAccount.initializeCloudKit(firstTime: true)
 
 		accountManagerAccountsDidChange()
 	}
@@ -121,13 +120,13 @@ public final class AccountManager {
 		// Send out all the document delete events for this account to clean up the search index
 		cloudKitAccount?.documents?.forEach { $0.documentDidDelete() }
 		
+		accountsDictionary[AccountType.cloudKit.rawValue] = nil
+		accountFiles[AccountType.cloudKit.rawValue] = nil
+
 		if let cloudKitAccount = cloudKitAccount {
 			cloudKitAccount.cloudKitManager?.accountWillBeDeleted(cloudKitAccount)
 		}
 		
-		accountsDictionary[AccountType.cloudKit.rawValue] = nil
-		accountFiles[AccountType.cloudKit.rawValue] = nil
-
 		try? FileManager.default.removeItem(atPath: cloudKitAccountFolder.path)
 
 		accountManagerAccountsDidChange()
