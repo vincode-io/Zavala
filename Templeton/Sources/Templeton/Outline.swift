@@ -40,6 +40,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			self.updated = Date()
 			documentTitleDidChange()
 			documentMetaDataDidChange()
+			requestCloudKitUpdate()
 		}
 	}
 	
@@ -58,18 +59,21 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	public var ownerName: String? {
 		didSet {
 			documentMetaDataDidChange()
+			requestCloudKitUpdate()
 		}
 	}
 	
 	public var ownerEmail: String? {
 		didSet {
 			documentMetaDataDidChange()
+			requestCloudKitUpdate()
 		}
 	}
 	
 	public var ownerURL: String? {
 		didSet {
 			documentMetaDataDidChange()
+			requestCloudKitUpdate()
 		}
 	}
 	
@@ -1149,6 +1153,12 @@ extension Outline {
 		var userInfo = [AnyHashable: Any]()
 		userInfo[OutlineElementChanges.userInfoKey] = changes
 		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
+	}
+	
+	private func requestCloudKitUpdate() {
+		if let cloudKitManager = account?.cloudKitManager, let zoneID = zoneID {
+			cloudKitManager.addRequest(CloudKitActionRequest(zoneID: zoneID, id: id))
+		}
 	}
 
 	private func completeUncomplete(rows: [Row], isComplete: Bool, textRowStrings: TextRowStrings?) -> ([Row], Int?) {

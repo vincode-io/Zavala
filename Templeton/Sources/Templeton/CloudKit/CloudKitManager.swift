@@ -46,6 +46,12 @@ public class CloudKitManager {
 		}
 	}
 	
+	func addRequest(_ request: CloudKitActionRequest) {
+		var requests = Set<CloudKitActionRequest>()
+		requests.insert(request)
+		addRequests(requests)
+	}
+	
 	func addRequests(_ requests: Set<CloudKitActionRequest>) {
 		let operation = CloudKitQueueRequestsOperation(requests: requests)
 		
