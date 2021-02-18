@@ -20,6 +20,7 @@ public class CloudKitManager {
 
 	private weak var account: Account?
 	
+	private var coalescingQueue = CoalescingQueue(name: "Send Modifications", interval: 5)
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
 	private let queue = MainThreadOperationQueue()
 
@@ -47,11 +48,16 @@ public class CloudKitManager {
 	
 	func addRequests(_ requests: Set<CloudKitActionRequest>) {
 		let operation = CloudKitQueueRequestsOperation(requests: requests)
+		
 		operation.completionBlock = { [weak self] op in
+			guard let self = self else { return }
 			if let error = (op as? BaseMainThreadOperation)?.error {
-				self?.presentError(error)
+				self.presentError(error)
+			} else {
+				self.coalescingQueue.add(self, #selector(self.sendModifications))
 			}
 		}
+		
 		queue.add(operation)
 	}
 	
@@ -82,18 +88,16 @@ extension CloudKitManager {
 		}
 	}
 	
-	private func sendModifications() {
+	@objc private func sendModifications() {
 		let operation = CloudKitModifyOperation()
+		
 		operation.completionBlock = { [weak self] op in
 			if let error = (op as? BaseMainThreadOperation)?.error {
 				self?.presentError(error)
 			}
 		}
-		queue.add(operation)
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
-			self?.sendModifications()
-		}
+		queue.add(operation)
 	}
 	
 }
