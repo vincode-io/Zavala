@@ -35,15 +35,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 	}
 	
-	public var title: String? {
-		didSet {
-			self.updated = Date()
-			documentTitleDidChange()
-			documentMetaDataDidChange()
-			requestCloudKitUpdate()
-		}
-	}
-	
+	public internal(set) var title: String?
+	public internal(set) var ownerName: String?
+	public internal(set) var ownerEmail: String?
+	public internal(set) var ownerURL: String?
+
 	public var created: Date? {
 		didSet {
 			documentMetaDataDidChange()
@@ -53,27 +49,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	public var updated: Date? {
 		didSet {
 			documentMetaDataDidChange()
-		}
-	}
-	
-	public var ownerName: String? {
-		didSet {
-			documentMetaDataDidChange()
-			requestCloudKitUpdate()
-		}
-	}
-	
-	public var ownerEmail: String? {
-		didSet {
-			documentMetaDataDidChange()
-			requestCloudKitUpdate()
-		}
-	}
-	
-	public var ownerURL: String? {
-		didSet {
-			documentMetaDataDidChange()
-			requestCloudKitUpdate()
 		}
 	}
 	
@@ -454,6 +429,23 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		suspend()
 		return opml
+	}
+	
+	public func update(title: String) {
+		self.title = title
+		self.updated = Date()
+		documentTitleDidChange()
+		documentMetaDataDidChange()
+		requestCloudKitUpdate()
+	}
+	
+	public func update(ownerName: String?, ownerEmail: String?, ownerURL: String?) {
+		self.ownerName = ownerName
+		self.ownerEmail = ownerEmail
+		self.ownerURL = ownerURL
+		self.updated = Date()
+		documentMetaDataDidChange()
+		requestCloudKitUpdate()
 	}
 	
 	public func toggleFilter() -> OutlineElementChanges {
