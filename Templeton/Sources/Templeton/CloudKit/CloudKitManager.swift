@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import os.log
 import CloudKit
 import RSCore
 
 public class CloudKitManager {
 
 	let defaultZone: CloudKitOutlineZone
+	var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "CloudKit")
 
 	private let container: CKContainer = {
 		let orgID = Bundle.main.object(forInfoDictionaryKey: "OrganizationIdentifier") as! String
@@ -49,6 +51,11 @@ public class CloudKitManager {
 	}
 	
 	func addRequests(_ requests: Set<CloudKitActionRequest>) {
+		let backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
+			guard let self = self else { return }
+			os_log("Add requests terminated for running too long.", log: self.log, type: .info)
+		}
+
 		let operation = CloudKitQueueRequestsOperation(requests: requests)
 		
 		operation.completionBlock = { [weak self] op in
@@ -56,8 +63,9 @@ public class CloudKitManager {
 			if let error = (op as? BaseMainThreadOperation)?.error {
 				self.presentError(error)
 			} else {
-				self.coalescingQueue.add(self, #selector(self.sendChanges))
+				self.coalescingQueue.add(self, #selector(self.sendQueuedChanges))
 			}
+			UIApplication.shared.endBackgroundTask(backgroundTask)
 		}
 		
 		queue.add(operation)
@@ -107,15 +115,27 @@ extension CloudKitManager {
 			}
 		}
 	}
-	
-	@objc private func sendChanges(completion: (() -> Void)? = nil) {
+
+	@objc private func sendQueuedChanges() {
+		sendChanges() {}
+	}
+
+	private func sendChanges(completion: @escaping (() -> Void)) {
+		assert(Thread.isMainThread)
+		
+		let backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
+			guard let self = self else { return }
+			os_log("Send changes terminated for running too long.", log: self.log, type: .info)
+		}
+
 		let operation = CloudKitModifyOperation()
 		
 		operation.completionBlock = { [weak self] op in
 			if let error = (op as? BaseMainThreadOperation)?.error {
 				self?.presentError(error)
 			}
-			completion?()
+			completion()
+			UIApplication.shared.endBackgroundTask(backgroundTask)
 		}
 		
 		queue.add(operation)
@@ -146,14 +166,19 @@ extension CloudKitManager {
 	}
 	
 	private func fetchChanges(zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
+		let backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
+			guard let self = self else { return }
+			os_log("Fetch changes terminated for running too long.", log: self.log, type: .info)
+		}
+
 		let zone = findZone(zoneID: zoneID)
 		zone.fetchChangesInZone() { [weak self] result in
 			if case .failure(let error) = result {
 				self?.presentError(error)
 			}
 			completion?()
+			UIApplication.shared.endBackgroundTask(backgroundTask)
 		}
 	}
 	
-
 }
