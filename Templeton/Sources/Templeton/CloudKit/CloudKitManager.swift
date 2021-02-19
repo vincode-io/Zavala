@@ -31,7 +31,7 @@ public class CloudKitManager {
 		self.zones[defaultZone.zoneID] = defaultZone
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-			self?.sendModifications()
+			self?.sendChanges()
 		}
 	}
 	
@@ -60,11 +60,15 @@ public class CloudKitManager {
 			if let error = (op as? BaseMainThreadOperation)?.error {
 				self.presentError(error)
 			} else {
-				self.coalescingQueue.add(self, #selector(self.sendModifications))
+				self.coalescingQueue.add(self, #selector(self.sendChanges))
 			}
 		}
 		
 		queue.add(operation)
+	}
+	
+	func sync(zoneIDs: Set<CKRecordZone.ID>) {
+		
 	}
 	
 	func findZone(zoneID: CKRecordZone.ID) -> CloudKitOutlineZone {
@@ -76,6 +80,10 @@ public class CloudKitManager {
 		zone.delegate = CloudKitAcountZoneDelegate(account: account!)
 		zones[zoneID] = zone
 		return zone
+	}
+	
+	func suspend() {
+		coalescingQueue.performCallsImmediately()
 	}
 	
 	func accountWillBeDeleted(_ account: Account) {
@@ -94,7 +102,7 @@ extension CloudKitManager {
 		}
 	}
 	
-	@objc private func sendModifications() {
+	@objc private func sendChanges() {
 		let operation = CloudKitModifyOperation()
 		
 		operation.completionBlock = { [weak self] op in

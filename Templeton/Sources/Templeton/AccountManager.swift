@@ -160,9 +160,10 @@ public final class AccountManager {
 		return nil
 	}
 	
-	public func save() {
+	public func suspend() {
 		accountFiles.values.forEach { $0.save() }
 		documents.forEach { $0.save() }
+		cloudKitAccount?.cloudKitManager?.suspend()
 	}
 	
 }
