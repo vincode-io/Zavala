@@ -160,6 +160,14 @@ public final class AccountManager {
 		return nil
 	}
 	
+	public func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
+		cloudKitAccount?.cloudKitManager?.receiveRemoteNotification(userInfo: userInfo, completion: completion)
+	}
+	
+	public func resume() {
+		cloudKitAccount?.cloudKitManager?.resume()
+	}
+	
 	public func suspend() {
 		accountFiles.values.forEach { $0.save() }
 		documents.forEach { $0.save() }

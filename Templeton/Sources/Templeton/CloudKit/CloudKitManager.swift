@@ -29,10 +29,6 @@ public class CloudKitManager {
 		self.defaultZone = CloudKitOutlineZone(container: container)
 		defaultZone.delegate = CloudKitAcountZoneDelegate(account: account)
 		self.zones[defaultZone.zoneID] = defaultZone
-		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-			self?.sendChanges()
-		}
 	}
 	
 	func firstTimeSetup() {
@@ -67,8 +63,12 @@ public class CloudKitManager {
 		queue.add(operation)
 	}
 	
-	func sync(zoneIDs: Set<CKRecordZone.ID>) {
-		
+	func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
+		guard let zoneID = CKRecordZoneNotification(fromRemoteNotificationDictionary: userInfo)?.recordZoneID else {
+			completion()
+			return
+		}
+		fetchChanges(zoneID: zoneID, completion: completion)
 	}
 	
 	func findZone(zoneID: CKRecordZone.ID) -> CloudKitOutlineZone {
@@ -80,6 +80,12 @@ public class CloudKitManager {
 		zone.delegate = CloudKitAcountZoneDelegate(account: account!)
 		zones[zoneID] = zone
 		return zone
+	}
+	
+	func resume() {
+		sendChanges() {
+			self.fetchAllChanges()
+		}
 	}
 	
 	func suspend() {
@@ -102,16 +108,52 @@ extension CloudKitManager {
 		}
 	}
 	
-	@objc private func sendChanges() {
+	@objc private func sendChanges(completion: (() -> Void)? = nil) {
 		let operation = CloudKitModifyOperation()
 		
 		operation.completionBlock = { [weak self] op in
 			if let error = (op as? BaseMainThreadOperation)?.error {
 				self?.presentError(error)
 			}
+			completion?()
 		}
 		
 		queue.add(operation)
 	}
 	
+	private func fetchAllChanges(completion: (() -> Void)? = nil) {
+		var zoneIDs = Set<CKRecordZone.ID>()
+		zoneIDs.insert(defaultZone.zoneID)
+		
+		for doc in account?.documents ?? [Document]() {
+			if let zoneID = doc.zoneID {
+				zoneIDs.insert(zoneID)
+			}
+		}
+		
+		let group = DispatchGroup()
+		
+		for zoneID in zoneIDs {
+			group.enter()
+			fetchChanges(zoneID: zoneID) {
+				group.leave()
+			}
+		}
+		
+		group.notify(queue: DispatchQueue.main) {
+			completion?()
+		}
+	}
+	
+	private func fetchChanges(zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
+		let zone = findZone(zoneID: zoneID)
+		zone.fetchChangesInZone() { [weak self] result in
+			if case .failure(let error) = result {
+				self?.presentError(error)
+			}
+			completion?()
+		}
+	}
+	
+
 }

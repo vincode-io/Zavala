@@ -303,7 +303,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		AppDefaults.registerDefaults()
 
-		
+		NotificationCenter.default.addObserver(self, selector: #selector(checkForUserDefaultsChanges), name: UserDefaults.didChangeNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+
 		var menuItems = [UIMenuItem]()
 		menuItems.append(UIMenuItem(title: L10n.bold, action: .toggleBoldface))
 		menuItems.append(UIMenuItem(title: L10n.italic, action: .toggleItalics))
@@ -323,6 +326,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return true
 	}
 
+	func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+		DispatchQueue.main.async {
+			AccountManager.shared.receiveRemoteNotification(userInfo: userInfo) {
+				completionHandler(.newData)
+			}
+		}
+	}
+	
 	// MARK: UISceneSession Lifecycle
 
 	func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -602,3 +613,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 }
 
+extension AppDelegate {
+	
+	@objc private func willEnterForeground() {
+		checkForUserDefaultsChanges()
+		AccountManager.shared.resume()
+	}
+	
+	@objc private func didEnterBackground() {
+		AccountManager.shared.suspend()
+	}
+	
+	@objc private func checkForUserDefaultsChanges() {
+		let localAccount = AccountManager.shared.localAccount
+		
+		if !AppDefaults.shared.hideLocalAccount != localAccount.isActive {
+			if AppDefaults.shared.hideLocalAccount {
+				localAccount.deactivate()
+			} else {
+				localAccount.activate()
+			}
+		}
+		
+		let cloudKitAccount = AccountManager.shared.cloudKitAccount
+		
+		if AppDefaults.shared.enableCloudKit && cloudKitAccount == nil {
+			AccountManager.shared.createCloudKitAccount()
+		} else if !AppDefaults.shared.enableCloudKit && cloudKitAccount != nil {
+			AccountManager.shared.deleteCloudKitAccount()
+		}
+	}
+	
+}
