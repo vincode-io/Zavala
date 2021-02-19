@@ -60,6 +60,7 @@
 "Search" = "Search";
 "Tag" = "Tag";
 "Add" = "Add";
+"Preferences" = "Preferences...";
 
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";

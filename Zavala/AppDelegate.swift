@@ -100,7 +100,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return menuKeyCommands
 		#endif
 	}
-	
+		
+	let showPreferences = UIKeyCommand(title: L10n.preferences,
+										 action: #selector(showPreferences(_:)),
+										 input: ",",
+										 modifierFlags: [.command])
 	
 	#if targetEnvironment(macCatalyst)
 	let checkForUpdates = UIKeyCommand(title: L10n.checkForUpdates,
@@ -108,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 input: ".",
 										 modifierFlags: [.command])
 	#endif
-	
+
 	let exportOPMLCommand = UIKeyCommand(title: L10n.exportOPML,
 										 action: #selector(exportOPMLCommand(_:)),
 										 input: "e",
@@ -342,6 +346,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	// MARK: Actions
 
+	@objc func showPreferences(_ sender: Any?) {
+		#if targetEnvironment(macCatalyst)
+		appKitPlugin?.showPreferences()
+		#endif
+	}
+
 	#if targetEnvironment(macCatalyst)
 	@objc func checkForUpdates(_ sender: Any?) {
 		appKitPlugin?.checkForUpdates()
@@ -565,10 +575,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.remove(menu: .openRecent)
 		
 		// Application Menu
-		if let preferencesMenu = builder.menu(for: .preferences)?.children[0] {
-			let appMenu = UIMenu(title: "", options: .displayInline, children: [preferencesMenu, checkForUpdates])
-			builder.replace(menu: .preferences, with: appMenu)
-		}
+		let appMenu = UIMenu(title: "", options: .displayInline, children: [showPreferences, checkForUpdates])
+		builder.insertSibling(appMenu, afterMenu: .about)
 		
 		// File Menu
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMarkdownCommand, exportOPMLCommand])

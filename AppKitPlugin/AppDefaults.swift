@@ -19,28 +19,8 @@ final class AppDefaults {
 	}()
 	
 	struct Key {
-		static let lastSelectedAccountID = "lastSelectedAccountID"
-		static let deletedLocalForV14 = "deletedLocalForV14"
 		static let enableCloudKit = "enableCloudKit"
 		static let hideLocalAccount = "hideLocalAccount"
-	}
-	
-	var lastSelectedAccountID: Int {
-		get {
-			return Self.int(for: Key.lastSelectedAccountID)
-		}
-		set {
-			Self.setInt(for: Key.lastSelectedAccountID, newValue)
-		}
-	}
-	
-	var deletedLocalForV14: Bool {
-		get {
-			return Self.bool(for: Key.deletedLocalForV14)
-		}
-		set {
-			Self.setBool(for: Key.deletedLocalForV14, newValue)
-		}
 	}
 
 	var enableCloudKit: Bool {
@@ -59,41 +39,6 @@ final class AppDefaults {
 		set {
 			Self.setBool(for: Key.hideLocalAccount, newValue)
 		}
-	}
-
-//	var addFolderAccountID: EntityID? {
-//		get {
-//			guard let userInfo = UserDefaults.standard.object(forKey: Key.addFolderAccountID) as? [AnyHashable : AnyHashable] else { return nil }
-//			return EntityID(userInfo: userInfo)
-//		}
-//		set {
-//			guard let userInfo = newValue?.userInfo else { return }
-//			UserDefaults.standard.set(userInfo, forKey: Key.addFolderAccountID)
-//		}
-//	}
-//
-//	var addOutlineFeedFolderID: EntityID? {
-//		get {
-//			guard let userInfo = UserDefaults.standard.object(forKey: Key.addOutlineFeedFolderID) as? [AnyHashable : AnyHashable] else { return nil }
-//			return EntityID(userInfo: userInfo)
-//		}
-//		set {
-//			guard let userInfo = newValue?.userInfo else { return }
-//			UserDefaults.standard.set(userInfo, forKey: Key.addOutlineFeedFolderID)
-//		}
-//	}
-	
-	static func registerDefaults() {
-//		let defaults: [String : Any] = [Key.userInterfaceColorPalette: UserInterfaceColorPalette.automatic.rawValue,
-//										Key.timelineGroupByFeed: false,
-//										Key.refreshClearsReadArticles: false,
-//										Key.timelineNumberOfLines: 2,
-//										Key.timelineIconDimension: IconSize.medium.rawValue,
-//										Key.timelineSortDirection: ComparisonResult.orderedDescending.rawValue,
-//										Key.articleFullscreenAvailable: false,
-//										Key.articleFullscreenEnabled: false,
-//										Key.confirmMarkAllAsRead: true]
-//		AppDefaults.store.register(defaults: defaults)
 	}
 
 }

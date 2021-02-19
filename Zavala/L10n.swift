@@ -122,6 +122,8 @@ internal enum L10n {
   internal static let outline = L10n.tr("Localizable", "Outline")
   /// Paste
   internal static let paste = L10n.tr("Localizable", "Paste")
+  /// Preferences...
+  internal static let preferences = L10n.tr("Localizable", "Preferences")
   /// Release Notes
   internal static let releaseNotes = L10n.tr("Localizable", "Release_Notes")
   /// Restore

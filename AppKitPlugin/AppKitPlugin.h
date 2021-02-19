@@ -8,6 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol AppKitPlugin <NSObject>
 - (void)start;
 - (void)checkForUpdates;
+- (void)showPreferences;
 @end
 
 NS_ASSUME_NONNULL_END

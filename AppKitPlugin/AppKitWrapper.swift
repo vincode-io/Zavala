@@ -15,6 +15,8 @@ import Sparkle
 	
 	private var softwareUpdater: SPUUpdater!
 
+	private var preferencesWindowController: NSWindowController?
+
 	func start() {
 		let hostBundle = Bundle.main
 		let updateDriver = SPUStandardUserDriver(hostBundle: hostBundle, delegate: self)
@@ -31,4 +33,12 @@ import Sparkle
 		softwareUpdater.checkForUpdates()
 	}
 	
+	func showPreferences() {
+		if preferencesWindowController == nil {
+			let bundle = Bundle(identifier: "io.vincode.AppKitPlugin")!
+			let storyboard = NSStoryboard(name: NSStoryboard.Name("Preferences"), bundle: bundle)
+			preferencesWindowController = storyboard.instantiateInitialController()! as NSWindowController
+		}
+		preferencesWindowController!.showWindow(self)
+	}
 }

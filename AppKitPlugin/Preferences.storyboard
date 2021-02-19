@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="mPU-HG-I4u">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="NTj-pB-UZ0">
+            <objects>
+                <windowController showSeguePresentationStyle="single" id="mPU-HG-I4u" customClass="PreferencesWindowController" customModule="AppKitPlugin" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" tabbingMode="disallowed" toolbarStyle="preference" id="2C0-LP-36T">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" topStrut="YES"/>
+                        <rect key="contentRect" x="128" y="512" width="480" height="273"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+                        <connections>
+                            <outlet property="delegate" destination="mPU-HG-I4u" id="OFR-wN-xDf"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="5hy-V0-Rya" kind="relationship" relationship="window.shadowedContentViewController" id="eQS-3L-XgF"/>
+                    </connections>
+                </windowController>
+                <customObject id="Q6y-w1-UqW" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-573" y="40.5"/>
+        </scene>
+        <!--General-->
+        <scene sceneID="R4l-Wg-k7x">
+            <objects>
+                <viewController title="General" storyboardIdentifier="General" id="iuH-lz-18x" customClass="GeneralPreferencesViewController" customModule="AppKitPlugin" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="WnV-px-wCT">
+                        <rect key="frame" x="0.0" y="0.0" width="355" height="117"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="Ut3-yd-q6G">
+                                <rect key="frame" x="54" y="16" width="245" height="85"/>
+                                <subviews>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mwT-nY-TrX">
+                                        <rect key="frame" x="18" y="48" width="207" height="18"/>
+                                        <buttonCell key="cell" type="check" title="Hide the On My Mac Account" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="lh0-G6-9v4">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="toggleHideLocalAccount:" target="iuH-lz-18x" id="8yI-7Y-7BK"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kaV-Ee-Pla">
+                                        <rect key="frame" x="18" y="19" width="186" height="18"/>
+                                        <buttonCell key="cell" type="check" title="Enable the iCloud Account" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="caS-El-r8g">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="toggleEnableCloudKit:" target="iuH-lz-18x" id="Y1o-Y7-JZH"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="kaV-Ee-Pla" firstAttribute="leading" secondItem="Ut3-yd-q6G" secondAttribute="leading" constant="20" symbolic="YES" id="BcW-0C-8dw"/>
+                                    <constraint firstItem="kaV-Ee-Pla" firstAttribute="top" secondItem="mwT-nY-TrX" secondAttribute="bottom" constant="13" id="JJI-XX-ZGS"/>
+                                    <constraint firstItem="mwT-nY-TrX" firstAttribute="top" secondItem="Ut3-yd-q6G" secondAttribute="top" constant="20" symbolic="YES" id="NcN-Er-iUO"/>
+                                    <constraint firstAttribute="trailing" secondItem="mwT-nY-TrX" secondAttribute="trailing" constant="20" symbolic="YES" id="Opw-sT-vve"/>
+                                    <constraint firstItem="mwT-nY-TrX" firstAttribute="leading" secondItem="Ut3-yd-q6G" secondAttribute="leading" constant="20" symbolic="YES" id="Wtj-Cn-wts"/>
+                                    <constraint firstAttribute="bottom" secondItem="kaV-Ee-Pla" secondAttribute="bottom" constant="20" symbolic="YES" id="dHp-Ul-xJ0"/>
+                                </constraints>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Ut3-yd-q6G" firstAttribute="leading" secondItem="WnV-px-wCT" secondAttribute="leading" constant="54" id="6DW-Tz-MNd"/>
+                            <constraint firstItem="Ut3-yd-q6G" firstAttribute="centerX" secondItem="WnV-px-wCT" secondAttribute="centerX" constant="-1" id="87C-ym-WzY"/>
+                            <constraint firstAttribute="bottom" secondItem="Ut3-yd-q6G" secondAttribute="bottom" constant="16" id="FVX-gg-o9H"/>
+                            <constraint firstItem="Ut3-yd-q6G" firstAttribute="top" secondItem="WnV-px-wCT" secondAttribute="top" constant="16" id="jtz-mW-ptL"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="enableCloudKit" destination="kaV-Ee-Pla" id="AiI-AG-Baj"/>
+                        <outlet property="hideLocalAccount" destination="mwT-nY-TrX" id="Gc0-cD-8Dr"/>
+                        <outlet property="showUnreadCountCheckbox" destination="mwT-nY-TrX" id="ZH9-P5-JkT"/>
+                    </connections>
+                </viewController>
+                <customObject id="bSQ-tq-wd3" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <userDefaultsController representsSharedInstance="YES" id="mAF-gO-1PI"/>
+            </objects>
+            <point key="canvasLocation" x="-615" y="392"/>
+        </scene>
+        <!--Container-->
+        <scene sceneID="fzS-hg-3TF">
+            <objects>
+                <viewController id="5hy-V0-Rya" userLabel="Container" sceneMemberID="viewController">
+                    <view key="view" id="n2N-K1-BAa">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="AmS-bK-IAF" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-44" y="27"/>
+        </scene>
+    </scenes>
+</document>

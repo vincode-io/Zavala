@@ -23,8 +23,6 @@
 		5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0C025CCAFEA004673C3 /* EditorTagAddContentView.swift */; };
 		5147D0C525CCD6AA004673C3 /* SidebarViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0C425CCD6AA004673C3 /* SidebarViewController+Drop.swift */; };
 		5147D0C825CE28AE004673C3 /* NSDataDetector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */; };
-		514954EA25D5F82100D64E54 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 514954E925D5F82100D64E54 /* Settings.bundle */; };
-		514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
 		514EF15F25A78A8C00B1FFB6 /* CrashReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */; };
 		514EF16325A78BCC00B1FFB6 /* CrashReporter in Frameworks */ = {isa = PBXBuildFile; platformFilter = maccatalyst; productRef = 514EF16225A78BCC00B1FFB6 /* CrashReporter */; };
@@ -40,6 +38,11 @@
 		5163ADF525C79B69008F25CA /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5163ADF425C79B69008F25CA /* String+.swift */; };
 		51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51692B0B25681AD3006B755F /* UIViewController+.swift */; };
 		5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5169928925AE4F5C00760C9D /* UICollectionView+.swift */; };
+		517AF68625E07A3F0044DBAB /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517AF68525E07A3F0044DBAB /* Preferences.storyboard */; };
+		517AF68825E07A420044DBAB /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF68425E07A190044DBAB /* PreferencesWindowController.swift */; };
+		517AF68C25E07A790044DBAB /* GeneralPrefencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */; };
+		517AF69525E085A80044DBAB /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF69425E085A80044DBAB /* AppDefaults.swift */; };
+		517AF69C25E0862E0044DBAB /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF69B25E0862E0044DBAB /* AppDefaults.swift */; };
 		5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9372554D92000C153E8 /* AppDelegate.swift */; };
 		5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9392554D92000C153E8 /* SceneDelegate.swift */; };
 		5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A93B2554D92000C153E8 /* SidebarViewController.swift */; };
@@ -167,8 +170,6 @@
 		5147D0C025CCAFEA004673C3 /* EditorTagAddContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagAddContentView.swift; sourceTree = "<group>"; };
 		5147D0C425CCD6AA004673C3 /* SidebarViewController+Drop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SidebarViewController+Drop.swift"; sourceTree = "<group>"; };
 		5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDataDetector+.swift"; sourceTree = "<group>"; };
-		514954E925D5F82100D64E54 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
 		514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReporter.swift; sourceTree = "<group>"; };
 		514F220C25C4CCA6004E02CD /* EditorTagViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagViewCell.swift; sourceTree = "<group>"; };
@@ -183,6 +184,11 @@
 		5163ADF425C79B69008F25CA /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		51692B0B25681AD3006B755F /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		5169928925AE4F5C00760C9D /* UICollectionView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+.swift"; sourceTree = "<group>"; };
+		517AF68425E07A190044DBAB /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
+		517AF68525E07A3F0044DBAB /* Preferences.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
+		517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralPrefencesViewController.swift; sourceTree = "<group>"; };
+		517AF69425E085A80044DBAB /* AppDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
+		517AF69B25E0862E0044DBAB /* AppDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		5181A9342554D92000C153E8 /* Zavala.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zavala.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5181A9372554D92000C153E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5181A9392554D92000C153E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -233,7 +239,7 @@
 		51E060A525A4506300194066 /* org.sparkle-project.Downloader.xpc */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.xpc-service"; path = "org.sparkle-project.Downloader.xpc"; sourceTree = "<group>"; };
 		51E060AF25A4547400194066 /* AppKitPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppKitPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		51E060B125A4547400194066 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		51E060C325A455B900194066 /* Zavala_sparkleplugin_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_sparkleplugin_target.xcconfig; sourceTree = "<group>"; };
+		51E060C325A455B900194066 /* Zavala_appkitplugin_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_appkitplugin_target.xcconfig; sourceTree = "<group>"; };
 		51E060D425A45B3A00194066 /* Zavala_macos_target_common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_macos_target_common.xcconfig; sourceTree = "<group>"; };
 		51E060D625A45B8500194066 /* Zavala_target_common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_target_common.xcconfig; sourceTree = "<group>"; };
 		51E060ED25A4B5E600194066 /* AppKitWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKitWrapper.swift; sourceTree = "<group>"; };
@@ -348,7 +354,6 @@
 			children = (
 				513F32A12594062C0003048F /* README.md */,
 				5181A9362554D92000C153E8 /* Zavala */,
-				514954E925D5F82100D64E54 /* Settings.bundle */,
 				51E060B025A4547400194066 /* AppKitPlugin */,
 				51C4C3CC2555F07A004E0206 /* Frameworks */,
 				5181A9352554D92000C153E8 /* Products */,
@@ -373,7 +378,7 @@
 				5181A93D2554D92000C153E8 /* Main.storyboard */,
 				51E14F22255F2D7F00320EDB /* ActivityManager.swift */,
 				51F13EFD255E13A9004B85CA /* AppAssets.swift */,
-				514BB9E0255B5A2B00C8DBDF /* AppDefaults.swift */,
+				517AF69B25E0862E0044DBAB /* AppDefaults.swift */,
 				5181A9372554D92000C153E8 /* AppDelegate.swift */,
 				51CF10C12571C22C005D6D88 /* L10n.swift */,
 				5122294B25609C47008041AF /* UserInfoKeys.swift */,
@@ -422,7 +427,7 @@
 				51C4C3AC2555E964004E0206 /* Zavala_project_debug.xcconfig */,
 				51C4C3AE2555E964004E0206 /* Zavala_project_release.xcconfig */,
 				51C4C3B02555E964004E0206 /* Zavala_project.xcconfig */,
-				51E060C325A455B900194066 /* Zavala_sparkleplugin_target.xcconfig */,
+				51E060C325A455B900194066 /* Zavala_appkitplugin_target.xcconfig */,
 				51E060D625A45B8500194066 /* Zavala_target_common.xcconfig */,
 			);
 			path = xcconfig;
@@ -442,6 +447,10 @@
 				51E060F225A4C13B00194066 /* BridgingHeader.h */,
 				51E060F325A4C13B00194066 /* AppKitPlugin.h */,
 				51E060ED25A4B5E600194066 /* AppKitWrapper.swift */,
+				517AF69425E085A80044DBAB /* AppDefaults.swift */,
+				517AF68525E07A3F0044DBAB /* Preferences.storyboard */,
+				517AF68425E07A190044DBAB /* PreferencesWindowController.swift */,
+				517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */,
 				51E060B125A4547400194066 /* Info.plist */,
 			);
 			path = AppKitPlugin;
@@ -537,9 +546,9 @@
 			productReference = 5181A9342554D92000C153E8 /* Zavala.app */;
 			productType = "com.apple.product-type.application";
 		};
-		51E060AE25A4547400194066 /* SparklePlugin */ = {
+		51E060AE25A4547400194066 /* AppKitPlugin */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 51E060B225A4547400194066 /* Build configuration list for PBXNativeTarget "SparklePlugin" */;
+			buildConfigurationList = 51E060B225A4547400194066 /* Build configuration list for PBXNativeTarget "AppKitPlugin" */;
 			buildPhases = (
 				51E060AB25A4547400194066 /* Sources */,
 				51E060AC25A4547400194066 /* Frameworks */,
@@ -549,7 +558,7 @@
 			);
 			dependencies = (
 			);
-			name = SparklePlugin;
+			name = AppKitPlugin;
 			packageProductDependencies = (
 				51E060C025A454B900194066 /* RSSparkle */,
 			);
@@ -596,7 +605,7 @@
 			projectRoot = "";
 			targets = (
 				5181A9332554D92000C153E8 /* Zavala */,
-				51E060AE25A4547400194066 /* SparklePlugin */,
+				51E060AE25A4547400194066 /* AppKitPlugin */,
 			);
 		};
 /* End PBXProject section */
@@ -610,7 +619,6 @@
 				510655BF258E8DE1000E7A53 /* File.icns in Resources */,
 				5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */,
 				510655D1258E91BA000E7A53 /* file44x58.png in Resources */,
-				514954EA25D5F82100D64E54 /* Settings.bundle in Resources */,
 				510655D5258E922A000E7A53 /* file22x29.png in Resources */,
 				5181A9412554D92100C153E8 /* Assets.xcassets in Resources */,
 				510655C9258E906E000E7A53 /* file320x320.png in Resources */,
@@ -625,6 +633,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				517AF68625E07A3F0044DBAB /* Preferences.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -703,6 +712,7 @@
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
 				5147D0B525CB95B4004673C3 /* TimelineViewController+Drag.swift in Sources */,
 				51D977FA257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift in Sources */,
+				517AF69C25E0862E0044DBAB /* AppDefaults.swift in Sources */,
 				51F2859B25AD12800019C573 /* SidebarSearchContentView.swift in Sources */,
 				51C030B8257E198B00609262 /* EditorTitleTextView.swift in Sources */,
 				51AE547E258FF28A006DA301 /* OutlineFont.swift in Sources */,
@@ -746,7 +756,6 @@
 				51B2B2D22563AB190090C56B /* EditorTextRowContentView.swift in Sources */,
 				51D28D32257731DC0039DDFC /* EditorViewController+Drop.swift in Sources */,
 				51B2B2D62563AB9F0090C56B /* UIView+.swift in Sources */,
-				514BB9E1255B5A2B00C8DBDF /* AppDefaults.swift in Sources */,
 				51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */,
 				514F221E25C4D0A8004E02CD /* EditorTagInputContentView.swift in Sources */,
 				5163ADF225C78CFB008F25CA /* SearchTextField.swift in Sources */,
@@ -764,7 +773,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				517AF68825E07A420044DBAB /* PreferencesWindowController.swift in Sources */,
+				517AF69525E085A80044DBAB /* AppDefaults.swift in Sources */,
 				51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */,
+				517AF68C25E07A790044DBAB /* GeneralPrefencesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -774,7 +786,7 @@
 		51E060D025A45AA800194066 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilter = maccatalyst;
-			target = 51E060AE25A4547400194066 /* SparklePlugin */;
+			target = 51E060AE25A4547400194066 /* AppKitPlugin */;
 			targetProxy = 51E060CF25A45AA800194066 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -829,14 +841,14 @@
 		};
 		51E060B325A4547400194066 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 51E060C325A455B900194066 /* Zavala_sparkleplugin_target.xcconfig */;
+			baseConfigurationReference = 51E060C325A455B900194066 /* Zavala_appkitplugin_target.xcconfig */;
 			buildSettings = {
 			};
 			name = Debug;
 		};
 		51E060B425A4547400194066 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 51E060C325A455B900194066 /* Zavala_sparkleplugin_target.xcconfig */;
+			baseConfigurationReference = 51E060C325A455B900194066 /* Zavala_appkitplugin_target.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -862,7 +874,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		51E060B225A4547400194066 /* Build configuration list for PBXNativeTarget "SparklePlugin" */ = {
+		51E060B225A4547400194066 /* Build configuration list for PBXNativeTarget "AppKitPlugin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				51E060B325A4547400194066 /* Debug */,
