@@ -9,9 +9,9 @@ PROVISIONING_PROFILE_SPECIFIER =
 #include "./Zavala_macos_target_common.xcconfig"
 
 LD_RUNPATH_SEARCH_PATHS = $(inherited) @loader_path/../Frameworks
-INFOPLIST_FILE = SparklePlugin/Info.plist
-PRODUCT_BUNDLE_IDENTIFIER = io.vincode.SparklePlugin
-PRODUCT_NAME = SparklePlugin
+INFOPLIST_FILE = AppKitPlugin/Info.plist
+PRODUCT_BUNDLE_IDENTIFIER = io.vincode.AppKitPlugin
+PRODUCT_NAME = AppKitPlugin
 
 INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 SKIP_INSTALL = YES;

@@ -283,7 +283,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	#if targetEnvironment(macCatalyst)
-	var sparklePlugin: SparklePlugin?
+	var appKitPlugin: AppKitPlugin?
 	#endif
 
 	func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
@@ -314,13 +314,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UIMenuController.shared.menuItems = menuItems
 
 		#if targetEnvironment(macCatalyst)
-		guard let pluginPath = (Bundle.main.builtInPlugInsPath as NSString?)?.appendingPathComponent("SparklePlugin.bundle"),
+		guard let pluginPath = (Bundle.main.builtInPlugInsPath as NSString?)?.appendingPathComponent("AppKitPlugin.bundle"),
 			  let bundle = Bundle(path: pluginPath),
 			  let cls = bundle.principalClass as? NSObject.Type,
-			  let sparklePlugin = cls.init() as? SparklePlugin else { return true }
+			  let appKitPlugin = cls.init() as? AppKitPlugin else { return true }
 		
-		self.sparklePlugin = sparklePlugin
-		sparklePlugin.start()
+		self.appKitPlugin = appKitPlugin
+		appKitPlugin.start()
 		#endif
 		
 		return true
@@ -344,7 +344,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	#if targetEnvironment(macCatalyst)
 	@objc func checkForUpdates(_ sender: Any?) {
-		sparklePlugin?.checkForUpdates()
+		appKitPlugin?.checkForUpdates()
 	}
 	#endif
 

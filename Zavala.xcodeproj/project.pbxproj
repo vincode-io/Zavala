@@ -81,8 +81,8 @@
 		51D977FA257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D977F9257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift */; };
 		51DFDC18259EA8D300C068C6 /* Selector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DFDC17259EA8D300C068C6 /* Selector+.swift */; };
 		51E060C125A454B900194066 /* RSSparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 51E060C025A454B900194066 /* RSSparkle */; };
-		51E060CE25A45AA800194066 /* SparklePlugin.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 51E060AF25A4547400194066 /* SparklePlugin.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		51E060EE25A4B5E600194066 /* SparkleWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E060ED25A4B5E600194066 /* SparkleWrapper.swift */; };
+		51E060CE25A45AA800194066 /* AppKitPlugin.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 51E060AF25A4547400194066 /* AppKitPlugin.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E060ED25A4B5E600194066 /* AppKitWrapper.swift */; };
 		51E0612D25A544C400194066 /* org.sparkle-project.Downloader.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 51E060A525A4506300194066 /* org.sparkle-project.Downloader.xpc */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		51E0612E25A544C400194066 /* org.sparkle-project.InstallerConnection.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 51E060A225A4506300194066 /* org.sparkle-project.InstallerConnection.xpc */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		51E0612F25A544C400194066 /* org.sparkle-project.InstallerLauncher.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = 51E060A425A4506300194066 /* org.sparkle-project.InstallerLauncher.xpc */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -128,7 +128,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				51E060CE25A45AA800194066 /* SparklePlugin.bundle in Embed PlugIns */,
+				51E060CE25A45AA800194066 /* AppKitPlugin.bundle in Embed PlugIns */,
 			);
 			name = "Embed PlugIns";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -231,14 +231,14 @@
 		51E060A325A4506300194066 /* org.sparkle-project.InstallerStatus.xpc */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.xpc-service"; path = "org.sparkle-project.InstallerStatus.xpc"; sourceTree = "<group>"; };
 		51E060A425A4506300194066 /* org.sparkle-project.InstallerLauncher.xpc */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.xpc-service"; path = "org.sparkle-project.InstallerLauncher.xpc"; sourceTree = "<group>"; };
 		51E060A525A4506300194066 /* org.sparkle-project.Downloader.xpc */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.xpc-service"; path = "org.sparkle-project.Downloader.xpc"; sourceTree = "<group>"; };
-		51E060AF25A4547400194066 /* SparklePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SparklePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		51E060AF25A4547400194066 /* AppKitPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppKitPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		51E060B125A4547400194066 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		51E060C325A455B900194066 /* Zavala_sparkleplugin_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_sparkleplugin_target.xcconfig; sourceTree = "<group>"; };
 		51E060D425A45B3A00194066 /* Zavala_macos_target_common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_macos_target_common.xcconfig; sourceTree = "<group>"; };
 		51E060D625A45B8500194066 /* Zavala_target_common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_target_common.xcconfig; sourceTree = "<group>"; };
-		51E060ED25A4B5E600194066 /* SparkleWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleWrapper.swift; sourceTree = "<group>"; };
+		51E060ED25A4B5E600194066 /* AppKitWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKitWrapper.swift; sourceTree = "<group>"; };
 		51E060F225A4C13B00194066 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
-		51E060F325A4C13B00194066 /* SparklePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SparklePlugin.h; sourceTree = "<group>"; };
+		51E060F325A4C13B00194066 /* AppKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitPlugin.h; sourceTree = "<group>"; };
 		51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatingToolbarItem.swift; sourceTree = "<group>"; };
 		51E14F22255F2D7F00320EDB /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
 		51E14F2D2560730000320EDB /* SidebarSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSection.swift; sourceTree = "<group>"; };
@@ -349,7 +349,7 @@
 				513F32A12594062C0003048F /* README.md */,
 				5181A9362554D92000C153E8 /* Zavala */,
 				514954E925D5F82100D64E54 /* Settings.bundle */,
-				51E060B025A4547400194066 /* SparklePlugin */,
+				51E060B025A4547400194066 /* AppKitPlugin */,
 				51C4C3CC2555F07A004E0206 /* Frameworks */,
 				5181A9352554D92000C153E8 /* Products */,
 				51C4C3AB2555E8EA004E0206 /* xcconfig */,
@@ -361,7 +361,7 @@
 			isa = PBXGroup;
 			children = (
 				5181A9342554D92000C153E8 /* Zavala.app */,
-				51E060AF25A4547400194066 /* SparklePlugin.bundle */,
+				51E060AF25A4547400194066 /* AppKitPlugin.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -436,15 +436,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		51E060B025A4547400194066 /* SparklePlugin */ = {
+		51E060B025A4547400194066 /* AppKitPlugin */ = {
 			isa = PBXGroup;
 			children = (
 				51E060F225A4C13B00194066 /* BridgingHeader.h */,
-				51E060F325A4C13B00194066 /* SparklePlugin.h */,
-				51E060ED25A4B5E600194066 /* SparkleWrapper.swift */,
+				51E060F325A4C13B00194066 /* AppKitPlugin.h */,
+				51E060ED25A4B5E600194066 /* AppKitWrapper.swift */,
 				51E060B125A4547400194066 /* Info.plist */,
 			);
-			path = SparklePlugin;
+			path = AppKitPlugin;
 			sourceTree = "<group>";
 		};
 		51E14F282560727C00320EDB /* Sidebar */ = {
@@ -554,7 +554,7 @@
 				51E060C025A454B900194066 /* RSSparkle */,
 			);
 			productName = SparklePlugin;
-			productReference = 51E060AF25A4547400194066 /* SparklePlugin.bundle */;
+			productReference = 51E060AF25A4547400194066 /* AppKitPlugin.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -764,7 +764,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51E060EE25A4B5E600194066 /* SparkleWrapper.swift in Sources */,
+				51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

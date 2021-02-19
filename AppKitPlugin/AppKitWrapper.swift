@@ -1,6 +1,6 @@
 //
-//  SparkleWrapper.swift
-//  SparklePlugin
+//  AppKitWrapper.swift
+//  AppKitPlugin
 //
 //  Created by Maurice Parker on 1/5/21.
 //
@@ -9,7 +9,7 @@ import AppKit
 import os.log
 import Sparkle
 
-@objc class SparkleWrapper: NSResponder, SparklePlugin, SPUUpdaterDelegate, SPUStandardUserDriverDelegate {
+@objc class AppKitWrapper: NSResponder, AppKitPlugin, SPUUpdaterDelegate, SPUStandardUserDriverDelegate {
 
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "SparkleWrapper")
 	

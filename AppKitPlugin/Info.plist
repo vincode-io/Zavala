@@ -19,6 +19,6 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSPrincipalClass</key>
-	<string>SparklePlugin.SparkleWrapper</string>
+	<string>AppKitPlugin.AppKitWrapper</string>
 </dict>
 </plist>
