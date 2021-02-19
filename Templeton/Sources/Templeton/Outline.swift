@@ -35,10 +35,38 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 	}
 	
-	public internal(set) var title: String?
-	public internal(set) var ownerName: String?
-	public internal(set) var ownerEmail: String?
-	public internal(set) var ownerURL: String?
+	public internal(set) var title: String? {
+		didSet {
+			if title != oldValue {
+				updated = Date()
+				documentTitleDidChange()
+			}
+		}
+	}
+	
+	public internal(set) var ownerName: String? {
+		didSet {
+			if ownerName != oldValue {
+				updated = Date()
+			}
+		}
+	}
+	
+	public internal(set) var ownerEmail: String? {
+		didSet {
+			if ownerEmail != oldValue {
+				updated = Date()
+			}
+		}
+	}
+	
+	public internal(set) var ownerURL: String? {
+		didSet {
+			if ownerURL != oldValue {
+				updated = Date()
+			}
+		}
+	}
 
 	public var created: Date? {
 		didSet {
@@ -121,7 +149,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return AccountType(rawValue: id.accountID) == .cloudKit
 	}
 	
-	public var shadowTable: [Row]?
+	public private(set) var shadowTable: [Row]?
 	
 	public var isEmpty: Bool {
 		return (title == nil || title?.isEmpty ?? true) && (rowOrder == nil || rowOrder?.isEmpty ?? true)
@@ -234,6 +262,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	private var tagIDs: [String]?
 	private var rowsFile: RowsFile?
 	
+	init(id: EntityID) {
+		self.id = id
+		self.created = Date()
+		self.updated = Date()
+		rowsFile = RowsFile(outline: self)
+	}
+
 	init(parentID: EntityID, title: String?) {
 		self.id = .document(parentID.accountID, UUID().uuidString)
 		self.title = title
@@ -433,9 +468,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public func update(title: String) {
 		self.title = title
-		self.updated = Date()
-		documentTitleDidChange()
-		documentMetaDataDidChange()
 		requestCloudKitUpdate()
 	}
 	
@@ -443,8 +475,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		self.ownerName = ownerName
 		self.ownerEmail = ownerEmail
 		self.ownerURL = ownerURL
-		self.updated = Date()
-		documentMetaDataDidChange()
 		requestCloudKitUpdate()
 	}
 	

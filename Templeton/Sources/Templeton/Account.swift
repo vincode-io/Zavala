@@ -8,6 +8,7 @@
 import Foundation
 import os.log
 import SWXMLHash
+import CloudKit
 
 public extension Notification.Name {
 	static let AccountDidInitialize = Notification.Name(rawValue: "AccountDidInitialize")
@@ -216,6 +217,35 @@ public final class Account: NSObject, Identifiable, Codable {
 		return document
 	}
 	
+	public func saveOutline(_ record: CKRecord) {
+		let outline: Outline
+		
+		func updateOutline() {
+			outline.title = record[CloudKitOutlineZone.CloudKitOutline.Fields.title]
+			outline.ownerName = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerName]
+			outline.ownerEmail = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail]
+			outline.ownerURL = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL]
+		}
+		
+		if let document = findDocument(documentUUID: record.recordID.recordName) {
+			outline = document.outline!
+			updateOutline()
+		} else {
+			let outlineID = EntityID.document(id.accountID, record.recordID.recordName)
+			outline = Outline(id: outlineID)
+			outline.zoneID = record.recordID.zoneID
+			
+			updateOutline()
+			
+			if documents == nil {
+				documents = [Document]()
+			}
+			let document = Document.outline(outline)
+			documents!.append(document)
+			accountDocumentsDidChange()
+		}
+	}
+	
 	public func createDocument(_ document: Document) {
 		document.reassignAccount(id.accountID)
 		
@@ -236,15 +266,12 @@ public final class Account: NSObject, Identifiable, Codable {
 	}
 
 	public func deleteDocument(_ document: Document) {
-		documents?.removeFirst(object: document)
-		accountDocumentsDidChange()
-		deleteFromCloudKit(document)
-
-		for tag in document.tags ?? [Tag]() {
-			deleteTag(tag)
-		}
-
-		document.delete()
+		deleteDocument(document, updateCloudKit: true)
+	}
+	
+	public func deleteDocument(_ recordID: CKRecord.ID) {
+		guard let document = findDocument(documentUUID: recordID.recordName) else { return }
+		deleteDocument(document, updateCloudKit: false)
 	}
 	
 	public func findDocumentContainer(_ entityID: EntityID) -> DocumentContainer? {
@@ -373,6 +400,21 @@ private extension Account {
 		
 		_idToTagsDictionary = idDictionary
 		tagsDictionaryNeedUpdate = false
+	}
+	
+	func deleteDocument(_ document: Document, updateCloudKit: Bool) {
+		documents?.removeFirst(object: document)
+		accountDocumentsDidChange()
+		
+		if updateCloudKit {
+			deleteFromCloudKit(document)
+		}
+
+		for tag in document.tags ?? [Tag]() {
+			deleteTag(tag)
+		}
+
+		document.delete()
 	}
 	
 	func saveToCloudKit(_ document: Document) {

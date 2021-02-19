@@ -21,27 +21,23 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 	}
 	
 	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey], completion: @escaping (Result<Void, Error>) -> Void) {
-//		for deletedRecordKey in deleted {
-//			switch deletedRecordKey.recordType {
-//			case CloudKitAccountZone.CloudKitWebFeed.recordType:
-//				removeWebFeed(deletedRecordKey.recordID.externalID)
-//			case CloudKitAccountZone.CloudKitContainer.recordType:
-//				removeContainer(deletedRecordKey.recordID.externalID)
-//			default:
-//				assertionFailure("Unknown record type: \(deletedRecordKey.recordType)")
-//			}
-//		}
-//
-//		for changedRecord in changed {
-//			switch changedRecord.recordType {
-//			case CloudKitAccountZone.CloudKitWebFeed.recordType:
-//				addOrUpdateWebFeed(changedRecord)
-//			case CloudKitAccountZone.CloudKitContainer.recordType:
-//				addOrUpdateContainer(changedRecord)
-//			default:
-//				assertionFailure("Unknown record type: \(changedRecord.recordType)")
-//			}
-//		}
+		for deletedRecordKey in deleted {
+			switch deletedRecordKey.recordType {
+			case CloudKitOutlineZone.CloudKitOutline.recordType:
+				account?.deleteDocument(deletedRecordKey.recordID)
+			default:
+				assertionFailure("Unknown record type: \(deletedRecordKey.recordType)")
+			}
+		}
+
+		for changedRecord in changed {
+			switch changedRecord.recordType {
+			case CloudKitOutlineZone.CloudKitOutline.recordType:
+				account?.saveOutline(changedRecord)
+			default:
+				assertionFailure("Unknown record type: \(changedRecord.recordType)")
+			}
+		}
 		
 		completion(.success(()))
 	}
