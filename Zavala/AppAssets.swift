@@ -137,6 +137,10 @@ struct AppAssets {
 		return UIColor(named: "SelectColor")!
 	}()
 
+	static var sync: UIImage = {
+		return UIImage(systemName: "arrow.clockwise")!
+	}()
+
 	static var uncompleteRow: UIImage = {
 		return UIImage(systemName: "square")!
 	}()

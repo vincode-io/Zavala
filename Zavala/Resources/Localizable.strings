@@ -62,6 +62,7 @@
 "Add" = "Add";
 "Preferences" = "Preferences...";
 "Remove" = "Remove";
+"Sync" = "Sync with iCloud";
 
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";

@@ -18,6 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		var menuKeyCommands = [UIKeyCommand]()
 		
 		menuKeyCommands.append(showPreferences)
+		
+		if AccountManager.shared.isSyncAvailable {
+			menuKeyCommands.append(sync)
+		}
 
 		if !(mainSplitViewController?.isOutlineFunctionsUnavailable ?? true) {
 			if mainSplitViewController?.isOutlineFiltered ?? false {
@@ -114,7 +118,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 input: ".",
 										 modifierFlags: [.command])
 	#endif
-
+	
+	let sync = UIKeyCommand(title: L10n.sync,
+							action: #selector(syncCommand(_:)),
+							input: "r",
+							modifierFlags: [.command])
+	
 	let exportOPMLCommand = UIKeyCommand(title: L10n.exportOPML,
 										 action: #selector(exportOPMLCommand(_:)),
 										 input: "e",
@@ -364,6 +373,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	#endif
 
+	@objc func syncCommand(_ sender: Any?) {
+		mainSplitViewController?.sync(sender)
+	}
+
 	@objc func importOPMLCommand(_ sender: Any?) {
 		mainSplitViewController?.importOPML(sender)
 	}
@@ -473,6 +486,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
+		case #selector(syncCommand(_:)):
+			if !AccountManager.shared.isSyncAvailable {
+				command.attributes = .disabled
+			}
 		case #selector(exportMarkdownCommand(_:)), #selector(exportOPMLCommand(_:)):
 			if mainSplitViewController?.isExportOutlineUnavailable ?? true {
 				command.attributes = .disabled
@@ -585,6 +602,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(appMenu, afterMenu: .about)
 		
 		// File Menu
+		let syncMenu = UIMenu(title: "", options: .displayInline, children: [sync])
+		builder.insertChild(syncMenu, atStartOfMenu: .file)
+
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMarkdownCommand, exportOPMLCommand])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 

@@ -31,14 +31,10 @@ public final class AccountManager {
 		return accountsDictionary[AccountType.cloudKit.rawValue]
 	}
 
-	public var accounts: [Account] {
-		return Array(accountsDictionary.values)
+	public var isSyncAvailable: Bool {
+		return cloudKitAccount?.cloudKitManager?.isSyncAvailable ?? false
 	}
-
-	public var sortedAccounts: [Account] {
-		return sort(accounts)
-	}
-
+	
 	public var activeAccounts: [Account] {
 		return Array(accountsDictionary.values.filter { $0.isActive })
 	}
@@ -162,6 +158,10 @@ public final class AccountManager {
 	
 	public func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
 		cloudKitAccount?.cloudKitManager?.receiveRemoteNotification(userInfo: userInfo, completion: completion)
+	}
+	
+	public func sync() {
+		cloudKitAccount?.cloudKitManager?.sync()
 	}
 	
 	public func resume() {

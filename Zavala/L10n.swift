@@ -154,6 +154,8 @@ internal enum L10n {
   internal static let showNotes = L10n.tr("Localizable", "Show_Notes")
   /// Split Row
   internal static let splitRow = L10n.tr("Localizable", "Split_Row")
+  /// Sync with iCloud
+  internal static let sync = L10n.tr("Localizable", "Sync")
   /// Tag
   internal static let tag = L10n.tr("Localizable", "Tag")
   /// Toggle Sidebar

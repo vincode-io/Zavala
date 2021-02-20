@@ -15,6 +15,8 @@ public class CloudKitManager {
 	let defaultZone: CloudKitOutlineZone
 	var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "CloudKit")
 
+	var isSyncAvailable = true
+	
 	private let container: CKContainer = {
 		let orgID = Bundle.main.object(forInfoDictionaryKey: "OrganizationIdentifier") as! String
 		return CKContainer(identifier: "iCloud.\(orgID).Zavala")
@@ -134,6 +136,7 @@ extension CloudKitManager {
 	}
 
 	private func sendChanges(completion: @escaping (() -> Void)) {
+		isSyncAvailable = false
 		let backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
 			guard let self = self else { return }
 			os_log("Send changes terminated for running too long.", log: self.log, type: .info)
@@ -147,12 +150,14 @@ extension CloudKitManager {
 			}
 			completion()
 			UIApplication.shared.endBackgroundTask(backgroundTask)
+			self?.isSyncAvailable = true
 		}
 		
 		queue.add(operation)
 	}
 	
 	private func fetchAllChanges(completion: (() -> Void)? = nil) {
+		isSyncAvailable = false
 		var zoneIDs = Set<CKRecordZone.ID>()
 		zoneIDs.insert(defaultZone.zoneID)
 		
@@ -173,6 +178,7 @@ extension CloudKitManager {
 		
 		group.notify(queue: DispatchQueue.main) {
 			completion?()
+			self.isSyncAvailable = true
 		}
 	}
 	

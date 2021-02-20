@@ -219,6 +219,10 @@ class MainSplitViewController: UISplitViewController {
 		}
 	}
 	
+	@objc func sync(_ sender: Any?) {
+		AccountManager.shared.sync()
+	}
+	
 	@objc func createOutline(_ sender: Any?) {
 		selectDefaultDocumentContainerIfNecessary() {
 			self.timelineViewController?.createOutline(sender)
@@ -500,6 +504,7 @@ extension MainSplitViewController {
 #if targetEnvironment(macCatalyst)
 
 extension NSToolbarItem.Identifier {
+	static let sync = NSToolbarItem.Identifier("io.vincode.Zavala.refresh")
 	static let newOutline = NSToolbarItem.Identifier("io.vincode.Zavala.newOutline")
 	static let toggleOutlineFilter = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineFilter")
 	static let toggleOutlineNotesHidden = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineNotesHidden")
@@ -527,6 +532,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 	
 	func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
 		return [
+			.sync,
 			.toggleSidebar,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
 			.newOutline,
@@ -545,6 +551,18 @@ extension MainSplitViewController: NSToolbarDelegate {
 		var toolbarItem: NSToolbarItem?
 		
 		switch itemIdentifier {
+		case .sync:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { _ in
+				return !AccountManager.shared.isSyncAvailable
+			}
+			item.image = AppAssets.sync
+			item.label = L10n.sync
+			item.toolTip = L10n.sync
+			item.isBordered = true
+			item.action = #selector(sync(_:))
+			item.target = self
+			toolbarItem = item
 		case .newOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { _ in
