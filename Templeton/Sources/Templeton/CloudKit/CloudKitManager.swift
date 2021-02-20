@@ -72,11 +72,17 @@ public class CloudKitManager {
 	}
 	
 	func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
-		guard let zoneID = CKRecordZoneNotification(fromRemoteNotificationDictionary: userInfo)?.recordZoneID else {
+		guard let zoneNote = CKRecordZoneNotification(fromRemoteNotificationDictionary: userInfo) else {
 			completion()
 			return
 		}
-		fetchChanges(zoneID: zoneID, completion: completion)
+		
+		guard let zoneId = zoneNote.databaseScope == .private ? defaultZone.zoneID : zoneNote.recordZoneID else {
+			completion()
+			return
+		}
+		
+		fetchChanges(zoneID: zoneId, completion: completion)
 	}
 	
 	func findZone(zoneID: CKRecordZone.ID) -> CloudKitOutlineZone {

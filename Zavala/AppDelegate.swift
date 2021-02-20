@@ -329,6 +329,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		appKitPlugin.start()
 		#endif
 		
+		UIApplication.shared.registerForRemoteNotifications()
+		
 		return true
 	}
 
