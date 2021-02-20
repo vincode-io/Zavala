@@ -87,6 +87,7 @@ public class CloudKitManager {
 		let zone = CloudKitOutlineZone(container: container, database: container.sharedCloudDatabase, zoneID: zoneID)
 		zone.delegate = CloudKitAcountZoneDelegate(account: account!)
 		zones[zoneID] = zone
+		zone.subscribeToZoneChanges()
 		return zone
 	}
 	
