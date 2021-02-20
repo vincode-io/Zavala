@@ -7,6 +7,7 @@
 
 import UIKit
 import os.log
+import SystemConfiguration
 import CloudKit
 import RSCore
 
@@ -15,7 +16,9 @@ public class CloudKitManager {
 	let defaultZone: CloudKitOutlineZone
 	var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "CloudKit")
 
-	var isSyncAvailable = true
+	var isSyncAvailable: Bool {
+		return !isSyncing && isNetworkAvailable
+	}
 	
 	private let container: CKContainer = {
 		let orgID = Bundle.main.object(forInfoDictionaryKey: "OrganizationIdentifier") as! String
@@ -28,6 +31,31 @@ public class CloudKitManager {
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
 	private let queue = MainThreadOperationQueue()
 
+	private var isSyncing = false
+	private var isNetworkAvailable: Bool {
+		var zeroAddress = sockaddr_in()
+		zeroAddress.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+		zeroAddress.sin_family = sa_family_t(AF_INET)
+
+		guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
+			 $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+				 SCNetworkReachabilityCreateWithAddress(nil, $0)
+			 }
+		 }) else {
+			 return false
+		 }
+
+		 var flags: SCNetworkReachabilityFlags = []
+		 if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
+			 return false
+		 }
+
+		 let isReachable = flags.contains(.reachable)
+		 let needsConnection = flags.contains(.connectionRequired)
+
+		 return (isReachable && !needsConnection)
+	}
+	
 	init(account: Account) {
 		self.account = account
 		self.defaultZone = CloudKitOutlineZone(container: container)
@@ -100,6 +128,9 @@ public class CloudKitManager {
 	}
 	
 	func sync() {
+		guard isNetworkAvailable else {
+			return
+		}
 		sendChanges() {
 			self.fetchAllChanges()
 		}
@@ -132,11 +163,14 @@ extension CloudKitManager {
 	}
 
 	@objc private func sendQueuedChanges() {
+		guard isNetworkAvailable else {
+			return
+		}
 		sendChanges() {}
 	}
 
 	private func sendChanges(completion: @escaping (() -> Void)) {
-		isSyncAvailable = false
+		isSyncing = true
 		let backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
 			guard let self = self else { return }
 			os_log("Send changes terminated for running too long.", log: self.log, type: .info)
@@ -150,14 +184,14 @@ extension CloudKitManager {
 			}
 			completion()
 			UIApplication.shared.endBackgroundTask(backgroundTask)
-			self?.isSyncAvailable = true
+			self?.isSyncing = false
 		}
 		
 		queue.add(operation)
 	}
 	
 	private func fetchAllChanges(completion: (() -> Void)? = nil) {
-		isSyncAvailable = false
+		isSyncing = true
 		var zoneIDs = Set<CKRecordZone.ID>()
 		zoneIDs.insert(defaultZone.zoneID)
 		
@@ -178,7 +212,7 @@ extension CloudKitManager {
 		
 		group.notify(queue: DispatchQueue.main) {
 			completion?()
-			self.isSyncAvailable = true
+			self.isSyncing = false
 		}
 	}
 	
