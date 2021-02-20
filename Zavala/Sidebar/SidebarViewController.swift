@@ -87,6 +87,12 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		applyChangeSnapshot()
 	}
 	
+	// MARK: Actions
+	
+	@IBAction func showSettings(_ sender: Any) {
+		(splitViewController as? MainSplitViewController)?.showSettings()
+	}
+	
 }
 
 // MARK: Collection View

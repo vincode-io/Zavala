@@ -342,6 +342,12 @@ class MainSplitViewController: UISplitViewController {
 		openURL("https://github.com/vincode-io/Zavala/releases/tag/\(version)")
 	}
 	
+	func showSettings() {
+		let settingsNavController = UIStoryboard.settings.instantiateInitialViewController() as! UINavigationController
+		settingsNavController.modalPresentationStyle = .formSheet
+		present(settingsNavController, animated: true)
+	}
+	
 }
 
 // MARK: SidebarDelegate

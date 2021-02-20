@@ -15,6 +15,10 @@ extension UIStoryboard {
 		return UIStoryboard(name: "Main", bundle: nil)
 	}
 	
+	static var settings: UIStoryboard {
+		return UIStoryboard(name: "Settings", bundle: nil)
+	}
+	
 	static var dialog: UIStoryboard {
 		return UIStoryboard(name: "Dialog", bundle: nil)
 	}

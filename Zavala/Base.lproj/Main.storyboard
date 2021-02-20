@@ -95,7 +95,13 @@
                             <outlet property="delegate" destination="IH1-qU-b0t" id="ZWb-Jf-p9Y"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Collections" id="JsX-sV-JPs"/>
+                    <navigationItem key="navigationItem" title="Collections" id="JsX-sV-JPs">
+                        <barButtonItem key="leftBarButtonItem" title="Settings" image="gear" catalog="system" id="QdS-gC-iLJ">
+                            <connections>
+                                <action selector="showSettings:" destination="IH1-qU-b0t" id="T8x-mR-ACZ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l9h-fx-tjO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -103,6 +109,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="gear" catalog="system" width="128" height="119"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -17,6 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		#else
 		var menuKeyCommands = [UIKeyCommand]()
 		
+		menuKeyCommands.append(showPreferences)
+
 		if !(mainSplitViewController?.isOutlineFunctionsUnavailable ?? true) {
 			if mainSplitViewController?.isOutlineFiltered ?? false {
 				menuKeyCommands.append(showCompletedCommand)
@@ -349,6 +351,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	@objc func showPreferences(_ sender: Any?) {
 		#if targetEnvironment(macCatalyst)
 		appKitPlugin?.showPreferences()
+		#else
+		mainSplitViewController?.showSettings()
 		#endif
 	}
 

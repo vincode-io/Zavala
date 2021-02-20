@@ -43,6 +43,10 @@
 		517AF68C25E07A790044DBAB /* GeneralPrefencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */; };
 		517AF69525E085A80044DBAB /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF69425E085A80044DBAB /* AppDefaults.swift */; };
 		517AF69C25E0862E0044DBAB /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF69B25E0862E0044DBAB /* AppDefaults.swift */; };
+		517AF6A025E08A6B0044DBAB /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517AF69F25E08A6B0044DBAB /* Settings.storyboard */; };
+		517AF6A425E08B7F0044DBAB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */; };
+		517AF6A725E08CB80044DBAB /* NonIntrinsicLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */; };
+		517AF6AA25E08CD30044DBAB /* Bundle-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */; };
 		5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9372554D92000C153E8 /* AppDelegate.swift */; };
 		5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9392554D92000C153E8 /* SceneDelegate.swift */; };
 		5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A93B2554D92000C153E8 /* SidebarViewController.swift */; };
@@ -189,6 +193,10 @@
 		517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralPrefencesViewController.swift; sourceTree = "<group>"; };
 		517AF69425E085A80044DBAB /* AppDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		517AF69B25E0862E0044DBAB /* AppDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
+		517AF69F25E08A6B0044DBAB /* Settings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
+		517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonIntrinsicLabel.swift; sourceTree = "<group>"; };
+		517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle-Extensions.swift"; sourceTree = "<group>"; };
 		5181A9342554D92000C153E8 /* Zavala.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zavala.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5181A9372554D92000C153E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5181A9392554D92000C153E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -287,10 +295,12 @@
 			isa = PBXGroup;
 			children = (
 				51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */,
+				517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */,
 				518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */,
 				514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */,
 				515F164A255C9F8E00FD98B8 /* FormViewController.swift */,
 				5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */,
+				517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */,
 				5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */,
 				51AE5481258FF35F006DA301 /* NSMutableAttributedString+.swift */,
 				51AE547D258FF28A006DA301 /* OutlineFont.swift */,
@@ -349,6 +359,15 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		517AF69E25E08A350044DBAB /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				517AF69F25E08A6B0044DBAB /* Settings.storyboard */,
+				517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		5181A92B2554D92000C153E8 = {
 			isa = PBXGroup;
 			children = (
@@ -388,6 +407,7 @@
 				51E14F292560728B00320EDB /* Timeline */,
 				51E14F2A2560729900320EDB /* Editor */,
 				51F13F01255E13D1004B85CA /* Dialogs */,
+				517AF69E25E08A350044DBAB /* Settings */,
 				514BB9D5255B595300C8DBDF /* Utility */,
 				515F163B255C536600FD98B8 /* Resources */,
 			);
@@ -618,6 +638,7 @@
 				51CF10A82571BA66005D6D88 /* Localizable.strings in Resources */,
 				510655BF258E8DE1000E7A53 /* File.icns in Resources */,
 				5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */,
+				517AF6A025E08A6B0044DBAB /* Settings.storyboard in Resources */,
 				510655D1258E91BA000E7A53 /* file44x58.png in Resources */,
 				510655D5258E922A000E7A53 /* file22x29.png in Resources */,
 				5181A9412554D92100C153E8 /* Assets.xcassets in Resources */,
@@ -704,6 +725,7 @@
 				51AE5482258FF35F006DA301 /* NSMutableAttributedString+.swift in Sources */,
 				51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */,
 				51CF10C22571C22C005D6D88 /* L10n.swift in Sources */,
+				517AF6A725E08CB80044DBAB /* NonIntrinsicLabel.swift in Sources */,
 				51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */,
 				5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */,
 				5147D0B825CCAB2A004673C3 /* TimelineViewController+Drop.swift in Sources */,
@@ -736,6 +758,8 @@
 				514F221125C4CCE4004E02CD /* EditorTagContentConfiguration.swift in Sources */,
 				5147D0C825CE28AE004673C3 /* NSDataDetector+.swift in Sources */,
 				51F2859725AD11DB0019C573 /* SidebarSearchContentConfiguration.swift in Sources */,
+				517AF6A425E08B7F0044DBAB /* SettingsViewController.swift in Sources */,
+				517AF6AA25E08CD30044DBAB /* Bundle-Extensions.swift in Sources */,
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
 				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
