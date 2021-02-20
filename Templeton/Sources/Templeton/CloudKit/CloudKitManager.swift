@@ -121,8 +121,6 @@ extension CloudKitManager {
 	}
 
 	private func sendChanges(completion: @escaping (() -> Void)) {
-		assert(Thread.isMainThread)
-		
 		let backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
 			guard let self = self else { return }
 			os_log("Send changes terminated for running too long.", log: self.log, type: .info)
