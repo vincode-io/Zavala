@@ -12,6 +12,8 @@ import Foundation
 internal enum L10n {
   /// Cancel
   internal static let cancel = L10n.tr("Localizable", "Cancel")
+  /// Preferences
+  internal static let general = L10n.tr("Localizable", "General")
   /// Remove
   internal static let remove = L10n.tr("Localizable", "Remove")
   /// Are you sure you want to remove the iCloud Account? All documents in the iCloud Account will be removed from this computer.

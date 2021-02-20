@@ -9,6 +9,7 @@
 /* Menu Items, Toolbars, & Buttons */
 "Cancel" = "Cancel";
 "Remove" = "Remove";
+"General" = "Preferences";
 
 /* Settings */
 "Remove_CloudKit_Title" = "Remove iCloud Account";

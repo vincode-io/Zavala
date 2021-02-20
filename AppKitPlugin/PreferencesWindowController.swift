@@ -33,7 +33,7 @@ class PreferencesWindowController : NSWindowController, NSToolbarDelegate {
 	private let toolbarItemSpecs: [PreferencesToolbarItemSpec] = {
 		var specs = [PreferencesToolbarItemSpec]()
 		specs += [PreferencesToolbarItemSpec(identifierRawValue: ToolbarItemIdentifier.General,
-											 name: NSLocalizedString("General", comment: "Preferences"),
+											 name: L10n.general,
 											 image: NSImage(systemSymbolName: "gearshape", accessibilityDescription: nil)!)]
 		return specs
 	}()
