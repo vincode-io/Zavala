@@ -102,6 +102,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		cloudKitManager = CloudKitManager(account: self)
 		if firstTime {
 			cloudKitManager?.firstTimeSetup()
+			cloudKitManager?.sync()
 		}
 	}
 	

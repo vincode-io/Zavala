@@ -120,13 +120,13 @@ public final class AccountManager {
 		// Send out all the document delete events for this account to clean up the search index
 		cloudKitAccount?.documents?.forEach { $0.documentDidDelete() }
 		
+		let cloudKitManger = cloudKitAccount?.cloudKitManager
+
 		accountsDictionary[AccountType.cloudKit.rawValue] = nil
 		accountFiles[AccountType.cloudKit.rawValue] = nil
 
-		if let cloudKitAccount = cloudKitAccount {
-			cloudKitAccount.cloudKitManager?.accountWillBeDeleted(cloudKitAccount)
-		}
-		
+		cloudKitManger?.accountDidDelete()
+
 		try? FileManager.default.removeItem(atPath: cloudKitAccountFolder.path)
 
 		accountManagerAccountsDidChange()

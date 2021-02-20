@@ -91,18 +91,24 @@ public class CloudKitManager {
 		return zone
 	}
 	
-	func resume() {
+	func sync() {
 		sendChanges() {
 			self.fetchAllChanges()
 		}
+	}
+	
+	func resume() {
+		sync()
 	}
 	
 	func suspend() {
 		coalescingQueue.performCallsImmediately()
 	}
 	
-	func accountWillBeDeleted(_ account: Account) {
-		defaultZone.resetChangeToken()
+	func accountDidDelete() {
+		for zone in zones.values {
+			zone.resetChangeToken()
+		}
 	}
 	
 }
