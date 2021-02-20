@@ -41,7 +41,6 @@ class SettingsViewController: UITableViewController {
 		wrapperView.translatesAutoresizingMaskIntoConstraints = false
 		wrapperView.addSubview(buildLabel)
 		tableView.tableFooterView = wrapperView
-
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -84,7 +83,27 @@ class SettingsViewController: UITableViewController {
 	}
 	
 	@IBAction func switchEnableCloudKit(_ sender: Any) {
-		AppDefaults.shared.enableCloudKit = enableCloudKitSwitch.isOn
+		guard !enableCloudKitSwitch.isOn else {
+			AppDefaults.shared.enableCloudKit = enableCloudKitSwitch.isOn
+			return
+		}
+		
+		let alertController = UIAlertController(title: L10n.removeCloudKitTitle, message: L10n.removeCloudKitMessage, preferredStyle: .alert)
+		
+		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel) { [weak self] action in
+			self?.enableCloudKitSwitch.isOn = true
+		}
+		alertController.addAction(cancelAction)
+		
+		let removeTitle = NSLocalizedString("Remove", comment: "Remove")
+		let deleteAction = UIAlertAction(title: removeTitle, style: .default) { [weak self] action in
+			guard let self = self else { return }
+			AppDefaults.shared.enableCloudKit = self.enableCloudKitSwitch.isOn
+		}
+		alertController.addAction(deleteAction)
+		alertController.preferredAction = deleteAction
+		
+		present(alertController, animated: true)
 	}
 	
 }

@@ -61,6 +61,7 @@
 "Tag" = "Tag";
 "Add" = "Add";
 "Preferences" = "Preferences...";
+"Remove" = "Remove";
 
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";
@@ -86,3 +87,6 @@
 "Crash_Reporter_Title" = "Crash Log Found";
 "Crash_Reporter_Message" = "To help us fix crashing bugs, click “Email It” below. You will have a chance to review the email message before it is sent.";
 
+/* Settings */
+"Remove_CloudKit_Title" = "Remove iCloud Account";
+"Remove_CloudKit_Message" = "Are you sure you want to remove the iCloud Account? All documents in the iCloud Account will be removed from this device.";

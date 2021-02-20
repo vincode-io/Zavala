@@ -126,6 +126,12 @@ internal enum L10n {
   internal static let preferences = L10n.tr("Localizable", "Preferences")
   /// Release Notes
   internal static let releaseNotes = L10n.tr("Localizable", "Release_Notes")
+  /// Remove
+  internal static let remove = L10n.tr("Localizable", "Remove")
+  /// Are you sure you want to remove the iCloud Account? All documents in the iCloud Account will be removed from this device.
+  internal static let removeCloudKitMessage = L10n.tr("Localizable", "Remove_CloudKit_Message")
+  /// Remove iCloud Account
+  internal static let removeCloudKitTitle = L10n.tr("Localizable", "Remove_CloudKit_Title")
   /// Restore
   internal static let restore = L10n.tr("Localizable", "Restore")
   /// Your current account data will be lost and unrecoverable.

@@ -4,8 +4,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -123,159 +121,10 @@
             </objects>
             <point key="canvasLocation" x="-454" y="152"/>
         </scene>
-        <!--Timeline Preview Table View Controller-->
-        <scene sceneID="k4U-0u-Fgv">
-            <objects>
-                <viewController id="vZY-Cd-RuD" customClass="TimelinePreviewTableViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="xMG-o1-VfV">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7do-cs-DNM">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="Zaq-yo-L5h" customClass="MasterTimelineTableViewCell" customModule="Zavala" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Zaq-yo-L5h" id="fD5-nw-z0z">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                            </tableView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="XPF-1A-UKw"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="7do-cs-DNM" firstAttribute="top" secondItem="xMG-o1-VfV" secondAttribute="top" id="Z1O-Z1-O7s"/>
-                            <constraint firstAttribute="trailing" secondItem="7do-cs-DNM" secondAttribute="trailing" id="cOE-fA-hi7"/>
-                            <constraint firstAttribute="bottom" secondItem="7do-cs-DNM" secondAttribute="bottom" id="eh9-tn-F3u"/>
-                            <constraint firstItem="7do-cs-DNM" firstAttribute="leading" secondItem="xMG-o1-VfV" secondAttribute="leading" id="kW5-pQ-FCx"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="tableView" destination="7do-cs-DNM" id="A8q-7w-LCQ"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Oq6-5f-Oa7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3071" y="617"/>
-        </scene>
-        <!--Modal Navigation Controller-->
-        <scene sceneID="t9A-uP-4Dk">
-            <objects>
-                <navigationController storyboardIdentifier="EnableExtensionPointNavigationViewController" id="mA0-Yf-esc" customClass="ModalNavigationController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="iXJ-DA-pQC">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="8Eu-UD-eCa" kind="relationship" relationship="rootViewController" id="zE1-0Q-l09"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="g07-xO-ryv" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1690" y="815"/>
-        </scene>
-        <!--Extension-->
-        <scene sceneID="sHq-4g-bAA">
-            <objects>
-                <tableViewController id="8Eu-UD-eCa" customClass="EnableExtensionPointViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="hqD-G5-jzC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <sections>
-                            <tableViewSection id="rqj-gU-4He">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="ALK-Z6-aOR" customClass="VibrantTableViewCell" customModule="Zavala" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="18" width="374" height="43.5"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ALK-Z6-aOR" id="Rqf-t4-F8q">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VCu-Yi-0ts">
-                                                    <rect key="frame" x="20" y="11" width="334" height="22"/>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="VCu-Yi-0ts" firstAttribute="top" secondItem="Rqf-t4-F8q" secondAttribute="topMargin" id="CiI-mf-hfd"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="VCu-Yi-0ts" secondAttribute="bottom" id="QW3-Ty-Hnz"/>
-                                                <constraint firstItem="VCu-Yi-0ts" firstAttribute="leading" secondItem="Rqf-t4-F8q" secondAttribute="leadingMargin" id="R3c-n2-gAq"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="VCu-Yi-0ts" secondAttribute="trailing" id="kS4-Gc-Eaf"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                            <tableViewSection id="7Nq-pj-Wqz">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="eZ5-P9-opw" customClass="VibrantTableViewCell" customModule="Zavala" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="97.5" width="374" height="43.5"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="eZ5-P9-opw" id="RlA-Zq-tRl">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cY9-Uk-Vlx" customClass="VibrantButton" customModule="Zavala" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="0.0" width="374" height="44"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="44" id="KfT-5A-V6M"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <state key="normal" title="Enable">
-                                                        <color key="titleColor" name="secondaryAccentColor"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="enable:" destination="8Eu-UD-eCa" eventType="touchUpInside" id="ce5-pt-YN7"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="cY9-Uk-Vlx" secondAttribute="trailing" id="KpS-U0-BBK"/>
-                                                <constraint firstItem="cY9-Uk-Vlx" firstAttribute="leading" secondItem="RlA-Zq-tRl" secondAttribute="leading" id="eEr-9i-9OF"/>
-                                                <constraint firstItem="cY9-Uk-Vlx" firstAttribute="centerY" secondItem="RlA-Zq-tRl" secondAttribute="centerY" id="gCV-Df-MUK"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
-                        </sections>
-                        <connections>
-                            <outlet property="dataSource" destination="8Eu-UD-eCa" id="cue-E2-LrE"/>
-                            <outlet property="delegate" destination="8Eu-UD-eCa" id="Nai-Ve-JDb"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Extension" id="xuT-vz-veD">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="FjO-N8-twm">
-                            <connections>
-                                <action selector="cancel:" destination="8Eu-UD-eCa" id="3rh-fd-LDm"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="extensionDescription" destination="VCu-Yi-0ts" id="grq-97-i1H"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5G7-cc-L54" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1690" y="1512"/>
-        </scene>
     </scenes>
     <resources>
         <namedColor name="primaryAccentColor">
             <color red="0.031372549019607843" green="0.41568627450980394" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="secondaryAccentColor">
-            <color red="0.031372549019607843" green="0.41568627450980394" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>
