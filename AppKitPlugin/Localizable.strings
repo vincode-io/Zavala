@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  Zavala
+
+  Created by Maurice Parker on 11/27/20.
+  
+*/
+
+/* Menu Items, Toolbars, & Buttons */
+"Cancel" = "Cancel";
+"Remove" = "Remove";
+
+/* Settings */
+"Remove_CloudKit_Title" = "Remove iCloud Account";
+"Remove_CloudKit_Message" = "Are you sure you want to remove the iCloud Account? All documents in the iCloud Account will be removed from this computer.";

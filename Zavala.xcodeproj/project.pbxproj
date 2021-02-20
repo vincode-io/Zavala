@@ -47,6 +47,8 @@
 		517AF6A425E08B7F0044DBAB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */; };
 		517AF6A725E08CB80044DBAB /* NonIntrinsicLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */; };
 		517AF6AA25E08CD30044DBAB /* Bundle-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */; };
+		517AF6AE25E0A2400044DBAB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 517AF6AD25E0A2400044DBAB /* Localizable.strings */; };
+		517AF6B425E0A3C20044DBAB /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6B325E0A3C20044DBAB /* L10n.swift */; };
 		5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9372554D92000C153E8 /* AppDelegate.swift */; };
 		5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9392554D92000C153E8 /* SceneDelegate.swift */; };
 		5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A93B2554D92000C153E8 /* SidebarViewController.swift */; };
@@ -197,6 +199,8 @@
 		517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonIntrinsicLabel.swift; sourceTree = "<group>"; };
 		517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle-Extensions.swift"; sourceTree = "<group>"; };
+		517AF6AD25E0A2400044DBAB /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		517AF6B325E0A3C20044DBAB /* L10n.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
 		5181A9342554D92000C153E8 /* Zavala.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zavala.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5181A9372554D92000C153E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5181A9392554D92000C153E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -471,6 +475,8 @@
 				517AF68525E07A3F0044DBAB /* Preferences.storyboard */,
 				517AF68425E07A190044DBAB /* PreferencesWindowController.swift */,
 				517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */,
+				517AF6B325E0A3C20044DBAB /* L10n.swift */,
+				517AF6AD25E0A2400044DBAB /* Localizable.strings */,
 				51E060B125A4547400194066 /* Info.plist */,
 			);
 			path = AppKitPlugin;
@@ -655,6 +661,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				517AF68625E07A3F0044DBAB /* Preferences.storyboard in Resources */,
+				517AF6AE25E0A2400044DBAB /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -695,7 +702,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if ! command -v \"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" &> /dev/null\nthen\n    echo \"swiftgen could not be found\"\n    exit\nfi\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Zavala/Resources/Localizable.strings\" \"$PROJECT_DIR/Zavala/Resources/Localizable.stringsdict\" --output \"$PROJECT_DIR/Zavala/L10n.swift\";\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Templeton/Sources/Templeton/Localizable.strings\" --output \"$PROJECT_DIR/Templeton/Sources/Templeton/L10n.swift\";\n";
+			shellScript = "if ! command -v \"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" &> /dev/null\nthen\n    echo \"swiftgen could not be found\"\n    exit\nfi\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Zavala/Resources/Localizable.strings\" \"$PROJECT_DIR/Zavala/Resources/Localizable.stringsdict\" --output \"$PROJECT_DIR/Zavala/L10n.swift\";\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/AppKitPlugin/Localizable.strings\" --output \"$PROJECT_DIR/AppKitPlugin/L10n.swift\";\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Templeton/Sources/Templeton/Localizable.strings\" --output \"$PROJECT_DIR/Templeton/Sources/Templeton/L10n.swift\";\n";
 		};
 		51E0613325A5450400194066 /* Sign Sparkle XPC Services */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -801,6 +808,7 @@
 				517AF69525E085A80044DBAB /* AppDefaults.swift in Sources */,
 				51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */,
 				517AF68C25E07A790044DBAB /* GeneralPrefencesViewController.swift in Sources */,
+				517AF6B425E0A3C20044DBAB /* L10n.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

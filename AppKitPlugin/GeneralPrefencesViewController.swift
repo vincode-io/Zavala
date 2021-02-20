@@ -41,7 +41,26 @@ final class GeneralPreferencesViewController: NSViewController {
 	}
 	
 	@IBAction func toggleEnableCloudKit(_ sender: Any) {
-		AppDefaults.shared.enableCloudKit = enableCloudKit.state == .on
+		guard enableCloudKit.state == .off else {
+			AppDefaults.shared.enableCloudKit = true
+			return
+		}
+		
+		let alert = NSAlert()
+		alert.alertStyle = .warning
+		alert.messageText = L10n.removeCloudKitTitle
+		alert.informativeText = L10n.removeCloudKitMessage
+		
+		alert.addButton(withTitle: L10n.remove)
+		alert.addButton(withTitle: L10n.cancel)
+			
+		alert.beginSheetModal(for: view.window!) { [weak self] result in
+			if result == NSApplication.ModalResponse.alertFirstButtonReturn {
+				AppDefaults.shared.enableCloudKit = false
+			} else {
+				self?.enableCloudKit.state = .on
+			}
+		}
 	}
 	
 }
