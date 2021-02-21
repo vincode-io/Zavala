@@ -1185,24 +1185,30 @@ extension Outline {
 		ownerEmail = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail]
 		ownerURL = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL]
 		
+		let rowOrderRowUUIDs = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
+		rowOrder = rowOrderRowUUIDs.map { EntityID.row(id.accountID, id.documentUUID, $0) }
+
 		let cloudKitTagNames = record[CloudKitOutlineZone.CloudKitOutline.Fields.tagNames] as? [String] ?? [String]()
 		let currentTagNames = Set(tags.map { $0.name })
 		
 		guard let account = account else { return }
 
 		let cloudKitTagIDs = cloudKitTagNames.map({ account.createTag(name: $0) }).map({ $0.id })
-		self.tagIDs = cloudKitTagIDs
+		let oldTagIDs = tagIDs ?? [String]()
+		tagIDs = cloudKitTagIDs
 
 		let tagNamesToDelete = currentTagNames.subtracting(cloudKitTagNames)
 		for tagNameToDelete in tagNamesToDelete {
 			account.deleteTag(name: tagNameToDelete)
 		}
+		
+		guard beingViewedCount > 0 else { return }
 
 		var moves = Set<OutlineElementChanges.Move>()
 		var inserts = Set<Int>()
 		var deletes = Set<Int>()
 		
-		let diff = cloudKitTagIDs.difference(from: tagIDs!).inferringMoves()
+		let diff = cloudKitTagIDs.difference(from: oldTagIDs).inferringMoves()
 		for change in diff {
 			switch change {
 			case .insert(let offset, _, let associated):
@@ -1222,9 +1228,6 @@ extension Outline {
 		
 		let changes = OutlineElementChanges(section: .tags, deletes: deletes, inserts: inserts, moves: moves)
 		outlineElementsDidChange(changes)
-
-		let rowOrderRowUUIDs = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
-		rowOrder = rowOrderRowUUIDs.map { EntityID.row(id.accountID, id.documentUUID, $0) }
 	}
 	
 }
