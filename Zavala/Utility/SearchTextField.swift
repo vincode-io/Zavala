@@ -309,7 +309,7 @@ open class SearchTextField: UITextField {
         }
         
         if let tableView = tableView {
-            guard let frame = self.superview?.convert(self.frame, to: nil) else { return }
+            guard let frame = self.superview?.convert(self.frame, to: nil), let window = window else { return }
             
             //TableViews use estimated cell heights to calculate content size until they
             //  are on-screen. We must set this to the theme cell height to avoid getting an
@@ -341,7 +341,7 @@ open class SearchTextField: UITextField {
                 var tableViewFrame = CGRect(x: 0, y: 0, width: tableWidth - 4, height: tableHeight)
                 tableViewFrame.origin = self.convert(tableViewFrame.origin, to: nil)
                 tableViewFrame.origin.x += 2 + tableXOffset
-				let xOffset = (tableViewFrame.origin.x + tableWidth) - window!.bounds.maxX
+				let xOffset = (tableViewFrame.origin.x + tableWidth) - window.bounds.maxX
 				if xOffset > 0 {
 					tableViewFrame.origin.x = tableViewFrame.origin.x - xOffset
 				}
