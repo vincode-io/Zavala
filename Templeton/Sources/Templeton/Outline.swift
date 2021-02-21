@@ -255,6 +255,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	private var rowsFile: RowsFile?
 	
+	private var batchCloudKitRequests = false
+	private var cloudKitRequestsIDs = Set<EntityID>()
+	
 	init(id: EntityID) {
 		self.id = id
 		self.created = Date()
@@ -346,7 +349,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let inserted = reload - 1
 		let changes = OutlineElementChanges(section: .tags, inserts: Set([inserted]), reloads: Set([reload]))
 		outlineElementsDidChange(changes)
-		requestCloudKitUpdate()
+		requestCloudKitUpdate(for: id)
 	}
 	
 	public func deleteTag(_ tag: Tag) {
@@ -357,7 +360,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let reload = tagIDs?.count ?? 1
 		let changes = OutlineElementChanges(section: .tags, deletes: Set([index]), reloads: Set([reload]))
 		outlineElementsDidChange(changes)
-		requestCloudKitUpdate()
+		requestCloudKitUpdate(for: id)
 	}
 	
 	public func hasTag(_ tag: Tag) -> Bool {
@@ -463,14 +466,14 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public func update(title: String) {
 		self.title = title
-		requestCloudKitUpdate()
+		requestCloudKitUpdate(for: id)
 	}
 	
 	public func update(ownerName: String?, ownerEmail: String?, ownerURL: String?) {
 		self.ownerName = ownerName
 		self.ownerEmail = ownerEmail
 		self.ownerURL = ownerURL
-		requestCloudKitUpdate()
+		requestCloudKitUpdate(for: id)
 	}
 	
 	public func toggleFilter() -> OutlineElementChanges {
@@ -1228,10 +1231,26 @@ extension Outline {
 		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
 	}
 	
-	private func requestCloudKitUpdate() {
-		if let cloudKitManager = account?.cloudKitManager, let zoneID = zoneID {
-			cloudKitManager.addRequest(CloudKitActionRequest(zoneID: zoneID, id: id))
+	private func beginCloudKitBatchRequests() {
+		batchCloudKitRequests = true
+	}
+	
+	private func requestCloudKitUpdate(for entityID: EntityID) {
+		guard let cloudKitManager = account?.cloudKitManager else { return }
+		if batchCloudKitRequests {
+			cloudKitRequestsIDs.insert(entityID)
+		} else {
+			guard let zoneID = zoneID else { return }
+			cloudKitManager.addRequest(CloudKitActionRequest(zoneID: zoneID, id: entityID))
 		}
+	}
+	
+	private func commitCloudKitBatchRequests() {
+		batchCloudKitRequests = false
+		guard let cloudKitManager = account?.cloudKitManager, let zoneID = zoneID else { return }
+
+		let requests = cloudKitRequestsIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) }
+		cloudKitManager.addRequests(Set(requests))
 	}
 
 	private func completeUncomplete(rows: [Row], isComplete: Bool, textRowStrings: TextRowStrings?) -> ([Row], Int?) {
