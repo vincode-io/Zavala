@@ -252,14 +252,28 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 	}
 	
-	var rowOrder: [EntityID]?
+	var rowOrder: [EntityID]? {
+		didSet {
+			if rowOrder != oldValue {
+				updated = Date()
+			}
+		}
+	}
+	
 	var keyedRows: [EntityID: Row]?
 	
 	private var cursorRowID: EntityID?
 	private var cursorIsInNotes: Bool?
 	private var cursorPosition: Int?
 	
-	private var tagIDs: [String]?
+	private var tagIDs: [String]? {
+		didSet {
+			if tagIDs != oldValue {
+				updated = Date()
+			}
+		}
+	}
+	
 	private var rowsFile: RowsFile?
 	
 	init(id: EntityID) {
