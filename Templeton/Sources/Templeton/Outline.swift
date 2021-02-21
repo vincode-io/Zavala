@@ -255,7 +255,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	private var rowsFile: RowsFile?
 	
-	private var batchCloudKitRequests = false
+	private var batchCloudKitRequests = 0
 	private var cloudKitRequestsIDs = Set<EntityID>()
 	
 	init(id: EntityID) {
@@ -315,27 +315,37 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		if rowOrder == nil {
 			rowOrder = [EntityID]()
 		}
+
 		if keyedRows == nil {
 			keyedRows = [EntityID: Row]()
 		}
+
 		rowOrder?.insert(row.id, at: at)
 		keyedRows?[row.id] = row
+
+		requestCloudKitUpdates(for: [id, row.id])
 	}
 
 	public func removeRow(_ row: Row) {
 		rowOrder?.removeFirst(object: row.id)
 		keyedRows?.removeValue(forKey: row.id)
+		
+		requestCloudKitUpdates(for: [id, row.id])
 	}
 
 	public func appendRow(_ row: Row) {
 		if rowOrder == nil {
 			rowOrder = [EntityID]()
 		}
+		
 		if keyedRows == nil {
 			keyedRows = [EntityID: Row]()
 		}
+		
 		rowOrder?.append(row.id)
 		keyedRows?[row.id] = row
+		
+		requestCloudKitUpdates(for: [id, row.id])
 	}
 	
 	public func createTag(_ tag: Tag) {
@@ -349,6 +359,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let inserted = reload - 1
 		let changes = OutlineElementChanges(section: .tags, inserts: Set([inserted]), reloads: Set([reload]))
 		outlineElementsDidChange(changes)
+		
 		requestCloudKitUpdate(for: id)
 	}
 	
@@ -360,6 +371,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let reload = tagIDs?.count ?? 1
 		let changes = OutlineElementChanges(section: .tags, deletes: Set([index]), reloads: Set([reload]))
 		outlineElementsDidChange(changes)
+		
 		requestCloudKitUpdate(for: id)
 	}
 	
@@ -498,6 +510,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	func createNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], Int?) {
+		beginCloudKitBatchRequest()
+		
 		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -510,6 +524,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 		
+		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 		
 		let reloads = impacted.compactMap { $0.shadowTableIndex }
@@ -529,6 +544,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	@discardableResult
 	func deleteNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row: NSAttributedString], Int?) {
+		beginCloudKitBatchRequest()
+		
 		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -541,6 +558,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 
+		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 		
 		let reloads = impacted.keys.compactMap { $0.shadowTableIndex }
@@ -550,10 +568,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	func restoreNotes(_ notes: [Row: NSAttributedString]) {
+		beginCloudKitBatchRequest()
+		
 		for (row, note) in notes {
 			row.textRow?.note = note
 		}
 
+		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 		
 		let reloads = notes.keys.compactMap { $0.shadowTableIndex }
@@ -563,6 +584,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	@discardableResult
 	func deleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) -> Int? {
+		beginCloudKitBatchRequest()
+		
 		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -589,6 +612,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 
+		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 		
 		var deletedRows = [Row]()
@@ -620,6 +644,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	func joinRows(topRow: Row, bottomRow: Row) {
+		beginCloudKitBatchRequest()
+		
 		guard let topTextRow = topRow.textRow,
 			  let topTopic = topTextRow.topic,
 			  let topShadowTableIndex = topRow.shadowTableIndex,
@@ -630,11 +656,15 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		topTextRow.topic = mutableText
 		
 		deleteRows([bottomRow])
+		endCloudKitBatchRequest()
+		
 		let changes = OutlineElementChanges(reloads: Set([topShadowTableIndex]))
 		outlineElementsDidChange(changes)
 	}
 	
 	func createRow(_ row: Row, beforeRow: Row, textRowStrings: TextRowStrings? = nil) -> Int? {
+		beginCloudKitBatchRequest()
+		
 		if let beforeTextRow = beforeRow.textRow, let texts = textRowStrings {
 			beforeTextRow.textRowStrings = texts
 		}
@@ -649,6 +679,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var mutatingRow = row
 		mutatingRow.parent = parent
 		
+		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 
 		shadowTable?.insert(row, at: shadowTableIndex)
@@ -661,6 +692,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	@discardableResult
 	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil, prefersEnd: Bool = false) -> Int? {
+		beginCloudKitBatchRequest()
+		
 		if let afterTextRow = afterRow?.textRow, let texts = textRowStrings {
 			afterTextRow.textRowStrings = texts
 		}
@@ -716,6 +749,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 
+		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 		
 		var changes = rebuildShadowTable()
@@ -735,6 +769,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) -> Int? {
 		guard let newTextRow = newRow.textRow, let textRow = row.textRow else { return nil }
 		
+		beginCloudKitBatchRequest()
+		
 		let newTopicRange = NSRange(location: cursorPosition, length: topic.length - cursorPosition)
 		let newTopicText = topic.attributedSubstring(from: newTopicRange)
 		newTextRow.topic = newTopicText
@@ -744,6 +780,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		textRow.topic = topicText
 
 		let newCursorIndex = createRows([newRow], afterRow: row)
+		
+		endCloudKitBatchRequest()
 
 		if let rowShadowTableIndex = textRow.shadowTableIndex {
 			let reloadChanges = OutlineElementChanges(reloads: Set([rowShadowTableIndex]))
@@ -915,6 +953,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	func indentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> [Row] {
+		beginCloudKitBatchRequest()
+		
 		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -946,6 +986,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			reloads.insert(rowShadowTableIndex)
 		}
 		
+		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 		
 		func reloadVisitor(_ visited: Row) {
@@ -979,6 +1020,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 	@discardableResult
 	func outdentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> [Row] {
+		beginCloudKitBatchRequest()
+		
 		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -1005,6 +1048,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			mutatingRow.parent = oldParent.parent
 		}
 
+		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 
 		var changes = rebuildShadowTable()
@@ -1016,6 +1060,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	func moveRows(_ rowMoves: [RowMove], textRowStrings: TextRowStrings?) {
+		beginCloudKitBatchRequest()
+		
 		if rowMoves.count == 1, let textRow = rowMoves.first?.row.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
@@ -1058,6 +1104,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 
+		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 
 		var changes = rebuildShadowTable()
@@ -1094,10 +1141,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineDidDelete()
 	}
 	
-	public func outlineDidDelete() {
-		NotificationCenter.default.post(name: .DocumentDidDelete, object: Document.outline(self), userInfo: nil)
-	}
-	
 	public func suspend() {
 		rowsFile?.save()
 		
@@ -1111,6 +1154,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
 		return lhs.id == rhs.id
+	}
+	
+	func outlineDidDelete() {
+		NotificationCenter.default.post(name: .DocumentDidDelete, object: Document.outline(self), userInfo: nil)
 	}
 	
 }
@@ -1148,6 +1195,36 @@ extension Outline: CustomDebugStringConvertible {
 
 extension Outline {
 	
+	func beginCloudKitBatchRequest() {
+		batchCloudKitRequests += 1
+	}
+	
+	func requestCloudKitUpdate(for entityID: EntityID) {
+		guard let cloudKitManager = account?.cloudKitManager else { return }
+		if batchCloudKitRequests > 0 {
+			cloudKitRequestsIDs.insert(entityID)
+		} else {
+			guard let zoneID = zoneID else { return }
+			cloudKitManager.addRequest(CloudKitActionRequest(zoneID: zoneID, id: entityID))
+		}
+	}
+
+	func requestCloudKitUpdates(for entityIDs: [EntityID]) {
+		beginCloudKitBatchRequest()
+		for id in entityIDs {
+			requestCloudKitUpdate(for: id)
+		}
+		endCloudKitBatchRequest()
+	}
+
+	func endCloudKitBatchRequest() {
+		batchCloudKitRequests = batchCloudKitRequests - 1
+		guard batchCloudKitRequests == 0, let cloudKitManager = account?.cloudKitManager, let zoneID = zoneID else { return }
+
+		let requests = cloudKitRequestsIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) }
+		cloudKitManager.addRequests(Set(requests))
+	}
+
 	func apply(_ update: CloudKitOutlineUpdate) {
 		if let record = update.saveOutlineRecord {
 			applyOutlineRecord(record)
@@ -1231,29 +1308,9 @@ extension Outline {
 		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
 	}
 	
-	private func beginCloudKitBatchRequests() {
-		batchCloudKitRequests = true
-	}
-	
-	private func requestCloudKitUpdate(for entityID: EntityID) {
-		guard let cloudKitManager = account?.cloudKitManager else { return }
-		if batchCloudKitRequests {
-			cloudKitRequestsIDs.insert(entityID)
-		} else {
-			guard let zoneID = zoneID else { return }
-			cloudKitManager.addRequest(CloudKitActionRequest(zoneID: zoneID, id: entityID))
-		}
-	}
-	
-	private func commitCloudKitBatchRequests() {
-		batchCloudKitRequests = false
-		guard let cloudKitManager = account?.cloudKitManager, let zoneID = zoneID else { return }
-
-		let requests = cloudKitRequestsIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) }
-		cloudKitManager.addRequests(Set(requests))
-	}
-
 	private func completeUncomplete(rows: [Row], isComplete: Bool, textRowStrings: TextRowStrings?) -> ([Row], Int?) {
+		beginCloudKitBatchRequest()
+		
 		if rowCount == 1, let textRow = rows.first?.textRow, let textRowStrings = textRowStrings {
 			textRow.textRowStrings = textRowStrings
 		}
@@ -1267,6 +1324,7 @@ extension Outline {
 			}
 		}
 		
+		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 		
 		if isFiltered ?? false {

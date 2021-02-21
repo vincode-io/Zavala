@@ -20,7 +20,13 @@ public struct TextRowStrings {
 
 public final class TextRow: BaseRow, Codable {
 	
-	public var isComplete: Bool?
+	public var isComplete: Bool? {
+		didSet {
+			if isComplete != oldValue {
+				outline?.requestCloudKitUpdate(for: id)
+			}
+		}
+	}
 
 	public var isNoteEmpty: Bool {
 		return notePlainText == nil
@@ -51,6 +57,7 @@ public final class TextRow: BaseRow, Codable {
 			} else {
 				topicData = nil
 			}
+			outline?.requestCloudKitUpdate(for: id)
 		}
 	}
 	
@@ -71,6 +78,7 @@ public final class TextRow: BaseRow, Codable {
 			} else {
 				noteData = nil
 			}
+			outline?.requestCloudKitUpdate(for: id)
 		}
 	}
 	

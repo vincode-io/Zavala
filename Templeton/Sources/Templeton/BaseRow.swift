@@ -26,17 +26,24 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		}
 		set {
 			guard let outline = self.outline else { return }
-
+			
+			outline.beginCloudKitBatchRequest()
+			outline.requestCloudKitUpdate(for: id)
+			
 			for id in rowOrder ?? [EntityID]() {
 				outline.keyedRows?.removeValue(forKey: id)
+				outline.requestCloudKitUpdate(for: id)
 			}
 
 			var order = [EntityID]()
 			for row in newValue {
 				order.append(row.id)
 				outline.keyedRows?[row.id] = row
+				outline.requestCloudKitUpdate(for: row.id)
 			}
 			rowOrder = order
+			
+			outline.endCloudKitBatchRequest()
 		}
 	}
 	
@@ -83,21 +90,29 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		if rowOrder == nil {
 			rowOrder = [EntityID]()
 		}
+		
 		rowOrder?.insert(row.id, at: at)
 		outline?.keyedRows?[row.id] = row
+		
+		outline?.requestCloudKitUpdates(for: [id, row.id])
 	}
 
 	public func removeRow(_ row: Row) {
 		rowOrder?.removeFirst(object: row.id)
 		outline?.keyedRows?.removeValue(forKey: row.id)
+		
+		outline?.requestCloudKitUpdates(for: [id, row.id])
 	}
 
 	public func appendRow(_ row: Row) {
 		if rowOrder == nil {
 			rowOrder = [EntityID]()
 		}
+		
 		rowOrder?.append(row.id)
 		outline?.keyedRows?[row.id] = row
+		
+		outline?.requestCloudKitUpdates(for: [id, row.id])
 	}
 
 	public func markdown(indentLevel: Int) -> String {
