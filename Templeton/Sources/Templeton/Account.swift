@@ -312,6 +312,13 @@ public final class Account: NSObject, Identifiable, Codable {
 		return tag
 	}
 	
+	public func deleteTag(name: String) {
+		guard let tag = tags?.first(where: { $0.name == name }) else {
+			return
+		}
+		deleteTag(tag)
+	}
+
 	public func deleteTag(_ tag: Tag) {
 		for doc in documents ?? [Document]() {
 			if doc.hasTag(tag) {

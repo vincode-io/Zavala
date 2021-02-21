@@ -353,6 +353,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let inserted = reload - 1
 		let changes = OutlineElementChanges(section: .tags, inserts: Set([inserted]), reloads: Set([reload]))
 		outlineElementsDidChange(changes)
+		requestCloudKitUpdate()
 	}
 	
 	public func deleteTag(_ tag: Tag) {
@@ -363,6 +364,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let reload = tagIDs?.count ?? 1
 		let changes = OutlineElementChanges(section: .tags, deletes: Set([index]), reloads: Set([reload]))
 		outlineElementsDidChange(changes)
+		requestCloudKitUpdate()
 	}
 	
 	public func hasTag(_ tag: Tag) -> Bool {
@@ -1168,6 +1170,47 @@ extension Outline {
 		ownerName = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerName]
 		ownerEmail = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail]
 		ownerURL = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL]
+		
+		let cloudKitTagNames = record[CloudKitOutlineZone.CloudKitOutline.Fields.tagNames] as? [String] ?? [String]()
+		let currentTagNames = Set(tags.map { $0.name })
+		
+		guard let account = account else { return }
+
+		let cloudKitTagIDs = cloudKitTagNames.map({ account.createTag(name: $0) }).map({ $0.id })
+		self.tagIDs = cloudKitTagIDs
+
+		let tagNamesToDelete = currentTagNames.subtracting(cloudKitTagNames)
+		for tagNameToDelete in tagNamesToDelete {
+			account.deleteTag(name: tagNameToDelete)
+		}
+
+		var moves = Set<OutlineElementChanges.Move>()
+		var inserts = Set<Int>()
+		var deletes = Set<Int>()
+		
+		let diff = cloudKitTagIDs.difference(from: tagIDs!).inferringMoves()
+		for change in diff {
+			switch change {
+			case .insert(let offset, _, let associated):
+				if let associated = associated {
+					moves.insert(OutlineElementChanges.Move(associated, offset))
+				} else {
+					inserts.insert(offset)
+				}
+			case .remove(let offset, _, let associated):
+				if let associated = associated {
+					moves.insert(OutlineElementChanges.Move(offset, associated))
+				} else {
+					deletes.insert(offset)
+				}
+			}
+		}
+		
+		let changes = OutlineElementChanges(section: .tags, deletes: deletes, inserts: inserts, moves: moves)
+		outlineElementsDidChange(changes)
+
+		let rowOrderRowUUIDs = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
+		rowOrder = rowOrderRowUUIDs.map { EntityID.row(id.accountID, id.documentUUID, $0) }
 	}
 	
 }
