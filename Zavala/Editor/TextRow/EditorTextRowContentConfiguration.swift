@@ -30,7 +30,7 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 		self.isNotesHidden = isNotesHidden
 		
 		self.id = row.id
-		self.isChevronShowing = !(row.rows?.isEmpty ?? true)
+		self.isChevronShowing = row.rowCount > 0
 		self.isComplete = row.isComplete ?? false
 		self.isAncestorComplete = row.isAncestorComplete
 		if let textRow = row.textRow {

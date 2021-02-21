@@ -147,7 +147,7 @@ public final class TextRow: BaseRow, Codable {
 			md.append("\n  \(notePlainText)")
 		}
 		
-		rows?.forEach {
+		rows.forEach {
 			md.append("\n")
 			md.append($0.markdown(indentLevel: indentLevel + 1))
 		}
@@ -168,11 +168,11 @@ public final class TextRow: BaseRow, Codable {
 			opml.append(" _status=\"checked\"")
 		}
 		
-		if rows?.count ?? 0 == 0 {
+		if rowCount == 0 {
 			opml.append("/>\n")
 		} else {
 			opml.append(">\n")
-			rows?.forEach { opml.append($0.opml()) }
+			rows.forEach { opml.append($0.opml()) }
 			opml.append(indent + "</outline>\n")
 		}
 		

@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol RowContainer {
-	var rows: [Row]? { get set }
+	var rows: [Row] { get }
 	var rowCount: Int { get }
 
 	func containsRow(_: Row) -> Bool

@@ -14,32 +14,29 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 
 	public var id: EntityID
 	public var isExpanded: Bool?
-	public var rows: [Row]? {
+	public internal(set) var rows: [Row] {
 		get {
+			guard let outline = self.outline else { return [Row]() }
+			
 			if let rowOrder = rowOrder {
-				guard let outline = outline else { return nil }
 				return rowOrder.compactMap { outline.keyedRows?[$0] }
 			} else {
-				return nil
+				return [Row]()
 			}
 		}
 		set {
-			guard let outline = outline else { return }
+			guard let outline = self.outline else { return }
 
 			for id in rowOrder ?? [EntityID]() {
 				outline.keyedRows?.removeValue(forKey: id)
 			}
 
-			if let rows = newValue {
-				var order = [EntityID]()
-				for row in rows {
-					order.append(row.id)
-					outline.keyedRows?[row.id] = row
-				}
-				rowOrder = order
-			} else {
-				rowOrder = nil
+			var order = [EntityID]()
+			for row in newValue {
+				order.append(row.id)
+				outline.keyedRows?[row.id] = row
 			}
+			rowOrder = order
 		}
 	}
 	

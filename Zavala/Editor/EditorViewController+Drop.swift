@@ -147,9 +147,7 @@ extension EditorViewController {
 		
 		// If we don't have a destination index, drop it at the back
 		guard let targetIndexPath = targetIndexPath else {
-			if let outlineRows = outline.rows {
-				localRowDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: outlineRows.count)
-			}
+			localRowDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: outline.rowCount)
 			return
 		}
 

@@ -118,7 +118,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 		bullet.removeFromSuperview()
 		disclosureIndicator.removeFromSuperview()
 		
-		if configuration.row?.rows?.isEmpty ?? true {
+		if configuration.row?.rowCount == 0 {
 			addSubview(bullet)
 			
 			let baseLineConstant = 0 - (OutlineFont.topicCapHeight - 4) / 2

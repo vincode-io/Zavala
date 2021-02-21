@@ -43,9 +43,7 @@ struct TextRowData: Codable {
 		self.noteData = textRow.noteData
 		self.isExpanded = textRow.isExpanded
 		self.isComplete = textRow.isComplete
-		if let rows = textRow.rows {
-			self.rowDatas = rows.map { RowData(row: $0) }
-		}
+		self.rowDatas = textRow.rows.map { RowData(row: $0) }
 	}
 	
 }

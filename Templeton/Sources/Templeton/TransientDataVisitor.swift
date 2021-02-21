@@ -46,7 +46,7 @@ class TransientDataVisitor {
 		}
 		
 		// Set all the Headline's children's parent and visit them
-		visited.rows?.forEach { row in
+		visited.rows.forEach { row in
 			var mutatingRow = row
 			mutatingRow.parent = visited
 			mutatingRow.visit(visitor: visitor)

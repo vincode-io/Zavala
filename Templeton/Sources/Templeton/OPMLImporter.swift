@@ -9,7 +9,7 @@ import Foundation
 import SWXMLHash
 
 public protocol OPMLImporter: RowContainer {
-	var rows: [Row]? { get set }
+	var rows: [Row] { get }
 	func importRows(outline: Outline, rowIndexers: [XMLIndexer])
 }
 

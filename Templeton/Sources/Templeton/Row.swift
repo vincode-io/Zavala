@@ -73,12 +73,12 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 	}
 	
 	public var isExpandable: Bool {
-		guard let rows = rows, !rows.isEmpty else { return false }
+		guard rowCount > 0 else { return false }
 		return !(isExpanded ?? true)
 	}
 
 	public var isCollapsable: Bool {
-		guard let rows = rows, !rows.isEmpty else { return false }
+		guard rowCount > 0 else { return false }
 		return isExpanded ?? true
 	}
 	
@@ -92,12 +92,9 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		return textRow.isComplete ?? false
 	}
 	
-	public var rows: [Row]? {
+	public var rows: [Row] {
 		get {
 			associatedRow.rows
-		}
-		set {
-			associatedRow.rows = newValue
 		}
 	}
 	

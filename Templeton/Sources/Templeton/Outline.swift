@@ -110,34 +110,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 	}
 
-	public var rows: [Row]? {
+	public var rows: [Row] {
 		get {
 			if let rowOrder = rowOrder, let rowData = keyedRows {
 				return rowOrder.compactMap { rowData[$0] }
 			} else {
-				return nil
+				return [Row]()
 			}
-		}
-		set {
-			if keyedRows == nil {
-				keyedRows = [EntityID: Row]()
-			}
-			
-			for id in rowOrder ?? [EntityID]() {
-				keyedRows?.removeValue(forKey: id)
-			}
-
-			if let rows = newValue {
-				var order = [EntityID]()
-				for row in rows {
-					order.append(row.id)
-					keyedRows?[row.id] = row
-				}
-				rowOrder = order
-			} else {
-				rowOrder = nil
-			}
-			
 		}
 	}
 	
@@ -178,10 +157,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 					expandedRows.append(String(currentRow))
 				}
 				currentRow = currentRow + 1
-				visited.rows?.forEach { $0.visit(visitor: expandedRowVisitor) }
+				visited.rows.forEach { $0.visit(visitor: expandedRowVisitor) }
 			}
 
-			rows?.forEach { $0.visit(visitor: expandedRowVisitor(_:)) }
+			rows.forEach { $0.visit(visitor: expandedRowVisitor(_:)) }
 			
 			return expandedRows.joined(separator: ",")
 		}
@@ -197,10 +176,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 				var mutatingVisited = visited
 				mutatingVisited.isExpanded = expandedRows.contains(currentRow)
 				currentRow = currentRow + 1
-				visited.rows?.forEach { $0.visit(visitor: expandedRowVisitor) }
+				visited.rows.forEach { $0.visit(visitor: expandedRowVisitor) }
 			}
 
-			rows?.forEach { $0.visit(visitor: expandedRowVisitor(_:)) }
+			rows.forEach { $0.visit(visitor: expandedRowVisitor(_:)) }
 		}
 	}
 	
@@ -402,12 +381,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 				children.append(index)
 			}
 			if visited.isExpanded ?? true {
-				visited.rows?.forEach { $0.visit(visitor: childrenVisitor) }
+				visited.rows.forEach { $0.visit(visitor: childrenVisitor) }
 			}
 		}
 
 		if row.isExpanded ?? true {
-			row.rows?.forEach { $0.visit(visitor: childrenVisitor(_:)) }
+			row.rows.forEach { $0.visit(visitor: childrenVisitor(_:)) }
 		}
 		
 		return children
@@ -418,10 +397,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		func childrenVisitor(_ visited: Row) {
 			children.append(visited)
-			visited.rows?.forEach { $0.visit(visitor: childrenVisitor) }
+			visited.rows.forEach { $0.visit(visitor: childrenVisitor) }
 		}
 
-		row.rows?.forEach { $0.visit(visitor: childrenVisitor(_:)) }
+		row.rows.forEach { $0.visit(visitor: childrenVisitor(_:)) }
 		return children
 	}
 	
@@ -429,7 +408,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		load()
 		
 		var md = "# \(title ?? "")\n\n"
-		rows?.forEach {
+		rows.forEach {
 			md.append($0.markdown(indentLevel: 0))
 			md.append("\n")
 		}
@@ -474,7 +453,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		opml.append("</head>\n")
 		opml.append("<body>\n")
-		rows?.forEach { opml.append($0.opml()) }
+		rows.forEach { opml.append($0.opml()) }
 		opml.append("</body>\n")
 		opml.append("</opml>\n")
 
@@ -516,7 +495,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	func createNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], Int?) {
-		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
+		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
 
@@ -547,7 +526,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	@discardableResult
 	func deleteNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row: NSAttributedString], Int?) {
-		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
+		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
 
@@ -581,7 +560,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	@discardableResult
 	func deleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) -> Int? {
-		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
+		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
 
@@ -598,12 +577,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 					deletes.append(index)
 				}
 				if visited.isExpanded ?? true {
-					visited.rows?.forEach { $0.visit(visitor: deleteVisitor) }
+					visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
 				}
 			}
 
 			if row.isExpanded ?? true {
-				row.rows?.forEach { $0.visit(visitor: deleteVisitor(_:)) }
+				row.rows.forEach { $0.visit(visitor: deleteVisitor(_:)) }
 			}
 		}
 
@@ -697,7 +676,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			} else if let parent = row.parent, let afterRow = afterRow {
 				let insertIndex = parent.firstIndexOfRow(afterRow) ?? parent.rowCount - 1
 				parent.insertRow(row, at: insertIndex + 1)
-			} else if afterRow?.isExpanded ?? true && !(afterRow?.rows?.isEmpty ?? true) {
+			} else if afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
 				afterRow?.insertRow(row, at: 0)
 				var mutatingRow = row
 				mutatingRow.parent = afterRow
@@ -719,7 +698,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		
 		func parentVisitor(_ visited: Row) {
-			visited.rows?.forEach {
+			visited.rows.forEach {
 				var mutatingRow = $0
 				mutatingRow.parent = visited
 				$0.visit(visitor: parentVisitor)
@@ -727,7 +706,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		for row in rows {
-			row.rows?.forEach {
+			row.rows.forEach {
 				var mutatingRow = $0
 				mutatingRow.parent = row
 				$0.visit(visitor: parentVisitor(_:))
@@ -787,7 +766,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	@discardableResult
 	public func expand(rows: [Row]) -> [Row] {
-		if rows.count == 1, let row = rows.first {
+		if rowCount == 1, let row = rows.first {
 			expand(row: row)
 			return [row]
 		}
@@ -796,7 +775,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	@discardableResult
 	func collapse(rows: [Row]) -> [Row] {
-		if rows.count == 1, let row = rows.first {
+		if rowCount == 1, let row = rows.first {
 			collapse(row: row)
 			return [row]
 		}
@@ -828,10 +807,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 					mutatingVisited.isExpanded = true
 					impacted.append(visited)
 				}
-				visited.rows?.forEach { $0.visit(visitor: expandVisitor) }
+				visited.rows.forEach { $0.visit(visitor: expandVisitor) }
 			}
 
-			container.rows?.forEach { $0.visit(visitor: expandVisitor(_:)) }
+			container.rows.forEach { $0.visit(visitor: expandVisitor(_:)) }
 		}
 
 		outlineBodyDidChange()
@@ -870,14 +849,14 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 					mutatingVisited.isExpanded = false
 					impacted.append(visited)
 				}
-				visited.rows?.forEach { $0.visit(visitor: collapseVisitor) }
+				visited.rows.forEach { $0.visit(visitor: collapseVisitor) }
 			}
 
 			if let row = container as? Row {
 				reloads.append(row)
 			}
 			
-			container.rows?.forEach {
+			container.rows.forEach {
 				reloads.append($0)
 				$0.visit(visitor: collapseVisitor(_:))
 			}
@@ -933,7 +912,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	func indentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> [Row] {
-		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
+		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
 		
@@ -946,7 +925,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			guard let container = row.parent,
 				  let rowIndex = container.firstIndexOfRow(row),
 				  rowIndex > 0,
-				  var newParentRow = container.rows?[rowIndex - 1],
+				  var newParentRow = row.parent?.rows[rowIndex - 1],
 				  let rowShadowTableIndex = row.shadowTableIndex,
 				  let newParentRowShadowTableIndex = newParentRow.shadowTableIndex else { continue }
 
@@ -971,13 +950,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 				reloads.insert(index)
 			}
 			if visited.isExpanded ?? true {
-				visited.rows?.forEach { $0.visit(visitor: reloadVisitor) }
+				visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
 			}
 		}
 
 		for row in impacted {
 			if row.isExpanded ?? true {
-				row.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+				row.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 			}
 		}
 
@@ -997,7 +976,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 	@discardableResult
 	func outdentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> [Row] {
-		if rows.count == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
+		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
 			textRow.textRowStrings = texts
 		}
 
@@ -1005,16 +984,15 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		for row in rows.sortedWithDecendentsFiltered().reversed() {
 			guard let oldParent = row.parent as? Row,
-				  let oldParentRows = oldParent.rows,
-				  let oldRowIndex = oldParentRows.firstIndex(of: row),
+				  let oldRowIndex = oldParent.rows.firstIndex(of: row),
 				  let newParent = oldParent.parent,
-				  let oldParentIndex = newParent.rows?.firstIndex(of: oldParent) else { continue }
+				  let oldParentIndex = newParent.rows.firstIndex(of: oldParent) else { continue }
 			
 			impacted.append(row)
 			
 			var siblingsToMove = [Row]()
-			for i in (oldRowIndex + 1)..<oldParentRows.count {
-				siblingsToMove.append(oldParentRows[i])
+			for i in (oldRowIndex + 1)..<oldParent.rowCount {
+				siblingsToMove.append(oldParent.rows[i])
 			}
 
 			oldParent.removeRow(row)
@@ -1065,21 +1043,15 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		// Move the rows in the tree
 		for rowMove in sortedRowMoves {
-			var mutatingToParent = rowMove.toParent
-			
 			rowMove.row.parent?.removeRow(rowMove.row)
 			if let oldParentShadowTableIndex = (rowMove.row.parent as? Row)?.shadowTableIndex {
 				oldParentReloads.insert(oldParentShadowTableIndex)
 			}
 			
-			if mutatingToParent.rows == nil {
-				mutatingToParent.rows = [rowMove.row]
+			if rowMove.toChildIndex >= rowMove.toParent.rowCount {
+				rowMove.toParent.appendRow(rowMove.row)
 			} else {
-				if rowMove.toChildIndex >= mutatingToParent.rows!.count {
-					mutatingToParent.appendRow(rowMove.row)
-				} else {
-					mutatingToParent.insertRow(rowMove.row, at: rowMove.toChildIndex)
-				}
+				rowMove.toParent.insertRow(rowMove.row, at: rowMove.toChildIndex)
 			}
 		}
 
@@ -1146,7 +1118,7 @@ extension Outline: CustomDebugStringConvertible {
 	
 	public var debugDescription: String {
 		var output = ""
-		for row in rows ?? [Row]() {
+		for row in rows {
 			output.append(dumpRow(level: 0, row: row))
 		}
 		return output
@@ -1160,7 +1132,7 @@ extension Outline: CustomDebugStringConvertible {
 		output.append(row.debugDescription)
 		output.append("\n")
 		
-		for child in row.rows ?? [Row]() {
+		for child in row.rows {
 			output.append(dumpRow(level: level + 1, row: child))
 		}
 		
@@ -1263,7 +1235,7 @@ extension Outline {
 	}
 
 	private func completeUncomplete(rows: [Row], isComplete: Bool, textRowStrings: TextRowStrings?) -> ([Row], Int?) {
-		if rows.count == 1, let textRow = rows.first?.textRow, let textRowStrings = textRowStrings {
+		if rowCount == 1, let textRow = rows.first?.textRow, let textRowStrings = textRowStrings {
 			textRow.textRowStrings = textRowStrings
 		}
 		
@@ -1299,12 +1271,12 @@ extension Outline {
 						reloads.insert(index)
 					}
 					if visited.isExpanded ?? true {
-						visited.rows?.forEach { $0.visit(visitor: reloadVisitor) }
+						visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
 					}
 				}
 
 				if row.isExpanded ?? true {
-					row.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+					row.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 				}
 			}
 		}
@@ -1322,7 +1294,7 @@ extension Outline {
 		var unavailable = true
 		
 		func expandedRowVisitor(_ visited: Row) {
-			for row in visited.rows ?? [Row]() {
+			for row in visited.rows {
 				unavailable = !row.isExpandable
 				if !unavailable {
 					break
@@ -1334,7 +1306,7 @@ extension Outline {
 			}
 		}
 
-		for row in container.rows ?? [Row]() {
+		for row in container.rows {
 			unavailable = !row.isExpandable
 			if !unavailable {
 				break
@@ -1387,14 +1359,14 @@ extension Outline {
 				shadowTableInserts.append(visited)
 
 				if visited.isExpanded ?? true {
-					visited.rows?.forEach {
+					visited.rows.forEach {
 						$0.visit(visitor: visitor)
 					}
 				}
 			}
 		}
 
-		row.rows?.forEach { row in
+		row.rows.forEach { row in
 			row.visit(visitor: visitor(_:))
 		}
 		
@@ -1418,7 +1390,7 @@ extension Outline {
 		var unavailable = true
 		
 		func collapsedRowVisitor(_ visited: Row) {
-			for row in visited.rows ?? [Row]() {
+			for row in visited.rows {
 				unavailable = !row.isCollapsable
 				if !unavailable {
 					break
@@ -1430,7 +1402,7 @@ extension Outline {
 			}
 		}
 
-		for row in container.rows ?? [Row]() {
+		for row in container.rows {
 			unavailable = !row.isCollapsable
 			if !unavailable {
 				break
@@ -1460,13 +1432,13 @@ extension Outline {
 			}
 
 			if visited.isExpanded ?? true {
-				visited.rows?.forEach {
+				visited.rows.forEach {
 					$0.visit(visitor: visitor)
 				}
 			}
 		}
 		
-		row.rows?.forEach { row in
+		row.rows.forEach { row in
 			row.visit(visitor: visitor(_:))
 		}
 		
@@ -1509,7 +1481,7 @@ extension Outline {
 	
 	private func rebuildTransientData() {
 		let transient = TransientDataVisitor(isFiltered: isFiltered ?? false)
-		rows?.forEach { row in
+		rows.forEach { row in
 			var mutatingRow = row
 			mutatingRow.parent = self
 			row.visit(visitor: transient.visitor(_:))
@@ -1540,12 +1512,12 @@ extension Outline {
 					reloads.insert(index)
 				}
 				if visited.isExpanded ?? true {
-					visited.rows?.forEach { $0.visit(visitor: reloadVisitor) }
+					visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
 				}
 			}
 
 			if row.isExpanded ?? true {
-				row.rows?.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+				row.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 			}
 		}
 
