@@ -218,26 +218,23 @@ public final class Account: NSObject, Identifiable, Codable {
 		return document
 	}
 	
-	public func saveOutline(_ record: CKRecord) {
-		let outline: Outline
-		
-		func updateOutline() {
-			outline.title = record[CloudKitOutlineZone.CloudKitOutline.Fields.title]
-			outline.ownerName = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerName]
-			outline.ownerEmail = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail]
-			outline.ownerURL = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL]
+	func apply(_ update: CloudKitOutlineUpdate) {
+		guard !update.isDelete else {
+			guard let document = findDocument(documentUUID: update.recordID.recordName) else { return }
+			deleteDocument(document, updateCloudKit: false)
+			return
 		}
 		
-		if let document = findDocument(documentUUID: record.recordID.recordName) {
-			outline = document.outline!
-			updateOutline()
+		if let document = findDocument(documentUUID: update.recordID.recordName) {
+			let outline = document.outline!
+			outline.apply(update)
 		} else {
-			let outlineID = EntityID.document(id.accountID, record.recordID.recordName)
-			outline = Outline(id: outlineID)
-			outline.zoneID = record.recordID.zoneID
-			
-			updateOutline()
-			
+			let outlineID = EntityID.document(id.accountID, update.recordID.recordName)
+			let outline = Outline(id: outlineID)
+			outline.zoneID = update.recordID.zoneID
+
+			outline.apply(update)
+
 			if documents == nil {
 				documents = [Document]()
 			}
@@ -268,11 +265,6 @@ public final class Account: NSObject, Identifiable, Codable {
 
 	public func deleteDocument(_ document: Document) {
 		deleteDocument(document, updateCloudKit: true)
-	}
-	
-	public func deleteDocument(_ recordID: CKRecord.ID) {
-		guard let document = findDocument(documentUUID: recordID.recordName) else { return }
-		deleteDocument(document, updateCloudKit: false)
 	}
 	
 	public func findDocumentContainer(_ entityID: EntityID) -> DocumentContainer? {

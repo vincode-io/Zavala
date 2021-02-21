@@ -12,10 +12,11 @@ import CloudKit
 
 class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 	
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "CloudKit")
-
 	weak var account: Account?
 
+	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "CloudKit")
+	private var updates = [CKRecord.ID: CloudKitOutlineUpdate]()
+	
 	init(account: Account) {
 		self.account = account
 	}
@@ -24,7 +25,7 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 		for deletedRecordKey in deleted {
 			switch deletedRecordKey.recordType {
 			case CloudKitOutlineZone.CloudKitOutline.recordType:
-				account?.deleteDocument(deletedRecordKey.recordID)
+				update(for: deletedRecordKey.recordID).isDelete = true
 			default:
 				assertionFailure("Unknown record type: \(deletedRecordKey.recordType)")
 			}
@@ -33,13 +34,33 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 		for changedRecord in changed {
 			switch changedRecord.recordType {
 			case CloudKitOutlineZone.CloudKitOutline.recordType:
-				account?.saveOutline(changedRecord)
+				update(for: changedRecord.recordID).saveOutlineRecord = changedRecord
 			default:
 				assertionFailure("Unknown record type: \(changedRecord.recordType)")
 			}
 		}
 		
+		for update in updates.values {
+			account?.apply(update)
+		}
+		
 		completion(.success(()))
 	}
 
+}
+
+// MARK: Helpers
+
+extension CloudKitAcountZoneDelegate {
+	
+	private func update(for recordID: CKRecord.ID) -> CloudKitOutlineUpdate {
+		if let update = updates[recordID] {
+			return update
+		} else {
+			let update = CloudKitOutlineUpdate(recordID: recordID)
+			updates[recordID] = update
+			return update
+		}
+	}
+	
 }

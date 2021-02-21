@@ -1153,6 +1153,25 @@ extension Outline: CustomDebugStringConvertible {
 	
 }
 
+// MARK: CloudKit
+
+extension Outline {
+	
+	func apply(_ update: CloudKitOutlineUpdate) {
+		if let record = update.saveOutlineRecord {
+			applyOutlineRecord(record)
+		}
+	}
+	
+	private func applyOutlineRecord(_ record: CKRecord) {
+		title = record[CloudKitOutlineZone.CloudKitOutline.Fields.title]
+		ownerName = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerName]
+		ownerEmail = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail]
+		ownerURL = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL]
+	}
+	
+}
+
 // MARK: Helpers
 
 extension Outline {
