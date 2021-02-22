@@ -37,12 +37,17 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
+		} else {
+			collectionView.refreshControl = UIRefreshControl()
+			collectionView.alwaysBounceVertical = true
+			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 		}
-		
+
 		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange(_:)), name: .AccountManagerAccountsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidInitialize(_:)), name: .AccountDidInitialize, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountTagsDidChange(_:)), name: .AccountTagsDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 	}
 	
 	// MARK: API
@@ -87,7 +92,15 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		applyChangeSnapshot()
 	}
 	
+	@objc func cloudKitSyncDidComplete(_ note: Notification) {
+		collectionView?.refreshControl?.endRefreshing()
+	}
+	
 	// MARK: Actions
+	
+	@objc func sync() {
+		(splitViewController as? MainSplitViewController)?.sync(self)
+	}
 	
 	@IBAction func showSettings(_ sender: Any) {
 		(splitViewController as? MainSplitViewController)?.showSettings()

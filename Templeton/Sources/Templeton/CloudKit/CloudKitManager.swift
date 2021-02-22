@@ -11,6 +11,10 @@ import SystemConfiguration
 import CloudKit
 import RSCore
 
+public extension Notification.Name {
+	static let CloudKitSyncDidComplete = Notification.Name(rawValue: "CloudKitSyncDidComplete")
+}
+
 public class CloudKitManager {
 
 	let defaultZone: CloudKitOutlineZone
@@ -132,7 +136,9 @@ public class CloudKitManager {
 			return
 		}
 		sendChanges() {
-			self.fetchAllChanges()
+			self.fetchAllChanges() {
+				NotificationCenter.default.post(name: .CloudKitSyncDidComplete, object: self, userInfo: nil)
+			}
 		}
 	}
 	

@@ -181,6 +181,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		} else {
 			filterBarButtonItem = UIBarButtonItem(image: AppAssets.filterInactive, style: .plain, target: self, action: #selector(toggleOutlineFilter(_:)))
 			navigationItem.rightBarButtonItems = [filterBarButtonItem!]
+
+			collectionView.refreshControl = UIRefreshControl()
+			collectionView.alwaysBounceVertical = true
+			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 		}
 		
 		collectionView.layer.speed = 1.25
@@ -226,6 +230,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineElementsDidChange(_:)), name: .OutlineElementsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -317,6 +322,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func applicationWillTerminate(_ note: Notification) {
 		updateSpotlightIndex()
+	}
+	
+	@objc func cloudKitSyncDidComplete(_ note: Notification) {
+		collectionView?.refreshControl?.endRefreshing()
 	}
 	
 	// MARK: API
@@ -446,6 +455,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	// MARK: Actions
+	
+	@objc func sync() {
+		(splitViewController as? MainSplitViewController)?.sync(self)
+	}
 	
 	@objc func toggleOutlineFilter(_ sender: Any?) {
 		guard let changes = outline?.toggleFilter() else { return }

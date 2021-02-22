@@ -62,6 +62,10 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 			definesPresentationContext = true
 
 			navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
+
+			collectionView.refreshControl = UIRefreshControl()
+			collectionView.alwaysBounceVertical = true
+			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 		}
 		
 		collectionView.dragDelegate = self
@@ -73,6 +77,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -115,7 +120,15 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		reload(document: document)
 	}
 	
+	@objc func cloudKitSyncDidComplete(_ note: Notification) {
+		collectionView?.refreshControl?.endRefreshing()
+	}
+	
 	// MARK: Actions
+	
+	@objc func sync() {
+		(splitViewController as? MainSplitViewController)?.sync(self)
+	}
 	
 	@objc func createOutline(_ sender: Any?) {
 		guard let account = documentContainer?.account else { return }
