@@ -320,17 +320,35 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			keyedRows = [EntityID: Row]()
 		}
 
+		var updatedKeys = [id, row.id]
+		
 		rowOrder?.insert(row.id, at: at)
 		keyedRows?[row.id] = row
 
-		requestCloudKitUpdates(for: [id, row.id])
+		func insertVisitor(_ visited: Row) {
+			updatedKeys.append(visited.id)
+			keyedRows?[visited.id] = visited
+			visited.rows.forEach { $0.visit(visitor: insertVisitor) }
+		}
+		row.rows.forEach { $0.visit(visitor: insertVisitor(_:)) }
+		
+		requestCloudKitUpdates(for: updatedKeys)
 	}
 
 	public func removeRow(_ row: Row) {
+		var updatedKeys = [id, row.id]
+
 		rowOrder?.removeFirst(object: row.id)
 		keyedRows?.removeValue(forKey: row.id)
 		
-		requestCloudKitUpdates(for: [id, row.id])
+		func deleteVisitor(_ visited: Row) {
+			updatedKeys.append(visited.id)
+			keyedRows?.removeValue(forKey: visited.id)
+			visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
+		}
+		row.rows.forEach { $0.visit(visitor: deleteVisitor(_:)) }
+
+		requestCloudKitUpdates(for: updatedKeys)
 	}
 
 	public func appendRow(_ row: Row) {
@@ -342,10 +360,19 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			keyedRows = [EntityID: Row]()
 		}
 		
+		var updatedKeys = [id, row.id]
+
 		rowOrder?.append(row.id)
 		keyedRows?[row.id] = row
 		
-		requestCloudKitUpdates(for: [id, row.id])
+		func appendVisitor(_ visited: Row) {
+			updatedKeys.append(visited.id)
+			keyedRows?[visited.id] = visited
+			visited.rows.forEach { $0.visit(visitor: appendVisitor) }
+		}
+		row.rows.forEach { $0.visit(visitor: appendVisitor(_:)) }
+
+		requestCloudKitUpdates(for: updatedKeys)
 	}
 	
 	public func createTag(_ tag: Tag) {

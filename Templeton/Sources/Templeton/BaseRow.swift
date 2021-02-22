@@ -91,17 +91,35 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 			rowOrder = [EntityID]()
 		}
 		
+		var updatedKeys = [id, row.id]
+		
 		rowOrder?.insert(row.id, at: at)
 		outline?.keyedRows?[row.id] = row
+
+		func insertVisitor(_ visited: Row) {
+			updatedKeys.append(visited.id)
+			outline?.keyedRows?[visited.id] = visited
+			visited.rows.forEach { $0.visit(visitor: insertVisitor) }
+		}
+		row.rows.forEach { $0.visit(visitor: insertVisitor(_:)) }
 		
-		outline?.requestCloudKitUpdates(for: [id, row.id])
+		outline?.requestCloudKitUpdates(for: updatedKeys)
 	}
 
 	public func removeRow(_ row: Row) {
+		var updatedKeys = [id, row.id]
+
 		rowOrder?.removeFirst(object: row.id)
 		outline?.keyedRows?.removeValue(forKey: row.id)
 		
-		outline?.requestCloudKitUpdates(for: [id, row.id])
+		func removeVisitor(_ visited: Row) {
+			updatedKeys.append(visited.id)
+			outline?.keyedRows?.removeValue(forKey: visited.id)
+			visited.rows.forEach { $0.visit(visitor: removeVisitor) }
+		}
+		row.rows.forEach { $0.visit(visitor: removeVisitor(_:)) }
+
+		outline?.requestCloudKitUpdates(for: updatedKeys)
 	}
 
 	public func appendRow(_ row: Row) {
@@ -109,10 +127,19 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 			rowOrder = [EntityID]()
 		}
 		
+		var updatedKeys = [id, row.id]
+		
 		rowOrder?.append(row.id)
 		outline?.keyedRows?[row.id] = row
+
+		func appendingVisitor(_ visited: Row) {
+			updatedKeys.append(visited.id)
+			outline?.keyedRows?[visited.id] = visited
+			visited.rows.forEach { $0.visit(visitor: appendingVisitor) }
+		}
+		row.rows.forEach { $0.visit(visitor: appendingVisitor(_:)) }
 		
-		outline?.requestCloudKitUpdates(for: [id, row.id])
+		outline?.requestCloudKitUpdates(for: updatedKeys)
 	}
 
 	public func markdown(indentLevel: Int) -> String {
