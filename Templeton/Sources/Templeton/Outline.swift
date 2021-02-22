@@ -1259,7 +1259,12 @@ extension Outline {
 	}
 	
 	private func applyOutlineRecord(_ record: CKRecord) {
-		title = record[CloudKitOutlineZone.CloudKitOutline.Fields.title]
+		let newTitle = record[CloudKitOutlineZone.CloudKitOutline.Fields.title] as? String
+		if title != newTitle {
+			title = newTitle
+			outlineElementsDidChange(OutlineElementChanges(section: .title, reloads: Set([0])))
+		}
+
 		ownerName = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerName]
 		ownerEmail = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail]
 		ownerURL = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL]
