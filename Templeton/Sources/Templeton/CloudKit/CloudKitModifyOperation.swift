@@ -26,17 +26,38 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 			return
 		}
 		
+		// Document Processing
+		
 		for documentRequest in documentRequests {
 			let id = documentRequest.id.documentUUID
 			if let document = account.findDocument(documentUUID: id) {
 				addSave(document)
 			} else {
-				addDelete(documentRequest)
+				addDeleteDocument(documentRequest)
 				documentRowRequests.removeValue(forKey: id)
 			}
 		}
 		
-		// TODO: Add row processing here...
+		// Row Processing
+		
+		for documentUUID in documentRowRequests.keys {
+			guard let outline = account.findDocument(documentUUID: documentUUID)?.outline,
+				  let documentRowRequest = documentRowRequests[documentUUID],
+				  let zoneID = outline.zoneID else { continue }
+			
+			let outlineRecordID = CKRecord.ID(recordName: outline.id.documentUUID, zoneID: zoneID)
+			let outlineRecordRef = CKRecord.Reference(recordID: outlineRecordID, action: .deleteSelf)
+
+			for rowRequest in documentRowRequest {
+				if let row = outline.findRow(id: rowRequest.id) {
+					addSave(zoneID: zoneID, outlineRecordRef: outlineRecordRef, row: row)
+				} else {
+					addDeleteRow(rowRequest)
+				}
+			}
+		}
+		
+		// Send the grouped changes
 		
 		let group = DispatchGroup()
 		
@@ -116,7 +137,23 @@ extension CloudKitModifyOperation {
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail] = outline.ownerEmail
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL] = outline.ownerURL
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.tagNames] = outline.tags.map { $0.name }
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] = outline.rowOrder?.map { $0.documentUUID }
+		record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] = outline.rowOrder?.map { $0.rowUUID }
+
+		addSave(zoneID, record)
+	}
+	
+	private func addSave(zoneID: CKRecordZone.ID, outlineRecordRef: CKRecord.Reference, row: Row) {
+		guard let textRow = row.textRow else { return }
+		
+		let recordID = CKRecord.ID(recordName: row.id.documentUUID, zoneID: zoneID)
+		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitRow.recordType, recordID: recordID)
+		
+		record[CloudKitOutlineZone.CloudKitRow.Fields.outline] = outlineRecordRef
+		record[CloudKitOutlineZone.CloudKitRow.Fields.subtype] = "text"
+		record[CloudKitOutlineZone.CloudKitRow.Fields.topicData] = textRow.topicData
+		record[CloudKitOutlineZone.CloudKitRow.Fields.noteData] = textRow.noteData
+		record[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] = textRow.isComplete ?? false ? "1" : "0"
+		record[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] = textRow.rowOrder?.map { $0.rowUUID }
 
 		addSave(zoneID, record)
 	}
@@ -134,9 +171,15 @@ extension CloudKitModifyOperation {
 		}
 	}
 	
-	private func addDelete(_ request: CloudKitActionRequest) {
+	private func addDeleteDocument(_ request: CloudKitActionRequest) {
 		let zoneID = request.zoneID
 		let recordID = CKRecord.ID(recordName: request.id.documentUUID, zoneID: zoneID)
+		addDelete(zoneID, recordID)
+	}
+	
+	private func addDeleteRow(_ request: CloudKitActionRequest) {
+		let zoneID = request.zoneID
+		let recordID = CKRecord.ID(recordName: request.id.rowUUID, zoneID: zoneID)
 		addDelete(zoneID, recordID)
 	}
 	

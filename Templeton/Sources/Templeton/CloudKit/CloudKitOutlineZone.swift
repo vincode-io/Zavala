@@ -43,7 +43,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 		static let recordType = "Row"
 		struct Fields {
 			static let outline = "outline"
-			static let subType = "subType"
+			static let subtype = "subtype"
 			static let topicData = "topicData"
 			static let noteData = "noteData"
 			static let isComplete = "isComplete"
