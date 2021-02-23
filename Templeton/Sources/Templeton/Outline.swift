@@ -1257,14 +1257,44 @@ extension Outline {
 			applyOutlineRecord(record)
 		}
 		
-		for deleteRecordID in update.deleteRowRecordIDs {
-			let entityID = EntityID.row(id.accountID, id.documentUUID, deleteRecordID.recordName)
-			keyedRows?.removeValue(forKey: entityID)
+		if keyedRows == nil {
+			keyedRows = [EntityID: Row]()
 		}
 		
-		// TODO: process saves
+		for deleteRecordID in update.deleteRowRecordIDs {
+			keyedRows?.removeValue(forKey: deleteRecordID)
+		}
 		
-		let changes = rebuildShadowTable()
+		var reloads = [EntityID]()
+		
+		for saveRowRecord in update.saveRowRecords {
+			guard let entityID = EntityID(description: saveRowRecord.recordID.recordName) else { continue }
+
+			var textRow: TextRow
+			if let existingTextRow = keyedRows?[entityID]?.textRow {
+				textRow = existingTextRow
+				reloads.append(entityID)
+			} else {
+				textRow = TextRow(id: entityID)
+			}
+			
+			textRow.topicData = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.topicData] as? Data
+			textRow.noteData = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.noteData] as? Data
+			
+			let isComplete = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] as? String
+			textRow.isComplete = isComplete == "1" ? true : false
+			
+			let rowOrder = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] as? [String]
+			textRow.rowOrder = rowOrder?.map { EntityID.row(id.accountID, id.documentUUID, $0) } ?? [EntityID]()
+			
+			keyedRows?[entityID] = .text(textRow)
+		}
+		
+		guard beingViewedCount > 0 else { return }
+
+		var changes = rebuildShadowTable()
+		let reloadIndexes = reloads.compactMap { keyedRows?[$0]?.shadowTableIndex }
+		changes.append(OutlineElementChanges(reloads: Set(reloadIndexes)))
 		outlineElementsDidChange(changes)
 	}
 	
@@ -1277,9 +1307,9 @@ extension Outline {
 			}
 		}
 
-		ownerName = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerName]
-		ownerEmail = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail]
-		ownerURL = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL]
+		ownerName = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerName] as? String
+		ownerEmail = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail] as? String
+		ownerURL = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL] as? String
 		
 		let rowOrderRowUUIDs = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
 		rowOrder = rowOrderRowUUIDs.map { EntityID.row(id.accountID, id.documentUUID, $0) }

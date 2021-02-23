@@ -220,18 +220,17 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	func apply(_ update: CloudKitOutlineUpdate) {
 		guard !update.isDelete else {
-			guard let document = findDocument(documentUUID: update.recordID.recordName) else { return }
+			guard let document = findDocument(documentUUID: update.documentID.documentUUID) else { return }
 			deleteDocument(document, updateCloudKit: false)
 			return
 		}
 		
-		if let document = findDocument(documentUUID: update.recordID.recordName) {
+		if let document = findDocument(documentUUID: update.documentID.documentUUID) {
 			let outline = document.outline!
 			outline.apply(update)
 		} else {
-			let outlineID = EntityID.document(id.accountID, update.recordID.recordName)
-			let outline = Outline(id: outlineID)
-			outline.zoneID = update.recordID.zoneID
+			let outline = Outline(id: update.documentID)
+			outline.zoneID = update.saveOutlineRecord?.recordID.zoneID
 
 			outline.apply(update)
 

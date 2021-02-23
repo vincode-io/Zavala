@@ -45,7 +45,7 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 				  let documentRowRequest = documentRowRequests[documentUUID],
 				  let zoneID = outline.zoneID else { continue }
 			
-			let outlineRecordID = CKRecord.ID(recordName: outline.id.documentUUID, zoneID: zoneID)
+			let outlineRecordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
 			let outlineRecordRef = CKRecord.Reference(recordID: outlineRecordID, action: .deleteSelf)
 
 			for rowRequest in documentRowRequest {
@@ -129,7 +129,7 @@ extension CloudKitModifyOperation {
 	private func addSave(_ document: Document) {
 		guard let outline = document.outline, let zoneID = outline.zoneID else { return }
 		
-		let recordID = CKRecord.ID(recordName: outline.id.documentUUID, zoneID: zoneID)
+		let recordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
 		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitOutline.recordType, recordID: recordID)
 		
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.title] = outline.title
@@ -145,7 +145,7 @@ extension CloudKitModifyOperation {
 	private func addSave(zoneID: CKRecordZone.ID, outlineRecordRef: CKRecord.Reference, row: Row) {
 		guard let textRow = row.textRow else { return }
 		
-		let recordID = CKRecord.ID(recordName: row.id.documentUUID, zoneID: zoneID)
+		let recordID = CKRecord.ID(recordName: textRow.id.description, zoneID: zoneID)
 		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitRow.recordType, recordID: recordID)
 		
 		record[CloudKitOutlineZone.CloudKitRow.Fields.outline] = outlineRecordRef
@@ -173,13 +173,13 @@ extension CloudKitModifyOperation {
 	
 	private func addDeleteDocument(_ request: CloudKitActionRequest) {
 		let zoneID = request.zoneID
-		let recordID = CKRecord.ID(recordName: request.id.documentUUID, zoneID: zoneID)
+		let recordID = CKRecord.ID(recordName: request.id.description, zoneID: zoneID)
 		addDelete(zoneID, recordID)
 	}
 	
 	private func addDeleteRow(_ request: CloudKitActionRequest) {
 		let zoneID = request.zoneID
-		let recordID = CKRecord.ID(recordName: request.id.rowUUID, zoneID: zoneID)
+		let recordID = CKRecord.ID(recordName: request.id.description, zoneID: zoneID)
 		addDelete(zoneID, recordID)
 	}
 	
