@@ -92,8 +92,29 @@ public final class TextRow: BaseRow, Codable {
 		}
 	}
 	
-	var topicData: Data?
-	var noteData: Data?
+	var topicData: Data? {
+		didSet {
+			if let topic = topicData {
+				_topic = try? NSAttributedString(data: topic,
+												 options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
+												 documentAttributes: nil)
+			} else {
+				_topic = nil
+			}
+		}
+	}
+	
+	var noteData: Data? {
+		didSet {
+			if let note = noteData {
+				_note = try? NSAttributedString(data: note,
+												options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
+												documentAttributes: nil)
+			} else {
+				_note = nil
+			}
+		}
+	}
 	
 	private enum CodingKeys: String, CodingKey {
 		case id = "id"
