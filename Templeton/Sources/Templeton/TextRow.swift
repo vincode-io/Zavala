@@ -19,7 +19,7 @@ public struct TextRowStrings {
 }
 
 public final class TextRow: BaseRow, Codable {
-	
+
 	public var isComplete: Bool? {
 		didSet {
 			if isComplete != oldValue {
@@ -121,6 +121,15 @@ public final class TextRow: BaseRow, Codable {
 		}
 	}
 	
+	internal init(id: EntityID, topicData: Data? = nil, noteData: Data? = nil, isComplete: Bool?, isExpanded: Bool?) {
+		super.init()
+		self.id = id
+		self.topicData = topicData
+		self.noteData = noteData
+		self.isComplete = isComplete
+		self.isExpanded = isExpanded
+	}
+	
 	public init(from decoder: Decoder) throws {
 		super.init()
 		let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -145,6 +154,17 @@ public final class TextRow: BaseRow, Codable {
 		try container.encode(isExpanded, forKey: .isExpanded)
 		try container.encode(isComplete, forKey: .isComplete)
 		try container.encode(rowOrder, forKey: .rowOrder)
+	}
+	
+	public override func clone() -> Row {
+		let id = EntityID.row(self.id.accountID, self.id.documentUUID, UUID().uuidString)
+		let result = TextRow(id: id, topicData: topicData, noteData: noteData, isComplete: isComplete, isExpanded: isExpanded)
+		
+		for row in rows {
+			result.appendRow(row.clone())
+		}
+		
+		return .text(result)
 	}
 	
 	public override func markdown(indentLevel: Int = 0) -> String {

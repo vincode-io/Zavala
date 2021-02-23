@@ -27,7 +27,17 @@ public final class CutRowCommand: OutlineCommand {
 		self.undoActionName = L10n.cut
 		self.redoActionName = L10n.cut
 
-		for row in rows {
+		var allRows = [Row]()
+		
+		func cutVisitor(_ visited: Row) {
+			allRows.append(visited)
+			visited.rows.forEach { $0.visit(visitor: cutVisitor) }
+		}
+		rows.forEach { $0.visit(visitor: cutVisitor(_:)) }
+		
+		self.rows = allRows
+		
+		for row in allRows {
 			if let rowShadowTableIndex = row.shadowTableIndex, rowShadowTableIndex > 0, let afterRow = outline.shadowTable?[rowShadowTableIndex - 1] {
 				afterRows[row] = afterRow
 			}

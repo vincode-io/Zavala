@@ -320,35 +320,16 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			keyedRows = [EntityID: Row]()
 		}
 
-		var updatedKeys = [id, row.id]
-		
 		rowOrder?.insert(row.id, at: at)
 		keyedRows?[row.id] = row
 
-		func insertVisitor(_ visited: Row) {
-			updatedKeys.append(visited.id)
-			keyedRows?[visited.id] = visited
-			visited.rows.forEach { $0.visit(visitor: insertVisitor) }
-		}
-		row.rows.forEach { $0.visit(visitor: insertVisitor(_:)) }
-		
-		requestCloudKitUpdates(for: updatedKeys)
+		requestCloudKitUpdates(for: [id, row.id])
 	}
 
 	public func removeRow(_ row: Row) {
-		var updatedKeys = [id, row.id]
-
 		rowOrder?.removeFirst(object: row.id)
 		keyedRows?.removeValue(forKey: row.id)
-		
-		func deleteVisitor(_ visited: Row) {
-			updatedKeys.append(visited.id)
-			keyedRows?.removeValue(forKey: visited.id)
-			visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
-		}
-		row.rows.forEach { $0.visit(visitor: deleteVisitor(_:)) }
-
-		requestCloudKitUpdates(for: updatedKeys)
+		requestCloudKitUpdates(for: [id, row.id])
 	}
 
 	public func appendRow(_ row: Row) {
@@ -360,19 +341,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			keyedRows = [EntityID: Row]()
 		}
 		
-		var updatedKeys = [id, row.id]
-
 		rowOrder?.append(row.id)
 		keyedRows?[row.id] = row
-		
-		func appendVisitor(_ visited: Row) {
-			updatedKeys.append(visited.id)
-			keyedRows?[visited.id] = visited
-			visited.rows.forEach { $0.visit(visitor: appendVisitor) }
-		}
-		row.rows.forEach { $0.visit(visitor: appendVisitor(_:)) }
 
-		requestCloudKitUpdates(for: updatedKeys)
+		requestCloudKitUpdates(for: [id, row.id])
 	}
 	
 	public func createTag(_ tag: Tag) {
@@ -620,23 +592,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var deletes = [Int]()
 
 		for row in rows {
-			row.parent?.removeRow(row)
-			
 			guard let rowShadowTableIndex = row.shadowTableIndex else { return nil }
 			deletes.append(rowShadowTableIndex)
-			
-			func deleteVisitor(_ visited: Row) {
-				if let index = visited.shadowTableIndex {
-					deletes.append(index)
-				}
-				if visited.isExpanded ?? true {
-					visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
-				}
-			}
-
-			if row.isExpanded ?? true {
-				row.rows.forEach { $0.visit(visitor: deleteVisitor(_:)) }
-			}
+			row.parent?.removeRow(row)
 		}
 
 		endCloudKitBatchRequest()
@@ -655,8 +613,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		resetShadowTableIndexes(startingAt: lowestShadowTableIndex)
 		
 		let reloads = rows.compactMap { ($0.parent as? Row)?.shadowTableIndex }
+		let deleteSet = Set(deletes)
+		let reloadSet = Set(reloads).subtracting(deleteSet)
 		
-		let changes = OutlineElementChanges(deletes: Set(deletes), reloads: Set(reloads))
+		let changes = OutlineElementChanges(deletes: deleteSet, reloads: reloadSet)
 		outlineElementsDidChange(changes)
 		
 		if deletedRows.contains(where: { $0.id == cursorRowID }) {
@@ -718,14 +678,21 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	@discardableResult
-	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil, prefersEnd: Bool = false) -> Int? {
+	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil, prefersEnd: Bool = false, copy: Bool = false) -> Int? {
 		beginCloudKitBatchRequest()
 		
 		if let afterTextRow = afterRow?.textRow, let texts = textRowStrings {
 			afterTextRow.textRowStrings = texts
 		}
+		
+		var createRows: [Row]
+		if copy {
+			createRows = rows.map { $0.clone() }
+		} else {
+			createRows = rows
+		}
 
-		for row in rows.sortedByReverseDisplayOrder() {
+		for row in createRows.sortedByReverseDisplayOrder() {
 			if afterRow == nil {
 				if prefersEnd {
 					appendRow(row)
@@ -760,22 +727,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 		
-		func parentVisitor(_ visited: Row) {
-			visited.rows.forEach {
-				var mutatingRow = $0
-				mutatingRow.parent = visited
-				$0.visit(visitor: parentVisitor)
-			}
-		}
-
-		for row in rows {
-			row.rows.forEach {
-				var mutatingRow = $0
-				mutatingRow.parent = row
-				$0.visit(visitor: parentVisitor(_:))
-			}
-		}
-
 		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 		
