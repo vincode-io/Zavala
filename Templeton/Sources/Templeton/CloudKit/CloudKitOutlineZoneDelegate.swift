@@ -15,13 +15,24 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 	weak var account: Account?
 
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "CloudKit")
-	private var updates = [CKRecord.ID: CloudKitOutlineUpdate]()
 	
 	init(account: Account) {
 		self.account = account
 	}
 	
 	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey], completion: @escaping (Result<Void, Error>) -> Void) {
+		var updates = [CKRecord.ID: CloudKitOutlineUpdate]()
+
+		func update(for recordID: CKRecord.ID) -> CloudKitOutlineUpdate {
+			if let update = updates[recordID] {
+				return update
+			} else {
+				let update = CloudKitOutlineUpdate(recordID: recordID)
+				updates[recordID] = update
+				return update
+			}
+		}
+
 		for deletedRecordKey in deleted {
 			switch deletedRecordKey.recordType {
 			case CloudKitOutlineZone.CloudKitOutline.recordType:
@@ -51,20 +62,4 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 		completion(.success(()))
 	}
 
-}
-
-// MARK: Helpers
-
-extension CloudKitAcountZoneDelegate {
-	
-	private func update(for recordID: CKRecord.ID) -> CloudKitOutlineUpdate {
-		if let update = updates[recordID] {
-			return update
-		} else {
-			let update = CloudKitOutlineUpdate(recordID: recordID)
-			updates[recordID] = update
-			return update
-		}
-	}
-	
 }
