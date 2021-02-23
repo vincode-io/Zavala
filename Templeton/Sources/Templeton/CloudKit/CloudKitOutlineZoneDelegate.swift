@@ -23,11 +23,11 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey], completion: @escaping (Result<Void, Error>) -> Void) {
 		var updates = [EntityID: CloudKitOutlineUpdate]()
 
-		func update(for documentID: EntityID) -> CloudKitOutlineUpdate {
+		func update(for documentID: EntityID, zoneID: CKRecordZone.ID) -> CloudKitOutlineUpdate {
 			if let update = updates[documentID] {
 				return update
 			} else {
-				let update = CloudKitOutlineUpdate(documentID: documentID)
+				let update = CloudKitOutlineUpdate(documentID: documentID, zoneID: zoneID)
 				updates[documentID] = update
 				return update
 			}
@@ -37,10 +37,10 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 			guard let entityID = EntityID(description: deletedRecordKey.recordID.recordName) else { continue }
 			switch entityID {
 			case .document:
-				update(for: entityID).isDelete = true
+				update(for: entityID, zoneID: deletedRecordKey.recordID.zoneID).isDelete = true
 			case .row(let accountID, let documentUUID, _):
 				let documentID = EntityID.document(accountID, documentUUID)
-				update(for: documentID).deleteRowRecordIDs.append(entityID)
+				update(for: documentID, zoneID: deletedRecordKey.recordID.zoneID).deleteRowRecordIDs.append(entityID)
 			default:
 				assertionFailure("Unknown record type: \(deletedRecordKey.recordType)")
 			}
@@ -50,10 +50,10 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 			guard let entityID = EntityID(description: changedRecord.recordID.recordName) else { continue }
 			switch entityID {
 			case .document:
-				update(for: entityID).saveOutlineRecord = changedRecord
+				update(for: entityID, zoneID: changedRecord.recordID.zoneID).saveOutlineRecord = changedRecord
 			case .row(let accountID, let documentUUID, _):
 				let documentID = EntityID.document(accountID, documentUUID)
-				update(for: documentID).saveRowRecords.append(changedRecord)
+				update(for: documentID, zoneID: changedRecord.recordID.zoneID).saveRowRecords.append(changedRecord)
 			default:
 				assertionFailure("Unknown record type: \(changedRecord.recordType)")
 			}

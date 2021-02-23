@@ -11,14 +11,16 @@ import CloudKit
 class CloudKitOutlineUpdate {
 	
 	var documentID: EntityID
+	var zoneID: CKRecordZone.ID
 	var isDelete = false
 	
 	var saveOutlineRecord: CKRecord?
 	var deleteRowRecordIDs = [EntityID]()
 	var saveRowRecords = [CKRecord]()
 	
-	init(documentID: EntityID) {
+	init(documentID: EntityID, zoneID: CKRecordZone.ID) {
 		self.documentID = documentID
+		self.zoneID = zoneID
 	}
 	
 }

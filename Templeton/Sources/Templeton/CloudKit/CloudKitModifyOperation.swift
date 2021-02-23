@@ -48,6 +48,8 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 			let outlineRecordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
 			let outlineRecordRef = CKRecord.Reference(recordID: outlineRecordID, action: .deleteSelf)
 
+			outline.load()
+			
 			for rowRequest in documentRowRequest {
 				if let row = outline.findRow(id: rowRequest.id) {
 					addSave(zoneID: zoneID, outlineRecordRef: outlineRecordRef, row: row)
@@ -55,6 +57,8 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 					addDeleteRow(rowRequest)
 				}
 			}
+			
+			outline.suspend()
 		}
 		
 		// Send the grouped changes
