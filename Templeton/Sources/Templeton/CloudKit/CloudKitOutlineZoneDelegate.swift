@@ -26,6 +26,8 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 			switch deletedRecordKey.recordType {
 			case CloudKitOutlineZone.CloudKitOutline.recordType:
 				update(for: deletedRecordKey.recordID).isDelete = true
+			case CloudKitOutlineZone.CloudKitRow.recordType:
+				update(for: deletedRecordKey.recordID).deleteRowRecordIDs.append(deletedRecordKey.recordID)
 			default:
 				assertionFailure("Unknown record type: \(deletedRecordKey.recordType)")
 			}
@@ -35,6 +37,8 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 			switch changedRecord.recordType {
 			case CloudKitOutlineZone.CloudKitOutline.recordType:
 				update(for: changedRecord.recordID).saveOutlineRecord = changedRecord
+			case CloudKitOutlineZone.CloudKitRow.recordType:
+				update(for: changedRecord.recordID).saveRowRecords.append(changedRecord)
 			default:
 				assertionFailure("Unknown record type: \(changedRecord.recordType)")
 			}

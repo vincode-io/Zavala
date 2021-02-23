@@ -14,7 +14,7 @@ class CloudKitOutlineUpdate {
 	var isDelete = false
 	
 	var saveOutlineRecord: CKRecord?
-	var deleteOutlineRecordIDs = [CKRecord.ID]()
+	var deleteRowRecordIDs = [CKRecord.ID]()
 	var saveRowRecords = [CKRecord]()
 	
 	init(recordID: CKRecord.ID) {

@@ -1256,13 +1256,25 @@ extension Outline {
 		if let record = update.saveOutlineRecord {
 			applyOutlineRecord(record)
 		}
+		
+		for deleteRecordID in update.deleteRowRecordIDs {
+			let entityID = EntityID.row(id.accountID, id.documentUUID, deleteRecordID.recordName)
+			keyedRows?.removeValue(forKey: entityID)
+		}
+		
+		// TODO: process saves
+		
+		let changes = rebuildShadowTable()
+		outlineElementsDidChange(changes)
 	}
 	
 	private func applyOutlineRecord(_ record: CKRecord) {
 		let newTitle = record[CloudKitOutlineZone.CloudKitOutline.Fields.title] as? String
 		if title != newTitle {
 			title = newTitle
-			outlineElementsDidChange(OutlineElementChanges(section: .title, reloads: Set([0])))
+			if beingViewedCount > 0 {
+				outlineElementsDidChange(OutlineElementChanges(section: .title, reloads: Set([0])))
+			}
 		}
 
 		ownerName = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerName]
