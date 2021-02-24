@@ -730,18 +730,45 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 		
-		var changes = rebuildShadowTable()
-		
-		var reloads = Set<Int>()
-		if let reload = afterRow?.shadowTableIndex {
-			reloads.insert(reload)
+		guard rows.count == 1 else {
+			var changes = rebuildShadowTable()
+			
+			var reloads = Set<Int>()
+			if let reload = afterRow?.shadowTableIndex {
+				reloads.insert(reload)
+			}
+			changes.append(OutlineElementChanges(reloads: reloads))
+			
+			outlineElementsDidChange(changes)
+			
+			let inserts = Array(changes.inserts ?? Set<Int>()).sorted()
+			return inserts.count > 0 ? inserts[0] : nil
 		}
-		changes.append(OutlineElementChanges(reloads: reloads))
+				
+		let rowShadowTableIndex: Int
+		if let afterRowShadowTableIndex = afterRow?.shadowTableIndex {
+			rowShadowTableIndex = afterRowShadowTableIndex + 1
+		} else {
+			if prefersEnd {
+				rowShadowTableIndex = shadowTable?.count ?? 0
+			} else {
+				rowShadowTableIndex = 0
+			}
+		}
 		
+		var reloads = [Int]()
+		if let reload = afterRow?.shadowTableIndex {
+			reloads.append(reload)
+		}
+
+		let inserts = [rowShadowTableIndex]
+		shadowTable?.insert(rows[0], at: rowShadowTableIndex)
+		
+		resetShadowTableIndexes(startingAt: afterRow?.shadowTableIndex ?? 0)
+		let changes = OutlineElementChanges(inserts: Set(inserts), reloads: Set(reloads))
 		outlineElementsDidChange(changes)
-		
-		let inserts = Array(changes.inserts ?? Set<Int>()).sorted()
-		return inserts.count > 0 ? inserts[0] : nil
+
+		return inserts[0]
 	}
 	
 	func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) -> Int? {
