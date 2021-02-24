@@ -1244,6 +1244,7 @@ extension Outline {
 		}
 		
 		var reloads = [EntityID]()
+		var completeFlipRows = [Row]()
 		
 		for saveRowRecord in update.saveRowRecords {
 			guard let entityID = EntityID(description: saveRowRecord.recordID.recordName) else { continue }
@@ -1256,20 +1257,34 @@ extension Outline {
 				textRow = TextRow(id: entityID)
 			}
 			
+			let row = Row.text(textRow)
+			
 			textRow.topicData = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.topicData] as? Data
 			textRow.noteData = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.noteData] as? Data
 			
-			let isComplete = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] as? String
-			textRow.isComplete = isComplete == "1" ? true : false
+			let isComplete = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] as? String == "1" ? true : false
+			if textRow.isComplete != isComplete {
+				textRow.isComplete = isComplete
+				completeFlipRows.append(row)
+			}
 			
 			let rowOrder = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] as? [String]
 			textRow.rowOrder = rowOrder?.map { EntityID.row(id.accountID, id.documentUUID, $0) } ?? [EntityID]()
 			
-			keyedRows?[entityID] = .text(textRow)
+			keyedRows?[entityID] = row
 		}
 		
 		guard beingViewedCount > 0 else { return }
 
+		func reloadVisitor(_ visited: Row) {
+			reloads.append(visited.id)
+			visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
+		}
+
+		for completeFlipRow in completeFlipRows {
+			completeFlipRow.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+		}
+		
 		var changes = rebuildShadowTable()
 		let reloadIndexes = reloads.compactMap { keyedRows?[$0]?.shadowTableIndex }
 		changes.append(OutlineElementChanges(reloads: Set(reloadIndexes)))
