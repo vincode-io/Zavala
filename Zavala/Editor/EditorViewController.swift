@@ -1387,13 +1387,15 @@ extension EditorViewController {
 				let itemProvider = UIPasteboard.general.itemProviders[index]
 				group.enter()
 				itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
-					if let data = data {
-						do {
-							rows.append(try Row(from: data))
-							group.leave()
-						} catch {
-							self?.presentError(error)
-							group.leave()
+					DispatchQueue.main.async {
+						if let data = data {
+							do {
+								rows.append(try Row(from: data))
+								group.leave()
+							} catch {
+								self?.presentError(error)
+								group.leave()
+							}
 						}
 					}
 				}
