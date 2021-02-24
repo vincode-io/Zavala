@@ -99,7 +99,11 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	// MARK: Actions
 	
 	@objc func sync() {
-		(splitViewController as? MainSplitViewController)?.sync(self)
+		if AccountManager.shared.isSyncAvailable {
+			(splitViewController as? MainSplitViewController)?.sync(self)
+		} else {
+			collectionView?.refreshControl?.endRefreshing()
+		}
 	}
 	
 	@IBAction func showSettings(_ sender: Any) {

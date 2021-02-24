@@ -127,7 +127,11 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	// MARK: Actions
 	
 	@objc func sync() {
-		(splitViewController as? MainSplitViewController)?.sync(self)
+		if AccountManager.shared.isSyncAvailable {
+			(splitViewController as? MainSplitViewController)?.sync(self)
+		} else {
+			collectionView?.refreshControl?.endRefreshing()
+		}
 	}
 	
 	@objc func createOutline(_ sender: Any?) {

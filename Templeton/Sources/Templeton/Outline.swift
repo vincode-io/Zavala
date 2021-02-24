@@ -1344,7 +1344,11 @@ extension Outline {
 		
 		for row in rows {
 			if isComplete != row.isComplete ?? false {
-				row.textRow?.isComplete = isComplete
+				if isComplete {
+					row.textRow?.complete()
+				} else {
+					row.textRow?.uncomplete()
+				}
 				impacted.append(row)
 			}
 		}

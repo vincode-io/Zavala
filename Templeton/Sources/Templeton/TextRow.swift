@@ -20,13 +20,7 @@ public struct TextRowStrings {
 
 public final class TextRow: BaseRow, Codable {
 
-	public var isComplete: Bool? {
-		didSet {
-			if isComplete != oldValue {
-				outline?.requestCloudKitUpdate(for: id)
-			}
-		}
-	}
+	public internal(set) var isComplete: Bool?
 
 	public var isNoteEmpty: Bool {
 		return notePlainText == nil
@@ -186,6 +180,16 @@ public final class TextRow: BaseRow, Codable {
 		}
 		
 		return .text(result)
+	}
+	
+	public func complete() {
+		isComplete = true
+		outline?.requestCloudKitUpdate(for: id)
+	}
+	
+	public func uncomplete() {
+		isComplete = false
+		outline?.requestCloudKitUpdate(for: id)
 	}
 	
 	public override func markdown(indentLevel: Int = 0) -> String {

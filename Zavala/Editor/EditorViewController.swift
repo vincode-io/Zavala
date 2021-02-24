@@ -457,7 +457,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	// MARK: Actions
 	
 	@objc func sync() {
-		(splitViewController as? MainSplitViewController)?.sync(self)
+		if AccountManager.shared.isSyncAvailable {
+			(splitViewController as? MainSplitViewController)?.sync(self)
+		} else {
+			collectionView?.refreshControl?.endRefreshing()
+		}
 	}
 	
 	@objc func toggleOutlineFilter(_ sender: Any?) {
