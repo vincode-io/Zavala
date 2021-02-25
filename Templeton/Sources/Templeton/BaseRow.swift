@@ -114,7 +114,7 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		outline?.requestCloudKitUpdates(for: [id, row.id])
 	}
 
-	public func clone() -> Row {
+	public func clone(newOutlineID: EntityID) -> Row {
 		fatalError("clone not implemented")
 	}
 	

@@ -171,12 +171,12 @@ public final class TextRow: BaseRow, Codable {
 		try container.encode(rowOrder, forKey: .rowOrder)
 	}
 	
-	public override func clone() -> Row {
-		let id = EntityID.row(self.id.accountID, self.id.documentUUID, UUID().uuidString)
+	public override func clone(newOutlineID: EntityID) -> Row {
+		let id = EntityID.row(newOutlineID.accountID, newOutlineID.documentUUID, UUID().uuidString)
 		let result = TextRow(id: id, topicData: topicData, noteData: noteData, isComplete: isComplete, isExpanded: isExpanded)
 		
 		for row in rows {
-			result.appendRow(row.clone())
+			result.appendRow(row.clone(newOutlineID: newOutlineID))
 		}
 		
 		return .text(result)

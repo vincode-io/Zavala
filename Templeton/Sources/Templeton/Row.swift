@@ -145,8 +145,8 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
-	public func clone() -> Row {
-		associatedRow.clone()
+	public func clone(newOutlineID: EntityID) -> Row {
+		associatedRow.clone(newOutlineID: newOutlineID)
 	}
 	
 	public func reassignAccount(_ accountID: Int) {

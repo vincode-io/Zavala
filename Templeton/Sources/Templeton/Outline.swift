@@ -687,7 +687,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		var createRows: [Row]
 		if copy {
-			createRows = rows.map { $0.clone() }
+			createRows = rows.map { $0.clone(newOutlineID: id) }
 		} else {
 			createRows = rows
 		}
