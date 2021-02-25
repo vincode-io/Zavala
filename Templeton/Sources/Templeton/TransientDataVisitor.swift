@@ -25,7 +25,7 @@ class TransientDataVisitor {
 		// Add to the Shadow Table if we haven't hit a collapsed entry
 		if addingToShadowTable {
 			
-			let shouldFilter = isFiltered && visited.isComplete ?? false
+			let shouldFilter = isFiltered && visited.isComplete
 			
 			if shouldFilter {
 				mutatingVisited.shadowTableIndex = nil
@@ -34,7 +34,7 @@ class TransientDataVisitor {
 				shadowTable.append(visited)
 			}
 			
-			if !(visited.isExpanded ?? true) || shouldFilter {
+			if !visited.isExpanded || shouldFilter {
 				addingToShadowTable = false
 				addingToShadowTableSuspended = true
 			}

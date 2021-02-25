@@ -13,16 +13,11 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 	public var shadowTableIndex: Int?
 
 	public var id: EntityID
-	public var isExpanded: Bool?
+	public var isExpanded: Bool
 	public internal(set) var rows: [Row] {
 		get {
 			guard let outline = self.outline else { return [Row]() }
-			
-			if let rowOrder = rowOrder {
-				return rowOrder.compactMap { outline.keyedRows?[$0] }
-			} else {
-				return [Row]()
-			}
+			return rowOrder.compactMap { outline.keyedRows?[$0] }
 		}
 		set {
 			guard let outline = self.outline else { return }
@@ -30,7 +25,7 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 			outline.beginCloudKitBatchRequest()
 			outline.requestCloudKitUpdate(for: id)
 			
-			for id in rowOrder ?? [EntityID]() {
+			for id in rowOrder {
 				outline.keyedRows?.removeValue(forKey: id)
 				outline.requestCloudKitUpdate(for: id)
 			}
@@ -48,7 +43,7 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 	}
 	
 	public var rowCount: Int {
-		return rowOrder?.count ?? 0
+		return rowOrder.count
 	}
 
 	public var account: Account? {
@@ -63,52 +58,46 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		return nil
 	}
 	
-	var rowOrder: [EntityID]?
+	var rowOrder: [EntityID]
 
 	public override init() {
 		self.id = .row(0, "", "")
+		self.isExpanded = true
+		self.rowOrder = [EntityID]()
 	}
 	
 	func reassignAccount(_ accountID: Int) {
 		self.id = .row(accountID, id.documentUUID, id.rowUUID)
 		var newOrder = [EntityID]()
-		for row in rowOrder ?? [EntityID]() {
+		for row in rowOrder {
 			newOrder.append(.row(accountID, row.documentUUID, row.rowUUID))
 		}
 		rowOrder = newOrder
 	}
 	
 	public func firstIndexOfRow(_ row: Row) -> Int? {
-		return rowOrder?.firstIndex(of: row.id)
+		return rowOrder.firstIndex(of: row.id)
 	}
 	
 	public func containsRow(_ row: Row) -> Bool {
-		return rowOrder?.contains(row.id) ?? false
+		return rowOrder.contains(row.id)
 	}
 	
 	public func insertRow(_ row: Row, at: Int) {
-		if rowOrder == nil {
-			rowOrder = [EntityID]()
-		}
-		
-		rowOrder?.insert(row.id, at: at)
+		rowOrder.insert(row.id, at: at)
 		outline?.keyedRows?[row.id] = row
 
 		outline?.requestCloudKitUpdates(for: [id, row.id])
 	}
 
 	public func removeRow(_ row: Row) {
-		rowOrder?.removeFirst(object: row.id)
+		rowOrder.removeFirst(object: row.id)
 		outline?.keyedRows?.removeValue(forKey: row.id)
 		outline?.requestCloudKitUpdates(for: [id, row.id])
 	}
 
 	public func appendRow(_ row: Row) {
-		if rowOrder == nil {
-			rowOrder = [EntityID]()
-		}
-		
-		rowOrder?.append(row.id)
+		rowOrder.append(row.id)
 		outline?.keyedRows?[row.id] = row
 
 		outline?.requestCloudKitUpdates(for: [id, row.id])

@@ -20,7 +20,7 @@ public struct TextRowStrings {
 
 public final class TextRow: BaseRow, Codable {
 
-	public internal(set) var isComplete: Bool?
+	public internal(set) var isComplete: Bool
 
 	public var isNoteEmpty: Bool {
 		return notePlainText == nil
@@ -123,20 +123,25 @@ public final class TextRow: BaseRow, Codable {
 	private var _note: NSAttributedString?
 
 	public init(document: Document) {
+		self.isComplete = false
 		super.init()
 		self.id = .row(document.id.accountID, document.id.documentUUID, UUID().uuidString)
+		self.isExpanded = true
 	}
 
 	public init(document: Document, topicPlainText: String, notePlainText: String? = nil) {
+		self.isComplete = false
 		super.init()
 		self.id = .row(document.id.accountID, document.id.documentUUID, UUID().uuidString)
+		self.isExpanded = true
 		topic = NSAttributedString(markdownRepresentation: topicPlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		if let notePlainText = notePlainText {
 			note = NSAttributedString(markdownRepresentation: notePlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		}
 	}
 	
-	internal init(id: EntityID, topicData: Data? = nil, noteData: Data? = nil, isComplete: Bool?, isExpanded: Bool?) {
+	internal init(id: EntityID, topicData: Data? = nil, noteData: Data? = nil, isComplete: Bool, isExpanded: Bool) {
+		self.isComplete = false
 		super.init()
 		self.id = id
 		self.topicData = topicData
@@ -146,19 +151,38 @@ public final class TextRow: BaseRow, Codable {
 	}
 	
 	public init(from decoder: Decoder) throws {
-		super.init()
 		let container = try decoder.container(keyedBy: CodingKeys.self)
+		
+		if let isComplete = try? container.decode(Bool.self, forKey: .isComplete) {
+			self.isComplete = isComplete
+		} else {
+			self.isComplete = false
+		}
+
+		super.init()
+
 		id = try container.decode(EntityID.self, forKey: .id)
 		topicData = try? container.decode(Data.self, forKey: .topicData)
 		noteData = try? container.decode(Data.self, forKey: .noteData)
-		isExpanded = try? container.decode(Bool.self, forKey: .isExpanded)
-		isComplete = try? container.decode(Bool.self, forKey: .isComplete)
-		rowOrder = try? container.decode([EntityID].self, forKey: .rowOrder)
+
+		if let isExpanded = try? container.decode(Bool.self, forKey: .isExpanded) {
+			self.isExpanded = isExpanded
+		} else {
+			self.isExpanded = true
+		}
+		
+		if let rowOrder = try? container.decode([EntityID].self, forKey: .rowOrder) {
+			self.rowOrder = rowOrder
+		} else {
+			self.rowOrder = [EntityID]()
+		}
 	}
 	
 	init(id: EntityID) {
+		self.isComplete = false
 		super.init()
 		self.id = id
+		self.isExpanded = true
 	}
 	
 	public func encode(to encoder: Encoder) throws {
@@ -217,7 +241,7 @@ public final class TextRow: BaseRow, Codable {
 			opml.append(" _note=\"\(escapedNote)\"")
 		}
 
-		if isComplete ?? false {
+		if isComplete {
 			opml.append(" _status=\"checked\"")
 		}
 		

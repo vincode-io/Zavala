@@ -394,12 +394,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			if let index = visited.shadowTableIndex {
 				children.append(index)
 			}
-			if visited.isExpanded ?? true {
+			if visited.isExpanded {
 				visited.rows.forEach { $0.visit(visitor: childrenVisitor) }
 			}
 		}
 
-		if row.isExpanded ?? true {
+		if row.isExpanded {
 			row.rows.forEach { $0.visit(visitor: childrenVisitor(_:)) }
 		}
 		
@@ -998,13 +998,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			if let index = visited.shadowTableIndex {
 				reloads.insert(index)
 			}
-			if visited.isExpanded ?? true {
+			if visited.isExpanded {
 				visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
 			}
 		}
 
 		for row in impacted {
-			if row.isExpanded ?? true {
+			if row.isExpanded {
 				row.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 			}
 		}
@@ -1380,7 +1380,7 @@ extension Outline {
 		var impacted = [Row]()
 		
 		for row in rows {
-			if isComplete != row.isComplete ?? false {
+			if isComplete != row.isComplete {
 				if isComplete {
 					row.textRow?.complete()
 				} else {
@@ -1413,12 +1413,12 @@ extension Outline {
 					if let index = visited.shadowTableIndex {
 						reloads.insert(index)
 					}
-					if visited.isExpanded ?? true {
+					if visited.isExpanded {
 						visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
 					}
 				}
 
-				if row.isExpanded ?? true {
+				if row.isExpanded {
 					row.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 				}
 			}
@@ -1467,7 +1467,7 @@ extension Outline {
 		var impacted = [Row]()
 		
 		for row in rows {
-			if isExpanded != row.isExpanded ?? true {
+			if isExpanded != row.isExpanded {
 				var mutatingRow = row
 				mutatingRow.isExpanded = isExpanded
 				impacted.append(mutatingRow)
@@ -1486,7 +1486,7 @@ extension Outline {
 	}
 	
 	private func expand(row: Row) {
-		guard !(row.isExpanded ?? true), let rowShadowTableIndex = row.shadowTableIndex else { return }
+		guard !row.isExpanded, let rowShadowTableIndex = row.shadowTableIndex else { return }
 		
 		var mutatingRow = row
 		mutatingRow.isExpanded = true
@@ -1496,12 +1496,12 @@ extension Outline {
 		var shadowTableInserts = [Row]()
 
 		func visitor(_ visited: Row) {
-			let shouldFilter = isFiltered ?? false && visited.isComplete ?? false
+			let shouldFilter = isFiltered ?? false && visited.isComplete
 			
 			if !shouldFilter {
 				shadowTableInserts.append(visited)
 
-				if visited.isExpanded ?? true {
+				if visited.isExpanded {
 					visited.rows.forEach {
 						$0.visit(visitor: visitor)
 					}
@@ -1560,7 +1560,7 @@ extension Outline {
 	}
 	
 	private func collapse(row: Row)  {
-		guard row.isExpanded ?? true else { return  }
+		guard row.isExpanded else { return  }
 
 		var mutatingRow = row
 		mutatingRow.isExpanded = false
@@ -1574,7 +1574,7 @@ extension Outline {
 				reloads.insert(shadowTableIndex)
 			}
 
-			if visited.isExpanded ?? true {
+			if visited.isExpanded {
 				visited.rows.forEach {
 					$0.visit(visitor: visitor)
 				}
@@ -1654,12 +1654,12 @@ extension Outline {
 				if let index = visited.shadowTableIndex {
 					reloads.insert(index)
 				}
-				if visited.isExpanded ?? true {
+				if visited.isExpanded {
 					visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
 				}
 			}
 
-			if row.isExpanded ?? true {
+			if row.isExpanded {
 				row.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
 			}
 		}

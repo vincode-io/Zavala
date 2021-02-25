@@ -156,8 +156,8 @@ extension CloudKitModifyOperation {
 		record[CloudKitOutlineZone.CloudKitRow.Fields.subtype] = "text"
 		record[CloudKitOutlineZone.CloudKitRow.Fields.topicData] = textRow.topicData
 		record[CloudKitOutlineZone.CloudKitRow.Fields.noteData] = textRow.noteData
-		record[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] = textRow.isComplete ?? false ? "1" : "0"
-		record[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] = textRow.rowOrder?.map { $0.rowUUID }
+		record[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] = textRow.isComplete ? "1" : "0"
+		record[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] = textRow.rowOrder.map { $0.rowUUID }
 
 		addSave(zoneID, record)
 	}

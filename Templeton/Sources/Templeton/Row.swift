@@ -40,7 +40,7 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
-	public var isExpanded: Bool? {
+	public var isExpanded: Bool {
 		get {
 			associatedRow.isExpanded
 		}
@@ -49,15 +49,15 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
-	public var isComplete: Bool? {
+	public var isComplete: Bool {
 		get {
-			textRow?.isComplete
+			textRow!.isComplete
 		}
 	}
 	
 	public var isAncestorComplete: Bool {
 		if let parentRow = parent as? Row {
-			return parentRow.isComplete ?? false || parentRow.isAncestorComplete
+			return parentRow.isComplete || parentRow.isAncestorComplete
 		}
 		return false
 	}
@@ -74,22 +74,22 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 	
 	public var isExpandable: Bool {
 		guard rowCount > 0 else { return false }
-		return !(isExpanded ?? true)
+		return !isExpanded
 	}
 
 	public var isCollapsable: Bool {
 		guard rowCount > 0 else { return false }
-		return isExpanded ?? true
+		return isExpanded
 	}
 	
 	public var isCompletable: Bool {
 		guard let textRow = textRow else { return false }
-		return !(textRow.isComplete ?? false)
+		return !textRow.isComplete
 	}
 	
 	public var isUncompletable: Bool {
 		guard let textRow = textRow else { return false }
-		return textRow.isComplete ?? false
+		return textRow.isComplete
 	}
 	
 	public var rows: [Row] {

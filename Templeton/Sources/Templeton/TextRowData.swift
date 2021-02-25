@@ -12,8 +12,8 @@ struct TextRowData: Codable {
 	private var id: EntityID
 	private var topicData: Data?
 	private var noteData: Data?
-	private var isExpanded: Bool?
-	private var isComplete: Bool?
+	private var isExpanded: Bool
+	private var isComplete: Bool
 	private var rowDatas: [RowData]?
 
 	var textRow: TextRow {
