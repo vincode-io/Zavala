@@ -55,6 +55,15 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
+	public var rowOrder: [EntityID] {
+		get {
+			associatedRow.rowOrder
+		}
+		set {
+			associatedRow.rowOrder = newValue
+		}
+	}
+	
 	public var isAncestorComplete: Bool {
 		if let parentRow = parent as? Row {
 			return parentRow.isComplete || parentRow.isAncestorComplete
@@ -125,12 +134,6 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		case type
 		case textRow
 	}
-	
-	public init(from data: Data) throws {
-		let decoder = PropertyListDecoder()
-		let rowData = try decoder.decode(RowData.self, from: data)
-		self = rowData.row
-	}
 
 	public init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -185,12 +188,6 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		associatedRow.appendRow(row)
 	}
 	
-	public func asData() throws -> Data {
-		let encoder = PropertyListEncoder()
-		encoder.outputFormat = .binary
-		return try encoder.encode(RowData(row: self))
-	}
-
 	public func isDecendent(_ row: Row) -> Bool {
 		if let parentRow = parent as? Row, parentRow.id == row.id || parentRow.isDecendent(row) {
 			return true

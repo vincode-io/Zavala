@@ -16,19 +16,21 @@ public final class PasteRowCommand: OutlineCommand {
 	public var cursorCoordinates: CursorCoordinates?
 	
 	public var outline: Outline
+	var rowGroups: [RowGroup]
 	var rows: [Row]
 	var afterRow: Row?
 	
 	public init(undoManager: UndoManager,
 		 delegate: OutlineCommandDelegate,
 		 outline: Outline,
-		 rows: [Row],
+		 rowGroups: [RowGroup],
 		 afterRow: Row?) {
 		
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.rows = rows
+		self.rowGroups = rowGroups
+		self.rows = [Row]()
 		self.afterRow = afterRow
 		self.undoActionName = L10n.paste
 		self.redoActionName = L10n.paste
@@ -36,12 +38,28 @@ public final class PasteRowCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		outline.createRows(rows, afterRow: afterRow, prefersEnd: true, copy: true)
+		
+		var newRows = [Row]()
+		for rowGroup in rowGroups {
+			let newRow = rowGroup.attach(to: outline)
+			newRows.append(newRow)
+		}
+		rows = newRows
+		
+		outline.createRows(rows, afterRow: afterRow, prefersEnd: true)
 		registerUndo()
 	}
 	
 	public func undo() {
-		outline.deleteRows(rows)
+		var allRows = [Row]()
+		
+		func deleteVisitor(_ visited: Row) {
+			allRows.append(visited)
+			visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
+		}
+		rows.forEach { $0.visit(visitor: deleteVisitor(_:)) }
+		
+		outline.deleteRows(allRows)
 		registerRedo()
 		restoreCursorPosition()
 	}

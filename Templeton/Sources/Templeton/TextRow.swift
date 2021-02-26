@@ -140,7 +140,7 @@ public final class TextRow: BaseRow, Codable {
 		}
 	}
 	
-	internal init(id: EntityID, topicData: Data? = nil, noteData: Data? = nil, isComplete: Bool, isExpanded: Bool) {
+	internal init(id: EntityID, topicData: Data? = nil, noteData: Data? = nil, isComplete: Bool, isExpanded: Bool, rowOrder: [EntityID]) {
 		self.isComplete = false
 		super.init()
 		self.id = id
@@ -148,6 +148,7 @@ public final class TextRow: BaseRow, Codable {
 		self.noteData = noteData
 		self.isComplete = isComplete
 		self.isExpanded = isExpanded
+		self.rowOrder = rowOrder
 	}
 	
 	public init(from decoder: Decoder) throws {
@@ -197,12 +198,7 @@ public final class TextRow: BaseRow, Codable {
 	
 	public override func clone(newOutlineID: EntityID) -> Row {
 		let id = EntityID.row(newOutlineID.accountID, newOutlineID.documentUUID, UUID().uuidString)
-		let result = TextRow(id: id, topicData: topicData, noteData: noteData, isComplete: isComplete, isExpanded: isExpanded)
-		
-		for row in rows {
-			result.appendRow(row.clone(newOutlineID: newOutlineID))
-		}
-		
+		let result = TextRow(id: id, topicData: topicData, noteData: noteData, isComplete: isComplete, isExpanded: isExpanded, rowOrder: rowOrder)
 		return .text(result)
 	}
 	

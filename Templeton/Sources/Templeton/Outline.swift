@@ -762,23 +762,15 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return inserts[0]
 	}
 
-	
 	@discardableResult
-	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil, prefersEnd: Bool = false, copy: Bool = false) -> Int? {
+	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil, prefersEnd: Bool = false) -> Int? {
 		beginCloudKitBatchRequest()
 		
 		if let afterTextRow = afterRow?.textRow, let texts = textRowStrings {
 			afterTextRow.textRowStrings = texts
 		}
-		
-		var createRows: [Row]
-		if copy {
-			createRows = rows.map { $0.clone(newOutlineID: id) }
-		} else {
-			createRows = rows
-		}
 
-		for row in createRows.sortedByReverseDisplayOrder() {
+		for row in rows.sortedByReverseDisplayOrder() {
 			if afterRow == nil {
 				if prefersEnd {
 					appendRow(row)

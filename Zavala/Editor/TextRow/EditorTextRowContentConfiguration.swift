@@ -31,7 +31,7 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 		
 		self.id = row.id
 		self.isChevronShowing = row.rowCount > 0
-		self.isComplete = row.isComplete ?? false
+		self.isComplete = row.isComplete
 		self.isAncestorComplete = row.isAncestorComplete
 		if let textRow = row.textRow {
 			self.topic = textRow.topic

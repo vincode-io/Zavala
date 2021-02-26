@@ -190,14 +190,14 @@ extension EditorViewController {
 		guard !itemProviders.isEmpty else { return }
 
 		let group = DispatchGroup()
-		var rows = [Row]()
+		var rowGroups = [RowGroup]()
 		
 		for itemProvider in itemProviders {
 			group.enter()
 			itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
 				if let data = data {
 					do {
-						rows.append(try Row(from: data))
+						rowGroups.append(try RowGroup.fromData(data))
 						group.leave()
 					} catch {
 						self?.presentError(error)
@@ -208,7 +208,7 @@ extension EditorViewController {
 		}
 
 		group.notify(queue: DispatchQueue.main) {
-			self.remoteRowDrop(coordinator: coordinator, rows: rows, targetIndexPath: targetIndexPath)
+			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, targetIndexPath: targetIndexPath)
 		}
 	}
 
@@ -241,60 +241,59 @@ extension EditorViewController {
 			let text = texts.joined(separator: "\n")
 			guard !text.isEmpty else { return }
 			
-			var rows = [Row]()
+			var rowGroups = [RowGroup]()
 			let textRows = text.split(separator: "\n").map { String($0) }
 			for textRow in textRows {
 				let row = Row.text(TextRow(document: .outline(outline), topicPlainText: textRow.trimmingWhitespace))
-				rows.append(row)
+				rowGroups.append(RowGroup(row))
 			}
 			
-			self.remoteRowDrop(coordinator: coordinator, rows: rows, targetIndexPath: targetIndexPath)
+			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, targetIndexPath: targetIndexPath)
 		}
 	}
 	
-	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], targetIndexPath: IndexPath?) {
-		guard !rows.isEmpty, let outline = self.outline, let shadowTable = outline.shadowTable else { return }
+	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], targetIndexPath: IndexPath?) {
+		guard !rowGroups.isEmpty, let outline = self.outline, let shadowTable = outline.shadowTable else { return }
 
 		// Dropping into a Row is easy peasy
 		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = targetIndexPath {
 			let newParent = shadowTable[dropInIndexPath.row]
 			
 			// We only have to set the parent for dropping into.  Otherwise Templeton figures it out on its own.
-			rows.forEach { row in
-				var mutableRow = row
-				mutableRow.parent = newParent
+			rowGroups.forEach { rowGroup in
+				rowGroup.row.parent = newParent
 			}
 			
-			self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: newParent)
+			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: newParent)
 			return
 		}
 		
 		// Drop into the first entry in the Outline
 		if targetIndexPath == IndexPath(row: 0, section: Outline.Section.rows.rawValue) {
-			self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
+			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: nil)
 			return
 		}
 		
 		// If we don't have a destination index, drop it at the back
 		guard let targetIndexPath = targetIndexPath else {
-			self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil, prefersEnd: true)
+			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: nil, prefersEnd: true)
 			return
 		}
 
 		if shadowTable.count > 0 && targetIndexPath.row > 0 {
-			self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: shadowTable[targetIndexPath.row - 1])
+			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: shadowTable[targetIndexPath.row - 1])
 		} else {
-			self.remoteRowDrop(coordinator: coordinator, rows: rows, afterRow: nil)
+			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: nil)
 		}
 	}
 	
-	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], afterRow: Row?, prefersEnd: Bool = false) {
+	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], afterRow: Row?, prefersEnd: Bool = false) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = RemoteDropRowCommand(undoManager: undoManager,
 										   delegate: self,
 										   outline: outline,
-										   rows: rows,
+										   rowGroups: rowGroups,
 										   afterRow: afterRow,
 										   prefersEnd: prefersEnd)
 		

@@ -1371,7 +1371,7 @@ extension EditorViewController {
 			
 			itemProvider.registerDataRepresentation(forTypeIdentifier: Row.typeIdentifier, visibility: .ownProcess) { completion in
 				do {
-					let data = try row.asData()
+					let data = try RowGroup(row).asData()
 					completion(data, nil)
 				} catch {
 					completion(nil, error)
@@ -1390,7 +1390,7 @@ extension EditorViewController {
 
 		if let rowProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [Row.typeIdentifier]), !rowProviderIndexes.isEmpty {
 			let group = DispatchGroup()
-			var rows = [Row]()
+			var rowGroups = [RowGroup]()
 			
 			for index in rowProviderIndexes {
 				let itemProvider = UIPasteboard.general.itemProviders[index]
@@ -1399,7 +1399,7 @@ extension EditorViewController {
 					DispatchQueue.main.async {
 						if let data = data {
 							do {
-								rows.append(try Row(from: data))
+								rowGroups.append(try RowGroup.fromData(data))
 								group.leave()
 							} catch {
 								self?.presentError(error)
@@ -1414,7 +1414,7 @@ extension EditorViewController {
 				let command = PasteRowCommand(undoManager: undoManager,
 											  delegate: self,
 											  outline: outline,
-											  rows: rows,
+											  rowGroups: rowGroups,
 											  afterRow: afterRows?.last)
 
 				self.runCommand(command)
@@ -1440,17 +1440,17 @@ extension EditorViewController {
 				let text = texts.joined(separator: "\n")
 				guard !text.isEmpty else { return }
 				
-				var rows = [Row]()
+				var rowGroups = [RowGroup]()
 				let textRows = text.split(separator: "\n").map { String($0) }
 				for textRow in textRows {
 					let row = Row.text(TextRow(document: .outline(outline), topicPlainText: textRow.trimmingWhitespace))
-					rows.append(row)
+					rowGroups.append(RowGroup(row))
 				}
 				
 				let command = PasteRowCommand(undoManager: undoManager,
 											  delegate: self,
 											  outline: outline,
-											  rows: rows,
+											  rowGroups: rowGroups,
 											  afterRow: afterRows?.last)
 
 				self.runCommand(command)

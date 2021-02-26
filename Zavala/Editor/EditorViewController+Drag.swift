@@ -39,7 +39,7 @@ extension EditorViewController: UICollectionViewDragDelegate {
 			
 			itemProvider.registerDataRepresentation(forTypeIdentifier: Row.typeIdentifier, visibility: .ownProcess) { completion in
 				do {
-					let data = try row.asData()
+					let data = try RowGroup(row).asData()
 					completion(data, nil)
 				} catch {
 					completion(nil, error)
