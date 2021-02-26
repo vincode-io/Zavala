@@ -36,7 +36,7 @@ public final class CreateRowAfterCommand: OutlineCommand {
 		if row == nil {
 			row = Row.text(TextRow(document: .outline(outline)))
 		}
-		newCursorIndex = outline.createRows([row!], afterRow: afterRow, textRowStrings: textRowStrings)
+		newCursorIndex = outline.createRow(row!, afterRow: afterRow, textRowStrings: textRowStrings)
 		registerUndo()
 	}
 	

@@ -677,6 +677,63 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return shadowTableIndex
 	}
 	
+	func createRow(_ row: Row, afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil) -> Int? {
+		beginCloudKitBatchRequest()
+		
+		if let afterTextRow = afterRow?.textRow, let texts = textRowStrings {
+			afterTextRow.textRowStrings = texts
+		}
+		
+		if afterRow == nil {
+			appendRow(row)
+			var mutatingRow = row
+			mutatingRow.parent = self
+		} else if afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
+			afterRow?.insertRow(row, at: 0)
+			var mutatingRow = row
+			mutatingRow.parent = afterRow
+		} else if let afterRow = afterRow, let parent = afterRow.parent {
+			let insertIndex = parent.firstIndexOfRow(afterRow) ?? -1
+			parent.insertRow(row, at: insertIndex + 1)
+			var mutatingRow = row
+			mutatingRow.parent = afterRow.parent
+		} else if let afterRow = afterRow {
+			let insertIndex = firstIndexOfRow(afterRow) ?? -1
+			insertRow(row, at: insertIndex + 1)
+			var mutatingRow = row
+			mutatingRow.parent = self
+		} else {
+			insertRow(row, at: 0)
+			var mutatingRow = row
+			mutatingRow.parent = self
+		}
+		
+		endCloudKitBatchRequest()
+		outlineBodyDidChange()
+			
+		let rowShadowTableIndex: Int
+		if let afterRowShadowTableIndex = afterRow?.shadowTableIndex {
+			rowShadowTableIndex = afterRowShadowTableIndex + 1
+		} else {
+			rowShadowTableIndex = shadowTable?.count ?? 0
+		}
+		
+		var reloads = [Int]()
+		if let reload = afterRow?.shadowTableIndex {
+			reloads.append(reload)
+		}
+
+		let inserts = [rowShadowTableIndex]
+		shadowTable?.insert(row, at: rowShadowTableIndex)
+		
+		resetShadowTableIndexes(startingAt: afterRow?.shadowTableIndex ?? 0)
+		let changes = OutlineElementChanges(inserts: Set(inserts), reloads: Set(reloads))
+		outlineElementsDidChange(changes)
+
+		return inserts[0]
+	}
+
+	
 	@discardableResult
 	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil, prefersEnd: Bool = false, copy: Bool = false) -> Int? {
 		beginCloudKitBatchRequest()
@@ -730,45 +787,18 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 		
-		guard rows.count == 1 else {
-			var changes = rebuildShadowTable()
-			
-			var reloads = Set<Int>()
-			if let reload = afterRow?.shadowTableIndex {
-				reloads.insert(reload)
-			}
-			changes.append(OutlineElementChanges(reloads: reloads))
-			
-			outlineElementsDidChange(changes)
-			
-			let inserts = Array(changes.inserts ?? Set<Int>()).sorted()
-			return inserts.count > 0 ? inserts[0] : nil
-		}
-				
-		let rowShadowTableIndex: Int
-		if let afterRowShadowTableIndex = afterRow?.shadowTableIndex {
-			rowShadowTableIndex = afterRowShadowTableIndex + 1
-		} else {
-			if prefersEnd {
-				rowShadowTableIndex = shadowTable?.count ?? 0
-			} else {
-				rowShadowTableIndex = 0
-			}
-		}
+		var changes = rebuildShadowTable()
 		
-		var reloads = [Int]()
+		var reloads = Set<Int>()
 		if let reload = afterRow?.shadowTableIndex {
-			reloads.append(reload)
+			reloads.insert(reload)
 		}
-
-		let inserts = [rowShadowTableIndex]
-		shadowTable?.insert(rows[0], at: rowShadowTableIndex)
+		changes.append(OutlineElementChanges(reloads: reloads))
 		
-		resetShadowTableIndexes(startingAt: afterRow?.shadowTableIndex ?? 0)
-		let changes = OutlineElementChanges(inserts: Set(inserts), reloads: Set(reloads))
 		outlineElementsDidChange(changes)
-
-		return inserts[0]
+		
+		let inserts = Array(changes.inserts ?? Set<Int>()).sorted()
+		return inserts.count > 0 ? inserts[0] : nil
 	}
 	
 	func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) -> Int? {
