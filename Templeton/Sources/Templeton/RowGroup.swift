@@ -59,6 +59,7 @@ public class RowGroup: Codable {
 		outline.endCloudKitBatchRequest()
 		
 		var newRow = row.clone(newOutlineID: outline.id)
+		newRow.parent = row.parent
 		var newRowRowOrder = [EntityID]()
 		for newRowOrder in newRow.rowOrder {
 			newRowRowOrder.append(idMap[newRowOrder]!)
