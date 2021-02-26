@@ -201,6 +201,35 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 	}
 	
+	public var isAnyRowCompleted: Bool {
+		var anyCompleted = false
+		
+		if let keyedRows = keyedRows {
+			for row in keyedRows.values {
+				if row.isComplete {
+					anyCompleted = true
+					break
+				}
+			}
+		}
+		
+		return anyCompleted
+	}
+	
+	public var allCompletedRows: [Row] {
+		var completedRows = [Row]()
+		
+		if let keyedRows = keyedRows {
+			for row in keyedRows.values {
+				if row.isComplete {
+					completedRows.append(row)
+				}
+			}
+		}
+
+		return completedRows
+	}
+	
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case title = "title"

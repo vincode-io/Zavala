@@ -50,6 +50,8 @@ internal enum L10n {
   internal static let cut = L10n.tr("Localizable", "Cut")
   /// Delete
   internal static let delete = L10n.tr("Localizable", "Delete")
+  /// Delete Completed Rows
+  internal static let deleteCompletedRows = L10n.tr("Localizable", "Delete_Completed_Rows")
   /// Any Outlines in this folder will also be deleted and unrecoverable.
   internal static let deleteFolderMessage = L10n.tr("Localizable", "Delete_Folder_Message")
   /// Are you sure you want to delete the “%@” folder?

@@ -122,6 +122,10 @@ class MainSplitViewController: UISplitViewController {
 		return editorViewController?.isCollapseUnavailable ?? true
 	}
 	
+	var isDeleteCompletedRowsUnavailable: Bool {
+		return editorViewController?.isDeleteCompletedRowsUnavailable ?? true
+	}
+	
 	var activityManager = ActivityManager()
 	
 	private var sidebarViewController: SidebarViewController? {
@@ -323,6 +327,10 @@ class MainSplitViewController: UISplitViewController {
 	
 	@objc func collapse(_ sender: Any?) {
 		editorViewController?.collapse()
+	}
+	
+	@objc func deleteCompletedRows(_ sender: Any?) {
+		editorViewController?.deleteCompletedRows()
 	}
 	
 	// MARK: Validations

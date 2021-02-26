@@ -120,6 +120,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return true
 	}
 
+	var isDeleteCompletedRowsUnavailable: Bool {
+		return !(outline?.isAnyRowCompleted ?? false)
+	}
+	
 	var currentRows: [Row]? {
 		if let selected = collectionView?.indexPathsForSelectedItems, !selected.isEmpty {
 			return selected.compactMap { outline?.shadowTable?[$0.row] }
@@ -452,6 +456,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	func collapse() {
 		guard let rows = currentRows else { return }
 		collapse(rows: rows)
+	}
+	
+	func deleteCompletedRows() {
+		guard let completedRows = outline?.allCompletedRows else { return }
+		deleteRows(completedRows)
 	}
 	
 	// MARK: Actions

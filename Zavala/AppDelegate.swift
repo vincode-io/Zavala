@@ -102,6 +102,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		if !(mainSplitViewController?.isCollapseUnavailable ?? true) {
 			menuKeyCommands.append(collapseCommand)
 		}
+		
+		if !(mainSplitViewController?.isDeleteCompletedRowsUnavailable ?? true) {
+			menuKeyCommands.append(deleteCompletedRowsCommand)
+		}
 
 		return menuKeyCommands
 		#endif
@@ -277,6 +281,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	let collapseCommand = UIKeyCommand(title: L10n.collapse,
 									   action: #selector(collapseCommand(_:)),
 									   input: "0",
+									   modifierFlags: [.command])
+	
+	let deleteCompletedRowsCommand = UIKeyCommand(title: L10n.deleteCompletedRows,
+									   action: #selector(deleteCompletedRowsCommand(_:)),
+									   input: "d",
 									   modifierFlags: [.command])
 	
 	let showReleaseNotesCommand = UIKeyCommand(title: L10n.releaseNotes,
@@ -478,6 +487,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.collapse(sender)
 	}
 	
+	@objc func deleteCompletedRowsCommand(_ sender: Any?) {
+		mainSplitViewController?.deleteCompletedRows(sender)
+	}
+	
 	@objc func showReleaseNotes(_ sender: Any?) {
 		mainSplitViewController?.showReleaseNotes()
 	}
@@ -581,6 +594,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainSplitViewController?.isCollapseUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(deleteCompletedRowsCommand(_:)):
+			if mainSplitViewController?.isDeleteCompletedRowsUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		default:
 			break
 		}
@@ -634,7 +651,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)
 		
 		// Outline Menu
-		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, createRowNotesCommand, deleteRowNotesCommand])
+		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand, createRowNotesCommand, deleteRowNotesCommand])
 		let mainOutlineMenu = UIMenu(title: "", options: .displayInline, children: [insertRowCommand, createRowCommand, splitRowCommand, indentRowsCommand, outdentRowsCommand])
 		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, completeMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)
