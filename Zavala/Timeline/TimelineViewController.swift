@@ -261,8 +261,24 @@ extension TimelineViewController {
 			var snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
 			snapshot.append(items)
 
+			let selectedItems = self.collectionView.indexPathsForSelectedItems?.compactMap { self.dataSource.itemIdentifier(for: $0) }
 			let snapshotOp = ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: animated)
-			snapshotOp.completionBlock = { _ in completion?() }
+			
+			snapshotOp.completionBlock = { _ in
+				
+				let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) }
+				
+				if selectedIndexPaths?.isEmpty ?? true {
+					self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, animated: true)
+				} else {
+					for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
+						self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
+					}
+				}
+				
+				completion?()
+			}
+			
 			self.dataSourceQueue.add(snapshotOp)
 		}
 	}
