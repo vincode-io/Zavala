@@ -914,7 +914,7 @@ extension EditorViewController {
 			} else {
 				navigationItem.rightBarButtonItems = [filterBarButtonItem!]
 			}
-		} else {
+		} else if traitCollection.userInterfaceIdiom == .pad {
 			navigationItem.rightBarButtonItems = [filterBarButtonItem!]
 		}
 	}
