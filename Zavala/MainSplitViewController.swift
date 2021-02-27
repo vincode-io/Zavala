@@ -513,6 +513,7 @@ extension MainSplitViewController {
 
 extension NSToolbarItem.Identifier {
 	static let sync = NSToolbarItem.Identifier("io.vincode.Zavala.refresh")
+	static let importOPML = NSToolbarItem.Identifier("io.vincode.Zavala.importOPML")
 	static let newOutline = NSToolbarItem.Identifier("io.vincode.Zavala.newOutline")
 	static let toggleOutlineFilter = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineFilter")
 	static let toggleOutlineNotesHidden = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineNotesHidden")
@@ -527,9 +528,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 		return [
 			.toggleSidebar,
 			.flexibleSpace,
-			.supplementarySidebarTrackingSeparatorItemIdentifier,
+			.importOPML,
 			.newOutline,
-			.space,
+			.supplementarySidebarTrackingSeparatorItemIdentifier,
 			.link,
 			.boldface,
 			.italic,
@@ -543,6 +544,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.sync,
 			.toggleSidebar,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
+			.importOPML,
 			.newOutline,
 			.link,
 			.boldface,
@@ -569,6 +571,18 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = L10n.sync
 			item.isBordered = true
 			item.action = #selector(sync(_:))
+			item.target = self
+			toolbarItem = item
+		case .importOPML:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { _ in
+				return false
+			}
+			item.image = AppAssets.importEntity
+			item.label = L10n.importOPML
+			item.toolTip = L10n.importOPML
+			item.isBordered = true
+			item.action = #selector(importOPML(_:))
 			item.target = self
 			toolbarItem = item
 		case .newOutline:
