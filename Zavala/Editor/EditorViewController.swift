@@ -176,6 +176,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	private var isOutlineNewFlag = false
 	private var isShowingAddButton = false
+	private var skipHidingKeyboardFlag = false
 	
 	private static var defaultContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 40, right: 0)
 	
@@ -238,7 +239,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardDidShowNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -336,7 +337,20 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		collectionView?.refreshControl?.endRefreshing()
 	}
 	
+	var keyboardWillShowNotificationCounter = 0
+	
 	@objc func adjustForKeyboard(_ note: Notification) {
+		guard !skipHidingKeyboardFlag else {
+			if note.name == UIResponder.keyboardWillShowNotification {
+				keyboardWillShowNotificationCounter += 1
+				if keyboardWillShowNotificationCounter == 2 {
+					keyboardWillShowNotificationCounter = 0
+					skipHidingKeyboardFlag = false
+				}
+			}
+			return
+		}
+		
 		guard let keyboardValue = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
 
 		let keyboardScreenEndFrame = keyboardValue.cgRectValue
@@ -345,9 +359,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if note.name == UIResponder.keyboardWillHideNotification {
 			collectionView.contentInset = EditorViewController.defaultContentInsets
 		} else {
-			collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
-			if let scrollToIndex = currentTextView?.row?.shadowTableIndex {
-			   makeCellVisibleIfNecessary(indexPath: IndexPath(row: scrollToIndex, section: Outline.Section.rows.rawValue))
+			collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height + 20, right: 0)
+			if let scrollToIndex = currentTextView?.row?.shadowTableIndex, let cell = collectionView.cellForItem(at: IndexPath(row: scrollToIndex, section: Outline.Section.rows.rawValue)) {
+				let cellFrame = view.convert(cell.frame, from: view.window)
+				collectionView.scrollRectToVisible(cellFrame, animated: true)
 			}
 		}
 
@@ -662,6 +677,12 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		return indexPath.section == Outline.Section.rows.rawValue
 	}
 	
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		if let textView = UIResponder.currentFirstResponder as? OutlineTextView {
+			textView.resignFirstResponder()
+		}
+	}
+	
 }
 
 extension EditorViewController: EditorTitleViewCellDelegate {
@@ -779,6 +800,7 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	}
 	
 	func editorTextRowDeleteRow(_ row: Row, textRowStrings: TextRowStrings) {
+		skipHidingKeyboardFlag = true
 		deleteRows([row], textRowStrings: textRowStrings)
 	}
 	
@@ -787,6 +809,7 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	}
 	
 	func editorTextRowCreateRow(afterRow: Row?, textRowStrings: TextRowStrings?) {
+		skipHidingKeyboardFlag = true
 		let afterRows = afterRow == nil ? nil : [afterRow!]
 		createRow(afterRows: afterRows, textRowStrings: textRowStrings)
 	}
