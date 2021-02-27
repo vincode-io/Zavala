@@ -177,6 +177,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var isOutlineNewFlag = false
 	private var isShowingAddButton = false
 	
+	private static var defaultContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 40, right: 0)
+	
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
@@ -200,7 +202,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		collectionView.dragInteractionEnabled = true
 		collectionView.allowsMultipleSelection = true
 		collectionView.selectionFollowsFocus = false
-		collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 40, right: 0)
+		collectionView.contentInset = EditorViewController.defaultContentInsets
 
 		titleRegistration = UICollectionView.CellRegistration<EditorTitleViewCell, Outline> { [weak self] (cell, indexPath, outline) in
 			cell.title = outline.title
@@ -235,6 +237,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineElementsDidChange(_:)), name: .OutlineElementsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardDidShowNotification, object: nil)
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -330,6 +334,23 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func cloudKitSyncDidComplete(_ note: Notification) {
 		collectionView?.refreshControl?.endRefreshing()
+	}
+	
+	@objc func adjustForKeyboard(_ note: Notification) {
+		guard let keyboardValue = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+
+		let keyboardScreenEndFrame = keyboardValue.cgRectValue
+		let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+
+		if note.name == UIResponder.keyboardWillHideNotification {
+			collectionView.contentInset = EditorViewController.defaultContentInsets
+		} else {
+			collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
+			if let scrollToIndex = currentTextView?.row?.shadowTableIndex {
+			   makeCellVisibleIfNecessary(indexPath: IndexPath(row: scrollToIndex, section: Outline.Section.rows.rawValue))
+			}
+		}
+
 	}
 	
 	// MARK: API
@@ -1631,9 +1652,9 @@ extension EditorViewController {
 		}
 	}
 
-	private func makeCellVisibleIfNecessary(indexPath: IndexPath, completion: @escaping () -> Void) {
+	private func makeCellVisibleIfNecessary(indexPath: IndexPath, completion: (() -> Void)? = nil) {
 		guard let frame = collectionView.layoutAttributesForItem(at: indexPath)?.frame else {
-			completion()
+			completion?()
 			return
 		}
 		
@@ -1641,14 +1662,14 @@ extension EditorViewController {
 		let bottom = collectionView.contentOffset.y + collectionView.frame.size.height
 		
 		guard frame.minY < top || frame.maxY > bottom else {
-			completion()
+			completion?()
 			return
 		}
 		
 		CATransaction.begin()
 		CATransaction.setCompletionBlock {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-				completion()
+				completion?()
 			}
 		}
 		collectionView.scrollRectToVisible(frame, animated: true)
