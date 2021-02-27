@@ -350,8 +350,7 @@ class MainSplitViewController: UISplitViewController {
 	// MARK: API
 	
 	func showReleaseNotes() {
-		let version = Bundle.main.infoDictionary!["CFBundleShortVersionString"]! as! String
-		openURL("https://github.com/vincode-io/Zavala/releases/tag/\(version)")
+		openURL(AppAssets.releaseNotesURL)
 	}
 	
 	func showSettings() {

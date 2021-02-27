@@ -15,6 +15,10 @@ class SettingsViewController: UITableViewController {
 	@IBOutlet weak var hideLocalAccountSwitch: UISwitch!
 	@IBOutlet weak var enableCloudKitSwitch: UISwitch!
 	
+	private var mainSplitViewController: MainSplitViewController? {
+		return (presentingViewController as? MainSplitViewController)
+	}
+	
 	override func viewDidLoad() {
 		// This hack mostly works around a bug in static tables with dynamic type.  See: https://spin.atomicobject.com/2018/10/15/dynamic-type-static-uitableview/
 		NotificationCenter.default.removeObserver(tableView!, name: UIContentSizeCategory.didChangeNotification, object: nil)
@@ -49,6 +53,23 @@ class SettingsViewController: UITableViewController {
 	}
 	
 	// MARK: UITableView
+	
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		guard indexPath.section == 1 else { return }
+		
+		switch indexPath.row {
+		case 0:
+			openURL(AppAssets.releaseNotesURL)
+		case 1:
+			openURL(AppAssets.githubRepositoryURL)
+		case 2:
+			openURL(AppAssets.bugTrackerURL)
+		default:
+			break
+		}
+
+		tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
+	}
 	
 	override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
 		return false

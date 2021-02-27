@@ -25,6 +25,8 @@ struct AppAssets {
 		return UIImage(named: "Bold-Large")!
 	}()
 	
+	static var bugTrackerURL = "https://github.com/vincode-io/Zavala/issues"
+
 	static var bullet: UIImage = {
 		return UIImage(systemName: "circle.fill")!.applyingSymbolConfiguration(.init(pointSize: 4, weight: .heavy))!
 	}()
@@ -92,6 +94,8 @@ struct AppAssets {
 	static var getInfoEntity: UIImage = {
 		return UIImage(systemName: "info.circle")!
 	}()
+	
+	static var githubRepositoryURL = "https://github.com/vincode-io/Zavala"
 
 	static var importEntity: UIImage = {
 		return UIImage(systemName: "square.and.arrow.down")!
@@ -129,6 +133,8 @@ struct AppAssets {
 		return UIImage(systemName: "doc.on.clipboard")!
 	}()
 
+	static var releaseNotesURL = "https://github.com/vincode-io/Zavala/releases/tag/\(Bundle.main.versionNumber)"
+	
 	static var removeEntity: UIImage = {
 		return UIImage(systemName: "trash")!
 	}()
