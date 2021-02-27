@@ -89,6 +89,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	func setDocumentContainer(_ documentContainer: DocumentContainer?, completion: (() -> Void)? = nil) {
 		self.documentContainer = documentContainer
 		updateUI()
+		collectionView.deselectAll()
 		applySnapshot(animated: false, completion: completion)
 	}
 
