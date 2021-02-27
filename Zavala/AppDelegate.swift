@@ -290,8 +290,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let showReleaseNotesCommand = UIKeyCommand(title: L10n.releaseNotes,
 											   action: #selector(showReleaseNotes(_:)),
-											   input: "r",
-											   modifierFlags: [.alternate, .command])
+											   input: "1",
+											   modifierFlags: [.command])
+	
+	let showGitHubRepositoryCommand = UIKeyCommand(title: L10n.gitHubRepository,
+												   action: #selector(showGitHubRepository(_:)),
+												   input: "2",
+												   modifierFlags: [.command])
+	
+	let showBugTrackerCommand = UIKeyCommand(title: L10n.bugTracker,
+											 action: #selector(showBugTracker(_:)),
+											 input: "3",
+											 modifierFlags: [.command])
 	
 	var mainSplitViewController: MainSplitViewController? {
 		var keyScene: UIScene?
@@ -495,6 +505,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.showReleaseNotes()
 	}
 
+	@objc func showGitHubRepository(_ sender: Any?) {
+		mainSplitViewController?.showGitHubRepository()
+	}
+	
+	@objc func showBugTracker(_ sender: Any?) {
+		mainSplitViewController?.showBugTracker()
+	}
+
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
@@ -657,7 +675,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 
 		// Help Menu
-		let helpMenu = UIMenu(title: "", options: .displayInline, children: [showReleaseNotesCommand])
+		let helpMenu = UIMenu(title: "", options: .displayInline, children: [showReleaseNotesCommand, showGitHubRepositoryCommand, showBugTrackerCommand])
 		builder.insertChild(helpMenu, atStartOfMenu: .help)
 	}
 	#endif

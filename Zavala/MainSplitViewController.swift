@@ -353,6 +353,14 @@ class MainSplitViewController: UISplitViewController {
 		openURL(AppAssets.releaseNotesURL)
 	}
 	
+	func showGitHubRepository() {
+		openURL(AppAssets.githubRepositoryURL)
+	}
+	
+	func showBugTracker() {
+		openURL(AppAssets.bugTrackerURL)
+	}
+	
 	func showSettings() {
 		let settingsNavController = UIStoryboard.settings.instantiateInitialViewController() as! UINavigationController
 		settingsNavController.modalPresentationStyle = .formSheet

@@ -26,6 +26,8 @@ internal enum L10n {
   }
   /// Bold
   internal static let bold = L10n.tr("Localizable", "Bold")
+  /// Bug Tracker
+  internal static let bugTracker = L10n.tr("Localizable", "Bug_Tracker")
   /// Cancel
   internal static let cancel = L10n.tr("Localizable", "Cancel")
   /// Check for Updates...
@@ -92,6 +94,8 @@ internal enum L10n {
   internal static let format = L10n.tr("Localizable", "Format")
   /// Get Info
   internal static let getInfo = L10n.tr("Localizable", "Get_Info")
+  /// GitHub Repository
+  internal static let gitHubRepository = L10n.tr("Localizable", "GitHub_Repository")
   /// Hide Completed
   internal static let hideCompleted = L10n.tr("Localizable", "Hide_Completed")
   /// Hide Notes
