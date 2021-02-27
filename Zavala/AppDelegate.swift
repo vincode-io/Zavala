@@ -675,8 +675,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 
 		// Help Menu
-		let helpMenu = UIMenu(title: "", options: .displayInline, children: [showReleaseNotesCommand, showGitHubRepositoryCommand, showBugTrackerCommand])
-		builder.insertChild(helpMenu, atStartOfMenu: .help)
+		builder.replaceChildren(ofMenu: .help, from: { _ in return [showReleaseNotesCommand, showGitHubRepositoryCommand, showBugTrackerCommand] })
 	}
 	#endif
 	
