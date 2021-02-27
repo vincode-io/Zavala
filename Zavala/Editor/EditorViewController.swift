@@ -133,6 +133,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return nil
 	}
 	
+	var isInEditMode: Bool {
+		if let responder = UIResponder.currentFirstResponder, responder is UITextField || responder is UITextView {
+			return true
+		} else {
+			return false
+		}
+	}
+	
 	var undoableCommands = [UndoableCommand]()
 	
 	override var canBecomeFirstResponder: Bool { return true }
@@ -155,6 +163,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var currentKeyPresses = Set<UIKeyboardHIDUsage>()
 	
 	private var filterBarButtonItem: UIBarButtonItem?
+	private var doneBarButtonItem: UIBarButtonItem?
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
@@ -187,7 +196,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
 			filterBarButtonItem = UIBarButtonItem(image: AppAssets.filterInactive, style: .plain, target: self, action: #selector(toggleOutlineFilter(_:)))
-			navigationItem.rightBarButtonItems = [filterBarButtonItem!]
+			doneBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
 
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
@@ -231,7 +240,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			cell.delegate = self
 		}
 		
-		updateUI()
+		updateUI(editMode: false)
 		collectionView.reloadData()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
@@ -393,7 +402,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		outline?.prepareForViewing()
 			
 		guard isViewLoaded else { return }
-		updateUI()
+		updateUI(editMode: false)
 		collectionView.reloadData()
 		
 		restoreOutlineCursorPosition()
@@ -509,15 +518,20 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
+	@objc func done(_ sender: Any?) {
+		UIResponder.currentFirstResponder?.resignFirstResponder()
+		updateUI(editMode: false)
+	}
+	
 	@objc func toggleOutlineFilter(_ sender: Any?) {
 		guard let changes = outline?.toggleFilter() else { return }
-		updateUI()
+		updateUI(editMode: isInEditMode)
 		applyChangesRestoringState(changes)
 	}
 	
 	@objc func toggleOutlineHideNotes(_ sender: Any?) {
 		guard let changes = outline?.toggleNotesHidden() else { return }
-		updateUI()
+		updateUI(editMode: isInEditMode)
 		applyChangesRestoringState(changes)
 	}
 	
@@ -696,6 +710,7 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	}
 	
 	func editorTitleTextFieldDidBecomeActive() {
+		updateUI(editMode: true)
 		collectionView.deselectAll()
 	}
 	
@@ -729,6 +744,7 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 	}
 	
 	func editorTagInputTextFieldDidBecomeActive() {
+		updateUI(editMode: true)
 		collectionView.deselectAll()
 	}
 	
@@ -788,6 +804,7 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	}
 	
 	func editorTextRowTextFieldDidBecomeActive() {
+		updateUI(editMode: true)
 		collectionView.deselectAll()
 	}
 
@@ -880,7 +897,7 @@ extension EditorViewController: LinkViewControllerDelegate {
 
 extension EditorViewController {
 	
-	private func updateUI() {
+	private func updateUI(editMode: Bool) {
 		navigationItem.largeTitleDisplayMode = .never
 		
 		if traitCollection.userInterfaceIdiom != .mac {
@@ -889,6 +906,16 @@ extension EditorViewController {
 			} else {
 				filterBarButtonItem?.image = AppAssets.filterInactive
 			}
+		}
+		
+		if traitCollection.userInterfaceIdiom == .phone {
+			if editMode {
+				navigationItem.rightBarButtonItems = [doneBarButtonItem!, filterBarButtonItem!]
+			} else {
+				navigationItem.rightBarButtonItems = [filterBarButtonItem!]
+			}
+		} else {
+			navigationItem.rightBarButtonItems = [filterBarButtonItem!]
 		}
 	}
 	
