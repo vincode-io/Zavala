@@ -101,8 +101,10 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 			timelineItem = TimelineItem.timelineItem(document)
 		}
 
-		updateSelection(item: timelineItem, animated: animated)
-		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: isNew, animated: animated)
+		updateSelection(item: timelineItem, animated: animated) { [weak self] in
+			guard let self = self else { return }
+			self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: isNew, animated: animated)
+		}
 	}
 	
 	func deleteCurrentDocument() {
@@ -284,8 +286,12 @@ extension TimelineViewController {
 		}
 	}
 	
-	func updateSelection(item: TimelineItem?, animated: Bool) {
-		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: item, animated: animated))
+	func updateSelection(item: TimelineItem?, animated: Bool, completion: @escaping () -> Void) {
+		let operation = UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: item, animated: animated)
+		operation.completionBlock = { _ in
+			completion()
+		}
+		dataSourceQueue.add(operation)
 	}
 }
 
