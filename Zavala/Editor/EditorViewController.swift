@@ -692,8 +692,8 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		if let textView = UIResponder.currentFirstResponder as? OutlineTextView {
-			textView.resignFirstResponder()
+		if let responder = UIResponder.currentFirstResponder, responder is UITextField || responder is UITextView {
+			responder.resignFirstResponder()
 		}
 	}
 	
