@@ -359,7 +359,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if note.name == UIResponder.keyboardWillHideNotification {
 			collectionView.contentInset = EditorViewController.defaultContentInsets
 		} else {
-			collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height + 20, right: 0)
+			collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
 			if let scrollToIndex = currentTextView?.row?.shadowTableIndex, let cell = collectionView.cellForItem(at: IndexPath(row: scrollToIndex, section: Outline.Section.rows.rawValue)) {
 				let cellFrame = view.convert(cell.frame, from: view.window)
 				collectionView.scrollRectToVisible(cellFrame, animated: true)
