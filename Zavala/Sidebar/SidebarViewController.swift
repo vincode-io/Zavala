@@ -32,6 +32,13 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
 
+	private var mainSplitViewController: MainSplitViewController? {
+		return splitViewController as? MainSplitViewController
+	}
+	
+	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
+	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importEntity, style: .plain, target: self, action: #selector(importOPML(_:)))
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
@@ -43,6 +50,10 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 		}
 
+		if traitCollection.userInterfaceIdiom == .phone {
+			navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
+		}
+		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange(_:)), name: .AccountManagerAccountsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidInitialize(_:)), name: .AccountDidInitialize, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
@@ -100,16 +111,23 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	
 	@objc func sync() {
 		if AccountManager.shared.isSyncAvailable {
-			(splitViewController as? MainSplitViewController)?.sync(self)
+			mainSplitViewController?.sync(self)
 		} else {
 			collectionView?.refreshControl?.endRefreshing()
 		}
 	}
 	
 	@IBAction func showSettings(_ sender: Any) {
-		(splitViewController as? MainSplitViewController)?.showSettings()
+		mainSplitViewController?.showSettings()
 	}
 	
+	@objc func importOPML(_ sender: Any) {
+		mainSplitViewController?.importOPML(sender)
+	}
+
+	@objc func createOutline(_ sender: Any) {
+		mainSplitViewController?.createOutline(sender)
+	}
 }
 
 // MARK: Collection View
