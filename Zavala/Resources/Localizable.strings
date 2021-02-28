@@ -68,6 +68,7 @@
 "Delete_Completed_Rows" = "Delete Completed Rows";
 "Share" = "Share";
 "Send_Copy" = "Send a Copy";
+"More" = "More...";
 
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";

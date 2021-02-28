@@ -15,7 +15,7 @@ extension EditorViewController {
 	
 	// MARK: API
 	
-	func share() {
+	@objc func share(_ sender: Any? = nil) {
 		
 	}
 	

@@ -112,6 +112,8 @@ internal enum L10n {
   internal static let link = L10n.tr("Localizable", "Link")
   /// Mark as Favorite
   internal static let markAsFavorite = L10n.tr("Localizable", "Mark_As_Favorite")
+  /// More...
+  internal static let more = L10n.tr("Localizable", "More")
   /// Move
   internal static let move = L10n.tr("Localizable", "Move")
   /// New Folder
