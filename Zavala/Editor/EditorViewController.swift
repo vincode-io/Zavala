@@ -512,6 +512,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		deleteRows(completedRows)
 	}
 	
+	func sendCopy() {
+		// TODO: Implement me...
+	}
+	
 	// MARK: Actions
 	
 	@objc func sync() {
@@ -924,6 +928,18 @@ extension EditorViewController {
 	}
 	
 	private func buildEllipsisMenu() -> UIMenu {
+		var shareActions = [UIAction]()
+
+		let shareAction = UIAction(title: L10n.share, image: AppAssets.share) { [weak self] _ in
+			self?.share()
+		}
+		shareActions.append(shareAction)
+
+		let sendCopyAction = UIAction(title: L10n.sendCopy, image: AppAssets.sendCopy) { [weak self] _ in
+			self?.sendCopy()
+		}
+		shareActions.append(sendCopyAction)
+		
 		var viewActions = [UIAction]()
 		
 		let expandAllInOutlineAction = UIAction(title: L10n.expandAllInOutline, image: AppAssets.expandAll) { [weak self] _ in
@@ -952,10 +968,11 @@ extension EditorViewController {
 			self?.deleteCompletedRows()
 		}
 		
+		let shareMenu = UIMenu(title: "", options: .displayInline, children: shareActions)
 		let viewMenu = UIMenu(title: "", options: .displayInline, children: viewActions)
 		let changeMenu = UIMenu(title: "", options: .displayInline, children: [deleteCompletedRowsAction])
 		
-		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [viewMenu, changeMenu])
+		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [shareMenu, viewMenu, changeMenu])
 	}
 	
 	private func pressesBeganForEditMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
