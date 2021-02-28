@@ -10,15 +10,19 @@ import Templeton
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
+	weak var scene: UIScene?
 	var window: UIWindow?
 	var mainSplitViewController: MainSplitViewController!
 	
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+		self.scene = scene
+		
 		guard let mainSplitViewController = window?.rootViewController as? MainSplitViewController else {
 			return
 		}
 
 		self.mainSplitViewController = mainSplitViewController
+		self.mainSplitViewController.sceneDelegate = self
 		
 		#if targetEnvironment(macCatalyst)
 		guard let windowScene = scene as? UIWindowScene else { return }
@@ -49,6 +53,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
 	func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
 		mainSplitViewController.handle(userActivity)
+	}
+	
+	// MARK: API
+	
+	func validateToolbar() {
+		#if targetEnvironment(macCatalyst)
+		guard let windowScene = scene as? UIWindowScene else { return }
+		windowScene.titlebar?.toolbar?.visibleItems?.forEach({ $0.validate() })
+		#endif
 	}
 	
 }

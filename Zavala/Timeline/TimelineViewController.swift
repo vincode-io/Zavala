@@ -95,7 +95,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		applySnapshot(animated: false, completion: completion)
 	}
 
-	func selectDocument(_ document: Document?, isNew: Bool = false, animated: Bool) {
+	func selectDocument(_ document: Document?, isNew: Bool = false, animated: Bool, completion: (() -> Void)? = nil) {
 		guard let documentContainer = documentContainer else { return }
 
 		var timelineItem: TimelineItem? = nil
@@ -106,6 +106,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		updateSelection(item: timelineItem, animated: animated) { [weak self] in
 			guard let self = self else { return }
 			self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: isNew, animated: animated)
+			completion?()
 		}
 	}
 	

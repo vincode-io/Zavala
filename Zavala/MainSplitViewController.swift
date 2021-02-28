@@ -21,6 +21,8 @@ enum MainControllerIdentifier {
 }
 
 class MainSplitViewController: UISplitViewController {
+	
+	weak var sceneDelegate: SceneDelegate?
 
 	var stateRestorationActivity: NSUserActivity {
 		let activity = activityManager.stateRestorationActivity
@@ -204,8 +206,10 @@ class MainSplitViewController: UISplitViewController {
 				  let documentID = EntityID(userInfo: documentUserInfo),
 				  let document = AccountManager.shared.findDocument(documentID) else { return }
 			
-			self.timelineViewController?.selectDocument(document, animated: false)
-			self.lastMainControllerToAppear = .editor
+			self.timelineViewController?.selectDocument(document, animated: false) {
+				self.lastMainControllerToAppear = .editor
+				self.sceneDelegate?.validateToolbar()
+			}
 		}
 	}
 	
