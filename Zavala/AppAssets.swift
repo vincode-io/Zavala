@@ -63,6 +63,10 @@ struct AppAssets {
 		#endif
 	}()
 	
+	static var ellipsis: UIImage = {
+		return UIImage(systemName: "ellipsis.circle")!
+	}()
+
 	static var expandAll: UIImage = {
 		return UIImage(systemName: "arrow.up.left.and.arrow.down.right")!
 	}()

@@ -618,11 +618,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			textRow.textRowStrings = texts
 		}
 
-		var deletes = [Int]()
+		var deletes = Set<Int>()
 
 		for row in rows {
 			guard let rowShadowTableIndex = row.shadowTableIndex else { return nil }
-			deletes.append(rowShadowTableIndex)
+			deletes.insert(rowShadowTableIndex)
 			row.parent?.removeRow(row)
 		}
 
@@ -631,14 +631,14 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		var deletedRows = [Row]()
 		
-		deletes.sort(by: { $0 > $1 })
-		for index in deletes {
+		let sortedDeletes = deletes.sorted(by: { $0 > $1 })
+		for index in sortedDeletes {
 			if let deletedRow = shadowTable?.remove(at: index) {
 				deletedRows.append(deletedRow)
 			}
 		}
 		
-		guard let lowestShadowTableIndex = deletes.last else { return nil }
+		guard let lowestShadowTableIndex = sortedDeletes.last else { return nil }
 		resetShadowTableIndexes(startingAt: lowestShadowTableIndex)
 		
 		let reloads = rows.compactMap { ($0.parent as? Row)?.shadowTableIndex }

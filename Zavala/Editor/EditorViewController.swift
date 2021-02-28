@@ -162,6 +162,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var cancelledKeyPresses = Set<UIKeyboardHIDUsage>()
 	private var currentKeyPresses = Set<UIKeyboardHIDUsage>()
 	
+	private var ellipsisBarButtonItem: UIBarButtonItem?
 	private var filterBarButtonItem: UIBarButtonItem?
 	private var doneBarButtonItem: UIBarButtonItem?
 
@@ -196,6 +197,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
 			filterBarButtonItem = UIBarButtonItem(image: AppAssets.filterInactive, style: .plain, target: self, action: #selector(toggleOutlineFilter(_:)))
+			ellipsisBarButtonItem = UIBarButtonItem(image: AppAssets.ellipsis, style: .plain, target: nil, action: nil)
 			doneBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
 
 			collectionView.refreshControl = UIRefreshControl()
@@ -910,13 +912,52 @@ extension EditorViewController {
 		
 		if traitCollection.userInterfaceIdiom == .phone {
 			if editMode {
-				navigationItem.rightBarButtonItems = [doneBarButtonItem!, filterBarButtonItem!]
+				navigationItem.rightBarButtonItems = [doneBarButtonItem!, filterBarButtonItem!, ellipsisBarButtonItem!]
 			} else {
-				navigationItem.rightBarButtonItems = [filterBarButtonItem!]
+				navigationItem.rightBarButtonItems = [filterBarButtonItem!, ellipsisBarButtonItem!]
 			}
 		} else if traitCollection.userInterfaceIdiom == .pad {
-			navigationItem.rightBarButtonItems = [filterBarButtonItem!]
+			navigationItem.rightBarButtonItems = [filterBarButtonItem!, ellipsisBarButtonItem!]
 		}
+
+		if traitCollection.userInterfaceIdiom != .mac {
+			self.ellipsisBarButtonItem?.menu = buildEllipsisMenu()
+		}
+	}
+	
+	private func buildEllipsisMenu() -> UIMenu {
+		var viewActions = [UIAction]()
+		
+		let expandAllInOutlineAction = UIAction(title: L10n.expandAllInOutline, image: AppAssets.expandAll) { [weak self] _ in
+			self?.expandAllInOutline()
+		}
+		viewActions.append(expandAllInOutlineAction)
+		
+		let collapseAllInOutlineAction = UIAction(title: L10n.collapseAllInOutline, image: AppAssets.collapseAll) { [weak self] _ in
+			self?.collapseAllInOutline()
+		}
+		viewActions.append(collapseAllInOutlineAction)
+		
+		if isOutlineNotesHidden {
+			let showNotesAction = UIAction(title: L10n.showNotes, image: AppAssets.hideNotesInactive) { [weak self] _ in
+				self?.toggleOutlineHideNotes(self)
+			}
+			viewActions.append(showNotesAction)
+		} else {
+			let hideNotesAction = UIAction(title: L10n.hideNotes, image: AppAssets.hideNotesActive) { [weak self] _ in
+				self?.toggleOutlineHideNotes(self)
+			}
+			viewActions.append(hideNotesAction)
+		}
+
+		let deleteCompletedRowsAction = UIAction(title: L10n.deleteCompletedRows, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in
+			self?.deleteCompletedRows()
+		}
+		
+		let viewMenu = UIMenu(title: "", options: .displayInline, children: viewActions)
+		let changeMenu = UIMenu(title: "", options: .displayInline, children: [deleteCompletedRowsAction])
+		
+		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [viewMenu, changeMenu])
 	}
 	
 	private func pressesBeganForEditMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
