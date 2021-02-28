@@ -117,10 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 modifierFlags: [.command])
 	
 	#if targetEnvironment(macCatalyst)
-	let checkForUpdates = UIKeyCommand(title: L10n.checkForUpdates,
-										 action: #selector(checkForUpdates(_:)),
-										 input: ".",
-										 modifierFlags: [.command])
+	let checkForUpdates = UICommand(title: L10n.checkForUpdates, action: #selector(checkForUpdates(_:)))
 	#endif
 	
 	let sync = UIKeyCommand(title: L10n.sync,
@@ -200,8 +197,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let deleteRowNotesCommand = UIKeyCommand(title: L10n.deleteNote,
 											 action: #selector(deleteRowNotesCommand(_:)),
-											 input: "=",
-											 modifierFlags: [.control])
+											 input: "-",
+											 modifierFlags: [.control, .shift])
 	
 	let splitRowCommand = UIKeyCommand(title: L10n.splitRow,
 									   action: #selector(splitRowCommand(_:)),
@@ -288,20 +285,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									   input: "d",
 									   modifierFlags: [.command])
 	
-	let showReleaseNotesCommand = UIKeyCommand(title: L10n.releaseNotes,
-											   action: #selector(showReleaseNotes(_:)),
-											   input: "1",
-											   modifierFlags: [.command])
+	let showReleaseNotesCommand = UICommand(title: L10n.releaseNotes, action: #selector(showReleaseNotes(_:)))
 	
-	let showGitHubRepositoryCommand = UIKeyCommand(title: L10n.gitHubRepository,
-												   action: #selector(showGitHubRepository(_:)),
-												   input: "2",
-												   modifierFlags: [.command])
+	let showGitHubRepositoryCommand = UICommand(title: L10n.gitHubRepository, action: #selector(showGitHubRepository(_:)))
 	
-	let showBugTrackerCommand = UIKeyCommand(title: L10n.bugTracker,
-											 action: #selector(showBugTracker(_:)),
-											 input: "3",
-											 modifierFlags: [.command])
+	let showBugTrackerCommand = UICommand(title: L10n.bugTracker, action: #selector(showBugTracker(_:)))
 	
 	let sendCopyCommand = UICommand(title: L10n.sendCopy,
 									action: #selector(sendCopy(_:)),
