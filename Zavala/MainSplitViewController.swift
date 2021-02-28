@@ -532,6 +532,7 @@ extension NSToolbarItem.Identifier {
 	static let boldface = NSToolbarItem.Identifier("io.vincode.Zavala.boldface")
 	static let italic = NSToolbarItem.Identifier("io.vincode.Zavala.italic")
 	static let share = NSToolbarItem.Identifier("io.vincode.Zavala.share")
+	static let sendCopy = NSToolbarItem.Identifier("io.vincode.Zavala.sendCopy")
 }
 
 extension MainSplitViewController: NSToolbarDelegate {
@@ -548,6 +549,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.italic,
 			.flexibleSpace,
 			.share,
+			.sendCopy,
 			.space,
 			.toggleOutlineFilter,
 		]
@@ -566,6 +568,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.toggleOutlineNotesHidden,
 			.toggleOutlineFilter,
 			.share,
+			.sendCopy,
 			.space,
 			.flexibleSpace
 		]
@@ -702,6 +705,10 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.action = #selector(share(_:))
 			item.target = self
 			toolbarItem = item
+		case .sendCopy:
+			let item = NSSharingServicePickerToolbarItem(itemIdentifier: .sendCopy)
+			 item.activityItemsConfiguration = self
+			 return item
 		case .toggleSidebar:
 			toolbarItem = NSToolbarItem(itemIdentifier: itemIdentifier)
 			
@@ -711,6 +718,26 @@ extension MainSplitViewController: NSToolbarDelegate {
 		
 		return toolbarItem
 	}
+}
+
+extension MainSplitViewController: UIActivityItemsConfigurationReading {
+	
+	var itemProvidersForActivityItemsConfiguration: [NSItemProvider] {
+		guard let outline = editorViewController?.outline else {
+			return [NSItemProvider]()
+		}
+		
+		let itemProvider = NSItemProvider()
+		
+		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+			let data = outline.markdown().data(using: .utf8)
+			completion(data, nil)
+			return nil
+		}
+		
+		return [itemProvider]
+	}
+	
 }
 
 #endif
