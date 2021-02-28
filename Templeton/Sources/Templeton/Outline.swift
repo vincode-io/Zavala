@@ -110,6 +110,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 	}
 
+	public var cloudKitShareRecordName: String? {
+		didSet {
+			documentMetaDataDidChange()
+		}
+	}
+
 	public var rows: [Row] {
 		get {
 			if let rowOrder = rowOrder, let rowData = keyedRows {
@@ -247,6 +253,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		case tagIDs = "tagIDS"
 		case cloudKitZoneName = "cloudKitZoneName"
 		case cloudKitZoneOwner = "cloudKitZoneOwner"
+		case cloudKitShareRecordName = "cloudKitShareRecordName"
 	}
 
 	var zoneID: CKRecordZone.ID? {
@@ -257,6 +264,17 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		set {
 			cloudKitZoneName = newValue?.zoneName
 			cloudKitZoneOwner = newValue?.ownerName
+		}
+	}
+	
+	var shareRecordID: CKRecord.ID? {
+		get {
+			guard let recordName = cloudKitShareRecordName, let zoneID = zoneID else { return nil }
+			return CKRecord.ID(recordName: recordName, zoneID: zoneID)
+		}
+		set {
+			cloudKitShareRecordName = newValue?.recordName
+			zoneID = newValue?.zoneID
 		}
 	}
 	

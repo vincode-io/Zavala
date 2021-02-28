@@ -78,6 +78,21 @@ public enum Document: Equatable, Codable {
 		}
 	}
 	
+	var shareRecordID: CKRecord.ID? {
+		get {
+			switch self {
+			case .outline(let outline):
+				return outline.shareRecordID
+			}
+		}
+		set {
+			switch self {
+			case .outline(let outline):
+				outline.shareRecordID = newValue
+			}
+		}
+	}
+	
 	var zoneID: CKRecordZone.ID? {
 		get {
 			switch self {
