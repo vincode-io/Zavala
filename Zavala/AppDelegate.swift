@@ -303,6 +303,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											 input: "3",
 											 modifierFlags: [.command])
 	
+	let sendCopyCommand = UICommand(title: L10n.sendCopy,
+									action: #selector(sendCopy(_:)),
+									propertyList: UICommandTagShare)
+
 	var mainSplitViewController: MainSplitViewController? {
 		var keyScene: UIScene?
 		let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
@@ -513,6 +517,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.showBugTracker()
 	}
 
+	@objc func sendCopy(_ sender: Any?) {
+		mainSplitViewController?.sendCopy(sender)
+	}
+
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
@@ -648,6 +656,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand])
 		builder.insertChild(newItemsMenu, atStartOfMenu: .file)
+
+		let shareMenu = UIMenu(title: "", options: .displayInline, children: [sendCopyCommand])
+		builder.insertChild(shareMenu, atEndOfMenu: .file)
 
 		// Edit
 		let linkMenu = UIMenu(title: "", options: .displayInline, children: [linkCommand])

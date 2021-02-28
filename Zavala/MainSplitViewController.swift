@@ -341,6 +341,10 @@ class MainSplitViewController: UISplitViewController {
 		editorViewController?.share()
 	}
 	
+	@objc func sendCopy(_ sender: Any?) {
+		editorViewController?.sendCopy()
+	}
+	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {

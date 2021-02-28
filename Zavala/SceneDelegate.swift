@@ -37,6 +37,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			titlebar.toolbar = toolbar
 			titlebar.toolbarStyle = .automatic
 		}
+		
+		(UIApplication.shared.delegate as! AppDelegate).activityItemsConfiguration = mainSplitViewController
 		#endif
 
 		mainSplitViewController.startUp()
