@@ -56,6 +56,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		mainSplitViewController.handle(userActivity)
 	}
 	
+	func windowScene(_ windowScene: UIWindowScene, userDidAcceptCloudKitShareWith shareMetadata: CKShare.Metadata) {
+		AccountManager.shared.cloudKitAccount?.userDidAcceptCloudKitShareWith(shareMetadata)
+	}
+	
 	// MARK: API
 	
 	func validateToolbar() {

@@ -106,6 +106,10 @@ public final class Account: NSObject, Identifiable, Codable {
 		}
 	}
 	
+	public func userDidAcceptCloudKitShareWith(_ shareMetadata: CKShare.Metadata) {
+		cloudKitManager?.userDidAcceptCloudKitShareWith(shareMetadata)
+	}
+
 	public func activate() {
 		guard isActive == false else { return }
 		isActive = true

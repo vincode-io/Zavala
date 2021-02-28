@@ -142,6 +142,28 @@ public class CloudKitManager {
 		}
 	}
 	
+	func userDidAcceptCloudKitShareWith(_ shareMetadata: CKShare.Metadata) {
+		let op = CKAcceptSharesOperation(shareMetadatas: [shareMetadata])
+		op.qualityOfService = CloudKitOutlineZone.qualityOfService
+		
+		op.acceptSharesCompletionBlock = { [weak self] error in
+			
+			guard let self = self else { return }
+			
+			switch CloudKitZoneResult.resolve(error) {
+			case .success:
+				let zoneID = shareMetadata.share.recordID.zoneID
+				self.fetchChanges(zoneID: zoneID)
+			default:
+				DispatchQueue.main.async {
+					self.presentError(error!)
+				}
+			}
+		}
+		
+		container.add(op)
+	}
+	
 	func resume() {
 		sync()
 	}
