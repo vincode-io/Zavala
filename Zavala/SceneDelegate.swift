@@ -44,7 +44,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
 			mainSplitViewController.handle(userActivity)
 		}
-		
 	}
 
 	func stateRestorationActivity(for scene: UIScene) -> NSUserActivity? {
