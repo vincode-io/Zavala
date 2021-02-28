@@ -39,6 +39,8 @@
 		51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51692B0B25681AD3006B755F /* UIViewController+.swift */; };
 		5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5169928925AE4F5C00760C9D /* UICollectionView+.swift */; };
 		517342EB25EB38D40012EB20 /* EditorViewController+Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517342EA25EB38D40012EB20 /* EditorViewController+Share.swift */; };
+		517342EF25EC2BE60012EB20 /* OutlineActivityItemSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517342EE25EC2BE60012EB20 /* OutlineActivityItemSource.swift */; };
+		517342F225EC2C690012EB20 /* UIActivityViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517342F125EC2C690012EB20 /* UIActivityViewController+.swift */; };
 		517AF68625E07A3F0044DBAB /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517AF68525E07A3F0044DBAB /* Preferences.storyboard */; };
 		517AF68825E07A420044DBAB /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF68425E07A190044DBAB /* PreferencesWindowController.swift */; };
 		517AF68C25E07A790044DBAB /* GeneralPrefencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */; };
@@ -192,6 +194,8 @@
 		51692B0B25681AD3006B755F /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		5169928925AE4F5C00760C9D /* UICollectionView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+.swift"; sourceTree = "<group>"; };
 		517342EA25EB38D40012EB20 /* EditorViewController+Share.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Share.swift"; sourceTree = "<group>"; };
+		517342EE25EC2BE60012EB20 /* OutlineActivityItemSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineActivityItemSource.swift; sourceTree = "<group>"; };
+		517342F125EC2C690012EB20 /* UIActivityViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityViewController+.swift"; sourceTree = "<group>"; };
 		517AF68425E07A190044DBAB /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
 		517AF68525E07A3F0044DBAB /* Preferences.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
 		517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralPrefencesViewController.swift; sourceTree = "<group>"; };
@@ -309,6 +313,7 @@
 				517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */,
 				5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */,
 				51AE5481258FF35F006DA301 /* NSMutableAttributedString+.swift */,
+				517342EE25EC2BE60012EB20 /* OutlineActivityItemSource.swift */,
 				51AE547D258FF28A006DA301 /* OutlineFont.swift */,
 				51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */,
 				51C030BD257E1B9400609262 /* OutlineTextView.swift */,
@@ -317,6 +322,7 @@
 				51DFDC17259EA8D300C068C6 /* Selector+.swift */,
 				51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */,
 				5163ADF425C79B69008F25CA /* String+.swift */,
+				517342F125EC2C690012EB20 /* UIActivityViewController+.swift */,
 				5169928925AE4F5C00760C9D /* UICollectionView+.swift */,
 				514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */,
 				51B2B2D52563AB9F0090C56B /* UIView+.swift */,
@@ -782,6 +788,7 @@
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,
 				51D28D2C257730DB0039DDFC /* EditorViewController+Drag.swift in Sources */,
 				51C030B4257E192100609262 /* EditorTitleViewCell.swift in Sources */,
+				517342F225EC2C690012EB20 /* UIActivityViewController+.swift in Sources */,
 				51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */,
 				512229682563507E008041AF /* EditorTextRowViewCell.swift in Sources */,
 				51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */,
@@ -797,6 +804,7 @@
 				5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */,
 				51B2B2C82563A2180090C56B /* EditorTextRowTopicTextView.swift in Sources */,
 				518F2E38257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift in Sources */,
+				517342EF25EC2BE60012EB20 /* OutlineActivityItemSource.swift in Sources */,
 				5147D0C525CCD6AA004673C3 /* SidebarViewController+Drop.swift in Sources */,
 				5163ADF525C79B69008F25CA /* String+.swift in Sources */,
 				51C4C45B255ACA1B004E0206 /* EditorViewController.swift in Sources */,

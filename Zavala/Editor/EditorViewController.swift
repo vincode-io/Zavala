@@ -529,7 +529,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func sendCopy(_ sender: Any? = nil) {
-		// TODO: Implement me...
+		guard let outline = outline else { return }
+		let controller = UIActivityViewController(outline: outline)
+		controller.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
+		present(controller, animated: true)
 	}
 	
 	@objc func toggleOutlineFilter(_ sender: Any?) {
