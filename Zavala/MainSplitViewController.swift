@@ -715,11 +715,12 @@ extension MainSplitViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .sendCopy:
 			let item = NSSharingServicePickerToolbarItem(itemIdentifier: .sendCopy)
-			 item.activityItemsConfiguration = self
-			 return item
+			item.label = L10n.sendCopy
+			item.toolTip = L10n.sendCopy
+			item.activityItemsConfiguration = self
+			toolbarItem = item
 		case .toggleSidebar:
 			toolbarItem = NSToolbarItem(itemIdentifier: itemIdentifier)
-			
 		default:
 			toolbarItem = nil
 		}
