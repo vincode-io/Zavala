@@ -61,6 +61,8 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 			navigationItem.searchController = searchController
 			definesPresentationContext = true
 
+			addBarButtonItem.title = L10n.add
+			importBarButtonItem.title = L10n.importOPML
 			navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
 
 			collectionView.refreshControl = UIRefreshControl()

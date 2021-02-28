@@ -45,6 +45,9 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
+			addBarButtonItem.title = L10n.add
+			importBarButtonItem.title = L10n.importOPML
+			
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)

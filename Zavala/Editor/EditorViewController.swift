@@ -198,9 +198,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
-			ellipsisBarButtonItem.accessibilityLabel = L10n.more
-			shareBarButtonItem.accessibilityLabel = L10n.share
-			sendCopyBarButtonItem.accessibilityLabel = L10n.sendCopy
+			ellipsisBarButtonItem.title = L10n.more
+			shareBarButtonItem.title = L10n.share
+			sendCopyBarButtonItem.title = L10n.sendCopy
 			
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
@@ -909,10 +909,10 @@ extension EditorViewController {
 		if traitCollection.userInterfaceIdiom != .mac {
 			if outline?.isFiltered ?? false {
 				filterBarButtonItem.image = AppAssets.filterActive
-				filterBarButtonItem.accessibilityLabel = L10n.showCompleted
+				filterBarButtonItem.title = L10n.showCompleted
 			} else {
 				filterBarButtonItem.image = AppAssets.filterInactive
-				filterBarButtonItem.accessibilityLabel = L10n.hideCompleted
+				filterBarButtonItem.title = L10n.hideCompleted
 			}
 		}
 		
