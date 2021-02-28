@@ -24,29 +24,19 @@
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Hide On My Device Account" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5tY-5k-v2g">
-                                                    <rect key="frame" x="20" y="11" width="213.5" height="22"/>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UOo-9z-IuL">
                                                     <rect key="frame" x="307" y="6.5" width="51" height="31"/>
-                                                    <color key="onTintColor" name="primaryAccentColor"/>
+                                                    <color key="onTintColor" name="AccentColor"/>
                                                     <connections>
                                                         <action selector="switchHideLocalAccount:" destination="a0p-rk-skQ" eventType="valueChanged" id="Bkg-w4-96q"/>
                                                     </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="5tY-5k-v2g" firstAttribute="top" secondItem="BpI-Hz-KH2" secondAttribute="topMargin" id="K3n-tK-0tu"/>
-                                                <constraint firstItem="UOo-9z-IuL" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="5tY-5k-v2g" secondAttribute="trailing" constant="8" id="KeP-ft-0GH"/>
                                                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="UOo-9z-IuL" secondAttribute="bottom" constant="6" id="RUM-9w-Q3y"/>
                                                 <constraint firstItem="UOo-9z-IuL" firstAttribute="centerY" secondItem="BpI-Hz-KH2" secondAttribute="centerY" id="V2L-l3-s1E"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="5tY-5k-v2g" secondAttribute="bottom" id="VeZ-P7-kQW"/>
                                                 <constraint firstAttribute="trailing" secondItem="UOo-9z-IuL" secondAttribute="trailing" constant="18" id="mNk-x8-oJx"/>
                                                 <constraint firstItem="UOo-9z-IuL" firstAttribute="top" relation="greaterThanOrEqual" secondItem="BpI-Hz-KH2" secondAttribute="top" constant="6" id="tps-aV-CKA"/>
-                                                <constraint firstItem="5tY-5k-v2g" firstAttribute="leading" secondItem="BpI-Hz-KH2" secondAttribute="leadingMargin" id="v4X-Nd-cpC"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -65,7 +55,7 @@
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="2Md-2E-7Z4">
                                                     <rect key="frame" x="305" y="6" width="51" height="31"/>
-                                                    <color key="onTintColor" name="primaryAccentColor"/>
+                                                    <color key="onTintColor" name="AccentColor"/>
                                                     <connections>
                                                         <action selector="switchEnableCloudKit:" destination="a0p-rk-skQ" eventType="valueChanged" id="9pC-ed-Q1K"/>
                                                     </connections>
@@ -178,8 +168,8 @@
         </scene>
     </scenes>
     <resources>
-        <namedColor name="primaryAccentColor">
-            <color red="0.031372549019607843" green="0.41568627450980394" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="AccentColor">
+            <color red="0.25490196078431371" green="0.45882352941176469" blue="0.019607843137254902" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

@@ -100,6 +100,10 @@ internal enum L10n {
   internal static let hideCompleted = L10n.tr("Localizable", "Hide_Completed")
   /// Hide Notes
   internal static let hideNotes = L10n.tr("Localizable", "Hide_Notes")
+  /// Hide On My iPad Account
+  internal static let hideOnMyIPad = L10n.tr("Localizable", "Hide_On_My_iPad")
+  /// Hide On My iPhone Account
+  internal static let hideOnMyIPhone = L10n.tr("Localizable", "Hide_On_My_iPhone")
   /// Import Failed
   internal static let importFailed = L10n.tr("Localizable", "Import Failed")
   /// Import OPML

@@ -54,6 +54,20 @@ class SettingsViewController: UITableViewController {
 	
 	// MARK: UITableView
 	
+	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = super.tableView(tableView, cellForRowAt: indexPath)
+		
+		if indexPath.section == 0 && indexPath.row == 0 {
+			if traitCollection.userInterfaceIdiom == .phone {
+				cell.textLabel?.text = L10n.hideOnMyIPhone
+			} else {
+				cell.textLabel?.text = L10n.hideOnMyIPad
+			}
+		}
+		
+		return cell
+	}
+	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		guard indexPath.section == 1 else { return }
 		
