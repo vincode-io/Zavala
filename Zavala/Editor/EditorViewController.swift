@@ -369,12 +369,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		if note.name == UIResponder.keyboardWillHideNotification {
 			collectionView.contentInset = EditorViewController.defaultContentInsets
+			updateUI(editMode: false)
 		} else {
 			collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
 			if let scrollToIndex = currentTextView?.row?.shadowTableIndex, let cell = collectionView.cellForItem(at: IndexPath(row: scrollToIndex, section: Outline.Section.rows.rawValue)) {
 				let cellFrame = view.convert(cell.frame, from: view.window)
 				collectionView.scrollRectToVisible(cellFrame, animated: true)
 			}
+			updateUI(editMode: true)
 		}
 
 	}
@@ -522,7 +524,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func done(_ sender: Any?) {
 		UIResponder.currentFirstResponder?.resignFirstResponder()
-		updateUI(editMode: false)
 	}
 	
 	@objc func toggleOutlineFilter(_ sender: Any?) {
@@ -712,7 +713,6 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	}
 	
 	func editorTitleTextFieldDidBecomeActive() {
-		updateUI(editMode: true)
 		collectionView.deselectAll()
 	}
 	
@@ -746,7 +746,6 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 	}
 	
 	func editorTagInputTextFieldDidBecomeActive() {
-		updateUI(editMode: true)
 		collectionView.deselectAll()
 	}
 	
@@ -806,7 +805,6 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	}
 	
 	func editorTextRowTextFieldDidBecomeActive() {
-		updateUI(editMode: true)
 		collectionView.deselectAll()
 	}
 
