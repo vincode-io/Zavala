@@ -38,6 +38,7 @@
 		5163ADF525C79B69008F25CA /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5163ADF425C79B69008F25CA /* String+.swift */; };
 		51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51692B0B25681AD3006B755F /* UIViewController+.swift */; };
 		5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5169928925AE4F5C00760C9D /* UICollectionView+.swift */; };
+		517342EB25EB38D40012EB20 /* EditorViewController+Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517342EA25EB38D40012EB20 /* EditorViewController+Share.swift */; };
 		517AF68625E07A3F0044DBAB /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517AF68525E07A3F0044DBAB /* Preferences.storyboard */; };
 		517AF68825E07A420044DBAB /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF68425E07A190044DBAB /* PreferencesWindowController.swift */; };
 		517AF68C25E07A790044DBAB /* GeneralPrefencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */; };
@@ -190,6 +191,7 @@
 		5163ADF425C79B69008F25CA /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		51692B0B25681AD3006B755F /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		5169928925AE4F5C00760C9D /* UICollectionView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+.swift"; sourceTree = "<group>"; };
+		517342EA25EB38D40012EB20 /* EditorViewController+Share.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Share.swift"; sourceTree = "<group>"; };
 		517AF68425E07A190044DBAB /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
 		517AF68525E07A3F0044DBAB /* Preferences.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
 		517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralPrefencesViewController.swift; sourceTree = "<group>"; };
@@ -511,6 +513,7 @@
 				51C4C45A255ACA1B004E0206 /* EditorViewController.swift */,
 				51D28D2B257730DB0039DDFC /* EditorViewController+Drag.swift */,
 				51D28D31257731DC0039DDFC /* EditorViewController+Drop.swift */,
+				517342EA25EB38D40012EB20 /* EditorViewController+Share.swift */,
 				51B9D51625A9080A00579D19 /* EditorViewDisclosureButton.swift */,
 				514F220B25C4CC42004E02CD /* Tag */,
 				51C03097257E02FF00609262 /* TextRow */,
@@ -783,6 +786,7 @@
 				512229682563507E008041AF /* EditorTextRowViewCell.swift in Sources */,
 				51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */,
 				51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */,
+				517342EB25EB38D40012EB20 /* EditorViewController+Share.swift in Sources */,
 				5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */,
 				51B2B2D22563AB190090C56B /* EditorTextRowContentView.swift in Sources */,
 				51D28D32257731DC0039DDFC /* EditorViewController+Drop.swift in Sources */,

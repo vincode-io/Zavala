@@ -333,6 +333,10 @@ class MainSplitViewController: UISplitViewController {
 		editorViewController?.deleteCompletedRows()
 	}
 	
+	@objc func share(_ sender: Any?) {
+		editorViewController?.share()
+	}
+	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
@@ -527,6 +531,7 @@ extension NSToolbarItem.Identifier {
 	static let link = NSToolbarItem.Identifier("io.vincode.Zavala.link")
 	static let boldface = NSToolbarItem.Identifier("io.vincode.Zavala.boldface")
 	static let italic = NSToolbarItem.Identifier("io.vincode.Zavala.italic")
+	static let share = NSToolbarItem.Identifier("io.vincode.Zavala.share")
 }
 
 extension MainSplitViewController: NSToolbarDelegate {
@@ -542,6 +547,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.boldface,
 			.italic,
 			.flexibleSpace,
+			.share,
+			.space,
 			.toggleOutlineFilter,
 		]
 	}
@@ -558,6 +565,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.italic,
 			.toggleOutlineNotesHidden,
 			.toggleOutlineFilter,
+			.share,
 			.space,
 			.flexibleSpace
 		]
@@ -680,6 +688,18 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = L10n.hideNotes
 			item.isBordered = true
 			item.action = #selector(toggleOutlineHideNotes(_:))
+			item.target = self
+			toolbarItem = item
+		case .share:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isShareUnavailable ?? true
+			}
+			item.image = AppAssets.share
+			item.label = L10n.share
+			item.toolTip = L10n.share
+			item.isBordered = true
+			item.action = #selector(share(_:))
 			item.target = self
 			toolbarItem = item
 		case .toggleSidebar:

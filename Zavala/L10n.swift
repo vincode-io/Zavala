@@ -154,6 +154,8 @@ internal enum L10n {
   internal static func seeDocumentsIn(_ p1: Any) -> String {
     return L10n.tr("Localizable", "See_Documents_In", String(describing: p1))
   }
+  /// Share
+  internal static let share = L10n.tr("Localizable", "Share")
   /// Show Completed
   internal static let showCompleted = L10n.tr("Localizable", "Show_Completed")
   /// Show Notes

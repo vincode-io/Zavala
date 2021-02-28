@@ -147,6 +147,10 @@ struct AppAssets {
 		return UIColor(named: "SelectColor")!
 	}()
 
+	static var share: UIImage = {
+		return UIImage(systemName: "person.crop.circle.badge.plus")!
+	}()
+
 	static var sync: UIImage = {
 		return UIImage(systemName: "arrow.clockwise")!
 	}()

@@ -66,6 +66,7 @@
 "Remove" = "Remove";
 "Sync" = "Sync with iCloud";
 "Delete_Completed_Rows" = "Delete Completed Rows";
+"Share" = "Share";
 
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";
