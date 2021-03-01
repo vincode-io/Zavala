@@ -39,6 +39,10 @@ class MainSplitViewController: UISplitViewController {
 		return editorViewController?.isOutlineFunctionsUnavailable ?? true
 	}
 	
+	var isShareUnavailable: Bool {
+		return editorViewController?.isShareUnavailable ?? true
+	}
+	
 	var isOutlineFiltered: Bool {
 		return editorViewController?.isOutlineFiltered ?? false
 	}

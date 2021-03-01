@@ -295,6 +295,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									action: #selector(sendCopy(_:)),
 									propertyList: UICommandTagShare)
 
+	let shareCommand = UICommand(title: L10n.share, action: #selector(shareCommand(_:)))
+
 	var mainSplitViewController: MainSplitViewController? {
 		var keyScene: UIScene?
 		let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
@@ -509,6 +511,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.sendCopy(sender)
 	}
 
+	@objc func shareCommand(_ sender: Any?) {
+		mainSplitViewController?.share(sender)
+	}
+
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
@@ -612,6 +618,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainSplitViewController?.isDeleteCompletedRowsUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(shareCommand(_:)):
+			if mainSplitViewController?.isShareUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		default:
 			break
 		}
@@ -645,7 +655,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand])
 		builder.insertChild(newItemsMenu, atStartOfMenu: .file)
 
-		let shareMenu = UIMenu(title: "", options: .displayInline, children: [sendCopyCommand])
+		let shareMenu = UIMenu(title: "", options: .displayInline, children: [sendCopyCommand, shareCommand])
 		builder.insertChild(shareMenu, atEndOfMenu: .file)
 
 		// Edit
