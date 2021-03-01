@@ -46,13 +46,12 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 				  let zoneID = outline.zoneID else { continue }
 			
 			let outlineRecordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
-			let outlineRecordRef = CKRecord.Reference(recordID: outlineRecordID, action: .deleteSelf)
 
 			outline.load()
 			
 			for rowRequest in documentRowRequest {
 				if let row = outline.findRow(id: rowRequest.id) {
-					addSave(zoneID: zoneID, outlineRecordRef: outlineRecordRef, row: row)
+					addSave(zoneID: zoneID, outlineRecordID: outlineRecordID, row: row)
 				} else {
 					addDeleteRow(rowRequest)
 				}
@@ -146,13 +145,14 @@ extension CloudKitModifyOperation {
 		addSave(zoneID, record)
 	}
 	
-	private func addSave(zoneID: CKRecordZone.ID, outlineRecordRef: CKRecord.Reference, row: Row) {
+	private func addSave(zoneID: CKRecordZone.ID, outlineRecordID: CKRecord.ID, row: Row) {
 		guard let textRow = row.textRow else { return }
 		
 		let recordID = CKRecord.ID(recordName: textRow.id.description, zoneID: zoneID)
 		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitRow.recordType, recordID: recordID)
 		
-		record[CloudKitOutlineZone.CloudKitRow.Fields.outline] = outlineRecordRef
+		record.parent = CKRecord.Reference(recordID: outlineRecordID, action: .none)
+		record[CloudKitOutlineZone.CloudKitRow.Fields.outline] = CKRecord.Reference(recordID: outlineRecordID, action: .deleteSelf)
 		record[CloudKitOutlineZone.CloudKitRow.Fields.subtype] = "text"
 		record[CloudKitOutlineZone.CloudKitRow.Fields.topicData] = textRow.topicData
 		record[CloudKitOutlineZone.CloudKitRow.Fields.noteData] = textRow.noteData
