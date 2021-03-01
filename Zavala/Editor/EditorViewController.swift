@@ -601,7 +601,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			case .success(let sharingController):
 				sharingController.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
 				sharingController.delegate = self
-				sharingController.availablePermissions = [.allowReadOnly, .allowReadWrite]
+				sharingController.availablePermissions = [.allowReadWrite]
 				self.present(sharingController, animated: true)
 			case .failure(let error):
 				self.presentError(error)
