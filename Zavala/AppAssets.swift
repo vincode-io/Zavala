@@ -155,6 +155,10 @@ struct AppAssets {
 		return UIImage(systemName: "person.crop.circle.badge.plus")!
 	}()
 
+	static var shared: UIImage = {
+		return UIImage(systemName: "person.crop.circle")!
+	}()
+
 	static var sync: UIImage = {
 		return UIImage(systemName: "arrow.clockwise")!
 	}()

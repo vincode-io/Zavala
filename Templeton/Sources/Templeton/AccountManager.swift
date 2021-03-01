@@ -160,8 +160,8 @@ public final class AccountManager {
 		cloudKitAccount?.cloudKitManager?.receiveRemoteNotification(userInfo: userInfo, completion: completion)
 	}
 	
-	public func sync() {
-		cloudKitAccount?.cloudKitManager?.sync()
+	public func sync(completion: (() -> Void)? = nil) {
+		cloudKitAccount?.cloudKitManager?.sync(completion: completion)
 	}
 	
 	public func resume() {

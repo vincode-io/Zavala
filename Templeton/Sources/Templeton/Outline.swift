@@ -112,7 +112,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 	public var cloudKitShareRecordName: String? {
 		didSet {
-			documentMetaDataDidChange()
+			if cloudKitShareRecordName != oldValue {
+				documentSharingDidChange()
+				documentMetaDataDidChange()
+			}
 		}
 	}
 
@@ -138,6 +141,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public var isEmpty: Bool {
 		return (title == nil || title?.isEmpty ?? true) && (rowOrder == nil || rowOrder?.isEmpty ?? true)
+	}
+	
+	public var isShared: Bool {
+		return cloudKitShareRecordName != nil
 	}
 	
 	public var account: Account? {
@@ -1431,6 +1438,10 @@ extension Outline {
 
 	private func documentMetaDataDidChange() {
 		NotificationCenter.default.post(name: .DocumentMetaDataDidChange, object: Document.outline(self), userInfo: nil)
+	}
+
+	private func documentSharingDidChange() {
+		NotificationCenter.default.post(name: .DocumentSharingDidChange, object: Document.outline(self), userInfo: nil)
 	}
 
 	private func outlineBodyDidChange() {

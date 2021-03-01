@@ -79,6 +79,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(documentSharingDidChange(_:)), name: .DocumentSharingDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 	}
 	
@@ -122,6 +123,11 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
+		guard let document = note.object as? Document else { return }
+		reload(document: document)
+	}
+	
+	@objc func documentSharingDidChange(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
 		reload(document: document)
 	}
@@ -229,7 +235,14 @@ extension TimelineViewController {
 			guard let self = self, let document = AccountManager.shared.findDocument(item.id) else { return }
 			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
-			contentConfiguration.text = document.title ?? ""
+			if document.isShared {
+				let attrText = NSMutableAttributedString(string: "\(document.title ?? "") ")
+				let shareAttachement = NSTextAttachment(image: AppAssets.shared)
+				attrText.append(NSAttributedString(attachment: shareAttachement))
+				contentConfiguration.attributedText = attrText
+			} else {
+				contentConfiguration.text = document.title ?? ""
+			}
 			contentConfiguration.secondaryText = Self.dateString(document.updated)
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			

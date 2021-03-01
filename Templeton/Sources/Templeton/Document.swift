@@ -12,6 +12,7 @@ public extension Notification.Name {
 	static let DocumentTitleDidChange = Notification.Name(rawValue: "DocumentTitleDidChange")
 	static let DocumentMetaDataDidChange = Notification.Name(rawValue: "DocumentMetaDataDidChange")
 	static let DocumentDidDelete = Notification.Name(rawValue: "DocumentDidDelete")
+	static let DocumentSharingDidChange = Notification.Name(rawValue: "DocumentSharingDidChange")
 }
 
 public enum Document: Equatable, Codable {
@@ -75,6 +76,13 @@ public enum Document: Equatable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.isEmpty
+		}
+	}
+	
+	public var isShared: Bool {
+		switch self {
+		case .outline(let outline):
+			return outline.isShared
 		}
 	}
 	

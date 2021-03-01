@@ -131,13 +131,16 @@ public class CloudKitManager {
 		return zone
 	}
 	
-	func sync() {
+	func sync(completion: (() -> Void)? = nil) {
 		guard isNetworkAvailable else {
+			completion?()
 			return
 		}
+		
 		sendChanges() {
 			self.fetchAllChanges() {
 				NotificationCenter.default.post(name: .CloudKitSyncDidComplete, object: self, userInfo: nil)
+				completion?()
 			}
 		}
 	}
