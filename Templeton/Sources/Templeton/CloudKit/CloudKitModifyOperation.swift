@@ -12,6 +12,11 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 
 	var modifications = [CKRecordZone.ID: ([CKRecord], [CKRecord.ID])]()
 
+	class CombinedRequest {
+		var documentRequest: CloudKitActionRequest?
+		var rowRequests = [CloudKitActionRequest]()
+	}
+	
 	override func run() {
 		guard let account = AccountManager.shared.cloudKitAccount,
 			  let cloudKitManager = account.cloudKitManager else {
@@ -19,37 +24,37 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 			return
 		}
 		
-		var (documentRequests, documentRowRequests) = loadRequests()
+		let combinedRequests = loadRequests()
 		
-		guard !documentRequests.isEmpty || !documentRowRequests.isEmpty else {
+		guard !combinedRequests.isEmpty else {
 			operationDelegate?.operationDidComplete(self)
 			return
 		}
 		
-		// Document Processing
-		
-		for documentRequest in documentRequests {
-			let id = documentRequest.id.documentUUID
-			if let document = account.findDocument(documentUUID: id) {
-				addSave(document)
-			} else {
-				addDeleteDocument(documentRequest)
-				documentRowRequests.removeValue(forKey: id)
+		for documentUUID in combinedRequests.keys {
+			guard let combinedRequest = combinedRequests[documentUUID] else { continue }
+			
+			// If we don't have a document, we probably have a delete request to send.
+			// We don't have to continue processing since we cascade delete our rows.
+			guard let document = account.findDocument(documentUUID: documentUUID) else {
+				if let docRequest = combinedRequest.documentRequest {
+					addDeleteDocument(docRequest)
+				}
+				continue
 			}
-		}
-		
-		// Row Processing
-		
-		for documentUUID in documentRowRequests.keys {
-			guard let outline = account.findDocument(documentUUID: documentUUID)?.outline,
-				  let documentRowRequest = documentRowRequests[documentUUID],
-				  let zoneID = outline.zoneID else { continue }
 			
-			let outlineRecordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
+			document.load()
+			
+			// This has to be a save for the document
+			if combinedRequest.documentRequest != nil {
+				addSave(document)
+			}
 
-			outline.load()
+			// Now process all the rows
+			guard let outline = document.outline, let zoneID = outline.zoneID else { continue }
+			let outlineRecordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
 			
-			for rowRequest in documentRowRequest {
+			for rowRequest in combinedRequest.rowRequests {
 				if let row = outline.findRow(id: rowRequest.id) {
 					addSave(zoneID: zoneID, outlineRecordID: outlineRecordID, row: row)
 				} else {
@@ -57,7 +62,7 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 				}
 			}
 			
-			outline.suspend()
+			document.suspend()
 		}
 		
 		// Send the grouped changes
@@ -90,7 +95,7 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 
 extension CloudKitModifyOperation {
 	
-	private func loadRequests() -> ([CloudKitActionRequest], [String: [CloudKitActionRequest]]) {
+	private func loadRequests() -> [String: CombinedRequest] {
 		var queuedRequests: Set<CloudKitActionRequest>? = nil
 		if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
 			let decoder = PropertyListDecoder()
@@ -99,30 +104,36 @@ extension CloudKitModifyOperation {
 			}
 		}
 
-		var documentRequests = [CloudKitActionRequest]()
-		var documentRowRequests = [String: [CloudKitActionRequest]]()
+		var combinedRequests = [String: CombinedRequest]()
 		
-		guard !(queuedRequests?.isEmpty ?? true) else { return (documentRequests, documentRowRequests) }
+		guard !(queuedRequests?.isEmpty ?? true) else { return combinedRequests }
 		
 		for queuedRequest in queuedRequests! {
 			switch queuedRequest.id {
-			case .document:
-				documentRequests.append(queuedRequest)
-			case .row(_, let documentUUID, _):
-				if var rowIDs = documentRowRequests[documentUUID] {
-					rowIDs.append(queuedRequest)
-					documentRowRequests[documentUUID] = rowIDs
+			case .document(_, let documentUUID):
+				if let combinedRequest = combinedRequests[documentUUID] {
+					combinedRequest.documentRequest = queuedRequest
+					combinedRequests[documentUUID] = combinedRequest
 				} else {
-					var rowIDs = [CloudKitActionRequest]()
-					rowIDs.append(queuedRequest)
-					documentRowRequests[documentUUID] = rowIDs
+					let combinedRequest = CombinedRequest()
+					combinedRequest.documentRequest = queuedRequest
+					combinedRequests[documentUUID] = combinedRequest
+				}
+			case .row(_, let documentUUID, _):
+				if let combinedRequest = combinedRequests[documentUUID] {
+					combinedRequest.rowRequests.append(queuedRequest)
+					combinedRequests[documentUUID] = combinedRequest
+				} else {
+					let combinedRequest = CombinedRequest()
+					combinedRequest.rowRequests.append(queuedRequest)
+					combinedRequests[documentUUID] = combinedRequest
 				}
 			default:
 				fatalError()
 			}
 		}
 		
-		return (documentRequests, documentRowRequests)
+		return combinedRequests
 	}
 	
 	private func deleteRequests() {
