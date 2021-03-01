@@ -25,7 +25,7 @@ class EditorTagInputContentView: UIView, UIContentView {
 		
 		borderView.translatesAutoresizingMaskIntoConstraints = false
 		borderView.layer.borderWidth = 1
-		borderView.layer.borderColor = UIColor.tertiarySystemBackground.cgColor
+		borderView.layer.borderColor = UIColor.systemGray4.cgColor
 
 		if traitCollection.userInterfaceIdiom == .mac {
 			borderView.layer.cornerRadius = 10
