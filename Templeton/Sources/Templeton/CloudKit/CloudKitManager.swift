@@ -76,6 +76,7 @@ public class CloudKitManager {
 				self?.presentError(error)
 			}
 		}
+		subscribeToSharedDatabaseChanges()
 	}
 	
 	func addRequest(_ request: CloudKitActionRequest) {
@@ -106,17 +107,17 @@ public class CloudKitManager {
 	}
 	
 	func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
-		guard let zoneNote = CKRecordZoneNotification(fromRemoteNotificationDictionary: userInfo) else {
-			completion()
-			return
+		if let zoneNote = CKRecordZoneNotification(fromRemoteNotificationDictionary: userInfo), zoneNote.notificationType == .recordZone {
+			guard let zoneId = zoneNote.databaseScope == .private ? defaultZone.zoneID : zoneNote.recordZoneID else {
+				completion()
+				return
+			}
+			fetchChanges(zoneID: zoneId, completion: completion)
 		}
 		
-		guard let zoneId = zoneNote.databaseScope == .private ? defaultZone.zoneID : zoneNote.recordZoneID else {
-			completion()
-			return
+		if let dbNote = CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo), dbNote.notificationType == .database {
+			fetchAllChanges()
 		}
-		
-		fetchChanges(zoneID: zoneId, completion: completion)
 	}
 	
 	func findZone(zoneID: CKRecordZone.ID) -> CloudKitOutlineZone {
@@ -127,7 +128,6 @@ public class CloudKitManager {
 		let zone = CloudKitOutlineZone(container: container, database: container.sharedCloudDatabase, zoneID: zoneID)
 		zone.delegate = CloudKitAcountZoneDelegate(account: account!)
 		zones[zoneID] = zone
-		zone.subscribeToZoneChanges()
 		return zone
 	}
 	
@@ -186,10 +186,20 @@ public class CloudKitManager {
 		coalescingQueue.performCallsImmediately()
 	}
 	
-	func accountDidDelete() {
-		for zone in zones.values {
-			zone.resetChangeToken()
+	func accountDidDelete(account: Account) {
+		var zoneIDs = Set<CKRecordZone.ID>()
+
+		for doc in account.documents ?? [Document]() {
+			if let zoneID = doc.zoneID {
+				zoneIDs.insert(zoneID)
+			}
 		}
+		
+		for zoneID in zoneIDs {
+			findZone(zoneID: zoneID).resetChangeToken()
+		}
+		
+		sharedDatabaseChangeToken = nil
 	}
 	
 }
@@ -237,25 +247,38 @@ extension CloudKitManager {
 		var zoneIDs = Set<CKRecordZone.ID>()
 		zoneIDs.insert(defaultZone.zoneID)
 		
-		for doc in account?.documents ?? [Document]() {
-			if let zoneID = doc.zoneID {
-				zoneIDs.insert(zoneID)
+		let op = CKFetchDatabaseChangesOperation(previousServerChangeToken: sharedDatabaseChangeToken)
+		op.qualityOfService = CloudKitOutlineZone.qualityOfService
+		
+		op.recordZoneWithIDChangedBlock = { zoneID in
+			zoneIDs.insert(zoneID)
+		}
+		
+		op.fetchDatabaseChangesCompletionBlock = { [weak self] token, _, error in
+			guard let self = self else {
+				completion?()
+				return
+			}
+			
+			let group = DispatchGroup()
+			
+			for zoneID in zoneIDs {
+				group.enter()
+				self.fetchChanges(zoneID: zoneID) {
+					group.leave()
+				}
+			}
+			
+			group.notify(queue: DispatchQueue.main) {
+				self.sharedDatabaseChangeToken = token
+				completion?()
+				self.isSyncing = false
 			}
 		}
 		
-		let group = DispatchGroup()
+		container.sharedCloudDatabase.add(op)
 		
-		for zoneID in zoneIDs {
-			group.enter()
-			fetchChanges(zoneID: zoneID) {
-				group.leave()
-			}
-		}
-		
-		group.notify(queue: DispatchQueue.main) {
-			completion?()
-			self.isSyncing = false
-		}
+
 	}
 	
 	private func fetchChanges(zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
@@ -275,6 +298,51 @@ extension CloudKitManager {
 			}
 			completion?()
 			UIApplication.shared.endBackgroundTask(backgroundTask)
+		}
+	}
+	
+	private func subscribeToSharedDatabaseChanges() {
+		let outlineSubscription = sharedDatabaseSubscription(recordType: CloudKitOutlineZone.CloudKitOutline.recordType)
+		let rowSubscription = sharedDatabaseSubscription(recordType: CloudKitOutlineZone.CloudKitRow.recordType)
+
+		let op = CKModifySubscriptionsOperation(subscriptionsToSave: [outlineSubscription, rowSubscription], subscriptionIDsToDelete: nil)
+		op.qualityOfService = CloudKitOutlineZone.qualityOfService
+		
+		op.modifySubscriptionsCompletionBlock = { subscriptions, deleted, error in
+			if error != nil {
+				os_log("Unable to subscribe to shared database.", log: self.log, type: .info)
+			}
+		}
+		
+		container.sharedCloudDatabase.add(op)
+	}
+	
+	private func sharedDatabaseSubscription(recordType: String) -> CKDatabaseSubscription {
+		let subscription = CKDatabaseSubscription()
+		subscription.recordType = recordType
+
+		let notificationInfo = CKSubscription.NotificationInfo()
+		notificationInfo.shouldSendContentAvailable = true
+		subscription.notificationInfo = notificationInfo
+		
+		return subscription
+	}
+	
+	var sharedDatabaseChangeTokenKey: String {
+		return "cloudkit.server.token.sharedDatabase"
+	}
+
+	var sharedDatabaseChangeToken: CKServerChangeToken? {
+		get {
+			guard let tokenData = UserDefaults.standard.object(forKey: sharedDatabaseChangeTokenKey) as? Data else { return nil }
+			return try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: tokenData)
+		}
+		set {
+			guard let token = newValue, let data = try? NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: false) else {
+				UserDefaults.standard.removeObject(forKey: sharedDatabaseChangeTokenKey)
+				return
+			}
+			UserDefaults.standard.set(data, forKey: sharedDatabaseChangeTokenKey)
 		}
 	}
 	

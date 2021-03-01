@@ -40,10 +40,10 @@
 		5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5169928925AE4F5C00760C9D /* UICollectionView+.swift */; };
 		517342EF25EC2BE60012EB20 /* OutlineActivityItemSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517342EE25EC2BE60012EB20 /* OutlineActivityItemSource.swift */; };
 		517342F225EC2C690012EB20 /* UIActivityViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517342F125EC2C690012EB20 /* UIActivityViewController+.swift */; };
+		5173430225ED85C30012EB20 /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5173430125ED85C30012EB20 /* AppDefaults.swift */; };
 		517AF68625E07A3F0044DBAB /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517AF68525E07A3F0044DBAB /* Preferences.storyboard */; };
 		517AF68825E07A420044DBAB /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF68425E07A190044DBAB /* PreferencesWindowController.swift */; };
 		517AF68C25E07A790044DBAB /* GeneralPrefencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */; };
-		517AF69525E085A80044DBAB /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF69425E085A80044DBAB /* AppDefaults.swift */; };
 		517AF69C25E0862E0044DBAB /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF69B25E0862E0044DBAB /* AppDefaults.swift */; };
 		517AF6A025E08A6B0044DBAB /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517AF69F25E08A6B0044DBAB /* Settings.storyboard */; };
 		517AF6A425E08B7F0044DBAB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */; };
@@ -194,10 +194,10 @@
 		5169928925AE4F5C00760C9D /* UICollectionView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+.swift"; sourceTree = "<group>"; };
 		517342EE25EC2BE60012EB20 /* OutlineActivityItemSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineActivityItemSource.swift; sourceTree = "<group>"; };
 		517342F125EC2C690012EB20 /* UIActivityViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityViewController+.swift"; sourceTree = "<group>"; };
+		5173430125ED85C30012EB20 /* AppDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		517AF68425E07A190044DBAB /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
 		517AF68525E07A3F0044DBAB /* Preferences.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
 		517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralPrefencesViewController.swift; sourceTree = "<group>"; };
-		517AF69425E085A80044DBAB /* AppDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		517AF69B25E0862E0044DBAB /* AppDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDefaults.swift; sourceTree = "<group>"; };
 		517AF69F25E08A6B0044DBAB /* Settings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
 		517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -477,7 +477,7 @@
 				51E060F225A4C13B00194066 /* BridgingHeader.h */,
 				51E060F325A4C13B00194066 /* AppKitPlugin.h */,
 				51E060ED25A4B5E600194066 /* AppKitWrapper.swift */,
-				517AF69425E085A80044DBAB /* AppDefaults.swift */,
+				5173430125ED85C30012EB20 /* AppDefaults.swift */,
 				517AF68525E07A3F0044DBAB /* Preferences.storyboard */,
 				517AF68425E07A190044DBAB /* PreferencesWindowController.swift */,
 				517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */,
@@ -813,7 +813,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				517AF68825E07A420044DBAB /* PreferencesWindowController.swift in Sources */,
-				517AF69525E085A80044DBAB /* AppDefaults.swift in Sources */,
+				5173430225ED85C30012EB20 /* AppDefaults.swift in Sources */,
 				51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */,
 				517AF68C25E07A790044DBAB /* GeneralPrefencesViewController.swift in Sources */,
 				517AF6B425E0A3C20044DBAB /* L10n.swift in Sources */,

@@ -113,19 +113,19 @@ public final class AccountManager {
 	}
 	
 	public func deleteCloudKitAccount() {
-		// Send out all the document delete events for this account to clean up the search index
-		cloudKitAccount?.documents?.forEach { $0.documentDidDelete() }
+		guard let cloudKitAccount = cloudKitAccount else { return }
 		
-		let cloudKitManger = cloudKitAccount?.cloudKitManager
-
+		// Send out all the document delete events for this account to clean up the search index
+		cloudKitAccount.documents?.forEach { $0.documentDidDelete() }
+		
 		accountsDictionary[AccountType.cloudKit.rawValue] = nil
 		accountFiles[AccountType.cloudKit.rawValue] = nil
-
-		cloudKitManger?.accountDidDelete()
 
 		try? FileManager.default.removeItem(atPath: cloudKitAccountFolder.path)
 
 		accountManagerAccountsDidChange()
+
+		cloudKitAccount.cloudKitManager?.accountDidDelete(account: cloudKitAccount)
 	}
 	
 	public func findAccount(accountType: AccountType) -> Account? {
