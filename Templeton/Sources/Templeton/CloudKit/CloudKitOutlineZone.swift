@@ -5,7 +5,7 @@
 //  Created by Maurice Parker on 2/6/21.
 //
 
-import Foundation
+import UIKit
 import os.log
 import RSCore
 import CloudKit
@@ -62,5 +62,59 @@ final class CloudKitOutlineZone: CloudKitZone {
 		self.database = database
 		self.zoneID = zoneID
 	}
+	
+	func prepareCloudSharingController(shareRecordID: CKRecord.ID, completion: @escaping (Result<UICloudSharingController, Error>) -> Void) {
+		fetch(externalID: shareRecordID.recordName) { [weak self] result in
+			switch result {
+			case .success(let record):
+				guard let shareRecord = record as? CKShare, let container = self?.container else {
+					completion(.failure(CloudKitOutlineZoneError.unknown))
+					return
+				}
+				completion(.success(UICloudSharingController(share: shareRecord, container: container)))
+			case .failure(let error):
+				completion(.failure(error))
+			}
+		}
+	}
 
+	func prepareCloudSharingController(document: Document, completion: @escaping (Result<UICloudSharingController, Error>) -> Void) {
+		let sharingController = UICloudSharingController { [weak self] (_, prepareCompletionHandler) in
+
+			self?.fetch(externalID: document.id.description) { [weak self] result in
+				guard let self = self else {
+					completion(.failure(CloudKitOutlineZoneError.unknown))
+					return
+				}
+
+				switch result {
+				case .success(let unsharedRootRecord):
+					let shareID = self.generateRecordID()
+					let share = CKShare(rootRecord: unsharedRootRecord, shareID: shareID)
+					share[CKShare.SystemFieldKey.title] = (document.title ?? "") as CKRecordValue
+
+					self.modify(recordsToSave: [share, unsharedRootRecord], recordIDsToDelete: []) { [weak self] result in
+						guard let self = self else {
+							completion(.failure(CloudKitOutlineZoneError.unknown))
+							return
+						}
+						
+						switch result {
+						case .success:
+							var mutableDocument = document
+							mutableDocument.shareRecordID = shareID
+							prepareCompletionHandler(share, self.container, nil)
+						case .failure(let error):
+							prepareCompletionHandler(nil, self.container, error)
+						}
+					}
+				case .failure(let error):
+					prepareCompletionHandler(nil, self.container, error)
+				}
+			}
+		}
+
+		completion(.success(sharingController))
+	}
+	
 }

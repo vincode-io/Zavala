@@ -1356,6 +1356,12 @@ extension Outline {
 	}
 	
 	private func applyOutlineRecord(_ record: CKRecord) {
+		if let shareReference = record.share {
+			cloudKitShareRecordName = shareReference.recordID.recordName
+		} else {
+			cloudKitShareRecordName = nil
+		}
+		
 		let newTitle = record[CloudKitOutlineZone.CloudKitOutline.Fields.title] as? String
 		if title != newTitle {
 			title = newTitle

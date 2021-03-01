@@ -5,7 +5,7 @@
 //  Created by Maurice Parker on 11/6/20.
 //
 
-import Foundation
+import UIKit
 import os.log
 import SWXMLHash
 import CloudKit
@@ -108,6 +108,10 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	public func userDidAcceptCloudKitShareWith(_ shareMetadata: CKShare.Metadata) {
 		cloudKitManager?.userDidAcceptCloudKitShareWith(shareMetadata)
+	}
+	
+	public func prepareCloudSharingController(document: Document, completion: @escaping (Result<UICloudSharingController, Error>) -> Void) {
+		cloudKitManager?.prepareCloudSharingController(document: document, completion: completion)
 	}
 
 	public func activate() {

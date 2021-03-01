@@ -20,6 +20,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return outline == nil
 	}
 	
+	var isShareUnavailable: Bool {
+		return outline == nil || !outline!.isCloudKit
+	}
+
 	var isOutlineFiltered: Bool {
 		return outline?.isFiltered ?? false
 	}
@@ -589,6 +593,21 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
+	@objc func share(_ sender: Any? = nil) {
+		guard let outline = outline else { return }
+		
+		AccountManager.shared.cloudKitAccount?.prepareCloudSharingController(document: .outline(outline)) { result in
+			switch result {
+			case .success(let sharingController):
+				sharingController.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
+				sharingController.delegate = self
+				sharingController.availablePermissions = [.allowReadOnly, .allowReadWrite]
+				self.present(sharingController, animated: true)
+			case .failure(let error):
+				self.presentError(error)
+			}
+		}
+	}
 }
 
 // MARK: Collection View
@@ -900,6 +919,20 @@ extension EditorViewController: LinkViewControllerDelegate {
 		}
 	}
 	
+}
+
+// MARK: UICloudSharingControllerDelegate
+
+extension EditorViewController: UICloudSharingControllerDelegate {
+	
+	func itemTitle(for csc: UICloudSharingController) -> String? {
+		return outline?.title
+	}
+	
+	func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
+		presentError(error)
+	}
+
 }
 
 // MARK: Helpers

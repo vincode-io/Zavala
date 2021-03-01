@@ -164,6 +164,20 @@ public class CloudKitManager {
 		container.add(op)
 	}
 	
+	func prepareCloudSharingController(document: Document, completion: @escaping (Result<UICloudSharingController, Error>) -> Void) {
+		guard let zoneID = document.zoneID else {
+			completion(.failure(CloudKitOutlineZoneError.unknown))
+			return
+		}
+		
+		let zone = findZone(zoneID: zoneID)
+		if let shareRecordID = document.shareRecordID {
+			zone.prepareCloudSharingController(shareRecordID: shareRecordID, completion: completion)
+		} else {
+			zone.prepareCloudSharingController(document: document, completion: completion)
+		}
+	}
+
 	func resume() {
 		sync()
 	}
