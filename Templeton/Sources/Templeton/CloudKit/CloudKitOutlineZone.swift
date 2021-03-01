@@ -101,8 +101,6 @@ final class CloudKitOutlineZone: CloudKitZone {
 						
 						switch result {
 						case .success:
-							var mutableDocument = document
-							mutableDocument.shareRecordID = shareID
 							prepareCompletionHandler(share, self.container, nil)
 						case .failure(let error):
 							prepareCompletionHandler(nil, self.container, error)

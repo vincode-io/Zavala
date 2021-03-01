@@ -932,6 +932,14 @@ extension EditorViewController: UICloudSharingControllerDelegate {
 	func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
 		presentError(error)
 	}
+	
+	func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
+		AccountManager.shared.sync()
+	}
+	
+	func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
+		AccountManager.shared.sync()
+	}
 
 }
 
