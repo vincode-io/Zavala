@@ -267,7 +267,11 @@ extension CloudKitManager {
 		let zone = findZone(zoneID: zoneID)
 		zone.fetchChangesInZone() { [weak self] result in
 			if case .failure(let error) = result {
-				self?.presentError(error)
+				if let ckError = (error as? CloudKitError)?.error as? CKError, ckError.code == .zoneNotFound {
+					AccountManager.shared.cloudKitAccount?.deleteAllDocuments(with: zoneID)
+				} else {
+					self?.presentError(error)
+				}
 			}
 			completion?()
 			UIApplication.shared.endBackgroundTask(backgroundTask)

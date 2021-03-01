@@ -342,6 +342,14 @@ public final class Account: NSObject, Identifiable, Codable {
 		accountTagsDidChange()
 	}
 	
+	func deleteAllDocuments(with zoneID: CKRecordZone.ID) {
+		for doc in documents ?? [Document]() {
+			if doc.zoneID == zoneID {
+				deleteDocument(doc, updateCloudKit: false)
+			}
+		}
+	}
+	
 	func findTag(name: String) -> Tag? {
 		return tags?.first(where: { $0.name == name })
 	}
