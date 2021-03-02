@@ -13,5 +13,3 @@ INFOPLIST_FILE = Zavala/Resources/Info.plist
 CODE_SIGN_ENTITLEMENTS = Zavala/Resources/Zavala.entitlements
 PRODUCT_BUNDLE_IDENTIFIER = $(ORGANIZATION_IDENTIFIER).Zavala
 PRODUCT_NAME = Zavala
-
-ORGANIZATION_IDENTIFIER = io.vincode
