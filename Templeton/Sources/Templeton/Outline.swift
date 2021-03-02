@@ -739,7 +739,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		
 		if afterRow == nil {
-			appendRow(row)
+			insertRow(row, at: 0)
 			var mutatingRow = row
 			mutatingRow.parent = self
 		} else if afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
@@ -769,7 +769,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		if let afterRowShadowTableIndex = afterRow?.shadowTableIndex {
 			rowShadowTableIndex = afterRowShadowTableIndex + 1
 		} else {
-			rowShadowTableIndex = shadowTable?.count ?? 0
+			rowShadowTableIndex = 0
 		}
 		
 		var reloads = [Int]()

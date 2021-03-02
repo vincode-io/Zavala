@@ -610,7 +610,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 }
 
-// MARK: Collection View
+// MARK: UICollectionViewDelegate, UICollectionViewDataSource
 
 extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 	
@@ -730,6 +730,8 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	
 }
 
+// MARK: EditorTitleViewCellDelegate
+
 extension EditorViewController: EditorTitleViewCellDelegate {
 	
 	var editorTitleUndoManager: UndoManager? {
@@ -753,6 +755,8 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	}
 
 }
+
+// MARK: EditorTagInputViewCellDelegate
 
 extension EditorViewController: EditorTagInputViewCellDelegate {
 	
@@ -801,6 +805,8 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 	
 }
 
+// MARK: EditorTagAddViewCellDelegate
+
 extension EditorViewController: EditorTagAddViewCellDelegate {
 	
 	func editorTagAddAddTag() {
@@ -814,6 +820,8 @@ extension EditorViewController: EditorTagAddViewCellDelegate {
 	
 }
 
+// MARK: EditorTagViewCellDelegate
+
 extension EditorViewController: EditorTagViewCellDelegate {
 	
 	func editorTagDeleteTag(name: String) {
@@ -821,6 +829,8 @@ extension EditorViewController: EditorTagViewCellDelegate {
 	}
 	
 }
+
+// MARK: EditorTextRowViewCellDelegate
 
 extension EditorViewController: EditorTextRowViewCellDelegate {
 
