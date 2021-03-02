@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-protocol EditorTextRowNoteTextViewDelegate: class {
+protocol EditorTextRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewTextRowStrings: TextRowStrings { get }
 	func invalidateLayout(_ : EditorTextRowNoteTextView)

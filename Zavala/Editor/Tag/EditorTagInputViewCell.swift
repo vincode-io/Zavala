@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-protocol EditorTagInputViewCellDelegate: class {
+protocol EditorTagInputViewCellDelegate: AnyObject {
 	var editorTagInputUndoManager: UndoManager? { get }
 	var editorTagInputIsAddShowing: Bool { get }
 	var editorTagInputTags: [Tag]? { get }

@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-protocol EditorTitleViewCellDelegate: class {
+protocol EditorTitleViewCellDelegate: AnyObject {
 	var editorTitleUndoManager: UndoManager? { get }
 	func editorTitleLayoutEditor()
 	func editorTitleTextFieldDidBecomeActive()

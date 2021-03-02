@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-protocol EditorTagInputTextFieldDelegate: class {
+protocol EditorTagInputTextFieldDelegate: AnyObject {
 	var editorTagInputTextFieldUndoManager: UndoManager? { get }
 	var editorTagInputTextFieldIsAddShowing: Bool { get }
 	var editorTagInputTextFieldTags: [Tag]? { get }

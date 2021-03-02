@@ -11,7 +11,7 @@ import RSCore
 import Combine
 import Templeton
 
-protocol SidebarDelegate: class {
+protocol SidebarDelegate: AnyObject {
 	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool, completion: (() -> Void)?)
 }
 

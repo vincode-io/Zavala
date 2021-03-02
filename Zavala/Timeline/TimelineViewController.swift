@@ -11,7 +11,7 @@ import CoreSpotlight
 import RSCore
 import Templeton
 
-protocol TimelineDelegate: class  {
+protocol TimelineDelegate: AnyObject  {
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool)
 }
 

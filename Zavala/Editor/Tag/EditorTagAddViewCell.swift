@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-protocol EditorTagAddViewCellDelegate: class {
+protocol EditorTagAddViewCellDelegate: AnyObject {
 	func editorTagAddAddTag()
 }
 

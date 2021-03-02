@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-protocol EditorTextRowTopicTextViewDelegate: class {
+protocol EditorTextRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
 	var editorRowTopicTextViewTextRowStrings: TextRowStrings { get }
 	func didBecomeActive(_: EditorTextRowTopicTextView)

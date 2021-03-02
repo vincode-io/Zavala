@@ -7,7 +7,7 @@
 import Foundation
 import RSCore
 
-public protocol OutlineCommandDelegate: class {
+public protocol OutlineCommandDelegate: AnyObject {
 	func restoreCursorPosition(_: CursorCoordinates)
 }
 

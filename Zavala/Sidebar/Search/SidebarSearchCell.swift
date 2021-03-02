@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol SidebarSearchCellDelegate: class {
+protocol SidebarSearchCellDelegate: AnyObject {
 	func sidebarSearchDidBecomeActive()
 	func sidebarSearchDidUpdate(searchText: String?)
 }

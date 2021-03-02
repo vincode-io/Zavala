@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-protocol EditorTextRowViewCellDelegate: class {
+protocol EditorTextRowViewCellDelegate: AnyObject {
 	var editorTextRowUndoManager: UndoManager? { get }
 	func editorTextRowLayoutEditor()
 	func editorTextRowTextFieldDidBecomeActive()

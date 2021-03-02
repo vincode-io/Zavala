@@ -9,7 +9,7 @@ import UIKit
 import RSCore
 import Templeton
 
-protocol LinkViewControllerDelegate: class {
+protocol LinkViewControllerDelegate: AnyObject {
 	func updateLink(_: LinkViewController, cursorCoordinates: CursorCoordinates, link: String?, range: NSRange)
 }
 

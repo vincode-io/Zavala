@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol EditorTitleTextViewDelegate: class {
+protocol EditorTitleTextViewDelegate: AnyObject {
 	var editorTitleTextViewUndoManager: UndoManager? { get }
 	func didBecomeActive(_: EditorTitleTextView)
 }
