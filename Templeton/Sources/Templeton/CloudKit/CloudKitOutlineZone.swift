@@ -63,7 +63,11 @@ final class CloudKitOutlineZone: CloudKitZone {
 		self.zoneID = zoneID
 	}
 	
-	func prepareCloudSharingController(shareRecordID: CKRecord.ID, completion: @escaping (Result<UICloudSharingController, Error>) -> Void) {
+	func prepareSharedCloudSharingController(document: Document, completion: @escaping (Result<UICloudSharingController, Error>) -> Void) {
+		guard let shareRecordID = document.shareRecordID else {
+			fatalError()
+		}
+		
 		fetch(externalID: shareRecordID.recordName) { [weak self] result in
 			switch result {
 			case .success(let record):
@@ -72,13 +76,13 @@ final class CloudKitOutlineZone: CloudKitZone {
 					return
 				}
 				completion(.success(UICloudSharingController(share: shareRecord, container: container)))
-			case .failure(let error):
-				completion(.failure(error))
+			case .failure:
+				self?.prepareNewCloudSharingController(document: document, completion: completion)
 			}
 		}
 	}
 
-	func prepareCloudSharingController(document: Document, completion: @escaping (Result<UICloudSharingController, Error>) -> Void) {
+	func prepareNewCloudSharingController(document: Document, completion: @escaping (Result<UICloudSharingController, Error>) -> Void) {
 		let sharingController = UICloudSharingController { [weak self] (_, prepareCompletionHandler) in
 
 			self?.fetch(externalID: document.id.description) { [weak self] result in

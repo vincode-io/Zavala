@@ -174,10 +174,10 @@ public class CloudKitManager {
 		}
 		
 		let zone = findZone(zoneID: zoneID)
-		if let shareRecordID = document.shareRecordID {
-			zone.prepareCloudSharingController(shareRecordID: shareRecordID, completion: completion)
+		if document.isShared {
+			zone.prepareSharedCloudSharingController(document: document, completion: completion)
 		} else {
-			zone.prepareCloudSharingController(document: document, completion: completion)
+			zone.prepareNewCloudSharingController(document: document, completion: completion)
 		}
 	}
 
