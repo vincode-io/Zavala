@@ -280,8 +280,6 @@ extension CloudKitManager {
 		}
 		
 		container.sharedCloudDatabase.add(op)
-		
-
 	}
 	
 	private func fetchChanges(zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
