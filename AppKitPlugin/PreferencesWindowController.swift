@@ -146,7 +146,7 @@ private extension PreferencesWindowController {
 			return cachedViewController
 		}
 
-		let bundle = Bundle(identifier: "io.vincode.AppKitPlugin")!
+		let bundle = Bundle(for: type(of: self))
 		let storyboard = NSStoryboard(name: NSStoryboard.Name("Preferences"), bundle: bundle)
 		guard let viewController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(identifier)) as? NSViewController else {
 			assertionFailure("Unknown preferences view controller: \(identifier)")

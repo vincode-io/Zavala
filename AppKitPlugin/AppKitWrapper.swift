@@ -35,7 +35,7 @@ import Sparkle
 	
 	func showPreferences() {
 		if preferencesWindowController == nil {
-			let bundle = Bundle(identifier: "io.vincode.AppKitPlugin")!
+			let bundle = Bundle(for: type(of: self))
 			let storyboard = NSStoryboard(name: NSStoryboard.Name("Preferences"), bundle: bundle)
 			preferencesWindowController = storyboard.instantiateInitialController()! as NSWindowController
 		}
