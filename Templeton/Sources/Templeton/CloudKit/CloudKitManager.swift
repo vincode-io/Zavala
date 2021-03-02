@@ -253,6 +253,10 @@ extension CloudKitManager {
 		let op = CKFetchDatabaseChangesOperation(previousServerChangeToken: sharedDatabaseChangeToken)
 		op.qualityOfService = CloudKitOutlineZone.qualityOfService
 		
+		op.recordZoneWithIDWasDeletedBlock = { zoneID in
+			zoneIDs.insert(zoneID)
+		}
+
 		op.recordZoneWithIDChangedBlock = { zoneID in
 			zoneIDs.insert(zoneID)
 		}
