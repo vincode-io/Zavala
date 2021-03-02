@@ -23,6 +23,13 @@ final class AppDefaults {
 		static let hideLocalAccount = "hideLocalAccount"
 	}
 
+	let isDeveloperBuild: Bool = {
+		if let dev = Bundle.main.object(forInfoDictionaryKey: "DeveloperEntitlements") as? String, dev == "-dev" {
+			return true
+		}
+		return false
+	}()
+	
 	var enableCloudKit: Bool {
 		get {
 			return Self.bool(for: Key.enableCloudKit)

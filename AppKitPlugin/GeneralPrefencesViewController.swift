@@ -76,6 +76,7 @@ private extension GeneralPreferencesViewController {
 	func updateUI() {
 		hideLocalAccount.state = AppDefaults.shared.hideLocalAccount ? .on : .off
 		enableCloudKit.state = AppDefaults.shared.enableCloudKit ? .on : .off
+		enableCloudKit.isEnabled = !AppDefaults.shared.isDeveloperBuild
 	}
 
 }
