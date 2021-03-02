@@ -19,10 +19,13 @@ have specific [Design Goals](https://github.com/vincode-io/Zavala/wiki/Design-Go
 project contributors have final say in the design.
 
 Keep in mind, this is an application in the very early stages of development.  You should not entrust any important information
-to it.  It is buggy and incomplete.  It may be very frustrating to use right now.  Here is the application for only the bravest
-of users to try out.
+to it.  It is a little buggy and incomplete. I recommend that any important documents you create with it, you back up by exporting
+them as OPML files.
 
 [Pre-release Download](https://github.com/vincode-io/Zavala/releases/latest/download/Zavala.app.zip) (Requires macOS 11 Big Sur)
+
+You can install the [TestFlight.app](https://developer.apple.com/testflight/) on your iPad or iPhone and get the TestFlight
+version of Zavala for iOS by clicking this [link](https://testflight.apple.com/join/iFbND23m) on your iPhone or iPad.
 
 ## Code Contributions
 
