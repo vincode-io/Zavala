@@ -97,5 +97,5 @@
 /* Settings */
 "Remove_CloudKit_Title" = "Remove iCloud Account";
 "Remove_CloudKit_Message" = "Are you sure you want to remove the iCloud Account? All documents in the iCloud Account will be removed from this device.";
-"Hide_On_My_iPhone" = "Hide On My iPhone Account";
-"Hide_On_My_iPad" = "Hide On My iPad Account";
+"Enable_On_My_iPhone" = "Enable On My iPhone";
+"Enable_On_My_iPad" = "Enable On My iPad";

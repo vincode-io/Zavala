@@ -12,7 +12,7 @@ import SafariServices
 
 class SettingsViewController: UITableViewController {
 
-	@IBOutlet weak var hideLocalAccountSwitch: UISwitch!
+	@IBOutlet weak var enableLocalAccountSwitch: UISwitch!
 	@IBOutlet weak var enableCloudKitSwitch: UISwitch!
 	
 	private var mainSplitViewController: MainSplitViewController? {
@@ -31,9 +31,10 @@ class SettingsViewController: UITableViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		hideLocalAccountSwitch.isOn = AppDefaults.shared.hideLocalAccount
+		enableLocalAccountSwitch.isOn = AppDefaults.shared.enableLocalAccount
 		enableCloudKitSwitch.isOn = AppDefaults.shared.enableCloudKit
-
+		enableCloudKitSwitch.isEnabled = !AppDefaults.shared.isDeveloperBuild
+		
 		let buildLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: 0.0, width: 0.0, height: 0.0))
 		buildLabel.font = UIFont.systemFont(ofSize: 11.0)
 		buildLabel.textColor = UIColor.gray
@@ -59,9 +60,9 @@ class SettingsViewController: UITableViewController {
 		
 		if indexPath.section == 0 && indexPath.row == 0 {
 			if traitCollection.userInterfaceIdiom == .phone {
-				cell.textLabel?.text = L10n.hideOnMyIPhone
+				cell.textLabel?.text = L10n.enableOnMyIPhone
 			} else {
-				cell.textLabel?.text = L10n.hideOnMyIPad
+				cell.textLabel?.text = L10n.enableOnMyIPad
 			}
 		}
 		
@@ -113,8 +114,8 @@ class SettingsViewController: UITableViewController {
 		dismiss(animated: true)
 	}
 	
-	@IBAction func switchHideLocalAccount(_ sender: Any) {
-		AppDefaults.shared.hideLocalAccount = hideLocalAccountSwitch.isOn
+	@IBAction func switchEnableLocalAccount(_ sender: Any) {
+		AppDefaults.shared.enableLocalAccount = enableLocalAccountSwitch.isOn
 	}
 	
 	@IBAction func switchEnableCloudKit(_ sender: Any) {

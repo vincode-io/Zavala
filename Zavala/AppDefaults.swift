@@ -22,9 +22,16 @@ final class AppDefaults {
 		static let lastSelectedAccountID = "lastSelectedAccountID"
 		static let deletedLocalForV14 = "deletedLocalForV14"
 		static let enableCloudKit = "enableCloudKit"
-		static let hideLocalAccount = "hideLocalAccount"
+		static let enableLocalAccount = "enableLocalAccount"
 	}
 	
+	let isDeveloperBuild: Bool = {
+		if let dev = Bundle.main.object(forInfoDictionaryKey: "DeveloperEntitlements") as? String, dev == "-dev" {
+			return true
+		}
+		return false
+	}()
+
 	var lastSelectedAccountID: Int {
 		get {
 			return Self.int(for: Key.lastSelectedAccountID)
@@ -52,12 +59,12 @@ final class AppDefaults {
 		}
 	}
 
-	var hideLocalAccount: Bool {
+	var enableLocalAccount: Bool {
 		get {
-			return Self.bool(for: Key.hideLocalAccount)
+			return Self.bool(for: Key.enableLocalAccount)
 		}
 		set {
-			Self.setBool(for: Key.hideLocalAccount, newValue)
+			Self.setBool(for: Key.enableLocalAccount, newValue)
 		}
 	}
 
@@ -84,16 +91,8 @@ final class AppDefaults {
 //	}
 	
 	static func registerDefaults() {
-//		let defaults: [String : Any] = [Key.userInterfaceColorPalette: UserInterfaceColorPalette.automatic.rawValue,
-//										Key.timelineGroupByFeed: false,
-//										Key.refreshClearsReadArticles: false,
-//										Key.timelineNumberOfLines: 2,
-//										Key.timelineIconDimension: IconSize.medium.rawValue,
-//										Key.timelineSortDirection: ComparisonResult.orderedDescending.rawValue,
-//										Key.articleFullscreenAvailable: false,
-//										Key.articleFullscreenEnabled: false,
-//										Key.confirmMarkAllAsRead: true]
-//		AppDefaults.store.register(defaults: defaults)
+		let defaults: [String : Any] = [Key.enableLocalAccount: true]
+		AppDefaults.store.register(defaults: defaults)
 	}
 
 }

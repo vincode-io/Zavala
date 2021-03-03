@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="mPU-HG-I4u">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="mPU-HG-I4u">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -31,20 +31,20 @@
             <objects>
                 <viewController title="General" storyboardIdentifier="General" id="iuH-lz-18x" customClass="GeneralPreferencesViewController" customModule="AppKitPlugin" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="WnV-px-wCT">
-                        <rect key="frame" x="0.0" y="0.0" width="355" height="117"/>
+                        <rect key="frame" x="0.0" y="0.0" width="364" height="117"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="Ut3-yd-q6G">
-                                <rect key="frame" x="54" y="16" width="245" height="85"/>
+                                <rect key="frame" x="54" y="16" width="254" height="85"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mwT-nY-TrX">
-                                        <rect key="frame" x="18" y="48" width="207" height="18"/>
-                                        <buttonCell key="cell" type="check" title="Hide the On My Mac Account" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="lh0-G6-9v4">
+                                        <rect key="frame" x="18" y="48" width="216" height="18"/>
+                                        <buttonCell key="cell" type="check" title="Enable the On My Mac Account" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="lh0-G6-9v4">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
-                                            <action selector="toggleHideLocalAccount:" target="iuH-lz-18x" id="8yI-7Y-7BK"/>
+                                            <action selector="toggleEnableLocalAccount:" target="iuH-lz-18x" id="fLD-d9-wrk"/>
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kaV-Ee-Pla">
@@ -77,8 +77,7 @@
                     </view>
                     <connections>
                         <outlet property="enableCloudKit" destination="kaV-Ee-Pla" id="AiI-AG-Baj"/>
-                        <outlet property="hideLocalAccount" destination="mwT-nY-TrX" id="Gc0-cD-8Dr"/>
-                        <outlet property="showUnreadCountCheckbox" destination="mwT-nY-TrX" id="ZH9-P5-JkT"/>
+                        <outlet property="enableLocalAccount" destination="mwT-nY-TrX" id="f1X-wp-9Uf"/>
                     </connections>
                 </viewController>
                 <customObject id="bSQ-tq-wd3" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

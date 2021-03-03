@@ -10,7 +10,7 @@ import AppKit
 
 final class GeneralPreferencesViewController: NSViewController {
 
-	@IBOutlet weak var hideLocalAccount: NSButton!
+	@IBOutlet weak var enableLocalAccount: NSButton!
 	@IBOutlet weak var enableCloudKit: NSButton!
 	
 	public override init(nibName nibNameOrNil: NSNib.Name?, bundle nibBundleOrNil: Bundle?) {
@@ -36,8 +36,8 @@ final class GeneralPreferencesViewController: NSViewController {
 
 	// MARK: - Actions
 
-	@IBAction func toggleHideLocalAccount(_ sender: Any) {
-		AppDefaults.shared.hideLocalAccount = hideLocalAccount.state == .on
+	@IBAction func toggleEnableLocalAccount(_ sender: Any) {
+		AppDefaults.shared.enableLocalAccount = enableLocalAccount.state == .on
 	}
 	
 	@IBAction func toggleEnableCloudKit(_ sender: Any) {
@@ -74,7 +74,7 @@ private extension GeneralPreferencesViewController {
 	}
 
 	func updateUI() {
-		hideLocalAccount.state = AppDefaults.shared.hideLocalAccount ? .on : .off
+		enableLocalAccount.state = AppDefaults.shared.enableLocalAccount ? .on : .off
 		enableCloudKit.state = AppDefaults.shared.enableCloudKit ? .on : .off
 		enableCloudKit.isEnabled = !AppDefaults.shared.isDeveloperBuild
 	}

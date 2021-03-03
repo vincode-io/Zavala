@@ -20,7 +20,7 @@ final class AppDefaults {
 	
 	struct Key {
 		static let enableCloudKit = "enableCloudKit"
-		static let hideLocalAccount = "hideLocalAccount"
+		static let enableLocalAccount = "enableLocalAccount"
 	}
 
 	let isDeveloperBuild: Bool = {
@@ -39,12 +39,12 @@ final class AppDefaults {
 		}
 	}
 
-	var hideLocalAccount: Bool {
+	var enableLocalAccount: Bool {
 		get {
-			return Self.bool(for: Key.hideLocalAccount)
+			return Self.bool(for: Key.enableLocalAccount)
 		}
 		set {
-			Self.setBool(for: Key.hideLocalAccount, newValue)
+			Self.setBool(for: Key.enableLocalAccount, newValue)
 		}
 	}
 

@@ -76,6 +76,10 @@ internal enum L10n {
   }
   /// Email It
   internal static let emailIt = L10n.tr("Localizable", "Email_It")
+  /// Enable On My iPad
+  internal static let enableOnMyIPad = L10n.tr("Localizable", "Enable_On_My_iPad")
+  /// Enable On My iPhone
+  internal static let enableOnMyIPhone = L10n.tr("Localizable", "Enable_On_My_iPhone")
   /// Error
   internal static let error = L10n.tr("Localizable", "Error")
   /// Expand
@@ -100,10 +104,6 @@ internal enum L10n {
   internal static let hideCompleted = L10n.tr("Localizable", "Hide_Completed")
   /// Hide Notes
   internal static let hideNotes = L10n.tr("Localizable", "Hide_Notes")
-  /// Hide On My iPad Account
-  internal static let hideOnMyIPad = L10n.tr("Localizable", "Hide_On_My_iPad")
-  /// Hide On My iPhone Account
-  internal static let hideOnMyIPhone = L10n.tr("Localizable", "Hide_On_My_iPhone")
   /// Import Failed
   internal static let importFailed = L10n.tr("Localizable", "Import Failed")
   /// Import OPML

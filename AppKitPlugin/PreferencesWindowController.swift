@@ -28,7 +28,7 @@ private struct ToolbarItemIdentifier {
 
 class PreferencesWindowController : NSWindowController, NSToolbarDelegate {
 	
-	private let windowWidth = CGFloat(350.0) // Width is constant for all views; only the height changes
+	private let windowWidth = CGFloat(375.0) // Width is constant for all views; only the height changes
 	private var viewControllers = [String: NSViewController]()
 	private let toolbarItemSpecs: [PreferencesToolbarItemSpec] = {
 		var specs = [PreferencesToolbarItemSpec]()
