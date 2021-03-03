@@ -291,6 +291,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let showBugTrackerCommand = UICommand(title: L10n.bugTracker, action: #selector(showBugTracker(_:)))
 	
+	// Currently unused because it automatically adds Services menus to my other context menus
 	let sendCopyCommand = UICommand(title: L10n.sendCopy,
 									action: #selector(sendCopy(_:)),
 									propertyList: UICommandTagShare)
@@ -655,7 +656,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand])
 		builder.insertChild(newItemsMenu, atStartOfMenu: .file)
 
-		let shareMenu = UIMenu(title: "", options: .displayInline, children: [sendCopyCommand, shareCommand])
+		let shareMenu = UIMenu(title: "", options: .displayInline, children: [shareCommand])
 		builder.insertChild(shareMenu, atEndOfMenu: .file)
 
 		// Edit
