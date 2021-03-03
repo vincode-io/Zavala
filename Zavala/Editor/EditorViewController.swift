@@ -254,6 +254,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineElementsDidChange(_:)), name: .OutlineElementsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -348,6 +349,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func applicationWillTerminate(_ note: Notification) {
 		updateSpotlightIndex()
+	}
+	
+	@objc func didEnterBackground(_ note: Notification) {
+		saveCurrentText()
 	}
 	
 	@objc func cloudKitSyncDidComplete(_ note: Notification) {
@@ -688,9 +693,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		
 		// Force save the text if the context menu has been requested so that we don't lose our
 		// text changes when the cell configuration gets applied
-		if let textView = UIResponder.currentFirstResponder as? OutlineTextView {
-			textView.saveText()
-		}
+		saveCurrentText()
 		
 		if !(collectionView.indexPathsForSelectedItems?.contains(indexPath) ?? false) {
 			collectionView.deselectAll()
@@ -1863,6 +1866,12 @@ extension EditorViewController {
 	private func updateSpotlightIndex() {
 		if let outline = outline {
 			(splitViewController as? MainSplitViewController)?.activityManager.updateIndex(forDocument: .outline(outline))
+		}
+	}
+	
+	private func saveCurrentText() {
+		if let textView = UIResponder.currentFirstResponder as? OutlineTextView {
+			textView.saveText()
 		}
 	}
 	
