@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		var menuKeyCommands = [UIKeyCommand]()
 		
 		menuKeyCommands.append(showPreferences)
+		menuKeyCommands.append(beginDocumentSearchCommand)
 		
 		if AccountManager.shared.isSyncAvailable {
 			menuKeyCommands.append(sync)
@@ -34,6 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			} else {
 				menuKeyCommands.append(hideNotesCommand)
 			}
+			menuKeyCommands.append(beginInDocumentSearchCommand)
+			menuKeyCommands.append(nextInDocumentSearchCommand)
+			menuKeyCommands.append(previousInDocumentSearchCommand)
 		}
 		
 		menuKeyCommands.append(newOutlineCommand)
@@ -291,6 +295,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let showBugTrackerCommand = UICommand(title: L10n.bugTracker, action: #selector(showBugTracker(_:)))
 	
+	let beginDocumentSearchCommand = UIKeyCommand(title: L10n.documentFind,
+												  action: #selector(beginDocumentSearchCommand(_:)),
+												  input: "f",
+												  modifierFlags: [.alternate, .command])
+	
+	let beginInDocumentSearchCommand = UIKeyCommand(title: L10n.findEllipsis,
+													action: #selector(beginInDocumentSearchCommand(_:)),
+													input: "f",
+													modifierFlags: [.command])
+	
+	let nextInDocumentSearchCommand = UIKeyCommand(title: L10n.findNext,
+												   action: #selector(nextInDocumentSearchCommand(_:)),
+												   input: "g",
+												   modifierFlags: [.command])
+	
+	let previousInDocumentSearchCommand = UIKeyCommand(title: L10n.findPrevious,
+													   action: #selector(previousInDocumentSearchCommand(_:)),
+													   input: "g",
+													   modifierFlags: [.shift, .command])
+	
 	// Currently unused because it automatically adds Services menus to my other context menus
 	let sendCopyCommand = UICommand(title: L10n.sendCopy,
 									action: #selector(sendCopy(_:)),
@@ -516,6 +540,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.share(sender)
 	}
 
+	@objc func beginDocumentSearchCommand(_ sender: Any?) {
+		mainSplitViewController?.beginDocumentSearch(sender)
+	}
+
+	@objc func beginInDocumentSearchCommand(_ sender: Any?) {
+		mainSplitViewController?.beginInDocumentSearch(sender)
+	}
+
+	@objc func nextInDocumentSearchCommand(_ sender: Any?) {
+	}
+
+	@objc func previousInDocumentSearchCommand(_ sender: Any?) {
+	}
+	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
@@ -663,6 +701,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let linkMenu = UIMenu(title: "", options: .displayInline, children: [linkCommand])
 		builder.insertSibling(linkMenu, afterMenu: .standardEdit)
 
+		let documentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginDocumentSearchCommand])
+		let inDocumentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginInDocumentSearchCommand, nextInDocumentSearchCommand, previousInDocumentSearchCommand])
+		let findMenu = UIMenu(title: L10n.find, children: [documentFindMenu, inDocumentFindMenu])
+		builder.insertSibling(findMenu, beforeMenu: .spelling)
+		
 		// Format
 		builder.remove(menu: .format)
 		let formatMenu = UIMenu(title: L10n.format, children: [toggleBoldCommand, toggleItalicsCommand])

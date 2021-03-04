@@ -21,6 +21,10 @@ struct AppAssets {
 		return UIImage(systemName: "plus")!
 	}()
 	
+	static var barBackgroundColor: UIColor = {
+		return UIColor(named: "BarBackgroundColor")!
+	}()
+
 	static var bold: UIImage = {
 		return UIImage(named: "Bold-Large")!
 	}()

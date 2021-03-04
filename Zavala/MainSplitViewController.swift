@@ -349,6 +349,14 @@ class MainSplitViewController: UISplitViewController {
 		editorViewController?.sendCopy()
 	}
 	
+	@objc func beginDocumentSearch(_ sender: Any?) {
+		sidebarViewController?.beginDocumentSearch()
+	}
+	
+	@objc func beginInDocumentSearch(_ sender: Any?) {
+		editorViewController?.beginInDocumentSearch()
+	}
+	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {

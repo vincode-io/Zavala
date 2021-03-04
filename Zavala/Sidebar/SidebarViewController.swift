@@ -131,6 +131,17 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	@objc func createOutline(_ sender: Any) {
 		mainSplitViewController?.createOutline(sender)
 	}
+	
+	// MARK API
+	
+	func beginDocumentSearch() {
+		if let searchCellIndexPath = self.dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {
+			if let searchCell = self.collectionView.cellForItem(at: searchCellIndexPath) as? SidebarSearchCell {
+				searchCell.setSearchField(searchText: "")
+			}
+		}
+	}
+	
 }
 
 // MARK: Collection View

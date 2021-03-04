@@ -12,6 +12,8 @@ import Templeton
 
 class EditorViewController: UIViewController, MainControllerIdentifiable, UndoableCommandRunner {
 
+	@IBOutlet weak var searchBar: EditorSearchBar!
+	@IBOutlet weak var collectionViewTopConstraint: NSLayoutConstraint!
 	@IBOutlet weak var collectionView: UICollectionView!
 	
 	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
@@ -210,6 +212,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 		}
+		
+		searchBar.delegate = self
+		collectionViewTopConstraint.constant = 0
 		
 		collectionView.layer.speed = 1.25
 		collectionView.collectionViewLayout = createLayout()
@@ -521,6 +526,15 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	func deleteCompletedRows() {
 		guard let completedRows = outline?.allCompletedRows else { return }
 		deleteRows(completedRows)
+	}
+	
+	func beginInDocumentSearch() {
+		searchBar.becomeFirstResponder()
+		view.layoutIfNeeded()
+		UIView.animate(withDuration: 0.3) {
+			self.collectionViewTopConstraint.constant = 36
+			self.view.layoutIfNeeded()
+		}
 	}
 	
 	// MARK: Actions
@@ -930,6 +944,29 @@ extension EditorViewController: LinkViewControllerDelegate {
 		} else {
 			textRowCell.topicTextView?.updateLinkForCurrentSelection(link: link, range: range)
 		}
+	}
+	
+}
+
+// MARK: SearchBarDelegate
+
+extension EditorViewController: SearchBarDelegate {
+
+	func nextWasPressed(_ searchBar: EditorSearchBar) {
+	}
+
+	func previousWasPressed(_ searchBar: EditorSearchBar) {
+	}
+
+	func doneWasPressed(_ searchBar: EditorSearchBar) {
+		view.layoutIfNeeded()
+		UIView.animate(withDuration: 0.3) {
+			self.collectionViewTopConstraint.constant = 0
+			self.view.layoutIfNeeded()
+		}
+	}
+	
+	func searchBar(_ searchBar: EditorSearchBar, textDidChange: String) {
 	}
 	
 }

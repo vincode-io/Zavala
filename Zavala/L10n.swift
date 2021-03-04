@@ -70,6 +70,8 @@ internal enum L10n {
   }
   /// Delete
   internal static let deleteRow = L10n.tr("Localizable", "Delete_Row")
+  /// Document Find...
+  internal static let documentFind = L10n.tr("Localizable", "Document_Find")
   /// Edit document “%@”
   internal static func editDocument(_ p1: Any) -> String {
     return L10n.tr("Localizable", "Edit_Document", String(describing: p1))
@@ -94,6 +96,14 @@ internal enum L10n {
   internal static let exportMarkdown = L10n.tr("Localizable", "Export_Markdown")
   /// Export OPML
   internal static let exportOPML = L10n.tr("Localizable", "Export_OPML")
+  /// Find
+  internal static let find = L10n.tr("Localizable", "Find")
+  /// Find...
+  internal static let findEllipsis = L10n.tr("Localizable", "Find_Ellipsis")
+  /// Find Next
+  internal static let findNext = L10n.tr("Localizable", "Find_Next")
+  /// Find Previous
+  internal static let findPrevious = L10n.tr("Localizable", "Find_Previous")
   /// Format
   internal static let format = L10n.tr("Localizable", "Format")
   /// Get Info

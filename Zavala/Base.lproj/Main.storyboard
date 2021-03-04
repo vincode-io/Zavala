@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vQK-Gr-dVw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vQK-Gr-dVw">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18092"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -51,8 +51,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k1S-h6-VDy" customClass="EditorSearchBar" customModule="Zavala" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="88" width="414" height="36"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="yB2-5z-ndn"/>
+                                </constraints>
+                            </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="wlS-l8-EoL">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="124" width="414" height="738"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="TbK-Ej-rdi">
                                     <size key="itemSize" width="128" height="128"/>
@@ -68,17 +75,22 @@
                         <constraints>
                             <constraint firstItem="sTb-Jg-icV" firstAttribute="trailing" secondItem="wlS-l8-EoL" secondAttribute="trailing" id="10y-oN-bwg"/>
                             <constraint firstItem="sTb-Jg-icV" firstAttribute="bottom" secondItem="wlS-l8-EoL" secondAttribute="bottom" id="2CC-Ft-NzR"/>
-                            <constraint firstItem="wlS-l8-EoL" firstAttribute="top" secondItem="sTb-Jg-icV" secondAttribute="top" id="HgQ-US-akt"/>
+                            <constraint firstItem="k1S-h6-VDy" firstAttribute="leading" secondItem="sTb-Jg-icV" secondAttribute="leading" id="8b3-XC-h6o"/>
+                            <constraint firstItem="wlS-l8-EoL" firstAttribute="top" secondItem="sTb-Jg-icV" secondAttribute="top" constant="36" id="9Ct-m6-YFj"/>
+                            <constraint firstItem="wlS-l8-EoL" firstAttribute="top" secondItem="k1S-h6-VDy" secondAttribute="bottom" id="NIH-8V-0ZC"/>
                             <constraint firstItem="wlS-l8-EoL" firstAttribute="leading" secondItem="sTb-Jg-icV" secondAttribute="leading" id="gM9-Pb-raz"/>
+                            <constraint firstItem="sTb-Jg-icV" firstAttribute="trailing" secondItem="k1S-h6-VDy" secondAttribute="trailing" id="jAo-Om-REl"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="wlS-l8-EoL" id="Wvh-Is-z5g"/>
+                        <outlet property="collectionViewTopConstraint" destination="9Ct-m6-YFj" id="2zL-nU-Gki"/>
+                        <outlet property="searchBar" destination="k1S-h6-VDy" id="WdA-ql-6Cc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KaB-gp-ltU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1068" y="252"/>
+            <point key="canvasLocation" x="-1068.1159420289855" y="245.08928571428569"/>
         </scene>
         <!--Folders-->
         <scene sceneID="xI7-xC-228">
@@ -109,7 +121,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="gear" catalog="system" width="128" height="119"/>
+        <image name="gear" catalog="system" width="32" height="32"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
