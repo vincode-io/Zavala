@@ -1,5 +1,5 @@
 //
-//  EditorViewDisclosureButton.swift
+//  EditorDisclosureButton.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 1/8/21.
@@ -7,10 +7,10 @@
 
 import UIKit
 
-class EditorViewDisclosureButton: UIButton {
+class EditorDisclosureButton: UIButton {
 	
 	private var isDisclosed = true
-	private let pointerInteractionDelegate = EditorViewDisclosureButtonInteractionDelegate()
+	private let pointerInteractionDelegate = EditorDisclosureButtonInteractionDelegate()
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -76,7 +76,7 @@ class EditorViewDisclosureButton: UIButton {
 
 // MARK: UIPointerInteractionDelegate
 
-class EditorViewDisclosureButtonInteractionDelegate: NSObject, UIPointerInteractionDelegate {
+class EditorDisclosureButtonInteractionDelegate: NSObject, UIPointerInteractionDelegate {
 	
 	func pointerInteraction(_ interaction: UIPointerInteraction, styleFor region: UIPointerRegion) -> UIPointerStyle? {
 		var pointerStyle: UIPointerStyle? = nil

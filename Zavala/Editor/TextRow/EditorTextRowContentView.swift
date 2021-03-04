@@ -14,8 +14,8 @@ class EditorTextRowContentView: UIView, UIContentView {
 	var noteTextView: EditorTextRowNoteTextView?
 	var barViews = [UIView]()
 
-	private lazy var disclosureIndicator: EditorViewDisclosureButton = {
-		let indicator = EditorViewDisclosureButton()
+	private lazy var disclosureIndicator: EditorDisclosureButton = {
+		let indicator = EditorDisclosureButton()
 		indicator.addTarget(self, action: #selector(toggleDisclosure(_:)), for: UIControl.Event.touchUpInside)
 		return indicator
 	}()
