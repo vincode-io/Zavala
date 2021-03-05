@@ -9,7 +9,13 @@ import UIKit
 
 class EditorDisclosureButton: UIButton {
 	
-	private var isDisclosed = true
+	enum State {
+		case expanded
+		case collapsed
+		case partial
+	}
+	
+	private var currentState = State.expanded
 	private let pointerInteractionDelegate = EditorDisclosureButtonInteractionDelegate()
 	
 	override init(frame: CGRect) {
@@ -44,14 +50,23 @@ class EditorDisclosureButton: UIButton {
 	}
 	
 	func toggleDisclosure() {
-		setDisclosure(isExpanded: !isDisclosed, animated: true)
+		switch currentState {
+		case .expanded:
+			setDisclosure(state: .collapsed, animated: true)
+		case .collapsed:
+			setDisclosure(state: .expanded, animated: true)
+		case .partial:
+			setDisclosure(state: .expanded, animated: true)
+		}
+		
 	}
 	
-	func setDisclosure(isExpanded: Bool, animated: Bool) {
-		guard isDisclosed != isExpanded else { return }
-		isDisclosed = isExpanded
+	func setDisclosure(state: State, animated: Bool) {
+		guard currentState != state else { return }
+		currentState = state
 
-		if isDisclosed {
+		switch currentState {
+		case .expanded:
 			accessibilityLabel = L10n.collapse
 			if animated {
 				UIView.animate(withDuration: 0.15) {
@@ -60,9 +75,19 @@ class EditorDisclosureButton: UIButton {
 			} else {
 				transform = CGAffineTransform(rotationAngle: 0)
 			}
-		} else {
+		case .collapsed:
 			accessibilityLabel = L10n.expand
 			let rotationAngle: CGFloat = traitCollection.horizontalSizeClass == .compact ? 1.570796 : -1.570796
+			if animated {
+				UIView.animate(withDuration: 0.15) {
+					self.transform = CGAffineTransform(rotationAngle: rotationAngle)
+				}
+			} else {
+				transform = CGAffineTransform(rotationAngle: rotationAngle)
+			}
+		case .partial:
+			accessibilityLabel = L10n.expand
+			let rotationAngle: CGFloat = traitCollection.horizontalSizeClass == .compact ? 0.785398 : -0.785398
 			if animated {
 				UIView.animate(withDuration: 0.15) {
 					self.transform = CGAffineTransform(rotationAngle: rotationAngle)

@@ -264,7 +264,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		rowRegistration = UICollectionView.CellRegistration<EditorTextRowViewCell, Row> { [weak self] (cell, indexPath, row) in
 			cell.row = row
-			cell.isNotesHidden = self?.outline?.isNotesHidden
+			cell.isNotesHidden = self?.outline?.isNotesHidden ?? false
+			cell.isSearching = self?.isSearching ?? false
 			cell.delegate = self
 		}
 		

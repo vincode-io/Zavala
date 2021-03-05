@@ -17,18 +17,20 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 	var indentionLevel: Int
 	var indentationWidth: CGFloat
 	var isNotesHidden: Bool
+	var isSearching: Bool
 	var isChevronShowing: Bool
 	var isComplete: Bool
 	var isAncestorComplete: Bool
 	var topic: NSAttributedString?
 	var note: NSAttributedString?
 	
-	init(row: Row, indentionLevel: Int, indentationWidth: CGFloat, isNotesHidden: Bool) {
+	init(row: Row, indentionLevel: Int, indentationWidth: CGFloat, isNotesHidden: Bool, isSearching: Bool) {
 		self.row = row
 		self.indentionLevel = indentionLevel
 		self.indentationWidth = indentationWidth
 		self.isNotesHidden = isNotesHidden
-		
+		self.isSearching = isSearching
+
 		self.id = row.id
 		self.isChevronShowing = row.rowCount > 0
 		self.isComplete = row.isComplete
@@ -52,6 +54,7 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 		hasher.combine(indentionLevel)
 		hasher.combine(indentationWidth)
 		hasher.combine(isNotesHidden)
+		hasher.combine(isSearching)
 		hasher.combine(isChevronShowing)
 		hasher.combine(isComplete)
 		hasher.combine(isAncestorComplete)
@@ -64,6 +67,7 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 			lhs.indentionLevel == rhs.indentionLevel &&
 			lhs.indentationWidth == rhs.indentationWidth &&
 			lhs.isNotesHidden == rhs.isNotesHidden &&
+			lhs.isSearching == rhs.isSearching &&
 			lhs.isChevronShowing == rhs.isChevronShowing &&
 			lhs.isComplete == rhs.isComplete &&
 			lhs.isAncestorComplete == rhs.isAncestorComplete &&

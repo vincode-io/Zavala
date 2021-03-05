@@ -157,7 +157,14 @@ class EditorTextRowContentView: UIView, UIContentView {
 				])
 			}
 			
-			disclosureIndicator.setDisclosure(isExpanded: configuration.row?.isExpanded ?? true, animated: false)
+			switch (configuration.row?.isExpanded ?? true, configuration.isSearching) {
+			case (true, _):
+				disclosureIndicator.setDisclosure(state: .expanded, animated: false)
+			case (false, false):
+				disclosureIndicator.setDisclosure(state: .collapsed, animated: false)
+			case (false, true):
+				disclosureIndicator.setDisclosure(state: .partial, animated: false)
+			}
 		}
 		
 		if configuration.indentionLevel < barViews.count {

@@ -35,7 +35,13 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 		}
 	}
 	
-	var isNotesHidden: Bool? {
+	var isNotesHidden: Bool = false {
+		didSet {
+			setNeedsUpdateConfiguration()
+		}
+	}
+	
+	var isSearching: Bool = false {
 		didSet {
 			setNeedsUpdateConfiguration()
 		}
@@ -75,7 +81,7 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 			indentationWidth = 10
 		}
 		
-		var content = EditorTextRowContentConfiguration(row: row, indentionLevel: indentationLevel, indentationWidth: indentationWidth, isNotesHidden: isNotesHidden ?? false)
+		var content = EditorTextRowContentConfiguration(row: row, indentionLevel: indentationLevel, indentationWidth: indentationWidth, isNotesHidden: isNotesHidden, isSearching: isSearching)
 		content = content.updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content
