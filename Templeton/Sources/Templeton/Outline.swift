@@ -27,6 +27,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		public var toChildIndex: Int
 	}
 	
+	public var isSearching = false
+	public var adjustedRowsSection: Section {
+		return isSearching ? Section.title : Section.rows
+	}
+	
 	public var beingViewedCount = 0
 	
 	public var id: EntityID {
@@ -552,9 +557,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		documentMetaDataDidChange()
 		
 		if let reloads = shadowTable?.filter({ !(($0.associatedRow as? TextRow)?.isNoteEmpty ?? true) }).compactMap({ $0.shadowTableIndex }) {
-			return OutlineElementChanges(reloads: Set(reloads))
+			return OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
 		} else {
-			return OutlineElementChanges()
+			return OutlineElementChanges(section: adjustedRowsSection)
 		}
 	}
 	
@@ -581,7 +586,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineBodyDidChange()
 		
 		let reloads = impacted.compactMap { $0.shadowTableIndex }
-		let changes = OutlineElementChanges(reloads: Set(reloads))
+		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
 		outlineElementsDidChange(changes)
 		return (impacted, reloads.sorted().first)
 	}
@@ -615,7 +620,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineBodyDidChange()
 		
 		let reloads = impacted.keys.compactMap { $0.shadowTableIndex }
-		let changes = OutlineElementChanges(reloads: Set(reloads))
+		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
 		outlineElementsDidChange(changes)
 		return (impacted, reloads.sorted().first)
 	}
@@ -631,7 +636,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineBodyDidChange()
 		
 		let reloads = notes.keys.compactMap { $0.shadowTableIndex }
-		let changes = OutlineElementChanges(reloads: Set(reloads))
+		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
 		outlineElementsDidChange(changes)
 	}
 	
@@ -670,7 +675,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let deleteSet = Set(deletes)
 		let reloadSet = Set(reloads).subtracting(deleteSet)
 		
-		let changes = OutlineElementChanges(deletes: deleteSet, reloads: reloadSet)
+		let changes = OutlineElementChanges(section: adjustedRowsSection, deletes: deleteSet, reloads: reloadSet)
 		outlineElementsDidChange(changes)
 		
 		if deletedRows.contains(where: { $0.id == cursorRowID }) {
@@ -699,7 +704,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		deleteRows([bottomRow])
 		endCloudKitBatchRequest()
 		
-		let changes = OutlineElementChanges(reloads: Set([topShadowTableIndex]))
+		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set([topShadowTableIndex]))
 		outlineElementsDidChange(changes)
 	}
 	
@@ -725,7 +730,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		shadowTable?.insert(row, at: shadowTableIndex)
 		resetShadowTableIndexes(startingAt: shadowTableIndex)
-		let changes = OutlineElementChanges(inserts: [shadowTableIndex])
+		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: [shadowTableIndex])
 		outlineElementsDidChange(changes)
 		
 		return shadowTableIndex
@@ -781,7 +786,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		shadowTable?.insert(row, at: rowShadowTableIndex)
 		
 		resetShadowTableIndexes(startingAt: afterRow?.shadowTableIndex ?? 0)
-		let changes = OutlineElementChanges(inserts: Set(inserts), reloads: Set(reloads))
+		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: Set(inserts), reloads: Set(reloads))
 		outlineElementsDidChange(changes)
 
 		return inserts[0]
@@ -839,7 +844,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		if let reload = afterRow?.shadowTableIndex {
 			reloads.insert(reload)
 		}
-		changes.append(OutlineElementChanges(reloads: reloads))
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		
 		outlineElementsDidChange(changes)
 		
@@ -865,7 +870,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		endCloudKitBatchRequest()
 
 		if let rowShadowTableIndex = textRow.shadowTableIndex {
-			let reloadChanges = OutlineElementChanges(reloads: Set([rowShadowTableIndex]))
+			let reloadChanges = OutlineElementChanges(section: adjustedRowsSection, reloads: Set([rowShadowTableIndex]))
 			outlineElementsDidChange(reloadChanges)
 		}
 
@@ -881,7 +886,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		if applyChanges {
 			guard let shadowTableIndex = row.shadowTableIndex else { return }
-			let changes = OutlineElementChanges(reloads: [shadowTableIndex])
+			let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: [shadowTableIndex])
 			outlineElementsDidChange(changes)
 		}
 	}
@@ -940,7 +945,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var changes = rebuildShadowTable()
 		
 		let reloads = Set(impacted.compactMap { $0.shadowTableIndex })
-		changes.append(OutlineElementChanges(reloads: reloads))
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		outlineElementsDidChange(changes)
 		return impacted
 	}
@@ -989,7 +994,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var changes = rebuildShadowTable()
 	
 		let reloadIndexes = Set(reloads.compactMap { $0.shadowTableIndex })
-		changes.append(OutlineElementChanges(reloads: reloadIndexes))
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloadIndexes))
 		
 		outlineElementsDidChange(changes)
 		return impacted
@@ -1085,7 +1090,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 
-		let changes = OutlineElementChanges(reloads: reloads)
+		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: reloads)
 		outlineElementsDidChange(changes)
 		return impacted
 	}
@@ -1134,7 +1139,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		var changes = rebuildShadowTable()
 		let reloads = reloadsForParentAndChildren(rows: impacted)
-		changes.append(OutlineElementChanges(reloads: reloads))
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		outlineElementsDidChange(changes)
 		
 		return impacted
@@ -1191,7 +1196,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var changes = rebuildShadowTable()
 		var reloads = reloadsForParentAndChildren(rows: rowMoves.map { $0.row })
 		reloads.formUnion(oldParentReloads)
-		changes.append(OutlineElementChanges(reloads: reloads))
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		outlineElementsDidChange(changes)
 	}
 	
@@ -1358,7 +1363,7 @@ extension Outline {
 		
 		var changes = rebuildShadowTable()
 		let reloadIndexes = reloadRows.compactMap { $0.shadowTableIndex }
-		changes.append(OutlineElementChanges(reloads: Set(reloadIndexes)))
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloadIndexes)))
 		outlineElementsDidChange(changes)
 	}
 	
@@ -1510,7 +1515,7 @@ extension Outline {
 			}
 		}
 		
-		let changes = OutlineElementChanges(reloads: reloads)
+		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: reloads)
 		outlineElementsDidChange(changes)
 		return (impacted, nil)
 	}
@@ -1565,7 +1570,7 @@ extension Outline {
 		var changes = rebuildShadowTable()
 		
 		let reloads = Set(rows.compactMap { $0.shadowTableIndex })
-		changes.append(OutlineElementChanges(reloads: reloads))
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		
 		outlineElementsDidChange(changes)
 		return impacted
@@ -1607,7 +1612,7 @@ extension Outline {
 		}
 		
 		resetShadowTableIndexes(startingAt: rowShadowTableIndex)
-		let changes = OutlineElementChanges(inserts: inserts, reloads: [rowShadowTableIndex])
+		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: inserts, reloads: [rowShadowTableIndex])
 		outlineElementsDidChange(changes)
 	}
 
@@ -1675,12 +1680,12 @@ extension Outline {
 		
 		guard let rowShadowTableIndex = row.shadowTableIndex else { return }
 		resetShadowTableIndexes(startingAt: rowShadowTableIndex)
-		let changes = OutlineElementChanges(deletes: reloads, reloads: Set([rowShadowTableIndex]))
+		let changes = OutlineElementChanges(section: adjustedRowsSection, deletes: reloads, reloads: Set([rowShadowTableIndex]))
 		outlineElementsDidChange(changes)
 	}
 	
 	private func rebuildShadowTable() -> OutlineElementChanges {
-		guard let oldShadowTable = shadowTable else { return OutlineElementChanges() }
+		guard let oldShadowTable = shadowTable else { return OutlineElementChanges(section: adjustedRowsSection) }
 		rebuildTransientData()
 		
 		var moves = Set<OutlineElementChanges.Move>()
@@ -1705,7 +1710,7 @@ extension Outline {
 			}
 		}
 		
-		return OutlineElementChanges(deletes: deletes, inserts: inserts, moves: moves)
+		return OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, inserts: inserts, moves: moves)
 	}
 	
 	private func rebuildTransientData() {

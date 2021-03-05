@@ -140,7 +140,7 @@ extension EditorViewController {
 		}
 		
 		// Drop into the first entry in the Outline
-		if targetIndexPath == IndexPath(row: 0, section: Outline.Section.rows.rawValue) {
+		if targetIndexPath == IndexPath(row: 0, section: adjustedRowsSection) {
 			localRowDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: 0)
 			return
 		}
@@ -269,7 +269,7 @@ extension EditorViewController {
 		}
 		
 		// Drop into the first entry in the Outline
-		if targetIndexPath == IndexPath(row: 0, section: Outline.Section.rows.rawValue) {
+		if targetIndexPath == IndexPath(row: 0, section: adjustedRowsSection) {
 			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: nil)
 			return
 		}

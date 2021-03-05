@@ -146,6 +146,19 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			return false
 		}
 	}
+
+	var isSearching: Bool {
+		get {
+			outline?.isSearching ?? false
+		}
+		set {
+			outline?.isSearching = newValue
+		}
+	}
+	
+	var adjustedRowsSection: Int {
+		return outline?.adjustedRowsSection.rawValue ?? Outline.Section.rows.rawValue
+	}
 	
 	var undoableCommands = [UndoableCommand]()
 	
@@ -183,7 +196,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var firstVisibleShadowTableIndex: Int? {
 		let visibleRect = collectionView.layoutMarginsGuide.layoutFrame
 		let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.minY)
-		if let indexPath = collectionView.indexPathForItem(at: visiblePoint), indexPath.section == Outline.Section.rows.rawValue {
+		if let indexPath = collectionView.indexPathForItem(at: visiblePoint), indexPath.section == adjustedRowsSection {
 			return indexPath.row
 		}
 		return nil
@@ -195,6 +208,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var isOutlineNewFlag = false
 	private var isShowingAddButton = false
 	private var skipHidingKeyboardFlag = false
+	
+	private var headerSections = IndexSet([Outline.Section.title.rawValue, Outline.Section.tags.rawValue])
 	
 	private static var defaultContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 40, right: 0)
 	
@@ -388,7 +403,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			updateUI(editMode: false)
 		} else {
 			collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
-			if let scrollToIndex = currentTextView?.row?.shadowTableIndex, let cell = collectionView.cellForItem(at: IndexPath(row: scrollToIndex, section: Outline.Section.rows.rawValue)) {
+			if let scrollToIndex = currentTextView?.row?.shadowTableIndex, let cell = collectionView.cellForItem(at: IndexPath(row: scrollToIndex, section: adjustedRowsSection)) {
 				let cellFrame = view.convert(cell.frame, from: view.window)
 				collectionView.scrollRectToVisible(cellFrame, animated: true)
 			}
@@ -529,8 +544,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	func beginInDocumentSearch() {
+		isSearching = true
+		collectionView.deleteSections(headerSections)
+
 		searchBar.becomeFirstResponder()
 		view.layoutIfNeeded()
+
 		UIView.animate(withDuration: 0.3) {
 			self.collectionViewTopConstraint.constant = 36
 			self.view.layoutIfNeeded()
@@ -599,7 +618,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				tagInput.selectBelow()
 				return
 			} else if outline?.shadowTable?.count ?? 0 > 0 {
-				if let rowCell = collectionView.cellForItem(at: IndexPath(row: 0, section: Outline.Section.rows.rawValue)) as? EditorTextRowViewCell {
+				if let rowCell = collectionView.cellForItem(at: IndexPath(row: 0, section: adjustedRowsSection)) as? EditorTextRowViewCell {
 					rowCell.moveToEnd()
 				}
 			}
@@ -661,11 +680,13 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 	
 	func numberOfSections(in collectionView: UICollectionView) -> Int {
-		return 3
+		return isSearching ? 1 : 3
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		switch section {
+		let adjustedSection = isSearching ? Outline.Section.rows.rawValue : section
+		
+		switch adjustedSection {
 		case Outline.Section.title.rawValue:
 			return outline == nil ? 0 : 1
 		case Outline.Section.tags.rawValue:
@@ -684,7 +705,9 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		switch indexPath.section {
+		let adjustedSection = isSearching ? Outline.Section.rows.rawValue : indexPath.section
+
+		switch adjustedSection {
 		case Outline.Section.title.rawValue:
 			return collectionView.dequeueConfiguredReusableCell(using: titleRegistration!, for: indexPath, item: outline)
 		case Outline.Section.tags.rawValue:
@@ -703,7 +726,8 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-		guard indexPath.section == Outline.Section.rows.rawValue else { return nil }
+		let adjustedSection = isSearching ? Outline.Section.rows.rawValue : indexPath.section
+		guard adjustedSection == Outline.Section.rows.rawValue else { return nil }
 		
 		// Force save the text if the context menu has been requested so that we don't lose our
 		// text changes when the cell configuration gets applied
@@ -730,13 +754,14 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
 		guard let row = configuration.identifier as? TextRow,
 			  let rowShadowTableIndex = row.shadowTableIndex,
-			  let cell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: Outline.Section.rows.rawValue)) as? EditorTextRowViewCell else { return nil }
+			  let cell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell else { return nil }
 		
 		return UITargetedPreview(view: cell, parameters: EditorTextRowPreviewParameters(cell: cell, row: row))
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-		return indexPath.section == Outline.Section.rows.rawValue
+		let adjustedSection = isSearching ? Outline.Section.rows.rawValue : indexPath.section
+		return adjustedSection == Outline.Section.rows.rawValue
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -936,7 +961,7 @@ extension EditorViewController: LinkViewControllerDelegate {
 	
 	func updateLink(_: LinkViewController, cursorCoordinates: CursorCoordinates, link: String?, range: NSRange) {
 		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
-		let indexPath = IndexPath(row: shadowTableIndex, section: Outline.Section.rows.rawValue)
+		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 		guard let textRowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
 		
 		if cursorCoordinates.isInNotes {
@@ -964,6 +989,9 @@ extension EditorViewController: SearchBarDelegate {
 			self.collectionViewTopConstraint.constant = 0
 			self.view.layoutIfNeeded()
 		}
+
+		isSearching = false
+		collectionView.insertSections(headerSections)
 	}
 	
 	func searchBar(_ searchBar: EditorSearchBar, textDidChange: String) {
@@ -1221,7 +1249,7 @@ extension EditorViewController {
 		
 		if let textRange = textRange,
 		   let updated = cursorRow?.shadowTableIndex,
-		   let rowCell = collectionView.cellForItem(at: IndexPath(row: updated, section: Outline.Section.rows.rawValue)) as? EditorTextRowViewCell {
+		   let rowCell = collectionView.cellForItem(at: IndexPath(row: updated, section: adjustedRowsSection)) as? EditorTextRowViewCell {
 			rowCell.restoreSelection(textRange)
 		}
 		
@@ -1240,7 +1268,7 @@ extension EditorViewController {
 
 	private func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates, animated: Bool) {
 		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
-		let indexPath = IndexPath(row: shadowTableIndex, section: Outline.Section.rows.rawValue)
+		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 
 		func restoreCursor() {
 			guard let rowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
@@ -1265,9 +1293,9 @@ extension EditorViewController {
 	private func restoreScrollPosition() {
 		if let verticleScrollState = outline?.verticleScrollState, verticleScrollState != 0 {
 			collectionView.isHidden = true
-			collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: Outline.Section.rows.rawValue), at: .top, animated: false)
+			collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: adjustedRowsSection), at: .top, animated: false)
 			DispatchQueue.main.async {
-				self.collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: Outline.Section.rows.rawValue), at: .top, animated: false)
+				self.collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: self.adjustedRowsSection), at: .top, animated: false)
 				self.collectionView.isHidden = false
 			}
 		}
@@ -1465,7 +1493,7 @@ extension EditorViewController {
 			return
 		}
 		
-		let indexPath = IndexPath(row: shadowTableIndex, section: Outline.Section.rows.rawValue)
+		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 		if let rowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
 			rowCell.moveToEnd()
 		}
@@ -1477,7 +1505,7 @@ extension EditorViewController {
 			return
 		}
 		
-		let indexPath = IndexPath(row: shadowTableIndex - 1, section: Outline.Section.rows.rawValue)
+		let indexPath = IndexPath(row: shadowTableIndex - 1, section: adjustedRowsSection)
 		makeCellVisibleIfNecessary(indexPath: indexPath) {
 			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
@@ -1487,7 +1515,7 @@ extension EditorViewController {
 	
 	private func moveCursorDown(row: Row) {
 		guard let shadowTableIndex = row.shadowTableIndex, let shadowTable = outline?.shadowTable, shadowTableIndex < (shadowTable.count - 1) else { return }
-		let indexPath = IndexPath(row: shadowTableIndex + 1, section: Outline.Section.rows.rawValue)
+		let indexPath = IndexPath(row: shadowTableIndex + 1, section: adjustedRowsSection)
 		makeCellVisibleIfNecessary(indexPath: indexPath) {
 			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
@@ -1719,7 +1747,7 @@ extension EditorViewController {
 			if newCursorIndex == -1 {
 				moveCursorToTagInput()
 			} else {
-				if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: Outline.Section.rows.rawValue)) as? EditorTextRowViewCell {
+				if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
 					rowCell.moveToEnd()
 				}
 			}
@@ -1737,7 +1765,7 @@ extension EditorViewController {
 		runCommand(command)
 		
 		if let newCursorIndex = command.newCursorIndex {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: Outline.Section.rows.rawValue)) as? EditorTextRowViewCell {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}
@@ -1757,7 +1785,7 @@ extension EditorViewController {
 		runCommand(command)
 		
 		if let newCursorIndex = command.newCursorIndex {
-			let newCursorIndexPath = IndexPath(row: newCursorIndex, section: Outline.Section.rows.rawValue)
+			let newCursorIndexPath = IndexPath(row: newCursorIndex, section: adjustedRowsSection)
 			makeCellVisibleIfNecessary(indexPath: newCursorIndexPath) {
 				if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorTextRowViewCell {
 					rowCell.moveToEnd()
@@ -1804,7 +1832,7 @@ extension EditorViewController {
 		runCommand(command)
 		
 		if let newCursorIndex = command.newCursorIndex {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: Outline.Section.rows.rawValue)) as? EditorTextRowViewCell {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
 				rowCell.moveToStart()
 			}
 		}
@@ -1822,7 +1850,7 @@ extension EditorViewController {
 		runCommand(command)
 		
 		if let newCursorIndex = command.newCursorIndex {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: Outline.Section.rows.rawValue)) as? EditorTextRowViewCell {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}
@@ -1852,7 +1880,7 @@ extension EditorViewController {
 		runCommand(command)
 		
 		if let newCursorIndex = command.newCursorIndex ?? rows.first?.shadowTableIndex {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: Outline.Section.rows.rawValue)) as? EditorTextRowViewCell {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
 				rowCell.moveToNote()
 			}
 		}
@@ -1870,7 +1898,7 @@ extension EditorViewController {
 		runCommand(command)
 
 		if let newCursorIndex = command.newCursorIndex {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: Outline.Section.rows.rawValue)) as? EditorTextRowViewCell {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}

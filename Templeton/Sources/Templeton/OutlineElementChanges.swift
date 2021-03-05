@@ -55,7 +55,7 @@ public struct OutlineElementChanges {
 		return reloads.map { IndexPath(row: $0, section: section.rawValue) }
 	}
 	
-	init(section: Outline.Section = .rows, deletes: Set<Int>? = nil, inserts: Set<Int>? = nil, moves: Set<Move>? = nil, reloads: Set<Int>? = nil) {
+	init(section: Outline.Section, deletes: Set<Int>? = nil, inserts: Set<Int>? = nil, moves: Set<Move>? = nil, reloads: Set<Int>? = nil) {
 		self.section = section
 		self.deletes = deletes
 		self.inserts = inserts
