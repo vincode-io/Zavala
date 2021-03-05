@@ -661,6 +661,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainSplitViewController?.isShareUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(beginInDocumentSearchCommand(_:)), #selector(nextInDocumentSearchCommand(_:)), #selector(previousInDocumentSearchCommand(_:)):
+			if mainSplitViewController?.isOutlineFunctionsUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		default:
 			break
 		}
