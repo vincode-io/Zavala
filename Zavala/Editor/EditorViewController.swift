@@ -424,6 +424,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		outline?.suspend()
 		clearUndoableCommands()
 	
+		let oldOutline = outline
+		
 		// Assign the new Outline and load it
 		outline = newOutline
 		outline?.beingViewedCount = (outline?.beingViewedCount ?? 0) + 1
@@ -434,7 +436,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		updateUI(editMode: false)
 		collectionView.reloadData()
 		
-		endSearching()
+		endSearching(outline: oldOutline)
 		restoreOutlineCursorPosition()
 		restoreScrollPosition()
 		moveCursorToTitleOnNew()
@@ -990,7 +992,7 @@ extension EditorViewController: SearchBarDelegate {
 	}
 
 	func doneWasPressed(_ searchBar: EditorSearchBar) {
-		endSearching()
+		endSearching(outline: outline)
 	}
 	
 	func searchBar(_ searchBar: EditorSearchBar, textDidChange: String) {
@@ -1946,7 +1948,7 @@ extension EditorViewController {
 		}
 	}
 	
-	private func endSearching() {
+	private func endSearching(outline: Outline?) {
 		guard isSearching else {
 			return
 		}
