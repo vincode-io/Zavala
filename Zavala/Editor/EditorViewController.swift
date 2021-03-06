@@ -537,25 +537,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		deleteRows(completedRows)
 	}
 	
-	func beginInDocumentSearch() {
-		guard !isSearching else {
-			searchBar.becomeFirstResponder()
-			return
-		}
-		
-		isSearching = true
-		collectionView.deleteSections(headerSections)
-		outline?.beginSearching()
-
-		searchBar.becomeFirstResponder()
-		view.layoutIfNeeded()
-
-		UIView.animate(withDuration: 0.3) {
-			self.collectionViewTopConstraint.constant = 36
-			self.view.layoutIfNeeded()
-		}
-	}
-	
 	func useSelectionForSearch() {
 		searchBar.searchField.text = currentTextView?.selectedText
 	}
@@ -650,6 +631,26 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			}
 		}
 	}
+	
+	@objc func beginInDocumentSearch() {
+		guard !isSearching else {
+			searchBar.becomeFirstResponder()
+			return
+		}
+		
+		isSearching = true
+		collectionView.deleteSections(headerSections)
+		outline?.beginSearching()
+
+		searchBar.becomeFirstResponder()
+		view.layoutIfNeeded()
+
+		UIView.animate(withDuration: 0.3) {
+			self.collectionViewTopConstraint.constant = 36
+			self.view.layoutIfNeeded()
+		}
+	}
+	
 }
 
 // MARK: UICollectionViewDelegate, UICollectionViewDataSource
@@ -1087,6 +1088,12 @@ extension EditorViewController {
 		}
 		shareActions.append(sendCopyAction)
 		
+		var findActions = [UIAction]()
+		let findAction = UIAction(title: L10n.findEllipsis, image: AppAssets.find) { [weak self] _ in
+			self?.beginInDocumentSearch()
+		}
+		findActions.append(findAction)
+
 		var viewActions = [UIAction]()
 		
 		let expandAllInOutlineAction = UIAction(title: L10n.expandAllInOutline, image: AppAssets.expandAll) { [weak self] _ in
@@ -1116,13 +1123,14 @@ extension EditorViewController {
 		}
 		
 		let shareMenu = UIMenu(title: "", options: .displayInline, children: shareActions)
+		let findMenu = UIMenu(title: "", options: .displayInline, children: findActions)
 		let viewMenu = UIMenu(title: "", options: .displayInline, children: viewActions)
 		let changeMenu = UIMenu(title: "", options: .displayInline, children: [deleteCompletedRowsAction])
 		
 		if traitCollection.userInterfaceIdiom == .pad {
-			return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [viewMenu, changeMenu])
+			return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [findMenu, viewMenu, changeMenu])
 		} else {
-			return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [shareMenu, viewMenu, changeMenu])
+			return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [shareMenu, findMenu, viewMenu, changeMenu])
 		}
 	}
 	
