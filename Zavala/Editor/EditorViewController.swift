@@ -434,6 +434,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		updateUI(editMode: false)
 		collectionView.reloadData()
 		
+		endSearching()
 		restoreOutlineCursorPosition()
 		restoreScrollPosition()
 		moveCursorToTitleOnNew()
@@ -989,15 +990,7 @@ extension EditorViewController: SearchBarDelegate {
 	}
 
 	func doneWasPressed(_ searchBar: EditorSearchBar) {
-		view.layoutIfNeeded()
-		UIView.animate(withDuration: 0.3) {
-			self.collectionViewTopConstraint.constant = 0
-			self.view.layoutIfNeeded()
-		}
-
-		isSearching = false
-		collectionView.insertSections(headerSections)
-		outline?.endSearching()
+		endSearching()
 	}
 	
 	func searchBar(_ searchBar: EditorSearchBar, textDidChange: String) {
@@ -1953,4 +1946,19 @@ extension EditorViewController {
 		}
 	}
 	
+	private func endSearching() {
+		guard isSearching else {
+			return
+		}
+		
+		view.layoutIfNeeded()
+		UIView.animate(withDuration: 0.3) {
+			self.collectionViewTopConstraint.constant = 0
+			self.view.layoutIfNeeded()
+		}
+
+		isSearching = false
+		collectionView.insertSections(headerSections)
+		outline?.endSearching()
+	}
 }
