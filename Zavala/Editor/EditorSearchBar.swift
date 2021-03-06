@@ -20,6 +20,7 @@ import UIKit
 	var searchField: UISearchTextField!
 	var nextButton: UIButton!
 	var prevButton: UIButton!
+	var doneButton: UIButton!
 	var background: UIView!
 	
 	weak private var resultsLabel: UILabel!
@@ -85,9 +86,7 @@ import UIKit
 	deinit {
 		NotificationCenter.default.removeObserver(self)
 	}
-}
 
-private extension EditorSearchBar {
 	func commonInit() {
 		isLayoutMarginsRelativeArrangement = true
 		alignment = .center
@@ -100,14 +99,21 @@ private extension EditorSearchBar {
 //		background.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 //		addSubview(background)
 		
-		let doneButton = UIButton(type: .roundedRect)
+		doneButton = UIButton(type: .custom)
 		doneButton.setTitle(NSLocalizedString("Done", comment: "Done"), for: .normal)
-		doneButton.setTitleColor(UIColor.label, for: .normal)
-		doneButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
 		doneButton.isAccessibilityElement = true
 		doneButton.addTarget(self, action: #selector(donePressed), for: .touchUpInside)
 		doneButton.isEnabled = true
 		doneButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+		doneButton.setTitleColor(UIColor.label, for: .normal)
+		if traitCollection.userInterfaceIdiom == .mac {
+			doneButton.setBackgroundImage(UIColor.systemGray4.asImage(), for: .highlighted)
+			doneButton.layer.borderWidth = 1.0
+			doneButton.layer.borderColor = UIColor.tertiaryLabel.cgColor
+			doneButton.layer.cornerRadius = 5
+		} else {
+			doneButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+		}
 		addArrangedSubview(doneButton)
 		
 		let resultsLabel = UILabel()
@@ -142,6 +148,16 @@ private extension EditorSearchBar {
 		nextButton.addTarget(self, action: #selector(nextPressed), for: .touchUpInside)
 		addArrangedSubview(nextButton)
 	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		if traitCollection.userInterfaceIdiom == .mac {
+			if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) ?? false {
+				doneButton.setBackgroundImage(UIColor.systemGray4.asImage(), for: .highlighted)
+				doneButton.layer.borderColor = UIColor.tertiaryLabel.cgColor
+			}
+		}
+	}
+	
 }
 
 private extension EditorSearchBar {
