@@ -538,6 +538,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	func beginInDocumentSearch() {
+		guard !isSearching else {
+			searchBar.becomeFirstResponder()
+			return
+		}
+		
 		isSearching = true
 		collectionView.deleteSections(headerSections)
 		outline?.beginSearching()
