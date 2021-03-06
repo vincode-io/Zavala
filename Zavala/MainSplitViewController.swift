@@ -357,6 +357,10 @@ class MainSplitViewController: UISplitViewController {
 		editorViewController?.beginInDocumentSearch()
 	}
 	
+	@objc func useSelectionForSearch(_ sender: Any?) {
+		editorViewController?.useSelectionForSearch()
+	}
+	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {

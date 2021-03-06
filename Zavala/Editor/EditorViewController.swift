@@ -551,6 +551,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
+	func useSelectionForSearch() {
+		searchBar.searchField.text = currentTextView?.selectedText
+	}
+	
 	// MARK: Actions
 	
 	@objc func sync() {

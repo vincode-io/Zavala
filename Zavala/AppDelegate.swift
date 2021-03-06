@@ -36,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				menuKeyCommands.append(hideNotesCommand)
 			}
 			menuKeyCommands.append(beginInDocumentSearchCommand)
+			menuKeyCommands.append(useSelectionForSearchCommand)
 			menuKeyCommands.append(nextInDocumentSearchCommand)
 			menuKeyCommands.append(previousInDocumentSearchCommand)
 		}
@@ -305,6 +306,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 													input: "f",
 													modifierFlags: [.command])
 	
+	let useSelectionForSearchCommand = UIKeyCommand(title: L10n.findEllipsis,
+													action: #selector(useSelectionForSearchCommand(_:)),
+													input: "e",
+													modifierFlags: [.command])
+	
 	let nextInDocumentSearchCommand = UIKeyCommand(title: L10n.findNext,
 												   action: #selector(nextInDocumentSearchCommand(_:)),
 												   input: "g",
@@ -548,6 +554,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.beginInDocumentSearch(sender)
 	}
 
+	@objc func useSelectionForSearchCommand(_ sender: Any?) {
+		mainSplitViewController?.useSelectionForSearch(sender)
+	}
+
 	@objc func nextInDocumentSearchCommand(_ sender: Any?) {
 	}
 
@@ -661,7 +671,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainSplitViewController?.isShareUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(beginInDocumentSearchCommand(_:)), #selector(nextInDocumentSearchCommand(_:)), #selector(previousInDocumentSearchCommand(_:)):
+		case #selector(beginInDocumentSearchCommand(_:)),
+			 #selector(useSelectionForSearchCommand(_:)),
+			 #selector(nextInDocumentSearchCommand(_:)),
+			 #selector(previousInDocumentSearchCommand(_:)):
 			if mainSplitViewController?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
@@ -707,7 +720,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		let documentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginDocumentSearchCommand])
 		let inDocumentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginInDocumentSearchCommand, nextInDocumentSearchCommand, previousInDocumentSearchCommand])
-		let findMenu = UIMenu(title: L10n.find, children: [documentFindMenu, inDocumentFindMenu])
+		let useSelectionMenu = UIMenu(title: "", options: .displayInline, children: [useSelectionForSearchCommand])
+		let findMenu = UIMenu(title: L10n.find, children: [documentFindMenu, inDocumentFindMenu, useSelectionMenu])
 		builder.insertSibling(findMenu, beforeMenu: .spelling)
 		
 		// Format

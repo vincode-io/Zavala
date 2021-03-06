@@ -34,6 +34,13 @@ class OutlineTextView: UITextView {
 		return !(selectedTextRange?.isEmpty ?? true)
 	}
 	
+	var selectedText: String? {
+		if let textRange = selectedTextRange {
+			return text(in: textRange)
+		}
+		return nil
+	}
+	
 	var cursorPosition: Int {
 		return selectedRange.location
 	}
