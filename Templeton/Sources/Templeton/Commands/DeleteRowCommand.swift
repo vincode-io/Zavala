@@ -29,15 +29,15 @@ public final class DeleteRowCommand: OutlineCommand {
 		self.undoActionName = L10n.deleteRow
 		self.redoActionName = L10n.deleteRow
 
-		var allRows = [Row]()
+		var allRows = Set<Row>()
 		
 		func deleteVisitor(_ visited: Row) {
-			allRows.append(visited)
+			allRows.insert(visited)
 			visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
 		}
 		rows.forEach { $0.visit(visitor: deleteVisitor(_:)) }
 		
-		self.rows = allRows
+		self.rows = Array(allRows)
 
 		for row in allRows {
 			if let rowShadowTableIndex = row.shadowTableIndex, rowShadowTableIndex > 0, let afterRow = outline.shadowTable?[rowShadowTableIndex - 1] {
