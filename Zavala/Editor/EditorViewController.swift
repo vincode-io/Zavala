@@ -741,6 +741,10 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		// text changes when the cell configuration gets applied
 		saveCurrentText()
 		
+		if let responder = UIResponder.currentFirstResponder, responder is UISearchTextField {
+			responder.resignFirstResponder()
+		}
+		
 		if !(collectionView.indexPathsForSelectedItems?.contains(indexPath) ?? false) {
 			collectionView.deselectAll()
 		}
