@@ -10,11 +10,13 @@ import Foundation
 class TransientDataVisitor {
 	
 	let isFiltered: Bool
+	let isSearching: Bool
 	var shadowTable = [Row]()
 	var addingToShadowTable = true
 	
-	init(isFiltered: Bool) {
+	init(isFiltered: Bool, isSearching: Bool) {
 		self.isFiltered = isFiltered
+		self.isSearching = isSearching
 	}
 	
 	func visitor(_ visited: Row) {
@@ -34,7 +36,7 @@ class TransientDataVisitor {
 				shadowTable.append(visited)
 			}
 			
-			if !visited.isExpanded || shouldFilter {
+			if (!visited.isExpanded && !isSearching) || shouldFilter {
 				addingToShadowTable = false
 				addingToShadowTableSuspended = true
 			}

@@ -147,14 +147,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 
-	var isSearching: Bool {
-		get {
-			outline?.isSearching ?? false
-		}
-		set {
-			outline?.isSearching = newValue
-		}
-	}
+	var isSearching = false
 	
 	var adjustedRowsSection: Int {
 		return outline?.adjustedRowsSection.rawValue ?? Outline.Section.rows.rawValue
@@ -547,6 +540,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	func beginInDocumentSearch() {
 		isSearching = true
 		collectionView.deleteSections(headerSections)
+		outline?.beginSearching()
 
 		searchBar.becomeFirstResponder()
 		view.layoutIfNeeded()
@@ -993,6 +987,7 @@ extension EditorViewController: SearchBarDelegate {
 
 		isSearching = false
 		collectionView.insertSections(headerSections)
+		outline?.endSearching()
 	}
 	
 	func searchBar(_ searchBar: EditorSearchBar, textDidChange: String) {

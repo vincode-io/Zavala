@@ -27,7 +27,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		public var toChildIndex: Int
 	}
 	
-	public var isSearching = false
+	public private(set) var isSearching = false
 	public var adjustedRowsSection: Section {
 		return isSearching ? Section.title : Section.rows
 	}
@@ -565,6 +565,31 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public func isCreateNotesUnavailable(rows: [Row]) -> Bool {
 		return rows.isEmpty
+	}
+	
+	public func beginSearching() {
+		isSearching = true
+		var changes = rebuildShadowTable()
+
+		if let inserts = changes.inserts {
+			let reloads = inserts.compactMap { (shadowTable?[$0].parent as? Row)?.shadowTableIndex }
+			changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
+		}
+		
+		outlineElementsDidChange(changes)
+	}
+	
+	public func endSearching() {
+		isSearching = false
+		let oldShadowTable = shadowTable
+		var changes = rebuildShadowTable()
+
+		if let deletes = changes.deletes {
+			let reloads = deletes.compactMap { (oldShadowTable?[$0].parent as? Row)?.shadowTableIndex }
+			changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
+		}
+		
+		outlineElementsDidChange(changes)
 	}
 	
 	func createNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], Int?) {
@@ -1714,7 +1739,7 @@ extension Outline {
 	}
 	
 	private func rebuildTransientData() {
-		let transient = TransientDataVisitor(isFiltered: isFiltered ?? false)
+		let transient = TransientDataVisitor(isFiltered: isFiltered ?? false, isSearching: isSearching)
 		rows.forEach { row in
 			var mutatingRow = row
 			mutatingRow.parent = self
