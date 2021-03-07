@@ -990,9 +990,11 @@ extension EditorViewController: LinkViewControllerDelegate {
 extension EditorViewController: SearchBarDelegate {
 
 	func nextWasPressed(_ searchBar: EditorSearchBar) {
+		outline?.nextSearchResult()
 	}
 
 	func previousWasPressed(_ searchBar: EditorSearchBar) {
+		outline?.previousSearchResult()
 	}
 
 	func doneWasPressed(_ searchBar: EditorSearchBar) {
@@ -1000,6 +1002,7 @@ extension EditorViewController: SearchBarDelegate {
 	}
 	
 	func searchBar(_ searchBar: EditorSearchBar, textDidChange: String) {
+		outline?.search(for: textDidChange)
 	}
 	
 }

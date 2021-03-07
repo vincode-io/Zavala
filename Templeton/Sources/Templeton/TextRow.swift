@@ -86,6 +86,8 @@ public final class TextRow: BaseRow, Codable {
 		}
 	}
 	
+	public var searchResultCoordinates = NSHashTable<SearchResultCoordinates>.weakObjects()
+
 	var topicData: Data? {
 		didSet {
 			if let topic = topicData {
@@ -109,8 +111,6 @@ public final class TextRow: BaseRow, Codable {
 			}
 		}
 	}
-	
-	var searchResultCoordinates = NSHashTable<SearchResultCoordinates>.weakObjects()
 	
 	private enum CodingKeys: String, CodingKey {
 		case id = "id"

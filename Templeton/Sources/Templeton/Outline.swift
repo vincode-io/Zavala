@@ -248,6 +248,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return completedRows
 	}
 	
+	public private(set) var currentSearchResult = 0
+	public var searchResultCount: Int {
+		return searchResultCoordinates.count
+	}
+	
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case title = "title"
@@ -316,6 +321,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	private var batchCloudKitRequests = 0
 	private var cloudKitRequestsIDs = Set<EntityID>()
+	
+	private var searchResultCoordinates = [SearchResultCoordinates]()
 	
 	init(id: EntityID) {
 		self.id = id
@@ -569,6 +576,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public func beginSearching() {
 		isSearching = true
+		currentSearchResult = 0
 		var changes = rebuildShadowTable()
 
 		if let inserts = changes.inserts {
@@ -577,6 +585,36 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		
 		outlineElementsDidChange(changes)
+	}
+	
+	public func search(for searchString: String) {
+		
+	}
+	
+	public func nextSearchResult() {
+		guard searchResultCoordinates.count > 0 else { return }
+		
+		let nextResult: Int
+		if currentSearchResult + 1 < searchResultCoordinates.count {
+			nextResult = currentSearchResult + 1
+		} else {
+			nextResult = 0
+		}
+		
+		changeSearchResult(nextResult)
+	}
+	
+	public func previousSearchResult() {
+		guard searchResultCoordinates.count > 0 else { return }
+		
+		let previousResult: Int
+		if currentSearchResult - 1 >= 0 {
+			previousResult = currentSearchResult - 1
+		} else {
+			previousResult = searchResultCoordinates.count - 1
+		}
+		
+		changeSearchResult(previousResult)
 	}
 	
 	public func endSearching() {
@@ -1484,6 +1522,26 @@ extension Outline {
 		var userInfo = [AnyHashable: Any]()
 		userInfo[OutlineElementChanges.userInfoKey] = changes
 		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
+	}
+	
+	private func changeSearchResult(_ changeToResult: Int) {
+		var reloads = Set<Int>()
+		
+		let currentCoordinates = searchResultCoordinates[currentSearchResult]
+		currentCoordinates.isCurrentResult = false
+		if let shadowTableIndex = currentCoordinates.row.shadowTableIndex {
+			reloads.insert(shadowTableIndex)
+		}
+		
+		let changeToCoordinates = searchResultCoordinates[currentSearchResult]
+		changeToCoordinates.isCurrentResult = true
+		if let shadowTableIndex = changeToCoordinates.row.shadowTableIndex {
+			reloads.insert(shadowTableIndex)
+		}
+
+		currentSearchResult = changeToResult
+		
+		outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 	}
 	
 	private func completeUncomplete(rows: [Row], isComplete: Bool, textRowStrings: TextRowStrings?) -> ([Row], Int?) {

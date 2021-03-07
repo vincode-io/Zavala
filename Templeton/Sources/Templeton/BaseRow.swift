@@ -60,6 +60,8 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 	
 	var rowOrder: [EntityID]
 
+	var isPartOfSearchResult = false
+	
 	public override init() {
 		self.id = .row(0, "", "")
 		self.isExpanded = true

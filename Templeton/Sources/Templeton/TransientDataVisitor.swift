@@ -27,7 +27,7 @@ class TransientDataVisitor {
 		// Add to the Shadow Table if we haven't hit a collapsed entry
 		if addingToShadowTable {
 			
-			let shouldFilter = isFiltered && visited.isComplete
+			let shouldFilter = (isFiltered && visited.isComplete) || (isSearching && !visited.isPartOfSearchResult)
 			
 			if shouldFilter {
 				mutatingVisited.shadowTableIndex = nil

@@ -130,6 +130,15 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
+	var isPartOfSearchResult: Bool {
+		get {
+			associatedRow.isPartOfSearchResult
+		}
+		set {
+			associatedRow.isPartOfSearchResult = newValue
+		}
+	}
+	
 	private enum CodingKeys: String, CodingKey {
 		case type
 		case textRow
