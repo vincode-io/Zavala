@@ -115,6 +115,7 @@ class EditorTextRowNoteTextView: OutlineTextView {
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false
 		} else {
+			textRow.textRow?.note = cleansedAttributedText
 			editorDelegate?.textChanged(self, row: textRow, isInNotes: true, cursorPosition: lastCursorPosition)
 		}
 		

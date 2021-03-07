@@ -52,6 +52,14 @@ class OutlineTextView: UITextView {
 		fatalError("attibutedTexts has not been implemented")
 	}
 
+	var cleansedAttributedText: NSAttributedString {
+		let cleanText = NSMutableAttributedString(attributedString: attributedText)
+		cleanText.enumerateAttribute(.backgroundColor, in:  NSRange(0..<cleanText.length)) { value, range, stop in
+			cleanText.removeAttribute(.backgroundColor, range: range)
+		}
+		return cleanText
+	}
+	
 	let toggleBoldCommand = UIKeyCommand(title: L10n.bold, action: .toggleBoldface, input: "b", modifierFlags: [.command])
 	let toggleItalicsCommand = UIKeyCommand(title: L10n.italic, action: .toggleItalics, input: "i", modifierFlags: [.command])
 	let editLinkCommand = UIKeyCommand(title: L10n.link, action: .editLink, input: "k", modifierFlags: [.command])

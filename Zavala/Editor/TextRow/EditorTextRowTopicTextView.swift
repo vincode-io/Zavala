@@ -154,6 +154,7 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false
 		} else {
+			textRow.textRow?.topic = cleansedAttributedText
 			editorDelegate?.textChanged(self, row: textRow, isInNotes: false, cursorPosition: lastCursorPosition)
 		}
 		
