@@ -62,6 +62,8 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 
 	var isPartOfSearchResult = false {
 		didSet {
+			guard isPartOfSearchResult else { return }
+			
 			var parentRow = parent as? Row
 			while (parentRow != nil) {
 				parentRow!.isPartOfSearchResult = true
