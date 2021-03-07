@@ -1563,7 +1563,10 @@ extension Outline {
 
 		rows.forEach { $0.visit(visitor: clearSearchVisitor(_:)) }
 		
+		let reloads = Set(searchResultCoordinates.compactMap({ $0.row.shadowTableIndex }))
 		searchResultCoordinates = .init()
+		
+		outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 	}
 	
 	private func completeUncomplete(rows: [Row], isComplete: Bool, textRowStrings: TextRowStrings?) -> ([Row], Int?) {
