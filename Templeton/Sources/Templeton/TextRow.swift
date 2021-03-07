@@ -110,6 +110,8 @@ public final class TextRow: BaseRow, Codable {
 		}
 	}
 	
+	var searchResultCoordinates = NSHashTable<SearchResultCoordinates>.weakObjects()
+	
 	private enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case topicData = "topicData"
@@ -194,12 +196,6 @@ public final class TextRow: BaseRow, Codable {
 		try container.encode(isExpanded, forKey: .isExpanded)
 		try container.encode(isComplete, forKey: .isComplete)
 		try container.encode(rowOrder, forKey: .rowOrder)
-	}
-	
-	public override func clone(newOutlineID: EntityID) -> Row {
-		let id = EntityID.row(newOutlineID.accountID, newOutlineID.documentUUID, UUID().uuidString)
-		let result = TextRow(id: id, topicData: topicData, noteData: noteData, isComplete: isComplete, isExpanded: isExpanded, rowOrder: rowOrder)
-		return .text(result)
 	}
 	
 	public func complete() {
