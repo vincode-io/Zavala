@@ -60,7 +60,15 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 	
 	var rowOrder: [EntityID]
 
-	var isPartOfSearchResult = false
+	var isPartOfSearchResult = false {
+		didSet {
+			var parentRow = parent as? Row
+			while (parentRow != nil) {
+				parentRow!.isPartOfSearchResult = true
+				parentRow = parentRow?.parent as? Row
+			}
+		}
+	}
 	
 	public override init() {
 		self.id = .row(0, "", "")
