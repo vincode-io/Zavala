@@ -593,10 +593,19 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineElementsDidChange(changes)
 	}
 	
-	public func search(for searchString: String) {
+	public func search(for searchText: String) {
 		clearSearchResults()
+		
+		let searchVisitor = SearchResultVisitor(searchText: searchText, isFiltered: isFiltered ?? false, isNotesHidden: isNotesHidden ?? false)
+		rows.forEach { $0.visit(visitor: searchVisitor.visitor(_:))	}
+		searchResultCoordinates = searchVisitor.searchResultCoordinates
+		
+		var changes = rebuildShadowTable()
+		let reloads = searchResultCoordinates.compactMap { $0.row.shadowTableIndex }
+		changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
+		outlineElementsDidChange(changes)
 	}
-	
+		
 	public func nextSearchResult() {
 		guard searchResultCoordinates.count > 0 else { return }
 		
