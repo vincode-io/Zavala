@@ -27,9 +27,16 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		public var toChildIndex: Int
 	}
 	
-	public private(set) var isSearching = false
+	public enum SearchState {
+		case beginSearch
+		case searching
+		case notSearching
+	}
+	
+	public private(set) var isSearching = SearchState.notSearching
+	
 	public var adjustedRowsSection: Section {
-		return isSearching ? Section.title : Section.rows
+		return isSearching == .notSearching ? Section.rows : Section.title
 	}
 	
 	public var beingViewedCount = 0
@@ -575,8 +582,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public func beginSearching() {
-		isSearching = true
-		currentSearchResult = 0
+		isSearching = .beginSearch
 		var changes = rebuildShadowTable()
 
 		if let inserts = changes.inserts {
@@ -588,7 +594,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public func search(for searchString: String) {
-		
+		clearSearchResults()
 	}
 	
 	public func nextSearchResult() {
@@ -618,7 +624,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public func endSearching() {
-		isSearching = false
+		clearSearchResults()
+		
+		isSearching = .notSearching
 		let oldShadowTable = shadowTable
 		var changes = rebuildShadowTable()
 
@@ -1542,6 +1550,20 @@ extension Outline {
 		currentSearchResult = changeToResult
 		
 		outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
+	}
+	
+	private func clearSearchResults() {
+		currentSearchResult = 0
+
+		func clearSearchVisitor(_ visited: Row) {
+			var mutableVisited = visited
+			mutableVisited.isPartOfSearchResult = false
+			visited.rows.forEach { $0.visit(visitor: clearSearchVisitor) }
+		}
+
+		rows.forEach { $0.visit(visitor: clearSearchVisitor(_:)) }
+		
+		searchResultCoordinates = .init()
 	}
 	
 	private func completeUncomplete(rows: [Row], isComplete: Bool, textRowStrings: TextRowStrings?) -> ([Row], Int?) {
