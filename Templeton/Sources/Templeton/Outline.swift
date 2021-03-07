@@ -596,9 +596,14 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	public func search(for searchText: String) {
 		clearSearchResults()
 		
-		let searchVisitor = SearchResultVisitor(searchText: searchText, isFiltered: isFiltered ?? false, isNotesHidden: isNotesHidden ?? false)
-		rows.forEach { $0.visit(visitor: searchVisitor.visitor(_:))	}
-		searchResultCoordinates = searchVisitor.searchResultCoordinates
+		if searchText.isEmpty {
+			isSearching = .beginSearch
+		} else {
+			isSearching = .searching
+			let searchVisitor = SearchResultVisitor(searchText: searchText, isFiltered: isFiltered ?? false, isNotesHidden: isNotesHidden ?? false)
+			rows.forEach { $0.visit(visitor: searchVisitor.visitor(_:))	}
+			searchResultCoordinates = searchVisitor.searchResultCoordinates
+		}
 		
 		var changes = rebuildShadowTable()
 		let reloads = searchResultCoordinates.compactMap { $0.row.shadowTableIndex }
