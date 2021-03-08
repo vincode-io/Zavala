@@ -68,6 +68,12 @@ class OutlineTextView: UITextView {
 	private static let dropDelegate = OutlineTextDropDelegate()
 
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
+		let textStorage = NSTextStorage()
+		let layoutManager = OutlineLayoutManager()
+		textStorage.addLayoutManager(layoutManager)
+		let textContainer = NSTextContainer()
+		layoutManager.addTextContainer(textContainer)
+		
 		super.init(frame: frame, textContainer: textContainer)
 
 		textDropDelegate = Self.dropDelegate

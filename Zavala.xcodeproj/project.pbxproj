@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		51028CD525F3159A00B50B71 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51028CD425F3159A00B50B71 /* UIColor+.swift */; };
+		511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */; };
 		5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
 		512229682563507E008041AF /* EditorTextRowViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorTextRowViewCell.swift */; };
 		51278E77257F37AC0034F1CB /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51278E76257F37AC0034F1CB /* Dialog.storyboard */; };
@@ -159,6 +160,7 @@
 
 /* Begin PBXFileReference section */
 		51028CD425F3159A00B50B71 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLayoutManager.swift; sourceTree = "<group>"; };
 		5122294B25609C47008041AF /* UserInfoKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoKeys.swift; sourceTree = "<group>"; };
 		512229672563507E008041AF /* EditorTextRowViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowViewCell.swift; sourceTree = "<group>"; };
 		51278E76257F37AC0034F1CB /* Dialog.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
@@ -308,6 +310,7 @@
 				51AE5481258FF35F006DA301 /* NSMutableAttributedString+.swift */,
 				517342EE25EC2BE60012EB20 /* OutlineActivityItemSource.swift */,
 				51AE547D258FF28A006DA301 /* OutlineFont.swift */,
+				511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */,
 				51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */,
 				51C030BD257E1B9400609262 /* OutlineTextView.swift */,
 				51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */,
@@ -726,6 +729,7 @@
 				51AE5482258FF35F006DA301 /* NSMutableAttributedString+.swift in Sources */,
 				51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */,
 				51CF10C22571C22C005D6D88 /* L10n.swift in Sources */,
+				511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */,
 				517AF6A725E08CB80044DBAB /* NonIntrinsicLabel.swift in Sources */,
 				51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */,
 				5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */,
