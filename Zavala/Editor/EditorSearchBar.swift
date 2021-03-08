@@ -134,14 +134,16 @@ import UIKit
 		self.resultsLabel = resultsLabel
 		addArrangedSubview(searchField)
 		
-		prevButton = UIButton(type: .system)
+		prevButton = UIButton(type: .custom)
+		prevButton.isEnabled = false
 		prevButton.setImage(UIImage(systemName: "chevron.up"), for: .normal)
 		prevButton.accessibilityLabel = "Previous Result"
 		prevButton.isAccessibilityElement = true
 		prevButton.addTarget(self, action: #selector(previousPressed), for: .touchUpInside)
 		addArrangedSubview(prevButton)
 		
-		nextButton = UIButton(type: .system)
+		nextButton = UIButton(type: .custom)
+		nextButton.isEnabled = false
 		nextButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
 		nextButton.accessibilityLabel = "Next Result"
 		nextButton.isAccessibilityElement = true
