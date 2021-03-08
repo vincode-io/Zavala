@@ -25,12 +25,12 @@ import UIKit
 	
 	weak private var resultsLabel: UILabel!
 	
-	var resultsCount: UInt = 0 {
+	var resultsCount: Int = 0 {
 		didSet {
 			updateUI()
 		}
 	}
-	var selectedResult: UInt = 1 {
+	var selectedResult: Int = 1 {
 		didSet {
 			updateUI()
 		}
@@ -64,7 +64,7 @@ import UIKit
 			let format = NSLocalizedString("%d of %d", comment: "Results selection and count")
 			resultsLabel.text = String.localizedStringWithFormat(format, selectedResult, resultsCount)
 		} else {
-			resultsLabel.text = NSLocalizedString("No results", comment: "No results")
+			resultsLabel.text = ""
 		}
 		
 		nextButton.isEnabled = selectedResult < resultsCount

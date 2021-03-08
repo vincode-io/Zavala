@@ -991,10 +991,12 @@ extension EditorViewController: SearchBarDelegate {
 
 	func nextWasPressed(_ searchBar: EditorSearchBar) {
 		outline?.nextSearchResult()
+		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
 	}
 
 	func previousWasPressed(_ searchBar: EditorSearchBar) {
 		outline?.previousSearchResult()
+		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
 	}
 
 	func doneWasPressed(_ searchBar: EditorSearchBar) {
@@ -1003,6 +1005,8 @@ extension EditorViewController: SearchBarDelegate {
 	
 	func searchBar(_ searchBar: EditorSearchBar, textDidChange: String) {
 		outline?.search(for: textDidChange)
+		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
 	}
 	
 }
@@ -1966,9 +1970,12 @@ extension EditorViewController {
 			self.view.layoutIfNeeded()
 		}
 
-		searchBar.searchField.text = ""
 		isSearching = false
 		collectionView.insertSections(headerSections)
 		outline?.endSearching()
+
+		searchBar.searchField.text = ""
+		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
 	}
 }
