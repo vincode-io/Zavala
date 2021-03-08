@@ -74,6 +74,7 @@
 "Find_Ellipsis" = "Find...";
 "Find_Next" = "Find Next";
 "Find_Previous" = "Find Previous";
+"Use_Selection_For_Find" = "Use Selection For Find";
 
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";

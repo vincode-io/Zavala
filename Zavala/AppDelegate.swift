@@ -306,7 +306,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 													input: "f",
 													modifierFlags: [.command])
 	
-	let useSelectionForSearchCommand = UIKeyCommand(title: L10n.findEllipsis,
+	let useSelectionForSearchCommand = UIKeyCommand(title: L10n.useSelectionForFind,
 													action: #selector(useSelectionForSearchCommand(_:)),
 													input: "e",
 													modifierFlags: [.command])

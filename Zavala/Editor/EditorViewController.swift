@@ -660,6 +660,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			self.collectionViewTopConstraint.constant = 36
 			self.view.layoutIfNeeded()
 		}
+		
+		if !(searchBar.searchField.text?.isEmpty ?? true) {
+			search(for: searchBar.searchField.text!)
+		}
 	}
 	
 }
@@ -1010,9 +1014,7 @@ extension EditorViewController: SearchBarDelegate {
 	}
 	
 	func searchBar(_ searchBar: EditorSearchBar, textDidChange: String) {
-		outline?.search(for: textDidChange)
-		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
-		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
+		search(for: textDidChange)
 	}
 	
 }
@@ -1965,6 +1967,22 @@ extension EditorViewController {
 		}
 	}
 	
+	private func search(for searchText: String) {
+		outline?.search(for: searchText)
+		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
+	}
+	
+	private func nextSearchResult() {
+		outline?.nextSearchResult()
+		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+	}
+	
+	private func previousSearchResult() {
+		outline?.previousSearchResult()
+		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+	}
+	
 	private func endSearching(outline: Outline?) {
 		guard isSearching else {
 			return
@@ -1983,16 +2001,6 @@ extension EditorViewController {
 		searchBar.searchField.text = ""
 		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
 		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
-	}
-	
-	private func nextSearchResult() {
-		outline?.nextSearchResult()
-		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
-	}
-	
-	private func previousSearchResult() {
-		outline?.previousSearchResult()
-		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
 	}
 	
 }

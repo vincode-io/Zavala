@@ -192,6 +192,8 @@ internal enum L10n {
   internal static let uncomplete = L10n.tr("Localizable", "Uncomplete")
   /// Unmark as Favorite
   internal static let unmarkAsFavorite = L10n.tr("Localizable", "Unmark_As_Favorite")
+  /// Use Selection For Find
+  internal static let useSelectionForFind = L10n.tr("Localizable", "Use_Selection_For_Find")
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces
