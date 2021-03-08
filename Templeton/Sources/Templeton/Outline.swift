@@ -638,9 +638,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public func endSearching() {
+		isSearching = .notSearching
+
 		clearSearchResults()
 		
-		isSearching = .notSearching
 		let oldShadowTable = shadowTable
 		var changes = rebuildShadowTable()
 
