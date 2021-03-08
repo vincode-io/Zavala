@@ -331,6 +331,7 @@ extension EditorTextRowContentView {
 			let range = NSRange(location: 0, length: mutableAttrText.length)
 			mutableAttrText.addAttributes(attrs, range: range)
 			mutableAttrText.replaceFont(with: OutlineFont.topic)
+			addHighlighting(mutableAttrText, searchResultCoordinates: configuration.row?.textRow?.searchResultCoordinates, isInNotes: false)
 			topicTextView.attributedText = mutableAttrText
 		} else {
 			// This is a bit of a hack to make sure that the reused UITextView gets cleared out for the
@@ -358,7 +359,8 @@ extension EditorTextRowContentView {
 		let range = NSRange(location: 0, length: mutableAttrText.length)
 		mutableAttrText.replaceFont(with: OutlineFont.note)
 		mutableAttrText.addAttributes(attrs, range: range)
-		
+		addHighlighting(mutableAttrText, searchResultCoordinates: configuration.row?.textRow?.searchResultCoordinates, isInNotes: true)
+
 		if noteTextView == nil {
 			noteTextView = EditorTextRowNoteTextView()
 			noteTextView!.editorDelegate = self
@@ -368,6 +370,21 @@ extension EditorTextRowContentView {
 		
 		noteTextView!.row = configuration.row
 		noteTextView!.attributedText = mutableAttrText
+	}
+	
+	private func addHighlighting(_ mutableAttrText: NSMutableAttributedString, searchResultCoordinates: NSHashTable<SearchResultCoordinates>?, isInNotes: Bool) {
+		guard let coordinates = searchResultCoordinates else { return }
+		for element in coordinates.objectEnumerator() {
+			guard let coordinate = element as? SearchResultCoordinates, coordinate.isInNotes == isInNotes else { continue }
+			if coordinate.isCurrentResult {
+				mutableAttrText.addAttribute(.backgroundColor, value: UIColor.systemYellow, range: coordinate.range)
+				if traitCollection.userInterfaceStyle == .dark {
+					mutableAttrText.addAttribute(.foregroundColor, value: UIColor.black, range: coordinate.range)
+				}
+			} else {
+				mutableAttrText.addAttribute(.backgroundColor, value: UIColor.systemGray, range: coordinate.range)
+			}
+		}
 	}
 	
 	private func addBarViews() {
