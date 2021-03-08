@@ -361,6 +361,14 @@ class MainSplitViewController: UISplitViewController {
 		editorViewController?.useSelectionForSearch()
 	}
 	
+	@objc func nextInDocumentSearchCommand(_ sender: Any?) {
+		editorViewController?.nextInDocumentSearchCommand()
+	}
+	
+	@objc func previousInDocumentSearchCommand(_ sender: Any?) {
+		editorViewController?.previousInDocumentSearchCommand()
+	}
+	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {

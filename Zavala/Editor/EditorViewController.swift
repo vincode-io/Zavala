@@ -544,6 +544,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		searchBar.searchField.text = currentTextView?.selectedText
 	}
 	
+	func nextInDocumentSearchCommand() {
+		nextSearchResult()
+	}
+	
+	func previousInDocumentSearchCommand() {
+		previousSearchResult()
+	}
+	
 	// MARK: Actions
 	
 	@objc func sync() {
@@ -990,13 +998,11 @@ extension EditorViewController: LinkViewControllerDelegate {
 extension EditorViewController: SearchBarDelegate {
 
 	func nextWasPressed(_ searchBar: EditorSearchBar) {
-		outline?.nextSearchResult()
-		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+		nextSearchResult()
 	}
 
 	func previousWasPressed(_ searchBar: EditorSearchBar) {
-		outline?.previousSearchResult()
-		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+		previousSearchResult()
 	}
 
 	func doneWasPressed(_ searchBar: EditorSearchBar) {
@@ -1978,4 +1984,15 @@ extension EditorViewController {
 		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
 		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
 	}
+	
+	private func nextSearchResult() {
+		outline?.nextSearchResult()
+		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+	}
+	
+	private func previousSearchResult() {
+		outline?.previousSearchResult()
+		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+	}
+	
 }

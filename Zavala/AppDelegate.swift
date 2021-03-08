@@ -559,9 +559,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	@objc func nextInDocumentSearchCommand(_ sender: Any?) {
+		mainSplitViewController?.nextInDocumentSearchCommand(sender)
 	}
 
 	@objc func previousInDocumentSearchCommand(_ sender: Any?) {
+		mainSplitViewController?.previousInDocumentSearchCommand(sender)
 	}
 	
 	// MARK: Validations
