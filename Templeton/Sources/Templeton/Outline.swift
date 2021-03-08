@@ -1556,7 +1556,7 @@ extension Outline {
 			reloads.insert(shadowTableIndex)
 		}
 		
-		let changeToCoordinates = searchResultCoordinates[currentSearchResult]
+		let changeToCoordinates = searchResultCoordinates[changeToResult]
 		changeToCoordinates.isCurrentResult = true
 		if let shadowTableIndex = changeToCoordinates.row.shadowTableIndex {
 			reloads.insert(shadowTableIndex)
