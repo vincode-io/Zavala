@@ -13,6 +13,7 @@ class SearchResultVisitor {
 	let isFiltered: Bool
 	let isNotesHidden: Bool
 	var searchResultCoordinates = [SearchResultCoordinates]()
+	var firstMatch = true
 	
 	init(searchText: String, isFiltered: Bool, isNotesHidden: Bool) {
 		let foldedText = searchText.trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current)
@@ -25,8 +26,6 @@ class SearchResultVisitor {
 		guard !(isFiltered && visited.isComplete), let textRow = visited.textRow, let searchRegEx = searchRegEx else {
 			return
 		}
-		
-		var firstMatch = true
 		
 		if let topicText = textRow.topic?.string.trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current) {
 			for match in searchRegEx.matches(in: topicText, options: [], range: NSRange(location: 0, length: topicText.utf16.count)) as [NSTextCheckingResult] {
