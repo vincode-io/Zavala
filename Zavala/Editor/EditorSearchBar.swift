@@ -67,8 +67,8 @@ import UIKit
 			resultsLabel.text = ""
 		}
 		
-		nextButton.isEnabled = selectedResult < resultsCount
-		prevButton.isEnabled = resultsCount > 0 && selectedResult > 1
+		nextButton.isEnabled = resultsCount > 1
+		prevButton.isEnabled = resultsCount > 1
 	}
 	
 	@discardableResult override func becomeFirstResponder() -> Bool {
