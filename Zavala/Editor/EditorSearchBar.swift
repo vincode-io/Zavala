@@ -137,7 +137,7 @@ import UIKit
 		prevButton = UIButton(type: .custom)
 		prevButton.isEnabled = false
 		prevButton.setImage(UIImage(systemName: "chevron.up"), for: .normal)
-		prevButton.accessibilityLabel = "Previous Result"
+		prevButton.accessibilityLabel = L10n.previousResult
 		prevButton.isAccessibilityElement = true
 		prevButton.addTarget(self, action: #selector(previousPressed), for: .touchUpInside)
 		addArrangedSubview(prevButton)
@@ -145,7 +145,7 @@ import UIKit
 		nextButton = UIButton(type: .custom)
 		nextButton.isEnabled = false
 		nextButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-		nextButton.accessibilityLabel = "Next Result"
+		nextButton.accessibilityLabel = L10n.nextResult
 		nextButton.isAccessibilityElement = true
 		nextButton.addTarget(self, action: #selector(nextPressed), for: .touchUpInside)
 		addArrangedSubview(nextButton)

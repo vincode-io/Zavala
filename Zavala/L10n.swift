@@ -136,6 +136,8 @@ internal enum L10n {
   internal static let newOutline = L10n.tr("Localizable", "New_Outline")
   /// New Window
   internal static let newWindow = L10n.tr("Localizable", "New_Window")
+  /// Next Result
+  internal static let nextResult = L10n.tr("Localizable", "Next_Result")
   /// Not Available
   internal static let notAvailable = L10n.tr("Localizable", "Not_Available")
   /// Outdent
@@ -146,6 +148,8 @@ internal enum L10n {
   internal static let paste = L10n.tr("Localizable", "Paste")
   /// Preferences...
   internal static let preferences = L10n.tr("Localizable", "Preferences")
+  /// Previous Result
+  internal static let previousResult = L10n.tr("Localizable", "Previous_Result")
   /// Release Notes
   internal static let releaseNotes = L10n.tr("Localizable", "Release_Notes")
   /// Remove

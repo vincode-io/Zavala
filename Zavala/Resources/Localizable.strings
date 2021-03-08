@@ -75,6 +75,8 @@
 "Find_Next" = "Find Next";
 "Find_Previous" = "Find Previous";
 "Use_Selection_For_Find" = "Use Selection For Find";
+"Previous_Result" = "Previous Result";
+"Next_Result" = "Next Result";
 
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";
