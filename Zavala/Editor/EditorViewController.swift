@@ -1966,6 +1966,7 @@ extension EditorViewController {
 			self.view.layoutIfNeeded()
 		}
 
+		searchBar.searchField.text = ""
 		isSearching = false
 		collectionView.insertSections(headerSections)
 		outline?.endSearching()
