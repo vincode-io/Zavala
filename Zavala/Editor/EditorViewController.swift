@@ -1971,16 +1971,27 @@ extension EditorViewController {
 		outline?.search(for: searchText)
 		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
 		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
+		scrollSearchResultIntoView()
 	}
 	
 	private func nextSearchResult() {
 		outline?.nextSearchResult()
 		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+		scrollSearchResultIntoView()
 	}
 	
 	private func previousSearchResult() {
 		outline?.previousSearchResult()
 		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+		scrollSearchResultIntoView()
+	}
+	
+	private func scrollSearchResultIntoView() {
+		guard let resultIndex = outline?.currentSearchResultRow?.shadowTableIndex else { return }
+		let indexPath = IndexPath(row: resultIndex, section: adjustedRowsSection)
+		if !collectionView.indexPathsForVisibleItems.contains(indexPath) {
+			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+		}
 	}
 	
 	private func endSearching(outline: Outline?) {

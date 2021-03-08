@@ -256,6 +256,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public private(set) var currentSearchResult = 0
+	public var currentSearchResultRow: Row? {
+		guard currentSearchResult < searchResultCoordinates.count else { return nil }
+		return searchResultCoordinates[currentSearchResult].row
+	}
 	public var searchResultCount: Int {
 		return searchResultCoordinates.count
 	}
