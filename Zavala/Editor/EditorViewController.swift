@@ -175,8 +175,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var currentKeyPresses = Set<UIKeyboardHIDUsage>()
 	
 	private var ellipsisBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.ellipsis, style: .plain, target: nil, action: nil)
-	private var shareBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.share, style: .plain, target: self, action: #selector(share(_:)))
-	private var sendCopyBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.sendCopy, style: .plain, target: self, action: #selector(sendCopy(_:)))
 	private var filterBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.filterInactive, style: .plain, target: self, action: #selector(toggleOutlineFilter(_:)))
 	private var doneBarButtonItem: UIBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
 
@@ -214,8 +212,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
 			ellipsisBarButtonItem.title = L10n.more
-			shareBarButtonItem.title = L10n.share
-			sendCopyBarButtonItem.title = L10n.sendCopy
 			
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
@@ -1076,7 +1072,7 @@ extension EditorViewController {
 				navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
 			}
 		} else if traitCollection.userInterfaceIdiom == .pad {
-			navigationItem.rightBarButtonItems = [filterBarButtonItem, sendCopyBarButtonItem, shareBarButtonItem, ellipsisBarButtonItem]
+			navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
 		}
 
 		if traitCollection.userInterfaceIdiom != .mac {
@@ -1086,30 +1082,23 @@ extension EditorViewController {
 		if outline == nil {
 			filterBarButtonItem.isEnabled = false
 			ellipsisBarButtonItem.isEnabled = false
-			sendCopyBarButtonItem.isEnabled = false
 		} else {
 			filterBarButtonItem.isEnabled = true
 			ellipsisBarButtonItem.isEnabled = true
-			sendCopyBarButtonItem.isEnabled = true
 		}
 		
-		if isShareUnavailable {
-			shareBarButtonItem.isEnabled = false
-		} else {
-			shareBarButtonItem.isEnabled = true
-		}
 	}
 	
 	private func buildEllipsisMenu() -> UIMenu {
 		var shareActions = [UIAction]()
 
 		let shareAction = UIAction(title: L10n.share, image: AppAssets.share) { [weak self] _ in
-			self?.share()
+			self?.share(self?.ellipsisBarButtonItem)
 		}
 		shareActions.append(shareAction)
 
 		let sendCopyAction = UIAction(title: L10n.sendCopy, image: AppAssets.sendCopy) { [weak self] _ in
-			self?.sendCopy()
+			self?.sendCopy(self?.ellipsisBarButtonItem)
 		}
 		shareActions.append(sendCopyAction)
 		
@@ -1152,11 +1141,7 @@ extension EditorViewController {
 		let viewMenu = UIMenu(title: "", options: .displayInline, children: viewActions)
 		let changeMenu = UIMenu(title: "", options: .displayInline, children: [deleteCompletedRowsAction])
 		
-		if traitCollection.userInterfaceIdiom == .pad {
-			return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [findMenu, viewMenu, changeMenu])
-		} else {
-			return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [shareMenu, findMenu, viewMenu, changeMenu])
-		}
+		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [shareMenu, findMenu, viewMenu, changeMenu])
 	}
 	
 	private func pressesBeganForEditMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
