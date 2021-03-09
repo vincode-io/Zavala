@@ -2008,7 +2008,7 @@ extension EditorViewController {
 		var adjustedCollectionViewFrame = CGRect(x: collectionViewFrame.origin.x, y: collectionViewFrame.origin.y, width: collectionViewFrame.width, height: collectionViewFrame.height - currentKeyboardHeight)
 		adjustedCollectionViewFrame = view.convert(adjustedCollectionViewFrame, to: view.window)
 		
-		if !adjustedCollectionViewFrame.intersects(cellFrame) {
+		if !adjustedCollectionViewFrame.contains(cellFrame) {
 			collectionView.scrollRectToVisible(cellFrame, animated: true)
 		}
 	}
