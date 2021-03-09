@@ -646,11 +646,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		clearSearchResults()
 		
-		let oldShadowTable = shadowTable
 		var changes = rebuildShadowTable()
 
-		if let deletes = changes.deletes {
-			let reloads = deletes.compactMap { (oldShadowTable?[$0].parent as? Row)?.shadowTableIndex }
+		// Reload any rows that should be collapsed so that thier disclosure is in the correct position
+		if let reloads = shadowTable?.filter({ !$0.isExpanded }).compactMap({ $0.shadowTableIndex }) {
 			changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
 		}
 		
