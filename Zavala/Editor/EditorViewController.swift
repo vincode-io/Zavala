@@ -650,7 +650,15 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 		
 		isSearching = true
-		collectionView.deleteSections(headerSections)
+		
+		// I don't understand why, but on iOS deleting the sections will cause random crashes.
+		// I should check periodically to see if this bug is fixed.
+		if traitCollection.userInterfaceIdiom == .mac {
+			collectionView.deleteSections(headerSections)
+		} else {
+			collectionView.reloadData()
+		}
+		
 		outline?.beginSearching()
 
 		searchBar.becomeFirstResponder()
