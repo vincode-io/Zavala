@@ -2024,6 +2024,8 @@ extension EditorViewController {
 			self.view.layoutIfNeeded()
 		}
 
+		let currentSearchResultRow = outline?.currentSearchResultRow
+		
 		isSearching = false
 		collectionView.insertSections(headerSections)
 		outline?.endSearching()
@@ -2034,7 +2036,10 @@ extension EditorViewController {
 
 		if let shadowTableIndex = CursorCoordinates.currentCoordinates?.row.shadowTableIndex {
 			let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
-			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+		} else if let shadowTableIndex = currentSearchResultRow?.shadowTableIndex {
+			let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
+			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
 		}
 	}
 	
