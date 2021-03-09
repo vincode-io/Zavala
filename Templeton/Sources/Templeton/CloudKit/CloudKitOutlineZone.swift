@@ -34,6 +34,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 			static let ownerName = "ownerName"
 			static let ownerEmail = "ownerEmail"
 			static let ownerURL = "ownerURL"
+			static let created = "created"
 			static let tagNames = "tagNames"
 			static let rowOrder = "rowOrder"
 		}

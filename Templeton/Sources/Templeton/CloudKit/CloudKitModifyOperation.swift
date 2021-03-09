@@ -150,6 +150,7 @@ extension CloudKitModifyOperation {
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerName] = outline.ownerName
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail] = outline.ownerEmail
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL] = outline.ownerURL
+		record[CloudKitOutlineZone.CloudKitOutline.Fields.created] = outline.created
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.tagNames] = outline.tags.map { $0.name }
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] = outline.rowOrder?.map { $0.rowUUID }
 

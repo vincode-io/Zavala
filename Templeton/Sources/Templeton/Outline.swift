@@ -82,7 +82,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 	public var created: Date? {
 		didSet {
-			documentMetaDataDidChange()
+			if created != oldValue {
+				updated = Date()
+			}
 		}
 	}
 	
@@ -1474,7 +1476,8 @@ extension Outline {
 		ownerName = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerName] as? String
 		ownerEmail = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail] as? String
 		ownerURL = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL] as? String
-		
+		created = record[CloudKitOutlineZone.CloudKitOutline.Fields.created] as? Date
+
 		let rowOrderRowUUIDs = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
 		rowOrder = rowOrderRowUUIDs.map { EntityID.row(id.accountID, id.documentUUID, $0) }
 
