@@ -201,6 +201,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var isOutlineNewFlag = false
 	private var isShowingAddButton = false
 	private var skipHidingKeyboardFlag = false
+	private var currentKeyboardHeight: CGFloat = 0
 	
 	private var headerSections = IndexSet([Outline.Section.title.rawValue, Outline.Section.tags.rawValue])
 	
@@ -395,6 +396,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if note.name == UIResponder.keyboardWillHideNotification {
 			collectionView.contentInset = EditorViewController.defaultContentInsets
 			updateUI(editMode: false)
+			currentKeyboardHeight = 0
 		} else {
 			collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
 			if let scrollToIndex = currentTextView?.row?.shadowTableIndex, let cell = collectionView.cellForItem(at: IndexPath(row: scrollToIndex, section: adjustedRowsSection)) {
@@ -402,6 +404,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				collectionView.scrollRectToVisible(cellFrame, animated: true)
 			}
 			updateUI(editMode: true)
+			currentKeyboardHeight = keyboardViewEndFrame.height
 		}
 
 	}
@@ -1997,8 +2000,16 @@ extension EditorViewController {
 	private func scrollSearchResultIntoView() {
 		guard let resultIndex = outline?.currentSearchResultRow?.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: resultIndex, section: adjustedRowsSection)
-		if !collectionView.indexPathsForVisibleItems.contains(indexPath) {
-			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+		
+		guard let cellFrame = collectionView.layoutAttributesForItem(at: indexPath)?.frame else { return }
+		var collectionViewFrame = collectionView.safeAreaLayoutGuide.layoutFrame
+		collectionViewFrame = view.convert(collectionViewFrame, to: view.window)
+		
+		var adjustedCollectionViewFrame = CGRect(x: collectionViewFrame.origin.x, y: collectionViewFrame.origin.y, width: collectionViewFrame.width, height: collectionViewFrame.height - currentKeyboardHeight)
+		adjustedCollectionViewFrame = view.convert(adjustedCollectionViewFrame, to: view.window)
+		
+		if !adjustedCollectionViewFrame.intersects(cellFrame) {
+			collectionView.scrollRectToVisible(cellFrame, animated: true)
 		}
 	}
 	
