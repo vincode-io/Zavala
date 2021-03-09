@@ -308,14 +308,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 	}
 	
-	var rowOrder: [EntityID]? {
-		didSet {
-			if rowOrder != oldValue {
-				updated = Date()
-			}
-		}
-	}
-	
+	var rowOrder: [EntityID]?
 	var keyedRows: [EntityID: Row]?
 	
 	private var cursorRowID: EntityID?
