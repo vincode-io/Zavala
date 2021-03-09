@@ -1092,10 +1092,12 @@ extension EditorViewController {
 	private func buildEllipsisMenu() -> UIMenu {
 		var shareActions = [UIAction]()
 
-		let shareAction = UIAction(title: L10n.share, image: AppAssets.share) { [weak self] _ in
-			self?.share(self?.ellipsisBarButtonItem)
+		if !isShareUnavailable {
+			let shareAction = UIAction(title: L10n.share, image: AppAssets.share) { [weak self] _ in
+				self?.share(self?.ellipsisBarButtonItem)
+			}
+			shareActions.append(shareAction)
 		}
-		shareActions.append(shareAction)
 
 		let sendCopyAction = UIAction(title: L10n.sendCopy, image: AppAssets.sendCopy) { [weak self] _ in
 			self?.sendCopy(self?.ellipsisBarButtonItem)
