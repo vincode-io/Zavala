@@ -37,7 +37,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 	var appliedConfiguration: EditorTextRowContentConfiguration!
 	
 	var textRowStrings: TextRowStrings {
-		return TextRowStrings(topic: topicTextView.attributedText, note: noteTextView?.attributedText)
+		return TextRowStrings(topic: topicTextView.cleansedAttributedText, note: noteTextView?.cleansedAttributedText)
 	}
 	
 	init(configuration: EditorTextRowContentConfiguration) {
