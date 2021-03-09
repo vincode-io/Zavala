@@ -563,6 +563,8 @@ extension NSToolbarItem.Identifier {
 	static let link = NSToolbarItem.Identifier("io.vincode.Zavala.link")
 	static let boldface = NSToolbarItem.Identifier("io.vincode.Zavala.boldface")
 	static let italic = NSToolbarItem.Identifier("io.vincode.Zavala.italic")
+	static let expandAllInOutline = NSToolbarItem.Identifier("io.vincode.Zavala.expandAllInOutline")
+	static let collapseAllInOutline = NSToolbarItem.Identifier("io.vincode.Zavala.collapseAllInOutline")
 	static let share = NSToolbarItem.Identifier("io.vincode.Zavala.share")
 	static let sendCopy = NSToolbarItem.Identifier("io.vincode.Zavala.sendCopy")
 }
@@ -599,6 +601,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.italic,
 			.toggleOutlineNotesHidden,
 			.toggleOutlineFilter,
+			.expandAllInOutline,
+			.collapseAllInOutline,
 			.share,
 			.sendCopy,
 			.space,
@@ -681,6 +685,30 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = L10n.italic
 			item.isBordered = true
 			item.action = #selector(outlineToggleItalics(_:))
+			item.target = self
+			toolbarItem = item
+		case .expandAllInOutline:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { _ in
+				return false
+			}
+			item.image = AppAssets.expandAll
+			item.label = L10n.expandAllInOutline
+			item.toolTip = L10n.expandAllInOutline
+			item.isBordered = true
+			item.action = #selector(expandAllInOutline(_:))
+			item.target = self
+			toolbarItem = item
+		case .collapseAllInOutline:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { _ in
+				return false
+			}
+			item.image = AppAssets.collapseAll
+			item.label = L10n.collapseAllInOutline
+			item.toolTip = L10n.collapseAllInOutline
+			item.isBordered = true
+			item.action = #selector(collapseAllInOutline(_:))
 			item.target = self
 			toolbarItem = item
 		case .toggleOutlineFilter:
