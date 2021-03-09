@@ -1438,6 +1438,8 @@ extension Outline {
 			keyedRows?[entityID] = row
 		}
 		
+		updated = Date()
+		
 		guard beingViewedCount > 0 else { return }
 
 		var reloadRows = [Row]()
