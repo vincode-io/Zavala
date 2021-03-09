@@ -329,16 +329,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	let shareCommand = UICommand(title: L10n.share, action: #selector(shareCommand(_:)))
 
 	var mainSplitViewController: MainSplitViewController? {
-		var keyScene: UIScene?
-		let windowScenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
-		
-		for windowScene in windowScenes {
-			if !windowScene.windows.filter({ $0.isKeyWindow }).isEmpty {
-				keyScene = windowScene
-			}
-		}
-		
-		return (keyScene?.delegate as? SceneDelegate)?.mainSplitViewController
+		return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController as? MainSplitViewController
 	}
 	
 	#if targetEnvironment(macCatalyst)
