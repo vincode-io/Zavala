@@ -341,8 +341,8 @@ class MainSplitViewController: UISplitViewController {
 		editorViewController?.deleteCompletedRows()
 	}
 	
-	@objc func print(_ sender: Any?) {
-		editorViewController?.print()
+	@objc func printDocument(_ sender: Any?) {
+		editorViewController?.printOutline()
 	}
 	
 	@objc func share(_ sender: Any?) {
@@ -376,7 +376,6 @@ class MainSplitViewController: UISplitViewController {
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
-		print(command)
 		switch command.action {
 		case #selector(delete(_:)):
 			if isDeleteEntityUnavailable {
@@ -569,7 +568,7 @@ extension NSToolbarItem.Identifier {
 	static let italic = NSToolbarItem.Identifier("io.vincode.Zavala.italic")
 	static let expandAllInOutline = NSToolbarItem.Identifier("io.vincode.Zavala.expandAllInOutline")
 	static let collapseAllInOutline = NSToolbarItem.Identifier("io.vincode.Zavala.collapseAllInOutline")
-	static let print = NSToolbarItem.Identifier("io.vincode.Zavala.print")
+	static let printDocument = NSToolbarItem.Identifier("io.vincode.Zavala.print")
 	static let share = NSToolbarItem.Identifier("io.vincode.Zavala.share")
 	static let sendCopy = NSToolbarItem.Identifier("io.vincode.Zavala.sendCopy")
 }
@@ -768,7 +767,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = L10n.print
 			item.toolTip = L10n.print
 			item.isBordered = true
-			item.action = #selector(print(_:))
+			item.action = #selector(printDocument(_:))
 			item.target = self
 			toolbarItem = item
 		case .share:

@@ -619,7 +619,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
-	@objc func print(_ sender: Any? = nil) {
+	@objc func printOutline(_ sender: Any? = nil) {
 		guard let outline = outline else { return }
 		
 		let pic = UIPrintInteractionController()
@@ -1129,7 +1129,7 @@ extension EditorViewController {
 		shareActions.append(sendCopyAction)
 
 		let printAction = UIAction(title: L10n.print, image: AppAssets.print) { [weak self] _ in
-			self?.print(self?.ellipsisBarButtonItem)
+			self?.printOutline(self?.ellipsisBarButtonItem)
 		}
 		shareActions.append(printAction)
 		

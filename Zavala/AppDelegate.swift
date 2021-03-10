@@ -536,7 +536,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	@objc func printCommand(_ sender: Any?) {
-		mainSplitViewController?.print(sender)
+		mainSplitViewController?.printDocument(sender)
 	}
 
 	@objc func sendCopy(_ sender: Any?) {
