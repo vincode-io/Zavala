@@ -47,6 +47,7 @@ class EditorTextRowNoteTextView: OutlineTextView {
 		return editorDelegate?.editorRowNoteTextViewTextRowStrings
 	}
 	
+	private var autosaveWorkItem: DispatchWorkItem?
 	private var textViewHeight: CGFloat?
 	private var isSavingTextUnnecessary = false
 
@@ -166,6 +167,12 @@ extension EditorTextRowNoteTextView: UITextViewDelegate {
 			textViewHeight = fittingSize.height
 			editorDelegate?.invalidateLayout(self)
 		}
+
+		autosaveWorkItem?.cancel()
+		autosaveWorkItem = DispatchWorkItem { [weak self] in
+			self?.saveText()
+		}
+		DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: autosaveWorkItem!)
 	}
 	
 }
