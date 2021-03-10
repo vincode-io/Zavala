@@ -192,7 +192,7 @@ extension TimelineViewController: UIDocumentPickerDelegate {
 		
 		if let document = document {
 			selectDocument(document, animated: true)
-			(splitViewController as? MainSplitViewController)?.activityManager.updateIndex(forDocument: document)
+			DocumentIndexer.updateIndex(forDocument: document)
 		}
 	}
 }

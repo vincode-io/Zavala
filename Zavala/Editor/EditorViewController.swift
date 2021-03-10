@@ -1985,7 +1985,7 @@ extension EditorViewController {
 	
 	private func updateSpotlightIndex() {
 		if let outline = outline {
-			(splitViewController as? MainSplitViewController)?.activityManager.updateIndex(forDocument: .outline(outline))
+			DocumentIndexer.updateIndex(forDocument: .outline(outline))
 		}
 	}
 	

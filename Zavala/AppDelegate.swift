@@ -343,16 +343,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	#endif
 
 	func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-		let documentAccountURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-		let documentAccountsFolder = documentAccountURL.appendingPathComponent("Accounts").absoluteString
-		let documentAccountsFolderPath = String(documentAccountsFolder.suffix(from: documentAccountsFolder.index(documentAccountsFolder.startIndex, offsetBy: 7)))
+		let oldDocumentAccountURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+		let oldDcumentAccountsFolder = oldDocumentAccountURL.appendingPathComponent("Accounts").absoluteString
+		let oldDocumentAccountsFolderPath = String(oldDcumentAccountsFolder.suffix(from: oldDcumentAccountsFolder.index(oldDcumentAccountsFolder.startIndex, offsetBy: 7)))
 		
 		if !AppDefaults.shared.deletedLocalForV14 {
-			try? FileManager.default.removeItem(atPath: documentAccountsFolderPath)
+			try? FileManager.default.removeItem(atPath: oldDocumentAccountsFolderPath)
 			AppDefaults.shared.deletedLocalForV14 = true
 		}
 		
-		AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath)
+		let appGroup = Bundle.main.object(forInfoDictionaryKey: "AppGroup") as! String
+		let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
+		let newDocumentAccountsFolderPath = containerURL!.appendingPathComponent("Accounts").path
+		
+		if FileManager.default.fileExists(atPath: oldDocumentAccountsFolderPath) {
+			try? FileManager.default.moveItem(atPath: oldDocumentAccountsFolderPath, toPath: newDocumentAccountsFolderPath)
+		}
+
+		AccountManager.shared = AccountManager(accountsFolderPath: newDocumentAccountsFolderPath)
 		return true
 	}
 	

@@ -1,0 +1,15 @@
+CODE_SIGN_IDENTITY= iPhone Developer
+DEVELOPMENT_TEAM = SHJK2V3AJG
+CODE_SIGN_STYLE = Automatic
+ORGANIZATION_IDENTIFIER = io.vincode
+DEVELOPER_ENTITLEMENTS =
+PROVISIONING_PROFILE_SPECIFIER =
+
+#include? "../../SharedXcodeSettings/DeveloperSettings.xcconfig"
+#include "./Zavala_ios_target_common.xcconfig"
+
+LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/../../Frameworks
+INFOPLIST_FILE = SpotlightIndexExtension/Info.plist
+CODE_SIGN_ENTITLEMENTS = SpotlightIndexExtension/SpotlightIndexExtension.entitlements
+PRODUCT_BUNDLE_IDENTIFIER = $(ORGANIZATION_IDENTIFIER).Zavala.SpotlightIndexExtension
+PRODUCT_NAME = $(TARGET_NAME)

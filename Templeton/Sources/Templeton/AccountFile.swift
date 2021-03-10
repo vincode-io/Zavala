@@ -83,9 +83,7 @@ private extension AccountFile {
 
 		account.folder = fileURL.deletingLastPathComponent()
 		
-		BatchUpdate.shared.perform {
-			accountManager?.accountsDictionary[accountType.rawValue] = account
-		}
+		accountManager?.accountsDictionary[accountType.rawValue] = account
 	}
 	
 	func saveCallback() {

@@ -63,15 +63,6 @@ class ActivityManager {
 		selectDocumentActivity = nil
 	}
 
-	func updateIndex(forDocument document: Document) {
-		DispatchQueue.main.async {
-			let attributeSet = self.makeSearchableItemAttributes(forDocument: document)
-			let identifier = attributeSet.relatedUniqueIdentifier
-			let searchableItem = CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "io.vincode", attributeSet: attributeSet)
-			CSSearchableIndex.default().indexSearchableItems([searchableItem])
-		}
-	}
-	
 }
 
 extension ActivityManager {
@@ -126,18 +117,6 @@ extension ActivityManager {
 		activity.persistentIdentifier = document.id.description
 		
 		return activity
-	}
-	
-	private func makeSearchableItemAttributes(forDocument document: Document) -> CSSearchableItemAttributeSet {
-		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
-		attributeSet.title = document.title ?? ""
-		if let keywords = document.tags?.map({ $0.name }) {
-			attributeSet.keywords = keywords
-		}
-		attributeSet.relatedUniqueIdentifier = document.id.description
-		attributeSet.textContent = document.content
-		attributeSet.contentModificationDate = document.updated
-		return attributeSet
 	}
 	
 }

@@ -25,7 +25,7 @@ extension TimelineViewController: UICollectionViewDropDelegate {
 				DispatchQueue.main.async {
 					let tag = (self?.documentContainer as? TagDocuments)?.tag
 					let document = account.importOPML(opmlData, tag: tag)
-					(self?.splitViewController as? MainSplitViewController)?.activityManager.updateIndex(forDocument: document)
+					DocumentIndexer.updateIndex(forDocument: document)
 				}
 			}
 		}

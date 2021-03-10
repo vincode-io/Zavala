@@ -43,6 +43,10 @@ public final class AccountManager {
 		return sort(activeAccounts)
 	}
 	
+	public var documents: [Document] {
+		return activeAccounts.reduce(into: [Document]()) { $0.append(contentsOf: $1.documents ?? [Document]() ) }
+	}
+	
 	var accountsDictionary = [Int: Account]()
 
 	var accountsFolder: URL
@@ -54,10 +58,6 @@ public final class AccountManager {
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "AccountManager")
 
 	private var accountFiles = [Int: AccountFile]()
-	
-	private var documents: [Document] {
-		return activeAccounts.reduce(into: [Document]()) { $0.append(contentsOf: $1.documents ?? [Document]() ) }
-	}
 	
 	public init(accountsFolderPath: String) {
 		self.accountsFolder = URL(fileURLWithPath: accountsFolderPath, isDirectory: true)
