@@ -579,7 +579,6 @@ extension MainSplitViewController: NSToolbarDelegate {
 		return [
 			.toggleSidebar,
 			.flexibleSpace,
-			.importOPML,
 			.newOutline,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
 			.link,
