@@ -245,7 +245,13 @@ public final class TextRow: BaseRow, Codable {
 			var attrs = [NSAttributedString.Key : Any]()
 			attrs[.foregroundColor] = UIColor.darkGray
 
-			let noteFont = UIFont.systemFont(ofSize: 11)
+			let noteFont: UIFont
+			if let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).withDesign(.serif) {
+				noteFont = UIFont(descriptor: descriptor, size: 11)
+			} else {
+				noteFont = UIFont.systemFont(ofSize: 11)
+			}
+
 			let noteParagraphStyle = NSMutableParagraphStyle()
 			noteParagraphStyle.paragraphSpacing = 0.33 * noteFont.lineHeight
 			noteParagraphStyle.firstLineHeadIndent = CGFloat(indentLevel * 20)
