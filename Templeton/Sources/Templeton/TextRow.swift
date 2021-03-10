@@ -261,8 +261,6 @@ public final class TextRow: BaseRow, Codable {
 			print.append(noteTopic)
 		}
 		
-		// TODO: Add notes next
-		
 		rows.forEach {
 			print.append(NSAttributedString(string: "\n"))
 			print.append($0.print(indentLevel: indentLevel + 1))
