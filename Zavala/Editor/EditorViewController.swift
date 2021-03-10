@@ -89,11 +89,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 
 	var isExpandAllInOutlineUnavailable: Bool {
-		return outline == nil || outline!.isExpandAllUnavailable(containers: [outline!])
+		return outline == nil || outline!.isExpandAllInOutlineUnavailable
 	}
 
 	var isCollapseAllInOutlineUnavailable: Bool {
-		return outline == nil || outline!.isCollapseAllUnavailable(containers: [outline!])
+		return outline == nil || outline!.isCollapseAllInOutlineUnavailable
 	}
 
 	var isExpandAllUnavailable: Bool {

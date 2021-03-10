@@ -695,8 +695,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .expandAllInOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { _ in
-				return false
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isExpandAllInOutlineUnavailable ?? true
 			}
 			item.image = AppAssets.expandAll
 			item.label = L10n.expandAllInOutline
@@ -707,8 +707,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .collapseAllInOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { _ in
-				return false
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isCollapseAllInOutlineUnavailable ?? true
 			}
 			item.image = AppAssets.collapseAll
 			item.label = L10n.collapseAllInOutline

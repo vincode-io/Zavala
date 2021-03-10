@@ -161,6 +161,26 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return cloudKitShareRecordName != nil
 	}
 	
+	private var collapseAllInOutlineUnavailable = true
+	private var collapseAllInOutlineUnavailableNeedsUpdate = true
+	public var isCollapseAllInOutlineUnavailable: Bool {
+		if collapseAllInOutlineUnavailableNeedsUpdate {
+			collapseAllInOutlineUnavailable = isCollapseAllUnavailable(container: self)
+			collapseAllInOutlineUnavailableNeedsUpdate = false
+		}
+		return collapseAllInOutlineUnavailable
+	}
+	
+	private var expandAllInOutlineUnavailable = true
+	private var expandAllInOutlineUnavailableNeedsUpdate = true
+	public var isExpandAllInOutlineUnavailable: Bool {
+		if expandAllInOutlineUnavailableNeedsUpdate {
+			expandAllInOutlineUnavailable = isExpandAllUnavailable(container: self)
+			expandAllInOutlineUnavailableNeedsUpdate = false
+		}
+		return expandAllInOutlineUnavailable
+	}
+	
 	public var account: Account? {
 		return AccountManager.shared.findAccount(accountID: id.accountID)
 	}
@@ -990,19 +1010,27 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	@discardableResult
 	public func expand(rows: [Row]) -> [Row] {
+		expandAllInOutlineUnavailableNeedsUpdate = true
+		collapseAllInOutlineUnavailableNeedsUpdate = true
+
 		if rowCount == 1, let row = rows.first {
 			expand(row: row)
 			return [row]
 		}
+		
 		return expandCollapse(rows: rows, isExpanded: true)
 	}
 	
 	@discardableResult
 	func collapse(rows: [Row]) -> [Row] {
+		expandAllInOutlineUnavailableNeedsUpdate = true
+		collapseAllInOutlineUnavailableNeedsUpdate = true
+		
 		if rowCount == 1, let row = rows.first {
 			collapse(row: row)
 			return [row]
 		}
+		
 		return expandCollapse(rows: rows, isExpanded: false)
 	}
 	
@@ -1016,6 +1044,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	func expandAll(containers: [RowContainer]) -> [Row] {
+		expandAllInOutlineUnavailableNeedsUpdate = true
+		collapseAllInOutlineUnavailableNeedsUpdate = true
+
 		var impacted = [Row]()
 		
 		for container in containers {
@@ -1057,6 +1088,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	func collapseAll(containers: [RowContainer]) -> [Row] {
+		expandAllInOutlineUnavailableNeedsUpdate = true
+		collapseAllInOutlineUnavailableNeedsUpdate = true
+
 		var impacted = [Row]()
 		var reloads = [Row]()
 
