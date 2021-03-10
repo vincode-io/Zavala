@@ -24,7 +24,8 @@ import UIKit
 	var background: UIView!
 	
 	weak private var resultsLabel: UILabel!
-	
+	private var searchWorkItem: DispatchWorkItem?
+
 	var resultsCount: Int = 0 {
 		didSet {
 			updateUI()
@@ -165,7 +166,12 @@ import UIKit
 private extension EditorSearchBar {
 	
 	@objc func textDidChange(_ notification: Notification) {
-		delegate?.searchBar?(self, textDidChange: searchField.text ?? "")
+		searchWorkItem?.cancel()
+		searchWorkItem = DispatchWorkItem { [weak self] in
+			guard let self = self else { return }
+			self.delegate?.searchBar?(self, textDidChange: self.searchField.text ?? "")
+		}
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: searchWorkItem!)
 		
 		if searchField.text?.isEmpty ?? true {
 			searchField.rightViewMode = .never
