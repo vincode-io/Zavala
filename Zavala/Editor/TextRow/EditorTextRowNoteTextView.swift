@@ -119,6 +119,7 @@ class EditorTextRowNoteTextView: OutlineTextView {
 			editorDelegate?.textChanged(self, row: textRow, isInNotes: true, cursorPosition: lastCursorPosition)
 		}
 		
+		autosaveWorkItem?.cancel()
 		isTextChanged = false
 	}
 	
