@@ -214,14 +214,14 @@ public final class TextRow: BaseRow, Codable {
 		if let topic = topic {
 			var attrs = [NSAttributedString.Key : Any]()
 			if isComplete || isAncestorComplete {
-				attrs[.foregroundColor] = UIColor.gray
+				attrs[.foregroundColor] = UIColor.darkGray
 			} else {
 				attrs[.foregroundColor] = UIColor.black
 			}
 			
 			if isComplete {
 				attrs[.strikethroughStyle] = 1
-				attrs[.strikethroughColor] = UIColor.gray
+				attrs[.strikethroughColor] = UIColor.darkGray
 			} else {
 				attrs[.strikethroughStyle] = 0
 			}
@@ -243,7 +243,7 @@ public final class TextRow: BaseRow, Codable {
 		
 		if let note = note {
 			var attrs = [NSAttributedString.Key : Any]()
-			attrs[.foregroundColor] = UIColor.gray
+			attrs[.foregroundColor] = UIColor.darkGray
 
 			let noteFont = UIFont.systemFont(ofSize: 11)
 			let noteParagraphStyle = NSMutableParagraphStyle()
