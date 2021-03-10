@@ -13,10 +13,12 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
 	
 	override init() {
 		DispatchQueue.main.sync {
-			let appGroup = Bundle.main.object(forInfoDictionaryKey: "AppGroup") as! String
-			let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
-			let documentAccountsFolderPath = containerURL!.appendingPathComponent("Accounts").path
-			AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath)
+			if AccountManager.shared == nil {
+				let appGroup = Bundle.main.object(forInfoDictionaryKey: "AppGroup") as! String
+				let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
+				let documentAccountsFolderPath = containerURL!.appendingPathComponent("Accounts").path
+				AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath)
+			}
 		}
 	}
 
