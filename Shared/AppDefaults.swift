@@ -19,17 +19,37 @@ final class AppDefaults {
 	}()
 	
 	struct Key {
+		static let lastSelectedAccountID = "lastSelectedAccountID"
+		static let deletedLocalForV14 = "deletedLocalForV14"
 		static let enableCloudKit = "enableCloudKit"
 		static let enableLocalAccount = "enableLocalAccount"
 	}
-
+	
 	let isDeveloperBuild: Bool = {
 		if let dev = Bundle.main.object(forInfoDictionaryKey: "DeveloperEntitlements") as? String, dev == "-dev" {
 			return true
 		}
 		return false
 	}()
+
+	var lastSelectedAccountID: Int {
+		get {
+			return Self.int(for: Key.lastSelectedAccountID)
+		}
+		set {
+			Self.setInt(for: Key.lastSelectedAccountID, newValue)
+		}
+	}
 	
+	var deletedLocalForV14: Bool {
+		get {
+			return Self.bool(for: Key.deletedLocalForV14)
+		}
+		set {
+			Self.setBool(for: Key.deletedLocalForV14, newValue)
+		}
+	}
+
 	var enableCloudKit: Bool {
 		get {
 			return Self.bool(for: Key.enableCloudKit)
@@ -46,6 +66,11 @@ final class AppDefaults {
 		set {
 			Self.setBool(for: Key.enableLocalAccount, newValue)
 		}
+	}
+	
+	static func registerDefaults() {
+		let defaults: [String : Any] = [Key.enableLocalAccount: true]
+		AppDefaults.store.register(defaults: defaults)
 	}
 
 }
