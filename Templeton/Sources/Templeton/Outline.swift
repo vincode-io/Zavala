@@ -5,7 +5,7 @@
 //  Created by Maurice Parker on 11/6/20.
 //
 
-import Foundation
+import UIKit
 import RSCore
 import CloudKit
 
@@ -513,6 +513,27 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	public func print(indentLevel: Int = 0) -> NSAttributedString {
 		let print = NSMutableAttributedString()
 		load()
+		
+		if let title = title {
+			let titleFont = UIFont.systemFont(ofSize: 16)
+			
+			var attrs = [NSAttributedString.Key : Any]()
+			attrs[.font] = titleFont
+			attrs[.foregroundColor] = UIColor.black
+			attrs[.underlineStyle] = 1
+
+			let titleParagraphStyle = NSMutableParagraphStyle()
+			titleParagraphStyle.alignment = .center
+			titleParagraphStyle.paragraphSpacing = 0.50 * titleFont.lineHeight
+			attrs[.paragraphStyle] = titleParagraphStyle
+			
+			let printTitle = NSMutableAttributedString(string: title)
+			let range = NSRange(location: 0, length: printTitle.length)
+			printTitle.addAttributes(attrs, range: range)
+			
+			print.append(printTitle)
+			print.append(NSAttributedString(string: "\n"))
+		}
 		
 		rows.forEach {
 			print.append($0.print(indentLevel: 0))
