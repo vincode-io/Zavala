@@ -60,6 +60,13 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 	
 	var rowOrder: [EntityID]
 
+	var isAncestorComplete: Bool {
+		if let parentRow = parent as? Row {
+			return parentRow.isComplete || parentRow.isAncestorComplete
+		}
+		return false
+	}
+
 	var isPartOfSearchResult = false {
 		didSet {
 			guard isPartOfSearchResult else { return }
@@ -117,6 +124,10 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 
 	public func clone(newOutlineID: EntityID) -> Row {
 		fatalError("clone not implemented")
+	}
+	
+	public func print(indentLevel: Int) -> NSAttributedString {
+		fatalError("print not implemented")
 	}
 	
 	public func markdown(indentLevel: Int) -> String {

@@ -150,6 +150,8 @@ internal enum L10n {
   internal static let preferences = L10n.tr("Localizable", "Preferences")
   /// Previous Result
   internal static let previousResult = L10n.tr("Localizable", "Previous_Result")
+  /// Print
+  internal static let print = L10n.tr("Localizable", "Print")
   /// Release Notes
   internal static let releaseNotes = L10n.tr("Localizable", "Release_Notes")
   /// Remove

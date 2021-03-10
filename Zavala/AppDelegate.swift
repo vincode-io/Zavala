@@ -39,6 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(useSelectionForSearchCommand)
 			menuKeyCommands.append(nextInDocumentSearchCommand)
 			menuKeyCommands.append(previousInDocumentSearchCommand)
+			menuKeyCommands.append(printCommand)
 		}
 		
 		menuKeyCommands.append(newOutlineCommand)
@@ -321,6 +322,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 													   input: "g",
 													   modifierFlags: [.shift, .command])
 	
+	let printCommand = UIKeyCommand(title: L10n.print,
+									action: #selector(printCommand(_:)),
+									input: "p",
+									modifierFlags: [.command])
+
 	// Currently unused because it automatically adds Services menus to my other context menus
 	let sendCopyCommand = UICommand(title: L10n.sendCopy,
 									action: #selector(sendCopy(_:)),
@@ -529,6 +535,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.showBugTracker()
 	}
 
+	@objc func printCommand(_ sender: Any?) {
+		mainSplitViewController?.print(sender)
+	}
+
 	@objc func sendCopy(_ sender: Any?) {
 		mainSplitViewController?.sendCopy(sender)
 	}
@@ -667,7 +677,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		case #selector(beginInDocumentSearchCommand(_:)),
 			 #selector(useSelectionForSearchCommand(_:)),
 			 #selector(nextInDocumentSearchCommand(_:)),
-			 #selector(previousInDocumentSearchCommand(_:)):
+			 #selector(previousInDocumentSearchCommand(_:)),
+			 #selector(printCommand(_:)):
 			if mainSplitViewController?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
@@ -704,7 +715,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand])
 		builder.insertChild(newItemsMenu, atStartOfMenu: .file)
 
-		let shareMenu = UIMenu(title: "", options: .displayInline, children: [shareCommand])
+		let shareMenu = UIMenu(title: "", options: .displayInline, children: [shareCommand, printCommand])
 		builder.insertChild(shareMenu, atEndOfMenu: .file)
 
 		// Edit

@@ -207,7 +207,70 @@ public final class TextRow: BaseRow, Codable {
 		isComplete = false
 		outline?.requestCloudKitUpdate(for: id)
 	}
-	
+
+	public override func print(indentLevel: Int) -> NSAttributedString {
+		let print = NSMutableAttributedString()
+		
+		if let topic = topic {
+			var attrs = [NSAttributedString.Key : Any]()
+			if isComplete || isAncestorComplete {
+				attrs[.foregroundColor] = UIColor.gray
+			} else {
+				attrs[.foregroundColor] = UIColor.black
+			}
+			
+			if isComplete {
+				attrs[.strikethroughStyle] = 1
+				attrs[.strikethroughColor] = UIColor.gray
+			} else {
+				attrs[.strikethroughStyle] = 0
+			}
+
+			let topicFont = UIFont.systemFont(ofSize: 12)
+			let topicParagraphStyle = NSMutableParagraphStyle()
+			topicParagraphStyle.paragraphSpacing = 0.33 * topicFont.lineHeight
+			topicParagraphStyle.firstLineHeadIndent = CGFloat(indentLevel * 20)
+			topicParagraphStyle.headIndent = CGFloat(indentLevel * 20)
+			attrs[.paragraphStyle] = topicParagraphStyle
+			
+			let printTopic = NSMutableAttributedString(attributedString: topic)
+			let range = NSRange(location: 0, length: printTopic.length)
+			printTopic.addAttributes(attrs, range: range)
+			printTopic.replaceFont(with: topicFont)
+
+			print.append(printTopic)
+		}
+		
+		if let note = note {
+			var attrs = [NSAttributedString.Key : Any]()
+			attrs[.foregroundColor] = UIColor.gray
+
+			let noteFont = UIFont.systemFont(ofSize: 11)
+			let noteParagraphStyle = NSMutableParagraphStyle()
+			noteParagraphStyle.paragraphSpacing = 0.33 * noteFont.lineHeight
+			noteParagraphStyle.firstLineHeadIndent = CGFloat(indentLevel * 20)
+			noteParagraphStyle.headIndent = CGFloat(indentLevel * 20)
+			attrs[.paragraphStyle] = noteParagraphStyle
+
+			let noteTopic = NSMutableAttributedString(string: "\n")
+			noteTopic.append(note)
+			let range = NSRange(location: 0, length: noteTopic.length)
+			noteTopic.addAttributes(attrs, range: range)
+			noteTopic.replaceFont(with: noteFont)
+
+			print.append(noteTopic)
+		}
+		
+		// TODO: Add notes next
+		
+		rows.forEach {
+			print.append(NSAttributedString(string: "\n"))
+			print.append($0.print(indentLevel: indentLevel + 1))
+		}
+
+		return print
+	}
+
 	public override func markdown(indentLevel: Int = 0) -> String {
 		var md = String(repeating: "\t", count: indentLevel)
 		md.append("* \(topicPlainText ?? "")")

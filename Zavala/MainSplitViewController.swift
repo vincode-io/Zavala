@@ -341,6 +341,10 @@ class MainSplitViewController: UISplitViewController {
 		editorViewController?.deleteCompletedRows()
 	}
 	
+	@objc func print(_ sender: Any?) {
+		editorViewController?.print()
+	}
+	
 	@objc func share(_ sender: Any?) {
 		editorViewController?.share()
 	}

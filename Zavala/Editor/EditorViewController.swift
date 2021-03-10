@@ -565,13 +565,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		UIResponder.currentFirstResponder?.resignFirstResponder()
 	}
 	
-	@objc func sendCopy(_ sender: Any? = nil) {
-		guard let outline = outline else { return }
-		let controller = UIActivityViewController(outline: outline)
-		controller.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
-		present(controller, animated: true)
-	}
-	
 	@objc func toggleOutlineFilter(_ sender: Any?) {
 		guard let changes = outline?.toggleFilter() else { return }
 		updateUI(editMode: isInEditMode)
@@ -624,6 +617,37 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 			self.repeatMoveCursorDown()
 		}
+	}
+	
+	@objc func print(_ sender: Any? = nil) {
+		guard let outline = outline else { return }
+		
+		let pic = UIPrintInteractionController()
+		
+		let printInfo = UIPrintInfo(dictionary: nil)
+		printInfo.outputType = .grayscale
+		printInfo.jobName = outline.title ?? ""
+		pic.printInfo = printInfo
+		
+		let textView = UITextView()
+		textView.attributedText = outline.print()
+		let printFormatter = textView.viewPrintFormatter()
+		printFormatter.startPage = 0
+		printFormatter.perPageContentInsets = UIEdgeInsets(top: 56, left: 56, bottom: 56, right: 56)
+		pic.printFormatter = printFormatter
+		
+		if traitCollection.userInterfaceIdiom == .mac {
+			pic.present(from: view.frame, in: view, animated: true)
+		} else {
+			pic.present(from: sender as! UIBarButtonItem, animated: true)
+		}
+	}
+	
+	@objc func sendCopy(_ sender: Any? = nil) {
+		guard let outline = outline else { return }
+		let controller = UIActivityViewController(outline: outline)
+		controller.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
+		present(controller, animated: true)
 	}
 	
 	@objc func share(_ sender: Any? = nil) {
@@ -1103,7 +1127,13 @@ extension EditorViewController {
 			self?.sendCopy(self?.ellipsisBarButtonItem)
 		}
 		shareActions.append(sendCopyAction)
+
+		let printAction = UIAction(title: L10n.print, image: AppAssets.print) { [weak self] _ in
+			self?.print(self?.ellipsisBarButtonItem)
+		}
+		shareActions.append(printAction)
 		
+
 		var findActions = [UIAction]()
 		let findAction = UIAction(title: L10n.findEllipsis, image: AppAssets.find) { [weak self] _ in
 			self?.beginInDocumentSearch()

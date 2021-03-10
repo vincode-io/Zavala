@@ -65,10 +65,7 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 	}
 	
 	public var isAncestorComplete: Bool {
-		if let parentRow = parent as? Row {
-			return parentRow.isComplete || parentRow.isAncestorComplete
-		}
-		return false
+		associatedRow.isAncestorComplete
 	}
 	
 	public var indentLevel: Int {
@@ -217,6 +214,10 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 		
 		return nil
+	}
+	
+	public func print(indentLevel: Int = 0) -> NSAttributedString {
+		return associatedRow.print(indentLevel: indentLevel)
 	}
 	
 	public func markdown(indentLevel: Int = 0) -> String {

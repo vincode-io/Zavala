@@ -490,6 +490,19 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return children
 	}
 	
+	public func print(indentLevel: Int = 0) -> NSAttributedString {
+		let print = NSMutableAttributedString()
+		load()
+		
+		rows.forEach {
+			print.append($0.print(indentLevel: 0))
+			print.append(NSAttributedString(string: "\n"))
+		}
+
+		suspend()
+		return print
+	}
+	
 	public func markdown(indentLevel: Int = 0) -> String {
 		load()
 		

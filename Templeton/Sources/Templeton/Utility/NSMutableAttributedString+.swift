@@ -10,7 +10,7 @@ import UIKit
 
 extension NSMutableAttributedString {
 	
-	func replaceFont(with font: UIFont) {
+	public func replaceFont(with font: UIFont) {
 		beginEditing()
 		self.enumerateAttribute(.font, in: NSRange(location: 0, length: self.length)) { (value, range, stop) in
 			if let f = value as? UIFont {

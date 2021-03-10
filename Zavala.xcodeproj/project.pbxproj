@@ -59,7 +59,6 @@
 		519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F004A25608EF9009DC1F0 /* TimelineItem.swift */; };
 		51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */; };
 		51AE547E258FF28A006DA301 /* OutlineFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AE547D258FF28A006DA301 /* OutlineFont.swift */; };
-		51AE5482258FF35F006DA301 /* NSMutableAttributedString+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AE5481258FF35F006DA301 /* NSMutableAttributedString+.swift */; };
 		51B2B2C82563A2180090C56B /* EditorTextRowTopicTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2C72563A2180090C56B /* EditorTextRowTopicTextView.swift */; };
 		51B2B2CE2563AAF60090C56B /* EditorTextRowContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2CD2563AAF60090C56B /* EditorTextRowContentConfiguration.swift */; };
 		51B2B2D22563AB190090C56B /* EditorTextRowContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2D12563AB190090C56B /* EditorTextRowContentView.swift */; };
@@ -215,7 +214,6 @@
 		519F004A25608EF9009DC1F0 /* TimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItem.swift; sourceTree = "<group>"; };
 		51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedUndoManager.swift; sourceTree = "<group>"; };
 		51AE547D258FF28A006DA301 /* OutlineFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFont.swift; sourceTree = "<group>"; };
-		51AE5481258FF35F006DA301 /* NSMutableAttributedString+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+.swift"; sourceTree = "<group>"; };
 		51B2B2C72563A2180090C56B /* EditorTextRowTopicTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowTopicTextView.swift; sourceTree = "<group>"; };
 		51B2B2CD2563AAF60090C56B /* EditorTextRowContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowContentConfiguration.swift; sourceTree = "<group>"; };
 		51B2B2D12563AB190090C56B /* EditorTextRowContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowContentView.swift; sourceTree = "<group>"; };
@@ -307,7 +305,6 @@
 				5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */,
 				517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */,
 				5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */,
-				51AE5481258FF35F006DA301 /* NSMutableAttributedString+.swift */,
 				517342EE25EC2BE60012EB20 /* OutlineActivityItemSource.swift */,
 				51AE547D258FF28A006DA301 /* OutlineFont.swift */,
 				511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */,
@@ -726,7 +723,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51AE5482258FF35F006DA301 /* NSMutableAttributedString+.swift in Sources */,
 				51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */,
 				51CF10C22571C22C005D6D88 /* L10n.swift in Sources */,
 				511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */,
