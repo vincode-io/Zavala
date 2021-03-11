@@ -140,6 +140,148 @@
             </objects>
             <point key="canvasLocation" x="-17" y="698"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Jid-Kd-z3F">
+            <objects>
+                <navigationController storyboardIdentifier="OutlineGetInfoViewControllerNav" modalPresentationStyle="formSheet" id="xMd-tW-tIj" sceneMemberID="viewController">
+                    <value key="contentSizeForViewInPopover" type="size" width="450" height="250"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="CdA-L9-ath">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="PFC-g3-2Wg" kind="relationship" relationship="rootViewController" id="LO6-0C-WcB"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gu1-Bn-Vo0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="675" y="698"/>
+        </scene>
+        <!--Outline-->
+        <scene sceneID="GgG-JX-Y0j">
+            <objects>
+                <viewController storyboardIdentifier="OutlineGetInfoViewController" id="PFC-g3-2Wg" customClass="OutlineGetInfoViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="s0v-RB-rho">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="tow-GO-bRC">
+                                <rect key="frame" x="20" y="108" width="374" height="175"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="firstBaseline" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="SaH-xL-kt5">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="27"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Owner Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wpH-3G-s0p">
+                                                <rect key="frame" x="0.0" y="0.0" width="103.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Owner Name" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S13-K6-ek0">
+                                                <rect key="frame" x="111.5" y="-7" width="262.5" height="34"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="firstBaseline" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="jEc-yX-1gg">
+                                        <rect key="frame" x="0.0" y="35" width="374" height="27"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Owner Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xLV-t2-mek">
+                                                <rect key="frame" x="0.0" y="0.0" width="103.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Owner Email" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="v4L-vd-tuM">
+                                                <rect key="frame" x="111.5" y="-7" width="262.5" height="34"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="firstBaseline" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="2Hn-MG-TZZ">
+                                        <rect key="frame" x="0.0" y="70" width="374" height="27"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Owner URL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ubz-Sw-7mC">
+                                                <rect key="frame" x="0.0" y="0.0" width="103.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Owner URL" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SMl-I3-hyp">
+                                                <rect key="frame" x="111.5" y="-7" width="262.5" height="34"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                        </subviews>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Created" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="caF-ja-vKn">
+                                        <rect key="frame" x="0.0" y="105" width="374" height="18"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Updated" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EPz-xI-JyT">
+                                        <rect key="frame" x="0.0" y="131" width="374" height="18"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Word Count" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Rd-eN-FFg">
+                                        <rect key="frame" x="0.0" y="157" width="374" height="18"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="S13-K6-ek0" firstAttribute="width" secondItem="v4L-vd-tuM" secondAttribute="width" id="K4C-b1-cEa"/>
+                                    <constraint firstItem="S13-K6-ek0" firstAttribute="width" secondItem="SMl-I3-hyp" secondAttribute="width" id="hzp-46-FMo"/>
+                                </constraints>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="W2W-Ke-eOG">
+                                <rect key="frame" x="277" y="291" width="117" height="33"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2EJ-WP-2z1">
+                                        <rect key="frame" x="0.0" y="0.0" width="53" height="33"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <state key="normal" title="Cancel"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aq3-8Y-D0c">
+                                        <rect key="frame" x="61" y="0.0" width="56" height="33"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <state key="normal" title="Update"/>
+                                        <connections>
+                                            <action selector="submit:" destination="PFC-g3-2Wg" eventType="touchUpInside" id="8gN-tC-C9o"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="dZg-qu-S1B"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="tow-GO-bRC" firstAttribute="leading" secondItem="dZg-qu-S1B" secondAttribute="leading" constant="20" id="BV3-SB-OXa"/>
+                            <constraint firstItem="dZg-qu-S1B" firstAttribute="trailing" secondItem="W2W-Ke-eOG" secondAttribute="trailing" constant="20" id="L8P-er-jMx"/>
+                            <constraint firstItem="tow-GO-bRC" firstAttribute="top" secondItem="dZg-qu-S1B" secondAttribute="top" constant="20" id="RCX-pl-Zss"/>
+                            <constraint firstItem="W2W-Ke-eOG" firstAttribute="top" secondItem="tow-GO-bRC" secondAttribute="bottom" constant="8" symbolic="YES" id="WDo-w7-Oog"/>
+                            <constraint firstItem="dZg-qu-S1B" firstAttribute="trailing" secondItem="tow-GO-bRC" secondAttribute="trailing" constant="20" id="icS-PX-yBW"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Outline" id="lHu-dU-3v6">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="S7N-AV-JA3"/>
+                        <barButtonItem key="rightBarButtonItem" title="Update" id="HR8-Ch-jkV">
+                            <connections>
+                                <action selector="submit:" destination="PFC-g3-2Wg" id="xZl-vu-XzB"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zJT-7S-UQd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1444.9275362318842" y="697.76785714285711"/>
+        </scene>
     </scenes>
     <resources>
         <image name="link" catalog="system" width="128" height="122"/>

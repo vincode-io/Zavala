@@ -543,11 +543,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		searchBar.searchField.text = currentTextView?.selectedText
 	}
 	
-	func nextInDocumentSearchCommand() {
+	func nextInDocumentSearch() {
 		nextSearchResult()
 	}
 	
-	func previousInDocumentSearchCommand() {
+	func previousInDocumentSearch() {
 		previousSearchResult()
 	}
 	
@@ -696,6 +696,26 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			search(for: searchBar.searchField.text!)
 		}
 	}
+	
+	@objc func showOutlineGetInfo() {
+		if traitCollection.userInterfaceIdiom == .mac {
+		
+			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: OutlineGetInfoViewController.self)
+			outlineGetInfoViewController.preferredContentSize = OutlineGetInfoViewController.preferredContentSize
+			present(outlineGetInfoViewController, animated: true)
+		
+		} else {
+			
+			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
+			outlineGetInfoNavViewController.preferredContentSize = OutlineGetInfoViewController.preferredContentSize
+			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
+//			let outineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
+			present(outlineGetInfoNavViewController, animated: true)
+			
+		}
+	}
+	
+
 	
 }
 

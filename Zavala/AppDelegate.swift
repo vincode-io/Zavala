@@ -40,6 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(nextInDocumentSearchCommand)
 			menuKeyCommands.append(previousInDocumentSearchCommand)
 			menuKeyCommands.append(printCommand)
+			menuKeyCommands.append(outlineGetInfoCommand)
 		}
 		
 		menuKeyCommands.append(newOutlineCommand)
@@ -334,6 +335,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	let shareCommand = UICommand(title: L10n.share, action: #selector(shareCommand(_:)))
 
+	let outlineGetInfoCommand = UIKeyCommand(title: L10n.getInfo,
+											 action: #selector(outlineGetInfoCommand(_:)),
+											 input: "i",
+											 modifierFlags: [.control, .command])
+
 	var mainSplitViewController: MainSplitViewController? {
 		return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController as? MainSplitViewController
 	}
@@ -568,11 +574,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	@objc func nextInDocumentSearchCommand(_ sender: Any?) {
-		mainSplitViewController?.nextInDocumentSearchCommand(sender)
+		mainSplitViewController?.nextInDocumentSearch(sender)
 	}
 
 	@objc func previousInDocumentSearchCommand(_ sender: Any?) {
-		mainSplitViewController?.previousInDocumentSearchCommand(sender)
+		mainSplitViewController?.previousInDocumentSearch(sender)
+	}
+	
+	@objc func outlineGetInfoCommand(_ sender: Any?) {
+		mainSplitViewController?.outlineGetInfo(sender)
 	}
 	
 	// MARK: Validations
@@ -725,6 +735,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		let shareMenu = UIMenu(title: "", options: .displayInline, children: [shareCommand, printCommand])
 		builder.insertChild(shareMenu, atEndOfMenu: .file)
+
+		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: [outlineGetInfoCommand])
+		builder.insertChild(getInfoMenu, atEndOfMenu: .file)
 
 		// Edit
 		let linkMenu = UIMenu(title: "", options: .displayInline, children: [linkCommand])

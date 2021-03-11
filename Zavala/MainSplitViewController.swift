@@ -365,12 +365,16 @@ class MainSplitViewController: UISplitViewController {
 		editorViewController?.useSelectionForSearch()
 	}
 	
-	@objc func nextInDocumentSearchCommand(_ sender: Any?) {
-		editorViewController?.nextInDocumentSearchCommand()
+	@objc func nextInDocumentSearch(_ sender: Any?) {
+		editorViewController?.nextInDocumentSearch()
 	}
 	
-	@objc func previousInDocumentSearchCommand(_ sender: Any?) {
-		editorViewController?.previousInDocumentSearchCommand()
+	@objc func previousInDocumentSearch(_ sender: Any?) {
+		editorViewController?.previousInDocumentSearch()
+	}
+	
+	@objc func outlineGetInfo(_ sender: Any?) {
+		editorViewController?.showOutlineGetInfo()
 	}
 	
 	// MARK: Validations
