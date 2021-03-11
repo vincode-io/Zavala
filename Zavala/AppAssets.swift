@@ -103,13 +103,13 @@ struct AppAssets {
 		return UIImage(systemName: "magnifyingglass")!
 	}()
 
-	static var getInfoEntity: UIImage = {
+	static var getInfo: UIImage = {
 		return UIImage(systemName: "info.circle")!
 	}()
 	
 	static var githubRepositoryURL = "https://github.com/vincode-io/Zavala"
 
-	static var importEntity: UIImage = {
+	static var importDocument: UIImage = {
 		return UIImage(systemName: "square.and.arrow.down")!
 	}()
 

@@ -37,7 +37,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	}
 	
 	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
-	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importEntity, style: .plain, target: self, action: #selector(importOPML(_:)))
+	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML(_:)))
 
 	override func viewDidLoad() {
 		super.viewDidLoad()

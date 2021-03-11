@@ -575,6 +575,7 @@ extension NSToolbarItem.Identifier {
 	static let printDocument = NSToolbarItem.Identifier("io.vincode.Zavala.print")
 	static let share = NSToolbarItem.Identifier("io.vincode.Zavala.share")
 	static let sendCopy = NSToolbarItem.Identifier("io.vincode.Zavala.sendCopy")
+	static let getInfo = NSToolbarItem.Identifier("io.vincode.Zavala.getInfo")
 }
 
 extension MainSplitViewController: NSToolbarDelegate {
@@ -613,6 +614,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.print,
 			.share,
 			.sendCopy,
+			.getInfo,
 			.space,
 			.flexibleSpace
 		]
@@ -640,7 +642,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return false
 			}
-			item.image = AppAssets.importEntity
+			item.image = AppAssets.importDocument
 			item.label = L10n.importOPML
 			item.toolTip = L10n.importOPML
 			item.isBordered = true
@@ -790,6 +792,18 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = L10n.sendCopy
 			item.toolTip = L10n.sendCopy
 			item.activityItemsConfiguration = self
+			toolbarItem = item
+		case .getInfo:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			}
+			item.image = AppAssets.getInfo
+			item.label = L10n.getInfo
+			item.toolTip = L10n.getInfo
+			item.isBordered = true
+			item.action = #selector(outlineGetInfo(_:))
+			item.target = self
 			toolbarItem = item
 		case .toggleSidebar:
 			toolbarItem = NSToolbarItem(itemIdentifier: itemIdentifier)
