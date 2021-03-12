@@ -108,3 +108,7 @@
 "Remove_CloudKit_Message" = "Are you sure you want to remove the iCloud Account? All documents in the iCloud Account will be removed from this device.";
 "Enable_On_My_iPhone" = "Enable On My iPhone";
 "Enable_On_My_iPad" = "Enable On My iPad";
+
+/* Outline Get Info */
+"Created_On" = "Created on %@ at %@";
+"Updated_On" = "Updated on %@ at %@";

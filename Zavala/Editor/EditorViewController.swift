@@ -702,6 +702,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: OutlineGetInfoViewController.self)
 			outlineGetInfoViewController.preferredContentSize = OutlineGetInfoViewController.preferredContentSize
+			outlineGetInfoViewController.outline = outline
 			present(outlineGetInfoViewController, animated: true)
 		
 		} else {
@@ -709,13 +710,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
 			outlineGetInfoNavViewController.preferredContentSize = OutlineGetInfoViewController.preferredContentSize
 			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
-//			let outineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
+			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
+			outlineGetInfoViewController.outline = outline
 			present(outlineGetInfoNavViewController, animated: true)
 			
 		}
 	}
-	
-
 	
 }
 

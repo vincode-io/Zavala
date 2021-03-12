@@ -48,6 +48,10 @@ internal enum L10n {
   internal static let crashReporterMessage = L10n.tr("Localizable", "Crash_Reporter_Message")
   /// Crash Log Found
   internal static let crashReporterTitle = L10n.tr("Localizable", "Crash_Reporter_Title")
+  /// Created on %@ at %@
+  internal static func createdOn(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "Created_On", String(describing: p1), String(describing: p2))
+  }
   /// Cut
   internal static let cut = L10n.tr("Localizable", "Cut")
   /// Delete
@@ -198,6 +202,10 @@ internal enum L10n {
   internal static let uncomplete = L10n.tr("Localizable", "Uncomplete")
   /// Unmark as Favorite
   internal static let unmarkAsFavorite = L10n.tr("Localizable", "Unmark_As_Favorite")
+  /// Updated on %@ at %@
+  internal static func updatedOn(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "Updated_On", String(describing: p1), String(describing: p2))
+  }
   /// Use Selection For Find
   internal static let useSelectionForFind = L10n.tr("Localizable", "Use_Selection_For_Find")
 }
