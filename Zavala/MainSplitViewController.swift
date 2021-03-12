@@ -212,9 +212,31 @@ class MainSplitViewController: UISplitViewController {
 			
 			self.timelineViewController?.selectDocument(document, animated: false) {
 				self.lastMainControllerToAppear = .editor
-				self.sceneDelegate?.validateToolbar()
+				self.validateToolbar()
 			}
 		}
+	}
+	
+	func showReleaseNotes() {
+		openURL(AppAssets.releaseNotesURL)
+	}
+	
+	func showGitHubRepository() {
+		openURL(AppAssets.githubRepositoryURL)
+	}
+	
+	func showBugTracker() {
+		openURL(AppAssets.bugTrackerURL)
+	}
+	
+	func showSettings() {
+		let settingsNavController = UIStoryboard.settings.instantiateInitialViewController() as! UINavigationController
+		settingsNavController.modalPresentationStyle = .formSheet
+		present(settingsNavController, animated: true)
+	}
+
+	func validateToolbar() {
+		self.sceneDelegate?.validateToolbar()
 	}
 	
 	// MARK: Actions
@@ -388,26 +410,6 @@ class MainSplitViewController: UISplitViewController {
 		default:
 			break
 		}
-	}
-	
-	// MARK: API
-	
-	func showReleaseNotes() {
-		openURL(AppAssets.releaseNotesURL)
-	}
-	
-	func showGitHubRepository() {
-		openURL(AppAssets.githubRepositoryURL)
-	}
-	
-	func showBugTracker() {
-		openURL(AppAssets.bugTrackerURL)
-	}
-	
-	func showSettings() {
-		let settingsNavController = UIStoryboard.settings.instantiateInitialViewController() as! UINavigationController
-		settingsNavController.modalPresentationStyle = .formSheet
-		present(settingsNavController, animated: true)
 	}
 	
 }

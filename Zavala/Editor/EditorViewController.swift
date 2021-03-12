@@ -18,6 +18,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
 
+	var mainSplitViewController: MainSplitViewController? {
+		return splitViewController as? MainSplitViewController
+	}
+	
 	var isOutlineFunctionsUnavailable: Bool {
 		return outline == nil
 	}
@@ -1490,6 +1494,7 @@ extension EditorViewController {
 	private func cutAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.cut, image: AppAssets.cut) { [weak self] action in
 			self?.cutRows(rows)
+			self?.mainSplitViewController?.validateToolbar()
 		}
 	}
 
@@ -1502,6 +1507,7 @@ extension EditorViewController {
 	private func pasteAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.paste, image: AppAssets.paste) { [weak self] action in
 			self?.pasteRows(afterRows: rows)
+			self?.mainSplitViewController?.validateToolbar()
 		}
 	}
 
@@ -1518,12 +1524,14 @@ extension EditorViewController {
 	private func indentAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.indent, image: AppAssets.indent) { [weak self] action in
 			self?.indentRows(rows)
+			self?.mainSplitViewController?.validateToolbar()
 		}
 	}
 
 	private func outdentAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.outdent, image: AppAssets.outdent) { [weak self] action in
 			self?.outdentRows(rows)
+			self?.mainSplitViewController?.validateToolbar()
 		}
 	}
 
@@ -1566,6 +1574,7 @@ extension EditorViewController {
 	private func deleteAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.deleteRow, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
 			self?.deleteRows(rows)
+			self?.mainSplitViewController?.validateToolbar()
 		}
 	}
 

@@ -780,6 +780,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	@discardableResult
 	func deleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) -> Int? {
+		collapseAllInOutlineUnavailableNeedsUpdate = true
+		
 		beginCloudKitBatchRequest()
 		
 		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
@@ -932,6 +934,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 	@discardableResult
 	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil, prefersEnd: Bool = false) -> Int? {
+		collapseAllInOutlineUnavailableNeedsUpdate = true
+		
 		beginCloudKitBatchRequest()
 		
 		if let afterTextRow = afterRow?.textRow, let texts = textRowStrings {
@@ -1191,6 +1195,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	func indentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> [Row] {
+		collapseAllInOutlineUnavailableNeedsUpdate = true
+
 		beginCloudKitBatchRequest()
 		
 		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
@@ -1258,6 +1264,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 	@discardableResult
 	func outdentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> [Row] {
+		collapseAllInOutlineUnavailableNeedsUpdate = true
+
 		beginCloudKitBatchRequest()
 		
 		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
