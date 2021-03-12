@@ -394,6 +394,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		#endif
 		
 		UIApplication.shared.registerForRemoteNotifications()
+		NSUbiquitousKeyValueStore.default.synchronize()
 		
 		return true
 	}

@@ -12,6 +12,9 @@ final class GeneralPreferencesViewController: NSViewController {
 
 	@IBOutlet weak var enableLocalAccount: NSButton!
 	@IBOutlet weak var enableCloudKit: NSButton!
+	@IBOutlet weak var ownerNameTextField: NSTextField!
+	@IBOutlet weak var ownerEmailTextField: NSTextField!
+	@IBOutlet weak var ownerURLTextField: NSTextField!
 	
 	public override init(nibName nibNameOrNil: NSNib.Name?, bundle nibBundleOrNil: Bundle?) {
 		super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -26,6 +29,12 @@ final class GeneralPreferencesViewController: NSViewController {
 	override func viewWillAppear() {
 		super.viewWillAppear()
 		updateUI()
+	}
+	
+	override func viewWillDisappear() {
+		AppDefaults.shared.ownerName = ownerNameTextField.stringValue
+		AppDefaults.shared.ownerEmail = ownerEmailTextField.stringValue
+		AppDefaults.shared.ownerURL = ownerURLTextField.stringValue
 	}
 
 	// MARK: - Notifications
@@ -62,7 +71,7 @@ final class GeneralPreferencesViewController: NSViewController {
 			}
 		}
 	}
-	
+
 }
 
 // MARK: - Private
@@ -77,6 +86,10 @@ private extension GeneralPreferencesViewController {
 		enableLocalAccount.state = AppDefaults.shared.enableLocalAccount ? .on : .off
 		enableCloudKit.state = AppDefaults.shared.enableCloudKit ? .on : .off
 		enableCloudKit.isEnabled = !AppDefaults.shared.isDeveloperBuild
+		
+		ownerNameTextField.stringValue = AppDefaults.shared.ownerName ?? ""
+		ownerEmailTextField.stringValue = AppDefaults.shared.ownerEmail ?? ""
+		ownerURLTextField.stringValue = AppDefaults.shared.ownerURL ?? ""
 	}
 
 }

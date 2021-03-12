@@ -23,6 +23,9 @@ final class AppDefaults {
 		static let deletedLocalForV14 = "deletedLocalForV14"
 		static let enableCloudKit = "enableCloudKit"
 		static let enableLocalAccount = "enableLocalAccount"
+		static let ownerName = "ownerName"
+		static let ownerEmail = "ownerEmail"
+		static let ownerURL = "ownerURL"
 	}
 	
 	let isDeveloperBuild: Bool = {
@@ -65,6 +68,33 @@ final class AppDefaults {
 		}
 		set {
 			Self.setBool(for: Key.enableLocalAccount, newValue)
+		}
+	}
+	
+	var ownerName: String? {
+		get {
+			NSUbiquitousKeyValueStore.default.string(forKey: Key.ownerName)
+		}
+		set {
+			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.ownerName)
+		}
+	}
+
+	var ownerEmail: String? {
+		get {
+			NSUbiquitousKeyValueStore.default.string(forKey: Key.ownerEmail)
+		}
+		set {
+			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.ownerEmail)
+		}
+	}
+	
+	var ownerURL: String? {
+		get {
+			NSUbiquitousKeyValueStore.default.string(forKey: Key.ownerURL)
+		}
+		set {
+			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.ownerURL)
 		}
 	}
 	
