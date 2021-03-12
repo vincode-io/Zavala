@@ -43,6 +43,7 @@
 		5167606525F95E4600AC0EBD /* DocumentIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167606325F95E4600AC0EBD /* DocumentIndexer.swift */; };
 		5167606D25F96B1F00AC0EBD /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF69B25E0862E0044DBAB /* AppDefaults.swift */; };
 		5167607725F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167607625F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift */; };
+		5167608525FBE4E500AC0EBD /* OutlineGetInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167608425FBE4E500AC0EBD /* OutlineGetInfoViewController.swift */; };
 		51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51692B0B25681AD3006B755F /* UIViewController+.swift */; };
 		5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5169928925AE4F5C00760C9D /* UICollectionView+.swift */; };
 		517342EF25EC2BE60012EB20 /* OutlineActivityItemSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517342EE25EC2BE60012EB20 /* OutlineActivityItemSource.swift */; };
@@ -220,6 +221,7 @@
 		5167605525F95B2900AC0EBD /* Zavala_spotlightext_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_spotlightext_target.xcconfig; sourceTree = "<group>"; };
 		5167606325F95E4600AC0EBD /* DocumentIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentIndexer.swift; sourceTree = "<group>"; };
 		5167607625F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOutlineGetInfoViewController.swift; sourceTree = "<group>"; };
+		5167608425FBE4E500AC0EBD /* OutlineGetInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineGetInfoViewController.swift; sourceTree = "<group>"; };
 		51692B0B25681AD3006B755F /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		5169928925AE4F5C00760C9D /* UICollectionView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+.swift"; sourceTree = "<group>"; };
 		517342EE25EC2BE60012EB20 /* OutlineActivityItemSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineActivityItemSource.swift; sourceTree = "<group>"; };
@@ -587,6 +589,7 @@
 				51278E76257F37AC0034F1CB /* Dialog.storyboard */,
 				51C568D8258C1CD200AA7B93 /* LinkViewController.swift */,
 				5167607625F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift */,
+				5167608425FBE4E500AC0EBD /* OutlineGetInfoViewController.swift */,
 			);
 			path = Dialogs;
 			sourceTree = "<group>";
@@ -864,6 +867,7 @@
 				5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */,
 				51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */,
 				514EF15F25A78A8C00B1FFB6 /* CrashReporter.swift in Sources */,
+				5167608525FBE4E500AC0EBD /* OutlineGetInfoViewController.swift in Sources */,
 				514F221825C4D076004E02CD /* EditorTagInputViewCell.swift in Sources */,
 				5147D0BB25CCAFC3004673C3 /* EditorTagAddViewCell.swift in Sources */,
 				514F221125C4CCE4004E02CD /* EditorTagContentConfiguration.swift in Sources */,

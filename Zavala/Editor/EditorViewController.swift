@@ -708,9 +708,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		} else {
 			
 			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
-			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 210)
+			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 250)
 			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
-			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! MacOutlineGetInfoViewController
+			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
 			outlineGetInfoViewController.outline = outline
 			present(outlineGetInfoNavViewController, animated: true)
 			
