@@ -10,8 +10,6 @@ import Templeton
 
 class OutlineGetInfoViewController: FormViewController {
 
-	static let preferredContentSize = CGSize(width: 400, height: 190)
-
 	weak var outline: Outline?
 	
 	@IBOutlet weak var ownerNameLabel: UILabel!

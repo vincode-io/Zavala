@@ -701,14 +701,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if traitCollection.userInterfaceIdiom == .mac {
 		
 			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: OutlineGetInfoViewController.self)
-			outlineGetInfoViewController.preferredContentSize = OutlineGetInfoViewController.preferredContentSize
+			outlineGetInfoViewController.preferredContentSize = CGSize(width: 400, height: 190)
 			outlineGetInfoViewController.outline = outline
 			present(outlineGetInfoViewController, animated: true)
 		
 		} else {
 			
 			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
-			outlineGetInfoNavViewController.preferredContentSize = OutlineGetInfoViewController.preferredContentSize
+			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 210)
 			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
 			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
 			outlineGetInfoViewController.outline = outline
@@ -1153,6 +1153,11 @@ extension EditorViewController {
 		}
 		shareActions.append(printAction)
 		
+		var getInfoActions = [UIAction]()
+		let getInfoAction = UIAction(title: L10n.getInfo, image: AppAssets.getInfo) { [weak self] _ in
+			self?.showOutlineGetInfo()
+		}
+		getInfoActions.append(getInfoAction)
 
 		var findActions = [UIAction]()
 		let findAction = UIAction(title: L10n.findEllipsis, image: AppAssets.find) { [weak self] _ in
@@ -1189,11 +1194,12 @@ extension EditorViewController {
 		}
 		
 		let shareMenu = UIMenu(title: "", options: .displayInline, children: shareActions)
+		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: getInfoActions)
 		let findMenu = UIMenu(title: "", options: .displayInline, children: findActions)
 		let viewMenu = UIMenu(title: "", options: .displayInline, children: viewActions)
 		let changeMenu = UIMenu(title: "", options: .displayInline, children: [deleteCompletedRowsAction])
 		
-		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [shareMenu, findMenu, viewMenu, changeMenu])
+		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [shareMenu, getInfoMenu, findMenu, viewMenu, changeMenu])
 	}
 	
 	private func pressesBeganForEditMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
