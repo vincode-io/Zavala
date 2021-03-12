@@ -140,36 +140,19 @@
             </objects>
             <point key="canvasLocation" x="-17" y="698"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="Jid-Kd-z3F">
-            <objects>
-                <navigationController storyboardIdentifier="OutlineGetInfoViewControllerNav" modalPresentationStyle="formSheet" id="xMd-tW-tIj" sceneMemberID="viewController">
-                    <value key="contentSizeForViewInPopover" type="size" width="450" height="250"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="CdA-L9-ath">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="PFC-g3-2Wg" kind="relationship" relationship="rootViewController" id="LO6-0C-WcB"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gu1-Bn-Vo0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="675" y="698"/>
-        </scene>
         <!--Outline-->
         <scene sceneID="GgG-JX-Y0j">
             <objects>
-                <viewController storyboardIdentifier="OutlineGetInfoViewController" id="PFC-g3-2Wg" customClass="OutlineGetInfoViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MacOutlineGetInfoViewController" id="PFC-g3-2Wg" customClass="MacOutlineGetInfoViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="s0v-RB-rho">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="tow-GO-bRC">
-                                <rect key="frame" x="20" y="108" width="374" height="154"/>
+                                <rect key="frame" x="20" y="64" width="374" height="146.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="firstBaseline" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="SaH-xL-kt5">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="27"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="24.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Owner Name:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wpH-3G-s0p">
                                                 <rect key="frame" x="0.0" y="0.0" width="108.5" height="20.5"/>
@@ -177,15 +160,15 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Owner Name" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S13-K6-ek0">
-                                                <rect key="frame" x="116.5" y="-7" width="257.5" height="34"/>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S13-K6-ek0">
+                                                <rect key="frame" x="116.5" y="-7.5" width="257.5" height="32"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="name"/>
                                             </textField>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="firstBaseline" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="jEc-yX-1gg">
-                                        <rect key="frame" x="0.0" y="35" width="374" height="27"/>
+                                        <rect key="frame" x="0.0" y="32.5" width="374" height="24.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Owner Email:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xLV-t2-mek">
                                                 <rect key="frame" x="0.0" y="0.0" width="108.5" height="20.5"/>
@@ -193,15 +176,15 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Owner Email" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="v4L-vd-tuM">
-                                                <rect key="frame" x="116.5" y="-7" width="257.5" height="34"/>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="v4L-vd-tuM">
+                                                <rect key="frame" x="116.5" y="-7.5" width="257.5" height="32"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="email"/>
                                             </textField>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="firstBaseline" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="2Hn-MG-TZZ">
-                                        <rect key="frame" x="0.0" y="70" width="374" height="27"/>
+                                        <rect key="frame" x="0.0" y="65" width="374" height="24.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Owner URL:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ubz-Sw-7mC">
                                                 <rect key="frame" x="0.0" y="0.0" width="108.5" height="20.5"/>
@@ -209,15 +192,15 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Owner URL" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SMl-I3-hyp">
-                                                <rect key="frame" x="116.5" y="-7" width="257.5" height="34"/>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SMl-I3-hyp">
+                                                <rect key="frame" x="116.5" y="-7.5" width="257.5" height="32"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="URL" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="url"/>
                                             </textField>
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="mE7-LL-Ra9">
-                                        <rect key="frame" x="0.0" y="105" width="374" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="97.5" width="374" height="20.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lnr-Tf-J4N">
                                                 <rect key="frame" x="0.0" y="0.0" width="112.5" height="20.5"/>
@@ -234,7 +217,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="IK5-Ql-ukv">
-                                        <rect key="frame" x="0.0" y="133.5" width="374" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="126" width="374" height="20.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="42O-ph-Mac">
                                                 <rect key="frame" x="0.0" y="0.0" width="112.5" height="20.5"/>
@@ -259,7 +242,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="W2W-Ke-eOG">
-                                <rect key="frame" x="277" y="270" width="117" height="33"/>
+                                <rect key="frame" x="277" y="218.5" width="117" height="33"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2EJ-WP-2z1">
                                         <rect key="frame" x="0.0" y="0.0" width="53" height="33"/>
@@ -291,36 +274,20 @@
                             <constraint firstItem="dZg-qu-S1B" firstAttribute="trailing" secondItem="tow-GO-bRC" secondAttribute="trailing" constant="20" id="icS-PX-yBW"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Outline" id="lHu-dU-3v6">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="S7N-AV-JA3">
-                            <connections>
-                                <action selector="cancel:" destination="PFC-g3-2Wg" id="Ubt-AY-pc0"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Update" id="HR8-Ch-jkV">
-                            <connections>
-                                <action selector="submit:" destination="PFC-g3-2Wg" id="xZl-vu-XzB"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Outline" id="lHu-dU-3v6"/>
                     <connections>
                         <outlet property="createdLabel" destination="caF-ja-vKn" id="48P-DC-9Ae"/>
-                        <outlet property="createdSpacer" destination="lnr-Tf-J4N" id="mk7-1C-aTZ"/>
                         <outlet property="macCancelButton" destination="2EJ-WP-2z1" id="Is6-Qh-KFX"/>
                         <outlet property="macSubmitButton" destination="aq3-8Y-D0c" id="GJp-bz-3BE"/>
-                        <outlet property="ownerEmailLabel" destination="xLV-t2-mek" id="cKD-be-Cjj"/>
                         <outlet property="ownerEmailTextField" destination="v4L-vd-tuM" id="cGy-2Z-NAt"/>
-                        <outlet property="ownerNameLabel" destination="wpH-3G-s0p" id="jtn-Lc-YEX"/>
                         <outlet property="ownerNameTextField" destination="S13-K6-ek0" id="HM5-Zy-pbZ"/>
-                        <outlet property="ownerURLLabel" destination="ubz-Sw-7mC" id="zla-Zd-oBk"/>
                         <outlet property="ownerURLTextField" destination="SMl-I3-hyp" id="m5W-Cf-sMD"/>
                         <outlet property="updatedLabel" destination="EPz-xI-JyT" id="VMi-KI-mJi"/>
-                        <outlet property="updatedSpacer" destination="42O-ph-Mac" id="3zM-Qf-ga3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zJT-7S-UQd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1444.9275362318842" y="697.76785714285711"/>
+            <point key="canvasLocation" x="790" y="698"/>
         </scene>
     </scenes>
     <resources>

@@ -8,20 +8,15 @@
 import UIKit
 import Templeton
 
-class OutlineGetInfoViewController: FormViewController {
+class MacOutlineGetInfoViewController: FormViewController {
 
 	weak var outline: Outline?
 	
-	@IBOutlet weak var ownerNameLabel: UILabel!
 	@IBOutlet weak var ownerNameTextField: UITextField!
-	@IBOutlet weak var ownerEmailLabel: UILabel!
 	@IBOutlet weak var ownerEmailTextField: UITextField!
-	@IBOutlet weak var ownerURLLabel: UILabel!
 	@IBOutlet weak var ownerURLTextField: UITextField!
 	
-	@IBOutlet weak var createdSpacer: UILabel!
 	@IBOutlet weak var createdLabel: UILabel!
-	@IBOutlet weak var updatedSpacer: UILabel!
 	@IBOutlet weak var updatedLabel: UILabel!
 	
 	@IBOutlet weak var macCancelButton: UIButton!
@@ -30,23 +25,7 @@ class OutlineGetInfoViewController: FormViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 	
-		if traitCollection.userInterfaceIdiom == .mac {
-			ownerNameTextField.placeholder = nil
-			ownerNameTextField.borderStyle = .bezel
-			ownerEmailTextField.placeholder = nil
-			ownerEmailTextField.borderStyle = .bezel
-			ownerURLTextField.placeholder = nil
-			ownerURLTextField.borderStyle = .bezel
-			macSubmitButton.role = .primary
-		} else {
-			ownerNameLabel.isHidden = true
-			ownerEmailLabel.isHidden = true
-			ownerURLLabel.isHidden = true
-			createdSpacer.isHidden = true
-			updatedSpacer.isHidden = true
-			macCancelButton.isHidden = true
-			macSubmitButton.isHidden = true
-		}
+		macSubmitButton.role = .primary
 
 		ownerNameTextField.text = outline?.ownerName
 		ownerEmailTextField.text = outline?.ownerEmail
@@ -84,7 +63,7 @@ class OutlineGetInfoViewController: FormViewController {
 	
 }
 
-extension OutlineGetInfoViewController: UITextFieldDelegate {
+extension MacOutlineGetInfoViewController: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()

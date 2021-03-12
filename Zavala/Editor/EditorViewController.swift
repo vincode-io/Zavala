@@ -700,7 +700,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func showOutlineGetInfo() {
 		if traitCollection.userInterfaceIdiom == .mac {
 		
-			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: OutlineGetInfoViewController.self)
+			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: MacOutlineGetInfoViewController.self)
 			outlineGetInfoViewController.preferredContentSize = CGSize(width: 400, height: 190)
 			outlineGetInfoViewController.outline = outline
 			present(outlineGetInfoViewController, animated: true)
@@ -710,7 +710,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
 			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 210)
 			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
-			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
+			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! MacOutlineGetInfoViewController
 			outlineGetInfoViewController.outline = outline
 			present(outlineGetInfoNavViewController, animated: true)
 			
