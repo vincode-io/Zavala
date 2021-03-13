@@ -229,6 +229,10 @@ class MainSplitViewController: UISplitViewController {
 		openURL(AppAssets.bugTrackerURL)
 	}
 	
+	func showAcknowledgements() {
+		openURL(AppAssets.acknowledgementsURL)
+	}
+	
 	func showSettings() {
 		let settingsNavController = UIStoryboard.settings.instantiateInitialViewController() as! UINavigationController
 		settingsNavController.modalPresentationStyle = .formSheet

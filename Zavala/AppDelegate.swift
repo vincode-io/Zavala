@@ -292,11 +292,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									   input: "d",
 									   modifierFlags: [.command])
 	
-	let showReleaseNotesCommand = UICommand(title: L10n.releaseNotes, action: #selector(showReleaseNotes(_:)))
+	let showReleaseNotesCommand = UICommand(title: L10n.releaseNotes, action: #selector(showReleaseNotesCommand(_:)))
 	
-	let showGitHubRepositoryCommand = UICommand(title: L10n.gitHubRepository, action: #selector(showGitHubRepository(_:)))
+	let showGitHubRepositoryCommand = UICommand(title: L10n.gitHubRepository, action: #selector(showGitHubRepositoryCommand(_:)))
 	
-	let showBugTrackerCommand = UICommand(title: L10n.bugTracker, action: #selector(showBugTracker(_:)))
+	let showBugTrackerCommand = UICommand(title: L10n.bugTracker, action: #selector(showBugTrackerCommand(_:)))
+	
+	let showAcknowledgementsCommand = UICommand(title: L10n.acknowledgements, action: #selector(showAcknowledgementsCommand(_:)))
 	
 	let beginDocumentSearchCommand = UIKeyCommand(title: L10n.documentFind,
 												  action: #selector(beginDocumentSearchCommand(_:)),
@@ -538,16 +540,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.deleteCompletedRows(sender)
 	}
 	
-	@objc func showReleaseNotes(_ sender: Any?) {
+	@objc func showReleaseNotesCommand(_ sender: Any?) {
 		mainSplitViewController?.showReleaseNotes()
 	}
 
-	@objc func showGitHubRepository(_ sender: Any?) {
+	@objc func showGitHubRepositoryCommand(_ sender: Any?) {
 		mainSplitViewController?.showGitHubRepository()
 	}
 	
-	@objc func showBugTracker(_ sender: Any?) {
+	@objc func showBugTrackerCommand(_ sender: Any?) {
 		mainSplitViewController?.showBugTracker()
+	}
+	
+	@objc func showAcknowledgementsCommand(_ sender: Any?) {
+		mainSplitViewController?.showAcknowledgements()
 	}
 
 	@objc func printCommand(_ sender: Any?) {
@@ -772,7 +778,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 
 		// Help Menu
-		builder.replaceChildren(ofMenu: .help, from: { _ in return [showReleaseNotesCommand, showGitHubRepositoryCommand, showBugTrackerCommand] })
+		builder.replaceChildren(ofMenu: .help, from: { _ in return [showReleaseNotesCommand, showGitHubRepositoryCommand, showBugTrackerCommand, showAcknowledgementsCommand] })
 	}
 	#endif
 	

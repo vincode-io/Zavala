@@ -79,6 +79,7 @@
 "Previous_Result" = "Previous Result";
 "Next_Result" = "Next Result";
 "Print" = "Print";
+"Acknowledgements" = "Acknowledgements";
 
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";
