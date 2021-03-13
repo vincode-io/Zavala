@@ -31,7 +31,7 @@ class EditorTagContentView: UIView, UIContentView {
 			button.layer.cornerRadius = 13
 		}
 
-		let deleteAction = UIAction(title: L10n.delete, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in
+		let deleteAction = UIAction(title: L10n.deleteTag, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in
 			guard let self = self, let name = self.button.currentTitle else { return }
 			self.delegate?.editorTagDeleteTag(name: name)
 		}

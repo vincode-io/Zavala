@@ -74,6 +74,8 @@ internal enum L10n {
   }
   /// Delete
   internal static let deleteRow = L10n.tr("Localizable", "Delete_Row")
+  /// Delete Tag
+  internal static let deleteTag = L10n.tr("Localizable", "Delete_Tag")
   /// Document Find...
   internal static let documentFind = L10n.tr("Localizable", "Document_Find")
   /// Edit document “%@”
