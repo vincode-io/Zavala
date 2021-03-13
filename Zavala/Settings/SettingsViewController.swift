@@ -92,6 +92,8 @@ class SettingsViewController: UITableViewController {
 			openURL(AppAssets.githubRepositoryURL)
 		case 2:
 			openURL(AppAssets.bugTrackerURL)
+		case 3:
+			openURL(AppAssets.acknowledgementsURL)
 		default:
 			break
 		}
