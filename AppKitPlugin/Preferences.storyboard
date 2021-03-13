@@ -31,14 +31,14 @@
             <objects>
                 <viewController title="General" storyboardIdentifier="General" id="iuH-lz-18x" customClass="GeneralPreferencesViewController" customModule="AppKitPlugin" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" misplaced="YES" id="WnV-px-wCT">
-                        <rect key="frame" x="0.0" y="0.0" width="445" height="199"/>
+                        <rect key="frame" x="0.0" y="0.0" width="445" height="235"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="Ut3-yd-q6G">
-                                <rect key="frame" x="54" y="16" width="335" height="171"/>
+                                <rect key="frame" x="54" y="16" width="335" height="209"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mwT-nY-TrX">
-                                        <rect key="frame" x="99" y="146" width="216" height="18"/>
+                                        <rect key="frame" x="99" y="184" width="216" height="18"/>
                                         <buttonCell key="cell" type="check" title="Enable the On My Mac Account" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="lh0-G6-9v4">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -48,7 +48,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kaV-Ee-Pla">
-                                        <rect key="frame" x="99" y="124" width="186" height="18"/>
+                                        <rect key="frame" x="99" y="162" width="186" height="18"/>
                                         <buttonCell key="cell" type="check" title="Enable the iCloud Account" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="caS-El-r8g">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -58,10 +58,10 @@
                                         </connections>
                                     </button>
                                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="EaA-py-49h">
-                                        <rect key="frame" x="8" y="106" width="327" height="5"/>
+                                        <rect key="frame" x="8" y="144" width="319" height="5"/>
                                     </box>
                                     <gridView xPlacement="leading" yPlacement="center" rowAlignment="firstBaseline" translatesAutoresizingMaskIntoConstraints="NO" id="uSw-zF-EtJ">
-                                        <rect key="frame" x="0.0" y="8" width="327" height="84"/>
+                                        <rect key="frame" x="0.0" y="46" width="335" height="84"/>
                                         <rows>
                                             <gridRow id="SUZ-cp-IaS"/>
                                             <gridRow id="Xt8-LB-MUH"/>
@@ -84,8 +84,8 @@
                                             </gridCell>
                                             <gridCell row="SUZ-cp-IaS" column="Qnq-NX-7ee" id="yqb-Eu-Uxw">
                                                 <textField key="contentView" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HK2-DW-oTh">
-                                                    <rect key="frame" x="101" y="63" width="226" height="21"/>
-                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="NPS-pg-Ni9">
+                                                    <rect key="frame" x="101" y="63" width="100" height="21"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Optional" drawsBackground="YES" id="NPS-pg-Ni9">
                                                         <font key="font" usesAppearanceFont="YES"/>
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -94,7 +94,7 @@
                                             </gridCell>
                                             <gridCell row="Xt8-LB-MUH" column="qcT-tL-qgY" id="hbc-Ay-aPg">
                                                 <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VVN-fJ-nO1">
-                                                    <rect key="frame" x="13" y="34" width="84" height="16"/>
+                                                    <rect key="frame" x="13" y="37" width="84" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Owner Email:" id="7PO-bL-6RE">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -104,8 +104,8 @@
                                             </gridCell>
                                             <gridCell row="Xt8-LB-MUH" column="Qnq-NX-7ee" id="P32-os-tAA">
                                                 <textField key="contentView" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="etc-6U-KHR">
-                                                    <rect key="frame" x="101" y="32" width="226" height="21"/>
-                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="5nw-lO-Kpc">
+                                                    <rect key="frame" x="101" y="35" width="100" height="21"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Optional" drawsBackground="YES" id="5nw-lO-Kpc">
                                                         <font key="font" usesAppearanceFont="YES"/>
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -114,7 +114,7 @@
                                             </gridCell>
                                             <gridCell row="z8o-8n-7Kx" column="qcT-tL-qgY" id="Iyz-1g-LKo">
                                                 <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dHR-u1-JJU">
-                                                    <rect key="frame" x="20" y="3" width="77" height="16"/>
+                                                    <rect key="frame" x="20" y="6" width="77" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Owner URL:" id="e7b-4N-QQf">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -124,8 +124,8 @@
                                             </gridCell>
                                             <gridCell row="z8o-8n-7Kx" column="Qnq-NX-7ee" id="wcJ-f2-RsQ">
                                                 <textField key="contentView" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JGX-RH-a6B">
-                                                    <rect key="frame" x="101" y="1" width="226" height="21"/>
-                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Zxs-QC-79W">
+                                                    <rect key="frame" x="101" y="4" width="100" height="21"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Optional" drawsBackground="YES" id="Zxs-QC-79W">
                                                         <font key="font" usesAppearanceFont="YES"/>
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -134,18 +134,29 @@
                                             </gridCell>
                                         </gridCells>
                                     </gridView>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="fGb-eC-qvt">
+                                        <rect key="frame" x="6" y="8" width="323" height="30"/>
+                                        <textFieldCell key="cell" title="This infomation is included in new Outlines and is used in OPML documents to document ownership." id="95o-m1-GfM">
+                                            <font key="font" metaFont="system" size="12"/>
+                                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="fGb-eC-qvt" firstAttribute="leading" secondItem="Ut3-yd-q6G" secondAttribute="leading" constant="8" id="4On-Ct-Pfi"/>
                                     <constraint firstItem="HK2-DW-oTh" firstAttribute="leading" secondItem="kaV-Ee-Pla" secondAttribute="leading" id="CZd-1Q-p9f"/>
-                                    <constraint firstAttribute="bottom" secondItem="uSw-zF-EtJ" secondAttribute="bottom" constant="8" id="IEL-i0-QpM"/>
                                     <constraint firstItem="kaV-Ee-Pla" firstAttribute="top" secondItem="mwT-nY-TrX" secondAttribute="bottom" constant="6" symbolic="YES" id="JJI-XX-ZGS"/>
                                     <constraint firstItem="mwT-nY-TrX" firstAttribute="top" secondItem="Ut3-yd-q6G" secondAttribute="top" constant="8" id="NcN-Er-iUO"/>
-                                    <constraint firstAttribute="trailing" secondItem="uSw-zF-EtJ" secondAttribute="trailing" constant="8" id="ODn-h6-kQb"/>
+                                    <constraint firstAttribute="trailing" secondItem="uSw-zF-EtJ" secondAttribute="trailing" id="ODn-h6-kQb"/>
                                     <constraint firstAttribute="trailing" secondItem="mwT-nY-TrX" secondAttribute="trailing" constant="20" symbolic="YES" id="Opw-sT-vve"/>
+                                    <constraint firstItem="fGb-eC-qvt" firstAttribute="top" secondItem="uSw-zF-EtJ" secondAttribute="bottom" constant="8" symbolic="YES" id="ZX9-zo-MOA"/>
                                     <constraint firstItem="uSw-zF-EtJ" firstAttribute="leading" secondItem="Ut3-yd-q6G" secondAttribute="leading" id="awE-G4-bbn"/>
                                     <constraint firstItem="HK2-DW-oTh" firstAttribute="leading" secondItem="mwT-nY-TrX" secondAttribute="leading" id="cgn-zq-bwZ"/>
+                                    <constraint firstAttribute="trailing" secondItem="fGb-eC-qvt" secondAttribute="trailing" constant="8" id="dBB-jX-aOb"/>
                                     <constraint firstItem="EaA-py-49h" firstAttribute="leading" secondItem="Ut3-yd-q6G" secondAttribute="leading" constant="8" id="mBC-Qy-jeB"/>
-                                    <constraint firstAttribute="trailing" secondItem="EaA-py-49h" secondAttribute="trailing" id="ruL-kh-HGv"/>
+                                    <constraint firstAttribute="bottom" secondItem="fGb-eC-qvt" secondAttribute="bottom" constant="8" id="pY8-qo-BzA"/>
+                                    <constraint firstAttribute="trailing" secondItem="EaA-py-49h" secondAttribute="trailing" constant="8" id="ruL-kh-HGv"/>
                                     <constraint firstItem="uSw-zF-EtJ" firstAttribute="top" secondItem="EaA-py-49h" secondAttribute="bottom" constant="16" id="sA2-1V-pB6"/>
                                     <constraint firstItem="EaA-py-49h" firstAttribute="top" secondItem="kaV-Ee-Pla" secondAttribute="bottom" constant="16" id="sMR-mV-14Y"/>
                                 </constraints>
@@ -169,7 +180,7 @@
                 <customObject id="bSQ-tq-wd3" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <userDefaultsController representsSharedInstance="YES" id="mAF-gO-1PI"/>
             </objects>
-            <point key="canvasLocation" x="-647.5" y="432.5"/>
+            <point key="canvasLocation" x="-647.5" y="450.5"/>
         </scene>
         <!--Container-->
         <scene sceneID="fzS-hg-3TF">
