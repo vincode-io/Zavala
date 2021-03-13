@@ -148,8 +148,11 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	
 	@objc func createOutline(_ sender: Any?) {
 		guard let account = documentContainer?.account else { return }
-		let outline = account.createOutline(tag: (documentContainer as? TagDocuments)?.tag)
-		selectDocument(outline, isNew: true, animated: true)
+		let document = account.createOutline(tag: (documentContainer as? TagDocuments)?.tag)
+		if case .outline(let outline) = document {
+			outline.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
+		}
+		selectDocument(document, isNew: true, animated: true)
 	}
 
 	@objc func importOPML(_ sender: Any?) {
