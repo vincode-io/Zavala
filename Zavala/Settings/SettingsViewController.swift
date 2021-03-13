@@ -15,6 +15,10 @@ class SettingsViewController: UITableViewController {
 	@IBOutlet weak var enableLocalAccountSwitch: UISwitch!
 	@IBOutlet weak var enableCloudKitSwitch: UISwitch!
 	
+	@IBOutlet weak var ownerNameTextField: UITextField!
+	@IBOutlet weak var ownerEmailTextField: UITextField!
+	@IBOutlet weak var ownerURLTextField: UITextField!
+	
 	private var mainSplitViewController: MainSplitViewController? {
 		return (presentingViewController as? MainSplitViewController)
 	}
@@ -35,6 +39,10 @@ class SettingsViewController: UITableViewController {
 		enableCloudKitSwitch.isOn = AppDefaults.shared.enableCloudKit
 		enableCloudKitSwitch.isEnabled = !AppDefaults.shared.isDeveloperBuild
 		
+		ownerNameTextField.text = AppDefaults.shared.ownerName
+		ownerEmailTextField.text = AppDefaults.shared.ownerEmail
+		ownerURLTextField.text = AppDefaults.shared.ownerURL
+
 		let buildLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: 0.0, width: 0.0, height: 0.0))
 		buildLabel.font = UIFont.systemFont(ofSize: 11.0)
 		buildLabel.textColor = UIColor.gray
@@ -49,6 +57,13 @@ class SettingsViewController: UITableViewController {
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		self.tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		AppDefaults.shared.ownerName = ownerNameTextField.text
+		AppDefaults.shared.ownerEmail = ownerEmailTextField.text
+		AppDefaults.shared.ownerURL = ownerURLTextField.text
 	}
 	
 	// MARK: UITableView
@@ -68,7 +83,7 @@ class SettingsViewController: UITableViewController {
 	}
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		guard indexPath.section == 1 else { return }
+		guard indexPath.section == 2 else { return }
 		
 		switch indexPath.row {
 		case 0:
@@ -94,10 +109,6 @@ class SettingsViewController: UITableViewController {
 
 	override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
 		return .none
-	}
-	
-	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return UITableView.automaticDimension
 	}
 	
 	// MARK: Notifications
