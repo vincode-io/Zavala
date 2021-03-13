@@ -287,7 +287,37 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zJT-7S-UQd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1526" y="1358"/>
+            <point key="canvasLocation" x="-1526" y="1383"/>
+        </scene>
+        <!--Open Quickly View Controller-->
+        <scene sceneID="Sa4-0q-hcq">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mCB-Tu-e9w" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="MacOpenQuicklyViewController" id="PXw-l2-c0M" customClass="OpenQuicklyViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3Xd-XC-T5G">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qB3-77-aRG" customClass="SearchTextField" customModule="Zavala" customModuleProvider="target">
+                                <rect key="frame" x="20" y="64" width="374" height="32"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="RkY-0w-WC7"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="qB3-77-aRG" firstAttribute="leading" secondItem="RkY-0w-WC7" secondAttribute="leading" constant="20" id="52b-hZ-bbM"/>
+                            <constraint firstItem="RkY-0w-WC7" firstAttribute="trailing" secondItem="qB3-77-aRG" secondAttribute="trailing" constant="20" id="7ec-tO-kCA"/>
+                            <constraint firstItem="qB3-77-aRG" firstAttribute="top" secondItem="RkY-0w-WC7" secondAttribute="top" constant="20" id="ZLx-TT-WQH"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="searchTextField" destination="qB3-77-aRG" id="rv5-CD-Cjp"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="-1526" y="2048"/>
         </scene>
         <!--Root View Controller-->
         <scene sceneID="tsv-bl-hMR">

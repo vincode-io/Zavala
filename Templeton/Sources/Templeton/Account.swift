@@ -292,9 +292,9 @@ public final class Account: NSObject, Identifiable, Codable {
 			fatalError()
 		}
 	}
-	
-	public func findDocument(documentUUID: String) -> Document? {
-		return idToDocumentsDictionary[documentUUID]
+
+	public func findDocument(_ entityID: EntityID) -> Document? {
+		return findDocument(documentUUID: entityID.documentUUID)
 	}
 	
 	@discardableResult
@@ -342,6 +342,10 @@ public final class Account: NSObject, Identifiable, Codable {
 		accountTagsDidChange()
 	}
 	
+	func findDocument(documentUUID: String) -> Document? {
+		return idToDocumentsDictionary[documentUUID]
+	}
+
 	func deleteAllDocuments(with zoneID: CKRecordZone.ID) {
 		for doc in documents ?? [Document]() {
 			if doc.zoneID == zoneID {

@@ -217,6 +217,22 @@ class MainSplitViewController: UISplitViewController {
 		}
 	}
 	
+	func openDocument(_ documentID: EntityID) {
+		guard let account = AccountManager.shared.findAccount(accountID: documentID.accountID),
+			  let document = account.findDocument(documentID) else { return }
+		
+		UIView.performWithoutAnimation {
+			show(.primary)
+		}
+
+		sidebarViewController?.selectDocumentContainer(AllDocuments(account: account), animated: false) {
+			self.timelineViewController?.selectDocument(document, animated: false) {
+				self.lastMainControllerToAppear = .editor
+				self.validateToolbar()
+			}
+		}
+	}
+	
 	func showReleaseNotes() {
 		openURL(AppAssets.releaseNotesURL)
 	}
@@ -233,6 +249,26 @@ class MainSplitViewController: UISplitViewController {
 		openURL(AppAssets.acknowledgementsURL)
 	}
 	
+	func showOpenQuickly() {
+		if traitCollection.userInterfaceIdiom == .mac {
+		
+			let openQuicklyViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacOpenQuicklyViewController") as! OpenQuicklyViewController
+			openQuicklyViewController.preferredContentSize = CGSize(width: 300, height: 60)
+			openQuicklyViewController.delegate = self
+			present(openQuicklyViewController, animated: true)
+		
+//		} else {
+//
+//			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
+//			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 250)
+//			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
+//			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
+//			outlineGetInfoViewController.outline = outline
+//			present(outlineGetInfoNavViewController, animated: true)
+			
+		}
+	}
+
 	func showSettings() {
 		let settingsNavController = UIStoryboard.settings.instantiateInitialViewController() as! UINavigationController
 		settingsNavController.modalPresentationStyle = .formSheet
@@ -528,6 +564,14 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 			timelineViewController?.selectDocument(nil, animated: false)
 			return
 		}
+	}
+	
+}
+
+extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
+	
+	func openDocument(_: OpenQuicklyViewController, documentID: EntityID) {
+		openDocument(documentID)
 	}
 	
 }

@@ -31,7 +31,7 @@
 		514F221B25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F221A25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift */; };
 		514F221E25C4D0A8004E02CD /* EditorTagInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F221D25C4D0A8004E02CD /* EditorTagInputContentView.swift */; };
 		514F222A25C4FF02004E02CD /* EditorTagInputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F222925C4FF02004E02CD /* EditorTagInputTextField.swift */; };
-		515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F164A255C9F8E00FD98B8 /* FormViewController.swift */; };
+		515F164B255C9F8E00FD98B8 /* MacFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */; };
 		5163ADF225C78CFB008F25CA /* SearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5163ADF125C78CFB008F25CA /* SearchTextField.swift */; };
 		5163ADF525C79B69008F25CA /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5163ADF425C79B69008F25CA /* String+.swift */; };
 		5167604725F959BA00AC0EBD /* IndexRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167604625F959BA00AC0EBD /* IndexRequestHandler.swift */; };
@@ -65,6 +65,7 @@
 		5181A9412554D92100C153E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5181A9402554D92100C153E8 /* Assets.xcassets */; };
 		5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5181A9422554D92100C153E8 /* LaunchScreen.storyboard */; };
 		518F2E38257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */; };
+		5193C8A125FD55CB00E63F94 /* OpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5193C8A025FD55CB00E63F94 /* OpenQuicklyViewController.swift */; };
 		519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F004A25608EF9009DC1F0 /* TimelineItem.swift */; };
 		51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */; };
 		51AE547E258FF28A006DA301 /* OutlineFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AE547D258FF28A006DA301 /* OutlineFont.swift */; };
@@ -211,7 +212,7 @@
 		514F221A25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagInputContentConfiguration.swift; sourceTree = "<group>"; };
 		514F221D25C4D0A8004E02CD /* EditorTagInputContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagInputContentView.swift; sourceTree = "<group>"; };
 		514F222925C4FF02004E02CD /* EditorTagInputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagInputTextField.swift; sourceTree = "<group>"; };
-		515F164A255C9F8E00FD98B8 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
+		515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFormViewController.swift; sourceTree = "<group>"; };
 		5163ADF125C78CFB008F25CA /* SearchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextField.swift; sourceTree = "<group>"; };
 		5163ADF425C79B69008F25CA /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		5167604425F959BA00AC0EBD /* SpotlightIndexExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SpotlightIndexExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -246,6 +247,7 @@
 		5181A9452554D92100C153E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5181A96A2554D93B00C153E8 /* Zavala.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Zavala.entitlements; sourceTree = "<group>"; };
 		518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistentCollectionViewListCell.swift; sourceTree = "<group>"; };
+		5193C8A025FD55CB00E63F94 /* OpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuicklyViewController.swift; sourceTree = "<group>"; };
 		519F004A25608EF9009DC1F0 /* TimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItem.swift; sourceTree = "<group>"; };
 		51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedUndoManager.swift; sourceTree = "<group>"; };
 		51AE547D258FF28A006DA301 /* OutlineFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFont.swift; sourceTree = "<group>"; };
@@ -345,7 +347,7 @@
 				517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */,
 				518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */,
 				514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */,
-				515F164A255C9F8E00FD98B8 /* FormViewController.swift */,
+				515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */,
 				5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */,
 				517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */,
 				5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */,
@@ -589,6 +591,7 @@
 				51278E76257F37AC0034F1CB /* Dialog.storyboard */,
 				51C568D8258C1CD200AA7B93 /* LinkViewController.swift */,
 				5167607625F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift */,
+				5193C8A025FD55CB00E63F94 /* OpenQuicklyViewController.swift */,
 				5167608425FBE4E500AC0EBD /* OutlineGetInfoViewController.swift */,
 			);
 			path = Dialogs;
@@ -842,6 +845,7 @@
 				5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */,
 				5147D0B825CCAB2A004673C3 /* TimelineViewController+Drop.swift in Sources */,
 				51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */,
+				5193C8A125FD55CB00E63F94 /* OpenQuicklyViewController.swift in Sources */,
 				514F222A25C4FF02004E02CD /* EditorTagInputTextField.swift in Sources */,
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
 				5147D0B525CB95B4004673C3 /* TimelineViewController+Drag.swift in Sources */,
@@ -856,7 +860,7 @@
 				5147D0BE25CCAFD2004673C3 /* EditorTagAddContentConfiguration.swift in Sources */,
 				51F2859425AD11100019C573 /* SidebarSearchCell.swift in Sources */,
 				51DFDC18259EA8D300C068C6 /* Selector+.swift in Sources */,
-				515F164B255C9F8E00FD98B8 /* FormViewController.swift in Sources */,
+				515F164B255C9F8E00FD98B8 /* MacFormViewController.swift in Sources */,
 				51F2DC7B2586E101003BD5CE /* EditorTextRowNoteTextView.swift in Sources */,
 				514F221425C4CD00004E02CD /* EditorTagContentView.swift in Sources */,
 				51C568D9258C1CD200AA7B93 /* LinkViewController.swift in Sources */,

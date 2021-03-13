@@ -580,6 +580,20 @@ open class SearchTextField: UITextField {
     
     // Handle inline behaviour
     func handleInlineFiltering() {
+		if filteredResults.count > 1 {
+			var shortest: SearchTextFieldItem? = nil
+			for item in filteredResults {
+				if shortest == nil {
+					shortest = item
+					continue
+				}
+				if shortest!.title.count > item.title.count {
+					shortest = item
+				}
+			}
+			filteredResults = [shortest!]
+		}
+		
         if let text = self.text {
             if text == "" {
                 self.placeholderLabel?.attributedText = nil
@@ -730,21 +744,15 @@ open class SearchTextFieldItem {
     public var title: String
     public var subtitle: String?
     public var image: UIImage?
+	public var associatedObject: Any?
     
-    public init(title: String, subtitle: String?, image: UIImage?) {
+	public init(title: String, subtitle: String? = nil, image: UIImage? = nil, associatedObject: Any? = nil) {
         self.title = title
         self.subtitle = subtitle
         self.image = image
+		self.associatedObject = associatedObject
     }
     
-    public init(title: String, subtitle: String?) {
-        self.title = title
-        self.subtitle = subtitle
-    }
-    
-    public init(title: String) {
-        self.title = title
-    }
 }
 
 public typealias SearchTextFieldItemHandler = (_ filteredResults: [SearchTextFieldItem], _ index: Int) -> Void

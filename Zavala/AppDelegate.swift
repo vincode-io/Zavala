@@ -19,9 +19,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		menuKeyCommands.append(showPreferences)
 		menuKeyCommands.append(beginDocumentSearchCommand)
+		menuKeyCommands.append(showOpenQuicklyCommand)
 		
 		if AccountManager.shared.isSyncAvailable {
-			menuKeyCommands.append(sync)
+			menuKeyCommands.append(syncCommand)
 		}
 
 		if !(mainSplitViewController?.isOutlineFunctionsUnavailable ?? true) {
@@ -127,10 +128,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	let checkForUpdates = UICommand(title: L10n.checkForUpdates, action: #selector(checkForUpdates(_:)))
 	#endif
 	
-	let sync = UIKeyCommand(title: L10n.sync,
-							action: #selector(syncCommand(_:)),
-							input: "r",
-							modifierFlags: [.command])
+	let syncCommand = UIKeyCommand(title: L10n.sync,
+								   action: #selector(syncCommand(_:)),
+								   input: "r",
+								   modifierFlags: [.command])
 	
 	let exportOPMLCommand = UIKeyCommand(title: L10n.exportOPML,
 										 action: #selector(exportOPMLCommand(_:)),
@@ -299,6 +300,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	let showBugTrackerCommand = UICommand(title: L10n.bugTracker, action: #selector(showBugTrackerCommand(_:)))
 	
 	let showAcknowledgementsCommand = UICommand(title: L10n.acknowledgements, action: #selector(showAcknowledgementsCommand(_:)))
+	
+	let showOpenQuicklyCommand = UIKeyCommand(title: L10n.openQuickly,
+											  action: #selector(showOpenQuicklyCommand(_:)),
+											  input: "o",
+											  modifierFlags: [.shift, .command])
 	
 	let beginDocumentSearchCommand = UIKeyCommand(title: L10n.documentFind,
 												  action: #selector(beginDocumentSearchCommand(_:)),
@@ -556,6 +562,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainSplitViewController?.showAcknowledgements()
 	}
 
+	@objc func showOpenQuicklyCommand(_ sender: Any?) {
+		mainSplitViewController?.showOpenQuickly()
+	}
+
 	@objc func printCommand(_ sender: Any?) {
 		mainSplitViewController?.printDocument(sender)
 	}
@@ -728,11 +738,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(appMenu, afterMenu: .about)
 		
 		// File Menu
-		let syncMenu = UIMenu(title: "", options: .displayInline, children: [sync])
+		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atStartOfMenu: .file)
 
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMarkdownCommand, exportOPMLCommand])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
+
+		let openMenu = UIMenu(title: "", options: .displayInline, children: [showOpenQuicklyCommand])
+		builder.insertChild(openMenu, atStartOfMenu: .file)
 
 		let newWindowMenu = UIMenu(title: "", options: .displayInline, children: [newWindowCommand])
 		builder.insertChild(newWindowMenu, atStartOfMenu: .file)

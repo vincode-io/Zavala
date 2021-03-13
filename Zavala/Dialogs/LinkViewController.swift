@@ -13,7 +13,7 @@ protocol LinkViewControllerDelegate: AnyObject {
 	func updateLink(_: LinkViewController, cursorCoordinates: CursorCoordinates, link: String?, range: NSRange)
 }
 
-class LinkViewController: FormViewController {
+class LinkViewController: MacFormViewController {
 
 	static let preferredContentSize = CGSize(width: 400, height: 150)
 

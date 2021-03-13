@@ -81,6 +81,7 @@
 "Next_Result" = "Next Result";
 "Print" = "Print";
 "Acknowledgements" = "Acknowledgements";
+"Open_Quickly" = "Open Quickly...";
 
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";
@@ -115,3 +116,6 @@
 /* Outline Get Info */
 "Created_On" = "Created on %@ at %@";
 "Updated_On" = "Updated on %@ at %@";
+
+/* Open Quickly */
+"Open_Quickly_Placeholder" = "Open Quickly";

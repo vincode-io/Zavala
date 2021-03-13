@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-class MacOutlineGetInfoViewController: FormViewController {
+class MacOutlineGetInfoViewController: MacFormViewController {
 
 	weak var outline: Outline?
 	

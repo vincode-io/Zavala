@@ -1,5 +1,5 @@
 //
-//  FormViewController.swift
+//  MacFormViewController.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/11/20.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FormViewController: UIViewController {
+class MacFormViewController: UIViewController {
 
 	override var keyCommands: [UIKeyCommand]? {
 		[
