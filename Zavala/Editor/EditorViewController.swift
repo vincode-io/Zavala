@@ -1572,7 +1572,8 @@ extension EditorViewController {
 	}
 
 	private func deleteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.deleteRow, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
+		let title = rows.count == 1 ? L10n.deleteRow : L10n.deleteRows
+		return UIAction(title: title, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
 			self?.deleteRows(rows)
 			self?.mainSplitViewController?.validateToolbar()
 		}
