@@ -30,8 +30,8 @@
         <scene sceneID="R4l-Wg-k7x">
             <objects>
                 <viewController title="General" storyboardIdentifier="General" id="iuH-lz-18x" customClass="GeneralPreferencesViewController" customModule="AppKitPlugin" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" misplaced="YES" id="WnV-px-wCT">
-                        <rect key="frame" x="0.0" y="0.0" width="445" height="235"/>
+                    <view key="view" id="WnV-px-wCT">
+                        <rect key="frame" x="0.0" y="0.0" width="445" height="241"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="Ut3-yd-q6G">
@@ -136,8 +136,8 @@
                                     </gridView>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="fGb-eC-qvt">
                                         <rect key="frame" x="6" y="8" width="323" height="30"/>
-                                        <textFieldCell key="cell" title="This infomation is included in new Outlines and is used in OPML documents to document ownership." id="95o-m1-GfM">
-                                            <font key="font" metaFont="system" size="12"/>
+                                        <textFieldCell key="cell" title="This infomation is included in new Outlines and is used in OPML documents to attribute ownership." id="95o-m1-GfM">
+                                            <font key="font" metaFont="cellTitle"/>
                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
