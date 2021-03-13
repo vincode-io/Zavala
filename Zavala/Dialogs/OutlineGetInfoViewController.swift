@@ -21,6 +21,10 @@ class OutlineGetInfoViewController: UITableViewController {
 
 		navigationItem.title = outline?.title
 
+		ownerNameTextField.delegate = self
+		ownerEmailTextField.delegate = self
+		ownerURLTextField.delegate = self
+
 		ownerNameTextField.text = outline?.ownerName
 		ownerEmailTextField.text = outline?.ownerEmail
 		ownerURLTextField.text = outline?.ownerURL
@@ -67,6 +71,15 @@ class OutlineGetInfoViewController: UITableViewController {
 	@IBAction func submit(_ sender: Any) {
 		outline?.update(ownerName: ownerNameTextField.text, ownerEmail: ownerEmailTextField.text, ownerURL: ownerURLTextField.text)
 		dismiss(animated: true)
+	}
+	
+}
+
+extension OutlineGetInfoViewController: UITextFieldDelegate {
+	
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return true
 	}
 	
 }
