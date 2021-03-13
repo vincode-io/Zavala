@@ -22,4 +22,8 @@ extension Bundle {
 		return infoDictionary?["CFBundleVersion"] as! String
 	}
 	
+	var copyright: String {
+		return infoDictionary?["NSHumanReadableCopyright"] as! String
+	}
+	
 }

@@ -43,13 +43,24 @@ class SettingsViewController: UITableViewController {
 		ownerEmailTextField.text = AppDefaults.shared.ownerEmail
 		ownerURLTextField.text = AppDefaults.shared.ownerURL
 
-		let buildLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: 0.0, width: 0.0, height: 0.0))
+		let copyrightLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: 0.0, width: 0.0, height: 0.0))
+		copyrightLabel.numberOfLines = 0
+		copyrightLabel.lineBreakMode = .byWordWrapping
+		copyrightLabel.font = UIFont.systemFont(ofSize: 11.0)
+		copyrightLabel.textColor = UIColor.gray
+		copyrightLabel.text = Bundle.main.copyright
+		let copyrightSize = copyrightLabel.sizeThatFits(CGSize(width: tableView.bounds.width - 32, height: CGFloat.infinity))
+		copyrightLabel.frame = CGRect(x: 32, y: 0, width: copyrightSize.width, height: copyrightSize.height)
+
+		let buildLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: copyrightLabel.frame.maxY + 8, width: 0.0, height: 0.0))
 		buildLabel.font = UIFont.systemFont(ofSize: 11.0)
 		buildLabel.textColor = UIColor.gray
 		buildLabel.text = "\(Bundle.main.appName) \(Bundle.main.versionNumber) (Build \(Bundle.main.buildNumber))"
 		buildLabel.sizeToFit()
-		
-		let wrapperView = UIView(frame: CGRect(x: 0, y: 0, width: buildLabel.frame.width, height: buildLabel.frame.height + 10.0))
+
+		let width = max(copyrightLabel.frame.width, buildLabel.frame.width)
+		let wrapperView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: buildLabel.frame.maxY + 10))
+		wrapperView.addSubview(copyrightLabel)
 		wrapperView.addSubview(buildLabel)
 		tableView.tableFooterView = wrapperView
 	}
