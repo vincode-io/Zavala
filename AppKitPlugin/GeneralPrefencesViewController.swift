@@ -32,6 +32,7 @@ final class GeneralPreferencesViewController: NSViewController {
 	}
 	
 	override func viewWillDisappear() {
+		super.viewWillDisappear()
 		AppDefaults.shared.ownerName = ownerNameTextField.stringValue
 		AppDefaults.shared.ownerEmail = ownerEmailTextField.stringValue
 		AppDefaults.shared.ownerURL = ownerURLTextField.stringValue
