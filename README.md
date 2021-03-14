@@ -29,9 +29,13 @@ version of Zavala for iOS by clicking this [link](https://testflight.apple.com/j
 
 ## Code Contributions
 
-We are not currently looking for additional code contributors yet. The project is in such an early state of development
-that too many people working on the code would be chaotic. That will change as the project matures. I'll update
-this README when we get to that point.
+We welcome contributions!
+
+If you’d like to contribute:
+
+1. File a ticket describing the bug you want to fix or feature you want to add. Or find an existing ticket.
+2. In [Discussions](https://github.com/vincode-io/Zavala/discussions) under the [Work](https://github.com/vincode-io/Zavala/discussions/categories/work) category mention that you would like to work on the item. We will probably discuss implementation details.  **This is very important, because there might be things you need to know before you start work.**
+4. Once approved, then go for it. Write the code, then do a pull request. We’ll either have comments or we’ll merge it. (We might revise it afterward, of course.)
 
 ## Project Documents
 
