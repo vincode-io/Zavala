@@ -416,7 +416,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		isOutlineNewFlag = isNew
 		
 		// Get ready for the new outline, buy saving the current one
-		outline?.cursorCoordinates = CursorCoordinates.currentCoordinates
+		outline?.cursorCoordinates = CursorCoordinates.bestCoordinates
 		
 		if let textField = UIResponder.currentFirstResponder as? OutlineTextView {
 			textField.endEditing(true)

@@ -50,7 +50,6 @@ class OutlineTextView: UITextView {
 	}
 	
 	var isTextChanged = false
-	var lastCursorPosition = 0
 	
 	var textRowStrings: TextRowStrings? {
 		fatalError("attibutedTexts has not been implemented")

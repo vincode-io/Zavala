@@ -85,7 +85,7 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	
 	override func resignFirstResponder() -> Bool {
 		if let textRow = row {
-			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: textRow, isInNotes: false, cursorPosition: lastCursorPosition)
+			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: textRow, isInNotes: false, cursorPosition: cursorPosition)
 		}
 		return super.resignFirstResponder()
 	}
@@ -160,7 +160,7 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false
 		} else {
-			editorDelegate?.textChanged(self, row: textRow, isInNotes: false, cursorPosition: lastCursorPosition)
+			editorDelegate?.textChanged(self, row: textRow, isInNotes: false, cursorPosition: cursorPosition)
 		}
 		
 		autosaveWorkItem?.cancel()
@@ -216,7 +216,6 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 	
 	func textViewDidChange(_ textView: UITextView) {
 		isTextChanged = true
-		lastCursorPosition = cursorPosition
 
 		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
 		if textViewHeight != fittingSize.height {
