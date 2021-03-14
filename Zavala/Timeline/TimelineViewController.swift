@@ -363,6 +363,8 @@ extension TimelineViewController {
 			
 			var menuItems = [UIMenu]()
 
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.copyLinkAction(document: document)]))
+
 			if let outline = document.outline {
 				menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.exportMarkdownAction(outline: outline), self.exportOPMLAction(outline: outline)]))
 			}
@@ -371,6 +373,14 @@ extension TimelineViewController {
 			
 			return UIMenu(title: "", children: menuItems)
 		})
+	}
+	
+	private func copyLinkAction(document: Document) -> UIAction {
+		let action = UIAction(title: L10n.copyLink, image: AppAssets.link) { action in
+			let documentURL = document.id.url
+			UIPasteboard.general.url = documentURL
+		}
+		return action
 	}
 	
 	private func exportMarkdownAction(outline: Outline) -> UIAction {
