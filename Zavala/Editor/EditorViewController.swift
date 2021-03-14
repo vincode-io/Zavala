@@ -89,7 +89,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 
 	var isLinkUnavailable: Bool {
-		return currentTextView == nil || !(currentTextView?.isSelecting ?? false)
+		return currentTextView == nil
 	}
 
 	var isExpandAllInOutlineUnavailable: Bool {
