@@ -21,14 +21,17 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	weak var delegate: SidebarDelegate?
 	
 	var selectedAccount: Account? {
-		guard let selectedIndexPath = collectionView.indexPathsForSelectedItems?.first,
-			  let entityID = dataSource.itemIdentifier(for: selectedIndexPath)?.entityID,
-			  let documentContainer = AccountManager.shared.findDocumentContainer(entityID) else {
-			return nil
-		}
-		return documentContainer.account
+		return currentDocumentContainer?.account
 	}
 	
+	var currentDocumentContainer: DocumentContainer? {
+		guard let selectedIndexPath = collectionView.indexPathsForSelectedItems?.first,
+			  let entityID = dataSource.itemIdentifier(for: selectedIndexPath)?.entityID else {
+			return nil
+		}
+		return AccountManager.shared.findDocumentContainer(entityID)
+	}
+
 	var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
 
@@ -75,6 +78,11 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	}
 	
 	func selectDocumentContainer(_ documentContainer: DocumentContainer?, animated: Bool, completion: (() -> Void)? = nil) {
+		guard currentDocumentContainer?.id != documentContainer?.id else {
+			completion?()
+			return
+		}
+		
 		if let search = documentContainer as? Search {
 			DispatchQueue.main.async {
 				if let searchCellIndexPath = self.dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {
