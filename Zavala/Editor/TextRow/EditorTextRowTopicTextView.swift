@@ -58,11 +58,8 @@ class EditorTextRowTopicTextView: OutlineTextView {
 
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
-
 		self.delegate = self
-
 		self.font = OutlineFont.topic
-		self.linkTextAttributes = [.foregroundColor: UIColor.label, .underlineStyle: 1]
 	}
 	
 	required init?(coder: NSCoder) {
@@ -147,6 +144,14 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	@objc override func editLink(_ sender: Any?) {
 		let result = findAndSelectLink()
 		editorDelegate?.editLink(self, result.0, range: result.1)
+	}
+	
+	override func rowWasUpdated() {
+		if row?.isComplete ?? false {
+			linkTextAttributes = [.foregroundColor: UIColor.tertiaryLabel, .underlineStyle: 1]
+		} else {
+			linkTextAttributes = [.foregroundColor: UIColor.label, .underlineStyle: 1]
+		}
 	}
 	
 	override func saveText() {

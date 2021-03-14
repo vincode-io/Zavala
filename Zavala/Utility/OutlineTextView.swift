@@ -16,7 +16,11 @@ extension Selector {
 
 class OutlineTextView: UITextView {
 	
-	var row: Row?
+	var row: Row? {
+		didSet {
+			rowWasUpdated()
+		}
+	}
 
 	var editorUndoManager: UndoManager? {
 		fatalError("editorUndoManager has not been implemented")
@@ -102,6 +106,9 @@ class OutlineTextView: UITextView {
 	
 	func saveText() {
 		fatalError("saveText has not been implemented")
+	}
+	
+	func rowWasUpdated() {
 	}
 	
 	func detectData() {
