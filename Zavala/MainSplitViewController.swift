@@ -252,19 +252,19 @@ class MainSplitViewController: UISplitViewController {
 	func showOpenQuickly() {
 		if traitCollection.userInterfaceIdiom == .mac {
 		
-			let openQuicklyViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacOpenQuicklyViewController") as! OpenQuicklyViewController
+			let openQuicklyViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacOpenQuicklyViewController") as! MacOpenQuicklyViewController
 			openQuicklyViewController.preferredContentSize = CGSize(width: 300, height: 60)
 			openQuicklyViewController.delegate = self
 			present(openQuicklyViewController, animated: true)
 		
-//		} else {
-//
-//			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
-//			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 250)
-//			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
-//			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
-//			outlineGetInfoViewController.outline = outline
-//			present(outlineGetInfoNavViewController, animated: true)
+		} else {
+
+			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OpenQuicklyViewControllerNav") as! UINavigationController
+			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 100)
+			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
+			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OpenQuicklyViewController
+			outlineGetInfoViewController.delegate = self
+			present(outlineGetInfoNavViewController, animated: true)
 			
 		}
 	}
@@ -570,7 +570,7 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 
 extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 	
-	func openDocument(_: OpenQuicklyViewController, documentID: EntityID) {
+	func quicklyOpenDocument(documentID: EntityID) {
 		openDocument(documentID)
 	}
 	

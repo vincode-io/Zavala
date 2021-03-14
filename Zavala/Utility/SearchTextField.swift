@@ -26,7 +26,7 @@ open class SearchTextField: UITextField {
     open var keyboardIsShowing = false
 
     /// How long to wait before deciding typing has stopped
-    open var typingStoppedDelay = 0.8
+    open var typingStoppedDelay = 0.5
     
     /// Set your custom visual theme, or just choose between pre-defined SearchTextFieldTheme.lightTheme() and SearchTextFieldTheme.darkTheme() themes
     open var theme = SearchTextFieldTheme.lightTheme() {

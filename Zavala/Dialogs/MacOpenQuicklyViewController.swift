@@ -8,22 +8,15 @@
 import UIKit
 import Templeton
 
-protocol OpenQuicklyViewControllerDelegate: AnyObject {
-	func quicklyOpenDocument(documentID: EntityID)
-}
-
-class OpenQuicklyViewController: UITableViewController {
+class MacOpenQuicklyViewController: MacFormViewController {
 
 	weak var delegate: OpenQuicklyViewControllerDelegate?
-
-	@IBOutlet weak var doneBarButtonItem: UIBarButtonItem!
+	
 	@IBOutlet weak var searchTextField: SearchTextField!
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
-
-		searchTextField.delegate = self
-
+		
 		searchTextField.placeholder = L10n.openQuicklyPlaceholder
 		searchTextField.inlineMode = true
 
@@ -35,34 +28,17 @@ class OpenQuicklyViewController: UITableViewController {
 			self.dismiss(animated: true)
 		}
 		
-		searchTextField.userStoppedTypingHandler = { [weak self] in
-			self?.doneBarButtonItem.isEnabled = self?.searchTextField.isShowingResults ?? false
-		}
-		
 		let searchItems = AccountManager.shared.documents.map { SearchTextFieldItem(title: $0.title ?? "", associatedObject: $0.id) }
 		searchTextField.filterItems(searchItems)
     }
-
+	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		searchTextField.becomeFirstResponder()
 	}
 	
-	@IBAction func cancel(_ sender: Any) {
-		dismiss(animated: true)
-	}
-	
-	@IBAction func submit(_ sender: Any) {
+	override func submit(_ sender: Any) {
 		searchTextField.textFieldDidEndEditingOnExit()
 	}
-	
-}
 
-extension OpenQuicklyViewController: UITextFieldDelegate {
-	
-	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		searchTextField.textFieldDidEndEditingOnExit()
-		return false
-	}
-	
 }

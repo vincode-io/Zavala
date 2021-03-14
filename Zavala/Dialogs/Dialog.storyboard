@@ -289,11 +289,10 @@
             </objects>
             <point key="canvasLocation" x="-1526" y="1383"/>
         </scene>
-        <!--Open Quickly View Controller-->
+        <!--Mac Open Quickly View Controller-->
         <scene sceneID="Sa4-0q-hcq">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mCB-Tu-e9w" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <viewController storyboardIdentifier="MacOpenQuicklyViewController" id="PXw-l2-c0M" customClass="OpenQuicklyViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MacOpenQuicklyViewController" id="PXw-l2-c0M" customClass="MacOpenQuicklyViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3Xd-XC-T5G">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -316,6 +315,7 @@
                         <outlet property="searchTextField" destination="qB3-77-aRG" id="rv5-CD-Cjp"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mCB-Tu-e9w" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1526" y="2048"/>
         </scene>
@@ -421,6 +421,82 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8y2-Ju-LGP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-22" y="1383"/>
+        </scene>
+        <!--Open Quickly View Controller-->
+        <scene sceneID="MRO-UB-mJv">
+            <objects>
+                <tableViewController storyboardIdentifier="OpenQuicklyViewController" id="oI2-2h-Ozq" customClass="OpenQuicklyViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="bNY-3n-B7H">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <sections>
+                            <tableViewSection id="icH-uR-j1Z">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="kOd-HF-k4w">
+                                        <rect key="frame" x="20" y="18" width="374" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kOd-HF-k4w" id="6vv-aW-pdm">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Open Quickly" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SFe-64-fzK" customClass="SearchTextField" customModule="Zavala" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="4" width="374" height="36"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="SFe-64-fzK" firstAttribute="top" secondItem="6vv-aW-pdm" secondAttribute="top" constant="4" id="CHS-Ga-MVg"/>
+                                                <constraint firstAttribute="trailing" secondItem="SFe-64-fzK" secondAttribute="trailing" constant="20" id="FC6-cX-wF5"/>
+                                                <constraint firstAttribute="bottom" secondItem="SFe-64-fzK" secondAttribute="bottom" constant="4" id="TDb-7I-Wfc"/>
+                                                <constraint firstItem="SFe-64-fzK" firstAttribute="leading" secondItem="6vv-aW-pdm" secondAttribute="leading" constant="20" id="Yti-Mc-yQo"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="oI2-2h-Ozq" id="gmL-hv-xD4"/>
+                            <outlet property="delegate" destination="oI2-2h-Ozq" id="eem-Dg-X6W"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="5oW-OS-be4">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="JgM-0X-iZq">
+                            <connections>
+                                <action selector="cancel:" destination="oI2-2h-Ozq" id="3ND-vJ-ENA"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" style="done" systemItem="done" id="iRI-cQ-ZeE">
+                            <connections>
+                                <action selector="submit:" destination="oI2-2h-Ozq" id="gm5-cu-adL"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="doneBarButtonItem" destination="iRI-cQ-ZeE" id="Udd-o3-pXn"/>
+                        <outlet property="searchTextField" destination="SFe-64-fzK" id="aIY-gU-Sox"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hOT-6p-3Nl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="19" y="2048"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="VzB-ui-HTX">
+            <objects>
+                <navigationController storyboardIdentifier="OpenQuicklyViewControllerNav" id="vcH-L2-Nz3" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6h7-lt-uZf">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="oI2-2h-Ozq" kind="relationship" relationship="rootViewController" id="apb-Vo-nVs"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yC9-by-7UO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-770" y="2048"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="hZ3-7j-ldu">
