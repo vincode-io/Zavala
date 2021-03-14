@@ -2,6 +2,17 @@
 
 A dedicated outliner for macOS, iPadOS, and iOS.
 
+## Download
+
+Keep in mind, this is an application in active development.  You should not entrust any important information
+to it.  It is a little buggy and incomplete. I recommend that any important documents you create with it, you back 
+up by exporting them as OPML files.
+
+[Pre-release Download](https://github.com/vincode-io/Zavala/releases/latest/download/Zavala.app.zip) (Requires macOS 11 Big Sur)
+
+You can install the [TestFlight.app](https://developer.apple.com/testflight/) on your iPad or iPhone and get the TestFlight
+version of Zavala for iOS by clicking this [link](https://testflight.apple.com/join/iFbND23m) on your iPhone or iPad.
+
 ## Community
 
 Let's talk outliners! Head over to [Discussions](https://github.com/vincode-io/Zavala/discussions) for outliner discussion and to express what you would like to see in an outliner application. Be sure to read our [Code of Conduct](https://github.com/vincode-io/Zavala/wiki/Code-of-Conduct).
@@ -17,15 +28,6 @@ This is your chance to help shape what Zavala will become but, we aren't looking
 can be implemented due to time constraints. Some features can't be implemented because they conflict with other ones.  We also
 have specific [Design Goals](https://github.com/vincode-io/Zavala/wiki/Design-Goals).  All input is welcome, but the primary
 project contributors have final say in the design.
-
-Keep in mind, this is an application in the very early stages of development.  You should not entrust any important information
-to it.  It is a little buggy and incomplete. I recommend that any important documents you create with it, you back up by exporting
-them as OPML files.
-
-[Pre-release Download](https://github.com/vincode-io/Zavala/releases/latest/download/Zavala.app.zip) (Requires macOS 11 Big Sur)
-
-You can install the [TestFlight.app](https://developer.apple.com/testflight/) on your iPad or iPhone and get the TestFlight
-version of Zavala for iOS by clicking this [link](https://testflight.apple.com/join/iFbND23m) on your iPhone or iPad.
 
 ## Code Contributions
 
