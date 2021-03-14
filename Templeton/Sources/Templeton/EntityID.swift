@@ -54,6 +54,68 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		}
 	}
 	
+	public var userInfo: [AnyHashable: AnyHashable] {
+		switch self {
+		case .account(let accountID):
+			return [
+				"type": "account",
+				"accountID": accountID
+			]
+		case .document(let accountID, let documentID):
+			return [
+				"type": "document",
+				"accountID": accountID,
+				"documentID": documentID
+			]
+		case .row(let accountID, let documentID, let rowID):
+			return [
+				"type": "row",
+				"accountID": accountID,
+				"documentID": documentID,
+				"rowID": rowID
+			]
+		case .search(let searchText):
+			return [
+				"type": "search",
+				"searchText": searchText
+			]
+		case .allDocuments(let accountID):
+			return [
+				"type": "allDocuments",
+				"accountID": accountID
+			]
+		case .recentDocuments(let accountID):
+			return [
+				"type": "recentDocuments",
+				"accountID": accountID
+			]
+		case .tagDocuments(let accountID, let tagID):
+			return [
+				"type": "tagDocuments",
+				"accountID": accountID,
+				"tagID": tagID
+			]
+		}
+	}
+
+	public var url: URL {
+		switch self {
+		case .document(let acct, let documentUUID):
+			var urlComponents = URLComponents()
+			urlComponents.scheme = "zavala"
+			urlComponents.host = "document"
+			
+			var queryItems = [URLQueryItem]()
+			queryItems.append(URLQueryItem(name: "accountID", value: String(acct)))
+			queryItems.append(URLQueryItem(name: "documentUUID", value: String(documentUUID)))
+			urlComponents.queryItems = queryItems
+			
+			return urlComponents.url!
+		default:
+			fatalError("We only support representing documents as URLs.")
+		}
+	}
+	
 	var isAccount: Bool {
 		switch self {
 		case .account(_):
@@ -217,6 +279,16 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return nil
 		}
 	}
+	
+	public init?(url: URL) {
+		guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false),
+			  let accountIDString = urlComponents.queryItems?.first(where: { $0.name == "accountID" })?.value,
+			  let accountID = Int(accountIDString),
+			  let documentUUID = urlComponents.queryItems?.first(where: { $0.name == "documentUUID" })?.value else {
+			return nil
+		}
+		self = .document(accountID, documentUUID)
+	}
 
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
@@ -249,50 +321,5 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			try container.encode(tagID, forKey: .tagID)
 		}
 	}
-	
-	public var userInfo: [AnyHashable: AnyHashable] {
-		switch self {
-		case .account(let accountID):
-			return [
-				"type": "account",
-				"accountID": accountID
-			]
-		case .document(let accountID, let documentID):
-			return [
-				"type": "document",
-				"accountID": accountID,
-				"documentID": documentID
-			]
-		case .row(let accountID, let documentID, let rowID):
-			return [
-				"type": "row",
-				"accountID": accountID,
-				"documentID": documentID,
-				"rowID": rowID
-			]
-		case .search(let searchText):
-			return [
-				"type": "search",
-				"searchText": searchText
-			]
-		case .allDocuments(let accountID):
-			return [
-				"type": "allDocuments",
-				"accountID": accountID
-			]
-		case .recentDocuments(let accountID):
-			return [
-				"type": "recentDocuments",
-				"accountID": accountID
-			]
-		case .tagDocuments(let accountID, let tagID):
-			return [
-				"type": "tagDocuments",
-				"accountID": accountID,
-				"tagID": tagID
-			]
-		}
-	}
-	
 
 }
