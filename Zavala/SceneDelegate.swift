@@ -46,6 +46,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
 			mainSplitViewController.handle(userActivity)
 		}
+		
+		if let url = connectionOptions.urlContexts.first?.url, let documentID = EntityID(url: url) {
+			mainSplitViewController.openDocument(documentID)
+		}
 	}
 
 	func stateRestorationActivity(for scene: UIScene) -> NSUserActivity? {
@@ -54,6 +58,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
 	func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
 		mainSplitViewController.handle(userActivity)
+	}
+	
+	func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
+		if let url = urlContexts.first?.url, let documentID = EntityID(url: url) {
+			mainSplitViewController.openDocument(documentID)
+		}
 	}
 	
 	func windowScene(_ windowScene: UIWindowScene, userDidAcceptCloudKitShareWith shareMetadata: CKShare.Metadata) {
