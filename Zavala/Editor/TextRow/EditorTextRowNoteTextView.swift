@@ -125,6 +125,7 @@ class EditorTextRowNoteTextView: OutlineTextView {
 	
 	override func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
 		super.updateLinkForCurrentSelection(text: text, link: link, range: range)
+		textStorage.replaceFont(with: OutlineFont.note)
 		isTextChanged = true
 		saveText()
 	}
