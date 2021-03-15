@@ -28,6 +28,17 @@ class MacLinkViewController: MacFormViewController {
 		submitButton.role = .primary
 		textTextField.text = text
 		linkTextField.text = link
+
+		textTextField.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in
+			guard let self = self, let documentID = filteredResults[index].associatedObject as? EntityID else {
+				return
+			}
+			self.textTextField.text = filteredResults[index].title
+			self.linkTextField.text = documentID.url.absoluteString
+		}
+		
+		let searchItems = AccountManager.shared.documents.map { SearchTextFieldItem(title: $0.title ?? "", associatedObject: $0.id) }
+		textTextField.filterItems(searchItems)
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {

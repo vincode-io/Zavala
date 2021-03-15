@@ -14,7 +14,7 @@ protocol LinkViewControllerDelegate: AnyObject {
 
 class LinkViewController: UITableViewController {
 
-	@IBOutlet weak var textTextField: UITextField!
+	@IBOutlet weak var textTextField: SearchTextField!
 	@IBOutlet weak var linkTextField: UITextField!
 	
 	weak var delegate: LinkViewControllerDelegate?
@@ -29,7 +29,18 @@ class LinkViewController: UITableViewController {
 		textTextField.delegate = self
 		linkTextField.text = link
 		linkTextField.delegate = self
-    }
+
+		textTextField.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in
+			guard let self = self, let documentID = filteredResults[index].associatedObject as? EntityID else {
+				return
+			}
+			self.textTextField.text = filteredResults[index].title
+			self.linkTextField.text = documentID.url.absoluteString
+		}
+		
+		let searchItems = AccountManager.shared.documents.map { SearchTextFieldItem(title: $0.title ?? "", associatedObject: $0.id) }
+		textTextField.filterItems(searchItems)
+	}
 
 	override func viewDidAppear(_ animated: Bool) {
 		textTextField.becomeFirstResponder()
