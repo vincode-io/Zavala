@@ -11,17 +11,16 @@ import Templeton
 
 class MacLinkViewController: MacFormViewController {
 
+	@IBOutlet weak var textTextField: SearchTextField!
+	@IBOutlet weak var linkTextField: UITextField!
+
+	@IBOutlet weak var submitButton: UIButton!
+
 	weak var delegate: LinkViewControllerDelegate?
 	var cursorCoordinates: CursorCoordinates?
 	var text: String?
 	var link: String?
 	var range: NSRange?
-	
-	@IBOutlet weak var textTextField: SearchTextField!
-	@IBOutlet weak var linkTextField: UITextField!
-
-	@IBOutlet weak var cancelButton: UIButton!
-	@IBOutlet weak var submitButton: UIButton!
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()

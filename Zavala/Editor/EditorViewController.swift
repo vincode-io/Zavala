@@ -1428,8 +1428,9 @@ extension EditorViewController {
 			linkNavViewController.preferredContentSize = CGSize(width: 400, height: 150)
 			linkNavViewController.modalPresentationStyle = .formSheet
 
-			let linkViewController = linkNavViewController.topViewController as! MacLinkViewController
+			let linkViewController = linkNavViewController.topViewController as! LinkViewController
 			linkViewController.cursorCoordinates = CursorCoordinates.bestCoordinates
+			linkViewController.text = text
 			linkViewController.link = link
 			linkViewController.range = range
 			linkViewController.delegate = self
