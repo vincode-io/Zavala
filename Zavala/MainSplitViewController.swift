@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreSpotlight
 import Templeton
 import SafariServices
 
@@ -187,6 +188,11 @@ class MainSplitViewController: UISplitViewController {
 	
 	func handle(_ activity: NSUserActivity) {
 		guard let userInfo = activity.userInfo else { return }
+		
+		if let searchIdentifier = userInfo[CSSearchableItemActivityIdentifier] as? String, let documentID = EntityID(description: searchIdentifier) {
+			openDocument(documentID)
+			return
+		}
 		
 		if let sidebarWidth = userInfo[UserInfoKeys.sidebarWidth] as? CGFloat {
 			preferredPrimaryColumnWidth = sidebarWidth
