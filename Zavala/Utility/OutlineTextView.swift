@@ -136,7 +136,7 @@ class OutlineTextView: UITextView {
 	
 	func findAndSelectLink() -> (String?, String?, NSRange) {
 		var effectiveRange = NSRange()
-		for i in selectedRange.lowerBound..<selectedRange.upperBound {
+		for i in selectedRange.lowerBound...selectedRange.upperBound {
 			if let link = textStorage.attribute(.link, at: i, effectiveRange: &effectiveRange) as? URL {
 				let text = textStorage.attributedSubstring(from: effectiveRange).string
 				return (link.absoluteString, text, effectiveRange)
