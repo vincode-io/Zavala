@@ -160,7 +160,9 @@ class OutlineTextView: UITextView {
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
-		case .toggleBoldface, .toggleItalics, .editLink:
+		case .editLink:
+			return true
+		case .toggleBoldface, .toggleItalics:
 			return isSelecting
 		default:
 			return super.canPerformAction(action, withSender: sender)
