@@ -147,7 +147,11 @@ class OutlineTextView: UITextView {
 	}
 	
 	func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
-		textStorage.replaceCharacters(in: range, with: text)
+		if text.isEmpty {
+			textStorage.replaceCharacters(in: range, with: text)
+		} else {
+			textStorage.replaceCharacters(in: range, with: "\(text) ")
+		}
 		if let link = link, let url = URL(string: link) {
 			let range = NSRange(location: range.location, length: text.count)
 			textStorage.addAttribute(.link, value: url, range: range)
