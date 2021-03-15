@@ -38,6 +38,8 @@ class MacLinkViewController: UIViewController {
 		textTextField.text = text
 		linkTextField.text = link
 
+		textTextField.maxResultsListHeight = 100
+		
 		textTextField.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in
 			guard let self = self, let documentID = filteredResults[index].associatedObject as? EntityID else {
 				return
