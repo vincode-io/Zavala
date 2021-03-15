@@ -14,6 +14,13 @@ protocol LinkViewControllerDelegate: AnyObject {
 
 class LinkViewController: UITableViewController {
 
+	override var keyCommands: [UIKeyCommand]? {
+		[
+			UIKeyCommand(action: #selector(arrowUp(_:)), input: UIKeyCommand.inputUpArrow),
+			UIKeyCommand(action: #selector(arrowDown(_:)), input: UIKeyCommand.inputDownArrow)
+		]
+	}
+
 	@IBOutlet weak var textTextField: SearchTextField!
 	@IBOutlet weak var linkTextField: UITextField!
 	
@@ -44,6 +51,14 @@ class LinkViewController: UITableViewController {
 
 	override func viewDidAppear(_ animated: Bool) {
 		textTextField.becomeFirstResponder()
+	}
+
+	@objc func arrowUp(_ sender: Any) {
+		textTextField.selectAbove()
+	}
+
+	@objc func arrowDown(_ sender: Any) {
+		textTextField.selectBelow()
 	}
 
 	@IBAction func cancel(_ sender: Any) {

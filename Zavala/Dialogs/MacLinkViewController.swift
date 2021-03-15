@@ -9,7 +9,16 @@ import UIKit
 import RSCore
 import Templeton
 
-class MacLinkViewController: MacFormViewController {
+class MacLinkViewController: UIViewController {
+
+	override var keyCommands: [UIKeyCommand]? {
+		[
+			UIKeyCommand(action: #selector(arrowUp(_:)), input: UIKeyCommand.inputUpArrow),
+			UIKeyCommand(action: #selector(arrowDown(_:)), input: UIKeyCommand.inputDownArrow),
+			UIKeyCommand(action: #selector(cancel(_:)), input: UIKeyCommand.inputEscape),
+			UIKeyCommand(action: #selector(submit(_:)), input: "\r"),
+		]
+	}
 
 	@IBOutlet weak var textTextField: SearchTextField!
 	@IBOutlet weak var linkTextField: UITextField!
@@ -45,7 +54,24 @@ class MacLinkViewController: MacFormViewController {
 		textTextField.becomeFirstResponder()
 	}
 	
-	@IBAction override func submit(_ sender: Any) {
+	@objc func arrowUp(_ sender: Any) {
+		textTextField.selectAbove()
+	}
+
+	@objc func arrowDown(_ sender: Any) {
+		textTextField.selectBelow()
+	}
+
+	@IBAction func cancel(_ sender: Any) {
+		dismiss(animated: true)
+	}
+
+	@IBAction func submit(_ sender: Any) {
+		guard !textTextField.isSelecting else {
+			textTextField.activateSelection()
+			return
+		}
+		
 		guard let cursorCoordinates = cursorCoordinates, let range = range else { return }
 		
 		let text = textTextField.text?.trimmingWhitespace ?? ""

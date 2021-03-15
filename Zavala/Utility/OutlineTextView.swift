@@ -152,7 +152,9 @@ class OutlineTextView: UITextView {
 			let range = NSRange(location: range.location, length: text.count)
 			textStorage.addAttribute(.link, value: url, range: range)
 		} else {
-			textStorage.removeAttribute(.link, range: range)
+			if range.length > 0 {
+				textStorage.removeAttribute(.link, range: range)
+			}
 		}
 	}
 	
