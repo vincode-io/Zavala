@@ -21,7 +21,7 @@ protocol EditorTextRowTopicTextViewDelegate: AnyObject {
 	func outdentRow(_: EditorTextRowTopicTextView, row: Row)
 	func splitRow(_: EditorTextRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
 	func createRowNote(_: EditorTextRowTopicTextView, row: Row)
-	func editLink(_: EditorTextRowTopicTextView, _ link: String?, range: NSRange)
+	func editLink(_: EditorTextRowTopicTextView, _ link: String?, text: String?, range: NSRange)
 }
 
 class EditorTextRowTopicTextView: OutlineTextView {
@@ -143,7 +143,7 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	
 	@objc override func editLink(_ sender: Any?) {
 		let result = findAndSelectLink()
-		editorDelegate?.editLink(self, result.0, range: result.1)
+		editorDelegate?.editLink(self, result.0, text: result.1, range: result.2)
 	}
 	
 	override func rowWasUpdated() {
@@ -167,8 +167,8 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		isTextChanged = false
 	}
 	
-	override func updateLinkForCurrentSelection(link: String?, range: NSRange) {
-		super.updateLinkForCurrentSelection(link: link, range: range)
+	override func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
+		super.updateLinkForCurrentSelection(text: text, link: link, range: range)
 		isTextChanged = true
 		saveText()
 	}

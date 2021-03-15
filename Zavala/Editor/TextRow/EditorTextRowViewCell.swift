@@ -24,7 +24,7 @@ protocol EditorTextRowViewCellDelegate: AnyObject {
 	func editorTextRowSplitRow(_: Row, topic: NSAttributedString, cursorPosition: Int)
 	func editorTextRowCreateRowNote(_ row: Row, textRowStrings: TextRowStrings)
 	func editorTextRowDeleteRowNote(_ row: Row, textRowStrings: TextRowStrings)
-	func editorTextRowEditLink(_ link: String?, range: NSRange)
+	func editorTextRowEditLink(_ link: String?, text: String?, range: NSRange)
 }
 
 class EditorTextRowViewCell: UICollectionViewListCell {

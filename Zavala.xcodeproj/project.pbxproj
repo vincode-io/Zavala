@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		51028CD525F3159A00B50B71 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51028CD425F3159A00B50B71 /* UIColor+.swift */; };
+		511B29E525FEE4DC00C04239 /* LinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29E425FEE4DC00C04239 /* LinkViewController.swift */; };
 		511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */; };
 		5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
 		512229682563507E008041AF /* EditorTextRowViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorTextRowViewCell.swift */; };
@@ -91,7 +92,7 @@
 		51C4C45B255ACA1B004E0206 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C45A255ACA1B004E0206 /* EditorViewController.swift */; };
 		51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */; };
 		51C568D5258C085400AA7B93 /* MarkdownAttributedString in Frameworks */ = {isa = PBXBuildFile; productRef = 51C568D4258C085400AA7B93 /* MarkdownAttributedString */; };
-		51C568D9258C1CD200AA7B93 /* LinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568D8258C1CD200AA7B93 /* LinkViewController.swift */; };
+		51C568D9258C1CD200AA7B93 /* MacLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568D8258C1CD200AA7B93 /* MacLinkViewController.swift */; };
 		51CF10A82571BA66005D6D88 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10A72571BA66005D6D88 /* Localizable.strings */; };
 		51CF10AC2571BA9A005D6D88 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */; };
 		51CF10C22571C22C005D6D88 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CF10C12571C22C005D6D88 /* L10n.swift */; };
@@ -189,6 +190,7 @@
 
 /* Begin PBXFileReference section */
 		51028CD425F3159A00B50B71 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		511B29E425FEE4DC00C04239 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
 		511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLayoutManager.swift; sourceTree = "<group>"; };
 		5122294B25609C47008041AF /* UserInfoKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoKeys.swift; sourceTree = "<group>"; };
 		512229672563507E008041AF /* EditorTextRowViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowViewCell.swift; sourceTree = "<group>"; };
@@ -275,7 +277,7 @@
 		51C4C448255AA215004E0206 /* MainSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSplitViewController.swift; sourceTree = "<group>"; };
 		51C4C45A255ACA1B004E0206 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
 		51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineTextDropDelegate.swift; sourceTree = "<group>"; };
-		51C568D8258C1CD200AA7B93 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
+		51C568D8258C1CD200AA7B93 /* MacLinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLinkViewController.swift; sourceTree = "<group>"; };
 		51CF10A72571BA66005D6D88 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
 		51CF10C12571C22C005D6D88 /* L10n.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
@@ -591,7 +593,8 @@
 			isa = PBXGroup;
 			children = (
 				51278E76257F37AC0034F1CB /* Dialog.storyboard */,
-				51C568D8258C1CD200AA7B93 /* LinkViewController.swift */,
+				511B29E425FEE4DC00C04239 /* LinkViewController.swift */,
+				51C568D8258C1CD200AA7B93 /* MacLinkViewController.swift */,
 				5193C8A025FD55CB00E63F94 /* MacOpenQuicklyViewController.swift */,
 				5167607625F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift */,
 				5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */,
@@ -865,9 +868,10 @@
 				51DFDC18259EA8D300C068C6 /* Selector+.swift in Sources */,
 				515F164B255C9F8E00FD98B8 /* MacFormViewController.swift in Sources */,
 				5193C8A625FD757900E63F94 /* OpenQuicklyViewController.swift in Sources */,
+				511B29E525FEE4DC00C04239 /* LinkViewController.swift in Sources */,
 				51F2DC7B2586E101003BD5CE /* EditorTextRowNoteTextView.swift in Sources */,
 				514F221425C4CD00004E02CD /* EditorTagContentView.swift in Sources */,
-				51C568D9258C1CD200AA7B93 /* LinkViewController.swift in Sources */,
+				51C568D9258C1CD200AA7B93 /* MacLinkViewController.swift in Sources */,
 				51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */,
 				51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */,
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,

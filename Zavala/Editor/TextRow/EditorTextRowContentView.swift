@@ -242,8 +242,8 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowCreateRowNote(row, textRowStrings: textRowStrings)
 	}
 	
-	func editLink(_: EditorTextRowTopicTextView, _ link: String?, range: NSRange) {
-		appliedConfiguration.delegate?.editorTextRowEditLink(link, range: range)
+	func editLink(_: EditorTextRowTopicTextView, _ link: String?, text: String?, range: NSRange) {
+		appliedConfiguration.delegate?.editorTextRowEditLink(link, text: text, range: range)
 	}
 	
 }
@@ -283,8 +283,8 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowMoveCursorDown(row: row)
 	}
 	
-	func editLink(_: EditorTextRowNoteTextView, _ link: String?, range: NSRange) {
-		appliedConfiguration.delegate?.editorTextRowEditLink(link, range: range)
+	func editLink(_: EditorTextRowNoteTextView, _ link: String?, text: String?, range: NSRange) {
+		appliedConfiguration.delegate?.editorTextRowEditLink(link, text: text, range: range)
 	}
 	
 }

@@ -1018,8 +1018,8 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		moveCursorDown(row: row)
 	}
 	
-	func editorTextRowEditLink(_ link: String?, range: NSRange) {
-		editLink(link, range: range)
+	func editorTextRowEditLink(_ link: String?, text: String?, range: NSRange) {
+		editLink(link, text: text, range: range)
 	}
 
 }
@@ -1038,15 +1038,15 @@ extension EditorViewController: OutlineCommandDelegate {
 
 extension EditorViewController: LinkViewControllerDelegate {
 	
-	func updateLink(_: LinkViewController, cursorCoordinates: CursorCoordinates, link: String?, range: NSRange) {
+	func updateLink(cursorCoordinates: CursorCoordinates, text: String, link: String?, range: NSRange) {
 		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 		guard let textRowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
 		
 		if cursorCoordinates.isInNotes {
-			textRowCell.noteTextView?.updateLinkForCurrentSelection(link: link, range: range)
+			textRowCell.noteTextView?.updateLinkForCurrentSelection(text: text, link: link, range: range)
 		} else {
-			textRowCell.topicTextView?.updateLinkForCurrentSelection(link: link, range: range)
+			textRowCell.topicTextView?.updateLinkForCurrentSelection(text: text, link: link, range: range)
 		}
 	}
 	
@@ -1410,12 +1410,13 @@ extension EditorViewController {
 		}
 	}
 	
-	private func editLink(_ link: String?, range: NSRange) {
+	private func editLink(_ link: String?, text: String?, range: NSRange) {
 		if traitCollection.userInterfaceIdiom == .mac {
 		
-			let linkViewController = UIStoryboard.dialog.instantiateController(ofType: LinkViewController.self)
-			linkViewController.preferredContentSize = LinkViewController.preferredContentSize
+			let linkViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacLinkViewController") as! MacLinkViewController
+			linkViewController.preferredContentSize = CGSize(width: 400, height: 130)
 			linkViewController.cursorCoordinates = CursorCoordinates.bestCoordinates
+			linkViewController.text = text
 			linkViewController.link = link
 			linkViewController.range = range
 			linkViewController.delegate = self
@@ -1424,10 +1425,10 @@ extension EditorViewController {
 		} else {
 			
 			let linkNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "LinkViewControllerNav") as! UINavigationController
-			linkNavViewController.preferredContentSize = LinkViewController.preferredContentSize
+			linkNavViewController.preferredContentSize = CGSize(width: 400, height: 150)
 			linkNavViewController.modalPresentationStyle = .formSheet
 
-			let linkViewController = linkNavViewController.topViewController as! LinkViewController
+			let linkViewController = linkNavViewController.topViewController as! MacLinkViewController
 			linkViewController.cursorCoordinates = CursorCoordinates.bestCoordinates
 			linkViewController.link = link
 			linkViewController.range = range
