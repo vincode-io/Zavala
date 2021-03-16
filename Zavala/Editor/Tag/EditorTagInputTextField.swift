@@ -40,10 +40,9 @@ class EditorTagInputTextField: SearchTextField {
 	}
 	
 	override var keyCommands: [UIKeyCommand]? {
-		let keys = [
-			UIKeyCommand(action: #selector(createTag(_:)), input: "\t"),
-			UIKeyCommand(action: #selector(clearSelection(_:)), input: UIKeyCommand.inputEscape)
-		]
+		var keys = super.keyCommands ?? [UIKeyCommand]()
+		keys.append(UIKeyCommand(action: #selector(createTag(_:)), input: "\t"))
+		keys.append(UIKeyCommand(action: #selector(clearSelection(_:)), input: UIKeyCommand.inputEscape))
 		return keys
 	}
 	

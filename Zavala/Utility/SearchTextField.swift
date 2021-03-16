@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class SearchTextField: UITextField {
+open class SearchTextField: EnhancedTextField {
     
     ////////////////////////////////////////////////////////////////////////
     // Public interface

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		51028CD525F3159A00B50B71 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51028CD425F3159A00B50B71 /* UIColor+.swift */; };
 		511B29E525FEE4DC00C04239 /* LinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29E425FEE4DC00C04239 /* LinkViewController.swift */; };
+		511B29F226014FBA00C04239 /* EnhancedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F126014FBA00C04239 /* EnhancedTextField.swift */; };
 		511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */; };
 		5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
 		512229682563507E008041AF /* EditorTextRowViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorTextRowViewCell.swift */; };
@@ -191,6 +192,7 @@
 /* Begin PBXFileReference section */
 		51028CD425F3159A00B50B71 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		511B29E425FEE4DC00C04239 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
+		511B29F126014FBA00C04239 /* EnhancedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedTextField.swift; sourceTree = "<group>"; };
 		511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLayoutManager.swift; sourceTree = "<group>"; };
 		5122294B25609C47008041AF /* UserInfoKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoKeys.swift; sourceTree = "<group>"; };
 		512229672563507E008041AF /* EditorTextRowViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowViewCell.swift; sourceTree = "<group>"; };
@@ -351,8 +353,9 @@
 				517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */,
 				518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */,
 				514EF15E25A78A8C00B1FFB6 /* CrashReporter.swift */,
-				515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */,
+				511B29F126014FBA00C04239 /* EnhancedTextField.swift */,
 				5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */,
+				515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */,
 				517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */,
 				5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */,
 				517342EE25EC2BE60012EB20 /* OutlineActivityItemSource.swift */,
@@ -913,6 +916,7 @@
 				5163ADF225C78CFB008F25CA /* SearchTextField.swift in Sources */,
 				5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */,
 				51B2B2C82563A2180090C56B /* EditorTextRowTopicTextView.swift in Sources */,
+				511B29F226014FBA00C04239 /* EnhancedTextField.swift in Sources */,
 				518F2E38257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift in Sources */,
 				5167607725F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift in Sources */,
 				517342EF25EC2BE60012EB20 /* OutlineActivityItemSource.swift in Sources */,
