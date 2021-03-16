@@ -713,7 +713,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if traitCollection.userInterfaceIdiom == .mac {
 		
 			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: MacOutlineGetInfoViewController.self)
-			outlineGetInfoViewController.preferredContentSize = CGSize(width: 400, height: 190)
+			outlineGetInfoViewController.preferredContentSize = CGSize(width: 400, height: 182)
 			outlineGetInfoViewController.outline = outline
 			present(outlineGetInfoViewController, animated: true)
 		
