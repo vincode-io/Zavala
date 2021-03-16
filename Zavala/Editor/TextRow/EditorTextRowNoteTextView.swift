@@ -121,6 +121,7 @@ class EditorTextRowNoteTextView: OutlineTextView {
 		}
 		
 		autosaveWorkItem?.cancel()
+		autosaveWorkItem = nil
 		isTextChanged = false
 	}
 	

@@ -165,6 +165,7 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		}
 		
 		autosaveWorkItem?.cancel()
+		autosaveWorkItem = nil
 		isTextChanged = false
 	}
 	
