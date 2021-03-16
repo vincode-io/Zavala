@@ -85,7 +85,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 
 	var isFormatUnavailable: Bool {
-		return currentTextView == nil || !(currentTextView?.isSelecting ?? false)
+		return currentTextView == nil
 	}
 
 	var isLinkUnavailable: Bool {
@@ -1366,6 +1366,7 @@ extension EditorViewController {
 				// Got to wait or the row cell won't be found
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 					restoreCursor()
+					self.mainSplitViewController?.validateToolbar()
 				}
 			}
 			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: animated)
