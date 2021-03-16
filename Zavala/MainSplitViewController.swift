@@ -732,9 +732,13 @@ extension MainSplitViewController: NSToolbarDelegate {
 		case .boldface:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
+				if self?.editorViewController?.isBoldToggledOn ?? false {
+					item.image = AppAssets.bold.tinted(color: UIColor.systemBlue)
+				} else {
+					item.image = AppAssets.bold
+				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppAssets.bold
 			item.label = L10n.bold
 			item.toolTip = L10n.bold
 			item.isBordered = true
@@ -744,9 +748,13 @@ extension MainSplitViewController: NSToolbarDelegate {
 		case .italic:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
+				if self?.editorViewController?.isItalicToggledOn ?? false {
+					item.image = AppAssets.italic.tinted(color:	UIColor.systemBlue)
+				} else {
+					item.image = AppAssets.italic
+				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppAssets.italic
 			item.label = L10n.italic
 			item.toolTip = L10n.italic
 			item.isBordered = true

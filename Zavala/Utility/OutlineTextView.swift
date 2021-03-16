@@ -34,6 +34,24 @@ class OutlineTextView: UITextView {
 		return stackedUndoManager
 	}
 	
+	var isBoldToggledOn: Bool {
+		if let symbolicTraits = (typingAttributes[.font] as? UIFont)?.fontDescriptor.symbolicTraits {
+			if symbolicTraits.contains(.traitBold) {
+				return true
+			}
+		}
+		return false
+	}
+	
+	var isItalicToggledOn: Bool {
+		if let symbolicTraits = (typingAttributes[.font] as? UIFont)?.fontDescriptor.symbolicTraits {
+			if symbolicTraits.contains(.traitItalic) {
+				return true
+			}
+		}
+		return false
+	}
+	
 	var isSelecting: Bool {
 		return !(selectedTextRange?.isEmpty ?? true)
 	}

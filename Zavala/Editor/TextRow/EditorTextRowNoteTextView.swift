@@ -74,8 +74,9 @@ class EditorTextRowNoteTextView: OutlineTextView {
 
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
+		let result = super.becomeFirstResponder()
 		editorDelegate?.didBecomeActive(self)
-		return super.becomeFirstResponder()
+		return result
 	}
 	
 	override func resignFirstResponder() -> Bool {

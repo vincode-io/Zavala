@@ -150,6 +150,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			return false
 		}
 	}
+	
+	var isBoldToggledOn: Bool {
+		return currentTextView?.isBoldToggledOn ?? false
+	}
+
+	var isItalicToggledOn: Bool {
+		return currentTextView?.isItalicToggledOn ?? false
+	}
 
 	var isSearching = false
 	
@@ -965,6 +973,7 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	
 	func editorTextRowTextFieldDidBecomeActive() {
 		collectionView.deselectAll()
+		mainSplitViewController?.validateToolbar()
 	}
 
 	func editorTextRowToggleDisclosure(row: Row) {
@@ -1366,7 +1375,6 @@ extension EditorViewController {
 				// Got to wait or the row cell won't be found
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 					restoreCursor()
-					self.mainSplitViewController?.validateToolbar()
 				}
 			}
 			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: animated)
