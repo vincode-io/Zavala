@@ -1998,8 +1998,8 @@ extension Outline {
 
 		rows.forEach { $0.visit(visitor: linkVisitor(_:)) }
 		
-		let currentLinkedDocumentIDs = links ?? [EntityID]()
-		let diff = currentLinkedDocumentIDs.difference(from: newLinks)
+		let currentLinks = links ?? [EntityID]()
+		let diff = currentLinks.difference(from: newLinks)
 		for change in diff {
 			switch change {
 			case .insert(_, let entityID, _):
