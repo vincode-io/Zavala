@@ -1396,7 +1396,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	public func delete() {
 		for link in links ?? [EntityID]() {
 			if let outline = AccountManager.shared.findDocument(link)?.outline {
-				outline.deleteBacklink(self.id)
+				outline.deleteBacklink(id)
 			}
 		}
 		
@@ -2004,11 +2004,11 @@ extension Outline {
 			switch change {
 			case .insert(_, let entityID, _):
 				if let outline = AccountManager.shared.findDocument(entityID)?.outline {
-					outline.createBacklink(entityID)
+					outline.createBacklink(id)
 				}
 			case .remove(_, let entityID, _):
 				if let outline = AccountManager.shared.findDocument(entityID)?.outline {
-					outline.deleteBacklink(entityID)
+					outline.deleteBacklink(id)
 				}
 			}
 		}
