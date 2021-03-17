@@ -16,6 +16,7 @@ class EditorBacklinkContentView: UIView, UIContentView {
 	init(configuration: EditorBacklinkContentConfiguration) {
 		super.init(frame: .zero)
 
+		textView.isEditable = false
 		textView.isScrollEnabled = false
 		textView.textContainer.lineFragmentPadding = 0
 		textView.textContainerInset = .zero
@@ -25,9 +26,10 @@ class EditorBacklinkContentView: UIView, UIContentView {
 		textView.linkTextAttributes = [.foregroundColor: UIColor.secondaryLabel, .underlineStyle: 1]
 		addSubview(textView)
 		
+		let adjustment: CGFloat = traitCollection.horizontalSizeClass == .compact ? 10 : 6
 		NSLayoutConstraint.activate([
-			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-			textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustment),
+			textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: 0 - adjustment),
 			textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
 			textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
 		])
