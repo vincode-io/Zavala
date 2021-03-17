@@ -1394,6 +1394,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public func delete() {
+		for link in links ?? [EntityID]() {
+			if let outline = AccountManager.shared.findDocument(link)?.outline {
+				outline.deleteBacklink(self.id)
+			}
+		}
+		
 		if rowsFile == nil {
 			rowsFile = RowsFile(outline: self)
 		}
