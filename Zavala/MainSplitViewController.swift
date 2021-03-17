@@ -739,6 +739,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
+			item.image = AppAssets.bold
 			item.label = L10n.bold
 			item.toolTip = L10n.bold
 			item.isBordered = true
@@ -755,6 +756,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
+			item.image = AppAssets.italic
 			item.label = L10n.italic
 			item.toolTip = L10n.italic
 			item.isBordered = true
