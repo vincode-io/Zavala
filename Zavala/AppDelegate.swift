@@ -357,24 +357,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	#endif
 
 	func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+		#if MAC_TEST
 		let oldDocumentAccountURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 		let oldDcumentAccountsFolder = oldDocumentAccountURL.appendingPathComponent("Accounts").absoluteString
-		let oldDocumentAccountsFolderPath = String(oldDcumentAccountsFolder.suffix(from: oldDcumentAccountsFolder.index(oldDcumentAccountsFolder.startIndex, offsetBy: 7)))
-		
-		if !AppDefaults.shared.deletedLocalForV14 {
-			try? FileManager.default.removeItem(atPath: oldDocumentAccountsFolderPath)
-			AppDefaults.shared.deletedLocalForV14 = true
-		}
-		
+		let documentAccountsFolderPath = String(oldDcumentAccountsFolder.suffix(from: oldDcumentAccountsFolder.index(oldDcumentAccountsFolder.startIndex, offsetBy: 7)))
+		#else
 		let appGroup = Bundle.main.object(forInfoDictionaryKey: "AppGroup") as! String
 		let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
-		let newDocumentAccountsFolderPath = containerURL!.appendingPathComponent("Accounts").path
+		let documentAccountsFolderPath = containerURL!.appendingPathComponent("Accounts").path
+		#endif
 		
-		if FileManager.default.fileExists(atPath: oldDocumentAccountsFolderPath) {
-			try? FileManager.default.moveItem(atPath: oldDocumentAccountsFolderPath, toPath: newDocumentAccountsFolderPath)
-		}
-
-		AccountManager.shared = AccountManager(accountsFolderPath: newDocumentAccountsFolderPath)
+		AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath)
 		return true
 	}
 	
@@ -734,7 +727,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.remove(menu: .openRecent)
 		
 		// Application Menu
-		let appMenu = UIMenu(title: "", options: .displayInline, children: [showPreferences, checkForUpdates])
+		var appMenuCommands = [UICommand]()
+		appMenuCommands.append(showPreferences)
+		#if MAC_TEST
+		appMenuCommands.append(checkForUpdates)
+		#endif
+		let appMenu = UIMenu(title: "", options: .displayInline, children: appMenuCommands)
 		builder.insertSibling(appMenu, afterMenu: .about)
 		
 		// File Menu

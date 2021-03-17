@@ -20,7 +20,6 @@ final class AppDefaults {
 	
 	struct Key {
 		static let lastSelectedAccountID = "lastSelectedAccountID"
-		static let deletedLocalForV14 = "deletedLocalForV14"
 		static let enableCloudKit = "enableCloudKit"
 		static let enableLocalAccount = "enableLocalAccount"
 		static let ownerName = "ownerName"
@@ -44,15 +43,6 @@ final class AppDefaults {
 		}
 	}
 	
-	var deletedLocalForV14: Bool {
-		get {
-			return Self.bool(for: Key.deletedLocalForV14)
-		}
-		set {
-			Self.setBool(for: Key.deletedLocalForV14, newValue)
-		}
-	}
-
 	var enableCloudKit: Bool {
 		get {
 			return Self.bool(for: Key.enableCloudKit)

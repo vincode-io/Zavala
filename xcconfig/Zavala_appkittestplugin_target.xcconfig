@@ -1,0 +1,3 @@
+#include "./Zavala_appkitplugin_target.xcconfig"
+
+OTHER_SWIFT_FLAGS = -DMAC_TEST $(inherited)

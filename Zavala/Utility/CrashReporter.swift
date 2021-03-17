@@ -5,8 +5,6 @@
 //  Created by Maurice Parker on 1/7/21.
 //
 
-#if targetEnvironment(macCatalyst)
-
 import UIKit
 import CrashReporter
 
@@ -60,4 +58,3 @@ extension CrashReporter {
 	}
 	
 }
-#endif

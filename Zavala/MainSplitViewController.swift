@@ -149,7 +149,7 @@ class MainSplitViewController: UISplitViewController {
 	
 	private var lastMainControllerToAppear = MainControllerIdentifier.none
 	
-	#if targetEnvironment(macCatalyst)
+	#if MAC_TEST
 	private var crashReporter = CrashReporter()
 	#endif
 	
@@ -179,7 +179,7 @@ class MainSplitViewController: UISplitViewController {
 		timelineViewController?.delegate = self
 		sidebarViewController?.startUp()
 
-		#if targetEnvironment(macCatalyst)
+		#if MAC_TEST
 		DispatchQueue.main.async {
 			self.crashReporter.check(presentingController: self)
 		}
