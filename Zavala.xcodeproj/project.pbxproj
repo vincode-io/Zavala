@@ -44,8 +44,6 @@
 		5167604725F959BA00AC0EBD /* IndexRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167604625F959BA00AC0EBD /* IndexRequestHandler.swift */; };
 		5167604B25F959BA00AC0EBD /* SpotlightIndexExtension.appex in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 5167604425F959BA00AC0EBD /* SpotlightIndexExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5167605B25F95C5800AC0EBD /* Templeton in Frameworks */ = {isa = PBXBuildFile; productRef = 5167605A25F95C5800AC0EBD /* Templeton */; };
-		5167605D25F95C6800AC0EBD /* RSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5167605C25F95C6800AC0EBD /* RSCore */; };
-		5167605E25F95C6800AC0EBD /* RSCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 5167605C25F95C6800AC0EBD /* RSCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		5167606425F95E4600AC0EBD /* DocumentIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167606325F95E4600AC0EBD /* DocumentIndexer.swift */; };
 		5167606525F95E4600AC0EBD /* DocumentIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167606325F95E4600AC0EBD /* DocumentIndexer.swift */; };
 		5167606D25F96B1F00AC0EBD /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF69B25E0862E0044DBAB /* AppDefaults.swift */; };
@@ -150,7 +148,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5167605E25F95C6800AC0EBD /* RSCore in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -327,7 +324,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5167605D25F95C6800AC0EBD /* RSCore in Frameworks */,
 				5167605B25F95C5800AC0EBD /* Templeton in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -658,7 +654,6 @@
 			name = SpotlightIndexExtension;
 			packageProductDependencies = (
 				5167605A25F95C5800AC0EBD /* Templeton */,
-				5167605C25F95C6800AC0EBD /* RSCore */,
 			);
 			productName = SpotlightIndexExtension;
 			productReference = 5167604425F959BA00AC0EBD /* SpotlightIndexExtension.appex */;
@@ -1152,11 +1147,6 @@
 		5167605A25F95C5800AC0EBD /* Templeton */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Templeton;
-		};
-		5167605C25F95C6800AC0EBD /* RSCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */;
-			productName = RSCore;
 		};
 		51B5861B256B245300ACF99B /* SWXMLHash */ = {
 			isa = XCSwiftPackageProductDependency;
