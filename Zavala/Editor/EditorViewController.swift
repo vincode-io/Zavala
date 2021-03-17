@@ -2056,13 +2056,17 @@ extension EditorViewController {
 			return nil
 		}
 		
-		let refString = backlinks.count == 1 ? L10n.reference : L10n.references
-		let result = NSMutableAttributedString(string: "\(refString)")
-		result.append(generateBacklink(id: backlinks[0]))
+		let references = Set(backlinks).map({ generateBacklink(id: $0) }).sorted() { lhs, rhs in
+			return lhs.string.caseInsensitiveCompare(rhs.string) == .orderedAscending
+		}
 		
-		for i in 1..<backlinks.count {
+		let refString = references.count == 1 ? L10n.reference : L10n.references
+		let result = NSMutableAttributedString(string: "\(refString)")
+		result.append(references[0])
+		
+		for i in 1..<references.count {
 			result.append(NSAttributedString(string: ", "))
-			result.append(generateBacklink(id: backlinks[i]))
+			result.append(references[i])
 		}
 		
 		var attrs = [NSAttributedString.Key : Any]()
