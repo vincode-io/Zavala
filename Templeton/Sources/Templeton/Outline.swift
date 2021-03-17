@@ -1411,11 +1411,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	public func suspend(outlineMayHaveChanged: Bool = false) {
 		rowsFile?.save()
 		
-		guard beingViewedCount < 1 else { return }
-		
 		if outlineMayHaveChanged {
 			processLinks()
 		}
+		
+		guard beingViewedCount < 1 else { return }
 		
 		rowsFile = nil
 		shadowTable = nil
