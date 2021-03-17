@@ -333,7 +333,7 @@
 		511B29FC2601901C00C04239 /* EditorBacklinkViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBacklinkViewCell.swift; sourceTree = "<group>"; };
 		511B29FF2601914400C04239 /* NSAttributedString+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+.swift"; sourceTree = "<group>"; };
 		511B2A0426019A2700C04239 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
-		511B2A8B2602410C00C04239 /* Zavala Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Zavala Test.app"; path = Zavala.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		511B2A8B2602410C00C04239 /* Zavala.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zavala.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		511B2A912602427000C04239 /* Zavala-test.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Zavala-test.entitlements"; sourceTree = "<group>"; };
 		511B2A922602431C00C04239 /* Zavala_iOStest_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_iOStest_target.xcconfig; sourceTree = "<group>"; };
 		511B2AA5260245AD00C04239 /* AppKitPlugin Test.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "AppKitPlugin Test.bundle"; path = AppKitPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -639,7 +639,7 @@
 				5181A9342554D92000C153E8 /* Zavala.app */,
 				51E060AF25A4547400194066 /* AppKitPlugin.bundle */,
 				5167604425F959BA00AC0EBD /* SpotlightIndexExtension.appex */,
-				511B2A8B2602410C00C04239 /* Zavala Test.app */,
+				511B2A8B2602410C00C04239 /* Zavala.app */,
 				511B2AA5260245AD00C04239 /* AppKitPlugin Test.bundle */,
 			);
 			name = Products;
@@ -827,7 +827,7 @@
 				511B2A152602410C00C04239 /* CrashReporter */,
 			);
 			productName = Manhattan;
-			productReference = 511B2A8B2602410C00C04239 /* Zavala Test.app */;
+			productReference = 511B2A8B2602410C00C04239 /* Zavala.app */;
 			productType = "com.apple.product-type.application";
 		};
 		511B2A94260245AD00C04239 /* AppKitPlugin Test */ = {
