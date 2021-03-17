@@ -334,11 +334,9 @@
 		511B29FF2601914400C04239 /* NSAttributedString+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+.swift"; sourceTree = "<group>"; };
 		511B2A0426019A2700C04239 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		511B2A8B2602410C00C04239 /* Zavala Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Zavala Test.app"; path = Zavala.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		511B2A8C2602410C00C04239 /* Zavala copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Zavala copy-Info.plist"; path = "/Users/maurice/Developer/Zavala/Zavala copy-Info.plist"; sourceTree = "<absolute>"; };
 		511B2A912602427000C04239 /* Zavala-test.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Zavala-test.entitlements"; sourceTree = "<group>"; };
 		511B2A922602431C00C04239 /* Zavala_iOStest_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_iOStest_target.xcconfig; sourceTree = "<group>"; };
 		511B2AA5260245AD00C04239 /* AppKitPlugin Test.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "AppKitPlugin Test.bundle"; path = AppKitPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		511B2AA6260245AD00C04239 /* AppKitPlugin copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "AppKitPlugin copy-Info.plist"; path = "/Users/maurice/Developer/Zavala/AppKitPlugin copy-Info.plist"; sourceTree = "<absolute>"; };
 		511B2AB02602460200C04239 /* Zavala_appkittestplugin_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_appkittestplugin_target.xcconfig; sourceTree = "<group>"; };
 		511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLayoutManager.swift; sourceTree = "<group>"; };
 		5122294B25609C47008041AF /* UserInfoKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoKeys.swift; sourceTree = "<group>"; };
@@ -632,8 +630,6 @@
 				5181A9352554D92000C153E8 /* Products */,
 				51C4C3AB2555E8EA004E0206 /* xcconfig */,
 				51C4C3E025560E09004E0206 /* Templeton */,
-				511B2A8C2602410C00C04239 /* Zavala copy-Info.plist */,
-				511B2AA6260245AD00C04239 /* AppKitPlugin copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -813,7 +809,6 @@
 				511B2A6D2602410C00C04239 /* Frameworks */,
 				511B2A742602410C00C04239 /* Resources */,
 				511B2A7C2602410C00C04239 /* Embed XPC Services */,
-				511B2A812602410C00C04239 /* Run VerifyNoBuildSettings */,
 				511B2A822602410C00C04239 /* Embed Frameworks */,
 				511B2A842602410C00C04239 /* Embed PlugIns */,
 				511B2A872602410C00C04239 /* Sign Sparkle XPC Services */,
@@ -1048,24 +1043,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if ! command -v \"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" &> /dev/null\nthen\n    echo \"swiftgen could not be found\"\n    exit\nfi\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Zavala/Resources/Localizable.strings\" \"$PROJECT_DIR/Zavala/Resources/Localizable.stringsdict\" --output \"$PROJECT_DIR/Zavala/L10n.swift\";\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/AppKitPlugin/Localizable.strings\" --output \"$PROJECT_DIR/AppKitPlugin/L10n.swift\";\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Templeton/Sources/Templeton/Localizable.strings\" --output \"$PROJECT_DIR/Templeton/Sources/Templeton/L10n.swift\";\n";
-		};
-		511B2A812602410C00C04239 /* Run VerifyNoBuildSettings */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run VerifyNoBuildSettings";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "xcrun -sdk macosx swiftc -target x86_64-macosx10.11  tools/VerifyNoBuildSettings.swift -o $CONFIGURATION_TEMP_DIR/VerifyNoBS\n$CONFIGURATION_TEMP_DIR/VerifyNoBS ${PROJECT_NAME}.xcodeproj/project.pbxproj\n\n\nif [ $? -ne 0 ]\nthen\n   echo \"error: Build Setting were found in the project.pbxproj file.  Most likely you didn't intend to change this file and should revert it.\"\n   exit 1\nfi\n";
 		};
 		511B2A872602410C00C04239 /* Sign Sparkle XPC Services */ = {
 			isa = PBXShellScriptBuildPhase;
