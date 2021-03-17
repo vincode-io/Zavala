@@ -15,6 +15,7 @@ protocol MainCoordinator {
 	func exportMarkdown()
 	func exportOPML()
 	func openURL(_: String)
+	func showSettings()
 }
 
 extension MainCoordinator {

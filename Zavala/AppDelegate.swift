@@ -25,13 +25,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(syncCommand)
 		}
 
-		if !(mainSplitViewController?.isOutlineFunctionsUnavailable ?? true) {
-			if mainSplitViewController?.isOutlineFiltered ?? false {
+		if !(mainCoordinator?.isOutlineFunctionsUnavailable ?? true) {
+			if mainCoordinator?.isOutlineFiltered ?? false {
 				menuKeyCommands.append(showCompletedCommand)
 			} else {
 				menuKeyCommands.append(hideCompletedCommand)
 			}
-			if mainSplitViewController?.isOutlineNotesHidden ?? false {
+			if mainCoordinator?.isOutlineNotesHidden ?? false {
 				menuKeyCommands.append(showNotesCommand)
 			} else {
 				menuKeyCommands.append(hideNotesCommand)
@@ -47,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		menuKeyCommands.append(newOutlineCommand)
 		menuKeyCommands.append(importOPMLCommand)
 		
-		if !(mainSplitViewController?.isExportOutlineUnavailable ?? true) {
+		if !(mainCoordinator?.isExportOutlineUnavailable ?? true) {
 			menuKeyCommands.append(exportMarkdownCommand)
 			menuKeyCommands.append(exportOPMLCommand)
 		}
@@ -55,63 +55,63 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		menuKeyCommands.append(newWindowCommand)
 		menuKeyCommands.append(toggleSidebarCommand)
 		
-		if !(mainSplitViewController?.isInsertRowUnavailable ?? true) {
+		if !(mainCoordinator?.isInsertRowUnavailable ?? true) {
 			menuKeyCommands.append(insertRowCommand)
 		}
 		
-		if !(mainSplitViewController?.isCreateRowUnavailable ?? true) {
+		if !(mainCoordinator?.isCreateRowUnavailable ?? true) {
 			menuKeyCommands.append(createRowCommand)
 		}
 		
-		if !(mainSplitViewController?.isIndentRowsUnavailable ?? true) {
+		if !(mainCoordinator?.isIndentRowsUnavailable ?? true) {
 			menuKeyCommands.append(indentRowsCommand)
 		}
 		
-		if !(mainSplitViewController?.isOutdentRowsUnavailable ?? true) {
+		if !(mainCoordinator?.isOutdentRowsUnavailable ?? true) {
 			menuKeyCommands.append(outdentRowsCommand)
 		}
 		
-		if !(mainSplitViewController?.isToggleRowCompleteUnavailable ?? true) {
-			if mainSplitViewController?.isCompleteRowsAvailable ?? false {
+		if !(mainCoordinator?.isToggleRowCompleteUnavailable ?? true) {
+			if mainCoordinator?.isCompleteRowsAvailable ?? false {
 				menuKeyCommands.append(completeRowsCommand)
 			} else {
 				menuKeyCommands.append(uncompleteRowsCommand)
 			}
 		}
 		
-		if !(mainSplitViewController?.isCreateRowNotesUnavailable ?? true) {
+		if !(mainCoordinator?.isCreateRowNotesUnavailable ?? true) {
 			menuKeyCommands.append(createRowNotesCommand)
 		}
 
-		if !(mainSplitViewController?.isDeleteRowNotesUnavailable ?? true) {
+		if !(mainCoordinator?.isDeleteRowNotesUnavailable ?? true) {
 			menuKeyCommands.append(deleteRowNotesCommand)
 		}
 
-		if !(mainSplitViewController?.isExpandAllInOutlineUnavailable ?? true) {
+		if !(mainCoordinator?.isExpandAllInOutlineUnavailable ?? true) {
 			menuKeyCommands.append(expandAllInOutlineCommand)
 		}
 		
-		if !(mainSplitViewController?.isCollapseAllInOutlineUnavailable ?? true) {
+		if !(mainCoordinator?.isCollapseAllInOutlineUnavailable ?? true) {
 			menuKeyCommands.append(collapseAllInOutlineCommand)
 		}
 
-		if !(mainSplitViewController?.isExpandAllUnavailable ?? true) {
+		if !(mainCoordinator?.isExpandAllUnavailable ?? true) {
 			menuKeyCommands.append(expandAllCommand)
 		}
 		
-		if !(mainSplitViewController?.isCollapseAllUnavailable ?? true) {
+		if !(mainCoordinator?.isCollapseAllUnavailable ?? true) {
 			menuKeyCommands.append(collapseAllCommand)
 		}
 		
-		if !(mainSplitViewController?.isExpandUnavailable ?? true) {
+		if !(mainCoordinator?.isExpandUnavailable ?? true) {
 			menuKeyCommands.append(expandCommand)
 		}
 		
-		if !(mainSplitViewController?.isCollapseUnavailable ?? true) {
+		if !(mainCoordinator?.isCollapseUnavailable ?? true) {
 			menuKeyCommands.append(collapseCommand)
 		}
 		
-		if !(mainSplitViewController?.isDeleteCompletedRowsUnavailable ?? true) {
+		if !(mainCoordinator?.isDeleteCompletedRowsUnavailable ?? true) {
 			menuKeyCommands.append(deleteCompletedRowsCommand)
 		}
 
@@ -420,7 +420,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		#if targetEnvironment(macCatalyst)
 		appKitPlugin?.showPreferences()
 		#else
-		mainSplitViewController?.showSettings()
+		mainCoordinator?.showSettings()
 		#endif
 	}
 
