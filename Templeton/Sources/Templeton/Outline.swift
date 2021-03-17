@@ -1999,7 +1999,7 @@ extension Outline {
 		rows.forEach { $0.visit(visitor: linkVisitor(_:)) }
 		
 		let currentDocumentLinks = documentLinks ?? [EntityID]()
-		let diff = currentDocumentLinks.difference(from: newDocumentLinks)
+		let diff = newDocumentLinks.difference(from: currentDocumentLinks)
 		for change in diff {
 			switch change {
 			case .insert(_, let entityID, _):
@@ -2018,7 +2018,7 @@ extension Outline {
 	
 	private func extractLinkToIDs(_ attrString: NSAttributedString) -> [EntityID] {
 		var ids = [EntityID]()
-		attrString.enumerateAttribute(.backgroundColor, in:  NSRange(0..<attrString.length)) { value, range, stop in
+		attrString.enumerateAttribute(.link, in:  NSRange(0..<attrString.length)) { value, range, stop in
 			if let url = value as? URL, let id = EntityID(url: url) {
 				ids.append(id)
 			}

@@ -2065,8 +2065,10 @@ extension EditorViewController {
 			result.append(generateBacklink(id: backlinks[i]))
 		}
 		
-		let italicFont = OutlineFont.topic.with(traits: .traitItalic)
-		result.replaceFont(with: italicFont)
+		var attrs = [NSAttributedString.Key : Any]()
+		attrs[.foregroundColor] = UIColor.secondaryLabel
+		attrs[.font] = OutlineFont.topic.with(traits: .traitItalic)
+		result.addAttributes(attrs, range: NSRange(0..<result.length))
 		return result
 	}
 	
