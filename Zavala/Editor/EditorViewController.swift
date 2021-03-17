@@ -195,7 +195,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var tagInputRegistration: UICollectionView.CellRegistration<EditorTagInputViewCell, EntityID>?
 	private var tagAddRegistration: UICollectionView.CellRegistration<EditorTagAddViewCell, EntityID>?
 	private var rowRegistration: UICollectionView.CellRegistration<EditorTextRowViewCell, Row>?
-	
+	private var backlinkRegistration: UICollectionView.CellRegistration<EditorBacklinkViewCell, Outline>?
+
 	private var firstVisibleShadowTableIndex: Int? {
 		let visibleRect = collectionView.layoutMarginsGuide.layoutFrame
 		let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.minY)
@@ -213,7 +214,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var skipHidingKeyboardFlag = false
 	private var currentKeyboardHeight: CGFloat = 0
 	
-	private var headerSections = IndexSet([Outline.Section.title.rawValue, Outline.Section.tags.rawValue])
+	private var headerFooterSections = IndexSet([Outline.Section.title.rawValue, Outline.Section.tags.rawValue, Outline.Section.backlinks.rawValue])
 	
 	private static var defaultContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 40, right: 0)
 	
@@ -269,6 +270,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			cell.isNotesHidden = self?.outline?.isNotesHidden ?? false
 			cell.isSearching = self?.isSearching ?? false
 			cell.delegate = self
+		}
+		
+		backlinkRegistration = UICollectionView.CellRegistration<EditorBacklinkViewCell, Outline> { [weak self] (cell, indexPath, outline) in
+			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
 		
 		updateUI(editMode: false)
@@ -689,7 +694,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		// I don't understand why, but on iOS deleting the sections will cause random crashes.
 		// I should check periodically to see if this bug is fixed.
 		if traitCollection.userInterfaceIdiom == .mac {
-			collectionView.deleteSections(headerSections)
+			collectionView.deleteSections(headerFooterSections)
 		} else {
 			collectionView.reloadData()
 		}
@@ -763,11 +768,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 	
 	func numberOfSections(in collectionView: UICollectionView) -> Int {
-		return isSearching ? 1 : 3
+		return isSearching ? 1 : 4
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		let adjustedSection = isSearching ? Outline.Section.rows.rawValue : section
+		let adjustedSection = isSearching ? section + 2 : section
 		
 		switch adjustedSection {
 		case Outline.Section.title.rawValue:
@@ -782,13 +787,15 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			} else {
 				return 0
 			}
+		case Outline.Section.backlinks.rawValue:
+			return outline == nil ? 0 : 1
 		default:
 			return outline?.shadowTable?.count ?? 0
 		}
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		let adjustedSection = isSearching ? Outline.Section.rows.rawValue : indexPath.section
+		let adjustedSection = isSearching ? indexPath.section + 2 : indexPath.section
 
 		switch adjustedSection {
 		case Outline.Section.title.rawValue:
@@ -802,6 +809,8 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			} else {
 				return collectionView.dequeueConfiguredReusableCell(using: tagAddRegistration!, for: indexPath, item: outline!.id)
 			}
+		case Outline.Section.backlinks.rawValue:
+			return collectionView.dequeueConfiguredReusableCell(using: backlinkRegistration!, for: indexPath, item: outline)
 		default:
 			let row = outline?.shadowTable?[indexPath.row] ?? Row.blank
 			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration!, for: indexPath, item: row)
@@ -809,7 +818,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-		let adjustedSection = isSearching ? Outline.Section.rows.rawValue : indexPath.section
+		let adjustedSection = isSearching ? indexPath.section + 2: indexPath.section
 		guard adjustedSection == Outline.Section.rows.rawValue else { return nil }
 		
 		// Force save the text if the context menu has been requested so that we don't lose our
@@ -847,7 +856,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-		let adjustedSection = isSearching ? Outline.Section.rows.rawValue : indexPath.section
+		let adjustedSection = isSearching ? indexPath.section + 2 : indexPath.section
 		return adjustedSection == Outline.Section.rows.rawValue
 	}
 	
@@ -2042,6 +2051,34 @@ extension EditorViewController {
 		}
 	}
 	
+	private func generateBacklinkVerbaige(outline: Outline) -> NSAttributedString? {
+		guard let backlinks = outline.documentBacklinks, !backlinks.isEmpty else {
+			return nil
+		}
+		
+		let refString = backlinks.count == 1 ? L10n.reference : L10n.references
+		let result = NSMutableAttributedString(string: "\(refString)")
+		result.append(generateBacklink(id: backlinks[0]))
+		
+		for i in 1..<backlinks.count {
+			result.append(NSAttributedString(string: ", "))
+			result.append(generateBacklink(id: backlinks[i]))
+		}
+		
+		let italicFont = OutlineFont.topic.with(traits: .traitItalic)
+		result.replaceFont(with: italicFont)
+		return result
+	}
+	
+	private func generateBacklink(id: EntityID) -> NSAttributedString {
+		if let title = AccountManager.shared.findDocument(id)?.title, !title.isEmpty {
+			let result = NSMutableAttributedString(string: title)
+			result.addAttribute(.link, value: id.url, range: NSRange(0..<result.length))
+			return result
+		}
+		return NSAttributedString()
+	}
+	
 	private func search(for searchText: String) {
 		outline?.search(for: searchText)
 		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
@@ -2091,7 +2128,7 @@ extension EditorViewController {
 		let currentSearchResultRow = outline?.currentSearchResultRow
 		
 		isSearching = false
-		collectionView.insertSections(headerSections)
+		collectionView.insertSections(headerFooterSections)
 		outline?.endSearching()
 
 		searchBar.searchField.text = ""

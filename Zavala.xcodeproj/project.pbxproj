@@ -10,6 +10,11 @@
 		51028CD525F3159A00B50B71 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51028CD425F3159A00B50B71 /* UIColor+.swift */; };
 		511B29E525FEE4DC00C04239 /* LinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29E425FEE4DC00C04239 /* LinkViewController.swift */; };
 		511B29F226014FBA00C04239 /* EnhancedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F126014FBA00C04239 /* EnhancedTextField.swift */; };
+		511B29F726018FBB00C04239 /* EditorBacklinkContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F626018FBB00C04239 /* EditorBacklinkContentConfiguration.swift */; };
+		511B29FA26018FD100C04239 /* EditorBacklinkContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F926018FD100C04239 /* EditorBacklinkContentView.swift */; };
+		511B29FD2601901C00C04239 /* EditorBacklinkViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29FC2601901C00C04239 /* EditorBacklinkViewCell.swift */; };
+		511B2A002601914400C04239 /* NSAttributedString+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29FF2601914400C04239 /* NSAttributedString+.swift */; };
+		511B2A0526019A2700C04239 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B2A0426019A2700C04239 /* UIFont+.swift */; };
 		511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */; };
 		5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
 		512229682563507E008041AF /* EditorTextRowViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorTextRowViewCell.swift */; };
@@ -193,6 +198,11 @@
 		51028CD425F3159A00B50B71 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		511B29E425FEE4DC00C04239 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
 		511B29F126014FBA00C04239 /* EnhancedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedTextField.swift; sourceTree = "<group>"; };
+		511B29F626018FBB00C04239 /* EditorBacklinkContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBacklinkContentConfiguration.swift; sourceTree = "<group>"; };
+		511B29F926018FD100C04239 /* EditorBacklinkContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBacklinkContentView.swift; sourceTree = "<group>"; };
+		511B29FC2601901C00C04239 /* EditorBacklinkViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBacklinkViewCell.swift; sourceTree = "<group>"; };
+		511B29FF2601914400C04239 /* NSAttributedString+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+.swift"; sourceTree = "<group>"; };
+		511B2A0426019A2700C04239 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLayoutManager.swift; sourceTree = "<group>"; };
 		5122294B25609C47008041AF /* UserInfoKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoKeys.swift; sourceTree = "<group>"; };
 		512229672563507E008041AF /* EditorTextRowViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowViewCell.swift; sourceTree = "<group>"; };
@@ -346,6 +356,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		511B29F526018F4A00C04239 /* Backlink */ = {
+			isa = PBXGroup;
+			children = (
+				511B29F626018FBB00C04239 /* EditorBacklinkContentConfiguration.swift */,
+				511B29F926018FD100C04239 /* EditorBacklinkContentView.swift */,
+				511B29FC2601901C00C04239 /* EditorBacklinkViewCell.swift */,
+			);
+			path = Backlink;
+			sourceTree = "<group>";
+		};
 		514BB9D5255B595300C8DBDF /* Utility */ = {
 			isa = PBXGroup;
 			children = (
@@ -357,6 +377,7 @@
 				5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */,
 				515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */,
 				517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */,
+				511B29FF2601914400C04239 /* NSAttributedString+.swift */,
 				5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */,
 				517342EE25EC2BE60012EB20 /* OutlineActivityItemSource.swift */,
 				51AE547D258FF28A006DA301 /* OutlineFont.swift */,
@@ -371,6 +392,7 @@
 				517342F125EC2C690012EB20 /* UIActivityViewController+.swift */,
 				5169928925AE4F5C00760C9D /* UICollectionView+.swift */,
 				51028CD425F3159A00B50B71 /* UIColor+.swift */,
+				511B2A0426019A2700C04239 /* UIFont+.swift */,
 				514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */,
 				51B2B2D52563AB9F0090C56B /* UIView+.swift */,
 				51692B0B25681AD3006B755F /* UIViewController+.swift */,
@@ -585,6 +607,7 @@
 				51D28D31257731DC0039DDFC /* EditorViewController+Drop.swift */,
 				51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */,
 				512D375125F06733000FA597 /* EditorSearchBar.swift */,
+				511B29F526018F4A00C04239 /* Backlink */,
 				514F220B25C4CC42004E02CD /* Tag */,
 				51C03097257E02FF00609262 /* TextRow */,
 				51C030A0257E06EC00609262 /* Title */,
@@ -893,9 +916,11 @@
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
 				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
+				511B29FD2601901C00C04239 /* EditorBacklinkViewCell.swift in Sources */,
 				519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */,
 				51B2B2CE2563AAF60090C56B /* EditorTextRowContentConfiguration.swift in Sources */,
 				51C030BE257E1B9400609262 /* OutlineTextView.swift in Sources */,
+				511B2A0526019A2700C04239 /* UIFont+.swift in Sources */,
 				514F221B25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift in Sources */,
 				51C4C442255A0DE1004E0206 /* TimelineViewController.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
@@ -905,6 +930,7 @@
 				517342F225EC2C690012EB20 /* UIActivityViewController+.swift in Sources */,
 				51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */,
 				512229682563507E008041AF /* EditorTextRowViewCell.swift in Sources */,
+				511B29F726018FBB00C04239 /* EditorBacklinkContentConfiguration.swift in Sources */,
 				51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */,
 				51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */,
 				5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */,
@@ -915,7 +941,9 @@
 				514F221E25C4D0A8004E02CD /* EditorTagInputContentView.swift in Sources */,
 				5163ADF225C78CFB008F25CA /* SearchTextField.swift in Sources */,
 				5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */,
+				511B2A002601914400C04239 /* NSAttributedString+.swift in Sources */,
 				51B2B2C82563A2180090C56B /* EditorTextRowTopicTextView.swift in Sources */,
+				511B29FA26018FD100C04239 /* EditorBacklinkContentView.swift in Sources */,
 				511B29F226014FBA00C04239 /* EnhancedTextField.swift in Sources */,
 				518F2E38257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift in Sources */,
 				5167607725F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift in Sources */,

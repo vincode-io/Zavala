@@ -71,17 +71,8 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 			lhs.isChevronShowing == rhs.isChevronShowing &&
 			lhs.isComplete == rhs.isComplete &&
 			lhs.isAncestorComplete == rhs.isAncestorComplete &&
-			isAttributedStringsEqual(lhs: lhs.topic, rhs: rhs.topic) &&
-			isAttributedStringsEqual(lhs: lhs.note, rhs: rhs.note)
+			NSAttributedString.isOptionalStringsEqual(lhs: lhs.topic, rhs: rhs.topic) &&
+			NSAttributedString.isOptionalStringsEqual(lhs: lhs.note, rhs: rhs.note)
 	}
 	
-	static func isAttributedStringsEqual(lhs: NSAttributedString?, rhs: NSAttributedString?) -> Bool {
-		if lhs == nil && rhs == nil {
-			return true
-		}
-		if lhs != nil || rhs != nil {
-			return false
-		}
-		return lhs!.isEqual(to: rhs!)
-	}
 }

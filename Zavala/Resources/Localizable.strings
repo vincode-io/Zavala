@@ -120,3 +120,7 @@
 
 /* Open Quickly */
 "Open_Quickly_Placeholder" = "Open Quickly";
+
+/* Outline Editor */
+"Reference" = "Reference: ";
+"References" = "References: ";

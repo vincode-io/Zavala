@@ -168,6 +168,10 @@ internal enum L10n {
   internal static let previousResult = L10n.tr("Localizable", "Previous_Result")
   /// Print
   internal static let print = L10n.tr("Localizable", "Print")
+  /// Reference: 
+  internal static let reference = L10n.tr("Localizable", "Reference")
+  /// References: 
+  internal static let references = L10n.tr("Localizable", "References")
   /// Release Notes
   internal static let releaseNotes = L10n.tr("Localizable", "Release_Notes")
   /// Remove
