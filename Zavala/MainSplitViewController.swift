@@ -178,6 +178,7 @@ class MainSplitViewController: UISplitViewController {
 		timelineViewController?.navigationController?.delegate = self
 		timelineViewController?.delegate = self
 		sidebarViewController?.startUp()
+		editorViewController?.delegate = self
 
 		#if MAC_TEST
 		DispatchQueue.main.async {
@@ -508,6 +509,16 @@ extension MainSplitViewController: TimelineDelegate {
 		}
 		
 		editorViewController?.edit(document?.outline, isNew: isNew)
+	}
+	
+}
+
+// MARK: EditorDelegate
+
+extension MainSplitViewController: EditorDelegate {
+	
+	func validateToolbar(_: EditorViewController) {
+		validateToolbar()
 	}
 	
 }

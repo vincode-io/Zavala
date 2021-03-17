@@ -10,6 +10,10 @@ import MobileCoreServices
 import RSCore
 import Templeton
 
+protocol EditorDelegate: AnyObject {
+	func validateToolbar(_ : EditorViewController)
+}
+
 class EditorViewController: UIViewController, MainControllerIdentifiable, UndoableCommandRunner {
 
 	@IBOutlet weak var searchBar: EditorSearchBar!
@@ -18,9 +22,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
 
-	var mainSplitViewController: MainSplitViewController? {
-		return splitViewController as? MainSplitViewController
-	}
+	weak var delegate: EditorDelegate?
 	
 	var isOutlineFunctionsUnavailable: Bool {
 		return outline == nil
@@ -982,7 +984,7 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	
 	func editorTextRowTextFieldDidBecomeActive() {
 		collectionView.deselectAll()
-		mainSplitViewController?.validateToolbar()
+		delegate?.validateToolbar(self)
 	}
 
 	func editorTextRowToggleDisclosure(row: Row) {
@@ -1513,8 +1515,9 @@ extension EditorViewController {
 	
 	private func cutAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.cut, image: AppAssets.cut) { [weak self] action in
-			self?.cutRows(rows)
-			self?.mainSplitViewController?.validateToolbar()
+			guard let self = self else { return }
+			self.cutRows(rows)
+			self.delegate?.validateToolbar(self)
 		}
 	}
 
@@ -1526,8 +1529,9 @@ extension EditorViewController {
 
 	private func pasteAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.paste, image: AppAssets.paste) { [weak self] action in
-			self?.pasteRows(afterRows: rows)
-			self?.mainSplitViewController?.validateToolbar()
+			guard let self = self else { return }
+			self.pasteRows(afterRows: rows)
+			self.delegate?.validateToolbar(self)
 		}
 	}
 
@@ -1543,15 +1547,17 @@ extension EditorViewController {
 
 	private func indentAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.indent, image: AppAssets.indent) { [weak self] action in
-			self?.indentRows(rows)
-			self?.mainSplitViewController?.validateToolbar()
+			guard let self = self else { return }
+			self.indentRows(rows)
+			self.delegate?.validateToolbar(self)
 		}
 	}
 
 	private func outdentAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.outdent, image: AppAssets.outdent) { [weak self] action in
-			self?.outdentRows(rows)
-			self?.mainSplitViewController?.validateToolbar()
+			guard let self = self else { return }
+			self.outdentRows(rows)
+			self.delegate?.validateToolbar(self)
 		}
 	}
 
@@ -1594,8 +1600,9 @@ extension EditorViewController {
 	private func deleteAction(rows: [Row]) -> UIAction {
 		let title = rows.count == 1 ? L10n.deleteRow : L10n.deleteRows
 		return UIAction(title: title, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
-			self?.deleteRows(rows)
-			self?.mainSplitViewController?.validateToolbar()
+			guard let self = self else { return }
+			self.deleteRows(rows)
+			self.delegate?.validateToolbar(self)
 		}
 	}
 
