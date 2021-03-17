@@ -19,6 +19,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		case title = 0
 		case tags = 1
 		case rows = 2
+		case footer = 3
 	}
 
 	public struct RowMove {
@@ -107,6 +108,18 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 
 	public var isNotesHidden: Bool? {
+		didSet {
+			documentMetaDataDidChange()
+		}
+	}
+	
+	public private(set) var links: [EntityID]? {
+		didSet {
+			documentMetaDataDidChange()
+		}
+	}
+	
+	public private(set) var backlinks: [EntityID]? {
 		didSet {
 			documentMetaDataDidChange()
 		}
@@ -301,6 +314,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		case cursorIsInNotes = "cursorIsInNotes"
 		case cursorPosition = "cursorPosition"
 		case tagIDs = "tagIDS"
+		case linkedToDocumentIDs = "linkedToDocumentIDs"
+		case linkedFromDocumentIDs = "linkedFromDocumentIDs"
 		case cloudKitZoneName = "cloudKitZoneName"
 		case cloudKitZoneOwner = "cloudKitZoneOwner"
 		case cloudKitShareRecordName = "cloudKitShareRecordName"
@@ -1387,10 +1402,14 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineDidDelete()
 	}
 	
-	public func suspend() {
+	public func suspend(outlineMayHaveChanged: Bool = false) {
 		rowsFile?.save()
 		
 		guard beingViewedCount < 1 else { return }
+		
+		if outlineMayHaveChanged {
+			processLinks()
+		}
 		
 		rowsFile = nil
 		shadowTable = nil
@@ -1957,5 +1976,63 @@ extension Outline {
 
 		return reloads
 	}
+
+	private func processLinks() {
+		var newLinks = [EntityID]()
+		
+		func linkVisitor(_ visited: Row) {
+			if let topic = visited.textRow?.topic {
+				newLinks.append(contentsOf: extractLinkToIDs(topic))
+			}
+			if let note = visited.textRow?.note {
+				newLinks.append(contentsOf: extractLinkToIDs(note))
+			}
+			visited.rows.forEach { $0.visit(visitor: linkVisitor) }
+		}
+
+		rows.forEach { $0.visit(visitor: linkVisitor(_:)) }
+		
+		let currentLinkedDocumentIDs = links ?? [EntityID]()
+		let diff = currentLinkedDocumentIDs.difference(from: newLinks)
+		for change in diff {
+			switch change {
+			case .insert(_, let entityID, _):
+				if let outline = AccountManager.shared.findDocument(entityID)?.outline {
+					outline.createBacklink(entityID)
+				}
+			case .remove(_, let entityID, _):
+				if let outline = AccountManager.shared.findDocument(entityID)?.outline {
+					outline.deleteBacklink(entityID)
+				}
+			}
+		}
+		
+		links = newLinks
+	}
 	
+	private func extractLinkToIDs(_ attrString: NSAttributedString) -> [EntityID] {
+		var ids = [EntityID]()
+		attrString.enumerateAttribute(.backgroundColor, in:  NSRange(0..<attrString.length)) { value, range, stop in
+			if let url = value as? URL, let id = EntityID(url: url) {
+				ids.append(id)
+			}
+		}
+		return ids
+	}
+	
+	private func createBacklink(_ entityID: EntityID) {
+		if backlinks == nil {
+			backlinks = [EntityID]()
+		}
+		backlinks?.append(entityID)
+		documentMetaDataDidChange()
+		outlineElementsDidChange(OutlineElementChanges(section: Section.footer, reloads: Set([0])))
+	}
+
+	private func deleteBacklink(_ entityID: EntityID) {
+		backlinks?.removeFirst(object: entityID)
+		documentMetaDataDidChange()
+		outlineElementsDidChange(OutlineElementChanges(section: Section.footer, reloads: Set([0])))
+	}
+
 }

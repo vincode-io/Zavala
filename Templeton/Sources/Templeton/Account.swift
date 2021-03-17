@@ -202,7 +202,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		saveToCloudKit(document)
 		
 		outline.forceSave()
-		outline.suspend()
+		outline.suspend(outlineMayHaveChanged: true)
 		
 		return document
 	}
