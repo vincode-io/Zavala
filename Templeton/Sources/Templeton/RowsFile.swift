@@ -25,9 +25,12 @@ final class RowsFile {
 													   save: { [weak self] in self?.saveCallback() })
 	private var lastModificationDate: Date?
 	
-	init(outline: Outline) {
+	init?(outline: Outline) {
+		guard let account = outline.account else {
+			return nil
+		}
 		self.outline = outline
-		let localAccountFolder = AccountManager.shared.accountsFolder.appendingPathComponent(outline.account!.type.folderName)
+		let localAccountFolder = AccountManager.shared.accountsFolder.appendingPathComponent(account.type.folderName)
 		fileURL = localAccountFolder.appendingPathComponent("\(outline.id.documentUUID).plist")
 	}
 	

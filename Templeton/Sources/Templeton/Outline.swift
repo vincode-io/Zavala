@@ -1369,7 +1369,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	public func load() {
 		guard rowsFile == nil else { return }
 		rowsFile = RowsFile(outline: self)
-		rowsFile!.load()
+		rowsFile?.load()
 	}
 	
 	public func save() {
