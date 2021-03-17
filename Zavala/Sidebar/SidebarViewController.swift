@@ -122,7 +122,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	
 	@objc func sync() {
 		if AccountManager.shared.isSyncAvailable {
-			mainSplitViewController?.sync(self)
+			AccountManager.shared.sync()
 		} else {
 			collectionView?.refreshControl?.endRefreshing()
 		}
@@ -133,11 +133,11 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	}
 	
 	@objc func importOPML(_ sender: Any) {
-		mainSplitViewController?.importOPML(sender)
+		mainSplitViewController?.importOPML()
 	}
 
 	@objc func createOutline(_ sender: Any) {
-		mainSplitViewController?.createOutline(sender)
+		mainSplitViewController?.createOutline()
 	}
 	
 	// MARK API

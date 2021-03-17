@@ -140,13 +140,13 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	
 	@objc func sync() {
 		if AccountManager.shared.isSyncAvailable {
-			(splitViewController as? MainSplitViewController)?.sync(self)
+			AccountManager.shared.sync()
 		} else {
 			collectionView?.refreshControl?.endRefreshing()
 		}
 	}
 	
-	@objc func createOutline(_ sender: Any?) {
+	@objc func createOutline(_ sender: Any? = nil) {
 		guard let account = documentContainer?.account else { return }
 		let document = account.createOutline(tag: (documentContainer as? TagDocuments)?.tag)
 		if case .outline(let outline) = document {
@@ -155,7 +155,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		selectDocument(document, isNew: true, animated: true)
 	}
 
-	@objc func importOPML(_ sender: Any?) {
+	@objc func importOPML(_ sender: Any? = nil) {
 		let opmlType = UTType(exportedAs: "org.opml.opml")
 		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [opmlType, .xml])
 		docPicker.delegate = self
@@ -164,12 +164,12 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		self.present(docPicker, animated: true)
 	}
 
-	@objc func exportMarkdown(_ sender: Any?) {
+	@objc func exportMarkdown(_ sender: Any? = nil) {
 		guard let currentOutline = currentDocument?.outline else { return }
 		exportMarkdownForOutline(currentOutline)
 	}
 
-	@objc func exportOPML(_ sender: Any?) {
+	@objc func exportOPML(_ sender: Any? = nil) {
 		guard let currentOutline = currentDocument?.outline else { return }
 		exportOPMLForOutline(currentOutline)
 	}

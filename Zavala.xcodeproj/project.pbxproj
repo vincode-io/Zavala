@@ -126,6 +126,8 @@
 		511B2AA0260245AD00C04239 /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517AF68525E07A3F0044DBAB /* Preferences.storyboard */; };
 		511B2AA1260245AD00C04239 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 517AF6AD25E0A2400044DBAB /* Localizable.strings */; };
 		511B2AAB260245CA00C04239 /* AppKitPlugin Test.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 511B2AA5260245AD00C04239 /* AppKitPlugin Test.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		511B2AC826028EE800C04239 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B2AC726028EE700C04239 /* MainCoordinator.swift */; };
+		511B2AC926028EE800C04239 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B2AC726028EE700C04239 /* MainCoordinator.swift */; };
 		511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */; };
 		5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
 		512229682563507E008041AF /* EditorTextRowViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorTextRowViewCell.swift */; };
@@ -338,6 +340,7 @@
 		511B2A922602431C00C04239 /* Zavala_iOStest_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_iOStest_target.xcconfig; sourceTree = "<group>"; };
 		511B2AA5260245AD00C04239 /* AppKitPlugin Test.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "AppKitPlugin Test.bundle"; path = AppKitPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		511B2AB02602460200C04239 /* Zavala_appkittestplugin_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_appkittestplugin_target.xcconfig; sourceTree = "<group>"; };
+		511B2AC726028EE700C04239 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLayoutManager.swift; sourceTree = "<group>"; };
 		5122294B25609C47008041AF /* UserInfoKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoKeys.swift; sourceTree = "<group>"; };
 		512229672563507E008041AF /* EditorTextRowViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowViewCell.swift; sourceTree = "<group>"; };
@@ -657,6 +660,7 @@
 				5122294B25609C47008041AF /* UserInfoKeys.swift */,
 				5181A9392554D92000C153E8 /* SceneDelegate.swift */,
 				51C4C448255AA215004E0206 /* MainSplitViewController.swift */,
+				511B2AC726028EE700C04239 /* MainCoordinator.swift */,
 				51E14F282560727C00320EDB /* Sidebar */,
 				51E14F292560728B00320EDB /* Timeline */,
 				51E14F2A2560729900320EDB /* Editor */,
@@ -1129,6 +1133,7 @@
 				511B2A2E2602410C00C04239 /* EditorTagAddContentConfiguration.swift in Sources */,
 				511B2A2F2602410C00C04239 /* SidebarSearchCell.swift in Sources */,
 				511B2A302602410C00C04239 /* Selector+.swift in Sources */,
+				511B2AC926028EE800C04239 /* MainCoordinator.swift in Sources */,
 				511B2A312602410C00C04239 /* MacFormViewController.swift in Sources */,
 				511B2A322602410C00C04239 /* OpenQuicklyViewController.swift in Sources */,
 				511B2A332602410C00C04239 /* LinkViewController.swift in Sources */,
@@ -1255,6 +1260,7 @@
 				51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */,
 				5167608525FBE4E500AC0EBD /* OutlineGetInfoViewController.swift in Sources */,
 				514F221825C4D076004E02CD /* EditorTagInputViewCell.swift in Sources */,
+				511B2AC826028EE800C04239 /* MainCoordinator.swift in Sources */,
 				5147D0BB25CCAFC3004673C3 /* EditorTagAddViewCell.swift in Sources */,
 				514F221125C4CCE4004E02CD /* EditorTagContentConfiguration.swift in Sources */,
 				5147D0C825CE28AE004673C3 /* NSDataDetector+.swift in Sources */,

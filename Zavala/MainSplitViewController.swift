@@ -21,8 +21,8 @@ enum MainControllerIdentifier {
 	case editor
 }
 
-class MainSplitViewController: UISplitViewController {
-	
+class MainSplitViewController: UISplitViewController, MainCoordinator {
+
 	weak var sceneDelegate: SceneDelegate?
 
 	var stateRestorationActivity: NSUserActivity {
@@ -36,22 +36,6 @@ class MainSplitViewController: UISplitViewController {
 		return activity
 	}
 	
-	var isOutlineFunctionsUnavailable: Bool {
-		return editorViewController?.isOutlineFunctionsUnavailable ?? true
-	}
-	
-	var isShareUnavailable: Bool {
-		return editorViewController?.isShareUnavailable ?? true
-	}
-	
-	var isOutlineFiltered: Bool {
-		return editorViewController?.isOutlineFiltered ?? false
-	}
-	
-	var isOutlineNotesHidden: Bool {
-		return editorViewController?.isOutlineNotesHidden ?? false
-	}
-	
 	var isExportOutlineUnavailable: Bool {
 		return timelineViewController?.isExportOutlineUnavailable ?? true
 	}
@@ -61,79 +45,11 @@ class MainSplitViewController: UISplitViewController {
 			(editorViewController?.isDeleteCurrentRowUnavailable ?? true) 
 	}
 
-	var isInsertRowUnavailable: Bool {
-		return editorViewController?.isInsertRowUnavailable ?? true
-	}
-	
-	var isCreateRowUnavailable: Bool {
-		return editorViewController?.isCreateRowUnavailable ?? true
-	}
-	
-	var isIndentRowsUnavailable: Bool {
-		return editorViewController?.isIndentRowsUnavailable ?? true
-	}
-
-	var isOutdentRowsUnavailable: Bool {
-		return editorViewController?.isOutdentRowsUnavailable ?? true
-	}
-
-	var isToggleRowCompleteUnavailable: Bool {
-		return editorViewController?.isToggleRowCompleteUnavailable ?? true
-	}
-	
-	var isCompleteRowsAvailable: Bool {
-		return editorViewController?.isCompleteRowsAvailable ?? false
-	}
-
-	var isCreateRowNotesUnavailable: Bool {
-		return editorViewController?.isCreateRowNotesUnavailable ?? true
-	}
-	
-	var isDeleteRowNotesUnavailable: Bool {
-		return editorViewController?.isDeleteRowNotesUnavailable ?? true
-	}
-	
-	var isSplitRowUnavailable: Bool {
-		return editorViewController?.isSplitRowUnavailable ?? true
-	}
-	
-	var isFormatUnavailable: Bool {
-		return editorViewController?.isFormatUnavailable ?? true
-	}
-	
-	var isLinkUnavailable: Bool {
-		return editorViewController?.isLinkUnavailable ?? true
-	}
-	
-	var isExpandAllInOutlineUnavailable: Bool {
-		return editorViewController?.isExpandAllInOutlineUnavailable ?? true
-	}
-
-	var isCollapseAllInOutlineUnavailable: Bool {
-		return editorViewController?.isCollapseAllInOutlineUnavailable ?? true
-	}
-
-	var isExpandAllUnavailable: Bool {
-		return editorViewController?.isExpandAllUnavailable ?? true
-	}
-
-	var isCollapseAllUnavailable: Bool {
-		return editorViewController?.isCollapseAllUnavailable ?? true
-	}
-
-	var isExpandUnavailable: Bool {
-		return editorViewController?.isExpandUnavailable ?? true
-	}
-
-	var isCollapseUnavailable: Bool {
-		return editorViewController?.isCollapseUnavailable ?? true
-	}
-	
-	var isDeleteCompletedRowsUnavailable: Bool {
-		return editorViewController?.isDeleteCompletedRowsUnavailable ?? true
-	}
-	
 	var activityManager = ActivityManager()
+	
+	var editorViewController: EditorViewController? {
+		viewController(for: .secondary) as? EditorViewController
+	}
 	
 	private var sidebarViewController: SidebarViewController? {
 		return viewController(for: .primary) as? SidebarViewController
@@ -141,10 +57,6 @@ class MainSplitViewController: UISplitViewController {
 	
 	private var timelineViewController: TimelineViewController? {
 		viewController(for: .supplementary) as? TimelineViewController
-	}
-	
-	private var editorViewController: EditorViewController? {
-		viewController(for: .secondary) as? EditorViewController
 	}
 	
 	private var lastMainControllerToAppear = MainControllerIdentifier.none
@@ -240,22 +152,13 @@ class MainSplitViewController: UISplitViewController {
 		}
 	}
 	
-	func showReleaseNotes() {
-		openURL(AppAssets.releaseNotesURL)
+	func openURL(_ urlString: String) {
+		guard let url = URL(string: urlString) else { return }
+		let vc = SFSafariViewController(url: url)
+		vc.modalPresentationStyle = .pageSheet
+		present(vc, animated: true)
 	}
-	
-	func showGitHubRepository() {
-		openURL(AppAssets.githubRepositoryURL)
-	}
-	
-	func showBugTracker() {
-		openURL(AppAssets.bugTrackerURL)
-	}
-	
-	func showAcknowledgements() {
-		openURL(AppAssets.acknowledgementsURL)
-	}
-	
+
 	func showOpenQuickly() {
 		if traitCollection.userInterfaceIdiom == .mac {
 		
@@ -304,32 +207,24 @@ class MainSplitViewController: UISplitViewController {
 		AccountManager.shared.sync()
 	}
 	
-	@objc func createOutline(_ sender: Any?) {
+	@objc func createOutline() {
 		selectDefaultDocumentContainerIfNecessary() {
-			self.timelineViewController?.createOutline(sender)
+			self.timelineViewController?.createOutline(self)
 		}
 	}
 	
-	@objc func importOPML(_ sender: Any?) {
+	@objc func importOPML() {
 		selectDefaultDocumentContainerIfNecessary() {
-			self.timelineViewController?.importOPML(sender)
+			self.timelineViewController?.importOPML(self)
 		}
 	}
 	
-	@objc func exportMarkdown(_ sender: Any?) {
-		timelineViewController?.exportMarkdown(sender)
+	@objc func exportMarkdown() {
+		timelineViewController?.exportMarkdown(self)
 	}
 	
-	@objc func exportOPML(_ sender: Any?) {
-		timelineViewController?.exportOPML(sender)
-	}
-	
-	@objc func toggleOutlineFilter(_ sender: Any?) {
-		editorViewController?.toggleOutlineFilter(sender)
-	}
-	
-	@objc func toggleOutlineHideNotes(_ sender: Any?) {
-		editorViewController?.toggleOutlineHideNotes(sender)
+	@objc func exportOPML() {
+		timelineViewController?.exportOPML(self)
 	}
 	
 	@objc func toggleSidebar(_ sender: Any?) {
@@ -337,113 +232,49 @@ class MainSplitViewController: UISplitViewController {
 			self.preferredDisplayMode = self.displayMode == .twoBesideSecondary ? .secondaryOnly : .twoBesideSecondary
 		}
 	}
-	
-	@objc func insertRow(_ sender: Any?) {
-		editorViewController?.insertRow()
-	}
-	
-	@objc func createRow(_ sender: Any?) {
-		editorViewController?.createRow()
-	}
-	
-	@objc func indentRows(_ sender: Any?) {
-		editorViewController?.indentRows()
-	}
-	
-	@objc func outdentRows(_ sender: Any?) {
-		editorViewController?.outdentRows()
-	}
-	
-	@objc func toggleCompleteRows(_ sender: Any?) {
-		editorViewController?.toggleCompleteRows()
-	}
-	
-	@objc func createRowNotes(_ sender: Any?) {
-		editorViewController?.createRowNotes()
-	}
-	
-	@objc func deleteRowNotes(_ sender: Any?) {
-		editorViewController?.deleteRowNotes()
-	}
-	
-	@objc func splitRow(_ sender: Any?) {
-		editorViewController?.splitRow()
-	}
-	
-	@objc func outlineToggleBoldface(_ sender: Any?) {
-		editorViewController?.outlineToggleBoldface()
-	}
-	
-	@objc func outlineToggleItalics(_ sender: Any?) {
-		editorViewController?.outlineToggleItalics()
-	}
-	
+
 	@objc func link(_ sender: Any?) {
-		editorViewController?.link()
+		link()
 	}
-	
+
+	@objc func toggleOutlineFilter(_ sender: Any?) {
+		toggleOutlineFilter()
+	}
+
+	@objc func outlineToggleBoldface(_ sender: Any?) {
+		outlineToggleBoldface()
+	}
+
+	@objc func outlineToggleItalics(_ sender: Any?) {
+		outlineToggleItalics()
+	}
+
 	@objc func expandAllInOutline(_ sender: Any?) {
-		editorViewController?.expandAllInOutline()
+		expandAllInOutline()
 	}
-	
+
 	@objc func collapseAllInOutline(_ sender: Any?) {
-		editorViewController?.collapseAllInOutline()
+		collapseAllInOutline()
 	}
-	
-	@objc func expandAll(_ sender: Any?) {
-		editorViewController?.expandAll()
+
+	@objc func toggleOutlineHideNotes(_ sender: Any?) {
+		toggleOutlineHideNotes()
 	}
-	
-	@objc func collapseAll(_ sender: Any?) {
-		editorViewController?.collapseAll()
-	}
-	
-	@objc func expand(_ sender: Any?) {
-		editorViewController?.expand()
-	}
-	
-	@objc func collapse(_ sender: Any?) {
-		editorViewController?.collapse()
-	}
-	
-	@objc func deleteCompletedRows(_ sender: Any?) {
-		editorViewController?.deleteCompletedRows()
-	}
-	
+
 	@objc func printDocument(_ sender: Any?) {
-		editorViewController?.printOutline()
+		printDocument()
 	}
-	
+
 	@objc func share(_ sender: Any?) {
-		editorViewController?.share()
+		share()
 	}
-	
-	@objc func sendCopy(_ sender: Any?) {
-		editorViewController?.sendCopy()
-	}
-	
-	@objc func beginDocumentSearch(_ sender: Any?) {
-		sidebarViewController?.beginDocumentSearch()
-	}
-	
-	@objc func beginInDocumentSearch(_ sender: Any?) {
-		editorViewController?.beginInDocumentSearch()
-	}
-	
-	@objc func useSelectionForSearch(_ sender: Any?) {
-		editorViewController?.useSelectionForSearch()
-	}
-	
-	@objc func nextInDocumentSearch(_ sender: Any?) {
-		editorViewController?.nextInDocumentSearch()
-	}
-	
-	@objc func previousInDocumentSearch(_ sender: Any?) {
-		editorViewController?.previousInDocumentSearch()
-	}
-	
+
 	@objc func outlineGetInfo(_ sender: Any?) {
-		editorViewController?.showOutlineGetInfo()
+		outlineGetInfo()
+	}
+
+	func beginDocumentSearch() {
+		sidebarViewController?.beginDocumentSearch()
 	}
 	
 	// MARK: Validations
@@ -597,13 +428,6 @@ extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 
 extension MainSplitViewController {
 	
-	private func openURL(_ urlString: String) {
-		guard let url = URL(string: urlString) else { return }
-		let vc = SFSafariViewController(url: url)
-		vc.modalPresentationStyle = .pageSheet
-		present(vc, animated: true)
-	}
-
 	private func selectDefaultDocumentContainerIfNecessary(completion: @escaping () -> Void) {
 		guard sidebarViewController?.selectedAccount == nil else {
 			completion()
@@ -627,23 +451,6 @@ extension MainSplitViewController {
 }
 
 #if targetEnvironment(macCatalyst)
-
-extension NSToolbarItem.Identifier {
-	static let sync = NSToolbarItem.Identifier("io.vincode.Zavala.refresh")
-	static let importOPML = NSToolbarItem.Identifier("io.vincode.Zavala.importOPML")
-	static let newOutline = NSToolbarItem.Identifier("io.vincode.Zavala.newOutline")
-	static let toggleOutlineFilter = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineFilter")
-	static let toggleOutlineNotesHidden = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineNotesHidden")
-	static let link = NSToolbarItem.Identifier("io.vincode.Zavala.link")
-	static let boldface = NSToolbarItem.Identifier("io.vincode.Zavala.boldface")
-	static let italic = NSToolbarItem.Identifier("io.vincode.Zavala.italic")
-	static let expandAllInOutline = NSToolbarItem.Identifier("io.vincode.Zavala.expandAllInOutline")
-	static let collapseAllInOutline = NSToolbarItem.Identifier("io.vincode.Zavala.collapseAllInOutline")
-	static let printDocument = NSToolbarItem.Identifier("io.vincode.Zavala.print")
-	static let share = NSToolbarItem.Identifier("io.vincode.Zavala.share")
-	static let sendCopy = NSToolbarItem.Identifier("io.vincode.Zavala.sendCopy")
-	static let getInfo = NSToolbarItem.Identifier("io.vincode.Zavala.getInfo")
-}
 
 extension MainSplitViewController: NSToolbarDelegate {
 	
@@ -713,7 +520,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = L10n.importOPML
 			item.toolTip = L10n.importOPML
 			item.isBordered = true
-			item.action = #selector(importOPML(_:))
+			item.action = #selector(importOPML)
 			item.target = self
 			toolbarItem = item
 		case .newOutline:
@@ -725,7 +532,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = L10n.newOutline
 			item.toolTip = L10n.newOutline
 			item.isBordered = true
-			item.action = #selector(createOutline(_:))
+			item.action = #selector(createOutline)
 			item.target = self
 			toolbarItem = item
 		case .link:

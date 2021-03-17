@@ -189,7 +189,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var currentKeyPresses = Set<UIKeyboardHIDUsage>()
 	
 	private var ellipsisBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.ellipsis, style: .plain, target: nil, action: nil)
-	private var filterBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.filterInactive, style: .plain, target: self, action: #selector(toggleOutlineFilter(_:)))
+	private var filterBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.filterInactive, style: .plain, target: self, action: #selector(toggleOutlineFilter))
 	private var doneBarButtonItem: UIBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
@@ -574,7 +574,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func sync() {
 		if AccountManager.shared.isSyncAvailable {
-			(splitViewController as? MainSplitViewController)?.sync(self)
+			AccountManager.shared.sync()
 		} else {
 			collectionView?.refreshControl?.endRefreshing()
 		}
@@ -584,13 +584,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		UIResponder.currentFirstResponder?.resignFirstResponder()
 	}
 	
-	@objc func toggleOutlineFilter(_ sender: Any?) {
+	@objc func toggleOutlineFilter() {
 		guard let changes = outline?.toggleFilter() else { return }
 		updateUI(editMode: isInEditMode)
 		applyChangesRestoringState(changes)
 	}
 	
-	@objc func toggleOutlineHideNotes(_ sender: Any?) {
+	@objc func toggleOutlineHideNotes() {
 		guard let changes = outline?.toggleNotesHidden() else { return }
 		updateUI(editMode: isInEditMode)
 		applyChangesRestoringState(changes)
@@ -1203,12 +1203,12 @@ extension EditorViewController {
 		
 		if isOutlineNotesHidden {
 			let showNotesAction = UIAction(title: L10n.showNotes, image: AppAssets.hideNotesInactive) { [weak self] _ in
-				self?.toggleOutlineHideNotes(self)
+				self?.toggleOutlineHideNotes()
 			}
 			viewActions.append(showNotesAction)
 		} else {
 			let hideNotesAction = UIAction(title: L10n.hideNotes, image: AppAssets.hideNotesActive) { [weak self] _ in
-				self?.toggleOutlineHideNotes(self)
+				self?.toggleOutlineHideNotes()
 			}
 			viewActions.append(hideNotesAction)
 		}

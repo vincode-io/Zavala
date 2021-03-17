@@ -348,8 +348,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											 input: "i",
 											 modifierFlags: [.control, .command])
 
-	var mainSplitViewController: MainSplitViewController? {
-		return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController as? MainSplitViewController
+	var mainCoordinator: MainCoordinator? {
+		return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController as? MainCoordinator
 	}
 	
 	#if targetEnvironment(macCatalyst)
@@ -431,19 +431,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	#endif
 
 	@objc func syncCommand(_ sender: Any?) {
-		mainSplitViewController?.sync(sender)
+		AccountManager.shared.sync()
 	}
 
 	@objc func importOPMLCommand(_ sender: Any?) {
-		mainSplitViewController?.importOPML(sender)
+		mainCoordinator?.importOPML()
 	}
 
 	@objc func exportMarkdownCommand(_ sender: Any?) {
-		mainSplitViewController?.exportMarkdown(sender)
+		mainCoordinator?.exportMarkdown()
 	}
 
 	@objc func exportOPMLCommand(_ sender: Any?) {
-		mainSplitViewController?.exportOPML(sender)
+		mainCoordinator?.exportOPML()
 	}
 
 	@objc func newWindow(_ sender: Any?) {
@@ -452,147 +452,153 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	@objc func createOutlineCommand(_ sender: Any?) {
-		mainSplitViewController?.createOutline(sender)
+		mainCoordinator?.createOutline()
 	}
 	
 	@objc func toggleSidebarCommand(_ sender: Any?) {
-		mainSplitViewController?.toggleSidebar(sender)
+		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
+			mainSplitViewController.toggleSidebar(sender)
+		}
 	}
 	
 	@objc func insertRowCommand(_ sender: Any?) {
-		mainSplitViewController?.insertRow(sender)
+		mainCoordinator?.insertRow()
 	}
 	
 	@objc func createRowCommand(_ sender: Any?) {
-		mainSplitViewController?.createRow(sender)
+		mainCoordinator?.createRow()
 	}
 	
 	@objc func indentRowsCommand(_ sender: Any?) {
-		mainSplitViewController?.indentRows(sender)
+		mainCoordinator?.indentRows()
 	}
 	
 	@objc func outdentRowsCommand(_ sender: Any?) {
-		mainSplitViewController?.outdentRows(sender)
+		mainCoordinator?.outdentRows()
 	}
 	
 	@objc func toggleCompleteRowsCommand(_ sender: Any?) {
-		mainSplitViewController?.toggleCompleteRows(sender)
+		mainCoordinator?.toggleCompleteRows()
 	}
 	
 	@objc func createRowNotesCommand(_ sender: Any?) {
-		mainSplitViewController?.createRowNotes(sender)
+		mainCoordinator?.createRowNotes()
 	}
 	
 	@objc func deleteRowNotesCommand(_ sender: Any?) {
-		mainSplitViewController?.deleteRowNotes(sender)
+		mainCoordinator?.deleteRowNotes()
 	}
 	
 	@objc func splitRowCommand(_ sender: Any?) {
-		mainSplitViewController?.splitRow(sender)
+		mainCoordinator?.splitRow()
 	}
 	
 	@objc func toggleBoldCommand(_ sender: Any?) {
-		mainSplitViewController?.outlineToggleBoldface(sender)
+		mainCoordinator?.outlineToggleBoldface()
 	}
 	
 	@objc func toggleItalicsCommand(_ sender: Any?) {
-		mainSplitViewController?.outlineToggleItalics(sender)
+		mainCoordinator?.outlineToggleItalics()
 	}
 	
 	@objc func linkCommand(_ sender: Any?) {
-		mainSplitViewController?.link(sender)
+		mainCoordinator?.link()
 	}
 
 	@objc func toggleOutlineFilterCommand(_ sender: Any?) {
-		mainSplitViewController?.toggleOutlineFilter(sender)
+		mainCoordinator?.toggleOutlineFilter()
 	}
 
 	@objc func toggleOutlineHideNotesCommand(_ sender: Any?) {
-		mainSplitViewController?.toggleOutlineHideNotes(sender)
+		mainCoordinator?.toggleOutlineHideNotes()
 	}
 
 	@objc func expandAllInOutlineCommand(_ sender: Any?) {
-		mainSplitViewController?.expandAllInOutline(sender)
+		mainCoordinator?.expandAllInOutline()
 	}
 
 	@objc func collapseAllInOutlineCommand(_ sender: Any?) {
-		mainSplitViewController?.collapseAllInOutline(sender)
+		mainCoordinator?.collapseAllInOutline()
 	}
 
 	@objc func expandAllCommand(_ sender: Any?) {
-		mainSplitViewController?.expandAll(sender)
+		mainCoordinator?.expandAll()
 	}
 
 	@objc func collapseAllCommand(_ sender: Any?) {
-		mainSplitViewController?.collapseAll(sender)
+		mainCoordinator?.collapseAll()
 	}
 
 	@objc func expandCommand(_ sender: Any?) {
-		mainSplitViewController?.expand(sender)
+		mainCoordinator?.expand()
 	}
 
 	@objc func collapseCommand(_ sender: Any?) {
-		mainSplitViewController?.collapse(sender)
+		mainCoordinator?.collapse()
 	}
 	
 	@objc func deleteCompletedRowsCommand(_ sender: Any?) {
-		mainSplitViewController?.deleteCompletedRows(sender)
+		mainCoordinator?.deleteCompletedRows()
 	}
 	
 	@objc func showReleaseNotesCommand(_ sender: Any?) {
-		mainSplitViewController?.showReleaseNotes()
+		mainCoordinator?.openURL(AppAssets.releaseNotesURL)
 	}
 
 	@objc func showGitHubRepositoryCommand(_ sender: Any?) {
-		mainSplitViewController?.showGitHubRepository()
+		mainCoordinator?.openURL(AppAssets.githubRepositoryURL)
 	}
 	
 	@objc func showBugTrackerCommand(_ sender: Any?) {
-		mainSplitViewController?.showBugTracker()
+		mainCoordinator?.openURL(AppAssets.bugTrackerURL)
 	}
 	
 	@objc func showAcknowledgementsCommand(_ sender: Any?) {
-		mainSplitViewController?.showAcknowledgements()
+		mainCoordinator?.openURL(AppAssets.acknowledgementsURL)
 	}
 
 	@objc func showOpenQuicklyCommand(_ sender: Any?) {
-		mainSplitViewController?.showOpenQuickly()
+		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
+			mainSplitViewController.showOpenQuickly()
+		}
 	}
 
 	@objc func printCommand(_ sender: Any?) {
-		mainSplitViewController?.printDocument(sender)
+		mainCoordinator?.printDocument()
 	}
 
 	@objc func sendCopy(_ sender: Any?) {
-		mainSplitViewController?.sendCopy(sender)
+		mainCoordinator?.sendCopy()
 	}
 
 	@objc func shareCommand(_ sender: Any?) {
-		mainSplitViewController?.share(sender)
+		mainCoordinator?.share()
 	}
 
 	@objc func beginDocumentSearchCommand(_ sender: Any?) {
-		mainSplitViewController?.beginDocumentSearch(sender)
+		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
+			mainSplitViewController.beginDocumentSearch()
+		}
 	}
 
 	@objc func beginInDocumentSearchCommand(_ sender: Any?) {
-		mainSplitViewController?.beginInDocumentSearch(sender)
+		mainCoordinator?.beginInDocumentSearch()
 	}
 
 	@objc func useSelectionForSearchCommand(_ sender: Any?) {
-		mainSplitViewController?.useSelectionForSearch(sender)
+		mainCoordinator?.useSelectionForSearch()
 	}
 
 	@objc func nextInDocumentSearchCommand(_ sender: Any?) {
-		mainSplitViewController?.nextInDocumentSearch(sender)
+		mainCoordinator?.nextInDocumentSearch()
 	}
 
 	@objc func previousInDocumentSearchCommand(_ sender: Any?) {
-		mainSplitViewController?.previousInDocumentSearch(sender)
+		mainCoordinator?.previousInDocumentSearch()
 	}
 	
 	@objc func outlineGetInfoCommand(_ sender: Any?) {
-		mainSplitViewController?.outlineGetInfo(sender)
+		mainCoordinator?.outlineGetInfo()
 	}
 	
 	// MARK: Validations
@@ -604,102 +610,102 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				command.attributes = .disabled
 			}
 		case #selector(exportMarkdownCommand(_:)), #selector(exportOPMLCommand(_:)):
-			if mainSplitViewController?.isExportOutlineUnavailable ?? true {
+			if mainCoordinator?.isExportOutlineUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(insertRowCommand(_:)):
-			if mainSplitViewController?.isInsertRowUnavailable ?? true {
+			if mainCoordinator?.isInsertRowUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(createRowCommand(_:)):
-			if mainSplitViewController?.isCreateRowUnavailable ?? true {
+			if mainCoordinator?.isCreateRowUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(indentRowsCommand(_:)):
-			if mainSplitViewController?.isIndentRowsUnavailable ?? true {
+			if mainCoordinator?.isIndentRowsUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(outdentRowsCommand(_:)):
-			if mainSplitViewController?.isOutdentRowsUnavailable ?? true {
+			if mainCoordinator?.isOutdentRowsUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(toggleCompleteRowsCommand(_:)):
-			if mainSplitViewController?.isCompleteRowsAvailable ?? false {
+			if mainCoordinator?.isCompleteRowsAvailable ?? false {
 				command.title = L10n.complete
 			} else {
 				command.title = L10n.uncomplete
 			}
-			if mainSplitViewController?.isToggleRowCompleteUnavailable ?? true {
+			if mainCoordinator?.isToggleRowCompleteUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(createRowNotesCommand(_:)):
-			if mainSplitViewController?.isCreateRowNotesUnavailable ?? true  {
+			if mainCoordinator?.isCreateRowNotesUnavailable ?? true  {
 				command.attributes = .disabled
 			}
 		case #selector(deleteRowNotesCommand(_:)):
-			if mainSplitViewController?.isDeleteRowNotesUnavailable ?? true {
+			if mainCoordinator?.isDeleteRowNotesUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(splitRowCommand(_:)):
-			if mainSplitViewController?.isSplitRowUnavailable ?? true {
+			if mainCoordinator?.isSplitRowUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(toggleBoldCommand(_:)), #selector(toggleItalicsCommand(_:)):
-			if mainSplitViewController?.isFormatUnavailable ?? true {
+			if mainCoordinator?.isFormatUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(linkCommand(_:)):
-			if mainSplitViewController?.isLinkUnavailable ?? true {
+			if mainCoordinator?.isLinkUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(toggleOutlineFilterCommand(_:)):
-			if mainSplitViewController?.isOutlineFiltered ?? false {
+			if mainCoordinator?.isOutlineFiltered ?? false {
 				command.title = L10n.showCompleted
 			} else {
 				command.title = L10n.hideCompleted
 			}
-			if mainSplitViewController?.isOutlineFunctionsUnavailable ?? true {
+			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(toggleOutlineHideNotesCommand(_:)):
-			if mainSplitViewController?.isOutlineNotesHidden ?? false {
+			if mainCoordinator?.isOutlineNotesHidden ?? false {
 				command.title = L10n.showNotes
 			} else {
 				command.title = L10n.hideNotes
 			}
-			if mainSplitViewController?.isOutlineFunctionsUnavailable ?? true {
+			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(expandAllInOutlineCommand(_:)):
-			if mainSplitViewController?.isExpandAllInOutlineUnavailable ?? true {
+			if mainCoordinator?.isExpandAllInOutlineUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(collapseAllInOutlineCommand(_:)):
-			if mainSplitViewController?.isCollapseAllInOutlineUnavailable ?? true {
+			if mainCoordinator?.isCollapseAllInOutlineUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(expandAllCommand(_:)):
-			if mainSplitViewController?.isExpandAllUnavailable ?? true {
+			if mainCoordinator?.isExpandAllUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(collapseAllCommand(_:)):
-			if mainSplitViewController?.isCollapseAllUnavailable ?? true {
+			if mainCoordinator?.isCollapseAllUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(expandCommand(_:)):
-			if mainSplitViewController?.isExpandUnavailable ?? true {
+			if mainCoordinator?.isExpandUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(collapseCommand(_:)):
-			if mainSplitViewController?.isCollapseUnavailable ?? true {
+			if mainCoordinator?.isCollapseUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(deleteCompletedRowsCommand(_:)):
-			if mainSplitViewController?.isDeleteCompletedRowsUnavailable ?? true {
+			if mainCoordinator?.isDeleteCompletedRowsUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(shareCommand(_:)):
-			if mainSplitViewController?.isShareUnavailable ?? true {
+			if mainCoordinator?.isShareUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(beginInDocumentSearchCommand(_:)),
@@ -707,7 +713,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			 #selector(nextInDocumentSearchCommand(_:)),
 			 #selector(previousInDocumentSearchCommand(_:)),
 			 #selector(printCommand(_:)):
-			if mainSplitViewController?.isOutlineFunctionsUnavailable ?? true {
+			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		default:
