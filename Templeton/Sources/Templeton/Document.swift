@@ -188,10 +188,10 @@ public enum Document: Equatable, Codable {
 		}
 	}
 
-	public func suspend() {
+	public func suspend(documentMayHaveChanged: Bool = false) {
 		switch self {
 		case .outline(let outline):
-			outline.suspend()
+			outline.suspend(outlineMayHaveChanged: documentMayHaveChanged)
 		}
 	}
 

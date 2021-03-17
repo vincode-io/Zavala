@@ -1391,6 +1391,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 		
+		documentLinks = nil
+		
 		if rowsFile == nil {
 			rowsFile = RowsFile(outline: self)
 		}
