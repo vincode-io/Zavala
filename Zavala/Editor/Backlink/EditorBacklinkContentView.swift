@@ -22,7 +22,7 @@ class EditorBacklinkContentView: UIView, UIContentView {
 		textView.backgroundColor = .clear
 		textView.adjustsFontForContentSizeCategory = true
 		textView.translatesAutoresizingMaskIntoConstraints = false
-		textView.linkTextAttributes = [.foregroundColor: UIColor.label, .underlineStyle: 1]
+		textView.linkTextAttributes = [.foregroundColor: UIColor.secondaryLabel, .underlineStyle: 1]
 		addSubview(textView)
 		
 		NSLayoutConstraint.activate([
