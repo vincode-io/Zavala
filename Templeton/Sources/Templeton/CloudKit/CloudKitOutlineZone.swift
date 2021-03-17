@@ -37,6 +37,8 @@ final class CloudKitOutlineZone: CloudKitZone {
 			static let created = "created"
 			static let tagNames = "tagNames"
 			static let rowOrder = "rowOrder"
+			static let documentLinks = "documentLinks"
+			static let documentBacklinks = "documentBacklinks"
 		}
 	}
 	

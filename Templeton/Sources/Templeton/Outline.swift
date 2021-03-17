@@ -113,17 +113,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 	}
 	
-	public private(set) var documentLinks: [EntityID]? {
-		didSet {
-			documentMetaDataDidChange()
-		}
-	}
-	
-	public private(set) var documentBacklinks: [EntityID]? {
-		didSet {
-			documentMetaDataDidChange()
-		}
-	}
+	public private(set) var documentLinks: [EntityID]?
+	public private(set) var documentBacklinks: [EntityID]?
 	
 	public var cloudKitZoneName: String? {
 		didSet {
@@ -1577,6 +1568,12 @@ extension Outline {
 		let rowOrderRowUUIDs = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
 		rowOrder = rowOrderRowUUIDs.map { EntityID.row(id.accountID, id.documentUUID, $0) }
 
+		let documentLinkDescriptions = record[CloudKitOutlineZone.CloudKitOutline.Fields.documentLinks] as? [String] ?? [String]()
+		documentLinks = documentLinkDescriptions.compactMap { EntityID(description: $0) }
+
+		let documentBacklinkDescriptions = record[CloudKitOutlineZone.CloudKitOutline.Fields.documentBacklinks] as? [String] ?? [String]()
+		documentBacklinks = documentBacklinkDescriptions.compactMap { EntityID(description: $0) }
+
 		let cloudKitTagNames = record[CloudKitOutlineZone.CloudKitOutline.Fields.tagNames] as? [String] ?? [String]()
 		let currentTagNames = Set(tags.map { $0.name })
 		
@@ -1617,6 +1614,7 @@ extension Outline {
 		
 		let changes = OutlineElementChanges(section: .tags, deletes: deletes, inserts: inserts, moves: moves)
 		outlineElementsDidChange(changes)
+		outlineElementsDidChange(OutlineElementChanges(section: .backlinks, reloads: Set([0])))
 	}
 	
 }
@@ -2014,6 +2012,11 @@ extension Outline {
 		}
 		
 		documentLinks = newDocumentLinks
+		documentMetaDataDidChange()
+
+		if !diff.isEmpty {
+			requestCloudKitUpdate(for: id)
+		}
 	}
 	
 	private func extractLinkToIDs(_ attrString: NSAttributedString) -> [EntityID] {
@@ -2033,12 +2036,14 @@ extension Outline {
 		documentBacklinks?.append(entityID)
 		documentMetaDataDidChange()
 		outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
+		requestCloudKitUpdate(for: id)
 	}
 
 	private func deleteBacklink(_ entityID: EntityID) {
 		documentBacklinks?.removeFirst(object: entityID)
 		documentMetaDataDidChange()
 		outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
+		requestCloudKitUpdate(for: id)
 	}
 
 }

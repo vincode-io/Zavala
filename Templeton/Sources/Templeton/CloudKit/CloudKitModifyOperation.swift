@@ -153,6 +153,8 @@ extension CloudKitModifyOperation {
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.created] = outline.created
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.tagNames] = outline.tags.map { $0.name }
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] = outline.rowOrder?.map { $0.rowUUID }
+		record[CloudKitOutlineZone.CloudKitOutline.Fields.documentLinks] = outline.documentLinks?.map { $0.description }
+		record[CloudKitOutlineZone.CloudKitOutline.Fields.documentBacklinks] = outline.documentBacklinks?.map { $0.description }
 
 		addSave(zoneID, record)
 	}
