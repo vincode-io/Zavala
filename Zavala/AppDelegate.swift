@@ -422,9 +422,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// MARK: UISceneSession Lifecycle
 
 	func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-		if options.userActivities.first?.activityType == NSUserActivity.ActivityType.openEditor {
+		switch options.userActivities.first?.activityType {
+		case NSUserActivity.ActivityType.openEditor, NSUserActivity.ActivityType.newOutline:
 			return UISceneConfiguration(name: "Outline Editor Configuration", sessionRole: connectingSceneSession.role)
-		} else {
+		default:
 			return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
 		}
 	}
@@ -450,7 +451,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	@objc func importOPMLCommand(_ sender: Any?) {
-		mainCoordinator?.importOPML()
+		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
+			mainSplitViewController.importOPML()
+		} else {
+			fatalError("You forgot to implement this...")
+		}
 	}
 
 	@objc func exportMarkdownCommand(_ sender: Any?) {
@@ -467,7 +472,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	@objc func createOutlineCommand(_ sender: Any?) {
-		mainCoordinator?.createOutline()
+		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
+			mainSplitViewController.createOutline()
+		} else {
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.newOutline)
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+		}
 	}
 	
 	@objc func toggleSidebarCommand(_ sender: Any?) {

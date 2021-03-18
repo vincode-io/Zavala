@@ -36,6 +36,11 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	}
 
 	func handle(_ activity: NSUserActivity) {
+		guard activity.activityType != NSUserActivity.ActivityType.newOutline else {
+			newOutline()
+			return
+		}
+		
 		guard let userInfo = activity.userInfo else { return }
 		
 		if let searchIdentifier = userInfo[CSSearchableItemActivityIdentifier] as? String, let documentID = EntityID(description: searchIdentifier) {
@@ -68,12 +73,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 
 	func shutdown() {
 		editorViewController?.edit(nil, isNew: false)
-	}
-	
-	func createOutline() {
-	}
-	
-	func importOPML() {
 	}
 	
 	func exportMarkdown() {

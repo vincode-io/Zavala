@@ -11,6 +11,7 @@ extension NSUserActivity {
 	struct ActivityType {
 		static let newWindow = "io.vincode.Zavala.newWindow"
 		static let openEditor = "io.vincode.Zavala.openEditor"
+		static let newOutline = "io.vincode.Zavala.newOutline"
 		static let restoration = "io.vincode.Zavala.restoration"
 		static let selectingDocumentContainer = "io.vincode.Zavala.selectingDocumentContainer"
 		static let selectingDocument = "io.vincode.Zavala.selectingDocument"
