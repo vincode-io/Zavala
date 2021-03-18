@@ -763,14 +763,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMarkdownCommand, exportOPMLCommand])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 
-		let openMenu = UIMenu(title: "", options: .displayInline, children: [showOpenQuicklyCommand])
-		builder.insertChild(openMenu, atStartOfMenu: .file)
-
-		let newWindowMenu = UIMenu(title: "", options: .displayInline, children: [newWindowCommand])
-		builder.insertChild(newWindowMenu, atStartOfMenu: .file)
-
-		let newItemsMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand])
-		builder.insertChild(newItemsMenu, atStartOfMenu: .file)
+		let newMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newWindowCommand, showOpenQuicklyCommand])
+		builder.insertChild(newMenu, atStartOfMenu: .file)
 
 		let shareMenu = UIMenu(title: "", options: .displayInline, children: [shareCommand, printCommand])
 		builder.insertChild(shareMenu, atEndOfMenu: .file)
