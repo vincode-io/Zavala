@@ -426,7 +426,7 @@ extension MainSplitViewController {
 		
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		
-		guard let account = AccountManager.shared.findAccount(accountID: accountID) else {
+		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else {
 			completion()
 			return
 		}
