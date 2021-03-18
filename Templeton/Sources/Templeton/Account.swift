@@ -201,8 +201,9 @@ public final class Account: NSObject, Identifiable, Codable {
 		let document = Document.outline(outline)
 		saveToCloudKit(document)
 		
+		outline.updateAllLinkRelationships()
 		outline.forceSave()
-		outline.suspend(outlineMayHaveChanged: true)
+		outline.suspend()
 		
 		return document
 	}

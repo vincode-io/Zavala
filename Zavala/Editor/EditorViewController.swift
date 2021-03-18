@@ -439,7 +439,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		updateSpotlightIndex()
 		outline?.beingViewedCount = (outline?.beingViewedCount ?? 1) - 1
-		outline?.suspend(outlineMayHaveChanged: true)
+		outline?.suspend()
 		clearUndoableCommands()
 	
 		let oldOutline = outline

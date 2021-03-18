@@ -715,7 +715,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		beginCloudKitBatchRequest()
 		
 		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
-			textRow.textRowStrings = texts
+			updateTextRowStrings(textRow, texts)
 		}
 
 		var impacted = [Row]()
@@ -749,7 +749,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		beginCloudKitBatchRequest()
 		
 		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
-			textRow.textRowStrings = texts
+			updateTextRowStrings(textRow, texts)
 		}
 
 		var impacted = [Row: NSAttributedString]()
@@ -791,7 +791,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		beginCloudKitBatchRequest()
 		
 		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
-			textRow.textRowStrings = texts
+			updateTextRowStrings(textRow, texts)
 		}
 
 		var deletes = Set<Int>()
@@ -802,6 +802,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			row.parent?.removeRow(row)
 		}
 
+		deleteLinkRelationships(for: rows)
 		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 		
@@ -858,7 +859,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		beginCloudKitBatchRequest()
 		
 		if let beforeTextRow = beforeRow.textRow, let texts = textRowStrings {
-			beforeTextRow.textRowStrings = texts
+			updateTextRowStrings(beforeTextRow, texts)
 		}
 
 		guard let parent = beforeRow.parent,
@@ -871,6 +872,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var mutatingRow = row
 		mutatingRow.parent = parent
 		
+		createLinkRelationships(for: [row])
 		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 
@@ -886,7 +888,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		beginCloudKitBatchRequest()
 		
 		if let afterTextRow = afterRow?.textRow, let texts = textRowStrings {
-			afterTextRow.textRowStrings = texts
+			updateTextRowStrings(afterTextRow, texts)
 		}
 		
 		if afterRow == nil {
@@ -913,6 +915,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			mutatingRow.parent = self
 		}
 		
+		createLinkRelationships(for: [row])
 		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 			
@@ -945,7 +948,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		beginCloudKitBatchRequest()
 		
 		if let afterTextRow = afterRow?.textRow, let texts = textRowStrings {
-			afterTextRow.textRowStrings = texts
+			updateTextRowStrings(afterTextRow, texts)
 		}
 
 		for row in rows.sortedByReverseDisplayOrder() {
@@ -983,6 +986,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 		
+		createLinkRelationships(for: rows)
 		endCloudKitBatchRequest()
 		outlineBodyDidChange()
 		
@@ -1026,8 +1030,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 
 	func updateRow(_ row: Row, textRowStrings: TextRowStrings?, applyChanges: Bool) {
-		if let textRow = row.textRow, let textRowStrings = textRowStrings {
-			textRow.textRowStrings = textRowStrings
+		if let textRow = row.textRow, let texts = textRowStrings {
+			updateTextRowStrings(textRow, texts)
 		}
 		
 		outlineBodyDidChange()
@@ -1206,7 +1210,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		beginCloudKitBatchRequest()
 		
 		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
-			textRow.textRowStrings = texts
+			updateTextRowStrings(textRow, texts)
 		}
 		
 		let sortedRows = rows.sortedByDisplayOrder()
@@ -1275,7 +1279,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		beginCloudKitBatchRequest()
 		
 		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
-			textRow.textRowStrings = texts
+			updateTextRowStrings(textRow, texts)
 		}
 
 		var impacted = [Row]()
@@ -1315,7 +1319,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		beginCloudKitBatchRequest()
 		
 		if rowMoves.count == 1, let textRow = rowMoves.first?.row.textRow, let texts = textRowStrings {
-			textRow.textRowStrings = texts
+			updateTextRowStrings(textRow, texts)
 		}
 
 		var oldParentReloads = Set<Int>()
@@ -1401,12 +1405,28 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineDidDelete()
 	}
 	
-	public func suspend(outlineMayHaveChanged: Bool = false) {
-		rowsFile?.save()
+	public func updateAllLinkRelationships() {
+		var newDocumentLinks = [EntityID]()
 		
-		if outlineMayHaveChanged {
-			processLinks()
+		func linkVisitor(_ visited: Row) {
+			if let topic = visited.textRow?.topic {
+				newDocumentLinks.append(contentsOf: extractLinkToIDs(topic))
+			}
+			if let note = visited.textRow?.note {
+				newDocumentLinks.append(contentsOf: extractLinkToIDs(note))
+			}
+			visited.rows.forEach { $0.visit(visitor: linkVisitor) }
 		}
+
+		rows.forEach { $0.visit(visitor: linkVisitor(_:)) }
+		
+		let currentDocumentLinks = documentLinks ?? [EntityID]()
+		let diff = newDocumentLinks.difference(from: currentDocumentLinks)
+		processLinkDiff(diff)
+	}
+	
+	public func suspend() {
+		rowsFile?.save()
 		
 		guard beingViewedCount < 1 else { return }
 		
@@ -1689,8 +1709,8 @@ extension Outline {
 	private func completeUncomplete(rows: [Row], isComplete: Bool, textRowStrings: TextRowStrings?) -> ([Row], Int?) {
 		beginCloudKitBatchRequest()
 		
-		if rowCount == 1, let textRow = rows.first?.textRow, let textRowStrings = textRowStrings {
-			textRow.textRowStrings = textRowStrings
+		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
+			updateTextRowStrings(textRow, texts)
 		}
 		
 		var impacted = [Row]()
@@ -1982,45 +2002,80 @@ extension Outline {
 
 		return reloads
 	}
-
-	private func processLinks() {
-		var newDocumentLinks = [EntityID]()
-		
-		func linkVisitor(_ visited: Row) {
-			if let topic = visited.textRow?.topic {
-				newDocumentLinks.append(contentsOf: extractLinkToIDs(topic))
+	
+	private func deleteLinkRelationships(for rows: [Row]) {
+		rows.compactMap({ $0.textRow }).forEach { textRow in
+			if let topic = textRow.topic {
+				extractLinkToIDs(topic).forEach { deleteLinkRelationship($0) }
 			}
-			if let note = visited.textRow?.note {
-				newDocumentLinks.append(contentsOf: extractLinkToIDs(note))
+			if let note = textRow.note {
+				extractLinkToIDs(note).forEach { deleteLinkRelationship($0) }
 			}
-			visited.rows.forEach { $0.visit(visitor: linkVisitor) }
 		}
+	}
 
-		rows.forEach { $0.visit(visitor: linkVisitor(_:)) }
+	private func createLinkRelationships(for rows: [Row]) {
+		rows.compactMap({ $0.textRow }).forEach { textRow in
+			if let topic = textRow.topic {
+				extractLinkToIDs(topic).forEach { createLinkRelationship($0) }
+			}
+			if let note = textRow.note {
+				extractLinkToIDs(note).forEach { createLinkRelationship($0) }
+			}
+		}
+	}
+
+	private func updateTextRowStrings(_ textRow: TextRow, _ textRowStrings: TextRowStrings) {
+		let oldTopicDocLinks = textRow.topic != nil ? extractLinkToIDs(textRow.topic!) : [EntityID]()
+		let newTopicDocLinks = textRowStrings.topic != nil ? extractLinkToIDs(textRowStrings.topic!) : [EntityID]()
+		let topicDiff = newTopicDocLinks.difference(from: oldTopicDocLinks)
+		processLinkDiff(topicDiff)
 		
-		let currentDocumentLinks = documentLinks ?? [EntityID]()
-		let diff = newDocumentLinks.difference(from: currentDocumentLinks)
+		let oldNoteDocLinks = textRow.note != nil ? extractLinkToIDs(textRow.note!) : [EntityID]()
+		let newNoteDocLinks = textRowStrings.note != nil ? extractLinkToIDs(textRowStrings.note!) : [EntityID]()
+		let noteDiff = newNoteDocLinks.difference(from: oldNoteDocLinks)
+		processLinkDiff(noteDiff)
+
+		textRow.textRowStrings = textRowStrings
+	}
+	
+	private func processLinkDiff(_ diff: CollectionDifference<EntityID>) {
+		guard !diff.isEmpty else { return }
+		
 		for change in diff {
 			switch change {
 			case .insert(_, let entityID, _):
-				if let outline = AccountManager.shared.findDocument(entityID)?.outline {
-					outline.createBacklink(id)
-				}
+				createLinkRelationship(entityID)
 			case .remove(_, let entityID, _):
-				if let outline = AccountManager.shared.findDocument(entityID)?.outline {
-					outline.deleteBacklink(id)
-				}
+				deleteLinkRelationship(entityID)
 			}
 		}
-		
-		documentLinks = newDocumentLinks
-		documentMetaDataDidChange()
 
-		if !diff.isEmpty {
-			requestCloudKitUpdate(for: id)
-		}
 	}
 	
+	private func createLinkRelationship(_ entityID: EntityID) {
+		guard let outline = AccountManager.shared.findDocument(entityID)?.outline else { return }
+		
+		outline.createBacklink(id)
+		if documentLinks == nil {
+			documentLinks = [EntityID]()
+		}
+		documentLinks?.append(entityID)
+
+		documentMetaDataDidChange()
+		requestCloudKitUpdate(for: id)
+	}
+
+	private func deleteLinkRelationship(_ entityID: EntityID) {
+		guard let outline = AccountManager.shared.findDocument(entityID)?.outline else { return }
+
+		outline.deleteBacklink(id)
+		documentLinks?.removeFirst(object: entityID)
+
+		documentMetaDataDidChange()
+		requestCloudKitUpdate(for: id)
+	}
+
 	private func extractLinkToIDs(_ attrString: NSAttributedString) -> [EntityID] {
 		var ids = [EntityID]()
 		attrString.enumerateAttribute(.link, in:  NSRange(0..<attrString.length)) { value, range, stop in
