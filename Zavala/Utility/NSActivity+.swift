@@ -8,11 +8,11 @@
 import Foundation
 
 extension NSUserActivity {
-	enum ActivityType: String {
-		case newWindow = "io.vincode.Zavala.newWindow"
-		case openEditor = "io.vincode.Zavala.openEditor"
-		case restoration = "io.vincode.Zavala.restoration"
-		case selectingDocumentContainer = "io.vincode.Zavala.selectingDocumentContainer"
-		case selectingDocument = "io.vincode.Zavala.selectingDocument"
+	struct ActivityType {
+		static let newWindow = "io.vincode.Zavala.newWindow"
+		static let openEditor = "io.vincode.Zavala.openEditor"
+		static let restoration = "io.vincode.Zavala.restoration"
+		static let selectingDocumentContainer = "io.vincode.Zavala.selectingDocumentContainer"
+		static let selectingDocument = "io.vincode.Zavala.selectingDocument"
 	}
 }

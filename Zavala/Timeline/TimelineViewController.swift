@@ -281,7 +281,7 @@ extension TimelineViewController {
 			  let indexPath = collectionView.indexPath(for: cell),
 			  let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
 
-		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor.rawValue)
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 		activity.userInfo = [UserInfoKeys.documentID: timelineItem.id.userInfo]
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}

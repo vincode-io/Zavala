@@ -24,7 +24,7 @@ class ActivityManager {
 			return activity
 		}
 		
-		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.restoration.rawValue)
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.restoration)
 		activity.persistentIdentifier = UUID().uuidString
 		activity.becomeCurrent()
 		return activity
@@ -67,7 +67,7 @@ extension ActivityManager {
 	}
 	
 	private func makeSelectDocumentContainerActivity(_ documentContainer: DocumentContainer) -> NSUserActivity {
-		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocumentContainer.rawValue)
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocumentContainer)
 		
 		let title = L10n.seeDocumentsIn(documentContainer.name ?? "")
 		activity.title = title
@@ -90,7 +90,7 @@ extension ActivityManager {
 	}
 	
 	private func makeSelectDocumentActivity(_ documentContainer: DocumentContainer?, _ document: Document) -> NSUserActivity {
-		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocument.rawValue)
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocument)
 
 		let title = L10n.editDocument(document.title ?? "")
 		activity.title = title
