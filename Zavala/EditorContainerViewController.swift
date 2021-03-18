@@ -57,6 +57,15 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		}
 	}
 
+	func newOutline() {
+		let accountID = AppDefaults.shared.lastSelectedAccountID
+		
+		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return }
+		guard let outline = account.createOutline().outline else { return }
+		
+		editorViewController?.edit(outline, isNew: true)
+	}
+
 	func shutdown() {
 		editorViewController?.edit(nil, isNew: false)
 	}

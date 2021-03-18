@@ -49,11 +49,15 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
 			editorContainerViewController.handle(userActivity)
+			return
 		}
 		
 		if let url = connectionOptions.urlContexts.first?.url, let documentID = EntityID(url: url) {
 			editorContainerViewController.openDocument(documentID)
+			return
 		}
+		
+		editorContainerViewController.newOutline()
 	}
 
 	func sceneDidDisconnect(_ scene: UIScene) {
