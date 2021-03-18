@@ -702,7 +702,15 @@ public struct SearchTextFieldTheme {
     public var fontColor: UIColor
     public var subtitleFontColor: UIColor
     public var placeholderColor: UIColor?
-    
+
+	#if targetEnvironment(macCatalyst)
+	private static let defaultCellHeight: CGFloat = 30
+	private static let defaultFontSize: CGFloat = 13
+	#else
+	private static let defaultCellHeight: CGFloat = 40
+	private static let defaultFontSize: CGFloat = 16
+	#endif
+	
     init(cellHeight: CGFloat, bgColor:UIColor, borderColor: UIColor, separatorColor: UIColor, font: UIFont, fontColor: UIColor, subtitleFontColor: UIColor? = nil) {
         self.cellHeight = cellHeight
         self.borderColor = borderColor
@@ -714,20 +722,20 @@ public struct SearchTextFieldTheme {
     }
     
     public static func lightTheme() -> SearchTextFieldTheme {
-        return SearchTextFieldTheme(cellHeight: 30,
+		return SearchTextFieldTheme(cellHeight: Self.defaultCellHeight,
 									bgColor: UIColor (red: 0.8, green: 0.8, blue: 0.8, alpha: 0.9),
 									borderColor: UIColor (red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0),
 									separatorColor: UIColor.clear,
-									font: UIFont.systemFont(ofSize: 13),
+									font: UIFont.systemFont(ofSize: Self.defaultFontSize),
 									fontColor: UIColor.black)
     }
     
     public static func darkTheme() -> SearchTextFieldTheme {
-        return SearchTextFieldTheme(cellHeight: 30,
+        return SearchTextFieldTheme(cellHeight: Self.defaultCellHeight,
 									bgColor: UIColor (red: 0.1, green: 0.1, blue: 0.1, alpha: 0.9),
 									borderColor: UIColor (red: 0.7, green: 0.7, blue: 0.7, alpha: 1.0),
 									separatorColor: UIColor.clear,
-									font: UIFont.systemFont(ofSize: 13),
+									font: UIFont.systemFont(ofSize: Self.defaultFontSize),
 									fontColor: UIColor.white)
     }
 }
