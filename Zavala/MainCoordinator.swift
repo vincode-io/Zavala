@@ -228,6 +228,7 @@ extension NSToolbarItem.Identifier {
 	static let newOutline = NSToolbarItem.Identifier("io.vincode.Zavala.newOutline")
 	static let toggleOutlineFilter = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineFilter")
 	static let toggleOutlineNotesHidden = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineNotesHidden")
+	static let delete = NSToolbarItem.Identifier("io.vincode.Zavala.delete")
 	static let link = NSToolbarItem.Identifier("io.vincode.Zavala.link")
 	static let boldface = NSToolbarItem.Identifier("io.vincode.Zavala.boldface")
 	static let italic = NSToolbarItem.Identifier("io.vincode.Zavala.italic")

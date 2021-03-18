@@ -52,6 +52,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 			openDocument(documentID)
 			return
 		}
+		
+		sceneDelegate?.closeWindow()
 	}
 	
 	func openDocument(_ documentID: EntityID) {
@@ -94,6 +96,34 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	
 	func showSettings() {
 		// No need to implement this since it is used on iOS only
+	}
+
+	@objc func deleteOutline(_ sender: Any?) {
+		guard let outline = editorViewController?.outline else { return }
+		let document = Document.outline(outline)
+		
+		func delete() {
+			document.account?.deleteDocument(document)
+			sceneDelegate?.closeWindow()
+		}
+
+		guard !document.isEmpty else {
+			delete()
+			return
+		}
+		
+		let deleteAction = UIAlertAction(title: L10n.delete, style: .destructive) { _ in
+			delete()
+		}
+		
+		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel)
+		
+		let alert = UIAlertController(title: L10n.deleteOutlinePrompt(document.title ?? ""), message: L10n.deleteOutlineMessage, preferredStyle: .alert)
+		alert.addAction(cancelAction)
+		alert.addAction(deleteAction)
+		alert.preferredAction = deleteAction
+		
+		present(alert, animated: true, completion: nil)
 	}
 
 	@objc func sync(_ sender: Any?) {
@@ -192,6 +222,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 	
 	func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
 		return [
+			.delete,
 			.sync,
 			.link,
 			.boldface,
@@ -214,6 +245,18 @@ extension EditorContainerViewController: NSToolbarDelegate {
 		var toolbarItem: NSToolbarItem?
 		
 		switch itemIdentifier {
+		case .delete:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { _ in
+				return false
+			}
+			item.image = AppAssets.delete
+			item.label = L10n.deleteOutline
+			item.toolTip = L10n.deleteOutline
+			item.isBordered = true
+			item.action = #selector(deleteOutline(_:))
+			item.target = self
+			toolbarItem = item
 		case .sync:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { _ in

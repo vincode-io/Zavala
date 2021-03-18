@@ -12,11 +12,13 @@ import Templeton
 class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	weak var scene: UIScene?
+	weak var session: UISceneSession?
 	var window: UIWindow?
 	var editorContainerViewController: EditorContainerViewController!
 	
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 		self.scene = scene
+		self.session = session
 		
 		guard let editorContainerViewController = window?.rootViewController as? EditorContainerViewController else {
 			return
@@ -82,6 +84,11 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 	
 	// MARK: API
+	
+	func closeWindow() {
+		guard let session = session else { return }
+		UIApplication.shared.requestSceneSessionDestruction(session, options: nil)
+	}
 	
 	func validateToolbar() {
 		#if targetEnvironment(macCatalyst)

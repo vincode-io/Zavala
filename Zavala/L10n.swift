@@ -70,6 +70,8 @@ internal enum L10n {
   }
   /// Delete Note
   internal static let deleteNote = L10n.tr("Localizable", "Delete_Note")
+  /// Delete Outline
+  internal static let deleteOutline = L10n.tr("Localizable", "Delete_Outline")
   /// The outline be deleted and unrecoverable.
   internal static let deleteOutlineMessage = L10n.tr("Localizable", "Delete_Outline_Message")
   /// Are you sure you want to delete the “%@” outline?

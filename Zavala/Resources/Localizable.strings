@@ -83,6 +83,7 @@
 "Acknowledgements" = "Acknowledgements";
 "Open_Quickly" = "Open Quickly...";
 "Copy_Link" = "Copy Link";
+"Delete_Outline" = "Delete Outline";
 
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";
