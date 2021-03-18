@@ -204,14 +204,6 @@ extension TimelineViewController: UIDocumentPickerDelegate {
 
 extension TimelineViewController {
 		
-	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		guard let documentContainer = documentContainer else { return }
-		guard let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
-		
-		let document = AccountManager.shared.findDocument(timelineItem.id)
-		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: false, animated: true)
-	}
-	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
 		guard let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return nil }
 		return makeOutlineContextMenu(item: timelineItem)
@@ -257,11 +249,41 @@ extension TimelineViewController {
 			}
 			
 			cell.contentConfiguration = contentConfiguration
+			
+			let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.selectDocument(gesture:)))
+			cell.addGestureRecognizer(singleTap)
+			
+			if self.traitCollection.userInterfaceIdiom == .mac {
+				let doubleTap = UITapGestureRecognizer(target: self, action: #selector(self.openDocumentInNewWindow(gesture:)))
+				doubleTap.numberOfTapsRequired = 2
+				cell.addGestureRecognizer(doubleTap)
+			}
 		}
 		
 		dataSource = UICollectionViewDiffableDataSource<Int, TimelineItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
 			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: item)
 		}
+	}
+	
+	@objc func selectDocument(gesture: UITapGestureRecognizer) {
+		guard let documentContainer = documentContainer,
+			  let cell = gesture.view as? UICollectionViewCell,
+			  let indexPath = collectionView.indexPath(for: cell),
+			  let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
+
+		collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+		let document = AccountManager.shared.findDocument(timelineItem.id)
+		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: false, animated: true)
+	}
+	
+	@objc func openDocumentInNewWindow(gesture: UITapGestureRecognizer) {
+		guard let cell = gesture.view as? UICollectionViewCell,
+			  let indexPath = collectionView.indexPath(for: cell),
+			  let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
+
+		let activity = NSUserActivity(activityType: "io.vincode.Zavala.openEditor")
+		activity.userInfo = [UserInfoKeys.documentID: timelineItem.id.userInfo]
+		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 	
 	func reload(document: Document) {
@@ -363,10 +385,6 @@ extension TimelineViewController {
 			
 			var menuItems = [UIMenu]()
 
-			if self.traitCollection.userInterfaceIdiom == .mac {
-				menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.openAction(document: document)]))
-			}
-			
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.copyLinkAction(document: document)]))
 
 			if let outline = document.outline {
@@ -379,15 +397,6 @@ extension TimelineViewController {
 		})
 	}
 
-	private func openAction(document: Document) -> UIAction {
-		let action = UIAction(title: L10n.openInNewWindow, image: AppAssets.link) { action in
-			let activity = NSUserActivity(activityType: "io.vincode.Zavala.openEditor")
-			activity.userInfo = [UserInfoKeys.documentID: document.id.userInfo]
-			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
-		}
-		return action
-	}
-	
 	private func copyLinkAction(document: Document) -> UIAction {
 		let action = UIAction(title: L10n.copyLink, image: AppAssets.link) { action in
 			let documentURL = document.id.url
