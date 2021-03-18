@@ -363,6 +363,10 @@ extension TimelineViewController {
 			
 			var menuItems = [UIMenu]()
 
+			if self.traitCollection.userInterfaceIdiom == .mac {
+				menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.openAction(document: document)]))
+			}
+			
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.copyLinkAction(document: document)]))
 
 			if let outline = document.outline {
@@ -373,6 +377,15 @@ extension TimelineViewController {
 			
 			return UIMenu(title: "", children: menuItems)
 		})
+	}
+
+	private func openAction(document: Document) -> UIAction {
+		let action = UIAction(title: L10n.openInNewWindow, image: AppAssets.link) { action in
+			let activity = NSUserActivity(activityType: "io.vincode.Zavala.openEditor")
+			activity.userInfo = [UserInfoKeys.documentID: document.id.userInfo]
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+		}
+		return action
 	}
 	
 	private func copyLinkAction(document: Document) -> UIAction {

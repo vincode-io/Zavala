@@ -52,7 +52,7 @@ class ActivityManager {
 		selectDocumentContainerActivity = nil
 	}
 
-	func selectingDocument(_ documentContainer: DocumentContainer, _ document: Document) {
+	func selectingDocument(_ documentContainer: DocumentContainer?, _ document: Document) {
 		self.invalidateSelectDocument()
 		self.selectDocumentActivity = self.makeSelectDocumentActivity(documentContainer, document)
 		self.selectDocumentActivity!.becomeCurrent()
@@ -95,13 +95,17 @@ extension ActivityManager {
 		return activity
 	}
 	
-	private func makeSelectDocumentActivity(_ documentContainer: DocumentContainer, _ document: Document) -> NSUserActivity {
+	private func makeSelectDocumentActivity(_ documentContainer: DocumentContainer?, _ document: Document) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: ActivityType.selectDocument.rawValue)
 
 		let title = L10n.editDocument(document.title ?? "")
 		activity.title = title
 		
-		activity.userInfo = [UserInfoKeys.documentContainerID: documentContainer.id.userInfo, UserInfoKeys.documentID: document.id.userInfo]
+		if let documentContainer = documentContainer {
+			activity.userInfo = [UserInfoKeys.documentContainerID: documentContainer.id.userInfo, UserInfoKeys.documentID: document.id.userInfo]
+		} else {
+			activity.userInfo = [UserInfoKeys.documentID: document.id.userInfo]
+		}
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 		
 		if let keywords = document.tags?.map({ $0.name }) {

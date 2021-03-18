@@ -152,6 +152,8 @@ internal enum L10n {
   internal static let nextResult = L10n.tr("Localizable", "Next_Result")
   /// Not Available
   internal static let notAvailable = L10n.tr("Localizable", "Not_Available")
+  /// Open In New Window
+  internal static let openInNewWindow = L10n.tr("Localizable", "Open_In_New_Window")
   /// Open Quickly...
   internal static let openQuickly = L10n.tr("Localizable", "Open_Quickly")
   /// Open Quickly

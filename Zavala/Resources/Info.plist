@@ -73,6 +73,14 @@
 					<key>UISceneStoryboardFile</key>
 					<string>Main</string>
 				</dict>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Outline Editor Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).OutlineEditorSceneDelegate</string>
+					<key>UISceneStoryboardFile</key>
+					<string>OutlineEditor</string>
+				</dict>
 			</array>
 		</dict>
 	</dict>
@@ -165,6 +173,10 @@
 				</array>
 			</dict>
 		</dict>
+	</array>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>io.vincode.Zavala.openEditor</string>
 	</array>
 </dict>
 </plist>

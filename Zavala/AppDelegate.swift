@@ -411,7 +411,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// MARK: UISceneSession Lifecycle
 
 	func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-		return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+		if options.userActivities.first?.activityType == "io.vincode.Zavala.openEditor" {
+			return UISceneConfiguration(name: "Outline Editor Configuration", sessionRole: connectingSceneSession.role)
+		} else {
+			return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+		}
 	}
 
 	// MARK: Actions

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="weB-54-0Fo">
+    <device id="mac" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Editor Container View Controller-->
+        <scene sceneID="OGC-pc-5XZ">
+            <objects>
+                <viewController id="weB-54-0Fo" customClass="EditorContainerViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="4qL-L1-yQR">
+                        <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xx9-N4-5dE">
+                                <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
+                                <connections>
+                                    <segue destination="wDl-nf-G47" kind="embed" id="QJh-wm-5xK"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="WSy-61-6Nb"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="xx9-N4-5dE" firstAttribute="top" secondItem="WSy-61-6Nb" secondAttribute="top" id="7wL-MJ-ug8"/>
+                            <constraint firstItem="WSy-61-6Nb" firstAttribute="bottom" secondItem="xx9-N4-5dE" secondAttribute="bottom" id="Pti-4A-Zxj"/>
+                            <constraint firstItem="WSy-61-6Nb" firstAttribute="trailing" secondItem="xx9-N4-5dE" secondAttribute="trailing" id="gNB-RL-mAf"/>
+                            <constraint firstItem="xx9-N4-5dE" firstAttribute="leading" secondItem="WSy-61-6Nb" secondAttribute="leading" id="h3a-Oc-aKX"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="K3H-xt-QW2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1839" y="244"/>
+        </scene>
+        <!--Editor View Controller-->
+        <scene sceneID="xI2-Ic-2tG">
+            <objects>
+                <viewController id="wDl-nf-G47" customClass="EditorViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ISO-wx-tBY">
+                        <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MSX-50-SmH" customClass="EditorSearchBar" customModule="Zavala" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="800" height="36"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="UOQ-tp-cUm"/>
+                                </constraints>
+                            </view>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="c3a-AA-EnS">
+                                <rect key="frame" x="0.0" y="36" width="800" height="564"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="laf-FT-8o7">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="j8K-cf-T45"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="c3a-AA-EnS" firstAttribute="top" secondItem="j8K-cf-T45" secondAttribute="top" constant="36" id="46x-oz-0wc"/>
+                            <constraint firstItem="c3a-AA-EnS" firstAttribute="leading" secondItem="j8K-cf-T45" secondAttribute="leading" id="G0D-GX-WNP"/>
+                            <constraint firstItem="j8K-cf-T45" firstAttribute="trailing" secondItem="c3a-AA-EnS" secondAttribute="trailing" id="MM8-d5-mpB"/>
+                            <constraint firstItem="c3a-AA-EnS" firstAttribute="top" secondItem="MSX-50-SmH" secondAttribute="bottom" id="N5A-Wz-gYZ"/>
+                            <constraint firstItem="j8K-cf-T45" firstAttribute="bottom" secondItem="c3a-AA-EnS" secondAttribute="bottom" id="ULS-ok-UXE"/>
+                            <constraint firstItem="j8K-cf-T45" firstAttribute="trailing" secondItem="MSX-50-SmH" secondAttribute="trailing" id="V03-Id-J24"/>
+                            <constraint firstItem="MSX-50-SmH" firstAttribute="leading" secondItem="j8K-cf-T45" secondAttribute="leading" id="vhP-rw-JBI"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="collectionView" destination="c3a-AA-EnS" id="FLJ-fW-iB5"/>
+                        <outlet property="collectionViewTopConstraint" destination="46x-oz-0wc" id="oQY-Uy-NnO"/>
+                        <outlet property="searchBar" destination="MSX-50-SmH" id="HaN-zn-BAn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="W2Y-6H-XgS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1130" y="244"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
