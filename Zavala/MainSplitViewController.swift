@@ -61,10 +61,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 	private var lastMainControllerToAppear = MainControllerIdentifier.none
 	
-	#if MAC_TEST
-	private var crashReporter = CrashReporter()
-	#endif
-	
 	override func viewDidLoad() {
         super.viewDidLoad()
 		primaryBackgroundStyle = .sidebar
@@ -91,12 +87,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		timelineViewController?.delegate = self
 		sidebarViewController?.startUp()
 		editorViewController?.delegate = self
-
-		#if MAC_TEST
-		DispatchQueue.main.async {
-			self.crashReporter.check(presentingController: self)
-		}
-		#endif
 	}
 	
 	func handle(_ activity: NSUserActivity) {

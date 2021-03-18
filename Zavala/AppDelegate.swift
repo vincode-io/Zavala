@@ -352,6 +352,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController as? MainCoordinator
 	}
 	
+	#if MAC_TEST
+	private var crashReporter = CrashReporter()
+	#endif
+	
 	#if targetEnvironment(macCatalyst)
 	var appKitPlugin: AppKitPlugin?
 	#endif
@@ -396,6 +400,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		UIApplication.shared.registerForRemoteNotifications()
 		NSUbiquitousKeyValueStore.default.synchronize()
+		
+		#if MAC_TEST
+		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+			guard let controller = self.mainCoordinator as? UIViewController else { return }
+			self.crashReporter.check(presentingController: controller)
+		}
+		#endif
 		
 		return true
 	}
