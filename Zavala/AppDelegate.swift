@@ -148,7 +148,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 input: "i",
 										 modifierFlags: [.shift, .command])
 	
-	let newWindowCommand = UIKeyCommand(title: L10n.newWindow,
+	let newWindowCommand = UIKeyCommand(title: L10n.newMainWindow,
 										action: #selector(newWindow(_:)),
 										input: "n",
 										modifierFlags: [.alternate, .command])

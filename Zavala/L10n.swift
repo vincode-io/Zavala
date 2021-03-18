@@ -144,10 +144,10 @@ internal enum L10n {
   internal static let move = L10n.tr("Localizable", "Move")
   /// New Folder
   internal static let newFolder = L10n.tr("Localizable", "New_Folder")
+  /// New Main Window
+  internal static let newMainWindow = L10n.tr("Localizable", "New_Main_Window")
   /// New Outline
   internal static let newOutline = L10n.tr("Localizable", "New_Outline")
-  /// New Window
-  internal static let newWindow = L10n.tr("Localizable", "New_Window")
   /// Next Result
   internal static let nextResult = L10n.tr("Localizable", "Next_Result")
   /// Not Available
