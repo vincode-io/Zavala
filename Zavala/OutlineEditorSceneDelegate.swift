@@ -23,7 +23,7 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 		}
 
 		if let windowFrame = window?.frame {
-			window?.frame = CGRect(x: windowFrame.origin.x, y: windowFrame.origin.y, width: 600, height: 600)
+			window?.frame = CGRect(x: windowFrame.origin.x, y: windowFrame.origin.y, width: 700, height: 600)
 		}
 		
 		self.editorContainerViewController = editorContainerViewController
