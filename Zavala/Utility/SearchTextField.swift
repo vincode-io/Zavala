@@ -378,6 +378,7 @@ open class SearchTextField: EnhancedTextField {
             tableView.backgroundColor = theme.bgColor
             
             tableView.reloadData()
+			tableView.flashScrollIndicators()
         }
     }
     
