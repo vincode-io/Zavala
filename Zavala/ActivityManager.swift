@@ -10,12 +10,6 @@ import CoreSpotlight
 import CoreServices
 import Templeton
 
-enum ActivityType: String {
-	case restoration = "Restoration"
-	case selectDocumentContainer = "SelectDocumentContainer"
-	case selectDocument = "SelectDocument"
-}
-
 class ActivityManager {
 	
 	private var selectDocumentContainerActivity: NSUserActivity?
@@ -30,7 +24,7 @@ class ActivityManager {
 			return activity
 		}
 		
-		let activity = NSUserActivity(activityType: ActivityType.restoration.rawValue)
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.restoration.rawValue)
 		activity.persistentIdentifier = UUID().uuidString
 		activity.becomeCurrent()
 		return activity
@@ -73,7 +67,7 @@ extension ActivityManager {
 	}
 	
 	private func makeSelectDocumentContainerActivity(_ documentContainer: DocumentContainer) -> NSUserActivity {
-		let activity = NSUserActivity(activityType: ActivityType.selectDocumentContainer.rawValue)
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocumentContainer.rawValue)
 		
 		let title = L10n.seeDocumentsIn(documentContainer.name ?? "")
 		activity.title = title
@@ -96,7 +90,7 @@ extension ActivityManager {
 	}
 	
 	private func makeSelectDocumentActivity(_ documentContainer: DocumentContainer?, _ document: Document) -> NSUserActivity {
-		let activity = NSUserActivity(activityType: ActivityType.selectDocument.rawValue)
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocument.rawValue)
 
 		let title = L10n.editDocument(document.title ?? "")
 		activity.title = title

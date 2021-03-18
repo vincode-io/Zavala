@@ -422,7 +422,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// MARK: UISceneSession Lifecycle
 
 	func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-		if options.userActivities.first?.activityType == "io.vincode.Zavala.openEditor" {
+		if options.userActivities.first?.activityType == NSUserActivity.ActivityType.openEditor.rawValue {
 			return UISceneConfiguration(name: "Outline Editor Configuration", sessionRole: connectingSceneSession.role)
 		} else {
 			return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
@@ -462,7 +462,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	@objc func newWindow(_ sender: Any?) {
-		let userActivity = NSUserActivity(activityType: "io.vincode.Zavala.create")
+		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.newWindow.rawValue)
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: userActivity, options: nil, errorHandler: nil)
 	}
 	
