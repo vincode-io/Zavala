@@ -94,6 +94,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			if updated != oldValue {
 				documentUpdatedDidChange()
 				documentMetaDataDidChange()
+				requestCloudKitUpdate(for: id)
 			}
 		}
 	}
