@@ -91,7 +91,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public var updated: Date? {
 		didSet {
-			documentMetaDataDidChange()
+			if updated != oldValue {
+				documentUpdatedDidChange()
+				documentMetaDataDidChange()
+			}
 		}
 	}
 	
@@ -1646,6 +1649,10 @@ extension Outline {
 	
 	private func documentTitleDidChange() {
 		NotificationCenter.default.post(name: .DocumentTitleDidChange, object: Document.outline(self), userInfo: nil)
+	}
+
+	private func documentUpdatedDidChange() {
+		NotificationCenter.default.post(name: .DocumentUpdatedDidChange, object: Document.outline(self), userInfo: nil)
 	}
 
 	private func documentMetaDataDidChange() {

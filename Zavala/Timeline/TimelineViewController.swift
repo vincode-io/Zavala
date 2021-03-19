@@ -79,6 +79,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(documentUpdatedDidChange(_:)), name: .DocumentUpdatedDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentSharingDidChange(_:)), name: .DocumentSharingDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 	}
@@ -123,6 +124,11 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
+		guard let document = note.object as? Document else { return }
+		reload(document: document)
+	}
+	
+	@objc func documentUpdatedDidChange(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
 		reload(document: document)
 	}
