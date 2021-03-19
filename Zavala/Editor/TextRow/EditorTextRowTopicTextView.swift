@@ -52,6 +52,20 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		return editorDelegate?.editorRowTopicTextViewTextRowStrings
 	}
 	
+	var cursorIsOnTopLine: Bool {
+		guard let caratPosition = selectedTextRange?.start else { return false }
+		let caratRect = caretRect(for: caratPosition)
+		let lineStart = closestPosition(to: CGPoint(x: 0, y: caratRect.midY))
+		return lineStart == beginningOfDocument
+	}
+	
+	var cursorIsOnBottomLine: Bool {
+		guard let caratPosition = selectedTextRange?.start else { return false }
+		let caratRect = caretRect(for: caratPosition)
+		let lineEnd = closestPosition(to: CGPoint(x: bounds.maxX, y: caratRect.midY))
+		return lineEnd == endOfDocument
+	}
+	
 	private var autosaveWorkItem: DispatchWorkItem?
 	private var textViewHeight: CGFloat?
 	private var isSavingTextUnnecessary = false

@@ -115,6 +115,8 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 		guard let textView = (contentView as? EditorTextRowContentView)?.topicTextView else { return }
 		textView.becomeFirstResponder()
 		let startPosition = textView.beginningOfDocument
+		// If you don't set the cursor location this way, sometimes if just doesn't appear.  Weird, I know.
+		textView.selectedTextRange = textView.textRange(from: startPosition, to: textView.endOfDocument)
 		textView.selectedTextRange = textView.textRange(from: startPosition, to: startPosition)
 	}
 	

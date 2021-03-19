@@ -1238,11 +1238,29 @@ extension EditorViewController {
 			
 			switch keyCode {
 			case .keyboardUpArrow:
-				currentKeyPresses.insert(keyCode)
-				repeatMoveCursorUp()
+				if let topic = currentTextView as? EditorTextRowTopicTextView {
+					if topic.cursorIsOnTopLine {
+						currentKeyPresses.insert(keyCode)
+						repeatMoveCursorUp()
+					} else {
+						super.pressesBegan(presses, with: event)
+					}
+				} else {
+					currentKeyPresses.insert(keyCode)
+					repeatMoveCursorUp()
+				}
 			case .keyboardDownArrow:
-				currentKeyPresses.insert(keyCode)
-				repeatMoveCursorDown()
+				if let topic = currentTextView as? EditorTextRowTopicTextView {
+					if topic.cursorIsOnBottomLine {
+						currentKeyPresses.insert(keyCode)
+						repeatMoveCursorDown()
+					} else {
+						super.pressesBegan(presses, with: event)
+					}
+				} else {
+					currentKeyPresses.insert(keyCode)
+					repeatMoveCursorDown()
+				}
 			default:
 				super.pressesBegan(presses, with: event)
 			}
@@ -1636,7 +1654,7 @@ extension EditorViewController {
 		let indexPath = IndexPath(row: shadowTableIndex + 1, section: adjustedRowsSection)
 		makeCellVisibleIfNecessary(indexPath: indexPath) {
 			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
-				rowCell.moveToEnd()
+				rowCell.moveToStart()
 			}
 		}
 	}
