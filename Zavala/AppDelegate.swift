@@ -630,6 +630,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
+		case #selector(toggleSidebarCommand(_:)):
+			if !(mainCoordinator is MainSplitViewController) {
+				command.attributes = .disabled
+			}
+		case #selector(beginDocumentSearchCommand(_:)):
+			if !(mainCoordinator is MainSplitViewController) {
+				command.attributes = .disabled
+			}
 		case #selector(syncCommand(_:)):
 			if !AccountManager.shared.isSyncAvailable {
 				command.attributes = .disabled
