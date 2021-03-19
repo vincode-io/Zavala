@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)checkForUpdates;
 - (void)showPreferences;
 - (void)importOPML;
+- (void)configureOpenQuickly:(NSObject  * _Nullable)window;
 @end
 
 NS_ASSUME_NONNULL_END

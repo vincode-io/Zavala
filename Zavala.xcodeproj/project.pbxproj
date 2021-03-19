@@ -171,6 +171,12 @@
 		517A9E2C2603E0BF00EF346A /* NSActivity+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517A9E2A2603E0BF00EF346A /* NSActivity+.swift */; };
 		517A9E332605130200EF346A /* OpenQuickly.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517A9E322605130200EF346A /* OpenQuickly.storyboard */; };
 		517A9E342605130200EF346A /* OpenQuickly.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517A9E322605130200EF346A /* OpenQuickly.storyboard */; };
+		517A9E3C26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517A9E3B26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift */; };
+		517A9E3D26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517A9E3B26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift */; };
+		517A9E432605558700EF346A /* MacOpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517A9E422605558700EF346A /* MacOpenQuicklyViewController.swift */; };
+		517A9E442605558700EF346A /* MacOpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517A9E422605558700EF346A /* MacOpenQuicklyViewController.swift */; };
+		517A9E4A26055C8B00EF346A /* UIWindow+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517A9E4926055C8B00EF346A /* UIWindow+.swift */; };
+		517A9E4B26055C8B00EF346A /* UIWindow+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517A9E4926055C8B00EF346A /* UIWindow+.swift */; };
 		517AF68625E07A3F0044DBAB /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517AF68525E07A3F0044DBAB /* Preferences.storyboard */; };
 		517AF68825E07A420044DBAB /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF68425E07A190044DBAB /* PreferencesWindowController.swift */; };
 		517AF68C25E07A790044DBAB /* GeneralPrefencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */; };
@@ -392,6 +398,9 @@
 		517A9E1E2602AD6B00EF346A /* EditorContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorContainerViewController.swift; sourceTree = "<group>"; };
 		517A9E2A2603E0BF00EF346A /* NSActivity+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSActivity+.swift"; sourceTree = "<group>"; };
 		517A9E322605130200EF346A /* OpenQuickly.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OpenQuickly.storyboard; sourceTree = "<group>"; };
+		517A9E3B26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOpenQuicklySceneDelegate.swift; sourceTree = "<group>"; };
+		517A9E422605558700EF346A /* MacOpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOpenQuicklyViewController.swift; sourceTree = "<group>"; };
+		517A9E4926055C8B00EF346A /* UIWindow+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+.swift"; sourceTree = "<group>"; };
 		517AF68425E07A190044DBAB /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
 		517AF68525E07A3F0044DBAB /* Preferences.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
 		517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralPrefencesViewController.swift; sourceTree = "<group>"; };
@@ -565,6 +574,7 @@
 				514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */,
 				51B2B2D52563AB9F0090C56B /* UIView+.swift */,
 				51692B0B25681AD3006B755F /* UIViewController+.swift */,
+				517A9E4926055C8B00EF346A /* UIWindow+.swift */,
 				51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */,
 				51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */,
 			);
@@ -629,6 +639,8 @@
 			isa = PBXGroup;
 			children = (
 				517A9E322605130200EF346A /* OpenQuickly.storyboard */,
+				517A9E3B26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift */,
+				517A9E422605558700EF346A /* MacOpenQuicklyViewController.swift */,
 				5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */,
 			);
 			path = OpenQuickly;
@@ -1175,11 +1187,13 @@
 				511B2A3A2602410C00C04239 /* StackedUndoManager.swift in Sources */,
 				511B2A3B2602410C00C04239 /* UICollectionView+.swift in Sources */,
 				511B2A3C2602410C00C04239 /* EditorDisclosureButton.swift in Sources */,
+				517A9E3D26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift in Sources */,
 				511B2A3D2602410C00C04239 /* CrashReporter.swift in Sources */,
 				511B2A3E2602410C00C04239 /* OutlineGetInfoViewController.swift in Sources */,
 				511B2A3F2602410C00C04239 /* EditorTagInputViewCell.swift in Sources */,
 				511B2A402602410C00C04239 /* EditorTagAddViewCell.swift in Sources */,
 				511B2A412602410C00C04239 /* EditorTagContentConfiguration.swift in Sources */,
+				517A9E442605558700EF346A /* MacOpenQuicklyViewController.swift in Sources */,
 				511B2A422602410C00C04239 /* NSDataDetector+.swift in Sources */,
 				511B2A432602410C00C04239 /* SidebarSearchContentConfiguration.swift in Sources */,
 				511B2A442602410C00C04239 /* SettingsViewController.swift in Sources */,
@@ -1224,6 +1238,7 @@
 				511B2A6A2602410C00C04239 /* String+.swift in Sources */,
 				511B2A6B2602410C00C04239 /* EditorViewController.swift in Sources */,
 				511B2A6C2602410C00C04239 /* EditorTagViewCell.swift in Sources */,
+				517A9E4B26055C8B00EF346A /* UIWindow+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1256,6 +1271,7 @@
 				51CF10C22571C22C005D6D88 /* L10n.swift in Sources */,
 				5167606425F95E4600AC0EBD /* DocumentIndexer.swift in Sources */,
 				511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */,
+				517A9E3C26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift in Sources */,
 				517AF6A725E08CB80044DBAB /* NonIntrinsicLabel.swift in Sources */,
 				51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */,
 				5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */,
@@ -1296,6 +1312,8 @@
 				5147D0C825CE28AE004673C3 /* NSDataDetector+.swift in Sources */,
 				51F2859725AD11DB0019C573 /* SidebarSearchContentConfiguration.swift in Sources */,
 				517AF6A425E08B7F0044DBAB /* SettingsViewController.swift in Sources */,
+				517A9E4A26055C8B00EF346A /* UIWindow+.swift in Sources */,
+				517A9E432605558700EF346A /* MacOpenQuicklyViewController.swift in Sources */,
 				517AF6AA25E08CD30044DBAB /* Bundle-Extensions.swift in Sources */,
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,

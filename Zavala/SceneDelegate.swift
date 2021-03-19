@@ -22,6 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			return
 		}
 
+		AppDefaults.shared.lastMainWindowWasClosed = false
+		
 		self.mainSplitViewController = mainSplitViewController
 		self.mainSplitViewController.sceneDelegate = self
 		
@@ -49,6 +51,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		if let url = connectionOptions.urlContexts.first?.url, let documentID = EntityID(url: url) {
 			mainSplitViewController.openDocument(documentID)
+		}
+	}
+	
+	func sceneDidDisconnect(_ scene: UIScene) {
+		if UIApplication.shared.applicationState == .active {
+			if !UIApplication.shared.windows.contains(where: { $0.rootViewController is MainSplitViewController }) {
+				AppDefaults.shared.lastMainWindowWasClosed = true
+			}
 		}
 	}
 

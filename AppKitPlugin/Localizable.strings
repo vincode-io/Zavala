@@ -14,3 +14,6 @@
 /* Settings */
 "Remove_CloudKit_Title" = "Remove iCloud Account";
 "Remove_CloudKit_Message" = "Are you sure you want to remove the iCloud Account? All documents in the iCloud Account will be removed from this computer.";
+
+/* Open Quickly */
+"Open Quickly" = "Open Quickly";

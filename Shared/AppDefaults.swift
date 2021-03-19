@@ -25,6 +25,7 @@ final class AppDefaults {
 		static let ownerName = "ownerName"
 		static let ownerEmail = "ownerEmail"
 		static let ownerURL = "ownerURL"
+		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
 	}
 	
 	let isDeveloperBuild: Bool = {
@@ -88,6 +89,15 @@ final class AppDefaults {
 		}
 	}
 	
+	var lastMainWindowWasClosed: Bool {
+		get {
+			return Self.bool(for: Key.lastMainWindowWasClosed)
+		}
+		set {
+			Self.setBool(for: Key.lastMainWindowWasClosed, newValue)
+		}
+	}
+
 	static func registerDefaults() {
 		let defaults: [String : Any] = [Key.enableLocalAccount: true]
 		AppDefaults.store.register(defaults: defaults)

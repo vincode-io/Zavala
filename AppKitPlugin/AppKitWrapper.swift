@@ -76,5 +76,13 @@ protocol SPUUpdaterDelegate {}
 			delegate?.importOPML(url)
 		}
 	}
-	
+
+	func configureOpenQuickly(_ window: NSObject?) {
+		guard let nsWindow = window as? NSWindow else { return }
+		nsWindow.title = L10n.openQuickly
+		nsWindow.titlebarAppearsTransparent = true
+		nsWindow.standardWindowButton(.zoomButton)?.isHidden = true
+		nsWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
+	}
+
 }

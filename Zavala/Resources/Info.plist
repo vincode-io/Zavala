@@ -81,6 +81,14 @@
 					<key>UISceneStoryboardFile</key>
 					<string>OutlineEditor</string>
 				</dict>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Open Quickly Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).MacOpenQuicklySceneDelegate</string>
+					<key>UISceneStoryboardFile</key>
+					<string>OpenQuickly</string>
+				</dict>
 			</array>
 		</dict>
 	</dict>
@@ -173,10 +181,6 @@
 				</array>
 			</dict>
 		</dict>
-	</array>
-	<key>NSUserActivityTypes</key>
-	<array>
-		<string>io.vincode.Zavala.openEditor</string>
 	</array>
 </dict>
 </plist>

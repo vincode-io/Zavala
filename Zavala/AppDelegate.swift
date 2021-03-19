@@ -8,6 +8,8 @@
 import UIKit
 import Templeton
 
+var appDelegate: AppDelegate!
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
@@ -361,6 +363,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	#endif
 
 	func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+		appDelegate = self
+
 		#if MAC_TEST
 		let oldDocumentAccountURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 		let oldDcumentAccountsFolder = oldDocumentAccountURL.appendingPathComponent("Accounts").absoluteString
@@ -426,11 +430,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		switch options.userActivities.first?.activityType {
 		case NSUserActivity.ActivityType.openEditor, NSUserActivity.ActivityType.newOutline:
 			return UISceneConfiguration(name: "Outline Editor Configuration", sessionRole: connectingSceneSession.role)
+		case NSUserActivity.ActivityType.openQuickly:
+			return UISceneConfiguration(name: "Open Quickly Configuration", sessionRole: connectingSceneSession.role)
 		default:
-			return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+			guard options.userActivities.first?.userInfo == nil else {
+				return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+			}
+			guard AppDefaults.shared.lastMainWindowWasClosed else {
+				return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+			}
+			return UISceneConfiguration(name: "Open Quickly Configuration", sessionRole: connectingSceneSession.role)
 		}
 	}
 
+	// MARK: API
+
+	func openDocument(_ documentID: EntityID) {
+		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
+			mainSplitViewController.openDocument(documentID)
+		} else {
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+			activity.userInfo = [UserInfoKeys.documentID: documentID.userInfo]
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+		}
+	}
+	
 	// MARK: Actions
 
 	@objc func showPreferences(_ sender: Any?) {
@@ -586,9 +610,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	@objc func showOpenQuicklyCommand(_ sender: Any?) {
+		#if targetEnvironment(macCatalyst)
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openQuickly)
+		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+		#else
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
 			mainSplitViewController.showOpenQuickly()
 		}
+		#endif
 	}
 
 	@objc func printCommand(_ sender: Any?) {
