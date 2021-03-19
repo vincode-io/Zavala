@@ -16,7 +16,9 @@ protocol SPUUpdaterDelegate {}
 #endif
 
 @objc class AppKitWrapper: NSResponder, AppKitPlugin, SPUUpdaterDelegate, SPUStandardUserDriverDelegate {
-
+	
+	private weak var delegate: AppKitPluginDelegate?
+	
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "SparkleWrapper")
 	
 	#if MAC_TEST
@@ -25,6 +27,10 @@ protocol SPUUpdaterDelegate {}
 
 	private var preferencesWindowController: NSWindowController?
 
+	func setDelegate(_ delegate: AppKitPluginDelegate?) {
+		self.delegate = delegate
+	}
+	
 	func start() {
 		#if MAC_TEST
 		let hostBundle = Bundle.main
@@ -53,4 +59,22 @@ protocol SPUUpdaterDelegate {}
 		}
 		preferencesWindowController!.showWindow(self)
 	}
+	
+	func importOPML() {
+		let panel = NSOpenPanel()
+		panel.canDownloadUbiquitousContents = true
+		panel.canResolveUbiquitousConflicts = true
+		panel.canChooseFiles = true
+		panel.allowsMultipleSelection = false
+		panel.canChooseDirectories = false
+		panel.resolvesAliases = true
+		panel.allowedFileTypes = ["opml"]
+		panel.allowsOtherFileTypes = false
+		
+		let modalResult = panel.runModal()
+		if modalResult == NSApplication.ModalResponse.OK, let url = panel.url {
+			delegate?.importOPML(url)
+		}
+	}
+	
 }

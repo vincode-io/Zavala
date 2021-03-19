@@ -395,6 +395,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			  let appKitPlugin = cls.init() as? AppKitPlugin else { return true }
 		
 		self.appKitPlugin = appKitPlugin
+		appKitPlugin.setDelegate(self)
 		appKitPlugin.start()
 		#endif
 		
@@ -454,7 +455,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
 			mainSplitViewController.importOPML()
 		} else {
-			fatalError("You forgot to implement this...")
+			#if targetEnvironment(macCatalyst)
+			appKitPlugin?.importOPML()
+			#endif
 		}
 	}
 
@@ -825,6 +828,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.replaceChildren(ofMenu: .help, from: { _ in return [showReleaseNotesCommand, showGitHubRepositoryCommand, showBugTrackerCommand, showAcknowledgementsCommand] })
 	}
 	#endif
+	
+}
+
+extension AppDelegate: AppKitPluginDelegate {
+	
+	func importOPML(_ url: URL) {
+		let accountID = AppDefaults.shared.lastSelectedAccountID
+		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return }
+		guard let document = try? account.importOPML(url, tag: nil) else { return }
+
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+		activity.userInfo = [UserInfoKeys.documentID: document.id.userInfo]
+		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+	}
 	
 }
 
