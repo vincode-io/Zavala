@@ -727,7 +727,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		
 		endCloudKitBatchRequest()
-		outlineBodyDidChange()
+		outlineContentDidChange()
 		
 		let reloads = impacted.compactMap { $0.shadowTableIndex }
 		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
@@ -761,7 +761,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		endCloudKitBatchRequest()
-		outlineBodyDidChange()
+		outlineContentDidChange()
 		
 		let reloads = impacted.keys.compactMap { $0.shadowTableIndex }
 		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
@@ -777,7 +777,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		endCloudKitBatchRequest()
-		outlineBodyDidChange()
+		outlineContentDidChange()
 		
 		let reloads = notes.keys.compactMap { $0.shadowTableIndex }
 		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
@@ -804,7 +804,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		deleteLinkRelationships(for: rows)
 		endCloudKitBatchRequest()
-		outlineBodyDidChange()
+		outlineContentDidChange()
 		
 		var deletedRows = [Row]()
 		
@@ -874,7 +874,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		createLinkRelationships(for: [row])
 		endCloudKitBatchRequest()
-		outlineBodyDidChange()
+		outlineContentDidChange()
 
 		shadowTable?.insert(row, at: shadowTableIndex)
 		resetShadowTableIndexes(startingAt: shadowTableIndex)
@@ -917,7 +917,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		createLinkRelationships(for: [row])
 		endCloudKitBatchRequest()
-		outlineBodyDidChange()
+		outlineContentDidChange()
 			
 		let rowShadowTableIndex: Int
 		if let afterRowShadowTableIndex = afterRow?.shadowTableIndex {
@@ -988,7 +988,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		createLinkRelationships(for: rows)
 		endCloudKitBatchRequest()
-		outlineBodyDidChange()
+		outlineContentDidChange()
 		
 		var changes = rebuildShadowTable()
 		
@@ -1034,7 +1034,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			updateTextRowStrings(textRow, texts)
 		}
 		
-		outlineBodyDidChange()
+		outlineContentDidChange()
 		
 		if applyChanges {
 			guard let shadowTableIndex = row.shadowTableIndex else { return }
@@ -1103,7 +1103,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			container.rows.forEach { $0.visit(visitor: expandVisitor(_:)) }
 		}
 
-		outlineBodyDidChange()
+		outlineViewPropertyDidChange()
 
 		var changes = rebuildShadowTable()
 		
@@ -1155,7 +1155,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 		
-		outlineBodyDidChange()
+		outlineViewPropertyDidChange()
 
 		var changes = rebuildShadowTable()
 	
@@ -1241,7 +1241,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		
 		endCloudKitBatchRequest()
-		outlineBodyDidChange()
+		outlineContentDidChange()
 		
 		func reloadVisitor(_ visited: Row) {
 			if let index = visited.shadowTableIndex {
@@ -1305,7 +1305,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		endCloudKitBatchRequest()
-		outlineBodyDidChange()
+		outlineContentDidChange()
 
 		var changes = rebuildShadowTable()
 		let reloads = reloadsForParentAndChildren(rows: impacted)
@@ -1361,7 +1361,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		endCloudKitBatchRequest()
-		outlineBodyDidChange()
+		outlineContentDidChange()
 
 		var changes = rebuildShadowTable()
 		var reloads = reloadsForParentAndChildren(rows: rowMoves.map { $0.row })
@@ -1545,8 +1545,6 @@ extension Outline {
 			keyedRows?[entityID] = row
 		}
 		
-		updated = Date()
-		
 		guard beingViewedCount > 0 else { return }
 
 		var reloadRows = [Row]()
@@ -1658,8 +1656,13 @@ extension Outline {
 		NotificationCenter.default.post(name: .DocumentSharingDidChange, object: Document.outline(self), userInfo: nil)
 	}
 
-	private func outlineBodyDidChange() {
+	private func outlineContentDidChange() {
 		self.updated = Date()
+		documentMetaDataDidChange()
+		rowsFile?.markAsDirty()
+	}
+	
+	private func outlineViewPropertyDidChange() {
 		documentMetaDataDidChange()
 		rowsFile?.markAsDirty()
 	}
@@ -1728,7 +1731,7 @@ extension Outline {
 		}
 		
 		endCloudKitBatchRequest()
-		outlineBodyDidChange()
+		outlineContentDidChange()
 		
 		if isFiltered ?? false {
 			let changes = rebuildShadowTable()
@@ -1811,7 +1814,7 @@ extension Outline {
 			}
 		}
 		
-		outlineBodyDidChange()
+		outlineViewPropertyDidChange()
 
 		var changes = rebuildShadowTable()
 		
@@ -1828,7 +1831,7 @@ extension Outline {
 		var mutatingRow = row
 		mutatingRow.isExpanded = true
 
-		outlineBodyDidChange()
+		outlineViewPropertyDidChange()
 		
 		var shadowTableInserts = [Row]()
 
@@ -1902,7 +1905,7 @@ extension Outline {
 		var mutatingRow = row
 		mutatingRow.isExpanded = false
 			
-		outlineBodyDidChange()
+		outlineViewPropertyDidChange()
 		
 		var reloads = Set<Int>()
 
