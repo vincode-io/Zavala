@@ -1586,6 +1586,7 @@ extension Outline {
 		ownerEmail = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail] as? String
 		ownerURL = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL] as? String
 		created = record[CloudKitOutlineZone.CloudKitOutline.Fields.created] as? Date
+		updated = record[CloudKitOutlineZone.CloudKitOutline.Fields.updated] as? Date
 
 		let rowOrderRowUUIDs = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
 		rowOrder = rowOrderRowUUIDs.map { EntityID.row(id.accountID, id.documentUUID, $0) }
