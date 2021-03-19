@@ -28,6 +28,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
+		editorViewController?.delegate = self
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
     }
     
@@ -170,6 +171,16 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		outlineGetInfo()
 	}
 
+}
+
+// MARK: Helpers
+
+extension EditorContainerViewController: EditorDelegate {
+	
+	func validateToolbar(_: EditorViewController) {
+		sceneDelegate?.validateToolbar()
+	}
+	
 }
 
 // MARK: Helpers
