@@ -152,14 +152,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	func showOpenQuickly() {
 		if traitCollection.userInterfaceIdiom == .mac {
 		
-			let openQuicklyViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacOpenQuicklyViewController") as! MacOpenQuicklyViewController
-			openQuicklyViewController.preferredContentSize = CGSize(width: 300, height: 60)
-			openQuicklyViewController.delegate = self
-			present(openQuicklyViewController, animated: true)
+//			let openQuicklyViewController = UIStoryboard.openQuickly.instantiateViewController(withIdentifier: "MacOpenQuicklyViewController") as! MacOpenQuicklyViewController
+//			openQuicklyViewController.preferredContentSize = CGSize(width: 300, height: 60)
+//			openQuicklyViewController.delegate = self
+//			present(openQuicklyViewController, animated: true)
 		
 		} else {
 
-			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OpenQuicklyViewControllerNav") as! UINavigationController
+			let outlineGetInfoNavViewController = UIStoryboard.openQuickly.instantiateViewController(withIdentifier: "OpenQuicklyViewControllerNav") as! UINavigationController
 			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 100)
 			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
 			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OpenQuicklyViewController

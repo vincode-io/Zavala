@@ -24,7 +24,6 @@
 		511B2A1F2602410C00C04239 /* KeyboardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */; };
 		511B2A202602410C00C04239 /* TimelineViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0B725CCAB2A004673C3 /* TimelineViewController+Drop.swift */; };
 		511B2A212602410C00C04239 /* ReloadItemsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */; };
-		511B2A222602410C00C04239 /* MacOpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5193C8A025FD55CB00E63F94 /* MacOpenQuicklyViewController.swift */; };
 		511B2A232602410C00C04239 /* EditorTagInputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F222925C4FF02004E02CD /* EditorTagInputTextField.swift */; };
 		511B2A242602410C00C04239 /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
 		511B2A252602410C00C04239 /* TimelineViewController+Drag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0B425CB95B4004673C3 /* TimelineViewController+Drag.swift */; };
@@ -170,6 +169,8 @@
 		517A9E232602AD7400EF346A /* OutlineEditorSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517A9E1A2602ACE000EF346A /* OutlineEditorSceneDelegate.swift */; };
 		517A9E2B2603E0BF00EF346A /* NSActivity+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517A9E2A2603E0BF00EF346A /* NSActivity+.swift */; };
 		517A9E2C2603E0BF00EF346A /* NSActivity+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517A9E2A2603E0BF00EF346A /* NSActivity+.swift */; };
+		517A9E332605130200EF346A /* OpenQuickly.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517A9E322605130200EF346A /* OpenQuickly.storyboard */; };
+		517A9E342605130200EF346A /* OpenQuickly.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517A9E322605130200EF346A /* OpenQuickly.storyboard */; };
 		517AF68625E07A3F0044DBAB /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517AF68525E07A3F0044DBAB /* Preferences.storyboard */; };
 		517AF68825E07A420044DBAB /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF68425E07A190044DBAB /* PreferencesWindowController.swift */; };
 		517AF68C25E07A790044DBAB /* GeneralPrefencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */; };
@@ -189,7 +190,6 @@
 		5188FAA92602A9CE0020B7DA /* OutlineEditor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5188FAA82602A9CE0020B7DA /* OutlineEditor.storyboard */; };
 		5188FAAA2602A9CE0020B7DA /* OutlineEditor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5188FAA82602A9CE0020B7DA /* OutlineEditor.storyboard */; };
 		518F2E38257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */; };
-		5193C8A125FD55CB00E63F94 /* MacOpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5193C8A025FD55CB00E63F94 /* MacOpenQuicklyViewController.swift */; };
 		5193C8A625FD757900E63F94 /* OpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */; };
 		519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F004A25608EF9009DC1F0 /* TimelineItem.swift */; };
 		51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */; };
@@ -391,6 +391,7 @@
 		517A9E1A2602ACE000EF346A /* OutlineEditorSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineEditorSceneDelegate.swift; sourceTree = "<group>"; };
 		517A9E1E2602AD6B00EF346A /* EditorContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorContainerViewController.swift; sourceTree = "<group>"; };
 		517A9E2A2603E0BF00EF346A /* NSActivity+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSActivity+.swift"; sourceTree = "<group>"; };
+		517A9E322605130200EF346A /* OpenQuickly.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OpenQuickly.storyboard; sourceTree = "<group>"; };
 		517AF68425E07A190044DBAB /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
 		517AF68525E07A3F0044DBAB /* Preferences.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
 		517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralPrefencesViewController.swift; sourceTree = "<group>"; };
@@ -412,7 +413,6 @@
 		5181A96A2554D93B00C153E8 /* Zavala.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Zavala.entitlements; sourceTree = "<group>"; };
 		5188FAA82602A9CE0020B7DA /* OutlineEditor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OutlineEditor.storyboard; sourceTree = "<group>"; };
 		518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistentCollectionViewListCell.swift; sourceTree = "<group>"; };
-		5193C8A025FD55CB00E63F94 /* MacOpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOpenQuicklyViewController.swift; sourceTree = "<group>"; };
 		5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuicklyViewController.swift; sourceTree = "<group>"; };
 		519F004A25608EF9009DC1F0 /* TimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItem.swift; sourceTree = "<group>"; };
 		51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedUndoManager.swift; sourceTree = "<group>"; };
@@ -625,6 +625,15 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
+		517A9E31260512DC00EF346A /* OpenQuickly */ = {
+			isa = PBXGroup;
+			children = (
+				517A9E322605130200EF346A /* OpenQuickly.storyboard */,
+				5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */,
+			);
+			path = OpenQuickly;
+			sourceTree = "<group>";
+		};
 		517AF69E25E08A350044DBAB /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -681,6 +690,7 @@
 				51E14F292560728B00320EDB /* Timeline */,
 				51E14F2A2560729900320EDB /* Editor */,
 				51F13F01255E13D1004B85CA /* Dialogs */,
+				517A9E31260512DC00EF346A /* OpenQuickly */,
 				517AF69E25E08A350044DBAB /* Settings */,
 				514BB9D5255B595300C8DBDF /* Utility */,
 				515F163B255C536600FD98B8 /* Resources */,
@@ -799,9 +809,7 @@
 				51278E76257F37AC0034F1CB /* Dialog.storyboard */,
 				511B29E425FEE4DC00C04239 /* LinkViewController.swift */,
 				51C568D8258C1CD200AA7B93 /* MacLinkViewController.swift */,
-				5193C8A025FD55CB00E63F94 /* MacOpenQuicklyViewController.swift */,
 				5167607625F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift */,
-				5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */,
 				5167608425FBE4E500AC0EBD /* OutlineGetInfoViewController.swift */,
 			);
 			path = Dialogs;
@@ -999,6 +1007,7 @@
 				511B2A772602410C00C04239 /* Settings.storyboard in Resources */,
 				511B2A782602410C00C04239 /* Assets.xcassets in Resources */,
 				511B2A792602410C00C04239 /* Main.storyboard in Resources */,
+				517A9E342605130200EF346A /* OpenQuickly.storyboard in Resources */,
 				511B2A7A2602410C00C04239 /* Dialog.storyboard in Resources */,
 				5188FAAA2602A9CE0020B7DA /* OutlineEditor.storyboard in Resources */,
 				511B2A7B2602410C00C04239 /* Localizable.stringsdict in Resources */,
@@ -1030,6 +1039,7 @@
 				517AF6A025E08A6B0044DBAB /* Settings.storyboard in Resources */,
 				5181A9412554D92100C153E8 /* Assets.xcassets in Resources */,
 				5181A93F2554D92000C153E8 /* Main.storyboard in Resources */,
+				517A9E332605130200EF346A /* OpenQuickly.storyboard in Resources */,
 				51278E77257F37AC0034F1CB /* Dialog.storyboard in Resources */,
 				5188FAA92602A9CE0020B7DA /* OutlineEditor.storyboard in Resources */,
 				51CF10AC2571BA9A005D6D88 /* Localizable.stringsdict in Resources */,
@@ -1136,7 +1146,6 @@
 				511B2A1F2602410C00C04239 /* KeyboardTableView.swift in Sources */,
 				511B2A202602410C00C04239 /* TimelineViewController+Drop.swift in Sources */,
 				511B2A212602410C00C04239 /* ReloadItemsOperation.swift in Sources */,
-				511B2A222602410C00C04239 /* MacOpenQuicklyViewController.swift in Sources */,
 				511B2A232602410C00C04239 /* EditorTagInputTextField.swift in Sources */,
 				511B2A242602410C00C04239 /* UserInfoKeys.swift in Sources */,
 				511B2A252602410C00C04239 /* TimelineViewController+Drag.swift in Sources */,
@@ -1252,7 +1261,6 @@
 				5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */,
 				5147D0B825CCAB2A004673C3 /* TimelineViewController+Drop.swift in Sources */,
 				51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */,
-				5193C8A125FD55CB00E63F94 /* MacOpenQuicklyViewController.swift in Sources */,
 				514F222A25C4FF02004E02CD /* EditorTagInputTextField.swift in Sources */,
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
 				5147D0B525CB95B4004673C3 /* TimelineViewController+Drag.swift in Sources */,

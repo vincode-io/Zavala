@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Open Quickly View Controller-->
+        <scene sceneID="1nX-He-O0T">
+            <objects>
+                <tableViewController storyboardIdentifier="OpenQuicklyViewController" id="vEk-C9-Dxn" customClass="OpenQuicklyViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="1Oq-A0-MF9">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <sections>
+                            <tableViewSection id="rST-Of-drW">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="0kM-tt-gs7">
+                                        <rect key="frame" x="20" y="18" width="374" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0kM-tt-gs7" id="0Gg-Zo-5Ik">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Open Quickly" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uNw-0Z-jOF" customClass="SearchTextField" customModule="Zavala" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="4" width="334" height="36"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="uNw-0Z-jOF" secondAttribute="trailing" constant="20" id="98c-n9-YY2"/>
+                                                <constraint firstItem="uNw-0Z-jOF" firstAttribute="top" secondItem="0Gg-Zo-5Ik" secondAttribute="top" constant="4" id="dbe-3c-PQ8"/>
+                                                <constraint firstItem="uNw-0Z-jOF" firstAttribute="leading" secondItem="0Gg-Zo-5Ik" secondAttribute="leading" constant="20" id="sYc-GR-sc8"/>
+                                                <constraint firstAttribute="bottom" secondItem="uNw-0Z-jOF" secondAttribute="bottom" constant="4" id="vEK-qC-Dwz"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="vEk-C9-Dxn" id="CIq-22-KrW"/>
+                            <outlet property="delegate" destination="vEk-C9-Dxn" id="dv6-q8-Igb"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="C8T-8a-8Q5">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="adX-uI-mOQ">
+                            <connections>
+                                <action selector="cancel:" destination="vEk-C9-Dxn" id="xWi-36-9GW"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" style="done" systemItem="done" id="aoM-y4-jGQ">
+                            <connections>
+                                <action selector="submit:" destination="vEk-C9-Dxn" id="7EC-K9-iVc"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="doneBarButtonItem" destination="aoM-y4-jGQ" id="iJc-ak-yvx"/>
+                        <outlet property="searchTextField" destination="uNw-0Z-jOF" id="kgd-Wa-zCx"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qmk-Ox-x6P" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="19" y="2048"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="l4v-UD-ZTA">
+            <objects>
+                <navigationController storyboardIdentifier="OpenQuicklyViewControllerNav" id="zn6-yc-ZVn" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="QFk-wC-0al">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="vEk-C9-Dxn" kind="relationship" relationship="rootViewController" id="s99-dD-XNh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EFh-63-Ntr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-770" y="2048"/>
+        </scene>
+    </scenes>
+</document>

@@ -23,6 +23,10 @@ extension UIStoryboard {
 		return UIStoryboard(name: "Dialog", bundle: nil)
 	}
 	
+	static var openQuickly: UIStoryboard {
+		return UIStoryboard(name: "OpenQuickly", bundle: nil)
+	}
+	
 	func instantiateController<T>(ofType type: T.Type = T.self) -> T where T: UIViewController {
 		
 		let storyboardId = String(describing: type)
