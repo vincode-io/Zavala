@@ -548,6 +548,8 @@ open class SearchTextField: EnhancedTextField {
                 }
             }
         }
+		
+		filteredResults.sort(by: { $0.title.caseInsensitiveCompare($1.title) == .orderedAscending })
         
         tableView?.reloadData()
         
