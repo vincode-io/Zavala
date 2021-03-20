@@ -8,5 +8,5 @@
 import Foundation
 
 enum SidebarSection: Int {
-	case search, library, localAccount, cloudKitAccount
+	case search, localAccount, cloudKitAccount
 }
