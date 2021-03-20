@@ -98,13 +98,13 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gLs-LO-DwW">
-                                <rect key="frame" x="20" y="56" width="376" height="484"/>
+                                <rect key="frame" x="20" y="56" width="370" height="484"/>
                                 <connections>
                                     <segue destination="lxn-5g-vaa" kind="embed" id="VUf-zG-NdZ"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BU4-8V-Sp7">
-                                <rect key="frame" x="404" y="56" width="376" height="484"/>
+                                <rect key="frame" x="410" y="56" width="370" height="484"/>
                                 <connections>
                                     <segue destination="VYi-R1-UJx" kind="embed" id="TkZ-Hp-Ie5"/>
                                 </connections>
@@ -150,7 +150,7 @@
                             <constraint firstItem="fYM-HH-7Xz" firstAttribute="trailing" secondItem="BU4-8V-Sp7" secondAttribute="trailing" constant="20" id="jCG-KA-WsO"/>
                             <constraint firstItem="fYM-HH-7Xz" firstAttribute="bottom" secondItem="TmL-0b-c4c" secondAttribute="bottom" constant="20" id="mh6-dw-Mzr"/>
                             <constraint firstItem="fYM-HH-7Xz" firstAttribute="trailing" secondItem="L9g-l9-eOK" secondAttribute="trailing" constant="20" id="tpR-cw-uHF"/>
-                            <constraint firstItem="BU4-8V-Sp7" firstAttribute="leading" secondItem="gLs-LO-DwW" secondAttribute="trailing" constant="8" symbolic="YES" id="vbV-Cb-h9N"/>
+                            <constraint firstItem="BU4-8V-Sp7" firstAttribute="leading" secondItem="gLs-LO-DwW" secondAttribute="trailing" constant="20" id="vbV-Cb-h9N"/>
                             <constraint firstItem="fYM-HH-7Xz" firstAttribute="trailing" secondItem="5qy-iE-SRe" secondAttribute="trailing" constant="20" id="wtc-nU-qbK"/>
                         </constraints>
                     </view>
@@ -168,7 +168,7 @@
             <objects>
                 <collectionViewController id="lxn-5g-vaa" customClass="MacOpenQuicklySidebarViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="sWX-zh-TRN">
-                        <rect key="frame" x="0.0" y="0.0" width="376" height="484"/>
+                        <rect key="frame" x="0.0" y="0.0" width="370" height="484"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="xdb-YK-Ihd">
@@ -193,7 +193,7 @@
             <objects>
                 <collectionViewController id="VYi-R1-UJx" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="MHo-lA-YzS">
-                        <rect key="frame" x="0.0" y="0.0" width="376" height="484"/>
+                        <rect key="frame" x="0.0" y="0.0" width="370" height="484"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="eog-zf-hN6">

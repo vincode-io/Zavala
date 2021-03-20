@@ -16,6 +16,11 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 
 	override func viewDidLoad() {
         super.viewDidLoad()
+
+		collectionView.layer.borderWidth = 1
+		collectionView.layer.borderColor = UIColor.systemGray2.cgColor
+		collectionView.layer.cornerRadius = 5
+		
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
 		applySnapshot()
@@ -28,7 +33,6 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 			var configuration = UICollectionLayoutListConfiguration(appearance: .sidebar)
 			configuration.showsSeparators = false
 			configuration.headerMode = .firstItemInSection
-			configuration.backgroundColor = .secondarySystemBackground
 			return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
 		}
 		return layout
@@ -46,11 +50,11 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 			cell.accessories = [.outlineDisclosure()]
 		}
 		
-		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, SidebarItem> { (cell, indexPath, item) in
+		let rowRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, SidebarItem> { (cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
 			contentConfiguration.text = item.title
 			contentConfiguration.image = item.image
-			
+			cell.backgroundView = UIImageView(image: UIColor.systemBackground.asImage())
 			cell.contentConfiguration = contentConfiguration
 		}
 		
