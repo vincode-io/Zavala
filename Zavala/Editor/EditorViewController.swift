@@ -313,6 +313,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			collectionView.contentOffset = offset
 			transitionContentOffset = nil
 		}
+
+		// Restrict the content to a readable horizontal width
+		if collectionView.frame.width < 800 {
+			collectionView.directionalLayoutMargins = .zero
+		} else {
+			let horizontalInsets = (collectionView.frame.width - 800) / 2
+			self.collectionView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0, leading: horizontalInsets, bottom: 0, trailing: horizontalInsets)
+		}
 	}
 	
 	override func cut(_ sender: Any?) {
@@ -746,15 +754,19 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 			
 			if sectionIndex == Outline.Section.tags.rawValue {
-				let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(50), heightDimension: .estimated(100))
+				let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(100), heightDimension: .estimated(50))
 				let item = NSCollectionLayoutItem(layoutSize: itemSize)
-				let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100))
+				let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
 				let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-				return NSCollectionLayoutSection(group: group)
+				let layoutSection = NSCollectionLayoutSection(group: group)
+				layoutSection.contentInsetsReference = .layoutMargins
+				return layoutSection
 			} else {
 				var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
 				configuration.showsSeparators = false
-				return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
+				let layoutSection = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
+				layoutSection.contentInsetsReference = .layoutMargins
+				return layoutSection
 			}
 			
 		}
