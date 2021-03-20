@@ -40,6 +40,14 @@ class EditorTextRowContentView: UIView, UIContentView {
 		return TextRowStrings(topic: topicTextView.cleansedAttributedText, note: noteTextView?.cleansedAttributedText)
 	}
 	
+	var configuration: UIContentConfiguration {
+		get { appliedConfiguration }
+		set {
+			guard let newConfig = newValue as? EditorTextRowContentConfiguration else { return }
+			apply(configuration: newConfig)
+		}
+	}
+	
 	init(configuration: EditorTextRowContentConfiguration) {
 		super.init(frame: .zero)
 
@@ -60,14 +68,6 @@ class EditorTextRowContentView: UIView, UIContentView {
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
-	}
-	
-	var configuration: UIContentConfiguration {
-		get { appliedConfiguration }
-		set {
-			guard let newConfig = newValue as? EditorTextRowContentConfiguration else { return }
-			apply(configuration: newConfig)
-		}
 	}
 	
 	private func apply(configuration: EditorTextRowContentConfiguration) {
