@@ -38,6 +38,7 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
 		
 		if case .documentContainer(let entityID) = sidebarItem.id {
+			AppDefaults.shared.openQuicklyDocumentContainerID = entityID.userInfo
 			let documentContainer = AccountManager.shared.findDocumentContainer(entityID)
 			delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer)
 		}
@@ -99,6 +100,18 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 
 	private func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<SidebarItem>, section: SidebarSection, animated: Bool) {
 		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
+		
+		operation.completionBlock = { [weak self] _ in
+			if let self = self,
+			   let containerUserInfo = AppDefaults.shared.openQuicklyDocumentContainerID,
+			   let containerID = EntityID(userInfo: containerUserInfo),
+			   let container = AccountManager.shared.findDocumentContainer(containerID),
+			   let indexPath = self.dataSource.indexPath(for: SidebarItem.sidebarItem(container)) {
+				self.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredVertically)
+				self.delegate?.documentContainerSelectionDidChange(self, documentContainer: container)
+			}
+		}
+		
 		dataSourceQueue.add(operation)
 	}
 	

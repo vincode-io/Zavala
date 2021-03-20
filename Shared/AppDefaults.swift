@@ -26,6 +26,7 @@ final class AppDefaults {
 		static let ownerEmail = "ownerEmail"
 		static let ownerURL = "ownerURL"
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
+		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
 	}
 	
 	let isDeveloperBuild: Bool = {
@@ -95,6 +96,15 @@ final class AppDefaults {
 		}
 		set {
 			Self.setBool(for: Key.lastMainWindowWasClosed, newValue)
+		}
+	}
+
+	var openQuicklyDocumentContainerID: [AnyHashable : AnyHashable]? {
+		get {
+			return UserDefaults.standard.object(forKey: Key.openQuicklyDocumentContainerID) as? [AnyHashable : AnyHashable]
+		}
+		set {
+			UserDefaults.standard.set(newValue, forKey: Key.openQuicklyDocumentContainerID)
 		}
 	}
 
