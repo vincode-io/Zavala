@@ -9,8 +9,14 @@ import UIKit
 import RSCore
 import Templeton
 
+protocol MacOpenQuicklySidebarDelegate: AnyObject {
+	func documentContainerSelectionDidChange(_: MacOpenQuicklySidebarViewController, documentContainer: DocumentContainer?)
+}
+
 class MacOpenQuicklySidebarViewController: UICollectionViewController {
 
+	weak var delegate: MacOpenQuicklySidebarDelegate?
+	
 	var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
 
@@ -19,7 +25,7 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 
 		collectionView.layer.borderWidth = 1
 		collectionView.layer.borderColor = UIColor.systemGray2.cgColor
-		collectionView.layer.cornerRadius = 5
+		collectionView.layer.cornerRadius = 3
 		
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
@@ -27,6 +33,15 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
     }
 
     // MARK: UICollectionView
+
+	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
+		
+		if case .documentContainer(let entityID) = sidebarItem.id {
+			let documentContainer = AccountManager.shared.findDocumentContainer(entityID)
+			delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer)
+		}
+	}
 
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
@@ -50,11 +65,11 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 			cell.accessories = [.outlineDisclosure()]
 		}
 		
-		let rowRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, SidebarItem> { (cell, indexPath, item) in
+		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, SidebarItem> { (cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
 			contentConfiguration.text = item.title
 			contentConfiguration.image = item.image
-			cell.backgroundView = UIImageView(image: UIColor.systemBackground.asImage())
+			cell.backgroundConfiguration?.backgroundColor = .systemBackground
 			cell.contentConfiguration = contentConfiguration
 		}
 		

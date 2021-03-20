@@ -188,10 +188,10 @@
             </objects>
             <point key="canvasLocation" x="-935" y="3416"/>
         </scene>
-        <!--Collection View Controller-->
+        <!--Mac Open Quickly Timeline View Controller-->
         <scene sceneID="Wq4-ci-XFh">
             <objects>
-                <collectionViewController id="VYi-R1-UJx" sceneMemberID="viewController">
+                <collectionViewController id="VYi-R1-UJx" customClass="MacOpenQuicklyTimelineViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="MHo-lA-YzS">
                         <rect key="frame" x="0.0" y="0.0" width="370" height="484"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

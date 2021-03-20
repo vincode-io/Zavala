@@ -10,6 +10,8 @@
 		51028CD525F3159A00B50B71 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51028CD425F3159A00B50B71 /* UIColor+.swift */; };
 		5115C02D2605898900416D67 /* MacOpenQuicklySidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5115C02C2605898900416D67 /* MacOpenQuicklySidebarViewController.swift */; };
 		5115C02E2605898900416D67 /* MacOpenQuicklySidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5115C02C2605898900416D67 /* MacOpenQuicklySidebarViewController.swift */; };
+		5115C0362605F96100416D67 /* MacOpenQuicklyTimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5115C0352605F96100416D67 /* MacOpenQuicklyTimelineViewController.swift */; };
+		5115C0372605F96100416D67 /* MacOpenQuicklyTimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5115C0352605F96100416D67 /* MacOpenQuicklyTimelineViewController.swift */; };
 		511B29E525FEE4DC00C04239 /* LinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29E425FEE4DC00C04239 /* LinkViewController.swift */; };
 		511B29F226014FBA00C04239 /* EnhancedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F126014FBA00C04239 /* EnhancedTextField.swift */; };
 		511B29F726018FBB00C04239 /* EditorBacklinkContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F626018FBB00C04239 /* EditorBacklinkContentConfiguration.swift */; };
@@ -345,6 +347,7 @@
 /* Begin PBXFileReference section */
 		51028CD425F3159A00B50B71 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		5115C02C2605898900416D67 /* MacOpenQuicklySidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOpenQuicklySidebarViewController.swift; sourceTree = "<group>"; };
+		5115C0352605F96100416D67 /* MacOpenQuicklyTimelineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOpenQuicklyTimelineViewController.swift; sourceTree = "<group>"; };
 		511B29E425FEE4DC00C04239 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
 		511B29F126014FBA00C04239 /* EnhancedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedTextField.swift; sourceTree = "<group>"; };
 		511B29F626018FBB00C04239 /* EditorBacklinkContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBacklinkContentConfiguration.swift; sourceTree = "<group>"; };
@@ -644,6 +647,7 @@
 				517A9E322605130200EF346A /* OpenQuickly.storyboard */,
 				517A9E3B26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift */,
 				5115C02C2605898900416D67 /* MacOpenQuicklySidebarViewController.swift */,
+				5115C0352605F96100416D67 /* MacOpenQuicklyTimelineViewController.swift */,
 				517A9E422605558700EF346A /* MacOpenQuicklyViewController.swift */,
 				5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */,
 			);
@@ -1197,6 +1201,7 @@
 				511B2A3F2602410C00C04239 /* EditorTagInputViewCell.swift in Sources */,
 				511B2A402602410C00C04239 /* EditorTagAddViewCell.swift in Sources */,
 				511B2A412602410C00C04239 /* EditorTagContentConfiguration.swift in Sources */,
+				5115C0372605F96100416D67 /* MacOpenQuicklyTimelineViewController.swift in Sources */,
 				517A9E442605558700EF346A /* MacOpenQuicklyViewController.swift in Sources */,
 				511B2A422602410C00C04239 /* NSDataDetector+.swift in Sources */,
 				511B2A432602410C00C04239 /* SidebarSearchContentConfiguration.swift in Sources */,
@@ -1316,6 +1321,7 @@
 				514F221125C4CCE4004E02CD /* EditorTagContentConfiguration.swift in Sources */,
 				5147D0C825CE28AE004673C3 /* NSDataDetector+.swift in Sources */,
 				51F2859725AD11DB0019C573 /* SidebarSearchContentConfiguration.swift in Sources */,
+				5115C0362605F96100416D67 /* MacOpenQuicklyTimelineViewController.swift in Sources */,
 				517AF6A425E08B7F0044DBAB /* SettingsViewController.swift in Sources */,
 				517A9E4A26055C8B00EF346A /* UIWindow+.swift in Sources */,
 				517A9E432605558700EF346A /* MacOpenQuicklyViewController.swift in Sources */,

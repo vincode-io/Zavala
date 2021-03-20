@@ -20,6 +20,13 @@ class ConsistentCollectionViewListCell: UICollectionViewListCell {
 			if insetBackground {
 				backgroundConfig.backgroundInsets = NSDirectionalEdgeInsets(top: 1, leading: 9, bottom: 1, trailing: 9)
 			}
+
+			if state.isSelected || state.isHighlighted {
+				backgroundConfig.backgroundColor = .tertiarySystemGroupedBackground
+			} else {
+				backgroundConfig.backgroundColor = .clear
+			}
+
 			backgroundConfiguration = backgroundConfig
 			return
 		}
