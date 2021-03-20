@@ -70,6 +70,17 @@ class EditorTextRowContentView: UIView, UIContentView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	// This prevents the navigation controller backswipe from trigging a row indent
+	override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+		if gestureRecognizer is UISwipeGestureRecognizer {
+			let location = gestureRecognizer.location(in: self)
+			if location.x < self.frame.maxX * 0.05 || location.x > self.frame.maxX * 0.95 {
+				return false
+			}
+		}
+		return super.gestureRecognizerShouldBegin(gestureRecognizer)
+	}
+	
 	private func apply(configuration: EditorTextRowContentConfiguration) {
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
