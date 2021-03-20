@@ -18,7 +18,8 @@ class MacOpenQuicklyViewController: UIViewController {
 	override var keyCommands: [UIKeyCommand]? {
 		[
 			UIKeyCommand(action: #selector(arrowUp(_:)), input: UIKeyCommand.inputUpArrow),
-			UIKeyCommand(action: #selector(arrowDown(_:)), input: UIKeyCommand.inputDownArrow)
+			UIKeyCommand(action: #selector(arrowDown(_:)), input: UIKeyCommand.inputDownArrow),
+			UIKeyCommand(action: #selector(cancel(_:)), input: UIKeyCommand.inputEscape)
 		]
 	}
 
