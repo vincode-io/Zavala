@@ -32,7 +32,9 @@ class MacOpenQuicklyViewController: UIViewController {
 				return
 			}
 			self.sceneDelegate?.closeWindow()
-			appDelegate.openDocument(documentID)
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+			activity.userInfo = [UserInfoKeys.documentID: documentID.userInfo]
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 		}
 
 		let searchItems = AccountManager.shared.documents.map { SearchTextFieldItem(title: $0.title ?? "", associatedObject: $0.id) }
@@ -43,7 +45,9 @@ class MacOpenQuicklyViewController: UIViewController {
 		#if targetEnvironment(macCatalyst)
 		appDelegate.appKitPlugin?.configureOpenQuickly(view.window?.nsWindow)
 		#endif
-		searchTextField.becomeFirstResponder()
+		DispatchQueue.main.async {
+			self.searchTextField.becomeFirstResponder()
+		}
 	}
 	
 	@objc func arrowUp(_ sender: Any) {

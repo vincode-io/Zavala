@@ -443,18 +443,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 
-	// MARK: API
-
-	func openDocument(_ documentID: EntityID) {
-		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.openDocument(documentID)
-		} else {
-			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-			activity.userInfo = [UserInfoKeys.documentID: documentID.userInfo]
-			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
-		}
-	}
-	
 	// MARK: Actions
 
 	@objc func showPreferences(_ sender: Any?) {
