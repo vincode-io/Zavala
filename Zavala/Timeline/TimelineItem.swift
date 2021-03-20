@@ -17,15 +17,6 @@ final class TimelineItem: NSObject, NSCopying, Identifiable {
 		self.id = id
 	}
 
-	static func timelineItem(_ searchableItem: CSSearchableItem) -> TimelineItem? {
-		let description = searchableItem.uniqueIdentifier
-		if let entityID = EntityID(description: description) {
-			return TimelineItem(id: entityID)
-		} else {
-			return nil
-		}
-	}
-	
 	static func timelineItem(_ document: Document) -> TimelineItem {
 		return TimelineItem(id: document.id)
 	}
