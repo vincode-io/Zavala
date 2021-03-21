@@ -287,9 +287,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineElementsDidChange(_:)), name: .OutlineElementsDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchDidBegin(_:)), name: .OutlineSearchDidBegin, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillBegin(_:)), name: .OutlineSearchWillBegin, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchTextDidChange(_:)), name: .OutlineSearchTextDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchDidEnd(_:)), name: .OutlineSearchDidEnd, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillEnd(_:)), name: .OutlineSearchWillEnd, object: nil)
 
 		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -385,7 +385,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
-	@objc func outlineSearchDidBegin(_ note: Notification) {
+	@objc func outlineSearchWillBegin(_ note: Notification) {
 		guard note.object as? Outline == outline else { return }
 		
 		isSearching = true
@@ -413,7 +413,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
-	@objc func outlineSearchDidEnd(_ note: Notification) {
+	@objc func outlineSearchWillEnd(_ note: Notification) {
 		guard note.object as? Outline == outline else { return }
 
 		if searchBar.searchField.isFirstResponder {

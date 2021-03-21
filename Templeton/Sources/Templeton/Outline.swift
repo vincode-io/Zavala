@@ -11,9 +11,9 @@ import CloudKit
 
 public extension Notification.Name {
 	static let OutlineElementsDidChange = Notification.Name(rawValue: "OutlineElementsDidChange")
-	static let OutlineSearchDidBegin = Notification.Name(rawValue: "OutlineSearchDidBegin")
+	static let OutlineSearchWillBegin = Notification.Name(rawValue: "OutlineSearchWillBegin")
 	static let OutlineSearchTextDidChange = Notification.Name(rawValue: "OutlineSearchTextDidChange")
-	static let OutlineSearchDidEnd = Notification.Name(rawValue: "OutlineSearchDidEnd")
+	static let OutlineSearchWillEnd = Notification.Name(rawValue: "OutlineSearchWillEnd")
 }
 
 public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable, Codable {
@@ -667,7 +667,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public func beginSearching() {
 		isSearching = .beginSearch
-		outlineSearchDidBegin()
+		outlineSearchWillBegin()
 
 		var changes = rebuildShadowTable()
 
@@ -728,7 +728,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public func endSearching() {
-		outlineSearchDidEnd()
+		outlineSearchWillEnd()
 
 		isSearching = .notSearching
 
@@ -1718,8 +1718,8 @@ extension Outline {
 		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
 	}
 	
-	private func outlineSearchDidBegin() {
-		NotificationCenter.default.post(name: .OutlineSearchDidBegin, object: self, userInfo: nil)
+	private func outlineSearchWillBegin() {
+		NotificationCenter.default.post(name: .OutlineSearchWillBegin, object: self, userInfo: nil)
 	}
 	
 	private func outlineSearchTextDidChange(_ searchText: String) {
@@ -1728,8 +1728,8 @@ extension Outline {
 		NotificationCenter.default.post(name: .OutlineSearchTextDidChange, object: self, userInfo: userInfo)
 	}
 	
-	private func outlineSearchDidEnd() {
-		NotificationCenter.default.post(name: .OutlineSearchDidEnd, object: self, userInfo: nil)
+	private func outlineSearchWillEnd() {
+		NotificationCenter.default.post(name: .OutlineSearchWillEnd, object: self, userInfo: nil)
 	}
 	
 	private func changeSearchResult(_ changeToResult: Int) {
