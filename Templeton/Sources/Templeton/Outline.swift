@@ -667,6 +667,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public func beginSearching() {
 		isSearching = .beginSearch
+		outlineSearchDidBegin()
+
 		var changes = rebuildShadowTable()
 
 		if let inserts = changes.inserts {
@@ -674,7 +676,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
 		}
 		
-		outlineSearchDidBegin()
 		outlineElementsDidChange(changes)
 	}
 	
