@@ -287,6 +287,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineElementsDidChange(_:)), name: .OutlineElementsDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchDidBegin(_:)), name: .OutlineSearchDidBegin, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchTextDidChange(_:)), name: .OutlineSearchTextDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchDidEnd(_:)), name: .OutlineSearchDidEnd, object: nil)
+
 		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
@@ -381,6 +385,74 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
+	@objc func outlineSearchDidBegin(_ note: Notification) {
+		guard note.object as? Outline == outline else { return }
+
+		guard !isSearching else {
+			searchBar.becomeFirstResponder()
+			return
+		}
+		
+		isSearching = true
+		
+		// I don't understand why, but on iOS deleting the sections will cause random crashes.
+		// I should check periodically to see if this bug is fixed.
+		if traitCollection.userInterfaceIdiom == .mac {
+			collectionView.deleteSections(headerFooterSections)
+		} else {
+			collectionView.reloadData()
+		}
+		
+		searchBar.becomeFirstResponder()
+		discloseSearchBar()
+		
+		if !(searchBar.searchField.text?.isEmpty ?? true) {
+			search(for: searchBar.searchField.text!)
+		}
+	}
+	
+	@objc func outlineSearchTextDidChange(_ note: Notification) {
+		guard note.object as? Outline == outline else { return }
+		if let searchText = note.userInfo?[Outline.UserInfoKeys.searchText] as? String {
+			searchBar.searchField.text = searchText
+		}
+	}
+	
+	@objc func outlineSearchDidEnd(_ note: Notification) {
+		guard note.object as? Outline == outline else { return }
+
+		if searchBar.searchField.isFirstResponder {
+			searchBar.searchField.resignFirstResponder()
+		}
+		
+		guard isSearching else {
+			return
+		}
+		
+		view.layoutIfNeeded()
+		UIView.animate(withDuration: 0.3) {
+			self.collectionViewTopConstraint.constant = 0
+			self.view.layoutIfNeeded()
+		}
+
+		let currentSearchResultRow = outline?.currentSearchResultRow
+		
+		isSearching = false
+		collectionView.insertSections(headerFooterSections)
+
+		searchBar.searchField.text = ""
+		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
+
+		if let shadowTableIndex = CursorCoordinates.currentCoordinates?.row.shadowTableIndex {
+			let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
+			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+		} else if let shadowTableIndex = currentSearchResultRow?.shadowTableIndex {
+			let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
+			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+		}
+	}
+	
 	@objc func applicationWillTerminate(_ note: Notification) {
 		updateSpotlightIndex()
 	}
@@ -456,43 +528,23 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			
 		guard isViewLoaded else { return }
 		updateUI(editMode: false)
+
+		if (outline?.isSearching ?? .notSearching) == .searching {
+			discloseSearchBar()
+			searchBar.searchField.text = outline?.searchText
+			isSearching = true
+		}
+
 		collectionView.reloadData()
 		
-		endSearching(outline: oldOutline)
+		oldOutline?.endSearching()
 		restoreOutlineCursorPosition()
 		restoreScrollPosition()
 		moveCursorToTitleOnNew()
 	}
 	
 	func beginInDocumentSearch() {
-		guard !isSearching else {
-			searchBar.becomeFirstResponder()
-			return
-		}
-		
-		isSearching = true
-		
-		// I don't understand why, but on iOS deleting the sections will cause random crashes.
-		// I should check periodically to see if this bug is fixed.
-		if traitCollection.userInterfaceIdiom == .mac {
-			collectionView.deleteSections(headerFooterSections)
-		} else {
-			collectionView.reloadData()
-		}
-		
 		outline?.beginSearching()
-
-		searchBar.becomeFirstResponder()
-		view.layoutIfNeeded()
-
-		UIView.animate(withDuration: 0.3) {
-			self.collectionViewTopConstraint.constant = 36
-			self.view.layoutIfNeeded()
-		}
-		
-		if !(searchBar.searchField.text?.isEmpty ?? true) {
-			search(for: searchBar.searchField.text!)
-		}
 	}
 	
 	func deleteCurrentRows() {
@@ -1092,7 +1144,7 @@ extension EditorViewController: SearchBarDelegate {
 	}
 
 	func doneWasPressed(_ searchBar: EditorSearchBar) {
-		endSearching(outline: outline)
+		outline?.endSearching()
 	}
 	
 	func searchBar(_ searchBar: EditorSearchBar, textDidChange: String) {
@@ -1162,6 +1214,15 @@ extension EditorViewController {
 			ellipsisBarButtonItem.isEnabled = true
 		}
 		
+	}
+	
+	private func discloseSearchBar() {
+		view.layoutIfNeeded()
+
+		UIView.animate(withDuration: 0.3) {
+			self.collectionViewTopConstraint.constant = 36
+			self.view.layoutIfNeeded()
+		}
 	}
 	
 	private func buildEllipsisMenu() -> UIMenu {
@@ -2149,36 +2210,6 @@ extension EditorViewController {
 		
 		if !adjustedCollectionViewFrame.contains(cellFrame) {
 			collectionView.scrollRectToVisible(cellFrame, animated: true)
-		}
-	}
-	
-	private func endSearching(outline: Outline?) {
-		guard isSearching else {
-			return
-		}
-		
-		view.layoutIfNeeded()
-		UIView.animate(withDuration: 0.3) {
-			self.collectionViewTopConstraint.constant = 0
-			self.view.layoutIfNeeded()
-		}
-
-		let currentSearchResultRow = outline?.currentSearchResultRow
-		
-		isSearching = false
-		collectionView.insertSections(headerFooterSections)
-		outline?.endSearching()
-
-		searchBar.searchField.text = ""
-		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
-		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
-
-		if let shadowTableIndex = CursorCoordinates.currentCoordinates?.row.shadowTableIndex {
-			let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
-			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-		} else if let shadowTableIndex = currentSearchResultRow?.shadowTableIndex {
-			let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
-			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
 		}
 	}
 	

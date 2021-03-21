@@ -11,6 +11,9 @@ import CloudKit
 
 public extension Notification.Name {
 	static let OutlineElementsDidChange = Notification.Name(rawValue: "OutlineElementsDidChange")
+	static let OutlineSearchDidBegin = Notification.Name(rawValue: "OutlineSearchDidBegin")
+	static let OutlineSearchTextDidChange = Notification.Name(rawValue: "OutlineSearchTextDidChange")
+	static let OutlineSearchDidEnd = Notification.Name(rawValue: "OutlineSearchDidEnd")
 }
 
 public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable, Codable {
@@ -34,8 +37,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		case notSearching
 	}
 	
-	public private(set) var isSearching = SearchState.notSearching
+	public struct UserInfoKeys {
+		public static let searchText = "searchText"
+	}
 	
+	public private(set) var isSearching = SearchState.notSearching
+	public private(set) var searchText = ""
+
 	public var adjustedRowsSection: Section {
 		return isSearching == .notSearching ? Section.rows : Section.title
 	}
@@ -666,10 +674,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
 		}
 		
+		outlineSearchDidBegin()
 		outlineElementsDidChange(changes)
 	}
 	
 	public func search(for searchText: String) {
+		self.searchText = searchText
+		
 		clearSearchResults()
 		
 		if searchText.isEmpty {
@@ -680,6 +691,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			rows.forEach { $0.visit(visitor: searchVisitor.visitor(_:))	}
 			searchResultCoordinates = searchVisitor.searchResultCoordinates
 		}
+		
+		outlineSearchTextDidChange(searchText)
 		
 		var changes = rebuildShadowTable()
 		let reloads = searchResultCoordinates.compactMap { $0.row.shadowTableIndex }
@@ -714,6 +727,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public func endSearching() {
+		outlineSearchDidEnd()
+
 		isSearching = .notSearching
 
 		clearSearchResults()
@@ -1700,6 +1715,20 @@ extension Outline {
 		var userInfo = [AnyHashable: Any]()
 		userInfo[OutlineElementChanges.userInfoKey] = changes
 		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
+	}
+	
+	private func outlineSearchDidBegin() {
+		NotificationCenter.default.post(name: .OutlineSearchDidBegin, object: self, userInfo: nil)
+	}
+	
+	private func outlineSearchTextDidChange(_ searchText: String) {
+		var userInfo = [AnyHashable: Any]()
+		userInfo[UserInfoKeys.searchText] = searchText
+		NotificationCenter.default.post(name: .OutlineSearchTextDidChange, object: self, userInfo: userInfo)
+	}
+	
+	private func outlineSearchDidEnd() {
+		NotificationCenter.default.post(name: .OutlineSearchDidEnd, object: self, userInfo: nil)
 	}
 	
 	private func changeSearchResult(_ changeToResult: Int) {
