@@ -57,9 +57,15 @@ class MacOpenQuicklyTimelineViewController: UICollectionViewController {
 			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 			cell.insetBackground = true
-			contentConfiguration.text = document.title ?? L10n.noTitle
-//			contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .body)
-//			contentConfiguration.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
+			
+			if document.isShared {
+				let attrText = NSMutableAttributedString(string: "\(document.title ?? "") ")
+				let shareAttachement = NSTextAttachment(image: AppAssets.shared)
+				attrText.append(NSAttributedString(attachment: shareAttachement))
+				contentConfiguration.attributedText = attrText
+			} else {
+				contentConfiguration.text = document.title ?? L10n.noTitle
+			}
 			
 			cell.contentConfiguration = contentConfiguration
 			
