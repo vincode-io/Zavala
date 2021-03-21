@@ -554,6 +554,19 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return print
 	}
 	
+	public func string(indentLevel: Int = 0) -> String {
+		load()
+		
+		var string = "\(title ?? "")\n\n"
+		rows.forEach {
+			string.append($0.string(indentLevel: 0))
+			string.append("\n")
+		}
+		
+		unload()
+		return string
+	}
+	
 	public func markdown(indentLevel: Int = 0) -> String {
 		load()
 		

@@ -23,14 +23,14 @@ public final class TextRow: BaseRow, Codable {
 	public internal(set) var isComplete: Bool
 
 	public var isNoteEmpty: Bool {
-		return notePlainText == nil
+		return noteMarkdown == nil
 	}
 	
-	public var topicPlainText: String? {
+	public var topicMarkdown: String? {
 		return topic?.markdownRepresentation
 	}
 	
-	public var notePlainText: String? {
+	public var noteMarkdown: String? {
 		return note?.markdownRepresentation
 	}
 	
@@ -275,11 +275,27 @@ public final class TextRow: BaseRow, Codable {
 		return print
 	}
 
+	public override func string(indentLevel: Int = 0) -> String {
+		var string = String(repeating: "\t", count: indentLevel)
+		string.append("\(topic?.string ?? "")")
+		
+		if let notePlainText = note?.string {
+			string.append("\n\(notePlainText)")
+		}
+		
+		rows.forEach {
+			string.append("\n")
+			string.append($0.string(indentLevel: indentLevel + 1))
+		}
+		
+		return string
+	}
+	
 	public override func markdown(indentLevel: Int = 0) -> String {
 		var md = String(repeating: "\t", count: indentLevel)
-		md.append("* \(topicPlainText ?? "")")
+		md.append("* \(topicMarkdown ?? "")")
 		
-		if let notePlainText = notePlainText {
+		if let notePlainText = noteMarkdown {
 			md.append("\n  \(notePlainText)")
 		}
 		
@@ -293,10 +309,10 @@ public final class TextRow: BaseRow, Codable {
 	
 	public override func opml(indentLevel: Int = 0) -> String {
 		let indent = String(repeating: " ", count: (indentLevel + 1) * 2)
-		let escapedText = topicPlainText?.escapingSpecialXMLCharacters ?? ""
+		let escapedText = topicMarkdown?.escapingSpecialXMLCharacters ?? ""
 		
 		var opml = indent + "<outline text=\"\(escapedText)\""
-		if let escapedNote = notePlainText?.escapingSpecialXMLCharacters {
+		if let escapedNote = noteMarkdown?.escapingSpecialXMLCharacters {
 			opml.append(" _note=\"\(escapedNote)\"")
 		}
 
@@ -321,6 +337,6 @@ public final class TextRow: BaseRow, Codable {
 
 extension TextRow {
 	override public var debugDescription: String {
-		return "\(topicPlainText ?? "") (\(id))"
+		return "\(topic?.string ?? "") (\(id))"
 	}
 }

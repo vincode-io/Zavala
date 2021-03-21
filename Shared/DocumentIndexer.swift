@@ -32,7 +32,7 @@ struct DocumentIndexer {
 			attributeSet.keywords = keywords
 		}
 		attributeSet.relatedUniqueIdentifier = document.id.description
-		attributeSet.textContent = document.content
+		attributeSet.textContent = document.string
 		attributeSet.contentModificationDate = document.updated
 		return attributeSet
 	}

@@ -52,10 +52,10 @@ public enum Document: Equatable, Codable {
 		}
 	}
 	
-	public var content: String? {
+	public var string: String? {
 		switch self {
 		case .outline(let outline):
-			return outline.markdown()
+			return outline.string()
 		}
 	}
 	

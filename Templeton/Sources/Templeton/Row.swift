@@ -220,6 +220,10 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		return associatedRow.print(indentLevel: indentLevel)
 	}
 	
+	public func string(indentLevel: Int = 0) -> String {
+		return associatedRow.string(indentLevel: indentLevel)
+	}
+	
 	public func markdown(indentLevel: Int = 0) -> String {
 		return associatedRow.markdown(indentLevel: indentLevel)
 	}
