@@ -203,7 +203,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		
 		outline.updateAllLinkRelationships()
 		outline.forceSave()
-		outline.suspend()
+		outline.unload()
 		
 		return document
 	}
@@ -239,14 +239,14 @@ public final class Account: NSObject, Identifiable, Codable {
 			outline.load()
 			outline.apply(update)
 			outline.forceSave()
-			outline.suspend()
+			outline.unload()
 		} else {
 			let outline = Outline(id: update.documentID)
 			outline.zoneID = update.zoneID
 
 			outline.apply(update)
 			outline.forceSave()
-			outline.suspend()
+			outline.unload()
 			
 			if documents == nil {
 				documents = [Document]()

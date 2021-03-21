@@ -87,7 +87,7 @@ extension SidebarViewController: UICollectionViewDropDelegate {
 			}
 			
 			document.forceSave()
-			document.suspend(documentMayHaveChanged: true)
+			document.unload()
 			return
 		}
 		

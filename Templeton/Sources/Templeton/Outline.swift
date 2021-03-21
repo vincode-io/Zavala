@@ -550,7 +550,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			print.append(NSAttributedString(string: "\n"))
 		}
 
-		suspend()
+		unload()
 		return print
 	}
 	
@@ -563,7 +563,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			md.append("\n")
 		}
 		
-		suspend()
+		unload()
 		return md
 	}
 	
@@ -607,7 +607,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		opml.append("</body>\n")
 		opml.append("</opml>\n")
 
-		suspend()
+		unload()
 		return opml
 	}
 	
@@ -1380,6 +1380,25 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		rowsFile?.load()
 	}
 	
+	public func unload() {
+		rowsFile?.save()
+		
+		guard beingViewedCount < 1 else { return }
+		
+		rowsFile = nil
+		shadowTable = nil
+		rowOrder = nil
+		keyedRows = nil
+	}
+	
+	public func suspend() {
+		rowsFile?.suspend()
+	}
+	
+	public func resume() {
+		rowsFile?.resume()
+	}
+	
 	public func save() {
 		rowsFile?.save()
 	}
@@ -1427,17 +1446,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let currentDocumentLinks = documentLinks ?? [EntityID]()
 		let diff = newDocumentLinks.difference(from: currentDocumentLinks)
 		processLinkDiff(diff)
-	}
-	
-	public func suspend() {
-		rowsFile?.save()
-		
-		guard beingViewedCount < 1 else { return }
-		
-		rowsFile = nil
-		shadowTable = nil
-		rowOrder = nil
-		keyedRows = nil
 	}
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {

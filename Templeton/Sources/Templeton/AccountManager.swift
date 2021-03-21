@@ -166,11 +166,19 @@ public final class AccountManager {
 	
 	public func resume() {
 		cloudKitAccount?.cloudKitManager?.resume()
+		accountFiles.values.forEach { $0.resume() }
+		documents.forEach {	$0.resume()	}
 	}
 	
 	public func suspend() {
-		accountFiles.values.forEach { $0.save() }
-		documents.forEach { $0.save() }
+		accountFiles.values.forEach {
+			$0.save()
+			$0.suspend()
+		}
+		documents.forEach {
+			$0.save()
+			$0.suspend()
+		}
 		cloudKitAccount?.cloudKitManager?.suspend()
 	}
 	

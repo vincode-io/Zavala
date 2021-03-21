@@ -175,6 +175,13 @@ public enum Document: Equatable, Codable {
 		}
 	}
 
+	public func unload() {
+		switch self {
+		case .outline(let outline):
+			outline.unload()
+		}
+	}
+
 	public func save() {
 		switch self {
 		case .outline(let outline):
@@ -189,10 +196,17 @@ public enum Document: Equatable, Codable {
 		}
 	}
 
-	public func suspend(documentMayHaveChanged: Bool = false) {
+	public func suspend() {
 		switch self {
 		case .outline(let outline):
 			outline.suspend()
+		}
+	}
+
+	public func resume() {
+		switch self {
+		case .outline(let outline):
+			outline.resume()
 		}
 	}
 
