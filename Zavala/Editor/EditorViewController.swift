@@ -756,7 +756,15 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			if sectionIndex == Outline.Section.tags.rawValue {
 				let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(100), heightDimension: .estimated(50))
 				let item = NSCollectionLayoutItem(layoutSize: itemSize)
+				
+				// We do this differently in Catalyst to prevent a loop that seems to happen if we use fractionalWidth
+				// and dynamically change the directional layout margins
+				#if targetEnvironment(macCatalyst)
+				let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(800), heightDimension: .estimated(50))
+				#else
 				let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
+				#endif
+				
 				let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 				let layoutSection = NSCollectionLayoutSection(group: group)
 				layoutSection.contentInsetsReference = .layoutMargins
