@@ -173,6 +173,10 @@ struct AppAssets {
 		return UIImage(systemName: "person.crop.circle.badge.checkmark")!
 	}()
 
+	static var statelessShare: UIImage = {
+		return UIImage(systemName: "person.crop.circle")!
+	}()
+
 	static var sync: UIImage = {
 		return UIImage(systemName: "arrow.clockwise")!
 	}()

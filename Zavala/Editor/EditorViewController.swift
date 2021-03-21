@@ -1168,7 +1168,7 @@ extension EditorViewController {
 		var shareActions = [UIAction]()
 
 		if !isShareUnavailable {
-			let shareAction = UIAction(title: L10n.share, image: AppAssets.share) { [weak self] _ in
+			let shareAction = UIAction(title: L10n.share, image: AppAssets.statelessShare) { [weak self] _ in
 				self?.share(self?.ellipsisBarButtonItem)
 			}
 			shareActions.append(shareAction)
