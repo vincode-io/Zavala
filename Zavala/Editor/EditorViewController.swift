@@ -387,11 +387,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func outlineSearchDidBegin(_ note: Notification) {
 		guard note.object as? Outline == outline else { return }
-
-		guard !isSearching else {
-			searchBar.becomeFirstResponder()
-			return
-		}
 		
 		isSearching = true
 		
@@ -544,6 +539,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	func beginInDocumentSearch() {
+		guard !isSearching else {
+			searchBar.becomeFirstResponder()
+			return
+		}
+
 		outline?.beginSearching()
 	}
 	
