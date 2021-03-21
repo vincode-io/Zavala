@@ -654,6 +654,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isDocumentShared ?? false {
 					item.image = AppAssets.shared
+				} else if self?.editorViewController?.isShareUnavailable ?? true {
+					item.image = AppAssets.statelessShare
 				} else {
 					item.image = AppAssets.share
 				}
