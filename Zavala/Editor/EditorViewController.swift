@@ -464,6 +464,37 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		moveCursorToTitleOnNew()
 	}
 	
+	func beginInDocumentSearch() {
+		guard !isSearching else {
+			searchBar.becomeFirstResponder()
+			return
+		}
+		
+		isSearching = true
+		
+		// I don't understand why, but on iOS deleting the sections will cause random crashes.
+		// I should check periodically to see if this bug is fixed.
+		if traitCollection.userInterfaceIdiom == .mac {
+			collectionView.deleteSections(headerFooterSections)
+		} else {
+			collectionView.reloadData()
+		}
+		
+		outline?.beginSearching()
+
+		searchBar.becomeFirstResponder()
+		view.layoutIfNeeded()
+
+		UIView.animate(withDuration: 0.3) {
+			self.collectionViewTopConstraint.constant = 36
+			self.view.layoutIfNeeded()
+		}
+		
+		if !(searchBar.searchField.text?.isEmpty ?? true) {
+			search(for: searchBar.searchField.text!)
+		}
+	}
+	
 	func deleteCurrentRows() {
 		guard let rows = currentRows else { return }
 		deleteRows(rows)
@@ -686,37 +717,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			case .failure(let error):
 				self.presentError(error)
 			}
-		}
-	}
-	
-	@objc func beginInDocumentSearch() {
-		guard !isSearching else {
-			searchBar.becomeFirstResponder()
-			return
-		}
-		
-		isSearching = true
-		
-		// I don't understand why, but on iOS deleting the sections will cause random crashes.
-		// I should check periodically to see if this bug is fixed.
-		if traitCollection.userInterfaceIdiom == .mac {
-			collectionView.deleteSections(headerFooterSections)
-		} else {
-			collectionView.reloadData()
-		}
-		
-		outline?.beginSearching()
-
-		searchBar.becomeFirstResponder()
-		view.layoutIfNeeded()
-
-		UIView.animate(withDuration: 0.3) {
-			self.collectionViewTopConstraint.constant = 36
-			self.view.layoutIfNeeded()
-		}
-		
-		if !(searchBar.searchField.text?.isEmpty ?? true) {
-			search(for: searchBar.searchField.text!)
 		}
 	}
 	
