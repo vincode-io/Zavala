@@ -31,6 +31,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	var isShareUnavailable: Bool {
 		return outline == nil || !outline!.isCloudKit
 	}
+	
+	var isDocumentShared: Bool {
+		return outline?.isShared ?? false
+	}
 
 	var isOutlineFiltered: Bool {
 		return outline?.isFiltered ?? false

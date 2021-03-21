@@ -407,6 +407,11 @@ extension EditorContainerViewController: NSToolbarDelegate {
 		case .share:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
+				if self?.editorViewController?.isDocumentShared ?? false {
+					item.image = AppAssets.shared
+				} else {
+					item.image = AppAssets.share
+				}
 				return self?.editorViewController?.isShareUnavailable ?? true
 			}
 			item.image = AppAssets.share

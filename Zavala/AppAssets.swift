@@ -170,7 +170,7 @@ struct AppAssets {
 	}()
 
 	static var shared: UIImage = {
-		return UIImage(systemName: "person.crop.circle")!
+		return UIImage(systemName: "person.crop.circle.badge.checkmark")!
 	}()
 
 	static var sync: UIImage = {
