@@ -118,7 +118,7 @@ import UIKit
 		addArrangedSubview(doneButton)
 		
 		let resultsLabel = UILabel()
-		searchField = UISearchTextField()
+		searchField = EnhancedSearchTextField()
 		searchField.autocapitalizationType = .none
 		searchField.autocorrectionType = .no
 		searchField.returnKeyType = .search
