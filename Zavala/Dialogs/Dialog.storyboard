@@ -103,7 +103,7 @@
             </objects>
             <point key="canvasLocation" x="-1526" y="706"/>
         </scene>
-        <!--Root View Controller-->
+        <!--Link-->
         <scene sceneID="iXY-7J-YDc">
             <objects>
                 <tableViewController storyboardIdentifier="LinkViewController" id="oi4-S5-U9t" customClass="LinkViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
@@ -163,7 +163,7 @@
                             <outlet property="delegate" destination="oi4-S5-U9t" id="CFc-UG-ar3"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="I9F-eA-IBo">
+                    <navigationItem key="navigationItem" title="Link" id="I9F-eA-IBo">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="pyJ-8n-8kV">
                             <connections>
                                 <action selector="cancel:" destination="oi4-S5-U9t" id="W4X-bj-yiu"/>
@@ -349,7 +349,7 @@
             </objects>
             <point key="canvasLocation" x="-1526" y="1383"/>
         </scene>
-        <!--Root View Controller-->
+        <!--Owner-->
         <scene sceneID="tsv-bl-hMR">
             <objects>
                 <tableViewController storyboardIdentifier="OutlineGetInfoViewController" id="KgI-VC-lId" customClass="OutlineGetInfoViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
@@ -430,7 +430,7 @@
                             <outlet property="delegate" destination="KgI-VC-lId" id="mDc-ag-ug0"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="wM9-hO-OO1">
+                    <navigationItem key="navigationItem" title="Owner" id="wM9-hO-OO1">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Kfd-23-5VB">
                             <connections>
                                 <action selector="cancel:" destination="KgI-VC-lId" id="r5t-ft-26d"/>
@@ -547,7 +547,7 @@
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
