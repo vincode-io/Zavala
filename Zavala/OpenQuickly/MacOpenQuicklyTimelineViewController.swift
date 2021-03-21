@@ -57,14 +57,16 @@ class MacOpenQuicklyTimelineViewController: UICollectionViewController {
 			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 			cell.insetBackground = true
-			
+
+			let title = (document.title?.isEmpty ?? true) ? L10n.noTitle : document.title!
+
 			if document.isShared {
-				let attrText = NSMutableAttributedString(string: "\(document.title ?? "") ")
+				let attrText = NSMutableAttributedString(string: "\(title) ")
 				let shareAttachement = NSTextAttachment(image: AppAssets.shared)
 				attrText.append(NSAttributedString(attachment: shareAttachement))
 				contentConfiguration.attributedText = attrText
 			} else {
-				contentConfiguration.text = document.title ?? L10n.noTitle
+				contentConfiguration.text = title
 			}
 			
 			cell.contentConfiguration = contentConfiguration

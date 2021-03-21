@@ -235,14 +235,16 @@ extension TimelineViewController {
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, TimelineItem> { [weak self] (cell, indexPath, item) in
 			guard let self = self, let document = AccountManager.shared.findDocument(item.id) else { return }
 			
+			let title = (document.title?.isEmpty ?? true) ? L10n.noTitle : document.title!
+			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 			if document.isShared {
-				let attrText = NSMutableAttributedString(string: "\(document.title ?? "") ")
+				let attrText = NSMutableAttributedString(string: "\(title) ")
 				let shareAttachement = NSTextAttachment(image: AppAssets.shared)
 				attrText.append(NSAttributedString(attachment: shareAttachement))
 				contentConfiguration.attributedText = attrText
 			} else {
-				contentConfiguration.text = document.title ?? ""
+				contentConfiguration.text = title
 			}
 			contentConfiguration.secondaryText = Self.dateString(document.updated)
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
