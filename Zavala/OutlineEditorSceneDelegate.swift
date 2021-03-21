@@ -24,10 +24,6 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 			return
 		}
 
-		if let windowFrame = window?.frame {
-			window?.frame = CGRect(x: windowFrame.origin.x, y: windowFrame.origin.y, width: 700, height: 600)
-		}
-		
 		self.editorContainerViewController = editorContainerViewController
 		self.editorContainerViewController.sceneDelegate = self
 		
@@ -49,14 +45,29 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		let _ = editorContainerViewController.view
 		
-		if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
+		if let userActivity = session.stateRestorationActivity {
 			editorContainerViewController.handle(userActivity)
+			return
+		}
+
+		if let userActivity = connectionOptions.userActivities.first {
+			editorContainerViewController.handle(userActivity)
+			if let windowFrame = window?.frame {
+				window?.frame = CGRect(x: windowFrame.origin.x, y: windowFrame.origin.y, width: 700, height: 600)
+			}
 			return
 		}
 		
 		if let url = connectionOptions.urlContexts.first?.url, let documentID = EntityID(url: url) {
 			editorContainerViewController.openDocument(documentID)
+			if let windowFrame = window?.frame {
+				window?.frame = CGRect(x: windowFrame.origin.x, y: windowFrame.origin.y, width: 700, height: 600)
+			}
 		}
+		
+		closeWindow()
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openQuickly)
+		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 
 	func sceneDidDisconnect(_ scene: UIScene) {
