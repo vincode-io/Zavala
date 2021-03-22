@@ -1672,9 +1672,11 @@ extension Outline {
 			}
 		}
 		
-		let changes = OutlineElementChanges(section: .tags, deletes: deletes, inserts: inserts, moves: moves)
+		let changes = OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, inserts: inserts, moves: moves)
 		outlineElementsDidChange(changes)
-		outlineElementsDidChange(OutlineElementChanges(section: .backlinks, reloads: Set([0])))
+		if isSearching == .notSearching {
+			outlineElementsDidChange(OutlineElementChanges(section: .backlinks, reloads: Set([0])))
+		}
 	}
 	
 }
@@ -2153,14 +2155,18 @@ extension Outline {
 		}
 		documentBacklinks?.append(entityID)
 		documentMetaDataDidChange()
-		outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
+		if isSearching == .notSearching {
+			outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
+		}
 		requestCloudKitUpdate(for: id)
 	}
 
 	private func deleteBacklink(_ entityID: EntityID) {
 		documentBacklinks?.removeFirst(object: entityID)
 		documentMetaDataDidChange()
-		outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
+		if isSearching == .notSearching {
+			outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
+		}
 		requestCloudKitUpdate(for: id)
 	}
 
