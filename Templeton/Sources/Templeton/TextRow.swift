@@ -208,6 +208,16 @@ public final class TextRow: BaseRow, Codable {
 		outline?.requestCloudKitUpdate(for: id)
 	}
 
+	public override func clone(newOutlineID: EntityID) -> Row {
+		let textRow = TextRow(id: EntityID.row(newOutlineID.accountID, newOutlineID.documentUUID, UUID().uuidString))
+		textRow.topicData = topicData
+		textRow.noteData = noteData
+		textRow.isExpanded = isExpanded
+		textRow.isComplete = isComplete
+		textRow.rowOrder = rowOrder
+		return .text(textRow)
+	}
+
 	public override func print(indentLevel: Int) -> NSAttributedString {
 		let print = NSMutableAttributedString()
 		
