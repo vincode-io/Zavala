@@ -1400,12 +1400,15 @@ extension EditorViewController {
 	}
 	
 	private func applyChanges(_ changes: OutlineElementChanges) {
-		if let deletes = changes.deleteIndexPaths, !deletes.isEmpty {
-			collectionView.deleteItems(at: deletes)
-		}
 		
-		if let inserts = changes.insertIndexPaths, !inserts.isEmpty {
-			collectionView.insertItems(at: inserts)
+		collectionView.performBatchUpdates {
+			if let deletes = changes.deleteIndexPaths, !deletes.isEmpty {
+				collectionView.deleteItems(at: deletes)
+			}
+			
+			if let inserts = changes.insertIndexPaths, !inserts.isEmpty {
+				collectionView.insertItems(at: inserts)
+			}
 		}
 		
 		if let moves = changes.moveIndexPaths, !moves.isEmpty {
