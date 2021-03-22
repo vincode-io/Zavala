@@ -728,12 +728,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public func endSearching() {
+		clearSearchResults()
 		outlineSearchWillEnd()
-
 		isSearching = .notSearching
 
-		clearSearchResults()
-		
 		var changes = rebuildShadowTable()
 
 		// Reload any rows that should be collapsed so that thier disclosure is in the correct position
