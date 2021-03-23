@@ -1409,10 +1409,8 @@ extension EditorViewController {
 			if let inserts = changes.insertIndexPaths, !inserts.isEmpty {
 				collectionView.insertItems(at: inserts)
 			}
-		}
-		
-		if let moves = changes.moveIndexPaths, !moves.isEmpty {
-			collectionView.performBatchUpdates {
+
+			if let moves = changes.moveIndexPaths, !moves.isEmpty {
 				for move in moves {
 					collectionView.moveItem(at: move.0, to: move.1)
 				}
