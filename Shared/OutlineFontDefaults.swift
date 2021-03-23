@@ -9,6 +9,8 @@ import Foundation
 
 struct OutlineFontDefaults {
 	
+	static let numberOfLevels = 5
+	
 	struct RowFontConfig {
 		var topicName: String
 		var topicSize: Int
@@ -18,14 +20,16 @@ struct OutlineFontDefaults {
 	
 	var rowFontConfigs = [RowFontConfig]()
 	
+	#if targetEnvironment(macCatalyst)
+	static let defaultRowConfig = RowFontConfig(topicName: "SF Pro", topicSize: 14, noteName: "SF Pro", noteSize: 13)
+	#else
+	static let defaultRowConfig = RowFontConfig(topicName: "SF Pro", topicSize: 17, noteName: "SF Pro", noteSize: 16)
+	#endif
+	
 	static var defaults: OutlineFontDefaults {
 		var defaults = OutlineFontDefaults()
-		for _ in 0..<6 {
-			#if targetEnvironment(macCatalyst)
-			defaults.rowFontConfigs.append(RowFontConfig(topicName: "SF Pro", topicSize: 14, noteName: "SF Pro", noteSize: 13))
-			#else
-			defaults.rowFontConfigs.append(RowFontConfig(topicName: "SF Pro", topicSize: 17, noteName: "SF Pro", noteSize: 16))
-			#endif
+		for _ in 0...numberOfLevels {
+			defaults.rowFontConfigs.append(defaultRowConfig)
 		}
 		return defaults
 	}

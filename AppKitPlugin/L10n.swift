@@ -12,7 +12,9 @@ import Foundation
 internal enum L10n {
   /// Cancel
   internal static let cancel = L10n.tr("Localizable", "Cancel")
-  /// Preferences
+  /// Fonts
+  internal static let fonts = L10n.tr("Localizable", "Fonts")
+  /// General
   internal static let general = L10n.tr("Localizable", "General")
   /// Open Quickly
   internal static let openQuickly = L10n.tr("Localizable", "Open Quickly")

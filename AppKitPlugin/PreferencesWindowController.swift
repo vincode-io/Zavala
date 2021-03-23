@@ -23,7 +23,7 @@ private struct PreferencesToolbarItemSpec {
 
 private struct ToolbarItemIdentifier {
 	static let General = "General"
-	static let Advanced = "Advanced"
+	static let Font = "Font"
 }
 
 class PreferencesWindowController : NSWindowController, NSToolbarDelegate {
@@ -35,19 +35,22 @@ class PreferencesWindowController : NSWindowController, NSToolbarDelegate {
 		specs += [PreferencesToolbarItemSpec(identifierRawValue: ToolbarItemIdentifier.General,
 											 name: L10n.general,
 											 image: NSImage(systemSymbolName: "gearshape", accessibilityDescription: nil)!)]
+		specs += [PreferencesToolbarItemSpec(identifierRawValue: ToolbarItemIdentifier.Font,
+											 name: L10n.fonts,
+											 image: NSImage(systemSymbolName: "textformat", accessibilityDescription: nil)!)]
 		return specs
 	}()
 
 	override func windowDidLoad() {
-//		let toolbar = NSToolbar(identifier: NSToolbar.Identifier("PreferencesToolbar"))
-//		toolbar.delegate = self
-//		toolbar.autosavesConfiguration = false
-//		toolbar.allowsUserCustomization = false
-//		toolbar.displayMode = .iconAndLabel
-//		toolbar.selectedItemIdentifier = toolbarItemSpecs.first!.identifier
-//
-//		window?.showsToolbarButton = false
-//		window?.toolbar = toolbar
+		let toolbar = NSToolbar(identifier: NSToolbar.Identifier("PreferencesToolbar"))
+		toolbar.delegate = self
+		toolbar.autosavesConfiguration = false
+		toolbar.allowsUserCustomization = false
+		toolbar.displayMode = .iconAndLabel
+		toolbar.selectedItemIdentifier = toolbarItemSpecs.first!.identifier
+
+		window?.showsToolbarButton = false
+		window?.toolbar = toolbar
 
 		switchToViewAtIndex(0)
 
