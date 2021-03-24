@@ -22,6 +22,9 @@ class FontPreferencesViewController: NSViewController {
 	
 	@IBAction func add(_ sender: Any) {
 	}
+	
+	@IBAction func restoreDefaults(_ sender: Any) {
+	}
 }
 
 // MARK: - NSTableViewDataSource

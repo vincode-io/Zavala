@@ -211,6 +211,10 @@
 		5188FAAA2602A9CE0020B7DA /* OutlineEditor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5188FAA82602A9CE0020B7DA /* OutlineEditor.storyboard */; };
 		518F2E38257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */; };
 		5193C8A625FD757900E63F94 /* OpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */; };
+		519A2324260A9B900056051E /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
+		519A2325260A9B900056051E /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
+		519A2326260A9C940056051E /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
+		519A2327260A9C940056051E /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
 		519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F004A25608EF9009DC1F0 /* TimelineItem.swift */; };
 		51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */; };
 		51AE547E258FF28A006DA301 /* OutlineFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AE547D258FF28A006DA301 /* OutlineFont.swift */; };
@@ -464,6 +468,7 @@
 		5188FAA82602A9CE0020B7DA /* OutlineEditor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OutlineEditor.storyboard; sourceTree = "<group>"; };
 		518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistentCollectionViewListCell.swift; sourceTree = "<group>"; };
 		5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuicklyViewController.swift; sourceTree = "<group>"; };
+		519A2323260A9B900056051E /* OutlineFontField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontField.swift; sourceTree = "<group>"; };
 		519F004A25608EF9009DC1F0 /* TimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItem.swift; sourceTree = "<group>"; };
 		51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedUndoManager.swift; sourceTree = "<group>"; };
 		51AE547D258FF28A006DA301 /* OutlineFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFont.swift; sourceTree = "<group>"; };
@@ -674,6 +679,7 @@
 				517AF69B25E0862E0044DBAB /* AppDefaults.swift */,
 				5167606325F95E4600AC0EBD /* DocumentIndexer.swift */,
 				516F5372260829060038BAF8 /* OutlineFontDefaults.swift */,
+				519A2323260A9B900056051E /* OutlineFontField.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -1274,6 +1280,7 @@
 				511B2A522602410C00C04239 /* EditorViewController+Drag.swift in Sources */,
 				511B2A532602410C00C04239 /* EditorTitleViewCell.swift in Sources */,
 				511B2A542602410C00C04239 /* UIActivityViewController+.swift in Sources */,
+				519A2325260A9B900056051E /* OutlineFontField.swift in Sources */,
 				511B2A552602410C00C04239 /* ApplySnapshotOperation.swift in Sources */,
 				511B2A562602410C00C04239 /* EditorTextRowViewCell.swift in Sources */,
 				511B2A572602410C00C04239 /* EditorBacklinkContentConfiguration.swift in Sources */,
@@ -1314,6 +1321,7 @@
 				516F5384260A92720038BAF8 /* PreferencesTableViewBackgroundView.swift in Sources */,
 				511B2A9A260245AD00C04239 /* AppKitWrapper.swift in Sources */,
 				511B2A9B260245AD00C04239 /* GeneralPrefencesViewController.swift in Sources */,
+				519A2327260A9C940056051E /* OutlineFontField.swift in Sources */,
 				516F5379260972470038BAF8 /* FontPreferencesViewController.swift in Sources */,
 				511B2A9C260245AD00C04239 /* L10n.swift in Sources */,
 			);
@@ -1392,6 +1400,7 @@
 				51C030BE257E1B9400609262 /* OutlineTextView.swift in Sources */,
 				511B2A0526019A2700C04239 /* UIFont+.swift in Sources */,
 				514F221B25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift in Sources */,
+				519A2324260A9B900056051E /* OutlineFontField.swift in Sources */,
 				51C4C442255A0DE1004E0206 /* TimelineViewController.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,
@@ -1438,6 +1447,7 @@
 				516F5383260A92720038BAF8 /* PreferencesTableViewBackgroundView.swift in Sources */,
 				51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */,
 				517AF68C25E07A790044DBAB /* GeneralPrefencesViewController.swift in Sources */,
+				519A2326260A9C940056051E /* OutlineFontField.swift in Sources */,
 				516F5378260972470038BAF8 /* FontPreferencesViewController.swift in Sources */,
 				517AF6B425E0A3C20044DBAB /* L10n.swift in Sources */,
 			);
