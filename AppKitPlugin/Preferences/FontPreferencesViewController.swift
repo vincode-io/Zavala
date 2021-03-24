@@ -104,11 +104,16 @@ extension FontPreferencesViewController: NSTableViewDelegate {
 
 	func tableViewSelectionDidChange(_ notification: Notification) {
 		
-		if tableView.selectedRow == -1 {
-			deleteButton.isEnabled = false
+		if tableView.selectedRow != -1, let field = sortedFields?[tableView.selectedRow] {
+			switch field {
+			case .rowTopic(let level), .rowNote(let level):
+				deleteButton.isEnabled = level > 1
+			default:
+				deleteButton.isEnabled = false
+			}
 			return
 		} else {
-			deleteButton.isEnabled = true
+			deleteButton.isEnabled = false
 		}
 		
 	}
