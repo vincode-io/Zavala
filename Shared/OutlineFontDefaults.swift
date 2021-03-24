@@ -32,6 +32,36 @@ struct OutlineFontDefaults {
 		return rowFontConfigs.keys.sorted(by: { $0.displayOrder < $1.displayOrder })
 	}
 	
+	var nextTopicDefault: (OutlineFontField, OutlineFontConfig)? {
+		var deepestLevel = 0
+		var result: (OutlineFontField, OutlineFontConfig)? = nil
+		for key in rowFontConfigs.keys {
+			if case .rowTopic(let level) = key {
+				if level > deepestLevel {
+					deepestLevel = level
+					let nextField = OutlineFontField.rowTopic(level + 1)
+					result = (nextField, rowFontConfigs[key]!)
+				}
+			}
+		}
+		return result
+	}
+	
+	var nextNoteDefault: (OutlineFontField, OutlineFontConfig)? {
+		var deepestLevel = 0
+		var result: (OutlineFontField, OutlineFontConfig)? = nil
+		for key in rowFontConfigs.keys {
+			if case .rowNote(let level) = key {
+				if level > deepestLevel {
+					deepestLevel = level
+					let nextField = OutlineFontField.rowNote(level + 1)
+					result = (nextField, rowFontConfigs[key]!)
+				}
+			}
+		}
+		return result
+	}
+	
 	var userInfo: [String: [AnyHashable: AnyHashable]] {
 		var userInfo = [String: [AnyHashable: AnyHashable]]()
 		for key in rowFontConfigs.keys {

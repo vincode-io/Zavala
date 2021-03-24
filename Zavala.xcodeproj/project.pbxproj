@@ -142,6 +142,12 @@
 		5142C298260AC78C0094571F /* OutlineFontConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142C294260AC78C0094571F /* OutlineFontConfig.swift */; };
 		5142C299260AC7970094571F /* OutlineFontDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F5372260829060038BAF8 /* OutlineFontDefaults.swift */; };
 		5142C29A260AC7980094571F /* OutlineFontDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F5372260829060038BAF8 /* OutlineFontDefaults.swift */; };
+		5142C29C260B90F30094571F /* FontPreferencesConfigWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142C29B260B90F30094571F /* FontPreferencesConfigWindowController.swift */; };
+		5142C29D260B90F30094571F /* FontPreferencesConfigWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142C29B260B90F30094571F /* FontPreferencesConfigWindowController.swift */; };
+		5142C29F260B91580094571F /* OutlineFontField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142C29E260B91580094571F /* OutlineFontField+.swift */; };
+		5142C2A0260B91580094571F /* OutlineFontField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142C29E260B91580094571F /* OutlineFontField+.swift */; };
+		5142C2A2260BA7D10094571F /* FontPreferencesConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5142C2A1260BA7D10094571F /* FontPreferencesConfig.xib */; };
+		5142C2A3260BA7D10094571F /* FontPreferencesConfig.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5142C2A1260BA7D10094571F /* FontPreferencesConfig.xib */; };
 		5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */; };
 		5147D0B525CB95B4004673C3 /* TimelineViewController+Drag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0B425CB95B4004673C3 /* TimelineViewController+Drag.swift */; };
 		5147D0B825CCAB2A004673C3 /* TimelineViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0B725CCAB2A004673C3 /* TimelineViewController+Drop.swift */; };
@@ -409,6 +415,9 @@
 		512D375125F06733000FA597 /* EditorSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorSearchBar.swift; sourceTree = "<group>"; };
 		513F32A12594062C0003048F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5142C294260AC78C0094571F /* OutlineFontConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontConfig.swift; sourceTree = "<group>"; };
+		5142C29B260B90F30094571F /* FontPreferencesConfigWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPreferencesConfigWindowController.swift; sourceTree = "<group>"; };
+		5142C29E260B91580094571F /* OutlineFontField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OutlineFontField+.swift"; sourceTree = "<group>"; };
+		5142C2A1260BA7D10094571F /* FontPreferencesConfig.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FontPreferencesConfig.xib; sourceTree = "<group>"; };
 		5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTableView.swift; sourceTree = "<group>"; };
 		5147D0B425CB95B4004673C3 /* TimelineViewController+Drag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TimelineViewController+Drag.swift"; sourceTree = "<group>"; };
 		5147D0B725CCAB2A004673C3 /* TimelineViewController+Drop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TimelineViewController+Drop.swift"; sourceTree = "<group>"; };
@@ -701,6 +710,9 @@
 				516F5380260A92720038BAF8 /* PreferencesTableViewBackgroundView.swift */,
 				517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */,
 				516F5377260972470038BAF8 /* FontPreferencesViewController.swift */,
+				5142C2A1260BA7D10094571F /* FontPreferencesConfig.xib */,
+				5142C29B260B90F30094571F /* FontPreferencesConfigWindowController.swift */,
+				5142C29E260B91580094571F /* OutlineFontField+.swift */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -1103,6 +1115,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				511B2AA0260245AD00C04239 /* Preferences.storyboard in Resources */,
+				5142C2A3260BA7D10094571F /* FontPreferencesConfig.xib in Resources */,
 				511B2AA1260245AD00C04239 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1135,6 +1148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				517AF68625E07A3F0044DBAB /* Preferences.storyboard in Resources */,
+				5142C2A2260BA7D10094571F /* FontPreferencesConfig.xib in Resources */,
 				517AF6AE25E0A2400044DBAB /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1324,8 +1338,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5142C2A0260B91580094571F /* OutlineFontField+.swift in Sources */,
 				516F5382260A92720038BAF8 /* PreferencesControlsBackgroundView.swift in Sources */,
 				5142C298260AC78C0094571F /* OutlineFontConfig.swift in Sources */,
+				5142C29D260B90F30094571F /* FontPreferencesConfigWindowController.swift in Sources */,
 				511B2A98260245AD00C04239 /* PreferencesWindowController.swift in Sources */,
 				511B2A99260245AD00C04239 /* AppDefaults.swift in Sources */,
 				516F5384260A92720038BAF8 /* PreferencesTableViewBackgroundView.swift in Sources */,
@@ -1453,8 +1469,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5142C29F260B91580094571F /* OutlineFontField+.swift in Sources */,
 				516F5381260A92720038BAF8 /* PreferencesControlsBackgroundView.swift in Sources */,
 				5142C297260AC78C0094571F /* OutlineFontConfig.swift in Sources */,
+				5142C29C260B90F30094571F /* FontPreferencesConfigWindowController.swift in Sources */,
 				517AF68825E07A420044DBAB /* PreferencesWindowController.swift in Sources */,
 				5167606D25F96B1F00AC0EBD /* AppDefaults.swift in Sources */,
 				516F5383260A92720038BAF8 /* PreferencesTableViewBackgroundView.swift in Sources */,
