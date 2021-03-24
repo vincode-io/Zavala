@@ -9,8 +9,6 @@ import Foundation
 
 struct OutlineFontDefaults {
 	
-	var rowFontConfigs = [OutlineFontField: OutlineFontConfig]()
-	
 	static var defaults: OutlineFontDefaults {
 		var defaults = OutlineFontDefaults()
 		#if targetEnvironment(macCatalyst)
@@ -29,7 +27,12 @@ struct OutlineFontDefaults {
 		return defaults
 	}
 	
-	public var userInfo: [String: [AnyHashable: AnyHashable]] {
+	var rowFontConfigs = [OutlineFontField: OutlineFontConfig]()
+	var sortedFields: [OutlineFontField] {
+		return rowFontConfigs.keys.sorted(by: { $0.displayOrder < $1.displayOrder })
+	}
+	
+	var userInfo: [String: [AnyHashable: AnyHashable]] {
 		var userInfo = [String: [AnyHashable: AnyHashable]]()
 		for key in rowFontConfigs.keys {
 			userInfo[key.description] = rowFontConfigs[key]!.userInfo
@@ -37,9 +40,9 @@ struct OutlineFontDefaults {
 		return userInfo
 	}
 	
-	public init() {}
+	init() {}
 	
-	public init(userInfo: [String: [AnyHashable: AnyHashable]]) {
+	init(userInfo: [String: [AnyHashable: AnyHashable]]) {
 		userInfo.forEach { (key: String, value: [AnyHashable : AnyHashable]) in
 			if let field = OutlineFontField(description: key), let config = OutlineFontConfig(userInfo: value) {
 				rowFontConfigs[field] = config

@@ -12,10 +12,16 @@ class FontPreferencesViewController: NSViewController {
 	@IBOutlet weak var tableView: NSTableView!
 	@IBOutlet weak var deleteButton: NSButton!
 	
+	var fontDefaults: OutlineFontDefaults?
+	var sortedFields: [OutlineFontField]?
+	
 	override func viewDidLoad() {
         super.viewDidLoad()
-        // Do view setup here.
-    }
+
+		fontDefaults = AppDefaults.shared.outlineFonts
+		sortedFields = fontDefaults?.sortedFields
+		tableView.reloadData()
+	}
     
 	@IBAction func delete(_ sender: Any) {
 	}
@@ -32,12 +38,9 @@ class FontPreferencesViewController: NSViewController {
 extension FontPreferencesViewController: NSTableViewDataSource {
 
 	func numberOfRows(in tableView: NSTableView) -> Int {
-		return 0
+		return sortedFields?.count ?? 0
 	}
 
-	func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-		return nil
-	}
 }
 
 // MARK: - NSTableViewDelegate
@@ -45,18 +48,30 @@ extension FontPreferencesViewController: NSTableViewDataSource {
 extension FontPreferencesViewController: NSTableViewDelegate {
 
 	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-//		if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "Cell"), owner: nil) as? NSTableViewCell {
-//
-//			let account = sortedAccounts[row]
-//			cell.textField?.stringValue = account.nameForDisplay
-//			cell.imageView?.image = account.smallIcon?.image
-//
-//			if account.type == .feedbin {
-//				cell.isImageTemplateCapable = false
-//			}
-//
-//			return cell
-//		}
+		if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "Cell"), owner: nil) as? NSTableCellView {
+			if tableColumn?.identifier == NSUserInterfaceItemIdentifier(rawValue: "Field") {
+				switch sortedFields?[row] {
+				case .title:
+					cell.textField?.stringValue = L10n.title
+				case .tags:
+					cell.textField?.stringValue =  L10n.tags
+				case .rowTopic(let level):
+					cell.textField?.stringValue = L10n.topicLevel(level)
+				case .rowNote(let level):
+					cell.textField?.stringValue = L10n.noteLevel(level)
+				case .backlinks:
+					cell.textField?.stringValue =  L10n.backlinks
+				default:
+					break
+				}
+			} else if tableColumn?.identifier == NSUserInterfaceItemIdentifier(rawValue: "Font") {
+				if let field = sortedFields?[row], let fontConfig = fontDefaults?.rowFontConfigs[field] {
+					cell.textField?.stringValue = "\(fontConfig.name) - \(fontConfig.size)"
+				}
+			}
+
+			return cell
+		}
 		return nil
 	}
 

@@ -28,6 +28,21 @@ enum OutlineFontField: Hashable, CustomStringConvertible {
 			return "backlinks"
 		}
 	}
+	
+	var displayOrder: Int {
+		switch self {
+		case .title:
+			return 0
+		case .tags:
+			return 1
+		case .rowTopic(let level):
+			return level * 10
+		case .rowNote(let level):
+			return level * 15
+		case .backlinks:
+			return 10000
+		}
+	}
 
 	init?(description: String) {
 		switch description {
@@ -43,9 +58,10 @@ enum OutlineFontField: Hashable, CustomStringConvertible {
 				self = .rowTopic(level)
 			} else if components[0] == "rowNote", let level = Int(components[1]) {
 				self = .rowNote(level)
+			} else {
+				return nil
 			}
 		}
-		return nil
 	}
 	
 }
