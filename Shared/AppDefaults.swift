@@ -111,7 +111,7 @@ final class AppDefaults {
 
 	var outlineFonts: OutlineFontDefaults? {
 		get {
-			if let userInfo = UserDefaults.standard.object(forKey: Key.outlineFonts) as? [[AnyHashable: AnyHashable]: [AnyHashable: AnyHashable]] {
+			if let userInfo = UserDefaults.standard.object(forKey: Key.outlineFonts) as? [String: [AnyHashable: AnyHashable]] {
 				return OutlineFontDefaults(userInfo: userInfo)
 			}
 			return nil

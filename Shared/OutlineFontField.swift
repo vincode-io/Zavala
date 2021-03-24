@@ -7,51 +7,45 @@
 
 import Foundation
 
-enum OutlineFontField: Hashable {
+enum OutlineFontField: Hashable, CustomStringConvertible {
 	case title
 	case tags
 	case rowTopic(Int) // Level
 	case rowNote(Int) // Level
 	case backlinks
 	
-	var userInfo: [AnyHashable: AnyHashable] {
-		var userInfo = [AnyHashable: AnyHashable]()
+	var description: String {
 		switch self {
 		case .title:
-			userInfo["type"] = "title"
+			return "title"
 		case .tags:
-			userInfo["type"] = "tags"
+			return "tags"
 		case .rowTopic(let level):
-			userInfo["type"] = "rowTopic"
-			userInfo["level"] = level
+			return  "rowTopic_\(level)"
 		case .rowNote(let level):
-			userInfo["type"] = "rowNote"
-			userInfo["level"] = level
+			return "rowNote_\(level)"
 		case .backlinks:
-			userInfo["type"] = "backlinks"
+			return "backlinks"
 		}
-		return userInfo
 	}
 
-	init?(userInfo: [AnyHashable: AnyHashable]) {
-		guard let type = userInfo["type"] as? String else { return nil }
-		
-		switch type {
+	init?(description: String) {
+		switch description {
 		case "title":
 			self = .title
 		case "tags":
 			self = .tags
-		case "rowTopic":
-			guard let level = userInfo["level"] as? Int else { return nil }
-			self = .rowTopic(level)
-		case "rowNote":
-			guard let level = userInfo["level"] as? Int else { return nil }
-			self = .rowNote(level)
 		case "backlinks":
 			self = .backlinks
 		default:
-			return nil
+			let components = description.split(separator: "_")
+			if components[0] == "rowTopic", let level = Int(components[1]) {
+				self = .rowTopic(level)
+			} else if components[0] == "rowNote", let level = Int(components[1]) {
+				self = .rowNote(level)
+			}
 		}
+		return nil
 	}
 	
 }
