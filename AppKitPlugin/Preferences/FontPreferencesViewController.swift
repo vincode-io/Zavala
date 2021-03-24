@@ -15,6 +15,11 @@ class FontPreferencesViewController: NSViewController {
 	
 	var fontDefaults: OutlineFontDefaults?
 	var sortedFields: [OutlineFontField]?
+	
+	var selectedField: OutlineFontField? {
+		guard tableView.selectedRow != -1 else { return nil }
+		return sortedFields?[tableView.selectedRow]
+	}
 
 	var windowController: NSWindowController?
 
@@ -31,6 +36,10 @@ class FontPreferencesViewController: NSViewController {
 	}
     
 	@IBAction func delete(_ sender: Any) {
+		if let field = selectedField {
+			fontDefaults?.rowFontConfigs.removeValue(forKey: field)
+		}
+		tableView.reloadData()
 	}
 	
 	@IBAction func add(_ sender: Any) {
@@ -64,8 +73,7 @@ class FontPreferencesViewController: NSViewController {
 	}
 	
 	@objc func editFontDefault(_ sender: Any) {
-		guard tableView.selectedRow != -1,
-			  let field = sortedFields?[tableView.selectedRow],
+		guard let field = selectedField,
 			  let config = fontDefaults?.rowFontConfigs[field] else { return }
 		showFontConfig(field: field, config: config)
 
@@ -104,7 +112,7 @@ extension FontPreferencesViewController: NSTableViewDelegate {
 
 	func tableViewSelectionDidChange(_ notification: Notification) {
 		
-		if tableView.selectedRow != -1, let field = sortedFields?[tableView.selectedRow] {
+		if let field = selectedField {
 			switch field {
 			case .rowTopic(let level), .rowNote(let level):
 				deleteButton.isEnabled = level > 1
@@ -127,6 +135,7 @@ extension FontPreferencesViewController: FontPreferencesConfigWindowControllerDe
 	func didUpdateConfig(field: OutlineFontField, config: OutlineFontConfig) {
 		fontDefaults?.rowFontConfigs[field] = config
 		AppDefaults.shared.outlineFonts = fontDefaults
+		tableView.reloadData()
 	}
 	
 }
