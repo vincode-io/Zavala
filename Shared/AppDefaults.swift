@@ -27,6 +27,7 @@ final class AppDefaults {
 		static let ownerURL = "ownerURL"
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
+		static let outlineFonts = "outlineFonts"
 	}
 	
 	let isDeveloperBuild: Bool = {
@@ -108,8 +109,21 @@ final class AppDefaults {
 		}
 	}
 
+	var outlineFonts: OutlineFontDefaults? {
+		get {
+			if let userInfo = UserDefaults.standard.object(forKey: Key.outlineFonts) as? [[AnyHashable: AnyHashable]: [AnyHashable: AnyHashable]] {
+				return OutlineFontDefaults(userInfo: userInfo)
+			}
+			return nil
+		}
+		set {
+			UserDefaults.standard.set(newValue?.userInfo, forKey: Key.outlineFonts)
+		}
+	}
+
 	static func registerDefaults() {
-		let defaults: [String : Any] = [Key.enableLocalAccount: true]
+		var defaults: [String : Any] = [Key.enableLocalAccount: true]
+		defaults[Key.outlineFonts] = OutlineFontDefaults.defaults.userInfo
 		AppDefaults.store.register(defaults: defaults)
 	}
 

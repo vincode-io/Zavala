@@ -7,14 +7,14 @@
 
 import Foundation
 
-enum OutineFontField {
+enum OutlineFontField: Hashable {
 	case title
 	case tags
 	case rowTopic(Int) // Level
 	case rowNote(Int) // Level
 	case backlinks
 	
-	public var userInfo: [AnyHashable: AnyHashable] {
+	var userInfo: [AnyHashable: AnyHashable] {
 		var userInfo = [AnyHashable: AnyHashable]()
 		switch self {
 		case .title:
@@ -33,4 +33,25 @@ enum OutineFontField {
 		return userInfo
 	}
 
+	init?(userInfo: [AnyHashable: AnyHashable]) {
+		guard let type = userInfo["type"] as? String else { return nil }
+		
+		switch type {
+		case "title":
+			self = .title
+		case "tags":
+			self = .tags
+		case "rowTopic":
+			guard let level = userInfo["level"] as? Int else { return nil }
+			self = .rowTopic(level)
+		case "rowNote":
+			guard let level = userInfo["level"] as? Int else { return nil }
+			self = .rowNote(level)
+		case "backlinks":
+			self = .backlinks
+		default:
+			return nil
+		}
+	}
+	
 }

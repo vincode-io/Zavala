@@ -9,53 +9,41 @@ import Foundation
 
 struct OutlineFontDefaults {
 	
-	static let numberOfLevels = 5
-	
-	struct RowFontConfig {
-		var topicName: String
-		var topicSize: Int
-		var noteName: String
-		var noteSize: Int
-	}
-	
-	var rowFontConfigs = [RowFontConfig]()
-	
-	#if targetEnvironment(macCatalyst)
-	static let defaultRowConfig = RowFontConfig(topicName: "SF Pro", topicSize: 14, noteName: "SF Pro", noteSize: 13)
-	#else
-	static let defaultRowConfig = RowFontConfig(topicName: "SF Pro", topicSize: 17, noteName: "SF Pro", noteSize: 16)
-	#endif
+	var rowFontConfigs = [OutlineFontField: OutlineFontConfig]()
 	
 	static var defaults: OutlineFontDefaults {
 		var defaults = OutlineFontDefaults()
-		for _ in 0...numberOfLevels {
-			defaults.rowFontConfigs.append(defaultRowConfig)
-		}
+		#if targetEnvironment(macCatalyst)
+		defaults.rowFontConfigs[.title] = OutlineFontConfig(name: "SF Pro", size: 26)
+//		defaults.rowFontConfigs[.tags] = OutlineFontConfig(name: "SF Pro", size: 14)
+//		defaults.rowFontConfigs[.rowTopic(1)] = OutlineFontConfig(name: "SF Pro", size: 14)
+//		defaults.rowFontConfigs[.rowNote(1)] = OutlineFontConfig(name: "SF Pro", size: 13)
+//		defaults.rowFontConfigs[.backlinks] = OutlineFontConfig(name: "SF Pro", size: 12)
+		#else
+		defaults.rowFontConfigs[.title] = OutlineFontConfig(name: "SF Pro", size: 34)
+		defaults.rowFontConfigs[.tags] = OutlineFontConfig(name: "SF Pro", size: 17)
+		defaults.rowFontConfigs[.rowTopic(1)] = OutlineFontConfig(name: "SF Pro", size: 17)
+		defaults.rowFontConfigs[.rowNote(1)] = OutlineFontConfig(name: "SF Pro", size: 16)
+		defaults.rowFontConfigs[.backlinks] = OutlineFontConfig(name: "SF Pro", size: 14)
+		#endif
 		return defaults
 	}
 	
-	public var userInfo: [[AnyHashable: AnyHashable]] {
-		var userInfo = [[AnyHashable: AnyHashable]]()
-		for rowFontConfig in rowFontConfigs {
-			var rowConfig = [AnyHashable: AnyHashable]()
-			rowConfig["topicName"] = rowFontConfig.topicName
-			rowConfig["topicSize"] = rowFontConfig.topicSize
-			rowConfig["noteName"] = rowFontConfig.noteName
-			rowConfig["noteSize"] = rowFontConfig.noteSize
-			userInfo.append(rowConfig)
+	public var userInfo: [[AnyHashable: AnyHashable]: [AnyHashable: AnyHashable]] {
+		var userInfo = [[AnyHashable: AnyHashable]: [AnyHashable: AnyHashable]]()
+		for key in rowFontConfigs.keys {
+			userInfo[key.userInfo] = rowFontConfigs[key]!.userInfo
 		}
 		return userInfo
 	}
 	
 	public init() {}
 	
-	public init(userInfo: [[AnyHashable: AnyHashable]]) {
-		for config in userInfo {
-			let topicName = config["topicName"] as! String
-			let topicSize = config["topicSize"] as! Int
-			let noteName = config["noteName"] as! String
-			let noteSize = config["noteSize"] as! Int
-			rowFontConfigs.append(RowFontConfig(topicName: topicName, topicSize: topicSize, noteName: noteName, noteSize: noteSize))
+	public init(userInfo: [[AnyHashable: AnyHashable]: [AnyHashable: AnyHashable]]) {
+		userInfo.forEach { (key: [AnyHashable : AnyHashable], value: [AnyHashable : AnyHashable]) in
+			if let field = OutlineFontField(userInfo: key), let config = OutlineFontConfig(userInfo: value) {
+				rowFontConfigs[field] = config
+			}
 		}
 	}
 	
