@@ -74,7 +74,7 @@
                                         <gridCells>
                                             <gridCell row="SUZ-cp-IaS" column="qcT-tL-qgY" id="ofD-11-faH">
                                                 <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="azQ-jB-Zox">
-                                                    <rect key="frame" x="10" y="65" width="87" height="16"/>
+                                                    <rect key="frame" x="10" y="62" width="87" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Owner Name:" id="8lw-ZA-QNq">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -84,7 +84,7 @@
                                             </gridCell>
                                             <gridCell row="SUZ-cp-IaS" column="Qnq-NX-7ee" id="yqb-Eu-Uxw">
                                                 <textField key="contentView" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HK2-DW-oTh">
-                                                    <rect key="frame" x="101" y="63" width="100" height="21"/>
+                                                    <rect key="frame" x="101" y="60" width="100" height="21"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Optional" drawsBackground="YES" id="NPS-pg-Ni9">
                                                         <font key="font" usesAppearanceFont="YES"/>
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -94,7 +94,7 @@
                                             </gridCell>
                                             <gridCell row="Xt8-LB-MUH" column="qcT-tL-qgY" id="hbc-Ay-aPg">
                                                 <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VVN-fJ-nO1">
-                                                    <rect key="frame" x="13" y="37" width="84" height="16"/>
+                                                    <rect key="frame" x="13" y="31" width="84" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Owner Email:" id="7PO-bL-6RE">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -104,7 +104,7 @@
                                             </gridCell>
                                             <gridCell row="Xt8-LB-MUH" column="Qnq-NX-7ee" id="P32-os-tAA">
                                                 <textField key="contentView" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="etc-6U-KHR">
-                                                    <rect key="frame" x="101" y="35" width="100" height="21"/>
+                                                    <rect key="frame" x="101" y="29" width="100" height="21"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Optional" drawsBackground="YES" id="5nw-lO-Kpc">
                                                         <font key="font" usesAppearanceFont="YES"/>
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -114,7 +114,7 @@
                                             </gridCell>
                                             <gridCell row="z8o-8n-7Kx" column="qcT-tL-qgY" id="Iyz-1g-LKo">
                                                 <textField key="contentView" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dHR-u1-JJU">
-                                                    <rect key="frame" x="20" y="6" width="77" height="16"/>
+                                                    <rect key="frame" x="20" y="3" width="77" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Owner URL:" id="e7b-4N-QQf">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -124,7 +124,7 @@
                                             </gridCell>
                                             <gridCell row="z8o-8n-7Kx" column="Qnq-NX-7ee" id="wcJ-f2-RsQ">
                                                 <textField key="contentView" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JGX-RH-a6B">
-                                                    <rect key="frame" x="101" y="4" width="100" height="21"/>
+                                                    <rect key="frame" x="101" y="1" width="100" height="21"/>
                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Optional" drawsBackground="YES" id="Zxs-QC-79W">
                                                         <font key="font" usesAppearanceFont="YES"/>
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -323,7 +323,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="add:" target="cul-aP-FWn" id="iPa-ja-AKR"/>
+                                    <action selector="add:" target="cul-aP-FWn" id="0U2-6M-aSt"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xWO-u4-Le4">
@@ -381,6 +381,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="addButton" destination="xoa-UE-SR0" id="yt9-c2-Ubc"/>
                         <outlet property="deleteButton" destination="xWO-u4-Le4" id="LBG-8c-tsp"/>
                         <outlet property="tableView" destination="BT5-pe-zzx" id="kOr-1h-Jtu"/>
                     </connections>

@@ -21,6 +21,8 @@
 "Topic_Level" = "Topic Level %d";
 "Note_Level" = "Note Level %d";
 "Backlinks" = "Backlinks";
+"Add_Topic_Level" = "Add Topic Level";
+"Add_Note_Level" = "Add Note Level";
 
 /* Open Quickly */
 "Open Quickly" = "Open Quickly";

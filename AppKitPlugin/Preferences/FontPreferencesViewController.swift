@@ -10,6 +10,7 @@ import Cocoa
 class FontPreferencesViewController: NSViewController {
 
 	@IBOutlet weak var tableView: NSTableView!
+	@IBOutlet weak var addButton: NSButton!
 	@IBOutlet weak var deleteButton: NSButton!
 	
 	var fontDefaults: OutlineFontDefaults?
@@ -21,16 +22,39 @@ class FontPreferencesViewController: NSViewController {
 		fontDefaults = AppDefaults.shared.outlineFonts
 		sortedFields = fontDefaults?.sortedFields
 		tableView.reloadData()
+		
+		addButton.sendAction(on: .leftMouseDown)
 	}
     
 	@IBAction func delete(_ sender: Any) {
 	}
 	
 	@IBAction func add(_ sender: Any) {
+		let menu = NSMenu()
+		
+		let newWebFeedItem = NSMenuItem()
+		newWebFeedItem.title = L10n.addTopicLevel
+		newWebFeedItem.action = #selector(addTopicLevel(_:))
+		menu.addItem(newWebFeedItem)
+		
+		let newRedditFeedItem = NSMenuItem()
+		newRedditFeedItem.title = L10n.addNoteLevel
+		newRedditFeedItem.action = #selector(addNoteLevel(_:))
+		menu.addItem(newRedditFeedItem)
+
+		let menuAt = NSPoint(x: addButton.frame.minX, y: addButton.frame.minY)
+		menu.popUp(positioning: newWebFeedItem, at: menuAt, in: view)
 	}
 	
 	@IBAction func restoreDefaults(_ sender: Any) {
 	}
+
+	@objc func addTopicLevel(_ sender: Any) {
+	}
+	
+	@objc func addNoteLevel(_ sender: Any) {
+	}
+	
 }
 
 // MARK: - NSTableViewDataSource
