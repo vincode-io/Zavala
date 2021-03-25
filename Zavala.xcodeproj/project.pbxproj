@@ -598,6 +598,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5113B08F260C2CAE00DBD11B /* General */ = {
+			isa = PBXGroup;
+			children = (
+				517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */,
+			);
+			path = General;
+			sourceTree = "<group>";
+		};
+		5113B090260C2CBE00DBD11B /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				516F5377260972470038BAF8 /* FontPreferencesViewController.swift */,
+				5142C2A1260BA7D10094571F /* FontPreferencesConfig.xib */,
+				5142C29B260B90F30094571F /* FontPreferencesConfigWindowController.swift */,
+				5142C29E260B91580094571F /* OutlineFontField+.swift */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		511B29F526018F4A00C04239 /* Backlink */ = {
 			isa = PBXGroup;
 			children = (
@@ -712,11 +731,8 @@
 				517AF68425E07A190044DBAB /* PreferencesWindowController.swift */,
 				516F537F260A92710038BAF8 /* PreferencesControlsBackgroundView.swift */,
 				516F5380260A92720038BAF8 /* PreferencesTableViewBackgroundView.swift */,
-				517AF68B25E07A790044DBAB /* GeneralPrefencesViewController.swift */,
-				516F5377260972470038BAF8 /* FontPreferencesViewController.swift */,
-				5142C2A1260BA7D10094571F /* FontPreferencesConfig.xib */,
-				5142C29B260B90F30094571F /* FontPreferencesConfigWindowController.swift */,
-				5142C29E260B91580094571F /* OutlineFontField+.swift */,
+				5113B08F260C2CAE00DBD11B /* General */,
+				5113B090260C2CBE00DBD11B /* Fonts */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
