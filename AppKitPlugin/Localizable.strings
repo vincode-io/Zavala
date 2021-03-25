@@ -11,6 +11,7 @@
 "Remove" = "Remove";
 "General" = "General";
 "Fonts" = "Fonts";
+"Restore" = "Restore";
 
 /* Settings */
 "Remove_CloudKit_Title" = "Remove iCloud Account";
@@ -23,6 +24,8 @@
 "Backlinks" = "Backlinks";
 "Add_Topic_Level" = "Add Topic Level";
 "Add_Note_Level" = "Add Note Level";
+"Restore_Defaults_Message" = "Restore Defaults";
+"Restore_Defaults_Informative" = "Are you sure you want to restore the defaults? All your font customizations will be lost.";
 
 /* Open Quickly */
 "Open Quickly" = "Open Quickly";

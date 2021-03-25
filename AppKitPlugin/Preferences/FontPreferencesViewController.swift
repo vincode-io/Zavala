@@ -61,6 +61,24 @@ class FontPreferencesViewController: NSViewController {
 	}
 	
 	@IBAction func restoreDefaults(_ sender: Any) {
+		let alert = NSAlert()
+		alert.alertStyle = .warning
+		alert.messageText = L10n.restoreDefaultsMessage
+		alert.informativeText = L10n.restoreDefaultsInformative
+		alert.addButton(withTitle: L10n.restore)
+		alert.addButton(withTitle: L10n.cancel)
+			
+		alert.beginSheetModal(for: view.window!) { [weak self] result in
+			if result == NSApplication.ModalResponse.alertFirstButtonReturn {
+				guard let self = self else { return }
+				self.fontDefaults = OutlineFontDefaults.defaults
+				AppDefaults.shared.outlineFonts = self.fontDefaults
+				self.sortedFields = self.fontDefaults?.sortedFields
+				self.tableView.reloadData()
+
+			}
+		}
+		
 	}
 
 	@objc func addTopicLevel(_ sender: Any) {

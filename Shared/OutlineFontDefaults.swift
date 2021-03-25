@@ -11,7 +11,7 @@ struct OutlineFontDefaults {
 	
 	static var defaults: OutlineFontDefaults {
 		var defaults = OutlineFontDefaults()
-		#if targetEnvironment(macCatalyst)
+		#if targetEnvironment(macCatalyst) || canImport(AppKit)
 		defaults.rowFontConfigs[.title] = OutlineFontConfig(name: "SF Pro", size: 26)
 		defaults.rowFontConfigs[.tags] = OutlineFontConfig(name: "SF Pro", size: 14)
 		defaults.rowFontConfigs[.rowTopic(1)] = OutlineFontConfig(name: "SF Pro", size: 14)

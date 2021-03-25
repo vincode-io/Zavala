@@ -34,6 +34,12 @@ internal enum L10n {
   internal static let removeCloudKitMessage = L10n.tr("Localizable", "Remove_CloudKit_Message")
   /// Remove iCloud Account
   internal static let removeCloudKitTitle = L10n.tr("Localizable", "Remove_CloudKit_Title")
+  /// Restore
+  internal static let restore = L10n.tr("Localizable", "Restore")
+  /// Are you sure you want to restore the defaults? All your font customizations will be lost.
+  internal static let restoreDefaultsInformative = L10n.tr("Localizable", "Restore_Defaults_Informative")
+  /// Restore Defaults
+  internal static let restoreDefaultsMessage = L10n.tr("Localizable", "Restore_Defaults_Message")
   /// Tags
   internal static let tags = L10n.tr("Localizable", "Tags")
   /// Title
