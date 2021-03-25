@@ -32,34 +32,40 @@ struct OutlineFontDefaults {
 		return rowFontConfigs.keys.sorted(by: { $0.displayOrder < $1.displayOrder })
 	}
 	
-	var nextTopicDefault: (OutlineFontField, OutlineFontConfig)? {
+	var deepestTopicLevel: Int {
 		var deepestLevel = 0
-		var result: (OutlineFontField, OutlineFontConfig)? = nil
 		for key in rowFontConfigs.keys {
 			if case .rowTopic(let level) = key {
 				if level > deepestLevel {
 					deepestLevel = level
-					let nextField = OutlineFontField.rowTopic(level + 1)
-					result = (nextField, rowFontConfigs[key]!)
 				}
 			}
 		}
-		return result
+		return deepestLevel
+	}
+
+	var nextTopicDefault: (OutlineFontField, OutlineFontConfig)? {
+		let level = deepestTopicLevel
+		let nextField = OutlineFontField.rowTopic(level + 1)
+		return (nextField, rowFontConfigs[.rowTopic(level)]!)
 	}
 	
-	var nextNoteDefault: (OutlineFontField, OutlineFontConfig)? {
+	var deepestNoteLevel: Int {
 		var deepestLevel = 0
-		var result: (OutlineFontField, OutlineFontConfig)? = nil
 		for key in rowFontConfigs.keys {
 			if case .rowNote(let level) = key {
 				if level > deepestLevel {
 					deepestLevel = level
-					let nextField = OutlineFontField.rowNote(level + 1)
-					result = (nextField, rowFontConfigs[key]!)
 				}
 			}
 		}
-		return result
+		return deepestLevel
+	}
+
+	var nextNoteDefault: (OutlineFontField, OutlineFontConfig)? {
+		let level = deepestTopicLevel
+		let nextField = OutlineFontField.rowNote(level + 1)
+		return (nextField, rowFontConfigs[.rowNote(level)]!)
 	}
 	
 	var userInfo: [String: [AnyHashable: AnyHashable]] {

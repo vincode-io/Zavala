@@ -395,11 +395,11 @@
             <objects>
                 <viewController id="Cso-d3-evP" customClass="FontPreferencesConfigWindowController" customModule="AppKitPlugin" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="7a9-sH-lZe">
-                        <rect key="frame" x="0.0" y="0.0" width="338" height="178"/>
+                        <rect key="frame" x="0.0" y="0.0" width="338" height="172"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DXf-oN-gmN">
-                                <rect key="frame" x="114" y="132" width="111" height="26"/>
+                                <rect key="frame" x="114" y="126" width="111" height="26"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Field Name" id="iEL-PW-Bg4">
                                     <font key="font" textStyle="title1" name=".SFNS-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -407,10 +407,10 @@
                                 </textFieldCell>
                             </textField>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PUz-4z-8B7">
-                                <rect key="frame" x="107" y="88" width="125" height="28"/>
+                                <rect key="frame" x="107" y="88" width="125" height="22"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qKH-2u-ccY">
-                                        <rect key="frame" x="-3" y="4" width="78" height="25"/>
+                                        <rect key="frame" x="-3" y="-2" width="78" height="25"/>
                                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="rVq-rG-hoG" id="Gl3-S6-WNS">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu"/>
@@ -424,7 +424,7 @@
                                         </popUpButtonCell>
                                     </popUpButton>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rzC-Rt-UM8">
-                                        <rect key="frame" x="77" y="12" width="29" height="16"/>
+                                        <rect key="frame" x="77" y="6" width="29" height="16"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="25" id="Z0r-C1-H1l"/>
                                         </constraints>
@@ -435,7 +435,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5eE-k9-Kt2">
-                                        <rect key="frame" x="109" y="4" width="19" height="28"/>
+                                        <rect key="frame" x="109" y="-2" width="19" height="28"/>
                                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="AUg-b0-ihY"/>
                                     </stepper>
                                 </subviews>
@@ -492,10 +492,10 @@ Gw
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="DXf-oN-gmN" secondAttribute="trailing" constant="20" id="ARF-jj-XP9"/>
                             <constraint firstItem="xhr-wG-kDm" firstAttribute="centerY" secondItem="WEk-Fy-lY7" secondAttribute="centerY" id="BX1-H0-BTO"/>
                             <constraint firstItem="PUz-4z-8B7" firstAttribute="top" secondItem="DXf-oN-gmN" secondAttribute="bottom" constant="16" id="FJ7-17-eel"/>
+                            <constraint firstItem="WEk-Fy-lY7" firstAttribute="top" secondItem="s1f-xy-oTD" secondAttribute="bottom" constant="16" id="JCG-dL-1bL"/>
                             <constraint firstItem="xhr-wG-kDm" firstAttribute="width" secondItem="WEk-Fy-lY7" secondAttribute="width" multiplier="0.938462" id="LnK-Sk-RD1"/>
                             <constraint firstAttribute="trailing" secondItem="WEk-Fy-lY7" secondAttribute="trailing" constant="20" id="NuV-1q-564"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="s1f-xy-oTD" secondAttribute="trailing" constant="20" id="cOq-ji-qu5"/>
-                            <constraint firstItem="WEk-Fy-lY7" firstAttribute="top" secondItem="s1f-xy-oTD" secondAttribute="bottom" constant="16" id="iO0-t2-Mhj"/>
                             <constraint firstItem="s1f-xy-oTD" firstAttribute="centerX" secondItem="7a9-sH-lZe" secondAttribute="centerX" id="nrH-n9-3jS"/>
                             <constraint firstItem="DXf-oN-gmN" firstAttribute="top" secondItem="7a9-sH-lZe" secondAttribute="top" constant="20" symbolic="YES" id="pBv-vM-O2P"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="PUz-4z-8B7" secondAttribute="trailing" constant="20" id="t1H-po-T3J"/>
@@ -513,7 +513,7 @@ Gw
                 </viewController>
                 <customObject id="N4Q-uG-t3z" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-198" y="875"/>
+            <point key="canvasLocation" x="-198" y="864"/>
         </scene>
     </scenes>
     <resources>

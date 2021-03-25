@@ -39,6 +39,7 @@ class FontPreferencesViewController: NSViewController {
 		if let field = selectedField {
 			fontDefaults?.rowFontConfigs.removeValue(forKey: field)
 		}
+		sortedFields = fontDefaults?.sortedFields
 		tableView.reloadData()
 	}
 	
@@ -114,8 +115,10 @@ extension FontPreferencesViewController: NSTableViewDelegate {
 		
 		if let field = selectedField {
 			switch field {
-			case .rowTopic(let level), .rowNote(let level):
-				deleteButton.isEnabled = level > 1
+			case .rowTopic(let level):
+				deleteButton.isEnabled = level > 1 && level == fontDefaults?.deepestTopicLevel
+			case .rowNote(let level):
+				deleteButton.isEnabled = level > 1 && level == fontDefaults?.deepestNoteLevel
 			default:
 				deleteButton.isEnabled = false
 			}
@@ -135,6 +138,7 @@ extension FontPreferencesViewController: FontPreferencesConfigWindowControllerDe
 	func didUpdateConfig(field: OutlineFontField, config: OutlineFontConfig) {
 		fontDefaults?.rowFontConfigs[field] = config
 		AppDefaults.shared.outlineFonts = fontDefaults
+		sortedFields = fontDefaults?.sortedFields
 		tableView.reloadData()
 	}
 	
