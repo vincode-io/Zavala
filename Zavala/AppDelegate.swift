@@ -376,6 +376,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		#endif
 		
 		AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath)
+		let _ = OutlineFontCache.shared
+		
 		return true
 	}
 	
