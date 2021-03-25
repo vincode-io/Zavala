@@ -38,7 +38,7 @@ enum OutlineFontField: Hashable, CustomStringConvertible {
 		case .rowTopic(let level):
 			return level * 10
 		case .rowNote(let level):
-			return level * 15
+			return (level * 10) + 5
 		case .backlinks:
 			return 10000
 		}
