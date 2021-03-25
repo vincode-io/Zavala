@@ -78,7 +78,6 @@ class FontPreferencesViewController: NSViewController {
 
 			}
 		}
-		
 	}
 
 	@objc func addTopicLevel(_ sender: Any) {
