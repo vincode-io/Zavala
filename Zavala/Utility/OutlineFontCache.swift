@@ -28,6 +28,7 @@ class OutlineFontCache {
 		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChangeNotification), name: UserDefaults.didChangeNotification, object: nil)
 	}
 	
+	/// This is a 0 based index lookup
 	func topic(level: Int) -> UIFont {
 		if level < topics.count {
 			return topics[level]
@@ -36,6 +37,7 @@ class OutlineFontCache {
 		}
 	}
 	
+	/// This is a 0 based index lookup
 	func note(level: Int) -> UIFont {
 		if level < notes.count {
 			return notes[level]
@@ -43,6 +45,7 @@ class OutlineFontCache {
 			return notes.last ?? UIFont.preferredFont(forTextStyle: .body)
 		}
 	}
+	
 }
 
 extension OutlineFontCache {
