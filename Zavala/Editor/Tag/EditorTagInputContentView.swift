@@ -35,6 +35,7 @@ class EditorTagInputContentView: UIView, UIContentView {
 
 		borderView.addSubview(textField)
 		textField.translatesAutoresizingMaskIntoConstraints = false
+		textField.font = OutlineFontCache.shared.tag
 		textField.editorDelegate = self
 		
 		NSLayoutConstraint.activate([
@@ -70,6 +71,7 @@ class EditorTagInputContentView: UIView, UIContentView {
 	}
 	
 	private func apply(configuration: EditorTagInputContentConfiguration) {
+		textField.font = OutlineFontCache.shared.tag
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
 		textField.text = ""

@@ -21,6 +21,7 @@ class EditorTagContentView: UIView, UIContentView {
 		addSubview(button)
 		
 		button.translatesAutoresizingMaskIntoConstraints = false
+		button.titleLabel?.font = OutlineFontCache.shared.tag
 		button.backgroundColor = .systemGray4
 		button.setTitleColor(.secondaryLabel, for: .normal)
 		button.contentEdgeInsets = UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8)
@@ -62,6 +63,7 @@ class EditorTagContentView: UIView, UIContentView {
 	}
 	
 	private func apply(configuration: EditorTagContentConfiguration) {
+		button.titleLabel?.font = OutlineFontCache.shared.tag
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
 		delegate = configuration.delegate

@@ -21,12 +21,9 @@ class EditorTagAddContentView: UIView, UIContentView {
 		addSubview(button)
 		
 		button.translatesAutoresizingMaskIntoConstraints = false
+		button.titleLabel?.font = OutlineFontCache.shared.tag
 		button.setTitle(L10n.add, for: .normal)
 		
-		if traitCollection.userInterfaceIdiom != .mac {
-			button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
-		}
-
 		let action = UIAction() { [weak self] _ in
 			self?.delegate?.editorTagAddAddTag()
 		}
@@ -55,6 +52,8 @@ class EditorTagAddContentView: UIView, UIContentView {
 	}
 	
 	private func apply(configuration: EditorTagAddContentConfiguration) {
+		button.titleLabel?.font = OutlineFontCache.shared.tag
+
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
 		delegate = configuration.delegate
