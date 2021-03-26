@@ -66,6 +66,7 @@ extension SettingsFontConfigViewController: UIFontPickerViewControllerDelegate {
 	
 	func fontPickerViewControllerDidPickFont(_ viewController: UIFontPickerViewController) {
 		guard let fontName = viewController.selectedFontDescriptor?.fontAttributes[.family] as? String else { return }
+		fontNameLabel.text = fontName
 		config?.name = fontName
 		updateUI()
 	}
