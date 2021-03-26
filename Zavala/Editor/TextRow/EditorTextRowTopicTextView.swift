@@ -79,13 +79,6 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-		super.traitCollectionDidChange(previousTraitCollection)
-		if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-			textStorage.replaceFont(with: OutlineFontCache.shared.topic(level: indentionLevel))
-		}
-	}
-	
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
 		// We leave and empty string in text field to help with autolayout where first baseline is used
