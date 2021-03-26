@@ -157,6 +157,10 @@ struct AppAssets {
 		return UIImage(systemName: "trash")!
 	}()
 	
+	static var restore: UIImage = {
+		return UIImage(systemName: "gobackward")!
+	}()
+
 	static var selectColor: UIColor = {
 		return UIColor(named: "SelectColor")!
 	}()

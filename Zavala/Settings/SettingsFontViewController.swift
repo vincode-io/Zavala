@@ -14,15 +14,21 @@ class SettingsFontViewController: UICollectionViewController {
 		case fonts
 	}
 	
-	@IBOutlet weak var restoreBarButtonItem: UIBarButtonItem!
-	
 	var fontDefaults = AppDefaults.shared.outlineFonts
 
 	var dataSource: UICollectionViewDiffableDataSource<Section, OutlineFontField>!
 	private let dataSourceQueue = MainThreadOperationQueue()
 
-    override func viewDidLoad() {
+	private var restoreBarButtonItem = UIBarButtonItem(image: AppAssets.restore, style: .plain, target: self, action: #selector(restoreDefaults(_:)))
+	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.add, style: .plain, target: nil, action: nil)
+
+	override func viewDidLoad() {
         super.viewDidLoad()
+
+		restoreBarButtonItem.title = L10n.restore
+		addBarButtonItem.title = L10n.add
+		addBarButtonItem.menu = buildAddMenu()
+		navigationItem.rightBarButtonItems = [addBarButtonItem, restoreBarButtonItem]
 
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
@@ -30,7 +36,7 @@ class SettingsFontViewController: UICollectionViewController {
 		updateUI()
     }
 
-	@IBAction func restoreDefaults(_ sender: Any) {
+	@objc func restoreDefaults(_ sender: Any) {
 		let alertController = UIAlertController(title: L10n.restoreDefaultsMessage, message: L10n.restoreDefaultsInformative, preferredStyle: .alert)
 		
 		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel)
@@ -49,21 +55,14 @@ class SettingsFontViewController: UICollectionViewController {
 		
 		present(alertController, animated: true)
 	}
-	
+
 	// MARK: UICollectionView
 
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		guard let field = dataSource.itemIdentifier(for: indexPath),
 			  let config = fontDefaults?.rowFontConfigs[field] else { return }
 		
-		let navController = UIStoryboard.settings.instantiateViewController(identifier: "SettingsFontConfigViewControllerNav") as! UINavigationController
-		navController.modalPresentationStyle = .formSheet
-		let controller = navController.topViewController as! SettingsFontConfigViewController
-		controller.field = field
-		controller.config = config
-		controller.delegate = self
-		present(navController, animated: true)
-		
+		showFontConfig(field: field, config: config)
 		collectionView.deselectItem(at: indexPath, animated: true)
 	}
 
@@ -127,6 +126,30 @@ extension SettingsFontViewController {
 	
 	private func updateUI() {
 		restoreBarButtonItem.isEnabled = fontDefaults != OutlineFontDefaults.defaults
+	}
+	
+	private func buildAddMenu() -> UIMenu {
+		let addTopicLevelAction = UIAction(title: L10n.addTopicLevel, image: AppAssets.add) { [weak self] _ in
+			guard let (field, config) = self?.fontDefaults?.nextTopicDefault else { return }
+			self?.showFontConfig(field: field, config: config)
+		}
+
+		let addNoteLevelAction = UIAction(title: L10n.addNoteLevel, image: AppAssets.add) { [weak self] _ in
+			guard let (field, config) = self?.fontDefaults?.nextNoteDefault else { return }
+			self?.showFontConfig(field: field, config: config)
+		}
+		
+		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [addTopicLevelAction, addNoteLevelAction])
+	}
+	
+	private func showFontConfig(field: OutlineFontField, config: OutlineFontConfig) {
+		let navController = UIStoryboard.settings.instantiateViewController(identifier: "SettingsFontConfigViewControllerNav") as! UINavigationController
+		navController.modalPresentationStyle = .formSheet
+		let controller = navController.topViewController as! SettingsFontConfigViewController
+		controller.field = field
+		controller.config = config
+		controller.delegate = self
+		present(navController, animated: true)
 	}
 	
 }

@@ -16,12 +16,16 @@ internal enum L10n {
   internal static let add = L10n.tr("Localizable", "Add")
   /// Add Note
   internal static let addNote = L10n.tr("Localizable", "Add_Note")
+  /// Add Note Level
+  internal static let addNoteLevel = L10n.tr("Localizable", "Add_Note_Level")
   /// Add Row
   internal static let addRow = L10n.tr("Localizable", "Add_Row")
   /// Add Row Above
   internal static let addRowAbove = L10n.tr("Localizable", "Add_Row_Above")
   /// Add Row Below
   internal static let addRowBelow = L10n.tr("Localizable", "Add_Row_Below")
+  /// Add Topic Level
+  internal static let addTopicLevel = L10n.tr("Localizable", "Add_Topic_Level")
   /// Archive %@
   internal static func archiveAccount(_ p1: Any) -> String {
     return L10n.tr("Localizable", "Archive_Account", String(describing: p1))

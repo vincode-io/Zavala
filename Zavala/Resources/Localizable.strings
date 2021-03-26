@@ -123,6 +123,8 @@
 "Backlinks" = "Backlinks";
 "Restore_Defaults_Message" = "Restore Defaults";
 "Restore_Defaults_Informative" = "Are you sure you want to restore the defaults? All your font customizations will be lost.";
+"Add_Topic_Level" = "Add Topic Level";
+"Add_Note_Level" = "Add Note Level";
 
 /* Outline Get Info */
 "Created_On" = "Created on %@ at %@";
