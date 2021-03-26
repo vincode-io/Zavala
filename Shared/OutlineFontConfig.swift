@@ -19,6 +19,10 @@ struct OutlineFontConfig: Equatable {
 		return userInfo
 	}
 	
+	var displayName: String {
+		return "\(name) - \(size)"
+	}
+	
 	init(name: String, size: Int) {
 		self.name = name
 		self.size = size

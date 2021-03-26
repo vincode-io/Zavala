@@ -116,6 +116,12 @@
 "Enable_On_My_iPhone" = "Enable On My iPhone";
 "Enable_On_My_iPad" = "Enable On My iPad";
 
+"Title" = "Title";
+"Tags" = "Tags";
+"Topic_Level" = "Topic Level %d";
+"Note_Level" = "Note Level %d";
+"Backlinks" = "Backlinks";
+
 /* Outline Get Info */
 "Created_On" = "Created on %@ at %@";
 "Updated_On" = "Updated on %@ at %@";

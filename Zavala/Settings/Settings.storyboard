@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -158,6 +159,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="MGi-AO-qBZ" kind="show" id="oMC-2l-d23"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -258,6 +262,34 @@
             </objects>
             <point key="canvasLocation" x="284" y="151"/>
         </scene>
+        <!--Fonts-->
+        <scene sceneID="jF0-84-ZIQ">
+            <objects>
+                <collectionViewController storyboardIdentifier="SettingsFontViewController" title="Fonts" id="MGi-AO-qBZ" customClass="SettingsFontViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="GOM-HR-7KC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="DiL-hW-PM7">
+                            <size key="itemSize" width="128" height="128"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells/>
+                        <connections>
+                            <outlet property="dataSource" destination="MGi-AO-qBZ" id="HDM-zm-krs"/>
+                            <outlet property="delegate" destination="MGi-AO-qBZ" id="IQe-WI-l5T"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" title="Fonts" id="xYI-HF-Gi6">
+                        <barButtonItem key="rightBarButtonItem" title="Restore" id="7NR-75-uaG"/>
+                    </navigationItem>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H9n-V4-Ync" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1142" y="151"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="Ezn-Ny-zye">
             <objects>
@@ -279,5 +311,8 @@
         <namedColor name="AccentColor">
             <color red="0.25490196078431371" green="0.45882352941176469" blue="0.019607843137254902" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

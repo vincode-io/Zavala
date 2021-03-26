@@ -119,7 +119,7 @@ extension FontPreferencesViewController: NSTableViewDelegate {
 				cell.textField?.stringValue = sortedFields?[row].displayName ?? ""
 			} else if tableColumn?.identifier == NSUserInterfaceItemIdentifier(rawValue: "Font") {
 				if let field = sortedFields?[row], let fontConfig = fontDefaults?.rowFontConfigs[field] {
-					cell.textField?.stringValue = "\(fontConfig.name) - \(fontConfig.size)"
+					cell.textField?.stringValue = fontConfig.displayName
 				}
 			}
 

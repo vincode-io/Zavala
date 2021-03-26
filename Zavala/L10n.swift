@@ -26,6 +26,8 @@ internal enum L10n {
   internal static func archiveAccount(_ p1: Any) -> String {
     return L10n.tr("Localizable", "Archive_Account", String(describing: p1))
   }
+  /// Backlinks
+  internal static let backlinks = L10n.tr("Localizable", "Backlinks")
   /// Bold
   internal static let bold = L10n.tr("Localizable", "Bold")
   /// Bug Tracker
@@ -156,6 +158,10 @@ internal enum L10n {
   internal static let noTitle = L10n.tr("Localizable", "No_Title")
   /// Not Available
   internal static let notAvailable = L10n.tr("Localizable", "Not_Available")
+  /// Note Level %d
+  internal static func noteLevel(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "Note_Level", p1)
+  }
   /// Open Quickly...
   internal static let openQuickly = L10n.tr("Localizable", "Open_Quickly")
   /// Open Quickly
@@ -214,8 +220,16 @@ internal enum L10n {
   internal static let sync = L10n.tr("Localizable", "Sync")
   /// Tag
   internal static let tag = L10n.tr("Localizable", "Tag")
+  /// Tags
+  internal static let tags = L10n.tr("Localizable", "Tags")
+  /// Title
+  internal static let title = L10n.tr("Localizable", "Title")
   /// Toggle Sidebar
   internal static let toggleSidebar = L10n.tr("Localizable", "Toggle_Sidebar")
+  /// Topic Level %d
+  internal static func topicLevel(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "Topic_Level", p1)
+  }
   /// Typing
   internal static let typing = L10n.tr("Localizable", "Typing")
   /// Uncomplete

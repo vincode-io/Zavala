@@ -94,11 +94,12 @@ class SettingsViewController: UITableViewController {
 	}
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		guard indexPath.section > 1 else { return }
+		guard indexPath.section == 3 else { return }
 		
 		switch indexPath.section {
-		case 2:
-			break
+//		case 2:
+//			let fonts = UIStoryboard.settings.instantiateController(ofType: SettingsFontViewController.self)
+//			self.navigationController?.pushViewController(fonts, animated: true)
 		case 3:
 			switch indexPath.row {
 			case 0:
