@@ -20,7 +20,7 @@ class OutlineFontCache {
 	
 	var title = UIFont.preferredFont(forTextStyle: .largeTitle)
 	var tag = UIFont.preferredFont(forTextStyle: .body)
-	var backline = UIFont.preferredFont(forTextStyle: .footnote)
+	var backline = UIFont.preferredFont(forTextStyle: .footnote).with(traits: .traitItalic)
 	
 	private var topics = [UIFont]()
 	private var notes = [UIFont]()
