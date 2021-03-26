@@ -12,6 +12,7 @@ class FontPreferencesViewController: NSViewController {
 	@IBOutlet weak var tableView: NSTableView!
 	@IBOutlet weak var addButton: NSButton!
 	@IBOutlet weak var deleteButton: NSButton!
+	@IBOutlet weak var restoreDefaultsButton: NSButton!
 	
 	var fontDefaults: OutlineFontDefaults?
 	var sortedFields: [OutlineFontField]?
@@ -31,6 +32,7 @@ class FontPreferencesViewController: NSViewController {
 		
 		tableView.doubleAction = #selector(editFontDefault(_:))
 		tableView.reloadData()
+		updateUI()
 		
 		addButton.sendAction(on: .leftMouseDown)
 	}
@@ -38,6 +40,7 @@ class FontPreferencesViewController: NSViewController {
 	@IBAction func delete(_ sender: Any) {
 		if let field = selectedField {
 			fontDefaults?.rowFontConfigs.removeValue(forKey: field)
+			AppDefaults.shared.outlineFonts = fontDefaults
 		}
 		sortedFields = fontDefaults?.sortedFields
 		tableView.reloadData()
@@ -75,7 +78,7 @@ class FontPreferencesViewController: NSViewController {
 				AppDefaults.shared.outlineFonts = self.fontDefaults
 				self.sortedFields = self.fontDefaults?.sortedFields
 				self.tableView.reloadData()
-
+				self.updateUI()
 			}
 		}
 	}
@@ -157,11 +160,18 @@ extension FontPreferencesViewController: FontPreferencesConfigWindowControllerDe
 		AppDefaults.shared.outlineFonts = fontDefaults
 		sortedFields = fontDefaults?.sortedFields
 		tableView.reloadData()
+		updateUI()
 	}
 	
 }
 
+// MARK: Helpers
+
 extension FontPreferencesViewController {
+
+	private func updateUI() {
+		restoreDefaultsButton.isEnabled = fontDefaults != OutlineFontDefaults.defaults
+	}
 	
 	private func showFontConfig(field: OutlineFontField?, config: OutlineFontConfig?) {
 		let fontConfigWindowController = FontPreferencesConfigWindowController()
@@ -170,7 +180,7 @@ extension FontPreferencesViewController {
 		fontConfigWindowController.delegate = self
 		fontConfigWindowController.runSheetOnWindow(self.view.window!)
 		windowController = fontConfigWindowController
-
 	}
-	
+
 }
+
