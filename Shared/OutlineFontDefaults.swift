@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OutlineFontDefaults {
+struct OutlineFontDefaults: Equatable {
 	
 	static var defaults: OutlineFontDefaults {
 		var defaults = OutlineFontDefaults()
@@ -84,6 +84,10 @@ struct OutlineFontDefaults {
 				rowFontConfigs[field] = config
 			}
 		}
+	}
+	
+	static func == (lhs: Self, rhs: Self) -> Bool {
+		return lhs.rowFontConfigs == rhs.rowFontConfigs
 	}
 	
 }

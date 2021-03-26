@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum OutlineFontField: Hashable, CustomStringConvertible {
+enum OutlineFontField: Hashable, Equatable, CustomStringConvertible {
 	case title
 	case tags
 	case rowTopic(Int) // Level

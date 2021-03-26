@@ -16,6 +16,8 @@ class OutlineFontCache {
 	
 	static let shared = OutlineFontCache()
 	
+	var lastOutlineFonts: OutlineFontDefaults?
+	
 	var title = UIFont.preferredFont(forTextStyle: .largeTitle)
 	var tag = UIFont.preferredFont(forTextStyle: .body)
 	var backline = UIFont.preferredFont(forTextStyle: .footnote)
@@ -51,10 +53,14 @@ class OutlineFontCache {
 extension OutlineFontCache {
 
 	@objc private func userDefaultsDidChangeNotification() {
-		buildCache(AppDefaults.shared.outlineFonts)
+		let fontDefaults = AppDefaults.shared.outlineFonts
+		if fontDefaults != lastOutlineFonts {
+			buildCache(fontDefaults)
+		}
 	}
 	
 	private func buildCache(_ fontDefaults: OutlineFontDefaults?) {
+		lastOutlineFonts = fontDefaults
 		guard let sortedFields = fontDefaults?.sortedFields else { return }
 		
 		topics.removeAll()
