@@ -47,7 +47,6 @@ class SettingsFontViewController: UICollectionViewController {
 			self.fontDefaults = OutlineFontDefaults.defaults
 			AppDefaults.shared.outlineFonts = self.fontDefaults
 			self.applySnapshot()
-			self.collectionView.reloadData()
 			self.updateUI()
 		}
 		alertController.addAction(restoreAction)
@@ -67,8 +66,16 @@ class SettingsFontViewController: UICollectionViewController {
 	}
 
 	private func createLayout() -> UICollectionViewLayout {
-		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
-			let configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+		let layout = UICollectionViewCompositionalLayout() { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
+			var configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+
+			configuration.trailingSwipeActionsConfigurationProvider = { indexPath in
+				guard let self = self,
+					  let field = self.dataSource.itemIdentifier(for: indexPath),
+					  let deleteAction = self.deleteAction(field: field) else { return nil }
+				return UISwipeActionsConfiguration(actions: [deleteAction])
+			}
+
 			return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
 		}
 		return layout
@@ -114,7 +121,7 @@ extension SettingsFontViewController: SettingsFontConfigViewControllerDelegate {
 	func didUpdateConfig(field: OutlineFontField, config: OutlineFontConfig) {
 		fontDefaults?.rowFontConfigs[field] = config
 		AppDefaults.shared.outlineFonts = fontDefaults
-		collectionView.reloadData()
+		applySnapshot()
 		updateUI()
 	}
 
@@ -150,6 +157,30 @@ extension SettingsFontViewController {
 		controller.config = config
 		controller.delegate = self
 		present(navController, animated: true)
+	}
+
+	private func deleteAction(field: OutlineFontField) -> UIContextualAction? {
+		let action =  UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
+			guard let self = self else { return }
+			self.fontDefaults?.rowFontConfigs.removeValue(forKey: field)
+			AppDefaults.shared.outlineFonts = self.fontDefaults
+			self.applySnapshot()
+		}
+
+		switch field {
+		case .rowTopic(let level):
+			if level > 1 && level == fontDefaults?.deepestTopicLevel {
+				return action
+			}
+		case .rowNote(let level):
+			if level > 1 && level == fontDefaults?.deepestNoteLevel {
+				return action
+			}
+		default:
+			break
+		}
+		
+		return nil
 	}
 	
 }
