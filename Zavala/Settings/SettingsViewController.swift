@@ -94,22 +94,28 @@ class SettingsViewController: UITableViewController {
 	}
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		guard indexPath.section == 2 else { return }
+		guard indexPath.section > 1 else { return }
 		
-		switch indexPath.row {
-		case 0:
-			openURL(AppAssets.releaseNotesURL)
-		case 1:
-			openURL(AppAssets.githubRepositoryURL)
+		switch indexPath.section {
 		case 2:
-			openURL(AppAssets.bugTrackerURL)
+			break
 		case 3:
-			openURL(AppAssets.acknowledgementsURL)
+			switch indexPath.row {
+			case 0:
+				openURL(AppAssets.releaseNotesURL)
+			case 1:
+				openURL(AppAssets.githubRepositoryURL)
+			case 2:
+				openURL(AppAssets.bugTrackerURL)
+			case 3:
+				openURL(AppAssets.acknowledgementsURL)
+			default:
+				break
+			}
+			tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
 		default:
 			break
 		}
-
-		tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
 	}
 	
 	override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
