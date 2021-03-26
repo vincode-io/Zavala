@@ -285,6 +285,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		updateUI(editMode: false)
 		collectionView.reloadData()
 		
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineFontCacheDidRebuild(_:)), name: .OutlineFontCacheDidRebuild, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineElementsDidChange(_:)), name: .OutlineElementsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillBegin(_:)), name: .OutlineSearchWillBegin, object: nil)
@@ -369,6 +370,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	// MARK: Notifications
+	
+	@objc func outlineFontCacheDidRebuild(_ note: Notification) {
+		let contentOffset = collectionView.contentOffset
+		collectionView.reloadData()
+		collectionView.contentOffset = contentOffset
+	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
 		guard let document = note.object as? Document,

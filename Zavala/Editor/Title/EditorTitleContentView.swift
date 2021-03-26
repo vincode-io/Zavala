@@ -27,7 +27,7 @@ class EditorTitleContentView: UIView, UIContentView {
 		textView.isScrollEnabled = false
 		textView.textContainer.lineFragmentPadding = 0
 		textView.textContainerInset = .zero
-		textView.font = UIFont.preferredFont(forTextStyle: .largeTitle)
+		textView.font = OutlineFontCache.shared.title
 		textView.textAlignment = .center
 		textView.backgroundColor = .clear
 		textView.tintColor = AppAssets.accent
@@ -72,6 +72,11 @@ class EditorTitleContentView: UIView, UIContentView {
 	}
 	
 	private func apply(configuration: EditorTitleContentConfiguration) {
+		if textView.font != OutlineFontCache.shared.title {
+			textView.font = OutlineFontCache.shared.title
+			updateAdjustingSeparatorWidthContraint()
+		}
+
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
 		textView.text = configuration.title
