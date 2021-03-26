@@ -14,7 +14,9 @@ class SettingsFontViewController: UICollectionViewController {
 		case fonts
 	}
 	
-	var outlineFonts = AppDefaults.shared.outlineFonts
+	@IBOutlet weak var restoreBarButtonItem: UIBarButtonItem!
+	
+	var fontDefaults = AppDefaults.shared.outlineFonts
 
 	var dataSource: UICollectionViewDiffableDataSource<Section, OutlineFontField?>!
 	private let dataSourceQueue = MainThreadOperationQueue()
@@ -25,8 +27,28 @@ class SettingsFontViewController: UICollectionViewController {
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
 		applySnapshot()
+		updateUI()
     }
 
+	@IBAction func restoreDefaults(_ sender: Any) {
+		let alertController = UIAlertController(title: L10n.removeCloudKitTitle, message: L10n.removeCloudKitMessage, preferredStyle: .alert)
+		
+		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel)
+		alertController.addAction(cancelAction)
+		
+		let restoreAction = UIAlertAction(title: L10n.restore, style: .default) { [weak self] action in
+			guard let self = self else { return }
+			self.fontDefaults = OutlineFontDefaults.defaults
+			AppDefaults.shared.outlineFonts = self.fontDefaults
+			self.applySnapshot()
+			self.updateUI()
+		}
+		alertController.addAction(restoreAction)
+		alertController.preferredAction = restoreAction
+		
+		present(alertController, animated: true)
+	}
+	
 	// MARK: UICollectionView
 
 //	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -54,7 +76,7 @@ class SettingsFontViewController: UICollectionViewController {
 				var contentConfiguration = UIListContentConfiguration.subtitleCell()
 				contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 				contentConfiguration.text = field.displayName
-				contentConfiguration.secondaryText = self?.outlineFonts?.rowFontConfigs[field]?.displayName
+				contentConfiguration.secondaryText = self?.fontDefaults?.rowFontConfigs[field]?.displayName
 				cell.contentConfiguration = contentConfiguration
 			}
 		}
@@ -75,9 +97,19 @@ class SettingsFontViewController: UICollectionViewController {
 	
 	private func snapshot() -> NSDiffableDataSourceSectionSnapshot<OutlineFontField?> {
 		var snapshot = NSDiffableDataSourceSectionSnapshot<OutlineFontField?>()
-		let fields = outlineFonts?.sortedFields ?? [OutlineFontField]()
+		let fields = fontDefaults?.sortedFields ?? [OutlineFontField]()
 		snapshot.append(fields)
 		return snapshot
 	}
 
+}
+
+// MARK: Helpers
+
+extension SettingsFontViewController {
+	
+	private func updateUI() {
+		restoreBarButtonItem.isEnabled = fontDefaults != OutlineFontDefaults.defaults
+	}
+	
 }

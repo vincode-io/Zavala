@@ -283,8 +283,15 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" title="Fonts" id="xYI-HF-Gi6">
-                        <barButtonItem key="rightBarButtonItem" title="Restore" id="7NR-75-uaG"/>
+                        <barButtonItem key="rightBarButtonItem" title="Restore" id="7NR-75-uaG">
+                            <connections>
+                                <action selector="restoreDefaults:" destination="MGi-AO-qBZ" id="jpD-Vq-GrC"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="restoreBarButtonItem" destination="7NR-75-uaG" id="jdb-Wd-cWL"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H9n-V4-Ync" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
