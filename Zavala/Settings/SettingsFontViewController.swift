@@ -31,7 +31,7 @@ class SettingsFontViewController: UICollectionViewController {
     }
 
 	@IBAction func restoreDefaults(_ sender: Any) {
-		let alertController = UIAlertController(title: L10n.removeCloudKitTitle, message: L10n.removeCloudKitMessage, preferredStyle: .alert)
+		let alertController = UIAlertController(title: L10n.restoreDefaultsMessage, message: L10n.restoreDefaultsInformative, preferredStyle: .alert)
 		
 		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel)
 		alertController.addAction(cancelAction)

@@ -200,6 +200,10 @@ internal enum L10n {
   }
   /// Restore Archive
   internal static let restoreArchive = L10n.tr("Localizable", "Restore_Archive")
+  /// Are you sure you want to restore the defaults? All your font customizations will be lost.
+  internal static let restoreDefaultsInformative = L10n.tr("Localizable", "Restore_Defaults_Informative")
+  /// Restore Defaults
+  internal static let restoreDefaultsMessage = L10n.tr("Localizable", "Restore_Defaults_Message")
   /// Search
   internal static let search = L10n.tr("Localizable", "Search")
   /// See documents in “%@”
