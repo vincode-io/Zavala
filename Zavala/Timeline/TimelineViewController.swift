@@ -406,7 +406,7 @@ extension TimelineViewController {
 	}
 
 	private func copyLinkAction(document: Document) -> UIAction {
-		let action = UIAction(title: L10n.copyLink, image: AppAssets.link) { action in
+		let action = UIAction(title: L10n.copyDocumentLink, image: AppAssets.link) { action in
 			let documentURL = document.id.url
 			UIPasteboard.general.url = documentURL
 		}

@@ -158,6 +158,11 @@ extension MainCoordinator {
 		editorViewController?.link()
 	}
 	
+	func copyDocumentLink() {
+		let documentURL = editorViewController?.outline?.id.url
+		UIPasteboard.general.url = documentURL
+	}
+	
 	func expandAllInOutline() {
 		editorViewController?.expandAllInOutline()
 	}

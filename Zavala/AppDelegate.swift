@@ -230,6 +230,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 								   input: "k",
 								   modifierFlags: [.command])
 	
+	let copyDocumentLinkCommand = UICommand(title: L10n.copyDocumentLink, action: #selector(copyDocumentLinkCommand(_:)))
+	
 	let toggleOutlineFilterCommand = UIKeyCommand(title: L10n.hideCompleted,
 												  action: #selector(toggleOutlineFilterCommand(_:)),
 												  input: "h",
@@ -547,6 +549,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.link()
 	}
 
+	@objc func copyDocumentLinkCommand(_ sender: Any?) {
+		mainCoordinator?.copyDocumentLink()
+	}
+
 	@objc func toggleOutlineFilterCommand(_ sender: Any?) {
 		mainCoordinator?.toggleOutlineFilter()
 	}
@@ -767,6 +773,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			 #selector(useSelectionForSearchCommand(_:)),
 			 #selector(nextInDocumentSearchCommand(_:)),
 			 #selector(previousInDocumentSearchCommand(_:)),
+			 #selector(copyDocumentLinkCommand(_:)),
 			 #selector(printCommand(_:)):
 			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
@@ -813,7 +820,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertChild(getInfoMenu, atEndOfMenu: .file)
 
 		// Edit
-		let linkMenu = UIMenu(title: "", options: .displayInline, children: [linkCommand])
+		let linkMenu = UIMenu(title: "", options: .displayInline, children: [linkCommand, copyDocumentLinkCommand])
 		builder.insertSibling(linkMenu, afterMenu: .standardEdit)
 
 		let documentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginDocumentSearchCommand])
