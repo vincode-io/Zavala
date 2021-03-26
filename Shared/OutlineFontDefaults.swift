@@ -12,11 +12,11 @@ struct OutlineFontDefaults: Equatable {
 	static var defaults: OutlineFontDefaults {
 		var defaults = OutlineFontDefaults()
 		#if targetEnvironment(macCatalyst) || canImport(AppKit)
-		defaults.rowFontConfigs[.title] = OutlineFontConfig(name: "SF Pro", size: 26)
-		defaults.rowFontConfigs[.tags] = OutlineFontConfig(name: "SF Pro", size: 14)
-		defaults.rowFontConfigs[.rowTopic(1)] = OutlineFontConfig(name: "SF Pro", size: 14)
-		defaults.rowFontConfigs[.rowNote(1)] = OutlineFontConfig(name: "SF Pro", size: 13)
-		defaults.rowFontConfigs[.backlinks] = OutlineFontConfig(name: "SF Pro", size: 12)
+		defaults.rowFontConfigs[.title] = OutlineFontConfig(name: "Helvetica Neue", size: 26)
+		defaults.rowFontConfigs[.tags] = OutlineFontConfig(name: "Helvetica Neue", size: 14)
+		defaults.rowFontConfigs[.rowTopic(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 14)
+		defaults.rowFontConfigs[.rowNote(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 13)
+		defaults.rowFontConfigs[.backlinks] = OutlineFontConfig(name: "Helvetica Neue", size: 12)
 		#else
 		defaults.rowFontConfigs[.title] = OutlineFontConfig(name: "Helvetica Neue", size: 34)
 		defaults.rowFontConfigs[.tags] = OutlineFontConfig(name: "Helvetica Neue", size: 17)
