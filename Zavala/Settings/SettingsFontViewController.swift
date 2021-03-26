@@ -24,15 +24,19 @@ class SettingsFontViewController: UICollectionViewController {
 	var dataSource: UICollectionViewDiffableDataSource<Section, FieldConfig>!
 	private let dataSourceQueue = MainThreadOperationQueue()
 
-	private var restoreBarButtonItem = UIBarButtonItem(image: AppAssets.restore, style: .plain, target: self, action: #selector(restoreDefaults(_:)))
-	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.add, style: .plain, target: nil, action: nil)
+	private var restoreBarButtonItem: UIBarButtonItem!
+	private var addBarButtonItem: UIBarButtonItem!
 
 	override func viewDidLoad() {
         super.viewDidLoad()
 
+		restoreBarButtonItem = UIBarButtonItem(image: AppAssets.restore, style: .plain, target: self, action: #selector(restoreDefaults(_:)))
 		restoreBarButtonItem.title = L10n.restore
+
+		addBarButtonItem = UIBarButtonItem(image: AppAssets.add, style: .plain, target: nil, action: nil)
 		addBarButtonItem.title = L10n.add
 		addBarButtonItem.menu = buildAddMenu()
+
 		navigationItem.rightBarButtonItems = [addBarButtonItem, restoreBarButtonItem]
 
 		collectionView.collectionViewLayout = createLayout()
