@@ -52,6 +52,7 @@ class SettingsFontViewController: UICollectionViewController {
 		let rowRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, OutlineFontField?> { [weak self] (cell, indexPath, field) in
 			if let field = field {
 				var contentConfiguration = UIListContentConfiguration.subtitleCell()
+				contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 				contentConfiguration.text = field.displayName
 				contentConfiguration.secondaryText = self?.outlineFonts?.rowFontConfigs[field]?.displayName
 				cell.contentConfiguration = contentConfiguration
