@@ -68,7 +68,7 @@ extension OutlineFontCache {
 			case .rowNote:
 				notes.append(UIFontMetrics(forTextStyle: .body).scaledFont(for: font))
 			case .backlinks:
-				backline = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: font)
+				backline = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: font).with(traits: .traitItalic)
 			}
 		}
 
