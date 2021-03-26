@@ -53,21 +53,21 @@ class OutlineFontCache {
 extension OutlineFontCache {
 
 	@objc private func userDefaultsDidChangeNotification() {
-		let fontDefaults = AppDefaults.shared.outlineFonts
-		if fontDefaults != lastOutlineFonts {
-			buildCache(fontDefaults)
+		let outlineFonts = AppDefaults.shared.outlineFonts
+		if outlineFonts != lastOutlineFonts {
+			buildCache(outlineFonts)
 		}
 	}
 	
-	private func buildCache(_ fontDefaults: OutlineFontDefaults?) {
-		lastOutlineFonts = fontDefaults
-		guard let sortedFields = fontDefaults?.sortedFields else { return }
+	private func buildCache(_ outlineFonts: OutlineFontDefaults?) {
+		lastOutlineFonts = outlineFonts
+		guard let sortedFields = outlineFonts?.sortedFields else { return }
 		
 		topics.removeAll()
 		notes.removeAll()
 		
 		for field in sortedFields {
-			guard let config = fontDefaults?.rowFontConfigs[field],
+			guard let config = outlineFonts?.rowFontConfigs[field],
 				  let font = UIFont(name: config.name, size: CGFloat(config.size)) else { continue }
 			
 			switch field {
