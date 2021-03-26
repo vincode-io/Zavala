@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OutlineFontConfig: Equatable {
+struct OutlineFontConfig: Equatable, Hashable {
 	
 	var name: String
 	var size: Int
