@@ -372,9 +372,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	// MARK: Notifications
 	
 	@objc func outlineFontCacheDidRebuild(_ note: Notification) {
-		let contentOffset = collectionView.contentOffset
-		collectionView.reloadData()
-		collectionView.contentOffset = contentOffset
+		collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
