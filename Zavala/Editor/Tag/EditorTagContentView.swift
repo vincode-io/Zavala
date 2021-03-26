@@ -25,12 +25,7 @@ class EditorTagContentView: UIView, UIContentView {
 		button.backgroundColor = .systemGray4
 		button.setTitleColor(.secondaryLabel, for: .normal)
 		button.contentEdgeInsets = UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8)
-
-		if traitCollection.userInterfaceIdiom == .mac {
-			button.layer.cornerRadius = 10
-		} else {
-			button.layer.cornerRadius = 13
-		}
+		button.layer.cornerRadius = button.intrinsicContentSize.height / 2
 
 		let deleteAction = UIAction(title: L10n.deleteTag, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in
 			guard let self = self, let name = self.button.currentTitle else { return }
@@ -64,6 +59,7 @@ class EditorTagContentView: UIView, UIContentView {
 	
 	private func apply(configuration: EditorTagContentConfiguration) {
 		button.titleLabel?.font = OutlineFontCache.shared.tag
+		button.layer.cornerRadius = button.intrinsicContentSize.height / 2
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
 		delegate = configuration.delegate

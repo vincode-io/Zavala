@@ -27,12 +27,6 @@ class EditorTagInputContentView: UIView, UIContentView {
 		borderView.layer.borderWidth = 1
 		borderView.layer.borderColor = UIColor.systemGray4.cgColor
 
-		if traitCollection.userInterfaceIdiom == .mac {
-			borderView.layer.cornerRadius = 10
-		} else {
-			borderView.layer.cornerRadius = 13
-		}
-
 		borderView.addSubview(textField)
 		textField.translatesAutoresizingMaskIntoConstraints = false
 		textField.font = OutlineFontCache.shared.tag
@@ -48,7 +42,9 @@ class EditorTagInputContentView: UIView, UIContentView {
 			textField.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 2.5),
 			textField.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -2.5),
 		])
-		
+
+		borderView.layer.cornerRadius = (textField.intrinsicContentSize.height + 5) / 2
+
 		apply(configuration: configuration)
 	}
 	
@@ -72,6 +68,7 @@ class EditorTagInputContentView: UIView, UIContentView {
 	
 	private func apply(configuration: EditorTagInputContentConfiguration) {
 		textField.font = OutlineFontCache.shared.tag
+		borderView.layer.cornerRadius = (textField.intrinsicContentSize.height + 5) / 2
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
 		textField.text = ""
