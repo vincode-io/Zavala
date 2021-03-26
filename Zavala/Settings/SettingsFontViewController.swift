@@ -122,6 +122,7 @@ extension SettingsFontViewController: SettingsFontConfigViewControllerDelegate {
 		fontDefaults?.rowFontConfigs[field] = config
 		AppDefaults.shared.outlineFonts = fontDefaults
 		applySnapshot()
+		collectionView.reloadData()
 		updateUI()
 	}
 
