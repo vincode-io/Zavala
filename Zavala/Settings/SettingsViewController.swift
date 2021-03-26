@@ -96,27 +96,20 @@ class SettingsViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		guard indexPath.section == 3 else { return }
 		
-		switch indexPath.section {
-//		case 2:
-//			let fonts = UIStoryboard.settings.instantiateController(ofType: SettingsFontViewController.self)
-//			self.navigationController?.pushViewController(fonts, animated: true)
+		switch indexPath.row {
+		case 0:
+			openURL(AppAssets.releaseNotesURL)
+		case 1:
+			openURL(AppAssets.githubRepositoryURL)
+		case 2:
+			openURL(AppAssets.bugTrackerURL)
 		case 3:
-			switch indexPath.row {
-			case 0:
-				openURL(AppAssets.releaseNotesURL)
-			case 1:
-				openURL(AppAssets.githubRepositoryURL)
-			case 2:
-				openURL(AppAssets.bugTrackerURL)
-			case 3:
-				openURL(AppAssets.acknowledgementsURL)
-			default:
-				break
-			}
-			tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
+			openURL(AppAssets.acknowledgementsURL)
 		default:
 			break
 		}
+		
+		tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
 	}
 	
 	override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
