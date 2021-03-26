@@ -192,6 +192,10 @@ public class CloudKitManager {
 	func accountDidDelete(account: Account) {
 		var zoneIDs = Set<CKRecordZone.ID>()
 
+		// If the user deletes all the documents prior to deleting the account, we
+		// won't reset the default zone unless we add it manually.
+		zoneIDs.insert(defaultZone.zoneID)
+		
 		for doc in account.documents ?? [Document]() {
 			if let zoneID = doc.zoneID {
 				zoneIDs.insert(zoneID)
