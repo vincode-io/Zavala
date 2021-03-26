@@ -18,7 +18,7 @@ class SettingsFontViewController: UICollectionViewController {
 	
 	var fontDefaults = AppDefaults.shared.outlineFonts
 
-	var dataSource: UICollectionViewDiffableDataSource<Section, OutlineFontField?>!
+	var dataSource: UICollectionViewDiffableDataSource<Section, OutlineFontField>!
 	private let dataSourceQueue = MainThreadOperationQueue()
 
     override func viewDidLoad() {
@@ -41,6 +41,7 @@ class SettingsFontViewController: UICollectionViewController {
 			self.fontDefaults = OutlineFontDefaults.defaults
 			AppDefaults.shared.outlineFonts = self.fontDefaults
 			self.applySnapshot()
+			self.collectionView.reloadData()
 			self.updateUI()
 		}
 		alertController.addAction(restoreAction)
@@ -51,15 +52,20 @@ class SettingsFontViewController: UICollectionViewController {
 	
 	// MARK: UICollectionView
 
-//	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
-//
-//		if case .documentContainer(let entityID) = sidebarItem.id {
-//			AppDefaults.shared.openQuicklyDocumentContainerID = entityID.userInfo
-//			let documentContainer = AccountManager.shared.findDocumentContainer(entityID)
-//			delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer)
-//		}
-//	}
+	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		guard let field = dataSource.itemIdentifier(for: indexPath),
+			  let config = fontDefaults?.rowFontConfigs[field] else { return }
+		
+		let navController = UIStoryboard.settings.instantiateViewController(identifier: "SettingsFontConfigViewControllerNav") as! UINavigationController
+		navController.modalPresentationStyle = .formSheet
+		let controller = navController.topViewController as! SettingsFontConfigViewController
+		controller.field = field
+		controller.config = config
+		controller.delegate = self
+		present(navController, animated: true)
+		
+		collectionView.deselectItem(at: indexPath, animated: true)
+	}
 
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
@@ -71,17 +77,15 @@ class SettingsFontViewController: UICollectionViewController {
 
 	private func configureDataSource() {
 
-		let rowRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, OutlineFontField?> { [weak self] (cell, indexPath, field) in
-			if let field = field {
-				var contentConfiguration = UIListContentConfiguration.subtitleCell()
-				contentConfiguration.prefersSideBySideTextAndSecondaryText = true
-				contentConfiguration.text = field.displayName
-				contentConfiguration.secondaryText = self?.fontDefaults?.rowFontConfigs[field]?.displayName
-				cell.contentConfiguration = contentConfiguration
-			}
+		let rowRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, OutlineFontField> { [weak self] (cell, indexPath, field) in
+			var contentConfiguration = UIListContentConfiguration.subtitleCell()
+			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
+			contentConfiguration.text = field.displayName
+			contentConfiguration.secondaryText = self?.fontDefaults?.rowFontConfigs[field]?.displayName
+			cell.contentConfiguration = contentConfiguration
 		}
 		
-		dataSource = UICollectionViewDiffableDataSource<Section, OutlineFontField?>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
+		dataSource = UICollectionViewDiffableDataSource<Section, OutlineFontField>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
 			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: item)
 		}
 	}
@@ -90,16 +94,29 @@ class SettingsFontViewController: UICollectionViewController {
 		applySnapshot(snapshot(), section: .fonts, animated: true)
 	}
 
-	private func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<OutlineFontField?>, section: Section, animated: Bool) {
+	private func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<OutlineFontField>, section: Section, animated: Bool) {
 		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
 		dataSourceQueue.add(operation)
 	}
 	
-	private func snapshot() -> NSDiffableDataSourceSectionSnapshot<OutlineFontField?> {
-		var snapshot = NSDiffableDataSourceSectionSnapshot<OutlineFontField?>()
+	private func snapshot() -> NSDiffableDataSourceSectionSnapshot<OutlineFontField> {
+		var snapshot = NSDiffableDataSourceSectionSnapshot<OutlineFontField>()
 		let fields = fontDefaults?.sortedFields ?? [OutlineFontField]()
 		snapshot.append(fields)
 		return snapshot
+	}
+
+}
+
+// MARK: SettingsFontConfigViewControllerDelegate
+
+extension SettingsFontViewController: SettingsFontConfigViewControllerDelegate {
+	
+	func didUpdateConfig(field: OutlineFontField, config: OutlineFontConfig) {
+		fontDefaults?.rowFontConfigs[field] = config
+		AppDefaults.shared.outlineFonts = fontDefaults
+		collectionView.reloadData()
+		updateUI()
 	}
 
 }

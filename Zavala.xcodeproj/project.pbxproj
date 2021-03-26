@@ -12,6 +12,8 @@
 		5113B08E260C1F1700DBD11B /* OutlineFontCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113B08C260C1F1700DBD11B /* OutlineFontCache.swift */; };
 		5113B092260E45B400DBD11B /* SettingsFontViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113B091260E45B400DBD11B /* SettingsFontViewController.swift */; };
 		5113B093260E45B400DBD11B /* SettingsFontViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113B091260E45B400DBD11B /* SettingsFontViewController.swift */; };
+		5113B095260E638400DBD11B /* SettingsFontConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */; };
+		5113B096260E638400DBD11B /* SettingsFontConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */; };
 		5115C02D2605898900416D67 /* MacOpenQuicklySidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5115C02C2605898900416D67 /* MacOpenQuicklySidebarViewController.swift */; };
 		5115C02E2605898900416D67 /* MacOpenQuicklySidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5115C02C2605898900416D67 /* MacOpenQuicklySidebarViewController.swift */; };
 		5115C0362605F96100416D67 /* MacOpenQuicklyTimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5115C0352605F96100416D67 /* MacOpenQuicklyTimelineViewController.swift */; };
@@ -394,6 +396,7 @@
 		51028CD425F3159A00B50B71 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		5113B08C260C1F1700DBD11B /* OutlineFontCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontCache.swift; sourceTree = "<group>"; };
 		5113B091260E45B400DBD11B /* SettingsFontViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFontViewController.swift; sourceTree = "<group>"; };
+		5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFontConfigViewController.swift; sourceTree = "<group>"; };
 		5115C02C2605898900416D67 /* MacOpenQuicklySidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOpenQuicklySidebarViewController.swift; sourceTree = "<group>"; };
 		5115C0352605F96100416D67 /* MacOpenQuicklyTimelineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOpenQuicklyTimelineViewController.swift; sourceTree = "<group>"; };
 		511B29E425FEE4DC00C04239 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
@@ -751,6 +754,7 @@
 				517AF69F25E08A6B0044DBAB /* Settings.storyboard */,
 				517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */,
 				5113B091260E45B400DBD11B /* SettingsFontViewController.swift */,
+				5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1279,6 +1283,7 @@
 				511B2A312602410C00C04239 /* MacFormViewController.swift in Sources */,
 				511B2A322602410C00C04239 /* OpenQuicklyViewController.swift in Sources */,
 				511B2A332602410C00C04239 /* LinkViewController.swift in Sources */,
+				5113B096260E638400DBD11B /* SettingsFontConfigViewController.swift in Sources */,
 				517A9E2C2603E0BF00EF346A /* NSActivity+.swift in Sources */,
 				511B2A342602410C00C04239 /* EditorTextRowNoteTextView.swift in Sources */,
 				511B2A352602410C00C04239 /* EditorTagContentView.swift in Sources */,
@@ -1452,6 +1457,7 @@
 				517342F225EC2C690012EB20 /* UIActivityViewController+.swift in Sources */,
 				51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */,
 				5113B092260E45B400DBD11B /* SettingsFontViewController.swift in Sources */,
+				5113B095260E638400DBD11B /* SettingsFontConfigViewController.swift in Sources */,
 				512229682563507E008041AF /* EditorTextRowViewCell.swift in Sources */,
 				511B29F726018FBB00C04239 /* EditorBacklinkContentConfiguration.swift in Sources */,
 				51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */,
