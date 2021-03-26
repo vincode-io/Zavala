@@ -22,6 +22,12 @@ class OutlineTextView: UITextView {
 		}
 	}
 
+	var indentionLevel = 0 {
+		didSet {
+			indentionLevelWasUpdated()
+		}
+	}
+	
 	var editorUndoManager: UndoManager? {
 		fatalError("editorUndoManager has not been implemented")
 	}
@@ -126,6 +132,9 @@ class OutlineTextView: UITextView {
 	}
 	
 	func rowWasUpdated() {
+	}
+	
+	func indentionLevelWasUpdated() {
 	}
 	
 	func detectData() {

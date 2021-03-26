@@ -63,7 +63,7 @@ struct OutlineFontDefaults {
 	}
 
 	var nextNoteDefault: (OutlineFontField, OutlineFontConfig)? {
-		let level = deepestTopicLevel
+		let level = deepestNoteLevel
 		let nextField = OutlineFontField.rowNote(level + 1)
 		return (nextField, rowFontConfigs[.rowNote(level)]!)
 	}

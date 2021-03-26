@@ -57,6 +57,9 @@ extension OutlineFontCache {
 	private func buildCache(_ fontDefaults: OutlineFontDefaults?) {
 		guard let sortedFields = fontDefaults?.sortedFields else { return }
 		
+		topics.removeAll()
+		notes.removeAll()
+		
 		for field in sortedFields {
 			guard let config = fontDefaults?.rowFontConfigs[field],
 				  let font = UIFont(name: config.name, size: CGFloat(config.size)) else { continue }

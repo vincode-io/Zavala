@@ -73,7 +73,6 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 		self.delegate = self
-		self.font = OutlineFont.topic
 	}
 	
 	required init?(coder: NSCoder) {
@@ -83,7 +82,7 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 		super.traitCollectionDidChange(previousTraitCollection)
 		if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-			textStorage.replaceFont(with: OutlineFont.topic)
+			textStorage.replaceFont(with: OutlineFontCache.shared.topic(level: indentionLevel))
 		}
 	}
 	
@@ -169,6 +168,10 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		}
 	}
 	
+	override func indentionLevelWasUpdated() {
+		font = OutlineFontCache.shared.topic(level: indentionLevel)
+	}
+	
 	override func saveText() {
 		guard isTextChanged, let textRow = row else { return }
 		
@@ -185,7 +188,7 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	
 	override func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
 		super.updateLinkForCurrentSelection(text: text, link: link, range: range)
-		textStorage.replaceFont(with: OutlineFont.topic)
+		textStorage.replaceFont(with: OutlineFontCache.shared.topic(level: indentionLevel))
 		isTextChanged = true
 		saveText()
 	}

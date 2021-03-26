@@ -56,7 +56,6 @@ class EditorTextRowNoteTextView: OutlineTextView {
 		
 		self.delegate = self
 
-		self.font = OutlineFont.note
 		self.textColor = .secondaryLabel
 		self.linkTextAttributes = [.foregroundColor: UIColor.secondaryLabel, .underlineStyle: 1]
 	}
@@ -68,7 +67,7 @@ class EditorTextRowNoteTextView: OutlineTextView {
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 		super.traitCollectionDidChange(previousTraitCollection)
 		if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
-			textStorage.replaceFont(with: OutlineFont.note)
+			textStorage.replaceFont(with: OutlineFontCache.shared.note(level: indentionLevel))
 		}
 	}
 
@@ -127,9 +126,13 @@ class EditorTextRowNoteTextView: OutlineTextView {
 	
 	override func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
 		super.updateLinkForCurrentSelection(text: text, link: link, range: range)
-		textStorage.replaceFont(with: OutlineFont.note)
+		textStorage.replaceFont(with: OutlineFontCache.shared.note(level: indentionLevel))
 		isTextChanged = true
 		saveText()
+	}
+	
+	override func indentionLevelWasUpdated() {
+		font = OutlineFontCache.shared.note(level: indentionLevel)
 	}
 	
 }

@@ -129,10 +129,12 @@ class EditorTextRowContentView: UIView, UIContentView {
 		bullet.removeFromSuperview()
 		disclosureIndicator.removeFromSuperview()
 		
+		let topicCapHeight = configuration.topicFont.capHeight
+		
 		if configuration.row?.rowCount == 0 {
 			addSubview(bullet)
 			
-			let baseLineConstant = 0 - (OutlineFont.topicCapHeight - 4) / 2
+			let baseLineConstant = 0 - (topicCapHeight - 4) / 2
 			if traitCollection.horizontalSizeClass != .compact {
 				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? 1 : 3
 				NSLayoutConstraint.activate([
@@ -150,9 +152,9 @@ class EditorTextRowContentView: UIView, UIContentView {
 
 			let baseLineConstant: CGFloat
 			if traitCollection.userInterfaceIdiom == .mac {
-				baseLineConstant = 0 - (OutlineFont.topicCapHeight - 8) / 2
+				baseLineConstant = 0 - (topicCapHeight - 8) / 2
 			} else {
-				baseLineConstant = 0 - (OutlineFont.topicCapHeight - 12) / 2
+				baseLineConstant = 0 - (topicCapHeight - 12) / 2
 			}
 
 			if traitCollection.horizontalSizeClass != .compact {
@@ -322,6 +324,7 @@ extension EditorTextRowContentView {
 	
 	private func configureTopicTextView(configuration: EditorTextRowContentConfiguration) {
 		topicTextView.row = configuration.row
+		topicTextView.indentionLevel = configuration.indentionLevel
 		
 		var attrs = [NSAttributedString.Key : Any]()
 		if configuration.isComplete || configuration.isAncestorComplete {
@@ -341,7 +344,7 @@ extension EditorTextRowContentView {
 			let mutableAttrText = NSMutableAttributedString(attributedString: topic)
 			let range = NSRange(location: 0, length: mutableAttrText.length)
 			mutableAttrText.addAttributes(attrs, range: range)
-			mutableAttrText.replaceFont(with: OutlineFont.topic)
+			mutableAttrText.replaceFont(with: configuration.topicFont)
 			addHighlighting(mutableAttrText, searchResultCoordinates: configuration.row?.textRow?.searchResultCoordinates, isInNotes: false)
 			topicTextView.attributedText = mutableAttrText
 		} else {
@@ -349,7 +352,7 @@ extension EditorTextRowContentView {
 			// empty attributed string and the bullet correctly aligns on the first baseline
 			let mutableAttrText = NSMutableAttributedString(string: " ")
 			let range = NSRange(location: 0, length: mutableAttrText.length)
-			attrs[.font] = OutlineFont.topic
+			attrs[.font] = configuration.topicFont
 			mutableAttrText.addAttributes(attrs, range: range)
 			topicTextView.attributedText = mutableAttrText
 		}
@@ -368,7 +371,7 @@ extension EditorTextRowContentView {
 		
 		let mutableAttrText = NSMutableAttributedString(attributedString: noteAttributedText)
 		let range = NSRange(location: 0, length: mutableAttrText.length)
-		mutableAttrText.replaceFont(with: OutlineFont.note)
+		mutableAttrText.replaceFont(with: configuration.noteFont)
 		mutableAttrText.addAttributes(attrs, range: range)
 		addHighlighting(mutableAttrText, searchResultCoordinates: configuration.row?.textRow?.searchResultCoordinates, isInNotes: true)
 
@@ -380,6 +383,7 @@ extension EditorTextRowContentView {
 		}
 		
 		noteTextView!.row = configuration.row
+		noteTextView!.indentionLevel = configuration.indentionLevel
 		noteTextView!.attributedText = mutableAttrText
 	}
 	

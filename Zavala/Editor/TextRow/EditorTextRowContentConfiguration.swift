@@ -22,7 +22,9 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 	var isComplete: Bool
 	var isAncestorComplete: Bool
 	var topic: NSAttributedString?
+	var topicFont: UIFont
 	var note: NSAttributedString?
+	var noteFont: UIFont
 	
 	init(row: Row, indentionLevel: Int, indentationWidth: CGFloat, isNotesHidden: Bool, isSearching: Bool) {
 		self.row = row
@@ -39,6 +41,9 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 			self.topic = textRow.topic
 			self.note = textRow.note
 		}
+		
+		self.topicFont = OutlineFontCache.shared.topic(level: indentionLevel)
+		self.noteFont = OutlineFontCache.shared.note(level: indentionLevel)
 	}
 	
 	func makeContentView() -> UIView & UIContentView {
@@ -59,7 +64,9 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 		hasher.combine(isComplete)
 		hasher.combine(isAncestorComplete)
 		hasher.combine(topic)
+		hasher.combine(topicFont)
 		hasher.combine(note)
+		hasher.combine(noteFont)
 	}
 	
 	static func == (lhs: EditorTextRowContentConfiguration, rhs: EditorTextRowContentConfiguration) -> Bool {
@@ -72,7 +79,9 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 			lhs.isComplete == rhs.isComplete &&
 			lhs.isAncestorComplete == rhs.isAncestorComplete &&
 			NSAttributedString.isOptionalStringsEqual(lhs: lhs.topic, rhs: rhs.topic) &&
-			NSAttributedString.isOptionalStringsEqual(lhs: lhs.note, rhs: rhs.note)
+			lhs.topicFont == rhs.topicFont &&
+			NSAttributedString.isOptionalStringsEqual(lhs: lhs.note, rhs: rhs.note) &&
+			lhs.noteFont == rhs.noteFont
 	}
 	
 }
