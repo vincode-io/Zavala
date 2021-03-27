@@ -133,7 +133,7 @@
 		511B2A9E260245AD00C04239 /* RSSparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 511B2A95260245AD00C04239 /* RSSparkle */; };
 		511B2AA0260245AD00C04239 /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517AF68525E07A3F0044DBAB /* Preferences.storyboard */; };
 		511B2AA1260245AD00C04239 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 517AF6AD25E0A2400044DBAB /* Localizable.strings */; };
-		511B2AAB260245CA00C04239 /* AppKitPlugin Test.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 511B2AA5260245AD00C04239 /* AppKitPlugin Test.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		511B2AAB260245CA00C04239 /* AppKitPlugin.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 511B2AA5260245AD00C04239 /* AppKitPlugin.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		511B2AC826028EE800C04239 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B2AC726028EE700C04239 /* MainCoordinator.swift */; };
 		511B2AC926028EE800C04239 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B2AC726028EE700C04239 /* MainCoordinator.swift */; };
 		511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */; };
@@ -332,7 +332,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				511B2AAB260245CA00C04239 /* AppKitPlugin Test.bundle in Embed PlugIns */,
+				511B2AAB260245CA00C04239 /* AppKitPlugin.bundle in Embed PlugIns */,
 			);
 			name = "Embed PlugIns";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -409,7 +409,7 @@
 		511B2A8B2602410C00C04239 /* Zavala.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zavala.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		511B2A912602427000C04239 /* Zavala-test.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Zavala-test.entitlements"; sourceTree = "<group>"; };
 		511B2A922602431C00C04239 /* Zavala_iOStest_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_iOStest_target.xcconfig; sourceTree = "<group>"; };
-		511B2AA5260245AD00C04239 /* AppKitPlugin Test.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "AppKitPlugin Test.bundle"; path = AppKitPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		511B2AA5260245AD00C04239 /* AppKitPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppKitPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		511B2AB02602460200C04239 /* Zavala_appkittestplugin_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_appkittestplugin_target.xcconfig; sourceTree = "<group>"; };
 		511B2AC726028EE700C04239 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLayoutManager.swift; sourceTree = "<group>"; };
@@ -781,7 +781,7 @@
 				51E060AF25A4547400194066 /* AppKitPlugin.bundle */,
 				5167604425F959BA00AC0EBD /* SpotlightIndexExtension.appex */,
 				511B2A8B2602410C00C04239 /* Zavala.app */,
-				511B2AA5260245AD00C04239 /* AppKitPlugin Test.bundle */,
+				511B2AA5260245AD00C04239 /* AppKitPlugin.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -990,7 +990,7 @@
 				511B2A95260245AD00C04239 /* RSSparkle */,
 			);
 			productName = SparklePlugin;
-			productReference = 511B2AA5260245AD00C04239 /* AppKitPlugin Test.bundle */;
+			productReference = 511B2AA5260245AD00C04239 /* AppKitPlugin.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 		5167604325F959BA00AC0EBD /* SpotlightIndexExtension */ = {
