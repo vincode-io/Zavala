@@ -56,43 +56,16 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 	}
 	
-	public internal(set) var title: String? {
-		didSet {
-			if title != oldValue {
-				updated = Date()
-				documentTitleDidChange()
-			}
-		}
-	}
-	
-	public internal(set) var ownerName: String? {
-		didSet {
-			if ownerName != oldValue {
-				updated = Date()
-			}
-		}
-	}
-	
-	public internal(set) var ownerEmail: String? {
-		didSet {
-			if ownerEmail != oldValue {
-				updated = Date()
-			}
-		}
-	}
-	
-	public internal(set) var ownerURL: String? {
-		didSet {
-			if ownerURL != oldValue {
-				updated = Date()
-			}
-		}
-	}
+	public internal(set) var title: String?
+	public internal(set) var ownerName: String?
+	public internal(set) var ownerEmail: String?
+	public internal(set) var ownerURL: String?
 
 	public var created: Date? {
 		didSet {
 			if created != oldValue {
-				updated = Date()
+				documentMetaDataDidChange()
+				requestCloudKitUpdate(for: id)
 			}
 		}
 	}
@@ -353,13 +326,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	private var cursorIsInNotes: Bool?
 	private var cursorPosition: Int?
 	
-	private var tagIDs: [String]? {
-		didSet {
-			if tagIDs != oldValue {
-				updated = Date()
-			}
-		}
-	}
+	private var tagIDs: [String]?
 	
 	private var rowsFile: RowsFile?
 	
@@ -634,6 +601,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public func update(title: String) {
 		self.title = title
+		updated = Date()
+		documentTitleDidChange()
 		requestCloudKitUpdate(for: id)
 	}
 	
@@ -641,6 +610,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		self.ownerName = ownerName
 		self.ownerEmail = ownerEmail
 		self.ownerURL = ownerURL
+		updated = Date()
 		requestCloudKitUpdate(for: id)
 	}
 	
