@@ -102,22 +102,22 @@ final class AppDefaults {
 
 	var openQuicklyDocumentContainerID: [AnyHashable : AnyHashable]? {
 		get {
-			return UserDefaults.standard.object(forKey: Key.openQuicklyDocumentContainerID) as? [AnyHashable : AnyHashable]
+			return AppDefaults.store.object(forKey: Key.openQuicklyDocumentContainerID) as? [AnyHashable : AnyHashable]
 		}
 		set {
-			UserDefaults.standard.set(newValue, forKey: Key.openQuicklyDocumentContainerID)
+			AppDefaults.store.set(newValue, forKey: Key.openQuicklyDocumentContainerID)
 		}
 	}
 
 	var outlineFonts: OutlineFontDefaults? {
 		get {
-			if let userInfo = UserDefaults.standard.object(forKey: Key.outlineFonts) as? [String: [AnyHashable: AnyHashable]] {
+			if let userInfo = AppDefaults.store.object(forKey: Key.outlineFonts) as? [String: [AnyHashable: AnyHashable]] {
 				return OutlineFontDefaults(userInfo: userInfo)
 			}
 			return nil
 		}
 		set {
-			UserDefaults.standard.set(newValue?.userInfo, forKey: Key.outlineFonts)
+			AppDefaults.store.set(newValue?.userInfo, forKey: Key.outlineFonts)
 		}
 	}
 
@@ -161,23 +161,6 @@ private extension AppDefaults {
 
 	static func setDate(for key: String, _ date: Date?) {
 		AppDefaults.store.set(date, forKey: key)
-	}
-
-	static func sortDirection(for key:String) -> ComparisonResult {
-		let rawInt = int(for: key)
-		if rawInt == ComparisonResult.orderedAscending.rawValue {
-			return .orderedAscending
-		}
-		return .orderedDescending
-	}
-
-	static func setSortDirection(for key: String, _ value: ComparisonResult) {
-		if value == .orderedAscending {
-			setInt(for: key, ComparisonResult.orderedAscending.rawValue)
-		}
-		else {
-			setInt(for: key, ComparisonResult.orderedDescending.rawValue)
-		}
 	}
 	
 }
