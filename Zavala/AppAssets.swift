@@ -17,7 +17,7 @@ struct AppAssets {
 		return .tertiaryLabel
 	}()
 	
-	static var acknowledgementsURL = "https://github.com/vincode-io/Zavala/wiki/Dependencies"
+	static var acknowledgementsURL = "https://github.com/vincode-io/Zavala/wiki/Acknowledgements"
 
 	static var add: UIImage = {
 		return UIImage(systemName: "plus")!
