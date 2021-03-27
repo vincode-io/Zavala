@@ -382,7 +382,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Migrate test users to the Mac App Store version
 		if FileManager.default.fileExists(atPath: oldDocumentAccountsFolderPath) && !FileManager.default.fileExists(atPath: documentAccountsFolderPath) {
 			try? FileManager.default.moveItem(atPath: oldDocumentAccountsFolderPath, toPath: documentAccountsFolderPath)
-			try? FileManager.default.removeItem(atPath: oldDocumentAccountsFolderPath)
 		}
 		#endif
 		
