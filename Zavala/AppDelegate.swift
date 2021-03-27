@@ -369,8 +369,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		#if MAC_TEST
 		let oldDocumentAccountURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-		let oldDcumentAccountsFolder = oldDocumentAccountURL.appendingPathComponent("Accounts").absoluteString
-		let documentAccountsFolderPath = String(oldDcumentAccountsFolder.suffix(from: oldDcumentAccountsFolder.index(oldDcumentAccountsFolder.startIndex, offsetBy: 7)))
+		let oldDocumentAccountsFolder = oldDocumentAccountURL.appendingPathComponent("Accounts").absoluteString
+		let documentAccountsFolderPath = String(oldDocumentAccountsFolder.suffix(from: oldDocumentAccountsFolder.index(oldDocumentAccountsFolder.startIndex, offsetBy: 7)))
 		#else
 		let appGroup = Bundle.main.object(forInfoDictionaryKey: "AppGroup") as! String
 		let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
