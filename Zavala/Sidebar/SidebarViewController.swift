@@ -39,12 +39,15 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		return splitViewController as? MainSplitViewController
 	}
 	
-	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
-	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML(_:)))
+	private var addBarButtonItem: UIBarButtonItem!
+	private var importBarButtonItem: UIBarButtonItem!
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
+		addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
+		importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML(_:)))
+		
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
