@@ -22,7 +22,7 @@ title: Zavala
 email: mo@vincode.io
 description: >- # this means to ignore newlines until "baseurl:"
   A good, simple outliner for macOS and iOS.
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/Zavala" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: vincode_io
 github_username:  vincode-io
