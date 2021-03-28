@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title:  "Welcome to Zavala!"
 date:   2021-03-28 10:35:21 -0500
 ---

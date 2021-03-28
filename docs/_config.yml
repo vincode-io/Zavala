@@ -28,8 +28,8 @@ twitter_username: vincode_io
 github_username:  vincode-io
 
 # Build settings
-theme: minima
-#theme: jekyll-theme-cayman
+#theme: minima
+theme: jekyll-theme-cayman
 plugins:
   - jekyll-feed
 
