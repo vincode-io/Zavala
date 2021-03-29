@@ -74,6 +74,7 @@ remote_theme: "mmistakes/minimal-mistakes@4.22.0"
 plugins:
   - jekyll-feed
   - jekyll-paginate
+  - jekyll-include-cache
 
 include: ["_pages"]
 # Exclude from processing.
