@@ -19,20 +19,63 @@
 # in the templates via {{ site.myvariable }}.
 
 title: Zavala
+subtitle: A Modern Outliner
 email: mo@vincode.io
 description: >- # this means to ignore newlines until "baseurl:"
   A good, simple outliner for macOS and iOS.
-baseurl: "/Zavala" # the subpath of your site, e.g. /blog
+baseurl: "" # the subpath of your site, e.g. /blog
+#baseurl: "/Zavala" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: vincode_io
 github_username:  vincode-io
 
+#logo: "/assets/images/88x88.png"
+repository: "vincode-io/Zavala"
+twitter:
+  username: "vincode_io"
+og_image: "/assets/images/site-logo.png"
+timezone: "US/Central"
+
+paginate: 5
+paginate_path: "/blog/page:num"
+
+author:
+  name: "Maurice Parker"
+  avatar: "/assets/images/avatar.jpg"
+  bio: "I'm an Open Source developer that specializes in Apple platforms."
+  location: "Centerville, IA"
+  links:
+    - label: "Email"
+      icon: "fas fa-fw fa-envelope-square"
+      url: "mailto:mo@vincode.io"
+    - label: "Website"
+      icon: "fas fa-fw fa-link"
+      url: "https://vincode.io"
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/vincode_io"
+
+defaults:
+  # _posts
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      share: true
+      show_date: true 
+      read_time: true
+
 # Build settings
 #theme: minima
-theme: jekyll-theme-cayman
+#theme: jekyll-theme-cayman
+remote_theme: "mmistakes/minimal-mistakes@4.22.0"
 plugins:
   - jekyll-feed
+  - jekyll-paginate
 
+include: ["_pages"]
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
