@@ -7,8 +7,16 @@
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
 
-.archive__item-title {
+.archive__item-body .archive__item-title {
   text-align: center;
+}
+
+.masthead {
+  border-bottom: 1px solid #417505;
+}
+
+.page__share {
+  border-top: 1px solid #417505;
 }
 
 .archive__subtitle {
