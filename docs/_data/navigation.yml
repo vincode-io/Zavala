@@ -4,7 +4,5 @@ main:
      url: /features/
    - title: "Blog"
      url: /blog/
-   - title: "GitHub"
-     url: https://github.com/vincode-io/Zavala
    - title: "About"
      url: /about/

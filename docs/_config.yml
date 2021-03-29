@@ -19,7 +19,7 @@
 # in the templates via {{ site.myvariable }}.
 
 title: Zavala
-subtitle: A Modern Outliner
+subtitle: Modern Outlining
 email: mo@vincode.io
 description: >- # this means to ignore newlines until "baseurl:"
   A good, simple outliner for macOS and iOS.
@@ -35,13 +35,18 @@ twitter:
 og_image: "/assets/images/site-logo.png"
 timezone: "US/Central"
 
+minimal_mistakes_skin: "dirt"
+
 paginate: 5
 paginate_path: "/blog/page:num"
+
+atom_feed:
+  hide: true
 
 author:
   name: "Maurice Parker"
   avatar: "/assets/images/avatar.jpg"
-  bio: "I'm an Open Source developer that specializes in Apple platforms."
+  bio: "I'm an Open Source developer with a soft spot for OPML files."
   location: "Centerville, IA"
   links:
     - label: "Email"
