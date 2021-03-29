@@ -1,5 +1,7 @@
 # main links
 main:
+   - title: "Features"
+     url: /features/
    - title: "Blog"
      url: /blog/
    - title: "GitHub"
