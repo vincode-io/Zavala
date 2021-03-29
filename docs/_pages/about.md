@@ -7,7 +7,8 @@ header:
   overlay_filter: 0.5
 ---
 
-Zavala is a dedicated outliner written for Apple platforms. It is an open source project and will be free forever.
+Zavala is a dedicated outliner written for Apple platforms by [Maurice Parker](https://vincode.io).
+It is an open source project and will be free forever.
 You can find the source code for [Zavala on GitHub](https://github.com/vincode-io/Zavala).
 
 ### Credits
