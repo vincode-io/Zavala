@@ -28,7 +28,7 @@ url: "https://zavala.vincode.io" # the base hostname & protocol for your site, e
 twitter_username: vincode_io
 github_username:  vincode-io
 
-#logo: "/assets/images/88x88.png"
+logo: "/assets/images/88x88.png"
 repository: "vincode-io/Zavala"
 twitter:
   username: "vincode_io"

@@ -2,11 +2,7 @@
 main:
    - title: "Blog"
      url: /blog/
+   - title: "GitHub"
+     url: https://github.com/vincode-io/Zavala
    - title: "About"
      url: /about/
-  # - title: "Sample Posts"
-  #   url: /year-archive/
-  # - title: "Sample Collections"
-  #   url: /collection-archive/
-  # - title: "Sitemap"
-  #   url: /sitemap/
