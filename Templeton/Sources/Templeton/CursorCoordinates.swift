@@ -15,12 +15,12 @@ public struct CursorCoordinates {
 
 	public var row: Row
 	public var isInNotes: Bool
-	public var cursorPosition: Int
+	public var selection: NSRange
 	
-	public init(row: Row, isInNotes: Bool, cursorPosition: Int) {
+	public init(row: Row, isInNotes: Bool, selection: NSRange) {
 		self.row = row
 		self.isInNotes = isInNotes
-		self.cursorPosition = cursorPosition
+		self.selection = selection
 	}
 
 	public static var lastKnownCoordinates: CursorCoordinates?

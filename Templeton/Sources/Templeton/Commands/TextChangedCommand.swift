@@ -20,7 +20,7 @@ public final class TextChangedCommand: OutlineCommand {
 	var newTextRowStrings: TextRowStrings
 	var applyChanges = false
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, selection: NSRange) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -31,7 +31,7 @@ public final class TextChangedCommand: OutlineCommand {
 		oldTextRowStrings = row.textRow?.textRowStrings
 		newTextRowStrings = textRowStrings
 		
-		cursorCoordinates = CursorCoordinates(row: row, isInNotes: isInNotes, cursorPosition: cursorPosition)
+		cursorCoordinates = CursorCoordinates(row: row, isInNotes: isInNotes, selection: selection)
 	}
 	
 	public func perform() {

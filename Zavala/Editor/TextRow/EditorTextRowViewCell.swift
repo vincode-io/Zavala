@@ -15,7 +15,7 @@ protocol EditorTextRowViewCellDelegate: AnyObject {
 	func editorTextRowToggleDisclosure(row: Row)
 	func editorTextRowMoveCursorTo(row: Row)
 	func editorTextRowMoveCursorDown(row: Row)
-	func editorTextRowTextChanged(row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int)
+	func editorTextRowTextChanged(row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, selection: NSRange)
 	func editorTextRowDeleteRow(_ row: Row, textRowStrings: TextRowStrings)
 	func editorTextRowCreateRow(beforeRow: Row)
 	func editorTextRowCreateRow(afterRow: Row?, textRowStrings: TextRowStrings?)
@@ -87,12 +87,6 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 		contentConfiguration = content
 	}
 
-	func restoreSelection(_ textRange: UITextRange) {
-		guard let textView = (contentView as? EditorTextRowContentView)?.topicTextView else { return }
-		textView.becomeFirstResponder()
-		textView.selectedTextRange = textRange
-	}
-	
 	func restoreCursor(_ cursorCoordinates: CursorCoordinates) {
 		let textView: OutlineTextView?
 		if cursorCoordinates.isInNotes {
@@ -101,9 +95,11 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 			textView = (contentView as? EditorTextRowContentView)?.topicTextView
 		}
 		
-		if let textView = textView, let textPosition = textView.position(from: textView.beginningOfDocument, offset: cursorCoordinates.cursorPosition) {
+		if let textView = textView,
+		   let startPosition = textView.position(from: textView.beginningOfDocument, offset: cursorCoordinates.selection.location),
+		   let endPosition = textView.position(from: startPosition, offset: cursorCoordinates.selection.length) {
 			textView.becomeFirstResponder()
-			textView.selectedTextRange = textView.textRange(from: textPosition, to: textPosition)
+			textView.selectedTextRange = textView.textRange(from: startPosition, to: endPosition)
 		} else if let textView = textView {
 			textView.becomeFirstResponder()
 			let endPosition = textView.endOfDocument

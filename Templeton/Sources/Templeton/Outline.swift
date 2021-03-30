@@ -221,18 +221,20 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public var cursorCoordinates: CursorCoordinates? {
 		get {
-			guard let rowID = cursorRowID,
+			guard let rowID = selectionRowID,
 				  let row = findRow(id: rowID),
-				  let isInNotes = cursorIsInNotes,
-				  let position = cursorPosition else {
+				  let isInNotes = selectionIsInNotes,
+				  let location = selectionLocation,
+				  let length = selectionLength else {
 				return nil
 			}
-			return CursorCoordinates(row: row, isInNotes: isInNotes, cursorPosition: position)
+			return CursorCoordinates(row: row, isInNotes: isInNotes, selection: NSRange(location: location, length: length))
 		}
 		set {
-			cursorRowID = newValue?.row.id
-			cursorIsInNotes = newValue?.isInNotes
-			cursorPosition = newValue?.cursorPosition
+			selectionRowID = newValue?.row.id
+			selectionIsInNotes = newValue?.isInNotes
+			selectionLocation = newValue?.selection.location
+			selectionLength = newValue?.selection.length
 			documentMetaDataDidChange()
 		}
 	}
@@ -286,9 +288,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		case verticleScrollState = "verticleScrollState"
 		case isFiltered = "isFiltered"
 		case isNotesHidden = "isNotesHidden"
-		case cursorRowID = "cursorRowID"
-		case cursorIsInNotes = "cursorIsInNotes"
-		case cursorPosition = "cursorPosition"
+		case selectionRowID = "selectionRowID"
+		case selectionIsInNotes = "selectionIsInNotes"
+		case selectionLocation = "selectionLocation"
+		case selectionLength = "selectionLength"
 		case tagIDs = "tagIDS"
 		case documentLinks = "documentLinks"
 		case documentBacklinks = "documentBacklinks"
@@ -322,10 +325,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	var rowOrder: [EntityID]?
 	var keyedRows: [EntityID: Row]?
 	
-	private var cursorRowID: EntityID?
-	private var cursorIsInNotes: Bool?
-	private var cursorPosition: Int?
-	
+	private var selectionRowID: EntityID?
+	private var selectionIsInNotes: Bool?
+	private var selectionLocation: Int?
+	private var selectionLength: Int?
+
 	private var tagIDs: [String]?
 	
 	private var rowsFile: RowsFile?
@@ -851,7 +855,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let changes = OutlineElementChanges(section: adjustedRowsSection, deletes: deleteSet, reloads: reloadSet)
 		outlineElementsDidChange(changes)
 		
-		if deletedRows.contains(where: { $0.id == cursorRowID }) {
+		if deletedRows.contains(where: { $0.id == selectionRowID }) {
 			if let firstDelete = deletes.first, firstDelete > 0 {
 				return firstDelete - 1
 			} else {

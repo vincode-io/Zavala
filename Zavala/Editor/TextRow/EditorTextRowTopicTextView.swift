@@ -13,7 +13,7 @@ protocol EditorTextRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewTextRowStrings: TextRowStrings { get }
 	func didBecomeActive(_: EditorTextRowTopicTextView)
 	func invalidateLayout(_: EditorTextRowTopicTextView)
-	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, cursorPosition: Int)
+	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange)
 	func deleteRow(_: EditorTextRowTopicTextView, row: Row)
 	func createRow(_: EditorTextRowTopicTextView, beforeRow: Row)
 	func createRow(_: EditorTextRowTopicTextView, afterRow: Row)
@@ -92,7 +92,7 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	
 	override func resignFirstResponder() -> Bool {
 		if let textRow = row {
-			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: textRow, isInNotes: false, cursorPosition: cursorPosition)
+			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: textRow, isInNotes: false, selection: selectedRange)
 		}
 		return super.resignFirstResponder()
 	}
@@ -171,7 +171,7 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false
 		} else {
-			editorDelegate?.textChanged(self, row: textRow, isInNotes: false, cursorPosition: cursorPosition)
+			editorDelegate?.textChanged(self, row: textRow, isInNotes: false, selection: selectedRange)
 		}
 		
 		autosaveWorkItem?.cancel()
@@ -194,7 +194,7 @@ extension EditorTextRowTopicTextView: CursorCoordinatesProvider {
 
 	var coordinates: CursorCoordinates? {
 		if let row = row {
-			return CursorCoordinates(row: row, isInNotes: false, cursorPosition: cursorPosition)
+			return CursorCoordinates(row: row, isInNotes: false, selection: selectedRange)
 		}
 		return nil
 	}

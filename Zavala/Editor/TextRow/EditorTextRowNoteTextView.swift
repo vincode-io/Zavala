@@ -13,7 +13,7 @@ protocol EditorTextRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewTextRowStrings: TextRowStrings { get }
 	func invalidateLayout(_ : EditorTextRowNoteTextView)
 	func didBecomeActive(_ : EditorTextRowNoteTextView)
-	func textChanged(_ : EditorTextRowNoteTextView, row: Row, isInNotes: Bool, cursorPosition: Int)
+	func textChanged(_ : EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange)
 	func deleteRowNote(_ : EditorTextRowNoteTextView, row: Row)
 	func moveCursorTo(_ : EditorTextRowNoteTextView, row: Row)
 	func moveCursorDown(_ : EditorTextRowNoteTextView, row: Row)
@@ -73,7 +73,7 @@ class EditorTextRowNoteTextView: OutlineTextView {
 	
 	override func resignFirstResponder() -> Bool {
 		if let row = row {
-			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: row, isInNotes: false, cursorPosition: cursorPosition)
+			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: row, isInNotes: true, selection: selectedRange)
 		}
 		return super.resignFirstResponder()
 	}
@@ -109,7 +109,7 @@ class EditorTextRowNoteTextView: OutlineTextView {
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false
 		} else {
-			editorDelegate?.textChanged(self, row: textRow, isInNotes: true, cursorPosition: cursorPosition)
+			editorDelegate?.textChanged(self, row: textRow, isInNotes: true, selection: selectedRange)
 		}
 		
 		autosaveWorkItem?.cancel()
@@ -136,7 +136,7 @@ extension EditorTextRowNoteTextView: CursorCoordinatesProvider {
 
 	var coordinates: CursorCoordinates? {
 		if let row = row {
-			return CursorCoordinates(row: row, isInNotes: true, cursorPosition: cursorPosition)
+			return CursorCoordinates(row: row, isInNotes: true, selection: selectedRange)
 		}
 		return nil
 	}

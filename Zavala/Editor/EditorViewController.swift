@@ -1055,8 +1055,8 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		toggleDisclosure(row: row)
 	}
 	
-	func editorTextRowTextChanged(row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
-		textChanged(row: row, textRowStrings: textRowStrings, isInNotes: isInNotes, cursorPosition: cursorPosition)
+	func editorTextRowTextChanged(row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, selection: NSRange) {
+		textChanged(row: row, textRowStrings: textRowStrings, isInNotes: isInNotes, selection: selection)
 	}
 	
 	func editorTextRowDeleteRow(_ row: Row, textRowStrings: TextRowStrings) {
@@ -1113,7 +1113,7 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 extension EditorViewController: OutlineCommandDelegate {
 	
 	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates) {
-		restoreCursorPosition(cursorCoordinates, animated: true)
+		restoreCursorPosition(cursorCoordinates, scroll: false)
 	}
 	
 }
@@ -1406,18 +1406,20 @@ extension EditorViewController {
 	
 	private func applyChanges(_ changes: OutlineElementChanges) {
 		
-		collectionView.performBatchUpdates {
-			if let deletes = changes.deleteIndexPaths, !deletes.isEmpty {
-				collectionView.deleteItems(at: deletes)
-			}
-			
-			if let inserts = changes.insertIndexPaths, !inserts.isEmpty {
-				collectionView.insertItems(at: inserts)
-			}
+		if !changes.isOnlyReloads {
+			collectionView.performBatchUpdates {
+				if let deletes = changes.deleteIndexPaths, !deletes.isEmpty {
+					collectionView.deleteItems(at: deletes)
+				}
+				
+				if let inserts = changes.insertIndexPaths, !inserts.isEmpty {
+					collectionView.insertItems(at: inserts)
+				}
 
-			if let moves = changes.moveIndexPaths, !moves.isEmpty {
-				for move in moves {
-					collectionView.moveItem(at: move.0, to: move.1)
+				if let moves = changes.moveIndexPaths, !moves.isEmpty {
+					for move in moves {
+						collectionView.moveItem(at: move.0, to: move.1)
+					}
 				}
 			}
 		}
@@ -1433,21 +1435,13 @@ extension EditorViewController {
 	}
 	
 	private func applyChangesRestoringState(_ changes: OutlineElementChanges) {
-		var textRange: UITextRange? = nil
-		var cursorRow: Row? = nil
-		if let editorTextView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView {
-			textRange = editorTextView.selectedTextRange
-			cursorRow = editorTextView.row
-		}
-		
+		let currentCoordinates = CursorCoordinates.currentCoordinates
 		let selectedIndexPaths = collectionView.indexPathsForSelectedItems
 		
 		applyChanges(changes)
-		
-		if let textRange = textRange,
-		   let updated = cursorRow?.shadowTableIndex,
-		   let rowCell = collectionView.cellForItem(at: IndexPath(row: updated, section: adjustedRowsSection)) as? EditorTextRowViewCell {
-			rowCell.restoreSelection(textRange)
+
+		if let coordinates = currentCoordinates {
+			restoreCursorPosition(coordinates, scroll: false)
 		}
 		
 		if changes.isOnlyReloads, let indexPaths = selectedIndexPaths {
@@ -1459,17 +1453,22 @@ extension EditorViewController {
 
 	private func restoreOutlineCursorPosition() {
 		if let cursorCoordinates = outline?.cursorCoordinates {
-			restoreCursorPosition(cursorCoordinates, animated: false)
+			restoreCursorPosition(cursorCoordinates, scroll: true)
 		}
 	}
 
-	private func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates, animated: Bool) {
+	private func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates, scroll: Bool) {
 		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 
 		func restoreCursor() {
 			guard let rowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
 			rowCell.restoreCursor(cursorCoordinates)
+		}
+		
+		guard scroll else {
+			restoreCursor()
+			return
 		}
 		
 		if !collectionView.indexPathsForVisibleItems.contains(indexPath) {
@@ -1480,7 +1479,7 @@ extension EditorViewController {
 					restoreCursor()
 				}
 			}
-			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: animated)
+			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
 			CATransaction.commit()
 		} else {
 			restoreCursor()
@@ -1808,7 +1807,7 @@ extension EditorViewController {
 		runCommand(command)
 	}
 
-	private func textChanged(row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, cursorPosition: Int) {
+	private func textChanged(row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, selection: NSRange) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = TextChangedCommand(undoManager: undoManager,
@@ -1817,7 +1816,7 @@ extension EditorViewController {
 										 row: row,
 										 textRowStrings: textRowStrings,
 										 isInNotes: isInNotes,
-										 cursorPosition: cursorPosition)
+										 selection: selection)
 		runCommand(command)
 	}
 
