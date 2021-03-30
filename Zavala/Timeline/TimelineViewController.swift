@@ -170,9 +170,14 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		self.present(docPicker, animated: true)
 	}
 
-	@objc func exportMarkdown(_ sender: Any? = nil) {
+	@objc func exportMarkdownOutline(_ sender: Any? = nil) {
 		guard let currentOutline = currentDocument?.outline else { return }
 		exportMarkdownOutlineForOutline(currentOutline)
+	}
+
+	@objc func exportMarkdownPost(_ sender: Any? = nil) {
+		guard let currentOutline = currentDocument?.outline else { return }
+		exportMarkdownPostForOutline(currentOutline)
 	}
 
 	@objc func exportOPML(_ sender: Any? = nil) {
@@ -396,7 +401,9 @@ extension TimelineViewController {
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.copyLinkAction(document: document)]))
 
 			if let outline = document.outline {
-				menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.exportMarkdownAction(outline: outline), self.exportOPMLAction(outline: outline)]))
+				menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.exportMarkdownPostAction(outline: outline),
+																					   self.exportMarkdownOutlineAction(outline: outline),
+																					   self.exportOPMLAction(outline: outline)]))
 			}
 			
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.deleteOutlineAction(document: document)]))
@@ -413,9 +420,16 @@ extension TimelineViewController {
 		return action
 	}
 	
-	private func exportMarkdownAction(outline: Outline) -> UIAction {
+	private func exportMarkdownOutlineAction(outline: Outline) -> UIAction {
 		let action = UIAction(title: L10n.exportMarkdownOutline, image: AppAssets.exportMarkdownOutline) { [weak self] action in
 			self?.exportMarkdownOutlineForOutline(outline)
+		}
+		return action
+	}
+	
+	private func exportMarkdownPostAction(outline: Outline) -> UIAction {
+		let action = UIAction(title: L10n.exportMarkdownPost, image: AppAssets.exportMarkdownPost) { [weak self] action in
+			self?.exportMarkdownPostForOutline(outline)
 		}
 		return action
 	}
@@ -444,8 +458,13 @@ extension TimelineViewController {
 	}
 	
 	private func exportMarkdownOutlineForOutline(_ outline: Outline) {
-		let markdown = outline.markdown()
+		let markdown = outline.markdownOutline()
 		export(markdown, fileName: outline.fileName(withSuffix: "md"))
+	}
+	
+	private func exportMarkdownPostForOutline(_ outline: Outline) {
+		let markdown = outline.markdownPost()
+		export(markdown, fileName: outline.postFileName(withSuffix: "md"))
 	}
 	
 	private func exportOPMLForOutline(_ outline: Outline) {

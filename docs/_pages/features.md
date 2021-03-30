@@ -24,5 +24,7 @@ header:
 	* Paste URL’s and have them automatically converted into clickable hypertext links.
 * Sharing
 	* You can import OPML files.
-	* You can export OPML and Markdown files.
+	* You can export OPML files.
+	* You can export Outlines formatted as Markdown.
+	* You can export Outlines formatted as Markdown blog posts.
 	* Print your outlines.

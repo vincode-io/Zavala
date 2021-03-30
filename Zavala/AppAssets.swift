@@ -78,11 +78,15 @@ struct AppAssets {
 	}()
 
 	static var exportMarkdownOutline: UIImage = {
-		return UIImage(systemName: "doc.plaintext")!
+		return UIImage(named: "OPML")!
+	}()
+
+	static var exportMarkdownPost: UIImage = {
+		return UIImage(systemName: "doc.richtext")!
 	}()
 
 	static var exportOPML: UIImage = {
-		return UIImage(named: "OPML")!
+		return UIImage(systemName: "list.bullet.rectangle")!
 	}()
 
 	static var favoriteSelected: UIImage = {

@@ -134,7 +134,11 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		fatalError("string not implemented")
 	}
 	
-	public func markdown(indentLevel: Int) -> String {
+	public func markdownOutline(indentLevel: Int) -> String {
+		fatalError("markdown not implemented")
+	}
+	
+	public func markdownPost(indentLevel: Int) -> String {
 		fatalError("markdown not implemented")
 	}
 	

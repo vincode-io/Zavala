@@ -209,8 +209,12 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 	
-	@objc func exportMarkdown() {
-		timelineViewController?.exportMarkdown(self)
+	@objc func exportMarkdownOutline() {
+		timelineViewController?.exportMarkdownOutline(self)
+	}
+	
+	@objc func exportMarkdownPost() {
+		timelineViewController?.exportMarkdownPost(self)
 	}
 	
 	@objc func exportOPML() {
@@ -706,7 +710,7 @@ extension MainSplitViewController: UIActivityItemsConfigurationReading {
 		let itemProvider = NSItemProvider()
 		
 		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
-			let data = outline.markdown().data(using: .utf8)
+			let data = outline.markdownOutline().data(using: .utf8)
 			completion(data, nil)
 			return nil
 		}

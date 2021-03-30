@@ -463,6 +463,18 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return filename
 	}
 	
+	public func postFileName(withSuffix suffix: String) -> String {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd"
+		let today = dateFormatter.string(from: Date())
+		
+		var filename = title ?? "Outline"
+		filename = filename.replacingOccurrences(of: " ", with: "-").trimmingCharacters(in: .whitespaces)
+		filename = "\(today)-\(filename).\(suffix)"
+		
+		return filename
+	}
+	
 	public func childrenIndexes(forIndex: Int) -> [Int] {
 		guard let row = shadowTable?[forIndex] else { return [Int]() }
 		var children = [Int]()
@@ -542,13 +554,26 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return string
 	}
 	
-	public func markdown(indentLevel: Int = 0) -> String {
+	public func markdownOutline(indentLevel: Int = 0) -> String {
 		load()
 		
 		var md = "# \(title ?? "")\n\n"
 		rows.forEach {
-			md.append($0.markdown(indentLevel: 0))
+			md.append($0.markdownOutline(indentLevel: 0))
 			md.append("\n")
+		}
+		
+		unload()
+		return md
+	}
+	
+	public func markdownPost(indentLevel: Int = 0) -> String {
+		load()
+		
+		var md = "# \(title ?? "")\n\n"
+		rows.forEach {
+			md.append($0.markdownPost(indentLevel: 0))
+			md.append("\n\n")
 		}
 		
 		unload()

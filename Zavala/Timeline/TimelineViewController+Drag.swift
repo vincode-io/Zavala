@@ -37,7 +37,7 @@ extension TimelineViewController: UICollectionViewDragDelegate {
 //			}
 			
 			itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
-				let data = outline.markdown().data(using: .utf8)
+				let data = outline.markdownOutline().data(using: .utf8)
 				completion(data, nil)
 				return nil
 			}

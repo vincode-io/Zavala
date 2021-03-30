@@ -224,8 +224,12 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		return associatedRow.string(indentLevel: indentLevel)
 	}
 	
-	public func markdown(indentLevel: Int = 0) -> String {
-		return associatedRow.markdown(indentLevel: indentLevel)
+	public func markdownOutline(indentLevel: Int = 0) -> String {
+		return associatedRow.markdownOutline(indentLevel: indentLevel)
+	}
+	
+	public func markdownPost(indentLevel: Int = 0) -> String {
+		return associatedRow.markdownPost(indentLevel: indentLevel)
 	}
 	
 	public func opml(indentLevel: Int = 0) -> String {

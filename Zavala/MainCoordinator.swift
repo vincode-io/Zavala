@@ -10,7 +10,8 @@ import UIKit
 protocol MainCoordinator {
 	var editorViewController: EditorViewController? { get }
 	var isExportOutlineUnavailable: Bool { get }
-	func exportMarkdown()
+	func exportMarkdownOutline()
+	func exportMarkdownPost()
 	func exportOPML()
 	func openURL(_: String)
 	func showSettings()

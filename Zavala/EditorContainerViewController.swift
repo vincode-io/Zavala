@@ -78,9 +78,14 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		editorViewController?.edit(nil, isNew: false)
 	}
 	
-	func exportMarkdown() {
+	func exportMarkdownOutline() {
 		guard let outline = editorViewController?.outline else { return }
-		exportMarkdownForOutline(outline)
+		exportMarkdownOutlineForOutline(outline)
+	}
+	
+	func exportMarkdownPost() {
+		guard let outline = editorViewController?.outline else { return }
+		exportMarkdownPostForOutline(outline)
 	}
 	
 	func exportOPML() {
@@ -187,9 +192,14 @@ extension EditorContainerViewController: EditorDelegate {
 
 extension EditorContainerViewController {
 	
-	private func exportMarkdownForOutline(_ outline: Outline) {
-		let markdown = outline.markdown()
+	private func exportMarkdownOutlineForOutline(_ outline: Outline) {
+		let markdown = outline.markdownOutline()
 		export(markdown, fileName: outline.fileName(withSuffix: "md"))
+	}
+	
+	private func exportMarkdownPostForOutline(_ outline: Outline) {
+		let markdown = outline.markdownPost()
+		export(markdown, fileName: outline.postFileName(withSuffix: "md"))
 	}
 	
 	private func exportOPMLForOutline(_ outline: Outline) {
@@ -459,7 +469,7 @@ extension EditorContainerViewController: UIActivityItemsConfigurationReading {
 		let itemProvider = NSItemProvider()
 		
 		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
-			let data = outline.markdown().data(using: .utf8)
+			let data = outline.markdownOutline().data(using: .utf8)
 			completion(data, nil)
 			return nil
 		}
