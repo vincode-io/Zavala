@@ -172,7 +172,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 
 	@objc func exportMarkdown(_ sender: Any? = nil) {
 		guard let currentOutline = currentDocument?.outline else { return }
-		exportMarkdownForOutline(currentOutline)
+		exportMarkdownOutlineForOutline(currentOutline)
 	}
 
 	@objc func exportOPML(_ sender: Any? = nil) {
@@ -414,8 +414,8 @@ extension TimelineViewController {
 	}
 	
 	private func exportMarkdownAction(outline: Outline) -> UIAction {
-		let action = UIAction(title: L10n.exportMarkdown, image: AppAssets.exportMarkdown) { [weak self] action in
-			self?.exportMarkdownForOutline(outline)
+		let action = UIAction(title: L10n.exportMarkdownOutline, image: AppAssets.exportMarkdownOutline) { [weak self] action in
+			self?.exportMarkdownOutlineForOutline(outline)
 		}
 		return action
 	}
@@ -443,7 +443,7 @@ extension TimelineViewController {
 		return action
 	}
 	
-	private func exportMarkdownForOutline(_ outline: Outline) {
+	private func exportMarkdownOutlineForOutline(_ outline: Outline) {
 		let markdown = outline.markdown()
 		export(markdown, fileName: outline.fileName(withSuffix: "md"))
 	}

@@ -77,7 +77,7 @@ struct AppAssets {
 		return UIImage(systemName: "arrow.up.left.and.arrow.down.right")!
 	}()
 
-	static var exportMarkdown: UIImage = {
+	static var exportMarkdownOutline: UIImage = {
 		return UIImage(systemName: "doc.plaintext")!
 	}()
 
