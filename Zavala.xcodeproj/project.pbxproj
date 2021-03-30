@@ -496,7 +496,6 @@
 		51B2B2D12563AB190090C56B /* EditorTextRowContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowContentView.swift; sourceTree = "<group>"; };
 		51B2B2D52563AB9F0090C56B /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDisclosureButton.swift; sourceTree = "<group>"; };
-		51B9D9932612B93C00A66859 /* RSCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = RSCore; path = ../RSCore; sourceTree = "<group>"; };
 		51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentConfiguration.swift; sourceTree = "<group>"; };
 		51C030A5257E084E00609262 /* EditorTitleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentView.swift; sourceTree = "<group>"; };
 		51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReloadItemsOperation.swift; sourceTree = "<group>"; };
@@ -763,7 +762,6 @@
 		5181A92B2554D92000C153E8 = {
 			isa = PBXGroup;
 			children = (
-				51B9D9932612B93C00A66859 /* RSCore */,
 				513F32A12594062C0003048F /* README.md */,
 				5181A9362554D92000C153E8 /* Zavala */,
 				51E060B025A4547400194066 /* AppKitPlugin */,
