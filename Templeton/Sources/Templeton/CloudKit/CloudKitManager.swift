@@ -225,7 +225,9 @@ extension CloudKitManager {
 		guard isNetworkAvailable else {
 			return
 		}
-		sendChanges() {}
+		sendChanges() {
+			self.fetchAllChanges()
+		}
 	}
 
 	private func sendChanges(completion: @escaping (() -> Void)) {
