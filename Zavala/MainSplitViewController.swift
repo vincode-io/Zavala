@@ -210,15 +210,18 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 	
 	@objc func exportMarkdownOutline() {
-		timelineViewController?.exportMarkdownOutline(self)
+		guard let outline = editorViewController?.outline else { return }
+		exportMarkdownOutlineForOutline(outline)
 	}
 	
 	@objc func exportMarkdownPost() {
-		timelineViewController?.exportMarkdownPost(self)
+		guard let outline = editorViewController?.outline else { return }
+		exportMarkdownPostForOutline(outline)
 	}
 	
 	@objc func exportOPML() {
-		timelineViewController?.exportOPML(self)
+		guard let outline = editorViewController?.outline else { return }
+		exportOPMLForOutline(outline)
 	}
 	
 	@objc func toggleSidebar(_ sender: Any?) {
@@ -335,6 +338,18 @@ extension MainSplitViewController: TimelineDelegate {
 		
 		editorViewController?.edit(document?.outline, isNew: isNew)
 	}
+
+	func exportMarkdownOutline(_: TimelineViewController, outline: Outline) {
+		exportMarkdownOutlineForOutline(outline)
+	}
+	
+	func exportMarkdownPost(_: TimelineViewController, outline: Outline) {
+		exportMarkdownPostForOutline(outline)
+	}
+	
+	func exportOPML(_: TimelineViewController, outline: Outline) {
+		exportOPMLForOutline(outline)
+	}
 	
 }
 
@@ -440,6 +455,35 @@ extension MainSplitViewController {
 		sidebarViewController?.selectDocumentContainer(documentContainer, animated: true) {
 			completion()
 		}
+	}
+	
+	private func exportMarkdownOutlineForOutline(_ outline: Outline) {
+		let markdown = outline.markdownOutline()
+		export(markdown, fileName: outline.fileName(withSuffix: "md"))
+	}
+	
+	private func exportMarkdownPostForOutline(_ outline: Outline) {
+		let markdown = outline.markdownPost()
+		export(markdown, fileName: outline.postFileName(withSuffix: "md"))
+	}
+	
+	private func exportOPMLForOutline(_ outline: Outline) {
+		let opml = outline.opml()
+		export(opml, fileName: outline.fileName(withSuffix: "opml"))
+	}
+	
+	private func export(_ string: String, fileName: String) {
+		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+		
+		do {
+			try string.write(to: tempFile, atomically: true, encoding: String.Encoding.utf8)
+		} catch {
+			self.presentError(title: "Export Error", message: error.localizedDescription)
+		}
+		
+		let docPicker = UIDocumentPickerViewController(forExporting: [tempFile], asCopy: true)
+		docPicker.modalPresentationStyle = .formSheet
+		self.present(docPicker, animated: true)
 	}
 	
 }

@@ -13,6 +13,9 @@ import Templeton
 
 protocol TimelineDelegate: AnyObject  {
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool)
+	func exportMarkdownOutline(_: TimelineViewController, outline: Outline)
+	func exportMarkdownPost(_: TimelineViewController, outline: Outline)
+	func exportOPML(_: TimelineViewController, outline: Outline)
 }
 
 class TimelineViewController: UICollectionViewController, MainControllerIdentifiable {
@@ -168,21 +171,6 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		docPicker.modalPresentationStyle = .formSheet
 		docPicker.allowsMultipleSelection = true
 		self.present(docPicker, animated: true)
-	}
-
-	@objc func exportMarkdownOutline(_ sender: Any? = nil) {
-		guard let currentOutline = currentDocument?.outline else { return }
-		exportMarkdownOutlineForOutline(currentOutline)
-	}
-
-	@objc func exportMarkdownPost(_ sender: Any? = nil) {
-		guard let currentOutline = currentDocument?.outline else { return }
-		exportMarkdownPostForOutline(currentOutline)
-	}
-
-	@objc func exportOPML(_ sender: Any? = nil) {
-		guard let currentOutline = currentDocument?.outline else { return }
-		exportOPMLForOutline(currentOutline)
 	}
 
 }
@@ -422,21 +410,24 @@ extension TimelineViewController {
 	
 	private func exportMarkdownOutlineAction(outline: Outline) -> UIAction {
 		let action = UIAction(title: L10n.exportMarkdownOutline, image: AppAssets.exportMarkdownOutline) { [weak self] action in
-			self?.exportMarkdownOutlineForOutline(outline)
+			guard let self = self else { return }
+			self.delegate?.exportMarkdownOutline(self, outline: outline)
 		}
 		return action
 	}
 	
 	private func exportMarkdownPostAction(outline: Outline) -> UIAction {
 		let action = UIAction(title: L10n.exportMarkdownPost, image: AppAssets.exportMarkdownPost) { [weak self] action in
-			self?.exportMarkdownPostForOutline(outline)
+			guard let self = self else { return }
+			self.delegate?.exportMarkdownPost(self, outline: outline)
 		}
 		return action
 	}
 	
 	private func exportOPMLAction(outline: Outline) -> UIAction {
 		let action = UIAction(title: L10n.exportOPML, image: AppAssets.exportOPML) { [weak self] action in
-			self?.exportOPMLForOutline(outline)
+			guard let self = self else { return }
+			self.delegate?.exportOPML(self, outline: outline)
 		}
 		return action
 	}
@@ -455,35 +446,6 @@ extension TimelineViewController {
 		}
 		
 		return action
-	}
-	
-	private func exportMarkdownOutlineForOutline(_ outline: Outline) {
-		let markdown = outline.markdownOutline()
-		export(markdown, fileName: outline.fileName(withSuffix: "md"))
-	}
-	
-	private func exportMarkdownPostForOutline(_ outline: Outline) {
-		let markdown = outline.markdownPost()
-		export(markdown, fileName: outline.postFileName(withSuffix: "md"))
-	}
-	
-	private func exportOPMLForOutline(_ outline: Outline) {
-		let opml = outline.opml()
-		export(opml, fileName: outline.fileName(withSuffix: "opml"))
-	}
-	
-	private func export(_ string: String, fileName: String) {
-		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-		
-		do {
-			try string.write(to: tempFile, atomically: true, encoding: String.Encoding.utf8)
-		} catch {
-			self.presentError(title: "Export Error", message: error.localizedDescription)
-		}
-		
-		let docPicker = UIDocumentPickerViewController(forExporting: [tempFile], asCopy: true)
-		docPicker.modalPresentationStyle = .formSheet
-		self.present(docPicker, animated: true)
 	}
 	
 	private func deleteDocument(_ document: Document, completion: ((Bool) -> Void)? = nil) {
