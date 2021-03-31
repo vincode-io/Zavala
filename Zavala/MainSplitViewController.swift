@@ -336,7 +336,11 @@ extension MainSplitViewController: TimelineDelegate {
 			activityManager.invalidateSelectDocument()
 		}
 		
-		editorViewController?.edit(document?.outline, isNew: isNew)
+		if let search = documentContainer as? Search {
+			editorViewController?.edit(document?.outline, isNew: isNew, searchText: search.searchText)
+		} else {
+			editorViewController?.edit(document?.outline, isNew: isNew)
+		}
 	}
 
 	func exportMarkdownOutline(_: TimelineViewController, outline: Outline) {

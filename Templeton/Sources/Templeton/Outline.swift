@@ -688,10 +688,15 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return rows.isEmpty
 	}
 	
-	public func beginSearching() {
+	public func beginSearching(for searchText: String? = nil) {
 		isSearching = .beginSearch
 		outlineSearchWillBegin()
 
+		guard searchText == nil else {
+			search(for: searchText!)
+			return
+		}
+		
 		var changes = rebuildShadowTable()
 
 		if let inserts = changes.inserts {

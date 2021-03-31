@@ -416,10 +416,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		searchBar.becomeFirstResponder()
 		discloseSearchBar()
-		
-		if !(searchBar.searchField.text?.isEmpty ?? true) {
-			search(for: searchBar.searchField.text!)
-		}
 	}
 	
 	@objc func outlineSearchTextDidChange(_ note: Notification) {
@@ -513,7 +509,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	// MARK: API
 	
-	func edit(_ newOutline: Outline?, isNew: Bool) {
+	func edit(_ newOutline: Outline?, isNew: Bool, searchText: String? = nil) {
 		guard outline != newOutline else { return }
 		isOutlineNewFlag = isNew
 		
@@ -544,6 +540,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			searchBar.searchField.text = outline?.searchText
 			isSearching = true
 		}
+		
+		if let searchText = searchText {
+			beginInDocumentSearch(text: searchText)
+			return
+		}
 
 		collectionView.reloadData()
 		
@@ -559,7 +560,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 
 		searchBar.searchField.text = text
-		outline?.beginSearching()
+		outline?.beginSearching(for: text)
+		
+		// I don't know why, but if you are clicking down the timeline with a sidebar search active
+		// the title row won't reload and you will get titles when you should only have search results.
+		if outline?.shadowTable?.count ?? 0 > 0  {
+			collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
+		}
 	}
 	
 	func deleteCurrentRows() {
