@@ -755,6 +755,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineSearchWillEnd()
 		isSearching = .notSearching
 
+		guard beingViewedCount > 0 else { return }
+		
 		var changes = rebuildShadowTable()
 
 		// Reload any rows that should be collapsed so that thier disclosure is in the correct position

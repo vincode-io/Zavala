@@ -526,11 +526,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		updateSpotlightIndex()
 		outline?.beingViewedCount = (outline?.beingViewedCount ?? 1) - 1
+		outline?.endSearching()
 		outline?.unload()
 		clearUndoableCommands()
 	
-		let oldOutline = outline
-		
 		// Assign the new Outline and load it
 		outline = newOutline
 		outline?.beingViewedCount = (outline?.beingViewedCount ?? 0) + 1
@@ -548,7 +547,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		collectionView.reloadData()
 		
-		oldOutline?.endSearching()
 		restoreOutlineCursorPosition()
 		restoreScrollPosition()
 		moveCursorToTitleOnNew()
