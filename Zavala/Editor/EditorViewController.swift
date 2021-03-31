@@ -554,12 +554,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		moveCursorToTitleOnNew()
 	}
 	
-	func beginInDocumentSearch() {
+	func beginInDocumentSearch(text: String? = nil) {
 		guard !isSearching else {
-			searchBar.becomeFirstResponder()
+			searchBar.searchField.becomeFirstResponder()
 			return
 		}
 
+		searchBar.searchField.text = text
 		outline?.beginSearching()
 	}
 	
@@ -662,7 +663,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	func useSelectionForSearch() {
-		searchBar.searchField.text = currentTextView?.selectedText
+		beginInDocumentSearch(text: currentTextView?.selectedText)
 	}
 	
 	func nextInDocumentSearch() {
@@ -1513,7 +1514,7 @@ extension EditorViewController {
 	}
 	
 	private func applyChangesRestoringState(_ changes: OutlineElementChanges) {
-		let currentCoordinates = CursorCoordinates.bestCoordinates
+		let currentCoordinates = CursorCoordinates.currentCoordinates
 		let selectedIndexPaths = collectionView.indexPathsForSelectedItems
 		
 		applyChanges(changes)
