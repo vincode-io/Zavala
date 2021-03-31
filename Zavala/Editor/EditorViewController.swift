@@ -1435,7 +1435,7 @@ extension EditorViewController {
 	}
 	
 	private func applyChangesRestoringState(_ changes: OutlineElementChanges) {
-		let currentCoordinates = CursorCoordinates.currentCoordinates
+		let currentCoordinates = CursorCoordinates.bestCoordinates
 		let selectedIndexPaths = collectionView.indexPathsForSelectedItems
 		
 		applyChanges(changes)
