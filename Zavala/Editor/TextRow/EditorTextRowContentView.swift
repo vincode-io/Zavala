@@ -417,7 +417,7 @@ extension EditorTextRowContentView {
 	
 	private func addBarView(indentLevel: Int, indentWidth: CGFloat, hasChevron: Bool) {
 		let barView = UIView()
-		barView.backgroundColor = AppAssets.accessory
+		barView.backgroundColor = AppAssets.verticalBar
 		barView.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(barView)
 		barViews.append(barView)

@@ -193,5 +193,8 @@ struct AppAssets {
 		return UIImage(systemName: "square")!
 	}()
 
-
+	static var verticalBar: UIColor = {
+		return .quaternaryLabel
+	}()
+	
 }
