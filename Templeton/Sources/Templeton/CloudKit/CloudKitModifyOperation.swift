@@ -62,7 +62,7 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 				}
 			}
 			
-			document.suspend()
+			document.unload()
 		}
 		
 		// Send the grouped changes
