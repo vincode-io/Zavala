@@ -231,6 +231,15 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 		case "\n":
 			editorDelegate?.createRow(self, afterRow: textRow)
 			return false
+		case " ":
+			var attributes = typingAttributes
+			attributes.removeValue(forKey: .link)
+			let attrString = NSAttributedString(string: " ", attributes: attributes)
+			textView.textStorage.insert(attrString, at: range.location)
+			let cursor = NSRange(location: textView.selectedRange.location + 1, length: 0)
+			textView.selectedRange = cursor
+			isTextChanged = true
+			return false
 		default:
 			return true
 		}

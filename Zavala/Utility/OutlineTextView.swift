@@ -181,11 +181,7 @@ class OutlineTextView: UITextView {
 	}
 	
 	func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
-		if text.isEmpty {
-			textStorage.replaceCharacters(in: range, with: text)
-		} else {
-			textStorage.replaceCharacters(in: range, with: "\(text) ")
-		}
+		textStorage.replaceCharacters(in: range, with: text)
 
 		let newRange = NSRange(location: range.location, length: text.count)
 
