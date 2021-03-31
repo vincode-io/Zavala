@@ -86,6 +86,7 @@
 "Open_Quickly" = "Open Quickly...";
 "Copy_Document_Link" = "Copy Document Link";
 "Delete_Outline" = "Delete Outline";
+"Website" = "Website";
 
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";

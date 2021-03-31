@@ -303,6 +303,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									   input: "d",
 									   modifierFlags: [.command])
 	
+	let showWebsiteCommand = UICommand(title: L10n.website, action: #selector(showWebsiteCommand(_:)))
+
 	let showReleaseNotesCommand = UICommand(title: L10n.releaseNotes, action: #selector(showReleaseNotesCommand(_:)))
 	
 	let showGitHubRepositoryCommand = UICommand(title: L10n.gitHubRepository, action: #selector(showGitHubRepositoryCommand(_:)))
@@ -607,6 +609,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.deleteCompletedRows()
 	}
 	
+	@objc func showWebsiteCommand(_ sender: Any?) {
+		mainCoordinator?.openURL(AppAssets.websiteURL)
+	}
+
 	@objc func showReleaseNotesCommand(_ sender: Any?) {
 		mainCoordinator?.openURL(AppAssets.releaseNotesURL)
 	}
@@ -871,7 +877,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 
 		// Help Menu
-		builder.replaceChildren(ofMenu: .help, from: { _ in return [showReleaseNotesCommand, showGitHubRepositoryCommand, showBugTrackerCommand, showAcknowledgementsCommand] })
+		builder.replaceChildren(ofMenu: .help, from: { _ in return [showWebsiteCommand, showReleaseNotesCommand, showGitHubRepositoryCommand, showBugTrackerCommand, showAcknowledgementsCommand] })
 	}
 	#endif
 	

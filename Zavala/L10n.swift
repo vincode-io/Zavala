@@ -254,6 +254,8 @@ internal enum L10n {
   }
   /// Use Selection For Find
   internal static let useSelectionForFind = L10n.tr("Localizable", "Use_Selection_For_Find")
+  /// Website
+  internal static let website = L10n.tr("Localizable", "Website")
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

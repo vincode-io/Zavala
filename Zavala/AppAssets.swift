@@ -197,4 +197,6 @@ struct AppAssets {
 		return .quaternaryLabel
 	}()
 	
+	static var websiteURL = "https://zavala.vincode.io"
+	
 }
