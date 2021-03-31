@@ -13,11 +13,13 @@ import CloudKit
 class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 	
 	weak var account: Account?
-
+	var zoneID: CKRecordZone.ID
+	
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "CloudKit")
 	
-	init(account: Account) {
+	init(account: Account, zoneID: CKRecordZone.ID) {
 		self.account = account
+		self.zoneID = zoneID
 	}
 	
 	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey], completion: @escaping (Result<Void, Error>) -> Void) {
@@ -56,6 +58,15 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 				update(for: documentID, zoneID: changedRecord.recordID.zoneID).saveRowRecords.append(changedRecord)
 			default:
 				assertionFailure("Unknown record type: \(changedRecord.recordType)")
+			}
+		}
+		
+		// Don't update anything from CloudKit that we have queued up for a CloudKit update
+		if let queuedRequests = CloudKitActionRequest.loadRequests(), !queuedRequests.isEmpty {
+			for key in updates.keys {
+				if queuedRequests.contains(CloudKitActionRequest(zoneID: zoneID, id: key)) {
+					updates.removeValue(forKey: key)
+				}
 			}
 		}
 		

@@ -40,4 +40,15 @@ public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 		self.id = id
 	}
 	
+	static func loadRequests() -> Set<CloudKitActionRequest>? {
+		var queuedRequests: Set<CloudKitActionRequest>? = nil
+		if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
+			let decoder = PropertyListDecoder()
+			if let decodedRequests = try? decoder.decode(Set<CloudKitActionRequest>.self, from: fileData) {
+				queuedRequests = decodedRequests
+			}
+		}
+		return queuedRequests
+	}
+	
 }

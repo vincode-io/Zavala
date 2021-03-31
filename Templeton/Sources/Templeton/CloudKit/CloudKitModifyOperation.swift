@@ -96,19 +96,11 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 extension CloudKitModifyOperation {
 	
 	private func loadRequests() -> [String: CombinedRequest] {
-		var queuedRequests: Set<CloudKitActionRequest>? = nil
-		if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
-			let decoder = PropertyListDecoder()
-			if let decodedRequests = try? decoder.decode(Set<CloudKitActionRequest>.self, from: fileData) {
-				queuedRequests = decodedRequests
-			}
-		}
-
 		var combinedRequests = [String: CombinedRequest]()
+
+		guard let queuedRequests = CloudKitActionRequest.loadRequests(), !queuedRequests.isEmpty else { return combinedRequests }
 		
-		guard !(queuedRequests?.isEmpty ?? true) else { return combinedRequests }
-		
-		for queuedRequest in queuedRequests! {
+		for queuedRequest in queuedRequests {
 			switch queuedRequest.id {
 			case .document(_, let documentUUID):
 				if let combinedRequest = combinedRequests[documentUUID] {

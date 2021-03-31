@@ -63,7 +63,7 @@ public class CloudKitManager {
 	init(account: Account) {
 		self.account = account
 		self.defaultZone = CloudKitOutlineZone(container: container)
-		defaultZone.delegate = CloudKitAcountZoneDelegate(account: account)
+		defaultZone.delegate = CloudKitAcountZoneDelegate(account: account, zoneID: self.defaultZone.zoneID)
 		self.zones[defaultZone.zoneID] = defaultZone
 	}
 	
@@ -126,7 +126,7 @@ public class CloudKitManager {
 		}
 		
 		let zone = CloudKitOutlineZone(container: container, database: container.sharedCloudDatabase, zoneID: zoneID)
-		zone.delegate = CloudKitAcountZoneDelegate(account: account!)
+		zone.delegate = CloudKitAcountZoneDelegate(account: account!, zoneID: zoneID)
 		zones[zoneID] = zone
 		return zone
 	}
