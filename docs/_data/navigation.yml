@@ -1,5 +1,7 @@
 # main links
 main:
+   - title: "Download"
+     url: /download/
    - title: "Features"
      url: /features/
    - title: "Blog"
