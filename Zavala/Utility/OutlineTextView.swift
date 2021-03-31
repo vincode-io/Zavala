@@ -186,12 +186,14 @@ class OutlineTextView: UITextView {
 		} else {
 			textStorage.replaceCharacters(in: range, with: "\(text) ")
 		}
+
+		let newRange = NSRange(location: range.location, length: text.count)
+
 		if let link = link, let url = URL(string: link) {
-			let range = NSRange(location: range.location, length: text.count)
-			textStorage.addAttribute(.link, value: url, range: range)
+			textStorage.addAttribute(.link, value: url, range: newRange)
 		} else {
-			if range.length > 0 {
-				textStorage.removeAttribute(.link, range: range)
+			if newRange.length > 0 {
+				textStorage.removeAttribute(.link, range: newRange)
 			}
 		}
 	}
