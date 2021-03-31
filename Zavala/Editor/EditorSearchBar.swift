@@ -95,13 +95,8 @@ import UIKit
 		layoutMargins.left = 8
 		layoutMargins.right = 8
 
-//		background = UIView(frame: bounds)
-//		background.backgroundColor = .systemGray6
-//		background.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//		addSubview(background)
-		
 		doneButton = UIButton(type: .custom)
-		doneButton.setTitle(NSLocalizedString("Done", comment: "Done"), for: .normal)
+		doneButton.setTitle(L10n.done, for: .normal)
 		doneButton.isAccessibilityElement = true
 		doneButton.addTarget(self, action: #selector(donePressed), for: .touchUpInside)
 		doneButton.isEnabled = true
@@ -113,7 +108,7 @@ import UIKit
 			doneButton.layer.borderColor = UIColor.tertiaryLabel.cgColor
 			doneButton.layer.cornerRadius = 5
 		} else {
-			doneButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+			doneButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
 		}
 		addArrangedSubview(doneButton)
 		

@@ -19,7 +19,14 @@ protocol EditorDelegate: AnyObject {
 
 class EditorViewController: UIViewController, MainControllerIdentifiable, UndoableCommandRunner {
 
+	#if targetEnvironment(macCatalyst)
+	private static let searchBarHeight: CGFloat = 36
+	#else
+	private static let searchBarHeight: CGFloat = 44
+	#endif
+	
 	@IBOutlet weak var searchBar: EditorSearchBar!
+	@IBOutlet weak var searchBarHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var collectionViewTopConstraint: NSLayoutConstraint!
 	@IBOutlet weak var collectionView: UICollectionView!
 	
@@ -241,6 +248,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 		
 		searchBar.delegate = self
+		searchBarHeightConstraint.constant = Self.searchBarHeight
 		collectionViewTopConstraint.constant = 0
 		
 		collectionView.layer.speed = 1.25
@@ -1290,7 +1298,7 @@ extension EditorViewController {
 		view.layoutIfNeeded()
 
 		UIView.animate(withDuration: 0.3) {
-			self.collectionViewTopConstraint.constant = 36
+			self.collectionViewTopConstraint.constant = Self.searchBarHeight
 			self.view.layoutIfNeeded()
 		}
 	}

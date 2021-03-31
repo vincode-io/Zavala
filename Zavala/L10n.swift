@@ -92,6 +92,8 @@ internal enum L10n {
   internal static let deleteTag = L10n.tr("Localizable", "Delete_Tag")
   /// Document Find...
   internal static let documentFind = L10n.tr("Localizable", "Document_Find")
+  /// Done
+  internal static let done = L10n.tr("Localizable", "Done")
   /// Edit document “%@”
   internal static func editDocument(_ p1: Any) -> String {
     return L10n.tr("Localizable", "Edit_Document", String(describing: p1))

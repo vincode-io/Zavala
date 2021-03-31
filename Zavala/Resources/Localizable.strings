@@ -7,6 +7,7 @@
 */
 
 /* Menu Items, Toolbars, & Buttons */
+"Done" = "Done";
 "Check_For_Updates" = "Check for Updates...";
 "Outline" = "Outline";
 "Import_OPML" = "Import OPML";

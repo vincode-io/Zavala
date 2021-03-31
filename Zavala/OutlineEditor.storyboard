@@ -51,14 +51,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MSX-50-SmH" customClass="EditorSearchBar" customModule="Zavala" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="800" height="36"/>
+                                <rect key="frame" x="0.0" y="0.0" width="800" height="44"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="36" id="UOQ-tp-cUm"/>
+                                    <constraint firstAttribute="height" constant="44" id="UOQ-tp-cUm"/>
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="c3a-AA-EnS">
-                                <rect key="frame" x="0.0" y="36" width="800" height="564"/>
+                                <rect key="frame" x="0.0" y="44" width="800" height="556"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="laf-FT-8o7">
                                     <size key="itemSize" width="128" height="128"/>
@@ -72,7 +72,7 @@
                         <viewLayoutGuide key="safeArea" id="j8K-cf-T45"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="c3a-AA-EnS" firstAttribute="top" secondItem="j8K-cf-T45" secondAttribute="top" constant="36" id="46x-oz-0wc"/>
+                            <constraint firstItem="c3a-AA-EnS" firstAttribute="top" secondItem="j8K-cf-T45" secondAttribute="top" constant="44" id="46x-oz-0wc"/>
                             <constraint firstItem="c3a-AA-EnS" firstAttribute="leading" secondItem="j8K-cf-T45" secondAttribute="leading" id="G0D-GX-WNP"/>
                             <constraint firstItem="j8K-cf-T45" firstAttribute="trailing" secondItem="c3a-AA-EnS" secondAttribute="trailing" id="MM8-d5-mpB"/>
                             <constraint firstItem="c3a-AA-EnS" firstAttribute="top" secondItem="MSX-50-SmH" secondAttribute="bottom" id="N5A-Wz-gYZ"/>
@@ -85,6 +85,7 @@
                         <outlet property="collectionView" destination="c3a-AA-EnS" id="FLJ-fW-iB5"/>
                         <outlet property="collectionViewTopConstraint" destination="46x-oz-0wc" id="oQY-Uy-NnO"/>
                         <outlet property="searchBar" destination="MSX-50-SmH" id="HaN-zn-BAn"/>
+                        <outlet property="searchBarHeightConstraint" destination="UOQ-tp-cUm" id="GGV-9l-UVO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W2Y-6H-XgS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -94,7 +95,7 @@
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>
