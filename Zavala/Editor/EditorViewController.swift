@@ -978,6 +978,11 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	
 	func editorTitleTextFieldDidBecomeActive() {
 		collectionView.deselectAll()
+		outline?.beginEditingTitle()
+	}
+	
+	func editorTitleTextFieldDidBecomeInactive() {
+		outline?.endEditingTitle()
 	}
 	
 	func editorTitleDidUpdate(title: String) {
@@ -1076,9 +1081,14 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		layoutEditor()
 	}
 	
-	func editorTextRowTextFieldDidBecomeActive() {
+	func editorTextRowTextFieldDidBecomeActive(row: Row) {
 		collectionView.deselectAll()
 		delegate?.validateToolbar(self)
+		outline?.beginEditingRow(id: row.id)
+	}
+
+	func editorTextRowTextFieldDidBecomeInactive(row: Row) {
+		outline?.endEditingRow(id: row.id)
 	}
 
 	func editorTextRowToggleDisclosure(row: Row) {

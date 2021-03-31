@@ -12,7 +12,8 @@ protocol EditorTextRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewTextRowStrings: TextRowStrings { get }
 	func invalidateLayout(_ : EditorTextRowNoteTextView)
-	func didBecomeActive(_ : EditorTextRowNoteTextView)
+	func didBecomeActive(_ : EditorTextRowNoteTextView, row: Row)
+	func didBecomeInactive(_ : EditorTextRowNoteTextView, row: Row)
 	func textChanged(_ : EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange)
 	func deleteRowNote(_ : EditorTextRowNoteTextView, row: Row)
 	func moveCursorTo(_ : EditorTextRowNoteTextView, row: Row)
@@ -67,7 +68,9 @@ class EditorTextRowNoteTextView: OutlineTextView {
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
 		let result = super.becomeFirstResponder()
-		editorDelegate?.didBecomeActive(self)
+		if let row = row {
+			editorDelegate?.didBecomeActive(self, row: row)
+		}
 		return result
 	}
 	
@@ -75,7 +78,11 @@ class EditorTextRowNoteTextView: OutlineTextView {
 		if let row = row {
 			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: row, isInNotes: true, selection: selectedRange)
 		}
-		return super.resignFirstResponder()
+		let result = super.resignFirstResponder()
+		if let row = row {
+			editorDelegate?.didBecomeInactive(self, row: row)
+		}
+		return result
 	}
 
 	override func deleteBackward() {

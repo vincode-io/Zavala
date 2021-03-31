@@ -24,6 +24,8 @@ public class CloudKitManager {
 		return !isSyncing && isNetworkAvailable
 	}
 	
+	var pendingActionRequests = Set<CloudKitActionRequest>()
+	
 	private let container: CKContainer = {
 		let orgID = Bundle.main.object(forInfoDictionaryKey: "OrganizationIdentifier") as! String
 		return CKContainer(identifier: "iCloud.\(orgID).Zavala")

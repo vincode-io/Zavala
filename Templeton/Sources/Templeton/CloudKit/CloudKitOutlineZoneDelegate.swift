@@ -61,6 +61,15 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 			}
 		}
 		
+		// Don't update anything from CloudKit that we are currently editing
+		if let cloudKitManager = account?.cloudKitManager {
+			for key in updates.keys {
+				if cloudKitManager.pendingActionRequests.contains(CloudKitActionRequest(zoneID: zoneID, id: key)) {
+					updates.removeValue(forKey: key)
+				}
+			}
+		}
+		
 		// Don't update anything from CloudKit that we have queued up for a CloudKit update
 		if let queuedRequests = CloudKitActionRequest.loadRequests(), !queuedRequests.isEmpty {
 			for key in updates.keys {

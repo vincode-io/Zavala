@@ -628,6 +628,30 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return opml
 	}
 	
+	public func beginEditingTitle() {
+		guard let zoneID = zoneID else { return }
+		let pendingRequest = CloudKitActionRequest(zoneID: zoneID, id: id)
+		account?.cloudKitManager?.pendingActionRequests.insert(pendingRequest)
+	}
+	
+	public func endEditingTitle() {
+		guard let zoneID = zoneID else { return }
+		let pendingRequest = CloudKitActionRequest(zoneID: zoneID, id: id)
+		account?.cloudKitManager?.pendingActionRequests.remove(pendingRequest)
+	}
+	
+	public func beginEditingRow(id: EntityID) {
+		guard let zoneID = zoneID else { return }
+		let pendingRequest = CloudKitActionRequest(zoneID: zoneID, id: id)
+		account?.cloudKitManager?.pendingActionRequests.insert(pendingRequest)
+	}
+	
+	public func endEditingRow(id: EntityID) {
+		guard let zoneID = zoneID else { return }
+		let pendingRequest = CloudKitActionRequest(zoneID: zoneID, id: id)
+		account?.cloudKitManager?.pendingActionRequests.remove(pendingRequest)
+	}
+	
 	public func update(title: String) {
 		self.title = title
 		updated = Date()

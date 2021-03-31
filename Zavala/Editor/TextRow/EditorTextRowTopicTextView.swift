@@ -11,7 +11,8 @@ import Templeton
 protocol EditorTextRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
 	var editorRowTopicTextViewTextRowStrings: TextRowStrings { get }
-	func didBecomeActive(_: EditorTextRowTopicTextView)
+	func didBecomeActive(_: EditorTextRowTopicTextView, row: Row)
+	func didBecomeInactive(_: EditorTextRowTopicTextView, row: Row)
 	func invalidateLayout(_: EditorTextRowTopicTextView)
 	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange)
 	func deleteRow(_: EditorTextRowTopicTextView, row: Row)
@@ -85,8 +86,11 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		if textStorage.length == 1 && textStorage.string.starts(with: " ") {
 			textStorage.deleteCharacters(in: NSRange(location: 0, length: 1))
 		}
+		
 		let result = super.becomeFirstResponder()
-		editorDelegate?.didBecomeActive(self)
+		if let row = row {
+			editorDelegate?.didBecomeActive(self, row: row)
+		}
 		return result
 	}
 	
@@ -94,7 +98,12 @@ class EditorTextRowTopicTextView: OutlineTextView {
 		if let textRow = row {
 			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: textRow, isInNotes: false, selection: selectedRange)
 		}
-		return super.resignFirstResponder()
+		
+		let result = super.resignFirstResponder()
+		if let row = row {
+			editorDelegate?.didBecomeInactive(self, row: row)
+		}
+		return result
 	}
 
 	override func deleteBackward() {
