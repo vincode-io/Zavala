@@ -238,6 +238,14 @@
 		51B2B2D62563AB9F0090C56B /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2D52563AB9F0090C56B /* UIView+.swift */; };
 		51B5861C256B245300ACF99B /* SWXMLHash in Frameworks */ = {isa = PBXBuildFile; productRef = 51B5861B256B245300ACF99B /* SWXMLHash */; };
 		51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */; };
+		51B9D99726140B0100A66859 /* PrintActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99626140B0100A66859 /* PrintActivity.swift */; };
+		51B9D99826140B0100A66859 /* PrintActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99626140B0100A66859 /* PrintActivity.swift */; };
+		51B9D99A26140E0600A66859 /* ExportPostActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99926140E0600A66859 /* ExportPostActivity.swift */; };
+		51B9D99B26140E0600A66859 /* ExportPostActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99926140E0600A66859 /* ExportPostActivity.swift */; };
+		51B9D99D26140EDC00A66859 /* ExportMarkdownActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99C26140EDC00A66859 /* ExportMarkdownActivity.swift */; };
+		51B9D99E26140EDC00A66859 /* ExportMarkdownActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99C26140EDC00A66859 /* ExportMarkdownActivity.swift */; };
+		51B9D9A026140F3A00A66859 /* ExportOPMLActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */; };
+		51B9D9A126140F3A00A66859 /* ExportOPMLActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */; };
 		51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */; };
 		51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A5257E084E00609262 /* EditorTitleContentView.swift */; };
 		51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */; };
@@ -496,6 +504,10 @@
 		51B2B2D12563AB190090C56B /* EditorTextRowContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowContentView.swift; sourceTree = "<group>"; };
 		51B2B2D52563AB9F0090C56B /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDisclosureButton.swift; sourceTree = "<group>"; };
+		51B9D99626140B0100A66859 /* PrintActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintActivity.swift; sourceTree = "<group>"; };
+		51B9D99926140E0600A66859 /* ExportPostActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPostActivity.swift; sourceTree = "<group>"; };
+		51B9D99C26140EDC00A66859 /* ExportMarkdownActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportMarkdownActivity.swift; sourceTree = "<group>"; };
+		51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportOPMLActivity.swift; sourceTree = "<group>"; };
 		51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentConfiguration.swift; sourceTree = "<group>"; };
 		51C030A5257E084E00609262 /* EditorTitleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentView.swift; sourceTree = "<group>"; };
 		51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReloadItemsOperation.swift; sourceTree = "<group>"; };
@@ -814,6 +826,17 @@
 			path = Zavala;
 			sourceTree = "<group>";
 		};
+		51B9D99526140AD100A66859 /* Activities */ = {
+			isa = PBXGroup;
+			children = (
+				51B9D99626140B0100A66859 /* PrintActivity.swift */,
+				51B9D99926140E0600A66859 /* ExportPostActivity.swift */,
+				51B9D99C26140EDC00A66859 /* ExportMarkdownActivity.swift */,
+				51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */,
+			);
+			path = Activities;
+			sourceTree = "<group>";
+		};
 		51C03097257E02FF00609262 /* TextRow */ = {
 			isa = PBXGroup;
 			children = (
@@ -909,6 +932,7 @@
 				51D28D31257731DC0039DDFC /* EditorViewController+Drop.swift */,
 				51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */,
 				512D375125F06733000FA597 /* EditorSearchBar.swift */,
+				51B9D99526140AD100A66859 /* Activities */,
 				511B29F526018F4A00C04239 /* Backlink */,
 				514F220B25C4CC42004E02CD /* Tag */,
 				51C03097257E02FF00609262 /* TextRow */,
@@ -1272,6 +1296,7 @@
 				511B2A272602410C00C04239 /* AppDefaults.swift in Sources */,
 				511B2A282602410C00C04239 /* SidebarSearchContentView.swift in Sources */,
 				511B2A292602410C00C04239 /* EditorTitleTextView.swift in Sources */,
+				51B9D99E26140EDC00A66859 /* ExportMarkdownActivity.swift in Sources */,
 				511B2A2B2602410C00C04239 /* AppAssets.swift in Sources */,
 				511B2A2C2602410C00C04239 /* UIColor+.swift in Sources */,
 				511B2A2D2602410C00C04239 /* EditorSearchBar.swift in Sources */,
@@ -1296,6 +1321,7 @@
 				511B2A3C2602410C00C04239 /* EditorDisclosureButton.swift in Sources */,
 				517A9E3D26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift in Sources */,
 				511B2A3D2602410C00C04239 /* CrashReporter.swift in Sources */,
+				51B9D9A126140F3A00A66859 /* ExportOPMLActivity.swift in Sources */,
 				511B2A3E2602410C00C04239 /* OutlineGetInfoViewController.swift in Sources */,
 				511B2A3F2602410C00C04239 /* EditorTagInputViewCell.swift in Sources */,
 				511B2A402602410C00C04239 /* EditorTagAddViewCell.swift in Sources */,
@@ -1315,6 +1341,7 @@
 				511B2A4A2602410C00C04239 /* TimelineItem.swift in Sources */,
 				511B2A4B2602410C00C04239 /* EditorTextRowContentConfiguration.swift in Sources */,
 				511B2A4C2602410C00C04239 /* OutlineTextView.swift in Sources */,
+				51B9D99B26140E0600A66859 /* ExportPostActivity.swift in Sources */,
 				511B2A4D2602410C00C04239 /* UIFont+.swift in Sources */,
 				511B2A4E2602410C00C04239 /* EditorTagInputContentConfiguration.swift in Sources */,
 				511B2A4F2602410C00C04239 /* TimelineViewController.swift in Sources */,
@@ -1326,6 +1353,7 @@
 				519A2325260A9B900056051E /* OutlineFontField.swift in Sources */,
 				511B2A552602410C00C04239 /* ApplySnapshotOperation.swift in Sources */,
 				511B2A562602410C00C04239 /* EditorTextRowViewCell.swift in Sources */,
+				51B9D99826140B0100A66859 /* PrintActivity.swift in Sources */,
 				511B2A572602410C00C04239 /* EditorBacklinkContentConfiguration.swift in Sources */,
 				5113B093260E45B400DBD11B /* SettingsFontViewController.swift in Sources */,
 				511B2A582602410C00C04239 /* ValidatingToolbarItem.swift in Sources */,
@@ -1409,6 +1437,7 @@
 				51C030B8257E198B00609262 /* EditorTitleTextView.swift in Sources */,
 				51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */,
 				51028CD525F3159A00B50B71 /* UIColor+.swift in Sources */,
+				51B9D99D26140EDC00A66859 /* ExportMarkdownActivity.swift in Sources */,
 				512D375225F06733000FA597 /* EditorSearchBar.swift in Sources */,
 				5147D0BE25CCAFD2004673C3 /* EditorTagAddContentConfiguration.swift in Sources */,
 				51F2859425AD11100019C573 /* SidebarSearchCell.swift in Sources */,
@@ -1448,11 +1477,14 @@
 				51C030BE257E1B9400609262 /* OutlineTextView.swift in Sources */,
 				511B2A0526019A2700C04239 /* UIFont+.swift in Sources */,
 				514F221B25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift in Sources */,
+				51B9D99726140B0100A66859 /* PrintActivity.swift in Sources */,
 				519A2324260A9B900056051E /* OutlineFontField.swift in Sources */,
+				51B9D99A26140E0600A66859 /* ExportPostActivity.swift in Sources */,
 				51C4C442255A0DE1004E0206 /* TimelineViewController.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,
 				51D28D2C257730DB0039DDFC /* EditorViewController+Drag.swift in Sources */,
+				51B9D9A026140F3A00A66859 /* ExportOPMLActivity.swift in Sources */,
 				51C030B4257E192100609262 /* EditorTitleViewCell.swift in Sources */,
 				517342F225EC2C690012EB20 /* UIActivityViewController+.swift in Sources */,
 				51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */,

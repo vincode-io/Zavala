@@ -360,7 +360,19 @@ extension MainSplitViewController: EditorDelegate {
 	func validateToolbar(_: EditorViewController) {
 		validateToolbar()
 	}
+
+	func exportMarkdownOutline(_: EditorViewController, outline: Outline) {
+		exportMarkdownOutlineForOutline(outline)
+	}
 	
+	func exportMarkdownPost(_: EditorViewController, outline: Outline) {
+		exportMarkdownPostForOutline(outline)
+	}
+	
+	func exportOPML(_: EditorViewController, outline: Outline) {
+		exportOPMLForOutline(outline)
+	}
+
 }
 
 // MARK: UISplitViewControllerDelegate

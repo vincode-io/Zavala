@@ -186,6 +186,11 @@ extension EditorContainerViewController: EditorDelegate {
 		sceneDelegate?.validateToolbar()
 	}
 	
+	// These aren't used when running in the EditorContainerViewController
+	func exportMarkdownOutline(_: EditorViewController, outline: Outline) {}
+	func exportMarkdownPost(_: EditorViewController, outline: Outline) {}
+	func exportOPML(_: EditorViewController, outline: Outline) {}
+
 }
 
 // MARK: Helpers

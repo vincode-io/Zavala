@@ -12,6 +12,9 @@ import Templeton
 
 protocol EditorDelegate: AnyObject {
 	func validateToolbar(_ : EditorViewController)
+	func exportMarkdownOutline(_: EditorViewController, outline: Outline)
+	func exportMarkdownPost(_: EditorViewController, outline: Outline)
+	func exportOPML(_: EditorViewController, outline: Outline)
 }
 
 class EditorViewController: UIViewController, MainControllerIdentifiable, UndoableCommandRunner {
@@ -730,7 +733,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
-	@objc func printOutline(_ sender: Any? = nil) {
+	@objc func printOutline() {
 		guard let outline = outline else { return }
 		
 		let pic = UIPrintInteractionController()
@@ -750,13 +753,32 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if traitCollection.userInterfaceIdiom == .mac {
 			pic.present(from: view.frame, in: view, animated: true)
 		} else {
-			pic.present(from: sender as! UIBarButtonItem, animated: true)
+			pic.present(from: ellipsisBarButtonItem, animated: true)
 		}
 	}
 	
 	@objc func sendCopy(_ sender: Any? = nil) {
 		guard let outline = outline else { return }
-		let controller = UIActivityViewController(outline: outline)
+		
+		var activities = [UIActivity]()
+		
+		let exportPostActivity = ExportPostActivity()
+		exportPostActivity.delegate = self
+		activities.append(exportPostActivity)
+		
+		let exportMarkdownActivity = ExportMarkdownActivity()
+		exportMarkdownActivity.delegate = self
+		activities.append(exportMarkdownActivity)
+		
+		let exportOPMLActivity = ExportOPMLActivity()
+		exportOPMLActivity.delegate = self
+		activities.append(exportOPMLActivity)
+		
+		let printActivity = PrintActivity()
+		printActivity.delegate = self
+		activities.append(printActivity)
+		
+		let controller = UIActivityViewController(outline: outline, applicationActivities: activities)
 		controller.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
 		present(controller, animated: true)
 	}
@@ -1136,6 +1158,49 @@ extension EditorViewController: LinkViewControllerDelegate {
 	
 }
 
+// MARK: PrintActivityDelegate
+
+extension EditorViewController: PrintActivityDelegate {
+	
+	func print(_: PrintActivity) {
+		printOutline()
+	}
+	
+}
+
+// MARK: ExportPostActivityDelegate
+
+extension EditorViewController: ExportPostActivityDelegate {
+	
+	func exportPost(_: ExportPostActivity) {
+		guard let outline = outline else { return }
+		delegate?.exportMarkdownPost(self, outline: outline)
+	}
+	
+}
+
+// MARK: ExportMarkdownActivityDelegate
+
+extension EditorViewController: ExportMarkdownActivityDelegate {
+
+	func exportMarkdown(_: ExportMarkdownActivity) {
+		guard let outline = outline else { return }
+		delegate?.exportMarkdownOutline(self, outline: outline)
+	}
+	
+}
+
+// MARK: ExportOPMLActivityDelegate
+
+extension EditorViewController: ExportOPMLActivityDelegate {
+	
+	func exportOPML(_: ExportOPMLActivity) {
+		guard let outline = outline else { return }
+		delegate?.exportOPML(self, outline: outline)
+	}
+	
+}
+
 // MARK: SearchBarDelegate
 
 extension EditorViewController: SearchBarDelegate {
@@ -1245,11 +1310,6 @@ extension EditorViewController {
 		}
 		shareActions.append(sendCopyAction)
 
-		let printAction = UIAction(title: L10n.print, image: AppAssets.print) { [weak self] _ in
-			self?.printOutline(self?.ellipsisBarButtonItem)
-		}
-		shareActions.append(printAction)
-		
 		var getInfoActions = [UIAction]()
 		let getInfoAction = UIAction(title: L10n.getInfo, image: AppAssets.getInfo) { [weak self] _ in
 			self?.showOutlineGetInfo()
