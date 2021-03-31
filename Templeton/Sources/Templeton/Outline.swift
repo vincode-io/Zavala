@@ -1435,6 +1435,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		guard beingViewedCount < 1 else { return }
 		
+		rowsFile?.suspend()
 		rowsFile = nil
 		shadowTable = nil
 		rowOrder = nil
