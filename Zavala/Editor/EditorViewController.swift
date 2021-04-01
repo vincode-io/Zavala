@@ -1169,14 +1169,22 @@ extension EditorViewController: OutlineCommandDelegate {
 extension EditorViewController: LinkViewControllerDelegate {
 	
 	func updateLink(cursorCoordinates: CursorCoordinates, text: String, link: String?, range: NSRange) {
+		var correctedLink = link
+		if correctedLink != nil, !correctedLink!.isEmpty {
+			if var urlComponents = URLComponents(string: correctedLink!), urlComponents.scheme == nil {
+				urlComponents.scheme = "https"
+				correctedLink = urlComponents.string ?? ""
+			}
+		}
+		
 		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 		guard let textRowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
 		
 		if cursorCoordinates.isInNotes {
-			textRowCell.noteTextView?.updateLinkForCurrentSelection(text: text, link: link, range: range)
+			textRowCell.noteTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
 		} else {
-			textRowCell.topicTextView?.updateLinkForCurrentSelection(text: text, link: link, range: range)
+			textRowCell.topicTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
 		}
 	}
 	
