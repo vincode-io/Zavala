@@ -232,7 +232,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	private var headerFooterSections = IndexSet([Outline.Section.title.rawValue, Outline.Section.tags.rawValue, Outline.Section.backlinks.rawValue])
 	
-	private static var defaultContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 40, right: 0)
+	private static var defaultContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
