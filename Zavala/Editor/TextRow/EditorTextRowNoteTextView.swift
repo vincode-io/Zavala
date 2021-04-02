@@ -185,7 +185,7 @@ extension EditorTextRowNoteTextView: UITextViewDelegate {
 		isTextChanged = true
 
 		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
-		if textViewHeight != fittingSize.height {
+		if let currentHeight = textViewHeight, fittingSize.height - currentHeight > currentHeight / 2  {
 			textViewHeight = fittingSize.height
 			editorDelegate?.invalidateLayout(self)
 		}
