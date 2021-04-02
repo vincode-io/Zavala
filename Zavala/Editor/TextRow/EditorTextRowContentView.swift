@@ -156,8 +156,6 @@ class EditorTextRowContentView: UIView, UIContentView {
 				topAnchorConstant = topicCapHeight + 4
 			}
 
-			print("topAnchorConstant: \(topAnchorConstant)")
-			
 			if traitCollection.horizontalSizeClass != .compact {
 				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -6 : -16
 				NSLayoutConstraint.activate([
