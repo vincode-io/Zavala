@@ -23,6 +23,7 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 	}
 	
 	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey], completion: @escaping (Result<Void, Error>) -> Void) {
+		let pendingIDs = loadPendingIDs()
 		var updates = [EntityID: CloudKitOutlineUpdate]()
 
 		func update(for documentID: EntityID, zoneID: CKRecordZone.ID) -> CloudKitOutlineUpdate {
@@ -36,7 +37,7 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 		}
 
 		for deletedRecordKey in deleted {
-			guard let entityID = EntityID(description: deletedRecordKey.recordID.recordName) else { continue }
+			guard let entityID = EntityID(description: deletedRecordKey.recordID.recordName), !pendingIDs.contains(entityID) else { continue }
 			switch entityID {
 			case .document:
 				update(for: entityID, zoneID: deletedRecordKey.recordID.zoneID).isDelete = true
@@ -49,7 +50,7 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 		}
 
 		for changedRecord in changed {
-			guard let entityID = EntityID(description: changedRecord.recordID.recordName) else { continue }
+			guard let entityID = EntityID(description: changedRecord.recordID.recordName), !pendingIDs.contains(entityID) else { continue }
 			switch entityID {
 			case .document:
 				update(for: entityID, zoneID: changedRecord.recordID.zoneID).saveOutlineRecord = changedRecord
@@ -61,24 +62,6 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 			}
 		}
 		
-		// Don't update anything from CloudKit that we are currently editing
-		if let cloudKitManager = account?.cloudKitManager {
-			for key in updates.keys {
-				if cloudKitManager.pendingActionRequests.contains(CloudKitActionRequest(zoneID: zoneID, id: key)) {
-					updates.removeValue(forKey: key)
-				}
-			}
-		}
-		
-		// Don't update anything from CloudKit that we have queued up for a CloudKit update
-		if let queuedRequests = CloudKitActionRequest.loadRequests(), !queuedRequests.isEmpty {
-			for key in updates.keys {
-				if queuedRequests.contains(CloudKitActionRequest(zoneID: zoneID, id: key)) {
-					updates.removeValue(forKey: key)
-				}
-			}
-		}
-		
 		for update in updates.values {
 			account?.apply(update)
 		}
@@ -86,4 +69,18 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 		completion(.success(()))
 	}
 
+}
+
+// MARK: Helpers
+
+extension CloudKitAcountZoneDelegate {
+	
+	private func loadPendingIDs() -> [EntityID] {
+		var pendingIDs = account?.cloudKitManager?.pendingActionRequests.filter({ $0.zoneID == zoneID }).map({ $0.id }) ?? [EntityID]()
+		if let persistedPendingIDs = CloudKitActionRequest.loadRequests()?.filter({ $0.zoneID == zoneID }).map({ $0.id }) {
+			pendingIDs.append(contentsOf: persistedPendingIDs)
+		}
+		return pendingIDs
+	}
+	
 }
