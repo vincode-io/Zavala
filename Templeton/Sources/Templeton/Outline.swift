@@ -858,9 +858,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var deletes = Set<Int>()
 
 		for row in rows {
+			row.parent?.removeRow(row)
 			guard let rowShadowTableIndex = row.shadowTableIndex else { continue }
 			deletes.insert(rowShadowTableIndex)
-			row.parent?.removeRow(row)
 		}
 
 		deleteLinkRelationships(for: rows)
