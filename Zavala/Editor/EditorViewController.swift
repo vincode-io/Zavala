@@ -1519,9 +1519,9 @@ extension EditorViewController {
 		if let reloads = changes.reloadIndexPaths, !reloads.isEmpty {
 			// This is to prevent jumping when reloading the last item in the collection
 			UIView.performWithoutAnimation {
-				let contentOffset = collectionView.contentOffset
+//				let contentOffset = collectionView.contentOffset
 				collectionView.reloadItems(at: reloads)
-				collectionView.contentOffset = contentOffset
+//				collectionView.contentOffset = contentOffset
 			}
 		}
 	}

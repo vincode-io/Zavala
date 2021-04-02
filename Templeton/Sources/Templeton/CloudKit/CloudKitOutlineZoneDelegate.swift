@@ -63,7 +63,7 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 		}
 		
 		for update in updates.values {
-			account?.apply(update)
+			account?.apply(update, pendingIDs: pendingIDs)
 		}
 		
 		completion(.success(()))

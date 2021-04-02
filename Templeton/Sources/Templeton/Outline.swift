@@ -1579,7 +1579,7 @@ extension Outline {
 		cloudKitManager.addRequests(Set(requests))
 	}
 
-	func apply(_ update: CloudKitOutlineUpdate) {
+	func apply(_ update: CloudKitOutlineUpdate, pendingIDs: [EntityID]) {
 		if let record = update.saveOutlineRecord {
 			applyOutlineRecord(record)
 		}
@@ -1620,7 +1620,9 @@ extension Outline {
 		var reloadRows = [Row]()
 		
 		func reloadVisitor(_ visited: Row) {
-			reloadRows.append(visited)
+			if !pendingIDs.contains(visited.id) {
+				reloadRows.append(visited)
+			}
 			visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
 		}
 

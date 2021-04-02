@@ -227,7 +227,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		return document
 	}
 	
-	func apply(_ update: CloudKitOutlineUpdate) {
+	func apply(_ update: CloudKitOutlineUpdate, pendingIDs: [EntityID]) {
 		guard !update.isDelete else {
 			guard let document = findDocument(documentUUID: update.documentID.documentUUID) else { return }
 			deleteDocument(document, updateCloudKit: false)
@@ -237,14 +237,14 @@ public final class Account: NSObject, Identifiable, Codable {
 		if let document = findDocument(documentUUID: update.documentID.documentUUID) {
 			let outline = document.outline!
 			outline.load()
-			outline.apply(update)
+			outline.apply(update, pendingIDs: pendingIDs)
 			outline.forceSave()
 			outline.unload()
 		} else {
 			let outline = Outline(id: update.documentID)
 			outline.zoneID = update.zoneID
 
-			outline.apply(update)
+			outline.apply(update, pendingIDs: pendingIDs)
 			outline.forceSave()
 			outline.unload()
 			
