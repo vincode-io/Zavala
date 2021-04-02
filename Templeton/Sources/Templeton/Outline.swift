@@ -1564,11 +1564,9 @@ extension Outline {
 	}
 
 	func requestCloudKitUpdates(for entityIDs: [EntityID]) {
-		beginCloudKitBatchRequest()
 		for id in entityIDs {
 			requestCloudKitUpdate(for: id)
 		}
-		endCloudKitBatchRequest()
 	}
 
 	func endCloudKitBatchRequest() {
