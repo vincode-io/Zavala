@@ -134,39 +134,40 @@ class EditorTextRowContentView: UIView, UIContentView {
 		if configuration.row?.rowCount == 0 {
 			addSubview(bullet)
 			
-			let baseLineConstant = 0 - (topicCapHeight - 4) / 2
 			if traitCollection.horizontalSizeClass != .compact {
 				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? 1 : 3
 				NSLayoutConstraint.activate([
 					bullet.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth + indentAdjustment),
-					bullet.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)
+					bullet.firstBaselineAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topicCapHeight)
 				])
 			} else {
 				NSLayoutConstraint.activate([
 					bullet.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
-					bullet.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)
+					bullet.firstBaselineAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topicCapHeight)
 				])
 			}
 		} else {
 			addSubview(disclosureIndicator)
 
-			let baseLineConstant: CGFloat
+			let topAnchorConstant: CGFloat
 			if traitCollection.userInterfaceIdiom == .mac {
-				baseLineConstant = 0 - (topicCapHeight - 8) / 2
+				topAnchorConstant = topicCapHeight * 1.1
 			} else {
-				baseLineConstant = 0 - (topicCapHeight - 12) / 2
+				topAnchorConstant = topicCapHeight + 4
 			}
 
+			print("topAnchorConstant: \(topAnchorConstant)")
+			
 			if traitCollection.horizontalSizeClass != .compact {
 				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -6 : -16
 				NSLayoutConstraint.activate([
 					disclosureIndicator.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth + indentAdjustment),
-					disclosureIndicator.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)
+					disclosureIndicator.firstBaselineAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
 				])
 			} else {
 				NSLayoutConstraint.activate([
 					disclosureIndicator.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: 0),
-					disclosureIndicator.firstBaselineAnchor.constraint(equalTo: topicTextView.firstBaselineAnchor, constant: baseLineConstant)
+					disclosureIndicator.firstBaselineAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
 				])
 			}
 			
@@ -356,9 +357,8 @@ extension EditorTextRowContentView {
 			addHighlighting(mutableAttrText, searchResultCoordinates: configuration.row?.textRow?.searchResultCoordinates, isInNotes: false)
 			topicTextView.attributedText = mutableAttrText
 		} else {
-			// This is a bit of a hack to make sure that the reused UITextView gets cleared out for the
-			// empty attributed string and the bullet correctly aligns on the first baseline
-			let mutableAttrText = NSMutableAttributedString(string: " ")
+			// This is a bit of a hack to make sure that the reused UITextView gets cleared out
+			let mutableAttrText = NSMutableAttributedString(string: "")
 			let range = NSRange(location: 0, length: mutableAttrText.length)
 			attrs[.font] = configuration.topicFont
 			mutableAttrText.addAttributes(attrs, range: range)

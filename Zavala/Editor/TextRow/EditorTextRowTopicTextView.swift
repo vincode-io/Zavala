@@ -82,11 +82,6 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
-		// We leave and empty string in text field to help with autolayout where first baseline is used
-		if textStorage.length == 1 && textStorage.string.starts(with: " ") {
-			textStorage.deleteCharacters(in: NSRange(location: 0, length: 1))
-		}
-		
 		let result = super.becomeFirstResponder()
 		if let row = row {
 			editorDelegate?.didBecomeActive(self, row: row)
