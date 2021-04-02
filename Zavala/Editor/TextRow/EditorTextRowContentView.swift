@@ -349,11 +349,12 @@ extension EditorTextRowContentView {
 			topicTextView.attributedText = mutableAttrText
 		} else {
 			// This is a bit of a hack to make sure that the reused UITextView gets cleared out
-			let mutableAttrText = NSMutableAttributedString(string: "")
+			let mutableAttrText = NSMutableAttributedString(string: " ")
 			let range = NSRange(location: 0, length: mutableAttrText.length)
 			attrs[.font] = configuration.topicFont
 			mutableAttrText.addAttributes(attrs, range: range)
 			topicTextView.attributedText = mutableAttrText
+			topicTextView.text = ""
 		}
 
 	}
