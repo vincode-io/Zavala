@@ -1719,7 +1719,7 @@ extension Outline {
 			account.deleteTag(name: tagNameToDelete)
 		}
 		
-		guard beingViewedCount > 0 else { return }
+		guard beingViewedCount > 0, isSearching == .notSearching else { return }
 
 		var moves = Set<OutlineElementChanges.Move>()
 		var inserts = Set<Int>()
@@ -1743,11 +1743,9 @@ extension Outline {
 			}
 		}
 		
-		let changes = OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, inserts: inserts, moves: moves)
+		let changes = OutlineElementChanges(section: .tags, deletes: deletes, inserts: inserts, moves: moves)
 		outlineElementsDidChange(changes)
-		if isSearching == .notSearching {
-			outlineElementsDidChange(OutlineElementChanges(section: .backlinks, reloads: Set([0])))
-		}
+		outlineElementsDidChange(OutlineElementChanges(section: .backlinks, reloads: Set([0])))
 	}
 	
 }
