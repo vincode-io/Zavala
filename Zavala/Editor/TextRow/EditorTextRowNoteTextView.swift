@@ -165,23 +165,15 @@ extension EditorTextRowNoteTextView: UITextViewDelegate {
 		saveText()
 	}
 	
-	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-		switch text {
-		case " ":
-			var attributes = typingAttributes
-			attributes.removeValue(forKey: .link)
-			let attrString = NSAttributedString(string: " ", attributes: attributes)
-			textView.textStorage.insert(attrString, at: range.location)
-			let cursor = NSRange(location: textView.selectedRange.location + 1, length: 0)
-			textView.selectedRange = cursor
-			isTextChanged = true
-			return false
-		default:
-			return true
-		}
-	}
-
 	func textViewDidChange(_ textView: UITextView) {
+		// Break any links with a space
+		if textView.textStorage.length > 0 {
+			let range = NSRange(location: textStorage.length - 1, length: 1)
+			if textView.textStorage.attributedSubstring(from: range).string == " " {
+				textView.textStorage.removeAttribute(.link, range: range)
+			}
+		}
+
 		isTextChanged = true
 
 		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
