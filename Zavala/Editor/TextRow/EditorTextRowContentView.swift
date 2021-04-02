@@ -129,8 +129,8 @@ class EditorTextRowContentView: UIView, UIContentView {
 		bullet.removeFromSuperview()
 		disclosureIndicator.removeFromSuperview()
 		
-		let topicCapHeight = configuration.topicFont.capHeight
-		
+		let topAnchorConstant = configuration.topicFont.capHeight *  0.9
+
 		if configuration.row?.rowCount == 0 {
 			addSubview(bullet)
 			
@@ -138,34 +138,27 @@ class EditorTextRowContentView: UIView, UIContentView {
 				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? 1 : 3
 				NSLayoutConstraint.activate([
 					bullet.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth + indentAdjustment),
-					bullet.firstBaselineAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topicCapHeight)
+					bullet.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
 				])
 			} else {
 				NSLayoutConstraint.activate([
 					bullet.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
-					bullet.firstBaselineAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topicCapHeight)
+					bullet.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
 				])
 			}
 		} else {
 			addSubview(disclosureIndicator)
 
-			let topAnchorConstant: CGFloat
-			if traitCollection.userInterfaceIdiom == .mac {
-				topAnchorConstant = topicCapHeight * 1.1
-			} else {
-				topAnchorConstant = topicCapHeight + 4
-			}
-
 			if traitCollection.horizontalSizeClass != .compact {
 				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -6 : -16
 				NSLayoutConstraint.activate([
 					disclosureIndicator.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth + indentAdjustment),
-					disclosureIndicator.firstBaselineAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
+					disclosureIndicator.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
 				])
 			} else {
 				NSLayoutConstraint.activate([
 					disclosureIndicator.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: 0),
-					disclosureIndicator.firstBaselineAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
+					disclosureIndicator.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
 				])
 			}
 			
