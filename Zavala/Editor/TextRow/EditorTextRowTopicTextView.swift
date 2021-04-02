@@ -243,7 +243,7 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 		isTextChanged = true
 
 		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
-		if let currentHeight = textViewHeight, fittingSize.height - currentHeight > currentHeight / 2  {
+		if let currentHeight = textViewHeight, abs(fittingSize.height - currentHeight) > OutlineFontCache.shared.topic(level: indentionLevel).capHeight / 2  {
 			textViewHeight = fittingSize.height
 			editorDelegate?.invalidateLayout(self)
 		}
