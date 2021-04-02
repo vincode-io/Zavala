@@ -1592,25 +1592,61 @@ extension Outline {
 			keyedRows?.removeValue(forKey: deleteRecordID)
 		}
 		
-		var updatedRows = [Row]()
+		var updatedRowIDs = Set<EntityID>()
 		
 		for saveRowRecord in update.saveRowRecords {
 			guard let entityID = EntityID(description: saveRowRecord.recordID.recordName) else { continue }
 
+			var isExistingRecord = false
 			var row: Row
 			if let existingRow = keyedRows?[entityID] {
 				row = existingRow
-				updatedRows.append(row)
+				isExistingRecord = true
 			} else {
 				row = .text(TextRow(id: entityID))
 			}
 
-			row.textRow?.topicData = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.topicData] as? Data
-			row.textRow?.noteData = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.noteData] as? Data
-			row.textRow?.isComplete = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] as? String == "1" ? true : false
+			let updatedTopicData = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.topicData] as? Data
+			if row.textRow?.topicData != updatedTopicData {
+				row.textRow?.topicData = updatedTopicData
+				if isExistingRecord {
+					updatedRowIDs.insert(row.id)
+				}
+			}
 			
-			let rowOrder = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] as? [String]
-			row.textRow?.rowOrder = rowOrder?.map { EntityID.row(id.accountID, id.documentUUID, $0) } ?? [EntityID]()
+			let updatedNoteData = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.noteData] as? Data
+			if row.textRow?.noteData != updatedNoteData {
+				row.textRow?.noteData = updatedNoteData
+				if isExistingRecord {
+					updatedRowIDs.insert(row.id)
+				}
+			}
+			
+			let updatedIsComplete = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] as? String == "1" ? true : false
+			if row.textRow?.isComplete != updatedIsComplete {
+				row.textRow?.isComplete = updatedIsComplete
+				if isExistingRecord {
+					updatedRowIDs.insert(row.id)
+				}
+			}
+			
+			let rowOrderRowUUIDS = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] as? [String]
+			let newRowOrder = rowOrderRowUUIDS?.map { EntityID.row(id.accountID, id.documentUUID, $0) } ?? [EntityID]()
+			
+			//  We only count newly added children for reloading so that they can indent or outdent
+			let diff = newRowOrder.difference(from: row.textRow?.rowOrder ?? [EntityID]())
+			for change in diff {
+				switch change {
+				case .insert(_, let newRowID, _):
+					if isExistingRecord {
+						updatedRowIDs.insert(newRowID)
+					}
+				default:
+					break
+				}
+			}
+			
+			row.textRow?.rowOrder = newRowOrder
 			
 			keyedRows?[entityID] = row
 		}
@@ -1626,9 +1662,11 @@ extension Outline {
 			visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
 		}
 
-		for updatedRow in updatedRows {
-			reloadRows.append(updatedRow)
-			updatedRow.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+		for updatedRowID in updatedRowIDs {
+			if let updatedRow = keyedRows?[updatedRowID] {
+				reloadRows.append(updatedRow)
+				updatedRow.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
+			}
 		}
 		
 		var changes = rebuildShadowTable()
