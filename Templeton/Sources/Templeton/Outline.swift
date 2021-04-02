@@ -1580,8 +1580,11 @@ extension Outline {
 	}
 
 	func apply(_ update: CloudKitOutlineUpdate, pendingIDs: [EntityID]) {
+		var updatedRowIDs = Set<EntityID>()
+		
 		if let record = update.saveOutlineRecord {
-			applyOutlineRecord(record)
+			let outlineUpdatedRows = applyOutlineRecord(record)
+			updatedRowIDs.formUnion(outlineUpdatedRows)
 		}
 		
 		if keyedRows == nil {
@@ -1591,8 +1594,6 @@ extension Outline {
 		for deleteRecordID in update.deleteRowRecordIDs {
 			keyedRows?.removeValue(forKey: deleteRecordID)
 		}
-		
-		var updatedRowIDs = Set<EntityID>()
 		
 		for saveRowRecord in update.saveRowRecords {
 			guard let entityID = EntityID(description: saveRowRecord.recordID.recordName) else { continue }
@@ -1675,7 +1676,7 @@ extension Outline {
 		outlineElementsDidChange(changes)
 	}
 	
-	private func applyOutlineRecord(_ record: CKRecord) {
+	private func applyOutlineRecord(_ record: CKRecord) -> [EntityID] {
 		if let shareReference = record.share {
 			cloudKitShareRecordName = shareReference.recordID.recordName
 		} else {
@@ -1697,7 +1698,22 @@ extension Outline {
 		updated = record[CloudKitOutlineZone.CloudKitOutline.Fields.updated] as? Date
 
 		let rowOrderRowUUIDs = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
-		rowOrder = rowOrderRowUUIDs.map { EntityID.row(id.accountID, id.documentUUID, $0) }
+		let newRowOrder = rowOrderRowUUIDs.map { EntityID.row(id.accountID, id.documentUUID, $0) }
+		
+		var updatedRowIDs = [EntityID]()
+		
+		//  We only count newly added children for reloading so that they can indent or outdent
+		let rowDiff = newRowOrder.difference(from: rowOrder ?? [EntityID]())
+		for change in rowDiff {
+			switch change {
+			case .insert(_, let newRowID, _):
+				updatedRowIDs.append(newRowID)
+			default:
+				break
+			}
+		}
+
+		rowOrder = newRowOrder
 
 		let documentLinkDescriptions = record[CloudKitOutlineZone.CloudKitOutline.Fields.documentLinks] as? [String] ?? [String]()
 		documentLinks = documentLinkDescriptions.compactMap { EntityID(description: $0) }
@@ -1708,7 +1724,7 @@ extension Outline {
 		let cloudKitTagNames = record[CloudKitOutlineZone.CloudKitOutline.Fields.tagNames] as? [String] ?? [String]()
 		let currentTagNames = Set(tags.map { $0.name })
 		
-		guard let account = account else { return }
+		guard let account = account else { return updatedRowIDs }
 
 		let cloudKitTagIDs = cloudKitTagNames.map({ account.createTag(name: $0) }).map({ $0.id })
 		let oldTagIDs = tagIDs ?? [String]()
@@ -1719,14 +1735,14 @@ extension Outline {
 			account.deleteTag(name: tagNameToDelete)
 		}
 		
-		guard beingViewedCount > 0, isSearching == .notSearching else { return }
+		guard beingViewedCount > 0, isSearching == .notSearching else { return updatedRowIDs }
 
 		var moves = Set<OutlineElementChanges.Move>()
 		var inserts = Set<Int>()
 		var deletes = Set<Int>()
 		
-		let diff = cloudKitTagIDs.difference(from: oldTagIDs).inferringMoves()
-		for change in diff {
+		let tagDiff = cloudKitTagIDs.difference(from: oldTagIDs).inferringMoves()
+		for change in tagDiff {
 			switch change {
 			case .insert(let offset, _, let associated):
 				if let associated = associated {
@@ -1746,6 +1762,8 @@ extension Outline {
 		let changes = OutlineElementChanges(section: .tags, deletes: deletes, inserts: inserts, moves: moves)
 		outlineElementsDidChange(changes)
 		outlineElementsDidChange(OutlineElementChanges(section: .backlinks, reloads: Set([0])))
+		
+		return updatedRowIDs
 	}
 	
 }
