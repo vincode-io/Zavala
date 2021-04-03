@@ -4,7 +4,9 @@ main:
      url: /download/
    - title: "Features"
      url: /features/
-   - title: "Blog"
-     url: /blog/
    - title: "About"
      url: /about/
+   - title: "Blog"
+     url: /blog/
+   - title: "Support"
+     url: https://github.com/vincode-io/Zavala/discussions/categories/support
