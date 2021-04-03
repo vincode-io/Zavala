@@ -1807,21 +1807,19 @@ extension EditorViewController {
 		}
 		
 		let indexPath = IndexPath(row: shadowTableIndex - 1, section: adjustedRowsSection)
-		makeCellVisibleIfNecessary(indexPath: indexPath) {
-			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
-				rowCell.moveToEnd()
-			}
+		if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
+			rowCell.moveToEnd()
 		}
+		makeCellVisibleIfNecessary(indexPath: indexPath)
 	}
 	
 	private func moveCursorDown(row: Row) {
 		guard let shadowTableIndex = row.shadowTableIndex, let shadowTable = outline?.shadowTable, shadowTableIndex < (shadowTable.count - 1) else { return }
 		let indexPath = IndexPath(row: shadowTableIndex + 1, section: adjustedRowsSection)
-		makeCellVisibleIfNecessary(indexPath: indexPath) {
-			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
-				rowCell.moveToStart()
-			}
+		if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
+			rowCell.moveToStart()
 		}
+		makeCellVisibleIfNecessary(indexPath: indexPath)
 	}
 	
 	private func toggleDisclosure(row: Row) {
@@ -2087,11 +2085,10 @@ extension EditorViewController {
 		
 		if let newCursorIndex = command.newCursorIndex {
 			let newCursorIndexPath = IndexPath(row: newCursorIndex, section: adjustedRowsSection)
-			makeCellVisibleIfNecessary(indexPath: newCursorIndexPath) {
-				if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorTextRowViewCell {
-					rowCell.moveToEnd()
-				}
+			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorTextRowViewCell {
+				rowCell.moveToEnd()
 			}
+			makeCellVisibleIfNecessary(indexPath: newCursorIndexPath)
 		}
 	}
 	
@@ -2205,9 +2202,8 @@ extension EditorViewController {
 		}
 	}
 
-	private func makeCellVisibleIfNecessary(indexPath: IndexPath, completion: (() -> Void)? = nil) {
+	private func makeCellVisibleIfNecessary(indexPath: IndexPath) {
 		guard let frame = collectionView.layoutAttributesForItem(at: indexPath)?.frame else {
-			completion?()
 			return
 		}
 		
@@ -2215,18 +2211,10 @@ extension EditorViewController {
 		let bottom = collectionView.contentOffset.y + collectionView.frame.size.height
 		
 		guard frame.minY < top || frame.maxY > bottom else {
-			completion?()
 			return
 		}
 		
-		CATransaction.begin()
-		CATransaction.setCompletionBlock {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-				completion?()
-			}
-		}
 		collectionView.scrollRectToVisible(frame, animated: true)
-		CATransaction.commit()
 	}
 	
 	private func updateSpotlightIndex() {
