@@ -1814,12 +1814,21 @@ extension EditorViewController {
 	}
 	
 	private func moveCursorDown(row: Row) {
-		guard let shadowTableIndex = row.shadowTableIndex, let shadowTable = outline?.shadowTable, shadowTableIndex < (shadowTable.count - 1) else { return }
-		let indexPath = IndexPath(row: shadowTableIndex + 1, section: adjustedRowsSection)
-		if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
-			rowCell.moveToStart()
+		guard let shadowTableIndex = row.shadowTableIndex, let shadowTable = outline?.shadowTable else { return }
+		
+		if shadowTableIndex < (shadowTable.count - 1) {
+			let indexPath = IndexPath(row: shadowTableIndex + 1, section: adjustedRowsSection)
+			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
+				rowCell.moveToStart()
+			}
+			makeCellVisibleIfNecessary(indexPath: indexPath)
+		} else {
+			let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
+			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
+				rowCell.moveToEnd()
+			}
 		}
-		makeCellVisibleIfNecessary(indexPath: indexPath)
+		
 	}
 	
 	private func toggleDisclosure(row: Row) {
