@@ -708,8 +708,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func repeatMoveCursorUp() {
 		guard currentKeyPresses.contains(.keyboardUpArrow) else { return }
 
-		if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, let row = textView.row {
-			moveCursorUp(row: row)
+		if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView {
+			moveCursorUp(topicTextView: textView)
 		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
 			if tagInput.isShowingResults {
 				tagInput.selectAbove()
@@ -727,8 +727,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func repeatMoveCursorDown() {
 		guard currentKeyPresses.contains(.keyboardDownArrow) else { return }
 		
-		if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView, let row = textView.row {
-			moveCursorDown(row: row)
+		if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView {
+			moveCursorDown(topicTextView: textView)
 		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
 			if tagInput.isShowingResults {
 				tagInput.selectBelow()
@@ -1145,7 +1145,10 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	}
 	
 	func editorTextRowMoveCursorDown(row: Row) {
-		moveCursorDown(row: row)
+		guard let shadowTableIndex = row.shadowTableIndex else { return }
+		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
+		guard let topicTextView = (collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell)?.topicTextView else { return }
+		moveCursorDown(topicTextView: topicTextView)
 	}
 	
 	func editorTextRowEditLink(_ link: String?, text: String?, range: NSRange) {
@@ -1800,26 +1803,44 @@ extension EditorViewController {
 		}
 	}
 	
-	private func moveCursorUp(row: Row) {
-		guard let shadowTableIndex = row.shadowTableIndex, shadowTableIndex > 0 else {
+	private func moveCursorUp(topicTextView: EditorTextRowTopicTextView) {
+		guard let row = topicTextView.row, let shadowTableIndex = row.shadowTableIndex, shadowTableIndex > 0 else {
 			moveCursorToTagInput()
 			return
 		}
 		
 		let indexPath = IndexPath(row: shadowTableIndex - 1, section: adjustedRowsSection)
-		if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
-			rowCell.moveToEnd()
+		if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell)?.topicTextView {
+			nextTopicTextView.becomeFirstResponder()
+			if let topicTextViewCursorRect = topicTextView.cursorRect {
+				let convertedRect = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
+				let nextRect = nextTopicTextView.convert(convertedRect, from: collectionView)
+				if let cursorPosition = nextTopicTextView.closestPosition(to: CGPoint(x: nextRect.midX, y: nextTopicTextView.bounds.height - 1)) {
+					let cursorOffset = nextTopicTextView.offset(from: nextTopicTextView.beginningOfDocument, to: cursorPosition)
+					let range = NSRange(location: cursorOffset, length: 0)
+					nextTopicTextView.selectedRange = range
+				}
+			}
 		}
 		makeCellVisibleIfNecessary(indexPath: indexPath)
 	}
 	
-	private func moveCursorDown(row: Row) {
-		guard let shadowTableIndex = row.shadowTableIndex, let shadowTable = outline?.shadowTable else { return }
+	private func moveCursorDown(topicTextView: EditorTextRowTopicTextView) {
+		guard let row = topicTextView.row, let shadowTableIndex = row.shadowTableIndex, let shadowTable = outline?.shadowTable else { return }
 		
 		if shadowTableIndex < (shadowTable.count - 1) {
 			let indexPath = IndexPath(row: shadowTableIndex + 1, section: adjustedRowsSection)
-			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
-				rowCell.moveToStart()
+			if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell)?.topicTextView {
+				nextTopicTextView.becomeFirstResponder()
+				if let topicTextViewCursorRect = topicTextView.cursorRect {
+					let convertedRect = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
+					let nextRect = nextTopicTextView.convert(convertedRect, from: collectionView)
+					if let cursorPosition = nextTopicTextView.closestPosition(to: CGPoint(x: nextRect.midX, y: 0)) {
+						let cursorOffset = nextTopicTextView.offset(from: nextTopicTextView.beginningOfDocument, to: cursorPosition)
+						let range = NSRange(location: cursorOffset, length: 0)
+						nextTopicTextView.selectedRange = range
+					}
+				}
 			}
 			makeCellVisibleIfNecessary(indexPath: indexPath)
 		} else {
