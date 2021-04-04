@@ -54,7 +54,7 @@
 	<key>OrganizationIdentifier</key>
 	<string>$(ORGANIZATION_IDENTIFIER)</string>
 	<key>SUFeedURL</key>
-	<string>https://vincode-io.github.io/Zavala/zavala-beta.xml</string>
+	<string>https://zavala.vincode.io/zavala-beta.xml</string>
 	<key>SUShowReleaseNotes</key>
 	<false/>
 	<key>UIApplicationSceneManifest</key>
