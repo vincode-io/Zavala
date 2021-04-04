@@ -254,6 +254,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		collapseAllInOutline()
 	}
 
+	@objc func indentRows(_ sender: Any?) {
+		indentRows()
+	}
+
+	@objc func outdentRows(_ sender: Any?) {
+		outdentRows()
+	}
+
 	@objc func toggleOutlineHideNotes(_ sender: Any?) {
 		toggleOutlineHideNotes()
 	}
@@ -539,6 +547,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.toggleOutlineFilter,
 			.expandAllInOutline,
 			.collapseAllInOutline,
+			.indent,
+			.outdent,
 			.print,
 			.share,
 			.sendCopy,
@@ -657,6 +667,30 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = L10n.collapseAllInOutline
 			item.isBordered = true
 			item.action = #selector(collapseAllInOutline(_:))
+			item.target = self
+			toolbarItem = item
+		case .indent:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isIndentRowsUnavailable ?? true
+			}
+			item.image = AppAssets.indent
+			item.label = L10n.indent
+			item.toolTip = L10n.indent
+			item.isBordered = true
+			item.action = #selector(indentRows(_:))
+			item.target = self
+			toolbarItem = item
+		case .outdent:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isOutdentRowsUnavailable ?? true
+			}
+			item.image = AppAssets.outdent
+			item.label = L10n.outdent
+			item.toolTip = L10n.outdent
+			item.isBordered = true
+			item.action = #selector(outdentRows(_:))
 			item.target = self
 			toolbarItem = item
 		case .toggleOutlineFilter:
