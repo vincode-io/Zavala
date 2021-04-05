@@ -199,8 +199,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return currentTextView?.cursorPosition
 	}
 	
-	private var cancelledKeyPresses = Set<UIKeyboardHIDUsage>()
-	private var currentKeyPresses = Set<UIKeyboardHIDUsage>()
+	private var cancelledKeys = Set<UIKey>()
+	private var isCursoringUp = false
+	private var isCursoringDown = false
 	
 	private var ellipsisBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.ellipsis, style: .plain, target: nil, action: nil)
 	private var filterBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.filterInactive, style: .plain, target: self, action: #selector(toggleOutlineFilter))
@@ -370,14 +371,31 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
 		super.pressesEnded(presses, with: event)
-		let keyCodes = presses.compactMap { $0.key?.keyCode }
-		keyCodes.forEach { currentKeyPresses.remove($0) }
+		for press in presses {
+			if let key = press.key {
+				if key.modifierFlags.subtracting(.numericPad).isEmpty {
+					if key.keyCode == .keyboardUpArrow {
+						isCursoringUp = false
+					}
+					if key.keyCode == .keyboardDownArrow {
+						isCursoringDown = false
+					}
+				}
+				if key.modifierFlags.contains(.control) && key.keyCode == .keyboardP {
+					isCursoringUp = false
+				}
+				if key.modifierFlags.contains(.control) && key.keyCode == .keyboardN {
+					isCursoringDown = false
+				}
+			}
+			
+		}
 	}
 	
 	override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
 		super.pressesCancelled(presses, with: event)
-		let keyCodes = presses.compactMap { $0.key?.keyCode }
-		keyCodes.forEach { cancelledKeyPresses.insert($0)	}
+		let keys = presses.compactMap { $0.key }
+		keys.forEach { cancelledKeys.insert($0)	}
 	}
 	
 	// MARK: Notifications
@@ -706,7 +724,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func repeatMoveCursorUp() {
-		guard currentKeyPresses.contains(.keyboardUpArrow) else { return }
+		guard isCursoringUp else { return }
 
 		if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView {
 			moveCursorUp(topicTextView: textView)
@@ -725,7 +743,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 
 	@objc func repeatMoveCursorDown() {
-		guard currentKeyPresses.contains(.keyboardDownArrow) else { return }
+		guard isCursoringDown else { return }
 		
 		if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView {
 			moveCursorDown(topicTextView: textView)
@@ -1397,36 +1415,35 @@ extension EditorViewController {
 	private func pressesBeganForEditMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
 		if !(CursorCoordinates.currentCoordinates?.isInNotes ?? false),
 		   presses.count == 1,
-		   presses.first?.key?.modifierFlags.subtracting(.numericPad).isEmpty ?? true,
-		   let keyCode = presses.first?.key?.keyCode {
+		   let key = presses.first?.key {
 			
-			guard cancelledKeyPresses.remove(keyCode) == nil else {
+			guard cancelledKeys.remove(key) == nil else {
 				return
 			}
 			
-			switch keyCode {
-			case .keyboardUpArrow:
+			switch (key.keyCode, true) {
+			case (.keyboardUpArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
 				if let topic = currentTextView as? EditorTextRowTopicTextView {
 					if topic.cursorIsOnTopLine {
-						currentKeyPresses.insert(keyCode)
+						isCursoringUp = true
 						repeatMoveCursorUp()
 					} else {
 						super.pressesBegan(presses, with: event)
 					}
 				} else {
-					currentKeyPresses.insert(keyCode)
+					isCursoringUp = true
 					repeatMoveCursorUp()
 				}
-			case .keyboardDownArrow:
+			case (.keyboardDownArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
 				if let topic = currentTextView as? EditorTextRowTopicTextView {
 					if topic.cursorIsOnBottomLine {
-						currentKeyPresses.insert(keyCode)
+						isCursoringDown = true
 						repeatMoveCursorDown()
 					} else {
 						super.pressesBegan(presses, with: event)
 					}
 				} else {
-					currentKeyPresses.insert(keyCode)
+					isCursoringDown = true
 					repeatMoveCursorDown()
 				}
 			default:
@@ -1441,12 +1458,12 @@ extension EditorViewController {
 	}
 	
 	private func pressesBeganForSelectMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-		if presses.count == 1, let keyCode = presses.first?.key?.keyCode {
-			guard cancelledKeyPresses.remove(keyCode) == nil else {
+		if presses.count == 1, let key = presses.first?.key {
+			guard cancelledKeys.remove(key) == nil else {
 				return
 			}
 			
-			switch keyCode {
+			switch key.keyCode {
 			case .keyboardUpArrow:
 				if let first = collectionView.indexPathsForSelectedItems?.sorted().first {
 					if first.row > 0 {
