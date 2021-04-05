@@ -1514,6 +1514,7 @@ extension EditorViewController {
 		collectionView.collectionViewLayout.invalidateLayout()
 		collectionView.layoutIfNeeded()
 		collectionView.contentOffset = contentOffset
+		makeCurrentCellVisibleIfNecessary()
 	}
 	
 	private func applyChanges(_ changes: OutlineElementChanges) {
@@ -2249,6 +2250,11 @@ extension EditorViewController {
 		}
 	}
 
+	private func makeCurrentCellVisibleIfNecessary() {
+		guard let shadowTableIndex = currentRows?.last?.shadowTableIndex else { return }
+		makeCellVisibleIfNecessary(indexPath: IndexPath(row: shadowTableIndex, section: adjustedRowsSection))
+	}
+	
 	private func makeCellVisibleIfNecessary(indexPath: IndexPath) {
 		guard let frame = collectionView.layoutAttributesForItem(at: indexPath)?.frame else {
 			return
