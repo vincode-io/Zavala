@@ -20,6 +20,14 @@ class EditorTextRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate 
 	}
 	
 	func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+		if let textView = textView {
+			textView.becomeFirstResponder()
+			let point = session.location(in: textView)
+			if let position = textView.closestPosition(to: point) {
+				textView.selectedTextRange = textView.textRange(from: position, to: position)
+			}
+		}
+		
 		let dropProposal: UIDropProposal = UIDropProposal(operation: .copy)
 		dropProposal.isPrecise = true
 		return dropProposal
@@ -32,7 +40,6 @@ class EditorTextRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate 
 			guard let text = strings.first as String? else { return }
 
 			if let textRange = textView.selectedTextRange {
-				textView.didBecomeActive()
 				textView.replace(textRange, withText: text)
 				textView.isTextChanged = true
 				textView.saveText()
