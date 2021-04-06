@@ -187,8 +187,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 	private(set) var outline: Outline?
 	
-	private var currentTextView: OutlineTextView? {
-		return UIResponder.currentFirstResponder as? OutlineTextView
+	private var currentTextView: EditorTextRowTextView? {
+		return UIResponder.currentFirstResponder as? EditorTextRowTextView
 	}
 	
 	private var currentTextRowStrings: TextRowStrings? {
@@ -534,7 +534,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		// Get ready for the new outline, buy saving the current one
 		outline?.cursorCoordinates = CursorCoordinates.bestCoordinates
 		
-		if let textField = UIResponder.currentFirstResponder as? OutlineTextView {
+		if let textField = UIResponder.currentFirstResponder as? EditorTextRowTextView {
 			textField.endEditing(true)
 		}
 		
@@ -2277,7 +2277,7 @@ extension EditorViewController {
 	}
 	
 	private func saveCurrentText() {
-		if let textView = UIResponder.currentFirstResponder as? OutlineTextView {
+		if let textView = UIResponder.currentFirstResponder as? EditorTextRowTextView {
 			textView.saveText()
 		}
 	}

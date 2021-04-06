@@ -21,7 +21,7 @@ protocol EditorTextRowNoteTextViewDelegate: AnyObject {
 	func editLink(_: EditorTextRowNoteTextView, _ link: String?, text: String?, range: NSRange)
 }
 
-class EditorTextRowNoteTextView: OutlineTextView {
+class EditorTextRowNoteTextView: EditorTextRowTextView {
 	
 	override var editorUndoManager: UndoManager? {
 		return editorDelegate?.editorRowNoteTextViewUndoManager
@@ -68,9 +68,7 @@ class EditorTextRowNoteTextView: OutlineTextView {
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
 		let result = super.becomeFirstResponder()
-		if let row = row {
-			editorDelegate?.didBecomeActive(self, row: row)
-		}
+		didBecomeActive()
 		return result
 	}
 	
@@ -85,6 +83,12 @@ class EditorTextRowNoteTextView: OutlineTextView {
 		return result
 	}
 
+	override func didBecomeActive() {
+		if let row = row {
+			editorDelegate?.didBecomeActive(self, row: row)
+		}
+	}
+	
 	override func deleteBackward() {
 		guard let textRow = row else { return }
 		if attributedText.length == 0 {

@@ -89,7 +89,7 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 	}
 
 	func restoreCursor(_ cursorCoordinates: CursorCoordinates) {
-		let textView: OutlineTextView?
+		let textView: EditorTextRowTextView?
 		if cursorCoordinates.isInNotes {
 			textView = (contentView as? EditorTextRowContentView)?.noteTextView
 		} else {

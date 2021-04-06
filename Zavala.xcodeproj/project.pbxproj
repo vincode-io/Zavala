@@ -74,7 +74,7 @@
 		511B2A492602410C00C04239 /* EditorBacklinkViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29FC2601901C00C04239 /* EditorBacklinkViewCell.swift */; };
 		511B2A4A2602410C00C04239 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F004A25608EF9009DC1F0 /* TimelineItem.swift */; };
 		511B2A4B2602410C00C04239 /* EditorTextRowContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2CD2563AAF60090C56B /* EditorTextRowContentConfiguration.swift */; };
-		511B2A4C2602410C00C04239 /* OutlineTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030BD257E1B9400609262 /* OutlineTextView.swift */; };
+		511B2A4C2602410C00C04239 /* EditorTextRowTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030BD257E1B9400609262 /* EditorTextRowTextView.swift */; };
 		511B2A4D2602410C00C04239 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B2A0426019A2700C04239 /* UIFont+.swift */; };
 		511B2A4E2602410C00C04239 /* EditorTagInputContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F221A25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift */; };
 		511B2A4F2602410C00C04239 /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C441255A0DE1004E0206 /* TimelineViewController.swift */; };
@@ -178,6 +178,8 @@
 		5167606D25F96B1F00AC0EBD /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF69B25E0862E0044DBAB /* AppDefaults.swift */; };
 		5167607725F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167607625F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift */; };
 		5167608525FBE4E500AC0EBD /* OutlineGetInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167608425FBE4E500AC0EBD /* OutlineGetInfoViewController.swift */; };
+		5167702D261CB5F300EFFD40 /* EditorTextRowDropInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167702C261CB5F300EFFD40 /* EditorTextRowDropInteractionDelegate.swift */; };
+		5167702E261CB5F300EFFD40 /* EditorTextRowDropInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167702C261CB5F300EFFD40 /* EditorTextRowDropInteractionDelegate.swift */; };
 		51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51692B0B25681AD3006B755F /* UIViewController+.swift */; };
 		5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5169928925AE4F5C00760C9D /* UICollectionView+.swift */; };
 		516F536C260806150038BAF8 /* EnhancedSearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */; };
@@ -251,7 +253,7 @@
 		51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */; };
 		51C030B4257E192100609262 /* EditorTitleViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030B3257E192100609262 /* EditorTitleViewCell.swift */; };
 		51C030B8257E198B00609262 /* EditorTitleTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030B7257E198B00609262 /* EditorTitleTextView.swift */; };
-		51C030BE257E1B9400609262 /* OutlineTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030BD257E1B9400609262 /* OutlineTextView.swift */; };
+		51C030BE257E1B9400609262 /* EditorTextRowTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030BD257E1B9400609262 /* EditorTextRowTextView.swift */; };
 		51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51C4C3CD2555F07A004E0206 /* CloudKit.framework */; };
 		51C4C3F92557470B004E0206 /* Templeton in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3F82557470B004E0206 /* Templeton */; };
 		51C4C40125576631004E0206 /* RSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C40025576631004E0206 /* RSCore */; };
@@ -458,6 +460,7 @@
 		5167606325F95E4600AC0EBD /* DocumentIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentIndexer.swift; sourceTree = "<group>"; };
 		5167607625F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOutlineGetInfoViewController.swift; sourceTree = "<group>"; };
 		5167608425FBE4E500AC0EBD /* OutlineGetInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineGetInfoViewController.swift; sourceTree = "<group>"; };
+		5167702C261CB5F300EFFD40 /* EditorTextRowDropInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowDropInteractionDelegate.swift; sourceTree = "<group>"; };
 		51692B0B25681AD3006B755F /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		5169928925AE4F5C00760C9D /* UICollectionView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+.swift"; sourceTree = "<group>"; };
 		516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedSearchTextField.swift; sourceTree = "<group>"; };
@@ -513,7 +516,7 @@
 		51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReloadItemsOperation.swift; sourceTree = "<group>"; };
 		51C030B3257E192100609262 /* EditorTitleViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleViewCell.swift; sourceTree = "<group>"; };
 		51C030B7257E198B00609262 /* EditorTitleTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleTextView.swift; sourceTree = "<group>"; };
-		51C030BD257E1B9400609262 /* OutlineTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineTextView.swift; sourceTree = "<group>"; };
+		51C030BD257E1B9400609262 /* EditorTextRowTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowTextView.swift; sourceTree = "<group>"; };
 		51C4C3AC2555E964004E0206 /* Zavala_project_debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Zavala_project_debug.xcconfig; sourceTree = "<group>"; };
 		51C4C3AD2555E964004E0206 /* Zavala_ios_target_common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Zavala_ios_target_common.xcconfig; sourceTree = "<group>"; };
 		51C4C3AE2555E964004E0206 /* Zavala_project_release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Zavala_project_release.xcconfig; sourceTree = "<group>"; };
@@ -657,7 +660,6 @@
 				5113B08C260C1F1700DBD11B /* OutlineFontCache.swift */,
 				511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */,
 				51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */,
-				51C030BD257E1B9400609262 /* OutlineTextView.swift */,
 				51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */,
 				5163ADF125C78CFB008F25CA /* SearchTextField.swift */,
 				51DFDC17259EA8D300C068C6 /* Selector+.swift */,
@@ -846,6 +848,8 @@
 				51D977F9257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift */,
 				51B2B2C72563A2180090C56B /* EditorTextRowTopicTextView.swift */,
 				512229672563507E008041AF /* EditorTextRowViewCell.swift */,
+				51C030BD257E1B9400609262 /* EditorTextRowTextView.swift */,
+				5167702C261CB5F300EFFD40 /* EditorTextRowDropInteractionDelegate.swift */,
 			);
 			path = TextRow;
 			sourceTree = "<group>";
@@ -1333,6 +1337,7 @@
 				511B2A432602410C00C04239 /* SidebarSearchContentConfiguration.swift in Sources */,
 				5115C02E2605898900416D67 /* MacOpenQuicklySidebarViewController.swift in Sources */,
 				511B2A442602410C00C04239 /* SettingsViewController.swift in Sources */,
+				5167702E261CB5F300EFFD40 /* EditorTextRowDropInteractionDelegate.swift in Sources */,
 				511B2A452602410C00C04239 /* Bundle-Extensions.swift in Sources */,
 				511B2A462602410C00C04239 /* SidebarItem.swift in Sources */,
 				511B2A472602410C00C04239 /* SidebarViewController.swift in Sources */,
@@ -1340,7 +1345,7 @@
 				511B2A492602410C00C04239 /* EditorBacklinkViewCell.swift in Sources */,
 				511B2A4A2602410C00C04239 /* TimelineItem.swift in Sources */,
 				511B2A4B2602410C00C04239 /* EditorTextRowContentConfiguration.swift in Sources */,
-				511B2A4C2602410C00C04239 /* OutlineTextView.swift in Sources */,
+				511B2A4C2602410C00C04239 /* EditorTextRowTextView.swift in Sources */,
 				51B9D99B26140E0600A66859 /* ExportPostActivity.swift in Sources */,
 				511B2A4D2602410C00C04239 /* UIFont+.swift in Sources */,
 				511B2A4E2602410C00C04239 /* EditorTagInputContentConfiguration.swift in Sources */,
@@ -1474,7 +1479,7 @@
 				511B29FD2601901C00C04239 /* EditorBacklinkViewCell.swift in Sources */,
 				519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */,
 				51B2B2CE2563AAF60090C56B /* EditorTextRowContentConfiguration.swift in Sources */,
-				51C030BE257E1B9400609262 /* OutlineTextView.swift in Sources */,
+				51C030BE257E1B9400609262 /* EditorTextRowTextView.swift in Sources */,
 				511B2A0526019A2700C04239 /* UIFont+.swift in Sources */,
 				514F221B25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift in Sources */,
 				51B9D99726140B0100A66859 /* PrintActivity.swift in Sources */,
@@ -1503,6 +1508,7 @@
 				5115C02D2605898900416D67 /* MacOpenQuicklySidebarViewController.swift in Sources */,
 				5163ADF225C78CFB008F25CA /* SearchTextField.swift in Sources */,
 				5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */,
+				5167702D261CB5F300EFFD40 /* EditorTextRowDropInteractionDelegate.swift in Sources */,
 				511B2A002601914400C04239 /* NSAttributedString+.swift in Sources */,
 				51B2B2C82563A2180090C56B /* EditorTextRowTopicTextView.swift in Sources */,
 				511B29FA26018FD100C04239 /* EditorBacklinkContentView.swift in Sources */,

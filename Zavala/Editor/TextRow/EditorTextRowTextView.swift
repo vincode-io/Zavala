@@ -1,5 +1,5 @@
 //
-//  OutlineTextView.swift
+//  EditorTextRowTextView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/7/20.
@@ -9,12 +9,12 @@ import UIKit
 import Templeton
 
 extension Selector {
-	static let toggleBoldface = #selector(OutlineTextView.outlineToggleBoldface(_:))
-	static let toggleItalics = #selector(OutlineTextView.outlineToggleItalics(_:))
-	static let editLink = #selector(OutlineTextView.editLink(_:))
+	static let toggleBoldface = #selector(EditorTextRowTextView.outlineToggleBoldface(_:))
+	static let toggleItalics = #selector(EditorTextRowTextView.outlineToggleItalics(_:))
+	static let editLink = #selector(EditorTextRowTextView.editLink(_:))
 }
 
-class OutlineTextView: UITextView {
+class EditorTextRowTextView: UITextView {
 	
 	var row: Row? {
 		didSet {
@@ -91,8 +91,8 @@ class OutlineTextView: UITextView {
 	let toggleItalicsCommand = UIKeyCommand(title: L10n.italic, action: .toggleItalics, input: "i", modifierFlags: [.command])
 	let editLinkCommand = UIKeyCommand(title: L10n.link, action: .editLink, input: "k", modifierFlags: [.command])
 
+	private var dropInteractionDelegate: EditorTextRowDropInteractionDelegate!
 	private var stackedUndoManager: UndoManager?
-	private static let dropDelegate = OutlineTextDropDelegate()
 
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		let textStorage = NSTextStorage()
@@ -103,7 +103,8 @@ class OutlineTextView: UITextView {
 		
 		super.init(frame: frame, textContainer: textContainer)
 
-		textDropDelegate = Self.dropDelegate
+		self.dropInteractionDelegate = EditorTextRowDropInteractionDelegate(textView: self)
+		self.addInteraction(UIDropInteraction(delegate: dropInteractionDelegate))
 
 		// These gesture recognizers will conflict with context menu preview dragging if not removed.
 		if traitCollection.userInterfaceIdiom != .mac {
@@ -210,6 +211,10 @@ class OutlineTextView: UITextView {
 	
 	@objc func editLink(_ sender: Any?) {
 		fatalError("editLink has not been implemented")
+	}
+
+	func didBecomeActive() {
+		fatalError("didBecomeActive has not been implemented")
 	}
 	
 	@objc func outlineToggleItalics(_ sender: Any?) {

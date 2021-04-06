@@ -25,7 +25,7 @@ protocol EditorTextRowTopicTextViewDelegate: AnyObject {
 	func editLink(_: EditorTextRowTopicTextView, _ link: String?, text: String?, range: NSRange)
 }
 
-class EditorTextRowTopicTextView: OutlineTextView {
+class EditorTextRowTopicTextView: EditorTextRowTextView {
 	
 	override var editorUndoManager: UndoManager? {
 		return editorDelegate?.editorRowTopicTextViewUndoManager
@@ -87,9 +87,7 @@ class EditorTextRowTopicTextView: OutlineTextView {
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
 		let result = super.becomeFirstResponder()
-		if let row = row {
-			editorDelegate?.didBecomeActive(self, row: row)
-		}
+		didBecomeActive()
 		return result
 	}
 	
@@ -103,6 +101,12 @@ class EditorTextRowTopicTextView: OutlineTextView {
 			editorDelegate?.didBecomeInactive(self, row: row)
 		}
 		return result
+	}
+	
+	override func didBecomeActive() {
+		if let row = row {
+			editorDelegate?.didBecomeActive(self, row: row)
+		}
 	}
 
 	override func deleteBackward() {
