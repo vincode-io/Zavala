@@ -2,9 +2,16 @@
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
     <channel>
         <title>Zavala Betas</title>
-        <link>https://vincode-io.github.io/Zavala/zavala-beta.xml</link>
+        <link>https://zavala.vincode.io/zavala-beta.xml</link>
         <description>Most recent Zavala changes with links to updates.</description>
         <language>en</language>
+
+<item>
+    <title>Zavala 1.0.0-alpha2</title>
+    <pubDate>Mon, 05 Apr 2021 20:00:00 -0600</pubDate>
+    <enclosure url="https://github.com/vincode-io/Zavala/releases/download/1.0.0-alpha2/Zavala.app.zip" sparkle:version="22" sparkle:shortVersionString="1.0.0-alpha2" length="4421981" type="application/zip" />
+    <sparkle:minimumSystemVersion>11.0.0</sparkle:minimumSystemVersion>
+</item>
 
 <item>
     <title>Zavala 1.0.0-alpha1</title>
