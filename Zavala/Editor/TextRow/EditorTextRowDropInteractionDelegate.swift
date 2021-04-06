@@ -38,12 +38,7 @@ class EditorTextRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate 
 			guard let textView = textView else { return }
 			let strings = stringItems as! [NSString]
 			guard let text = strings.first as String? else { return }
-
-			if let textRange = textView.selectedTextRange {
-				textView.replace(textRange, withText: text)
-				textView.isTextChanged = true
-				textView.saveText()
-			}
+			textView.replaceCharacters(textView.selectedRange, withText: text)
 		}
 		
 	}

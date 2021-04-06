@@ -196,6 +196,12 @@ class EditorTextRowTextView: UITextView {
 		}
 	}
 	
+	func replaceCharacters(_ range: NSRange, withText text: String) {
+		textStorage.replaceCharacters(in: range, with: text)
+		isTextChanged = true
+		saveText()
+	}
+	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
 		case .toggleBoldface, .toggleItalics, .editLink:
