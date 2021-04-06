@@ -103,6 +103,8 @@ class EditorTextRowTextView: UITextView {
 		
 		super.init(frame: frame, textContainer: textContainer)
 
+		textStorage.delegate = self
+
 		self.dropInteractionDelegate = EditorTextRowDropInteractionDelegate(textView: self)
 		self.addInteraction(UIDropInteraction(delegate: dropInteractionDelegate))
 
@@ -202,6 +204,24 @@ class EditorTextRowTextView: UITextView {
 		saveText()
 	}
 	
+	func replaceCharacters(_ range: NSRange, withImage image: UIImage) {
+		
+		let attachment = EditorTextRowTextAttachment()
+		attachment.image = image
+		let imageAttrText = NSMutableAttributedString(attachment: attachment)
+		let imageStyle = NSMutableParagraphStyle()
+		imageStyle.alignment = .center
+		imageAttrText.addAttribute(.paragraphStyle, value: imageStyle, range: NSRange(location: 0, length: imageAttrText.length))
+
+		let attrString = NSMutableAttributedString(attributedString: NSAttributedString(string: "\n\n"))
+		attrString.append(imageAttrText)
+		attrString.append(NSAttributedString(string: "\n\n"))
+		
+		textStorage.replaceCharacters(in: range, with: attrString)
+		isTextChanged = true
+		saveText()
+	}
+	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
 		case .toggleBoldface, .toggleItalics, .editLink:
@@ -236,6 +256,33 @@ class EditorTextRowTextView: UITextView {
 			
 			let editMenu = UIMenu(title: "", options: .displayInline, children: [editLinkCommand])
 			builder.insertSibling(editMenu, afterMenu: .standardEdit)
+		}
+	}
+	
+}
+
+// MARK: NSTextStorageDelegate
+
+extension EditorTextRowTextView: NSTextStorageDelegate {
+	
+	func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
+		textStorage.enumerateAttributes(in: editedRange, options: .longestEffectiveRangeNotRequired) { (attributes, range, _) in
+			var newAttributes = attributes
+			
+			for key in attributes.keys {
+				if key == .attachment, let nsAttachment = attributes[key] as? NSTextAttachment {
+					guard !(nsAttachment is EditorTextRowTextAttachment) else { continue }
+					if let image = nsAttachment.image {
+						let attachment = EditorTextRowTextAttachment(image: image)
+						newAttributes[key] = attachment
+					} else if let fileContents = nsAttachment.fileWrapper?.regularFileContents {
+						let attachment = EditorTextRowTextAttachment(data: fileContents, ofType: nsAttachment.fileType)
+						newAttributes[key] = attachment
+					}
+				}
+			}
+
+			textStorage.setAttributes(newAttributes, range: range)
 		}
 	}
 	

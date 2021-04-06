@@ -279,6 +279,8 @@
 		51E14F342560732F00320EDB /* SidebarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F332560732F00320EDB /* SidebarItem.swift */; };
 		51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */; };
 		51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */; };
+		51E23B5A261CFBC300CF27E7 /* EditorTextRowTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E23B59261CFBC300CF27E7 /* EditorTextRowTextAttachment.swift */; };
+		51E23B5B261CFBC300CF27E7 /* EditorTextRowTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E23B59261CFBC300CF27E7 /* EditorTextRowTextAttachment.swift */; };
 		51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F13EFD255E13A9004B85CA /* AppAssets.swift */; };
 		51F2859425AD11100019C573 /* SidebarSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859325AD11100019C573 /* SidebarSearchCell.swift */; };
 		51F2859725AD11DB0019C573 /* SidebarSearchContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859625AD11DB0019C573 /* SidebarSearchContentConfiguration.swift */; };
@@ -554,6 +556,7 @@
 		51E14F332560732F00320EDB /* SidebarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarItem.swift; sourceTree = "<group>"; };
 		51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSelectionOperation.swift; sourceTree = "<group>"; };
 		51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplySnapshotOperation.swift; sourceTree = "<group>"; };
+		51E23B59261CFBC300CF27E7 /* EditorTextRowTextAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowTextAttachment.swift; sourceTree = "<group>"; };
 		51F13EFD255E13A9004B85CA /* AppAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAssets.swift; sourceTree = "<group>"; };
 		51F2859325AD11100019C573 /* SidebarSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSearchCell.swift; sourceTree = "<group>"; };
 		51F2859625AD11DB0019C573 /* SidebarSearchContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSearchContentConfiguration.swift; sourceTree = "<group>"; };
@@ -850,6 +853,7 @@
 				512229672563507E008041AF /* EditorTextRowViewCell.swift */,
 				51C030BD257E1B9400609262 /* EditorTextRowTextView.swift */,
 				5167702C261CB5F300EFFD40 /* EditorTextRowDropInteractionDelegate.swift */,
+				51E23B59261CFBC300CF27E7 /* EditorTextRowTextAttachment.swift */,
 			);
 			path = TextRow;
 			sourceTree = "<group>";
@@ -1301,6 +1305,7 @@
 				511B2A282602410C00C04239 /* SidebarSearchContentView.swift in Sources */,
 				511B2A292602410C00C04239 /* EditorTitleTextView.swift in Sources */,
 				51B9D99E26140EDC00A66859 /* ExportMarkdownActivity.swift in Sources */,
+				51E23B5B261CFBC300CF27E7 /* EditorTextRowTextAttachment.swift in Sources */,
 				511B2A2B2602410C00C04239 /* AppAssets.swift in Sources */,
 				511B2A2C2602410C00C04239 /* UIColor+.swift in Sources */,
 				511B2A2D2602410C00C04239 /* EditorSearchBar.swift in Sources */,
@@ -1508,6 +1513,7 @@
 				5115C02D2605898900416D67 /* MacOpenQuicklySidebarViewController.swift in Sources */,
 				5163ADF225C78CFB008F25CA /* SearchTextField.swift in Sources */,
 				5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */,
+				51E23B5A261CFBC300CF27E7 /* EditorTextRowTextAttachment.swift in Sources */,
 				5167702D261CB5F300EFFD40 /* EditorTextRowDropInteractionDelegate.swift in Sources */,
 				511B2A002601914400C04239 /* NSAttributedString+.swift in Sources */,
 				51B2B2C82563A2180090C56B /* EditorTextRowTopicTextView.swift in Sources */,

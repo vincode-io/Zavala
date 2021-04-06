@@ -34,13 +34,15 @@ class EditorTextRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate 
 	}
 	
 	func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-		session.loadObjects(ofClass: NSString.self) { [weak textView] (stringItems) in
-			guard let textView = textView else { return }
-			let strings = stringItems as! [NSString]
-			guard let text = strings.first as String? else { return }
-			textView.replaceCharacters(textView.selectedRange, withText: text)
+		session.loadObjects(ofClass: UIImage.self) { [weak textView] (imageItems) in
+			guard let textView = textView, let image = imageItems.first as? UIImage else { return }
+			textView.replaceCharacters(textView.selectedRange, withImage: image)
 		}
 		
+		session.loadObjects(ofClass: NSString.self) { [weak textView] (stringItems) in
+			guard let textView = textView, let text = stringItems.first as? String else { return }
+			textView.replaceCharacters(textView.selectedRange, withText: text)
+		}
 	}
 	
 }
