@@ -357,7 +357,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				return self?.editorViewController?.isExpandAllInOutlineUnavailable ?? true
 			}
 			item.image = AppAssets.expandAll
-			item.label = L10n.expandAllInOutline
+			item.label = L10n.expand
 			item.toolTip = L10n.expandAllInOutline
 			item.isBordered = true
 			item.action = #selector(expandAllInOutline(_:))
@@ -369,7 +369,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				return self?.editorViewController?.isCollapseAllInOutlineUnavailable ?? true
 			}
 			item.image = AppAssets.collapseAll
-			item.label = L10n.collapseAllInOutline
+			item.label = L10n.collapse
 			item.toolTip = L10n.collapseAllInOutline
 			item.isBordered = true
 			item.action = #selector(collapseAllInOutline(_:))
