@@ -39,11 +39,6 @@ public final class TextRow: BaseRow, Codable {
 			guard let topic = topicData else { return nil }
 			if _topic == nil {
 				_topic = try? NSAttributedString(data: topic,
-												 options: [.documentType: NSAttributedString.DocumentType.rtfd, .characterEncoding: String.Encoding.utf8.rawValue],
-												 documentAttributes: nil)
-			}
-			if _topic == nil {
-				_topic = try? NSAttributedString(data: topic,
 												 options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
 												 documentAttributes: nil)
 			}
@@ -52,7 +47,7 @@ public final class TextRow: BaseRow, Codable {
 		set {
 			_topic = newValue
 			if let attrText = newValue {
-				topicData = try? attrText.data(from: .init(location: 0, length: attrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtfd])
+				topicData = try? attrText.data(from: .init(location: 0, length: attrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 			} else {
 				topicData = nil
 			}
@@ -65,11 +60,6 @@ public final class TextRow: BaseRow, Codable {
 			guard let note = noteData else { return nil }
 			if _note == nil {
 				_note = try? NSAttributedString(data: note,
-												options: [.documentType: NSAttributedString.DocumentType.rtfd, .characterEncoding: String.Encoding.utf8.rawValue],
-												documentAttributes: nil)
-			}
-			if _note == nil {
-				_note = try? NSAttributedString(data: note,
 												options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
 												documentAttributes: nil)
 			}
@@ -78,7 +68,7 @@ public final class TextRow: BaseRow, Codable {
 		set {
 			_note = newValue
 			if let noteAttrText = newValue {
-				noteData = try? noteAttrText.data(from: .init(location: 0, length: noteAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtfd])
+				noteData = try? noteAttrText.data(from: .init(location: 0, length: noteAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 			} else {
 				noteData = nil
 			}
@@ -102,7 +92,7 @@ public final class TextRow: BaseRow, Codable {
 		didSet {
 			if let topic = topicData {
 				_topic = try? NSAttributedString(data: topic,
-												 options: [.documentType: NSAttributedString.DocumentType.rtfd, .characterEncoding: String.Encoding.utf8.rawValue],
+												 options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
 												 documentAttributes: nil)
 			} else {
 				_topic = nil
@@ -114,7 +104,7 @@ public final class TextRow: BaseRow, Codable {
 		didSet {
 			if let note = noteData {
 				_note = try? NSAttributedString(data: note,
-												options: [.documentType: NSAttributedString.DocumentType.rtfd, .characterEncoding: String.Encoding.utf8.rawValue],
+												options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
 												documentAttributes: nil)
 			} else {
 				_note = nil
