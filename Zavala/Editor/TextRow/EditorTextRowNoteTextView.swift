@@ -89,6 +89,10 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 		}
 	}
 	
+	override func invalidateLayout() {
+		editorDelegate?.invalidateLayout(self)
+	}
+
 	override func deleteBackward() {
 		guard let textRow = row else { return }
 		if attributedText.length == 0 {

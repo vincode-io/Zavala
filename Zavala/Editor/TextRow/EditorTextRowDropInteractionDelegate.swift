@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RSCore
 
 class EditorTextRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {
 	
@@ -34,9 +35,14 @@ class EditorTextRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate 
 	}
 	
 	func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-		session.loadObjects(ofClass: UIImage.self) { [weak textView] (imageItems) in
-			guard let textView = textView, let image = imageItems.first as? UIImage else { return }
-			textView.replaceCharacters(textView.selectedRange, withImage: image)
+		if let itemProvider = session.items.first(where: { $0.itemProvider.hasItemConformingToTypeIdentifier(kUTTypeImage as String) })?.itemProvider {
+			itemProvider.loadDataRepresentation(forTypeIdentifier: kUTTypeImage as String) { [weak textView] (data, error) in
+				guard let textView = textView, let data = data, let cgImage = RSImage.scaleImage(data, maxPixelSize: 1024) else { return }
+				let image = UIImage(cgImage: cgImage)
+				DispatchQueue.main.async {
+					textView.replaceCharacters(textView.selectedRange, withImage: image)
+				}
+			}
 		}
 		
 		session.loadObjects(ofClass: NSString.self) { [weak textView] (stringItems) in

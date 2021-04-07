@@ -220,6 +220,7 @@ class EditorTextRowTextView: UITextView {
 		textStorage.replaceCharacters(in: range, with: attrString)
 		isTextChanged = true
 		saveText()
+		invalidateLayout()
 	}
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -241,6 +242,10 @@ class EditorTextRowTextView: UITextView {
 
 	func didBecomeActive() {
 		fatalError("didBecomeActive has not been implemented")
+	}
+	
+	func invalidateLayout() {
+		fatalError("invalidateLayout has not been implemented")
 	}
 	
 	@objc func outlineToggleItalics(_ sender: Any?) {
