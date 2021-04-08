@@ -209,8 +209,10 @@ class EditorTextRowTextView: UITextView {
 		attachment.image = image
 		let imageAttrText = NSAttributedString(attachment: attachment)
 
+		let savedTypingAttributes = typingAttributes
 		textStorage.replaceCharacters(in: range, with: imageAttrText)
 		selectedRange = .init(location: range.location + imageAttrText.length, length: 0)
+		typingAttributes = savedTypingAttributes
 		isTextChanged = true
 		saveText()
 		invalidateLayout()
