@@ -218,6 +218,7 @@ class EditorTextRowTextView: UITextView {
 		attrString.append(NSAttributedString(string: "\n\n"))
 		
 		textStorage.replaceCharacters(in: range, with: attrString)
+		selectedRange = .init(location: range.location + attrString.length, length: 0)
 		isTextChanged = true
 		saveText()
 		invalidateLayout()

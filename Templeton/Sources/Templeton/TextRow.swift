@@ -37,19 +37,26 @@ public final class TextRow: BaseRow, Codable {
 	public var topic: NSAttributedString? {
 		get {
 			guard let topic = topicData else { return nil }
-			if _topic == nil {
-				_topic = try? NSAttributedString(data: topic,
-												 options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
-												 documentAttributes: nil)
+			if topicCache == nil {
+				topicCache = try? NSAttributedString(data: topic,
+													 options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
+													 documentAttributes: nil)
+				topicCache = replaceImages(attrString: topicCache, isNotes: false)
 			}
-			return _topic
+			return topicCache
 		}
 		set {
-			_topic = newValue
 			if let attrText = newValue {
-				topicData = try? attrText.data(from: .init(location: 0, length: attrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+				let (cleanAttrText, newImages) = splitOffImages(attrString: attrText, isNotes: false)
+				
+				topicData = try? cleanAttrText.data(from: .init(location: 0, length: cleanAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+				
+				var noteImages = images?.filter { $0.isInNotes } ?? [Image]()
+				noteImages.append(contentsOf: newImages)
+				images = noteImages
 			} else {
 				topicData = nil
+				images = images?.filter { $0.isInNotes }
 			}
 			outline?.requestCloudKitUpdate(for: id)
 		}
@@ -58,19 +65,26 @@ public final class TextRow: BaseRow, Codable {
 	public var note: NSAttributedString? {
 		get {
 			guard let note = noteData else { return nil }
-			if _note == nil {
-				_note = try? NSAttributedString(data: note,
-												options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
-												documentAttributes: nil)
+			if noteCache == nil {
+				noteCache = try? NSAttributedString(data: note,
+													options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
+													documentAttributes: nil)
+				noteCache = replaceImages(attrString: noteCache, isNotes: true)
 			}
-			return _note
+			return noteCache
 		}
 		set {
-			_note = newValue
-			if let noteAttrText = newValue {
-				noteData = try? noteAttrText.data(from: .init(location: 0, length: noteAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+			if let attrText = newValue {
+				let (cleanAttrText, newImages) = splitOffImages(attrString: attrText, isNotes: true)
+				
+				noteData = try? cleanAttrText.data(from: .init(location: 0, length: cleanAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+
+				var topicImages = images?.filter { !$0.isInNotes } ?? [Image]()
+				topicImages.append(contentsOf: newImages)
+				images = topicImages
 			} else {
 				noteData = nil
+				images = images?.filter { !$0.isInNotes }
 			}
 			outline?.requestCloudKitUpdate(for: id)
 		}
@@ -90,25 +104,20 @@ public final class TextRow: BaseRow, Codable {
 
 	var topicData: Data? {
 		didSet {
-			if let topic = topicData {
-				_topic = try? NSAttributedString(data: topic,
-												 options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
-												 documentAttributes: nil)
-			} else {
-				_topic = nil
-			}
+			topicCache = nil
 		}
 	}
 	
 	var noteData: Data? {
 		didSet {
-			if let note = noteData {
-				_note = try? NSAttributedString(data: note,
-												options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
-												documentAttributes: nil)
-			} else {
-				_note = nil
-			}
+			noteCache = nil
+		}
+	}
+	
+	var images: [Image]? {
+		didSet {
+			topicCache = nil
+			noteCache = nil
 		}
 	}
 	
@@ -119,10 +128,11 @@ public final class TextRow: BaseRow, Codable {
 		case isExpanded = "isExpanded"
 		case isComplete = "isComplete"
 		case rowOrder = "rowOrder"
+		case images = "images"
 	}
 	
-	private var _topic: NSAttributedString?
-	private var _note: NSAttributedString?
+	private var topicCache: NSAttributedString?
+	private var noteCache: NSAttributedString?
 
 	public init(document: Document) {
 		self.isComplete = false
@@ -140,17 +150,6 @@ public final class TextRow: BaseRow, Codable {
 		if let notePlainText = notePlainText {
 			note = NSAttributedString(markdownRepresentation: notePlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		}
-	}
-	
-	internal init(id: EntityID, topicData: Data? = nil, noteData: Data? = nil, isComplete: Bool, isExpanded: Bool, rowOrder: [EntityID]) {
-		self.isComplete = false
-		super.init()
-		self.id = id
-		self.topicData = topicData
-		self.noteData = noteData
-		self.isComplete = isComplete
-		self.isExpanded = isExpanded
-		self.rowOrder = rowOrder
 	}
 	
 	public init(from decoder: Decoder) throws {
@@ -179,6 +178,12 @@ public final class TextRow: BaseRow, Codable {
 		} else {
 			self.rowOrder = [EntityID]()
 		}
+
+		if let images = try? container.decode([Image].self, forKey: .images) {
+			self.images = images
+		} else {
+			self.images = [Image]()
+		}
 	}
 	
 	init(id: EntityID) {
@@ -196,6 +201,7 @@ public final class TextRow: BaseRow, Codable {
 		try container.encode(isExpanded, forKey: .isExpanded)
 		try container.encode(isComplete, forKey: .isComplete)
 		try container.encode(rowOrder, forKey: .rowOrder)
+		try container.encode(images, forKey: .images)
 	}
 	
 	public func complete() {
@@ -215,6 +221,7 @@ public final class TextRow: BaseRow, Codable {
 		textRow.isExpanded = isExpanded
 		textRow.isComplete = isComplete
 		textRow.rowOrder = rowOrder
+		textRow.images = images
 		return .text(textRow)
 	}
 
@@ -370,4 +377,48 @@ extension TextRow {
 	override public var debugDescription: String {
 		return "\(topic?.string ?? "") (\(id))"
 	}
+}
+
+// MARK: Helpers
+
+extension TextRow {
+	
+	func replaceImages(attrString: NSAttributedString?, isNotes: Bool) -> NSAttributedString? {
+		guard let attrString = attrString else { return nil }
+		let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
+		
+		mutableAttrString.enumerateAttribute(.attachment, in: .init(location: 0, length: mutableAttrString.length), options: []) { (attribute, range, _) in
+			mutableAttrString.removeAttribute(.attachment, range: range)
+		}
+		
+		for image in images ?? [Image]() {
+			if image.isInNotes == isNotes {
+				let attachment = NSTextAttachment(data: image.data, ofType: kUTTypePNG as String)
+				let imageAttrText = NSMutableAttributedString(attachment: attachment)
+				let imageStyle = NSMutableParagraphStyle()
+				imageStyle.alignment = .center
+				imageAttrText.addAttribute(.paragraphStyle, value: imageStyle, range: NSRange(location: 0, length: imageAttrText.length))
+				mutableAttrString.insert(imageAttrText, at: image.offset)
+			}
+		}
+		
+		return mutableAttrString
+	}
+	
+	func splitOffImages(attrString: NSAttributedString, isNotes: Bool) -> (NSAttributedString, [Image]) {
+		let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
+		var images = [Image]()
+		
+		mutableAttrString.enumerateAttribute(.attachment, in: .init(location: 0, length: mutableAttrString.length), options: []) { (attribute, range, _) in
+			if let pngData = (attribute as? NSTextAttachment)?.image?.pngData() {
+				let entityID = EntityID.image(id.accountID, id.documentUUID, id.rowUUID, UUID().uuidString)
+				let image = Image(id: entityID, isInNotes: isNotes, offset: range.location, data: pngData)
+				images.append(image)
+			}
+			mutableAttrString.removeAttribute(.attachment, range: range)
+		}
+		
+		return (mutableAttrString, images)
+	}
+	
 }

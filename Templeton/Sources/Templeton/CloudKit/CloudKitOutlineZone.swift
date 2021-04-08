@@ -55,6 +55,16 @@ final class CloudKitOutlineZone: CloudKitZone {
 		}
 	}
 	
+	struct CloudKitImage {
+		static let recordType = "Image"
+		struct Fields {
+			static let row = "row"
+			static let isInNotes = "isInNotes"
+			static let offset = "offset"
+			static let asset = "asset"
+		}
+	}
+	
 	init(container: CKContainer) {
 		self.container = container
 		self.database = container.privateCloudDatabase

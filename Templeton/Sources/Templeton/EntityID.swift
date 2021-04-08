@@ -11,6 +11,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 	case account(Int)
 	case document(Int, String) // Account, Document
 	case row(Int, String, String) // Account, Document, Row
+	case image(Int, String, String, String) // Account, Document, Row, Image
 	case allDocuments(Int) // Account
 	case recentDocuments(Int) // Account
 	case tagDocuments(Int, String) // Account, Tag
@@ -23,6 +24,8 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case .document(let accountID, _):
 			return accountID
 		case .row(let accountID, _, _):
+			return accountID
+		case .image(let accountID, _, _, _):
 			return accountID
 		case .allDocuments(let accountID):
 			return accountID
@@ -43,6 +46,8 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return "document:\(accountID)_\(documentID)"
 		case .row(let accountID, let documentID, let rowID):
 			return "row:\(accountID)_\(documentID)_\(rowID)"
+		case .image(let accountID, let documentID, let rowID, let imageID):
+			return "image:\(accountID)_\(documentID)_\(rowID)_\(imageID)"
 		case .search(let searchText):
 			return "search:\(searchText)"
 		case .allDocuments(let id):
@@ -73,6 +78,14 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 				"accountID": accountID,
 				"documentID": documentID,
 				"rowID": rowID
+			]
+		case .image(let accountID, let documentID, let rowID, let imageID):
+			return [
+				"type": "image",
+				"accountID": accountID,
+				"documentID": documentID,
+				"rowID": rowID,
+				"imageID": imageID
 			]
 		case .search(let searchText):
 			return [
@@ -149,6 +162,17 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		switch self {
 		case .row(_, _, let rowID):
 			return rowID
+		case .image(_, _, let rowID, _):
+			return rowID
+		default:
+			fatalError()
+		}
+	}
+	
+	var imageUUID: String {
+		switch self {
+		case .image(_, _, _, let imageID):
+			return imageID
 		default:
 			fatalError()
 		}
@@ -160,6 +184,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		case accountID
 		case documentID
 		case rowID
+		case imageID
 		case tagID
 	}
 	
@@ -182,6 +207,13 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			let ids = idString.split(separator: "_")
 			if let accountID = Int(ids[0]) {
 				self = .row(accountID, String(ids[1]), String(ids[2]))
+				return
+			}
+		} else if description.starts(with: "image:") {
+			let idString = description.suffix(from: description.index(description.startIndex, offsetBy: 6))
+			let ids = idString.split(separator: "_")
+			if let accountID = Int(ids[0]) {
+				self = .image(accountID, String(ids[1]), String(ids[2]), String(ids[3]))
 				return
 			}
 		} else if description.starts(with: "search:") {
@@ -228,6 +260,12 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			let documentID = try container.decode(String.self, forKey: .documentID)
 			let rowID = try container.decode(String.self, forKey: .rowID)
 			self = .row(accountID, documentID, rowID)
+		case "image":
+			let accountID = try container.decode(Int.self, forKey: .accountID)
+			let documentID = try container.decode(String.self, forKey: .documentID)
+			let rowID = try container.decode(String.self, forKey: .rowID)
+			let imageID = try container.decode(String.self, forKey: .imageID)
+			self = .image(accountID, documentID, rowID, imageID)
 		case "search":
 			let searchText = try container.decode(String.self, forKey: .searchText)
 			self = .search(searchText)
@@ -262,6 +300,12 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			guard let documentID = userInfo["documentID"] as? String else { return nil }
 			guard let rowID = userInfo["rowID"] as? String else { return nil }
 			self = .row(accountID, documentID, rowID)
+		case "image":
+			guard let accountID = userInfo["accountID"] as? Int else { return nil }
+			guard let documentID = userInfo["documentID"] as? String else { return nil }
+			guard let rowID = userInfo["rowID"] as? String else { return nil }
+			guard let imageID = userInfo["imageID"] as? String else { return nil }
+			self = .image(accountID, documentID, rowID, imageID)
 		case "search":
 			guard let searchText = userInfo["searchText"] as? String else { return nil }
 			self = .search(searchText)
@@ -306,6 +350,12 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			try container.encode(accountID, forKey: .accountID)
 			try container.encode(documentID, forKey: .documentID)
 			try container.encode(rowID, forKey: .rowID)
+		case .image(let accountID, let documentID, let rowID, let imageID):
+			try container.encode("image", forKey: .type)
+			try container.encode(accountID, forKey: .accountID)
+			try container.encode(documentID, forKey: .documentID)
+			try container.encode(rowID, forKey: .rowID)
+			try container.encode(imageID, forKey: .imageID)
 		case .search(let searchText):
 			try container.encode("search", forKey: .type)
 			try container.encode(searchText, forKey: .searchText)
