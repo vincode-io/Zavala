@@ -394,10 +394,7 @@ extension TextRow {
 		for image in images ?? [Image]() {
 			if image.isInNotes == isNotes {
 				let attachment = NSTextAttachment(data: image.data, ofType: kUTTypePNG as String)
-				let imageAttrText = NSMutableAttributedString(attachment: attachment)
-				let imageStyle = NSMutableParagraphStyle()
-				imageStyle.alignment = .center
-				imageAttrText.addAttribute(.paragraphStyle, value: imageStyle, range: NSRange(location: 0, length: imageAttrText.length))
+				let imageAttrText = NSAttributedString(attachment: attachment)
 				mutableAttrString.insert(imageAttrText, at: image.offset)
 			}
 		}

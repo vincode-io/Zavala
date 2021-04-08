@@ -205,20 +205,12 @@ class EditorTextRowTextView: UITextView {
 	}
 	
 	func replaceCharacters(_ range: NSRange, withImage image: UIImage) {
-		
 		let attachment = EditorTextRowTextAttachment()
 		attachment.image = image
-		let imageAttrText = NSMutableAttributedString(attachment: attachment)
-		let imageStyle = NSMutableParagraphStyle()
-		imageStyle.alignment = .center
-		imageAttrText.addAttribute(.paragraphStyle, value: imageStyle, range: NSRange(location: 0, length: imageAttrText.length))
+		let imageAttrText = NSAttributedString(attachment: attachment)
 
-		let attrString = NSMutableAttributedString(attributedString: NSAttributedString(string: "\n\n"))
-		attrString.append(imageAttrText)
-		attrString.append(NSAttributedString(string: "\n\n"))
-		
-		textStorage.replaceCharacters(in: range, with: attrString)
-		selectedRange = .init(location: range.location + attrString.length, length: 0)
+		textStorage.replaceCharacters(in: range, with: imageAttrText)
+		selectedRange = .init(location: range.location + imageAttrText.length, length: 0)
 		isTextChanged = true
 		saveText()
 		invalidateLayout()
