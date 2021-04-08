@@ -53,10 +53,10 @@ public final class TextRow: BaseRow, Codable {
 				
 				var noteImages = images?.filter { $0.isInNotes } ?? [Image]()
 				noteImages.append(contentsOf: newImages)
-				images = noteImages
+				updateImages(noteImages)
 			} else {
 				topicData = nil
-				images = images?.filter { $0.isInNotes }
+				updateImages(images?.filter { $0.isInNotes })
 			}
 			outline?.requestCloudKitUpdate(for: id)
 		}
@@ -81,10 +81,10 @@ public final class TextRow: BaseRow, Codable {
 
 				var topicImages = images?.filter { !$0.isInNotes } ?? [Image]()
 				topicImages.append(contentsOf: newImages)
-				images = topicImages
+				updateImages(images)
 			} else {
 				noteData = nil
-				images = images?.filter { !$0.isInNotes }
+				updateImages(images?.filter { !$0.isInNotes })
 			}
 			outline?.requestCloudKitUpdate(for: id)
 		}
@@ -382,6 +382,20 @@ extension TextRow {
 // MARK: Helpers
 
 extension TextRow {
+	
+	func updateImages(_ images: [Image]?) {
+		let newImages = images ?? [Image]()
+		
+		let diff = newImages.difference(from: images ?? [Image]())
+		for change in diff {
+			switch change {
+			case .insert(_, let image, _), .remove(_, let image, _):
+				outline?.requestCloudKitUpdate(for: image.id)
+			}
+		}
+		
+		self.images = newImages
+	}
 	
 	func replaceImages(attrString: NSAttributedString?, isNotes: Bool) -> NSAttributedString? {
 		guard let attrString = attrString else { return nil }
