@@ -36,7 +36,6 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 			UIKeyCommand(action: #selector(indent(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(outdent(_:))),
 			UIKeyCommand(input: "\t", modifierFlags: [.alternate], action: #selector(insertTab(_:))),
-			UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(createRow(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(insertReturn(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(insertRow(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(split(_:))),
@@ -235,6 +234,17 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 	func textViewDidEndEditing(_ textView: UITextView) {
 		detectData()
 		saveText()
+	}
+	
+	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+		guard let textRow = row else { return true }
+		switch text {
+		case "\n":
+			editorDelegate?.createRow(self, afterRow: textRow)
+			return false
+		default:
+			return true
+		}
 	}
 	
 	func textViewDidChange(_ textView: UITextView) {
