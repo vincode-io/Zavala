@@ -30,7 +30,7 @@ class EditorTextRowTextAttachment: NSTextAttachment {
 		
 		var scalingFactor: CGFloat = 1.0
 		if width < imageSize.width {
-			scalingFactor = (width * 0.9) / imageSize.width
+			scalingFactor = width / imageSize.width
 		}
 
 		return CGRect(x: 0, y: 0, width: imageSize.width * scalingFactor, height: imageSize.height * scalingFactor)
