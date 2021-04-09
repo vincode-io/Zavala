@@ -204,6 +204,10 @@ public final class TextRow: BaseRow, Codable {
 		try container.encode(images, forKey: .images)
 	}
 	
+	public override func findImage(id: EntityID) -> Image? {
+		return images?.first(where: { $0.id == id })
+	}
+
 	public func complete() {
 		isComplete = true
 		outline?.requestCloudKitUpdate(for: id)

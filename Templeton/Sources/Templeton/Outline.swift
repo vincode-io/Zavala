@@ -384,6 +384,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return keyedRows?[id]
 	}
 	
+	public func findImage(id: EntityID) -> Image? {
+		let rowID = EntityID.row(id.accountID, id.documentUUID, id.rowUUID)
+		return findRow(id: rowID)?.findImage(id: id)
+	}
+	
 	public func firstIndexOfRow(_ row: Row) -> Int? {
 		return rowOrder?.firstIndex(of: row.id)
 	}

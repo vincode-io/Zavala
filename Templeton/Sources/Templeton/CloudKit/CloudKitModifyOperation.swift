@@ -15,6 +15,7 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 	class CombinedRequest {
 		var documentRequest: CloudKitActionRequest?
 		var rowRequests = [CloudKitActionRequest]()
+		var imageRequests = [CloudKitActionRequest]()
 	}
 	
 	override func run() {
@@ -30,6 +31,8 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 			operationDelegate?.operationDidComplete(self)
 			return
 		}
+		
+		var tempFileURLs = [URL]()
 		
 		for documentUUID in combinedRequests.keys {
 			guard let combinedRequest = combinedRequests[documentUUID] else { continue }
@@ -50,10 +53,10 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 				addSave(document)
 			}
 
-			// Now process all the rows
 			guard let outline = document.outline, let zoneID = outline.zoneID else { continue }
 			let outlineRecordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
 			
+			// Now process all the rows
 			for rowRequest in combinedRequest.rowRequests {
 				if let row = outline.findRow(id: rowRequest.id) {
 					addSave(zoneID: zoneID, outlineRecordID: outlineRecordID, row: row)
@@ -62,6 +65,17 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 				}
 			}
 			
+			// And process all the images
+			for rowRequest in combinedRequest.imageRequests {
+				if let image = outline.findImage(id: rowRequest.id) {
+					let imageURL = addSave(zoneID: zoneID, image: image)
+					tempFileURLs.append(imageURL)
+				} else {
+					addDeleteRow(rowRequest)
+				}
+			}
+			
+
 			document.unload()
 		}
 		
@@ -86,6 +100,7 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 		group.notify(queue: DispatchQueue.main) {
 			if self.error == nil {
 				self.deleteRequests()
+				self.deleteTempFiles(tempFileURLs)
 			}
 			self.operationDelegate?.operationDidComplete(self)
 		}
@@ -120,6 +135,15 @@ extension CloudKitModifyOperation {
 					combinedRequest.rowRequests.append(queuedRequest)
 					combinedRequests[documentUUID] = combinedRequest
 				}
+			case .image(_, let documentUUID, _, _):
+				if let combinedRequest = combinedRequests[documentUUID] {
+					combinedRequest.imageRequests.append(queuedRequest)
+					combinedRequests[documentUUID] = combinedRequest
+				} else {
+					let combinedRequest = CombinedRequest()
+					combinedRequest.imageRequests.append(queuedRequest)
+					combinedRequests[documentUUID] = combinedRequest
+				}
 			default:
 				fatalError()
 			}
@@ -130,6 +154,12 @@ extension CloudKitModifyOperation {
 	
 	private func deleteRequests() {
 		try? FileManager.default.removeItem(at: CloudKitActionRequest.actionRequestFile)
+	}
+	
+	private func deleteTempFiles(_ urls: [URL]) {
+		for url in urls {
+			try? FileManager.default.removeItem(at: url)
+		}
 	}
 	
 	private func addSave(_ document: Document) {
@@ -167,6 +197,27 @@ extension CloudKitModifyOperation {
 		record[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] = textRow.rowOrder.map { $0.rowUUID }
 
 		addSave(zoneID, record)
+	}
+	
+	private func addSave(zoneID: CKRecordZone.ID, image: Image) -> URL {
+		let recordID = CKRecord.ID(recordName: image.id.description, zoneID: zoneID)
+		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitImage.recordType, recordID: recordID)
+		
+		let rowID = EntityID.row(image.id.accountID, image.id.documentUUID, image.id.rowUUID)
+		let rowRecordID = CKRecord.ID(recordName: rowID.description, zoneID: zoneID)
+		
+		record.parent = CKRecord.Reference(recordID: rowRecordID, action: .none)
+		record[CloudKitOutlineZone.CloudKitImage.Fields.row] = CKRecord.Reference(recordID: rowRecordID, action: .deleteSelf)
+		record[CloudKitOutlineZone.CloudKitImage.Fields.isInNotes] = image.isInNotes
+		record[CloudKitOutlineZone.CloudKitImage.Fields.offset] = image.offset
+		
+		let imageURL = FileManager.default.temporaryDirectory.appendingPathComponent(image.id.imageUUID).appendingPathExtension("png")
+		try? image.data.write(to: imageURL)
+		record[CloudKitOutlineZone.CloudKitImage.Fields.asset] = CKAsset(fileURL: imageURL)
+
+		addSave(zoneID, record)
+		
+		return imageURL
 	}
 	
 	private func addSave(_ zoneID: CKRecordZone.ID, _ record: CKRecord) {

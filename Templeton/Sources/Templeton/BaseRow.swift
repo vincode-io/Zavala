@@ -94,6 +94,10 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		rowOrder = newOrder
 	}
 	
+	public func findImage(id: EntityID) -> Image? {
+		return nil
+	}
+	
 	public func firstIndexOfRow(_ row: Row) -> Int? {
 		return rowOrder.firstIndex(of: row.id)
 	}

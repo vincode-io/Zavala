@@ -174,6 +174,10 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
+	public func findImage(id: EntityID) -> Image? {
+		return associatedRow.findImage(id: id)
+	}
+	
 	public func firstIndexOfRow(_ row: Row) -> Int? {
 		return associatedRow.firstIndexOfRow(row)
 	}
