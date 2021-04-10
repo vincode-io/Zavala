@@ -100,11 +100,6 @@ private extension RowsFile {
 			os_log(.error, log: log, "RowsFile read from disk coordination failed: %@.", error.localizedDescription)
 		}
 
-		// As we migrate to compressed data, the previous data may still be uncompressed
-//		if let decompressedData = try? (fileData as NSData?)?.decompressed(using: .lz4) as Data? {
-//			fileData = decompressedData
-//		}
-		
 		guard let rowsData = fileData else {
 			return
 		}
@@ -137,10 +132,6 @@ private extension RowsFile {
 			return
 		}
 
-//		if let compressedData = try? (rowsData as NSData?)?.compressed(using: .lz4) as Data? {
-//			rowsData = compressedData
-//		}
-		
 		let errorPointer: NSErrorPointer = nil
 		let fileCoordinator = NSFileCoordinator(filePresenter: managedFile)
 		
