@@ -1681,6 +1681,10 @@ extension Outline {
 			}
 		}
 		
+		if !updatedRowIDs.isEmpty {
+			rowsFile?.markAsDirty()
+		}
+		
 		guard beingViewedCount > 0 else { return }
 
 		var reloadRows = [Row]()

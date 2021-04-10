@@ -238,14 +238,14 @@ public final class Account: NSObject, Identifiable, Codable {
 			let outline = document.outline!
 			outline.load()
 			outline.apply(update, pendingIDs: pendingIDs)
-			outline.forceSave()
+			outline.save()
 			outline.unload()
 		} else {
 			let outline = Outline(id: update.documentID)
 			outline.zoneID = update.zoneID
 
 			outline.apply(update, pendingIDs: pendingIDs)
-			outline.forceSave()
+			outline.save()
 			outline.unload()
 			
 			if documents == nil {
