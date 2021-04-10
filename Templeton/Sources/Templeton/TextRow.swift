@@ -51,9 +51,9 @@ public final class TextRow: BaseRow, Codable {
 				
 				topicData = try? cleanAttrText.data(from: .init(location: 0, length: cleanAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 				
-				var noteImages = images?.filter { $0.isInNotes } ?? [Image]()
-				noteImages.append(contentsOf: newImages)
-				updateImages(noteImages)
+				var topicImages = images?.filter { $0.isInNotes } ?? [Image]()
+				topicImages.append(contentsOf: newImages)
+				updateImages(topicImages)
 			} else {
 				topicData = nil
 				updateImages(images?.filter { $0.isInNotes })
@@ -79,9 +79,9 @@ public final class TextRow: BaseRow, Codable {
 				
 				noteData = try? cleanAttrText.data(from: .init(location: 0, length: cleanAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 
-				var topicImages = images?.filter { !$0.isInNotes } ?? [Image]()
-				topicImages.append(contentsOf: newImages)
-				updateImages(images)
+				var noteImages = images?.filter { !$0.isInNotes } ?? [Image]()
+				noteImages.append(contentsOf: newImages)
+				updateImages(noteImages)
 			} else {
 				noteData = nil
 				updateImages(images?.filter { !$0.isInNotes })
@@ -387,10 +387,10 @@ extension TextRow {
 
 extension TextRow {
 	
-	func updateImages(_ images: [Image]?) {
-		let newImages = images ?? [Image]()
+	func updateImages(_ newImages: [Image]?) {
+		let newImages = newImages ?? [Image]()
 		
-		let diff = newImages.difference(from: images ?? [Image]())
+		let diff = newImages.difference(from: self.images ?? [Image]())
 		for change in diff {
 			switch change {
 			case .insert(_, let image, _), .remove(_, let image, _):
