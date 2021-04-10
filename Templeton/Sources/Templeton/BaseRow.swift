@@ -98,6 +98,12 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		return nil
 	}
 	
+	public func saveImage(_ image: Image) {
+	}
+
+	public func deleteImage(id: EntityID) {
+	}
+	
 	public func firstIndexOfRow(_ row: Row) -> Int? {
 		return rowOrder.firstIndex(of: row.id)
 	}

@@ -178,6 +178,14 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		return associatedRow.findImage(id: id)
 	}
 	
+	public func saveImage(_ image: Image) {
+		associatedRow.saveImage(image)
+	}
+
+	public func deleteImage(id: EntityID) {
+		associatedRow.deleteImage(id: id)
+	}
+
 	public func firstIndexOfRow(_ row: Row) -> Int? {
 		return associatedRow.firstIndexOfRow(row)
 	}

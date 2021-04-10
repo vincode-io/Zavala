@@ -44,6 +44,9 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 			case .row(let accountID, let documentUUID, _):
 				let documentID = EntityID.document(accountID, documentUUID)
 				update(for: documentID, zoneID: deletedRecordKey.recordID.zoneID).deleteRowRecordIDs.append(entityID)
+			case .image(let accountID, let documentUUID, _, _):
+				let documentID = EntityID.document(accountID, documentUUID)
+				update(for: documentID, zoneID: deletedRecordKey.recordID.zoneID).deleteImageRecordIDs.append(entityID)
 			default:
 				assertionFailure("Unknown record type: \(deletedRecordKey.recordType)")
 			}
@@ -57,6 +60,9 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 			case .row(let accountID, let documentUUID, _):
 				let documentID = EntityID.document(accountID, documentUUID)
 				update(for: documentID, zoneID: changedRecord.recordID.zoneID).saveRowRecords.append(changedRecord)
+			case .image(let accountID, let documentUUID, _, _):
+				let documentID = EntityID.document(accountID, documentUUID)
+				update(for: documentID, zoneID: changedRecord.recordID.zoneID).saveImageRecords.append(changedRecord)
 			default:
 				assertionFailure("Unknown record type: \(changedRecord.recordType)")
 			}

@@ -17,7 +17,9 @@ class CloudKitOutlineUpdate {
 	var saveOutlineRecord: CKRecord?
 	var deleteRowRecordIDs = [EntityID]()
 	var saveRowRecords = [CKRecord]()
-	
+	var deleteImageRecordIDs = [EntityID]()
+	var saveImageRecords = [CKRecord]()
+
 	init(documentID: EntityID, zoneID: CKRecordZone.ID) {
 		self.documentID = documentID
 		self.zoneID = zoneID

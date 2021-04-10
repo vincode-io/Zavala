@@ -208,6 +208,25 @@ public final class TextRow: BaseRow, Codable {
 		return images?.first(where: { $0.id == id })
 	}
 
+	public override func saveImage(_ image: Image) {
+		if images == nil {
+			images = [Image]()
+		}
+
+		if !images!.contains(image) {
+			images!.append(image)
+		}
+		
+		topicCache = nil
+		noteCache = nil
+	}
+
+	public override func deleteImage(id: EntityID) {
+		images?.removeAll(where: { $0.id == id })
+		topicCache = nil
+		noteCache = nil
+	}
+
 	public func complete() {
 		isComplete = true
 		outline?.requestCloudKitUpdate(for: id)

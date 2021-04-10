@@ -1598,8 +1598,8 @@ extension Outline {
 			keyedRows?.removeValue(forKey: deleteRecordID)
 		}
 		
-		for saveRowRecord in update.saveRowRecords {
-			guard let entityID = EntityID(description: saveRowRecord.recordID.recordName) else { continue }
+		for saveRecord in update.saveRowRecords {
+			guard let entityID = EntityID(description: saveRecord.recordID.recordName) else { continue }
 
 			var isExistingRecord = false
 			var row: Row
@@ -1610,7 +1610,7 @@ extension Outline {
 				row = .text(TextRow(id: entityID))
 			}
 
-			let updatedTopicData = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.topicData] as? Data
+			let updatedTopicData = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.topicData] as? Data
 			if row.textRow?.topicData != updatedTopicData {
 				row.textRow?.topicData = updatedTopicData
 				if isExistingRecord {
@@ -1618,7 +1618,7 @@ extension Outline {
 				}
 			}
 			
-			let updatedNoteData = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.noteData] as? Data
+			let updatedNoteData = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.noteData] as? Data
 			if row.textRow?.noteData != updatedNoteData {
 				row.textRow?.noteData = updatedNoteData
 				if isExistingRecord {
@@ -1626,7 +1626,7 @@ extension Outline {
 				}
 			}
 			
-			let updatedIsComplete = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] as? String == "1" ? true : false
+			let updatedIsComplete = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] as? String == "1" ? true : false
 			if row.textRow?.isComplete != updatedIsComplete {
 				row.textRow?.isComplete = updatedIsComplete
 				if isExistingRecord {
@@ -1634,7 +1634,7 @@ extension Outline {
 				}
 			}
 			
-			let rowOrderRowUUIDS = saveRowRecord[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] as? [String]
+			let rowOrderRowUUIDS = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] as? [String]
 			let newRowOrder = rowOrderRowUUIDS?.map { EntityID.row(id.accountID, id.documentUUID, $0) } ?? [EntityID]()
 			
 			//  We only count newly added children for reloading so that they can indent or outdent
@@ -1653,6 +1653,32 @@ extension Outline {
 			row.textRow?.rowOrder = newRowOrder
 			
 			keyedRows?[entityID] = row
+		}
+		
+		for deleteRecordID in update.deleteImageRecordIDs {
+			let rowID = EntityID.row(deleteRecordID.accountID, deleteRecordID.documentUUID, deleteRecordID.rowUUID)
+			if let row = keyedRows?[rowID] {
+				row.deleteImage(id: deleteRecordID)
+				updatedRowIDs.insert(rowID)
+			}
+		}
+		
+		for saveRecord in update.saveImageRecords {
+			guard let saveRecordID = EntityID(description: saveRecord.recordID.recordName) else { continue }
+			let rowID = EntityID.row(saveRecordID.accountID, saveRecordID.documentUUID, saveRecordID.rowUUID)
+			
+			if let row = keyedRows?[rowID],
+			   let isInNotes = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.isInNotes] as? Bool,
+			   let offset = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.offset] as? Int,
+			   let asset = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.asset] as? CKAsset,
+			   let fileURL = asset.fileURL,
+			   let data = try? Data(contentsOf: fileURL) {
+
+				let image = Image(id: saveRecordID, isInNotes: isInNotes, offset: offset, data: data)
+				
+				row.saveImage(image)
+				updatedRowIDs.insert(rowID)
+			}
 		}
 		
 		guard beingViewedCount > 0 else { return }
