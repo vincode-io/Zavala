@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MobileCoreServices
 import RSCore
 
 class EditorTextRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {

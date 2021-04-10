@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MobileCoreServices
 import MarkdownAttributedString
 
 public struct TextRowStrings {
