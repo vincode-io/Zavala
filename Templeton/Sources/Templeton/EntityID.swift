@@ -153,6 +153,8 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return documentID
 		case .row(_, let documentID, _):
 			return documentID
+		case .image(_, let documentID, _, _):
+			return documentID
 		default:
 			fatalError()
 		}
