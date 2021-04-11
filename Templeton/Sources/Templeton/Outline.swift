@@ -1595,7 +1595,9 @@ extension Outline {
 				row = .text(TextRow(id: entityID))
 			}
 
-			guard row.syncID != saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.syncID] as? String else { continue }
+			if let recordSyncID = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.syncID] as? String, recordSyncID == row.syncID {
+				continue
+			}
 
 			if isExistingRecord {
 				updatedRowIDs.insert(row.id)
@@ -1677,7 +1679,9 @@ extension Outline {
 			cloudKitShareRecordName = nil
 		}
 
-		guard syncID != record[CloudKitOutlineZone.CloudKitOutline.Fields.syncID] as? String else { return [] }
+		if let recordSyncID = record[CloudKitOutlineZone.CloudKitOutline.Fields.syncID] as? String, recordSyncID == syncID {
+			return []
+		}
 		
 		let newTitle = record[CloudKitOutlineZone.CloudKitOutline.Fields.title] as? String
 		if title != newTitle {
