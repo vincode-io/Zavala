@@ -10,7 +10,6 @@ import UIKit
 protocol EditorTitleTextViewDelegate: AnyObject {
 	var editorTitleTextViewUndoManager: UndoManager? { get }
 	func didBecomeActive(_: EditorTitleTextView)
-	func didBecomeInactive(_: EditorTitleTextView)
 }
 
 class EditorTitleTextView: UITextView {
@@ -48,10 +47,4 @@ class EditorTitleTextView: UITextView {
 		return result
 	}
 	
-	override func resignFirstResponder() -> Bool {
-		let result = super.resignFirstResponder()
-		editorDelegate?.didBecomeInactive(self)
-		return result
-	}
-
 }

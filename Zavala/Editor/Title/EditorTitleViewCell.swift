@@ -12,7 +12,6 @@ protocol EditorTitleViewCellDelegate: AnyObject {
 	var editorTitleUndoManager: UndoManager? { get }
 	func editorTitleLayoutEditor()
 	func editorTitleTextFieldDidBecomeActive()
-	func editorTitleTextFieldDidBecomeInactive()
 	func editorTitleDidUpdate(title: String)
 	func editorTitleMoveToTagInput()
 }

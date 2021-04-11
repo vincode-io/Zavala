@@ -97,10 +97,6 @@ extension EditorTitleContentView: EditorTitleTextViewDelegate {
 		appliedConfiguration.delegate?.editorTitleTextFieldDidBecomeActive()
 	}
 	
-	func didBecomeInactive(_: EditorTitleTextView) {
-		appliedConfiguration.delegate?.editorTitleTextFieldDidBecomeInactive()
-	}
-	
 }
 
 // MARK: UITextViewDelegate

@@ -13,7 +13,6 @@ protocol EditorTextRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewTextRowStrings: TextRowStrings { get }
 	func invalidateLayout(_ : EditorTextRowNoteTextView)
 	func didBecomeActive(_ : EditorTextRowNoteTextView, row: Row)
-	func didBecomeInactive(_ : EditorTextRowNoteTextView, row: Row)
 	func textChanged(_ : EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange)
 	func deleteRowNote(_ : EditorTextRowNoteTextView, row: Row)
 	func moveCursorTo(_ : EditorTextRowNoteTextView, row: Row)
@@ -76,11 +75,7 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 		if let row = row {
 			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: row, isInNotes: true, selection: selectedRange)
 		}
-		let result = super.resignFirstResponder()
-		if let row = row {
-			editorDelegate?.didBecomeInactive(self, row: row)
-		}
-		return result
+		return super.resignFirstResponder()
 	}
 
 	override func didBecomeActive() {

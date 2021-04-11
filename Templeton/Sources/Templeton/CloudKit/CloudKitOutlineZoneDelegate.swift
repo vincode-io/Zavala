@@ -82,11 +82,7 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 extension CloudKitAcountZoneDelegate {
 	
 	private func loadPendingIDs() -> [EntityID] {
-		var pendingIDs = account?.cloudKitManager?.pendingActionRequests.filter({ $0.zoneID == zoneID }).map({ $0.id }) ?? [EntityID]()
-		if let persistedPendingIDs = CloudKitActionRequest.loadRequests()?.filter({ $0.zoneID == zoneID }).map({ $0.id }) {
-			pendingIDs.append(contentsOf: persistedPendingIDs)
-		}
-		return pendingIDs
+		return CloudKitActionRequest.loadRequests()?.filter({ $0.zoneID == zoneID }).map({ $0.id }) ?? [EntityID]()
 	}
 	
 }

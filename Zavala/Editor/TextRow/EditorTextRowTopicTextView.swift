@@ -12,7 +12,6 @@ protocol EditorTextRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
 	var editorRowTopicTextViewTextRowStrings: TextRowStrings { get }
 	func didBecomeActive(_: EditorTextRowTopicTextView, row: Row)
-	func didBecomeInactive(_: EditorTextRowTopicTextView, row: Row)
 	func invalidateLayout(_: EditorTextRowTopicTextView)
 	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange)
 	func deleteRow(_: EditorTextRowTopicTextView, row: Row)
@@ -94,12 +93,7 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 		if let textRow = row {
 			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: textRow, isInNotes: false, selection: selectedRange)
 		}
-		
-		let result = super.resignFirstResponder()
-		if let row = row {
-			editorDelegate?.didBecomeInactive(self, row: row)
-		}
-		return result
+		return super.resignFirstResponder()
 	}
 	
 	override func didBecomeActive() {
