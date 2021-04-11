@@ -519,6 +519,7 @@
 		51C030B3257E192100609262 /* EditorTitleViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleViewCell.swift; sourceTree = "<group>"; };
 		51C030B7257E198B00609262 /* EditorTitleTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleTextView.swift; sourceTree = "<group>"; };
 		51C030BD257E1B9400609262 /* EditorTextRowTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowTextView.swift; sourceTree = "<group>"; };
+		51C1102D2622457700EEEFB5 /* RSCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = RSCore; path = ../RSCore; sourceTree = "<group>"; };
 		51C4C3AC2555E964004E0206 /* Zavala_project_debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Zavala_project_debug.xcconfig; sourceTree = "<group>"; };
 		51C4C3AD2555E964004E0206 /* Zavala_ios_target_common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Zavala_ios_target_common.xcconfig; sourceTree = "<group>"; };
 		51C4C3AE2555E964004E0206 /* Zavala_project_release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Zavala_project_release.xcconfig; sourceTree = "<group>"; };
@@ -779,6 +780,7 @@
 		5181A92B2554D92000C153E8 = {
 			isa = PBXGroup;
 			children = (
+				51C1102D2622457700EEEFB5 /* RSCore */,
 				513F32A12594062C0003048F /* README.md */,
 				5181A9362554D92000C153E8 /* Zavala */,
 				51E060B025A4547400194066 /* AppKitPlugin */,

@@ -104,6 +104,12 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
+	public var images: [Image] {
+		get {
+			associatedRow.images ?? [Image]()
+		}
+	}
+	
 	public var rowCount: Int {
 		return associatedRow.rowCount
 	}

@@ -15,7 +15,6 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 	class CombinedRequest {
 		var documentRequest: CloudKitActionRequest?
 		var rowRequests = [CloudKitActionRequest]()
-		var imageRequests = [CloudKitActionRequest]()
 	}
 	
 	override func run() {
@@ -31,8 +30,6 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 			operationDelegate?.operationDidComplete(self)
 			return
 		}
-		
-		var tempFileURLs = [URL]()
 		
 		for documentUUID in combinedRequests.keys {
 			guard let combinedRequest = combinedRequests[documentUUID] else { continue }
@@ -65,22 +62,12 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 				}
 			}
 			
-			// And process all the images
-			for rowRequest in combinedRequest.imageRequests {
-				if let image = outline.findImage(id: rowRequest.id) {
-					let imageURL = addSave(zoneID: zoneID, image: image)
-					tempFileURLs.append(imageURL)
-				} else {
-					addDeleteRow(rowRequest)
-				}
-			}
-			
-
 			document.unload()
 		}
 		
 		// Send the grouped changes
 		
+		var tempFileURLs = [URL]()
 		let group = DispatchGroup()
 		
 		for zoneID in modifications.keys {
@@ -89,11 +76,33 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 			let cloudKitZone = cloudKitManager.findZone(zoneID: zoneID)
 			let (saves, deletes) = modifications[zoneID]!
 
-			cloudKitZone.modify(recordsToSave: saves, recordIDsToDelete: deletes) { result in
-				if case .failure(let error) = result {
-					self.error = error
+			if let imageQuery = buildImageQuery(saves: saves) {
+				cloudKitZone.query(imageQuery, desiredKeys: []) { result in
+					switch result {
+					case .success(let imageRecords):
+						var (moreSaves, moreDeletes, imageURLs) = self.trueUpImageRecordIDs(zoneID: zoneID, saves: saves, imageRecords: imageRecords)
+						moreSaves.append(contentsOf: saves)
+						moreDeletes.append(contentsOf: deletes)
+						tempFileURLs.append(contentsOf: imageURLs)
+						
+						cloudKitZone.modify(recordsToSave: moreSaves, recordIDsToDelete: moreDeletes) { result in
+							if case .failure(let error) = result {
+								self.error = error
+							}
+							group.leave()
+						}
+					case .failure(let error):
+						self.error = error
+						group.leave()
+					}
 				}
-				group.leave()
+			} else {
+				cloudKitZone.modify(recordsToSave: saves, recordIDsToDelete: deletes) { result in
+					if case .failure(let error) = result {
+						self.error = error
+					}
+					group.leave()
+				}
 			}
 		}
 		
@@ -133,15 +142,6 @@ extension CloudKitModifyOperation {
 				} else {
 					let combinedRequest = CombinedRequest()
 					combinedRequest.rowRequests.append(queuedRequest)
-					combinedRequests[documentUUID] = combinedRequest
-				}
-			case .image(_, let documentUUID, _, _):
-				if let combinedRequest = combinedRequests[documentUUID] {
-					combinedRequest.imageRequests.append(queuedRequest)
-					combinedRequests[documentUUID] = combinedRequest
-				} else {
-					let combinedRequest = CombinedRequest()
-					combinedRequest.imageRequests.append(queuedRequest)
 					combinedRequests[documentUUID] = combinedRequest
 				}
 			default:
@@ -199,27 +199,6 @@ extension CloudKitModifyOperation {
 		addSave(zoneID, record)
 	}
 	
-	private func addSave(zoneID: CKRecordZone.ID, image: Image) -> URL {
-		let recordID = CKRecord.ID(recordName: image.id.description, zoneID: zoneID)
-		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitImage.recordType, recordID: recordID)
-		
-		let rowID = EntityID.row(image.id.accountID, image.id.documentUUID, image.id.rowUUID)
-		let rowRecordID = CKRecord.ID(recordName: rowID.description, zoneID: zoneID)
-		
-		record.parent = CKRecord.Reference(recordID: rowRecordID, action: .none)
-		record[CloudKitOutlineZone.CloudKitImage.Fields.row] = CKRecord.Reference(recordID: rowRecordID, action: .deleteSelf)
-		record[CloudKitOutlineZone.CloudKitImage.Fields.isInNotes] = image.isInNotes
-		record[CloudKitOutlineZone.CloudKitImage.Fields.offset] = image.offset
-		
-		let imageURL = FileManager.default.temporaryDirectory.appendingPathComponent(image.id.imageUUID).appendingPathExtension("png")
-		try? image.data.write(to: imageURL)
-		record[CloudKitOutlineZone.CloudKitImage.Fields.asset] = CKAsset(fileURL: imageURL)
-
-		addSave(zoneID, record)
-		
-		return imageURL
-	}
-	
 	private func addSave(_ zoneID: CKRecordZone.ID, _ record: CKRecord) {
 		if let (saves, deletes) = modifications[zoneID] {
 			var mutableSaves = saves
@@ -256,6 +235,65 @@ extension CloudKitModifyOperation {
 			deletes.append(recordID)
 			modifications[zoneID] = (saves, deletes)
 		}
+	}
+	
+	private func buildImageQuery(saves: [CKRecord]) -> CKQuery? {
+		let rowReferences = saves
+			.filter { $0.recordType == CloudKitOutlineZone.CloudKitRow.recordType }
+			.map { CKRecord.Reference(recordID: $0.recordID, action: .deleteSelf) }
+		
+		guard !rowReferences.isEmpty else { return nil }
+		
+		let predicate = NSPredicate(format: "row IN %@", rowReferences)
+		let ckQuery = CKQuery(recordType: CloudKitOutlineZone.CloudKitImage.recordType, predicate: predicate)
+		
+		return ckQuery
+	}
+	
+	private func trueUpImageRecordIDs(zoneID: CKRecordZone.ID, saves: [CKRecord], imageRecords: [CKRecord]) -> ([CKRecord], [CKRecord.ID], [URL]) {
+		let imageRecordIDs = imageRecords.compactMap { EntityID(description: $0.recordID.recordName) }
+		
+		var imageSaves = [CKRecord]()
+		var imageDeletes = [CKRecord.ID]()
+		var imageURLs = [URL]()
+		
+		let saveRecords = saves.filter { $0.recordType == CloudKitOutlineZone.CloudKitRow.recordType }
+		let saveEntityIDs = saveRecords.compactMap { EntityID(description: $0.recordID.recordName) }
+		let saveRows = saveEntityIDs.compactMap { AccountManager.shared.findRow($0) }
+		let saveImages = saveRows.flatMap { $0.images }
+		
+		for image in saveImages {
+			if !imageRecordIDs.contains(image.id) {
+				let recordID = CKRecord.ID(recordName: image.id.description, zoneID: zoneID)
+				let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitImage.recordType, recordID: recordID)
+				
+				let rowID = EntityID.row(image.id.accountID, image.id.documentUUID, image.id.rowUUID)
+				let rowRecordID = CKRecord.ID(recordName: rowID.description, zoneID: zoneID)
+				
+				record.parent = CKRecord.Reference(recordID: rowRecordID, action: .none)
+				record[CloudKitOutlineZone.CloudKitImage.Fields.row] = CKRecord.Reference(recordID: rowRecordID, action: .deleteSelf)
+				record[CloudKitOutlineZone.CloudKitImage.Fields.isInNotes] = image.isInNotes
+				record[CloudKitOutlineZone.CloudKitImage.Fields.offset] = image.offset
+				
+				let imageURL = FileManager.default.temporaryDirectory.appendingPathComponent(image.id.imageUUID).appendingPathExtension("png")
+				imageURLs.append(imageURL)
+				try? image.data.write(to: imageURL)
+				record[CloudKitOutlineZone.CloudKitImage.Fields.asset] = CKAsset(fileURL: imageURL)
+
+				imageSaves.append(record)
+			}
+		}
+		
+		for imageRecordID in imageRecordIDs {
+			let rowID = EntityID.row(imageRecordID.accountID, imageRecordID.documentUUID, imageRecordID.rowUUID)
+			guard let row = AccountManager.shared.findRow(rowID) else { continue }
+
+			if !row.images.contains(where: { $0.id == imageRecordID }) {
+				imageDeletes.append(CKRecord.ID(recordName: imageRecordID.description, zoneID: zoneID))
+			}
+		}
+		
+		return (imageSaves, imageDeletes, imageURLs)
 	}
 	
 }

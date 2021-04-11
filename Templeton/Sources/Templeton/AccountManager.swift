@@ -156,6 +156,15 @@ public final class AccountManager {
 		return nil
 	}
 	
+	public func findRow(_ entityID: EntityID) -> Row? {
+		if case .row(let accountID, let documentUUID, _) = entityID,
+		   let account = findAccount(accountID: accountID),
+		   let outline = account.findDocument(documentUUID: documentUUID)?.outline {
+			return outline.findRow(id: entityID)
+		}
+		return nil
+	}
+	
 	public func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
 		cloudKitAccount?.cloudKitManager?.receiveRemoteNotification(userInfo: userInfo, completion: completion)
 	}

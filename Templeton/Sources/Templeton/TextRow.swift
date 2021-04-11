@@ -54,10 +54,10 @@ public final class TextRow: BaseRow, Codable {
 				
 				var topicImages = images?.filter { $0.isInNotes } ?? [Image]()
 				topicImages.append(contentsOf: newImages)
-				updateImages(topicImages)
+				images = topicImages
 			} else {
 				topicData = nil
-				updateImages(images?.filter { $0.isInNotes })
+				images = images?.filter { $0.isInNotes }
 			}
 			outline?.requestCloudKitUpdate(for: id)
 		}
@@ -82,10 +82,10 @@ public final class TextRow: BaseRow, Codable {
 
 				var noteImages = images?.filter { !$0.isInNotes } ?? [Image]()
 				noteImages.append(contentsOf: newImages)
-				updateImages(noteImages)
+				images = noteImages
 			} else {
 				noteData = nil
-				updateImages(images?.filter { !$0.isInNotes })
+				images = images?.filter { !$0.isInNotes }
 			}
 			outline?.requestCloudKitUpdate(for: id)
 		}
@@ -115,7 +115,7 @@ public final class TextRow: BaseRow, Codable {
 		}
 	}
 	
-	var images: [Image]? {
+	override var images: [Image]? {
 		didSet {
 			topicCache = nil
 			noteCache = nil
@@ -407,20 +407,6 @@ extension TextRow {
 
 extension TextRow {
 	
-	func updateImages(_ newImages: [Image]?) {
-		let newImages = newImages ?? [Image]()
-		
-		let diff = newImages.difference(from: self.images ?? [Image]())
-		for change in diff {
-			switch change {
-			case .insert(_, let image, _), .remove(_, let image, _):
-				outline?.requestCloudKitUpdate(for: image.id)
-			}
-		}
-		
-		self.images = newImages
-	}
-	
 	func replaceImages(attrString: NSAttributedString?, isNotes: Bool) -> NSAttributedString? {
 		guard let attrString = attrString else { return nil }
 		let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
@@ -430,7 +416,7 @@ extension TextRow {
 		}
 		
 		for image in images ?? [Image]() {
-			if image.isInNotes == isNotes, image.offset < mutableAttrString.length {
+			if image.isInNotes == isNotes {
 				let attachment = NSTextAttachment(data: image.data, ofType: kUTTypePNG as String)
 				let imageAttrText = NSAttributedString(attachment: attachment)
 				mutableAttrString.insert(imageAttrText, at: image.offset)

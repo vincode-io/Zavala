@@ -59,6 +59,7 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 	}
 	
 	var rowOrder: [EntityID]
+	var images: [Image]?
 
 	var isAncestorComplete: Bool {
 		if let parentRow = parent as? Row {
