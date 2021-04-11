@@ -73,7 +73,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		didSet {
 			if created != oldValue {
 				documentMetaDataDidChange()
-				requestCloudKitUpdate(for: id)
 			}
 		}
 	}
@@ -83,7 +82,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			if updated != oldValue {
 				documentUpdatedDidChange()
 				documentMetaDataDidChange()
-				requestCloudKitUpdate(for: id)
 			}
 		}
 	}
@@ -1790,7 +1788,7 @@ extension Outline {
 
 	private func outlineContentDidChange() {
 		self.updated = Date()
-		documentMetaDataDidChange()
+		requestCloudKitUpdate(for: id)
 		rowsFile?.markAsDirty()
 	}
 	
