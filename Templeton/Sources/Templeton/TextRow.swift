@@ -124,6 +124,7 @@ public final class TextRow: BaseRow, Codable {
 	
 	private enum CodingKeys: String, CodingKey {
 		case id = "id"
+		case syncID = "syncID"
 		case topicData = "topicData"
 		case noteData = "noteData"
 		case isExpanded = "isExpanded"

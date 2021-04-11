@@ -165,9 +165,12 @@ extension CloudKitModifyOperation {
 	private func addSave(_ document: Document) {
 		guard let outline = document.outline, let zoneID = outline.zoneID else { return }
 		
+		outline.syncID = UUID().uuidString
+		
 		let recordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
 		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitOutline.recordType, recordID: recordID)
 		
+		record[CloudKitOutlineZone.CloudKitOutline.Fields.syncID] = outline.syncID
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.title] = outline.title
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerName] = outline.ownerName
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail] = outline.ownerEmail
@@ -185,11 +188,14 @@ extension CloudKitModifyOperation {
 	private func addSave(zoneID: CKRecordZone.ID, outlineRecordID: CKRecord.ID, row: Row) {
 		guard let textRow = row.textRow else { return }
 		
+		textRow.syncID = UUID().uuidString
+		
 		let recordID = CKRecord.ID(recordName: textRow.id.description, zoneID: zoneID)
 		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitRow.recordType, recordID: recordID)
 		
 		record.parent = CKRecord.Reference(recordID: outlineRecordID, action: .none)
 		record[CloudKitOutlineZone.CloudKitRow.Fields.outline] = CKRecord.Reference(recordID: outlineRecordID, action: .deleteSelf)
+		record[CloudKitOutlineZone.CloudKitRow.Fields.syncID] = textRow.syncID
 		record[CloudKitOutlineZone.CloudKitRow.Fields.subtype] = "text"
 		record[CloudKitOutlineZone.CloudKitRow.Fields.topicData] = textRow.topicData
 		record[CloudKitOutlineZone.CloudKitRow.Fields.noteData] = textRow.noteData

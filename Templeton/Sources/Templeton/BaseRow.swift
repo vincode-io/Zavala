@@ -13,6 +13,7 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 	public var shadowTableIndex: Int?
 
 	public var id: EntityID
+	public var syncID: String?
 	public var isExpanded: Bool
 	public internal(set) var rows: [Row] {
 		get {

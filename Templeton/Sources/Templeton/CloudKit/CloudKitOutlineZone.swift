@@ -30,6 +30,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 	struct CloudKitOutline {
 		static let recordType = "Outline"
 		struct Fields {
+			static let syncID = "syncID"
 			static let title = "title"
 			static let ownerName = "ownerName"
 			static let ownerEmail = "ownerEmail"
@@ -46,6 +47,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 	struct CloudKitRow {
 		static let recordType = "Row"
 		struct Fields {
+			static let syncID = "syncID"
 			static let outline = "outline"
 			static let subtype = "subtype"
 			static let topicData = "topicData"

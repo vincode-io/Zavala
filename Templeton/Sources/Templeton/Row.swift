@@ -40,6 +40,15 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
+	public var syncID: String? {
+		get {
+			associatedRow.syncID
+		}
+		set {
+			associatedRow.syncID = newValue
+		}
+	}
+	
 	public var isExpanded: Bool {
 		get {
 			associatedRow.isExpanded

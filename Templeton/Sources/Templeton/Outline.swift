@@ -55,6 +55,14 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			documentMetaDataDidChange()
 		}
 	}
+
+	public var syncID: String? {
+		didSet {
+			if syncID != oldValue {
+				documentMetaDataDidChange()
+			}
+		}
+	}
 	
 	public internal(set) var title: String?
 	public internal(set) var ownerName: String?
@@ -279,6 +287,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	enum CodingKeys: String, CodingKey {
 		case id = "id"
+		case syncID = "syncID"
 		case title = "title"
 		case created = "created"
 		case updated = "updated"
@@ -1558,7 +1567,7 @@ extension Outline {
 		cloudKitManager.addRequests(Set(requests))
 	}
 
-	func apply(_ update: CloudKitOutlineUpdate, pendingIDs: [EntityID]) {
+	func apply(_ update: CloudKitOutlineUpdate) {
 		var updatedRowIDs = Set<EntityID>()
 		
 		if let record = update.saveOutlineRecord {
@@ -1586,45 +1595,23 @@ extension Outline {
 				row = .text(TextRow(id: entityID))
 			}
 
-			let updatedTopicData = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.topicData] as? Data
-			if row.textRow?.topicData != updatedTopicData {
-				row.textRow?.topicData = updatedTopicData
-				if isExistingRecord {
-					updatedRowIDs.insert(row.id)
-				}
+			guard row.syncID != saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.syncID] as? String else { continue }
+
+			if isExistingRecord {
+				updatedRowIDs.insert(row.id)
 			}
+			
+			let updatedTopicData = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.topicData] as? Data
+			row.textRow?.topicData = updatedTopicData
 			
 			let updatedNoteData = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.noteData] as? Data
-			if row.textRow?.noteData != updatedNoteData {
-				row.textRow?.noteData = updatedNoteData
-				if isExistingRecord {
-					updatedRowIDs.insert(row.id)
-				}
-			}
+			row.textRow?.noteData = updatedNoteData
 			
 			let updatedIsComplete = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] as? String == "1" ? true : false
-			if row.textRow?.isComplete != updatedIsComplete {
-				row.textRow?.isComplete = updatedIsComplete
-				if isExistingRecord {
-					updatedRowIDs.insert(row.id)
-				}
-			}
+			row.textRow?.isComplete = updatedIsComplete
 			
 			let rowOrderRowUUIDS = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] as? [String]
 			let newRowOrder = rowOrderRowUUIDS?.map { EntityID.row(id.accountID, id.documentUUID, $0) } ?? [EntityID]()
-			
-			//  We only count newly added children for reloading so that they can indent or outdent
-			let diff = newRowOrder.difference(from: row.textRow?.rowOrder ?? [EntityID]())
-			for change in diff {
-				switch change {
-				case .insert(_, let newRowID, _):
-					if isExistingRecord {
-						updatedRowIDs.insert(newRowID)
-					}
-				default:
-					break
-				}
-			}
 			
 			row.textRow?.rowOrder = newRowOrder
 			
@@ -1666,9 +1653,7 @@ extension Outline {
 		var reloadRows = [Row]()
 		
 		func reloadVisitor(_ visited: Row) {
-			if !pendingIDs.contains(visited.id) {
-				reloadRows.append(visited)
-			}
+			reloadRows.append(visited)
 			visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
 		}
 
@@ -1691,6 +1676,8 @@ extension Outline {
 		} else {
 			cloudKitShareRecordName = nil
 		}
+
+		guard syncID != record[CloudKitOutlineZone.CloudKitOutline.Fields.syncID] as? String else { return [] }
 		
 		let newTitle = record[CloudKitOutlineZone.CloudKitOutline.Fields.title] as? String
 		if title != newTitle {
