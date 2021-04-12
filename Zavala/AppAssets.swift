@@ -143,6 +143,10 @@ struct AppAssets {
 		return UIImage(systemName: "doc.text")!
 	}()
 
+	static var noteFont: UIImage = {
+		return UIImage(systemName: "textformat.size.smaller")!
+	}()
+
 	static var outdent: UIImage = {
 		return UIImage(systemName: "arrow.left.to.line")!
 	}()
@@ -187,6 +191,10 @@ struct AppAssets {
 
 	static var sync: UIImage = {
 		return UIImage(systemName: "arrow.clockwise")!
+	}()
+
+	static var topicFont: UIImage = {
+		return UIImage(systemName: "textformat.size.larger")!
 	}()
 
 	static var uncompleteRow: UIImage = {
