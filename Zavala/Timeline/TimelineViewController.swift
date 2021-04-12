@@ -46,10 +46,11 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	private var heldDocumentContainer: DocumentContainer?
 
 	private let searchController = UISearchController(searchResultsController: nil)
-	private var addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
-	private var importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML(_:)))
+	private var addBarButtonItem: UIBarButtonItem?
+	private var importBarButtonItem: UIBarButtonItem?
 
 	private let dataSourceQueue = MainThreadOperationQueue()
+	private var reloadWorkItem: DispatchWorkItem?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +58,9 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
+			addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
+			importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML(_:)))
+			
 			searchController.delegate = self
 			searchController.searchResultsUpdater = self
 			searchController.obscuresBackgroundDuringPresentation = false
@@ -64,9 +68,9 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 			navigationItem.searchController = searchController
 			definesPresentationContext = true
 
-			addBarButtonItem.title = L10n.add
-			importBarButtonItem.title = L10n.importOPML
-			navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
+			addBarButtonItem!.title = L10n.add
+			importBarButtonItem!.title = L10n.importOPML
+			navigationItem.rightBarButtonItems = [addBarButtonItem!, importBarButtonItem!]
 
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
@@ -375,7 +379,7 @@ extension TimelineViewController {
 			if documentContainer?.account == nil {
 				navigationItem.rightBarButtonItems = nil
 			} else {
-				navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
+				navigationItem.rightBarButtonItems = [addBarButtonItem!, importBarButtonItem!]
 			}
 		}
 	}
