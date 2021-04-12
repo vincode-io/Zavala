@@ -25,6 +25,7 @@ protocol SPUUpdaterDelegate {}
 	private var softwareUpdater: SPUUpdater!
 	#endif
 
+	private var movementMonitor: RSAppMovementMonitor? = nil
 	private var preferencesWindowController: NSWindowController?
 
 	func setDelegate(_ delegate: AppKitPluginDelegate?) {
@@ -32,6 +33,8 @@ protocol SPUUpdaterDelegate {}
 	}
 	
 	func start() {
+		movementMonitor = RSAppMovementMonitor()
+		
 		#if MAC_TEST
 		let hostBundle = Bundle.main
 		let updateDriver = SPUStandardUserDriver(hostBundle: hostBundle, delegate: self)
