@@ -263,6 +263,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		collectionView.selectionFollowsFocus = false
 		collectionView.contentInset = EditorViewController.defaultContentInsets
 
+		let tapGestureRecogniser = UITapGestureRecognizer(target: self, action: #selector(createInitialRowIfNecessary))
+		tapGestureRecogniser.delegate = self
+		collectionView.addGestureRecognizer(tapGestureRecogniser)
+		
 		titleRegistration = UICollectionView.CellRegistration<EditorTitleViewCell, Outline> { [weak self] (cell, indexPath, outline) in
 			cell.title = outline.title
 			cell.delegate = self
@@ -699,6 +703,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	// MARK: Actions
 	
+	@objc func createInitialRowIfNecessary() {
+		guard let outline = outline, outline.rowCount == 0 else { return }
+		createRow(afterRows: nil)
+	}
+	
 	@objc func sync() {
 		if AccountManager.shared.isSyncAvailable {
 			AccountManager.shared.sync()
@@ -984,6 +993,18 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		if let responder = UIResponder.currentFirstResponder, responder is UITextField || responder is UITextView {
 			responder.resignFirstResponder()
 		}
+	}
+	
+}
+
+// MARK: EditorTitleViewCellDelegate
+
+extension EditorViewController: UIGestureRecognizerDelegate {
+
+	func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+		let point = gestureRecognizer.location(in: collectionView)
+		let indexPath = collectionView.indexPathForItem(at: point)
+		return indexPath == nil
 	}
 	
 }
