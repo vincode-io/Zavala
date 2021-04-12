@@ -50,7 +50,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	private var importBarButtonItem: UIBarButtonItem?
 
 	private let dataSourceQueue = MainThreadOperationQueue()
-	private var reloadWorkItem: DispatchWorkItem?
+	private var applySnapshotWorkItem: DispatchWorkItem?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,6 +133,12 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	@objc func documentTitleDidChange(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
 		reload(document: document)
+
+		applySnapshotWorkItem?.cancel()
+		applySnapshotWorkItem = DispatchWorkItem { [weak self] in
+			self?.applySnapshot(animated: true)
+		}
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: applySnapshotWorkItem!)
 	}
 	
 	@objc func documentUpdatedDidChange(_ note: Notification) {
