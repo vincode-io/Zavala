@@ -228,6 +228,8 @@
 		5188FAAA2602A9CE0020B7DA /* OutlineEditor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5188FAA82602A9CE0020B7DA /* OutlineEditor.storyboard */; };
 		518F2E38257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */; };
 		5193C8A625FD757900E63F94 /* OpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */; };
+		519965DC2624EEE500D8468B /* RSAppMovementMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */; };
+		519965DD2624EEE500D8468B /* RSAppMovementMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */; };
 		519A2324260A9B900056051E /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
 		519A2325260A9B900056051E /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
 		519A2326260A9C940056051E /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
@@ -501,6 +503,7 @@
 		5188FAA82602A9CE0020B7DA /* OutlineEditor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OutlineEditor.storyboard; sourceTree = "<group>"; };
 		518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistentCollectionViewListCell.swift; sourceTree = "<group>"; };
 		5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuicklyViewController.swift; sourceTree = "<group>"; };
+		519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSAppMovementMonitor.swift; sourceTree = "<group>"; };
 		519A2323260A9B900056051E /* OutlineFontField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontField.swift; sourceTree = "<group>"; };
 		519F004A25608EF9009DC1F0 /* TimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItem.swift; sourceTree = "<group>"; };
 		51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedUndoManager.swift; sourceTree = "<group>"; };
@@ -901,6 +904,7 @@
 				51E060F325A4C13B00194066 /* AppKitPlugin.h */,
 				51E060F225A4C13B00194066 /* BridgingHeader.h */,
 				51E060ED25A4B5E600194066 /* AppKitWrapper.swift */,
+				519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */,
 				517AF6B325E0A3C20044DBAB /* L10n.swift */,
 				517AF6AD25E0A2400044DBAB /* Localizable.strings */,
 				51E060B125A4547400194066 /* Info.plist */,
@@ -1403,6 +1407,7 @@
 				5142C29D260B90F30094571F /* FontPreferencesConfigWindowController.swift in Sources */,
 				511B2A98260245AD00C04239 /* PreferencesWindowController.swift in Sources */,
 				511B2A99260245AD00C04239 /* AppDefaults.swift in Sources */,
+				519965DD2624EEE500D8468B /* RSAppMovementMonitor.swift in Sources */,
 				516F5384260A92720038BAF8 /* PreferencesTableViewBackgroundView.swift in Sources */,
 				511B2A9A260245AD00C04239 /* AppKitWrapper.swift in Sources */,
 				511B2A9B260245AD00C04239 /* GeneralPrefencesViewController.swift in Sources */,
@@ -1541,6 +1546,7 @@
 				5142C29C260B90F30094571F /* FontPreferencesConfigWindowController.swift in Sources */,
 				517AF68825E07A420044DBAB /* PreferencesWindowController.swift in Sources */,
 				5167606D25F96B1F00AC0EBD /* AppDefaults.swift in Sources */,
+				519965DC2624EEE500D8468B /* RSAppMovementMonitor.swift in Sources */,
 				516F5383260A92720038BAF8 /* PreferencesTableViewBackgroundView.swift in Sources */,
 				51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */,
 				517AF68C25E07A790044DBAB /* GeneralPrefencesViewController.swift in Sources */,

@@ -151,12 +151,12 @@ extension SettingsFontViewController {
 	}
 	
 	private func buildAddMenu() -> UIMenu {
-		let addTopicLevelAction = UIAction(title: L10n.addTopicLevel, image: AppAssets.add) { [weak self] _ in
+		let addTopicLevelAction = UIAction(title: L10n.addTopicLevel, image: AppAssets.topicFont) { [weak self] _ in
 			guard let (field, config) = self?.fontDefaults?.nextTopicDefault else { return }
 			self?.showFontConfig(field: field, config: config)
 		}
 
-		let addNoteLevelAction = UIAction(title: L10n.addNoteLevel, image: AppAssets.add) { [weak self] _ in
+		let addNoteLevelAction = UIAction(title: L10n.addNoteLevel, image: AppAssets.noteFont) { [weak self] _ in
 			guard let (field, config) = self?.fontDefaults?.nextNoteDefault else { return }
 			self?.showFontConfig(field: field, config: config)
 		}
