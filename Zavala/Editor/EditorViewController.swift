@@ -1421,10 +1421,12 @@ extension EditorViewController {
 	}
 	
 	private func pressesBeganForEditMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-		if !(CursorCoordinates.currentCoordinates?.isInNotes ?? false),
-		   presses.count == 1,
-		   let key = presses.first?.key {
+		guard presses.count == 1, let key = presses.first?.key else {
+			super.pressesBegan(presses, with: event)
+			return
+		}
 			
+		if !(CursorCoordinates.currentCoordinates?.isInNotes ?? false) {
 			guard cancelledKeys.remove(key) == nil else {
 				return
 			}
@@ -1459,9 +1461,14 @@ extension EditorViewController {
 			}
 			
 		} else {
-			
+			switch (key.keyCode, true) {
+			case (.keyboardUpArrow, key.modifierFlags.subtracting(.numericPad).isEmpty), (.keyboardDownArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
+				makeCursorVisibleIfNecessary(isInNotes: true)
+			default:
+				break
+			}
+
 			super.pressesBegan(presses, with: event)
-			
 		}
 	}
 	
@@ -2258,9 +2265,13 @@ extension EditorViewController {
 		}
 	}
 
-	private func makeCursorVisibleIfNecessary() {
+	private func makeCursorVisibleIfNecessary(isInNotes: Bool = false) {
 		guard let textView = UIResponder.currentFirstResponder as? EditorTextRowTextView, let cursorRect = textView.cursorRect else { return }
-		let convertedRect = textView.convert(cursorRect, to: collectionView)
+		var convertedRect = textView.convert(cursorRect, to: collectionView)
+		// This isInNotes hack isn't well understood, but it improves the user experience...
+		if isInNotes {
+			convertedRect.size.height = convertedRect.size.height + 10
+		}
 		collectionView.scrollRectToVisible(convertedRect, animated: true)
 	}
 	
