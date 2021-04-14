@@ -438,7 +438,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
 		DispatchQueue.main.async {
+			if UIApplication.shared.applicationState == .background {
+				AccountManager.shared.resume()
+			}
 			AccountManager.shared.receiveRemoteNotification(userInfo: userInfo) {
+				if UIApplication.shared.applicationState == .background {
+					AccountManager.shared.suspend()
+				}
 				completionHandler(.newData)
 			}
 		}
