@@ -519,10 +519,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			currentKeyboardHeight = 0
 		} else {
 			collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
-			if let scrollToIndex = currentTextView?.row?.shadowTableIndex, let cell = collectionView.cellForItem(at: IndexPath(row: scrollToIndex, section: adjustedRowsSection)) {
-				let cellFrame = view.convert(cell.frame, from: view.window)
-				collectionView.scrollRectToVisible(cellFrame, animated: true)
-			}
+			makeCursorVisibleIfNecessary()
 			updateUI(editMode: true)
 			currentKeyboardHeight = keyboardViewEndFrame.height
 		}
@@ -1525,7 +1522,7 @@ extension EditorViewController {
 		collectionView.collectionViewLayout.invalidateLayout()
 		collectionView.layoutIfNeeded()
 		collectionView.contentOffset = contentOffset
-		makeCurrentCellVisibleIfNecessary()
+		makeCursorVisibleIfNecessary()
 	}
 	
 	private func applyChanges(_ changes: OutlineElementChanges) {
@@ -1851,7 +1848,7 @@ extension EditorViewController {
 				}
 			}
 		}
-		makeCellVisibleIfNecessary(indexPath: indexPath)
+		makeCursorVisibleIfNecessary()
 	}
 	
 	private func moveCursorDown(topicTextView: EditorTextRowTopicTextView) {
@@ -1871,7 +1868,7 @@ extension EditorViewController {
 					}
 				}
 			}
-			makeCellVisibleIfNecessary(indexPath: indexPath)
+			makeCursorVisibleIfNecessary()
 		} else {
 			let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
@@ -2147,7 +2144,7 @@ extension EditorViewController {
 			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorTextRowViewCell {
 				rowCell.moveToEnd()
 			}
-			makeCellVisibleIfNecessary(indexPath: newCursorIndexPath)
+			makeCursorVisibleIfNecessary()
 		}
 	}
 	
@@ -2261,24 +2258,10 @@ extension EditorViewController {
 		}
 	}
 
-	private func makeCurrentCellVisibleIfNecessary() {
-		guard let shadowTableIndex = currentRows?.last?.shadowTableIndex else { return }
-		makeCellVisibleIfNecessary(indexPath: IndexPath(row: shadowTableIndex, section: adjustedRowsSection))
-	}
-	
-	private func makeCellVisibleIfNecessary(indexPath: IndexPath) {
-		guard let frame = collectionView.layoutAttributesForItem(at: indexPath)?.frame else {
-			return
-		}
-		
-		let top = collectionView.contentOffset.y
-		let bottom = collectionView.contentOffset.y + collectionView.frame.size.height
-		
-		guard frame.minY < top || frame.maxY > bottom else {
-			return
-		}
-		
-		collectionView.scrollRectToVisible(frame, animated: true)
+	private func makeCursorVisibleIfNecessary() {
+		guard let textView = UIResponder.currentFirstResponder as? EditorTextRowTextView, let cursorRect = textView.cursorRect else { return }
+		let convertedRect = textView.convert(cursorRect, to: collectionView)
+		collectionView.scrollRectToVisible(convertedRect, animated: true)
 	}
 	
 	private func updateSpotlightIndex() {

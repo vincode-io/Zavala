@@ -52,11 +52,6 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 		return editorDelegate?.editorRowTopicTextViewTextRowStrings
 	}
 	
-	var cursorRect: CGRect? {
-		guard let caratPosition = selectedTextRange?.start else { return nil }
-		return caretRect(for: caratPosition)
-	}
-	
 	var cursorIsOnTopLine: Bool {
 		guard let cursorRect = cursorRect else { return false }
 		let lineStart = closestPosition(to: CGPoint(x: 0, y: cursorRect.midY))

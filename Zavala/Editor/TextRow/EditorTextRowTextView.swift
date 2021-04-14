@@ -57,11 +57,15 @@ class EditorTextRowTextView: UITextView {
 		}
 		return false
 	}
+		
+	var cursorRect: CGRect? {
+		guard let caratPosition = selectedTextRange?.start else { return nil }
+		return caretRect(for: caratPosition)
+	}
 	
 	var isSelecting: Bool {
 		return !(selectedTextRange?.isEmpty ?? true)
 	}
-	
 	var selectedText: String? {
 		if let textRange = selectedTextRange {
 			return text(in: textRange)
