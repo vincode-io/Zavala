@@ -518,7 +518,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			updateUI(editMode: false)
 			currentKeyboardHeight = 0
 		} else {
-			collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
+			let newInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
+			if collectionView.contentInset != newInsets {
+				collectionView.contentInset = newInsets
+			}
 			makeCursorVisibleIfNecessary()
 			updateUI(editMode: true)
 			currentKeyboardHeight = keyboardViewEndFrame.height
@@ -2272,6 +2275,7 @@ extension EditorViewController {
 		if isInNotes {
 			convertedRect.size.height = convertedRect.size.height + 10
 		}
+		Swift.print("***** \(convertedRect) \(textView.text ?? "")")
 		collectionView.scrollRectToVisible(convertedRect, animated: true)
 	}
 	
