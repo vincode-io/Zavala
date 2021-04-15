@@ -562,7 +562,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		var string = "\(title ?? "")\n\n"
 		rows.forEach {
-			string.append($0.string(indentLevel: 0))
+			let visitor = StringVisitor()
+			$0.visit(visitor: visitor.visitor)
+			string.append(visitor.string)
 			string.append("\n")
 		}
 		
@@ -635,7 +637,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		rows.forEach {
 			let visitor = OPMLVisitor()
 			$0.visit(visitor: visitor.visitor)
-			opml.append(visitor.opml) }
+			opml.append(visitor.opml)
+		}
 		opml.append("</body>\n")
 		opml.append("</opml>\n")
 

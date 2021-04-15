@@ -317,22 +317,6 @@ public final class TextRow: BaseRow, Codable {
 		return print
 	}
 
-	public override func string(indentLevel: Int = 0) -> String {
-		var string = String(repeating: "\t", count: indentLevel)
-		string.append("\(topic?.string ?? "")")
-		
-		if let notePlainText = note?.string {
-			string.append("\n\(notePlainText)")
-		}
-		
-		rows.forEach {
-			string.append("\n")
-			string.append($0.string(indentLevel: indentLevel + 1))
-		}
-		
-		return string
-	}
-	
 	public override func markdownOutline(indentLevel: Int = 0) -> String {
 		var md = String(repeating: "\t", count: indentLevel)
 		

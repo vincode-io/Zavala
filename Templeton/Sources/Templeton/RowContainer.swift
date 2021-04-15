@@ -18,7 +18,6 @@ public protocol RowContainer {
 	func firstIndexOfRow(_: Row) -> Int?
 
 	func print(indentLevel: Int) -> NSAttributedString
-	func string(indentLevel: Int) -> String
 	func markdownOutline(indentLevel: Int) -> String
 	func markdownPost(indentLevel: Int) -> String
 }
