@@ -523,7 +523,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return children
 	}
 	
-	public func print(indentLevel: Int = 0) -> NSAttributedString {
+	public func print() -> NSAttributedString {
 		let print = NSMutableAttributedString()
 		load()
 		
@@ -559,7 +559,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return print
 	}
 	
-	public func string(indentLevel: Int = 0) -> String {
+	public func string() -> String {
 		load()
 		
 		var string = "\(title ?? "")\n\n"
@@ -574,12 +574,14 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return string
 	}
 	
-	public func markdownOutline(indentLevel: Int = 0) -> String {
+	public func markdown() -> String {
 		load()
 		
 		var md = "# \(title ?? "")\n\n"
 		rows.forEach {
-			md.append($0.markdownOutline(indentLevel: 0))
+			let visitor = MarkdownVisitor()
+			$0.visit(visitor: visitor.visitor)
+			md.append(visitor.markdown)
 			md.append("\n")
 		}
 		
@@ -600,7 +602,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return md
 	}
 	
-	public func opml(indentLevel: Int = 0) -> String {
+	public func opml() -> String {
 		load()
 
 		var opml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"

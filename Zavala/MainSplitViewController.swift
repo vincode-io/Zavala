@@ -482,7 +482,7 @@ extension MainSplitViewController {
 	}
 	
 	private func exportMarkdownOutlineForOutline(_ outline: Outline) {
-		let markdown = outline.markdownOutline()
+		let markdown = outline.markdown()
 		export(markdown, fileName: outline.fileName(withSuffix: "md"))
 	}
 	
@@ -804,7 +804,7 @@ extension MainSplitViewController: UIActivityItemsConfigurationReading {
 		let itemProvider = NSItemProvider()
 		
 		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
-			let data = outline.markdownOutline().data(using: .utf8)
+			let data = outline.markdown().data(using: .utf8)
 			completion(data, nil)
 			return nil
 		}

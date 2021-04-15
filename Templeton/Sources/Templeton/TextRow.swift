@@ -250,27 +250,6 @@ public final class TextRow: BaseRow, Codable {
 		return .text(textRow)
 	}
 
-	public override func markdownOutline(indentLevel: Int = 0) -> String {
-		var md = String(repeating: "\t", count: indentLevel)
-		
-		if isComplete {
-			md.append("* ~~\(topicMarkdown ?? "")~~")
-		} else {
-			md.append("* \(topicMarkdown ?? "")")
-		}
-		
-		if let notePlainText = noteMarkdown {
-			md.append("\n  \(notePlainText)")
-		}
-		
-		rows.forEach {
-			md.append("\n")
-			md.append($0.markdownOutline(indentLevel: indentLevel + 1))
-		}
-		
-		return md
-	}
-	
 	public override func markdownPost(indentLevel: Int = 0) -> String {
 		var md = String(repeating: "#", count: indentLevel + 2)
 		md.append(" \(topicMarkdown ?? "")")

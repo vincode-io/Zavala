@@ -243,8 +243,10 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		return nil
 	}
 	
-	public func markdownOutline(indentLevel: Int = 0) -> String {
-		return associatedRow.markdownOutline(indentLevel: indentLevel)
+	public func markdown() -> String {
+		let visitor = MarkdownVisitor()
+		visit(visitor: visitor.visitor)
+		return visitor.markdown
 	}
 	
 	public func markdownPost(indentLevel: Int = 0) -> String {

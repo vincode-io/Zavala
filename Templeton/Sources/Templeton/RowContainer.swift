@@ -17,6 +17,5 @@ public protocol RowContainer {
 	func appendRow(_: Row)
 	func firstIndexOfRow(_: Row) -> Int?
 
-	func markdownOutline(indentLevel: Int) -> String
 	func markdownPost(indentLevel: Int) -> String
 }
