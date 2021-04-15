@@ -259,10 +259,6 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		return associatedRow.markdownPost(indentLevel: indentLevel)
 	}
 	
-	public func opml(indentLevel: Int = 0) -> String {
-		return associatedRow.opml(indentLevel: indentLevel)
-	}
-	
 	public func hash(into hasher: inout Hasher) {
 		hasher.combine(id)
 	}

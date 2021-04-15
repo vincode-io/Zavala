@@ -154,10 +154,6 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		fatalError("markdown not implemented")
 	}
 	
-	public func opml(indentLevel: Int) -> String {
-		fatalError("opml not implemented")
-	}
-
 	public override func isEqual(_ object: Any?) -> Bool {
 		guard let other = object as? Self else { return false }
 		if self === other { return true }

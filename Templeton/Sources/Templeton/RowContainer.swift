@@ -21,5 +21,4 @@ public protocol RowContainer {
 	func string(indentLevel: Int) -> String
 	func markdownOutline(indentLevel: Int) -> String
 	func markdownPost(indentLevel: Int) -> String
-	func opml(indentLevel: Int) -> String
 }

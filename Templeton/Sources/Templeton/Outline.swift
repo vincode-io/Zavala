@@ -632,7 +632,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		opml.append("</head>\n")
 		opml.append("<body>\n")
-		rows.forEach { opml.append($0.opml()) }
+		rows.forEach {
+			let visitor = OPMLVisitor()
+			$0.visit(visitor: visitor.visitor)
+			opml.append(visitor.opml) }
 		opml.append("</body>\n")
 		opml.append("</opml>\n")
 

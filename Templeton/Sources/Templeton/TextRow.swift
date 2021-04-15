@@ -370,30 +370,6 @@ public final class TextRow: BaseRow, Codable {
 		return md
 	}
 	
-	public override func opml(indentLevel: Int = 0) -> String {
-		let indent = String(repeating: " ", count: (indentLevel + 1) * 2)
-		let escapedText = topicMarkdown?.escapingSpecialXMLCharacters ?? ""
-		
-		var opml = indent + "<outline text=\"\(escapedText)\""
-		if let escapedNote = noteMarkdown?.escapingSpecialXMLCharacters {
-			opml.append(" _note=\"\(escapedNote)\"")
-		}
-
-		if isComplete {
-			opml.append(" _status=\"checked\"")
-		}
-		
-		if rowCount == 0 {
-			opml.append("/>\n")
-		} else {
-			opml.append(">\n")
-			rows.forEach { opml.append($0.opml()) }
-			opml.append(indent + "</outline>\n")
-		}
-		
-		return opml
-	}
-
 }
 
 // MARK: CustomDebugStringConvertible
