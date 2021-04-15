@@ -249,10 +249,6 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		return visitor.markdown
 	}
 	
-	public func markdownPost(indentLevel: Int = 0) -> String {
-		return associatedRow.markdownPost(indentLevel: indentLevel)
-	}
-	
 	public func hash(into hasher: inout Hasher) {
 		hasher.combine(id)
 	}

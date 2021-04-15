@@ -12,8 +12,7 @@ import Templeton
 
 protocol EditorDelegate: AnyObject {
 	func validateToolbar(_ : EditorViewController)
-	func exportMarkdownOutline(_: EditorViewController, outline: Outline)
-	func exportMarkdownPost(_: EditorViewController, outline: Outline)
+	func exportMarkdown(_: EditorViewController, outline: Outline)
 	func exportOPML(_: EditorViewController, outline: Outline)
 }
 
@@ -803,10 +802,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		var activities = [UIActivity]()
 		
-		let exportPostActivity = ExportPostActivity()
-		exportPostActivity.delegate = self
-		activities.append(exportPostActivity)
-		
 		let exportMarkdownActivity = ExportMarkdownActivity()
 		exportMarkdownActivity.delegate = self
 		activities.append(exportMarkdownActivity)
@@ -1232,24 +1227,13 @@ extension EditorViewController: PrintActivityDelegate {
 	
 }
 
-// MARK: ExportPostActivityDelegate
-
-extension EditorViewController: ExportPostActivityDelegate {
-	
-	func exportPost(_: ExportPostActivity) {
-		guard let outline = outline else { return }
-		delegate?.exportMarkdownPost(self, outline: outline)
-	}
-	
-}
-
 // MARK: ExportMarkdownActivityDelegate
 
 extension EditorViewController: ExportMarkdownActivityDelegate {
 
 	func exportMarkdown(_: ExportMarkdownActivity) {
 		guard let outline = outline else { return }
-		delegate?.exportMarkdownOutline(self, outline: outline)
+		delegate?.exportMarkdown(self, outline: outline)
 	}
 	
 }

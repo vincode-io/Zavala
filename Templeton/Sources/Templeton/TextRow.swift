@@ -250,22 +250,6 @@ public final class TextRow: BaseRow, Codable {
 		return .text(textRow)
 	}
 
-	public override func markdownPost(indentLevel: Int = 0) -> String {
-		var md = String(repeating: "#", count: indentLevel + 2)
-		md.append(" \(topicMarkdown ?? "")")
-		
-		if let notePlainText = noteMarkdown {
-			md.append("\n\n\(notePlainText)")
-		}
-		
-		rows.forEach {
-			md.append("\n\n")
-			md.append($0.markdownPost(indentLevel: indentLevel + 1))
-		}
-		
-		return md
-	}
-	
 }
 
 // MARK: CustomDebugStringConvertible

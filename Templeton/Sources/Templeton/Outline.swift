@@ -589,20 +589,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return md
 	}
 	
-	public func markdownPost(indentLevel: Int = 0) -> String {
-		load()
-		
-		var md = "# \(title ?? "")\n\n"
-		rows.forEach {
-			md.append($0.markdownPost(indentLevel: 0))
-			md.append("\n\n")
-		}
-		
-		unload()
-		return md
-	}
-	
-	public func opml() -> String {
+	public func opml(indentLevel: Int = 0) -> String {
 		load()
 
 		var opml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"

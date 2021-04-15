@@ -138,10 +138,6 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		fatalError("clone not implemented")
 	}
 	
-	public func markdownPost(indentLevel: Int) -> String {
-		fatalError("markdown not implemented")
-	}
-	
 	public override func isEqual(_ object: Any?) -> Bool {
 		guard let other = object as? Self else { return false }
 		if self === other { return true }
