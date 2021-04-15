@@ -1,5 +1,5 @@
 //
-//  EditorTextRowTextAttachment.swift
+//  OutlineTextAttachment.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 4/6/21.
@@ -7,9 +7,9 @@
 
 import UIKit
 
-class EditorTextRowTextAttachment: NSTextAttachment {
+public class OutlineTextAttachment: NSTextAttachment {
 	
-	override init(data contentData: Data?, ofType uti: String?) {
+	public override init(data contentData: Data?, ofType uti: String?) {
 		super.init(data: contentData, ofType: uti)
 		if image == nil, let contentData = contentData {
 			image = UIImage(data: contentData)
@@ -20,7 +20,7 @@ class EditorTextRowTextAttachment: NSTextAttachment {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
+	public override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
 		guard let image = image else {
 			return super.attachmentBounds(for: textContainer, proposedLineFragment: lineFrag, glyphPosition: position, characterIndex: charIndex)
 		}
