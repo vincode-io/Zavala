@@ -479,14 +479,14 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return filename
 	}
 	
-	public func postFileName(withSuffix suffix: String) -> String {
+	public func jekyllPostFileName() -> String {
 		let dateFormatter = DateFormatter()
 		dateFormatter.dateFormat = "yyyy-MM-dd"
 		let today = dateFormatter.string(from: Date())
 		
 		var filename = title ?? "Outline"
 		filename = filename.replacingOccurrences(of: " ", with: "-").trimmingCharacters(in: .whitespaces)
-		filename = "\(today)-\(filename).\(suffix)"
+		filename = "\(today)-\(filename).md"
 		
 		return filename
 	}
