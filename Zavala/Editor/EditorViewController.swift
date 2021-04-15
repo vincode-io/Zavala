@@ -2275,7 +2275,6 @@ extension EditorViewController {
 		if isInNotes {
 			convertedRect.size.height = convertedRect.size.height + 10
 		}
-		Swift.print("***** \(convertedRect) \(textView.text ?? "")")
 		collectionView.scrollRectToVisible(convertedRect, animated: true)
 	}
 	
