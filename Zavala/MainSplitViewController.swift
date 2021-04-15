@@ -209,14 +209,9 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 	
-	@objc func exportMarkdownOutline() {
+	@objc func exportMarkdown() {
 		guard let outline = editorViewController?.outline else { return }
-		exportMarkdownOutlineForOutline(outline)
-	}
-	
-	@objc func exportMarkdownPost() {
-		guard let outline = editorViewController?.outline else { return }
-		exportMarkdownPostForOutline(outline)
+		exportMarkdownForOutline(outline)
 	}
 	
 	@objc func exportOPML() {
@@ -351,12 +346,8 @@ extension MainSplitViewController: TimelineDelegate {
 		}
 	}
 
-	func exportMarkdownOutline(_: TimelineViewController, outline: Outline) {
-		exportMarkdownOutlineForOutline(outline)
-	}
-	
-	func exportMarkdownPost(_: TimelineViewController, outline: Outline) {
-		exportMarkdownPostForOutline(outline)
+	func exportMarkdown(_: TimelineViewController, outline: Outline) {
+		exportMarkdownForOutline(outline)
 	}
 	
 	func exportOPML(_: TimelineViewController, outline: Outline) {
@@ -373,12 +364,8 @@ extension MainSplitViewController: EditorDelegate {
 		validateToolbar()
 	}
 
-	func exportMarkdownOutline(_: EditorViewController, outline: Outline) {
-		exportMarkdownOutlineForOutline(outline)
-	}
-	
-	func exportMarkdownPost(_: EditorViewController, outline: Outline) {
-		exportMarkdownPostForOutline(outline)
+	func exportMarkdown(_: EditorViewController, outline: Outline) {
+		exportMarkdownForOutline(outline)
 	}
 	
 	func exportOPML(_: EditorViewController, outline: Outline) {
@@ -481,14 +468,9 @@ extension MainSplitViewController {
 		}
 	}
 	
-	private func exportMarkdownOutlineForOutline(_ outline: Outline) {
+	private func exportMarkdownForOutline(_ outline: Outline) {
 		let markdown = outline.markdownOutline()
 		export(markdown, fileName: outline.fileName(withSuffix: "md"))
-	}
-	
-	private func exportMarkdownPostForOutline(_ outline: Outline) {
-		let markdown = outline.markdownPost()
-		export(markdown, fileName: outline.postFileName(withSuffix: "md"))
 	}
 	
 	private func exportOPMLForOutline(_ outline: Outline) {

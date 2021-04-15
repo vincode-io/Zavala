@@ -242,8 +242,6 @@
 		51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */; };
 		51B9D99726140B0100A66859 /* PrintActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99626140B0100A66859 /* PrintActivity.swift */; };
 		51B9D99826140B0100A66859 /* PrintActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99626140B0100A66859 /* PrintActivity.swift */; };
-		51B9D99A26140E0600A66859 /* ExportPostActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99926140E0600A66859 /* ExportPostActivity.swift */; };
-		51B9D99B26140E0600A66859 /* ExportPostActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99926140E0600A66859 /* ExportPostActivity.swift */; };
 		51B9D99D26140EDC00A66859 /* ExportMarkdownActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99C26140EDC00A66859 /* ExportMarkdownActivity.swift */; };
 		51B9D99E26140EDC00A66859 /* ExportMarkdownActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99C26140EDC00A66859 /* ExportMarkdownActivity.swift */; };
 		51B9D9A026140F3A00A66859 /* ExportOPMLActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */; };
@@ -508,7 +506,6 @@
 		51B2B2D52563AB9F0090C56B /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDisclosureButton.swift; sourceTree = "<group>"; };
 		51B9D99626140B0100A66859 /* PrintActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintActivity.swift; sourceTree = "<group>"; };
-		51B9D99926140E0600A66859 /* ExportPostActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPostActivity.swift; sourceTree = "<group>"; };
 		51B9D99C26140EDC00A66859 /* ExportMarkdownActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportMarkdownActivity.swift; sourceTree = "<group>"; };
 		51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportOPMLActivity.swift; sourceTree = "<group>"; };
 		51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentConfiguration.swift; sourceTree = "<group>"; };
@@ -833,7 +830,6 @@
 			isa = PBXGroup;
 			children = (
 				51B9D99626140B0100A66859 /* PrintActivity.swift */,
-				51B9D99926140E0600A66859 /* ExportPostActivity.swift */,
 				51B9D99C26140EDC00A66859 /* ExportMarkdownActivity.swift */,
 				51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */,
 			);
@@ -1345,7 +1341,6 @@
 				511B2A4A2602410C00C04239 /* TimelineItem.swift in Sources */,
 				511B2A4B2602410C00C04239 /* EditorTextRowContentConfiguration.swift in Sources */,
 				511B2A4C2602410C00C04239 /* OutlineTextView.swift in Sources */,
-				51B9D99B26140E0600A66859 /* ExportPostActivity.swift in Sources */,
 				511B2A4D2602410C00C04239 /* UIFont+.swift in Sources */,
 				511B2A4E2602410C00C04239 /* EditorTagInputContentConfiguration.swift in Sources */,
 				511B2A4F2602410C00C04239 /* TimelineViewController.swift in Sources */,
@@ -1484,7 +1479,6 @@
 				514F221B25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift in Sources */,
 				51B9D99726140B0100A66859 /* PrintActivity.swift in Sources */,
 				519A2324260A9B900056051E /* OutlineFontField.swift in Sources */,
-				51B9D99A26140E0600A66859 /* ExportPostActivity.swift in Sources */,
 				51C4C442255A0DE1004E0206 /* TimelineViewController.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,
