@@ -22,9 +22,11 @@ class StringVisitor {
 			string.append("\n\(notePlainText)")
 		}
 		
-		string.append("\n")
 		indentLevel = indentLevel + 1
-		textRow.rows.forEach { $0.visit(visitor: self.visitor) }
+		textRow.rows.forEach {
+			string.append("\n")
+			$0.visit(visitor: self.visitor)
+		}
 		indentLevel = indentLevel - 1
 	}
 	

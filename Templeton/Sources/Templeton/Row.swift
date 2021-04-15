@@ -243,10 +243,6 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		return nil
 	}
 	
-	public func print(indentLevel: Int = 0) -> NSAttributedString {
-		return associatedRow.print(indentLevel: indentLevel)
-	}
-	
 	public func markdownOutline(indentLevel: Int = 0) -> String {
 		return associatedRow.markdownOutline(indentLevel: indentLevel)
 	}

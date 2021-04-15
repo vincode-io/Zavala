@@ -138,10 +138,6 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		fatalError("clone not implemented")
 	}
 	
-	public func print(indentLevel: Int) -> NSAttributedString {
-		fatalError("print not implemented")
-	}
-	
 	public func markdownOutline(indentLevel: Int) -> String {
 		fatalError("markdown not implemented")
 	}

@@ -549,7 +549,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		
 		rows.forEach {
-			print.append($0.print(indentLevel: 0))
+			let visitor = PrintVisitor()
+			$0.visit(visitor: visitor.visitor)
+			print.append(visitor.print)
 			print.append(NSAttributedString(string: "\n"))
 		}
 
