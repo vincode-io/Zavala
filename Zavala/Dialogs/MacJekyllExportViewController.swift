@@ -100,10 +100,27 @@ extension MacJekyllExportViewController {
 	}
 	
 	private func showDocumentPicker() {
+		var initialDirectory: URL? = nil
+		switch currentPickerType! {
+		case .root:
+			if let path = rootFolderTextField.text {
+				initialDirectory = URL(fileURLWithPath: path)
+			}
+		case .posts:
+			if let path = postsFolderTextField.text {
+				initialDirectory = URL(fileURLWithPath: path)
+			}
+		case .images:
+			if let path = imagesFolderTextField.text {
+				initialDirectory = URL(fileURLWithPath: path)
+			}
+		}
+
 		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.folder])
 		docPicker.delegate = self
 		docPicker.modalPresentationStyle = .formSheet
 		docPicker.allowsMultipleSelection = false
+		docPicker.directoryURL = initialDirectory
 		self.present(docPicker, animated: true)
 	}
 	
