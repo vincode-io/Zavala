@@ -478,19 +478,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		filename = "\(filename).\(suffix)"
 		return filename
 	}
-	
-	public func jekyllPostFileName() -> String {
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "yyyy-MM-dd"
-		let today = dateFormatter.string(from: Date())
 		
-		var filename = title ?? "Outline"
-		filename = filename.replacingOccurrences(of: " ", with: "-").trimmingCharacters(in: .whitespaces)
-		filename = "\(today)-\(filename).md"
-		
-		return filename
-	}
-	
 	public func childrenIndexes(forIndex: Int) -> [Int] {
 		guard let row = shadowTable?[forIndex] else { return [Int]() }
 		var children = [Int]()
@@ -635,6 +623,29 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		unload()
 		return opml
+	}
+	
+	public func exportJekyllPost(root: URL, posts: URL, images: URL) {
+		var md = String()
+		md.append("---\n")
+		md.append("Title: \(title ?? "No Title")\n")
+		md.append("---\n\n")
+
+		rows.forEach {
+			let visitor = JekyllPostVisitor()
+			$0.visit(visitor: visitor.visitor)
+			md.append(visitor.markdown)
+		}
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd"
+		let today = dateFormatter.string(from: Date())
+		
+		var filename = title ?? "Outline"
+		filename = filename.replacingOccurrences(of: " ", with: "-").trimmingCharacters(in: .whitespaces)
+		filename = "\(today)-\(filename)"
+		let fileURL = posts.appendingPathComponent(filename).appendingPathExtension("md")
+		try? md.write(toFile: fileURL.path, atomically: true, encoding: .utf8)
 	}
 	
 	public func update(title: String) {
