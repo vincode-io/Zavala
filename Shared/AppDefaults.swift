@@ -28,9 +28,9 @@ final class AppDefaults {
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
 		static let outlineFonts = "outlineFonts"
-		static let jekyllRootFolder = "jekyllRootFolder"
-		static let jekyllPostsFolder = "jekyllPostsFolder"
-		static let jekyllImagesFolder = "jekyllImagesFolder"
+		static let jekyllRootBookmark = "jekyllRootBookmark"
+		static let jekyllPostsBookmark = "jekyllPostsBookmark"
+		static let jekyllImagesBookmark = "jekyllImagesBookmark"
 	}
 	
 	let isDeveloperBuild: Bool = {
@@ -124,30 +124,30 @@ final class AppDefaults {
 		}
 	}
 
-	var jekyllRootFolder: String? {
+	var jekyllRootBookmark: Data? {
 		get {
-			return Self.string(for: Key.jekyllRootFolder)
+			return Self.data(for: Key.jekyllRootBookmark)
 		}
 		set {
-			Self.setString(for: Key.jekyllRootFolder, newValue)
+			Self.setData(for: Key.jekyllRootBookmark, newValue)
 		}
 	}
 
-	var jekyllPostsFolder: String? {
+	var jekyllPostsBookmark: Data? {
 		get {
-			return Self.string(for: Key.jekyllPostsFolder)
+			return Self.data(for: Key.jekyllPostsBookmark)
 		}
 		set {
-			Self.setString(for: Key.jekyllPostsFolder, newValue)
+			Self.setData(for: Key.jekyllPostsBookmark, newValue)
 		}
 	}
 
-	var jekyllImagesFolder: String? {
+	var jekyllImagesBookmark: Data? {
 		get {
-			return Self.string(for: Key.jekyllImagesFolder)
+			return Self.data(for: Key.jekyllImagesBookmark)
 		}
 		set {
-			Self.setString(for: Key.jekyllImagesFolder, newValue)
+			Self.setData(for: Key.jekyllImagesBookmark, newValue)
 		}
 	}
 
@@ -191,6 +191,14 @@ private extension AppDefaults {
 
 	static func setDate(for key: String, _ date: Date?) {
 		AppDefaults.store.set(date, forKey: key)
+	}
+	
+	static func data(for key: String) -> Data? {
+		return AppDefaults.store.object(forKey: key) as? Data
+	}
+
+	static func setData(for key: String, _ data: Data?) {
+		AppDefaults.store.set(data, forKey: key)
 	}
 	
 }

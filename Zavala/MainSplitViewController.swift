@@ -212,7 +212,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	@objc func exportJekyll() {
 		let openJekyllExportViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacJekyllExportViewController") as! MacJekyllExportViewController
 		openJekyllExportViewController.preferredContentSize = CGSize(width: 500, height: 150)
-//		openJekyllExportViewController.delegate = self
+		openJekyllExportViewController.delegate = self
 		present(openJekyllExportViewController, animated: true)
 	}
 
@@ -443,10 +443,25 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 	
 }
 
+// MARK: OpenQuicklyViewControllerDelegate
+
 extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 	
 	func quicklyOpenDocument(documentID: EntityID) {
 		openDocument(documentID)
+	}
+	
+}
+
+// MARK: JekyllExportViewControllerDelegate
+
+extension MainSplitViewController: JekyllExportViewControllerDelegate {
+	
+	func exportJekyll(root: URL, posts: URL, images: URL) {
+		guard let outline = editorViewController?.outline else {
+			return
+		}
+		outline.exportJekyllPost(root: root, posts: posts, images: images)
 	}
 	
 }

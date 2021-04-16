@@ -29,9 +29,9 @@ class MacJekyllExportViewController: MacFormViewController {
 	private var currentPickerType: PickerType? = nil
 	
 	override func viewDidLoad() {
-		rootFolderTextField.text = AppDefaults.shared.jekyllRootFolder
-		postsFolderTextField.text = AppDefaults.shared.jekyllPostsFolder
-		imagesFolderTextField.text = AppDefaults.shared.jekyllImagesFolder
+		rootFolderTextField.text = bookmarkToURL(AppDefaults.shared.jekyllRootBookmark)?.path
+		postsFolderTextField.text = bookmarkToURL(AppDefaults.shared.jekyllPostsBookmark)?.path
+		imagesFolderTextField.text = bookmarkToURL(AppDefaults.shared.jekyllImagesBookmark)?.path
 	}
 	
 	@IBAction func chooseRootFolder(_ sender: Any) {
@@ -50,15 +50,11 @@ class MacJekyllExportViewController: MacFormViewController {
 	}
 	
 	@IBAction override func submit(_ sender: Any) {
-		guard let rootURL = rootFolderTextField.text,
-			  let postsURL = postsFolderTextField.text,
-			  let imagesURL = imagesFolderTextField.text else { return }
-
-		let root = URL(fileURLWithPath: rootURL)
-		let posts = URL(fileURLWithPath: postsURL)
-		let images = URL(fileURLWithPath: imagesURL)
-		delegate?.exportJekyll(root: root, posts: posts, images: images)
+		guard let root = bookmarkToURL(AppDefaults.shared.jekyllRootBookmark),
+			  let posts = bookmarkToURL(AppDefaults.shared.jekyllPostsBookmark),
+			  let images = bookmarkToURL(AppDefaults.shared.jekyllImagesBookmark) else { return }
 		
+		delegate?.exportJekyll(root: root, posts: posts, images: images)
 		dismiss(animated: true)
 	}
 	
@@ -67,18 +63,22 @@ class MacJekyllExportViewController: MacFormViewController {
 extension MacJekyllExportViewController: UIDocumentPickerDelegate {
 	
 	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-		guard let url = urls.first else { return }
+		guard let url = urls.first, url.startAccessingSecurityScopedResource() else { return }
+		
+		defer { url.stopAccessingSecurityScopedResource() }
+		
+		let bookmarkData = try? url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
 		
 		switch currentPickerType! {
 		case .root:
 			rootFolderTextField.text = url.path
-			AppDefaults.shared.jekyllRootFolder = url.path
+			AppDefaults.shared.jekyllRootBookmark = bookmarkData
 		case .posts:
 			postsFolderTextField.text = url.path
-			AppDefaults.shared.jekyllPostsFolder = url.path
+			AppDefaults.shared.jekyllPostsBookmark = bookmarkData
 		case .images:
 			imagesFolderTextField.text = url.path
-			AppDefaults.shared.jekyllImagesFolder = url.path
+			AppDefaults.shared.jekyllImagesBookmark = bookmarkData
 		}
 		
 		currentPickerType = nil
@@ -91,6 +91,19 @@ extension MacJekyllExportViewController: UIDocumentPickerDelegate {
 
 extension MacJekyllExportViewController {
 	
+	private func bookmarkToURL(_ data: Data?) -> URL? {
+		guard let data = data else { return nil }
+		
+		var isStale = false
+		let url = try? URL(resolvingBookmarkData: data, bookmarkDataIsStale: &isStale)
+		
+		if !isStale {
+			return url
+		} else {
+			return nil
+		}
+	}
+	
 	private func updateUI() {
 		if rootFolderTextField.text == nil || postsFolderTextField.text == nil || imagesFolderTextField.text == nil {
 			exportButton.isEnabled = false
@@ -101,19 +114,8 @@ extension MacJekyllExportViewController {
 	
 	private func showDocumentPicker() {
 		var initialDirectory: URL? = nil
-		switch currentPickerType! {
-		case .root:
-			if let path = rootFolderTextField.text {
-				initialDirectory = URL(fileURLWithPath: path)
-			}
-		case .posts:
-			if let path = postsFolderTextField.text {
-				initialDirectory = URL(fileURLWithPath: path)
-			}
-		case .images:
-			if let path = imagesFolderTextField.text {
-				initialDirectory = URL(fileURLWithPath: path)
-			}
+		if let path = rootFolderTextField.text {
+			initialDirectory = URL(fileURLWithPath: path)
 		}
 
 		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [.folder])

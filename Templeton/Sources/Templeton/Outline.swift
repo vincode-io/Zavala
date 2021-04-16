@@ -645,7 +645,22 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		filename = filename.replacingOccurrences(of: " ", with: "-").trimmingCharacters(in: .whitespaces)
 		filename = "\(today)-\(filename)"
 		let fileURL = posts.appendingPathComponent(filename).appendingPathExtension("md")
-		try? md.write(toFile: fileURL.path, atomically: true, encoding: .utf8)
+
+		guard posts.startAccessingSecurityScopedResource() else { return }
+		defer { posts.stopAccessingSecurityScopedResource() }
+		
+		var error: NSError? = nil
+		NSFileCoordinator().coordinate(writingItemAt: fileURL, options: .forReplacing, error: &error) { url in
+			do {
+				try md.write(to: url, atomically: true, encoding: .utf8)
+			} catch {
+				Swift.print(error.localizedDescription)
+			}
+		}
+		
+		if let error = error {
+			Swift.print(error.localizedDescription)
+		}
 	}
 	
 	public func update(title: String) {
