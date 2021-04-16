@@ -28,6 +28,9 @@ final class AppDefaults {
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
 		static let outlineFonts = "outlineFonts"
+		static let jekyllRootFolder = "jekyllRootFolder"
+		static let jekyllPostsFolder = "jekyllPostsFolder"
+		static let jekyllImagesFolder = "jekyllImagesFolder"
 	}
 	
 	let isDeveloperBuild: Bool = {
@@ -118,6 +121,33 @@ final class AppDefaults {
 		}
 		set {
 			AppDefaults.store.set(newValue?.userInfo, forKey: Key.outlineFonts)
+		}
+	}
+
+	var jekyllRootFolder: String? {
+		get {
+			return Self.string(for: Key.jekyllRootFolder)
+		}
+		set {
+			Self.setString(for: Key.jekyllRootFolder, newValue)
+		}
+	}
+
+	var jekyllPostsFolder: String? {
+		get {
+			return Self.string(for: Key.jekyllPostsFolder)
+		}
+		set {
+			Self.setString(for: Key.jekyllPostsFolder, newValue)
+		}
+	}
+
+	var jekyllImagesFolder: String? {
+		get {
+			return Self.string(for: Key.jekyllImagesFolder)
+		}
+		set {
+			Self.setString(for: Key.jekyllImagesFolder, newValue)
 		}
 	}
 

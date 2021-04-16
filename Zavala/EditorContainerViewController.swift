@@ -78,6 +78,13 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		editorViewController?.edit(nil, isNew: false)
 	}
 	
+	func exportJekyll() {
+		let openJekyllExportViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacJekyllExportViewController") as! MacJekyllExportViewController
+		openJekyllExportViewController.preferredContentSize = CGSize(width: 500, height: 150)
+//		openJekyllExportViewController.delegate = self
+		present(openJekyllExportViewController, animated: true)
+	}
+
 	func exportMarkdown() {
 		guard let outline = editorViewController?.outline else { return }
 		exportMarkdownForOutline(outline)

@@ -114,6 +114,8 @@ internal enum L10n {
   internal static let expandAllInOutline = L10n.tr("Localizable", "Expand_All_In_Outline")
   /// Expand All in Row
   internal static let expandAllInRow = L10n.tr("Localizable", "Expand_All_In_Row")
+  /// Export Jekyll Post
+  internal static let exportJekyll = L10n.tr("Localizable", "Export_Jekyll")
   /// Export Markdown
   internal static let exportMarkdown = L10n.tr("Localizable", "Export_Markdown")
   /// Export OPML

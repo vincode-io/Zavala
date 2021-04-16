@@ -10,6 +10,7 @@ import UIKit
 protocol MainCoordinator {
 	var editorViewController: EditorViewController? { get }
 	var isExportOutlineUnavailable: Bool { get }
+	func exportJekyll()
 	func exportMarkdown()
 	func exportOPML()
 	func openURL(_: String)
