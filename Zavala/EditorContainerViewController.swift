@@ -79,10 +79,12 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	}
 	
 	func exportJekyll() {
+		#if targetEnvironment(macCatalyst)
 		let openJekyllExportViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacJekyllExportViewController") as! MacJekyllExportViewController
 		openJekyllExportViewController.preferredContentSize = CGSize(width: 500, height: 150)
 //		openJekyllExportViewController.delegate = self
 		present(openJekyllExportViewController, animated: true)
+		#endif
 	}
 
 	func exportMarkdown() {

@@ -11,7 +11,7 @@
         }
       },
       {
-        "package": "PLCrashReporter",
+        "package": "plcrashreporter",
         "repositoryURL": "https://github.com/microsoft/plcrashreporter.git",
         "state": {
           "branch": null,
@@ -29,7 +29,7 @@
         }
       },
       {
-        "package": "RSSparkle",
+        "package": "Sparkle-Binary",
         "repositoryURL": "https://github.com/vincode-io/Sparkle-Binary.git",
         "state": {
           "branch": "main",

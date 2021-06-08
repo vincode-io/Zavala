@@ -210,10 +210,12 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 	
 	@objc func exportJekyll() {
+		#if targetEnvironment(macCatalyst)
 		let openJekyllExportViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacJekyllExportViewController") as! MacJekyllExportViewController
 		openJekyllExportViewController.preferredContentSize = CGSize(width: 500, height: 150)
 		openJekyllExportViewController.delegate = self
 		present(openJekyllExportViewController, animated: true)
+		#endif
 	}
 
 	@objc func exportMarkdown() {
@@ -455,6 +457,7 @@ extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 
 // MARK: JekyllExportViewControllerDelegate
 
+#if targetEnvironment(macCatalyst)
 extension MainSplitViewController: JekyllExportViewControllerDelegate {
 	
 	func exportJekyll(root: URL, posts: URL, images: URL) {
@@ -465,6 +468,7 @@ extension MainSplitViewController: JekyllExportViewControllerDelegate {
 	}
 	
 }
+#endif
 
 // MARK: Helpers
 

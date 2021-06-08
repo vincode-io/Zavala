@@ -5,6 +5,8 @@
 //  Created by Maurice Parker on 4/15/21.
 //
 
+#if targetEnvironment(macCatalyst)
+
 import UIKit
 
 protocol JekyllExportViewControllerDelegate: AnyObject {
@@ -127,3 +129,5 @@ extension MacJekyllExportViewController {
 	}
 	
 }
+
+#endif
