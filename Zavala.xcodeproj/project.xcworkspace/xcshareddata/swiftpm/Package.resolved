@@ -11,7 +11,7 @@
         }
       },
       {
-        "package": "PLCrashReporter",
+        "package": "plcrashreporter",
         "repositoryURL": "https://github.com/microsoft/plcrashreporter.git",
         "state": {
           "branch": null,
@@ -24,12 +24,12 @@
         "repositoryURL": "https://github.com/Ranchero-Software/RSCore.git",
         "state": {
           "branch": "main",
-          "revision": "b5324162d5c3e3e6bfa0110f30bf666677560322",
+          "revision": "2a13519b4d91843faa6aff4245b0e387dc64eafe",
           "version": null
         }
       },
       {
-        "package": "RSSparkle",
+        "package": "Sparkle-Binary",
         "repositoryURL": "https://github.com/vincode-io/Sparkle-Binary.git",
         "state": {
           "branch": "main",
