@@ -9,7 +9,7 @@ header:
   overlay_filter: 0.5
   actions:
     - label: "Download"
-      url: "/download/"
+      url: "https://apps.apple.com/us/app/zavala/id1546457750"
 
 feature_row:
   - image_path: /assets/images/feature-screenshot-mac.png
