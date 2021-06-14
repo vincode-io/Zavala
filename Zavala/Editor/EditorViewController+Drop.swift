@@ -36,6 +36,10 @@ extension EditorViewController: UICollectionViewDropDelegate {
 			return UICollectionViewDropProposal(operation: .cancel, intent: .unspecified)
 		}
 		
+		if targetIndexPath.section > adjustedRowsSection {
+			return UICollectionViewDropProposal(operation: .cancel, intent: .unspecified)
+		}
+		
 		if session.localDragSession != nil {
 			return localDropProposal(session: session, targetIndexPath: targetIndexPath)
 		} else {
@@ -153,9 +157,28 @@ extension EditorViewController {
 			return
 		}
 
-		// THis is where most of the sibling moves happen at
-		let newSibling = shadowTable[targetIndexPath.row]
-		guard let newParent = newSibling.parent, var newIndex = newParent.firstIndexOfRow(newSibling) else { return }
+		// This is where most of the sibling moves happen at
+		var newParent: RowContainer
+		var newIndex: Int
+		
+		let newSiblingCandidate = shadowTable[targetIndexPath.row]
+
+		// We have to handle dropping into the first entry in a parent in a special way
+		if targetIndexPath.row + 1 < shadowTable.count {
+			let newSiblingCandidateChildCandidate = shadowTable[targetIndexPath.row + 1]
+			if newSiblingCandidate.containsRow(newSiblingCandidateChildCandidate) && targetIndexPath.section == adjustedRowsSection {
+				newParent = newSiblingCandidate
+				newIndex = -1
+			} else {
+				guard let parent = newSiblingCandidate.parent, let index = parent.firstIndexOfRow(newSiblingCandidate) else { return }
+				newParent = parent
+				newIndex = index
+			}
+		} else {
+			guard let parent = newSiblingCandidate.parent, let index = parent.firstIndexOfRow(newSiblingCandidate) else { return }
+			newParent = parent
+			newIndex = index
+		}
 
 		// I don't know why this works.  This is definately in the category of, "Just try stuff until it works.".
 		for row in rows {
