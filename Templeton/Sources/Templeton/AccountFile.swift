@@ -61,12 +61,10 @@ private extension AccountFile {
 		fileCoordinator.coordinate(readingItemAt: fileURL, options: [], error: errorPointer, byAccessor: { readURL in
 			do {
 				let resourceValues = try readURL.resourceValues(forKeys: [.contentModificationDateKey])
-				guard lastModificationDate != resourceValues.contentModificationDate else {
-					return
+				if lastModificationDate != resourceValues.contentModificationDate {
+					lastModificationDate = resourceValues.contentModificationDate
+					fileData = try Data(contentsOf: readURL)
 				}
-				lastModificationDate = resourceValues.contentModificationDate
-
-				fileData = try Data(contentsOf: readURL)
 			} catch {
 				os_log(.error, log: log, "Account read from disk failed: %@.", error.localizedDescription)
 			}
