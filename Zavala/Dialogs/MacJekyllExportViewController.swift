@@ -31,6 +31,7 @@ class MacJekyllExportViewController: MacFormViewController {
 	private var currentPickerType: PickerType? = nil
 	
 	override func viewDidLoad() {
+		exportButton.role = .primary
 		rootFolderTextField.text = bookmarkToURL(AppDefaults.shared.jekyllRootBookmark)?.path
 		postsFolderTextField.text = bookmarkToURL(AppDefaults.shared.jekyllPostsBookmark)?.path
 		imagesFolderTextField.text = bookmarkToURL(AppDefaults.shared.jekyllImagesBookmark)?.path
