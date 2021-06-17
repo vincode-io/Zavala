@@ -238,7 +238,7 @@ public final class Account: NSObject, Identifiable, Codable {
 			let outline = document.outline!
 			outline.load()
 			outline.apply(update)
-			outline.save()
+			outline.forceSave()
 			outline.unload()
 		} else {
 			guard update.saveOutlineRecord != nil else {
@@ -248,7 +248,7 @@ public final class Account: NSObject, Identifiable, Codable {
 			outline.zoneID = update.zoneID
 
 			outline.apply(update)
-			outline.save()
+			outline.forceSave()
 			outline.unload()
 			
 			if documents == nil {
