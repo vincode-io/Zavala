@@ -8,6 +8,7 @@
 import UIKit
 import MobileCoreServices
 import RSCore
+import Templeton
 
 class EditorTextRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {
 	
@@ -18,6 +19,10 @@ class EditorTextRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate 
 	}
 	
 	func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+		guard !session.hasItemsConforming(toTypeIdentifiers: [Row.typeIdentifier]) else {
+			return false
+		}
+
 		return session.hasItemsConforming(toTypeIdentifiers: [kUTTypeImage as String, kUTTypeText as String]) && session.items.count == 1
 	}
 	
