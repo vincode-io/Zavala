@@ -327,6 +327,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)
+		
+		// I'm not sure how collectionView could be nil, but we have crash reports where it is
+		guard collectionView != nil else { return }
+		
 		if collectionView.contentOffset != .zero {
 			transitionContentOffset = collectionView.contentOffset
 		}
