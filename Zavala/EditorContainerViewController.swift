@@ -70,7 +70,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		
 		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return }
 		guard let outline = account.createOutline().outline else { return }
-		
+		outline.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
+
 		editorViewController?.edit(outline, isNew: true)
 	}
 
