@@ -161,31 +161,34 @@ extension EditorViewController {
 		var newParent: RowContainer
 		var newIndex: Int
 		
-		let newSiblingCandidate = shadowTable[targetIndexPath.row]
+		// The target index path points to the following row, but we want the preceding row to be the sibling
+		var newSiblingTargetIndexPath = targetIndexPath.row > 0 ? targetIndexPath.row - 1 : 0
+
+		// Adjust the index path when dragging downward
+		for row in rows {
+			if row.shadowTableIndex ?? 0 < targetIndexPath.row {
+				newSiblingTargetIndexPath = newSiblingTargetIndexPath + 1
+				break
+			}
+		}
+
+		let newSiblingCandidate = shadowTable[newSiblingTargetIndexPath]
 
 		// We have to handle dropping into the first entry in a parent in a special way
-		if targetIndexPath.row + 1 < shadowTable.count {
-			let newSiblingCandidateChildCandidate = shadowTable[targetIndexPath.row + 1]
+		if newSiblingTargetIndexPath + 1 < shadowTable.count {
+			let newSiblingCandidateChildCandidate = shadowTable[newSiblingTargetIndexPath + 1]
 			if newSiblingCandidate.containsRow(newSiblingCandidateChildCandidate) && targetIndexPath.section == adjustedRowsSection {
 				newParent = newSiblingCandidate
-				newIndex = -1
+				newIndex = 0
 			} else {
 				guard let parent = newSiblingCandidate.parent, let index = parent.firstIndexOfRow(newSiblingCandidate) else { return }
 				newParent = parent
-				newIndex = index
+				newIndex = index + 1
 			}
 		} else {
 			guard let parent = newSiblingCandidate.parent, let index = parent.firstIndexOfRow(newSiblingCandidate) else { return }
 			newParent = parent
-			newIndex = index
-		}
-
-		// I don't know why this works.  This is definately in the category of, "Just try stuff until it works.".
-		for row in rows {
-			if (row.parent as? Row) != (newParent as? Row) && row.shadowTableIndex ?? 0 < targetIndexPath.row {
-				newIndex = newIndex + 1
-				break
-			}
+			newIndex = index + 1
 		}
 		
 		localRowDrop(coordinator: coordinator, rows: rows, toParent: newParent, toChildIndex: newIndex)
