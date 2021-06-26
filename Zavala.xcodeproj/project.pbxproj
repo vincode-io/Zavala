@@ -238,7 +238,6 @@
 		51B2B2CE2563AAF60090C56B /* EditorTextRowContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2CD2563AAF60090C56B /* EditorTextRowContentConfiguration.swift */; };
 		51B2B2D22563AB190090C56B /* EditorTextRowContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2D12563AB190090C56B /* EditorTextRowContentView.swift */; };
 		51B2B2D62563AB9F0090C56B /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2D52563AB9F0090C56B /* UIView+.swift */; };
-		51B5861C256B245300ACF99B /* SWXMLHash in Frameworks */ = {isa = PBXBuildFile; productRef = 51B5861B256B245300ACF99B /* SWXMLHash */; };
 		51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */; };
 		51B9D99726140B0100A66859 /* PrintActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99626140B0100A66859 /* PrintActivity.swift */; };
 		51B9D99826140B0100A66859 /* PrintActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99626140B0100A66859 /* PrintActivity.swift */; };
@@ -254,13 +253,10 @@
 		51C030BE257E1B9400609262 /* OutlineTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030BD257E1B9400609262 /* OutlineTextView.swift */; };
 		51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51C4C3CD2555F07A004E0206 /* CloudKit.framework */; };
 		51C4C3F92557470B004E0206 /* Templeton in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C3F82557470B004E0206 /* Templeton */; };
-		51C4C40125576631004E0206 /* RSCore in Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C40025576631004E0206 /* RSCore */; };
-		51C4C40225576632004E0206 /* RSCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 51C4C40025576631004E0206 /* RSCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		51C4C442255A0DE1004E0206 /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C441255A0DE1004E0206 /* TimelineViewController.swift */; };
 		51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C448255AA215004E0206 /* MainSplitViewController.swift */; };
 		51C4C45B255ACA1B004E0206 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C45A255ACA1B004E0206 /* EditorViewController.swift */; };
 		51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */; };
-		51C568D5258C085400AA7B93 /* MarkdownAttributedString in Frameworks */ = {isa = PBXBuildFile; productRef = 51C568D4258C085400AA7B93 /* MarkdownAttributedString */; };
 		51C568D9258C1CD200AA7B93 /* MacLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568D8258C1CD200AA7B93 /* MacLinkViewController.swift */; };
 		51CF10A82571BA66005D6D88 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10A72571BA66005D6D88 /* Localizable.strings */; };
 		51CF10AC2571BA9A005D6D88 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */; };
@@ -381,7 +377,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				51C4C40225576632004E0206 /* RSCore in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -592,10 +587,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51C568D5258C085400AA7B93 /* MarkdownAttributedString in Frameworks */,
-				51B5861C256B245300ACF99B /* SWXMLHash in Frameworks */,
 				51C4C3F92557470B004E0206 /* Templeton in Frameworks */,
-				51C4C40125576631004E0206 /* RSCore in Frameworks */,
 				51C4C3CE2555F07A004E0206 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1049,6 +1041,7 @@
 				51C4C3C22555EB4D004E0206 /* Run VerifyNoBuildSettings */,
 				51C4C3F125565282004E0206 /* Embed Frameworks */,
 				51E060D125A45AA800194066 /* Embed PlugIns */,
+				512604B12687A9D000AFEC7F /* Run Script: Delete Unnecessary Frameworks For Extensions */,
 			);
 			buildRules = (
 			);
@@ -1059,9 +1052,6 @@
 			name = Zavala;
 			packageProductDependencies = (
 				51C4C3F82557470B004E0206 /* Templeton */,
-				51C4C40025576631004E0206 /* RSCore */,
-				51B5861B256B245300ACF99B /* SWXMLHash */,
-				51C568D4258C085400AA7B93 /* MarkdownAttributedString */,
 			);
 			productName = Manhattan;
 			productReference = 5181A9342554D92000C153E8 /* Zavala.app */;
@@ -1118,9 +1108,6 @@
 			);
 			mainGroup = 5181A92B2554D92000C153E8;
 			packageReferences = (
-				51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */,
-				51B5861A256B245300ACF99B /* XCRemoteSwiftPackageReference "SWXMLHash" */,
-				51C568D3258C085400AA7B93 /* XCRemoteSwiftPackageReference "MarkdownAttributedString" */,
 				51E060AA25A4516100194066 /* XCRemoteSwiftPackageReference "Sparkle-Binary" */,
 				514EF16125A78BCC00B1FFB6 /* XCRemoteSwiftPackageReference "plcrashreporter" */,
 			);
@@ -1235,6 +1222,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
 			shellScript = "if [ $CONFIGURATION = \"Release\" ] && [ \"${IS_MACCATALYST}\" = \"YES\" ]; then\n\tcodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Updater.app\"\n\tcodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Autoupdate\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.Downloader.xpc\"\n\tcodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc\"\n\tcodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerConnection.xpc\"\n\tcodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerStatus.xpc\"\nfi\n";
+		};
+		512604B12687A9D000AFEC7F /* Run Script: Delete Unnecessary Frameworks For Extensions */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script: Delete Unnecessary Frameworks For Extensions";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Delete the framework that Xcode should have never included\n# https://forums.swift.org/t/is-this-an-xcode-bug-or-somehow-related-to-spm/33987\nrm -rf \"${TARGET_BUILD_DIR}/${PLUGINS_FOLDER_PATH}/SpotlightIndexExtension.appex/Frameworks\"\n\n# Re-sign to update the expected files in the signature\ncodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${TARGET_BUILD_DIR}/${PLUGINS_FOLDER_PATH}/SpotlightIndexExtension.appex\"\n";
 		};
 		51C4C3C22555EB4D004E0206 /* Run VerifyNoBuildSettings */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1773,30 +1778,6 @@
 				minimumVersion = 1.8.1;
 			};
 		};
-		51B5861A256B245300ACF99B /* XCRemoteSwiftPackageReference "SWXMLHash" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/drmohundro/SWXMLHash.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.1;
-			};
-		};
-		51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Ranchero-Software/RSCore.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		51C568D3258C085400AA7B93 /* XCRemoteSwiftPackageReference "MarkdownAttributedString" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/vincode-io/MarkdownAttributedString.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		51E060AA25A4516100194066 /* XCRemoteSwiftPackageReference "Sparkle-Binary" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/vincode-io/Sparkle-Binary.git";
@@ -1841,24 +1822,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Templeton;
 		};
-		51B5861B256B245300ACF99B /* SWXMLHash */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 51B5861A256B245300ACF99B /* XCRemoteSwiftPackageReference "SWXMLHash" */;
-			productName = SWXMLHash;
-		};
 		51C4C3F82557470B004E0206 /* Templeton */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Templeton;
-		};
-		51C4C40025576631004E0206 /* RSCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 51C4C3ED25565281004E0206 /* XCRemoteSwiftPackageReference "RSCore" */;
-			productName = RSCore;
-		};
-		51C568D4258C085400AA7B93 /* MarkdownAttributedString */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 51C568D3258C085400AA7B93 /* XCRemoteSwiftPackageReference "MarkdownAttributedString" */;
-			productName = MarkdownAttributedString;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
