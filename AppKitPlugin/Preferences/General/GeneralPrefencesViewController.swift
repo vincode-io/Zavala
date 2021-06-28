@@ -10,6 +10,7 @@ import AppKit
 
 final class GeneralPreferencesViewController: NSViewController {
 
+	@IBOutlet weak var enableMainWindowAsDefault: NSButton!
 	@IBOutlet weak var enableLocalAccount: NSButton!
 	@IBOutlet weak var enableCloudKit: NSButton!
 	@IBOutlet weak var ownerNameTextField: NSTextField!
@@ -45,7 +46,10 @@ final class GeneralPreferencesViewController: NSViewController {
 	}
 
 	// MARK: - Actions
-
+	@IBAction func toggleEnableMainWindowAsDefault(_ sender: Any) {
+		AppDefaults.shared.enableMainWindowAsDefault = enableMainWindowAsDefault.state == .on
+	}
+	
 	@IBAction func toggleEnableLocalAccount(_ sender: Any) {
 		AppDefaults.shared.enableLocalAccount = enableLocalAccount.state == .on
 	}
@@ -84,6 +88,7 @@ private extension GeneralPreferencesViewController {
 	}
 
 	func updateUI() {
+		enableMainWindowAsDefault.state = AppDefaults.shared.enableMainWindowAsDefault ? .on : .off
 		enableLocalAccount.state = AppDefaults.shared.enableLocalAccount ? .on : .off
 		enableCloudKit.state = AppDefaults.shared.enableCloudKit ? .on : .off
 		enableCloudKit.isEnabled = !AppDefaults.shared.isDeveloperBuild

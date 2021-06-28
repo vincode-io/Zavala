@@ -461,7 +461,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			guard AppDefaults.shared.lastMainWindowWasClosed else {
 				return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
 			}
-			return UISceneConfiguration(name: "Open Quickly Configuration", sessionRole: connectingSceneSession.role)
+			if AppDefaults.shared.enableMainWindowAsDefault {
+				return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+			} else {
+				return UISceneConfiguration(name: "Open Quickly Configuration", sessionRole: connectingSceneSession.role)
+			}
 		}
 	}
 

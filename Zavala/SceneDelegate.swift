@@ -47,10 +47,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
 			mainSplitViewController.handle(userActivity)
+			return
 		}
 		
 		if let url = connectionOptions.urlContexts.first?.url, let documentID = EntityID(url: url) {
 			mainSplitViewController.openDocument(documentID)
+			return
+		}
+		
+		if let userInfo = AppDefaults.shared.lastMainWindowState {
+			mainSplitViewController.handle(userInfo)
+			AppDefaults.shared.lastMainWindowState = nil
 		}
 	}
 	
@@ -58,6 +65,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		if UIApplication.shared.applicationState == .active {
 			if !UIApplication.shared.windows.contains(where: { $0.rootViewController is MainSplitViewController }) {
 				AppDefaults.shared.lastMainWindowWasClosed = true
+				AppDefaults.shared.lastMainWindowState = mainSplitViewController.stateRestorationActivity.userInfo
 			}
 		}
 	}

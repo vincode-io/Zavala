@@ -20,12 +20,14 @@ final class AppDefaults {
 	
 	struct Key {
 		static let lastSelectedAccountID = "lastSelectedAccountID"
-		static let enableCloudKit = "enableCloudKit"
+		static let enableMainWindowAsDefault = "enableMainWindowAsDefault"
 		static let enableLocalAccount = "enableLocalAccount"
+		static let enableCloudKit = "enableCloudKit"
 		static let ownerName = "ownerName"
 		static let ownerEmail = "ownerEmail"
 		static let ownerURL = "ownerURL"
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
+		static let lastMainWindowState = "lastMainWindowState"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
 		static let outlineFonts = "outlineFonts"
 		static let jekyllRootBookmark = "jekyllRootBookmark"
@@ -49,15 +51,15 @@ final class AppDefaults {
 		}
 	}
 	
-	var enableCloudKit: Bool {
+	var enableMainWindowAsDefault: Bool {
 		get {
-			return Self.bool(for: Key.enableCloudKit)
+			return Self.bool(for: Key.enableMainWindowAsDefault)
 		}
 		set {
-			Self.setBool(for: Key.enableCloudKit, newValue)
+			Self.setBool(for: Key.enableMainWindowAsDefault, newValue)
 		}
 	}
-
+	
 	var enableLocalAccount: Bool {
 		get {
 			return Self.bool(for: Key.enableLocalAccount)
@@ -67,6 +69,15 @@ final class AppDefaults {
 		}
 	}
 	
+	var enableCloudKit: Bool {
+		get {
+			return Self.bool(for: Key.enableCloudKit)
+		}
+		set {
+			Self.setBool(for: Key.enableCloudKit, newValue)
+		}
+	}
+
 	var ownerName: String? {
 		get {
 			NSUbiquitousKeyValueStore.default.string(forKey: Key.ownerName)
@@ -100,6 +111,15 @@ final class AppDefaults {
 		}
 		set {
 			Self.setBool(for: Key.lastMainWindowWasClosed, newValue)
+		}
+	}
+	
+	var lastMainWindowState: [AnyHashable: Any]? {
+		get {
+			return AppDefaults.store.object(forKey: Key.lastMainWindowState) as? [AnyHashable : Any]
+		}
+		set {
+			AppDefaults.store.set(newValue, forKey: Key.lastMainWindowState)
 		}
 	}
 

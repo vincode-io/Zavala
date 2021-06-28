@@ -91,7 +91,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 	func handle(_ activity: NSUserActivity) {
 		guard let userInfo = activity.userInfo else { return }
-		
+		handle(userInfo)
+	}
+	
+	func handle(_ userInfo: [AnyHashable: Any]) {
 		if let searchIdentifier = userInfo[CSSearchableItemActivityIdentifier] as? String, let documentID = EntityID(description: searchIdentifier) {
 			openDocument(documentID)
 			return
