@@ -135,6 +135,10 @@ struct AppAssets {
 		return UIImage(systemName: "doc.text")!
 	}()
 
+	static var insertImage: UIImage = {
+		return UIImage(systemName: "photo")!
+	}()
+
 	static var link: UIImage = {
 		return UIImage(named: "Link-Large")!
 	}()

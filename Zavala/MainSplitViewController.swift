@@ -237,6 +237,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 
+	@objc func insertImage(_ sender: Any?) {
+		insertImage()
+	}
+
 	@objc func link(_ sender: Any?) {
 		link()
 	}
@@ -533,6 +537,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.flexibleSpace,
 			.newOutline,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
+			.insertImage,
 			.link,
 			.boldface,
 			.italic,
@@ -551,6 +556,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
 			.importOPML,
 			.newOutline,
+			.insertImage,
 			.link,
 			.boldface,
 			.italic,
@@ -608,6 +614,18 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = L10n.newOutline
 			item.isBordered = true
 			item.action = #selector(createOutline)
+			item.target = self
+			toolbarItem = item
+		case .insertImage:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isInsertImageUnavailable ?? true
+			}
+			item.image = AppAssets.insertImage
+			item.label = L10n.insertImage
+			item.toolTip = L10n.insertImage
+			item.isBordered = true
+			item.action = #selector(insertImage(_:))
 			item.target = self
 			toolbarItem = item
 		case .link:

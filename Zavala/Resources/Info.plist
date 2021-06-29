@@ -182,5 +182,7 @@
 			</dict>
 		</dict>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Zavala wants to use your photos so that you can insert them into outlines.</string>
 </dict>
 </plist>

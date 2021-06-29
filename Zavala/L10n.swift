@@ -144,6 +144,8 @@ internal enum L10n {
   internal static let importOPML = L10n.tr("Localizable", "Import_OPML")
   /// Indent
   internal static let indent = L10n.tr("Localizable", "Indent")
+  /// Insert Image
+  internal static let insertImage = L10n.tr("Localizable", "Insert_Image")
   /// Italic
   internal static let italic = L10n.tr("Localizable", "Italic")
   /// Link

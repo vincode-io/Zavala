@@ -141,6 +141,10 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		AccountManager.shared.sync()
 	}
 
+	@objc func insertImage(_ sender: Any?) {
+		insertImage()
+	}
+
 	@objc func link(_ sender: Any?) {
 		link()
 	}
@@ -243,6 +247,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 	
 	func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
 		return [
+			.insertImage,
 			.link,
 			.boldface,
 			.italic,
@@ -258,6 +263,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 		return [
 			.delete,
 			.sync,
+			.insertImage,
 			.link,
 			.boldface,
 			.italic,
@@ -303,6 +309,18 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.toolTip = L10n.sync
 			item.isBordered = true
 			item.action = #selector(sync(_:))
+			item.target = self
+			toolbarItem = item
+		case .insertImage:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isInsertImageUnavailable ?? true
+			}
+			item.image = AppAssets.insertImage
+			item.label = L10n.insertImage
+			item.toolTip = L10n.insertImage
+			item.isBordered = true
+			item.action = #selector(insertImage(_:))
 			item.target = self
 			toolbarItem = item
 		case .link:
