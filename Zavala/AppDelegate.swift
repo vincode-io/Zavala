@@ -413,6 +413,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		menuItems.append(UIMenuItem(title: L10n.bold, action: .toggleBoldface))
 		menuItems.append(UIMenuItem(title: L10n.italic, action: .toggleItalics))
 		menuItems.append(UIMenuItem(title: L10n.link, action: .editLink))
+		menuItems.append(UIMenuItem(title: L10n.insertImage, action: .insertImage))
 		UIMenuController.shared.menuItems = menuItems
 
 		#if targetEnvironment(macCatalyst)

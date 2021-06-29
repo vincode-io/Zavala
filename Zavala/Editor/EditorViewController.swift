@@ -11,6 +11,10 @@ import PhotosUI
 import RSCore
 import Templeton
 
+extension Selector {
+	static let insertImage = #selector(EditorViewController.insertImage(_:))
+}
+
 protocol EditorDelegate: AnyObject {
 	func validateToolbar(_ : EditorViewController)
 	func exportMarkdown(_: EditorViewController, outline: Outline)
