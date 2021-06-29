@@ -57,6 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		menuKeyCommands.append(newWindowCommand)
 		menuKeyCommands.append(toggleSidebarCommand)
 		
+		menuKeyCommands.append(deleteCommand)
+
 		if !(mainCoordinator?.isInsertRowUnavailable ?? true) {
 			menuKeyCommands.append(insertRowCommand)
 		}
@@ -166,6 +168,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											action: #selector(toggleSidebarCommand(_:)),
 											input: "s",
 											modifierFlags: [.control, .command])
+	
+	let deleteCommand = UIKeyCommand(title: L10n.delete,
+									 action: #selector(delete),
+									 input: "\u{8}",
+									 modifierFlags: [.command])
 	
 	let insertRowCommand = UIKeyCommand(title: L10n.addRowAbove,
 										action: #selector(insertRowCommand(_:)),
@@ -856,8 +863,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			var newElements = [UIMenuElement]()
 			for oldElement in oldElements {
 				if let oldCommand = oldElement as? UICommand, oldCommand.action == #selector(delete) {
-					let delete = UIKeyCommand(title: oldElement.title, action: #selector(delete), input: "\u{8}", modifierFlags: [.command])
-					newElements.append(delete)
+					newElements.append(deleteCommand)
 				} else {
 					newElements.append(oldElement)
 				}
