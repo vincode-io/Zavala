@@ -75,6 +75,10 @@ extension MainCoordinator {
 		return editorViewController?.isFormatUnavailable ?? true
 	}
 	
+	var isInsertImageUnavailable: Bool {
+		return editorViewController?.isInsertImageUnavailable ?? true
+	}
+	
 	var isLinkUnavailable: Bool {
 		return editorViewController?.isLinkUnavailable ?? true
 	}

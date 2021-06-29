@@ -59,6 +59,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		menuKeyCommands.append(deleteCommand)
 
+		if !(mainCoordinator?.isInsertImageUnavailable ?? true) {
+			menuKeyCommands.append(insertImageCommand)
+		}
+		
+		if !(mainCoordinator?.isLinkUnavailable ?? true) {
+			menuKeyCommands.append(linkCommand)
+		}
+		
 		if !(mainCoordinator?.isInsertRowUnavailable ?? true) {
 			menuKeyCommands.append(insertRowCommand)
 		}
@@ -233,6 +241,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											action: #selector(toggleItalicsCommand(_:)),
 											input: "i",
 											modifierFlags: [.command])
+	
+	let insertImageCommand = UIKeyCommand(title: L10n.insertImage,
+										  action: #selector(insertImageCommand(_:)),
+										  input: "i",
+										  modifierFlags: [.alternate, .command])
 	
 	let linkCommand = UIKeyCommand(title: L10n.link,
 								   action: #selector(linkCommand(_:)),
@@ -579,6 +592,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.outlineToggleItalics()
 	}
 	
+	@objc func insertImageCommand(_ sender: Any?) {
+		mainCoordinator?.insertImage()
+	}
+
 	@objc func linkCommand(_ sender: Any?) {
 		mainCoordinator?.link()
 	}
@@ -755,6 +772,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isFormatUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(insertImageCommand(_:)):
+			if mainCoordinator?.isInsertImageUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		case #selector(linkCommand(_:)):
 			if mainCoordinator?.isLinkUnavailable ?? true {
 				command.attributes = .disabled
@@ -872,7 +893,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return newElements
 		}
 		
-		let linkMenu = UIMenu(title: "", options: .displayInline, children: [linkCommand, copyDocumentLinkCommand])
+		let linkMenu = UIMenu(title: "", options: .displayInline, children: [insertImageCommand, linkCommand, copyDocumentLinkCommand])
 		builder.insertSibling(linkMenu, afterMenu: .standardEdit)
 
 		let documentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginDocumentSearchCommand])

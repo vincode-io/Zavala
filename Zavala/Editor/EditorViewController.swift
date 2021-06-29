@@ -113,8 +113,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 
 	var isInsertImageUnavailable: Bool {
-		guard currentTextView != nil else { return true }
-		return !UIImagePickerController.isSourceTypeAvailable(.photoLibrary)
+		return currentTextView == nil
 	}
 
 	var isExpandAllInOutlineUnavailable: Bool {
