@@ -38,6 +38,10 @@
 "Move" = "Move";
 "Indent" = "Indent";
 "Outdent" = "Outdent";
+"Move_Up" = "Move Up";
+"Move_Down" = "Move Down";
+"Move_Left" = "Move Left";
+"Move_Right" = "Move Right";
 "Split_Row" = "Split Row";
 "Typing" = "Typing";
 "Complete" = "Complete";

@@ -51,6 +51,22 @@ extension MainCoordinator {
 		return editorViewController?.isOutdentRowsUnavailable ?? true
 	}
 
+	var isMoveRowsUpUnavailable: Bool {
+		return editorViewController?.isMoveRowsUpUnavailable ?? true
+	}
+
+	var isMoveRowsDownUnavailable: Bool {
+		return editorViewController?.isMoveRowsDownUnavailable ?? true
+	}
+
+	var isMoveRowsLeftUnavailable: Bool {
+		return editorViewController?.isMoveRowsLeftUnavailable ?? true
+	}
+
+	var isMoveRowsRightUnavailable: Bool {
+		return editorViewController?.isMoveRowsRightUnavailable ?? true
+	}
+
 	var isToggleRowCompleteUnavailable: Bool {
 		return editorViewController?.isToggleRowCompleteUnavailable ?? true
 	}
@@ -133,6 +149,22 @@ extension MainCoordinator {
 	
 	func outdentRows() {
 		editorViewController?.outdentRows()
+	}
+	
+	func moveRowsUp() {
+		editorViewController?.moveRowsUp()
+	}
+	
+	func moveRowsDown() {
+		editorViewController?.moveRowsDown()
+	}
+	
+	func moveRowsLeft() {
+		editorViewController?.moveRowsLeft()
+	}
+	
+	func moveRowsRight() {
+		editorViewController?.moveRowsRight()
 	}
 	
 	func toggleCompleteRows() {

@@ -1387,6 +1387,80 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return impacted
 	}
 	
+	public func isMoveRowsUpUnavailable(rows: [Row]) -> Bool {
+		guard let first = rows.first else { return true }
+		
+		for row in rows {
+			if !first.hasSameParent(row) {
+				return true
+			}
+		}
+		
+		guard let index = first.parent?.rows.firstIndex(of: first) else { return true }
+		
+		return index == 0
+	}
+
+	func moveRowsUp(_ rows: [Row], textRowStrings: TextRowStrings?) {
+		beginCloudKitBatchRequest()
+		
+		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
+			updateTextRowStrings(textRow, texts)
+		}
+
+		for row in rows {
+			if let index = row.parent?.firstIndexOfRow(row) {
+				row.parent?.removeRow(row)
+				row.parent?.insertRow(row, at: index - 1)
+			}
+		}
+		
+		endCloudKitBatchRequest()
+		outlineContentDidChange()
+		outlineElementsDidChange(rebuildShadowTable())
+	}
+	
+	public func isMoveRowsDownUnavailable(rows: [Row]) -> Bool {
+		guard let first = rows.first else { return true }
+		
+		for row in rows {
+			if !first.hasSameParent(row) {
+				return true
+			}
+		}
+		
+		guard let index = first.parent?.rows.firstIndex(of: first) else { return true }
+		
+		return index == (first.parent?.rowCount ?? -1) - 1
+	}
+
+	func moveRowsDown(_ rows: [Row], textRowStrings: TextRowStrings?) {
+		beginCloudKitBatchRequest()
+		
+		if rowCount == 1, let textRow = rows.first?.textRow, let texts = textRowStrings {
+			updateTextRowStrings(textRow, texts)
+		}
+
+		for row in rows {
+			if let index = row.parent?.firstIndexOfRow(row) {
+				row.parent?.removeRow(row)
+				row.parent?.insertRow(row, at: index + 1)
+			}
+		}
+		
+		endCloudKitBatchRequest()
+		outlineContentDidChange()
+		outlineElementsDidChange(rebuildShadowTable())
+	}
+	
+	public func isMoveRowsLeftUnavailable(rows: [Row]) -> Bool {
+		return isOutdentRowsUnavailable(rows: rows)
+	}
+	
+	public func isMoveRowsRightUnavailable(rows: [Row]) -> Bool {
+		return isIndentRowsUnavailable(rows: rows)
+	}
+	
 	func moveRows(_ rowMoves: [RowMove], textRowStrings: TextRowStrings?) {
 		beginCloudKitBatchRequest()
 		

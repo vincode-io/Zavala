@@ -83,6 +83,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(outdentRowsCommand)
 		}
 		
+		if !(mainCoordinator?.isMoveRowsUpUnavailable ?? true) {
+			menuKeyCommands.append(moveRowsUpCommand)
+		}
+		
+		if !(mainCoordinator?.isMoveRowsDownUnavailable ?? true) {
+			menuKeyCommands.append(moveRowsDownCommand)
+		}
+		
+		if !(mainCoordinator?.isMoveRowsLeftUnavailable ?? true) {
+			menuKeyCommands.append(moveRowsLeftCommand)
+		}
+		
+		if !(mainCoordinator?.isMoveRowsRightUnavailable ?? true) {
+			menuKeyCommands.append(moveRowsRightCommand)
+		}
+		
 		if !(mainCoordinator?.isToggleRowCompleteUnavailable ?? true) {
 			if mainCoordinator?.isCompleteRowsAvailable ?? false {
 				menuKeyCommands.append(completeRowsCommand)
@@ -201,6 +217,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										  action: #selector(outdentRowsCommand(_:)),
 										  input: "[",
 										  modifierFlags: [.command])
+	
+	let moveRowsUpCommand = UIKeyCommand(title: L10n.moveUp,
+										 action: #selector(moveRowsUpCommand(_:)),
+										 input: UIKeyCommand.inputUpArrow,
+										 modifierFlags: [.control, .command])
+	
+	let moveRowsDownCommand = UIKeyCommand(title: L10n.moveDown,
+										   action: #selector(moveRowsDownCommand(_:)),
+										   input: UIKeyCommand.inputDownArrow,
+										   modifierFlags: [.control, .command])
+	
+	let moveRowsLeftCommand = UIKeyCommand(title: L10n.moveLeft,
+										   action: #selector(moveRowsLeftCommand(_:)),
+										   input: UIKeyCommand.inputLeftArrow,
+										   modifierFlags: [.control, .command])
+	
+	let moveRowsRightCommand = UIKeyCommand(title: L10n.moveRight,
+											action: #selector(moveRowsRightCommand(_:)),
+											input: UIKeyCommand.inputRightArrow,
+											modifierFlags: [.control, .command])
 	
 	let toggleCompleteRowsCommand = UIKeyCommand(title: L10n.complete,
 												 action: #selector(toggleCompleteRowsCommand(_:)),
@@ -568,6 +604,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.outdentRows()
 	}
 	
+	@objc func moveRowsUpCommand(_ sender: Any?) {
+		mainCoordinator?.moveRowsUp()
+	}
+	
+	@objc func moveRowsDownCommand(_ sender: Any?) {
+		mainCoordinator?.moveRowsDown()
+	}
+	
+	@objc func moveRowsLeftCommand(_ sender: Any?) {
+		mainCoordinator?.moveRowsLeft()
+	}
+	
+	@objc func moveRowsRightCommand(_ sender: Any?) {
+		mainCoordinator?.moveRowsRight()
+	}
+	
 	@objc func toggleCompleteRowsCommand(_ sender: Any?) {
 		mainCoordinator?.toggleCompleteRows()
 	}
@@ -747,6 +799,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isOutdentRowsUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(moveRowsUpCommand(_:)):
+			if mainCoordinator?.isMoveRowsUpUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(moveRowsDownCommand(_:)):
+			if mainCoordinator?.isMoveRowsDownUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(moveRowsLeftCommand(_:)):
+			if mainCoordinator?.isMoveRowsLeftUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(moveRowsRightCommand(_:)):
+			if mainCoordinator?.isMoveRowsRightUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		case #selector(toggleCompleteRowsCommand(_:)):
 			if mainCoordinator?.isCompleteRowsAvailable ?? false {
 				command.title = L10n.complete
@@ -919,8 +987,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		// Outline Menu
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand, createRowNotesCommand, deleteRowNotesCommand])
+		let moveRowMenu = UIMenu(title: "Move", children: [moveRowsUpCommand, moveRowsDownCommand, moveRowsLeftCommand, moveRowsRightCommand])
 		let mainOutlineMenu = UIMenu(title: "", options: .displayInline, children: [insertRowCommand, createRowCommand, splitRowCommand, indentRowsCommand, outdentRowsCommand])
-		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, completeMenu])
+		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, moveRowMenu, completeMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 
 		// Help Menu

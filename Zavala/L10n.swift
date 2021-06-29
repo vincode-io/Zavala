@@ -156,6 +156,14 @@ internal enum L10n {
   internal static let more = L10n.tr("Localizable", "More")
   /// Move
   internal static let move = L10n.tr("Localizable", "Move")
+  /// Move Down
+  internal static let moveDown = L10n.tr("Localizable", "Move_Down")
+  /// Move Left
+  internal static let moveLeft = L10n.tr("Localizable", "Move_Left")
+  /// Move Right
+  internal static let moveRight = L10n.tr("Localizable", "Move_Right")
+  /// Move Up
+  internal static let moveUp = L10n.tr("Localizable", "Move_Up")
   /// New Folder
   internal static let newFolder = L10n.tr("Localizable", "New_Folder")
   /// New Main Window

@@ -243,6 +243,16 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		return nil
 	}
 	
+	public func hasSameParent(_ row: Row) -> Bool {
+		if let parentOutline = parent as? Outline, let rowOutline = row.parent as? Outline {
+			return parentOutline.id == rowOutline.id
+		}
+		if let parentRow = parent as? Row, let rowRow = row.parent as? Row {
+			return parentRow.id == rowRow.id
+		}
+		return false
+	}
+	
 	public func markdown() -> String {
 		let visitor = MarkdownVisitor()
 		visit(visitor: visitor.visitor)

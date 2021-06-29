@@ -80,6 +80,26 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return outline.isOutdentRowsUnavailable(rows: rows)
 	}
 
+	var isMoveRowsUpUnavailable: Bool {
+		guard let outline = outline, let rows = currentRows else { return true }
+		return outline.isMoveRowsUpUnavailable(rows: rows)
+	}
+
+	var isMoveRowsDownUnavailable: Bool {
+		guard let outline = outline, let rows = currentRows else { return true }
+		return outline.isMoveRowsDownUnavailable(rows: rows)
+	}
+
+	var isMoveRowsLeftUnavailable: Bool {
+		guard let outline = outline, let rows = currentRows else { return true }
+		return outline.isMoveRowsLeftUnavailable(rows: rows)
+	}
+
+	var isMoveRowsRightUnavailable: Bool {
+		guard let outline = outline, let rows = currentRows else { return true }
+		return outline.isMoveRowsRightUnavailable(rows: rows)
+	}
+
 	var isToggleRowCompleteUnavailable: Bool {
 		guard let outline = outline, let rows = currentRows else { return true }
 		return outline.isCompleteUnavailable(rows: rows) && outline.isUncompleteUnavailable(rows: rows)
@@ -626,6 +646,26 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	func outdentRows() {
 		guard let rows = currentRows else { return }
 		outdentRows(rows)
+	}
+	
+	func moveRowsUp() {
+		guard let rows = currentRows else { return }
+		moveRowsUp(rows)
+	}
+	
+	func moveRowsDown() {
+		guard let rows = currentRows else { return }
+		moveRowsDown(rows)
+	}
+	
+	func moveRowsLeft() {
+		guard let rows = currentRows else { return }
+		moveRowsLeft(rows)
+	}
+	
+	func moveRowsRight() {
+		guard let rows = currentRows else { return }
+		moveRowsRight(rows)
 	}
 	
 	func toggleCompleteRows() {
@@ -2219,6 +2259,54 @@ extension EditorViewController {
 										outline: outline,
 										rows: rows,
 										textRowStrings: textRowStrings)
+		
+		runCommand(command)
+	}
+
+	private func moveRowsUp(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = MoveRowUpCommand(undoManager: undoManager,
+									   delegate: self,
+									   outline: outline,
+									   rows: rows,
+									   textRowStrings: textRowStrings)
+		
+		runCommand(command)
+	}
+
+	private func moveRowsDown(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = MoveRowDownCommand(undoManager: undoManager,
+										 delegate: self,
+										 outline: outline,
+										 rows: rows,
+										 textRowStrings: textRowStrings)
+		
+		runCommand(command)
+	}
+
+	private func moveRowsLeft(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = MoveRowLeftCommand(undoManager: undoManager,
+										 delegate: self,
+										 outline: outline,
+										 rows: rows,
+										 textRowStrings: textRowStrings)
+		
+		runCommand(command)
+	}
+
+	private func moveRowsRight(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		
+		let command = MoveRowRightCommand(undoManager: undoManager,
+										  delegate: self,
+										  outline: outline,
+										  rows: rows,
+										  textRowStrings: textRowStrings)
 		
 		runCommand(command)
 	}
