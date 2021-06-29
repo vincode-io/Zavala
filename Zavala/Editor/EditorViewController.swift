@@ -808,6 +808,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func insertImage(_ sender: Any? = nil) {
 		let controller = UIImagePickerController()
+		controller.allowsEditing = true
 		controller.mediaTypes = [kUTTypeImage as String]
 		controller.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
 		controller.delegate = self
@@ -1211,7 +1212,7 @@ extension EditorViewController: OutlineCommandDelegate {
 extension EditorViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 		guard let cursorCoordinates = CursorCoordinates.bestCoordinates,
-			  let image = info[.originalImage] as? UIImage,
+			  let image = info[.editedImage] as? UIImage,
 			  let data = image.pngData(),
 			  let cgImage = RSImage.scaleImage(data, maxPixelSize: 1024) else {
 			picker.dismiss(animated: true)
