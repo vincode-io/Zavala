@@ -852,6 +852,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertChild(getInfoMenu, atEndOfMenu: .file)
 
 		// Edit
+		builder.replaceChildren(ofMenu: .standardEdit) { oldElements in
+			var newElements = [UIMenuElement]()
+			for oldElement in oldElements {
+				if let oldCommand = oldElement as? UICommand, oldCommand.action == #selector(delete) {
+					let delete = UIKeyCommand(title: oldElement.title, action: #selector(delete), input: "\u{8}", modifierFlags: [.command])
+					newElements.append(delete)
+				} else {
+					newElements.append(oldElement)
+				}
+			}
+			return newElements
+		}
+		
 		let linkMenu = UIMenu(title: "", options: .displayInline, children: [linkCommand, copyDocumentLinkCommand])
 		builder.insertSibling(linkMenu, afterMenu: .standardEdit)
 
