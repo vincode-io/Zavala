@@ -7,6 +7,7 @@
 
 import UIKit
 import MobileCoreServices
+import PhotosUI
 import RSCore
 import Templeton
 
@@ -807,12 +808,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func insertImage(_ sender: Any? = nil) {
-		let controller = UIImagePickerController()
-		controller.allowsEditing = true
-		controller.mediaTypes = [kUTTypeImage as String]
-		controller.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
-		controller.delegate = self
-		present(controller, animated: true)
+		var config = PHPickerConfiguration()
+		config.filter = PHPickerFilter.images
+
+		let pickerViewController = PHPickerViewController(configuration: config)
+		pickerViewController.delegate = self
+		self.present(pickerViewController, animated: true, completion: nil)
 	}
 	
 	@objc func sendCopy(_ sender: Any? = nil) {
@@ -1209,30 +1210,39 @@ extension EditorViewController: OutlineCommandDelegate {
 	
 }
 
-extension EditorViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-		guard let cursorCoordinates = CursorCoordinates.bestCoordinates,
-			  let image = info[.editedImage] as? UIImage,
-			  let data = image.pngData(),
-			  let cgImage = RSImage.scaleImage(data, maxPixelSize: 1024) else {
-			picker.dismiss(animated: true)
+// MARK:
+
+extension EditorViewController: PHPickerViewControllerDelegate {
+	
+	func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+		picker.dismiss(animated: true, completion: nil)
+		
+		guard let cursorCoordinates = CursorCoordinates.bestCoordinates else {
 			return
 		}
 		
-		let scaledImage = UIImage(cgImage: cgImage)
-
-		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
-		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
-		guard let textRowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
-		
-		if cursorCoordinates.isInNotes, let textView = textRowCell.noteTextView {
-			textView.replaceCharacters(textView.selectedRange, withImage: scaledImage)
-		} else if let textView = textRowCell.topicTextView {
-			textView.replaceCharacters(textView.selectedRange, withImage: scaledImage)
+		for result in results {
+			result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { (object, error) in
+				if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = RSImage.scaleImage(data, maxPixelSize: 1024) {
+					let scaledImage = UIImage(cgImage: cgImage)
+					
+					DispatchQueue.main.async {
+						guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
+						let indexPath = IndexPath(row: shadowTableIndex, section: self.adjustedRowsSection)
+						guard let textRowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
+						
+						if cursorCoordinates.isInNotes, let textView = textRowCell.noteTextView {
+							textView.replaceCharacters(textView.selectedRange, withImage: scaledImage)
+						} else if let textView = textRowCell.topicTextView {
+							textView.replaceCharacters(textView.selectedRange, withImage: scaledImage)
+						}
+					}
+				}
+			})
 		}
 		
-		picker.dismiss(animated: true)
 	}
+	
 }
 
 // MARK: LinkViewControllerDelegate
