@@ -177,6 +177,15 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		associatedRow.reassignAccount(accountID)
 	}
 	
+	public func duplicate(accountID: Int, documentUUID: String) -> Row {
+		switch self {
+		case .text(let row):
+			return .text(row.duplicate(accountID: accountID, documentUUID: documentUUID))
+		default:
+			fatalError()
+		}
+	}
+	
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 

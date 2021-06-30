@@ -16,7 +16,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		return children.first as? EditorViewController
 	}
 	
-	var isExportOutlineUnavailable: Bool = false
+	var isOutlineActionUnavailable: Bool = false
 	
 	weak var sceneDelegate: OutlineEditorSceneDelegate?
 	

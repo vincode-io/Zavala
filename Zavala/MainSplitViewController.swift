@@ -36,12 +36,12 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		return activity
 	}
 	
-	var isExportOutlineUnavailable: Bool {
-		return timelineViewController?.isExportOutlineUnavailable ?? true
+	var isOutlineActionUnavailable: Bool {
+		return timelineViewController?.isOutlineActionUnavailable ?? true
 	}
 	
 	var isDeleteEntityUnavailable: Bool {
-		return (timelineViewController?.isDeleteCurrentOutlineUnavailable ?? true) &&
+		return (timelineViewController?.isOutlineActionUnavailable ?? true) &&
 			(editorViewController?.isDeleteCurrentRowUnavailable ?? true) 
 	}
 
@@ -190,7 +190,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			return
 		}
 		
-		guard timelineViewController?.isDeleteCurrentOutlineUnavailable ?? true else {
+		guard timelineViewController?.isOutlineActionUnavailable ?? true else {
 			timelineViewController?.deleteCurrentDocument()
 			return
 		}

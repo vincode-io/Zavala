@@ -22,11 +22,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 
 	weak var delegate: TimelineDelegate?
 	
-	var isExportOutlineUnavailable: Bool {
-		return currentDocument == nil
-	}
-	
-	var isDeleteCurrentOutlineUnavailable: Bool {
+	var isOutlineActionUnavailable: Bool {
 		return currentDocument == nil
 	}
 	
@@ -395,6 +391,7 @@ extension TimelineViewController {
 			
 			var menuItems = [UIMenu]()
 
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.duplicateAction(document: document)]))
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.copyLinkAction(document: document)]))
 
 			if let outline = document.outline {
@@ -412,6 +409,18 @@ extension TimelineViewController {
 		let action = UIAction(title: L10n.copyDocumentLink, image: AppAssets.link) { action in
 			let documentURL = document.id.url
 			UIPasteboard.general.url = documentURL
+		}
+		return action
+	}
+	
+	private func duplicateAction(document: Document) -> UIAction {
+		let action = UIAction(title: L10n.duplicate, image: AppAssets.duplicate) { action in
+			document.load()
+			let newDocument = document.duplicate()
+			document.account?.createDocument(newDocument)
+			newDocument.forceSave()
+			newDocument.unload()
+			document.unload()
 		}
 		return action
 	}

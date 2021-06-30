@@ -1571,6 +1571,63 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineDidDelete()
 	}
 	
+	public func duplicate() -> Outline {
+		let outline = Outline(id: .document(id.accountID, UUID().uuidString))
+
+		outline.title = title
+		outline.ownerName = ownerName
+		outline.ownerEmail = ownerEmail
+		outline.ownerURL = ownerURL
+		outline.isFiltered = isFiltered
+		outline.isNotesHidden = isNotesHidden
+		outline.tagIDs = tagIDs
+		outline.documentLinks = documentLinks
+		
+		for linkedDocumentID in outline.documentLinks ?? [EntityID]() {
+			if let linkedOutline = AccountManager.shared.findDocument(linkedDocumentID)?.outline {
+				linkedOutline.createBacklink(outline.id)
+			}
+		}
+		
+		guard let keyedRows = keyedRows else { return outline }
+
+		var rowIDMap = [EntityID: EntityID]()
+		var newKeyedRows = [EntityID: Row]()
+		for key in keyedRows.keys {
+			if let row = keyedRows[key] {
+				let duplicateRow = row.duplicate(accountID: outline.id.accountID, documentUUID: outline.id.documentUUID)
+				newKeyedRows[duplicateRow.id] = duplicateRow
+				rowIDMap[row.id] = duplicateRow.id
+			}
+		}
+		
+		var newRowOrder = [EntityID]()
+		for orderKey in rowOrder ?? [EntityID]() {
+			if let newKey = rowIDMap[orderKey] {
+				newRowOrder.append(newKey)
+			}
+		}
+		outline.rowOrder = newRowOrder
+		
+		var updatedNewKeyedRows = [EntityID: Row]()
+		for key in newKeyedRows.keys {
+			if var newKeyedRow = newKeyedRows[key] {
+				var updatedRowOrder = [EntityID]()
+				for orderKey in newKeyedRow.rowOrder {
+					if let newKey = rowIDMap[orderKey] {
+						updatedRowOrder.append(newKey)
+					}
+				}
+				newKeyedRow.rowOrder = updatedRowOrder
+				updatedNewKeyedRows[newKeyedRow.id] = newKeyedRow
+			}
+		}
+		
+		outline.keyedRows = updatedNewKeyedRows
+		
+		return outline
+	}
+	
 	public func updateAllLinkRelationships() {
 		var newDocumentLinks = [EntityID]()
 		

@@ -206,6 +206,19 @@ public final class TextRow: BaseRow, Codable {
 		try container.encode(images, forKey: .images)
 	}
 	
+	public func duplicate(accountID: Int, documentUUID: String) -> TextRow {
+		let textRow = TextRow(id: .row(accountID, documentUUID, UUID().uuidString))
+
+		textRow.topicData = topicData
+		textRow.noteData = noteData
+		textRow.isExpanded = isExpanded
+		textRow.isComplete = isComplete
+		textRow.rowOrder = rowOrder
+		textRow.images = images
+		
+		return textRow
+	}
+	
 	public override func findImage(id: EntityID) -> Image? {
 		return images?.first(where: { $0.id == id })
 	}

@@ -69,6 +69,10 @@ struct AppAssets {
 		#endif
 	}()
 	
+	static var duplicate: UIImage = {
+		return UIImage(systemName: "plus.square.on.square")!
+	}()
+
 	static var ellipsis: UIImage = {
 		return UIImage(systemName: "ellipsis.circle")!
 	}()

@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		menuKeyCommands.append(newOutlineCommand)
 		menuKeyCommands.append(importOPMLCommand)
 		
-		if !(mainCoordinator?.isExportOutlineUnavailable ?? true) {
+		if !(mainCoordinator?.isOutlineActionUnavailable ?? true) {
 			menuKeyCommands.append(exportMarkdownCommand)
 			menuKeyCommands.append(exportOPMLCommand)
 		}
@@ -780,7 +780,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		case #selector(exportJekyllCommand(_:)),
 			 #selector(exportMarkdownCommand(_:)),
 			 #selector(exportOPMLCommand(_:)):
-			if mainCoordinator?.isExportOutlineUnavailable ?? true {
+			if mainCoordinator?.isOutlineActionUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(insertRowCommand(_:)):

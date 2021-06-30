@@ -224,4 +224,11 @@ public enum Document: Equatable, Codable {
 		}
 	}
 	
+	public func duplicate() -> Document {
+		switch self {
+		case .outline(let outline):
+			return Document.outline(outline.duplicate())
+		}
+	}
+	
 }
