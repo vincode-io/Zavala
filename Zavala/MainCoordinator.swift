@@ -43,6 +43,14 @@ extension MainCoordinator {
 		return editorViewController?.isCreateRowUnavailable ?? true
 	}
 	
+	var isCreateRowInsideUnavailable: Bool {
+		return editorViewController?.isCreateRowInsideUnavailable ?? true
+	}
+	
+	var isCreateRowOutsideUnavailable: Bool {
+		return editorViewController?.isCreateRowOutsideUnavailable ?? true
+	}
+	
 	var isIndentRowsUnavailable: Bool {
 		return editorViewController?.isIndentRowsUnavailable ?? true
 	}
@@ -141,6 +149,14 @@ extension MainCoordinator {
 	
 	func createRow() {
 		editorViewController?.createRow()
+	}
+	
+	func createRowInside() {
+		editorViewController?.createRowInside()
+	}
+	
+	func createRowOutside() {
+		editorViewController?.createRowOutside()
 	}
 	
 	func indentRows() {

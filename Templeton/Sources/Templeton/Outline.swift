@@ -1076,6 +1076,73 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return inserts.count > 0 ? inserts[0] : nil
 	}
 	
+	func createRowInside(_ row: Row, afterRow: Row, textRowStrings: TextRowStrings? = nil) -> Int? {
+		beginCloudKitBatchRequest()
+		
+		if let afterTextRow = afterRow.textRow, let texts = textRowStrings {
+			updateTextRowStrings(afterTextRow, texts)
+		}
+		
+		afterRow.insertRow(row, at: 0)
+		var mutatingRow = row
+		mutatingRow.parent = afterRow
+		
+		createLinkRelationships(for: [row])
+		endCloudKitBatchRequest()
+		outlineContentDidChange()
+			
+		let rowShadowTableIndex: Int
+		if let afterRowShadowTableIndex = afterRow.shadowTableIndex {
+			rowShadowTableIndex = afterRowShadowTableIndex + 1
+		} else {
+			rowShadowTableIndex = 0
+		}
+		
+		var reloads = [Int]()
+		if let reload = afterRow.shadowTableIndex {
+			reloads.append(reload)
+		}
+
+		let inserts = [rowShadowTableIndex]
+		shadowTable?.insert(row, at: rowShadowTableIndex)
+		
+		resetShadowTableIndexes(startingAt: afterRow.shadowTableIndex ?? 0)
+		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: Set(inserts), reloads: Set(reloads))
+		outlineElementsDidChange(changes)
+
+		return inserts[0]
+	}
+
+	public func isCreateRowOutsideUnavailable(rows: [Row]) -> Bool {
+		return isOutdentRowsUnavailable(rows: rows)
+	}
+	
+	func createRowOutside(_ row: Row, afterRow: Row, textRowStrings: TextRowStrings? = nil) -> Int? {
+		beginCloudKitBatchRequest()
+		
+		if let afterTextRow = afterRow.textRow, let texts = textRowStrings {
+			updateTextRowStrings(afterTextRow, texts)
+		}
+		
+		guard let afterParentRow = afterRow.parent as? Row,
+			  let afterParentRowParent = afterParentRow.parent,
+			  let index = afterParentRowParent.firstIndexOfRow(afterParentRow) else {
+			return nil
+		}
+		
+		afterParentRowParent.insertRow(row, at: index + 1)
+		var mutatingRow = row
+		mutatingRow.parent = afterParentRowParent
+
+		createLinkRelationships(for: [row])
+		endCloudKitBatchRequest()
+		outlineContentDidChange()
+
+		outlineElementsDidChange(rebuildShadowTable())
+		return row.shadowTableIndex
+	}
+
+
 	func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) -> Int? {
 		guard let newTextRow = newRow.textRow, let textRow = row.textRow else { return nil }
 		

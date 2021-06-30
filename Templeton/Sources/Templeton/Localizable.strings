@@ -28,6 +28,8 @@
 "Expand" = "Expand";
 "Add_Note" = "Add Note";
 "Add_Row" = "Add Row";
+"Add_Row_Inside" = "Add Row Inside";
+"Add_Row_Outside" = "Add Row Outside";
 "Add_Tag" = "Add Tag";
 "Delete_Note" = "Delete Note";
 "Delete_Row" = "Delete Row";

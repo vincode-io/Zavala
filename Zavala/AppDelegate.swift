@@ -75,6 +75,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(createRowCommand)
 		}
 		
+		if !(mainCoordinator?.isCreateRowInsideUnavailable ?? true) {
+			menuKeyCommands.append(createRowInsideCommand)
+		}
+		
+		if !(mainCoordinator?.isCreateRowOutsideUnavailable ?? true) {
+			menuKeyCommands.append(createRowOutsideCommand)
+		}
+		
 		if !(mainCoordinator?.isIndentRowsUnavailable ?? true) {
 			menuKeyCommands.append(indentRowsCommand)
 		}
@@ -207,6 +215,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										action: #selector(createRowCommand(_:)),
 										input: "\n",
 										modifierFlags: [])
+	
+	let createRowInsideCommand = UIKeyCommand(title: L10n.addRowInside,
+											  action: #selector(createRowInsideCommand(_:)),
+											  input: "}",
+											  modifierFlags: [.command])
+	
+	let createRowOutsideCommand = UIKeyCommand(title: L10n.addRowOutside,
+											   action: #selector(createRowOutsideCommand(_:)),
+											   input: "{",
+											   modifierFlags: [.command])
 	
 	let indentRowsCommand = UIKeyCommand(title: L10n.indent,
 										 action: #selector(indentRowsCommand(_:)),
@@ -596,6 +614,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.createRow()
 	}
 	
+	@objc func createRowInsideCommand(_ sender: Any?) {
+		mainCoordinator?.createRowInside()
+	}
+	
+	@objc func createRowOutsideCommand(_ sender: Any?) {
+		mainCoordinator?.createRowOutside()
+	}
+	
 	@objc func indentRowsCommand(_ sender: Any?) {
 		mainCoordinator?.indentRows()
 	}
@@ -789,6 +815,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(createRowCommand(_:)):
 			if mainCoordinator?.isCreateRowUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(createRowInsideCommand(_:)):
+			if mainCoordinator?.isCreateRowInsideUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(createRowOutsideCommand(_:)):
+			if mainCoordinator?.isCreateRowOutsideUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(indentRowsCommand(_:)):
@@ -988,7 +1022,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Outline Menu
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand, createRowNotesCommand, deleteRowNotesCommand])
 		let moveRowMenu = UIMenu(title: "Move", children: [moveRowsUpCommand, moveRowsDownCommand, moveRowsLeftCommand, moveRowsRightCommand])
-		let mainOutlineMenu = UIMenu(title: "", options: .displayInline, children: [insertRowCommand, createRowCommand, splitRowCommand, indentRowsCommand, outdentRowsCommand])
+		let mainOutlineMenu = UIMenu(title: "",
+									 options: .displayInline,
+									 children: [insertRowCommand, createRowCommand, createRowInsideCommand, createRowOutsideCommand, splitRowCommand, indentRowsCommand, outdentRowsCommand])
 		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, moveRowMenu, completeMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 

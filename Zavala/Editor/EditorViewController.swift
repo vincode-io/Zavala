@@ -70,6 +70,15 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return currentRows == nil
 	}
 	
+	var isCreateRowInsideUnavailable: Bool {
+		return currentRows == nil
+	}
+
+	var isCreateRowOutsideUnavailable: Bool {
+		guard let outline = outline, let rows = currentRows else { return true }
+		return outline.isCreateRowOutsideUnavailable(rows: rows)
+	}
+
 	var isIndentRowsUnavailable: Bool {
 		guard let outline = outline, let rows = currentRows else { return true }
 		return outline.isIndentRowsUnavailable(rows: rows)
@@ -636,6 +645,16 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	func createRow() {
 		guard let rows = currentRows else { return }
 		createRow(afterRows: rows)
+	}
+	
+	func createRowInside() {
+		guard let rows = currentRows else { return }
+		createRowInside(afterRows: rows)
+	}
+	
+	func createRowOutside() {
+		guard let rows = currentRows else { return }
+		createRowOutside(afterRows: rows)
 	}
 	
 	func indentRows() {
@@ -2227,6 +2246,48 @@ extension EditorViewController {
 											outline: outline,
 											afterRow: afterRow,
 											textRowStrings: textRowStrings)
+		
+		runCommand(command)
+		
+		if let newCursorIndex = command.newCursorIndex {
+			let newCursorIndexPath = IndexPath(row: newCursorIndex, section: adjustedRowsSection)
+			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorTextRowViewCell {
+				rowCell.moveToEnd()
+			}
+			makeCursorVisibleIfNecessary()
+		}
+	}
+	
+	private func createRowInside(afterRows: [Row]?, textRowStrings: TextRowStrings? = nil) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let afterRow = afterRows?.sortedByDisplayOrder().last else { return }
+		
+		let command = CreateRowInsideCommand(undoManager: undoManager,
+											 delegate: self,
+											 outline: outline,
+											 afterRow: afterRow,
+											 textRowStrings: textRowStrings)
+		
+		runCommand(command)
+		
+		if let newCursorIndex = command.newCursorIndex {
+			let newCursorIndexPath = IndexPath(row: newCursorIndex, section: adjustedRowsSection)
+			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorTextRowViewCell {
+				rowCell.moveToEnd()
+			}
+			makeCursorVisibleIfNecessary()
+		}
+	}
+	
+	private func createRowOutside(afterRows: [Row]?, textRowStrings: TextRowStrings? = nil) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let afterRow = afterRows?.sortedByDisplayOrder().last else { return }
+		
+		let command = CreateRowOutsideCommand(undoManager: undoManager,
+											  delegate: self,
+											  outline: outline,
+											  afterRow: afterRow,
+											  textRowStrings: textRowStrings)
 		
 		runCommand(command)
 		

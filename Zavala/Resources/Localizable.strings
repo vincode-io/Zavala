@@ -48,6 +48,8 @@
 "Add_Row_Above" = "Add Row Above";
 "Add_Row_Below" = "Add Row Below";
 "Add_Row" = "Add Row";
+"Add_Row_Inside" = "Add Row Inside";
+"Add_Row_Outside" = "Add Row Outside";
 "Delete_Row" = "Delete Row";
 "Delete_Rows" = "Delete Rows";
 "Add_Note" = "Add Note";

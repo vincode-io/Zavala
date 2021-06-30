@@ -26,6 +26,10 @@ internal enum L10n {
   internal static let addNote = L10n.tr("Localizable", "Add_Note")
   /// Add Row
   internal static let addRow = L10n.tr("Localizable", "Add_Row")
+  /// Add Row Inside
+  internal static let addRowInside = L10n.tr("Localizable", "Add_Row_Inside")
+  /// Add Row Outside
+  internal static let addRowOutside = L10n.tr("Localizable", "Add_Row_Outside")
   /// Add Tag
   internal static let addTag = L10n.tr("Localizable", "Add_Tag")
   /// All

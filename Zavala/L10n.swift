@@ -24,6 +24,10 @@ internal enum L10n {
   internal static let addRowAbove = L10n.tr("Localizable", "Add_Row_Above")
   /// Add Row Below
   internal static let addRowBelow = L10n.tr("Localizable", "Add_Row_Below")
+  /// Add Row Inside
+  internal static let addRowInside = L10n.tr("Localizable", "Add_Row_Inside")
+  /// Add Row Outside
+  internal static let addRowOutside = L10n.tr("Localizable", "Add_Row_Outside")
   /// Add Topic Level
   internal static let addTopicLevel = L10n.tr("Localizable", "Add_Topic_Level")
   /// Archive %@
