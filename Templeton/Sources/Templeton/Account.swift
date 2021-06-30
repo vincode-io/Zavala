@@ -261,8 +261,6 @@ public final class Account: NSObject, Identifiable, Codable {
 	}
 	
 	public func createDocument(_ document: Document) {
-		document.reassignAccount(id.accountID)
-		
 		if documents == nil {
 			documents = [Document]()
 		}

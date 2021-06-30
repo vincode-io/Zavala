@@ -78,7 +78,10 @@ extension SidebarViewController: UICollectionViewDropDelegate {
 			}
 			
 			document.account?.deleteDocument(document)
-			container.account?.createDocument(document)
+			if let containerAccount = container.account {
+				document.reassignAccount(containerAccount.id.accountID)
+				containerAccount.createDocument(document)
+			}
 			
 			for tagName in tagNames {
 				if let tag = container.account?.createTag(name: tagName) {
