@@ -10,6 +10,7 @@ import RSCore
 import CloudKit
 
 public extension Notification.Name {
+	static let OutlineTagsDidChange = Notification.Name(rawValue: "OutlineTagsDidChange")
 	static let OutlineElementsDidChange = Notification.Name(rawValue: "OutlineElementsDidChange")
 	static let OutlineSearchWillBegin = Notification.Name(rawValue: "OutlineSearchWillBegin")
 	static let OutlineSearchTextDidChange = Notification.Name(rawValue: "OutlineSearchTextDidChange")
@@ -446,6 +447,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		tagIDs!.append(tag.id)
 		self.updated = Date()
+		
+		outlineTagsDidChange()
 
 		let reload = tagIDs!.count
 		let inserted = reload - 1
@@ -460,6 +463,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		tagIDs?.remove(at: index)
 		self.updated = Date()
 
+		outlineTagsDidChange()
+		
 		let reload = tagIDs?.count ?? 1
 		let changes = OutlineElementChanges(section: .tags, deletes: Set([index]), reloads: Set([reload]))
 		outlineElementsDidChange(changes)
@@ -2016,6 +2021,10 @@ extension Outline {
 	private func outlineViewPropertyDidChange() {
 		documentMetaDataDidChange()
 		rowsFile?.markAsDirty()
+	}
+	
+	private func outlineTagsDidChange() {
+		NotificationCenter.default.post(name: .OutlineTagsDidChange, object: self, userInfo: nil)
 	}
 	
 	private func outlineElementsDidChange(_ changes: OutlineElementChanges) {
