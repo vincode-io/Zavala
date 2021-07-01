@@ -12,6 +12,7 @@ public protocol DocumentContainer {
 	var id: EntityID { get }
 	var name: String? { get }
 	var image: RSImage? { get }
+	var itemCount: Int? { get }
 	var account: Account? { get }
 	
 	func sortedDocuments(completion: @escaping (Result<[Document], Error>) -> Void)

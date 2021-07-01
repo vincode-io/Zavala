@@ -68,6 +68,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountTagsDidChange(_:)), name: .AccountTagsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
 	}
 	
 	// MARK: API
@@ -116,7 +117,11 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	@objc func accountTagsDidChange(_ note: Notification) {
 		applyChangeSnapshot()
 	}
-	
+
+	@objc func accountDocumentsDidChange(_ note: Notification) {
+		applyChangeSnapshot()
+	}
+
 	@objc func cloudKitSyncDidComplete(_ note: Notification) {
 		collectionView?.refreshControl?.endRefreshing()
 	}
@@ -205,7 +210,10 @@ extension SidebarViewController {
 			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
 			contentConfiguration.text = item.title
 			contentConfiguration.image = item.image
-			
+			if let count = item.count {
+				contentConfiguration.secondaryText = String(count)
+			}
+			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			cell.contentConfiguration = contentConfiguration
 		}
 		

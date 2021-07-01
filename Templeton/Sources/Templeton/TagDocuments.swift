@@ -14,6 +14,11 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 	public var name: String?
 	public var image: RSImage? = UIImage(systemName: "capsule")!
 
+	public var itemCount: Int? {
+		guard let tag = tag else { return nil }
+		return account?.documents?.filter({ $0.hasTag(tag) }).count
+	}
+	
 	public weak var account: Account?
 	public weak var tag: Tag?
 	

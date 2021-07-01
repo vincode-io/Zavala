@@ -16,6 +16,10 @@ public final class Search: Identifiable, DocumentContainer {
 	public var image: RSImage?
 	public var account: Account? = nil
 
+	public var itemCount: Int? {
+		return nil
+	}
+	
 	public var searchText: String
 	
 	private var searchQuery: CSSearchQuery?

@@ -19,6 +19,7 @@ final class SidebarItem: NSObject, NSCopying, Identifiable {
 	let id: SidebarItem.ID
 	let title: String?
 	let image: UIImage?
+	let count: Int?
 	
 	var entityID: EntityID? {
 		if case .documentContainer(let entityID) = id {
@@ -27,23 +28,24 @@ final class SidebarItem: NSObject, NSCopying, Identifiable {
 		return nil
 	}
 	
-	init(id: ID, title: String?, image: UIImage?) {
+	init(id: ID, title: String?, image: UIImage?, count: Int?) {
 		self.id = id
 		self.title = title
 		self.image = image
+		self.count = count
 	}
 	
 	static func searchSidebarItem() -> SidebarItem {
-		return SidebarItem(id: .search, title: nil, image: nil)
+		return SidebarItem(id: .search, title: nil, image: nil, count: nil)
 	}
 	
 	static func sidebarItem(title: String, id: ID) -> SidebarItem {
-		return SidebarItem(id: id, title: title, image: nil)
+		return SidebarItem(id: id, title: title, image: nil, count: nil)
 	}
 	
 	static func sidebarItem(_ documentContainer: DocumentContainer) -> SidebarItem {
 		let id = SidebarItem.ID.documentContainer(documentContainer.id)
-		return SidebarItem(id: id, title: documentContainer.name, image: documentContainer.image)
+		return SidebarItem(id: id, title: documentContainer.name, image: documentContainer.image, count: documentContainer.itemCount)
 	}
 
 	override func isEqual(_ object: Any?) -> Bool {

@@ -14,6 +14,10 @@ public final class RecentDocuments: Identifiable, DocumentContainer {
 	public var name: String? = L10n.recent
 	public var image: RSImage? = UIImage(systemName: "clock")!
 
+	public var itemCount: Int? {
+		return account?.documents?.prefix(10).count
+	}
+	
 	public weak var account: Account?
 	
 	public init(account: Account) {

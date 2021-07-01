@@ -14,6 +14,10 @@ public final class AllDocuments: Identifiable, DocumentContainer {
 	public var name: String? = L10n.all
 	public var image: RSImage? = UIImage(systemName: "tray")!
 
+	public var itemCount: Int? {
+		return account?.documents?.count
+	}
+	
 	public weak var account: Account?
 	
 	public init(account: Account) {
