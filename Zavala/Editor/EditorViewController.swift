@@ -872,6 +872,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func insertImage(_ sender: Any? = nil) {
 		var config = PHPickerConfiguration()
 		config.filter = PHPickerFilter.images
+		config.selectionLimit = 1
 
 		let pickerViewController = PHPickerViewController(configuration: config)
 		pickerViewController.delegate = self
@@ -1279,29 +1280,27 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 	func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
 		picker.dismiss(animated: true, completion: nil)
 		
-		guard let cursorCoordinates = CursorCoordinates.bestCoordinates else {
+		guard let cursorCoordinates = CursorCoordinates.bestCoordinates, let result = results.first else {
 			return
 		}
 		
-		for result in results {
-			result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { (object, error) in
-				if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = RSImage.scaleImage(data, maxPixelSize: 1024) {
-					let scaledImage = UIImage(cgImage: cgImage)
+		result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { (object, error) in
+			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = RSImage.scaleImage(data, maxPixelSize: 1024) {
+				let scaledImage = UIImage(cgImage: cgImage)
+				
+				DispatchQueue.main.async {
+					guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
+					let indexPath = IndexPath(row: shadowTableIndex, section: self.adjustedRowsSection)
+					guard let textRowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
 					
-					DispatchQueue.main.async {
-						guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
-						let indexPath = IndexPath(row: shadowTableIndex, section: self.adjustedRowsSection)
-						guard let textRowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
-						
-						if cursorCoordinates.isInNotes, let textView = textRowCell.noteTextView {
-							textView.replaceCharacters(textView.selectedRange, withImage: scaledImage)
-						} else if let textView = textRowCell.topicTextView {
-							textView.replaceCharacters(textView.selectedRange, withImage: scaledImage)
-						}
+					if cursorCoordinates.isInNotes, let textView = textRowCell.noteTextView {
+						textView.replaceCharacters(textView.selectedRange, withImage: scaledImage)
+					} else if let textView = textRowCell.topicTextView {
+						textView.replaceCharacters(textView.selectedRange, withImage: scaledImage)
 					}
 				}
-			})
-		}
+			}
+		})
 		
 	}
 	
