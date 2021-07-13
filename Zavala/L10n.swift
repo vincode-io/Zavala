@@ -52,6 +52,8 @@ internal enum L10n {
   internal static let collapseAllInOutline = L10n.tr("Localizable", "Collapse_All_In_Outline")
   /// Collapse All in Row
   internal static let collapseAllInRow = L10n.tr("Localizable", "Collapse_All_In_Row")
+  /// Collapse Parent Row
+  internal static let collapseParentRow = L10n.tr("Localizable", "Collapse_Parent_Row")
   /// Complete
   internal static let complete = L10n.tr("Localizable", "Complete")
   /// Copy

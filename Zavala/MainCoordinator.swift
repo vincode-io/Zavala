@@ -131,6 +131,10 @@ extension MainCoordinator {
 		return editorViewController?.isCollapseUnavailable ?? true
 	}
 	
+	var isCollapseParentRowUnavailable: Bool {
+		return editorViewController?.isCollapseParentRowUnavailable ?? true
+	}
+	
 	var isDeleteCompletedRowsUnavailable: Bool {
 		return editorViewController?.isDeleteCompletedRowsUnavailable ?? true
 	}
@@ -242,6 +246,10 @@ extension MainCoordinator {
 	
 	func collapse() {
 		editorViewController?.collapse()
+	}
+	
+	func collapseParentRow() {
+		editorViewController?.collapseParentRow()
 	}
 	
 	func deleteCompletedRows() {

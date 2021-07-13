@@ -183,6 +183,16 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return true
 	}
 
+	var isCollapseParentRowUnavailable: Bool {
+		guard let rows = currentRows else { return true }
+		for row in rows {
+			if (row.parent as? Row)?.isCollapsable ?? false {
+				return false
+			}
+		}
+		return true
+	}
+	
 	var isDeleteCompletedRowsUnavailable: Bool {
 		return !(outline?.isAnyRowCompleted ?? false)
 	}
@@ -753,6 +763,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	func collapse() {
 		guard let rows = currentRows else { return }
 		collapse(rows: rows)
+	}
+	
+	func collapseParentRow() {
+		guard let rows = currentRows else { return }
+		let parentRows = rows.compactMap { $0.parent as? Row }
+		guard !parentRows.isEmpty else { return }
+		collapse(rows: parentRows)
 	}
 	
 	func deleteCompletedRows() {

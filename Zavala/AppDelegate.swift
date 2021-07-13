@@ -147,6 +147,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(collapseCommand)
 		}
 		
+		if !(mainCoordinator?.isCollapseParentUnavailable ?? true) {
+			menuKeyCommands.append(collapseParentCommand)
+		}
+		
 		if !(mainCoordinator?.isDeleteCompletedRowsUnavailable ?? true) {
 			menuKeyCommands.append(deleteCompletedRowsCommand)
 		}
@@ -367,6 +371,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									   action: #selector(collapseCommand(_:)),
 									   input: "0",
 									   modifierFlags: [.command])
+	
+	let collapseParentRowCommand = UIKeyCommand(title: L10n.collapseParentRow,
+												action: #selector(collapseParentRowCommand(_:)),
+												input: "0",
+												modifierFlags: [.control, .alternate, .command])
 	
 	let deleteCompletedRowsCommand = UIKeyCommand(title: L10n.deleteCompletedRows,
 									   action: #selector(deleteCompletedRowsCommand(_:)),
@@ -714,6 +723,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.collapse()
 	}
 	
+	@objc func collapseParentRowCommand(_ sender: Any?) {
+		mainCoordinator?.collapseParentRow()
+	}
+	
 	@objc func deleteCompletedRowsCommand(_ sender: Any?) {
 		mainCoordinator?.deleteCompletedRows()
 	}
@@ -924,6 +937,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isCollapseUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(collapseParentRowCommand(_:)):
+			if mainCoordinator?.isCollapseParentRowUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		case #selector(deleteCompletedRowsCommand(_:)):
 			if mainCoordinator?.isDeleteCompletedRowsUnavailable ?? true {
 				command.attributes = .disabled
@@ -1012,7 +1029,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// View Menu
 		let expandCollapseMenu = UIMenu(title: "",
 										options: .displayInline,
-										children: [expandAllInOutlineCommand, expandAllCommand, expandCommand, collapseAllInOutlineCommand, collapseAllCommand, collapseCommand])
+										children: [expandAllInOutlineCommand, expandAllCommand, expandCommand, collapseAllInOutlineCommand, collapseAllCommand, collapseCommand, collapseParentRowCommand])
 		builder.insertChild(expandCollapseMenu, atStartOfMenu: .view)
 		let toggleFilterOutlineMenu = UIMenu(title: "", options: .displayInline, children: [toggleOutlineFilterCommand, toggleOutlineHideNotesCommand])
 		builder.insertChild(toggleFilterOutlineMenu, atStartOfMenu: .view)
