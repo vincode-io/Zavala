@@ -147,8 +147,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(collapseCommand)
 		}
 		
-		if !(mainCoordinator?.isCollapseParentUnavailable ?? true) {
-			menuKeyCommands.append(collapseParentCommand)
+		if !(mainCoordinator?.isCollapseParentRowUnavailable ?? true) {
+			menuKeyCommands.append(collapseParentRowCommand)
 		}
 		
 		if !(mainCoordinator?.isDeleteCompletedRowsUnavailable ?? true) {
