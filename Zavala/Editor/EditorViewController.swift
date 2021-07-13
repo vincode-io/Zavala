@@ -2049,12 +2049,24 @@ extension EditorViewController {
 	private func collapse(rows: [Row]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
+		let currentRow = currentTextView?.row
+		
 		let command = CollapseCommand(undoManager: undoManager,
 									  delegate: self,
 									  outline: outline,
 									  rows: rows)
 		
 		runCommand(command)
+		
+		if let cursorRow = currentRow {
+			for row in rows {
+				if cursorRow.isDecendent(row), let newCursorIndex = row.shadowTableIndex {
+					if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
+						rowCell.moveToEnd()
+					}
+				}
+			}
+		}
 	}
 
 	private func expandAll(containers: [RowContainer]) {
