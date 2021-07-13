@@ -50,7 +50,11 @@ class LinkViewController: UITableViewController {
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
-		textTextField.becomeFirstResponder()
+		if textTextField.text?.isEmpty ?? true {
+			textTextField.becomeFirstResponder()
+		} else {
+			linkTextField.becomeFirstResponder()
+		}
 	}
 
 	@objc func arrowUp(_ sender: Any) {
