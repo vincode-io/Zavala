@@ -565,6 +565,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
 
 		if note.name == UIResponder.keyboardWillHideNotification {
+			CursorCoordinates.lastKnownCoordinates = nil
+			
 			collectionView.contentInset = EditorViewController.defaultContentInsets
 			updateUI(editMode: false)
 			currentKeyboardHeight = 0
