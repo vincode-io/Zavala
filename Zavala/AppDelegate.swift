@@ -1033,8 +1033,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertChild(expandCollapseMenu, atStartOfMenu: .view)
 		let toggleFilterOutlineMenu = UIMenu(title: "", options: .displayInline, children: [toggleOutlineFilterCommand, toggleOutlineHideNotesCommand])
 		builder.insertChild(toggleFilterOutlineMenu, atStartOfMenu: .view)
-		let toggleSidebarMenu = UIMenu(title: "", options: .displayInline, children: [toggleSidebarCommand])
-		builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)
+
+		if #available(macOS 12.0, *) {
+			// This is included automatically on 12 and up
+		} else {
+			let toggleSidebarMenu = UIMenu(title: "", options: .displayInline, children: [toggleSidebarCommand])
+			builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)
+		}
 		
 		// Outline Menu
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand, createRowNotesCommand, deleteRowNotesCommand])
