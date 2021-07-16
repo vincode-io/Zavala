@@ -646,7 +646,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				if self?.editorViewController?.isBoldToggledOn ?? false {
 					item.image = AppAssets.bold.tinted(color: UIColor.systemBlue)
 				} else {
-					item.image = AppAssets.bold
+					item.image = AppAssets.bold.tinted(color: UIColor.systemGray)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
@@ -663,7 +663,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				if self?.editorViewController?.isItalicToggledOn ?? false {
 					item.image = AppAssets.italic.tinted(color:	UIColor.systemBlue)
 				} else {
-					item.image = AppAssets.italic
+					item.image = AppAssets.italic.tinted(color: UIColor.systemGray)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
