@@ -23,7 +23,7 @@ class EditorTextRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate 
 			return false
 		}
 
-		return session.hasItemsConforming(toTypeIdentifiers: [kUTTypeImage as String, kUTTypeText as String]) && session.items.count == 1
+		return session.hasItemsConforming(toTypeIdentifiers: [kUTTypeImage as String]) && session.items.count == 1
 	}
 	
 	func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
@@ -49,11 +49,6 @@ class EditorTextRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate 
 					textView.replaceCharacters(textView.selectedRange, withImage: image)
 				}
 			}
-		}
-		
-		session.loadObjects(ofClass: NSString.self) { [weak textView] (stringItems) in
-			guard let textView = textView, let text = stringItems.first as? String else { return }
-			textView.replaceCharacters(textView.selectedRange, withText: text)
 		}
 	}
 	

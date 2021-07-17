@@ -7,6 +7,7 @@
 
 import UIKit
 import Templeton
+import RSCore
 
 extension Selector {
 	static let toggleBoldface = #selector(EditorTextRowTextView.outlineToggleBoldface(_:))
@@ -108,7 +109,8 @@ class EditorTextRowTextView: UITextView {
 		super.init(frame: frame, textContainer: textContainer)
 
 		textStorage.delegate = self
-
+		textDropDelegate = self
+		
 		self.dropInteractionDelegate = EditorTextRowDropInteractionDelegate(textView: self)
 		self.addInteraction(UIDropInteraction(delegate: dropInteractionDelegate))
 
@@ -261,6 +263,22 @@ class EditorTextRowTextView: UITextView {
 			let editMenu = UIMenu(title: "", options: .displayInline, children: [editLinkCommand])
 			builder.insertSibling(editMenu, afterMenu: .standardEdit)
 		}
+	}
+	
+}
+
+extension EditorTextRowTextView: UITextDropDelegate {
+	
+	func textDroppableView(_ textDroppableView: UIView & UITextDroppable, willBecomeEditableForDrop drop: UITextDropRequest) -> UITextDropEditability {
+		return .temporary
+	}
+	
+	func textDroppableView(_ textDroppableView: UIView & UITextDroppable, proposalForDrop drop: UITextDropRequest) -> UITextDropProposal {
+		guard !drop.dropSession.hasItemsConforming(toTypeIdentifiers: [Row.typeIdentifier]) else {
+			return UITextDropProposal(operation: .forbidden)
+		}
+
+		return UITextDropProposal(operation: .copy)
 	}
 	
 }
