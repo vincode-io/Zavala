@@ -98,8 +98,8 @@ public final class Account: NSObject, Identifiable, Codable {
 		self.documents = [Document]()
 	}
 	
-	func initializeCloudKit(firstTime: Bool) {
-		cloudKitManager = CloudKitManager(account: self)
+	func initializeCloudKit(firstTime: Bool, errorHandler: ErrorHandler) {
+		cloudKitManager = CloudKitManager(account: self, errorHandler: errorHandler)
 		if firstTime {
 			cloudKitManager?.firstTimeSetup()
 			cloudKitManager?.sync()

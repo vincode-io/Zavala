@@ -16,7 +16,7 @@ public extension Notification.Name {
 }
 
 public class CloudKitManager {
-
+	
 	let defaultZone: CloudKitOutlineZone
 	var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "CloudKit")
 
@@ -29,6 +29,7 @@ public class CloudKitManager {
 		return CKContainer(identifier: "iCloud.\(orgID).Zavala")
 	}()
 
+	private weak var errorHandler: ErrorHandler?
 	private weak var account: Account?
 	
 	private var coalescingQueue = CoalescingQueue(name: "Send Modifications", interval: 5)
@@ -60,11 +61,12 @@ public class CloudKitManager {
 		 return (isReachable && !needsConnection)
 	}
 	
-	init(account: Account) {
+	init(account: Account, errorHandler: ErrorHandler) {
 		self.account = account
 		self.defaultZone = CloudKitOutlineZone(container: container)
 		defaultZone.delegate = CloudKitAcountZoneDelegate(account: account, zoneID: self.defaultZone.zoneID)
 		self.zones[defaultZone.zoneID] = defaultZone
+		self.errorHandler = errorHandler
 	}
 	
 	func firstTimeSetup() {
@@ -86,24 +88,32 @@ public class CloudKitManager {
 	}
 	
 	func addRequests(_ requests: Set<CloudKitActionRequest>) {
-		let backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
-			guard let self = self else { return }
-			os_log("Add requests terminated for running too long.", log: self.log, type: .info)
-		}
+		let processInfo = ProcessInfo()
+		processInfo.performExpiringActivity(withReason: "Fetching Changes") { expired in
+			guard !expired else { return }
+			
+			var finished = false
 
-		let operation = CloudKitQueueRequestsOperation(requests: requests)
-		
-		operation.completionBlock = { [weak self] op in
-			guard let self = self else { return }
-			if let error = (op as? BaseMainThreadOperation)?.error {
-				self.presentError(error)
-			} else {
-				self.coalescingQueue.add(self, #selector(self.sendQueuedChanges))
+			let operation = CloudKitQueueRequestsOperation(requests: requests)
+			
+			operation.completionBlock = { [weak self] op in
+				guard let self = self else { return }
+				if let error = (op as? BaseMainThreadOperation)?.error {
+					self.presentError(error)
+				} else {
+					self.coalescingQueue.add(self, #selector(self.sendQueuedChanges))
+				}
+				finished = true
 			}
-			UIApplication.shared.endBackgroundTask(backgroundTask)
+			
+			DispatchQueue.main.async {
+				self.queue.add(operation)
+			}
+			
+			repeat {
+				sleep(1)
+			} while(!finished)
 		}
-		
-		queue.add(operation)
 	}
 	
 	func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
@@ -214,11 +224,7 @@ public class CloudKitManager {
 extension CloudKitManager {
 	
 	private func presentError(_ error: Error) {
-		if let controller = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController {
-			if controller.presentedViewController == nil {
-				controller.presentError(title: "CloudKit Syncing Error", message: error.localizedDescription)
-			}
-		}
+		errorHandler?.presentError(error, title: "CloudKit Syncing Error")
 	}
 
 	@objc private func sendQueuedChanges() {
@@ -232,23 +238,31 @@ extension CloudKitManager {
 
 	private func sendChanges(completion: @escaping (() -> Void)) {
 		isSyncing = true
-		let backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
-			guard let self = self else { return }
-			os_log("Send changes terminated for running too long.", log: self.log, type: .info)
-		}
+		let processInfo = ProcessInfo()
+		processInfo.performExpiringActivity(withReason: "Fetching Changes") { expired in
+			guard !expired else { return }
+			
+			var finished = false
 
-		let operation = CloudKitModifyOperation()
-		
-		operation.completionBlock = { [weak self] op in
-			if let error = (op as? BaseMainThreadOperation)?.error {
-				self?.presentError(error)
+			let operation = CloudKitModifyOperation()
+			
+			operation.completionBlock = { [weak self] op in
+				if let error = (op as? BaseMainThreadOperation)?.error {
+					self?.presentError(error)
+				}
+				completion()
+				finished = true
+				self?.isSyncing = false
 			}
-			completion()
-			UIApplication.shared.endBackgroundTask(backgroundTask)
-			self?.isSyncing = false
+			
+			DispatchQueue.main.async {
+				self.queue.add(operation)
+			}
+			
+			repeat {
+				sleep(1)
+			} while(!finished)
 		}
-		
-		queue.add(operation)
 	}
 	
 	private func fetchAllChanges(completion: (() -> Void)? = nil) {
@@ -293,23 +307,30 @@ extension CloudKitManager {
 	}
 	
 	private func fetchChanges(zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
-		let backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
-			guard let self = self else { return }
-			os_log("Fetch changes terminated for running too long.", log: self.log, type: .info)
-		}
-
-		let zone = findZone(zoneID: zoneID)
-		zone.fetchChangesInZone() { [weak self] result in
-			if case .failure(let error) = result {
-				if let ckError = (error as? CloudKitError)?.error as? CKError, ckError.code == .zoneNotFound {
-					AccountManager.shared.cloudKitAccount?.deleteAllDocuments(with: zoneID)
-				} else {
-					self?.presentError(error)
+		let processInfo = ProcessInfo()
+		processInfo.performExpiringActivity(withReason: "Fetching Changes") { expired in
+			guard !expired else { return }
+			
+			var finished = false
+			
+			let zone = self.findZone(zoneID: zoneID)
+			zone.fetchChangesInZone() { [weak self] result in
+				if case .failure(let error) = result {
+					if let ckError = (error as? CloudKitError)?.error as? CKError, ckError.code == .zoneNotFound {
+						AccountManager.shared.cloudKitAccount?.deleteAllDocuments(with: zoneID)
+					} else {
+						self?.presentError(error)
+					}
 				}
+				completion?()
+				finished = true
 			}
-			completion?()
-			UIApplication.shared.endBackgroundTask(backgroundTask)
+			
+			repeat {
+				sleep(1)
+			} while(!finished)
 		}
+		
 	}
 	
 	private func subscribeToSharedDatabaseChanges() {

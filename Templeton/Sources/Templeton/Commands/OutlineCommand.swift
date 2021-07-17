@@ -8,6 +8,7 @@ import Foundation
 import RSCore
 
 public protocol OutlineCommandDelegate: AnyObject {
+	var currentCoordinates: CursorCoordinates? { get }
 	func restoreCursorPosition(_: CursorCoordinates)
 }
 
@@ -20,7 +21,7 @@ public protocol OutlineCommand: UndoableCommand {
 public extension OutlineCommand {
 	
 	func saveCursorCoordinates() {
-		let coordinates = CursorCoordinates.currentCoordinates
+		let coordinates = delegate?.currentCoordinates
 		cursorCoordinates = coordinates
 		outline.cursorCoordinates = coordinates
 	}

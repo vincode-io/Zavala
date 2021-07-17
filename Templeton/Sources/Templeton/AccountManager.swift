@@ -59,7 +59,7 @@ public final class AccountManager {
 
 	private var accountFiles = [Int: AccountFile]()
 	
-	public init(accountsFolderPath: String) {
+	public init(accountsFolderPath: String, errorHandler: ErrorHandler) {
 		self.accountsFolder = URL(fileURLWithPath: accountsFolderPath, isDirectory: true)
 		self.localAccountFolder = accountsFolder.appendingPathComponent(AccountType.local.folderName)
 		self.localAccountFile = localAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
@@ -90,13 +90,13 @@ public final class AccountManager {
 		
 		if FileManager.default.fileExists(atPath: cloudKitAccountFile.path) {
 			initializeFile(accountType: .cloudKit)
-			cloudKitAccount?.initializeCloudKit(firstTime: false)
+			cloudKitAccount?.initializeCloudKit(firstTime: false, errorHandler: errorHandler)
 		}
 	}
 
 	// MARK: API
 	
-	public func createCloudKitAccount() {
+	public func createCloudKitAccount(errorHandler: ErrorHandler) {
 		do {
 			try FileManager.default.createDirectory(atPath: cloudKitAccountFolder.path, withIntermediateDirectories: true, attributes: nil)
 		} catch {
@@ -107,7 +107,7 @@ public final class AccountManager {
 		let cloudKitAccount = Account(accountType: .cloudKit)
 		accountsDictionary[AccountType.cloudKit.rawValue] = cloudKitAccount
 		initializeFile(accountType: .cloudKit)
-		cloudKitAccount.initializeCloudKit(firstTime: true)
+		cloudKitAccount.initializeCloudKit(firstTime: true, errorHandler: errorHandler)
 
 		accountManagerAccountsDidChange()
 	}

@@ -25,6 +25,7 @@ public struct CursorCoordinates {
 
 	public static var lastKnownCoordinates: CursorCoordinates?
 
+	@available(iOSApplicationExtension, unavailable)
 	public static var currentCoordinates: CursorCoordinates? {
 		if let provider = UIResponder.currentFirstResponder as? CursorCoordinatesProvider {
 			return provider.coordinates
@@ -32,6 +33,7 @@ public struct CursorCoordinates {
 		return nil
 	}
 
+	@available(iOSApplicationExtension, unavailable)
 	public static var bestCoordinates: CursorCoordinates? {
 		if let current = currentCoordinates {
 			return current

@@ -472,7 +472,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		#endif
 		
-		AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath)
+		AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath, errorHandler: self)
 		let _ = OutlineFontCache.shared
 		
 		return true
@@ -1071,6 +1071,18 @@ extension AppDelegate: AppKitPluginDelegate {
 	
 }
 
+extension AppDelegate: ErrorHandler {
+	
+	func presentError(_ error: Error, title: String) {
+		if let controller = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController {
+			if controller.presentedViewController == nil {
+				controller.presentError(title: title, message: error.localizedDescription)
+			}
+		}
+	}
+	
+}
+
 extension AppDelegate {
 	
 	@objc private func willEnterForeground() {
@@ -1096,7 +1108,7 @@ extension AppDelegate {
 		let cloudKitAccount = AccountManager.shared.cloudKitAccount
 		
 		if AppDefaults.shared.enableCloudKit && cloudKitAccount == nil {
-			AccountManager.shared.createCloudKitAccount()
+			AccountManager.shared.createCloudKitAccount(errorHandler: self)
 		} else if !AppDefaults.shared.enableCloudKit && cloudKitAccount != nil {
 			AccountManager.shared.deleteCloudKitAccount()
 		}

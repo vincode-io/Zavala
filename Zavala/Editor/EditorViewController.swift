@@ -1286,6 +1286,10 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 
 extension EditorViewController: OutlineCommandDelegate {
 	
+	var currentCoordinates: CursorCoordinates? {
+		return CursorCoordinates.currentCoordinates
+	}
+	
 	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates) {
 		restoreCursorPosition(cursorCoordinates, scroll: false)
 	}
