@@ -341,7 +341,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				if self?.editorViewController?.isBoldToggledOn ?? false {
 					item.image = AppAssets.bold.tinted(color: UIColor.systemBlue)
 				} else {
-					item.image = AppAssets.bold.tinted(color: UIColor.systemGray)
+					item.image = AppAssets.bold
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
@@ -358,7 +358,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				if self?.editorViewController?.isItalicToggledOn ?? false {
 					item.image = AppAssets.italic.tinted(color:	UIColor.systemBlue)
 				} else {
-					item.image = AppAssets.italic.tinted(color: UIColor.systemGray)
+					item.image = AppAssets.italic
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}

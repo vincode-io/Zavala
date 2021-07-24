@@ -28,7 +28,7 @@ struct AppAssets {
 	}()
 
 	static var bold: UIImage = {
-		return UIImage(systemName: "bold")!.applyingSymbolConfiguration(.init(pointSize: 22.0, weight: .regular, scale: .medium))!
+		return UIImage(systemName: "bold")!.applyingSymbolConfiguration(.init(pointSize: 22.0, weight: .regular, scale: .medium))!.tinted(color: UIColor.systemGray)!
 	}()
 	
 	static var bugTrackerURL = "https://github.com/vincode-io/Zavala/issues"
@@ -128,7 +128,7 @@ struct AppAssets {
 	}()
 	
 	static var italic: UIImage = {
-		return UIImage(systemName: "italic")!.applyingSymbolConfiguration(.init(pointSize: 22.0, weight: .regular, scale: .medium))!
+		return UIImage(systemName: "italic")!.applyingSymbolConfiguration(.init(pointSize: 22.0, weight: .regular, scale: .medium))!.tinted(color: UIColor.systemGray)!
 	}()
 
 	static var hideNotesActive: UIImage = {
