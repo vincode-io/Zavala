@@ -10,6 +10,7 @@ import Templeton
 
 protocol EditorTextRowViewCellDelegate: AnyObject {
 	var editorTextRowUndoManager: UndoManager? { get }
+	var editorTextRowInputAccessoryView: UIView? { get }
 	func editorTextRowLayoutEditor()
 	func editorTextRowTextFieldDidBecomeActive(row: Row)
 	func editorTextRowToggleDisclosure(row: Row)

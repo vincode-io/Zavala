@@ -164,19 +164,19 @@ extension MainCoordinator {
 	}
 	
 	func indentRows() {
-		editorViewController?.indentRows()
+		editorViewController?.indentCurrentRows()
 	}
 	
 	func outdentRows() {
-		editorViewController?.outdentRows()
+		editorViewController?.outdentCurrentRows()
 	}
 	
 	func moveRowsUp() {
-		editorViewController?.moveRowsUp()
+		editorViewController?.moveCurrentRowsUp()
 	}
 	
 	func moveRowsDown() {
-		editorViewController?.moveRowsDown()
+		editorViewController?.moveCurrentRowsDown()
 	}
 	
 	func moveRowsLeft() {

@@ -11,6 +11,7 @@ import Templeton
 protocol EditorTextRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewTextRowStrings: TextRowStrings { get }
+	var editorRowNoteTextViewInputAccessoryView: UIView? { get }
 	func invalidateLayout(_ : EditorTextRowNoteTextView)
 	func didBecomeActive(_ : EditorTextRowNoteTextView, row: Row)
 	func textChanged(_ : EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange)
@@ -66,6 +67,9 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 	
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
+		if traitCollection.userInterfaceIdiom == .phone {
+			inputAccessoryView = editorDelegate?.editorRowNoteTextViewInputAccessoryView
+		}
 		let result = super.becomeFirstResponder()
 		didBecomeActive()
 		return result

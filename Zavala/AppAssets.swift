@@ -147,6 +147,14 @@ struct AppAssets {
 		return UIImage(systemName: "link")!.applyingSymbolConfiguration(.init(pointSize: 16.0, weight: .regular, scale: .medium))!.tinted(color: UIColor.systemGray)!
 	}()
 
+	static var moveDown: UIImage = {
+		return UIImage(systemName: "arrow.down.to.line")!
+	}()
+
+	static var moveUp: UIImage = {
+		return UIImage(systemName: "arrow.up.to.line")!
+	}()
+
 	static var note: UIImage = {
 		return UIImage(systemName: "doc.text")!
 	}()

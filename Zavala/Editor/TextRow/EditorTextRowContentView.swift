@@ -206,6 +206,10 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 		return textRowStrings
 	}
 	
+	var editorRowTopicTextViewInputAccessoryView: UIView? {
+		appliedConfiguration.delegate?.editorTextRowInputAccessoryView
+	}
+	
 	func invalidateLayout(_: EditorTextRowTopicTextView) {
 		invalidateIntrinsicContentSize()
 		appliedConfiguration.delegate?.editorTextRowLayoutEditor()
@@ -261,6 +265,10 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 	
 	var editorRowNoteTextViewTextRowStrings: TextRowStrings {
 		return textRowStrings
+	}
+	
+	var editorRowNoteTextViewInputAccessoryView: UIView? {
+		return appliedConfiguration.delegate?.editorTextRowInputAccessoryView
 	}
 	
 	func invalidateLayout(_: EditorTextRowNoteTextView) {

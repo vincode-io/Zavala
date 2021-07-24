@@ -232,6 +232,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	override var canBecomeFirstResponder: Bool { return true }
 
+	private var keyboardToolBar: UIToolbar!
+	private var indentButton: UIBarButtonItem!
+	private var outdentButton: UIBarButtonItem!
+	private var moveUpButton: UIBarButtonItem!
+	private var moveDownButton: UIBarButtonItem!
+
 	private(set) var outline: Outline?
 	
 	private var currentTextView: EditorTextRowTextView? {
@@ -345,6 +351,21 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
 		
+		indentButton = UIBarButtonItem(image: AppAssets.indent, style: .plain, target: self, action: #selector(indentCurrentRows))
+		indentButton.title = L10n.indent
+		outdentButton = UIBarButtonItem(image: AppAssets.outdent, style: .plain, target: self, action: #selector(outdentCurrentRows))
+		outdentButton.title = L10n.outdent
+		moveUpButton = UIBarButtonItem(image: AppAssets.moveUp, style: .plain, target: self, action: #selector(moveCurrentRowsUp))
+		moveUpButton.title = L10n.moveUp
+		moveDownButton = UIBarButtonItem(image: AppAssets.moveDown, style: .plain, target: self, action: #selector(moveCurrentRowsDown))
+		moveDownButton.title = L10n.moveDown
+
+		if traitCollection.userInterfaceIdiom == .phone {
+			keyboardToolBar = UIToolbar()
+			keyboardToolBar.items = [outdentButton, indentButton, moveUpButton, moveDownButton]
+			keyboardToolBar.sizeToFit()
+		}
+
 		updateUI(editMode: false)
 		collectionView.reloadData()
 		
@@ -669,26 +690,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		createRowOutside(afterRows: rows)
 	}
 	
-	func indentRows() {
-		guard let rows = currentRows else { return }
-		indentRows(rows)
-	}
-	
-	func outdentRows() {
-		guard let rows = currentRows else { return }
-		outdentRows(rows)
-	}
-	
-	func moveRowsUp() {
-		guard let rows = currentRows else { return }
-		moveRowsUp(rows)
-	}
-	
-	func moveRowsDown() {
-		guard let rows = currentRows else { return }
-		moveRowsDown(rows)
-	}
-	
 	func moveRowsLeft() {
 		guard let rows = currentRows else { return }
 		moveRowsLeft(rows)
@@ -812,13 +813,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func toggleOutlineFilter() {
 		guard let changes = outline?.toggleFilter() else { return }
-		updateUI(editMode: isInEditMode)
 		applyChangesRestoringState(changes)
 	}
 	
 	@objc func toggleOutlineHideNotes() {
 		guard let changes = outline?.toggleNotesHidden() else { return }
-		updateUI(editMode: isInEditMode)
 		applyChangesRestoringState(changes)
 	}
 	
@@ -956,6 +955,26 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
+	@objc func outdentCurrentRows() {
+		guard let rows = currentRows else { return }
+		outdentRows(rows)
+	}
+	
+	@objc func indentCurrentRows() {
+		guard let rows = currentRows else { return }
+		indentRows(rows)
+	}
+	
+	@objc func moveCurrentRowsUp() {
+		guard let rows = currentRows else { return }
+		moveRowsUp(rows)
+	}
+	
+	@objc func moveCurrentRowsDown() {
+		guard let rows = currentRows else { return }
+		moveRowsDown(rows)
+	}
+	
 }
 
 // MARK: UICollectionViewDelegate, UICollectionViewDataSource
@@ -1089,6 +1108,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		if let responder = UIResponder.currentFirstResponder, responder is UITextField || responder is UITextView {
 			responder.resignFirstResponder()
 		}
+		updateUI(editMode: isInEditMode)
 	}
 	
 }
@@ -1211,6 +1231,10 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 
 	var editorTextRowUndoManager: UndoManager? {
 		return undoManager
+	}
+	
+	var editorTextRowInputAccessoryView: UIView? {
+		return keyboardToolBar
 	}
 	
 	func editorTextRowLayoutEditor() {
@@ -1455,7 +1479,7 @@ extension EditorViewController {
 				navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
 			}
 		} else if traitCollection.userInterfaceIdiom == .pad {
-			navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
+			navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem, moveDownButton, moveUpButton, indentButton, outdentButton]
 		}
 
 		if traitCollection.userInterfaceIdiom != .mac {
@@ -1470,6 +1494,10 @@ extension EditorViewController {
 			ellipsisBarButtonItem.isEnabled = true
 		}
 		
+		outdentButton.isEnabled = !isOutdentRowsUnavailable
+		indentButton.isEnabled = !isIndentRowsUnavailable
+		moveUpButton.isEnabled = !isMoveRowsUpUnavailable
+		moveDownButton.isEnabled = !isMoveRowsDownUnavailable
 	}
 	
 	private func discloseSearchBar() {
@@ -1658,7 +1686,6 @@ extension EditorViewController {
 	}
 	
 	private func applyChanges(_ changes: OutlineElementChanges) {
-		
 		if !changes.isOnlyReloads {
 			collectionView.performBatchUpdates {
 				if let deletes = changes.deleteIndexPaths, !deletes.isEmpty {
@@ -1685,6 +1712,8 @@ extension EditorViewController {
 				collectionView.contentOffset = contentOffset
 			}
 		}
+		
+		updateUI(editMode: isInEditMode)
 	}
 	
 	private func applyChangesRestoringState(_ changes: OutlineElementChanges) {
