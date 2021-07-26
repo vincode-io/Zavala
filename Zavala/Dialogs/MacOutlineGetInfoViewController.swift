@@ -62,12 +62,3 @@ class MacOutlineGetInfoViewController: MacFormViewController {
 	}
 	
 }
-
-extension MacOutlineGetInfoViewController: UITextFieldDelegate {
-	
-	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		textField.resignFirstResponder()
-		return true
-	}
-	
-}
