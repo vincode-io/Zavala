@@ -1460,7 +1460,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public func isMoveRowsUpUnavailable(rows: [Row]) -> Bool {
-		guard let first = rows.first else { return true }
+		guard let first = rows.sortedByDisplayOrder().first else { return true }
 		
 		for row in rows {
 			if !first.hasSameParent(row) {
@@ -1480,7 +1480,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			updateTextRowStrings(textRow, texts)
 		}
 
-		for row in rows {
+		for row in rows.sortedByDisplayOrder() {
 			if let index = row.parent?.firstIndexOfRow(row) {
 				row.parent?.removeRow(row)
 				row.parent?.insertRow(row, at: index - 1)
@@ -1493,17 +1493,17 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public func isMoveRowsDownUnavailable(rows: [Row]) -> Bool {
-		guard let first = rows.first else { return true }
+		guard let last = rows.sortedByDisplayOrder().last else { return true }
 		
 		for row in rows {
-			if !first.hasSameParent(row) {
+			if !last.hasSameParent(row) {
 				return true
 			}
 		}
 		
-		guard let index = first.parent?.rows.firstIndex(of: first) else { return true }
+		guard let index = last.parent?.rows.firstIndex(of: last) else { return true }
 		
-		return index == (first.parent?.rowCount ?? -1) - 1
+		return index == (last.parent?.rowCount ?? -1) - 1
 	}
 
 	func moveRowsDown(_ rows: [Row], textRowStrings: TextRowStrings?) {
@@ -1513,7 +1513,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			updateTextRowStrings(textRow, texts)
 		}
 
-		for row in rows {
+		for row in rows.sortedByReverseDisplayOrder() {
 			if let index = row.parent?.firstIndexOfRow(row) {
 				row.parent?.removeRow(row)
 				row.parent?.insertRow(row, at: index + 1)
