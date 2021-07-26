@@ -48,7 +48,7 @@ class EditorTagInputViewCell: UICollectionViewCell {
 	
 	func createTag() {
 		guard let textField = (contentView as? EditorTagInputContentView)?.textField else { return }
-		textField.createTag(self)
+		textField.createTag()
 	}
 	
 }

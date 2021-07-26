@@ -39,13 +39,6 @@ class EditorTagInputTextField: SearchTextField {
 		return stackedUndoManager
 	}
 	
-	override var keyCommands: [UIKeyCommand]? {
-		var keys = super.keyCommands ?? [UIKeyCommand]()
-		keys.append(UIKeyCommand(action: #selector(createTag(_:)), input: "\t"))
-		keys.append(UIKeyCommand(action: #selector(clearSelection(_:)), input: UIKeyCommand.inputEscape))
-		return keys
-	}
-	
 	private var stackedUndoManager: UndoManager?
 	private static let dropDelegate = OutlineTextDropDelegate()
 
@@ -97,8 +90,10 @@ class EditorTagInputTextField: SearchTextField {
 		}
 		
 	}
+	
+	// MARK: API
 
-	@objc func createTag(_ sender: Any) {
+	func createTag() {
 		activateSelection()
 		
 		guard let name = text, !name.isEmpty else { return }
@@ -110,8 +105,8 @@ class EditorTagInputTextField: SearchTextField {
 		resetFilterStrings()
 	}
 	
-	@objc func clearSelection(_ sender: Any) {
-		clearSelection()
+	override func clearSelection() {
+		super.clearSelection()
 	}
 }
 

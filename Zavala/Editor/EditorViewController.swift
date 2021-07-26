@@ -1582,8 +1582,27 @@ extension EditorViewController {
 			super.pressesBegan(presses, with: event)
 			return
 		}
+		
+		if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
+			guard cancelledKeys.remove(key) == nil else {
+				return
+			}
 			
-		if !(CursorCoordinates.currentCoordinates?.isInNotes ?? false) {
+			switch (key.keyCode, true) {
+			case (.keyboardUpArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
+				isCursoringUp = true
+				repeatMoveCursorUp()
+			case (.keyboardDownArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
+				isCursoringDown = true
+				repeatMoveCursorDown()
+			case (.keyboardTab, true):
+				tagInput.createTag()
+			case (.keyboardEscape, true):
+				tagInput.clearSelection()
+			default:
+				super.pressesBegan(presses, with: event)
+			}
+		} else if !(CursorCoordinates.currentCoordinates?.isInNotes ?? false) {
 			guard cancelledKeys.remove(key) == nil else {
 				return
 			}
