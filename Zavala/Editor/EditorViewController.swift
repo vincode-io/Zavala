@@ -1104,6 +1104,10 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		return adjustedSection == Outline.Section.rows.rawValue
 	}
 	
+	func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+		updateUI(editMode: isInEditMode)
+	}
+	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		if let responder = UIResponder.currentFirstResponder, responder is UITextField || responder is UITextView {
 			responder.resignFirstResponder()
