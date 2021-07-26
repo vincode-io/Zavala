@@ -1712,8 +1712,6 @@ extension EditorViewController {
 				collectionView.contentOffset = contentOffset
 			}
 		}
-		
-		updateUI(editMode: isInEditMode)
 	}
 	
 	private func applyChangesRestoringState(_ changes: OutlineElementChanges) {
@@ -1731,6 +1729,8 @@ extension EditorViewController {
 				collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
 			}
 		}
+		
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func restoreOutlineCursorPosition() {
