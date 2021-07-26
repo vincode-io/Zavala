@@ -307,6 +307,8 @@ extension NSToolbarItem.Identifier {
 	static let collapseAllInOutline = NSToolbarItem.Identifier("io.vincode.Zavala.collapseAllInOutline")
 	static let indent = NSToolbarItem.Identifier("io.vincode.Zavala.indent")
 	static let outdent = NSToolbarItem.Identifier("io.vincode.Zavala.outdent")
+	static let moveUp = NSToolbarItem.Identifier("io.vincode.Zavala.moveUp")
+	static let moveDown = NSToolbarItem.Identifier("io.vincode.Zavala.moveDown")
 	static let printDocument = NSToolbarItem.Identifier("io.vincode.Zavala.print")
 	static let share = NSToolbarItem.Identifier("io.vincode.Zavala.share")
 	static let sendCopy = NSToolbarItem.Identifier("io.vincode.Zavala.sendCopy")

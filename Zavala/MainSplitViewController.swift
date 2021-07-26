@@ -273,6 +273,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		outdentRows()
 	}
 
+	@objc func moveRowsUp(_ sender: Any?) {
+		moveRowsUp()
+	}
+
+	@objc func moveRowsDown(_ sender: Any?) {
+		moveRowsDown()
+	}
+
 	@objc func toggleOutlineHideNotes(_ sender: Any?) {
 		toggleOutlineHideNotes()
 	}
@@ -566,6 +574,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.collapseAllInOutline,
 			.indent,
 			.outdent,
+			.moveUp,
+			.moveDown,
 			.print,
 			.share,
 			.sendCopy,
@@ -720,6 +730,30 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = L10n.outdent
 			item.isBordered = true
 			item.action = #selector(outdentRows(_:))
+			item.target = self
+			toolbarItem = item
+		case .moveUp:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isMoveRowsUpUnavailable ?? true
+			}
+			item.image = AppAssets.moveUp
+			item.label = L10n.moveUp
+			item.toolTip = L10n.moveUp
+			item.isBordered = true
+			item.action = #selector(moveRowsUp(_:))
+			item.target = self
+			toolbarItem = item
+		case .moveDown:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isMoveRowsDownUnavailable ?? true
+			}
+			item.image = AppAssets.moveDown
+			item.label = L10n.moveDown
+			item.toolTip = L10n.moveDown
+			item.isBordered = true
+			item.action = #selector(moveRowsDown(_:))
 			item.target = self
 			toolbarItem = item
 		case .toggleOutlineFilter:

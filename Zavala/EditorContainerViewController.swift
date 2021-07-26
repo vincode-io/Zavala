@@ -177,6 +177,14 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		outdentRows()
 	}
 
+	@objc func moveRowsUp(_ sender: Any?) {
+		moveRowsUp()
+	}
+
+	@objc func moveRowsDown(_ sender: Any?) {
+		moveRowsDown()
+	}
+
 	@objc func toggleOutlineHideNotes(_ sender: Any?) {
 		toggleOutlineHideNotes()
 	}
@@ -273,6 +281,8 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.collapseAllInOutline,
 			.indent,
 			.outdent,
+			.moveUp,
+			.moveDown,
 			.print,
 			.share,
 			.sendCopy,
@@ -416,25 +426,29 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.isBordered = true
 			item.action = #selector(outdentRows(_:))
 			item.target = self
-			toolbarItem = item		case .toggleOutlineFilter:
+			toolbarItem = item
+		case .moveUp:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] item in
-				if self?.editorViewController?.isOutlineFiltered ?? false {
-					item.image = AppAssets.filterActive
-					item.label = L10n.showCompleted
-					item.toolTip = L10n.showCompleted
-				} else {
-					item.image = AppAssets.filterInactive
-					item.label = L10n.hideCompleted
-					item.toolTip = L10n.hideCompleted
-				}
-				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isMoveRowsUpUnavailable ?? true
 			}
-			item.image = AppAssets.filterInactive
-			item.label = L10n.hideCompleted
-			item.toolTip = L10n.hideCompleted
+			item.image = AppAssets.moveUp
+			item.label = L10n.moveUp
+			item.toolTip = L10n.moveUp
 			item.isBordered = true
-			item.action = #selector(toggleOutlineFilter(_:))
+			item.action = #selector(moveRowsUp(_:))
+			item.target = self
+			toolbarItem = item
+		case .moveDown:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isMoveRowsDownUnavailable ?? true
+			}
+			item.image = AppAssets.moveDown
+			item.label = L10n.moveDown
+			item.toolTip = L10n.moveDown
+			item.isBordered = true
+			item.action = #selector(moveRowsDown(_:))
 			item.target = self
 			toolbarItem = item
 		case .toggleOutlineNotesHidden:
