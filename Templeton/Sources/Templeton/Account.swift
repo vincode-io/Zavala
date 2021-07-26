@@ -163,6 +163,9 @@ public final class Account: NSObject, Identifiable, Codable {
 		}
 		
 		let outline = Outline(parentID: id, title: title)
+		documents?.append(.outline(outline))
+		accountDocumentsDidChange()
+
 		if let created = headIndexer["dateCreated"].element?.text {
 			outline.created = Date.dateFromRFC822(rfc822String: created)
 		}
@@ -192,9 +195,6 @@ public final class Account: NSObject, Identifiable, Codable {
 			outline.createTag(tag)
 		}
 
-		documents?.append(.outline(outline))
-		accountDocumentsDidChange()
-
 		outline.importRows(outline: outline, rowIndexers: outlineIndexers)
 		
 		outline.zoneID = cloudKitManager?.defaultZone.zoneID
@@ -210,10 +210,6 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	public func createOutline(title: String? = nil, tag: Tag? = nil) -> Document {
 		let outline = Outline(parentID: id, title: title)
-		if let tag = tag {
-			outline.createTag(tag)
-		}
-		
 		if documents == nil {
 			documents = [Document]()
 		}
@@ -222,6 +218,11 @@ public final class Account: NSObject, Identifiable, Codable {
 		let document = Document.outline(outline)
 		documents!.append(document)
 		accountDocumentsDidChange()
+
+		if let tag = tag {
+			outline.createTag(tag)
+		}
+		
 		saveToCloudKit(document)
 		
 		return document
