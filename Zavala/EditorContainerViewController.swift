@@ -451,6 +451,27 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.action = #selector(moveRowsDown(_:))
 			item.target = self
 			toolbarItem = item
+		case .toggleOutlineFilter:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] item in
+				if self?.editorViewController?.isOutlineFiltered ?? false {
+					item.image = AppAssets.filterActive
+					item.label = L10n.showCompleted
+					item.toolTip = L10n.showCompleted
+				} else {
+					item.image = AppAssets.filterInactive
+					item.label = L10n.hideCompleted
+					item.toolTip = L10n.hideCompleted
+				}
+				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			}
+			item.image = AppAssets.filterInactive
+			item.label = L10n.hideCompleted
+			item.toolTip = L10n.hideCompleted
+			item.isBordered = true
+			item.action = #selector(toggleOutlineFilter(_:))
+			item.target = self
+			toolbarItem = item
 		case .toggleOutlineNotesHidden:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
