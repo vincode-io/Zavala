@@ -21,6 +21,7 @@ class LinkViewController: UITableViewController {
 		]
 	}
 
+	@IBOutlet weak var addOutlineBarButtonItem: UIBarButtonItem!
 	@IBOutlet weak var textTextField: SearchTextField!
 	@IBOutlet weak var linkTextField: UITextField!
 	
@@ -43,10 +44,16 @@ class LinkViewController: UITableViewController {
 			}
 			self.textTextField.text = filteredResults[index].title
 			self.linkTextField.text = documentID.url.absoluteString
+			self.updateUI()
 		}
 		
 		let searchItems = AccountManager.shared.documents.map { SearchTextFieldItem(title: $0.title ?? "", associatedObject: $0.id) }
 		textTextField.filterItems(searchItems)
+
+		NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: textTextField)
+		NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: linkTextField)
+
+		updateUI()
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -65,11 +72,49 @@ class LinkViewController: UITableViewController {
 		textTextField.selectBelow()
 	}
 
+	@IBAction func addOutline(_ sender: Any) {
+		guard let outlineTitle = textTextField.text else { return }
+		
+		let accountID = AppDefaults.shared.lastSelectedAccountID
+		
+		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return }
+		guard let outline = account.createOutline(title: outlineTitle).outline else { return }
+		outline.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
+		
+		linkTextField.text = outline.id.url.absoluteString
+		
+		submitAndDismiss()
+	}
+	
 	@IBAction func cancel(_ sender: Any) {
 		dismiss(animated: true)
 	}
 	
 	@IBAction func submit(_ sender: Any) {
+		submitAndDismiss()
+	}
+}
+
+extension LinkViewController: UITextFieldDelegate {
+	
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return false
+	}
+	
+}
+
+extension LinkViewController {
+	
+	@objc private func textDidChange(_ note: Notification) {
+		updateUI()
+	}
+	
+	private func updateUI() {
+		addOutlineBarButtonItem.isEnabled = !(textTextField.text?.isEmpty ?? true) && (linkTextField.text?.isEmpty ?? true)
+	}
+	
+	private func submitAndDismiss() {
 		guard let cursorCoordinates = cursorCoordinates, let range = range else { return }
 		
 		let text = textTextField.text?.trimmingWhitespace ?? ""
@@ -80,14 +125,6 @@ class LinkViewController: UITableViewController {
 		}
 		
 		dismiss(animated: true)
-	}
-}
-
-extension LinkViewController: UITextFieldDelegate {
-	
-	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		textField.resignFirstResponder()
-		return false
 	}
 	
 }
