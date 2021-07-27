@@ -405,6 +405,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		guard !UIResponder.isFirstResponderTextField else { return }
+		CursorCoordinates.lastKnownCoordinates = nil
+	}
+	
 	override func viewDidLayoutSubviews() {
 		if let offset = transitionContentOffset {
 			collectionView.contentOffset = offset
@@ -586,8 +592,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
 
 		if note.name == UIResponder.keyboardWillHideNotification {
-			CursorCoordinates.lastKnownCoordinates = nil
-			
 			collectionView.contentInset = EditorViewController.defaultContentInsets
 			updateUI(editMode: false)
 			currentKeyboardHeight = 0
