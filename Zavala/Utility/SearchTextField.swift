@@ -140,6 +140,8 @@ open class SearchTextField: EnhancedTextField {
     ////////////////////////////////////////////////////////////////////////
     // Private implementation
     
+	fileprivate var cancelledKeys = Set<UIKey>()
+
     fileprivate var tableView: KeyboardTableView?
     fileprivate var shadowView: UIView?
     fileprivate var direction: Direction = .down
@@ -498,6 +500,32 @@ open class SearchTextField: EnhancedTextField {
             
         }
     }
+	
+	open override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+		guard presses.count == 1, let key = presses.first?.key else {
+			super.pressesBegan(presses, with: event)
+			return
+		}
+
+		guard cancelledKeys.remove(key) == nil else {
+			return
+		}
+
+		switch (key.keyCode, true) {
+		case (.keyboardUpArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
+			selectAbove()
+		case (.keyboardDownArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
+			selectBelow()
+		default:
+			super.pressesBegan(presses, with: event)
+		}
+	}
+	
+	open override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+		super.pressesCancelled(presses, with: event)
+		let keys = presses.compactMap { $0.key }
+		keys.forEach { cancelledKeys.insert($0)	}
+	}
     
     fileprivate func filter(forceShowAll addAll: Bool) {
         clearResults()
