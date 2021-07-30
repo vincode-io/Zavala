@@ -52,9 +52,9 @@ public final class TextRow: BaseRow, Codable {
 				
 				topicData = try? cleanAttrText.data(from: .init(location: 0, length: cleanAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 				
-				var topicImages = images?.filter { $0.isInNotes } ?? [Image]()
-				topicImages.append(contentsOf: newImages)
-				images = topicImages
+				var notesImages = images?.filter { $0.isInNotes } ?? [Image]()
+				notesImages.append(contentsOf: newImages)
+				images = notesImages
 			} else {
 				topicData = nil
 				images = images?.filter { $0.isInNotes }
@@ -80,9 +80,9 @@ public final class TextRow: BaseRow, Codable {
 				
 				noteData = try? cleanAttrText.data(from: .init(location: 0, length: cleanAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 
-				var noteImages = images?.filter { !$0.isInNotes } ?? [Image]()
-				noteImages.append(contentsOf: newImages)
-				images = noteImages
+				var topicImages = images?.filter { !$0.isInNotes } ?? [Image]()
+				topicImages.append(contentsOf: newImages)
+				images = topicImages
 			} else {
 				noteData = nil
 				images = images?.filter { !$0.isInNotes }
