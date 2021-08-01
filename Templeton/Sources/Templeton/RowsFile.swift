@@ -30,8 +30,8 @@ final class RowsFile {
 			return nil
 		}
 		self.outline = outline
-		let localAccountFolder = AccountManager.shared.accountsFolder.appendingPathComponent(account.type.folderName)
-		fileURL = localAccountFolder.appendingPathComponent("\(outline.id.documentUUID).plist")
+		let accountFolder = AccountManager.shared.accountsFolder.appendingPathComponent(account.type.folderName)
+		fileURL = accountFolder.appendingPathComponent("\(outline.id.documentUUID).plist")
 	}
 	
 	func markAsDirty() {
