@@ -171,14 +171,14 @@ public enum Document: Equatable, Codable {
 	public func load() {
 		switch self {
 		case .outline(let outline):
-			outline.load()
+			outline.loadRows()
 		}
 	}
 
 	public func unload() {
 		switch self {
 		case .outline(let outline):
-			outline.unload()
+			outline.unloadRows()
 		}
 	}
 

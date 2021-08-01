@@ -116,7 +116,11 @@ public final class TextRow: BaseRow, Codable {
 	}
 	
 	override var images: [Image]? {
-		didSet {
+		get {
+			return outline?.findImages(rowID: id)
+		}
+		set {
+			outline?.updateImages(rowID: id, images: newValue)
 			topicCache = nil
 			noteCache = nil
 		}
@@ -130,7 +134,6 @@ public final class TextRow: BaseRow, Codable {
 		case isExpanded = "isExpanded"
 		case isComplete = "isComplete"
 		case rowOrder = "rowOrder"
-		case images = "images"
 	}
 	
 	private var topicCache: NSAttributedString?
@@ -180,12 +183,6 @@ public final class TextRow: BaseRow, Codable {
 		} else {
 			self.rowOrder = [EntityID]()
 		}
-
-		if let images = try? container.decode([Image].self, forKey: .images) {
-			self.images = images
-		} else {
-			self.images = [Image]()
-		}
 	}
 	
 	init(id: EntityID) {
@@ -203,7 +200,6 @@ public final class TextRow: BaseRow, Codable {
 		try container.encode(isExpanded, forKey: .isExpanded)
 		try container.encode(isComplete, forKey: .isComplete)
 		try container.encode(rowOrder, forKey: .rowOrder)
-		try container.encode(images, forKey: .images)
 	}
 	
 	public func duplicate(accountID: Int, documentUUID: String) -> TextRow {
@@ -277,7 +273,7 @@ extension TextRow {
 
 extension TextRow {
 	
-	func replaceImages(attrString: NSAttributedString?, isNotes: Bool) -> NSAttributedString? {
+	private func replaceImages(attrString: NSAttributedString?, isNotes: Bool) -> NSAttributedString? {
 		guard let attrString = attrString else { return nil }
 		let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
 		
@@ -296,7 +292,7 @@ extension TextRow {
 		return mutableAttrString
 	}
 	
-	func splitOffImages(attrString: NSAttributedString, isNotes: Bool) -> (NSAttributedString, [Image]) {
+	private func splitOffImages(attrString: NSAttributedString, isNotes: Bool) -> (NSAttributedString, [Image]) {
 		let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
 		var images = [Image]()
 		

@@ -117,6 +117,9 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		get {
 			associatedRow.images ?? [Image]()
 		}
+		set {
+			associatedRow.images = newValue
+		}
 	}
 	
 	public var rowCount: Int {

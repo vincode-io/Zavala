@@ -203,7 +203,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		
 		outline.updateAllLinkRelationships()
 		outline.forceSave()
-		outline.unload()
+		outline.unloadRows()
 		
 		return document
 	}

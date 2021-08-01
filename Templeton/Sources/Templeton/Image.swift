@@ -32,4 +32,9 @@ public struct Image: Identifiable, Codable, Equatable {
 		return lhs.id == rhs.id && lhs.isInNotes == rhs.isInNotes && lhs.offset == rhs.offset && lhs.data == rhs.data
 	}
 	
+	public func duplicate(accountID: Int, documentUUID: String, rowUUID: String) -> Image {
+		let id = EntityID.image(accountID, documentUUID, rowUUID, UUID().uuidString)
+		return Image(id: id, isInNotes: isInNotes, offset: offset, data: data)
+	}
+	
 }
