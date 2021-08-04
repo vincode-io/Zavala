@@ -169,6 +169,15 @@
 		514F221B25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F221A25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift */; };
 		514F221E25C4D0A8004E02CD /* EditorTagInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F221D25C4D0A8004E02CD /* EditorTagInputContentView.swift */; };
 		514F222A25C4FF02004E02CD /* EditorTagInputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F222925C4FF02004E02CD /* EditorTagInputTextField.swift */; };
+		515D452726BB553600228229 /* SpotlightIndexExtension.appex in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 515D452026BB553600228229 /* SpotlightIndexExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		515D452F26BB557200228229 /* IndexRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515D452D26BB557200228229 /* IndexRequestHandler.swift */; };
+		515D453226BB55A900228229 /* Templeton in Frameworks */ = {isa = PBXBuildFile; productRef = 515D453126BB55A900228229 /* Templeton */; };
+		515D453326BB55C900228229 /* DocumentIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167606325F95E4600AC0EBD /* DocumentIndexer.swift */; };
+		515D453426BB55CC00228229 /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF69B25E0862E0044DBAB /* AppDefaults.swift */; };
+		515D453526BB55E200228229 /* OutlineFontConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142C294260AC78C0094571F /* OutlineFontConfig.swift */; };
+		515D453626BB55E200228229 /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
+		515D453726BB55E200228229 /* OutlineFontDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F5372260829060038BAF8 /* OutlineFontDefaults.swift */; };
+		515D453826BB564900228229 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CF10C12571C22C005D6D88 /* L10n.swift */; };
 		515F164B255C9F8E00FD98B8 /* MacFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */; };
 		5163ADF225C78CFB008F25CA /* SearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5163ADF125C78CFB008F25CA /* SearchTextField.swift */; };
 		5163ADF525C79B69008F25CA /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5163ADF425C79B69008F25CA /* String+.swift */; };
@@ -289,6 +298,13 @@
 			remoteGlobalIDString = 511B2A94260245AD00C04239;
 			remoteInfo = "AppKitPlugin Test";
 		};
+		515D452526BB553600228229 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5181A92C2554D92000C153E8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 515D451F26BB553600228229;
+			remoteInfo = SpotlightIndexExtension;
+		};
 		51E060CF25A45AA800194066 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5181A92C2554D92000C153E8 /* Project object */;
@@ -371,6 +387,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				515D452726BB553600228229 /* SpotlightIndexExtension.appex in Embed PlugIns */,
 				51E060CE25A45AA800194066 /* AppKitPlugin.bundle in Embed PlugIns */,
 			);
 			name = "Embed PlugIns";
@@ -426,6 +443,10 @@
 		514F221A25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagInputContentConfiguration.swift; sourceTree = "<group>"; };
 		514F221D25C4D0A8004E02CD /* EditorTagInputContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagInputContentView.swift; sourceTree = "<group>"; };
 		514F222925C4FF02004E02CD /* EditorTagInputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagInputTextField.swift; sourceTree = "<group>"; };
+		515D452026BB553600228229 /* SpotlightIndexExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SpotlightIndexExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		515D452C26BB557200228229 /* SpotlightIndexExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = SpotlightIndexExtension.entitlements; sourceTree = "<group>"; };
+		515D452D26BB557200228229 /* IndexRequestHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexRequestHandler.swift; sourceTree = "<group>"; };
+		515D452E26BB557200228229 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFormViewController.swift; sourceTree = "<group>"; };
 		5163ADF125C78CFB008F25CA /* SearchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextField.swift; sourceTree = "<group>"; };
 		5163ADF425C79B69008F25CA /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
@@ -557,6 +578,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		515D451D26BB553600228229 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				515D453226BB55A900228229 /* Templeton in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5181A9312554D92000C153E8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -660,6 +689,16 @@
 			path = Tag;
 			sourceTree = "<group>";
 		};
+		515D452B26BB557200228229 /* SpotlightIndexExtension */ = {
+			isa = PBXGroup;
+			children = (
+				515D452C26BB557200228229 /* SpotlightIndexExtension.entitlements */,
+				515D452D26BB557200228229 /* IndexRequestHandler.swift */,
+				515D452E26BB557200228229 /* Info.plist */,
+			);
+			path = SpotlightIndexExtension;
+			sourceTree = SOURCE_ROOT;
+		};
 		515F163B255C536600FD98B8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -733,6 +772,7 @@
 				513F32A12594062C0003048F /* README.md */,
 				5181A9362554D92000C153E8 /* Zavala */,
 				51E060B025A4547400194066 /* AppKitPlugin */,
+				515D452B26BB557200228229 /* SpotlightIndexExtension */,
 				5167606225F95E0400AC0EBD /* Shared */,
 				51C4C3CC2555F07A004E0206 /* Frameworks */,
 				5181A9352554D92000C153E8 /* Products */,
@@ -748,6 +788,7 @@
 				51E060AF25A4547400194066 /* AppKitPlugin.bundle */,
 				511B2A8B2602410C00C04239 /* Zavala.app */,
 				511B2AA5260245AD00C04239 /* AppKitPlugin.bundle */,
+				515D452026BB553600228229 /* SpotlightIndexExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -974,6 +1015,26 @@
 			productReference = 511B2AA5260245AD00C04239 /* AppKitPlugin.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
+		515D451F26BB553600228229 /* SpotlightIndexExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 515D452826BB553600228229 /* Build configuration list for PBXNativeTarget "SpotlightIndexExtension" */;
+			buildPhases = (
+				515D451C26BB553600228229 /* Sources */,
+				515D451D26BB553600228229 /* Frameworks */,
+				515D451E26BB553600228229 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SpotlightIndexExtension;
+			packageProductDependencies = (
+				515D453126BB55A900228229 /* Templeton */,
+			);
+			productName = SpotlightIndexExtension;
+			productReference = 515D452026BB553600228229 /* SpotlightIndexExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		5181A9332554D92000C153E8 /* Zavala */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5181A95E2554D92100C153E8 /* Build configuration list for PBXNativeTarget "Zavala" */;
@@ -990,6 +1051,7 @@
 			);
 			dependencies = (
 				51E060D025A45AA800194066 /* PBXTargetDependency */,
+				515D452626BB553600228229 /* PBXTargetDependency */,
 			);
 			name = Zavala;
 			packageProductDependencies = (
@@ -1025,9 +1087,12 @@
 		5181A92C2554D92000C153E8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1240;
+				LastSwiftUpdateCheck = 1300;
 				LastUpgradeCheck = 1220;
 				TargetAttributes = {
+					515D451F26BB553600228229 = {
+						CreatedOnToolsVersion = 13.0;
+					};
 					5181A9332554D92000C153E8 = {
 						CreatedOnToolsVersion = 12.2;
 					};
@@ -1058,6 +1123,7 @@
 				511B2A092602410C00C04239 /* Zavala Test */,
 				51E060AE25A4547400194066 /* AppKitPlugin */,
 				511B2A94260245AD00C04239 /* AppKitPlugin Test */,
+				515D451F26BB553600228229 /* SpotlightIndexExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -1086,6 +1152,13 @@
 				511B2AA0260245AD00C04239 /* Preferences.storyboard in Resources */,
 				5142C2A3260BA7D10094571F /* FontPreferencesConfig.xib in Resources */,
 				511B2AA1260245AD00C04239 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		515D451E26BB553600228229 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1323,6 +1396,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		515D451C26BB553600228229 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				515D453326BB55C900228229 /* DocumentIndexer.swift in Sources */,
+				515D452F26BB557200228229 /* IndexRequestHandler.swift in Sources */,
+				515D453626BB55E200228229 /* OutlineFontField.swift in Sources */,
+				515D453426BB55CC00228229 /* AppDefaults.swift in Sources */,
+				515D453826BB564900228229 /* L10n.swift in Sources */,
+				515D453526BB55E200228229 /* OutlineFontConfig.swift in Sources */,
+				515D453726BB55E200228229 /* OutlineFontDefaults.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5181A9302554D92000C153E8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1462,6 +1549,11 @@
 			target = 511B2A94260245AD00C04239 /* AppKitPlugin Test */;
 			targetProxy = 511B2AAC260245CA00C04239 /* PBXContainerItemProxy */;
 		};
+		515D452626BB553600228229 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 515D451F26BB553600228229 /* SpotlightIndexExtension */;
+			targetProxy = 515D452526BB553600228229 /* PBXContainerItemProxy */;
+		};
 		51E060D025A45AA800194066 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilter = maccatalyst;
@@ -1514,6 +1606,20 @@
 		511B2AA4260245AD00C04239 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 511B2AB02602460200C04239 /* Zavala_appkittestplugin_target.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		515D452926BB553600228229 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5167605525F95B2900AC0EBD /* Zavala_spotlightext_target.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		515D452A26BB553600228229 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5167605525F95B2900AC0EBD /* Zavala_spotlightext_target.xcconfig */;
 			buildSettings = {
 			};
 			name = Release;
@@ -1577,6 +1683,15 @@
 			buildConfigurations = (
 				511B2AA3260245AD00C04239 /* Debug */,
 				511B2AA4260245AD00C04239 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		515D452826BB553600228229 /* Build configuration list for PBXNativeTarget "SpotlightIndexExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				515D452926BB553600228229 /* Debug */,
+				515D452A26BB553600228229 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1698,6 +1813,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 511B2A96260245AD00C04239 /* XCRemoteSwiftPackageReference "Sparkle-Binary" */;
 			productName = RSSparkle;
+		};
+		515D453126BB55A900228229 /* Templeton */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Templeton;
 		};
 		51C4C3F82557470B004E0206 /* Templeton */ = {
 			isa = XCSwiftPackageProductDependency;
