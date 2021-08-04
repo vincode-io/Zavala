@@ -19,7 +19,6 @@ protocol EditorTextRowTopicTextViewDelegate: AnyObject {
 	func createRow(_: EditorTextRowTopicTextView, beforeRow: Row)
 	func createRow(_: EditorTextRowTopicTextView, afterRow: Row)
 	func indentRow(_: EditorTextRowTopicTextView, row: Row)
-	func outdentRow(_: EditorTextRowTopicTextView, row: Row)
 	func splitRow(_: EditorTextRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
 	func createRowNote(_: EditorTextRowTopicTextView, row: Row)
 	func editLink(_: EditorTextRowTopicTextView, _ link: String?, text: String?, range: NSRange)
@@ -34,7 +33,6 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 	override var keyCommands: [UIKeyCommand]? {
 		let keys = [
 			UIKeyCommand(action: #selector(indent(_:)), input: "\t"),
-			UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(outdent(_:))),
 			UIKeyCommand(input: "\t", modifierFlags: [.alternate], action: #selector(insertTab(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(insertReturn(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(insertRow(_:))),
@@ -122,11 +120,6 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 	@objc func indent(_ sender: Any) {
 		guard let textRow = row else { return }
 		editorDelegate?.indentRow(self, row: textRow)
-	}
-	
-	@objc func outdent(_ sender: Any) {
-		guard let textRow = row else { return }
-		editorDelegate?.outdentRow(self, row: textRow)
 	}
 	
 	@objc func insertTab(_ sender: Any) {

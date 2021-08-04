@@ -1636,6 +1636,8 @@ extension EditorViewController {
 					isCursoringDown = true
 					repeatMoveCursorDown()
 				}
+			case (.keyboardTab, key.modifierFlags.contains(.shift)):
+				outdentCurrentRows()
 			default:
 				super.pressesBegan(presses, with: event)
 			}
