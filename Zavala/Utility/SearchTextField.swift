@@ -502,7 +502,7 @@ open class SearchTextField: EnhancedTextField {
     }
 	
 	open override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-		guard presses.count == 1, let key = presses.first?.key else {
+		guard presses.count == 1, let key = presses.first?.key, isShowingResults else {
 			super.pressesBegan(presses, with: event)
 			return
 		}

@@ -1592,11 +1592,17 @@ extension EditorViewController {
 				return
 			}
 			
-			switch (key.keyCode) {
-			case (.keyboardTab):
+			switch (key.keyCode, true) {
+			case (.keyboardTab, true):
 				tagInput.createTag()
-			case (.keyboardEscape):
+			case (.keyboardEscape, true):
 				tagInput.clearSelection()
+			case (.keyboardUpArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
+				isCursoringUp = true
+				repeatMoveCursorUp()
+			case (.keyboardDownArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
+				isCursoringDown = true
+				repeatMoveCursorDown()
 			default:
 				super.pressesBegan(presses, with: event)
 			}
