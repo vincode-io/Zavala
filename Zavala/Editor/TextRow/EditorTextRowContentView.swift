@@ -84,6 +84,14 @@ class EditorTextRowContentView: UIView, UIContentView {
 	private func apply(configuration: EditorTextRowContentConfiguration) {
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
+		
+		if topicTextView.isFirstResponder {
+			topicTextView.saveText()
+		}
+
+		if noteTextView?.isFirstResponder ?? false {
+			noteTextView?.saveText()
+		}
 
 		configureTopicTextView(configuration: configuration)
 		configureNoteTextView(configuration: configuration)
