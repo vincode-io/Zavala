@@ -169,7 +169,6 @@
 		514F221B25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F221A25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift */; };
 		514F221E25C4D0A8004E02CD /* EditorTagInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F221D25C4D0A8004E02CD /* EditorTagInputContentView.swift */; };
 		514F222A25C4FF02004E02CD /* EditorTagInputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F222925C4FF02004E02CD /* EditorTagInputTextField.swift */; };
-		515D452726BB553600228229 /* SpotlightIndexExtension.appex in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 515D452026BB553600228229 /* SpotlightIndexExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		515D452F26BB557200228229 /* IndexRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515D452D26BB557200228229 /* IndexRequestHandler.swift */; };
 		515D453226BB55A900228229 /* Templeton in Frameworks */ = {isa = PBXBuildFile; productRef = 515D453126BB55A900228229 /* Templeton */; };
 		515D453326BB55C900228229 /* DocumentIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167606325F95E4600AC0EBD /* DocumentIndexer.swift */; };
@@ -387,7 +386,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				515D452726BB553600228229 /* SpotlightIndexExtension.appex in Embed PlugIns */,
 				51E060CE25A45AA800194066 /* AppKitPlugin.bundle in Embed PlugIns */,
 			);
 			name = "Embed PlugIns";

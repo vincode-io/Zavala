@@ -17,15 +17,21 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
     override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexAllSearchableItemsWithAcknowledgementHandler acknowledgementHandler: @escaping () -> Void) {
 		DispatchQueue.main.async {
 			self.resume()
+
+			let group = DispatchGroup()
 			
-			var searchableItems = [CSSearchableItem]()
 			for document in AccountManager.shared.documents {
-				searchableItems.append(DocumentIndexer.makeSearchableItem(forDocument: document))
+				autoreleasepool {
+					let searchableItem = DocumentIndexer.makeSearchableItem(forDocument: document)
+					group.enter()
+					searchableIndex.indexSearchableItems([searchableItem]) { _ in
+						group.leave()
+					}
+				}
 			}
 			
-			self.suspend()
-			
-			searchableIndex.indexSearchableItems(searchableItems) { _ in
+			group.notify(queue: .main) {
+				self.suspend()
 				acknowledgementHandler()
 			}
 		}
@@ -35,16 +41,22 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
 		DispatchQueue.main.async {
 			self.resume()
 			
-			var searchableItems = [CSSearchableItem]()
+			let group = DispatchGroup()
+			
 			for description in identifiers {
 				if let entityID = EntityID(description: description), let document = AccountManager.shared.findDocument(entityID) {
-					searchableItems.append(DocumentIndexer.makeSearchableItem(forDocument: document))
+					autoreleasepool {
+						let searchableItem = DocumentIndexer.makeSearchableItem(forDocument: document)
+						group.enter()
+						searchableIndex.indexSearchableItems([searchableItem]) { _ in
+							group.leave()
+						}
+					}
 				}
 			}
 			
-			self.suspend()
-			
-			searchableIndex.indexSearchableItems(searchableItems) { _ in
+			group.notify(queue: .main) {
+				self.suspend()
 				acknowledgementHandler()
 			}
 		}
