@@ -294,7 +294,17 @@ extension TimelineViewController {
 	
 	func reload(document: Document) {
 		let timelineItem = TimelineItem.timelineItem(document)
-		dataSourceQueue.add(ReloadItemsOperation(dataSource: dataSource, section: 0, items: [timelineItem], animated: true))
+		let reloadOp = ReloadItemsOperation(dataSource: dataSource, section: 0, items: [timelineItem], animated: true)
+		let selectedItems = self.collectionView.indexPathsForSelectedItems?.compactMap { self.dataSource.itemIdentifier(for: $0) }
+
+		reloadOp.completionBlock = { _ in
+			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) }
+			for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
+				self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
+			}
+		}
+		
+		dataSourceQueue.add(reloadOp)
 	}
 	
 	func applySnapshot(animated: Bool, completion: (() -> Void)? = nil) {
