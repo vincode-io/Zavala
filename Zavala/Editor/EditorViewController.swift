@@ -613,6 +613,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		guard outline != newOutline else { return }
 		isOutlineNewFlag = isNew
 		
+		// On the iPad if we aren't editing a field, clear out the last know coordinates
+		if traitCollection.userInterfaceIdiom == .pad && !UIResponder.isFirstResponderTextField {
+			CursorCoordinates.lastKnownCoordinates = nil
+		}
+		
 		// Get ready for the new outline, buy saving the current one
 		outline?.cursorCoordinates = CursorCoordinates.bestCoordinates
 		
