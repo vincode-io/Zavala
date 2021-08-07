@@ -31,13 +31,17 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 
-	public var id: EntityID {
+	public var id: String {
 		get {
 			associatedRow.id
 		}
 		set {
 			associatedRow.id = newValue
 		}
+	}
+	
+	public var entityID: EntityID {
+		return associatedRow.entityID
 	}
 	
 	public var syncID: String? {
@@ -64,7 +68,7 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
-	public var rowOrder: [EntityID] {
+	public var rowOrder: [String] {
 		get {
 			associatedRow.rowOrder
 		}
@@ -145,6 +149,15 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
+	var outline: Outline? {
+		get {
+			associatedRow.outline
+		}
+		set {
+			associatedRow.outline = newValue
+		}
+	}
+	
 	var isPartOfSearchResult: Bool {
 		get {
 			associatedRow.isPartOfSearchResult
@@ -172,18 +185,10 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		}
 	}
 	
-	public func clone(newOutlineID: EntityID) -> Row {
-		associatedRow.clone(newOutlineID: newOutlineID)
-	}
-	
-	public func reassignAccount(_ accountID: Int) {
-		associatedRow.reassignAccount(accountID)
-	}
-	
-	public func duplicate(accountID: Int, documentUUID: String) -> Row {
+	public func duplicate(newOutline: Outline) -> Row {
 		switch self {
 		case .text(let row):
-			return .text(row.duplicate(accountID: accountID, documentUUID: documentUUID))
+			return .text(row.duplicate(newOutline: newOutline))
 		default:
 			fatalError()
 		}

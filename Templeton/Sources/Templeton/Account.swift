@@ -454,7 +454,7 @@ private extension Account {
 		case .outline(let outline):
 			if let rows = outline.keyedRows?.values {
 				for row in rows {
-					requests.insert(CloudKitActionRequest(zoneID: zoneID, id: row.id))
+					requests.insert(CloudKitActionRequest(zoneID: zoneID, id: row.entityID))
 				}
 			}
 		}

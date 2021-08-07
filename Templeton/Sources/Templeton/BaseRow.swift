@@ -12,7 +12,7 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 	public var parent: RowContainer?
 	public var shadowTableIndex: Int?
 
-	public var id: EntityID
+	public var id: String
 	public var syncID: String?
 	public var isExpanded: Bool
 	public internal(set) var rows: [Row] {
@@ -24,18 +24,18 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 			guard let outline = self.outline else { return }
 			
 			outline.beginCloudKitBatchRequest()
-			outline.requestCloudKitUpdate(for: id)
+			outline.requestCloudKitUpdate(for: entityID)
 			
 			for id in rowOrder {
 				outline.keyedRows?.removeValue(forKey: id)
-				outline.requestCloudKitUpdate(for: id)
+				outline.requestCloudKitUpdate(for: entityID)
 			}
 
-			var order = [EntityID]()
+			var order = [String]()
 			for row in newValue {
 				order.append(row.id)
 				outline.keyedRows?[row.id] = row
-				outline.requestCloudKitUpdate(for: row.id)
+				outline.requestCloudKitUpdate(for: row.entityID)
 			}
 			rowOrder = order
 			
@@ -47,19 +47,15 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		return rowOrder.count
 	}
 
-	public var account: Account? {
-		return AccountManager.shared.findAccount(accountID: id.accountID)
-	}
-	
-	public var outline: Outline? {
-		let document = account?.findDocument(documentUUID: id.documentUUID)
-		if case .outline(let outline) = document {
-			return outline
+	weak var outline: Outline? {
+		didSet {
+			if let outline = outline {
+				_entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
+			}
 		}
-		return nil
 	}
 	
-	var rowOrder: [EntityID]
+	var rowOrder: [String]
 	var images: [Image]? {
 		get {
 			return nil
@@ -88,19 +84,18 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		}
 	}
 	
-	public override init() {
-		self.id = .row(0, "", "")
-		self.isExpanded = true
-		self.rowOrder = [EntityID]()
+	private var _entityID: EntityID?
+	var entityID: EntityID {
+		guard let entityID = _entityID else {
+			fatalError("Missing EntityID for row")
+		}
+		return entityID
 	}
 	
-	func reassignAccount(_ accountID: Int) {
-		self.id = .row(accountID, id.documentUUID, id.rowUUID)
-		var newOrder = [EntityID]()
-		for row in rowOrder {
-			newOrder.append(.row(accountID, row.documentUUID, row.rowUUID))
-		}
-		rowOrder = newOrder
+	public override init() {
+		self.id = ""
+		self.isExpanded = true
+		self.rowOrder = [String]()
 	}
 	
 	public func findImage(id: EntityID) -> Image? {
@@ -125,26 +120,22 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 		rowOrder.insert(row.id, at: at)
 		outline?.keyedRows?[row.id] = row
 
-		outline?.requestCloudKitUpdates(for: [id, row.id])
+		outline?.requestCloudKitUpdates(for: [entityID, row.entityID])
 	}
 
 	public func removeRow(_ row: Row) {
 		rowOrder.removeFirst(object: row.id)
 		outline?.keyedRows?.removeValue(forKey: row.id)
-		outline?.requestCloudKitUpdates(for: [id, row.id])
+		outline?.requestCloudKitUpdates(for: [entityID, row.entityID])
 	}
 
 	public func appendRow(_ row: Row) {
 		rowOrder.append(row.id)
 		outline?.keyedRows?[row.id] = row
 
-		outline?.requestCloudKitUpdates(for: [id, row.id])
+		outline?.requestCloudKitUpdates(for: [entityID, row.entityID])
 	}
 
-	public func clone(newOutlineID: EntityID) -> Row {
-		fatalError("clone not implemented")
-	}
-	
 	public override func isEqual(_ object: Any?) -> Bool {
 		guard let other = object as? Self else { return false }
 		if self === other { return true }

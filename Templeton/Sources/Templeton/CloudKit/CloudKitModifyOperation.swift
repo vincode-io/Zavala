@@ -55,7 +55,7 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 			
 			// Now process all the rows
 			for rowRequest in combinedRequest.rowRequests {
-				if let row = outline.findRow(id: rowRequest.id) {
+				if let row = outline.findRow(id: rowRequest.id.rowUUID) {
 					addSave(zoneID: zoneID, outlineRecordID: outlineRecordID, row: row)
 				} else {
 					addDeleteRow(rowRequest)
@@ -178,7 +178,7 @@ extension CloudKitModifyOperation {
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.created] = outline.created
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.updated] = outline.updated
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.tagNames] = outline.tags.map { $0.name }
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] = outline.rowOrder?.map { $0.rowUUID }
+		record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] = outline.rowOrder
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.documentLinks] = outline.documentLinks?.map { $0.description }
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.documentBacklinks] = outline.documentBacklinks?.map { $0.description }
 
@@ -200,7 +200,7 @@ extension CloudKitModifyOperation {
 		record[CloudKitOutlineZone.CloudKitRow.Fields.topicData] = textRow.topicData
 		record[CloudKitOutlineZone.CloudKitRow.Fields.noteData] = textRow.noteData
 		record[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] = textRow.isComplete ? "1" : "0"
-		record[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] = textRow.rowOrder.map { $0.rowUUID }
+		record[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] = textRow.rowOrder
 
 		addSave(zoneID, record)
 	}

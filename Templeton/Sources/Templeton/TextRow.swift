@@ -19,6 +19,13 @@ public struct TextRowStrings {
 	}
 }
 
+enum TextRowError: LocalizedError {
+	case unableToDeserialize
+	var errorDescription: String? {
+		return NSLocalizedString("Unable to deserialize the row data.", comment: "An unexpected CloudKit error occurred.")
+	}
+}
+
 public final class TextRow: BaseRow, Codable {
 
 	public internal(set) var isComplete: Bool
@@ -59,7 +66,7 @@ public final class TextRow: BaseRow, Codable {
 				topicData = nil
 				images = images?.filter { $0.isInNotes }
 			}
-			outline?.requestCloudKitUpdate(for: id)
+			outline?.requestCloudKitUpdate(for: entityID)
 		}
 	}
 	
@@ -87,7 +94,7 @@ public final class TextRow: BaseRow, Codable {
 				noteData = nil
 				images = images?.filter { !$0.isInNotes }
 			}
-			outline?.requestCloudKitUpdate(for: id)
+			outline?.requestCloudKitUpdate(for: entityID)
 		}
 	}
 	
@@ -139,17 +146,19 @@ public final class TextRow: BaseRow, Codable {
 	private var topicCache: NSAttributedString?
 	private var noteCache: NSAttributedString?
 
-	public init(document: Document) {
+	public init(outline: Outline) {
 		self.isComplete = false
 		super.init()
-		self.id = .row(document.id.accountID, document.id.documentUUID, UUID().uuidString)
+		self.outline = outline
+		self.id = UUID().uuidString
 		self.isExpanded = true
 	}
 
-	public init(document: Document, topicPlainText: String, notePlainText: String? = nil) {
+	public init(outline: Outline, topicPlainText: String, notePlainText: String? = nil) {
 		self.isComplete = false
 		super.init()
-		self.id = .row(document.id.accountID, document.id.documentUUID, UUID().uuidString)
+		self.outline = outline
+		self.id = UUID().uuidString
 		self.isExpanded = true
 		topic = NSAttributedString(markdownRepresentation: topicPlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		if let notePlainText = notePlainText {
@@ -168,7 +177,14 @@ public final class TextRow: BaseRow, Codable {
 
 		super.init()
 
-		id = try container.decode(EntityID.self, forKey: .id)
+		if let id = try? container.decode(String.self, forKey: .id) {
+			self.id = id
+		} else if let id = try? container.decode(EntityID.self, forKey: .id) {
+			self.id = id.rowUUID
+		} else {
+			throw TextRowError.unableToDeserialize
+		}
+		
 		topicData = try? container.decode(Data.self, forKey: .topicData)
 		noteData = try? container.decode(Data.self, forKey: .noteData)
 
@@ -178,14 +194,16 @@ public final class TextRow: BaseRow, Codable {
 			self.isExpanded = true
 		}
 		
-		if let rowOrder = try? container.decode([EntityID].self, forKey: .rowOrder) {
+		if let rowOrder = try? container.decode([String].self, forKey: .rowOrder) {
 			self.rowOrder = rowOrder
+		} else if let rowOrder = try? container.decode([EntityID].self, forKey: .rowOrder) {
+			self.rowOrder = rowOrder.map { $0.rowUUID }
 		} else {
-			self.rowOrder = [EntityID]()
+			throw TextRowError.unableToDeserialize
 		}
 	}
 	
-	init(id: EntityID) {
+	init(id: String) {
 		self.isComplete = false
 		super.init()
 		self.id = id
@@ -202,8 +220,8 @@ public final class TextRow: BaseRow, Codable {
 		try container.encode(rowOrder, forKey: .rowOrder)
 	}
 	
-	public func duplicate(accountID: Int, documentUUID: String) -> TextRow {
-		let textRow = TextRow(id: .row(accountID, documentUUID, UUID().uuidString))
+	public func duplicate(newOutline: Outline) -> TextRow {
+		let textRow = TextRow(outline: newOutline)
 
 		textRow.topicData = topicData
 		textRow.noteData = noteData
@@ -240,23 +258,12 @@ public final class TextRow: BaseRow, Codable {
 
 	public func complete() {
 		isComplete = true
-		outline?.requestCloudKitUpdate(for: id)
+		outline?.requestCloudKitUpdate(for: entityID)
 	}
 	
 	public func uncomplete() {
 		isComplete = false
-		outline?.requestCloudKitUpdate(for: id)
-	}
-
-	public override func clone(newOutlineID: EntityID) -> Row {
-		let textRow = TextRow(id: EntityID.row(newOutlineID.accountID, newOutlineID.documentUUID, UUID().uuidString))
-		textRow.topicData = topicData
-		textRow.noteData = noteData
-		textRow.isExpanded = isExpanded
-		textRow.isComplete = isComplete
-		textRow.rowOrder = rowOrder
-		textRow.images = images
-		return .text(textRow)
+		outline?.requestCloudKitUpdate(for: entityID)
 	}
 
 }
@@ -293,12 +300,16 @@ extension TextRow {
 	}
 	
 	private func splitOffImages(attrString: NSAttributedString, isNotes: Bool) -> (NSAttributedString, [Image]) {
+		guard let outline = outline else {
+			fatalError("Missing Outline")
+		}
+		
 		let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
 		var images = [Image]()
 		
 		mutableAttrString.enumerateAttribute(.attachment, in: .init(location: 0, length: mutableAttrString.length), options: []) { (attribute, range, _) in
 			if let pngData = (attribute as? NSTextAttachment)?.image?.pngData() {
-				let entityID = EntityID.image(id.accountID, id.documentUUID, id.rowUUID, UUID().uuidString)
+				let entityID = EntityID.image(outline.id.accountID, outline.id.documentUUID, id, UUID().uuidString)
 				let image = Image(id: entityID, isInNotes: isNotes, offset: range.location, data: pngData)
 				images.append(image)
 			}

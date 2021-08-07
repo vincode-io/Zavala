@@ -20,7 +20,7 @@ public extension OPMLImporter {
 			let topicPlainText = rowIndexer.element?.attribute(by: "text")?.text ?? ""
 			let notePlainText = rowIndexer.element?.attribute(by: "_note")?.text
 			
-			let textRow = TextRow(document: .outline(outline), topicPlainText: topicPlainText, notePlainText: notePlainText)
+			let textRow = TextRow(outline: outline, topicPlainText: topicPlainText, notePlainText: notePlainText)
 
 			if rowIndexer.element?.attribute(by: "_status")?.text == "checked" {
 				textRow.isComplete = true

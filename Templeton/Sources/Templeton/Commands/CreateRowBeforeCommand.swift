@@ -24,7 +24,7 @@ public final class CreateRowBeforeCommand: OutlineCommand {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
-		self.row = Row.text(TextRow(document: .outline(outline)))
+		self.row = Row.text(TextRow(outline: outline))
 		self.beforeRow = beforeRow
 		undoActionName = L10n.addRow
 		redoActionName = L10n.addRow

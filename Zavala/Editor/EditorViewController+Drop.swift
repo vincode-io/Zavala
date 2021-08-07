@@ -272,7 +272,7 @@ extension EditorViewController {
 			var rowGroups = [RowGroup]()
 			let textRows = text.split(separator: "\n").map { String($0) }
 			for textRow in textRows {
-				let row = Row.text(TextRow(document: .outline(outline), topicPlainText: textRow.trimmingWhitespace))
+				let row = Row.text(TextRow(outline: outline, topicPlainText: textRow.trimmingWhitespace))
 				rowGroups.append(RowGroup(row))
 			}
 			

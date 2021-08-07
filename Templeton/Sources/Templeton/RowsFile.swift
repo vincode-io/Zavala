@@ -10,8 +10,65 @@ import os.log
 import RSCore
 
 struct OutlineRows: Codable {
-	var rowOrder: [EntityID]
-	var keyedRows: [EntityID: Row]
+	let fileVersion = 2
+	var rowOrder: [String]
+	var keyedRows: [String: Row]
+
+	private enum CodingKeys: String, CodingKey {
+		case fileVersion
+		case rowOrder
+		case keyedRows
+	}
+	
+	public init(rowOrder: [String], keyedRows: [String: Row]) {
+		self.rowOrder = rowOrder
+		self.keyedRows = keyedRows
+	}
+	
+	public init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		
+		let fileVersion = (try? container.decode(Int.self, forKey: .fileVersion)) ?? 1
+
+		let allRows: [Row]
+
+		if fileVersion == 1 {
+			if let rowOrder = try? container.decode([EntityID].self, forKey: .rowOrder) {
+				self.rowOrder = rowOrder.map { $0.rowUUID}
+			} else {
+				self.rowOrder = [String]()
+			}
+			if let entityKeyedRows = try? container.decode([EntityID: Row].self, forKey: .keyedRows) {
+				allRows = Array(entityKeyedRows.values)
+			} else {
+				allRows = [Row]()
+			}
+		} else {
+			if let rowOrder = try? container.decode([String].self, forKey: .rowOrder) {
+				self.rowOrder = rowOrder
+			} else {
+				self.rowOrder = [String]()
+			}
+			if let rows = try? container.decode([Row].self, forKey: .keyedRows) {
+				allRows = rows
+			} else {
+				allRows = [Row]()
+			}
+		}
+	
+		self.keyedRows = allRows.reduce([String: Row]()) { result, row in
+			var mutableResult = result
+			mutableResult[row.id] = row
+			return mutableResult
+		}
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(fileVersion, forKey: .fileVersion)
+		try container.encode(rowOrder, forKey: .rowOrder)
+		try container.encode(Array(keyedRows.values), forKey: .keyedRows)
+	}
 }
 
 final class RowsFile {

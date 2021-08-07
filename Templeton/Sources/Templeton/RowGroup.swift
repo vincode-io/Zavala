@@ -29,23 +29,23 @@ public class RowGroup: Codable {
 	}
 
 	public func attach(to outline: Outline) -> Row {
-		var idMap = [EntityID: EntityID]()
+		var idMap = [String: String]()
 		var newChildRows = [Row]()
 		
 		for childRow in childRows {
-			let newChildRow = childRow.clone(newOutlineID: outline.id)
+			let newChildRow = childRow.duplicate(newOutline: outline)
 			idMap[childRow.id] = newChildRow.id
 			newChildRows.append(newChildRow)
 		}
 		
 		if outline.keyedRows == nil {
-			outline.keyedRows = [EntityID: Row]()
+			outline.keyedRows = [String: Row]()
 		}
 		
 		outline.beginCloudKitBatchRequest()
 
 		for newChildRow in newChildRows {
-			var newChildRowRowOrder = [EntityID]()
+			var newChildRowRowOrder = [String]()
 			for oldRowOrder in newChildRow.rowOrder {
 				newChildRowRowOrder.append(idMap[oldRowOrder]!)
 			}
@@ -53,14 +53,14 @@ public class RowGroup: Codable {
 			var mutableChildRow = newChildRow
 			mutableChildRow.rowOrder = newChildRowRowOrder
 			outline.keyedRows?[mutableChildRow.id] = mutableChildRow
-			outline.requestCloudKitUpdate(for: mutableChildRow.id)
+			outline.requestCloudKitUpdate(for: mutableChildRow.entityID)
 		}
 		
 		outline.endCloudKitBatchRequest()
 		
-		var newRow = row.clone(newOutlineID: outline.id)
+		var newRow = row.duplicate(newOutline: outline)
 		newRow.parent = row.parent
-		var newRowRowOrder = [EntityID]()
+		var newRowRowOrder = [String]()
 		for newRowOrder in newRow.rowOrder {
 			newRowRowOrder.append(idMap[newRowOrder]!)
 		}

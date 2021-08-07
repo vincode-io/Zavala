@@ -160,7 +160,7 @@ public final class AccountManager {
 		if case .row(let accountID, let documentUUID, _) = entityID,
 		   let account = findAccount(accountID: accountID),
 		   let outline = account.findDocument(documentUUID: documentUUID)?.outline {
-			return outline.findRow(id: entityID)
+			return outline.findRow(id: entityID.rowUUID)
 		}
 		return nil
 	}

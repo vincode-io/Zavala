@@ -99,9 +99,9 @@ private extension ImagesFile {
 		}
 
 		let decoder = PropertyListDecoder()
-		let outlineImages: [EntityID: [Image]]
+		let outlineImages: [String: [Image]]
 		do {
-			outlineImages = try decoder.decode([EntityID: [Image]].self, from: imagesData)
+			outlineImages = try decoder.decode([String: [Image]].self, from: imagesData)
 		} catch {
 			os_log(.error, log: log, "ImagesFile read deserialization failed: %@.", error.localizedDescription)
 			return

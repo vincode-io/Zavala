@@ -13,7 +13,7 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 	var row: Row? = nil
 	weak var delegate: EditorTextRowViewCellDelegate? = nil
 
-	var id: EntityID
+	var id: String
 	var indentionLevel: Int
 	var indentationWidth: CGFloat
 	var isNotesHidden: Bool

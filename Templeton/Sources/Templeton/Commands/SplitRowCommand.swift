@@ -36,7 +36,7 @@ public final class SplitRowCommand: OutlineCommand {
 	public func perform() {
 		saveCursorCoordinates()
 		if newRow == nil {
-			newRow = Row.text(TextRow(document: .outline(outline)))
+			newRow = Row.text(TextRow(outline: outline))
 		}
 		newCursorIndex = outline.splitRow(newRow: newRow!, row: row, topic: topic, cursorPosition: cursorPosition)
 		registerUndo()

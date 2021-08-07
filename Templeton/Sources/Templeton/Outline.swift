@@ -229,7 +229,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	public var cursorCoordinates: CursorCoordinates? {
 		get {
 			guard let rowID = selectionRowID,
-				  let row = findRow(id: rowID),
+				  let row = findRow(id: rowID.rowUUID),
 				  let isInNotes = selectionIsInNotes,
 				  let location = selectionLocation,
 				  let length = selectionLength else {
@@ -238,7 +238,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			return CursorCoordinates(row: row, isInNotes: isInNotes, selection: NSRange(location: location, length: length))
 		}
 		set {
-			selectionRowID = newValue?.row.id
+			if let coordinates = newValue {
+				selectionRowID = .row(id.accountID, id.documentUUID, coordinates.row.id)
+			} else {
+				selectionRowID = nil
+			}
 			selectionIsInNotes = newValue?.isInNotes
 			selectionLocation = newValue?.selection.location
 			selectionLength = newValue?.selection.length
@@ -330,9 +334,18 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 	}
 	
-	var rowOrder: [EntityID]?
-	var keyedRows: [EntityID: Row]?
-	var images: [EntityID: [Image]]?
+	var rowOrder: [String]?
+	var keyedRows: [String: Row]? {
+		didSet {
+			if let keyedRows = keyedRows {
+				for var row in keyedRows.values {
+					row.outline = self
+				}
+			}
+		}
+	}
+	
+	var images: [String: [Image]]?
 	
 	private var selectionRowID: EntityID?
 	private var selectionIsInNotes: Bool?
@@ -368,31 +381,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 	public func reassignAccount(_ accountID: Int) {
 		self.id = .document(accountID, id.documentUUID)
-
-		guard let keyedRows = keyedRows else { return }
-
-		var newOrder = [EntityID]()
-		for row in rowOrder ?? [EntityID]() {
-			newOrder.append(.row(accountID, row.documentUUID, row.rowUUID))
-		}
-		rowOrder = newOrder
-
-		var newKeyedRows = [EntityID: Row]()
-		for key in keyedRows.keys {
-			if let row = keyedRows[key] {
-				row.reassignAccount(accountID)
-				newKeyedRows[row.id] = row
-			}
-		}
-		
-		self.keyedRows = newKeyedRows
 	}
 	
 	public func prepareForViewing() {
 		rebuildTransientData()
 	}
 	
-	public func findRow(id: EntityID) -> Row? {
+	public func findRow(id: String) -> Row? {
 		return keyedRows?[id]
 	}
 	
@@ -406,38 +401,38 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 	public func insertRow(_ row: Row, at: Int) {
 		if rowOrder == nil {
-			rowOrder = [EntityID]()
+			rowOrder = [String]()
 		}
 
 		if keyedRows == nil {
-			keyedRows = [EntityID: Row]()
+			keyedRows = [String: Row]()
 		}
 
 		rowOrder?.insert(row.id, at: at)
 		keyedRows?[row.id] = row
 
-		requestCloudKitUpdates(for: [id, row.id])
+		requestCloudKitUpdates(for: [id, row.entityID])
 	}
 
 	public func removeRow(_ row: Row) {
 		rowOrder?.removeFirst(object: row.id)
 		keyedRows?.removeValue(forKey: row.id)
-		requestCloudKitUpdates(for: [id, row.id])
+		requestCloudKitUpdates(for: [id, row.entityID])
 	}
 
 	public func appendRow(_ row: Row) {
 		if rowOrder == nil {
-			rowOrder = [EntityID]()
+			rowOrder = [String]()
 		}
 		
 		if keyedRows == nil {
-			keyedRows = [EntityID: Row]()
+			keyedRows = [String: Row]()
 		}
 		
 		rowOrder?.append(row.id)
 		keyedRows?[row.id] = row
 
-		requestCloudKitUpdates(for: [id, row.id])
+		requestCloudKitUpdates(for: [id, row.entityID])
 	}
 	
 	public func createTag(_ tag: Tag) {
@@ -787,15 +782,15 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineElementsDidChange(changes)
 	}
 	
-	func findImages(rowID: EntityID) -> [Image]? {
+	func findImages(rowID: String) -> [Image]? {
 		return images?[rowID]
 	}
 	
-	func updateImages(rowID: EntityID, images: [Image]?) {
+	func updateImages(rowID: String, images: [Image]?) {
 		guard self.images?[rowID] != images else { return }
 		
 		if self.images == nil {
-			self.images = [EntityID: [Image]]()
+			self.images = [String: [Image]]()
 		}
 		
 		if images?.isEmpty ?? true {
@@ -921,7 +916,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		let changes = OutlineElementChanges(section: adjustedRowsSection, deletes: deleteSet, reloads: reloadSet)
 		outlineElementsDidChange(changes)
 		
-		if deletedRows.contains(where: { $0.id == selectionRowID }) {
+		if deletedRows.contains(where: { $0.id == selectionRowID?.rowUUID }) {
 			if let firstDelete = deletes.first, firstDelete > 0 {
 				return firstDelete - 1
 			} else {
@@ -1720,28 +1715,28 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		guard let keyedRows = keyedRows else { return outline }
 
-		var rowIDMap = [EntityID: EntityID]()
-		var newKeyedRows = [EntityID: Row]()
+		var rowIDMap = [String: String]()
+		var newKeyedRows = [String: Row]()
 		for key in keyedRows.keys {
 			if let row = keyedRows[key] {
-				let duplicateRow = row.duplicate(accountID: outline.id.accountID, documentUUID: outline.id.documentUUID)
+				let duplicateRow = row.duplicate(newOutline: self)
 				newKeyedRows[duplicateRow.id] = duplicateRow
 				rowIDMap[row.id] = duplicateRow.id
 			}
 		}
 		
-		var newRowOrder = [EntityID]()
-		for orderKey in rowOrder ?? [EntityID]() {
+		var newRowOrder = [String]()
+		for orderKey in rowOrder ?? [String]() {
 			if let newKey = rowIDMap[orderKey] {
 				newRowOrder.append(newKey)
 			}
 		}
 		outline.rowOrder = newRowOrder
 		
-		var updatedNewKeyedRows = [EntityID: Row]()
+		var updatedNewKeyedRows = [String: Row]()
 		for key in newKeyedRows.keys {
 			if var newKeyedRow = newKeyedRows[key] {
-				var updatedRowOrder = [EntityID]()
+				var updatedRowOrder = [String]()
 				for orderKey in newKeyedRow.rowOrder {
 					if let newKey = rowIDMap[orderKey] {
 						updatedRowOrder.append(newKey)
@@ -1756,7 +1751,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outline.keyedRows = updatedNewKeyedRows
 		
 		for var row in outline.keyedRows!.values {
-			row.images = row.images.map { $0.duplicate(accountID: row.id.accountID, documentUUID: row.id.documentUUID, rowUUID: row.id.rowUUID) }
+			row.images = row.images.map { $0.duplicate(accountID: id.accountID, documentUUID: id.documentUUID, rowUUID: row.id) }
 		}
 		
 		return outline
@@ -1854,7 +1849,7 @@ extension Outline {
 	}
 
 	func apply(_ update: CloudKitOutlineUpdate) {
-		var updatedRowIDs = Set<EntityID>()
+		var updatedRowIDs = Set<String>()
 		
 		if let record = update.saveOutlineRecord {
 			let outlineUpdatedRows = applyOutlineRecord(record)
@@ -1862,11 +1857,11 @@ extension Outline {
 		}
 		
 		if keyedRows == nil {
-			keyedRows = [EntityID: Row]()
+			keyedRows = [String: Row]()
 		}
 		
 		for deleteRecordID in update.deleteRowRecordIDs {
-			keyedRows?.removeValue(forKey: deleteRecordID)
+			keyedRows?.removeValue(forKey: deleteRecordID.rowUUID)
 		}
 		
 		for saveRecord in update.saveRowRecords {
@@ -1874,11 +1869,11 @@ extension Outline {
 
 			var isExistingRecord = false
 			var row: Row
-			if let existingRow = keyedRows?[entityID] {
+			if let existingRow = keyedRows?[entityID.rowUUID] {
 				row = existingRow
 				isExistingRecord = true
 			} else {
-				row = .text(TextRow(id: entityID))
+				row = .text(TextRow(id: entityID.rowUUID))
 			}
 
 			if let recordSyncID = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.syncID] as? String, recordSyncID == row.syncID {
@@ -1898,27 +1893,24 @@ extension Outline {
 			let updatedIsComplete = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] as? String == "1" ? true : false
 			row.textRow?.isComplete = updatedIsComplete
 			
-			let rowOrderRowUUIDS = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] as? [String]
-			let newRowOrder = rowOrderRowUUIDS?.map { EntityID.row(id.accountID, id.documentUUID, $0) } ?? [EntityID]()
+			let newRowOrder = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] as? [String]
 			
-			row.textRow?.rowOrder = newRowOrder
+			row.textRow?.rowOrder = newRowOrder ?? [String]()
 			
-			keyedRows?[entityID] = row
+			keyedRows?[entityID.rowUUID] = row
 		}
 		
 		for deleteRecordID in update.deleteImageRecordIDs {
-			let rowID = EntityID.row(deleteRecordID.accountID, deleteRecordID.documentUUID, deleteRecordID.rowUUID)
-			if let row = keyedRows?[rowID] {
+			if let row = keyedRows?[deleteRecordID.rowUUID] {
 				row.deleteImage(id: deleteRecordID)
-				updatedRowIDs.insert(rowID)
+				updatedRowIDs.insert(deleteRecordID.rowUUID)
 			}
 		}
 		
 		for saveRecord in update.saveImageRecords {
 			guard let saveRecordID = EntityID(description: saveRecord.recordID.recordName) else { continue }
-			let rowID = EntityID.row(saveRecordID.accountID, saveRecordID.documentUUID, saveRecordID.rowUUID)
 			
-			if let row = keyedRows?[rowID],
+			if let row = keyedRows?[saveRecordID.rowUUID],
 			   let isInNotes = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.isInNotes] as? Bool,
 			   let offset = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.offset] as? Int,
 			   let asset = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.asset] as? CKAsset,
@@ -1928,7 +1920,7 @@ extension Outline {
 				let image = Image(id: saveRecordID, isInNotes: isInNotes, offset: offset, data: data)
 				
 				row.saveImage(image)
-				updatedRowIDs.insert(rowID)
+				updatedRowIDs.insert(saveRecordID.rowUUID)
 			}
 		}
 		
@@ -1958,7 +1950,7 @@ extension Outline {
 		outlineElementsDidChange(changes)
 	}
 	
-	private func applyOutlineRecord(_ record: CKRecord) -> [EntityID] {
+	private func applyOutlineRecord(_ record: CKRecord) -> [String] {
 		if let shareReference = record.share {
 			cloudKitShareRecordName = shareReference.recordID.recordName
 		} else {
@@ -1983,13 +1975,12 @@ extension Outline {
 		created = record[CloudKitOutlineZone.CloudKitOutline.Fields.created] as? Date
 		updated = record[CloudKitOutlineZone.CloudKitOutline.Fields.updated] as? Date
 
-		let rowOrderRowUUIDs = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
-		let newRowOrder = rowOrderRowUUIDs.map { EntityID.row(id.accountID, id.documentUUID, $0) }
+		let newRowOrder = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
 		
-		var updatedRowIDs = [EntityID]()
+		var updatedRowIDs = [String]()
 		
 		//  We only count newly added children for reloading so that they can indent or outdent
-		let rowDiff = newRowOrder.difference(from: rowOrder ?? [EntityID]())
+		let rowDiff = newRowOrder.difference(from: rowOrder ?? [String]())
 		for change in rowDiff {
 			switch change {
 			case .insert(_, let newRowID, _):
