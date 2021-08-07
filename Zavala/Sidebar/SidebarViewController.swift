@@ -292,20 +292,19 @@ extension SidebarViewController {
 	}
 	
 	func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<SidebarItem>, section: SidebarSection, animated: Bool) {
-		let selectedItems = collectionView.indexPathsForSelectedItems?.compactMap { dataSource.itemIdentifier(for: $0) }
+		let selectedItems = collectionView.indexPathsForSelectedItems?
+			.compactMap({ dataSource.itemIdentifier(for: $0) })
+			.compactMap({ item in
+				return snapshot.items.first(where: { $0.entityID == item.entityID })
+			})
+		
 		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
 
 		operation.completionBlock = { [weak self] _ in
 			guard let self = self else { return }
-			
 			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) }
-			
-			if selectedIndexPaths?.isEmpty ?? true {
-				self.delegate?.documentContainerSelectionDidChange(self, documentContainer: nil, animated: true, completion: {})
-			} else {
-				for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
-					self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
-				}
+			for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
+				self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
 			}
 		}
 		
