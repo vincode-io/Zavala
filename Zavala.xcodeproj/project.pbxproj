@@ -139,6 +139,8 @@
 		511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */; };
 		5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5122294B25609C47008041AF /* UserInfoKeys.swift */; };
 		512229682563507E008041AF /* EditorTextRowViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorTextRowViewCell.swift */; };
+		5125D01A26BE181500703DA4 /* SpotlightIndexExtension.appex in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 515D452026BB553600228229 /* SpotlightIndexExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5125D01D26BE183100703DA4 /* SpotlightIndexExtension.appex in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 515D452026BB553600228229 /* SpotlightIndexExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		51278E77257F37AC0034F1CB /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51278E76257F37AC0034F1CB /* Dialog.storyboard */; };
 		512D375225F06733000FA597 /* EditorSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512D375125F06733000FA597 /* EditorSearchBar.swift */; };
 		5132E32B26290E9F00652C34 /* MacJekyllExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5132E32A26290E9F00652C34 /* MacJekyllExportViewController.swift */; };
@@ -297,6 +299,20 @@
 			remoteGlobalIDString = 511B2A94260245AD00C04239;
 			remoteInfo = "AppKitPlugin Test";
 		};
+		5125D01B26BE181500703DA4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5181A92C2554D92000C153E8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 515D451F26BB553600228229;
+			remoteInfo = SpotlightIndexExtension;
+		};
+		5125D01E26BE183100703DA4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5181A92C2554D92000C153E8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 515D451F26BB553600228229;
+			remoteInfo = SpotlightIndexExtension;
+		};
 		515D452526BB553600228229 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5181A92C2554D92000C153E8 /* Project object */;
@@ -345,6 +361,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				5125D01D26BE183100703DA4 /* SpotlightIndexExtension.appex in Embed PlugIns */,
 				511B2AAB260245CA00C04239 /* AppKitPlugin.bundle in Embed PlugIns */,
 			);
 			name = "Embed PlugIns";
@@ -386,6 +403,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				5125D01A26BE181500703DA4 /* SpotlightIndexExtension.appex in Embed PlugIns */,
 				51E060CE25A45AA800194066 /* AppKitPlugin.bundle in Embed PlugIns */,
 			);
 			name = "Embed PlugIns";
@@ -979,6 +997,7 @@
 			);
 			dependencies = (
 				511B2AAD260245CA00C04239 /* PBXTargetDependency */,
+				5125D01F26BE183100703DA4 /* PBXTargetDependency */,
 			);
 			name = "Zavala Test";
 			packageProductDependencies = (
@@ -1044,12 +1063,14 @@
 				51C4C3C22555EB4D004E0206 /* Run VerifyNoBuildSettings */,
 				51C4C3F125565282004E0206 /* Embed Frameworks */,
 				51E060D125A45AA800194066 /* Embed PlugIns */,
+				5141785526BE1DB900E9EAA5 /* Delete unintended embedded frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				51E060D025A45AA800194066 /* PBXTargetDependency */,
 				515D452626BB553600228229 /* PBXTargetDependency */,
+				5125D01C26BE181500703DA4 /* PBXTargetDependency */,
 			);
 			name = Zavala;
 			packageProductDependencies = (
@@ -1224,6 +1245,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
 			shellScript = "if [ $CONFIGURATION = \"Release\" ] && [ \"${IS_MACCATALYST}\" = \"YES\" ]; then\n\tcodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Updater.app\"\n\tcodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc/Contents/MacOS/Autoupdate\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.Downloader.xpc\"\n\tcodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc\"\n\tcodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerConnection.xpc\"\n\tcodesign --verbose --force -o runtime --preserve-metadata=entitlements --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${CODESIGNING_FOLDER_PATH}/Contents/XPCServices/org.sparkle-project.InstallerStatus.xpc\"\nfi\n";
+		};
+		5141785526BE1DB900E9EAA5 /* Delete unintended embedded frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Delete unintended embedded frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Delete the framework that Xcode should have never included\n# https://forums.swift.org/t/is-this-an-xcode-bug-or-somehow-related-to-spm/33987\nrm -rf \"${TARGET_BUILD_DIR}/${PLUGINS_FOLDER_PATH}/SpotlightIndexExtension.appex/Frameworks\"\n";
 		};
 		51C4C3C22555EB4D004E0206 /* Run VerifyNoBuildSettings */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1546,6 +1585,16 @@
 			platformFilter = maccatalyst;
 			target = 511B2A94260245AD00C04239 /* AppKitPlugin Test */;
 			targetProxy = 511B2AAC260245CA00C04239 /* PBXContainerItemProxy */;
+		};
+		5125D01C26BE181500703DA4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 515D451F26BB553600228229 /* SpotlightIndexExtension */;
+			targetProxy = 5125D01B26BE181500703DA4 /* PBXContainerItemProxy */;
+		};
+		5125D01F26BE183100703DA4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 515D451F26BB553600228229 /* SpotlightIndexExtension */;
+			targetProxy = 5125D01E26BE183100703DA4 /* PBXContainerItemProxy */;
 		};
 		515D452626BB553600228229 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
