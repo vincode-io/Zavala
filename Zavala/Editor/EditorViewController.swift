@@ -1884,6 +1884,7 @@ extension EditorViewController {
 
 			var outlineActions = [UIAction]()
 			outlineActions.append(self.addAction(rows: rows))
+			outlineActions.append(self.duplicateAction(rows: rows))
 			if !outline.isIndentRowsUnavailable(rows: rows) {
 				outlineActions.append(self.indentAction(rows: rows))
 			}
@@ -1949,6 +1950,12 @@ extension EditorViewController {
 			DispatchQueue.main.async {
 				self?.createRow(afterRows: rows)
 			}
+		}
+	}
+
+	private func duplicateAction(rows: [Row]) -> UIAction {
+		return UIAction(title: L10n.duplicate, image: AppAssets.duplicate) { [weak self] action in
+			self?.duplicateRows(rows)
 		}
 	}
 
@@ -2395,6 +2402,17 @@ extension EditorViewController {
 			}
 			makeCursorVisibleIfNecessary()
 		}
+	}
+	
+	private func duplicateRows(_ rows: [Row]) {
+		guard let undoManager = undoManager, let outline = outline else { return }
+
+		let command = DuplicateRowCommand(undoManager: undoManager,
+										  delegate: self,
+										  outline: outline,
+										  rows: rows)
+		
+		runCommand(command)
 	}
 	
 	private func indentRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {

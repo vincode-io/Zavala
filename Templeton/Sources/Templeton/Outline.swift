@@ -1161,6 +1161,42 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return row.shadowTableIndex
 	}
 
+	func duplicateRows(_ rows: [Row]) -> [Row] {
+		beginCloudKitBatchRequest()
+
+		var newRows = [Row]()
+		var idDict = [String: Row]()
+		
+		let sortedRows = rows.sortedWithDecendentsFiltered().sortedByReverseDisplayOrder()
+		guard let afterRow = sortedRows.first else { return newRows }
+		
+		func duplicatingVisitor(_ visited: Row) {
+			var newRow = visited.duplicate(newOutline: self)
+			newRow.rowOrder = [String]()
+			
+			if let parentRow = visited.parent as? Row {
+				newRow.parent = idDict[parentRow.id] ?? visited.parent
+			} else {
+				newRow.parent = self
+			}
+			
+			let insertIndex = newRow.parent!.firstIndexOfRow(afterRow) ?? newRow.parent!.rowCount - 1
+			newRow.parent!.insertRow(newRow, at: insertIndex + 1)
+
+			newRows.append(newRow)
+			idDict[visited.id] = newRow
+			
+			visited.rows.forEach { $0.visit(visitor: duplicatingVisitor) }
+		}
+
+		sortedRows.forEach { $0.visit(visitor: duplicatingVisitor(_:)) }
+		
+		endCloudKitBatchRequest()
+		outlineContentDidChange()
+		outlineElementsDidChange(rebuildShadowTable())
+
+		return newRows
+	}
 
 	func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) -> Int? {
 		guard let newTextRow = newRow.textRow, let textRow = row.textRow else { return nil }

@@ -54,6 +54,8 @@ internal enum L10n {
   internal static let deleteRow = L10n.tr("Localizable", "Delete_Row")
   /// Delete Tag
   internal static let deleteTag = L10n.tr("Localizable", "Delete_Tag")
+  /// Duplicate
+  internal static let duplicate = L10n.tr("Localizable", "Duplicate")
   /// Expand
   internal static let expand = L10n.tr("Localizable", "Expand")
   /// Expand All
