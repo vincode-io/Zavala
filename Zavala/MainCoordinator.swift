@@ -43,6 +43,10 @@ extension MainCoordinator {
 		return editorViewController?.isCreateRowUnavailable ?? true
 	}
 	
+	var isDuplicateRowsUnavailable: Bool {
+		return editorViewController?.isDuplicateRowsUnavailable ?? true
+	}
+	
 	var isCreateRowInsideUnavailable: Bool {
 		return editorViewController?.isCreateRowInsideUnavailable ?? true
 	}
@@ -137,6 +141,10 @@ extension MainCoordinator {
 	
 	var isDeleteCompletedRowsUnavailable: Bool {
 		return editorViewController?.isDeleteCompletedRowsUnavailable ?? true
+	}
+	
+	func duplicateRows() {
+		editorViewController?.duplicateCurrentRows()
 	}
 	
 	func toggleOutlineFilter() {

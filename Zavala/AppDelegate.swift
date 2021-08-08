@@ -75,6 +75,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(createRowCommand)
 		}
 		
+		if !(mainCoordinator?.isDuplicateRowsUnavailable ?? true) {
+			menuKeyCommands.append(duplicateRowsCommand)
+		}
+		
 		if !(mainCoordinator?.isCreateRowInsideUnavailable ?? true) {
 			menuKeyCommands.append(createRowInsideCommand)
 		}
@@ -219,6 +223,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										action: #selector(createRowCommand(_:)),
 										input: "\n",
 										modifierFlags: [])
+	
+	let duplicateRowsCommand = UIKeyCommand(title: L10n.duplicate,
+											action: #selector(duplicateRowsCommand(_:)),
+											input: "r",
+											modifierFlags: [.command, .control])
 	
 	let createRowInsideCommand = UIKeyCommand(title: L10n.addRowInside,
 											  action: #selector(createRowInsideCommand(_:)),
@@ -623,6 +632,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.createRow()
 	}
 	
+	@objc func duplicateRowsCommand(_ sender: Any?) {
+		mainCoordinator?.duplicateRows()
+	}
+	
 	@objc func createRowInsideCommand(_ sender: Any?) {
 		mainCoordinator?.createRowInside()
 	}
@@ -828,6 +841,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(createRowCommand(_:)):
 			if mainCoordinator?.isCreateRowUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(duplicateRowsCommand(_:)):
+			if mainCoordinator?.isDuplicateRowsUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(createRowInsideCommand(_:)):
@@ -1046,7 +1063,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let moveRowMenu = UIMenu(title: "Move", children: [moveRowsUpCommand, moveRowsDownCommand, moveRowsLeftCommand, moveRowsRightCommand])
 		let mainOutlineMenu = UIMenu(title: "",
 									 options: .displayInline,
-									 children: [insertRowCommand, createRowCommand, createRowInsideCommand, createRowOutsideCommand, splitRowCommand, indentRowsCommand, outdentRowsCommand])
+									 children: [insertRowCommand,
+												createRowCommand,
+												createRowInsideCommand,
+												createRowOutsideCommand,
+												duplicateRowsCommand,
+												splitRowCommand,
+												indentRowsCommand,
+												outdentRowsCommand])
 		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, moveRowMenu, completeMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 

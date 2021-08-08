@@ -70,6 +70,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return currentRows == nil
 	}
 	
+	var isDuplicateRowsUnavailable: Bool {
+		return currentRows == nil
+	}
+	
 	var isCreateRowInsideUnavailable: Bool {
 		return currentRows == nil
 	}
@@ -687,6 +691,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	func createRow() {
 		guard let rows = currentRows else { return }
 		createRow(afterRows: rows)
+	}
+	
+	func duplicateCurrentRows() {
+		guard let rows = currentRows else { return }
+		duplicateRows(rows)
 	}
 	
 	func createRowInside() {
