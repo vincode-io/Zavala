@@ -16,6 +16,8 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
 
     override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexAllSearchableItemsWithAcknowledgementHandler acknowledgementHandler: @escaping () -> Void) {
 		DispatchQueue.main.async {
+			os_log("IndexRequestHandler starting...", log: self.log, type: .info)
+			
 			self.resume()
 
 			let group = DispatchGroup()
@@ -32,6 +34,7 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
 			
 			group.notify(queue: .main) {
 				self.suspend()
+				os_log("IndexRequestHandler done.", log: self.log, type: .info)
 				acknowledgementHandler()
 			}
 		}
@@ -39,6 +42,8 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
     
 	override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexSearchableItemsWithIdentifiers identifiers: [String], acknowledgementHandler: @escaping () -> Void) {
 		DispatchQueue.main.async {
+			os_log("IndexRequestHandler starting...", log: self.log, type: .info)
+			
 			self.resume()
 			
 			let group = DispatchGroup()
@@ -57,6 +62,7 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
 			
 			group.notify(queue: .main) {
 				self.suspend()
+				os_log("IndexRequestHandler done.", log: self.log, type: .info)
 				acknowledgementHandler()
 			}
 		}
