@@ -40,6 +40,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			titlebar.toolbar = toolbar
 			titlebar.toolbarStyle = .automatic
 		}
+
+		// If we let the user shrink the window down too small, the collection view will crash itself with a
+		// no selector found error on an internal Apple API
+		windowScene.sizeRestrictions?.minimumSize = CGSize(width: 800, height: 600)
 		
 		#endif
 
