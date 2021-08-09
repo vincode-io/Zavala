@@ -190,7 +190,7 @@ extension CloudKitModifyOperation {
 		
 		textRow.syncID = UUID().uuidString
 		
-		let recordID = CKRecord.ID(recordName: textRow.id.description, zoneID: zoneID)
+		let recordID = CKRecord.ID(recordName: textRow.entityID.description, zoneID: zoneID)
 		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitRow.recordType, recordID: recordID)
 		
 		record.parent = CKRecord.Reference(recordID: outlineRecordID, action: .none)
