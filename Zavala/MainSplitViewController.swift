@@ -760,17 +760,17 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
 				if self?.editorViewController?.isOutlineFiltered ?? false {
-					item.image = AppAssets.filterActive.symbolSizedForToolbar(pointSize: 18.0)
+					item.image = AppAssets.filterActive.symbolSizedForToolbar()
 					item.label = L10n.showCompleted
 					item.toolTip = L10n.showCompleted
 				} else {
-					item.image = AppAssets.filterInactive.symbolSizedForToolbar(pointSize: 18.0)
+					item.image = AppAssets.filterInactive.symbolSizedForToolbar()
 					item.label = L10n.hideCompleted
 					item.toolTip = L10n.hideCompleted
 				}
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.filterInactive.symbolSizedForToolbar(pointSize: 18.0)
+			item.image = AppAssets.filterInactive.symbolSizedForToolbar()
 			item.label = L10n.hideCompleted
 			item.toolTip = L10n.hideCompleted
 			item.isBordered = true
