@@ -1004,7 +1004,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atStartOfMenu: .file)
 
-		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportJekyllCommand, exportMarkdownCommand, exportOPMLCommand])
+		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMarkdownCommand, exportOPMLCommand])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 
 		let newMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newWindowCommand, showOpenQuicklyCommand])
