@@ -595,7 +595,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !AccountManager.shared.isSyncAvailable
 			}
-			item.image = AppAssets.sync
+			item.image = AppAssets.sync.symbolSizedForToolbar()
 			item.label = L10n.sync
 			item.toolTip = L10n.sync
 			item.isBordered = true
@@ -607,7 +607,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return false
 			}
-			item.image = AppAssets.importDocument
+			item.image = AppAssets.importDocument.symbolSizedForToolbar()
 			item.label = L10n.importOPML
 			item.toolTip = L10n.importOPML
 			item.isBordered = true
@@ -619,7 +619,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return false
 			}
-			item.image = AppAssets.createEntity
+			item.image = AppAssets.createEntity.symbolSizedForToolbar()
 			item.label = L10n.newOutline
 			item.toolTip = L10n.newOutline
 			item.isBordered = true
@@ -631,7 +631,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isInsertImageUnavailable ?? true
 			}
-			item.image = AppAssets.insertImage
+			item.image = AppAssets.insertImage.symbolSizedForToolbar()
 			item.label = L10n.insertImage
 			item.toolTip = L10n.insertImage
 			item.isBordered = true
@@ -643,7 +643,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isLinkUnavailable ?? true
 			}
-			item.image = AppAssets.link
+			item.image = AppAssets.link.symbolSizedForToolbar()
 			item.label = L10n.link
 			item.toolTip = L10n.link
 			item.isBordered = true
@@ -654,13 +654,13 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isBoldToggledOn ?? false {
-					item.image = AppAssets.bold.tinted(color: UIColor.systemBlue)
+					item.image = AppAssets.bold.symbolSizedForToolbar(pointSize: 22.0, color: .systemBlue)
 				} else {
-					item.image = AppAssets.bold
+					item.image = AppAssets.bold.symbolSizedForToolbar(pointSize: 22.0)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppAssets.bold
+			item.image = AppAssets.bold.symbolSizedForToolbar(pointSize: 22.0)
 			item.label = L10n.bold
 			item.toolTip = L10n.bold
 			item.isBordered = true
@@ -671,13 +671,13 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isItalicToggledOn ?? false {
-					item.image = AppAssets.italic.tinted(color:	UIColor.systemBlue)
+					item.image = AppAssets.italic.symbolSizedForToolbar(pointSize: 22.0, color: .systemBlue)
 				} else {
-					item.image = AppAssets.italic
+					item.image = AppAssets.italic.symbolSizedForToolbar(pointSize: 22.0)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppAssets.italic
+			item.image = AppAssets.italic.symbolSizedForToolbar(pointSize: 22.0)
 			item.label = L10n.italic
 			item.toolTip = L10n.italic
 			item.isBordered = true
@@ -689,7 +689,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isExpandAllInOutlineUnavailable ?? true
 			}
-			item.image = AppAssets.expandAll
+			item.image = AppAssets.expandAll.symbolSizedForToolbar()
 			item.label = L10n.expand
 			item.toolTip = L10n.expandAllInOutline
 			item.isBordered = true
@@ -701,7 +701,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isCollapseAllInOutlineUnavailable ?? true
 			}
-			item.image = AppAssets.collapseAll
+			item.image = AppAssets.collapseAll.symbolSizedForToolbar()
 			item.label = L10n.collapse
 			item.toolTip = L10n.collapseAllInOutline
 			item.isBordered = true
@@ -713,7 +713,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isIndentRowsUnavailable ?? true
 			}
-			item.image = AppAssets.indent
+			item.image = AppAssets.indent.symbolSizedForToolbar()
 			item.label = L10n.indent
 			item.toolTip = L10n.indent
 			item.isBordered = true
@@ -725,7 +725,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutdentRowsUnavailable ?? true
 			}
-			item.image = AppAssets.outdent
+			item.image = AppAssets.outdent.symbolSizedForToolbar()
 			item.label = L10n.outdent
 			item.toolTip = L10n.outdent
 			item.isBordered = true
@@ -737,7 +737,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsUpUnavailable ?? true
 			}
-			item.image = AppAssets.moveUp
+			item.image = AppAssets.moveUp.symbolSizedForToolbar()
 			item.label = L10n.moveUp
 			item.toolTip = L10n.moveUp
 			item.isBordered = true
@@ -749,7 +749,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsDownUnavailable ?? true
 			}
-			item.image = AppAssets.moveDown
+			item.image = AppAssets.moveDown.symbolSizedForToolbar()
 			item.label = L10n.moveDown
 			item.toolTip = L10n.moveDown
 			item.isBordered = true
@@ -760,17 +760,17 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
 				if self?.editorViewController?.isOutlineFiltered ?? false {
-					item.image = AppAssets.filterActive
+					item.image = AppAssets.filterActive.symbolSizedForToolbar(pointSize: 18.0)
 					item.label = L10n.showCompleted
 					item.toolTip = L10n.showCompleted
 				} else {
-					item.image = AppAssets.filterInactive
+					item.image = AppAssets.filterInactive.symbolSizedForToolbar(pointSize: 18.0)
 					item.label = L10n.hideCompleted
 					item.toolTip = L10n.hideCompleted
 				}
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.filterInactive
+			item.image = AppAssets.filterInactive.symbolSizedForToolbar(pointSize: 18.0)
 			item.label = L10n.hideCompleted
 			item.toolTip = L10n.hideCompleted
 			item.isBordered = true
@@ -781,17 +781,17 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
 				if self?.editorViewController?.isOutlineNotesHidden ?? false {
-					item.image = AppAssets.hideNotesActive
+					item.image = AppAssets.hideNotesActive.symbolSizedForToolbar()
 					item.label = L10n.showNotes
 					item.toolTip = L10n.showNotes
 				} else {
-					item.image = AppAssets.hideNotesInactive
+					item.image = AppAssets.hideNotesInactive.symbolSizedForToolbar()
 					item.label = L10n.hideNotes
 					item.toolTip = L10n.hideNotes
 				}
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.hideNotesInactive
+			item.image = AppAssets.hideNotesInactive.symbolSizedForToolbar()
 			item.label = L10n.hideNotes
 			item.toolTip = L10n.hideNotes
 			item.isBordered = true
@@ -803,7 +803,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.print
+			item.image = AppAssets.print.symbolSizedForToolbar()
 			item.label = L10n.print
 			item.toolTip = L10n.print
 			item.isBordered = true
@@ -814,15 +814,15 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isDocumentShared ?? false {
-					item.image = AppAssets.shared
+					item.image = AppAssets.shared.symbolSizedForToolbar()
 				} else if self?.editorViewController?.isShareUnavailable ?? true {
-					item.image = AppAssets.statelessShare
+					item.image = AppAssets.statelessShare.symbolSizedForToolbar()
 				} else {
-					item.image = AppAssets.share
+					item.image = AppAssets.share.symbolSizedForToolbar()
 				}
 				return self?.editorViewController?.isShareUnavailable ?? true
 			}
-			item.image = AppAssets.share
+			item.image = AppAssets.share.symbolSizedForToolbar()
 			item.label = L10n.share
 			item.toolTip = L10n.share
 			item.isBordered = true
@@ -840,7 +840,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.getInfo
+			item.image = AppAssets.getInfo.symbolSizedForToolbar()
 			item.label = L10n.getInfo
 			item.toolTip = L10n.getInfo
 			item.isBordered = true

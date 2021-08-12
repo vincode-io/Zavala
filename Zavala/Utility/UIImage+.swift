@@ -20,4 +20,8 @@ extension UIImage {
 		return copy
 	}
 	
+	func symbolSizedForToolbar(pointSize: CGFloat = 16.0, color: UIColor = .systemGray) -> UIImage {
+		return applyingSymbolConfiguration(.init(pointSize: pointSize, weight: .regular, scale: .medium))!.tinted(color: UIColor.systemGray)!
+	}
+	
 }
