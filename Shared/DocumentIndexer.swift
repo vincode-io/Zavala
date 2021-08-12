@@ -10,7 +10,11 @@ import MobileCoreServices
 import Templeton
 import CoreSpotlight
 
-struct DocumentIndexer {
+class DocumentIndexer {
+	
+	init() {
+		NotificationCenter.default.addObserver(self, selector: #selector(documentDidChangeBySync(_:)), name: .DocumentDidChangeBySync, object: nil)
+	}
 	
 	static func updateIndex(forDocument document: Document) {
 		DispatchQueue.main.async {
@@ -25,6 +29,10 @@ struct DocumentIndexer {
 		return CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "io.vincode", attributeSet: attributeSet)
 	}
 	
+}
+
+extension DocumentIndexer {
+	
 	private static func makeSearchableItemAttributes(forDocument document: Document) -> CSSearchableItemAttributeSet {
 		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
 		attributeSet.title = document.title ?? ""
@@ -35,6 +43,11 @@ struct DocumentIndexer {
 		attributeSet.textContent = document.string
 		attributeSet.contentModificationDate = document.updated
 		return attributeSet
+	}
+	
+	@objc private func documentDidChangeBySync(_ note: Notification) {
+		guard let document = note.object as? Document else { return }
+		Self.updateIndex(forDocument: document)
 	}
 	
 }

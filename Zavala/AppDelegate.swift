@@ -456,6 +456,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	private var crashReporter = CrashReporter()
 	#endif
 	
+	private var documentIndexer: DocumentIndexer?
+	
 	#if targetEnvironment(macCatalyst)
 	var appKitPlugin: AppKitPlugin?
 	#endif
@@ -521,6 +523,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			self.crashReporter.check(presentingController: controller)
 		}
 		#endif
+		
+		documentIndexer = DocumentIndexer()
 		
 		return true
 	}

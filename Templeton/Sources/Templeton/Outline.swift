@@ -1964,6 +1964,8 @@ extension Outline {
 			rowsFile?.markAsDirty()
 		}
 		
+		documentDidChangeBySync()
+		
 		guard beingViewedCount > 0 else { return }
 
 		var reloadRows = [Row]()
@@ -2085,6 +2087,10 @@ extension Outline {
 
 extension Outline {
 	
+	private func documentDidChangeBySync() {
+		NotificationCenter.default.post(name: .DocumentDidChangeBySync, object: Document.outline(self), userInfo: nil)
+	}
+
 	private func documentTitleDidChange() {
 		NotificationCenter.default.post(name: .DocumentTitleDidChange, object: Document.outline(self), userInfo: nil)
 	}
