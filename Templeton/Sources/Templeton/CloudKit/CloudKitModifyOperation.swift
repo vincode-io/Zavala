@@ -31,6 +31,8 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 			return
 		}
 		
+		var loadedDocuments = [Document]()
+		
 		for documentUUID in combinedRequests.keys {
 			guard let combinedRequest = combinedRequests[documentUUID] else { continue }
 			
@@ -44,6 +46,7 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 			}
 			
 			document.load()
+			loadedDocuments.append(document)
 			
 			// This has to be a save for the document
 			if combinedRequest.documentRequest != nil {
@@ -62,7 +65,6 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 				}
 			}
 			
-			document.unload()
 		}
 		
 		// Send the grouped changes
@@ -107,6 +109,7 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 		}
 		
 		group.notify(queue: DispatchQueue.main) {
+			loadedDocuments.forEach { $0.unload() }
 			if self.error == nil {
 				self.deleteRequests()
 				self.deleteTempFiles(tempFileURLs)
