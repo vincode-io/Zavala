@@ -1679,6 +1679,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		imagesFile?.suspend()
 		imagesFile = nil
+		images = nil
 	}
 	
 	public func suspend() {
@@ -1755,7 +1756,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		var newKeyedRows = [String: Row]()
 		for key in keyedRows.keys {
 			if let row = keyedRows[key] {
-				let duplicateRow = row.duplicate(newOutline: self)
+				let duplicateRow = row.duplicate(newOutline: outline)
 				newKeyedRows[duplicateRow.id] = duplicateRow
 				rowIDMap[row.id] = duplicateRow.id
 			}
@@ -1785,10 +1786,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 		
 		outline.keyedRows = updatedNewKeyedRows
-		
-		for var row in outline.keyedRows!.values {
-			row.images = row.images.map { $0.duplicate(accountID: id.accountID, documentUUID: id.documentUUID, rowUUID: row.id) }
-		}
 		
 		return outline
 	}
