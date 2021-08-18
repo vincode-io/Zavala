@@ -238,12 +238,15 @@ public final class TextRow: BaseRow, Codable {
 	}
 
 	public override func saveImage(_ image: Image) {
-		if images == nil {
-			images = [Image]()
-		}
-
-		if !images!.contains(image) {
-			images!.append(image)
+		var foundImages = images
+		
+		if foundImages == nil {
+			images = [image]
+		} else {
+			if !foundImages!.contains(image) {
+				foundImages!.append(image)
+				images = foundImages
+			}
 		}
 		
 		topicCache = nil
