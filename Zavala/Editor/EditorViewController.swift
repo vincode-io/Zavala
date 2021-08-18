@@ -1342,7 +1342,7 @@ extension EditorViewController: OutlineCommandDelegate {
 	
 }
 
-// MARK:
+// MARK: PHPickerViewControllerDelegate
 
 extension EditorViewController: PHPickerViewControllerDelegate {
 	
