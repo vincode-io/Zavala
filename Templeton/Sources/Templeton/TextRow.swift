@@ -228,7 +228,7 @@ public final class TextRow: BaseRow, Codable {
 		textRow.isExpanded = isExpanded
 		textRow.isComplete = isComplete
 		textRow.rowOrder = rowOrder
-		textRow.images = images
+		textRow.images = images?.map { $0.duplicate(accountID: newOutline.id.accountID, documentUUID: newOutline.id.documentUUID, rowUUID: textRow.id) }
 		
 		return textRow
 	}
