@@ -80,6 +80,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		applySnapshot(animated: false)
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineTagsDidChange(_:)), name: .OutlineTagsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentUpdatedDidChange(_:)), name: .DocumentUpdatedDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentSharingDidChange(_:)), name: .DocumentSharingDidChange, object: nil)
@@ -122,6 +123,10 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	// MARK: Notifications
 	
 	@objc func accountDocumentsDidChange(_ note: Notification) {
+		applySnapshot(animated: true)
+	}
+	
+	@objc func outlineTagsDidChange(_ note: Notification) {
 		applySnapshot(animated: true)
 	}
 	
