@@ -256,6 +256,7 @@
 		51B9D99E26140EDC00A66859 /* ExportMarkdownActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99C26140EDC00A66859 /* ExportMarkdownActivity.swift */; };
 		51B9D9A026140F3A00A66859 /* ExportOPMLActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */; };
 		51B9D9A126140F3A00A66859 /* ExportOPMLActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */; };
+		51C0171C26CEFEB500C5990B /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5173B405268BBD4200687117 /* UIImage+.swift */; };
 		51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */; };
 		51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A5257E084E00609262 /* EditorTitleContentView.swift */; };
 		51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */; };
@@ -1368,6 +1369,7 @@
 				511B2A472602410C00C04239 /* SidebarViewController.swift in Sources */,
 				511B2A482602410C00C04239 /* UpdateSelectionOperation.swift in Sources */,
 				511B2A492602410C00C04239 /* EditorBacklinkViewCell.swift in Sources */,
+				51C0171C26CEFEB500C5990B /* UIImage+.swift in Sources */,
 				511B2A4A2602410C00C04239 /* TimelineItem.swift in Sources */,
 				511B2A4B2602410C00C04239 /* EditorTextRowContentConfiguration.swift in Sources */,
 				511B2A4C2602410C00C04239 /* EditorTextRowTextView.swift in Sources */,
