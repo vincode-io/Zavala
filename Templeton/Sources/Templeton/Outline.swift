@@ -1531,9 +1531,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		for row in rows.sortedByDisplayOrder() {
-			if let index = row.parent?.firstIndexOfRow(row) {
-				row.parent?.removeRow(row)
-				row.parent?.insertRow(row, at: index - 1)
+			if let parent = row.parent, let index = parent.firstIndexOfRow(row), index - 1 > -1 {
+				parent.removeRow(row)
+				parent.insertRow(row, at: index - 1)
 			}
 		}
 		
@@ -1564,9 +1564,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		}
 
 		for row in rows.sortedByReverseDisplayOrder() {
-			if let index = row.parent?.firstIndexOfRow(row) {
-				row.parent?.removeRow(row)
-				row.parent?.insertRow(row, at: index + 1)
+			if let parent = row.parent, let index = parent.firstIndexOfRow(row), index + 1 < parent.rowCount {
+				parent.removeRow(row)
+				parent.insertRow(row, at: index + 1)
 			}
 		}
 		

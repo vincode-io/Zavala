@@ -241,6 +241,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var outdentButton: UIBarButtonItem!
 	private var moveUpButton: UIBarButtonItem!
 	private var moveDownButton: UIBarButtonItem!
+	private var insertImageButton: UIBarButtonItem!
+	private var linkButton: UIBarButtonItem!
 
 	private(set) var outline: Outline?
 	
@@ -363,11 +365,27 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		moveUpButton.title = L10n.moveUp
 		moveDownButton = UIBarButtonItem(image: AppAssets.moveDown, style: .plain, target: self, action: #selector(moveCurrentRowsDown))
 		moveDownButton.title = L10n.moveDown
+		insertImageButton = UIBarButtonItem(image: AppAssets.insertImage, style: .plain, target: self, action: #selector(insertImage))
+		insertImageButton.title = L10n.insertImage
+		linkButton = UIBarButtonItem(image: AppAssets.link, style: .plain, target: self, action: #selector(link))
+		linkButton.title = L10n.link
 
 		if traitCollection.userInterfaceIdiom == .phone {
 			keyboardToolBar = UIToolbar()
-			keyboardToolBar.items = [outdentButton, indentButton, moveUpButton, moveDownButton]
+			keyboardToolBar.items = [outdentButton, indentButton, moveUpButton, moveDownButton, insertImageButton, linkButton]
 			keyboardToolBar.sizeToFit()
+			navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
+		}
+
+		if traitCollection.userInterfaceIdiom == .pad {
+			navigationItem.rightBarButtonItems = [filterBarButtonItem,
+												  ellipsisBarButtonItem,
+												  linkButton,
+												  insertImageButton,
+												  moveDownButton,
+												  moveUpButton,
+												  indentButton,
+												  outdentButton]
 		}
 
 		updateUI(editMode: false)
@@ -744,18 +762,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
-	func outlineToggleBoldface() {
-		currentTextView?.toggleBoldface(self)
-	}
-	
-	func outlineToggleItalics() {
-		currentTextView?.toggleItalics(self)
-	}
-	
-	func link() {
-		currentTextView?.editLink(self)
-	}
-	
 	func expandAllInOutline() {
 		guard let outline = outline else { return }
 		expandAll(containers: [outline])
@@ -913,6 +919,18 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		let pickerViewController = PHPickerViewController(configuration: config)
 		pickerViewController.delegate = self
 		self.present(pickerViewController, animated: true, completion: nil)
+	}
+	
+	@objc func link(_ sender: Any? = nil) {
+		currentTextView?.editLink(self)
+	}
+	
+	@objc func outlineToggleBoldface(_ sender: Any? = nil) {
+		currentTextView?.toggleBoldface(self)
+	}
+	
+	@objc func outlineToggleItalics(_ sender: Any? = nil) {
+		currentTextView?.toggleItalics(self)
 	}
 	
 	@objc func sendCopy(_ sender: Any? = nil) {
@@ -1500,26 +1518,27 @@ extension EditorViewController {
 			} else {
 				navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
 			}
-		} else if traitCollection.userInterfaceIdiom == .pad {
-			navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem, moveDownButton, moveUpButton, indentButton, outdentButton]
 		}
 
 		if traitCollection.userInterfaceIdiom != .mac {
 			self.ellipsisBarButtonItem.menu = buildEllipsisMenu()
+
+			if outline == nil {
+				filterBarButtonItem.isEnabled = false
+				ellipsisBarButtonItem.isEnabled = false
+			} else {
+				filterBarButtonItem.isEnabled = true
+				ellipsisBarButtonItem.isEnabled = true
+			}
+			
+			outdentButton.isEnabled = !isOutdentRowsUnavailable
+			indentButton.isEnabled = !isIndentRowsUnavailable
+			moveUpButton.isEnabled = !isMoveRowsUpUnavailable
+			moveDownButton.isEnabled = !isMoveRowsDownUnavailable
+			insertImageButton.isEnabled = !isInsertImageUnavailable
+			linkButton.isEnabled = !isLinkUnavailable
 		}
 		
-		if outline == nil {
-			filterBarButtonItem.isEnabled = false
-			ellipsisBarButtonItem.isEnabled = false
-		} else {
-			filterBarButtonItem.isEnabled = true
-			ellipsisBarButtonItem.isEnabled = true
-		}
-		
-		outdentButton.isEnabled = !isOutdentRowsUnavailable
-		indentButton.isEnabled = !isIndentRowsUnavailable
-		moveUpButton.isEnabled = !isMoveRowsUpUnavailable
-		moveDownButton.isEnabled = !isMoveRowsDownUnavailable
 	}
 	
 	private func discloseSearchBar() {
