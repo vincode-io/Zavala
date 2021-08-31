@@ -660,7 +660,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		outline?.prepareForViewing()
 			
 		guard isViewLoaded else { return }
-		updateUI(editMode: false)
 
 		if (outline?.isSearching ?? .notSearching) == .searching {
 			discloseSearchBar()
@@ -675,6 +674,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		collectionView.reloadData()
 		
+		updateUI(editMode: false)
+
 		restoreOutlineCursorPosition()
 		restoreScrollPosition()
 		moveCursorToTitleOnNew()
