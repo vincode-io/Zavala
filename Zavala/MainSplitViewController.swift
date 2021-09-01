@@ -326,7 +326,6 @@ extension MainSplitViewController: SidebarDelegate {
 		}
 		
 		timelineViewController?.setDocumentContainer(documentContainer, completion: completion)
-		editorViewController?.edit(nil, isNew: false)
 
 		guard let documentContainer = documentContainer else {
 			activityManager.invalidateSelectDocumentContainer()
