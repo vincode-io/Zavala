@@ -185,10 +185,6 @@ struct AppAssets {
 		return UIImage(systemName: "gobackward")!
 	}()
 
-	static var selectColor: UIColor = {
-		return UIColor(named: "SelectColor")!
-	}()
-
 	static var sendCopy: UIImage = {
 		return UIImage(systemName: "square.and.arrow.up")!
 	}()
