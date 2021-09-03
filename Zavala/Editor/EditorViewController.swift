@@ -1566,6 +1566,11 @@ extension EditorViewController {
 		}
 		shareActions.append(sendCopyAction)
 
+		let printAction = UIAction(title: L10n.print, image: AppAssets.print) { [weak self] _ in
+			self?.printOutline()
+		}
+		shareActions.append(printAction)
+
 		var getInfoActions = [UIAction]()
 		let getInfoAction = UIAction(title: L10n.getInfo, image: AppAssets.getInfo) { [weak self] _ in
 			self?.showOutlineGetInfo()
