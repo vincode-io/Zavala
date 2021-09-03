@@ -891,6 +891,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func printOutline() {
 		guard let outline = outline else { return }
 		
+		currentTextView?.saveText()
+		
 		let pic = UIPrintInteractionController()
 		
 		let printInfo = UIPrintInfo(dictionary: nil)
