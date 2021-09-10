@@ -949,10 +949,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		exportOPMLActivity.delegate = self
 		activities.append(exportOPMLActivity)
 		
-		let printActivity = PrintActivity()
-		printActivity.delegate = self
-		activities.append(printActivity)
-		
 		let controller = UIActivityViewController(outline: outline, applicationActivities: activities)
 		controller.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
 		present(controller, animated: true)
@@ -1418,16 +1414,6 @@ extension EditorViewController: LinkViewControllerDelegate {
 		} else {
 			textRowCell.topicTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
 		}
-	}
-	
-}
-
-// MARK: PrintActivityDelegate
-
-extension EditorViewController: PrintActivityDelegate {
-	
-	func print(_: PrintActivity) {
-		printOutline()
 	}
 	
 }
