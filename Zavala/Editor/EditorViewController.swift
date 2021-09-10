@@ -689,7 +689,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		searchBar.searchField.text = text
 		outline?.beginSearching(for: text)
-		
+		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
+
 		// I don't know why, but if you are clicking down the timeline with a sidebar search active
 		// the title row won't reload and you will get titles when you should only have search results.
 		if outline?.shadowTable?.count ?? 0 > 0  {
