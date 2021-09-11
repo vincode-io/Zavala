@@ -10,7 +10,7 @@ header:
 * Use on a Mac, iPhone, and/or iPad for free and forever.
 * Sync Outlines using iCloud with full offline editing.
 * Share Outlines using iCloud so that you can collaborate on an Outline with one or more other Zavala users in realtime.
-* Embed images in your Outline text fields
+* Embed images in your Outline text fields.
 * Customize the fonts used in the Outline Editor.
 * You can tag Outlines with any name you want and a tag search is automatically generated in the Sidebar so you can find related Outlines.
 * Quickly open any Outline by just typing a portion of the name into the Open Quickly dialog.
