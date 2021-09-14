@@ -30,7 +30,6 @@ class EditorTitleContentView: UIView, UIContentView {
 		textView.font = OutlineFontCache.shared.title
 		textView.textAlignment = .center
 		textView.backgroundColor = .clear
-		textView.tintColor = AppAssets.accent
 		textView.autocapitalizationType = .words
 		textView.adjustsFontForContentSizeCategory = true
 		textView.translatesAutoresizingMaskIntoConstraints = false

@@ -689,7 +689,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		searchBar.searchField.text = text
 		outline?.beginSearching(for: text)
-		
+		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
+		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
+
 		// I don't know why, but if you are clicking down the timeline with a sidebar search active
 		// the title row won't reload and you will get titles when you should only have search results.
 		if outline?.shadowTable?.count ?? 0 > 0  {
@@ -891,6 +893,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func printOutline() {
 		guard let outline = outline else { return }
 		
+		currentTextView?.saveText()
+		
 		let pic = UIPrintInteractionController()
 		
 		let printInfo = UIPrintInfo(dictionary: nil)
@@ -946,10 +950,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		let exportOPMLActivity = ExportOPMLActivity()
 		exportOPMLActivity.delegate = self
 		activities.append(exportOPMLActivity)
-		
-		let printActivity = PrintActivity()
-		printActivity.delegate = self
-		activities.append(printActivity)
 		
 		let controller = UIActivityViewController(outline: outline, applicationActivities: activities)
 		controller.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
@@ -1420,16 +1420,6 @@ extension EditorViewController: LinkViewControllerDelegate {
 	
 }
 
-// MARK: PrintActivityDelegate
-
-extension EditorViewController: PrintActivityDelegate {
-	
-	func print(_: PrintActivity) {
-		printOutline()
-	}
-	
-}
-
 // MARK: ExportMarkdownActivityDelegate
 
 extension EditorViewController: ExportMarkdownActivityDelegate {
@@ -1565,6 +1555,11 @@ extension EditorViewController {
 			self?.sendCopy(self?.ellipsisBarButtonItem)
 		}
 		shareActions.append(sendCopyAction)
+
+		let printAction = UIAction(title: L10n.print, image: AppAssets.print) { [weak self] _ in
+			self?.printOutline()
+		}
+		shareActions.append(printAction)
 
 		var getInfoActions = [UIAction]()
 		let getInfoAction = UIAction(title: L10n.getInfo, image: AppAssets.getInfo) { [weak self] _ in
@@ -1832,7 +1827,8 @@ extension EditorViewController {
 	}
 	
 	private func restoreScrollPosition() {
-		if let verticleScrollState = outline?.verticleScrollState, verticleScrollState != 0 {
+		let rowCount = collectionView.numberOfItems(inSection: adjustedRowsSection)
+		if let verticleScrollState = outline?.verticleScrollState, verticleScrollState != 0, verticleScrollState < rowCount {
 			collectionView.isHidden = true
 			collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: adjustedRowsSection), at: .top, animated: false)
 			DispatchQueue.main.async {

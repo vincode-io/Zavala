@@ -33,11 +33,16 @@ class PrintVisitor {
 			let topicFont = UIFont.systemFont(ofSize: 12)
 			let topicParagraphStyle = NSMutableParagraphStyle()
 			topicParagraphStyle.paragraphSpacing = 0.33 * topicFont.lineHeight
+			
 			topicParagraphStyle.firstLineHeadIndent = CGFloat(indentLevel * 20)
-			topicParagraphStyle.headIndent = CGFloat(indentLevel * 20)
+			let textIndent = CGFloat(indentLevel * 20) + 10
+			topicParagraphStyle.headIndent = textIndent
+			topicParagraphStyle.defaultTabInterval = textIndent
+			topicParagraphStyle.tabStops = [NSTextTab(textAlignment: .left, location: textIndent, options: [:])]
 			attrs[.paragraphStyle] = topicParagraphStyle
 			
-			let printTopic = NSMutableAttributedString(attributedString: topic)
+			let printTopic = NSMutableAttributedString(string: "\u{2022}\t")
+			printTopic.append(topic)
 			let range = NSRange(location: 0, length: printTopic.length)
 			printTopic.addAttributes(attrs, range: range)
 			printTopic.replaceFont(with: topicFont)

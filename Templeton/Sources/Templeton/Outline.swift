@@ -1411,14 +1411,14 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		var impacted = [Row]()
 		var reloads = Set<Int>()
+		var deletes = Set<Int>()
 
 		for row in sortedRows {
 			guard let container = row.parent,
 				  let rowIndex = container.firstIndexOfRow(row),
 				  rowIndex > 0,
 				  var newParentRow = row.parent?.rows[rowIndex - 1],
-				  let rowShadowTableIndex = row.shadowTableIndex,
-				  let newParentRowShadowTableIndex = newParentRow.shadowTableIndex else { continue }
+				  let rowShadowTableIndex = row.shadowTableIndex else { continue }
 
 			impacted.append(row)
 			expand(row: newParentRow)
@@ -1430,8 +1430,14 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 			newParentRow.isExpanded = true
 
-			reloads.insert(newParentRowShadowTableIndex)
-			reloads.insert(rowShadowTableIndex)
+			// If the new parent row doesn't have a shadow table index, it is because it is filtered
+			if let newParentRowShadowTableIndex = newParentRow.shadowTableIndex {
+				reloads.insert(newParentRowShadowTableIndex)
+				reloads.insert(rowShadowTableIndex)
+			} else {
+				shadowTable?.remove(at: rowShadowTableIndex)
+				deletes.insert(rowShadowTableIndex)
+			}
 		}
 		
 		endCloudKitBatchRequest()
@@ -1452,7 +1458,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 
-		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: reloads)
+		let changes = OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, reloads: reloads)
 		outlineElementsDidChange(changes)
 		return impacted
 	}

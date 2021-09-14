@@ -363,7 +363,11 @@ extension MainSplitViewController: TimelineDelegate {
 		}
 		
 		if let search = documentContainer as? Search {
-			editorViewController?.edit(document?.outline, isNew: isNew, searchText: search.searchText)
+			if search.searchText.isEmpty {
+				editorViewController?.edit(nil, isNew: isNew)
+			} else {
+				editorViewController?.edit(document?.outline, isNew: isNew, searchText: search.searchText)
+			}
 		} else {
 			editorViewController?.edit(document?.outline, isNew: isNew)
 		}
