@@ -108,6 +108,15 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	func showSettings() {
 		// No need to implement this since it is used on iOS only
 	}
+	
+	// MARK: Actions
+	
+	override func delete(_ sender: Any?) {
+		guard editorViewController?.isDeleteCurrentRowUnavailable ?? true else {
+			editorViewController?.deleteCurrentRows()
+			return
+		}
+	}
 
 	@objc func deleteOutline(_ sender: Any?) {
 		guard let outline = editorViewController?.outline else { return }
@@ -201,6 +210,17 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		outlineGetInfo()
 	}
 
+	// MARK: Validation
+	
+	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+		switch action {
+		case #selector(delete(_:)):
+			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true)
+		default:
+			return super.canPerformAction(action, withSender: sender)
+		}
+	}
+	
 }
 
 // MARK: Helpers
