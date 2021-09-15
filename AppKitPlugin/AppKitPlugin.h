@@ -12,7 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol AppKitPlugin <NSObject>
 - (void)setDelegate:(nullable id<AppKitPluginDelegate>)delegate;
 - (void)start;
-- (void)checkForUpdates;
 - (void)showPreferences;
 - (void)importOPML;
 - (void)configureOpenQuickly:(NSObject  * _Nullable)window;

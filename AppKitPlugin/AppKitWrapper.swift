@@ -8,23 +8,12 @@
 import AppKit
 import os.log
 
-#if MAC_TEST
-import Sparkle
-#else
-protocol SPUStandardUserDriverDelegate {}
-protocol SPUUpdaterDelegate {}
-#endif
-
-@objc class AppKitWrapper: NSResponder, AppKitPlugin, SPUUpdaterDelegate, SPUStandardUserDriverDelegate {
+@objc class AppKitWrapper: NSResponder, AppKitPlugin {
 	
 	private weak var delegate: AppKitPluginDelegate?
 	
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "SparkleWrapper")
 	
-	#if MAC_TEST
-	private var softwareUpdater: SPUUpdater!
-	#endif
-
 	private var movementMonitor: RSAppMovementMonitor? = nil
 	private var preferencesWindowController: NSWindowController?
 
@@ -34,24 +23,6 @@ protocol SPUUpdaterDelegate {}
 	
 	func start() {
 		movementMonitor = RSAppMovementMonitor()
-		
-		#if MAC_TEST
-		let hostBundle = Bundle.main
-		let updateDriver = SPUStandardUserDriver(hostBundle: hostBundle, delegate: self)
-		self.softwareUpdater = SPUUpdater(hostBundle: hostBundle, applicationBundle: hostBundle, userDriver: updateDriver, delegate: self)
-
-		do {
-			try self.softwareUpdater.start()
-		} catch {
-			os_log(.error, log: log, "Failed to start software updater with error: %@.", error.localizedDescription)
-		}
-		#endif
-	}
-	
-	func checkForUpdates() {
-		#if MAC_TEST
-		softwareUpdater.checkForUpdates()
-		#endif
 	}
 	
 	func showPreferences() {

@@ -168,10 +168,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 input: ",",
 										 modifierFlags: [.command])
 	
-	#if targetEnvironment(macCatalyst)
-	let checkForUpdates = UICommand(title: L10n.checkForUpdates, action: #selector(checkForUpdates(_:)))
-	#endif
-	
 	let syncCommand = UIKeyCommand(title: L10n.sync,
 								   action: #selector(syncCommand(_:)),
 								   input: "r",
@@ -452,10 +448,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController as? MainCoordinator
 	}
 	
-	#if MAC_TEST
-	private var crashReporter = CrashReporter()
-	#endif
-	
 	private var documentIndexer: DocumentIndexer?
 	
 	#if targetEnvironment(macCatalyst)
@@ -468,9 +460,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let oldDocumentAccountURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 		let oldDocumentAccountsFolder = oldDocumentAccountURL.appendingPathComponent("Accounts").absoluteString
 
-		#if MAC_TEST
-		let documentAccountsFolderPath = String(oldDocumentAccountsFolder.suffix(from: oldDocumentAccountsFolder.index(oldDocumentAccountsFolder.startIndex, offsetBy: 7)))
-		#else
 		let oldDocumentAccountsFolderPath = String(oldDocumentAccountsFolder.suffix(from: oldDocumentAccountsFolder.index(oldDocumentAccountsFolder.startIndex, offsetBy: 7)))
 		
 		let appGroup = Bundle.main.object(forInfoDictionaryKey: "AppGroup") as! String
@@ -481,7 +470,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		if FileManager.default.fileExists(atPath: oldDocumentAccountsFolderPath) && !FileManager.default.fileExists(atPath: documentAccountsFolderPath) {
 			try? FileManager.default.moveItem(atPath: oldDocumentAccountsFolderPath, toPath: documentAccountsFolderPath)
 		}
-		#endif
 		
 		AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath, errorHandler: self)
 		let _ = OutlineFontCache.shared
@@ -516,13 +504,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		UIApplication.shared.registerForRemoteNotifications()
 		NSUbiquitousKeyValueStore.default.synchronize()
-		
-		#if MAC_TEST
-		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-			guard let controller = self.mainCoordinator as? UIViewController else { return }
-			self.crashReporter.check(presentingController: controller)
-		}
-		#endif
 		
 		documentIndexer = DocumentIndexer()
 		
@@ -575,12 +556,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.showSettings()
 		#endif
 	}
-
-	#if targetEnvironment(macCatalyst)
-	@objc func checkForUpdates(_ sender: Any?) {
-		appKitPlugin?.checkForUpdates()
-	}
-	#endif
 
 	@objc func syncCommand(_ sender: Any?) {
 		AccountManager.shared.sync()
@@ -998,9 +973,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Application Menu
 		var appMenuCommands = [UICommand]()
 		appMenuCommands.append(showPreferences)
-		#if MAC_TEST
-		appMenuCommands.append(checkForUpdates)
-		#endif
+
 		let appMenu = UIMenu(title: "", options: .displayInline, children: appMenuCommands)
 		builder.insertSibling(appMenu, afterMenu: .about)
 		
