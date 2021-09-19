@@ -1045,7 +1045,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 						
 						let action = UIContextualAction(style: .normal, title: L10n.uncomplete, handler: actionHandler)
 						action.image = AppAssets.uncompleteRow
-						action.backgroundColor = .systemYellow
+						if self.traitCollection.userInterfaceIdiom == .mac {
+							action.backgroundColor = UIColor.accentColor
+						} else {
+							action.backgroundColor = AppAssets.accent
+						}
 						
 						return UISwipeActionsConfiguration(actions: [action])
 					} else {
@@ -1056,8 +1060,12 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 						
 						let action = UIContextualAction(style: .normal, title: L10n.complete, handler: actionHandler)
 						action.image = AppAssets.completeRow
-						action.backgroundColor = .systemYellow
-						
+						if self.traitCollection.userInterfaceIdiom == .mac {
+							action.backgroundColor = UIColor.accentColor
+						} else {
+							action.backgroundColor = AppAssets.accent
+						}
+
 						return UISwipeActionsConfiguration(actions: [action])
 					}
 				}
