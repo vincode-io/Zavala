@@ -1033,6 +1033,48 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			} else {
 				var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
 				configuration.showsSeparators = false
+				
+				configuration.leadingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+					guard let self = self, let row = self.outline?.shadowTable?[indexPath.row] else { return nil }
+					
+					if row.isComplete {
+						let actionHandler: UIContextualAction.Handler = { action, view, completion in
+							self.uncompleteRows([row])
+							completion(true)
+						}
+						
+						let action = UIContextualAction(style: .normal, title: L10n.uncomplete, handler: actionHandler)
+						action.image = AppAssets.uncompleteRow
+						action.backgroundColor = .systemYellow
+						
+						return UISwipeActionsConfiguration(actions: [action])
+					} else {
+						let actionHandler: UIContextualAction.Handler = { action, view, completion in
+							self.completeRows([row])
+							completion(true)
+						}
+						
+						let action = UIContextualAction(style: .normal, title: L10n.complete, handler: actionHandler)
+						action.image = AppAssets.completeRow
+						action.backgroundColor = .systemYellow
+						
+						return UISwipeActionsConfiguration(actions: [action])
+					}
+				}
+				
+				configuration.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+					guard let self = self, let row = self.outline?.shadowTable?[indexPath.row] else { return nil }
+
+					let actionHandler: UIContextualAction.Handler = { action, view, completion in
+						self.deleteRows([row])
+						completion(true)
+					}
+					
+					let action = UIContextualAction(style: .destructive, title: L10n.delete, handler: actionHandler)
+					action.image = AppAssets.delete
+					
+					return UISwipeActionsConfiguration(actions: [action])
+				}
 				return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
 			}
 			
