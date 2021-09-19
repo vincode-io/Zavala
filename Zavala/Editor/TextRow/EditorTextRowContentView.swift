@@ -55,14 +55,6 @@ class EditorTextRowContentView: UIView, UIContentView {
 		topicTextView.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(topicTextView)
 
-		let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft(_:)))
-		swipeLeftGesture.direction = .left
-		addGestureRecognizer(swipeLeftGesture)
-		
-		let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipedRight(_:)))
-		swipeRightGesture.direction = .right
-		addGestureRecognizer(swipeRightGesture)
-		
 		apply(configuration: configuration)
 	}
 	
@@ -314,16 +306,6 @@ extension EditorTextRowContentView {
 		guard let row = appliedConfiguration.row else { return }
 		disclosureIndicator.toggleDisclosure()
 		appliedConfiguration.delegate?.editorTextRowToggleDisclosure(row: row)
-	}
-	
-	@objc func swipedLeft(_ sender: UISwipeGestureRecognizer) {
-		guard let row = appliedConfiguration.row else { return }
-		appliedConfiguration.delegate?.editorTextRowOutdentRow(row, textRowStrings: textRowStrings)
-	}
-	
-	@objc func swipedRight(_ sender: UISwipeGestureRecognizer) {
-		guard let row = appliedConfiguration.row else { return }
-		appliedConfiguration.delegate?.editorTextRowIndentRow(row, textRowStrings: textRowStrings)
 	}
 	
 	private func configureTopicTextView(configuration: EditorTextRowContentConfiguration) {

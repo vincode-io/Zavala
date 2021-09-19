@@ -1314,10 +1314,6 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		indentRows([row], textRowStrings: textRowStrings)
 	}
 	
-	func editorTextRowOutdentRow(_ row: Row, textRowStrings: TextRowStrings) {
-		outdentRows([row], textRowStrings: textRowStrings)
-	}
-	
 	func editorTextRowSplitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}

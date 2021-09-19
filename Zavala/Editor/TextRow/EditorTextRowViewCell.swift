@@ -21,7 +21,6 @@ protocol EditorTextRowViewCellDelegate: AnyObject {
 	func editorTextRowCreateRow(beforeRow: Row)
 	func editorTextRowCreateRow(afterRow: Row?, textRowStrings: TextRowStrings?)
 	func editorTextRowIndentRow(_ row: Row, textRowStrings: TextRowStrings)
-	func editorTextRowOutdentRow(_ row: Row, textRowStrings: TextRowStrings)
 	func editorTextRowSplitRow(_: Row, topic: NSAttributedString, cursorPosition: Int)
 	func editorTextRowCreateRowNote(_ row: Row, textRowStrings: TextRowStrings)
 	func editorTextRowDeleteRowNote(_ row: Row, textRowStrings: TextRowStrings)
