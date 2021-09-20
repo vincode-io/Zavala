@@ -109,11 +109,11 @@ public class BaseRow: NSObject, NSCopying, OPMLImporter, Identifiable {
 	}
 	
 	public func firstIndexOfRow(_ row: Row) -> Int? {
-		return rowOrder.firstIndex(of: row.id)
+		return rows.firstIndex(of: row)
 	}
 	
 	public func containsRow(_ row: Row) -> Bool {
-		return rowOrder.contains(row.id)
+		return rows.contains(row)
 	}
 	
 	public func insertRow(_ row: Row, at: Int) {
