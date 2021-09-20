@@ -9,13 +9,15 @@ import UIKit
 
 extension UIColor {
 	
-	static var accentColor: UIColor? {
+	static var accentColor: UIColor {
 		guard let systemHighlightColor = UserDefaults.standard.string(forKey: "AppleHighlightColor"),
-			  let colorName = systemHighlightColor.components(separatedBy: " ").last else { return nil }
+			  let colorName = systemHighlightColor.components(separatedBy: " ").last else { return AppAssets.accent }
+		
+		guard colorName != "Graphite" else { return UIColor.systemGray }
 		
 		let selector = NSSelectorFromString(NSString.localizedStringWithFormat("system%@Color", colorName) as String)
-		guard UIColor.responds(to: selector) else { return nil }
-		return UIColor.perform(selector).takeUnretainedValue() as? UIColor
+		guard UIColor.responds(to: selector) else { return AppAssets.accent }
+		return UIColor.perform(selector).takeUnretainedValue() as? UIColor ?? AppAssets.accent
 	}
 	
 	func asImage() -> UIImage {

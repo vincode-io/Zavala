@@ -181,11 +181,7 @@ open class SearchTextField: EnhancedTextField {
 	private var selectedBackgroundView: UIView = {
 		let view = UIView()
 		view.layer.cornerRadius = 5
-		if let accentColor = UIColor.accentColor {
-			view.backgroundColor = accentColor.withAlphaComponent(0.6)
-		} else {
-			view.backgroundColor = AppAssets.accent.withAlphaComponent(0.6)
-		}
+		view.backgroundColor = UIColor.accentColor.withAlphaComponent(0.6)
 		return view
 	}()
 	
