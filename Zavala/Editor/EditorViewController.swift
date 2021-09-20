@@ -1916,7 +1916,7 @@ extension EditorViewController {
 		if traitCollection.userInterfaceIdiom == .mac {
 		
 			let linkViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacLinkViewController") as! MacLinkViewController
-			linkViewController.preferredContentSize = CGSize(width: 400, height: 130)
+			linkViewController.preferredContentSize = CGSize(width: 400, height: 116)
 			linkViewController.cursorCoordinates = CursorCoordinates.bestCoordinates
 			linkViewController.text = text
 			linkViewController.link = link
