@@ -1044,7 +1044,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 						}
 						
 						let action = UIContextualAction(style: .normal, title: L10n.uncomplete, handler: actionHandler)
-						action.image = AppAssets.uncompleteRow
+						if self.traitCollection.userInterfaceIdiom == .mac {
+							action.image = AppAssets.uncompleteRow.symbolSizedForCatalyst(color: .white)
+						} else {
+							action.image = AppAssets.uncompleteRow
+						}
 						action.backgroundColor = UIColor.accentColor
 						
 						return UISwipeActionsConfiguration(actions: [action])
@@ -1055,7 +1059,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 						}
 						
 						let action = UIContextualAction(style: .normal, title: L10n.complete, handler: actionHandler)
-						action.image = AppAssets.completeRow
+						if self.traitCollection.userInterfaceIdiom == .mac {
+							action.image = AppAssets.completeRow.symbolSizedForCatalyst(color: .white)
+						} else {
+							action.image = AppAssets.completeRow
+						}
 						action.backgroundColor = UIColor.accentColor
 
 						return UISwipeActionsConfiguration(actions: [action])
@@ -1071,8 +1079,12 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 					}
 					
 					let action = UIContextualAction(style: .destructive, title: L10n.delete, handler: actionHandler)
-					action.image = AppAssets.delete
-					
+					if self.traitCollection.userInterfaceIdiom == .mac {
+						action.image = AppAssets.delete.symbolSizedForCatalyst(color: .white)
+					} else {
+						action.image = AppAssets.delete
+					}
+
 					return UISwipeActionsConfiguration(actions: [action])
 				}
 				return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
