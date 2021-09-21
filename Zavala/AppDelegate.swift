@@ -17,6 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		#if targetEnvironment(macCatalyst)
 		return nil
 		#else
+		if #available(iOS 15.0, *) {
+			return nil
+		}
+		
 		var menuKeyCommands = [UIKeyCommand]()
 		
 		menuKeyCommands.append(showPreferences)
@@ -961,7 +965,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 	// MARK: Menu
 
-	#if targetEnvironment(macCatalyst)
 	override func buildMenu(with builder: UIMenuBuilder) {
 		super.buildMenu(with: builder)
 
@@ -1054,8 +1057,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Help Menu
 		builder.replaceChildren(ofMenu: .help, from: { _ in return [showWebsiteCommand, showReleaseNotesCommand, showGitHubRepositoryCommand, showBugTrackerCommand, showAcknowledgementsCommand] })
 	}
-	#endif
-	
+
 }
 
 extension AppDelegate: AppKitPluginDelegate {
