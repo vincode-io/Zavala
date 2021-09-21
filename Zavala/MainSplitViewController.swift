@@ -21,6 +21,13 @@ enum MainControllerIdentifier {
 	case editor
 }
 
+enum MainSplitViewControllerError: LocalizedError {
+	case unknownOutline
+	var errorDescription: String? {
+		return L10n.unknownOutline
+	}
+}
+
 class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 	weak var sceneDelegate: SceneDelegate?
@@ -108,9 +115,23 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 
 		guard let documentContainerUserInfo = userInfo[UserInfoKeys.documentContainerID] as? [AnyHashable : AnyHashable],
-			  let documentContainerID = EntityID(userInfo: documentContainerUserInfo),
-			  let documentContainer = AccountManager.shared.findDocumentContainer(documentContainerID) else { return }
+			  let documentContainerID = EntityID(userInfo: documentContainerUserInfo) else {
+				  presentError(MainSplitViewControllerError.unknownOutline)
+				  return
+			  }
 
+		var candidateContainer: DocumentContainer? = nil
+		if let container = AccountManager.shared.findDocumentContainer(documentContainerID) {
+			candidateContainer = container
+		} else if let container = AccountManager.shared.findDocumentContainer(.allDocuments(documentContainerID.accountID)) {
+			candidateContainer = container
+		}
+
+		guard let documentContainer = candidateContainer else {
+			presentError(MainSplitViewControllerError.unknownOutline)
+			return
+		}
+		
 		UIView.performWithoutAnimation {
 			show(.primary)
 		}
@@ -120,7 +141,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 			guard let documentUserInfo = userInfo[UserInfoKeys.documentID] as? [AnyHashable : AnyHashable],
 				  let documentID = EntityID(userInfo: documentUserInfo),
-				  let document = AccountManager.shared.findDocument(documentID) else { return }
+				  let document = AccountManager.shared.findDocument(documentID) else {
+					  self.presentError(MainSplitViewControllerError.unknownOutline)
+					  return
+				  }
 			
 			self.timelineViewController?.selectDocument(document, animated: false) {
 				self.lastMainControllerToAppear = .editor
