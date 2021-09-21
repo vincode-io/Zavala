@@ -2,18 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSUserActivityTypes</key>
-	<array>
-		<string>io.vincode.Zavala.restoration</string>
-		<string>io.vincode.Zavala.selectingDocumentContainer</string>
-		<string>io.vincode.Zavala.selectingDocument</string>
-	</array>
 	<key>AppGroup</key>
 	<string>group.$(ORGANIZATION_IDENTIFIER).Zavala</string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(AppIdentifierPrefix)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>OPML</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>opml</string>
+			</array>
+		</dict>
+		<dict/>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -57,6 +65,14 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2020-2021 Maurice C Parker. All rights reserved.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Zavala wants to use your photos so that you can insert them into outlines.</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>io.vincode.Zavala.restoration</string>
+		<string>io.vincode.Zavala.selectingDocumentContainer</string>
+		<string>io.vincode.Zavala.selectingDocument</string>
+	</array>
 	<key>OrganizationIdentifier</key>
 	<string>$(ORGANIZATION_IDENTIFIER)</string>
 	<key>SUFeedURL</key>
@@ -188,7 +204,5 @@
 			</dict>
 		</dict>
 	</array>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Zavala wants to use your photos so that you can insert them into outlines.</string>
 </dict>
 </plist>

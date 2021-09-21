@@ -85,7 +85,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
 		if let url = urlContexts.first?.url, let documentID = EntityID(url: url) {
 			mainSplitViewController.openDocument(documentID)
+			return
 		}
+		
+		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == "opml" }).map({ $0.url })
+		mainSplitViewController.importOPMLs(urls: opmlURLs)
 	}
 	
 	func windowScene(_ windowScene: UIWindowScene, userDidAcceptCloudKitShareWith shareMetadata: CKShare.Metadata) {

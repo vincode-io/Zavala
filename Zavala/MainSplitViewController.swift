@@ -176,6 +176,12 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		present(vc, animated: true)
 	}
 
+	func importOPMLs(urls: [URL]) {
+		selectDefaultDocumentContainer {
+			self.timelineViewController?.importOPMLs(urls: urls)
+		}
+	}
+	
 	func showOpenQuickly() {
 		if traitCollection.userInterfaceIdiom == .mac {
 		
@@ -554,7 +560,11 @@ extension MainSplitViewController {
 			completion()
 			return
 		}
-		
+
+		selectDefaultDocumentContainer(completion: completion)
+	}
+	
+	private func selectDefaultDocumentContainer(completion: @escaping () -> Void) {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		
 		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else {

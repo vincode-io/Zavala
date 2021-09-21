@@ -121,6 +121,25 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		deleteDocument(document)
 	}
 	
+	func importOPMLs(urls: [URL]) {
+		guard let account = documentContainer?.account else { return }
+
+		var document: Document?
+		for url in urls {
+			do {
+				let tag = (documentContainer as? TagDocuments)?.tag
+				document = try account.importOPML(url, tag: tag)
+				DocumentIndexer.updateIndex(forDocument: document!)
+			} catch {
+				self.presentError(title: L10n.importFailed, message: error.localizedDescription)
+			}
+		}
+		
+		if let document = document {
+			selectDocument(document, animated: true)
+		}
+	}
+	
 	// MARK: Notifications
 	
 	@objc func accountDocumentsDidChange(_ note: Notification) {
@@ -191,23 +210,9 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 extension TimelineViewController: UIDocumentPickerDelegate {
 	
 	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-		guard let account = documentContainer?.account else { return }
-
-		var document: Document?
-		for url in urls {
-			do {
-				let tag = (documentContainer as? TagDocuments)?.tag
-				document = try account.importOPML(url, tag: tag)
-			} catch {
-				self.presentError(title: L10n.importFailed, message: error.localizedDescription)
-			}
-		}
-		
-		if let document = document {
-			selectDocument(document, animated: true)
-			DocumentIndexer.updateIndex(forDocument: document)
-		}
+		importOPMLs(urls: urls)
 	}
+	
 }
 
 // MARK: Collection View
