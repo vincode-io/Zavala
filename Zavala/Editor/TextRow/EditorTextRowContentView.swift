@@ -311,7 +311,7 @@ extension EditorTextRowContentView {
 	private func configureTopicTextView(configuration: EditorTextRowContentConfiguration) {
 		topicTextView.row = configuration.row
 		topicTextView.indentionLevel = configuration.indentionLevel
-		
+
 		var attrs = [NSAttributedString.Key : Any]()
 		if configuration.isComplete || configuration.isAncestorComplete {
 			attrs[.foregroundColor] = UIColor.tertiaryLabel
@@ -339,6 +339,11 @@ extension EditorTextRowContentView {
 			topicTextView.typingAttributes = attrs
 		}
 
+		if configuration.isComplete || configuration.isAncestorComplete {
+			topicTextView.accessibilityLabel = L10n.complete
+		} else {
+			topicTextView.accessibilityLabel = nil
+		}
 	}
 	
 	private func configureNoteTextView(configuration: EditorTextRowContentConfiguration) {
