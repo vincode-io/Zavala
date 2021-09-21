@@ -17,6 +17,7 @@ extension Selector {
 
 protocol EditorDelegate: AnyObject {
 	func validateToolbar(_ : EditorViewController)
+	func showGetInfo(_: EditorViewController, outline: Outline)
 	func exportMarkdown(_: EditorViewController, outline: Outline)
 	func exportOPML(_: EditorViewController, outline: Outline)
 }
@@ -973,23 +974,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func showOutlineGetInfo() {
-		if traitCollection.userInterfaceIdiom == .mac {
-		
-			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: MacOutlineGetInfoViewController.self)
-			outlineGetInfoViewController.preferredContentSize = CGSize(width: 400, height: 182)
-			outlineGetInfoViewController.outline = outline
-			present(outlineGetInfoViewController, animated: true)
-		
-		} else {
-			
-			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
-			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 250)
-			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
-			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
-			outlineGetInfoViewController.outline = outline
-			present(outlineGetInfoNavViewController, animated: true)
-			
-		}
+		guard let outline = outline else { return }
+		delegate?.showGetInfo(self, outline: outline)
 	}
 	
 	@objc func outdentCurrentRows() {

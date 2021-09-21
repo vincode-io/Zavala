@@ -201,6 +201,31 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		settingsNavController.modalPresentationStyle = .formSheet
 		present(settingsNavController, animated: true)
 	}
+	
+	func showGetInfo() {
+		guard let outline = editorViewController?.outline else { return }
+		showGetInfo(outline: outline)
+	}
+	
+	func showGetInfo(outline: Outline) {
+		if traitCollection.userInterfaceIdiom == .mac {
+		
+			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: MacOutlineGetInfoViewController.self)
+			outlineGetInfoViewController.preferredContentSize = CGSize(width: 400, height: 182)
+			outlineGetInfoViewController.outline = outline
+			present(outlineGetInfoViewController, animated: true)
+		
+		} else {
+			
+			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
+			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 250)
+			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
+			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
+			outlineGetInfoViewController.outline = outline
+			present(outlineGetInfoNavViewController, animated: true)
+			
+		}
+	}
 
 	func validateToolbar() {
 		self.sceneDelegate?.validateToolbar()
@@ -318,7 +343,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 
 	@objc func outlineGetInfo(_ sender: Any?) {
-		outlineGetInfo()
+		showGetInfo()
 	}
 
 	func beginDocumentSearch() {
@@ -397,6 +422,10 @@ extension MainSplitViewController: TimelineDelegate {
 		}
 	}
 
+	func showGetInfo(_: TimelineViewController, outline: Outline) {
+		showGetInfo(outline: outline)
+	}
+	
 	func exportMarkdown(_: TimelineViewController, outline: Outline) {
 		exportMarkdownForOutline(outline)
 	}
@@ -415,6 +444,10 @@ extension MainSplitViewController: EditorDelegate {
 		validateToolbar()
 	}
 
+	func showGetInfo(_: EditorViewController, outline: Outline) {
+		showGetInfo(outline: outline)
+	}
+	
 	func exportMarkdown(_: EditorViewController, outline: Outline) {
 		exportMarkdownForOutline(outline)
 	}

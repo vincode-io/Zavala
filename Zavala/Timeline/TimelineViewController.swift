@@ -13,6 +13,7 @@ import Templeton
 
 protocol TimelineDelegate: AnyObject  {
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool)
+	func showGetInfo(_: TimelineViewController, outline: Outline)
 	func exportMarkdown(_: TimelineViewController, outline: Outline)
 	func exportOPML(_: TimelineViewController, outline: Outline)
 }
@@ -406,6 +407,7 @@ extension TimelineViewController {
 			
 			var menuItems = [UIMenu]()
 
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.showGetInfoAction(document: document)]))
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.duplicateAction(document: document)]))
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.copyLinkAction(document: document)]))
 
@@ -420,10 +422,10 @@ extension TimelineViewController {
 		})
 	}
 
-	private func copyLinkAction(document: Document) -> UIAction {
-		let action = UIAction(title: L10n.copyDocumentLink, image: AppAssets.link) { action in
-			let documentURL = document.id.url
-			UIPasteboard.general.url = documentURL
+	private func showGetInfoAction(document: Document) -> UIAction {
+		let action = UIAction(title: L10n.getInfo, image: AppAssets.getInfo) { [weak self] action in
+			guard let self = self, let outline = document.outline else { return }
+			self.delegate?.showGetInfo(self, outline: outline)
 		}
 		return action
 	}
@@ -436,6 +438,14 @@ extension TimelineViewController {
 			newDocument.forceSave()
 			newDocument.unload()
 			document.unload()
+		}
+		return action
+	}
+	
+	private func copyLinkAction(document: Document) -> UIAction {
+		let action = UIAction(title: L10n.copyDocumentLink, image: AppAssets.link) { action in
+			let documentURL = document.id.url
+			UIPasteboard.general.url = documentURL
 		}
 		return action
 	}

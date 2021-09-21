@@ -789,7 +789,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	@objc func outlineGetInfoCommand(_ sender: Any?) {
-		mainCoordinator?.outlineGetInfo()
+		mainCoordinator?.showGetInfo()
 	}
 	
 	// MARK: Validations

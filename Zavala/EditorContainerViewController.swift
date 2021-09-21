@@ -109,6 +109,31 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		// No need to implement this since it is used on iOS only
 	}
 	
+	func showGetInfo() {
+		guard let outline = editorViewController?.outline else { return }
+		showGetInfo(outline: outline)
+	}
+	
+	func showGetInfo(outline: Outline) {
+		if traitCollection.userInterfaceIdiom == .mac {
+		
+			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: MacOutlineGetInfoViewController.self)
+			outlineGetInfoViewController.preferredContentSize = CGSize(width: 400, height: 182)
+			outlineGetInfoViewController.outline = outline
+			present(outlineGetInfoViewController, animated: true)
+		
+		} else {
+			
+			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
+			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 250)
+			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
+			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
+			outlineGetInfoViewController.outline = outline
+			present(outlineGetInfoNavViewController, animated: true)
+			
+		}
+	}
+	
 	// MARK: Actions
 	
 	override func delete(_ sender: Any?) {
@@ -207,7 +232,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	}
 
 	@objc func outlineGetInfo(_ sender: Any?) {
-		outlineGetInfo()
+		showGetInfo()
 	}
 
 	// MARK: Validation
@@ -232,6 +257,7 @@ extension EditorContainerViewController: EditorDelegate {
 	}
 	
 	// These aren't used when running in the EditorContainerViewController
+	func showGetInfo(_: EditorViewController, outline: Outline) { }
 	func exportMarkdown(_: EditorViewController, outline: Outline) {}
 	func exportMarkdownPost(_: EditorViewController, outline: Outline) {}
 	func exportOPML(_: EditorViewController, outline: Outline) {}

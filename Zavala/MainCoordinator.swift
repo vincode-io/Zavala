@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import Templeton
 
 protocol MainCoordinator {
 	var editorViewController: EditorViewController? { get }
 	var isOutlineActionUnavailable: Bool { get }
+	func showGetInfo()
 	func exportJekyll()
 	func exportMarkdown()
 	func exportOPML()
@@ -290,10 +292,6 @@ extension MainCoordinator {
 	
 	func previousInDocumentSearch() {
 		editorViewController?.previousInDocumentSearch()
-	}
-	
-	func outlineGetInfo() {
-		editorViewController?.showOutlineGetInfo()
 	}
 	
 }
