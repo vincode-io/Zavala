@@ -97,6 +97,9 @@
 "Website" = "Website";
 "Duplicate" = "Duplicate";
 
+/* State restoration */
+"Unknown_Outline" = "The requested outline could not be found.";
+
 /* Activity Manager */
 "See_Documents_In" = "See documents in “%@”";
 "Edit_Document" = "Edit document “%@”";

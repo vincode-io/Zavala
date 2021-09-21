@@ -264,6 +264,8 @@ internal enum L10n {
   internal static let typing = L10n.tr("Localizable", "Typing")
   /// Uncomplete
   internal static let uncomplete = L10n.tr("Localizable", "Uncomplete")
+  /// The requested outline could not be found.
+  internal static let unknownOutline = L10n.tr("Localizable", "Unknown_Outline")
   /// Unmark as Favorite
   internal static let unmarkAsFavorite = L10n.tr("Localizable", "Unmark_As_Favorite")
   /// Updated on %@ at %@
