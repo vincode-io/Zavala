@@ -276,9 +276,9 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		#endif
 	}
 
-	@objc func exportMarkdown() {
+	@objc func exportMarkdownList() {
 		guard let outline = editorViewController?.outline else { return }
-		exportMarkdownForOutline(outline)
+		exportMarkdownListForOutline(outline)
 	}
 	
 	@objc func exportOPML() {
@@ -432,8 +432,8 @@ extension MainSplitViewController: TimelineDelegate {
 		showGetInfo(outline: outline)
 	}
 	
-	func exportMarkdown(_: TimelineViewController, outline: Outline) {
-		exportMarkdownForOutline(outline)
+	func exportMarkdownList(_: TimelineViewController, outline: Outline) {
+		exportMarkdownListForOutline(outline)
 	}
 	
 	func exportOPML(_: TimelineViewController, outline: Outline) {
@@ -454,8 +454,8 @@ extension MainSplitViewController: EditorDelegate {
 		showGetInfo(outline: outline)
 	}
 	
-	func exportMarkdown(_: EditorViewController, outline: Outline) {
-		exportMarkdownForOutline(outline)
+	func exportMarkdownList(_: EditorViewController, outline: Outline) {
+		exportMarkdownListForOutline(outline)
 	}
 	
 	func exportOPML(_: EditorViewController, outline: Outline) {
@@ -579,8 +579,8 @@ extension MainSplitViewController {
 		}
 	}
 	
-	private func exportMarkdownForOutline(_ outline: Outline) {
-		let markdown = outline.markdown()
+	private func exportMarkdownListForOutline(_ outline: Outline) {
+		let markdown = outline.markdownList()
 		export(markdown, fileName: outline.fileName(withSuffix: "md"))
 	}
 	
@@ -937,7 +937,7 @@ extension MainSplitViewController: UIActivityItemsConfigurationReading {
 		let itemProvider = NSItemProvider()
 		
 		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
-			let data = outline.markdown().data(using: .utf8)
+			let data = outline.markdownList().data(using: .utf8)
 			completion(data, nil)
 			return nil
 		}

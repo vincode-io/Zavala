@@ -12,7 +12,7 @@
 "Outline" = "Outline";
 "Import_OPML" = "Import OPML";
 "Export_Jekyll" = "Export Jekyll Post";
-"Export_Markdown" = "Export Markdown";
+"Export_Markdown_List" = "Export Markdown List";
 "Export_OPML" = "Export OPML";
 "New_Main_Window" = "New Main Window";
 "New_Outline" = "New Outline";

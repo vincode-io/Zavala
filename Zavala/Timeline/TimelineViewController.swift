@@ -14,7 +14,7 @@ import Templeton
 protocol TimelineDelegate: AnyObject  {
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool)
 	func showGetInfo(_: TimelineViewController, outline: Outline)
-	func exportMarkdown(_: TimelineViewController, outline: Outline)
+	func exportMarkdownList(_: TimelineViewController, outline: Outline)
 	func exportOPML(_: TimelineViewController, outline: Outline)
 }
 
@@ -417,7 +417,7 @@ extension TimelineViewController {
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.copyLinkAction(document: document)]))
 
 			if let outline = document.outline {
-				menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.exportMarkdownOutlineAction(outline: outline),
+				menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.exportMarkdownListOutlineAction(outline: outline),
 																					   self.exportOPMLAction(outline: outline)]))
 			}
 			
@@ -455,10 +455,10 @@ extension TimelineViewController {
 		return action
 	}
 	
-	private func exportMarkdownOutlineAction(outline: Outline) -> UIAction {
-		let action = UIAction(title: L10n.exportMarkdown, image: AppAssets.exportMarkdownOutline) { [weak self] action in
+	private func exportMarkdownListOutlineAction(outline: Outline) -> UIAction {
+		let action = UIAction(title: L10n.exportMarkdownList, image: AppAssets.exportMarkdownList) { [weak self] action in
 			guard let self = self else { return }
-			self.delegate?.exportMarkdown(self, outline: outline)
+			self.delegate?.exportMarkdownList(self, outline: outline)
 		}
 		return action
 	}

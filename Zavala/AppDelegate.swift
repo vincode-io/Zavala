@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		menuKeyCommands.append(importOPMLCommand)
 		
 		if !(mainCoordinator?.isOutlineActionUnavailable ?? true) {
-			menuKeyCommands.append(exportMarkdownCommand)
+			menuKeyCommands.append(exportMarkdownListCommand)
 			menuKeyCommands.append(exportOPMLCommand)
 		}
 		
@@ -184,8 +184,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let exportJekyllCommand = UICommand(title: L10n.exportJekyll, action: #selector(exportJekyllCommand(_:)))
 	
-	let exportMarkdownCommand = UIKeyCommand(title: L10n.exportMarkdown,
-											 action: #selector(exportMarkdownCommand(_:)),
+	let exportMarkdownListCommand = UIKeyCommand(title: L10n.exportMarkdownList,
+											 action: #selector(exportMarkdownListCommand(_:)),
 											 input: "e",
 											 modifierFlags: [.control, .command])
 	
@@ -579,8 +579,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.exportJekyll()
 	}
 
-	@objc func exportMarkdownCommand(_ sender: Any?) {
-		mainCoordinator?.exportMarkdown()
+	@objc func exportMarkdownListCommand(_ sender: Any?) {
+		mainCoordinator?.exportMarkdownList()
 	}
 
 	@objc func exportOPMLCommand(_ sender: Any?) {
@@ -813,7 +813,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				command.attributes = .disabled
 			}
 		case #selector(exportJekyllCommand(_:)),
-			 #selector(exportMarkdownCommand(_:)),
+			 #selector(exportMarkdownListCommand(_:)),
 			 #selector(exportOPMLCommand(_:)):
 			if mainCoordinator?.isOutlineActionUnavailable ?? true {
 				command.attributes = .disabled
@@ -984,7 +984,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atStartOfMenu: .file)
 
-		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMarkdownCommand, exportOPMLCommand])
+		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMarkdownListCommand, exportOPMLCommand])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 
 		let newMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newWindowCommand, showOpenQuicklyCommand])

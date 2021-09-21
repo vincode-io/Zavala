@@ -17,11 +17,11 @@ class OutlineActivityItemSource: NSObject, UIActivityItemSource {
 	}
 	
 	func activityViewControllerPlaceholderItem(_ : UIActivityViewController) -> Any {
-		return outline.markdown()
+		return outline.markdownList()
 	}
 	
 	func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-		return outline.markdown()
+		return outline.markdownList()
 	}
 	
 	func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {

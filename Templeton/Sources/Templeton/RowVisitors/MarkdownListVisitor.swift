@@ -1,5 +1,5 @@
 //
-//  MarkdownVisitor.swift
+//  MarkdownListVisitor.swift
 //  
 //
 //  Created by Maurice Parker on 4/14/21.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MarkdownVisitor {
+class MarkdownListVisitor {
 	
 	var indentLevel = 0
 	var markdown = String()

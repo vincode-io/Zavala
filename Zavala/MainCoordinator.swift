@@ -13,7 +13,7 @@ protocol MainCoordinator {
 	var isOutlineActionUnavailable: Bool { get }
 	func showGetInfo()
 	func exportJekyll()
-	func exportMarkdown()
+	func exportMarkdownList()
 	func exportOPML()
 	func openURL(_: String)
 	func showSettings()

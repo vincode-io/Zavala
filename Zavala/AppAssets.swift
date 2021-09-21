@@ -81,12 +81,12 @@ struct AppAssets {
 		return UIImage(systemName: "arrow.up.left.and.arrow.down.right")!
 	}()
 
-	static var exportMarkdownOutline: UIImage = {
-		return UIImage(named: "OPML")!
+	static var exportMarkdownDoc: UIImage = {
+		return UIImage(systemName: "doc.richtext")!
 	}()
 
-	static var exportMarkdownPost: UIImage = {
-		return UIImage(systemName: "doc.richtext")!
+	static var exportMarkdownList: UIImage = {
+		return UIImage(named: "OPML")!
 	}()
 
 	static var exportOPML: UIImage = {

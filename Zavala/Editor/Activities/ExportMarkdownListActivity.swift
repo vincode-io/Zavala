@@ -1,5 +1,5 @@
 //
-//  ExportMarkdownActivity.swift
+//  ExportMarkdownListActivity.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 3/30/21.
@@ -7,24 +7,24 @@
 
 import UIKit
 
-protocol ExportMarkdownActivityDelegate: AnyObject {
-	func exportMarkdown(_ : ExportMarkdownActivity)
+protocol ExportMarkdownListActivityDelegate: AnyObject {
+	func exportMarkdownList(_ : ExportMarkdownListActivity)
 }
 
-class ExportMarkdownActivity: UIActivity {
+class ExportMarkdownListActivity: UIActivity {
 	
-	weak var delegate: ExportMarkdownActivityDelegate?
+	weak var delegate: ExportMarkdownListActivityDelegate?
 	
 	override var activityTitle: String? {
-		L10n.exportMarkdown
+		L10n.exportMarkdownList
 	}
 	
 	override var activityType: UIActivity.ActivityType? {
-		UIActivity.ActivityType(rawValue: "io.vincode.Zavala.exportMarkdown")
+		UIActivity.ActivityType(rawValue: "io.vincode.Zavala.exportMarkdownList")
 	}
 	
 	override var activityImage: UIImage? {
-		AppAssets.exportMarkdownOutline.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .regular))
+		AppAssets.exportMarkdownList.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .regular))
 	}
 	
 	override class var activityCategory: UIActivity.Category {
@@ -40,7 +40,7 @@ class ExportMarkdownActivity: UIActivity {
 	}
 	
 	override func perform() {
-		delegate?.exportMarkdown(self)
+		delegate?.exportMarkdownList(self)
 		activityDidFinish(true)
 	}
 	

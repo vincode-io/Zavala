@@ -88,9 +88,9 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		#endif
 	}
 
-	func exportMarkdown() {
+	func exportMarkdownList() {
 		guard let outline = editorViewController?.outline else { return }
-		exportMarkdownForOutline(outline)
+		exportMarkdownListForOutline(outline)
 	}
 	
 	func exportOPML() {
@@ -251,15 +251,14 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 // MARK: Helpers
 
 extension EditorContainerViewController: EditorDelegate {
-	
+
 	func validateToolbar(_: EditorViewController) {
 		sceneDelegate?.validateToolbar()
 	}
 	
 	// These aren't used when running in the EditorContainerViewController
 	func showGetInfo(_: EditorViewController, outline: Outline) { }
-	func exportMarkdown(_: EditorViewController, outline: Outline) {}
-	func exportMarkdownPost(_: EditorViewController, outline: Outline) {}
+	func exportMarkdownList(_: EditorViewController, outline: Outline) {}
 	func exportOPML(_: EditorViewController, outline: Outline) {}
 
 }
@@ -268,8 +267,8 @@ extension EditorContainerViewController: EditorDelegate {
 
 extension EditorContainerViewController {
 	
-	private func exportMarkdownForOutline(_ outline: Outline) {
-		let markdown = outline.markdown()
+	private func exportMarkdownListForOutline(_ outline: Outline) {
+		let markdown = outline.markdownList()
 		export(markdown, fileName: outline.fileName(withSuffix: "md"))
 	}
 	
@@ -608,7 +607,7 @@ extension EditorContainerViewController: UIActivityItemsConfigurationReading {
 		let itemProvider = NSItemProvider()
 		
 		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
-			let data = outline.markdown().data(using: .utf8)
+			let data = outline.markdownList().data(using: .utf8)
 			completion(data, nil)
 			return nil
 		}

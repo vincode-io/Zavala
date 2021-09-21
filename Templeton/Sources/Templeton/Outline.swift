@@ -561,12 +561,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return string
 	}
 	
-	public func markdown() -> String {
+	public func markdownList() -> String {
 		loadRows()
 		
 		var md = "# \(title ?? "")\n\n"
 		rows.forEach {
-			let visitor = MarkdownVisitor()
+			let visitor = MarkdownListVisitor()
 			$0.visit(visitor: visitor.visitor)
 			md.append(visitor.markdown)
 			md.append("\n")
