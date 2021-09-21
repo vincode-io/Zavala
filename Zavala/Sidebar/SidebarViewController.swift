@@ -285,9 +285,9 @@ extension SidebarViewController {
 		}
 
 		if let snapshot = self.cloudKitAccountSnapshot() {
-			applySnapshot(snapshot, section: .cloudKitAccount, animated: false)
+			applySnapshot(snapshot, section: .cloudKitAccount, animated: true)
 		} else {
-			applySnapshot(NSDiffableDataSourceSectionSnapshot<SidebarItem>(), section: .cloudKitAccount, animated: false)
+			applySnapshot(NSDiffableDataSourceSectionSnapshot<SidebarItem>(), section: .cloudKitAccount, animated: true)
 		}
 	}
 	
