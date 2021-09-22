@@ -418,9 +418,11 @@ extension TimelineViewController {
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.copyLinkAction(document: document)]))
 
 			if let outline = document.outline {
-				menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.exportMarkdownDocOutlineAction(outline: outline),
-																					   self.exportMarkdownListOutlineAction(outline: outline),
-																					   self.exportOPMLAction(outline: outline)]))
+				var exportActions = [UIAction]()
+				exportActions.append(self.exportMarkdownDocOutlineAction(outline: outline))
+				exportActions.append(self.exportMarkdownListOutlineAction(outline: outline))
+				exportActions.append(self.exportOPMLAction(outline: outline))
+				menuItems.append(UIMenu(title: L10n.export, children: exportActions))
 			}
 			
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.deleteOutlineAction(document: document)]))
