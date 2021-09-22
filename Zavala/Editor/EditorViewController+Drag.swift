@@ -29,7 +29,7 @@ extension EditorViewController: UICollectionViewDragDelegate {
 				itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
 					var markdowns = [String]()
 					for row in rows {
-						markdowns.append(row.markdown())
+						markdowns.append(row.markdownList())
 					}
 					let data = markdowns.joined(separator: "\n").data(using: .utf8)
 					completion(data, nil)

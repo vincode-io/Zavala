@@ -270,7 +270,7 @@ public enum Row: RowContainer, Codable, Identifiable, Equatable, Hashable {
 		return false
 	}
 	
-	public func markdown() -> String {
+	public func markdownList() -> String {
 		let visitor = MarkdownListVisitor()
 		visit(visitor: visitor.visitor)
 		return visitor.markdown
