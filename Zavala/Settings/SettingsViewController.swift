@@ -23,10 +23,14 @@ class SettingsViewController: UITableViewController {
 		return (presentingViewController as? MainSplitViewController)
 	}
 	
+	private var currentPalette = AppDefaults.shared.userInterfaceColorPalette
+	
 	override func viewDidLoad() {
 		// This hack mostly works around a bug in static tables with dynamic type.  See: https://spin.atomicobject.com/2018/10/15/dynamic-type-static-uitableview/
 		NotificationCenter.default.removeObserver(tableView!, name: UIContentSizeCategory.didChangeNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
+
+		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
 
 		tableView.rowHeight = UITableView.automaticDimension
 		tableView.estimatedRowHeight = 44
@@ -81,13 +85,18 @@ class SettingsViewController: UITableViewController {
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = super.tableView(tableView, cellForRowAt: indexPath)
-		
-		if indexPath.section == 0 && indexPath.row == 0 {
+	
+		switch (indexPath.section, indexPath.row) {
+		case (0, 0):
 			if traitCollection.userInterfaceIdiom == .phone {
 				cell.textLabel?.text = L10n.enableOnMyIPhone
 			} else {
 				cell.textLabel?.text = L10n.enableOnMyIPad
 			}
+		case (2, 0):
+			cell.detailTextLabel?.text = AppDefaults.shared.userInterfaceColorPalette.description
+		default:
+			break
 		}
 		
 		return cell
@@ -130,6 +139,13 @@ class SettingsViewController: UITableViewController {
 	
 	@objc func contentSizeCategoryDidChange() {
 		tableView.reloadData()
+	}
+
+	@objc func userDefaultsDidChange() {
+		if currentPalette != AppDefaults.shared.userInterfaceColorPalette {
+			currentPalette = AppDefaults.shared.userInterfaceColorPalette
+			tableView.reloadData()
+		}
 	}
 
 	// MARK: Actions

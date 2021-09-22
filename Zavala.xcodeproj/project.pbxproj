@@ -135,6 +135,7 @@
 		51DEE80C26FB4488006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
 		51DEE80D26FB4488006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
 		51DEE80E26FB4550006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
+		51DEE81026FB8D89006DAA56 /* ColorPaletteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80F26FB8D89006DAA56 /* ColorPaletteTableViewController.swift */; };
 		51DFDC18259EA8D300C068C6 /* Selector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DFDC17259EA8D300C068C6 /* Selector+.swift */; };
 		51E060CE25A45AA800194066 /* AppKitPlugin.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 51E060AF25A4547400194066 /* AppKitPlugin.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E060ED25A4B5E600194066 /* AppKitWrapper.swift */; };
@@ -340,6 +341,7 @@
 		51D28D31257731DC0039DDFC /* EditorViewController+Drop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Drop.swift"; sourceTree = "<group>"; };
 		51D977F9257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowPreviewParameters.swift; sourceTree = "<group>"; };
 		51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInterfaceColorPalette.swift; sourceTree = "<group>"; };
+		51DEE80F26FB8D89006DAA56 /* ColorPaletteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteTableViewController.swift; sourceTree = "<group>"; };
 		51DFDC17259EA8D300C068C6 /* Selector+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Selector+.swift"; sourceTree = "<group>"; };
 		51E060AF25A4547400194066 /* AppKitPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppKitPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		51E060B125A4547400194066 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -539,10 +541,11 @@
 		517AF69E25E08A350044DBAB /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				51DEE80F26FB8D89006DAA56 /* ColorPaletteTableViewController.swift */,
 				517AF69F25E08A6B0044DBAB /* Settings.storyboard */,
-				517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */,
-				5113B091260E45B400DBD11B /* SettingsFontViewController.swift */,
 				5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */,
+				5113B091260E45B400DBD11B /* SettingsFontViewController.swift */,
+				517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1039,6 +1042,7 @@
 				517342F225EC2C690012EB20 /* UIActivityViewController+.swift in Sources */,
 				51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */,
 				5113B092260E45B400DBD11B /* SettingsFontViewController.swift in Sources */,
+				51DEE81026FB8D89006DAA56 /* ColorPaletteTableViewController.swift in Sources */,
 				5113B095260E638400DBD11B /* SettingsFontConfigViewController.swift in Sources */,
 				512229682563507E008041AF /* EditorTextRowViewCell.swift in Sources */,
 				511B29F726018FBB00C04239 /* EditorBacklinkContentConfiguration.swift in Sources */,
