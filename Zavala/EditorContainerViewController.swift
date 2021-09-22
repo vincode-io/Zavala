@@ -88,6 +88,11 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		#endif
 	}
 
+	func exportMarkdownDoc() {
+		guard let outline = editorViewController?.outline else { return }
+		exportMarkdownDocForOutline(outline)
+	}
+	
 	func exportMarkdownList() {
 		guard let outline = editorViewController?.outline else { return }
 		exportMarkdownListForOutline(outline)
@@ -258,6 +263,7 @@ extension EditorContainerViewController: EditorDelegate {
 	
 	// These aren't used when running in the EditorContainerViewController
 	func showGetInfo(_: EditorViewController, outline: Outline) { }
+	func exportMarkdownDoc(_: EditorViewController, outline: Outline) {}
 	func exportMarkdownList(_: EditorViewController, outline: Outline) {}
 	func exportOPML(_: EditorViewController, outline: Outline) {}
 
@@ -266,6 +272,11 @@ extension EditorContainerViewController: EditorDelegate {
 // MARK: Helpers
 
 extension EditorContainerViewController {
+	
+	private func exportMarkdownDocForOutline(_ outline: Outline) {
+		let markdown = outline.markdownDoc()
+		export(markdown, fileName: outline.fileName(withSuffix: "md"))
+	}
 	
 	private func exportMarkdownListForOutline(_ outline: Outline) {
 		let markdown = outline.markdownList()

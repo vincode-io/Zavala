@@ -82,7 +82,7 @@ struct AppAssets {
 	}()
 
 	static var exportMarkdownDoc: UIImage = {
-		return UIImage(systemName: "doc.richtext")!
+		return UIImage(systemName: "doc.plaintext")!
 	}()
 
 	static var exportMarkdownList: UIImage = {

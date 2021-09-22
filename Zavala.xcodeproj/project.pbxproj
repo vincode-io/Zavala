@@ -146,6 +146,7 @@
 		51F2859725AD11DB0019C573 /* SidebarSearchContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859625AD11DB0019C573 /* SidebarSearchContentConfiguration.swift */; };
 		51F2859B25AD12800019C573 /* SidebarSearchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859A25AD12800019C573 /* SidebarSearchContentView.swift */; };
 		51F2DC7B2586E101003BD5CE /* EditorTextRowNoteTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2DC7A2586E101003BD5CE /* EditorTextRowNoteTextView.swift */; };
+		51F36C5826FAB5C90075A273 /* ExportMarkdownDocActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F36C5726FAB5C90075A273 /* ExportMarkdownDocActivity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -355,6 +356,7 @@
 		51F2859625AD11DB0019C573 /* SidebarSearchContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSearchContentConfiguration.swift; sourceTree = "<group>"; };
 		51F2859A25AD12800019C573 /* SidebarSearchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSearchContentView.swift; sourceTree = "<group>"; };
 		51F2DC7A2586E101003BD5CE /* EditorTextRowNoteTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowNoteTextView.swift; sourceTree = "<group>"; };
+		51F36C5726FAB5C90075A273 /* ExportMarkdownDocActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportMarkdownDocActivity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -596,6 +598,7 @@
 		51B9D99526140AD100A66859 /* Activities */ = {
 			isa = PBXGroup;
 			children = (
+				51F36C5726FAB5C90075A273 /* ExportMarkdownDocActivity.swift */,
 				51B9D99C26140EDC00A66859 /* ExportMarkdownListActivity.swift */,
 				51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */,
 			);
@@ -969,6 +972,7 @@
 				51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */,
 				514F222A25C4FF02004E02CD /* EditorTagInputTextField.swift in Sources */,
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
+				51F36C5826FAB5C90075A273 /* ExportMarkdownDocActivity.swift in Sources */,
 				5147D0B525CB95B4004673C3 /* TimelineViewController+Drag.swift in Sources */,
 				51D977FA257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift in Sources */,
 				517AF69C25E0862E0044DBAB /* AppDefaults.swift in Sources */,

@@ -18,6 +18,7 @@ extension Selector {
 protocol EditorDelegate: AnyObject {
 	func validateToolbar(_ : EditorViewController)
 	func showGetInfo(_: EditorViewController, outline: Outline)
+	func exportMarkdownDoc(_: EditorViewController, outline: Outline)
 	func exportMarkdownList(_: EditorViewController, outline: Outline)
 	func exportOPML(_: EditorViewController, outline: Outline)
 }
@@ -944,6 +945,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		var activities = [UIActivity]()
 		
+		let exportMarkdownDocActivity = ExportMarkdownDocActivity()
+		exportMarkdownDocActivity.delegate = self
+		activities.append(exportMarkdownDocActivity)
+		
 		let exportMarkdownListActivity = ExportMarkdownListActivity()
 		exportMarkdownListActivity.delegate = self
 		activities.append(exportMarkdownListActivity)
@@ -1452,6 +1457,17 @@ extension EditorViewController: LinkViewControllerDelegate {
 		} else {
 			textRowCell.topicTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
 		}
+	}
+	
+}
+
+// MARK: ExportMarkdownDocActivityDelegate
+
+extension EditorViewController: ExportMarkdownDocActivityDelegate {
+
+	func exportMarkdownDoc(_: ExportMarkdownDocActivity) {
+		guard let outline = outline else { return }
+		delegate?.exportMarkdownDoc(self, outline: outline)
 	}
 	
 }

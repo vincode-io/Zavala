@@ -184,6 +184,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let exportJekyllCommand = UICommand(title: L10n.exportJekyll, action: #selector(exportJekyllCommand(_:)))
 	
+	let exportMarkdownDocCommand = UICommand(title: L10n.exportMarkdownDoc, action: #selector(exportMarkdownDocCommand(_:)))
+	
 	let exportMarkdownListCommand = UIKeyCommand(title: L10n.exportMarkdownList,
 											 action: #selector(exportMarkdownListCommand(_:)),
 											 input: "e",
@@ -579,6 +581,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.exportJekyll()
 	}
 
+	@objc func exportMarkdownDocCommand(_ sender: Any?) {
+		mainCoordinator?.exportMarkdownDoc()
+	}
+
 	@objc func exportMarkdownListCommand(_ sender: Any?) {
 		mainCoordinator?.exportMarkdownList()
 	}
@@ -813,6 +819,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				command.attributes = .disabled
 			}
 		case #selector(exportJekyllCommand(_:)),
+			 #selector(exportMarkdownDocCommand(_:)),
 			 #selector(exportMarkdownListCommand(_:)),
 			 #selector(exportOPMLCommand(_:)):
 			if mainCoordinator?.isOutlineActionUnavailable ?? true {
@@ -984,7 +991,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atStartOfMenu: .file)
 
-		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMarkdownListCommand, exportOPMLCommand])
+		let exportMenu = UIMenu(title: L10n.export, children: [exportMarkdownDocCommand, exportMarkdownListCommand, exportOPMLCommand])
+		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMenu])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 
 		let newMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newWindowCommand, showOpenQuicklyCommand])

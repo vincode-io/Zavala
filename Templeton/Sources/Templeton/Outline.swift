@@ -561,6 +561,20 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return string
 	}
 	
+	public func markdownDoc() -> String {
+		loadRows()
+		
+		var md = "# \(title ?? "")"
+		rows.forEach {
+			let visitor = MarkdownDocVisitor()
+			$0.visit(visitor: visitor.visitor)
+			md.append(visitor.markdown)
+		}
+		
+		unloadRows()
+		return md
+	}
+	
 	public func markdownList() -> String {
 		loadRows()
 		
@@ -631,7 +645,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		md.append("---\n\n")
 
 		rows.forEach {
-			let visitor = JekyllPostVisitor()
+			let visitor = MarkdownDocVisitor()
 			$0.visit(visitor: visitor.visitor)
 			md.append(visitor.markdown)
 		}

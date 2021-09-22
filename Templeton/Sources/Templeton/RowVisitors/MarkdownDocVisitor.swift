@@ -1,5 +1,5 @@
 //
-//  JekyllPostVisitor.swift
+//  MarkdownDocVisitor.swift
 //  
 //
 //  Created by Maurice Parker on 4/14/21.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class JekyllPostVisitor {
+class MarkdownDocVisitor {
 	
 	var indentLevel = 0
 	var markdown = String()
@@ -15,16 +15,18 @@ class JekyllPostVisitor {
 	func visitor(_ visited: Row) {
 		guard let textRow = visited.textRow else { return }
 
-		markdown.append(String(repeating: "#", count: indentLevel + 2))
-		markdown.append(" \(textRow.topicMarkdown ?? "")")
+		if let topicMarkdown = textRow.topicMarkdown, !topicMarkdown.isEmpty {
+			markdown.append("\n\n")
+			markdown.append(String(repeating: "#", count: indentLevel + 2))
+			markdown.append(" \(topicMarkdown)")
+		}
 		
-		if let notePlainText = textRow.noteMarkdown {
-			markdown.append("\n\n\(notePlainText)")
+		if let noteMarkdown = textRow.noteMarkdown {
+			markdown.append("\n\n\(noteMarkdown)")
 		}
 		
 		indentLevel = indentLevel + 1
 		textRow.rows.forEach {
-			markdown.append("\n\n")
 			$0.visit(visitor: self.visitor)
 		}
 		indentLevel = indentLevel - 1

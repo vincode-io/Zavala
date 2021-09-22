@@ -276,6 +276,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		#endif
 	}
 
+	@objc func exportMarkdownDoc() {
+		guard let outline = editorViewController?.outline else { return }
+		exportMarkdownDocForOutline(outline)
+	}
+	
 	@objc func exportMarkdownList() {
 		guard let outline = editorViewController?.outline else { return }
 		exportMarkdownListForOutline(outline)
@@ -432,6 +437,10 @@ extension MainSplitViewController: TimelineDelegate {
 		showGetInfo(outline: outline)
 	}
 	
+	func exportMarkdownDoc(_: TimelineViewController, outline: Outline) {
+		exportMarkdownDocForOutline(outline)
+	}
+	
 	func exportMarkdownList(_: TimelineViewController, outline: Outline) {
 		exportMarkdownListForOutline(outline)
 	}
@@ -452,6 +461,10 @@ extension MainSplitViewController: EditorDelegate {
 
 	func showGetInfo(_: EditorViewController, outline: Outline) {
 		showGetInfo(outline: outline)
+	}
+	
+	func exportMarkdownDoc(_: EditorViewController, outline: Outline) {
+		exportMarkdownDocForOutline(outline)
 	}
 	
 	func exportMarkdownList(_: EditorViewController, outline: Outline) {
@@ -577,6 +590,11 @@ extension MainSplitViewController {
 		sidebarViewController?.selectDocumentContainer(documentContainer, animated: true) {
 			completion()
 		}
+	}
+	
+	private func exportMarkdownDocForOutline(_ outline: Outline) {
+		let markdown = outline.markdownDoc()
+		export(markdown, fileName: outline.fileName(withSuffix: "md"))
 	}
 	
 	private func exportMarkdownListForOutline(_ outline: Outline) {
