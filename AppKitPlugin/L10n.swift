@@ -14,14 +14,20 @@ internal enum L10n {
   internal static let addNoteLevel = L10n.tr("Localizable", "Add_Note_Level")
   /// Add Topic Level
   internal static let addTopicLevel = L10n.tr("Localizable", "Add_Topic_Level")
+  /// Automatic
+  internal static let automatic = L10n.tr("Localizable", "Automatic")
   /// Backlinks
   internal static let backlinks = L10n.tr("Localizable", "Backlinks")
   /// Cancel
   internal static let cancel = L10n.tr("Localizable", "Cancel")
-  /// Fonts
-  internal static let fonts = L10n.tr("Localizable", "Fonts")
+  /// Dark
+  internal static let dark = L10n.tr("Localizable", "Dark")
+  /// Fonts & Colors
+  internal static let fontsAndColors = L10n.tr("Localizable", "Fonts_And_Colors")
   /// General
   internal static let general = L10n.tr("Localizable", "General")
+  /// Light
+  internal static let light = L10n.tr("Localizable", "Light")
   /// Note Level %d
   internal static func noteLevel(_ p1: Int) -> String {
     return L10n.tr("Localizable", "Note_Level", p1)

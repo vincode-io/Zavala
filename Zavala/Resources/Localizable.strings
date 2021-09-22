@@ -143,6 +143,10 @@
 "Add_Topic_Level" = "Add Topic Level";
 "Add_Note_Level" = "Add Note Level";
 
+"Automatic" = "Automatic";
+"Light" = "Light";
+"Dark" = "Dark";
+
 /* Outline Get Info */
 "Created_On" = "Created on %@ at %@";
 "Updated_On" = "Updated on %@ at %@";

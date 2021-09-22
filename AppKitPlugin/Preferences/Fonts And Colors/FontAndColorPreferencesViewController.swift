@@ -1,5 +1,5 @@
 //
-//  FontPreferencesViewController.swift
+//  FontAndColorPreferencesViewController.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 3/22/21.
@@ -7,8 +7,9 @@
 
 import Cocoa
 
-class FontPreferencesViewController: NSViewController {
+class FontAndColorPreferencesViewController: NSViewController {
 
+	@IBOutlet weak var colorPalettePopUpButton: NSPopUpButton!
 	@IBOutlet weak var tableView: NSTableView!
 	@IBOutlet weak var addButton: NSButton!
 	@IBOutlet weak var deleteButton: NSButton!
@@ -27,6 +28,7 @@ class FontPreferencesViewController: NSViewController {
 	override func viewDidLoad() {
         super.viewDidLoad()
 
+		colorPalettePopUpButton.selectItem(withTag: AppDefaults.shared.userInterfaceColorPalette.rawValue)
 		fontDefaults = AppDefaults.shared.outlineFonts
 		sortedFields = fontDefaults?.sortedFields
 		
@@ -37,6 +39,12 @@ class FontPreferencesViewController: NSViewController {
 		addButton.sendAction(on: .leftMouseDown)
 	}
     
+	@IBAction func changeColorPalette(_ sender: Any) {
+		if let tag = colorPalettePopUpButton.selectedItem?.tag, let palette = UserInterfaceColorPalette(rawValue: tag) {
+			AppDefaults.shared.userInterfaceColorPalette = palette
+		}
+	}
+	
 	@IBAction func delete(_ sender: Any) {
 		if let field = selectedField {
 			fontDefaults?.rowFontConfigs.removeValue(forKey: field)
@@ -104,7 +112,7 @@ class FontPreferencesViewController: NSViewController {
 
 // MARK: - NSTableViewDataSource
 
-extension FontPreferencesViewController: NSTableViewDataSource {
+extension FontAndColorPreferencesViewController: NSTableViewDataSource {
 
 	func numberOfRows(in tableView: NSTableView) -> Int {
 		return sortedFields?.count ?? 0
@@ -114,7 +122,7 @@ extension FontPreferencesViewController: NSTableViewDataSource {
 
 // MARK: - NSTableViewDelegate
 
-extension FontPreferencesViewController: NSTableViewDelegate {
+extension FontAndColorPreferencesViewController: NSTableViewDelegate {
 
 	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "Cell"), owner: nil) as? NSTableCellView {
@@ -153,7 +161,7 @@ extension FontPreferencesViewController: NSTableViewDelegate {
 
 // MARK: FontPreferencesConfigViewControllerDelegate
 
-extension FontPreferencesViewController: FontPreferencesConfigWindowControllerDelegate {
+extension FontAndColorPreferencesViewController: FontAndColorPreferencesConfigWindowControllerDelegate {
 	
 	func didUpdateConfig(field: OutlineFontField, config: OutlineFontConfig) {
 		fontDefaults?.rowFontConfigs[field] = config
@@ -167,14 +175,14 @@ extension FontPreferencesViewController: FontPreferencesConfigWindowControllerDe
 
 // MARK: Helpers
 
-extension FontPreferencesViewController {
+extension FontAndColorPreferencesViewController {
 
 	private func updateUI() {
 		restoreDefaultsButton.isEnabled = fontDefaults != OutlineFontDefaults.defaults
 	}
 	
 	private func showFontConfig(field: OutlineFontField?, config: OutlineFontConfig?) {
-		let fontConfigWindowController = FontPreferencesConfigWindowController()
+		let fontConfigWindowController = FontAndColorPreferencesConfigWindowController()
 		fontConfigWindowController.field = field
 		fontConfigWindowController.config = config
 		fontConfigWindowController.delegate = self

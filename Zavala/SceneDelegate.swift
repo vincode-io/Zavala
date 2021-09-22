@@ -21,7 +21,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		guard let mainSplitViewController = window?.rootViewController as? MainSplitViewController else {
 			return
 		}
-
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
+		
 		AppDefaults.shared.lastMainWindowWasClosed = false
 		
 		self.mainSplitViewController = mainSplitViewController
@@ -105,4 +107,29 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		#endif
 	}
 	
+}
+
+private extension SceneDelegate {
+	
+	@objc func userDefaultsDidChange() {
+		updateUserInterfaceStyle()
+	}
+	
+	func updateUserInterfaceStyle() {
+		DispatchQueue.main.async {
+			switch AppDefaults.shared.userInterfaceColorPalette {
+			case .automatic:
+				self.window?.overrideUserInterfaceStyle = .unspecified
+			case .light:
+				self.window?.overrideUserInterfaceStyle = .light
+			case .dark:
+				self.window?.overrideUserInterfaceStyle = .dark
+			}
+			
+			#if targetEnvironment(macCatalyst)
+			appDelegate.appKitPlugin?.updateAppearance(self.window?.nsWindow)
+			#endif
+		}
+	}
+
 }

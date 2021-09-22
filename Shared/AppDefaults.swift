@@ -29,6 +29,7 @@ final class AppDefaults {
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
 		static let lastMainWindowState = "lastMainWindowState"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
+		static let userInterfaceColorPalette = "userInterfaceColorPalette";
 		static let outlineFonts = "outlineFonts"
 		static let jekyllRootBookmark = "jekyllRootBookmark"
 		static let jekyllPostsBookmark = "jekyllPostsBookmark"
@@ -132,6 +133,18 @@ final class AppDefaults {
 		}
 	}
 
+	var userInterfaceColorPalette: UserInterfaceColorPalette {
+		get {
+			if let result = UserInterfaceColorPalette(rawValue: Self.int(for: Key.userInterfaceColorPalette)) {
+				return result
+			}
+			return .automatic
+		}
+		set {
+			Self.setInt(for: Key.userInterfaceColorPalette, newValue.rawValue)
+		}
+	}
+	
 	var outlineFonts: OutlineFontDefaults? {
 		get {
 			if let userInfo = AppDefaults.store.object(forKey: Key.outlineFonts) as? [String: [AnyHashable: AnyHashable]] {
@@ -173,6 +186,7 @@ final class AppDefaults {
 
 	static func registerDefaults() {
 		var defaults: [String : Any] = [Key.enableLocalAccount: true]
+		defaults[Key.userInterfaceColorPalette] = UserInterfaceColorPalette.automatic.rawValue
 		defaults[Key.outlineFonts] = OutlineFontDefaults.defaults.userInfo
 		AppDefaults.store.register(defaults: defaults)
 	}

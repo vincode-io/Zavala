@@ -34,6 +34,8 @@ internal enum L10n {
   internal static func archiveAccount(_ p1: Any) -> String {
     return L10n.tr("Localizable", "Archive_Account", String(describing: p1))
   }
+  /// Automatic
+  internal static let automatic = L10n.tr("Localizable", "Automatic")
   /// Backlinks
   internal static let backlinks = L10n.tr("Localizable", "Backlinks")
   /// Bold
@@ -70,6 +72,8 @@ internal enum L10n {
   }
   /// Cut
   internal static let cut = L10n.tr("Localizable", "Cut")
+  /// Dark
+  internal static let dark = L10n.tr("Localizable", "Dark")
   /// Delete
   internal static let delete = L10n.tr("Localizable", "Delete")
   /// Delete Completed Rows
@@ -160,6 +164,8 @@ internal enum L10n {
   internal static let insertImage = L10n.tr("Localizable", "Insert_Image")
   /// Italic
   internal static let italic = L10n.tr("Localizable", "Italic")
+  /// Light
+  internal static let light = L10n.tr("Localizable", "Light")
   /// Link
   internal static let link = L10n.tr("Localizable", "Link")
   /// Mark as Favorite

@@ -1,5 +1,5 @@
 //
-//  FontPreferencesConfigWindowController.swift
+//  FontAndColorPreferencesConfigWindowController.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 3/24/21.
@@ -7,15 +7,15 @@
 
 import Cocoa
 
-protocol FontPreferencesConfigWindowControllerDelegate: AnyObject {
+protocol FontAndColorPreferencesConfigWindowControllerDelegate: AnyObject {
 	func didUpdateConfig(field: OutlineFontField, config: OutlineFontConfig)
 }
 
-class FontPreferencesConfigWindowController: NSWindowController {
+class FontAndColorPreferencesConfigWindowController: NSWindowController {
 
 	var field: OutlineFontField?
 	var config: OutlineFontConfig?
-	weak var delegate: FontPreferencesConfigWindowControllerDelegate?
+	weak var delegate: FontAndColorPreferencesConfigWindowControllerDelegate?
 	
 	@IBOutlet weak var fieldNameLabel: NSTextField!
 	@IBOutlet weak var fontNamePopUpButton: NSPopUpButton!
@@ -26,7 +26,7 @@ class FontPreferencesConfigWindowController: NSWindowController {
 	private weak var hostWindow: NSWindow?
 
 	convenience init() {
-		self.init(windowNibName: NSNib.Name("FontPreferencesConfig"))
+		self.init(windowNibName: NSNib.Name("FontAndColorPreferencesConfig"))
 	}
 
 	override func windowDidLoad() {
@@ -87,7 +87,7 @@ class FontPreferencesConfigWindowController: NSWindowController {
 
 // MARK: Helpers
 
-extension FontPreferencesConfigWindowController {
+extension FontAndColorPreferencesConfigWindowController {
 
 	private func updateUI() {
 		guard let config = config, let font = NSFont(name: config.name, size: CGFloat(config.size)) else { return }

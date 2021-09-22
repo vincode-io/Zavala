@@ -10,7 +10,7 @@
 "Cancel" = "Cancel";
 "Remove" = "Remove";
 "General" = "General";
-"Fonts" = "Fonts";
+"Fonts_And_Colors" = "Fonts & Colors";
 "Restore" = "Restore";
 
 /* Settings */
@@ -26,6 +26,10 @@
 "Add_Note_Level" = "Add Note Level";
 "Restore_Defaults_Message" = "Restore Defaults";
 "Restore_Defaults_Informative" = "Are you sure you want to restore the defaults? All your font customizations will be lost.";
+
+"Automatic" = "Automatic";
+"Light" = "Light";
+"Dark" = "Dark";
 
 /* Open Quickly */
 "Open Quickly" = "Open Quickly";

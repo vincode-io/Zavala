@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="mPU-HG-I4u">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="mPU-HG-I4u">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19162"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -214,25 +215,55 @@
             </objects>
             <point key="canvasLocation" x="-44" y="27"/>
         </scene>
-        <!--Font Preferences View Controller-->
+        <!--Font And Color Preferences View Controller-->
         <scene sceneID="ZeZ-V6-p0m">
             <objects>
-                <viewController storyboardIdentifier="Font" id="cul-aP-FWn" customClass="FontPreferencesViewController" customModule="AppKitPlugin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Font" id="cul-aP-FWn" customClass="FontAndColorPreferencesViewController" customModule="AppKitPlugin" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="sXM-t7-gxE">
-                        <rect key="frame" x="0.0" y="0.0" width="490" height="368"/>
+                        <rect key="frame" x="0.0" y="0.0" width="490" height="434"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hj1-rJ-yUX">
+                                <rect key="frame" x="91" y="396" width="87" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Color Palette:" id="xUH-B3-Az2">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lg0-mu-5xG">
+                                <rect key="frame" x="181" y="390" width="182" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="175" id="lOM-fR-xls"/>
+                                </constraints>
+                                <popUpButtonCell key="cell" type="push" title="Automatic" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="GSc-1Y-egt" id="Dbu-bE-Ihm">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="Br7-8I-yV1">
+                                        <items>
+                                            <menuItem title="Automatic" state="on" id="GSc-1Y-egt"/>
+                                            <menuItem title="Light" tag="1" id="VUM-TK-JQH">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                            <menuItem title="Dark" tag="2" id="unj-nu-fiQ"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="changeColorPalette:" target="cul-aP-FWn" id="FEy-q2-eh4"/>
+                                </connections>
+                            </popUpButton>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="pIz-Ni-gec" customClass="PreferencesTableViewBackgroundView" customModule="AppKitPlugin" customModuleProvider="target">
-                                <rect key="frame" x="20" y="84" width="450" height="264"/>
+                                <rect key="frame" x="20" y="84" width="450" height="290"/>
                                 <subviews>
                                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" hasHorizontalScroller="NO" horizontalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="kYb-Oe-WoO">
-                                        <rect key="frame" x="1" y="1" width="448" height="262"/>
+                                        <rect key="frame" x="1" y="1" width="448" height="288"/>
                                         <clipView key="contentView" id="6KT-gc-fmr">
-                                            <rect key="frame" x="0.0" y="0.0" width="448" height="262"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="448" height="288"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="medium" headerView="gDx-aa-CFW" viewBased="YES" id="BT5-pe-zzx">
-                                                    <rect key="frame" x="0.0" y="0.0" width="484" height="234"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="484" height="260"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -359,8 +390,8 @@
                                 <rect key="frame" x="83" y="60" width="387" height="24"/>
                             </customView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DuV-bO-eqi">
-                                <rect key="frame" x="345" y="13" width="132" height="32"/>
-                                <buttonCell key="cell" type="push" title="Restore Defauts" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wfO-d6-c3L">
+                                <rect key="frame" x="312" y="13" width="165" height="32"/>
+                                <buttonCell key="cell" type="push" title="Restore Default Fonts" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wfO-d6-c3L">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -369,8 +400,8 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="xFZ-Gx-sd5">
-                                <rect key="frame" x="18" y="14" width="328" height="32"/>
-                                <textFieldCell key="cell" title="Indented rows inherit thier font settings from their parent rows unless specified here." id="S1f-uk-vU2">
+                                <rect key="frame" x="18" y="14" width="295" height="32"/>
+                                <textFieldCell key="cell" title="Indented rows inherit thier font settings from their parent rows unless specified." id="S1f-uk-vU2">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -378,11 +409,12 @@
                             </textField>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="pIz-Ni-gec" firstAttribute="top" secondItem="sXM-t7-gxE" secondAttribute="top" constant="20" symbolic="YES" id="5BA-mj-DFC"/>
                             <constraint firstItem="VrQ-4h-gXC" firstAttribute="bottom" secondItem="xWO-u4-Le4" secondAttribute="bottom" id="7mX-ym-K80"/>
                             <constraint firstItem="DuV-bO-eqi" firstAttribute="leading" secondItem="xFZ-Gx-sd5" secondAttribute="trailing" constant="8" id="7xP-mU-wGu"/>
                             <constraint firstItem="DuV-bO-eqi" firstAttribute="top" secondItem="xoa-UE-SR0" secondAttribute="bottom" constant="20" symbolic="YES" id="E5W-ur-nRZ"/>
+                            <constraint firstItem="pIz-Ni-gec" firstAttribute="top" secondItem="lg0-mu-5xG" secondAttribute="bottom" constant="20" id="Gwg-WC-pnc"/>
                             <constraint firstItem="xFZ-Gx-sd5" firstAttribute="centerY" secondItem="DuV-bO-eqi" secondAttribute="centerY" id="GzO-kL-85s"/>
+                            <constraint firstItem="hj1-rJ-yUX" firstAttribute="centerY" secondItem="lg0-mu-5xG" secondAttribute="centerY" id="Mas-KW-RU2"/>
                             <constraint firstItem="xWO-u4-Le4" firstAttribute="width" secondItem="xoa-UE-SR0" secondAttribute="width" id="Ry8-CX-yD0"/>
                             <constraint firstItem="xWO-u4-Le4" firstAttribute="leading" secondItem="xoa-UE-SR0" secondAttribute="trailing" constant="-1" id="Shl-Np-oYP"/>
                             <constraint firstItem="VrQ-4h-gXC" firstAttribute="trailing" secondItem="pIz-Ni-gec" secondAttribute="trailing" id="UUi-HW-rft"/>
@@ -391,16 +423,20 @@
                             <constraint firstAttribute="bottom" secondItem="DuV-bO-eqi" secondAttribute="bottom" constant="20" symbolic="YES" id="cLj-uX-a2T"/>
                             <constraint firstItem="xoa-UE-SR0" firstAttribute="leading" secondItem="sXM-t7-gxE" secondAttribute="leading" constant="20" symbolic="YES" id="cSn-xs-ePc"/>
                             <constraint firstItem="xoa-UE-SR0" firstAttribute="height" secondItem="xWO-u4-Le4" secondAttribute="height" id="drQ-tc-ZZF"/>
+                            <constraint firstItem="lg0-mu-5xG" firstAttribute="top" secondItem="sXM-t7-gxE" secondAttribute="top" constant="20" symbolic="YES" id="fJT-3h-hVH"/>
                             <constraint firstItem="VrQ-4h-gXC" firstAttribute="height" secondItem="xWO-u4-Le4" secondAttribute="height" id="kJm-Jr-QF0"/>
                             <constraint firstItem="xoa-UE-SR0" firstAttribute="top" secondItem="pIz-Ni-gec" secondAttribute="bottom" id="niZ-zt-NeE"/>
                             <constraint firstItem="xFZ-Gx-sd5" firstAttribute="leading" secondItem="sXM-t7-gxE" secondAttribute="leading" constant="20" symbolic="YES" id="r8V-Uu-yZw"/>
+                            <constraint firstItem="lg0-mu-5xG" firstAttribute="leading" secondItem="sXM-t7-gxE" secondAttribute="leading" constant="184" id="saU-JP-Ic9"/>
                             <constraint firstAttribute="trailing" secondItem="pIz-Ni-gec" secondAttribute="trailing" constant="20" symbolic="YES" id="sg6-qt-WY5"/>
                             <constraint firstItem="DuV-bO-eqi" firstAttribute="top" secondItem="xWO-u4-Le4" secondAttribute="bottom" constant="20" symbolic="YES" id="wle-Od-CF9"/>
                             <constraint firstItem="pIz-Ni-gec" firstAttribute="leading" secondItem="sXM-t7-gxE" secondAttribute="leading" constant="20" symbolic="YES" id="yI1-6v-rf8"/>
+                            <constraint firstItem="lg0-mu-5xG" firstAttribute="leading" secondItem="hj1-rJ-yUX" secondAttribute="trailing" constant="8" symbolic="YES" id="zjy-DA-ahY"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="addButton" destination="xoa-UE-SR0" id="yt9-c2-Ubc"/>
+                        <outlet property="colorPalettePopUpButton" destination="lg0-mu-5xG" id="wce-4Y-N2K"/>
                         <outlet property="deleteButton" destination="xWO-u4-Le4" id="LBG-8c-tsp"/>
                         <outlet property="restoreDefaultsButton" destination="DuV-bO-eqi" id="L0a-zp-SQn"/>
                         <outlet property="tableView" destination="BT5-pe-zzx" id="kOr-1h-Jtu"/>
@@ -408,7 +444,7 @@
                 </viewController>
                 <customObject id="3WN-o4-W1w" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-138" y="514"/>
+            <point key="canvasLocation" x="-138" y="547"/>
         </scene>
     </scenes>
     <resources>

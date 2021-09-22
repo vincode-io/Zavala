@@ -36,7 +36,7 @@ class PreferencesWindowController : NSWindowController, NSToolbarDelegate {
 											 name: L10n.general,
 											 image: NSImage(systemSymbolName: "gearshape", accessibilityDescription: nil)!)]
 		specs += [PreferencesToolbarItemSpec(identifierRawValue: ToolbarItemIdentifier.Font,
-											 name: L10n.fonts,
+											 name: L10n.fontsAndColors,
 											 image: NSImage(systemSymbolName: "textformat", accessibilityDescription: nil)!)]
 		return specs
 	}()
@@ -51,10 +51,13 @@ class PreferencesWindowController : NSWindowController, NSToolbarDelegate {
 
 		window?.showsToolbarButton = false
 		window?.toolbar = toolbar
-
+		
+		updateAppearance()
 		switchToViewAtIndex(0)
 
 		window?.center()
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
 	}
 
 	// MARK: Actions
@@ -101,6 +104,21 @@ private extension PreferencesWindowController {
 
 	var currentView: NSView? {
 		return window?.contentView?.subviews.first
+	}
+	
+	@objc func userDefaultsDidChange() {
+		updateAppearance()
+	}
+	
+	func updateAppearance() {
+		switch AppDefaults.shared.userInterfaceColorPalette {
+		case .light:
+			window?.appearance = NSAppearance(named: .aqua)
+		case .dark:
+			window?.appearance = NSAppearance(named: .darkAqua)
+		default:
+			window?.appearance = nil
+		}
 	}
 
 	func toolbarItemSpec(for identifier: String) -> PreferencesToolbarItemSpec? {

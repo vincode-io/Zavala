@@ -59,4 +59,17 @@ import os.log
 		nsWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
 	}
 
+	func updateAppearance(_ window: NSObject?) {
+		guard let nsWindow = window as? NSWindow else { return }
+
+		switch AppDefaults.shared.userInterfaceColorPalette {
+		case .light:
+			nsWindow.appearance = NSAppearance(named: .aqua)
+		case .dark:
+			nsWindow.appearance = NSAppearance(named: .darkAqua)
+		default:
+			nsWindow.appearance = nil
+		}
+	}
+
 }
