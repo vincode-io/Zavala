@@ -140,11 +140,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			self.lastMainControllerToAppear = .timeline
 
 			guard let documentUserInfo = userInfo[UserInfoKeys.documentID] as? [AnyHashable : AnyHashable],
-				  let documentID = EntityID(userInfo: documentUserInfo),
-				  let document = AccountManager.shared.findDocument(documentID) else {
-					  self.presentError(MainSplitViewControllerError.unknownOutline)
+				  let documentID = EntityID(userInfo: documentUserInfo) else {
 					  return
 				  }
+			
+			guard let document = AccountManager.shared.findDocument(documentID) else {
+				self.presentError(MainSplitViewControllerError.unknownOutline)
+				return
+			}
 			
 			self.timelineViewController?.selectDocument(document, animated: false) {
 				self.lastMainControllerToAppear = .editor
