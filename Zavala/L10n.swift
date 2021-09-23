@@ -44,8 +44,6 @@ internal enum L10n {
   internal static let bugTracker = L10n.tr("Localizable", "Bug_Tracker")
   /// Cancel
   internal static let cancel = L10n.tr("Localizable", "Cancel")
-  /// Check for Updates...
-  internal static let checkForUpdates = L10n.tr("Localizable", "Check_For_Updates")
   /// Collapse
   internal static let collapse = L10n.tr("Localizable", "Collapse")
   /// Collapse All
@@ -100,8 +98,8 @@ internal enum L10n {
   internal static let deleteRows = L10n.tr("Localizable", "Delete_Rows")
   /// Delete Tag
   internal static let deleteTag = L10n.tr("Localizable", "Delete_Tag")
-  /// Document Find...
-  internal static let documentFind = L10n.tr("Localizable", "Document_Find")
+  /// Document Find…
+  internal static let documentFindEllipsis = L10n.tr("Localizable", "Document_Find_Ellipsis")
   /// Done
   internal static let done = L10n.tr("Localizable", "Done")
   /// Duplicate
@@ -128,17 +126,23 @@ internal enum L10n {
   internal static let expandAllInRow = L10n.tr("Localizable", "Expand_All_In_Row")
   /// Export
   internal static let export = L10n.tr("Localizable", "Export")
-  /// Export Jekyll Post
-  internal static let exportJekyll = L10n.tr("Localizable", "Export_Jekyll")
+  /// Export Jekyll Post…
+  internal static let exportJekyllEllipsis = L10n.tr("Localizable", "Export_Jekyll_Ellipsis")
   /// Export Markdown Doc
   internal static let exportMarkdownDoc = L10n.tr("Localizable", "Export_Markdown_Doc")
+  /// Export Markdown Doc…
+  internal static let exportMarkdownDocEllipsis = L10n.tr("Localizable", "Export_Markdown_Doc_Ellipsis")
   /// Export Markdown List
   internal static let exportMarkdownList = L10n.tr("Localizable", "Export_Markdown_List")
+  /// Export Markdown List…
+  internal static let exportMarkdownListEllipsis = L10n.tr("Localizable", "Export_Markdown_List_Ellipsis")
   /// Export OPML
   internal static let exportOPML = L10n.tr("Localizable", "Export_OPML")
+  /// Export OPML…
+  internal static let exportOPMLEllipsis = L10n.tr("Localizable", "Export_OPML_Ellipsis")
   /// Find
   internal static let find = L10n.tr("Localizable", "Find")
-  /// Find...
+  /// Find…
   internal static let findEllipsis = L10n.tr("Localizable", "Find_Ellipsis")
   /// Find Next
   internal static let findNext = L10n.tr("Localizable", "Find_Next")
@@ -158,19 +162,25 @@ internal enum L10n {
   internal static let importFailed = L10n.tr("Localizable", "Import Failed")
   /// Import OPML
   internal static let importOPML = L10n.tr("Localizable", "Import_OPML")
+  /// Import OPML…
+  internal static let importOPMLEllipsis = L10n.tr("Localizable", "Import_OPML_Ellipsis")
   /// Indent
   internal static let indent = L10n.tr("Localizable", "Indent")
   /// Insert Image
   internal static let insertImage = L10n.tr("Localizable", "Insert_Image")
+  /// Insert Image…
+  internal static let insertImageEllipsis = L10n.tr("Localizable", "Insert_Image_Ellipsis")
   /// Italic
   internal static let italic = L10n.tr("Localizable", "Italic")
   /// Light
   internal static let light = L10n.tr("Localizable", "Light")
   /// Link
   internal static let link = L10n.tr("Localizable", "Link")
+  /// Link…
+  internal static let linkEllipsis = L10n.tr("Localizable", "Link_Ellipsis")
   /// Mark as Favorite
   internal static let markAsFavorite = L10n.tr("Localizable", "Mark_As_Favorite")
-  /// More...
+  /// More…
   internal static let more = L10n.tr("Localizable", "More")
   /// Move
   internal static let move = L10n.tr("Localizable", "Move")
@@ -198,8 +208,8 @@ internal enum L10n {
   internal static func noteLevel(_ p1: Int) -> String {
     return L10n.tr("Localizable", "Note_Level", p1)
   }
-  /// Open Quickly...
-  internal static let openQuickly = L10n.tr("Localizable", "Open_Quickly")
+  /// Open Quickly…
+  internal static let openQuicklyEllipsis = L10n.tr("Localizable", "Open_Quickly_Ellipsis")
   /// Open Quickly
   internal static let openQuicklyPlaceholder = L10n.tr("Localizable", "Open_Quickly_Placeholder")
   /// Outdent
@@ -208,12 +218,14 @@ internal enum L10n {
   internal static let outline = L10n.tr("Localizable", "Outline")
   /// Paste
   internal static let paste = L10n.tr("Localizable", "Paste")
-  /// Preferences...
-  internal static let preferences = L10n.tr("Localizable", "Preferences")
+  /// Preferences…
+  internal static let preferencesEllipsis = L10n.tr("Localizable", "Preferences_Ellipsis")
   /// Previous Result
   internal static let previousResult = L10n.tr("Localizable", "Previous_Result")
   /// Print
   internal static let print = L10n.tr("Localizable", "Print")
+  /// Print…
+  internal static let printEllipsis = L10n.tr("Localizable", "Print_Ellipsis")
   /// Reference: 
   internal static let reference = L10n.tr("Localizable", "Reference")
   /// References: 
@@ -250,6 +262,8 @@ internal enum L10n {
   internal static let sendCopy = L10n.tr("Localizable", "Send_Copy")
   /// Share
   internal static let share = L10n.tr("Localizable", "Share")
+  /// Share…
+  internal static let shareEllipsis = L10n.tr("Localizable", "Share_Ellipsis")
   /// Show Completed
   internal static let showCompleted = L10n.tr("Localizable", "Show_Completed")
   /// Show Notes

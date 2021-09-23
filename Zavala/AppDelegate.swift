@@ -167,7 +167,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		#endif
 	}
 		
-	let showPreferences = UIKeyCommand(title: L10n.preferences,
+	let showPreferences = UIKeyCommand(title: L10n.preferencesEllipsis,
 										 action: #selector(showPreferences(_:)),
 										 input: ",",
 										 modifierFlags: [.command])
@@ -177,21 +177,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 								   input: "r",
 								   modifierFlags: [.command])
 	
-	let exportOPMLCommand = UIKeyCommand(title: L10n.exportOPML,
+	let exportOPMLCommand = UIKeyCommand(title: L10n.exportOPMLEllipsis,
 										 action: #selector(exportOPMLCommand(_:)),
 										 input: "e",
 										 modifierFlags: [.shift, .command])
 	
-	let exportJekyllCommand = UICommand(title: L10n.exportJekyll, action: #selector(exportJekyllCommand(_:)))
+	let exportJekyllCommand = UICommand(title: L10n.exportJekyllEllipsis, action: #selector(exportJekyllCommand(_:)))
 	
-	let exportMarkdownDocCommand = UICommand(title: L10n.exportMarkdownDoc, action: #selector(exportMarkdownDocCommand(_:)))
+	let exportMarkdownDocCommand = UICommand(title: L10n.exportMarkdownDocEllipsis, action: #selector(exportMarkdownDocCommand(_:)))
 	
-	let exportMarkdownListCommand = UIKeyCommand(title: L10n.exportMarkdownList,
+	let exportMarkdownListCommand = UIKeyCommand(title: L10n.exportMarkdownListEllipsis,
 											 action: #selector(exportMarkdownListCommand(_:)),
 											 input: "e",
 											 modifierFlags: [.control, .command])
 	
-	let importOPMLCommand = UIKeyCommand(title: L10n.importOPML,
+	let importOPMLCommand = UIKeyCommand(title: L10n.importOPMLEllipsis,
 										 action: #selector(importOPMLCommand(_:)),
 										 input: "i",
 										 modifierFlags: [.shift, .command])
@@ -311,12 +311,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											input: "i",
 											modifierFlags: [.command])
 	
-	let insertImageCommand = UIKeyCommand(title: L10n.insertImage,
+	let insertImageCommand = UIKeyCommand(title: L10n.insertImageEllipsis,
 										  action: #selector(insertImageCommand(_:)),
 										  input: "i",
 										  modifierFlags: [.alternate, .command])
 	
-	let linkCommand = UIKeyCommand(title: L10n.link,
+	let linkCommand = UIKeyCommand(title: L10n.linkEllipsis,
 								   action: #selector(linkCommand(_:)),
 								   input: "k",
 								   modifierFlags: [.command])
@@ -403,12 +403,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let showAcknowledgementsCommand = UICommand(title: L10n.acknowledgements, action: #selector(showAcknowledgementsCommand(_:)))
 	
-	let showOpenQuicklyCommand = UIKeyCommand(title: L10n.openQuickly,
+	let showOpenQuicklyCommand = UIKeyCommand(title: L10n.openQuicklyEllipsis,
 											  action: #selector(showOpenQuicklyCommand(_:)),
 											  input: "o",
 											  modifierFlags: [.shift, .command])
 	
-	let beginDocumentSearchCommand = UIKeyCommand(title: L10n.documentFind,
+	let beginDocumentSearchCommand = UIKeyCommand(title: L10n.documentFindEllipsis,
 												  action: #selector(beginDocumentSearchCommand(_:)),
 												  input: "f",
 												  modifierFlags: [.alternate, .command])
@@ -433,7 +433,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 													   input: "g",
 													   modifierFlags: [.shift, .command])
 	
-	let printCommand = UIKeyCommand(title: L10n.print,
+	let printCommand = UIKeyCommand(title: L10n.printEllipsis,
 									action: #selector(printCommand(_:)),
 									input: "p",
 									modifierFlags: [.command])
@@ -443,7 +443,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									action: #selector(sendCopy(_:)),
 									propertyList: UICommandTagShare)
 
-	let shareCommand = UICommand(title: L10n.share, action: #selector(shareCommand(_:)))
+	let shareCommand = UICommand(title: L10n.shareEllipsis, action: #selector(shareCommand(_:)))
 
 	let outlineGetInfoCommand = UIKeyCommand(title: L10n.getInfo,
 											 action: #selector(outlineGetInfoCommand(_:)),
