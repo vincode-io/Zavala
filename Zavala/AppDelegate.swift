@@ -818,7 +818,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if !AccountManager.shared.isSyncAvailable {
 				command.attributes = .disabled
 			}
-		case #selector(exportJekyllPostCommand(_:)),
+		case #selector(outlineGetInfoCommand(_:)),
+			 #selector(exportJekyllPostCommand(_:)),
 			 #selector(exportMarkdownDocCommand(_:)),
 			 #selector(exportMarkdownListCommand(_:)),
 			 #selector(exportOPMLCommand(_:)):
