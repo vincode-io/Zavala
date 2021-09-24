@@ -12,7 +12,7 @@
 "Import_OPML" = "Import OPML";
 "Import_OPML_Ellipsis" = "Import OPML…";
 "Export" = "Export";
-"Export_Jekyll_Ellipsis" = "Export Jekyll Post…";
+"Export_Jekyll_Post_Ellipsis" = "Export Jekyll Post…";
 "Export_Markdown_Doc_Ellipsis" = "Export Markdown Doc…";
 "Export_Markdown_List_Ellipsis" = "Export Markdown List…";
 "Export_OPML_Ellipsis" = "Export OPML…";

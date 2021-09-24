@@ -79,13 +79,9 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		editorViewController?.edit(nil, isNew: false)
 	}
 	
-	func exportJekyll() {
-		#if targetEnvironment(macCatalyst)
-		let openJekyllExportViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacJekyllExportViewController") as! MacJekyllExportViewController
-		openJekyllExportViewController.preferredContentSize = CGSize(width: 500, height: 150)
-//		openJekyllExportViewController.delegate = self
-		present(openJekyllExportViewController, animated: true)
-		#endif
+	func exportJekyllPost() {
+		guard let outline = editorViewController?.outline else { return }
+		exportJekyllPostForOutline(outline)
 	}
 
 	func exportMarkdownDoc() {
@@ -253,7 +249,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	
 }
 
-// MARK: Helpers
+// MARK: EditorDelegate
 
 extension EditorContainerViewController: EditorDelegate {
 
@@ -273,6 +269,15 @@ extension EditorContainerViewController: EditorDelegate {
 
 extension EditorContainerViewController {
 	
+	private func exportJekyllPostForOutline(_ outline: Outline) {
+		#if targetEnvironment(macCatalyst)
+		let openJekyllExportViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacJekyllExportViewController") as! MacJekyllExportViewController
+		openJekyllExportViewController.preferredContentSize = CGSize(width: 500, height: 150)
+		openJekyllExportViewController.outline = outline
+		present(openJekyllExportViewController, animated: true)
+		#endif
+	}
+
 	private func exportMarkdownDocForOutline(_ outline: Outline) {
 		let markdown = outline.markdownDoc()
 		export(markdown, fileName: outline.fileName(withSuffix: "md"))

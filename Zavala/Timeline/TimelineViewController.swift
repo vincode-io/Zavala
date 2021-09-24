@@ -14,6 +14,7 @@ import Templeton
 protocol TimelineDelegate: AnyObject  {
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool)
 	func showGetInfo(_: TimelineViewController, outline: Outline)
+	func exportJekyllPost(_: TimelineViewController, outline: Outline)
 	func exportMarkdownDoc(_: TimelineViewController, outline: Outline)
 	func exportMarkdownList(_: TimelineViewController, outline: Outline)
 	func exportOPML(_: TimelineViewController, outline: Outline)
@@ -419,6 +420,9 @@ extension TimelineViewController {
 
 			if let outline = document.outline {
 				var exportActions = [UIAction]()
+				if self.traitCollection.userInterfaceIdiom == .mac {
+					exportActions.append(self.exportJekyllPostOutlineAction(outline: outline))
+				}
 				exportActions.append(self.exportMarkdownDocOutlineAction(outline: outline))
 				exportActions.append(self.exportMarkdownListOutlineAction(outline: outline))
 				exportActions.append(self.exportOPMLAction(outline: outline))
@@ -455,6 +459,14 @@ extension TimelineViewController {
 		let action = UIAction(title: L10n.copyDocumentLink, image: AppAssets.link) { action in
 			let documentURL = document.id.url
 			UIPasteboard.general.url = documentURL
+		}
+		return action
+	}
+	
+	private func exportJekyllPostOutlineAction(outline: Outline) -> UIAction {
+		let action = UIAction(title: L10n.exportJekyllPostEllipsis) { [weak self] action in
+			guard let self = self else { return }
+			self.delegate?.exportJekyllPost(self, outline: outline)
 		}
 		return action
 	}

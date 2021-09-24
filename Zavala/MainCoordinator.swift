@@ -12,7 +12,7 @@ protocol MainCoordinator {
 	var editorViewController: EditorViewController? { get }
 	var isOutlineActionUnavailable: Bool { get }
 	func showGetInfo()
-	func exportJekyll()
+	func exportJekyllPost()
 	func exportMarkdownDoc()
 	func exportMarkdownList()
 	func exportOPML()

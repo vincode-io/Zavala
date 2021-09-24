@@ -8,10 +8,7 @@
 #if targetEnvironment(macCatalyst)
 
 import UIKit
-
-protocol JekyllExportViewControllerDelegate: AnyObject {
-	func exportJekyll(root: URL, posts: URL, images: URL)
-}
+import Templeton
 
 class MacJekyllExportViewController: MacFormViewController {
 	
@@ -26,7 +23,7 @@ class MacJekyllExportViewController: MacFormViewController {
 	@IBOutlet weak var imagesFolderTextField: EnhancedTextField!
 	@IBOutlet weak var exportButton: UIButton!
 	
-	weak var delegate: JekyllExportViewControllerDelegate?
+	weak var outline: Outline?
 	
 	private var currentPickerType: PickerType? = nil
 	
@@ -53,11 +50,12 @@ class MacJekyllExportViewController: MacFormViewController {
 	}
 	
 	@IBAction override func submit(_ sender: Any) {
-		guard let root = bookmarkToURL(AppDefaults.shared.jekyllRootBookmark),
+		guard let outline = outline,
+			  let root = bookmarkToURL(AppDefaults.shared.jekyllRootBookmark),
 			  let posts = bookmarkToURL(AppDefaults.shared.jekyllPostsBookmark),
 			  let images = bookmarkToURL(AppDefaults.shared.jekyllImagesBookmark) else { return }
 		
-		delegate?.exportJekyll(root: root, posts: posts, images: images)
+		outline.exportJekyllPost(root: root, posts: posts, images: images)
 		dismiss(animated: true)
 	}
 	

@@ -182,7 +182,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 input: "e",
 										 modifierFlags: [.shift, .command])
 	
-	let exportJekyllCommand = UICommand(title: L10n.exportJekyllEllipsis, action: #selector(exportJekyllCommand(_:)))
+	let exportJekyllPostCommand = UICommand(title: L10n.exportJekyllPostEllipsis, action: #selector(exportJekyllPostCommand(_:)))
 	
 	let exportMarkdownDocCommand = UICommand(title: L10n.exportMarkdownDocEllipsis, action: #selector(exportMarkdownDocCommand(_:)))
 	
@@ -577,8 +577,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 
-	@objc func exportJekyllCommand(_ sender: Any?) {
-		mainCoordinator?.exportJekyll()
+	@objc func exportJekyllPostCommand(_ sender: Any?) {
+		mainCoordinator?.exportJekyllPost()
 	}
 
 	@objc func exportMarkdownDocCommand(_ sender: Any?) {
@@ -818,7 +818,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if !AccountManager.shared.isSyncAvailable {
 				command.attributes = .disabled
 			}
-		case #selector(exportJekyllCommand(_:)),
+		case #selector(exportJekyllPostCommand(_:)),
 			 #selector(exportMarkdownDocCommand(_:)),
 			 #selector(exportMarkdownListCommand(_:)),
 			 #selector(exportOPMLCommand(_:)):
@@ -991,7 +991,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atStartOfMenu: .file)
 
-		let exportMenu = UIMenu(title: L10n.export, children: [exportMarkdownDocCommand, exportMarkdownListCommand, exportOPMLCommand])
+		let exportMenu = UIMenu(title: L10n.export, children: [exportJekyllPostCommand, exportMarkdownDocCommand, exportMarkdownListCommand, exportOPMLCommand])
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMenu])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 

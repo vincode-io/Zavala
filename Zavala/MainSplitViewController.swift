@@ -270,13 +270,9 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 	
-	@objc func exportJekyll() {
-		#if targetEnvironment(macCatalyst)
-		let openJekyllExportViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacJekyllExportViewController") as! MacJekyllExportViewController
-		openJekyllExportViewController.preferredContentSize = CGSize(width: 500, height: 150)
-		openJekyllExportViewController.delegate = self
-		present(openJekyllExportViewController, animated: true)
-		#endif
+	@objc func exportJekyllPost() {
+		guard let outline = editorViewController?.outline else { return }
+		exportJekyllPostForOutline(outline)
 	}
 
 	@objc func exportMarkdownDoc() {
@@ -440,6 +436,10 @@ extension MainSplitViewController: TimelineDelegate {
 		showGetInfo(outline: outline)
 	}
 	
+	func exportJekyllPost(_: TimelineViewController, outline: Outline) {
+		exportJekyllPostForOutline(outline)
+	}
+	
 	func exportMarkdownDoc(_: TimelineViewController, outline: Outline) {
 		exportMarkdownDocForOutline(outline)
 	}
@@ -552,21 +552,6 @@ extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 	
 }
 
-// MARK: JekyllExportViewControllerDelegate
-
-#if targetEnvironment(macCatalyst)
-extension MainSplitViewController: JekyllExportViewControllerDelegate {
-	
-	func exportJekyll(root: URL, posts: URL, images: URL) {
-		guard let outline = editorViewController?.outline else {
-			return
-		}
-		outline.exportJekyllPost(root: root, posts: posts, images: images)
-	}
-	
-}
-#endif
-
 // MARK: Helpers
 
 extension MainSplitViewController {
@@ -595,6 +580,16 @@ extension MainSplitViewController {
 		}
 	}
 	
+	private func exportJekyllPostForOutline(_ outline: Outline) {
+		#if targetEnvironment(macCatalyst)
+		let openJekyllExportViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacJekyllExportViewController") as! MacJekyllExportViewController
+		openJekyllExportViewController.preferredContentSize = CGSize(width: 500, height: 150)
+		openJekyllExportViewController.outline = outline
+		present(openJekyllExportViewController, animated: true)
+		#endif
+	}
+
+
 	private func exportMarkdownDocForOutline(_ outline: Outline) {
 		let markdown = outline.markdownDoc()
 		export(markdown, fileName: outline.fileName(withSuffix: "md"))
