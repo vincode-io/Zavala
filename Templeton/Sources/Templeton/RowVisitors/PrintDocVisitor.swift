@@ -31,7 +31,7 @@ class PrintDocVisitor {
 				attrs[.strikethroughStyle] = 0
 			}
 			
-			let fontSize = indentLevel < 3 ? 15 - indentLevel : 12
+			let fontSize = indentLevel < 3 ? 18 - ((indentLevel + 1) * 2) : 12
 
 			let topicFont = UIFont.systemFont(ofSize: CGFloat(fontSize))
 			let topicParagraphStyle = NSMutableParagraphStyle()
