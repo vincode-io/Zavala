@@ -46,14 +46,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(useSelectionForSearchCommand)
 			menuKeyCommands.append(nextInDocumentSearchCommand)
 			menuKeyCommands.append(previousInDocumentSearchCommand)
-			menuKeyCommands.append(printCommand)
+			menuKeyCommands.append(printDocCommand)
+			menuKeyCommands.append(printListCommand)
 			menuKeyCommands.append(outlineGetInfoCommand)
 		}
 		
 		menuKeyCommands.append(newOutlineCommand)
 		menuKeyCommands.append(importOPMLCommand)
 		
-		if !(mainCoordinator?.isOutlineActionUnavailable ?? true) {
+		if !(mainCoordinator?.isOutlineFunctionsUnavailable ?? true) {
 			menuKeyCommands.append(exportMarkdownListCommand)
 			menuKeyCommands.append(exportOPMLCommand)
 		}
