@@ -16,7 +16,7 @@ class PrintListVisitor {
 		guard let textRow = visited.textRow else { return }
 		
 		if let topic = textRow.topic {
-			print.append(NSAttributedString(string: "\n"))
+			print.append(NSAttributedString(string: "\n\n"))
 			var attrs = [NSAttributedString.Key : Any]()
 			if textRow.isComplete || textRow.isAncestorComplete {
 				attrs[.foregroundColor] = UIColor.darkGray
@@ -75,12 +75,10 @@ class PrintListVisitor {
 			noteTopic.replaceFont(with: noteFont)
 
 			print.append(noteTopic)
-			print.append(NSAttributedString(string: "\n"))
 		}
 		
 		indentLevel = indentLevel + 1
 		textRow.rows.forEach {
-			print.append(NSAttributedString(string: "\n"))
 			$0.visit(visitor: self.visitor)
 		}
 		indentLevel = indentLevel - 1
