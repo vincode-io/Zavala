@@ -10,7 +10,6 @@ import UIKit
 extension UIPrintPageRenderer {
 	
 	func generatePDF() -> Data {
-		
 		let paperRect = CGRect(x: 0, y: 0, width: 612, height: 792)
 		setValue(paperRect, forKey: "paperRect")
 		let padding: CGFloat = 56
