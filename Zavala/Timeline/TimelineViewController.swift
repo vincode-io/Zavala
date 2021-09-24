@@ -426,7 +426,7 @@ extension TimelineViewController {
 				exportActions.append(self.exportMarkdownDocOutlineAction(outline: outline))
 				exportActions.append(self.exportMarkdownListOutlineAction(outline: outline))
 				exportActions.append(self.exportOPMLAction(outline: outline))
-				menuItems.append(UIMenu(title: L10n.export, children: exportActions))
+				menuItems.append(UIMenu(title: L10n.export, image: AppAssets.export, children: exportActions))
 			}
 			
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.deleteOutlineAction(document: document)]))
