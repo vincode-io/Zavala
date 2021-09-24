@@ -437,10 +437,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 													   input: "g",
 													   modifierFlags: [.shift, .command])
 	
-	let printCommand = UIKeyCommand(title: L10n.printEllipsis,
-									action: #selector(printCommand(_:)),
-									input: "p",
-									modifierFlags: [.command])
+	let printDocCommand = UIKeyCommand(title: L10n.printDocEllipsis,
+									   action: #selector(printDocCommand(_:)),
+									   input: "p",
+									   modifierFlags: [.alternate, .command])
+	
+	let printListCommand = UIKeyCommand(title: L10n.printListEllipsis,
+										action: #selector(printListCommand(_:)),
+										input: "p",
+										modifierFlags: [.command])
 
 	// Currently unused because it automatically adds Services menus to my other context menus
 	let sendCopyCommand = UICommand(title: L10n.sendCopy,
@@ -776,8 +781,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		#endif
 	}
 
-	@objc func printCommand(_ sender: Any?) {
-		mainCoordinator?.printDocument()
+	@objc func printDocCommand(_ sender: Any?) {
+		mainCoordinator?.printList()
+	}
+
+	@objc func printListCommand(_ sender: Any?) {
+		mainCoordinator?.printList()
 	}
 
 	@objc func sendCopy(_ sender: Any?) {
@@ -972,11 +981,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				command.attributes = .disabled
 			}
 		case #selector(beginInDocumentSearchCommand(_:)),
-			 #selector(useSelectionForSearchCommand(_:)),
-			 #selector(nextInDocumentSearchCommand(_:)),
-			 #selector(previousInDocumentSearchCommand(_:)),
-			 #selector(copyDocumentLinkCommand(_:)),
-			 #selector(printCommand(_:)):
+			#selector(useSelectionForSearchCommand(_:)),
+			#selector(nextInDocumentSearchCommand(_:)),
+			#selector(previousInDocumentSearchCommand(_:)),
+			#selector(copyDocumentLinkCommand(_:)),
+			#selector(printDocCommand(_:)),
+			#selector(printListCommand(_:)):
 			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
@@ -1013,7 +1023,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let newMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newWindowCommand, showOpenQuicklyCommand])
 		builder.insertChild(newMenu, atStartOfMenu: .file)
 
-		let shareMenu = UIMenu(title: "", options: .displayInline, children: [shareCommand, printCommand])
+		let shareMenu = UIMenu(title: "", options: .displayInline, children: [shareCommand, printDocCommand, printListCommand])
 		builder.insertChild(shareMenu, atEndOfMenu: .file)
 
 		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: [outlineGetInfoCommand])

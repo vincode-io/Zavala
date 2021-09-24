@@ -260,8 +260,12 @@ extension MainCoordinator {
 		editorViewController?.deleteCompletedRows()
 	}
 	
-	func printDocument() {
-		editorViewController?.printOutline()
+	func printDoc() {
+		editorViewController?.printDoc()
+	}
+	
+	func printList() {
+		editorViewController?.printList()
 	}
 	
 	func share() {
@@ -442,7 +446,7 @@ extension NSToolbarItem.Identifier {
 	static let outdent = NSToolbarItem.Identifier("io.vincode.Zavala.outdent")
 	static let moveUp = NSToolbarItem.Identifier("io.vincode.Zavala.moveUp")
 	static let moveDown = NSToolbarItem.Identifier("io.vincode.Zavala.moveDown")
-	static let printDocument = NSToolbarItem.Identifier("io.vincode.Zavala.print")
+	static let printList = NSToolbarItem.Identifier("io.vincode.Zavala.print")
 	static let share = NSToolbarItem.Identifier("io.vincode.Zavala.share")
 	static let sendCopy = NSToolbarItem.Identifier("io.vincode.Zavala.sendCopy")
 	static let getInfo = NSToolbarItem.Identifier("io.vincode.Zavala.getInfo")

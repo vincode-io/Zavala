@@ -282,8 +282,12 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		toggleOutlineHideNotes()
 	}
 
-	@objc func printDocument(_ sender: Any?) {
-		printDocument()
+	@objc func printDoc(_ sender: Any?) {
+		printDoc()
+	}
+
+	@objc func printList(_ sender: Any?) {
+		printList()
 	}
 
 	@objc func share(_ sender: Any?) {
@@ -569,7 +573,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.outdent,
 			.moveUp,
 			.moveDown,
-			.print,
+			.printList,
 			.share,
 			.sendCopy,
 			.getInfo,
@@ -791,16 +795,16 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.action = #selector(toggleOutlineHideNotes(_:))
 			item.target = self
 			toolbarItem = item
-		case .print:
+		case .printList:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
 			item.image = AppAssets.print.symbolSizedForCatalyst()
-			item.label = L10n.print
-			item.toolTip = L10n.print
+			item.label = L10n.printList
+			item.toolTip = L10n.printList
 			item.isBordered = true
-			item.action = #selector(printDocument(_:))
+			item.action = #selector(printList(_:))
 			item.target = self
 			toolbarItem = item
 		case .share:

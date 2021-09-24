@@ -821,6 +821,18 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		previousSearchResult()
 	}
 	
+	func printDoc() {
+		guard let outline = outline else { return }
+		currentTextView?.saveText()
+		print(title: outline.title ?? "", attrString: outline.printDoc())
+	}
+	
+	func printList() {
+		guard let outline = outline else { return }
+		currentTextView?.saveText()
+		print(title: outline.title ?? "", attrString: outline.printList())
+	}
+	
 	// MARK: Actions
 	
 	@objc func createInitialRowIfNecessary() {
@@ -889,32 +901,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 			self.repeatMoveCursorDown()
-		}
-	}
-	
-	@objc func printOutline() {
-		guard let outline = outline else { return }
-		
-		currentTextView?.saveText()
-		
-		let pic = UIPrintInteractionController()
-		
-		let printInfo = UIPrintInfo(dictionary: nil)
-		printInfo.outputType = .grayscale
-		printInfo.jobName = outline.title ?? ""
-		pic.printInfo = printInfo
-		
-		let textView = UITextView()
-		textView.attributedText = outline.printList()
-		let printFormatter = textView.viewPrintFormatter()
-		printFormatter.startPage = 0
-		printFormatter.perPageContentInsets = UIEdgeInsets(top: 56, left: 56, bottom: 56, right: 56)
-		pic.printFormatter = printFormatter
-		
-		if traitCollection.userInterfaceIdiom == .mac {
-			pic.present(from: view.frame, in: view, animated: true)
-		} else {
-			pic.present(from: ellipsisBarButtonItem, animated: true)
 		}
 	}
 	
@@ -1608,10 +1594,15 @@ extension EditorViewController {
 		}
 		shareActions.append(sendCopyAction)
 
-		let printAction = UIAction(title: L10n.printEllipsis, image: AppAssets.print) { [weak self] _ in
-			self?.printOutline()
+		let printDocAction = UIAction(title: L10n.printDocEllipsis, image: AppAssets.print) { [weak self] _ in
+			self?.printDoc()
 		}
-		shareActions.append(printAction)
+		shareActions.append(printDocAction)
+
+		let printListAction = UIAction(title: L10n.printListEllipsis, image: AppAssets.print) { [weak self] _ in
+			self?.printList()
+		}
+		shareActions.append(printListAction)
 
 		var getInfoActions = [UIAction]()
 		let getInfoAction = UIAction(title: L10n.getInfo, image: AppAssets.getInfo) { [weak self] _ in
@@ -2741,4 +2732,26 @@ extension EditorViewController {
 		}
 	}
 	
+	private func print(title: String, attrString: NSAttributedString) {
+		let pic = UIPrintInteractionController()
+		
+		let printInfo = UIPrintInfo(dictionary: nil)
+		printInfo.outputType = .grayscale
+		printInfo.jobName = title
+		pic.printInfo = printInfo
+		
+		let textView = UITextView()
+		textView.attributedText = attrString
+		let printFormatter = textView.viewPrintFormatter()
+		printFormatter.startPage = 0
+		printFormatter.perPageContentInsets = UIEdgeInsets(top: 56, left: 56, bottom: 56, right: 56)
+		pic.printFormatter = printFormatter
+		
+		if traitCollection.userInterfaceIdiom == .mac {
+			pic.present(from: view.frame, in: view, animated: true)
+		} else {
+			pic.present(from: ellipsisBarButtonItem, animated: true)
+		}
+	}
+
 }

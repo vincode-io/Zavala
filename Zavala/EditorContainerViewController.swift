@@ -166,8 +166,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		toggleOutlineHideNotes()
 	}
 
-	@objc func printDocument(_ sender: Any?) {
-		printDocument()
+	@objc func printList(_ sender: Any?) {
+		printList()
 	}
 
 	@objc func share(_ sender: Any?) {
@@ -243,7 +243,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.outdent,
 			.moveUp,
 			.moveDown,
-			.print,
+			.printList,
 			.share,
 			.sendCopy,
 			.getInfo,
@@ -453,16 +453,16 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.action = #selector(toggleOutlineHideNotes(_:))
 			item.target = self
 			toolbarItem = item
-		case .print:
+		case .printList:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
 			item.image = AppAssets.print.symbolSizedForCatalyst()
-			item.label = L10n.print
-			item.toolTip = L10n.print
+			item.label = L10n.printList
+			item.toolTip = L10n.printList
 			item.isBordered = true
-			item.action = #selector(printDocument(_:))
+			item.action = #selector(printList(_:))
 			item.target = self
 			toolbarItem = item
 		case .share:
