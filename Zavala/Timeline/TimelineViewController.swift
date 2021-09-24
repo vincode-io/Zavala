@@ -460,7 +460,7 @@ extension TimelineViewController {
 	}
 	
 	private func exportMarkdownDocOutlineAction(outline: Outline) -> UIAction {
-		let action = UIAction(title: L10n.exportMarkdownDoc, image: AppAssets.exportMarkdownDoc) { [weak self] action in
+		let action = UIAction(title: L10n.exportMarkdownDocEllipsis, image: AppAssets.exportMarkdownDoc) { [weak self] action in
 			guard let self = self else { return }
 			self.delegate?.exportMarkdownDoc(self, outline: outline)
 		}
@@ -468,7 +468,7 @@ extension TimelineViewController {
 	}
 	
 	private func exportMarkdownListOutlineAction(outline: Outline) -> UIAction {
-		let action = UIAction(title: L10n.exportMarkdownList, image: AppAssets.exportMarkdownList) { [weak self] action in
+		let action = UIAction(title: L10n.exportMarkdownListEllipsis, image: AppAssets.exportMarkdownList) { [weak self] action in
 			guard let self = self else { return }
 			self.delegate?.exportMarkdownList(self, outline: outline)
 		}
@@ -476,7 +476,7 @@ extension TimelineViewController {
 	}
 	
 	private func exportOPMLAction(outline: Outline) -> UIAction {
-		let action = UIAction(title: L10n.exportOPML, image: AppAssets.exportOPML) { [weak self] action in
+		let action = UIAction(title: L10n.exportOPMLEllipsis, image: AppAssets.exportOPML) { [weak self] action in
 			guard let self = self else { return }
 			self.delegate?.exportOPML(self, outline: outline)
 		}

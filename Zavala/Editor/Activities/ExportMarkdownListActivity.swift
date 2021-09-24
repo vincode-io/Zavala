@@ -16,7 +16,7 @@ class ExportMarkdownListActivity: UIActivity {
 	weak var delegate: ExportMarkdownListActivityDelegate?
 	
 	override var activityTitle: String? {
-		L10n.exportMarkdownList
+		L10n.exportMarkdownListEllipsis
 	}
 	
 	override var activityType: UIActivity.ActivityType? {

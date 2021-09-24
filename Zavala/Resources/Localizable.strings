@@ -13,11 +13,8 @@
 "Import_OPML_Ellipsis" = "Import OPML…";
 "Export" = "Export";
 "Export_Jekyll_Ellipsis" = "Export Jekyll Post…";
-"Export_Markdown_Doc" = "Export Markdown Doc";
 "Export_Markdown_Doc_Ellipsis" = "Export Markdown Doc…";
-"Export_Markdown_List" = "Export Markdown List";
 "Export_Markdown_List_Ellipsis" = "Export Markdown List…";
-"Export_OPML" = "Export OPML";
 "Export_OPML_Ellipsis" = "Export OPML…";
 "New_Main_Window" = "New Main Window";
 "New_Outline" = "New Outline";
@@ -88,6 +85,7 @@
 "Share" = "Share";
 "Share_Ellipsis" = "Share…";
 "Send_Copy" = "Send a Copy";
+"Send_Copy_Ellipsis" = "Send a Copy…";
 "More" = "More…";
 "Find" = "Find";
 "Document_Find_Ellipsis" = "Document Find…";

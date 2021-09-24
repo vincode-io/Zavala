@@ -1597,18 +1597,18 @@ extension EditorViewController {
 		var shareActions = [UIAction]()
 
 		if !isShareUnavailable {
-			let shareAction = UIAction(title: L10n.share, image: AppAssets.statelessShare) { [weak self] _ in
+			let shareAction = UIAction(title: L10n.shareEllipsis, image: AppAssets.statelessShare) { [weak self] _ in
 				self?.share(self?.ellipsisBarButtonItem)
 			}
 			shareActions.append(shareAction)
 		}
 
-		let sendCopyAction = UIAction(title: L10n.sendCopy, image: AppAssets.sendCopy) { [weak self] _ in
+		let sendCopyAction = UIAction(title: L10n.sendCopyEllipsis, image: AppAssets.sendCopy) { [weak self] _ in
 			self?.sendCopy(self?.ellipsisBarButtonItem)
 		}
 		shareActions.append(sendCopyAction)
 
-		let printAction = UIAction(title: L10n.print, image: AppAssets.print) { [weak self] _ in
+		let printAction = UIAction(title: L10n.printEllipsis, image: AppAssets.print) { [weak self] _ in
 			self?.printOutline()
 		}
 		shareActions.append(printAction)

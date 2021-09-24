@@ -128,16 +128,10 @@ internal enum L10n {
   internal static let export = L10n.tr("Localizable", "Export")
   /// Export Jekyll Post…
   internal static let exportJekyllEllipsis = L10n.tr("Localizable", "Export_Jekyll_Ellipsis")
-  /// Export Markdown Doc
-  internal static let exportMarkdownDoc = L10n.tr("Localizable", "Export_Markdown_Doc")
   /// Export Markdown Doc…
   internal static let exportMarkdownDocEllipsis = L10n.tr("Localizable", "Export_Markdown_Doc_Ellipsis")
-  /// Export Markdown List
-  internal static let exportMarkdownList = L10n.tr("Localizable", "Export_Markdown_List")
   /// Export Markdown List…
   internal static let exportMarkdownListEllipsis = L10n.tr("Localizable", "Export_Markdown_List_Ellipsis")
-  /// Export OPML
-  internal static let exportOPML = L10n.tr("Localizable", "Export_OPML")
   /// Export OPML…
   internal static let exportOPMLEllipsis = L10n.tr("Localizable", "Export_OPML_Ellipsis")
   /// Find
@@ -260,6 +254,8 @@ internal enum L10n {
   }
   /// Send a Copy
   internal static let sendCopy = L10n.tr("Localizable", "Send_Copy")
+  /// Send a Copy…
+  internal static let sendCopyEllipsis = L10n.tr("Localizable", "Send_Copy_Ellipsis")
   /// Share
   internal static let share = L10n.tr("Localizable", "Share")
   /// Share…

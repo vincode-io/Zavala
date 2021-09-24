@@ -16,7 +16,7 @@ class ExportOPMLActivity: UIActivity {
 	weak var delegate: ExportOPMLActivityDelegate?
 	
 	override var activityTitle: String? {
-		L10n.exportOPML
+		L10n.exportOPMLEllipsis
 	}
 	
 	override var activityType: UIActivity.ActivityType? {
