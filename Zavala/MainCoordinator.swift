@@ -331,6 +331,16 @@ extension MainCoordinator {
 		exportJekyllPostForOutline(outline)
 	}
 
+	func exportPDFDoc() {
+		guard let outline = editorViewController?.outline else { return }
+		exportPDFDocForOutline(outline)
+	}
+	
+	func exportPDFList() {
+		guard let outline = editorViewController?.outline else { return }
+		exportPDFListForOutline(outline)
+	}
+	
 	func exportMarkdownDoc() {
 		guard let outline = editorViewController?.outline else { return }
 		exportMarkdownDocForOutline(outline)

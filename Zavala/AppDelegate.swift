@@ -184,6 +184,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let exportJekyllPostCommand = UICommand(title: L10n.exportJekyllPostEllipsis, action: #selector(exportJekyllPostCommand(_:)))
 	
+	let exportPDFDocCommand = UICommand(title: L10n.exportPDFDocEllipsis, action: #selector(exportPDFDocCommand(_:)))
+
+	let exportPDFListCommand = UICommand(title: L10n.exportPDFListEllipsis, action: #selector(exportPDFListCommand(_:)))
+
 	let exportMarkdownDocCommand = UICommand(title: L10n.exportMarkdownDocEllipsis, action: #selector(exportMarkdownDocCommand(_:)))
 	
 	let exportMarkdownListCommand = UIKeyCommand(title: L10n.exportMarkdownListEllipsis,
@@ -581,6 +585,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.exportJekyllPost()
 	}
 
+	@objc func exportPDFDocCommand(_ sender: Any?) {
+		mainCoordinator?.exportPDFDoc()
+	}
+
+	@objc func exportPDFListCommand(_ sender: Any?) {
+		mainCoordinator?.exportPDFList()
+	}
+
 	@objc func exportMarkdownDocCommand(_ sender: Any?) {
 		mainCoordinator?.exportMarkdownDoc()
 	}
@@ -819,10 +831,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				command.attributes = .disabled
 			}
 		case #selector(outlineGetInfoCommand(_:)),
-			 #selector(exportJekyllPostCommand(_:)),
-			 #selector(exportMarkdownDocCommand(_:)),
-			 #selector(exportMarkdownListCommand(_:)),
-			 #selector(exportOPMLCommand(_:)):
+			#selector(exportJekyllPostCommand(_:)),
+			#selector(exportPDFDocCommand(_:)),
+			#selector(exportPDFListCommand(_:)),
+			#selector(exportMarkdownDocCommand(_:)),
+			#selector(exportMarkdownListCommand(_:)),
+			#selector(exportOPMLCommand(_:)):
 			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
@@ -992,7 +1006,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atStartOfMenu: .file)
 
-		let exportMenu = UIMenu(title: L10n.export, children: [exportJekyllPostCommand, exportMarkdownDocCommand, exportMarkdownListCommand, exportOPMLCommand])
+		let exportMenu = UIMenu(title: L10n.export, children: [exportJekyllPostCommand, exportPDFDocCommand, exportPDFListCommand, exportMarkdownDocCommand, exportMarkdownListCommand, exportOPMLCommand])
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMenu])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 
