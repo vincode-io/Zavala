@@ -416,6 +416,14 @@ extension MainSplitViewController: EditorDelegate {
 		showGetInfo(outline: outline)
 	}
 	
+	func exportPDFDoc(_: EditorViewController, outline: Outline) {
+		exportPDFDocForOutline(outline)
+	}
+	
+	func exportPDFList(_: EditorViewController, outline: Outline) {
+		exportPDFListForOutline(outline)
+	}
+	
 	func exportMarkdownDoc(_: EditorViewController, outline: Outline) {
 		exportMarkdownDocForOutline(outline)
 	}

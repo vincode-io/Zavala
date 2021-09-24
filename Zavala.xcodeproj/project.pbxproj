@@ -137,6 +137,8 @@
 		51DEE80E26FB4550006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
 		51DEE81026FB8D89006DAA56 /* ColorPaletteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80F26FB8D89006DAA56 /* ColorPaletteTableViewController.swift */; };
 		51DEE82226FE37F9006DAA56 /* UIPrintPageRenderer+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE82126FE37F9006DAA56 /* UIPrintPageRenderer+.swift */; };
+		51DEE82426FE8711006DAA56 /* ExportPDFDocActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE82326FE8711006DAA56 /* ExportPDFDocActivity.swift */; };
+		51DEE82626FE87CD006DAA56 /* ExportPDFListActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE82526FE87CD006DAA56 /* ExportPDFListActivity.swift */; };
 		51DFDC18259EA8D300C068C6 /* Selector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DFDC17259EA8D300C068C6 /* Selector+.swift */; };
 		51E060CE25A45AA800194066 /* AppKitPlugin.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 51E060AF25A4547400194066 /* AppKitPlugin.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E060ED25A4B5E600194066 /* AppKitWrapper.swift */; };
@@ -344,6 +346,8 @@
 		51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInterfaceColorPalette.swift; sourceTree = "<group>"; };
 		51DEE80F26FB8D89006DAA56 /* ColorPaletteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteTableViewController.swift; sourceTree = "<group>"; };
 		51DEE82126FE37F9006DAA56 /* UIPrintPageRenderer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPrintPageRenderer+.swift"; sourceTree = "<group>"; };
+		51DEE82326FE8711006DAA56 /* ExportPDFDocActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPDFDocActivity.swift; sourceTree = "<group>"; };
+		51DEE82526FE87CD006DAA56 /* ExportPDFListActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPDFListActivity.swift; sourceTree = "<group>"; };
 		51DFDC17259EA8D300C068C6 /* Selector+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Selector+.swift"; sourceTree = "<group>"; };
 		51E060AF25A4547400194066 /* AppKitPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppKitPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		51E060B125A4547400194066 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -612,6 +616,8 @@
 				51F36C5726FAB5C90075A273 /* ExportMarkdownDocActivity.swift */,
 				51B9D99C26140EDC00A66859 /* ExportMarkdownListActivity.swift */,
 				51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */,
+				51DEE82326FE8711006DAA56 /* ExportPDFDocActivity.swift */,
+				51DEE82526FE87CD006DAA56 /* ExportPDFListActivity.swift */,
 			);
 			path = Activities;
 			sourceTree = "<group>";
@@ -978,6 +984,7 @@
 				517A9E3C26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift in Sources */,
 				516F536C260806150038BAF8 /* EnhancedSearchTextField.swift in Sources */,
 				517AF6A725E08CB80044DBAB /* NonIntrinsicLabel.swift in Sources */,
+				51DEE82426FE8711006DAA56 /* ExportPDFDocActivity.swift in Sources */,
 				51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */,
 				5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */,
 				5147D0B825CCAB2A004673C3 /* TimelineViewController+Drop.swift in Sources */,
@@ -985,6 +992,7 @@
 				514F222A25C4FF02004E02CD /* EditorTagInputTextField.swift in Sources */,
 				5122294C25609C47008041AF /* UserInfoKeys.swift in Sources */,
 				51F36C5826FAB5C90075A273 /* ExportMarkdownDocActivity.swift in Sources */,
+				51DEE82626FE87CD006DAA56 /* ExportPDFListActivity.swift in Sources */,
 				5147D0B525CB95B4004673C3 /* TimelineViewController+Drag.swift in Sources */,
 				51D977FA257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift in Sources */,
 				517AF69C25E0862E0044DBAB /* AppDefaults.swift in Sources */,

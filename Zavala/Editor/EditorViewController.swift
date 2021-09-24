@@ -18,6 +18,8 @@ extension Selector {
 protocol EditorDelegate: AnyObject {
 	func validateToolbar(_ : EditorViewController)
 	func showGetInfo(_: EditorViewController, outline: Outline)
+	func exportPDFDoc(_: EditorViewController, outline: Outline)
+	func exportPDFList(_: EditorViewController, outline: Outline)
 	func exportMarkdownDoc(_: EditorViewController, outline: Outline)
 	func exportMarkdownList(_: EditorViewController, outline: Outline)
 	func exportOPML(_: EditorViewController, outline: Outline)
@@ -931,6 +933,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		var activities = [UIActivity]()
 		
+		let exportPDFDocActivity = ExportPDFDocActivity()
+		exportPDFDocActivity.delegate = self
+		activities.append(exportPDFDocActivity)
+		
+		let exportPDFListActivity = ExportPDFListActivity()
+		exportPDFListActivity.delegate = self
+		activities.append(exportPDFListActivity)
+		
 		let exportMarkdownDocActivity = ExportMarkdownDocActivity()
 		exportMarkdownDocActivity.delegate = self
 		activities.append(exportMarkdownDocActivity)
@@ -1443,6 +1453,28 @@ extension EditorViewController: LinkViewControllerDelegate {
 		} else {
 			textRowCell.topicTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
 		}
+	}
+	
+}
+
+// MARK: ExportPDFDocActivityDelegate
+
+extension EditorViewController: ExportPDFDocActivityDelegate {
+
+	func exportPDFDoc(_: ExportPDFDocActivity) {
+		guard let outline = outline else { return }
+		delegate?.exportPDFDoc(self, outline: outline)
+	}
+	
+}
+
+// MARK: ExportPDFListActivityDelegate
+
+extension EditorViewController: ExportPDFListActivityDelegate {
+
+	func exportPDFList(_: ExportPDFListActivity) {
+		guard let outline = outline else { return }
+		delegate?.exportPDFList(self, outline: outline)
 	}
 	
 }

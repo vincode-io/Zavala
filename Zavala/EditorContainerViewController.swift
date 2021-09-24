@@ -205,6 +205,8 @@ extension EditorContainerViewController: EditorDelegate {
 	
 	// These aren't used when running in the EditorContainerViewController
 	func showGetInfo(_: EditorViewController, outline: Outline) { }
+	func exportPDFDoc(_: EditorViewController, outline: Outline) {}
+	func exportPDFList(_: EditorViewController, outline: Outline) {}
 	func exportMarkdownDoc(_: EditorViewController, outline: Outline) {}
 	func exportMarkdownList(_: EditorViewController, outline: Outline) {}
 	func exportOPML(_: EditorViewController, outline: Outline) {}
