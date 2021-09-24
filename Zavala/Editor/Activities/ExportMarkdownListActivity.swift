@@ -24,7 +24,7 @@ class ExportMarkdownListActivity: UIActivity {
 	}
 	
 	override var activityImage: UIImage? {
-		AppAssets.exportMarkdownList.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .regular))
+		AppAssets.export.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .regular))
 	}
 	
 	override class var activityCategory: UIActivity.Category {

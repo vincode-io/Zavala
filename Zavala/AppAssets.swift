@@ -85,18 +85,6 @@ struct AppAssets {
 		return UIImage(systemName: "arrow.up.doc")!
 	}()
 
-	static var exportMarkdownDoc: UIImage = {
-		return UIImage(systemName: "doc.plaintext")!
-	}()
-
-	static var exportMarkdownList: UIImage = {
-		return UIImage(named: "OPML")!
-	}()
-
-	static var exportOPML: UIImage = {
-		return UIImage(systemName: "list.bullet.rectangle")!
-	}()
-
 	static var favoriteSelected: UIImage = {
 		return UIImage(systemName: "star.fill")!
 	}()

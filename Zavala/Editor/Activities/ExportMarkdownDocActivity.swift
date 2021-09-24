@@ -24,7 +24,7 @@ class ExportMarkdownDocActivity: UIActivity {
 	}
 	
 	override var activityImage: UIImage? {
-		AppAssets.exportMarkdownDoc.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .regular))
+		AppAssets.export.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .regular))
 	}
 	
 	override class var activityCategory: UIActivity.Category {
