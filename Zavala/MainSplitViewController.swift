@@ -43,12 +43,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		return activity
 	}
 	
-	var isOutlineActionUnavailable: Bool {
-		return timelineViewController?.isOutlineActionUnavailable ?? true
-	}
-	
 	var isDeleteEntityUnavailable: Bool {
-		return (timelineViewController?.isOutlineActionUnavailable ?? true) &&
+		return (editorViewController?.isOutlineFunctionsUnavailable ?? true) &&
 			(editorViewController?.isDeleteCurrentRowUnavailable ?? true) 
 	}
 
@@ -172,13 +168,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 	
-	func openURL(_ urlString: String) {
-		guard let url = URL(string: urlString) else { return }
-		let vc = SFSafariViewController(url: url)
-		vc.modalPresentationStyle = .pageSheet
-		present(vc, animated: true)
-	}
-
 	func importOPMLs(urls: [URL]) {
 		selectDefaultDocumentContainer {
 			self.timelineViewController?.importOPMLs(urls: urls)
@@ -205,37 +194,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 
-	func showSettings() {
-		let settingsNavController = UIStoryboard.settings.instantiateInitialViewController() as! UINavigationController
-		settingsNavController.modalPresentationStyle = .formSheet
-		present(settingsNavController, animated: true)
-	}
-	
-	func showGetInfo() {
-		guard let outline = editorViewController?.outline else { return }
-		showGetInfo(outline: outline)
-	}
-	
-	func showGetInfo(outline: Outline) {
-		if traitCollection.userInterfaceIdiom == .mac {
-		
-			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: MacOutlineGetInfoViewController.self)
-			outlineGetInfoViewController.preferredContentSize = CGSize(width: 400, height: 182)
-			outlineGetInfoViewController.outline = outline
-			present(outlineGetInfoViewController, animated: true)
-		
-		} else {
-			
-			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
-			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 250)
-			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
-			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
-			outlineGetInfoViewController.outline = outline
-			present(outlineGetInfoNavViewController, animated: true)
-			
-		}
-	}
-
 	func validateToolbar() {
 		self.sceneDelegate?.validateToolbar()
 	}
@@ -248,7 +206,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			return
 		}
 		
-		guard timelineViewController?.isOutlineActionUnavailable ?? true else {
+		guard editorViewController?.isOutlineFunctionsUnavailable ?? true else {
 			timelineViewController?.deleteCurrentDocument()
 			return
 		}
@@ -268,26 +226,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		selectDefaultDocumentContainerIfNecessary() {
 			self.timelineViewController?.importOPML(self)
 		}
-	}
-	
-	@objc func exportJekyllPost() {
-		guard let outline = editorViewController?.outline else { return }
-		exportJekyllPostForOutline(outline)
-	}
-
-	@objc func exportMarkdownDoc() {
-		guard let outline = editorViewController?.outline else { return }
-		exportMarkdownDocForOutline(outline)
-	}
-	
-	@objc func exportMarkdownList() {
-		guard let outline = editorViewController?.outline else { return }
-		exportMarkdownListForOutline(outline)
-	}
-	
-	@objc func exportOPML() {
-		guard let outline = editorViewController?.outline else { return }
-		exportOPMLForOutline(outline)
 	}
 	
 	@objc func toggleSidebar(_ sender: Any?) {
@@ -586,71 +524,6 @@ extension MainSplitViewController {
 		sidebarViewController?.selectDocumentContainer(documentContainer, animated: true) {
 			completion()
 		}
-	}
-	
-	private func exportJekyllPostForOutline(_ outline: Outline) {
-		#if targetEnvironment(macCatalyst)
-		let openJekyllExportViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacJekyllExportViewController") as! MacJekyllExportViewController
-		openJekyllExportViewController.preferredContentSize = CGSize(width: 500, height: 150)
-		openJekyllExportViewController.outline = outline
-		present(openJekyllExportViewController, animated: true)
-		#endif
-	}
-
-	private func exportPDFDocForOutline(_ outline: Outline) {
-//		let markdown = outline.markdownDoc()
-//		export(markdown, fileName: outline.fileName(withSuffix: "md"))
-	}
-	
-	private func exportPDFListForOutline(_ outline: Outline) {
-		let printList = outline.printList()
-		exportPDFForOutline(outline, attrString: printList)
-	}
-	
-	private func exportPDFForOutline(_ outline: Outline, attrString: NSAttributedString) {
-		let textView = UITextView()
-		textView.attributedText = attrString
-		let printFormatter = textView.viewPrintFormatter()
-		
-		let pageRenderer = UIPrintPageRenderer()
-		pageRenderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
-		let data = pageRenderer.generatePDF()
-		
-		export(data as Data, fileName: outline.fileName(withSuffix: "pdf"))
-	}
-	
-	private func exportMarkdownDocForOutline(_ outline: Outline) {
-		let markdown = outline.markdownDoc()
-		export(markdown, fileName: outline.fileName(withSuffix: "md"))
-	}
-	
-	private func exportMarkdownListForOutline(_ outline: Outline) {
-		let markdown = outline.markdownList()
-		export(markdown, fileName: outline.fileName(withSuffix: "md"))
-	}
-	
-	private func exportOPMLForOutline(_ outline: Outline) {
-		let opml = outline.opml()
-		export(opml, fileName: outline.fileName(withSuffix: "opml"))
-	}
-	
-	private func export(_ string: String, fileName: String) {
-		guard let data = string.data(using: .utf8) else { return }
-		export(data, fileName: fileName)
-	}
-	
-	private func export(_ data: Data, fileName: String) {
-		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-		
-		do {
-			try data.write(to: tempFile)
-		} catch {
-			self.presentError(title: "Export Error", message: error.localizedDescription)
-		}
-		
-		let docPicker = UIDocumentPickerViewController(forExporting: [tempFile], asCopy: true)
-		docPicker.modalPresentationStyle = .formSheet
-		self.present(docPicker, animated: true)
 	}
 	
 }

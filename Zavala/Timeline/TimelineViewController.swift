@@ -26,11 +26,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	var mainControllerIdentifer: MainControllerIdentifier { return .timeline }
 
 	weak var delegate: TimelineDelegate?
-	
-	var isOutlineActionUnavailable: Bool {
-		return currentDocument == nil
-	}
-	
+
 	var currentDocument: Document? {
 		guard let indexPath = collectionView.indexPathsForSelectedItems?.first,
 			  let item = dataSource.itemIdentifier(for: indexPath) else { return nil }

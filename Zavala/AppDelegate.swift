@@ -822,7 +822,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			 #selector(exportMarkdownDocCommand(_:)),
 			 #selector(exportMarkdownListCommand(_:)),
 			 #selector(exportOPMLCommand(_:)):
-			if mainCoordinator?.isOutlineActionUnavailable ?? true {
+			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(insertRowCommand(_:)):

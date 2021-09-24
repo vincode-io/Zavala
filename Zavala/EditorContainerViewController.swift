@@ -16,8 +16,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		return children.first as? EditorViewController
 	}
 	
-	var isOutlineActionUnavailable: Bool = false
-	
 	weak var sceneDelegate: OutlineEditorSceneDelegate?
 	
 	var stateRestorationActivity: NSUserActivity {
@@ -77,62 +75,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 
 	func shutdown() {
 		editorViewController?.edit(nil, isNew: false)
-	}
-	
-	func exportJekyllPost() {
-		guard let outline = editorViewController?.outline else { return }
-		exportJekyllPostForOutline(outline)
-	}
-
-	func exportMarkdownDoc() {
-		guard let outline = editorViewController?.outline else { return }
-		exportMarkdownDocForOutline(outline)
-	}
-	
-	func exportMarkdownList() {
-		guard let outline = editorViewController?.outline else { return }
-		exportMarkdownListForOutline(outline)
-	}
-	
-	func exportOPML() {
-		guard let outline = editorViewController?.outline else { return }
-		exportOPMLForOutline(outline)
-	}
-	
-	func openURL(_ urlString: String) {
-		guard let url = URL(string: urlString) else { return }
-		let vc = SFSafariViewController(url: url)
-		vc.modalPresentationStyle = .pageSheet
-		present(vc, animated: true)
-	}
-	
-	func showSettings() {
-		// No need to implement this since it is used on iOS only
-	}
-	
-	func showGetInfo() {
-		guard let outline = editorViewController?.outline else { return }
-		showGetInfo(outline: outline)
-	}
-	
-	func showGetInfo(outline: Outline) {
-		if traitCollection.userInterfaceIdiom == .mac {
-		
-			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: MacOutlineGetInfoViewController.self)
-			outlineGetInfoViewController.preferredContentSize = CGSize(width: 400, height: 182)
-			outlineGetInfoViewController.outline = outline
-			present(outlineGetInfoViewController, animated: true)
-		
-		} else {
-			
-			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
-			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 250)
-			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
-			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
-			outlineGetInfoViewController.outline = outline
-			present(outlineGetInfoNavViewController, animated: true)
-			
-		}
 	}
 	
 	// MARK: Actions
@@ -263,49 +205,6 @@ extension EditorContainerViewController: EditorDelegate {
 	func exportMarkdownList(_: EditorViewController, outline: Outline) {}
 	func exportOPML(_: EditorViewController, outline: Outline) {}
 
-}
-
-// MARK: Helpers
-
-extension EditorContainerViewController {
-	
-	private func exportJekyllPostForOutline(_ outline: Outline) {
-		#if targetEnvironment(macCatalyst)
-		let openJekyllExportViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacJekyllExportViewController") as! MacJekyllExportViewController
-		openJekyllExportViewController.preferredContentSize = CGSize(width: 500, height: 150)
-		openJekyllExportViewController.outline = outline
-		present(openJekyllExportViewController, animated: true)
-		#endif
-	}
-
-	private func exportMarkdownDocForOutline(_ outline: Outline) {
-		let markdown = outline.markdownDoc()
-		export(markdown, fileName: outline.fileName(withSuffix: "md"))
-	}
-	
-	private func exportMarkdownListForOutline(_ outline: Outline) {
-		let markdown = outline.markdownList()
-		export(markdown, fileName: outline.fileName(withSuffix: "md"))
-	}
-	
-	private func exportOPMLForOutline(_ outline: Outline) {
-		let opml = outline.opml()
-		export(opml, fileName: outline.fileName(withSuffix: "opml"))
-	}
-	
-	private func export(_ string: String, fileName: String) {
-		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-		
-		do {
-			try string.write(to: tempFile, atomically: true, encoding: String.Encoding.utf8)
-		} catch {
-			self.presentError(title: "Export Error", message: error.localizedDescription)
-		}
-		
-		let docPicker = UIDocumentPickerViewController(forExporting: [tempFile], asCopy: true)
-		docPicker.modalPresentationStyle = .formSheet
-		self.present(docPicker, animated: true)
-	}
 }
 
 // MARK: Toolbar
