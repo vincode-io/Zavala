@@ -905,7 +905,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		pic.printInfo = printInfo
 		
 		let textView = UITextView()
-		textView.attributedText = outline.print()
+		textView.attributedText = outline.printList()
 		let printFormatter = textView.viewPrintFormatter()
 		printFormatter.startPage = 0
 		printFormatter.perPageContentInsets = UIEdgeInsets(top: 56, left: 56, bottom: 56, right: 56)

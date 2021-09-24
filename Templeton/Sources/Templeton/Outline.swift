@@ -510,7 +510,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return children
 	}
 	
-	public func print() -> NSAttributedString {
+	public func printList() -> NSAttributedString {
 		let print = NSMutableAttributedString()
 		load()
 		
@@ -532,14 +532,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			printTitle.addAttributes(attrs, range: range)
 			
 			print.append(printTitle)
-			print.append(NSAttributedString(string: "\n"))
 		}
 		
 		rows.forEach {
-			let visitor = PrintVisitor()
+			let visitor = PrintListVisitor()
 			$0.visit(visitor: visitor.visitor)
 			print.append(visitor.print)
-			print.append(NSAttributedString(string: "\n"))
 		}
 
 		unload()

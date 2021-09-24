@@ -15,6 +15,8 @@ protocol TimelineDelegate: AnyObject  {
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool)
 	func showGetInfo(_: TimelineViewController, outline: Outline)
 	func exportJekyllPost(_: TimelineViewController, outline: Outline)
+	func exportPDFDoc(_: TimelineViewController, outline: Outline)
+	func exportPDFList(_: TimelineViewController, outline: Outline)
 	func exportMarkdownDoc(_: TimelineViewController, outline: Outline)
 	func exportMarkdownList(_: TimelineViewController, outline: Outline)
 	func exportOPML(_: TimelineViewController, outline: Outline)
@@ -423,6 +425,8 @@ extension TimelineViewController {
 				if self.traitCollection.userInterfaceIdiom == .mac {
 					exportActions.append(self.exportJekyllPostOutlineAction(outline: outline))
 				}
+				exportActions.append(self.exportPDFDocOutlineAction(outline: outline))
+				exportActions.append(self.exportPDFListOutlineAction(outline: outline))
 				exportActions.append(self.exportMarkdownDocOutlineAction(outline: outline))
 				exportActions.append(self.exportMarkdownListOutlineAction(outline: outline))
 				exportActions.append(self.exportOPMLAction(outline: outline))
@@ -467,6 +471,22 @@ extension TimelineViewController {
 		let action = UIAction(title: L10n.exportJekyllPostEllipsis) { [weak self] action in
 			guard let self = self else { return }
 			self.delegate?.exportJekyllPost(self, outline: outline)
+		}
+		return action
+	}
+	
+	private func exportPDFDocOutlineAction(outline: Outline) -> UIAction {
+		let action = UIAction(title: L10n.exportPDFDocEllipsis) { [weak self] action in
+			guard let self = self else { return }
+			self.delegate?.exportPDFDoc(self, outline: outline)
+		}
+		return action
+	}
+	
+	private func exportPDFListOutlineAction(outline: Outline) -> UIAction {
+		let action = UIAction(title: L10n.exportPDFListEllipsis) { [weak self] action in
+			guard let self = self else { return }
+			self.delegate?.exportPDFList(self, outline: outline)
 		}
 		return action
 	}

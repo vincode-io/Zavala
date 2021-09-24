@@ -1,5 +1,5 @@
 //
-//  PrintVisitor.swift
+//  PrintListVisitor.swift
 //  
 //
 //  Created by Maurice Parker on 4/14/21.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PrintVisitor {
+class PrintListVisitor {
 	
 	var indentLevel = 0
 	var print = NSMutableAttributedString()
@@ -16,6 +16,7 @@ class PrintVisitor {
 		guard let textRow = visited.textRow else { return }
 		
 		if let topic = textRow.topic {
+			print.append(NSAttributedString(string: "\n"))
 			var attrs = [NSAttributedString.Key : Any]()
 			if textRow.isComplete || textRow.isAncestorComplete {
 				attrs[.foregroundColor] = UIColor.darkGray
@@ -63,8 +64,8 @@ class PrintVisitor {
 
 			let noteParagraphStyle = NSMutableParagraphStyle()
 			noteParagraphStyle.paragraphSpacing = 0.33 * noteFont.lineHeight
-			noteParagraphStyle.firstLineHeadIndent = CGFloat(indentLevel * 20)
-			noteParagraphStyle.headIndent = CGFloat(indentLevel * 20)
+			noteParagraphStyle.firstLineHeadIndent = CGFloat(indentLevel * 20) + 10
+			noteParagraphStyle.headIndent = CGFloat(indentLevel * 20) + 10
 			attrs[.paragraphStyle] = noteParagraphStyle
 
 			let noteTopic = NSMutableAttributedString(string: "\n")
@@ -74,6 +75,7 @@ class PrintVisitor {
 			noteTopic.replaceFont(with: noteFont)
 
 			print.append(noteTopic)
+			print.append(NSAttributedString(string: "\n"))
 		}
 		
 		indentLevel = indentLevel + 1

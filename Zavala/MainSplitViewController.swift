@@ -440,6 +440,14 @@ extension MainSplitViewController: TimelineDelegate {
 		exportJekyllPostForOutline(outline)
 	}
 	
+	func exportPDFDoc(_: TimelineViewController, outline: Outline) {
+		exportPDFDocForOutline(outline)
+	}
+	
+	func exportPDFList(_: TimelineViewController, outline: Outline) {
+		exportPDFListForOutline(outline)
+	}
+	
 	func exportMarkdownDoc(_: TimelineViewController, outline: Outline) {
 		exportMarkdownDocForOutline(outline)
 	}
@@ -589,7 +597,28 @@ extension MainSplitViewController {
 		#endif
 	}
 
-
+	private func exportPDFDocForOutline(_ outline: Outline) {
+//		let markdown = outline.markdownDoc()
+//		export(markdown, fileName: outline.fileName(withSuffix: "md"))
+	}
+	
+	private func exportPDFListForOutline(_ outline: Outline) {
+		let printList = outline.printList()
+		exportPDFForOutline(outline, attrString: printList)
+	}
+	
+	private func exportPDFForOutline(_ outline: Outline, attrString: NSAttributedString) {
+		let textView = UITextView()
+		textView.attributedText = attrString
+		let printFormatter = textView.viewPrintFormatter()
+		
+		let pageRenderer = UIPrintPageRenderer()
+		pageRenderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
+		let data = pageRenderer.generatePDF()
+		
+		export(data as Data, fileName: outline.fileName(withSuffix: "pdf"))
+	}
+	
 	private func exportMarkdownDocForOutline(_ outline: Outline) {
 		let markdown = outline.markdownDoc()
 		export(markdown, fileName: outline.fileName(withSuffix: "md"))
@@ -606,10 +635,15 @@ extension MainSplitViewController {
 	}
 	
 	private func export(_ string: String, fileName: String) {
+		guard let data = string.data(using: .utf8) else { return }
+		export(data, fileName: fileName)
+	}
+	
+	private func export(_ data: Data, fileName: String) {
 		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
 		
 		do {
-			try string.write(to: tempFile, atomically: true, encoding: String.Encoding.utf8)
+			try data.write(to: tempFile)
 		} catch {
 			self.presentError(title: "Export Error", message: error.localizedDescription)
 		}

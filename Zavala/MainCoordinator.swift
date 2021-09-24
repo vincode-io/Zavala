@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-protocol MainCoordinator {
+protocol MainCoordinator: UIViewController {
 	var editorViewController: EditorViewController? { get }
 	var isOutlineActionUnavailable: Bool { get }
 	func showGetInfo()
