@@ -783,7 +783,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	@objc func printDocCommand(_ sender: Any?) {
-		mainCoordinator?.printList()
+		mainCoordinator?.printDoc()
 	}
 
 	@objc func printListCommand(_ sender: Any?) {
