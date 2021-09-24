@@ -163,8 +163,12 @@ struct AppAssets {
 		return UIImage(systemName: "doc.on.clipboard")!
 	}()
 
-	static var print: UIImage = {
+	static var printDoc: UIImage = {
 		return UIImage(systemName: "printer")!
+	}()
+
+	static var printList: UIImage = {
+		return UIImage(systemName: "printer.dotmatrix")!
 	}()
 
 	static var releaseNotesURL = "https://github.com/vincode-io/Zavala/releases/tag/\(Bundle.main.versionNumber)"

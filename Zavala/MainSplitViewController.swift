@@ -573,6 +573,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.outdent,
 			.moveUp,
 			.moveDown,
+			.printDoc,
 			.printList,
 			.share,
 			.sendCopy,
@@ -795,12 +796,24 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.action = #selector(toggleOutlineHideNotes(_:))
 			item.target = self
 			toolbarItem = item
+		case .printDoc:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			}
+			item.image = AppAssets.printDoc.symbolSizedForCatalyst()
+			item.label = L10n.printDoc
+			item.toolTip = L10n.printDoc
+			item.isBordered = true
+			item.action = #selector(printDoc(_:))
+			item.target = self
+			toolbarItem = item
 		case .printList:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.print.symbolSizedForCatalyst()
+			item.image = AppAssets.printList.symbolSizedForCatalyst()
 			item.label = L10n.printList
 			item.toolTip = L10n.printList
 			item.isBordered = true

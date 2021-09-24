@@ -1594,12 +1594,12 @@ extension EditorViewController {
 		}
 		shareActions.append(sendCopyAction)
 
-		let printDocAction = UIAction(title: L10n.printDocEllipsis, image: AppAssets.print) { [weak self] _ in
+		let printDocAction = UIAction(title: L10n.printDocEllipsis, image: AppAssets.printDoc) { [weak self] _ in
 			self?.printDoc()
 		}
 		shareActions.append(printDocAction)
 
-		let printListAction = UIAction(title: L10n.printListEllipsis, image: AppAssets.print) { [weak self] _ in
+		let printListAction = UIAction(title: L10n.printListEllipsis, image: AppAssets.printList) { [weak self] _ in
 			self?.printList()
 		}
 		shareActions.append(printListAction)

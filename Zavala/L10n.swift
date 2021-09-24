@@ -220,6 +220,8 @@ internal enum L10n {
   internal static let preferencesEllipsis = L10n.tr("Localizable", "Preferences_Ellipsis")
   /// Previous Result
   internal static let previousResult = L10n.tr("Localizable", "Previous_Result")
+  /// Print Doc
+  internal static let printDoc = L10n.tr("Localizable", "Print_Doc")
   /// Print Doc…
   internal static let printDocEllipsis = L10n.tr("Localizable", "Print_Doc_Ellipsis")
   /// Print List
