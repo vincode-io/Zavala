@@ -30,20 +30,15 @@ class PrintDocVisitor {
 			} else {
 				attrs[.strikethroughStyle] = 0
 			}
+			
+			let fontSize = indentLevel < 3 ? 15 - indentLevel : 12
 
-			let topicFont = UIFont.systemFont(ofSize: 12)
+			let topicFont = UIFont.systemFont(ofSize: CGFloat(fontSize))
 			let topicParagraphStyle = NSMutableParagraphStyle()
 			topicParagraphStyle.paragraphSpacing = 0.33 * topicFont.lineHeight
-			
-			topicParagraphStyle.firstLineHeadIndent = CGFloat(indentLevel * 20)
-			let textIndent = CGFloat(indentLevel * 20) + 10
-			topicParagraphStyle.headIndent = textIndent
-			topicParagraphStyle.defaultTabInterval = textIndent
-			topicParagraphStyle.tabStops = [NSTextTab(textAlignment: .left, location: textIndent, options: [:])]
 			attrs[.paragraphStyle] = topicParagraphStyle
 			
-			let printTopic = NSMutableAttributedString(string: "\u{2022}\t")
-			printTopic.append(topic)
+			let printTopic = NSMutableAttributedString(attributedString: topic)
 			let range = NSRange(location: 0, length: printTopic.length)
 			printTopic.addAttributes(attrs, range: range)
 			printTopic.replaceFont(with: topicFont)
@@ -64,8 +59,6 @@ class PrintDocVisitor {
 
 			let noteParagraphStyle = NSMutableParagraphStyle()
 			noteParagraphStyle.paragraphSpacing = 0.33 * noteFont.lineHeight
-			noteParagraphStyle.firstLineHeadIndent = CGFloat(indentLevel * 20) + 10
-			noteParagraphStyle.headIndent = CGFloat(indentLevel * 20) + 10
 			attrs[.paragraphStyle] = noteParagraphStyle
 
 			let noteTopic = NSMutableAttributedString(string: "\n")
