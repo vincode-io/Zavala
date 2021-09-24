@@ -366,8 +366,8 @@ extension MainCoordinator {
 	}
 
 	func exportPDFDocForOutline(_ outline: Outline) {
-//		let markdown = outline.markdownDoc()
-//		export(markdown, fileName: outline.fileName(withSuffix: "md"))
+		let printDoc = outline.printDoc()
+		exportPDFForOutline(outline, attrString: printDoc)
 	}
 	
 	func exportPDFListForOutline(_ outline: Outline) {
