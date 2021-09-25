@@ -2568,6 +2568,8 @@ extension EditorViewController {
 										 textRowStrings: textRowStrings)
 		
 		runCommand(command)
+
+		makeCursorVisibleIfNecessary()
 	}
 
 	private func moveRowsLeft(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
