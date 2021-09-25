@@ -1754,7 +1754,7 @@ extension EditorViewController {
 		} else {
 			switch (key.keyCode, true) {
 			case (.keyboardUpArrow, key.modifierFlags.subtracting(.numericPad).isEmpty), (.keyboardDownArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
-				makeCursorVisibleIfNecessary(isInNotes: true)
+				makeCursorVisibleIfNecessary()
 			default:
 				break
 			}
@@ -2554,6 +2554,8 @@ extension EditorViewController {
 									   textRowStrings: textRowStrings)
 		
 		runCommand(command)
+		
+		makeCursorVisibleIfNecessary()
 	}
 
 	private func moveRowsDown(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
@@ -2678,11 +2680,11 @@ extension EditorViewController {
 		}
 	}
 
-	private func makeCursorVisibleIfNecessary(isInNotes: Bool = false) {
+	private func makeCursorVisibleIfNecessary() {
 		guard let textView = UIResponder.currentFirstResponder as? EditorTextRowTextView, let cursorRect = textView.cursorRect else { return }
 		var convertedRect = textView.convert(cursorRect, to: collectionView)
 		// This isInNotes hack isn't well understood, but it improves the user experience...
-		if isInNotes {
+		if textView is EditorTextRowNoteTextView {
 			convertedRect.size.height = convertedRect.size.height + 10
 		}
 		collectionView.scrollRectToVisible(convertedRect, animated: true)
