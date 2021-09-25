@@ -139,6 +139,7 @@
 		51DEE82226FE37F9006DAA56 /* UIPrintPageRenderer+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE82126FE37F9006DAA56 /* UIPrintPageRenderer+.swift */; };
 		51DEE82426FE8711006DAA56 /* ExportPDFDocActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE82326FE8711006DAA56 /* ExportPDFDocActivity.swift */; };
 		51DEE82626FE87CD006DAA56 /* ExportPDFListActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE82526FE87CD006DAA56 /* ExportPDFListActivity.swift */; };
+		51DEE82826FF951E006DAA56 /* UIWindowSceneDelegate+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE82726FF951E006DAA56 /* UIWindowSceneDelegate+.swift */; };
 		51DFDC18259EA8D300C068C6 /* Selector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DFDC17259EA8D300C068C6 /* Selector+.swift */; };
 		51E060CE25A45AA800194066 /* AppKitPlugin.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 51E060AF25A4547400194066 /* AppKitPlugin.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E060ED25A4B5E600194066 /* AppKitWrapper.swift */; };
@@ -348,6 +349,7 @@
 		51DEE82126FE37F9006DAA56 /* UIPrintPageRenderer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPrintPageRenderer+.swift"; sourceTree = "<group>"; };
 		51DEE82326FE8711006DAA56 /* ExportPDFDocActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPDFDocActivity.swift; sourceTree = "<group>"; };
 		51DEE82526FE87CD006DAA56 /* ExportPDFListActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPDFListActivity.swift; sourceTree = "<group>"; };
+		51DEE82726FF951E006DAA56 /* UIWindowSceneDelegate+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindowSceneDelegate+.swift"; sourceTree = "<group>"; };
 		51DFDC17259EA8D300C068C6 /* Selector+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Selector+.swift"; sourceTree = "<group>"; };
 		51E060AF25A4547400194066 /* AppKitPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppKitPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		51E060B125A4547400194066 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -460,6 +462,7 @@
 				51B2B2D52563AB9F0090C56B /* UIView+.swift */,
 				51692B0B25681AD3006B755F /* UIViewController+.swift */,
 				517A9E4926055C8B00EF346A /* UIWindow+.swift */,
+				51DEE82726FF951E006DAA56 /* UIWindowSceneDelegate+.swift */,
 				51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */,
 				51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */,
 			);
@@ -1044,6 +1047,7 @@
 				511B2A0526019A2700C04239 /* UIFont+.swift in Sources */,
 				514F221B25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift in Sources */,
 				519A2324260A9B900056051E /* OutlineFontField.swift in Sources */,
+				51DEE82826FF951E006DAA56 /* UIWindowSceneDelegate+.swift in Sources */,
 				51C4C442255A0DE1004E0206 /* TimelineViewController.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,

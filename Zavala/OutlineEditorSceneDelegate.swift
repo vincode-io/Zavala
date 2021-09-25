@@ -24,6 +24,9 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 			return
 		}
 
+		updateUserInterfaceStyle()
+		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
+		
 		self.editorContainerViewController = editorContainerViewController
 		self.editorContainerViewController.sceneDelegate = self
 		
@@ -108,4 +111,12 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 		#endif
 	}
 	
+}
+
+private extension OutlineEditorSceneDelegate {
+	
+	@objc func userDefaultsDidChange() {
+		updateUserInterfaceStyle()
+	}
+
 }

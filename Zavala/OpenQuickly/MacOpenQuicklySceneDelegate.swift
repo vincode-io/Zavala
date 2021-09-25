@@ -23,6 +23,9 @@ class MacOpenQuicklySceneDelegate: UIResponder, UIWindowSceneDelegate {
 		guard let macOpenQuicklyViewController = window?.rootViewController as? MacOpenQuicklyViewController else {
 			return
 		}
+
+		updateUserInterfaceStyle()
+		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
 		
 		macOpenQuicklyViewController.sceneDelegate = self
 
@@ -59,3 +62,10 @@ class MacOpenQuicklySceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
+private extension MacOpenQuicklySceneDelegate {
+	
+	@objc func userDefaultsDidChange() {
+		updateUserInterfaceStyle()
+	}
+
+}
