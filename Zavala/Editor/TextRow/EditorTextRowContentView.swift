@@ -243,10 +243,6 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowSplitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
-	func createRowNote(_: EditorTextRowTopicTextView, row: Row) {
-		appliedConfiguration.delegate?.editorTextRowCreateRowNote(row, textRowStrings: textRowStrings)
-	}
-	
 	func editLink(_: EditorTextRowTopicTextView, _ link: String?, text: String?, range: NSRange) {
 		appliedConfiguration.delegate?.editorTextRowEditLink(link, text: text, range: range)
 	}

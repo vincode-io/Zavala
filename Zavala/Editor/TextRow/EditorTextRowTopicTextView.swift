@@ -20,7 +20,6 @@ protocol EditorTextRowTopicTextViewDelegate: AnyObject {
 	func createRow(_: EditorTextRowTopicTextView, afterRow: Row)
 	func indentRow(_: EditorTextRowTopicTextView, row: Row)
 	func splitRow(_: EditorTextRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
-	func createRowNote(_: EditorTextRowTopicTextView, row: Row)
 	func editLink(_: EditorTextRowTopicTextView, _ link: String?, text: String?, range: NSRange)
 }
 
@@ -37,7 +36,6 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(insertReturn(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(insertRow(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(split(_:))),
-			UIKeyCommand(input: "-", modifierFlags: [.control], action: #selector(addNote(_:))),
 			toggleBoldCommand,
 			toggleItalicsCommand,
 			editLinkCommand
@@ -135,13 +133,7 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 		isSavingTextUnnecessary = true
 		editorDelegate?.createRow(self, beforeRow: textRow)
 	}
-	
-	@objc func addNote(_ sender: Any) {
-		guard let textRow = row else { return }
-		isSavingTextUnnecessary = true
-		editorDelegate?.createRowNote(self, row: textRow)
-	}
-	
+
 	@objc func split(_ sender: Any) {
 		guard let textRow = row else { return }
 		

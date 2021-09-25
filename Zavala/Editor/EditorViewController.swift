@@ -1364,10 +1364,6 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
-	func editorTextRowCreateRowNote(_ row: Row, textRowStrings: TextRowStrings) {
-		createRowNotes([row], textRowStrings: textRowStrings)
-	}
-	
 	func editorTextRowDeleteRowNote(_ row: Row, textRowStrings: TextRowStrings) {
 		deleteRowNotes([row], textRowStrings: textRowStrings)
 	}
