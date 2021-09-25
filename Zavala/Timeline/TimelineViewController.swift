@@ -418,9 +418,6 @@ extension TimelineViewController {
 
 			if let outline = document.outline {
 				var exportActions = [UIAction]()
-				if self.traitCollection.userInterfaceIdiom == .mac {
-					exportActions.append(self.exportJekyllPostOutlineAction(outline: outline))
-				}
 				exportActions.append(self.exportPDFDocOutlineAction(outline: outline))
 				exportActions.append(self.exportPDFListOutlineAction(outline: outline))
 				exportActions.append(self.exportMarkdownDocOutlineAction(outline: outline))

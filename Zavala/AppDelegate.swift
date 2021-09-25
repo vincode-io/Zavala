@@ -1017,7 +1017,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atStartOfMenu: .file)
 
-		let exportMenu = UIMenu(title: L10n.export, children: [exportJekyllPostCommand, exportPDFDocCommand, exportPDFListCommand, exportMarkdownDocCommand, exportMarkdownListCommand, exportOPMLCommand])
+		let exportMenu = UIMenu(title: L10n.export, children: [exportPDFDocCommand, exportPDFListCommand, exportMarkdownDocCommand, exportMarkdownListCommand, exportOPMLCommand])
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMenu])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 
