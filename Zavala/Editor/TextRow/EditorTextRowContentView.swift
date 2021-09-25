@@ -36,10 +36,6 @@ class EditorTextRowContentView: UIView, UIContentView {
 	
 	var appliedConfiguration: EditorTextRowContentConfiguration!
 	
-	var textRowStrings: TextRowStrings {
-		return TextRowStrings(topic: topicTextView.cleansedAttributedText, note: noteTextView?.cleansedAttributedText)
-	}
-	
 	var configuration: UIContentConfiguration {
 		get { appliedConfiguration }
 		set {
@@ -202,10 +198,6 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 		return appliedConfiguration.delegate?.editorTextRowUndoManager
 	}
 	
-	var editorRowTopicTextViewTextRowStrings: TextRowStrings {
-		return textRowStrings
-	}
-	
 	var editorRowTopicTextViewInputAccessoryView: UIView? {
 		appliedConfiguration.delegate?.editorTextRowInputAccessoryView
 	}
@@ -219,11 +211,11 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowTextFieldDidBecomeActive(row: row)
 	}
 
-	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange) {
+	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, textRowStrings: TextRowStrings) {
 		appliedConfiguration.delegate?.editorTextRowTextChanged(row: row, textRowStrings: textRowStrings, isInNotes: isInNotes, selection: selection)
 	}
 	
-	func deleteRow(_: EditorTextRowTopicTextView, row: Row) {
+	func deleteRow(_: EditorTextRowTopicTextView, row: Row, textRowStrings: TextRowStrings) {
 		appliedConfiguration.delegate?.editorTextRowDeleteRow(row, textRowStrings: textRowStrings)
 	}
 	
@@ -231,11 +223,11 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowCreateRow(beforeRow: beforeRow)
 	}
 	
-	func createRow(_: EditorTextRowTopicTextView, afterRow: Row) {
+	func createRow(_: EditorTextRowTopicTextView, afterRow: Row, textRowStrings: TextRowStrings) {
 		appliedConfiguration.delegate?.editorTextRowCreateRow(afterRow: afterRow, textRowStrings: textRowStrings)
 	}
 	
-	func indentRow(_: EditorTextRowTopicTextView, row: Row) {
+	func indentRow(_: EditorTextRowTopicTextView, row: Row, textRowStrings: TextRowStrings) {
 		appliedConfiguration.delegate?.editorTextRowIndentRow(row, textRowStrings: textRowStrings)
 	}
 	
@@ -255,10 +247,6 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 		return appliedConfiguration.delegate?.editorTextRowUndoManager
 	}
 	
-	var editorRowNoteTextViewTextRowStrings: TextRowStrings {
-		return textRowStrings
-	}
-	
 	var editorRowNoteTextViewInputAccessoryView: UIView? {
 		return appliedConfiguration.delegate?.editorTextRowInputAccessoryView
 	}
@@ -272,11 +260,11 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowTextFieldDidBecomeActive(row: row)
 	}
 	
-	func textChanged(_: EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange) {
+	func textChanged(_: EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, textRowStrings: TextRowStrings) {
 		appliedConfiguration.delegate?.editorTextRowTextChanged(row: row, textRowStrings: textRowStrings, isInNotes: isInNotes, selection: selection)
 	}
 	
-	func deleteRowNote(_: EditorTextRowNoteTextView, row: Row) {
+	func deleteRowNote(_: EditorTextRowNoteTextView, row: Row, textRowStrings: TextRowStrings) {
 		appliedConfiguration.delegate?.editorTextRowDeleteRowNote(row, textRowStrings: textRowStrings)
 	}
 	

@@ -10,12 +10,11 @@ import Templeton
 
 protocol EditorTextRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
-	var editorRowNoteTextViewTextRowStrings: TextRowStrings { get }
 	var editorRowNoteTextViewInputAccessoryView: UIView? { get }
 	func invalidateLayout(_ : EditorTextRowNoteTextView)
 	func didBecomeActive(_ : EditorTextRowNoteTextView, row: Row)
-	func textChanged(_ : EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange)
-	func deleteRowNote(_ : EditorTextRowNoteTextView, row: Row)
+	func textChanged(_ : EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, textRowStrings: TextRowStrings)
+	func deleteRowNote(_ : EditorTextRowNoteTextView, row: Row, textRowStrings: TextRowStrings)
 	func moveCursorTo(_ : EditorTextRowNoteTextView, row: Row)
 	func moveCursorDown(_ : EditorTextRowNoteTextView, row: Row)
 	func editLink(_: EditorTextRowNoteTextView, _ link: String?, text: String?, range: NSRange)
@@ -44,8 +43,8 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 	
 	weak var editorDelegate: EditorTextRowNoteTextViewDelegate?
 	
-	override var textRowStrings: TextRowStrings? {
-		return editorDelegate?.editorRowNoteTextViewTextRowStrings
+	override var textRowStrings: TextRowStrings {
+		return TextRowStrings.note(cleansedAttributedText)
 	}
 	
 	private var autosaveWorkItem: DispatchWorkItem?
@@ -96,7 +95,7 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 		guard let textRow = row else { return }
 		if attributedText.length == 0 {
 			isSavingTextUnnecessary = true
-			editorDelegate?.deleteRowNote(self, row: textRow)
+			editorDelegate?.deleteRowNote(self, row: textRow, textRowStrings: textRowStrings)
 		} else {
 			super.deleteBackward()
 		}
@@ -123,7 +122,7 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false
 		} else {
-			editorDelegate?.textChanged(self, row: textRow, isInNotes: true, selection: selectedRange)
+			editorDelegate?.textChanged(self, row: textRow, isInNotes: true, selection: selectedRange, textRowStrings: textRowStrings)
 		}
 		
 		autosaveWorkItem?.cancel()

@@ -9,14 +9,10 @@ import Foundation
 import MobileCoreServices
 import MarkdownAttributedString
 
-public struct TextRowStrings {
-	public var topic: NSAttributedString?
-	public var note: NSAttributedString?
-	
-	public init(topic: NSAttributedString?, note: NSAttributedString?) {
-		self.topic = topic
-		self.note = note
-	}
+public enum TextRowStrings {
+	case topic(NSAttributedString?)
+	case note(NSAttributedString?)
+	case both(NSAttributedString?, NSAttributedString?)
 }
 
 enum TextRowError: LocalizedError {
@@ -100,11 +96,18 @@ public final class TextRow: BaseRow, Codable {
 	
 	public var textRowStrings: TextRowStrings {
 		get {
-			return TextRowStrings(topic: topic, note: note)
+			return TextRowStrings.both(topic, note)
 		}
 		set {
-			topic = newValue.topic
-			note = newValue.note
+			switch newValue {
+			case .topic(let topic):
+				self.topic = topic
+			case .note(let note):
+				self.note = note
+			case .both(let topic, let note):
+				self.topic = topic
+				self.note = note
+			}
 		}
 	}
 	

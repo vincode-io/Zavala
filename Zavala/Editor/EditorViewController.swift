@@ -769,7 +769,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	func splitRow() {
 		guard let row = currentRows?.last,
-			  let topic = currentTextRowStrings?.topic,
+			  let topic = (currentTextView as? EditorTextRowTopicTextView)?.attributedText,
 			  let cursorPosition = currentCursorPosition else { return }
 		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}

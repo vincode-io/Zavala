@@ -10,15 +10,14 @@ import Templeton
 
 protocol EditorTextRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
-	var editorRowTopicTextViewTextRowStrings: TextRowStrings { get }
 	var editorRowTopicTextViewInputAccessoryView: UIView? { get }
 	func didBecomeActive(_: EditorTextRowTopicTextView, row: Row)
 	func invalidateLayout(_: EditorTextRowTopicTextView)
-	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange)
-	func deleteRow(_: EditorTextRowTopicTextView, row: Row)
+	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, textRowStrings: TextRowStrings)
+	func deleteRow(_: EditorTextRowTopicTextView, row: Row, textRowStrings: TextRowStrings)
 	func createRow(_: EditorTextRowTopicTextView, beforeRow: Row)
-	func createRow(_: EditorTextRowTopicTextView, afterRow: Row)
-	func indentRow(_: EditorTextRowTopicTextView, row: Row)
+	func createRow(_: EditorTextRowTopicTextView, afterRow: Row, textRowStrings: TextRowStrings)
+	func indentRow(_: EditorTextRowTopicTextView, row: Row, textRowStrings: TextRowStrings)
 	func splitRow(_: EditorTextRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
 	func editLink(_: EditorTextRowTopicTextView, _ link: String?, text: String?, range: NSRange)
 }
@@ -45,8 +44,8 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 	
 	weak var editorDelegate: EditorTextRowTopicTextViewDelegate?
 	
-	override var textRowStrings: TextRowStrings? {
-		return editorDelegate?.editorRowTopicTextViewTextRowStrings
+	override var textRowStrings: TextRowStrings {
+		return TextRowStrings.topic(cleansedAttributedText)
 	}
 	
 	var cursorIsOnTopLine: Bool {
@@ -104,7 +103,7 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 	override func deleteBackward() {
 		guard let textRow = row else { return }
 		if attributedText.length == 0 && textRow.rowCount == 0 {
-			editorDelegate?.deleteRow(self, row: textRow)
+			editorDelegate?.deleteRow(self, row: textRow, textRowStrings: textRowStrings)
 		} else {
 			super.deleteBackward()
 		}
@@ -112,12 +111,12 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 
 	@objc func createRow(_ sender: Any) {
 		guard let textRow = row else { return }
-		editorDelegate?.createRow(self, afterRow: textRow)
+		editorDelegate?.createRow(self, afterRow: textRow, textRowStrings: textRowStrings)
 	}
 	
 	@objc func indent(_ sender: Any) {
 		guard let textRow = row else { return }
-		editorDelegate?.indentRow(self, row: textRow)
+		editorDelegate?.indentRow(self, row: textRow, textRowStrings: textRowStrings)
 	}
 	
 	@objc func insertTab(_ sender: Any) {
@@ -169,7 +168,7 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false
 		} else {
-			editorDelegate?.textChanged(self, row: textRow, isInNotes: false, selection: selectedRange)
+			editorDelegate?.textChanged(self, row: textRow, isInNotes: false, selection: selectedRange, textRowStrings: textRowStrings)
 		}
 		
 		autosaveWorkItem?.cancel()
@@ -218,7 +217,7 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 		guard let textRow = row else { return true }
 		switch text {
 		case "\n":
-			editorDelegate?.createRow(self, afterRow: textRow)
+			editorDelegate?.createRow(self, afterRow: textRow, textRowStrings: textRowStrings)
 			return false
 		default:
 			return true

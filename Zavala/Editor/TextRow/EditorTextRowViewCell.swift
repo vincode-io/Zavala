@@ -52,10 +52,6 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 		}
 	}
 	
-	var textRowStrings: TextRowStrings? {
-		return (contentView as? EditorTextRowContentView)?.textRowStrings
-	}
-	
 	var topicTextView: EditorTextRowTopicTextView? {
 		return (contentView as? EditorTextRowContentView)?.topicTextView
 	}

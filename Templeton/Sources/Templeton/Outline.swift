@@ -2512,17 +2512,24 @@ extension Outline {
 	}
 
 	private func updateTextRowStrings(_ textRow: TextRow, _ textRowStrings: TextRowStrings) {
-		let oldTopicDocLinks = textRow.topic != nil ? extractLinkToIDs(textRow.topic!) : [EntityID]()
-		let newTopicDocLinks = textRowStrings.topic != nil ? extractLinkToIDs(textRowStrings.topic!) : [EntityID]()
-		let topicDiff = newTopicDocLinks.difference(from: oldTopicDocLinks)
-		processLinkDiff(topicDiff)
-		
-		let oldNoteDocLinks = textRow.note != nil ? extractLinkToIDs(textRow.note!) : [EntityID]()
-		let newNoteDocLinks = textRowStrings.note != nil ? extractLinkToIDs(textRowStrings.note!) : [EntityID]()
-		let noteDiff = newNoteDocLinks.difference(from: oldNoteDocLinks)
-		processLinkDiff(noteDiff)
+		switch textRowStrings {
+		case .topic(let topic):
+			processLinkDiff(oldText: textRow.topic, newText: topic)
+		case .note(let note):
+			processLinkDiff(oldText: textRow.note, newText: note)
+		case .both(let topic, let note):
+			processLinkDiff(oldText: textRow.topic, newText: topic)
+			processLinkDiff(oldText: textRow.note, newText: note)
+		}
 
 		textRow.textRowStrings = textRowStrings
+	}
+	
+	private func processLinkDiff(oldText: NSAttributedString?, newText: NSAttributedString?) {
+		let oldTextDocLinks = oldText != nil ? extractLinkToIDs(oldText!) : [EntityID]()
+		let newTextDocLinks = newText != nil ? extractLinkToIDs(newText!) : [EntityID]()
+		let topicDiff = newTextDocLinks.difference(from: oldTextDocLinks)
+		processLinkDiff(topicDiff)
 	}
 	
 	private func processLinkDiff(_ diff: CollectionDifference<EntityID>) {
