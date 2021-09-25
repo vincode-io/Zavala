@@ -1816,10 +1816,18 @@ extension EditorViewController {
 	}
 	
 	private func layoutEditor() {
-		let contentOffset = collectionView.contentOffset
-		collectionView.collectionViewLayout.invalidateLayout()
-		collectionView.layoutIfNeeded()
-		collectionView.contentOffset = contentOffset
+		if let row = currentTextView?.row?.shadowTableIndex {
+			let contentOffset = collectionView.contentOffset
+			let currentCoordinates = CursorCoordinates.currentCoordinates
+			UIView.performWithoutAnimation {
+				self.collectionView.reloadItems(at: [IndexPath(row: row, section: self.adjustedRowsSection)])
+				self.collectionView.contentOffset = contentOffset
+				if let coordinates = currentCoordinates {
+					self.restoreCursorPosition(coordinates, scroll: false)
+				}
+			}
+		}
+		
 		makeCursorVisibleIfNecessary()
 	}
 	
