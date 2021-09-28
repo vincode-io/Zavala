@@ -28,8 +28,8 @@ public final class IndentRowCommand: OutlineCommand {
 		self.undoActionName = L10n.indent
 		self.redoActionName = L10n.indent
 		
-		if rows.count == 1, let textRow = rows.first?.textRow {
-			self.oldTextRowStrings = textRow.textRowStrings
+		if rows.count == 1, let row = rows.first {
+			self.oldTextRowStrings = row.textRowStrings
 			self.newTextRowStrings = textRowStrings
 		}
 	}

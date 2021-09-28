@@ -13,22 +13,20 @@ class MarkdownListVisitor {
 	var markdown = String()
 	
 	func visitor(_ visited: Row) {
-		guard let textRow = visited.textRow else { return }
-
 		markdown.append(String(repeating: "\t", count: indentLevel))
 		
-		if textRow.isComplete {
-			markdown.append("* ~~\(textRow.topicMarkdown ?? "")~~")
+		if visited.isComplete {
+			markdown.append("* ~~\(visited.topicMarkdown ?? "")~~")
 		} else {
-			markdown.append("* \(textRow.topicMarkdown ?? "")")
+			markdown.append("* \(visited.topicMarkdown ?? "")")
 		}
 		
-		if let notePlainText = textRow.noteMarkdown {
+		if let notePlainText = visited.noteMarkdown {
 			markdown.append("\n  \(notePlainText)")
 		}
 		
 		indentLevel = indentLevel + 1
-		textRow.rows.forEach {
+		visited.rows.forEach {
 			markdown.append("\n")
 			$0.visit(visitor: self.visitor)
 		}

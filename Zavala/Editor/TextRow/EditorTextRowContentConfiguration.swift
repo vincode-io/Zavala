@@ -37,10 +37,8 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 		self.isChevronShowing = row.rowCount > 0
 		self.isComplete = row.isComplete
 		self.isAncestorComplete = row.isAncestorComplete
-		if let textRow = row.textRow {
-			self.topic = textRow.topic
-			self.note = textRow.note
-		}
+		self.topic = row.topic
+		self.note = row.note
 		
 		self.topicFont = OutlineFontCache.shared.topic(level: indentionLevel)
 		self.noteFont = OutlineFontCache.shared.note(level: indentionLevel)

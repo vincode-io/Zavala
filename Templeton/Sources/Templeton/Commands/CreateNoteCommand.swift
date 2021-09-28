@@ -31,8 +31,8 @@ public final class CreateNoteCommand: OutlineCommand {
 		undoActionName = L10n.addNote
 		redoActionName = L10n.addNote
 
-		if rows.count == 1, let textRow = rows.first?.textRow {
-			self.oldTextRowStrings = textRow.textRowStrings
+		if rows.count == 1, let row = rows.first {
+			self.oldTextRowStrings = row.textRowStrings
 			self.newTextRowStrings = textRowStrings
 		}
 	}

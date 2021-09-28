@@ -30,8 +30,8 @@ public final class UncompleteCommand: OutlineCommand {
 		self.undoActionName = L10n.uncomplete
 		self.redoActionName = L10n.uncomplete
 		
-		if rows.count == 1, let textRow = rows.first?.textRow {
-			self.oldTextRowStrings = textRow.textRowStrings
+		if rows.count == 1, let row = rows.first {
+			self.oldTextRowStrings = row.textRowStrings
 			self.newTextRowStrings = textRowStrings
 		}
 	}

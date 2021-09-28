@@ -13,17 +13,15 @@ class StringVisitor {
 	var string = String()
 	
 	func visitor(_ visited: Row) {
-		guard let textRow = visited.textRow else { return }
-
 		string.append(String(repeating: "\t", count: indentLevel))
-		string.append("\(textRow.topic?.string ?? "")")
+		string.append("\(visited.topic?.string ?? "")")
 		
-		if let notePlainText = textRow.note?.string {
+		if let notePlainText = visited.note?.string {
 			string.append("\n\(notePlainText)")
 		}
 		
 		indentLevel = indentLevel + 1
-		textRow.rows.forEach {
+		visited.rows.forEach {
 			string.append("\n")
 			$0.visit(visitor: self.visitor)
 		}

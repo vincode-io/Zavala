@@ -20,14 +20,14 @@ public extension OPMLImporter {
 			let topicPlainText = rowIndexer.element?.attribute(by: "text")?.text ?? ""
 			let notePlainText = rowIndexer.element?.attribute(by: "_note")?.text
 			
-			let textRow = TextRow(outline: outline, topicPlainText: topicPlainText, notePlainText: notePlainText)
+			let row = Row(outline: outline, topicPlainText: topicPlainText, notePlainText: notePlainText)
 
 			if rowIndexer.element?.attribute(by: "_status")?.text == "checked" {
-				textRow.isComplete = true
+				row.isComplete = true
 			}
 			
-			appendRow(.text(textRow))
-			textRow.importRows(outline: outline, rowIndexers: rowIndexer["outline"].all)
+			appendRow(row)
+			row.importRows(outline: outline, rowIndexers: rowIndexer["outline"].all)
 		}
 	}
 	

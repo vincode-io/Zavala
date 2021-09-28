@@ -34,7 +34,7 @@ public final class CreateRowAfterCommand: OutlineCommand {
 	public func perform() {
 		saveCursorCoordinates()
 		if row == nil {
-			row = Row.text(TextRow(outline: outline))
+			row = Row(outline: outline)
 		}
 		newCursorIndex = outline.createRow(row!, afterRow: afterRow, textRowStrings: textRowStrings)
 		registerUndo()

@@ -13,20 +13,18 @@ class MarkdownDocVisitor {
 	var markdown = String()
 	
 	func visitor(_ visited: Row) {
-		guard let textRow = visited.textRow else { return }
-
-		if let topicMarkdown = textRow.topicMarkdown, !topicMarkdown.isEmpty {
+		if let topicMarkdown = visited.topicMarkdown, !topicMarkdown.isEmpty {
 			markdown.append("\n\n")
 			markdown.append(String(repeating: "#", count: indentLevel + 2))
 			markdown.append(" \(topicMarkdown)")
 		}
 		
-		if let noteMarkdown = textRow.noteMarkdown {
+		if let noteMarkdown = visited.noteMarkdown {
 			markdown.append("\n\n\(noteMarkdown)")
 		}
 		
 		indentLevel = indentLevel + 1
-		textRow.rows.forEach {
+		visited.rows.forEach {
 			$0.visit(visitor: self.visitor)
 		}
 		indentLevel = indentLevel - 1

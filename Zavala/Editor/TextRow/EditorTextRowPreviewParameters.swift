@@ -14,7 +14,7 @@ class EditorTextRowPreviewParameters: UIDragPreviewParameters {
 		super.init()
 	}
 	
-	init(cell: EditorTextRowViewCell, row: BaseRow) {
+	init(cell: EditorTextRowViewCell, row: Row) {
 		super.init()
 
 //		#if !targetEnvironment(macCatalyst)

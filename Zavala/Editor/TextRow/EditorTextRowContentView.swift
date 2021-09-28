@@ -315,7 +315,7 @@ extension EditorTextRowContentView {
 			let range = NSRange(location: 0, length: mutableAttrText.length)
 			mutableAttrText.addAttributes(attrs, range: range)
 			mutableAttrText.replaceFont(with: configuration.topicFont)
-			addHighlighting(mutableAttrText, searchResultCoordinates: configuration.row?.textRow?.searchResultCoordinates, isInNotes: false)
+			addHighlighting(mutableAttrText, searchResultCoordinates: configuration.row?.searchResultCoordinates, isInNotes: false)
 			topicTextView.attributedText = mutableAttrText
 		} else {
 			topicTextView.text = ""
@@ -331,7 +331,7 @@ extension EditorTextRowContentView {
 	}
 	
 	private func configureNoteTextView(configuration: EditorTextRowContentConfiguration) {
-		guard !configuration.isNotesHidden, let noteAttributedText = configuration.row?.textRow?.note else {
+		guard !configuration.isNotesHidden, let noteAttributedText = configuration.row?.note else {
 			noteTextView?.removeFromSuperview()
 			noteTextView = nil
 			return
@@ -344,7 +344,7 @@ extension EditorTextRowContentView {
 		let range = NSRange(location: 0, length: mutableAttrText.length)
 		mutableAttrText.replaceFont(with: configuration.noteFont)
 		mutableAttrText.addAttributes(attrs, range: range)
-		addHighlighting(mutableAttrText, searchResultCoordinates: configuration.row?.textRow?.searchResultCoordinates, isInNotes: true)
+		addHighlighting(mutableAttrText, searchResultCoordinates: configuration.row?.searchResultCoordinates, isInNotes: true)
 
 		if noteTextView == nil {
 			noteTextView = EditorTextRowNoteTextView()

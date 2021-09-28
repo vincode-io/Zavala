@@ -21,7 +21,6 @@ class TransientDataVisitor {
 	
 	func visitor(_ visited: Row) {
 
-		var mutatingVisited = visited
 		var addingToShadowTableSuspended = false
 		
 		// Add to the Shadow Table if we haven't hit a collapsed entry
@@ -30,9 +29,9 @@ class TransientDataVisitor {
 			let shouldFilter = (isFiltered && visited.isComplete) || (isSearching == .searching && !visited.isPartOfSearchResult)
 			
 			if shouldFilter {
-				mutatingVisited.shadowTableIndex = nil
+				visited.shadowTableIndex = nil
 			} else {
-				mutatingVisited.shadowTableIndex = shadowTable.count
+				visited.shadowTableIndex = shadowTable.count
 				shadowTable.append(visited)
 			}
 			
@@ -43,15 +42,14 @@ class TransientDataVisitor {
 			
 		} else {
 			
-			mutatingVisited.shadowTableIndex = nil
+			visited.shadowTableIndex = nil
 			
 		}
 		
 		// Set all the Headline's children's parent and visit them
 		visited.rows.forEach { row in
-			var mutatingRow = row
-			mutatingRow.parent = visited
-			mutatingRow.visit(visitor: visitor)
+			row.parent = visited
+			row.visit(visitor: visitor)
 		}
 
 		if addingToShadowTableSuspended {

@@ -52,7 +52,7 @@ extension EditorViewController: UICollectionViewDragDelegate {
 		
 			dragItem.previewProvider = { () -> UIDragPreview? in
 				guard let cell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return nil}
-				return UIDragPreview(view: cell, parameters: EditorTextRowPreviewParameters(cell: cell, row: row.associatedRow))
+				return UIDragPreview(view: cell, parameters: EditorTextRowPreviewParameters(cell: cell, row: row))
 			}
 			
 			dragItems.append(dragItem)

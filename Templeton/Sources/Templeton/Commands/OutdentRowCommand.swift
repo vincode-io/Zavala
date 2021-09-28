@@ -35,8 +35,8 @@ public final class OutdentRowCommand: OutlineCommand {
 			restoreMoves.append(Outline.RowMove(row: row, toParent: oldParent, toChildIndex: oldChildIndex))
 		}
 		
-		if rows.count == 1, let textRow = rows.first?.textRow {
-			self.oldTextRowStrings = textRow.textRowStrings
+		if rows.count == 1, let row = rows.first {
+			self.oldTextRowStrings = row.textRowStrings
 			self.newTextRowStrings = textRowStrings
 		}
 	}

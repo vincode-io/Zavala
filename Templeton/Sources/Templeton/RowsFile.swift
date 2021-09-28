@@ -9,8 +9,24 @@ import Foundation
 import os.log
 import RSCore
 
+struct OldRow: Decodable {
+	
+	var row: Row?
+	
+	private enum CodingKeys: String, CodingKey {
+		case type
+		case textRow
+	}
+
+	public init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		row = try container.decode(Row.self, forKey: .textRow)
+	}
+	
+}
+
 struct OutlineRows: Codable {
-	let fileVersion = 2
+	let fileVersion = 3
 	var rowOrder: [String]
 	var keyedRows: [String: Row]
 
@@ -32,18 +48,30 @@ struct OutlineRows: Codable {
 
 		let allRows: [Row]
 
-		if fileVersion == 1 {
+		switch fileVersion {
+		case 1:
 			if let rowOrder = try? container.decode([EntityID].self, forKey: .rowOrder) {
 				self.rowOrder = rowOrder.map { $0.rowUUID}
 			} else {
 				self.rowOrder = [String]()
 			}
-			if let entityKeyedRows = try? container.decode([EntityID: Row].self, forKey: .keyedRows) {
-				allRows = Array(entityKeyedRows.values)
+			if let entityKeyedRows = try? container.decode([EntityID: OldRow].self, forKey: .keyedRows) {
+				allRows = Array(entityKeyedRows.values).compactMap { $0.row }
 			} else {
 				allRows = [Row]()
 			}
-		} else {
+		case 2:
+			if let rowOrder = try? container.decode([String].self, forKey: .rowOrder) {
+				self.rowOrder = rowOrder
+			} else {
+				self.rowOrder = [String]()
+			}
+			if let rows = try? container.decode([OldRow].self, forKey: .keyedRows) {
+				allRows = rows.compactMap { $0.row }
+			} else {
+				allRows = [Row]()
+			}
+		default:
 			if let rowOrder = try? container.decode([String].self, forKey: .rowOrder) {
 				self.rowOrder = rowOrder
 			} else {

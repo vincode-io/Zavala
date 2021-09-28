@@ -28,7 +28,7 @@ public final class TextChangedCommand: OutlineCommand {
 		self.undoActionName = L10n.typing
 		self.redoActionName = L10n.typing
 
-		oldTextRowStrings = row.textRow?.textRowStrings
+		oldTextRowStrings = row.textRowStrings
 		newTextRowStrings = textRowStrings
 		
 		cursorCoordinates = CursorCoordinates(row: row, isInNotes: isInNotes, selection: selection)

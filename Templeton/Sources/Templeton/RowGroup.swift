@@ -50,15 +50,14 @@ public class RowGroup: Codable {
 				newChildRowRowOrder.append(idMap[oldRowOrder]!)
 			}
 			
-			var mutableChildRow = newChildRow
-			mutableChildRow.rowOrder = newChildRowRowOrder
-			outline.keyedRows?[mutableChildRow.id] = mutableChildRow
-			outline.requestCloudKitUpdate(for: mutableChildRow.entityID)
+			newChildRow.rowOrder = newChildRowRowOrder
+			outline.keyedRows?[newChildRow.id] = newChildRow
+			outline.requestCloudKitUpdate(for: newChildRow.entityID)
 		}
 		
 		outline.endCloudKitBatchRequest()
 		
-		var newRow = row.duplicate(newOutline: outline)
+		let newRow = row.duplicate(newOutline: outline)
 		newRow.parent = row.parent
 		var newRowRowOrder = [String]()
 		for newRowOrder in newRow.rowOrder {

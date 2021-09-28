@@ -13,18 +13,16 @@ class PrintDocVisitor {
 	var print = NSMutableAttributedString()
 
 	func visitor(_ visited: Row) {
-		guard let textRow = visited.textRow else { return }
-		
-		if let topic = textRow.topic {
+		if let topic = visited.topic {
 			print.append(NSAttributedString(string: "\n\n"))
 			var attrs = [NSAttributedString.Key : Any]()
-			if textRow.isComplete || textRow.isAncestorComplete {
+			if visited.isComplete || visited.isAncestorComplete {
 				attrs[.foregroundColor] = UIColor.darkGray
 			} else {
 				attrs[.foregroundColor] = UIColor.black
 			}
 			
-			if textRow.isComplete {
+			if visited.isComplete {
 				attrs[.strikethroughStyle] = 1
 				attrs[.strikethroughColor] = UIColor.darkGray
 			} else {
@@ -46,7 +44,7 @@ class PrintDocVisitor {
 			print.append(printTopic)
 		}
 		
-		if let note = textRow.note {
+		if let note = visited.note {
 			var attrs = [NSAttributedString.Key : Any]()
 			attrs[.foregroundColor] = UIColor.darkGray
 
@@ -71,7 +69,7 @@ class PrintDocVisitor {
 		}
 		
 		indentLevel = indentLevel + 1
-		textRow.rows.forEach {
+		visited.rows.forEach {
 			$0.visit(visitor: self.visitor)
 		}
 		indentLevel = indentLevel - 1

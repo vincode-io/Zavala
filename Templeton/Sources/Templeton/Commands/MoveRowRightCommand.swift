@@ -29,8 +29,8 @@ public final class MoveRowRightCommand: OutlineCommand {
 		self.undoActionName = L10n.moveRight
 		self.redoActionName = L10n.moveRight
 		
-		if rows.count == 1, let textRow = rows.first?.textRow {
-			self.oldTextRowStrings = textRow.textRowStrings
+		if rows.count == 1, let row = rows.first {
+			self.oldTextRowStrings = row.textRowStrings
 			self.newTextRowStrings = textRowStrings
 		}
 	}

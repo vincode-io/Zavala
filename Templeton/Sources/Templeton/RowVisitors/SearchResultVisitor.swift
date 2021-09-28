@@ -23,29 +23,29 @@ class SearchResultVisitor {
 	}
 	
 	func visitor(_ visited: Row) {
-		guard !(isFiltered && visited.isComplete), let textRow = visited.textRow, let searchRegEx = searchRegEx else {
+		guard !(isFiltered && visited.isComplete), let searchRegEx = searchRegEx else {
 			return
 		}
 		
-		if let topicText = textRow.topic?.string.trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current) {
+		if let topicText = visited.topic?.string.trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current) {
 			for match in searchRegEx.matches(in: topicText, options: [], range: NSRange(location: 0, length: topicText.utf16.count)) as [NSTextCheckingResult] {
 				let coordinates = SearchResultCoordinates(isCurrentResult: firstMatch, row: visited, isInNotes: false, range: match.range)
 				searchResultCoordinates.append(coordinates)
 				
-				textRow.isPartOfSearchResult = true
-				textRow.searchResultCoordinates.add(coordinates)
+				visited.isPartOfSearchResult = true
+				visited.searchResultCoordinates.add(coordinates)
 				
 				firstMatch = false
 			}
 		}
 		
-		if !isNotesHidden, let noteText = textRow.note?.string.trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current) {
+		if !isNotesHidden, let noteText = visited.note?.string.trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current) {
 			for match in searchRegEx.matches(in: noteText, options: [], range: NSRange(location: 0, length: noteText.utf16.count)) as [NSTextCheckingResult] {
 				let coordinates = SearchResultCoordinates(isCurrentResult: firstMatch, row: visited, isInNotes: true, range: match.range)
 				searchResultCoordinates.append(coordinates)
 
-				textRow.isPartOfSearchResult = true
-				textRow.searchResultCoordinates.add(coordinates)
+				visited.isPartOfSearchResult = true
+				visited.searchResultCoordinates.add(coordinates)
 				
 				firstMatch = false
 			}

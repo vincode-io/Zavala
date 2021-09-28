@@ -189,21 +189,19 @@ extension CloudKitModifyOperation {
 	}
 	
 	private func addSave(zoneID: CKRecordZone.ID, outlineRecordID: CKRecord.ID, row: Row) {
-		guard let textRow = row.textRow else { return }
+		row.syncID = UUID().uuidString
 		
-		textRow.syncID = UUID().uuidString
-		
-		let recordID = CKRecord.ID(recordName: textRow.entityID.description, zoneID: zoneID)
+		let recordID = CKRecord.ID(recordName: row.entityID.description, zoneID: zoneID)
 		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitRow.recordType, recordID: recordID)
 		
 		record.parent = CKRecord.Reference(recordID: outlineRecordID, action: .none)
 		record[CloudKitOutlineZone.CloudKitRow.Fields.outline] = CKRecord.Reference(recordID: outlineRecordID, action: .deleteSelf)
-		record[CloudKitOutlineZone.CloudKitRow.Fields.syncID] = textRow.syncID
+		record[CloudKitOutlineZone.CloudKitRow.Fields.syncID] = row.syncID
 		record[CloudKitOutlineZone.CloudKitRow.Fields.subtype] = "text"
-		record[CloudKitOutlineZone.CloudKitRow.Fields.topicData] = textRow.topicData
-		record[CloudKitOutlineZone.CloudKitRow.Fields.noteData] = textRow.noteData
-		record[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] = textRow.isComplete ? "1" : "0"
-		record[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] = textRow.rowOrder
+		record[CloudKitOutlineZone.CloudKitRow.Fields.topicData] = row.topicData
+		record[CloudKitOutlineZone.CloudKitRow.Fields.noteData] = row.noteData
+		record[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] = row.isComplete ? "1" : "0"
+		record[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] = row.rowOrder
 
 		addSave(zoneID, record)
 	}
@@ -269,7 +267,15 @@ extension CloudKitModifyOperation {
 		let saveRecords = saves.filter { $0.recordType == CloudKitOutlineZone.CloudKitRow.recordType }
 		let saveEntityIDs = saveRecords.compactMap { EntityID(description: $0.recordID.recordName) }
 		let saveRows = saveEntityIDs.compactMap { AccountManager.shared.findRow($0) }
-		let saveImages = saveRows.flatMap { $0.images }
+		let saveImages = saveRows.reduce([Image]()) { partialResult, row in
+			if let images = row.images {
+				var result = partialResult
+				result.append(contentsOf: images)
+				return result
+			} else {
+				return partialResult
+			}
+		}
 		
 		for image in saveImages {
 			if !imageRecordIDs.contains(image.id) {
@@ -297,7 +303,7 @@ extension CloudKitModifyOperation {
 			let rowID = EntityID.row(imageRecordID.accountID, imageRecordID.documentUUID, imageRecordID.rowUUID)
 			guard let row = AccountManager.shared.findRow(rowID) else { continue }
 
-			if !row.images.contains(where: { $0.id == imageRecordID }) {
+			if let images = row.images, !images.contains(where: { $0.id == imageRecordID }) {
 				imageDeletes.append(CKRecord.ID(recordName: imageRecordID.description, zoneID: zoneID))
 			}
 		}

@@ -1139,7 +1139,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Outline.Section.backlinks.rawValue:
 			return collectionView.dequeueConfiguredReusableCell(using: backlinkRegistration!, for: indexPath, item: outline)
 		default:
-			let row = outline?.shadowTable?[indexPath.row] ?? Row.blank
+			let row = outline?.shadowTable?[indexPath.row] ?? Row()
 			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration!, for: indexPath, item: row)
 		}
 	}
@@ -1175,7 +1175,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-		guard let row = configuration.identifier as? TextRow,
+		guard let row = configuration.identifier as? Row,
 			  let rowShadowTableIndex = row.shadowTableIndex,
 			  let cell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell else { return nil }
 		
@@ -1978,7 +1978,7 @@ extension EditorViewController {
 	private func makeRowsContextMenu(rows: [Row]) -> UIContextMenuConfiguration? {
 		guard let firstRow = rows.sortedByDisplayOrder().first else { return nil }
 		
-		return UIContextMenuConfiguration(identifier: firstRow.associatedRow as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
+		return UIContextMenuConfiguration(identifier: firstRow as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
 			guard let self = self, let outline = self.outline else { return nil }
 			
 			var menuItems = [UIMenu]()
@@ -2394,7 +2394,7 @@ extension EditorViewController {
 				var rowGroups = [RowGroup]()
 				let textRows = text.split(separator: "\n").map { String($0) }
 				for textRow in textRows {
-					let row = Row.text(TextRow(outline: outline, topicPlainText: textRow.trimmingWhitespace))
+					let row = Row(outline: outline, topicPlainText: textRow.trimmingWhitespace)
 					rowGroups.append(RowGroup(row))
 				}
 				
