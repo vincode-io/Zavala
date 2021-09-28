@@ -41,12 +41,12 @@ public final class LocalDropRowCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		outline.moveRows(rowMoves, textRowStrings: nil)
+		outline.moveRows(rowMoves, rowStrings: nil)
 		registerUndo()
 	}
 	
 	public func undo() {
-		outline.moveRows(restoreMoves, textRowStrings: nil)
+		outline.moveRows(restoreMoves, rowStrings: nil)
 		registerRedo()
 		restoreCursorPosition()
 	}

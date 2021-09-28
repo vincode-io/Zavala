@@ -211,24 +211,24 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowTextFieldDidBecomeActive(row: row)
 	}
 
-	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, textRowStrings: TextRowStrings) {
-		appliedConfiguration.delegate?.editorTextRowTextChanged(row: row, textRowStrings: textRowStrings, isInNotes: isInNotes, selection: selection)
+	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings) {
+		appliedConfiguration.delegate?.editorTextRowTextChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
 	}
 	
-	func deleteRow(_: EditorTextRowTopicTextView, row: Row, textRowStrings: TextRowStrings) {
-		appliedConfiguration.delegate?.editorTextRowDeleteRow(row, textRowStrings: textRowStrings)
+	func deleteRow(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings) {
+		appliedConfiguration.delegate?.editorTextRowDeleteRow(row, rowStrings: rowStrings)
 	}
 	
 	func createRow(_: EditorTextRowTopicTextView, beforeRow: Row) {
 		appliedConfiguration.delegate?.editorTextRowCreateRow(beforeRow: beforeRow)
 	}
 	
-	func createRow(_: EditorTextRowTopicTextView, afterRow: Row, textRowStrings: TextRowStrings) {
-		appliedConfiguration.delegate?.editorTextRowCreateRow(afterRow: afterRow, textRowStrings: textRowStrings)
+	func createRow(_: EditorTextRowTopicTextView, afterRow: Row, rowStrings: RowStrings) {
+		appliedConfiguration.delegate?.editorTextRowCreateRow(afterRow: afterRow, rowStrings: rowStrings)
 	}
 	
-	func indentRow(_: EditorTextRowTopicTextView, row: Row, textRowStrings: TextRowStrings) {
-		appliedConfiguration.delegate?.editorTextRowIndentRow(row, textRowStrings: textRowStrings)
+	func indentRow(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings) {
+		appliedConfiguration.delegate?.editorTextRowIndentRow(row, rowStrings: rowStrings)
 	}
 	
 	func splitRow(_: EditorTextRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int) {
@@ -260,12 +260,12 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowTextFieldDidBecomeActive(row: row)
 	}
 	
-	func textChanged(_: EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, textRowStrings: TextRowStrings) {
-		appliedConfiguration.delegate?.editorTextRowTextChanged(row: row, textRowStrings: textRowStrings, isInNotes: isInNotes, selection: selection)
+	func textChanged(_: EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings) {
+		appliedConfiguration.delegate?.editorTextRowTextChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
 	}
 	
-	func deleteRowNote(_: EditorTextRowNoteTextView, row: Row, textRowStrings: TextRowStrings) {
-		appliedConfiguration.delegate?.editorTextRowDeleteRowNote(row, textRowStrings: textRowStrings)
+	func deleteRowNote(_: EditorTextRowNoteTextView, row: Row, rowStrings: RowStrings) {
+		appliedConfiguration.delegate?.editorTextRowDeleteRowNote(row, rowStrings: rowStrings)
 	}
 	
 	func moveCursorTo(_: EditorTextRowNoteTextView, row: Row) {

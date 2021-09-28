@@ -19,10 +19,10 @@ public final class OutdentRowCommand: OutlineCommand {
 	var restoreMoves = [Outline.RowMove]()
 	var outdentedRows: [Row]?
 
-	var oldTextRowStrings: TextRowStrings?
-	var newTextRowStrings: TextRowStrings?
+	var oldRowStrings: RowStrings?
+	var newRowStrings: RowStrings?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], textRowStrings: TextRowStrings?) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -36,14 +36,14 @@ public final class OutdentRowCommand: OutlineCommand {
 		}
 		
 		if rows.count == 1, let row = rows.first {
-			self.oldTextRowStrings = row.textRowStrings
-			self.newTextRowStrings = textRowStrings
+			self.oldRowStrings = row.rowStrings
+			self.newRowStrings = rowStrings
 		}
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		outdentedRows = outline.outdentRows(rows, textRowStrings: newTextRowStrings)
+		outdentedRows = outline.outdentRows(rows, rowStrings: newRowStrings)
 		registerUndo()
 	}
 	
@@ -51,7 +51,7 @@ public final class OutdentRowCommand: OutlineCommand {
 		guard let outdentedRows = outdentedRows else { return }
 		let outdented = Set(outdentedRows)
 		let outdentRestore = restoreMoves.filter { outdented.contains($0.row) }
-		outline.moveRows(outdentRestore, textRowStrings: oldTextRowStrings)
+		outline.moveRows(outdentRestore, rowStrings: oldRowStrings)
 		registerRedo()
 		restoreCursorPosition()
 	}

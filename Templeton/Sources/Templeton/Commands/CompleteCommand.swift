@@ -21,10 +21,10 @@ public final class CompleteCommand: OutlineCommand {
 	
 	public var newCursorIndex: Int?
 	
-	var oldTextRowStrings: TextRowStrings?
-	var newTextRowStrings: TextRowStrings?
+	var oldRowStrings: RowStrings?
+	var newRowStrings: RowStrings?
 
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], textRowStrings: TextRowStrings?) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -33,14 +33,14 @@ public final class CompleteCommand: OutlineCommand {
 		self.redoActionName = L10n.complete
 		
 		if rows.count == 1, let row = rows.first {
-			self.oldTextRowStrings = row.textRowStrings
-			self.newTextRowStrings = textRowStrings
+			self.oldRowStrings = row.rowStrings
+			self.newRowStrings = rowStrings
 		}
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (impacted, newCursorIndex) = outline.complete(rows: rows, textRowStrings: newTextRowStrings)
+		let (impacted, newCursorIndex) = outline.complete(rows: rows, rowStrings: newRowStrings)
 		completedRows = impacted
 		self.newCursorIndex = newCursorIndex
 		registerUndo()
@@ -48,7 +48,7 @@ public final class CompleteCommand: OutlineCommand {
 	
 	public func undo() {
 		guard let completedRows = completedRows else { return }
-		outline.uncomplete(rows: completedRows, textRowStrings: oldTextRowStrings)
+		outline.uncomplete(rows: completedRows, rowStrings: oldRowStrings)
 		registerRedo()
 		restoreCursorPosition()
 	}

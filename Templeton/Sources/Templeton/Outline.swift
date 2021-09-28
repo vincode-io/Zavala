@@ -811,11 +811,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		imagesFile?.markAsDirty()
 	}
 	
-	func createNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], Int?) {
+	func createNotes(rows: [Row], rowStrings: RowStrings?) -> ([Row], Int?) {
 		beginCloudKitBatchRequest()
 		
-		if rowCount == 1, let row = rows.first, let texts = textRowStrings {
-			updateTextRowStrings(row, texts)
+		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+			updateRowStrings(row, texts)
 		}
 
 		var impacted = [Row]()
@@ -845,11 +845,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	@discardableResult
-	func deleteNotes(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row: NSAttributedString], Int?) {
+	func deleteNotes(rows: [Row], rowStrings: RowStrings?) -> ([Row: NSAttributedString], Int?) {
 		beginCloudKitBatchRequest()
 		
-		if rowCount == 1, let row = rows.first, let texts = textRowStrings {
-			updateTextRowStrings(row, texts)
+		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+			updateRowStrings(row, texts)
 		}
 
 		var impacted = [Row: NSAttributedString]()
@@ -885,13 +885,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	@discardableResult
-	func deleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) -> Int? {
+	func deleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) -> Int? {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
 		beginCloudKitBatchRequest()
 		
-		if rowCount == 1, let row = rows.first, let texts = textRowStrings {
-			updateTextRowStrings(row, texts)
+		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+			updateRowStrings(row, texts)
 		}
 
 		var deletes = Set<Int>()
@@ -954,11 +954,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineElementsDidChange(changes)
 	}
 	
-	func createRow(_ row: Row, beforeRow: Row, textRowStrings: TextRowStrings? = nil) -> Int? {
+	func createRow(_ row: Row, beforeRow: Row, rowStrings: RowStrings? = nil) -> Int? {
 		beginCloudKitBatchRequest()
 		
-		if let texts = textRowStrings {
-			updateTextRowStrings(beforeRow, texts)
+		if let texts = rowStrings {
+			updateRowStrings(beforeRow, texts)
 		}
 
 		guard let parent = beforeRow.parent,
@@ -982,11 +982,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return shadowTableIndex
 	}
 	
-	func createRow(_ row: Row, afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil) -> Int? {
+	func createRow(_ row: Row, afterRow: Row? = nil, rowStrings: RowStrings? = nil) -> Int? {
 		beginCloudKitBatchRequest()
 		
-		if let afterRow = afterRow, let texts = textRowStrings {
-			updateTextRowStrings(afterRow, texts)
+		if let afterRow = afterRow, let texts = rowStrings {
+			updateRowStrings(afterRow, texts)
 		}
 		
 		if afterRow == nil {
@@ -1035,13 +1035,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 
 	@discardableResult
-	func createRows(_ rows: [Row], afterRow: Row? = nil, textRowStrings: TextRowStrings? = nil, prefersEnd: Bool = false) -> Int? {
+	func createRows(_ rows: [Row], afterRow: Row? = nil, rowStrings: RowStrings? = nil, prefersEnd: Bool = false) -> Int? {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
 		beginCloudKitBatchRequest()
 		
-		if let afterRow = afterRow, let texts = textRowStrings {
-			updateTextRowStrings(afterRow, texts)
+		if let afterRow = afterRow, let texts = rowStrings {
+			updateRowStrings(afterRow, texts)
 		}
 
 		for row in rows.sortedByReverseDisplayOrder() {
@@ -1092,11 +1092,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return inserts.count > 0 ? inserts[0] : nil
 	}
 	
-	func createRowInside(_ row: Row, afterRow: Row, textRowStrings: TextRowStrings? = nil) -> Int? {
+	func createRowInside(_ row: Row, afterRow: Row, rowStrings: RowStrings? = nil) -> Int? {
 		beginCloudKitBatchRequest()
 		
-		if let texts = textRowStrings {
-			updateTextRowStrings(afterRow, texts)
+		if let texts = rowStrings {
+			updateRowStrings(afterRow, texts)
 		}
 		
 		afterRow.insertRow(row, at: 0)
@@ -1132,11 +1132,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return isOutdentRowsUnavailable(rows: rows)
 	}
 	
-	func createRowOutside(_ row: Row, afterRow: Row, textRowStrings: TextRowStrings? = nil) -> Int? {
+	func createRowOutside(_ row: Row, afterRow: Row, rowStrings: RowStrings? = nil) -> Int? {
 		beginCloudKitBatchRequest()
 		
-		if let texts = textRowStrings {
-			updateTextRowStrings(afterRow, texts)
+		if let texts = rowStrings {
+			updateRowStrings(afterRow, texts)
 		}
 		
 		guard let afterParentRow = afterRow.parent as? Row,
@@ -1216,9 +1216,9 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return newCursorIndex
 	}
 
-	func updateRow(_ row: Row, textRowStrings: TextRowStrings?, applyChanges: Bool) {
-		if let texts = textRowStrings {
-			updateTextRowStrings(row, texts)
+	func updateRow(_ row: Row, rowStrings: RowStrings?, applyChanges: Bool) {
+		if let texts = rowStrings {
+			updateRowStrings(row, texts)
 		}
 		
 		outlineContentDidChange()
@@ -1359,8 +1359,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	@discardableResult
-	func complete(rows: [Row], textRowStrings: TextRowStrings?) -> ([Row], Int?) {
-		return completeUncomplete(rows: rows, isComplete: true, textRowStrings: textRowStrings)
+	func complete(rows: [Row], rowStrings: RowStrings?) -> ([Row], Int?) {
+		return completeUncomplete(rows: rows, isComplete: true, rowStrings: rowStrings)
 	}
 	
 	public func isUncompleteUnavailable(rows: [Row]) -> Bool {
@@ -1373,8 +1373,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	@discardableResult
-	func uncomplete(rows: [Row], textRowStrings: TextRowStrings?) -> [Row] {
-		let (impacted, _) = completeUncomplete(rows: rows, isComplete: false, textRowStrings: textRowStrings)
+	func uncomplete(rows: [Row], rowStrings: RowStrings?) -> [Row] {
+		let (impacted, _) = completeUncomplete(rows: rows, isComplete: false, rowStrings: rowStrings)
 		return impacted
 	}
 	
@@ -1387,13 +1387,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return true
 	}
 	
-	func indentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> [Row] {
+	func indentRows(_ rows: [Row], rowStrings: RowStrings?) -> [Row] {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 
 		beginCloudKitBatchRequest()
 		
-		if rowCount == 1, let row = rows.first, let texts = textRowStrings {
-			updateTextRowStrings(row, texts)
+		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+			updateRowStrings(row, texts)
 		}
 		
 		let sortedRows = rows.sortedByDisplayOrder()
@@ -1461,13 +1461,13 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 		
 	@discardableResult
-	func outdentRows(_ rows: [Row], textRowStrings: TextRowStrings?) -> [Row] {
+	func outdentRows(_ rows: [Row], rowStrings: RowStrings?) -> [Row] {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 
 		beginCloudKitBatchRequest()
 		
-		if rowCount == 1, let row = rows.first, let texts = textRowStrings {
-			updateTextRowStrings(row, texts)
+		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+			updateRowStrings(row, texts)
 		}
 
 		var impacted = [Row]()
@@ -1516,11 +1516,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return index == 0
 	}
 
-	func moveRowsUp(_ rows: [Row], textRowStrings: TextRowStrings?) {
+	func moveRowsUp(_ rows: [Row], rowStrings: RowStrings?) {
 		beginCloudKitBatchRequest()
 		
-		if rowCount == 1, let row = rows.first, let texts = textRowStrings {
-			updateTextRowStrings(row, texts)
+		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+			updateRowStrings(row, texts)
 		}
 
 		for row in rows.sortedByDisplayOrder() {
@@ -1549,11 +1549,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return index == (last.parent?.rowCount ?? -1) - 1
 	}
 
-	func moveRowsDown(_ rows: [Row], textRowStrings: TextRowStrings?) {
+	func moveRowsDown(_ rows: [Row], rowStrings: RowStrings?) {
 		beginCloudKitBatchRequest()
 		
-		if rowCount == 1, let row = rows.first, let texts = textRowStrings {
-			updateTextRowStrings(row, texts)
+		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+			updateRowStrings(row, texts)
 		}
 
 		for row in rows.sortedByReverseDisplayOrder() {
@@ -1576,11 +1576,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return isIndentRowsUnavailable(rows: rows)
 	}
 	
-	func moveRows(_ rowMoves: [RowMove], textRowStrings: TextRowStrings?) {
+	func moveRows(_ rowMoves: [RowMove], rowStrings: RowStrings?) {
 		beginCloudKitBatchRequest()
 		
-		if rowMoves.count == 1, let row = rowMoves.first?.row, let texts = textRowStrings {
-			updateTextRowStrings(row, texts)
+		if rowMoves.count == 1, let row = rowMoves.first?.row, let texts = rowStrings {
+			updateRowStrings(row, texts)
 		}
 
 		var oldParentReloads = Set<Int>()
@@ -2168,11 +2168,11 @@ extension Outline {
 		outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 	}
 	
-	private func completeUncomplete(rows: [Row], isComplete: Bool, textRowStrings: TextRowStrings?) -> ([Row], Int?) {
+	private func completeUncomplete(rows: [Row], isComplete: Bool, rowStrings: RowStrings?) -> ([Row], Int?) {
 		beginCloudKitBatchRequest()
 		
-		if rowCount == 1, let row = rows.first, let texts = textRowStrings {
-			updateTextRowStrings(row, texts)
+		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+			updateRowStrings(row, texts)
 		}
 		
 		var impacted = [Row]()
@@ -2483,8 +2483,8 @@ extension Outline {
 		}
 	}
 
-	private func updateTextRowStrings(_ row: Row, _ textRowStrings: TextRowStrings) {
-		switch textRowStrings {
+	private func updateRowStrings(_ row: Row, _ rowStrings: RowStrings) {
+		switch rowStrings {
 		case .topic(let topic):
 			processLinkDiff(oldText: row.topic, newText: topic)
 		case .note(let note):
@@ -2494,7 +2494,7 @@ extension Outline {
 			processLinkDiff(oldText: row.note, newText: note)
 		}
 
-		row.textRowStrings = textRowStrings
+		row.rowStrings = rowStrings
 	}
 	
 	private func processLinkDiff(oldText: NSAttributedString?, newText: NSAttributedString?) {

@@ -9,7 +9,7 @@ import Foundation
 import MobileCoreServices
 import MarkdownAttributedString
 
-public enum TextRowStrings {
+public enum RowStrings {
 	case topic(NSAttributedString?)
 	case note(NSAttributedString?)
 	case both(NSAttributedString?, NSAttributedString?)
@@ -199,9 +199,9 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 		}
 	}
 	
-	public var textRowStrings: TextRowStrings {
+	public var rowStrings: RowStrings {
 		get {
-			return TextRowStrings.both(topic, note)
+			return RowStrings.both(topic, note)
 		}
 		set {
 			switch newValue {

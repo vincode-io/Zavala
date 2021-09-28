@@ -18,11 +18,11 @@ public final class DeleteNoteCommand: OutlineCommand {
 
 	public var outline: Outline
 	var rows: [Row]
-	var oldTextRowStrings: TextRowStrings?
-	var newTextRowStrings: TextRowStrings?
+	var oldRowStrings: RowStrings?
+	var newRowStrings: RowStrings?
 	var deletedRowNotes: [Row: NSAttributedString]?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], textRowStrings: TextRowStrings?) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -31,14 +31,14 @@ public final class DeleteNoteCommand: OutlineCommand {
 		self.redoActionName = L10n.deleteNote
 		
 		if rows.count == 1, let row = rows.first {
-			self.oldTextRowStrings = row.textRowStrings
-			self.newTextRowStrings = textRowStrings
+			self.oldRowStrings = row.rowStrings
+			self.newRowStrings = rowStrings
 		}
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (impacted, newCursorIndex) = outline.deleteNotes(rows: rows, textRowStrings: newTextRowStrings)
+		let (impacted, newCursorIndex) = outline.deleteNotes(rows: rows, rowStrings: newRowStrings)
 		deletedRowNotes = impacted
 		self.newCursorIndex = newCursorIndex
 		registerUndo()

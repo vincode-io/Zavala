@@ -16,13 +16,13 @@ protocol EditorTextRowViewCellDelegate: AnyObject {
 	func editorTextRowToggleDisclosure(row: Row)
 	func editorTextRowMoveCursorTo(row: Row)
 	func editorTextRowMoveCursorDown(row: Row)
-	func editorTextRowTextChanged(row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, selection: NSRange)
-	func editorTextRowDeleteRow(_ row: Row, textRowStrings: TextRowStrings)
+	func editorTextRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange)
+	func editorTextRowDeleteRow(_ row: Row, rowStrings: RowStrings)
 	func editorTextRowCreateRow(beforeRow: Row)
-	func editorTextRowCreateRow(afterRow: Row?, textRowStrings: TextRowStrings?)
-	func editorTextRowIndentRow(_ row: Row, textRowStrings: TextRowStrings)
+	func editorTextRowCreateRow(afterRow: Row?, rowStrings: RowStrings?)
+	func editorTextRowIndentRow(_ row: Row, rowStrings: RowStrings)
 	func editorTextRowSplitRow(_: Row, topic: NSAttributedString, cursorPosition: Int)
-	func editorTextRowDeleteRowNote(_ row: Row, textRowStrings: TextRowStrings)
+	func editorTextRowDeleteRowNote(_ row: Row, rowStrings: RowStrings)
 	func editorTextRowEditLink(_ link: String?, text: String?, range: NSRange)
 }
 

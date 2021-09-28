@@ -20,14 +20,14 @@ public final class CreateRowOutsideCommand: OutlineCommand {
 	public var outline: Outline
 	var row: Row?
 	var afterRow: Row
-	var textRowStrings: TextRowStrings?
+	var rowStrings: RowStrings?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, afterRow: Row, textRowStrings: TextRowStrings?) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, afterRow: Row, rowStrings: RowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
 		self.afterRow = afterRow
-		self.textRowStrings = textRowStrings
+		self.rowStrings = rowStrings
 		undoActionName = L10n.addRowOutside
 		redoActionName = L10n.addRowOutside
 	}
@@ -37,7 +37,7 @@ public final class CreateRowOutsideCommand: OutlineCommand {
 		if row == nil {
 			row = Row(outline: outline)
 		}
-		newCursorIndex = outline.createRowOutside(row!, afterRow: afterRow, textRowStrings: textRowStrings)
+		newCursorIndex = outline.createRowOutside(row!, afterRow: afterRow, rowStrings: rowStrings)
 		registerUndo()
 	}
 	

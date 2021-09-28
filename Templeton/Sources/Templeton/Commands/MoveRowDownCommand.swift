@@ -18,10 +18,10 @@ public final class MoveRowDownCommand: OutlineCommand {
 	public var outline: Outline
 	var rows: [Row]
 
-	var oldTextRowStrings: TextRowStrings?
-	var newTextRowStrings: TextRowStrings?
+	var oldRowStrings: RowStrings?
+	var newRowStrings: RowStrings?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], textRowStrings: TextRowStrings?) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -30,19 +30,19 @@ public final class MoveRowDownCommand: OutlineCommand {
 		self.redoActionName = L10n.moveDown
 		
 		if rows.count == 1, let row = rows.first {
-			self.oldTextRowStrings = row.textRowStrings
-			self.newTextRowStrings = textRowStrings
+			self.oldRowStrings = row.rowStrings
+			self.newRowStrings = rowStrings
 		}
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		outline.moveRowsDown(rows, textRowStrings: newTextRowStrings)
+		outline.moveRowsDown(rows, rowStrings: newRowStrings)
 		registerUndo()
 	}
 	
 	public func undo() {
-		outline.moveRowsUp(rows, textRowStrings: oldTextRowStrings)
+		outline.moveRowsUp(rows, rowStrings: oldRowStrings)
 		registerRedo()
 		restoreCursorPosition()
 	}

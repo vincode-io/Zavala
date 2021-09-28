@@ -80,8 +80,8 @@ class EditorTextRowTextView: UITextView {
 	
 	var isTextChanged = false
 	
-	var textRowStrings: TextRowStrings {
-		fatalError("textRowStrings has not been implemented")
+	var rowStrings: RowStrings {
+		fatalError("rowStrings has not been implemented")
 	}
 
 	var cleansedAttributedText: NSAttributedString {

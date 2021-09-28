@@ -18,10 +18,10 @@ public final class MoveRowRightCommand: OutlineCommand {
 	public var outline: Outline
 	var rows: [Row]
 	var indentedRows: [Row]?
-	var oldTextRowStrings: TextRowStrings?
-	var newTextRowStrings: TextRowStrings?
+	var oldRowStrings: RowStrings?
+	var newRowStrings: RowStrings?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], textRowStrings: TextRowStrings?) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -30,20 +30,20 @@ public final class MoveRowRightCommand: OutlineCommand {
 		self.redoActionName = L10n.moveRight
 		
 		if rows.count == 1, let row = rows.first {
-			self.oldTextRowStrings = row.textRowStrings
-			self.newTextRowStrings = textRowStrings
+			self.oldRowStrings = row.rowStrings
+			self.newRowStrings = rowStrings
 		}
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		indentedRows = outline.indentRows(rows, textRowStrings: newTextRowStrings)
+		indentedRows = outline.indentRows(rows, rowStrings: newRowStrings)
 		registerUndo()
 	}
 	
 	public func undo() {
 		guard let indentedRows = indentedRows else { return }
-		outline.outdentRows(indentedRows, textRowStrings: oldTextRowStrings)
+		outline.outdentRows(indentedRows, rowStrings: oldRowStrings)
 		registerRedo()
 		restoreCursorPosition()
 	}

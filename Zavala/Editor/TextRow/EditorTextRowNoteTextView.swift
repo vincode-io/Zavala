@@ -13,8 +13,8 @@ protocol EditorTextRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewInputAccessoryView: UIView? { get }
 	func invalidateLayout(_ : EditorTextRowNoteTextView)
 	func didBecomeActive(_ : EditorTextRowNoteTextView, row: Row)
-	func textChanged(_ : EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, textRowStrings: TextRowStrings)
-	func deleteRowNote(_ : EditorTextRowNoteTextView, row: Row, textRowStrings: TextRowStrings)
+	func textChanged(_ : EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
+	func deleteRowNote(_ : EditorTextRowNoteTextView, row: Row, rowStrings: RowStrings)
 	func moveCursorTo(_ : EditorTextRowNoteTextView, row: Row)
 	func moveCursorDown(_ : EditorTextRowNoteTextView, row: Row)
 	func editLink(_: EditorTextRowNoteTextView, _ link: String?, text: String?, range: NSRange)
@@ -43,8 +43,8 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 	
 	weak var editorDelegate: EditorTextRowNoteTextViewDelegate?
 	
-	override var textRowStrings: TextRowStrings {
-		return TextRowStrings.note(cleansedAttributedText)
+	override var rowStrings: RowStrings {
+		return RowStrings.note(cleansedAttributedText)
 	}
 	
 	private var autosaveWorkItem: DispatchWorkItem?
@@ -95,7 +95,7 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 		guard let textRow = row else { return }
 		if attributedText.length == 0 {
 			isSavingTextUnnecessary = true
-			editorDelegate?.deleteRowNote(self, row: textRow, textRowStrings: textRowStrings)
+			editorDelegate?.deleteRowNote(self, row: textRow, rowStrings: rowStrings)
 		} else {
 			super.deleteBackward()
 		}
@@ -122,7 +122,7 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 		if isSavingTextUnnecessary {
 			isSavingTextUnnecessary = false
 		} else {
-			editorDelegate?.textChanged(self, row: textRow, isInNotes: true, selection: selectedRange, textRowStrings: textRowStrings)
+			editorDelegate?.textChanged(self, row: textRow, isInNotes: true, selection: selectedRange, rowStrings: rowStrings)
 		}
 		
 		autosaveWorkItem?.cancel()

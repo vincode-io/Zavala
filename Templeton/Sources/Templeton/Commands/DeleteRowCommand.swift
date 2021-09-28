@@ -18,10 +18,10 @@ public final class DeleteRowCommand: OutlineCommand {
 
 	public var outline: Outline
 	var rows: [Row]
-	var textRowStrings: TextRowStrings?
+	var rowStrings: RowStrings?
 	var afterRows = [Row: Row]()
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], textRowStrings: TextRowStrings?) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -45,12 +45,12 @@ public final class DeleteRowCommand: OutlineCommand {
 			}
 		}
 
-		self.textRowStrings = textRowStrings
+		self.rowStrings = rowStrings
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		newCursorIndex = outline.deleteRows(rows, textRowStrings: textRowStrings)
+		newCursorIndex = outline.deleteRows(rows, rowStrings: rowStrings)
 		registerUndo()
 	}
 	

@@ -18,12 +18,12 @@ public final class CreateNoteCommand: OutlineCommand {
 
 	public var outline: Outline
 	var rows: [Row]
-	var oldTextRowStrings: TextRowStrings?
-	var newTextRowStrings: TextRowStrings?
+	var oldRowStrings: RowStrings?
+	var newRowStrings: RowStrings?
 	
 	var noteCreatedRows: [Row]?
 
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], textRowStrings: TextRowStrings?) {
+	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
 		self.undoManager = undoManager
 		self.delegate = delegate
 		self.outline = outline
@@ -32,21 +32,21 @@ public final class CreateNoteCommand: OutlineCommand {
 		redoActionName = L10n.addNote
 
 		if rows.count == 1, let row = rows.first {
-			self.oldTextRowStrings = row.textRowStrings
-			self.newTextRowStrings = textRowStrings
+			self.oldRowStrings = row.rowStrings
+			self.newRowStrings = rowStrings
 		}
 	}
 	
 	public func perform() {
 		saveCursorCoordinates()
-		let (impacted, newCursorIndex) = outline.createNotes(rows: rows, textRowStrings: newTextRowStrings)
+		let (impacted, newCursorIndex) = outline.createNotes(rows: rows, rowStrings: newRowStrings)
 		noteCreatedRows = impacted
 		self.newCursorIndex = newCursorIndex
 		registerUndo()
 	}
 	
 	public func undo() {
-		outline.deleteNotes(rows: noteCreatedRows ?? [Row](), textRowStrings: oldTextRowStrings)
+		outline.deleteNotes(rows: noteCreatedRows ?? [Row](), rowStrings: oldRowStrings)
 		registerRedo()
 		restoreCursorPosition()
 	}
