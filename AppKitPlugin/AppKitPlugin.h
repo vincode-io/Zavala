@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)importOPML;
 - (void)configureOpenQuickly:(NSObject  * _Nullable)window;
 - (void)updateAppearance:(NSObject  * _Nullable)window;
+- (void)clearRecentDocuments;
 @end
 
 NS_ASSUME_NONNULL_END

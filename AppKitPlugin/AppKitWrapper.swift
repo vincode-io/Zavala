@@ -71,5 +71,9 @@ import os.log
 			nsWindow.appearance = nil
 		}
 	}
+	
+	func clearRecentDocuments() {
+		NSDocumentController.shared.clearRecentDocuments(nil)
+	}
 
 }
