@@ -515,11 +515,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		appendPrintTitle(attrString: print)
 		
+		let visitor = PrintDocVisitor()
 		rows.forEach {
-			let visitor = PrintDocVisitor()
 			$0.visit(visitor: visitor.visitor)
-			print.append(visitor.print)
 		}
+		print.append(visitor.print)
 
 		unload()
 		return print
@@ -560,12 +560,12 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		loadRows()
 		
 		var md = "# \(title ?? "")"
+		let visitor = MarkdownDocVisitor()
 		rows.forEach {
-			let visitor = MarkdownDocVisitor()
 			$0.visit(visitor: visitor.visitor)
-			md.append(visitor.markdown)
 		}
-		
+		md.append(visitor.markdown)
+
 		unloadRows()
 		return md
 	}
@@ -639,11 +639,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		md.append("Title: \(title ?? "No Title")\n")
 		md.append("---\n\n")
 
+		let visitor = MarkdownDocVisitor()
 		rows.forEach {
-			let visitor = MarkdownDocVisitor()
 			$0.visit(visitor: visitor.visitor)
-			md.append(visitor.markdown)
 		}
+		md.append(visitor.markdown)
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.dateFormat = "yyyy-MM-dd"
