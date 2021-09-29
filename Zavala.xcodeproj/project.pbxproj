@@ -106,6 +106,9 @@
 		519A2326260A9C940056051E /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
 		519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F004A25608EF9009DC1F0 /* TimelineItem.swift */; };
 		51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */; };
+		51AEEC8D2703E6EB00354C59 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 51AEEC8C2703E6EB00354C59 /* Intents.intentdefinition */; };
+		51AEEC8F2703EB6700354C59 /* FindCurrentOutlineIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AEEC8E2703EB6700354C59 /* FindCurrentOutlineIntentHandler.swift */; };
+		51AEEC912703F41A00354C59 /* CreateMarkdownDocIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AEEC902703F41A00354C59 /* CreateMarkdownDocIntentHandler.swift */; };
 		51B2B2C82563A2180090C56B /* EditorTextRowTopicTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2C72563A2180090C56B /* EditorTextRowTopicTextView.swift */; };
 		51B2B2CE2563AAF60090C56B /* EditorTextRowContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2CD2563AAF60090C56B /* EditorTextRowContentConfiguration.swift */; };
 		51B2B2D22563AB190090C56B /* EditorTextRowContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2D12563AB190090C56B /* EditorTextRowContentView.swift */; };
@@ -313,6 +316,9 @@
 		519A2323260A9B900056051E /* OutlineFontField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontField.swift; sourceTree = "<group>"; };
 		519F004A25608EF9009DC1F0 /* TimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItem.swift; sourceTree = "<group>"; };
 		51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedUndoManager.swift; sourceTree = "<group>"; };
+		51AEEC8C2703E6EB00354C59 /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
+		51AEEC8E2703EB6700354C59 /* FindCurrentOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindCurrentOutlineIntentHandler.swift; sourceTree = "<group>"; };
+		51AEEC902703F41A00354C59 /* CreateMarkdownDocIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMarkdownDocIntentHandler.swift; sourceTree = "<group>"; };
 		51B2B2C72563A2180090C56B /* EditorTextRowTopicTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowTopicTextView.swift; sourceTree = "<group>"; };
 		51B2B2CD2563AAF60090C56B /* EditorTextRowContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowContentConfiguration.swift; sourceTree = "<group>"; };
 		51B2B2D12563AB190090C56B /* EditorTextRowContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowContentView.swift; sourceTree = "<group>"; };
@@ -608,9 +614,20 @@
 				517A9E31260512DC00EF346A /* OpenQuickly */,
 				517AF69E25E08A350044DBAB /* Settings */,
 				514BB9D5255B595300C8DBDF /* Utility */,
+				51AEEC8B2703E6B500354C59 /* Intents */,
 				515F163B255C536600FD98B8 /* Resources */,
 			);
 			path = Zavala;
+			sourceTree = "<group>";
+		};
+		51AEEC8B2703E6B500354C59 /* Intents */ = {
+			isa = PBXGroup;
+			children = (
+				51AEEC8C2703E6EB00354C59 /* Intents.intentdefinition */,
+				51AEEC8E2703EB6700354C59 /* FindCurrentOutlineIntentHandler.swift */,
+				51AEEC902703F41A00354C59 /* CreateMarkdownDocIntentHandler.swift */,
+			);
+			path = Intents;
 			sourceTree = "<group>";
 		};
 		51B9D99526140AD100A66859 /* Activities */ = {
@@ -1008,6 +1025,7 @@
 				512D375225F06733000FA597 /* EditorSearchBar.swift in Sources */,
 				5173B406268BBD4200687117 /* UIImage+.swift in Sources */,
 				5147D0BE25CCAFD2004673C3 /* EditorTagAddContentConfiguration.swift in Sources */,
+				51AEEC912703F41A00354C59 /* CreateMarkdownDocIntentHandler.swift in Sources */,
 				51F2859425AD11100019C573 /* SidebarSearchCell.swift in Sources */,
 				51DFDC18259EA8D300C068C6 /* Selector+.swift in Sources */,
 				515F164B255C9F8E00FD98B8 /* MacFormViewController.swift in Sources */,
@@ -1038,6 +1056,7 @@
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,
 				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
+				51AEEC8D2703E6EB00354C59 /* Intents.intentdefinition in Sources */,
 				516F5373260829060038BAF8 /* OutlineFontDefaults.swift in Sources */,
 				5132E32B26290E9F00652C34 /* MacJekyllExportViewController.swift in Sources */,
 				511B29FD2601901C00C04239 /* EditorBacklinkViewCell.swift in Sources */,
@@ -1055,6 +1074,7 @@
 				51B9D9A026140F3A00A66859 /* ExportOPMLActivity.swift in Sources */,
 				51C030B4257E192100609262 /* EditorTitleViewCell.swift in Sources */,
 				517342F225EC2C690012EB20 /* UIActivityViewController+.swift in Sources */,
+				51AEEC8F2703EB6700354C59 /* FindCurrentOutlineIntentHandler.swift in Sources */,
 				51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */,
 				5113B092260E45B400DBD11B /* SettingsFontViewController.swift in Sources */,
 				51DEE81026FB8D89006DAA56 /* ColorPaletteTableViewController.swift in Sources */,

@@ -58,6 +58,11 @@
 	<true/>
 	<key>DeveloperEntitlements</key>
 	<string>$(DEVELOPER_ENTITLEMENTS)</string>
+	<key>INIntentsSupported</key>
+	<array>
+		<string>FindCurrentOutlineIntent</string>
+		<string>CreateMarkdownDocIntent</string>
+	</array>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.productivity</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -68,17 +73,19 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
-	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2020-2021 Maurice C Parker. All rights reserved.</string>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2020-2021 Maurice C Parker. All rights reserved.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Zavala wants to use your photos so that you can insert them into outlines.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
+		<string>CreateMarkdownDocIntent</string>
+		<string>FindCurrentOutlineIntent</string>
 		<string>io.vincode.Zavala.restoration</string>
-		<string>io.vincode.Zavala.selectingDocumentContainer</string>
 		<string>io.vincode.Zavala.selectingDocument</string>
+		<string>io.vincode.Zavala.selectingDocumentContainer</string>
 	</array>
 	<key>OrganizationIdentifier</key>
 	<string>$(ORGANIZATION_IDENTIFIER)</string>

@@ -15,6 +15,10 @@ protocol MainCoordinator: UIViewController {
 
 extension MainCoordinator {
 	
+	var currentOutline: Outline? {
+		return editorViewController?.outline
+	}
+	
 	var isOutlineFunctionsUnavailable: Bool {
 		return editorViewController?.isOutlineFunctionsUnavailable ?? true
 	}

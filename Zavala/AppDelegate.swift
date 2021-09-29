@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Intents
 import Templeton
 
 var appDelegate: AppDelegate!
@@ -537,6 +538,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				}
 				completionHandler(.newData)
 			}
+		}
+	}
+	
+	func application(_ application: UIApplication, handlerFor intent: INIntent) -> Any? {
+		switch intent {
+		case is FindCurrentOutlineIntent:
+			return FindCurrentOutlineIntentHandler(mainCoordinator: mainCoordinator)
+		case is CreateMarkdownDocIntent:
+			return CreateMarkdownDocIntentHandler()
+		default:
+			fatalError("Unhandled intent type: \(intent)")
 		}
 	}
 	
