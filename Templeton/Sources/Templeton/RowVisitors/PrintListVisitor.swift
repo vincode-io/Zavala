@@ -31,7 +31,7 @@ class PrintListVisitor {
 				attrs[.strikethroughStyle] = 0
 			}
 
-			let topicFont = UIFont.systemFont(ofSize: 12)
+			let topicFont = UIFont.systemFont(ofSize: 11)
 			let topicParagraphStyle = NSMutableParagraphStyle()
 			topicParagraphStyle.paragraphSpacing = 0.33 * topicFont.lineHeight
 			
