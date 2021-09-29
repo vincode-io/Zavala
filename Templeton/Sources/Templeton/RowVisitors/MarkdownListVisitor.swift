@@ -23,13 +23,15 @@ class MarkdownListVisitor {
 			markdown.append("* \(textRow.topicMarkdown ?? "")")
 		}
 		
-		if let notePlainText = textRow.noteMarkdown {
-			markdown.append("\n  \(notePlainText)")
+		if let noteMarkdown = textRow.noteMarkdown, !noteMarkdown.isEmpty {
+			markdown.append("\n\n")
+			markdown.append(String(repeating: "\t", count: indentLevel))
+			markdown.append("  \(noteMarkdown)")
 		}
 		
 		indentLevel = indentLevel + 1
 		textRow.rows.forEach {
-			markdown.append("\n")
+			markdown.append("\n\n")
 			$0.visit(visitor: self.visitor)
 		}
 		indentLevel = indentLevel - 1
