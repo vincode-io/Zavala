@@ -29,12 +29,19 @@ class PrintDocVisitor {
 			if let note = textRow.note {
 				printTopic(topic, textRow: textRow)
 				printNote(note)
+				
+				previousRowWasParagraph = true
 				visitChildren()
-				previousRowWasParagraph = false
 			} else {
+				if previousRowWasParagraph {
+					print.append(NSAttributedString(string: "\n"))
+				}
+				
 				let listVisitor = PrintListVisitor()
+				listVisitor.indentLevel = 1
 				visited.visit(visitor: listVisitor.visitor)
 				print.append(listVisitor.print)
+				
 				previousRowWasParagraph = false
 			}
 		} else {

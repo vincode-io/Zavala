@@ -516,11 +516,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		appendPrintTitle(attrString: print)
 		
+		let visitor = PrintDocVisitor()
 		rows.forEach {
-			let visitor = PrintDocVisitor()
 			$0.visit(visitor: visitor.visitor)
-			print.append(visitor.print)
 		}
+		print.append(visitor.print)
 
 		unload()
 		return print

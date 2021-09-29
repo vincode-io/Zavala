@@ -16,7 +16,7 @@ class PrintListVisitor {
 		guard let textRow = visited.textRow else { return }
 		
 		if let topic = textRow.topic {
-			print.append(NSAttributedString(string: "\n\n"))
+			print.append(NSAttributedString(string: "\n"))
 			var attrs = [NSAttributedString.Key : Any]()
 			if textRow.isComplete || textRow.isAncestorComplete {
 				attrs[.foregroundColor] = UIColor.darkGray
