@@ -9,112 +9,13 @@
 	<key>INIntentDefinitionNamespace</key>
 	<string>LEx6zX</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>21A5522h</string>
+	<string>21A5534d</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
 	<string>13A233</string>
 	<key>INIntentDefinitionToolsVersion</key>
 	<string>13.0</string>
 	<key>INIntents</key>
 	<array>
-		<dict>
-			<key>INIntentCategory</key>
-			<string>search</string>
-			<key>INIntentConfigurable</key>
-			<true/>
-			<key>INIntentDescriptionID</key>
-			<string>ho2TVa</string>
-			<key>INIntentManagedParameterCombinations</key>
-			<dict>
-				<key></key>
-				<dict>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Find Current Outline</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>fCHUFH</string>
-					<key>INIntentParameterCombinationUpdatesLinked</key>
-					<true/>
-				</dict>
-			</dict>
-			<key>INIntentName</key>
-			<string>FindCurrentOutline</string>
-			<key>INIntentParameterCombinations</key>
-			<dict>
-				<key></key>
-				<dict>
-					<key>INIntentParameterCombinationIsPrimary</key>
-					<true/>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Find Current Outline</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>wHF2ea</string>
-				</dict>
-			</dict>
-			<key>INIntentResponse</key>
-			<dict>
-				<key>INIntentResponseCodes</key>
-				<array>
-					<dict>
-						<key>INIntentResponseCodeName</key>
-						<string>success</string>
-						<key>INIntentResponseCodeSuccess</key>
-						<true/>
-					</dict>
-					<dict>
-						<key>INIntentResponseCodeName</key>
-						<string>failure</string>
-					</dict>
-					<dict>
-						<key>INIntentResponseCodeConciseFormatString</key>
-						<string>There isn't a currently selected outline available.</string>
-						<key>INIntentResponseCodeConciseFormatStringID</key>
-						<string>dQxUCR</string>
-						<key>INIntentResponseCodeFormatString</key>
-						<string>There isn't a currently selected outline available.</string>
-						<key>INIntentResponseCodeFormatStringID</key>
-						<string>U9NeUL</string>
-						<key>INIntentResponseCodeName</key>
-						<string>notFound</string>
-					</dict>
-				</array>
-				<key>INIntentResponseLastParameterTag</key>
-				<integer>3</integer>
-				<key>INIntentResponseOutput</key>
-				<string>outline</string>
-				<key>INIntentResponseParameters</key>
-				<array>
-					<dict>
-						<key>INIntentResponseParameterDisplayName</key>
-						<string>Outline</string>
-						<key>INIntentResponseParameterDisplayNameID</key>
-						<string>Eor4S1</string>
-						<key>INIntentResponseParameterDisplayPriority</key>
-						<integer>1</integer>
-						<key>INIntentResponseParameterName</key>
-						<string>outline</string>
-						<key>INIntentResponseParameterObjectType</key>
-						<string>Outline</string>
-						<key>INIntentResponseParameterObjectTypeNamespace</key>
-						<string>LEx6zX</string>
-						<key>INIntentResponseParameterTag</key>
-						<integer>3</integer>
-						<key>INIntentResponseParameterType</key>
-						<string>Object</string>
-					</dict>
-				</array>
-			</dict>
-			<key>INIntentTitle</key>
-			<string>Find Current Outline</string>
-			<key>INIntentTitleID</key>
-			<string>6G6urZ</string>
-			<key>INIntentType</key>
-			<string>Custom</string>
-			<key>INIntentVerb</key>
-			<string>Find</string>
-		</dict>
 		<dict>
 			<key>INIntentCategory</key>
 			<string>generic</string>
@@ -254,6 +155,107 @@
 			<string>Custom</string>
 			<key>INIntentVerb</key>
 			<string>Do</string>
+		</dict>
+		<dict>
+			<key>INIntentCategory</key>
+			<string>download</string>
+			<key>INIntentConfigurable</key>
+			<true/>
+			<key>INIntentDescriptionID</key>
+			<string>6dPBfd</string>
+			<key>INIntentManagedParameterCombinations</key>
+			<dict>
+				<key></key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Get Current Outline</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>VYrM1u</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+			</dict>
+			<key>INIntentName</key>
+			<string>GetCurrentOutline</string>
+			<key>INIntentParameterCombinations</key>
+			<dict>
+				<key></key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<true/>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Get Current Outline</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>6rwlWx</string>
+				</dict>
+			</dict>
+			<key>INIntentResponse</key>
+			<dict>
+				<key>INIntentResponseCodes</key>
+				<array>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>success</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>failure</string>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeConciseFormatString</key>
+						<string>No outline found.</string>
+						<key>INIntentResponseCodeConciseFormatStringID</key>
+						<string>i1DeHY</string>
+						<key>INIntentResponseCodeFormatString</key>
+						<string>No outline found.</string>
+						<key>INIntentResponseCodeFormatStringID</key>
+						<string>WWY8oC</string>
+						<key>INIntentResponseCodeName</key>
+						<string>notFound</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<true/>
+					</dict>
+				</array>
+				<key>INIntentResponseLastParameterTag</key>
+				<integer>3</integer>
+				<key>INIntentResponseOutput</key>
+				<string>outline</string>
+				<key>INIntentResponseParameters</key>
+				<array>
+					<dict>
+						<key>INIntentResponseParameterDisplayName</key>
+						<string>Outline</string>
+						<key>INIntentResponseParameterDisplayNameID</key>
+						<string>SByZd1</string>
+						<key>INIntentResponseParameterDisplayPriority</key>
+						<integer>1</integer>
+						<key>INIntentResponseParameterName</key>
+						<string>outline</string>
+						<key>INIntentResponseParameterObjectType</key>
+						<string>Outline</string>
+						<key>INIntentResponseParameterObjectTypeNamespace</key>
+						<string>LEx6zX</string>
+						<key>INIntentResponseParameterTag</key>
+						<integer>3</integer>
+						<key>INIntentResponseParameterType</key>
+						<string>Object</string>
+					</dict>
+				</array>
+			</dict>
+			<key>INIntentTitle</key>
+			<string>Get Current Outline</string>
+			<key>INIntentTitleID</key>
+			<string>KKWURg</string>
+			<key>INIntentType</key>
+			<string>Custom</string>
+			<key>INIntentVerb</key>
+			<string>Get</string>
 		</dict>
 	</array>
 	<key>INTypes</key>

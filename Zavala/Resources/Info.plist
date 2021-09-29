@@ -60,7 +60,7 @@
 	<string>$(DEVELOPER_ENTITLEMENTS)</string>
 	<key>INIntentsSupported</key>
 	<array>
-		<string>FindCurrentOutlineIntent</string>
+		<string>GetCurrentOutlineIntent</string>
 		<string>CreateMarkdownDocIntent</string>
 	</array>
 	<key>LSApplicationCategoryType</key>
@@ -82,7 +82,7 @@
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>CreateMarkdownDocIntent</string>
-		<string>FindCurrentOutlineIntent</string>
+		<string>GetCurrentOutlineIntent</string>
 		<string>io.vincode.Zavala.restoration</string>
 		<string>io.vincode.Zavala.selectingDocument</string>
 		<string>io.vincode.Zavala.selectingDocumentContainer</string>

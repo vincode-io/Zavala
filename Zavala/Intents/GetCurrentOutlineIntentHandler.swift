@@ -1,5 +1,5 @@
 //
-//  FindCurrentOutlineIntentHandler.swift
+//  GetCurrentOutlineIntentHandler.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 9/28/21.
@@ -7,7 +7,7 @@
 
 import Intents
 
-public class FindCurrentOutlineIntentHandler: NSObject, FindCurrentOutlineIntentHandling {
+public class GetCurrentOutlineIntentHandler: NSObject, GetCurrentOutlineIntentHandling {
 	
 	private weak var mainCoordinator: MainCoordinator?
 	
@@ -15,13 +15,13 @@ public class FindCurrentOutlineIntentHandler: NSObject, FindCurrentOutlineIntent
 		self.mainCoordinator = mainCoordinator
 	}
 	
-	public func handle(intent: FindCurrentOutlineIntent, completion: @escaping (FindCurrentOutlineIntentResponse) -> Void) {
+	public func handle(intent: GetCurrentOutlineIntent, completion: @escaping (GetCurrentOutlineIntentResponse) -> Void) {
 		guard let outline = mainCoordinator?.currentOutline else {
-			completion(FindCurrentOutlineIntentResponse(code: .notFound, userActivity: nil))
+			completion(GetCurrentOutlineIntentResponse(code: .notFound, userActivity: nil))
 			return
 		}
 		
-		let response = FindCurrentOutlineIntentResponse(code: .success, userActivity: nil)
+		let response = GetCurrentOutlineIntentResponse(code: .success, userActivity: nil)
 		response.outline = IntentOutline(identifier: outline.id.description, display: outline.title ?? "")
 		completion(response)
 	}

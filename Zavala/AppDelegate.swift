@@ -543,8 +543,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	func application(_ application: UIApplication, handlerFor intent: INIntent) -> Any? {
 		switch intent {
-		case is FindCurrentOutlineIntent:
-			return FindCurrentOutlineIntentHandler(mainCoordinator: mainCoordinator)
+		case is GetCurrentOutlineIntent:
+			return GetCurrentOutlineIntentHandler(mainCoordinator: mainCoordinator)
 		case is CreateMarkdownDocIntent:
 			return CreateMarkdownDocIntentHandler()
 		default:
