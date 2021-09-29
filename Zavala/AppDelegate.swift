@@ -517,7 +517,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		self.appKitPlugin = appKitPlugin
 		appKitPlugin.setDelegate(self)
 		appKitPlugin.start()
-		appKitPlugin.clearRecentDocuments()
 		#endif
 		
 		UIApplication.shared.registerForRemoteNotifications()
@@ -1142,9 +1141,6 @@ extension AppDelegate {
 	
 	@objc private func didEnterBackground() {
 		AccountManager.shared.suspend()
-		#if targetEnvironment(macCatalyst)
-		appKitPlugin?.clearRecentDocuments()
-		#endif
 	}
 	
 	@objc private func checkForUserDefaultsChanges() {

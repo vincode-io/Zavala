@@ -93,6 +93,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == "opml" }).map({ $0.url })
 		mainSplitViewController.importOPMLs(urls: opmlURLs)
+		
+		#if targetEnvironment(macCatalyst)
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+			appDelegate.appKitPlugin?.clearRecentDocuments()
+		}
+		#endif
 	}
 	
 	func windowScene(_ windowScene: UIWindowScene, userDidAcceptCloudKitShareWith shareMetadata: CKShare.Metadata) {
