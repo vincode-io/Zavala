@@ -256,8 +256,9 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 
 	public init(outline: Outline) {
 		self.isComplete = false
-		self.outline = outline
 		self.id = UUID().uuidString
+		self.outline = outline
+		self._entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
 		self.isExpanded = true
 		self.rowOrder = [String]()
 		super.init()
@@ -265,8 +266,9 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 
 	public init(outline: Outline, topicPlainText: String, notePlainText: String? = nil) {
 		self.isComplete = false
-		self.outline = outline
 		self.id = UUID().uuidString
+		self.outline = outline
+		self._entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
 		self.isExpanded = true
 		self.rowOrder = [String]()
 		super.init()
@@ -340,16 +342,16 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 	}
 	
 	public func duplicate(newOutline: Outline) -> Row {
-		let textRow = Row(outline: newOutline)
+		let row = Row(outline: newOutline)
 
-		textRow.topicData = topicData
-		textRow.noteData = noteData
-		textRow.isExpanded = isExpanded
-		textRow.isComplete = isComplete
-		textRow.rowOrder = rowOrder
-		textRow.images = images?.map { $0.duplicate(accountID: newOutline.id.accountID, documentUUID: newOutline.id.documentUUID, rowUUID: textRow.id) }
+		row.topicData = topicData
+		row.noteData = noteData
+		row.isExpanded = isExpanded
+		row.isComplete = isComplete
+		row.rowOrder = rowOrder
+		row.images = images?.map { $0.duplicate(accountID: newOutline.id.accountID, documentUUID: newOutline.id.documentUUID, rowUUID: row.id) }
 		
-		return textRow
+		return row
 	}
 	
 	public func findImage(id: EntityID) -> Image? {
