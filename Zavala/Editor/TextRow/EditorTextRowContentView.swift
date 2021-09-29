@@ -204,7 +204,7 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 	
 	func invalidateLayout(_: EditorTextRowTopicTextView) {
 		invalidateIntrinsicContentSize()
-		appliedConfiguration.delegate?.editorTextRowLayoutEditor()
+		appliedConfiguration.delegate?.editorTextRowReloadCurrentCell()
 	}
 	
 	func didBecomeActive(_: EditorTextRowTopicTextView, row: Row) {
@@ -253,7 +253,7 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 	
 	func invalidateLayout(_: EditorTextRowNoteTextView) {
 		invalidateIntrinsicContentSize()
-		appliedConfiguration.delegate?.editorTextRowLayoutEditor()
+		appliedConfiguration.delegate?.editorTextRowReloadCurrentCell()
 	}
 	
 	func didBecomeActive(_: EditorTextRowNoteTextView, row: Row) {

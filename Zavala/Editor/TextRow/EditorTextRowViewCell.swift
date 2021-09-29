@@ -11,7 +11,7 @@ import Templeton
 protocol EditorTextRowViewCellDelegate: AnyObject {
 	var editorTextRowUndoManager: UndoManager? { get }
 	var editorTextRowInputAccessoryView: UIView? { get }
-	func editorTextRowLayoutEditor()
+	func editorTextRowReloadCurrentCell()
 	func editorTextRowTextFieldDidBecomeActive(row: Row)
 	func editorTextRowToggleDisclosure(row: Row)
 	func editorTextRowMoveCursorTo(row: Row)

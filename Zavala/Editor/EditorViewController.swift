@@ -1324,8 +1324,8 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		return keyboardToolBar
 	}
 	
-	func editorTextRowLayoutEditor() {
-		layoutEditor()
+	func editorTextRowReloadCurrentCell() {
+		reloadCurrentCell()
 	}
 	
 	func editorTextRowTextFieldDidBecomeActive(row: Row) {
@@ -1812,6 +1812,14 @@ extension EditorViewController {
 	}
 	
 	private func layoutEditor() {
+		let contentOffset = collectionView.contentOffset
+		collectionView.collectionViewLayout.invalidateLayout()
+		collectionView.layoutIfNeeded()
+		collectionView.contentOffset = contentOffset
+		makeCursorVisibleIfNecessary()
+	}
+	
+	private func reloadCurrentCell() {
 		if let row = currentTextView?.row?.shadowTableIndex {
 			let contentOffset = collectionView.contentOffset
 			let currentCoordinates = CursorCoordinates.currentCoordinates
