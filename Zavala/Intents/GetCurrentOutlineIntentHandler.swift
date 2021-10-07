@@ -22,7 +22,9 @@ public class GetCurrentOutlineIntentHandler: NSObject, GetCurrentOutlineIntentHa
 		}
 		
 		let response = GetCurrentOutlineIntentResponse(code: .success, userActivity: nil)
-		response.outline = IntentOutline(identifier: outline.id.description, display: outline.title ?? "")
+		let intentOutline = IntentOutline(identifier: outline.id.description, display: outline.title ?? "")
+		intentOutline.url = outline.id.url
+		response.outline = intentOutline
 		completion(response)
 	}
 		

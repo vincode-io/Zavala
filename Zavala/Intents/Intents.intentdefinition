@@ -9,7 +9,7 @@
 	<key>INIntentDefinitionNamespace</key>
 	<string>LEx6zX</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>21A5534d</string>
+	<string>21A5543b</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
 	<string>13A233</string>
 	<key>INIntentDefinitionToolsVersion</key>
@@ -268,7 +268,7 @@
 			<key>INTypeDisplayNameID</key>
 			<string>tRlu5y</string>
 			<key>INTypeLastPropertyTag</key>
-			<integer>99</integer>
+			<integer>101</integer>
 			<key>INTypeName</key>
 			<string>Outline</string>
 			<key>INTypeProperties</key>
@@ -322,6 +322,20 @@
 					<integer>4</integer>
 					<key>INTypePropertyType</key>
 					<string>SpeakableString</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>URL</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>4ECBMv</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>5</integer>
+					<key>INTypePropertyName</key>
+					<string>url</string>
+					<key>INTypePropertyTag</key>
+					<integer>101</integer>
+					<key>INTypePropertyType</key>
+					<string>URL</string>
 				</dict>
 			</array>
 		</dict>
