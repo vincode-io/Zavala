@@ -633,44 +633,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return opml
 	}
 	
-	public func exportJekyllPost(root: URL, posts: URL, images: URL) {
-		var md = String()
-		md.append("---\n")
-		md.append("Title: \(title ?? "No Title")\n")
-		md.append("---\n\n")
-
-		let visitor = MarkdownDocVisitor()
-		rows.forEach {
-			$0.visit(visitor: visitor.visitor)
-		}
-		md.append(visitor.markdown)
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "yyyy-MM-dd"
-		let today = dateFormatter.string(from: Date())
-		
-		var filename = title ?? "Outline"
-		filename = filename.replacingOccurrences(of: " ", with: "-").trimmingCharacters(in: .whitespaces)
-		filename = "\(today)-\(filename)"
-		let fileURL = posts.appendingPathComponent(filename).appendingPathExtension("md")
-
-		guard posts.startAccessingSecurityScopedResource() else { return }
-		defer { posts.stopAccessingSecurityScopedResource() }
-		
-		var error: NSError? = nil
-		NSFileCoordinator().coordinate(writingItemAt: fileURL, options: .forReplacing, error: &error) { url in
-			do {
-				try md.write(to: url, atomically: true, encoding: .utf8)
-			} catch {
-				Swift.print(error.localizedDescription)
-			}
-		}
-		
-		if let error = error {
-			Swift.print(error.localizedDescription)
-		}
-	}
-	
 	public func update(title: String) {
 		self.title = title
 		updated = Date()

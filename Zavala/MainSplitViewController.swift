@@ -378,10 +378,6 @@ extension MainSplitViewController: TimelineDelegate {
 		showGetInfo(outline: outline)
 	}
 	
-	func exportJekyllPost(_: TimelineViewController, outline: Outline) {
-		exportJekyllPostForOutline(outline)
-	}
-	
 	func exportPDFDoc(_: TimelineViewController, outline: Outline) {
 		exportPDFDocForOutline(outline)
 	}

@@ -184,8 +184,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 input: "e",
 										 modifierFlags: [.shift, .command])
 	
-	let exportJekyllPostCommand = UICommand(title: L10n.exportJekyllPostEllipsis, action: #selector(exportJekyllPostCommand(_:)))
-	
 	let exportPDFDocCommand = UICommand(title: L10n.exportPDFDocEllipsis, action: #selector(exportPDFDocCommand(_:)))
 
 	let exportPDFListCommand = UICommand(title: L10n.exportPDFListEllipsis, action: #selector(exportPDFListCommand(_:)))
@@ -599,10 +597,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 
-	@objc func exportJekyllPostCommand(_ sender: Any?) {
-		mainCoordinator?.exportJekyllPost()
-	}
-
 	@objc func exportPDFDocCommand(_ sender: Any?) {
 		mainCoordinator?.exportPDFDoc()
 	}
@@ -853,7 +847,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				command.attributes = .disabled
 			}
 		case #selector(outlineGetInfoCommand(_:)),
-			#selector(exportJekyllPostCommand(_:)),
 			#selector(exportPDFDocCommand(_:)),
 			#selector(exportPDFListCommand(_:)),
 			#selector(exportMarkdownDocCommand(_:)),

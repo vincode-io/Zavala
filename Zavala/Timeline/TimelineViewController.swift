@@ -14,7 +14,6 @@ import Templeton
 protocol TimelineDelegate: AnyObject  {
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool)
 	func showGetInfo(_: TimelineViewController, outline: Outline)
-	func exportJekyllPost(_: TimelineViewController, outline: Outline)
 	func exportPDFDoc(_: TimelineViewController, outline: Outline)
 	func exportPDFList(_: TimelineViewController, outline: Outline)
 	func exportMarkdownDoc(_: TimelineViewController, outline: Outline)
@@ -456,14 +455,6 @@ extension TimelineViewController {
 		let action = UIAction(title: L10n.copyDocumentLink, image: AppAssets.link) { action in
 			let documentURL = document.id.url
 			UIPasteboard.general.url = documentURL
-		}
-		return action
-	}
-	
-	private func exportJekyllPostOutlineAction(outline: Outline) -> UIAction {
-		let action = UIAction(title: L10n.exportJekyllPostEllipsis) { [weak self] action in
-			guard let self = self else { return }
-			self.delegate?.exportJekyllPost(self, outline: outline)
 		}
 		return action
 	}

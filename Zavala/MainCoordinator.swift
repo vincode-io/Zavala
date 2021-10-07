@@ -334,11 +334,6 @@ extension MainCoordinator {
 		}
 	}
 
-	func exportJekyllPost() {
-		guard let outline = editorViewController?.outline else { return }
-		exportJekyllPostForOutline(outline)
-	}
-
 	func exportPDFDoc() {
 		guard let outline = editorViewController?.outline else { return }
 		exportPDFDocForOutline(outline)
@@ -364,15 +359,6 @@ extension MainCoordinator {
 		exportOPMLForOutline(outline)
 	}
 	
-	func exportJekyllPostForOutline(_ outline: Outline) {
-		#if targetEnvironment(macCatalyst)
-		let openJekyllExportViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "MacJekyllExportViewController") as! MacJekyllExportViewController
-		openJekyllExportViewController.preferredContentSize = CGSize(width: 500, height: 150)
-		openJekyllExportViewController.outline = outline
-		present(openJekyllExportViewController, animated: true)
-		#endif
-	}
-
 	func exportPDFDocForOutline(_ outline: Outline) {
 		let printDoc = outline.printDoc()
 		exportPDFForOutline(outline, attrString: printDoc)
