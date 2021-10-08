@@ -541,12 +541,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	func application(_ application: UIApplication, handlerFor intent: INIntent) -> Any? {
 		switch intent {
+		case is ExportIntent:
+			return ExportIntentHandler()
 		case is GetCurrentOutlineIntent:
 			return GetCurrentOutlineIntentHandler(mainCoordinator: mainCoordinator)
 		case is GetImagesIntent:
 			return GetImagesIntentHandler()
-		case is ExportIntent:
-			return ExportIntentHandler()
+		case is ImportIntent:
+			return ImportIntentHandler()
 		default:
 			fatalError("Unhandled intent type: \(intent)")
 		}
