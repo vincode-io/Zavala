@@ -43,7 +43,7 @@ class EditorTextRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate 
 	func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
 		if let itemProvider = session.items.first(where: { $0.itemProvider.hasItemConformingToTypeIdentifier(kUTTypeImage as String) })?.itemProvider {
 			itemProvider.loadDataRepresentation(forTypeIdentifier: kUTTypeImage as String) { [weak textView] (data, error) in
-				guard let textView = textView, let data = data, let cgImage = RSImage.scaleImage(data, maxPixelSize: 1024) else { return }
+				guard let textView = textView, let data = data, let cgImage = RSImage.scaleImage(data, maxPixelSize: 1800) else { return }
 				let image = UIImage(cgImage: cgImage)
 				DispatchQueue.main.async {
 					textView.replaceCharacters(textView.selectedRange, withImage: image)
