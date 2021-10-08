@@ -372,11 +372,7 @@ extension MainCoordinator {
 	func exportPDFForOutline(_ outline: Outline, attrString: NSAttributedString) {
 		let textView = UITextView()
 		textView.attributedText = attrString
-		let printFormatter = textView.viewPrintFormatter()
-		
-		let pageRenderer = UIPrintPageRenderer()
-		pageRenderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
-		let data = pageRenderer.generatePDF()
+		let data = textView.generatePDF()
 		
 		export(data as Data, fileName: outline.fileName(withSuffix: "pdf"))
 	}

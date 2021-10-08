@@ -3,7 +3,81 @@
 <plist version="1.0">
 <dict>
 	<key>INEnums</key>
-	<array/>
+	<array>
+		<dict>
+			<key>INEnumDisplayName</key>
+			<string>Export Type</string>
+			<key>INEnumDisplayNameID</key>
+			<string>MNFDRa</string>
+			<key>INEnumGeneratesHeader</key>
+			<true/>
+			<key>INEnumName</key>
+			<string>ExportType</string>
+			<key>INEnumType</key>
+			<string>Regular</string>
+			<key>INEnumValues</key>
+			<array>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>unknown</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>NrxuXI</string>
+					<key>INEnumValueName</key>
+					<string>unknown</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>OPML</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>Po4CGG</string>
+					<key>INEnumValueIndex</key>
+					<integer>1</integer>
+					<key>INEnumValueName</key>
+					<string>opml</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Markdown Doc</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>jmFBcs</string>
+					<key>INEnumValueIndex</key>
+					<integer>2</integer>
+					<key>INEnumValueName</key>
+					<string>markdownDoc</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Markdown List</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>mqGMox</string>
+					<key>INEnumValueIndex</key>
+					<integer>3</integer>
+					<key>INEnumValueName</key>
+					<string>markdownList</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>PDF Doc</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>41Qcnl</string>
+					<key>INEnumValueIndex</key>
+					<integer>4</integer>
+					<key>INEnumValueName</key>
+					<string>pdfDoc</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>PDF List</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>jgMDjP</string>
+					<key>INEnumValueIndex</key>
+					<integer>5</integer>
+					<key>INEnumValueName</key>
+					<string>pdfList</string>
+				</dict>
+			</array>
+		</dict>
+	</array>
 	<key>INIntentDefinitionModelVersion</key>
 	<string>1.2</string>
 	<key>INIntentDefinitionNamespace</key>
@@ -18,151 +92,13 @@
 	<array>
 		<dict>
 			<key>INIntentCategory</key>
-			<string>generic</string>
-			<key>INIntentConfigurable</key>
-			<true/>
-			<key>INIntentDescriptionID</key>
-			<string>4Bbndi</string>
-			<key>INIntentInput</key>
-			<string>outline</string>
-			<key>INIntentKeyParameter</key>
-			<string>outline</string>
-			<key>INIntentLastParameterTag</key>
-			<integer>2</integer>
-			<key>INIntentManagedParameterCombinations</key>
-			<dict>
-				<key>outline</key>
-				<dict>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Create Markdown Doc from${outline}</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>WOp1A6</string>
-					<key>INIntentParameterCombinationUpdatesLinked</key>
-					<true/>
-				</dict>
-			</dict>
-			<key>INIntentName</key>
-			<string>CreateMarkdownDoc</string>
-			<key>INIntentParameterCombinations</key>
-			<dict>
-				<key>outline</key>
-				<dict>
-					<key>INIntentParameterCombinationIsLinked</key>
-					<true/>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Create Markdown Doc from${outline}</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>SSmYFS</string>
-				</dict>
-			</dict>
-			<key>INIntentParameters</key>
-			<array>
-				<dict>
-					<key>INIntentParameterConfigurable</key>
-					<true/>
-					<key>INIntentParameterDisplayName</key>
-					<string>Outline</string>
-					<key>INIntentParameterDisplayNameID</key>
-					<string>Ua1dmL</string>
-					<key>INIntentParameterDisplayPriority</key>
-					<integer>1</integer>
-					<key>INIntentParameterName</key>
-					<string>outline</string>
-					<key>INIntentParameterObjectType</key>
-					<string>Outline</string>
-					<key>INIntentParameterObjectTypeNamespace</key>
-					<string>LEx6zX</string>
-					<key>INIntentParameterPromptDialogs</key>
-					<array>
-						<dict>
-							<key>INIntentParameterPromptDialogCustom</key>
-							<true/>
-							<key>INIntentParameterPromptDialogType</key>
-							<string>Configuration</string>
-						</dict>
-						<dict>
-							<key>INIntentParameterPromptDialogCustom</key>
-							<true/>
-							<key>INIntentParameterPromptDialogType</key>
-							<string>Primary</string>
-						</dict>
-					</array>
-					<key>INIntentParameterTag</key>
-					<integer>2</integer>
-					<key>INIntentParameterType</key>
-					<string>Object</string>
-					<key>INIntentParameterUnsupportedReasons</key>
-					<array>
-						<dict>
-							<key>INIntentParameterUnsupportedReasonCode</key>
-							<string>required</string>
-							<key>INIntentParameterUnsupportedReasonCustom</key>
-							<true/>
-							<key>INIntentParameterUnsupportedReasonFormatString</key>
-							<string>You must supply an Outline.</string>
-							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
-							<string>Dn3Lsj</string>
-						</dict>
-					</array>
-				</dict>
-			</array>
-			<key>INIntentResponse</key>
-			<dict>
-				<key>INIntentResponseCodes</key>
-				<array>
-					<dict>
-						<key>INIntentResponseCodeName</key>
-						<string>success</string>
-						<key>INIntentResponseCodeSuccess</key>
-						<true/>
-					</dict>
-					<dict>
-						<key>INIntentResponseCodeName</key>
-						<string>failure</string>
-					</dict>
-				</array>
-				<key>INIntentResponseLastParameterTag</key>
-				<integer>1</integer>
-				<key>INIntentResponseOutput</key>
-				<string>markdown</string>
-				<key>INIntentResponseParameters</key>
-				<array>
-					<dict>
-						<key>INIntentResponseParameterDisplayName</key>
-						<string>Markdown</string>
-						<key>INIntentResponseParameterDisplayNameID</key>
-						<string>lNYyRA</string>
-						<key>INIntentResponseParameterDisplayPriority</key>
-						<integer>1</integer>
-						<key>INIntentResponseParameterName</key>
-						<string>markdown</string>
-						<key>INIntentResponseParameterTag</key>
-						<integer>1</integer>
-						<key>INIntentResponseParameterType</key>
-						<string>String</string>
-					</dict>
-				</array>
-			</dict>
-			<key>INIntentTitle</key>
-			<string>Create Markdown Doc</string>
-			<key>INIntentTitleID</key>
-			<string>Tcz19N</string>
-			<key>INIntentType</key>
-			<string>Custom</string>
-			<key>INIntentVerb</key>
-			<string>Do</string>
-		</dict>
-		<dict>
-			<key>INIntentCategory</key>
 			<string>download</string>
 			<key>INIntentConfigurable</key>
 			<true/>
 			<key>INIntentDescriptionID</key>
 			<string>6dPBfd</string>
+			<key>INIntentIneligibleForSuggestions</key>
+			<true/>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
 				<key></key>
@@ -179,20 +115,6 @@
 			</dict>
 			<key>INIntentName</key>
 			<string>GetCurrentOutline</string>
-			<key>INIntentParameterCombinations</key>
-			<dict>
-				<key></key>
-				<dict>
-					<key>INIntentParameterCombinationIsPrimary</key>
-					<true/>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Get Current Outline</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>6rwlWx</string>
-				</dict>
-			</dict>
 			<key>INIntentResponse</key>
 			<dict>
 				<key>INIntentResponseCodes</key>
@@ -264,6 +186,8 @@
 			<true/>
 			<key>INIntentDescriptionID</key>
 			<string>YwU1TK</string>
+			<key>INIntentIneligibleForSuggestions</key>
+			<true/>
 			<key>INIntentInput</key>
 			<string>outline</string>
 			<key>INIntentLastParameterTag</key>
@@ -284,20 +208,6 @@
 			</dict>
 			<key>INIntentName</key>
 			<string>GetImages</string>
-			<key>INIntentParameterCombinations</key>
-			<dict>
-				<key>outline</key>
-				<dict>
-					<key>INIntentParameterCombinationIsLinked</key>
-					<true/>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Get Images for${outline}</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>rKYPIL</string>
-				</dict>
-			</dict>
 			<key>INIntentParameters</key>
 			<array>
 				<dict>
@@ -379,6 +289,191 @@
 			<string>Get Images</string>
 			<key>INIntentTitleID</key>
 			<string>kRIWYV</string>
+			<key>INIntentType</key>
+			<string>Custom</string>
+			<key>INIntentVerb</key>
+			<string>Get</string>
+		</dict>
+		<dict>
+			<key>INIntentCategory</key>
+			<string>download</string>
+			<key>INIntentConfigurable</key>
+			<true/>
+			<key>INIntentDescriptionID</key>
+			<string>aEjjxU</string>
+			<key>INIntentIneligibleForSuggestions</key>
+			<true/>
+			<key>INIntentInput</key>
+			<string>outline</string>
+			<key>INIntentLastParameterTag</key>
+			<integer>4</integer>
+			<key>INIntentManagedParameterCombinations</key>
+			<dict>
+				<key>outline,exportType</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Export the${outline}as ${exportType}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>sSRmym</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+			</dict>
+			<key>INIntentName</key>
+			<string>Export</string>
+			<key>INIntentParameters</key>
+			<array>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Outline</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>rBjaC0</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>1</integer>
+					<key>INIntentParameterName</key>
+					<string>outline</string>
+					<key>INIntentParameterObjectType</key>
+					<string>Outline</string>
+					<key>INIntentParameterObjectTypeNamespace</key>
+					<string>LEx6zX</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterTag</key>
+					<integer>2</integer>
+					<key>INIntentParameterType</key>
+					<string>Object</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterCustomDisambiguation</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Export Type</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>Yo6yOM</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>2</integer>
+					<key>INIntentParameterEnumType</key>
+					<string>ExportType</string>
+					<key>INIntentParameterEnumTypeNamespace</key>
+					<string>LEx6zX</string>
+					<key>INIntentParameterName</key>
+					<string>exportType</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>There are ${count} options matching ‘${exportType}’.</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>ngTkTr</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>DisambiguationIntroduction</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>Just to confirm, you wanted ‘${exportType}’?</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>fundIe</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Confirmation</string>
+						</dict>
+					</array>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>4</integer>
+					<key>INIntentParameterType</key>
+					<string>Integer</string>
+					<key>INIntentParameterUnsupportedReasons</key>
+					<array>
+						<dict>
+							<key>INIntentParameterUnsupportedReasonCode</key>
+							<string>required</string>
+							<key>INIntentParameterUnsupportedReasonCustom</key>
+							<true/>
+							<key>INIntentParameterUnsupportedReasonFormatString</key>
+							<string>The${exportType}is required.</string>
+							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
+							<string>4JA58U</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+			<key>INIntentResponse</key>
+			<dict>
+				<key>INIntentResponseCodes</key>
+				<array>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>success</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>failure</string>
+					</dict>
+				</array>
+				<key>INIntentResponseLastParameterTag</key>
+				<integer>2</integer>
+				<key>INIntentResponseOutput</key>
+				<string>exportFile</string>
+				<key>INIntentResponseParameters</key>
+				<array>
+					<dict>
+						<key>INIntentResponseParameterDisplayName</key>
+						<string>Export File</string>
+						<key>INIntentResponseParameterDisplayNameID</key>
+						<string>haIDGp</string>
+						<key>INIntentResponseParameterDisplayPriority</key>
+						<integer>1</integer>
+						<key>INIntentResponseParameterName</key>
+						<string>exportFile</string>
+						<key>INIntentResponseParameterTag</key>
+						<integer>2</integer>
+						<key>INIntentResponseParameterType</key>
+						<string>File</string>
+					</dict>
+				</array>
+			</dict>
+			<key>INIntentTitle</key>
+			<string>Export</string>
+			<key>INIntentTitleID</key>
+			<string>3CWcJ3</string>
 			<key>INIntentType</key>
 			<string>Custom</string>
 			<key>INIntentVerb</key>

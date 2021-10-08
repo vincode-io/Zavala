@@ -61,8 +61,8 @@
 	<key>INIntentsSupported</key>
 	<array>
 		<string>GetCurrentOutlineIntent</string>
-		<string>CreateMarkdownDocIntent</string>
 		<string>GetImagesIntent</string>
+		<string>ExportIntent</string>
 	</array>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.productivity</string>
@@ -82,7 +82,7 @@
 	<string>Zavala wants to use your photos so that you can insert them into outlines.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
-		<string>CreateMarkdownDocIntent</string>
+		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
 		<string>GetImagesIntent</string>
 		<string>io.vincode.Zavala.restoration</string>
