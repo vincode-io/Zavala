@@ -9,6 +9,8 @@ import UIKit
 
 public class OutlineTextAttachment: NSTextAttachment {
 	
+	public var imageUUID: String? = nil
+
 	public override init(data contentData: Data?, ofType uti: String?) {
 		super.init(data: contentData, ofType: uti)
 		if image == nil, let contentData = contentData {

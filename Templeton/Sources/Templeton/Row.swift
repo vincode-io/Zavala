@@ -501,6 +501,7 @@ extension Row {
 		for image in images ?? [Image]() {
 			if image.isInNotes == isNotes {
 				let attachment = OutlineTextAttachment(data: image.data, ofType: kUTTypePNG as String)
+				attachment.imageUUID = image.id.imageUUID
 				let imageAttrText = NSAttributedString(attachment: attachment)
 				mutableAttrString.insert(imageAttrText, at: image.offset)
 			}
@@ -518,8 +519,8 @@ extension Row {
 		var images = [Image]()
 		
 		mutableAttrString.enumerateAttribute(.attachment, in: .init(location: 0, length: mutableAttrString.length), options: []) { (attribute, range, _) in
-			if let pngData = (attribute as? NSTextAttachment)?.image?.pngData() {
-				let entityID = EntityID.image(outline.id.accountID, outline.id.documentUUID, id, UUID().uuidString)
+			if let outlineTextAttachment = attribute as? OutlineTextAttachment, let imageUUID = outlineTextAttachment.imageUUID, let pngData = outlineTextAttachment.image?.pngData() {
+				let entityID = EntityID.image(outline.id.accountID, outline.id.documentUUID, id, imageUUID)
 				let image = Image(id: entityID, isInNotes: isNotes, offset: range.location, data: pngData)
 				images.append(image)
 			}
