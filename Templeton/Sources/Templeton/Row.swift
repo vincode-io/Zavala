@@ -136,11 +136,31 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 	}
 	
 	public var topicMarkdown: String? {
-		return topic?.markdownRepresentation
+		if let topic = topic, let images = images?.filter({ !$0.isInNotes }), !images.isEmpty {
+			let mutableTopic = NSMutableAttributedString(attributedString: topic)
+			let sortedImages = images.sorted(by: { $0.offset > $1.offset })
+			for image in sortedImages {
+				let markdown = NSAttributedString(string: "![](\(image.id.imageUUID).png)")
+				mutableTopic.insert(markdown, at: image.offset)
+			}
+			return mutableTopic.markdownRepresentation
+		} else {
+			return topic?.markdownRepresentation
+		}
 	}
 	
 	public var noteMarkdown: String? {
-		return note?.markdownRepresentation
+		if let note = note, let images = images?.filter({ $0.isInNotes }), !images.isEmpty {
+			let mutableNote = NSMutableAttributedString(attributedString: note)
+			let sortedImages = images.sorted(by: { $0.offset > $1.offset })
+			for image in sortedImages {
+				let markdown = NSAttributedString(string: "![](\(image.id.imageUUID).png)")
+				mutableNote.insert(markdown, at: image.offset)
+			}
+			return mutableNote.markdownRepresentation
+		} else {
+			return note?.markdownRepresentation
+		}
 	}
 	
 	public var topic: NSAttributedString? {
