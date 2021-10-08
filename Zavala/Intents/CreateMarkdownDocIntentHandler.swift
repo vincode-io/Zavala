@@ -5,7 +5,6 @@
 //  Created by Maurice Parker on 9/28/21.
 //
 
-import UIKit
 import Intents
 import Templeton
 

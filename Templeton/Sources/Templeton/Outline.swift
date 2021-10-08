@@ -278,6 +278,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return completedRows
 	}
 	
+	public var images: [String: [Image]]?
+	
 	public private(set) var currentSearchResult = 0
 	public var currentSearchResultRow: Row? {
 		guard currentSearchResult < searchResultCoordinates.count else { return nil }
@@ -343,8 +345,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			}
 		}
 	}
-	
-	var images: [String: [Image]]?
 	
 	private var selectionRowID: EntityID?
 	private var selectionIsInNotes: Bool?

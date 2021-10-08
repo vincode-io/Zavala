@@ -62,6 +62,7 @@
 	<array>
 		<string>GetCurrentOutlineIntent</string>
 		<string>CreateMarkdownDocIntent</string>
+		<string>GetImagesIntent</string>
 	</array>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.productivity</string>
@@ -83,6 +84,7 @@
 	<array>
 		<string>CreateMarkdownDocIntent</string>
 		<string>GetCurrentOutlineIntent</string>
+		<string>GetImagesIntent</string>
 		<string>io.vincode.Zavala.restoration</string>
 		<string>io.vincode.Zavala.selectingDocument</string>
 		<string>io.vincode.Zavala.selectingDocumentContainer</string>

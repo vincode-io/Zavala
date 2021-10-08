@@ -545,6 +545,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return GetCurrentOutlineIntentHandler(mainCoordinator: mainCoordinator)
 		case is CreateMarkdownDocIntent:
 			return CreateMarkdownDocIntentHandler()
+		case is GetImagesIntent:
+			return GetImagesIntentHandler()
 		default:
 			fatalError("Unhandled intent type: \(intent)")
 		}

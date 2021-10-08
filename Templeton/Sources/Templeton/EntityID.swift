@@ -38,6 +38,39 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		}
 	}
 
+	public var documentUUID: String {
+		switch self {
+		case .document(_, let documentID):
+			return documentID
+		case .row(_, let documentID, _):
+			return documentID
+		case .image(_, let documentID, _, _):
+			return documentID
+		default:
+			fatalError()
+		}
+	}
+	
+	public var rowUUID: String {
+		switch self {
+		case .row(_, _, let rowID):
+			return rowID
+		case .image(_, _, let rowID, _):
+			return rowID
+		default:
+			fatalError()
+		}
+	}
+	
+	public var imageUUID: String {
+		switch self {
+		case .image(_, _, _, let imageID):
+			return imageID
+		default:
+			fatalError()
+		}
+	}
+	
 	public var description: String {
 		switch self {
 		case .account(let id):
@@ -144,39 +177,6 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			return true
 		default:
 			return false
-		}
-	}
-	
-	var documentUUID: String {
-		switch self {
-		case .document(_, let documentID):
-			return documentID
-		case .row(_, let documentID, _):
-			return documentID
-		case .image(_, let documentID, _, _):
-			return documentID
-		default:
-			fatalError()
-		}
-	}
-	
-	var rowUUID: String {
-		switch self {
-		case .row(_, _, let rowID):
-			return rowID
-		case .image(_, _, let rowID, _):
-			return rowID
-		default:
-			fatalError()
-		}
-	}
-	
-	var imageUUID: String {
-		switch self {
-		case .image(_, _, _, let imageID):
-			return imageID
-		default:
-			fatalError()
 		}
 	}
 	
