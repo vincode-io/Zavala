@@ -9,9 +9,12 @@ import Foundation
 
 extension String {
 	
+	public func makeSearchable() -> String {
+		return trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current)
+	}
+	
 	public func searchRegEx() -> NSRegularExpression? {
-		let foldedText = trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current)
-		return try? NSRegularExpression(pattern: foldedText, options: .caseInsensitive)
+		return try? NSRegularExpression(pattern: makeSearchable(), options: .caseInsensitive)
 	}
 	
 }

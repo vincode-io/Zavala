@@ -26,8 +26,8 @@ class SearchResultVisitor {
 			return
 		}
 		
-		if let topicText = visited.topic?.string.trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current) {
-			for match in searchRegEx.matches(in: topicText, options: [], range: NSRange(location: 0, length: topicText.utf16.count)) as [NSTextCheckingResult] {
+		if let topicText = visited.topic?.string.makeSearchable() {
+			for match in searchRegEx.allMatches(in: topicText) {
 				let coordinates = SearchResultCoordinates(isCurrentResult: firstMatch, row: visited, isInNotes: false, range: match.range)
 				searchResultCoordinates.append(coordinates)
 				
@@ -38,8 +38,8 @@ class SearchResultVisitor {
 			}
 		}
 		
-		if !isNotesHidden, let noteText = visited.note?.string.trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current) {
-			for match in searchRegEx.matches(in: noteText, options: [], range: NSRange(location: 0, length: noteText.utf16.count)) as [NSTextCheckingResult] {
+		if !isNotesHidden, let noteText = visited.note?.string.makeSearchable() {
+			for match in searchRegEx.allMatches(in: noteText) {
 				let coordinates = SearchResultCoordinates(isCurrentResult: firstMatch, row: visited, isInNotes: true, range: match.range)
 				searchResultCoordinates.append(coordinates)
 
