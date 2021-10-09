@@ -16,8 +16,7 @@ class SearchResultVisitor {
 	var firstMatch = true
 	
 	init(searchText: String, isFiltered: Bool, isNotesHidden: Bool) {
-		let foldedText = searchText.trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current)
-		searchRegEx = try? NSRegularExpression(pattern: foldedText, options: .caseInsensitive)
+		searchRegEx = searchText.searchRegEx()
 		self.isFiltered = isFiltered
 		self.isNotesHidden = isNotesHidden
 	}
