@@ -549,6 +549,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return GetImagesIntentHandler()
 		case is ImportIntent:
 			return ImportIntentHandler()
+		case is ShowOutlineIntent:
+			return ShowOutlineIntentHandler(mainCoordinator: mainCoordinator)
 		default:
 			fatalError("Unhandled intent type: \(intent)")
 		}
