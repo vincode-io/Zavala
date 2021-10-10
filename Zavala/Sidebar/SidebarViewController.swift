@@ -380,12 +380,21 @@ extension SidebarViewController {
 		guard let tagDocuments = container as? TagDocuments else { return nil }
 		
 		let action = UIAction(title: L10n.rename, image: AppAssets.rename) { [weak self] action in
-			let renameTagNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "RenameTagViewControllerNav") as! UINavigationController
-			renameTagNavViewController.preferredContentSize = CGSize(width: 400, height: 100)
-			renameTagNavViewController.modalPresentationStyle = .formSheet
-			let renameTagViewController = renameTagNavViewController.topViewController as! RenameTagViewController
-			renameTagViewController.tagDocuments = tagDocuments
-			self?.present(renameTagNavViewController, animated: true)
+			guard let self = self else { return }
+			
+			if self.traitCollection.userInterfaceIdiom == .mac {
+				let renameTagViewController = UIStoryboard.dialog.instantiateController(ofType: MacRenameTagViewController.self)
+				renameTagViewController.preferredContentSize = CGSize(width: 400, height: 80)
+				renameTagViewController.tagDocuments = tagDocuments
+				self.present(renameTagViewController, animated: true)
+			} else {
+				let renameTagNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "RenameTagViewControllerNav") as! UINavigationController
+				renameTagNavViewController.preferredContentSize = CGSize(width: 400, height: 100)
+				renameTagNavViewController.modalPresentationStyle = .formSheet
+				let renameTagViewController = renameTagNavViewController.topViewController as! RenameTagViewController
+				renameTagViewController.tagDocuments = tagDocuments
+				self.present(renameTagNavViewController, animated: true)
+			}
 		}
 		
 		return action
