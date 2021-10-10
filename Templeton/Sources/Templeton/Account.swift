@@ -346,6 +346,10 @@ public final class Account: NSObject, Identifiable, Codable {
 		accountTagsDidChange()
 	}
 	
+	public func findTag(name: String) -> Tag? {
+		return tags?.first(where: { $0.name == name })
+	}
+
 	func findDocument(documentUUID: String) -> Document? {
 		return idToDocumentsDictionary[documentUUID]
 	}
@@ -356,10 +360,6 @@ public final class Account: NSObject, Identifiable, Codable {
 				deleteDocument(doc, updateCloudKit: false)
 			}
 		}
-	}
-	
-	func findTag(name: String) -> Tag? {
-		return tags?.first(where: { $0.name == name })
 	}
 	
 	func findTag(tagID: String) -> Tag? {

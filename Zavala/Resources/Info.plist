@@ -61,11 +61,12 @@
 	<key>INIntentsSupported</key>
 	<array>
 		<string>AddOutlineTagIntent</string>
+		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
 		<string>GetImagesForOutlineIntent</string>
 		<string>GetOutlinesIntent</string>
-		<string>ExportIntent</string>
 		<string>ImportIntent</string>
+		<string>RemoveOutlineTagIntent</string>
 		<string>ShowOutlineIntent</string>
 		<string>SetOutlineTitleIntent</string>
 	</array>
@@ -93,6 +94,7 @@
 		<string>GetImagesForOutlineIntent</string>
 		<string>GetOutlinesIntent</string>
 		<string>ImportIntent</string>
+		<string>RemoveOutlineTagIntent</string>
 		<string>SetOutlineTitleIntent</string>
 		<string>ShowOutlineIntent</string>
 		<string>io.vincode.Zavala.restoration</string>
