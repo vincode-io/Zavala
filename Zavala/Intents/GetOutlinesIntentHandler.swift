@@ -80,6 +80,8 @@ class GetOutlinesIntentHandler: NSObject, ZavalaIntentHandler, GetOutlinesIntent
 	}
 		
 	func handle(intent: GetOutlinesIntent, completion: @escaping (GetOutlinesIntentResponse) -> Void) {
+		resume()
+		
 		var documents: [Document]
 		
 		switch intent.accountType {
@@ -163,6 +165,8 @@ class GetOutlinesIntentHandler: NSObject, ZavalaIntentHandler, GetOutlinesIntent
 		}
 		
 		documents = documents.sorted(by: { $0.title ?? "" < $1.title ?? "" })
+		
+		suspend()
 		
 		let response = GetOutlinesIntentResponse(code: .success, userActivity: nil)
 		response.outlines = documents.compactMap({ $0.outline }).map({ IntentOutline(outline: $0) })
