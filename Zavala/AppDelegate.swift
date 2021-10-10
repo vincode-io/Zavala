@@ -541,6 +541,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	func application(_ application: UIApplication, handlerFor intent: INIntent) -> Any? {
 		switch intent {
+		case is AddOutlineTagIntent:
+			return AddOutlineTagIntentHandler()
 		case is ExportIntent:
 			return ExportIntentHandler()
 		case is GetCurrentOutlineIntent:
