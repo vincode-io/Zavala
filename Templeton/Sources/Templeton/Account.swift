@@ -346,6 +346,15 @@ public final class Account: NSObject, Identifiable, Codable {
 		accountTagsDidChange()
 	}
 	
+	public func forceDeleteTag(_ tag: Tag) {
+		for doc in documents ?? [Document]() {
+			doc.deleteTag(tag)
+		}
+		
+		tags?.removeFirst(object: tag)
+		accountTagsDidChange()
+	}
+	
 	public func findTag(name: String) -> Tag? {
 		return tags?.first(where: { $0.name == name })
 	}

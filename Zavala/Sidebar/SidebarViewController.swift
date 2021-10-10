@@ -169,6 +169,11 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 
 extension SidebarViewController {
 	
+	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return nil }
+		return makeDocumentContainerContextMenu(item: sidebarItem)
+	}
+
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		if let searchCellIndexPath = dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {
 			if let searchCell = collectionView.cellForItem(at: searchCellIndexPath) as? SidebarSearchCell {
@@ -349,4 +354,39 @@ extension SidebarViewController: SidebarSearchCellDelegate {
 
 extension SidebarViewController {
 	
+	private func makeDocumentContainerContextMenu(item: SidebarItem) -> UIContextMenuConfiguration {
+		return UIContextMenuConfiguration(identifier: item as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
+			guard let self = self,
+				  case .documentContainer(let entityID) = item.id,
+				  let container = AccountManager.shared.findDocumentContainer(entityID) else {
+					  return nil
+				  }
+
+			var menuItems = [UIMenu]()
+			
+			if let deleteTagAction = self.deleteTagAction(container: container) {
+				menuItems.append(UIMenu(title: "", options: .displayInline, children: [deleteTagAction]))
+			}
+			
+			return UIMenu(title: "", children: menuItems)
+		})
+	}
+
+	private func deleteTagAction(container: DocumentContainer) -> UIAction? {
+		guard let tagDocuments = container as? TagDocuments, let tag = tagDocuments.tag else { return nil }
+		let action = UIAction(title: L10n.delete, image: AppAssets.removeEntity, attributes: .destructive) { [weak self] action in
+			let deleteAction = UIAlertAction(title: L10n.delete, style: .destructive) { _ in
+				tagDocuments.account?.forceDeleteTag(tag)
+			}
+			
+			let alert = UIAlertController(title: L10n.deleteTagPrompt(tag.name), message: L10n.deleteTagMessage, preferredStyle: .alert)
+			alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
+			alert.addAction(deleteAction)
+			alert.preferredAction = deleteAction
+			self?.present(alert, animated: true, completion: nil)
+		}
+		
+		return action
+	}
+
 }

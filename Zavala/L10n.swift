@@ -76,12 +76,6 @@ internal enum L10n {
   internal static let delete = L10n.tr("Localizable", "Delete")
   /// Delete Completed Rows
   internal static let deleteCompletedRows = L10n.tr("Localizable", "Delete_Completed_Rows")
-  /// Any Outlines in this folder will also be deleted and unrecoverable.
-  internal static let deleteFolderMessage = L10n.tr("Localizable", "Delete_Folder_Message")
-  /// Are you sure you want to delete the “%@” folder?
-  internal static func deleteFolderPrompt(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "Delete_Folder_Prompt", String(describing: p1))
-  }
   /// Delete Note
   internal static let deleteNote = L10n.tr("Localizable", "Delete_Note")
   /// Delete Outline
@@ -98,6 +92,12 @@ internal enum L10n {
   internal static let deleteRows = L10n.tr("Localizable", "Delete_Rows")
   /// Delete Tag
   internal static let deleteTag = L10n.tr("Localizable", "Delete_Tag")
+  /// No Outlines associated with this tag will be deleted.
+  internal static let deleteTagMessage = L10n.tr("Localizable", "Delete_Tag_Message")
+  /// Are you sure you want to delete the “%@” tag?
+  internal static func deleteTagPrompt(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "Delete_Tag_Prompt", String(describing: p1))
+  }
   /// Document Find…
   internal static let documentFindEllipsis = L10n.tr("Localizable", "Document_Find_Ellipsis")
   /// Done
@@ -240,12 +240,6 @@ internal enum L10n {
   internal static let removeCloudKitTitle = L10n.tr("Localizable", "Remove_CloudKit_Title")
   /// Restore
   internal static let restore = L10n.tr("Localizable", "Restore")
-  /// Your current account data will be lost and unrecoverable.
-  internal static let restoreAccountMessage = L10n.tr("Localizable", "Restore_Account_Message")
-  /// Are you sure you want to restore the “%@” account?
-  internal static func restoreAccountPrompt(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "Restore_Account_Prompt", String(describing: p1))
-  }
   /// Restore Archive
   internal static let restoreArchive = L10n.tr("Localizable", "Restore_Archive")
   /// Are you sure you want to restore the defaults? All your font customizations will be lost.

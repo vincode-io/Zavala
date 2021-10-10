@@ -115,10 +115,8 @@
 "Edit_Document" = "Edit document “%@”";
 
 /* Sidebar */
-"Delete_Folder_Prompt" = "Are you sure you want to delete the “%@” folder?";
-"Delete_Folder_Message" = "Any Outlines in this folder will also be deleted and unrecoverable.";
-"Restore_Account_Prompt" = "Are you sure you want to restore the “%@” account?";
-"Restore_Account_Message" = "Your current account data will be lost and unrecoverable.";
+"Delete_Tag_Prompt" = "Are you sure you want to delete the “%@” tag?";
+"Delete_Tag_Message" = "No Outlines associated with this tag will be deleted.";
 
 /* Timeline */
 "Not_Available" = "Not Available";
