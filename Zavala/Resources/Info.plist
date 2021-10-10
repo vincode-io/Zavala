@@ -61,7 +61,7 @@
 	<key>INIntentsSupported</key>
 	<array>
 		<string>GetCurrentOutlineIntent</string>
-		<string>GetImagesIntent</string>
+		<string>GetImagesForOutlineIntent</string>
 		<string>GetOutlinesIntent</string>
 		<string>ExportIntent</string>
 		<string>ImportIntent</string>
@@ -87,7 +87,7 @@
 	<array>
 		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
-		<string>GetImagesIntent</string>
+		<string>GetImagesForOutlineIntent</string>
 		<string>GetOutlinesIntent</string>
 		<string>ImportIntent</string>
 		<string>ShowOutlineIntent</string>

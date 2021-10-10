@@ -545,8 +545,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return ExportIntentHandler()
 		case is GetCurrentOutlineIntent:
 			return GetCurrentOutlineIntentHandler(mainCoordinator: mainCoordinator)
-		case is GetImagesIntent:
-			return GetImagesIntentHandler()
+		case is GetImagesForOutlineIntent:
+			return GetImagesForOutlineIntentHandler()
 		case is GetOutlinesIntent:
 			return GetOutlinesIntentHandler()
 		case is ImportIntent:

@@ -293,7 +293,7 @@
 				</dict>
 			</dict>
 			<key>INIntentName</key>
-			<string>GetImages</string>
+			<string>GetImagesForOutline</string>
 			<key>INIntentParameters</key>
 			<array>
 				<dict>
@@ -372,7 +372,7 @@
 				</array>
 			</dict>
 			<key>INIntentTitle</key>
-			<string>Get Images</string>
+			<string>Get Images For Outline</string>
 			<key>INIntentTitleID</key>
 			<string>kRIWYV</string>
 			<key>INIntentType</key>

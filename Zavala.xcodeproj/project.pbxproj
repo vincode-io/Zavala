@@ -99,7 +99,7 @@
 		5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5181A9422554D92100C153E8 /* LaunchScreen.storyboard */; };
 		5188FAA92602A9CE0020B7DA /* OutlineEditor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5188FAA82602A9CE0020B7DA /* OutlineEditor.storyboard */; };
 		518F2E38257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */; };
-		519184EE270FAFE100B7E177 /* GetImagesIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519184ED270FAFE100B7E177 /* GetImagesIntentHandler.swift */; };
+		519184EE270FAFE100B7E177 /* GetImagesForOutlineIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519184ED270FAFE100B7E177 /* GetImagesForOutlineIntentHandler.swift */; };
 		519184F12710792300B7E177 /* ExportIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519184F02710792300B7E177 /* ExportIntentHandler.swift */; };
 		519184F327107FDA00B7E177 /* UITextView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519184F227107FDA00B7E177 /* UITextView+.swift */; };
 		519184F52710F93700B7E177 /* ImportIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519184F42710F93700B7E177 /* ImportIntentHandler.swift */; };
@@ -316,7 +316,7 @@
 		5181A96A2554D93B00C153E8 /* Zavala.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Zavala.entitlements; sourceTree = "<group>"; };
 		5188FAA82602A9CE0020B7DA /* OutlineEditor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OutlineEditor.storyboard; sourceTree = "<group>"; };
 		518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistentCollectionViewListCell.swift; sourceTree = "<group>"; };
-		519184ED270FAFE100B7E177 /* GetImagesIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetImagesIntentHandler.swift; sourceTree = "<group>"; };
+		519184ED270FAFE100B7E177 /* GetImagesForOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetImagesForOutlineIntentHandler.swift; sourceTree = "<group>"; };
 		519184F02710792300B7E177 /* ExportIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportIntentHandler.swift; sourceTree = "<group>"; };
 		519184F227107FDA00B7E177 /* UITextView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+.swift"; sourceTree = "<group>"; };
 		519184F42710F93700B7E177 /* ImportIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportIntentHandler.swift; sourceTree = "<group>"; };
@@ -639,7 +639,7 @@
 				51AEEC8C2703E6EB00354C59 /* Intents.intentdefinition */,
 				519184F02710792300B7E177 /* ExportIntentHandler.swift */,
 				51AEEC8E2703EB6700354C59 /* GetCurrentOutlineIntentHandler.swift */,
-				519184ED270FAFE100B7E177 /* GetImagesIntentHandler.swift */,
+				519184ED270FAFE100B7E177 /* GetImagesForOutlineIntentHandler.swift */,
 				519184F827124E9700B7E177 /* GetOutlinesIntentHandler.swift */,
 				519184F42710F93700B7E177 /* ImportIntentHandler.swift */,
 				519184FA27126EB200B7E177 /* IntentOutline+.swift */,
@@ -1130,7 +1130,7 @@
 				5147D0C525CCD6AA004673C3 /* SidebarViewController+Drop.swift in Sources */,
 				5113B08D260C1F1700DBD11B /* OutlineFontCache.swift in Sources */,
 				5163ADF525C79B69008F25CA /* String+.swift in Sources */,
-				519184EE270FAFE100B7E177 /* GetImagesIntentHandler.swift in Sources */,
+				519184EE270FAFE100B7E177 /* GetImagesForOutlineIntentHandler.swift in Sources */,
 				51C4C45B255ACA1B004E0206 /* EditorViewController.swift in Sources */,
 				514F220D25C4CCA7004E02CD /* EditorTagViewCell.swift in Sources */,
 			);
