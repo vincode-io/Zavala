@@ -68,6 +68,7 @@
 		<string>GetImagesForOutlineIntent</string>
 		<string>GetOutlinesIntent</string>
 		<string>ImportIntent</string>
+		<string>RemoveOutlineIntent</string>
 		<string>RemoveOutlineTagIntent</string>
 		<string>ShowOutlineIntent</string>
 		<string>SetOutlineTitleIntent</string>
@@ -98,6 +99,7 @@
 		<string>GetImagesForOutlineIntent</string>
 		<string>GetOutlinesIntent</string>
 		<string>ImportIntent</string>
+		<string>RemoveOutlineIntent</string>
 		<string>RemoveOutlineTagIntent</string>
 		<string>SetOutlineTitleIntent</string>
 		<string>ShowOutlineIntent</string>

@@ -557,6 +557,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return GetOutlinesIntentHandler()
 		case is ImportIntent:
 			return ImportIntentHandler()
+		case is RemoveOutlineIntent:
+			return RemoveOutlineIntentHandler()
 		case is RemoveOutlineTagIntent:
 			return RemoveOutlineTagIntentHandler()
 		case is ShowOutlineIntent:

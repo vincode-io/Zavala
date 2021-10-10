@@ -2059,8 +2059,12 @@
 			<string>generic</string>
 			<key>INIntentConfigurable</key>
 			<true/>
+			<key>INIntentDescription</key>
+			<string>Adds an Outline</string>
 			<key>INIntentDescriptionID</key>
 			<string>XBP1qH</string>
+			<key>INIntentIneligibleForSuggestions</key>
+			<true/>
 			<key>INIntentInput</key>
 			<string>title</string>
 			<key>INIntentLastParameterTag</key>
@@ -2081,20 +2085,6 @@
 			</dict>
 			<key>INIntentName</key>
 			<string>AddOutline</string>
-			<key>INIntentParameterCombinations</key>
-			<dict>
-				<key>title,tagName,accountType</key>
-				<dict>
-					<key>INIntentParameterCombinationIsLinked</key>
-					<true/>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Add Outline titled${title}to${accountType}</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>pZpIKN</string>
-				</dict>
-			</dict>
 			<key>INIntentParameters</key>
 			<array>
 				<dict>
@@ -2318,6 +2308,102 @@
 			<string>L0KO38</string>
 			<key>INIntentType</key>
 			<string>Custom</string>
+			<key>INIntentVerb</key>
+			<string>Do</string>
+		</dict>
+		<dict>
+			<key>INIntentCategory</key>
+			<string>generic</string>
+			<key>INIntentConfigurable</key>
+			<true/>
+			<key>INIntentDescription</key>
+			<string>Deletes an Outline.</string>
+			<key>INIntentDescriptionID</key>
+			<string>fjljXH</string>
+			<key>INIntentIneligibleForSuggestions</key>
+			<true/>
+			<key>INIntentInput</key>
+			<string>outline</string>
+			<key>INIntentLastParameterTag</key>
+			<integer>2</integer>
+			<key>INIntentManagedParameterCombinations</key>
+			<dict>
+				<key>outline</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Remove${outline}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>gwXrnL</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+			</dict>
+			<key>INIntentName</key>
+			<string>RemoveOutline</string>
+			<key>INIntentParameters</key>
+			<array>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Outline</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>tNmVyT</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>1</integer>
+					<key>INIntentParameterName</key>
+					<string>outline</string>
+					<key>INIntentParameterObjectType</key>
+					<string>Outline</string>
+					<key>INIntentParameterObjectTypeNamespace</key>
+					<string>LEx6zX</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterTag</key>
+					<integer>2</integer>
+					<key>INIntentParameterType</key>
+					<string>Object</string>
+				</dict>
+			</array>
+			<key>INIntentResponse</key>
+			<dict>
+				<key>INIntentResponseCodes</key>
+				<array>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>success</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>failure</string>
+					</dict>
+				</array>
+			</dict>
+			<key>INIntentTitle</key>
+			<string>Remove Outline</string>
+			<key>INIntentTitleID</key>
+			<string>NJemqs</string>
+			<key>INIntentType</key>
+			<string>Custom</string>
+			<key>INIntentUserConfirmationRequired</key>
+			<true/>
 			<key>INIntentVerb</key>
 			<string>Do</string>
 		</dict>
