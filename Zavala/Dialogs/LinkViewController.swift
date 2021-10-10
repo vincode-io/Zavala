@@ -43,7 +43,7 @@ class LinkViewController: UITableViewController {
 				return
 			}
 			self.textTextField.text = filteredResults[index].title
-			self.linkTextField.text = documentID.url.absoluteString
+			self.linkTextField.text = documentID.url?.absoluteString ?? ""
 			self.updateUI()
 		}
 		
@@ -81,7 +81,7 @@ class LinkViewController: UITableViewController {
 		guard let outline = account.createOutline(title: outlineTitle).outline else { return }
 		outline.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
 		
-		linkTextField.text = outline.id.url.absoluteString
+		linkTextField.text = outline.id.url?.absoluteString ?? ""
 		
 		submitAndDismiss()
 	}

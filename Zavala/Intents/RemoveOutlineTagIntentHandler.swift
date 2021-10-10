@@ -21,7 +21,7 @@ class RemoveOutlineTagIntentHandler: NSObject, ZavalaIntentHandler, RemoveOutlin
 	func handle(intent: RemoveOutlineTagIntent, completion: @escaping (RemoveOutlineTagIntentResponse) -> Void) {
 		resume()
 		
-		guard let outline = findOutline(intent.outline), let tagName = intent.tagName, let account = outline.account else {
+		guard let outline = findOutline(intent.outlineEntityID), let tagName = intent.tagName, let account = outline.account else {
 			suspend()
 			completion(RemoveOutlineTagIntentResponse(code: .failure, userActivity: nil))
 			return
@@ -34,9 +34,7 @@ class RemoveOutlineTagIntentHandler: NSObject, ZavalaIntentHandler, RemoveOutlin
 		
 		suspend()
 		
-		let response = RemoveOutlineTagIntentResponse(code: .success, userActivity: nil)
-		response.outline = IntentOutline(outline: outline)
-		completion(response)
+		completion(RemoveOutlineTagIntentResponse(code: .success, userActivity: nil))
 	}
 
 }

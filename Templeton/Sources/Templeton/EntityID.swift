@@ -144,7 +144,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		}
 	}
 
-	public var url: URL {
+	public var url: URL? {
 		switch self {
 		case .document(let acct, let documentUUID):
 			var urlComponents = URLComponents()
@@ -158,7 +158,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			
 			return urlComponents.url!
 		default:
-			fatalError("We only support representing documents as URLs.")
+			return nil
 		}
 	}
 	

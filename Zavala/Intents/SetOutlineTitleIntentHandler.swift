@@ -21,7 +21,7 @@ class SetOutlineTitleIntentHandler: NSObject, ZavalaIntentHandler, SetOutlineTit
 	func handle(intent: SetOutlineTitleIntent, completion: @escaping (SetOutlineTitleIntentResponse) -> Void) {
 		resume()
 		
-		guard let outline = findOutline(intent.outline) else {
+		guard let outline = findOutline(intent.outlineEntityID) else {
 			suspend()
 			completion(SetOutlineTitleIntentResponse(code: .failure, userActivity: nil))
 			return
@@ -31,9 +31,7 @@ class SetOutlineTitleIntentHandler: NSObject, ZavalaIntentHandler, SetOutlineTit
 		
 		suspend()
 		
-		let response = SetOutlineTitleIntentResponse(code: .success, userActivity: nil)
-		response.outline = IntentOutline(outline: outline)
-		completion(response)
+		completion(SetOutlineTitleIntentResponse(code: .success, userActivity: nil))
 	}
 	
 }

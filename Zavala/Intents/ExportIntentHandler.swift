@@ -22,7 +22,7 @@ class ExportIntentHandler: NSObject, ZavalaIntentHandler, ExportIntentHandling {
 	func handle(intent: ExportIntent, completion: @escaping (ExportIntentResponse) -> Void) {
 		resume()
 		
-		guard let outline = findOutline(intent.outline) else {
+		guard let outline = findOutline(intent.outlineEntityID) else {
 			suspend()
 			completion(ExportIntentResponse(code: .failure, userActivity: nil))
 			return

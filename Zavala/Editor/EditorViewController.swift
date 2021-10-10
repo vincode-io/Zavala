@@ -2756,9 +2756,9 @@ extension EditorViewController {
 	}
 	
 	private func generateBacklink(id: EntityID) -> NSAttributedString {
-		if let title = AccountManager.shared.findDocument(id)?.title, !title.isEmpty {
+		if let title = AccountManager.shared.findDocument(id)?.title, !title.isEmpty, let url = id.url {
 			let result = NSMutableAttributedString(string: title)
-			result.addAttribute(.link, value: id.url, range: NSRange(0..<result.length))
+			result.addAttribute(.link, value: url, range: NSRange(0..<result.length))
 			return result
 		}
 		return NSAttributedString()
