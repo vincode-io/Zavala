@@ -553,8 +553,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return ImportIntentHandler()
 		case is ShowOutlineIntent:
 			return ShowOutlineIntentHandler(mainCoordinator: mainCoordinator)
-		case is UpdateOutlineTitleIntent:
-			return UpdateOutlineTitleIntentHandler()
+		case is SetOutlineTitleIntent:
+			return SetOutlineTitleIntentHandler()
 		default:
 			fatalError("Unhandled intent type: \(intent)")
 		}

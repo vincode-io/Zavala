@@ -1455,7 +1455,7 @@
 		</dict>
 		<dict>
 			<key>INIntentCategory</key>
-			<string>generic</string>
+			<string>set</string>
 			<key>INIntentConfigurable</key>
 			<true/>
 			<key>INIntentDescriptionID</key>
@@ -1473,7 +1473,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Update the Outline Title to${title}</string>
+					<string>Set the Outline Title to${title}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>tcGLnk</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -1481,7 +1481,7 @@
 				</dict>
 			</dict>
 			<key>INIntentName</key>
-			<string>UpdateOutlineTitle</string>
+			<string>SetOutlineTitle</string>
 			<key>INIntentParameters</key>
 			<array>
 				<dict>
@@ -1619,13 +1619,13 @@
 				</array>
 			</dict>
 			<key>INIntentTitle</key>
-			<string>Update Outline Title</string>
+			<string>Set Outline Title</string>
 			<key>INIntentTitleID</key>
 			<string>ur0h27</string>
 			<key>INIntentType</key>
 			<string>Custom</string>
 			<key>INIntentVerb</key>
-			<string>Do</string>
+			<string>Set</string>
 		</dict>
 	</array>
 	<key>INTypes</key>
