@@ -239,6 +239,13 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
+	public func requestCloudKitUpdateForSelf() {
+		switch self {
+		case .outline(let outline):
+			outline.requestCloudKitUpdateForSelf()
+		}
+	}
+	
 	public static func == (lhs: Document, rhs: Document) -> Bool {
 		return lhs.id == rhs.id
 	}

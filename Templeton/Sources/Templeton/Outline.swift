@@ -1816,6 +1816,10 @@ extension Outline {
 		batchCloudKitRequests += 1
 	}
 	
+	func requestCloudKitUpdateForSelf() {
+		requestCloudKitUpdate(for: id)
+	}
+	
 	func requestCloudKitUpdate(for entityID: EntityID) {
 		guard let cloudKitManager = account?.cloudKitManager else { return }
 		if batchCloudKitRequests > 0 {

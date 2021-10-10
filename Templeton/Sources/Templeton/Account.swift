@@ -332,6 +332,12 @@ public final class Account: NSObject, Identifiable, Codable {
 		tag.name = newTagName
 		tags?.sort(by: { $0.name < $1.name })
 		accountTagsDidChange()
+
+		for doc in documents ?? [Document]() {
+			if doc.hasTag(tag) {
+				doc.requestCloudKitUpdateForSelf()
+			}
+		}
 	}
 	
 	public func deleteTag(name: String) {
