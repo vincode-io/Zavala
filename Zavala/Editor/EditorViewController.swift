@@ -250,6 +250,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 	private(set) var outline: Outline?
 	
+	private var currentTitle: String? {
+		guard let titleCell = collectionView.cellForItem(at: IndexPath(row: 0, section: Outline.Section.title.rawValue)) as? EditorTitleViewCell else {
+			return nil
+		}
+		return titleCell.textViewText
+	}
+	
 	private var currentTextView: EditorTextRowTextView? {
 		return UIResponder.currentFirstResponder as? EditorTextRowTextView
 	}
@@ -517,7 +524,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		guard let document = note.object as? Document,
 			  let updatedOutline = document.outline,
 			  updatedOutline == outline,
-			  !(view.window?.isKeyWindow ?? false) else { return }
+			  currentTitle != outline?.title else { return }
 		collectionView.reloadItems(at: [IndexPath(row: 0, section: Outline.Section.title.rawValue)])
 	}
 	

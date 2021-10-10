@@ -13,14 +13,11 @@ class GetImagesForOutlineIntentHandler: NSObject, ZavalaIntentHandler, GetImages
 	func handle(intent: GetImagesForOutlineIntent, completion: @escaping (GetImagesForOutlineIntentResponse) -> Void) {
 		resume()
 
-		guard let intentOutline = intent.outline,
-			  let outlineIdentifier = intentOutline.identifier,
-			  let id = EntityID(description: outlineIdentifier),
-			  let outline = AccountManager.shared.findDocument(id)?.outline else {
-				  suspend()
-				  completion(GetImagesForOutlineIntentResponse(code: .failure, userActivity: nil))
-				  return
-			  }
+		guard let outline = findOutline(intent.outline) else {
+			suspend()
+			completion(GetImagesForOutlineIntentResponse(code: .failure, userActivity: nil))
+			return
+		}
 		
 		var files = [INFile]()
 		

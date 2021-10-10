@@ -22,14 +22,11 @@ class ExportIntentHandler: NSObject, ZavalaIntentHandler, ExportIntentHandling {
 	func handle(intent: ExportIntent, completion: @escaping (ExportIntentResponse) -> Void) {
 		resume()
 		
-		guard let intentOutline = intent.outline,
-			  let outlineIdentifier = intentOutline.identifier,
-			  let id = EntityID(description: outlineIdentifier),
-			  let outline = AccountManager.shared.findDocument(id)?.outline else {
-				  suspend()
-				  completion(ExportIntentResponse(code: .failure, userActivity: nil))
-				  return
-			  }
+		guard let outline = findOutline(intent.outline) else {
+			suspend()
+			completion(ExportIntentResponse(code: .failure, userActivity: nil))
+			return
+		}
 		
 		let response = ExportIntentResponse(code: .success, userActivity: nil)
 		

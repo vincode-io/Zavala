@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Intents
 import Templeton
 
 protocol ZavalaIntentHandler {
@@ -26,4 +27,13 @@ extension ZavalaIntentHandler {
 		}
 	}
 	
+	func findOutline(_ intentOutline: IntentOutline?) -> Outline? {
+		guard let searchOutline = intentOutline,
+			  let outlineIdentifier = searchOutline.identifier,
+			  let id = EntityID(description: outlineIdentifier),
+			  let outline = AccountManager.shared.findDocument(id)?.outline else {
+				  return nil
+			  }
+		return outline
+	}
 }

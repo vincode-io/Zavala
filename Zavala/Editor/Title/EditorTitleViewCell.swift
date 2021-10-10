@@ -24,6 +24,11 @@ class EditorTitleViewCell: UICollectionViewListCell {
 		}
 	}
 	
+	var textViewText: String? {
+		guard let textView = (contentView as? EditorTitleContentView)?.textView else { return nil }
+		return textView.text
+	}
+	
 	weak var delegate: EditorTitleViewCellDelegate? {
 		didSet {
 			setNeedsUpdateConfiguration()
