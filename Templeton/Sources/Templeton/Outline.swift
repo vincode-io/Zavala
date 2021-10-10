@@ -435,6 +435,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	public func createTag(_ tag: Tag) {
+		guard !hasTag(tag) else {
+			return
+		}
+		
 		if tagIDs == nil {
 			tagIDs = [String]()
 		}
