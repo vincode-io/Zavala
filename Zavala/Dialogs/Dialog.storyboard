@@ -327,10 +327,10 @@
             </objects>
             <point key="canvasLocation" x="-22" y="1383"/>
         </scene>
-        <!--Open Quickly View Controller-->
+        <!--Rename Tag View Controller-->
         <scene sceneID="MRO-UB-mJv">
             <objects>
-                <tableViewController storyboardIdentifier="OpenQuicklyViewController" id="oI2-2h-Ozq" customClass="OpenQuicklyViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="RenameTagViewController" id="oI2-2h-Ozq" customClass="RenameTagViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="bNY-3n-B7H">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -344,10 +344,10 @@
                                             <rect key="frame" x="0.0" y="0.0" width="760" height="27.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Open Quickly" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SFe-64-fzK" customClass="SearchTextField" customModule="Zavala" customModuleProvider="target">
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Tag Name" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SFe-64-fzK">
                                                     <rect key="frame" x="20" y="4" width="720" height="19.5"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" textContentType="name"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -369,28 +369,28 @@
                     <navigationItem key="navigationItem" id="5oW-OS-be4">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="JgM-0X-iZq">
                             <connections>
-                                <action selector="cancel:" destination="oI2-2h-Ozq" id="3ND-vJ-ENA"/>
+                                <action selector="cancel:" destination="oI2-2h-Ozq" id="yqQ-vz-P1M"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" enabled="NO" style="done" systemItem="done" id="iRI-cQ-ZeE">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Rename" style="done" id="iRI-cQ-ZeE">
                             <connections>
-                                <action selector="submit:" destination="oI2-2h-Ozq" id="gm5-cu-adL"/>
+                                <action selector="submit:" destination="oI2-2h-Ozq" id="EXk-NA-geV"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="doneBarButtonItem" destination="iRI-cQ-ZeE" id="Udd-o3-pXn"/>
-                        <outlet property="searchTextField" destination="SFe-64-fzK" id="aIY-gU-Sox"/>
+                        <outlet property="renameBarButtonItem" destination="iRI-cQ-ZeE" id="5AX-bu-RVn"/>
+                        <outlet property="tagNameTextField" destination="SFe-64-fzK" id="UhV-Qb-eSQ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hOT-6p-3Nl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="19" y="2048"/>
+            <point key="canvasLocation" x="-23" y="2058"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="VzB-ui-HTX">
             <objects>
-                <navigationController storyboardIdentifier="OpenQuicklyViewControllerNav" id="vcH-L2-Nz3" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="RenameTagViewControllerNav" id="vcH-L2-Nz3" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6h7-lt-uZf">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -572,7 +572,7 @@
     <resources>
         <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

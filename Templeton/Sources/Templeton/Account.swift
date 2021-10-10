@@ -328,6 +328,12 @@ public final class Account: NSObject, Identifiable, Codable {
 		return tag
 	}
 	
+	public func renameTag(_ tag: Tag, to newTagName: String) {
+		tag.name = newTagName
+		tags?.sort(by: { $0.name < $1.name })
+		accountTagsDidChange()
+	}
+	
 	public func deleteTag(name: String) {
 		guard let tag = tags?.first(where: { $0.name == name }) else {
 			return

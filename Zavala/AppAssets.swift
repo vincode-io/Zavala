@@ -173,10 +173,10 @@ struct AppAssets {
 
 	static var releaseNotesURL = "https://github.com/vincode-io/Zavala/releases/tag/\(Bundle.main.versionNumber)"
 	
-	static var removeEntity: UIImage = {
-		return UIImage(systemName: "trash")!
+	static var rename: UIImage = {
+		return UIImage(systemName: "pencil")!
 	}()
-	
+
 	static var restore: UIImage = {
 		return UIImage(systemName: "gobackward")!
 	}()

@@ -508,7 +508,7 @@ extension TimelineViewController {
 	}
 	
 	private func deleteOutlineAction(document: Document) -> UIAction {
-		let action = UIAction(title: L10n.delete, image: AppAssets.removeEntity, attributes: .destructive) { [weak self] action in
+		let action = UIAction(title: L10n.delete, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
 			self?.deleteDocument(document)
 		}
 		
