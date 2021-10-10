@@ -65,7 +65,6 @@
 		<string>GetOutlinesIntent</string>
 		<string>ExportIntent</string>
 		<string>ImportIntent</string>
-		<string>SearchOutlinesIntent</string>
 		<string>ShowOutlineIntent</string>
 	</array>
 	<key>LSApplicationCategoryType</key>
@@ -91,7 +90,6 @@
 		<string>GetImagesIntent</string>
 		<string>GetOutlinesIntent</string>
 		<string>ImportIntent</string>
-		<string>SearchOutlinesIntent</string>
 		<string>ShowOutlineIntent</string>
 		<string>io.vincode.Zavala.restoration</string>
 		<string>io.vincode.Zavala.selectingDocument</string>

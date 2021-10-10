@@ -551,8 +551,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return GetOutlinesIntentHandler()
 		case is ImportIntent:
 			return ImportIntentHandler()
-		case is SearchOutlinesIntent:
-			return SearchOutlinesIntentHandler()
 		case is ShowOutlineIntent:
 			return ShowOutlineIntentHandler(mainCoordinator: mainCoordinator)
 		default:

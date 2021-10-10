@@ -9,6 +9,16 @@ import Intents
 import Templeton
 
 class GetOutlinesIntentHandler: NSObject, ZavalaIntentHandler, GetOutlinesIntentHandling {
+
+	private var search: Search?
+
+	func resolveSearch(for intent: GetOutlinesIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
+		guard let search = intent.search else {
+			completion(.notRequired())
+			return
+		}
+		completion(.success(with: search))
+	}
 	
 	func resolveAccountType(for intent: GetOutlinesIntent, with completion: @escaping (IntentAccountTypeResolutionResult) -> Void) {
 		completion(.success(with: intent.accountType))
@@ -82,17 +92,39 @@ class GetOutlinesIntentHandler: NSObject, ZavalaIntentHandler, GetOutlinesIntent
 	func handle(intent: GetOutlinesIntent, completion: @escaping (GetOutlinesIntentResponse) -> Void) {
 		resume()
 		
-		var documents: [Document]
+		guard let searchText = intent.search, !searchText.isEmpty else {
+			filter(documents: AccountManager.shared.documents, intent: intent, completion: completion)
+			return
+		}
+
+		search = Search(searchText: searchText)
+		
+		search!.sortedDocuments { result in
+			switch result {
+			case .success(let documents):
+				self.filter(documents: documents, intent: intent, completion: completion)
+			case .failure:
+				completion(.init(code: .failure, userActivity: nil))
+			}
+		}
+	}
+	
+}
+
+extension GetOutlinesIntentHandler {
+	
+	private func filter(documents: [Document], intent: GetOutlinesIntent, completion: @escaping (GetOutlinesIntentResponse) -> Void) {
+		var documents = documents
 		
 		switch intent.accountType {
 		case .onMyDevice:
-			documents = AccountManager.shared.localAccount.documents ?? [Document]()
+			documents = documents.filter { $0.id.accountID == AccountType.local.rawValue }
 		case .iCloud:
-			documents = AccountManager.shared.cloudKitAccount?.documents ?? [Document]()
+			documents = documents.filter { $0.id.accountID == AccountType.cloudKit.rawValue }
 		default:
-			documents = AccountManager.shared.documents
+			break
 		}
-			
+		
 		if let outlineNames = intent.outlineNames, !outlineNames.isEmpty {
 			var foundDocuments = Set<Document>()
 			for tagName in outlineNames {
