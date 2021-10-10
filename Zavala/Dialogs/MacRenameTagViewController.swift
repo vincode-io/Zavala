@@ -17,7 +17,8 @@ class MacRenameTagViewController: MacFormViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
+		
+		renameButton.role = .primary
 		NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: tagNameTextField)
 		updateUI()
 	}
