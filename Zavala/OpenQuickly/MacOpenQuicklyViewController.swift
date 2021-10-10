@@ -51,7 +51,7 @@ class MacOpenQuicklyViewController: UIViewController {
 			self.openDocument(documentID)
 		}
 
-		let searchItems = AccountManager.shared.documents.map { SearchTextFieldItem(title: $0.title ?? "", associatedObject: $0.id) }
+		let searchItems = AccountManager.shared.activeDocuments.map { SearchTextFieldItem(title: $0.title ?? "", associatedObject: $0.id) }
 		searchTextField.filterItems(searchItems)
 	}
 

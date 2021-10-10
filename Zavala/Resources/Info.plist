@@ -62,6 +62,7 @@
 	<array>
 		<string>GetCurrentOutlineIntent</string>
 		<string>GetImagesIntent</string>
+		<string>GetOutlinesIntent</string>
 		<string>ExportIntent</string>
 		<string>ImportIntent</string>
 		<string>ShowOutlineIntent</string>
@@ -87,6 +88,7 @@
 		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
 		<string>GetImagesIntent</string>
+		<string>GetOutlinesIntent</string>
 		<string>ImportIntent</string>
 		<string>ShowOutlineIntent</string>
 		<string>io.vincode.Zavala.restoration</string>

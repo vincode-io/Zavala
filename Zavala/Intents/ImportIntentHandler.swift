@@ -47,9 +47,7 @@ class ImportIntentHandler: NSObject, ZavalaIntentHandler, ImportIntentHandling {
 		
 		let response = ImportIntentResponse(code: .success, userActivity: nil)
 		if let outline = doc.outline {
-			let intentOutline = IntentOutline(identifier: outline.id.description, display: outline.title ?? "")
-			intentOutline.url = outline.id.url
-			response.outline = intentOutline
+			response.outline = IntentOutline(outline: outline)
 		}
 		
 		suspend()

@@ -35,6 +35,10 @@ public final class AccountManager {
 		return cloudKitAccount?.cloudKitManager?.isSyncAvailable ?? false
 	}
 	
+	public var accounts: [Account] {
+		return accountsDictionary.values.map { $0 }
+	}
+
 	public var activeAccounts: [Account] {
 		return Array(accountsDictionary.values.filter { $0.isActive })
 	}
@@ -44,6 +48,10 @@ public final class AccountManager {
 	}
 	
 	public var documents: [Document] {
+		return accounts.reduce(into: [Document]()) { $0.append(contentsOf: $1.documents ?? [Document]() ) }
+	}
+	
+	public var activeDocuments: [Document] {
 		return activeAccounts.reduce(into: [Document]()) { $0.append(contentsOf: $1.documents ?? [Document]() ) }
 	}
 	
@@ -176,7 +184,7 @@ public final class AccountManager {
 	public func resume() {
 		cloudKitAccount?.cloudKitManager?.resume()
 		accountFiles.values.forEach { $0.resume() }
-		documents.forEach {	$0.resume()	}
+		activeDocuments.forEach {	$0.resume()	}
 	}
 	
 	public func suspend() {
@@ -184,7 +192,7 @@ public final class AccountManager {
 			$0.save()
 			$0.suspend()
 		}
-		documents.forEach {
+		activeDocuments.forEach {
 			$0.save()
 			$0.suspend()
 		}

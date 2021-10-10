@@ -17,7 +17,7 @@ public extension Notification.Name {
 	static let DocumentSharingDidChange = Notification.Name(rawValue: "DocumentSharingDidChange")
 }
 
-public enum Document: Equatable, Codable {
+public enum Document: Equatable, Hashable, Codable {
 	case outline(Outline)
 	
 	private enum CodingKeys: String, CodingKey {
@@ -64,6 +64,13 @@ public enum Document: Equatable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.tags
+		}
+	}
+	
+	public var created: Date? {
+		switch self {
+		case .outline(let outline):
+			return outline.created
 		}
 	}
 	
@@ -230,6 +237,14 @@ public enum Document: Equatable, Codable {
 		case .outline(let outline):
 			return Document.outline(outline.duplicate())
 		}
+	}
+	
+	public static func == (lhs: Document, rhs: Document) -> Bool {
+		return lhs.id == rhs.id
+	}
+	
+	public func hash(into hasher: inout Hasher) {
+		hasher.combine(id)
 	}
 	
 }

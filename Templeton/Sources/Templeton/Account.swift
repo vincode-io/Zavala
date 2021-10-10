@@ -60,6 +60,8 @@ public final class Account: NSObject, Identifiable, Codable {
 		return containers
 	}
 	
+	public private(set) var documents: [Document]?
+
 	enum CodingKeys: String, CodingKey {
 		case type = "type"
 		case isActive = "isActive"
@@ -67,7 +69,6 @@ public final class Account: NSObject, Identifiable, Codable {
 		case documents = "documents"
 	}
 	
-	var documents: [Document]?
 	var folder: URL?
 	var cloudKitManager: CloudKitManager?
 	
