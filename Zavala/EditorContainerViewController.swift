@@ -11,6 +11,8 @@ import Templeton
 import SafariServices
 
 class EditorContainerViewController: UIViewController, MainCoordinator {
+	
+	var currentTag: Tag? = nil
 
 	var editorViewController: EditorViewController? {
 		return children.first as? EditorViewController

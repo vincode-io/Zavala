@@ -50,6 +50,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 	var activityManager = ActivityManager()
 	
+	var currentTag: Tag? {
+		return sidebarViewController?.currentTag
+	}
+
 	var editorViewController: EditorViewController? {
 		viewController(for: .secondary) as? EditorViewController
 	}

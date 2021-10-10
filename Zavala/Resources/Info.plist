@@ -63,6 +63,7 @@
 		<string>AddOutlineTagIntent</string>
 		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
+		<string>GetCurrentTagIntent</string>
 		<string>GetImagesForOutlineIntent</string>
 		<string>GetOutlinesIntent</string>
 		<string>ImportIntent</string>
@@ -91,6 +92,7 @@
 		<string>AddOutlineTagIntent</string>
 		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
+		<string>GetCurrentTagIntent</string>
 		<string>GetImagesForOutlineIntent</string>
 		<string>GetOutlinesIntent</string>
 		<string>ImportIntent</string>

@@ -10,6 +10,7 @@ import Templeton
 import SafariServices
 
 protocol MainCoordinator: UIViewController {
+	var currentTag: Tag? { get }
 	var editorViewController: EditorViewController? { get }
 }
 

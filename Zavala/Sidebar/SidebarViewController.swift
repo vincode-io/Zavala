@@ -24,6 +24,10 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		return currentDocumentContainer?.account
 	}
 	
+	var currentTag: Tag? {
+		return (currentDocumentContainer as? TagDocuments)?.tag
+	}
+	
 	var currentDocumentContainer: DocumentContainer? {
 		guard let selectedIndexPath = collectionView.indexPathsForSelectedItems?.first,
 			  let entityID = dataSource.itemIdentifier(for: selectedIndexPath)?.entityID else {
