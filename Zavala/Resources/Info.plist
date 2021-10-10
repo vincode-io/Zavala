@@ -60,6 +60,7 @@
 	<string>$(DEVELOPER_ENTITLEMENTS)</string>
 	<key>INIntentsSupported</key>
 	<array>
+		<string>AddOutlineIntent</string>
 		<string>AddOutlineTagIntent</string>
 		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
@@ -89,6 +90,7 @@
 	<string>Zavala wants to use your photos so that you can insert them into outlines.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
+		<string>AddOutlineIntent</string>
 		<string>AddOutlineTagIntent</string>
 		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
