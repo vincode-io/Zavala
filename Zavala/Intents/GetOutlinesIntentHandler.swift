@@ -124,7 +124,7 @@ class GetOutlinesIntentHandler: NSObject, ZavalaIntentHandler, GetOutlinesIntent
 		if let createdStartDate = intent.createdStartDate?.date {
 			var foundDocuments = Set<Document>()
 			for document in documents {
-				if let createdDate = document.created, Calendar.current.compare(createdStartDate, to: createdDate, toGranularity: .day) != .orderedAscending {
+				if let createdDate = document.created, Calendar.current.compare(createdStartDate, to: createdDate, toGranularity: .day) != .orderedDescending {
 					foundDocuments.insert(document)
 				}
 			}
@@ -134,7 +134,7 @@ class GetOutlinesIntentHandler: NSObject, ZavalaIntentHandler, GetOutlinesIntent
 		if let createdEndDate = intent.createdEndDate?.date {
 			var foundDocuments = Set<Document>()
 			for document in documents {
-				if let createdDate = document.created, Calendar.current.compare(createdEndDate, to: createdDate, toGranularity: .day) != .orderedDescending {
+				if let createdDate = document.created, Calendar.current.compare(createdEndDate, to: createdDate, toGranularity: .day) != .orderedAscending {
 					foundDocuments.insert(document)
 				}
 			}
@@ -145,7 +145,7 @@ class GetOutlinesIntentHandler: NSObject, ZavalaIntentHandler, GetOutlinesIntent
 		if let updatedStartDate = intent.updatedStartDate?.date {
 			var foundDocuments = Set<Document>()
 			for document in documents {
-				if let updatedDate = document.updated, Calendar.current.compare(updatedStartDate, to: updatedDate, toGranularity: .day) != .orderedAscending {
+				if let updatedDate = document.updated, Calendar.current.compare(updatedStartDate, to: updatedDate, toGranularity: .day) != .orderedDescending {
 					foundDocuments.insert(document)
 				}
 			}
@@ -155,7 +155,7 @@ class GetOutlinesIntentHandler: NSObject, ZavalaIntentHandler, GetOutlinesIntent
 		if let updatedEndDate = intent.updatedEndDate?.date {
 			var foundDocuments = Set<Document>()
 			for document in documents {
-				if let updatedDate = document.updated, Calendar.current.compare(updatedEndDate, to: updatedDate, toGranularity: .day) != .orderedDescending {
+				if let updatedDate = document.updated, Calendar.current.compare(updatedEndDate, to: updatedDate, toGranularity: .day) != .orderedAscending {
 					foundDocuments.insert(document)
 				}
 			}
