@@ -9,7 +9,7 @@ import Intents
 import Templeton
 
 class GetOutlinesIntentHandler: NSObject, ZavalaIntentHandler, GetOutlinesIntentHandling {
-
+	
 	private var search: Search?
 
 	func resolveSearch(for intent: GetOutlinesIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
@@ -22,6 +22,23 @@ class GetOutlinesIntentHandler: NSObject, ZavalaIntentHandler, GetOutlinesIntent
 	
 	func resolveAccountType(for intent: GetOutlinesIntent, with completion: @escaping (IntentAccountTypeResolutionResult) -> Void) {
 		completion(.success(with: intent.accountType))
+	}
+	
+	func provideOutlineNamesOptionsCollection(for intent: GetOutlinesIntent, with completion: @escaping (INObjectCollection<NSString>?, Error?) -> Void) {
+		let outlineNames: [String]
+		switch intent.accountType {
+		case .onMyDevice:
+			outlineNames = AccountManager.shared.localAccount.documents?.compactMap({ $0.title ?? "" as String }) ?? [String]()
+		case .iCloud:
+			outlineNames = AccountManager.shared.cloudKitAccount?.documents?.compactMap({ $0.title ?? "" as String }) ?? [String]()
+		default:
+			var names = Set<String>()
+			names.formUnion(Set(AccountManager.shared.localAccount.documents?.compactMap({ $0.title ?? "" as String }) ?? [String]()))
+			names.formUnion(Set(AccountManager.shared.cloudKitAccount?.documents?.compactMap({ $0.title ?? "" as String }) ?? [String]()))
+			outlineNames = Array(names)
+		}
+		
+		completion(INObjectCollection<NSString>(items: outlineNames.sorted().map({ $0 as NSString })), nil)
 	}
 	
 	func resolveOutlineNames(for intent: GetOutlinesIntent, with completion: @escaping ([INStringResolutionResult]) -> Void) {
@@ -127,13 +144,9 @@ extension GetOutlinesIntentHandler {
 		
 		if let outlineNames = intent.outlineNames, !outlineNames.isEmpty {
 			var foundDocuments = Set<Document>()
-			for tagName in outlineNames {
-				guard let outlineNameRegEx = tagName.searchRegEx() else {
-					continue
-				}
+			for outlineName in outlineNames {
 				for document in documents {
-					let searchTitle = (document.title ?? "").makeSearchable()
-					if outlineNameRegEx.anyMatch(in: searchTitle) {
+					if outlineName.caseInsensitiveCompare(document.title ?? "") == .orderedSame {
 						foundDocuments.insert(document)
 					}
 				}
