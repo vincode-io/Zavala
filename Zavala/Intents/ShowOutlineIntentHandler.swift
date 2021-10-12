@@ -25,6 +25,11 @@ public class ShowOutlineIntentHandler: NSObject, ShowOutlineIntentHandling {
 		
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
 			mainSplitViewController.openDocument(documentID)
+			
+			#if targetEnvironment(macCatalyst)
+			appDelegate.appKitPlugin?.activateIgnoringOtherApps()
+			#endif
+			
 			completion(.init(code: .success, userActivity: nil))
 			return
 		}
@@ -32,6 +37,11 @@ public class ShowOutlineIntentHandler: NSObject, ShowOutlineIntentHandling {
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 		activity.userInfo = [UserInfoKeys.documentID: documentID.userInfo]
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+		
+		#if targetEnvironment(macCatalyst)
+		appDelegate.appKitPlugin?.activateIgnoringOtherApps()
+		#endif
+
 		completion(.init(code: .success, userActivity: nil))
 	}
 	

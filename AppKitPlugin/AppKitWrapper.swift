@@ -76,4 +76,8 @@ import os.log
 		NSDocumentController.shared.clearRecentDocuments(nil)
 	}
 
+	func activateIgnoringOtherApps() {
+		NSApplication.shared.activate(ignoringOtherApps: true)
+	}
+	
 }

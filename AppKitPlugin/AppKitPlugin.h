@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)configureOpenQuickly:(NSObject  * _Nullable)window;
 - (void)updateAppearance:(NSObject  * _Nullable)window;
 - (void)clearRecentDocuments;
+- (void)activateIgnoringOtherApps;
 @end
 
 NS_ASSUME_NONNULL_END
