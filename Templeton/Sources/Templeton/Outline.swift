@@ -42,6 +42,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		public static let searchText = "searchText"
 	}
 	
+	public var outline: Outline? {
+		return self
+	}
+	
 	public private(set) var isSearching = SearchState.notSearching
 	public private(set) var searchText = ""
 
@@ -918,6 +922,45 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		
 		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set([topShadowTableIndex]))
 		outlineElementsDidChange(changes)
+	}
+	
+	public func createRow(rowContainer: RowContainer, destination: RowDestination, topic: String?, note: String?) -> Row {
+		beginCloudKitBatchRequest()
+
+		let row = Row(outline: self, topicPlainText: topic, notePlainText: note)
+		
+		var shadowTableIndex = 0
+		
+		switch destination {
+		case .insideAtStart:
+			fatalError()
+		case .insideAtEnd:
+			if rowContainer.rowCount > 0 {
+				shadowTableIndex = (rowContainer.rows[rowContainer.rowCount - 1].shadowTableIndex ?? -1) + 1
+			} else {
+				if let row = rowContainer as? Row {
+					shadowTableIndex = (row.shadowTableIndex ?? -1) + 1
+				} else {
+					shadowTableIndex = 0
+				}
+			}
+			rowContainer.appendRow(row)
+			row.parent = rowContainer
+		case .outside:
+			fatalError()
+		case .directlyAfter:
+			fatalError()
+		}
+		
+		createLinkRelationships(for: [row])
+		endCloudKitBatchRequest()
+
+		shadowTable?.insert(row, at: shadowTableIndex)
+		resetShadowTableIndexes(startingAt: shadowTableIndex)
+		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: [shadowTableIndex])
+		outlineElementsDidChange(changes)
+		
+		return row
 	}
 	
 	func createRow(_ row: Row, beforeRow: Row, rowStrings: RowStrings? = nil) -> Int? {

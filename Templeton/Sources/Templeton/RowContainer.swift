@@ -8,6 +8,7 @@
 import Foundation
 
 public protocol RowContainer {
+	var outline: Outline? { get }
 	var rows: [Row] { get }
 	var rowCount: Int { get }
 

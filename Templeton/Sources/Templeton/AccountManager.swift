@@ -173,6 +173,17 @@ public final class AccountManager {
 		return nil
 	}
 	
+	public func findRowContainer(_ entityID: EntityID) -> RowContainer? {
+		switch entityID {
+		case .document:
+			return findDocument(entityID)?.outline
+		case .row:
+			return findRow(entityID)
+		default:
+			return nil
+		}
+	}
+	
 	public func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
 		cloudKitAccount?.cloudKitManager?.receiveRemoteNotification(userInfo: userInfo, completion: completion)
 	}

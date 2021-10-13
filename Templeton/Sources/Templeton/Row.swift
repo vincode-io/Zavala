@@ -71,7 +71,7 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 		return false
 	}
 
-	weak var outline: Outline? {
+	public weak var outline: Outline? {
 		didSet {
 			if let outline = outline {
 				_entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
@@ -79,6 +79,13 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 		}
 	}
 	
+	public var entityID: EntityID {
+		guard let entityID = _entityID else {
+			fatalError("Missing EntityID for row")
+		}
+		return entityID
+	}
+
 	var rowOrder: [String]
 
 	var isPartOfSearchResult = false {
@@ -94,12 +101,6 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 	}
 	
 	private var _entityID: EntityID?
-	var entityID: EntityID {
-		guard let entityID = _entityID else {
-			fatalError("Missing EntityID for row")
-		}
-		return entityID
-	}
 	
 	public var indentLevel: Int {
 		var parentCount = 0
@@ -284,7 +285,7 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 		super.init()
 	}
 
-	public init(outline: Outline, topicPlainText: String, notePlainText: String? = nil) {
+	public init(outline: Outline, topicPlainText: String?, notePlainText: String? = nil) {
 		self.isComplete = false
 		self.id = UUID().uuidString
 		self.outline = outline
@@ -292,7 +293,9 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 		self.isExpanded = true
 		self.rowOrder = [String]()
 		super.init()
-		topic = NSAttributedString(markdownRepresentation: topicPlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
+		if let topicPlainText = topicPlainText {
+			topic = NSAttributedString(markdownRepresentation: topicPlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
+		}
 		if let notePlainText = notePlainText {
 			note = NSAttributedString(markdownRepresentation: notePlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		}

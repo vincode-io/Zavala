@@ -116,6 +116,8 @@
 		5191850F271390F100B7E177 /* IntentEntityID+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850E271390F100B7E177 /* IntentEntityID+.swift */; };
 		519185112713BFAE00B7E177 /* BeginRowProcessingIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519185102713BFAE00B7E177 /* BeginRowProcessingIntentHandler.swift */; };
 		519185132713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519185122713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift */; };
+		51918515271664FB00B7E177 /* AddRowIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51918514271664FB00B7E177 /* AddRowIntentHandler.swift */; };
+		51918517271665AC00B7E177 /* IntentRowDestination+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51918516271665AC00B7E177 /* IntentRowDestination+.swift */; };
 		5193C8A625FD757900E63F94 /* OpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */; };
 		519965DC2624EEE500D8468B /* RSAppMovementMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */; };
 		519A2324260A9B900056051E /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
@@ -343,6 +345,8 @@
 		5191850E271390F100B7E177 /* IntentEntityID+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentEntityID+.swift"; sourceTree = "<group>"; };
 		519185102713BFAE00B7E177 /* BeginRowProcessingIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeginRowProcessingIntentHandler.swift; sourceTree = "<group>"; };
 		519185122713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndRowProcessingIntentHandler.swift; sourceTree = "<group>"; };
+		51918514271664FB00B7E177 /* AddRowIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRowIntentHandler.swift; sourceTree = "<group>"; };
+		51918516271665AC00B7E177 /* IntentRowDestination+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentRowDestination+.swift"; sourceTree = "<group>"; };
 		5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuicklyViewController.swift; sourceTree = "<group>"; };
 		519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSAppMovementMonitor.swift; sourceTree = "<group>"; };
 		519A2323260A9B900056051E /* OutlineFontField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontField.swift; sourceTree = "<group>"; };
@@ -659,6 +663,7 @@
 				51AEEC8C2703E6EB00354C59 /* Intents.intentdefinition */,
 				5191850A2713828F00B7E177 /* AddOutlineIntentHandler.swift */,
 				519185002713116B00B7E177 /* AddOutlineTagIntentHandler.swift */,
+				51918514271664FB00B7E177 /* AddRowIntentHandler.swift */,
 				519185102713BFAE00B7E177 /* BeginRowProcessingIntentHandler.swift */,
 				519185122713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift */,
 				519184F02710792300B7E177 /* ExportIntentHandler.swift */,
@@ -668,6 +673,7 @@
 				519184F827124E9700B7E177 /* GetOutlinesIntentHandler.swift */,
 				519184F42710F93700B7E177 /* ImportIntentHandler.swift */,
 				5191850E271390F100B7E177 /* IntentEntityID+.swift */,
+				51918516271665AC00B7E177 /* IntentRowDestination+.swift */,
 				5191850C271387C300B7E177 /* RemoveOutlineIntentHandler.swift */,
 				519185022713146500B7E177 /* RemoveOutlineTagIntentHandler.swift */,
 				519184FE2713043700B7E177 /* SetOutlineTitleIntentHandler.swift */,
@@ -1099,6 +1105,7 @@
 				5147D0C825CE28AE004673C3 /* NSDataDetector+.swift in Sources */,
 				519185032713146500B7E177 /* RemoveOutlineTagIntentHandler.swift in Sources */,
 				51F2859725AD11DB0019C573 /* SidebarSearchContentConfiguration.swift in Sources */,
+				51918515271664FB00B7E177 /* AddRowIntentHandler.swift in Sources */,
 				5115C0362605F96100416D67 /* MacOpenQuicklyTimelineViewController.swift in Sources */,
 				5142C295260AC78C0094571F /* OutlineFontConfig.swift in Sources */,
 				517AF6A425E08B7F0044DBAB /* SettingsViewController.swift in Sources */,
@@ -1139,6 +1146,7 @@
 				51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */,
 				5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */,
 				51DEE80C26FB4488006DAA56 /* UserInterfaceColorPalette.swift in Sources */,
+				51918517271665AC00B7E177 /* IntentRowDestination+.swift in Sources */,
 				519185072713453700B7E177 /* MacRenameTagViewController.swift in Sources */,
 				51B2B2D22563AB190090C56B /* EditorTextRowContentView.swift in Sources */,
 				519184F52710F93700B7E177 /* ImportIntentHandler.swift in Sources */,
