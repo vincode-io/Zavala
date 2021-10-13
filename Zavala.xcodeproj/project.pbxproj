@@ -657,28 +657,52 @@
 			path = Zavala;
 			sourceTree = "<group>";
 		};
+		5191851827166AA300B7E177 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				51AEEC8E2703EB6700354C59 /* GetCurrentOutlineIntentHandler.swift */,
+				5191850827137DFD00B7E177 /* GetCurrentTagIntentHandler.swift */,
+				519184F6271115CE00B7E177 /* ShowOutlineIntentHandler.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		5191851927166ABB00B7E177 /* Outline */ = {
+			isa = PBXGroup;
+			children = (
+				5191850A2713828F00B7E177 /* AddOutlineIntentHandler.swift */,
+				519185002713116B00B7E177 /* AddOutlineTagIntentHandler.swift */,
+				519184F02710792300B7E177 /* ExportIntentHandler.swift */,
+				519184ED270FAFE100B7E177 /* GetImagesForOutlineIntentHandler.swift */,
+				519184F827124E9700B7E177 /* GetOutlinesIntentHandler.swift */,
+				519184F42710F93700B7E177 /* ImportIntentHandler.swift */,
+				5191850C271387C300B7E177 /* RemoveOutlineIntentHandler.swift */,
+				519185022713146500B7E177 /* RemoveOutlineTagIntentHandler.swift */,
+				519184FE2713043700B7E177 /* SetOutlineTitleIntentHandler.swift */,
+			);
+			path = Outline;
+			sourceTree = "<group>";
+		};
+		5191851A27166AE300B7E177 /* Row */ = {
+			isa = PBXGroup;
+			children = (
+				51918514271664FB00B7E177 /* AddRowIntentHandler.swift */,
+				519185102713BFAE00B7E177 /* BeginRowProcessingIntentHandler.swift */,
+				519185122713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift */,
+			);
+			path = Row;
+			sourceTree = "<group>";
+		};
 		51AEEC8B2703E6B500354C59 /* Intents */ = {
 			isa = PBXGroup;
 			children = (
 				51AEEC8C2703E6EB00354C59 /* Intents.intentdefinition */,
-				5191850A2713828F00B7E177 /* AddOutlineIntentHandler.swift */,
-				519185002713116B00B7E177 /* AddOutlineTagIntentHandler.swift */,
-				51918514271664FB00B7E177 /* AddRowIntentHandler.swift */,
-				519185102713BFAE00B7E177 /* BeginRowProcessingIntentHandler.swift */,
-				519185122713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift */,
-				519184F02710792300B7E177 /* ExportIntentHandler.swift */,
-				51AEEC8E2703EB6700354C59 /* GetCurrentOutlineIntentHandler.swift */,
-				5191850827137DFD00B7E177 /* GetCurrentTagIntentHandler.swift */,
-				519184ED270FAFE100B7E177 /* GetImagesForOutlineIntentHandler.swift */,
-				519184F827124E9700B7E177 /* GetOutlinesIntentHandler.swift */,
-				519184F42710F93700B7E177 /* ImportIntentHandler.swift */,
 				5191850E271390F100B7E177 /* IntentEntityID+.swift */,
 				51918516271665AC00B7E177 /* IntentRowDestination+.swift */,
-				5191850C271387C300B7E177 /* RemoveOutlineIntentHandler.swift */,
-				519185022713146500B7E177 /* RemoveOutlineTagIntentHandler.swift */,
-				519184FE2713043700B7E177 /* SetOutlineTitleIntentHandler.swift */,
-				519184F6271115CE00B7E177 /* ShowOutlineIntentHandler.swift */,
 				51EB162E270F46780079F40C /* ZavalaIntentHandler.swift */,
+				5191851927166ABB00B7E177 /* Outline */,
+				5191851A27166AE300B7E177 /* Row */,
+				5191851827166AA300B7E177 /* UI */,
 			);
 			path = Intents;
 			sourceTree = "<group>";

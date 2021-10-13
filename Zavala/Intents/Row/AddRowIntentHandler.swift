@@ -35,7 +35,10 @@ class AddRowIntentHandler: NSObject, ZavalaIntentHandler, AddRowIntentHandling {
 	}
 	
 	func handle(intent: AddRowIntent, completion: @escaping (AddRowIntentResponse) -> Void) {
+		resume()
+		
 		guard let entityID = intent.outlineOrRow?.toEntityID(), let rowContainer = AccountManager.shared.findRowContainer(entityID), let outline = rowContainer.outline else {
+			suspend()
 			completion(.init(code: .failure, userActivity: nil))
 			return
 		}
@@ -45,6 +48,7 @@ class AddRowIntentHandler: NSObject, ZavalaIntentHandler, AddRowIntentHandling {
 									topic: intent.rowTopic,
 									note: intent.rowNote)
 		
+		suspend()
 		let response = AddRowIntentResponse(code: .success, userActivity: nil)
 		response.row = IntentEntityID(entityID: row.entityID, display: nil)
 		completion(response)
