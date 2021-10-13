@@ -49,10 +49,12 @@ class AddOutlineIntentHandler: NSObject, ZavalaIntentHandler, AddOutlineIntentHa
 			tag = account.createTag(name: tagName)
 		}
 		
-		let _ = account.createOutline(title: title, tag: tag)
+		let document = account.createOutline(title: title, tag: tag)
 		
 		suspend()
-		completion(AddOutlineIntentResponse(code: .success, userActivity: nil))
+		let response = AddOutlineIntentResponse(code: .success, userActivity: nil)
+		response.outlineEntityID = IntentEntityID(entityID: document.id, display: document.title)
+		completion(response)
 	}
 	
 }
