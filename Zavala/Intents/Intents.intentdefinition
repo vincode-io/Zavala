@@ -2621,7 +2621,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Add a new row to${outlineOrRow}at${destination}</string>
+					<string>Add${rowTopic}to${outlineOrRow}at${destination}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>y8yx3H</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
