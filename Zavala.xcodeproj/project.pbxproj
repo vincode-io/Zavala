@@ -133,6 +133,7 @@
 		51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */; };
 		51B9D99D26140EDC00A66859 /* ExportMarkdownListActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99C26140EDC00A66859 /* ExportMarkdownListActivity.swift */; };
 		51B9D9A026140F3A00A66859 /* ExportOPMLActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */; };
+		51BAEA8F2717AA74004F1E84 /* GetRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BAEA8E2717AA74004F1E84 /* GetRowsIntentHandler.swift */; };
 		51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */; };
 		51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A5257E084E00609262 /* EditorTitleContentView.swift */; };
 		51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */; };
@@ -361,6 +362,7 @@
 		51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDisclosureButton.swift; sourceTree = "<group>"; };
 		51B9D99C26140EDC00A66859 /* ExportMarkdownListActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportMarkdownListActivity.swift; sourceTree = "<group>"; };
 		51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportOPMLActivity.swift; sourceTree = "<group>"; };
+		51BAEA8E2717AA74004F1E84 /* GetRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRowsIntentHandler.swift; sourceTree = "<group>"; };
 		51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentConfiguration.swift; sourceTree = "<group>"; };
 		51C030A5257E084E00609262 /* EditorTitleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentView.swift; sourceTree = "<group>"; };
 		51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReloadItemsOperation.swift; sourceTree = "<group>"; };
@@ -689,6 +691,7 @@
 				51918514271664FB00B7E177 /* AddRowIntentHandler.swift */,
 				519185102713BFAE00B7E177 /* BeginRowProcessingIntentHandler.swift */,
 				519185122713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift */,
+				51BAEA8E2717AA74004F1E84 /* GetRowsIntentHandler.swift */,
 			);
 			path = Row;
 			sourceTree = "<group>";
@@ -1192,6 +1195,7 @@
 				519185012713116B00B7E177 /* AddOutlineTagIntentHandler.swift in Sources */,
 				511B2A002601914400C04239 /* NSAttributedString+.swift in Sources */,
 				51B2B2C82563A2180090C56B /* EditorTextRowTopicTextView.swift in Sources */,
+				51BAEA8F2717AA74004F1E84 /* GetRowsIntentHandler.swift in Sources */,
 				511B29FA26018FD100C04239 /* EditorBacklinkContentView.swift in Sources */,
 				517A9E1F2602AD6B00EF346A /* EditorContainerViewController.swift in Sources */,
 				511B29F226014FBA00C04239 /* EnhancedTextField.swift in Sources */,

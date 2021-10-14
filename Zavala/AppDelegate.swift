@@ -561,6 +561,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return GetImagesForOutlineIntentHandler()
 		case is GetOutlinesIntent:
 			return GetOutlinesIntentHandler()
+		case is GetRowsIntent:
+			return GetRowsIntentHandler()
 		case is ImportIntent:
 			return ImportIntentHandler()
 		case is RemoveOutlineIntent:

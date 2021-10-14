@@ -479,7 +479,7 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 		return visitor.markdown
 	}
 	
-	func visit(visitor: (Row) -> Void) {
+	public func visit(visitor: (Row) -> Void) {
 		visitor(self)
 	}
 	

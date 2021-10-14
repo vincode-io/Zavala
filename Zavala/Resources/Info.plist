@@ -70,6 +70,7 @@
 		<string>GetCurrentTagIntent</string>
 		<string>GetImagesForOutlineIntent</string>
 		<string>GetOutlinesIntent</string>
+		<string>GetRowsIntent</string>
 		<string>ImportIntent</string>
 		<string>RemoveOutlineIntent</string>
 		<string>RemoveOutlineTagIntent</string>
@@ -104,6 +105,7 @@
 		<string>GetCurrentTagIntent</string>
 		<string>GetImagesForOutlineIntent</string>
 		<string>GetOutlinesIntent</string>
+		<string>GetRowsIntent</string>
 		<string>ImportIntent</string>
 		<string>RemoveOutlineIntent</string>
 		<string>RemoveOutlineTagIntent</string>
