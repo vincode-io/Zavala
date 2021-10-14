@@ -22,7 +22,10 @@ class GetRowsIntentHandler: NSObject, ZavalaIntentHandler, GetRowsIntentHandling
 		}
 		
 		let isExactMatch = intent.exactSearchMatch == 1
-		let visitor = GetRowsVisitor(searchText: intent.search, isExactMatch: isExactMatch, completionState: intent.completionState)
+		let visitor = GetRowsVisitor(searchText: intent.search,
+									 isExactMatch: isExactMatch,
+									 completionState: intent.completionState,
+									 expandedState: intent.expandedState)
 		
 		rowContainer.rows.forEach { $0.visit(visitor: visitor.visitor(_:)) }
 		
@@ -39,47 +42,49 @@ class GetRowsVisitor {
 	var searchText: String? = nil
 	var searchRegEx: NSRegularExpression? = nil
 	let isTextSearch: Bool
+	let isExactMatch: Bool
 	let completionState: IntentRowCompletionState
+	let expandedState: IntentRowExpandedState
 	var results = [Row]()
 	
-	init(searchText: String?, isExactMatch: Bool, completionState: IntentRowCompletionState) {
+	init(searchText: String?, isExactMatch: Bool, completionState: IntentRowCompletionState, expandedState: IntentRowExpandedState) {
 		if isExactMatch {
 			self.searchText = searchText
 		} else {
 			self.searchRegEx = searchText?.searchRegEx()
 		}
-		isTextSearch = self.searchText != nil || self.searchRegEx != nil
+		self.isExactMatch = isExactMatch
+		self.isTextSearch = self.searchText != nil || self.searchRegEx != nil
 		self.completionState = completionState
+		self.expandedState = expandedState
 	}
 	
 	func visitor(_ visited: Row) {
 		
-		var textMatched = matchedText(visited.topic)
-		if !textMatched {
-			textMatched = matchedText(visited.note)
+		var textPassed = false
+		if isTextSearch {
+			textPassed = matchedText(visited.topic)
+			if !textPassed {
+				textPassed = matchedText(visited.note)
+			}
+		} else {
+			// Match against empty rows on an exact match without a valid search
+			if isExactMatch {
+				if (visited.topic?.string.isEmpty ?? true) || visited.note?.string.isEmpty ?? true {
+					textPassed = true
+				} else {
+					textPassed = false
+				}
+			} else {
+				textPassed = true
+			}
 		}
+
+		let completionPassed = passedCompletion(visited.isComplete)
+		let expandedPassed = passedExpanded(visited.isExpanded)
 		
-		switch (true, true)  {
-		case (textMatched, completionState == .unknown):
+		if textPassed && completionPassed && expandedPassed {
 			results.append(visited)
-		case (textMatched, completionState == .complete):
-			if visited.isComplete {
-				results.append(visited)
-			}
-		case (textMatched, completionState == .uncomplete):
-			if !visited.isComplete {
-				results.append(visited)
-			}
-		case (!isTextSearch, completionState == .complete):
-			if visited.isComplete {
-				results.append(visited)
-			}
-		case (!isTextSearch, completionState == .uncomplete):
-			if !visited.isComplete {
-				results.append(visited)
-			}
-		default:
-			break
 		}
 		
 		visited.rows.forEach { row in
@@ -90,7 +95,7 @@ class GetRowsVisitor {
 	func matchedText(_ attrString: NSAttributedString?) -> Bool {
 		var textMatched = true
 		
-		if isTextSearch, let text = attrString?.string {
+		if let text = attrString?.string {
 			if let searchText = searchText {
 				if searchText != text {
 					textMatched = false
@@ -109,14 +114,26 @@ class GetRowsVisitor {
 		return textMatched
 	}
 	
-	func matchedCompletion(_ complete: Bool) -> Bool {
+	func passedCompletion(_ complete: Bool) -> Bool {
 		switch completionState {
 		case .complete:
 			return complete
 		case .uncomplete:
 			return !complete
 		default:
-			return false
+			return true
 		}
 	}
+
+	func passedExpanded(_ expanded: Bool) -> Bool {
+		switch expandedState {
+		case .expanded:
+			return expanded
+		case .collapsed:
+			return !expanded
+		default:
+			return true
+		}
+	}
+
 }
