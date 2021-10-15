@@ -37,12 +37,21 @@ class AddRowIntentHandler: NSObject, ZavalaIntentHandler, AddRowIntentHandling {
 	func handle(intent: AddRowIntent, completion: @escaping (AddRowIntentResponse) -> Void) {
 		resume()
 		
-		guard let entityID = intent.outlineOrRow?.toEntityID(), let rowContainer = AccountManager.shared.findRowContainer(entityID), let outline = rowContainer.outline else {
+		guard let entityID = intent.outlineOrRow?.toEntityID(), let outline = AccountManager.shared.findDocument(entityID)?.outline else {
 			suspend()
 			completion(.init(code: .failure, userActivity: nil))
 			return
 		}
 		
+		outline.load()
+	
+		guard let rowContainer = outline.findRowContainer(entityID: entityID) else {
+			outline.unload()
+			suspend()
+			completion(.init(code: .failure, userActivity: nil))
+			return
+		}
+
 		let row = Row(outline: outline, topicPlainText: intent.rowTopic, notePlainText: intent.rowNote)
 		
 		switch intent.destination {
@@ -54,6 +63,7 @@ class AddRowIntentHandler: NSObject, ZavalaIntentHandler, AddRowIntentHandling {
 			if let afterRow = rowContainer as? Row {
 				outline.createRowOutside(row, afterRow: afterRow)
 			} else {
+				outline.unload()
 				suspend()
 				completion(.init(code: .success, userActivity: nil))
 				return
@@ -62,16 +72,19 @@ class AddRowIntentHandler: NSObject, ZavalaIntentHandler, AddRowIntentHandling {
 			if let afterRow = rowContainer as? Row {
 				outline.createRowDirectlyAfter(row, afterRow: afterRow)
 			} else {
+				outline.unload()
 				suspend()
 				completion(.init(code: .success, userActivity: nil))
 				return
 			}
 		default:
+			outline.unload()
 			suspend()
 			completion(.init(code: .failure, userActivity: nil))
 			return
 		}
 		
+		outline.unload()
 		suspend()
 		let response = AddRowIntentResponse(code: .success, userActivity: nil)
 		response.row = IntentEntityID(entityID: row.entityID, display: nil)

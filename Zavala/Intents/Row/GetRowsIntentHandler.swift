@@ -13,7 +13,16 @@ class GetRowsIntentHandler: NSObject, ZavalaIntentHandler, GetRowsIntentHandling
 	func handle(intent: GetRowsIntent, completion: @escaping (GetRowsIntentResponse) -> Void) {
 		resume()
 		
-		guard let entityID = intent.outlineOrRow?.toEntityID(), let rowContainer = AccountManager.shared.findRowContainer(entityID) else {
+		guard let entityID = intent.outlineOrRow?.toEntityID(), let outline = AccountManager.shared.findDocument(entityID)?.outline else {
+			suspend()
+			completion(.init(code: .failure, userActivity: nil))
+			return
+		}
+		
+		outline.load()
+		
+		guard let rowContainer = outline.findRowContainer(entityID: entityID) else {
+			outline.unload()
 			suspend()
 			completion(.init(code: .failure, userActivity: nil))
 			return
@@ -32,6 +41,7 @@ class GetRowsIntentHandler: NSObject, ZavalaIntentHandler, GetRowsIntentHandling
 		
 		rowContainer.rows.forEach { $0.visit(visitor: visitor.visitor(_:)) }
 		
+		outline.unload()
 		suspend()
 		let response = GetRowsIntentResponse(code: .success, userActivity: nil)
 		response.rows = visitor.results.map { IntentEntityID(entityID: $0.entityID, display: $0.topic?.string) }

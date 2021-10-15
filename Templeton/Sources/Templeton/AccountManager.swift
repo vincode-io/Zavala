@@ -152,18 +152,22 @@ public final class AccountManager {
 		case .allDocuments(let accountID), .recentDocuments(let accountID), .tagDocuments(let accountID, _):
 			return findAccount(accountID: accountID)?.findDocumentContainer(entityID)
 		default:
-			fatalError()
+			return nil
 		}
 	}
 	
 	public func findDocument(_ entityID: EntityID) -> Document? {
-		if case .document(let accountID, let documentUUID) = entityID,
-		   let account = findAccount(accountID: accountID) {
-			return account.findDocument(documentUUID: documentUUID)
+		switch entityID {
+		case .document(let accountID, let documentUUID):
+			return findAccount(accountID: accountID)?.findDocument(documentUUID: documentUUID)
+		case .row(let accountID, let documentUUID, _):
+			return findAccount(accountID: accountID)?.findDocument(documentUUID: documentUUID)
+		default:
+			return nil
 		}
-		return nil
 	}
 	
+	/// Don't use this function. It will fail silently if the outline's rows aren't loaded at the time it is called.
 	public func findRow(_ entityID: EntityID) -> Row? {
 		if case .row(let accountID, let documentUUID, _) = entityID,
 		   let account = findAccount(accountID: accountID),
@@ -171,17 +175,6 @@ public final class AccountManager {
 			return outline.findRow(id: entityID.rowUUID)
 		}
 		return nil
-	}
-	
-	public func findRowContainer(_ entityID: EntityID) -> RowContainer? {
-		switch entityID {
-		case .document:
-			return findDocument(entityID)?.outline
-		case .row:
-			return findRow(entityID)
-		default:
-			return nil
-		}
 	}
 	
 	public func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {

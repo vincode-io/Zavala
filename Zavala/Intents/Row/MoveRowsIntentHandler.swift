@@ -23,17 +23,37 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 		
 		guard let intentRowEntityIDs = intent.rows,
 			  let entityID = intent.outlineOrRow?.toEntityID(),
-			  let rowContainer = AccountManager.shared.findRowContainer(entityID),
-			  let outline = rowContainer.outline else {
+			  let outline = AccountManager.shared.findDocument(entityID)?.outline else {
 				  suspend()
 				  completion(.init(code: .failure, userActivity: nil))
 				  return
 			  }
 		
+		var outlines = Set<Outline>()
+		outline.load()
+		outlines.insert(outline)
+		
+		guard let rowContainer = outline.findRowContainer(entityID: entityID) else {
+			outlines.forEach { $0.unload() }
+			suspend()
+			completion(.init(code: .failure, userActivity: nil))
+			return
+		}
+		
 		var intraOutlineMoves = [Row]()
 		var interOutlineMoves = [(Row, Row)]()
 
-		let inputRows = intentRowEntityIDs.compactMap({ $0.toEntityID() }).compactMap({ AccountManager.shared.findRow($0) })
+		let inputRows: [Row] = intentRowEntityIDs
+			.compactMap { $0.toEntityID() }
+			.compactMap {
+				if let rowOutline = AccountManager.shared.findDocument($0)?.outline {
+					rowOutline.load()
+					outlines.insert(rowOutline)
+					return rowOutline.findRow(id: $0.rowUUID)
+				}
+				return nil
+			}
+		
 		for inputRow in inputRows {
 			if inputRow.outline == outline {
 				intraOutlineMoves.append(inputRow)
@@ -57,6 +77,7 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 					outline.moveRowsDirectlyAfter(intraOutlineMoves, afterRow: afterRow)
 				}
 			default:
+				outlines.forEach { $0.unload() }
 				suspend()
 				completion(.init(code: .failure, userActivity: nil))
 				return
@@ -64,30 +85,36 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 		}
 		
 		for interOutlineMove in interOutlineMoves {
+			guard let sourceOutline = interOutlineMove.0.outline else {
+				continue
+			}
+			
 			switch intent.destination {
 			case .insideAtStart:
-				interOutlineMove.0.outline?.deleteRows([interOutlineMove.0])
-				interOutlineMove.1.outline?.createRowInsideAtStart(interOutlineMove.1, afterRowContainer: rowContainer)
+				sourceOutline.deleteRows([interOutlineMove.0])
+				outline.createRowInsideAtStart(interOutlineMove.1, afterRowContainer: rowContainer)
 			case .insideAtEnd:
-				interOutlineMove.0.outline?.deleteRows([interOutlineMove.0])
-				interOutlineMove.1.outline?.createRowInsideAtEnd(interOutlineMove.1, afterRowContainer: rowContainer)
+				sourceOutline.deleteRows([interOutlineMove.0])
+				outline.createRowInsideAtEnd(interOutlineMove.1, afterRowContainer: rowContainer)
 			case .outside:
 				if let afterRow = rowContainer as? Row {
-					interOutlineMove.0.outline?.deleteRows([interOutlineMove.0])
-					interOutlineMove.1.outline?.createRowOutside(interOutlineMove.1, afterRow: afterRow)
+					sourceOutline.deleteRows([interOutlineMove.0])
+					outline.createRowOutside(interOutlineMove.1, afterRow: afterRow)
 				}
 			case .directlyAfter:
 				if let afterRow = rowContainer as? Row {
-					interOutlineMove.0.outline?.deleteRows([interOutlineMove.0])
-					interOutlineMove.1.outline?.createRowDirectlyAfter(interOutlineMove.1, afterRow: afterRow)
+					sourceOutline.deleteRows([interOutlineMove.0])
+					outline.createRowDirectlyAfter(interOutlineMove.1, afterRow: afterRow)
 				}
 			default:
+				outlines.forEach { $0.unload() }
 				suspend()
 				completion(.init(code: .failure, userActivity: nil))
 				return
 			}
 		}
 		
+		outlines.forEach { $0.unload() }
 		suspend()
 		completion(.init(code: .success, userActivity: nil))
 	}

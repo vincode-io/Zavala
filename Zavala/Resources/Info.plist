@@ -63,8 +63,6 @@
 		<string>AddOutlineIntent</string>
 		<string>AddOutlineTagIntent</string>
 		<string>AddRowIntent</string>
-		<string>BeginRowProcessingIntent</string>
-		<string>EndRowProcessingIntent</string>
 		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
 		<string>GetCurrentTagIntent</string>
@@ -100,8 +98,6 @@
 		<string>AddOutlineIntent</string>
 		<string>AddOutlineTagIntent</string>
 		<string>AddRowIntent</string>
-		<string>BeginRowProcessingIntent</string>
-		<string>EndRowProcessingIntent</string>
 		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
 		<string>GetCurrentTagIntent</string>

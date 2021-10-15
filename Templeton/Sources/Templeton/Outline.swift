@@ -394,6 +394,16 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		rebuildTransientData()
 	}
 	
+	public func findRowContainer(entityID: EntityID) -> RowContainer? {
+		guard id != entityID else {
+			return self
+		}
+		if case .row(_, _, let rowUUID) = entityID {
+			return findRow(id: rowUUID)
+		}
+		return nil
+	}
+	
 	public func findRow(id: String) -> Row? {
 		return keyedRows?[id]
 	}
@@ -1798,6 +1808,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		guard rowsFile == nil else { return }
 		rowsFile = RowsFile(outline: self)
 		rowsFile?.load()
+		prepareRowsForProcessing()
 	}
 	
 	public func unloadRows() {
@@ -2555,6 +2566,20 @@ extension Outline {
 		resetShadowTableIndexes(startingAt: rowShadowTableIndex)
 		let changes = OutlineElementChanges(section: adjustedRowsSection, deletes: reloads, reloads: Set([rowShadowTableIndex]))
 		outlineElementsDidChange(changes)
+	}
+	
+	private func prepareRowsForProcessing() {
+		func visitor(_ visited: Row) {
+			visited.rows.forEach { row in
+				row.parent = visited
+				row.visit(visitor: visitor)
+			}
+		}
+		
+		rows.forEach { row in
+			row.parent = self
+			row.visit(visitor: visitor(_:))
+		}
 	}
 	
 	private func rebuildShadowTable() -> OutlineElementChanges {

@@ -19,17 +19,28 @@ class RemoveRowsIntentHandler: NSObject, ZavalaIntentHandler, RemoveRowsIntentHa
 			return
 		}
 		
-		let inputRows = intentRowEntityIDs.compactMap({ $0.toEntityID() }).compactMap({ AccountManager.shared.findRow($0) })
+		var outlines = Set<Outline>()
+
+		let inputRows: [Row] = intentRowEntityIDs
+			.compactMap { $0.toEntityID() }
+			.compactMap {
+				if let rowOutline = AccountManager.shared.findDocument($0)?.outline {
+					rowOutline.load()
+					outlines.insert(rowOutline)
+					return rowOutline.findRow(id: $0.rowUUID)
+				}
+				return nil
+			}
+		
 		let groupedInputRows = Dictionary(grouping: inputRows, by: { $0.outline })
 		
 		for outline in groupedInputRows.keys {
 			if let outline = outline, let deleteRows = groupedInputRows[outline] {
-				outline.load()
 				outline.deleteRows(deleteRows)
-				outline.unload()
 			}
 		}
-		
+
+		outlines.forEach { $0.unload() }
 		suspend()
 		completion(.init(code: .success, userActivity: nil))
 	}

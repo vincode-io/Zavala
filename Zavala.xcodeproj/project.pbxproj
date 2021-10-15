@@ -116,8 +116,6 @@
 		5191850B2713828F00B7E177 /* AddOutlineIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850A2713828F00B7E177 /* AddOutlineIntentHandler.swift */; };
 		5191850D271387C300B7E177 /* RemoveOutlineIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850C271387C300B7E177 /* RemoveOutlineIntentHandler.swift */; };
 		5191850F271390F100B7E177 /* IntentEntityID+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850E271390F100B7E177 /* IntentEntityID+.swift */; };
-		519185112713BFAE00B7E177 /* BeginRowProcessingIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519185102713BFAE00B7E177 /* BeginRowProcessingIntentHandler.swift */; };
-		519185132713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519185122713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift */; };
 		51918515271664FB00B7E177 /* AddRowIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51918514271664FB00B7E177 /* AddRowIntentHandler.swift */; };
 		5193C8A625FD757900E63F94 /* OpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */; };
 		519965DC2624EEE500D8468B /* RSAppMovementMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */; };
@@ -347,8 +345,6 @@
 		5191850A2713828F00B7E177 /* AddOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddOutlineIntentHandler.swift; sourceTree = "<group>"; };
 		5191850C271387C300B7E177 /* RemoveOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveOutlineIntentHandler.swift; sourceTree = "<group>"; };
 		5191850E271390F100B7E177 /* IntentEntityID+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentEntityID+.swift"; sourceTree = "<group>"; };
-		519185102713BFAE00B7E177 /* BeginRowProcessingIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeginRowProcessingIntentHandler.swift; sourceTree = "<group>"; };
-		519185122713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndRowProcessingIntentHandler.swift; sourceTree = "<group>"; };
 		51918514271664FB00B7E177 /* AddRowIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRowIntentHandler.swift; sourceTree = "<group>"; };
 		5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuicklyViewController.swift; sourceTree = "<group>"; };
 		519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSAppMovementMonitor.swift; sourceTree = "<group>"; };
@@ -691,8 +687,6 @@
 			isa = PBXGroup;
 			children = (
 				51918514271664FB00B7E177 /* AddRowIntentHandler.swift */,
-				519185102713BFAE00B7E177 /* BeginRowProcessingIntentHandler.swift */,
-				519185122713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift */,
 				51BAEA8E2717AA74004F1E84 /* GetRowsIntentHandler.swift */,
 				510471BA271940E5001DEFD5 /* MoveRowsIntentHandler.swift */,
 				510471BC2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift */,
@@ -1181,7 +1175,6 @@
 				51B2B2D22563AB190090C56B /* EditorTextRowContentView.swift in Sources */,
 				519184F52710F93700B7E177 /* ImportIntentHandler.swift in Sources */,
 				51D28D32257731DC0039DDFC /* EditorViewController+Drop.swift in Sources */,
-				519185112713BFAE00B7E177 /* BeginRowProcessingIntentHandler.swift in Sources */,
 				51B2B2D62563AB9F0090C56B /* UIView+.swift in Sources */,
 				51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */,
 				5191850F271390F100B7E177 /* IntentEntityID+.swift in Sources */,
@@ -1190,7 +1183,6 @@
 				510471BB271940E5001DEFD5 /* MoveRowsIntentHandler.swift in Sources */,
 				5115C02D2605898900416D67 /* MacOpenQuicklySidebarViewController.swift in Sources */,
 				5191850B2713828F00B7E177 /* AddOutlineIntentHandler.swift in Sources */,
-				519185132713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift in Sources */,
 				5163ADF225C78CFB008F25CA /* SearchTextField.swift in Sources */,
 				51DEE82226FE37F9006DAA56 /* UIPrintPageRenderer+.swift in Sources */,
 				5191850527133B4000B7E177 /* RenameTagViewController.swift in Sources */,
