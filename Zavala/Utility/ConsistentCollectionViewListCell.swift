@@ -14,36 +14,25 @@ class ConsistentCollectionViewListCell: UICollectionViewListCell {
 	override func updateConfiguration(using state: UICellConfigurationState) {
 		super.updateConfiguration(using: state)
 		
-		guard state.traitCollection.userInterfaceIdiom != .mac else {
-			guard var backgroundConfig = backgroundConfiguration else { return }
-			backgroundConfig.cornerRadius = 5
-			if insetBackground {
-				backgroundConfig.backgroundInsets = NSDirectionalEdgeInsets(top: 1, leading: 9, bottom: 1, trailing: 9)
-			}
-
-			if state.isSelected || state.isHighlighted {
-				backgroundConfig.backgroundColor = .tertiarySystemGroupedBackground
-			} else {
-				backgroundConfig.backgroundColor = .clear
-			}
-
-			backgroundConfiguration = backgroundConfig
-			return
-		}
-		
 		guard var contentConfig = contentConfiguration as? UIListContentConfiguration else { return }
 		
 		var backgroundConfig = UIBackgroundConfiguration.listSidebarCell().updated(for: state)
 
+		if state.traitCollection.userInterfaceIdiom == .mac {
+			backgroundConfig.cornerRadius = 5
+			if insetBackground {
+				backgroundConfig.backgroundInsets = NSDirectionalEdgeInsets(top: 1, leading: 9, bottom: 1, trailing: 9)
+			}
+		}
+		
 		if state.isSelected || state.isHighlighted {
 			contentConfig.textProperties.color = .white
 			contentConfig.secondaryTextProperties.color = .white
-			contentConfig.imageProperties.tintColor = .white
-			backgroundConfig.backgroundColor = AppAssets.accent
+			backgroundConfig.backgroundColor = UIColor.accentColor.withAlphaComponent(0.6)
 		} else {
 			contentConfig.textProperties.color = .label
 			contentConfig.secondaryTextProperties.color = .label
-			contentConfig.imageProperties.tintColor = AppAssets.accent
+			backgroundConfig.backgroundColor = .clear
 		}
 		
 		contentConfiguration = contentConfig
