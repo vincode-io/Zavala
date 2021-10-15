@@ -1555,7 +1555,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public func isOutdentRowsUnavailable(rows: [Row]) -> Bool {
 		for row in rows {
-			if row.indentLevel != 0 {
+			if row.level != 0 {
 				return false
 			}
 		}

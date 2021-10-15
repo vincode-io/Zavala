@@ -2980,10 +2980,10 @@
 			<key>INIntentInput</key>
 			<string>outlineOrRow</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>9</integer>
+			<integer>16</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>outlineOrRow,search,exactSearchMatch,completionState,expandedState</key>
+				<key>outlineOrRow,search,exactSearchMatch,completionState,expandedState,excludedRows,startDepth,endDepth</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
@@ -3122,11 +3122,93 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
+					<string>Start Depth</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>stQZUl</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>4</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataDefaultValue</key>
+						<integer>1</integer>
+						<key>INIntentParameterMetadataMaximumValue</key>
+						<integer>200</integer>
+						<key>INIntentParameterMetadataMinimumValue</key>
+						<integer>1</integer>
+						<key>INIntentParameterMetadataType</key>
+						<string>Field</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>startDepth</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterTag</key>
+					<integer>14</integer>
+					<key>INIntentParameterType</key>
+					<string>Integer</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>End Depth</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>8dJBes</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>5</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataDefaultValue</key>
+						<integer>200</integer>
+						<key>INIntentParameterMetadataMaximumValue</key>
+						<integer>200</integer>
+						<key>INIntentParameterMetadataType</key>
+						<string>Field</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>endDepth</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterTag</key>
+					<integer>16</integer>
+					<key>INIntentParameterType</key>
+					<string>Integer</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
 					<string>Completion State</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>k3qYPg</string>
 					<key>INIntentParameterDisplayPriority</key>
-					<integer>4</integer>
+					<integer>6</integer>
 					<key>INIntentParameterEnumType</key>
 					<string>RowCompletionState</string>
 					<key>INIntentParameterEnumTypeNamespace</key>
@@ -3181,7 +3263,7 @@
 					<key>INIntentParameterDisplayNameID</key>
 					<string>U5vLPe</string>
 					<key>INIntentParameterDisplayPriority</key>
-					<integer>5</integer>
+					<integer>7</integer>
 					<key>INIntentParameterEnumType</key>
 					<string>RowExpandedState</string>
 					<key>INIntentParameterEnumTypeNamespace</key>
@@ -3227,6 +3309,43 @@
 					<integer>9</integer>
 					<key>INIntentParameterType</key>
 					<string>Integer</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Excluded Rows</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>Z8yVNM</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>8</integer>
+					<key>INIntentParameterName</key>
+					<string>excludedRows</string>
+					<key>INIntentParameterObjectType</key>
+					<string>EntityID</string>
+					<key>INIntentParameterObjectTypeNamespace</key>
+					<string>LEx6zX</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterSupportsMultipleValues</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>12</integer>
+					<key>INIntentParameterType</key>
+					<string>Object</string>
 				</dict>
 			</array>
 			<key>INIntentResponse</key>

@@ -102,7 +102,7 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 	
 	private var _entityID: EntityID?
 	
-	public var indentLevel: Int {
+	public var level: Int {
 		var parentCount = 0
 		var p = parent as? Row
 		while p != nil {

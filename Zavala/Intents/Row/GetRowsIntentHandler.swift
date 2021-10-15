@@ -20,10 +20,15 @@ class GetRowsIntentHandler: NSObject, ZavalaIntentHandler, GetRowsIntentHandling
 		}
 		
 		let isExactMatch = intent.exactSearchMatch == 1
+		let excludedRowIDs = intent.excludedRows?.compactMap { $0.toEntityID() }
+		
 		let visitor = GetRowsVisitor(searchText: intent.search,
 									 isExactMatch: isExactMatch,
+									 startDepth: intent.startDepth?.intValue ?? 0,
+									 endDepth: intent.endDepth?.intValue ?? 200,
 									 completionState: intent.completionState,
-									 expandedState: intent.expandedState)
+									 expandedState: intent.expandedState,
+									 excludedRowIDs: excludedRowIDs)
 		
 		rowContainer.rows.forEach { $0.visit(visitor: visitor.visitor(_:)) }
 		
@@ -41,23 +46,33 @@ class GetRowsVisitor {
 	var searchRegEx: NSRegularExpression? = nil
 	let isTextSearch: Bool
 	let isExactMatch: Bool
+	let startDepth: Int
+	let endDepth: Int
 	let completionState: IntentRowCompletionState
 	let expandedState: IntentRowExpandedState
+	let excludedRowIDs: [EntityID]?
 	var results = [Row]()
 	
-	init(searchText: String?, isExactMatch: Bool, completionState: IntentRowCompletionState, expandedState: IntentRowExpandedState) {
+	init(searchText: String?, isExactMatch: Bool, startDepth: Int, endDepth: Int, completionState: IntentRowCompletionState, expandedState: IntentRowExpandedState, excludedRowIDs: [EntityID]?) {
 		if isExactMatch {
 			self.searchText = searchText
 		} else {
 			self.searchRegEx = searchText?.searchRegEx()
 		}
 		self.isExactMatch = isExactMatch
+		self.startDepth = startDepth
+		self.endDepth = endDepth
 		self.isTextSearch = self.searchText != nil || self.searchRegEx != nil
 		self.completionState = completionState
 		self.expandedState = expandedState
+		self.excludedRowIDs = excludedRowIDs
 	}
 	
 	func visitor(_ visited: Row) {
+		
+		guard !(excludedRowIDs?.contains(visited.entityID) ?? false) else {
+			return
+		}
 		
 		var textPassed = false
 		if isTextSearch {
@@ -78,10 +93,12 @@ class GetRowsVisitor {
 			}
 		}
 
+		let level = visited.level + 1
+		let depthPassed = startDepth <= level && endDepth >= level
 		let completionPassed = passedCompletion(visited.isComplete)
 		let expandedPassed = passedExpanded(visited.isExpanded)
 		
-		if textPassed && completionPassed && expandedPassed {
+		if textPassed && depthPassed && completionPassed && expandedPassed {
 			results.append(visited)
 		}
 		
