@@ -565,6 +565,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return GetRowsIntentHandler()
 		case is ImportIntent:
 			return ImportIntentHandler()
+		case is MoveRowsIntent:
+			return MoveRowsIntentHandler()
 		case is RemoveOutlineIntent:
 			return RemoveOutlineIntentHandler()
 		case is RemoveOutlineTagIntent:

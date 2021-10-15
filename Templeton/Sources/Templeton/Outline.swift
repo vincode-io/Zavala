@@ -872,7 +872,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	}
 	
 	@discardableResult
-	func deleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) -> Int? {
+	public func deleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) -> Int? {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
 		beginCloudKitBatchRequest()
@@ -1688,7 +1688,46 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return isIndentRowsUnavailable(rows: rows)
 	}
 	
-	func moveRows(_ rowMoves: [RowMove], rowStrings: RowStrings?) {
+	public func moveRowsInsideAtStart(_ rows: [Row], afterRowContainer: RowContainer) {
+		var rowMoves = [RowMove]()
+		for (index, row) in rows.enumerated() {
+			rowMoves.append(RowMove(row: row, toParent: afterRowContainer, toChildIndex: index))
+		}
+		moveRows(rowMoves)
+	}
+	
+	public func moveRowsInsideAtEnd(_ rows: [Row], afterRowContainer: RowContainer) {
+		var rowMoves = [RowMove]()
+		for (index, row) in rows.enumerated() {
+			rowMoves.append(RowMove(row: row, toParent: afterRowContainer, toChildIndex: index + afterRowContainer.rowCount))
+		}
+		moveRows(rowMoves)
+	}
+	
+	public func moveRowsOutside(_ rows: [Row], afterRow: Row) {
+		guard let afterRowParent = afterRow.parent as? Row,
+			  let afterRowGrandParent = afterRowParent.parent,
+			  let startIndex = afterRowGrandParent.firstIndexOfRow(afterRowParent) else { return }
+		
+		var rowMoves = [RowMove]()
+		for (index, row) in rows.enumerated() {
+			rowMoves.append(RowMove(row: row, toParent: afterRowGrandParent, toChildIndex: index + startIndex + 1))
+		}
+		moveRows(rowMoves)
+	}
+
+	public func moveRowsDirectlyAfter(_ rows: [Row], afterRow: Row) {
+		guard let afterRowParent = afterRow.parent,
+			  let startIndex = afterRowParent.firstIndexOfRow(afterRow) else { return }
+		
+		var rowMoves = [RowMove]()
+		for (index, row) in rows.enumerated() {
+			rowMoves.append(RowMove(row: row, toParent: afterRowParent, toChildIndex: index + startIndex + 1))
+		}
+		moveRows(rowMoves)
+	}
+
+	func moveRows(_ rowMoves: [RowMove], rowStrings: RowStrings? = nil) {
 		beginCloudKitBatchRequest()
 		
 		if rowMoves.count == 1, let row = rowMoves.first?.row, let texts = rowStrings {

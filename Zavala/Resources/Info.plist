@@ -72,6 +72,7 @@
 		<string>GetOutlinesIntent</string>
 		<string>GetRowsIntent</string>
 		<string>ImportIntent</string>
+		<string>MoveRowsIntent</string>
 		<string>RemoveOutlineIntent</string>
 		<string>RemoveOutlineTagIntent</string>
 		<string>ShowOutlineIntent</string>
@@ -107,6 +108,7 @@
 		<string>GetOutlinesIntent</string>
 		<string>GetRowsIntent</string>
 		<string>ImportIntent</string>
+		<string>MoveRowsIntent</string>
 		<string>RemoveOutlineIntent</string>
 		<string>RemoveOutlineTagIntent</string>
 		<string>SetOutlineTitleIntent</string>

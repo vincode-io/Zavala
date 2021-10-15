@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		51028CD525F3159A00B50B71 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51028CD425F3159A00B50B71 /* UIColor+.swift */; };
+		510471BB271940E5001DEFD5 /* MoveRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510471BA271940E5001DEFD5 /* MoveRowsIntentHandler.swift */; };
 		5113B08D260C1F1700DBD11B /* OutlineFontCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113B08C260C1F1700DBD11B /* OutlineFontCache.swift */; };
 		5113B092260E45B400DBD11B /* SettingsFontViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113B091260E45B400DBD11B /* SettingsFontViewController.swift */; };
 		5113B095260E638400DBD11B /* SettingsFontConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */; };
@@ -239,6 +240,7 @@
 
 /* Begin PBXFileReference section */
 		51028CD425F3159A00B50B71 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		510471BA271940E5001DEFD5 /* MoveRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveRowsIntentHandler.swift; sourceTree = "<group>"; };
 		5113B08C260C1F1700DBD11B /* OutlineFontCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontCache.swift; sourceTree = "<group>"; };
 		5113B091260E45B400DBD11B /* SettingsFontViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFontViewController.swift; sourceTree = "<group>"; };
 		5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFontConfigViewController.swift; sourceTree = "<group>"; };
@@ -690,6 +692,7 @@
 				519185102713BFAE00B7E177 /* BeginRowProcessingIntentHandler.swift */,
 				519185122713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift */,
 				51BAEA8E2717AA74004F1E84 /* GetRowsIntentHandler.swift */,
+				510471BA271940E5001DEFD5 /* MoveRowsIntentHandler.swift */,
 			);
 			path = Row;
 			sourceTree = "<group>";
@@ -1180,6 +1183,7 @@
 				5191850F271390F100B7E177 /* IntentEntityID+.swift in Sources */,
 				514F221E25C4D0A8004E02CD /* EditorTagInputContentView.swift in Sources */,
 				5191850D271387C300B7E177 /* RemoveOutlineIntentHandler.swift in Sources */,
+				510471BB271940E5001DEFD5 /* MoveRowsIntentHandler.swift in Sources */,
 				5115C02D2605898900416D67 /* MacOpenQuicklySidebarViewController.swift in Sources */,
 				5191850B2713828F00B7E177 /* AddOutlineIntentHandler.swift in Sources */,
 				519185132713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift in Sources */,
