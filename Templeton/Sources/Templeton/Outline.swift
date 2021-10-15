@@ -17,7 +17,7 @@ public extension Notification.Name {
 	static let OutlineSearchWillEnd = Notification.Name(rawValue: "OutlineSearchWillEnd")
 }
 
-public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable, Codable {
+public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable, Hashable, Codable {
 	
 	public enum Section: Int {
 		case title = 0
@@ -1958,6 +1958,10 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
 		return lhs.id == rhs.id
+	}
+	
+	public func hash(into hasher: inout Hasher) {
+		hasher.combine(id)
 	}
 	
 	func outlineDidDelete() {

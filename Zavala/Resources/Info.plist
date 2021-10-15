@@ -75,6 +75,7 @@
 		<string>MoveRowsIntent</string>
 		<string>RemoveOutlineIntent</string>
 		<string>RemoveOutlineTagIntent</string>
+		<string>RemoveRowsIntent</string>
 		<string>ShowOutlineIntent</string>
 		<string>SetOutlineTitleIntent</string>
 	</array>
@@ -111,6 +112,7 @@
 		<string>MoveRowsIntent</string>
 		<string>RemoveOutlineIntent</string>
 		<string>RemoveOutlineTagIntent</string>
+		<string>RemoveRowsIntent</string>
 		<string>SetOutlineTitleIntent</string>
 		<string>ShowOutlineIntent</string>
 		<string>io.vincode.Zavala.restoration</string>

@@ -2523,7 +2523,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Begin row processing for${outlineEntityID}</string>
+					<string>Begin Row processing for${outlineEntityID}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>2hkcOV</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -2617,7 +2617,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>End row processing for${outlineEntityID}</string>
+					<string>End Row processing for${outlineEntityID}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>VkL0JD</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -3608,6 +3608,110 @@
 			<string>Move Rows</string>
 			<key>INIntentTitleID</key>
 			<string>M4SJaU</string>
+			<key>INIntentType</key>
+			<string>Custom</string>
+			<key>INIntentVerb</key>
+			<string>Do</string>
+		</dict>
+		<dict>
+			<key>INIntentCategory</key>
+			<string>generic</string>
+			<key>INIntentConfigurable</key>
+			<true/>
+			<key>INIntentDescriptionID</key>
+			<string>Q0fRYW</string>
+			<key>INIntentLastParameterTag</key>
+			<integer>3</integer>
+			<key>INIntentManagedParameterCombinations</key>
+			<dict>
+				<key>rows</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Remove${rows}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>5GXQYV</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+			</dict>
+			<key>INIntentName</key>
+			<string>RemoveRows</string>
+			<key>INIntentParameterCombinations</key>
+			<dict>
+				<key>rows</key>
+				<dict>
+					<key>INIntentParameterCombinationIsLinked</key>
+					<true/>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Remove${rows}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>VNVi48</string>
+				</dict>
+			</dict>
+			<key>INIntentParameters</key>
+			<array>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Rows</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>D68qiv</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>1</integer>
+					<key>INIntentParameterName</key>
+					<string>rows</string>
+					<key>INIntentParameterObjectType</key>
+					<string>EntityID</string>
+					<key>INIntentParameterObjectTypeNamespace</key>
+					<string>LEx6zX</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterSupportsMultipleValues</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>3</integer>
+					<key>INIntentParameterType</key>
+					<string>Object</string>
+				</dict>
+			</array>
+			<key>INIntentResponse</key>
+			<dict>
+				<key>INIntentResponseCodes</key>
+				<array>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>success</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>failure</string>
+					</dict>
+				</array>
+			</dict>
+			<key>INIntentTitle</key>
+			<string>Remove Rows</string>
+			<key>INIntentTitleID</key>
+			<string>fyaTpG</string>
 			<key>INIntentType</key>
 			<string>Custom</string>
 			<key>INIntentVerb</key>

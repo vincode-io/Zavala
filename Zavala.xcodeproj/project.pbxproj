@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		51028CD525F3159A00B50B71 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51028CD425F3159A00B50B71 /* UIColor+.swift */; };
 		510471BB271940E5001DEFD5 /* MoveRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510471BA271940E5001DEFD5 /* MoveRowsIntentHandler.swift */; };
+		510471BD2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510471BC2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift */; };
 		5113B08D260C1F1700DBD11B /* OutlineFontCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113B08C260C1F1700DBD11B /* OutlineFontCache.swift */; };
 		5113B092260E45B400DBD11B /* SettingsFontViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113B091260E45B400DBD11B /* SettingsFontViewController.swift */; };
 		5113B095260E638400DBD11B /* SettingsFontConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */; };
@@ -241,6 +242,7 @@
 /* Begin PBXFileReference section */
 		51028CD425F3159A00B50B71 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		510471BA271940E5001DEFD5 /* MoveRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveRowsIntentHandler.swift; sourceTree = "<group>"; };
+		510471BC2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveRowsIntentHandler.swift; sourceTree = "<group>"; };
 		5113B08C260C1F1700DBD11B /* OutlineFontCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontCache.swift; sourceTree = "<group>"; };
 		5113B091260E45B400DBD11B /* SettingsFontViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFontViewController.swift; sourceTree = "<group>"; };
 		5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFontConfigViewController.swift; sourceTree = "<group>"; };
@@ -693,6 +695,7 @@
 				519185122713BFBF00B7E177 /* EndRowProcessingIntentHandler.swift */,
 				51BAEA8E2717AA74004F1E84 /* GetRowsIntentHandler.swift */,
 				510471BA271940E5001DEFD5 /* MoveRowsIntentHandler.swift */,
+				510471BC2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift */,
 			);
 			path = Row;
 			sourceTree = "<group>";
@@ -1103,6 +1106,7 @@
 				51F2859B25AD12800019C573 /* SidebarSearchContentView.swift in Sources */,
 				51C030B8257E198B00609262 /* EditorTitleTextView.swift in Sources */,
 				51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */,
+				510471BD2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift in Sources */,
 				51028CD525F3159A00B50B71 /* UIColor+.swift in Sources */,
 				51B9D99D26140EDC00A66859 /* ExportMarkdownListActivity.swift in Sources */,
 				512D375225F06733000FA597 /* EditorSearchBar.swift in Sources */,

@@ -571,6 +571,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return RemoveOutlineIntentHandler()
 		case is RemoveOutlineTagIntent:
 			return RemoveOutlineTagIntentHandler()
+		case is RemoveRowsIntent:
+			return RemoveRowsIntentHandler()
 		case is ShowOutlineIntent:
 			return ShowOutlineIntentHandler(mainCoordinator: mainCoordinator)
 		case is SetOutlineTitleIntent:
