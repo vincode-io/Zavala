@@ -945,47 +945,6 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		outlineElementsDidChange(changes)
 	}
 	
-	public func createRow(rowContainer: RowContainer, destination: RowDestination, topic: String?, note: String?) -> Row {
-		beginCloudKitBatchRequest()
-
-		let row = Row(outline: self, topicPlainText: topic, notePlainText: note)
-		
-		var shadowTableIndex = 0
-		
-		switch destination {
-		case .insideAtStart:
-			fatalError()
-		case .insideAtEnd:
-			if rowContainer.rowCount > 0 {
-				shadowTableIndex = (rowContainer.rows[rowContainer.rowCount - 1].shadowTableIndex ?? -1) + 1
-			} else {
-				if let row = rowContainer as? Row {
-					shadowTableIndex = (row.shadowTableIndex ?? -1) + 1
-				} else {
-					shadowTableIndex = 0
-				}
-			}
-			rowContainer.appendRow(row)
-			row.parent = rowContainer
-		case .outside:
-			fatalError()
-		case .directlyAfter:
-			fatalError()
-		}
-		
-		createLinkRelationships(for: [row])
-		endCloudKitBatchRequest()
-		
-		guard isBeingViewed else { return row }
-
-		shadowTable?.insert(row, at: shadowTableIndex)
-		resetShadowTableIndexes(startingAt: shadowTableIndex)
-		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: [shadowTableIndex])
-		outlineElementsDidChange(changes)
-		
-		return row
-	}
-	
 	func createRow(_ row: Row, beforeRow: Row, rowStrings: RowStrings? = nil) -> Int? {
 		beginCloudKitBatchRequest()
 		
@@ -1130,15 +1089,16 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return inserts.count > 0 ? inserts[0] : nil
 	}
 	
-	func createRowInside(_ row: Row, afterRow: Row, rowStrings: RowStrings? = nil) -> Int? {
+	@discardableResult
+	public func createRowInsideAtStart(_ row: Row, afterRowContainer: RowContainer, rowStrings: RowStrings? = nil) -> Int? {
 		beginCloudKitBatchRequest()
 		
-		if let texts = rowStrings {
+		if let texts = rowStrings, let afterRow = afterRowContainer as? Row {
 			updateRowStrings(afterRow, texts)
 		}
 		
-		afterRow.insertRow(row, at: 0)
-		row.parent = afterRow
+		afterRowContainer.insertRow(row, at: 0)
+		row.parent = afterRowContainer
 		
 		createLinkRelationships(for: [row])
 		endCloudKitBatchRequest()
@@ -1146,23 +1106,106 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 			
 		guard isBeingViewed else { return nil }
 
+		var afterRowContainerShadowTableIndex: Int? = nil
+		if let afterRow = afterRowContainer as? Row {
+			afterRowContainerShadowTableIndex = afterRow.shadowTableIndex
+		}
+		
 		let rowShadowTableIndex: Int
-		if let afterRowShadowTableIndex = afterRow.shadowTableIndex {
+		if let afterRowShadowTableIndex = afterRowContainerShadowTableIndex {
 			rowShadowTableIndex = afterRowShadowTableIndex + 1
 		} else {
 			rowShadowTableIndex = 0
 		}
 		
 		var reloads = [Int]()
-		if let reload = afterRow.shadowTableIndex {
+		if let reload = afterRowContainerShadowTableIndex {
 			reloads.append(reload)
 		}
 
 		let inserts = [rowShadowTableIndex]
 		shadowTable?.insert(row, at: rowShadowTableIndex)
 		
-		resetShadowTableIndexes(startingAt: afterRow.shadowTableIndex ?? 0)
+		resetShadowTableIndexes(startingAt: afterRowContainerShadowTableIndex ?? 0)
 		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: Set(inserts), reloads: Set(reloads))
+		outlineElementsDidChange(changes)
+
+		return inserts[0]
+	}
+
+	@discardableResult
+	public func createRowInsideAtEnd(_ row: Row, afterRowContainer: RowContainer, rowStrings: RowStrings? = nil) -> Int? {
+		beginCloudKitBatchRequest()
+		
+		if let texts = rowStrings, let afterRow = afterRowContainer as? Row {
+			updateRowStrings(afterRow, texts)
+		}
+		
+		afterRowContainer.appendRow(row)
+		row.parent = afterRowContainer
+		
+		createLinkRelationships(for: [row])
+		endCloudKitBatchRequest()
+		outlineContentDidChange()
+			
+		guard isBeingViewed else { return nil }
+
+		var afterRowContainerShadowTableIndex: Int? = nil
+		if let afterRow = afterRowContainer as? Row {
+			afterRowContainerShadowTableIndex = afterRow.shadowTableIndex
+		}
+		
+		let rowShadowTableIndex: Int
+		if afterRowContainer.rowCount > 0 {
+			rowShadowTableIndex = (afterRowContainer.rows[afterRowContainer.rowCount - 1].shadowTableIndex ?? -1) + 1
+		} else {
+			if let row = afterRowContainer as? Row {
+				rowShadowTableIndex = (row.shadowTableIndex ?? -1) + 1
+			} else {
+				rowShadowTableIndex = 0
+			}
+		}
+		
+		var reloads = [Int]()
+		if let reload = afterRowContainerShadowTableIndex {
+			reloads.append(reload)
+		}
+
+		let inserts = [rowShadowTableIndex]
+		shadowTable?.insert(row, at: rowShadowTableIndex)
+		
+		resetShadowTableIndexes(startingAt: afterRowContainerShadowTableIndex ?? 0)
+		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: Set(inserts), reloads: Set(reloads))
+		outlineElementsDidChange(changes)
+
+		return inserts[0]
+	}
+
+	@discardableResult
+	public func createRowDirectlyAfter(_ row: Row, afterRow: Row, rowStrings: RowStrings? = nil) -> Int? {
+		beginCloudKitBatchRequest()
+		
+		if let texts = rowStrings {
+			updateRowStrings(row, texts)
+		}
+		
+		if let afterRowParent = afterRow.parent, let afterRowChildIndex = afterRowParent.firstIndexOfRow(afterRow) {
+			afterRowParent.insertRow(row, at: afterRowChildIndex + 1)
+			row.parent = afterRowParent
+		}
+		
+		createLinkRelationships(for: [row])
+		endCloudKitBatchRequest()
+		outlineContentDidChange()
+			
+		guard isBeingViewed else { return nil }
+
+		let rowShadowTableIndex = (afterRow.shadowTableIndex ?? 0) + 1
+		let inserts = [rowShadowTableIndex]
+		shadowTable?.insert(row, at: rowShadowTableIndex)
+		
+		resetShadowTableIndexes(startingAt: afterRow.shadowTableIndex ?? 0)
+		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: Set(inserts))
 		outlineElementsDidChange(changes)
 
 		return inserts[0]
@@ -1172,7 +1215,8 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		return isOutdentRowsUnavailable(rows: rows)
 	}
 	
-	func createRowOutside(_ row: Row, afterRow: Row, rowStrings: RowStrings? = nil) -> Int? {
+	@discardableResult
+	public func createRowOutside(_ row: Row, afterRow: Row, rowStrings: RowStrings? = nil) -> Int? {
 		beginCloudKitBatchRequest()
 		
 		if let texts = rowStrings {

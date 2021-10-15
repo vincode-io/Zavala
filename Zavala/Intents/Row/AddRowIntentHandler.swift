@@ -43,10 +43,34 @@ class AddRowIntentHandler: NSObject, ZavalaIntentHandler, AddRowIntentHandling {
 			return
 		}
 		
-		let row = outline.createRow(rowContainer: rowContainer,
-									destination: intent.destination.toRowDestination(),
-									topic: intent.rowTopic,
-									note: intent.rowNote)
+		let row = Row(outline: outline, topicPlainText: intent.rowTopic, notePlainText: intent.rowNote)
+		
+		switch intent.destination {
+		case .insideAtStart:
+			outline.createRowInsideAtStart(row, afterRowContainer: rowContainer)
+		case .insideAtEnd:
+			outline.createRowInsideAtEnd(row, afterRowContainer: rowContainer)
+		case .outside:
+			if let afterRow = rowContainer as? Row {
+				outline.createRowOutside(row, afterRow: afterRow)
+			} else {
+				suspend()
+				completion(.init(code: .success, userActivity: nil))
+				return
+			}
+		case .directlyAfter:
+			if let afterRow = rowContainer as? Row {
+				outline.createRowDirectlyAfter(row, afterRow: afterRow)
+			} else {
+				suspend()
+				completion(.init(code: .success, userActivity: nil))
+				return
+			}
+		default:
+			suspend()
+			completion(.init(code: .failure, userActivity: nil))
+			return
+		}
 		
 		suspend()
 		let response = AddRowIntentResponse(code: .success, userActivity: nil)

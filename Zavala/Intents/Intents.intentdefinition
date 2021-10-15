@@ -3243,6 +3243,18 @@
 						<key>INIntentResponseCodeName</key>
 						<string>failure</string>
 					</dict>
+					<dict>
+						<key>INIntentResponseCodeConciseFormatString</key>
+						<string>You must specify a Row for this Destination.</string>
+						<key>INIntentResponseCodeConciseFormatStringID</key>
+						<string>viHCDE</string>
+						<key>INIntentResponseCodeFormatString</key>
+						<string>You must specify a Row for this Destination.</string>
+						<key>INIntentResponseCodeFormatStringID</key>
+						<string>RYTUte</string>
+						<key>INIntentResponseCodeName</key>
+						<string>rowRequired</string>
+					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
 				<integer>3</integer>

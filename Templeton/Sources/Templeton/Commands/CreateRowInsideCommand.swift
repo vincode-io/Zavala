@@ -37,7 +37,7 @@ public final class CreateRowInsideCommand: OutlineCommand {
 		if row == nil {
 			row = Row(outline: outline)
 		}
-		newCursorIndex = outline.createRowInside(row!, afterRow: afterRow, rowStrings: rowStrings)
+		newCursorIndex = outline.createRowInsideAtStart(row!, afterRowContainer: afterRow, rowStrings: rowStrings)
 		registerUndo()
 	}
 	
