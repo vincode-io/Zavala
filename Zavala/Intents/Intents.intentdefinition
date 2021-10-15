@@ -3620,6 +3620,8 @@
 			<true/>
 			<key>INIntentDescriptionID</key>
 			<string>Q0fRYW</string>
+			<key>INIntentInput</key>
+			<string>rows</string>
 			<key>INIntentLastParameterTag</key>
 			<integer>3</integer>
 			<key>INIntentManagedParameterCombinations</key>
