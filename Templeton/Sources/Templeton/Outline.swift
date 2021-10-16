@@ -797,6 +797,11 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 		imagesFile?.markAsDirty()
 	}
 	
+	func removeImages(rowID: String) {
+		self.images?.removeValue(forKey: rowID)
+		imagesFile?.markAsDirty()
+	}
+	
 	func createNotes(rows: [Row], rowStrings: RowStrings?) -> ([Row], Int?) {
 		beginCloudKitBatchRequest()
 		
@@ -895,6 +900,7 @@ public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable,
 
 		for row in rows {
 			row.parent?.removeRow(row)
+			removeImages(rowID: row.id)
 			guard let rowShadowTableIndex = row.shadowTableIndex else { continue }
 			deletes.insert(rowShadowTableIndex)
 		}
