@@ -52,7 +52,7 @@ class AddRowIntentHandler: NSObject, ZavalaIntentHandler, AddRowIntentHandling {
 			return
 		}
 
-		let row = Row(outline: outline, topicPlainText: intent.rowTopic, notePlainText: intent.rowNote)
+		let row = Row(outline: outline, topicMarkdown: intent.rowTopic, noteMarkdown: intent.rowNote)
 		
 		switch intent.destination {
 		case .insideAtStart:

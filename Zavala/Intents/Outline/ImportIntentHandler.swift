@@ -43,7 +43,15 @@ class ImportIntentHandler: NSObject, ZavalaIntentHandler, ImportIntentHandling {
 			return
 		}
 		
-		let doc = account.importOPML(data, tag: nil)
+		var images = [String:  Data]()
+		if let intentImages = intent.inputImages {
+			for intentImage in intentImages {
+				let imageUUID = String(intentImage.filename.prefix(while: { $0 != "." }))
+				images[imageUUID] = intentImage.data
+			}
+		}
+		
+		let doc = account.importOPML(data, tag: nil, images: images)
 		
 		suspend()
 		let response = ImportIntentResponse(code: .success, userActivity: nil)

@@ -17,7 +17,7 @@ public extension Notification.Name {
 	static let OutlineSearchWillEnd = Notification.Name(rawValue: "OutlineSearchWillEnd")
 }
 
-public final class Outline: RowContainer, OPMLImporter, Identifiable, Equatable, Hashable, Codable {
+public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Codable {
 	
 	public enum Section: Int {
 		case title = 0

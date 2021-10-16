@@ -146,7 +146,7 @@ public final class Account: NSObject, Identifiable, Codable {
 	}
 
 	@discardableResult
-	public func importOPML(_ opmlData: Data, tag: Tag?) -> Document {
+	public func importOPML(_ opmlData: Data, tag: Tag?, images: [String:  Data]? = nil) -> Document {
 		let opml = SWXMLHash.config({ config in
 			config.caseInsensitive = true
 		}).parse(opmlData)["opml"]
@@ -196,7 +196,7 @@ public final class Account: NSObject, Identifiable, Codable {
 			outline.createTag(tag)
 		}
 
-		outline.importRows(outline: outline, rowIndexers: outlineIndexers)
+		outline.importRows(outline: outline, rowIndexers: outlineIndexers, images: images)
 		
 		outline.zoneID = cloudKitManager?.defaultZone.zoneID
 		let document = Document.outline(outline)

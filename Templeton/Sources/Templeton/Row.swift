@@ -22,7 +22,7 @@ enum RowError: LocalizedError {
 	}
 }
 
-public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable, Identifiable {
+public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable {
 	
 	public static let typeIdentifier = "io.vincode.Zavala.Row"
 	
@@ -285,7 +285,7 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 		super.init()
 	}
 
-	public init(outline: Outline, topicPlainText: String?, notePlainText: String? = nil) {
+	public init(outline: Outline, topicMarkdown: String?, noteMarkdown: String? = nil) {
 		self.isComplete = false
 		self.id = UUID().uuidString
 		self.outline = outline
@@ -293,11 +293,11 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 		self.isExpanded = true
 		self.rowOrder = [String]()
 		super.init()
-		if let topicPlainText = topicPlainText {
-			topic = NSAttributedString(markdownRepresentation: topicPlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
+		if let topicMarkdown = topicMarkdown {
+			topic = NSAttributedString(markdownRepresentation: topicMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		}
-		if let notePlainText = notePlainText {
-			note = NSAttributedString(markdownRepresentation: notePlainText, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
+		if let noteMarkdown = noteMarkdown {
+			note = NSAttributedString(markdownRepresentation: noteMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		}
 	}
 	
@@ -375,6 +375,53 @@ public final class Row: NSObject, NSCopying, RowContainer, OPMLImporter, Codable
 		row.images = images?.map { $0.duplicate(accountID: newOutline.id.accountID, documentUUID: newOutline.id.documentUUID, rowUUID: row.id) }
 		
 		return row
+	}
+	
+	public func update(topicMarkdown: String?, noteMarkdown: String?, images: [String: Data]?) {
+		guard let regEx = try? NSRegularExpression(pattern: "!\\]\\]\\(([^)]+).png\\)", options: []) else {
+			return
+		}
+		
+		var matchedImages = [Image]()
+		
+		func replaceImageMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
+			if let markdown = markdown {
+				let mangledMarkdown = markdown.replacingOccurrences(of: "![", with: "!]")
+				let attrString = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
+				let strippedString = attrString.string
+				let matches = regEx.allMatches(in: strippedString)
+				
+				for match in matches {
+					guard let wholeRange = Range(match.range(at: 0), in: strippedString), let captureRange = Range(match.range(at: 1), in: strippedString) else {
+						continue
+					}
+					
+					let currentString = attrString.string
+					let wholeString = strippedString[wholeRange]
+					guard let wholeStringRange = currentString.range(of: wholeString) else {
+						continue
+					}
+					
+					let offset = currentString[currentString.startIndex..<wholeStringRange.lowerBound].utf16.count
+					attrString.replaceCharacters(in: NSRange(location: offset, length: wholeString.utf16.count), with: "")
+					
+					let imageUUID = String(strippedString[captureRange])
+					if let data = images?[imageUUID] {
+						let imageID = EntityID.image(entityID.accountID, entityID.documentUUID, entityID.rowUUID, imageUUID)
+						matchedImages.append(Image(id: imageID, isInNotes: isInNotes, offset: offset, data: data))
+					}
+				}
+				
+				return attrString
+			}
+			
+			return nil
+		}
+		
+		self.topic = replaceImageMarkdown(topicMarkdown, isInNotes: false)
+		self.note = replaceImageMarkdown(noteMarkdown, isInNotes: true)
+		
+		outline?.updateImages(rowID: id, images: matchedImages)
 	}
 	
 	public func findImage(id: EntityID) -> Image? {
