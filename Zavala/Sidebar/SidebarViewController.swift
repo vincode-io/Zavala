@@ -38,6 +38,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 
 	var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
+	private var coalescingQueue = CoalescingQueue(name: "Apply Snapshot", interval: 0.5)
 
 	private var mainSplitViewController: MainSplitViewController? {
 		return splitViewController as? MainSplitViewController
@@ -108,27 +109,27 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	// MARK: Notifications
 	
 	@objc func accountManagerAccountsDidChange(_ note: Notification) {
-		applyChangeSnapshot()
+		queueApplyChangeSnapshot()
 	}
 
 	@objc func accountDidInitialize(_ note: Notification) {
-		applyChangeSnapshot()
+		queueApplyChangeSnapshot()
 	}
 	
 	@objc func accountMetadataDidChange(_ note: Notification) {
-		applyChangeSnapshot()
+		queueApplyChangeSnapshot()
 	}
 	
 	@objc func accountTagsDidChange(_ note: Notification) {
-		applyChangeSnapshot()
+		queueApplyChangeSnapshot()
 	}
 
 	@objc func outlineTagsDidChange(_ note: Notification) {
-		applyChangeSnapshot()
+		queueApplyChangeSnapshot()
 	}
 
 	@objc func accountDocumentsDidChange(_ note: Notification) {
-		applyChangeSnapshot()
+		queueApplyChangeSnapshot()
 	}
 
 	@objc func cloudKitSyncDidComplete(_ note: Notification) {
@@ -357,6 +358,14 @@ extension SidebarViewController: SidebarSearchCellDelegate {
 // MARK: Helper Functions
 
 extension SidebarViewController {
+	
+	private func queueApplyChangeSnapshot() {
+		coalescingQueue.add(self, #selector(applyQueuedChangeSnapshot))
+	}
+	
+	@objc private func applyQueuedChangeSnapshot() {
+		applyChangeSnapshot()
+	}
 	
 	private func makeDocumentContainerContextMenu(item: SidebarItem) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: item as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in

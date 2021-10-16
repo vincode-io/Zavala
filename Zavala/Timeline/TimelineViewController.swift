@@ -45,6 +45,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	private var importBarButtonItem: UIBarButtonItem?
 
 	private let dataSourceQueue = MainThreadOperationQueue()
+	private var coalescingQueue = CoalescingQueue(name: "Apply Snapshot", interval: 0.5)
 	private var applySnapshotWorkItem: DispatchWorkItem?
 
     override func viewDidLoad() {
@@ -142,11 +143,11 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	// MARK: Notifications
 	
 	@objc func accountDocumentsDidChange(_ note: Notification) {
-		applySnapshot(animated: true)
+		queueApplyChangeSnapshot()
 	}
 	
 	@objc func outlineTagsDidChange(_ note: Notification) {
-		applySnapshot(animated: true)
+		queueApplyChangeSnapshot()
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
@@ -391,6 +392,14 @@ extension TimelineViewController: UISearchResultsUpdating {
 // MARK: Helper Functions
 
 extension TimelineViewController {
+	
+	private func queueApplyChangeSnapshot() {
+		coalescingQueue.add(self, #selector(applyQueuedChangeSnapshot))
+	}
+	
+	@objc private func applyQueuedChangeSnapshot() {
+		applySnapshot(animated: true)
+	}
 	
 	private func updateUI() {
 		navigationItem.title = documentContainer?.name
