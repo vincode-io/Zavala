@@ -56,12 +56,12 @@ class AddRowIntentHandler: NSObject, ZavalaIntentHandler, AddRowIntentHandling {
 		
 		switch intent.destination {
 		case .insideAtStart:
-			outline.createRowInsideAtStart(row, afterRowContainer: rowContainer)
+			outline.createRowsInsideAtStart([row], afterRowContainer: rowContainer)
 		case .insideAtEnd:
-			outline.createRowInsideAtEnd(row, afterRowContainer: rowContainer)
+			outline.createRowsInsideAtEnd([row], afterRowContainer: rowContainer)
 		case .outside:
 			if let afterRow = rowContainer as? Row {
-				outline.createRowOutside(row, afterRow: afterRow)
+				outline.createRowsOutside([row], afterRow: afterRow)
 			} else {
 				outline.unload()
 				suspend()
@@ -70,7 +70,7 @@ class AddRowIntentHandler: NSObject, ZavalaIntentHandler, AddRowIntentHandling {
 			}
 		case .directlyAfter:
 			if let afterRow = rowContainer as? Row {
-				outline.createRowDirectlyAfter(row, afterRow: afterRow)
+				outline.createRowsDirectlyAfter([row], afterRow: afterRow)
 			} else {
 				outline.unload()
 				suspend()

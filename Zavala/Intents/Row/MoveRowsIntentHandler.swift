@@ -92,19 +92,19 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 			switch intent.destination {
 			case .insideAtStart:
 				sourceOutline.deleteRows([interOutlineMove.0])
-				outline.createRowInsideAtStart(interOutlineMove.1, afterRowContainer: rowContainer)
+				outline.createRowsInsideAtStart([interOutlineMove.1], afterRowContainer: rowContainer)
 			case .insideAtEnd:
 				sourceOutline.deleteRows([interOutlineMove.0])
-				outline.createRowInsideAtEnd(interOutlineMove.1, afterRowContainer: rowContainer)
+				outline.createRowsInsideAtEnd([interOutlineMove.1], afterRowContainer: rowContainer)
 			case .outside:
 				if let afterRow = rowContainer as? Row {
 					sourceOutline.deleteRows([interOutlineMove.0])
-					outline.createRowOutside(interOutlineMove.1, afterRow: afterRow)
+					outline.createRowsOutside([interOutlineMove.1], afterRow: afterRow)
 				}
 			case .directlyAfter:
 				if let afterRow = rowContainer as? Row {
 					sourceOutline.deleteRows([interOutlineMove.0])
-					outline.createRowDirectlyAfter(interOutlineMove.1, afterRow: afterRow)
+					outline.createRowsDirectlyAfter([interOutlineMove.1], afterRow: afterRow)
 				}
 			default:
 				outlines.forEach { $0.unload() }

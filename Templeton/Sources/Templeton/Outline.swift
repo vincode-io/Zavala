@@ -1104,127 +1104,64 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		let inserts = Array(changes.inserts ?? Set<Int>()).sorted()
 		return inserts.count > 0 ? inserts[0] : nil
 	}
-	
+
 	@discardableResult
-	public func createRowInsideAtStart(_ row: Row, afterRowContainer: RowContainer, rowStrings: RowStrings? = nil) -> Int? {
+	public func createRowsInsideAtStart(_ rows: [Row], afterRowContainer: RowContainer, rowStrings: RowStrings? = nil) -> Int? {
 		beginCloudKitBatchRequest()
 		
 		if let texts = rowStrings, let afterRow = afterRowContainer as? Row {
 			updateRowStrings(afterRow, texts)
 		}
+
+		for row in rows.reversed() {
+			afterRowContainer.insertRow(row, at: 0)
+			row.parent = afterRowContainer
+		}
 		
-		afterRowContainer.insertRow(row, at: 0)
-		row.parent = afterRowContainer
-		
-		createLinkRelationships(for: [row])
+		createLinkRelationships(for: rows)
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 			
 		guard isBeingViewed else { return nil }
 
-		var afterRowContainerShadowTableIndex: Int? = nil
-		if let afterRow = afterRowContainer as? Row {
-			afterRowContainerShadowTableIndex = afterRow.shadowTableIndex
-		}
-		
-		let rowShadowTableIndex: Int
-		if let afterRowShadowTableIndex = afterRowContainerShadowTableIndex {
-			rowShadowTableIndex = afterRowShadowTableIndex + 1
-		} else {
-			rowShadowTableIndex = 0
-		}
-		
-		var reloads = [Int]()
-		if let reload = afterRowContainerShadowTableIndex {
-			reloads.append(reload)
-		}
+		outlineElementsDidChange(rebuildShadowTable())
+		return rows.last?.shadowTableIndex
+	}
+	
+	public func createRowsInsideAtEnd(_ rows: [Row], afterRowContainer: RowContainer) {
+		beginCloudKitBatchRequest()
 
-		let inserts = [rowShadowTableIndex]
-		shadowTable?.insert(row, at: rowShadowTableIndex)
+		for row in rows {
+			afterRowContainer.appendRow(row)
+			row.parent = afterRowContainer
+		}
 		
-		resetShadowTableIndexes(startingAt: afterRowContainerShadowTableIndex ?? 0)
-		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: Set(inserts), reloads: Set(reloads))
-		outlineElementsDidChange(changes)
+		createLinkRelationships(for: rows)
+		endCloudKitBatchRequest()
+		outlineContentDidChange()
+			
+		guard isBeingViewed else { return  }
 
-		return inserts[0]
+		outlineElementsDidChange(rebuildShadowTable())
 	}
 
-	@discardableResult
-	public func createRowInsideAtEnd(_ row: Row, afterRowContainer: RowContainer, rowStrings: RowStrings? = nil) -> Int? {
+	public func createRowsDirectlyAfter(_ rows: [Row], afterRow: Row) {
 		beginCloudKitBatchRequest()
 		
-		if let texts = rowStrings, let afterRow = afterRowContainer as? Row {
-			updateRowStrings(afterRow, texts)
-		}
-		
-		afterRowContainer.appendRow(row)
-		row.parent = afterRowContainer
-		
-		createLinkRelationships(for: [row])
-		endCloudKitBatchRequest()
-		outlineContentDidChange()
-			
-		guard isBeingViewed else { return nil }
-
-		var afterRowContainerShadowTableIndex: Int? = nil
-		if let afterRow = afterRowContainer as? Row {
-			afterRowContainerShadowTableIndex = afterRow.shadowTableIndex
-		}
-		
-		let rowShadowTableIndex: Int
-		if afterRowContainer.rowCount > 0 {
-			rowShadowTableIndex = (afterRowContainer.rows[afterRowContainer.rowCount - 1].shadowTableIndex ?? -1) + 1
-		} else {
-			if let row = afterRowContainer as? Row {
-				rowShadowTableIndex = (row.shadowTableIndex ?? -1) + 1
-			} else {
-				rowShadowTableIndex = 0
+		if let afterRowParent = afterRow.parent, let afterRowChildIndex = afterRowParent.firstIndexOfRow(afterRow) {
+			for (i, row) in rows.enumerated() {
+				afterRowParent.insertRow(row, at: afterRowChildIndex + i + 1)
+				row.parent = afterRowParent
 			}
 		}
 		
-		var reloads = [Int]()
-		if let reload = afterRowContainerShadowTableIndex {
-			reloads.append(reload)
-		}
-
-		let inserts = [rowShadowTableIndex]
-		shadowTable?.insert(row, at: rowShadowTableIndex)
-		
-		resetShadowTableIndexes(startingAt: afterRowContainerShadowTableIndex ?? 0)
-		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: Set(inserts), reloads: Set(reloads))
-		outlineElementsDidChange(changes)
-
-		return inserts[0]
-	}
-
-	@discardableResult
-	public func createRowDirectlyAfter(_ row: Row, afterRow: Row, rowStrings: RowStrings? = nil) -> Int? {
-		beginCloudKitBatchRequest()
-		
-		if let texts = rowStrings {
-			updateRowStrings(row, texts)
-		}
-		
-		if let afterRowParent = afterRow.parent, let afterRowChildIndex = afterRowParent.firstIndexOfRow(afterRow) {
-			afterRowParent.insertRow(row, at: afterRowChildIndex + 1)
-			row.parent = afterRowParent
-		}
-		
-		createLinkRelationships(for: [row])
+		createLinkRelationships(for: rows)
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 			
-		guard isBeingViewed else { return nil }
+		guard isBeingViewed else { return }
 
-		let rowShadowTableIndex = (afterRow.shadowTableIndex ?? 0) + 1
-		let inserts = [rowShadowTableIndex]
-		shadowTable?.insert(row, at: rowShadowTableIndex)
-		
-		resetShadowTableIndexes(startingAt: afterRow.shadowTableIndex ?? 0)
-		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: Set(inserts))
-		outlineElementsDidChange(changes)
-
-		return inserts[0]
+		outlineElementsDidChange(rebuildShadowTable())
 	}
 
 	public func isCreateRowOutsideUnavailable(rows: [Row]) -> Bool {
@@ -1232,7 +1169,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	@discardableResult
-	public func createRowOutside(_ row: Row, afterRow: Row, rowStrings: RowStrings? = nil) -> Int? {
+	public func createRowsOutside(_ rows: [Row], afterRow: Row, rowStrings: RowStrings? = nil) -> Int? {
 		beginCloudKitBatchRequest()
 		
 		if let texts = rowStrings {
@@ -1245,17 +1182,19 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			return nil
 		}
 		
-		afterParentRowParent.insertRow(row, at: index + 1)
-		row.parent = afterParentRowParent
+		for (i, row) in rows.enumerated() {
+			afterParentRowParent.insertRow(row, at: index + i + 1)
+			row.parent = afterParentRowParent
+		}
 
-		createLinkRelationships(for: [row])
+		createLinkRelationships(for: rows)
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 
 		guard isBeingViewed else { return nil }
 
 		outlineElementsDidChange(rebuildShadowTable())
-		return row.shadowTableIndex
+		return rows.last?.shadowTableIndex
 	}
 
 	func duplicateRows(_ rows: [Row]) -> [Row] {
