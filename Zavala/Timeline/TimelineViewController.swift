@@ -147,7 +147,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	}
 	
 	@objc func outlineTagsDidChange(_ note: Notification) {
-		queueApplyChangeSnapshot()
+		applySnapshot(animated: true)
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
