@@ -448,9 +448,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										modifierFlags: [.command])
 
 	// Currently unused because it automatically adds Services menus to my other context menus
-	let sendCopyCommand = UICommand(title: L10n.sendCopy,
-									action: #selector(sendCopy(_:)),
-									propertyList: UICommandTagShare)
+	let shareCommand = UICommand(title: L10n.share,
+								 action: #selector(share(_:)),
+								 propertyList: UICommandTagShare)
 
 	let collaborateCommand = UICommand(title: L10n.collaborateEllipsis, action: #selector(collaborateCommand(_:)))
 
@@ -824,8 +824,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.printList()
 	}
 
-	@objc func sendCopy(_ sender: Any?) {
-		mainCoordinator?.sendCopy()
+	@objc func share(_ sender: Any?) {
+		mainCoordinator?.share()
 	}
 
 	@objc func collaborateCommand(_ sender: Any?) {

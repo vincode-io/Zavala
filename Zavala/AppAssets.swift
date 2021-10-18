@@ -189,7 +189,7 @@ struct AppAssets {
 		return UIImage(systemName: "gobackward")!
 	}()
 
-	static var sendCopy: UIImage = {
+	static var share: UIImage = {
 		return UIImage(systemName: "square.and.arrow.up")!
 	}()
 

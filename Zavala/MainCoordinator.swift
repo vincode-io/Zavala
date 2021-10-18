@@ -277,8 +277,8 @@ extension MainCoordinator {
 		editorViewController?.collaborate()
 	}
 	
-	func sendCopy() {
-		editorViewController?.sendCopy()
+	func share() {
+		editorViewController?.share()
 	}
 	
 	func beginInDocumentSearch() {
@@ -435,8 +435,8 @@ extension NSToolbarItem.Identifier {
 	static let moveDown = NSToolbarItem.Identifier("io.vincode.Zavala.moveDown")
 	static let printDoc = NSToolbarItem.Identifier("io.vincode.Zavala.printDoc")
 	static let printList = NSToolbarItem.Identifier("io.vincode.Zavala.printList")
-	static let collaborate = NSToolbarItem.Identifier("io.vincode.Zavala.collaborate")
-	static let sendCopy = NSToolbarItem.Identifier("io.vincode.Zavala.sendCopy")
+	static let collaborate = NSToolbarItem.Identifier("io.vincode.Zavala.share")
+	static let share = NSToolbarItem.Identifier("io.vincode.Zavala.sendCopy")
 	static let getInfo = NSToolbarItem.Identifier("io.vincode.Zavala.getInfo")
 }
 

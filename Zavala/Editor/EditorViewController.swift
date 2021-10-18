@@ -947,7 +947,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		currentTextView?.toggleItalics(self)
 	}
 	
-	@objc func sendCopy(_ sender: Any? = nil) {
+	@objc func share(_ sender: Any? = nil) {
 		guard let outline = outline else { return }
 		
 		var activities = [UIActivity]()
@@ -1636,10 +1636,10 @@ extension EditorViewController {
 			shareActions.append(collaborateAction)
 		}
 
-		let sendCopyAction = UIAction(title: L10n.sendCopyEllipsis, image: AppAssets.sendCopy) { [weak self] _ in
-			self?.sendCopy(self?.ellipsisBarButtonItem)
+		let shareAction = UIAction(title: L10n.shareEllipsis, image: AppAssets.share) { [weak self] _ in
+			self?.share(self?.ellipsisBarButtonItem)
 		}
-		shareActions.append(sendCopyAction)
+		shareActions.append(shareAction)
 
 		let printDocAction = UIAction(title: L10n.printDocEllipsis, image: AppAssets.printDoc) { [weak self] _ in
 			self?.printDoc()

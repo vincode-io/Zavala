@@ -556,7 +556,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.italic,
 			.flexibleSpace,
 			.collaborate,
-			.sendCopy,
+			.share,
 			.space,
 			.toggleOutlineFilter,
 		]
@@ -584,7 +584,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.printDoc,
 			.printList,
 			.collaborate,
-			.sendCopy,
+			.share,
 			.getInfo,
 			.space,
 			.flexibleSpace
@@ -847,10 +847,10 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.action = #selector(collaborate(_:))
 			item.target = self
 			toolbarItem = item
-		case .sendCopy:
-			let item = NSSharingServicePickerToolbarItem(itemIdentifier: .sendCopy)
-			item.label = L10n.sendCopy
-			item.toolTip = L10n.sendCopy
+		case .share:
+			let item = NSSharingServicePickerToolbarItem(itemIdentifier: .share)
+			item.label = L10n.share
+			item.toolTip = L10n.share
 			item.activityItemsConfiguration = self
 			toolbarItem = item
 		case .getInfo:
