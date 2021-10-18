@@ -117,6 +117,7 @@
 		5191850D271387C300B7E177 /* RemoveOutlineIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850C271387C300B7E177 /* RemoveOutlineIntentHandler.swift */; };
 		5191850F271390F100B7E177 /* IntentEntityID+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850E271390F100B7E177 /* IntentEntityID+.swift */; };
 		51918515271664FB00B7E177 /* AddRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51918514271664FB00B7E177 /* AddRowsIntentHandler.swift */; };
+		51922210271E27FD000CDC1F /* EditorCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5192220F271E27FD000CDC1F /* EditorCollectionView.swift */; };
 		5193C8A625FD757900E63F94 /* OpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */; };
 		519965DC2624EEE500D8468B /* RSAppMovementMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */; };
 		519A2324260A9B900056051E /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
@@ -346,6 +347,7 @@
 		5191850C271387C300B7E177 /* RemoveOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveOutlineIntentHandler.swift; sourceTree = "<group>"; };
 		5191850E271390F100B7E177 /* IntentEntityID+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentEntityID+.swift"; sourceTree = "<group>"; };
 		51918514271664FB00B7E177 /* AddRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRowsIntentHandler.swift; sourceTree = "<group>"; };
+		5192220F271E27FD000CDC1F /* EditorCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCollectionView.swift; sourceTree = "<group>"; };
 		5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuicklyViewController.swift; sourceTree = "<group>"; };
 		519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSAppMovementMonitor.swift; sourceTree = "<group>"; };
 		519A2323260A9B900056051E /* OutlineFontField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontField.swift; sourceTree = "<group>"; };
@@ -810,11 +812,12 @@
 		51E14F2A2560729900320EDB /* Editor */ = {
 			isa = PBXGroup;
 			children = (
+				5192220F271E27FD000CDC1F /* EditorCollectionView.swift */,
+				51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */,
+				512D375125F06733000FA597 /* EditorSearchBar.swift */,
 				51C4C45A255ACA1B004E0206 /* EditorViewController.swift */,
 				51D28D2B257730DB0039DDFC /* EditorViewController+Drag.swift */,
 				51D28D31257731DC0039DDFC /* EditorViewController+Drop.swift */,
-				51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */,
-				512D375125F06733000FA597 /* EditorSearchBar.swift */,
 				51B9D99526140AD100A66859 /* Activities */,
 				511B29F526018F4A00C04239 /* Backlink */,
 				514F220B25C4CC42004E02CD /* Tag */,
@@ -1161,6 +1164,7 @@
 				517342F225EC2C690012EB20 /* UIActivityViewController+.swift in Sources */,
 				51AEEC8F2703EB6700354C59 /* GetCurrentOutlineIntentHandler.swift in Sources */,
 				51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */,
+				51922210271E27FD000CDC1F /* EditorCollectionView.swift in Sources */,
 				5113B092260E45B400DBD11B /* SettingsFontViewController.swift in Sources */,
 				51DEE81026FB8D89006DAA56 /* ColorPaletteTableViewController.swift in Sources */,
 				5113B095260E638400DBD11B /* SettingsFontConfigViewController.swift in Sources */,

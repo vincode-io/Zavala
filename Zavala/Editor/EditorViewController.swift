@@ -36,7 +36,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@IBOutlet weak var searchBar: EditorSearchBar!
 	@IBOutlet weak var searchBarHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var collectionViewTopConstraint: NSLayoutConstraint!
-	@IBOutlet weak var collectionView: UICollectionView!
+	@IBOutlet weak var collectionView: EditorCollectionView!
 	
 	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
 
@@ -2715,7 +2715,7 @@ extension EditorViewController {
 		if textView is EditorTextRowNoteTextView {
 			convertedRect.size.height = convertedRect.size.height + 10
 		}
-		collectionView.scrollRectToVisible(convertedRect, animated: true)
+		collectionView.scrollRectToVisibleBypass(convertedRect, animated: true)
 	}
 	
 	private func updateSpotlightIndex() {
@@ -2795,7 +2795,7 @@ extension EditorViewController {
 		adjustedCollectionViewFrame = view.convert(adjustedCollectionViewFrame, to: view.window)
 		
 		if !adjustedCollectionViewFrame.contains(cellFrame) {
-			collectionView.scrollRectToVisible(cellFrame, animated: true)
+			collectionView.scrollRectToVisibleBypass(cellFrame, animated: true)
 		}
 	}
 	
