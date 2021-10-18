@@ -15,7 +15,7 @@ class RemoveRowsIntentHandler: NSObject, ZavalaIntentHandler, RemoveRowsIntentHa
 		
 		guard let intentRowEntityIDs = intent.rows else {
 			suspend()
-			completion(.init(code: .failure, userActivity: nil))
+			completion(.init(code: .success, userActivity: nil))
 			return
 		}
 		

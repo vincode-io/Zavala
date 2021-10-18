@@ -23,7 +23,7 @@ class AddRowsIntentHandler: NSObject, ZavalaIntentHandler, AddRowsIntentHandling
 		
 		guard let entityID = intent.outlineOrRow?.toEntityID(), let outline = AccountManager.shared.findDocument(entityID)?.outline else {
 			suspend()
-			completion(.init(code: .failure, userActivity: nil))
+			completion(.init(code: .success, userActivity: nil))
 			return
 		}
 		
@@ -32,7 +32,7 @@ class AddRowsIntentHandler: NSObject, ZavalaIntentHandler, AddRowsIntentHandling
 		guard let rowContainer = outline.findRowContainer(entityID: entityID), let topics = intent.topics else {
 			outline.unload()
 			suspend()
-			completion(.init(code: .failure, userActivity: nil))
+			completion(.init(code: .success, userActivity: nil))
 			return
 		}
 

@@ -25,7 +25,7 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 			  let entityID = intent.outlineOrRow?.toEntityID(),
 			  let outline = AccountManager.shared.findDocument(entityID)?.outline else {
 				  suspend()
-				  completion(.init(code: .failure, userActivity: nil))
+				  completion(.init(code: .success, userActivity: nil))
 				  return
 			  }
 		
@@ -36,7 +36,7 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 		guard let rowContainer = outline.findRowContainer(entityID: entityID) else {
 			outlines.forEach { $0.unload() }
 			suspend()
-			completion(.init(code: .failure, userActivity: nil))
+			completion(.init(code: .success, userActivity: nil))
 			return
 		}
 		
