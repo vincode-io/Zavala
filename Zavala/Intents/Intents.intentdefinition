@@ -2999,7 +2999,7 @@
 			<integer>16</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>outlineOrRow,search,exactSearchMatch,completionState,expandedState,excludedRows,startDepth,endDepth</key>
+				<key>outlineOrRow,search,regularExpression,completionState,expandedState,excludedRows,startDepth,endDepth</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
@@ -3096,13 +3096,15 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Exact Search Match</string>
+					<string>Regular Expression</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>fIgSiS</string>
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>3</integer>
 					<key>INIntentParameterMetadata</key>
 					<dict>
+						<key>INIntentParameterMetadataDefaultValue</key>
+						<true/>
 						<key>INIntentParameterMetadataFalseDisplayName</key>
 						<string>False</string>
 						<key>INIntentParameterMetadataFalseDisplayNameID</key>
@@ -3113,7 +3115,7 @@
 						<string>veyMYY</string>
 					</dict>
 					<key>INIntentParameterName</key>
-					<string>exactSearchMatch</string>
+					<string>regularExpression</string>
 					<key>INIntentParameterPromptDialogs</key>
 					<array>
 						<dict>

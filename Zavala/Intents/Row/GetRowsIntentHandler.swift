@@ -28,11 +28,11 @@ class GetRowsIntentHandler: NSObject, ZavalaIntentHandler, GetRowsIntentHandling
 			return
 		}
 		
-		let isExactMatch = intent.exactSearchMatch == 1
+		let regularExpression = intent.regularExpression == 1
 		let excludedRowIDs = intent.excludedRows?.compactMap { $0.toEntityID() }
 		
 		let visitor = GetRowsVisitor(searchText: intent.search,
-									 isExactMatch: isExactMatch,
+									 regularExpression: regularExpression,
 									 startDepth: intent.startDepth?.intValue ?? 0,
 									 endDepth: intent.endDepth?.intValue ?? 200,
 									 completionState: intent.completionState,
@@ -55,7 +55,7 @@ class GetRowsVisitor {
 	var searchText: String? = nil
 	var searchRegEx: NSRegularExpression? = nil
 	let isTextSearch: Bool
-	let isExactMatch: Bool
+	let regularExpression: Bool
 	let startDepth: Int
 	let endDepth: Int
 	let completionState: IntentRowCompletionState
@@ -63,13 +63,13 @@ class GetRowsVisitor {
 	let excludedRowIDs: [EntityID]?
 	var results = [Row]()
 	
-	init(searchText: String?, isExactMatch: Bool, startDepth: Int, endDepth: Int, completionState: IntentRowCompletionState, expandedState: IntentRowExpandedState, excludedRowIDs: [EntityID]?) {
-		if isExactMatch {
-			self.searchText = searchText
-		} else {
+	init(searchText: String?, regularExpression: Bool, startDepth: Int, endDepth: Int, completionState: IntentRowCompletionState, expandedState: IntentRowExpandedState, excludedRowIDs: [EntityID]?) {
+		if regularExpression {
 			self.searchRegEx = searchText?.searchRegEx()
+		} else {
+			self.searchText = searchText
 		}
-		self.isExactMatch = isExactMatch
+		self.regularExpression = regularExpression
 		self.startDepth = startDepth
 		self.endDepth = endDepth
 		self.isTextSearch = self.searchText != nil || self.searchRegEx != nil
@@ -92,14 +92,14 @@ class GetRowsVisitor {
 			}
 		} else {
 			// Match against empty rows on an exact match without a valid search
-			if isExactMatch {
+			if regularExpression {
+				textPassed = true
+			} else {
 				if (visited.topic?.string.isEmpty ?? true) || visited.note?.string.isEmpty ?? true {
 					textPassed = true
 				} else {
 					textPassed = false
 				}
-			} else {
-				textPassed = true
 			}
 		}
 
