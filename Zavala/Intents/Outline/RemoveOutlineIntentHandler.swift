@@ -15,14 +15,14 @@ class RemoveOutlineIntentHandler: NSObject, ZavalaIntentHandler, RemoveOutlineIn
 
 		guard let outline = findOutline(intent.outlineEntityID) else {
 			suspend()
-			completion(RemoveOutlineIntentResponse(code: .failure, userActivity: nil))
+			completion(.init(code: .success, userActivity: nil))
 			return
 		}
 		
 		outline.account?.deleteDocument(.outline(outline))
 		
 		suspend()
-		completion(RemoveOutlineIntentResponse(code: .success, userActivity: nil))
+		completion(.init(code: .success, userActivity: nil))
 	}
 	
 }

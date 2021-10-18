@@ -15,7 +15,7 @@ class GetImagesForOutlineIntentHandler: NSObject, ZavalaIntentHandler, GetImages
 
 		guard let outline = findOutline(intent.outlineEntityID) else {
 			suspend()
-			completion(GetImagesForOutlineIntentResponse(code: .failure, userActivity: nil))
+			completion(.init(code: .success, userActivity: nil))
 			return
 		}
 		
@@ -25,7 +25,7 @@ class GetImagesForOutlineIntentHandler: NSObject, ZavalaIntentHandler, GetImages
 		
 		guard let imageGroups = outline.images?.values, !imageGroups.isEmpty else {
 			suspend()
-			completion(GetImagesForOutlineIntentResponse(code: .success, userActivity: nil))
+			completion(.init(code: .success, userActivity: nil))
 			return
 		}
 

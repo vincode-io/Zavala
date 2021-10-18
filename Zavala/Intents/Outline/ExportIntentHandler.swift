@@ -24,7 +24,7 @@ class ExportIntentHandler: NSObject, ZavalaIntentHandler, ExportIntentHandling {
 		
 		guard let outline = findOutline(intent.outlineEntityID) else {
 			suspend()
-			completion(ExportIntentResponse(code: .failure, userActivity: nil))
+			completion(.init(code: .success, userActivity: nil))
 			return
 		}
 		

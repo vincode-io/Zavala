@@ -23,7 +23,7 @@ class RemoveOutlineTagIntentHandler: NSObject, ZavalaIntentHandler, RemoveOutlin
 		
 		guard let outline = findOutline(intent.outlineEntityID), let tagName = intent.tagName, let account = outline.account else {
 			suspend()
-			completion(RemoveOutlineTagIntentResponse(code: .failure, userActivity: nil))
+			completion(.init(code: .success, userActivity: nil))
 			return
 		}
 		
@@ -34,7 +34,7 @@ class RemoveOutlineTagIntentHandler: NSObject, ZavalaIntentHandler, RemoveOutlin
 		
 		suspend()
 		
-		completion(RemoveOutlineTagIntentResponse(code: .success, userActivity: nil))
+		completion(.init(code: .success, userActivity: nil))
 	}
 
 }
