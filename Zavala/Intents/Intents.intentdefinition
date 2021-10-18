@@ -2748,15 +2748,15 @@
 			<key>INIntentInput</key>
 			<string>outlineOrRow</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>9</integer>
+			<integer>11</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>outlineOrRow,destination,rowTopic,rowNote</key>
+				<key>outlineOrRow,destination,topics</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Add${rowTopic}to${outlineOrRow}at${destination}</string>
+					<string>Add${topics}to${outlineOrRow}at${destination}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>y8yx3H</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -2764,7 +2764,7 @@
 				</dict>
 			</dict>
 			<key>INIntentName</key>
-			<string>AddRow</string>
+			<string>AddRows</string>
 			<key>INIntentParameters</key>
 			<array>
 				<dict>
@@ -2878,9 +2878,9 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Row Topic</string>
+					<string>Topics</string>
 					<key>INIntentParameterDisplayNameID</key>
-					<string>P9PhD4</string>
+					<string>FkTsgv</string>
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>3</integer>
 					<key>INIntentParameterMetadata</key>
@@ -2888,10 +2888,10 @@
 						<key>INIntentParameterMetadataCapitalization</key>
 						<string>Sentences</string>
 						<key>INIntentParameterMetadataDefaultValueID</key>
-						<string>2fBgc5</string>
+						<string>k5FbIH</string>
 					</dict>
 					<key>INIntentParameterName</key>
-					<string>rowTopic</string>
+					<string>topics</string>
 					<key>INIntentParameterPromptDialogs</key>
 					<array>
 						<dict>
@@ -2904,63 +2904,32 @@
 							<key>INIntentParameterPromptDialogCustom</key>
 							<true/>
 							<key>INIntentParameterPromptDialogFormatString</key>
-							<string>What is the ${rowTopic}</string>
+							<string>What are the${topics}you would like add?</string>
 							<key>INIntentParameterPromptDialogFormatStringID</key>
-							<string>Tyg9Dx</string>
+							<string>OhPFAC</string>
 							<key>INIntentParameterPromptDialogType</key>
 							<string>Primary</string>
 						</dict>
 					</array>
-					<key>INIntentParameterSupportsResolution</key>
+					<key>INIntentParameterSupportsMultipleValues</key>
 					<true/>
 					<key>INIntentParameterTag</key>
-					<integer>8</integer>
+					<integer>11</integer>
 					<key>INIntentParameterType</key>
 					<string>String</string>
-				</dict>
-				<dict>
-					<key>INIntentParameterConfigurable</key>
-					<true/>
-					<key>INIntentParameterDisplayName</key>
-					<string>Row Note</string>
-					<key>INIntentParameterDisplayNameID</key>
-					<string>2ZfxpE</string>
-					<key>INIntentParameterDisplayPriority</key>
-					<integer>4</integer>
-					<key>INIntentParameterMetadata</key>
-					<dict>
-						<key>INIntentParameterMetadataCapitalization</key>
-						<string>Sentences</string>
-						<key>INIntentParameterMetadataDefaultValueID</key>
-						<string>QGrSHI</string>
-					</dict>
-					<key>INIntentParameterName</key>
-					<string>rowNote</string>
-					<key>INIntentParameterPromptDialogs</key>
+					<key>INIntentParameterUnsupportedReasons</key>
 					<array>
 						<dict>
-							<key>INIntentParameterPromptDialogCustom</key>
+							<key>INIntentParameterUnsupportedReasonCode</key>
+							<string>required</string>
+							<key>INIntentParameterUnsupportedReasonCustom</key>
 							<true/>
-							<key>INIntentParameterPromptDialogType</key>
-							<string>Configuration</string>
-						</dict>
-						<dict>
-							<key>INIntentParameterPromptDialogCustom</key>
-							<true/>
-							<key>INIntentParameterPromptDialogFormatString</key>
-							<string>What is the${rowNote}</string>
-							<key>INIntentParameterPromptDialogFormatStringID</key>
-							<string>ccciH7</string>
-							<key>INIntentParameterPromptDialogType</key>
-							<string>Primary</string>
+							<key>INIntentParameterUnsupportedReasonFormatString</key>
+							<string>At least one${topics}is required.</string>
+							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
+							<string>g9RWat</string>
 						</dict>
 					</array>
-					<key>INIntentParameterSupportsResolution</key>
-					<true/>
-					<key>INIntentParameterTag</key>
-					<integer>9</integer>
-					<key>INIntentParameterType</key>
-					<string>String</string>
 				</dict>
 			</array>
 			<key>INIntentResponse</key>
@@ -2979,33 +2948,35 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>6</integer>
+				<integer>7</integer>
 				<key>INIntentResponseOutput</key>
-				<string>row</string>
+				<string>rows</string>
 				<key>INIntentResponseParameters</key>
 				<array>
 					<dict>
 						<key>INIntentResponseParameterDisplayName</key>
-						<string>Row</string>
+						<string>Rows</string>
 						<key>INIntentResponseParameterDisplayNameID</key>
 						<string>rF8wZV</string>
 						<key>INIntentResponseParameterDisplayPriority</key>
 						<integer>1</integer>
 						<key>INIntentResponseParameterName</key>
-						<string>row</string>
+						<string>rows</string>
 						<key>INIntentResponseParameterObjectType</key>
 						<string>EntityID</string>
 						<key>INIntentResponseParameterObjectTypeNamespace</key>
 						<string>LEx6zX</string>
+						<key>INIntentResponseParameterSupportsMultipleValues</key>
+						<true/>
 						<key>INIntentResponseParameterTag</key>
-						<integer>6</integer>
+						<integer>7</integer>
 						<key>INIntentResponseParameterType</key>
 						<string>Object</string>
 					</dict>
 				</array>
 			</dict>
 			<key>INIntentTitle</key>
-			<string>Add Row</string>
+			<string>Add Rows</string>
 			<key>INIntentTitleID</key>
 			<string>5NYzSB</string>
 			<key>INIntentType</key>

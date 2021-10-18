@@ -545,8 +545,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return AddOutlineIntentHandler()
 		case is AddOutlineTagIntent:
 			return AddOutlineTagIntentHandler()
-		case is AddRowIntent:
-			return AddRowIntentHandler()
+		case is AddRowsIntent:
+			return AddRowsIntentHandler()
 		case is ExportIntent:
 			return ExportIntentHandler()
 		case is GetCurrentOutlineIntent:
