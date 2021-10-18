@@ -8,13 +8,6 @@
 import Foundation
 import os.log
 
-public enum AccountManagerError: LocalizedError {
-	case readArchiveError
-	public var errorDescription: String? {
-		return L10n.checkArchiveError
-	}
-}
-
 public extension Notification.Name {
 	static let AccountManagerAccountsDidChange = Notification.Name(rawValue: "AccountManagerAccountsDidChange")
 }

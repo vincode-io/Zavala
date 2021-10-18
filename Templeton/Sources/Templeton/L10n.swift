@@ -34,8 +34,6 @@ internal enum L10n {
   internal static let addTag = L10n.tr("Localizable", "Add_Tag")
   /// All
   internal static let all = L10n.tr("Localizable", "All")
-  /// This doesn't appear to be a Zavala archive.  We're unable to restore from this file.
-  internal static let checkArchiveError = L10n.tr("Localizable", "Check_Archive_Error")
   /// Collapse
   internal static let collapse = L10n.tr("Localizable", "Collapse")
   /// Collapse All
