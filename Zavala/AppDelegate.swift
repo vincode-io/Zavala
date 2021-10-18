@@ -452,7 +452,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									action: #selector(sendCopy(_:)),
 									propertyList: UICommandTagShare)
 
-	let shareCommand = UICommand(title: L10n.shareEllipsis, action: #selector(shareCommand(_:)))
+	let collaborateCommand = UICommand(title: L10n.collaborateEllipsis, action: #selector(collaborateCommand(_:)))
 
 	let outlineGetInfoCommand = UIKeyCommand(title: L10n.getInfo,
 											 action: #selector(outlineGetInfoCommand(_:)),
@@ -828,8 +828,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.sendCopy()
 	}
 
-	@objc func shareCommand(_ sender: Any?) {
-		mainCoordinator?.share()
+	@objc func collaborateCommand(_ sender: Any?) {
+		mainCoordinator?.collaborate()
 	}
 
 	@objc func beginDocumentSearchCommand(_ sender: Any?) {
@@ -1010,8 +1010,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isDeleteCompletedRowsUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(shareCommand(_:)):
-			if mainCoordinator?.isShareUnavailable ?? true {
+		case #selector(collaborateCommand(_:)):
+			if mainCoordinator?.isCollaborateUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(beginInDocumentSearchCommand(_:)),
@@ -1047,8 +1047,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(appMenu, afterMenu: .about)
 		
 		// File Menu
-		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
-		builder.insertChild(syncMenu, atStartOfMenu: .file)
+		let cloudKitMenu = UIMenu(title: "", options: .displayInline, children: [collaborateCommand, syncCommand])
+		builder.insertChild(cloudKitMenu, atStartOfMenu: .file)
 
 		let exportMenu = UIMenu(title: L10n.export, children: [exportPDFDocCommand, exportPDFListCommand, exportMarkdownDocCommand, exportMarkdownListCommand, exportOPMLCommand])
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMenu])
@@ -1057,8 +1057,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let newMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newWindowCommand, showOpenQuicklyCommand])
 		builder.insertChild(newMenu, atStartOfMenu: .file)
 
-		let shareMenu = UIMenu(title: "", options: .displayInline, children: [shareCommand, printDocCommand, printListCommand])
-		builder.insertChild(shareMenu, atEndOfMenu: .file)
+		let printMenu = UIMenu(title: "", options: .displayInline, children: [printDocCommand, printListCommand])
+		builder.insertChild(printMenu, atEndOfMenu: .file)
 
 		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: [outlineGetInfoCommand])
 		builder.insertChild(getInfoMenu, atEndOfMenu: .file)

@@ -88,10 +88,10 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
-	public var isShared: Bool {
+	public var isCollaborating: Bool {
 		switch self {
 		case .outline(let outline):
-			return outline.isShared
+			return outline.iCollaborating
 		}
 	}
 	

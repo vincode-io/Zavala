@@ -46,12 +46,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return outline == nil
 	}
 	
-	var isShareUnavailable: Bool {
+	var isCollaborateUnavailable: Bool {
 		return outline == nil || !outline!.isCloudKit
 	}
 	
-	var isDocumentShared: Bool {
-		return outline?.isShared ?? false
+	var isDocumentCollaborating: Bool {
+		return outline?.iCollaborating ?? false
 	}
 
 	var isOutlineFiltered: Bool {
@@ -977,7 +977,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		present(controller, animated: true)
 	}
 	
-	@objc func share(_ sender: Any? = nil) {
+	@objc func collaborate(_ sender: Any? = nil) {
 		guard let outline = outline else { return }
 		
 		AccountManager.shared.cloudKitAccount?.prepareCloudSharingController(document: .outline(outline)) { result in
@@ -1629,11 +1629,11 @@ extension EditorViewController {
 	private func buildEllipsisMenu() -> UIMenu {
 		var shareActions = [UIAction]()
 
-		if !isShareUnavailable {
-			let shareAction = UIAction(title: L10n.shareEllipsis, image: AppAssets.statelessShare) { [weak self] _ in
-				self?.share(self?.ellipsisBarButtonItem)
+		if !isCollaborateUnavailable {
+			let collaborateAction = UIAction(title: L10n.collaborateEllipsis, image: AppAssets.statelessCollaborate) { [weak self] _ in
+				self?.collaborate(self?.ellipsisBarButtonItem)
 			}
-			shareActions.append(shareAction)
+			shareActions.append(collaborateAction)
 		}
 
 		let sendCopyAction = UIAction(title: L10n.sendCopyEllipsis, image: AppAssets.sendCopy) { [weak self] _ in

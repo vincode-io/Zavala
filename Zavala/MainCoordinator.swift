@@ -24,8 +24,8 @@ extension MainCoordinator {
 		return editorViewController?.isOutlineFunctionsUnavailable ?? true
 	}
 	
-	var isShareUnavailable: Bool {
-		return editorViewController?.isShareUnavailable ?? true
+	var isCollaborateUnavailable: Bool {
+		return editorViewController?.isCollaborateUnavailable ?? true
 	}
 	
 	var isOutlineFiltered: Bool {
@@ -273,8 +273,8 @@ extension MainCoordinator {
 		editorViewController?.printList()
 	}
 	
-	func share() {
-		editorViewController?.share()
+	func collaborate() {
+		editorViewController?.collaborate()
 	}
 	
 	func sendCopy() {
@@ -435,7 +435,7 @@ extension NSToolbarItem.Identifier {
 	static let moveDown = NSToolbarItem.Identifier("io.vincode.Zavala.moveDown")
 	static let printDoc = NSToolbarItem.Identifier("io.vincode.Zavala.printDoc")
 	static let printList = NSToolbarItem.Identifier("io.vincode.Zavala.printList")
-	static let share = NSToolbarItem.Identifier("io.vincode.Zavala.share")
+	static let collaborate = NSToolbarItem.Identifier("io.vincode.Zavala.collaborate")
 	static let sendCopy = NSToolbarItem.Identifier("io.vincode.Zavala.sendCopy")
 	static let getInfo = NSToolbarItem.Identifier("io.vincode.Zavala.getInfo")
 }

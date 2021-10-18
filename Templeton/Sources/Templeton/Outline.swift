@@ -161,7 +161,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return (title == nil || title?.isEmpty ?? true) && (rowOrder == nil || rowOrder?.isEmpty ?? true)
 	}
 	
-	public var isShared: Bool {
+	public var iCollaborating: Bool {
 		return cloudKitShareRecordName != nil
 	}
 	

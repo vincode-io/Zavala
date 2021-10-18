@@ -44,6 +44,10 @@ internal enum L10n {
   internal static let bugTracker = L10n.tr("Localizable", "Bug_Tracker")
   /// Cancel
   internal static let cancel = L10n.tr("Localizable", "Cancel")
+  /// Collaborate
+  internal static let collaborate = L10n.tr("Localizable", "Collaborate")
+  /// Collaborate…
+  internal static let collaborateEllipsis = L10n.tr("Localizable", "Collaborate_Ellipsis")
   /// Collapse
   internal static let collapse = L10n.tr("Localizable", "Collapse")
   /// Collapse All
@@ -258,10 +262,6 @@ internal enum L10n {
   internal static let sendCopy = L10n.tr("Localizable", "Send_Copy")
   /// Send a Copy…
   internal static let sendCopyEllipsis = L10n.tr("Localizable", "Send_Copy_Ellipsis")
-  /// Share
-  internal static let share = L10n.tr("Localizable", "Share")
-  /// Share…
-  internal static let shareEllipsis = L10n.tr("Localizable", "Share_Ellipsis")
   /// Show Completed
   internal static let showCompleted = L10n.tr("Localizable", "Show_Completed")
   /// Show Notes

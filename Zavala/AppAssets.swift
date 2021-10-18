@@ -37,6 +37,14 @@ struct AppAssets {
 		return UIImage(systemName: "circle.fill")!.applyingSymbolConfiguration(.init(pointSize: 4, weight: .heavy))!
 	}()
 
+	static var collaborate: UIImage = {
+		return UIImage(systemName: "person.crop.circle.badge.plus")!
+	}()
+
+	static var collaborating: UIImage = {
+		return UIImage(systemName: "person.crop.circle.badge.checkmark")!
+	}()
+
 	static var collapseAll: UIImage = {
 		return UIImage(systemName: "arrow.down.right.and.arrow.up.left")!
 	}()
@@ -185,15 +193,7 @@ struct AppAssets {
 		return UIImage(systemName: "square.and.arrow.up")!
 	}()
 
-	static var share: UIImage = {
-		return UIImage(systemName: "person.crop.circle.badge.plus")!
-	}()
-
-	static var shared: UIImage = {
-		return UIImage(systemName: "person.crop.circle.badge.checkmark")!
-	}()
-
-	static var statelessShare: UIImage = {
+	static var statelessCollaborate: UIImage = {
 		return UIImage(systemName: "person.crop.circle")!
 	}()
 

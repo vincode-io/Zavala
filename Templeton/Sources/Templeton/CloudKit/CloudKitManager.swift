@@ -184,7 +184,7 @@ public class CloudKitManager {
 		}
 		
 		let zone = findZone(zoneID: zoneID)
-		if document.isShared {
+		if document.isCollaborating {
 			zone.prepareSharedCloudSharingController(document: document, completion: completion)
 		} else {
 			zone.prepareNewCloudSharingController(document: document, completion: completion)

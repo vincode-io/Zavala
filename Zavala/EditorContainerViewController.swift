@@ -176,8 +176,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		printList()
 	}
 
-	@objc func share(_ sender: Any?) {
-		share()
+	@objc func collaborate(_ sender: Any?) {
+		collaborate()
 	}
 
 	@objc func outlineGetInfo(_ sender: Any?) {
@@ -228,7 +228,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.boldface,
 			.italic,
 			.space,
-			.share,
+			.collaborate,
 			.sendCopy,
 			.space,
 			.toggleOutlineFilter,
@@ -253,7 +253,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.moveDown,
 			.printDoc,
 			.printList,
-			.share,
+			.collaborate,
 			.sendCopy,
 			.getInfo,
 			.space,
@@ -486,23 +486,23 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.action = #selector(printList(_:))
 			item.target = self
 			toolbarItem = item
-		case .share:
+		case .collaborate:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
-				if self?.editorViewController?.isDocumentShared ?? false {
-					item.image = AppAssets.shared.symbolSizedForCatalyst()
-				} else if self?.editorViewController?.isShareUnavailable ?? true {
-					item.image = AppAssets.statelessShare.symbolSizedForCatalyst()
+				if self?.editorViewController?.isDocumentCollaborating ?? false {
+					item.image = AppAssets.collaborating.symbolSizedForCatalyst()
+				} else if self?.editorViewController?.isCollaborateUnavailable ?? true {
+					item.image = AppAssets.statelessCollaborate.symbolSizedForCatalyst()
 				} else {
-					item.image = AppAssets.share.symbolSizedForCatalyst()
+					item.image = AppAssets.collaborate.symbolSizedForCatalyst()
 				}
-				return self?.editorViewController?.isShareUnavailable ?? true
+				return self?.editorViewController?.isCollaborateUnavailable ?? true
 			}
-			item.image = AppAssets.share.symbolSizedForCatalyst()
-			item.label = L10n.share
-			item.toolTip = L10n.share
+			item.image = AppAssets.collaborate.symbolSizedForCatalyst()
+			item.label = L10n.collaborate
+			item.toolTip = L10n.collaborate
 			item.isBordered = true
-			item.action = #selector(share(_:))
+			item.action = #selector(collaborate(_:))
 			item.target = self
 			toolbarItem = item
 		case .sendCopy:

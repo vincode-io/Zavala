@@ -60,9 +60,9 @@ class MacOpenQuicklyTimelineViewController: UICollectionViewController {
 
 			let title = (document.title?.isEmpty ?? true) ? L10n.noTitle : document.title!
 
-			if document.isShared {
+			if document.isCollaborating {
 				let attrText = NSMutableAttributedString(string: "\(title) ")
-				let shareAttachement = NSTextAttachment(image: AppAssets.shared)
+				let shareAttachement = NSTextAttachment(image: AppAssets.collaborating)
 				attrText.append(NSAttributedString(attachment: shareAttachement))
 				contentConfiguration.attributedText = attrText
 			} else {
