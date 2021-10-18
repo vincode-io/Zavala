@@ -13,6 +13,7 @@ protocol EditorTextRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewInputAccessoryView: UIView? { get }
 	func didBecomeActive(_: EditorTextRowTopicTextView, row: Row)
 	func invalidateLayout(_: EditorTextRowTopicTextView)
+	func makeCursorVisibleIfNecessary(_: EditorTextRowTopicTextView)
 	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
 	func deleteRow(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings)
 	func createRow(_: EditorTextRowTopicTextView, beforeRow: Row)
@@ -240,6 +241,8 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 			textViewHeight = fittingSize.height
 			editorDelegate?.invalidateLayout(self)
 		}
+		
+		editorDelegate?.makeCursorVisibleIfNecessary(self)
 		
 		autosaveWorkItem?.cancel()
 		autosaveWorkItem = DispatchWorkItem { [weak self] in

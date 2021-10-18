@@ -12,6 +12,7 @@ protocol EditorTextRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewInputAccessoryView: UIView? { get }
 	func invalidateLayout(_ : EditorTextRowNoteTextView)
+	func makeCursorVisibleIfNecessary(_ : EditorTextRowNoteTextView)
 	func didBecomeActive(_ : EditorTextRowNoteTextView, row: Row)
 	func textChanged(_ : EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
 	func deleteRowNote(_ : EditorTextRowNoteTextView, row: Row, rowStrings: RowStrings)
@@ -187,6 +188,8 @@ extension EditorTextRowNoteTextView: UITextViewDelegate {
 			textViewHeight = fittingSize.height
 			editorDelegate?.invalidateLayout(self)
 		}
+		
+		editorDelegate?.makeCursorVisibleIfNecessary(self)
 
 		autosaveWorkItem?.cancel()
 		autosaveWorkItem = DispatchWorkItem { [weak self] in

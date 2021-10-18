@@ -1342,6 +1342,10 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		reloadCurrentCell()
 	}
 	
+	func editorTextRowMakeCursorVisibleIfNecessary() {
+		makeCursorVisibleIfNecessary()
+	}
+
 	func editorTextRowTextFieldDidBecomeActive(row: Row) {
 		collectionView.deselectAll()
 		delegate?.validateToolbar(self)
@@ -1845,8 +1849,6 @@ extension EditorViewController {
 				}
 			}
 		}
-		
-		makeCursorVisibleIfNecessary()
 	}
 	
 	private func applyChanges(_ changes: OutlineElementChanges) {

@@ -207,6 +207,10 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowReloadCurrentCell()
 	}
 	
+	func makeCursorVisibleIfNecessary(_: EditorTextRowTopicTextView) {
+		appliedConfiguration.delegate?.editorTextRowMakeCursorVisibleIfNecessary()
+	}
+	
 	func didBecomeActive(_: EditorTextRowTopicTextView, row: Row) {
 		appliedConfiguration.delegate?.editorTextRowTextFieldDidBecomeActive(row: row)
 	}
@@ -256,6 +260,10 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowReloadCurrentCell()
 	}
 	
+	func makeCursorVisibleIfNecessary(_: EditorTextRowNoteTextView) {
+		appliedConfiguration.delegate?.editorTextRowMakeCursorVisibleIfNecessary()
+	}
+
 	func didBecomeActive(_: EditorTextRowNoteTextView, row: Row) {
 		appliedConfiguration.delegate?.editorTextRowTextFieldDidBecomeActive(row: row)
 	}
