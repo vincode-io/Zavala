@@ -898,11 +898,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 		var deletes = Set<Int>()
 
+		func deleteVisitor(_ visited: Row) {
+			if let shadowTableIndex = visited.shadowTableIndex {
+				deletes.insert(shadowTableIndex)
+			}
+			visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
+		}
+		
 		for row in rows {
 			row.parent?.removeRow(row)
 			removeImages(rowID: row.id)
-			guard let rowShadowTableIndex = row.shadowTableIndex else { continue }
-			deletes.insert(rowShadowTableIndex)
+			row.visit(visitor: deleteVisitor(_:))
 		}
 
 		deleteLinkRelationships(for: rows)

@@ -1,16 +1,16 @@
 //
-//  MoveRowsIntentHandler.swift
+//  CopyRowsIntentHandler.swift
 //  Zavala
 //
-//  Created by Maurice Parker on 10/14/21.
+//  Created by Maurice Parker on 10/18/21.
 //
 
 import Intents
 import Templeton
 
-class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandling {
-
-	func resolveDestination(for intent: MoveRowsIntent, with completion: @escaping (MoveRowsDestinationResolutionResult) -> Void) {
+class CopyRowsIntentHandler: NSObject, ZavalaIntentHandler, CopyRowsIntentHandling {
+	
+	func resolveDestination(for intent: CopyRowsIntent, with completion: @escaping (CopyRowsDestinationResolutionResult) -> Void) {
 		guard intent.destination != .unknown else {
 			completion(.unsupported(forReason: .required))
 			return
@@ -18,7 +18,7 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 		completion(.success(with: intent.destination))
 	}
 	
-	func handle(intent: MoveRowsIntent, completion: @escaping (MoveRowsIntentResponse) -> Void) {
+	func handle(intent: CopyRowsIntent, completion: @escaping (CopyRowsIntentResponse) -> Void) {
 		resume()
 		
 		guard let intentRowEntityIDs = intent.rows,
@@ -40,10 +40,7 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 			return
 		}
 		
-		var intraOutlineMoves = [Row]()
-		var interOutlineMoves = [Row]()
-
-		let inputRows: [Row] = intentRowEntityIDs
+		let rows: [Row] = intentRowEntityIDs
 			.compactMap { $0.toEntityID() }
 			.compactMap {
 				if let rowOutline = AccountManager.shared.findDocument($0)?.outline {
@@ -54,59 +51,21 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 				return nil
 			}
 		
-		for inputRow in inputRows {
-			if inputRow.outline == outline {
-				intraOutlineMoves.append(inputRow)
-			} else {
-				interOutlineMoves.append(inputRow)
-			}
-		}
-		
-		if !intraOutlineMoves.isEmpty {
-			switch intent.destination {
-			case .insideAtStart:
-				outline.moveRowsInsideAtStart(intraOutlineMoves, afterRowContainer: rowContainer)
-			case .insideAtEnd:
-				outline.moveRowsInsideAtEnd(intraOutlineMoves, afterRowContainer: rowContainer)
-			case .outside:
-				if let afterRow = rowContainer as? Row {
-					outline.moveRowsOutside(intraOutlineMoves, afterRow: afterRow)
-				}
-			case .directlyAfter:
-				if let afterRow = rowContainer as? Row {
-					outline.moveRowsDirectlyAfter(intraOutlineMoves, afterRow: afterRow)
-				}
-			default:
-				outlines.forEach { $0.unload() }
-				suspend()
-				completion(.init(code: .failure, userActivity: nil))
-				return
-			}
-		}
-		
-		for interOutlineMove in interOutlineMoves {
-			guard let sourceOutline = interOutlineMove.outline else {
-				continue
-			}
-
-			let rowGroup = RowGroup(interOutlineMove)
+		for row in rows {
+			let rowGroup = RowGroup(row)
 			let attachedRow = rowGroup.attach(to: outline)
 
 			switch intent.destination {
 			case .insideAtStart:
-				sourceOutline.deleteRows([interOutlineMove])
 				outline.createRowsInsideAtStart([attachedRow], afterRowContainer: rowContainer)
 			case .insideAtEnd:
-				sourceOutline.deleteRows([interOutlineMove])
 				outline.createRowsInsideAtEnd([attachedRow], afterRowContainer: rowContainer)
 			case .outside:
 				if let afterRow = rowContainer as? Row {
-					sourceOutline.deleteRows([interOutlineMove])
 					outline.createRowsOutside([attachedRow], afterRow: afterRow)
 				}
 			case .directlyAfter:
 				if let afterRow = rowContainer as? Row {
-					sourceOutline.deleteRows([interOutlineMove])
 					outline.createRowsDirectlyAfter([attachedRow], afterRow: afterRow)
 				}
 			default:
@@ -119,7 +78,10 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 		
 		outlines.forEach { $0.unload() }
 		suspend()
-		completion(.init(code: .success, userActivity: nil))
+		
+		let response = CopyRowsIntentResponse(code: .success, userActivity: nil)
+		response.rows = rows.map { IntentEntityID(entityID: $0.entityID, display: nil) }
+		completion(response)
 	}
 	
 }

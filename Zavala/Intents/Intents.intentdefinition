@@ -322,9 +322,9 @@
 	<key>INIntentDefinitionSystemVersion</key>
 	<string>21A5552a</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>13A233</string>
+	<string>13A1030d</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>13.0</string>
+	<string>13.1</string>
 	<key>INIntents</key>
 	<array>
 		<dict>
@@ -2989,6 +2989,8 @@
 			<string>download</string>
 			<key>INIntentConfigurable</key>
 			<true/>
+			<key>INIntentDescription</key>
+			<string>Get Rows from an Outline.</string>
 			<key>INIntentDescriptionID</key>
 			<string>zKZfJD</string>
 			<key>INIntentIneligibleForSuggestions</key>
@@ -3435,6 +3437,8 @@
 			<string>generic</string>
 			<key>INIntentConfigurable</key>
 			<true/>
+			<key>INIntentDescription</key>
+			<string>Move Rows in or between Outlines.</string>
 			<key>INIntentDescriptionID</key>
 			<string>9KPYBg</string>
 			<key>INIntentIneligibleForSuggestions</key>
@@ -3636,6 +3640,8 @@
 			<string>generic</string>
 			<key>INIntentConfigurable</key>
 			<true/>
+			<key>INIntentDescription</key>
+			<string>Delete the specified Rows</string>
 			<key>INIntentDescriptionID</key>
 			<string>Q0fRYW</string>
 			<key>INIntentInput</key>
@@ -3732,6 +3738,234 @@
 			<string>Remove Rows</string>
 			<key>INIntentTitleID</key>
 			<string>fyaTpG</string>
+			<key>INIntentType</key>
+			<string>Custom</string>
+			<key>INIntentVerb</key>
+			<string>Do</string>
+		</dict>
+		<dict>
+			<key>INIntentCategory</key>
+			<string>generic</string>
+			<key>INIntentConfigurable</key>
+			<true/>
+			<key>INIntentDescriptionID</key>
+			<string>Xt5aZp</string>
+			<key>INIntentIneligibleForSuggestions</key>
+			<true/>
+			<key>INIntentInput</key>
+			<string>rows</string>
+			<key>INIntentLastParameterTag</key>
+			<integer>7</integer>
+			<key>INIntentManagedParameterCombinations</key>
+			<dict>
+				<key>rows,outlineOrRow,destination</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Copy${rows}to ${outlineOrRow}at ${destination}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>BKEQnX</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+			</dict>
+			<key>INIntentName</key>
+			<string>CopyRows</string>
+			<key>INIntentParameters</key>
+			<array>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Rows</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>VUbaKk</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>1</integer>
+					<key>INIntentParameterName</key>
+					<string>rows</string>
+					<key>INIntentParameterObjectType</key>
+					<string>EntityID</string>
+					<key>INIntentParameterObjectTypeNamespace</key>
+					<string>LEx6zX</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterSupportsMultipleValues</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>3</integer>
+					<key>INIntentParameterType</key>
+					<string>Object</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Outline Or Row</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>GE10Oe</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>2</integer>
+					<key>INIntentParameterName</key>
+					<string>outlineOrRow</string>
+					<key>INIntentParameterObjectType</key>
+					<string>EntityID</string>
+					<key>INIntentParameterObjectTypeNamespace</key>
+					<string>LEx6zX</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterTag</key>
+					<integer>5</integer>
+					<key>INIntentParameterType</key>
+					<string>Object</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterCustomDisambiguation</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Destination</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>YUYIs8</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>3</integer>
+					<key>INIntentParameterEnumType</key>
+					<string>RowDestination</string>
+					<key>INIntentParameterEnumTypeNamespace</key>
+					<string>LEx6zX</string>
+					<key>INIntentParameterName</key>
+					<string>destination</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>There are ${count} options matching ‘${destination}’.</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>aTbYCj</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>DisambiguationIntroduction</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>Just to confirm, you wanted ‘${destination}’?</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>qn4wXW</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Confirmation</string>
+						</dict>
+					</array>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>7</integer>
+					<key>INIntentParameterType</key>
+					<string>Integer</string>
+					<key>INIntentParameterUnsupportedReasons</key>
+					<array>
+						<dict>
+							<key>INIntentParameterUnsupportedReasonCode</key>
+							<string>required</string>
+							<key>INIntentParameterUnsupportedReasonCustom</key>
+							<true/>
+							<key>INIntentParameterUnsupportedReasonFormatString</key>
+							<string>The${destination}is required.</string>
+							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
+							<string>oX6wQg</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+			<key>INIntentResponse</key>
+			<dict>
+				<key>INIntentResponseCodes</key>
+				<array>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>success</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>failure</string>
+					</dict>
+				</array>
+				<key>INIntentResponseLastParameterTag</key>
+				<integer>3</integer>
+				<key>INIntentResponseOutput</key>
+				<string>rows</string>
+				<key>INIntentResponseParameters</key>
+				<array>
+					<dict>
+						<key>INIntentResponseParameterDisplayName</key>
+						<string>Rows</string>
+						<key>INIntentResponseParameterDisplayNameID</key>
+						<string>ENl8ZS</string>
+						<key>INIntentResponseParameterDisplayPriority</key>
+						<integer>1</integer>
+						<key>INIntentResponseParameterName</key>
+						<string>rows</string>
+						<key>INIntentResponseParameterObjectType</key>
+						<string>EntityID</string>
+						<key>INIntentResponseParameterObjectTypeNamespace</key>
+						<string>LEx6zX</string>
+						<key>INIntentResponseParameterSupportsMultipleValues</key>
+						<true/>
+						<key>INIntentResponseParameterTag</key>
+						<integer>3</integer>
+						<key>INIntentResponseParameterType</key>
+						<string>Object</string>
+					</dict>
+				</array>
+			</dict>
+			<key>INIntentTitle</key>
+			<string>Copy Rows</string>
+			<key>INIntentTitleID</key>
+			<string>sQJrv0</string>
 			<key>INIntentType</key>
 			<string>Custom</string>
 			<key>INIntentVerb</key>
