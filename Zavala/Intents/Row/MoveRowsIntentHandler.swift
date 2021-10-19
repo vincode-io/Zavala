@@ -62,6 +62,8 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 			}
 		}
 		
+		var movedRows = intraOutlineMoves
+		
 		if !intraOutlineMoves.isEmpty {
 			switch intent.destination {
 			case .insideAtStart:
@@ -91,7 +93,8 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 
 			let rowGroup = RowGroup(interOutlineMove)
 			let attachedRow = rowGroup.attach(to: outline)
-
+			movedRows.append(attachedRow)
+			
 			switch intent.destination {
 			case .insideAtStart:
 				sourceOutline.deleteRows([interOutlineMove])
@@ -119,7 +122,10 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 		
 		outlines.forEach { $0.unload() }
 		suspend()
-		completion(.init(code: .success, userActivity: nil))
+		
+		let response = MoveRowsIntentResponse(code: .success, userActivity: nil)
+		response.rows = movedRows.map { IntentEntityID(entityID: $0.entityID, display: nil) }
+		completion(response)
 	}
 	
 }
