@@ -22,7 +22,7 @@ public class GetCurrentOutlineIntentHandler: NSObject, GetCurrentOutlineIntentHa
 		}
 		
 		let response = GetCurrentOutlineIntentResponse(code: .success, userActivity: nil)
-		response.outlineEntityID = IntentEntityID(entityID: outline.id)
+		response.outline = IntentOutline(outline)
 		completion(response)
 	}
 		

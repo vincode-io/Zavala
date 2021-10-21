@@ -384,26 +384,26 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>4</integer>
+				<integer>6</integer>
 				<key>INIntentResponseOutput</key>
-				<string>outlineEntityID</string>
+				<string>outline</string>
 				<key>INIntentResponseParameters</key>
 				<array>
 					<dict>
 						<key>INIntentResponseParameterDisplayName</key>
 						<string>Outline</string>
 						<key>INIntentResponseParameterDisplayNameID</key>
-						<string>SByZd1</string>
+						<string>r9g0Zx</string>
 						<key>INIntentResponseParameterDisplayPriority</key>
 						<integer>1</integer>
 						<key>INIntentResponseParameterName</key>
-						<string>outlineEntityID</string>
+						<string>outline</string>
 						<key>INIntentResponseParameterObjectType</key>
-						<string>EntityID</string>
+						<string>Outline</string>
 						<key>INIntentResponseParameterObjectTypeNamespace</key>
 						<string>LEx6zX</string>
 						<key>INIntentResponseParameterTag</key>
-						<integer>4</integer>
+						<integer>6</integer>
 						<key>INIntentResponseParameterType</key>
 						<string>Object</string>
 					</dict>
@@ -430,17 +430,17 @@
 			<key>INIntentIneligibleForSuggestions</key>
 			<true/>
 			<key>INIntentInput</key>
-			<string>outlineEntityID</string>
+			<string>outline</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>3</integer>
+			<integer>4</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>outlineEntityID</key>
+				<key>outline</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Get Images for${outlineEntityID}</string>
+					<string>Get Images for${outline}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>fRwlYU</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -461,9 +461,9 @@
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>1</integer>
 					<key>INIntentParameterName</key>
-					<string>outlineEntityID</string>
+					<string>outline</string>
 					<key>INIntentParameterObjectType</key>
-					<string>EntityID</string>
+					<string>Outline</string>
 					<key>INIntentParameterObjectTypeNamespace</key>
 					<string>LEx6zX</string>
 					<key>INIntentParameterPromptDialogs</key>
@@ -482,7 +482,7 @@
 						</dict>
 					</array>
 					<key>INIntentParameterTag</key>
-					<integer>3</integer>
+					<integer>4</integer>
 					<key>INIntentParameterType</key>
 					<string>Object</string>
 				</dict>
@@ -547,17 +547,17 @@
 			<key>INIntentIneligibleForSuggestions</key>
 			<true/>
 			<key>INIntentInput</key>
-			<string>outlineEntityID</string>
+			<string>outline</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>5</integer>
+			<integer>6</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>outlineEntityID,exportType</key>
+				<key>outline,exportType</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Export the${outlineEntityID}as ${exportType}</string>
+					<string>Export the${outline}as ${exportType}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>sSRmym</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -578,9 +578,9 @@
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>1</integer>
 					<key>INIntentParameterName</key>
-					<string>outlineEntityID</string>
+					<string>outline</string>
 					<key>INIntentParameterObjectType</key>
-					<string>EntityID</string>
+					<string>Outline</string>
 					<key>INIntentParameterObjectTypeNamespace</key>
 					<string>LEx6zX</string>
 					<key>INIntentParameterPromptDialogs</key>
@@ -599,7 +599,7 @@
 						</dict>
 					</array>
 					<key>INIntentParameterTag</key>
-					<integer>5</integer>
+					<integer>6</integer>
 					<key>INIntentParameterType</key>
 					<string>Object</string>
 				</dict>
@@ -1016,9 +1016,9 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>3</integer>
+				<integer>4</integer>
 				<key>INIntentResponseOutput</key>
-				<string>outlineEntityID</string>
+				<string>outline</string>
 				<key>INIntentResponseParameters</key>
 				<array>
 					<dict>
@@ -1029,13 +1029,13 @@
 						<key>INIntentResponseParameterDisplayPriority</key>
 						<integer>1</integer>
 						<key>INIntentResponseParameterName</key>
-						<string>outlineEntityID</string>
+						<string>outline</string>
 						<key>INIntentResponseParameterObjectType</key>
-						<string>EntityID</string>
+						<string>Outline</string>
 						<key>INIntentResponseParameterObjectTypeNamespace</key>
 						<string>LEx6zX</string>
 						<key>INIntentResponseParameterTag</key>
-						<integer>3</integer>
+						<integer>4</integer>
 						<key>INIntentResponseParameterType</key>
 						<string>Object</string>
 					</dict>
@@ -1062,19 +1062,19 @@
 			<key>INIntentIneligibleForSuggestions</key>
 			<true/>
 			<key>INIntentInput</key>
-			<string>outlineEntityID</string>
+			<string>outline</string>
 			<key>INIntentKeyParameter</key>
-			<string>outlineEntityID</string>
+			<string>outline</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>3</integer>
+			<integer>4</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>outlineEntityID</key>
+				<key>outline</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Show ${outlineEntityID}</string>
+					<string>Show ${outline}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>pGvecX</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -1095,9 +1095,9 @@
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>1</integer>
 					<key>INIntentParameterName</key>
-					<string>outlineEntityID</string>
+					<string>outline</string>
 					<key>INIntentParameterObjectType</key>
-					<string>EntityID</string>
+					<string>Outline</string>
 					<key>INIntentParameterObjectTypeNamespace</key>
 					<string>LEx6zX</string>
 					<key>INIntentParameterPromptDialogs</key>
@@ -1116,7 +1116,7 @@
 						</dict>
 					</array>
 					<key>INIntentParameterTag</key>
-					<integer>3</integer>
+					<integer>4</integer>
 					<key>INIntentParameterType</key>
 					<string>Object</string>
 				</dict>
@@ -1625,9 +1625,9 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>4</integer>
+				<integer>5</integer>
 				<key>INIntentResponseOutput</key>
-				<string>outlineEntityIDs</string>
+				<string>outlines</string>
 				<key>INIntentResponseParameters</key>
 				<array>
 					<dict>
@@ -1638,15 +1638,15 @@
 						<key>INIntentResponseParameterDisplayPriority</key>
 						<integer>1</integer>
 						<key>INIntentResponseParameterName</key>
-						<string>outlineEntityIDs</string>
+						<string>outlines</string>
 						<key>INIntentResponseParameterObjectType</key>
-						<string>EntityID</string>
+						<string>Outline</string>
 						<key>INIntentResponseParameterObjectTypeNamespace</key>
 						<string>LEx6zX</string>
 						<key>INIntentResponseParameterSupportsMultipleValues</key>
 						<true/>
 						<key>INIntentResponseParameterTag</key>
-						<integer>4</integer>
+						<integer>5</integer>
 						<key>INIntentResponseParameterType</key>
 						<string>Object</string>
 					</dict>
@@ -1663,159 +1663,6 @@
 		</dict>
 		<dict>
 			<key>INIntentCategory</key>
-			<string>set</string>
-			<key>INIntentConfigurable</key>
-			<true/>
-			<key>INIntentDescription</key>
-			<string>Sets the Title of the given Outline.</string>
-			<key>INIntentDescriptionID</key>
-			<string>UbKDGQ</string>
-			<key>INIntentIneligibleForSuggestions</key>
-			<true/>
-			<key>INIntentInput</key>
-			<string>outlineEntityID</string>
-			<key>INIntentLastParameterTag</key>
-			<integer>4</integer>
-			<key>INIntentManagedParameterCombinations</key>
-			<dict>
-				<key>outlineEntityID,title</key>
-				<dict>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Set the ${outlineEntityID}Title to${title}</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>tcGLnk</string>
-					<key>INIntentParameterCombinationUpdatesLinked</key>
-					<true/>
-				</dict>
-			</dict>
-			<key>INIntentName</key>
-			<string>SetOutlineTitle</string>
-			<key>INIntentParameters</key>
-			<array>
-				<dict>
-					<key>INIntentParameterConfigurable</key>
-					<true/>
-					<key>INIntentParameterDisplayName</key>
-					<string>Outline</string>
-					<key>INIntentParameterDisplayNameID</key>
-					<string>Jko5An</string>
-					<key>INIntentParameterDisplayPriority</key>
-					<integer>1</integer>
-					<key>INIntentParameterName</key>
-					<string>outlineEntityID</string>
-					<key>INIntentParameterObjectType</key>
-					<string>EntityID</string>
-					<key>INIntentParameterObjectTypeNamespace</key>
-					<string>LEx6zX</string>
-					<key>INIntentParameterPromptDialogs</key>
-					<array>
-						<dict>
-							<key>INIntentParameterPromptDialogCustom</key>
-							<true/>
-							<key>INIntentParameterPromptDialogType</key>
-							<string>Configuration</string>
-						</dict>
-						<dict>
-							<key>INIntentParameterPromptDialogCustom</key>
-							<true/>
-							<key>INIntentParameterPromptDialogType</key>
-							<string>Primary</string>
-						</dict>
-					</array>
-					<key>INIntentParameterTag</key>
-					<integer>4</integer>
-					<key>INIntentParameterType</key>
-					<string>Object</string>
-				</dict>
-				<dict>
-					<key>INIntentParameterConfigurable</key>
-					<true/>
-					<key>INIntentParameterDisplayName</key>
-					<string>Title</string>
-					<key>INIntentParameterDisplayNameID</key>
-					<string>sAT0JR</string>
-					<key>INIntentParameterDisplayPriority</key>
-					<integer>2</integer>
-					<key>INIntentParameterMetadata</key>
-					<dict>
-						<key>INIntentParameterMetadataCapitalization</key>
-						<string>Sentences</string>
-						<key>INIntentParameterMetadataDefaultValueID</key>
-						<string>eVjQjS</string>
-					</dict>
-					<key>INIntentParameterName</key>
-					<string>title</string>
-					<key>INIntentParameterPromptDialogs</key>
-					<array>
-						<dict>
-							<key>INIntentParameterPromptDialogCustom</key>
-							<true/>
-							<key>INIntentParameterPromptDialogType</key>
-							<string>Configuration</string>
-						</dict>
-						<dict>
-							<key>INIntentParameterPromptDialogCustom</key>
-							<true/>
-							<key>INIntentParameterPromptDialogFormatString</key>
-							<string>What is the new${title}?</string>
-							<key>INIntentParameterPromptDialogFormatStringID</key>
-							<string>UasrxZ</string>
-							<key>INIntentParameterPromptDialogType</key>
-							<string>Primary</string>
-						</dict>
-					</array>
-					<key>INIntentParameterSupportsResolution</key>
-					<true/>
-					<key>INIntentParameterTag</key>
-					<integer>3</integer>
-					<key>INIntentParameterType</key>
-					<string>String</string>
-					<key>INIntentParameterUnsupportedReasons</key>
-					<array>
-						<dict>
-							<key>INIntentParameterUnsupportedReasonCode</key>
-							<string>required</string>
-							<key>INIntentParameterUnsupportedReasonCustom</key>
-							<true/>
-							<key>INIntentParameterUnsupportedReasonFormatString</key>
-							<string>The new title is required.</string>
-							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
-							<string>gMCYlp</string>
-						</dict>
-					</array>
-				</dict>
-			</array>
-			<key>INIntentResponse</key>
-			<dict>
-				<key>INIntentResponseCodes</key>
-				<array>
-					<dict>
-						<key>INIntentResponseCodeName</key>
-						<string>success</string>
-						<key>INIntentResponseCodeSuccess</key>
-						<true/>
-					</dict>
-					<dict>
-						<key>INIntentResponseCodeName</key>
-						<string>failure</string>
-					</dict>
-				</array>
-				<key>INIntentResponseLastParameterTag</key>
-				<integer>2</integer>
-			</dict>
-			<key>INIntentTitle</key>
-			<string>Set Outline Title</string>
-			<key>INIntentTitleID</key>
-			<string>ur0h27</string>
-			<key>INIntentType</key>
-			<string>Custom</string>
-			<key>INIntentVerb</key>
-			<string>Set</string>
-		</dict>
-		<dict>
-			<key>INIntentCategory</key>
 			<string>create</string>
 			<key>INIntentConfigurable</key>
 			<true/>
@@ -1826,17 +1673,17 @@
 			<key>INIntentIneligibleForSuggestions</key>
 			<true/>
 			<key>INIntentInput</key>
-			<string>outlineEntityID</string>
+			<string>outline</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>4</integer>
+			<integer>5</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>outlineEntityID,tagName</key>
+				<key>outline,tagName</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Add ${tagName}to ${outlineEntityID}</string>
+					<string>Add ${tagName}to ${outline}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>tExxnA</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -1857,9 +1704,9 @@
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>1</integer>
 					<key>INIntentParameterName</key>
-					<string>outlineEntityID</string>
+					<string>outline</string>
 					<key>INIntentParameterObjectType</key>
-					<string>EntityID</string>
+					<string>Outline</string>
 					<key>INIntentParameterObjectTypeNamespace</key>
 					<string>LEx6zX</string>
 					<key>INIntentParameterPromptDialogs</key>
@@ -1878,7 +1725,7 @@
 						</dict>
 					</array>
 					<key>INIntentParameterTag</key>
-					<integer>4</integer>
+					<integer>5</integer>
 					<key>INIntentParameterType</key>
 					<string>Object</string>
 				</dict>
@@ -1979,17 +1826,17 @@
 			<key>INIntentIneligibleForSuggestions</key>
 			<true/>
 			<key>INIntentInput</key>
-			<string>outlineEntityID</string>
+			<string>outline</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>4</integer>
+			<integer>5</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>outlineEntityID,tagName</key>
+				<key>outline,tagName</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Remove${tagName}from${outlineEntityID}</string>
+					<string>Remove${tagName}from${outline}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>ek6ViP</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -2010,9 +1857,9 @@
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>1</integer>
 					<key>INIntentParameterName</key>
-					<string>outlineEntityID</string>
+					<string>outline</string>
 					<key>INIntentParameterObjectType</key>
-					<string>EntityID</string>
+					<string>Outline</string>
 					<key>INIntentParameterObjectTypeNamespace</key>
 					<string>LEx6zX</string>
 					<key>INIntentParameterPromptDialogs</key>
@@ -2031,7 +1878,7 @@
 						</dict>
 					</array>
 					<key>INIntentParameterTag</key>
-					<integer>4</integer>
+					<integer>5</integer>
 					<key>INIntentParameterType</key>
 					<string>Object</string>
 				</dict>
@@ -2416,9 +2263,9 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>3</integer>
+				<integer>4</integer>
 				<key>INIntentResponseOutput</key>
-				<string>outlineEntityID</string>
+				<string>outline</string>
 				<key>INIntentResponseParameters</key>
 				<array>
 					<dict>
@@ -2429,13 +2276,13 @@
 						<key>INIntentResponseParameterDisplayPriority</key>
 						<integer>1</integer>
 						<key>INIntentResponseParameterName</key>
-						<string>outlineEntityID</string>
+						<string>outline</string>
 						<key>INIntentResponseParameterObjectType</key>
-						<string>EntityID</string>
+						<string>Outline</string>
 						<key>INIntentResponseParameterObjectTypeNamespace</key>
 						<string>LEx6zX</string>
 						<key>INIntentResponseParameterTag</key>
-						<integer>3</integer>
+						<integer>4</integer>
 						<key>INIntentResponseParameterType</key>
 						<string>Object</string>
 					</dict>
@@ -2462,17 +2309,17 @@
 			<key>INIntentIneligibleForSuggestions</key>
 			<true/>
 			<key>INIntentInput</key>
-			<string>outlineEntityID</string>
+			<string>outline</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>3</integer>
+			<integer>4</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>outlineEntityID</key>
+				<key>outline</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Remove${outlineEntityID}</string>
+					<string>Remove${outline}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>gwXrnL</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -2493,9 +2340,9 @@
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>1</integer>
 					<key>INIntentParameterName</key>
-					<string>outlineEntityID</string>
+					<string>outline</string>
 					<key>INIntentParameterObjectType</key>
-					<string>EntityID</string>
+					<string>Outline</string>
 					<key>INIntentParameterObjectTypeNamespace</key>
 					<string>LEx6zX</string>
 					<key>INIntentParameterPromptDialogs</key>
@@ -2514,7 +2361,7 @@
 						</dict>
 					</array>
 					<key>INIntentParameterTag</key>
-					<integer>3</integer>
+					<integer>4</integer>
 					<key>INIntentParameterType</key>
 					<string>Object</string>
 				</dict>
@@ -2558,17 +2405,17 @@
 			<key>INIntentIneligibleForSuggestions</key>
 			<true/>
 			<key>INIntentInput</key>
-			<string>outlineOrRow</string>
+			<string>entityID</string>
 			<key>INIntentLastParameterTag</key>
 			<integer>11</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>outlineOrRow,destination,topics</key>
+				<key>entityID,destination,topics</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Add${topics}to${outlineOrRow}at${destination}</string>
+					<string>Add${topics}to${entityID}at${destination}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>y8yx3H</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -2583,13 +2430,13 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Outline Or Row</string>
+					<string>Entity ID</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>WZURkc</string>
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>1</integer>
 					<key>INIntentParameterName</key>
-					<string>outlineOrRow</string>
+					<string>entityID</string>
 					<key>INIntentParameterObjectType</key>
 					<string>EntityID</string>
 					<key>INIntentParameterObjectTypeNamespace</key>
@@ -2760,7 +2607,7 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>7</integer>
+				<integer>8</integer>
 				<key>INIntentResponseOutput</key>
 				<string>rows</string>
 				<key>INIntentResponseParameters</key>
@@ -2775,13 +2622,13 @@
 						<key>INIntentResponseParameterName</key>
 						<string>rows</string>
 						<key>INIntentResponseParameterObjectType</key>
-						<string>EntityID</string>
+						<string>Row</string>
 						<key>INIntentResponseParameterObjectTypeNamespace</key>
 						<string>LEx6zX</string>
 						<key>INIntentResponseParameterSupportsMultipleValues</key>
 						<true/>
 						<key>INIntentResponseParameterTag</key>
-						<integer>7</integer>
+						<integer>8</integer>
 						<key>INIntentResponseParameterType</key>
 						<string>Object</string>
 					</dict>
@@ -2808,17 +2655,17 @@
 			<key>INIntentIneligibleForSuggestions</key>
 			<true/>
 			<key>INIntentInput</key>
-			<string>outlineOrRow</string>
+			<string>entityID</string>
 			<key>INIntentLastParameterTag</key>
 			<integer>16</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>outlineOrRow,search,regularExpression,completionState,expandedState,excludedRows,startDepth,endDepth</key>
+				<key>entityID,search,regularExpression,completionState,expandedState,excludedRows,startDepth,endDepth</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Get Rows matching${search}starting at${outlineOrRow}</string>
+					<string>Get Rows matching${search}starting at${entityID}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>HbPven</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -2833,13 +2680,13 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Outline Or Row</string>
+					<string>Entity ID</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>7ERV0O</string>
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>1</integer>
 					<key>INIntentParameterName</key>
-					<string>outlineOrRow</string>
+					<string>entityID</string>
 					<key>INIntentParameterObjectType</key>
 					<string>EntityID</string>
 					<key>INIntentParameterObjectTypeNamespace</key>
@@ -3208,7 +3055,7 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>3</integer>
+				<integer>4</integer>
 				<key>INIntentResponseOutput</key>
 				<string>rows</string>
 				<key>INIntentResponseParameters</key>
@@ -3223,13 +3070,13 @@
 						<key>INIntentResponseParameterName</key>
 						<string>rows</string>
 						<key>INIntentResponseParameterObjectType</key>
-						<string>EntityID</string>
+						<string>Row</string>
 						<key>INIntentResponseParameterObjectTypeNamespace</key>
 						<string>LEx6zX</string>
 						<key>INIntentResponseParameterSupportsMultipleValues</key>
 						<true/>
 						<key>INIntentResponseParameterTag</key>
-						<integer>3</integer>
+						<integer>4</integer>
 						<key>INIntentResponseParameterType</key>
 						<string>Object</string>
 					</dict>
@@ -3258,15 +3105,15 @@
 			<key>INIntentInput</key>
 			<string>rows</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>7</integer>
+			<integer>8</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>rows,outlineOrRow,destination</key>
+				<key>rows,entityID,destination</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Move${rows}to${outlineOrRow}at${destination}</string>
+					<string>Move${rows}to${entityID}at${destination}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>3ZTqHR</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -3289,7 +3136,7 @@
 					<key>INIntentParameterName</key>
 					<string>rows</string>
 					<key>INIntentParameterObjectType</key>
-					<string>EntityID</string>
+					<string>Row</string>
 					<key>INIntentParameterObjectTypeNamespace</key>
 					<string>LEx6zX</string>
 					<key>INIntentParameterPromptDialogs</key>
@@ -3310,7 +3157,7 @@
 					<key>INIntentParameterSupportsMultipleValues</key>
 					<true/>
 					<key>INIntentParameterTag</key>
-					<integer>3</integer>
+					<integer>8</integer>
 					<key>INIntentParameterType</key>
 					<string>Object</string>
 				</dict>
@@ -3318,13 +3165,13 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Outline Or Row</string>
+					<string>Entity ID</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>uTl9ZB</string>
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>2</integer>
 					<key>INIntentParameterName</key>
-					<string>outlineOrRow</string>
+					<string>entityID</string>
 					<key>INIntentParameterObjectType</key>
 					<string>EntityID</string>
 					<key>INIntentParameterObjectTypeNamespace</key>
@@ -3438,7 +3285,7 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>3</integer>
+				<integer>4</integer>
 				<key>INIntentResponseOutput</key>
 				<string>rows</string>
 				<key>INIntentResponseParameters</key>
@@ -3453,13 +3300,13 @@
 						<key>INIntentResponseParameterName</key>
 						<string>rows</string>
 						<key>INIntentResponseParameterObjectType</key>
-						<string>EntityID</string>
+						<string>Row</string>
 						<key>INIntentResponseParameterObjectTypeNamespace</key>
 						<string>LEx6zX</string>
 						<key>INIntentResponseParameterSupportsMultipleValues</key>
 						<true/>
 						<key>INIntentResponseParameterTag</key>
-						<integer>3</integer>
+						<integer>4</integer>
 						<key>INIntentResponseParameterType</key>
 						<string>Object</string>
 					</dict>
@@ -3483,10 +3330,12 @@
 			<string>Delete the specified Rows</string>
 			<key>INIntentDescriptionID</key>
 			<string>Q0fRYW</string>
+			<key>INIntentIneligibleForSuggestions</key>
+			<true/>
 			<key>INIntentInput</key>
 			<string>rows</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>3</integer>
+			<integer>4</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
 				<key>rows</key>
@@ -3503,20 +3352,6 @@
 			</dict>
 			<key>INIntentName</key>
 			<string>RemoveRows</string>
-			<key>INIntentParameterCombinations</key>
-			<dict>
-				<key>rows</key>
-				<dict>
-					<key>INIntentParameterCombinationIsLinked</key>
-					<true/>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Remove${rows}</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>VNVi48</string>
-				</dict>
-			</dict>
 			<key>INIntentParameters</key>
 			<array>
 				<dict>
@@ -3531,7 +3366,7 @@
 					<key>INIntentParameterName</key>
 					<string>rows</string>
 					<key>INIntentParameterObjectType</key>
-					<string>EntityID</string>
+					<string>Row</string>
 					<key>INIntentParameterObjectTypeNamespace</key>
 					<string>LEx6zX</string>
 					<key>INIntentParameterPromptDialogs</key>
@@ -3552,7 +3387,7 @@
 					<key>INIntentParameterSupportsMultipleValues</key>
 					<true/>
 					<key>INIntentParameterTag</key>
-					<integer>3</integer>
+					<integer>4</integer>
 					<key>INIntentParameterType</key>
 					<string>Object</string>
 				</dict>
@@ -3594,15 +3429,15 @@
 			<key>INIntentInput</key>
 			<string>rows</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>7</integer>
+			<integer>8</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>rows,outlineOrRow,destination</key>
+				<key>rows,entityID,destination</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Copy${rows}to ${outlineOrRow}at ${destination}</string>
+					<string>Copy${rows}to ${entityID}at ${destination}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>BKEQnX</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -3625,7 +3460,7 @@
 					<key>INIntentParameterName</key>
 					<string>rows</string>
 					<key>INIntentParameterObjectType</key>
-					<string>EntityID</string>
+					<string>Row</string>
 					<key>INIntentParameterObjectTypeNamespace</key>
 					<string>LEx6zX</string>
 					<key>INIntentParameterPromptDialogs</key>
@@ -3646,7 +3481,7 @@
 					<key>INIntentParameterSupportsMultipleValues</key>
 					<true/>
 					<key>INIntentParameterTag</key>
-					<integer>3</integer>
+					<integer>8</integer>
 					<key>INIntentParameterType</key>
 					<string>Object</string>
 				</dict>
@@ -3654,13 +3489,13 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Outline Or Row</string>
+					<string>Entity ID</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>GE10Oe</string>
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>2</integer>
 					<key>INIntentParameterName</key>
-					<string>outlineOrRow</string>
+					<string>entityID</string>
 					<key>INIntentParameterObjectType</key>
 					<string>EntityID</string>
 					<key>INIntentParameterObjectTypeNamespace</key>
@@ -3774,7 +3609,7 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>3</integer>
+				<integer>4</integer>
 				<key>INIntentResponseOutput</key>
 				<string>rows</string>
 				<key>INIntentResponseParameters</key>
@@ -3789,13 +3624,13 @@
 						<key>INIntentResponseParameterName</key>
 						<string>rows</string>
 						<key>INIntentResponseParameterObjectType</key>
-						<string>EntityID</string>
+						<string>Row</string>
 						<key>INIntentResponseParameterObjectTypeNamespace</key>
 						<string>LEx6zX</string>
 						<key>INIntentResponseParameterSupportsMultipleValues</key>
 						<true/>
 						<key>INIntentResponseParameterTag</key>
-						<integer>3</integer>
+						<integer>4</integer>
 						<key>INIntentResponseParameterType</key>
 						<string>Object</string>
 					</dict>

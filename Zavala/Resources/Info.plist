@@ -111,7 +111,6 @@
 		<string>RemoveOutlineIntent</string>
 		<string>RemoveOutlineTagIntent</string>
 		<string>RemoveRowsIntent</string>
-		<string>SetOutlineTitleIntent</string>
 		<string>ShowOutlineIntent</string>
 		<string>io.vincode.Zavala.restoration</string>
 		<string>io.vincode.Zavala.selectingDocument</string>

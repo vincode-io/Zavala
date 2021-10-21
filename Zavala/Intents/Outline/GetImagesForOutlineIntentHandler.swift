@@ -13,7 +13,7 @@ class GetImagesForOutlineIntentHandler: NSObject, ZavalaIntentHandler, GetImages
 	func handle(intent: GetImagesForOutlineIntent, completion: @escaping (GetImagesForOutlineIntentResponse) -> Void) {
 		resume()
 
-		guard let outline = findOutline(intent.outlineEntityID) else {
+		guard let outline = findOutline(intent.outline) else {
 			suspend()
 			completion(.init(code: .success, userActivity: nil))
 			return

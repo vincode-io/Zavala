@@ -18,7 +18,7 @@ public class ShowOutlineIntentHandler: NSObject, ShowOutlineIntentHandling {
 	}
 	
 	public func handle(intent: ShowOutlineIntent, completion: @escaping (ShowOutlineIntentResponse) -> Void) {
-		guard let description = intent.outlineEntityID?.identifier, let documentID = EntityID(description: description) else {
+		guard let documentID = intent.outline?.entityID?.toEntityID() else {
 			completion(.init(code: .failure, userActivity: nil))
 			return
 		}

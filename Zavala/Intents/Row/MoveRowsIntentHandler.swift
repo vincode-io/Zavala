@@ -21,8 +21,8 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 	func handle(intent: MoveRowsIntent, completion: @escaping (MoveRowsIntentResponse) -> Void) {
 		resume()
 		
-		guard let intentRowEntityIDs = intent.rows,
-			  let entityID = intent.outlineOrRow?.toEntityID(),
+		guard let intentRows = intent.rows,
+			  let entityID = intent.entityID?.toEntityID(),
 			  let outline = AccountManager.shared.findDocument(entityID)?.outline else {
 				  suspend()
 				  completion(.init(code: .success, userActivity: nil))
@@ -43,8 +43,8 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 		var intraOutlineMoves = [Row]()
 		var interOutlineMoves = [Row]()
 
-		let inputRows: [Row] = intentRowEntityIDs
-			.compactMap { $0.toEntityID() }
+		let inputRows: [Row] = intentRows
+			.compactMap { $0.entityID?.toEntityID() }
 			.compactMap {
 				if let rowOutline = AccountManager.shared.findDocument($0)?.outline {
 					rowOutline.load()
@@ -124,7 +124,7 @@ class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandli
 		suspend()
 		
 		let response = MoveRowsIntentResponse(code: .success, userActivity: nil)
-		response.rows = movedRows.map { IntentEntityID(entityID: $0.entityID) }
+		response.rows = movedRows.map { IntentRow($0) }
 		completion(response)
 	}
 	

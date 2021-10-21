@@ -573,8 +573,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return RemoveRowsIntentHandler()
 		case is ShowOutlineIntent:
 			return ShowOutlineIntentHandler(mainCoordinator: mainCoordinator)
-		case is SetOutlineTitleIntent:
-			return SetOutlineTitleIntentHandler()
 		default:
 			fatalError("Unhandled intent type: \(intent)")
 		}

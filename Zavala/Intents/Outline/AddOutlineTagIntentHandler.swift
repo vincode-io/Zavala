@@ -21,11 +21,13 @@ class AddOutlineTagIntentHandler: NSObject, ZavalaIntentHandler, AddOutlineTagIn
 	func handle(intent: AddOutlineTagIntent, completion: @escaping (AddOutlineTagIntentResponse) -> Void) {
 		resume()
 		
-		guard let outline = findOutline(intent.outlineEntityID), let tagName = intent.tagName, let tag = outline.account?.createTag(name: tagName) else {
-			suspend()
-			completion(.init(code: .success, userActivity: nil))
-			return
-		}
+		guard let outline = findOutline(intent.outline),
+			  let tagName = intent.tagName,
+			  let tag = outline.account?.createTag(name: tagName) else {
+				  suspend()
+				  completion(.init(code: .success, userActivity: nil))
+				  return
+			  }
 		
 		outline.createTag(tag)
 		

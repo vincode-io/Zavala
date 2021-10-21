@@ -13,7 +13,7 @@ class RemoveRowsIntentHandler: NSObject, ZavalaIntentHandler, RemoveRowsIntentHa
 	func handle(intent: RemoveRowsIntent, completion: @escaping (RemoveRowsIntentResponse) -> Void) {
 		resume()
 		
-		guard let intentRowEntityIDs = intent.rows else {
+		guard let intentRows = intent.rows else {
 			suspend()
 			completion(.init(code: .success, userActivity: nil))
 			return
@@ -21,8 +21,8 @@ class RemoveRowsIntentHandler: NSObject, ZavalaIntentHandler, RemoveRowsIntentHa
 		
 		var outlines = Set<Outline>()
 
-		let inputRows: [Row] = intentRowEntityIDs
-			.compactMap { $0.toEntityID() }
+		let inputRows: [Row] = intentRows
+			.compactMap { $0.entityID?.toEntityID() }
 			.compactMap {
 				if let rowOutline = AccountManager.shared.findDocument($0)?.outline {
 					rowOutline.load()

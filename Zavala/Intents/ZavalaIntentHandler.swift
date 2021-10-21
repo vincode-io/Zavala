@@ -26,6 +26,10 @@ extension ZavalaIntentHandler {
 			AccountManager.shared.suspend()
 		}
 	}
+
+	func findOutline(_ intentOutline: IntentOutline?) -> Outline? {
+		return findOutline(intentOutline?.entityID)
+	}
 	
 	func findOutline(_ intentEntityID: IntentEntityID?) -> Outline? {
 		guard let description = intentEntityID?.identifier,

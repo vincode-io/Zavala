@@ -51,11 +51,15 @@ class ImportIntentHandler: NSObject, ZavalaIntentHandler, ImportIntentHandling {
 			}
 		}
 		
-		let doc = account.importOPML(data, tag: nil, images: images)
+		guard let outline = account.importOPML(data, tag: nil, images: images).outline else {
+			suspend()
+			completion(.init(code: .failure, userActivity: nil))
+			return
+		}
 		
 		suspend()
 		let response = ImportIntentResponse(code: .success, userActivity: nil)
-		response.outlineEntityID = IntentEntityID(entityID: doc.id)
+		response.outline = IntentOutline(outline)
 		completion(response)
 	}
 	

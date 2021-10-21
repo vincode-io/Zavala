@@ -21,7 +21,7 @@ class AddRowsIntentHandler: NSObject, ZavalaIntentHandler, AddRowsIntentHandling
 	func handle(intent: AddRowsIntent, completion: @escaping (AddRowsIntentResponse) -> Void) {
 		resume()
 		
-		guard let entityID = intent.outlineOrRow?.toEntityID(), let outline = AccountManager.shared.findDocument(entityID)?.outline else {
+		guard let entityID = intent.entityID?.toEntityID(), let outline = AccountManager.shared.findDocument(entityID)?.outline else {
 			suspend()
 			completion(.init(code: .success, userActivity: nil))
 			return
@@ -72,7 +72,7 @@ class AddRowsIntentHandler: NSObject, ZavalaIntentHandler, AddRowsIntentHandling
 		outline.unload()
 		suspend()
 		let response = AddRowsIntentResponse(code: .success, userActivity: nil)
-		response.rows = rows.map { IntentEntityID(entityID: $0.entityID) }
+		response.rows = rows.map { IntentRow($0) }
 		completion(response)
 	}
 	

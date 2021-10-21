@@ -214,7 +214,7 @@ extension GetOutlinesIntentHandler {
 		suspend()
 		
 		let response = GetOutlinesIntentResponse(code: .success, userActivity: nil)
-		response.outlineEntityIDs = documents.map({ IntentEntityID(entityID: $0.id) })
+		response.outlines = documents.compactMap({ $0.outline }).map({ IntentOutline($0) })
 		completion(response)
 	}
 	

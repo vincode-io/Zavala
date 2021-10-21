@@ -6,12 +6,11 @@
 //
 
 import Foundation
-
 import Templeton
 
 extension IntentEntityID {
 	
-	convenience init(entityID: EntityID) {
+	convenience init(_ entityID: EntityID) {
 		let description = entityID.description
 		self.init(identifier: description, display: description)
 	}

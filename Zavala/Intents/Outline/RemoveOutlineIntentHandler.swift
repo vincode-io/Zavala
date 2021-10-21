@@ -13,7 +13,7 @@ class RemoveOutlineIntentHandler: NSObject, ZavalaIntentHandler, RemoveOutlineIn
 	func handle(intent: RemoveOutlineIntent, completion: @escaping (RemoveOutlineIntentResponse) -> Void) {
 		resume()
 
-		guard let outline = findOutline(intent.outlineEntityID) else {
+		guard let outline = findOutline(intent.outline) else {
 			suspend()
 			completion(.init(code: .success, userActivity: nil))
 			return

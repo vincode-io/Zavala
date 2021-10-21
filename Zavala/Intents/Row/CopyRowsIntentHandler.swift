@@ -21,8 +21,8 @@ class CopyRowsIntentHandler: NSObject, ZavalaIntentHandler, CopyRowsIntentHandli
 	func handle(intent: CopyRowsIntent, completion: @escaping (CopyRowsIntentResponse) -> Void) {
 		resume()
 		
-		guard let intentRowEntityIDs = intent.rows,
-			  let entityID = intent.outlineOrRow?.toEntityID(),
+		guard let intentRows = intent.rows,
+			  let entityID = intent.entityID?.toEntityID(),
 			  let outline = AccountManager.shared.findDocument(entityID)?.outline else {
 				  suspend()
 				  completion(.init(code: .success, userActivity: nil))
@@ -40,8 +40,8 @@ class CopyRowsIntentHandler: NSObject, ZavalaIntentHandler, CopyRowsIntentHandli
 			return
 		}
 		
-		let rows: [Row] = intentRowEntityIDs
-			.compactMap { $0.toEntityID() }
+		let rows: [Row] = intentRows
+			.compactMap { $0.entityID?.toEntityID() }
 			.compactMap {
 				if let rowOutline = AccountManager.shared.findDocument($0)?.outline {
 					rowOutline.load()
@@ -80,7 +80,7 @@ class CopyRowsIntentHandler: NSObject, ZavalaIntentHandler, CopyRowsIntentHandli
 		suspend()
 		
 		let response = CopyRowsIntentResponse(code: .success, userActivity: nil)
-		response.rows = rows.map { IntentEntityID(entityID: $0.entityID) }
+		response.rows = rows.map { IntentRow($0) }
 		completion(response)
 	}
 	
