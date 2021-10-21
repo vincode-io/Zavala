@@ -28,7 +28,7 @@ class ConsistentCollectionViewListCell: UICollectionViewListCell {
 		if state.isSelected || state.isHighlighted {
 			contentConfig.textProperties.color = .white
 			contentConfig.secondaryTextProperties.color = .white
-			backgroundConfig.backgroundColor = UIColor.accentColor.withAlphaComponent(0.6)
+			backgroundConfig.backgroundColor = UIColor.accentColor
 		} else {
 			contentConfig.textProperties.color = .label
 			contentConfig.secondaryTextProperties.color = .label
