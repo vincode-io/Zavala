@@ -44,7 +44,7 @@ class GetRowsIntentHandler: NSObject, ZavalaIntentHandler, GetRowsIntentHandling
 		outline.unload()
 		suspend()
 		let response = GetRowsIntentResponse(code: .success, userActivity: nil)
-		response.rows = visitor.results.map { IntentEntityID(entityID: $0.entityID, display: $0.topic?.string) }
+		response.rows = visitor.results.map { IntentEntityID(entityID: $0.entityID) }
 		completion(response)
 	}
 	

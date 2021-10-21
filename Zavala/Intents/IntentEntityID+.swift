@@ -11,9 +11,9 @@ import Templeton
 
 extension IntentEntityID {
 	
-	convenience init(entityID: EntityID, display: String?) {
-		self.init(identifier: entityID.description, display: display ?? entityID.description)
-		url = entityID.url
+	convenience init(entityID: EntityID) {
+		let description = entityID.description
+		self.init(identifier: description, display: description)
 	}
 	
 	func toEntityID() -> EntityID? {

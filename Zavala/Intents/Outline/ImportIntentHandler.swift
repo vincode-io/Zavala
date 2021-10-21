@@ -55,7 +55,7 @@ class ImportIntentHandler: NSObject, ZavalaIntentHandler, ImportIntentHandling {
 		
 		suspend()
 		let response = ImportIntentResponse(code: .success, userActivity: nil)
-		response.outlineEntityID = IntentEntityID(entityID: doc.id, display: doc.title)
+		response.outlineEntityID = IntentEntityID(entityID: doc.id)
 		completion(response)
 	}
 	

@@ -53,7 +53,7 @@ class AddOutlineIntentHandler: NSObject, ZavalaIntentHandler, AddOutlineIntentHa
 		
 		suspend()
 		let response = AddOutlineIntentResponse(code: .success, userActivity: nil)
-		response.outlineEntityID = IntentEntityID(entityID: document.id, display: document.title)
+		response.outlineEntityID = IntentEntityID(entityID: document.id)
 		completion(response)
 	}
 	

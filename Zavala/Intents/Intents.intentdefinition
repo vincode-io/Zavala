@@ -320,7 +320,7 @@
 	<key>INIntentDefinitionNamespace</key>
 	<string>LEx6zX</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>21A5552a</string>
+	<string>21A559</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
 	<string>13A1030d</string>
 	<key>INIntentDefinitionToolsVersion</key>
@@ -3876,19 +3876,171 @@
 					<key>INTypePropertyType</key>
 					<string>SpeakableString</string>
 				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>INTypeClassName</key>
+			<string>IntentOutline</string>
+			<key>INTypeDisplayName</key>
+			<string>Outline</string>
+			<key>INTypeDisplayNameID</key>
+			<string>ubmqkG</string>
+			<key>INTypeLastPropertyTag</key>
+			<integer>101</integer>
+			<key>INTypeName</key>
+			<string>Outline</string>
+			<key>INTypeProperties</key>
+			<array>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>1</integer>
+					<key>INTypePropertyName</key>
+					<string>identifier</string>
+					<key>INTypePropertyTag</key>
+					<integer>1</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>2</integer>
+					<key>INTypePropertyName</key>
+					<string>displayString</string>
+					<key>INTypePropertyTag</key>
+					<integer>2</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>3</integer>
+					<key>INTypePropertyName</key>
+					<string>pronunciationHint</string>
+					<key>INTypePropertyTag</key>
+					<integer>3</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>4</integer>
+					<key>INTypePropertyName</key>
+					<string>alternativeSpeakableMatches</string>
+					<key>INTypePropertySupportsMultipleValues</key>
+					<true/>
+					<key>INTypePropertyTag</key>
+					<integer>4</integer>
+					<key>INTypePropertyType</key>
+					<string>SpeakableString</string>
+				</dict>
 				<dict>
 					<key>INTypePropertyDisplayName</key>
-					<string>URL</string>
+					<string>Entity ID</string>
 					<key>INTypePropertyDisplayNameID</key>
-					<string>g9MHJf</string>
+					<string>dAu3Sa</string>
 					<key>INTypePropertyDisplayPriority</key>
 					<integer>5</integer>
 					<key>INTypePropertyName</key>
-					<string>url</string>
+					<string>entityID</string>
+					<key>INTypePropertyObjectType</key>
+					<string>EntityID</string>
+					<key>INTypePropertyObjectTypeNamespace</key>
+					<string>LEx6zX</string>
 					<key>INTypePropertyTag</key>
 					<integer>101</integer>
 					<key>INTypePropertyType</key>
-					<string>URL</string>
+					<string>Object</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>INTypeClassName</key>
+			<string>IntentRow</string>
+			<key>INTypeDisplayName</key>
+			<string>Row</string>
+			<key>INTypeDisplayNameID</key>
+			<string>jddV8S</string>
+			<key>INTypeLastPropertyTag</key>
+			<integer>101</integer>
+			<key>INTypeName</key>
+			<string>Row</string>
+			<key>INTypeProperties</key>
+			<array>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>1</integer>
+					<key>INTypePropertyName</key>
+					<string>identifier</string>
+					<key>INTypePropertyTag</key>
+					<integer>1</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>2</integer>
+					<key>INTypePropertyName</key>
+					<string>displayString</string>
+					<key>INTypePropertyTag</key>
+					<integer>2</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>3</integer>
+					<key>INTypePropertyName</key>
+					<string>pronunciationHint</string>
+					<key>INTypePropertyTag</key>
+					<integer>3</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDefault</key>
+					<true/>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>4</integer>
+					<key>INTypePropertyName</key>
+					<string>alternativeSpeakableMatches</string>
+					<key>INTypePropertySupportsMultipleValues</key>
+					<true/>
+					<key>INTypePropertyTag</key>
+					<integer>4</integer>
+					<key>INTypePropertyType</key>
+					<string>SpeakableString</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>Entity ID</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>Y19k3L</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>5</integer>
+					<key>INTypePropertyName</key>
+					<string>entityID</string>
+					<key>INTypePropertyObjectType</key>
+					<string>EntityID</string>
+					<key>INTypePropertyObjectTypeNamespace</key>
+					<string>LEx6zX</string>
+					<key>INTypePropertyTag</key>
+					<integer>101</integer>
+					<key>INTypePropertyType</key>
+					<string>Object</string>
 				</dict>
 			</array>
 		</dict>

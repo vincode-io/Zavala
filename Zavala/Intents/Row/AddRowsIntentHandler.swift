@@ -72,7 +72,7 @@ class AddRowsIntentHandler: NSObject, ZavalaIntentHandler, AddRowsIntentHandling
 		outline.unload()
 		suspend()
 		let response = AddRowsIntentResponse(code: .success, userActivity: nil)
-		response.rows = rows.map { IntentEntityID(entityID: $0.entityID, display: nil) }
+		response.rows = rows.map { IntentEntityID(entityID: $0.entityID) }
 		completion(response)
 	}
 	
