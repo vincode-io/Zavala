@@ -377,6 +377,69 @@
 				</dict>
 			</array>
 		</dict>
+		<dict>
+			<key>INEnumDisplayName</key>
+			<string>Row Detail</string>
+			<key>INEnumDisplayNameID</key>
+			<string>cFMQWl</string>
+			<key>INEnumGeneratesHeader</key>
+			<true/>
+			<key>INEnumName</key>
+			<string>RowDetail</string>
+			<key>INEnumType</key>
+			<string>Regular</string>
+			<key>INEnumValues</key>
+			<array>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>unknown</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>9z2oBF</string>
+					<key>INEnumValueName</key>
+					<string>unknown</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Topic</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>mGkCCh</string>
+					<key>INEnumValueIndex</key>
+					<integer>1</integer>
+					<key>INEnumValueName</key>
+					<string>topic</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Note</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>2gS3cI</string>
+					<key>INEnumValueIndex</key>
+					<integer>2</integer>
+					<key>INEnumValueName</key>
+					<string>note</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Complete</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>FRTrzd</string>
+					<key>INEnumValueIndex</key>
+					<integer>3</integer>
+					<key>INEnumValueName</key>
+					<string>complete</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Expanded</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>lW8ycD</string>
+					<key>INEnumValueIndex</key>
+					<integer>4</integer>
+					<key>INEnumValueName</key>
+					<string>expanded</string>
+				</dict>
+			</array>
+		</dict>
 	</array>
 	<key>INIntentDefinitionModelVersion</key>
 	<string>1.2</string>
@@ -3806,6 +3869,8 @@
 						<key>INIntentParameterRelationshipPredicateValue</key>
 						<string>title</string>
 					</dict>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
 					<key>INIntentParameterTag</key>
 					<integer>3</integer>
 					<key>INIntentParameterType</key>
@@ -3840,6 +3905,10 @@
 						<dict>
 							<key>INIntentParameterPromptDialogCustom</key>
 							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>What is the ${ownerName}</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>Vb1r1j</string>
 							<key>INIntentParameterPromptDialogType</key>
 							<string>Primary</string>
 						</dict>
@@ -3853,6 +3922,8 @@
 						<key>INIntentParameterRelationshipPredicateValue</key>
 						<string>ownerName</string>
 					</dict>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
 					<key>INIntentParameterTag</key>
 					<integer>6</integer>
 					<key>INIntentParameterType</key>
@@ -3893,6 +3964,10 @@
 						<dict>
 							<key>INIntentParameterPromptDialogCustom</key>
 							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>What is the ${ownerEmail}</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>D0Rxq0</string>
 							<key>INIntentParameterPromptDialogType</key>
 							<string>Primary</string>
 						</dict>
@@ -3906,6 +3981,8 @@
 						<key>INIntentParameterRelationshipPredicateValue</key>
 						<string>ownerEmail</string>
 					</dict>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
 					<key>INIntentParameterTag</key>
 					<integer>7</integer>
 					<key>INIntentParameterType</key>
@@ -3946,6 +4023,10 @@
 						<dict>
 							<key>INIntentParameterPromptDialogCustom</key>
 							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>What is the ownerURL</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>HpJx86</string>
 							<key>INIntentParameterPromptDialogType</key>
 							<string>Primary</string>
 						</dict>
@@ -3959,6 +4040,8 @@
 						<key>INIntentParameterRelationshipPredicateValue</key>
 						<string>ownerURL</string>
 					</dict>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
 					<key>INIntentParameterTag</key>
 					<integer>8</integer>
 					<key>INIntentParameterType</key>
@@ -4010,6 +4093,444 @@
 			<string>Edit Outline</string>
 			<key>INIntentTitleID</key>
 			<string>7pQwz1</string>
+			<key>INIntentType</key>
+			<string>Custom</string>
+			<key>INIntentVerb</key>
+			<string>Set</string>
+		</dict>
+		<dict>
+			<key>INIntentCategory</key>
+			<string>set</string>
+			<key>INIntentConfigurable</key>
+			<true/>
+			<key>INIntentDescriptionID</key>
+			<string>TJ4jC7</string>
+			<key>INIntentIneligibleForSuggestions</key>
+			<true/>
+			<key>INIntentInput</key>
+			<string>rows</string>
+			<key>INIntentLastParameterTag</key>
+			<integer>11</integer>
+			<key>INIntentManagedParameterCombinations</key>
+			<dict>
+				<key>rows,detail</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Set ${detail}of ${rows}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>SJKUzz</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+				<key>rows,detail,complete</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Set ${detail}of ${rows}to ${complete}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>jVwvb4</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+				<key>rows,detail,expanded</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Set ${detail}of ${rows}to ${expanded}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>ALDU01</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+				<key>rows,detail,note</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Set ${detail}of ${rows}to ${note}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>5ucRxt</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+				<key>rows,detail,topic</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Set ${detail}of ${rows}to ${topic}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>GqnaGY</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+			</dict>
+			<key>INIntentName</key>
+			<string>EditRows</string>
+			<key>INIntentParameters</key>
+			<array>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Rows</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>Ip1L8I</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>1</integer>
+					<key>INIntentParameterName</key>
+					<string>rows</string>
+					<key>INIntentParameterObjectType</key>
+					<string>Row</string>
+					<key>INIntentParameterObjectTypeNamespace</key>
+					<string>LEx6zX</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterSupportsMultipleValues</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>11</integer>
+					<key>INIntentParameterType</key>
+					<string>Object</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Detail</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>6Vo7Xm</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>2</integer>
+					<key>INIntentParameterEnumType</key>
+					<string>RowDetail</string>
+					<key>INIntentParameterEnumTypeNamespace</key>
+					<string>LEx6zX</string>
+					<key>INIntentParameterName</key>
+					<string>detail</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>There are ${count} options matching ‘${detail}’.</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>4pFNKk</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>DisambiguationIntroduction</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>Just to confirm, you wanted ‘${detail}’?</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>KTwLUe</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Confirmation</string>
+						</dict>
+					</array>
+					<key>INIntentParameterTag</key>
+					<integer>4</integer>
+					<key>INIntentParameterType</key>
+					<string>Integer</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Topic</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>BJPRu0</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>3</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataCapitalization</key>
+						<string>Sentences</string>
+						<key>INIntentParameterMetadataDefaultValueID</key>
+						<string>CIsVV0</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>topic</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>What is the ${rows}${topic}</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>uvfPvV</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterRelationship</key>
+					<dict>
+						<key>INIntentParameterRelationshipParentName</key>
+						<string>detail</string>
+						<key>INIntentParameterRelationshipPredicateName</key>
+						<string>EnumHasExactValue</string>
+						<key>INIntentParameterRelationshipPredicateValue</key>
+						<string>topic</string>
+					</dict>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>5</integer>
+					<key>INIntentParameterType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Note</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>Lxxx4F</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>4</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataCapitalization</key>
+						<string>Sentences</string>
+						<key>INIntentParameterMetadataDefaultValueID</key>
+						<string>TgE6Ln</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>note</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>What is the ${rows}${topic}</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>004VZO</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterRelationship</key>
+					<dict>
+						<key>INIntentParameterRelationshipParentName</key>
+						<string>detail</string>
+						<key>INIntentParameterRelationshipPredicateName</key>
+						<string>EnumHasExactValue</string>
+						<key>INIntentParameterRelationshipPredicateValue</key>
+						<string>note</string>
+					</dict>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>6</integer>
+					<key>INIntentParameterType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Complete</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>egUtxU</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>5</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataFalseDisplayName</key>
+						<string>No</string>
+						<key>INIntentParameterMetadataFalseDisplayNameID</key>
+						<string>kqrDu9</string>
+						<key>INIntentParameterMetadataTrueDisplayName</key>
+						<string>Yes</string>
+						<key>INIntentParameterMetadataTrueDisplayNameID</key>
+						<string>bMlyQq</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>complete</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>Mark complete as ${complete}</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>kH8PXX</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterRelationship</key>
+					<dict>
+						<key>INIntentParameterRelationshipParentName</key>
+						<string>detail</string>
+						<key>INIntentParameterRelationshipPredicateName</key>
+						<string>EnumHasExactValue</string>
+						<key>INIntentParameterRelationshipPredicateValue</key>
+						<string>complete</string>
+					</dict>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>8</integer>
+					<key>INIntentParameterType</key>
+					<string>Boolean</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Expanded</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>jHLhTr</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>6</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataFalseDisplayName</key>
+						<string>No</string>
+						<key>INIntentParameterMetadataFalseDisplayNameID</key>
+						<string>dCZf14</string>
+						<key>INIntentParameterMetadataTrueDisplayName</key>
+						<string>Yes</string>
+						<key>INIntentParameterMetadataTrueDisplayNameID</key>
+						<string>yAVftc</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>expanded</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>Mark expanded as ${expanded}</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>DY3Xrw</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterRelationship</key>
+					<dict>
+						<key>INIntentParameterRelationshipParentName</key>
+						<string>detail</string>
+						<key>INIntentParameterRelationshipPredicateName</key>
+						<string>EnumHasExactValue</string>
+						<key>INIntentParameterRelationshipPredicateValue</key>
+						<string>expanded</string>
+					</dict>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>10</integer>
+					<key>INIntentParameterType</key>
+					<string>Boolean</string>
+				</dict>
+			</array>
+			<key>INIntentResponse</key>
+			<dict>
+				<key>INIntentResponseCodes</key>
+				<array>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>success</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>failure</string>
+					</dict>
+				</array>
+				<key>INIntentResponseLastParameterTag</key>
+				<integer>3</integer>
+				<key>INIntentResponseParameters</key>
+				<array>
+					<dict>
+						<key>INIntentResponseParameterDisplayName</key>
+						<string>Rows</string>
+						<key>INIntentResponseParameterDisplayNameID</key>
+						<string>UjVbr3</string>
+						<key>INIntentResponseParameterDisplayPriority</key>
+						<integer>1</integer>
+						<key>INIntentResponseParameterName</key>
+						<string>rows</string>
+						<key>INIntentResponseParameterObjectType</key>
+						<string>Row</string>
+						<key>INIntentResponseParameterObjectTypeNamespace</key>
+						<string>LEx6zX</string>
+						<key>INIntentResponseParameterSupportsMultipleValues</key>
+						<true/>
+						<key>INIntentResponseParameterTag</key>
+						<integer>3</integer>
+						<key>INIntentResponseParameterType</key>
+						<string>Object</string>
+					</dict>
+				</array>
+			</dict>
+			<key>INIntentTitle</key>
+			<string>Edit Rows</string>
+			<key>INIntentTitleID</key>
+			<string>bxPUpt</string>
 			<key>INIntentType</key>
 			<string>Custom</string>
 			<key>INIntentVerb</key>
@@ -4091,7 +4612,7 @@
 			<key>INTypeDisplayNameID</key>
 			<string>ubmqkG</string>
 			<key>INTypeLastPropertyTag</key>
-			<integer>105</integer>
+			<integer>108</integer>
 			<key>INTypeName</key>
 			<string>Outline</string>
 			<key>INTypeProperties</key>
@@ -4220,6 +4741,20 @@
 					<key>INTypePropertyType</key>
 					<string>String</string>
 				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>URL</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>U3s8AQ</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>10</integer>
+					<key>INTypePropertyName</key>
+					<string>url</string>
+					<key>INTypePropertyTag</key>
+					<integer>108</integer>
+					<key>INTypePropertyType</key>
+					<string>URL</string>
+				</dict>
 			</array>
 		</dict>
 		<dict>
@@ -4230,7 +4765,7 @@
 			<key>INTypeDisplayNameID</key>
 			<string>jddV8S</string>
 			<key>INTypeLastPropertyTag</key>
-			<integer>107</integer>
+			<integer>111</integer>
 			<key>INTypeName</key>
 			<string>Row</string>
 			<key>INTypeProperties</key>
@@ -4380,6 +4915,20 @@
 					<integer>107</integer>
 					<key>INTypePropertyType</key>
 					<string>Boolean</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>Level</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>e1FnQ0</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>10</integer>
+					<key>INTypePropertyName</key>
+					<string>level</string>
+					<key>INTypePropertyTag</key>
+					<integer>109</integer>
+					<key>INTypePropertyType</key>
+					<string>Integer</string>
 				</dict>
 			</array>
 		</dict>

@@ -17,6 +17,7 @@ extension IntentOutline {
 		ownerName = outline.ownerName
 		ownerEmail = outline.ownerEmail
 		ownerURL = outline.ownerURL
+		url = outline.id.url
 	}
 	
 }

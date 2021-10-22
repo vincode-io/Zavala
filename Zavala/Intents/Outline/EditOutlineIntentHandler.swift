@@ -5,12 +5,43 @@
 //  Created by Maurice Parker on 10/22/21.
 //
 
-import Foundation
-
+import Intents
 import Templeton
 
 class EditOutlineIntentHandler: NSObject, ZavalaIntentHandler, EditOutlineIntentHandling {
 
+	func resolveTitle(for intent: EditOutlineIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
+		guard let title = intent.title else {
+			completion(.notRequired())
+			return
+		}
+		completion(.success(with: title))
+	}
+	
+	func resolveOwnerName(for intent: EditOutlineIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
+		guard let ownerName = intent.ownerName else {
+			completion(.notRequired())
+			return
+		}
+		completion(.success(with: ownerName))
+	}
+	
+	func resolveOwnerEmail(for intent: EditOutlineIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
+		guard let ownerEmail = intent.ownerEmail else {
+			completion(.notRequired())
+			return
+		}
+		completion(.success(with: ownerEmail))
+	}
+	
+	func resolveOwnerURL(for intent: EditOutlineIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
+		guard let ownerURL = intent.ownerURL else {
+			completion(.notRequired())
+			return
+		}
+		completion(.success(with: ownerURL))
+	}
+	
 	func handle(intent: EditOutlineIntent, completion: @escaping (EditOutlineIntentResponse) -> Void) {
 		resume()
 		

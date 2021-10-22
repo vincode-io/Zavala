@@ -858,7 +858,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	@discardableResult
-	func deleteNotes(rows: [Row], rowStrings: RowStrings?) -> ([Row: NSAttributedString], Int?) {
+	public func deleteNotes(rows: [Row], rowStrings: RowStrings? = nil) -> ([Row: NSAttributedString], Int?) {
 		beginCloudKitBatchRequest()
 		
 		if rowCount == 1, let row = rows.first, let texts = rowStrings {
@@ -1285,7 +1285,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return newCursorIndex
 	}
 
-	func updateRow(_ row: Row, rowStrings: RowStrings?, applyChanges: Bool) {
+	public func updateRow(_ row: Row, rowStrings: RowStrings?, applyChanges: Bool) {
 		if let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
@@ -1315,7 +1315,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	@discardableResult
-	func collapse(rows: [Row]) -> [Row] {
+	public func collapse(rows: [Row]) -> [Row] {
 		let collapsableRows = rows.filter { $0.isCollapsable }
 
 		expandAllInOutlineUnavailableNeedsUpdate = true
@@ -1440,7 +1440,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	@discardableResult
-	func complete(rows: [Row], rowStrings: RowStrings?) -> ([Row], Int?) {
+	public func complete(rows: [Row], rowStrings: RowStrings? = nil) -> ([Row], Int?) {
 		return completeUncomplete(rows: rows, isComplete: true, rowStrings: rowStrings)
 	}
 	
@@ -1454,7 +1454,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	@discardableResult
-	func uncomplete(rows: [Row], rowStrings: RowStrings?) -> [Row] {
+	public func uncomplete(rows: [Row], rowStrings: RowStrings? = nil) -> [Row] {
 		let (impacted, _) = completeUncomplete(rows: rows, isComplete: false, rowStrings: rowStrings)
 		return impacted
 	}
