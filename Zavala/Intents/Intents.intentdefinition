@@ -4230,7 +4230,7 @@
 			<key>INTypeDisplayNameID</key>
 			<string>jddV8S</string>
 			<key>INTypeLastPropertyTag</key>
-			<integer>101</integer>
+			<integer>107</integer>
 			<key>INTypeName</key>
 			<string>Row</string>
 			<key>INTypeProperties</key>
@@ -4302,6 +4302,84 @@
 					<integer>101</integer>
 					<key>INTypePropertyType</key>
 					<string>Object</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>Topic</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>WfIIHg</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>6</integer>
+					<key>INTypePropertyName</key>
+					<string>topic</string>
+					<key>INTypePropertyTag</key>
+					<integer>102</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>Note</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>G4Fzkh</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>7</integer>
+					<key>INTypePropertyName</key>
+					<string>note</string>
+					<key>INTypePropertyTag</key>
+					<integer>103</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>Complete</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>9zWuEz</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>8</integer>
+					<key>INTypePropertyMetadata</key>
+					<dict>
+						<key>INTypePropertyMetadataFalseDisplayName</key>
+						<string>No</string>
+						<key>INTypePropertyMetadataFalseDisplayNameID</key>
+						<string>wEFUsK</string>
+						<key>INTypePropertyMetadataTrueDisplayName</key>
+						<string>Yes</string>
+						<key>INTypePropertyMetadataTrueDisplayNameID</key>
+						<string>fcqUSy</string>
+					</dict>
+					<key>INTypePropertyName</key>
+					<string>complete</string>
+					<key>INTypePropertyTag</key>
+					<integer>105</integer>
+					<key>INTypePropertyType</key>
+					<string>Boolean</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>Expanded</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>cRLWHT</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>9</integer>
+					<key>INTypePropertyMetadata</key>
+					<dict>
+						<key>INTypePropertyMetadataFalseDisplayName</key>
+						<string>No</string>
+						<key>INTypePropertyMetadataFalseDisplayNameID</key>
+						<string>EX9Yqj</string>
+						<key>INTypePropertyMetadataTrueDisplayName</key>
+						<string>Yes</string>
+						<key>INTypePropertyMetadataTrueDisplayNameID</key>
+						<string>Ojs1XF</string>
+					</dict>
+					<key>INTypePropertyName</key>
+					<string>expanded</string>
+					<key>INTypePropertyTag</key>
+					<integer>107</integer>
+					<key>INTypePropertyType</key>
+					<string>Boolean</string>
 				</dict>
 			</array>
 		</dict>
