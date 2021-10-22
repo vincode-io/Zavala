@@ -4091,7 +4091,7 @@
 			<key>INTypeDisplayNameID</key>
 			<string>ubmqkG</string>
 			<key>INTypeLastPropertyTag</key>
-			<integer>102</integer>
+			<integer>105</integer>
 			<key>INTypeName</key>
 			<string>Outline</string>
 			<key>INTypeProperties</key>
@@ -4175,6 +4175,48 @@
 					<string>title</string>
 					<key>INTypePropertyTag</key>
 					<integer>102</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>Owner Name</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>Gq6cKL</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>7</integer>
+					<key>INTypePropertyName</key>
+					<string>ownerName</string>
+					<key>INTypePropertyTag</key>
+					<integer>103</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>Owner Email</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>U1B4Ft</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>8</integer>
+					<key>INTypePropertyName</key>
+					<string>ownerEmail</string>
+					<key>INTypePropertyTag</key>
+					<integer>104</integer>
+					<key>INTypePropertyType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INTypePropertyDisplayName</key>
+					<string>Owner URL</string>
+					<key>INTypePropertyDisplayNameID</key>
+					<string>QaaAHc</string>
+					<key>INTypePropertyDisplayPriority</key>
+					<integer>9</integer>
+					<key>INTypePropertyName</key>
+					<string>ownerURL</string>
+					<key>INTypePropertyTag</key>
+					<integer>105</integer>
 					<key>INTypePropertyType</key>
 					<string>String</string>
 				</dict>

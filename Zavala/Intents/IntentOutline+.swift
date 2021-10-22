@@ -14,6 +14,9 @@ extension IntentOutline {
 		self.init(identifier: outline.id.description, display: outline.title ?? "")
 		entityID = IntentEntityID(outline.id)
 		title = outline.title
+		ownerName = outline.ownerName
+		ownerEmail = outline.ownerEmail
+		ownerURL = outline.ownerURL
 	}
 	
 }
