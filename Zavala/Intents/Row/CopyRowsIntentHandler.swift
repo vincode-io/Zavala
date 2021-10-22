@@ -10,14 +10,6 @@ import Templeton
 
 class CopyRowsIntentHandler: NSObject, ZavalaIntentHandler, CopyRowsIntentHandling {
 	
-	func resolveDestination(for intent: CopyRowsIntent, with completion: @escaping (CopyRowsDestinationResolutionResult) -> Void) {
-		guard intent.destination != .unknown else {
-			completion(.unsupported(forReason: .required))
-			return
-		}
-		completion(.success(with: intent.destination))
-	}
-	
 	func handle(intent: CopyRowsIntent, completion: @escaping (CopyRowsIntentResponse) -> Void) {
 		resume()
 		

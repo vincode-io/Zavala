@@ -10,30 +10,6 @@ import Templeton
 
 class ImportIntentHandler: NSObject, ZavalaIntentHandler, ImportIntentHandling {
 	
-	func resolveInputFile(for intent: ImportIntent, with completion: @escaping (ImportInputFileResolutionResult) -> Void) {
-		guard let file = intent.inputFile, !file.data.isEmpty else {
-			completion(.unsupported(forReason: .required))
-			return
-		}
-		completion(.success(with: file))
-	}
-	
-	func resolveImportType(for intent: ImportIntent, with completion: @escaping (ImportImportTypeResolutionResult) -> Void) {
-		guard intent.importType != .unknown else {
-			completion(.unsupported(forReason: .required))
-			return
-		}
-		completion(.success(with: intent.importType))
-	}
-	
-	func resolveAccountType(for intent: ImportIntent, with completion: @escaping (ImportAccountTypeResolutionResult) -> Void) {
-		guard intent.accountType != .unknown else {
-			completion(.unsupported(forReason: .required))
-			return
-		}
-		completion(.success(with: intent.accountType))
-	}
-	
 	func handle(intent: ImportIntent, completion: @escaping (ImportIntentResponse) -> Void) {
 		resume()
 		let acctType = intent.accountType == .onMyDevice ? AccountType.local : AccountType.cloudKit

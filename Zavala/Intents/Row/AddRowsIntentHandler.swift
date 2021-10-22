@@ -9,14 +9,6 @@ import Intents
 import Templeton
 
 class AddRowsIntentHandler: NSObject, ZavalaIntentHandler, AddRowsIntentHandling {
-
-	func resolveDestination(for intent: AddRowsIntent, with completion: @escaping (AddRowsDestinationResolutionResult) -> Void) {
-		guard intent.destination != .unknown else {
-			completion(.unsupported(forReason: .required))
-			return
-		}
-		completion(.success(with: intent.destination))
-	}
 	
 	func handle(intent: AddRowsIntent, completion: @escaping (AddRowsIntentResponse) -> Void) {
 		resume()

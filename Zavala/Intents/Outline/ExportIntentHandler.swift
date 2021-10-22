@@ -10,10 +10,10 @@ import Templeton
 import UIKit
 
 class ExportIntentHandler: NSObject, ZavalaIntentHandler, ExportIntentHandling {
-	
-	func resolveExportType(for intent: ExportIntent, with completion: @escaping (ExportExportTypeResolutionResult) -> Void) {
+
+	func resolveExportType(for intent: ExportIntent, with completion: @escaping (IntentExportTypeResolutionResult) -> Void) {
 		guard intent.exportType != .unknown else {
-			completion(.unsupported(forReason: .required))
+			completion(.needsValue())
 			return
 		}
 		completion(.success(with: intent.exportType))

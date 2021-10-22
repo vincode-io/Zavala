@@ -724,19 +724,6 @@
 					<integer>4</integer>
 					<key>INIntentParameterType</key>
 					<string>Integer</string>
-					<key>INIntentParameterUnsupportedReasons</key>
-					<array>
-						<dict>
-							<key>INIntentParameterUnsupportedReasonCode</key>
-							<string>required</string>
-							<key>INIntentParameterUnsupportedReasonCustom</key>
-							<true/>
-							<key>INIntentParameterUnsupportedReasonFormatString</key>
-							<string>The${exportType}is required.</string>
-							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
-							<string>4JA58U</string>
-						</dict>
-					</array>
 				</dict>
 			</array>
 			<key>INIntentResponse</key>
@@ -860,25 +847,10 @@
 							<string>Primary</string>
 						</dict>
 					</array>
-					<key>INIntentParameterSupportsResolution</key>
-					<true/>
 					<key>INIntentParameterTag</key>
 					<integer>8</integer>
 					<key>INIntentParameterType</key>
 					<string>File</string>
-					<key>INIntentParameterUnsupportedReasons</key>
-					<array>
-						<dict>
-							<key>INIntentParameterUnsupportedReasonCode</key>
-							<string>required</string>
-							<key>INIntentParameterUnsupportedReasonCustom</key>
-							<true/>
-							<key>INIntentParameterUnsupportedReasonFormatString</key>
-							<string>The Input File is required.</string>
-							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
-							<string>X5SMAX</string>
-						</dict>
-					</array>
 				</dict>
 				<dict>
 					<key>INIntentParameterConfigurable</key>
@@ -920,8 +892,6 @@
 				</dict>
 				<dict>
 					<key>INIntentParameterConfigurable</key>
-					<true/>
-					<key>INIntentParameterCustomDisambiguation</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
 					<string>Import Type</string>
@@ -970,8 +940,6 @@
 							<string>Confirmation</string>
 						</dict>
 					</array>
-					<key>INIntentParameterSupportsResolution</key>
-					<true/>
 					<key>INIntentParameterTag</key>
 					<integer>4</integer>
 					<key>INIntentParameterType</key>
@@ -992,8 +960,6 @@
 				</dict>
 				<dict>
 					<key>INIntentParameterConfigurable</key>
-					<true/>
-					<key>INIntentParameterCustomDisambiguation</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
 					<string>Account Type</string>
@@ -1042,8 +1008,6 @@
 							<string>Confirmation</string>
 						</dict>
 					</array>
-					<key>INIntentParameterSupportsResolution</key>
-					<true/>
 					<key>INIntentParameterTag</key>
 					<integer>6</integer>
 					<key>INIntentParameterType</key>
@@ -1835,19 +1799,6 @@
 					<integer>3</integer>
 					<key>INIntentParameterType</key>
 					<string>String</string>
-					<key>INIntentParameterUnsupportedReasons</key>
-					<array>
-						<dict>
-							<key>INIntentParameterUnsupportedReasonCode</key>
-							<string>required</string>
-							<key>INIntentParameterUnsupportedReasonCustom</key>
-							<true/>
-							<key>INIntentParameterUnsupportedReasonFormatString</key>
-							<string>The Tag Name is required.</string>
-							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
-							<string>yEZw8M</string>
-						</dict>
-					</array>
 				</dict>
 			</array>
 			<key>INIntentResponse</key>
@@ -1988,19 +1939,6 @@
 					<integer>3</integer>
 					<key>INIntentParameterType</key>
 					<string>String</string>
-					<key>INIntentParameterUnsupportedReasons</key>
-					<array>
-						<dict>
-							<key>INIntentParameterUnsupportedReasonCode</key>
-							<string>required</string>
-							<key>INIntentParameterUnsupportedReasonCustom</key>
-							<true/>
-							<key>INIntentParameterUnsupportedReasonFormatString</key>
-							<string>The Tag Name is required.</string>
-							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
-							<string>QIjIsT</string>
-						</dict>
-					</array>
 				</dict>
 			</array>
 			<key>INIntentResponse</key>
@@ -2194,19 +2132,6 @@
 					<integer>5</integer>
 					<key>INIntentParameterType</key>
 					<string>Integer</string>
-					<key>INIntentParameterUnsupportedReasons</key>
-					<array>
-						<dict>
-							<key>INIntentParameterUnsupportedReasonCode</key>
-							<string>required</string>
-							<key>INIntentParameterUnsupportedReasonCustom</key>
-							<true/>
-							<key>INIntentParameterUnsupportedReasonFormatString</key>
-							<string>The Account Type is required</string>
-							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
-							<string>2hlE38</string>
-						</dict>
-					</array>
 				</dict>
 				<dict>
 					<key>INIntentParameterConfigurable</key>
@@ -2251,19 +2176,6 @@
 					<integer>1</integer>
 					<key>INIntentParameterType</key>
 					<string>String</string>
-					<key>INIntentParameterUnsupportedReasons</key>
-					<array>
-						<dict>
-							<key>INIntentParameterUnsupportedReasonCode</key>
-							<string>required</string>
-							<key>INIntentParameterUnsupportedReasonCustom</key>
-							<true/>
-							<key>INIntentParameterUnsupportedReasonFormatString</key>
-							<string>The Title is required.</string>
-							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
-							<string>UK0XBS</string>
-						</dict>
-					</array>
 				</dict>
 				<dict>
 					<key>INIntentParameterConfigurable</key>
@@ -2527,8 +2439,6 @@
 				<dict>
 					<key>INIntentParameterConfigurable</key>
 					<true/>
-					<key>INIntentParameterCustomDisambiguation</key>
-					<true/>
 					<key>INIntentParameterDisplayName</key>
 					<string>Destination</string>
 					<key>INIntentParameterDisplayNameID</key>
@@ -2576,25 +2486,10 @@
 							<string>Confirmation</string>
 						</dict>
 					</array>
-					<key>INIntentParameterSupportsResolution</key>
-					<true/>
 					<key>INIntentParameterTag</key>
 					<integer>4</integer>
 					<key>INIntentParameterType</key>
 					<string>Integer</string>
-					<key>INIntentParameterUnsupportedReasons</key>
-					<array>
-						<dict>
-							<key>INIntentParameterUnsupportedReasonCode</key>
-							<string>required</string>
-							<key>INIntentParameterUnsupportedReasonCustom</key>
-							<true/>
-							<key>INIntentParameterUnsupportedReasonFormatString</key>
-							<string>The${destination} is required.</string>
-							<key>INIntentParameterUnsupportedReasonFormatStringID</key>
-							<string>WLO845</string>
-						</dict>
-					</array>
 				</dict>
 				<dict>
 					<key>INIntentParameterConfigurable</key>
@@ -3262,8 +3157,6 @@
 				<dict>
 					<key>INIntentParameterConfigurable</key>
 					<true/>
-					<key>INIntentParameterCustomDisambiguation</key>
-					<true/>
 					<key>INIntentParameterDisplayName</key>
 					<string>Destination</string>
 					<key>INIntentParameterDisplayNameID</key>
@@ -3311,8 +3204,6 @@
 							<string>Confirmation</string>
 						</dict>
 					</array>
-					<key>INIntentParameterSupportsResolution</key>
-					<true/>
 					<key>INIntentParameterTag</key>
 					<integer>7</integer>
 					<key>INIntentParameterType</key>
@@ -3586,8 +3477,6 @@
 				<dict>
 					<key>INIntentParameterConfigurable</key>
 					<true/>
-					<key>INIntentParameterCustomDisambiguation</key>
-					<true/>
 					<key>INIntentParameterDisplayName</key>
 					<string>Destination</string>
 					<key>INIntentParameterDisplayNameID</key>
@@ -3635,8 +3524,6 @@
 							<string>Confirmation</string>
 						</dict>
 					</array>
-					<key>INIntentParameterSupportsResolution</key>
-					<true/>
 					<key>INIntentParameterTag</key>
 					<integer>7</integer>
 					<key>INIntentParameterType</key>

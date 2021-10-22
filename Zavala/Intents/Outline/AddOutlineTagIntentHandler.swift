@@ -10,14 +10,14 @@ import Templeton
 
 class AddOutlineTagIntentHandler: NSObject, ZavalaIntentHandler, AddOutlineTagIntentHandling {
 
-	func resolveTagName(for intent: AddOutlineTagIntent, with completion: @escaping (AddOutlineTagTagNameResolutionResult) -> Void) {
+	func resolveTagName(for intent: AddOutlineTagIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
 		guard let tagName = intent.tagName else {
-			completion(.unsupported(forReason: .required))
+			completion(.needsValue())
 			return
 		}
 		completion(.success(with: tagName))
 	}
-
+	
 	func handle(intent: AddOutlineTagIntent, completion: @escaping (AddOutlineTagIntentResponse) -> Void) {
 		resume()
 		

@@ -10,22 +10,22 @@ import Templeton
 
 class AddOutlineIntentHandler: NSObject, ZavalaIntentHandler, AddOutlineIntentHandling {
 
-	func resolveAccountType(for intent: AddOutlineIntent, with completion: @escaping (AddOutlineAccountTypeResolutionResult) -> Void) {
+	func resolveAccountType(for intent: AddOutlineIntent, with completion: @escaping (IntentAccountTypeResolutionResult) -> Void) {
 		guard intent.accountType != .unknown else {
-			completion(.unsupported(forReason: .required))
+			completion(.needsValue())
 			return
 		}
 		completion(.success(with: intent.accountType))
 	}
 	
-	func resolveTitle(for intent: AddOutlineIntent, with completion: @escaping (AddOutlineTitleResolutionResult) -> Void) {
+	func resolveTitle(for intent: AddOutlineIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
 		guard let title = intent.title else {
-			completion(.unsupported(forReason: .required))
+			completion(.needsValue())
 			return
 		}
 		completion(.success(with: title))
 	}
-	
+
 	func resolveTagName(for intent: AddOutlineIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
 		guard let tagName = intent.tagName else {
 			completion(.notRequired())

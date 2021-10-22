@@ -10,14 +10,15 @@ import Templeton
 
 class RemoveOutlineTagIntentHandler: NSObject, ZavalaIntentHandler, RemoveOutlineTagIntentHandling {
 
-	func resolveTagName(for intent: RemoveOutlineTagIntent, with completion: @escaping (RemoveOutlineTagTagNameResolutionResult) -> Void) {
+	func resolveTagName(for intent: RemoveOutlineTagIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
 		guard let tagName = intent.tagName else {
-			completion(.unsupported(forReason: .required))
+			completion(.needsValue())
 			return
 		}
 		completion(.success(with: tagName))
 	}
 	
+
 	func handle(intent: RemoveOutlineTagIntent, completion: @escaping (RemoveOutlineTagIntentResponse) -> Void) {
 		resume()
 		

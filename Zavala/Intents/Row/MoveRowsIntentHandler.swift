@@ -10,14 +10,6 @@ import Templeton
 
 class MoveRowsIntentHandler: NSObject, ZavalaIntentHandler, MoveRowsIntentHandling {
 
-	func resolveDestination(for intent: MoveRowsIntent, with completion: @escaping (MoveRowsDestinationResolutionResult) -> Void) {
-		guard intent.destination != .unknown else {
-			completion(.unsupported(forReason: .required))
-			return
-		}
-		completion(.success(with: intent.destination))
-	}
-	
 	func handle(intent: MoveRowsIntent, completion: @escaping (MoveRowsIntentResponse) -> Void) {
 		resume()
 		
