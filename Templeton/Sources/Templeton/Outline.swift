@@ -1301,28 +1301,32 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	@discardableResult
 	public func expand(rows: [Row]) -> [Row] {
+		let expandableRows = rows.filter { $0.isExpandable }
+		
 		expandAllInOutlineUnavailableNeedsUpdate = true
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 
-		if rowCount == 1, let row = rows.first {
+		if rowCount == 1, let row = expandableRows.first {
 			expand(row: row)
 			return [row]
 		}
 		
-		return expandCollapse(rows: rows, isExpanded: true)
+		return expandCollapse(rows: expandableRows, isExpanded: true)
 	}
 	
 	@discardableResult
 	func collapse(rows: [Row]) -> [Row] {
+		let collapsableRows = rows.filter { $0.isCollapsable }
+
 		expandAllInOutlineUnavailableNeedsUpdate = true
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
-		if rowCount == 1, let row = rows.first {
+		if rowCount == 1, let row = collapsableRows.first {
 			collapse(row: row)
 			return [row]
 		}
 		
-		return expandCollapse(rows: rows, isExpanded: false)
+		return expandCollapse(rows: collapsableRows, isExpanded: false)
 	}
 	
 	public func isExpandAllUnavailable(containers: [RowContainer]) -> Bool {

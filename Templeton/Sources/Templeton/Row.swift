@@ -451,11 +451,13 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 
 	public func complete() {
+		guard isCompletable else { return }
 		isComplete = true
 		outline?.requestCloudKitUpdate(for: entityID)
 	}
 	
 	public func uncomplete() {
+		guard isUncompletable else { return }
 		isComplete = false
 		outline?.requestCloudKitUpdate(for: entityID)
 	}
