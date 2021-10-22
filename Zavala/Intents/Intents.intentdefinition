@@ -2110,7 +2110,7 @@
 			<key>INIntentConfigurable</key>
 			<true/>
 			<key>INIntentDescription</key>
-			<string>Adds an Outline</string>
+			<string>Adds an Outline.</string>
 			<key>INIntentDescriptionID</key>
 			<string>XBP1qH</string>
 			<key>INIntentIneligibleForSuggestions</key>
@@ -3344,7 +3344,7 @@
 			<key>INIntentConfigurable</key>
 			<true/>
 			<key>INIntentDescription</key>
-			<string>Delete the specified Rows</string>
+			<string>Delete the specified Rows.</string>
 			<key>INIntentDescriptionID</key>
 			<string>Q0fRYW</string>
 			<key>INIntentIneligibleForSuggestions</key>
@@ -3439,6 +3439,8 @@
 			<string>generic</string>
 			<key>INIntentConfigurable</key>
 			<true/>
+			<key>INIntentDescription</key>
+			<string>Copy Rows in or between Outlines.</string>
 			<key>INIntentDescriptionID</key>
 			<string>Xt5aZp</string>
 			<key>INIntentIneligibleForSuggestions</key>
@@ -3663,6 +3665,8 @@
 			<string>set</string>
 			<key>INIntentConfigurable</key>
 			<true/>
+			<key>INIntentDescription</key>
+			<string>Update the details of an Outline.</string>
 			<key>INIntentDescriptionID</key>
 			<string>ZYyK7W</string>
 			<key>INIntentIneligibleForSuggestions</key>
@@ -4103,6 +4107,8 @@
 			<string>set</string>
 			<key>INIntentConfigurable</key>
 			<true/>
+			<key>INIntentDescription</key>
+			<string>Update the details of a Row.</string>
 			<key>INIntentDescriptionID</key>
 			<string>TJ4jC7</string>
 			<key>INIntentIneligibleForSuggestions</key>
