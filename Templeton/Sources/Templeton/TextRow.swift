@@ -294,7 +294,7 @@ extension TextRow {
 			mutableAttrString.removeAttribute(.attachment, range: range)
 		}
 		
-		for image in images ?? [Image]() {
+		for image in images?.sorted(by: { $0.offset < $1.offset }) ?? [Image]() {
 			if image.isInNotes == isNotes {
 				let attachment = OutlineTextAttachment(data: image.data, ofType: kUTTypePNG as String)
 				let imageAttrText = NSAttributedString(attachment: attachment)
