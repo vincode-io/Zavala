@@ -13,6 +13,7 @@ extension IntentOutline {
 	convenience init(_ outline: Outline) {
 		self.init(identifier: outline.id.description, display: outline.title ?? "")
 		entityID = IntentEntityID(outline.id)
+		title = outline.title
 	}
 	
 }

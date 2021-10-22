@@ -657,10 +657,28 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return opml
 	}
 	
-	public func update(title: String) {
+	public func update(title: String?) {
 		self.title = title
 		updated = Date()
 		documentTitleDidChange()
+		requestCloudKitUpdate(for: id)
+	}
+	
+	public func update(ownerName: String?) {
+		self.ownerName = ownerName
+		updated = Date()
+		requestCloudKitUpdate(for: id)
+	}
+	
+	public func update(ownerEmail: String?) {
+		self.ownerEmail = ownerEmail
+		updated = Date()
+		requestCloudKitUpdate(for: id)
+	}
+	
+	public func update(ownerURL: String?) {
+		self.ownerURL = ownerURL
+		updated = Date()
 		requestCloudKitUpdate(for: id)
 	}
 	

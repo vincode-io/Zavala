@@ -64,6 +64,7 @@
 		<string>AddOutlineTagIntent</string>
 		<string>AddRowsIntent</string>
 		<string>CopyRowsIntent</string>
+		<string>EditOutlineIntent</string>
 		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
 		<string>GetCurrentTagIntent</string>
@@ -100,6 +101,7 @@
 		<string>AddOutlineTagIntent</string>
 		<string>AddRowsIntent</string>
 		<string>CopyRowsIntent</string>
+		<string>EditOutlineIntent</string>
 		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
 		<string>GetCurrentTagIntent</string>

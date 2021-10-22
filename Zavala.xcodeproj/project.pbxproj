@@ -29,6 +29,7 @@
 		5125D01A26BE181500703DA4 /* SpotlightIndexExtension.appex in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 515D452026BB553600228229 /* SpotlightIndexExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		51278E77257F37AC0034F1CB /* Dialog.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51278E76257F37AC0034F1CB /* Dialog.storyboard */; };
 		512D375225F06733000FA597 /* EditorSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512D375125F06733000FA597 /* EditorSearchBar.swift */; };
+		513B916A2722CDC80051A6BA /* EditOutlineIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513B91692722CDC80051A6BA /* EditOutlineIntentHandler.swift */; };
 		5142C295260AC78C0094571F /* OutlineFontConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142C294260AC78C0094571F /* OutlineFontConfig.swift */; };
 		5142C297260AC78C0094571F /* OutlineFontConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142C294260AC78C0094571F /* OutlineFontConfig.swift */; };
 		5142C29A260AC7980094571F /* OutlineFontDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F5372260829060038BAF8 /* OutlineFontDefaults.swift */; };
@@ -263,6 +264,7 @@
 		51278E76257F37AC0034F1CB /* Dialog.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
 		512D375025EEFC01000FA597 /* Zavala-dev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Zavala-dev.entitlements"; sourceTree = "<group>"; };
 		512D375125F06733000FA597 /* EditorSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorSearchBar.swift; sourceTree = "<group>"; };
+		513B91692722CDC80051A6BA /* EditOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditOutlineIntentHandler.swift; sourceTree = "<group>"; };
 		513F32A12594062C0003048F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5142C294260AC78C0094571F /* OutlineFontConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontConfig.swift; sourceTree = "<group>"; };
 		5142C29B260B90F30094571F /* FontAndColorPreferencesConfigWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAndColorPreferencesConfigWindowController.swift; sourceTree = "<group>"; };
@@ -678,6 +680,7 @@
 			children = (
 				5191850A2713828F00B7E177 /* AddOutlineIntentHandler.swift */,
 				519185002713116B00B7E177 /* AddOutlineTagIntentHandler.swift */,
+				513B91692722CDC80051A6BA /* EditOutlineIntentHandler.swift */,
 				519184F02710792300B7E177 /* ExportIntentHandler.swift */,
 				519184ED270FAFE100B7E177 /* GetImagesForOutlineIntentHandler.swift */,
 				519184F827124E9700B7E177 /* GetOutlinesIntentHandler.swift */,
@@ -1199,6 +1202,7 @@
 				5191850527133B4000B7E177 /* RenameTagViewController.swift in Sources */,
 				5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */,
 				5167702D261CB5F300EFFD40 /* EditorTextRowDropInteractionDelegate.swift in Sources */,
+				513B916A2722CDC80051A6BA /* EditOutlineIntentHandler.swift in Sources */,
 				519185012713116B00B7E177 /* AddOutlineTagIntentHandler.swift in Sources */,
 				511B2A002601914400C04239 /* NSAttributedString+.swift in Sources */,
 				51E5C48F27221F6200A38983 /* IntentOutline+.swift in Sources */,
