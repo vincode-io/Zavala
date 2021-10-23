@@ -15,6 +15,10 @@ protocol SidebarDelegate: AnyObject {
 	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool, completion: (() -> Void)?)
 }
 
+enum SidebarSection: Int {
+	case search, localAccount, cloudKitAccount
+}
+
 class SidebarViewController: UICollectionViewController, MainControllerIdentifiable {
 	var mainControllerIdentifer: MainControllerIdentifier { return .sidebar }
 	

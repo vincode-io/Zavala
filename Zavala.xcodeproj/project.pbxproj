@@ -168,7 +168,6 @@
 		51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E060ED25A4B5E600194066 /* AppKitWrapper.swift */; };
 		51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */; };
 		51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F22255F2D7F00320EDB /* ActivityManager.swift */; };
-		51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F2D2560730000320EDB /* SidebarSection.swift */; };
 		51E14F342560732F00320EDB /* SidebarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F332560732F00320EDB /* SidebarItem.swift */; };
 		51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */; };
 		51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */; };
@@ -410,7 +409,6 @@
 		51E060F325A4C13B00194066 /* AppKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitPlugin.h; sourceTree = "<group>"; };
 		51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatingToolbarItem.swift; sourceTree = "<group>"; };
 		51E14F22255F2D7F00320EDB /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
-		51E14F2D2560730000320EDB /* SidebarSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSection.swift; sourceTree = "<group>"; };
 		51E14F332560732F00320EDB /* SidebarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarItem.swift; sourceTree = "<group>"; };
 		51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSelectionOperation.swift; sourceTree = "<group>"; };
 		51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplySnapshotOperation.swift; sourceTree = "<group>"; };
@@ -803,7 +801,6 @@
 			isa = PBXGroup;
 			children = (
 				51E14F332560732F00320EDB /* SidebarItem.swift */,
-				51E14F2D2560730000320EDB /* SidebarSection.swift */,
 				5181A93B2554D92000C153E8 /* SidebarViewController.swift */,
 				5147D0C425CCD6AA004673C3 /* SidebarViewController+Drop.swift */,
 				51F2859D25AD12860019C573 /* Search */,
@@ -1099,7 +1096,6 @@
 				519184F927124E9700B7E177 /* GetOutlinesIntentHandler.swift in Sources */,
 				517AF6A725E08CB80044DBAB /* NonIntrinsicLabel.swift in Sources */,
 				51DEE82426FE8711006DAA56 /* ExportPDFDocActivity.swift in Sources */,
-				51E14F2E2560730000320EDB /* SidebarSection.swift in Sources */,
 				5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */,
 				5147D0B825CCAB2A004673C3 /* TimelineViewController+Drop.swift in Sources */,
 				51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */,
