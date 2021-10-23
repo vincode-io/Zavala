@@ -330,16 +330,24 @@ extension TimelineViewController {
 			
 			let prevSelectedDoc = self.collectionView.indexPathsForSelectedItems?.map({ self.timelineDocuments[$0.row] }).first
 
-			let diff = documents.difference(from: self.timelineDocuments)
+			let diff = documents.difference(from: self.timelineDocuments).inferringMoves()
 			self.timelineDocuments = documents
 
 			self.collectionView.performBatchUpdates {
 				for change in diff {
 					switch change {
-					case .insert(let offset, _, _):
-						self.collectionView.insertItems(at: [IndexPath(row: offset, section: 0)])
-					case .remove(let offset, _, _):
-						self.collectionView.deleteItems(at: [IndexPath(row: offset, section: 0)])
+					case .insert(let offset, _, let associated):
+						if let associated = associated {
+							self.collectionView.moveItem(at: IndexPath(row: associated, section: 0), to: IndexPath(row: offset, section: 0))
+						} else {
+							self.collectionView.insertItems(at: [IndexPath(row: offset, section: 0)])
+						}
+					case .remove(let offset, _, let associated):
+						if let associated = associated {
+							self.collectionView.moveItem(at: IndexPath(row: offset, section: 0), to: IndexPath(row: associated, section: 0))
+						} else {
+							self.collectionView.deleteItems(at: [IndexPath(row: offset, section: 0)])
+						}
 					}
 				}
 			}
