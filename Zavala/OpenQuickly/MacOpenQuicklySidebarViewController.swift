@@ -67,6 +67,7 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 		}
 		
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, SidebarItem> { (cell, indexPath, item) in
+			cell.highlightImageInWhite = true
 			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
 			contentConfiguration.text = item.title
 			contentConfiguration.image = item.image
