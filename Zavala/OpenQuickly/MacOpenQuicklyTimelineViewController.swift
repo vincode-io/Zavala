@@ -101,6 +101,9 @@ class MacOpenQuicklyTimelineViewController: UICollectionViewController {
 			
 			cell.contentConfiguration = contentConfiguration
 			
+			let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.selectDocument(gesture:)))
+			cell.addGestureRecognizer(singleTap)
+			
 			if self.traitCollection.userInterfaceIdiom == .mac {
 				let doubleTap = UITapGestureRecognizer(target: self, action: #selector(self.openDocumentInNewWindow(gesture:)))
 				doubleTap.numberOfTapsRequired = 2
@@ -113,6 +116,16 @@ class MacOpenQuicklyTimelineViewController: UICollectionViewController {
 		}
 	}
 
+	@objc private func selectDocument(gesture: UITapGestureRecognizer) {
+		guard let cell = gesture.view as? UICollectionViewCell,
+			  let indexPath = collectionView.indexPath(for: cell),
+			  let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
+
+		collectionView.deselectAll()
+		collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+		delegate?.documentSelectionDidChange(self, documentID: timelineItem.id)
+	}
+	
 	@objc func openDocumentInNewWindow(gesture: UITapGestureRecognizer) {
 		guard let cell = gesture.view as? UICollectionViewCell,
 			  let indexPath = collectionView.indexPath(for: cell),
