@@ -395,10 +395,10 @@ extension TimelineViewController: UISearchResultsUpdating {
 extension TimelineViewController {
 	
 	private func queueLoadDocuments() {
-		coalescingQueue.add(self, #selector(loadDocumentsAnimated))
+		coalescingQueue.add(self, #selector(executeQueuedLoadDocuments))
 	}
 	
-	@objc private func loadDocumentsAnimated() {
+	@objc private func executeQueuedLoadDocuments() {
 		loadDocuments(animated: true)
 	}
 	
