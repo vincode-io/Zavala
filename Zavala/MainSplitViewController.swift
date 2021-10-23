@@ -149,10 +149,9 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 				return
 			}
 			
-			self.timelineViewController?.selectDocument(document, animated: false) {
-				self.lastMainControllerToAppear = .editor
-				self.validateToolbar()
-			}
+			self.timelineViewController?.selectDocument(document, animated: false)
+			self.lastMainControllerToAppear = .editor
+			self.validateToolbar()
 		}
 	}
 	
@@ -165,10 +164,9 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 
 		sidebarViewController?.selectDocumentContainer(AllDocuments(account: account), animated: false) {
-			self.timelineViewController?.selectDocument(document, animated: false) {
-				self.lastMainControllerToAppear = .editor
-				self.validateToolbar()
-			}
+			self.timelineViewController?.selectDocument(document, animated: false)
+			self.lastMainControllerToAppear = .editor
+			self.validateToolbar()
 		}
 	}
 	

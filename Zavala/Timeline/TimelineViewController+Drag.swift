@@ -12,9 +12,7 @@ import Templeton
 extension TimelineViewController: UICollectionViewDragDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-		guard let timelineItem = dataSource.itemIdentifier(for: indexPath),
-			  let document = AccountManager.shared.findDocument(timelineItem.id) else { return [UIDragItem]() }
-		
+		let document = timelineDocuments[indexPath.row]
 		session.localContext = document
 		
 		let itemProvider = NSItemProvider()

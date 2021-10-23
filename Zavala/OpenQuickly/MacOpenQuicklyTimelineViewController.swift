@@ -14,6 +14,36 @@ protocol MacOpenQuicklyTimelineDelegate: AnyObject {
 	func openDocument(_: MacOpenQuicklyTimelineViewController, documentID: EntityID)
 }
 
+final class TimelineItem: NSObject, NSCopying, Identifiable {
+
+		let id: EntityID
+
+		init(id: EntityID) {
+				self.id = id
+		}
+
+		static func timelineItem(_ document: Document) -> TimelineItem {
+				return TimelineItem(id: document.id)
+		}
+
+		override func isEqual(_ object: Any?) -> Bool {
+				guard let other = object as? TimelineItem else { return false }
+				if self === other { return true }
+				return id == other.id
+		}
+
+		override var hash: Int {
+				var hasher = Hasher()
+				hasher.combine(id)
+				return hasher.finalize()
+		}
+
+		func copy(with zone: NSZone? = nil) -> Any {
+				return self
+		}
+
+}
+
 class MacOpenQuicklyTimelineViewController: UICollectionViewController {
 
 	weak var delegate: MacOpenQuicklyTimelineDelegate?
@@ -71,9 +101,6 @@ class MacOpenQuicklyTimelineViewController: UICollectionViewController {
 			
 			cell.contentConfiguration = contentConfiguration
 			
-			let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.selectDocument(gesture:)))
-			cell.addGestureRecognizer(singleTap)
-			
 			if self.traitCollection.userInterfaceIdiom == .mac {
 				let doubleTap = UITapGestureRecognizer(target: self, action: #selector(self.openDocumentInNewWindow(gesture:)))
 				doubleTap.numberOfTapsRequired = 2
@@ -86,16 +113,6 @@ class MacOpenQuicklyTimelineViewController: UICollectionViewController {
 		}
 	}
 
-	@objc private func selectDocument(gesture: UITapGestureRecognizer) {
-		guard let cell = gesture.view as? UICollectionViewCell,
-			  let indexPath = collectionView.indexPath(for: cell),
-			  let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
-
-		collectionView.deselectAll()
-		collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-		delegate?.documentSelectionDidChange(self, documentID: timelineItem.id)
-	}
-	
 	@objc func openDocumentInNewWindow(gesture: UITapGestureRecognizer) {
 		guard let cell = gesture.view as? UICollectionViewCell,
 			  let indexPath = collectionView.indexPath(for: cell),

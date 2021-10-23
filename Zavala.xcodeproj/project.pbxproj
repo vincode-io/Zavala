@@ -123,8 +123,8 @@
 		519965DC2624EEE500D8468B /* RSAppMovementMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */; };
 		519A2324260A9B900056051E /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
 		519A2326260A9C940056051E /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
-		519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519F004A25608EF9009DC1F0 /* TimelineItem.swift */; };
 		51A1EC422723246C00463A15 /* EditRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A1EC412723246C00463A15 /* EditRowsIntentHandler.swift */; };
+		51A1EC4427243B3600463A15 /* GenericRowIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A1EC4327243B3600463A15 /* GenericRowIdentifier.swift */; };
 		51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */; };
 		51AEEC8D2703E6EB00354C59 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 51AEEC8C2703E6EB00354C59 /* Intents.intentdefinition */; };
 		51AEEC8F2703EB6700354C59 /* GetCurrentOutlineIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AEEC8E2703EB6700354C59 /* GetCurrentOutlineIntentHandler.swift */; };
@@ -356,8 +356,8 @@
 		5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuicklyViewController.swift; sourceTree = "<group>"; };
 		519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSAppMovementMonitor.swift; sourceTree = "<group>"; };
 		519A2323260A9B900056051E /* OutlineFontField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontField.swift; sourceTree = "<group>"; };
-		519F004A25608EF9009DC1F0 /* TimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItem.swift; sourceTree = "<group>"; };
 		51A1EC412723246C00463A15 /* EditRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRowsIntentHandler.swift; sourceTree = "<group>"; };
+		51A1EC4327243B3600463A15 /* GenericRowIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericRowIdentifier.swift; sourceTree = "<group>"; };
 		51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedUndoManager.swift; sourceTree = "<group>"; };
 		51AEEC8C2703E6EB00354C59 /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
 		51AEEC8E2703EB6700354C59 /* GetCurrentOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentOutlineIntentHandler.swift; sourceTree = "<group>"; };
@@ -489,6 +489,7 @@
 				518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */,
 				516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */,
 				511B29F126014FBA00C04239 /* EnhancedTextField.swift */,
+				51A1EC4327243B3600463A15 /* GenericRowIdentifier.swift */,
 				5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */,
 				515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */,
 				517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */,
@@ -813,7 +814,6 @@
 		51E14F292560728B00320EDB /* Timeline */ = {
 			isa = PBXGroup;
 			children = (
-				519F004A25608EF9009DC1F0 /* TimelineItem.swift */,
 				51C4C441255A0DE1004E0206 /* TimelineViewController.swift */,
 				5147D0B425CB95B4004673C3 /* TimelineViewController+Drag.swift */,
 				5147D0B725CCAB2A004673C3 /* TimelineViewController+Drop.swift */,
@@ -1158,8 +1158,8 @@
 				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
 				51AEEC8D2703E6EB00354C59 /* Intents.intentdefinition in Sources */,
 				516F5373260829060038BAF8 /* OutlineFontDefaults.swift in Sources */,
+				51A1EC4427243B3600463A15 /* GenericRowIdentifier.swift in Sources */,
 				511B29FD2601901C00C04239 /* EditorBacklinkViewCell.swift in Sources */,
-				519F004B25608EF9009DC1F0 /* TimelineItem.swift in Sources */,
 				51B2B2CE2563AAF60090C56B /* EditorTextRowContentConfiguration.swift in Sources */,
 				51C030BE257E1B9400609262 /* EditorTextRowTextView.swift in Sources */,
 				511B2A0526019A2700C04239 /* UIFont+.swift in Sources */,

@@ -27,13 +27,11 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	weak var delegate: TimelineDelegate?
 
 	var currentDocument: Document? {
-		guard let indexPath = collectionView.indexPathsForSelectedItems?.first,
-			  let item = dataSource.itemIdentifier(for: indexPath) else { return nil }
-			  
-		return AccountManager.shared.findDocument(item.id)
+		guard let indexPath = collectionView.indexPathsForSelectedItems?.first else { return nil }
+		return timelineDocuments[indexPath.row]
 	}
 	
-	var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
+	var timelineDocuments = [Document]()
 
 	override var canBecomeFirstResponder: Bool { return true }
 
@@ -44,10 +42,11 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	private var addBarButtonItem: UIBarButtonItem?
 	private var importBarButtonItem: UIBarButtonItem?
 
-	private let dataSourceQueue = MainThreadOperationQueue()
-	private var coalescingQueue = CoalescingQueue(name: "Apply Snapshot", interval: 0.5)
+	private var coalescingQueue = CoalescingQueue(name: "Load Documents", interval: 0.5)
 	private var applySnapshotWorkItem: DispatchWorkItem?
 
+	private var rowRegistration: UICollectionView.CellRegistration<ConsistentCollectionViewListCell, Document>!
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -77,172 +76,10 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		collectionView.dropDelegate = self
 		collectionView.remembersLastFocusedIndexPath = true
 		collectionView.collectionViewLayout = createLayout()
-		configureDataSource()
-		applySnapshot(animated: false)
+		collectionView.reloadData()
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlineTagsDidChange(_:)), name: .OutlineTagsDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(documentUpdatedDidChange(_:)), name: .DocumentUpdatedDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(documentSharingDidChange(_:)), name: .DocumentSharingDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
-	}
-	
-	override func viewDidAppear(_ animated: Bool) {
-		updateUI()
-	}
-	
-	// MARK: API
-	
-	func setDocumentContainer(_ documentContainer: DocumentContainer?, completion: (() -> Void)? = nil) {
-		self.documentContainer = documentContainer
-		updateUI()
-		collectionView.deselectAll()
-		applySnapshot(animated: false, completion: completion)
-	}
-
-	func selectDocument(_ document: Document?, isNew: Bool = false, animated: Bool, completion: (() -> Void)? = nil) {
-		guard let documentContainer = documentContainer else { return }
-
-		var timelineItem: TimelineItem? = nil
-		if let document = document {
-			timelineItem = TimelineItem.timelineItem(document)
-		}
-
-		updateSelection(item: timelineItem, animated: animated) { [weak self] in
+		rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, Document> { [weak self] (cell, indexPath, document) in
 			guard let self = self else { return }
-			self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: isNew, animated: animated)
-			completion?()
-		}
-	}
-	
-	func deleteCurrentDocument() {
-		guard let document = currentDocument else { return }
-		deleteDocument(document)
-	}
-	
-	func importOPMLs(urls: [URL]) {
-		guard let account = documentContainer?.account else { return }
-
-		var document: Document?
-		for url in urls {
-			do {
-				let tag = (documentContainer as? TagDocuments)?.tag
-				document = try account.importOPML(url, tag: tag)
-				DocumentIndexer.updateIndex(forDocument: document!)
-			} catch {
-				self.presentError(title: L10n.importFailed, message: error.localizedDescription)
-			}
-		}
-		
-		if let document = document {
-			selectDocument(document, animated: true)
-		}
-	}
-	
-	// MARK: Notifications
-	
-	@objc func accountDocumentsDidChange(_ note: Notification) {
-		queueApplyChangeSnapshot()
-	}
-	
-	@objc func outlineTagsDidChange(_ note: Notification) {
-		applySnapshot(animated: true)
-	}
-	
-	@objc func documentTitleDidChange(_ note: Notification) {
-		guard let document = note.object as? Document else { return }
-		reload(document: document)
-
-		applySnapshotWorkItem?.cancel()
-		applySnapshotWorkItem = DispatchWorkItem { [weak self] in
-			self?.applySnapshot(animated: true)
-		}
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: applySnapshotWorkItem!)
-	}
-	
-	@objc func documentUpdatedDidChange(_ note: Notification) {
-		guard let document = note.object as? Document else { return }
-		reload(document: document)
-	}
-	
-	@objc func documentSharingDidChange(_ note: Notification) {
-		guard let document = note.object as? Document else { return }
-		reload(document: document)
-	}
-	
-	@objc func cloudKitSyncDidComplete(_ note: Notification) {
-		collectionView?.refreshControl?.endRefreshing()
-	}
-	
-	// MARK: Actions
-	
-	@objc func sync() {
-		if AccountManager.shared.isSyncAvailable {
-			AccountManager.shared.sync()
-		} else {
-			collectionView?.refreshControl?.endRefreshing()
-		}
-	}
-	
-	@objc func createOutline(_ sender: Any? = nil) {
-		guard let account = documentContainer?.account else { return }
-		let document = account.createOutline(tag: (documentContainer as? TagDocuments)?.tag)
-		if case .outline(let outline) = document {
-			outline.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
-		}
-		selectDocument(document, isNew: true, animated: true)
-	}
-
-	@objc func importOPML(_ sender: Any? = nil) {
-		let opmlType = UTType(exportedAs: "org.opml.opml")
-		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [opmlType, .xml])
-		docPicker.delegate = self
-		docPicker.modalPresentationStyle = .formSheet
-		docPicker.allowsMultipleSelection = true
-		self.present(docPicker, animated: true)
-	}
-
-}
-
-// MARK: UIDocumentPickerDelegate
-
-extension TimelineViewController: UIDocumentPickerDelegate {
-	
-	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-		importOPMLs(urls: urls)
-	}
-	
-}
-
-// MARK: Collection View
-
-extension TimelineViewController {
-		
-	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-		guard let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return nil }
-		return makeOutlineContextMenu(item: timelineItem)
-	}
-	
-	private func createLayout() -> UICollectionViewLayout {
-		let layout = UICollectionViewCompositionalLayout() { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
-			let isMac = layoutEnvironment.traitCollection.userInterfaceIdiom == .mac
-			var configuration = UICollectionLayoutListConfiguration(appearance: isMac ? .plain : .sidebar)
-			configuration.showsSeparators = false
-
-			configuration.trailingSwipeActionsConfigurationProvider = { indexPath in
-				guard let self = self, let timelineItem = self.dataSource.itemIdentifier(for: indexPath) else { return nil }
-				return UISwipeActionsConfiguration(actions: [self.deleteContextualAction(item: timelineItem)])
-			}
-
-			return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
-		}
-		return layout
-	}
-	
-	private func configureDataSource() {
-		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, TimelineItem> { [weak self] (cell, indexPath, item) in
-			guard let self = self, let document = AccountManager.shared.findDocument(item.id) else { return }
 			
 			let title = (document.title?.isEmpty ?? true) ? L10n.noTitle : document.title!
 			
@@ -277,90 +114,246 @@ extension TimelineViewController {
 			}
 		}
 		
-		dataSource = UICollectionViewDiffableDataSource<Int, TimelineItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
-			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: item)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineTagsDidChange(_:)), name: .OutlineTagsDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(documentUpdatedDidChange(_:)), name: .DocumentUpdatedDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(documentSharingDidChange(_:)), name: .DocumentSharingDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		updateUI()
+	}
+	
+	// MARK: API
+	
+	func setDocumentContainer(_ documentContainer: DocumentContainer?, completion: (() -> Void)? = nil) {
+		self.documentContainer = documentContainer
+		updateUI()
+		collectionView.deselectAll()
+		loadDocuments(animated: false, completion: completion)
+	}
+
+	func selectDocument(_ document: Document?, isNew: Bool = false, animated: Bool) {
+		guard let documentContainer = documentContainer else { return }
+		if let document = document, let index = timelineDocuments.firstIndex(of: document) {
+			collectionView.selectItem(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .centeredVertically)
+		} else {
+			collectionView.deselectAll()
+		}
+		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: isNew, animated: animated)
+	}
+	
+	func deleteCurrentDocument() {
+		guard let document = currentDocument else { return }
+		deleteDocument(document)
+	}
+	
+	func importOPMLs(urls: [URL]) {
+		guard let account = documentContainer?.account else { return }
+
+		var document: Document?
+		for url in urls {
+			do {
+				let tag = (documentContainer as? TagDocuments)?.tag
+				document = try account.importOPML(url, tag: tag)
+				DocumentIndexer.updateIndex(forDocument: document!)
+			} catch {
+				self.presentError(title: L10n.importFailed, message: error.localizedDescription)
+			}
+		}
+		
+		if let document = document {
+			selectDocument(document, animated: true)
 		}
 	}
 	
+	// MARK: Notifications
+	
+	@objc func accountDocumentsDidChange(_ note: Notification) {
+		queueLoadDocuments()
+	}
+	
+	@objc func outlineTagsDidChange(_ note: Notification) {
+		queueLoadDocuments()
+	}
+	
+	@objc func documentTitleDidChange(_ note: Notification) {
+		guard let document = note.object as? Document else { return }
+		reload(document: document)
+
+		applySnapshotWorkItem?.cancel()
+		applySnapshotWorkItem = DispatchWorkItem { [weak self] in
+			self?.loadDocuments(animated: true)
+		}
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: applySnapshotWorkItem!)
+	}
+	
+	@objc func documentUpdatedDidChange(_ note: Notification) {
+		guard let document = note.object as? Document else { return }
+		reload(document: document)
+	}
+	
+	@objc func documentSharingDidChange(_ note: Notification) {
+		guard let document = note.object as? Document else { return }
+		reload(document: document)
+	}
+	
+	@objc func cloudKitSyncDidComplete(_ note: Notification) {
+		collectionView?.refreshControl?.endRefreshing()
+	}
+	
+	// MARK: Actions
+	
+	@objc func sync() {
+		if AccountManager.shared.isSyncAvailable {
+			AccountManager.shared.sync()
+		} else {
+			collectionView?.refreshControl?.endRefreshing()
+		}
+	}
+	
+	@objc func createOutline(_ sender: Any? = nil) {
+		guard let account = documentContainer?.account else { return }
+		let document = account.createOutline(tag: (documentContainer as? TagDocuments)?.tag)
+		if case .outline(let outline) = document {
+			outline.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
+		}
+		loadDocuments(animated: true) {
+			self.selectDocument(document, isNew: true, animated: true)
+		}
+	}
+
+	@objc func importOPML(_ sender: Any? = nil) {
+		let opmlType = UTType(exportedAs: "org.opml.opml")
+		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [opmlType, .xml])
+		docPicker.delegate = self
+		docPicker.modalPresentationStyle = .formSheet
+		docPicker.allowsMultipleSelection = true
+		self.present(docPicker, animated: true)
+	}
+
+}
+
+// MARK: UIDocumentPickerDelegate
+
+extension TimelineViewController: UIDocumentPickerDelegate {
+	
+	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+		importOPMLs(urls: urls)
+	}
+	
+}
+
+// MARK: Collection View
+
+extension TimelineViewController {
+	
+	override func numberOfSections(in collectionView: UICollectionView) -> Int {
+		return 1
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+		return timelineDocuments.count
+	}
+		
+	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+		return makeOutlineContextMenu(rowIdentifier: GenericRowIdentifier(indexPath: indexPath))
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: timelineDocuments[indexPath.row])
+	}
+	
+	private func createLayout() -> UICollectionViewLayout {
+		let layout = UICollectionViewCompositionalLayout() { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
+			let isMac = layoutEnvironment.traitCollection.userInterfaceIdiom == .mac
+			var configuration = UICollectionLayoutListConfiguration(appearance: isMac ? .plain : .sidebar)
+			configuration.showsSeparators = false
+
+			configuration.trailingSwipeActionsConfigurationProvider = { indexPath in
+				guard let self = self else { return nil }
+				return UISwipeActionsConfiguration(actions: [self.deleteContextualAction(indexPath: indexPath)])
+			}
+
+			return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
+		}
+		return layout
+	}
+		
 	@objc func selectDocument(gesture: UITapGestureRecognizer) {
 		guard let documentContainer = documentContainer,
 			  let cell = gesture.view as? UICollectionViewCell,
-			  let indexPath = collectionView.indexPath(for: cell),
-			  let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
+			  let indexPath = collectionView.indexPath(for: cell) else { return }
 
 		collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-		let document = AccountManager.shared.findDocument(timelineItem.id)
+		let document = timelineDocuments[indexPath.row]
 		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: false, animated: true)
 	}
 	
 	@objc func openDocumentInNewWindow(gesture: UITapGestureRecognizer) {
 		guard let cell = gesture.view as? UICollectionViewCell,
-			  let indexPath = collectionView.indexPath(for: cell),
-			  let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
+			  let indexPath = collectionView.indexPath(for: cell) else { return }
 
+		let document = timelineDocuments[indexPath.row]
+		
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-		activity.userInfo = [UserInfoKeys.documentID: timelineItem.id.userInfo]
+		activity.userInfo = [UserInfoKeys.documentID: document.id.userInfo]
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 	
 	func reload(document: Document) {
-		let timelineItem = TimelineItem.timelineItem(document)
-		let reloadOp = ReloadItemsOperation(dataSource: dataSource, section: 0, items: [timelineItem], animated: true)
-		let selectedItems = self.collectionView.indexPathsForSelectedItems?.compactMap { self.dataSource.itemIdentifier(for: $0) }
-
-		reloadOp.completionBlock = { _ in
-			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) }
-			for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
-				self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
-			}
+		let selectedIndexPaths = self.collectionView.indexPathsForSelectedItems
+		if let index = timelineDocuments.firstIndex(of: document) {
+			collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
 		}
-		
-		dataSourceQueue.add(reloadOp)
+		if let selectedItem = selectedIndexPaths?.first {
+			collectionView.selectItem(at: selectedItem, animated: false, scrollPosition: [])
+		}
 	}
 	
-	func applySnapshot(animated: Bool, completion: (() -> Void)? = nil) {
+	func loadDocuments(animated: Bool, completion: (() -> Void)? = nil) {
 		guard let documentContainer = documentContainer else {
-			let snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
-			self.dataSourceQueue.add(ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: animated))
+			completion?()
 			return
 		}
 		
 		documentContainer.sortedDocuments { [weak self] result in
 			guard let self = self, let documents = try? result.get() else { return }
 
-			let items = documents.map { TimelineItem.timelineItem($0) }
-			var snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
-			snapshot.append(items)
-
-			let selectedItems = self.collectionView.indexPathsForSelectedItems?.compactMap { self.dataSource.itemIdentifier(for: $0) }
-			let snapshotOp = ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: animated)
-			
-			snapshotOp.completionBlock = { _ in
-				
-				let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) }
-				
-				if selectedIndexPaths?.isEmpty ?? true {
-					self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, animated: true)
-				} else {
-					for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
-						self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
-					}
-				}
-				
-				completion?()
+			guard animated else {
+				self.timelineDocuments = documents
+				self.collectionView.reloadData()
+				return
 			}
 			
-			self.dataSourceQueue.add(snapshotOp)
+			let prevSelectedDoc = self.collectionView.indexPathsForSelectedItems?.map({ self.timelineDocuments[$0.row] }).first
+
+			let diff = documents.difference(from: self.timelineDocuments)
+			self.timelineDocuments = documents
+
+			self.collectionView.performBatchUpdates {
+				for change in diff {
+					switch change {
+					case .insert(let offset, _, _):
+						self.collectionView.insertItems(at: [IndexPath(row: offset, section: 0)])
+					case .remove(let offset, _, _):
+						self.collectionView.deleteItems(at: [IndexPath(row: offset, section: 0)])
+					}
+				}
+			}
+			
+			if let prevSelectedDoc = prevSelectedDoc, let index = self.timelineDocuments.firstIndex(of: prevSelectedDoc) {
+				self.collectionView.selectItem(at: IndexPath(row: index, section: 0), animated: false, scrollPosition: [])
+			} else {
+				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, animated: true)
+			}
+			
+			completion?()
 		}
 	}
 	
-	func updateSelection(item: TimelineItem?, animated: Bool, completion: @escaping () -> Void) {
-		let operation = UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: item, animated: animated)
-		operation.completionBlock = { _ in
-			completion()
-		}
-		dataSourceQueue.add(operation)
-	}
 }
 
 // MARK: UISearchControllerDelegate
@@ -393,12 +386,12 @@ extension TimelineViewController: UISearchResultsUpdating {
 
 extension TimelineViewController {
 	
-	private func queueApplyChangeSnapshot() {
-		coalescingQueue.add(self, #selector(applyQueuedChangeSnapshot))
+	private func queueLoadDocuments() {
+		coalescingQueue.add(self, #selector(loadDocumentsAnimated))
 	}
 	
-	@objc private func applyQueuedChangeSnapshot() {
-		applySnapshot(animated: true)
+	@objc private func loadDocumentsAnimated() {
+		loadDocuments(animated: true)
 	}
 	
 	private func updateUI() {
@@ -414,9 +407,10 @@ extension TimelineViewController {
 		}
 	}
 	
-	private func makeOutlineContextMenu(item: TimelineItem) -> UIContextMenuConfiguration {
-		return UIContextMenuConfiguration(identifier: item as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
-			guard let self = self, let document = AccountManager.shared.findDocument(item.id) else { return nil }
+	private func makeOutlineContextMenu(rowIdentifier: GenericRowIdentifier) -> UIContextMenuConfiguration {
+		return UIContextMenuConfiguration(identifier: rowIdentifier as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
+			guard let self = self else { return nil }
+			let document = self.timelineDocuments[rowIdentifier.indexPath.row]
 			
 			var menuItems = [UIMenu]()
 
@@ -508,11 +502,11 @@ extension TimelineViewController {
 		return action
 	}
 	
-	private func deleteContextualAction(item: TimelineItem) -> UIContextualAction {
+	private func deleteContextualAction(indexPath: IndexPath) -> UIContextualAction {
 		return UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
-			if let document = AccountManager.shared.findDocument(item.id) {
-				self?.deleteDocument(document, completion: completion)
-			}
+			guard let self = self else { return }
+			let document = self.timelineDocuments[indexPath.row]
+			self.deleteDocument(document, completion: completion)
 		}
 	}
 	
