@@ -76,7 +76,7 @@ class EditorTitleContentView: UIView, UIContentView {
 			updateAdjustingSeparatorWidthContraint()
 		}
 
-		guard appliedConfiguration != configuration else { return }
+		guard appliedConfiguration != configuration || textView.text != configuration.title else { return }
 		appliedConfiguration = configuration
 		textView.text = configuration.title
 		updateAdjustingSeparatorWidthContraint()
