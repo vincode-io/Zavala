@@ -30,13 +30,16 @@ class LinkViewController: UITableViewController {
 	var text: String?
 	var link: String?
 	var range: NSRange?
+	
+	let textTextFieldDelegate = TextTextFieldDelegate()
+	let linkTextFieldDelegate = LinkTextFieldDelegate()
 
 	override func viewDidLoad() {
         super.viewDidLoad()
 		textTextField.text = text
-		textTextField.delegate = self
+		textTextField.delegate = textTextFieldDelegate
 		linkTextField.text = link
-		linkTextField.delegate = self
+		linkTextField.delegate = linkTextFieldDelegate
 
 		textTextField.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in
 			guard let self = self, let documentID = filteredResults[index].associatedObject as? EntityID else {
@@ -95,15 +98,6 @@ class LinkViewController: UITableViewController {
 	}
 }
 
-extension LinkViewController: UITextFieldDelegate {
-	
-	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		textField.resignFirstResponder()
-		return false
-	}
-	
-}
-
 extension LinkViewController {
 	
 	@objc private func textDidChange(_ note: Notification) {
@@ -125,6 +119,29 @@ extension LinkViewController {
 		}
 		
 		dismiss(animated: true)
+	}
+	
+}
+
+class TextTextFieldDelegate: NSObject, UITextFieldDelegate {
+	
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		guard let searchTextField = textField as? SearchTextField else { return false }
+		if searchTextField.isSelecting {
+			searchTextField.activateSelection()
+		} else {
+			searchTextField.resignFirstResponder()
+		}
+		return false
+	}
+	
+}
+
+class LinkTextFieldDelegate: NSObject, UITextFieldDelegate {
+	
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return false
 	}
 	
 }

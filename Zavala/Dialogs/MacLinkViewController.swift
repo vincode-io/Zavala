@@ -103,7 +103,11 @@ class MacLinkViewController: UIViewController {
 extension MacLinkViewController: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		textTextField.activateSelection()
+		if textTextField.isSelecting {
+			textTextField.activateSelection()
+		} else {
+			submitAndDismiss()
+		}
 		return false
 	}
 	
