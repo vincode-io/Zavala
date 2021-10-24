@@ -39,6 +39,7 @@ class MacLinkViewController: UIViewController {
 		textTextField.text = text
 		linkTextField.text = link
 
+		textTextField.delegate = self
 		textTextField.maxResultsListHeight = 100
 		
 		textTextField.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in
@@ -99,7 +100,14 @@ class MacLinkViewController: UIViewController {
 	
 }
 
-
+extension MacLinkViewController: UITextFieldDelegate {
+	
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textTextField.activateSelection()
+		return false
+	}
+	
+}
 
 extension MacLinkViewController {
 	
