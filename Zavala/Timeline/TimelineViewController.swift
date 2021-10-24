@@ -325,6 +325,7 @@ extension TimelineViewController {
 			guard animated else {
 				self.timelineDocuments = documents
 				self.collectionView.reloadData()
+				completion?()
 				return
 			}
 			
