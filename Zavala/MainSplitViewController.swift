@@ -357,8 +357,11 @@ extension MainSplitViewController: TimelineDelegate {
 			if animated {
 				show(.secondary)
 			} else {
-				UIView.performWithoutAnimation {
-					show(.secondary)
+				// I don't know why the perform without animation doesn't execute without this...
+				DispatchQueue.main.async {
+					UIView.performWithoutAnimation {
+						self.show(.secondary)
+					}
 				}
 			}
 		} else {
