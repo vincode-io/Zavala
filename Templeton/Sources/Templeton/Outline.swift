@@ -15,6 +15,8 @@ public extension Notification.Name {
 	static let OutlineSearchWillBegin = Notification.Name(rawValue: "OutlineSearchWillBegin")
 	static let OutlineSearchTextDidChange = Notification.Name(rawValue: "OutlineSearchTextDidChange")
 	static let OutlineSearchWillEnd = Notification.Name(rawValue: "OutlineSearchWillEnd")
+	static let OutlineAddedBacklinks = Notification.Name(rawValue: "OutlineAddedBacklinks")
+	static let OutlineRemovedBacklinks = Notification.Name(rawValue: "OutlineRemovedBacklinks")
 }
 
 public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Codable {
@@ -2169,7 +2171,15 @@ extension Outline {
 		documentLinks = documentLinkDescriptions.compactMap { EntityID(description: $0) }
 
 		let documentBacklinkDescriptions = record[CloudKitOutlineZone.CloudKitOutline.Fields.documentBacklinks] as? [String] ?? [String]()
-		documentBacklinks = documentBacklinkDescriptions.compactMap { EntityID(description: $0) }
+		let cloudKitBackLinks = documentBacklinkDescriptions.compactMap { EntityID(description: $0) }
+
+		for backlink in Set(cloudKitBackLinks).subtracting(documentBacklinks ?? [EntityID]()) {
+			createBacklink(backlink)
+		}
+
+		for backlink in Set(documentBacklinks ?? [EntityID]()).subtracting(cloudKitBackLinks) {
+			deleteBacklink(backlink)
+		}
 
 		let cloudKitTagNames = record[CloudKitOutlineZone.CloudKitOutline.Fields.tagNames] as? [String] ?? [String]()
 		let currentTagNames = Set(tags.map { $0.name })
@@ -2275,6 +2285,14 @@ extension Outline {
 	
 	private func outlineSearchWillEnd() {
 		NotificationCenter.default.post(name: .OutlineSearchWillEnd, object: self, userInfo: nil)
+	}
+	
+	private func outlineAddedBacklinks() {
+		NotificationCenter.default.post(name: .OutlineAddedBacklinks, object: self, userInfo: nil)
+	}
+	
+	private func outlineRemovedBacklinks() {
+		NotificationCenter.default.post(name: .OutlineRemovedBacklinks, object: self, userInfo: nil)
 	}
 	
 	private func changeSearchResult(_ changeToResult: Int) {
@@ -2722,21 +2740,39 @@ extension Outline {
 		if documentBacklinks == nil {
 			documentBacklinks = [EntityID]()
 		}
+				
 		documentBacklinks?.append(entityID)
+		
 		documentMetaDataDidChange()
-		if isBeingViewed && isSearching == .notSearching {
-			outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
-		}
 		requestCloudKitUpdate(for: id)
+
+		guard isBeingViewed else { return }
+
+		if !(documentBacklinks?.isEmpty ?? true) {
+			outlineAddedBacklinks()
+		} else {
+			if isSearching == .notSearching {
+				outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
+			}
+		}
 	}
 
 	private func deleteBacklink(_ entityID: EntityID) {
+		
 		documentBacklinks?.removeFirst(object: entityID)
+		
 		documentMetaDataDidChange()
-		if isBeingViewed && isSearching == .notSearching {
-			outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
-		}
 		requestCloudKitUpdate(for: id)
+
+		guard isBeingViewed else { return }
+		
+		if documentBacklinks?.isEmpty ?? true {
+			outlineRemovedBacklinks()
+		} else {
+			if isSearching == .notSearching {
+				outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
+			}
+		}
 	}
 
 	private func appendPrintTitle(attrString: NSMutableAttributedString) {

@@ -301,7 +301,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var skipHidingKeyboardFlag = false
 	private var currentKeyboardHeight: CGFloat = 0
 	
-	private var headerFooterSections = IndexSet([Outline.Section.title.rawValue, Outline.Section.tags.rawValue, Outline.Section.backlinks.rawValue])
+	private var headerFooterSections: IndexSet {
+		var sections = [Outline.Section.title.rawValue, Outline.Section.tags.rawValue]
+		if !(outline?.documentBacklinks?.isEmpty ?? true) {
+			sections.append(Outline.Section.backlinks.rawValue)
+		}
+		return IndexSet(sections)
+	}
 	
 	private static var defaultContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
 	
@@ -409,6 +415,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillBegin(_:)), name: .OutlineSearchWillBegin, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchTextDidChange(_:)), name: .OutlineSearchTextDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillEnd(_:)), name: .OutlineSearchWillEnd, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineAddedBacklinks(_:)), name: .OutlineAddedBacklinks, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineRemovedBacklinks(_:)), name: .OutlineRemovedBacklinks, object: nil)
 
 		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(sceneWillDeactivate(_:)),	name: UIScene.willDeactivateNotification, object: nil)
@@ -599,6 +607,16 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
 		}
+	}
+	
+	@objc func outlineAddedBacklinks(_ note: Notification) {
+		guard note.object as? Outline == outline else { return }
+		collectionView.insertSections([Outline.Section.backlinks.rawValue])
+	}
+	
+	@objc func outlineRemovedBacklinks(_ note: Notification) {
+		guard note.object as? Outline == outline else { return }
+		collectionView.deleteSections([Outline.Section.backlinks.rawValue])
 	}
 	
 	@objc func applicationWillTerminate(_ note: Notification) {
@@ -1109,7 +1127,15 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 	
 	func numberOfSections(in collectionView: UICollectionView) -> Int {
-		return isSearching ? 1 : 4
+		if isSearching {
+			return 1
+		} else {
+			if outline?.documentBacklinks?.isEmpty ?? true {
+				return 3
+			} else {
+				return 4
+			}
+		}
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
