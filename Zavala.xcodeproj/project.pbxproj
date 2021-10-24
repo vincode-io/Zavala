@@ -180,6 +180,7 @@
 		51F2859B25AD12800019C573 /* SidebarSearchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859A25AD12800019C573 /* SidebarSearchContentView.swift */; };
 		51F2DC7B2586E101003BD5CE /* EditorTextRowNoteTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2DC7A2586E101003BD5CE /* EditorTextRowNoteTextView.swift */; };
 		51F36C5826FAB5C90075A273 /* ExportMarkdownDocActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F36C5726FAB5C90075A273 /* ExportMarkdownDocActivity.swift */; };
+		51F83B862725BFF30015FC06 /* ReloadVisibleItemsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F83B852725BFF30015FC06 /* ReloadVisibleItemsOperation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -421,6 +422,7 @@
 		51F2859A25AD12800019C573 /* SidebarSearchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSearchContentView.swift; sourceTree = "<group>"; };
 		51F2DC7A2586E101003BD5CE /* EditorTextRowNoteTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowNoteTextView.swift; sourceTree = "<group>"; };
 		51F36C5726FAB5C90075A273 /* ExportMarkdownDocActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportMarkdownDocActivity.swift; sourceTree = "<group>"; };
+		51F83B852725BFF30015FC06 /* ReloadVisibleItemsOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReloadVisibleItemsOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -499,6 +501,7 @@
 				511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */,
 				51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */,
 				51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */,
+				51F83B852725BFF30015FC06 /* ReloadVisibleItemsOperation.swift */,
 				5163ADF125C78CFB008F25CA /* SearchTextField.swift */,
 				51DFDC17259EA8D300C068C6 /* Selector+.swift */,
 				51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */,
@@ -1159,6 +1162,7 @@
 				51B2B2CE2563AAF60090C56B /* EditorTextRowContentConfiguration.swift in Sources */,
 				51C030BE257E1B9400609262 /* EditorTextRowTextView.swift in Sources */,
 				511B2A0526019A2700C04239 /* UIFont+.swift in Sources */,
+				51F83B862725BFF30015FC06 /* ReloadVisibleItemsOperation.swift in Sources */,
 				514F221B25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift in Sources */,
 				519A2324260A9B900056051E /* OutlineFontField.swift in Sources */,
 				51DEE82826FF951E006DAA56 /* UIWindowSceneDelegate+.swift in Sources */,

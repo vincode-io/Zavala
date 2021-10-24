@@ -42,7 +42,8 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 
 	var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
-	private var coalescingQueue = CoalescingQueue(name: "Apply Snapshot", interval: 0.5)
+	private var applyCoalescingQueue = CoalescingQueue(name: "Apply Snapshot", interval: 0.5)
+	private var reloadCoalescingQueue = CoalescingQueue(name: "Reload Visible", interval: 0.5)
 
 	private var mainSplitViewController: MainSplitViewController? {
 		return splitViewController as? MainSplitViewController
@@ -129,11 +130,11 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	}
 
 	@objc func outlineTagsDidChange(_ note: Notification) {
-		queueApplyChangeSnapshot()
+		queueReloadChangeSnapshot()
 	}
 
 	@objc func accountDocumentsDidChange(_ note: Notification) {
-		queueApplyChangeSnapshot()
+		queueReloadChangeSnapshot()
 	}
 
 	@objc func cloudKitSyncDidComplete(_ note: Notification) {
@@ -217,7 +218,8 @@ extension SidebarViewController {
 
 		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, SidebarItem> {	(cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarHeader()
-			contentConfiguration.text = item.title
+			
+			contentConfiguration.text = item.id.name
 			contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .subheadline)
 			contentConfiguration.textProperties.color = .secondaryLabel
 			
@@ -227,11 +229,15 @@ extension SidebarViewController {
 		
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, SidebarItem> { (cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
-			contentConfiguration.text = item.title
-			contentConfiguration.image = item.image
-			if let count = item.count {
-				contentConfiguration.secondaryText = String(count)
+			
+			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
+				contentConfiguration.text = container.name
+				contentConfiguration.image = container.image
+				if let count = container.itemCount {
+					contentConfiguration.secondaryText = String(count)
+				}
 			}
+
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			cell.contentConfiguration = contentConfiguration
 		}
@@ -260,7 +266,7 @@ extension SidebarViewController {
 		guard localAccount.isActive else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
-		let header = SidebarItem.sidebarItem(title: AccountType.local.name, id: .header(.localAccount))
+		let header = SidebarItem.sidebarItem(id: .header(.localAccount))
 		
 		let items = localAccount.documentContainers.map { SidebarItem.sidebarItem($0) }
 		
@@ -274,7 +280,7 @@ extension SidebarViewController {
 		guard let cloudKitAccount = AccountManager.shared.cloudKitAccount else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
-		let header = SidebarItem.sidebarItem(title: AccountType.cloudKit.name, id: .header(.cloudKitAccount))
+		let header = SidebarItem.sidebarItem(id: .header(.cloudKitAccount))
 		
 		let items = cloudKitAccount.documentContainers.map { SidebarItem.sidebarItem($0) }
 		
@@ -339,6 +345,11 @@ extension SidebarViewController {
 		}
 		dataSourceQueue.add(operation)
 	}
+	
+	func reloadVisible() {
+		dataSourceQueue.add(ReloadVisibleItemsOperation(dataSource: dataSource, collectionView: collectionView))
+	}
+	
 }
 
 // MARK: SidebarSearchCellDelegate
@@ -364,11 +375,19 @@ extension SidebarViewController: SidebarSearchCellDelegate {
 extension SidebarViewController {
 	
 	private func queueApplyChangeSnapshot() {
-		coalescingQueue.add(self, #selector(applyQueuedChangeSnapshot))
+		applyCoalescingQueue.add(self, #selector(applyQueuedChangeSnapshot))
 	}
 	
 	@objc private func applyQueuedChangeSnapshot() {
 		applyChangeSnapshot()
+	}
+	
+	private func queueReloadChangeSnapshot() {
+		reloadCoalescingQueue.add(self, #selector(reloadQueuedChangeSnapshot))
+	}
+	
+	@objc private func reloadQueuedChangeSnapshot() {
+		reloadVisible()
 	}
 	
 	private func makeDocumentContainerContextMenu(item: SidebarItem) -> UIContextMenuConfiguration {

@@ -14,12 +14,24 @@ final class SidebarItem: NSObject, NSCopying, Identifiable {
 		case header(SidebarSection)
 		case search
 		case documentContainer(EntityID)
+		
+		var name: String? {
+			if case .header(let section) = self {
+				switch section {
+				case .localAccount:
+					return AccountType.local.name
+				case .cloudKitAccount:
+					return AccountType.cloudKit.name
+				default:
+					break
+				}
+			}
+			return nil
+		}
+		
 	}
 	
 	let id: SidebarItem.ID
-	let title: String?
-	let image: UIImage?
-	let count: Int?
 	
 	var entityID: EntityID? {
 		if case .documentContainer(let entityID) = id {
@@ -28,37 +40,32 @@ final class SidebarItem: NSObject, NSCopying, Identifiable {
 		return nil
 	}
 	
-	init(id: ID, title: String?, image: UIImage?, count: Int?) {
+	init(id: ID) {
 		self.id = id
-		self.title = title
-		self.image = image
-		self.count = count
 	}
 	
 	static func searchSidebarItem() -> SidebarItem {
-		return SidebarItem(id: .search, title: nil, image: nil, count: nil)
+		return SidebarItem(id: .search)
 	}
 	
-	static func sidebarItem(title: String, id: ID) -> SidebarItem {
-		return SidebarItem(id: id, title: title, image: nil, count: nil)
+	static func sidebarItem(id: ID) -> SidebarItem {
+		return SidebarItem(id: id)
 	}
 	
 	static func sidebarItem(_ documentContainer: DocumentContainer) -> SidebarItem {
 		let id = SidebarItem.ID.documentContainer(documentContainer.id)
-		return SidebarItem(id: id, title: documentContainer.name, image: documentContainer.image, count: documentContainer.itemCount)
+		return SidebarItem(id: id)
 	}
 
 	override func isEqual(_ object: Any?) -> Bool {
 		guard let other = object as? SidebarItem else { return false }
 		if self === other { return true }
-		return id == other.id && title == other.title && count == other.count
+		return id == other.id
 	}
 	
 	override var hash: Int {
 		var hasher = Hasher()
 		hasher.combine(id)
-		hasher.combine(title)
-		hasher.combine(count)
 		return hasher.finalize()
 	}
 	

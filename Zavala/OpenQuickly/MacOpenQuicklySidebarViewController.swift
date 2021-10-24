@@ -58,7 +58,7 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 
 		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, SidebarItem> {	(cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarHeader()
-			contentConfiguration.text = item.title
+			contentConfiguration.text = item.id.name
 			contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .subheadline)
 			contentConfiguration.textProperties.color = .secondaryLabel
 			
@@ -69,8 +69,12 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, SidebarItem> { (cell, indexPath, item) in
 			cell.highlightImageInWhite = true
 			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
-			contentConfiguration.text = item.title
-			contentConfiguration.image = item.image
+
+			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
+				contentConfiguration.text = container.name
+				contentConfiguration.image = container.image
+			}
+
 			cell.backgroundConfiguration?.backgroundColor = .systemBackground
 			cell.contentConfiguration = contentConfiguration
 		}
@@ -122,7 +126,7 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 		guard localAccount.isActive else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
-		let header = SidebarItem.sidebarItem(title: AccountType.local.name, id: .header(.localAccount))
+		let header = SidebarItem.sidebarItem(id: .header(.localAccount))
 		
 		let items = localAccount.documentContainers.map { SidebarItem.sidebarItem($0) }
 		
@@ -136,7 +140,7 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 		guard let cloudKitAccount = AccountManager.shared.cloudKitAccount else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
-		let header = SidebarItem.sidebarItem(title: AccountType.cloudKit.name, id: .header(.cloudKitAccount))
+		let header = SidebarItem.sidebarItem(id: .header(.cloudKitAccount))
 		
 		let items = cloudKitAccount.documentContainers.map { SidebarItem.sidebarItem($0) }
 		
