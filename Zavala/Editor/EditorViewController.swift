@@ -1011,7 +1011,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 	
 	private func createLayout() -> UICollectionViewLayout {
-		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
+		let layout = UICollectionViewCompositionalLayout() { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 			
 			if sectionIndex == Outline.Section.tags.rawValue {
 				let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(100), heightDimension: .estimated(50))
@@ -1026,59 +1026,62 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 				var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
 				configuration.showsSeparators = false
 				
-				configuration.leadingSwipeActionsConfigurationProvider = { [weak self] indexPath in
-					guard let self = self, let row = self.outline?.shadowTable?[indexPath.row] else { return nil }
+				if sectionIndex == self?.adjustedRowsSection {
+					configuration.leadingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+						guard let self = self, let row = self.outline?.shadowTable?[indexPath.row] else { return nil }
+						
+						if row.isComplete {
+							let actionHandler: UIContextualAction.Handler = { action, view, completion in
+								self.uncompleteRows([row])
+								completion(true)
+							}
+							
+							let action = UIContextualAction(style: .normal, title: L10n.uncomplete, handler: actionHandler)
+							if self.traitCollection.userInterfaceIdiom == .mac {
+								action.image = AppAssets.uncompleteRow.symbolSizedForCatalyst(color: .white)
+							} else {
+								action.image = AppAssets.uncompleteRow
+							}
+							action.backgroundColor = UIColor.accentColor
+							
+							return UISwipeActionsConfiguration(actions: [action])
+						} else {
+							let actionHandler: UIContextualAction.Handler = { action, view, completion in
+								self.completeRows([row])
+								completion(true)
+							}
+							
+							let action = UIContextualAction(style: .normal, title: L10n.complete, handler: actionHandler)
+							if self.traitCollection.userInterfaceIdiom == .mac {
+								action.image = AppAssets.completeRow.symbolSizedForCatalyst(color: .white)
+							} else {
+								action.image = AppAssets.completeRow
+							}
+							action.backgroundColor = UIColor.accentColor
+
+							return UISwipeActionsConfiguration(actions: [action])
+						}
+					}
 					
-					if row.isComplete {
+					configuration.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+						guard let self = self, let row = self.outline?.shadowTable?[indexPath.row] else { return nil }
+
 						let actionHandler: UIContextualAction.Handler = { action, view, completion in
-							self.uncompleteRows([row])
+							self.deleteRows([row])
 							completion(true)
 						}
 						
-						let action = UIContextualAction(style: .normal, title: L10n.uncomplete, handler: actionHandler)
+						let action = UIContextualAction(style: .destructive, title: L10n.delete, handler: actionHandler)
 						if self.traitCollection.userInterfaceIdiom == .mac {
-							action.image = AppAssets.uncompleteRow.symbolSizedForCatalyst(color: .white)
+							action.image = AppAssets.delete.symbolSizedForCatalyst(color: .white)
 						} else {
-							action.image = AppAssets.uncompleteRow
+							action.image = AppAssets.delete
 						}
-						action.backgroundColor = UIColor.accentColor
-						
-						return UISwipeActionsConfiguration(actions: [action])
-					} else {
-						let actionHandler: UIContextualAction.Handler = { action, view, completion in
-							self.completeRows([row])
-							completion(true)
-						}
-						
-						let action = UIContextualAction(style: .normal, title: L10n.complete, handler: actionHandler)
-						if self.traitCollection.userInterfaceIdiom == .mac {
-							action.image = AppAssets.completeRow.symbolSizedForCatalyst(color: .white)
-						} else {
-							action.image = AppAssets.completeRow
-						}
-						action.backgroundColor = UIColor.accentColor
 
 						return UISwipeActionsConfiguration(actions: [action])
 					}
 				}
 				
-				configuration.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
-					guard let self = self, let row = self.outline?.shadowTable?[indexPath.row] else { return nil }
-
-					let actionHandler: UIContextualAction.Handler = { action, view, completion in
-						self.deleteRows([row])
-						completion(true)
-					}
-					
-					let action = UIContextualAction(style: .destructive, title: L10n.delete, handler: actionHandler)
-					if self.traitCollection.userInterfaceIdiom == .mac {
-						action.image = AppAssets.delete.symbolSizedForCatalyst(color: .white)
-					} else {
-						action.image = AppAssets.delete
-					}
-
-					return UISwipeActionsConfiguration(actions: [action])
-				}
 				return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
 			}
 			
