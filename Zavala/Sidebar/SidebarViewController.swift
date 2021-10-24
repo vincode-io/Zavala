@@ -312,11 +312,7 @@ extension SidebarViewController {
 	}
 	
 	func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<SidebarItem>, section: SidebarSection, animated: Bool) {
-		let selectedItems = collectionView.indexPathsForSelectedItems?
-			.compactMap({ dataSource.itemIdentifier(for: $0) })
-			.compactMap({ item in
-				return snapshot.items.first(where: { $0.entityID == item.entityID })
-			})
+		let selectedItems = collectionView.indexPathsForSelectedItems?.compactMap({ dataSource.itemIdentifier(for: $0) })
 		
 		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
 
