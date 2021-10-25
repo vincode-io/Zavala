@@ -376,7 +376,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		if traitCollection.userInterfaceIdiom == .phone {
 			keyboardToolBar = UIToolbar()
-			keyboardToolBar.items = [outdentButton, indentButton, moveUpButton, moveDownButton, insertImageButton, linkButton]
+			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+			keyboardToolBar.items = [outdentButton, indentButton, moveUpButton, moveDownButton, flexibleSpace, insertImageButton, linkButton]
 			keyboardToolBar.sizeToFit()
 			navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
 		}
