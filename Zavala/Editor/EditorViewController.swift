@@ -722,6 +722,48 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		moveCursorToTitleOnNew()
 	}
 	
+	func updateUI(editMode: Bool) {
+		navigationItem.largeTitleDisplayMode = .never
+		
+		if traitCollection.userInterfaceIdiom != .mac {
+			if outline?.isFiltered ?? false {
+				filterBarButtonItem.image = AppAssets.filterActive
+				filterBarButtonItem.title = L10n.showCompleted
+			} else {
+				filterBarButtonItem.image = AppAssets.filterInactive
+				filterBarButtonItem.title = L10n.hideCompleted
+			}
+		}
+		
+		if traitCollection.userInterfaceIdiom == .phone {
+			if editMode {
+				navigationItem.rightBarButtonItems = [doneBarButtonItem, filterBarButtonItem, ellipsisBarButtonItem]
+			} else {
+				navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
+			}
+		}
+
+		if traitCollection.userInterfaceIdiom != .mac {
+			self.ellipsisBarButtonItem.menu = buildEllipsisMenu()
+
+			if outline == nil {
+				filterBarButtonItem.isEnabled = false
+				ellipsisBarButtonItem.isEnabled = false
+			} else {
+				filterBarButtonItem.isEnabled = true
+				ellipsisBarButtonItem.isEnabled = true
+			}
+			
+			outdentButton.isEnabled = !isOutdentRowsUnavailable
+			indentButton.isEnabled = !isIndentRowsUnavailable
+			moveUpButton.isEnabled = !isMoveRowsUpUnavailable
+			moveDownButton.isEnabled = !isMoveRowsDownUnavailable
+			insertImageButton.isEnabled = !isInsertImageUnavailable
+			linkButton.isEnabled = !isLinkUnavailable
+		}
+		
+	}
+	
 	func beginInDocumentSearch(text: String? = nil) {
 		guard !isSearching else {
 			searchBar.searchField.becomeFirstResponder()
@@ -1608,48 +1650,6 @@ extension EditorViewController: UICloudSharingControllerDelegate {
 
 extension EditorViewController {
 	
-	private func updateUI(editMode: Bool) {
-		navigationItem.largeTitleDisplayMode = .never
-		
-		if traitCollection.userInterfaceIdiom != .mac {
-			if outline?.isFiltered ?? false {
-				filterBarButtonItem.image = AppAssets.filterActive
-				filterBarButtonItem.title = L10n.showCompleted
-			} else {
-				filterBarButtonItem.image = AppAssets.filterInactive
-				filterBarButtonItem.title = L10n.hideCompleted
-			}
-		}
-		
-		if traitCollection.userInterfaceIdiom == .phone {
-			if editMode {
-				navigationItem.rightBarButtonItems = [doneBarButtonItem, filterBarButtonItem, ellipsisBarButtonItem]
-			} else {
-				navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
-			}
-		}
-
-		if traitCollection.userInterfaceIdiom != .mac {
-			self.ellipsisBarButtonItem.menu = buildEllipsisMenu()
-
-			if outline == nil {
-				filterBarButtonItem.isEnabled = false
-				ellipsisBarButtonItem.isEnabled = false
-			} else {
-				filterBarButtonItem.isEnabled = true
-				ellipsisBarButtonItem.isEnabled = true
-			}
-			
-			outdentButton.isEnabled = !isOutdentRowsUnavailable
-			indentButton.isEnabled = !isIndentRowsUnavailable
-			moveUpButton.isEnabled = !isMoveRowsUpUnavailable
-			moveDownButton.isEnabled = !isMoveRowsDownUnavailable
-			insertImageButton.isEnabled = !isInsertImageUnavailable
-			linkButton.isEnabled = !isLinkUnavailable
-		}
-		
-	}
-	
 	private func discloseSearchBar() {
 		view.layoutIfNeeded()
 
@@ -1924,8 +1924,6 @@ extension EditorViewController {
 				collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
 			}
 		}
-		
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func restoreOutlineCursorPosition() {
@@ -2260,6 +2258,7 @@ extension EditorViewController {
 		
 		runCommand(command)
 		moveCursorToTagInput()
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func deleteTag(name: String) {
@@ -2271,6 +2270,7 @@ extension EditorViewController {
 									   tagName: name)
 		
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 	
 	private func expand(rows: [Row]) {
@@ -2282,6 +2282,7 @@ extension EditorViewController {
 									rows: rows)
 		
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func collapse(rows: [Row]) {
@@ -2305,6 +2306,8 @@ extension EditorViewController {
 				}
 			}
 		}
+		
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func expandAll(containers: [RowContainer]) {
@@ -2316,6 +2319,7 @@ extension EditorViewController {
 									   containers: containers)
 		
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func collapseAll(containers: [RowContainer]) {
@@ -2327,6 +2331,7 @@ extension EditorViewController {
 										 containers: containers)
 
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func textChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
@@ -2340,6 +2345,7 @@ extension EditorViewController {
 										 isInNotes: isInNotes,
 										 selection: selection)
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func cutRows(_ rows: [Row]) {
@@ -2352,6 +2358,7 @@ extension EditorViewController {
 									rows: rows)
 
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func copyRows(_ rows: [Row]) {
@@ -2422,6 +2429,7 @@ extension EditorViewController {
 											  afterRow: afterRows?.last)
 
 				self.runCommand(command)
+				self.updateUI(editMode: self.isInEditMode)
 			}
 			
 		} else if let stringProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [kUTTypeUTF8PlainText as String]), !stringProviderIndexes.isEmpty {
@@ -2458,6 +2466,7 @@ extension EditorViewController {
 											  afterRow: afterRows?.last)
 
 				self.runCommand(command)
+				self.updateUI(editMode: self.isInEditMode)
 			}
 
 		}
@@ -2483,6 +2492,8 @@ extension EditorViewController {
 				}
 			}
 		}
+		
+		updateUI(editMode: isInEditMode)
 	}
 	
 	private func createRow(beforeRows: [Row]) {
@@ -2500,6 +2511,8 @@ extension EditorViewController {
 				rowCell.moveToEnd()
 			}
 		}
+		
+		updateUI(editMode: isInEditMode)
 	}
 	
 	private func createRow(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
@@ -2522,6 +2535,8 @@ extension EditorViewController {
 			}
 			makeCursorVisibleIfNecessary()
 		}
+		
+		updateUI(editMode: isInEditMode)
 	}
 	
 	private func createRowInside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
@@ -2543,6 +2558,8 @@ extension EditorViewController {
 			}
 			makeCursorVisibleIfNecessary()
 		}
+		
+		updateUI(editMode: isInEditMode)
 	}
 	
 	private func createRowOutside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
@@ -2564,6 +2581,8 @@ extension EditorViewController {
 			}
 			makeCursorVisibleIfNecessary()
 		}
+		
+		updateUI(editMode: isInEditMode)
 	}
 	
 	private func duplicateRows(_ rows: [Row]) {
@@ -2575,6 +2594,7 @@ extension EditorViewController {
 										  rows: rows)
 		
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 	
 	private func indentRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -2587,6 +2607,7 @@ extension EditorViewController {
 									   rowStrings: rowStrings)
 		
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 	
 	private func outdentRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -2599,6 +2620,7 @@ extension EditorViewController {
 										rowStrings: rowStrings)
 		
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func moveRowsUp(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -2611,7 +2633,7 @@ extension EditorViewController {
 									   rowStrings: rowStrings)
 		
 		runCommand(command)
-		
+		updateUI(editMode: isInEditMode)
 		makeCursorVisibleIfNecessary()
 	}
 
@@ -2625,7 +2647,7 @@ extension EditorViewController {
 										 rowStrings: rowStrings)
 		
 		runCommand(command)
-
+		updateUI(editMode: isInEditMode)
 		makeCursorVisibleIfNecessary()
 	}
 
@@ -2639,6 +2661,7 @@ extension EditorViewController {
 										 rowStrings: rowStrings)
 		
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func moveRowsRight(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -2651,6 +2674,7 @@ extension EditorViewController {
 										  rowStrings: rowStrings)
 		
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func splitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
@@ -2671,6 +2695,8 @@ extension EditorViewController {
 				rowCell.moveToStart()
 			}
 		}
+		
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func completeRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -2689,6 +2715,8 @@ extension EditorViewController {
 				rowCell.moveToEnd()
 			}
 		}
+		
+		updateUI(editMode: isInEditMode)
 	}
 	
 	private func uncompleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -2701,6 +2729,7 @@ extension EditorViewController {
 										rowStrings: rowStrings)
 		
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 	
 	private func createRowNotes(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -2719,6 +2748,8 @@ extension EditorViewController {
 				rowCell.moveToNote()
 			}
 		}
+		
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func deleteRowNotes(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -2737,6 +2768,8 @@ extension EditorViewController {
 				rowCell.moveToEnd()
 			}
 		}
+		
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func makeCursorVisibleIfNecessary() {

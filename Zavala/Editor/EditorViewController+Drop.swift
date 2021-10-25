@@ -205,6 +205,7 @@ extension EditorViewController {
 										  toChildIndex: toChildIndex)
 		
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 	
 	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
@@ -326,6 +327,7 @@ extension EditorViewController {
 										   prefersEnd: prefersEnd)
 		
 		runCommand(command)
+		updateUI(editMode: isInEditMode)
 	}
 	
 }
