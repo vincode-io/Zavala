@@ -2669,17 +2669,21 @@ extension Outline {
 	}
 
 	private func updateRowStrings(_ row: Row, _ rowStrings: RowStrings) {
-		switch rowStrings {
-		case .topic(let topic):
-			processLinkDiff(oldText: row.topic, newText: topic)
-		case .note(let note):
-			processLinkDiff(oldText: row.note, newText: note)
-		case .both(let topic, let note):
-			processLinkDiff(oldText: row.topic, newText: topic)
-			processLinkDiff(oldText: row.note, newText: note)
-		}
+		let oldTopic = row.topic
+		let oldNote = row.note
 
 		row.rowStrings = rowStrings
+
+		switch rowStrings {
+		case .topicMarkdown, .topic:
+			processLinkDiff(oldText: oldTopic, newText: row.topic)
+		case .noteMarkdown, .note:
+			processLinkDiff(oldText: oldNote, newText: row.note)
+		case .both:
+			processLinkDiff(oldText: oldTopic, newText: row.topic)
+			processLinkDiff(oldText: oldNote, newText: row.note)
+		}
+
 	}
 	
 	private func processLinkDiff(oldText: NSAttributedString?, newText: NSAttributedString?) {

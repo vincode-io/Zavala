@@ -10,6 +10,8 @@ import MobileCoreServices
 import MarkdownAttributedString
 
 public enum RowStrings {
+	case topicMarkdown(String?)
+	case noteMarkdown(String?)
 	case topic(NSAttributedString?)
 	case note(NSAttributedString?)
 	case both(NSAttributedString?, NSAttributedString?)
@@ -137,30 +139,20 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 	
 	public var topicMarkdown: String? {
-		if let topic = topic, let images = images?.filter({ !$0.isInNotes }), !images.isEmpty {
-			let mutableTopic = NSMutableAttributedString(attributedString: topic)
-			let sortedImages = images.sorted(by: { $0.offset > $1.offset })
-			for image in sortedImages {
-				let markdown = NSAttributedString(string: "![](\(image.id.imageUUID).png)")
-				mutableTopic.insert(markdown, at: image.offset)
-			}
-			return mutableTopic.markdownRepresentation
-		} else {
-			return topic?.markdownRepresentation
+		get {
+			return convertAttrString(topic, isInNotes: false)
+		}
+		set {
+			topic = convertMarkdown(newValue, isInNotes: false)
 		}
 	}
 	
 	public var noteMarkdown: String? {
-		if let note = note, let images = images?.filter({ $0.isInNotes }), !images.isEmpty {
-			let mutableNote = NSMutableAttributedString(attributedString: note)
-			let sortedImages = images.sorted(by: { $0.offset > $1.offset })
-			for image in sortedImages {
-				let markdown = NSAttributedString(string: "![](\(image.id.imageUUID).png)")
-				mutableNote.insert(markdown, at: image.offset)
-			}
-			return mutableNote.markdownRepresentation
-		} else {
-			return note?.markdownRepresentation
+		get {
+			return convertAttrString(note, isInNotes: true)
+		}
+		set {
+			note = convertMarkdown(newValue, isInNotes: true)
 		}
 	}
 	
@@ -226,6 +218,10 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		}
 		set {
 			switch newValue {
+			case .topicMarkdown(let topicMarkdown):
+				self.topicMarkdown = topicMarkdown
+			case .noteMarkdown(let noteMarkdown):
+				self.noteMarkdown = noteMarkdown
 			case .topic(let topic):
 				self.topic = topic
 			case .note(let note):
@@ -272,6 +268,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		case rowOrder = "rowOrder"
 	}
 	
+	private static let markdownImagePattern = "!\\]\\]\\(([^)]+).png\\)"
+	
 	private var topicCache: NSAttributedString?
 	private var noteCache: NSAttributedString?
 
@@ -293,12 +291,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		self.isExpanded = true
 		self.rowOrder = [String]()
 		super.init()
-		if let topicMarkdown = topicMarkdown {
-			topic = NSAttributedString(markdownRepresentation: topicMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
-		}
-		if let noteMarkdown = noteMarkdown {
-			note = NSAttributedString(markdownRepresentation: noteMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
-		}
+		self.topicMarkdown = topicMarkdown
+		self.noteMarkdown = noteMarkdown
 	}
 	
 	public init(from decoder: Decoder) throws {
@@ -377,8 +371,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return row
 	}
 	
-	public func import(topicMarkdown: String?, noteMarkdown: String?, images: [String: Data]?) {
-		guard let regEx = try? NSRegularExpression(pattern: "!\\]\\]\\(([^)]+).png\\)", options: []) else {
+	public func importText(topicMarkdown: String?, noteMarkdown: String?, images: [String: Data]?) {
+		guard let regEx = try? NSRegularExpression(pattern: Self.markdownImagePattern, options: []) else {
 			return
 		}
 		
@@ -572,10 +566,7 @@ extension Row {
 		
 		for image in images?.sorted(by: { $0.offset < $1.offset }) ?? [Image]() {
 			if image.isInNotes == isNotes {
-				let attachment = OutlineTextAttachment(data: image.data, ofType: kUTTypePNG as String)
-				attachment.imageUUID = image.id.imageUUID
-				let imageAttrText = NSAttributedString(attachment: attachment)
-				mutableAttrString.insert(imageAttrText, at: image.offset)
+				insertImageAttachment(attrString: mutableAttrString, image: image, offset: image.offset)
 			}
 		}
 		
@@ -600,6 +591,61 @@ extension Row {
 		}
 		
 		return (mutableAttrString, images)
+	}
+	
+	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool) -> String? {
+		if let attrString = attrString, let images = images?.filter({ $0.isInNotes == isInNotes }), !images.isEmpty {
+			let result = NSMutableAttributedString(attributedString: attrString)
+			let sortedImages = images.sorted(by: { $0.offset > $1.offset })
+			for image in sortedImages {
+				let markdown = NSAttributedString(string: "![](\(image.id.imageUUID).png)")
+				result.insert(markdown, at: image.offset)
+			}
+			return result.markdownRepresentation
+		} else {
+			return note?.markdownRepresentation
+		}
+	}
+	
+	func convertMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
+		guard let markdown = markdown, let regEx = try? NSRegularExpression(pattern: Self.markdownImagePattern, options: []) else {
+			return nil
+		}
+
+		let mangledMarkdown = markdown.replacingOccurrences(of: "![", with: "!]")
+		let attrString = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
+		let strippedString = attrString.string
+		let matches = regEx.allMatches(in: strippedString)
+		
+		for match in matches {
+			guard let wholeRange = Range(match.range(at: 0), in: strippedString), let captureRange = Range(match.range(at: 1), in: strippedString) else {
+				continue
+			}
+			
+			let currentString = attrString.string
+			let wholeString = strippedString[wholeRange]
+			guard let wholeStringRange = currentString.range(of: wholeString) else {
+				continue
+			}
+			
+			let offset = currentString[currentString.startIndex..<wholeStringRange.lowerBound].utf16.count
+			attrString.replaceCharacters(in: NSRange(location: offset, length: wholeString.utf16.count), with: "")
+
+			let imageUUID = String(strippedString[captureRange])
+			let imageID = EntityID.image(entityID.accountID, entityID.documentUUID, entityID.rowUUID, imageUUID)
+			if let image = findImage(id: imageID) {
+				insertImageAttachment(attrString: attrString, image: image, offset: offset)
+			}
+		}
+		
+		return attrString
+	}
+	
+	func insertImageAttachment(attrString: NSMutableAttributedString, image: Image, offset: Int) {
+		let attachment = OutlineTextAttachment(data: image.data, ofType: kUTTypePNG as String)
+		attachment.imageUUID = image.id.imageUUID
+		let imageAttrText = NSAttributedString(attachment: attachment)
+		attrString.insert(imageAttrText, at: offset)
 	}
 	
 }

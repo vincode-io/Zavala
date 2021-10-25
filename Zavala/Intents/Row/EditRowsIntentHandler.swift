@@ -68,13 +68,11 @@ class EditRowsIntentHandler: NSObject, ZavalaIntentHandler, EditRowsIntentHandli
 			switch intent.detail {
 			case .topic:
 				if let markdown = intent.topic {
-					let attrString = NSMutableAttributedString(markdownRepresentation: markdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
-					row.outline?.updateRow(row, rowStrings: .topic(attrString), applyChanges: true)
+					row.outline?.updateRow(row, rowStrings: .topicMarkdown(markdown), applyChanges: true)
 				}
 			case .note:
 				if let markdown = intent.note, !markdown.isEmpty {
-					let attrString = NSMutableAttributedString(markdownRepresentation: markdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
-					row.outline?.updateRow(row, rowStrings: .note(attrString), applyChanges: true)
+					row.outline?.updateRow(row, rowStrings: .noteMarkdown(markdown), applyChanges: true)
 				} else {
 					row.outline?.deleteNotes(rows: [row])
 				}
