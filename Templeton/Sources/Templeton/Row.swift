@@ -377,7 +377,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return row
 	}
 	
-	public func update(topicMarkdown: String?, noteMarkdown: String?, images: [String: Data]?) {
+	public func import(topicMarkdown: String?, noteMarkdown: String?, images: [String: Data]?) {
 		guard let regEx = try? NSRegularExpression(pattern: "!\\]\\]\\(([^)]+).png\\)", options: []) else {
 			return
 		}
