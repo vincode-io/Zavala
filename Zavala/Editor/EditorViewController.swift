@@ -665,7 +665,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				collectionView.contentInset = newInsets
 			}
 			makeCursorVisibleIfNecessary()
-			updateUI(editMode: true)
 			currentKeyboardHeight = keyboardViewEndFrame.height
 		}
 
@@ -1424,6 +1423,7 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		collectionView.deselectAll()
 		updateUI(editMode: isInEditMode)
 		delegate?.validateToolbar(self)
+		makeCursorVisibleIfNecessary()
 	}
 
 	func editorTextRowToggleDisclosure(row: Row) {
