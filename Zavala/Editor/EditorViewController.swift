@@ -406,7 +406,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 												  outdentButton]
 		}
 
-		updateUI(editMode: false)
+		updateNavigationUI(editMode: false)
+		updateUI()
 		collectionView.reloadData()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineFontCacheDidRebuild(_:)), name: .OutlineFontCacheDidRebuild, object: nil)
@@ -657,13 +658,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		if note.name == UIResponder.keyboardWillHideNotification {
 			collectionView.contentInset = EditorViewController.defaultContentInsets
-			updateUI(editMode: false)
+			updateNavigationUI(editMode: false)
 			currentKeyboardHeight = 0
 		} else {
 			let newInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
 			if collectionView.contentInset != newInsets {
 				collectionView.contentInset = newInsets
 			}
+			updateNavigationUI(editMode: true)
 			makeCursorVisibleIfNecessary()
 			currentKeyboardHeight = keyboardViewEndFrame.height
 		}
@@ -715,14 +717,24 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		collectionView.reloadData()
 		
-		updateUI(editMode: false)
+		updateUI()
 
 		restoreOutlineCursorPosition()
 		restoreScrollPosition()
 		moveCursorToTitleOnNew()
 	}
 	
-	func updateUI(editMode: Bool) {
+	func updateNavigationUI(editMode: Bool) {
+		if traitCollection.userInterfaceIdiom == .phone {
+			if editMode {
+				navigationItem.rightBarButtonItems = [doneBarButtonItem, filterBarButtonItem, ellipsisBarButtonItem]
+			} else {
+				navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
+			}
+		}
+	}
+	
+	func updateUI() {
 		navigationItem.largeTitleDisplayMode = .never
 		
 		if traitCollection.userInterfaceIdiom != .mac {
@@ -735,14 +747,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			}
 		}
 		
-		if traitCollection.userInterfaceIdiom == .phone {
-			if editMode {
-				navigationItem.rightBarButtonItems = [doneBarButtonItem, filterBarButtonItem, ellipsisBarButtonItem]
-			} else {
-				navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
-			}
-		}
-
 		if traitCollection.userInterfaceIdiom != .mac {
 			self.ellipsisBarButtonItem.menu = buildEllipsisMenu()
 
@@ -936,13 +940,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func toggleOutlineFilter() {
 		guard let changes = outline?.toggleFilter() else { return }
 		applyChangesRestoringState(changes)
-		updateUI(editMode: isInEditMode)
+		updateUI()
 	}
 	
 	@objc func toggleOutlineHideNotes() {
 		guard let changes = outline?.toggleNotesHidden() else { return }
 		applyChangesRestoringState(changes)
-		updateUI(editMode: isInEditMode)
+		updateUI()
 	}
 	
 	@objc func repeatMoveCursorUp() {
@@ -1275,14 +1279,14 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-		updateUI(editMode: isInEditMode)
+		updateUI()
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		if let responder = UIResponder.currentFirstResponder, responder is UITextField || responder is UITextView {
 			responder.resignFirstResponder()
 		}
-		updateUI(editMode: isInEditMode)
+		updateUI()
 	}
 	
 }
@@ -1421,7 +1425,7 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 
 	func editorTextRowTextFieldDidBecomeActive(row: Row) {
 		collectionView.deselectAll()
-		updateUI(editMode: isInEditMode)
+		updateUI()
 		delegate?.validateToolbar(self)
 		makeCursorVisibleIfNecessary()
 	}
@@ -1929,7 +1933,7 @@ extension EditorViewController {
 			}
 		}
 		
-		updateUI(editMode: isInEditMode)
+		updateUI()
 	}
 
 	private func restoreOutlineCursorPosition() {
