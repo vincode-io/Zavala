@@ -500,8 +500,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
 
 		var menuItems = [UIMenuItem]()
-		menuItems.append(UIMenuItem(title: L10n.bold, action: .toggleBoldface))
-		menuItems.append(UIMenuItem(title: L10n.italic, action: .toggleItalics))
 		menuItems.append(UIMenuItem(title: L10n.link, action: .editLink))
 		menuItems.append(UIMenuItem(title: L10n.insertImage, action: .insertImage))
 		UIMenuController.shared.menuItems = menuItems

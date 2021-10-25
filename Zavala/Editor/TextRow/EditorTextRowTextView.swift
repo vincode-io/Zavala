@@ -10,9 +10,10 @@ import Templeton
 import RSCore
 
 extension Selector {
-	static let toggleBoldface = #selector(EditorTextRowTextView.outlineToggleBoldface(_:))
-	static let toggleItalics = #selector(EditorTextRowTextView.outlineToggleItalics(_:))
 	static let editLink = #selector(EditorTextRowTextView.editLink(_:))
+	static let toggleBoldface = #selector(UIResponder.toggleBoldface(_:))
+	static let toggleItalics = #selector(UIResponder.toggleItalics(_:))
+	static let toggleUnderline = #selector(UIResponder.toggleUnderline(_:))
 }
 
 class EditorTextRowTextView: UITextView {
@@ -126,6 +127,7 @@ class EditorTextRowTextView: UITextView {
 			}
 		}
 
+		self.allowsEditingTextAttributes = true
 		self.isScrollEnabled = false
 		self.textContainer.lineFragmentPadding = 0
 		self.textContainerInset = .zero
@@ -227,15 +229,11 @@ class EditorTextRowTextView: UITextView {
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
-		case .toggleBoldface, .toggleItalics, .editLink:
-			return true
+		case .toggleUnderline:
+			return false
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
-	}
-	
-	@objc func outlineToggleBoldface(_ sender: Any?) {
-		super.toggleBoldface(sender)
 	}
 	
 	@objc func editLink(_ sender: Any?) {
@@ -249,11 +247,7 @@ class EditorTextRowTextView: UITextView {
 	func invalidateLayout() {
 		fatalError("invalidateLayout has not been implemented")
 	}
-	
-	@objc func outlineToggleItalics(_ sender: Any?) {
-		super.toggleItalics(sender)
-	}
-	
+		
 	override func buildMenu(with builder: UIMenuBuilder) {
 		super.buildMenu(with: builder)
 		
