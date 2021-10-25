@@ -76,7 +76,9 @@ class EditorTitleContentView: UIView, UIContentView {
 			updateAdjustingSeparatorWidthContraint()
 		}
 
-		guard appliedConfiguration != configuration else { return }
+		// If you enable this optimization, we end up carrying forward previous titles when creating new outlines.
+		// I have no idea why.
+//		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
 		textView.text = configuration.title
 		updateAdjustingSeparatorWidthContraint()
