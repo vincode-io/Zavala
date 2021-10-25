@@ -149,9 +149,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 				return
 			}
 			
-			self.timelineViewController?.selectDocument(document, animated: false)
-			self.lastMainControllerToAppear = .editor
-			self.validateToolbar()
+			self.handleSelectDocument(document)
 		}
 	}
 	
@@ -164,9 +162,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 
 		sidebarViewController?.selectDocumentContainer(AllDocuments(account: account), animated: false) {
-			self.timelineViewController?.selectDocument(document, animated: false)
-			self.lastMainControllerToAppear = .editor
-			self.validateToolbar()
+			self.handleSelectDocument(document)
 		}
 	}
 	
@@ -357,11 +353,8 @@ extension MainSplitViewController: TimelineDelegate {
 			if animated {
 				show(.secondary)
 			} else {
-				// I don't know why the perform without animation doesn't execute without this...
-				DispatchQueue.main.async {
-					UIView.performWithoutAnimation {
-						self.show(.secondary)
-					}
+				UIView.performWithoutAnimation {
+					self.show(.secondary)
 				}
 			}
 		} else {
@@ -514,6 +507,26 @@ extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 // MARK: Helpers
 
 extension MainSplitViewController {
+	
+	private func handleSelectDocument(_ document: Document) {
+		// This is done because the restore state navigation used to rely on the fact that
+		// the TimeliniewController used a diffable datasource that didn't complete until after
+		// some navigation had occurred. Changing this assumption broke state restoration
+		// on the iPhone.
+		//
+		// When TimelineViewController was rewritten without diffable datasources, was when this
+		// assumption was broken. Rather than rewrite how we handle navigation (which would
+		// not be easy. SidebarViewController still uses a diffable datasource), we made it
+		// look like it still works the same way by dispatching to the next run loop to occur.
+		//
+		// Someday this should be refactored. How the UINavigationControllerDelegate works would
+		// be the main challenge.
+		DispatchQueue.main.async {
+			self.timelineViewController?.selectDocument(document, animated: false)
+			self.lastMainControllerToAppear = .editor
+			self.validateToolbar()
+		}
+	}
 	
 	private func selectDefaultDocumentContainerIfNecessary(completion: @escaping () -> Void) {
 		guard sidebarViewController?.selectedAccount == nil else {
