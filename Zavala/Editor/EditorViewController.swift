@@ -1378,6 +1378,7 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	
 	func editorTextRowTextFieldDidBecomeActive(row: Row) {
 		collectionView.deselectAll()
+		updateUI(editMode: isInEditMode)
 		delegate?.validateToolbar(self)
 	}
 
@@ -2219,7 +2220,6 @@ extension EditorViewController {
 		
 		runCommand(command)
 		moveCursorToTagInput()
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func deleteTag(name: String) {
@@ -2231,7 +2231,6 @@ extension EditorViewController {
 									   tagName: name)
 		
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 	}
 	
 	private func expand(rows: [Row]) {
@@ -2243,7 +2242,6 @@ extension EditorViewController {
 									rows: rows)
 		
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func collapse(rows: [Row]) {
@@ -2267,8 +2265,6 @@ extension EditorViewController {
 				}
 			}
 		}
-		
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func expandAll(containers: [RowContainer]) {
@@ -2280,7 +2276,6 @@ extension EditorViewController {
 									   containers: containers)
 		
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func collapseAll(containers: [RowContainer]) {
@@ -2292,7 +2287,6 @@ extension EditorViewController {
 										 containers: containers)
 
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func textChanged(row: Row, textRowStrings: TextRowStrings, isInNotes: Bool, selection: NSRange) {
@@ -2306,7 +2300,6 @@ extension EditorViewController {
 										 isInNotes: isInNotes,
 										 selection: selection)
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func cutRows(_ rows: [Row]) {
@@ -2319,7 +2312,6 @@ extension EditorViewController {
 									rows: rows)
 
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func copyRows(_ rows: [Row]) {
@@ -2390,7 +2382,6 @@ extension EditorViewController {
 											  afterRow: afterRows?.last)
 
 				self.runCommand(command)
-				self.updateUI(editMode: self.isInEditMode)
 			}
 			
 		} else if let stringProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [kUTTypeUTF8PlainText as String]), !stringProviderIndexes.isEmpty {
@@ -2427,7 +2418,6 @@ extension EditorViewController {
 											  afterRow: afterRows?.last)
 
 				self.runCommand(command)
-				self.updateUI(editMode: self.isInEditMode)
 			}
 
 		}
@@ -2453,8 +2443,6 @@ extension EditorViewController {
 				}
 			}
 		}
-		
-		updateUI(editMode: isInEditMode)
 	}
 	
 	private func createRow(beforeRows: [Row]) {
@@ -2472,8 +2460,6 @@ extension EditorViewController {
 				rowCell.moveToEnd()
 			}
 		}
-		
-		updateUI(editMode: isInEditMode)
 	}
 	
 	private func createRow(afterRows: [Row]?, textRowStrings: TextRowStrings? = nil) {
@@ -2496,8 +2482,6 @@ extension EditorViewController {
 			}
 			makeCursorVisibleIfNecessary()
 		}
-		
-		updateUI(editMode: isInEditMode)
 	}
 	
 	private func createRowInside(afterRows: [Row]?, textRowStrings: TextRowStrings? = nil) {
@@ -2519,8 +2503,6 @@ extension EditorViewController {
 			}
 			makeCursorVisibleIfNecessary()
 		}
-		
-		updateUI(editMode: isInEditMode)
 	}
 	
 	private func createRowOutside(afterRows: [Row]?, textRowStrings: TextRowStrings? = nil) {
@@ -2542,8 +2524,6 @@ extension EditorViewController {
 			}
 			makeCursorVisibleIfNecessary()
 		}
-		
-		updateUI(editMode: isInEditMode)
 	}
 	
 	private func duplicateRows(_ rows: [Row]) {
@@ -2555,7 +2535,6 @@ extension EditorViewController {
 										  rows: rows)
 		
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 	}
 	
 	private func indentRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
@@ -2568,7 +2547,6 @@ extension EditorViewController {
 									   textRowStrings: textRowStrings)
 		
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 	}
 	
 	private func outdentRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
@@ -2581,7 +2559,6 @@ extension EditorViewController {
 										textRowStrings: textRowStrings)
 		
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func moveRowsUp(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
@@ -2594,7 +2571,6 @@ extension EditorViewController {
 									   textRowStrings: textRowStrings)
 		
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 		makeCursorVisibleIfNecessary()
 	}
 
@@ -2608,7 +2584,6 @@ extension EditorViewController {
 										 textRowStrings: textRowStrings)
 		
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 		makeCursorVisibleIfNecessary()
 	}
 
@@ -2622,7 +2597,6 @@ extension EditorViewController {
 										 textRowStrings: textRowStrings)
 		
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func moveRowsRight(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
@@ -2635,7 +2609,6 @@ extension EditorViewController {
 										  textRowStrings: textRowStrings)
 		
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func splitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
@@ -2656,8 +2629,6 @@ extension EditorViewController {
 				rowCell.moveToStart()
 			}
 		}
-		
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func completeRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
@@ -2676,8 +2647,6 @@ extension EditorViewController {
 				rowCell.moveToEnd()
 			}
 		}
-		
-		updateUI(editMode: isInEditMode)
 	}
 	
 	private func uncompleteRows(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
@@ -2690,7 +2659,6 @@ extension EditorViewController {
 										textRowStrings: textRowStrings)
 		
 		runCommand(command)
-		updateUI(editMode: isInEditMode)
 	}
 	
 	private func createRowNotes(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
@@ -2709,8 +2677,6 @@ extension EditorViewController {
 				rowCell.moveToNote()
 			}
 		}
-		
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func deleteRowNotes(_ rows: [Row], textRowStrings: TextRowStrings? = nil) {
@@ -2729,8 +2695,6 @@ extension EditorViewController {
 				rowCell.moveToEnd()
 			}
 		}
-		
-		updateUI(editMode: isInEditMode)
 	}
 
 	private func makeCursorVisibleIfNecessary() {
