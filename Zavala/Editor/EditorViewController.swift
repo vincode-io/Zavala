@@ -904,11 +904,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func toggleOutlineFilter() {
 		guard let changes = outline?.toggleFilter() else { return }
 		applyChangesRestoringState(changes)
+		updateUI(editMode: isInEditMode)
 	}
 	
 	@objc func toggleOutlineHideNotes() {
 		guard let changes = outline?.toggleNotesHidden() else { return }
 		applyChangesRestoringState(changes)
+		updateUI(editMode: isInEditMode)
 	}
 	
 	@objc func repeatMoveCursorUp() {
