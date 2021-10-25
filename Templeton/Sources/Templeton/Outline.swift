@@ -2748,7 +2748,7 @@ extension Outline {
 
 		guard isBeingViewed else { return }
 
-		if !(documentBacklinks?.isEmpty ?? true) {
+		if documentBacklinks?.count ?? 0 == 1 {
 			outlineAddedBacklinks()
 		} else {
 			if isSearching == .notSearching {
@@ -2766,7 +2766,7 @@ extension Outline {
 
 		guard isBeingViewed else { return }
 		
-		if documentBacklinks?.isEmpty ?? true {
+		if documentBacklinks?.count ?? 0 == 0 {
 			outlineRemovedBacklinks()
 		} else {
 			if isSearching == .notSearching {
