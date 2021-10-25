@@ -428,10 +428,11 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		if foundImages == nil {
 			images = [image]
 		} else {
-			if !foundImages!.contains(image) {
-				foundImages!.append(image)
-				images = foundImages
+			if let index = foundImages!.firstIndex(where: { $0.id == image.id }) {
+				foundImages!.remove(at: index)
 			}
+			foundImages!.append(image)
+			images = foundImages
 		}
 		
 		topicCache = nil

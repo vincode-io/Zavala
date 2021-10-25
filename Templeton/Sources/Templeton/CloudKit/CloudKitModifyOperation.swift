@@ -79,7 +79,7 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 			let (saves, deletes) = modifications[zoneID]!
 
 			if let imageQuery = buildImageQuery(saves: saves) {
-				cloudKitZone.query(imageQuery, desiredKeys: []) { result in
+				cloudKitZone.query(imageQuery, desiredKeys: [CloudKitOutlineZone.CloudKitImage.Fields.offset]) { result in
 					switch result {
 					case .success(let imageRecords):
 						var (moreSaves, moreDeletes, imageURLs) = self.trueUpImageRecordIDs(zoneID: zoneID, saves: saves, imageRecords: imageRecords)
@@ -258,7 +258,11 @@ extension CloudKitModifyOperation {
 	}
 	
 	private func trueUpImageRecordIDs(zoneID: CKRecordZone.ID, saves: [CKRecord], imageRecords: [CKRecord]) -> ([CKRecord], [CKRecord.ID], [URL]) {
-		let imageRecordIDs = imageRecords.compactMap { EntityID(description: $0.recordID.recordName) }
+		let imageRecordData = imageRecords.reduce(into: [EntityID: Int]()) { partialResult, record in
+			if let entityID = EntityID(description: record.recordID.recordName) {
+				partialResult[entityID] = record[CloudKitOutlineZone.CloudKitImage.Fields.offset] as? Int
+			}
+		}
 		
 		var imageSaves = [CKRecord]()
 		var imageDeletes = [CKRecord.ID]()
@@ -278,7 +282,7 @@ extension CloudKitModifyOperation {
 		}
 		
 		for image in saveImages {
-			if !imageRecordIDs.contains(image.id) {
+			if image.offset != imageRecordData[image.id] {
 				let recordID = CKRecord.ID(recordName: image.id.description, zoneID: zoneID)
 				let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitImage.recordType, recordID: recordID)
 				
@@ -299,7 +303,7 @@ extension CloudKitModifyOperation {
 			}
 		}
 		
-		for imageRecordID in imageRecordIDs {
+		for imageRecordID in imageRecordData.keys {
 			let rowID = EntityID.row(imageRecordID.accountID, imageRecordID.documentUUID, imageRecordID.rowUUID)
 			guard let row = AccountManager.shared.findRow(rowID) else { continue }
 
