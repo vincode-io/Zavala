@@ -1886,6 +1886,8 @@ extension EditorViewController {
 				collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
 			}
 		}
+		
+		updateUI(editMode: isInEditMode)
 	}
 
 	private func restoreOutlineCursorPosition() {
