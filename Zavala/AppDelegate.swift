@@ -501,7 +501,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		var menuItems = [UIMenuItem]()
 		menuItems.append(UIMenuItem(title: L10n.link, action: .editLink))
-		menuItems.append(UIMenuItem(title: L10n.insertImage, action: .insertImage))
+		menuItems.append(UIMenuItem(title: L10n.image, action: .insertImage))
 		UIMenuController.shared.menuItems = menuItems
 
 		#if targetEnvironment(macCatalyst)

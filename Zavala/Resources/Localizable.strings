@@ -66,6 +66,7 @@
 "Format" = "Format";
 "Bold" = "Bold";
 "Italic" = "Italic";
+"Image" = "Image";
 "Insert_Image" = "Insert Image";
 "Insert_Image_Ellipsis" = "Insert Image…";
 "Link" = "Link";

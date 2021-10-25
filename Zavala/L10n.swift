@@ -158,6 +158,8 @@ internal enum L10n {
   internal static let hideCompleted = L10n.tr("Localizable", "Hide_Completed")
   /// Hide Notes
   internal static let hideNotes = L10n.tr("Localizable", "Hide_Notes")
+  /// Image
+  internal static let image = L10n.tr("Localizable", "Image")
   /// Import Failed
   internal static let importFailed = L10n.tr("Localizable", "Import Failed")
   /// Import OPML
