@@ -604,7 +604,7 @@ extension Row {
 			}
 			return result.markdownRepresentation
 		} else {
-			return note?.markdownRepresentation
+			return attrString?.markdownRepresentation
 		}
 	}
 	
