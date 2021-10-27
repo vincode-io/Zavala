@@ -60,6 +60,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 	struct CloudKitImage {
 		static let recordType = "Image"
 		struct Fields {
+			static let syncID = "syncID"
 			static let row = "row"
 			static let isInNotes = "isInNotes"
 			static let offset = "offset"
