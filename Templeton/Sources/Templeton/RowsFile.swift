@@ -32,7 +32,8 @@ struct OutlineRows: Codable {
 
 		let allRows: [Row]
 
-		if fileVersion == 1 {
+		switch fileVersion {
+		case 1:
 			if let rowOrder = try? container.decode([EntityID].self, forKey: .rowOrder) {
 				self.rowOrder = rowOrder.map { $0.rowUUID}
 			} else {
@@ -43,7 +44,7 @@ struct OutlineRows: Codable {
 			} else {
 				allRows = [Row]()
 			}
-		} else {
+		case 2:
 			if let rowOrder = try? container.decode([String].self, forKey: .rowOrder) {
 				self.rowOrder = rowOrder
 			} else {
@@ -54,8 +55,10 @@ struct OutlineRows: Codable {
 			} else {
 				allRows = [Row]()
 			}
+		default:
+			fatalError("Unrecognized Row File Version")
 		}
-	
+		
 		self.keyedRows = allRows.reduce([String: Row]()) { result, row in
 			var mutableResult = result
 			mutableResult[row.id] = row
