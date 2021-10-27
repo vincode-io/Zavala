@@ -175,6 +175,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 				
 				var notesImages = images?.filter { $0.isInNotes } ?? [Image]()
 				notesImages.append(contentsOf: newImages)
+
+				if let images = images {
+					outline?.requestCloudKitUpdates(for: images.filter({ !$0.isInNotes }).map({ $0.id }))
+				}
+				outline?.requestCloudKitUpdates(for: newImages.map({ $0.id }))
+
 				images = notesImages
 			} else {
 				topicData = nil
@@ -203,6 +209,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 
 				var topicImages = images?.filter { !$0.isInNotes } ?? [Image]()
 				topicImages.append(contentsOf: newImages)
+
+				if let images = images {
+					outline?.requestCloudKitUpdates(for: images.filter({ $0.isInNotes }).map({ $0.id }))
+				}
+				outline?.requestCloudKitUpdates(for: newImages.map({ $0.id }))
+
 				images = topicImages
 			} else {
 				noteData = nil

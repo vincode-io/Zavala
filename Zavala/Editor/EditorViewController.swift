@@ -1507,11 +1507,15 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 			return
 		}
 		
-		result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { (object, error) in
-			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = RSImage.scaleImage(data, maxPixelSize: 1800) {
+		result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] (object, error) in
+			guard let self = self else { return }
+			
+			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = RSImage.scaleImage(data, maxPixelSize: 1024) {
 				let scaledImage = UIImage(cgImage: cgImage)
 				
 				DispatchQueue.main.async {
+					self.restoreCursorPosition(cursorCoordinates)
+					
 					guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 					let indexPath = IndexPath(row: shadowTableIndex, section: self.adjustedRowsSection)
 					guard let textRowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}

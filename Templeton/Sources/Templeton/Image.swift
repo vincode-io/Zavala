@@ -13,12 +13,14 @@ public struct Image: Identifiable, Codable, Equatable {
 	public var isInNotes: Bool
 	public var offset: Int
 	public var data: Data
+	public var syncID: String?
 
 	private enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case isInNotes = "isInNotes"
 		case offset = "offset"
 		case data = "data"
+		case syncID = "syncID"
 	}
 	
 	public init(id: EntityID, isInNotes: Bool, offset: Int, data: Data) {

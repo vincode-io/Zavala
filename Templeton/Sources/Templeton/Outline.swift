@@ -2075,16 +2075,24 @@ extension Outline {
 		
 		for deleteRecordID in update.deleteImageRecordIDs {
 			if let row = keyedRows?[deleteRecordID.rowUUID] {
-				row.deleteImage(id: deleteRecordID)
-				updatedRowIDs.insert(deleteRecordID.rowUUID)
+				if row.findImage(id: deleteRecordID) != nil {
+					row.deleteImage(id: deleteRecordID)
+					updatedRowIDs.insert(deleteRecordID.rowUUID)
+				}
 			}
 		}
 		
 		for saveRecord in update.saveImageRecords {
-			guard let saveRecordID = EntityID(description: saveRecord.recordID.recordName) else { continue }
+			guard let saveRecordID = EntityID(description: saveRecord.recordID.recordName),
+				  let row = keyedRows?[saveRecordID.rowUUID] else { continue }
 			
-			if let row = keyedRows?[saveRecordID.rowUUID],
-			   let isInNotes = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.isInNotes] as? Bool,
+			if let syncID = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.syncID] as? String,
+			   let image = row.findImage(id: saveRecordID),
+			   image.syncID == syncID {
+				continue
+			}
+			
+			if let isInNotes = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.isInNotes] as? Bool,
 			   let offset = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.offset] as? Int,
 			   let asset = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.asset] as? CKAsset,
 			   let fileURL = asset.fileURL,
