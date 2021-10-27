@@ -290,7 +290,8 @@ extension EditorTextRowTextView: NSTextStorageDelegate {
 				if key == .attachment, let nsAttachment = attributes[key] as? NSTextAttachment {
 					guard !(nsAttachment is OutlineTextAttachment) else { continue }
 					if let image = nsAttachment.image {
-						let attachment = OutlineTextAttachment(image: image)
+						let attachment = OutlineTextAttachment(data: nil, ofType: nil)
+						attachment.image = image
 						attachment.imageUUID = UUID().uuidString
 						newAttributes[key] = attachment
 					} else if let fileContents = nsAttachment.fileWrapper?.regularFileContents {

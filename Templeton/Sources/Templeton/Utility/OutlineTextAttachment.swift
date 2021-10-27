@@ -17,7 +17,7 @@ public class OutlineTextAttachment: NSTextAttachment {
 			image = UIImage(data: contentData)
 		}
 	}
-	
+
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
