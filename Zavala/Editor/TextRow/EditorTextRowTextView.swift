@@ -213,7 +213,7 @@ class EditorTextRowTextView: UITextView {
 	}
 	
 	func replaceCharacters(_ range: NSRange, withImage image: UIImage) {
-		let attachment = OutlineTextAttachment()
+		let attachment = ImageTextAttachment()
 		attachment.image = image
 		attachment.imageUUID = UUID().uuidString
 		let imageAttrText = NSAttributedString(attachment: attachment)
@@ -288,14 +288,14 @@ extension EditorTextRowTextView: NSTextStorageDelegate {
 			
 			for key in attributes.keys {
 				if key == .attachment, let nsAttachment = attributes[key] as? NSTextAttachment {
-					guard !(nsAttachment is OutlineTextAttachment) else { continue }
+					guard !(nsAttachment is ImageTextAttachment) && !(nsAttachment is MetadataTextAttachment) else { continue }
 					if let image = nsAttachment.image {
-						let attachment = OutlineTextAttachment(data: nil, ofType: nil)
+						let attachment = ImageTextAttachment(data: nil, ofType: nil)
 						attachment.image = image
 						attachment.imageUUID = UUID().uuidString
 						newAttributes[key] = attachment
 					} else if let fileContents = nsAttachment.fileWrapper?.regularFileContents {
-						let attachment = OutlineTextAttachment(data: fileContents, ofType: nsAttachment.fileType)
+						let attachment = ImageTextAttachment(data: fileContents, ofType: nsAttachment.fileType)
 						attachment.imageUUID = UUID().uuidString
 						newAttributes[key] = attachment
 					}

@@ -1,5 +1,5 @@
 //
-//  OutlineTextAttachment.swift
+//  ImageTextAttachment.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 4/6/21.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class OutlineTextAttachment: NSTextAttachment {
+public class ImageTextAttachment: NSTextAttachment {
 	
 	public var imageUUID: String? = nil
 
