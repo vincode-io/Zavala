@@ -489,6 +489,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath, errorHandler: self)
 		let _ = OutlineFontCache.shared
 		
+		MetadataViewManager.provider = MetadataViewProvider()
+		
 		return true
 	}
 	

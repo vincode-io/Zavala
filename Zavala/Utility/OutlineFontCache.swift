@@ -23,6 +23,7 @@ class OutlineFontCache {
 	var backline = UIFont.preferredFont(forTextStyle: .footnote).with(traits: .traitItalic)
 	
 	private var topics = [UIFont]()
+	private var metadatum = [UIFont]()
 	private var notes = [UIFont]()
 
 	init() {
@@ -37,6 +38,15 @@ class OutlineFontCache {
 			return topics[level]
 		} else {
 			return topics.last ?? UIFont.preferredFont(forTextStyle: .body)
+		}
+	}
+	
+	/// This is a 0 based index lookup
+	func metadata(level: Int) -> UIFont {
+		if level < metadatum.count {
+			return metadatum[level]
+		} else {
+			return metadatum.last ?? UIFont.preferredFont(forTextStyle: .title1)
 		}
 	}
 	
@@ -81,7 +91,10 @@ extension OutlineFontCache {
 			case .tags:
 				tag = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
 			case .rowTopic:
-				topics.append(UIFontMetrics(forTextStyle: .body).scaledFont(for: font))
+				let topicFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
+				topics.append(topicFont)
+				let metadataFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font.withSize(font.pointSize - 2))
+				metadatum.append(metadataFont)
 			case .rowNote:
 				notes.append(UIFontMetrics(forTextStyle: .body).scaledFont(for: font))
 			case .backlinks:

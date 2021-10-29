@@ -583,6 +583,11 @@ extension Row {
 			}
 		}
 		
+//		let attachment = MetadataTextAttachment(data: nil, ofType: "org.opml.opml")
+//		attachment.configure(key: "Due", value: "12/25/2021", level: level)
+//		let metaAttrText = NSAttributedString(attachment: attachment)
+//		mutableAttrString.insert(metaAttrText, at: mutableAttrString.length)
+		
 		return mutableAttrString
 	}
 	
