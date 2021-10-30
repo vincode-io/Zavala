@@ -24,6 +24,7 @@ public class MetadataTextAttachment: NSTextAttachment {
 	func configure(key: String, value: String, level: Int) {
 		view = MetadataViewManager.provider.provide(key: key, value: value, level: level)
 		let bounds = view.bounds
+		// TODO: fix this temporary hack for the y coordinate
 		adjustedBounds = CGRect(x: 0, y: -(bounds.height / 8), width: bounds.width, height: bounds.height)
 	}
 	
