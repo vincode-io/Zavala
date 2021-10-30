@@ -127,6 +127,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	
 	@objc func accountTagsDidChange(_ note: Notification) {
 		queueApplyChangeSnapshot()
+		queueReloadChangeSnapshot()
 	}
 
 	@objc func outlineTagsDidChange(_ note: Notification) {
