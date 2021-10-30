@@ -5,6 +5,7 @@
 //  Created by Maurice Parker on 10/27/21.
 //
 
+/*
 import UIKit
 import Templeton
 
@@ -17,3 +18,4 @@ class MetadataTextAttachmentViewProvider: NSTextAttachmentViewProvider {
 	}
 
 }
+*/

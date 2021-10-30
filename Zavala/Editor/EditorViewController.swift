@@ -314,7 +314,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
-		NSTextAttachment.registerViewProviderClass(MetadataTextAttachmentViewProvider.self, forFileType: MetadataTextAttachmentViewProvider.fileType)
+		//NSTextAttachment.registerViewProviderClass(MetadataTextAttachmentViewProvider.self, forFileType: MetadataTextAttachmentViewProvider.fileType)
 		
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
