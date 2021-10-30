@@ -181,6 +181,11 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 extension SidebarViewController {
 	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+		// If we don't force the text view to give up focus, we get its additional context menu items
+		if let textView = UIResponder.currentFirstResponder as? UITextView {
+			textView.resignFirstResponder()
+		}
+		
 		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return nil }
 		return makeDocumentContainerContextMenu(item: sidebarItem)
 	}

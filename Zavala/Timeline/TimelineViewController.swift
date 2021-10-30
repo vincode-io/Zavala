@@ -259,6 +259,11 @@ extension TimelineViewController {
 	}
 		
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+		// If we don't force the text view to give up focus, we get its additional context menu items
+		if let textView = UIResponder.currentFirstResponder as? UITextView {
+			textView.resignFirstResponder()
+		}
+
 		return makeOutlineContextMenu(rowIdentifier: GenericRowIdentifier(indexPath: indexPath))
 	}
 	
