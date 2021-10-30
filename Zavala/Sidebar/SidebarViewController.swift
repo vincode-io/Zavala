@@ -164,7 +164,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		mainSplitViewController?.createOutline()
 	}
 	
-	// MARK API
+	// MARK: API
 	
 	func beginDocumentSearch() {
 		if let searchCellIndexPath = self.dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {
