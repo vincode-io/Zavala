@@ -11,16 +11,12 @@ class MacFormViewController: UIViewController {
 
 	override var keyCommands: [UIKeyCommand]? {
 		[
-			UIKeyCommand(action: #selector(cancel(_:)), input: UIKeyCommand.inputEscape),
-			UIKeyCommand(action: #selector(submit(_:)), input: "\r"),
+			UIKeyCommand(action: #selector(cancel(_:)), input: UIKeyCommand.inputEscape)
 		]
 	}
 
 	@IBAction func cancel(_ sender: Any) {
 		dismiss(animated: true)
-	}
-	
-	@IBAction func submit(_ sender: Any) {
 	}
 	
 }
