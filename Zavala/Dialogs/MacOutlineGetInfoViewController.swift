@@ -31,6 +31,10 @@ class MacOutlineGetInfoViewController: MacFormViewController {
 		ownerEmailTextField.text = outline?.ownerEmail
 		ownerURLTextField.text = outline?.ownerURL
 
+		ownerNameTextField.delegate = self
+		ownerEmailTextField.delegate = self
+		ownerURLTextField.delegate = self
+
 		let dateFormatter = DateFormatter()
 		dateFormatter.dateStyle = .medium
 		dateFormatter.timeStyle = .none
@@ -56,7 +60,24 @@ class MacOutlineGetInfoViewController: MacFormViewController {
 		ownerNameTextField.becomeFirstResponder()
 	}
 
-	@IBAction override func submit(_ sender: Any) {
+	@IBAction func submit(_ sender: Any) {
+		submitAndDismiss()
+	}
+	
+}
+
+extension MacOutlineGetInfoViewController: UITextFieldDelegate {
+	
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		submitAndDismiss()
+		return false
+	}
+	
+}
+
+extension MacOutlineGetInfoViewController {
+	
+	private func submitAndDismiss() {
 		outline?.update(ownerName: ownerNameTextField.text, ownerEmail: ownerEmailTextField.text, ownerURL: ownerURLTextField.text)
 		dismiss(animated: true)
 	}

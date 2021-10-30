@@ -40,6 +40,7 @@ class MacLinkViewController: UIViewController {
 		linkTextField.text = link
 
 		textTextField.delegate = self
+		linkTextField.delegate = self
 		textTextField.maxResultsListHeight = 80
 		
 		textTextField.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in

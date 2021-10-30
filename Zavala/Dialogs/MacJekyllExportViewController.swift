@@ -49,7 +49,7 @@ class MacJekyllExportViewController: MacFormViewController {
 		showDocumentPicker()
 	}
 	
-	@IBAction override func submit(_ sender: Any) {
+	@IBAction func submit(_ sender: Any) {
 		guard let outline = outline,
 			  let root = bookmarkToURL(AppDefaults.shared.jekyllRootBookmark),
 			  let posts = bookmarkToURL(AppDefaults.shared.jekyllPostsBookmark),
