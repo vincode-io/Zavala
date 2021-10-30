@@ -19,6 +19,8 @@ class MacRenameTagViewController: MacFormViewController {
 		super.viewDidLoad()
 		
 		tagNameTextField.delegate = self
+		tagNameTextField.text = tagDocuments?.name
+		
 		renameButton.role = .primary
 		NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: tagNameTextField)
 		updateUI()
