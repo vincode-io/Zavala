@@ -1872,6 +1872,15 @@ extension EditorViewController {
 		}
 	}
 	
+	private func scrollRowToShowBottom() {
+		// If we don't do this when we are creating a row after a really long one, for
+		// some reason the newly created topic will not become the first responder.
+		if let lastRowIndex = currentRows?.last?.shadowTableIndex {
+			let lastRowIndexPath = IndexPath(row: lastRowIndex, section: adjustedRowsSection)
+			collectionView.scrollToItem(at: lastRowIndexPath, at: [.bottom], animated: false)
+		}
+	}
+	
 	private func layoutEditor() {
 		let contentOffset = collectionView.contentOffset
 		collectionView.collectionViewLayout.invalidateLayout()
@@ -2519,6 +2528,8 @@ extension EditorViewController {
 	private func createRow(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
+		scrollRowToShowBottom()
+		
 		let afterRow = afterRows?.sortedByDisplayOrder().last
 		
 		let command = CreateRowAfterCommand(undoManager: undoManager,
@@ -2540,6 +2551,9 @@ extension EditorViewController {
 	
 	private func createRowInside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
+
+		scrollRowToShowBottom()
+		
 		guard let afterRow = afterRows?.sortedByDisplayOrder().last else { return }
 		
 		let command = CreateRowInsideCommand(undoManager: undoManager,
@@ -2561,6 +2575,9 @@ extension EditorViewController {
 	
 	private func createRowOutside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
+
+		scrollRowToShowBottom()
+		
 		guard let afterRow = afterRows?.sortedByDisplayOrder().last else { return }
 		
 		let command = CreateRowOutsideCommand(undoManager: undoManager,
