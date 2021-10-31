@@ -81,8 +81,18 @@ class EditorTextRowContentView: UIView, UIContentView {
 			noteTextView?.saveText()
 		}
 
+		let coordinates = CursorCoordinates.currentCoordinates
+		
 		configureTopicTextView(configuration: configuration)
 		configureNoteTextView(configuration: configuration)
+		
+		if let coordinates = coordinates, coordinates.row == configuration.row {
+			if !coordinates.isInNotes {
+				topicTextView.selectedRange = coordinates.selection
+			} else {
+				noteTextView?.selectedRange = coordinates.selection
+			}
+		}
 
 		let adjustedLeadingIndention: CGFloat
 		let adjustedTrailingIndention: CGFloat
