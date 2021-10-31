@@ -227,10 +227,12 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 	
 	func textViewDidChange(_ textView: UITextView) {
 		// Break any links with a space
-		if textView.textStorage.length > 0 {
-			let range = NSRange(location: textStorage.length - 1, length: 1)
+		let cursorLocation = selectedRange.location
+		if cursorLocation > 0 {
+			let range = NSRange(location: cursorLocation - 1, length: 1)
 			if textView.textStorage.attributedSubstring(from: range).string == " " {
 				textView.textStorage.removeAttribute(.link, range: range)
+				textView.typingAttributes[.link] = nil
 			}
 		}
 		
