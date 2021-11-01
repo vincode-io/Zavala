@@ -177,10 +177,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			return
 		}
 		
-		UIView.performWithoutAnimation {
-			show(.primary)
-		}
-
 		sidebarViewController?.selectDocumentContainer(documentContainer, isNavigationBranch: true, animated: false) {
 			self.lastMainControllerToAppear = .timeline
 
@@ -201,10 +197,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	func openDocument(_ documentID: EntityID) {
 		guard let account = AccountManager.shared.findAccount(accountID: documentID.accountID),
 			  let document = account.findDocument(documentID) else { return }
-		
-		UIView.performWithoutAnimation {
-			show(.primary)
-		}
 		
 		if let sidebarTag = sidebarViewController?.currentTag, document.hasTag(sidebarTag) {
 			self.handleSelectDocument(document)
