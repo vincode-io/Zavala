@@ -29,6 +29,15 @@ enum MainSplitViewControllerError: LocalizedError {
 }
 
 class MainSplitViewController: UISplitViewController, MainCoordinator {
+	
+	private struct Navigate: Equatable {
+		let container: DocumentContainer
+		let document: Document
+		
+		static func == (lhs: Self, rhs: Self) -> Bool {
+			return lhs.container.id == rhs.container.id && lhs.document.id == rhs.document.id
+		}
+	}
 
 	weak var sceneDelegate: SceneDelegate?
 
@@ -68,6 +77,18 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 	private var lastMainControllerToAppear = MainControllerIdentifier.none
 	
+	private var lastNavigate: Navigate?
+	private var goBackwardStack = [Navigate]()
+	private var goForwardStack = [Navigate]()
+
+	private var isGoBackwardUnavailable: Bool {
+		return goBackwardStack.isEmpty
+	}
+	
+	private var isGoForwardUnavailable: Bool {
+		return goForwardStack.isEmpty
+	}
+	
 	override func viewDidLoad() {
         super.viewDidLoad()
 		primaryBackgroundStyle = .sidebar
@@ -85,6 +106,28 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		delegate = self
     }
 	
+	// MARK: Notifications
+	
+	@objc func accountDocumentsDidChange(_ note: Notification) {
+		let allDocuments = AccountManager.shared.documents
+		
+		var replacementGoBackwardStack = [Navigate]()
+		for navigate in goBackwardStack {
+			if allDocuments.contains(navigate.document) {
+				replacementGoBackwardStack.append(navigate)
+			}
+		}
+		goBackwardStack = replacementGoBackwardStack
+		
+		var replacementGoForwardStack = [Navigate]()
+		for navigate in goForwardStack {
+			if allDocuments.contains(navigate.document) {
+				replacementGoForwardStack.append(navigate)
+			}
+		}
+		goForwardStack = replacementGoForwardStack
+	}
+
 	// MARK: API
 	
 	func startUp() {
@@ -94,6 +137,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		timelineViewController?.delegate = self
 		sidebarViewController?.startUp()
 		editorViewController?.delegate = self
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
 	}
 	
 	func handle(_ activity: NSUserActivity) {
@@ -136,7 +181,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			show(.primary)
 		}
 
-		sidebarViewController?.selectDocumentContainer(documentContainer, animated: false) {
+		sidebarViewController?.selectDocumentContainer(documentContainer, isNavigationBranch: true, animated: false) {
 			self.lastMainControllerToAppear = .timeline
 
 			guard let documentUserInfo = userInfo[UserInfoKeys.documentID] as? [AnyHashable : AnyHashable],
@@ -164,11 +209,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		if let sidebarTag = sidebarViewController?.currentTag, document.hasTag(sidebarTag) {
 			self.handleSelectDocument(document)
 		} else if document.tagCount == 1, let tag = document.tags?.first {
-			sidebarViewController?.selectDocumentContainer(TagDocuments(account: account, tag: tag), animated: false) {
+			sidebarViewController?.selectDocumentContainer(TagDocuments(account: account, tag: tag), isNavigationBranch: true, animated: false) {
 				self.handleSelectDocument(document)
 			}
 		} else {
-			sidebarViewController?.selectDocumentContainer(AllDocuments(account: account), animated: false) {
+			sidebarViewController?.selectDocumentContainer(AllDocuments(account: account), isNavigationBranch: true, animated: false) {
 				self.handleSelectDocument(document)
 			}
 		}
@@ -242,6 +287,28 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 	@objc func insertImage(_ sender: Any?) {
 		insertImage()
+	}
+
+	@objc func goBackward(_ sender: Any?) {
+		if let lastNavigate = lastNavigate {
+			goForwardStack.append(lastNavigate)
+		}
+		
+		lastNavigate = nil
+		
+		if let navigate = goBackwardStack.popLast() {
+			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: true) {
+				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: true)
+			}
+		}
+	}
+
+	@objc func goForward(_ sender: Any?) {
+		if let navigate = goForwardStack.popLast() {
+			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: true) {
+				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: true)
+			}
+		}
 	}
 
 	@objc func link(_ sender: Any?) {
@@ -327,12 +394,12 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 extension MainSplitViewController: SidebarDelegate {
 	
-	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool, completion: (() -> Void)? = nil) {
+	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
 		if let accountID = documentContainer?.account?.id.accountID {
 			AppDefaults.shared.lastSelectedAccountID = accountID
 		}
 		
-		timelineViewController?.setDocumentContainer(documentContainer, completion: completion)
+		timelineViewController?.setDocumentContainer(documentContainer, isNavigationBranch: isNavigationBranch, completion: completion)
 
 		guard let documentContainer = documentContainer else {
 			activityManager.invalidateSelectDocumentContainer()
@@ -359,7 +426,16 @@ extension MainSplitViewController: TimelineDelegate {
 		activityManager.selectingDocument(documentContainer, document)
 	}
 	
-	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool) {
+	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
+		if let lastNavigate = lastNavigate {
+			goBackwardStack.append(lastNavigate)
+			self.lastNavigate = nil
+		}
+		
+		if isNavigationBranch {
+			goForwardStack.removeAll()
+		}
+
 		if let document = document {
 			activityManager.selectingDocument(documentContainer, document)
 			if animated {
@@ -369,6 +445,8 @@ extension MainSplitViewController: TimelineDelegate {
 					self.show(.secondary)
 				}
 			}
+
+			lastNavigate = Navigate(container: documentContainer, document: document)
 		} else {
 			activityManager.invalidateSelectDocument()
 		}
@@ -497,7 +575,7 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 		// If we are showing the Feeds and only the feeds start clearing stuff
 		if isCollapsed && viewController === sidebarViewController && lastMainControllerToAppear == .timeline {
 			activityManager.invalidateSelectDocumentContainer()
-			sidebarViewController?.selectDocumentContainer(nil, animated: false)
+			sidebarViewController?.selectDocumentContainer(nil, isNavigationBranch: true, animated: false)
 			return
 		}
 
@@ -563,7 +641,7 @@ extension MainSplitViewController {
 		
 		let documentContainer = account.documentContainers[0]
 		
-		sidebarViewController?.selectDocumentContainer(documentContainer, animated: true) {
+		sidebarViewController?.selectDocumentContainer(documentContainer, isNavigationBranch: true, animated: true) {
 			completion()
 		}
 	}
@@ -599,6 +677,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
 			.importOPML,
 			.newOutline,
+			.goBackward,
+			.goForward,
 			.insertImage,
 			.link,
 			.boldface,
@@ -672,6 +752,30 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = L10n.insertImage
 			item.isBordered = true
 			item.action = #selector(insertImage(_:))
+			item.target = self
+			toolbarItem = item
+		case .goBackward:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.isGoBackwardUnavailable ?? true
+			}
+			item.image = AppAssets.goBackward.symbolSizedForCatalyst()
+			item.label = L10n.goBackward
+			item.toolTip = L10n.goBackward
+			item.isBordered = true
+			item.action = #selector(goBackward(_:))
+			item.target = self
+			toolbarItem = item
+		case .goForward:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				return self?.isGoForwardUnavailable ?? true
+			}
+			item.image = AppAssets.goForward.symbolSizedForCatalyst()
+			item.label = L10n.goForward
+			item.toolTip = L10n.goForward
+			item.isBordered = true
+			item.action = #selector(goForward(_:))
 			item.target = self
 			toolbarItem = item
 		case .link:

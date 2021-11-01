@@ -108,6 +108,8 @@
 "Delete_Outline" = "Delete Outline";
 "Website" = "Website";
 "Duplicate" = "Duplicate";
+"Go_Backward" = "Go Backward";
+"Go_Forward" = "Go Forward";
 
 /* State restoration */
 "Unknown_Outline" = "The requested outline could not be found.";

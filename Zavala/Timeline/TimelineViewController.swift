@@ -13,7 +13,7 @@ import Templeton
 
 protocol TimelineDelegate: AnyObject  {
 	func documentSelectionDidChangeTitle(_: TimelineViewController, documentContainer: DocumentContainer, document: Document)
-	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool)
+	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool)
 	func showGetInfo(_: TimelineViewController, outline: Outline)
 	func exportPDFDoc(_: TimelineViewController, outline: Outline)
 	func exportPDFList(_: TimelineViewController, outline: Outline)
@@ -129,21 +129,21 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	
 	// MARK: API
 	
-	func setDocumentContainer(_ documentContainer: DocumentContainer?, completion: (() -> Void)? = nil) {
+	func setDocumentContainer(_ documentContainer: DocumentContainer?, isNavigationBranch: Bool, completion: (() -> Void)? = nil) {
 		self.documentContainer = documentContainer
 		updateUI()
 		collectionView.deselectAll()
-		loadDocuments(animated: false, completion: completion)
+		loadDocuments(animated: false, isNavigationBranch: isNavigationBranch, completion: completion)
 	}
 
-	func selectDocument(_ document: Document?, isNew: Bool = false, animated: Bool) {
+	func selectDocument(_ document: Document?, isNew: Bool = false, isNavigationBranch: Bool = true, animated: Bool) {
 		guard let documentContainer = documentContainer else { return }
 		if let document = document, let index = timelineDocuments.firstIndex(of: document) {
 			collectionView.selectItem(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .centeredVertically)
 		} else {
 			collectionView.deselectAll()
 		}
-		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: isNew, animated: animated)
+		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: isNew, isNavigationBranch: isNavigationBranch, animated: animated)
 	}
 	
 	func deleteCurrentDocument() {
@@ -302,11 +302,12 @@ extension TimelineViewController {
 	@objc func selectDocument(gesture: UITapGestureRecognizer) {
 		guard let documentContainer = documentContainer,
 			  let cell = gesture.view as? UICollectionViewCell,
-			  let indexPath = collectionView.indexPath(for: cell) else { return }
+			  let indexPath = collectionView.indexPath(for: cell),
+			  indexPath != collectionView.indexPathsForSelectedItems?.first else { return }
 
 		collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
 		let document = timelineDocuments[indexPath.row]
-		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: false, animated: true)
+		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: false, isNavigationBranch: true, animated: true)
 	}
 	
 	@objc func openDocumentInNewWindow(gesture: UITapGestureRecognizer) {
@@ -330,7 +331,7 @@ extension TimelineViewController {
 		}
 	}
 	
-	func loadDocuments(animated: Bool, completion: (() -> Void)? = nil) {
+	func loadDocuments(animated: Bool, isNavigationBranch: Bool = false, completion: (() -> Void)? = nil) {
 		guard let documentContainer = documentContainer else {
 			completion?()
 			return
@@ -342,7 +343,7 @@ extension TimelineViewController {
 			guard animated else {
 				self.timelineDocuments = documents
 				self.collectionView.reloadData()
-				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, animated: true)
+				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, isNavigationBranch: true, animated: true)
 				completion?()
 				return
 			}
@@ -376,7 +377,7 @@ extension TimelineViewController {
 				self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
 				self.collectionView.scrollToItem(at: indexPath, at: [], animated: true)
 			} else {
-				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, animated: true)
+				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
 			}
 			
 			completion?()
@@ -391,11 +392,11 @@ extension TimelineViewController: UISearchControllerDelegate {
 
 	func willPresentSearchController(_ searchController: UISearchController) {
 		heldDocumentContainer = documentContainer
-		setDocumentContainer(Search(searchText: ""))
+		setDocumentContainer(Search(searchText: ""), isNavigationBranch: false)
 	}
 
 	func didDismissSearchController(_ searchController: UISearchController) {
-		setDocumentContainer(heldDocumentContainer)
+		setDocumentContainer(heldDocumentContainer, isNavigationBranch: false)
 		heldDocumentContainer = nil
 	}
 
@@ -406,7 +407,7 @@ extension TimelineViewController: UISearchControllerDelegate {
 extension TimelineViewController: UISearchResultsUpdating {
 
 	func updateSearchResults(for searchController: UISearchController) {
-		setDocumentContainer(Search(searchText: searchController.searchBar.text!))
+		setDocumentContainer(Search(searchText: searchController.searchBar.text!), isNavigationBranch: false)
 	}
 
 }
@@ -550,7 +551,7 @@ extension TimelineViewController {
 	private func deleteDocument(_ document: Document, completion: ((Bool) -> Void)? = nil) {
 		func delete() {
 			if document == self.currentDocument, let documentContainer = self.documentContainer {
-				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, animated: true)
+				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, isNavigationBranch: true, animated: true)
 			}
 			document.account?.deleteDocument(document)
 		}

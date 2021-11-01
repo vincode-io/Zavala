@@ -154,6 +154,10 @@ internal enum L10n {
   internal static let getInfo = L10n.tr("Localizable", "Get_Info")
   /// GitHub Repository
   internal static let gitHubRepository = L10n.tr("Localizable", "GitHub_Repository")
+  /// Go Backward
+  internal static let goBackward = L10n.tr("Localizable", "Go_Backward")
+  /// Go Forward
+  internal static let goForward = L10n.tr("Localizable", "Go_Forward")
   /// Hide Completed
   internal static let hideCompleted = L10n.tr("Localizable", "Hide_Completed")
   /// Hide Notes

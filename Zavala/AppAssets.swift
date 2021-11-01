@@ -119,6 +119,14 @@ struct AppAssets {
 	
 	static var githubRepositoryURL = "https://github.com/vincode-io/Zavala"
 
+	static var goBackward: UIImage = {
+		return UIImage(systemName: "chevron.left")!
+	}()
+	
+	static var goForward: UIImage = {
+		return UIImage(systemName: "chevron.right")!
+	}()
+
 	static var importDocument: UIImage = {
 		return UIImage(systemName: "square.and.arrow.down")!
 	}()

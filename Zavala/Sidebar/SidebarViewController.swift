@@ -12,7 +12,7 @@ import Combine
 import Templeton
 
 protocol SidebarDelegate: AnyObject {
-	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, animated: Bool, completion: (() -> Void)?)
+	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?)
 }
 
 enum SidebarSection: Int {
@@ -92,7 +92,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		applyInitialSnapshot()
 	}
 	
-	func selectDocumentContainer(_ documentContainer: DocumentContainer?, animated: Bool, completion: (() -> Void)? = nil) {
+	func selectDocumentContainer(_ documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
 		guard currentDocumentContainer?.id != documentContainer?.id else {
 			completion?()
 			return
@@ -108,7 +108,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 			}
 		}
 
-		updateSelection(documentContainer, animated: animated, completion: completion)
+		updateSelection(documentContainer, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
 	}
 	
 	// MARK: Notifications
@@ -201,7 +201,7 @@ extension SidebarViewController {
 		
 		if case .documentContainer(let entityID) = sidebarItem.id {
 			let documentContainer = AccountManager.shared.findDocumentContainer(entityID)
-			delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, animated: true, completion: nil)
+			delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, isNavigationBranch: true, animated: true, completion: nil)
 		}
 	}
 	
@@ -333,7 +333,7 @@ extension SidebarViewController {
 		dataSourceQueue.add(operation)
 	}
 	
-	func updateSelection(_ documentContainer: DocumentContainer?, animated: Bool, completion: (() -> Void)?) {
+	func updateSelection(_ documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?) {
 		var sidebarItem: SidebarItem? = nil
 		if let documentContainer = documentContainer {
 			sidebarItem = SidebarItem.sidebarItem(documentContainer)
@@ -343,7 +343,7 @@ extension SidebarViewController {
 		
 		operation.completionBlock = { [weak self] _ in
 			guard let self = self else { return }
-			self.delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, animated: animated, completion: completion)
+			self.delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
 		}
 		dataSourceQueue.add(operation)
 	}
@@ -359,14 +359,14 @@ extension SidebarViewController {
 extension SidebarViewController: SidebarSearchCellDelegate {
 
 	func sidebarSearchDidBecomeActive() {
-		selectDocumentContainer(Search(searchText: ""), animated: false)
+		selectDocumentContainer(Search(searchText: ""), isNavigationBranch: false, animated: false)
 	}
 
 	func sidebarSearchDidUpdate(searchText: String?) {
 		if let searchText = searchText {
-			selectDocumentContainer(Search(searchText: searchText), animated: true)
+			selectDocumentContainer(Search(searchText: searchText), isNavigationBranch: false, animated: true)
 		} else {
-			selectDocumentContainer(Search(searchText: ""), animated: false)
+			selectDocumentContainer(Search(searchText: ""), isNavigationBranch: false, animated: false)
 		}
 	}
 	
