@@ -1882,7 +1882,10 @@ extension EditorViewController {
 		// some reason the newly created topic will not become the first responder.
 		if let lastRowIndex = currentRows?.last?.shadowTableIndex {
 			let lastRowIndexPath = IndexPath(row: lastRowIndex, section: adjustedRowsSection)
-			collectionView.scrollToItem(at: lastRowIndexPath, at: [.bottom], animated: false)
+			if let lastRowFrame = collectionView.cellForItem(at: lastRowIndexPath)?.frame {
+				let bottomRect = CGRect(x: lastRowFrame.origin.x, y: lastRowFrame.maxY - 1, width: lastRowFrame.width, height: 1)
+				collectionView.scrollRectToVisibleBypass(bottomRect, animated: false)
+			}
 		}
 	}
 	
