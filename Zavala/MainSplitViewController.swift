@@ -657,16 +657,16 @@ extension MainSplitViewController {
 		lastNavigate = nil
 		
 		if let navigate = goBackwardStack.popLast() {
-			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: true) {
-				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: true)
+			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: false) {
+				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: false)
 			}
 		}
 	}
 	
 	private func goForward() {
 		if let navigate = goForwardStack.popLast() {
-			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: true) {
-				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: true)
+			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: false) {
+				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: false)
 			}
 		}
 	}
