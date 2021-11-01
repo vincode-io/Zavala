@@ -343,7 +343,7 @@ extension TimelineViewController {
 			guard animated else {
 				self.timelineDocuments = documents
 				self.collectionView.reloadData()
-				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, isNavigationBranch: true, animated: true)
+				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
 				completion?()
 				return
 			}
