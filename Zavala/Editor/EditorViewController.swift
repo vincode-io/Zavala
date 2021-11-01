@@ -460,12 +460,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
-	override func viewWillDisappear(_ animated: Bool) {
-		super.viewWillDisappear(animated)
-		guard !UIResponder.isFirstResponderTextField else { return }
-		CursorCoordinates.lastKnownCoordinates = nil
-	}
-	
 	override func viewDidLayoutSubviews() {
 		if let offset = transitionContentOffset {
 			collectionView.contentOffset = offset
@@ -945,6 +939,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func done(_ sender: Any?) {
 		UIResponder.currentFirstResponder?.resignFirstResponder()
+		CursorCoordinates.lastKnownCoordinates = nil
 	}
 	
 	@objc func toggleOutlineFilter() {
