@@ -347,6 +347,10 @@ extension MainSplitViewController: SidebarDelegate {
 
 extension MainSplitViewController: TimelineDelegate {
 	
+	func documentSelectionDidChangeTitle(_: TimelineViewController, documentContainer: DocumentContainer, document: Document) {
+		activityManager.selectingDocument(documentContainer, document)
+	}
+	
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, animated: Bool) {
 		if let document = document {
 			activityManager.selectingDocument(documentContainer, document)
