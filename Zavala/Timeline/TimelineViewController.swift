@@ -365,7 +365,9 @@ extension TimelineViewController {
 			}
 			
 			if let prevSelectedDoc = prevSelectedDoc, let index = self.timelineDocuments.firstIndex(of: prevSelectedDoc) {
-				self.collectionView.selectItem(at: IndexPath(row: index, section: 0), animated: false, scrollPosition: [])
+				let indexPath = IndexPath(row: index, section: 0)
+				self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+				self.collectionView.scrollToItem(at: indexPath, at: [], animated: true)
 			} else {
 				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, animated: true)
 			}
