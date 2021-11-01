@@ -10,6 +10,7 @@ import Templeton
 
 protocol EditorTitleViewCellDelegate: AnyObject {
 	var editorTitleUndoManager: UndoManager? { get }
+	var editorTitleTextViewInputAccessoryView: UIView? { get }
 	func editorTitleLayoutEditor()
 	func editorTitleTextFieldDidBecomeActive()
 	func editorTitleDidUpdate(title: String)

@@ -67,9 +67,7 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 	
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
-		if traitCollection.userInterfaceIdiom == .phone {
-			inputAccessoryView = editorDelegate?.editorRowNoteTextViewInputAccessoryView
-		}
+		inputAccessoryView = editorDelegate?.editorRowNoteTextViewInputAccessoryView
 		let result = super.becomeFirstResponder()
 		didBecomeActive()
 		return result

@@ -16,6 +16,10 @@ extension Selector {
 }
 
 protocol EditorDelegate: AnyObject {
+	var editorViewControllerIsGoBackUnavailable: Bool { get }
+	var editorViewControllerIsGoForwardUnavailable: Bool { get }
+	func goBackward(_ : EditorViewController)
+	func goForward(_ : EditorViewController)
 	func createOutline(_ : EditorViewController, title: String) -> Outline?
 	func validateToolbar(_ : EditorViewController)
 	func showGetInfo(_: EditorViewController, outline: Outline)
@@ -88,6 +92,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return outline.isCreateRowOutsideUnavailable(rows: rows)
 	}
 
+	var isGoBackwardUnavailable: Bool {
+		return delegate?.editorViewControllerIsGoBackUnavailable ?? true
+	}
+	
+	var isGoForwardUnavailable: Bool {
+		return delegate?.editorViewControllerIsGoForwardUnavailable ?? true
+	}
+	
 	var isIndentRowsUnavailable: Bool {
 		guard let outline = outline, let rows = currentRows else { return true }
 		return outline.isIndentRowsUnavailable(rows: rows)
@@ -242,6 +254,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	override var canBecomeFirstResponder: Bool { return true }
 
 	private var keyboardToolBar: UIToolbar!
+	private var goBackwardButton: UIBarButtonItem!
+	private var goForwardButton: UIBarButtonItem!
 	private var indentButton: UIBarButtonItem!
 	private var outdentButton: UIBarButtonItem!
 	private var moveUpButton: UIBarButtonItem!
@@ -377,6 +391,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
 		
+		goBackwardButton = UIBarButtonItem(image: AppAssets.goBackward, style: .plain, target: self, action: #selector(goBackward))
+		goBackwardButton.title = L10n.goBackward
+		goForwardButton = UIBarButtonItem(image: AppAssets.goForward, style: .plain, target: self, action: #selector(goForward))
+		goForwardButton.title = L10n.goForward
 		indentButton = UIBarButtonItem(image: AppAssets.indent, style: .plain, target: self, action: #selector(indentCurrentRows))
 		indentButton.title = L10n.indent
 		outdentButton = UIBarButtonItem(image: AppAssets.outdent, style: .plain, target: self, action: #selector(outdentCurrentRows))
@@ -390,23 +408,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		linkButton = UIBarButtonItem(image: AppAssets.link, style: .plain, target: self, action: #selector(link))
 		linkButton.title = L10n.link
 
-		if traitCollection.userInterfaceIdiom == .phone {
+		if traitCollection.userInterfaceIdiom != .mac {
 			keyboardToolBar = UIToolbar()
+			let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+			fixedSpace.width = 20
 			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-			keyboardToolBar.items = [outdentButton, indentButton, moveUpButton, moveDownButton, flexibleSpace, insertImageButton, linkButton]
+			keyboardToolBar.items = [goBackwardButton, goForwardButton, fixedSpace, outdentButton, indentButton, moveUpButton, moveDownButton, flexibleSpace, insertImageButton, linkButton]
 			keyboardToolBar.sizeToFit()
 			navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
-		}
-
-		if traitCollection.userInterfaceIdiom == .pad {
-			navigationItem.rightBarButtonItems = [filterBarButtonItem,
-												  ellipsisBarButtonItem,
-												  linkButton,
-												  insertImageButton,
-												  moveDownButton,
-												  moveUpButton,
-												  indentButton,
-												  outdentButton]
 		}
 
 		updateNavigationUI(editMode: false)
@@ -741,6 +750,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		navigationItem.largeTitleDisplayMode = .never
 		
 		if traitCollection.userInterfaceIdiom != .mac {
+			self.ellipsisBarButtonItem.menu = buildEllipsisMenu()
+
 			if outline?.isFiltered ?? false {
 				filterBarButtonItem.image = AppAssets.filterActive
 				filterBarButtonItem.title = L10n.showCompleted
@@ -748,10 +759,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				filterBarButtonItem.image = AppAssets.filterInactive
 				filterBarButtonItem.title = L10n.hideCompleted
 			}
-		}
-		
-		if traitCollection.userInterfaceIdiom != .mac {
-			self.ellipsisBarButtonItem.menu = buildEllipsisMenu()
 
 			if outline == nil {
 				filterBarButtonItem.isEnabled = false
@@ -761,6 +768,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				ellipsisBarButtonItem.isEnabled = true
 			}
 			
+			goBackwardButton.isEnabled = !isGoBackwardUnavailable
+			goForwardButton.isEnabled = !isGoForwardUnavailable
 			outdentButton.isEnabled = !isOutdentRowsUnavailable
 			indentButton.isEnabled = !isIndentRowsUnavailable
 			moveUpButton.isEnabled = !isMoveRowsUpUnavailable
@@ -1067,6 +1076,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		delegate?.showGetInfo(self, outline: outline)
 	}
 	
+	@objc func goBackward() {
+		delegate?.goBackward(self)
+	}
+
+	@objc func goForward() {
+		delegate?.goForward(self)
+	}
+
 	@objc func outdentCurrentRows() {
 		guard let rows = currentRows else { return }
 		outdentRows(rows)
@@ -1314,11 +1331,16 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 		return undoManager
 	}
 	
+	var editorTitleTextViewInputAccessoryView: UIView? {
+		return keyboardToolBar
+	}
+	
 	func editorTitleLayoutEditor() {
 		layoutEditor()
 	}
 	
 	func editorTitleTextFieldDidBecomeActive() {
+		updateUI()
 		collectionView.deselectAll()
 	}
 	
@@ -1349,11 +1371,16 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 		return outline?.account?.tags?.filter({ !outlineTags.contains($0) })
 	}
 	
+	var editorTagInputAccessoryView: UIView? {
+		return keyboardToolBar
+	}
+	
 	func editorTagInputLayoutEditor() {
 		layoutEditor()
 	}
 	
 	func editorTagInputTextFieldDidBecomeActive() {
+		updateUI()
 		collectionView.deselectAll()
 	}
 	

@@ -289,26 +289,12 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		insertImage()
 	}
 
-	@objc func goBackward(_ sender: Any?) {
-		if let lastNavigate = lastNavigate {
-			goForwardStack.append(lastNavigate)
-		}
-		
-		lastNavigate = nil
-		
-		if let navigate = goBackwardStack.popLast() {
-			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: true) {
-				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: true)
-			}
-		}
+	@objc func goBackwardOne(_ sender: Any?) {
+		goBackward()
 	}
 
-	@objc func goForward(_ sender: Any?) {
-		if let navigate = goForwardStack.popLast() {
-			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: true) {
-				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: true)
-			}
-		}
+	@objc func goForwardOne(_ sender: Any?) {
+		goForward()
 	}
 
 	@objc func link(_ sender: Any?) {
@@ -492,6 +478,23 @@ extension MainSplitViewController: TimelineDelegate {
 
 extension MainSplitViewController: EditorDelegate {
 	
+	var editorViewControllerIsGoBackUnavailable: Bool {
+		return isGoBackwardUnavailable
+	}
+	
+	var editorViewControllerIsGoForwardUnavailable: Bool {
+		return isGoForwardUnavailable
+	}
+	
+	func goBackward(_: EditorViewController) {
+		goBackward()
+	}
+	
+	func goForward(_: EditorViewController) {
+		goForward()
+	}
+	
+	
 	func createOutline(_: EditorViewController, title: String) -> Outline? {
 		return timelineViewController?.createOutline(title: title)
 	}
@@ -646,6 +649,28 @@ extension MainSplitViewController {
 		}
 	}
 	
+	private func goBackward() {
+		if let lastNavigate = lastNavigate {
+			goForwardStack.append(lastNavigate)
+		}
+		
+		lastNavigate = nil
+		
+		if let navigate = goBackwardStack.popLast() {
+			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: true) {
+				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: true)
+			}
+		}
+	}
+	
+	private func goForward() {
+		if let navigate = goForwardStack.popLast() {
+			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: true) {
+				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: true)
+			}
+		}
+	}
+	
 }
 
 #if targetEnvironment(macCatalyst)
@@ -766,7 +791,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = L10n.goBackward
 			item.toolTip = L10n.goBackward
 			item.isBordered = true
-			item.action = #selector(goBackward(_:))
+			item.action = #selector(goBackwardOne(_:))
 			item.target = self
 			toolbarItem = item
 		case .goForward:
@@ -778,7 +803,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = L10n.goForward
 			item.toolTip = L10n.goForward
 			item.isBordered = true
-			item.action = #selector(goForward(_:))
+			item.action = #selector(goForwardOne(_:))
 			item.target = self
 			toolbarItem = item
 		case .link:

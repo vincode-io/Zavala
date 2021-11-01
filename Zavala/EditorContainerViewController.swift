@@ -202,6 +202,12 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 
 extension EditorContainerViewController: EditorDelegate {
 	
+	// These aren't used when running in the EditorContainerViewController
+	var editorViewControllerIsGoBackUnavailable: Bool { return true }
+	var editorViewControllerIsGoForwardUnavailable: Bool { return true  }
+	func goBackward(_ : EditorViewController) {}
+	func goForward(_ : EditorViewController) {}
+
 	func createOutline(_: EditorViewController, title: String) -> Outline? {
 		return newOutline(title: title)
 	}
