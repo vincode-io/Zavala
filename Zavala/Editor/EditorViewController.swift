@@ -16,6 +16,7 @@ extension Selector {
 }
 
 protocol EditorDelegate: AnyObject {
+	func createOutline(_ : EditorViewController, title: String) -> Outline?
 	func validateToolbar(_ : EditorViewController)
 	func showGetInfo(_: EditorViewController, outline: Outline)
 	func exportPDFDoc(_: EditorViewController, outline: Outline)
@@ -1538,6 +1539,10 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 // MARK: LinkViewControllerDelegate
 
 extension EditorViewController: LinkViewControllerDelegate {
+	
+	func createOutline(title: String) -> Outline? {
+		return delegate?.createOutline(self, title: title)
+	}
 	
 	func updateLink(cursorCoordinates: CursorCoordinates, text: String, link: String?, range: NSRange) {
 		var correctedLink = link

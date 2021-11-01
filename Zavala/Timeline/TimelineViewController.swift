@@ -170,6 +170,13 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		}
 	}
 	
+	func createOutline(title: String) -> Outline? {
+		guard let account = documentContainer?.account else { return nil }
+		let document = account.createOutline(title: title, tag: (documentContainer as? TagDocuments)?.tag)
+		document.outline?.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
+		return document.outline
+	}
+	
 	// MARK: Notifications
 	
 	@objc func accountDocumentsDidChange(_ note: Notification) {

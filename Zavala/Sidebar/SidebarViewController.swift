@@ -161,7 +161,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	}
 
 	@objc func createOutline(_ sender: Any) {
-		mainSplitViewController?.createOutline()
+		mainSplitViewController?.createOutline(sender)
 	}
 	
 	// MARK: API

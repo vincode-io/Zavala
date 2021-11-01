@@ -9,6 +9,7 @@ import UIKit
 import Templeton
 
 protocol LinkViewControllerDelegate: AnyObject {
+	func createOutline(title: String) -> Outline?
 	func updateLink(cursorCoordinates: CursorCoordinates, text: String, link: String?, range: NSRange)
 }
 
@@ -77,15 +78,8 @@ class LinkViewController: UITableViewController {
 
 	@IBAction func addOutline(_ sender: Any) {
 		guard let outlineTitle = textTextField.text else { return }
-		
-		let accountID = AppDefaults.shared.lastSelectedAccountID
-		
-		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return }
-		guard let outline = account.createOutline(title: outlineTitle).outline else { return }
-		outline.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
-		
-		linkTextField.text = outline.id.url?.absoluteString ?? ""
-		
+		let outline = delegate?.createOutline(title: outlineTitle)
+		linkTextField.text = outline?.id.url?.absoluteString ?? ""
 		submitAndDismiss()
 	}
 	

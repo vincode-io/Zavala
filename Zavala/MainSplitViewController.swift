@@ -214,9 +214,9 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		AccountManager.shared.sync()
 	}
 	
-	@objc func createOutline() {
+	@objc func createOutline(_ sender: Any?) {
 		selectDefaultDocumentContainerIfNecessary() {
-			self.timelineViewController?.createOutline(self)
+			self.timelineViewController?.createOutline(sender)
 		}
 	}
 	
@@ -405,6 +405,10 @@ extension MainSplitViewController: TimelineDelegate {
 // MARK: EditorDelegate
 
 extension MainSplitViewController: EditorDelegate {
+	
+	func createOutline(_: EditorViewController, title: String) -> Outline? {
+		return timelineViewController?.createOutline(title: title)
+	}
 	
 	func validateToolbar(_: EditorViewController) {
 		validateToolbar()
@@ -647,7 +651,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = L10n.newOutline
 			item.toolTip = L10n.newOutline
 			item.isBordered = true
-			item.action = #selector(createOutline)
+			item.action = #selector(createOutline(_:))
 			item.target = self
 			toolbarItem = item
 		case .insertImage:

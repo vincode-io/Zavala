@@ -38,7 +38,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 
 	func handle(_ activity: NSUserActivity) {
 		guard activity.activityType != NSUserActivity.ActivityType.newOutline else {
-			newOutline()
+			let outline = newOutline()
+			editorViewController?.edit(outline, isNew: true)
 			return
 		}
 		
@@ -65,14 +66,14 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		}
 	}
 
-	func newOutline() {
+	func newOutline(title: String? = nil) -> Outline? {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		
-		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return }
-		guard let outline = account.createOutline().outline else { return }
+		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return nil }
+		guard let outline = account.createOutline(title: title).outline else { return nil }
 		outline.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
-
-		editorViewController?.edit(outline, isNew: true)
+		
+		return outline
 	}
 
 	func shutdown() {
@@ -200,6 +201,10 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 // MARK: EditorDelegate
 
 extension EditorContainerViewController: EditorDelegate {
+	
+	func createOutline(_: EditorViewController, title: String) -> Outline? {
+		return newOutline(title: title)
+	}
 
 	func validateToolbar(_: EditorViewController) {
 		sceneDelegate?.validateToolbar()
