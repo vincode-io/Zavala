@@ -377,21 +377,20 @@ extension MainSplitViewController: SidebarDelegate {
 			AppDefaults.shared.lastSelectedAccountID = accountID
 		}
 		
-		timelineViewController?.setDocumentContainer(documentContainer, isNavigationBranch: isNavigationBranch, completion: completion)
-
-		guard let documentContainer = documentContainer else {
-			activityManager.invalidateSelectDocumentContainer()
-			return
-		}
-
-		activityManager.selectingDocumentContainer(documentContainer)
-		if animated {
-			show(.supplementary)
-		} else {
-			UIView.performWithoutAnimation {
+		if let documentContainer = documentContainer {
+			activityManager.selectingDocumentContainer(documentContainer)
+			if animated {
 				show(.supplementary)
+			} else {
+				UIView.performWithoutAnimation {
+					show(.supplementary)
+				}
 			}
+		} else {
+			activityManager.invalidateSelectDocumentContainer()
 		}
+		
+		timelineViewController?.setDocumentContainer(documentContainer, isNavigationBranch: isNavigationBranch, completion: completion)
 	}
 	
 }

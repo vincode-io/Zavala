@@ -339,13 +339,9 @@ extension SidebarViewController {
 			sidebarItem = SidebarItem.sidebarItem(documentContainer)
 		}
 
-		let operation = UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: sidebarItem, animated: animated)
+		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: sidebarItem, animated: animated))
 		
-		operation.completionBlock = { [weak self] _ in
-			guard let self = self else { return }
-			self.delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
-		}
-		dataSourceQueue.add(operation)
+		delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
 	}
 	
 	func reloadVisible() {
