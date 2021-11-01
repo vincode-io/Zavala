@@ -160,9 +160,17 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		UIView.performWithoutAnimation {
 			show(.primary)
 		}
-
-		sidebarViewController?.selectDocumentContainer(AllDocuments(account: account), animated: false) {
+		
+		if let sidebarTag = sidebarViewController?.currentTag, document.hasTag(sidebarTag) {
 			self.handleSelectDocument(document)
+		} else if document.tagCount == 1, let tag = document.tags?.first {
+			sidebarViewController?.selectDocumentContainer(TagDocuments(account: account, tag: tag), animated: false) {
+				self.handleSelectDocument(document)
+			}
+		} else {
+			sidebarViewController?.selectDocumentContainer(AllDocuments(account: account), animated: false) {
+				self.handleSelectDocument(document)
+			}
 		}
 	}
 	

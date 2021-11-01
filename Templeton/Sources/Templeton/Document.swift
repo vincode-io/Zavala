@@ -60,6 +60,13 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
+	public var tagCount: Int {
+		switch self {
+		case .outline(let outline):
+			return outline.tagCount
+		}
+	}
+	
 	public var tags: [Tag]? {
 		switch self {
 		case .outline(let outline):
