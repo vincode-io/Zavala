@@ -410,12 +410,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		if traitCollection.userInterfaceIdiom != .mac {
 			keyboardToolBar = UIToolbar()
-			let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-			fixedSpace.width = 20
 			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-			keyboardToolBar.items = [goBackwardButton, goForwardButton, fixedSpace, outdentButton, indentButton, moveUpButton, moveDownButton, flexibleSpace, insertImageButton, linkButton]
+			keyboardToolBar.items = [outdentButton, indentButton, moveUpButton, moveDownButton, flexibleSpace, insertImageButton, linkButton]
 			keyboardToolBar.sizeToFit()
-			navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
+			navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem, goForwardButton, goBackwardButton]
 		}
 
 		updateNavigationUI(editMode: false)
@@ -739,9 +737,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	func updateNavigationUI(editMode: Bool) {
 		if traitCollection.userInterfaceIdiom == .phone {
 			if editMode {
-				navigationItem.rightBarButtonItems = [doneBarButtonItem, filterBarButtonItem, ellipsisBarButtonItem]
+				navigationItem.rightBarButtonItems = [doneBarButtonItem, filterBarButtonItem, ellipsisBarButtonItem, goForwardButton, goBackwardButton]
 			} else {
-				navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem]
+				navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem, goForwardButton, goBackwardButton]
 			}
 		}
 	}
