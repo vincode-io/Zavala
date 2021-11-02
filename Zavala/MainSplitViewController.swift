@@ -565,13 +565,13 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 		// If we are showing the Feeds and only the feeds start clearing stuff
 		if isCollapsed && viewController === sidebarViewController && lastMainControllerToAppear == .timeline {
 			activityManager.invalidateSelectDocumentContainer()
-			sidebarViewController?.selectDocumentContainer(nil, isNavigationBranch: true, animated: false)
+			sidebarViewController?.selectDocumentContainer(nil, isNavigationBranch: false, animated: false)
 			return
 		}
 
 		if isCollapsed && viewController === timelineViewController && lastMainControllerToAppear == .editor {
 			activityManager.invalidateSelectDocument()
-			timelineViewController?.selectDocument(nil, animated: false)
+			timelineViewController?.selectDocument(nil, isNavigationBranch: false, animated: false)
 			return
 		}
 	}
