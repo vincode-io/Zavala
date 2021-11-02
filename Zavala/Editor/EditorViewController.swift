@@ -716,19 +716,15 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			
 		guard isViewLoaded else { return }
 
-		if (outline?.isSearching ?? .notSearching) == .searching {
-			discloseSearchBar()
-			searchBar.searchField.text = outline?.searchText
-			isSearching = true
-		}
+		collectionView.reloadData()
 		
 		if let searchText = searchText {
+			discloseSearchBar()
+			searchBar.searchField.text = outline?.searchText
 			beginInDocumentSearch(text: searchText)
 			return
 		}
 
-		collectionView.reloadData()
-		
 		updateUI()
 
 		restoreOutlineCursorPosition()
