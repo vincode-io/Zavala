@@ -400,7 +400,7 @@ extension MainSplitViewController: TimelineDelegate {
 	}
 	
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
-		if let lastNavigate = lastNavigate {
+		if let lastNavigate = lastNavigate, let document = document, lastNavigate.document != document {
 			goBackwardStack.append(lastNavigate)
 			self.lastNavigate = nil
 		}
