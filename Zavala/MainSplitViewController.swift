@@ -30,13 +30,9 @@ enum MainSplitViewControllerError: LocalizedError {
 
 class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
-	private struct Navigate: Equatable {
+	private struct Navigate {
 		let container: DocumentContainer
 		let document: Document
-		
-		static func == (lhs: Self, rhs: Self) -> Bool {
-			return lhs.container.id == rhs.container.id && lhs.document.id == rhs.document.id
-		}
 	}
 
 	weak var sceneDelegate: SceneDelegate?
