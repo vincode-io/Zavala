@@ -93,11 +93,6 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	}
 	
 	func selectDocumentContainer(_ documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
-		guard currentDocumentContainer?.id != documentContainer?.id else {
-			completion?()
-			return
-		}
-		
 		if let search = documentContainer as? Search {
 			DispatchQueue.main.async {
 				if let searchCellIndexPath = self.dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {

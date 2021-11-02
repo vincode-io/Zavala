@@ -130,6 +130,12 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	// MARK: API
 	
 	func setDocumentContainer(_ documentContainer: DocumentContainer?, isNavigationBranch: Bool, completion: (() -> Void)? = nil) {
+		if !(documentContainer is Search) {
+			searchController.searchBar.text = ""
+			heldDocumentContainer = nil
+			searchController.isActive = false
+		}
+		
 		self.documentContainer = documentContainer
 		updateUI()
 		collectionView.deselectAll()
@@ -338,7 +344,10 @@ extension TimelineViewController {
 		}
 		
 		documentContainer.sortedDocuments { [weak self] result in
-			guard let self = self, let documents = try? result.get() else { return }
+			guard let self = self, let documents = try? result.get() else {
+				completion?()
+				return
+			}
 
 			guard animated else {
 				self.timelineDocuments = documents
@@ -396,8 +405,10 @@ extension TimelineViewController: UISearchControllerDelegate {
 	}
 
 	func didDismissSearchController(_ searchController: UISearchController) {
-		setDocumentContainer(heldDocumentContainer, isNavigationBranch: false)
-		heldDocumentContainer = nil
+		if let heldDocumentContainer = heldDocumentContainer {
+			setDocumentContainer(heldDocumentContainer, isNavigationBranch: false)
+			self.heldDocumentContainer = nil
+		}
 	}
 
 }
