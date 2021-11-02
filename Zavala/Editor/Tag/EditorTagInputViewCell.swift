@@ -12,7 +12,6 @@ protocol EditorTagInputViewCellDelegate: AnyObject {
 	var editorTagInputUndoManager: UndoManager? { get }
 	var editorTagInputIsAddShowing: Bool { get }
 	var editorTagInputTags: [Tag]? { get }
-	var editorTagInputAccessoryView: UIView? { get }
 	func editorTagInputLayoutEditor()
 	func editorTagInputTextFieldDidBecomeActive()
 	func editorTagInputTextFieldShowAdd()

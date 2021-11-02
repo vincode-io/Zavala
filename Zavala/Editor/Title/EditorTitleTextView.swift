@@ -9,7 +9,6 @@ import UIKit
 
 protocol EditorTitleTextViewDelegate: AnyObject {
 	var editorTitleTextViewUndoManager: UndoManager? { get }
-	var editorTitleTextViewInputAccessoryView: UIView? { get }
 	func didBecomeActive(_: EditorTitleTextView)
 }
 
@@ -43,7 +42,6 @@ class EditorTitleTextView: UITextView {
 
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
-		inputAccessoryView = editorDelegate?.editorTitleTextViewInputAccessoryView
 		let result = super.becomeFirstResponder()
 		editorDelegate?.didBecomeActive(self)
 		return result

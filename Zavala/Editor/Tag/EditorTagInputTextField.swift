@@ -12,7 +12,6 @@ protocol EditorTagInputTextFieldDelegate: AnyObject {
 	var editorTagInputTextFieldUndoManager: UndoManager? { get }
 	var editorTagInputTextFieldIsAddShowing: Bool { get }
 	var editorTagInputTextFieldTags: [Tag]? { get }
-	var editorTagInputAccessoryView: UIView? { get }
 	func invalidateLayout(_: EditorTagInputTextField)
 	func didBecomeActive(_ : EditorTagInputTextField)
 	func showAdd(_ : EditorTagInputTextField)
@@ -72,7 +71,6 @@ class EditorTagInputTextField: SearchTextField {
 	
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
-		inputAccessoryView = editorDelegate?.editorTagInputAccessoryView
 		resetFilterStrings()
 		let result = super.becomeFirstResponder()
 		editorDelegate?.didBecomeActive(self)

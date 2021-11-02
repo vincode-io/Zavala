@@ -1335,10 +1335,6 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 		return undoManager
 	}
 	
-	var editorTitleTextViewInputAccessoryView: UIView? {
-		return keyboardToolBar
-	}
-	
 	func editorTitleLayoutEditor() {
 		layoutEditor()
 	}
@@ -1373,10 +1369,6 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 	var editorTagInputTags: [Tag]? {
 		guard let outlineTags = outline?.tags else { return nil }
 		return outline?.account?.tags?.filter({ !outlineTags.contains($0) })
-	}
-	
-	var editorTagInputAccessoryView: UIView? {
-		return keyboardToolBar
 	}
 	
 	func editorTagInputLayoutEditor() {

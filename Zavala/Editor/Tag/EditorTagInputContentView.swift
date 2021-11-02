@@ -90,10 +90,6 @@ extension EditorTagInputContentView: EditorTagInputTextFieldDelegate {
 		return appliedConfiguration.delegate?.editorTagInputTags
 	}
 	
-	var editorTagInputAccessoryView: UIView? {
-		return appliedConfiguration.delegate?.editorTagInputAccessoryView
-	}
-
 	func invalidateLayout(_: EditorTagInputTextField) {
 		appliedConfiguration.delegate?.editorTagInputLayoutEditor()
 	}
