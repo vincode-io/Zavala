@@ -423,6 +423,7 @@ extension NSToolbarItem.Identifier {
 	static let toggleOutlineFilter = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineFilter")
 	static let toggleOutlineNotesHidden = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineNotesHidden")
 	static let delete = NSToolbarItem.Identifier("io.vincode.Zavala.delete")
+	static let navigation = NSToolbarItem.Identifier("io.vincode.Zavala.navigation")
 	static let goBackward = NSToolbarItem.Identifier("io.vincode.Zavala.goBackward")
 	static let goForward = NSToolbarItem.Identifier("io.vincode.Zavala.goForward")
 	static let insertImage = NSToolbarItem.Identifier("io.vincode.Zavala.insertImage")

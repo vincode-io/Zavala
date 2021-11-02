@@ -678,8 +678,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.collaborate,
 			.share,
 			.flexibleSpace,
-			.goBackward,
-			.goForward,
+			.navigation,
 			.space,
 			.toggleOutlineFilter,
 		]
@@ -692,8 +691,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
 			.importOPML,
 			.newOutline,
-			.goBackward,
-			.goForward,
+			.navigation,
 			.insertImage,
 			.link,
 			.boldface,
@@ -769,32 +767,37 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.action = #selector(insertImage(_:))
 			item.target = self
 			toolbarItem = item
-		case .goBackward:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
+		case .navigation:
+			let groupItem = NSToolbarItemGroup(itemIdentifier: .navigation)
+			groupItem.visibilityPriority = .high
+			groupItem.controlRepresentation = .expanded
+			groupItem.label = L10n.navigation
+			
+			let goBackwardItem = ValidatingToolbarItem(itemIdentifier: .goBackward)
+			goBackwardItem.checkForUnavailable = { [weak self] _ in
 				return self?.isGoBackwardUnavailable ?? true
 			}
-			item.image = AppAssets.goBackward.symbolSizedForCatalyst()
-			item.label = L10n.goBackward
-			item.toolTip = L10n.goBackward
-			item.isBordered = true
-			item.action = #selector(goBackwardOne(_:))
-			item.target = self
-			item.visibilityPriority = .high
-			toolbarItem = item
-		case .goForward:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
+			goBackwardItem.image = AppAssets.goBackward.symbolSizedForCatalyst()
+			goBackwardItem.label = L10n.goBackward
+			goBackwardItem.toolTip = L10n.goBackward
+			goBackwardItem.isBordered = true
+			goBackwardItem.action = #selector(goBackwardOne(_:))
+			goBackwardItem.target = self
+
+			let goForwardItem = ValidatingToolbarItem(itemIdentifier: .goForward)
+			goForwardItem.checkForUnavailable = { [weak self] _ in
 				return self?.isGoForwardUnavailable ?? true
 			}
-			item.image = AppAssets.goForward.symbolSizedForCatalyst()
-			item.label = L10n.goForward
-			item.toolTip = L10n.goForward
-			item.isBordered = true
-			item.action = #selector(goForwardOne(_:))
-			item.target = self
-			item.visibilityPriority = .high
-			toolbarItem = item
+			goForwardItem.image = AppAssets.goForward.symbolSizedForCatalyst()
+			goForwardItem.label = L10n.goForward
+			goForwardItem.toolTip = L10n.goForward
+			goForwardItem.isBordered = true
+			goForwardItem.action = #selector(goForwardOne(_:))
+			goForwardItem.target = self
+			
+			groupItem.subitems = [goBackwardItem, goForwardItem]
+			
+			toolbarItem = groupItem
 		case .link:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
