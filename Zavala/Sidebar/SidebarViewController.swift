@@ -106,6 +106,8 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 					}
 				}
 			}
+		} else {
+			clearSearchField()
 		}
 
 		updateSelection(documentContainer, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
@@ -191,11 +193,7 @@ extension SidebarViewController {
 	}
 
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		if let searchCellIndexPath = dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {
-			if let searchCell = collectionView.cellForItem(at: searchCellIndexPath) as? SidebarSearchCell {
-				searchCell.clearSearchField()
-			}
-		}
+		clearSearchField()
 		
 		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
 		
@@ -368,9 +366,17 @@ extension SidebarViewController: SidebarSearchCellDelegate {
 	
 }
 
-// MARK: Helper Functions
+// MARK: Helpers
 
 extension SidebarViewController {
+	
+	private func clearSearchField() {
+		if let searchCellIndexPath = dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {
+			if let searchCell = collectionView.cellForItem(at: searchCellIndexPath) as? SidebarSearchCell {
+				searchCell.clearSearchField()
+			}
+		}
+	}
 	
 	private func queueApplyChangeSnapshot() {
 		applyCoalescingQueue.add(self, #selector(applyQueuedChangeSnapshot))
