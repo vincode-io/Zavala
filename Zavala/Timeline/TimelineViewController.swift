@@ -137,14 +137,14 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 			loadDocuments(animated: false, isNavigationBranch: isNavigationBranch, completion: completion)
 		}
 		
-		if !(documentContainer is Search) {
+		if documentContainer is Search {
+			updateContainer()
+		} else {
 			searchController.searchBar.text = ""
 			heldDocumentContainer = nil
 			searchController.dismiss(animated: false) {
 				updateContainer()
 			}
-		} else {
-			updateContainer()
 		}
 	}
 
