@@ -588,6 +588,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 		
 		guard isSearching else {
+			self.collectionViewTopConstraint.constant = 0
 			return
 		}
 		
@@ -695,8 +696,15 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 		
 		updateSpotlightIndex()
+		
+		// After this point as long as we don't have this Outline open in other
+		// windows, no more collection view updates should happen for it.
 		outline?.beingViewedCount = (outline?.beingViewedCount ?? 1) - 1
+		
+		// End the search collection view updates early
+		isSearching = false
 		outline?.endSearching()
+		
 		outline?.unload()
 		clearUndoableCommands()
 	
