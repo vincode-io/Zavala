@@ -710,9 +710,16 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 		// Assign the new Outline and load it
 		outline = newOutline
-		outline?.beingViewedCount = (outline?.beingViewedCount ?? 0) + 1
-		outline?.load()
-		outline?.prepareForViewing()
+		
+		// Don't continue if we are just clearing out the editor
+		guard let outline = outline else {
+			collectionView.reloadData()
+			return
+		}
+
+		outline.beingViewedCount = outline.beingViewedCount + 1
+		outline.load()
+		outline.prepareForViewing()
 			
 		guard isViewLoaded else { return }
 
@@ -720,7 +727,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		if let searchText = searchText {
 			discloseSearchBar()
-			searchBar.searchField.text = outline?.searchText
+			searchBar.searchField.text = outline.searchText
 			beginInDocumentSearch(text: searchText)
 			return
 		}
