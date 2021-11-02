@@ -780,6 +780,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.isBordered = true
 			item.action = #selector(goBackwardOne(_:))
 			item.target = self
+			item.visibilityPriority = .high
 			toolbarItem = item
 		case .goForward:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
@@ -792,6 +793,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.isBordered = true
 			item.action = #selector(goForwardOne(_:))
 			item.target = self
+			item.visibilityPriority = .high
 			toolbarItem = item
 		case .link:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
