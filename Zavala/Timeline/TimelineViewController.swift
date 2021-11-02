@@ -130,16 +130,22 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	// MARK: API
 	
 	func setDocumentContainer(_ documentContainer: DocumentContainer?, isNavigationBranch: Bool, completion: (() -> Void)? = nil) {
+		func updateContainer() {
+			self.documentContainer = documentContainer
+			updateUI()
+			collectionView.deselectAll()
+			loadDocuments(animated: false, isNavigationBranch: isNavigationBranch, completion: completion)
+		}
+		
 		if !(documentContainer is Search) {
 			searchController.searchBar.text = ""
 			heldDocumentContainer = nil
-			searchController.isActive = false
+			searchController.dismiss(animated: false) {
+				updateContainer()
+			}
+		} else {
+			updateContainer()
 		}
-		
-		self.documentContainer = documentContainer
-		updateUI()
-		collectionView.deselectAll()
-		loadDocuments(animated: false, isNavigationBranch: isNavigationBranch, completion: completion)
 	}
 
 	func selectDocument(_ document: Document?, isNew: Bool = false, isNavigationBranch: Bool = true, animated: Bool) {
