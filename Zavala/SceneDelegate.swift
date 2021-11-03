@@ -53,17 +53,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		mainSplitViewController.startUp()
 
 		if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
-			mainSplitViewController.handle(userActivity)
+			mainSplitViewController.handle(userActivity, isNavigationBranch: false)
 			return
 		}
 		
 		if let url = connectionOptions.urlContexts.first?.url, let documentID = EntityID(url: url) {
-			mainSplitViewController.openDocument(documentID)
+			mainSplitViewController.openDocument(documentID, isNavigationBranch: false)
 			return
 		}
 		
 		if let userInfo = AppDefaults.shared.lastMainWindowState {
-			mainSplitViewController.handle(userInfo)
+			mainSplitViewController.handle(userInfo, isNavigationBranch: false)
 			AppDefaults.shared.lastMainWindowState = nil
 		}
 	}
@@ -82,12 +82,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 	
 	func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-		mainSplitViewController.handle(userActivity)
+		mainSplitViewController.handle(userActivity, isNavigationBranch: true)
 	}
 	
 	func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
 		if let url = urlContexts.first?.url, let documentID = EntityID(url: url) {
-			mainSplitViewController.openDocument(documentID)
+			mainSplitViewController.openDocument(documentID, isNavigationBranch: true)
 			return
 		}
 		

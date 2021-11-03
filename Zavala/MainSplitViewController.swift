@@ -34,12 +34,17 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 	var stateRestorationActivity: NSUserActivity {
 		let activity = activityManager.stateRestorationActivity
+		var userInfo = activity.userInfo == nil ? [AnyHashable: Any]() : activity.userInfo
+
+		userInfo![UserInfoKeys.goBackwardStack] = goBackwardStack.map { $0.userInfo }
+		userInfo![UserInfoKeys.goForwardStack] = goForwardStack.map { $0.userInfo }
+
 		if traitCollection.userInterfaceIdiom == .mac {
-			var userInfo = activity.userInfo == nil ? [AnyHashable: Any]() : activity.userInfo
 			userInfo![UserInfoKeys.sidebarWidth] = primaryColumnWidth
 			userInfo![UserInfoKeys.timelineWidth] = supplementaryColumnWidth
-			activity.userInfo = userInfo
 		}
+
+		activity.userInfo = userInfo
 		return activity
 	}
 	
@@ -100,31 +105,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	// MARK: Notifications
 	
 	@objc func accountDocumentsDidChange(_ note: Notification) {
-		let allDocumentIDs = AccountManager.shared.documents.map { $0.id }
-		
-		var replacementGoBackwardStack = [Pin]()
-		for pin in goBackwardStack {
-			if let documentID = pin.documentID {
-				if allDocumentIDs.contains(documentID) {
-					replacementGoBackwardStack.append(pin)
-				}
-			} else {
-				replacementGoBackwardStack.append(pin)
-			}
-		}
-		goBackwardStack = replacementGoBackwardStack
-		
-		var replacementGoForwardStack = [Pin]()
-		for pin in goForwardStack {
-			if let documentID = pin.documentID {
-				if allDocumentIDs.contains(documentID) {
-					replacementGoForwardStack.append(pin)
-				}
-			} else {
-				replacementGoForwardStack.append(pin)
-			}
-		}
-		goForwardStack = replacementGoForwardStack
+		cleanUpStacks()
 	}
 
 	// MARK: API
@@ -140,16 +121,26 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
 	}
 	
-	func handle(_ activity: NSUserActivity) {
+	func handle(_ activity: NSUserActivity, isNavigationBranch: Bool) {
 		guard let userInfo = activity.userInfo else { return }
-		handle(userInfo)
+		handle(userInfo, isNavigationBranch: isNavigationBranch)
 	}
-	
-	func handle(_ userInfo: [AnyHashable: Any]) {
+
+	func handle(_ userInfo: [AnyHashable: Any], isNavigationBranch: Bool) {
 		if let searchIdentifier = userInfo[CSSearchableItemActivityIdentifier] as? String, let documentID = EntityID(description: searchIdentifier) {
-			openDocument(documentID)
+			openDocument(documentID, isNavigationBranch: isNavigationBranch)
 			return
 		}
+		
+		if let goBackwardStackUserInfos = userInfo[UserInfoKeys.goBackwardStack] as? [Any] {
+			goBackwardStack = goBackwardStackUserInfos.compactMap { Pin(userInfo: $0) }
+		}
+		
+		if let goForwardStackUserInfos = userInfo[UserInfoKeys.goForwardStack] as? [Any] {
+			goForwardStack = goForwardStackUserInfos.compactMap { Pin(userInfo: $0) }
+		}
+
+		cleanUpStacks()
 		
 		if let sidebarWidth = userInfo[UserInfoKeys.sidebarWidth] as? CGFloat {
 			preferredPrimaryColumnWidth = sidebarWidth
@@ -165,30 +156,30 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			return
 		}
 		
-		sidebarViewController?.selectDocumentContainer(documentContainer, isNavigationBranch: true, animated: false) {
+		sidebarViewController?.selectDocumentContainer(documentContainer, isNavigationBranch: isNavigationBranch, animated: false) {
 			self.lastMainControllerToAppear = .timeline
 
 			guard let document = pin.document else {
 				return
 			}
 			
-			self.handleSelectDocument(document)
+			self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 		}
 	}
 	
-	func openDocument(_ documentID: EntityID) {
+	func openDocument(_ documentID: EntityID, isNavigationBranch: Bool) {
 		guard let account = AccountManager.shared.findAccount(accountID: documentID.accountID),
 			  let document = account.findDocument(documentID) else { return }
 		
 		if let sidebarTag = sidebarViewController?.currentTag, document.hasTag(sidebarTag) {
-			self.handleSelectDocument(document)
+			self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 		} else if document.tagCount == 1, let tag = document.tags?.first {
 			sidebarViewController?.selectDocumentContainer(TagDocuments(account: account, tag: tag), isNavigationBranch: true, animated: false) {
-				self.handleSelectDocument(document)
+				self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 			}
 		} else {
 			sidebarViewController?.selectDocumentContainer(AllDocuments(account: account), isNavigationBranch: true, animated: false) {
-				self.handleSelectDocument(document)
+				self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 			}
 		}
 	}
@@ -602,7 +593,7 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 	
 	func quicklyOpenDocument(documentID: EntityID) {
-		openDocument(documentID)
+		openDocument(documentID, isNavigationBranch: true)
 	}
 	
 }
@@ -611,7 +602,7 @@ extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 
 extension MainSplitViewController {
 	
-	private func handleSelectDocument(_ document: Document) {
+	private func handleSelectDocument(_ document: Document, isNavigationBranch: Bool) {
 		// This is done because the restore state navigation used to rely on the fact that
 		// the TimeliniewController used a diffable datasource that didn't complete until after
 		// some navigation had occurred. Changing this assumption broke state restoration
@@ -625,7 +616,7 @@ extension MainSplitViewController {
 		// Someday this should be refactored. How the UINavigationControllerDelegate works would
 		// be the main challenge.
 		DispatchQueue.main.async {
-			self.timelineViewController?.selectDocument(document, animated: false)
+			self.timelineViewController?.selectDocument(document, isNavigationBranch: isNavigationBranch, animated: false)
 			self.lastMainControllerToAppear = .editor
 			self.validateToolbar()
 		}
@@ -653,6 +644,34 @@ extension MainSplitViewController {
 		sidebarViewController?.selectDocumentContainer(documentContainer, isNavigationBranch: true, animated: true) {
 			completion()
 		}
+	}
+	
+	private func cleanUpStacks() {
+		let allDocumentIDs = AccountManager.shared.documents.map { $0.id }
+		
+		var replacementGoBackwardStack = [Pin]()
+		for pin in goBackwardStack {
+			if let documentID = pin.documentID {
+				if allDocumentIDs.contains(documentID) {
+					replacementGoBackwardStack.append(pin)
+				}
+			} else {
+				replacementGoBackwardStack.append(pin)
+			}
+		}
+		goBackwardStack = replacementGoBackwardStack
+		
+		var replacementGoForwardStack = [Pin]()
+		for pin in goForwardStack {
+			if let documentID = pin.documentID {
+				if allDocumentIDs.contains(documentID) {
+					replacementGoForwardStack.append(pin)
+				}
+			} else {
+				replacementGoForwardStack.append(pin)
+			}
+		}
+		goForwardStack = replacementGoForwardStack
 	}
 	
 }
