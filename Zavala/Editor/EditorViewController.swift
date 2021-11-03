@@ -700,8 +700,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		outline?.unload()
 		clearUndoableCommands()
 	
-		updateNavigationMenus()
-		
 		// Assign the new Outline and load it
 		outline = newOutline
 		
@@ -717,6 +715,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			
 		guard isViewLoaded else { return }
 
+		updateNavigationMenus()
 		collectionView.reloadData()
 		
 		if let searchText = searchText {
