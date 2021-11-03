@@ -1119,7 +1119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		// Outline Menu
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand, createRowNotesCommand, deleteRowNotesCommand])
-		let moveRowMenu = UIMenu(title: "", options: .displayInline, children: [moveRowsUpCommand, moveRowsDownCommand, moveRowsLeftCommand, moveRowsRightCommand])
+		let moveRowMenu = UIMenu(title: "", options: .displayInline, children: [moveRowsLeftCommand, moveRowsRightCommand, moveRowsUpCommand, moveRowsDownCommand])
 		let mainOutlineMenu = UIMenu(title: "",
 									 options: .displayInline,
 									 children: [insertRowCommand,
