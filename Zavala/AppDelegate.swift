@@ -501,7 +501,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		NotificationCenter.default.addObserver(self, selector: #selector(checkForUserDefaultsChanges), name: UserDefaults.didChangeNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+		
 		NotificationCenter.default.addObserver(self, selector: #selector(pinWasVisited), name: .PinWasVisited, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange), name: .AccountDocumentsDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange), name: .AccountManagerAccountsDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange), name: .AccountMetadataDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange), name: .DocumentTitleDidChange, object: nil)
 
 		var menuItems = [UIMenuItem]()
 		menuItems.append(UIMenuItem(title: L10n.link, action: .editLink))
@@ -1189,6 +1194,8 @@ extension AppDelegate {
 		if let userInfos = AppDefaults.shared.documentHistory {
 			history = userInfos.compactMap { Pin(userInfo: $0) }
 		}
+		
+		cleanUpHistory()
 	}
 	
 	@objc private func didEnterBackground() {
@@ -1225,7 +1232,23 @@ extension AppDelegate {
 		
 		UIMenuSystem.main.setNeedsRebuild()
 	}
+
+	@objc private func accountDocumentsDidChange() {
+		cleanUpHistory()
+	}
+
+	@objc private func accountManagerAccountsDidChange() {
+		cleanUpHistory()
+	}
+
+	@objc private func accountMetadataDidChange() {
+		cleanUpHistory()
+	}
 	
+	@objc private func documentTitleDidChange() {
+		UIMenuSystem.main.setNeedsRebuild()
+	}
+
 	private func openHistoryItem(index: Int) {
 		let pin = history[index]
 		
@@ -1239,4 +1262,17 @@ extension AppDelegate {
 		
 	}
 
+	private func cleanUpHistory() {
+		let allDocumentIDs = AccountManager.shared.activeDocuments.map { $0.id }
+		
+		for pin in history {
+			if let documentID = pin.documentID {
+				if !allDocumentIDs.contains(documentID) {
+					history.removeFirst(object: pin)
+					UIMenuSystem.main.setNeedsRebuild()
+				}
+			}
+		}
+	}
+	
 }
