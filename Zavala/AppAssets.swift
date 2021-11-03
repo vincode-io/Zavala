@@ -131,10 +131,6 @@ struct AppAssets {
 		return UIImage(systemName: "square.and.arrow.down")!
 	}()
 
-	static var indent: UIImage = {
-		return UIImage(systemName: "arrow.right.to.line")!
-	}()
-	
 	static var italic: UIImage = {
 		return UIImage(systemName: "italic")!
 	}()
@@ -159,6 +155,14 @@ struct AppAssets {
 		return UIImage(systemName: "arrow.down.to.line")!
 	}()
 
+	static var moveLeft: UIImage = {
+		return UIImage(systemName: "arrow.left.to.line")!
+	}()
+
+	static var moveRight: UIImage = {
+		return UIImage(systemName: "arrow.right.to.line")!
+	}()
+	
 	static var moveUp: UIImage = {
 		return UIImage(systemName: "arrow.up.to.line")!
 	}()
@@ -169,10 +173,6 @@ struct AppAssets {
 
 	static var noteFont: UIImage = {
 		return UIImage(systemName: "textformat.size.smaller")!
-	}()
-
-	static var outdent: UIImage = {
-		return UIImage(systemName: "arrow.left.to.line")!
 	}()
 
 	static var paste: UIImage = {

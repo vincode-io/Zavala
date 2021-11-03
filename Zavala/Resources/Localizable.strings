@@ -28,8 +28,6 @@
 "Cancel" = "Cancel";
 "Get_Info" = "Get Info";
 "Typing" = "Typing";
-"Indent" = "Indent";
-"Outdent" = "Outdent";
 "Move_Up" = "Move Up";
 "Move_Down" = "Move Down";
 "Move_Left" = "Move Left";

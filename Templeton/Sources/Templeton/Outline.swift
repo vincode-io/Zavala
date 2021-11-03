@@ -1191,7 +1191,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 
 	public func isCreateRowOutsideUnavailable(rows: [Row]) -> Bool {
-		return isOutdentRowsUnavailable(rows: rows)
+		return isMoveRowsLeftUnavailable(rows: rows)
 	}
 	
 	@discardableResult
@@ -1461,7 +1461,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return impacted
 	}
 	
-	public func isIndentRowsUnavailable(rows: [Row]) -> Bool {
+	public func isMoveRowsRightUnavailable(rows: [Row]) -> Bool {
 		for row in rows {
 			if let rowIndex = row.parent?.firstIndexOfRow(row), rowIndex > 0 {
 				return false
@@ -1470,7 +1470,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return true
 	}
 	
-	func indentRows(_ rows: [Row], rowStrings: RowStrings?) -> [Row] {
+	func moveRowsRight(_ rows: [Row], rowStrings: RowStrings?) -> [Row] {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 
 		beginCloudKitBatchRequest()
@@ -1538,7 +1538,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return impacted
 	}
 	
-	public func isOutdentRowsUnavailable(rows: [Row]) -> Bool {
+	public func isMoveRowsLeftUnavailable(rows: [Row]) -> Bool {
 		for row in rows {
 			if row.level != 0 {
 				return false
@@ -1548,7 +1548,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 		
 	@discardableResult
-	func outdentRows(_ rows: [Row], rowStrings: RowStrings?) -> [Row] {
+	func moveRowsLeft(_ rows: [Row], rowStrings: RowStrings?) -> [Row] {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 
 		beginCloudKitBatchRequest()
@@ -1663,14 +1663,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		guard isBeingViewed else { return }
 
 		outlineElementsDidChange(rebuildShadowTable())
-	}
-	
-	public func isMoveRowsLeftUnavailable(rows: [Row]) -> Bool {
-		return isOutdentRowsUnavailable(rows: rows)
-	}
-	
-	public func isMoveRowsRightUnavailable(rows: [Row]) -> Bool {
-		return isIndentRowsUnavailable(rows: rows)
 	}
 	
 	public func moveRowsInsideAtStart(_ rows: [Row], afterRowContainer: RowContainer) {

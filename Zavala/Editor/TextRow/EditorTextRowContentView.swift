@@ -241,8 +241,8 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowCreateRow(afterRow: afterRow, rowStrings: rowStrings)
 	}
 	
-	func indentRow(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings) {
-		appliedConfiguration.delegate?.editorTextRowIndentRow(row, rowStrings: rowStrings)
+	func moveRowRight(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings) {
+		appliedConfiguration.delegate?.editorTextRowMoveRowRight(row, rowStrings: rowStrings)
 	}
 	
 	func splitRow(_: EditorTextRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int) {

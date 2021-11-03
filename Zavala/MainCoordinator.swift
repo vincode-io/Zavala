@@ -56,14 +56,6 @@ extension MainCoordinator {
 		return editorViewController?.isCreateRowOutsideUnavailable ?? true
 	}
 	
-	var isIndentRowsUnavailable: Bool {
-		return editorViewController?.isIndentRowsUnavailable ?? true
-	}
-
-	var isOutdentRowsUnavailable: Bool {
-		return editorViewController?.isOutdentRowsUnavailable ?? true
-	}
-
 	var isMoveRowsUpUnavailable: Bool {
 		return editorViewController?.isMoveRowsUpUnavailable ?? true
 	}
@@ -170,14 +162,6 @@ extension MainCoordinator {
 	
 	func createRowOutside() {
 		editorViewController?.createRowOutside()
-	}
-	
-	func indentRows() {
-		editorViewController?.indentCurrentRows()
-	}
-	
-	func outdentRows() {
-		editorViewController?.outdentCurrentRows()
 	}
 	
 	func moveRowsUp() {
@@ -432,8 +416,8 @@ extension NSToolbarItem.Identifier {
 	static let italic = NSToolbarItem.Identifier("io.vincode.Zavala.italic")
 	static let expandAllInOutline = NSToolbarItem.Identifier("io.vincode.Zavala.expandAllInOutline")
 	static let collapseAllInOutline = NSToolbarItem.Identifier("io.vincode.Zavala.collapseAllInOutline")
-	static let indent = NSToolbarItem.Identifier("io.vincode.Zavala.indent")
-	static let outdent = NSToolbarItem.Identifier("io.vincode.Zavala.outdent")
+	static let moveRight = NSToolbarItem.Identifier("io.vincode.Zavala.moveRight")
+	static let moveLeft = NSToolbarItem.Identifier("io.vincode.Zavala.moveLeft")
 	static let moveUp = NSToolbarItem.Identifier("io.vincode.Zavala.moveUp")
 	static let moveDown = NSToolbarItem.Identifier("io.vincode.Zavala.moveDown")
 	static let printDoc = NSToolbarItem.Identifier("io.vincode.Zavala.printDoc")

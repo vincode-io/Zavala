@@ -17,7 +17,7 @@ public final class MoveRowRightCommand: OutlineCommand {
 	
 	public var outline: Outline
 	var rows: [Row]
-	var indentedRows: [Row]?
+	var moveRightRows: [Row]?
 	var oldRowStrings: RowStrings?
 	var newRowStrings: RowStrings?
 	
@@ -37,13 +37,13 @@ public final class MoveRowRightCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		indentedRows = outline.indentRows(rows, rowStrings: newRowStrings)
+		moveRightRows = outline.moveRowsRight(rows, rowStrings: newRowStrings)
 		registerUndo()
 	}
 	
 	public func undo() {
-		guard let indentedRows = indentedRows else { return }
-		outline.outdentRows(indentedRows, rowStrings: oldRowStrings)
+		guard let moveRightRows = moveRightRows else { return }
+		outline.moveRowsLeft(moveRightRows, rowStrings: oldRowStrings)
 		registerRedo()
 		restoreCursorPosition()
 	}

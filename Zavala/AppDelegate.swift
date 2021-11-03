@@ -93,14 +93,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(createRowOutsideCommand)
 		}
 		
-		if !(mainCoordinator?.isIndentRowsUnavailable ?? true) {
-			menuKeyCommands.append(indentRowsCommand)
-		}
-		
-		if !(mainCoordinator?.isOutdentRowsUnavailable ?? true) {
-			menuKeyCommands.append(outdentRowsCommand)
-		}
-		
 		if !(mainCoordinator?.isMoveRowsUpUnavailable ?? true) {
 			menuKeyCommands.append(moveRowsUpCommand)
 		}
@@ -244,16 +236,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											   action: #selector(createRowOutsideCommand(_:)),
 											   input: "{",
 											   modifierFlags: [.command])
-	
-	let indentRowsCommand = UIKeyCommand(title: L10n.indent,
-										 action: #selector(indentRowsCommand(_:)),
-										 input: "]",
-										 modifierFlags: [.command])
-	
-	let outdentRowsCommand = UIKeyCommand(title: L10n.outdent,
-										  action: #selector(outdentRowsCommand(_:)),
-										  input: "[",
-										  modifierFlags: [.command])
 	
 	let moveRowsUpCommand = UIKeyCommand(title: L10n.moveUp,
 										 action: #selector(moveRowsUpCommand(_:)),
@@ -689,14 +671,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.createRowOutside()
 	}
 	
-	@objc func indentRowsCommand(_ sender: Any?) {
-		mainCoordinator?.indentRows()
-	}
-	
-	@objc func outdentRowsCommand(_ sender: Any?) {
-		mainCoordinator?.outdentRows()
-	}
-	
+
 	@objc func moveRowsUpCommand(_ sender: Any?) {
 		mainCoordinator?.moveRowsUp()
 	}
@@ -907,14 +882,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isCreateRowOutsideUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(indentRowsCommand(_:)):
-			if mainCoordinator?.isIndentRowsUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(outdentRowsCommand(_:)):
-			if mainCoordinator?.isOutdentRowsUnavailable ?? true {
-				command.attributes = .disabled
-			}
 		case #selector(moveRowsUpCommand(_:)):
 			if mainCoordinator?.isMoveRowsUpUnavailable ?? true {
 				command.attributes = .disabled
@@ -1119,9 +1086,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												createRowInsideCommand,
 												createRowOutsideCommand,
 												duplicateRowsCommand,
-												splitRowCommand,
-												indentRowsCommand,
-												outdentRowsCommand])
+												splitRowCommand])
 		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, moveRowMenu, completeMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 

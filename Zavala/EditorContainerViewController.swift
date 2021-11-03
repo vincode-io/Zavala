@@ -149,12 +149,12 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		collapseAllInOutline()
 	}
 
-	@objc func indentRows(_ sender: Any?) {
-		indentRows()
+	@objc func moveRowsRight(_ sender: Any?) {
+		moveRowsRight()
 	}
 
-	@objc func outdentRows(_ sender: Any?) {
-		outdentRows()
+	@objc func moveRowsLeft(_ sender: Any?) {
+		moveRowsLeft()
 	}
 
 	@objc func moveRowsUp(_ sender: Any?) {
@@ -258,8 +258,8 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.toggleOutlineFilter,
 			.expandAllInOutline,
 			.collapseAllInOutline,
-			.indent,
-			.outdent,
+			.moveRight,
+			.moveLeft,
 			.moveUp,
 			.moveDown,
 			.printDoc,
@@ -383,28 +383,28 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.action = #selector(collapseAllInOutline(_:))
 			item.target = self
 			toolbarItem = item
-		case .indent:
+		case .moveRight:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isIndentRowsUnavailable ?? true
+				return self?.editorViewController?.isMoveRowsRightUnavailable ?? true
 			}
-			item.image = AppAssets.indent.symbolSizedForCatalyst()
-			item.label = L10n.indent
-			item.toolTip = L10n.indent
+			item.image = AppAssets.moveRight.symbolSizedForCatalyst()
+			item.label = L10n.moveRight
+			item.toolTip = L10n.moveRight
 			item.isBordered = true
-			item.action = #selector(indentRows(_:))
+			item.action = #selector(moveRowsRight(_:))
 			item.target = self
 			toolbarItem = item
-		case .outdent:
+		case .moveLeft:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isOutdentRowsUnavailable ?? true
+				return self?.editorViewController?.isMoveRowsLeftUnavailable ?? true
 			}
-			item.image = AppAssets.outdent.symbolSizedForCatalyst()
-			item.label = L10n.outdent
-			item.toolTip = L10n.outdent
+			item.image = AppAssets.moveLeft.symbolSizedForCatalyst()
+			item.label = L10n.moveLeft
+			item.toolTip = L10n.moveLeft
 			item.isBordered = true
-			item.action = #selector(outdentRows(_:))
+			item.action = #selector(moveRowsLeft(_:))
 			item.target = self
 			toolbarItem = item
 		case .moveUp:

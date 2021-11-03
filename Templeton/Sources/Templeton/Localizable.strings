@@ -36,8 +36,6 @@
 "Copy" = "Copy";
 "Paste" = "Paste";
 "Move" = "Move";
-"Indent" = "Indent";
-"Outdent" = "Outdent";
 "Move_Up" = "Move Up";
 "Move_Down" = "Move Down";
 "Move_Left" = "Move Left";

@@ -18,7 +18,7 @@ public final class MoveRowLeftCommand: OutlineCommand {
 	public var outline: Outline
 	var rows: [Row]
 	var restoreMoves = [Outline.RowMove]()
-	var outdentedRows: [Row]?
+	var moveLeftRows: [Row]?
 
 	var oldRowStrings: RowStrings?
 	var newRowStrings: RowStrings?
@@ -29,7 +29,7 @@ public final class MoveRowLeftCommand: OutlineCommand {
 		self.outline = outline
 		self.rows = rows
 		self.undoActionName = L10n.moveLeft
-		self.redoActionName = L10n.moveRight
+		self.redoActionName = L10n.moveLeft
 		
 		for row in rows {
 			guard let oldParent = row.parent, let oldChildIndex = oldParent.firstIndexOfRow(row) else { continue }
@@ -44,15 +44,15 @@ public final class MoveRowLeftCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		outdentedRows = outline.outdentRows(rows, rowStrings: newRowStrings)
+		moveLeftRows = outline.moveRowsLeft(rows, rowStrings: newRowStrings)
 		registerUndo()
 	}
 	
 	public func undo() {
-		guard let outdentedRows = outdentedRows else { return }
-		let outdented = Set(outdentedRows)
-		let outdentRestore = restoreMoves.filter { outdented.contains($0.row) }
-		outline.moveRows(outdentRestore, rowStrings: oldRowStrings)
+		guard let moveLeftRows = moveLeftRows else { return }
+		let movedLeft = Set(moveLeftRows)
+		let moveLeftRestore = restoreMoves.filter { movedLeft.contains($0.row) }
+		outline.moveRows(moveLeftRestore, rowStrings: oldRowStrings)
 		registerRedo()
 		restoreCursorPosition()
 	}

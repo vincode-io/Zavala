@@ -60,8 +60,6 @@ internal enum L10n {
   internal static let expandAll = L10n.tr("Localizable", "Expand_All")
   /// Expand All in Outline
   internal static let expandAllInOutline = L10n.tr("Localizable", "Expand_All_In_Outline")
-  /// Indent
-  internal static let indent = L10n.tr("Localizable", "Indent")
   /// Move
   internal static let move = L10n.tr("Localizable", "Move")
   /// Move Down
@@ -72,8 +70,6 @@ internal enum L10n {
   internal static let moveRight = L10n.tr("Localizable", "Move_Right")
   /// Move Up
   internal static let moveUp = L10n.tr("Localizable", "Move_Up")
-  /// Outdent
-  internal static let outdent = L10n.tr("Localizable", "Outdent")
   /// Paste
   internal static let paste = L10n.tr("Localizable", "Paste")
   /// Recent

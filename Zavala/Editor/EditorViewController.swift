@@ -100,14 +100,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return delegate?.editorViewControllerIsGoForwardUnavailable ?? true
 	}
 	
-	var isIndentRowsUnavailable: Bool {
+	var isMoveRowsRightUnavailable: Bool {
 		guard let outline = outline, let rows = currentRows else { return true }
-		return outline.isIndentRowsUnavailable(rows: rows)
+		return outline.isMoveRowsRightUnavailable(rows: rows)
 	}
 
-	var isOutdentRowsUnavailable: Bool {
+	var isMoveRowsLeftUnavailable: Bool {
 		guard let outline = outline, let rows = currentRows else { return true }
-		return outline.isOutdentRowsUnavailable(rows: rows)
+		return outline.isMoveRowsLeftUnavailable(rows: rows)
 	}
 
 	var isMoveRowsUpUnavailable: Bool {
@@ -118,16 +118,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	var isMoveRowsDownUnavailable: Bool {
 		guard let outline = outline, let rows = currentRows else { return true }
 		return outline.isMoveRowsDownUnavailable(rows: rows)
-	}
-
-	var isMoveRowsLeftUnavailable: Bool {
-		guard let outline = outline, let rows = currentRows else { return true }
-		return outline.isMoveRowsLeftUnavailable(rows: rows)
-	}
-
-	var isMoveRowsRightUnavailable: Bool {
-		guard let outline = outline, let rows = currentRows else { return true }
-		return outline.isMoveRowsRightUnavailable(rows: rows)
 	}
 
 	var isToggleRowCompleteUnavailable: Bool {
@@ -256,8 +246,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var keyboardToolBar: UIToolbar!
 	private var goBackwardButton: UIBarButtonItem!
 	private var goForwardButton: UIBarButtonItem!
-	private var indentButton: UIBarButtonItem!
-	private var outdentButton: UIBarButtonItem!
+	private var moveRightButton: UIBarButtonItem!
+	private var moveLeftButton: UIBarButtonItem!
 	private var moveUpButton: UIBarButtonItem!
 	private var moveDownButton: UIBarButtonItem!
 	private var insertImageButton: UIBarButtonItem!
@@ -395,10 +385,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		goBackwardButton.title = L10n.goBackward
 		goForwardButton = UIBarButtonItem(image: AppAssets.goForward, style: .plain, target: self, action: #selector(goForward))
 		goForwardButton.title = L10n.goForward
-		indentButton = UIBarButtonItem(image: AppAssets.indent, style: .plain, target: self, action: #selector(indentCurrentRows))
-		indentButton.title = L10n.indent
-		outdentButton = UIBarButtonItem(image: AppAssets.outdent, style: .plain, target: self, action: #selector(outdentCurrentRows))
-		outdentButton.title = L10n.outdent
+		moveRightButton = UIBarButtonItem(image: AppAssets.moveRight, style: .plain, target: self, action: #selector(moveCurrentRowsRight))
+		moveRightButton.title = L10n.moveLeft
+		moveLeftButton = UIBarButtonItem(image: AppAssets.moveLeft, style: .plain, target: self, action: #selector(moveCurrentRowsLeft))
+		moveLeftButton.title = L10n.moveRight
 		moveUpButton = UIBarButtonItem(image: AppAssets.moveUp, style: .plain, target: self, action: #selector(moveCurrentRowsUp))
 		moveUpButton.title = L10n.moveUp
 		moveDownButton = UIBarButtonItem(image: AppAssets.moveDown, style: .plain, target: self, action: #selector(moveCurrentRowsDown))
@@ -411,7 +401,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if traitCollection.userInterfaceIdiom != .mac {
 			keyboardToolBar = UIToolbar()
 			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-			keyboardToolBar.items = [outdentButton, indentButton, moveUpButton, moveDownButton, flexibleSpace, insertImageButton, linkButton]
+			keyboardToolBar.items = [moveLeftButton, moveRightButton, moveUpButton, moveDownButton, flexibleSpace, insertImageButton, linkButton]
 			keyboardToolBar.sizeToFit()
 			navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem, goForwardButton, goBackwardButton]
 		}
@@ -773,8 +763,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			
 			goBackwardButton.isEnabled = !isGoBackwardUnavailable
 			goForwardButton.isEnabled = !isGoForwardUnavailable
-			outdentButton.isEnabled = !isOutdentRowsUnavailable
-			indentButton.isEnabled = !isIndentRowsUnavailable
+			moveLeftButton.isEnabled = !isMoveRowsLeftUnavailable
+			moveRightButton.isEnabled = !isMoveRowsRightUnavailable
 			moveUpButton.isEnabled = !isMoveRowsUpUnavailable
 			moveDownButton.isEnabled = !isMoveRowsDownUnavailable
 			insertImageButton.isEnabled = !isInsertImageUnavailable
@@ -1088,14 +1078,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		delegate?.goForward(self)
 	}
 
-	@objc func outdentCurrentRows() {
+	@objc func moveCurrentRowsLeft() {
 		guard let rows = currentRows else { return }
-		outdentRows(rows)
+		moveRowsLeft(rows)
 	}
 	
-	@objc func indentCurrentRows() {
+	@objc func moveCurrentRowsRight() {
 		guard let rows = currentRows else { return }
-		indentRows(rows)
+		moveRowsRight(rows)
 	}
 	
 	@objc func moveCurrentRowsUp() {
@@ -1479,8 +1469,8 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		createRow(afterRows: afterRows, rowStrings: rowStrings)
 	}
 	
-	func editorTextRowIndentRow(_ row: Row, rowStrings: RowStrings) {
-		indentRows([row], rowStrings: rowStrings)
+	func editorTextRowMoveRowRight(_ row: Row, rowStrings: RowStrings) {
+		moveRowsRight([row], rowStrings: rowStrings)
 	}
 	
 	func editorTextRowSplitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
@@ -1831,7 +1821,7 @@ extension EditorViewController {
 					repeatMoveCursorDown()
 				}
 			case (.keyboardTab, key.modifierFlags.contains(.shift)):
-				outdentCurrentRows()
+				moveCurrentRowsLeft()
 			default:
 				super.pressesBegan(presses, with: event)
 			}
@@ -2101,11 +2091,11 @@ extension EditorViewController {
 			var outlineActions = [UIAction]()
 			outlineActions.append(self.addAction(rows: rows))
 			outlineActions.append(self.duplicateAction(rows: rows))
-			if !outline.isIndentRowsUnavailable(rows: rows) {
-				outlineActions.append(self.indentAction(rows: rows))
+			if !outline.isMoveRowsRightUnavailable(rows: rows) {
+				outlineActions.append(self.moveRowsRightAction(rows: rows))
 			}
-			if !outline.isOutdentRowsUnavailable(rows: rows) {
-				outlineActions.append(self.outdentAction(rows: rows))
+			if !outline.isMoveRowsLeftUnavailable(rows: rows) {
+				outlineActions.append(self.moveRowsLeftAction(rows: rows))
 			}
 			if !outline.isCompleteUnavailable(rows: rows) {
 				outlineActions.append(self.completeAction(rows: rows))
@@ -2175,18 +2165,18 @@ extension EditorViewController {
 		}
 	}
 
-	private func indentAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.indent, image: AppAssets.indent) { [weak self] action in
+	private func moveRowsRightAction(rows: [Row]) -> UIAction {
+		return UIAction(title: L10n.moveRight, image: AppAssets.moveRight) { [weak self] action in
 			guard let self = self else { return }
-			self.indentRows(rows)
+			self.moveRowsRight(rows)
 			self.delegate?.validateToolbar(self)
 		}
 	}
 
-	private func outdentAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.outdent, image: AppAssets.outdent) { [weak self] action in
+	private func moveRowsLeftAction(rows: [Row]) -> UIAction {
+		return UIAction(title: L10n.moveLeft, image: AppAssets.moveLeft) { [weak self] action in
 			guard let self = self else { return }
-			self.outdentRows(rows)
+			self.moveRowsLeft(rows)
 			self.delegate?.validateToolbar(self)
 		}
 	}
@@ -2639,26 +2629,26 @@ extension EditorViewController {
 		runCommand(command)
 	}
 	
-	private func indentRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
+	private func moveRowsLeft(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = IndentRowCommand(undoManager: undoManager,
-									   delegate: self,
-									   outline: outline,
-									   rows: rows,
-									   rowStrings: rowStrings)
+		let command = MoveRowLeftCommand(undoManager: undoManager,
+										 delegate: self,
+										 outline: outline,
+										 rows: rows,
+										 rowStrings: rowStrings)
 		
 		runCommand(command)
 	}
-	
-	private func outdentRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
+
+	private func moveRowsRight(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = OutdentRowCommand(undoManager: undoManager,
-										delegate: self,
-										outline: outline,
-										rows: rows,
-										rowStrings: rowStrings)
+		let command = MoveRowRightCommand(undoManager: undoManager,
+										  delegate: self,
+										  outline: outline,
+										  rows: rows,
+										  rowStrings: rowStrings)
 		
 		runCommand(command)
 	}
@@ -2687,30 +2677,6 @@ extension EditorViewController {
 		
 		runCommand(command)
 		makeCursorVisibleIfNecessary()
-	}
-
-	private func moveRowsLeft(_ rows: [Row], rowStrings: RowStrings? = nil) {
-		guard let undoManager = undoManager, let outline = outline else { return }
-		
-		let command = MoveRowLeftCommand(undoManager: undoManager,
-										 delegate: self,
-										 outline: outline,
-										 rows: rows,
-										 rowStrings: rowStrings)
-		
-		runCommand(command)
-	}
-
-	private func moveRowsRight(_ rows: [Row], rowStrings: RowStrings? = nil) {
-		guard let undoManager = undoManager, let outline = outline else { return }
-		
-		let command = MoveRowRightCommand(undoManager: undoManager,
-										  delegate: self,
-										  outline: outline,
-										  rows: rows,
-										  rowStrings: rowStrings)
-		
-		runCommand(command)
 	}
 
 	private func splitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {

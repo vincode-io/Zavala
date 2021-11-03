@@ -170,8 +170,6 @@ internal enum L10n {
   internal static let importOPML = L10n.tr("Localizable", "Import_OPML")
   /// Import OPML…
   internal static let importOPMLEllipsis = L10n.tr("Localizable", "Import_OPML_Ellipsis")
-  /// Indent
-  internal static let indent = L10n.tr("Localizable", "Indent")
   /// Insert Image
   internal static let insertImage = L10n.tr("Localizable", "Insert_Image")
   /// Insert Image…
@@ -220,8 +218,6 @@ internal enum L10n {
   internal static let openQuicklyEllipsis = L10n.tr("Localizable", "Open_Quickly_Ellipsis")
   /// Open Quickly
   internal static let openQuicklyPlaceholder = L10n.tr("Localizable", "Open_Quickly_Placeholder")
-  /// Outdent
-  internal static let outdent = L10n.tr("Localizable", "Outdent")
   /// Outline
   internal static let outline = L10n.tr("Localizable", "Outline")
   /// Paste
