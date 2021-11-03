@@ -107,8 +107,11 @@
 "Website" = "Website";
 "Duplicate" = "Duplicate";
 "Navigation" = "Navigation";
+"Back" = "Back";
+"Forward" = "Forward";
 "Go_Backward" = "Go Backward";
 "Go_Forward" = "Go Forward";
+"History" = "History";
 
 /* State restoration */
 "Unknown_Outline" = "The requested outline could not be found.";

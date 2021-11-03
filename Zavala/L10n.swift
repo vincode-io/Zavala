@@ -36,6 +36,8 @@ internal enum L10n {
   }
   /// Automatic
   internal static let automatic = L10n.tr("Localizable", "Automatic")
+  /// Back
+  internal static let back = L10n.tr("Localizable", "Back")
   /// Backlinks
   internal static let backlinks = L10n.tr("Localizable", "Backlinks")
   /// Bold
@@ -150,6 +152,8 @@ internal enum L10n {
   internal static let findPrevious = L10n.tr("Localizable", "Find_Previous")
   /// Format
   internal static let format = L10n.tr("Localizable", "Format")
+  /// Forward
+  internal static let forward = L10n.tr("Localizable", "Forward")
   /// Get Info
   internal static let getInfo = L10n.tr("Localizable", "Get_Info")
   /// GitHub Repository
@@ -162,6 +166,8 @@ internal enum L10n {
   internal static let hideCompleted = L10n.tr("Localizable", "Hide_Completed")
   /// Hide Notes
   internal static let hideNotes = L10n.tr("Localizable", "Hide_Notes")
+  /// History
+  internal static let history = L10n.tr("Localizable", "History")
   /// Image
   internal static let image = L10n.tr("Localizable", "Image")
   /// Import Failed

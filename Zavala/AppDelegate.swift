@@ -65,6 +65,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		menuKeyCommands.append(deleteCommand)
 
+		if !(mainCoordinator?.isGoBackwardUnavailable ?? true) {
+			menuKeyCommands.append(goBackwardCommand)
+		}
+		
+		if !(mainCoordinator?.isGoForwardUnavailable ?? true) {
+			menuKeyCommands.append(goForwardCommand)
+		}
+		
 		if !(mainCoordinator?.isInsertImageUnavailable ?? true) {
 			menuKeyCommands.append(insertImageCommand)
 		}
@@ -211,6 +219,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									 action: #selector(delete),
 									 input: "\u{8}",
 									 modifierFlags: [.command])
+	
+	let goBackwardCommand = UIKeyCommand(title: L10n.back,
+										 action: #selector(goBackwardCommand(_:)),
+										 input: "[",
+										 modifierFlags: [.command])
+	
+	let goForwardCommand = UIKeyCommand(title: L10n.forward,
+										action: #selector(goForwardCommand(_:)),
+										input: "]",
+										modifierFlags: [.command])
 	
 	let insertRowCommand = UIKeyCommand(title: L10n.addRowAbove,
 										action: #selector(insertRowCommand(_:)),
@@ -651,6 +669,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
+	@objc func goBackwardCommand(_ sender: Any?) {
+		mainCoordinator?.goBackward()
+	}
+	
+	@objc func goForwardCommand(_ sender: Any?) {
+		mainCoordinator?.goForward()
+	}
+	
 	@objc func insertRowCommand(_ sender: Any?) {
 		mainCoordinator?.insertRow()
 	}
@@ -860,6 +886,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			#selector(exportMarkdownListCommand(_:)),
 			#selector(exportOPMLCommand(_:)):
 			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(goBackwardCommand(_:)):
+			if mainCoordinator?.isGoBackwardUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(goForwardCommand(_:)):
+			if mainCoordinator?.isGoForwardUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(insertRowCommand(_:)):
@@ -1089,6 +1123,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												splitRowCommand])
 		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, moveRowMenu, completeMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)
+
+		// History Menu
+		let navigateMenu = UIMenu(title: "", options: .displayInline, children: [goBackwardCommand, goForwardCommand])
+		let historyMenu = UIMenu(title: L10n.history, children: [navigateMenu])
+		builder.insertSibling(historyMenu, afterMenu: .view)
 
 		// Help Menu
 		builder.replaceChildren(ofMenu: .help, from: { _ in return [showWebsiteCommand, showReleaseNotesCommand, showGitHubRepositoryCommand, showBugTrackerCommand, showAcknowledgementsCommand] })

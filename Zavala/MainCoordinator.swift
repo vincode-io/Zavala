@@ -12,6 +12,10 @@ import SafariServices
 protocol MainCoordinator: UIViewController {
 	var currentTag: Tag? { get }
 	var editorViewController: EditorViewController? { get }
+	var isGoBackwardUnavailable: Bool { get }
+	var isGoForwardUnavailable: Bool { get }
+	func goBackward()
+	func goForward()
 }
 
 extension MainCoordinator {

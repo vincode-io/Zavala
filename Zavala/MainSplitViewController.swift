@@ -63,6 +63,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		viewController(for: .secondary) as? EditorViewController
 	}
 	
+	var isGoBackwardUnavailable: Bool {
+		return goBackwardStack.isEmpty
+	}
+	
+	var isGoForwardUnavailable: Bool {
+		return goForwardStack.isEmpty
+	}
+	
 	private var sidebarViewController: SidebarViewController? {
 		return viewController(for: .primary) as? SidebarViewController
 	}
@@ -77,14 +85,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	private var goBackwardStack = [Navigate]()
 	private var goForwardStack = [Navigate]()
 
-	private var isGoBackwardUnavailable: Bool {
-		return goBackwardStack.isEmpty
-	}
-	
-	private var isGoForwardUnavailable: Bool {
-		return goForwardStack.isEmpty
-	}
-	
 	override func viewDidLoad() {
         super.viewDidLoad()
 		primaryBackgroundStyle = .sidebar
@@ -233,6 +233,28 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 
+	func goBackward() {
+		if let lastNavigate = lastNavigate {
+			goForwardStack.append(lastNavigate)
+		}
+		
+		lastNavigate = nil
+		
+		if let navigate = goBackwardStack.popLast() {
+			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: false) {
+				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: false)
+			}
+		}
+	}
+	
+	func goForward() {
+		if let navigate = goForwardStack.popLast() {
+			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: false) {
+				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: false)
+			}
+		}
+	}
+	
 	func validateToolbar() {
 		self.sceneDelegate?.validateToolbar()
 	}
@@ -633,28 +655,6 @@ extension MainSplitViewController {
 		
 		sidebarViewController?.selectDocumentContainer(documentContainer, isNavigationBranch: true, animated: true) {
 			completion()
-		}
-	}
-	
-	private func goBackward() {
-		if let lastNavigate = lastNavigate {
-			goForwardStack.append(lastNavigate)
-		}
-		
-		lastNavigate = nil
-		
-		if let navigate = goBackwardStack.popLast() {
-			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: false) {
-				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: false)
-			}
-		}
-	}
-	
-	private func goForward() {
-		if let navigate = goForwardStack.popLast() {
-			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: false) {
-				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: false)
-			}
 		}
 	}
 	

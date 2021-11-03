@@ -17,7 +17,10 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	var editorViewController: EditorViewController? {
 		return children.first as? EditorViewController
 	}
-	
+
+	var isGoBackwardUnavailable: Bool = false
+	var isGoForwardUnavailable: Bool = false
+
 	weak var sceneDelegate: OutlineEditorSceneDelegate?
 	
 	var stateRestorationActivity: NSUserActivity {
@@ -76,6 +79,9 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		return outline
 	}
 
+	func goBackward() {	}
+	func goForward() { }
+	
 	func shutdown() {
 		editorViewController?.edit(nil, isNew: false)
 	}
