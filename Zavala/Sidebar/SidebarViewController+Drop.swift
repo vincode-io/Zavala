@@ -18,10 +18,6 @@ extension SidebarViewController: UICollectionViewDropDelegate {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
 		
-		guard !(container is RecentDocuments) else {
-			return UICollectionViewDropProposal(operation: .forbidden)
-		}
-		
 		guard session.localDragSession != nil else {
 			return UICollectionViewDropProposal(operation: .copy, intent: .insertIntoDestinationIndexPath)
 		}
