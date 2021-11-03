@@ -391,6 +391,15 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 extension MainSplitViewController: SidebarDelegate {
 	
 	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
+		if let lastNavigate = lastNavigate {
+			goBackwardStack.append(lastNavigate)
+			self.lastNavigate = nil
+		}
+		
+		if isNavigationBranch {
+			goForwardStack.removeAll()
+		}
+
 		if let accountID = documentContainer?.account?.id.accountID {
 			AppDefaults.shared.lastSelectedAccountID = accountID
 		}
