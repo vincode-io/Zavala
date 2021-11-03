@@ -154,24 +154,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		if let sidebarWidth = userInfo[UserInfoKeys.sidebarWidth] as? CGFloat {
 			preferredPrimaryColumnWidth = sidebarWidth
 		}
+		
 		if let timelineWidth = userInfo[UserInfoKeys.timelineWidth] as? CGFloat {
 			preferredSupplementaryColumnWidth = timelineWidth
 		}
 
-		guard let documentContainerUserInfo = userInfo[UserInfoKeys.documentContainerID] as? [AnyHashable : AnyHashable],
-			  let documentContainerID = EntityID(userInfo: documentContainerUserInfo) else {
-				  presentError(MainSplitViewControllerError.unknownOutline)
-				  return
-			  }
-
-		var candidateContainer: DocumentContainer? = nil
-		if let container = AccountManager.shared.findDocumentContainer(documentContainerID) {
-			candidateContainer = container
-		} else if let container = AccountManager.shared.findDocumentContainer(.allDocuments(documentContainerID.accountID)) {
-			candidateContainer = container
-		}
-
-		guard let documentContainer = candidateContainer else {
+		let pin = Pin(userInfo: userInfo[UserInfoKeys.pin])
+		
+		guard let documentContainer = pin.container else {
 			presentError(MainSplitViewControllerError.unknownOutline)
 			return
 		}
@@ -179,12 +169,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		sidebarViewController?.selectDocumentContainer(documentContainer, isNavigationBranch: true, animated: false) {
 			self.lastMainControllerToAppear = .timeline
 
-			guard let documentUserInfo = userInfo[UserInfoKeys.documentID] as? [AnyHashable : AnyHashable],
-				  let documentID = EntityID(userInfo: documentUserInfo) else {
-					  return
-				  }
-			
-			guard let document = AccountManager.shared.findDocument(documentID) else {
+			guard let document = pin.document else {
 				self.presentError(MainSplitViewControllerError.unknownOutline)
 				return
 			}

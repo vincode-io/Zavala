@@ -53,7 +53,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 			return
 		}
 		
-		if let entityUserInfo = userInfo[UserInfoKeys.documentID] as? [AnyHashable: AnyHashable], let documentID = EntityID(userInfo: entityUserInfo) {
+		let pin = Pin(userInfo: userInfo[UserInfoKeys.pin])
+		if let documentID = pin.documentID {
 			openDocument(documentID)
 			return
 		}

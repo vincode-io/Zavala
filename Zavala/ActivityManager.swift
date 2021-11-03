@@ -72,7 +72,7 @@ extension ActivityManager {
 		let title = L10n.seeDocumentsIn(documentContainer.name ?? "")
 		activity.title = title
 		
-		activity.userInfo = [UserInfoKeys.documentContainerID: documentContainer.id.userInfo]
+		activity.userInfo = [UserInfoKeys.pin: Pin(container: documentContainer).userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 	
 		activity.isEligibleForSearch = true
@@ -95,11 +95,7 @@ extension ActivityManager {
 		let title = L10n.editDocument(document.title ?? "")
 		activity.title = title
 		
-		if let documentContainer = documentContainer {
-			activity.userInfo = [UserInfoKeys.documentContainerID: documentContainer.id.userInfo, UserInfoKeys.documentID: document.id.userInfo]
-		} else {
-			activity.userInfo = [UserInfoKeys.documentID: document.id.userInfo]
-		}
+		activity.userInfo = [UserInfoKeys.pin: Pin(container: documentContainer, document: document).userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 		
 		if let keywords = document.tags?.map({ $0.name }) {

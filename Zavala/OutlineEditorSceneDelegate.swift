@@ -88,7 +88,7 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 	func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
 		if let url = urlContexts.first?.url, let documentID = EntityID(url: url) {
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-			activity.userInfo = [UserInfoKeys.documentID: documentID.userInfo]
+			activity.userInfo = [UserInfoKeys.pin: Pin(documentID: documentID).userInfo]
 			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 		}
 	}

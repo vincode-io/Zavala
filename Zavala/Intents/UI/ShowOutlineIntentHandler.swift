@@ -35,7 +35,7 @@ public class ShowOutlineIntentHandler: NSObject, ShowOutlineIntentHandling {
 		}
 		
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-		activity.userInfo = [UserInfoKeys.documentID: documentID.userInfo]
+		activity.userInfo = [UserInfoKeys.pin: Pin(documentID: documentID).userInfo]
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 		
 		#if targetEnvironment(macCatalyst)

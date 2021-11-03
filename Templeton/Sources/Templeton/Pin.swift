@@ -11,8 +11,17 @@ public struct Pin: Equatable {
 	public let documentID: EntityID?
 	
 	public var container: DocumentContainer? {
-		guard let containerID = containerID else { return nil }
-		return AccountManager.shared.findDocumentContainer(containerID)
+		if let containerID = containerID {
+			if let container = AccountManager.shared.findDocumentContainer(containerID) {
+				return container
+			}
+		}
+		
+		if let documentID = documentID {
+			return AccountManager.shared.findDocumentContainer(.allDocuments(documentID.accountID))
+		}
+		
+		return nil
 	}
 	
 	public var document: Document? {
@@ -27,17 +36,29 @@ public struct Pin: Equatable {
 		]
 	}
 	
+	public init(containerID: EntityID? = nil, documentID: EntityID? = nil) {
+		self.containerID = containerID
+		self.documentID = documentID
+	}
+
 	public init(container: DocumentContainer? = nil, document: Document? = nil) {
 		self.containerID = container?.id
 		self.documentID = document?.id
 	}
 
-	public init(userInfo: [AnyHashable: AnyHashable]) {
+	public init(userInfo: Any?) {
+		guard let userInfo = userInfo as? [AnyHashable: AnyHashable] else {
+			containerID = nil
+			documentID = nil
+			return
+		}
+		
 		if let userInfo = userInfo["containerID"] as? [AnyHashable : AnyHashable] {
 			containerID = EntityID(userInfo: userInfo)
 		} else {
 			containerID = nil
 		}
+		
 		if let userInfo = userInfo["documentID"] as? [AnyHashable : AnyHashable] {
 			documentID = EntityID(userInfo: userInfo)
 		} else {

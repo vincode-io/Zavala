@@ -329,7 +329,7 @@ extension TimelineViewController {
 		let document = timelineDocuments[indexPath.row]
 		
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-		activity.userInfo = [UserInfoKeys.documentID: document.id.userInfo]
+		activity.userInfo = [UserInfoKeys.pin: Pin(document: document).userInfo]
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 	
