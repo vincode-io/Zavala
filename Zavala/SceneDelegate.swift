@@ -58,7 +58,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		}
 		
 		if let url = connectionOptions.urlContexts.first?.url, let documentID = EntityID(url: url) {
-			mainSplitViewController.openDocument(documentID, isNavigationBranch: false)
+			mainSplitViewController.handleDocument(documentID, isNavigationBranch: false)
 			return
 		}
 		
@@ -87,7 +87,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
 	func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
 		if let url = urlContexts.first?.url, let documentID = EntityID(url: url) {
-			mainSplitViewController.openDocument(documentID, isNavigationBranch: true)
+			mainSplitViewController.handleDocument(documentID, isNavigationBranch: true)
 			return
 		}
 		

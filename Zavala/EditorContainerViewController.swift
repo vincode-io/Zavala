@@ -12,7 +12,7 @@ import SafariServices
 
 class EditorContainerViewController: UIViewController, MainCoordinator {
 	
-	var currentTag: Tag? = nil
+	var currentDocumentContainer: DocumentContainer? = nil
 
 	var editorViewController: EditorViewController? {
 		return children.first as? EditorViewController
@@ -41,8 +41,11 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 
 	func handle(_ activity: NSUserActivity) {
 		guard activity.activityType != NSUserActivity.ActivityType.newOutline else {
-			let outline = newOutline()
-			editorViewController?.edit(outline, isNew: true)
+			let document = newOutlineDocument()
+			editorViewController?.edit(document?.outline, isNew: true)
+			if let document = document {
+				pinWasVisited(Pin(document: document))
+			}
 			return
 		}
 		
@@ -67,17 +70,18 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 			sceneDelegate?.window?.windowScene?.title = outline.title
 			activityManager.selectingDocument(nil, document)
 			editorViewController?.edit(outline, isNew: false)
+			pinWasVisited(Pin(document: document))
 		}
 	}
 
-	func newOutline(title: String? = nil) -> Outline? {
+	func newOutlineDocument(title: String? = nil) -> Document? {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		
 		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return nil }
-		guard let outline = account.createOutline(title: title).outline else { return nil }
-		outline.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
+		let document = account.createOutline(title: title)
+		document.outline?.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
 		
-		return outline
+		return document
 	}
 
 	func goBackwardOne() {	}
@@ -218,7 +222,7 @@ extension EditorContainerViewController: EditorDelegate {
 	func goForward(_ : EditorViewController, to: Int) {}
 
 	func createOutline(_: EditorViewController, title: String) -> Outline? {
-		return newOutline(title: title)
+		return newOutlineDocument(title: title)?.outline
 	}
 
 	func validateToolbar(_: EditorViewController) {

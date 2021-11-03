@@ -55,8 +55,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 	var activityManager = ActivityManager()
 	
-	var currentTag: Tag? {
-		return sidebarViewController?.currentTag
+	var currentDocumentContainer: DocumentContainer? {
+		return sidebarViewController?.currentDocumentContainer
 	}
 
 	var editorViewController: EditorViewController? {
@@ -138,7 +138,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 	func handle(_ userInfo: [AnyHashable: Any], isNavigationBranch: Bool) {
 		if let searchIdentifier = userInfo[CSSearchableItemActivityIdentifier] as? String, let documentID = EntityID(description: searchIdentifier) {
-			openDocument(documentID, isNavigationBranch: isNavigationBranch)
+			handleDocument(documentID, isNavigationBranch: isNavigationBranch)
 			return
 		}
 		
@@ -177,7 +177,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 	
-	func openDocument(_ documentID: EntityID, isNavigationBranch: Bool) {
+	func handleDocument(_ documentID: EntityID, isNavigationBranch: Bool) {
 		guard let account = AccountManager.shared.findAccount(accountID: documentID.accountID),
 			  let document = account.findDocument(documentID) else { return }
 		
@@ -191,6 +191,13 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			sidebarViewController?.selectDocumentContainer(AllDocuments(account: account), isNavigationBranch: true, animated: false) {
 				self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 			}
+		}
+	}
+	
+	func handlePin(_ pin: Pin) {
+		guard let documentContainer = pin.container else { return }
+		sidebarViewController?.selectDocumentContainer(documentContainer, isNavigationBranch: true, animated: false) {
+			self.timelineViewController?.selectDocument(pin.document, isNavigationBranch: true, animated: false)
 		}
 	}
 	
@@ -429,9 +436,15 @@ extension MainSplitViewController: TimelineDelegate {
 				editorViewController?.edit(nil, isNew: isNew)
 			} else {
 				editorViewController?.edit(document?.outline, isNew: isNew, searchText: search.searchText)
+				if let document = document {
+					pinWasVisited(Pin(container: documentContainer, document: document))
+				}
 			}
 		} else {
 			editorViewController?.edit(document?.outline, isNew: isNew)
+			if let document = document {
+				pinWasVisited(Pin(container: documentContainer, document: document))
+			}
 		}
 	}
 
@@ -590,7 +603,7 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 	
 	func quicklyOpenDocument(documentID: EntityID) {
-		openDocument(documentID, isNavigationBranch: true)
+		handleDocument(documentID, isNavigationBranch: true)
 	}
 	
 }

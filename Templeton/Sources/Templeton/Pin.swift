@@ -6,6 +6,10 @@
 
 import Foundation
 
+public extension Notification.Name {
+	static let PinWasVisited = Notification.Name(rawValue: "PinWasVisited")
+}
+
 public struct Pin: Equatable {
 	
 	public let containerID: EntityID?

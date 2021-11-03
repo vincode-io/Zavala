@@ -8,6 +8,7 @@
 import UIKit
 import Intents
 import Templeton
+import AppKit
 
 var appDelegate: AppDelegate!
 
@@ -463,6 +464,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController as? MainCoordinator
 	}
 	
+	private var history = [Pin]()
 	private var documentIndexer: DocumentIndexer?
 	
 	#if targetEnvironment(macCatalyst)
@@ -500,6 +502,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		NotificationCenter.default.addObserver(self, selector: #selector(checkForUserDefaultsChanges), name: UserDefaults.didChangeNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(pinWasVisited), name: .PinWasVisited, object: nil)
 
 		var menuItems = [UIMenuItem]()
 		menuItems.append(UIMenuItem(title: L10n.link, action: .editLink))
@@ -1126,7 +1129,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		// History Menu
 		let navigateMenu = UIMenu(title: "", options: .displayInline, children: [goBackwardOneCommand, goForwardOneCommand])
-		let historyMenu = UIMenu(title: L10n.history, children: [navigateMenu])
+		
+		var historyItems = [UIAction]()
+		for (index, pin) in history.enumerated() {
+			historyItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
+				DispatchQueue.main.async {
+					self?.openHistoryItem(index: index)
+				}
+			})
+		}
+		let historyItemsMenu = UIMenu(title: "", options: .displayInline, children: historyItems)
+
+		let historyMenu = UIMenu(title: L10n.history, children: [navigateMenu, historyItemsMenu])
 		builder.insertSibling(historyMenu, afterMenu: .view)
 
 		// Help Menu
@@ -1134,6 +1148,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 }
+
+// MARK: AppKitPluginDelegate
 
 extension AppDelegate: AppKitPluginDelegate {
 	
@@ -1149,6 +1165,8 @@ extension AppDelegate: AppKitPluginDelegate {
 	
 }
 
+// MARK: ErrorHandler
+
 extension AppDelegate: ErrorHandler {
 	
 	func presentError(_ error: Error, title: String) {
@@ -1161,15 +1179,22 @@ extension AppDelegate: ErrorHandler {
 	
 }
 
+// MARK: Helpers
+
 extension AppDelegate {
 	
 	@objc private func willEnterForeground() {
 		checkForUserDefaultsChanges()
 		AccountManager.shared.resume()
+		
+		if let userInfos = AppDefaults.shared.documentHistory {
+			history = userInfos.compactMap { Pin(userInfo: $0) }
+		}
 	}
 	
 	@objc private func didEnterBackground() {
 		AccountManager.shared.suspend()
+		AppDefaults.shared.documentHistory = history.map { $0.userInfo }
 	}
 	
 	@objc private func checkForUserDefaultsChanges() {
@@ -1191,5 +1216,28 @@ extension AppDelegate {
 			AccountManager.shared.deleteCloudKitAccount()
 		}
 	}
+
+	@objc private func pinWasVisited(_ note: Notification) {
+		guard let pin = note.object as? Pin else { return }
+		
+		history.removeAll(where: { $0.documentID == pin.documentID })
+		history.insert(pin, at: 0)
+		history = history.suffix(15)
+		
+		UIMenuSystem.main.setNeedsRebuild()
+	}
 	
+	private func openHistoryItem(index: Int) {
+		let pin = history[index]
+		
+		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
+			mainSplitViewController.handlePin(pin)
+		} else {
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+			activity.userInfo = [UserInfoKeys.pin: pin.userInfo]
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+		}
+		
+	}
+
 }

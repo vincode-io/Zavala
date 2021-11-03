@@ -6,6 +6,7 @@
 //
 
 import Intents
+import Templeton
 
 public class GetCurrentTagIntentHandler: NSObject, GetCurrentTagIntentHandling {
 	
@@ -17,7 +18,7 @@ public class GetCurrentTagIntentHandler: NSObject, GetCurrentTagIntentHandling {
 	
 	public func handle(intent: GetCurrentTagIntent, completion: @escaping (GetCurrentTagIntentResponse) -> Void) {
 		let response = GetCurrentTagIntentResponse(code: .success, userActivity: nil)
-		response.tagName = mainCoordinator?.currentTag?.name
+		response.tagName = (mainCoordinator?.currentDocumentContainer as? TagDocuments)?.tag?.name
 		completion(response)
 	}
 

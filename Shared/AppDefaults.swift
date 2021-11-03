@@ -31,6 +31,7 @@ final class AppDefaults {
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
 		static let userInterfaceColorPalette = "userInterfaceColorPalette";
 		static let outlineFonts = "outlineFonts"
+		static let documentHistory = "documentHistory"
 	}
 	
 	let isDeveloperBuild: Bool = {
@@ -151,6 +152,15 @@ final class AppDefaults {
 		}
 		set {
 			AppDefaults.store.set(newValue?.userInfo, forKey: Key.outlineFonts)
+		}
+	}
+
+	var documentHistory: [[AnyHashable: AnyHashable]]? {
+		get {
+			return AppDefaults.store.object(forKey: Key.documentHistory) as? [[AnyHashable: AnyHashable]]
+		}
+		set {
+			AppDefaults.store.set(newValue, forKey: Key.documentHistory)
 		}
 	}
 

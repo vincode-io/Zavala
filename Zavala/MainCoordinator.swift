@@ -10,7 +10,7 @@ import Templeton
 import SafariServices
 
 protocol MainCoordinator: UIViewController {
-	var currentTag: Tag? { get }
+	var currentDocumentContainer: DocumentContainer? { get }
 	var editorViewController: EditorViewController? { get }
 	var isGoBackwardUnavailable: Bool { get }
 	var isGoForwardUnavailable: Bool { get }
@@ -398,6 +398,10 @@ extension MainCoordinator {
 		let docPicker = UIDocumentPickerViewController(forExporting: [tempFile], asCopy: true)
 		docPicker.modalPresentationStyle = .formSheet
 		self.present(docPicker, animated: true)
+	}
+	
+	func pinWasVisited(_ pin: Pin) {
+		NotificationCenter.default.post(name: .PinWasVisited, object: pin, userInfo: nil)
 	}
 	
 }
