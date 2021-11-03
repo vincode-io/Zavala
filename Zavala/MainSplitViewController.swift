@@ -21,13 +21,6 @@ enum MainControllerIdentifier {
 	case editor
 }
 
-enum MainSplitViewControllerError: LocalizedError {
-	case unknownOutline
-	var errorDescription: String? {
-		return L10n.unknownOutline
-	}
-}
-
 class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 	weak var sceneDelegate: SceneDelegate?
@@ -162,7 +155,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		let pin = Pin(userInfo: userInfo[UserInfoKeys.pin])
 		
 		guard let documentContainer = pin.container else {
-			presentError(MainSplitViewControllerError.unknownOutline)
 			return
 		}
 		
@@ -170,7 +162,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			self.lastMainControllerToAppear = .timeline
 
 			guard let document = pin.document else {
-				self.presentError(MainSplitViewControllerError.unknownOutline)
 				return
 			}
 			
