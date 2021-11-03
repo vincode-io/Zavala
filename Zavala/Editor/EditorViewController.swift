@@ -2043,7 +2043,10 @@ extension EditorViewController {
 			collectionView.isHidden = true
 			collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: adjustedRowsSection), at: .top, animated: false)
 			DispatchQueue.main.async {
-				self.collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: self.adjustedRowsSection), at: .top, animated: false)
+				let rowCount = self.collectionView.numberOfItems(inSection: self.adjustedRowsSection)
+				if verticleScrollState < rowCount {
+					self.collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: self.adjustedRowsSection), at: .top, animated: false)
+				}
 				self.collectionView.isHidden = false
 			}
 		}
