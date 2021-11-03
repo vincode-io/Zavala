@@ -396,6 +396,7 @@ extension MainSplitViewController: SidebarDelegate {
 	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
 		if let lastNavigate = lastPin {
 			goBackwardStack.append(lastNavigate)
+			goBackwardStack = goBackwardStack.suffix(10)
 			self.lastPin = nil
 		}
 		
@@ -436,6 +437,7 @@ extension MainSplitViewController: TimelineDelegate {
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
 		if let lastNavigate = lastPin, let document = document, lastNavigate.document != document {
 			goBackwardStack.append(lastNavigate)
+			goBackwardStack = goBackwardStack.suffix(10)
 			self.lastPin = nil
 		}
 		
