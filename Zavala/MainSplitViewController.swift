@@ -23,6 +23,13 @@ enum MainControllerIdentifier {
 
 class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
+	struct UserInfoKeys {
+		static let goBackwardStack = "goBackwardStack"
+		static let goForwardStack = "goForwardStack"
+		static let sidebarWidth = "sidebarWidth"
+		static let timelineWidth = "timelineWidth"
+	}
+	
 	weak var sceneDelegate: SceneDelegate?
 
 	var stateRestorationActivity: NSUserActivity {
@@ -152,7 +159,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			preferredSupplementaryColumnWidth = timelineWidth
 		}
 
-		let pin = Pin(userInfo: userInfo[UserInfoKeys.pin])
+		let pin = Pin(userInfo: userInfo[Zavala.UserInfoKeys.pin])
 		
 		guard let documentContainer = pin.container else {
 			return

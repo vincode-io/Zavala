@@ -9,7 +9,4 @@ import Foundation
 
 struct UserInfoKeys {
 	static let pin = "pin"
-	
-	static let sidebarWidth = "sidebarWidth"
-	static let timelineWidth = "timelineWidth"
 }
