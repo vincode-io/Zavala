@@ -30,11 +30,6 @@ enum MainSplitViewControllerError: LocalizedError {
 
 class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
-	private struct Navigate {
-		let container: DocumentContainer
-		let document: Document
-	}
-
 	weak var sceneDelegate: SceneDelegate?
 
 	var stateRestorationActivity: NSUserActivity {
@@ -81,9 +76,9 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 	private var lastMainControllerToAppear = MainControllerIdentifier.none
 	
-	private var lastNavigate: Navigate?
-	private var goBackwardStack = [Navigate]()
-	private var goForwardStack = [Navigate]()
+	private var lastPin: Pin?
+	private var goBackwardStack = [Pin]()
+	private var goForwardStack = [Pin]()
 
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,20 +100,28 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	// MARK: Notifications
 	
 	@objc func accountDocumentsDidChange(_ note: Notification) {
-		let allDocuments = AccountManager.shared.documents
+		let allDocumentIDs = AccountManager.shared.documents.map { $0.id }
 		
-		var replacementGoBackwardStack = [Navigate]()
-		for navigate in goBackwardStack {
-			if allDocuments.contains(navigate.document) {
-				replacementGoBackwardStack.append(navigate)
+		var replacementGoBackwardStack = [Pin]()
+		for pin in goBackwardStack {
+			if let documentID = pin.documentID {
+				if allDocumentIDs.contains(documentID) {
+					replacementGoBackwardStack.append(pin)
+				}
+			} else {
+				replacementGoBackwardStack.append(pin)
 			}
 		}
 		goBackwardStack = replacementGoBackwardStack
 		
-		var replacementGoForwardStack = [Navigate]()
-		for navigate in goForwardStack {
-			if allDocuments.contains(navigate.document) {
-				replacementGoForwardStack.append(navigate)
+		var replacementGoForwardStack = [Pin]()
+		for pin in goForwardStack {
+			if let documentID = pin.documentID {
+				if allDocumentIDs.contains(documentID) {
+					replacementGoForwardStack.append(pin)
+				}
+			} else {
+				replacementGoForwardStack.append(pin)
 			}
 		}
 		goForwardStack = replacementGoForwardStack
@@ -234,11 +237,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 
 	func goBackward() {
-		if let lastNavigate = lastNavigate {
+		if let lastNavigate = lastPin {
 			goForwardStack.append(lastNavigate)
 		}
 		
-		lastNavigate = nil
+		lastPin = nil
 		
 		if let navigate = goBackwardStack.popLast() {
 			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: false) {
@@ -391,9 +394,9 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 extension MainSplitViewController: SidebarDelegate {
 	
 	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
-		if let lastNavigate = lastNavigate {
+		if let lastNavigate = lastPin {
 			goBackwardStack.append(lastNavigate)
-			self.lastNavigate = nil
+			self.lastPin = nil
 		}
 		
 		if isNavigationBranch {
@@ -431,9 +434,9 @@ extension MainSplitViewController: TimelineDelegate {
 	}
 	
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
-		if let lastNavigate = lastNavigate, let document = document, lastNavigate.document != document {
+		if let lastNavigate = lastPin, let document = document, lastNavigate.document != document {
 			goBackwardStack.append(lastNavigate)
-			self.lastNavigate = nil
+			self.lastPin = nil
 		}
 		
 		if isNavigationBranch {
@@ -450,7 +453,7 @@ extension MainSplitViewController: TimelineDelegate {
 				}
 			}
 
-			lastNavigate = Navigate(container: documentContainer, document: document)
+			lastPin = Pin(container: documentContainer, document: document)
 		} else {
 			activityManager.invalidateSelectDocument()
 		}
