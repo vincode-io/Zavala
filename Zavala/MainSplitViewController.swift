@@ -829,7 +829,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				guard let self = self else { return true }
 				var backwardItems = [UIAction]()
 				for (index, pin) in self.goBackwardStack.enumerated() {
-					backwardItems.append(UIAction(title: pin.documentTitle ?? L10n.noTitle) { [weak self] _ in
+					backwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
 						DispatchQueue.main.async {
 							self?.goBackward(to: index)
 						}
@@ -854,7 +854,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				guard let self = self else { return true }
 				var forwardItems = [UIAction]()
 				for (index, pin) in self.goForwardStack.enumerated() {
-					forwardItems.append(UIAction(title: pin.documentTitle ?? L10n.noTitle) { [weak self] _ in
+					forwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
 						DispatchQueue.main.async {
 							self?.goForward(to: index)
 						}

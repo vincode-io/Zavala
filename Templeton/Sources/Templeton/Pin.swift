@@ -10,7 +10,6 @@ public struct Pin: Equatable {
 	
 	public let containerID: EntityID?
 	public let documentID: EntityID?
-	public let documentTitle: String?
 	
 	public var container: DocumentContainer? {
 		if let containerID = containerID {
@@ -34,28 +33,24 @@ public struct Pin: Equatable {
 	public var userInfo: [AnyHashable: AnyHashable] {
 		return [
 			"containerID": containerID?.userInfo,
-			"documentID": documentID?.userInfo,
-			"documentTitle": documentTitle
+			"documentID": documentID?.userInfo
 		]
 	}
 	
 	public init(containerID: EntityID? = nil, documentID: EntityID? = nil) {
 		self.containerID = containerID
 		self.documentID = documentID
-		self.documentTitle = nil
 	}
 
 	public init(container: DocumentContainer? = nil, document: Document? = nil) {
 		self.containerID = container?.id
 		self.documentID = document?.id
-		self.documentTitle = document?.title
 	}
 
 	public init(userInfo: Any?) {
 		guard let userInfo = userInfo as? [AnyHashable: AnyHashable] else {
 			self.containerID = nil
 			self.documentID = nil
-			self.documentTitle = nil
 			return
 		}
 		
@@ -69,12 +64,6 @@ public struct Pin: Equatable {
 			self.documentID = EntityID(userInfo: userInfo)
 		} else {
 			self.documentID = nil
-		}
-
-		if let documentTitle = userInfo["documentTitle"] as? String{
-			self.documentTitle = documentTitle
-		} else {
-			self.documentTitle = nil
 		}
 	}
 	

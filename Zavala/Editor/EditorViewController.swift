@@ -748,7 +748,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		var backwardItems = [UIAction]()
 		for (index, pin) in delegate.editorViewControllerGoBackwardStack.enumerated() {
-			backwardItems.append(UIAction(title: pin.documentTitle ?? L10n.noTitle) { [weak self] _ in
+			backwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
 				guard let self = self else { return }
 				DispatchQueue.main.async {
 					delegate.goBackward(self, to: index)
@@ -759,7 +759,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		var forwardItems = [UIAction]()
 		for (index, pin) in delegate.editorViewControllerGoForwardStack.enumerated() {
-			forwardItems.append(UIAction(title: pin.documentTitle ?? L10n.noTitle) { [weak self] _ in
+			forwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
 				guard let self = self else { return }
 				DispatchQueue.main.async {
 					delegate.goForward(self, to: index)
