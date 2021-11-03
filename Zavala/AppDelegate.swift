@@ -220,15 +220,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									 input: "\u{8}",
 									 modifierFlags: [.command])
 	
-	let goBackwardCommand = UIKeyCommand(title: L10n.back,
-										 action: #selector(goBackwardCommand(_:)),
-										 input: "[",
-										 modifierFlags: [.command])
+	let goBackwardOneCommand = UIKeyCommand(title: L10n.back,
+											action: #selector(goBackwardOneCommand(_:)),
+											input: "[",
+											modifierFlags: [.command])
 	
-	let goForwardCommand = UIKeyCommand(title: L10n.forward,
-										action: #selector(goForwardCommand(_:)),
-										input: "]",
-										modifierFlags: [.command])
+	let goForwardOneCommand = UIKeyCommand(title: L10n.forward,
+										   action: #selector(goForwardOneCommand(_:)),
+										   input: "]",
+										   modifierFlags: [.command])
 	
 	let insertRowCommand = UIKeyCommand(title: L10n.addRowAbove,
 										action: #selector(insertRowCommand(_:)),
@@ -669,12 +669,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func goBackwardCommand(_ sender: Any?) {
-		mainCoordinator?.goBackward()
+	@objc func goBackwardOneCommand(_ sender: Any?) {
+		mainCoordinator?.goBackwardOne()
 	}
 	
-	@objc func goForwardCommand(_ sender: Any?) {
-		mainCoordinator?.goForward()
+	@objc func goForwardOneCommand(_ sender: Any?) {
+		mainCoordinator?.goForwardOne()
 	}
 	
 	@objc func insertRowCommand(_ sender: Any?) {
@@ -888,11 +888,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(goBackwardCommand(_:)):
+		case #selector(goBackwardOneCommand(_:)):
 			if mainCoordinator?.isGoBackwardUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(goForwardCommand(_:)):
+		case #selector(goForwardOneCommand(_:)):
 			if mainCoordinator?.isGoForwardUnavailable ?? true {
 				command.attributes = .disabled
 			}
@@ -1125,7 +1125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 
 		// History Menu
-		let navigateMenu = UIMenu(title: "", options: .displayInline, children: [goBackwardCommand, goForwardCommand])
+		let navigateMenu = UIMenu(title: "", options: .displayInline, children: [goBackwardOneCommand, goForwardOneCommand])
 		let historyMenu = UIMenu(title: L10n.history, children: [navigateMenu])
 		builder.insertSibling(historyMenu, afterMenu: .view)
 

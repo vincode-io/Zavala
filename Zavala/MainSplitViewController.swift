@@ -135,7 +135,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		if let goBackwardStackUserInfos = userInfo[UserInfoKeys.goBackwardStack] as? [Any] {
 			goBackwardStack = goBackwardStackUserInfos.compactMap { Pin(userInfo: $0) }
 		}
-		
+
 		if let goForwardStackUserInfos = userInfo[UserInfoKeys.goForwardStack] as? [Any] {
 			goForwardStack = goForwardStackUserInfos.compactMap { Pin(userInfo: $0) }
 		}
@@ -209,29 +209,15 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			
 		}
 	}
+	
+	func goBackwardOne() {
+		goBackward(to: 0)
+	}
+	
+	func goForwardOne() {
+		goForward(to: 0)
+	}
 
-	func goBackward() {
-		if let lastNavigate = lastPin {
-			goForwardStack.append(lastNavigate)
-		}
-		
-		lastPin = nil
-		
-		if let navigate = goBackwardStack.popLast() {
-			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: false) {
-				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: false)
-			}
-		}
-	}
-	
-	func goForward() {
-		if let navigate = goForwardStack.popLast() {
-			sidebarViewController?.selectDocumentContainer(navigate.container, isNavigationBranch: false, animated: false) {
-				self.timelineViewController?.selectDocument(navigate.document, isNavigationBranch: false, animated: false)
-			}
-		}
-	}
-	
 	func validateToolbar() {
 		self.sceneDelegate?.validateToolbar()
 	}
@@ -277,11 +263,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 
 	@objc func goBackwardOne(_ sender: Any?) {
-		goBackward()
+		goBackward(to: 0)
 	}
 
 	@objc func goForwardOne(_ sender: Any?) {
-		goForward()
+		goForward(to: 0)
 	}
 
 	@objc func link(_ sender: Any?) {
@@ -368,13 +354,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 extension MainSplitViewController: SidebarDelegate {
 	
 	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
-		if let lastNavigate = lastPin {
-			goBackwardStack.append(lastNavigate)
+		if isNavigationBranch, let lastPin = lastPin {
+			goBackwardStack.insert(lastPin, at: 0)
 			goBackwardStack = goBackwardStack.suffix(10)
 			self.lastPin = nil
-		}
-		
-		if isNavigationBranch {
 			goForwardStack.removeAll()
 		}
 
@@ -409,13 +392,10 @@ extension MainSplitViewController: TimelineDelegate {
 	}
 	
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
-		if let lastNavigate = lastPin, let document = document, lastNavigate.document != document {
-			goBackwardStack.append(lastNavigate)
+		if isNavigationBranch, let lastPin = lastPin, let document = document, lastPin.document != document {
+			goBackwardStack.insert(lastPin, at: 0)
 			goBackwardStack = goBackwardStack.suffix(10)
 			self.lastPin = nil
-		}
-		
-		if isNavigationBranch {
 			goForwardStack.removeAll()
 		}
 
@@ -474,7 +454,6 @@ extension MainSplitViewController: TimelineDelegate {
 // MARK: EditorDelegate
 
 extension MainSplitViewController: EditorDelegate {
-	
 	var editorViewControllerIsGoBackUnavailable: Bool {
 		return isGoBackwardUnavailable
 	}
@@ -483,12 +462,20 @@ extension MainSplitViewController: EditorDelegate {
 		return isGoForwardUnavailable
 	}
 	
-	func goBackward(_: EditorViewController) {
-		goBackward()
+	var editorViewControllerGoBackwardStack: [Pin] {
+		return goBackwardStack
 	}
 	
-	func goForward(_: EditorViewController) {
-		goForward()
+	var editorViewControllerGoForwardStack: [Pin] {
+		return goForwardStack
+	}
+	
+	func goBackward(_: EditorViewController, to: Int) {
+		goBackward(to: to)
+	}
+	
+	func goForward(_: EditorViewController, to: Int) {
+		goForward(to: to)
 	}
 	
 	
@@ -647,7 +634,7 @@ extension MainSplitViewController {
 	}
 	
 	private func cleanUpStacks() {
-		let allDocumentIDs = AccountManager.shared.documents.map { $0.id }
+		let allDocumentIDs = AccountManager.shared.activeDocuments.map { $0.id }
 		
 		var replacementGoBackwardStack = [Pin]()
 		for pin in goBackwardStack {
@@ -672,6 +659,39 @@ extension MainSplitViewController {
 			}
 		}
 		goForwardStack = replacementGoForwardStack
+	}
+	
+	private func goBackward(to: Int) {
+		if let lastPin = lastPin {
+			goForwardStack.insert(lastPin, at: 0)
+		}
+		
+		for _ in 0..<to {
+			let pin = goBackwardStack.removeFirst()
+			goForwardStack.insert(pin, at: 0)
+		}
+		
+		let pin = goBackwardStack.removeFirst()
+		lastPin = pin
+		sidebarViewController?.selectDocumentContainer(pin.container, isNavigationBranch: false, animated: false) {
+			self.timelineViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
+		}
+	}
+	
+	private func goForward(to:  Int) {
+		if let lastPin = lastPin {
+			goBackwardStack.insert(lastPin, at: 0)
+		}
+		
+		for _ in 0..<to {
+			let pin = goForwardStack.removeFirst()
+			goBackwardStack.insert(pin, at: 0)
+		}
+		
+		let pin = goForwardStack.removeFirst()
+		sidebarViewController?.selectDocumentContainer(pin.container, isNavigationBranch: false, animated: false) {
+			self.timelineViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
+		}
 	}
 	
 }
@@ -789,27 +809,55 @@ extension MainSplitViewController: NSToolbarDelegate {
 			groupItem.controlRepresentation = .expanded
 			groupItem.label = L10n.navigation
 			
-			let goBackwardItem = ValidatingToolbarItem(itemIdentifier: .goBackward)
-			goBackwardItem.checkForUnavailable = { [weak self] _ in
-				return self?.isGoBackwardUnavailable ?? true
+			let goBackwardItem = ValidatingMenuToolbarItem(itemIdentifier: .goBackward)
+			
+			goBackwardItem.checkForUnavailable = { [weak self] toolbarItem in
+				guard let self = self else { return true }
+				var backwardItems = [UIAction]()
+				for (index, pin) in self.goBackwardStack.enumerated() {
+					backwardItems.append(UIAction(title: pin.documentTitle ?? L10n.noTitle) { [weak self] _ in
+						DispatchQueue.main.async {
+							self?.goBackward(to: index)
+						}
+					})
+				}
+				toolbarItem.itemMenu = UIMenu(title: "", children: backwardItems)
+				
+				return self.isGoBackwardUnavailable
 			}
+			
 			goBackwardItem.image = AppAssets.goBackward.symbolSizedForCatalyst()
 			goBackwardItem.label = L10n.goBackward
 			goBackwardItem.toolTip = L10n.goBackward
 			goBackwardItem.isBordered = true
 			goBackwardItem.action = #selector(goBackwardOne(_:))
 			goBackwardItem.target = self
+			goBackwardItem.showsIndicator = false
 
-			let goForwardItem = ValidatingToolbarItem(itemIdentifier: .goForward)
-			goForwardItem.checkForUnavailable = { [weak self] _ in
-				return self?.isGoForwardUnavailable ?? true
+			let goForwardItem = ValidatingMenuToolbarItem(itemIdentifier: .goForward)
+			
+			goForwardItem.checkForUnavailable = { [weak self] toolbarItem in
+				guard let self = self else { return true }
+				var forwardItems = [UIAction]()
+				for (index, pin) in self.goForwardStack.enumerated() {
+					forwardItems.append(UIAction(title: pin.documentTitle ?? L10n.noTitle) { [weak self] _ in
+						DispatchQueue.main.async {
+							self?.goForward(to: index)
+						}
+					})
+				}
+				toolbarItem.itemMenu = UIMenu(title: "", children: forwardItems)
+				
+				return self.isGoForwardUnavailable
 			}
+			
 			goForwardItem.image = AppAssets.goForward.symbolSizedForCatalyst()
 			goForwardItem.label = L10n.goForward
 			goForwardItem.toolTip = L10n.goForward
 			goForwardItem.isBordered = true
 			goForwardItem.action = #selector(goForwardOne(_:))
 			goForwardItem.target = self
+			goForwardItem.showsIndicator = false
 			
 			groupItem.subitems = [goBackwardItem, goForwardItem]
 			

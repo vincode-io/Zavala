@@ -80,8 +80,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		return outline
 	}
 
-	func goBackward() {	}
-	func goForward() { }
+	func goBackwardOne() {	}
+	func goForwardOne() { }
 	
 	func shutdown() {
 		editorViewController?.edit(nil, isNew: false)
@@ -208,12 +208,14 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 // MARK: EditorDelegate
 
 extension EditorContainerViewController: EditorDelegate {
-	
+
 	// These aren't used when running in the EditorContainerViewController
 	var editorViewControllerIsGoBackUnavailable: Bool { return true }
 	var editorViewControllerIsGoForwardUnavailable: Bool { return true  }
-	func goBackward(_ : EditorViewController) {}
-	func goForward(_ : EditorViewController) {}
+	var editorViewControllerGoBackwardStack: [Pin] { return [Pin]() }
+	var editorViewControllerGoForwardStack: [Pin] { return [Pin]() }
+	func goBackward(_ : EditorViewController, to: Int) {}
+	func goForward(_ : EditorViewController, to: Int) {}
 
 	func createOutline(_: EditorViewController, title: String) -> Outline? {
 		return newOutline(title: title)

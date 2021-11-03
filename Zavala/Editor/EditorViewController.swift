@@ -18,8 +18,10 @@ extension Selector {
 protocol EditorDelegate: AnyObject {
 	var editorViewControllerIsGoBackUnavailable: Bool { get }
 	var editorViewControllerIsGoForwardUnavailable: Bool { get }
-	func goBackward(_ : EditorViewController)
-	func goForward(_ : EditorViewController)
+	var editorViewControllerGoBackwardStack: [Pin] { get }
+	var editorViewControllerGoForwardStack: [Pin] { get }
+	func goBackward(_: EditorViewController, to: Int)
+	func goForward(_: EditorViewController, to: Int)
 	func createOutline(_ : EditorViewController, title: String) -> Outline?
 	func validateToolbar(_ : EditorViewController)
 	func showGetInfo(_: EditorViewController, outline: Outline)
@@ -381,9 +383,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
 		
-		goBackwardButton = UIBarButtonItem(image: AppAssets.goBackward, style: .plain, target: self, action: #selector(goBackward))
+		goBackwardButton = UIBarButtonItem(image: AppAssets.goBackward, style: .plain, target: self, action: #selector(goBackwardOne))
 		goBackwardButton.title = L10n.goBackward
-		goForwardButton = UIBarButtonItem(image: AppAssets.goForward, style: .plain, target: self, action: #selector(goForward))
+		goForwardButton = UIBarButtonItem(image: AppAssets.goForward, style: .plain, target: self, action: #selector(goForwardOne))
 		goForwardButton.title = L10n.goForward
 		moveRightButton = UIBarButtonItem(image: AppAssets.moveRight, style: .plain, target: self, action: #selector(moveCurrentRowsRight))
 		moveRightButton.title = L10n.moveLeft
@@ -406,7 +408,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem, goForwardButton, goBackwardButton]
 		}
 
-		updateNavigationUI(editMode: false)
+		updatePhoneUI(editMode: false)
 		updateUI()
 		collectionView.reloadData()
 		
@@ -653,14 +655,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		if note.name == UIResponder.keyboardWillHideNotification {
 			collectionView.contentInset = EditorViewController.defaultContentInsets
-			updateNavigationUI(editMode: false)
+			updatePhoneUI(editMode: false)
 			currentKeyboardHeight = 0
 		} else {
 			let newInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
 			if collectionView.contentInset != newInsets {
 				collectionView.contentInset = newInsets
 			}
-			updateNavigationUI(editMode: true)
+			updatePhoneUI(editMode: true)
 			makeCursorVisibleIfNecessary()
 			currentKeyboardHeight = keyboardViewEndFrame.height
 		}
@@ -698,6 +700,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		outline?.unload()
 		clearUndoableCommands()
 	
+		updateNavigationMenus()
+		
 		// Assign the new Outline and load it
 		outline = newOutline
 		
@@ -729,7 +733,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		moveCursorToTitleOnNew()
 	}
 	
-	func updateNavigationUI(editMode: Bool) {
+	func updatePhoneUI(editMode: Bool) {
 		if traitCollection.userInterfaceIdiom == .phone {
 			if editMode {
 				navigationItem.rightBarButtonItems = [doneBarButtonItem, filterBarButtonItem, ellipsisBarButtonItem, goForwardButton, goBackwardButton]
@@ -737,6 +741,32 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem, goForwardButton, goBackwardButton]
 			}
 		}
+	}
+	
+	func updateNavigationMenus() {
+		guard let delegate = delegate else { return }
+		
+		var backwardItems = [UIAction]()
+		for (index, pin) in delegate.editorViewControllerGoBackwardStack.enumerated() {
+			backwardItems.append(UIAction(title: pin.documentTitle ?? L10n.noTitle) { [weak self] _ in
+				guard let self = self else { return }
+				DispatchQueue.main.async {
+					delegate.goBackward(self, to: index)
+				}
+			})
+		}
+		goBackwardButton.menu = UIMenu(title: "", children: backwardItems)
+
+		var forwardItems = [UIAction]()
+		for (index, pin) in delegate.editorViewControllerGoForwardStack.enumerated() {
+			forwardItems.append(UIAction(title: pin.documentTitle ?? L10n.noTitle) { [weak self] _ in
+				guard let self = self else { return }
+				DispatchQueue.main.async {
+					delegate.goForward(self, to: index)
+				}
+			})
+		}
+		goForwardButton.menu = UIMenu(title: "", children: forwardItems)
 	}
 	
 	func updateUI() {
@@ -1070,12 +1100,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		delegate?.showGetInfo(self, outline: outline)
 	}
 	
-	@objc func goBackward() {
-		delegate?.goBackward(self)
+	@objc func goBackwardOne() {
+		delegate?.goBackward(self, to: 0)
 	}
 
-	@objc func goForward() {
-		delegate?.goForward(self)
+	@objc func goForwardOne() {
+		delegate?.goForward(self, to: 0)
 	}
 
 	@objc func moveCurrentRowsLeft() {

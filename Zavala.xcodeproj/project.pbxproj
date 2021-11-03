@@ -185,6 +185,7 @@
 		51F2DC7B2586E101003BD5CE /* EditorTextRowNoteTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2DC7A2586E101003BD5CE /* EditorTextRowNoteTextView.swift */; };
 		51F36C5826FAB5C90075A273 /* ExportMarkdownDocActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F36C5726FAB5C90075A273 /* ExportMarkdownDocActivity.swift */; };
 		51F83B862725BFF30015FC06 /* ReloadVisibleItemsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F83B852725BFF30015FC06 /* ReloadVisibleItemsOperation.swift */; };
+		51FF2A6B2732B97800208A75 /* ValidatingMenuToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FF2A6A2732B97800208A75 /* ValidatingMenuToolbarItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -431,6 +432,7 @@
 		51F2DC7A2586E101003BD5CE /* EditorTextRowNoteTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowNoteTextView.swift; sourceTree = "<group>"; };
 		51F36C5726FAB5C90075A273 /* ExportMarkdownDocActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportMarkdownDocActivity.swift; sourceTree = "<group>"; };
 		51F83B852725BFF30015FC06 /* ReloadVisibleItemsOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReloadVisibleItemsOperation.swift; sourceTree = "<group>"; };
+		51FF2A6A2732B97800208A75 /* ValidatingMenuToolbarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatingMenuToolbarItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -498,6 +500,7 @@
 				516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */,
 				511B29F126014FBA00C04239 /* EnhancedTextField.swift */,
 				51A1EC4327243B3600463A15 /* GenericRowIdentifier.swift */,
+				51341E03272B55080005425B /* InsetLabel.swift */,
 				5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */,
 				515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */,
 				517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */,
@@ -527,8 +530,8 @@
 				517A9E4926055C8B00EF346A /* UIWindow+.swift */,
 				51DEE82726FF951E006DAA56 /* UIWindowSceneDelegate+.swift */,
 				51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */,
+				51FF2A6A2732B97800208A75 /* ValidatingMenuToolbarItem.swift */,
 				51E14F1A255F23C100320EDB /* ValidatingToolbarItem.swift */,
-				51341E03272B55080005425B /* InsetLabel.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -1130,6 +1133,7 @@
 				51D977FA257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift in Sources */,
 				5191850927137DFD00B7E177 /* GetCurrentTagIntentHandler.swift in Sources */,
 				517AF69C25E0862E0044DBAB /* AppDefaults.swift in Sources */,
+				51FF2A6B2732B97800208A75 /* ValidatingMenuToolbarItem.swift in Sources */,
 				517A9E1B2602ACE000EF346A /* OutlineEditorSceneDelegate.swift in Sources */,
 				51F2859B25AD12800019C573 /* SidebarSearchContentView.swift in Sources */,
 				51C030B8257E198B00609262 /* EditorTitleTextView.swift in Sources */,

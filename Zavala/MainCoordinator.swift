@@ -14,8 +14,8 @@ protocol MainCoordinator: UIViewController {
 	var editorViewController: EditorViewController? { get }
 	var isGoBackwardUnavailable: Bool { get }
 	var isGoForwardUnavailable: Bool { get }
-	func goBackward()
-	func goForward()
+	func goBackwardOne()
+	func goForwardOne()
 }
 
 extension MainCoordinator {
