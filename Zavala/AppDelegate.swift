@@ -8,7 +8,6 @@
 import UIKit
 import Intents
 import Templeton
-import AppKit
 
 var appDelegate: AppDelegate!
 
@@ -66,12 +65,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		menuKeyCommands.append(deleteCommand)
 
-		if !(mainCoordinator?.isGoBackwardUnavailable ?? true) {
-			menuKeyCommands.append(goBackwardCommand)
+		if !(mainCoordinator?.isGoBackwardOneUnavailable ?? true) {
+			menuKeyCommands.append(goBackwardOneCommand)
 		}
 		
 		if !(mainCoordinator?.isGoForwardUnavailable ?? true) {
-			menuKeyCommands.append(goForwardCommand)
+			menuKeyCommands.append(goForwardOneCommand)
 		}
 		
 		if !(mainCoordinator?.isInsertImageUnavailable ?? true) {
@@ -892,11 +891,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				command.attributes = .disabled
 			}
 		case #selector(goBackwardOneCommand(_:)):
-			if mainCoordinator?.isGoBackwardUnavailable ?? true {
+			if mainCoordinator?.isGoBackwardOneUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(goForwardOneCommand(_:)):
-			if mainCoordinator?.isGoForwardUnavailable ?? true {
+			if mainCoordinator?.isGoForwardOneUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(insertRowCommand(_:)):

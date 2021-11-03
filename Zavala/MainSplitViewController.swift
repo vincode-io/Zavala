@@ -63,11 +63,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		viewController(for: .secondary) as? EditorViewController
 	}
 	
-	var isGoBackwardUnavailable: Bool {
+	var isGoBackwardOneUnavailable: Bool {
 		return goBackwardStack.isEmpty
 	}
 	
-	var isGoForwardUnavailable: Bool {
+	var isGoForwardOneUnavailable: Bool {
 		return goForwardStack.isEmpty
 	}
 	
@@ -478,11 +478,11 @@ extension MainSplitViewController: TimelineDelegate {
 
 extension MainSplitViewController: EditorDelegate {
 	var editorViewControllerIsGoBackUnavailable: Bool {
-		return isGoBackwardUnavailable
+		return isGoBackwardOneUnavailable
 	}
 	
 	var editorViewControllerIsGoForwardUnavailable: Bool {
-		return isGoForwardUnavailable
+		return isGoForwardOneUnavailable
 	}
 	
 	var editorViewControllerGoBackwardStack: [Pin] {
@@ -850,7 +850,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				}
 				toolbarItem.itemMenu = UIMenu(title: "", children: backwardItems)
 				
-				return self.isGoBackwardUnavailable
+				return self.isGoBackwardOneUnavailable
 			}
 			
 			goBackwardItem.image = AppAssets.goBackward.symbolSizedForCatalyst()
@@ -875,7 +875,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				}
 				toolbarItem.itemMenu = UIMenu(title: "", children: forwardItems)
 				
-				return self.isGoForwardUnavailable
+				return self.isGoForwardOneUnavailable
 			}
 			
 			goForwardItem.image = AppAssets.goForward.symbolSizedForCatalyst()

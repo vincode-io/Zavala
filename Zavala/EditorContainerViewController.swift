@@ -18,8 +18,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		return children.first as? EditorViewController
 	}
 
-	var isGoBackwardUnavailable: Bool = false
-	var isGoForwardUnavailable: Bool = false
+	var isGoBackwardOneUnavailable: Bool = false
+	var isGoForwardOneUnavailable: Bool = false
 
 	weak var sceneDelegate: OutlineEditorSceneDelegate?
 	
