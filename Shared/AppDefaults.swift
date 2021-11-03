@@ -31,9 +31,6 @@ final class AppDefaults {
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
 		static let userInterfaceColorPalette = "userInterfaceColorPalette";
 		static let outlineFonts = "outlineFonts"
-		static let jekyllRootBookmark = "jekyllRootBookmark"
-		static let jekyllPostsBookmark = "jekyllPostsBookmark"
-		static let jekyllImagesBookmark = "jekyllImagesBookmark"
 	}
 	
 	let isDeveloperBuild: Bool = {
@@ -154,33 +151,6 @@ final class AppDefaults {
 		}
 		set {
 			AppDefaults.store.set(newValue?.userInfo, forKey: Key.outlineFonts)
-		}
-	}
-
-	var jekyllRootBookmark: Data? {
-		get {
-			return Self.data(for: Key.jekyllRootBookmark)
-		}
-		set {
-			Self.setData(for: Key.jekyllRootBookmark, newValue)
-		}
-	}
-
-	var jekyllPostsBookmark: Data? {
-		get {
-			return Self.data(for: Key.jekyllPostsBookmark)
-		}
-		set {
-			Self.setData(for: Key.jekyllPostsBookmark, newValue)
-		}
-	}
-
-	var jekyllImagesBookmark: Data? {
-		get {
-			return Self.data(for: Key.jekyllImagesBookmark)
-		}
-		set {
-			Self.setData(for: Key.jekyllImagesBookmark, newValue)
 		}
 	}
 
