@@ -69,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(goBackwardOneCommand)
 		}
 		
-		if !(mainCoordinator?.isGoForwardUnavailable ?? true) {
+		if !(mainCoordinator?.isGoForwardOneUnavailable ?? true) {
 			menuKeyCommands.append(goForwardOneCommand)
 		}
 		
