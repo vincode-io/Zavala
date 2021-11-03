@@ -105,7 +105,15 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	// MARK: Notifications
 	
 	@objc func accountDocumentsDidChange(_ note: Notification) {
-		cleanUpStacks()
+		cleanUpNavigationStacks()
+	}
+
+	@objc func accountManagerAccountsDidChange(_ note: Notification) {
+		cleanUpNavigationStacks()
+	}
+
+	@objc func accountMetadataDidChange(_ note: Notification) {
+		cleanUpNavigationStacks()
 	}
 
 	// MARK: API
@@ -119,6 +127,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		editorViewController?.delegate = self
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange(_:)), name: .AccountManagerAccountsDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
 	}
 	
 	func handle(_ activity: NSUserActivity, isNavigationBranch: Bool) {
@@ -140,7 +150,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			goForwardStack = goForwardStackUserInfos.compactMap { Pin(userInfo: $0) }
 		}
 
-		cleanUpStacks()
+		cleanUpNavigationStacks()
 		
 		if let sidebarWidth = userInfo[UserInfoKeys.sidebarWidth] as? CGFloat {
 			preferredPrimaryColumnWidth = sidebarWidth
@@ -633,7 +643,7 @@ extension MainSplitViewController {
 		}
 	}
 	
-	private func cleanUpStacks() {
+	private func cleanUpNavigationStacks() {
 		let allDocumentIDs = AccountManager.shared.activeDocuments.map { $0.id }
 		
 		var replacementGoBackwardStack = [Pin]()
@@ -659,6 +669,10 @@ extension MainSplitViewController {
 			}
 		}
 		goForwardStack = replacementGoForwardStack
+		
+		if let lastPinDocumentID = lastPin?.documentID, !allDocumentIDs.contains(lastPinDocumentID) {
+			self.lastPin = nil
+		}
 	}
 	
 	private func goBackward(to: Int) {
