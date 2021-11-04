@@ -97,14 +97,14 @@ class EditorTextRowContentView: UIView, UIContentView {
 		let adjustedLeadingIndention: CGFloat
 		let adjustedTrailingIndention: CGFloat
 		if traitCollection.userInterfaceIdiom == .mac {
-			adjustedLeadingIndention = configuration.indentationWidth + 8
+			adjustedLeadingIndention = configuration.indentationWidth + 4
 			adjustedTrailingIndention = -8
 		} else {
 			if traitCollection.horizontalSizeClass != .compact {
-				adjustedLeadingIndention = configuration.indentationWidth + 12
+				adjustedLeadingIndention = configuration.indentationWidth + 6
 				adjustedTrailingIndention = -8
 			} else {
-				adjustedLeadingIndention = configuration.indentationWidth
+				adjustedLeadingIndention = 0
 				adjustedTrailingIndention = -25
 			}
 		}
@@ -141,7 +141,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 			addSubview(bullet)
 			
 			if traitCollection.horizontalSizeClass != .compact {
-				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? 1 : 3
+				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -4 : -2
 				NSLayoutConstraint.activate([
 					bullet.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth + indentAdjustment),
 					bullet.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
@@ -156,7 +156,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 			addSubview(disclosureIndicator)
 
 			if traitCollection.horizontalSizeClass != .compact {
-				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -6 : -16
+				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -12 : -22
 				NSLayoutConstraint.activate([
 					disclosureIndicator.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth + indentAdjustment),
 					disclosureIndicator.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
@@ -177,23 +177,12 @@ class EditorTextRowContentView: UIView, UIContentView {
 				disclosureIndicator.setDisclosure(state: .partial, animated: false)
 			}
 		}
-		
-		if configuration.indentionLevel < barViews.count {
-			for i in (configuration.indentionLevel..<barViews.count).reversed() {
-				barViews[i].removeFromSuperview()
-				barViews.remove(at: i)
-			}
-		}
 
 		addBarViews()
 	}
 	
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 		if traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
-			for i in 0..<barViews.count {
-				barViews[i].removeFromSuperview()
-			}
-			barViews.removeAll()
 			addBarViews()
 		}
 	}
@@ -338,19 +327,26 @@ extension EditorTextRowContentView {
 	}
 	
 	private func addBarViews() {
-		let configuration = appliedConfiguration as EditorTextRowContentConfiguration
+		for i in 0..<barViews.count {
+			barViews[i].removeFromSuperview()
+		}
+		barViews.removeAll()
+
+		let config = appliedConfiguration as EditorTextRowContentConfiguration
 		
-		if configuration.indentionLevel > 0 {
+		if config.indentionLevel > 0 {
 			let barViewsCount = barViews.count
-			for i in (1...configuration.indentionLevel) {
+			for i in (1...config.indentionLevel) {
 				if i > barViewsCount {
-					addBarView(indentLevel: i, indentWidth: configuration.indentationWidth, hasChevron: configuration.isChevronShowing)
+					addBarView(indentLevel: i)
 				}
 			}
 		}
 	}
 	
-	private func addBarView(indentLevel: Int, indentWidth: CGFloat, hasChevron: Bool) {
+	private func addBarView(indentLevel: Int) {
+		let config = appliedConfiguration as EditorTextRowContentConfiguration
+		
 		let barView = UIView()
 		barView.backgroundColor = AppAssets.verticalBar
 		barView.translatesAutoresizingMaskIntoConstraints = false
@@ -359,12 +355,12 @@ extension EditorTextRowContentView {
 
 		var indention: CGFloat
 		if traitCollection.userInterfaceIdiom == .mac {
-			indention = CGFloat(28 - ((indentLevel + 1) * 13))
+			indention = CGFloat(28 - (CGFloat(indentLevel + 1) * config.indentationWidth))
 		} else {
 			if traitCollection.horizontalSizeClass != .compact {
-				indention = CGFloat(30 - ((indentLevel + 1) * 13))
+				indention = CGFloat(30 - (CGFloat(indentLevel + 1) * config.indentationWidth))
 			} else {
-				indention = CGFloat(19 - (indentLevel * 10))
+				indention = CGFloat(9 - (CGFloat(indentLevel) * config.indentationWidth))
 			}
 		}
 

@@ -73,9 +73,9 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 
 		// We make the indentation width the same regardless of device if not compact
 		if traitCollection.horizontalSizeClass != .compact {
-			indentationWidth = 13
+			indentationWidth = 16
 		} else {
-			indentationWidth = 10
+			indentationWidth = 13
 		}
 		
 		var content = EditorTextRowContentConfiguration(row: row, indentionLevel: indentationLevel, indentationWidth: indentationWidth, isNotesHidden: isNotesHidden, isSearching: isSearching)
