@@ -162,15 +162,16 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 		editorDelegate?.editLink(self, result.0, text: result.1, range: result.2)
 	}
 	
-	override func rowWasUpdated() {
-		if row?.isComplete ?? false {
+	override func update(row: Row, indentionLevel: Int) {
+		self.row = row
+		self.indentionLevel = indentionLevel
+
+		if row.isComplete {
 			linkTextAttributes = [.foregroundColor: UIColor.tertiaryLabel, .underlineStyle: 1]
 		} else {
 			linkTextAttributes = [.foregroundColor: UIColor.label, .underlineStyle: 1]
 		}
-	}
-	
-	override func indentionLevelWasUpdated() {
+
 		font = OutlineFontCache.shared.topic(level: indentionLevel)
 	}
 	

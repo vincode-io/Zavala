@@ -315,8 +315,8 @@ extension EditorTextRowContentView {
 	}
 	
 	private func configureTopicTextView(configuration: EditorTextRowContentConfiguration) {
-		topicTextView.row = configuration.row
-		topicTextView.indentionLevel = configuration.indentionLevel
+		guard let row = configuration.row else { return }
+		topicTextView.update(row: row, indentionLevel: configuration.indentionLevel)
 
 		var attrs = [NSAttributedString.Key : Any]()
 		if configuration.isComplete || configuration.isAncestorComplete {
@@ -353,7 +353,7 @@ extension EditorTextRowContentView {
 	}
 	
 	private func configureNoteTextView(configuration: EditorTextRowContentConfiguration) {
-		guard !configuration.isNotesHidden, let noteAttributedText = configuration.row?.note else {
+		guard !configuration.isNotesHidden, let row = configuration.row, let noteAttributedText = row.note else {
 			noteTextView?.removeFromSuperview()
 			noteTextView = nil
 			return
@@ -375,8 +375,7 @@ extension EditorTextRowContentView {
 			addSubview(noteTextView!)
 		}
 		
-		noteTextView!.row = configuration.row
-		noteTextView!.indentionLevel = configuration.indentionLevel
+		noteTextView!.update(row: row, indentionLevel: configuration.indentionLevel)
 		noteTextView!.attributedText = mutableAttrText
 	}
 	

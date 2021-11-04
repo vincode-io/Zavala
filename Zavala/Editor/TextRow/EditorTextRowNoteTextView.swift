@@ -129,15 +129,18 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 		isTextChanged = false
 	}
 	
+	override func update(row: Row, indentionLevel: Int) {
+		self.row = row
+		self.indentionLevel = indentionLevel
+		
+		font = OutlineFontCache.shared.note(level: indentionLevel)
+	}
+	
 	override func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
 		super.updateLinkForCurrentSelection(text: text, link: link, range: range)
 		textStorage.replaceFont(with: OutlineFontCache.shared.note(level: indentionLevel))
 		isTextChanged = true
 		saveText()
-	}
-	
-	override func indentionLevelWasUpdated() {
-		font = OutlineFontCache.shared.note(level: indentionLevel)
 	}
 	
 }

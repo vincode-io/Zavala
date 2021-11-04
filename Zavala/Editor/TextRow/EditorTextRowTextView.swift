@@ -18,17 +18,8 @@ extension Selector {
 
 class EditorTextRowTextView: UITextView {
 	
-	var row: Row? {
-		didSet {
-			rowWasUpdated()
-		}
-	}
-
-	var indentionLevel = 0 {
-		didSet {
-			indentionLevelWasUpdated()
-		}
-	}
+	var row: Row?
+	var indentionLevel = 0
 	
 	var editorUndoManager: UndoManager? {
 		fatalError("editorUndoManager has not been implemented")
@@ -77,6 +68,10 @@ class EditorTextRowTextView: UITextView {
 	var isTextChanged = false
 	
 	var rowStrings: RowStrings {
+		fatalError("rowStrings has not been implemented")
+	}
+
+	var textAttributes: [NSAttributedString.Key : Any] {
 		fatalError("rowStrings has not been implemented")
 	}
 
@@ -137,10 +132,8 @@ class EditorTextRowTextView: UITextView {
 		fatalError("saveText has not been implemented")
 	}
 	
-	func rowWasUpdated() {
-	}
-	
-	func indentionLevelWasUpdated() {
+	func update(row: Row, indentionLevel: Int) {
+		fatalError("update has not been implemented")
 	}
 	
 	func detectData() {
