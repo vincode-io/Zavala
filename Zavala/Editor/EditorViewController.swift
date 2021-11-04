@@ -2047,6 +2047,7 @@ extension EditorViewController {
 		if let titleCell = self.collectionView.cellForItem(at: IndexPath(row: 0, section: Outline.Section.title.rawValue)) as? EditorTitleViewCell {
 			titleCell.takeCursor()
 		}
+		makeCursorVisibleIfNecessary()
 	}
 	
 	private func moveCursorToTagInput() {
@@ -2056,6 +2057,7 @@ extension EditorViewController {
 				tagInputCell.takeCursor()
 			}
 		}
+		makeCursorVisibleIfNecessary()
 	}
 	
 	private func editLink(_ link: String?, text: String?, range: NSRange) {
@@ -2781,10 +2783,12 @@ extension EditorViewController {
 	}
 
 	private func makeCursorVisibleIfNecessary() {
-		guard let textView = UIResponder.currentFirstResponder as? EditorTextRowTextView, let cursorRect = textView.cursorRect else { return }
-		var convertedRect = textView.convert(cursorRect, to: collectionView)
+		guard let textInput = UIResponder.currentFirstResponder as? UITextInput,
+			  let cursorRect = textInput.cursorRect,
+			  var convertedRect = (textInput as? UIView)?.convert(cursorRect, to: collectionView) else { return }
+		
 		// This isInNotes hack isn't well understood, but it improves the user experience...
-		if textView is EditorTextRowNoteTextView {
+		if textInput is EditorTextRowNoteTextView {
 			convertedRect.size.height = convertedRect.size.height + 10
 		}
 		collectionView.scrollRectToVisibleBypass(convertedRect, animated: true)
