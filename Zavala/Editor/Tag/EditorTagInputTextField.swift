@@ -39,6 +39,18 @@ class EditorTagInputTextField: SearchTextField {
 		return stackedUndoManager
 	}
 	
+	override var keyCommands: [UIKeyCommand]? {
+		let tab = UIKeyCommand(action: #selector(createTag), input: "\t")
+		let esc = UIKeyCommand(action: #selector(closeSuggestionList), input: UIKeyCommand.inputEscape)
+		
+		if #available(iOS 15.0, *) {
+			tab.wantsPriorityOverSystemBehavior = true
+			esc.wantsPriorityOverSystemBehavior = true
+		}
+
+		return [tab, esc]
+	}
+	
 	private var stackedUndoManager: UndoManager?
 	private static let dropDelegate = OutlineTextDropDelegate()
 
@@ -94,7 +106,7 @@ class EditorTagInputTextField: SearchTextField {
 	
 	// MARK: API
 
-	func createTag() {
+	@objc func createTag() {
 		activateSelection()
 		
 		guard let name = text, !name.isEmpty else { return }
@@ -106,9 +118,13 @@ class EditorTagInputTextField: SearchTextField {
 		resetFilterStrings()
 	}
 	
-	override func clearSelection() {
+	// MARK: Actions
+	
+	@objc func closeSuggestionList() {
 		super.clearSelection()
+		super.hideResultsList()
 	}
+	
 }
 
 extension EditorTagInputTextField: UITextFieldDelegate {
