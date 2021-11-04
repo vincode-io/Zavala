@@ -2791,6 +2791,7 @@ extension EditorViewController {
 		if textInput is EditorTextRowNoteTextView {
 			convertedRect.size.height = convertedRect.size.height + 10
 		}
+		
 		collectionView.scrollRectToVisibleBypass(convertedRect, animated: true)
 	}
 	
