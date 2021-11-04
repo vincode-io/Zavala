@@ -727,8 +727,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		updateUI()
 
-		restoreOutlineCursorPosition()
 		restoreScrollPosition()
+		restoreOutlineCursorPosition()
 		moveCursorToTitleOnNew()
 	}
 	
@@ -2031,6 +2031,8 @@ extension EditorViewController {
 				}
 				self.collectionView.isHidden = false
 			}
+		} else {
+			collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
 		}
 	}
 	
