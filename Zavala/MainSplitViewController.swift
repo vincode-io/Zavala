@@ -373,7 +373,7 @@ extension MainSplitViewController: SidebarDelegate {
 	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
 		if isNavigationBranch, let lastPin = lastPin {
 			goBackwardStack.insert(lastPin, at: 0)
-			goBackwardStack = goBackwardStack.suffix(10)
+			goBackwardStack = Array(goBackwardStack.prefix(10))
 			self.lastPin = nil
 			goForwardStack.removeAll()
 		}
@@ -411,7 +411,7 @@ extension MainSplitViewController: TimelineDelegate {
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
 		if isNavigationBranch, let lastPin = lastPin, let document = document, lastPin.document != document {
 			goBackwardStack.insert(lastPin, at: 0)
-			goBackwardStack = goBackwardStack.suffix(10)
+			goBackwardStack = Array(goBackwardStack.prefix(10))
 			self.lastPin = nil
 			goForwardStack.removeAll()
 		}
