@@ -696,6 +696,8 @@ extension MainSplitViewController {
 	}
 	
 	private func goBackward(to: Int) {
+		guard to < goBackwardStack.count else { return }
+		
 		if let lastPin = lastPin {
 			goForwardStack.insert(lastPin, at: 0)
 		}
@@ -713,6 +715,8 @@ extension MainSplitViewController {
 	}
 	
 	private func goForward(to:  Int) {
+		guard to < goForwardStack.count else { return }
+
 		if let lastPin = lastPin {
 			goBackwardStack.insert(lastPin, at: 0)
 		}
