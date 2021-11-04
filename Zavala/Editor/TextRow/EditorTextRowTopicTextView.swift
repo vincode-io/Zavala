@@ -18,6 +18,7 @@ protocol EditorTextRowTopicTextViewDelegate: AnyObject {
 	func deleteRow(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings)
 	func createRow(_: EditorTextRowTopicTextView, beforeRow: Row)
 	func createRow(_: EditorTextRowTopicTextView, afterRow: Row, rowStrings: RowStrings)
+	func moveRowLeft(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings)
 	func moveRowRight(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings)
 	func splitRow(_: EditorTextRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
 	func editLink(_: EditorTextRowTopicTextView, _ link: String?, text: String?, range: NSRange)
@@ -30,7 +31,13 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 	}
 	
 	override var keyCommands: [UIKeyCommand]? {
+		let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(moveLeft(_:)))
+		if #available(iOS 15.0, *) {
+			shiftTab.wantsPriorityOverSystemBehavior = true
+		}
+		
 		let keys = [
+			shiftTab,
 			UIKeyCommand(action: #selector(moveRight(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.alternate], action: #selector(insertTab(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(insertReturn(_:))),
@@ -40,6 +47,7 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 			toggleItalicsCommand,
 			editLinkCommand
 		]
+		
 		return keys
 	}
 	
@@ -111,6 +119,11 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 	@objc func createRow(_ sender: Any) {
 		guard let textRow = row else { return }
 		editorDelegate?.createRow(self, afterRow: textRow, rowStrings: rowStrings)
+	}
+	
+	@objc func moveLeft(_ sender: Any) {
+		guard let textRow = row else { return }
+		editorDelegate?.moveRowLeft(self, row: textRow, rowStrings: rowStrings)
 	}
 	
 	@objc func moveRight(_ sender: Any) {

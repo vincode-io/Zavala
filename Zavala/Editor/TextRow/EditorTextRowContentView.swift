@@ -241,6 +241,10 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowCreateRow(afterRow: afterRow, rowStrings: rowStrings)
 	}
 	
+	func moveRowLeft(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings) {
+		appliedConfiguration.delegate?.editorTextRowMoveRowLeft(row, rowStrings: rowStrings)
+	}
+
 	func moveRowRight(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings) {
 		appliedConfiguration.delegate?.editorTextRowMoveRowRight(row, rowStrings: rowStrings)
 	}

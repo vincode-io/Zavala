@@ -1498,6 +1498,10 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		createRow(afterRows: afterRows, rowStrings: rowStrings)
 	}
 	
+	func editorTextRowMoveRowLeft(_ row: Row, rowStrings: RowStrings) {
+		moveRowsLeft([row], rowStrings: rowStrings)
+	}
+	
 	func editorTextRowMoveRowRight(_ row: Row, rowStrings: RowStrings) {
 		moveRowsRight([row], rowStrings: rowStrings)
 	}
@@ -1849,8 +1853,6 @@ extension EditorViewController {
 					isCursoringDown = true
 					repeatMoveCursorDown()
 				}
-			case (.keyboardTab, key.modifierFlags.contains(.shift)):
-				moveCurrentRowsLeft()
 			default:
 				super.pressesBegan(presses, with: event)
 			}
