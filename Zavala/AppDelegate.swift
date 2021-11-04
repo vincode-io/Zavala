@@ -1228,7 +1228,7 @@ extension AppDelegate {
 		
 		history.removeAll(where: { $0.documentID == pin.documentID })
 		history.insert(pin, at: 0)
-		history = history.suffix(15)
+		history = Array(history.prefix(upTo: 15))
 		
 		UIMenuSystem.main.setNeedsRebuild()
 	}
