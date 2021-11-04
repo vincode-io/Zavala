@@ -35,10 +35,14 @@ public struct Pin: Equatable {
 	}
 	
 	public var userInfo: [AnyHashable: AnyHashable] {
-		return [
-			"containerID": containerID?.userInfo,
-			"documentID": documentID?.userInfo
-		]
+		var userInfo = [AnyHashable: AnyHashable]()
+		if let containerID = containerID {
+			userInfo["containerID"] = containerID.userInfo
+		}
+		if let documentID = documentID {
+			userInfo["documentID"] = documentID.userInfo
+		}
+		return userInfo
 	}
 	
 	public init(containerID: EntityID? = nil, documentID: EntityID? = nil) {
