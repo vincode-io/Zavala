@@ -166,13 +166,32 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 		self.row = row
 		self.indentionLevel = indentionLevel
 
-		if row.isComplete {
-			linkTextAttributes = [.foregroundColor: UIColor.tertiaryLabel, .underlineStyle: 1]
+		var attrs = [NSAttributedString.Key : Any]()
+		if row.isComplete || row.isAncestorComplete {
+			attrs[.foregroundColor] = UIColor.tertiaryLabel
+			accessibilityLabel = L10n.complete
 		} else {
-			linkTextAttributes = [.foregroundColor: UIColor.label, .underlineStyle: 1]
+			attrs[.foregroundColor] = UIColor.label
+			accessibilityLabel = nil
 		}
-
-		font = OutlineFontCache.shared.topic(level: indentionLevel)
+		
+		if row.isComplete {
+			attrs[.strikethroughStyle] = 1
+			attrs[.strikethroughColor] = UIColor.tertiaryLabel
+		} else {
+			attrs[.strikethroughStyle] = 0
+		}
+		
+		attrs[.font] = OutlineFontCache.shared.topic(level: indentionLevel)
+		
+		typingAttributes = attrs
+		
+		var linkAttrs = attrs
+		linkAttrs[.underlineStyle] = 1
+		linkTextAttributes = linkAttrs
+		
+		attributedText = row.topic
+		addSearchHighlighting(isInNotes: false)
 	}
 	
 	override func saveText() {

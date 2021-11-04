@@ -135,7 +135,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 		bullet.removeFromSuperview()
 		disclosureIndicator.removeFromSuperview()
 		
-		let topAnchorConstant = configuration.topicFont.capHeight *  0.9
+		let topAnchorConstant = topicTextView.font!.capHeight *  0.9
 
 		if configuration.row?.rowCount == 0 {
 			addSubview(bullet)
@@ -318,56 +318,15 @@ extension EditorTextRowContentView {
 		guard let row = configuration.row else { return }
 		topicTextView.update(row: row, indentionLevel: configuration.indentionLevel)
 
-		var attrs = [NSAttributedString.Key : Any]()
-		if configuration.isComplete || configuration.isAncestorComplete {
-			attrs[.foregroundColor] = UIColor.tertiaryLabel
-		} else {
-			attrs[.foregroundColor] = UIColor.label
-		}
-		
-		if configuration.isComplete {
-			attrs[.strikethroughStyle] = 1
-			attrs[.strikethroughColor] = UIColor.tertiaryLabel
-		} else {
-			attrs[.strikethroughStyle] = 0
-		}
-
-		if let topic = configuration.topic {
-			let mutableAttrText = NSMutableAttributedString(attributedString: topic)
-			let range = NSRange(location: 0, length: mutableAttrText.length)
-			mutableAttrText.addAttributes(attrs, range: range)
-			mutableAttrText.replaceFont(with: configuration.topicFont)
-			addHighlighting(mutableAttrText, searchResultCoordinates: configuration.row?.searchResultCoordinates, isInNotes: false)
-			topicTextView.attributedText = mutableAttrText
-		} else {
-			topicTextView.text = ""
-			attrs[.font] = configuration.topicFont
-			topicTextView.typingAttributes = attrs
-		}
-
-		if configuration.isComplete || configuration.isAncestorComplete {
-			topicTextView.accessibilityLabel = L10n.complete
-		} else {
-			topicTextView.accessibilityLabel = nil
-		}
 	}
 	
 	private func configureNoteTextView(configuration: EditorTextRowContentConfiguration) {
-		guard !configuration.isNotesHidden, let row = configuration.row, let noteAttributedText = row.note else {
+		guard !configuration.isNotesHidden, let row = configuration.row, row.note != nil else {
 			noteTextView?.removeFromSuperview()
 			noteTextView = nil
 			return
 		}
 		
-		var attrs = [NSAttributedString.Key : Any]()
-		attrs[.foregroundColor] = UIColor.secondaryLabel
-		
-		let mutableAttrText = NSMutableAttributedString(attributedString: noteAttributedText)
-		let range = NSRange(location: 0, length: mutableAttrText.length)
-		mutableAttrText.replaceFont(with: configuration.noteFont)
-		mutableAttrText.addAttributes(attrs, range: range)
-		addHighlighting(mutableAttrText, searchResultCoordinates: configuration.row?.searchResultCoordinates, isInNotes: true)
-
 		if noteTextView == nil {
 			noteTextView = EditorTextRowNoteTextView()
 			noteTextView!.editorDelegate = self
@@ -376,22 +335,6 @@ extension EditorTextRowContentView {
 		}
 		
 		noteTextView!.update(row: row, indentionLevel: configuration.indentionLevel)
-		noteTextView!.attributedText = mutableAttrText
-	}
-	
-	private func addHighlighting(_ mutableAttrText: NSMutableAttributedString, searchResultCoordinates: NSHashTable<SearchResultCoordinates>?, isInNotes: Bool) {
-		guard let coordinates = searchResultCoordinates else { return }
-		for element in coordinates.objectEnumerator() {
-			guard let coordinate = element as? SearchResultCoordinates, coordinate.isInNotes == isInNotes else { continue }
-			if coordinate.isCurrentResult {
-				mutableAttrText.addAttribute(.backgroundColor, value: UIColor.systemYellow, range: coordinate.range)
-				if traitCollection.userInterfaceStyle == .dark {
-					mutableAttrText.addAttribute(.foregroundColor, value: UIColor.black, range: coordinate.range)
-				}
-			} else {
-				mutableAttrText.addAttribute(.backgroundColor, value: UIColor.systemGray, range: coordinate.range)
-			}
-		}
 	}
 	
 	private func addBarViews() {

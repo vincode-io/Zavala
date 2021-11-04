@@ -16,6 +16,11 @@ extension Selector {
 	static let toggleUnderline = #selector(UIResponder.toggleUnderline(_:))
 }
 
+extension NSAttributedString.Key {
+	static let selectedSearchResult: NSAttributedString.Key = .init("selectedSearchResult")
+	static let searchResult: NSAttributedString.Key = .init("searchResult")
+}
+
 class EditorTextRowTextView: UITextView {
 	
 	var row: Row?
@@ -215,6 +220,18 @@ class EditorTextRowTextView: UITextView {
 		invalidateLayout()
 	}
 	
+	func addSearchHighlighting(isInNotes: Bool) {
+		guard let coordinates = row?.searchResultCoordinates else { return }
+		for element in coordinates.objectEnumerator() {
+			guard let coordinate = element as? SearchResultCoordinates, coordinate.isInNotes == isInNotes else { continue }
+			if coordinate.isCurrentResult {
+				textStorage.addAttribute(.selectedSearchResult, value: true, range: coordinate.range)
+			} else {
+				textStorage.addAttribute(.searchResult, value: true, range: coordinate.range)
+			}
+		}
+	}
+	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
 		case .toggleUnderline:
@@ -273,8 +290,31 @@ extension EditorTextRowTextView: NSTextStorageDelegate {
 	func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
 		textStorage.enumerateAttributes(in: editedRange, options: .longestEffectiveRangeNotRequired) { (attributes, range, _) in
 			var newAttributes = attributes
+			newAttributes.merge(typingAttributes) { old, new in new }
 			
 			for key in attributes.keys {
+
+				if key == .selectedSearchResult {
+					newAttributes[.backgroundColor] = UIColor.systemYellow
+					if traitCollection.userInterfaceStyle == .dark {
+						newAttributes[.foregroundColor] = UIColor.black
+					}
+				}
+				
+				if key == .searchResult {
+					newAttributes[.backgroundColor] = UIColor.systemGray
+				}
+				
+				if key == .underlineStyle {
+					newAttributes[key] = nil
+				}
+				
+				if key == .font, let oldFont = attributes[key] as? UIFont, let font = font {
+					let ufd = oldFont.fontDescriptor.withFamily(font.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(font.familyName)
+					let newFont = UIFont(descriptor: ufd, size: font.pointSize)
+					newAttributes[key] = newFont
+				}
+				
 				if key == .attachment, let nsAttachment = attributes[key] as? NSTextAttachment {
 					guard !(nsAttachment is ImageTextAttachment) && !(nsAttachment is MetadataTextAttachment) else { continue }
 					if let image = nsAttachment.image {

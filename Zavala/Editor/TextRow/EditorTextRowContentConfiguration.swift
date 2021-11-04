@@ -19,12 +19,6 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 	var isNotesHidden: Bool
 	var isSearching: Bool
 	var isChevronShowing: Bool
-	var isComplete: Bool
-	var isAncestorComplete: Bool
-	var topic: NSAttributedString?
-	var topicFont: UIFont
-	var note: NSAttributedString?
-	var noteFont: UIFont
 	
 	init(row: Row, indentionLevel: Int, indentationWidth: CGFloat, isNotesHidden: Bool, isSearching: Bool) {
 		self.row = row
@@ -35,13 +29,6 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 
 		self.id = row.id
 		self.isChevronShowing = row.rowCount > 0
-		self.isComplete = row.isComplete
-		self.isAncestorComplete = row.isAncestorComplete
-		self.topic = row.topic
-		self.note = row.note
-		
-		self.topicFont = OutlineFontCache.shared.topic(level: indentionLevel)
-		self.noteFont = OutlineFontCache.shared.note(level: indentionLevel)
 	}
 	
 	func makeContentView() -> UIView & UIContentView {
@@ -59,12 +46,6 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 		hasher.combine(isNotesHidden)
 		hasher.combine(isSearching)
 		hasher.combine(isChevronShowing)
-		hasher.combine(isComplete)
-		hasher.combine(isAncestorComplete)
-		hasher.combine(topic)
-		hasher.combine(topicFont)
-		hasher.combine(note)
-		hasher.combine(noteFont)
 	}
 	
 	static func == (lhs: EditorTextRowContentConfiguration, rhs: EditorTextRowContentConfiguration) -> Bool {
@@ -73,13 +54,7 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 			lhs.indentationWidth == rhs.indentationWidth &&
 			lhs.isNotesHidden == rhs.isNotesHidden &&
 			lhs.isSearching == rhs.isSearching &&
-			lhs.isChevronShowing == rhs.isChevronShowing &&
-			lhs.isComplete == rhs.isComplete &&
-			lhs.isAncestorComplete == rhs.isAncestorComplete &&
-			NSAttributedString.isOptionalStringsEqual(lhs: lhs.topic, rhs: rhs.topic) &&
-			lhs.topicFont == rhs.topicFont &&
-			NSAttributedString.isOptionalStringsEqual(lhs: lhs.note, rhs: rhs.note) &&
-			lhs.noteFont == rhs.noteFont
+			lhs.isChevronShowing == rhs.isChevronShowing
 	}
 	
 }

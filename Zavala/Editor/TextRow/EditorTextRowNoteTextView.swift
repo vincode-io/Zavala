@@ -7,6 +7,7 @@
 
 import UIKit
 import Templeton
+import SwiftUI
 
 protocol EditorTextRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
@@ -133,7 +134,13 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 		self.row = row
 		self.indentionLevel = indentionLevel
 		
-		font = OutlineFontCache.shared.note(level: indentionLevel)
+		var attrs = [NSAttributedString.Key : Any]()
+		attrs[.foregroundColor] = UIColor.secondaryLabel
+		attrs[.font] = OutlineFontCache.shared.note(level: indentionLevel)
+		
+		typingAttributes = attrs
+		attributedText = row.note
+		addSearchHighlighting(isInNotes: true)
 	}
 	
 	override func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
