@@ -2316,6 +2316,8 @@ extension Outline {
 	}
 	
 	private func clearSearchResults() {
+		let reloads = Set(searchResultCoordinates.compactMap({ $0.row.shadowTableIndex }))
+		
 		currentSearchResult = 0
 		searchResultCoordinates = .init()
 
@@ -2325,10 +2327,7 @@ extension Outline {
 			visited.isPartOfSearchResult = false
 			visited.rows.forEach { $0.visit(visitor: clearSearchVisitor) }
 		}
-
 		rows.forEach { $0.visit(visitor: clearSearchVisitor(_:)) }
-		
-		let reloads = Set(searchResultCoordinates.compactMap({ $0.row.shadowTableIndex }))
 		
 		outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 	}
