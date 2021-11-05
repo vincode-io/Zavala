@@ -26,6 +26,13 @@ class EditorTextRowTextView: UITextView {
 	var row: Row?
 	var indentionLevel = 0
 	
+	var lineHeight: CGFloat {
+		if let textRange = textRange(from: beginningOfDocument, to: beginningOfDocument) {
+			return firstRect(for: textRange).height
+		}
+		return 0
+	}
+	
 	var editorUndoManager: UndoManager? {
 		fatalError("editorUndoManager has not been implemented")
 	}
@@ -73,10 +80,6 @@ class EditorTextRowTextView: UITextView {
 	var isTextChanged = false
 	
 	var rowStrings: RowStrings {
-		fatalError("rowStrings has not been implemented")
-	}
-
-	var textAttributes: [NSAttributedString.Key : Any] {
 		fatalError("rowStrings has not been implemented")
 	}
 
@@ -290,10 +293,13 @@ extension EditorTextRowTextView: NSTextStorageDelegate {
 	func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
 		textStorage.enumerateAttributes(in: editedRange, options: .longestEffectiveRangeNotRequired) { (attributes, range, _) in
 			var newAttributes = attributes
-			newAttributes.merge(typingAttributes) { old, new in new }
+			
+			var newTypingAttributes = typingAttributes
+			newTypingAttributes.removeValue(forKey: .font)
+			newAttributes.merge(newTypingAttributes) { old, new in new }
 			
 			for key in attributes.keys {
-
+				
 				if key == .selectedSearchResult {
 					newAttributes[.backgroundColor] = UIColor.systemYellow
 					if traitCollection.userInterfaceStyle == .dark {
@@ -309,9 +315,9 @@ extension EditorTextRowTextView: NSTextStorageDelegate {
 					newAttributes[key] = nil
 				}
 				
-				if key == .font, let oldFont = attributes[key] as? UIFont, let font = font {
-					let ufd = oldFont.fontDescriptor.withFamily(font.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(font.familyName)
-					let newFont = UIFont(descriptor: ufd, size: font.pointSize)
+				if key == .font, let oldFont = attributes[key] as? UIFont, oldFont.familyName != "Apple Color Emoji", let newFont = font {
+					let ufd = oldFont.fontDescriptor.withFamily(newFont.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(newFont.familyName)
+					let newFont = UIFont(descriptor: ufd, size: newFont.pointSize)
 					newAttributes[key] = newFont
 				}
 				
@@ -329,7 +335,7 @@ extension EditorTextRowTextView: NSTextStorageDelegate {
 					}
 				}
 			}
-
+			
 			textStorage.setAttributes(newAttributes, range: range)
 		}
 	}

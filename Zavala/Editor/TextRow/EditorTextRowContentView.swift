@@ -135,7 +135,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 		bullet.removeFromSuperview()
 		disclosureIndicator.removeFromSuperview()
 		
-		let topAnchorConstant = topicTextView.font!.capHeight *  0.9
+		let topAnchorConstant = topicTextView.lineHeight / 2
 
 		if configuration.row?.rowCount == 0 {
 			addSubview(bullet)
