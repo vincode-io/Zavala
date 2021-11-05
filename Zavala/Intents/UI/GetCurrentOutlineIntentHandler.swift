@@ -16,7 +16,7 @@ public class GetCurrentOutlineIntentHandler: NSObject, GetCurrentOutlineIntentHa
 	}
 	
 	public func handle(intent: GetCurrentOutlineIntent, completion: @escaping (GetCurrentOutlineIntentResponse) -> Void) {
-		guard let outline = mainCoordinator?.currentOutline else {
+		guard let outline = mainCoordinator?.currentDocument?.outline else {
 			completion(GetCurrentOutlineIntentResponse(code: .notFound, userActivity: nil))
 			return
 		}

@@ -24,11 +24,9 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	weak var sceneDelegate: OutlineEditorSceneDelegate?
 	
 	var stateRestorationActivity: NSUserActivity {
-		return activityManager.stateRestorationActivity
+		return appDelegate.activityManager.stateRestorationActivity
 	}
 
-	var activityManager = ActivityManager()
-	
     override func viewDidLoad() {
         super.viewDidLoad()
 		editorViewController?.delegate = self
@@ -68,7 +66,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	func openDocument(_ documentID: EntityID) {
 		if let document = AccountManager.shared.findDocument(documentID), let outline = document.outline {
 			sceneDelegate?.window?.windowScene?.title = outline.title
-			activityManager.selectingDocument(nil, document)
+			appDelegate.activityManager.selectingDocument(nil, document)
 			editorViewController?.edit(outline, isNew: false)
 			pinWasVisited(Pin(document: document))
 		}
@@ -88,6 +86,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	func goForwardOne() { }
 	
 	func shutdown() {
+		appDelegate.activityManager.invalidateSelectDocument()
 		editorViewController?.edit(nil, isNew: false)
 	}
 	

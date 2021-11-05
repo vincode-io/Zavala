@@ -33,7 +33,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	weak var sceneDelegate: SceneDelegate?
 
 	var stateRestorationActivity: NSUserActivity {
-		let activity = activityManager.stateRestorationActivity
+		let activity = appDelegate.activityManager.stateRestorationActivity
 		var userInfo = activity.userInfo == nil ? [AnyHashable: Any]() : activity.userInfo
 
 		userInfo![UserInfoKeys.goBackwardStack] = goBackwardStack.map { $0.userInfo }
@@ -53,8 +53,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			(editorViewController?.isDeleteCurrentRowUnavailable ?? true) 
 	}
 
-	var activityManager = ActivityManager()
-	
 	var currentDocumentContainer: DocumentContainer? {
 		return sidebarViewController?.currentDocumentContainer
 	}
@@ -383,7 +381,7 @@ extension MainSplitViewController: SidebarDelegate {
 		}
 		
 		if let documentContainer = documentContainer {
-			activityManager.selectingDocumentContainer(documentContainer)
+			appDelegate.activityManager.selectingDocumentContainer(documentContainer)
 			if animated {
 				show(.supplementary)
 			} else {
@@ -392,7 +390,7 @@ extension MainSplitViewController: SidebarDelegate {
 				}
 			}
 		} else {
-			activityManager.invalidateSelectDocumentContainer()
+			appDelegate.activityManager.invalidateSelectDocumentContainer()
 		}
 		
 		timelineViewController?.setDocumentContainer(documentContainer, isNavigationBranch: isNavigationBranch, completion: completion)
@@ -403,10 +401,6 @@ extension MainSplitViewController: SidebarDelegate {
 // MARK: TimelineDelegate
 
 extension MainSplitViewController: TimelineDelegate {
-	
-	func documentSelectionDidChangeTitle(_: TimelineViewController, documentContainer: DocumentContainer, document: Document) {
-		activityManager.selectingDocument(documentContainer, document)
-	}
 	
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
 		// This prevents the same document from entering the backward stack more than once in a row.
@@ -424,7 +418,7 @@ extension MainSplitViewController: TimelineDelegate {
 		}
 
 		if let document = document {
-			activityManager.selectingDocument(documentContainer, document)
+			appDelegate.activityManager.selectingDocument(documentContainer, document)
 			if animated {
 				show(.secondary)
 			} else {
@@ -435,7 +429,7 @@ extension MainSplitViewController: TimelineDelegate {
 
 			lastPin = Pin(container: documentContainer, document: document)
 		} else {
-			activityManager.invalidateSelectDocument()
+			appDelegate.activityManager.invalidateSelectDocument()
 		}
 		
 		if let search = documentContainer as? Search {
@@ -591,13 +585,13 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 
 		// If we are showing the Feeds and only the feeds start clearing stuff
 		if isCollapsed && viewController === sidebarViewController && lastMainControllerToAppear == .timeline {
-			activityManager.invalidateSelectDocumentContainer()
+			appDelegate.activityManager.invalidateSelectDocumentContainer()
 			sidebarViewController?.selectDocumentContainer(nil, isNavigationBranch: false, animated: false)
 			return
 		}
 
 		if isCollapsed && viewController === timelineViewController && lastMainControllerToAppear == .editor {
-			activityManager.invalidateSelectDocument()
+			appDelegate.activityManager.invalidateSelectDocument()
 			timelineViewController?.selectDocument(nil, isNavigationBranch: false, animated: false)
 			return
 		}

@@ -12,7 +12,6 @@ import RSCore
 import Templeton
 
 protocol TimelineDelegate: AnyObject  {
-	func documentSelectionDidChangeTitle(_: TimelineViewController, documentContainer: DocumentContainer, document: Document)
 	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool)
 	func showGetInfo(_: TimelineViewController, outline: Outline)
 	func exportPDFDoc(_: TimelineViewController, outline: Outline)
@@ -208,9 +207,6 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		applySnapshotWorkItem = DispatchWorkItem { [weak self] in
 			guard let self = self else { return }
 			self.loadDocuments(animated: true)
-			if document == self.currentDocument, let documentContainer = self.documentContainer, let currentDocument = self.currentDocument {
-				self.delegate?.documentSelectionDidChangeTitle(self, documentContainer: documentContainer, document: currentDocument)
-			}
 		}
 		DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: applySnapshotWorkItem!)
 	}

@@ -20,8 +20,9 @@ protocol MainCoordinator: UIViewController {
 
 extension MainCoordinator {
 	
-	var currentOutline: Outline? {
-		return editorViewController?.outline
+	var currentDocument: Document? {
+		guard let outline = editorViewController?.outline else { return nil	}
+		return .outline(outline)
 	}
 	
 	var isOutlineFunctionsUnavailable: Bool {
