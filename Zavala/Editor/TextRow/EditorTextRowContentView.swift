@@ -135,6 +135,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 		bullet.removeFromSuperview()
 		disclosureIndicator.removeFromSuperview()
 		
+		topicTextView.sizeToFit()
 		let topAnchorConstant = topicTextView.lineHeight / 2
 
 		if configuration.row?.rowCount == 0 {
