@@ -920,7 +920,7 @@
 				5181A9302554D92000C153E8 /* Sources */,
 				5181A9312554D92000C153E8 /* Frameworks */,
 				5181A9322554D92000C153E8 /* Resources */,
-				51C4C3C22555EB4D004E0206 /* Run VerifyNoBuildSettings */,
+				51C4C3C22555EB4D004E0206 /* Run VerifyNoBS */,
 				51C4C3F125565282004E0206 /* Embed Frameworks */,
 				51E060D125A45AA800194066 /* Embed PlugIns */,
 				5141785526BE1DB900E9EAA5 /* Delete unintended embedded frameworks */,
@@ -1058,7 +1058,7 @@
 			shellPath = /bin/sh;
 			shellScript = "# Delete the framework that Xcode should have never included\n# https://forums.swift.org/t/is-this-an-xcode-bug-or-somehow-related-to-spm/33987\nrm -rf \"${TARGET_BUILD_DIR}/${PLUGINS_FOLDER_PATH}/SpotlightIndexExtension.appex/Frameworks\"\n";
 		};
-		51C4C3C22555EB4D004E0206 /* Run VerifyNoBuildSettings */ = {
+		51C4C3C22555EB4D004E0206 /* Run VerifyNoBS */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1067,14 +1067,14 @@
 			);
 			inputPaths = (
 			);
-			name = "Run VerifyNoBuildSettings";
+			name = "Run VerifyNoBS";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "xcrun -sdk macosx swiftc -target x86_64-macosx10.11  tools/VerifyNoBuildSettings.swift -o $CONFIGURATION_TEMP_DIR/VerifyNoBS\n$CONFIGURATION_TEMP_DIR/VerifyNoBS ${PROJECT_NAME}.xcodeproj/project.pbxproj\n\n\nif [ $? -ne 0 ]\nthen\n   echo \"error: Build Setting were found in the project.pbxproj file.  Most likely you didn't intend to change this file and should revert it.\"\n   exit 1\nfi\n";
+			shellScript = "xcrun -sdk macosx swift tools/VerifyNoBS.swift  --xcode  ${PROJECT_DIR}/${PROJECT_NAME}.xcodeproj/project.pbxproj\n";
 		};
 		51CF10AF2571BB1E005D6D88 /* Run Swiftgen */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1092,7 +1092,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if ! command -v \"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" &> /dev/null\nthen\n    echo \"swiftgen could not be found\"\n    exit\nfi\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Zavala/Resources/Localizable.strings\" \"$PROJECT_DIR/Zavala/Resources/Localizable.stringsdict\" --output \"$PROJECT_DIR/Zavala/L10n.swift\";\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/AppKitPlugin/Localizable.strings\" --output \"$PROJECT_DIR/AppKitPlugin/L10n.swift\";\n\n\"$PROJECT_DIR/tools/swiftgen-6.4.0/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Templeton/Sources/Templeton/Localizable.strings\" --output \"$PROJECT_DIR/Templeton/Sources/Templeton/L10n.swift\";\n";
+			shellScript = "if ! command -v \"$PROJECT_DIR/tools/swiftgen-6.5.1/bin/swiftgen\" &> /dev/null\nthen\n    echo \"swiftgen could not be found\"\n    exit\nfi\n\n\"$PROJECT_DIR/tools/swiftgen-6.5.1/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Zavala/Resources/Localizable.strings\" \"$PROJECT_DIR/Zavala/Resources/Localizable.stringsdict\" --output \"$PROJECT_DIR/Zavala/L10n.swift\";\n\n\"$PROJECT_DIR/tools/swiftgen-6.5.1/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/AppKitPlugin/Localizable.strings\" --output \"$PROJECT_DIR/AppKitPlugin/L10n.swift\";\n\n\"$PROJECT_DIR/tools/swiftgen-6.5.1/bin/swiftgen\" run strings -t structured-swift5 \"$PROJECT_DIR/Templeton/Sources/Templeton/Localizable.strings\" --output \"$PROJECT_DIR/Templeton/Sources/Templeton/L10n.swift\";\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
