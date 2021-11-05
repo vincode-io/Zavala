@@ -412,7 +412,7 @@ extension MainSplitViewController: TimelineDelegate {
 		// This prevents the same document from entering the backward stack more than once in a row.
 		// If the first item on the backward stack equals the new document and there is nothing stored
 		// in the last pin, we know they clicked on a document twice without one between.
-		if goBackwardStack.first?.document == document && lastPin == nil{
+		if let first = goBackwardStack.first, first.document == document && lastPin == nil{
 			goBackwardStack.removeFirst()
 		}
 		
