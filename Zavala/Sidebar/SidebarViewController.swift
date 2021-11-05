@@ -42,8 +42,8 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 
 	var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
-	private var applyCoalescingQueue = CoalescingQueue(name: "Apply Snapshot", interval: 0.5)
-	private var reloadCoalescingQueue = CoalescingQueue(name: "Reload Visible", interval: 0.5)
+	private var applyChangesQueue = CoalescingQueue(name: "Apply Snapshot", interval: 0.5)
+	private var reloadChangedQueue = CoalescingQueue(name: "Reload Visible", interval: 0.5)
 
 	private var mainSplitViewController: MainSplitViewController? {
 		return splitViewController as? MainSplitViewController
@@ -374,7 +374,7 @@ extension SidebarViewController {
 	}
 	
 	private func queueApplyChangeSnapshot() {
-		applyCoalescingQueue.add(self, #selector(applyQueuedChangeSnapshot))
+		applyChangesQueue.add(self, #selector(applyQueuedChangeSnapshot))
 	}
 	
 	@objc private func applyQueuedChangeSnapshot() {
@@ -382,7 +382,7 @@ extension SidebarViewController {
 	}
 	
 	private func queueReloadChangeSnapshot() {
-		reloadCoalescingQueue.add(self, #selector(reloadQueuedChangeSnapshot))
+		reloadChangedQueue.add(self, #selector(reloadQueuedChangeSnapshot))
 	}
 	
 	@objc private func reloadQueuedChangeSnapshot() {
