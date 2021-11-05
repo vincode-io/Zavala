@@ -190,7 +190,12 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 		linkAttrs[.underlineStyle] = 1
 		linkTextAttributes = linkAttrs
 		
-		attributedText = row.topic
+        if let topic = row.topic {
+            attributedText = topic
+        } else {
+            text = ""
+        }
+        
 		addSearchHighlighting(isInNotes: false)
 	}
 	

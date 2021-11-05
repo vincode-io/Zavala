@@ -139,7 +139,13 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 		attrs[.font] = OutlineFontCache.shared.note(level: indentionLevel)
 		
 		typingAttributes = attrs
-		attributedText = row.note
+        
+        if let note = row.note {
+            attributedText = note
+        } else {
+            text = ""
+        }
+        
 		addSearchHighlighting(isInNotes: true)
 	}
 	
