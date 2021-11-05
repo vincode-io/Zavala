@@ -43,7 +43,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	private var addBarButtonItem: UIBarButtonItem?
 	private var importBarButtonItem: UIBarButtonItem?
 
-	private var coalescingQueue = CoalescingQueue(name: "Load Documents", interval: 0.5)
+	private var loadDocumentsQueue = CoalescingQueue(name: "Load Documents", interval: 0.5)
 	private var applySnapshotWorkItem: DispatchWorkItem?
 
 	private var rowRegistration: UICollectionView.CellRegistration<ConsistentCollectionViewListCell, Document>!
@@ -178,6 +178,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		}
 		
 		if let document = document {
+			loadDocumentsQueue.performCallsImmediately()
 			selectDocument(document, animated: true)
 		}
 	}
@@ -434,7 +435,7 @@ extension TimelineViewController: UISearchResultsUpdating {
 extension TimelineViewController {
 	
 	private func queueLoadDocuments() {
-		coalescingQueue.add(self, #selector(executeQueuedLoadDocuments))
+		loadDocumentsQueue.add(self, #selector(executeQueuedLoadDocuments))
 	}
 	
 	@objc private func executeQueuedLoadDocuments() {
