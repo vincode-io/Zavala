@@ -314,11 +314,15 @@ extension EditorTextRowTextView: NSTextStorageDelegate {
 				if key == .underlineStyle {
 					newAttributes[key] = nil
 				}
-				
-				if key == .font, let oldFont = attributes[key] as? UIFont, oldFont.familyName != "Apple Color Emoji", let newFont = font {
-					let ufd = oldFont.fontDescriptor.withFamily(newFont.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(newFont.familyName)
-					let newFont = UIFont(descriptor: ufd, size: newFont.pointSize)
-					newAttributes[key] = newFont
+
+				if key == .font, let oldFont = attributes[key] as? UIFont, let newFont = font {
+					if oldFont.familyName == "Apple Color Emoji" {
+						newAttributes[key] = oldFont.withSize(newFont.pointSize)
+					} else {
+						let ufd = oldFont.fontDescriptor.withFamily(newFont.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(newFont.familyName)
+						let newFont = UIFont(descriptor: ufd, size: newFont.pointSize)
+						newAttributes[key] = newFont
+					}
 				}
 				
 				if key == .attachment, let nsAttachment = attributes[key] as? NSTextAttachment {
