@@ -12,7 +12,7 @@ protocol EditorTextRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
 	var editorRowTopicTextViewInputAccessoryView: UIView? { get }
 	func didBecomeActive(_: EditorTextRowTopicTextView, row: Row)
-	func invalidateLayout(_: EditorTextRowTopicTextView)
+	func reload(_: EditorTextRowTopicTextView, row: Row)
 	func makeCursorVisibleIfNecessary(_: EditorTextRowTopicTextView)
 	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
 	func deleteRow(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings)
@@ -69,10 +69,6 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 		return lineEnd == endOfDocument
 	}
 	
-	private var autosaveWorkItem: DispatchWorkItem?
-	private var textViewHeight: CGFloat?
-	private var isSavingTextUnnecessary = false
-
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 		self.delegate = self
@@ -97,16 +93,26 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 		return super.resignFirstResponder()
 	}
 	
-	override func didBecomeActive() {
+	func didBecomeActive() {
 		if let row = row {
 			editorDelegate?.didBecomeActive(self, row: row)
 		}
 	}
+    
+    override func textWasChanged() {
+        guard let textRow = row else { return }
+        editorDelegate?.textChanged(self, row: textRow, isInNotes: false, selection: selectedRange, rowStrings: rowStrings)
+    }
 
-	override func invalidateLayout() {
-		editorDelegate?.invalidateLayout(self)
+	override func reloadRow() {
+        guard let textRow = row else { return }
+		editorDelegate?.reload(self, row: textRow)
 	}
 	
+    override func makeCursorVisibleIfNecessary() {
+        editorDelegate?.makeCursorVisibleIfNecessary(self)
+    }
+    
 	override func deleteBackward() {
 		guard let textRow = row else { return }
 		if attributedText.length == 0 && textRow.rowCount == 0 {
@@ -197,21 +203,10 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
         }
         
 		addSearchHighlighting(isInNotes: false)
-	}
-	
-	override func saveText() {
-		guard isTextChanged, let textRow = row else { return }
-		
-		if isSavingTextUnnecessary {
-			isSavingTextUnnecessary = false
-		} else {
-			editorDelegate?.textChanged(self, row: textRow, isInNotes: false, selection: selectedRange, rowStrings: rowStrings)
-		}
-		
-		autosaveWorkItem?.cancel()
-		autosaveWorkItem = nil
-		isTextChanged = false
-	}
+
+        let fittingSize = sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
+        textViewHeight = fittingSize.height
+    }
 	
 }
 
@@ -232,15 +227,8 @@ extension EditorTextRowTopicTextView: CursorCoordinatesProvider {
 
 extension EditorTextRowTopicTextView: UITextViewDelegate {
 	
-	func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
-		textViewHeight = fittingSize.height
-		return true
-	}
-	
 	func textViewDidEndEditing(_ textView: UITextView) {
-		detectData()
-		saveText()
+        processTextEditingEnding()
 	}
 	
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -254,32 +242,8 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 		}
 	}
 	
-	func textViewDidChange(_ textView: UITextView) {
-		// Break any links with a space
-		let cursorLocation = selectedRange.location
-		if cursorLocation > 0 {
-			let range = NSRange(location: cursorLocation - 1, length: 1)
-			if textView.textStorage.attributedSubstring(from: range).string == " " {
-				textView.textStorage.removeAttribute(.link, range: range)
-				textView.typingAttributes[.link] = nil
-			}
-		}
-		
-		isTextChanged = true
-
-		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
-		if let currentHeight = textViewHeight, abs(fittingSize.height - currentHeight) >= lineHeight  {
-			textViewHeight = fittingSize.height
-			editorDelegate?.invalidateLayout(self)
-		}
-		
-		editorDelegate?.makeCursorVisibleIfNecessary(self)
-		
-		autosaveWorkItem?.cancel()
-		autosaveWorkItem = DispatchWorkItem { [weak self] in
-			self?.saveText()
-		}
-		DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: autosaveWorkItem!)
-	}
-	
+    func textViewDidChange(_ textView: UITextView) {
+        processTextChanges()
+    }
+    
 }

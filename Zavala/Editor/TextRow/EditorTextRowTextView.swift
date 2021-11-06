@@ -66,6 +66,7 @@ class EditorTextRowTextView: UITextView {
 	var isSelecting: Bool {
 		return !(selectedTextRange?.isEmpty ?? true)
 	}
+    
 	var selectedText: String? {
 		if let textRange = selectedTextRange {
 			return text(in: textRange)
@@ -91,6 +92,10 @@ class EditorTextRowTextView: UITextView {
 		return cleanText
 	}
 	
+    var autosaveWorkItem: DispatchWorkItem?
+    var textViewHeight: CGFloat?
+    var isSavingTextUnnecessary = false
+
 	let toggleBoldCommand = UIKeyCommand(title: L10n.bold, action: .toggleBoldface, input: "b", modifierFlags: [.command])
 	let toggleItalicsCommand = UIKeyCommand(title: L10n.italic, action: .toggleItalics, input: "i", modifierFlags: [.command])
 	let editLinkCommand = UIKeyCommand(title: L10n.link, action: .editLink, input: "k", modifierFlags: [.command])
@@ -135,59 +140,41 @@ class EditorTextRowTextView: UITextView {
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
+ 
+    func reloadRow() {
+        fatalError("reloadRow has not been implemented")
+    }
+    
+    func makeCursorVisibleIfNecessary() {
+        fatalError("makeCursorVisibleIfNecessary has not been implemented")
+    }
+
+    // MARK: API
 	
 	func saveText() {
-		fatalError("saveText has not been implemented")
+        guard isTextChanged else { return }
+        
+        if isSavingTextUnnecessary {
+            isSavingTextUnnecessary = false
+        } else {
+            textWasChanged()
+        }
+        
+        autosaveWorkItem?.cancel()
+        autosaveWorkItem = nil
+        isTextChanged = false
 	}
-	
+
+    func textWasChanged() {
+        fatalError("textChanged has not been implemented")
+    }
+
 	func update(row: Row, indentionLevel: Int) {
 		fatalError("update has not been implemented")
 	}
 	
-	func detectData() {
-		guard let text = attributedText?.string, !text.isEmpty else { return }
-		
-		let detector = NSDataDetector(dataTypes: [.url])
-		detector.enumerateMatches(in: text) { (range, match) in
-			switch match {
-			case .url(let url), .email(_, let url):
-				var effectiveRange = NSRange()
-				if let link = textStorage.attribute(.link, at: range.location, effectiveRange: &effectiveRange) as? URL {
-					if range != effectiveRange || link != url {
-						isTextChanged = true
-						textStorage.removeAttribute(.link, range: effectiveRange)
-						textStorage.addAttribute(.link, value: url, range: range)
-					}
-				} else {
-					isTextChanged = true
-					textStorage.addAttribute(.link, value: url, range: range)
-				}
-			default:
-				break
-			}
-		}
-	}
-	
-	func findAndSelectLink() -> (String?, String?, NSRange) {
-		var effectiveRange = NSRange()
-		if selectedRange.length == 0 && selectedRange.lowerBound < textStorage.length {
-			if let link = textStorage.attribute(.link, at: selectedRange.lowerBound, effectiveRange: &effectiveRange) as? URL {
-				let text = textStorage.attributedSubstring(from: effectiveRange).string
-				return (link.absoluteString, text, effectiveRange)
-			}
-		} else {
-			for i in selectedRange.lowerBound..<selectedRange.upperBound {
-				if let link = textStorage.attribute(.link, at: i, effectiveRange: &effectiveRange) as? URL {
-					let text = textStorage.attributedSubstring(from: effectiveRange).string
-					return (link.absoluteString, text, effectiveRange)
-				}
-			}
-		}
-		let text = textStorage.attributedSubstring(from: selectedRange).string
-		return (nil, text, selectedRange)
-	}
-	
 	func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
+        
         var attrs = typingAttributes
         attrs.removeValue(forKey: .link)
         let attrText = NSMutableAttributedString(string: text, attributes: attrs)
@@ -201,9 +188,12 @@ class EditorTextRowTextView: UITextView {
 				textStorage.removeAttribute(.link, range: newRange)
 			}
 		}
-        
+
         selectedRange = NSRange(location: range.location + text.count, length: 0)
+        
         isTextChanged = true
+        saveText()
+        processTextChanges()
 	}
 	
 	func replaceCharacters(_ range: NSRange, withImage image: UIImage) {
@@ -216,21 +206,10 @@ class EditorTextRowTextView: UITextView {
 		textStorage.replaceCharacters(in: range, with: imageAttrText)
 		selectedRange = .init(location: range.location + imageAttrText.length, length: 0)
 		typingAttributes = savedTypingAttributes
-		isTextChanged = true
-		saveText()
-		invalidateLayout()
-	}
-	
-	func addSearchHighlighting(isInNotes: Bool) {
-		guard let coordinates = row?.searchResultCoordinates else { return }
-		for element in coordinates.objectEnumerator() {
-			guard let coordinate = element as? SearchResultCoordinates, coordinate.isInNotes == isInNotes else { continue }
-			if coordinate.isCurrentResult {
-				textStorage.addAttribute(.selectedSearchResult, value: true, range: coordinate.range)
-			} else {
-				textStorage.addAttribute(.searchResult, value: true, range: coordinate.range)
-			}
-		}
+
+        isTextChanged = true
+        saveText()
+		processTextChanges()
 	}
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -242,18 +221,6 @@ class EditorTextRowTextView: UITextView {
 		}
 	}
 	
-	@objc func editLink(_ sender: Any?) {
-		fatalError("editLink has not been implemented")
-	}
-
-	func didBecomeActive() {
-		fatalError("didBecomeActive has not been implemented")
-	}
-	
-	func invalidateLayout() {
-		fatalError("invalidateLayout has not been implemented")
-	}
-		
 	override func buildMenu(with builder: UIMenuBuilder) {
 		super.buildMenu(with: builder)
 		
@@ -266,6 +233,12 @@ class EditorTextRowTextView: UITextView {
 		}
 	}
 	
+    // MARK: Actions
+    
+    @objc func editLink(_ sender: Any?) {
+        fatalError("editLink has not been implemented")
+    }
+
 }
 
 extension EditorTextRowTextView: UITextDropDelegate {
@@ -342,4 +315,98 @@ extension EditorTextRowTextView: NSTextStorageDelegate {
 		}
 	}
 	
+}
+
+// MARK: Helpers
+
+extension EditorTextRowTextView {
+    
+    func detectData() {
+        guard let text = attributedText?.string, !text.isEmpty else { return }
+        
+        let detector = NSDataDetector(dataTypes: [.url])
+        detector.enumerateMatches(in: text) { (range, match) in
+            switch match {
+            case .url(let url), .email(_, let url):
+                var effectiveRange = NSRange()
+                if let link = textStorage.attribute(.link, at: range.location, effectiveRange: &effectiveRange) as? URL {
+                    if range != effectiveRange || link != url {
+                        isTextChanged = true
+                        textStorage.removeAttribute(.link, range: effectiveRange)
+                        textStorage.addAttribute(.link, value: url, range: range)
+                    }
+                } else {
+                    isTextChanged = true
+                    textStorage.addAttribute(.link, value: url, range: range)
+                }
+            default:
+                break
+            }
+        }
+    }
+    
+    func findAndSelectLink() -> (String?, String?, NSRange) {
+        var effectiveRange = NSRange()
+        if selectedRange.length == 0 && selectedRange.lowerBound < textStorage.length {
+            if let link = textStorage.attribute(.link, at: selectedRange.lowerBound, effectiveRange: &effectiveRange) as? URL {
+                let text = textStorage.attributedSubstring(from: effectiveRange).string
+                return (link.absoluteString, text, effectiveRange)
+            }
+        } else {
+            for i in selectedRange.lowerBound..<selectedRange.upperBound {
+                if let link = textStorage.attribute(.link, at: i, effectiveRange: &effectiveRange) as? URL {
+                    let text = textStorage.attributedSubstring(from: effectiveRange).string
+                    return (link.absoluteString, text, effectiveRange)
+                }
+            }
+        }
+        let text = textStorage.attributedSubstring(from: selectedRange).string
+        return (nil, text, selectedRange)
+    }
+    
+    func addSearchHighlighting(isInNotes: Bool) {
+        guard let coordinates = row?.searchResultCoordinates else { return }
+        for element in coordinates.objectEnumerator() {
+            guard let coordinate = element as? SearchResultCoordinates, coordinate.isInNotes == isInNotes else { continue }
+            if coordinate.isCurrentResult {
+                textStorage.addAttribute(.selectedSearchResult, value: true, range: coordinate.range)
+            } else {
+                textStorage.addAttribute(.searchResult, value: true, range: coordinate.range)
+            }
+        }
+    }
+    
+    func processTextEditingEnding() {
+        detectData()
+        saveText()
+    }
+
+    func processTextChanges() {
+        // Break any links with a space
+        let cursorLocation = selectedRange.location
+        if cursorLocation > 0 {
+            let range = NSRange(location: cursorLocation - 1, length: 1)
+            if textStorage.attributedSubstring(from: range).string == " " {
+                textStorage.removeAttribute(.link, range: range)
+                typingAttributes[.link] = nil
+            }
+        }
+        
+        isTextChanged = true
+
+        let fittingSize = sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
+        if let currentHeight = textViewHeight, abs(fittingSize.height - currentHeight) >= lineHeight  {
+            textViewHeight = fittingSize.height
+            reloadRow()
+        }
+        
+        makeCursorVisibleIfNecessary()
+        
+        autosaveWorkItem?.cancel()
+        autosaveWorkItem = DispatchWorkItem { [weak self] in
+            self?.saveText()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: autosaveWorkItem!)
+    }
+
 }

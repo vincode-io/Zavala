@@ -1460,8 +1460,8 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		return keyboardToolBar
 	}
 	
-	func editorTextRowReloadCurrentCell() {
-		reloadCurrentCell()
+    func editorTextRowReload(row: Row) {
+        reload(row: row)
 	}
 	
 	func editorTextRowMakeCursorVisibleIfNecessary() {
@@ -1922,12 +1922,12 @@ extension EditorViewController {
 		makeCursorVisibleIfNecessary()
 	}
 	
-	private func reloadCurrentCell() {
-		if let row = currentTextView?.row?.shadowTableIndex {
+    private func reload(row: Row) {
+		if let rowIndex = row.shadowTableIndex {
 			let contentOffset = collectionView.contentOffset
 			let currentCoordinates = CursorCoordinates.currentCoordinates
 			UIView.performWithoutAnimation {
-				self.collectionView.reloadItems(at: [IndexPath(row: row, section: self.adjustedRowsSection)])
+				self.collectionView.reloadItems(at: [IndexPath(row: rowIndex, section: self.adjustedRowsSection)])
 				self.collectionView.contentOffset = contentOffset
 				if let coordinates = currentCoordinates {
 					self.restoreCursorPosition(coordinates, scroll: false)
