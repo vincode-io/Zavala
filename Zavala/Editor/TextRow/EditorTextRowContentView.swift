@@ -10,7 +10,7 @@ import Templeton
 
 class EditorTextRowContentView: UIView, UIContentView {
 
-	let topicTextView = EditorTextRowTopicTextView()
+    var topicTextView: EditorTextRowTopicTextView?
 	var noteTextView: EditorTextRowNoteTextView?
 	var barViews = [UIView]()
 
@@ -46,11 +46,6 @@ class EditorTextRowContentView: UIView, UIContentView {
 	
 	init(configuration: EditorTextRowContentConfiguration) {
 		super.init(frame: .zero)
-
-		topicTextView.editorDelegate = self
-		topicTextView.translatesAutoresizingMaskIntoConstraints = false
-		addSubview(topicTextView)
-
 		apply(configuration: configuration)
 	}
 	
@@ -73,8 +68,8 @@ class EditorTextRowContentView: UIView, UIContentView {
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
 		
-		if topicTextView.isFirstResponder {
-			topicTextView.saveText()
+		if topicTextView?.isFirstResponder ?? false {
+			topicTextView?.saveText()
 		}
 
 		if noteTextView?.isFirstResponder ?? false {
@@ -86,6 +81,8 @@ class EditorTextRowContentView: UIView, UIContentView {
 		configureTopicTextView(configuration: configuration)
 		configureNoteTextView(configuration: configuration)
 		
+        guard let topicTextView = topicTextView else { return }
+        
 		if let coordinates = coordinates, coordinates.row == configuration.row {
 			if !coordinates.isInNotes {
 				topicTextView.selectedRange = coordinates.selection
@@ -109,10 +106,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 			}
 		}
 
-		topicTextView.removeConstraintsOwnedBySuperview()
-		
 		if let noteTextView = noteTextView {
-			noteTextView.removeConstraintsOwnedBySuperview()
 			NSLayoutConstraint.activate([
 				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
 				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
@@ -305,24 +299,30 @@ extension EditorTextRowContentView {
 	}
 	
 	private func configureTopicTextView(configuration: EditorTextRowContentConfiguration) {
+        topicTextView?.removeFromSuperview()
+        
 		guard let row = configuration.row else { return }
-		topicTextView.update(row: row, indentionLevel: configuration.indentionLevel)
+        
+        topicTextView = EditorTextRowTopicTextView()
+        topicTextView!.editorDelegate = self
+        topicTextView!.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(topicTextView!)
 
+		topicTextView!.update(row: row, indentionLevel: configuration.indentionLevel)
 	}
 	
 	private func configureNoteTextView(configuration: EditorTextRowContentConfiguration) {
-		guard !configuration.isNotesHidden, let row = configuration.row, row.note != nil else {
-			noteTextView?.removeFromSuperview()
-			noteTextView = nil
+        noteTextView?.removeFromSuperview()
+        noteTextView = nil
+
+        guard !configuration.isNotesHidden, let row = configuration.row, row.note != nil else {
 			return
 		}
 		
-		if noteTextView == nil {
-			noteTextView = EditorTextRowNoteTextView()
-			noteTextView!.editorDelegate = self
-			noteTextView!.translatesAutoresizingMaskIntoConstraints = false
-			addSubview(noteTextView!)
-		}
+        noteTextView = EditorTextRowNoteTextView()
+        noteTextView!.editorDelegate = self
+        noteTextView!.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(noteTextView!)
 		
 		noteTextView!.update(row: row, indentionLevel: configuration.indentionLevel)
 	}

@@ -135,7 +135,6 @@
 		51B2B2C82563A2180090C56B /* EditorTextRowTopicTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2C72563A2180090C56B /* EditorTextRowTopicTextView.swift */; };
 		51B2B2CE2563AAF60090C56B /* EditorTextRowContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2CD2563AAF60090C56B /* EditorTextRowContentConfiguration.swift */; };
 		51B2B2D22563AB190090C56B /* EditorTextRowContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2D12563AB190090C56B /* EditorTextRowContentView.swift */; };
-		51B2B2D62563AB9F0090C56B /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2D52563AB9F0090C56B /* UIView+.swift */; };
 		51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */; };
 		51B9D99D26140EDC00A66859 /* ExportMarkdownListActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99C26140EDC00A66859 /* ExportMarkdownListActivity.swift */; };
 		51B9D9A026140F3A00A66859 /* ExportOPMLActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */; };
@@ -374,7 +373,6 @@
 		51B2B2C72563A2180090C56B /* EditorTextRowTopicTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowTopicTextView.swift; sourceTree = "<group>"; };
 		51B2B2CD2563AAF60090C56B /* EditorTextRowContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowContentConfiguration.swift; sourceTree = "<group>"; };
 		51B2B2D12563AB190090C56B /* EditorTextRowContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowContentView.swift; sourceTree = "<group>"; };
-		51B2B2D52563AB9F0090C56B /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDisclosureButton.swift; sourceTree = "<group>"; };
 		51B9D99C26140EDC00A66859 /* ExportMarkdownListActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportMarkdownListActivity.swift; sourceTree = "<group>"; };
 		51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportOPMLActivity.swift; sourceTree = "<group>"; };
@@ -528,7 +526,6 @@
 				514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */,
 				5177B7B32733D0AA006EB1E3 /* UITextInput+.swift */,
 				519184F227107FDA00B7E177 /* UITextView+.swift */,
-				51B2B2D52563AB9F0090C56B /* UIView+.swift */,
 				51692B0B25681AD3006B755F /* UIViewController+.swift */,
 				517A9E4926055C8B00EF346A /* UIWindow+.swift */,
 				51DEE82726FF951E006DAA56 /* UIWindowSceneDelegate+.swift */,
@@ -1223,7 +1220,6 @@
 				51B2B2D22563AB190090C56B /* EditorTextRowContentView.swift in Sources */,
 				519184F52710F93700B7E177 /* ImportIntentHandler.swift in Sources */,
 				51D28D32257731DC0039DDFC /* EditorViewController+Drop.swift in Sources */,
-				51B2B2D62563AB9F0090C56B /* UIView+.swift in Sources */,
 				51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */,
 				51E5C49127221F6F00A38983 /* IntentRow+.swift in Sources */,
 				5191850F271390F100B7E177 /* IntentEntityID+.swift in Sources */,
