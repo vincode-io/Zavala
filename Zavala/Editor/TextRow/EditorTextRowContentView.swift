@@ -65,7 +65,20 @@ class EditorTextRowContentView: UIView, UIContentView {
 	}
 	
 	private func apply(configuration: EditorTextRowContentConfiguration) {
-		guard appliedConfiguration != configuration else { return }
+		guard appliedConfiguration != configuration else {
+            // This is a horrible hack in search of a better solution. I haven't figured out how to tell
+            // when the user has switched to another app and come back. I do know that the collection view
+            // will try to apply config changes when this happens tho. So, we restore the cursor that somehow
+            // gets lost when the user switches applications.
+            if let coordinates = CursorCoordinates.bestCoordinates, coordinates.row == configuration.row {
+                if !coordinates.isInNotes {
+                    topicTextView?.selectedRange = coordinates.selection
+                } else {
+                    noteTextView?.selectedRange = coordinates.selection
+                }
+            }
+            return
+        }
 		appliedConfiguration = configuration
 		
 		if topicTextView?.isFirstResponder ?? false {
@@ -76,6 +89,7 @@ class EditorTextRowContentView: UIView, UIContentView {
 			noteTextView?.saveText()
 		}
 
+        // Save the coordinates so that we can restore them immediately after rebuilding the text views.
 		let coordinates = CursorCoordinates.currentCoordinates
 		
 		configureTopicTextView(configuration: configuration)
