@@ -202,7 +202,6 @@ class EditorTextRowTextView: UITextView {
         
         isTextChanged = true
         saveText()
-        updateLastKnownCoordinates()
         processTextChanges()
 	}
 	
@@ -219,7 +218,6 @@ class EditorTextRowTextView: UITextView {
 
         isTextChanged = true
         saveText()
-        updateLastKnownCoordinates()
 		processTextChanges()
 	}
 	
@@ -407,6 +405,7 @@ extension EditorTextRowTextView {
 
         let fittingSize = sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
         if let currentHeight = textViewHeight, abs(fittingSize.height - currentHeight) >= lineHeight  {
+            updateLastKnownCoordinates()
             textViewHeight = fittingSize.height
             reloadRow()
         }
