@@ -188,11 +188,12 @@ class EditorTextRowTextView: UITextView {
 	}
 	
 	func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
-		textStorage.replaceCharacters(in: range, with: text)
-		selectedRange = NSRange(location: range.location + text.count, length: 0)
-		
-		let newRange = NSRange(location: range.location, length: text.count)
+        var attrs = typingAttributes
+        attrs.removeValue(forKey: .link)
+        let attrText = NSMutableAttributedString(string: text, attributes: attrs)
+        textStorage.replaceCharacters(in: range, with: attrText)
 
+        let newRange = NSRange(location: range.location, length: attrText.length)
 		if let link = link, let url = URL(string: link) {
 			textStorage.addAttribute(.link, value: url, range: newRange)
 		} else {
@@ -201,8 +202,8 @@ class EditorTextRowTextView: UITextView {
 			}
 		}
         
+        selectedRange = NSRange(location: range.location + text.count, length: 0)
         isTextChanged = true
-        saveText()
 	}
 	
 	func replaceCharacters(_ range: NSRange, withImage image: UIImage) {
