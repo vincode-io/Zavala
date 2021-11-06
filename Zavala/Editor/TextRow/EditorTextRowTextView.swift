@@ -205,12 +205,6 @@ class EditorTextRowTextView: UITextView {
         saveText()
 	}
 	
-	func replaceCharacters(_ range: NSRange, withText text: String) {
-		textStorage.replaceCharacters(in: range, with: text)
-		isTextChanged = true
-		saveText()
-	}
-	
 	func replaceCharacters(_ range: NSRange, withImage image: UIImage) {
 		let attachment = ImageTextAttachment()
 		attachment.image = image
