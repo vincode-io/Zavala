@@ -13,10 +13,13 @@ extension NSAttributedString {
 		if lhs == nil && rhs == nil {
 			return true
 		}
-		if lhs != nil || rhs != nil {
+		if lhs != nil && rhs == nil {
 			return false
 		}
-		return lhs!.isEqual(to: rhs!)
+        if lhs == nil && rhs != nil {
+            return false
+        }
+        return lhs!.isEqual(to: rhs!)
 	}
 	
 }
