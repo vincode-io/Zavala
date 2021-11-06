@@ -141,12 +141,21 @@ class EditorTextRowTextView: UITextView {
 		fatalError("init(coder:) has not been implemented")
 	}
  
+    override func resignFirstResponder() -> Bool {
+        updateLastKnownCoordinates()
+        return super.resignFirstResponder()
+    }
+    
     func reloadRow() {
         fatalError("reloadRow has not been implemented")
     }
     
     func makeCursorVisibleIfNecessary() {
         fatalError("makeCursorVisibleIfNecessary has not been implemented")
+    }
+
+    func updateLastKnownCoordinates() {
+        fatalError("updateLastKnownCoordinates has not been implemented")
     }
 
     // MARK: API
@@ -193,6 +202,7 @@ class EditorTextRowTextView: UITextView {
         
         isTextChanged = true
         saveText()
+        updateLastKnownCoordinates()
         processTextChanges()
 	}
 	
@@ -209,6 +219,7 @@ class EditorTextRowTextView: UITextView {
 
         isTextChanged = true
         saveText()
+        updateLastKnownCoordinates()
 		processTextChanges()
 	}
 	

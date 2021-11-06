@@ -70,13 +70,6 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 		return result
 	}
 	
-	override func resignFirstResponder() -> Bool {
-		if let row = row {
-			CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: row, isInNotes: true, selection: selectedRange)
-		}
-		return super.resignFirstResponder()
-	}
-
 	func didBecomeActive() {
 		if let row = row {
 			editorDelegate?.didBecomeActive(self, row: row)
@@ -95,6 +88,12 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
     
     override func makeCursorVisibleIfNecessary() {
         editorDelegate?.makeCursorVisibleIfNecessary(self)
+    }
+    
+    override func updateLastKnownCoordinates() {
+        if let row = row {
+            CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: row, isInNotes: true, selection: selectedRange)
+        }
     }
     
 	override func deleteBackward() {

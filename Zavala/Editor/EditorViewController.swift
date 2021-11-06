@@ -1925,7 +1925,7 @@ extension EditorViewController {
     private func reload(row: Row) {
 		if let rowIndex = row.shadowTableIndex {
 			let contentOffset = collectionView.contentOffset
-			let currentCoordinates = CursorCoordinates.currentCoordinates
+			let currentCoordinates = CursorCoordinates.bestCoordinates
 			UIView.performWithoutAnimation {
 				self.collectionView.reloadItems(at: [IndexPath(row: rowIndex, section: self.adjustedRowsSection)])
 				self.collectionView.contentOffset = contentOffset
