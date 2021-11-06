@@ -68,23 +68,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		}
 	}
 	
-	func sceneDidBecomeActive(_ scene: UIScene) {
-		let container = mainSplitViewController.currentDocumentContainer
-		let document = mainSplitViewController.currentDocument
-		if let container = container {
-			if let document = document {
-				appDelegate.activityManager.selectingDocument(container, document)
-			} else {
-				appDelegate.activityManager.selectingDocumentContainer(container)
-			}
-		}
-	}
-	
-	func sceneWillResignActive(_ scene: UIScene) {
-		appDelegate.activityManager.invalidateSelectDocumentContainer()
-		appDelegate.activityManager.invalidateSelectDocument()
-	}
-	
 	func sceneDidDisconnect(_ scene: UIScene) {
 		if UIApplication.shared.applicationState == .active {
 			if !UIApplication.shared.windows.contains(where: { $0.rootViewController is MainSplitViewController }) {

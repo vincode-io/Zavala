@@ -463,8 +463,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController as? MainCoordinator
 	}
 	
-	var activityManager = ActivityManager()
-	
 	private var history = [Pin]()
 	private var documentIndexer: DocumentIndexer?
 	
@@ -1248,11 +1246,8 @@ extension AppDelegate {
 		cleanUpHistory()
 	}
 	
-	@objc private func documentTitleDidChange(_ note: Notification) {
-		guard let document = note.object as? Document else { return }
+	@objc private func documentTitleDidChange() {
 		UIMenuSystem.main.setNeedsRebuild()
-		let container = mainCoordinator?.currentDocumentContainer
-		activityManager.selectingDocument(container, document)
 	}
 
 	private func openHistoryItem(index: Int) {

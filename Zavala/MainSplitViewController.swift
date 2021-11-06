@@ -33,7 +33,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	weak var sceneDelegate: SceneDelegate?
 
 	var stateRestorationActivity: NSUserActivity {
-		let activity = appDelegate.activityManager.stateRestorationActivity
+		let activity = activityManager.stateRestorationActivity
 		var userInfo = activity.userInfo == nil ? [AnyHashable: Any]() : activity.userInfo
 
 		userInfo![UserInfoKeys.goBackwardStack] = goBackwardStack.map { $0.userInfo }
@@ -68,6 +68,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	var isGoForwardOneUnavailable: Bool {
 		return goForwardStack.isEmpty
 	}
+    
+    private let activityManager = ActivityManager()
 	
 	private var sidebarViewController: SidebarViewController? {
 		return viewController(for: .primary) as? SidebarViewController
@@ -381,7 +383,7 @@ extension MainSplitViewController: SidebarDelegate {
 		}
 		
 		if let documentContainer = documentContainer {
-			appDelegate.activityManager.selectingDocumentContainer(documentContainer)
+			activityManager.selectingDocumentContainer(documentContainer)
 			if animated {
 				show(.supplementary)
 			} else {
@@ -390,7 +392,7 @@ extension MainSplitViewController: SidebarDelegate {
 				}
 			}
 		} else {
-			appDelegate.activityManager.invalidateSelectDocumentContainer()
+			activityManager.invalidateSelectDocumentContainer()
 		}
 		
 		timelineViewController?.setDocumentContainer(documentContainer, isNavigationBranch: isNavigationBranch, completion: completion)
@@ -418,7 +420,7 @@ extension MainSplitViewController: TimelineDelegate {
 		}
 
 		if let document = document {
-			appDelegate.activityManager.selectingDocument(documentContainer, document)
+			activityManager.selectingDocument(documentContainer, document)
 			if animated {
 				show(.secondary)
 			} else {
@@ -429,7 +431,7 @@ extension MainSplitViewController: TimelineDelegate {
 
 			lastPin = Pin(container: documentContainer, document: document)
 		} else {
-			appDelegate.activityManager.invalidateSelectDocument()
+			activityManager.invalidateSelectDocument()
 		}
 		
 		if let search = documentContainer as? Search {
@@ -585,13 +587,13 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 
 		// If we are showing the Feeds and only the feeds start clearing stuff
 		if isCollapsed && viewController === sidebarViewController && lastMainControllerToAppear == .timeline {
-			appDelegate.activityManager.invalidateSelectDocumentContainer()
+			activityManager.invalidateSelectDocumentContainer()
 			sidebarViewController?.selectDocumentContainer(nil, isNavigationBranch: false, animated: false)
 			return
 		}
 
 		if isCollapsed && viewController === timelineViewController && lastMainControllerToAppear == .editor {
-			appDelegate.activityManager.invalidateSelectDocument()
+			activityManager.invalidateSelectDocument()
 			timelineViewController?.selectDocument(nil, isNavigationBranch: false, animated: false)
 			return
 		}
