@@ -200,6 +200,9 @@ class EditorTextRowTextView: UITextView {
 				textStorage.removeAttribute(.link, range: newRange)
 			}
 		}
+        
+        isTextChanged = true
+        saveText()
 	}
 	
 	func replaceCharacters(_ range: NSRange, withText text: String) {

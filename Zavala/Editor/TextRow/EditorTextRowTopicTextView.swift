@@ -213,13 +213,6 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 		isTextChanged = false
 	}
 	
-	override func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
-		super.updateLinkForCurrentSelection(text: text, link: link, range: range)
-		textStorage.replaceFont(with: OutlineFontCache.shared.topic(level: indentionLevel))
-		isTextChanged = true
-		saveText()
-	}
-	
 }
 
 // MARK: CursorCoordinatesProvider

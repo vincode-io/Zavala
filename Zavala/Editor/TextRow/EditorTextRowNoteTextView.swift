@@ -149,13 +149,6 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 		addSearchHighlighting(isInNotes: true)
 	}
 	
-	override func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
-		super.updateLinkForCurrentSelection(text: text, link: link, range: range)
-		textStorage.replaceFont(with: OutlineFontCache.shared.note(level: indentionLevel))
-		isTextChanged = true
-		saveText()
-	}
-	
 }
 
 // MARK: CursorCoordinatesProvider
