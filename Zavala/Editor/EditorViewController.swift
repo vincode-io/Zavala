@@ -1321,6 +1321,10 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		return adjustedSection == Outline.Section.rows.rawValue
 	}
 	
+	func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
+		return false
+	}
+	
 	func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
 		updateUI()
 	}

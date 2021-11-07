@@ -298,6 +298,10 @@ extension TimelineViewController {
 		return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: timelineDocuments[indexPath.row])
 	}
 
+	override func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
+		return false
+	}
+	
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
 		guard let documentContainers = documentContainers else { return }
 		

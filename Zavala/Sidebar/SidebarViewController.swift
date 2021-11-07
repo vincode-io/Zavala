@@ -224,7 +224,11 @@ extension SidebarViewController {
 		return makeDocumentContainerContextMenu(item: sidebarItem)
 	}
     
-    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+	override func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
+		return false
+	}
+		
+	override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         updateSelections()
     }
 
