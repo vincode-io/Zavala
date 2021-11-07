@@ -12,15 +12,12 @@ import Templeton
 
 class ActivityManager {
 	
-	private var selectDocumentContainerActivity: NSUserActivity?
 	private var selectDocumentActivity: NSUserActivity?
+    private var selectDocumentContainer: DocumentContainer?
+    private var selectDocument: Document?
 
 	var stateRestorationActivity: NSUserActivity {
 		if let activity = selectDocumentActivity {
-			return activity
-		}
-		
-		if let activity = selectDocumentContainerActivity {
 			return activity
 		}
 		
@@ -32,29 +29,22 @@ class ActivityManager {
 	
 	init() {
 		NotificationCenter.default.addObserver(self, selector: #selector(documentDidDelete(_:)), name: .DocumentDidDelete, object: nil)
-	}
-
-	func selectingDocumentContainer(_ documentContainer: DocumentContainer) {
-		self.invalidateSelectDocumentContainer()
-		self.selectDocumentContainerActivity = self.makeSelectDocumentContainerActivity(documentContainer)
-		self.selectDocumentContainerActivity!.becomeCurrent()
-	}
-	
-	func invalidateSelectDocumentContainer() {
-		invalidateSelectDocument()
-		selectDocumentContainerActivity?.invalidate()
-		selectDocumentContainerActivity = nil
+        NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 	}
 
 	func selectingDocument(_ documentContainer: DocumentContainer?, _ document: Document) {
 		self.invalidateSelectDocument()
 		self.selectDocumentActivity = self.makeSelectDocumentActivity(documentContainer, document)
 		self.selectDocumentActivity!.becomeCurrent()
+        self.selectDocumentContainer = documentContainer
+        self.selectDocument = document
 	}
 	
 	func invalidateSelectDocument() {
 		selectDocumentActivity?.invalidate()
 		selectDocumentActivity = nil
+        selectDocumentContainer = nil
+        selectDocument = nil
 	}
 
 }
@@ -66,6 +56,11 @@ extension ActivityManager {
 		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [document.id.description])
 	}
 	
+    @objc func documentTitleDidChange(_ note: Notification) {
+        guard let document = note.object as? Document, document == selectDocument else { return }
+        selectingDocument(selectDocumentContainer, document)
+    }
+    
 	private func makeSelectDocumentContainerActivity(_ documentContainer: DocumentContainer) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocumentContainer)
 		

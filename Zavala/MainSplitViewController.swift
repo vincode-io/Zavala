@@ -382,8 +382,7 @@ extension MainSplitViewController: SidebarDelegate {
 			AppDefaults.shared.lastSelectedAccountID = accountID
 		}
 		
-		if let documentContainer = documentContainer {
-			activityManager.selectingDocumentContainer(documentContainer)
+		if documentContainer != nil {
 			if animated {
 				show(.supplementary)
 			} else {
@@ -391,8 +390,6 @@ extension MainSplitViewController: SidebarDelegate {
 					show(.supplementary)
 				}
 			}
-		} else {
-			activityManager.invalidateSelectDocumentContainer()
 		}
 		
 		timelineViewController?.setDocumentContainer(documentContainer, isNavigationBranch: isNavigationBranch, completion: completion)
@@ -587,7 +584,6 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 
 		// If we are showing the Feeds and only the feeds start clearing stuff
 		if isCollapsed && viewController === sidebarViewController && lastMainControllerToAppear == .timeline {
-			activityManager.invalidateSelectDocumentContainer()
 			sidebarViewController?.selectDocumentContainer(nil, isNavigationBranch: false, animated: false)
 			return
 		}
