@@ -112,6 +112,7 @@
 "Go_Backward" = "Go Backward";
 "Go_Forward" = "Go Forward";
 "History" = "History";
+"Select" = "Select";
 
 /* State restoration */
 "Unknown_Outline" = "The requested outline could not be found.";

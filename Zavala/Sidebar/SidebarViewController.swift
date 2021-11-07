@@ -57,18 +57,24 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	private var addBarButtonItem: UIBarButtonItem!
 	private var importBarButtonItem: UIBarButtonItem!
 
-	override func viewDidLoad() {
+    private var selectBarButtonItem: UIBarButtonItem!
+    private var selectDoneBarButtonItem: UIBarButtonItem!
+
+    override func viewDidLoad() {
 		super.viewDidLoad()
 
 		addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
-		importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML(_:)))
-		
+        addBarButtonItem.title = L10n.add
+
+        importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML(_:)))
+        importBarButtonItem.title = L10n.importOPML
+
+        selectBarButtonItem = UIBarButtonItem(title: L10n.select, style: .plain, target: self, action: #selector(multipleSelect))
+        selectDoneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(multipleSelectDone))
+        
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
-			addBarButtonItem.title = L10n.add
-			importBarButtonItem.title = L10n.importOPML
-			
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
@@ -76,6 +82,10 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
         
         if traitCollection.userInterfaceIdiom == .mac {
             collectionView.allowsMultipleSelection = true
+        }
+
+        if traitCollection.userInterfaceIdiom == .pad {
+            navigationItem.rightBarButtonItem = selectBarButtonItem
         }
 
 		if traitCollection.userInterfaceIdiom == .phone {
@@ -103,6 +113,10 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	
 	func selectDocumentContainers(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
         collectionView.deselectAll()
+        
+        if let containers = containers, containers.count > 1, traitCollection.userInterfaceIdiom == .pad {
+            multipleSelect()
+        }
         
         if let containers = containers, containers.count == 1, let search = containers.first as? Search {
 			DispatchQueue.main.async {
@@ -168,10 +182,21 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		mainSplitViewController?.importOPML()
 	}
 
-	@objc func createOutline(_ sender: Any) {
-		mainSplitViewController?.createOutline(sender)
-	}
-	
+    @objc func createOutline(_ sender: Any) {
+        mainSplitViewController?.createOutline(sender)
+    }
+    
+    @objc func multipleSelect() {
+        collectionView.allowsMultipleSelection = true
+        navigationItem.rightBarButtonItem = selectDoneBarButtonItem
+    }
+
+    @objc func multipleSelectDone() {
+        selectDocumentContainers(nil, isNavigationBranch: true, animated: true)
+        collectionView.allowsMultipleSelection = false
+        navigationItem.rightBarButtonItem = selectBarButtonItem
+    }
+
 	// MARK: API
 	
 	func beginDocumentSearch() {
