@@ -176,6 +176,12 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 				self.presentError(title: L10n.importFailed, message: error.localizedDescription)
 			}
 		}
+        
+        if let document = document {
+            loadDocuments(animated: true) {
+                self.selectDocument(document, animated: true)
+            }
+        }
 	}
 	
 	func createOutlineDocument(title: String) -> Document? {

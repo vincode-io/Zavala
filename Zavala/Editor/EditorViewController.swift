@@ -22,7 +22,7 @@ protocol EditorDelegate: AnyObject {
 	var editorViewControllerGoForwardStack: [Pin] { get }
 	func goBackward(_: EditorViewController, to: Int)
 	func goForward(_: EditorViewController, to: Int)
-	func createOutline(_ : EditorViewController, title: String) -> Outline?
+	func createNewOutline(_ : EditorViewController, title: String) -> Outline?
 	func validateToolbar(_ : EditorViewController)
 	func showGetInfo(_: EditorViewController, outline: Outline)
 	func exportPDFDoc(_: EditorViewController, outline: Outline)
@@ -1587,7 +1587,7 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 extension EditorViewController: LinkViewControllerDelegate {
 	
 	func createOutline(title: String) -> Outline? {
-		return delegate?.createOutline(self, title: title)
+		return delegate?.createNewOutline(self, title: title)
 	}
 	
 	func updateLink(cursorCoordinates: CursorCoordinates, text: String, link: String?, range: NSRange) {

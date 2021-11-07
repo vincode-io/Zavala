@@ -222,7 +222,7 @@ extension EditorContainerViewController: EditorDelegate {
 	func goBackward(_ : EditorViewController, to: Int) {}
 	func goForward(_ : EditorViewController, to: Int) {}
 
-	func createOutline(_: EditorViewController, title: String) -> Outline? {
+	func createNewOutline(_: EditorViewController, title: String) -> Outline? {
 		return newOutlineDocument(title: title)?.outline
 	}
 

@@ -509,7 +509,7 @@ extension MainSplitViewController: EditorDelegate {
 	}
 	
 	
-	func createOutline(_: EditorViewController, title: String) -> Outline? {
+	func createNewOutline(_: EditorViewController, title: String) -> Outline? {
         return timelineViewController?.createOutlineDocument(title: title)?.outline
 	}
 	
@@ -801,7 +801,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = L10n.sync
 			item.toolTip = L10n.sync
 			item.isBordered = true
-			item.action = #selector(sync(_:))
+			item.action = #selector(sync)
 			item.target = self
 			toolbarItem = item
 		case .importOPML:
@@ -825,7 +825,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = L10n.newOutline
 			item.toolTip = L10n.newOutline
 			item.isBordered = true
-			item.action = #selector(createOutline(_:))
+			item.action = #selector(createOutline)
 			item.target = self
 			toolbarItem = item
 		case .insertImage:
