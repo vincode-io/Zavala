@@ -29,15 +29,14 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 		self.name = tag.name
 	}
 	
-	public func sortedDocuments(completion: @escaping (Result<[Document], Error>) -> Void) {
+	public func documents(completion: @escaping (Result<[Document], Error>) -> Void) {
 		guard let tag = tag else {
 			completion(.success([Document]()))
 			return
 		}
 		
 		let tagDocuments = account?.documents?.filter { $0.hasTag(tag) }
-		let sortedDocuments = Self.sortByTitle(tagDocuments ?? [Document]())
-		completion(.success(sortedDocuments))
+		completion(.success(tagDocuments ?? [Document]()))
 	}
 	
 }

@@ -12,7 +12,7 @@ import RSCore
 import Templeton
 
 protocol TimelineDelegate: AnyObject  {
-	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool)
+	func documentSelectionDidChange(_: TimelineViewController, documentContainers: [DocumentContainer], document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool)
 	func showGetInfo(_: TimelineViewController, outline: Outline)
 	func exportPDFDoc(_: TimelineViewController, outline: Outline)
 	func exportPDFList(_: TimelineViewController, outline: Outline)
@@ -35,8 +35,8 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 
 	override var canBecomeFirstResponder: Bool { return true }
 
-	private(set) var documentContainer: DocumentContainer?
-	private var heldDocumentContainer: DocumentContainer?
+	private(set) var documentContainers: [DocumentContainer]?
+	private var heldDocumentContainers: [DocumentContainer]?
 
 	private let searchController = UISearchController(searchResultsController: nil)
 	private var addBarButtonItem: UIBarButtonItem?
@@ -128,19 +128,19 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	
 	// MARK: API
 	
-	func setDocumentContainer(_ documentContainer: DocumentContainer?, isNavigationBranch: Bool, completion: (() -> Void)? = nil) {
+	func setDocumentContainers(_ documentContainers: [DocumentContainer], isNavigationBranch: Bool, completion: (() -> Void)? = nil) {
 		func updateContainer() {
-			self.documentContainer = documentContainer
+			self.documentContainers = documentContainers
 			updateUI()
 			collectionView.deselectAll()
 			loadDocuments(animated: false, isNavigationBranch: isNavigationBranch, completion: completion)
 		}
 		
-		if documentContainer is Search {
+        if documentContainers.count == 1, documentContainers.first is Search {
 			updateContainer()
 		} else {
 			searchController.searchBar.text = ""
-			heldDocumentContainer = nil
+			heldDocumentContainers = nil
 			searchController.dismiss(animated: false) {
 				updateContainer()
 			}
@@ -148,13 +148,13 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	}
 
 	func selectDocument(_ document: Document?, isNew: Bool = false, isNavigationBranch: Bool = true, animated: Bool) {
-		guard let documentContainer = documentContainer else { return }
+		guard let documentContainers = documentContainers else { return }
 		if let document = document, let index = timelineDocuments.firstIndex(of: document) {
 			collectionView.selectItem(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .centeredVertically)
 		} else {
 			collectionView.deselectAll()
 		}
-		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: isNew, isNavigationBranch: isNavigationBranch, animated: animated)
+		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: document, isNew: isNew, isNavigationBranch: isNavigationBranch, animated: animated)
 	}
 	
 	func deleteCurrentDocument() {
@@ -163,30 +163,28 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	}
 	
 	func importOPMLs(urls: [URL]) {
-		guard let account = documentContainer?.account else { return }
+        guard let documentContainers = documentContainers,
+              let account = documentContainers.uniqueAccount else { return }
 
 		var document: Document?
 		for url in urls {
 			do {
-				let tag = (documentContainer as? TagDocuments)?.tag
-				document = try account.importOPML(url, tag: tag)
+                let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
+				document = try account.importOPML(url, tags: tags)
 				DocumentIndexer.updateIndex(forDocument: document!)
 			} catch {
 				self.presentError(title: L10n.importFailed, message: error.localizedDescription)
 			}
 		}
-		
-		if let document = document {
-			loadDocumentsQueue.performCallsImmediately()
-			selectDocument(document, animated: true)
-		}
 	}
 	
-	func createOutline(title: String) -> Outline? {
-		guard let account = documentContainer?.account else { return nil }
-		let document = account.createOutline(title: title, tag: (documentContainer as? TagDocuments)?.tag)
+	func createOutlineDocument(title: String) -> Document? {
+        guard let documentContainers = documentContainers,
+              let account = documentContainers.uniqueAccount else { return nil }
+
+        let document = account.createOutline(title: title, tags: documentContainers.tags)
 		document.outline?.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
-		return document.outline
+		return document
 	}
 	
 	// MARK: Notifications
@@ -236,11 +234,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	}
 	
 	@objc func createOutline(_ sender: Any? = nil) {
-		guard let account = documentContainer?.account else { return }
-		let document = account.createOutline(tag: (documentContainer as? TagDocuments)?.tag)
-		if case .outline(let outline) = document {
-			outline.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
-		}
+		guard let document = createOutlineDocument(title: "") else { return }
 		loadDocuments(animated: true) {
 			self.selectDocument(document, isNew: true, animated: true)
 		}
@@ -309,14 +303,14 @@ extension TimelineViewController {
 	}
 		
 	@objc func selectDocument(gesture: UITapGestureRecognizer) {
-		guard let documentContainer = documentContainer,
+		guard let documentContainers = documentContainers,
 			  let cell = gesture.view as? UICollectionViewCell,
 			  let indexPath = collectionView.indexPath(for: cell),
 			  indexPath != collectionView.indexPathsForSelectedItems?.first else { return }
 
 		collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
 		let document = timelineDocuments[indexPath.row]
-		delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: document, isNew: false, isNavigationBranch: true, animated: true)
+		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: document, isNew: false, isNavigationBranch: true, animated: true)
 	}
 	
 	@objc func openDocumentInNewWindow(gesture: UITapGestureRecognizer) {
@@ -341,29 +335,47 @@ extension TimelineViewController {
 	}
 	
 	func loadDocuments(animated: Bool, isNavigationBranch: Bool = false, completion: (() -> Void)? = nil) {
-		guard let documentContainer = documentContainer else {
+		guard let documentContainers = documentContainers else {
 			completion?()
 			return
 		}
 		
-		documentContainer.sortedDocuments { [weak self] result in
-			guard let self = self, let documents = try? result.get() else {
-				completion?()
-				return
-			}
+        let tags = documentContainers.tags
+        var selectionContainers: [DocumentProvider]
+        if !tags.isEmpty {
+            selectionContainers = [TagsDocuments(tags: tags)]
+        } else {
+            selectionContainers = documentContainers
+        }
+        
+        var documents = Set<Document>()
+        let group = DispatchGroup()
+        
+        for container in selectionContainers {
+            group.enter()
+            container.documents { result in
+                if let containerDocuments = try? result.get() {
+                    documents.formUnion(containerDocuments)
+                }
+                group.leave()
+            }
+        }
+        
+        group.notify(queue: DispatchQueue.main) {
+            let sortedDocuments = documents.sorted(by: { $0.title ?? "" < $1.title ?? "" })
 
-			guard animated else {
-				self.timelineDocuments = documents
+            guard animated else {
+                self.timelineDocuments = sortedDocuments
 				self.collectionView.reloadData()
-				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
+				self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: nil, isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
 				completion?()
 				return
 			}
 			
 			let prevSelectedDoc = self.collectionView.indexPathsForSelectedItems?.map({ self.timelineDocuments[$0.row] }).first
 
-			let diff = documents.difference(from: self.timelineDocuments).inferringMoves()
-			self.timelineDocuments = documents
+			let diff = sortedDocuments.difference(from: self.timelineDocuments).inferringMoves()
+            self.timelineDocuments = sortedDocuments
 
 			self.collectionView.performBatchUpdates {
 				for change in diff {
@@ -389,7 +401,7 @@ extension TimelineViewController {
 				self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
 				self.collectionView.scrollToItem(at: indexPath, at: [], animated: true)
 			} else {
-				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
+				self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: nil, isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
 			}
 			
 			completion?()
@@ -403,14 +415,14 @@ extension TimelineViewController {
 extension TimelineViewController: UISearchControllerDelegate {
 
 	func willPresentSearchController(_ searchController: UISearchController) {
-		heldDocumentContainer = documentContainer
-		setDocumentContainer(Search(searchText: ""), isNavigationBranch: false)
+		heldDocumentContainers = documentContainers
+		setDocumentContainers([Search(searchText: "")], isNavigationBranch: false)
 	}
 
 	func didDismissSearchController(_ searchController: UISearchController) {
-		if let heldDocumentContainer = heldDocumentContainer {
-			setDocumentContainer(heldDocumentContainer, isNavigationBranch: false)
-			self.heldDocumentContainer = nil
+		if let heldDocumentContainers = heldDocumentContainers {
+			setDocumentContainers(heldDocumentContainers, isNavigationBranch: false)
+			self.heldDocumentContainers = nil
 		}
 	}
 
@@ -421,7 +433,7 @@ extension TimelineViewController: UISearchControllerDelegate {
 extension TimelineViewController: UISearchResultsUpdating {
 
 	func updateSearchResults(for searchController: UISearchController) {
-		setDocumentContainer(Search(searchText: searchController.searchBar.text!), isNavigationBranch: false)
+		setDocumentContainers([Search(searchText: searchController.searchBar.text!)], isNavigationBranch: false)
 	}
 
 }
@@ -439,11 +451,22 @@ extension TimelineViewController {
 	}
 	
 	private func updateUI() {
-		navigationItem.title = documentContainer?.name
-		view.window?.windowScene?.title = documentContainer?.name
+        var defaultAccount: Account? = nil
+        var title: String? = nil
+        if let containers = documentContainers {
+            if containers.count == 1, let onlyContainer = containers.first {
+                title = onlyContainer.name
+                defaultAccount = onlyContainer.account
+            } else {
+                title = L10n.multiple
+            }
+        }
+        
+		navigationItem.title = title
+		view.window?.windowScene?.title = title
 		
 		if traitCollection.userInterfaceIdiom != .mac {
-			if documentContainer?.account == nil {
+			if defaultAccount == nil {
 				navigationItem.rightBarButtonItems = nil
 			} else {
 				navigationItem.rightBarButtonItems = [addBarButtonItem!, importBarButtonItem!]
@@ -564,8 +587,8 @@ extension TimelineViewController {
 	
 	private func deleteDocument(_ document: Document, completion: ((Bool) -> Void)? = nil) {
 		func delete() {
-			if document == self.currentDocument, let documentContainer = self.documentContainer {
-				self.delegate?.documentSelectionDidChange(self, documentContainer: documentContainer, document: nil, isNew: false, isNavigationBranch: true, animated: true)
+			if document == self.currentDocument, let documentContainers = self.documentContainers {
+				self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: nil, isNew: false, isNavigationBranch: true, animated: true)
 			}
 			document.account?.deleteDocument(document)
 		}

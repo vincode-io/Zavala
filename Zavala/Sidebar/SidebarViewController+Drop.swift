@@ -52,8 +52,11 @@ extension SidebarViewController: UICollectionViewDropDelegate {
 				provider.loadDataRepresentation(forTypeIdentifier: "org.opml.opml") { (opmlData, error) in
 					guard let opmlData = opmlData else { return }
 					DispatchQueue.main.async {
-						let tag = (container as? TagDocuments)?.tag
-						if let document = container.account?.importOPML(opmlData, tag: tag) {
+                        var tags: [Tag]? = nil
+                        if let tag = (container as? TagDocuments)?.tag {
+                            tags = [tag]
+                        }
+						if let document = container.account?.importOPML(opmlData, tags: tags) {
 							DocumentIndexer.updateIndex(forDocument: document)
 						}
 					}

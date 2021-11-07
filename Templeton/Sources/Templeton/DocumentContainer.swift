@@ -8,24 +8,31 @@
 import Foundation
 import RSCore
 
-public protocol DocumentContainer {
+public protocol DocumentContainer: DocumentProvider {
 	var id: EntityID { get }
 	var name: String? { get }
 	var image: RSImage? { get }
 	var itemCount: Int? { get }
 	var account: Account? { get }
-	
-	func sortedDocuments(completion: @escaping (Result<[Document], Error>) -> Void)
 }
 
-public extension DocumentContainer {
-	
-	static func sortByUpdate(_ documents: [Document]) -> [Document] {
-		return documents.sorted(by: { $0.updated ?? Date.distantPast > $1.updated ?? Date.distantPast })
-	}
-
-	static func sortByTitle(_ documents: [Document]) -> [Document] {
-		return documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
-	}
-
+public extension Array where Element == DocumentContainer {
+    
+    var uniqueAccount: Account? {
+        var account: Account? = nil
+        for container in self {
+            if let account = account, let containerAccount = container.account {
+                if account != containerAccount {
+                    return nil
+                }
+            }
+            account = container.account
+        }
+        return account
+    }
+    
+    var tags: [Tag] {
+        return self.compactMap { ($0 as? TagDocuments)?.tag }
+    }
+    
 }

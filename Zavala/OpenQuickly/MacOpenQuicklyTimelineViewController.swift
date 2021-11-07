@@ -141,10 +141,11 @@ class MacOpenQuicklyTimelineViewController: UICollectionViewController {
 			return
 		}
 		
-		documentContainer.sortedDocuments { [weak self] result in
+		documentContainer.documents { [weak self] result in
 			guard let self = self, let documents = try? result.get() else { return }
 
-			let items = documents.map { TimelineItem.timelineItem($0) }
+            let sortedDocuments = documents.sorted(by: { $0.title ?? "" < $1.title ?? "" })
+			let items = sortedDocuments.map { TimelineItem.timelineItem($0) }
 			var snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
 			snapshot.append(items)
 

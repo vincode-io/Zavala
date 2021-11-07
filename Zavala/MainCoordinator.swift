@@ -10,7 +10,6 @@ import Templeton
 import SafariServices
 
 protocol MainCoordinator: UIViewController {
-	var currentDocumentContainer: DocumentContainer? { get }
 	var editorViewController: EditorViewController? { get }
 	var isGoBackwardOneUnavailable: Bool { get }
 	var isGoForwardOneUnavailable: Bool { get }

@@ -68,7 +68,7 @@
 		<string>EditRowsIntent</string>
 		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
-		<string>GetCurrentTagIntent</string>
+		<string>GetCurrentTagsIntent</string>
 		<string>GetImagesForOutlineIntent</string>
 		<string>GetOutlinesIntent</string>
 		<string>GetRowsIntent</string>
@@ -106,7 +106,7 @@
 		<string>EditRowsIntent</string>
 		<string>ExportIntent</string>
 		<string>GetCurrentOutlineIntent</string>
-		<string>GetCurrentTagIntent</string>
+		<string>GetCurrentTagsIntent</string>
 		<string>GetImagesForOutlineIntent</string>
 		<string>GetOutlinesIntent</string>
 		<string>GetRowsIntent</string>

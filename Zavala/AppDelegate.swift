@@ -564,8 +564,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return ExportIntentHandler()
 		case is GetCurrentOutlineIntent:
 			return GetCurrentOutlineIntentHandler(mainCoordinator: mainCoordinator)
-		case is GetCurrentTagIntent:
-			return GetCurrentTagIntentHandler(mainCoordinator: mainCoordinator)
+		case is GetCurrentTagsIntent:
+			return GetCurrentTagsIntentHandler(mainCoordinator: mainCoordinator)
 		case is GetImagesForOutlineIntent:
 			return GetImagesForOutlineIntentHandler()
 		case is GetOutlinesIntent:
@@ -1160,7 +1160,7 @@ extension AppDelegate: AppKitPluginDelegate {
 	func importOPML(_ url: URL) {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return }
-		guard let document = try? account.importOPML(url, tag: nil) else { return }
+		guard let document = try? account.importOPML(url, tags: nil) else { return }
 
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 		activity.userInfo = [UserInfoKeys.pin: Pin(document: document).userInfo]

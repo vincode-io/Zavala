@@ -202,6 +202,8 @@ internal enum L10n {
   internal static let moveRight = L10n.tr("Localizable", "Move_Right")
   /// Move Up
   internal static let moveUp = L10n.tr("Localizable", "Move_Up")
+  /// Multiple
+  internal static let multiple = L10n.tr("Localizable", "Multiple")
   /// Navigation
   internal static let navigation = L10n.tr("Localizable", "Navigation")
   /// New Folder

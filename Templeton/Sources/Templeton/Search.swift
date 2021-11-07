@@ -63,17 +63,6 @@ public final class Search: Identifiable, DocumentContainer {
 		searchQuery?.start()
 	}
 	
-	public func sortedDocuments(completion: @escaping (Result<[Document], Error>) -> Void) {
-		documents() { result in
-			switch result {
-			case .success(let documents):
-				completion(.success(Self.sortByUpdate(documents)))
-			case .failure(let error):
-				completion(.failure(error))
-			}
-		}
-	}
-	
 	deinit {
 		searchQuery?.cancel()
 	}

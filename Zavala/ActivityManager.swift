@@ -12,12 +12,17 @@ import Templeton
 
 class ActivityManager {
 	
+	private var selectDocumentContainerActivity: NSUserActivity?
 	private var selectDocumentActivity: NSUserActivity?
-    private var selectDocumentContainer: DocumentContainer?
+    private var selectDocumentContainers: [DocumentContainer]?
     private var selectDocument: Document?
 
 	var stateRestorationActivity: NSUserActivity {
 		if let activity = selectDocumentActivity {
+			return activity
+		}
+		
+		if let activity = selectDocumentContainerActivity {
 			return activity
 		}
 		
@@ -31,19 +36,31 @@ class ActivityManager {
 		NotificationCenter.default.addObserver(self, selector: #selector(documentDidDelete(_:)), name: .DocumentDidDelete, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 	}
+    
+    func selectingDocumentContainers(_ documentContainers: [DocumentContainer]) {
+        self.invalidateSelectDocumentContainers()
+        self.selectDocumentContainerActivity = self.makeSelectDocumentContainerActivity(documentContainers)
+        self.selectDocumentContainerActivity!.becomeCurrent()
+    }
+    
+    func invalidateSelectDocumentContainers() {
+        invalidateSelectDocument()
+        selectDocumentContainerActivity?.invalidate()
+        selectDocumentContainerActivity = nil
+    }
 
-	func selectingDocument(_ documentContainer: DocumentContainer?, _ document: Document) {
+	func selectingDocument(_ documentContainers: [DocumentContainer]?, _ document: Document) {
 		self.invalidateSelectDocument()
-		self.selectDocumentActivity = self.makeSelectDocumentActivity(documentContainer, document)
+		self.selectDocumentActivity = self.makeSelectDocumentActivity(documentContainers, document)
 		self.selectDocumentActivity!.becomeCurrent()
-        self.selectDocumentContainer = documentContainer
+        self.selectDocumentContainers = documentContainers
         self.selectDocument = document
 	}
 	
 	func invalidateSelectDocument() {
 		selectDocumentActivity?.invalidate()
 		selectDocumentActivity = nil
-        selectDocumentContainer = nil
+        selectDocumentContainers = nil
         selectDocument = nil
 	}
 
@@ -56,41 +73,34 @@ extension ActivityManager {
 		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [document.id.description])
 	}
 	
-    @objc func documentTitleDidChange(_ note: Notification) {
-        guard let document = note.object as? Document, document == selectDocument else { return }
-        selectingDocument(selectDocumentContainer, document)
-    }
-    
-	private func makeSelectDocumentContainerActivity(_ documentContainer: DocumentContainer) -> NSUserActivity {
+	private func makeSelectDocumentContainerActivity(_ documentContainers: [DocumentContainer]) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocumentContainer)
 		
-		let title = L10n.seeDocumentsIn(documentContainer.name ?? "")
+        var containerName = L10n.multiple
+        if documentContainers.count == 1, let name = documentContainers.first?.name {
+            containerName = name
+        }
+		let title = L10n.seeDocumentsIn(containerName)
 		activity.title = title
 		
-		activity.userInfo = [UserInfoKeys.pin: Pin(container: documentContainer).userInfo]
+		activity.userInfo = [UserInfoKeys.pin: Pin(containers: documentContainers).userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
-	
-		activity.isEligibleForSearch = true
-		activity.isEligibleForPrediction = true
-
-		let idString = documentContainer.id.description
-		activity.persistentIdentifier = idString
-
-		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeCompositeContent as String)
-		attributeSet.title = title
-		attributeSet.relatedUniqueIdentifier = idString
-		activity.contentAttributeSet = attributeSet
 		
 		return activity
 	}
 	
-	private func makeSelectDocumentActivity(_ documentContainer: DocumentContainer?, _ document: Document) -> NSUserActivity {
+    @objc func documentTitleDidChange(_ note: Notification) {
+        guard let document = note.object as? Document, document == selectDocument else { return }
+        selectingDocument(selectDocumentContainers, document)
+    }
+    
+	private func makeSelectDocumentActivity(_ documentContainers: [DocumentContainer]?, _ document: Document) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocument)
 
 		let title = L10n.editDocument(document.title ?? "")
 		activity.title = title
 		
-		activity.userInfo = [UserInfoKeys.pin: Pin(container: documentContainer, document: document).userInfo]
+		activity.userInfo = [UserInfoKeys.pin: Pin(containers: documentContainers, document: document).userInfo]
 		activity.requiredUserInfoKeys = Set(activity.userInfo!.keys.map { $0 as! String })
 		
 		if let keywords = document.tags?.map({ $0.name }) {

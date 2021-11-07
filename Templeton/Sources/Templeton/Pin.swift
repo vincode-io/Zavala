@@ -12,18 +12,16 @@ public extension Notification.Name {
 
 public struct Pin: Equatable {
 	
-	public let containerID: EntityID?
+	public let containerIDs: [EntityID]?
 	public let documentID: EntityID?
 	
-	public var container: DocumentContainer? {
-		if let containerID = containerID {
-			if let container = AccountManager.shared.findDocumentContainer(containerID) {
-				return container
-			}
+	public var containers: [DocumentContainer]? {
+		if let containerIDs = containerIDs {
+            return containerIDs.compactMap { AccountManager.shared.findDocumentContainer($0) }
 		}
 		
-		if let documentID = documentID {
-			return AccountManager.shared.findDocumentContainer(.allDocuments(documentID.accountID))
+		if let documentID = documentID, let container = AccountManager.shared.findDocumentContainer(.allDocuments(documentID.accountID)) {
+			return [container]
 		}
 		
 		return nil
@@ -36,8 +34,8 @@ public struct Pin: Equatable {
 	
 	public var userInfo: [AnyHashable: AnyHashable] {
 		var userInfo = [AnyHashable: AnyHashable]()
-		if let containerID = containerID {
-			userInfo["containerID"] = containerID.userInfo
+		if let containerIDs = containerIDs {
+            userInfo["containerIDs"] = containerIDs.map { $0.userInfo }
 		}
 		if let documentID = documentID {
 			userInfo["documentID"] = documentID.userInfo
@@ -45,27 +43,27 @@ public struct Pin: Equatable {
 		return userInfo
 	}
 	
-	public init(containerID: EntityID? = nil, documentID: EntityID? = nil) {
-		self.containerID = containerID
+	public init(containerIDs: [EntityID]? = nil, documentID: EntityID? = nil) {
+		self.containerIDs = containerIDs
 		self.documentID = documentID
 	}
 
-	public init(container: DocumentContainer? = nil, document: Document? = nil) {
-		self.containerID = container?.id
+	public init(containers: [DocumentContainer]? = nil, document: Document? = nil) {
+        self.containerIDs = containers?.map { $0.id }
 		self.documentID = document?.id
 	}
 
 	public init(userInfo: Any?) {
 		guard let userInfo = userInfo as? [AnyHashable: AnyHashable] else {
-			self.containerID = nil
+			self.containerIDs = nil
 			self.documentID = nil
 			return
 		}
 		
-		if let userInfo = userInfo["containerID"] as? [AnyHashable : AnyHashable] {
-			self.containerID = EntityID(userInfo: userInfo)
+		if let userInfos = userInfo["containerIDs"] as? [[AnyHashable : AnyHashable]] {
+            self.containerIDs = userInfos.compactMap { EntityID(userInfo: $0) }
 		} else {
-			self.containerID = nil
+			self.containerIDs = nil
 		}
 		
 		if let userInfo = userInfo["documentID"] as? [AnyHashable : AnyHashable] {

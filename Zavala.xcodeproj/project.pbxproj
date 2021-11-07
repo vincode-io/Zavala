@@ -116,7 +116,7 @@
 		519185032713146500B7E177 /* RemoveOutlineTagIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519185022713146500B7E177 /* RemoveOutlineTagIntentHandler.swift */; };
 		5191850527133B4000B7E177 /* RenameTagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850427133B4000B7E177 /* RenameTagViewController.swift */; };
 		519185072713453700B7E177 /* MacRenameTagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519185062713453700B7E177 /* MacRenameTagViewController.swift */; };
-		5191850927137DFD00B7E177 /* GetCurrentTagIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850827137DFD00B7E177 /* GetCurrentTagIntentHandler.swift */; };
+		5191850927137DFD00B7E177 /* GetCurrentTagsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850827137DFD00B7E177 /* GetCurrentTagsIntentHandler.swift */; };
 		5191850B2713828F00B7E177 /* AddOutlineIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850A2713828F00B7E177 /* AddOutlineIntentHandler.swift */; };
 		5191850D271387C300B7E177 /* RemoveOutlineIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850C271387C300B7E177 /* RemoveOutlineIntentHandler.swift */; };
 		5191850F271390F100B7E177 /* IntentEntityID+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850E271390F100B7E177 /* IntentEntityID+.swift */; };
@@ -355,7 +355,7 @@
 		519185022713146500B7E177 /* RemoveOutlineTagIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveOutlineTagIntentHandler.swift; sourceTree = "<group>"; };
 		5191850427133B4000B7E177 /* RenameTagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameTagViewController.swift; sourceTree = "<group>"; };
 		519185062713453700B7E177 /* MacRenameTagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacRenameTagViewController.swift; sourceTree = "<group>"; };
-		5191850827137DFD00B7E177 /* GetCurrentTagIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentTagIntentHandler.swift; sourceTree = "<group>"; };
+		5191850827137DFD00B7E177 /* GetCurrentTagsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentTagsIntentHandler.swift; sourceTree = "<group>"; };
 		5191850A2713828F00B7E177 /* AddOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddOutlineIntentHandler.swift; sourceTree = "<group>"; };
 		5191850C271387C300B7E177 /* RemoveOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveOutlineIntentHandler.swift; sourceTree = "<group>"; };
 		5191850E271390F100B7E177 /* IntentEntityID+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentEntityID+.swift"; sourceTree = "<group>"; };
@@ -685,7 +685,7 @@
 			isa = PBXGroup;
 			children = (
 				51AEEC8E2703EB6700354C59 /* GetCurrentOutlineIntentHandler.swift */,
-				5191850827137DFD00B7E177 /* GetCurrentTagIntentHandler.swift */,
+				5191850827137DFD00B7E177 /* GetCurrentTagsIntentHandler.swift */,
 				519184F6271115CE00B7E177 /* ShowOutlineIntentHandler.swift */,
 			);
 			path = UI;
@@ -1131,7 +1131,7 @@
 				51DEE82626FE87CD006DAA56 /* ExportPDFListActivity.swift in Sources */,
 				5147D0B525CB95B4004673C3 /* TimelineViewController+Drag.swift in Sources */,
 				51D977FA257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift in Sources */,
-				5191850927137DFD00B7E177 /* GetCurrentTagIntentHandler.swift in Sources */,
+				5191850927137DFD00B7E177 /* GetCurrentTagsIntentHandler.swift in Sources */,
 				517AF69C25E0862E0044DBAB /* AppDefaults.swift in Sources */,
 				51FF2A6B2732B97800208A75 /* ValidatingMenuToolbarItem.swift in Sources */,
 				517A9E1B2602ACE000EF346A /* OutlineEditorSceneDelegate.swift in Sources */,

@@ -176,6 +176,20 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
+    public func hasAllTags(_ tags: [Tag]) -> Bool {
+        switch self {
+        case .outline(let outline):
+            return outline.hasAllTags(tags)
+        }
+    }
+    
+    public func hasAnyTag(_ tags: [Tag]) -> Bool {
+        switch self {
+        case .outline(let outline):
+            return outline.hasAnyTag(tags)
+        }
+    }
+    
 	public func hasTag(_ tag: Tag) -> Bool {
 		switch self {
 		case .outline(let outline):

@@ -126,7 +126,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		accountMetadataDidChange()
 	}
 	
-	public func importOPML(_ url: URL, tag: Tag?) throws -> Document {
+	public func importOPML(_ url: URL, tags: [Tag]?) throws -> Document {
 		guard url.startAccessingSecurityScopedResource() else { throw AccountError.securityScopeError }
 		defer {
 			url.stopAccessingSecurityScopedResource()
@@ -141,11 +141,11 @@ public final class Account: NSObject, Identifiable, Codable {
 		guard fileError == nil else { throw fileError! }
 		guard let opmlData = fileData else { throw AccountError.fileReadError }
 		
-		return importOPML(opmlData, tag: tag)
+		return importOPML(opmlData, tags: tags)
 	}
 
 	@discardableResult
-	public func importOPML(_ opmlData: Data, tag: Tag?, images: [String:  Data]? = nil) -> Document {
+	public func importOPML(_ opmlData: Data, tags: [Tag]?, images: [String:  Data]? = nil) -> Document {
 		let opml = SWXMLHash.config({ config in
 			config.caseInsensitive = true
 		}).parse(opmlData)["opml"]
@@ -191,7 +191,7 @@ public final class Account: NSObject, Identifiable, Codable {
 			outline.expansionState = expansionState
 		}
 		
-		if let tag = tag, !outline.hasTag(tag) {
+		for tag in tags ?? [Tag]() {
 			outline.createTag(tag)
 		}
 
@@ -208,7 +208,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		return document
 	}
 	
-	public func createOutline(title: String? = nil, tag: Tag? = nil) -> Document {
+	public func createOutline(title: String? = nil, tags: [Tag]? = nil) -> Document {
 		let outline = Outline(parentID: id, title: title)
 		if documents == nil {
 			documents = [Document]()
@@ -219,8 +219,10 @@ public final class Account: NSObject, Identifiable, Codable {
 		documents!.append(document)
 		accountDocumentsDidChange()
 
-		if let tag = tag {
-			outline.createTag(tag)
+		if let tags = tags {
+            for tag in tags {
+                outline.createTag(tag)
+            }
 		}
 		
 		saveToCloudKit(document)

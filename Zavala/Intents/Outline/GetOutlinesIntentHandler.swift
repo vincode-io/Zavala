@@ -116,7 +116,7 @@ class GetOutlinesIntentHandler: NSObject, ZavalaIntentHandler, GetOutlinesIntent
 
 		search = Search(searchText: searchText)
 		
-		search!.sortedDocuments { result in
+		search!.documents { result in
 			switch result {
 			case .success(let documents):
 				self.filter(documents: documents, intent: intent, completion: completion)

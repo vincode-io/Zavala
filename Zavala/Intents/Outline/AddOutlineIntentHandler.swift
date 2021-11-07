@@ -26,12 +26,12 @@ class AddOutlineIntentHandler: NSObject, ZavalaIntentHandler, AddOutlineIntentHa
 		completion(.success(with: title))
 	}
 
-	func resolveTagName(for intent: AddOutlineIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
-		guard let tagName = intent.tagName else {
-			completion(.notRequired())
+    func resolveTagNames(for intent: AddOutlineIntent, with completion: @escaping ([INStringResolutionResult]) -> Void) {
+		guard let tagNames = intent.tagNames else {
+			completion([INStringResolutionResult]())
 			return
 		}
-		completion(.success(with: tagName))
+        completion(tagNames.map({ INStringResolutionResult.success(with: $0) }))
 	}
 
 	func handle(intent: AddOutlineIntent, completion: @escaping (AddOutlineIntentResponse) -> Void) {
@@ -44,12 +44,16 @@ class AddOutlineIntentHandler: NSObject, ZavalaIntentHandler, AddOutlineIntentHa
 			return
 		}
 		
-		var tag: Tag? = nil
-		if let tagName = intent.tagName, !tagName.isEmpty {
-			tag = account.createTag(name: tagName)
+		var tags = [Tag]()
+		if let tagNames = intent.tagNames {
+            for tagName in tagNames {
+                if !tagName.isEmpty {
+                    tags.append(account.createTag(name: tagName))
+                }
+            }
 		}
 		
-		guard let outline = account.createOutline(title: title, tag: tag).outline else {
+		guard let outline = account.createOutline(title: title, tags: tags).outline else {
 			suspend()
 			completion(.init(code: .failure, userActivity: nil))
 			return

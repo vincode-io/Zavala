@@ -53,9 +53,13 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			(editorViewController?.isDeleteCurrentRowUnavailable ?? true) 
 	}
 
-	var currentDocumentContainer: DocumentContainer? {
-		return sidebarViewController?.currentDocumentContainer
+	var currentDocumentContainers: [DocumentContainer]? {
+		return sidebarViewController?.currentDocumentContainers
 	}
+    
+    var currentTags: [Tag]? {
+        return sidebarViewController?.currentTags
+    }
 
 	var editorViewController: EditorViewController? {
 		viewController(for: .secondary) as? EditorViewController
@@ -162,11 +166,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 		let pin = Pin(userInfo: userInfo[Zavala.UserInfoKeys.pin])
 		
-		guard let documentContainer = pin.container else {
+		guard let documentContainers = pin.containers else {
 			return
 		}
 		
-		sidebarViewController?.selectDocumentContainer(documentContainer, isNavigationBranch: isNavigationBranch, animated: false) {
+		sidebarViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch, animated: false) {
 			self.lastMainControllerToAppear = .timeline
 
 			guard let document = pin.document else {
@@ -181,28 +185,28 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		guard let account = AccountManager.shared.findAccount(accountID: documentID.accountID),
 			  let document = account.findDocument(documentID) else { return }
 		
-		if let sidebarTag = sidebarViewController?.currentTag, document.hasTag(sidebarTag) {
+		if let sidebarTags = currentTags, document.hasAnyTag(sidebarTags) {
 			self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 		} else if document.tagCount == 1, let tag = document.tags?.first {
-			sidebarViewController?.selectDocumentContainer(TagDocuments(account: account, tag: tag), isNavigationBranch: true, animated: false) {
+			sidebarViewController?.selectDocumentContainers([TagDocuments(account: account, tag: tag)], isNavigationBranch: true, animated: false) {
 				self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 			}
 		} else {
-			sidebarViewController?.selectDocumentContainer(AllDocuments(account: account), isNavigationBranch: true, animated: false) {
+			sidebarViewController?.selectDocumentContainers([AllDocuments(account: account)], isNavigationBranch: true, animated: false) {
 				self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 			}
 		}
 	}
 	
 	func handlePin(_ pin: Pin) {
-		guard let documentContainer = pin.container else { return }
-		sidebarViewController?.selectDocumentContainer(documentContainer, isNavigationBranch: true, animated: false) {
+		guard let documentContainers = pin.containers else { return }
+		sidebarViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: true, animated: false) {
 			self.timelineViewController?.selectDocument(pin.document, isNavigationBranch: true, animated: false)
 		}
 	}
 	
 	func importOPMLs(urls: [URL]) {
-		selectDefaultDocumentContainer {
+		selectDefaultDocumentContainerIfNecessary {
 			self.timelineViewController?.importOPMLs(urls: urls)
 		}
 	}
@@ -370,7 +374,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 extension MainSplitViewController: SidebarDelegate {
 	
-	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
+	func documentContainerSelectionsDidChange(_: SidebarViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
 		if isNavigationBranch, let lastPin = lastPin {
 			goBackwardStack.insert(lastPin, at: 0)
 			goBackwardStack = Array(goBackwardStack.prefix(10))
@@ -378,11 +382,12 @@ extension MainSplitViewController: SidebarDelegate {
 			goForwardStack.removeAll()
 		}
 
-		if let accountID = documentContainer?.account?.id.accountID {
+        if let accountID = documentContainers.first?.account?.id.accountID {
 			AppDefaults.shared.lastSelectedAccountID = accountID
 		}
 		
-		if documentContainer != nil {
+        if !documentContainers.isEmpty {
+            activityManager.selectingDocumentContainers(documentContainers)
 			if animated {
 				show(.supplementary)
 			} else {
@@ -390,9 +395,11 @@ extension MainSplitViewController: SidebarDelegate {
 					show(.supplementary)
 				}
 			}
+		} else {
+			activityManager.invalidateSelectDocumentContainers()
 		}
 		
-		timelineViewController?.setDocumentContainer(documentContainer, isNavigationBranch: isNavigationBranch, completion: completion)
+		timelineViewController?.setDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch, completion: completion)
 	}
 	
 }
@@ -401,7 +408,7 @@ extension MainSplitViewController: SidebarDelegate {
 
 extension MainSplitViewController: TimelineDelegate {
 	
-	func documentSelectionDidChange(_: TimelineViewController, documentContainer: DocumentContainer, document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
+	func documentSelectionDidChange(_: TimelineViewController, documentContainers: [DocumentContainer], document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
 		// This prevents the same document from entering the backward stack more than once in a row.
 		// If the first item on the backward stack equals the new document and there is nothing stored
 		// in the last pin, we know they clicked on a document twice without one between.
@@ -417,7 +424,7 @@ extension MainSplitViewController: TimelineDelegate {
 		}
 
 		if let document = document {
-			activityManager.selectingDocument(documentContainer, document)
+			activityManager.selectingDocument(documentContainers, document)
 			if animated {
 				show(.secondary)
 			} else {
@@ -426,24 +433,24 @@ extension MainSplitViewController: TimelineDelegate {
 				}
 			}
 
-			lastPin = Pin(container: documentContainer, document: document)
+			lastPin = Pin(containers: documentContainers, document: document)
 		} else {
 			activityManager.invalidateSelectDocument()
 		}
 		
-		if let search = documentContainer as? Search {
+        if let search = documentContainers.first as? Search {
 			if search.searchText.isEmpty {
 				editorViewController?.edit(nil, isNew: isNew)
 			} else {
 				editorViewController?.edit(document?.outline, isNew: isNew, searchText: search.searchText)
 				if let document = document {
-					pinWasVisited(Pin(container: documentContainer, document: document))
+					pinWasVisited(Pin(containers: documentContainers, document: document))
 				}
 			}
 		} else {
 			editorViewController?.edit(document?.outline, isNew: isNew)
 			if let document = document {
-				pinWasVisited(Pin(container: documentContainer, document: document))
+				pinWasVisited(Pin(containers: documentContainers, document: document))
 			}
 		}
 	}
@@ -503,7 +510,7 @@ extension MainSplitViewController: EditorDelegate {
 	
 	
 	func createOutline(_: EditorViewController, title: String) -> Outline? {
-		return timelineViewController?.createOutline(title: title)
+        return timelineViewController?.createOutlineDocument(title: title)?.outline
 	}
 	
 	func validateToolbar(_: EditorViewController) {
@@ -543,7 +550,7 @@ extension MainSplitViewController: UISplitViewControllerDelegate {
 	func splitViewController(_ svc: UISplitViewController, topColumnForCollapsingToProposedTopColumn proposedTopColumn: UISplitViewController.Column) -> UISplitViewController.Column {
 		switch proposedTopColumn {
 		case .supplementary:
-			if timelineViewController?.documentContainer != nil {
+            if let containers = timelineViewController?.documentContainers, !containers.isEmpty {
 				return .supplementary
 			} else {
 				return .primary
@@ -552,7 +559,7 @@ extension MainSplitViewController: UISplitViewControllerDelegate {
 			if editorViewController?.outline != nil {
 				return .secondary
 			} else {
-				if timelineViewController?.documentContainer != nil {
+                if let containers = timelineViewController?.documentContainers, !containers.isEmpty {
 					return .supplementary
 				} else {
 					return .primary
@@ -584,7 +591,7 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 
 		// If we are showing the Feeds and only the feeds start clearing stuff
 		if isCollapsed && viewController === sidebarViewController && lastMainControllerToAppear == .timeline {
-			sidebarViewController?.selectDocumentContainer(nil, isNavigationBranch: false, animated: false)
+			sidebarViewController?.selectDocumentContainers(nil, isNavigationBranch: false, animated: false)
 			return
 		}
 
@@ -632,7 +639,7 @@ extension MainSplitViewController {
 	}
 	
 	private func selectDefaultDocumentContainerIfNecessary(completion: @escaping () -> Void) {
-		guard sidebarViewController?.selectedAccount == nil else {
+		guard sidebarViewController?.currentAccount == nil else {
 			completion()
 			return
 		}
@@ -650,7 +657,7 @@ extension MainSplitViewController {
 		
 		let documentContainer = account.documentContainers[0]
 		
-		sidebarViewController?.selectDocumentContainer(documentContainer, isNavigationBranch: true, animated: true) {
+		sidebarViewController?.selectDocumentContainers([documentContainer], isNavigationBranch: true, animated: true) {
 			completion()
 		}
 	}
@@ -701,7 +708,7 @@ extension MainSplitViewController {
 		
 		let pin = goBackwardStack.removeFirst()
 		lastPin = pin
-		sidebarViewController?.selectDocumentContainer(pin.container, isNavigationBranch: false, animated: false) {
+		sidebarViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false) {
 			self.timelineViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
 		}
 	}
@@ -719,7 +726,7 @@ extension MainSplitViewController {
 		}
 		
 		let pin = goForwardStack.removeFirst()
-		sidebarViewController?.selectDocumentContainer(pin.container, isNavigationBranch: false, animated: false) {
+		sidebarViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false) {
 			self.timelineViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
 		}
 	}

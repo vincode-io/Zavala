@@ -25,9 +25,8 @@ public final class AllDocuments: Identifiable, DocumentContainer {
 		self.account = account
 	}
 	
-	public func sortedDocuments(completion: @escaping (Result<[Document], Error>) -> Void) {
-		let sortedDocuments = Self.sortByTitle(account?.documents ?? [Document]())
-		completion(.success(sortedDocuments))
+	public func documents(completion: @escaping (Result<[Document], Error>) -> Void) {
+		completion(.success(account?.documents ?? [Document]()))
 	}
 	
 }

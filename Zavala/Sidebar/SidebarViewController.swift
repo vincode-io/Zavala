@@ -12,7 +12,7 @@ import Combine
 import Templeton
 
 protocol SidebarDelegate: AnyObject {
-	func documentContainerSelectionDidChange(_: SidebarViewController, documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?)
+	func documentContainerSelectionsDidChange(_: SidebarViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?)
 }
 
 enum SidebarSection: Int {
@@ -24,20 +24,25 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	
 	weak var delegate: SidebarDelegate?
 	
-	var selectedAccount: Account? {
-		return currentDocumentContainer?.account
+	var currentAccount: Account? {
+        currentDocumentContainers?.uniqueAccount
 	}
 	
-	var currentTag: Tag? {
-		return (currentDocumentContainer as? TagDocuments)?.tag
+	var currentTags: [Tag]? {
+        return currentDocumentContainers?.compactMap { ($0 as? TagDocuments)?.tag }
 	}
 	
-	var currentDocumentContainer: DocumentContainer? {
-		guard let selectedIndexPath = collectionView.indexPathsForSelectedItems?.first,
-			  let entityID = dataSource.itemIdentifier(for: selectedIndexPath)?.entityID else {
+	var currentDocumentContainers: [DocumentContainer]? {
+		guard let selectedIndexPaths = collectionView.indexPathsForSelectedItems else {
 			return nil
 		}
-		return AccountManager.shared.findDocumentContainer(entityID)
+        
+        return selectedIndexPaths.compactMap { indexPath in
+            if let entityID = dataSource.itemIdentifier(for: indexPath)?.entityID {
+                return AccountManager.shared.findDocumentContainer(entityID)
+            }
+            return nil
+        }
 	}
 
 	var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
@@ -68,6 +73,8 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 		}
+        
+        collectionView.allowsMultipleSelection = true
 
 		if traitCollection.userInterfaceIdiom == .phone {
 			navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
@@ -92,8 +99,10 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 		applyInitialSnapshot()
 	}
 	
-	func selectDocumentContainer(_ documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
-		if let search = documentContainer as? Search {
+	func selectDocumentContainers(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
+        collectionView.deselectAll()
+        
+        if let containers = containers, containers.count == 1, let search = containers.first as? Search {
 			DispatchQueue.main.async {
 				if let searchCellIndexPath = self.dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {
 					if let searchCell = self.collectionView.cellForItem(at: searchCellIndexPath) as? SidebarSearchCell {
@@ -105,7 +114,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 			clearSearchField()
 		}
 
-		updateSelection(documentContainer, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
+		updateSelections(containers, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
 	}
 	
 	// MARK: Notifications
@@ -186,18 +195,24 @@ extension SidebarViewController {
 		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return nil }
 		return makeDocumentContainerContextMenu(item: sidebarItem)
 	}
+    
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        updateSelections()
+    }
 
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		clearSearchField()
-		
-		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
-		
-		if case .documentContainer(let entityID) = sidebarItem.id {
-			let documentContainer = AccountManager.shared.findDocumentContainer(entityID)
-			delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, isNavigationBranch: true, animated: true, completion: nil)
-		}
+        updateSelections()
 	}
-	
+    
+    private func updateSelections() {
+        guard let selectedIndexes = collectionView.indexPathsForSelectedItems else { return }
+        let sideBarItems = selectedIndexes.compactMap { dataSource.itemIdentifier(for: $0) }
+        let containers = convert(sideBarItems: sideBarItems)
+        
+        delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: true, animated: true, completion: nil)
+    }
+    
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 			var configuration = UICollectionLayoutListConfiguration(appearance: .sidebar)
@@ -326,15 +341,12 @@ extension SidebarViewController {
 		dataSourceQueue.add(operation)
 	}
 	
-	func updateSelection(_ documentContainer: DocumentContainer?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?) {
-		var sidebarItem: SidebarItem? = nil
-		if let documentContainer = documentContainer {
-			sidebarItem = SidebarItem.sidebarItem(documentContainer)
-		}
-
-		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, item: sidebarItem, animated: animated))
-		
-		delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
+	func updateSelections(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?) {
+        let sidebarItems = containers?.map { SidebarItem.sidebarItem($0) } ?? [SidebarItem]()
+		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, items: sidebarItems, animated: animated))
+        
+		let containers = convert(sideBarItems: sidebarItems)
+		delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
 	}
 	
 	func reloadVisible() {
@@ -348,14 +360,14 @@ extension SidebarViewController {
 extension SidebarViewController: SidebarSearchCellDelegate {
 
 	func sidebarSearchDidBecomeActive() {
-		selectDocumentContainer(Search(searchText: ""), isNavigationBranch: false, animated: false)
+		selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
 	}
 
 	func sidebarSearchDidUpdate(searchText: String?) {
 		if let searchText = searchText {
-			selectDocumentContainer(Search(searchText: searchText), isNavigationBranch: false, animated: true)
+			selectDocumentContainers([Search(searchText: searchText)], isNavigationBranch: false, animated: true)
 		} else {
-			selectDocumentContainer(Search(searchText: ""), isNavigationBranch: false, animated: false)
+			selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
 		}
 	}
 	
@@ -372,6 +384,16 @@ extension SidebarViewController {
 			}
 		}
 	}
+    
+    private func convert(sideBarItems: [SidebarItem]) -> [DocumentContainer] {
+        let containers: [DocumentContainer] = sideBarItems.compactMap { sidebarItem in
+            if case .documentContainer(let entityID) = sidebarItem.id {
+                return AccountManager.shared.findDocumentContainer(entityID)
+            }
+            return nil
+        }
+        return containers
+    }
 	
 	private func queueApplyChangeSnapshot() {
 		applyChangesQueue.add(self, #selector(applyQueuedChangeSnapshot))

@@ -2037,7 +2037,7 @@
 			<key>INIntentConfigurable</key>
 			<true/>
 			<key>INIntentDescription</key>
-			<string>Gets the name of the currently selected Tag if there is one.</string>
+			<string>Gets the name of the currently selected Tags if there are any.</string>
 			<key>INIntentDescriptionID</key>
 			<string>cQDaQ3</string>
 			<key>INIntentIneligibleForSuggestions</key>
@@ -2057,7 +2057,7 @@
 				</dict>
 			</dict>
 			<key>INIntentName</key>
-			<string>GetCurrentTag</string>
+			<string>GetCurrentTags</string>
 			<key>INIntentResponse</key>
 			<dict>
 				<key>INIntentResponseCodes</key>
@@ -2074,29 +2074,31 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>1</integer>
+				<integer>2</integer>
 				<key>INIntentResponseOutput</key>
-				<string>tagName</string>
+				<string>tagNames</string>
 				<key>INIntentResponseParameters</key>
 				<array>
 					<dict>
 						<key>INIntentResponseParameterDisplayName</key>
-						<string>Tag Name</string>
+						<string>Tag Names</string>
 						<key>INIntentResponseParameterDisplayNameID</key>
 						<string>uW2txT</string>
 						<key>INIntentResponseParameterDisplayPriority</key>
 						<integer>1</integer>
 						<key>INIntentResponseParameterName</key>
-						<string>tagName</string>
+						<string>tagNames</string>
+						<key>INIntentResponseParameterSupportsMultipleValues</key>
+						<true/>
 						<key>INIntentResponseParameterTag</key>
-						<integer>1</integer>
+						<integer>2</integer>
 						<key>INIntentResponseParameterType</key>
 						<string>String</string>
 					</dict>
 				</array>
 			</dict>
 			<key>INIntentTitle</key>
-			<string>Get Current Tag</string>
+			<string>Get Current Tags</string>
 			<key>INIntentTitleID</key>
 			<string>3sl1AK</string>
 			<key>INIntentType</key>
@@ -2118,10 +2120,10 @@
 			<key>INIntentInput</key>
 			<string>title</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>6</integer>
+			<integer>7</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>title,tagName,accountType</key>
+				<key>title,tagNames,accountType</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
@@ -2244,7 +2246,7 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Tag Name</string>
+					<string>Tag Names</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>Zf66Zk</string>
 					<key>INIntentParameterDisplayPriority</key>
@@ -2257,7 +2259,7 @@
 						<string>OTizXp</string>
 					</dict>
 					<key>INIntentParameterName</key>
-					<string>tagName</string>
+					<string>tagNames</string>
 					<key>INIntentParameterPromptDialogs</key>
 					<array>
 						<dict>
@@ -2270,17 +2272,19 @@
 							<key>INIntentParameterPromptDialogCustom</key>
 							<true/>
 							<key>INIntentParameterPromptDialogFormatString</key>
-							<string>Enter the ${tagName}for this Outline</string>
+							<string>Enter the ${tagNames}for this Outline</string>
 							<key>INIntentParameterPromptDialogFormatStringID</key>
 							<string>RwPnoO</string>
 							<key>INIntentParameterPromptDialogType</key>
 							<string>Primary</string>
 						</dict>
 					</array>
+					<key>INIntentParameterSupportsMultipleValues</key>
+					<true/>
 					<key>INIntentParameterSupportsResolution</key>
 					<true/>
 					<key>INIntentParameterTag</key>
-					<integer>6</integer>
+					<integer>7</integer>
 					<key>INIntentParameterType</key>
 					<string>String</string>
 				</dict>
