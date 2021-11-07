@@ -496,7 +496,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		super.pressesEnded(presses, with: event)
 		for press in presses {
 			if let key = press.key {
-				if key.modifierFlags.subtracting(.numericPad).isEmpty {
+				if key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty {
 					if key.keyCode == .keyboardUpArrow {
 						isCursoringUp = false
 					}
@@ -1810,7 +1810,7 @@ extension EditorViewController {
 			}
 			
 			switch (key.keyCode, true) {
-			case (.keyboardUpArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
+            case (.keyboardUpArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				if let topic = currentTextView as? EditorTextRowTopicTextView {
 					if topic.cursorIsOnTopLine {
 						isCursoringUp = true
@@ -1822,7 +1822,7 @@ extension EditorViewController {
 					isCursoringUp = true
 					repeatMoveCursorUp()
 				}
-			case (.keyboardDownArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
+			case (.keyboardDownArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				if let topic = currentTextView as? EditorTextRowTopicTextView {
 					if topic.cursorIsOnBottomLine {
 						isCursoringDown = true
@@ -1840,7 +1840,7 @@ extension EditorViewController {
 			
 		} else {
 			switch (key.keyCode, true) {
-			case (.keyboardUpArrow, key.modifierFlags.subtracting(.numericPad).isEmpty), (.keyboardDownArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
+			case (.keyboardUpArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty), (.keyboardDownArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				makeCursorVisibleIfNecessary()
 			default:
 				break
