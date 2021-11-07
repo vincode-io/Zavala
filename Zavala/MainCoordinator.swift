@@ -325,77 +325,93 @@ extension MainCoordinator {
 
 	func exportPDFDoc() {
 		guard let outline = editorViewController?.outline else { return }
-		exportPDFDocForOutline(outline)
+		exportPDFDocsForOutlines([outline])
 	}
 	
 	func exportPDFList() {
 		guard let outline = editorViewController?.outline else { return }
-		exportPDFListForOutline(outline)
+		exportPDFListsForOutlines([outline])
 	}
 	
 	func exportMarkdownDoc() {
 		guard let outline = editorViewController?.outline else { return }
-		exportMarkdownDocForOutline(outline)
+		exportMarkdownDocsForOutlines([outline])
 	}
 	
 	func exportMarkdownList() {
 		guard let outline = editorViewController?.outline else { return }
-		exportMarkdownListForOutline(outline)
+		exportMarkdownListsForOutlines([outline])
 	}
 	
 	func exportOPML() {
 		guard let outline = editorViewController?.outline else { return }
-		exportOPMLForOutline(outline)
+		exportOPMLsForOutlines([outline])
 	}
 	
-	func exportPDFDocForOutline(_ outline: Outline) {
-		let printDoc = outline.printDoc()
-		exportPDFForOutline(outline, attrString: printDoc)
+	func exportPDFDocsForOutlines(_ outlines: [Outline]) {
+        let pdfs = outlines.map { (outline: $0, attrString: $0.printDoc()) }
+		exportPDFsForOutline(pdfs)
 	}
 	
-	func exportPDFListForOutline(_ outline: Outline) {
-		let printList = outline.printList()
-		exportPDFForOutline(outline, attrString: printList)
+	func exportPDFListsForOutlines(_ outlines: [Outline]) {
+        let pdfs = outlines.map { (outline: $0, attrString: $0.printList()) }
+		exportPDFsForOutline(pdfs)
 	}
 	
-	func exportPDFForOutline(_ outline: Outline, attrString: NSAttributedString) {
-		let textView = UITextView()
-		textView.attributedText = attrString
-		let data = textView.generatePDF()
+    func exportPDFsForOutline(_ pdfs: [(outline: Outline, attrString: NSAttributedString)]) {
+        var exports = [(data: Data, fileName: String)]()
+        
+        for pdf in pdfs {
+            let textView = UITextView()
+            textView.attributedText = pdf.attrString
+            let data = textView.generatePDF()
+            let fileName = pdf.outline.fileName(withSuffix: "pdf")
+            exports.append((data: data, fileName: fileName))
+        }
 		
-		export(data as Data, fileName: outline.fileName(withSuffix: "pdf"))
+		export(exports)
 	}
 	
-	func exportMarkdownDocForOutline(_ outline: Outline) {
-		let markdown = outline.markdownDoc()
-		export(markdown, fileName: outline.fileName(withSuffix: "md"))
+	func exportMarkdownDocsForOutlines(_ outlines: [Outline]) {
+        export(outlines.compactMap {
+            if let data = $0.markdownDoc().data(using: .utf8) {
+                return (data: data, fileName: $0.fileName(withSuffix: "md"))
+            }
+            return nil
+        })
 	}
 	
-	func exportMarkdownListForOutline(_ outline: Outline) {
-		let markdown = outline.markdownList()
-		export(markdown, fileName: outline.fileName(withSuffix: "md"))
+	func exportMarkdownListsForOutlines(_ outlines: [Outline]) {
+        export(outlines.compactMap {
+            if let data = $0.markdownList().data(using: .utf8) {
+                return (data: data, fileName: $0.fileName(withSuffix: "md"))
+            }
+            return nil
+        })
 	}
 	
-	func exportOPMLForOutline(_ outline: Outline) {
-		let opml = outline.opml()
-		export(opml, fileName: outline.fileName(withSuffix: "opml"))
+	func exportOPMLsForOutlines(_ outlines: [Outline]) {
+        export(outlines.compactMap {
+            if let data = $0.opml().data(using: .utf8) {
+                return (data: data, fileName: $0.fileName(withSuffix: "md"))
+            }
+            return nil
+        })
 	}
 	
-	func export(_ string: String, fileName: String) {
-		guard let data = string.data(using: .utf8) else { return }
-		export(data, fileName: fileName)
-	}
-	
-	func export(_ data: Data, fileName: String) {
-		let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+    func export(_ exports: [(data: Data, fileName: String)]) {
+        var tempFiles = [URL]()
+        for export in exports {
+            let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(export.fileName)
+            do {
+                try export.data.write(to: tempFile)
+            } catch {
+                self.presentError(title: "Export Error", message: error.localizedDescription)
+            }
+            tempFiles.append(tempFile)
+        }
 		
-		do {
-			try data.write(to: tempFile)
-		} catch {
-			self.presentError(title: "Export Error", message: error.localizedDescription)
-		}
-		
-		let docPicker = UIDocumentPickerViewController(forExporting: [tempFile], asCopy: true)
+		let docPicker = UIDocumentPickerViewController(forExporting: tempFiles, asCopy: true)
 		docPicker.modalPresentationStyle = .formSheet
 		self.present(docPicker, animated: true)
 	}

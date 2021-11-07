@@ -92,6 +92,12 @@ internal enum L10n {
   internal static func deleteOutlinePrompt(_ p1: Any) -> String {
     return L10n.tr("Localizable", "Delete_Outline_Prompt", String(describing: p1))
   }
+  /// The outlines be deleted and unrecoverable.
+  internal static let deleteOutlinesMessage = L10n.tr("Localizable", "Delete_Outlines_Message")
+  /// Are you sure you want to delete %d outlines?
+  internal static func deleteOutlinesPrompt(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "Delete_Outlines_Prompt", p1)
+  }
   /// Delete Row
   internal static let deleteRow = L10n.tr("Localizable", "Delete_Row")
   /// Delete Rows
@@ -134,14 +140,24 @@ internal enum L10n {
   internal static let export = L10n.tr("Localizable", "Export")
   /// Export Markdown Doc…
   internal static let exportMarkdownDocEllipsis = L10n.tr("Localizable", "Export_Markdown_Doc_Ellipsis")
+  /// Export Markdown Docs…
+  internal static let exportMarkdownDocsEllipsis = L10n.tr("Localizable", "Export_Markdown_Docs_Ellipsis")
   /// Export Markdown List…
   internal static let exportMarkdownListEllipsis = L10n.tr("Localizable", "Export_Markdown_List_Ellipsis")
+  /// Export Markdown Lists…
+  internal static let exportMarkdownListsEllipsis = L10n.tr("Localizable", "Export_Markdown_Lists_Ellipsis")
   /// Export OPML…
   internal static let exportOPMLEllipsis = L10n.tr("Localizable", "Export_OPML_Ellipsis")
+  /// Export OPMLs…
+  internal static let exportOPMLsEllipsis = L10n.tr("Localizable", "Export_OPMLs_Ellipsis")
   /// Export PDF Doc…
   internal static let exportPDFDocEllipsis = L10n.tr("Localizable", "Export_PDF_Doc_Ellipsis")
+  /// Export PDF Docs…
+  internal static let exportPDFDocsEllipsis = L10n.tr("Localizable", "Export_PDF_Docs_Ellipsis")
   /// Export PDF List…
   internal static let exportPDFListEllipsis = L10n.tr("Localizable", "Export_PDF_List_Ellipsis")
+  /// Export PDF Lists…
+  internal static let exportPDFListsEllipsis = L10n.tr("Localizable", "Export_PDF_Lists_Ellipsis")
   /// Find
   internal static let find = L10n.tr("Localizable", "Find")
   /// Find…

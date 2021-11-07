@@ -14,11 +14,11 @@ import Templeton
 protocol TimelineDelegate: AnyObject  {
 	func documentSelectionDidChange(_: TimelineViewController, documentContainers: [DocumentContainer], document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool)
 	func showGetInfo(_: TimelineViewController, outline: Outline)
-	func exportPDFDoc(_: TimelineViewController, outline: Outline)
-	func exportPDFList(_: TimelineViewController, outline: Outline)
-	func exportMarkdownDoc(_: TimelineViewController, outline: Outline)
-	func exportMarkdownList(_: TimelineViewController, outline: Outline)
-	func exportOPML(_: TimelineViewController, outline: Outline)
+	func exportPDFDocs(_: TimelineViewController, outlines: [Outline])
+	func exportPDFLists(_: TimelineViewController, outlines: [Outline])
+	func exportMarkdownDocs(_: TimelineViewController, outlines: [Outline])
+	func exportMarkdownLists(_: TimelineViewController, outlines: [Outline])
+	func exportOPMLs(_: TimelineViewController, outlines: [Outline])
 }
 
 class TimelineViewController: UICollectionViewController, MainControllerIdentifiable {
@@ -26,9 +26,9 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 
 	weak var delegate: TimelineDelegate?
 
-	var currentDocument: Document? {
-		guard let indexPath = collectionView.indexPathsForSelectedItems?.first else { return nil }
-		return timelineDocuments[indexPath.row]
+	var currentDocuments: [Document]? {
+		guard let indexPaths = collectionView.indexPathsForSelectedItems else { return nil }
+        return indexPaths.map { timelineDocuments[$0.row] }
 	}
 	
 	var timelineDocuments = [Document]()
@@ -157,9 +157,9 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: document, isNew: isNew, isNavigationBranch: isNavigationBranch, animated: animated)
 	}
 	
-	func deleteCurrentDocument() {
-		guard let document = currentDocument else { return }
-		deleteDocument(document)
+	func deleteCurrentDocuments() {
+		guard let documents = currentDocuments else { return }
+		deleteDocuments(documents)
 	}
 	
 	func importOPMLs(urls: [URL]) {
@@ -284,8 +284,19 @@ extension TimelineViewController {
 		if let textView = UIResponder.currentFirstResponder as? UITextView {
 			textView.resignFirstResponder()
 		}
-
-		return makeOutlineContextMenu(rowIdentifier: GenericRowIdentifier(indexPath: indexPath))
+        
+        if !(collectionView.indexPathsForSelectedItems?.contains(indexPath) ?? false) {
+            collectionView.deselectAll()
+        }
+        
+        let allRowIDs: [GenericRowIdentifier]
+        if let selected = collectionView.indexPathsForSelectedItems, !selected.isEmpty {
+            allRowIDs = selected.compactMap { GenericRowIdentifier(indexPath: $0)}
+        } else {
+            allRowIDs = [GenericRowIdentifier(indexPath: indexPath)]
+        }
+        
+        return makeOutlineContextMenu(mainRowID: GenericRowIdentifier(indexPath: indexPath), allRowIDs: allRowIDs)
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -312,7 +323,7 @@ extension TimelineViewController {
 		guard let documentContainers = documentContainers,
 			  let cell = gesture.view as? UICollectionViewCell,
 			  let indexPath = collectionView.indexPath(for: cell),
-			  indexPath != collectionView.indexPathsForSelectedItems?.first else { return }
+			  indexPath != collectionView.indexPathsForSelectedItems?.last else { return }
 
 		collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
 		let document = timelineDocuments[indexPath.row]
@@ -323,6 +334,7 @@ extension TimelineViewController {
 		guard let cell = gesture.view as? UICollectionViewCell,
 			  let indexPath = collectionView.indexPath(for: cell) else { return }
 
+        collectionView.deselectAll()
 		let document = timelineDocuments[indexPath.row]
 		
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
@@ -477,28 +489,35 @@ extension TimelineViewController {
 		}
 	}
 	
-	private func makeOutlineContextMenu(rowIdentifier: GenericRowIdentifier) -> UIContextMenuConfiguration {
-		return UIContextMenuConfiguration(identifier: rowIdentifier as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
+    private func makeOutlineContextMenu(mainRowID: GenericRowIdentifier, allRowIDs: [GenericRowIdentifier]) -> UIContextMenuConfiguration {
+		return UIContextMenuConfiguration(identifier: mainRowID as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
 			guard let self = self else { return nil }
-			let document = self.timelineDocuments[rowIdentifier.indexPath.row]
+            let documents = allRowIDs.map { self.timelineDocuments[$0.indexPath.row] }
 			
 			var menuItems = [UIMenu]()
 
-			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.showGetInfoAction(document: document)]))
-			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.duplicateAction(document: document)]))
-			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.copyLinkAction(document: document)]))
+            if documents.count == 1, let document = documents.first {
+                menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.showGetInfoAction(document: document)]))
+            }
+            
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.duplicateAction(documents: documents)]))
 
-			if let outline = document.outline {
+            if documents.count == 1, let document = documents.first {
+                menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.copyLinkAction(document: document)]))
+            }
+
+            let outlines = documents.compactMap { $0.outline }
+            if !outlines.isEmpty {
 				var exportActions = [UIAction]()
-				exportActions.append(self.exportPDFDocOutlineAction(outline: outline))
-				exportActions.append(self.exportPDFListOutlineAction(outline: outline))
-				exportActions.append(self.exportMarkdownDocOutlineAction(outline: outline))
-				exportActions.append(self.exportMarkdownListOutlineAction(outline: outline))
-				exportActions.append(self.exportOPMLAction(outline: outline))
+				exportActions.append(self.exportPDFDocsOutlineAction(outlines: outlines))
+				exportActions.append(self.exportPDFListsOutlineAction(outlines: outlines))
+				exportActions.append(self.exportMarkdownDocsOutlineAction(outlines: outlines))
+				exportActions.append(self.exportMarkdownListsOutlineAction(outlines: outlines))
+				exportActions.append(self.exportOPMLsAction(outlines: outlines))
 				menuItems.append(UIMenu(title: L10n.export, image: AppAssets.export, children: exportActions))
 			}
 			
-			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.deleteOutlineAction(document: document)]))
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.deleteDocumentsAction(documents: documents)]))
 			
 			return UIMenu(title: "", children: menuItems)
 		})
@@ -512,14 +531,16 @@ extension TimelineViewController {
 		return action
 	}
 	
-	private func duplicateAction(document: Document) -> UIAction {
+	private func duplicateAction(documents: [Document]) -> UIAction {
 		let action = UIAction(title: L10n.duplicate, image: AppAssets.duplicate) { action in
-			document.load()
-			let newDocument = document.duplicate()
-			document.account?.createDocument(newDocument)
-			newDocument.forceSave()
-			newDocument.unload()
-			document.unload()
+            for document in documents {
+                document.load()
+                let newDocument = document.duplicate()
+                document.account?.createDocument(newDocument)
+                newDocument.forceSave()
+                newDocument.unload()
+                document.unload()
+            }
 		}
 		return action
 	}
@@ -532,42 +553,47 @@ extension TimelineViewController {
 		return action
 	}
 	
-	private func exportPDFDocOutlineAction(outline: Outline) -> UIAction {
-		let action = UIAction(title: L10n.exportPDFDocEllipsis) { [weak self] action in
+	private func exportPDFDocsOutlineAction(outlines: [Outline]) -> UIAction {
+        let title = outlines.count > 1 ? L10n.exportPDFDocsEllipsis : L10n.exportPDFDocEllipsis
+		let action = UIAction(title: title) { [weak self] action in
 			guard let self = self else { return }
-			self.delegate?.exportPDFDoc(self, outline: outline)
+			self.delegate?.exportPDFDocs(self, outlines: outlines)
 		}
 		return action
 	}
 	
-	private func exportPDFListOutlineAction(outline: Outline) -> UIAction {
-		let action = UIAction(title: L10n.exportPDFListEllipsis) { [weak self] action in
+	private func exportPDFListsOutlineAction(outlines: [Outline]) -> UIAction {
+        let title = outlines.count > 1 ? L10n.exportPDFListsEllipsis : L10n.exportPDFListEllipsis
+        let action = UIAction(title: title) { [weak self] action in
 			guard let self = self else { return }
-			self.delegate?.exportPDFList(self, outline: outline)
+			self.delegate?.exportPDFLists(self, outlines: outlines)
 		}
 		return action
 	}
 	
-	private func exportMarkdownDocOutlineAction(outline: Outline) -> UIAction {
-		let action = UIAction(title: L10n.exportMarkdownDocEllipsis) { [weak self] action in
+	private func exportMarkdownDocsOutlineAction(outlines: [Outline]) -> UIAction {
+        let title = outlines.count > 1 ? L10n.exportMarkdownDocsEllipsis : L10n.exportMarkdownDocEllipsis
+        let action = UIAction(title: title) { [weak self] action in
 			guard let self = self else { return }
-			self.delegate?.exportMarkdownDoc(self, outline: outline)
+			self.delegate?.exportMarkdownDocs(self, outlines: outlines)
 		}
 		return action
 	}
 	
-	private func exportMarkdownListOutlineAction(outline: Outline) -> UIAction {
-		let action = UIAction(title: L10n.exportMarkdownListEllipsis) { [weak self] action in
+	private func exportMarkdownListsOutlineAction(outlines: [Outline]) -> UIAction {
+        let title = outlines.count > 1 ? L10n.exportMarkdownListsEllipsis : L10n.exportMarkdownListEllipsis
+        let action = UIAction(title: title) { [weak self] action in
 			guard let self = self else { return }
-			self.delegate?.exportMarkdownList(self, outline: outline)
+			self.delegate?.exportMarkdownLists(self, outlines: outlines)
 		}
 		return action
 	}
 	
-	private func exportOPMLAction(outline: Outline) -> UIAction {
-		let action = UIAction(title: L10n.exportOPMLEllipsis) { [weak self] action in
+	private func exportOPMLsAction(outlines: [Outline]) -> UIAction {
+        let title = outlines.count > 1 ? L10n.exportOPMLsEllipsis : L10n.exportOPMLEllipsis
+        let action = UIAction(title: title) { [weak self] action in
 			guard let self = self else { return }
-			self.delegate?.exportOPML(self, outline: outline)
+			self.delegate?.exportOPMLs(self, outlines: outlines)
 		}
 		return action
 	}
@@ -576,27 +602,31 @@ extension TimelineViewController {
 		return UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
 			guard let self = self else { return }
 			let document = self.timelineDocuments[indexPath.row]
-			self.deleteDocument(document, completion: completion)
+			self.deleteDocuments([document], completion: completion)
 		}
 	}
 	
-	private func deleteOutlineAction(document: Document) -> UIAction {
+	private func deleteDocumentsAction(documents: [Document]) -> UIAction {
 		let action = UIAction(title: L10n.delete, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
-			self?.deleteDocument(document)
+			self?.deleteDocuments(documents)
 		}
 		
 		return action
 	}
 	
-	private func deleteDocument(_ document: Document, completion: ((Bool) -> Void)? = nil) {
+	private func deleteDocuments(_ documents: [Document], completion: ((Bool) -> Void)? = nil) {
 		func delete() {
-			if document == self.currentDocument, let documentContainers = self.documentContainers {
+            let deselect = !(currentDocuments?.filter({ documents.contains($0) }).isEmpty ?? true)
+            if deselect, let documentContainers = self.documentContainers {
 				self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: nil, isNew: false, isNavigationBranch: true, animated: true)
 			}
-			document.account?.deleteDocument(document)
+            for document in documents {
+                document.account?.deleteDocument(document)
+            }
 		}
 
-		guard !document.isEmpty else {
+        // We insta-delete anytime we don't have any document content
+        guard !documents.filter({ !$0.isEmpty }).isEmpty else {
 			delete()
 			return
 		}
@@ -609,7 +639,17 @@ extension TimelineViewController {
 			completion?(true)
 		}
 		
-		let alert = UIAlertController(title: L10n.deleteOutlinePrompt(document.title ?? ""), message: L10n.deleteOutlineMessage, preferredStyle: .alert)
+        let title: String
+        let message: String
+        if documents.count > 1 {
+            title = L10n.deleteOutlinesPrompt(documents.count)
+            message = L10n.deleteOutlinesMessage
+        } else {
+            title = L10n.deleteOutlinePrompt(documents.first?.title ?? "")
+            message = L10n.deleteOutlineMessage
+        }
+        
+		let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
 		alert.addAction(cancelAction)
 		alert.addAction(deleteAction)
 		alert.preferredAction = deleteAction

@@ -252,7 +252,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 		
 		guard editorViewController?.isOutlineFunctionsUnavailable ?? true else {
-			timelineViewController?.deleteCurrentDocument()
+			timelineViewController?.deleteCurrentDocuments()
 			return
 		}
 	}
@@ -459,24 +459,24 @@ extension MainSplitViewController: TimelineDelegate {
 		showGetInfo(outline: outline)
 	}
 	
-	func exportPDFDoc(_: TimelineViewController, outline: Outline) {
-		exportPDFDocForOutline(outline)
+	func exportPDFDocs(_: TimelineViewController, outlines: [Outline]) {
+		exportPDFDocsForOutlines(outlines)
 	}
 	
-	func exportPDFList(_: TimelineViewController, outline: Outline) {
-		exportPDFListForOutline(outline)
+	func exportPDFLists(_: TimelineViewController, outlines: [Outline]) {
+		exportPDFListsForOutlines(outlines)
 	}
 	
-	func exportMarkdownDoc(_: TimelineViewController, outline: Outline) {
-		exportMarkdownDocForOutline(outline)
+	func exportMarkdownDocs(_: TimelineViewController, outlines: [Outline]) {
+		exportMarkdownDocsForOutlines(outlines)
 	}
 	
-	func exportMarkdownList(_: TimelineViewController, outline: Outline) {
-		exportMarkdownListForOutline(outline)
+	func exportMarkdownLists(_: TimelineViewController, outlines: [Outline]) {
+		exportMarkdownListsForOutlines(outlines)
 	}
 	
-	func exportOPML(_: TimelineViewController, outline: Outline) {
-		exportOPMLForOutline(outline)
+	func exportOPMLs(_: TimelineViewController, outlines: [Outline]) {
+		exportOPMLsForOutlines(outlines)
 	}
 	
 }
@@ -522,23 +522,23 @@ extension MainSplitViewController: EditorDelegate {
 	}
 	
 	func exportPDFDoc(_: EditorViewController, outline: Outline) {
-		exportPDFDocForOutline(outline)
+		exportPDFDocsForOutlines([outline])
 	}
 	
 	func exportPDFList(_: EditorViewController, outline: Outline) {
-		exportPDFListForOutline(outline)
+		exportPDFListsForOutlines([outline])
 	}
 	
 	func exportMarkdownDoc(_: EditorViewController, outline: Outline) {
-		exportMarkdownDocForOutline(outline)
+		exportMarkdownDocsForOutlines([outline])
 	}
 	
 	func exportMarkdownList(_: EditorViewController, outline: Outline) {
-		exportMarkdownListForOutline(outline)
+		exportMarkdownListsForOutlines([outline])
 	}
 	
 	func exportOPML(_: EditorViewController, outline: Outline) {
-		exportOPMLForOutline(outline)
+		exportOPMLsForOutlines([outline])
 	}
 
 }
