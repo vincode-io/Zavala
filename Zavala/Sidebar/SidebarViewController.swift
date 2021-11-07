@@ -74,7 +74,9 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 		}
         
-        collectionView.allowsMultipleSelection = true
+        if traitCollection.userInterfaceIdiom == .mac {
+            collectionView.allowsMultipleSelection = true
+        }
 
 		if traitCollection.userInterfaceIdiom == .phone {
 			navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
