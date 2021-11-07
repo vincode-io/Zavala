@@ -570,8 +570,7 @@ extension TimelineViewController {
 	}
 	
 	private func exportPDFDocsOutlineAction(outlines: [Outline]) -> UIAction {
-        let title = outlines.count > 1 ? L10n.exportPDFDocsEllipsis : L10n.exportPDFDocEllipsis
-		let action = UIAction(title: title) { [weak self] action in
+		let action = UIAction(title: L10n.exportPDFDocEllipsis) { [weak self] action in
 			guard let self = self else { return }
 			self.delegate?.exportPDFDocs(self, outlines: outlines)
 		}
@@ -579,8 +578,7 @@ extension TimelineViewController {
 	}
 	
 	private func exportPDFListsOutlineAction(outlines: [Outline]) -> UIAction {
-        let title = outlines.count > 1 ? L10n.exportPDFListsEllipsis : L10n.exportPDFListEllipsis
-        let action = UIAction(title: title) { [weak self] action in
+        let action = UIAction(title: L10n.exportPDFListEllipsis) { [weak self] action in
 			guard let self = self else { return }
 			self.delegate?.exportPDFLists(self, outlines: outlines)
 		}
@@ -588,8 +586,7 @@ extension TimelineViewController {
 	}
 	
 	private func exportMarkdownDocsOutlineAction(outlines: [Outline]) -> UIAction {
-        let title = outlines.count > 1 ? L10n.exportMarkdownDocsEllipsis : L10n.exportMarkdownDocEllipsis
-        let action = UIAction(title: title) { [weak self] action in
+        let action = UIAction(title: L10n.exportMarkdownDocEllipsis) { [weak self] action in
 			guard let self = self else { return }
 			self.delegate?.exportMarkdownDocs(self, outlines: outlines)
 		}
@@ -597,8 +594,7 @@ extension TimelineViewController {
 	}
 	
 	private func exportMarkdownListsOutlineAction(outlines: [Outline]) -> UIAction {
-        let title = outlines.count > 1 ? L10n.exportMarkdownListsEllipsis : L10n.exportMarkdownListEllipsis
-        let action = UIAction(title: title) { [weak self] action in
+        let action = UIAction(title: L10n.exportMarkdownListEllipsis) { [weak self] action in
 			guard let self = self else { return }
 			self.delegate?.exportMarkdownLists(self, outlines: outlines)
 		}
@@ -606,8 +602,7 @@ extension TimelineViewController {
 	}
 	
 	private func exportOPMLsAction(outlines: [Outline]) -> UIAction {
-        let title = outlines.count > 1 ? L10n.exportOPMLsEllipsis : L10n.exportOPMLEllipsis
-        let action = UIAction(title: title) { [weak self] action in
+        let action = UIAction(title: L10n.exportOPMLEllipsis) { [weak self] action in
 			guard let self = self else { return }
 			self.delegate?.exportOPMLs(self, outlines: outlines)
 		}
