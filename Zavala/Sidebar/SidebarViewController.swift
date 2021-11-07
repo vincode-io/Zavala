@@ -187,6 +187,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
     }
     
     @objc func multipleSelect() {
+        selectDocumentContainers(nil, isNavigationBranch: true, animated: true)
         collectionView.allowsMultipleSelection = true
         navigationItem.rightBarButtonItem = selectDoneBarButtonItem
     }
