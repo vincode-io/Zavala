@@ -393,7 +393,7 @@ extension MainCoordinator {
 	func exportOPMLsForOutlines(_ outlines: [Outline]) {
         export(outlines.compactMap {
             if let data = $0.opml().data(using: .utf8) {
-                return (data: data, fileName: $0.fileName(withSuffix: "md"))
+                return (data: data, fileName: $0.fileName(withSuffix: "opml"))
             }
             return nil
         })
