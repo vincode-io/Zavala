@@ -641,6 +641,7 @@
 				51C4C3E025560E09004E0206 /* Templeton */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		5181A9352554D92000C153E8 /* Products */ = {
 			isa = PBXGroup;

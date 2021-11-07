@@ -44,6 +44,9 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 
 	private var loadDocumentsQueue = CoalescingQueue(name: "Load Documents", interval: 0.5)
 	private var applySnapshotWorkItem: DispatchWorkItem?
+    
+    private var lastClick: TimeInterval = Date().timeIntervalSince1970
+    private var lastIndexPath: IndexPath? = nil
 
 	private var rowRegistration: UICollectionView.CellRegistration<ConsistentCollectionViewListCell, Document>!
 	
@@ -104,14 +107,14 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 			
 			cell.contentConfiguration = contentConfiguration
 			
-			let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.selectDocument(gesture:)))
-			cell.addGestureRecognizer(singleTap)
-			
-			if self.traitCollection.userInterfaceIdiom == .mac {
-				let doubleTap = UITapGestureRecognizer(target: self, action: #selector(self.openDocumentInNewWindow(gesture:)))
-				doubleTap.numberOfTapsRequired = 2
-				cell.addGestureRecognizer(doubleTap)
-			}
+//			let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.selectDocument(gesture:)))
+//			cell.addGestureRecognizer(singleTap)
+//
+//			if self.traitCollection.userInterfaceIdiom == .mac {
+//				let doubleTap = UITapGestureRecognizer(target: self, action: #selector(self.openDocumentInNewWindow(gesture:)))
+//				doubleTap.numberOfTapsRequired = 2
+//				cell.addGestureRecognizer(doubleTap)
+//			}
 		}
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
@@ -302,6 +305,24 @@ extension TimelineViewController {
 	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: timelineDocuments[indexPath.row])
 	}
+
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        <#code#>
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let documentContainers = documentContainers else { return }
+
+        let now: TimeInterval = Date().timeIntervalSince1970
+        if now - lastClick < 0.3 && lastIndexPath?.row == indexPath.row {
+            openDocumentInNewWindow(indexPath: indexPath)
+        }
+        lastClick = now
+        lastIndexPath = indexPath
+        
+        let document = timelineDocuments[indexPath.row]
+        delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: document, isNew: false, isNavigationBranch: true, animated: true)
+    }
 	
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
@@ -330,10 +351,7 @@ extension TimelineViewController {
 		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: document, isNew: false, isNavigationBranch: true, animated: true)
 	}
 	
-	@objc func openDocumentInNewWindow(gesture: UITapGestureRecognizer) {
-		guard let cell = gesture.view as? UICollectionViewCell,
-			  let indexPath = collectionView.indexPath(for: cell) else { return }
-
+	@objc func openDocumentInNewWindow(indexPath: IndexPath) {
         collectionView.deselectAll()
 		let document = timelineDocuments[indexPath.row]
 		
