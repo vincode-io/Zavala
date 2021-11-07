@@ -34,5 +34,8 @@ public extension Array where Element == DocumentContainer {
     var tags: [Tag] {
         return self.compactMap { ($0 as? TagDocuments)?.tag }
     }
-    
+
+    var title: String {
+        ListFormatter.localizedString(byJoining: self.compactMap({ $0.name }))
+    }
 }

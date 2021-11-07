@@ -451,20 +451,17 @@ extension TimelineViewController {
 	}
 	
 	private func updateUI() {
+        var title = documentContainers?.title ?? ""
+        navigationItem.title = title
+        view.window?.windowScene?.title = title
+        
         var defaultAccount: Account? = nil
-        var title: String? = nil
         if let containers = documentContainers {
             if containers.count == 1, let onlyContainer = containers.first {
-                title = onlyContainer.name
                 defaultAccount = onlyContainer.account
-            } else {
-                title = L10n.multiple
             }
         }
         
-		navigationItem.title = title
-		view.window?.windowScene?.title = title
-		
 		if traitCollection.userInterfaceIdiom != .mac {
 			if defaultAccount == nil {
 				navigationItem.rightBarButtonItems = nil

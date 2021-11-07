@@ -76,11 +76,7 @@ extension ActivityManager {
 	private func makeSelectDocumentContainerActivity(_ documentContainers: [DocumentContainer]) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocumentContainer)
 		
-        var containerName = L10n.multiple
-        if documentContainers.count == 1, let name = documentContainers.first?.name {
-            containerName = name
-        }
-		let title = L10n.seeDocumentsIn(containerName)
+		let title = L10n.seeDocumentsIn(documentContainers.title)
 		activity.title = title
 		
 		activity.userInfo = [UserInfoKeys.pin: Pin(containers: documentContainers).userInfo]
