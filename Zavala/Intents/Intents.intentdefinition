@@ -2049,7 +2049,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Get Current Tag</string>
+					<string>Get Current Tags</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>ihH6Za</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
