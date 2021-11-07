@@ -128,7 +128,9 @@
 
 /* Sidebar */
 "Delete_Tag_Prompt" = "Are you sure you want to delete the “%@” tag?";
+"Delete_Tags_Prompt" = "Are you sure you want to delete %d tags?";
 "Delete_Tag_Message" = "No Outlines associated with this tag will be deleted.";
+"Delete_Tags_Message" = "No Outlines associated with these tags will be deleted.";
 
 /* Timeline */
 "Not_Available" = "Not Available";

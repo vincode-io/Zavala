@@ -110,6 +110,12 @@ internal enum L10n {
   internal static func deleteTagPrompt(_ p1: Any) -> String {
     return L10n.tr("Localizable", "Delete_Tag_Prompt", String(describing: p1))
   }
+  /// No Outlines associated with these tags will be deleted.
+  internal static let deleteTagsMessage = L10n.tr("Localizable", "Delete_Tags_Message")
+  /// Are you sure you want to delete %d tags?
+  internal static func deleteTagsPrompt(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "Delete_Tags_Prompt", p1)
+  }
   /// Document Find…
   internal static let documentFindEllipsis = L10n.tr("Localizable", "Document_Find_Ellipsis")
   /// Done

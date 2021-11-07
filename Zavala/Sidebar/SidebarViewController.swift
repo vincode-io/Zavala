@@ -220,8 +220,23 @@ extension SidebarViewController {
 			textView.resignFirstResponder()
 		}
 		
-		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return nil }
-		return makeDocumentContainerContextMenu(item: sidebarItem)
+		if !(collectionView.indexPathsForSelectedItems?.contains(indexPath) ?? false) {
+			collectionView.deselectAll()
+		}
+		
+		let sidebarItems: [SidebarItem]
+		if let selected = collectionView.indexPathsForSelectedItems, !selected.isEmpty {
+			sidebarItems = selected.compactMap { dataSource.itemIdentifier(for: $0) }
+		} else {
+			if let sidebarItem = dataSource.itemIdentifier(for: indexPath) {
+				sidebarItems = [sidebarItem]
+			} else {
+				sidebarItems = [SidebarItem]()
+			}
+		}
+		
+		guard let mainItem = dataSource.itemIdentifier(for: indexPath) else { return nil }
+		return makeDocumentContainerContextMenu(mainItem: mainItem, items: sidebarItems)
 	}
     
 	override func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
@@ -443,30 +458,30 @@ extension SidebarViewController {
 		reloadVisible()
 	}
 	
-	private func makeDocumentContainerContextMenu(item: SidebarItem) -> UIContextMenuConfiguration {
-		return UIContextMenuConfiguration(identifier: item as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
-			guard let self = self,
-				  case .documentContainer(let entityID) = item.id,
-				  let container = AccountManager.shared.findDocumentContainer(entityID) else {
-					  return nil
-				  }
+	private func makeDocumentContainerContextMenu(mainItem: SidebarItem, items: [SidebarItem]) -> UIContextMenuConfiguration {
+		return UIContextMenuConfiguration(identifier: mainItem as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
+			guard let self = self else { return nil }
 
-			var menuItems = [UIMenu]()
+			let containers: [DocumentContainer] = items.compactMap { item in
+				if case .documentContainer(let entityID) = item.id {
+					return AccountManager.shared.findDocumentContainer(entityID)
+				}
+				return nil
+			}
 			
-			if let renameTagAction = self.renameTagAction(container: container) {
+			var menuItems = [UIMenu]()
+			if let renameTagAction = self.renameTagAction(containers: containers) {
 				menuItems.append(UIMenu(title: "", options: .displayInline, children: [renameTagAction]))
 			}
-			
-			if let deleteTagAction = self.deleteTagAction(container: container) {
+			if let deleteTagAction = self.deleteTagAction(containers: containers) {
 				menuItems.append(UIMenu(title: "", options: .displayInline, children: [deleteTagAction]))
 			}
-			
 			return UIMenu(title: "", children: menuItems)
 		})
 	}
 
-	private func renameTagAction(container: DocumentContainer) -> UIAction? {
-		guard let tagDocuments = container as? TagDocuments else { return nil }
+	private func renameTagAction(containers: [DocumentContainer]) -> UIAction? {
+		guard containers.count == 1, let container = containers.first, let tagDocuments = container as? TagDocuments else { return nil }
 		
 		let action = UIAction(title: L10n.rename, image: AppAssets.rename) { [weak self] action in
 			guard let self = self else { return }
@@ -489,15 +504,30 @@ extension SidebarViewController {
 		return action
 	}
 
-	private func deleteTagAction(container: DocumentContainer) -> UIAction? {
-		guard let tagDocuments = container as? TagDocuments, let tag = tagDocuments.tag else { return nil }
+	private func deleteTagAction(containers: [DocumentContainer]) -> UIAction? {
+		let tagDocuments = containers.compactMap { $0 as? TagDocuments }
+		guard tagDocuments.count == containers.count else { return nil}
 		
 		let action = UIAction(title: L10n.delete, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
 			let deleteAction = UIAlertAction(title: L10n.delete, style: .destructive) { _ in
-				tagDocuments.account?.forceDeleteTag(tag)
+				for tagDocument in tagDocuments {
+					if let tag = tagDocument.tag {
+						tagDocument.account?.forceDeleteTag(tag)
+					}
+				}
 			}
 			
-			let alert = UIAlertController(title: L10n.deleteTagPrompt(tag.name), message: L10n.deleteTagMessage, preferredStyle: .alert)
+			let title: String
+			let message: String
+			if tagDocuments.count == 1, let tag = tagDocuments.first?.tag {
+				title = L10n.deleteTagPrompt(tag.name)
+				message = L10n.deleteTagMessage
+			} else {
+				title = L10n.deleteTagsPrompt(tagDocuments.count)
+				message = L10n.deleteTagsMessage
+			}
+			
+			let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
 			alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
 			alert.addAction(deleteAction)
 			alert.preferredAction = deleteAction
