@@ -55,6 +55,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
+			collectionView.allowsMultipleSelection = true
 		} else {
 			addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline))
 			importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML))
@@ -106,15 +107,6 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 			}
 			
 			cell.contentConfiguration = contentConfiguration
-			
-//			let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.selectDocument(gesture:)))
-//			cell.addGestureRecognizer(singleTap)
-//
-//			if self.traitCollection.userInterfaceIdiom == .mac {
-//				let doubleTap = UITapGestureRecognizer(target: self, action: #selector(self.openDocumentInNewWindow(gesture:)))
-//				doubleTap.numberOfTapsRequired = 2
-//				cell.addGestureRecognizer(doubleTap)
-//			}
 		}
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
@@ -307,12 +299,21 @@ extension TimelineViewController {
 	}
 
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        <#code#>
+		guard let documentContainers = documentContainers else { return }
+		
+		guard let selectedIndexPaths = collectionView.indexPathsForSelectedItems, selectedIndexPaths.count == 1, let selectedIndexPath = selectedIndexPaths.first else {
+			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: nil, isNew: false, isNavigationBranch: false, animated: true)
+			return
+		}
+		
+		let document = timelineDocuments[selectedIndexPath.row]
+		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: document, isNew: false, isNavigationBranch: true, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let documentContainers = documentContainers else { return }
 
+		// We have to figure out double clicks for ourselves
         let now: TimeInterval = Date().timeIntervalSince1970
         if now - lastClick < 0.3 && lastIndexPath?.row == indexPath.row {
             openDocumentInNewWindow(indexPath: indexPath)
@@ -320,8 +321,12 @@ extension TimelineViewController {
         lastClick = now
         lastIndexPath = indexPath
         
-        let document = timelineDocuments[indexPath.row]
-        delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: document, isNew: false, isNavigationBranch: true, animated: true)
+		if let selectedIndexPaths = collectionView.indexPathsForSelectedItems, selectedIndexPaths.count > 1 {
+			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: nil, isNew: false, isNavigationBranch: false, animated: true)
+		} else {
+			let document = timelineDocuments[indexPath.row]
+			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: document, isNew: false, isNavigationBranch: true, animated: true)
+		}
     }
 	
 	private func createLayout() -> UICollectionViewLayout {
@@ -339,19 +344,8 @@ extension TimelineViewController {
 		}
 		return layout
 	}
-		
-	@objc func selectDocument(gesture: UITapGestureRecognizer) {
-		guard let documentContainers = documentContainers,
-			  let cell = gesture.view as? UICollectionViewCell,
-			  let indexPath = collectionView.indexPath(for: cell),
-			  indexPath != collectionView.indexPathsForSelectedItems?.last else { return }
-
-		collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-		let document = timelineDocuments[indexPath.row]
-		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, document: document, isNew: false, isNavigationBranch: true, animated: true)
-	}
 	
-	@objc func openDocumentInNewWindow(indexPath: IndexPath) {
+	func openDocumentInNewWindow(indexPath: IndexPath) {
         collectionView.deselectAll()
 		let document = timelineDocuments[indexPath.row]
 		
