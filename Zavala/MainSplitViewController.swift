@@ -257,23 +257,23 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 	
-	@objc func sync(_ sender: Any?) {
+	@objc func sync() {
 		AccountManager.shared.sync()
 	}
 	
-	@objc func createOutline(_ sender: Any?) {
+	@objc func createOutline() {
 		selectDefaultDocumentContainerIfNecessary() {
-			self.timelineViewController?.createOutline(sender)
+			self.timelineViewController?.createOutline()
 		}
 	}
 	
 	@objc func importOPML() {
 		selectDefaultDocumentContainerIfNecessary() {
-			self.timelineViewController?.importOPML(self)
+			self.timelineViewController?.importOPML()
 		}
 	}
 	
-	@objc func toggleSidebar(_ sender: Any?) {
+	@objc func toggleSidebar() {
 		UIView.animate(withDuration: 0.25) {
 			self.preferredDisplayMode = self.displayMode == .twoBesideSecondary ? .secondaryOnly : .twoBesideSecondary
 		}

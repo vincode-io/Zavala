@@ -663,7 +663,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	@objc func createOutlineCommand(_ sender: Any?) {
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.createOutline(sender)
+			mainSplitViewController.createOutline()
 		} else {
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.newOutline)
 			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
@@ -672,7 +672,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	@objc func toggleSidebarCommand(_ sender: Any?) {
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.toggleSidebar(sender)
+			mainSplitViewController.toggleSidebar()
 		}
 	}
 	

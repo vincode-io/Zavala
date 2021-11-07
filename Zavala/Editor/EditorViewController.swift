@@ -12,7 +12,7 @@ import RSCore
 import Templeton
 
 extension Selector {
-	static let insertImage = #selector(EditorViewController.insertImage(_:))
+	static let insertImage = #selector(EditorViewController.insertImage)
 }
 
 protocol EditorDelegate: AnyObject {
@@ -282,7 +282,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	private var ellipsisBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.ellipsis, style: .plain, target: nil, action: nil)
 	private var filterBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.filterInactive, style: .plain, target: self, action: #selector(toggleOutlineFilter))
-	private var doneBarButtonItem: UIBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done(_:)))
+	private var doneBarButtonItem: UIBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done))
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
@@ -967,7 +967,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
-	@objc func done(_ sender: Any?) {
+	@objc func done() {
 		UIResponder.currentFirstResponder?.resignFirstResponder()
 		CursorCoordinates.lastKnownCoordinates = nil
 	}
@@ -1026,7 +1026,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
-	@objc func insertImage(_ sender: Any? = nil) {
+	@objc func insertImage() {
 		var config = PHPickerConfiguration()
 		config.filter = PHPickerFilter.images
 		config.selectionLimit = 1
@@ -1036,7 +1036,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		self.present(pickerViewController, animated: true, completion: nil)
 	}
 	
-	@objc func link(_ sender: Any? = nil) {
+	@objc func link() {
 		currentTextView?.editLink(self)
 	}
 	

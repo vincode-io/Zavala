@@ -53,8 +53,8 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
-			addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
-			importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML(_:)))
+			addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline))
+			importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML))
 			
 			searchController.delegate = self
 			searchController.searchResultsUpdater = self
@@ -233,14 +233,14 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 		}
 	}
 	
-	@objc func createOutline(_ sender: Any? = nil) {
+	@objc func createOutline() {
 		guard let document = createOutlineDocument(title: "") else { return }
 		loadDocuments(animated: true) {
 			self.selectDocument(document, isNew: true, animated: true)
 		}
 	}
 
-	@objc func importOPML(_ sender: Any? = nil) {
+	@objc func importOPML() {
 		let opmlType = UTType(exportedAs: "org.opml.opml")
 		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [opmlType, .xml])
 		docPicker.delegate = self
@@ -451,7 +451,7 @@ extension TimelineViewController {
 	}
 	
 	private func updateUI() {
-        var title = documentContainers?.title ?? ""
+        let title = documentContainers?.title ?? ""
         navigationItem.title = title
         view.window?.windowScene?.title = title
         

@@ -183,7 +183,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	}
 
     @objc func createOutline(_ sender: Any) {
-        mainSplitViewController?.createOutline(sender)
+        mainSplitViewController?.createOutline()
     }
     
     @objc func multipleSelect() {
