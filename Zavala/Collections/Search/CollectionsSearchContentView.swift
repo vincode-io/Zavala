@@ -1,5 +1,5 @@
 //
-//  SidebarSearchContentView.swift
+//  CollectionsSearchContentView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 1/11/21.
@@ -7,13 +7,13 @@
 
 import UIKit
 
-class SidebarSearchContentView: UIView, UIContentView {
+class CollectionsSearchContentView: UIView, UIContentView {
 
 	let searchTextField = UISearchTextField()
 	
-	var appliedConfiguration: SidebarSearchContentConfiguration!
+	var appliedConfiguration: CollectionsSearchContentConfiguration!
 	
-	init(configuration: SidebarSearchContentConfiguration) {
+	init(configuration: CollectionsSearchContentConfiguration) {
 		super.init(frame: .zero)
 		
 		searchTextField.delegate = self
@@ -44,16 +44,16 @@ class SidebarSearchContentView: UIView, UIContentView {
 	var configuration: UIContentConfiguration {
 		get { appliedConfiguration }
 		set {
-			guard let newConfig = newValue as? SidebarSearchContentConfiguration else { return }
+			guard let newConfig = newValue as? CollectionsSearchContentConfiguration else { return }
 			apply(configuration: newConfig)
 		}
 	}
 
 	@objc func searchTextFieldDidChange(textField: UITextField) {
-		appliedConfiguration.delegate?.sidebarSearchDidUpdate(searchText: textField.text)
+		appliedConfiguration.delegate?.collectionsSearchDidUpdate(searchText: textField.text)
 	}
 	
-	private func apply(configuration: SidebarSearchContentConfiguration) {
+	private func apply(configuration: CollectionsSearchContentConfiguration) {
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
 		searchTextField.text = configuration.searchText
@@ -61,11 +61,11 @@ class SidebarSearchContentView: UIView, UIContentView {
 	
 }
 
-extension SidebarSearchContentView: UITextFieldDelegate {
+extension CollectionsSearchContentView: UITextFieldDelegate {
 	
 	func textFieldDidBeginEditing(_ textField: UITextField) {
 		if textField.text == nil || textField.text!.isEmpty {
-			appliedConfiguration.delegate?.sidebarSearchDidBecomeActive()
+			appliedConfiguration.delegate?.collectionsSearchDidBecomeActive()
 		}
 	}
 	

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ydF-F8-RZZ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ydF-F8-RZZ">
     <device id="mac" appearance="light" renderMode="macOS"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,15 +19,15 @@
                         <sections>
                             <tableViewSection id="rST-Of-drW">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="0kM-tt-gs7">
-                                        <rect key="frame" x="20" y="18" width="760" height="43.5"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="0kM-tt-gs7">
+                                        <rect key="frame" x="20" y="18" width="760" height="25.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0kM-tt-gs7" id="0Gg-Zo-5Ik">
-                                            <rect key="frame" x="0.0" y="0.0" width="760" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="760" height="25.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Open Quickly" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uNw-0Z-jOF" customClass="SearchTextField" customModule="Zavala" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="4" width="720" height="16"/>
+                                                    <rect key="frame" x="20" y="4" width="720" height="17.5"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                 </textField>
@@ -73,7 +74,7 @@
             <objects>
                 <navigationController storyboardIdentifier="OpenQuicklyViewControllerNav" id="zn6-yc-ZVn" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="QFk-wC-0al">
-                        <rect key="frame" x="0.0" y="0.0" width="800" height="39"/>
+                        <rect key="frame" x="0.0" y="0.0" width="800" height="38"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -93,18 +94,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="Outline Name" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L9g-l9-eOK" customClass="SearchTextField" customModule="Zavala" customModuleProvider="target">
-                                <rect key="frame" x="20" y="10" width="760" height="26"/>
+                                <rect key="frame" x="20" y="10" width="760" height="22"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gLs-LO-DwW">
-                                <rect key="frame" x="20" y="56" width="370" height="484"/>
+                                <rect key="frame" x="20" y="52" width="370" height="488"/>
                                 <connections>
                                     <segue destination="lxn-5g-vaa" kind="embed" id="VUf-zG-NdZ"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BU4-8V-Sp7">
-                                <rect key="frame" x="410" y="56" width="370" height="484"/>
+                                <rect key="frame" x="410" y="52" width="370" height="488"/>
                                 <connections>
                                     <segue destination="VYi-R1-UJx" kind="embed" id="TkZ-Hp-Ie5"/>
                                 </connections>
@@ -163,12 +164,12 @@
             </objects>
             <point key="canvasLocation" x="-776.25" y="2759"/>
         </scene>
-        <!--Mac Open Quickly Sidebar View Controller-->
+        <!--Mac Open Quickly Collections View Controller-->
         <scene sceneID="RuC-mF-ede">
             <objects>
-                <collectionViewController id="lxn-5g-vaa" customClass="MacOpenQuicklySidebarViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController id="lxn-5g-vaa" customClass="MacOpenQuicklyCollectionsViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="sWX-zh-TRN">
-                        <rect key="frame" x="0.0" y="0.0" width="370" height="484"/>
+                        <rect key="frame" x="0.0" y="0.0" width="370" height="488"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="xdb-YK-Ihd">
@@ -188,12 +189,12 @@
             </objects>
             <point key="canvasLocation" x="-935" y="3416"/>
         </scene>
-        <!--Mac Open Quickly Timeline View Controller-->
+        <!--Mac Open Quickly Documents View Controller-->
         <scene sceneID="Wq4-ci-XFh">
             <objects>
-                <collectionViewController id="VYi-R1-UJx" customClass="MacOpenQuicklyTimelineViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController id="VYi-R1-UJx" customClass="MacOpenQuicklyDocumentsViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="MHo-lA-YzS">
-                        <rect key="frame" x="0.0" y="0.0" width="370" height="484"/>
+                        <rect key="frame" x="0.0" y="0.0" width="370" height="488"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="eog-zf-hN6">

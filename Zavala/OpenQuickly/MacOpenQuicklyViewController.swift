@@ -23,12 +23,12 @@ class MacOpenQuicklyViewController: UIViewController {
 		]
 	}
 
-	private var sidebarViewController: MacOpenQuicklySidebarViewController? {
-		return children.first(where: { $0 is MacOpenQuicklySidebarViewController }) as? MacOpenQuicklySidebarViewController
+	private var collectionsViewController: MacOpenQuicklyCollectionsViewController? {
+		return children.first(where: { $0 is MacOpenQuicklyCollectionsViewController }) as? MacOpenQuicklyCollectionsViewController
 	}
 	
-	private var timelineViewController: MacOpenQuicklyTimelineViewController? {
-		return children.first(where: { $0 is MacOpenQuicklyTimelineViewController }) as? MacOpenQuicklyTimelineViewController
+	private var documentsViewController: MacOpenQuicklyDocumentsViewController? {
+		return children.first(where: { $0 is MacOpenQuicklyDocumentsViewController }) as? MacOpenQuicklyDocumentsViewController
 	}
 
 	private var selectedDocumentID: EntityID?
@@ -36,8 +36,8 @@ class MacOpenQuicklyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		sidebarViewController?.delegate = self
-		timelineViewController?.delegate = self
+		collectionsViewController?.delegate = self
+		documentsViewController?.delegate = self
 
 		searchTextField.delegate = self
 		searchTextField.layer.borderWidth = 1
@@ -98,26 +98,26 @@ extension MacOpenQuicklyViewController: UITextFieldDelegate {
 	
 }
 
-// MARK: MacOpenQuicklySidebarDelegate
+// MARK: MacOpenQuicklyCollectionsDelegate
 
-extension MacOpenQuicklyViewController: MacOpenQuicklySidebarDelegate {
+extension MacOpenQuicklyViewController: MacOpenQuicklyCollectionsDelegate {
 	
-	func documentContainerSelectionDidChange(_: MacOpenQuicklySidebarViewController, documentContainer: DocumentContainer?) {
-		timelineViewController?.setDocumentContainer(documentContainer)
+	func documentContainerSelectionDidChange(_: MacOpenQuicklyCollectionsViewController, documentContainer: DocumentContainer?) {
+		documentsViewController?.setDocumentContainer(documentContainer)
 	}
 	
 }
 
-// MARK: MacOpenQuicklySidebarDelegate
+// MARK: MacOpenQuicklyDocumentsDelegate
 
-extension MacOpenQuicklyViewController: MacOpenQuicklyTimelineDelegate {
+extension MacOpenQuicklyViewController: MacOpenQuicklyDocumentsDelegate {
 	
-	func documentSelectionDidChange(_: MacOpenQuicklyTimelineViewController, documentID: EntityID?) {
+	func documentSelectionDidChange(_: MacOpenQuicklyDocumentsViewController, documentID: EntityID?) {
 		selectedDocumentID = documentID
 		updateUI()
 	}
 	
-	func openDocument(_: MacOpenQuicklyTimelineViewController, documentID: EntityID) {
+	func openDocument(_: MacOpenQuicklyDocumentsViewController, documentID: EntityID) {
 		openDocument(documentID)
 	}
 	

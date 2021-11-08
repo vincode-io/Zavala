@@ -22,7 +22,7 @@ protocol TimelineDelegate: AnyObject  {
 }
 
 class TimelineViewController: UICollectionViewController, MainControllerIdentifiable {
-	var mainControllerIdentifer: MainControllerIdentifier { return .timeline }
+	var mainControllerIdentifer: MainControllerIdentifier { return .documents }
 
 	weak var delegate: TimelineDelegate?
 

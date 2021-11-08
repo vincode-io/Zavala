@@ -1,5 +1,5 @@
 //
-//  SidebarViewController.swift
+//  CollectionsViewController.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/5/20.
@@ -11,18 +11,18 @@ import RSCore
 import Combine
 import Templeton
 
-protocol SidebarDelegate: AnyObject {
-	func documentContainerSelectionsDidChange(_: SidebarViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?)
+protocol CollectionsDelegate: AnyObject {
+	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?)
 }
 
-enum SidebarSection: Int {
+enum CollectionsSection: Int {
 	case search, localAccount, cloudKitAccount
 }
 
-class SidebarViewController: UICollectionViewController, MainControllerIdentifiable {
-	var mainControllerIdentifer: MainControllerIdentifier { return .sidebar }
+class CollectionsViewController: UICollectionViewController, MainControllerIdentifiable {
+	var mainControllerIdentifer: MainControllerIdentifier { return .collections }
 	
-	weak var delegate: SidebarDelegate?
+	weak var delegate: CollectionsDelegate?
 	
 	var currentAccount: Account? {
         currentDocumentContainers?.uniqueAccount
@@ -45,7 +45,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
         }
 	}
 
-	var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
+	var dataSource: UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
 	private var applyChangesQueue = CoalescingQueue(name: "Apply Snapshot", interval: 0.5)
 	private var reloadChangedQueue = CoalescingQueue(name: "Reload Visible", interval: 0.5)
@@ -121,8 +121,8 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
         
         if let containers = containers, containers.count == 1, let search = containers.first as? Search {
 			DispatchQueue.main.async {
-				if let searchCellIndexPath = self.dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {
-					if let searchCell = self.collectionView.cellForItem(at: searchCellIndexPath) as? SidebarSearchCell {
+				if let searchCellIndexPath = self.dataSource.indexPath(for: CollectionsItem.searchItem()) {
+					if let searchCell = self.collectionView.cellForItem(at: searchCellIndexPath) as? CollectionsSearchCell {
 						searchCell.setSearchField(searchText: search.searchText)
 					}
 				}
@@ -202,8 +202,8 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 	// MARK: API
 	
 	func beginDocumentSearch() {
-		if let searchCellIndexPath = self.dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {
-			if let searchCell = self.collectionView.cellForItem(at: searchCellIndexPath) as? SidebarSearchCell {
+		if let searchCellIndexPath = self.dataSource.indexPath(for: CollectionsItem.searchItem()) {
+			if let searchCell = self.collectionView.cellForItem(at: searchCellIndexPath) as? CollectionsSearchCell {
 				searchCell.setSearchField(searchText: "")
 			}
 		}
@@ -213,7 +213,7 @@ class SidebarViewController: UICollectionViewController, MainControllerIdentifia
 
 // MARK: Collection View
 
-extension SidebarViewController {
+extension CollectionsViewController {
 	
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
 		// If we don't force the text view to give up focus, we get its additional context menu items
@@ -225,14 +225,14 @@ extension SidebarViewController {
 			collectionView.deselectAll()
 		}
 		
-		let sidebarItems: [SidebarItem]
+		let sidebarItems: [CollectionsItem]
 		if let selected = collectionView.indexPathsForSelectedItems, !selected.isEmpty {
 			sidebarItems = selected.compactMap { dataSource.itemIdentifier(for: $0) }
 		} else {
 			if let sidebarItem = dataSource.itemIdentifier(for: indexPath) {
 				sidebarItems = [sidebarItem]
 			} else {
-				sidebarItems = [SidebarItem]()
+				sidebarItems = [CollectionsItem]()
 			}
 		}
 		
@@ -272,13 +272,13 @@ extension SidebarViewController {
 	}
 	
 	private func configureDataSource() {
-		let searchRegistration = UICollectionView.CellRegistration<SidebarSearchCell, SidebarItem> { (cell, indexPath, item) in
-			var contentConfiguration = SidebarSearchContentConfiguration(searchText: nil)
+		let searchRegistration = UICollectionView.CellRegistration<CollectionsSearchCell, CollectionsItem> { (cell, indexPath, item) in
+			var contentConfiguration = CollectionsSearchContentConfiguration(searchText: nil)
 			contentConfiguration.delegate = self
 			cell.contentConfiguration = contentConfiguration
 		}
 
-		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, SidebarItem> {	(cell, indexPath, item) in
+		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, CollectionsItem> {	(cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarHeader()
 			
 			contentConfiguration.text = item.id.name
@@ -289,7 +289,7 @@ extension SidebarViewController {
 			cell.accessories = [.outlineDisclosure()]
 		}
 		
-		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, SidebarItem> { (cell, indexPath, item) in
+		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, CollectionsItem> { (cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
 			
 			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
@@ -304,7 +304,7 @@ extension SidebarViewController {
 			cell.contentConfiguration = contentConfiguration
 		}
 		
-		dataSource = UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
+		dataSource = UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
 			switch item.id {
 			case .search:
 				return collectionView.dequeueConfiguredReusableCell(using: searchRegistration, for: indexPath, item: item)
@@ -316,21 +316,21 @@ extension SidebarViewController {
 		}
 	}
 	
-	private func searchSnapshot() -> NSDiffableDataSourceSectionSnapshot<SidebarItem> {
-		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
-		snapshot.append([SidebarItem.searchSidebarItem()])
+	private func searchSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem> {
+		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
+		snapshot.append([CollectionsItem.searchItem()])
 		return snapshot
 	}
 	
-	private func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<SidebarItem>? {
+	private func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
 		let localAccount = AccountManager.shared.localAccount
 		
 		guard localAccount.isActive else { return nil }
 		
-		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
-		let header = SidebarItem.sidebarItem(id: .header(.localAccount))
+		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
+		let header = CollectionsItem.item(id: .header(.localAccount))
 		
-		let items = localAccount.documentContainers.map { SidebarItem.sidebarItem($0) }
+		let items = localAccount.documentContainers.map { CollectionsItem.item($0) }
 		
 		snapshot.append([header])
 		snapshot.expand([header])
@@ -338,13 +338,13 @@ extension SidebarViewController {
 		return snapshot
 	}
 	
-	private func cloudKitAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<SidebarItem>? {
+	private func cloudKitAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
 		guard let cloudKitAccount = AccountManager.shared.cloudKitAccount else { return nil }
 		
-		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
-		let header = SidebarItem.sidebarItem(id: .header(.cloudKitAccount))
+		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
+		let header = CollectionsItem.item(id: .header(.cloudKitAccount))
 		
-		let items = cloudKitAccount.documentContainers.map { SidebarItem.sidebarItem($0) }
+		let items = cloudKitAccount.documentContainers.map { CollectionsItem.item($0) }
 		
 		snapshot.append([header])
 		snapshot.expand([header])
@@ -363,17 +363,17 @@ extension SidebarViewController {
 		if let snapshot = localAccountSnapshot() {
 			applySnapshot(snapshot, section: .localAccount, animated: true)
 		} else {
-			applySnapshot(NSDiffableDataSourceSectionSnapshot<SidebarItem>(), section: .localAccount, animated: true)
+			applySnapshot(NSDiffableDataSourceSectionSnapshot<CollectionsItem>(), section: .localAccount, animated: true)
 		}
 
 		if let snapshot = self.cloudKitAccountSnapshot() {
 			applySnapshot(snapshot, section: .cloudKitAccount, animated: true)
 		} else {
-			applySnapshot(NSDiffableDataSourceSectionSnapshot<SidebarItem>(), section: .cloudKitAccount, animated: true)
+			applySnapshot(NSDiffableDataSourceSectionSnapshot<CollectionsItem>(), section: .cloudKitAccount, animated: true)
 		}
 	}
 	
-	func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<SidebarItem>, section: SidebarSection, animated: Bool) {
+	func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<CollectionsItem>, section: CollectionsSection, animated: Bool) {
 		let selectedItems = collectionView.indexPathsForSelectedItems?.compactMap({ dataSource.itemIdentifier(for: $0) })
 		
 		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
@@ -390,7 +390,7 @@ extension SidebarViewController {
 	}
 	
 	func updateSelections(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?) {
-        let sidebarItems = containers?.map { SidebarItem.sidebarItem($0) } ?? [SidebarItem]()
+        let sidebarItems = containers?.map { CollectionsItem.item($0) } ?? [CollectionsItem]()
 		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, items: sidebarItems, animated: animated))
         
 		let containers = convert(sideBarItems: sidebarItems)
@@ -405,13 +405,13 @@ extension SidebarViewController {
 
 // MARK: SidebarSearchCellDelegate
 
-extension SidebarViewController: SidebarSearchCellDelegate {
+extension CollectionsViewController: CollectionsSearchCellDelegate {
 
-	func sidebarSearchDidBecomeActive() {
+	func collectionsSearchDidBecomeActive() {
 		selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
 	}
 
-	func sidebarSearchDidUpdate(searchText: String?) {
+	func collectionsSearchDidUpdate(searchText: String?) {
 		if let searchText = searchText {
 			selectDocumentContainers([Search(searchText: searchText)], isNavigationBranch: false, animated: true)
 		} else {
@@ -423,17 +423,17 @@ extension SidebarViewController: SidebarSearchCellDelegate {
 
 // MARK: Helpers
 
-extension SidebarViewController {
+extension CollectionsViewController {
 	
 	private func clearSearchField() {
-		if let searchCellIndexPath = dataSource.indexPath(for: SidebarItem.searchSidebarItem()) {
-			if let searchCell = collectionView.cellForItem(at: searchCellIndexPath) as? SidebarSearchCell {
+		if let searchCellIndexPath = dataSource.indexPath(for: CollectionsItem.searchItem()) {
+			if let searchCell = collectionView.cellForItem(at: searchCellIndexPath) as? CollectionsSearchCell {
 				searchCell.clearSearchField()
 			}
 		}
 	}
     
-    private func convert(sideBarItems: [SidebarItem]) -> [DocumentContainer] {
+    private func convert(sideBarItems: [CollectionsItem]) -> [DocumentContainer] {
         let containers: [DocumentContainer] = sideBarItems.compactMap { sidebarItem in
             if case .documentContainer(let entityID) = sidebarItem.id {
                 return AccountManager.shared.findDocumentContainer(entityID)
@@ -459,7 +459,7 @@ extension SidebarViewController {
 		reloadVisible()
 	}
 	
-	private func makeDocumentContainerContextMenu(mainItem: SidebarItem, items: [SidebarItem]) -> UIContextMenuConfiguration {
+	private func makeDocumentContainerContextMenu(mainItem: CollectionsItem, items: [CollectionsItem]) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: mainItem as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
 			guard let self = self else { return nil }
 

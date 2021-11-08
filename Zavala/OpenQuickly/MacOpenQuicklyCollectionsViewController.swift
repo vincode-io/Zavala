@@ -1,5 +1,5 @@
 //
-//  MacOpenQuicklySidebarViewController.swift
+//  MacOpenQuicklyCollectionsViewController.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 3/19/21.
@@ -9,15 +9,15 @@ import UIKit
 import RSCore
 import Templeton
 
-protocol MacOpenQuicklySidebarDelegate: AnyObject {
-	func documentContainerSelectionDidChange(_: MacOpenQuicklySidebarViewController, documentContainer: DocumentContainer?)
+protocol MacOpenQuicklyCollectionsDelegate: AnyObject {
+	func documentContainerSelectionDidChange(_: MacOpenQuicklyCollectionsViewController, documentContainer: DocumentContainer?)
 }
 
-class MacOpenQuicklySidebarViewController: UICollectionViewController {
+class MacOpenQuicklyCollectionsViewController: UICollectionViewController {
 
-	weak var delegate: MacOpenQuicklySidebarDelegate?
+	weak var delegate: MacOpenQuicklyCollectionsDelegate?
 	
-	var dataSource: UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>!
+	var dataSource: UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
 
 	override func viewDidLoad() {
@@ -35,9 +35,9 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
     // MARK: UICollectionView
 
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		guard let sidebarItem = dataSource.itemIdentifier(for: indexPath) else { return }
+		guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
 		
-		if case .documentContainer(let entityID) = sidebarItem.id {
+		if case .documentContainer(let entityID) = item.id {
 			AppDefaults.shared.openQuicklyDocumentContainerID = entityID.userInfo
 			let documentContainer = AccountManager.shared.findDocumentContainer(entityID)
 			delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer)
@@ -56,7 +56,7 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 
 	private func configureDataSource() {
 
-		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, SidebarItem> {	(cell, indexPath, item) in
+		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, CollectionsItem> {	(cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarHeader()
 			contentConfiguration.text = item.id.name
 			contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .subheadline)
@@ -66,7 +66,7 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 			cell.accessories = [.outlineDisclosure()]
 		}
 		
-		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, SidebarItem> { (cell, indexPath, item) in
+		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, CollectionsItem> { (cell, indexPath, item) in
 			cell.highlightImageInWhite = true
 			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
 
@@ -79,7 +79,7 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 			cell.contentConfiguration = contentConfiguration
 		}
 		
-		dataSource = UICollectionViewDiffableDataSource<SidebarSection, SidebarItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
+		dataSource = UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
 			switch item.id {
 			case .header:
 				return collectionView.dequeueConfiguredReusableCell(using: headerRegistration, for: indexPath, item: item)
@@ -93,17 +93,17 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 		if let snapshot = localAccountSnapshot() {
 			applySnapshot(snapshot, section: .localAccount, animated: true)
 		} else {
-			applySnapshot(NSDiffableDataSourceSectionSnapshot<SidebarItem>(), section: .localAccount, animated: true)
+			applySnapshot(NSDiffableDataSourceSectionSnapshot<CollectionsItem>(), section: .localAccount, animated: true)
 		}
 
 		if let snapshot = self.cloudKitAccountSnapshot() {
 			applySnapshot(snapshot, section: .cloudKitAccount, animated: false)
 		} else {
-			applySnapshot(NSDiffableDataSourceSectionSnapshot<SidebarItem>(), section: .cloudKitAccount, animated: false)
+			applySnapshot(NSDiffableDataSourceSectionSnapshot<CollectionsItem>(), section: .cloudKitAccount, animated: false)
 		}
 	}
 
-	private func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<SidebarItem>, section: SidebarSection, animated: Bool) {
+	private func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<CollectionsItem>, section: CollectionsSection, animated: Bool) {
 		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
 		
 		operation.completionBlock = { [weak self] _ in
@@ -111,7 +111,7 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 			   let containerUserInfo = AppDefaults.shared.openQuicklyDocumentContainerID,
 			   let containerID = EntityID(userInfo: containerUserInfo),
 			   let container = AccountManager.shared.findDocumentContainer(containerID),
-			   let indexPath = self.dataSource.indexPath(for: SidebarItem.sidebarItem(container)) {
+			   let indexPath = self.dataSource.indexPath(for: CollectionsItem.item(container)) {
 				self.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredVertically)
 				self.delegate?.documentContainerSelectionDidChange(self, documentContainer: container)
 			}
@@ -120,15 +120,15 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 		dataSourceQueue.add(operation)
 	}
 	
-	private func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<SidebarItem>? {
+	private func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
 		let localAccount = AccountManager.shared.localAccount
 		
 		guard localAccount.isActive else { return nil }
 		
-		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
-		let header = SidebarItem.sidebarItem(id: .header(.localAccount))
+		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
+		let header = CollectionsItem.item(id: .header(.localAccount))
 		
-		let items = localAccount.documentContainers.map { SidebarItem.sidebarItem($0) }
+		let items = localAccount.documentContainers.map { CollectionsItem.item($0) }
 		
 		snapshot.append([header])
 		snapshot.expand([header])
@@ -136,13 +136,13 @@ class MacOpenQuicklySidebarViewController: UICollectionViewController {
 		return snapshot
 	}
 	
-	private func cloudKitAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<SidebarItem>? {
+	private func cloudKitAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
 		guard let cloudKitAccount = AccountManager.shared.cloudKitAccount else { return nil }
 		
-		var snapshot = NSDiffableDataSourceSectionSnapshot<SidebarItem>()
-		let header = SidebarItem.sidebarItem(id: .header(.cloudKitAccount))
+		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
+		let header = CollectionsItem.item(id: .header(.cloudKitAccount))
 		
-		let items = cloudKitAccount.documentContainers.map { SidebarItem.sidebarItem($0) }
+		let items = cloudKitAccount.documentContainers.map { CollectionsItem.item($0) }
 		
 		snapshot.append([header])
 		snapshot.expand([header])

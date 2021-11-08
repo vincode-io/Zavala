@@ -1,5 +1,5 @@
 //
-//  SidebarItem.swift
+//  CollectionsItem.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/14/20.
@@ -8,10 +8,10 @@
 import UIKit
 import Templeton
 
-final class SidebarItem: NSObject, NSCopying, Identifiable {
+final class CollectionsItem: NSObject, NSCopying, Identifiable {
 	
 	enum ID: Hashable {
-		case header(SidebarSection)
+		case header(CollectionsSection)
 		case search
 		case documentContainer(EntityID)
 		
@@ -31,7 +31,7 @@ final class SidebarItem: NSObject, NSCopying, Identifiable {
 		
 	}
 	
-	let id: SidebarItem.ID
+	let id: CollectionsItem.ID
 	
 	var entityID: EntityID? {
 		if case .documentContainer(let entityID) = id {
@@ -44,21 +44,21 @@ final class SidebarItem: NSObject, NSCopying, Identifiable {
 		self.id = id
 	}
 	
-	static func searchSidebarItem() -> SidebarItem {
-		return SidebarItem(id: .search)
+	static func searchItem() -> CollectionsItem {
+		return CollectionsItem(id: .search)
 	}
 	
-	static func sidebarItem(id: ID) -> SidebarItem {
-		return SidebarItem(id: id)
+	static func item(id: ID) -> CollectionsItem {
+		return CollectionsItem(id: id)
 	}
 	
-	static func sidebarItem(_ documentContainer: DocumentContainer) -> SidebarItem {
-		let id = SidebarItem.ID.documentContainer(documentContainer.id)
-		return SidebarItem(id: id)
+	static func item(_ documentContainer: DocumentContainer) -> CollectionsItem {
+		let id = CollectionsItem.ID.documentContainer(documentContainer.id)
+		return CollectionsItem(id: id)
 	}
 
 	override func isEqual(_ object: Any?) -> Bool {
-		guard let other = object as? SidebarItem else { return false }
+		guard let other = object as? CollectionsItem else { return false }
 		if self === other { return true }
 		return id == other.id
 	}

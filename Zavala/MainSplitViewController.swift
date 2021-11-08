@@ -16,8 +16,8 @@ protocol MainControllerIdentifiable {
 
 enum MainControllerIdentifier {
 	case none
-	case sidebar
-	case timeline
+	case collections
+	case documents
 	case editor
 }
 
@@ -84,8 +84,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
     
     private let activityManager = ActivityManager()
 	
-	private var sidebarViewController: SidebarViewController? {
-		return viewController(for: .primary) as? SidebarViewController
+	private var sidebarViewController: CollectionsViewController? {
+		return viewController(for: .primary) as? CollectionsViewController
 	}
 	
 	private var timelineViewController: TimelineViewController? {
@@ -180,7 +180,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 		
 		sidebarViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch, animated: false) {
-			self.lastMainControllerToAppear = .timeline
+			self.lastMainControllerToAppear = .documents
 
 			guard let document = pin.document else {
 				// I honestly don't know why this is needed. We set this to show supplementary in the SidebarDelegate, but
@@ -384,9 +384,9 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 // MARK: SidebarDelegate
 
-extension MainSplitViewController: SidebarDelegate {
+extension MainSplitViewController: CollectionsDelegate {
 	
-	func documentContainerSelectionsDidChange(_: SidebarViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
+	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
 		if isNavigationBranch, let lastPin = lastPin {
 			goBackwardStack.insert(lastPin, at: 0)
 			goBackwardStack = Array(goBackwardStack.prefix(10))
@@ -618,7 +618,7 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 		}
 
 		// If we are showing the Feeds and only the feeds start clearing stuff
-		if isCollapsed && viewController === sidebarViewController && lastMainControllerToAppear == .timeline {
+		if isCollapsed && viewController === sidebarViewController && lastMainControllerToAppear == .documents {
 			sidebarViewController?.selectDocumentContainers(nil, isNavigationBranch: false, animated: false)
 			return
 		}

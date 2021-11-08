@@ -1,5 +1,5 @@
 //
-//  MacOpenQuicklyTimelineViewController.swift
+//  MacOpenQuicklyDocumentsViewController.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 3/20/21.
@@ -9,12 +9,12 @@ import UIKit
 import RSCore
 import Templeton
 
-protocol MacOpenQuicklyTimelineDelegate: AnyObject {
-	func documentSelectionDidChange(_: MacOpenQuicklyTimelineViewController, documentID: EntityID?)
-	func openDocument(_: MacOpenQuicklyTimelineViewController, documentID: EntityID)
+protocol MacOpenQuicklyDocumentsDelegate: AnyObject {
+	func documentSelectionDidChange(_: MacOpenQuicklyDocumentsViewController, documentID: EntityID?)
+	func openDocument(_: MacOpenQuicklyDocumentsViewController, documentID: EntityID)
 }
 
-final class TimelineItem: NSObject, NSCopying, Identifiable {
+final class DocumentsItem: NSObject, NSCopying, Identifiable {
 
 		let id: EntityID
 
@@ -22,12 +22,12 @@ final class TimelineItem: NSObject, NSCopying, Identifiable {
 				self.id = id
 		}
 
-		static func timelineItem(_ document: Document) -> TimelineItem {
-				return TimelineItem(id: document.id)
+		static func item(_ document: Document) -> DocumentsItem {
+				return DocumentsItem(id: document.id)
 		}
 
 		override func isEqual(_ object: Any?) -> Bool {
-				guard let other = object as? TimelineItem else { return false }
+				guard let other = object as? DocumentsItem else { return false }
 				if self === other { return true }
 				return id == other.id
 		}
@@ -44,12 +44,12 @@ final class TimelineItem: NSObject, NSCopying, Identifiable {
 
 }
 
-class MacOpenQuicklyTimelineViewController: UICollectionViewController {
+class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 
-	weak var delegate: MacOpenQuicklyTimelineDelegate?
+	weak var delegate: MacOpenQuicklyDocumentsDelegate?
 	private var documentContainer: DocumentContainer?
 
-	private var dataSource: UICollectionViewDiffableDataSource<Int, TimelineItem>!
+	private var dataSource: UICollectionViewDiffableDataSource<Int, DocumentsItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
 
     override func viewDidLoad() {
@@ -82,7 +82,7 @@ class MacOpenQuicklyTimelineViewController: UICollectionViewController {
 	}
 	
 	private func configureDataSource() {
-		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, TimelineItem> { [weak self] (cell, indexPath, item) in
+		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, DocumentsItem> { [weak self] (cell, indexPath, item) in
 			guard let self = self, let document = AccountManager.shared.findDocument(item.id) else { return }
 			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
@@ -111,7 +111,7 @@ class MacOpenQuicklyTimelineViewController: UICollectionViewController {
 			}
 		}
 		
-		dataSource = UICollectionViewDiffableDataSource<Int, TimelineItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
+		dataSource = UICollectionViewDiffableDataSource<Int, DocumentsItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
 			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: item)
 		}
 	}
@@ -119,24 +119,24 @@ class MacOpenQuicklyTimelineViewController: UICollectionViewController {
 	@objc private func selectDocument(gesture: UITapGestureRecognizer) {
 		guard let cell = gesture.view as? UICollectionViewCell,
 			  let indexPath = collectionView.indexPath(for: cell),
-			  let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
+			  let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
 		collectionView.deselectAll()
 		collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-		delegate?.documentSelectionDidChange(self, documentID: timelineItem.id)
+		delegate?.documentSelectionDidChange(self, documentID: item.id)
 	}
 	
 	@objc func openDocumentInNewWindow(gesture: UITapGestureRecognizer) {
 		guard let cell = gesture.view as? UICollectionViewCell,
 			  let indexPath = collectionView.indexPath(for: cell),
-			  let timelineItem = dataSource.itemIdentifier(for: indexPath) else { return }
+			  let item = dataSource.itemIdentifier(for: indexPath) else { return }
 
-		delegate?.openDocument(self, documentID: timelineItem.id)
+		delegate?.openDocument(self, documentID: item.id)
 	}
 	
 	func applySnapshot() {
 		guard let documentContainer = documentContainer else {
-			let snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
+			let snapshot = NSDiffableDataSourceSectionSnapshot<DocumentsItem>()
 			self.dataSourceQueue.add(ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: false))
 			return
 		}
@@ -145,8 +145,8 @@ class MacOpenQuicklyTimelineViewController: UICollectionViewController {
 			guard let self = self, let documents = try? result.get() else { return }
 
             let sortedDocuments = documents.sorted(by: { $0.title ?? "" < $1.title ?? "" })
-			let items = sortedDocuments.map { TimelineItem.timelineItem($0) }
-			var snapshot = NSDiffableDataSourceSectionSnapshot<TimelineItem>()
+			let items = sortedDocuments.map { DocumentsItem.item($0) }
+			var snapshot = NSDiffableDataSourceSectionSnapshot<DocumentsItem>()
 			snapshot.append(items)
 
 			let snapshotOp = ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: false)

@@ -1,5 +1,5 @@
 //
-//  SidebarViewController+Drop.swift
+//  CollectionsViewController+Drop.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/3/20.
@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-extension SidebarViewController: UICollectionViewDropDelegate {
+extension CollectionsViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
 		guard !(session.items.first?.localObject is Document) else { return true }
@@ -17,8 +17,8 @@ extension SidebarViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
 		guard let destinationIndexPath = destinationIndexPath,
-			  let sidebarItem = dataSource.itemIdentifier(for: destinationIndexPath),
-			  let entityID = sidebarItem.entityID,
+			  let item = dataSource.itemIdentifier(for: destinationIndexPath),
+			  let entityID = item.entityID,
 			  let container = AccountManager.shared.findDocumentContainer(entityID) else {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
@@ -46,11 +46,11 @@ extension SidebarViewController: UICollectionViewDropDelegate {
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
 		guard let dragItem = coordinator.items.first?.dragItem,
 			  let destinationIndexPath = coordinator.destinationIndexPath,
-			  let sidebarItem = dataSource.itemIdentifier(for: destinationIndexPath),
-			  let entityID = sidebarItem.entityID,
+			  let item = dataSource.itemIdentifier(for: destinationIndexPath),
+			  let entityID = item.entityID,
 			  let container = AccountManager.shared.findDocumentContainer(entityID) else { return }
 		
-		// Dragging an OPML file into the sidebar
+		// Dragging an OPML file into the Collections View
 		guard let document = dragItem.localObject as? Document else {
 			for dropItem in coordinator.items {
 				let provider = dropItem.dragItem.itemProvider

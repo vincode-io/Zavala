@@ -97,7 +97,7 @@
         <!--Collections-->
         <scene sceneID="xI7-xC-228">
             <objects>
-                <collectionViewController title="Collections" clearsSelectionOnViewWillAppear="NO" id="IH1-qU-b0t" customClass="SidebarViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController title="Collections" clearsSelectionOnViewWillAppear="NO" id="IH1-qU-b0t" customClass="CollectionsViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="8wb-92-AvW">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

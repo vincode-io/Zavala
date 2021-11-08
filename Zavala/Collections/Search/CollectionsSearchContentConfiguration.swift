@@ -1,5 +1,5 @@
 //
-//  SidebarSearchContentConfiguration.swift
+//  CollectionsSearchContentConfiguration.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 1/11/21.
@@ -7,17 +7,17 @@
 
 import UIKit
 
-struct SidebarSearchContentConfiguration: UIContentConfiguration, Hashable {
+struct CollectionsSearchContentConfiguration: UIContentConfiguration, Hashable {
 
 	var searchText: String?
-	weak var delegate: SidebarSearchCellDelegate?
+	weak var delegate: CollectionsSearchCellDelegate?
 	
 	init(searchText: String?) {
 		self.searchText = searchText
 	}
 	
 	func makeContentView() -> UIView & UIContentView {
-		return SidebarSearchContentView(configuration: self)
+		return CollectionsSearchContentView(configuration: self)
 	}
 	
 	func updated(for state: UIConfigurationState) -> Self {
@@ -28,7 +28,7 @@ struct SidebarSearchContentConfiguration: UIContentConfiguration, Hashable {
 		hasher.combine(searchText)
 	}
 	
-	static func == (lhs: SidebarSearchContentConfiguration, rhs: SidebarSearchContentConfiguration) -> Bool {
+	static func == (lhs: CollectionsSearchContentConfiguration, rhs: CollectionsSearchContentConfiguration) -> Bool {
 		return lhs.searchText == rhs.searchText
 	}
 	

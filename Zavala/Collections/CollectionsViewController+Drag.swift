@@ -1,5 +1,5 @@
 //
-//  SidebarViewController+Drag.swift
+//  CollectionsViewController+Drag.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/8/21.
@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-extension SidebarViewController: UICollectionViewDragDelegate {
+extension CollectionsViewController: UICollectionViewDragDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
 		guard traitCollection.userInterfaceIdiom == .pad else { return [] }
