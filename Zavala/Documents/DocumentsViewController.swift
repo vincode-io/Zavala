@@ -144,11 +144,13 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 
 	func selectDocument(_ document: Document?, isNew: Bool = false, isNavigationBranch: Bool = true, animated: Bool) {
 		guard let documentContainers = documentContainers else { return }
+
+		collectionView.deselectAll()
+
 		if let document = document, let index = documents.firstIndex(of: document) {
 			collectionView.selectItem(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .centeredVertically)
 			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [document], isNew: isNew, isNavigationBranch: isNavigationBranch, animated: animated)
 		} else {
-			collectionView.deselectAll()
 			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: isNew, isNavigationBranch: isNavigationBranch, animated: animated)
 		}
 	}
