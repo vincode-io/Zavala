@@ -136,6 +136,9 @@
 "Delete_Outlines_Message" = "The outlines be deleted and unrecoverable.";
 "No_Title" = "(No Title)";
 
+/* Editor */
+"Multiple_Selection" = "Multiple Selection";
+
 /* Generic Eror Handling */
 "Error" = "Error";
 

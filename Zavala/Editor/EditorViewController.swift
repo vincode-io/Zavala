@@ -257,6 +257,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var insertImageButton: UIBarButtonItem!
 	private var linkButton: UIBarButtonItem!
 
+	private var messageBox: UIView?
+	
 	private(set) var outline: Outline?
 	
 	private var currentTitle: String? {
@@ -673,9 +675,36 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	// MARK: API
 	
+	func showMessage(_ message: String) {
+		messageBox?.removeFromSuperview()
+		messageBox = UIView()
+		messageBox!.translatesAutoresizingMaskIntoConstraints = false
+		
+		let messageLabel = UILabel()
+		messageLabel.font = UIFont.preferredFont(forTextStyle: .title1)
+		messageLabel.textColor = .tertiaryLabel
+		messageLabel.translatesAutoresizingMaskIntoConstraints = false
+		messageLabel.text = message
+
+		messageBox!.addSubview(messageLabel)
+		collectionView.addSubview(messageBox!)
+		
+		NSLayoutConstraint.activate([
+			messageBox!.topAnchor.constraint(equalTo: collectionView.safeAreaLayoutGuide.topAnchor),
+			messageBox!.leadingAnchor.constraint(equalTo: collectionView.safeAreaLayoutGuide.leadingAnchor),
+			messageBox!.trailingAnchor.constraint(equalTo: collectionView.safeAreaLayoutGuide.trailingAnchor),
+			messageBox!.bottomAnchor.constraint(equalTo: collectionView.safeAreaLayoutGuide.centerYAnchor),
+			messageLabel.centerXAnchor.constraint(equalTo: messageBox!.centerXAnchor),
+			messageLabel.centerYAnchor.constraint(equalTo: messageBox!.centerYAnchor)
+		])
+	}
+	
 	func edit(_ newOutline: Outline?, isNew: Bool, searchText: String? = nil) {
 		guard outline != newOutline else { return }
 		isOutlineNewFlag = isNew
+		
+		messageBox?.removeFromSuperview()
+		messageBox = nil
 		
 		// On the iPad if we aren't editing a field, clear out the last know coordinates
 		if traitCollection.userInterfaceIdiom == .pad && !UIResponder.isFirstResponderTextField {

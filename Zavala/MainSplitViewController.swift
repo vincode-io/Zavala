@@ -417,7 +417,16 @@ extension MainSplitViewController: SidebarDelegate {
 
 extension MainSplitViewController: TimelineDelegate {
 	
-	func documentSelectionDidChange(_: TimelineViewController, documentContainers: [DocumentContainer], document: Document?, isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
+	func documentSelectionDidChange(_: TimelineViewController, documentContainers: [DocumentContainer], documents: [Document], isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
+		guard documents.count == 1, let document = documents.first else {
+			activityManager.invalidateSelectDocument()
+			editorViewController?.edit(nil, isNew: isNew)
+			if !documents.isEmpty {
+				editorViewController?.showMessage(L10n.multipleSelection)
+			}
+			return
+		}
+		
 		// This prevents the same document from entering the backward stack more than once in a row.
 		// If the first item on the backward stack equals the new document and there is nothing stored
 		// in the last pin, we know they clicked on a document twice without one between.
@@ -425,42 +434,35 @@ extension MainSplitViewController: TimelineDelegate {
 			goBackwardStack.removeFirst()
 		}
 		
-		if isNavigationBranch, let lastPin = lastPin, let document = document, lastPin.document != document {
+		if isNavigationBranch, let lastPin = lastPin, lastPin.document != document {
 			goBackwardStack.insert(lastPin, at: 0)
 			goBackwardStack = Array(goBackwardStack.prefix(10))
 			self.lastPin = nil
 			goForwardStack.removeAll()
 		}
 
-		if let document = document {
-			activityManager.selectingDocument(documentContainers, document)
-			if animated {
-				show(.secondary)
-			} else {
-				UIView.performWithoutAnimation {
-					self.show(.secondary)
-				}
-			}
-
-			lastPin = Pin(containers: documentContainers, document: document)
+		activityManager.selectingDocument(documentContainers, document)
+		
+		if animated {
+			show(.secondary)
 		} else {
-			activityManager.invalidateSelectDocument()
+			UIView.performWithoutAnimation {
+				self.show(.secondary)
+			}
 		}
+
+		lastPin = Pin(containers: documentContainers, document: document)
 		
         if let search = documentContainers.first as? Search {
 			if search.searchText.isEmpty {
 				editorViewController?.edit(nil, isNew: isNew)
 			} else {
-				editorViewController?.edit(document?.outline, isNew: isNew, searchText: search.searchText)
-				if let document = document {
-					pinWasVisited(Pin(containers: documentContainers, document: document))
-				}
-			}
-		} else {
-			editorViewController?.edit(document?.outline, isNew: isNew)
-			if let document = document {
+				editorViewController?.edit(document.outline, isNew: isNew, searchText: search.searchText)
 				pinWasVisited(Pin(containers: documentContainers, document: document))
 			}
+		} else {
+			editorViewController?.edit(document.outline, isNew: isNew)
+			pinWasVisited(Pin(containers: documentContainers, document: document))
 		}
 	}
 
