@@ -20,15 +20,17 @@ public struct Pin: Equatable {
 	public let documentID: EntityID?
 	
 	public var containers: [DocumentContainer]? {
+		var containers = [DocumentContainer]()
+		
 		if let containerIDs = containerIDs {
-            return containerIDs.compactMap { AccountManager.shared.findDocumentContainer($0) }
+            containers = containerIDs.compactMap { AccountManager.shared.findDocumentContainer($0) }
 		}
 		
-		if let documentID = documentID, let container = AccountManager.shared.findDocumentContainer(.allDocuments(documentID.accountID)) {
-			return [container]
+		if containers.isEmpty, let documentID = documentID, let container = AccountManager.shared.findDocumentContainer(.allDocuments(documentID.accountID)) {
+			containers = [container]
 		}
 		
-		return nil
+		return containers
 	}
 	
 	public var document: Document? {
