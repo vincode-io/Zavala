@@ -385,6 +385,11 @@ extension EditorTextRowTextView {
         }
     }
     
+	func processTextEditingBegin() {
+		let fittingSize = sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
+		textViewHeight = fittingSize.height
+	}
+	
     func processTextEditingEnding() {
         detectData()
         saveText()
@@ -404,7 +409,7 @@ extension EditorTextRowTextView {
         isTextChanged = true
 
         let fittingSize = sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
-        if let currentHeight = textViewHeight, abs(fittingSize.height - currentHeight) > lineHeight / 2  {
+        if let currentHeight = textViewHeight, abs(fittingSize.height - currentHeight) > 0  {
             updateLastKnownCoordinates()
             textViewHeight = fittingSize.height
             reloadRow()

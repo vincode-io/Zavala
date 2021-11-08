@@ -202,9 +202,6 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
         }
         
 		addSearchHighlighting(isInNotes: false)
-
-        let fittingSize = sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
-        textViewHeight = fittingSize.height
     }
 	
 }
@@ -225,6 +222,10 @@ extension EditorTextRowTopicTextView: CursorCoordinatesProvider {
 // MARK: UITextViewDelegate
 
 extension EditorTextRowTopicTextView: UITextViewDelegate {
+	
+	func textViewDidBeginEditing(_ textView: UITextView) {
+		processTextEditingBegin()
+	}
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
         processTextEditingEnding()

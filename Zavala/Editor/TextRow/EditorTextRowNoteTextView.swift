@@ -138,9 +138,6 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
         }
         
 		addSearchHighlighting(isInNotes: true)
-
-        let fittingSize = sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
-        textViewHeight = fittingSize.height
     }
 	
 }
@@ -161,6 +158,10 @@ extension EditorTextRowNoteTextView: CursorCoordinatesProvider {
 // MARK: UITextViewDelegate
 
 extension EditorTextRowNoteTextView: UITextViewDelegate {
+	
+	func textViewDidBeginEditing(_ textView: UITextView) {
+		processTextEditingBegin()
+	}
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
         processTextEditingEnding()
