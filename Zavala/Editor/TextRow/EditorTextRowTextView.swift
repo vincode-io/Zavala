@@ -183,7 +183,6 @@ class EditorTextRowTextView: UITextView {
 	}
 	
 	func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
-        
         var attrs = typingAttributes
         attrs.removeValue(forKey: .link)
         let attrText = NSMutableAttributedString(string: text, attributes: attrs)
