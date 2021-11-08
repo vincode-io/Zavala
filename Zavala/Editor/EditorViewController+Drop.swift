@@ -12,7 +12,7 @@ import Templeton
 extension EditorViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
-		guard session.localDragSession == nil else { return true }
+		guard !(session.items.first?.localObject is Row) else { return true }
 		return session.hasItemsConforming(toTypeIdentifiers: [kUTTypeUTF8PlainText as String, Row.typeIdentifier])
 	}
 	
