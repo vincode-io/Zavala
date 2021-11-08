@@ -142,7 +142,7 @@ class EditorTextRowTextView: UITextView {
 	}
  
     override func resignFirstResponder() -> Bool {
-        updateLastKnownCoordinates()
+		CursorCoordinates.updateLastKnownCoordinates()
         return super.resignFirstResponder()
     }
     
@@ -152,10 +152,6 @@ class EditorTextRowTextView: UITextView {
     
     func makeCursorVisibleIfNecessary() {
         fatalError("makeCursorVisibleIfNecessary has not been implemented")
-    }
-
-    func updateLastKnownCoordinates() {
-        fatalError("updateLastKnownCoordinates has not been implemented")
     }
 
     // MARK: API
@@ -409,7 +405,7 @@ extension EditorTextRowTextView {
 
         let fittingSize = sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
         if let currentHeight = textViewHeight, abs(fittingSize.height - currentHeight) > 0  {
-            updateLastKnownCoordinates()
+			CursorCoordinates.updateLastKnownCoordinates()
             textViewHeight = fittingSize.height
             reloadRow()
         }

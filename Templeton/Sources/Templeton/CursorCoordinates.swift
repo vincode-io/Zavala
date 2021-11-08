@@ -23,7 +23,7 @@ public struct CursorCoordinates {
 		self.selection = selection
 	}
 
-	public static var lastKnownCoordinates: CursorCoordinates?
+	public private(set) static var lastKnownCoordinates: CursorCoordinates?
 
 	@available(iOSApplicationExtension, unavailable)
 	public static var currentCoordinates: CursorCoordinates? {
@@ -39,6 +39,18 @@ public struct CursorCoordinates {
 			return current
 		}
 		return lastKnownCoordinates
+	}
+	
+	@available(iOSApplicationExtension, unavailable)
+	public static func clearLastKnownCoordinates() {
+		lastKnownCoordinates = nil
+	}
+	
+	@available(iOSApplicationExtension, unavailable)
+	public static func updateLastKnownCoordinates() {
+		if let coordinates = currentCoordinates {
+			lastKnownCoordinates = coordinates
+		}
 	}
 	
 }

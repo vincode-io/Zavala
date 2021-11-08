@@ -106,12 +106,6 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
         editorDelegate?.makeCursorVisibleIfNecessary(self)
     }
     
-    override func updateLastKnownCoordinates() {
-        if let textRow = row {
-            CursorCoordinates.lastKnownCoordinates = CursorCoordinates(row: textRow, isInNotes: false, selection: selectedRange)
-        }
-    }
-    
 	override func deleteBackward() {
 		guard let textRow = row else { return }
 		if attributedText.length == 0 && textRow.rowCount == 0 {

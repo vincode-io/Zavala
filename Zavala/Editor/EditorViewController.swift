@@ -705,7 +705,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		// On the iPad if we aren't editing a field, clear out the last know coordinates
 		if traitCollection.userInterfaceIdiom == .pad && !UIResponder.isFirstResponderTextField {
-			CursorCoordinates.lastKnownCoordinates = nil
+			CursorCoordinates.clearLastKnownCoordinates()
 		}
 		
 		// Get ready for the new outline, buy saving the current one
@@ -997,7 +997,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func done() {
 		UIResponder.currentFirstResponder?.resignFirstResponder()
-		CursorCoordinates.lastKnownCoordinates = nil
+		CursorCoordinates.clearLastKnownCoordinates()
 	}
 	
 	@objc func toggleOutlineFilter() {
