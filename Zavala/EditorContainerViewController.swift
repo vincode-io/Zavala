@@ -14,10 +14,19 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	
 	var currentDocumentContainer: DocumentContainer? = nil
 
+	var currentOutlines: [Outline]? {
+		guard let outline = editorViewController?.outline else { return nil }
+		return [outline]
+	}
+	
 	var editorViewController: EditorViewController? {
 		return children.first as? EditorViewController
 	}
 
+	var isExportAndPrintUnavailable: Bool {
+		return editorViewController?.isOutlineFunctionsUnavailable ?? true
+	}
+	
 	var isGoBackwardOneUnavailable: Bool = false
 	var isGoForwardOneUnavailable: Bool = false
 
@@ -182,11 +191,11 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	}
 
 	@objc func printDoc(_ sender: Any?) {
-		printDoc()
+		printDocs()
 	}
 
 	@objc func printList(_ sender: Any?) {
-		printList()
+		printLists()
 	}
 
 	@objc func collaborate(_ sender: Any?) {
@@ -237,6 +246,8 @@ extension EditorContainerViewController: EditorDelegate {
 	func exportMarkdownDoc(_: EditorViewController, outline: Outline) {}
 	func exportMarkdownList(_: EditorViewController, outline: Outline) {}
 	func exportOPML(_: EditorViewController, outline: Outline) {}
+	func printDoc(_: EditorViewController, outline: Outline) { }
+	func printList(_: EditorViewController, outline: Outline) { }
 
 }
 

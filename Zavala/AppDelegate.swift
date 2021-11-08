@@ -47,8 +47,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(useSelectionForSearchCommand)
 			menuKeyCommands.append(nextInDocumentSearchCommand)
 			menuKeyCommands.append(previousInDocumentSearchCommand)
-			menuKeyCommands.append(printDocCommand)
-			menuKeyCommands.append(printListCommand)
+			menuKeyCommands.append(printDocsCommand)
+			menuKeyCommands.append(printListsCommand)
 			menuKeyCommands.append(outlineGetInfoCommand)
 		}
 		
@@ -56,8 +56,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		menuKeyCommands.append(importOPMLCommand)
 		
 		if !(mainCoordinator?.isOutlineFunctionsUnavailable ?? true) {
-			menuKeyCommands.append(exportMarkdownListCommand)
-			menuKeyCommands.append(exportOPMLCommand)
+			menuKeyCommands.append(exportMarkdownListsCommand)
+			menuKeyCommands.append(exportOPMLsCommand)
 		}
 		
 		menuKeyCommands.append(newWindowCommand)
@@ -179,21 +179,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 								   input: "r",
 								   modifierFlags: [.command])
 	
-	let exportOPMLCommand = UIKeyCommand(title: L10n.exportOPMLEllipsis,
-										 action: #selector(exportOPMLCommand(_:)),
-										 input: "e",
-										 modifierFlags: [.shift, .command])
+	let exportOPMLsCommand = UIKeyCommand(title: L10n.exportOPMLEllipsis,
+										  action: #selector(exportOPMLsCommand(_:)),
+										  input: "e",
+										  modifierFlags: [.shift, .command])
 	
-	let exportPDFDocCommand = UICommand(title: L10n.exportPDFDocEllipsis, action: #selector(exportPDFDocCommand(_:)))
+	let exportPDFDocsCommand = UICommand(title: L10n.exportPDFDocEllipsis, action: #selector(exportPDFDocsCommand(_:)))
 
-	let exportPDFListCommand = UICommand(title: L10n.exportPDFListEllipsis, action: #selector(exportPDFListCommand(_:)))
+	let exportPDFListsCommand = UICommand(title: L10n.exportPDFListEllipsis, action: #selector(exportPDFListsCommand(_:)))
 
-	let exportMarkdownDocCommand = UICommand(title: L10n.exportMarkdownDocEllipsis, action: #selector(exportMarkdownDocCommand(_:)))
+	let exportMarkdownDocsCommand = UICommand(title: L10n.exportMarkdownDocEllipsis, action: #selector(exportMarkdownDocsCommand(_:)))
 	
-	let exportMarkdownListCommand = UIKeyCommand(title: L10n.exportMarkdownListEllipsis,
-											 action: #selector(exportMarkdownListCommand(_:)),
-											 input: "e",
-											 modifierFlags: [.control, .command])
+	let exportMarkdownListsCommand = UIKeyCommand(title: L10n.exportMarkdownListEllipsis,
+												  action: #selector(exportMarkdownListsCommand(_:)),
+												  input: "e",
+												  modifierFlags: [.control, .command])
 	
 	let importOPMLCommand = UIKeyCommand(title: L10n.importOPMLEllipsis,
 										 action: #selector(importOPMLCommand(_:)),
@@ -437,15 +437,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 													   input: "g",
 													   modifierFlags: [.shift, .command])
 	
-	let printDocCommand = UIKeyCommand(title: L10n.printDocEllipsis,
-									   action: #selector(printDocCommand(_:)),
-									   input: "p",
-									   modifierFlags: [.alternate, .command])
-	
-	let printListCommand = UIKeyCommand(title: L10n.printListEllipsis,
-										action: #selector(printListCommand(_:)),
+	let printDocsCommand = UIKeyCommand(title: L10n.printDocEllipsis,
+										action: #selector(printDocsCommand(_:)),
 										input: "p",
-										modifierFlags: [.command])
+										modifierFlags: [.alternate, .command])
+	
+	let printListsCommand = UIKeyCommand(title: L10n.printListEllipsis,
+										 action: #selector(printListsCommand(_:)),
+										 input: "p",
+										 modifierFlags: [.command])
 
 	// Currently unused because it automatically adds Services menus to my other context menus
 	let shareCommand = UICommand(title: L10n.share,
@@ -636,24 +636,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 
-	@objc func exportPDFDocCommand(_ sender: Any?) {
-		mainCoordinator?.exportPDFDoc()
+	@objc func exportPDFDocsCommand(_ sender: Any?) {
+		mainCoordinator?.exportPDFDocs()
 	}
 
-	@objc func exportPDFListCommand(_ sender: Any?) {
-		mainCoordinator?.exportPDFList()
+	@objc func exportPDFListsCommand(_ sender: Any?) {
+		mainCoordinator?.exportPDFLists()
 	}
 
-	@objc func exportMarkdownDocCommand(_ sender: Any?) {
-		mainCoordinator?.exportMarkdownDoc()
+	@objc func exportMarkdownDocsCommand(_ sender: Any?) {
+		mainCoordinator?.exportMarkdownDocs()
 	}
 
-	@objc func exportMarkdownListCommand(_ sender: Any?) {
-		mainCoordinator?.exportMarkdownList()
+	@objc func exportMarkdownListsCommand(_ sender: Any?) {
+		mainCoordinator?.exportMarkdownLists()
 	}
 
-	@objc func exportOPMLCommand(_ sender: Any?) {
-		mainCoordinator?.exportOPML()
+	@objc func exportOPMLsCommand(_ sender: Any?) {
+		mainCoordinator?.exportOPMLs()
 	}
 
 	@objc func newWindow(_ sender: Any?) {
@@ -828,12 +828,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		#endif
 	}
 
-	@objc func printDocCommand(_ sender: Any?) {
-		mainCoordinator?.printDoc()
+	@objc func printDocsCommand(_ sender: Any?) {
+		mainCoordinator?.printDocs()
 	}
 
-	@objc func printListCommand(_ sender: Any?) {
-		mainCoordinator?.printList()
+	@objc func printListsCommand(_ sender: Any?) {
+		mainCoordinator?.printLists()
 	}
 
 	@objc func share(_ sender: Any?) {
@@ -886,13 +886,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if !AccountManager.shared.isSyncAvailable {
 				command.attributes = .disabled
 			}
-		case #selector(outlineGetInfoCommand(_:)),
-			#selector(exportPDFDocCommand(_:)),
-			#selector(exportPDFListCommand(_:)),
-			#selector(exportMarkdownDocCommand(_:)),
-			#selector(exportMarkdownListCommand(_:)),
-			#selector(exportOPMLCommand(_:)):
+		case #selector(outlineGetInfoCommand(_:)):
 			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(exportPDFDocsCommand(_:)),
+			#selector(exportPDFListsCommand(_:)),
+			#selector(exportMarkdownDocsCommand(_:)),
+			#selector(exportMarkdownListsCommand(_:)),
+			#selector(exportOPMLsCommand(_:)),
+			#selector(printDocsCommand(_:)),
+			#selector(printListsCommand(_:)):
+			if mainCoordinator?.isExportAndPrintUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(goBackwardOneCommand(_:)):
@@ -1030,9 +1035,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			#selector(useSelectionForSearchCommand(_:)),
 			#selector(nextInDocumentSearchCommand(_:)),
 			#selector(previousInDocumentSearchCommand(_:)),
-			#selector(copyDocumentLinkCommand(_:)),
-			#selector(printDocCommand(_:)),
-			#selector(printListCommand(_:)):
+			#selector(copyDocumentLinkCommand(_:)):
 			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
@@ -1062,14 +1065,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let cloudKitMenu = UIMenu(title: "", options: .displayInline, children: [collaborateCommand, syncCommand])
 		builder.insertChild(cloudKitMenu, atStartOfMenu: .file)
 
-		let exportMenu = UIMenu(title: L10n.export, children: [exportPDFDocCommand, exportPDFListCommand, exportMarkdownDocCommand, exportMarkdownListCommand, exportOPMLCommand])
+		let exportMenu = UIMenu(title: L10n.export, children: [exportPDFDocsCommand, exportPDFListsCommand, exportMarkdownDocsCommand, exportMarkdownListsCommand, exportOPMLsCommand])
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMenu])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 
 		let newMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newWindowCommand, showOpenQuicklyCommand])
 		builder.insertChild(newMenu, atStartOfMenu: .file)
 
-		let printMenu = UIMenu(title: "", options: .displayInline, children: [printDocCommand, printListCommand])
+		let printMenu = UIMenu(title: "", options: .displayInline, children: [printDocsCommand, printListsCommand])
 		builder.insertChild(printMenu, atEndOfMenu: .file)
 
 		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: [outlineGetInfoCommand])

@@ -11,6 +11,8 @@ import SafariServices
 
 protocol MainCoordinator: UIViewController {
 	var editorViewController: EditorViewController? { get }
+	var isExportAndPrintUnavailable: Bool { get }
+	var currentOutlines: [Outline]? { get }
 	var isGoBackwardOneUnavailable: Bool { get }
 	var isGoForwardOneUnavailable: Bool { get }
 	func goBackwardOne()
@@ -253,14 +255,6 @@ extension MainCoordinator {
 		editorViewController?.deleteCompletedRows()
 	}
 	
-	func printDoc() {
-		editorViewController?.printDoc()
-	}
-	
-	func printList() {
-		editorViewController?.printList()
-	}
-	
 	func collaborate() {
 		editorViewController?.collaborate()
 	}
@@ -322,30 +316,30 @@ extension MainCoordinator {
 			
 		}
 	}
-
-	func exportPDFDoc() {
-		guard let outline = editorViewController?.outline else { return }
-		exportPDFDocsForOutlines([outline])
+	
+	func exportPDFDocs() {
+		guard let outlines = currentOutlines else { return }
+		exportPDFDocsForOutlines(outlines)
 	}
 	
-	func exportPDFList() {
-		guard let outline = editorViewController?.outline else { return }
-		exportPDFListsForOutlines([outline])
+	func exportPDFLists() {
+		guard let outlines = currentOutlines else { return }
+		exportPDFListsForOutlines(outlines)
 	}
 	
-	func exportMarkdownDoc() {
-		guard let outline = editorViewController?.outline else { return }
-		exportMarkdownDocsForOutlines([outline])
+	func exportMarkdownDocs() {
+		guard let outlines = currentOutlines else { return }
+		exportMarkdownDocsForOutlines(outlines)
 	}
 	
-	func exportMarkdownList() {
-		guard let outline = editorViewController?.outline else { return }
-		exportMarkdownListsForOutlines([outline])
+	func exportMarkdownLists() {
+		guard let outlines = currentOutlines else { return }
+		exportMarkdownListsForOutlines(outlines)
 	}
 	
-	func exportOPML() {
-		guard let outline = editorViewController?.outline else { return }
-		exportOPMLsForOutlines([outline])
+	func exportOPMLs() {
+		guard let outlines = currentOutlines else { return }
+		exportOPMLsForOutlines(outlines)
 	}
 	
 	func exportPDFDocsForOutlines(_ outlines: [Outline]) {
@@ -414,6 +408,55 @@ extension MainCoordinator {
 		let docPicker = UIDocumentPickerViewController(forExporting: tempFiles, asCopy: true)
 		docPicker.modalPresentationStyle = .formSheet
 		self.present(docPicker, animated: true)
+	}
+	
+	func printLists() {
+		guard let outlines = currentOutlines else { return }
+		printListsForOutlines(outlines)
+	}
+	
+	func printListsForOutlines(_ outlines: [Outline]) {
+		var pdfs = [Data]()
+
+		for outline in outlines {
+			let textView = UITextView()
+			textView.attributedText = outline.printList()
+			pdfs.append(textView.generatePDF())
+		}
+		
+		let title = ListFormatter.localizedString(byJoining: outlines.compactMap({ $0.title }).sorted())
+		printPDFs(pdfs, title: title)
+	}
+
+	func printDocs() {
+		guard let outlines = currentOutlines else { return }
+		printDocsForOutlines(outlines)
+	}
+
+	func printDocsForOutlines(_ outlines: [Outline]) {
+		var pdfs = [Data]()
+
+		for outline in outlines {
+			let textView = UITextView()
+			textView.attributedText = outline.printDoc()
+			pdfs.append(textView.generatePDF())
+		}
+		
+		let title = ListFormatter.localizedString(byJoining: outlines.compactMap({ $0.title }).sorted())
+		printPDFs(pdfs, title: title)
+	}
+
+	private func printPDFs(_ pdfs: [Data], title: String) {
+		let pic = UIPrintInteractionController()
+		
+		let printInfo = UIPrintInfo(dictionary: nil)
+		printInfo.outputType = .grayscale
+		printInfo.jobName = title
+		pic.printInfo = printInfo
+		
+		pic.printingItems = pdfs
+		
+		pic.present(animated: true)
 	}
 	
 	func pinWasVisited(_ pin: Pin) {

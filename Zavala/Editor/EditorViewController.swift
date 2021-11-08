@@ -30,6 +30,8 @@ protocol EditorDelegate: AnyObject {
 	func exportMarkdownDoc(_: EditorViewController, outline: Outline)
 	func exportMarkdownList(_: EditorViewController, outline: Outline)
 	func exportOPML(_: EditorViewController, outline: Outline)
+	func printDoc(_: EditorViewController, outline: Outline)
+	func printList(_: EditorViewController, outline: Outline)
 }
 
 class EditorViewController: UIViewController, MainControllerIdentifiable, UndoableCommandRunner {
@@ -943,13 +945,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	func printDoc() {
 		guard let outline = outline else { return }
 		currentTextView?.saveText()
-		print(title: outline.title ?? "", attrString: outline.printDoc())
+		delegate?.printDoc(self, outline: outline)
 	}
 	
 	func printList() {
 		guard let outline = outline else { return }
 		currentTextView?.saveText()
-		print(title: outline.title ?? "", attrString: outline.printList())
+		delegate?.printList(self, outline: outline)
 	}
 	
 	// MARK: Actions
@@ -2881,28 +2883,6 @@ extension EditorViewController {
 		
 		if !adjustedCollectionViewFrame.contains(cellFrame) {
 			collectionView.scrollRectToVisibleBypass(cellFrame, animated: true)
-		}
-	}
-	
-	private func print(title: String, attrString: NSAttributedString) {
-		let pic = UIPrintInteractionController()
-		
-		let printInfo = UIPrintInfo(dictionary: nil)
-		printInfo.outputType = .grayscale
-		printInfo.jobName = title
-		pic.printInfo = printInfo
-		
-		let textView = UITextView()
-		textView.attributedText = attrString
-		let printFormatter = textView.viewPrintFormatter()
-		printFormatter.startPage = 0
-		printFormatter.perPageContentInsets = UIEdgeInsets(top: 56, left: 56, bottom: 56, right: 56)
-		pic.printFormatter = printFormatter
-		
-		if traitCollection.userInterfaceIdiom == .mac {
-			pic.present(from: view.frame, in: view, animated: true)
-		} else {
-			pic.present(from: ellipsisBarButtonItem, animated: true)
 		}
 	}
 

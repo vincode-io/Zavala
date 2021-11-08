@@ -48,6 +48,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		return activity
 	}
 	
+	var isExportAndPrintUnavailable: Bool {
+		guard let outlines = currentOutlines else { return true }
+		return outlines.count < 1
+	}
+
 	var isDeleteEntityUnavailable: Bool {
 		return (editorViewController?.isOutlineFunctionsUnavailable ?? true) &&
 			(editorViewController?.isDeleteCurrentRowUnavailable ?? true) 
@@ -60,6 +65,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
     var currentTags: [Tag]? {
         return sidebarViewController?.currentTags
     }
+	
+	var currentOutlines: [Outline]? {
+		return timelineViewController?.currentDocuments?.compactMap({ $0.outline })
+	}
 
 	var editorViewController: EditorViewController? {
 		viewController(for: .secondary) as? EditorViewController
@@ -335,12 +344,12 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		toggleOutlineHideNotes()
 	}
 
-	@objc func printDoc(_ sender: Any?) {
-		printDoc()
+	@objc func printDocs(_ sender: Any?) {
+		printDocs()
 	}
 
-	@objc func printList(_ sender: Any?) {
-		printList()
+	@objc func printLists(_ sender: Any?) {
+		printLists()
 	}
 
 	@objc func collaborate(_ sender: Any?) {
@@ -484,6 +493,7 @@ extension MainSplitViewController: TimelineDelegate {
 // MARK: EditorDelegate
 
 extension MainSplitViewController: EditorDelegate {
+	
 	var editorViewControllerIsGoBackUnavailable: Bool {
 		return isGoBackwardOneUnavailable
 	}
@@ -507,7 +517,6 @@ extension MainSplitViewController: EditorDelegate {
 	func goForward(_: EditorViewController, to: Int) {
 		goForward(to: to)
 	}
-	
 	
 	func createNewOutline(_: EditorViewController, title: String) -> Outline? {
         return timelineViewController?.createOutlineDocument(title: title)?.outline
@@ -541,6 +550,14 @@ extension MainSplitViewController: EditorDelegate {
 		exportOPMLsForOutlines([outline])
 	}
 
+	func printDoc(_: EditorViewController, outline: Outline) {
+		printDocsForOutlines([outline])
+	}
+	
+	func printList(_: EditorViewController, outline: Outline) {
+		printListsForOutlines([outline])
+	}
+	
 }
 
 // MARK: UISplitViewControllerDelegate
@@ -1068,7 +1085,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = L10n.printDoc
 			item.toolTip = L10n.printDoc
 			item.isBordered = true
-			item.action = #selector(printDoc(_:))
+			item.action = #selector(printDocs(_:))
 			item.target = self
 			toolbarItem = item
 		case .printList:
@@ -1080,7 +1097,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = L10n.printList
 			item.toolTip = L10n.printList
 			item.isBordered = true
-			item.action = #selector(printList(_:))
+			item.action = #selector(printLists(_:))
 			item.target = self
 			toolbarItem = item
 		case .collaborate:
