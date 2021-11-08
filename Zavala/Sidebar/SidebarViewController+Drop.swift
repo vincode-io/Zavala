@@ -10,6 +10,11 @@ import Templeton
 
 extension SidebarViewController: UICollectionViewDropDelegate {
 	
+	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
+		guard !(session.items.first?.localObject is Document) else { return true }
+		return session.hasItemsConforming(toTypeIdentifiers: ["org.opml.opml"])
+	}
+	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
 		guard let destinationIndexPath = destinationIndexPath,
 			  let sidebarItem = dataSource.itemIdentifier(for: destinationIndexPath),

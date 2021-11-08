@@ -53,12 +53,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		mainSplitViewController.startUp()
 
 		if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
-			mainSplitViewController.handle(userActivity, isNavigationBranch: false)
+			mainSplitViewController.handle(userActivity, isNavigationBranch: true)
 			return
 		}
 		
 		if let url = connectionOptions.urlContexts.first?.url, let documentID = EntityID(url: url) {
-			mainSplitViewController.handleDocument(documentID, isNavigationBranch: false)
+			mainSplitViewController.handleDocument(documentID, isNavigationBranch: true)
 			return
 		}
 		

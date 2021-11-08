@@ -159,6 +159,7 @@
 		51D28D32257731DC0039DDFC /* EditorViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D28D31257731DC0039DDFC /* EditorViewController+Drop.swift */; };
 		51D460FA2729E30C0024EC48 /* MetadataTextAttachmentViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D460F92729E30C0024EC48 /* MetadataTextAttachmentViewProvider.swift */; };
 		51D977FA257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D977F9257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift */; };
+		51DAEC262739838E00BE4A13 /* SidebarViewController+Drag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DAEC252739838E00BE4A13 /* SidebarViewController+Drag.swift */; };
 		51DEE80C26FB4488006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
 		51DEE80D26FB4488006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
 		51DEE80E26FB4550006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
@@ -402,6 +403,7 @@
 		51D28D31257731DC0039DDFC /* EditorViewController+Drop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewController+Drop.swift"; sourceTree = "<group>"; };
 		51D460F92729E30C0024EC48 /* MetadataTextAttachmentViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataTextAttachmentViewProvider.swift; sourceTree = "<group>"; };
 		51D977F9257A2E4F00D98490 /* EditorTextRowPreviewParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTextRowPreviewParameters.swift; sourceTree = "<group>"; };
+		51DAEC252739838E00BE4A13 /* SidebarViewController+Drag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SidebarViewController+Drag.swift"; sourceTree = "<group>"; };
 		51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInterfaceColorPalette.swift; sourceTree = "<group>"; };
 		51DEE80F26FB8D89006DAA56 /* ColorPaletteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteTableViewController.swift; sourceTree = "<group>"; };
 		51DEE82126FE37F9006DAA56 /* UIPrintPageRenderer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPrintPageRenderer+.swift"; sourceTree = "<group>"; };
@@ -828,6 +830,7 @@
 			children = (
 				51E14F332560732F00320EDB /* SidebarItem.swift */,
 				5181A93B2554D92000C153E8 /* SidebarViewController.swift */,
+				51DAEC252739838E00BE4A13 /* SidebarViewController+Drag.swift */,
 				5147D0C425CCD6AA004673C3 /* SidebarViewController+Drop.swift */,
 				51F2859D25AD12860019C573 /* Search */,
 			);
@@ -1176,6 +1179,7 @@
 				517A9E4A26055C8B00EF346A /* UIWindow+.swift in Sources */,
 				517A9E432605558700EF346A /* MacOpenQuicklyViewController.swift in Sources */,
 				517AF6AA25E08CD30044DBAB /* Bundle-Extensions.swift in Sources */,
+				51DAEC262739838E00BE4A13 /* SidebarViewController+Drag.swift in Sources */,
 				51E14F342560732F00320EDB /* SidebarItem.swift in Sources */,
 				51A1EC422723246C00463A15 /* EditRowsIntentHandler.swift in Sources */,
 				5181A93C2554D92000C153E8 /* SidebarViewController.swift in Sources */,

@@ -19,7 +19,6 @@ extension TimelineViewController: UICollectionViewDragDelegate {
 
 		switch document {
 		case .outline(let outline):
-
 			let fileName = outline.fileName(withSuffix: "opml")
 			itemProvider.suggestedName = fileName
 			itemProvider.registerFileRepresentation(forTypeIdentifier: "org.opml.opml", visibility: .all) { (completionHandler) -> Progress? in
@@ -33,15 +32,20 @@ extension TimelineViewController: UICollectionViewDragDelegate {
 				}
 				return nil
 			}
-			
+
 			itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
 				let data = outline.markdownList().data(using: .utf8)
 				completion(data, nil)
 				return nil
 			}
-			
 		}
 		
+		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.newWindow)
+		var userInfo = [AnyHashable: Any]()
+		userInfo[UserInfoKeys.pin] = Pin(containers: documentContainers, document: document).userInfo
+		userActivity.userInfo = userInfo
+		itemProvider.registerObject(userActivity, visibility: .all)
+
 		let dragItem = UIDragItem(itemProvider: itemProvider)
 		dragItem.localObject = document
 		return [dragItem]
