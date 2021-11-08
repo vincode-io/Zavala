@@ -595,22 +595,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			self.view.layoutIfNeeded()
 		}
 
-		let currentSearchResultRow = outline?.currentSearchResultRow
-		
 		isSearching = false
 		collectionView.insertSections(headerFooterSections)
 
 		searchBar.searchField.text = ""
 		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
 		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
-
-		if let shadowTableIndex = CursorCoordinates.currentCoordinates?.row.shadowTableIndex {
-			let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
-			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-		} else if let shadowTableIndex = currentSearchResultRow?.shadowTableIndex {
-			let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
-			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
-		}
 	}
 	
 	@objc func outlineAddedBacklinks(_ note: Notification) {
