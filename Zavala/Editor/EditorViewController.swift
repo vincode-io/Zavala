@@ -1493,7 +1493,8 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	}
 	
     func editorTextRowReload(row: Row) {
-        reload(row: row)
+		layoutEditor()
+//        reload(row: row)
 	}
 	
 	func editorTextRowMakeCursorVisibleIfNecessary() {
@@ -1952,19 +1953,19 @@ extension EditorViewController {
 		makeCursorVisibleIfNecessary()
 	}
 	
-    private func reload(row: Row) {
-		if let rowIndex = row.shadowTableIndex {
-			let contentOffset = collectionView.contentOffset
-			let currentCoordinates = CursorCoordinates.bestCoordinates
-			UIView.performWithoutAnimation {
-				self.collectionView.reloadItems(at: [IndexPath(row: rowIndex, section: self.adjustedRowsSection)])
-				self.collectionView.contentOffset = contentOffset
-				if let coordinates = currentCoordinates {
-					self.restoreCursorPosition(coordinates, scroll: false)
-				}
-			}
-		}
-	}
+//    private func reload(row: Row) {
+//		if let rowIndex = row.shadowTableIndex {
+//			let contentOffset = collectionView.contentOffset
+//			let currentCoordinates = CursorCoordinates.bestCoordinates
+//			UIView.performWithoutAnimation {
+//				self.collectionView.reloadItems(at: [IndexPath(row: rowIndex, section: self.adjustedRowsSection)])
+//				self.collectionView.contentOffset = contentOffset
+//				if let coordinates = currentCoordinates {
+//					self.restoreCursorPosition(coordinates, scroll: false)
+//				}
+//			}
+//		}
+//	}
 	
 	private func applyChanges(_ changes: OutlineElementChanges) {
 		if !changes.isOnlyReloads {
