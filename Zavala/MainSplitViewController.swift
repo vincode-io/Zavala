@@ -397,11 +397,17 @@ extension MainSplitViewController: SidebarDelegate {
 		
         if !documentContainers.isEmpty {
             activityManager.selectingDocumentContainers(documentContainers)
-			if animated {
-				show(.supplementary)
-			} else {
-				UIView.performWithoutAnimation {
+			
+			// In theory, we shouldn't need to do anything with the supplementary view when we aren't
+			// navigating because we should be using navigation buttons and already be looking at the
+			// editor view.
+			if isNavigationBranch {
+				if animated {
 					show(.supplementary)
+				} else {
+					UIView.performWithoutAnimation {
+						show(.supplementary)
+					}
 				}
 			}
 		} else {
