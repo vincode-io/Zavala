@@ -309,7 +309,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	private var isOutlineNewFlag = false
 	private var isShowingAddButton = false
-	private var skipHidingKeyboardFlag = false
+	private var hideKeyboardWorkItem: DispatchWorkItem?
+
 	private var currentKeyboardHeight: CGFloat = 0
 	
 	private var headerFooterSections: IndexSet {
@@ -638,30 +639,26 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		collectionView?.refreshControl?.endRefreshing()
 	}
 	
-	var keyboardWillShowNotificationCounter = 0
-	
 	@objc func adjustForKeyboard(_ note: Notification) {
-		guard !skipHidingKeyboardFlag else {
-			if note.name == UIResponder.keyboardWillShowNotification {
-				keyboardWillShowNotificationCounter += 1
-				if keyboardWillShowNotificationCounter == 2 {
-					keyboardWillShowNotificationCounter = 0
-					skipHidingKeyboardFlag = false
-				}
-			}
-			return
-		}
-		
 		guard let keyboardValue = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
 
 		let keyboardScreenEndFrame = keyboardValue.cgRectValue
 		let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
 
 		if note.name == UIResponder.keyboardWillHideNotification {
-			collectionView.contentInset = EditorViewController.defaultContentInsets
-			updatePhoneUI(editMode: false)
-			currentKeyboardHeight = 0
+			hideKeyboardWorkItem?.cancel()
+			hideKeyboardWorkItem = DispatchWorkItem { [weak self] in
+				UIView.animate(withDuration: 0.25) {
+					self?.collectionView.contentInset = EditorViewController.defaultContentInsets
+				}
+				self?.updatePhoneUI(editMode: false)
+				self?.currentKeyboardHeight = 0
+			}
+			DispatchQueue.main.asyncAfter(deadline: .now(), execute: hideKeyboardWorkItem!)
 		} else {
+			hideKeyboardWorkItem?.cancel()
+			hideKeyboardWorkItem = nil
+
 			let newInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
 			if collectionView.contentInset != newInsets {
 				collectionView.contentInset = newInsets
@@ -670,7 +667,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			makeCursorVisibleIfNecessary()
 			currentKeyboardHeight = keyboardViewEndFrame.height
 		}
-
 	}
 	
 	// MARK: API
@@ -1519,7 +1515,6 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	}
 	
 	func editorTextRowDeleteRow(_ row: Row, rowStrings: RowStrings) {
-		skipHidingKeyboardFlag = true
 		deleteRows([row], rowStrings: rowStrings)
 	}
 	
@@ -1528,7 +1523,6 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	}
 	
 	func editorTextRowCreateRow(afterRow: Row?, rowStrings: RowStrings?) {
-		skipHidingKeyboardFlag = true
 		let afterRows = afterRow == nil ? nil : [afterRow!]
 		createRow(afterRows: afterRows, rowStrings: rowStrings)
 	}
