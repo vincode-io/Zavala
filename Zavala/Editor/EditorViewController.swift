@@ -309,7 +309,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	private var isOutlineNewFlag = false
 	private var isShowingAddButton = false
-	private var hideKeyboardWorkItem: DispatchWorkItem?
+	private var keyboardWorkItem: DispatchWorkItem?
 
 	private var currentKeyboardHeight: CGFloat = 0
 	
@@ -646,26 +646,27 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
 
 		if note.name == UIResponder.keyboardWillHideNotification {
-			hideKeyboardWorkItem?.cancel()
-			hideKeyboardWorkItem = DispatchWorkItem { [weak self] in
+			keyboardWorkItem?.cancel()
+			keyboardWorkItem = DispatchWorkItem { [weak self] in
 				UIView.animate(withDuration: 0.25) {
 					self?.collectionView.contentInset = EditorViewController.defaultContentInsets
 				}
 				self?.updatePhoneUI(editMode: false)
 				self?.currentKeyboardHeight = 0
 			}
-			DispatchQueue.main.asyncAfter(deadline: .now(), execute: hideKeyboardWorkItem!)
+			DispatchQueue.main.asyncAfter(deadline: .now(), execute: keyboardWorkItem!)
 		} else {
-			hideKeyboardWorkItem?.cancel()
-			hideKeyboardWorkItem = nil
-
-			let newInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
-			if collectionView.contentInset != newInsets {
-				collectionView.contentInset = newInsets
+			keyboardWorkItem?.cancel()
+			keyboardWorkItem = DispatchWorkItem { [weak self] in
+				let newInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
+				if self?.collectionView.contentInset != newInsets {
+					self?.collectionView.contentInset = newInsets
+				}
+				self?.updatePhoneUI(editMode: true)
+				self?.makeCursorVisibleIfNecessary()
+				self?.currentKeyboardHeight = keyboardViewEndFrame.height
 			}
-			updatePhoneUI(editMode: true)
-			makeCursorVisibleIfNecessary()
-			currentKeyboardHeight = keyboardViewEndFrame.height
+			DispatchQueue.main.asyncAfter(deadline: .now(), execute: keyboardWorkItem!)
 		}
 	}
 	
