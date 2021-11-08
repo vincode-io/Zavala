@@ -12,7 +12,7 @@
         <!--Outlines-->
         <scene sceneID="DuZ-tW-ztJ">
             <objects>
-                <collectionViewController storyboardIdentifier="OutlineListViewController" title="Outlines" clearsSelectionOnViewWillAppear="NO" id="ACt-yd-5XI" customClass="TimelineViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="DocumentsViewController" title="Outlines" clearsSelectionOnViewWillAppear="NO" id="ACt-yd-5XI" customClass="DocumentsViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="zj1-RR-HeS">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -125,7 +125,7 @@
     <resources>
         <image name="gear" catalog="system" width="128" height="119"/>
         <systemColor name="systemBackgroundColor">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

@@ -1,5 +1,5 @@
 //
-//  TimelineViewController+Drag.swift
+//  DocumentsViewController+Drag.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/2/20.
@@ -9,10 +9,10 @@ import UIKit
 import MobileCoreServices
 import Templeton
 
-extension TimelineViewController: UICollectionViewDragDelegate {
+extension DocumentsViewController: UICollectionViewDragDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-		let document = timelineDocuments[indexPath.row]
+		let document = documents[indexPath.row]
 		session.localContext = document
 		
 		let itemProvider = NSItemProvider()

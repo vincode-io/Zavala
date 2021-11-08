@@ -1,5 +1,5 @@
 //
-//  TimelineViewController+Drop.swift
+//  DocumentsViewController+Drop.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/4/20.
@@ -8,7 +8,7 @@
 import UIKit
 import Templeton
 
-extension TimelineViewController: UICollectionViewDropDelegate {
+extension DocumentsViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
 		guard documentContainers?.uniqueAccount != nil else { return false }

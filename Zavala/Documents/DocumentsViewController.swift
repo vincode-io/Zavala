@@ -1,5 +1,5 @@
 //
-//  TimelineViewController.swift
+//  DocumentsViewController.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/9/20.
@@ -11,27 +11,27 @@ import CoreSpotlight
 import RSCore
 import Templeton
 
-protocol TimelineDelegate: AnyObject  {
-	func documentSelectionDidChange(_: TimelineViewController, documentContainers: [DocumentContainer], documents: [Document], isNew: Bool, isNavigationBranch: Bool, animated: Bool)
-	func showGetInfo(_: TimelineViewController, outline: Outline)
-	func exportPDFDocs(_: TimelineViewController, outlines: [Outline])
-	func exportPDFLists(_: TimelineViewController, outlines: [Outline])
-	func exportMarkdownDocs(_: TimelineViewController, outlines: [Outline])
-	func exportMarkdownLists(_: TimelineViewController, outlines: [Outline])
-	func exportOPMLs(_: TimelineViewController, outlines: [Outline])
+protocol DocumentsDelegate: AnyObject  {
+	func documentSelectionDidChange(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], isNew: Bool, isNavigationBranch: Bool, animated: Bool)
+	func showGetInfo(_: DocumentsViewController, outline: Outline)
+	func exportPDFDocs(_: DocumentsViewController, outlines: [Outline])
+	func exportPDFLists(_: DocumentsViewController, outlines: [Outline])
+	func exportMarkdownDocs(_: DocumentsViewController, outlines: [Outline])
+	func exportMarkdownLists(_: DocumentsViewController, outlines: [Outline])
+	func exportOPMLs(_: DocumentsViewController, outlines: [Outline])
 }
 
-class TimelineViewController: UICollectionViewController, MainControllerIdentifiable {
+class DocumentsViewController: UICollectionViewController, MainControllerIdentifiable {
 	var mainControllerIdentifer: MainControllerIdentifier { return .documents }
 
-	weak var delegate: TimelineDelegate?
+	weak var delegate: DocumentsDelegate?
 
-	var currentDocuments: [Document]? {
+	var selectedDocuments: [Document]? {
 		guard let indexPaths = collectionView.indexPathsForSelectedItems else { return nil }
-        return indexPaths.map { timelineDocuments[$0.row] }
+        return indexPaths.map { documents[$0.row] }
 	}
 	
-	var timelineDocuments = [Document]()
+	var documents = [Document]()
 
 	override var canBecomeFirstResponder: Bool { return true }
 
@@ -144,7 +144,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 
 	func selectDocument(_ document: Document?, isNew: Bool = false, isNavigationBranch: Bool = true, animated: Bool) {
 		guard let documentContainers = documentContainers else { return }
-		if let document = document, let index = timelineDocuments.firstIndex(of: document) {
+		if let document = document, let index = documents.firstIndex(of: document) {
 			collectionView.selectItem(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .centeredVertically)
 			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [document], isNew: isNew, isNavigationBranch: isNavigationBranch, animated: animated)
 		} else {
@@ -154,7 +154,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 	}
 	
 	func deleteCurrentDocuments() {
-		guard let documents = currentDocuments else { return }
+		guard let documents = selectedDocuments else { return }
 		deleteDocuments(documents)
 	}
 	
@@ -255,7 +255,7 @@ class TimelineViewController: UICollectionViewController, MainControllerIdentifi
 
 // MARK: UIDocumentPickerDelegate
 
-extension TimelineViewController: UIDocumentPickerDelegate {
+extension DocumentsViewController: UIDocumentPickerDelegate {
 	
 	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
 		importOPMLs(urls: urls)
@@ -265,14 +265,14 @@ extension TimelineViewController: UIDocumentPickerDelegate {
 
 // MARK: Collection View
 
-extension TimelineViewController {
+extension DocumentsViewController {
 	
 	override func numberOfSections(in collectionView: UICollectionView) -> Int {
 		return 1
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return timelineDocuments.count
+		return documents.count
 	}
 		
 	override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -296,7 +296,7 @@ extension TimelineViewController {
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: timelineDocuments[indexPath.row])
+		return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: documents[indexPath.row])
 	}
 
 	override func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
@@ -311,8 +311,8 @@ extension TimelineViewController {
 			return
 		}
 		
-		let documents = selectedIndexPaths.map { timelineDocuments[$0.row] }
-		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: documents, isNew: false, isNavigationBranch: true, animated: true)
+		let selectedDocuments = selectedIndexPaths.map { documents[$0.row] }
+		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: selectedDocuments, isNew: false, isNavigationBranch: true, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -331,8 +331,8 @@ extension TimelineViewController {
 			return
 		}
 		
-		let documents = selectedIndexPaths.map { timelineDocuments[$0.row] }
-		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: documents, isNew: false, isNavigationBranch: true, animated: true)
+		let selectedDocuments = selectedIndexPaths.map { documents[$0.row] }
+		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: selectedDocuments, isNew: false, isNavigationBranch: true, animated: true)
     }
 	
 	private func createLayout() -> UICollectionViewLayout {
@@ -353,7 +353,7 @@ extension TimelineViewController {
 	
 	func openDocumentInNewWindow(indexPath: IndexPath) {
         collectionView.deselectAll()
-		let document = timelineDocuments[indexPath.row]
+		let document = documents[indexPath.row]
 		
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 		activity.userInfo = [Pin.UserInfoKeys.pin: Pin(document: document).userInfo]
@@ -362,7 +362,7 @@ extension TimelineViewController {
 	
 	func reload(document: Document) {
 		let selectedIndexPaths = self.collectionView.indexPathsForSelectedItems
-		if let index = timelineDocuments.firstIndex(of: document) {
+		if let index = documents.firstIndex(of: document) {
 			collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
 		}
 		if let selectedItem = selectedIndexPaths?.first {
@@ -401,17 +401,17 @@ extension TimelineViewController {
             let sortedDocuments = documents.sorted(by: { $0.title ?? "" < $1.title ?? "" })
 
             guard animated else {
-                self.timelineDocuments = sortedDocuments
+                self.documents = sortedDocuments
 				self.collectionView.reloadData()
 				self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
 				completion?()
 				return
 			}
 			
-			let prevSelectedDoc = self.collectionView.indexPathsForSelectedItems?.map({ self.timelineDocuments[$0.row] }).first
+			let prevSelectedDoc = self.collectionView.indexPathsForSelectedItems?.map({ self.documents[$0.row] }).first
 
-			let diff = sortedDocuments.difference(from: self.timelineDocuments).inferringMoves()
-            self.timelineDocuments = sortedDocuments
+			let diff = sortedDocuments.difference(from: self.documents).inferringMoves()
+            self.documents = sortedDocuments
 
 			self.collectionView.performBatchUpdates {
 				for change in diff {
@@ -432,7 +432,7 @@ extension TimelineViewController {
 				}
 			}
 			
-			if let prevSelectedDoc = prevSelectedDoc, let index = self.timelineDocuments.firstIndex(of: prevSelectedDoc) {
+			if let prevSelectedDoc = prevSelectedDoc, let index = self.documents.firstIndex(of: prevSelectedDoc) {
 				let indexPath = IndexPath(row: index, section: 0)
 				self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
 				self.collectionView.scrollToItem(at: indexPath, at: [], animated: true)
@@ -448,7 +448,7 @@ extension TimelineViewController {
 
 // MARK: UISearchControllerDelegate
 
-extension TimelineViewController: UISearchControllerDelegate {
+extension DocumentsViewController: UISearchControllerDelegate {
 
 	func willPresentSearchController(_ searchController: UISearchController) {
 		heldDocumentContainers = documentContainers
@@ -466,7 +466,7 @@ extension TimelineViewController: UISearchControllerDelegate {
 
 // MARK: UISearchResultsUpdating
 
-extension TimelineViewController: UISearchResultsUpdating {
+extension DocumentsViewController: UISearchResultsUpdating {
 
 	func updateSearchResults(for searchController: UISearchController) {
 		setDocumentContainers([Search(searchText: searchController.searchBar.text!)], isNavigationBranch: false)
@@ -476,7 +476,7 @@ extension TimelineViewController: UISearchResultsUpdating {
 
 // MARK: Helper Functions
 
-extension TimelineViewController {
+extension DocumentsViewController {
 	
 	private func queueLoadDocuments() {
 		loadDocumentsQueue.add(self, #selector(executeQueuedLoadDocuments))
@@ -510,7 +510,7 @@ extension TimelineViewController {
     private func makeOutlineContextMenu(mainRowID: GenericRowIdentifier, allRowIDs: [GenericRowIdentifier]) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: mainRowID as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
 			guard let self = self else { return nil }
-            let documents = allRowIDs.map { self.timelineDocuments[$0.indexPath.row] }
+            let documents = allRowIDs.map { self.documents[$0.indexPath.row] }
 			
 			var menuItems = [UIMenu]()
 
@@ -614,7 +614,7 @@ extension TimelineViewController {
 	private func deleteContextualAction(indexPath: IndexPath) -> UIContextualAction {
 		return UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
 			guard let self = self else { return }
-			let document = self.timelineDocuments[indexPath.row]
+			let document = self.documents[indexPath.row]
 			self.deleteDocuments([document], completion: completion)
 		}
 	}
@@ -629,7 +629,7 @@ extension TimelineViewController {
 	
 	private func deleteDocuments(_ documents: [Document], completion: ((Bool) -> Void)? = nil) {
 		func delete() {
-            let deselect = !(currentDocuments?.filter({ documents.contains($0) }).isEmpty ?? true)
+            let deselect = !(selectedDocuments?.filter({ documents.contains($0) }).isEmpty ?? true)
             if deselect, let documentContainers = self.documentContainers {
 				self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: true, animated: true)
 			}

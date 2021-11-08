@@ -24,15 +24,15 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	
 	weak var delegate: CollectionsDelegate?
 	
-	var currentAccount: Account? {
-        currentDocumentContainers?.uniqueAccount
+	var selectedAccount: Account? {
+        selectedDocumentContainers?.uniqueAccount
 	}
 	
-	var currentTags: [Tag]? {
-        return currentDocumentContainers?.compactMap { ($0 as? TagDocuments)?.tag }
+	var selectedTags: [Tag]? {
+        return selectedDocumentContainers?.compactMap { ($0 as? TagDocuments)?.tag }
 	}
 	
-	var currentDocumentContainers: [DocumentContainer]? {
+	var selectedDocumentContainers: [DocumentContainer]? {
 		guard let selectedIndexPaths = collectionView.indexPathsForSelectedItems else {
 			return nil
 		}
@@ -225,19 +225,19 @@ extension CollectionsViewController {
 			collectionView.deselectAll()
 		}
 		
-		let sidebarItems: [CollectionsItem]
+		let items: [CollectionsItem]
 		if let selected = collectionView.indexPathsForSelectedItems, !selected.isEmpty {
-			sidebarItems = selected.compactMap { dataSource.itemIdentifier(for: $0) }
+			items = selected.compactMap { dataSource.itemIdentifier(for: $0) }
 		} else {
-			if let sidebarItem = dataSource.itemIdentifier(for: indexPath) {
-				sidebarItems = [sidebarItem]
+			if let item = dataSource.itemIdentifier(for: indexPath) {
+				items = [item]
 			} else {
-				sidebarItems = [CollectionsItem]()
+				items = [CollectionsItem]()
 			}
 		}
 		
 		guard let mainItem = dataSource.itemIdentifier(for: indexPath) else { return nil }
-		return makeDocumentContainerContextMenu(mainItem: mainItem, items: sidebarItems)
+		return makeDocumentContainerContextMenu(mainItem: mainItem, items: items)
 	}
     
 	override func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
@@ -255,8 +255,8 @@ extension CollectionsViewController {
     
     private func updateSelections() {
         guard let selectedIndexes = collectionView.indexPathsForSelectedItems else { return }
-        let sideBarItems = selectedIndexes.compactMap { dataSource.itemIdentifier(for: $0) }
-        let containers = convert(sideBarItems: sideBarItems)
+        let items = selectedIndexes.compactMap { dataSource.itemIdentifier(for: $0) }
+        let containers = convert(items: items)
         
         delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: true, animated: true, completion: nil)
     }
@@ -390,10 +390,10 @@ extension CollectionsViewController {
 	}
 	
 	func updateSelections(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?) {
-        let sidebarItems = containers?.map { CollectionsItem.item($0) } ?? [CollectionsItem]()
-		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, items: sidebarItems, animated: animated))
+        let items = containers?.map { CollectionsItem.item($0) } ?? [CollectionsItem]()
+		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, items: items, animated: animated))
         
-		let containers = convert(sideBarItems: sidebarItems)
+		let containers = convert(items: items)
 		delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
 	}
 	
@@ -403,7 +403,7 @@ extension CollectionsViewController {
 	
 }
 
-// MARK: SidebarSearchCellDelegate
+// MARK: CollectionsSearchCellDelegate
 
 extension CollectionsViewController: CollectionsSearchCellDelegate {
 
@@ -433,9 +433,9 @@ extension CollectionsViewController {
 		}
 	}
     
-    private func convert(sideBarItems: [CollectionsItem]) -> [DocumentContainer] {
-        let containers: [DocumentContainer] = sideBarItems.compactMap { sidebarItem in
-            if case .documentContainer(let entityID) = sidebarItem.id {
+    private func convert(items: [CollectionsItem]) -> [DocumentContainer] {
+        let containers: [DocumentContainer] = items.compactMap { item in
+            if case .documentContainer(let entityID) = item.id {
                 return AccountManager.shared.findDocumentContainer(entityID)
             }
             return nil

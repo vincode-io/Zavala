@@ -121,13 +121,13 @@
 "See_Documents_In" = "See documents in “%@”";
 "Edit_Document" = "Edit document “%@”";
 
-/* Sidebar */
+/* Collections */
 "Delete_Tag_Prompt" = "Are you sure you want to delete the “%@” tag?";
 "Delete_Tags_Prompt" = "Are you sure you want to delete %d tags?";
 "Delete_Tag_Message" = "No Outlines associated with this tag will be deleted.";
 "Delete_Tags_Message" = "No Outlines associated with these tags will be deleted.";
 
-/* Timeline */
+/* Documents */
 "Not_Available" = "Not Available";
 "Import Failed" = "Import Failed";
 "Delete_Outline_Prompt" = "Are you sure you want to delete the “%@” outline?";

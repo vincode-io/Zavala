@@ -26,8 +26,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	struct UserInfoKeys {
 		static let goBackwardStack = "goBackwardStack"
 		static let goForwardStack = "goForwardStack"
-		static let sidebarWidth = "sidebarWidth"
-		static let timelineWidth = "timelineWidth"
+		static let collectionsWidth = "collectionsWidth"
+		static let documentsWidth = "documentsWidth"
 	}
 	
 	weak var sceneDelegate: SceneDelegate?
@@ -40,8 +40,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		userInfo![UserInfoKeys.goForwardStack] = goForwardStack.map { $0.userInfo }
 
 		if traitCollection.userInterfaceIdiom == .mac {
-			userInfo![UserInfoKeys.sidebarWidth] = primaryColumnWidth
-			userInfo![UserInfoKeys.timelineWidth] = supplementaryColumnWidth
+			userInfo![UserInfoKeys.collectionsWidth] = primaryColumnWidth
+			userInfo![UserInfoKeys.documentsWidth] = supplementaryColumnWidth
 		}
 
 		activity.userInfo = userInfo
@@ -49,7 +49,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 	
 	var isExportAndPrintUnavailable: Bool {
-		guard let outlines = currentOutlines else { return true }
+		guard let outlines = selectedOutlines else { return true }
 		return outlines.count < 1
 	}
 
@@ -58,16 +58,16 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			(editorViewController?.isDeleteCurrentRowUnavailable ?? true) 
 	}
 
-	var currentDocumentContainers: [DocumentContainer]? {
-		return sidebarViewController?.currentDocumentContainers
+	var selectedDocumentContainers: [DocumentContainer]? {
+		return collectionsViewController?.selectedDocumentContainers
 	}
     
-    var currentTags: [Tag]? {
-        return sidebarViewController?.currentTags
+    var selectedTags: [Tag]? {
+        return collectionsViewController?.selectedTags
     }
 	
-	var currentOutlines: [Outline]? {
-		return timelineViewController?.currentDocuments?.compactMap({ $0.outline })
+	var selectedOutlines: [Outline]? {
+		return documentsViewController?.selectedDocuments?.compactMap({ $0.outline })
 	}
 
 	var editorViewController: EditorViewController? {
@@ -84,12 +84,12 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
     
     private let activityManager = ActivityManager()
 	
-	private var sidebarViewController: CollectionsViewController? {
+	private var collectionsViewController: CollectionsViewController? {
 		return viewController(for: .primary) as? CollectionsViewController
 	}
 	
-	private var timelineViewController: TimelineViewController? {
-		viewController(for: .supplementary) as? TimelineViewController
+	private var documentsViewController: DocumentsViewController? {
+		viewController(for: .supplementary) as? DocumentsViewController
 	}
 	
 	private var lastMainControllerToAppear = MainControllerIdentifier.none
@@ -132,11 +132,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	// MARK: API
 	
 	func startUp() {
-		sidebarViewController?.navigationController?.delegate = self
-		sidebarViewController?.delegate = self
-		timelineViewController?.navigationController?.delegate = self
-		timelineViewController?.delegate = self
-		sidebarViewController?.startUp()
+		collectionsViewController?.navigationController?.delegate = self
+		collectionsViewController?.delegate = self
+		documentsViewController?.navigationController?.delegate = self
+		documentsViewController?.delegate = self
+		collectionsViewController?.startUp()
 		editorViewController?.delegate = self
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
@@ -165,12 +165,12 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 		cleanUpNavigationStacks()
 		
-		if let sidebarWidth = userInfo[UserInfoKeys.sidebarWidth] as? CGFloat {
-			preferredPrimaryColumnWidth = sidebarWidth
+		if let collectionsWidth = userInfo[UserInfoKeys.collectionsWidth] as? CGFloat {
+			preferredPrimaryColumnWidth = collectionsWidth
 		}
 		
-		if let timelineWidth = userInfo[UserInfoKeys.timelineWidth] as? CGFloat {
-			preferredSupplementaryColumnWidth = timelineWidth
+		if let documentsWidth = userInfo[UserInfoKeys.documentsWidth] as? CGFloat {
+			preferredSupplementaryColumnWidth = documentsWidth
 		}
 
 		let pin = Pin(userInfo: userInfo[Pin.UserInfoKeys.pin])
@@ -179,11 +179,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			return
 		}
 		
-		sidebarViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch, animated: false) {
+		collectionsViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch, animated: false) {
 			self.lastMainControllerToAppear = .documents
 
 			guard let document = pin.document else {
-				// I honestly don't know why this is needed. We set this to show supplementary in the SidebarDelegate, but
+				// I honestly don't know why this is needed. We set this to show supplementary in the CollectionsDelegate, but
 				// for some reason the secondary column shows instead, so we set it here and it works.
 				self.show(.supplementary)
 				return
@@ -197,14 +197,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		guard let account = AccountManager.shared.findAccount(accountID: documentID.accountID),
 			  let document = account.findDocument(documentID) else { return }
 		
-		if let sidebarTags = currentTags, document.hasAnyTag(sidebarTags) {
+		if let collectionsTags = selectedTags, document.hasAnyTag(collectionsTags) {
 			self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 		} else if document.tagCount == 1, let tag = document.tags?.first {
-			sidebarViewController?.selectDocumentContainers([TagDocuments(account: account, tag: tag)], isNavigationBranch: true, animated: false) {
+			collectionsViewController?.selectDocumentContainers([TagDocuments(account: account, tag: tag)], isNavigationBranch: true, animated: false) {
 				self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 			}
 		} else {
-			sidebarViewController?.selectDocumentContainers([AllDocuments(account: account)], isNavigationBranch: true, animated: false) {
+			collectionsViewController?.selectDocumentContainers([AllDocuments(account: account)], isNavigationBranch: true, animated: false) {
 				self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 			}
 		}
@@ -212,14 +212,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 	func handlePin(_ pin: Pin) {
 		guard let documentContainers = pin.containers else { return }
-		sidebarViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: true, animated: false) {
-			self.timelineViewController?.selectDocument(pin.document, isNavigationBranch: true, animated: false)
+		collectionsViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: true, animated: false) {
+			self.documentsViewController?.selectDocument(pin.document, isNavigationBranch: true, animated: false)
 		}
 	}
 	
 	func importOPMLs(urls: [URL]) {
 		selectDefaultDocumentContainerIfNecessary {
-			self.timelineViewController?.importOPMLs(urls: urls)
+			self.documentsViewController?.importOPMLs(urls: urls)
 		}
 	}
 	
@@ -264,7 +264,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 		
 		guard editorViewController?.isOutlineFunctionsUnavailable ?? true else {
-			timelineViewController?.deleteCurrentDocuments()
+			documentsViewController?.deleteCurrentDocuments()
 			return
 		}
 	}
@@ -275,13 +275,13 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 	@objc func createOutline() {
 		selectDefaultDocumentContainerIfNecessary() {
-			self.timelineViewController?.createOutline()
+			self.documentsViewController?.createOutline()
 		}
 	}
 	
 	@objc func importOPML() {
 		selectDefaultDocumentContainerIfNecessary() {
-			self.timelineViewController?.importOPML()
+			self.documentsViewController?.importOPML()
 		}
 	}
 	
@@ -364,7 +364,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 
 	func beginDocumentSearch() {
-		sidebarViewController?.beginDocumentSearch()
+		collectionsViewController?.beginDocumentSearch()
 	}
 	
 	// MARK: Validations
@@ -382,7 +382,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 }
 
-// MARK: SidebarDelegate
+// MARK: CollectionsDelegate
 
 extension MainSplitViewController: CollectionsDelegate {
 	
@@ -417,16 +417,16 @@ extension MainSplitViewController: CollectionsDelegate {
 			activityManager.invalidateSelectDocumentContainers()
 		}
 		
-		timelineViewController?.setDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch, completion: completion)
+		documentsViewController?.setDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch, completion: completion)
 	}
 	
 }
 
-// MARK: TimelineDelegate
+// MARK: DocumentsDelegate
 
-extension MainSplitViewController: TimelineDelegate {
+extension MainSplitViewController: DocumentsDelegate {
 	
-	func documentSelectionDidChange(_: TimelineViewController, documentContainers: [DocumentContainer], documents: [Document], isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
+	func documentSelectionDidChange(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
 		guard documents.count == 1, let document = documents.first else {
 			activityManager.invalidateSelectDocument()
 			editorViewController?.edit(nil, isNew: isNew)
@@ -475,27 +475,27 @@ extension MainSplitViewController: TimelineDelegate {
 		}
 	}
 
-	func showGetInfo(_: TimelineViewController, outline: Outline) {
+	func showGetInfo(_: DocumentsViewController, outline: Outline) {
 		showGetInfo(outline: outline)
 	}
 	
-	func exportPDFDocs(_: TimelineViewController, outlines: [Outline]) {
+	func exportPDFDocs(_: DocumentsViewController, outlines: [Outline]) {
 		exportPDFDocsForOutlines(outlines)
 	}
 	
-	func exportPDFLists(_: TimelineViewController, outlines: [Outline]) {
+	func exportPDFLists(_: DocumentsViewController, outlines: [Outline]) {
 		exportPDFListsForOutlines(outlines)
 	}
 	
-	func exportMarkdownDocs(_: TimelineViewController, outlines: [Outline]) {
+	func exportMarkdownDocs(_: DocumentsViewController, outlines: [Outline]) {
 		exportMarkdownDocsForOutlines(outlines)
 	}
 	
-	func exportMarkdownLists(_: TimelineViewController, outlines: [Outline]) {
+	func exportMarkdownLists(_: DocumentsViewController, outlines: [Outline]) {
 		exportMarkdownListsForOutlines(outlines)
 	}
 	
-	func exportOPMLs(_: TimelineViewController, outlines: [Outline]) {
+	func exportOPMLs(_: DocumentsViewController, outlines: [Outline]) {
 		exportOPMLsForOutlines(outlines)
 	}
 	
@@ -530,7 +530,7 @@ extension MainSplitViewController: EditorDelegate {
 	}
 	
 	func createNewOutline(_: EditorViewController, title: String) -> Outline? {
-        return timelineViewController?.createOutlineDocument(title: title)?.outline
+        return documentsViewController?.createOutlineDocument(title: title)?.outline
 	}
 	
 	func validateToolbar(_: EditorViewController) {
@@ -578,7 +578,7 @@ extension MainSplitViewController: UISplitViewControllerDelegate {
 	func splitViewController(_ svc: UISplitViewController, topColumnForCollapsingToProposedTopColumn proposedTopColumn: UISplitViewController.Column) -> UISplitViewController.Column {
 		switch proposedTopColumn {
 		case .supplementary:
-            if let containers = timelineViewController?.documentContainers, !containers.isEmpty {
+            if let containers = documentsViewController?.documentContainers, !containers.isEmpty {
 				return .supplementary
 			} else {
 				return .primary
@@ -587,7 +587,7 @@ extension MainSplitViewController: UISplitViewControllerDelegate {
 			if editorViewController?.outline != nil {
 				return .secondary
 			} else {
-                if let containers = timelineViewController?.documentContainers, !containers.isEmpty {
+                if let containers = documentsViewController?.documentContainers, !containers.isEmpty {
 					return .supplementary
 				} else {
 					return .primary
@@ -618,14 +618,14 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 		}
 
 		// If we are showing the Feeds and only the feeds start clearing stuff
-		if isCollapsed && viewController === sidebarViewController && lastMainControllerToAppear == .documents {
-			sidebarViewController?.selectDocumentContainers(nil, isNavigationBranch: false, animated: false)
+		if isCollapsed && viewController === collectionsViewController && lastMainControllerToAppear == .documents {
+			collectionsViewController?.selectDocumentContainers(nil, isNavigationBranch: false, animated: false)
 			return
 		}
 
-		if isCollapsed && viewController === timelineViewController && lastMainControllerToAppear == .editor {
+		if isCollapsed && viewController === documentsViewController && lastMainControllerToAppear == .editor {
 			activityManager.invalidateSelectDocument()
-			timelineViewController?.selectDocument(nil, isNavigationBranch: false, animated: false)
+			documentsViewController?.selectDocument(nil, isNavigationBranch: false, animated: false)
 			return
 		}
 	}
@@ -652,22 +652,22 @@ extension MainSplitViewController {
 		// some navigation had occurred. Changing this assumption broke state restoration
 		// on the iPhone.
 		//
-		// When TimelineViewController was rewritten without diffable datasources, was when this
+		// When DocumentsViewController was rewritten without diffable datasources, was when this
 		// assumption was broken. Rather than rewrite how we handle navigation (which would
-		// not be easy. SidebarViewController still uses a diffable datasource), we made it
+		// not be easy. CollectionsViewController still uses a diffable datasource), we made it
 		// look like it still works the same way by dispatching to the next run loop to occur.
 		//
 		// Someday this should be refactored. How the UINavigationControllerDelegate works would
 		// be the main challenge.
 		DispatchQueue.main.async {
-			self.timelineViewController?.selectDocument(document, isNavigationBranch: isNavigationBranch, animated: false)
+			self.documentsViewController?.selectDocument(document, isNavigationBranch: isNavigationBranch, animated: false)
 			self.lastMainControllerToAppear = .editor
 			self.validateToolbar()
 		}
 	}
 	
 	private func selectDefaultDocumentContainerIfNecessary(completion: @escaping () -> Void) {
-		guard sidebarViewController?.currentAccount == nil else {
+		guard collectionsViewController?.selectedAccount == nil else {
 			completion()
 			return
 		}
@@ -685,7 +685,7 @@ extension MainSplitViewController {
 		
 		let documentContainer = account.documentContainers[0]
 		
-		sidebarViewController?.selectDocumentContainers([documentContainer], isNavigationBranch: true, animated: true) {
+		collectionsViewController?.selectDocumentContainers([documentContainer], isNavigationBranch: true, animated: true) {
 			completion()
 		}
 	}
@@ -736,8 +736,8 @@ extension MainSplitViewController {
 		
 		let pin = goBackwardStack.removeFirst()
 		lastPin = pin
-		sidebarViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false) {
-			self.timelineViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
+		collectionsViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false) {
+			self.documentsViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
 		}
 	}
 	
@@ -754,8 +754,8 @@ extension MainSplitViewController {
 		}
 		
 		let pin = goForwardStack.removeFirst()
-		sidebarViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false) {
-			self.timelineViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
+		collectionsViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false) {
+			self.documentsViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
 		}
 	}
 	

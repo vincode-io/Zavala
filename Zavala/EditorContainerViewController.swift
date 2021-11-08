@@ -14,7 +14,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	
 	var currentDocumentContainer: DocumentContainer? = nil
 
-	var currentOutlines: [Outline]? {
+	var selectedOutlines: [Outline]? {
 		guard let outline = editorViewController?.outline else { return nil }
 		return [outline]
 	}

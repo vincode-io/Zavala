@@ -12,7 +12,7 @@ import SafariServices
 protocol MainCoordinator: UIViewController {
 	var editorViewController: EditorViewController? { get }
 	var isExportAndPrintUnavailable: Bool { get }
-	var currentOutlines: [Outline]? { get }
+	var selectedOutlines: [Outline]? { get }
 	var isGoBackwardOneUnavailable: Bool { get }
 	var isGoForwardOneUnavailable: Bool { get }
 	func goBackwardOne()
@@ -318,27 +318,27 @@ extension MainCoordinator {
 	}
 	
 	func exportPDFDocs() {
-		guard let outlines = currentOutlines else { return }
+		guard let outlines = selectedOutlines else { return }
 		exportPDFDocsForOutlines(outlines)
 	}
 	
 	func exportPDFLists() {
-		guard let outlines = currentOutlines else { return }
+		guard let outlines = selectedOutlines else { return }
 		exportPDFListsForOutlines(outlines)
 	}
 	
 	func exportMarkdownDocs() {
-		guard let outlines = currentOutlines else { return }
+		guard let outlines = selectedOutlines else { return }
 		exportMarkdownDocsForOutlines(outlines)
 	}
 	
 	func exportMarkdownLists() {
-		guard let outlines = currentOutlines else { return }
+		guard let outlines = selectedOutlines else { return }
 		exportMarkdownListsForOutlines(outlines)
 	}
 	
 	func exportOPMLs() {
-		guard let outlines = currentOutlines else { return }
+		guard let outlines = selectedOutlines else { return }
 		exportOPMLsForOutlines(outlines)
 	}
 	
@@ -411,7 +411,7 @@ extension MainCoordinator {
 	}
 	
 	func printLists() {
-		guard let outlines = currentOutlines else { return }
+		guard let outlines = selectedOutlines else { return }
 		printListsForOutlines(outlines)
 	}
 	
@@ -429,7 +429,7 @@ extension MainCoordinator {
 	}
 
 	func printDocs() {
-		guard let outlines = currentOutlines else { return }
+		guard let outlines = selectedOutlines else { return }
 		printDocsForOutlines(outlines)
 	}
 
