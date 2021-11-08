@@ -25,7 +25,9 @@ class RenameTagViewController: UITableViewController {
 
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
+		tagNameTextField.text = tagDocuments?.tag?.name
 		tagNameTextField.becomeFirstResponder()
+		updateUI()
 	}
 	
 	@IBAction func cancel(_ sender: Any) {
