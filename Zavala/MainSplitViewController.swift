@@ -173,7 +173,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			preferredSupplementaryColumnWidth = timelineWidth
 		}
 
-		let pin = Pin(userInfo: userInfo[Zavala.UserInfoKeys.pin])
+		let pin = Pin(userInfo: userInfo[Pin.UserInfoKeys.pin])
 		
 		guard let documentContainers = pin.containers else {
 			return

@@ -12,6 +12,10 @@ public extension Notification.Name {
 
 public struct Pin: Equatable {
 	
+	public struct UserInfoKeys {
+		public static let pin = "pin"
+	}
+	
 	public let containerIDs: [EntityID]?
 	public let documentID: EntityID?
 	

@@ -65,7 +65,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 			return
 		}
 		
-		let pin = Pin(userInfo: userInfo[UserInfoKeys.pin])
+		let pin = Pin(userInfo: userInfo[Pin.UserInfoKeys.pin])
 		if let documentID = pin.documentID {
 			openDocument(documentID)
 			return

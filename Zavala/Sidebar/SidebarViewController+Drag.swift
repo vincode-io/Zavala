@@ -21,7 +21,7 @@ extension SidebarViewController: UICollectionViewDragDelegate {
 
 		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.newWindow)
 		var userInfo = [AnyHashable: Any]()
-		userInfo[UserInfoKeys.pin] = Pin(containers: [container]).userInfo
+		userInfo[Pin.UserInfoKeys.pin] = Pin(containers: [container]).userInfo
 		userActivity.userInfo = userInfo
 		itemProvider.registerObject(userActivity, visibility: .all)
 

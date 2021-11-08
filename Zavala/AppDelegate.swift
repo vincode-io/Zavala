@@ -1166,7 +1166,7 @@ extension AppDelegate: AppKitPluginDelegate {
 		guard let document = try? account.importOPML(url, tags: nil) else { return }
 
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-		activity.userInfo = [UserInfoKeys.pin: Pin(document: document).userInfo]
+		activity.userInfo = [Pin.UserInfoKeys.pin: Pin(document: document).userInfo]
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 	
@@ -1260,7 +1260,7 @@ extension AppDelegate {
 			mainSplitViewController.handlePin(pin)
 		} else {
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-			activity.userInfo = [UserInfoKeys.pin: pin.userInfo]
+			activity.userInfo = [Pin.UserInfoKeys.pin: pin.userInfo]
 			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 		}
 		

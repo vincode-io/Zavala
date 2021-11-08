@@ -42,7 +42,7 @@ extension TimelineViewController: UICollectionViewDragDelegate {
 		
 		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.newWindow)
 		var userInfo = [AnyHashable: Any]()
-		userInfo[UserInfoKeys.pin] = Pin(containers: documentContainers, document: document).userInfo
+		userInfo[Pin.UserInfoKeys.pin] = Pin(containers: documentContainers, document: document).userInfo
 		userActivity.userInfo = userInfo
 		itemProvider.registerObject(userActivity, visibility: .all)
 
