@@ -654,7 +654,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				self?.updatePhoneUI(editMode: false)
 				self?.currentKeyboardHeight = 0
 			}
-			DispatchQueue.main.asyncAfter(deadline: .now(), execute: keyboardWorkItem!)
+			DispatchQueue.main.async(execute: keyboardWorkItem!)
 		} else {
 			keyboardWorkItem?.cancel()
 			keyboardWorkItem = DispatchWorkItem { [weak self] in
@@ -666,7 +666,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				self?.makeCursorVisibleIfNecessary()
 				self?.currentKeyboardHeight = keyboardViewEndFrame.height
 			}
-			DispatchQueue.main.asyncAfter(deadline: .now(), execute: keyboardWorkItem!)
+			DispatchQueue.main.async(execute: keyboardWorkItem!)
 		}
 	}
 	
