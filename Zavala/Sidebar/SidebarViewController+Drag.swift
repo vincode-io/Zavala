@@ -11,6 +11,8 @@ import Templeton
 extension SidebarViewController: UICollectionViewDragDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+		guard traitCollection.userInterfaceIdiom == .pad else { return [] }
+		
 		let itemProvider = NSItemProvider()
 		
 		guard let item = dataSource.itemIdentifier(for: indexPath),
