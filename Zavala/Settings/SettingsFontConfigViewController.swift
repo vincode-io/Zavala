@@ -37,7 +37,8 @@ class SettingsFontConfigViewController: UITableViewController {
 		if indexPath.section == 0 && indexPath.row == 0 {
 			let controller = UIFontPickerViewController()
 			controller.delegate = self
-			present(controller, animated: true)		}
+			present(controller, animated: true)
+		}
 		tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
 	}
 	
