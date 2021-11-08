@@ -10,7 +10,7 @@ import RSCore
 import Templeton
 
 protocol MacOpenQuicklyCollectionsDelegate: AnyObject {
-	func documentContainerSelectionDidChange(_: MacOpenQuicklyCollectionsViewController, documentContainer: DocumentContainer?)
+	func documentContainerSelectionsDidChange(_: MacOpenQuicklyCollectionsViewController, documentContainers: [DocumentContainer])
 }
 
 class MacOpenQuicklyCollectionsViewController: UICollectionViewController {
@@ -26,6 +26,7 @@ class MacOpenQuicklyCollectionsViewController: UICollectionViewController {
 		collectionView.layer.borderWidth = 1
 		collectionView.layer.borderColor = UIColor.systemGray2.cgColor
 		collectionView.layer.cornerRadius = 3
+		collectionView.allowsMultipleSelection = true
 		
 		collectionView.collectionViewLayout = createLayout()
 		configureDataSource()
@@ -34,16 +35,24 @@ class MacOpenQuicklyCollectionsViewController: UICollectionViewController {
 
     // MARK: UICollectionView
 
-	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
-		
-		if case .documentContainer(let entityID) = item.id {
-			AppDefaults.shared.openQuicklyDocumentContainerID = entityID.userInfo
-			let documentContainer = AccountManager.shared.findDocumentContainer(entityID)
-			delegate?.documentContainerSelectionDidChange(self, documentContainer: documentContainer)
-		}
+	override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+		updateSelections()
 	}
 
+	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		updateSelections()
+	}
+	
+}
+
+extension MacOpenQuicklyCollectionsViewController {
+	
+	private func updateSelections() {
+		guard let selectedIndexes = collectionView.indexPathsForSelectedItems else { return }
+		let items = selectedIndexes.compactMap { dataSource.itemIdentifier(for: $0) }
+		delegate?.documentContainerSelectionsDidChange(self, documentContainers: items.toContainers())
+	}
+	
 	private func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 			var configuration = UICollectionLayoutListConfiguration(appearance: .sidebar)
@@ -104,16 +113,15 @@ class MacOpenQuicklyCollectionsViewController: UICollectionViewController {
 	}
 
 	private func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<CollectionsItem>, section: CollectionsSection, animated: Bool) {
-		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
+		let selectedItems = collectionView.indexPathsForSelectedItems?.compactMap({ dataSource.itemIdentifier(for: $0) })
 		
+		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
+
 		operation.completionBlock = { [weak self] _ in
-			if let self = self,
-			   let containerUserInfo = AppDefaults.shared.openQuicklyDocumentContainerID,
-			   let containerID = EntityID(userInfo: containerUserInfo),
-			   let container = AccountManager.shared.findDocumentContainer(containerID),
-			   let indexPath = self.dataSource.indexPath(for: CollectionsItem.item(container)) {
-				self.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredVertically)
-				self.delegate?.documentContainerSelectionDidChange(self, documentContainer: container)
+			guard let self = self else { return }
+			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) }
+			for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
+				self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
 			}
 		}
 		

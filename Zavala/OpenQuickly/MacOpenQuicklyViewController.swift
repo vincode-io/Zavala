@@ -102,8 +102,8 @@ extension MacOpenQuicklyViewController: UITextFieldDelegate {
 
 extension MacOpenQuicklyViewController: MacOpenQuicklyCollectionsDelegate {
 	
-	func documentContainerSelectionDidChange(_: MacOpenQuicklyCollectionsViewController, documentContainer: DocumentContainer?) {
-		documentsViewController?.setDocumentContainer(documentContainer)
+	func documentContainerSelectionsDidChange(_: MacOpenQuicklyCollectionsViewController, documentContainers: [DocumentContainer]) {
+		documentsViewController?.setDocumentContainers(documentContainers)
 	}
 	
 }

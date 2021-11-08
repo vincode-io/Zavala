@@ -256,7 +256,7 @@ extension CollectionsViewController {
     private func updateSelections() {
         guard let selectedIndexes = collectionView.indexPathsForSelectedItems else { return }
         let items = selectedIndexes.compactMap { dataSource.itemIdentifier(for: $0) }
-        let containers = convert(items: items)
+		let containers = items.toContainers()
         
         delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: true, animated: true, completion: nil)
     }
@@ -393,7 +393,7 @@ extension CollectionsViewController {
         let items = containers?.map { CollectionsItem.item($0) } ?? [CollectionsItem]()
 		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, items: items, animated: animated))
         
-		let containers = convert(items: items)
+		let containers = items.toContainers()
 		delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
 	}
 	
@@ -432,16 +432,6 @@ extension CollectionsViewController {
 			}
 		}
 	}
-    
-    private func convert(items: [CollectionsItem]) -> [DocumentContainer] {
-        let containers: [DocumentContainer] = items.compactMap { item in
-            if case .documentContainer(let entityID) = item.id {
-                return AccountManager.shared.findDocumentContainer(entityID)
-            }
-            return nil
-        }
-        return containers
-    }
 	
 	private func queueApplyChangeSnapshot() {
 		applyChangesQueue.add(self, #selector(applyQueuedChangeSnapshot))

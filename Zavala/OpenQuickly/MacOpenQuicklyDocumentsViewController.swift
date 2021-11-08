@@ -47,7 +47,7 @@ final class DocumentsItem: NSObject, NSCopying, Identifiable {
 class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 
 	weak var delegate: MacOpenQuicklyDocumentsDelegate?
-	private var documentContainer: DocumentContainer?
+	private var documentContainers: [DocumentContainer]?
 
 	private var dataSource: UICollectionViewDiffableDataSource<Int, DocumentsItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
@@ -64,8 +64,8 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 		applySnapshot()
 	}
 
-	func setDocumentContainer(_ documentContainer: DocumentContainer?, completion: (() -> Void)? = nil) {
-		self.documentContainer = documentContainer
+	func setDocumentContainers(_ documentContainers: [DocumentContainer], completion: (() -> Void)? = nil) {
+		self.documentContainers = documentContainers
 		collectionView.deselectAll()
 		applySnapshot()
 	}
@@ -135,15 +135,34 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 	}
 	
 	func applySnapshot() {
-		guard let documentContainer = documentContainer else {
+		guard let documentContainers = documentContainers else {
 			let snapshot = NSDiffableDataSourceSectionSnapshot<DocumentsItem>()
 			self.dataSourceQueue.add(ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: false))
 			return
 		}
 		
-		documentContainer.documents { [weak self] result in
-			guard let self = self, let documents = try? result.get() else { return }
-
+		let tags = documentContainers.tags
+		var selectionContainers: [DocumentProvider]
+		if !tags.isEmpty {
+			selectionContainers = [TagsDocuments(tags: tags)]
+		} else {
+			selectionContainers = documentContainers
+		}
+		
+		var documents = Set<Document>()
+		let group = DispatchGroup()
+		
+		for container in selectionContainers {
+			group.enter()
+			container.documents { result in
+				if let containerDocuments = try? result.get() {
+					documents.formUnion(containerDocuments)
+				}
+				group.leave()
+			}
+		}
+		
+		group.notify(queue: DispatchQueue.main) {
             let sortedDocuments = documents.sorted(by: { $0.title ?? "" < $1.title ?? "" })
 			let items = sortedDocuments.map { DocumentsItem.item($0) }
 			var snapshot = NSDiffableDataSourceSectionSnapshot<DocumentsItem>()
