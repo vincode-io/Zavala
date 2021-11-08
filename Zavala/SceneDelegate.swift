@@ -63,7 +63,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		}
 		
 		if let userInfo = AppDefaults.shared.lastMainWindowState {
-			mainSplitViewController.handle(userInfo, isNavigationBranch: false)
+			mainSplitViewController.handle(userInfo, isNavigationBranch: true)
 			AppDefaults.shared.lastMainWindowState = nil
 		}
 	}
