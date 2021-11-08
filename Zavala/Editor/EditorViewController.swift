@@ -1637,6 +1637,7 @@ extension EditorViewController: LinkViewControllerDelegate {
 		if cursorCoordinates.isInNotes {
 			textRowCell.noteTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
 		} else {
+			textRowCell.topicTextView?.becomeFirstResponder()
 			textRowCell.topicTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
 		}
 	}

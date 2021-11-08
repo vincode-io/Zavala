@@ -99,8 +99,10 @@ class EditorTextRowContentView: UIView, UIContentView {
         
 		if let coordinates = coordinates, coordinates.row == configuration.row {
 			if !coordinates.isInNotes {
+				topicTextView.becomeFirstResponder()
 				topicTextView.selectedRange = coordinates.selection
 			} else {
+				noteTextView?.becomeFirstResponder()
 				noteTextView?.selectedRange = coordinates.selection
 			}
 		}
