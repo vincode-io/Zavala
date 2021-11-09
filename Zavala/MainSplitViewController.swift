@@ -175,7 +175,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 		let pin = Pin(userInfo: userInfo[Pin.UserInfoKeys.pin])
 		
-		guard let documentContainers = pin.containers else {
+		guard let documentContainers = pin.containers, !documentContainers.isEmpty else {
 			return
 		}
 		
@@ -183,9 +183,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			self.lastMainControllerToAppear = .documents
 
 			guard let document = pin.document else {
-				// I honestly don't know why this is needed. We set this to show supplementary in the CollectionsDelegate, but
-				// for some reason the secondary column shows instead, so we set it here and it works.
-				self.show(.supplementary)
 				return
 			}
 			
