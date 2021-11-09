@@ -518,7 +518,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	public func fileName(withSuffix suffix: String) -> String {
 		var filename = title ?? "Outline"
-		filename = filename.replacingOccurrences(of: " ", with: "").trimmingCharacters(in: .whitespaces)
+		filename = filename.replacingOccurrences(of: " ", with: "-").trimmingCharacters(in: .whitespaces)
 		filename = "\(filename).\(suffix)"
 		return filename
 	}
