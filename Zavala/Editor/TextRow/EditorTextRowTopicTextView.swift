@@ -231,6 +231,9 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 		case "\n":
 			editorDelegate?.createRow(self, afterRow: textRow, rowStrings: rowStrings)
 			return false
+		case " ":
+			typingAttributes[.link] = nil
+			return true
 		default:
 			return true
 		}

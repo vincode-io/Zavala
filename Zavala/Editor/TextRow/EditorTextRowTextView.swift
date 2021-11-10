@@ -394,15 +394,8 @@ extension EditorTextRowTextView {
     }
 
     func processTextChanges() {
-        // Break any links with a space
-        let cursorLocation = selectedRange.location
-        if cursorLocation > 0 {
-            let range = NSRange(location: cursorLocation - 1, length: 1)
-            if textStorage.attributedSubstring(from: range).string == " " {
-                textStorage.removeAttribute(.link, range: range)
-                typingAttributes[.link] = nil
-            }
-		} else if selectedRange.length == 0 {
+        // If we deleted to the beginning of the line, remove any residual links
+        if selectedRange.location == 0 && selectedRange.length == 0 {
 			typingAttributes[.link] = nil
 		}
         
