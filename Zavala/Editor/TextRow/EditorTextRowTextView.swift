@@ -399,7 +399,9 @@ extension EditorTextRowTextView {
                 textStorage.removeAttribute(.link, range: range)
                 typingAttributes[.link] = nil
             }
-        }
+		} else if selectedRange.length == 0 {
+			typingAttributes[.link] = nil
+		}
         
         isTextChanged = true
 
