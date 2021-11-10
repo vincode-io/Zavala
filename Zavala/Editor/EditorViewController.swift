@@ -1937,11 +1937,10 @@ extension EditorViewController {
 	}
 	
 	private func layoutEditor() {
-// I forget why this was needed at one point. Keep it around until we are sure we don't need it anymore.
-//		let contentOffset = collectionView.contentOffset
+		let contentOffset = collectionView.contentOffset
 		collectionView.collectionViewLayout.invalidateLayout()
 		collectionView.layoutIfNeeded()
-//		collectionView.contentOffset = contentOffset
+		collectionView.contentOffset = contentOffset
 		makeCursorVisibleIfNecessary()
 	}
 	
