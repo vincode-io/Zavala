@@ -1625,6 +1625,7 @@ extension EditorViewController: LinkViewControllerDelegate {
 		guard let textRowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
 		
 		if cursorCoordinates.isInNotes {
+			textRowCell.noteTextView?.becomeFirstResponder()
 			textRowCell.noteTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
 		} else {
 			textRowCell.topicTextView?.becomeFirstResponder()
