@@ -16,12 +16,12 @@ class MarkdownListVisitor {
 		markdown.append(String(repeating: "\t", count: indentLevel))
 		
 		if visited.isComplete {
-			markdown.append("* ~~\(visited.topicMarkdown ?? "")~~")
+			markdown.append("* ~~\(visited.topicMarkdown(representation: .markdown) ?? "")~~")
 		} else {
-			markdown.append("* \(visited.topicMarkdown ?? "")")
+			markdown.append("* \(visited.topicMarkdown(representation: .markdown) ?? "")")
 		}
 		
-		if let noteMarkdown = visited.noteMarkdown, !noteMarkdown.isEmpty {
+		if let noteMarkdown = visited.noteMarkdown(representation: .markdown), !noteMarkdown.isEmpty {
 			markdown.append("\n\n")
 			let paragraphs = noteMarkdown.components(separatedBy: "\n\n")
 			for paragraph in paragraphs {

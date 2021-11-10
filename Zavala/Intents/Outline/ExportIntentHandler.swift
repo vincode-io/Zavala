@@ -33,26 +33,26 @@ class ExportIntentHandler: NSObject, ZavalaIntentHandler, ExportIntentHandling {
 		switch intent.exportType {
 		case .opml:
 			if let opmlData = outline.opml().data(using: .utf8) {
-				response.exportFile = INFile(data: opmlData, filename: outline.fileName(withSuffix: DataRepresentation.opml.suffix), typeIdentifier: DataRepresentation.opml.typeIdentifier)
+				response.exportFile = INFile(data: opmlData, filename: outline.filename(representation: DataRepresentation.opml), typeIdentifier: DataRepresentation.opml.typeIdentifier)
 			}
 		case .markdownDoc:
 			if let markdownData = outline.markdownDoc().data(using: .utf8) {
-				response.exportFile = INFile(data: markdownData, filename: outline.fileName(withSuffix: DataRepresentation.markdown.suffix), typeIdentifier: DataRepresentation.markdown.typeIdentifier)
+				response.exportFile = INFile(data: markdownData, filename: outline.filename(representation: DataRepresentation.markdown), typeIdentifier: DataRepresentation.markdown.typeIdentifier)
 			}
 		case .markdownList:
 			if let markdownData = outline.markdownList().data(using: .utf8) {
-				response.exportFile = INFile(data: markdownData, filename: outline.fileName(withSuffix: DataRepresentation.markdown.suffix), typeIdentifier: DataRepresentation.markdown.typeIdentifier)
+				response.exportFile = INFile(data: markdownData, filename: outline.filename(representation: DataRepresentation.markdown), typeIdentifier: DataRepresentation.markdown.typeIdentifier)
 			}
 		case .pdfDoc:
 			let textView = UITextView()
 			textView.attributedText = outline.printDoc()
 			let pdfData = textView.generatePDF()
-			response.exportFile = INFile(data: pdfData, filename: outline.fileName(withSuffix: DataRepresentation.pdf.suffix), typeIdentifier: DataRepresentation.pdf.typeIdentifier)
+			response.exportFile = INFile(data: pdfData, filename: outline.filename(representation: DataRepresentation.pdf), typeIdentifier: DataRepresentation.pdf.typeIdentifier)
 		case .pdfList:
 			let textView = UITextView()
 			textView.attributedText = outline.printList()
 			let pdfData = textView.generatePDF()
-			response.exportFile = INFile(data: pdfData, filename: outline.fileName(withSuffix: DataRepresentation.pdf.suffix), typeIdentifier: DataRepresentation.pdf.typeIdentifier)
+			response.exportFile = INFile(data: pdfData, filename: outline.filename(representation: DataRepresentation.pdf), typeIdentifier: DataRepresentation.pdf.typeIdentifier)
 		default:
 			break
 		}

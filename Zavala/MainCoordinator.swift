@@ -353,14 +353,14 @@ extension MainCoordinator {
 	}
 	
     func exportPDFsForOutline(_ pdfs: [(outline: Outline, attrString: NSAttributedString)]) {
-        var exports = [(data: Data, fileName: String)]()
+        var exports = [(data: Data, filename: String)]()
         
         for pdf in pdfs {
             let textView = UITextView()
             textView.attributedText = pdf.attrString
             let data = textView.generatePDF()
-			let fileName = pdf.outline.fileName(withSuffix: DataRepresentation.pdf.suffix)
-            exports.append((data: data, fileName: fileName))
+			let filename = pdf.outline.filename(representation: DataRepresentation.pdf)
+            exports.append((data: data, filename: filename))
         }
 		
 		export(exports)
@@ -369,7 +369,7 @@ extension MainCoordinator {
 	func exportMarkdownDocsForOutlines(_ outlines: [Outline]) {
         export(outlines.compactMap {
             if let data = $0.markdownDoc().data(using: .utf8) {
-				return (data: data, fileName: $0.fileName(withSuffix: DataRepresentation.markdown.suffix))
+				return (data: data, filename: $0.filename(representation: DataRepresentation.markdown))
             }
             return nil
         })
@@ -378,7 +378,7 @@ extension MainCoordinator {
 	func exportMarkdownListsForOutlines(_ outlines: [Outline]) {
         export(outlines.compactMap {
             if let data = $0.markdownList().data(using: .utf8) {
-                return (data: data, fileName: $0.fileName(withSuffix: DataRepresentation.markdown.suffix))
+                return (data: data, filename: $0.filename(representation: DataRepresentation.markdown))
             }
             return nil
         })
@@ -387,16 +387,16 @@ extension MainCoordinator {
 	func exportOPMLsForOutlines(_ outlines: [Outline]) {
         export(outlines.compactMap {
             if let data = $0.opml().data(using: .utf8) {
-				return (data: data, fileName: $0.fileName(withSuffix: DataRepresentation.opml.suffix))
+				return (data: data, filename: $0.filename(representation: DataRepresentation.opml))
             }
             return nil
         })
 	}
 	
-    func export(_ exports: [(data: Data, fileName: String)]) {
+    func export(_ exports: [(data: Data, filename: String)]) {
         var tempFiles = [URL]()
         for export in exports {
-            let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(export.fileName)
+            let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(export.filename)
             do {
                 try export.data.write(to: tempFile)
             } catch {

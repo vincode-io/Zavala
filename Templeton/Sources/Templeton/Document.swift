@@ -53,6 +53,13 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
+	public var disambiguator: Int? {
+		switch self {
+		case .outline(let outline):
+			return outline.disambiguator
+		}
+	}
+	
 	public var string: String? {
 		switch self {
 		case .outline(let outline):
@@ -257,6 +264,13 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return Document.outline(outline.duplicate())
+		}
+	}
+	
+	public func filename(representation: DataRepresentation) -> String {
+		switch self {
+		case .outline(let outline):
+			return outline.filename(representation: representation)
 		}
 	}
 	

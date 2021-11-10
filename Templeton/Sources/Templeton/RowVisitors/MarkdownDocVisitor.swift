@@ -24,8 +24,8 @@ class MarkdownDocVisitor {
 			indentLevel = indentLevel - 1
 		}
 
-		if let topicMarkdown = visited.topicMarkdown, !topicMarkdown.isEmpty {
-			if let noteMarkdown = visited.noteMarkdown, !noteMarkdown.isEmpty {
+		if let topicMarkdown = visited.topicMarkdown(representation: .markdown), !topicMarkdown.isEmpty {
+			if let noteMarkdown = visited.noteMarkdown(representation: .markdown), !noteMarkdown.isEmpty {
 				markdown.append("\n\n")
 				markdown.append(String(repeating: "#", count: indentLevel + 2))
 				markdown.append(" \(topicMarkdown)")
@@ -46,7 +46,7 @@ class MarkdownDocVisitor {
 				previousRowWasParagraph = false
 			}
 		} else {
-			if let noteMarkdown = visited.noteMarkdown, !noteMarkdown.isEmpty {
+			if let noteMarkdown = visited.noteMarkdown(representation: .markdown), !noteMarkdown.isEmpty {
 				markdown.append("\n\n\(noteMarkdown)")
 				previousRowWasParagraph = true
 			} else {

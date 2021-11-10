@@ -208,6 +208,13 @@ public final class Account: NSObject, Identifiable, Codable {
 		return document
 	}
 	
+	public func resolveLinks() {
+		guard let documents = documents else { return }
+		for outline in documents.compactMap({ $0.outline }) {
+			outline.resolveLinks()
+		}
+	}
+	
 	public func createOutline(title: String? = nil, tags: [Tag]? = nil) -> Document {
 		let outline = Outline(parentID: id, title: title)
 		if documents == nil {
@@ -300,6 +307,29 @@ public final class Account: NSObject, Identifiable, Codable {
 
 	public func findDocument(_ entityID: EntityID) -> Document? {
 		return findDocument(documentUUID: entityID.documentUUID)
+	}
+	
+	public func findDocument(filename: String) -> Document? {
+		var title = filename
+		var disambiguator: Int? = nil
+		
+		if let periodIndex = filename.lastIndex(of: ".") {
+			title = String(filename.prefix(upTo: periodIndex))
+		}
+		
+		if let underscoreIndex = filename.lastIndex(of: "-") {
+			if underscoreIndex < title.endIndex {
+				let disambiguatorIndex = title.index(after: underscoreIndex)
+				disambiguator = Int(title.suffix(from: disambiguatorIndex))
+			}
+			title = String(filename.prefix(upTo: underscoreIndex))
+		}
+
+		title = title.replacingOccurrences(of: "_", with: " ")
+		
+		return documents?.filter({ document in
+			return document.title == title && document.disambiguator == disambiguator
+		}).first
 	}
 	
 	@discardableResult

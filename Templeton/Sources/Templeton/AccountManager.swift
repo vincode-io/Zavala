@@ -160,16 +160,6 @@ public final class AccountManager {
 		}
 	}
 	
-	/// Don't use this function. It will fail silently if the outline's rows aren't loaded at the time it is called.
-	public func findRow(_ entityID: EntityID) -> Row? {
-		if case .row(let accountID, let documentUUID, _) = entityID,
-		   let account = findAccount(accountID: accountID),
-		   let outline = account.findDocument(documentUUID: documentUUID)?.outline {
-			return outline.findRow(id: entityID.rowUUID)
-		}
-		return nil
-	}
-	
 	public func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
 		cloudKitAccount?.cloudKitManager?.receiveRemoteNotification(userInfo: userInfo, completion: completion)
 	}
@@ -185,14 +175,20 @@ public final class AccountManager {
 	}
 	
 	public func suspend() {
+		for account in activeAccounts {
+			account.resolveLinks()
+		}
+
 		accountFiles.values.forEach {
 			$0.save()
 			$0.suspend()
 		}
+
 		activeDocuments.forEach {
 			$0.save()
 			$0.suspend()
 		}
+
 		cloudKitAccount?.cloudKitManager?.suspend()
 	}
 	

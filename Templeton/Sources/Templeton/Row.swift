@@ -135,25 +135,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public internal(set) var isComplete: Bool
 
 	public var isNoteEmpty: Bool {
-		return noteMarkdown == nil
-	}
-	
-	public var topicMarkdown: String? {
-		get {
-			return convertAttrString(topic, isInNotes: false)
-		}
-		set {
-			topic = convertMarkdown(newValue, isInNotes: false)
-		}
-	}
-	
-	public var noteMarkdown: String? {
-		get {
-			return convertAttrString(note, isInNotes: true)
-		}
-		set {
-			note = convertMarkdown(newValue, isInNotes: true)
-		}
+		return note == nil
 	}
 	
 	public var topic: NSAttributedString? {
@@ -231,9 +213,9 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		set {
 			switch newValue {
 			case .topicMarkdown(let topicMarkdown):
-				self.topicMarkdown = topicMarkdown
+				self.topic = convertMarkdown(topicMarkdown, isInNotes: false)
 			case .noteMarkdown(let noteMarkdown):
-				self.noteMarkdown = noteMarkdown
+				self.note = convertMarkdown(noteMarkdown, isInNotes: true)
 			case .topic(let topic):
 				self.topic = topic
 			case .note(let note):
@@ -303,8 +285,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		self.isExpanded = true
 		self.rowOrder = [String]()
 		super.init()
-		self.topicMarkdown = topicMarkdown
-		self.noteMarkdown = noteMarkdown
+		self.topic = convertMarkdown(topicMarkdown, isInNotes: false)
+		self.note = convertMarkdown(noteMarkdown, isInNotes: true)
 	}
 	
 	public init(from decoder: Decoder) throws {
@@ -370,6 +352,14 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		try container.encode(rowOrder, forKey: .rowOrder)
 	}
 	
+	public func topicMarkdown(representation: DataRepresentation) -> String? {
+		return convertAttrString(topic, isInNotes: false, representation: representation)
+	}
+	
+	public func noteMarkdown(representation: DataRepresentation) -> String? {
+		return convertAttrString(note, isInNotes: true, representation: representation)
+	}
+	
 	public func duplicate(newOutline: Outline) -> Row {
 		let row = Row(outline: newOutline)
 
@@ -383,14 +373,14 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return row
 	}
 	
-	public func importText(topicMarkdown: String?, noteMarkdown: String?, images: [String: Data]?) {
+	public func importRow(topicMarkdown: String?, noteMarkdown: String?, images: [String: Data]?) {
 		guard let regEx = try? NSRegularExpression(pattern: Self.markdownImagePattern, options: []) else {
 			return
 		}
 		
 		var matchedImages = [Image]()
 		
-		func replaceImageMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
+		func importMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
 			if let markdown = markdown {
 				let mangledMarkdown = markdown.replacingOccurrences(of: "![", with: "!]")
 				let attrString = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
@@ -418,14 +408,16 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 					}
 				}
 				
+				resolveLinks(attrString: attrString)
+				
 				return attrString
 			}
 			
 			return nil
 		}
 		
-		self.topic = replaceImageMarkdown(topicMarkdown, isInNotes: false)
-		self.note = replaceImageMarkdown(noteMarkdown, isInNotes: true)
+		self.topic = importMarkdown(topicMarkdown, isInNotes: false)
+		self.note = importMarkdown(noteMarkdown, isInNotes: true)
 		
 		outline?.updateImages(rowID: id, images: matchedImages)
 	}
@@ -535,6 +527,20 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return visitor.markdown
 	}
 	
+	public func resolveLinks() {
+		if let topic = topic {
+			let mutableTopic = NSMutableAttributedString(attributedString: topic)
+			resolveLinks(attrString: mutableTopic)
+			self.topic = mutableTopic
+		}
+		
+		if let note = note {
+			let mutableNote = NSMutableAttributedString(attributedString: note)
+			resolveLinks(attrString: mutableNote)
+			self.note = mutableNote
+		}
+	}
+	
 	public func visit(visitor: (Row) -> Void) {
 		visitor(self)
 	}
@@ -583,7 +589,7 @@ extension Row {
 			}
 		}
 		
-//		let attachment = MetadataTextAttachment(data: nil, ofType: "org.opml.opml")
+//		let attachment = MetadataTextAttachment(data: nil, ofType: DataRepresentation.opml.typeIdentifier)
 //		attachment.configure(key: "Due", value: "12/25/2021", level: level)
 //		let metaAttrText = NSAttributedString(attachment: attachment)
 //		mutableAttrString.insert(metaAttrText, at: mutableAttrString.length)
@@ -599,8 +605,8 @@ extension Row {
 		let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
 		var images = [Image]()
 		
-		mutableAttrString.enumerateAttribute(.attachment, in: .init(location: 0, length: mutableAttrString.length), options: []) { (attribute, range, _) in
-			if let imageTextAttachment = attribute as? ImageTextAttachment, let imageUUID = imageTextAttachment.imageUUID, let pngData = imageTextAttachment.image?.pngData() {
+		mutableAttrString.enumerateAttribute(.attachment, in: .init(location: 0, length: mutableAttrString.length), options: []) { (value, range, _) in
+			if let imageTextAttachment = value as? ImageTextAttachment, let imageUUID = imageTextAttachment.imageUUID, let pngData = imageTextAttachment.image?.pngData() {
 				let entityID = EntityID.image(outline.id.accountID, outline.id.documentUUID, id, imageUUID)
 				let image = Image(id: entityID, isInNotes: isNotes, offset: range.location, data: pngData)
 				images.append(image)
@@ -611,28 +617,40 @@ extension Row {
 		return (mutableAttrString, images)
 	}
 	
-	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool) -> String? {
-		if let attrString = attrString, let images = images?.filter({ $0.isInNotes == isInNotes }), !images.isEmpty {
-			let result = NSMutableAttributedString(attributedString: attrString)
+	private func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, representation: DataRepresentation) -> String? {
+		guard let attrString = attrString else { return nil	}
+
+		let result = NSMutableAttributedString(attributedString: attrString)
+		
+		result.enumerateAttribute(.link, in: .init(location: 0, length: result.length), options: []) { (value, range, _) in
+			guard let url = value as? URL,
+				  let entityID = EntityID(url: url),
+				  let document = AccountManager.shared.findDocument(entityID),
+				  let newURL = URL(string: document.filename(representation: representation)) else { return }
+			
+			result.removeAttribute(.link, range: range)
+			result.addAttribute(.link, value: newURL, range: range)
+		}
+
+		if let images = images?.filter({ $0.isInNotes == isInNotes }), !images.isEmpty {
 			let sortedImages = images.sorted(by: { $0.offset > $1.offset })
 			for image in sortedImages {
 				let markdown = NSAttributedString(string: "![](\(image.id.imageUUID).png)")
 				result.insert(markdown, at: image.offset)
 			}
-			return result.markdownRepresentation
-		} else {
-			return attrString?.markdownRepresentation
 		}
+
+		return result.markdownRepresentation
 	}
 	
-	func convertMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
+	private func convertMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
 		guard let markdown = markdown, let regEx = try? NSRegularExpression(pattern: Self.markdownImagePattern, options: []) else {
 			return nil
 		}
 
 		let mangledMarkdown = markdown.replacingOccurrences(of: "![", with: "!]")
-		let attrString = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
-		let strippedString = attrString.string
+		let result = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
+		let strippedString = result.string
 		let matches = regEx.allMatches(in: strippedString)
 		
 		for match in matches {
@@ -640,30 +658,45 @@ extension Row {
 				continue
 			}
 			
-			let currentString = attrString.string
+			let currentString = result.string
 			let wholeString = strippedString[wholeRange]
 			guard let wholeStringRange = currentString.range(of: wholeString) else {
 				continue
 			}
 			
 			let offset = currentString[currentString.startIndex..<wholeStringRange.lowerBound].utf16.count
-			attrString.replaceCharacters(in: NSRange(location: offset, length: wholeString.utf16.count), with: "")
+			result.replaceCharacters(in: NSRange(location: offset, length: wholeString.utf16.count), with: "")
 
 			let imageUUID = String(strippedString[captureRange])
 			let imageID = EntityID.image(entityID.accountID, entityID.documentUUID, entityID.rowUUID, imageUUID)
 			if let image = findImage(id: imageID) {
-				insertImageAttachment(attrString: attrString, image: image, offset: offset)
+				insertImageAttachment(attrString: result, image: image, offset: offset)
 			}
 		}
 		
-		return attrString
+		resolveLinks(attrString: result)
+
+		return result
 	}
 	
-	func insertImageAttachment(attrString: NSMutableAttributedString, image: Image, offset: Int) {
+	private func insertImageAttachment(attrString: NSMutableAttributedString, image: Image, offset: Int) {
 		let attachment = ImageTextAttachment(data: image.data, ofType: kUTTypePNG as String)
 		attachment.imageUUID = image.id.imageUUID
 		let imageAttrText = NSAttributedString(attachment: attachment)
 		attrString.insert(imageAttrText, at: offset)
+	}
+	
+	private func resolveLinks(attrString: NSMutableAttributedString) {
+		attrString.enumerateAttribute(.link, in: .init(location: 0, length: attrString.length), options: []) { (value, range, _) in
+			guard let url = value as? URL, url.scheme == nil else { return }
+
+			if let documentURL = outline?.account?.findDocument(filename: url.path)?.id.url {
+				attrString.removeAttribute(.link, range: range)
+				attrString.addAttribute(.link, value: documentURL, range: range)
+			} else {
+				outline?.isBadLinks = true
+			}
+		}
 	}
 	
 }

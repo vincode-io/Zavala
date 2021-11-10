@@ -28,7 +28,7 @@ public extension RowContainer {
 			let noteMarkdown = rowIndexer.element?.attribute(by: "_note")?.text
 			
 			let row = Row(outline: outline)
-			row.importText(topicMarkdown: topicMarkdown, noteMarkdown: noteMarkdown, images: images)
+			row.importRow(topicMarkdown: topicMarkdown, noteMarkdown: noteMarkdown, images: images)
 
 			if rowIndexer.element?.attribute(by: "_status")?.text == "checked" {
 				row.isComplete = true

@@ -11,11 +11,13 @@ import Templeton
 extension IntentRow {
 	
 	convenience init(_ row: Row) {
-		self.init(identifier: row.entityID.description, display: row.topicMarkdown ?? "")
+		let topicMarkdown = row.topicMarkdown(representation: .markdown)
+		
+		self.init(identifier: row.entityID.description, display: topicMarkdown ?? "")
 		entityID = IntentEntityID(row.entityID)
 		
-		topic = row.topicMarkdown
-		note = row.noteMarkdown
+		topic = topicMarkdown
+		note = row.noteMarkdown(representation: .markdown)
 		
 		complete = NSNumber(booleanLiteral: row.isComplete)
 		expanded = NSNumber(booleanLiteral: row.isExpanded)

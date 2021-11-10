@@ -76,6 +76,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public internal(set) var title: String?
+	public internal(set) var disambiguator: Int?
 	public internal(set) var ownerName: String?
 	public internal(set) var ownerEmail: String?
 	public internal(set) var ownerURL: String?
@@ -117,6 +118,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	public private(set) var documentLinks: [EntityID]?
 	public private(set) var documentBacklinks: [EntityID]?
+	public internal(set) var isBadLinks: Bool? {
+		didSet {
+			if isBadLinks != oldValue {
+				documentMetaDataDidChange()
+			}
+		}
+	}
 	
 	public var cloudKitZoneName: String? {
 		didSet {
@@ -303,6 +311,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		case id = "id"
 		case syncID = "syncID"
 		case title = "title"
+		case disambiguator = "disambiguator"
 		case created = "created"
 		case updated = "updated"
 		case ownerName = "ownerName"
@@ -318,6 +327,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		case tagIDs = "tagIDS"
 		case documentLinks = "documentLinks"
 		case documentBacklinks = "documentBacklinks"
+		case isBadLinks = "isBadLinks"
 		case cloudKitZoneName = "cloudKitZoneName"
 		case cloudKitZoneOwner = "cloudKitZoneOwner"
 		case cloudKitShareRecordName = "cloudKitShareRecordName"
@@ -516,10 +526,15 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return tagIDs.contains(tag.id)
 	}
 	
-	public func fileName(withSuffix suffix: String) -> String {
+	public func filename(representation: DataRepresentation) -> String {
 		var filename = title ?? "Outline"
-		filename = filename.replacingOccurrences(of: " ", with: "-").trimmingCharacters(in: .whitespaces)
-		filename = "\(filename).\(suffix)"
+		filename = filename.replacingOccurrences(of: " ", with: "_").trimmingCharacters(in: .whitespaces)
+		
+		if let disambiguator = disambiguator {
+			filename = "\(filename)-\(disambiguator)"
+		}
+		
+		filename = "\(filename).\(representation.suffix)"
 		return filename
 	}
 		
@@ -677,6 +692,18 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 		unload()
 		return opml
+	}
+	
+	public func resolveLinks() {
+		guard isBadLinks ?? false, let keyedRows = keyedRows else { return }
+
+		isBadLinks = false
+
+		loadRows()
+		for row in keyedRows.values {
+			row.resolveLinks()
+		}
+		unloadRows()
 	}
 	
 	public func update(title: String?) {
