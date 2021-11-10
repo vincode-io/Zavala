@@ -12,7 +12,7 @@ extension DocumentsViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
 		guard documentContainers?.uniqueAccount != nil else { return false }
-		return session.hasItemsConforming(toTypeIdentifiers: ["org.opml.opml"])
+		return session.hasItemsConforming(toTypeIdentifiers: [DataRepresentation.opml.typeIdentifier])
 	}
 		
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
@@ -20,7 +20,7 @@ extension DocumentsViewController: UICollectionViewDropDelegate {
 
 		for dropItem in coordinator.items {
 			let provider = dropItem.dragItem.itemProvider
-			provider.loadDataRepresentation(forTypeIdentifier: "org.opml.opml") { [weak self] (opmlData, error) in
+			provider.loadDataRepresentation(forTypeIdentifier: DataRepresentation.opml.typeIdentifier) { [weak self] (opmlData, error) in
 				guard let opmlData = opmlData else { return }
 				DispatchQueue.main.async {
                     let tags = self?.documentContainers?.compactMap { ($0 as? TagDocuments)?.tag }

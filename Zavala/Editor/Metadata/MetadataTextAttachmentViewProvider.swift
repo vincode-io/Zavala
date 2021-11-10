@@ -11,7 +11,7 @@ import Templeton
 
 class MetadataTextAttachmentViewProvider: NSTextAttachmentViewProvider {
 	
-	static let fileType = "org.opml.opml"
+	static let fileType = DataRepresentation.opml.typeIdentifier
 
 	override func loadView() {
 		view = (textAttachment as? MetadataTextAttachment)?.view

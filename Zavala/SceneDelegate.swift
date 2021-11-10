@@ -91,7 +91,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			return
 		}
 		
-		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == "opml" }).map({ $0.url })
+		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == DataRepresentation.opml.suffix }).map({ $0.url })
 		mainSplitViewController.importOPMLs(urls: opmlURLs)
 		
 		#if targetEnvironment(macCatalyst)

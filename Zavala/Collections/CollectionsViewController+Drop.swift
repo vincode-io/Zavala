@@ -12,7 +12,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
 		guard !(session.items.first?.localObject is Document) else { return true }
-		return session.hasItemsConforming(toTypeIdentifiers: ["org.opml.opml"])
+		return session.hasItemsConforming(toTypeIdentifiers: [DataRepresentation.opml.typeIdentifier])
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
@@ -54,7 +54,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 		guard let document = dragItem.localObject as? Document else {
 			for dropItem in coordinator.items {
 				let provider = dropItem.dragItem.itemProvider
-				provider.loadDataRepresentation(forTypeIdentifier: "org.opml.opml") { (opmlData, error) in
+				provider.loadDataRepresentation(forTypeIdentifier: DataRepresentation.opml.typeIdentifier) { (opmlData, error) in
 					guard let opmlData = opmlData else { return }
 					DispatchQueue.main.async {
                         var tags: [Tag]? = nil

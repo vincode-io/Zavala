@@ -245,7 +245,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	}
 
 	@objc func importOPML() {
-		let opmlType = UTType(exportedAs: "org.opml.opml")
+		let opmlType = UTType(exportedAs: DataRepresentation.opml.typeIdentifier)
 		let docPicker = UIDocumentPickerViewController(forOpeningContentTypes: [opmlType, .xml])
 		docPicker.delegate = self
 		docPicker.modalPresentationStyle = .formSheet

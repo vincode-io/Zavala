@@ -19,9 +19,9 @@ extension DocumentsViewController: UICollectionViewDragDelegate {
 
 		switch document {
 		case .outline(let outline):
-			let fileName = outline.fileName(withSuffix: "opml")
+			let fileName = outline.fileName(withSuffix: DataRepresentation.opml.suffix)
 			itemProvider.suggestedName = fileName
-			itemProvider.registerFileRepresentation(forTypeIdentifier: "org.opml.opml", visibility: .all) { (completionHandler) -> Progress? in
+			itemProvider.registerFileRepresentation(forTypeIdentifier: DataRepresentation.opml.typeIdentifier, visibility: .all) { (completionHandler) -> Progress? in
 				let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
 				do {
 					let opml = outline.opml()
