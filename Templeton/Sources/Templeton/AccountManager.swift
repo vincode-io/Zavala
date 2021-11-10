@@ -216,8 +216,12 @@ private extension AccountManager {
 	}
 
 	@objc func documentTitleDidChange(_ note: Notification) {
-		guard let account = (note.object as? Document)?.account else { return }
+		guard let document = note.object as? Document, let account = document.account else { return }
 		markAsDirty(account)
+		
+		if let outline = document.outline {
+			account.fixBadLinks(excluding: outline)
+		}
 	}
 	
 	@objc func documentMetadataDidChange(_ note: Notification) {

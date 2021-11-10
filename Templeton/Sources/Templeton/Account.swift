@@ -203,11 +203,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		
 		outline.updateAllLinkRelationships()
 		
-		for candidate in documents?.compactMap({ $0.outline }) ?? [Outline]() {
-			if candidate != outline {
-				candidate.fixBadLinks()
-			}
-		}
+		fixBadLinks(excluding: outline)
 		
 		outline.forceSave()
 		outline.unloadRows()
@@ -418,6 +414,14 @@ public final class Account: NSObject, Identifiable, Codable {
 		return idToTagsDictionary[tagID]
 	}
 
+	func fixBadLinks(excluding: Outline) {
+		for outline in documents?.compactMap({ $0.outline }) ?? [Outline]() {
+			if outline != excluding {
+				outline.fixBadLinks()
+			}
+		}
+	}
+	
 	func accountDidInitialize() {
 		NotificationCenter.default.post(name: .AccountDidInitialize, object: self, userInfo: nil)
 	}

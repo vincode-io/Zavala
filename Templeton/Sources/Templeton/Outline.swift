@@ -1811,7 +1811,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		rowsFile = RowsFile(outline: self)
 		rowsFile?.load()
 		prepareRowsForProcessing()
-		fixBadLinks()
 	}
 	
 	public func unloadRows() {
