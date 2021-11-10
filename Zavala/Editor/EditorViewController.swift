@@ -2044,14 +2044,12 @@ extension EditorViewController {
 	private func restoreScrollPosition() {
 		let rowCount = collectionView.numberOfItems(inSection: adjustedRowsSection)
 		if let verticleScrollState = outline?.verticleScrollState, verticleScrollState != 0, verticleScrollState < rowCount {
-			collectionView.isHidden = true
 			collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: adjustedRowsSection), at: .top, animated: false)
 			DispatchQueue.main.async {
 				let rowCount = self.collectionView.numberOfItems(inSection: self.adjustedRowsSection)
 				if verticleScrollState < rowCount {
 					self.collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: self.adjustedRowsSection), at: .top, animated: false)
 				}
-				self.collectionView.isHidden = false
 			}
 		} else {
 			if collectionView.numberOfSections > 0 && collectionView.numberOfItems(inSection: 0) > 0 {
