@@ -202,17 +202,17 @@ public final class Account: NSObject, Identifiable, Codable {
 		saveToCloudKit(document)
 		
 		outline.updateAllLinkRelationships()
+		
+		for candidate in documents?.compactMap({ $0.outline }) ?? [Outline]() {
+			if candidate != outline {
+				candidate.fixBadLinks()
+			}
+		}
+		
 		outline.forceSave()
 		outline.unloadRows()
-		
+
 		return document
-	}
-	
-	public func resolveLinks() {
-		guard let documents = documents else { return }
-		for outline in documents.compactMap({ $0.outline }) {
-			outline.resolveLinks()
-		}
 	}
 	
 	public func createOutline(title: String? = nil, tags: [Tag]? = nil) -> Document {

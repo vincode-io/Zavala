@@ -694,18 +694,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return opml
 	}
 	
-	public func resolveLinks() {
-		guard isBadLinks ?? false, let keyedRows = keyedRows else { return }
-
-		isBadLinks = false
-
-		loadRows()
-		for row in keyedRows.values {
-			row.resolveLinks()
-		}
-		unloadRows()
-	}
-	
 	public func update(title: String?) {
 		self.title = title
 		updated = Date()
@@ -1823,13 +1811,14 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		rowsFile = RowsFile(outline: self)
 		rowsFile?.load()
 		prepareRowsForProcessing()
+		fixBadLinks()
 	}
 	
 	public func unloadRows() {
 		rowsFile?.save()
 		
 		guard !isBeingViewed else { return }
-		
+
 		rowsFile?.suspend()
 		rowsFile = nil
 		shadowTable = nil
@@ -1979,6 +1968,38 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		let currentDocumentLinks = documentLinks ?? [EntityID]()
 		let diff = newDocumentLinks.difference(from: currentDocumentLinks)
 		processLinkDiff(diff)
+	}
+		
+	public func fixBadLinks() {
+		guard isBadLinks ?? false else { return }
+		
+		loadRows()
+		
+		if let keyedRows = keyedRows {
+			beginCloudKitBatchRequest()
+			var cumulativeActionsTaken = LinkResolvingActions()
+			
+			for row in keyedRows.values {
+				let actionsTaken = row.resolveLinks()
+				cumulativeActionsTaken.formUnion(actionsTaken)
+				
+				if actionsTaken.contains(.fixedLink) {
+					createLinkRelationships(for: [row])
+					outlineContentDidChange()
+					requestCloudKitUpdate(for: row.entityID)
+				}
+			}
+			
+			if !cumulativeActionsTaken.contains(.foundBadLink) {
+				isBadLinks = false
+				requestCloudKitUpdate(for: id)
+			}
+			
+			endCloudKitBatchRequest()
+		}
+		
+		unloadRows()
+		
 	}
 	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {

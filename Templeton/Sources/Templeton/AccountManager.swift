@@ -175,10 +175,6 @@ public final class AccountManager {
 	}
 	
 	public func suspend() {
-		for account in activeAccounts {
-			account.resolveLinks()
-		}
-
 		accountFiles.values.forEach {
 			$0.save()
 			$0.suspend()

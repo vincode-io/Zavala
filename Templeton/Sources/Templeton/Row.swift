@@ -24,6 +24,18 @@ enum RowError: LocalizedError {
 	}
 }
 
+public struct LinkResolvingActions: OptionSet {
+	
+	public static let fixedLink = LinkResolvingActions(rawValue: 1)
+	public static let foundBadLink = LinkResolvingActions(rawValue: 2)
+	
+	public let rawValue: Int
+	public init(rawValue: Int) {
+		self.rawValue = rawValue
+	}
+	
+}
+
 public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable {
 	
 	public static let typeIdentifier = "io.vincode.Zavala.Row"
@@ -527,18 +539,22 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return visitor.markdown
 	}
 	
-	public func resolveLinks() {
+	public func resolveLinks() -> LinkResolvingActions {
+		var actionsTaken = LinkResolvingActions()
+		
 		if let topic = topic {
 			let mutableTopic = NSMutableAttributedString(attributedString: topic)
-			resolveLinks(attrString: mutableTopic)
+			actionsTaken.formUnion(resolveLinks(attrString: mutableTopic))
 			self.topic = mutableTopic
 		}
 		
 		if let note = note {
 			let mutableNote = NSMutableAttributedString(attributedString: note)
-			resolveLinks(attrString: mutableNote)
+			actionsTaken.formUnion(resolveLinks(attrString: mutableNote))
 			self.note = mutableNote
 		}
+		
+		return actionsTaken
 	}
 	
 	public func visit(visitor: (Row) -> Void) {
@@ -686,17 +702,24 @@ extension Row {
 		attrString.insert(imageAttrText, at: offset)
 	}
 	
-	private func resolveLinks(attrString: NSMutableAttributedString) {
+	@discardableResult
+	private func resolveLinks(attrString: NSMutableAttributedString) -> LinkResolvingActions {
+		var actionsTaken = LinkResolvingActions()
+		
 		attrString.enumerateAttribute(.link, in: .init(location: 0, length: attrString.length), options: []) { (value, range, _) in
 			guard let url = value as? URL, url.scheme == nil else { return }
 
 			if let documentURL = outline?.account?.findDocument(filename: url.path)?.id.url {
 				attrString.removeAttribute(.link, range: range)
 				attrString.addAttribute(.link, value: documentURL, range: range)
+				actionsTaken.insert(.fixedLink)
 			} else {
 				outline?.isBadLinks = true
+				actionsTaken.insert(.foundBadLink)
 			}
 		}
+		
+		return actionsTaken
 	}
 	
 }
