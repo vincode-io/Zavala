@@ -182,6 +182,8 @@ class EditorTextRowTextView: UITextView {
         var attrs = typingAttributes
         attrs.removeValue(forKey: .link)
         let attrText = NSMutableAttributedString(string: text, attributes: attrs)
+		
+		textStorage.beginEditing()
         textStorage.replaceCharacters(in: range, with: attrText)
 
         let newRange = NSRange(location: range.location, length: attrText.length)
@@ -192,11 +194,10 @@ class EditorTextRowTextView: UITextView {
 				textStorage.removeAttribute(.link, range: newRange)
 			}
 		}
+		textStorage.endEditing()
 
         selectedRange = NSRange(location: range.location + text.count, length: 0)
         
-        isTextChanged = true
-        saveText()
         processTextChanges()
 	}
 	
@@ -207,12 +208,14 @@ class EditorTextRowTextView: UITextView {
 		let imageAttrText = NSAttributedString(attachment: attachment)
 
 		let savedTypingAttributes = typingAttributes
+
+		textStorage.beginEditing()
 		textStorage.replaceCharacters(in: range, with: imageAttrText)
+		textStorage.endEditing()
+
 		selectedRange = .init(location: range.location + imageAttrText.length, length: 0)
 		typingAttributes = savedTypingAttributes
 
-        isTextChanged = true
-        saveText()
 		processTextChanges()
 	}
 	
