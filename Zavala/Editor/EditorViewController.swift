@@ -1484,7 +1484,6 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 	
     func editorTextRowReload(row: Row) {
 		layoutEditor()
-//        reload(row: row)
 	}
 	
 	func editorTextRowMakeCursorVisibleIfNecessary() {
@@ -1938,26 +1937,13 @@ extension EditorViewController {
 	}
 	
 	private func layoutEditor() {
-		let contentOffset = collectionView.contentOffset
+// I forget why this was needed at one point. Keep it around until we are sure we don't need it anymore.
+//		let contentOffset = collectionView.contentOffset
 		collectionView.collectionViewLayout.invalidateLayout()
 		collectionView.layoutIfNeeded()
-		collectionView.contentOffset = contentOffset
+//		collectionView.contentOffset = contentOffset
 		makeCursorVisibleIfNecessary()
 	}
-	
-//    private func reload(row: Row) {
-//		if let rowIndex = row.shadowTableIndex {
-//			let contentOffset = collectionView.contentOffset
-//			let currentCoordinates = CursorCoordinates.bestCoordinates
-//			UIView.performWithoutAnimation {
-//				self.collectionView.reloadItems(at: [IndexPath(row: rowIndex, section: self.adjustedRowsSection)])
-//				self.collectionView.contentOffset = contentOffset
-//				if let coordinates = currentCoordinates {
-//					self.restoreCursorPosition(coordinates, scroll: false)
-//				}
-//			}
-//		}
-//	}
 	
 	private func applyChanges(_ changes: OutlineElementChanges) {
 		if !changes.isOnlyReloads {
