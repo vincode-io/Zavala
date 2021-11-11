@@ -618,7 +618,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func markdownDoc() -> String {
-		loadRows()
+		load()
 		
 		var md = "# \(title ?? "")"
 		let visitor = MarkdownDocVisitor()
@@ -627,12 +627,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 		md.append(visitor.markdown)
 
-		unloadRows()
+		unload()
 		return md
 	}
 	
 	public func markdownList() -> String {
-		loadRows()
+		load()
 		
 		var md = "# \(title ?? "")\n\n"
 		rows.forEach {
@@ -642,7 +642,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			md.append("\n")
 		}
 		
-		unloadRows()
+		unload()
 		return md
 	}
 	
