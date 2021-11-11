@@ -257,7 +257,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var insertImageButton: UIBarButtonItem!
 	private var linkButton: UIBarButtonItem!
 
-	private var messageBox: UIView?
+	private var messageLabel: UILabel?
 	
 	private(set) var outline: Outline?
 	
@@ -664,26 +664,19 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	// MARK: API
 	
 	func showMessage(_ message: String) {
-		messageBox?.removeFromSuperview()
-		messageBox = UIView()
-		messageBox!.translatesAutoresizingMaskIntoConstraints = false
+		messageLabel?.removeFromSuperview()
 		
-		let messageLabel = UILabel()
-		messageLabel.font = UIFont.preferredFont(forTextStyle: .title1)
-		messageLabel.textColor = .tertiaryLabel
-		messageLabel.translatesAutoresizingMaskIntoConstraints = false
-		messageLabel.text = message
+		messageLabel = UILabel()
+		messageLabel!.font = UIFont.preferredFont(forTextStyle: .title1)
+		messageLabel!.textColor = .tertiaryLabel
+		messageLabel!.translatesAutoresizingMaskIntoConstraints = false
+		messageLabel!.text = message
 
-		messageBox!.addSubview(messageLabel)
-		collectionView.addSubview(messageBox!)
+		collectionView.addSubview(messageLabel!)
 		
 		NSLayoutConstraint.activate([
-			messageBox!.topAnchor.constraint(equalTo: collectionView.safeAreaLayoutGuide.topAnchor),
-			messageBox!.leadingAnchor.constraint(equalTo: collectionView.safeAreaLayoutGuide.leadingAnchor),
-			messageBox!.trailingAnchor.constraint(equalTo: collectionView.safeAreaLayoutGuide.trailingAnchor),
-			messageBox!.bottomAnchor.constraint(equalTo: collectionView.safeAreaLayoutGuide.centerYAnchor),
-			messageLabel.centerXAnchor.constraint(equalTo: messageBox!.centerXAnchor),
-			messageLabel.centerYAnchor.constraint(equalTo: messageBox!.centerYAnchor)
+			messageLabel!.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
+			messageLabel!.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor, constant: -100)
 		])
 	}
 	
@@ -691,8 +684,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		guard outline != newOutline else { return }
 		isOutlineNewFlag = isNew
 		
-		messageBox?.removeFromSuperview()
-		messageBox = nil
+		messageLabel?.removeFromSuperview()
+		messageLabel = nil
 		
 		// On the iPad if we aren't editing a field, clear out the last know coordinates
 		if traitCollection.userInterfaceIdiom == .pad && !UIResponder.isFirstResponderTextField {
