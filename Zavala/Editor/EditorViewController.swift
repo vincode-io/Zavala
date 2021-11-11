@@ -309,6 +309,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	private var isOutlineNewFlag = false
 	private var isShowingAddButton = false
+	private var updateTitleWorkItem: DispatchWorkItem?
 	private var keyboardWorkItem: DispatchWorkItem?
 
 	private var currentKeyboardHeight: CGFloat = 0
@@ -1386,7 +1387,11 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	}
 	
 	func editorTitleDidUpdate(title: String) {
-		outline?.update(title: title)
+		updateTitleWorkItem?.cancel()
+		updateTitleWorkItem = DispatchWorkItem { [weak self] in
+			self?.outline?.update(title: title)
+		}
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: updateTitleWorkItem!)
 	}
 	
 	func editorTitleMoveToTagInput() {

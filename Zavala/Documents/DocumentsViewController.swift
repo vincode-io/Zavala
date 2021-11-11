@@ -43,7 +43,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var importBarButtonItem: UIBarButtonItem?
 
 	private var loadDocumentsQueue = CoalescingQueue(name: "Load Documents", interval: 0.5)
-	private var applySnapshotWorkItem: DispatchWorkItem?
     
     private var lastClick: TimeInterval = Date().timeIntervalSince1970
     private var lastIndexPath: IndexPath? = nil
@@ -204,13 +203,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	@objc func documentTitleDidChange(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
 		reload(document: document)
-
-		applySnapshotWorkItem?.cancel()
-		applySnapshotWorkItem = DispatchWorkItem { [weak self] in
-			guard let self = self else { return }
-			self.loadDocuments(animated: true)
-		}
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: applySnapshotWorkItem!)
+		self.loadDocuments(animated: true)
 	}
 	
 	@objc func documentUpdatedDidChange(_ note: Notification) {
