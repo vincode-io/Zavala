@@ -291,7 +291,8 @@ extension EditorTextRowTextView: NSTextStorageDelegate {
 				}
 
 				if key == .font, let oldFont = attributes[key] as? UIFont, let newFont = font {
-					if oldFont.familyName == "Apple Color Emoji" {
+					let charsInRange = textStorage.attributedSubstring(from: range).string
+					if charsInRange.containsEmoji || charsInRange.containsSymbols {
 						newAttributes[key] = oldFont.withSize(newFont.pointSize)
 					} else {
 						let ufd = oldFont.fontDescriptor.withFamily(newFont.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(newFont.familyName)
