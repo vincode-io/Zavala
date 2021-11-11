@@ -145,12 +145,8 @@ class EditorTextRowContentView: UIView, UIContentView {
 		bullet.removeFromSuperview()
 		disclosureIndicator.removeFromSuperview()
 		
-		let xBounds = NSString(string: "X").boundingRect(
-			with: CGSize(width: Double.infinity, height: Double.infinity),
-			options: [.usesFontLeading, .usesLineFragmentOrigin],
-			attributes: [.font : topicTextView.font!],
-			context: nil)
-		let topAnchorConstant = (xBounds.height / 2) + topicTextView.textContainerInset.top
+		let xHeight = "X".height(withConstrainedWidth: Double.infinity, font: topicTextView.font!)
+		let topAnchorConstant = (xHeight / 2) + topicTextView.textContainerInset.top
 
 		if configuration.row?.rowCount == 0 {
 			addSubview(bullet)
