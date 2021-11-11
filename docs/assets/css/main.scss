@@ -7,6 +7,14 @@
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
 
+body {
+  background-color: white;
+}
+
+.greedy-nav {
+  background-color: white;
+}
+
 .archive__item-body .archive__item-title {
   text-align: center;
 }
@@ -19,6 +27,12 @@
   border-bottom: 0px;
 }
 
+.page__content img {        
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+}
+  
 .page__share {
   border-top: 1px solid #417505;
 }
