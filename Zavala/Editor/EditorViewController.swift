@@ -676,7 +676,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		NSLayoutConstraint.activate([
 			messageLabel!.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
-			messageLabel!.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor, constant: -100)
+			messageLabel!.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor, constant: -50)
 		])
 	}
 	
