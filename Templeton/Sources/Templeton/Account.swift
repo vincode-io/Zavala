@@ -217,7 +217,7 @@ public final class Account: NSObject, Identifiable, Codable {
 	public func disambiguate(document: Document) {
 		guard let documents = documents else { return }
 		
-		if let lastCommon = documents.filter({ $0.title == document.title }).sorted(by: { $0.disambiguator ?? 0 < $1.disambiguator ?? 0 }).last {
+		if let lastCommon = documents.filter({ $0.title == document.title && $0.id != document.id }).sorted(by: { $0.disambiguator ?? 0 < $1.disambiguator ?? 0 }).last {
 			document.update(disambiguator: (lastCommon.disambiguator ?? 1) + 1)
 		}
 	}
