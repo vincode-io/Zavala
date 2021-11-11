@@ -142,6 +142,27 @@ class EditorTextRowTextView: UITextView {
 		CursorCoordinates.updateLastKnownCoordinates()
         return super.resignFirstResponder()
     }
+	
+	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+		switch action {
+		case .toggleUnderline:
+			return false
+		default:
+			return super.canPerformAction(action, withSender: sender)
+		}
+	}
+	
+	override func buildMenu(with builder: UIMenuBuilder) {
+		super.buildMenu(with: builder)
+		
+		if isSelecting {
+			let formattingMenu = UIMenu(title: "", options: .displayInline, children: [toggleBoldCommand, toggleItalicsCommand])
+			builder.insertSibling(formattingMenu, afterMenu: .standardEdit)
+			
+			let editMenu = UIMenu(title: "", options: .displayInline, children: [editLinkCommand])
+			builder.insertSibling(editMenu, afterMenu: .standardEdit)
+		}
+	}
     
     func reloadRow() {
         fatalError("reloadRow has not been implemented")
@@ -214,27 +235,6 @@ class EditorTextRowTextView: UITextView {
 		typingAttributes = savedTypingAttributes
 
 		processTextChanges()
-	}
-	
-	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-		switch action {
-		case .toggleUnderline:
-			return false
-		default:
-			return super.canPerformAction(action, withSender: sender)
-		}
-	}
-	
-	override func buildMenu(with builder: UIMenuBuilder) {
-		super.buildMenu(with: builder)
-		
-		if isSelecting {
-			let formattingMenu = UIMenu(title: "", options: .displayInline, children: [toggleBoldCommand, toggleItalicsCommand])
-			builder.insertSibling(formattingMenu, afterMenu: .standardEdit)
-			
-			let editMenu = UIMenu(title: "", options: .displayInline, children: [editLinkCommand])
-			builder.insertSibling(editMenu, afterMenu: .standardEdit)
-		}
 	}
 	
     // MARK: Actions
