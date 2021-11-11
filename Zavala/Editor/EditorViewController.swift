@@ -71,6 +71,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return outline?.isNotesHidden ?? false
 	}
 	
+	var isSelectAllRowsUnavailable: Bool {
+		if let selected = collectionView?.indexPathsForSelectedItems, !selected.isEmpty {
+			return false
+		}
+		return true
+	}
+	
 	var isDeleteCurrentRowUnavailable: Bool {
 		return currentRows == nil
 	}
@@ -742,6 +749,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		restoreOutlineCursorPosition()
 		restoreScrollPosition()
 		moveCursorToTitleOnNew()
+	}
+	
+	func selectAllRows() {
+		for i in 0..<collectionView.numberOfItems(inSection: adjustedRowsSection) {
+			collectionView.selectItem(at: IndexPath(row: i, section: adjustedRowsSection), animated: false, scrollPosition: [])
+		}
 	}
 	
 	func updatePhoneUI(editMode: Bool) {

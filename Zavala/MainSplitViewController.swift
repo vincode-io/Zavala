@@ -266,6 +266,18 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 	
+	override func selectAll(_ sender: Any?) {
+		guard editorViewController?.isSelectAllRowsUnavailable ?? true else {
+			editorViewController?.selectAllRows()
+			return
+		}
+		
+		guard editorViewController?.isOutlineFunctionsUnavailable ?? true else {
+			documentsViewController?.selectAllDocuments()
+			return
+		}
+	}
+	
 	@objc func sync() {
 		AccountManager.shared.sync()
 	}

@@ -154,6 +154,12 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		}
 	}
 	
+	func selectAllDocuments() {
+		for i in 0..<collectionView.numberOfItems(inSection: 0) {
+			collectionView.selectItem(at: IndexPath(row: i, section: 0), animated: false, scrollPosition: [])
+		}
+	}
+	
 	func deleteCurrentDocuments() {
 		guard let documents = selectedDocuments else { return }
 		deleteDocuments(documents)
