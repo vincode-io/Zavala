@@ -11,9 +11,6 @@ import RSCore
 
 extension Selector {
 	static let editLink = #selector(EditorTextRowTextView.editLink(_:))
-	static let toggleBoldface = #selector(UIResponder.toggleBoldface(_:))
-	static let toggleItalics = #selector(UIResponder.toggleItalics(_:))
-	static let toggleUnderline = #selector(UIResponder.toggleUnderline(_:))
 }
 
 extension NSAttributedString.Key {
