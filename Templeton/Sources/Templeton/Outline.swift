@@ -2216,7 +2216,7 @@ extension Outline {
 		ownerURL = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL] as? String
 		created = record[CloudKitOutlineZone.CloudKitOutline.Fields.created] as? Date
 		updated = record[CloudKitOutlineZone.CloudKitOutline.Fields.updated] as? Date
-		hasAltLinks = record[CloudKitOutlineZone.CloudKitOutline.Fields.hasAltLinks] as? String == "1" ? true : false
+		hasAltLinks = record[CloudKitOutlineZone.CloudKitOutline.Fields.hasAltLinks] as? Bool
 
 		let newRowOrder = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
 		
