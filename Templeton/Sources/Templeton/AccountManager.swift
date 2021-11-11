@@ -222,6 +222,8 @@ private extension AccountManager {
 		if let outline = document.outline {
 			account.fixAltLinks(excluding: outline)
 		}
+
+		account.disambiguate(document: document)
 	}
 	
 	@objc func documentMetadataDidChange(_ note: Notification) {

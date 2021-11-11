@@ -162,6 +162,13 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
+	public func update(disambiguator: Int) {
+		switch self {
+		case .outline(let outline):
+			outline.update(disambiguator: disambiguator)
+		}
+	}
+	
 	public func reassignAccount(_ accountID: Int) {
 		switch self {
 		case .outline(let outline):

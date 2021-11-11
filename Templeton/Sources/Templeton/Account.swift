@@ -199,6 +199,9 @@ public final class Account: NSObject, Identifiable, Codable {
 		
 		outline.zoneID = cloudKitManager?.defaultZone.zoneID
 		let document = Document.outline(outline)
+		
+		disambiguate(document: document)
+		
 		saveToCloudKit(document)
 		
 		outline.updateAllLinkRelationships()
@@ -209,6 +212,14 @@ public final class Account: NSObject, Identifiable, Codable {
 		outline.unloadRows()
 
 		return document
+	}
+	
+	public func disambiguate(document: Document) {
+		guard let documents = documents else { return }
+		
+		if let lastCommon = documents.filter({ $0.title == document.title }).sorted(by: { $0.disambiguator ?? 0 < $1.disambiguator ?? 0 }).last {
+			document.update(disambiguator: (lastCommon.disambiguator ?? 1) + 1)
+		}
 	}
 	
 	public func createOutline(title: String? = nil, tags: [Tag]? = nil) -> Document {
@@ -227,6 +238,8 @@ public final class Account: NSObject, Identifiable, Codable {
                 outline.createTag(tag)
             }
 		}
+		
+		disambiguate(document: document)
 		
 		saveToCloudKit(document)
 		

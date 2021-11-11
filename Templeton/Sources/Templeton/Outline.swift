@@ -701,6 +701,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		requestCloudKitUpdate(for: id)
 	}
 	
+	public func update(disambiguator: Int) {
+		self.disambiguator = disambiguator
+		requestCloudKitUpdate(for: id)
+	}
+	
 	public func update(ownerName: String?) {
 		self.ownerName = ownerName
 		updated = Date()
@@ -2217,6 +2222,7 @@ extension Outline {
 		created = record[CloudKitOutlineZone.CloudKitOutline.Fields.created] as? Date
 		updated = record[CloudKitOutlineZone.CloudKitOutline.Fields.updated] as? Date
 		hasAltLinks = record[CloudKitOutlineZone.CloudKitOutline.Fields.hasAltLinks] as? Bool
+		disambiguator = record[CloudKitOutlineZone.CloudKitOutline.Fields.disambiguator] as? Int
 
 		let newRowOrder = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
 		

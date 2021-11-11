@@ -42,6 +42,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 			static let documentLinks = "documentLinks"
 			static let documentBacklinks = "documentBacklinks"
 			static let hasAltLinks = "hasAltLinks"
+			static let disambiguator = "disambiguator"
 		}
 	}
 	
