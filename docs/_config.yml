@@ -77,7 +77,7 @@ plugins:
   - jekyll-paginate
   - jekyll-include-cache
 
-include: ["_pages"]
+include: ["_pages", "_pages/help"]
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
