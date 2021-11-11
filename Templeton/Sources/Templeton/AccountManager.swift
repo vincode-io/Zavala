@@ -220,7 +220,7 @@ private extension AccountManager {
 		markAsDirty(account)
 		
 		if let outline = document.outline {
-			account.fixBadLinks(excluding: outline)
+			account.fixAltLinks(excluding: outline)
 		}
 	}
 	

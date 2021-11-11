@@ -118,9 +118,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	public private(set) var documentLinks: [EntityID]?
 	public private(set) var documentBacklinks: [EntityID]?
-	public internal(set) var isBadLinks: Bool? {
+	public internal(set) var hasAltLinks: Bool? {
 		didSet {
-			if isBadLinks != oldValue {
+			if hasAltLinks != oldValue {
 				documentMetaDataDidChange()
 			}
 		}
@@ -327,7 +327,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		case tagIDs = "tagIDS"
 		case documentLinks = "documentLinks"
 		case documentBacklinks = "documentBacklinks"
-		case isBadLinks = "isBadLinks"
+		case hasAltLinks = "hasAltLinks"
 		case cloudKitZoneName = "cloudKitZoneName"
 		case cloudKitZoneOwner = "cloudKitZoneOwner"
 		case cloudKitShareRecordName = "cloudKitShareRecordName"
@@ -1969,8 +1969,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		processLinkDiff(diff)
 	}
 		
-	public func fixBadLinks() {
-		guard isBadLinks ?? false else { return }
+	public func fixAltLinks() {
+		guard hasAltLinks ?? false else { return }
 		
 		loadRows()
 		
@@ -1982,15 +1982,15 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 				let actionsTaken = row.resolveLinks()
 				cumulativeActionsTaken.formUnion(actionsTaken)
 				
-				if actionsTaken.contains(.fixedLink) {
+				if actionsTaken.contains(.fixedAltLink) {
 					createLinkRelationships(for: [row])
 					outlineContentDidChange()
 					requestCloudKitUpdate(for: row.entityID)
 				}
 			}
 			
-			if !cumulativeActionsTaken.contains(.foundBadLink) {
-				isBadLinks = false
+			if !cumulativeActionsTaken.contains(.foundAltLink) {
+				hasAltLinks = false
 				requestCloudKitUpdate(for: id)
 			}
 			
@@ -2216,6 +2216,7 @@ extension Outline {
 		ownerURL = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL] as? String
 		created = record[CloudKitOutlineZone.CloudKitOutline.Fields.created] as? Date
 		updated = record[CloudKitOutlineZone.CloudKitOutline.Fields.updated] as? Date
+		hasAltLinks = record[CloudKitOutlineZone.CloudKitOutline.Fields.hasAltLinks] as? String == "1" ? true : false
 
 		let newRowOrder = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
 		

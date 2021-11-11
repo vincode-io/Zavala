@@ -184,6 +184,7 @@ extension CloudKitModifyOperation {
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] = outline.rowOrder
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.documentLinks] = outline.documentLinks?.map { $0.description }
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.documentBacklinks] = outline.documentBacklinks?.map { $0.description }
+		record[CloudKitOutlineZone.CloudKitOutline.Fields.hasAltLinks] = (outline.hasAltLinks ?? false) ? "1" : "0"
 
 		addSave(zoneID, record)
 	}

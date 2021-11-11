@@ -203,7 +203,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		
 		outline.updateAllLinkRelationships()
 		
-		fixBadLinks(excluding: outline)
+		fixAltLinks(excluding: outline)
 		
 		outline.forceSave()
 		outline.unloadRows()
@@ -414,10 +414,10 @@ public final class Account: NSObject, Identifiable, Codable {
 		return idToTagsDictionary[tagID]
 	}
 
-	func fixBadLinks(excluding: Outline) {
+	func fixAltLinks(excluding: Outline) {
 		for outline in documents?.compactMap({ $0.outline }) ?? [Outline]() {
 			if outline != excluding {
-				outline.fixBadLinks()
+				outline.fixAltLinks()
 			}
 		}
 	}

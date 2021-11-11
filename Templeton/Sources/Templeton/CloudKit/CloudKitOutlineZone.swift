@@ -41,6 +41,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 			static let rowOrder = "rowOrder"
 			static let documentLinks = "documentLinks"
 			static let documentBacklinks = "documentBacklinks"
+			static let hasAltLinks = "hasAltLinks"
 		}
 	}
 	

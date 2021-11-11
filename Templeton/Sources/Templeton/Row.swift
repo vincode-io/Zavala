@@ -26,8 +26,8 @@ enum RowError: LocalizedError {
 
 public struct LinkResolvingActions: OptionSet {
 	
-	public static let fixedLink = LinkResolvingActions(rawValue: 1)
-	public static let foundBadLink = LinkResolvingActions(rawValue: 2)
+	public static let fixedAltLink = LinkResolvingActions(rawValue: 1)
+	public static let foundAltLink = LinkResolvingActions(rawValue: 2)
 	
 	public let rawValue: Int
 	public init(rawValue: Int) {
@@ -712,10 +712,10 @@ extension Row {
 			if let documentURL = outline?.account?.findDocument(filename: url.path)?.id.url {
 				attrString.removeAttribute(.link, range: range)
 				attrString.addAttribute(.link, value: documentURL, range: range)
-				actionsTaken.insert(.fixedLink)
+				actionsTaken.insert(.fixedAltLink)
 			} else {
-				outline?.isBadLinks = true
-				actionsTaken.insert(.foundBadLink)
+				outline?.hasAltLinks = true
+				actionsTaken.insert(.foundAltLink)
 			}
 		}
 		
