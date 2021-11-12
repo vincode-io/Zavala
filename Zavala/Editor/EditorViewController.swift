@@ -32,6 +32,7 @@ protocol EditorDelegate: AnyObject {
 	func exportOPML(_: EditorViewController, outline: Outline)
 	func printDoc(_: EditorViewController, outline: Outline)
 	func printList(_: EditorViewController, outline: Outline)
+	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate)
 }
 
 class EditorViewController: UIViewController, MainControllerIdentifiable, UndoableCommandRunner {
@@ -331,6 +332,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	private static var defaultContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
 	
+	private var transition = ImageTransition()
+	
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
@@ -443,11 +446,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
 	}
 
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-		restoreOutlineCursorPosition()
-		restoreScrollPosition()
-	}
+//	override func viewWillAppear(_ animated: Bool) {
+//		super.viewWillAppear(animated)
+//		restoreOutlineCursorPosition()
+//		restoreScrollPosition()
+//	}
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
@@ -1560,6 +1563,13 @@ extension EditorViewController: EditorTextRowViewCellDelegate {
 		editLink(link, text: text, range: range)
 	}
 
+	func editorTextRowZoomImage(_ image: UIImage, rect: CGRect) {
+		transition.maskFrame = collectionView.convert(collectionView.safeAreaLayoutGuide.layoutFrame, to: nil)
+		transition.originFrame = rect
+		transition.originImage = image
+		delegate?.zoomImage(self, image: image, transitioningDelegate: self)
+	}
+
 }
 
 // MARK: EditorOutlineCommandDelegate
@@ -1742,6 +1752,21 @@ extension EditorViewController: UICloudSharingControllerDelegate {
 		AccountManager.shared.sync()
 	}
 
+}
+
+// MARK: UIViewControllerTransitioningDelegate
+
+extension EditorViewController: UIViewControllerTransitioningDelegate {
+
+	func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+		transition.presenting = true
+		return transition
+	}
+	
+	func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+		transition.presenting = false
+		return transition
+	}
 }
 
 // MARK: Helpers

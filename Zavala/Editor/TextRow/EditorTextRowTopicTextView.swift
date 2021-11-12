@@ -22,6 +22,7 @@ protocol EditorTextRowTopicTextViewDelegate: AnyObject {
 	func moveRowRight(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings)
 	func splitRow(_: EditorTextRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
 	func editLink(_: EditorTextRowTopicTextView, _ link: String?, text: String?, range: NSRange)
+	func zoomImage(_: EditorTextRowTopicTextView, _ image: UIImage, rect: CGRect)
 }
 
 class EditorTextRowTopicTextView: EditorTextRowTextView {
@@ -243,4 +244,14 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
         processTextChanges()
     }
     
+	func textView(_ textView: UITextView, shouldInteractWith textAttachment: NSTextAttachment, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+		guard interaction == .invokeDefaultAction,
+			  let firstRect = firstRect(for: characterRange),
+			  let image = textAttachment.image	else { return true }
+		
+		let convertedRect = convert(firstRect, to: nil)
+		editorDelegate?.zoomImage(self, image, rect: convertedRect)
+		return false
+	}
+	
 }

@@ -20,6 +20,7 @@ protocol EditorTextRowNoteTextViewDelegate: AnyObject {
 	func moveCursorTo(_ : EditorTextRowNoteTextView, row: Row)
 	func moveCursorDown(_ : EditorTextRowNoteTextView, row: Row)
 	func editLink(_: EditorTextRowNoteTextView, _ link: String?, text: String?, range: NSRange)
+	func zoomImage(_: EditorTextRowNoteTextView, _ image: UIImage, rect: CGRect)
 }
 
 class EditorTextRowNoteTextView: EditorTextRowTextView {
@@ -175,4 +176,13 @@ extension EditorTextRowNoteTextView: UITextViewDelegate {
         processTextChanges()
     }
     
+	func textView(_ textView: UITextView, shouldInteractWith textAttachment: NSTextAttachment, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+		guard interaction == .invokeDefaultAction,
+			  let firstRect = firstRect(for: characterRange),
+			  let image = textAttachment.image	else { return true }
+		
+		let convertedRect = convert(firstRect, to: nil)
+		editorDelegate?.zoomImage(self, image, rect: convertedRect)
+		return false
+	}
 }

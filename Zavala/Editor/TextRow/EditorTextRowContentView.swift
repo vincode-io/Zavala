@@ -257,6 +257,10 @@ extension EditorTextRowContentView: EditorTextRowTopicTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowEditLink(link, text: text, range: range)
 	}
 	
+	func zoomImage(_ topicRow: EditorTextRowTopicTextView, _ image: UIImage, rect: CGRect) {
+		appliedConfiguration.delegate?.editorTextRowZoomImage(image, rect: rect)
+	}
+
 }
 
 extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
@@ -302,6 +306,10 @@ extension EditorTextRowContentView: EditorTextRowNoteTextViewDelegate {
 		appliedConfiguration.delegate?.editorTextRowEditLink(link, text: text, range: range)
 	}
 	
+	func zoomImage(_ noteRow: EditorTextRowNoteTextView, _ image: UIImage, rect: CGRect) {
+		appliedConfiguration.delegate?.editorTextRowZoomImage(image, rect: rect)
+	}
+
 }
 
 // MARK: Helpers

@@ -26,6 +26,7 @@ protocol EditorTextRowViewCellDelegate: AnyObject {
 	func editorTextRowSplitRow(_: Row, topic: NSAttributedString, cursorPosition: Int)
 	func editorTextRowDeleteRowNote(_ row: Row, rowStrings: RowStrings)
 	func editorTextRowEditLink(_ link: String?, text: String?, range: NSRange)
+	func editorTextRowZoomImage(_ image: UIImage, rect: CGRect)
 }
 
 class EditorTextRowViewCell: UICollectionViewListCell {

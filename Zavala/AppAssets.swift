@@ -112,6 +112,10 @@ struct AppAssets {
 	static var find: UIImage = {
 		return UIImage(systemName: "magnifyingglass")!
 	}()
+	
+	static var fullScreenBackgroundColor: UIColor = {
+		return UIColor(named: "FullScreenBackgroundColor")!
+	}()
 
 	static var getInfo: UIImage = {
 		return UIImage(systemName: "info.circle")!

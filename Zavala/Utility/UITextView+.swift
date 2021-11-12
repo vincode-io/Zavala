@@ -15,4 +15,12 @@ extension UITextView {
 		return pageRenderer.generatePDF()
 	}
 	
+	func firstRect(for range: NSRange) -> CGRect? {
+		guard let start = position(from: beginningOfDocument, offset: range.location),
+			  let end = position(from: start, offset: range.length),
+			  let textRange = textRange(from: start, to: end) else { return nil }
+		
+		return firstRect(for: textRange)
+	}
+	
 }

@@ -151,6 +151,9 @@
 		51C4C45B255ACA1B004E0206 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C4C45A255ACA1B004E0206 /* EditorViewController.swift */; };
 		51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */; };
 		51C568D9258C1CD200AA7B93 /* MacLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C568D8258C1CD200AA7B93 /* MacLinkViewController.swift */; };
+		51C71C6B273F07ED00F6C779 /* ImageTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C71C6A273F07ED00F6C779 /* ImageTransition.swift */; };
+		51C71C6D273F087000F6C779 /* ImageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C71C6C273F087000F6C779 /* ImageScrollView.swift */; };
+		51C71C6F273F088D00F6C779 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C71C6E273F088D00F6C779 /* ImageViewController.swift */; };
 		51CF10A82571BA66005D6D88 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10A72571BA66005D6D88 /* Localizable.strings */; };
 		51CF10AC2571BA9A005D6D88 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */; };
 		51CF10C22571C22C005D6D88 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CF10C12571C22C005D6D88 /* L10n.swift */; };
@@ -394,6 +397,9 @@
 		51C4C45A255ACA1B004E0206 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
 		51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineTextDropDelegate.swift; sourceTree = "<group>"; };
 		51C568D8258C1CD200AA7B93 /* MacLinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLinkViewController.swift; sourceTree = "<group>"; };
+		51C71C6A273F07ED00F6C779 /* ImageTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTransition.swift; sourceTree = "<group>"; };
+		51C71C6C273F087000F6C779 /* ImageScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageScrollView.swift; sourceTree = "<group>"; };
+		51C71C6E273F088D00F6C779 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		51CF10A72571BA66005D6D88 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
 		51CF10C12571C22C005D6D88 /* L10n.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
@@ -674,6 +680,7 @@
 				51F13F01255E13D1004B85CA /* Dialogs */,
 				517A9E31260512DC00EF346A /* OpenQuickly */,
 				517AF69E25E08A350044DBAB /* Settings */,
+				51C71C70273F22A500F6C779 /* Image */,
 				514BB9D5255B595300C8DBDF /* Utility */,
 				51AEEC8B2703E6B500354C59 /* Intents */,
 				515F163B255C536600FD98B8 /* Resources */,
@@ -795,6 +802,16 @@
 				51C4C3CD2555F07A004E0206 /* CloudKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		51C71C70273F22A500F6C779 /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				51C71C6C273F087000F6C779 /* ImageScrollView.swift */,
+				51C71C6A273F07ED00F6C779 /* ImageTransition.swift */,
+				51C71C6E273F088D00F6C779 /* ImageViewController.swift */,
+			);
+			path = Image;
 			sourceTree = "<group>";
 		};
 		51D460F82729E2E60024EC48 /* Metadata */ = {
@@ -1161,6 +1178,7 @@
 				5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */,
 				51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */,
 				5167608525FBE4E500AC0EBD /* OutlineGetInfoViewController.swift in Sources */,
+				51C71C6D273F087000F6C779 /* ImageScrollView.swift in Sources */,
 				514F221825C4D076004E02CD /* EditorTagInputViewCell.swift in Sources */,
 				511B2AC826028EE800C04239 /* MainCoordinator.swift in Sources */,
 				5147D0BB25CCAFC3004673C3 /* EditorTagAddViewCell.swift in Sources */,
@@ -1210,6 +1228,7 @@
 				51DEE81026FB8D89006DAA56 /* ColorPaletteTableViewController.swift in Sources */,
 				5113B095260E638400DBD11B /* SettingsFontConfigViewController.swift in Sources */,
 				512229682563507E008041AF /* EditorTextRowViewCell.swift in Sources */,
+				51C71C6F273F088D00F6C779 /* ImageViewController.swift in Sources */,
 				51341E08272B6DB00005425B /* MetadataViewProvider.swift in Sources */,
 				511B29F726018FBB00C04239 /* EditorBacklinkContentConfiguration.swift in Sources */,
 				51E14F1B255F23C100320EDB /* ValidatingToolbarItem.swift in Sources */,
@@ -1235,6 +1254,7 @@
 				5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */,
 				5167702D261CB5F300EFFD40 /* EditorTextRowDropInteractionDelegate.swift in Sources */,
 				513B916A2722CDC80051A6BA /* EditOutlineIntentHandler.swift in Sources */,
+				51C71C6B273F07ED00F6C779 /* ImageTransition.swift in Sources */,
 				519185012713116B00B7E177 /* AddOutlineTagIntentHandler.swift in Sources */,
 				511B2A002601914400C04239 /* NSAttributedString+.swift in Sources */,
 				51E5C48F27221F6200A38983 /* IntentOutline+.swift in Sources */,

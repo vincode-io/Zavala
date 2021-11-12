@@ -249,6 +249,10 @@ extension EditorContainerViewController: EditorDelegate {
 	func printDoc(_: EditorViewController, outline: Outline) { }
 	func printList(_: EditorViewController, outline: Outline) { }
 
+	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate) {
+
+	}
+
 }
 
 // MARK: Toolbar

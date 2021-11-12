@@ -578,6 +578,14 @@ extension MainSplitViewController: EditorDelegate {
 		printListsForOutlines([outline])
 	}
 	
+	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate) {
+		let imageVC = UIStoryboard.main.instantiateController(ofType: ImageViewController.self)
+		imageVC.image = image
+		imageVC.modalPresentationStyle = .currentContext
+		imageVC.transitioningDelegate = transitioningDelegate
+		present(imageVC, animated: true)
+	}
+
 }
 
 // MARK: UISplitViewControllerDelegate
