@@ -211,12 +211,12 @@ struct AppAssets {
 		return UIImage(systemName: "arrow.clockwise")!
 	}()
 
-	static var supportURL = "https://github.com/vincode-io/Zavala/discussions/categories/support"
-	
 	static var topicFont: UIImage = {
 		return UIImage(systemName: "textformat.size.larger")!
 	}()
 
+	static var twitterURL = "https://twitter.com/vincode_io"
+	
 	static var uncompleteRow: UIImage = {
 		return UIImage(systemName: "square")!
 	}()

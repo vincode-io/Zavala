@@ -399,7 +399,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let showHelpCommand = UICommand(title: L10n.zavalaHelp, action: #selector(showHelpCommand(_:)))
 
-	let showSupportCommand = UICommand(title: L10n.technicalSupport, action: #selector(showSupportCommand(_:)))
+	let showTwitterCommand = UICommand(title: L10n.twitter, action: #selector(showTwitterCommand(_:)))
 
 	let showWebsiteCommand = UICommand(title: L10n.website, action: #selector(showWebsiteCommand(_:)))
 
@@ -805,8 +805,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.openURL(AppAssets.helpURL)
 	}
 
-	@objc func showSupportCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppAssets.supportURL)
+	@objc func showTwitterCommand(_ sender: Any?) {
+		mainCoordinator?.openURL(AppAssets.twitterURL)
 	}
 
 	@objc func showWebsiteCommand(_ sender: Any?) {
@@ -1164,7 +1164,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		// Help Menu
 		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand,
-																	showSupportCommand,
+																	showTwitterCommand,
 																	showWebsiteCommand,
 																	showReleaseNotesCommand,
 																	showGitHubRepositoryCommand,

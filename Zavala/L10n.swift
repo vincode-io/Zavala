@@ -300,8 +300,6 @@ internal enum L10n {
   internal static let tag = L10n.tr("Localizable", "Tag")
   /// Tags
   internal static let tags = L10n.tr("Localizable", "Tags")
-  /// Technical Support
-  internal static let technicalSupport = L10n.tr("Localizable", "Technical_Support")
   /// Title
   internal static let title = L10n.tr("Localizable", "Title")
   /// Toggle Sidebar
@@ -310,6 +308,8 @@ internal enum L10n {
   internal static func topicLevel(_ p1: Int) -> String {
     return L10n.tr("Localizable", "Topic_Level", p1)
   }
+  /// Twitter
+  internal static let twitter = L10n.tr("Localizable", "Twitter")
   /// Typing
   internal static let typing = L10n.tr("Localizable", "Typing")
   /// Uncomplete

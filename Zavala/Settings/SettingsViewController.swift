@@ -109,7 +109,7 @@ class SettingsViewController: UITableViewController {
 		case 0:
 			openURL(AppAssets.helpURL)
 		case 1:
-			openURL(AppAssets.supportURL)
+			UIApplication.shared.open(URL(string: AppAssets.twitterURL)!, options: [:])
 		case 2:
 			openURL(AppAssets.websiteURL)
 		case 3:
