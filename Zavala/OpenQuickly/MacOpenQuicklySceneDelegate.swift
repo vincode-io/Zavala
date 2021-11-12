@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 import Templeton
 
 class MacOpenQuicklySceneDelegate: UIResponder, UIWindowSceneDelegate {
