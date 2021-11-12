@@ -27,6 +27,10 @@ extension UIStoryboard {
 		return UIStoryboard(name: "OpenQuickly", bundle: nil)
 	}
 	
+	static var image: UIStoryboard {
+		return UIStoryboard(name: "Image", bundle: nil)
+	}
+	
 	func instantiateController<T>(ofType type: T.Type = T.self) -> T where T: UIViewController {
 		
 		let storyboardId = String(describing: type)

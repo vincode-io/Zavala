@@ -579,7 +579,7 @@ extension MainSplitViewController: EditorDelegate {
 	}
 	
 	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate) {
-		let imageVC = UIStoryboard.main.instantiateController(ofType: ImageViewController.self)
+		let imageVC = UIStoryboard.image.instantiateController(ofType: ImageViewController.self)
 		imageVC.image = image
 		imageVC.modalPresentationStyle = .currentContext
 		imageVC.transitioningDelegate = transitioningDelegate

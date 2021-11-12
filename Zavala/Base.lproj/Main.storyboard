@@ -4,7 +4,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -122,86 +121,9 @@
             </objects>
             <point key="canvasLocation" x="-1068" y="-476"/>
         </scene>
-        <!--Image View Controller-->
-        <scene sceneID="zcS-Jv-NsI">
-            <objects>
-                <viewController storyboardIdentifier="ImageViewController" id="OLs-dW-uTC" customClass="ImageViewController" customModule="Zavala" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="dDI-SE-fOi">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NPz-qg-xFk" customClass="ImageScrollView" customModule="Zavala">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <viewLayoutGuide key="contentLayoutGuide" id="HnE-Iv-1CR"/>
-                                <viewLayoutGuide key="frameLayoutGuide" id="NsN-QD-aCK"/>
-                            </scrollView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UNh-HY-7xS">
-                                <rect key="frame" x="362" y="44" width="44" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="44" id="E3m-G2-cMz"/>
-                                    <constraint firstAttribute="height" constant="44" id="LkO-Yr-btO"/>
-                                </constraints>
-                                <color key="tintColor" name="primaryAccentColor"/>
-                                <state key="normal" image="square.and.arrow.up.fill" catalog="system">
-                                    <color key="titleColor" systemColor="labelColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="share:" destination="OLs-dW-uTC" eventType="touchUpInside" id="1x6-zq-paP"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Q3-Xv-Cud">
-                                <rect key="frame" x="8" y="44" width="44" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="44" id="pIH-1c-ATX"/>
-                                    <constraint firstAttribute="height" constant="44" id="zcI-TN-Toh"/>
-                                </constraints>
-                                <color key="tintColor" name="primaryAccentColor"/>
-                                <state key="normal" image="multiply.circle.fill" catalog="system">
-                                    <color key="titleColor" systemColor="labelColor"/>
-                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="regular"/>
-                                </state>
-                                <connections>
-                                    <action selector="done:" destination="OLs-dW-uTC" eventType="touchUpInside" id="SDX-JT-kkE"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="tVk-5G-Kmq"/>
-                        <color key="backgroundColor" name="FullScreenBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="UNh-HY-7xS" firstAttribute="top" secondItem="tVk-5G-Kmq" secondAttribute="top" id="30X-Dp-QmU"/>
-                            <constraint firstItem="NPz-qg-xFk" firstAttribute="top" secondItem="dDI-SE-fOi" secondAttribute="top" id="4rc-Ju-ctb"/>
-                            <constraint firstItem="5Q3-Xv-Cud" firstAttribute="leading" secondItem="tVk-5G-Kmq" secondAttribute="leading" constant="8" id="8sA-kW-pfG"/>
-                            <constraint firstAttribute="trailing" secondItem="NPz-qg-xFk" secondAttribute="trailing" id="R4q-Fp-97P"/>
-                            <constraint firstItem="5Q3-Xv-Cud" firstAttribute="top" secondItem="tVk-5G-Kmq" secondAttribute="top" id="fE7-wQ-csS"/>
-                            <constraint firstItem="NPz-qg-xFk" firstAttribute="leading" secondItem="dDI-SE-fOi" secondAttribute="leading" id="gWY-XS-OEp"/>
-                            <constraint firstItem="tVk-5G-Kmq" firstAttribute="trailing" secondItem="UNh-HY-7xS" secondAttribute="trailing" constant="8" id="iEf-Bh-3BW"/>
-                            <constraint firstAttribute="bottom" secondItem="NPz-qg-xFk" secondAttribute="bottom" id="k0E-Pw-Ltj"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="closeButton" destination="5Q3-Xv-Cud" id="i8s-GB-tIS"/>
-                        <outlet property="imageScrollView" destination="NPz-qg-xFk" id="ywa-f4-dTR"/>
-                        <outlet property="shareButton" destination="UNh-HY-7xS" id="8Et-VX-kkq"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="eJ8-ZJ-nTd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="616" y="-117"/>
-        </scene>
     </scenes>
     <resources>
         <image name="gear" catalog="system" width="128" height="119"/>
-        <image name="multiply.circle.fill" catalog="system" width="128" height="121"/>
-        <image name="square.and.arrow.up.fill" catalog="system" width="115" height="128"/>
-        <namedColor name="FullScreenBackgroundColor">
-            <color red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="primaryAccentColor">
-            <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <systemColor name="labelColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

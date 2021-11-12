@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="EpY-NZ-0xE">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Image View Controller-->
+        <scene sceneID="GHB-Xh-uuW">
+            <objects>
+                <viewController storyboardIdentifier="ImageViewController" id="EpY-NZ-0xE" customClass="ImageViewController" customModule="Zavala" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8BS-LD-bmQ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nnh-Gd-bmP" customClass="ImageScrollView" customModule="Zavala">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <viewLayoutGuide key="contentLayoutGuide" id="fQ1-8R-YDr"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="bdv-fT-4sM"/>
+                            </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jd9-rP-V4S">
+                                <rect key="frame" x="362" y="44" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="XYB-B2-0VL"/>
+                                    <constraint firstAttribute="height" constant="44" id="mnO-MO-L8l"/>
+                                </constraints>
+                                <color key="tintColor" name="primaryAccentColor"/>
+                                <state key="normal" image="square.and.arrow.up.fill" catalog="system">
+                                    <color key="titleColor" systemColor="labelColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="share:" destination="EpY-NZ-0xE" eventType="touchUpInside" id="qn1-D6-eN3"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O50-4Q-yBa">
+                                <rect key="frame" x="8" y="44" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="Uy9-3F-SNj"/>
+                                    <constraint firstAttribute="width" constant="44" id="rqb-qA-fQW"/>
+                                </constraints>
+                                <color key="tintColor" name="primaryAccentColor"/>
+                                <state key="normal" image="multiply.circle.fill" catalog="system">
+                                    <color key="titleColor" systemColor="labelColor"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="regular"/>
+                                </state>
+                                <connections>
+                                    <action selector="done:" destination="EpY-NZ-0xE" eventType="touchUpInside" id="Kg8-yw-ZYD"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="g0h-QX-LhX"/>
+                        <color key="backgroundColor" name="FullScreenBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="g0h-QX-LhX" firstAttribute="trailing" secondItem="Jd9-rP-V4S" secondAttribute="trailing" constant="8" id="8Kc-6L-gsW"/>
+                            <constraint firstAttribute="bottom" secondItem="nnh-Gd-bmP" secondAttribute="bottom" id="IZf-QL-Ijb"/>
+                            <constraint firstAttribute="trailing" secondItem="nnh-Gd-bmP" secondAttribute="trailing" id="JRg-s4-aKv"/>
+                            <constraint firstItem="O50-4Q-yBa" firstAttribute="top" secondItem="g0h-QX-LhX" secondAttribute="top" id="KR9-E8-yGb"/>
+                            <constraint firstItem="nnh-Gd-bmP" firstAttribute="top" secondItem="8BS-LD-bmQ" secondAttribute="top" id="N9I-Qq-Hrk"/>
+                            <constraint firstItem="nnh-Gd-bmP" firstAttribute="leading" secondItem="8BS-LD-bmQ" secondAttribute="leading" id="Pn6-8B-YIV"/>
+                            <constraint firstItem="O50-4Q-yBa" firstAttribute="leading" secondItem="g0h-QX-LhX" secondAttribute="leading" constant="8" id="UXo-ez-Lnq"/>
+                            <constraint firstItem="Jd9-rP-V4S" firstAttribute="top" secondItem="g0h-QX-LhX" secondAttribute="top" id="g6y-DG-Iea"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="closeButton" destination="O50-4Q-yBa" id="Ur7-tW-EWf"/>
+                        <outlet property="imageScrollView" destination="nnh-Gd-bmP" id="KRo-Np-O2V"/>
+                        <outlet property="shareButton" destination="Jd9-rP-V4S" id="gdE-eo-ZZt"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wgj-sP-zzY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="616" y="-117"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="multiply.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="square.and.arrow.up.fill" catalog="system" width="115" height="128"/>
+        <namedColor name="FullScreenBackgroundColor">
+            <color red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="primaryAccentColor">
+            <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
