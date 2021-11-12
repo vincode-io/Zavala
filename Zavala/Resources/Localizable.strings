@@ -113,6 +113,8 @@
 "Go_Forward" = "Go Forward";
 "History" = "History";
 "Select" = "Select";
+"Zavala_Help" = "Zavala Help";
+"Technical_Support" = "Technical Support";
 
 /* State restoration */
 "Unknown_Outline" = "The requested outline could not be found.";

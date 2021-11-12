@@ -107,14 +107,18 @@ class SettingsViewController: UITableViewController {
 		
 		switch indexPath.row {
 		case 0:
-			openURL(AppAssets.websiteURL)
+			openURL(AppAssets.helpURL)
 		case 1:
-			openURL(AppAssets.releaseNotesURL)
+			openURL(AppAssets.supportURL)
 		case 2:
-			openURL(AppAssets.githubRepositoryURL)
+			openURL(AppAssets.websiteURL)
 		case 3:
-			openURL(AppAssets.bugTrackerURL)
+			openURL(AppAssets.releaseNotesURL)
 		case 4:
+			openURL(AppAssets.githubRepositoryURL)
+		case 5:
+			openURL(AppAssets.bugTrackerURL)
+		case 6:
 			openURL(AppAssets.acknowledgementsURL)
 		default:
 			break

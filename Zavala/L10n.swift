@@ -300,6 +300,8 @@ internal enum L10n {
   internal static let tag = L10n.tr("Localizable", "Tag")
   /// Tags
   internal static let tags = L10n.tr("Localizable", "Tags")
+  /// Technical Support
+  internal static let technicalSupport = L10n.tr("Localizable", "Technical_Support")
   /// Title
   internal static let title = L10n.tr("Localizable", "Title")
   /// Toggle Sidebar
@@ -324,6 +326,8 @@ internal enum L10n {
   internal static let useSelectionForFind = L10n.tr("Localizable", "Use_Selection_For_Find")
   /// Website
   internal static let website = L10n.tr("Localizable", "Website")
+  /// Zavala Help
+  internal static let zavalaHelp = L10n.tr("Localizable", "Zavala_Help")
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

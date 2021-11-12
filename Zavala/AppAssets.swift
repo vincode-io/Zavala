@@ -127,6 +127,8 @@ struct AppAssets {
 		return UIImage(systemName: "chevron.right")!
 	}()
 
+	static var helpURL = "https://zavala.vincode.io/help/Zavala_Help.md/"
+	
 	static var importDocument: UIImage = {
 		return UIImage(systemName: "square.and.arrow.down")!
 	}()
@@ -209,6 +211,8 @@ struct AppAssets {
 		return UIImage(systemName: "arrow.clockwise")!
 	}()
 
+	static var supportURL = "https://github.com/vincode-io/Zavala/discussions/categories/support"
+	
 	static var topicFont: UIImage = {
 		return UIImage(systemName: "textformat.size.larger")!
 	}()

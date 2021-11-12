@@ -397,6 +397,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									   input: "d",
 									   modifierFlags: [.command])
 	
+	let showHelpCommand = UICommand(title: L10n.zavalaHelp, action: #selector(showHelpCommand(_:)))
+
+	let showSupportCommand = UICommand(title: L10n.technicalSupport, action: #selector(showSupportCommand(_:)))
+
 	let showWebsiteCommand = UICommand(title: L10n.website, action: #selector(showWebsiteCommand(_:)))
 
 	let showReleaseNotesCommand = UICommand(title: L10n.releaseNotes, action: #selector(showReleaseNotesCommand(_:)))
@@ -797,6 +801,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.deleteCompletedRows()
 	}
 	
+	@objc func showHelpCommand(_ sender: Any?) {
+		mainCoordinator?.openURL(AppAssets.helpURL)
+	}
+
+	@objc func showSupportCommand(_ sender: Any?) {
+		mainCoordinator?.openURL(AppAssets.supportURL)
+	}
+
 	@objc func showWebsiteCommand(_ sender: Any?) {
 		mainCoordinator?.openURL(AppAssets.websiteURL)
 	}
@@ -1151,7 +1163,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(historyMenu, afterMenu: .view)
 
 		// Help Menu
-		builder.replaceChildren(ofMenu: .help, from: { _ in return [showWebsiteCommand, showReleaseNotesCommand, showGitHubRepositoryCommand, showBugTrackerCommand, showAcknowledgementsCommand] })
+		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand,
+																	showSupportCommand,
+																	showWebsiteCommand,
+																	showReleaseNotesCommand,
+																	showGitHubRepositoryCommand,
+																	showBugTrackerCommand,
+																	showAcknowledgementsCommand] })
 	}
 
 }
