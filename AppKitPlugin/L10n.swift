@@ -14,6 +14,10 @@ internal enum L10n {
   internal static let addNoteLevel = L10n.tr("Localizable", "Add_Note_Level")
   /// Add Topic Level
   internal static let addTopicLevel = L10n.tr("Localizable", "Add_Topic_Level")
+  /// Zavala won't launch while another instance is running. You may have to force quit the other instance.
+  internal static let alreadyRunningInfo = L10n.tr("Localizable", "Already_Running_Info")
+  /// Zavala was already running.
+  internal static let alreadyRunningMessage = L10n.tr("Localizable", "Already_Running_Message")
   /// Automatic
   internal static let automatic = L10n.tr("Localizable", "Automatic")
   /// Backlinks

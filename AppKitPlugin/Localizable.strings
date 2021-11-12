@@ -33,3 +33,7 @@
 
 /* Open Quickly */
 "Open Quickly" = "Open Quickly";
+
+/* Running Check */
+"Already_Running_Message" = "Zavala was already running.";
+"Already_Running_Info" = "Zavala won't launch while another instance is running. You may have to force quit the other instance.";

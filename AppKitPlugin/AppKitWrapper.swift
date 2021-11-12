@@ -12,8 +12,6 @@ import os.log
 	
 	private weak var delegate: AppKitPluginDelegate?
 	
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "SparkleWrapper")
-	
 	private var movementMonitor: RSAppMovementMonitor? = nil
 	private var preferencesWindowController: NSWindowController?
 
@@ -78,6 +76,22 @@ import os.log
 
 	func activateIgnoringOtherApps() {
 		NSApplication.shared.activate(ignoringOtherApps: true)
+	}
+	
+	func killOtherInstance() {
+		let runningApp = NSWorkspace.shared.runningApplications
+			.filter { item in item.bundleIdentifier == "io.vincode.Zavala" }
+			.first { item in item.processIdentifier != getpid() }
+
+		if runningApp != nil {
+			let alert = NSAlert()
+			alert.messageText = L10n.alreadyRunningMessage
+			alert.informativeText = L10n.alreadyRunningInfo
+			alert.alertStyle = NSAlert.Style.informational
+			alert.addButton(withTitle: "OK")
+			alert.runModal()
+			exit(0)
+		}
 	}
 	
 }

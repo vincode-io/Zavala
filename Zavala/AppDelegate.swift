@@ -526,6 +526,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		self.appKitPlugin = appKitPlugin
 		appKitPlugin.setDelegate(self)
 		appKitPlugin.start()
+		
+		appKitPlugin.killOtherInstance()
 		#endif
 		
 		UIApplication.shared.registerForRemoteNotifications()

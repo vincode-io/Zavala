@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateAppearance:(NSObject  * _Nullable)window;
 - (void)clearRecentDocuments;
 - (void)activateIgnoringOtherApps;
+- (void)killOtherInstance;
 @end
 
 NS_ASSUME_NONNULL_END
