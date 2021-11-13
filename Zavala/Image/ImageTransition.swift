@@ -24,7 +24,7 @@ class ImageTransition: NSObject, UIViewControllerAnimatedTransitioning {
 	}
 	
 	private weak var delegate: ImageTransitionDelegate?
-	private let duration = 0.4
+	private let duration = 0.5
 	
 	func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
 		return duration
@@ -54,7 +54,7 @@ class ImageTransition: NSObject, UIViewControllerAnimatedTransitioning {
 		UIView.animate(
 			withDuration: duration,
 			delay:0.0,
-			usingSpringWithDamping: 0.6,
+			usingSpringWithDamping: 0.7,
 			initialSpringVelocity: 0.2,
 			animations: {
 				let imageController = transitionContext.viewController(forKey: .to) as! ImageViewController
@@ -93,7 +93,7 @@ class ImageTransition: NSObject, UIViewControllerAnimatedTransitioning {
 		UIView.animate(
 			withDuration: duration,
 			delay:0.0,
-			usingSpringWithDamping: 0.6,
+			usingSpringWithDamping: 0.7,
 			initialSpringVelocity: 0.2,
 			animations: {
 				imageView.frame = self.originFrame
