@@ -519,8 +519,8 @@ extension CollectionsViewController {
 			}
 			
 			let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-			alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
 			alert.addAction(deleteAction)
+			alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
 			alert.preferredAction = deleteAction
 			self?.present(alert, animated: true, completion: nil)
 		}
