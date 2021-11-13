@@ -18,21 +18,16 @@ class ImageViewController: UIViewController {
 	var zoomedFrame: CGRect {
 		return imageScrollView.zoomedFrame
 	}
-	
+
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
-		closeButton.imageView?.contentMode = .scaleAspectFit
-		
 		closeButton.accessibilityLabel = NSLocalizedString("Close", comment: "Close")
-		closeButton.tintColor = UIColor.accentColor
-		
 		shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "Share")
-		shareButton.tintColor = UIColor.accentColor
 
 		if traitCollection.userInterfaceIdiom == .mac {
 			closeButton.isHidden = true
-			shareButton.isHidden = true
+			shareButton.tintColor = .accentColor
 		}
 		
         imageScrollView.setup()
@@ -48,7 +43,9 @@ class ImageViewController: UIViewController {
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		#if targetEnvironment(macCatalyst)
-		appDelegate.appKitPlugin?.configureViewImage(view.window?.nsWindow, width: image.size.width, height: image.size.height)
+		if let image = image {
+			appDelegate.appKitPlugin?.configureViewImage(view.window?.nsWindow, width: image.size.width, height: image.size.height)
+		}
 		#endif
 	}
 
@@ -84,6 +81,5 @@ extension ImageViewController: ImageScrollViewDelegate {
 	func imageScrollViewDidGestureSwipeDown(imageScrollView: ImageScrollView) {
 		dismiss(animated: true)
 	}
-	
-	
+		
 }
