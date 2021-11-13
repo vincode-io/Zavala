@@ -1,5 +1,5 @@
 //
-//  EditorTextViewDropInteractionDelegate.swift
+//  EditorRowDropInteractionDelegate.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 4/6/21.
@@ -10,11 +10,11 @@ import MobileCoreServices
 import RSCore
 import Templeton
 
-class EditorTextRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {
+class EditorRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {
 	
-	weak var textView: EditorTextRowTextView?
+	weak var textView: EditorRowTextView?
 	
-	init(textView: EditorTextRowTextView) {
+	init(textView: EditorRowTextView) {
 		self.textView = textView
 	}
 	

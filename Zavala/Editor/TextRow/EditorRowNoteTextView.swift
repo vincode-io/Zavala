@@ -1,5 +1,5 @@
 //
-//  EditorTextRowNoteTextView.swift
+//  EditorRowNoteTextView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/13/20.
@@ -9,21 +9,21 @@ import UIKit
 import Templeton
 import SwiftUI
 
-protocol EditorTextRowNoteTextViewDelegate: AnyObject {
+protocol EditorRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewInputAccessoryView: UIView? { get }
-	func reload(_ : EditorTextRowNoteTextView, row: Row)
-	func makeCursorVisibleIfNecessary(_ : EditorTextRowNoteTextView)
-	func didBecomeActive(_ : EditorTextRowNoteTextView, row: Row)
-	func textChanged(_ : EditorTextRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
-	func deleteRowNote(_ : EditorTextRowNoteTextView, row: Row, rowStrings: RowStrings)
-	func moveCursorTo(_ : EditorTextRowNoteTextView, row: Row)
-	func moveCursorDown(_ : EditorTextRowNoteTextView, row: Row)
-	func editLink(_: EditorTextRowNoteTextView, _ link: String?, text: String?, range: NSRange)
-	func zoomImage(_: EditorTextRowNoteTextView, _ image: UIImage, rect: CGRect)
+	func reload(_ : EditorRowNoteTextView, row: Row)
+	func makeCursorVisibleIfNecessary(_ : EditorRowNoteTextView)
+	func didBecomeActive(_ : EditorRowNoteTextView, row: Row)
+	func textChanged(_ : EditorRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
+	func deleteRowNote(_ : EditorRowNoteTextView, row: Row, rowStrings: RowStrings)
+	func moveCursorTo(_ : EditorRowNoteTextView, row: Row)
+	func moveCursorDown(_ : EditorRowNoteTextView, row: Row)
+	func editLink(_: EditorRowNoteTextView, _ link: String?, text: String?, range: NSRange)
+	func zoomImage(_: EditorRowNoteTextView, _ image: UIImage, rect: CGRect)
 }
 
-class EditorTextRowNoteTextView: EditorTextRowTextView {
+class EditorRowNoteTextView: EditorRowTextView {
 	
 	override var editorUndoManager: UndoManager? {
 		return editorDelegate?.editorRowNoteTextViewUndoManager
@@ -44,7 +44,7 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 		return keys
 	}
 	
-	weak var editorDelegate: EditorTextRowNoteTextViewDelegate?
+	weak var editorDelegate: EditorRowNoteTextViewDelegate?
 	
 	override var rowStrings: RowStrings {
 		return RowStrings.note(cleansedAttributedText)
@@ -78,13 +78,13 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 	}
 	
     override func textWasChanged() {
-        guard let textRow = row else { return }
-        editorDelegate?.textChanged(self, row: textRow, isInNotes: true, selection: selectedRange, rowStrings: rowStrings)
+        guard let row = row else { return }
+        editorDelegate?.textChanged(self, row: row, isInNotes: true, selection: selectedRange, rowStrings: rowStrings)
     }
     
 	override func reloadRow() {
-        guard let textRow = row else { return }
-        editorDelegate?.reload(self, row: textRow)
+        guard let row = row else { return }
+        editorDelegate?.reload(self, row: row)
 	}
     
     override func makeCursorVisibleIfNecessary() {
@@ -92,23 +92,23 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
     }
     
 	override func deleteBackward() {
-		guard let textRow = row else { return }
+		guard let row = row else { return }
 		if attributedText.length == 0 {
 			isSavingTextUnnecessary = true
-			editorDelegate?.deleteRowNote(self, row: textRow, rowStrings: rowStrings)
+			editorDelegate?.deleteRowNote(self, row: row, rowStrings: rowStrings)
 		} else {
 			super.deleteBackward()
 		}
 	}
 
 	@objc func moveCursorToText(_ sender: Any) {
-		guard let textRow = row else { return }
-		editorDelegate?.moveCursorTo(self, row: textRow)
+		guard let row = row else { return }
+		editorDelegate?.moveCursorTo(self, row: row)
 	}
 	
 	@objc func moveCursorDown(_ sender: Any) {
-		guard let textRow = row else { return }
-		editorDelegate?.moveCursorDown(self, row: textRow)
+		guard let row = row else { return }
+		editorDelegate?.moveCursorDown(self, row: row)
 	}
 
 	@objc override func editLink(_ sender: Any?) {
@@ -138,7 +138,7 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 
 // MARK: CursorCoordinatesProvider
 
-extension EditorTextRowNoteTextView: CursorCoordinatesProvider {
+extension EditorRowNoteTextView: CursorCoordinatesProvider {
 
 	var coordinates: CursorCoordinates? {
 		if let row = row {
@@ -151,7 +151,7 @@ extension EditorTextRowNoteTextView: CursorCoordinatesProvider {
 
 // MARK: UITextViewDelegate
 
-extension EditorTextRowNoteTextView: UITextViewDelegate {
+extension EditorRowNoteTextView: UITextViewDelegate {
 	
 	func textViewDidBeginEditing(_ textView: UITextView) {
 		processTextEditingBegin()

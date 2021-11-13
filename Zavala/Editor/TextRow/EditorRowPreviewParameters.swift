@@ -1,5 +1,5 @@
 //
-//  EditorTextRowPreviewParameters.swift
+//  EditorRowPreviewParameters.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/4/20.
@@ -8,13 +8,13 @@
 import UIKit
 import Templeton
 
-class EditorTextRowPreviewParameters: UIDragPreviewParameters {
+class EditorRowPreviewParameters: UIDragPreviewParameters {
 	
 	override init() {
 		super.init()
 	}
 	
-	init(cell: EditorTextRowViewCell, row: Row) {
+	init(cell: EditorRowViewCell, row: Row) {
 		super.init()
 
 //		#if !targetEnvironment(macCatalyst)

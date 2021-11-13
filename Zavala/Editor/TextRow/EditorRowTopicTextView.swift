@@ -1,5 +1,5 @@
 //
-//  EditorTextRowTopicTextView.swift
+//  EditorRowTopicTextView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/17/20.
@@ -8,24 +8,24 @@
 import UIKit
 import Templeton
 
-protocol EditorTextRowTopicTextViewDelegate: AnyObject {
+protocol EditorRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
 	var editorRowTopicTextViewInputAccessoryView: UIView? { get }
-	func didBecomeActive(_: EditorTextRowTopicTextView, row: Row)
-	func reload(_: EditorTextRowTopicTextView, row: Row)
-	func makeCursorVisibleIfNecessary(_: EditorTextRowTopicTextView)
-	func textChanged(_: EditorTextRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
-	func deleteRow(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings)
-	func createRow(_: EditorTextRowTopicTextView, beforeRow: Row)
-	func createRow(_: EditorTextRowTopicTextView, afterRow: Row, rowStrings: RowStrings)
-	func moveRowLeft(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings)
-	func moveRowRight(_: EditorTextRowTopicTextView, row: Row, rowStrings: RowStrings)
-	func splitRow(_: EditorTextRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
-	func editLink(_: EditorTextRowTopicTextView, _ link: String?, text: String?, range: NSRange)
-	func zoomImage(_: EditorTextRowTopicTextView, _ image: UIImage, rect: CGRect)
+	func didBecomeActive(_: EditorRowTopicTextView, row: Row)
+	func reload(_: EditorRowTopicTextView, row: Row)
+	func makeCursorVisibleIfNecessary(_: EditorRowTopicTextView)
+	func textChanged(_: EditorRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
+	func deleteRow(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings)
+	func createRow(_: EditorRowTopicTextView, beforeRow: Row)
+	func createRow(_: EditorRowTopicTextView, afterRow: Row, rowStrings: RowStrings)
+	func moveRowLeft(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings)
+	func moveRowRight(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings)
+	func splitRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
+	func editLink(_: EditorRowTopicTextView, _ link: String?, text: String?, range: NSRange)
+	func zoomImage(_: EditorRowTopicTextView, _ image: UIImage, rect: CGRect)
 }
 
-class EditorTextRowTopicTextView: EditorTextRowTextView {
+class EditorRowTopicTextView: EditorRowTextView {
 	
 	override var editorUndoManager: UndoManager? {
 		return editorDelegate?.editorRowTopicTextViewUndoManager
@@ -52,7 +52,7 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 		return keys
 	}
 	
-	weak var editorDelegate: EditorTextRowTopicTextViewDelegate?
+	weak var editorDelegate: EditorRowTopicTextViewDelegate?
 	
 	override var rowStrings: RowStrings {
 		return RowStrings.topic(cleansedAttributedText)
@@ -94,13 +94,13 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 	}
     
     override func textWasChanged() {
-        guard let textRow = row else { return }
-        editorDelegate?.textChanged(self, row: textRow, isInNotes: false, selection: selectedRange, rowStrings: rowStrings)
+        guard let row = row else { return }
+        editorDelegate?.textChanged(self, row: row, isInNotes: false, selection: selectedRange, rowStrings: rowStrings)
     }
 
 	override func reloadRow() {
-        guard let textRow = row else { return }
-		editorDelegate?.reload(self, row: textRow)
+        guard let row = row else { return }
+		editorDelegate?.reload(self, row: row)
 	}
 	
     override func makeCursorVisibleIfNecessary() {
@@ -108,27 +108,27 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
     }
     
 	override func deleteBackward() {
-		guard let textRow = row else { return }
-		if attributedText.length == 0 && textRow.rowCount == 0 {
-			editorDelegate?.deleteRow(self, row: textRow, rowStrings: rowStrings)
+		guard let row = row else { return }
+		if attributedText.length == 0 && row.rowCount == 0 {
+			editorDelegate?.deleteRow(self, row: row, rowStrings: rowStrings)
 		} else {
 			super.deleteBackward()
 		}
 	}
 
 	@objc func createRow(_ sender: Any) {
-		guard let textRow = row else { return }
-		editorDelegate?.createRow(self, afterRow: textRow, rowStrings: rowStrings)
+		guard let row = row else { return }
+		editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
 	}
 	
 	@objc func moveLeft(_ sender: Any) {
-		guard let textRow = row else { return }
-		editorDelegate?.moveRowLeft(self, row: textRow, rowStrings: rowStrings)
+		guard let row = row else { return }
+		editorDelegate?.moveRowLeft(self, row: row, rowStrings: rowStrings)
 	}
 	
 	@objc func moveRight(_ sender: Any) {
-		guard let textRow = row else { return }
-		editorDelegate?.moveRowRight(self, row: textRow, rowStrings: rowStrings)
+		guard let row = row else { return }
+		editorDelegate?.moveRowRight(self, row: row, rowStrings: rowStrings)
 	}
 	
 	@objc func insertTab(_ sender: Any) {
@@ -140,20 +140,20 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 	}
 	
 	@objc func insertRow(_ sender: Any) {
-		guard let textRow = row else { return }
+		guard let row = row else { return }
 		isSavingTextUnnecessary = true
-		editorDelegate?.createRow(self, beforeRow: textRow)
+		editorDelegate?.createRow(self, beforeRow: row)
 	}
 
 	@objc func split(_ sender: Any) {
-		guard let textRow = row else { return }
+		guard let row = row else { return }
 		
 		isSavingTextUnnecessary = true
 		
 		if cursorPosition == 0 {
-			editorDelegate?.createRow(self, beforeRow: textRow)
+			editorDelegate?.createRow(self, beforeRow: row)
 		} else {
-			editorDelegate?.splitRow(self, row: textRow, topic: attributedText, cursorPosition: cursorPosition)
+			editorDelegate?.splitRow(self, row: row, topic: attributedText, cursorPosition: cursorPosition)
 		}
 	}
 	
@@ -202,7 +202,7 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 
 // MARK: CursorCoordinatesProvider
 
-extension EditorTextRowTopicTextView: CursorCoordinatesProvider {
+extension EditorRowTopicTextView: CursorCoordinatesProvider {
 
 	var coordinates: CursorCoordinates? {
 		if let row = row {
@@ -215,7 +215,7 @@ extension EditorTextRowTopicTextView: CursorCoordinatesProvider {
 
 // MARK: UITextViewDelegate
 
-extension EditorTextRowTopicTextView: UITextViewDelegate {
+extension EditorRowTopicTextView: UITextViewDelegate {
 	
 	func textViewDidBeginEditing(_ textView: UITextView) {
 		processTextEditingBegin()
@@ -226,10 +226,10 @@ extension EditorTextRowTopicTextView: UITextViewDelegate {
 	}
 	
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-		guard let textRow = row else { return true }
+		guard let row = row else { return true }
 		switch text {
 		case "\n":
-			editorDelegate?.createRow(self, afterRow: textRow, rowStrings: rowStrings)
+			editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
 			return false
 		case " ":
 			typingAttributes[.link] = nil

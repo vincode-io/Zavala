@@ -276,8 +276,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return titleCell.textViewText
 	}
 	
-	private var currentTextView: EditorTextRowTextView? {
-		return UIResponder.currentFirstResponder as? EditorTextRowTextView
+	private var currentTextView: EditorRowTextView? {
+		return UIResponder.currentFirstResponder as? EditorRowTextView
 	}
 	
 	private var currentRowStrings: RowStrings? {
@@ -300,7 +300,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
 	private var tagInputRegistration: UICollectionView.CellRegistration<EditorTagInputViewCell, EntityID>?
 	private var tagAddRegistration: UICollectionView.CellRegistration<EditorTagAddViewCell, EntityID>?
-	private var rowRegistration: UICollectionView.CellRegistration<EditorTextRowViewCell, Row>?
+	private var rowRegistration: UICollectionView.CellRegistration<EditorRowViewCell, Row>?
 	private var backlinkRegistration: UICollectionView.CellRegistration<EditorBacklinkViewCell, Outline>?
 
 	private var firstVisibleShadowTableIndex: Int? {
@@ -388,7 +388,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			cell.delegate = self
 		}
 		
-		rowRegistration = UICollectionView.CellRegistration<EditorTextRowViewCell, Row> { [weak self] (cell, indexPath, row) in
+		rowRegistration = UICollectionView.CellRegistration<EditorRowViewCell, Row> { [weak self] (cell, indexPath, row) in
 			cell.row = row
 			cell.isNotesHidden = self?.outline?.isNotesHidden ?? false
 			cell.isSearching = self?.isSearching ?? false
@@ -705,7 +705,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		// Get ready for the new outline, buy saving the current one
 		outline?.cursorCoordinates = CursorCoordinates.bestCoordinates
 		
-		if let textField = UIResponder.currentFirstResponder as? EditorTextRowTextView {
+		if let textField = UIResponder.currentFirstResponder as? EditorRowTextView {
 			textField.endEditing(true)
 		}
 		
@@ -909,7 +909,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	func splitRow() {
 		guard let row = currentRows?.last,
-			  let topic = (currentTextView as? EditorTextRowTopicTextView)?.attributedText,
+			  let topic = (currentTextView as? EditorRowTopicTextView)?.attributedText,
 			  let cursorPosition = currentCursorPosition else { return }
 		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
@@ -1015,7 +1015,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func repeatMoveCursorUp() {
 		guard isCursoringUp else { return }
 
-		if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView {
+		if let textView = UIResponder.currentFirstResponder as? EditorRowTopicTextView {
 			moveCursorUp(topicTextView: textView)
 		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
 			if tagInput.isShowingResults {
@@ -1034,14 +1034,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func repeatMoveCursorDown() {
 		guard isCursoringDown else { return }
 		
-		if let textView = UIResponder.currentFirstResponder as? EditorTextRowTopicTextView {
+		if let textView = UIResponder.currentFirstResponder as? EditorRowTopicTextView {
 			moveCursorDown(topicTextView: textView)
 		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
 			if tagInput.isShowingResults {
 				tagInput.selectBelow()
 				return
 			} else if outline?.shadowTable?.count ?? 0 > 0 {
-				if let rowCell = collectionView.cellForItem(at: IndexPath(row: 0, section: adjustedRowsSection)) as? EditorTextRowViewCell {
+				if let rowCell = collectionView.cellForItem(at: IndexPath(row: 0, section: adjustedRowsSection)) as? EditorRowViewCell {
 					rowCell.moveToEnd()
 				}
 			}
@@ -1339,9 +1339,9 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
 		guard let row = configuration.identifier as? Row,
 			  let rowShadowTableIndex = row.shadowTableIndex,
-			  let cell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell else { return nil }
+			  let cell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorRowViewCell else { return nil }
 		
-		return UITargetedPreview(view: cell, parameters: EditorTextRowPreviewParameters(cell: cell, row: row))
+		return UITargetedPreview(view: cell, parameters: EditorRowPreviewParameters(cell: cell, row: row))
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
@@ -1484,86 +1484,86 @@ extension EditorViewController: EditorTagViewCellDelegate {
 	
 }
 
-// MARK: EditorTextRowViewCellDelegate
+// MARK: EditorRowViewCellDelegate
 
-extension EditorViewController: EditorTextRowViewCellDelegate {
+extension EditorViewController: EditorRowViewCellDelegate {
 
-	var editorTextRowUndoManager: UndoManager? {
+	var editorRowUndoManager: UndoManager? {
 		return undoManager
 	}
 	
-	var editorTextRowInputAccessoryView: UIView? {
+	var editorRowInputAccessoryView: UIView? {
 		return keyboardToolBar
 	}
 	
-    func editorTextRowReload(row: Row) {
+    func editorRowReload(row: Row) {
 		layoutEditor()
 	}
 	
-	func editorTextRowMakeCursorVisibleIfNecessary() {
+	func editorRowMakeCursorVisibleIfNecessary() {
 		makeCursorVisibleIfNecessary()
 	}
 
-	func editorTextRowTextFieldDidBecomeActive(row: Row) {
+	func editorRowTextFieldDidBecomeActive(row: Row) {
 		collectionView.deselectAll()
 		updateUI()
 		delegate?.validateToolbar(self)
 		makeCursorVisibleIfNecessary()
 	}
 
-	func editorTextRowToggleDisclosure(row: Row) {
+	func editorRowToggleDisclosure(row: Row) {
 		toggleDisclosure(row: row)
 	}
 	
-	func editorTextRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
+	func editorRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
 		textChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
 	}
 	
-	func editorTextRowDeleteRow(_ row: Row, rowStrings: RowStrings) {
+	func editorRowDeleteRow(_ row: Row, rowStrings: RowStrings) {
 		deleteRows([row], rowStrings: rowStrings)
 	}
 	
-	func editorTextRowCreateRow(beforeRow: Row) {
+	func editorRowCreateRow(beforeRow: Row) {
 		createRow(beforeRows: [beforeRow])
 	}
 	
-	func editorTextRowCreateRow(afterRow: Row?, rowStrings: RowStrings?) {
+	func editorRowCreateRow(afterRow: Row?, rowStrings: RowStrings?) {
 		let afterRows = afterRow == nil ? nil : [afterRow!]
 		createRow(afterRows: afterRows, rowStrings: rowStrings)
 	}
 	
-	func editorTextRowMoveRowLeft(_ row: Row, rowStrings: RowStrings) {
+	func editorRowMoveRowLeft(_ row: Row, rowStrings: RowStrings) {
 		moveRowsLeft([row], rowStrings: rowStrings)
 	}
 	
-	func editorTextRowMoveRowRight(_ row: Row, rowStrings: RowStrings) {
+	func editorRowMoveRowRight(_ row: Row, rowStrings: RowStrings) {
 		moveRowsRight([row], rowStrings: rowStrings)
 	}
 	
-	func editorTextRowSplitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
+	func editorRowSplitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
-	func editorTextRowDeleteRowNote(_ row: Row, rowStrings: RowStrings) {
+	func editorRowDeleteRowNote(_ row: Row, rowStrings: RowStrings) {
 		deleteRowNotes([row], rowStrings: rowStrings)
 	}
 	
-	func editorTextRowMoveCursorTo(row: Row) {
+	func editorRowMoveCursorTo(row: Row) {
 		moveCursorTo(row: row)
 	}
 	
-	func editorTextRowMoveCursorDown(row: Row) {
+	func editorRowMoveCursorDown(row: Row) {
 		guard let shadowTableIndex = row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
-		guard let topicTextView = (collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell)?.topicTextView else { return }
+		guard let topicTextView = (collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView else { return }
 		moveCursorDown(topicTextView: topicTextView)
 	}
 	
-	func editorTextRowEditLink(_ link: String?, text: String?, range: NSRange) {
+	func editorRowEditLink(_ link: String?, text: String?, range: NSRange) {
 		editLink(link, text: text, range: range)
 	}
 
-	func editorTextRowZoomImage(_ image: UIImage, rect: CGRect) {
+	func editorRowZoomImage(_ image: UIImage, rect: CGRect) {
 		transition.maskFrame = collectionView.convert(collectionView.safeAreaLayoutGuide.layoutFrame, to: nil)
 		transition.originFrame = rect
 		transition.originImage = image
@@ -1608,11 +1608,11 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 					
 					guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 					let indexPath = IndexPath(row: shadowTableIndex, section: self.adjustedRowsSection)
-					guard let textRowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
+					guard let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell else { return	}
 					
-					if cursorCoordinates.isInNotes, let textView = textRowCell.noteTextView {
+					if cursorCoordinates.isInNotes, let textView = rowCell.noteTextView {
 						textView.replaceCharacters(textView.selectedRange, withImage: scaledImage)
-					} else if let textView = textRowCell.topicTextView {
+					} else if let textView = rowCell.topicTextView {
 						textView.replaceCharacters(textView.selectedRange, withImage: scaledImage)
 					}
 				}
@@ -1642,14 +1642,14 @@ extension EditorViewController: LinkViewControllerDelegate {
 		
 		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
-		guard let textRowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
+		guard let rowCell = collectionView.cellForItem(at: indexPath) as? EditorRowViewCell else { return	}
 		
 		if cursorCoordinates.isInNotes {
-			textRowCell.noteTextView?.becomeFirstResponder()
-			textRowCell.noteTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
+			rowCell.noteTextView?.becomeFirstResponder()
+			rowCell.noteTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
 		} else {
-			textRowCell.topicTextView?.becomeFirstResponder()
-			textRowCell.topicTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
+			rowCell.topicTextView?.becomeFirstResponder()
+			rowCell.topicTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
 		}
 	}
 	
@@ -1869,7 +1869,7 @@ extension EditorViewController {
 			
 			switch (key.keyCode, true) {
             case (.keyboardUpArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
-				if let topic = currentTextView as? EditorTextRowTopicTextView {
+				if let topic = currentTextView as? EditorRowTopicTextView {
 					if topic.cursorIsOnTopLine {
 						isCursoringUp = true
 						repeatMoveCursorUp()
@@ -1881,7 +1881,7 @@ extension EditorViewController {
 					repeatMoveCursorUp()
 				}
 			case (.keyboardDownArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
-				if let topic = currentTextView as? EditorTextRowTopicTextView {
+				if let topic = currentTextView as? EditorRowTopicTextView {
 					if topic.cursorIsOnBottomLine {
 						isCursoringDown = true
 						repeatMoveCursorDown()
@@ -1918,11 +1918,11 @@ extension EditorViewController {
 			case .keyboardUpArrow:
 				if let first = collectionView.indexPathsForSelectedItems?.sorted().first {
 					if first.row > 0 {
-						if let cell = collectionView.cellForItem(at: IndexPath(row: first.row - 1, section: first.section)) as? EditorTextRowViewCell {
+						if let cell = collectionView.cellForItem(at: IndexPath(row: first.row - 1, section: first.section)) as? EditorRowViewCell {
 							cell.moveToEnd()
 						}
 					} else {
-						if let cell = collectionView.cellForItem(at: first) as? EditorTextRowViewCell {
+						if let cell = collectionView.cellForItem(at: first) as? EditorRowViewCell {
 							cell.moveToStart()
 						}
 					}
@@ -1930,24 +1930,24 @@ extension EditorViewController {
 			case .keyboardDownArrow:
 				if let last = collectionView.indexPathsForSelectedItems?.sorted().last {
 					if last.row + 1 < outline?.shadowTable?.count ?? 0 {
-						if let cell = collectionView.cellForItem(at: IndexPath(row: last.row + 1, section: last.section)) as? EditorTextRowViewCell {
+						if let cell = collectionView.cellForItem(at: IndexPath(row: last.row + 1, section: last.section)) as? EditorRowViewCell {
 							cell.moveToEnd()
 						}
 					} else {
-						if let cell = collectionView.cellForItem(at: last) as? EditorTextRowViewCell {
+						if let cell = collectionView.cellForItem(at: last) as? EditorRowViewCell {
 							cell.moveToEnd()
 						}
 					}
 				}
 			case .keyboardLeftArrow:
 				if let first = collectionView.indexPathsForSelectedItems?.sorted().first {
-					if let cell = collectionView.cellForItem(at: first) as? EditorTextRowViewCell {
+					if let cell = collectionView.cellForItem(at: first) as? EditorRowViewCell {
 						cell.moveToStart()
 					}
 				}
 			case .keyboardRightArrow:
 				if let last = collectionView.indexPathsForSelectedItems?.sorted().last {
-					if let cell = collectionView.cellForItem(at: last) as? EditorTextRowViewCell {
+					if let cell = collectionView.cellForItem(at: last) as? EditorRowViewCell {
 						cell.moveToEnd()
 					}
 				}
@@ -1982,7 +1982,7 @@ extension EditorViewController {
 		// This is one of those things where I'm just not sure what is going on. The content size can vary wildly for seemingly no
 		// reason when invalidating the layout. If we try to set the contentOffset when that happens, the editor wildly bounces
 		// around. We try to detect when this is happening and then don't set the contentOffset to prevent the bouncing.
-		if abs(collectionView.contentSize.height - contentHeight) <= (UIResponder.currentFirstResponder as? EditorTextRowTextView)?.lineHeight ?? 0 {
+		if abs(collectionView.contentSize.height - contentHeight) <= (UIResponder.currentFirstResponder as? EditorRowTextView)?.lineHeight ?? 0 {
 			collectionView.contentOffset = contentOffset
 		}
 		makeCursorVisibleIfNecessary()
@@ -2047,7 +2047,7 @@ extension EditorViewController {
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 
 		func restoreCursor() {
-			guard let rowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell else { return	}
+			guard let rowCell = collectionView.cellForItem(at: indexPath) as? EditorRowViewCell else { return	}
 			rowCell.restoreCursor(cursorCoordinates)
 		}
 		
@@ -2303,19 +2303,19 @@ extension EditorViewController {
 		}
 		
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
-		if let rowCell = collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
+		if let rowCell = collectionView.cellForItem(at: indexPath) as? EditorRowViewCell {
 			rowCell.moveToEnd()
 		}
 	}
 	
-	private func moveCursorUp(topicTextView: EditorTextRowTopicTextView) {
+	private func moveCursorUp(topicTextView: EditorRowTopicTextView) {
 		guard let row = topicTextView.row, let shadowTableIndex = row.shadowTableIndex, shadowTableIndex > 0 else {
 			moveCursorToTagInput()
 			return
 		}
 		
 		let indexPath = IndexPath(row: shadowTableIndex - 1, section: adjustedRowsSection)
-		if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell)?.topicTextView {
+		if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView {
 			nextTopicTextView.becomeFirstResponder()
 			if let topicTextViewCursorRect = topicTextView.cursorRect {
 				let convertedRect = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
@@ -2330,12 +2330,12 @@ extension EditorViewController {
 		makeCursorVisibleIfNecessary()
 	}
 	
-	private func moveCursorDown(topicTextView: EditorTextRowTopicTextView) {
+	private func moveCursorDown(topicTextView: EditorRowTopicTextView) {
 		guard let row = topicTextView.row, let shadowTableIndex = row.shadowTableIndex, let shadowTable = outline?.shadowTable else { return }
 		
 		if shadowTableIndex < (shadowTable.count - 1) {
 			let indexPath = IndexPath(row: shadowTableIndex + 1, section: adjustedRowsSection)
-			if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell)?.topicTextView {
+			if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView {
 				nextTopicTextView.becomeFirstResponder()
 				if let topicTextViewCursorRect = topicTextView.cursorRect {
 					let convertedRect = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
@@ -2350,7 +2350,7 @@ extension EditorViewController {
 			makeCursorVisibleIfNecessary()
 		} else {
 			let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
-			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorTextRowViewCell {
+			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}
@@ -2414,7 +2414,7 @@ extension EditorViewController {
 		if let cursorRow = currentRow {
 			for row in rows {
 				if cursorRow.isDecendent(row), let newCursorIndex = row.shadowTableIndex {
-					if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
+					if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {
 						rowCell.moveToEnd()
 					}
 				}
@@ -2593,7 +2593,7 @@ extension EditorViewController {
 			if newCursorIndex == -1 {
 				moveCursorToTagInput()
 			} else {
-				if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
+				if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {
 					rowCell.moveToEnd()
 				}
 			}
@@ -2611,7 +2611,7 @@ extension EditorViewController {
 		runCommand(command)
 		
 		if let newCursorIndex = command.newCursorIndex {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}
@@ -2634,7 +2634,7 @@ extension EditorViewController {
 		
 		if let newCursorIndex = command.newCursorIndex {
 			let newCursorIndexPath = IndexPath(row: newCursorIndex, section: adjustedRowsSection)
-			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorTextRowViewCell {
+			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
 				rowCell.moveToEnd()
 			}
 			makeCursorVisibleIfNecessary()
@@ -2658,7 +2658,7 @@ extension EditorViewController {
 		
 		if let newCursorIndex = command.newCursorIndex {
 			let newCursorIndexPath = IndexPath(row: newCursorIndex, section: adjustedRowsSection)
-			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorTextRowViewCell {
+			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
 				rowCell.moveToEnd()
 			}
 			makeCursorVisibleIfNecessary()
@@ -2682,7 +2682,7 @@ extension EditorViewController {
 		
 		if let newCursorIndex = command.newCursorIndex {
 			let newCursorIndexPath = IndexPath(row: newCursorIndex, section: adjustedRowsSection)
-			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorTextRowViewCell {
+			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
 				rowCell.moveToEnd()
 			}
 			makeCursorVisibleIfNecessary()
@@ -2764,7 +2764,7 @@ extension EditorViewController {
 		runCommand(command)
 		
 		if let newCursorIndex = command.newCursorIndex {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {
 				rowCell.moveToStart()
 			}
 		}
@@ -2782,7 +2782,7 @@ extension EditorViewController {
 		runCommand(command)
 		
 		if let newCursorIndex = command.newCursorIndex {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}
@@ -2812,7 +2812,7 @@ extension EditorViewController {
 		runCommand(command)
 		
 		if let newCursorIndex = command.newCursorIndex ?? rows.first?.shadowTableIndex {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {
 				rowCell.moveToNote()
 			}
 		}
@@ -2830,7 +2830,7 @@ extension EditorViewController {
 		runCommand(command)
 
 		if let newCursorIndex = command.newCursorIndex {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorTextRowViewCell {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {
 				rowCell.moveToEnd()
 			}
 		}
@@ -2842,7 +2842,7 @@ extension EditorViewController {
 			  var convertedRect = (textInput as? UIView)?.convert(cursorRect, to: collectionView) else { return }
 		
 		// This isInNotes hack isn't well understood, but it improves the user experience...
-		if textInput is EditorTextRowNoteTextView {
+		if textInput is EditorRowNoteTextView {
 			convertedRect.size.height = convertedRect.size.height + 10
 		}
 		
@@ -2856,7 +2856,7 @@ extension EditorViewController {
 	}
 	
 	private func saveCurrentText() {
-		if let textView = UIResponder.currentFirstResponder as? EditorTextRowTextView {
+		if let textView = UIResponder.currentFirstResponder as? EditorRowTextView {
 			textView.saveText()
 		}
 	}

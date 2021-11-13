@@ -1,5 +1,5 @@
 //
-//  EditorTextRowTextView.swift
+//  EditorRowTextView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/7/20.
@@ -10,7 +10,7 @@ import Templeton
 import RSCore
 
 extension Selector {
-	static let editLink = #selector(EditorTextRowTextView.editLink(_:))
+	static let editLink = #selector(EditorRowTextView.editLink(_:))
 }
 
 extension NSAttributedString.Key {
@@ -18,7 +18,7 @@ extension NSAttributedString.Key {
 	static let searchResult: NSAttributedString.Key = .init("searchResult")
 }
 
-class EditorTextRowTextView: UITextView {
+class EditorRowTextView: UITextView {
 	
 	var row: Row?
 	
@@ -96,7 +96,7 @@ class EditorTextRowTextView: UITextView {
 	let toggleItalicsCommand = UIKeyCommand(title: L10n.italic, action: .toggleItalics, input: "i", modifierFlags: [.command])
 	let editLinkCommand = UIKeyCommand(title: L10n.link, action: .editLink, input: "k", modifierFlags: [.command])
 
-	private var dropInteractionDelegate: EditorTextRowDropInteractionDelegate!
+	private var dropInteractionDelegate: EditorRowDropInteractionDelegate!
 	private var stackedUndoManager: UndoManager?
 
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
@@ -111,7 +111,7 @@ class EditorTextRowTextView: UITextView {
 		textStorage.delegate = self
 		textDropDelegate = self
 		
-		self.dropInteractionDelegate = EditorTextRowDropInteractionDelegate(textView: self)
+		self.dropInteractionDelegate = EditorRowDropInteractionDelegate(textView: self)
 		self.addInteraction(UIDropInteraction(delegate: dropInteractionDelegate))
 
 		// These gesture recognizers will conflict with context menu preview dragging if not removed.
@@ -244,7 +244,7 @@ class EditorTextRowTextView: UITextView {
 
 }
 
-extension EditorTextRowTextView: UITextDropDelegate {
+extension EditorRowTextView: UITextDropDelegate {
 	
 	func textDroppableView(_ textDroppableView: UIView & UITextDroppable, willBecomeEditableForDrop drop: UITextDropRequest) -> UITextDropEditability {
 		return .temporary
@@ -262,7 +262,7 @@ extension EditorTextRowTextView: UITextDropDelegate {
 
 // MARK: NSTextStorageDelegate
 
-extension EditorTextRowTextView: NSTextStorageDelegate {
+extension EditorRowTextView: NSTextStorageDelegate {
 	
 	func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
 		textStorage.enumerateAttributes(in: editedRange, options: .longestEffectiveRangeNotRequired) { (attributes, range, _) in
@@ -323,7 +323,7 @@ extension EditorTextRowTextView: NSTextStorageDelegate {
 
 // MARK: Helpers
 
-extension EditorTextRowTextView {
+extension EditorRowTextView {
     
     func detectData() {
         guard let text = attributedText?.string, !text.isEmpty else { return }

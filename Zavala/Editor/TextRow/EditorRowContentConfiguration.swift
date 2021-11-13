@@ -1,5 +1,5 @@
 //
-//  EditorTextRowContentConfiguration.swift
+//  EditorRowContentConfiguration.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/17/20.
@@ -8,9 +8,9 @@
 import UIKit
 import Templeton
 
-struct EditorTextRowContentConfiguration: UIContentConfiguration {
+struct EditorRowContentConfiguration: UIContentConfiguration {
 
-	weak var delegate: EditorTextRowViewCellDelegate? = nil
+	weak var delegate: EditorRowViewCellDelegate? = nil
 
 	var row: Row? = nil
 	var indentationWidth: CGFloat
@@ -25,7 +25,7 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration {
 	}
 	
 	func makeContentView() -> UIView & UIContentView {
-		return EditorTextRowContentView(configuration: self)
+		return EditorRowContentView(configuration: self)
 	}
 	
 	func updated(for state: UIConfigurationState) -> Self {

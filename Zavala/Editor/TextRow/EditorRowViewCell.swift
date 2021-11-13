@@ -1,5 +1,5 @@
 //
-//  EditorTextRowViewCell.swift
+//  EditorRowViewCell.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/16/20.
@@ -8,28 +8,28 @@
 import UIKit
 import Templeton
 
-protocol EditorTextRowViewCellDelegate: AnyObject {
-	var editorTextRowUndoManager: UndoManager? { get }
-	var editorTextRowInputAccessoryView: UIView? { get }
-    func editorTextRowReload(row: Row)
-	func editorTextRowMakeCursorVisibleIfNecessary()
-	func editorTextRowTextFieldDidBecomeActive(row: Row)
-	func editorTextRowToggleDisclosure(row: Row)
-	func editorTextRowMoveCursorTo(row: Row)
-	func editorTextRowMoveCursorDown(row: Row)
-	func editorTextRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange)
-	func editorTextRowDeleteRow(_ row: Row, rowStrings: RowStrings)
-	func editorTextRowCreateRow(beforeRow: Row)
-	func editorTextRowCreateRow(afterRow: Row?, rowStrings: RowStrings?)
-	func editorTextRowMoveRowLeft(_ row: Row, rowStrings: RowStrings)
-	func editorTextRowMoveRowRight(_ row: Row, rowStrings: RowStrings)
-	func editorTextRowSplitRow(_: Row, topic: NSAttributedString, cursorPosition: Int)
-	func editorTextRowDeleteRowNote(_ row: Row, rowStrings: RowStrings)
-	func editorTextRowEditLink(_ link: String?, text: String?, range: NSRange)
-	func editorTextRowZoomImage(_ image: UIImage, rect: CGRect)
+protocol EditorRowViewCellDelegate: AnyObject {
+	var editorRowUndoManager: UndoManager? { get }
+	var editorRowInputAccessoryView: UIView? { get }
+    func editorRowReload(row: Row)
+	func editorRowMakeCursorVisibleIfNecessary()
+	func editorRowTextFieldDidBecomeActive(row: Row)
+	func editorRowToggleDisclosure(row: Row)
+	func editorRowMoveCursorTo(row: Row)
+	func editorRowMoveCursorDown(row: Row)
+	func editorRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange)
+	func editorRowDeleteRow(_ row: Row, rowStrings: RowStrings)
+	func editorRowCreateRow(beforeRow: Row)
+	func editorRowCreateRow(afterRow: Row?, rowStrings: RowStrings?)
+	func editorRowMoveRowLeft(_ row: Row, rowStrings: RowStrings)
+	func editorRowMoveRowRight(_ row: Row, rowStrings: RowStrings)
+	func editorRowSplitRow(_: Row, topic: NSAttributedString, cursorPosition: Int)
+	func editorRowDeleteRowNote(_ row: Row, rowStrings: RowStrings)
+	func editorRowEditLink(_ link: String?, text: String?, range: NSRange)
+	func editorRowZoomImage(_ image: UIImage, rect: CGRect)
 }
 
-class EditorTextRowViewCell: UICollectionViewListCell {
+class EditorRowViewCell: UICollectionViewListCell {
 
 	var row: Row? {
 		didSet {
@@ -49,18 +49,18 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 		}
 	}
 	
-	weak var delegate: EditorTextRowViewCellDelegate? {
+	weak var delegate: EditorRowViewCellDelegate? {
 		didSet {
 			setNeedsUpdateConfiguration()
 		}
 	}
 	
-	var topicTextView: EditorTextRowTopicTextView? {
-		return (contentView as? EditorTextRowContentView)?.topicTextView
+	var topicTextView: EditorRowTopicTextView? {
+		return (contentView as? EditorRowContentView)?.topicTextView
 	}
 	
-	var noteTextView: EditorTextRowNoteTextView? {
-		return (contentView as? EditorTextRowContentView)?.noteTextView
+	var noteTextView: EditorRowNoteTextView? {
+		return (contentView as? EditorRowContentView)?.noteTextView
 	}
 	
 	override func updateConfiguration(using state: UICellConfigurationState) {
@@ -79,18 +79,18 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 			indentationWidth = 13
 		}
 		
-		var content = EditorTextRowContentConfiguration(row: row, indentionLevel: indentationLevel, indentationWidth: indentationWidth, isNotesHidden: isNotesHidden, isSearching: isSearching)
+		var content = EditorRowContentConfiguration(row: row, indentionLevel: indentationLevel, indentationWidth: indentationWidth, isNotesHidden: isNotesHidden, isSearching: isSearching)
 		content = content.updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content
 	}
 
 	func restoreCursor(_ cursorCoordinates: CursorCoordinates) {
-		let textView: EditorTextRowTextView?
+		let textView: EditorRowTextView?
 		if cursorCoordinates.isInNotes {
-			textView = (contentView as? EditorTextRowContentView)?.noteTextView
+			textView = (contentView as? EditorRowContentView)?.noteTextView
 		} else {
-			textView = (contentView as? EditorTextRowContentView)?.topicTextView
+			textView = (contentView as? EditorRowContentView)?.topicTextView
 		}
 		
 		if let textView = textView,
@@ -106,7 +106,7 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 	}
 	
 	func moveToStart() {
-		guard let textView = (contentView as? EditorTextRowContentView)?.topicTextView else { return }
+		guard let textView = (contentView as? EditorRowContentView)?.topicTextView else { return }
 		textView.becomeFirstResponder()
 		let startPosition = textView.beginningOfDocument
 		// If you don't set the cursor location this way, sometimes if just doesn't appear.  Weird, I know.
@@ -115,14 +115,14 @@ class EditorTextRowViewCell: UICollectionViewListCell {
 	}
 	
 	func moveToEnd() {
-		guard let textView = (contentView as? EditorTextRowContentView)?.topicTextView else { return }
+		guard let textView = (contentView as? EditorRowContentView)?.topicTextView else { return }
 		textView.becomeFirstResponder()
 		let endPosition = textView.endOfDocument
 		textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
 	}
 	
 	func moveToNote() {
-		guard let textView = (contentView as? EditorTextRowContentView)?.noteTextView else { return }
+		guard let textView = (contentView as? EditorRowContentView)?.noteTextView else { return }
 		textView.becomeFirstResponder()
 		let endPosition = textView.endOfDocument
 		textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
