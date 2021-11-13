@@ -758,7 +758,7 @@
 			path = Activities;
 			sourceTree = "<group>";
 		};
-		51C03097257E02FF00609262 /* TextRow */ = {
+		51C03097257E02FF00609262 /* Row */ = {
 			isa = PBXGroup;
 			children = (
 				51B2B2CD2563AAF60090C56B /* EditorRowContentConfiguration.swift */,
@@ -770,7 +770,7 @@
 				51B2B2C72563A2180090C56B /* EditorRowTopicTextView.swift */,
 				512229672563507E008041AF /* EditorRowViewCell.swift */,
 			);
-			path = TextRow;
+			path = Row;
 			sourceTree = "<group>";
 		};
 		51C030A0257E06EC00609262 /* Title */ = {
@@ -880,7 +880,7 @@
 				511B29F526018F4A00C04239 /* Backlink */,
 				51D460F82729E2E60024EC48 /* Metadata */,
 				514F220B25C4CC42004E02CD /* Tag */,
-				51C03097257E02FF00609262 /* TextRow */,
+				51C03097257E02FF00609262 /* Row */,
 				51C030A0257E06EC00609262 /* Title */,
 			);
 			path = Editor;
