@@ -332,7 +332,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	private static var defaultContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
 	
-	private var transition = ImageTransition()
+	private lazy var transition = ImageTransition(delegate: self)
+	private var imageBlocker: UIView?
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -1767,6 +1768,24 @@ extension EditorViewController: UIViewControllerTransitioningDelegate {
 		transition.presenting = false
 		return transition
 	}
+}
+
+// MARK: ImageTransitionDelegate
+
+extension EditorViewController: ImageTransitionDelegate {
+	
+	func hideImage(_: ImageTransition, frame: CGRect) {
+		let convertedFrame = view.convert(frame, to: collectionView)
+		imageBlocker = UIView(frame: convertedFrame)
+		imageBlocker!.backgroundColor = AppAssets.fullScreenBackgroundColor
+		collectionView.addSubview(imageBlocker!)
+	}
+	
+	func unhideImage(_: ImageTransition) {
+		imageBlocker?.removeFromSuperview()
+		imageBlocker = nil
+	}
+	
 }
 
 // MARK: Helpers

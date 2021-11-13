@@ -7,13 +7,24 @@
 
 import UIKit
 
+protocol ImageTransitionDelegate: AnyObject {
+	func hideImage(_: ImageTransition, frame: CGRect);
+	func unhideImage(_: ImageTransition);
+}
+
 class ImageTransition: NSObject, UIViewControllerAnimatedTransitioning {
 
-	private let duration = 0.4
 	var presenting = true
 	var originFrame: CGRect!
 	var maskFrame: CGRect!
 	var originImage: UIImage!
+
+	init(delegate: ImageTransitionDelegate) {
+		self.delegate = delegate
+	}
+	
+	private weak var delegate: ImageTransitionDelegate?
+	private let duration = 0.4
 	
 	func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
 		return duration
@@ -37,6 +48,8 @@ class ImageTransition: NSObject, UIViewControllerAnimatedTransitioning {
 
 		transitionContext.containerView.backgroundColor = AppAssets.fullScreenBackgroundColor
 		transitionContext.containerView.addSubview(imageView)
+		
+		delegate?.hideImage(self, frame: originFrame)
 		
 		UIView.animate(
 			withDuration: duration,
@@ -84,8 +97,8 @@ class ImageTransition: NSObject, UIViewControllerAnimatedTransitioning {
 			initialSpringVelocity: 0.2,
 			animations: {
 				imageView.frame = self.originFrame
-				imageView.alpha = 0.5
 			}, completion: { _ in
+				self.delegate?.unhideImage(self)
 				imageView.removeFromSuperview()
 				transitionContext.completeTransition(true)
 		})
