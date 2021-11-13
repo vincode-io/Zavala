@@ -25,9 +25,11 @@ class ImageViewController: UIViewController {
 		closeButton.accessibilityLabel = NSLocalizedString("Close", comment: "Close")
 		shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "Share")
 
+		closeButton.tintColor = .accentColor
+		shareButton.tintColor = .accentColor
+
 		if traitCollection.userInterfaceIdiom == .mac {
 			closeButton.isHidden = true
-			shareButton.tintColor = .accentColor
 		}
 		
         imageScrollView.setup()
