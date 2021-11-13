@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct EditorTitleContentConfiguration: UIContentConfiguration, Hashable {
+struct EditorTitleContentConfiguration: UIContentConfiguration {
 
 	var title: String?
 	weak var delegate: EditorTitleViewCellDelegate?
@@ -24,12 +24,4 @@ struct EditorTitleContentConfiguration: UIContentConfiguration, Hashable {
 		return self
 	}
 
-	func hash(into hasher: inout Hasher) {
-		hasher.combine(title)
-	}
-	
-	static func == (lhs: EditorTitleContentConfiguration, rhs: EditorTitleContentConfiguration) -> Bool {
-		return lhs.title == rhs.title
-	}
-	
 }

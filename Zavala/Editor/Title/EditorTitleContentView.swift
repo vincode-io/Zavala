@@ -14,12 +14,8 @@ class EditorTitleContentView: UIView, UIContentView {
 	var textViewHeight: CGFloat?
 	var adjustingSeparatorWidthContraint: NSLayoutConstraint?
 	
-	weak var delegate: EditorTitleViewCellDelegate?
-	
-	var appliedConfiguration: EditorTitleContentConfiguration!
-	
 	init(configuration: EditorTitleContentConfiguration) {
-		self.delegate = configuration.delegate
+		self.configuration = configuration
 		super.init(frame: .zero)
 
 		textView.delegate = self
@@ -55,7 +51,7 @@ class EditorTitleContentView: UIView, UIContentView {
 			separator.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor)
 		])
 
-		apply(configuration: configuration)
+		apply()
 	}
 	
 	required init?(coder: NSCoder) {
@@ -63,22 +59,17 @@ class EditorTitleContentView: UIView, UIContentView {
 	}
 	
 	var configuration: UIContentConfiguration {
-		get { appliedConfiguration }
-		set {
-			guard let newConfig = newValue as? EditorTitleContentConfiguration else { return }
-			apply(configuration: newConfig)
+		didSet {
+			apply()
 		}
 	}
 	
-	private func apply(configuration: EditorTitleContentConfiguration) {
-		if textView.font != OutlineFontCache.shared.title {
-			textView.font = OutlineFontCache.shared.title
-			updateAdjustingSeparatorWidthContraint()
-		}
-
-		guard appliedConfiguration != configuration else { return }
-		appliedConfiguration = configuration
-		textView.text = configuration.title
+	private var titleConfiguration: EditorTitleContentConfiguration {
+		return configuration as! EditorTitleContentConfiguration
+	}
+	
+	private func apply() {
+		textView.text = titleConfiguration.title
 		updateAdjustingSeparatorWidthContraint()
 	}
 	
@@ -89,11 +80,11 @@ class EditorTitleContentView: UIView, UIContentView {
 extension EditorTitleContentView: EditorTitleTextViewDelegate {
 	
 	var editorTitleTextViewUndoManager: UndoManager? {
-		return appliedConfiguration.delegate?.editorTitleUndoManager
+		return titleConfiguration.delegate?.editorTitleUndoManager
 	}
 	
 	func didBecomeActive(_: EditorTitleTextView) {
-		appliedConfiguration.delegate?.editorTitleTextFieldDidBecomeActive()
+		titleConfiguration.delegate?.editorTitleTextFieldDidBecomeActive()
 	}
 	
 }
@@ -111,7 +102,7 @@ extension EditorTitleContentView: UITextViewDelegate {
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
 		switch text {
 		case "\n":
-			appliedConfiguration.delegate?.editorTitleMoveToTagInput()
+			titleConfiguration.delegate?.editorTitleMoveToTagInput()
 			return false
 		default:
 			return true
@@ -119,13 +110,13 @@ extension EditorTitleContentView: UITextViewDelegate {
 	}
 	
 	func textViewDidChange(_ textView: UITextView) {
-		delegate?.editorTitleDidUpdate(title: textView.text)
+		titleConfiguration.delegate?.editorTitleDidUpdate(title: textView.text)
 		
 		let fittingSize = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
 		if textViewHeight != fittingSize.height {
 			textViewHeight = fittingSize.height
 			invalidateIntrinsicContentSize()
-			appliedConfiguration.delegate?.editorTitleLayoutEditor()
+			titleConfiguration.delegate?.editorTitleLayoutEditor()
 		}
 		
 		updateAdjustingSeparatorWidthContraint()
