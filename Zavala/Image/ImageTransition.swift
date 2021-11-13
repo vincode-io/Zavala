@@ -84,11 +84,10 @@ class ImageTransition: NSObject, UIViewControllerAnimatedTransitioning {
 			initialSpringVelocity: 0.2,
 			animations: {
 				imageView.frame = self.originFrame
+				imageView.alpha = 0.5
 			}, completion: { _ in
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-					imageView.removeFromSuperview()
-					transitionContext.completeTransition(true)
-				}
+				imageView.removeFromSuperview()
+				transitionContext.completeTransition(true)
 		})
 	}
 	
