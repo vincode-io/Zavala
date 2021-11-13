@@ -8,40 +8,20 @@
 import UIKit
 import Templeton
 
-struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
+struct EditorTextRowContentConfiguration: UIContentConfiguration {
 
-	var row: Row? = nil
 	weak var delegate: EditorTextRowViewCellDelegate? = nil
 
-	var id: String
-	var indentionLevel: Int
+	var row: Row? = nil
 	var indentationWidth: CGFloat
 	var isNotesHidden: Bool
 	var isSearching: Bool
-	var isChevronShowing: Bool
-	var isComplete: Bool
-	var isAncestorComplete: Bool
-	var topic: NSAttributedString?
-	var topicFont: UIFont
-	var note: NSAttributedString?
-	var noteFont: UIFont
 	
 	init(row: Row, indentionLevel: Int, indentationWidth: CGFloat, isNotesHidden: Bool, isSearching: Bool) {
 		self.row = row
-		self.indentionLevel = indentionLevel
 		self.indentationWidth = indentationWidth
 		self.isNotesHidden = isNotesHidden
 		self.isSearching = isSearching
-
-		self.id = row.id
-		self.isChevronShowing = row.rowCount > 0
-		self.isComplete = row.isComplete
-		self.isAncestorComplete = row.isAncestorComplete
-		self.topic = row.topic
-		self.note = row.note
-		
-		self.topicFont = OutlineFontCache.shared.topic(level: indentionLevel)
-		self.noteFont = OutlineFontCache.shared.note(level: indentionLevel)
 	}
 	
 	func makeContentView() -> UIView & UIContentView {
@@ -52,34 +32,4 @@ struct EditorTextRowContentConfiguration: UIContentConfiguration, Hashable {
 		return self
 	}
 
-	func hash(into hasher: inout Hasher) {
-		hasher.combine(id)
-		hasher.combine(indentionLevel)
-		hasher.combine(indentationWidth)
-		hasher.combine(isNotesHidden)
-		hasher.combine(isSearching)
-		hasher.combine(isChevronShowing)
-		hasher.combine(isComplete)
-		hasher.combine(isAncestorComplete)
-		hasher.combine(topic)
-		hasher.combine(topicFont)
-		hasher.combine(note)
-		hasher.combine(noteFont)
-	}
-	
-	static func == (lhs: EditorTextRowContentConfiguration, rhs: EditorTextRowContentConfiguration) -> Bool {
-		return lhs.id == rhs.id &&
-			lhs.indentionLevel == rhs.indentionLevel &&
-			lhs.indentationWidth == rhs.indentationWidth &&
-			lhs.isNotesHidden == rhs.isNotesHidden &&
-			lhs.isSearching == rhs.isSearching &&
-			lhs.isChevronShowing == rhs.isChevronShowing &&
-			lhs.isComplete == rhs.isComplete &&
-			lhs.isAncestorComplete == rhs.isAncestorComplete &&
-			NSAttributedString.isOptionalStringsEqual(lhs: lhs.topic, rhs: rhs.topic) &&
-			lhs.topicFont == rhs.topicFont &&
-			NSAttributedString.isOptionalStringsEqual(lhs: lhs.note, rhs: rhs.note) &&
-			lhs.noteFont == rhs.noteFont
-	}
-	
 }

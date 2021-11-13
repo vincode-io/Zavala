@@ -21,7 +21,6 @@ extension NSAttributedString.Key {
 class EditorTextRowTextView: UITextView {
 	
 	var row: Row?
-	var indentionLevel = 0
 	
 	var lineHeight: CGFloat {
 		if let textRange = textRange(from: beginningOfDocument, to: beginningOfDocument) {
@@ -192,7 +191,7 @@ class EditorTextRowTextView: UITextView {
         fatalError("textChanged has not been implemented")
     }
 
-	func update(row: Row, indentionLevel: Int) {
+	func update(row: Row) {
 		fatalError("update has not been implemented")
 	}
 	

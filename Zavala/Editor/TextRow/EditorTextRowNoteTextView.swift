@@ -116,13 +116,12 @@ class EditorTextRowNoteTextView: EditorTextRowTextView {
 		editorDelegate?.editLink(self, result.0, text: result.1, range: result.2)
 	}
 	
-	override func update(row: Row, indentionLevel: Int) {
+	override func update(row: Row) {
 		self.row = row
-		self.indentionLevel = indentionLevel
 		
 		var attrs = [NSAttributedString.Key : Any]()
 		attrs[.foregroundColor] = UIColor.secondaryLabel
-		attrs[.font] = OutlineFontCache.shared.note(level: indentionLevel)
+		attrs[.font] = OutlineFontCache.shared.note(level: row.level)
 		
 		typingAttributes = attrs
         

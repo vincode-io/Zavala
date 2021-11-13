@@ -162,9 +162,8 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 		editorDelegate?.editLink(self, result.0, text: result.1, range: result.2)
 	}
 	
-	override func update(row: Row, indentionLevel: Int) {
+	override func update(row: Row) {
 		self.row = row
-		self.indentionLevel = indentionLevel
 
 		var attrs = [NSAttributedString.Key : Any]()
 		if row.isComplete || row.isAncestorComplete {
@@ -182,7 +181,7 @@ class EditorTextRowTopicTextView: EditorTextRowTextView {
 			attrs[.strikethroughStyle] = 0
 		}
 		
-		attrs[.font] = OutlineFontCache.shared.topic(level: indentionLevel)
+		attrs[.font] = OutlineFontCache.shared.topic(level: row.level)
 		
 		typingAttributes = attrs
 		

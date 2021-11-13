@@ -65,20 +65,6 @@ class EditorTextRowContentView: UIView, UIContentView {
 	}
 	
 	private func apply(configuration: EditorTextRowContentConfiguration) {
-		guard appliedConfiguration != configuration else {
-            // This is a horrible hack in search of a better solution. I haven't figured out how to tell
-            // when the user has switched to another app and come back. I do know that the collection view
-            // will try to apply config changes when this happens tho. So, we restore the cursor that somehow
-            // gets lost when the user switches applications.
-            if let coordinates = CursorCoordinates.bestCoordinates, coordinates.row == configuration.row {
-                if !coordinates.isInNotes {
-                    topicTextView?.selectedRange = coordinates.selection
-                } else {
-                    noteTextView?.selectedRange = coordinates.selection
-                }
-            }
-            return
-        }
 		appliedConfiguration = configuration
 		
 		if topicTextView?.isFirstResponder ?? false {
@@ -332,7 +318,7 @@ extension EditorTextRowContentView {
         topicTextView!.translatesAutoresizingMaskIntoConstraints = false
         addSubview(topicTextView!)
 
-		topicTextView!.update(row: row, indentionLevel: configuration.indentionLevel)
+		topicTextView!.update(row: row)
 	}
 	
 	private func configureNoteTextView(configuration: EditorTextRowContentConfiguration) {
@@ -348,20 +334,20 @@ extension EditorTextRowContentView {
         noteTextView!.translatesAutoresizingMaskIntoConstraints = false
         addSubview(noteTextView!)
 		
-		noteTextView!.update(row: row, indentionLevel: configuration.indentionLevel)
+		noteTextView!.update(row: row)
 	}
 	
 	private func addBarViews() {
+		guard let row = appliedConfiguration.row else { return }
+		
 		for i in 0..<barViews.count {
 			barViews[i].removeFromSuperview()
 		}
 		barViews.removeAll()
 
-		let config = appliedConfiguration as EditorTextRowContentConfiguration
-		
-		if config.indentionLevel > 0 {
+		if row.level > 0 {
 			let barViewsCount = barViews.count
-			for i in (1...config.indentionLevel) {
+			for i in (1...row.level) {
 				if i > barViewsCount {
 					addBarView(indentLevel: i)
 				}
