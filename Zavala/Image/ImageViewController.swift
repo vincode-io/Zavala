@@ -1,6 +1,5 @@
 //
 //  ImageViewController.swift
-//  NetNewsWire-iOS
 //
 //  Created by Maurice Parker on 10/12/19.
 //  Copyright © 2019 Ranchero Software. All rights reserved.
