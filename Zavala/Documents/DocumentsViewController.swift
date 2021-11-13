@@ -664,8 +664,8 @@ extension DocumentsViewController {
         }
         
 		let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-		alert.addAction(cancelAction)
 		alert.addAction(deleteAction)
+		alert.addAction(cancelAction)
 		alert.preferredAction = deleteAction
 		
 		present(alert, animated: true, completion: nil)
