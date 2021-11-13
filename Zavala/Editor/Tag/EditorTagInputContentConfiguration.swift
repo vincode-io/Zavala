@@ -8,15 +8,10 @@
 import UIKit
 import Templeton
 
-struct EditorTagInputContentConfiguration: UIContentConfiguration, Hashable {
+struct EditorTagInputContentConfiguration: UIContentConfiguration {
 
-	var outlineID: EntityID?
 	weak var delegate: EditorTagInputViewCellDelegate?
-	
-	init(outlineID: EntityID?) {
-		self.outlineID = outlineID
-	}
-	
+
 	func makeContentView() -> UIView & UIContentView {
 		return EditorTagInputContentView(configuration: self)
 	}
@@ -25,12 +20,4 @@ struct EditorTagInputContentConfiguration: UIContentConfiguration, Hashable {
 		return self
 	}
 
-	func hash(into hasher: inout Hasher) {
-		hasher.combine(outlineID)
-	}
-	
-	static func == (lhs: EditorTagInputContentConfiguration, rhs: EditorTagInputContentConfiguration) -> Bool {
-		return lhs.outlineID == rhs.outlineID
-	}
-	
 }

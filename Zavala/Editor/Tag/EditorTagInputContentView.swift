@@ -69,9 +69,7 @@ class EditorTagInputContentView: UIView, UIContentView {
 	private func apply(configuration: EditorTagInputContentConfiguration) {
 		textField.font = OutlineFontCache.shared.tag
 		borderView.layer.cornerRadius = (textField.intrinsicContentSize.height + 5) / 2
-		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
-		textField.text = ""
 	}
 	
 }
