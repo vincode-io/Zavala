@@ -29,8 +29,10 @@ class ImageSceneDelegate: UIResponder, UIWindowSceneDelegate {
 		self.imageViewController = imageViewController
 		self.imageViewController.image = image
 
-		window?.windowScene?.titlebar?.titleVisibility = .hidden
-		window?.windowScene?.titlebar?.toolbar = nil
+		#if targetEnvironment(macCatalyst)
+			window?.windowScene?.titlebar?.titleVisibility = .hidden
+			window?.windowScene?.titlebar?.toolbar = nil
+		#endif
 
 		var width = image.size.width
 		var height = image.size.height
