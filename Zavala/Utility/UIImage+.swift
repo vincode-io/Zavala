@@ -8,6 +8,10 @@
 import UIKit
 
 extension UIImage {
+
+	struct UserInfoKeys {
+		static let pngData = "pngData"
+	}
 	
 	func rotateImage() -> UIImage? {
 		if (imageOrientation == UIImage.Orientation.up ) {

@@ -603,6 +603,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return UISceneConfiguration(name: "Outline Editor Configuration", sessionRole: connectingSceneSession.role)
 		case NSUserActivity.ActivityType.openQuickly:
 			return UISceneConfiguration(name: "Open Quickly Configuration", sessionRole: connectingSceneSession.role)
+		case NSUserActivity.ActivityType.viewImage:
+			return UISceneConfiguration(name: "Image Configuration", sessionRole: connectingSceneSession.role)
 		default:
 			guard options.userActivities.first?.userInfo == nil else {
 				return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)

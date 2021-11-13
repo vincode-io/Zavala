@@ -250,7 +250,11 @@ extension EditorContainerViewController: EditorDelegate {
 	func printList(_: EditorViewController, outline: Outline) { }
 
 	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate) {
-
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.viewImage)
+		if let pngData = image.pngData() {
+			activity.userInfo = [UIImage.UserInfoKeys.pngData: pngData]
+		}
+		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 
 }

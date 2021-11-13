@@ -155,6 +155,7 @@
 		51C71C6D273F087000F6C779 /* ImageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C71C6C273F087000F6C779 /* ImageScrollView.swift */; };
 		51C71C6F273F088D00F6C779 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C71C6E273F088D00F6C779 /* ImageViewController.swift */; };
 		51C71C72273F252900F6C779 /* Image.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51C71C71273F252900F6C779 /* Image.storyboard */; };
+		51C71C74273F264600F6C779 /* ImageSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C71C73273F264600F6C779 /* ImageSceneDelegate.swift */; };
 		51CF10A82571BA66005D6D88 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10A72571BA66005D6D88 /* Localizable.strings */; };
 		51CF10AC2571BA9A005D6D88 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */; };
 		51CF10C22571C22C005D6D88 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51CF10C12571C22C005D6D88 /* L10n.swift */; };
@@ -402,6 +403,7 @@
 		51C71C6C273F087000F6C779 /* ImageScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageScrollView.swift; sourceTree = "<group>"; };
 		51C71C6E273F088D00F6C779 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		51C71C71273F252900F6C779 /* Image.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Image.storyboard; sourceTree = "<group>"; };
+		51C71C73273F264600F6C779 /* ImageSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSceneDelegate.swift; sourceTree = "<group>"; };
 		51CF10A72571BA66005D6D88 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; path = Localizable.stringsdict; sourceTree = "<group>"; };
 		51CF10C12571C22C005D6D88 /* L10n.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
@@ -810,6 +812,7 @@
 			isa = PBXGroup;
 			children = (
 				51C71C71273F252900F6C779 /* Image.storyboard */,
+				51C71C73273F264600F6C779 /* ImageSceneDelegate.swift */,
 				51C71C6C273F087000F6C779 /* ImageScrollView.swift */,
 				51C71C6A273F07ED00F6C779 /* ImageTransition.swift */,
 				51C71C6E273F088D00F6C779 /* ImageViewController.swift */,
@@ -1246,6 +1249,7 @@
 				51D28D32257731DC0039DDFC /* EditorViewController+Drop.swift in Sources */,
 				51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */,
 				51E5C49127221F6F00A38983 /* IntentRow+.swift in Sources */,
+				51C71C74273F264600F6C779 /* ImageSceneDelegate.swift in Sources */,
 				5191850F271390F100B7E177 /* IntentEntityID+.swift in Sources */,
 				514F221E25C4D0A8004E02CD /* EditorTagInputContentView.swift in Sources */,
 				5191850D271387C300B7E177 /* RemoveOutlineIntentHandler.swift in Sources */,

@@ -117,6 +117,7 @@
 		<string>RemoveRowsIntent</string>
 		<string>ShowOutlineIntent</string>
 		<string>io.vincode.Zavala.newWindow</string>
+		<string>io.vincode.Zavala.viewImage</string>
 		<string>io.vincode.Zavala.restoration</string>
 		<string>io.vincode.Zavala.selectingDocument</string>
 		<string>io.vincode.Zavala.selectingDocumentContainer</string>
@@ -158,6 +159,14 @@
 					<string>$(PRODUCT_MODULE_NAME).MacOpenQuicklySceneDelegate</string>
 					<key>UISceneStoryboardFile</key>
 					<string>OpenQuickly</string>
+				</dict>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Image Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).ImageSceneDelegate</string>
+					<key>UISceneStoryboardFile</key>
+					<string>Image</string>
 				</dict>
 			</array>
 		</dict>

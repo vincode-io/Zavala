@@ -579,11 +579,19 @@ extension MainSplitViewController: EditorDelegate {
 	}
 	
 	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate) {
-		let imageVC = UIStoryboard.image.instantiateController(ofType: ImageViewController.self)
-		imageVC.image = image
-		imageVC.modalPresentationStyle = .currentContext
-		imageVC.transitioningDelegate = transitioningDelegate
-		present(imageVC, animated: true)
+		if traitCollection.userInterfaceIdiom == .mac {
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.viewImage)
+			if let pngData = image.pngData() {
+				activity.userInfo = [UIImage.UserInfoKeys.pngData: pngData]
+			}
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+		} else {
+			let imageVC = UIStoryboard.image.instantiateController(ofType: ImageViewController.self)
+			imageVC.image = image
+			imageVC.modalPresentationStyle = .currentContext
+			imageVC.transitioningDelegate = transitioningDelegate
+			present(imageVC, animated: true)
+		}
 	}
 
 }

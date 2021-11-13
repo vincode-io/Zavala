@@ -23,18 +23,34 @@ class ImageViewController: UIViewController {
         super.viewDidLoad()
 		
 		closeButton.imageView?.contentMode = .scaleAspectFit
+		
 		closeButton.accessibilityLabel = NSLocalizedString("Close", comment: "Close")
-		closeButton.tintColor = .accentColor
+		closeButton.tintColor = UIColor.accentColor
+		
 		shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "Share")
-		shareButton.tintColor = .accentColor
+		shareButton.tintColor = UIColor.accentColor
 
+		if traitCollection.userInterfaceIdiom == .mac {
+			closeButton.isHidden = true
+			shareButton.isHidden = true
+		}
+		
         imageScrollView.setup()
         imageScrollView.imageScrollViewDelegate = self
         imageScrollView.imageContentMode = .aspectFit
         imageScrollView.initialOffset = .center
-		imageScrollView.display(image: image)
 		
+		if let image = image {
+			imageScrollView.display(image: image)
+		}
     }
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		#if targetEnvironment(macCatalyst)
+		appDelegate.appKitPlugin?.configureViewImage(view.window?.nsWindow, width: image.size.width, height: image.size.height)
+		#endif
+	}
 
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)

@@ -57,6 +57,11 @@ import os.log
 		nsWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
 	}
 
+	func configureViewImage(_ window: NSObject?, width: Double, height: Double) {
+		guard let nsWindow = window as? NSWindow else { return }
+		nsWindow.aspectRatio = CGSize(width: 1.0, height: height / width)
+	}
+
 	func updateAppearance(_ window: NSObject?) {
 		guard let nsWindow = window as? NSWindow else { return }
 
