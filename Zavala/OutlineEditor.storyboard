@@ -19,9 +19,6 @@
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xx9-N4-5dE">
                                 <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="800" id="Z6h-pK-ofP"/>
-                                </constraints>
                                 <connections>
                                     <segue destination="wDl-nf-G47" kind="embed" id="QJh-wm-5xK"/>
                                 </connections>
@@ -33,8 +30,6 @@
                             <constraint firstItem="xx9-N4-5dE" firstAttribute="top" secondItem="WSy-61-6Nb" secondAttribute="top" id="7wL-MJ-ug8"/>
                             <constraint firstItem="xx9-N4-5dE" firstAttribute="trailing" secondItem="WSy-61-6Nb" secondAttribute="trailing" priority="750" id="M1c-oT-kgK"/>
                             <constraint firstItem="WSy-61-6Nb" firstAttribute="bottom" secondItem="xx9-N4-5dE" secondAttribute="bottom" id="Pti-4A-Zxj"/>
-                            <constraint firstItem="xx9-N4-5dE" firstAttribute="width" relation="lessThanOrEqual" secondItem="4qL-L1-yQR" secondAttribute="width" id="fxa-QG-4J7"/>
-                            <constraint firstItem="xx9-N4-5dE" firstAttribute="centerX" secondItem="4qL-L1-yQR" secondAttribute="centerX" id="wSf-bP-iTr"/>
                             <constraint firstItem="xx9-N4-5dE" firstAttribute="leading" secondItem="WSy-61-6Nb" secondAttribute="leading" priority="750" id="yWT-we-l9a"/>
                         </constraints>
                     </view>
@@ -96,7 +91,7 @@
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>
