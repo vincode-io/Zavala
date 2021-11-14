@@ -11,6 +11,7 @@ class ImageViewController: UIViewController {
 
 	@IBOutlet weak var closeButton: UIButton!
 	@IBOutlet weak var shareButton: UIButton!
+	@IBOutlet weak var shareButtonTopConstraint: NSLayoutConstraint!
 	@IBOutlet weak var imageScrollView: ImageScrollView!
 	
 	var image: UIImage!
@@ -29,6 +30,7 @@ class ImageViewController: UIViewController {
 
 		if traitCollection.userInterfaceIdiom == .mac {
 			closeButton.isHidden = true
+			shareButtonTopConstraint.constant = -20
 		}
 		
         imageScrollView.setup()

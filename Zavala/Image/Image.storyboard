@@ -79,11 +79,12 @@
                         <outlet property="closeButton" destination="O50-4Q-yBa" id="Ur7-tW-EWf"/>
                         <outlet property="imageScrollView" destination="nnh-Gd-bmP" id="KRo-Np-O2V"/>
                         <outlet property="shareButton" destination="Jd9-rP-V4S" id="gdE-eo-ZZt"/>
+                        <outlet property="shareButtonTopConstraint" destination="g6y-DG-Iea" id="q58-FU-9A4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wgj-sP-zzY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="616" y="-117"/>
+            <point key="canvasLocation" x="414" y="-162"/>
         </scene>
     </scenes>
     <resources>
@@ -93,7 +94,7 @@
             <color red="0.25490196078431371" green="0.45882352941176469" blue="0.019607843137254902" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="FullScreenBackgroundColor">
-            <color red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="primaryAccentColor">
             <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
