@@ -97,36 +97,36 @@ class EditorRowViewCell: UICollectionViewListCell {
 		if let textView = textView,
 		   let startPosition = textView.position(from: textView.beginningOfDocument, offset: cursorCoordinates.selection.location),
 		   let endPosition = textView.position(from: startPosition, offset: cursorCoordinates.selection.length) {
-			textView.becomeFirstResponder()
 			textView.selectedTextRange = textView.textRange(from: startPosition, to: endPosition)
-		} else if let textView = textView {
 			textView.becomeFirstResponder()
+		} else if let textView = textView {
 			let endPosition = textView.endOfDocument
 			textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
+			textView.becomeFirstResponder()
 		}
 	}
 	
 	func moveToStart() {
 		guard let textView = (contentView as? EditorRowContentView)?.topicTextView else { return }
-		textView.becomeFirstResponder()
 		let startPosition = textView.beginningOfDocument
 		// If you don't set the cursor location this way, sometimes if just doesn't appear.  Weird, I know.
 		textView.selectedTextRange = textView.textRange(from: startPosition, to: textView.endOfDocument)
 		textView.selectedTextRange = textView.textRange(from: startPosition, to: startPosition)
+		textView.becomeFirstResponder()
 	}
 	
 	func moveToEnd() {
 		guard let textView = (contentView as? EditorRowContentView)?.topicTextView else { return }
-		textView.becomeFirstResponder()
 		let endPosition = textView.endOfDocument
 		textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
+		textView.becomeFirstResponder()
 	}
 	
 	func moveToNote() {
 		guard let textView = (contentView as? EditorRowContentView)?.noteTextView else { return }
-		textView.becomeFirstResponder()
 		let endPosition = textView.endOfDocument
 		textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
+		textView.becomeFirstResponder()
 	}
 	
 }
