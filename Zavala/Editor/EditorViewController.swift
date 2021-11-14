@@ -428,6 +428,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		updatePhoneUI(editMode: false)
 		updateUI()
 		collectionView.reloadData()
+
+		restoreOutlineCursorPosition()
+		restoreScrollPosition()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineFontCacheDidRebuild(_:)), name: .OutlineFontCacheDidRebuild, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
@@ -447,12 +450,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
 	}
 
-//	override func viewWillAppear(_ animated: Bool) {
-//		super.viewWillAppear(animated)
-//		restoreOutlineCursorPosition()
-//		restoreScrollPosition()
-//	}
-	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		moveCursorToTitleOnNew()
