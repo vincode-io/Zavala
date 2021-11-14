@@ -15,7 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)showPreferences;
 - (void)importOPML;
 - (void)configureOpenQuickly:(NSObject  * _Nullable)window;
-- (void)configureViewImage:(NSObject  * _Nullable)window width:(double)width height:(double)height;
+- (void)configureWindowSize:(NSObject  * _Nullable)window x:(double)x y:(double)y width:(double)width height:(double)height;
+- (void)configureWindowAspectRatio:(NSObject  * _Nullable)window width:(double)width height:(double)height;
 - (void)updateAppearance:(NSObject  * _Nullable)window;
 - (void)clearRecentDocuments;
 - (void)activateIgnoringOtherApps;

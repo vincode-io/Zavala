@@ -40,15 +40,6 @@ class ImageViewController: UIViewController {
 			imageScrollView.display(image: image)
 		}
     }
-	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-		#if targetEnvironment(macCatalyst)
-		if let image = image {
-			appDelegate.appKitPlugin?.configureViewImage(view.window?.nsWindow, width: image.size.width, height: image.size.height)
-		}
-		#endif
-	}
 
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)
