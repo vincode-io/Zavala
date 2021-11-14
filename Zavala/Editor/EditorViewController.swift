@@ -1608,7 +1608,7 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 		result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] (object, error) in
 			guard let self = self else { return }
 			
-			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = RSImage.scaleImage(data, maxPixelSize: 1024) {
+			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = RSImage.scaleImage(data, maxPixelSize: 1800) {
 				let scaledImage = UIImage(cgImage: cgImage)
 				
 				DispatchQueue.main.async {
