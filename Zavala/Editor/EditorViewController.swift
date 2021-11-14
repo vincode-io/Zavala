@@ -1552,7 +1552,14 @@ extension EditorViewController: EditorRowViewCellDelegate {
 	func editorRowMoveCursorTo(row: Row) {
 		moveCursorTo(row: row)
 	}
-	
+
+	func editorRowMoveCursorUp(row: Row) {
+		guard let shadowTableIndex = row.shadowTableIndex else { return }
+		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
+		guard let topicTextView = (collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView else { return }
+		moveCursorUp(topicTextView: topicTextView)
+	}
+
 	func editorRowMoveCursorDown(row: Row) {
 		guard let shadowTableIndex = row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)

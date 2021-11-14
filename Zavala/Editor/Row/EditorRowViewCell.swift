@@ -16,6 +16,7 @@ protocol EditorRowViewCellDelegate: AnyObject {
 	func editorRowTextFieldDidBecomeActive(row: Row)
 	func editorRowToggleDisclosure(row: Row)
 	func editorRowMoveCursorTo(row: Row)
+	func editorRowMoveCursorUp(row: Row)
 	func editorRowMoveCursorDown(row: Row)
 	func editorRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange)
 	func editorRowDeleteRow(_ row: Row, rowStrings: RowStrings)

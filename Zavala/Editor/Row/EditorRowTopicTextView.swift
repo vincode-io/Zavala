@@ -14,6 +14,8 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	func didBecomeActive(_: EditorRowTopicTextView, row: Row)
 	func reload(_: EditorRowTopicTextView, row: Row)
 	func makeCursorVisibleIfNecessary(_: EditorRowTopicTextView)
+	func moveCursorUp(_: EditorRowTopicTextView, row: Row)
+	func moveCursorDown(_: EditorRowTopicTextView, row: Row)
 	func textChanged(_: EditorRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
 	func deleteRow(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings)
 	func createRow(_: EditorRowTopicTextView, beforeRow: Row)
@@ -37,8 +39,20 @@ class EditorRowTopicTextView: EditorRowTextView {
 			shiftTab.wantsPriorityOverSystemBehavior = true
 		}
 		
+		let controlP = UIKeyCommand(input: "p", modifierFlags: [.control], action: #selector(moveCursorUp(_:)))
+		if #available(iOS 15.0, *) {
+			shiftTab.wantsPriorityOverSystemBehavior = true
+		}
+
+		let controlN = UIKeyCommand(input: "n", modifierFlags: [.control], action: #selector(moveCursorDown(_:)))
+		if #available(iOS 15.0, *) {
+			shiftTab.wantsPriorityOverSystemBehavior = true
+		}
+
 		let keys = [
 			shiftTab,
+			controlP,
+			controlN,
 			UIKeyCommand(action: #selector(moveRight(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.alternate], action: #selector(insertTab(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(insertReturn(_:))),
@@ -119,6 +133,16 @@ class EditorRowTopicTextView: EditorRowTextView {
 	@objc func createRow(_ sender: Any) {
 		guard let row = row else { return }
 		editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
+	}
+	
+	@objc func moveCursorUp(_ sender: Any) {
+		guard let row = row else { return }
+		editorDelegate?.moveCursorUp(self, row: row)
+	}
+	
+	@objc func moveCursorDown(_ sender: Any) {
+		guard let row = row else { return }
+		editorDelegate?.moveCursorDown(self, row: row)
 	}
 	
 	@objc func moveLeft(_ sender: Any) {
