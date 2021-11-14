@@ -1494,7 +1494,7 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		return keyboardToolBar
 	}
 	
-    func editorRowReload(row: Row) {
+    func editorRowLayoutEditor() {
 		layoutEditor()
 	}
 	

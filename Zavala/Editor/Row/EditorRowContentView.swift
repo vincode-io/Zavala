@@ -198,9 +198,9 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration.delegate?.editorRowInputAccessoryView
 	}
 	
-	func reload(_: EditorRowTopicTextView, row: Row) {
+	func layoutEditor(_: EditorRowTopicTextView) {
 		invalidateIntrinsicContentSize()
-		appliedConfiguration.delegate?.editorRowReload(row: row)
+		appliedConfiguration.delegate?.editorRowLayoutEditor()
 	}
 	
 	func makeCursorVisibleIfNecessary(_: EditorRowTopicTextView) {
@@ -267,9 +267,9 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 		return appliedConfiguration.delegate?.editorRowInputAccessoryView
 	}
 	
-    func reload(_: EditorRowNoteTextView, row: Row) {
+    func layoutEditor(_: EditorRowNoteTextView) {
 		invalidateIntrinsicContentSize()
-        appliedConfiguration.delegate?.editorRowReload(row: row)
+        appliedConfiguration.delegate?.editorRowLayoutEditor()
 	}
 	
 	func makeCursorVisibleIfNecessary(_: EditorRowNoteTextView) {
