@@ -97,7 +97,9 @@ class EditorRowTopicTextView: EditorRowTextView {
 	override func becomeFirstResponder() -> Bool {
 		inputAccessoryView = editorDelegate?.editorRowTopicTextViewInputAccessoryView
 		let result = super.becomeFirstResponder()
-		didBecomeActive()
+		if result {
+			didBecomeActive()
+		}
 		return result
 	}
 	

@@ -67,7 +67,9 @@ class EditorRowNoteTextView: EditorRowTextView {
 	override func becomeFirstResponder() -> Bool {
 		inputAccessoryView = editorDelegate?.editorRowNoteTextViewInputAccessoryView
 		let result = super.becomeFirstResponder()
-		didBecomeActive()
+		if result {
+			didBecomeActive()
+		}
 		return result
 	}
 	
