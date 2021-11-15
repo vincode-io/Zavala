@@ -429,8 +429,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		updateUI()
 		collectionView.reloadData()
 
-		restoreOutlineCursorPosition()
 		restoreScrollPosition()
+		restoreOutlineCursorPosition()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineFontCacheDidRebuild(_:)), name: .OutlineFontCacheDidRebuild, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
@@ -747,8 +747,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		updateUI()
 
-		restoreOutlineCursorPosition()
 		restoreScrollPosition()
+		restoreOutlineCursorPosition()
 		moveCursorToTitleOnNew()
 	}
 	
