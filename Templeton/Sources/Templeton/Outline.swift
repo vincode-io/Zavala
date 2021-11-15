@@ -2171,9 +2171,8 @@ extension Outline {
 		
 		if !updatedRowIDs.isEmpty {
 			rowsFile?.markAsDirty()
+			documentDidChangeBySync()
 		}
-		
-		documentDidChangeBySync()
 		
 		guard isBeingViewed else { return }
 
@@ -2194,7 +2193,10 @@ extension Outline {
 		var changes = rebuildShadowTable()
 		let reloadIndexes = reloadRows.compactMap { $0.shadowTableIndex }
 		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloadIndexes)))
-		outlineElementsDidChange(changes)
+		
+		if !changes.isEmpty {
+			outlineElementsDidChange(changes)
+		}
 	}
 	
 	private func applyOutlineRecord(_ record: CKRecord) -> [String] {
