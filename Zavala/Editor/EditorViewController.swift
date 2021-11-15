@@ -2048,7 +2048,7 @@ extension EditorViewController {
 		applyChanges(changes)
 
 		if let coordinates = currentCoordinates {
-			restoreCursorPosition(coordinates, scroll: false)
+			restoreCursorPosition(coordinates, scroll: true)
 		}
 		
 		if changes.isOnlyReloads, let indexPaths = selectedIndexPaths {
@@ -2088,7 +2088,9 @@ extension EditorViewController {
 					restoreCursor()
 				}
 			}
-			collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+			if indexPath.row < collectionView.numberOfItems(inSection: indexPath.section) {
+				collectionView.scrollToItem(at: indexPath, at: [], animated: false)
+			}
 			CATransaction.commit()
 		} else {
 			restoreCursor()
