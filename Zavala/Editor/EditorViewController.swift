@@ -1996,18 +1996,19 @@ extension EditorViewController {
 	}
 	
 	private func layoutEditor() {
-		let contentOffset = collectionView.contentOffset
-		let contentHeight = collectionView.contentSize.height
+//		let contentOffset = collectionView.contentOffset
+//		let contentHeight = collectionView.contentSize.height
 		
-		collectionView.collectionViewLayout.invalidateLayout()
+		let context = UICollectionViewLayoutInvalidationContext()
+		collectionView.collectionViewLayout.invalidateLayout(with: context)
 		collectionView.layoutIfNeeded()
 		
 		// This is one of those things where I'm just not sure what is going on. The content size can vary wildly for seemingly no
 		// reason when invalidating the layout. If we try to set the contentOffset when that happens, the editor wildly bounces
 		// around. We try to detect when this is happening and then don't set the contentOffset to prevent the bouncing.
-		if abs(collectionView.contentSize.height - contentHeight) <= (UIResponder.currentFirstResponder as? EditorRowTextView)?.lineHeight ?? 0 {
-			collectionView.contentOffset = contentOffset
-		}
+//		if abs(collectionView.contentSize.height - contentHeight) <= (UIResponder.currentFirstResponder as? EditorRowTextView)?.lineHeight ?? 0 {
+//			collectionView.contentOffset = contentOffset
+//		}
 		makeCursorVisibleIfNecessary()
 	}
 	
