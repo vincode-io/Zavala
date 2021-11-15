@@ -1999,8 +1999,9 @@ extension EditorViewController {
 //		let contentOffset = collectionView.contentOffset
 //		let contentHeight = collectionView.contentSize.height
 		
-		let context = UICollectionViewLayoutInvalidationContext()
-		collectionView.collectionViewLayout.invalidateLayout(with: context)
+//		let context = UICollectionViewLayoutInvalidationContext()
+//		collectionView.collectionViewLayout.invalidateLayout(with: context)
+		collectionView.collectionViewLayout.invalidateLayout()
 		collectionView.layoutIfNeeded()
 		
 		// This is one of those things where I'm just not sure what is going on. The content size can vary wildly for seemingly no
