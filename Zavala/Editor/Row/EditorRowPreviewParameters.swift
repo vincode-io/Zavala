@@ -17,7 +17,6 @@ class EditorRowPreviewParameters: UIDragPreviewParameters {
 	init(cell: EditorRowViewCell, row: Row) {
 		super.init()
 
-//		#if !targetEnvironment(macCatalyst)
 		let x = CGFloat(11 + (cell.indentationLevel * 10))
 		
 		let cellSize = cell.topicTextView?.bounds.size ?? cell.bounds.size
@@ -27,7 +26,7 @@ class EditorRowPreviewParameters: UIDragPreviewParameters {
 		let newBounds = CGRect(x: x, y: 6, width: width, height: height)
 		let visiblePath = UIBezierPath(roundedRect: newBounds, cornerRadius: 4)
 		self.visiblePath = visiblePath
-//		#endif
+
 	}
 
 }
