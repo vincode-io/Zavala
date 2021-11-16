@@ -1339,7 +1339,8 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			  let rowShadowTableIndex = row.shadowTableIndex,
 			  let cell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorRowViewCell else { return nil }
 		
-		return UITargetedPreview(view: cell, parameters: EditorRowPreviewParameters(cell: cell, row: row))
+		let isCompact = traitCollection.horizontalSizeClass == .compact
+		return UITargetedPreview(view: cell, parameters: EditorRowPreviewParameters(cell: cell, row: row, isCompact: isCompact))
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {

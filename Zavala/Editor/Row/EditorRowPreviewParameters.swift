@@ -14,15 +14,21 @@ class EditorRowPreviewParameters: UIDragPreviewParameters {
 		super.init()
 	}
 	
-	init(cell: EditorRowViewCell, row: Row) {
+	init(cell: EditorRowViewCell, row: Row, isCompact: Bool) {
 		super.init()
 
-		let x = CGFloat(11 + (cell.indentationLevel * 10))
+		let topicSize = cell.topicTextView!.bounds.size
+
+		let x: CGFloat
+		if isCompact {
+			x = CGFloat(4) + (CGFloat(cell.indentationLevel) * cell.indentationWidth)
+		} else {
+			x = CGFloat(6) + (CGFloat(cell.indentationLevel + 1) * cell.indentationWidth)
+		}
 		
-		let cellSize = cell.topicTextView?.bounds.size ?? cell.bounds.size
-		let height = cellSize.height + 4
-		let width = cellSize.width + 12
-		
+		let width = topicSize.width + 4
+		let height = topicSize.height + 4
+
 		let newBounds = CGRect(x: x, y: 6, width: width, height: height)
 		let visiblePath = UIBezierPath(roundedRect: newBounds, cornerRadius: 4)
 		self.visiblePath = visiblePath
