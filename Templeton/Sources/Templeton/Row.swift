@@ -474,11 +474,11 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 
 	public func firstIndexOfRow(_ row: Row) -> Int? {
-		return rows.firstIndex(of: row)
+		return rowOrder.firstIndex(of: row.id)
 	}
 	
 	public func containsRow(_ row: Row) -> Bool {
-		return rows.contains(row)
+		return rowOrder.contains(row.id)
 	}
 	
 	public func insertRow(_ row: Row, at: Int) {

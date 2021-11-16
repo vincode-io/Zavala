@@ -421,11 +421,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func firstIndexOfRow(_ row: Row) -> Int? {
-		return rows.firstIndex(of: row)
+		return rowOrder?.firstIndex(of: row.id)
 	}
 
 	public func containsRow(_ row: Row) -> Bool {
-		return rows.contains(row)
+		return rowOrder?.contains(row.id) ?? false
 	}
 
 	public func insertRow(_ row: Row, at: Int) {
