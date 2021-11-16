@@ -14,7 +14,7 @@ protocol EditorRowViewCellDelegate: AnyObject {
     func editorRowLayoutEditor()
 	func editorRowMakeCursorVisibleIfNecessary()
 	func editorRowTextFieldDidBecomeActive(row: Row)
-	func editorRowToggleDisclosure(row: Row)
+	func editorRowToggleDisclosure(row: Row, applyToAll: Bool)
 	func editorRowMoveCursorTo(row: Row)
 	func editorRowMoveCursorUp(row: Row)
 	func editorRowMoveCursorDown(row: Row)

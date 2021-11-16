@@ -1509,8 +1509,8 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		makeCursorVisibleIfNecessary()
 	}
 
-	func editorRowToggleDisclosure(row: Row) {
-		toggleDisclosure(row: row)
+	func editorRowToggleDisclosure(row: Row, applyToAll: Bool) {
+		toggleDisclosure(row: row, applyToAll: applyToAll)
 	}
 	
 	func editorRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
@@ -2384,11 +2384,16 @@ extension EditorViewController {
 		
 	}
 	
-	private func toggleDisclosure(row: Row) {
-		if row.isExpandable {
+	private func toggleDisclosure(row: Row, applyToAll: Bool) {
+		switch (row.isExpandable, applyToAll) {
+		case (true, false):
 			expand(rows: [row])
-		} else {
+		case (true, true):
+			expandAll(containers: [row])
+		case (false, false):
 			collapse(rows: [row])
+		case (false, true):
+			collapseAll(containers: [row])
 		}
 	}
 

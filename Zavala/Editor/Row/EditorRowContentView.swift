@@ -16,7 +16,7 @@ class EditorRowContentView: UIView, UIContentView {
 
 	private lazy var disclosureIndicator: EditorDisclosureButton = {
 		let indicator = EditorDisclosureButton()
-		indicator.addTarget(self, action: #selector(toggleDisclosure(_:)), for: UIControl.Event.touchUpInside)
+		indicator.addTarget(self, action: #selector(toggleDisclosure(_:forEvent:)), for: UIControl.Event.touchUpInside)
 		return indicator
 	}()
 	
@@ -310,10 +310,11 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 
 extension EditorRowContentView {
 
-	@objc func toggleDisclosure(_ sender: Any?) {
+	@objc func toggleDisclosure(_ sender: Any?, forEvent event: UIEvent) {
 		guard let row = appliedConfiguration.row else { return }
 		disclosureIndicator.toggleDisclosure()
-		appliedConfiguration.delegate?.editorRowToggleDisclosure(row: row)
+		let applyToAll = event.modifierFlags.contains(.alternate)
+		appliedConfiguration.delegate?.editorRowToggleDisclosure(row: row, applyToAll: applyToAll)
 	}
 	
 	private func configureTopicTextView(configuration: EditorRowContentConfiguration) {
