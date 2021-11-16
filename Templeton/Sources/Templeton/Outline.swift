@@ -429,6 +429,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 
 	public func insertRow(_ row: Row, at: Int) {
+		guard !containsRow(row) else { return }
+		
 		if rowOrder == nil {
 			rowOrder = [String]()
 		}
@@ -444,12 +446,15 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 
 	public func removeRow(_ row: Row) {
-		rowOrder?.removeFirst(object: row.id)
+		rowOrder?.removeAll(where: { $0 == row.id })
 		keyedRows?.removeValue(forKey: row.id)
+		
 		requestCloudKitUpdates(for: [id, row.entityID])
 	}
 
 	public func appendRow(_ row: Row) {
+		guard !containsRow(row) else { return }
+
 		if rowOrder == nil {
 			rowOrder = [String]()
 		}

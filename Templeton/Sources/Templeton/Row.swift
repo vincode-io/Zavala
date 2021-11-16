@@ -482,6 +482,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 	
 	public func insertRow(_ row: Row, at: Int) {
+		guard !containsRow(row) else { return }
+
 		rowOrder.insert(row.id, at: at)
 		outline?.keyedRows?[row.id] = row
 
@@ -489,12 +491,15 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 
 	public func removeRow(_ row: Row) {
-		rowOrder.removeFirst(object: row.id)
+		rowOrder.removeAll(where: { $0 == row.id })
 		outline?.keyedRows?.removeValue(forKey: row.id)
+		
 		outline?.requestCloudKitUpdates(for: [entityID, row.entityID])
 	}
 
 	public func appendRow(_ row: Row) {
+		guard !containsRow(row) else { return }
+
 		rowOrder.append(row.id)
 		outline?.keyedRows?[row.id] = row
 
