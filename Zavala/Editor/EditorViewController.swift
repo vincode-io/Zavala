@@ -2190,12 +2190,6 @@ extension EditorViewController {
 			var outlineActions = [UIAction]()
 			outlineActions.append(self.addAction(rows: rows))
 			outlineActions.append(self.duplicateAction(rows: rows))
-			if !outline.isMoveRowsRightUnavailable(rows: rows) {
-				outlineActions.append(self.moveRowsRightAction(rows: rows))
-			}
-			if !outline.isMoveRowsLeftUnavailable(rows: rows) {
-				outlineActions.append(self.moveRowsLeftAction(rows: rows))
-			}
 			if !outline.isCompleteUnavailable(rows: rows) {
 				outlineActions.append(self.completeAction(rows: rows))
 			}
@@ -2261,22 +2255,6 @@ extension EditorViewController {
 	private func duplicateAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.duplicate, image: AppAssets.duplicate) { [weak self] action in
 			self?.duplicateRows(rows)
-		}
-	}
-
-	private func moveRowsRightAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.moveRight, image: AppAssets.moveRight) { [weak self] action in
-			guard let self = self else { return }
-			self.moveRowsRight(rows)
-			self.delegate?.validateToolbar(self)
-		}
-	}
-
-	private func moveRowsLeftAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.moveLeft, image: AppAssets.moveLeft) { [weak self] action in
-			guard let self = self else { return }
-			self.moveRowsLeft(rows)
-			self.delegate?.validateToolbar(self)
 		}
 	}
 
