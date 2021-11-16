@@ -8,6 +8,7 @@
 import Foundation
 import os.log
 import RSCore
+import OrderedCollections
 
 struct OldRow: Decodable {
 	
@@ -200,13 +201,13 @@ private extension RowsFile {
 			return
 		}
 
-		outline?.rowOrder = outlineRows.rowOrder
+		outline?.rowOrder = OrderedSet(outlineRows.rowOrder)
 		outline?.keyedRows = outlineRows.keyedRows
 	}
 	
 	func saveCallback() {
 		guard let rowOrder = outline?.rowOrder, let keyedRows = outline?.keyedRows else { return }
-		let outlineRows = OutlineRows(rowOrder: rowOrder, keyedRows: keyedRows)
+		let outlineRows = OutlineRows(rowOrder: Array(rowOrder), keyedRows: keyedRows)
 
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary

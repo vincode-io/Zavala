@@ -557,7 +557,9 @@ extension CloudKitManager {
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.created] = outline.created
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.updated] = outline.updated
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.tagNames] = outline.tags.map { $0.name }
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] = outline.rowOrder
+		if let rowOrder = outline.rowOrder {
+			record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] = Array(rowOrder)
+		}
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.documentLinks] = outline.documentLinks?.map { $0.description }
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.documentBacklinks] = outline.documentBacklinks?.map { $0.description }
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.hasAltLinks] = outline.hasAltLinks
@@ -579,7 +581,7 @@ extension CloudKitManager {
 		record[CloudKitOutlineZone.CloudKitRow.Fields.topicData] = row.topicData
 		record[CloudKitOutlineZone.CloudKitRow.Fields.noteData] = row.noteData
 		record[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] = row.isComplete ? "1" : "0"
-		record[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] = row.rowOrder
+		record[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] = Array(row.rowOrder)
 
 		addSave(zoneID, record)
 	}

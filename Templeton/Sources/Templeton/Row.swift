@@ -8,6 +8,7 @@
 import Foundation
 import MobileCoreServices
 import MarkdownAttributedString
+import OrderedCollections
 
 public enum RowStrings {
 	case topicMarkdown(String?)
@@ -62,7 +63,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 				outline.requestCloudKitUpdate(for: entityID)
 			}
 
-			var order = [String]()
+			var order = OrderedSet<String>()
 			for row in newValue {
 				order.append(row.id)
 				outline.keyedRows?[row.id] = row
@@ -100,7 +101,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return entityID
 	}
 
-	var rowOrder: [String]
+	var rowOrder: OrderedSet<String>
 
 	var isPartOfSearchResult = false {
 		didSet {
@@ -285,7 +286,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		self.outline = outline
 		self._entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
 		self.isExpanded = true
-		self.rowOrder = [String]()
+		self.rowOrder = OrderedSet<String>()
 		super.init()
 	}
 
@@ -295,7 +296,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		self.outline = outline
 		self._entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
 		self.isExpanded = true
-		self.rowOrder = [String]()
+		self.rowOrder = OrderedSet<String>()
 		super.init()
 		self.topic = convertMarkdown(topicMarkdown, isInNotes: false)
 		self.note = convertMarkdown(noteMarkdown, isInNotes: true)
@@ -325,9 +326,9 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		}
 		
 		if let rowOrder = try? container.decode([String].self, forKey: .rowOrder) {
-			self.rowOrder = rowOrder
+			self.rowOrder = OrderedSet(rowOrder)
 		} else if let rowOrder = try? container.decode([EntityID].self, forKey: .rowOrder) {
-			self.rowOrder = rowOrder.map { $0.rowUUID }
+			self.rowOrder = OrderedSet(rowOrder.map { $0.rowUUID })
 		} else {
 			throw RowError.unableToDeserialize
 		}
@@ -342,7 +343,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		self.isComplete = false
 		self.id = UUID().uuidString
 		self.isExpanded = true
-		self.rowOrder = [String]()
+		self.rowOrder = OrderedSet<String>()
 		super.init()
 	}
 	
@@ -350,7 +351,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		self.isComplete = false
 		self.id = id
 		self.isExpanded = true
-		self.rowOrder = [String]()
+		self.rowOrder = OrderedSet<String>()
 		super.init()
 	}
 	
@@ -482,8 +483,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 	
 	public func insertRow(_ row: Row, at: Int) {
-		guard !containsRow(row) else { return }
-
 		rowOrder.insert(row.id, at: at)
 		outline?.keyedRows?[row.id] = row
 
@@ -491,15 +490,13 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 
 	public func removeRow(_ row: Row) {
-		rowOrder.removeAll(where: { $0 == row.id })
+		rowOrder.remove(row.id)
 		outline?.keyedRows?.removeValue(forKey: row.id)
 		
 		outline?.requestCloudKitUpdates(for: [entityID, row.entityID])
 	}
 
 	public func appendRow(_ row: Row) {
-		guard !containsRow(row) else { return }
-
 		rowOrder.append(row.id)
 		outline?.keyedRows?[row.id] = row
 

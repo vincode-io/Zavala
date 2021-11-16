@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OrderedCollections
 
 public class RowGroup: Codable {
 	
@@ -67,7 +68,7 @@ public class RowGroup: Codable {
 				newChildRowRowOrder.append(idMap[oldRowOrder]!)
 			}
 			
-			newChildRow.rowOrder = newChildRowRowOrder
+			newChildRow.rowOrder = OrderedSet(newChildRowRowOrder)
 			outline.keyedRows?[newChildRow.id] = newChildRow
 			outline.requestCloudKitUpdate(for: newChildRow.entityID)
 		}
@@ -83,7 +84,7 @@ public class RowGroup: Codable {
 		for newRowOrder in newRow.rowOrder {
 			newRowRowOrder.append(idMap[newRowOrder]!)
 		}
-		newRow.rowOrder = newRowRowOrder
+		newRow.rowOrder = OrderedSet(newRowRowOrder)
 
 		return newRow
 	}

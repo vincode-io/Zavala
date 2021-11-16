@@ -8,6 +8,7 @@
 import UIKit
 import RSCore
 import CloudKit
+import OrderedCollections
 
 public extension Notification.Name {
 	static let OutlineTagsDidChange = Notification.Name(rawValue: "OutlineTagsDidChange")
@@ -355,7 +356,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 	
-	var rowOrder: [String]?
+	var rowOrder: OrderedSet<String>?
 	var keyedRows: [String: Row]? {
 		didSet {
 			if let keyedRows = keyedRows {
@@ -429,10 +430,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 
 	public func insertRow(_ row: Row, at: Int) {
-		guard !containsRow(row) else { return }
-		
 		if rowOrder == nil {
-			rowOrder = [String]()
+			rowOrder = OrderedSet<String>()
 		}
 
 		if keyedRows == nil {
@@ -446,17 +445,15 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 
 	public func removeRow(_ row: Row) {
-		rowOrder?.removeAll(where: { $0 == row.id })
+		rowOrder?.remove(row.id)
 		keyedRows?.removeValue(forKey: row.id)
 		
 		requestCloudKitUpdates(for: [id, row.entityID])
 	}
 
 	public func appendRow(_ row: Row) {
-		guard !containsRow(row) else { return }
-
 		if rowOrder == nil {
-			rowOrder = [String]()
+			rowOrder = OrderedSet<String>()
 		}
 		
 		if keyedRows == nil {
@@ -1279,7 +1276,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		func duplicatingVisitor(_ visited: Row) {
 			let newRow = visited.duplicate(newOutline: self)
-			newRow.rowOrder = [String]()
+			newRow.rowOrder = OrderedSet<String>()
 			
 			if let parentRow = visited.parent as? Row {
 				newRow.parent = idDict[parentRow.id] ?? visited.parent
@@ -1931,8 +1928,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			}
 		}
 		
-		var newRowOrder = [String]()
-		for orderKey in rowOrder ?? [String]() {
+		var newRowOrder = OrderedSet<String>()
+		for orderKey in rowOrder ?? OrderedSet<String>() {
 			if let newKey = rowIDMap[orderKey] {
 				newRowOrder.append(newKey)
 			}
@@ -1942,7 +1939,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		var updatedNewKeyedRows = [String: Row]()
 		for key in newKeyedRows.keys {
 			if let newKeyedRow = newKeyedRows[key] {
-				var updatedRowOrder = [String]()
+				var updatedRowOrder = OrderedSet<String>()
 				for orderKey in newKeyedRow.rowOrder {
 					if let newKey = rowIDMap[orderKey] {
 						updatedRowOrder.append(newKey)
@@ -2135,9 +2132,11 @@ extension Outline {
 			let updatedIsComplete = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] as? String == "1" ? true : false
 			row.isComplete = updatedIsComplete
 			
-			let newRowOrder = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] as? [String]
-			
-			row.rowOrder = newRowOrder ?? [String]()
+			if let newRowOrder = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] as? [String] {
+				row.rowOrder = OrderedSet(newRowOrder)
+			} else {
+				row.rowOrder = OrderedSet<String>()
+			}
 			
 			keyedRows?[entityID.rowUUID] = row
 		}
@@ -2231,12 +2230,17 @@ extension Outline {
 		hasAltLinks = record[CloudKitOutlineZone.CloudKitOutline.Fields.hasAltLinks] as? Bool
 		disambiguator = record[CloudKitOutlineZone.CloudKitOutline.Fields.disambiguator] as? Int
 
-		let newRowOrder = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] ?? [String]()
+		let newRowOrder: OrderedSet<String>
+		if let cloudKitRowOrder = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] {
+			newRowOrder = OrderedSet(cloudKitRowOrder)
+		} else {
+			newRowOrder = OrderedSet<String>()
+		}
 		
 		var updatedRowIDs = [String]()
 		
 		//  We only count newly added children for reloading so that they can indent or outdent
-		let rowDiff = newRowOrder.difference(from: rowOrder ?? [String]())
+		let rowDiff = newRowOrder.difference(from: rowOrder ?? OrderedSet<String>())
 		for change in rowDiff {
 			switch change {
 			case .insert(_, let newRowID, _):
