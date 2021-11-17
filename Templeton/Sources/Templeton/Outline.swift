@@ -1814,6 +1814,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func loadRows() {
+		assert(Thread.isMainThread)
 		guard rowsFile == nil else { return }
 		rowsFile = RowsFile(outline: self)
 		rowsFile?.load()
@@ -1833,6 +1834,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func loadImages() {
+		assert(Thread.isMainThread)
 		guard imagesFile == nil else { return }
 		imagesFile = ImagesFile(outline: self)
 		imagesFile?.load()

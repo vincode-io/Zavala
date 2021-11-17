@@ -272,12 +272,11 @@ extension CloudKitManager {
 
 			self.requestsFileLock.lock()
 			
-			self.groupModificationAndSendToCloudKit() {
-				self.modifications = [CKRecordZone.ID: ([CKRecord], [CKRecord.ID])]()
-				self.isSyncing = false
-				self.requestsFileLock.unlock()
-
-				DispatchQueue.main.async {
+			DispatchQueue.main.async {
+				self.groupModificationAndSendToCloudKit() {
+					self.modifications = [CKRecordZone.ID: ([CKRecord], [CKRecord.ID])]()
+					self.isSyncing = false
+					self.requestsFileLock.unlock()
 					completion()
 				}
 			}
@@ -408,7 +407,7 @@ extension CloudKitManager {
 					group.leave()
 				}
 			}
-			
+				
 			group.notify(queue: DispatchQueue.main) {
 				self.sharedDatabaseChangeToken = token
 				completion?()
