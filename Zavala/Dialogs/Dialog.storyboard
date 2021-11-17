@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="mac" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
@@ -224,7 +224,7 @@
             </objects>
             <point key="canvasLocation" x="-788" y="706"/>
         </scene>
-        <!--Owner-->
+        <!--Get Info-->
         <scene sceneID="tsv-bl-hMR">
             <objects>
                 <tableViewController storyboardIdentifier="OutlineGetInfoViewController" id="KgI-VC-lId" customClass="OutlineGetInfoViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
@@ -232,16 +232,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <sections>
-                            <tableViewSection id="5w4-Ek-uJY">
+                            <tableViewSection headerTitle="Owner" id="5w4-Ek-uJY">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="43.5" id="r8X-Vb-uCT">
-                                        <rect key="frame" x="20" y="18" width="760" height="43.5"/>
+                                        <rect key="frame" x="20" y="31" width="760" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="r8X-Vb-uCT" id="gf4-8Z-4aM">
                                             <rect key="frame" x="0.0" y="0.0" width="760" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Owner Name" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aa5-JT-vZ0" customClass="EnhancedTextField" customModule="Zavala" customModuleProvider="target">
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Name" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aa5-JT-vZ0" customClass="EnhancedTextField" customModule="Zavala" customModuleProvider="target">
                                                     <rect key="frame" x="20" y="4" width="720" height="35.5"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="name"/>
@@ -256,13 +256,13 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="43.5" id="A8B-A2-Syb">
-                                        <rect key="frame" x="20" y="61.5" width="760" height="43.5"/>
+                                        <rect key="frame" x="20" y="74.5" width="760" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="A8B-A2-Syb" id="bfE-uG-0ex">
                                             <rect key="frame" x="0.0" y="0.0" width="760" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Owner Email" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UUG-J8-Dbm" customClass="EnhancedTextField" customModule="Zavala" customModuleProvider="target">
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UUG-J8-Dbm" customClass="EnhancedTextField" customModule="Zavala" customModuleProvider="target">
                                                     <rect key="frame" x="20" y="4" width="720" height="35.5"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="email"/>
@@ -277,13 +277,13 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="43.5" id="UMG-jS-pi0">
-                                        <rect key="frame" x="20" y="105" width="760" height="43.5"/>
+                                        <rect key="frame" x="20" y="118" width="760" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UMG-jS-pi0" id="Q3L-u3-1U1">
                                             <rect key="frame" x="0.0" y="0.0" width="760" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Owner URL" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vb1-7V-p0X" customClass="EnhancedTextField" customModule="Zavala" customModuleProvider="target">
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="URL" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vb1-7V-p0X" customClass="EnhancedTextField" customModule="Zavala" customModuleProvider="target">
                                                     <rect key="frame" x="20" y="4" width="720" height="35.5"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="URL" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="url"/>
@@ -297,6 +297,28 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="43.5" id="b8g-KW-WL6">
+                                        <rect key="frame" x="20" y="161.5" width="760" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="b8g-KW-WL6" id="D0W-je-iyT">
+                                            <rect key="frame" x="0.0" y="0.0" width="760" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This information is included in OPML documents to attribute ownership." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LY6-fd-Lji">
+                                                    <rect key="frame" x="16" y="4" width="728" height="35.5"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                                    <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="LY6-fd-Lji" secondAttribute="bottom" constant="4" id="4Jx-K5-Hl5"/>
+                                                <constraint firstItem="LY6-fd-Lji" firstAttribute="top" secondItem="D0W-je-iyT" secondAttribute="top" constant="4" id="7hx-Sm-2ee"/>
+                                                <constraint firstItem="LY6-fd-Lji" firstAttribute="leading" secondItem="D0W-je-iyT" secondAttribute="leading" constant="16" id="SKJ-XK-gcH"/>
+                                                <constraint firstAttribute="trailing" secondItem="LY6-fd-Lji" secondAttribute="trailing" constant="16" id="wf1-c9-mSg"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -305,7 +327,7 @@
                             <outlet property="delegate" destination="KgI-VC-lId" id="mDc-ag-ug0"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Owner" id="wM9-hO-OO1">
+                    <navigationItem key="navigationItem" title="Get Info" id="wM9-hO-OO1">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Kfd-23-5VB">
                             <connections>
                                 <action selector="cancel:" destination="KgI-VC-lId" id="r5t-ft-26d"/>
@@ -649,8 +671,11 @@
     </scenes>
     <resources>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.49803921568627452" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -308,7 +308,7 @@ extension MainCoordinator {
 		} else {
 			
 			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
-			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 250)
+			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 325)
 			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
 			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
 			outlineGetInfoViewController.outline = outline
