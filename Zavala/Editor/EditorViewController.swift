@@ -1780,7 +1780,8 @@ extension EditorViewController: UIViewControllerTransitioningDelegate {
 extension EditorViewController: ImageTransitionDelegate {
 	
 	func hideImage(_: ImageTransition, frame: CGRect) {
-		let convertedFrame = view.convert(frame, to: collectionView)
+		guard let splitView = splitViewController?.view else { return }
+		let convertedFrame = splitView.convert(frame, to: collectionView)
 		imageBlocker = UIView(frame: convertedFrame)
 		imageBlocker!.backgroundColor = AppAssets.fullScreenBackgroundColor
 		collectionView.addSubview(imageBlocker!)
