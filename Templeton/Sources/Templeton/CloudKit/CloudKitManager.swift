@@ -119,9 +119,7 @@ public class CloudKitManager {
 			completeProcessing()
 		}
 		
-		DispatchQueue.main.async {
-			self.queue.add(operation)
-		}
+		self.queue.add(operation)
 	}
 	
 	func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
@@ -270,9 +268,7 @@ extension CloudKitManager {
 			completeProcessing()
 		}
 		
-		DispatchQueue.main.async {
-			self.queue.add(operation)
-		}
+		self.queue.add(operation)
 	}
 	
 	private func fetchAllChanges(completion: (() -> Void)? = nil) {
