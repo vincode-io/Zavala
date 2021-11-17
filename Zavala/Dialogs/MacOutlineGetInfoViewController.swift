@@ -30,6 +30,9 @@ class MacOutlineGetInfoViewController: MacFormViewController {
 
 		ownerBackgroundView.layer.backgroundColor = UIColor.quaternarySystemFill.cgColor
 		ownerBackgroundView.layer.cornerRadius = 5
+		ownerBackgroundView.layer.borderWidth = 1
+		ownerBackgroundView.layer.borderColor = UIColor.quaternaryLabel.cgColor
+		
 		ownerNameTextField.text = outline?.ownerName
 		ownerEmailTextField.text = outline?.ownerEmail
 		ownerURLTextField.text = outline?.ownerURL
