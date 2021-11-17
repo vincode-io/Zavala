@@ -301,7 +301,7 @@ extension MainCoordinator {
 		if traitCollection.userInterfaceIdiom == .mac {
 		
 			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: MacOutlineGetInfoViewController.self)
-			outlineGetInfoViewController.preferredContentSize = CGSize(width: 400, height: 182)
+			outlineGetInfoViewController.preferredContentSize = CGSize(width: 350, height: 250)
 			outlineGetInfoViewController.outline = outline
 			present(outlineGetInfoViewController, animated: true)
 		

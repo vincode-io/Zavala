@@ -12,6 +12,7 @@ class MacOutlineGetInfoViewController: MacFormViewController {
 
 	weak var outline: Outline?
 	
+	@IBOutlet var ownerBackgroundView: UIView!
 	@IBOutlet weak var ownerNameTextField: UITextField!
 	@IBOutlet weak var ownerEmailTextField: UITextField!
 	@IBOutlet weak var ownerURLTextField: UITextField!
@@ -27,6 +28,8 @@ class MacOutlineGetInfoViewController: MacFormViewController {
 	
 		macSubmitButton.role = .primary
 
+		ownerBackgroundView.layer.backgroundColor = UIColor.quaternarySystemFill.cgColor
+		ownerBackgroundView.layer.cornerRadius = 5
 		ownerNameTextField.text = outline?.ownerName
 		ownerEmailTextField.text = outline?.ownerEmail
 		ownerURLTextField.text = outline?.ownerURL
@@ -53,6 +56,10 @@ class MacOutlineGetInfoViewController: MacFormViewController {
 			updatedLabel.text = L10n.updatedOn(dateFormatter.string(from: updated), timeFormatter.string(from: updated))
 		} else {
 			updatedLabel.text = " "
+		}
+		
+		if (outline?.ownerName?.isEmpty ?? true) && (outline?.ownerEmail?.isEmpty ?? true) && (outline?.ownerURL?.isEmpty ?? true) {
+			macSubmitButton.setTitle(L10n.add, for: .normal)
 		}
 	}
 	
