@@ -968,13 +968,13 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isBoldToggledOn ?? false {
-					item.image = AppAssets.bold.symbolSizedForCatalyst(pointSize: 22.0, color: .systemBlue)
+					item.image = AppAssets.bold.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
 				} else {
-					item.image = AppAssets.bold.symbolSizedForCatalyst(pointSize: 22.0)
+					item.image = AppAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppAssets.bold.symbolSizedForCatalyst(pointSize: 22.0)
+			item.image = AppAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
 			item.label = L10n.bold
 			item.toolTip = L10n.bold
 			item.isBordered = true
@@ -985,13 +985,13 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isItalicToggledOn ?? false {
-					item.image = AppAssets.italic.symbolSizedForCatalyst(pointSize: 22.0, color: .systemBlue)
+					item.image = AppAssets.italic.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
 				} else {
-					item.image = AppAssets.italic.symbolSizedForCatalyst(pointSize: 22.0)
+					item.image = AppAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppAssets.italic.symbolSizedForCatalyst(pointSize: 22.0)
+			item.image = AppAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
 			item.label = L10n.italic
 			item.toolTip = L10n.italic
 			item.isBordered = true
