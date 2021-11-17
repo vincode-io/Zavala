@@ -55,6 +55,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 			collectionView.allowsMultipleSelection = true
+			collectionView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
 		} else {
 			addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline))
 			importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML))
