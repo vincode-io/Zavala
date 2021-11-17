@@ -268,7 +268,6 @@ extension CloudKitManager {
 				self?.presentError(error)
 			}
 			completeProcessing()
-			self?.isSyncing = false
 		}
 		
 		DispatchQueue.main.async {
