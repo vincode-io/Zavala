@@ -271,29 +271,30 @@ extension CloudKitManager {
 			}
 
 			self.requestsFileLock.lock()
-			defer {
-				self.requestsFileLock.unlock()
-			}
-
-			self.groupModificationAndSendToCloudKit()
-			self.modifications = [CKRecordZone.ID: ([CKRecord], [CKRecord.ID])]()
-			self.isSyncing = false
 			
-			DispatchQueue.main.async {
-				completion()
+			self.groupModificationAndSendToCloudKit() {
+				self.modifications = [CKRecordZone.ID: ([CKRecord], [CKRecord.ID])]()
+				self.isSyncing = false
+				self.requestsFileLock.unlock()
+
+				DispatchQueue.main.async {
+					completion()
+				}
 			}
 		}
 	}
 	
-	private func groupModificationAndSendToCloudKit() {
+	private func groupModificationAndSendToCloudKit(completion: @escaping (() -> Void)) {
 		guard let account = AccountManager.shared.cloudKitAccount,
 			  let cloudKitManager = account.cloudKitManager else {
+			completion()
 			return
 		}
 		
 		let combinedRequests = loadRequests()
 		
 		guard !combinedRequests.isEmpty else {
+			completion()
 			return
 		}
 		
@@ -373,6 +374,7 @@ extension CloudKitManager {
 				self.deleteRequests()
 				self.deleteTempFiles(tempFileURLs)
 			}
+			completion()
 		}
 	}
 	
