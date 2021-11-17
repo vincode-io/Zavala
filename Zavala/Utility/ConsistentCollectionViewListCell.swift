@@ -25,7 +25,7 @@ class ConsistentCollectionViewListCell: UICollectionViewListCell {
 		if state.traitCollection.userInterfaceIdiom == .mac {
 			backgroundConfig.cornerRadius = 5
 			if insetBackground {
-				backgroundConfig.backgroundInsets = NSDirectionalEdgeInsets(top: 1, leading: 9, bottom: 1, trailing: 9)
+				backgroundConfig.backgroundInsets = NSDirectionalEdgeInsets(top: 2, leading: 9, bottom: 2, trailing: 9)
 			}
 		}
 		
