@@ -40,6 +40,8 @@ public class CloudKitManager {
 	private weak var errorHandler: ErrorHandler?
 	private weak var account: Account?
 	
+	private var sendChangesBackgroundTaskID = UIBackgroundTaskIdentifier.invalid
+
 	private var coalescingQueue = CoalescingQueue(name: "Send Modifications", interval: 5)
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
 
@@ -134,7 +136,6 @@ public class CloudKitManager {
 			DispatchQueue.main.async {
 				self.coalescingQueue.add(self, #selector(self.sendQueuedChanges))
 			}
-			
 		}
 	}
 	
@@ -261,29 +262,32 @@ extension CloudKitManager {
 	private func sendChanges(completion: @escaping (() -> Void)) {
 		isSyncing = true
 
-		let processInfo = ProcessInfo()
-		processInfo.performExpiringActivity(withReason: "Fetching Changes") { [weak self] expired in
-			guard let self = self else { return }
+		let completeProcessing = { [unowned self] in
+			self.modifications = [CKRecordZone.ID: ([CKRecord], [CKRecord.ID])]()
+			self.isSyncing = false
+			self.requestsFileLock.unlock()
 			
-			guard !expired else {
-				self.isSyncing = false
-				return
-			}
+			UIApplication.shared.endBackgroundTask(self.sendChangesBackgroundTaskID)
+			self.sendChangesBackgroundTaskID = UIBackgroundTaskIdentifier.invalid
+			
+			completion()
+		}
 
-			self.requestsFileLock.lock()
-			
-			DispatchQueue.main.async {
-				self.groupModificationAndSendToCloudKit() {
-					self.modifications = [CKRecordZone.ID: ([CKRecord], [CKRecord.ID])]()
-					self.isSyncing = false
-					self.requestsFileLock.unlock()
-					completion()
-				}
-			}
+		self.requestsFileLock.lock()
+
+		self.sendChangesBackgroundTaskID = UIApplication.shared.beginBackgroundTask {
+			completeProcessing()
+			os_log("CloudKit sync processing terminated for running too long.", log: self.log, type: .info)
+		}
+		
+		self.groupModificationAndSendToCloudKit() {
+			completeProcessing()
 		}
 	}
 	
 	private func groupModificationAndSendToCloudKit(completion: @escaping (() -> Void)) {
+		assert(Thread.isMainThread)
+		
 		guard let account = AccountManager.shared.cloudKitAccount,
 			  let cloudKitManager = account.cloudKitManager else {
 			completion()
