@@ -119,6 +119,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			}
 			
 			cell.contentConfiguration = contentConfiguration
+			cell.setNeedsUpdateConfiguration()
 		}
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
@@ -127,6 +128,8 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		NotificationCenter.default.addObserver(self, selector: #selector(documentUpdatedDidChange(_:)), name: .DocumentUpdatedDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentSharingDidChange(_:)), name: .DocumentSharingDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
+		
+		scheduleReconfigureAll()
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -455,6 +458,22 @@ extension DocumentsViewController {
 			}
 			
 			completion?()
+		}
+	}
+	
+	private func reconfigureAll() {
+		if #available(iOS 15, *) {
+			let indexPaths = (0..<documents.count).map { IndexPath(row: $0, section: 0) }
+			collectionView.reconfigureItems(at: indexPaths)
+		} else {
+			collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+		}
+	}
+	
+	private func scheduleReconfigureAll() {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 60) { [weak self] in
+			self?.reconfigureAll()
+			self?.scheduleReconfigureAll()
 		}
 	}
 	
