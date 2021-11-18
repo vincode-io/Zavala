@@ -96,13 +96,14 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			} else {
 				contentConfiguration.text = title
 			}
+
+			contentConfiguration.secondaryTextProperties.font = .preferredFont(forTextStyle: .body)
 			contentConfiguration.secondaryText = Self.dateString(document.updated)
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			
 			if self.traitCollection.userInterfaceIdiom == .mac {
 				cell.insetBackground = true
 				contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .body)
-				contentConfiguration.secondaryTextProperties.font = .preferredFont(forTextStyle: .footnote)
 				contentConfiguration.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
 			}
 			

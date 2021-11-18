@@ -31,14 +31,14 @@ class ConsistentCollectionViewListCell: UICollectionViewListCell {
 		
 		if state.isSelected || state.isHighlighted {
 			contentConfig.textProperties.color = .white
-			contentConfig.secondaryTextProperties.color = .white
+			contentConfig.secondaryTextProperties.color = .lightGray
 			if highlightImageInWhite {
 				contentConfig.imageProperties.tintColor = .white
 			}
 			backgroundConfig.backgroundColor = UIColor.accentColor
 		} else {
 			contentConfig.textProperties.color = .label
-			contentConfig.secondaryTextProperties.color = .label
+			contentConfig.secondaryTextProperties.color = .tertiaryLabel
 			if highlightImageInWhite {
 				contentConfig.imageProperties.tintColor = nil
 			}
