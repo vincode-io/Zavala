@@ -266,6 +266,8 @@ internal enum L10n {
   internal static let removeCloudKitMessage = L10n.tr("Localizable", "Remove_CloudKit_Message")
   /// Remove iCloud Account
   internal static let removeCloudKitTitle = L10n.tr("Localizable", "Remove_CloudKit_Title")
+  /// Remove Tag
+  internal static let removeTag = L10n.tr("Localizable", "Remove_Tag")
   /// Rename
   internal static let rename = L10n.tr("Localizable", "Rename")
   /// Restore

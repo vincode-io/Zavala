@@ -115,6 +115,7 @@
 "Select" = "Select";
 "Zavala_Help" = "Zavala Help";
 "Twitter" = "Twitter";
+"Remove_Tag" = "Remove Tag";
 
 /* State restoration */
 "Unknown_Outline" = "The requested outline could not be found.";
