@@ -32,6 +32,7 @@ final class AppDefaults {
 		static let userInterfaceColorPalette = "userInterfaceColorPalette";
 		static let outlineFonts = "outlineFonts"
 		static let documentHistory = "documentHistory"
+		static let upgradedDefaultsToV2 = "upgradedDefaultsToV2"
 	}
 	
 	let isDeveloperBuild: Bool = {
@@ -163,12 +164,23 @@ final class AppDefaults {
 			AppDefaults.store.set(newValue, forKey: Key.documentHistory)
 		}
 	}
+	
+	var upgradedDefaultsToV2: Bool {
+		get {
+			return Self.bool(for: Key.upgradedDefaultsToV2)
+		}
+		set {
+			Self.setBool(for: Key.upgradedDefaultsToV2, newValue)
+		}
+	}
 
 	static func registerDefaults() {
 		var defaults: [String : Any] = [Key.enableLocalAccount: true]
 		defaults[Key.userInterfaceColorPalette] = UserInterfaceColorPalette.automatic.rawValue
 		defaults[Key.outlineFonts] = OutlineFontDefaults.defaults.userInfo
 		AppDefaults.store.register(defaults: defaults)
+		
+		upgradeDefaultsToV2()
 	}
 
 }
@@ -215,4 +227,14 @@ private extension AppDefaults {
 		AppDefaults.store.set(data, forKey: key)
 	}
 	
+	static func upgradeDefaultsToV2() {
+		guard !Self.shared.upgradedDefaultsToV2, var outlineFonts = Self.shared.outlineFonts else { return }
+		
+		if outlineFonts.rowFontConfigs[.tags] == OutlineFontDefaults.tagConfigV1 {
+			outlineFonts.rowFontConfigs[.tags] = OutlineFontDefaults.tagConfigV2
+		}
+		
+		Self.shared.outlineFonts = outlineFonts
+		Self.shared.upgradedDefaultsToV2 = true
+	}
 }

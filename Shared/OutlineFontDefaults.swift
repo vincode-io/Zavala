@@ -13,18 +13,34 @@ struct OutlineFontDefaults: Equatable {
 		var defaults = OutlineFontDefaults()
 		#if targetEnvironment(macCatalyst) || canImport(AppKit)
 		defaults.rowFontConfigs[.title] = OutlineFontConfig(name: "Helvetica Neue", size: 26)
-		defaults.rowFontConfigs[.tags] = OutlineFontConfig(name: "Helvetica Neue", size: 14)
+		defaults.rowFontConfigs[.tags] = tagConfigV2
 		defaults.rowFontConfigs[.rowTopic(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 14)
 		defaults.rowFontConfigs[.rowNote(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 13)
 		defaults.rowFontConfigs[.backlinks] = OutlineFontConfig(name: "Helvetica Neue", size: 12)
 		#else
 		defaults.rowFontConfigs[.title] = OutlineFontConfig(name: "Helvetica Neue", size: 34)
-		defaults.rowFontConfigs[.tags] = OutlineFontConfig(name: "Helvetica Neue", size: 17)
+		defaults.rowFontConfigs[.tags] = tagConfigV2
 		defaults.rowFontConfigs[.rowTopic(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 17)
 		defaults.rowFontConfigs[.rowNote(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 16)
 		defaults.rowFontConfigs[.backlinks] = OutlineFontConfig(name: "Helvetica Neue", size: 14)
 		#endif
 		return defaults
+	}
+	
+	static var tagConfigV1: OutlineFontConfig {
+		#if targetEnvironment(macCatalyst) || canImport(AppKit)
+		return OutlineFontConfig(name: "Helvetica Neue", size: 14)
+		#else
+		return OutlineFontConfig(name: "Helvetica Neue", size: 17)
+		#endif
+	}
+	
+	static var tagConfigV2: OutlineFontConfig {
+		#if targetEnvironment(macCatalyst) || canImport(AppKit)
+		return OutlineFontConfig(name: "Helvetica Neue", size: 11)
+		#else
+		return OutlineFontConfig(name: "Helvetica Neue", size: 14)
+		#endif
 	}
 	
 	var rowFontConfigs = [OutlineFontField: OutlineFontConfig]()
