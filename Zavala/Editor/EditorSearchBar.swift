@@ -107,7 +107,7 @@ import UIKit
 			doneButton.layer.borderWidth = 1.0
 			doneButton.layer.borderColor = UIColor.tertiaryLabel.cgColor
 			doneButton.layer.cornerRadius = 5
-			doneButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
+			doneButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
 		} else {
 			doneButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
 		}
@@ -119,6 +119,9 @@ import UIKit
 		searchField.autocorrectionType = .no
 		searchField.returnKeyType = .search
 		searchField.delegate = self
+		if traitCollection.userInterfaceIdiom == .mac {
+			searchField.heightAnchor.constraint(equalToConstant: 42).isActive = true
+		}
 		
 		resultsLabel.font = .systemFont(ofSize: UIFont.smallSystemFontSize)
 		resultsLabel.textColor = .secondaryLabel
