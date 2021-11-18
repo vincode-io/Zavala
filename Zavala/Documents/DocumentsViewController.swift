@@ -49,6 +49,14 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 
 	private var rowRegistration: UICollectionView.CellRegistration<ConsistentCollectionViewListCell, Document>!
 	
+	private var relativeFormatter: RelativeDateTimeFormatter = {
+		let relativeDateTimeFormatter = RelativeDateTimeFormatter()
+		relativeDateTimeFormatter.dateTimeStyle = .named
+		relativeDateTimeFormatter.unitsStyle = .full
+		relativeDateTimeFormatter.formattingContext = .beginningOfSentence
+		return relativeDateTimeFormatter
+	}()
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -97,8 +105,11 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 				contentConfiguration.text = title
 			}
 
-			contentConfiguration.secondaryTextProperties.font = .preferredFont(forTextStyle: .body)
-			contentConfiguration.secondaryText = Self.dateString(document.updated)
+			if let updated = document.updated {
+				contentConfiguration.secondaryTextProperties.font = .preferredFont(forTextStyle: .body)
+				contentConfiguration.secondaryText = self.relativeFormatter.localizedString(for: updated, relativeTo: Date())
+			}
+
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			
 			if self.traitCollection.userInterfaceIdiom == .mac {
@@ -671,31 +682,6 @@ extension DocumentsViewController {
 		alert.preferredAction = deleteAction
 		
 		present(alert, animated: true, completion: nil)
-	}
-		
-	private static let dateFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateStyle = .medium
-		formatter.timeStyle = .none
-		return formatter
-	}()
-
-	private static let timeFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateStyle = .none
-		formatter.timeStyle = .short
-		return formatter
-	}()
-	
-	private static func dateString(_ date: Date?) -> String {
-		guard let date = date else {
-			return L10n.notAvailable
-		}
-		
-		if Calendar.dateIsToday(date) {
-			return timeFormatter.string(from: date)
-		}
-		return dateFormatter.string(from: date)
 	}
 	
 }
