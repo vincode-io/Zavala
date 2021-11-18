@@ -163,7 +163,7 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 		}
 		
 		group.notify(queue: DispatchQueue.main) {
-            let sortedDocuments = documents.sorted(by: { $0.title ?? "" < $1.title ?? "" })
+			let sortedDocuments = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
 			let items = sortedDocuments.map { DocumentsItem.item($0) }
 			var snapshot = NSDiffableDataSourceSectionSnapshot<DocumentsItem>()
 			snapshot.append(items)

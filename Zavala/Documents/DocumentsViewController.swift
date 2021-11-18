@@ -412,7 +412,7 @@ extension DocumentsViewController {
         }
         
         group.notify(queue: DispatchQueue.main) {
-            let sortedDocuments = documents.sorted(by: { $0.title ?? "" < $1.title ?? "" })
+			let sortedDocuments = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
 
             guard animated else {
                 self.documents = sortedDocuments
