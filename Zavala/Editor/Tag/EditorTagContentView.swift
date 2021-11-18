@@ -24,7 +24,7 @@ class EditorTagContentView: UIView, UIContentView {
 		button.titleLabel?.font = OutlineFontCache.shared.tag
 		button.backgroundColor = .systemGray4
 		button.setTitleColor(.secondaryLabel, for: .normal)
-		button.contentEdgeInsets = UIEdgeInsets(top: 2, left: 8, bottom: 2, right: 8)
+		button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
 		button.layer.cornerRadius = button.intrinsicContentSize.height / 2
 
 		let deleteAction = UIAction(title: L10n.deleteTag, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in

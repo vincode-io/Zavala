@@ -89,7 +89,7 @@ extension OutlineFontCache {
 			case .title:
 				title = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: font)
 			case .tags:
-				tag = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
+				tag = UIFontMetrics(forTextStyle: .body).scaledFont(for: font).with(traits: .traitBold)
 			case .rowTopic:
 				let topicFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
 				topics.append(topicFont)
