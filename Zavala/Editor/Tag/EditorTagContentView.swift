@@ -33,7 +33,6 @@ class EditorTagContentView: UIView, UIContentView {
 		}
 		let menu = UIMenu(title: "", image: nil, identifier: nil, options: [], children: [deleteAction])
 		button.menu = menu
-		button.showsMenuAsPrimaryAction = true
 
 		NSLayoutConstraint.activate([
 			button.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
