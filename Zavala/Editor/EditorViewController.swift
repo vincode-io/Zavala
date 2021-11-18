@@ -37,11 +37,7 @@ protocol EditorDelegate: AnyObject {
 
 class EditorViewController: UIViewController, MainControllerIdentifiable, UndoableCommandRunner {
 
-	#if targetEnvironment(macCatalyst)
-	private static let searchBarHeight: CGFloat = 36
-	#else
 	private static let searchBarHeight: CGFloat = 44
-	#endif
 	
 	@IBOutlet weak var searchBar: EditorSearchBar!
 	@IBOutlet weak var searchBarHeightConstraint: NSLayoutConstraint!

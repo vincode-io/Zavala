@@ -107,6 +107,7 @@ import UIKit
 			doneButton.layer.borderWidth = 1.0
 			doneButton.layer.borderColor = UIColor.tertiaryLabel.cgColor
 			doneButton.layer.cornerRadius = 5
+			doneButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
 		} else {
 			doneButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
 		}
