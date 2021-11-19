@@ -1162,10 +1162,10 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 				let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(100), heightDimension: .estimated(50))
 				let item = NSCollectionLayoutItem(layoutSize: itemSize)
 				
-				// We do this differently in Catalyst to prevent a loop that seems to happen if we use fractionalWidth
-				// and dynamically change the directional layout margins
 				let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
 				let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+				group.interItemSpacing = .fixed(-8)
+				
 				return NSCollectionLayoutSection(group: group)
 			} else {
 				var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
