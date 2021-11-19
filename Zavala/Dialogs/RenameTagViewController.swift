@@ -42,6 +42,8 @@ class RenameTagViewController: UITableViewController {
 	
 }
 
+// MARK: UITextFieldDelegate
+
 extension RenameTagViewController: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -51,13 +53,15 @@ extension RenameTagViewController: UITextFieldDelegate {
 	
 }
 
-extension RenameTagViewController {
+// MARK: Helpers
+
+private extension RenameTagViewController {
 	
-	@objc private func textDidChange(_ note: Notification) {
+	@objc func textDidChange(_ note: Notification) {
 		updateUI()
 	}
 	
-	private func updateUI() {
+	func updateUI() {
 		renameBarButtonItem.isEnabled = !(tagNameTextField.text?.isEmpty ?? true)
 	}
 	

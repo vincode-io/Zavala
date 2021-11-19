@@ -70,6 +70,8 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
 	
 }
 
+// MARK: ErrorHandler
+
 extension IndexRequestHandler: ErrorHandler {
 	
 	func presentError(_ error: Error, title: String) {
@@ -78,9 +80,11 @@ extension IndexRequestHandler: ErrorHandler {
 	
 }
 
-extension IndexRequestHandler {
+// MARK: Helpers
+
+private extension IndexRequestHandler {
 	
-	private func resume() {
+	func resume() {
 		if AccountManager.shared == nil {
 			let appGroup = Bundle.main.object(forInfoDictionaryKey: "AppGroup") as! String
 			let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
@@ -91,7 +95,7 @@ extension IndexRequestHandler {
 		}
 	}
 	
-	private func suspend() {
+	func suspend() {
 		AccountManager.shared.suspend()
 	}
 	

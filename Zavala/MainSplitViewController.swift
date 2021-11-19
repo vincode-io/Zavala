@@ -669,9 +669,9 @@ extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 
 // MARK: Helpers
 
-extension MainSplitViewController {
+private extension MainSplitViewController {
 	
-	private func handleSelectDocument(_ document: Document, isNavigationBranch: Bool) {
+	func handleSelectDocument(_ document: Document, isNavigationBranch: Bool) {
 		// This is done because the restore state navigation used to rely on the fact that
 		// the TimeliniewController used a diffable datasource that didn't complete until after
 		// some navigation had occurred. Changing this assumption broke state restoration
@@ -691,7 +691,7 @@ extension MainSplitViewController {
 		}
 	}
 	
-	private func selectDefaultDocumentContainerIfNecessary(completion: @escaping () -> Void) {
+	func selectDefaultDocumentContainerIfNecessary(completion: @escaping () -> Void) {
 		guard collectionsViewController?.selectedAccount == nil else {
 			completion()
 			return
@@ -700,7 +700,7 @@ extension MainSplitViewController {
 		selectDefaultDocumentContainer(completion: completion)
 	}
 	
-	private func selectDefaultDocumentContainer(completion: @escaping () -> Void) {
+	func selectDefaultDocumentContainer(completion: @escaping () -> Void) {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		
 		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else {
@@ -715,7 +715,7 @@ extension MainSplitViewController {
 		}
 	}
 	
-	private func cleanUpNavigationStacks() {
+	func cleanUpNavigationStacks() {
 		let allDocumentIDs = AccountManager.shared.activeDocuments.map { $0.id }
 		
 		var replacementGoBackwardStack = [Pin]()
@@ -747,7 +747,7 @@ extension MainSplitViewController {
 		}
 	}
 	
-	private func goBackward(to: Int) {
+	func goBackward(to: Int) {
 		guard to < goBackwardStack.count else { return }
 		
 		if let lastPin = lastPin {
@@ -766,7 +766,7 @@ extension MainSplitViewController {
 		}
 	}
 	
-	private func goForward(to:  Int) {
+	func goForward(to:  Int) {
 		guard to < goForwardStack.count else { return }
 
 		if let lastPin = lastPin {

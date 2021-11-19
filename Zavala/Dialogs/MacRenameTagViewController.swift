@@ -37,6 +37,8 @@ class MacRenameTagViewController: MacFormViewController {
 	
 }
 
+// MARK: UITextFieldDelegate
+
 extension MacRenameTagViewController: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -46,17 +48,19 @@ extension MacRenameTagViewController: UITextFieldDelegate {
 	
 }
 
-extension MacRenameTagViewController {
+// MARK: Helpers
+
+private extension MacRenameTagViewController {
 	
-	@objc private func textDidChange(_ note: Notification) {
+	@objc func textDidChange(_ note: Notification) {
 		updateUI()
 	}
 	
-	private func updateUI() {
+	func updateUI() {
 		renameButton.isEnabled = !(tagNameTextField.text?.isEmpty ?? true)
 	}
 	
-	private func submitAndDismiss() {
+	func submitAndDismiss() {
 		guard let tagName = tagNameTextField.text, let tag = tagDocuments?.tag else { return }
 		tagDocuments?.account?.renameTag(tag, to: tagName)
 		dismiss(animated: true)

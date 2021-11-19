@@ -58,6 +58,8 @@ class OpenQuicklyViewController: UITableViewController {
 	
 }
 
+// MARK: UITextFieldDelegate
+
 extension OpenQuicklyViewController: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {

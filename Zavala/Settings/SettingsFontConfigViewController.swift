@@ -77,9 +77,9 @@ extension SettingsFontConfigViewController: UIFontPickerViewControllerDelegate {
 
 // MARK: Helpers
 
-extension SettingsFontConfigViewController {
+private extension SettingsFontConfigViewController {
 
-	private func updateUI() {
+	func updateUI() {
 		guard let config = config, let font = UIFont(name: config.name, size: CGFloat(config.size)) else { return }
 		sampleTextLabel.font = font
 		tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)

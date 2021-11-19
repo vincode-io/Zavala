@@ -446,7 +446,17 @@ extension MainCoordinator {
 		printPDFs(pdfs, title: title)
 	}
 
-	private func printPDFs(_ pdfs: [Data], title: String) {
+	func pinWasVisited(_ pin: Pin) {
+		NotificationCenter.default.post(name: .PinWasVisited, object: pin, userInfo: nil)
+	}
+	
+}
+
+// MARK: Helpers
+
+private extension MainCoordinator {
+	
+	func printPDFs(_ pdfs: [Data], title: String) {
 		let pic = UIPrintInteractionController()
 		
 		let printInfo = UIPrintInfo(dictionary: nil)
@@ -457,10 +467,6 @@ extension MainCoordinator {
 		pic.printingItems = pdfs
 		
 		pic.present(animated: true)
-	}
-	
-	func pinWasVisited(_ pin: Pin) {
-		NotificationCenter.default.post(name: .PinWasVisited, object: pin, userInfo: nil)
 	}
 	
 }

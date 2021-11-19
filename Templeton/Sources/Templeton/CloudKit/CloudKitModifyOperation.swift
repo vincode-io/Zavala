@@ -31,9 +31,11 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 	
 }
 
-extension CloudKitModifyOperation {
+// MARK: Helpers
+
+private extension CloudKitModifyOperation {
 	
-	private func send(combinedRequests: [String : CombinedRequest], completion: @escaping (() -> Void)) {
+	func send(combinedRequests: [String : CombinedRequest], completion: @escaping (() -> Void)) {
 		guard !combinedRequests.isEmpty,
 			  let account = AccountManager.shared.cloudKitAccount,
 			  let cloudKitManager = account.cloudKitManager else {
@@ -118,7 +120,7 @@ extension CloudKitModifyOperation {
 		}
 	}
 	
-	private func loadRequests() -> [String: CombinedRequest] {
+	func loadRequests() -> [String: CombinedRequest] {
 		var combinedRequests = [String: CombinedRequest]()
 
 		guard let queuedRequests = CloudKitActionRequest.loadRequests(), !queuedRequests.isEmpty else { return combinedRequests }
@@ -160,17 +162,17 @@ extension CloudKitModifyOperation {
 		return combinedRequests
 	}
 	
-	private func deleteRequests() {
+	func deleteRequests() {
 		try? FileManager.default.removeItem(at: CloudKitActionRequest.actionRequestFile)
 	}
 	
-	private func deleteTempFiles(_ urls: [URL]) {
+	func deleteTempFiles(_ urls: [URL]) {
 		for url in urls {
 			try? FileManager.default.removeItem(at: url)
 		}
 	}
 	
-	private func addSave(_ document: Document) {
+	func addSave(_ document: Document) {
 		guard let outline = document.outline, let zoneID = outline.zoneID else { return }
 		
 		outline.syncID = UUID().uuidString
@@ -197,7 +199,7 @@ extension CloudKitModifyOperation {
 		addSave(zoneID, record)
 	}
 	
-	private func addSave(zoneID: CKRecordZone.ID, outlineRecordID: CKRecord.ID, row: Row) {
+	func addSave(zoneID: CKRecordZone.ID, outlineRecordID: CKRecord.ID, row: Row) {
 		row.syncID = UUID().uuidString
 		
 		let recordID = CKRecord.ID(recordName: row.entityID.description, zoneID: zoneID)
@@ -215,7 +217,7 @@ extension CloudKitModifyOperation {
 		addSave(zoneID, record)
 	}
 	
-	private func addSave(zoneID: CKRecordZone.ID, image: Image) -> URL {
+	func addSave(zoneID: CKRecordZone.ID, image: Image) -> URL {
 		var image = image
 		
 		image.syncID = UUID().uuidString
@@ -241,7 +243,7 @@ extension CloudKitModifyOperation {
 		return imageURL
 	}
 	
-	private func addSave(_ zoneID: CKRecordZone.ID, _ record: CKRecord) {
+	func addSave(_ zoneID: CKRecordZone.ID, _ record: CKRecord) {
 		if let (saves, deletes) = modifications[zoneID] {
 			var mutableSaves = saves
 			mutableSaves.append(record)
@@ -254,13 +256,13 @@ extension CloudKitModifyOperation {
 		}
 	}
 	
-	private func addDelete(_ request: CloudKitActionRequest) {
+	func addDelete(_ request: CloudKitActionRequest) {
 		let zoneID = request.zoneID
 		let recordID = CKRecord.ID(recordName: request.id.description, zoneID: zoneID)
 		addDelete(zoneID, recordID)
 	}
 	
-	private func addDelete(_ zoneID: CKRecordZone.ID, _ recordID: CKRecord.ID) {
+	func addDelete(_ zoneID: CKRecordZone.ID, _ recordID: CKRecord.ID) {
 		if let (saves, deletes) = modifications[zoneID] {
 			var mutableDeletes = deletes
 			mutableDeletes.append(recordID)

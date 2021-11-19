@@ -45,15 +45,17 @@ class MacOpenQuicklyCollectionsViewController: UICollectionViewController {
 	
 }
 
-extension MacOpenQuicklyCollectionsViewController {
+// MARK: Helpers
+
+private extension MacOpenQuicklyCollectionsViewController {
 	
-	private func updateSelections() {
+	func updateSelections() {
 		guard let selectedIndexes = collectionView.indexPathsForSelectedItems else { return }
 		let items = selectedIndexes.compactMap { dataSource.itemIdentifier(for: $0) }
 		delegate?.documentContainerSelectionsDidChange(self, documentContainers: items.toContainers())
 	}
 	
-	private func createLayout() -> UICollectionViewLayout {
+	func createLayout() -> UICollectionViewLayout {
 		let layout = UICollectionViewCompositionalLayout() { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 			var configuration = UICollectionLayoutListConfiguration(appearance: .sidebar)
 			configuration.showsSeparators = false
@@ -63,7 +65,7 @@ extension MacOpenQuicklyCollectionsViewController {
 		return layout
 	}
 
-	private func configureDataSource() {
+	func configureDataSource() {
 
 		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, CollectionsItem> {	(cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarHeader()
@@ -98,7 +100,7 @@ extension MacOpenQuicklyCollectionsViewController {
 		}
 	}
 
-	private func applySnapshot() {
+	func applySnapshot() {
 		if let snapshot = localAccountSnapshot() {
 			applySnapshot(snapshot, section: .localAccount, animated: true)
 		} else {
@@ -112,7 +114,7 @@ extension MacOpenQuicklyCollectionsViewController {
 		}
 	}
 
-	private func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<CollectionsItem>, section: CollectionsSection, animated: Bool) {
+	func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<CollectionsItem>, section: CollectionsSection, animated: Bool) {
 		let selectedItems = collectionView.indexPathsForSelectedItems?.compactMap({ dataSource.itemIdentifier(for: $0) })
 		
 		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
@@ -128,7 +130,7 @@ extension MacOpenQuicklyCollectionsViewController {
 		dataSourceQueue.add(operation)
 	}
 	
-	private func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
+	func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
 		let localAccount = AccountManager.shared.localAccount
 		
 		guard localAccount.isActive else { return nil }
@@ -144,7 +146,7 @@ extension MacOpenQuicklyCollectionsViewController {
 		return snapshot
 	}
 	
-	private func cloudKitAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
+	func cloudKitAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
 		guard let cloudKitAccount = AccountManager.shared.cloudKitAccount else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()

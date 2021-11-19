@@ -59,9 +59,9 @@ class PrintDocVisitor {
 
 // MARK: Helpers
 
-extension PrintDocVisitor {
+private extension PrintDocVisitor {
 	
-	private func printTopic(_ topic: NSAttributedString, row: Row) {
+	func printTopic(_ topic: NSAttributedString, row: Row) {
 		print.append(NSAttributedString(string: "\n\n"))
 		var attrs = [NSAttributedString.Key : Any]()
 		if row.isComplete || row.isAncestorComplete {
@@ -92,7 +92,7 @@ extension PrintDocVisitor {
 		print.append(printTopic)
 	}
 	
-	private func printNote(_ note: NSAttributedString) {
+	func printNote(_ note: NSAttributedString) {
 		var attrs = [NSAttributedString.Key : Any]()
 		attrs[.foregroundColor] = UIColor.darkGray
 

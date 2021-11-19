@@ -92,30 +92,7 @@ class LinkViewController: UITableViewController {
 	}
 }
 
-extension LinkViewController {
-	
-	@objc private func textDidChange(_ note: Notification) {
-		updateUI()
-	}
-	
-	private func updateUI() {
-		addOutlineBarButtonItem.isEnabled = !(textTextField.text?.isEmpty ?? true) && (linkTextField.text?.isEmpty ?? true)
-	}
-	
-	private func submitAndDismiss() {
-		guard let cursorCoordinates = cursorCoordinates, let range = range else { return }
-		
-		let text = textTextField.text?.trimmingWhitespace ?? ""
-		if let newLink = linkTextField.text, !newLink.trimmingWhitespace.isEmpty {
-			delegate?.updateLink(cursorCoordinates: cursorCoordinates, text: text, link: newLink.trimmingWhitespace, range: range)
-		} else {
-			delegate?.updateLink(cursorCoordinates: cursorCoordinates, text: text, link: nil, range: range)
-		}
-		
-		dismiss(animated: true)
-	}
-	
-}
+// MARK: UITextFieldDelegate
 
 class TextTextFieldDelegate: NSObject, UITextFieldDelegate {
 	
@@ -131,11 +108,40 @@ class TextTextFieldDelegate: NSObject, UITextFieldDelegate {
 	
 }
 
+// MARK: UITextFieldDelegate
+
 class LinkTextFieldDelegate: NSObject, UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		textField.resignFirstResponder()
 		return false
+	}
+	
+}
+
+// MARK: Helpers
+
+private extension LinkViewController {
+	
+	@objc func textDidChange(_ note: Notification) {
+		updateUI()
+	}
+	
+	func updateUI() {
+		addOutlineBarButtonItem.isEnabled = !(textTextField.text?.isEmpty ?? true) && (linkTextField.text?.isEmpty ?? true)
+	}
+	
+	func submitAndDismiss() {
+		guard let cursorCoordinates = cursorCoordinates, let range = range else { return }
+		
+		let text = textTextField.text?.trimmingWhitespace ?? ""
+		if let newLink = linkTextField.text, !newLink.trimmingWhitespace.isEmpty {
+			delegate?.updateLink(cursorCoordinates: cursorCoordinates, text: text, link: newLink.trimmingWhitespace, range: range)
+		} else {
+			delegate?.updateLink(cursorCoordinates: cursorCoordinates, text: text, link: nil, range: range)
+		}
+		
+		dismiss(animated: true)
 	}
 	
 }

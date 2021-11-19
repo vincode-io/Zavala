@@ -63,10 +63,10 @@ extension EditorViewController: UICollectionViewDropDelegate {
 
 // MARK: Helpers
 
-extension EditorViewController {
+private extension EditorViewController {
 	
 	// The destinationIndexPath is worthless.  See https://stackoverflow.com/a/58038185
-	private func correctDestinationIndexPath(session: UIDropSession) -> IndexPath? {
+	func correctDestinationIndexPath(session: UIDropSession) -> IndexPath? {
 		let location = session.location(in: collectionView)
 		
 		var correctDestination: IndexPath?
@@ -77,7 +77,7 @@ extension EditorViewController {
 		return correctDestination
 	}
 	
-	private func droppingInto(session: UIDropSession, targetIndexPath: IndexPath) -> Bool {
+	func droppingInto(session: UIDropSession, targetIndexPath: IndexPath) -> Bool {
 		if let destCell = collectionView.cellForItem(at: targetIndexPath) {
 			let fractionHeight = destCell.bounds.height / 20
 			let yInCell = session.location(in: destCell).y
@@ -86,7 +86,7 @@ extension EditorViewController {
 		return false
 	}
 	
-	private func localDropProposal(session: UIDropSession, targetIndexPath: IndexPath) -> UICollectionViewDropProposal {
+	func localDropProposal(session: UIDropSession, targetIndexPath: IndexPath) -> UICollectionViewDropProposal {
 		guard let localDragSession = session.localDragSession,
 			  let shadowTable = outline?.shadowTable else {
 			return UICollectionViewDropProposal(operation: .cancel)
@@ -126,7 +126,7 @@ extension EditorViewController {
 		return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
 	}
 	
-	private func remoteDropProposal(session: UIDropSession, targetIndexPath: IndexPath) -> UICollectionViewDropProposal {
+	func remoteDropProposal(session: UIDropSession, targetIndexPath: IndexPath) -> UICollectionViewDropProposal {
 		if droppingInto(session: session, targetIndexPath: targetIndexPath) {
 			return UICollectionViewDropProposal(operation: .copy, intent: .insertIntoDestinationIndexPath)
 		} else {
@@ -134,7 +134,7 @@ extension EditorViewController {
 		}
 	}
 	
-	private func localRowDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
+	func localRowDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
 		guard let outline = outline, let shadowTable = outline.shadowTable else { return }
 		
 		let rows = coordinator.items.compactMap { $0.dragItem.localObject as? Row }
@@ -194,7 +194,7 @@ extension EditorViewController {
 		localRowDrop(coordinator: coordinator, rows: rows, toParent: newParent, toChildIndex: newIndex)
 	}
 	
-	private func localRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], toParent: RowContainer, toChildIndex: Int) {
+	func localRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], toParent: RowContainer, toChildIndex: Int) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = LocalDropRowCommand(undoManager: undoManager,
@@ -207,7 +207,7 @@ extension EditorViewController {
 		runCommand(command)
 	}
 	
-	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
+	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
 			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(Row.typeIdentifier) {
 				return dropItem.dragItem.itemProvider
@@ -240,7 +240,7 @@ extension EditorViewController {
 		}
 	}
 
-	private func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
+	func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
 		guard let outline = outline else { return }
 		
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
@@ -280,7 +280,7 @@ extension EditorViewController {
 		}
 	}
 	
-	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], targetIndexPath: IndexPath?) {
+	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], targetIndexPath: IndexPath?) {
 		guard !rowGroups.isEmpty, let outline = self.outline, let shadowTable = outline.shadowTable else { return }
 
 		// Dropping into a Row is easy peasy
@@ -315,7 +315,7 @@ extension EditorViewController {
 		}
 	}
 	
-	private func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], afterRow: Row?, prefersEnd: Bool = false) {
+	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], afterRow: Row?, prefersEnd: Bool = false) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
 		let command = RemoteDropRowCommand(undoManager: undoManager,

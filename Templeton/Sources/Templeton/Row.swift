@@ -591,9 +591,9 @@ extension Row {
 
 // MARK: Helpers
 
-extension Row {
+private extension Row {
 	
-	private func replaceImages(attrString: NSAttributedString?, isNotes: Bool) -> NSAttributedString? {
+	func replaceImages(attrString: NSAttributedString?, isNotes: Bool) -> NSAttributedString? {
 		guard let attrString = attrString else { return nil }
 		let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
 		
@@ -615,7 +615,7 @@ extension Row {
 		return mutableAttrString
 	}
 	
-	private func splitOffImages(attrString: NSAttributedString, isNotes: Bool) -> (NSAttributedString, [Image]) {
+	func splitOffImages(attrString: NSAttributedString, isNotes: Bool) -> (NSAttributedString, [Image]) {
 		guard let outline = outline else {
 			fatalError("Missing Outline")
 		}
@@ -635,7 +635,7 @@ extension Row {
 		return (mutableAttrString, images)
 	}
 	
-	private func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, representation: DataRepresentation) -> String? {
+	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, representation: DataRepresentation) -> String? {
 		guard let attrString = attrString else { return nil	}
 
 		let result = NSMutableAttributedString(attributedString: attrString)
@@ -661,7 +661,7 @@ extension Row {
 		return result.markdownRepresentation
 	}
 	
-	private func convertMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
+	func convertMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
 		guard let markdown = markdown, let regEx = try? NSRegularExpression(pattern: Self.markdownImagePattern, options: []) else {
 			return nil
 		}
@@ -697,7 +697,7 @@ extension Row {
 		return result
 	}
 	
-	private func insertImageAttachment(attrString: NSMutableAttributedString, image: Image, offset: Int) {
+	func insertImageAttachment(attrString: NSMutableAttributedString, image: Image, offset: Int) {
 		let attachment = ImageTextAttachment(data: image.data, ofType: kUTTypePNG as String)
 		attachment.imageUUID = image.id.imageUUID
 		let imageAttrText = NSAttributedString(attachment: attachment)
@@ -705,7 +705,7 @@ extension Row {
 	}
 	
 	@discardableResult
-	private func resolveLinks(attrString: NSMutableAttributedString) -> LinkResolvingActions {
+	func resolveLinks(attrString: NSMutableAttributedString) -> LinkResolvingActions {
 		var actionsTaken = LinkResolvingActions()
 		
 		attrString.enumerateAttribute(.link, in: .init(location: 0, length: attrString.length), options: []) { (value, range, _) in

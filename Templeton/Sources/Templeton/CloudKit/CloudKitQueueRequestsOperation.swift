@@ -23,9 +23,11 @@ class CloudKitQueueRequestsOperation: BaseMainThreadOperation {
 	
 }
 
-extension CloudKitQueueRequestsOperation {
+// MARK: Helpers
+
+private extension CloudKitQueueRequestsOperation {
 	
-	private func processRequests() {
+	func processRequests() {
 		let queuedRequests: Set<CloudKitActionRequest>
 		if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
 			let decoder = PropertyListDecoder()

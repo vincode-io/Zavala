@@ -227,13 +227,15 @@ public class CloudKitManager {
 	
 }
 
-extension CloudKitManager {
+// MARK: Helpers
+
+private extension CloudKitManager {
 	
-	private func presentError(_ error: Error) {
+	func presentError(_ error: Error) {
 		errorHandler?.presentError(error, title: "CloudKit Syncing Error")
 	}
 
-	@objc private func sendQueuedChanges() {
+	@objc func sendQueuedChanges() {
 		guard isNetworkAvailable else {
 			return
 		}
@@ -242,7 +244,7 @@ extension CloudKitManager {
 		}
 	}
 
-	private func sendChanges(completion: @escaping (() -> Void)) {
+	func sendChanges(completion: @escaping (() -> Void)) {
 		isSyncing = true
 
 		let completeProcessing = { [unowned self] in
@@ -271,7 +273,7 @@ extension CloudKitManager {
 		self.queue.add(operation)
 	}
 	
-	private func fetchAllChanges(completion: (() -> Void)? = nil) {
+	func fetchAllChanges(completion: (() -> Void)? = nil) {
 		isSyncing = true
 		var zoneIDs = Set<CKRecordZone.ID>()
 		zoneIDs.insert(defaultZone.zoneID)
@@ -312,7 +314,7 @@ extension CloudKitManager {
 		container.sharedCloudDatabase.add(op)
 	}
 	
-	private func fetchChanges(zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
+	func fetchChanges(zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
 		let processInfo = ProcessInfo()
 		processInfo.performExpiringActivity(withReason: "Fetching Changes") { expired in
 			guard !expired else { return }
@@ -339,7 +341,7 @@ extension CloudKitManager {
 		
 	}
 	
-	private func subscribeToSharedDatabaseChanges() {
+	func subscribeToSharedDatabaseChanges() {
 		let outlineSubscription = sharedDatabaseSubscription(recordType: CloudKitOutlineZone.CloudKitOutline.recordType)
 		let rowSubscription = sharedDatabaseSubscription(recordType: CloudKitOutlineZone.CloudKitRow.recordType)
 
@@ -355,7 +357,7 @@ extension CloudKitManager {
 		container.sharedCloudDatabase.add(op)
 	}
 	
-	private func sharedDatabaseSubscription(recordType: String) -> CKDatabaseSubscription {
+	func sharedDatabaseSubscription(recordType: String) -> CKDatabaseSubscription {
 		let subscription = CKDatabaseSubscription()
 		subscription.recordType = recordType
 

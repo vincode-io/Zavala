@@ -38,7 +38,13 @@ class ImageTransition: NSObject, UIViewControllerAnimatedTransitioning {
 		}
 	}
 	
-	private func animateTransitionPresenting(using transitionContext: UIViewControllerContextTransitioning) {
+}
+
+// MARK: Helpers
+
+private extension ImageTransition {
+	
+	func animateTransitionPresenting(using transitionContext: UIViewControllerContextTransitioning) {
 
 		let imageView = UIImageView(image: originImage)
 		imageView.frame = originFrame
@@ -67,7 +73,7 @@ class ImageTransition: NSObject, UIViewControllerAnimatedTransitioning {
 		})
 	}
 	
-	private func animateTransitionReturning(using transitionContext: UIViewControllerContextTransitioning) {
+	func animateTransitionReturning(using transitionContext: UIViewControllerContextTransitioning) {
 		let imageController = transitionContext.viewController(forKey: .from) as! ImageViewController
 		let imageView = UIImageView(image: originImage)
 		imageView.frame = imageController.zoomedFrame

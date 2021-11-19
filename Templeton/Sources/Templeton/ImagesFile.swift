@@ -69,6 +69,8 @@ final class ImagesFile {
 	
 }
 
+// MARK: Helpers
+
 private extension ImagesFile {
 
 	func loadCallback() {

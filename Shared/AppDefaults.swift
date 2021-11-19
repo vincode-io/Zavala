@@ -185,6 +185,8 @@ final class AppDefaults {
 
 }
 
+// MARK: Helpers
+
 private extension AppDefaults {
 
 	static func string(for key: String) -> String? {

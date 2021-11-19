@@ -190,7 +190,7 @@ public final class AccountManager {
 	
 }
 
-// MARK: Private
+// MARK: Helpers
 
 private extension AccountManager {
 	

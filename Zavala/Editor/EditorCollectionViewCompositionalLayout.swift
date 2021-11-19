@@ -35,7 +35,9 @@ class EditorCollectionViewCompositionalLayout : UICollectionViewCompositionalLay
 	
 }
 
-extension EditorCollectionViewCompositionalLayout {
+// MARK: Helpers
+
+private extension EditorCollectionViewCompositionalLayout {
 	
 	// https://stackoverflow.com/a/38254368
 	func center(_ attributes: [UICollectionViewLayoutAttributes]) {

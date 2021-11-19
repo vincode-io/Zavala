@@ -66,14 +66,16 @@ class ActivityManager {
 
 }
 
-extension ActivityManager {
+// MARK: Helpers
+
+private extension ActivityManager {
 
 	@objc func documentDidDelete(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
 		CSSearchableIndex.default().deleteSearchableItems(withIdentifiers: [document.id.description])
 	}
 	
-	private func makeSelectDocumentContainerActivity(_ documentContainers: [DocumentContainer]) -> NSUserActivity {
+	func makeSelectDocumentContainerActivity(_ documentContainers: [DocumentContainer]) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocumentContainer)
 		
 		let title = L10n.seeDocumentsIn(documentContainers.title)
@@ -90,7 +92,7 @@ extension ActivityManager {
         selectingDocument(selectDocumentContainers, document)
     }
     
-	private func makeSelectDocumentActivity(_ documentContainers: [DocumentContainer]?, _ document: Document) -> NSUserActivity {
+	func makeSelectDocumentActivity(_ documentContainers: [DocumentContainer]?, _ document: Document) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocument)
 
 		let title = L10n.editDocument(document.title ?? "")

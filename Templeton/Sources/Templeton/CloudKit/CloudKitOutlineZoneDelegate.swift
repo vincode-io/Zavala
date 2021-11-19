@@ -79,9 +79,9 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 
 // MARK: Helpers
 
-extension CloudKitAcountZoneDelegate {
+private extension CloudKitAcountZoneDelegate {
 	
-	private func loadPendingIDs() -> [EntityID] {
+	func loadPendingIDs() -> [EntityID] {
 		return CloudKitActionRequest.loadRequests()?.filter({ $0.zoneID == zoneID }).map({ $0.id }) ?? [EntityID]()
 	}
 	

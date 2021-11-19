@@ -128,9 +128,11 @@ class GetOutlinesIntentHandler: NSObject, ZavalaIntentHandler, GetOutlinesIntent
 	
 }
 
-extension GetOutlinesIntentHandler {
+// MARK: Helpers
+
+private extension GetOutlinesIntentHandler {
 	
-	private func filter(documents: [Document], intent: GetOutlinesIntent, completion: @escaping (GetOutlinesIntentResponse) -> Void) {
+	func filter(documents: [Document], intent: GetOutlinesIntent, completion: @escaping (GetOutlinesIntentResponse) -> Void) {
 		var documents = documents
 		
 		switch intent.accountType {

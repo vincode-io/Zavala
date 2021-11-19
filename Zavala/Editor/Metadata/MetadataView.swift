@@ -36,9 +36,9 @@ class MetadataView: UIView {
 
 // MARK: Helpers
 
-extension MetadataView {
+private extension MetadataView {
 	
-	private func makeLabel(text: String, level: Int) -> UILabel {
+	func makeLabel(text: String, level: Int) -> UILabel {
 		let keyLabel = InsetLabel(top: 1.0, left: 2.0, bottom: 1.0, right: 2.0)
 		keyLabel.text = text
 		keyLabel.textColor = .label

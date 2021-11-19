@@ -425,9 +425,9 @@ extension CollectionsViewController: CollectionsSearchCellDelegate {
 
 // MARK: Helpers
 
-extension CollectionsViewController {
+private extension CollectionsViewController {
 	
-	private func clearSearchField() {
+	func clearSearchField() {
 		if let searchCellIndexPath = dataSource.indexPath(for: CollectionsItem.searchItem()) {
 			if let searchCell = collectionView.cellForItem(at: searchCellIndexPath) as? CollectionsSearchCell {
 				searchCell.clearSearchField()
@@ -435,23 +435,23 @@ extension CollectionsViewController {
 		}
 	}
 	
-	private func queueApplyChangeSnapshot() {
+	func queueApplyChangeSnapshot() {
 		applyChangesQueue.add(self, #selector(applyQueuedChangeSnapshot))
 	}
 	
-	@objc private func applyQueuedChangeSnapshot() {
+	@objc func applyQueuedChangeSnapshot() {
 		applyChangeSnapshot()
 	}
 	
-	private func queueReloadChangeSnapshot() {
+	func queueReloadChangeSnapshot() {
 		reloadChangedQueue.add(self, #selector(reloadQueuedChangeSnapshot))
 	}
 	
-	@objc private func reloadQueuedChangeSnapshot() {
+	@objc func reloadQueuedChangeSnapshot() {
 		reloadVisible()
 	}
 	
-	private func makeDocumentContainerContextMenu(mainItem: CollectionsItem, items: [CollectionsItem]) -> UIContextMenuConfiguration {
+	func makeDocumentContainerContextMenu(mainItem: CollectionsItem, items: [CollectionsItem]) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: mainItem as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
 			guard let self = self else { return nil }
 
@@ -473,7 +473,7 @@ extension CollectionsViewController {
 		})
 	}
 
-	private func renameTagAction(containers: [DocumentContainer]) -> UIAction? {
+	func renameTagAction(containers: [DocumentContainer]) -> UIAction? {
 		guard containers.count == 1, let container = containers.first, let tagDocuments = container as? TagDocuments else { return nil }
 		
 		let action = UIAction(title: L10n.rename, image: AppAssets.rename) { [weak self] action in
@@ -497,7 +497,7 @@ extension CollectionsViewController {
 		return action
 	}
 
-	private func deleteTagAction(containers: [DocumentContainer]) -> UIAction? {
+	func deleteTagAction(containers: [DocumentContainer]) -> UIAction? {
 		let tagDocuments = containers.compactMap { $0 as? TagDocuments }
 		guard tagDocuments.count == containers.count else { return nil}
 		

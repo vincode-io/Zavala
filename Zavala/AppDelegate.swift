@@ -527,7 +527,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		appKitPlugin.setDelegate(self)
 		appKitPlugin.start()
 		
-		appKitPlugin.killOtherInstance()
+		appKitPlugin.refuseLaunchIfOtherIsRunning()
 		#endif
 		
 		UIApplication.shared.registerForRemoteNotifications()
@@ -1210,9 +1210,9 @@ extension AppDelegate: ErrorHandler {
 
 // MARK: Helpers
 
-extension AppDelegate {
+private extension AppDelegate {
 	
-	@objc private func willEnterForeground() {
+	@objc func willEnterForeground() {
 		checkForUserDefaultsChanges()
 		AccountManager.shared.resume()
 		
@@ -1249,7 +1249,7 @@ extension AppDelegate {
 		}
 	}
 
-	@objc private func pinWasVisited(_ note: Notification) {
+	@objc func pinWasVisited(_ note: Notification) {
 		guard let pin = note.object as? Pin else { return }
 		
 		history.removeAll(where: { $0.documentID == pin.documentID })
@@ -1259,23 +1259,23 @@ extension AppDelegate {
 		UIMenuSystem.main.setNeedsRebuild()
 	}
 
-	@objc private func accountDocumentsDidChange() {
+	@objc func accountDocumentsDidChange() {
 		cleanUpHistory()
 	}
 
-	@objc private func accountManagerAccountsDidChange() {
+	@objc func accountManagerAccountsDidChange() {
 		cleanUpHistory()
 	}
 
-	@objc private func accountMetadataDidChange() {
+	@objc func accountMetadataDidChange() {
 		cleanUpHistory()
 	}
 	
-	@objc private func documentTitleDidChange() {
+	@objc func documentTitleDidChange() {
 		UIMenuSystem.main.setNeedsRebuild()
 	}
 
-	private func openHistoryItem(index: Int) {
+	func openHistoryItem(index: Int) {
 		let pin = history[index]
 		
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {

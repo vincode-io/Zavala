@@ -152,9 +152,9 @@ extension EditorTagInputTextField: UITextFieldDelegate {
 
 // MARK: Helpers
 
-extension EditorTagInputTextField {
+private extension EditorTagInputTextField {
 	
-	private func resetFilterStrings() {
+	func resetFilterStrings() {
 		let filterStrings = editorDelegate?.editorTagInputTextFieldTags?.compactMap({ $0.name }) ?? [String]()
 		self.filterStrings(filterStrings)
 	}

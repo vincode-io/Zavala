@@ -31,9 +31,11 @@ class DocumentIndexer {
 	
 }
 
-extension DocumentIndexer {
+// MARK: Helpers
+
+private extension DocumentIndexer {
 	
-	private static func makeSearchableItemAttributes(forDocument document: Document) -> CSSearchableItemAttributeSet {
+	static func makeSearchableItemAttributes(forDocument document: Document) -> CSSearchableItemAttributeSet {
 		let attributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
 		attributeSet.title = document.title ?? ""
 		if let keywords = document.tags?.map({ $0.name }) {
@@ -45,7 +47,7 @@ extension DocumentIndexer {
 		return attributeSet
 	}
 	
-	@objc private func documentDidChangeBySync(_ note: Notification) {
+	@objc func documentDidChangeBySync(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
 		Self.updateIndex(forDocument: document)
 	}

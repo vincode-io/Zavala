@@ -51,6 +51,8 @@ final class AccountFile {
 	
 }
 
+// MARK: Helpers
+
 private extension AccountFile {
 
 	func loadCallback() {

@@ -76,6 +76,8 @@ class MacOutlineGetInfoViewController: MacFormViewController {
 	
 }
 
+// MARK: UITextFieldDelegate
+
 extension MacOutlineGetInfoViewController: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -85,9 +87,11 @@ extension MacOutlineGetInfoViewController: UITextFieldDelegate {
 	
 }
 
-extension MacOutlineGetInfoViewController {
+// MARK: Helpers
+
+private extension MacOutlineGetInfoViewController {
 	
-	private func submitAndDismiss() {
+	func submitAndDismiss() {
 		outline?.update(ownerName: ownerNameTextField.text, ownerEmail: ownerEmailTextField.text, ownerURL: ownerURLTextField.text)
 		dismiss(animated: true)
 	}

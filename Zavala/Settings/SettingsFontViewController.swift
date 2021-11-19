@@ -144,13 +144,13 @@ extension SettingsFontViewController: SettingsFontConfigViewControllerDelegate {
 
 // MARK: Helpers
 
-extension SettingsFontViewController {
+private extension SettingsFontViewController {
 	
-	private func updateUI() {
+	func updateUI() {
 		restoreBarButtonItem.isEnabled = fontDefaults != OutlineFontDefaults.defaults
 	}
 	
-	private func buildAddMenu() -> UIMenu {
+	func buildAddMenu() -> UIMenu {
 		let addTopicLevelAction = UIAction(title: L10n.addTopicLevel, image: AppAssets.topicFont) { [weak self] _ in
 			guard let (field, config) = self?.fontDefaults?.nextTopicDefault else { return }
 			self?.showFontConfig(field: field, config: config)
@@ -164,7 +164,7 @@ extension SettingsFontViewController {
 		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [addTopicLevelAction, addNoteLevelAction])
 	}
 	
-	private func showFontConfig(field: OutlineFontField, config: OutlineFontConfig) {
+	func showFontConfig(field: OutlineFontField, config: OutlineFontConfig) {
 		let navController = UIStoryboard.settings.instantiateViewController(identifier: "SettingsFontConfigViewControllerNav") as! UINavigationController
 		navController.modalPresentationStyle = .formSheet
 		let controller = navController.topViewController as! SettingsFontConfigViewController
@@ -174,7 +174,7 @@ extension SettingsFontViewController {
 		present(navController, animated: true)
 	}
 
-	private func deleteAction(field: OutlineFontField) -> UIContextualAction? {
+	func deleteAction(field: OutlineFontField) -> UIContextualAction? {
 		let action =  UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
 			guard let self = self else { return }
 			self.fontDefaults?.rowFontConfigs.removeValue(forKey: field)

@@ -168,6 +168,17 @@ import UIKit
 	
 }
 
+// MARK: UITextFieldDelegate
+
+extension EditorSearchBar: UITextFieldDelegate {
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		delegate?.nextWasPressed?(self)
+		return false
+	}
+}
+
+// MARK: Helpers
+
 private extension EditorSearchBar {
 	
 	@objc func textDidChange(_ notification: Notification) {
@@ -195,12 +206,5 @@ private extension EditorSearchBar {
 	
 	@objc func donePressed(_ _: Any? = nil) {
 		delegate?.doneWasPressed?(self)
-	}
-}
-
-extension EditorSearchBar: UITextFieldDelegate {
-	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		delegate?.nextWasPressed?(self)
-		return false
 	}
 }

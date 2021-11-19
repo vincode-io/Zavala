@@ -88,7 +88,7 @@ import os.log
 		NSApplication.shared.activate(ignoringOtherApps: true)
 	}
 	
-	func killOtherInstance() {
+	func refuseLaunchIfOtherIsRunning() {
 		let runningApp = NSWorkspace.shared.runningApplications
 			.filter { item in item.bundleIdentifier == "io.vincode.Zavala" }
 			.first { item in item.processIdentifier != getpid() }

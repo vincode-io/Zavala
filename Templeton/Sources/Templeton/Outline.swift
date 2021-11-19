@@ -2317,72 +2317,72 @@ extension Outline {
 
 // MARK: Helpers
 
-extension Outline {
+private extension Outline {
 	
-	private func documentDidChangeBySync() {
+	func documentDidChangeBySync() {
 		NotificationCenter.default.post(name: .DocumentDidChangeBySync, object: Document.outline(self), userInfo: nil)
 	}
 
-	private func documentTitleDidChange() {
+	func documentTitleDidChange() {
 		NotificationCenter.default.post(name: .DocumentTitleDidChange, object: Document.outline(self), userInfo: nil)
 	}
 
-	private func documentUpdatedDidChange() {
+	func documentUpdatedDidChange() {
 		NotificationCenter.default.post(name: .DocumentUpdatedDidChange, object: Document.outline(self), userInfo: nil)
 	}
 
-	private func documentMetaDataDidChange() {
+	func documentMetaDataDidChange() {
 		NotificationCenter.default.post(name: .DocumentMetaDataDidChange, object: Document.outline(self), userInfo: nil)
 	}
 
-	private func documentSharingDidChange() {
+	func documentSharingDidChange() {
 		NotificationCenter.default.post(name: .DocumentSharingDidChange, object: Document.outline(self), userInfo: nil)
 	}
 
-	private func outlineContentDidChange() {
+	func outlineContentDidChange() {
 		self.updated = Date()
 		requestCloudKitUpdate(for: id)
 		rowsFile?.markAsDirty()
 	}
 	
-	private func outlineViewPropertyDidChange() {
+	func outlineViewPropertyDidChange() {
 		documentMetaDataDidChange()
 		rowsFile?.markAsDirty()
 	}
 	
-	private func outlineTagsDidChange() {
+	func outlineTagsDidChange() {
 		NotificationCenter.default.post(name: .OutlineTagsDidChange, object: self, userInfo: nil)
 	}
 	
-	private func outlineElementsDidChange(_ changes: OutlineElementChanges) {
+	func outlineElementsDidChange(_ changes: OutlineElementChanges) {
 		var userInfo = [AnyHashable: Any]()
 		userInfo[OutlineElementChanges.userInfoKey] = changes
 		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
 	}
 	
-	private func outlineSearchWillBegin() {
+	func outlineSearchWillBegin() {
 		NotificationCenter.default.post(name: .OutlineSearchWillBegin, object: self, userInfo: nil)
 	}
 	
-	private func outlineSearchTextDidChange(_ searchText: String) {
+	func outlineSearchTextDidChange(_ searchText: String) {
 		var userInfo = [AnyHashable: Any]()
 		userInfo[UserInfoKeys.searchText] = searchText
 		NotificationCenter.default.post(name: .OutlineSearchTextDidChange, object: self, userInfo: userInfo)
 	}
 	
-	private func outlineSearchWillEnd() {
+	func outlineSearchWillEnd() {
 		NotificationCenter.default.post(name: .OutlineSearchWillEnd, object: self, userInfo: nil)
 	}
 	
-	private func outlineAddedBacklinks() {
+	func outlineAddedBacklinks() {
 		NotificationCenter.default.post(name: .OutlineAddedBacklinks, object: self, userInfo: nil)
 	}
 	
-	private func outlineRemovedBacklinks() {
+	func outlineRemovedBacklinks() {
 		NotificationCenter.default.post(name: .OutlineRemovedBacklinks, object: self, userInfo: nil)
 	}
 	
-	private func changeSearchResult(_ changeToResult: Int) {
+	func changeSearchResult(_ changeToResult: Int) {
 		var reloads = Set<Int>()
 		
 		let currentCoordinates = searchResultCoordinates[currentSearchResult]
@@ -2402,7 +2402,7 @@ extension Outline {
 		outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 	}
 	
-	private func clearSearchResults() {
+	func clearSearchResults() {
 		let reloads = Set(searchResultCoordinates.compactMap({ $0.row.shadowTableIndex }))
 		
 		currentSearchResult = 0
@@ -2419,7 +2419,7 @@ extension Outline {
 		outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 	}
 	
-	private func completeUncomplete(rows: [Row], isComplete: Bool, rowStrings: RowStrings?) -> ([Row], Int?) {
+	func completeUncomplete(rows: [Row], isComplete: Bool, rowStrings: RowStrings?) -> ([Row], Int?) {
 		beginCloudKitBatchRequest()
 		
 		if rowCount == 1, let row = rows.first, let texts = rowStrings {
@@ -2480,7 +2480,7 @@ extension Outline {
 		return (impacted, nil)
 	}
 
-	private func isExpandAllUnavailable(container: RowContainer) -> Bool {
+	func isExpandAllUnavailable(container: RowContainer) -> Bool {
 		if let row = container as? Row, row.isExpandable {
 			return false
 		}
@@ -2514,7 +2514,7 @@ extension Outline {
 		return unavailable
 	}
 	
-	private func expandCollapse(rows: [Row], isExpanded: Bool) -> [Row] {
+	func expandCollapse(rows: [Row], isExpanded: Bool) -> [Row] {
 		var impacted = [Row]()
 		
 		for row in rows {
@@ -2537,7 +2537,7 @@ extension Outline {
 		return impacted
 	}
 	
-	private func expand(row: Row) {
+	func expand(row: Row) {
 		guard !row.isExpanded, let rowShadowTableIndex = row.shadowTableIndex else { return }
 		
 		row.isExpanded = true
@@ -2578,7 +2578,7 @@ extension Outline {
 		outlineElementsDidChange(changes)
 	}
 
-	private func isCollapseAllUnavailable(container: RowContainer) -> Bool {
+	func isCollapseAllUnavailable(container: RowContainer) -> Bool {
 		if let row = container as? Row, row.isCollapsable {
 			return false
 		}
@@ -2612,7 +2612,7 @@ extension Outline {
 		return unavailable
 	}
 	
-	private func collapse(row: Row)  {
+	func collapse(row: Row)  {
 		guard row.isExpanded else { return  }
 
 		row.isExpanded = false
@@ -2647,7 +2647,7 @@ extension Outline {
 		outlineElementsDidChange(changes)
 	}
 	
-	private func prepareRowsForProcessing() {
+	func prepareRowsForProcessing() {
 		func visitor(_ visited: Row) {
 			visited.rows.forEach { row in
 				row.parent = visited
@@ -2661,7 +2661,7 @@ extension Outline {
 		}
 	}
 	
-	private func rebuildShadowTable() -> OutlineElementChanges {
+	func rebuildShadowTable() -> OutlineElementChanges {
 		guard let oldShadowTable = shadowTable else { return OutlineElementChanges(section: adjustedRowsSection) }
 		rebuildTransientData()
 		
@@ -2690,7 +2690,7 @@ extension Outline {
 		return OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, inserts: inserts, moves: moves)
 	}
 	
-	private func rebuildTransientData() {
+	func rebuildTransientData() {
 		let transient = TransientDataVisitor(isFiltered: isFiltered ?? false, isSearching: isSearching)
 		rows.forEach { row in
 			row.parent = self
@@ -2699,14 +2699,14 @@ extension Outline {
 		self.shadowTable = transient.shadowTable
 	}
 	
-	private func resetShadowTableIndexes(startingAt: Int = 0) {
+	func resetShadowTableIndexes(startingAt: Int = 0) {
 		guard let shadowTable = shadowTable else { return }
 		for i in startingAt..<shadowTable.count {
 			shadowTable[i].shadowTableIndex = i
 		}
 	}
 	
-	private func reloadsForParentAndChildren(rows: [Row]) -> Set<Int> {
+	func reloadsForParentAndChildren(rows: [Row]) -> Set<Int> {
 		var reloads = Set<Int>()
 		
 		for row in rows {
@@ -2734,7 +2734,7 @@ extension Outline {
 		return reloads
 	}
 	
-	private func deleteLinkRelationships(for rows: [Row]) {
+	func deleteLinkRelationships(for rows: [Row]) {
 		rows.forEach { row in
 			if let topic = row.topic {
 				extractLinkToIDs(topic).forEach { deleteLinkRelationship($0) }
@@ -2745,7 +2745,7 @@ extension Outline {
 		}
 	}
 
-	private func createLinkRelationships(for rows: [Row]) {
+	func createLinkRelationships(for rows: [Row]) {
 		rows.forEach { row in
 			if let topic = row.topic {
 				extractLinkToIDs(topic).forEach { createLinkRelationship($0) }
@@ -2756,7 +2756,7 @@ extension Outline {
 		}
 	}
 
-	private func updateRowStrings(_ row: Row, _ rowStrings: RowStrings) {
+	func updateRowStrings(_ row: Row, _ rowStrings: RowStrings) {
 		let oldTopic = row.topic
 		let oldNote = row.note
 
@@ -2774,14 +2774,14 @@ extension Outline {
 
 	}
 	
-	private func processLinkDiff(oldText: NSAttributedString?, newText: NSAttributedString?) {
+	func processLinkDiff(oldText: NSAttributedString?, newText: NSAttributedString?) {
 		let oldTextDocLinks = oldText != nil ? extractLinkToIDs(oldText!) : [EntityID]()
 		let newTextDocLinks = newText != nil ? extractLinkToIDs(newText!) : [EntityID]()
 		let topicDiff = newTextDocLinks.difference(from: oldTextDocLinks)
 		processLinkDiff(topicDiff)
 	}
 	
-	private func processLinkDiff(_ diff: CollectionDifference<EntityID>) {
+	func processLinkDiff(_ diff: CollectionDifference<EntityID>) {
 		guard !diff.isEmpty else { return }
 		
 		for change in diff {
@@ -2795,7 +2795,7 @@ extension Outline {
 
 	}
 	
-	private func createLinkRelationship(_ entityID: EntityID) {
+	func createLinkRelationship(_ entityID: EntityID) {
 		guard let outline = AccountManager.shared.findDocument(entityID)?.outline else { return }
 		
 		outline.createBacklink(id)
@@ -2808,7 +2808,7 @@ extension Outline {
 		requestCloudKitUpdate(for: id)
 	}
 
-	private func deleteLinkRelationship(_ entityID: EntityID) {
+	func deleteLinkRelationship(_ entityID: EntityID) {
 		guard let outline = AccountManager.shared.findDocument(entityID)?.outline else { return }
 
 		outline.deleteBacklink(id)
@@ -2818,7 +2818,7 @@ extension Outline {
 		requestCloudKitUpdate(for: id)
 	}
 
-	private func extractLinkToIDs(_ attrString: NSAttributedString) -> [EntityID] {
+	func extractLinkToIDs(_ attrString: NSAttributedString) -> [EntityID] {
 		var ids = [EntityID]()
 		attrString.enumerateAttribute(.link, in:  NSRange(0..<attrString.length)) { value, range, stop in
 			if let url = value as? URL, let id = EntityID(url: url) {
@@ -2828,7 +2828,7 @@ extension Outline {
 		return ids
 	}
 	
-	private func createBacklink(_ entityID: EntityID) {
+	func createBacklink(_ entityID: EntityID) {
 		if documentBacklinks == nil {
 			documentBacklinks = [EntityID]()
 		}
@@ -2849,7 +2849,7 @@ extension Outline {
 		}
 	}
 
-	private func deleteBacklink(_ entityID: EntityID) {
+	func deleteBacklink(_ entityID: EntityID) {
 		
 		documentBacklinks?.removeFirst(object: entityID)
 		
@@ -2867,7 +2867,7 @@ extension Outline {
 		}
 	}
 
-	private func appendPrintTitle(attrString: NSMutableAttributedString) {
+	func appendPrintTitle(attrString: NSMutableAttributedString) {
 		if let title = title {
 			let titleFont = UIFont.systemFont(ofSize: 18)
 			

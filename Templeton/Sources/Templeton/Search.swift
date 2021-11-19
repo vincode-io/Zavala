@@ -71,9 +71,9 @@ public final class Search: Identifiable, DocumentContainer {
 
 // MARK: Helpers
 
-extension Search {
+private extension Search {
 	
-	private func toDocuments(_ searchItems: [CSSearchableItem]) -> [Document] {
+	func toDocuments(_ searchItems: [CSSearchableItem]) -> [Document] {
 		return searchItems.compactMap {
 			if let entityID = EntityID(description: $0.uniqueIdentifier) {
 				if let document = AccountManager.shared.findDocument(entityID) {

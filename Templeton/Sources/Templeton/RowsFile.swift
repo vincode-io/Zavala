@@ -163,6 +163,8 @@ final class RowsFile {
 	
 }
 
+// MARK Helpers
+
 private extension RowsFile {
 
 	func loadCallback() {

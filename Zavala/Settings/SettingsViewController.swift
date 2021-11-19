@@ -188,7 +188,7 @@ class SettingsViewController: UITableViewController {
 }
 
 
-// MARK: Private
+// MARK: Helpers
 
 private extension SettingsViewController {
 	

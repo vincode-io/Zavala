@@ -94,6 +94,8 @@ class MacLinkViewController: UIViewController {
 	
 }
 
+// MARK: UITextFieldDelegate
+
 extension MacLinkViewController: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -107,17 +109,19 @@ extension MacLinkViewController: UITextFieldDelegate {
 	
 }
 
-extension MacLinkViewController {
+// MARK: Helpers
+
+private extension MacLinkViewController {
 	
-	@objc private func textDidChange(_ note: Notification) {
+	@objc func textDidChange(_ note: Notification) {
 		updateUI()
 	}
 	
-	private func updateUI() {
+	func updateUI() {
 		newOutlineButton.isEnabled = !(textTextField.text?.isEmpty ?? true) && (linkTextField.text?.isEmpty ?? true)
 	}
 	
-	private func submitAndDismiss() {
+	func submitAndDismiss() {
 		guard !textTextField.isSelecting else {
 			textTextField.activateSelection()
 			return

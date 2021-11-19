@@ -89,6 +89,8 @@ class MacOpenQuicklyViewController: UIViewController {
 	
 }
 
+// MARK: UITextFieldDelegate
+
 extension MacOpenQuicklyViewController: UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -125,13 +127,13 @@ extension MacOpenQuicklyViewController: MacOpenQuicklyDocumentsDelegate {
 
 // MARK: Helpers
 
-extension MacOpenQuicklyViewController {
+private extension MacOpenQuicklyViewController {
 	
-	private func updateUI() {
+	func updateUI() {
 		openButton.isEnabled = selectedDocumentID != nil
 	}
 	
-	private func openDocument(_ documentID: EntityID) {
+	func openDocument(_ documentID: EntityID) {
 		self.sceneDelegate?.closeWindow()
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 		activity.userInfo = [Pin.UserInfoKeys.pin: Pin(documentID: documentID).userInfo]

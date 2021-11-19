@@ -308,7 +308,7 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 
 // MARK: Helpers
 
-extension EditorRowContentView {
+private extension EditorRowContentView {
 
 	@objc func toggleDisclosure(_ sender: Any?, forEvent event: UIEvent) {
 		guard let row = appliedConfiguration.row else { return }
@@ -317,7 +317,7 @@ extension EditorRowContentView {
 		appliedConfiguration.delegate?.editorRowToggleDisclosure(row: row, applyToAll: applyToAll)
 	}
 	
-	private func configureTopicTextView(configuration: EditorRowContentConfiguration) {
+	func configureTopicTextView(configuration: EditorRowContentConfiguration) {
         topicTextView?.removeFromSuperview()
         
 		guard let row = configuration.row else { return }
@@ -330,7 +330,7 @@ extension EditorRowContentView {
 		topicTextView!.update(row: row)
 	}
 	
-	private func configureNoteTextView(configuration: EditorRowContentConfiguration) {
+	func configureNoteTextView(configuration: EditorRowContentConfiguration) {
         noteTextView?.removeFromSuperview()
         noteTextView = nil
 
@@ -346,7 +346,7 @@ extension EditorRowContentView {
 		noteTextView!.update(row: row)
 	}
 	
-	private func addBarViews() {
+	func addBarViews() {
 		guard let row = appliedConfiguration.row else { return }
 		
 		for i in 0..<barViews.count {
@@ -364,7 +364,7 @@ extension EditorRowContentView {
 		}
 	}
 	
-	private func addBarView(indentLevel: Int) {
+	func addBarView(indentLevel: Int) {
 		let config = appliedConfiguration as EditorRowContentConfiguration
 		
 		let barView = UIView()
