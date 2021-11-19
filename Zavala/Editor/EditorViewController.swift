@@ -1161,15 +1161,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			if sectionIndex == Outline.Section.tags.rawValue {
 				let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(100), heightDimension: .estimated(50))
 				let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//				item.edgeSpacing = .init(leading: .fixed(0), top: .fixed(0), trailing: .fixed(0), bottom: .fixed(0))
-
+				
 				// We do this differently in Catalyst to prevent a loop that seems to happen if we use fractionalWidth
 				// and dynamically change the directional layout margins
 				let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
 				let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-//				group.interItemSpacing = .fixed(-8)
-//				group.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: .fixed(0), top: nil, trailing: .fixed(0), bottom: nil)
-				
 				return NSCollectionLayoutSection(group: group)
 			} else {
 				var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
