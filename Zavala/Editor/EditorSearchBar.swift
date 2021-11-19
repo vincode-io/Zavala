@@ -92,6 +92,12 @@ import UIKit
 		isLayoutMarginsRelativeArrangement = true
 		alignment = .center
 		spacing = 8
+		
+		if traitCollection.userInterfaceIdiom == .mac {
+			layoutMargins.top = 0
+			layoutMargins.bottom = 0
+		}
+		
 		layoutMargins.left = 8
 		layoutMargins.right = 8
 
@@ -120,7 +126,7 @@ import UIKit
 		searchField.returnKeyType = .search
 		searchField.delegate = self
 		if traitCollection.userInterfaceIdiom == .mac {
-			searchField.heightAnchor.constraint(equalToConstant: 42).isActive = true
+			searchField.heightAnchor.constraint(equalToConstant: 30).isActive = true
 		}
 		
 		resultsLabel.font = .systemFont(ofSize: UIFont.smallSystemFontSize)
