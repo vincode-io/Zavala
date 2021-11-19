@@ -12,7 +12,6 @@ class EditorTitleContentView: UIView, UIContentView {
 
 	let textView = EditorTitleTextView()
 	var textViewHeight: CGFloat?
-	var adjustingSeparatorWidthContraint: NSLayoutConstraint?
 	
 	init(configuration: EditorTitleContentConfiguration) {
 		self.configuration = configuration
@@ -36,19 +35,11 @@ class EditorTitleContentView: UIView, UIContentView {
 		separator.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(separator)
 		
-		adjustingSeparatorWidthContraint = separator.widthAnchor.constraint(greaterThanOrEqualToConstant: 44)
-		
 		NSLayoutConstraint.activate([
 			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
 			textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
 			textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-			textView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
-			
-			separator.heightAnchor.constraint(equalToConstant: 2),
-			adjustingSeparatorWidthContraint!,
-			separator.widthAnchor.constraint(greaterThanOrEqualToConstant: 44),
-			separator.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: 4),
-			separator.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor)
+			textView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
 		])
 
 		apply()
@@ -70,7 +61,6 @@ class EditorTitleContentView: UIView, UIContentView {
 	
 	private func apply() {
 		textView.text = titleConfiguration.title
-		updateAdjustingSeparatorWidthContraint()
 	}
 	
 }
@@ -118,19 +108,6 @@ extension EditorTitleContentView: UITextViewDelegate {
 			invalidateIntrinsicContentSize()
 			titleConfiguration.delegate?.editorTitleLayoutEditor()
 		}
-		
-		updateAdjustingSeparatorWidthContraint()
-	}
-	
-}
-
-// MARK: Helpers
-
-extension EditorTitleContentView {
-	
-	func updateAdjustingSeparatorWidthContraint() {
-		let fittingSize = textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: textView.frame.height))
-		adjustingSeparatorWidthContraint?.constant = fittingSize.width
 	}
 	
 }

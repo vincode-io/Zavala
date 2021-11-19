@@ -87,7 +87,7 @@ extension OutlineFontCache {
 			
 			switch field {
 			case .title:
-				title = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: font)
+				title = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: font).with(traits: .traitBold)
 			case .tags:
 				tag = UIFontMetrics(forTextStyle: .body).scaledFont(for: font).with(traits: .traitBold)
 			case .rowTopic:

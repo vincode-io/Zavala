@@ -37,7 +37,7 @@ class EditorTagContentView: UIView, UIContentView {
 		NSLayoutConstraint.activate([
 			button.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
 			button.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-			button.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+			button.topAnchor.constraint(equalTo: topAnchor),
 			button.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
 		])
 

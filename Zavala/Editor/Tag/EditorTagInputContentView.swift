@@ -35,7 +35,7 @@ class EditorTagInputContentView: UIView, UIContentView {
 		NSLayoutConstraint.activate([
 			borderView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
 			borderView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-			borderView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+			borderView.topAnchor.constraint(equalTo: topAnchor),
 			borderView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
 			textField.leadingAnchor.constraint(equalTo: borderView.leadingAnchor, constant: 8),
 			textField.trailingAnchor.constraint(equalTo: borderView.trailingAnchor, constant: -8),
