@@ -80,10 +80,18 @@ internal enum L10n {
   internal static let dark = L10n.tr("Localizable", "Dark")
   /// Delete
   internal static let delete = L10n.tr("Localizable", "Delete")
+  /// Always Delete Without Asking
+  internal static let deleteAlways = L10n.tr("Localizable", "Delete_Always")
+  /// Are you sure you want to delete the completed rows?
+  internal static let deleteCompletedMessage = L10n.tr("Localizable", "Delete_Completed_Message")
   /// Delete Completed Rows
   internal static let deleteCompletedRows = L10n.tr("Localizable", "Delete_Completed_Rows")
+  /// Delete Completed Rows
+  internal static let deleteCompletedTitle = L10n.tr("Localizable", "Delete_Completed_Title")
   /// Delete Note
   internal static let deleteNote = L10n.tr("Localizable", "Delete_Note")
+  /// Delete Once
+  internal static let deleteOnce = L10n.tr("Localizable", "Delete_Once")
   /// Delete Outline
   internal static let deleteOutline = L10n.tr("Localizable", "Delete_Outline")
   /// The outline be deleted and unrecoverable.

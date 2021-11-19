@@ -947,7 +947,31 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	func deleteCompletedRows() {
 		guard let completedRows = outline?.allCompletedRows else { return }
-		deleteRows(completedRows)
+
+		guard AppDefaults.shared.confirmDeleteCompletedRows else {
+			deleteRows(completedRows)
+			return
+		}
+		
+		let alertController = UIAlertController(title: L10n.deleteCompletedTitle, message: L10n.deleteCompletedMessage, preferredStyle: .alert)
+		
+		let alwaysDeleteCompletedAction = UIAlertAction(title: L10n.deleteAlways, style: .destructive) { [weak self] action in
+			AppDefaults.shared.confirmDeleteCompletedRows = false
+			self?.deleteRows(completedRows)
+		}
+		alertController.addAction(alwaysDeleteCompletedAction)
+
+		let deleteCompletedAction = UIAlertAction(title: L10n.deleteOnce, style: .destructive) { [weak self] action in
+			self?.deleteRows(completedRows)
+		}
+		
+		alertController.addAction(deleteCompletedAction)
+		alertController.preferredAction = deleteCompletedAction
+
+		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel)
+		alertController.addAction(cancelAction)
+
+		present(alertController, animated: true)
 	}
 	
 	func useSelectionForSearch() {

@@ -32,6 +32,7 @@ final class AppDefaults {
 		static let userInterfaceColorPalette = "userInterfaceColorPalette";
 		static let outlineFonts = "outlineFonts"
 		static let documentHistory = "documentHistory"
+		static let confirmDeleteCompletedRows = "confirmDeleteCompletedRows"
 		static let upgradedDefaultsToV2 = "upgradedDefaultsToV2"
 	}
 	
@@ -165,6 +166,15 @@ final class AppDefaults {
 		}
 	}
 	
+	var confirmDeleteCompletedRows: Bool {
+		get {
+			return Self.bool(for: Key.confirmDeleteCompletedRows)
+		}
+		set {
+			Self.setBool(for: Key.confirmDeleteCompletedRows, newValue)
+		}
+	}
+	
 	var upgradedDefaultsToV2: Bool {
 		get {
 			return Self.bool(for: Key.upgradedDefaultsToV2)
@@ -176,8 +186,11 @@ final class AppDefaults {
 
 	static func registerDefaults() {
 		var defaults: [String : Any] = [Key.enableLocalAccount: true]
+		
 		defaults[Key.userInterfaceColorPalette] = UserInterfaceColorPalette.automatic.rawValue
 		defaults[Key.outlineFonts] = OutlineFontDefaults.defaults.userInfo
+		defaults[Key.confirmDeleteCompletedRows] = true
+		
 		AppDefaults.store.register(defaults: defaults)
 		
 		upgradeDefaultsToV2()
