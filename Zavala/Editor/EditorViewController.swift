@@ -1156,7 +1156,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 	
 	private func createLayout() -> UICollectionViewLayout {
-		let layout = UICollectionViewCompositionalLayout() { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
+		let layout = EditorCollectionViewCompositionalLayout() { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
 			
 			if sectionIndex == Outline.Section.tags.rawValue {
 				let itemSize = NSCollectionLayoutSize(widthDimension: .estimated(100), heightDimension: .estimated(50))
@@ -1164,7 +1164,6 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 				
 				let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50))
 				let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-				group.interItemSpacing = .fixed(-8)
 				
 				return NSCollectionLayoutSection(group: group)
 			} else {

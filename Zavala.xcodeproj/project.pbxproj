@@ -164,6 +164,7 @@
 		51D460FA2729E30C0024EC48 /* MetadataTextAttachmentViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D460F92729E30C0024EC48 /* MetadataTextAttachmentViewProvider.swift */; };
 		51D977FA257A2E4F00D98490 /* EditorRowPreviewParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D977F9257A2E4F00D98490 /* EditorRowPreviewParameters.swift */; };
 		51DAEC262739838E00BE4A13 /* CollectionsViewController+Drag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DAEC252739838E00BE4A13 /* CollectionsViewController+Drag.swift */; };
+		51DB0DCB2748101B008312EC /* EditorCollectionViewCompositionalLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DB0DCA2748101B008312EC /* EditorCollectionViewCompositionalLayout.swift */; };
 		51DEE80C26FB4488006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
 		51DEE80D26FB4488006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
 		51DEE80E26FB4550006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
@@ -412,6 +413,7 @@
 		51D460F92729E30C0024EC48 /* MetadataTextAttachmentViewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataTextAttachmentViewProvider.swift; sourceTree = "<group>"; };
 		51D977F9257A2E4F00D98490 /* EditorRowPreviewParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowPreviewParameters.swift; sourceTree = "<group>"; };
 		51DAEC252739838E00BE4A13 /* CollectionsViewController+Drag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionsViewController+Drag.swift"; sourceTree = "<group>"; };
+		51DB0DCA2748101B008312EC /* EditorCollectionViewCompositionalLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCollectionViewCompositionalLayout.swift; sourceTree = "<group>"; };
 		51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInterfaceColorPalette.swift; sourceTree = "<group>"; };
 		51DEE80F26FB8D89006DAA56 /* ColorPaletteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteTableViewController.swift; sourceTree = "<group>"; };
 		51DEE82126FE37F9006DAA56 /* UIPrintPageRenderer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPrintPageRenderer+.swift"; sourceTree = "<group>"; };
@@ -871,6 +873,7 @@
 			isa = PBXGroup;
 			children = (
 				5192220F271E27FD000CDC1F /* EditorCollectionView.swift */,
+				51DB0DCA2748101B008312EC /* EditorCollectionViewCompositionalLayout.swift */,
 				51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */,
 				512D375125F06733000FA597 /* EditorSearchBar.swift */,
 				51C4C45A255ACA1B004E0206 /* EditorViewController.swift */,
@@ -879,8 +882,8 @@
 				51B9D99526140AD100A66859 /* Activities */,
 				511B29F526018F4A00C04239 /* Backlink */,
 				51D460F82729E2E60024EC48 /* Metadata */,
-				514F220B25C4CC42004E02CD /* Tag */,
 				51C03097257E02FF00609262 /* Row */,
+				514F220B25C4CC42004E02CD /* Tag */,
 				51C030A0257E06EC00609262 /* Title */,
 			);
 			path = Editor;
@@ -1258,6 +1261,7 @@
 				5191850B2713828F00B7E177 /* AddOutlineIntentHandler.swift in Sources */,
 				5163ADF225C78CFB008F25CA /* SearchTextField.swift in Sources */,
 				51DEE82226FE37F9006DAA56 /* UIPrintPageRenderer+.swift in Sources */,
+				51DB0DCB2748101B008312EC /* EditorCollectionViewCompositionalLayout.swift in Sources */,
 				5191850527133B4000B7E177 /* RenameTagViewController.swift in Sources */,
 				5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */,
 				5167702D261CB5F300EFFD40 /* EditorRowDropInteractionDelegate.swift in Sources */,
