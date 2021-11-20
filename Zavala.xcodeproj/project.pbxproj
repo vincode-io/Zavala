@@ -40,9 +40,6 @@
 		5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */; };
 		5147D0B525CB95B4004673C3 /* DocumentsViewController+Drag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0B425CB95B4004673C3 /* DocumentsViewController+Drag.swift */; };
 		5147D0B825CCAB2A004673C3 /* DocumentsViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0B725CCAB2A004673C3 /* DocumentsViewController+Drop.swift */; };
-		5147D0BB25CCAFC3004673C3 /* EditorTagAddViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0BA25CCAFC3004673C3 /* EditorTagAddViewCell.swift */; };
-		5147D0BE25CCAFD2004673C3 /* EditorTagAddContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0BD25CCAFD2004673C3 /* EditorTagAddContentConfiguration.swift */; };
-		5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0C025CCAFEA004673C3 /* EditorTagAddContentView.swift */; };
 		5147D0C525CCD6AA004673C3 /* CollectionsViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0C425CCD6AA004673C3 /* CollectionsViewController+Drop.swift */; };
 		5147D0C825CE28AE004673C3 /* NSDataDetector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
@@ -165,6 +162,7 @@
 		51D977FA257A2E4F00D98490 /* EditorRowPreviewParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D977F9257A2E4F00D98490 /* EditorRowPreviewParameters.swift */; };
 		51DAEC262739838E00BE4A13 /* CollectionsViewController+Drag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DAEC252739838E00BE4A13 /* CollectionsViewController+Drag.swift */; };
 		51DB0DCB2748101B008312EC /* EditorCollectionViewCompositionalLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DB0DCA2748101B008312EC /* EditorCollectionViewCompositionalLayout.swift */; };
+		51DB0DCD27496CBE008312EC /* EditorTagInputPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DB0DCC27496CBE008312EC /* EditorTagInputPill.swift */; };
 		51DEE80C26FB4488006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
 		51DEE80D26FB4488006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
 		51DEE80E26FB4550006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
@@ -286,9 +284,6 @@
 		5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTableView.swift; sourceTree = "<group>"; };
 		5147D0B425CB95B4004673C3 /* DocumentsViewController+Drag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DocumentsViewController+Drag.swift"; sourceTree = "<group>"; };
 		5147D0B725CCAB2A004673C3 /* DocumentsViewController+Drop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DocumentsViewController+Drop.swift"; sourceTree = "<group>"; };
-		5147D0BA25CCAFC3004673C3 /* EditorTagAddViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagAddViewCell.swift; sourceTree = "<group>"; };
-		5147D0BD25CCAFD2004673C3 /* EditorTagAddContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagAddContentConfiguration.swift; sourceTree = "<group>"; };
-		5147D0C025CCAFEA004673C3 /* EditorTagAddContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagAddContentView.swift; sourceTree = "<group>"; };
 		5147D0C425CCD6AA004673C3 /* CollectionsViewController+Drop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CollectionsViewController+Drop.swift"; sourceTree = "<group>"; };
 		5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDataDetector+.swift"; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
@@ -414,6 +409,7 @@
 		51D977F9257A2E4F00D98490 /* EditorRowPreviewParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowPreviewParameters.swift; sourceTree = "<group>"; };
 		51DAEC252739838E00BE4A13 /* CollectionsViewController+Drag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionsViewController+Drag.swift"; sourceTree = "<group>"; };
 		51DB0DCA2748101B008312EC /* EditorCollectionViewCompositionalLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCollectionViewCompositionalLayout.swift; sourceTree = "<group>"; };
+		51DB0DCC27496CBE008312EC /* EditorTagInputPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagInputPill.swift; sourceTree = "<group>"; };
 		51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInterfaceColorPalette.swift; sourceTree = "<group>"; };
 		51DEE80F26FB8D89006DAA56 /* ColorPaletteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteTableViewController.swift; sourceTree = "<group>"; };
 		51DEE82126FE37F9006DAA56 /* UIPrintPageRenderer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPrintPageRenderer+.swift"; sourceTree = "<group>"; };
@@ -557,10 +553,8 @@
 				514F221A25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift */,
 				514F221D25C4D0A8004E02CD /* EditorTagInputContentView.swift */,
 				514F222925C4FF02004E02CD /* EditorTagInputTextField.swift */,
+				51DB0DCC27496CBE008312EC /* EditorTagInputPill.swift */,
 				514F221725C4D076004E02CD /* EditorTagInputViewCell.swift */,
-				5147D0BD25CCAFD2004673C3 /* EditorTagAddContentConfiguration.swift */,
-				5147D0C025CCAFEA004673C3 /* EditorTagAddContentView.swift */,
-				5147D0BA25CCAFC3004673C3 /* EditorTagAddViewCell.swift */,
 			);
 			path = Tag;
 			sourceTree = "<group>";
@@ -1170,7 +1164,6 @@
 				51B9D99D26140EDC00A66859 /* ExportMarkdownListActivity.swift in Sources */,
 				512D375225F06733000FA597 /* EditorSearchBar.swift in Sources */,
 				5173B406268BBD4200687117 /* UIImage+.swift in Sources */,
-				5147D0BE25CCAFD2004673C3 /* EditorTagAddContentConfiguration.swift in Sources */,
 				51F2859425AD11100019C573 /* CollectionsSearchCell.swift in Sources */,
 				51DFDC18259EA8D300C068C6 /* Selector+.swift in Sources */,
 				515F164B255C9F8E00FD98B8 /* MacFormViewController.swift in Sources */,
@@ -1183,6 +1176,7 @@
 				51C568D9258C1CD200AA7B93 /* MacLinkViewController.swift in Sources */,
 				51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */,
 				51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */,
+				51DB0DCD27496CBE008312EC /* EditorTagInputPill.swift in Sources */,
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
 				51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */,
 				5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */,
@@ -1191,7 +1185,6 @@
 				51C71C6D273F087000F6C779 /* ImageScrollView.swift in Sources */,
 				514F221825C4D076004E02CD /* EditorTagInputViewCell.swift in Sources */,
 				511B2AC826028EE800C04239 /* MainCoordinator.swift in Sources */,
-				5147D0BB25CCAFC3004673C3 /* EditorTagAddViewCell.swift in Sources */,
 				514F221125C4CCE4004E02CD /* EditorTagContentConfiguration.swift in Sources */,
 				5147D0C825CE28AE004673C3 /* NSDataDetector+.swift in Sources */,
 				519185032713146500B7E177 /* RemoveOutlineTagIntentHandler.swift in Sources */,
@@ -1263,7 +1256,6 @@
 				51DEE82226FE37F9006DAA56 /* UIPrintPageRenderer+.swift in Sources */,
 				51DB0DCB2748101B008312EC /* EditorCollectionViewCompositionalLayout.swift in Sources */,
 				5191850527133B4000B7E177 /* RenameTagViewController.swift in Sources */,
-				5147D0C125CCAFEA004673C3 /* EditorTagAddContentView.swift in Sources */,
 				5167702D261CB5F300EFFD40 /* EditorRowDropInteractionDelegate.swift in Sources */,
 				513B916A2722CDC80051A6BA /* EditOutlineIntentHandler.swift in Sources */,
 				51C71C6B273F07ED00F6C779 /* ImageTransition.swift in Sources */,

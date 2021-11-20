@@ -10,8 +10,7 @@ import Templeton
 
 class EditorTagInputContentView: UIView, UIContentView {
 
-	let borderView = UIView()
-	let textField = EditorTagInputTextField()
+	let inputPill = EditorTagInputPill()
 	
 	weak var delegate: EditorTagInputViewCellDelegate?
 	
@@ -21,41 +20,21 @@ class EditorTagInputContentView: UIView, UIContentView {
 		self.delegate = configuration.delegate
 		super.init(frame: .zero)
 
-		addSubview(borderView)
-		
-		borderView.translatesAutoresizingMaskIntoConstraints = false
-		borderView.layer.borderWidth = 1
-		borderView.layer.borderColor = UIColor.systemGray4.cgColor
+		inputPill.translatesAutoresizingMaskIntoConstraints = false
+		addSubview(inputPill)
 
-		borderView.addSubview(textField)
-		textField.translatesAutoresizingMaskIntoConstraints = false
-		textField.font = OutlineFontCache.shared.tag
-		textField.editorDelegate = self
-		
 		NSLayoutConstraint.activate([
-			borderView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-			borderView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-			borderView.topAnchor.constraint(equalTo: topAnchor),
-			borderView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
-			textField.leadingAnchor.constraint(equalTo: borderView.leadingAnchor, constant: 8),
-			textField.trailingAnchor.constraint(equalTo: borderView.trailingAnchor, constant: -8),
-			textField.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 2.5),
-			textField.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -2.5),
+			inputPill.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+			inputPill.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+			inputPill.topAnchor.constraint(equalTo: topAnchor),
+			inputPill.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
 		])
-
-		borderView.layer.cornerRadius = (textField.intrinsicContentSize.height + 5) / 2
 
 		apply(configuration: configuration)
 	}
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
-	}
-	
-	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-		if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) ?? false {
-			borderView.layer.borderColor = UIColor.tertiarySystemBackground.cgColor
-		}
 	}
 	
 	var configuration: UIContentConfiguration {
@@ -67,49 +46,42 @@ class EditorTagInputContentView: UIView, UIContentView {
 	}
 	
 	private func apply(configuration: EditorTagInputContentConfiguration) {
-		textField.font = OutlineFontCache.shared.tag
-		borderView.layer.cornerRadius = (textField.intrinsicContentSize.height + 5) / 2
+		inputPill.editorDelegate = self
+		inputPill.updateAppearance()
+		
+		if appliedConfiguration != configuration {
+			inputPill.reset()
+		}
+		
 		appliedConfiguration = configuration
 	}
 	
 }
 
-extension EditorTagInputContentView: EditorTagInputTextFieldDelegate {
+extension EditorTagInputContentView: EditorTagInputPillDelegate {
 
-	var editorTagInputTextFieldUndoManager: UndoManager? {
-		return appliedConfiguration.delegate?.editorTagInputUndoManager
+	var editorTagInputPillUndoManager: UndoManager? {
+		return delegate?.editorTagInputUndoManager
 	}
 	
-	var editorTagInputTextFieldIsAddShowing: Bool {
-		return appliedConfiguration.delegate?.editorTagInputIsAddShowing ?? false
+	var editorTagInputPillTags: [Tag]? {
+		return delegate?.editorTagInputTags
 	}
 	
-	var editorTagInputTextFieldTags: [Tag]? {
-		return appliedConfiguration.delegate?.editorTagInputTags
+	func invalidateLayout(_: EditorTagInputPill) {
+		delegate?.editorTagInputLayoutEditor()
 	}
 	
-	func invalidateLayout(_: EditorTagInputTextField) {
-		appliedConfiguration.delegate?.editorTagInputLayoutEditor()
+	func didBecomeActive(_: EditorTagInputPill) {
+		delegate?.editorTagInputTextFieldDidBecomeActive()
 	}
 	
-	func didBecomeActive(_: EditorTagInputTextField) {
-		appliedConfiguration.delegate?.editorTagInputTextFieldDidBecomeActive()
+	func createRow(_: EditorTagInputPill) {
+		delegate?.editorTagInputTextFieldCreateRow()
 	}
 	
-	func showAdd(_: EditorTagInputTextField) {
-		appliedConfiguration.delegate?.editorTagInputTextFieldShowAdd()
-	}
-	
-	func hideAdd(_: EditorTagInputTextField) {
-		appliedConfiguration.delegate?.editorTagInputTextFieldHideAdd()
-	}
-	
-	func createRow(_: EditorTagInputTextField) {
-		appliedConfiguration.delegate?.editorTagInputTextFieldCreateRow()
-	}
-	
-	func createTag(_: EditorTagInputTextField, name: String) {
-		appliedConfiguration.delegate?.editorTagInputTextFieldCreateTag(name: name)
+	func createTag(_: EditorTagInputPill, name: String) {
+		delegate?.editorTagInputTextFieldCreateTag(name: name)
 	}
 	
 }

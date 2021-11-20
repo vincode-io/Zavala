@@ -10,12 +10,9 @@ import Templeton
 
 protocol EditorTagInputTextFieldDelegate: AnyObject {
 	var editorTagInputTextFieldUndoManager: UndoManager? { get }
-	var editorTagInputTextFieldIsAddShowing: Bool { get }
 	var editorTagInputTextFieldTags: [Tag]? { get }
-	func invalidateLayout(_: EditorTagInputTextField)
 	func didBecomeActive(_ : EditorTagInputTextField)
-	func showAdd(_ : EditorTagInputTextField)
-	func hideAdd(_ : EditorTagInputTextField)
+	func textDidChange(_ : EditorTagInputTextField)
 	func createRow(_ : EditorTagInputTextField)
 	func createTag(_ : EditorTagInputTextField, name: String)
 }
@@ -72,7 +69,6 @@ class EditorTagInputTextField: SearchTextField {
 			self.text = nil
 			self.invalidateIntrinsicContentSize()
 			let name = filteredResults[index].title
-			self.editorDelegate?.hideAdd(self)
 			self.editorDelegate?.createTag(self, name: name)
 		}
 	}
@@ -92,20 +88,11 @@ class EditorTagInputTextField: SearchTextField {
 	override func textFieldDidChange() {
 		super.textFieldDidChange()
 		invalidateIntrinsicContentSize()
-		editorDelegate?.invalidateLayout(self)
-		
-		let textIsEmpty = text?.isEmpty ?? true
-		let isAddShowing = (editorDelegate?.editorTagInputTextFieldIsAddShowing ?? false)
-		if textIsEmpty && isAddShowing {
-			editorDelegate?.hideAdd(self)
-		} else if !textIsEmpty && !isAddShowing {
-			editorDelegate?.showAdd(self)
-		}
-		
+		editorDelegate?.textDidChange(self)
 	}
 	
-	// MARK: API
-
+	// MARK: Actions
+	
 	@objc func createTag() {
 		activateSelection()
 		
@@ -113,12 +100,9 @@ class EditorTagInputTextField: SearchTextField {
 		
 		text = nil
 		invalidateIntrinsicContentSize()
-		editorDelegate?.hideAdd(self)
 		editorDelegate?.createTag(self, name: name)
 		resetFilterStrings()
 	}
-	
-	// MARK: Actions
 	
 	@objc func closeSuggestionList() {
 		super.clearSelection()
@@ -138,7 +122,6 @@ extension EditorTagInputTextField: UITextFieldDelegate {
 		if let name = text, !name.isEmpty {
 			text = nil
 			invalidateIntrinsicContentSize()
-			editorDelegate?.hideAdd(self)
 			editorDelegate?.createTag(self, name: name)
 			resetFilterStrings()
 		}
