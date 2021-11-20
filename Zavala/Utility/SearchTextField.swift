@@ -321,8 +321,7 @@ open class SearchTextField: EnhancedTextField {
             tableView.estimatedRowHeight = theme.cellHeight
             if self.direction == .down {
                 
-				let widest = widestFilteredResult + 20
-				let tableWidth = min((widest), (UIScreen.main.bounds.size.width - frame.origin.x - widest))
+				let tableWidth = widestFilteredResult + 20
 
 				var tableHeight: CGFloat = 0
                 if keyboardIsShowing, let keyboardHeight = keyboardFrame?.size.height {
