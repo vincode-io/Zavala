@@ -1558,11 +1558,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			guard let container = row.parent,
 				  let rowIndex = container.firstIndexOfRow(row),
 				  rowIndex > 0,
-				  let newParentRow = row.parent?.rows[rowIndex - 1],
-				  let rowShadowTableIndex = row.shadowTableIndex else { continue }
+				  let newParentRow = row.parent?.rows[rowIndex - 1] else { continue }
 
 			impacted.append(row)
 			expand(row: newParentRow)
+			
+			// Don't grab this until we expand or it won't be correctly recalculated
+			guard let rowShadowTableIndex = row.shadowTableIndex else { continue }
 			
 			row.parent = newParentRow
 			container.removeRow(row)
