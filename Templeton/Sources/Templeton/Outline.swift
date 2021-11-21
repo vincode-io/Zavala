@@ -497,8 +497,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 		guard isBeingViewed else { return }
 		
-		let reload = tagIDs!.count
-		let inserted = reload - 1
+		let inserted = tagIDs!.count
+		let reload = inserted - 1
 		let changes = OutlineElementChanges(section: .tags, inserts: Set([inserted]), reloads: Set([reload]))
 		outlineElementsDidChange(changes)
 	}
