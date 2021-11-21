@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Templeton
 import Combine
 
 public extension Notification.Name {

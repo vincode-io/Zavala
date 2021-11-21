@@ -2897,12 +2897,11 @@ private extension Outline {
 
 	func appendPrintTitle(attrString: NSMutableAttributedString) {
 		if let title = title {
-			let titleFont = UIFont.systemFont(ofSize: 18)
+			let titleFont = UIFont.systemFont(ofSize: 18).with(traits: .traitBold)
 			
 			var attrs = [NSAttributedString.Key : Any]()
 			attrs[.font] = titleFont
 			attrs[.foregroundColor] = UIColor.black
-			attrs[.underlineStyle] = 1
 
 			let titleParagraphStyle = NSMutableParagraphStyle()
 			titleParagraphStyle.alignment = .center
