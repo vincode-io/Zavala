@@ -306,6 +306,7 @@
 		5167702C261CB5F300EFFD40 /* EditorRowDropInteractionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowDropInteractionDelegate.swift; sourceTree = "<group>"; };
 		51692B0B25681AD3006B755F /* UIViewController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
 		5169928925AE4F5C00760C9D /* UICollectionView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+.swift"; sourceTree = "<group>"; };
+		516CBCAB274AFE920062EB42 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedSearchTextField.swift; sourceTree = "<group>"; };
 		516F5372260829060038BAF8 /* OutlineFontDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontDefaults.swift; sourceTree = "<group>"; };
 		516F5377260972470038BAF8 /* FontAndColorPreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAndColorPreferencesViewController.swift; sourceTree = "<group>"; };
@@ -569,9 +570,10 @@
 		515F163B255C536600FD98B8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5181A96A2554D93B00C153E8 /* Zavala.entitlements */,
 				512D375025EEFC01000FA597 /* Zavala-dev.entitlements */,
+				5181A96A2554D93B00C153E8 /* Zavala.entitlements */,
 				5181A9452554D92100C153E8 /* Info.plist */,
+				516CBCAB274AFE920062EB42 /* Credits.rtf */,
 				51CF10A72571BA66005D6D88 /* Localizable.strings */,
 				51CF10AB2571BA9A005D6D88 /* Localizable.stringsdict */,
 				5181A9402554D92100C153E8 /* Assets.xcassets */,
