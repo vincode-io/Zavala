@@ -1074,7 +1074,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
 				if self?.editorViewController?.isOutlineFiltered ?? false {
-					item.image = AppAssets.filterActive.symbolSizedForCatalyst()
+					item.image = AppAssets.filterActive.symbolSizedForCatalyst(color: .accentColor)
 					item.label = L10n.showCompleted
 					item.toolTip = L10n.showCompleted
 				} else {
