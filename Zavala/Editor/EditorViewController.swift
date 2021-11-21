@@ -430,7 +430,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineFontCacheDidRebuild(_:)), name: .OutlineFontCacheDidRebuild, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(accountTagsDidChange(_:)), name: .AccountTagsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineElementsDidChange(_:)), name: .OutlineElementsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillBegin(_:)), name: .OutlineSearchWillBegin, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchTextDidChange(_:)), name: .OutlineSearchTextDidChange, object: nil)
@@ -535,12 +534,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func outlineFontCacheDidRebuild(_ note: Notification) {
 		collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
-	}
-	
-	@objc func accountTagsDidChange(_ note: Notification) {
-		if !isSearching {
-			collectionView.reloadSections([Outline.Section.tags.rawValue])
-		}
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
