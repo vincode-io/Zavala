@@ -149,18 +149,20 @@ private extension EditorTagInputPill {
 		if textField.hasText != buttonIsShowing {
 			updateButtonVisibility()
 		} else {
-			editorDelegate?.invalidateLayout(self)
+			UIView.animate(withDuration: 0.1) {
+				self.editorDelegate?.invalidateLayout(self)
+			}
 		}
 	}
 	
 	func updateButtonVisibility() {
 		if textField.hasText {
-			UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut) {
+			UIView.animate(withDuration: 0.2) {
 				self.showButton()
 				self.editorDelegate?.invalidateLayout(self)
 			}
 		} else {
-			UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut) {
+			UIView.animate(withDuration: 0.2) {
 				self.hideButton()
 				self.editorDelegate?.invalidateLayout(self)
 			}
