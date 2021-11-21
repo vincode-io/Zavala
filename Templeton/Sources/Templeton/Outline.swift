@@ -756,6 +756,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 		if let reloads = shadowTable?.filter({ !$0.isNoteEmpty }).compactMap({ $0.shadowTableIndex }) {
 			changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads)))
+			changes.isReloadsAnimatable = true
 		}
 		
 		return changes
@@ -772,7 +773,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		documentMetaDataDidChange()
 		
 		if let reloads = shadowTable?.filter({ !$0.isNoteEmpty }).compactMap({ $0.shadowTableIndex }) {
-			return OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
+			var changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
+			changes.isReloadsAnimatable = true
+			return changes
 		} else {
 			return OutlineElementChanges(section: adjustedRowsSection)
 		}

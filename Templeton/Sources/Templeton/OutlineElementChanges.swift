@@ -26,6 +26,7 @@ public struct OutlineElementChanges {
 	public var inserts: Set<Int>?
 	public var moves: Set<Move>?
 	public var reloads: Set<Int>?
+	public var isReloadsAnimatable = false
 	
 	public var isEmpty: Bool {
 		return (deletes?.isEmpty ?? true) && (inserts?.isEmpty ?? true) && (moves?.isEmpty ?? true) && (reloads?.isEmpty ?? true)
