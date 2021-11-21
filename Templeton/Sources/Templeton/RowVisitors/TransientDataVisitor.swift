@@ -9,13 +9,13 @@ import Foundation
 
 class TransientDataVisitor {
 	
-	let isFiltered: Bool
+	let isCompletedFilterOn: Bool
 	let isSearching: Outline.SearchState
 	var shadowTable = [Row]()
 	var addingToShadowTable = true
 	
-	init(isFiltered: Bool, isSearching: Outline.SearchState) {
-		self.isFiltered = isFiltered
+	init(isCompletedFilterOn: Bool, isSearching: Outline.SearchState) {
+		self.isCompletedFilterOn = isCompletedFilterOn
 		self.isSearching = isSearching
 	}
 	
@@ -26,7 +26,7 @@ class TransientDataVisitor {
 		// Add to the Shadow Table if we haven't hit a collapsed entry
 		if addingToShadowTable {
 			
-			let shouldFilter = (isFiltered && visited.isComplete) || (isSearching == .searching && !visited.isPartOfSearchResult)
+			let shouldFilter = (isCompletedFilterOn && visited.isComplete) || (isSearching == .searching && !visited.isPartOfSearchResult)
 			
 			if shouldFilter {
 				visited.shadowTableIndex = nil

@@ -59,13 +59,17 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	var isDocumentCollaborating: Bool {
 		return outline?.iCollaborating ?? false
 	}
+	
+	var isFilterOn: Bool {
+		return outline?.isFilterOn ?? false
+	}
 
-	var isOutlineFiltered: Bool {
-		return outline?.isFiltered ?? false
+	var isCompletedFiltered: Bool {
+		return outline?.isCompletedFiltered ?? true
 	}
 	
-	var isOutlineNotesHidden: Bool {
-		return outline?.isNotesHidden ?? false
+	var isNotesFiltered: Bool {
+		return outline?.isNotesFiltered ?? true
 	}
 	
 	var isSelectAllRowsUnavailable: Bool {
@@ -289,7 +293,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var isCursoringDown = false
 	
 	private var ellipsisBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.ellipsis, style: .plain, target: nil, action: nil)
-	private var filterBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.filterInactive, style: .plain, target: self, action: #selector(toggleOutlineFilter))
+	private var filterBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.filterInactive, style: .plain, target: nil, action: nil)
 	private var doneBarButtonItem: UIBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done))
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
@@ -338,7 +342,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
 			ellipsisBarButtonItem.title = L10n.more
-			
+			filterBarButtonItem.title = L10n.filter
+
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
@@ -380,7 +385,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		rowRegistration = UICollectionView.CellRegistration<EditorRowViewCell, Row> { [weak self] (cell, indexPath, row) in
 			cell.row = row
-			cell.isNotesHidden = self?.outline?.isNotesHidden ?? false
+			cell.isNotesHidden = self?.outline?.isNotesFilterOn ?? false
 			cell.isSearching = self?.isSearching ?? false
 			cell.delegate = self
 		}
@@ -393,6 +398,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		goBackwardButton.title = L10n.goBackward
 		goForwardButton = UIBarButtonItem(image: AppAssets.goForward, style: .plain, target: self, action: #selector(goForwardOne))
 		goForwardButton.title = L10n.goForward
+		
 		moveRightButton = UIBarButtonItem(image: AppAssets.moveRight, style: .plain, target: self, action: #selector(moveCurrentRowsRight))
 		moveRightButton.title = L10n.moveLeft
 		moveLeftButton = UIBarButtonItem(image: AppAssets.moveLeft, style: .plain, target: self, action: #selector(moveCurrentRowsLeft))
@@ -401,6 +407,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		moveUpButton.title = L10n.moveUp
 		moveDownButton = UIBarButtonItem(image: AppAssets.moveDown, style: .plain, target: self, action: #selector(moveCurrentRowsDown))
 		moveDownButton.title = L10n.moveDown
+		
 		insertImageButton = UIBarButtonItem(image: AppAssets.insertImage, style: .plain, target: self, action: #selector(insertImage))
 		insertImageButton.title = L10n.insertImage
 		linkButton = UIBarButtonItem(image: AppAssets.link, style: .plain, target: self, action: #selector(link))
@@ -787,16 +794,16 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		navigationItem.largeTitleDisplayMode = .never
 		
 		if traitCollection.userInterfaceIdiom != .mac {
-			self.ellipsisBarButtonItem.menu = buildEllipsisMenu()
+			ellipsisBarButtonItem.menu = buildEllipsisMenu()
 
-			if outline?.isFiltered ?? false {
+			if isFilterOn {
 				filterBarButtonItem.image = AppAssets.filterActive
-				filterBarButtonItem.title = L10n.showCompleted
 			} else {
 				filterBarButtonItem.image = AppAssets.filterInactive
-				filterBarButtonItem.title = L10n.hideCompleted
 			}
 
+			filterBarButtonItem.menu = buildFilterMenu()
+			
 			if outline == nil {
 				filterBarButtonItem.isEnabled = false
 				ellipsisBarButtonItem.isEnabled = false
@@ -1011,14 +1018,20 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		CursorCoordinates.clearLastKnownCoordinates()
 	}
 	
-	@objc func toggleOutlineFilter() {
-		guard let changes = outline?.toggleFilter() else { return }
+	@objc func toggleFilterOn() {
+		guard let changes = outline?.toggleFilterOn() else { return }
 		applyChangesRestoringState(changes)
 		updateUI()
 	}
 	
-	@objc func toggleOutlineHideNotes() {
-		guard let changes = outline?.toggleNotesHidden() else { return }
+	@objc func toggleCompletedFilter() {
+		guard let changes = outline?.toggleCompletedFilter() else { return }
+		applyChangesRestoringState(changes)
+		updateUI()
+	}
+	
+	@objc func toggleNotesFilter() {
+		guard let changes = outline?.toggleNotesFilter() else { return }
 		applyChangesRestoringState(changes)
 		updateUI()
 	}
@@ -1829,18 +1842,6 @@ private extension EditorViewController {
 		}
 		viewActions.append(collapseAllInOutlineAction)
 		
-		if isOutlineNotesHidden {
-			let showNotesAction = UIAction(title: L10n.showNotes, image: AppAssets.hideNotesInactive) { [weak self] _ in
-				self?.toggleOutlineHideNotes()
-			}
-			viewActions.append(showNotesAction)
-		} else {
-			let hideNotesAction = UIAction(title: L10n.hideNotes, image: AppAssets.hideNotesActive) { [weak self] _ in
-				self?.toggleOutlineHideNotes()
-			}
-			viewActions.append(hideNotesAction)
-		}
-
 		let deleteCompletedRowsAction = UIAction(title: L10n.deleteCompletedRows, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in
 			self?.deleteCompletedRows()
 		}
@@ -1852,6 +1853,31 @@ private extension EditorViewController {
 		let changeMenu = UIMenu(title: "", options: .displayInline, children: [deleteCompletedRowsAction])
 		
 		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [shareMenu, getInfoMenu, findMenu, viewMenu, changeMenu])
+	}
+	
+	func buildFilterMenu() -> UIMenu {
+		let turnFilterOnAction = UIAction() { [weak self] _ in
+		   self?.toggleFilterOn()
+		}
+		turnFilterOnAction.title = isFilterOn ? L10n.turnFilterOff : L10n.turnFilterOn
+		
+		let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
+		
+		let filterCompletedAction = UIAction(title: L10n.filterCompleted) { [weak self] _ in
+			self?.toggleCompletedFilter()
+		}
+		filterCompletedAction.state = isCompletedFiltered ? .on : .off
+		filterCompletedAction.attributes = isFilterOn ? [] : .disabled
+
+		let filterNotesAction = UIAction(title: L10n.filterNotes) { [weak self] _ in
+		   self?.toggleNotesFilter()
+		}
+		filterNotesAction.state = isNotesFiltered ? .on : .off
+		filterNotesAction.attributes = isFilterOn ? [] : .disabled
+
+		let filterOptionsMenu = UIMenu(title: "", options: .displayInline, children: [filterCompletedAction, filterNotesAction])
+
+		return UIMenu(title: "", children: [turnFilterOnMenu, filterOptionsMenu])
 	}
 	
 	func pressesBeganForEditMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {

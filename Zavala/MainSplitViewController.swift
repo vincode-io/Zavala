@@ -317,7 +317,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 
 	@objc func toggleOutlineFilter(_ sender: Any?) {
-		toggleOutlineFilter()
+		toggleCompletedFilter()
 	}
 
 	@objc func outlineToggleBoldface(_ sender: Any?) {
@@ -353,7 +353,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 
 	@objc func toggleOutlineHideNotes(_ sender: Any?) {
-		toggleOutlineHideNotes()
+		toggleNotesFilter()
 	}
 
 	@objc func printDocs(_ sender: Any?) {
@@ -806,7 +806,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.flexibleSpace,
 			.navigation,
 			.space,
-			.toggleOutlineFilter,
+			.toggleCompletedFilter,
 		]
 	}
 	
@@ -822,8 +822,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.link,
 			.boldface,
 			.italic,
-			.toggleOutlineNotesHidden,
-			.toggleOutlineFilter,
+			.toggleCompletedFilter,
 			.expandAllInOutline,
 			.collapseAllInOutline,
 			.moveLeft,
@@ -1070,47 +1069,55 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.action = #selector(moveRowsDown(_:))
 			item.target = self
 			toolbarItem = item
-		case .toggleOutlineFilter:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+		case .toggleCompletedFilter:
+			let item = ValidatingMenuToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
-				if self?.editorViewController?.isOutlineFiltered ?? false {
+				guard let self = self else { return false }
+				
+				if self.editorViewController?.isFilterOn ?? false {
 					item.image = AppAssets.filterActive.symbolSizedForCatalyst(color: .accentColor)
-					item.label = L10n.showCompleted
-					item.toolTip = L10n.showCompleted
 				} else {
 					item.image = AppAssets.filterInactive.symbolSizedForCatalyst()
-					item.label = L10n.hideCompleted
-					item.toolTip = L10n.hideCompleted
 				}
-				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+				
+				let turnFilterOnAction = UIAction() { [weak self] _ in
+					DispatchQueue.main.async {
+						   self?.toggleFilterOn()
+					   }
+				}
+				
+				turnFilterOnAction.title = self.isFilterOn ? L10n.turnFilterOff : L10n.turnFilterOn
+				
+				let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
+				
+				let filterCompletedAction = UIAction(title: L10n.filterCompleted) { [weak self] _ in
+					DispatchQueue.main.async {
+						   self?.toggleCompletedFilter()
+					   }
+				}
+				filterCompletedAction.state = self.isCompletedFiltered ? .on : .off
+				filterCompletedAction.attributes = self.isFilterOn ? [] : .disabled
+
+				let filterNotesAction = UIAction(title: L10n.filterNotes) { [weak self] _ in
+					DispatchQueue.main.async {
+						   self?.toggleNotesFilter()
+					   }
+				}
+				filterNotesAction.state = self.isNotesFiltered ? .on : .off
+				filterNotesAction.attributes = self.isFilterOn ? [] : .disabled
+
+				let filterOptionsMenu = UIMenu(title: "", options: .displayInline, children: [filterCompletedAction, filterNotesAction])
+
+				item.itemMenu = UIMenu(title: "", children: [turnFilterOnMenu, filterOptionsMenu])
+				
+				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
 			item.image = AppAssets.filterInactive.symbolSizedForCatalyst()
-			item.label = L10n.hideCompleted
-			item.toolTip = L10n.hideCompleted
+			item.label = L10n.filter
+			item.toolTip = L10n.filter
 			item.isBordered = true
-			item.action = #selector(toggleOutlineFilter(_:))
 			item.target = self
-			toolbarItem = item
-		case .toggleOutlineNotesHidden:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] item in
-				if self?.editorViewController?.isOutlineNotesHidden ?? false {
-					item.image = AppAssets.hideNotesActive.symbolSizedForCatalyst()
-					item.label = L10n.showNotes
-					item.toolTip = L10n.showNotes
-				} else {
-					item.image = AppAssets.hideNotesInactive.symbolSizedForCatalyst()
-					item.label = L10n.hideNotes
-					item.toolTip = L10n.hideNotes
-				}
-				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
-			}
-			item.image = AppAssets.hideNotesInactive.symbolSizedForCatalyst()
-			item.label = L10n.hideNotes
-			item.toolTip = L10n.hideNotes
-			item.isBordered = true
-			item.action = #selector(toggleOutlineHideNotes(_:))
-			item.target = self
+			item.showsIndicator = false
 			toolbarItem = item
 		case .printDoc:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)

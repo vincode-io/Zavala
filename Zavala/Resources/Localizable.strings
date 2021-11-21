@@ -35,10 +35,13 @@
 "Move" = "Move";
 "Complete" = "Complete";
 "Uncomplete" = "Uncomplete";
-"Show_Completed" = "Show Completed";
-"Hide_Completed" = "Hide Completed";
-"Show_Notes" = "Show Notes";
-"Hide_Notes" = "Hide Notes";
+"Filter" = "Filter";
+"Turn_Filter_On" = "Turn Filter On";
+"Turn_Filter_Off" = "Turn Filter Off";
+"Completed" = "Completed";
+"Filter_Completed" = "Filter Completed";
+"Notes" = "Notes";
+"Filter_Notes" = "Filter Notes";
 "Expand" = "Expand";
 "Expand_All" = "Expand All";
 "Expand_All_In_Row" = "Expand All in Row";

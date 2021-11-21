@@ -34,12 +34,16 @@ extension MainCoordinator {
 		return editorViewController?.isCollaborateUnavailable ?? true
 	}
 	
-	var isOutlineFiltered: Bool {
-		return editorViewController?.isOutlineFiltered ?? false
+	var isFilterOn: Bool {
+		return editorViewController?.isFilterOn ?? false
 	}
 	
-	var isOutlineNotesHidden: Bool {
-		return editorViewController?.isOutlineNotesHidden ?? false
+	var isCompletedFiltered: Bool {
+		return editorViewController?.isCompletedFiltered ?? false
+	}
+	
+	var isNotesFiltered: Bool {
+		return editorViewController?.isNotesFiltered ?? false
 	}
 
 	var isInsertRowUnavailable: Bool {
@@ -146,12 +150,16 @@ extension MainCoordinator {
 		editorViewController?.duplicateCurrentRows()
 	}
 	
-	func toggleOutlineFilter() {
-		editorViewController?.toggleOutlineFilter()
+	func toggleFilterOn() {
+		editorViewController?.toggleFilterOn()
 	}
 	
-	func toggleOutlineHideNotes() {
-		editorViewController?.toggleOutlineHideNotes()
+	func toggleCompletedFilter() {
+		editorViewController?.toggleCompletedFilter()
+	}
+	
+	func toggleNotesFilter() {
+		editorViewController?.toggleNotesFilter()
 	}
 	
 	func insertRow() {
@@ -477,8 +485,7 @@ extension NSToolbarItem.Identifier {
 	static let sync = NSToolbarItem.Identifier("io.vincode.Zavala.refresh")
 	static let importOPML = NSToolbarItem.Identifier("io.vincode.Zavala.importOPML")
 	static let newOutline = NSToolbarItem.Identifier("io.vincode.Zavala.newOutline")
-	static let toggleOutlineFilter = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineFilter")
-	static let toggleOutlineNotesHidden = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineNotesHidden")
+	static let toggleCompletedFilter = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineFilter")
 	static let delete = NSToolbarItem.Identifier("io.vincode.Zavala.delete")
 	static let navigation = NSToolbarItem.Identifier("io.vincode.Zavala.navigation")
 	static let goBackward = NSToolbarItem.Identifier("io.vincode.Zavala.goBackward")

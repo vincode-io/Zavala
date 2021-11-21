@@ -104,14 +104,28 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			documentMetaDataDidChange()
 		}
 	}
-	
-	public var isFiltered: Bool? {
+
+	public var isFilterOn: Bool? {
 		didSet {
 			documentMetaDataDidChange()
 		}
 	}
+	
+	public var isCompletedFilterOn: Bool {
+		return isFilterOn ?? false && isCompletedFiltered ?? true
+	}
 
-	public var isNotesHidden: Bool? {
+	public var isCompletedFiltered: Bool? {
+		didSet {
+			documentMetaDataDidChange()
+		}
+	}
+	
+	public var isNotesFilterOn: Bool {
+		return isFilterOn ?? false && isNotesFiltered ?? true
+	}
+
+	public var isNotesFiltered: Bool? {
 		didSet {
 			documentMetaDataDidChange()
 		}
@@ -319,8 +333,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		case ownerEmail = "ownerEmail"
 		case ownerURL = "ownerURL"
 		case verticleScrollState = "verticleScrollState"
-		case isFiltered = "isFiltered"
-		case isNotesHidden = "isNotesHidden"
+		case isFilterOn = "isFilterOn"
+		case isCompletedFiltered = "isCompletedFiltered"
+		case isNotesFiltered = "isNotesFiltered"
 		case selectionRowID = "selectionRowID"
 		case selectionIsInNotes = "selectionIsInNotes"
 		case selectionLocation = "selectionLocation"
@@ -734,14 +749,26 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		requestCloudKitUpdate(for: id)
 	}
 	
-	public func toggleFilter() -> OutlineElementChanges {
-		isFiltered = !(isFiltered ?? false)
+	public func toggleFilterOn() -> OutlineElementChanges {
+		isFilterOn = !(isFilterOn ?? false)
+		documentMetaDataDidChange()
+		var changes = rebuildShadowTable()
+
+		if let reloads = shadowTable?.filter({ !$0.isNoteEmpty }).compactMap({ $0.shadowTableIndex }) {
+			changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads)))
+		}
+		
+		return changes
+	}
+	
+	public func toggleCompletedFilter() -> OutlineElementChanges {
+		isCompletedFiltered = !(isCompletedFiltered ?? true)
 		documentMetaDataDidChange()
 		return rebuildShadowTable()
 	}
 	
-	public func toggleNotesHidden() -> OutlineElementChanges {
-		isNotesHidden = !(isNotesHidden ?? false)
+	public func toggleNotesFilter() -> OutlineElementChanges {
+		isNotesFiltered = !(isNotesFiltered ?? true)
 		documentMetaDataDidChange()
 		
 		if let reloads = shadowTable?.filter({ !$0.isNoteEmpty }).compactMap({ $0.shadowTableIndex }) {
@@ -783,7 +810,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			isSearching = .beginSearch
 		} else {
 			isSearching = .searching
-			let searchVisitor = SearchResultVisitor(searchText: searchText, isFiltered: isFiltered ?? false, isNotesHidden: isNotesHidden ?? false)
+			let searchVisitor = SearchResultVisitor(searchText: searchText, isCompletedFilterOn: isCompletedFilterOn, isNotesFilterOn: isNotesFilterOn)
 			rows.forEach { $0.visit(visitor: searchVisitor.visitor(_:))	}
 			searchResultCoordinates = searchVisitor.searchResultCoordinates
 		}
@@ -1907,8 +1934,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outline.ownerName = ownerName
 		outline.ownerEmail = ownerEmail
 		outline.ownerURL = ownerURL
-		outline.isFiltered = isFiltered
-		outline.isNotesHidden = isNotesHidden
+		outline.isFilterOn = isFilterOn
+		outline.isCompletedFiltered = isCompletedFiltered
+		outline.isNotesFiltered = isNotesFiltered
 		outline.tagIDs = tagIDs
 		outline.documentLinks = documentLinks
 		
@@ -2444,7 +2472,7 @@ private extension Outline {
 		
 		guard isBeingViewed else { return (impacted, nil) }
 
-		if isFiltered ?? false {
+		if isCompletedFilterOn {
 			let changes = rebuildShadowTable()
 			outlineElementsDidChange(changes)
 			if let firstComplete = changes.deletes?.sorted().first, firstComplete > 0 {
@@ -2549,7 +2577,7 @@ private extension Outline {
 		var shadowTableInserts = [Row]()
 
 		func visitor(_ visited: Row) {
-			let shouldFilter = isFiltered ?? false && visited.isComplete
+			let shouldFilter = isCompletedFilterOn && visited.isComplete
 			
 			if !shouldFilter {
 				shadowTableInserts.append(visited)
@@ -2691,7 +2719,7 @@ private extension Outline {
 	}
 	
 	func rebuildTransientData() {
-		let transient = TransientDataVisitor(isFiltered: isFiltered ?? false, isSearching: isSearching)
+		let transient = TransientDataVisitor(isCompletedFilterOn: isCompletedFilterOn, isSearching: isSearching)
 		rows.forEach { row in
 			row.parent = self
 			row.visit(visitor: transient.visitor(_:))

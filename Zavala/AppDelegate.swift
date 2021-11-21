@@ -32,17 +32,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(syncCommand)
 		}
 
+
 		if !(mainCoordinator?.isOutlineFunctionsUnavailable ?? true) {
-			if mainCoordinator?.isOutlineFiltered ?? false {
-				menuKeyCommands.append(showCompletedCommand)
-			} else {
-				menuKeyCommands.append(hideCompletedCommand)
-			}
-			if mainCoordinator?.isOutlineNotesHidden ?? false {
-				menuKeyCommands.append(showNotesCommand)
-			} else {
-				menuKeyCommands.append(hideNotesCommand)
-			}
+			menuKeyCommands.append(toggleFilterOnCommand)
 			menuKeyCommands.append(beginInDocumentSearchCommand)
 			menuKeyCommands.append(useSelectionForSearchCommand)
 			menuKeyCommands.append(nextInDocumentSearchCommand)
@@ -327,35 +319,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let copyDocumentLinkCommand = UICommand(title: L10n.copyDocumentLink, action: #selector(copyDocumentLinkCommand(_:)))
 	
-	let toggleOutlineFilterCommand = UIKeyCommand(title: L10n.hideCompleted,
-												  action: #selector(toggleOutlineFilterCommand(_:)),
-												  input: "h",
-												  modifierFlags: [.shift, .command])
+	let toggleFilterOnCommand = UIKeyCommand(title: L10n.turnFilterOn,
+											 action: #selector(toggleFilterOnCommand(_:)),
+											 input: "h",
+											 modifierFlags: [.shift, .command])
 	
-	let hideCompletedCommand = UIKeyCommand(title: L10n.hideCompleted,
-											action: #selector(toggleOutlineFilterCommand(_:)),
-											input: "h",
-											modifierFlags: [.shift, .command])
+	let toggleCompletedFilterCommand = UICommand(title: L10n.filterCompleted, action: #selector(toggleCompletedFilterCommand(_:)))
 	
-	let showCompletedCommand = UIKeyCommand(title: L10n.showCompleted,
-											action: #selector(toggleOutlineFilterCommand(_:)),
-											input: "h",
-											modifierFlags: [.shift, .command])
-
-	let toggleOutlineHideNotesCommand = UIKeyCommand(title: L10n.hideNotes,
-												  action: #selector(toggleOutlineHideNotesCommand(_:)),
-												  input: "h",
-												  modifierFlags: [.shift, .alternate, .command])
-	
-	let hideNotesCommand = UIKeyCommand(title: L10n.hideNotes,
-											action: #selector(toggleOutlineHideNotesCommand(_:)),
-											input: "h",
-											modifierFlags: [.shift, .alternate, .command])
-	
-	let showNotesCommand = UIKeyCommand(title: L10n.showNotes,
-											action: #selector(toggleOutlineHideNotesCommand(_:)),
-											input: "h",
-											modifierFlags: [.shift, .alternate, .command])
+	let toggleNotesFilterCommand = UICommand(title: L10n.filterNotes, action: #selector(toggleNotesFilterCommand(_:)))
 	
 	let expandAllInOutlineCommand = UIKeyCommand(title: L10n.expandAllInOutline,
 												 action: #selector(expandAllInOutlineCommand(_:)),
@@ -765,12 +736,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.copyDocumentLink()
 	}
 
-	@objc func toggleOutlineFilterCommand(_ sender: Any?) {
-		mainCoordinator?.toggleOutlineFilter()
+	@objc func toggleFilterOnCommand(_ sender: Any?) {
+		mainCoordinator?.toggleFilterOn()
 	}
 
-	@objc func toggleOutlineHideNotesCommand(_ sender: Any?) {
-		mainCoordinator?.toggleOutlineHideNotes()
+	@objc func toggleCompletedFilterCommand(_ sender: Any?) {
+		mainCoordinator?.toggleCompletedFilter()
+	}
+
+	@objc func toggleNotesFilterCommand(_ sender: Any?) {
+		mainCoordinator?.toggleNotesFilter()
 	}
 
 	@objc func expandAllInOutlineCommand(_ sender: Any?) {
@@ -993,22 +968,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isLinkUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(toggleOutlineFilterCommand(_:)):
-			if mainCoordinator?.isOutlineFiltered ?? false {
-				command.title = L10n.showCompleted
+		case #selector(toggleFilterOnCommand(_:)):
+			if mainCoordinator?.isFilterOn ?? false {
+				command.title = L10n.turnFilterOff
 			} else {
-				command.title = L10n.hideCompleted
+				command.title = L10n.turnFilterOn
 			}
-			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
+		case #selector(toggleCompletedFilterCommand(_:)):
+			if mainCoordinator?.isCompletedFiltered ?? false {
+				command.state = .on
+			} else {
+				command.state = .off
+			}
+			if !(mainCoordinator?.isFilterOn ?? false) {
 				command.attributes = .disabled
 			}
-		case #selector(toggleOutlineHideNotesCommand(_:)):
-			if mainCoordinator?.isOutlineNotesHidden ?? false {
-				command.title = L10n.showNotes
+		case #selector(toggleNotesFilterCommand(_:)):
+			if mainCoordinator?.isNotesFiltered ?? false {
+				command.state = .on
 			} else {
-				command.title = L10n.hideNotes
+				command.state = .off
 			}
-			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
+			if !(mainCoordinator?.isFilterOn ?? false) {
 				command.attributes = .disabled
 			}
 		case #selector(expandAllInOutlineCommand(_:)):
@@ -1126,7 +1107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										options: .displayInline,
 										children: [expandAllInOutlineCommand, expandAllCommand, expandCommand, collapseAllInOutlineCommand, collapseAllCommand, collapseCommand, collapseParentRowCommand])
 		builder.insertChild(expandCollapseMenu, atStartOfMenu: .view)
-		let toggleFilterOutlineMenu = UIMenu(title: "", options: .displayInline, children: [toggleOutlineFilterCommand, toggleOutlineHideNotesCommand])
+		let toggleFilterOutlineMenu = UIMenu(title: "", options: .displayInline, children: [toggleFilterOnCommand, toggleCompletedFilterCommand, toggleNotesFilterCommand])
 		builder.insertChild(toggleFilterOutlineMenu, atStartOfMenu: .view)
 
 		if #available(macOS 12.0, *) {

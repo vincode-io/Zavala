@@ -62,6 +62,8 @@ internal enum L10n {
   internal static let collapseParentRow = L10n.tr("Localizable", "Collapse_Parent_Row")
   /// Complete
   internal static let complete = L10n.tr("Localizable", "Complete")
+  /// Completed
+  internal static let completed = L10n.tr("Localizable", "Completed")
   /// Copy
   internal static let copy = L10n.tr("Localizable", "Copy")
   /// Copy Document Link
@@ -162,6 +164,12 @@ internal enum L10n {
   internal static let exportPDFDocEllipsis = L10n.tr("Localizable", "Export_PDF_Doc_Ellipsis")
   /// Export PDF List…
   internal static let exportPDFListEllipsis = L10n.tr("Localizable", "Export_PDF_List_Ellipsis")
+  /// Filter
+  internal static let filter = L10n.tr("Localizable", "Filter")
+  /// Filter Completed
+  internal static let filterCompleted = L10n.tr("Localizable", "Filter_Completed")
+  /// Filter Notes
+  internal static let filterNotes = L10n.tr("Localizable", "Filter_Notes")
   /// Find
   internal static let find = L10n.tr("Localizable", "Find")
   /// Find…
@@ -182,10 +190,6 @@ internal enum L10n {
   internal static let goBackward = L10n.tr("Localizable", "Go_Backward")
   /// Go Forward
   internal static let goForward = L10n.tr("Localizable", "Go_Forward")
-  /// Hide Completed
-  internal static let hideCompleted = L10n.tr("Localizable", "Hide_Completed")
-  /// Hide Notes
-  internal static let hideNotes = L10n.tr("Localizable", "Hide_Notes")
   /// History
   internal static let history = L10n.tr("Localizable", "History")
   /// Image
@@ -242,6 +246,8 @@ internal enum L10n {
   internal static func noteLevel(_ p1: Int) -> String {
     return L10n.tr("Localizable", "Note_Level", p1)
   }
+  /// Notes
+  internal static let notes = L10n.tr("Localizable", "Notes")
   /// Open Quickly…
   internal static let openQuicklyEllipsis = L10n.tr("Localizable", "Open_Quickly_Ellipsis")
   /// Open Quickly
@@ -298,10 +304,6 @@ internal enum L10n {
   internal static let share = L10n.tr("Localizable", "Share")
   /// Share…
   internal static let shareEllipsis = L10n.tr("Localizable", "Share_Ellipsis")
-  /// Show Completed
-  internal static let showCompleted = L10n.tr("Localizable", "Show_Completed")
-  /// Show Notes
-  internal static let showNotes = L10n.tr("Localizable", "Show_Notes")
   /// Split Row
   internal static let splitRow = L10n.tr("Localizable", "Split_Row")
   /// Sync with iCloud
@@ -318,6 +320,10 @@ internal enum L10n {
   internal static func topicLevel(_ p1: Int) -> String {
     return L10n.tr("Localizable", "Topic_Level", p1)
   }
+  /// Turn Filter Off
+  internal static let turnFilterOff = L10n.tr("Localizable", "Turn_Filter_Off")
+  /// Turn Filter On
+  internal static let turnFilterOn = L10n.tr("Localizable", "Turn_Filter_On")
   /// Twitter
   internal static let twitter = L10n.tr("Localizable", "Twitter")
   /// Typing
