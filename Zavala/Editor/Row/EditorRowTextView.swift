@@ -398,10 +398,8 @@ extension EditorRowTextView {
         
         isTextChanged = true
 
-		// Layout the editor if we change the line height by any amount that is more than just typing
-		// in a capital letter (which changes the line height by less than 1 typically)
         let fittingSize = sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
-        if let currentHeight = textViewHeight, abs(fittingSize.height - currentHeight) > 2  {
+        if let currentHeight = textViewHeight, abs(fittingSize.height - currentHeight) > 0 {
 			CursorCoordinates.updateLastKnownCoordinates()
             textViewHeight = fittingSize.height
             layoutEditor()
