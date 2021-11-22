@@ -917,7 +917,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 		
 		let reloads = impacted.compactMap { $0.shadowTableIndex }
-		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
+		var changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
+		changes.isReloadsAnimatable = true
 		outlineElementsDidChange(changes)
 		return (impacted, reloads.sorted().first)
 	}
@@ -955,7 +956,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 
 		let reloads = impacted.keys.compactMap { $0.shadowTableIndex }
-		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
+		var changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
+		changes.isReloadsAnimatable = true
 		outlineElementsDidChange(changes)
 		return (impacted, reloads.sorted().first)
 	}
