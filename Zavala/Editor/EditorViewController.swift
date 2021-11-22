@@ -353,7 +353,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		searchBarHeightConstraint.constant = Self.searchBarHeight
 		collectionViewTopConstraint.constant = 0
 		
-		collectionView.layer.speed = 1.25
 		collectionView.collectionViewLayout = createLayout()
 		collectionView.delegate = self
 		collectionView.dataSource = self
