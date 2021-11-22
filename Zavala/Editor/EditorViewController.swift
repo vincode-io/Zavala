@@ -1473,8 +1473,8 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		return keyboardToolBar
 	}
 	
-    func editorRowLayoutEditor() {
-		layoutEditor()
+    func editorRowLayoutEditor(row: Row) {
+		layoutEditor(row: row)
 	}
 	
 	func editorRowMakeCursorVisibleIfNecessary() {
@@ -1989,20 +1989,23 @@ private extension EditorViewController {
 	}
 	
 	func layoutEditor() {
-//		let contentOffset = collectionView.contentOffset
-//		let contentHeight = collectionView.contentSize.height
-		
-//		let context = UICollectionViewLayoutInvalidationContext()
-//		collectionView.collectionViewLayout.invalidateLayout(with: context)
 		collectionView.collectionViewLayout.invalidateLayout()
 		collectionView.layoutIfNeeded()
+	}
+	
+	func layoutEditor(row: Row) {
+		if #available(iOS 15, *) {
+			guard let index = row.shadowTableIndex else { return }
+			let indexPath = IndexPath(row: index, section: adjustedRowsSection)
+			collectionView.reconfigureItems(at: [indexPath])
+		} else {
+			// This is presumably less effecient than just reconfiguring the item and
+			// it can trigger layout bugs. For example if the first row of a topic above
+			// this row is an image, things go to 💩 in a hurry.
+			collectionView.collectionViewLayout.invalidateLayout()
+			collectionView.layoutIfNeeded()
+		}
 		
-		// This is one of those things where I'm just not sure what is going on. The content size can vary wildly for seemingly no
-		// reason when invalidating the layout. If we try to set the contentOffset when that happens, the editor wildly bounces
-		// around. We try to detect when this is happening and then don't set the contentOffset to prevent the bouncing.
-//		if abs(collectionView.contentSize.height - contentHeight) <= (UIResponder.currentFirstResponder as? EditorRowTextView)?.lineHeight ?? 0 {
-//			collectionView.contentOffset = contentOffset
-//		}
 		makeCursorVisibleIfNecessary()
 	}
 	

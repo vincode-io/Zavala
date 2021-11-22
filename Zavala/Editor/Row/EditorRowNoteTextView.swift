@@ -12,7 +12,7 @@ import SwiftUI
 protocol EditorRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewInputAccessoryView: UIView? { get }
-	func layoutEditor(_ : EditorRowNoteTextView)
+	func layoutEditor(_ : EditorRowNoteTextView, row: Row)
 	func makeCursorVisibleIfNecessary(_ : EditorRowNoteTextView)
 	func didBecomeActive(_ : EditorRowNoteTextView, row: Row)
 	func textChanged(_ : EditorRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
@@ -85,7 +85,8 @@ class EditorRowNoteTextView: EditorRowTextView {
     }
     
 	override func layoutEditor() {
-        editorDelegate?.layoutEditor(self)
+		guard let row = row else { return }
+		editorDelegate?.layoutEditor(self, row: row)
 	}
     
     override func makeCursorVisibleIfNecessary() {

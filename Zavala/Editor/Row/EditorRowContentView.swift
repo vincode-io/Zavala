@@ -153,8 +153,8 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration.delegate?.editorRowInputAccessoryView
 	}
 	
-	func layoutEditor(_: EditorRowTopicTextView) {
-		appliedConfiguration.delegate?.editorRowLayoutEditor()
+	func layoutEditor(_: EditorRowTopicTextView, row: Row) {
+		appliedConfiguration.delegate?.editorRowLayoutEditor(row: row)
 	}
 	
 	func makeCursorVisibleIfNecessary(_: EditorRowTopicTextView) {
@@ -221,8 +221,8 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 		return appliedConfiguration.delegate?.editorRowInputAccessoryView
 	}
 	
-    func layoutEditor(_: EditorRowNoteTextView) {
-        appliedConfiguration.delegate?.editorRowLayoutEditor()
+	func layoutEditor(_: EditorRowNoteTextView, row: Row) {
+		appliedConfiguration.delegate?.editorRowLayoutEditor(row: row)
 	}
 	
 	func makeCursorVisibleIfNecessary(_: EditorRowNoteTextView) {

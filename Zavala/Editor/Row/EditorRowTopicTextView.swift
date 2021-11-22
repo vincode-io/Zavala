@@ -12,7 +12,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
 	var editorRowTopicTextViewInputAccessoryView: UIView? { get }
 	func didBecomeActive(_: EditorRowTopicTextView, row: Row)
-	func layoutEditor(_: EditorRowTopicTextView)
+	func layoutEditor(_: EditorRowTopicTextView, row: Row)
 	func makeCursorVisibleIfNecessary(_: EditorRowTopicTextView)
 	func moveCursorUp(_: EditorRowTopicTextView, row: Row)
 	func moveCursorDown(_: EditorRowTopicTextView, row: Row)
@@ -115,7 +115,8 @@ class EditorRowTopicTextView: EditorRowTextView {
     }
 
 	override func layoutEditor() {
-		editorDelegate?.layoutEditor(self)
+		guard let row = row else { return }
+		editorDelegate?.layoutEditor(self, row: row)
 	}
 	
     override func makeCursorVisibleIfNecessary() {
