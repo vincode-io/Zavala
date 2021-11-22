@@ -85,9 +85,9 @@ class EditorRowViewCell: UICollectionViewListCell {
 		
 		var content = EditorRowContentConfiguration(row: row,
 													isSearching: isSearching,
+													indentationWidth: indentationWidth,
 													isDisclosureVisible: isDisclosureVisible,
-													isNotesVisible: isNotesVisible,
-													horizontalSizeClass: traitCollection.horizontalSizeClass)
+													isNotesVisible: isNotesVisible)
 		
 		content = content.updated(for: state)
 		content.delegate = delegate

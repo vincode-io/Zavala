@@ -77,7 +77,7 @@ class EditorDisclosureButton: UIButton {
 			}
 		case .collapsed:
 			accessibilityLabel = L10n.expand
-			let rotationAngle: CGFloat = traitCollection.horizontalSizeClass == .compact ? 1.570796 : -1.570796
+			let rotationAngle: CGFloat = -1.570796
 			if animated {
 				UIView.animate(withDuration: 0.15) {
 					self.transform = CGAffineTransform(rotationAngle: rotationAngle)
@@ -87,7 +87,7 @@ class EditorDisclosureButton: UIButton {
 			}
 		case .partial:
 			accessibilityLabel = L10n.expand
-			let rotationAngle: CGFloat = traitCollection.horizontalSizeClass == .compact ? 0.785398 : -0.785398
+			let rotationAngle: CGFloat = -0.785398
 			if animated {
 				UIView.animate(withDuration: 0.15) {
 					self.transform = CGAffineTransform(rotationAngle: rotationAngle)
