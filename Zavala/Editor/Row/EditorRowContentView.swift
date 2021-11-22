@@ -83,7 +83,6 @@ class EditorRowContentView: UIView, UIContentView {
 		
 		NSLayoutConstraint.activate([
 			barViewWidthConstraint,
-			barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor),
 			barView.topAnchor.constraint(equalTo: topAnchor),
 			barView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
@@ -293,7 +292,9 @@ private extension EditorRowContentView {
 				adjustedTrailingIndention = -25
 			}
 		}
-
+		
+		topicTextView.removeConstraintsOwnedBySuperview()
+		
 		if config.isNotesVisible {
 			addSubview(noteTextView)
 			NSLayoutConstraint.activate([
@@ -303,8 +304,8 @@ private extension EditorRowContentView {
 				topicTextView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: -4),
 				noteTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
 				noteTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-				noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
-
+				noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+				barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor)
 			])
 		} else {
 			noteTextView.removeFromSuperview()
@@ -312,7 +313,8 @@ private extension EditorRowContentView {
 				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
 				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
 				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-				topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+				topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+				barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor)
 			])
 		}
 	}
@@ -321,8 +323,10 @@ private extension EditorRowContentView {
 		let xHeight = "X".height(withConstrainedWidth: Double.infinity, font: topicTextView.font!)
 		let topAnchorConstant = (xHeight / 2) + topicTextView.textContainerInset.top
 
+		bullet.removeFromSuperview()
+		disclosureIndicator.removeFromSuperview()
+
 		if config.isDisclosureVisible {
-			bullet.removeFromSuperview()
 			addSubview(disclosureIndicator)
 
 			if config.horizontalSizeClass != .compact {
@@ -338,7 +342,6 @@ private extension EditorRowContentView {
 				])
 			}
 		} else {
-			disclosureIndicator.removeFromSuperview()
 			addSubview(bullet)
 			
 			if config.horizontalSizeClass != .compact {
