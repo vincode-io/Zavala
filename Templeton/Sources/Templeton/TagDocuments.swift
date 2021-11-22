@@ -12,8 +12,13 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 
 	public var id: EntityID
 	public var name: String?
-	public var image: RSImage? = UIImage(systemName: "capsule")!
 
+	#if targetEnvironment(macCatalyst)
+	public var image: RSImage? = UIImage(systemName: "capsule")!.applyingSymbolConfiguration(.init(pointSize: 12))
+	#else
+	public var image: RSImage? = UIImage(systemName: "capsule")!.applyingSymbolConfiguration(.init(pointSize: 15))
+	#endif
+	
 	public var itemCount: Int? {
 		guard let tag = tag else { return nil }
 		return account?.documents?.filter({ $0.hasTag(tag) }).count
