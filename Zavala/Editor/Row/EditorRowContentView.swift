@@ -154,7 +154,6 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 	}
 	
 	func layoutEditor(_: EditorRowTopicTextView) {
-		invalidateIntrinsicContentSize()
 		appliedConfiguration.delegate?.editorRowLayoutEditor()
 	}
 	
@@ -223,7 +222,6 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 	}
 	
     func layoutEditor(_: EditorRowNoteTextView) {
-		invalidateIntrinsicContentSize()
         appliedConfiguration.delegate?.editorRowLayoutEditor()
 	}
 	
