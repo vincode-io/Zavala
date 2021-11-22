@@ -2193,7 +2193,7 @@ private extension EditorViewController {
 			if !outline.isUncompleteUnavailable(rows: rows) {
 				outlineActions.append(self.uncompleteAction(rows: rows))
 			}
-			if !outline.isCreateNotesUnavailable(rows: rows) {
+			if outline.isDeleteNotesUnavailable(rows: rows) {
 				outlineActions.append(self.createNoteAction(rows: rows))
 			}
 			if !outline.isDeleteNotesUnavailable(rows: rows) {
