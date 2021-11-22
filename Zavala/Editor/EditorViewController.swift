@@ -40,7 +40,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private static let searchBarHeight: CGFloat = 44
 	
 	@IBOutlet weak var searchBar: EditorSearchBar!
-	@IBOutlet weak var searchBarHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var collectionViewTopConstraint: NSLayoutConstraint!
 	@IBOutlet weak var collectionView: EditorCollectionView!
 	
@@ -350,7 +349,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 		
 		searchBar.delegate = self
-		searchBarHeightConstraint.constant = Self.searchBarHeight
 		collectionViewTopConstraint.constant = 0
 		
 		collectionView.collectionViewLayout = createLayout()

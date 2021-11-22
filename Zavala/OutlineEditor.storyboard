@@ -46,12 +46,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MSX-50-SmH" customClass="EditorSearchBar" customModule="Zavala" customModuleProvider="target">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MSX-50-SmH" customClass="EditorSearchBar" customModule="Zavala" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="800" height="44"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="UOQ-tp-cUm"/>
-                                </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="c3a-AA-EnS" customClass="EditorCollectionView" customModule="Zavala" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="800" height="556"/>
@@ -81,7 +78,6 @@
                         <outlet property="collectionView" destination="c3a-AA-EnS" id="FLJ-fW-iB5"/>
                         <outlet property="collectionViewTopConstraint" destination="46x-oz-0wc" id="oQY-Uy-NnO"/>
                         <outlet property="searchBar" destination="MSX-50-SmH" id="HaN-zn-BAn"/>
-                        <outlet property="searchBarHeightConstraint" destination="UOQ-tp-cUm" id="GGV-9l-UVO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W2Y-6H-XgS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
