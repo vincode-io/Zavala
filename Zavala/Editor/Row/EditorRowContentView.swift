@@ -143,8 +143,6 @@ class EditorRowContentView: UIView, UIContentView {
 		
 		configureTextViews(config: configuration)
 		configureBulletOrDisclosure(config: configuration)
-
-//		addBarViews()
 	}
 	
 }
