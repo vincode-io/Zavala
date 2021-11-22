@@ -2647,7 +2647,6 @@ private extension EditorViewController {
 			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
 				rowCell.moveToEnd()
 			}
-			makeCursorVisibleIfNecessary()
 		}
 	}
 	
@@ -2671,7 +2670,6 @@ private extension EditorViewController {
 			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
 				rowCell.moveToEnd()
 			}
-			makeCursorVisibleIfNecessary()
 		}
 	}
 	
@@ -2695,7 +2693,6 @@ private extension EditorViewController {
 			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
 				rowCell.moveToEnd()
 			}
-			makeCursorVisibleIfNecessary()
 		}
 	}
 	
