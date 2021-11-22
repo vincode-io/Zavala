@@ -72,6 +72,7 @@ private extension CloudKitModifyOperation {
 			// Now process all the rows
 			for imageRequest in combinedRequest.rowRequests {
 				if let row = outline.findRow(id: imageRequest.id.rowUUID) {
+					outline.updateRowSyncID(row)
 					addSave(zoneID: zoneID, outlineRecordID: outlineRecordID, row: row)
 				} else {
 					addDelete(imageRequest)
@@ -83,6 +84,7 @@ private extension CloudKitModifyOperation {
 				// if the row is gone, we don't need to process the images because we cascade our deletes
 				if let row = outline.findRow(id: imageRequest.id.rowUUID) {
 					if let image = row.findImage(id: imageRequest.id) {
+						outline.updateImageSyncID(image)
 						let tempFileURL = addSave(zoneID: zoneID, image: image)
 						tempFileURLs.append(tempFileURL)
 					} else {
@@ -200,8 +202,6 @@ private extension CloudKitModifyOperation {
 	}
 	
 	func addSave(zoneID: CKRecordZone.ID, outlineRecordID: CKRecord.ID, row: Row) {
-		row.syncID = UUID().uuidString
-		
 		let recordID = CKRecord.ID(recordName: row.entityID.description, zoneID: zoneID)
 		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitRow.recordType, recordID: recordID)
 		
@@ -218,10 +218,6 @@ private extension CloudKitModifyOperation {
 	}
 	
 	func addSave(zoneID: CKRecordZone.ID, image: Image) -> URL {
-		var image = image
-		
-		image.syncID = UUID().uuidString
-		
 		let recordID = CKRecord.ID(recordName: image.id.description, zoneID: zoneID)
 		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitImage.recordType, recordID: recordID)
 		

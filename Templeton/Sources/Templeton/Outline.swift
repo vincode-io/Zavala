@@ -1361,6 +1361,16 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return newCursorIndex
 	}
 
+	public func updateRowSyncID(_ row: Row) {
+		row.syncID = UUID().uuidString
+		outlineContentDidChange()
+	}
+	
+	public func updateImageSyncID(_ image: Image) {
+		image.syncID = UUID().uuidString
+		imagesFile?.markAsDirty()
+	}
+	
 	public func updateRow(_ row: Row, rowStrings: RowStrings?, applyChanges: Bool) {
 		if let texts = rowStrings {
 			updateRowStrings(row, texts)

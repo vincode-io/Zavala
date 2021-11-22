@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Image: Identifiable, Codable, Equatable {
+public class Image: Identifiable, Codable, Equatable {
 	
 	public var id: EntityID
 	public var isInNotes: Bool
