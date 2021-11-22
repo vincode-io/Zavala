@@ -121,6 +121,8 @@ class EditorRowNoteTextView: EditorRowTextView {
 	override func update(row: Row) {
 		self.row = row
 		
+		let cursorRange = selectedTextRange
+		
 		text = ""
 		
 		var attrs = [NSAttributedString.Key : Any]()
@@ -134,6 +136,8 @@ class EditorRowNoteTextView: EditorRowTextView {
         }
         
 		addSearchHighlighting(isInNotes: true)
+		
+		selectedTextRange = cursorRange
     }
 	
 }
