@@ -80,7 +80,15 @@ class EditorRowViewCell: UICollectionViewListCell {
 			indentationWidth = 13
 		}
 		
-		var content = EditorRowContentConfiguration(row: row, indentionLevel: indentationLevel, indentationWidth: indentationWidth, isNotesHidden: isNotesHidden, isSearching: isSearching)
+		let isDisclosureVisible = row.rowCount != 0
+		let isNotesVisible = !isNotesHidden && !row.isNoteEmpty
+		
+		var content = EditorRowContentConfiguration(row: row,
+													isSearching: isSearching,
+													isDisclosureVisible: isDisclosureVisible,
+													isNotesVisible: isNotesVisible,
+													horizontalSizeClass: traitCollection.horizontalSizeClass)
+		
 		content = content.updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content

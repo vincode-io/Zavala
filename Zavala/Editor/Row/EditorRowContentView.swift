@@ -10,9 +10,33 @@ import Templeton
 
 class EditorRowContentView: UIView, UIContentView {
 
-    var topicTextView: EditorRowTopicTextView?
-	var noteTextView: EditorRowNoteTextView?
-	var barViews = [UIView]()
+	private enum ConfigState {
+		case unconfigured
+		case topicOnly
+		case both
+	}
+	
+	lazy var topicTextView: EditorRowTopicTextView = {
+		let textView = EditorRowTopicTextView()
+		textView.editorDelegate = self
+		textView.translatesAutoresizingMaskIntoConstraints = false
+		return textView
+	}()
+	
+	lazy var noteTextView: EditorRowNoteTextView = {
+		let textView = EditorRowNoteTextView()
+		textView.editorDelegate = self
+		textView.translatesAutoresizingMaskIntoConstraints = false
+		return textView
+	}()
+
+	var configuration: UIContentConfiguration {
+		get { appliedConfiguration }
+		set {
+			guard let newConfig = newValue as? EditorRowContentConfiguration else { return }
+			apply(configuration: newConfig)
+		}
+	}
 
 	private lazy var disclosureIndicator: EditorDisclosureButton = {
 		let indicator = EditorDisclosureButton()
@@ -34,18 +58,36 @@ class EditorRowContentView: UIView, UIContentView {
 		return bulletView
 	}()
 	
-	var appliedConfiguration: EditorRowContentConfiguration!
+	private lazy var barView: BarView = {
+		let barView = BarView()
+		barView.backgroundColor = .clear
+		barView.translatesAutoresizingMaskIntoConstraints = false
+		return barView
+	}()
+
+	private var barViews = [UIView]()
+	private var appliedConfiguration: EditorRowContentConfiguration!
 	
-	var configuration: UIContentConfiguration {
-		get { appliedConfiguration }
-		set {
-			guard let newConfig = newValue as? EditorRowContentConfiguration else { return }
-			apply(configuration: newConfig)
-		}
+	private var indentationWidth: CGFloat {
+		return traitCollection.horizontalSizeClass == .compact ? 13 : 16
 	}
 	
 	init(configuration: EditorRowContentConfiguration) {
 		super.init(frame: .zero)
+		
+		addSubview(topicTextView)
+		addSubview(barView)
+		
+		let barViewWidthConstraint = barView.widthAnchor.constraint(equalToConstant: 1)
+		barView.barViewWidthConstraint = barViewWidthConstraint
+		
+		NSLayoutConstraint.activate([
+			barViewWidthConstraint,
+			barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor),
+			barView.topAnchor.constraint(equalTo: topAnchor),
+			barView.bottomAnchor.constraint(equalTo: bottomAnchor)
+		])
+		
 		apply(configuration: configuration)
 	}
 	
@@ -65,123 +107,44 @@ class EditorRowContentView: UIView, UIContentView {
 	}
 	
 	private func apply(configuration: EditorRowContentConfiguration) {
-		appliedConfiguration = configuration
+		defer {
+			appliedConfiguration = configuration
+		}
 		
-		if topicTextView?.isFirstResponder ?? false {
-			topicTextView?.saveText()
+		if topicTextView.isFirstResponder {
+			topicTextView.saveText()
 		}
 
-		if noteTextView?.isFirstResponder ?? false {
-			noteTextView?.saveText()
+		if noteTextView.isFirstResponder {
+			noteTextView.saveText()
 		}
 
-        // Save the coordinates so that we can restore them immediately after rebuilding the text views.
-		let coordinates = CursorCoordinates.currentCoordinates
+		guard let row = configuration.row else { return }
+
+		topicTextView.update(row: row)
+		noteTextView.update(row: row)
+
+		switch (configuration.row?.isExpanded ?? true, configuration.isSearching) {
+		case (true, _):
+			disclosureIndicator.setDisclosure(state: .expanded, animated: false)
+		case (false, false):
+			disclosureIndicator.setDisclosure(state: .collapsed, animated: false)
+		case (false, true):
+			disclosureIndicator.setDisclosure(state: .partial, animated: false)
+		}
+
+		barView.level = row.level
+		barView.indentationWidth = indentationWidth
+		barView.horizontalSizeClass = configuration.horizontalSizeClass
 		
-		configureTopicTextView(configuration: configuration)
-		configureNoteTextView(configuration: configuration)
+		guard appliedConfiguration == nil || !appliedConfiguration.isLayoutEqual(configuration) else {
+			return
+		}
 		
-        guard let topicTextView = topicTextView else { return }
-        
-		if let coordinates = coordinates, coordinates.row == configuration.row {
-			if !coordinates.isInNotes {
-				topicTextView.becomeFirstResponder()
-				topicTextView.selectedRange = coordinates.selection
-			} else {
-				noteTextView?.becomeFirstResponder()
-				noteTextView?.selectedRange = coordinates.selection
-			}
-		}
+		configureTextViews(config: configuration)
+		configureBulletOrDisclosure(config: configuration)
 
-		let adjustedLeadingIndention: CGFloat
-		let adjustedTrailingIndention: CGFloat
-		if traitCollection.userInterfaceIdiom == .mac {
-			adjustedLeadingIndention = configuration.indentationWidth + 4
-			adjustedTrailingIndention = -8
-		} else {
-			if traitCollection.horizontalSizeClass != .compact {
-				adjustedLeadingIndention = configuration.indentationWidth + 6
-				adjustedTrailingIndention = -8
-			} else {
-				adjustedLeadingIndention = 0
-				adjustedTrailingIndention = -25
-			}
-		}
-
-		if let noteTextView = noteTextView {
-			NSLayoutConstraint.activate([
-				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-				topicTextView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: -4),
-				noteTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-				noteTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-				noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
-
-			])
-		} else {
-			NSLayoutConstraint.activate([
-				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
-				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-				topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
-			])
-		}
-
-		bullet.removeFromSuperview()
-		disclosureIndicator.removeFromSuperview()
-		
-		let xHeight = "X".height(withConstrainedWidth: Double.infinity, font: topicTextView.font!)
-		let topAnchorConstant = (xHeight / 2) + topicTextView.textContainerInset.top
-
-		if configuration.row?.rowCount == 0 {
-			addSubview(bullet)
-			
-			if traitCollection.horizontalSizeClass != .compact {
-				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -4 : -2
-				NSLayoutConstraint.activate([
-					bullet.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth + indentAdjustment),
-					bullet.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
-				])
-			} else {
-				NSLayoutConstraint.activate([
-					bullet.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
-					bullet.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
-				])
-			}
-		} else {
-			addSubview(disclosureIndicator)
-
-			if traitCollection.horizontalSizeClass != .compact {
-				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -12 : -22
-				NSLayoutConstraint.activate([
-					disclosureIndicator.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: configuration.indentationWidth + indentAdjustment),
-					disclosureIndicator.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
-				])
-			} else {
-				NSLayoutConstraint.activate([
-					disclosureIndicator.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: 0),
-					disclosureIndicator.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
-				])
-			}
-			
-			switch (configuration.row?.isExpanded ?? true, configuration.isSearching) {
-			case (true, _):
-				disclosureIndicator.setDisclosure(state: .expanded, animated: false)
-			case (false, false):
-				disclosureIndicator.setDisclosure(state: .collapsed, animated: false)
-			case (false, true):
-				disclosureIndicator.setDisclosure(state: .partial, animated: false)
-			}
-		}
-
-		addBarViews()
-	}
-	
-	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-		if traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
-			addBarViews()
-		}
+//		addBarViews()
 	}
 	
 }
@@ -317,79 +280,141 @@ private extension EditorRowContentView {
 		appliedConfiguration.delegate?.editorRowToggleDisclosure(row: row, applyToAll: applyToAll)
 	}
 	
-	func configureTopicTextView(configuration: EditorRowContentConfiguration) {
-        topicTextView?.removeFromSuperview()
-        
-		guard let row = configuration.row else { return }
-        
-        topicTextView = EditorRowTopicTextView()
-        topicTextView!.editorDelegate = self
-        topicTextView!.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(topicTextView!)
+	func configureTextViews(config: EditorRowContentConfiguration) {
+		let adjustedLeadingIndention: CGFloat
+		let adjustedTrailingIndention: CGFloat
+		if traitCollection.userInterfaceIdiom == .mac {
+			adjustedLeadingIndention = indentationWidth + 4
+			adjustedTrailingIndention = -8
+		} else {
+			if config.horizontalSizeClass != .compact {
+				adjustedLeadingIndention = indentationWidth + 6
+				adjustedTrailingIndention = -8
+			} else {
+				adjustedLeadingIndention = 0
+				adjustedTrailingIndention = -25
+			}
+		}
 
-		topicTextView!.update(row: row)
+		if config.isNotesVisible {
+			addSubview(noteTextView)
+			NSLayoutConstraint.activate([
+				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+				topicTextView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: -4),
+				noteTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+				noteTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+				noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+
+			])
+		} else {
+			noteTextView.removeFromSuperview()
+			NSLayoutConstraint.activate([
+				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
+				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
+				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+				topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+			])
+		}
 	}
 	
-	func configureNoteTextView(configuration: EditorRowContentConfiguration) {
-        noteTextView?.removeFromSuperview()
-        noteTextView = nil
+	func configureBulletOrDisclosure(config: EditorRowContentConfiguration) {
+		let xHeight = "X".height(withConstrainedWidth: Double.infinity, font: topicTextView.font!)
+		let topAnchorConstant = (xHeight / 2) + topicTextView.textContainerInset.top
 
-        guard !configuration.isNotesHidden, let row = configuration.row, row.note != nil else {
-			return
+		if config.isDisclosureVisible {
+			bullet.removeFromSuperview()
+			addSubview(disclosureIndicator)
+
+			if config.horizontalSizeClass != .compact {
+				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -12 : -22
+				NSLayoutConstraint.activate([
+					disclosureIndicator.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: indentationWidth + indentAdjustment),
+					disclosureIndicator.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
+				])
+			} else {
+				NSLayoutConstraint.activate([
+					disclosureIndicator.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: 0),
+					disclosureIndicator.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
+				])
+			}
+		} else {
+			disclosureIndicator.removeFromSuperview()
+			addSubview(bullet)
+			
+			if config.horizontalSizeClass != .compact {
+				let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -4 : -2
+				NSLayoutConstraint.activate([
+					bullet.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: indentationWidth + indentAdjustment),
+					bullet.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
+				])
+			} else {
+				NSLayoutConstraint.activate([
+					bullet.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
+					bullet.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
+				])
+			}
 		}
-		
-        noteTextView = EditorRowNoteTextView()
-        noteTextView!.editorDelegate = self
-        noteTextView!.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(noteTextView!)
-		
-		noteTextView!.update(row: row)
 	}
 	
-	func addBarViews() {
-		guard let row = appliedConfiguration.row else { return }
+	class BarView: UIView {
 		
-		for i in 0..<barViews.count {
-			barViews[i].removeFromSuperview()
-		}
-		barViews.removeAll()
-
-		if row.level > 0 {
-			let barViewsCount = barViews.count
-			for i in (1...row.level) {
-				if i > barViewsCount {
-					addBarView(indentLevel: i)
+		var barViewWidthConstraint: NSLayoutConstraint?
+		
+		var level: Int = 0 {
+			didSet {
+				if level != oldValue {
+					setNeedsUpdateConstraints()
+					setNeedsDisplay()
 				}
 			}
 		}
-	}
-	
-	func addBarView(indentLevel: Int) {
-		let config = appliedConfiguration as EditorRowContentConfiguration
 		
-		let barView = UIView()
-		barView.backgroundColor = AppAssets.verticalBar
-		barView.translatesAutoresizingMaskIntoConstraints = false
-		addSubview(barView)
-		barViews.append(barView)
-
-		var indention: CGFloat
-		if traitCollection.userInterfaceIdiom == .mac {
-			indention = CGFloat(28 - (CGFloat(indentLevel + 1) * config.indentationWidth))
-		} else {
-			if traitCollection.horizontalSizeClass != .compact {
-				indention = CGFloat(30 - (CGFloat(indentLevel + 1) * config.indentationWidth))
-			} else {
-				indention = CGFloat(9 - (CGFloat(indentLevel) * config.indentationWidth))
+		var indentationWidth: CGFloat = 0.0 {
+			didSet {
+				if indentationWidth != oldValue {
+					setNeedsUpdateConstraints()
+					setNeedsDisplay()
+				}
+			}
+		}
+		
+		var horizontalSizeClass: UIUserInterfaceSizeClass = .unspecified {
+			didSet {
+				if horizontalSizeClass != oldValue {
+					setNeedsUpdateConstraints()
+					setNeedsDisplay()
+				}
 			}
 		}
 
-		NSLayoutConstraint.activate([
-			barView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: indention),
-			barView.widthAnchor.constraint(equalToConstant: 2),
-			barView.topAnchor.constraint(equalTo: topAnchor),
-			barView.bottomAnchor.constraint(equalTo: bottomAnchor)
-		])
+		override func updateConstraints() {
+			let width = abs(computeBackspacing(indentLevel: level))
+			barViewWidthConstraint?.constant = width
+			super.updateConstraints()
+		}
+		
+		override func draw(_ rect: CGRect) {
+			for i in 0..<level {
+				drawBarView(indentLevel: i)
+			}
+		}
+		
+		private func drawBarView(indentLevel: Int) {
+			let x = (CGFloat(indentLevel) * indentationWidth)
+			let bar = CGRect(x: x, y: 0, width: 2, height: bounds.size.height)
+			
+			AppAssets.verticalBar.setFill()
+			let context = UIGraphicsGetCurrentContext();
+			context?.addRect(bar)
+			context?.fill(bar)
+		}
+		
+		private func computeBackspacing(indentLevel: Int) -> CGFloat {
+			return CGFloat(indentLevel + 1) * indentationWidth
+		}
+		
 	}
 	
 }

@@ -189,6 +189,8 @@ class EditorRowTopicTextView: EditorRowTextView {
 	
 	override func update(row: Row) {
 		self.row = row
+		
+		text = ""
 
 		var attrs = [NSAttributedString.Key : Any]()
 		if row.isComplete || row.isAncestorComplete {
@@ -216,8 +218,6 @@ class EditorRowTopicTextView: EditorRowTextView {
 		
         if let topic = row.topic {
             attributedText = topic
-        } else {
-            text = ""
         }
         
 		addSearchHighlighting(isInNotes: false)

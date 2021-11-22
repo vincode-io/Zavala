@@ -120,6 +120,8 @@ class EditorRowNoteTextView: EditorRowTextView {
 	override func update(row: Row) {
 		self.row = row
 		
+		text = ""
+		
 		var attrs = [NSAttributedString.Key : Any]()
 		attrs[.foregroundColor] = UIColor.secondaryLabel
 		attrs[.font] = OutlineFontCache.shared.note(level: row.level)
@@ -128,8 +130,6 @@ class EditorRowNoteTextView: EditorRowTextView {
         
         if let note = row.note {
             attributedText = note
-        } else {
-            text = ""
         }
         
 		addSearchHighlighting(isInNotes: true)
