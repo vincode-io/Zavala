@@ -38,7 +38,6 @@ public class CloudKitManager {
 	private weak var errorHandler: ErrorHandler?
 	private weak var account: Account?
 
-	private var writeRequestsBackgroundTaskID = UIBackgroundTaskIdentifier.invalid
 	private var sendChangesBackgroundTaskID = UIBackgroundTaskIdentifier.invalid
 
 	private var coalescingQueue = CoalescingQueue(name: "Send Modifications", interval: 5)
@@ -97,16 +96,6 @@ public class CloudKitManager {
 	}
 	
 	func addRequests(_ requests: Set<CloudKitActionRequest>) {
-		let completeProcessing = { [unowned self] in
-			UIApplication.shared.endBackgroundTask(self.writeRequestsBackgroundTaskID)
-			self.writeRequestsBackgroundTaskID = UIBackgroundTaskIdentifier.invalid
-		}
-
-		self.writeRequestsBackgroundTaskID = UIApplication.shared.beginBackgroundTask {
-			completeProcessing()
-			os_log("CloudKit add requests terminated for running too long.", log: self.log, type: .info)
-		}
-		
 		let operation = CloudKitQueueRequestsOperation(requests: requests)
 		
 		operation.completionBlock = { [weak self] op in
@@ -116,7 +105,6 @@ public class CloudKitManager {
 			} else {
 				self.coalescingQueue.add(self, #selector(self.sendQueuedChanges))
 			}
-			completeProcessing()
 		}
 		
 		self.queue.add(operation)
@@ -315,30 +303,17 @@ private extension CloudKitManager {
 	}
 	
 	func fetchChanges(zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
-		let processInfo = ProcessInfo()
-		processInfo.performExpiringActivity(withReason: "Fetching Changes") { expired in
-			guard !expired else { return }
-			
-			var finished = false
-			
-			let zone = self.findZone(zoneID: zoneID)
-			zone.fetchChangesInZone() { [weak self] result in
-				if case .failure(let error) = result {
-					if let ckError = (error as? CloudKitError)?.error as? CKError, ckError.code == .zoneNotFound {
-						AccountManager.shared.cloudKitAccount?.deleteAllDocuments(with: zoneID)
-					} else {
-						self?.presentError(error)
-					}
+		let zone = self.findZone(zoneID: zoneID)
+		zone.fetchChangesInZone() { [weak self] result in
+			if case .failure(let error) = result {
+				if let ckError = (error as? CloudKitError)?.error as? CKError, ckError.code == .zoneNotFound {
+					AccountManager.shared.cloudKitAccount?.deleteAllDocuments(with: zoneID)
+				} else {
+					self?.presentError(error)
 				}
-				completion?()
-				finished = true
 			}
-			
-			repeat {
-				sleep(1)
-			} while(!finished)
+			completion?()
 		}
-		
 	}
 	
 	func subscribeToSharedDatabaseChanges() {
