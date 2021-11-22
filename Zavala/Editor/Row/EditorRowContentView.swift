@@ -410,7 +410,11 @@ private extension EditorRowContentView {
 		}
 		
 		private func computeBackspacing(indentLevel: Int) -> CGFloat {
-			return CGFloat(indentLevel + 1) * indentationWidth
+			if horizontalSizeClass == .compact {
+				return CGFloat(indentLevel) * indentationWidth
+			} else {
+				return CGFloat(indentLevel + 1) * indentationWidth
+			}
 		}
 		
 	}
