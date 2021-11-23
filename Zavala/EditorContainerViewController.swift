@@ -131,8 +131,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel)
 		
 		let alert = UIAlertController(title: L10n.deleteOutlinePrompt(document.title ?? ""), message: L10n.deleteOutlineMessage, preferredStyle: .alert)
-		alert.addAction(cancelAction)
 		alert.addAction(deleteAction)
+		alert.addAction(cancelAction)
 		alert.preferredAction = deleteAction
 		
 		present(alert, animated: true, completion: nil)
