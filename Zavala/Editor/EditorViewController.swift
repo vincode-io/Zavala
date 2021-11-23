@@ -1625,6 +1625,11 @@ extension EditorViewController: LinkViewControllerDelegate {
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 		guard let rowCell = collectionView.cellForItem(at: indexPath) as? EditorRowViewCell else { return	}
 		
+		// When contained in EditorContainerViewController, the search bar registers as the first responder
+		// even after we tell the text view to become first responder. Directly telling it to resign solves
+		// the problem.
+		UIResponder.currentFirstResponder?.resignFirstResponder()
+		
 		if cursorCoordinates.isInNotes {
 			rowCell.noteTextView?.becomeFirstResponder()
 			rowCell.noteTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
