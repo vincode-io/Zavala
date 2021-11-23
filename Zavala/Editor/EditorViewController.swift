@@ -1483,7 +1483,6 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		collectionView.deselectAll()
 		updateUI()
 		delegate?.validateToolbar(self)
-		makeCursorVisibleIfNecessary()
 	}
 
 	func editorRowToggleDisclosure(row: Row, applyToAll: Bool) {
