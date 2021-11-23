@@ -366,7 +366,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		collectionView.addGestureRecognizer(tapGestureRecogniser)
 		
 		titleRegistration = UICollectionView.CellRegistration<EditorTitleViewCell, Outline> { [weak self] (cell, indexPath, outline) in
-			cell.title = outline.title
+			cell.outline = outline
 			cell.delegate = self
 		}
 		

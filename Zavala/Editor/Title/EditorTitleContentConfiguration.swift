@@ -6,14 +6,15 @@
 //
 
 import UIKit
+import Templeton
 
 struct EditorTitleContentConfiguration: UIContentConfiguration {
 
-	var title: String?
+	weak var outline: Outline?
 	weak var delegate: EditorTitleViewCellDelegate?
 	
-	init(title: String?) {
-		self.title = title
+	init(outline: Outline?) {
+		self.outline = outline
 	}
 	
 	func makeContentView() -> UIView & UIContentView {

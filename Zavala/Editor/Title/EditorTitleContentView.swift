@@ -60,7 +60,7 @@ class EditorTitleContentView: UIView, UIContentView {
 	}
 	
 	private func apply() {
-		textView.text = titleConfiguration.title
+		textView.text = titleConfiguration.outline?.title
 	}
 	
 }

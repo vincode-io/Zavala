@@ -18,7 +18,7 @@ protocol EditorTitleViewCellDelegate: AnyObject {
 
 class EditorTitleViewCell: UICollectionViewListCell {
 
-	var title: String? {
+	weak var outline: Outline? {
 		didSet {
 			setNeedsUpdateConfiguration()
 		}
@@ -40,7 +40,7 @@ class EditorTitleViewCell: UICollectionViewListCell {
 		
 		layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 
-		var content = EditorTitleContentConfiguration(title: title).updated(for: state)
+		var content = EditorTitleContentConfiguration(outline: outline).updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content
 	}
