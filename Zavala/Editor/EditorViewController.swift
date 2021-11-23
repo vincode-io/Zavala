@@ -2030,15 +2030,21 @@ private extension EditorViewController {
 			}
 		}
 		
-		if let reloads = changes.reloadIndexPaths, !reloads.isEmpty {
-			if changes.isReloadsAnimatable {
-				collectionView.reloadItems(at: reloads)
-			} else {
-				// This is to prevent jumping when reloading the last item in the collection
-				UIView.performWithoutAnimation {
-					let contentOffset = collectionView.contentOffset
+		if #available(iOS 15, *) {
+			if let reloads = changes.reloadIndexPaths, !reloads.isEmpty {
+				collectionView.reconfigureItems(at: reloads)
+			}
+		} else {
+			if let reloads = changes.reloadIndexPaths, !reloads.isEmpty {
+				if changes.isReloadsAnimatable {
 					collectionView.reloadItems(at: reloads)
-					collectionView.contentOffset = contentOffset
+				} else {
+					// This is to prevent jumping when reloading the last item in the collection
+					UIView.performWithoutAnimation {
+						let contentOffset = collectionView.contentOffset
+						collectionView.reloadItems(at: reloads)
+						collectionView.contentOffset = contentOffset
+					}
 				}
 			}
 		}
@@ -2050,8 +2056,11 @@ private extension EditorViewController {
 		
 		applyChanges(changes)
 
-		if let coordinates = currentCoordinates {
-			restoreCursorPosition(coordinates, scroll: true)
+		if #available(iOS 15, *) {
+		} else {
+			if let coordinates = currentCoordinates {
+				restoreCursorPosition(coordinates, scroll: true)
+			}
 		}
 		
 		if changes.isOnlyReloads, let indexPaths = selectedIndexPaths {
@@ -2650,6 +2659,8 @@ private extension EditorViewController {
 				rowCell.moveToEnd()
 			}
 		}
+		
+		makeCursorVisibleIfNecessary()
 	}
 	
 	func createRowInside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
@@ -2673,6 +2684,8 @@ private extension EditorViewController {
 				rowCell.moveToEnd()
 			}
 		}
+
+		makeCursorVisibleIfNecessary()
 	}
 	
 	func createRowOutside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
@@ -2696,6 +2709,8 @@ private extension EditorViewController {
 				rowCell.moveToEnd()
 			}
 		}
+		
+		makeCursorVisibleIfNecessary()
 	}
 	
 	func duplicateRows(_ rows: [Row]) {
@@ -2825,6 +2840,8 @@ private extension EditorViewController {
 				rowCell.moveToNote()
 			}
 		}
+
+		makeCursorVisibleIfNecessary()
 	}
 
 	func deleteRowNotes(_ rows: [Row], rowStrings: RowStrings? = nil) {
