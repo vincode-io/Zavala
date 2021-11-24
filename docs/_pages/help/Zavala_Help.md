@@ -8,23 +8,32 @@ header:
 ---
 
 
+
+This guide uses screenshots from the Mac version of Zavala. The Mac, iPhone, and iPad versions of Zavala are all developed at the same time and are mostly equivalent in functionality. All features look almost identical between platforms and I will try to call it out when they are different.
+
 * Getting Started
 	* [Outliners Defined](Outliners_Defined.md)
 	* [Text Formatting Philosophy](Text_Formatting_Philosophy.md)
+	* [The Notes Field](The_Notes_Field.md)
 	* [Glossary](Glossary.md)
+* Common Tasks
+	* [Creating an Outline](Creating_an_Outline.md)
+	* [Import Outlines](Import_Outlines.md)
+	* [Exporting Outlines](Exporting_Outlines.md)
+	* [Editing an Outline](Editing_an_Outline.md)
+	* [Managing Tasks](Managing_Tasks.md)
+	* [iCloud Sync](iCloud_Sync.md)
+	* [Collaborating on an Outline](Collaborating_on_an_Outline.md)
 * The User Interface
 	* [Main Window](Main_Window.md)
 	* [Individual Editor Window](Individual_Editor_Window.md)
-	* [Quick Open](Quick_Open.md)
-	* Preferences
+	* [Open Quickly](Open_Quickly.md)
+	* Preferences / Settings
 		* [General Preferences](General_Preferences.md)
 		* [Fonts & Colors Preferences](Fonts_&_Colors_Preferences.md)
 	* Dialogs
 		* [Get Info Dialog](Get_Info_Dialog.md)
 		* [Link Dialog](Link_Dialog.md)
-* Common Tasks
-	* [Creating an Outline](Creating_an_Outline.md)
-	* [Import Outlines](Import_Outlines.md)
-	* [Exporting Outlines](Exporting_Outlines.md)
 * Shortcuts Guide
+	* [Shortcut Programming Guide](Shortcut_Programming_Guide.md)
 	* [Shortcut Examples](Shortcut_Examples.md)

@@ -9,9 +9,7 @@ header:
 
 
 
-## Getting Started
-
-![](/assets/images/help/E62CB962-B79C-40F2-8F4F-53C36225A825.png)￼
+## ![](/assets/images/help/E62CB962-B79C-40F2-8F4F-53C36225A825.png)￼
 
 Creating a new outline is pretty simple. Just click the square and pencil button (shown above). The only real trick is letting Zavala know where you want to create the Outline.
 

@@ -47,8 +47,8 @@ Zavala is a native application and isn’t limited to plain text editing. So we 
 
 Beyond Markdown, we support tags that are different from your standard hashtag. You can have spaces in the name of Zavala tags and they are shown in a common location, just under the document title. 
 
-You can put hashtags anywhere, and that is a double-edged sword. They look bad if you randomly sprinkle them about. On the other hand, they can provide additional context to their surrounding content, which Zavala tags can’t. Look for us to address that in an upcoming update.
+In most systems you can put hashtags anywhere, and that is a double-edged sword. They look bad if you randomly sprinkle them about. But, they can provide additional context to their surrounding content (at the row level), which Zavala tags can’t. Look for us to address that in an upcoming update.
 
 ## The Future
 
-A lot of care and thought has been put into text handling in Zavala. But, that doesn’t mean that is the end of the story. There are shortcomings in how we handle text in Zavala that we would like to address in future updates. The hard part is do so while sticking to our core philosophies.
+A lot of care and thought has been put into text handling in Zavala. That doesn’t mean that is the end of the story. There are shortcomings in how we handle text in Zavala that we would like to address in future updates. The hard part will be doing so while sticking to our core philosophies.

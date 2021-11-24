@@ -23,11 +23,11 @@ You can search across all the content in all the Outlines at the same time. The 
 
 ## Main Window
 
-This is the first window you see when you start Zavala for the first time. It has 3 columns. They are called from left to right, Collections, Documents, and the Editor.
+This is the first window you see when you start Zavala for the first time. It has 3 columns. They are called from left to right, Collections, Documents, and the Editor. See [Main Window.](Main_Window.md) See [Text Formatting Philosophy.](Text_Formatting_Philosophy.md)
 
 ## Markdown
 
-A plain text formatting syntax that is good for translating into other formats, primarily HTML. [Markdown](https://daringfireball.net/projects/markdown/) was invented by [John Gruber](https://daringfireball.net) and is used pervasively in all kinds of writing contexts.
+A plain text formatting syntax that is good for translating into other formats, primarily HTML. [Markdown](https://daringfireball.net/projects/markdown/) was invented by [John Gruber](https://daringfireball.net/) and is used pervasively in all kinds of writing contexts.
 
 ## More Options Menu
 
@@ -35,7 +35,7 @@ This the menu that is shown in the top right of the Editor on iOS. It is a circl
 
 ## Note
 
-Detail information about the Topic is associated with.
+Detail information about the Topic is associated with. See [The Notes Field.](The_Notes_Field.md)
 
 ## Outline
 
@@ -51,7 +51,7 @@ The right-most column of the Main Window. The editor shows the currently selecte
 
 ## OPML
 
-OPML stands for [Outline Processor Markup Language](http://opml.org). It is the file format that outliners use to exchange outlines between each other.
+OPML stands for [Outline Processor Markup Language](http://opml.org/). It is the file format that outliners use to exchange outlines between each other.
 
 ## Row
 

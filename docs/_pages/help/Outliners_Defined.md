@@ -31,6 +31,7 @@ Completing items is fast and easy. Just swipe righton a Row as complete or unmar
 	* Brain storming
 	* Task or project planning
 	* Task or project management
+	* Writing documentation
 
 ## Everyday Use
 
