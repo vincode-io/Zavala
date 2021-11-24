@@ -26,6 +26,7 @@ public struct OutlineElementChanges {
 	public var inserts: Set<Int>?
 	public var moves: Set<Move>?
 	public var reloads: Set<Int>?
+	/* I would like to remove this property. The Templeton layer shouldn't know about limitations of the UI layer. */
 	public var isReloadsAnimatable = false
 	
 	public var isEmpty: Bool {
