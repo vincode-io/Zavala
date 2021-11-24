@@ -499,7 +499,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		let inserted = tagIDs!.count
 		let reload = inserted - 1
-		let changes = OutlineElementChanges(section: .tags, inserts: Set([inserted]), reloads: Set([reload]))
+		var changes = OutlineElementChanges(section: .tags, inserts: Set([inserted]), reloads: Set([reload]))
+		changes.isReloadsAnimatable = true
 		outlineElementsDidChange(changes)
 	}
 	
@@ -514,7 +515,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		guard isBeingViewed else { return }
 
 		let reload = tagIDs?.count ?? 1
-		let changes = OutlineElementChanges(section: .tags, deletes: Set([index]), reloads: Set([reload]))
+		var changes = OutlineElementChanges(section: .tags, deletes: Set([index]), reloads: Set([reload]))
+		changes.isReloadsAnimatable = true
 		outlineElementsDidChange(changes)
 	}
 	

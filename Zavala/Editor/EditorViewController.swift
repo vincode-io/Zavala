@@ -2030,21 +2030,21 @@ private extension EditorViewController {
 			}
 		}
 		
-		if #available(iOS 15, *) {
-			if let reloads = changes.reloadIndexPaths, !reloads.isEmpty {
-				collectionView.reconfigureItems(at: reloads)
-			}
+		guard let reloads = changes.reloadIndexPaths, !reloads.isEmpty else { return }
+		
+		let hasSectionOtherThanRows = reloads.contains(where: { $0.section != adjustedRowsSection })
+		
+		if #available(iOS 15, *), !hasSectionOtherThanRows {
+			collectionView.reconfigureItems(at: reloads)
 		} else {
-			if let reloads = changes.reloadIndexPaths, !reloads.isEmpty {
-				if changes.isReloadsAnimatable {
+			if changes.isReloadsAnimatable {
+				collectionView.reloadItems(at: reloads)
+			} else {
+				// This is to prevent jumping when reloading the last item in the collection
+				UIView.performWithoutAnimation {
+					let contentOffset = collectionView.contentOffset
 					collectionView.reloadItems(at: reloads)
-				} else {
-					// This is to prevent jumping when reloading the last item in the collection
-					UIView.performWithoutAnimation {
-						let contentOffset = collectionView.contentOffset
-						collectionView.reloadItems(at: reloads)
-						collectionView.contentOffset = contentOffset
-					}
+					collectionView.contentOffset = contentOffset
 				}
 			}
 		}
