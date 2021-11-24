@@ -88,20 +88,4 @@ import os.log
 		NSApplication.shared.activate(ignoringOtherApps: true)
 	}
 	
-	func refuseLaunchIfOtherIsRunning() {
-		let runningApp = NSWorkspace.shared.runningApplications
-			.filter { item in item.bundleIdentifier == "io.vincode.Zavala" }
-			.first { item in item.processIdentifier != getpid() }
-
-		if runningApp != nil {
-			let alert = NSAlert()
-			alert.messageText = L10n.alreadyRunningMessage
-			alert.informativeText = L10n.alreadyRunningInfo
-			alert.alertStyle = NSAlert.Style.informational
-			alert.addButton(withTitle: "OK")
-			alert.runModal()
-			exit(0)
-		}
-	}
-	
 }
