@@ -10,6 +10,10 @@ import Templeton
 
 class MainOpenQuicklyViewController: UIViewController {
 
+	override var keyCommands: [UIKeyCommand]? {
+		return [UIKeyCommand(action: #selector(cancel(_:)), input: UIKeyCommand.inputEscape)]
+	}
+	
 	weak var delegate: OpenQuicklyViewControllerDelegate?
 
 	@IBOutlet weak var searchTextField: SearchTextField!
@@ -39,12 +43,8 @@ class MainOpenQuicklyViewController: UIViewController {
 		searchTextField.becomeFirstResponder()
 	}
 	
-	@IBAction func cancel(_ sender: Any) {
+	@objc func cancel(_ sender: Any) {
 		dismiss(animated: true)
-	}
-	
-	@IBAction func submit(_ sender: Any) {
-		searchTextField.textFieldDidEndEditingOnExit()
 	}
 	
 }
