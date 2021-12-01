@@ -807,14 +807,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	@objc func showOpenQuicklyCommand(_ sender: Any?) {
-		#if targetEnvironment(macCatalyst)
-		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openQuickly)
-		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
-		#else
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
 			mainSplitViewController.showOpenQuickly()
+		} else {
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openQuickly)
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 		}
-		#endif
 	}
 
 	@objc func printDocsCommand(_ sender: Any?) {

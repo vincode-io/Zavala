@@ -60,6 +60,7 @@
 		515F164B255C9F8E00FD98B8 /* MacFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */; };
 		5163ADF225C78CFB008F25CA /* SearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5163ADF125C78CFB008F25CA /* SearchTextField.swift */; };
 		5163ADF525C79B69008F25CA /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5163ADF425C79B69008F25CA /* String+.swift */; };
+		5164B35427582D810039600B /* MainOpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5164B35327582D810039600B /* MainOpenQuicklyViewController.swift */; };
 		5167606425F95E4600AC0EBD /* DocumentIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167606325F95E4600AC0EBD /* DocumentIndexer.swift */; };
 		5167606D25F96B1F00AC0EBD /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF69B25E0862E0044DBAB /* AppDefaults.swift */; };
 		5167607725F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167607625F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift */; };
@@ -300,6 +301,7 @@
 		515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFormViewController.swift; sourceTree = "<group>"; };
 		5163ADF125C78CFB008F25CA /* SearchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextField.swift; sourceTree = "<group>"; };
 		5163ADF425C79B69008F25CA /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
+		5164B35327582D810039600B /* MainOpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainOpenQuicklyViewController.swift; sourceTree = "<group>"; };
 		5167605525F95B2900AC0EBD /* Zavala_spotlightext_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_spotlightext_target.xcconfig; sourceTree = "<group>"; };
 		5167606325F95E4600AC0EBD /* DocumentIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentIndexer.swift; sourceTree = "<group>"; };
 		5167607625F9BC9400AC0EBD /* MacOutlineGetInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOutlineGetInfoViewController.swift; sourceTree = "<group>"; };
@@ -614,10 +616,11 @@
 			isa = PBXGroup;
 			children = (
 				517A9E322605130200EF346A /* OpenQuickly.storyboard */,
-				517A9E3B26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift */,
 				5115C02C2605898900416D67 /* MacOpenQuicklyCollectionsViewController.swift */,
 				5115C0352605F96100416D67 /* MacOpenQuicklyDocumentsViewController.swift */,
+				517A9E3B26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift */,
 				517A9E422605558700EF346A /* MacOpenQuicklyViewController.swift */,
+				5164B35327582D810039600B /* MainOpenQuicklyViewController.swift */,
 				5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */,
 			);
 			path = OpenQuickly;
@@ -1143,6 +1146,7 @@
 				511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */,
 				517A9E3C26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift in Sources */,
 				516F536C260806150038BAF8 /* EnhancedSearchTextField.swift in Sources */,
+				5164B35427582D810039600B /* MainOpenQuicklyViewController.swift in Sources */,
 				519184F927124E9700B7E177 /* GetOutlinesIntentHandler.swift in Sources */,
 				517AF6A725E08CB80044DBAB /* NonIntrinsicLabel.swift in Sources */,
 				51DEE82426FE8711006DAA56 /* ExportPDFDocActivity.swift in Sources */,

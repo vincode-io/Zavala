@@ -223,10 +223,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	func showOpenQuickly() {
 		if traitCollection.userInterfaceIdiom == .mac {
 		
-//			let openQuicklyViewController = UIStoryboard.openQuickly.instantiateViewController(withIdentifier: "MacOpenQuicklyViewController") as! MacOpenQuicklyViewController
-//			openQuicklyViewController.preferredContentSize = CGSize(width: 300, height: 60)
-//			openQuicklyViewController.delegate = self
-//			present(openQuicklyViewController, animated: true)
+			let openQuicklyViewController = UIStoryboard.openQuickly.instantiateController(ofType: MainOpenQuicklyViewController.self)
+			openQuicklyViewController.preferredContentSize = CGSize(width: 300, height: 60)
+			openQuicklyViewController.delegate = self
+			present(openQuicklyViewController, animated: true)
 		
 		} else {
 
