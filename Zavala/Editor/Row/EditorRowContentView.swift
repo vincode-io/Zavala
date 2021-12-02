@@ -10,12 +10,6 @@ import Templeton
 
 class EditorRowContentView: UIView, UIContentView {
 
-	private enum ConfigState {
-		case unconfigured
-		case topicOnly
-		case both
-	}
-	
 	lazy var topicTextView: EditorRowTopicTextView = {
 		let textView = EditorRowTopicTextView()
 		textView.editorDelegate = self
