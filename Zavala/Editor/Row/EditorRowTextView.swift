@@ -137,6 +137,7 @@ class EditorRowTextView: UITextView {
 		fatalError("init(coder:) has not been implemented")
 	}
  
+	@discardableResult
     override func resignFirstResponder() -> Bool {
 		CursorCoordinates.updateLastKnownCoordinates()
         return super.resignFirstResponder()
