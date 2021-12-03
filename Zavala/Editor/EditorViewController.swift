@@ -1257,24 +1257,15 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
 		self.outline?.verticleScrollState = firstVisibleShadowTableIndex
 		
-		let currentFirstResponder = UIResponder.currentFirstResponder
-		if let tagInput = currentFirstResponder as? EditorTagInputTextField {
+		if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
 			tagInput.setNeedsLayout()
 		}
-		
+	}
+	
+	func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
 		// We resign first responder and put it back later to work around: https://openradar.appspot.com/39604024
-		if let rowInput = currentFirstResponder as? EditorRowTextView {
+		if let rowInput = UIResponder.currentFirstResponder as? EditorRowTextView {
 			rowInput.resignFirstResponder()
-		}
-	}
-	
-	func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-		restoreBestKnownCursorPosition()
-	}
-	
-	func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-		if !decelerate {
-			restoreBestKnownCursorPosition()
 		}
 	}
 	
@@ -2095,12 +2086,6 @@ private extension EditorViewController {
 		}
 	}
 	
-	func restoreBestKnownCursorPosition() {
-		if let cursorCoordinates = CursorCoordinates.bestCoordinates {
-			restoreCursorPosition(cursorCoordinates, scroll: false)
-		}
-	}
-
 	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates, scroll: Bool) {
 		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
