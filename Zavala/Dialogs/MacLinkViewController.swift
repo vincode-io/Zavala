@@ -62,7 +62,7 @@ class MacLinkViewController: UIViewController {
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
-		if textTextField.text?.isEmpty ?? true {
+		if text == nil || text!.isEmpty {
 			textTextField.becomeFirstResponder()
 		} else {
 			linkTextField.becomeFirstResponder()
