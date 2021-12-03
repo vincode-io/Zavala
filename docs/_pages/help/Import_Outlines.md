@@ -11,7 +11,7 @@ header:
 
 ![](/assets/images/help/65BA7DF4-868B-4BC2-AB0C-E986542F149C.png)￼ 
 
-If you are coming to Zavala from another outliner application, you can bring your data with you if your existing outliner has an OPML export.
+If you are coming to Zavala from another outliner application, you can bring your data with you if your existing outliner has an OPML export function. 
 
 * Options
 	* macOS

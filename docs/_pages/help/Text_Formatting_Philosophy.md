@@ -11,7 +11,7 @@ header:
 
 ## Less is More
 
-Text formatting in Zavala may feel a little restrictive at first. You can bold and italicize text and that is about it. But, there is a reason we don’t go all out and allow full Rich Text Formatting. Most of the reasons are because of how we use and publish writings in contemporary times.
+Text formatting in Zavala may feel a little restrictive at first. You can bold and italicize text and that is about it. But, there is a reason we don’t go all out and allow full Rich Text Formatting. Most of the reasons are because of how people use and publish writings in contemporary times.
 
 ## Colors
 
@@ -33,7 +33,7 @@ We want to be able to publish and share outlines with as many applications and p
 
 Since OPML doesn’t support formatting, we use Markdown inside the OPML text fields. That allows us to have formatting that is only limited by Markdown’s syntax.
 
-As of now, we only support the basic Markdown syntax. Extensions have been made to Markdown, and we don’t currently have any plans support them. 
+As of now, we only support the basic Markdown syntax. Extensions have been made to Markdown, but we don’t currently have any plans support them. 
 
 Markdown supports bold, italics, links, and embedded images. It doesn’t support highlighting, strike-through, or [underlining](https://mobile.twitter.com/gruber/status/299372697593462784).
 
@@ -47,7 +47,7 @@ Zavala is a native application and isn’t limited to plain text editing. So we 
 
 Beyond Markdown, we support tags that are different from your standard hashtag. You can have spaces in the name of Zavala tags and they are shown in a common location, just under the document title. 
 
-In most systems you can put hashtags anywhere, and that is a double-edged sword. They look bad if you randomly sprinkle them about. But, they can provide additional context to their surrounding content (at the row level), which Zavala tags can’t. Look for us to address that in an upcoming update.
+In most systems you can put hashtags anywhere and that is a double-edged sword. They look bad if you randomly sprinkle them about. But, they can provide additional context to their surrounding content (at the row level), which Zavala tags can’t. Look for us to address that in an upcoming update.
 
 ## The Future
 

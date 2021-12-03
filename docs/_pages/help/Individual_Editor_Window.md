@@ -13,7 +13,7 @@ header:
 
 ## Focused Writing
 
-Sometimes the Collections and Documents views can distract you from what you are trying to outline. On the Mac you have the option to open an Outline in its own window. Just double click on it in the Documents view to open the Individual Editor Window.
+Sometimes the Collections and Documents views can distract you from what you are trying to work on. On the Mac you have the option to open an Outline in its own window. Just double click on it in the Documents view to open the Individual Editor Window.
 
 This is a Mac only feature. On the iPad you can drag an Outline out of the Documents view to spawn a new window, which is similar to how the Individual Editor Window works on the Mac.
 

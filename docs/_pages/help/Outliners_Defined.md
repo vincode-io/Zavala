@@ -9,9 +9,9 @@ header:
 
 
 
-Outlines are a way of structuring information so that it has relationships between pieces of information. They are a hierarchy of rows where each row contains what ever information you think is important.
+Outlines are a way of structuring information so that it has relationships between pieces of information. Outlines are a hierarchy of rows. When building that hierarchy, you break down information into smaller pieces while still showing how the smaller pieces are related.
 
-The same things you might typically do with a note taking application can be done with an outliner. The advantage to using an outliner is that you can show how information relates to each other. Here is an example.
+The same things you might typically do with a note taking application can be done with an outliner. The advantage to using an outliner is that you can show how pieces of information relate to each other. Here is an example.
 
 ![](/assets/images/help/6FB6664B-AEB6-4ABD-88B8-F689B35E091A.png)￼
 
@@ -27,10 +27,10 @@ Completing items is fast and easy. Just swipe righton a Row as complete or unmar
 
 * Outliner Uses
 	* Taking notes
-	* Managing lists, a shopping list for example
+	* Managing task lists
 	* Brain storming
-	* Task or project planning
-	* Task or project management
+	* Project planning
+	* Project management
 	* Writing documentation
 
 ## Everyday Use

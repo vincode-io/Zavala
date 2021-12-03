@@ -20,8 +20,7 @@ This guide uses screenshots from the Mac version of Zavala. The Mac, iPhone, and
 	* [Creating an Outline](Creating_an_Outline.md)
 	* [Import Outlines](Import_Outlines.md)
 	* [Exporting Outlines](Exporting_Outlines.md)
-	* [Editing an Outline](Editing_an_Outline.md)
-	* [Managing Tasks](Managing_Tasks.md)
+	* [Task Management](Task_Management.md)
 	* [iCloud Sync](iCloud_Sync.md)
 	* [Collaborating on an Outline](Collaborating_on_an_Outline.md)
 * The User Interface
@@ -34,6 +33,6 @@ This guide uses screenshots from the Mac version of Zavala. The Mac, iPhone, and
 	* Dialogs
 		* [Get Info Dialog](Get_Info_Dialog.md)
 		* [Link Dialog](Link_Dialog.md)
-* Shortcuts Guide
-	* [Shortcut Programming Guide](Shortcut_Programming_Guide.md)
+* Shortcuts
+	* [Programming Guide](Programming_Guide.md)
 	* [Shortcut Examples](Shortcut_Examples.md)
