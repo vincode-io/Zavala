@@ -1269,6 +1269,18 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		}
 	}
 	
+	func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+		if traitCollection.userInterfaceIdiom == .mac {
+			restoreBestKnownCursorPosition()
+		}
+	}
+	
+	func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+		if !decelerate && traitCollection.userInterfaceIdiom == .mac {
+			restoreBestKnownCursorPosition()
+		}
+	}
+	
 	func numberOfSections(in collectionView: UICollectionView) -> Int {
 		if isSearching {
 			return 1
@@ -2086,6 +2098,12 @@ private extension EditorViewController {
 		}
 	}
 	
+	func restoreBestKnownCursorPosition() {
+		if let cursorCoordinates = CursorCoordinates.bestCoordinates {
+			restoreCursorPosition(cursorCoordinates, scroll: false)
+		}
+	}
+
 	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates, scroll: Bool) {
 		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
