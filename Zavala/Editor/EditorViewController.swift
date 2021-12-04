@@ -2019,7 +2019,9 @@ private extension EditorViewController {
 		if #available(iOS 15, *) {
 			guard let index = row.shadowTableIndex else { return }
 			let indexPath = IndexPath(row: index, section: adjustedRowsSection)
-			collectionView.reconfigureItems(at: [indexPath])
+			UIView.performWithoutAnimation {
+				collectionView.reconfigureItems(at: [indexPath])
+			}
 		} else {
 			// This is presumably less effecient than just reconfiguring the item and
 			// it can trigger layout bugs. For example if the first row of a topic above
