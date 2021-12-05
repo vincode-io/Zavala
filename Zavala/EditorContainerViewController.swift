@@ -138,6 +138,12 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		present(alert, animated: true, completion: nil)
 	}
 
+	override func selectAll(_ sender: Any?) {
+		if !(editorViewController?.isSelectAllRowsUnavailable ?? true) {
+			editorViewController?.selectAllRows()
+		}
+	}
+
 	@objc func sync(_ sender: Any?) {
 		AccountManager.shared.sync()
 	}
