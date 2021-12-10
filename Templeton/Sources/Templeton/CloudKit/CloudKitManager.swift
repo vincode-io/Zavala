@@ -116,11 +116,11 @@ public class CloudKitManager {
 				completion()
 				return
 			}
-			fetchChanges(zoneID: zoneId, completion: completion)
+			fetchChanges(userInitiated: true, zoneID: zoneId, completion: completion)
 		}
 		
 		if let dbNote = CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo), dbNote.notificationType == .database {
-			fetchAllChanges()
+			fetchAllChanges(userInitiated: true)
 		}
 	}
 	
@@ -141,8 +141,8 @@ public class CloudKitManager {
 			return
 		}
 		
-		sendChanges() {
-			self.fetchAllChanges() {
+		sendChanges(userInitiated: true) {
+			self.fetchAllChanges(userInitiated: true) {
 				NotificationCenter.default.post(name: .CloudKitSyncDidComplete, object: self, userInfo: nil)
 				completion?()
 			}
@@ -160,7 +160,7 @@ public class CloudKitManager {
 			switch CloudKitZoneResult.resolve(error) {
 			case .success:
 				let zoneID = shareMetadata.share.recordID.zoneID
-				self.fetchChanges(zoneID: zoneID)
+				self.fetchChanges(userInitiated: true, zoneID: zoneID)
 			default:
 				DispatchQueue.main.async {
 					self.presentError(error!)
@@ -227,12 +227,12 @@ private extension CloudKitManager {
 		guard isNetworkAvailable else {
 			return
 		}
-		sendChanges() {
-			self.fetchAllChanges()
+		sendChanges(userInitiated: false) {
+			self.fetchAllChanges(userInitiated: false)
 		}
 	}
 
-	func sendChanges(completion: @escaping (() -> Void)) {
+	func sendChanges(userInitiated: Bool, completion: @escaping (() -> Void)) {
 		isSyncing = true
 
 		let completeProcessing = { [unowned self] in
@@ -253,7 +253,9 @@ private extension CloudKitManager {
 		
 		operation.completionBlock = { [weak self] op in
 			if let error = (op as? BaseMainThreadOperation)?.error {
-				self?.presentError(error)
+				if userInitiated {
+					self?.presentError(error)
+				}
 			}
 			completeProcessing()
 		}
@@ -261,7 +263,7 @@ private extension CloudKitManager {
 		self.queue.add(operation)
 	}
 	
-	func fetchAllChanges(completion: (() -> Void)? = nil) {
+	func fetchAllChanges(userInitiated: Bool, completion: (() -> Void)? = nil) {
 		isSyncing = true
 		var zoneIDs = Set<CKRecordZone.ID>()
 		zoneIDs.insert(defaultZone.zoneID)
@@ -287,7 +289,7 @@ private extension CloudKitManager {
 			
 			for zoneID in zoneIDs {
 				group.enter()
-				self.fetchChanges(zoneID: zoneID) {
+				self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID) {
 					group.leave()
 				}
 			}
@@ -302,14 +304,16 @@ private extension CloudKitManager {
 		container.sharedCloudDatabase.add(op)
 	}
 	
-	func fetchChanges(zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
+	func fetchChanges(userInitiated: Bool, zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
 		let zone = self.findZone(zoneID: zoneID)
 		zone.fetchChangesInZone() { [weak self] result in
 			if case .failure(let error) = result {
 				if let ckError = (error as? CloudKitError)?.error as? CKError, ckError.code == .zoneNotFound {
 					AccountManager.shared.cloudKitAccount?.deleteAllDocuments(with: zoneID)
 				} else {
-					self?.presentError(error)
+					if userInitiated {
+						self?.presentError(error)
+					}
 				}
 			}
 			completion?()
