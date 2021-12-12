@@ -2377,28 +2377,56 @@ private extension EditorViewController {
 	func moveCursorDown(topicTextView: EditorRowTopicTextView) {
 		guard let row = topicTextView.row, let shadowTableIndex = row.shadowTableIndex, let shadowTable = outline?.shadowTable else { return }
 		
-		if shadowTableIndex < (shadowTable.count - 1) {
-			let indexPath = IndexPath(row: shadowTableIndex + 1, section: adjustedRowsSection)
-			if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView {
-				nextTopicTextView.becomeFirstResponder()
-				if let topicTextViewCursorRect = topicTextView.cursorRect {
-					let convertedRect = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
-					let nextRect = nextTopicTextView.convert(convertedRect, from: collectionView)
-					if let cursorPosition = nextTopicTextView.closestPosition(to: CGPoint(x: nextRect.midX, y: 0)) {
-						let cursorOffset = nextTopicTextView.offset(from: nextTopicTextView.beginningOfDocument, to: cursorPosition)
-						let range = NSRange(location: cursorOffset, length: 0)
-						nextTopicTextView.selectedRange = range
-					}
-				}
-			}
-			makeCursorVisibleIfNecessary()
-		} else {
+		// Move the cursor to the end of the last row
+		guard shadowTableIndex < (shadowTable.count - 1) else {
 			let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 			if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell {
 				rowCell.moveToEnd()
 			}
+			return
 		}
 		
+		func moveCursorDownToNext(nextTopicTextView: EditorRowTopicTextView) {
+			if let topicTextViewCursorRect = topicTextView.cursorRect {
+				let convertedRect = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
+				let nextRect = nextTopicTextView.convert(convertedRect, from: collectionView)
+				if let cursorPosition = nextTopicTextView.closestPosition(to: CGPoint(x: nextRect.midX, y: 0)) {
+					let cursorOffset = nextTopicTextView.offset(from: nextTopicTextView.beginningOfDocument, to: cursorPosition)
+					let range = NSRange(location: cursorOffset, length: 0)
+					nextTopicTextView.selectedRange = range
+				}
+				makeCursorVisibleIfNecessary()
+			}
+		}
+		
+		let indexPath = IndexPath(row: shadowTableIndex + 1, section: adjustedRowsSection)
+		
+		// This is needed because the collection view might not have the cell built yet or the topic won't take the
+		// first responder if it isn't visible.
+		func scrollAndMoveCursorDownToNext() {
+			if let frame = collectionView.collectionViewLayout.layoutAttributesForItem(at: indexPath)?.frame {
+				let xHeight = "X".height(withConstrainedWidth: Double.infinity, font: topicTextView.font!)
+				let totalHeight = xHeight + topicTextView.textContainerInset.top + topicTextView.textContainerInset.bottom
+				let rect = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: totalHeight)
+				collectionView.scrollRectToVisibleBypass(rect, animated: true)
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+					if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView {
+						nextTopicTextView.becomeFirstResponder()
+						moveCursorDownToNext(nextTopicTextView: nextTopicTextView)
+					}
+				}
+			}
+		}
+		
+		if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView {
+			if nextTopicTextView.becomeFirstResponder() {
+				moveCursorDownToNext(nextTopicTextView: nextTopicTextView)
+			} else {
+				scrollAndMoveCursorDownToNext()
+			}
+		} else {
+			scrollAndMoveCursorDownToNext()
+		}
 	}
 	
 	func toggleDisclosure(row: Row, applyToAll: Bool) {
