@@ -614,6 +614,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func sceneWillDeactivate(_ note: Notification) {
 		saveCurrentText()
+		
+		// If we don't update the last know coordinates, then when the container
+		// tries to save and update the outine we might not have the ability to tell
+		// what the last first responder was or where its cursor was.
+		CursorCoordinates.updateLastKnownCoordinates()
 	}
 	
 	@objc func didEnterBackground(_ note: Notification) {
