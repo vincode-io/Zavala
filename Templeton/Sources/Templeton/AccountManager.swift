@@ -171,7 +171,7 @@ public final class AccountManager {
 	public func resume() {
 		cloudKitAccount?.cloudKitManager?.resume()
 		accountFiles.values.forEach { $0.resume() }
-		activeDocuments.forEach {	$0.resume()	}
+		activeDocuments.forEach { $0.resume() }
 	}
 	
 	public func suspend() {
