@@ -93,11 +93,6 @@ import UIKit
 		alignment = .center
 		spacing = 8
 		
-		if traitCollection.userInterfaceIdiom == .mac {
-			layoutMargins.top = 0
-			layoutMargins.bottom = 0
-		}
-		
 		layoutMargins.left = 8
 		layoutMargins.right = 8
 
