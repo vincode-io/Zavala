@@ -127,6 +127,7 @@
 		51A1EC422723246C00463A15 /* EditRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A1EC412723246C00463A15 /* EditRowsIntentHandler.swift */; };
 		51A1EC4427243B3600463A15 /* GenericRowIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A1EC4327243B3600463A15 /* GenericRowIdentifier.swift */; };
 		51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */; };
+		51AED28B276A4EB300B27B04 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 516CBCAB274AFE920062EB42 /* Credits.rtf */; };
 		51AEEC8D2703E6EB00354C59 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 51AEEC8C2703E6EB00354C59 /* Intents.intentdefinition */; };
 		51AEEC8F2703EB6700354C59 /* GetCurrentOutlineIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AEEC8E2703EB6700354C59 /* GetCurrentOutlineIntentHandler.swift */; };
 		51B2B2C82563A2180090C56B /* EditorRowTopicTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2C72563A2180090C56B /* EditorRowTopicTextView.swift */; };
@@ -1046,6 +1047,7 @@
 				5181A93F2554D92000C153E8 /* Main.storyboard in Resources */,
 				517A9E332605130200EF346A /* OpenQuickly.storyboard in Resources */,
 				51278E77257F37AC0034F1CB /* Dialog.storyboard in Resources */,
+				51AED28B276A4EB300B27B04 /* Credits.rtf in Resources */,
 				5188FAA92602A9CE0020B7DA /* OutlineEditor.storyboard in Resources */,
 				51CF10AC2571BA9A005D6D88 /* Localizable.stringsdict in Resources */,
 			);
