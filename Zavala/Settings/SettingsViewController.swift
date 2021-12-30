@@ -53,6 +53,12 @@ class SettingsViewController: UITableViewController {
 		buildLabel.text = "\(Bundle.main.appName) \(Bundle.main.versionNumber) (Build \(Bundle.main.buildNumber))"
 		buildLabel.sizeToFit()
 
+		let creditsLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: buildLabel.frame.maxY + 8, width: 0.0, height: 0.0))
+		creditsLabel.font = UIFont.systemFont(ofSize: 11.0)
+		creditsLabel.textColor = UIColor.gray
+		creditsLabel.text = "App icon by Brad Ellis"
+		creditsLabel.sizeToFit()
+
 		let copyrightLabel = NonIntrinsicLabel()
 		copyrightLabel.numberOfLines = 0
 		copyrightLabel.lineBreakMode = .byWordWrapping
@@ -60,11 +66,12 @@ class SettingsViewController: UITableViewController {
 		copyrightLabel.textColor = UIColor.gray
 		copyrightLabel.text = Bundle.main.copyright
 		let copyrightSize = copyrightLabel.sizeThatFits(CGSize(width: tableView.bounds.width - 32, height: CGFloat.infinity))
-		copyrightLabel.frame = CGRect(x: 32, y: buildLabel.frame.maxY + 8, width: copyrightSize.width, height: copyrightSize.height)
+		copyrightLabel.frame = CGRect(x: 32, y: creditsLabel.frame.maxY + 8, width: copyrightSize.width, height: copyrightSize.height)
 
 		let width = max(copyrightLabel.frame.width, buildLabel.frame.width)
 		let wrapperView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: copyrightLabel.frame.maxY + 10))
 		wrapperView.addSubview(copyrightLabel)
+		wrapperView.addSubview(creditsLabel)
 		wrapperView.addSubview(buildLabel)
 		tableView.tableFooterView = wrapperView
 	}
