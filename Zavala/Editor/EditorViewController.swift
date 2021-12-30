@@ -1271,6 +1271,9 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		// We resign first responder and put it back later to work around: https://openradar.appspot.com/39604024
 		if let rowInput = UIResponder.currentFirstResponder as? EditorRowTextView {
 			rowInput.resignFirstResponder()
+			if traitCollection.userInterfaceIdiom != .mac {
+				CursorCoordinates.clearLastKnownCoordinates()
+			}                      
 		}
 	}
 	
