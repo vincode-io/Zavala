@@ -219,7 +219,7 @@ struct AppAssets {
 		return UIImage(systemName: "textformat.size.larger")!
 	}()
 
-	static var twitterURL = "https://twitter.com/vincode_io"
+	static var feedbackURL = "mailto:mo@vincode.io"
 	
 	static var uncompleteRow: UIImage = {
 		return UIImage(systemName: "square")!

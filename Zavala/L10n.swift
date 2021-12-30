@@ -164,6 +164,8 @@ internal enum L10n {
   internal static let exportPDFDocEllipsis = L10n.tr("Localizable", "Export_PDF_Doc_Ellipsis")
   /// Export PDF List…
   internal static let exportPDFListEllipsis = L10n.tr("Localizable", "Export_PDF_List_Ellipsis")
+  /// Feedback
+  internal static let feedback = L10n.tr("Localizable", "Feedback")
   /// Filter
   internal static let filter = L10n.tr("Localizable", "Filter")
   /// Filter Completed
@@ -324,8 +326,6 @@ internal enum L10n {
   internal static let turnFilterOff = L10n.tr("Localizable", "Turn_Filter_Off")
   /// Turn Filter On
   internal static let turnFilterOn = L10n.tr("Localizable", "Turn_Filter_On")
-  /// Twitter
-  internal static let twitter = L10n.tr("Localizable", "Twitter")
   /// Typing
   internal static let typing = L10n.tr("Localizable", "Typing")
   /// Uncomplete
