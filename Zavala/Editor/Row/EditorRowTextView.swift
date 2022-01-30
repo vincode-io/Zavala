@@ -297,7 +297,12 @@ extension EditorRowTextView: NSTextStorageDelegate {
 					} else {
 						let ufd = oldFont.fontDescriptor.withFamily(newFont.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(newFont.familyName)
 						let newFont = UIFont(descriptor: ufd, size: newFont.pointSize)
-						newAttributes[key] = newFont
+						
+						if newFont.isValidFor(value: charsInRange) {
+							newAttributes[key] = newFont
+						} else {
+							newAttributes[key] = oldFont
+						}
 					}
 				}
 				
