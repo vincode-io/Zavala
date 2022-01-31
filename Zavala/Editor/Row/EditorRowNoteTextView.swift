@@ -119,6 +119,9 @@ class EditorRowNoteTextView: EditorRowTextView {
 	}
 	
 	override func update(row: Row) {
+		// Don't update the row if we are in the middle of entering multistage characters, e.g. Japanese
+		guard markedTextRange == nil else { return }
+		
 		self.row = row
 		
 		let cursorRange = selectedTextRange
