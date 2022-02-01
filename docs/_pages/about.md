@@ -11,7 +11,7 @@ Zavala is an outliner written for Apple platforms by [Maurice Parker](https://vi
 It is an open source project and will be free forever.
 You can find the source code for [Zavala on GitHub](https://github.com/vincode-io/Zavala).
 
-### Credits
+### Inspiration
 
 I would like to thank [John Gruber](https://daringfireball.net) and [Brent Simmons](https://inessential.com)
 for inspiring this project. Their dedication to outliners and disatisfaction with the current generation of
@@ -20,4 +20,8 @@ them is ultimately what got this project going.  In fact John [tweeted](https://
 > I would kill for a good simple outliner that synced across iOS and Mac, and had a great *simple* UI on all three platforms.
 
 If there was a mission statement for Zavala, that would be it.
+
+### Credits
+
+Icon design by [Brad Ellis](https://twitter.com/bradellis?s=21)
 
