@@ -1841,6 +1841,28 @@ private extension EditorViewController {
 		}
 		shareActions.append(UIMenu(title: L10n.print, image: AppAssets.printDoc, children: [printDocAction, printListAction]))
 
+		let exportPDFDoc = UIAction(title: L10n.exportPDFDocEllipsis) { [weak self] _ in
+			guard let self = self, let outline = self.outline else { return }
+			self.delegate?.exportPDFDoc(self, outline: outline)
+		}
+		let exportPDFList = UIAction(title: L10n.exportPDFListEllipsis) { [weak self] _ in
+			guard let self = self, let outline = self.outline else { return }
+			self.delegate?.exportPDFList(self, outline: outline)
+		}
+		let exportMarkdownDoc = UIAction(title: L10n.exportMarkdownDocEllipsis) { [weak self] _ in
+			guard let self = self, let outline = self.outline else { return }
+			self.delegate?.exportMarkdownDoc(self, outline: outline)
+		}
+		let exportMarkdownList = UIAction(title: L10n.exportMarkdownListEllipsis) { [weak self] _ in
+			guard let self = self, let outline = self.outline else { return }
+			self.delegate?.exportMarkdownList(self, outline: outline)
+		}
+		let exportOPML = UIAction(title: L10n.exportOPMLEllipsis) { [weak self] _ in
+			guard let self = self, let outline = self.outline else { return }
+			self.delegate?.exportOPML(self, outline: outline)
+		}
+		let exportActions = [exportPDFDoc, exportPDFList, exportMarkdownDoc, exportMarkdownList, exportOPML]
+		shareActions.append(UIMenu(title: L10n.export, image: AppAssets.export, children: exportActions))
 
 		var getInfoActions = [UIAction]()
 		let getInfoAction = UIAction(title: L10n.getInfo, image: AppAssets.getInfo) { [weak self] _ in
