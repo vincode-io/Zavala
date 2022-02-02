@@ -1100,30 +1100,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func share(_ sender: Any? = nil) {
 		guard let outline = outline else { return }
-		
-		var activities = [UIActivity]()
-		
-		let exportPDFDocActivity = ExportPDFDocActivity()
-		exportPDFDocActivity.delegate = self
-		activities.append(exportPDFDocActivity)
-		
-		let exportPDFListActivity = ExportPDFListActivity()
-		exportPDFListActivity.delegate = self
-		activities.append(exportPDFListActivity)
-		
-		let exportMarkdownDocActivity = ExportMarkdownDocActivity()
-		exportMarkdownDocActivity.delegate = self
-		activities.append(exportMarkdownDocActivity)
-		
-		let exportMarkdownListActivity = ExportMarkdownListActivity()
-		exportMarkdownListActivity.delegate = self
-		activities.append(exportMarkdownListActivity)
-		
-		let exportOPMLActivity = ExportOPMLActivity()
-		exportOPMLActivity.delegate = self
-		activities.append(exportOPMLActivity)
-		
-		let controller = UIActivityViewController(outline: outline, applicationActivities: activities)
+		let controller = UIActivityViewController(outline: outline)
 		controller.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
 		present(controller, animated: true)
 	}
@@ -1668,61 +1645,6 @@ extension EditorViewController: LinkViewControllerDelegate {
 			rowCell.topicTextView?.becomeFirstResponder()
 			rowCell.topicTextView?.updateLinkForCurrentSelection(text: text, link: correctedLink, range: range)
 		}
-	}
-	
-}
-
-// MARK: ExportPDFDocActivityDelegate
-
-extension EditorViewController: ExportPDFDocActivityDelegate {
-
-	func exportPDFDoc(_: ExportPDFDocActivity) {
-		guard let outline = outline else { return }
-		delegate?.exportPDFDoc(self, outline: outline)
-	}
-	
-}
-
-// MARK: ExportPDFListActivityDelegate
-
-extension EditorViewController: ExportPDFListActivityDelegate {
-
-	func exportPDFList(_: ExportPDFListActivity) {
-		guard let outline = outline else { return }
-		delegate?.exportPDFList(self, outline: outline)
-	}
-	
-}
-
-// MARK: ExportMarkdownDocActivityDelegate
-
-extension EditorViewController: ExportMarkdownDocActivityDelegate {
-
-	func exportMarkdownDoc(_: ExportMarkdownDocActivity) {
-		guard let outline = outline else { return }
-		delegate?.exportMarkdownDoc(self, outline: outline)
-	}
-	
-}
-
-// MARK: ExportMarkdownListActivityDelegate
-
-extension EditorViewController: ExportMarkdownListActivityDelegate {
-
-	func exportMarkdownList(_: ExportMarkdownListActivity) {
-		guard let outline = outline else { return }
-		delegate?.exportMarkdownList(self, outline: outline)
-	}
-	
-}
-
-// MARK: ExportOPMLActivityDelegate
-
-extension EditorViewController: ExportOPMLActivityDelegate {
-	
-	func exportOPML(_: ExportOPMLActivity) {
-		guard let outline = outline else { return }
-		delegate?.exportOPML(self, outline: outline)
 	}
 	
 }
