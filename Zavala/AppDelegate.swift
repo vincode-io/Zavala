@@ -125,6 +125,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(deleteRowNotesCommand)
 		}
 
+		if !(mainCoordinator?.isSplitRowUnavailable ?? true) {
+			menuKeyCommands.append(splitRowCommand)
+		}
+
 		if !(mainCoordinator?.isExpandAllInOutlineUnavailable ?? true) {
 			menuKeyCommands.append(expandAllInOutlineCommand)
 		}
