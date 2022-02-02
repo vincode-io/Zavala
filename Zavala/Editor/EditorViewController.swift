@@ -13,6 +13,7 @@ import Templeton
 
 extension Selector {
 	static let insertImage = #selector(EditorViewController.insertImage)
+	static let splitRow = #selector(EditorViewController.splitRow as (EditorViewController) -> () -> Void)
 }
 
 protocol EditorDelegate: AnyObject {
@@ -152,7 +153,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 
 	var isSplitRowUnavailable: Bool {
-		return currentTextView == nil
+		return !(UIResponder.currentFirstResponder is EditorRowTopicTextView)
 	}
 
 	var isFormatUnavailable: Bool {
@@ -485,6 +486,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
 		case .paste:
 			return UIPasteboard.general.contains(pasteboardTypes: [kUTTypeUTF8PlainText as String, Row.typeIdentifier])
+		case .splitRow:
+			return !isSplitRowUnavailable
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -896,13 +899,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		deleteRowNotes(rows)
 	}
 	
-	func splitRow() {
-		guard let row = currentRows?.last,
-			  let topic = (currentTextView as? EditorRowTopicTextView)?.attributedText,
-			  let cursorPosition = currentCursorPosition else { return }
-		splitRow(row, topic: topic, cursorPosition: cursorPosition)
-	}
-	
 	func expandAllInOutline() {
 		guard let outline = outline else { return }
 		expandAll(containers: [outline])
@@ -1085,6 +1081,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func link() {
 		currentTextView?.editLink(self)
+	}
+	
+	@objc func splitRow() {
+		guard let row = currentRows?.last,
+			  let topic = (currentTextView as? EditorRowTopicTextView)?.attributedText,
+			  let cursorPosition = currentCursorPosition else { return }
+		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
 	@objc func outlineToggleBoldface(_ sender: Any? = nil) {
