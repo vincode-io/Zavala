@@ -1819,7 +1819,7 @@ private extension EditorViewController {
 	}
 	
 	func buildEllipsisMenu() -> UIMenu {
-		var shareActions = [UIAction]()
+		var shareActions = [UIMenuElement]()
 
 		if !isCollaborateUnavailable {
 			let collaborateAction = UIAction(title: L10n.collaborateEllipsis, image: AppAssets.statelessCollaborate) { [weak self] _ in
@@ -1833,15 +1833,14 @@ private extension EditorViewController {
 		}
 		shareActions.append(shareAction)
 
-		let printDocAction = UIAction(title: L10n.printDocEllipsis, image: AppAssets.printDoc) { [weak self] _ in
+		let printDocAction = UIAction(title: L10n.printDocEllipsis) { [weak self] _ in
 			self?.printDoc()
 		}
-		shareActions.append(printDocAction)
-
-		let printListAction = UIAction(title: L10n.printListEllipsis, image: AppAssets.printList) { [weak self] _ in
+		let printListAction = UIAction(title: L10n.printListEllipsis) { [weak self] _ in
 			self?.printList()
 		}
-		shareActions.append(printListAction)
+		shareActions.append(UIMenu(title: L10n.print, image: AppAssets.printDoc, children: [printDocAction, printListAction]))
+
 
 		var getInfoActions = [UIAction]()
 		let getInfoAction = UIAction(title: L10n.getInfo, image: AppAssets.getInfo) { [weak self] _ in
