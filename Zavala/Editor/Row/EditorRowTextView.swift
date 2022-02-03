@@ -269,6 +269,10 @@ extension EditorRowTextView: UITextDropDelegate {
 extension EditorRowTextView: NSTextStorageDelegate {
 	
 	func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
+		// If we haven't edited any characters, don't bother with trying to change the character attributs.
+		// In fact, we will crash just accessing the typineAttributes property if there haven't been any character changes.
+		guard editedMask.contains(.editedCharacters) else { return }
+		
 		textStorage.enumerateAttributes(in: editedRange, options: .longestEffectiveRangeNotRequired) { (attributes, range, _) in
 			var newAttributes = attributes
 			
