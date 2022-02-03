@@ -547,7 +547,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	public func filename(representation: DataRepresentation) -> String {
 		var filename = title ?? "Outline"
-		filename = filename.replacingOccurrences(of: " ", with: "_").trimmingCharacters(in: .whitespaces)
+		
+		filename = filename
+			.replacingOccurrences(of: " ", with: "_")
+			.replacingOccurrences(of: "/", with: "-")
+			.trimmingCharacters(in: .whitespaces)
 		
 		if let disambiguator = disambiguator {
 			filename = "\(filename)-\(disambiguator)"
