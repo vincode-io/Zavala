@@ -21,7 +21,7 @@ class OutlineFontCache {
 	
 	var title = UIFont.preferredFont(forTextStyle: .largeTitle)
 	var tag = UIFont.preferredFont(forTextStyle: .body)
-	var backline = UIFont.preferredFont(forTextStyle: .footnote).with(traits: .traitItalic)
+	var backlink = UIFont.preferredFont(forTextStyle: .footnote).with(traits: .traitItalic)
 	
 	private var topics = [UIFont]()
 	private var metadatum = [UIFont]()
@@ -99,7 +99,7 @@ extension OutlineFontCache {
 			case .rowNote:
 				notes.append(UIFontMetrics(forTextStyle: .body).scaledFont(for: font))
 			case .backlinks:
-				backline = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: font).with(traits: .traitItalic)
+				backlink = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: font).with(traits: .traitItalic)
 			}
 		}
 
