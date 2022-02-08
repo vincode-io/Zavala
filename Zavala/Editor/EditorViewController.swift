@@ -45,6 +45,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@IBOutlet weak var collectionView: EditorCollectionView!
 	
 	override var keyCommands: [UIKeyCommand]? {
+		guard !isToggleRowCompleteUnavailable else { return nil }
+		
 		// We need to have this hear in addition to the AppDelegate, since the iOS won't pick it up for some reason
 		let completedCommand = UIKeyCommand(input: "\r", modifierFlags: [.command], action: #selector(toggleCompleteRows))
 		if #available(iOS 15, *) {
