@@ -44,6 +44,15 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@IBOutlet weak var collectionViewTopConstraint: NSLayoutConstraint!
 	@IBOutlet weak var collectionView: EditorCollectionView!
 	
+	override var keyCommands: [UIKeyCommand]? {
+		// We need to have this hear in addition to the AppDelegate, since the iOS won't pick it up for some reason
+		let completedCommand = UIKeyCommand(input: "\r", modifierFlags: [.command], action: #selector(toggleCompleteRows))
+		if #available(iOS 15, *) {
+			completedCommand.wantsPriorityOverSystemBehavior = true
+		}
+		return [completedCommand]
+	}
+	
 	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
 
 	weak var delegate: EditorDelegate?
@@ -880,15 +889,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		moveRowsRight(rows)
 	}
 	
-	func toggleCompleteRows() {
-		guard let outline = outline, let rows = currentRows else { return }
-		if !outline.isCompleteUnavailable(rows: rows) {
-			completeRows(rows)
-		} else if !outline.isUncompleteUnavailable(rows: rows) {
-			uncompleteRows(rows)
-		}
-	}
-	
 	func createRowNotes() {
 		guard let rows = currentRows else { return }
 		createRowNotes(rows)
@@ -1152,6 +1152,15 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func moveCurrentRowsDown() {
 		guard let rows = currentRows else { return }
 		moveRowsDown(rows)
+	}
+
+	@objc func toggleCompleteRows() {
+		guard let outline = outline, let rows = currentRows else { return }
+		if !outline.isCompleteUnavailable(rows: rows) {
+			completeRows(rows)
+		} else if !outline.isUncompleteUnavailable(rows: rows) {
+			uncompleteRows(rows)
+		}
 	}
 	
 }
