@@ -19,6 +19,8 @@ protocol DocumentsDelegate: AnyObject  {
 	func exportMarkdownDocs(_: DocumentsViewController, outlines: [Outline])
 	func exportMarkdownLists(_: DocumentsViewController, outlines: [Outline])
 	func exportOPMLs(_: DocumentsViewController, outlines: [Outline])
+	func printDocs(_: DocumentsViewController, outlines: [Outline])
+	func printLists(_: DocumentsViewController, outlines: [Outline])
 }
 
 class DocumentsViewController: UICollectionViewController, MainControllerIdentifiable {
@@ -545,27 +547,34 @@ private extension DocumentsViewController {
 			guard let self = self else { return nil }
             let documents = allRowIDs.map { self.documents[$0.indexPath.row] }
 			
-			var menuItems = [UIMenu]()
+			var menuItems = [UIMenuElement]()
 
             if documents.count == 1, let document = documents.first {
-                menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.showGetInfoAction(document: document)]))
+                menuItems.append(self.showGetInfoAction(document: document))
             }
             
-			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.duplicateAction(documents: documents)]))
+			menuItems.append(self.duplicateAction(documents: documents))
 
             if documents.count == 1, let document = documents.first {
-                menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.copyLinkAction(document: document)]))
+                menuItems.append(self.copyLinkAction(document: document))
             }
 
             let outlines = documents.compactMap { $0.outline }
             if !outlines.isEmpty {
+				var printActions = [UIAction]()
+				printActions.append(self.printDocsAction(outlines: outlines))
+				printActions.append(self.printListsAction(outlines: outlines))
+				let printMenu = UIMenu(title: L10n.print, image: AppAssets.printDoc, children: printActions)
+
 				var exportActions = [UIAction]()
 				exportActions.append(self.exportPDFDocsOutlineAction(outlines: outlines))
 				exportActions.append(self.exportPDFListsOutlineAction(outlines: outlines))
 				exportActions.append(self.exportMarkdownDocsOutlineAction(outlines: outlines))
 				exportActions.append(self.exportMarkdownListsOutlineAction(outlines: outlines))
 				exportActions.append(self.exportOPMLsAction(outlines: outlines))
-				menuItems.append(UIMenu(title: L10n.export, image: AppAssets.export, children: exportActions))
+				let exportMenu = UIMenu(title: L10n.export, image: AppAssets.export, children: exportActions)
+
+				menuItems.append(UIMenu(title: "", options: .displayInline, children: [printMenu, exportMenu]))
 			}
 			
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.deleteDocumentsAction(documents: documents)]))
@@ -640,6 +649,22 @@ private extension DocumentsViewController {
         let action = UIAction(title: L10n.exportOPMLEllipsis) { [weak self] action in
 			guard let self = self else { return }
 			self.delegate?.exportOPMLs(self, outlines: outlines)
+		}
+		return action
+	}
+	
+	func printDocsAction(outlines: [Outline]) -> UIAction {
+		let action = UIAction(title: L10n.printDocEllipsis) { [weak self] action in
+			guard let self = self else { return }
+			self.delegate?.printDocs(self, outlines: outlines)
+		}
+		return action
+	}
+	
+	func printListsAction(outlines: [Outline]) -> UIAction {
+		let action = UIAction(title: L10n.printListEllipsis) { [weak self] action in
+			guard let self = self else { return }
+			self.delegate?.printLists(self, outlines: outlines)
 		}
 		return action
 	}
