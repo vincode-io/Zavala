@@ -1752,6 +1752,29 @@ private extension EditorViewController {
 	}
 	
 	func buildEllipsisMenu() -> UIMenu {
+		var outlineActions = [UIMenuElement]()
+
+		let getInfoAction = UIAction(title: L10n.getInfo, image: AppAssets.getInfo) { [weak self] _ in
+			self?.showOutlineGetInfo()
+		}
+		outlineActions.append(getInfoAction)
+
+		var findActions = [UIAction]()
+		let findAction = UIAction(title: L10n.findEllipsis, image: AppAssets.find) { [weak self] _ in
+			self?.beginInDocumentSearch()
+		}
+		outlineActions.append(findAction)
+
+		let expandAllInOutlineAction = UIAction(title: L10n.expandAllInOutline, image: AppAssets.expandAll) { [weak self] _ in
+			self?.expandAllInOutline()
+		}
+		outlineActions.append(expandAllInOutlineAction)
+		
+		let collapseAllInOutlineAction = UIAction(title: L10n.collapseAllInOutline, image: AppAssets.collapseAll) { [weak self] _ in
+			self?.collapseAllInOutline()
+		}
+		outlineActions.append(collapseAllInOutlineAction)
+		
 		var shareActions = [UIMenuElement]()
 
 		if !isCollaborateUnavailable {
@@ -1797,41 +1820,14 @@ private extension EditorViewController {
 		let exportActions = [exportPDFDoc, exportPDFList, exportMarkdownDoc, exportMarkdownList, exportOPML]
 		shareActions.append(UIMenu(title: L10n.export, image: AppAssets.export, children: exportActions))
 
-		var getInfoActions = [UIAction]()
-		let getInfoAction = UIAction(title: L10n.getInfo, image: AppAssets.getInfo) { [weak self] _ in
-			self?.showOutlineGetInfo()
-		}
-		getInfoActions.append(getInfoAction)
-
-		var findActions = [UIAction]()
-		let findAction = UIAction(title: L10n.findEllipsis, image: AppAssets.find) { [weak self] _ in
-			self?.beginInDocumentSearch()
-		}
-		findActions.append(findAction)
-
-		var viewActions = [UIAction]()
-		
-		let expandAllInOutlineAction = UIAction(title: L10n.expandAllInOutline, image: AppAssets.expandAll) { [weak self] _ in
-			self?.expandAllInOutline()
-		}
-		viewActions.append(expandAllInOutlineAction)
-		
-		let collapseAllInOutlineAction = UIAction(title: L10n.collapseAllInOutline, image: AppAssets.collapseAll) { [weak self] _ in
-			self?.collapseAllInOutline()
-		}
-		viewActions.append(collapseAllInOutlineAction)
-		
 		let deleteCompletedRowsAction = UIAction(title: L10n.deleteCompletedRows, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in
 			self?.deleteCompletedRows()
 		}
-		
+		let outlineMenu = UIMenu(title: "", options: .displayInline, children: outlineActions)
 		let shareMenu = UIMenu(title: "", options: .displayInline, children: shareActions)
-		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: getInfoActions)
-		let findMenu = UIMenu(title: "", options: .displayInline, children: findActions)
-		let viewMenu = UIMenu(title: "", options: .displayInline, children: viewActions)
 		let changeMenu = UIMenu(title: "", options: .displayInline, children: [deleteCompletedRowsAction])
 		
-		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [shareMenu, getInfoMenu, findMenu, viewMenu, changeMenu])
+		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [outlineMenu, shareMenu, changeMenu])
 	}
 	
 	func buildFilterMenu() -> UIMenu {
