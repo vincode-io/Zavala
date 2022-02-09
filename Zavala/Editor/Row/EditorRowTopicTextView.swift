@@ -84,6 +84,14 @@ class EditorRowTopicTextView: EditorRowTextView {
 		return lineEnd == endOfDocument
 	}
 	
+	var cursorIsAtBeginning: Bool {
+		return position(from: beginningOfDocument, offset: cursorPosition) == beginningOfDocument
+	}
+	
+	var cursorIsAtEnd: Bool {
+		return position(from: beginningOfDocument, offset: cursorPosition) == endOfDocument
+	}
+	
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 		self.delegate = self

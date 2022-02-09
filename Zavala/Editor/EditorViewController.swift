@@ -1759,7 +1759,6 @@ private extension EditorViewController {
 		}
 		outlineActions.append(getInfoAction)
 
-		var findActions = [UIAction]()
 		let findAction = UIAction(title: L10n.findEllipsis, image: AppAssets.find) { [weak self] _ in
 			self?.beginInDocumentSearch()
 		}
@@ -1890,6 +1889,24 @@ private extension EditorViewController {
 				} else {
 					isCursoringDown = true
 					repeatMoveCursorDown()
+				}
+			case (.keyboardLeftArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
+				if let topic = currentTextView as? EditorRowTopicTextView, topic.cursorIsAtBeginning,
+				   let currentRowIndex = topic.row?.shadowTableIndex,
+				   currentRowIndex > 0,
+				   let cell = collectionView.cellForItem(at: IndexPath(row: currentRowIndex - 1, section: adjustedRowsSection)) as? EditorRowViewCell {
+					cell.moveToEnd()
+				} else {
+					super.pressesBegan(presses, with: event)
+				}
+			case (.keyboardRightArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
+				if let topic = currentTextView as? EditorRowTopicTextView, topic.cursorIsAtEnd,
+				   let currentRowIndex = topic.row?.shadowTableIndex,
+				   currentRowIndex + 1 < outline?.shadowTable?.count ?? 0,
+				   let cell = collectionView.cellForItem(at: IndexPath(row: currentRowIndex + 1, section: adjustedRowsSection)) as? EditorRowViewCell {
+					cell.moveToStart()
+				} else {
+					super.pressesBegan(presses, with: event)
 				}
 			default:
 				super.pressesBegan(presses, with: event)
