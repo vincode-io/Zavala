@@ -1819,7 +1819,7 @@ private extension EditorViewController {
 		let exportActions = [exportPDFDoc, exportPDFList, exportMarkdownDoc, exportMarkdownList, exportOPML]
 		shareActions.append(UIMenu(title: L10n.export, image: AppAssets.export, children: exportActions))
 
-		let deleteCompletedRowsAction = UIAction(title: L10n.deleteCompletedRows, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in
+		let deleteCompletedRowsAction = UIAction(title: L10n.deleteCompleted, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in
 			self?.deleteCompletedRows()
 		}
 		let outlineMenu = UIMenu(title: "", options: .displayInline, children: outlineActions)
