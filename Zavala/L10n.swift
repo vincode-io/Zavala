@@ -84,6 +84,8 @@ internal enum L10n {
   internal static let delete = L10n.tr("Localizable", "Delete")
   /// Always Delete Without Asking
   internal static let deleteAlways = L10n.tr("Localizable", "Delete_Always")
+  /// Delete Completed
+  internal static let deleteCompleted = L10n.tr("Localizable", "Delete_Completed")
   /// Are you sure you want to delete the completed rows?
   internal static let deleteCompletedMessage = L10n.tr("Localizable", "Delete_Completed_Message")
   /// Delete Completed Rows

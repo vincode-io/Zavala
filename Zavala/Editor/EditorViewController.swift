@@ -1864,7 +1864,7 @@ private extension EditorViewController {
 		}
 		viewActions.append(collapseAllInOutlineAction)
 		
-		let deleteCompletedRowsAction = UIAction(title: L10n.deleteCompletedRows, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in
+		let deleteCompletedRowsAction = UIAction(title: L10n.deleteCompleted, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in
 			self?.deleteCompletedRows()
 		}
 		
