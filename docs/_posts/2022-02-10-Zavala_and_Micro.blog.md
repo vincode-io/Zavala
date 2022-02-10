@@ -6,7 +6,7 @@ title: Zavala and Micro.blog
 
 ## Dog-fooding Zavala
 
-One of the main problems with running a small open source project is getting it tested sufficiently. I use TestFlight to distribute test versions of Zavala so that users can test it out. My problem is that the pool of users willing to donate time to testing is too small. On of the ways to offset this is to do what we call dog-fooding in the IT world. It means “eat your own dog food” with the idea being if you were a dog food manufacturer, you should eat your own product for quality control.
+One of the main problems with running a small open source project is getting it tested sufficiently. I use TestFlight to distribute test versions of Zavala so that users can test it out. My problem is that the pool of users willing to donate time to testing is too small. One of the ways to offset this is to do what we call dog-fooding in the IT world. It means “eat your own dog food” with the idea being if you were a dog food manufacturer, you should eat your own product for quality control.
 
 I needed to spend as much time as possible in Zavala to effectively dog-food it. It could already be used as a [rudimentary word processor by using the Notes field](https://zavala.vincode.io/help/The_Notes_Field.md/#alternate-usage). In fact, it is kind of a nice writing experience if you are the type that typically starts a paper or article by outlining it. When writing I typically like to open a dedicated outline window by double clicking it (on the Mac) in the Documents view (the middle panel).
 
@@ -24,7 +24,7 @@ About the same time as I was thinking about blogging with Zavala, Apple announce
 
 ## Humboldt
 
-I contacted [Manton Reese](https://www.manton.org) to discuss my integration options. He is the creator of [Micro.blog](https:https//micro.blog). He was very helpful. We discussed directly using the Micro.blog web API’s from Shortcuts. That didn’t sound like much fun to me. Manton mentioned that he had an open source project that I might be interested in. [Snippets](https://github.com/microdotblog/snippets) is an open source Swift implementation of the Micro.blog web API’s. All I had to do was write a wrapper program around Snippets that understood Shortcuts.
+I contacted [Manton Reece](https://www.manton.org) to discuss my integration options. He is the creator of [Micro.blog](https:https//micro.blog). He was very helpful. We discussed directly using the Micro.blog web API’s from Shortcuts. That didn’t sound like much fun to me. Manton mentioned that he had an open source project that I might be interested in. [Snippets](https://github.com/microdotblog/snippets) is an open source Swift implementation of the Micro.blog web API’s. All I had to do was write a wrapper program around Snippets that understood Shortcuts.
 
 So that’s what I did. The [application is also open source](https://github.com/vincode-io/Humboldt) and is named Humboldt. You can download [Humboldt from the App Store](https://apps.apple.com/us/app/humboldt/id1592768206). Humboldt allows you to upload images and posts directly to Micro.blog after you sign in using Humboldt’s Micro.blog authentication flow.
 
