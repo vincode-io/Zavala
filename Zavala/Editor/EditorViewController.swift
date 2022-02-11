@@ -2871,7 +2871,10 @@ private extension EditorViewController {
 		
 		if let newCursorIndex = command.newCursorIndex ?? rows.first?.shadowTableIndex {
 			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {
-				rowCell.moveToNote()
+				// This fixes the problem of not moving to the note on iOS when adding a note
+				DispatchQueue.main.async {
+					rowCell.moveToNote()
+				}
 			}
 		}
 
