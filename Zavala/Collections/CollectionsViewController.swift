@@ -278,12 +278,17 @@ extension CollectionsViewController {
 			cell.contentConfiguration = contentConfiguration
 		}
 
-		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, CollectionsItem> {	(cell, indexPath, item) in
+		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, CollectionsItem> { [weak self]	(cell, indexPath, item) in
 			var contentConfiguration = UIListContentConfiguration.sidebarHeader()
 			
 			contentConfiguration.text = item.id.name
-			contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .subheadline)
-			contentConfiguration.textProperties.color = .secondaryLabel
+			if self?.traitCollection.userInterfaceIdiom == .mac {
+				contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .subheadline)
+				contentConfiguration.textProperties.color = .secondaryLabel
+			} else {
+				contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .title2).with(traits: .traitBold)
+				contentConfiguration.textProperties.color = .label
+			}
 			
 			cell.contentConfiguration = contentConfiguration
 			cell.accessories = [.outlineDisclosure()]
