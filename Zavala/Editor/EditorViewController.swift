@@ -403,6 +403,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 		
 		let navButtonsStackView = UIStackView()
+		navButtonsStackView.isLayoutMarginsRelativeArrangement = true
+		navButtonsStackView.layoutMargins.right = 8
 		navButtonsStackView.alignment = .center
 		navButtonsStackView.spacing = 16
 
