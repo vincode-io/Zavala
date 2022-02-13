@@ -92,8 +92,6 @@ class EditorRowTextView: UITextView {
     var textViewHeight: CGFloat?
     var isSavingTextUnnecessary = false
 
-	var lastKnownTypingAttributes: [NSAttributedString.Key : Any]?
-	
 	let toggleBoldCommand = UIKeyCommand(title: L10n.bold, action: .toggleBoldface, input: "b", modifierFlags: [.command])
 	let toggleItalicsCommand = UIKeyCommand(title: L10n.italic, action: .toggleItalics, input: "i", modifierFlags: [.command])
 	let editLinkCommand = UIKeyCommand(title: L10n.link, action: .editLink, input: "k", modifierFlags: [.command])
@@ -272,17 +270,7 @@ extension EditorRowTextView: NSTextStorageDelegate {
 	
 	func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
 
-		// We save off the typing attributes before possibly laying out the editor. Directly accesssing
-		// layoutAttributes here can trigger the textStorage to change while collectionView.reconfigureItems
-		// is working with it. This causes a crash.
-		var newTypingAttributes: [NSAttributedString.Key : Any] = {
-			if let lastKnownTypingAttributes = lastKnownTypingAttributes {
-				self.lastKnownTypingAttributes = nil
-				return lastKnownTypingAttributes
-			} else {
-				return typingAttributes
-			}
-		}()
+		var newTypingAttributes = typingAttributes
 		newTypingAttributes.removeValue(forKey: .font)
 
 		textStorage.enumerateAttributes(in: editedRange, options: .longestEffectiveRangeNotRequired) { (attributes, range, _) in
@@ -425,7 +413,6 @@ extension EditorRowTextView {
         if let currentHeight = textViewHeight, abs(fittingSize.height - currentHeight) > 0 {
 			CursorCoordinates.updateLastKnownCoordinates()
             textViewHeight = fittingSize.height
-			lastKnownTypingAttributes = typingAttributes
             layoutEditor()
         }
         
