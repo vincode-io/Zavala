@@ -267,8 +267,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	override var canBecomeFirstResponder: Bool { return true }
 
 	private var keyboardToolBar: UIToolbar!
-	private var goBackwardButton: UIBarButtonItem!
-	private var goForwardButton: UIBarButtonItem!
 	private var moveRightButton: UIBarButtonItem!
 	private var moveLeftButton: UIBarButtonItem!
 	private var moveUpButton: UIBarButtonItem!
@@ -303,8 +301,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var isCursoringUp = false
 	private var isCursoringDown = false
 	
-	private var ellipsisBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.ellipsis, style: .plain, target: nil, action: nil)
-	private var filterBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: AppAssets.filterInactive, style: .plain, target: nil, action: nil)
+	private var navButtonsBarButtonItem: UIBarButtonItem!
+	private var goBackwardButton: UIButton!
+	private var goForwardButton: UIButton!
+	private var moreMenuButton: UIButton!
+	private var filterButton: UIButton!
+	
 	private var doneBarButtonItem: UIBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done))
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
@@ -352,9 +354,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
-			ellipsisBarButtonItem.title = L10n.more
-			filterBarButtonItem.title = L10n.filter
-
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
@@ -403,10 +402,41 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
 		
-		goBackwardButton = UIBarButtonItem(image: AppAssets.goBackward, style: .plain, target: self, action: #selector(goBackwardOne))
-		goBackwardButton.title = L10n.goBackward
-		goForwardButton = UIBarButtonItem(image: AppAssets.goForward, style: .plain, target: self, action: #selector(goForwardOne))
-		goForwardButton.title = L10n.goForward
+		let navButtonsStackView = UIStackView()
+		navButtonsStackView.isLayoutMarginsRelativeArrangement = true
+		navButtonsStackView.alignment = .center
+		navButtonsStackView.spacing = 20
+		navButtonsStackView.layoutMargins.right = 8
+
+		goBackwardButton = ToolbarButton(type: .system)
+		goBackwardButton.addTarget(self, action: #selector(goBackwardOne), for: .touchUpInside)
+		goBackwardButton.setImage(AppAssets.goBackward, for: .normal)
+		goBackwardButton.accessibilityLabel = L10n.goBackward
+		goBackwardButton.isAccessibilityElement = true
+		navButtonsStackView.addArrangedSubview(goBackwardButton)
+
+		goForwardButton = ToolbarButton(type: .system)
+		goForwardButton.addTarget(self, action: #selector(goForwardOne), for: .touchUpInside)
+		goForwardButton.setImage(AppAssets.goForward, for: .normal)
+		goForwardButton.accessibilityLabel = L10n.goForward
+		goForwardButton.isAccessibilityElement = true
+		navButtonsStackView.addArrangedSubview(goForwardButton)
+
+		moreMenuButton = ToolbarButton(type: .system)
+		moreMenuButton.showsMenuAsPrimaryAction = true
+		moreMenuButton.setImage(AppAssets.ellipsis, for: .normal)
+		moreMenuButton.accessibilityLabel = L10n.more
+		moreMenuButton.isAccessibilityElement = true
+		navButtonsStackView.addArrangedSubview(moreMenuButton)
+
+		filterButton = ToolbarButton(type: .system)
+		filterButton.showsMenuAsPrimaryAction = true
+		filterButton.setImage(AppAssets.filterInactive, for: .normal)
+		filterButton.accessibilityLabel = L10n.filter
+		filterButton.isAccessibilityElement = true
+		navButtonsStackView.addArrangedSubview(filterButton)
+		
+		navButtonsBarButtonItem = UIBarButtonItem(customView: navButtonsStackView)
 		
 		moveRightButton = UIBarButtonItem(image: AppAssets.moveRight, style: .plain, target: self, action: #selector(moveCurrentRowsRight))
 		moveRightButton.title = L10n.moveLeft
@@ -427,7 +457,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 			keyboardToolBar.items = [moveLeftButton, moveRightButton, moveUpButton, moveDownButton, flexibleSpace, insertImageButton, linkButton]
 			keyboardToolBar.sizeToFit()
-			navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem, goForwardButton, goBackwardButton]
+			navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
 		}
 
 		updatePhoneUI(editMode: false)
@@ -766,9 +796,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	func updatePhoneUI(editMode: Bool) {
 		if traitCollection.userInterfaceIdiom == .phone {
 			if editMode {
-				navigationItem.rightBarButtonItems = [doneBarButtonItem, filterBarButtonItem, ellipsisBarButtonItem, goForwardButton, goBackwardButton]
+				navigationItem.rightBarButtonItems = [doneBarButtonItem, navButtonsBarButtonItem]
 			} else {
-				navigationItem.rightBarButtonItems = [filterBarButtonItem, ellipsisBarButtonItem, goForwardButton, goBackwardButton]
+				navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
 			}
 		}
 	}
@@ -803,22 +833,22 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		navigationItem.largeTitleDisplayMode = .never
 		
 		if traitCollection.userInterfaceIdiom != .mac {
-			ellipsisBarButtonItem.menu = buildEllipsisMenu()
+			moreMenuButton.menu = buildEllipsisMenu()
 
 			if isFilterOn {
-				filterBarButtonItem.image = AppAssets.filterActive
+				filterButton.setImage(AppAssets.filterActive, for: .normal)
 			} else {
-				filterBarButtonItem.image = AppAssets.filterInactive
+				filterButton.setImage(AppAssets.filterInactive, for: .normal)
 			}
 
-			filterBarButtonItem.menu = buildFilterMenu()
+			filterButton.menu = buildFilterMenu()
 			
 			if outline == nil {
-				filterBarButtonItem.isEnabled = false
-				ellipsisBarButtonItem.isEnabled = false
+				filterButton.isEnabled = false
+				moreMenuButton.isEnabled = false
 			} else {
-				filterBarButtonItem.isEnabled = true
-				ellipsisBarButtonItem.isEnabled = true
+				filterButton.isEnabled = true
+				moreMenuButton.isEnabled = true
 			}
 			
 			goBackwardButton.isEnabled = !isGoBackwardUnavailable
@@ -1778,13 +1808,13 @@ private extension EditorViewController {
 
 		if !isCollaborateUnavailable {
 			let collaborateAction = UIAction(title: L10n.collaborateEllipsis, image: AppAssets.statelessCollaborate) { [weak self] _ in
-				self?.collaborate(self?.ellipsisBarButtonItem)
+				self?.collaborate(self?.moreMenuButton)
 			}
 			shareActions.append(collaborateAction)
 		}
 
 		let shareAction = UIAction(title: L10n.shareEllipsis, image: AppAssets.share) { [weak self] _ in
-			self?.share(self?.ellipsisBarButtonItem)
+			self?.share(self?.moreMenuButton)
 		}
 		shareActions.append(shareAction)
 
