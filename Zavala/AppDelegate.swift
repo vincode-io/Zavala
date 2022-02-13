@@ -125,6 +125,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			menuKeyCommands.append(deleteRowNotesCommand)
 		}
 
+		if !(mainCoordinator?.isSplitRowUnavailable ?? true) {
+			menuKeyCommands.append(splitRowCommand)
+		}
+
 		if !(mainCoordinator?.isExpandAllInOutlineUnavailable ?? true) {
 			menuKeyCommands.append(expandAllInOutlineCommand)
 		}
@@ -486,6 +490,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		var menuItems = [UIMenuItem]()
 		menuItems.append(UIMenuItem(title: L10n.link, action: .editLink))
 		menuItems.append(UIMenuItem(title: L10n.image, action: .insertImage))
+		menuItems.append(UIMenuItem(title: L10n.splitRow, action: .splitRow))
 		UIMenuController.shared.menuItems = menuItems
 
 		#if targetEnvironment(macCatalyst)

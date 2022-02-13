@@ -177,6 +177,9 @@ class EditorRowTextView: UITextView {
 	func saveText() {
         guard isTextChanged else { return }
         
+		// Don't save if we are in the middle of entering a multistage character, e.g Japanese
+		guard markedTextRange == nil else { return }
+		
         if isSavingTextUnnecessary {
             isSavingTextUnnecessary = false
         } else {
@@ -266,11 +269,13 @@ extension EditorRowTextView: UITextDropDelegate {
 extension EditorRowTextView: NSTextStorageDelegate {
 	
 	func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
+
+		var newTypingAttributes = typingAttributes
+		newTypingAttributes.removeValue(forKey: .font)
+
 		textStorage.enumerateAttributes(in: editedRange, options: .longestEffectiveRangeNotRequired) { (attributes, range, _) in
 			var newAttributes = attributes
 			
-			var newTypingAttributes = typingAttributes
-			newTypingAttributes.removeValue(forKey: .font)
 			newAttributes.merge(newTypingAttributes) { old, new in new }
 			
 			for key in attributes.keys {

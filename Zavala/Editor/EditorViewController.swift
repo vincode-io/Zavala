@@ -13,6 +13,7 @@ import Templeton
 
 extension Selector {
 	static let insertImage = #selector(EditorViewController.insertImage)
+	static let splitRow = #selector(EditorViewController.splitRow as (EditorViewController) -> () -> Void)
 }
 
 protocol EditorDelegate: AnyObject {
@@ -42,6 +43,17 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@IBOutlet weak var searchBar: EditorSearchBar!
 	@IBOutlet weak var collectionViewTopConstraint: NSLayoutConstraint!
 	@IBOutlet weak var collectionView: EditorCollectionView!
+	
+	override var keyCommands: [UIKeyCommand]? {
+		guard !isToggleRowCompleteUnavailable else { return nil }
+		
+		// We need to have this hear in addition to the AppDelegate, since the iOS won't pick it up for some reason
+		let completedCommand = UIKeyCommand(input: "\r", modifierFlags: [.command], action: #selector(toggleCompleteRows))
+		if #available(iOS 15, *) {
+			completedCommand.wantsPriorityOverSystemBehavior = true
+		}
+		return [completedCommand]
+	}
 	
 	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
 
@@ -152,7 +164,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 
 	var isSplitRowUnavailable: Bool {
-		return currentTextView == nil
+		return !(UIResponder.currentFirstResponder is EditorRowTopicTextView)
 	}
 
 	var isFormatUnavailable: Bool {
@@ -485,6 +497,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
 		case .paste:
 			return UIPasteboard.general.contains(pasteboardTypes: [kUTTypeUTF8PlainText as String, Row.typeIdentifier])
+		case .splitRow:
+			return !isSplitRowUnavailable
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -877,15 +891,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		moveRowsRight(rows)
 	}
 	
-	func toggleCompleteRows() {
-		guard let outline = outline, let rows = currentRows else { return }
-		if !outline.isCompleteUnavailable(rows: rows) {
-			completeRows(rows)
-		} else if !outline.isUncompleteUnavailable(rows: rows) {
-			uncompleteRows(rows)
-		}
-	}
-	
 	func createRowNotes() {
 		guard let rows = currentRows else { return }
 		createRowNotes(rows)
@@ -894,13 +899,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	func deleteRowNotes() {
 		guard let rows = currentRows else { return }
 		deleteRowNotes(rows)
-	}
-	
-	func splitRow() {
-		guard let row = currentRows?.last,
-			  let topic = (currentTextView as? EditorRowTopicTextView)?.attributedText,
-			  let cursorPosition = currentCursorPosition else { return }
-		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
 	func expandAllInOutline() {
@@ -1087,6 +1085,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		currentTextView?.editLink(self)
 	}
 	
+	@objc func splitRow() {
+		guard let row = currentRows?.last,
+			  let topic = (currentTextView as? EditorRowTopicTextView)?.attributedText,
+			  let cursorPosition = currentCursorPosition else { return }
+		splitRow(row, topic: topic, cursorPosition: cursorPosition)
+	}
+	
 	@objc func outlineToggleBoldface(_ sender: Any? = nil) {
 		currentTextView?.toggleBoldface(self)
 	}
@@ -1097,30 +1102,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func share(_ sender: Any? = nil) {
 		guard let outline = outline else { return }
-		
-		var activities = [UIActivity]()
-		
-		let exportPDFDocActivity = ExportPDFDocActivity()
-		exportPDFDocActivity.delegate = self
-		activities.append(exportPDFDocActivity)
-		
-		let exportPDFListActivity = ExportPDFListActivity()
-		exportPDFListActivity.delegate = self
-		activities.append(exportPDFListActivity)
-		
-		let exportMarkdownDocActivity = ExportMarkdownDocActivity()
-		exportMarkdownDocActivity.delegate = self
-		activities.append(exportMarkdownDocActivity)
-		
-		let exportMarkdownListActivity = ExportMarkdownListActivity()
-		exportMarkdownListActivity.delegate = self
-		activities.append(exportMarkdownListActivity)
-		
-		let exportOPMLActivity = ExportOPMLActivity()
-		exportOPMLActivity.delegate = self
-		activities.append(exportOPMLActivity)
-		
-		let controller = UIActivityViewController(outline: outline, applicationActivities: activities)
+		let controller = UIActivityViewController(outline: outline)
 		controller.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
 		present(controller, animated: true)
 	}
@@ -1172,6 +1154,15 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func moveCurrentRowsDown() {
 		guard let rows = currentRows else { return }
 		moveRowsDown(rows)
+	}
+
+	@objc func toggleCompleteRows() {
+		guard let outline = outline, let rows = currentRows else { return }
+		if !outline.isCompleteUnavailable(rows: rows) {
+			completeRows(rows)
+		} else if !outline.isUncompleteUnavailable(rows: rows) {
+			uncompleteRows(rows)
+		}
 	}
 	
 }
@@ -1669,61 +1660,6 @@ extension EditorViewController: LinkViewControllerDelegate {
 	
 }
 
-// MARK: ExportPDFDocActivityDelegate
-
-extension EditorViewController: ExportPDFDocActivityDelegate {
-
-	func exportPDFDoc(_: ExportPDFDocActivity) {
-		guard let outline = outline else { return }
-		delegate?.exportPDFDoc(self, outline: outline)
-	}
-	
-}
-
-// MARK: ExportPDFListActivityDelegate
-
-extension EditorViewController: ExportPDFListActivityDelegate {
-
-	func exportPDFList(_: ExportPDFListActivity) {
-		guard let outline = outline else { return }
-		delegate?.exportPDFList(self, outline: outline)
-	}
-	
-}
-
-// MARK: ExportMarkdownDocActivityDelegate
-
-extension EditorViewController: ExportMarkdownDocActivityDelegate {
-
-	func exportMarkdownDoc(_: ExportMarkdownDocActivity) {
-		guard let outline = outline else { return }
-		delegate?.exportMarkdownDoc(self, outline: outline)
-	}
-	
-}
-
-// MARK: ExportMarkdownListActivityDelegate
-
-extension EditorViewController: ExportMarkdownListActivityDelegate {
-
-	func exportMarkdownList(_: ExportMarkdownListActivity) {
-		guard let outline = outline else { return }
-		delegate?.exportMarkdownList(self, outline: outline)
-	}
-	
-}
-
-// MARK: ExportOPMLActivityDelegate
-
-extension EditorViewController: ExportOPMLActivityDelegate {
-	
-	func exportOPML(_: ExportOPMLActivity) {
-		guard let outline = outline else { return }
-		delegate?.exportOPML(self, outline: outline)
-	}
-	
-}
-
 // MARK: SearchBarDelegate
 
 extension EditorViewController: SearchBarDelegate {
@@ -1816,7 +1752,29 @@ private extension EditorViewController {
 	}
 	
 	func buildEllipsisMenu() -> UIMenu {
-		var shareActions = [UIAction]()
+		var outlineActions = [UIMenuElement]()
+
+		let getInfoAction = UIAction(title: L10n.getInfo, image: AppAssets.getInfo) { [weak self] _ in
+			self?.showOutlineGetInfo()
+		}
+		outlineActions.append(getInfoAction)
+
+		let findAction = UIAction(title: L10n.findEllipsis, image: AppAssets.find) { [weak self] _ in
+			self?.beginInDocumentSearch()
+		}
+		outlineActions.append(findAction)
+
+		let expandAllInOutlineAction = UIAction(title: L10n.expandAllInOutline, image: AppAssets.expandAll) { [weak self] _ in
+			self?.expandAllInOutline()
+		}
+		outlineActions.append(expandAllInOutlineAction)
+		
+		let collapseAllInOutlineAction = UIAction(title: L10n.collapseAllInOutline, image: AppAssets.collapseAll) { [weak self] _ in
+			self?.collapseAllInOutline()
+		}
+		outlineActions.append(collapseAllInOutlineAction)
+		
+		var shareActions = [UIMenuElement]()
 
 		if !isCollaborateUnavailable {
 			let collaborateAction = UIAction(title: L10n.collaborateEllipsis, image: AppAssets.statelessCollaborate) { [weak self] _ in
@@ -1830,51 +1788,45 @@ private extension EditorViewController {
 		}
 		shareActions.append(shareAction)
 
-		let printDocAction = UIAction(title: L10n.printDocEllipsis, image: AppAssets.printDoc) { [weak self] _ in
+		let printDocAction = UIAction(title: L10n.printDocEllipsis) { [weak self] _ in
 			self?.printDoc()
 		}
-		shareActions.append(printDocAction)
-
-		let printListAction = UIAction(title: L10n.printListEllipsis, image: AppAssets.printList) { [weak self] _ in
+		let printListAction = UIAction(title: L10n.printListEllipsis) { [weak self] _ in
 			self?.printList()
 		}
-		shareActions.append(printListAction)
+		shareActions.append(UIMenu(title: L10n.print, image: AppAssets.printDoc, children: [printDocAction, printListAction]))
 
-		var getInfoActions = [UIAction]()
-		let getInfoAction = UIAction(title: L10n.getInfo, image: AppAssets.getInfo) { [weak self] _ in
-			self?.showOutlineGetInfo()
+		let exportPDFDoc = UIAction(title: L10n.exportPDFDocEllipsis) { [weak self] _ in
+			guard let self = self, let outline = self.outline else { return }
+			self.delegate?.exportPDFDoc(self, outline: outline)
 		}
-		getInfoActions.append(getInfoAction)
+		let exportPDFList = UIAction(title: L10n.exportPDFListEllipsis) { [weak self] _ in
+			guard let self = self, let outline = self.outline else { return }
+			self.delegate?.exportPDFList(self, outline: outline)
+		}
+		let exportMarkdownDoc = UIAction(title: L10n.exportMarkdownDocEllipsis) { [weak self] _ in
+			guard let self = self, let outline = self.outline else { return }
+			self.delegate?.exportMarkdownDoc(self, outline: outline)
+		}
+		let exportMarkdownList = UIAction(title: L10n.exportMarkdownListEllipsis) { [weak self] _ in
+			guard let self = self, let outline = self.outline else { return }
+			self.delegate?.exportMarkdownList(self, outline: outline)
+		}
+		let exportOPML = UIAction(title: L10n.exportOPMLEllipsis) { [weak self] _ in
+			guard let self = self, let outline = self.outline else { return }
+			self.delegate?.exportOPML(self, outline: outline)
+		}
+		let exportActions = [exportPDFDoc, exportPDFList, exportMarkdownDoc, exportMarkdownList, exportOPML]
+		shareActions.append(UIMenu(title: L10n.export, image: AppAssets.export, children: exportActions))
 
-		var findActions = [UIAction]()
-		let findAction = UIAction(title: L10n.findEllipsis, image: AppAssets.find) { [weak self] _ in
-			self?.beginInDocumentSearch()
-		}
-		findActions.append(findAction)
-
-		var viewActions = [UIAction]()
-		
-		let expandAllInOutlineAction = UIAction(title: L10n.expandAllInOutline, image: AppAssets.expandAll) { [weak self] _ in
-			self?.expandAllInOutline()
-		}
-		viewActions.append(expandAllInOutlineAction)
-		
-		let collapseAllInOutlineAction = UIAction(title: L10n.collapseAllInOutline, image: AppAssets.collapseAll) { [weak self] _ in
-			self?.collapseAllInOutline()
-		}
-		viewActions.append(collapseAllInOutlineAction)
-		
 		let deleteCompletedRowsAction = UIAction(title: L10n.deleteCompleted, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in
 			self?.deleteCompletedRows()
 		}
-		
+		let outlineMenu = UIMenu(title: "", options: .displayInline, children: outlineActions)
 		let shareMenu = UIMenu(title: "", options: .displayInline, children: shareActions)
-		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: getInfoActions)
-		let findMenu = UIMenu(title: "", options: .displayInline, children: findActions)
-		let viewMenu = UIMenu(title: "", options: .displayInline, children: viewActions)
 		let changeMenu = UIMenu(title: "", options: .displayInline, children: [deleteCompletedRowsAction])
 		
-		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [shareMenu, getInfoMenu, findMenu, viewMenu, changeMenu])
+		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [outlineMenu, shareMenu, changeMenu])
 	}
 	
 	func buildFilterMenu() -> UIMenu {
@@ -1937,6 +1889,24 @@ private extension EditorViewController {
 				} else {
 					isCursoringDown = true
 					repeatMoveCursorDown()
+				}
+			case (.keyboardLeftArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
+				if let topic = currentTextView as? EditorRowTopicTextView, topic.cursorIsAtBeginning,
+				   let currentRowIndex = topic.row?.shadowTableIndex,
+				   currentRowIndex > 0,
+				   let cell = collectionView.cellForItem(at: IndexPath(row: currentRowIndex - 1, section: adjustedRowsSection)) as? EditorRowViewCell {
+					cell.moveToEnd()
+				} else {
+					super.pressesBegan(presses, with: event)
+				}
+			case (.keyboardRightArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
+				if let topic = currentTextView as? EditorRowTopicTextView, topic.cursorIsAtEnd,
+				   let currentRowIndex = topic.row?.shadowTableIndex,
+				   currentRowIndex + 1 < outline?.shadowTable?.count ?? 0,
+				   let cell = collectionView.cellForItem(at: IndexPath(row: currentRowIndex + 1, section: adjustedRowsSection)) as? EditorRowViewCell {
+					cell.moveToStart()
+				} else {
+					super.pressesBegan(presses, with: event)
 				}
 			default:
 				super.pressesBegan(presses, with: event)
@@ -2901,7 +2871,10 @@ private extension EditorViewController {
 		
 		if let newCursorIndex = command.newCursorIndex ?? rows.first?.shadowTableIndex {
 			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {
-				rowCell.moveToNote()
+				// This fixes the problem of not moving to the note on iOS when adding a note
+				DispatchQueue.main.async {
+					rowCell.moveToNote()
+				}
 			}
 		}
 
@@ -2971,7 +2944,7 @@ private extension EditorViewController {
 		
 		var attrs = [NSAttributedString.Key : Any]()
 		attrs[.foregroundColor] = UIColor.secondaryLabel
-		attrs[.font] = OutlineFontCache.shared.backline
+		attrs[.font] = OutlineFontCache.shared.backlink
 		result.addAttributes(attrs, range: NSRange(0..<result.length))
 		return result
 	}

@@ -134,8 +134,6 @@
 		51B2B2C82563A2180090C56B /* EditorRowTopicTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2C72563A2180090C56B /* EditorRowTopicTextView.swift */; };
 		51B2B2CE2563AAF60090C56B /* EditorRowContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2CD2563AAF60090C56B /* EditorRowContentConfiguration.swift */; };
 		51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */; };
-		51B9D99D26140EDC00A66859 /* ExportMarkdownListActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99C26140EDC00A66859 /* ExportMarkdownListActivity.swift */; };
-		51B9D9A026140F3A00A66859 /* ExportOPMLActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */; };
 		51BAEA8F2717AA74004F1E84 /* GetRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BAEA8E2717AA74004F1E84 /* GetRowsIntentHandler.swift */; };
 		51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */; };
 		51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A5257E084E00609262 /* EditorTitleContentView.swift */; };
@@ -171,8 +169,6 @@
 		51DEE80E26FB4550006DAA56 /* UserInterfaceColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */; };
 		51DEE81026FB8D89006DAA56 /* ColorPaletteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE80F26FB8D89006DAA56 /* ColorPaletteTableViewController.swift */; };
 		51DEE82226FE37F9006DAA56 /* UIPrintPageRenderer+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE82126FE37F9006DAA56 /* UIPrintPageRenderer+.swift */; };
-		51DEE82426FE8711006DAA56 /* ExportPDFDocActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE82326FE8711006DAA56 /* ExportPDFDocActivity.swift */; };
-		51DEE82626FE87CD006DAA56 /* ExportPDFListActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE82526FE87CD006DAA56 /* ExportPDFListActivity.swift */; };
 		51DEE82826FF951E006DAA56 /* UIWindowSceneDelegate+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DEE82726FF951E006DAA56 /* UIWindowSceneDelegate+.swift */; };
 		51DFDC18259EA8D300C068C6 /* Selector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DFDC17259EA8D300C068C6 /* Selector+.swift */; };
 		51E060CE25A45AA800194066 /* AppKitPlugin.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 51E060AF25A4547400194066 /* AppKitPlugin.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -190,7 +186,6 @@
 		51F2859725AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859625AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift */; };
 		51F2859B25AD12800019C573 /* CollectionsSearchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859A25AD12800019C573 /* CollectionsSearchContentView.swift */; };
 		51F2DC7B2586E101003BD5CE /* EditorRowNoteTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2DC7A2586E101003BD5CE /* EditorRowNoteTextView.swift */; };
-		51F36C5826FAB5C90075A273 /* ExportMarkdownDocActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F36C5726FAB5C90075A273 /* ExportMarkdownDocActivity.swift */; };
 		51F83B862725BFF30015FC06 /* ReloadVisibleItemsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F83B852725BFF30015FC06 /* ReloadVisibleItemsOperation.swift */; };
 		51FF2A6B2732B97800208A75 /* ValidatingMenuToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FF2A6A2732B97800208A75 /* ValidatingMenuToolbarItem.swift */; };
 /* End PBXBuildFile section */
@@ -379,8 +374,6 @@
 		51B2B2C72563A2180090C56B /* EditorRowTopicTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowTopicTextView.swift; sourceTree = "<group>"; };
 		51B2B2CD2563AAF60090C56B /* EditorRowContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowContentConfiguration.swift; sourceTree = "<group>"; };
 		51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDisclosureButton.swift; sourceTree = "<group>"; };
-		51B9D99C26140EDC00A66859 /* ExportMarkdownListActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportMarkdownListActivity.swift; sourceTree = "<group>"; };
-		51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportOPMLActivity.swift; sourceTree = "<group>"; };
 		51BAEA8E2717AA74004F1E84 /* GetRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRowsIntentHandler.swift; sourceTree = "<group>"; };
 		51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentConfiguration.swift; sourceTree = "<group>"; };
 		51C030A5257E084E00609262 /* EditorTitleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentView.swift; sourceTree = "<group>"; };
@@ -419,8 +412,6 @@
 		51DEE80B26FB4488006DAA56 /* UserInterfaceColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInterfaceColorPalette.swift; sourceTree = "<group>"; };
 		51DEE80F26FB8D89006DAA56 /* ColorPaletteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteTableViewController.swift; sourceTree = "<group>"; };
 		51DEE82126FE37F9006DAA56 /* UIPrintPageRenderer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPrintPageRenderer+.swift"; sourceTree = "<group>"; };
-		51DEE82326FE8711006DAA56 /* ExportPDFDocActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPDFDocActivity.swift; sourceTree = "<group>"; };
-		51DEE82526FE87CD006DAA56 /* ExportPDFListActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPDFListActivity.swift; sourceTree = "<group>"; };
 		51DEE82726FF951E006DAA56 /* UIWindowSceneDelegate+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindowSceneDelegate+.swift"; sourceTree = "<group>"; };
 		51DFDC17259EA8D300C068C6 /* Selector+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Selector+.swift"; sourceTree = "<group>"; };
 		51E060AF25A4547400194066 /* AppKitPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppKitPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -444,7 +435,6 @@
 		51F2859625AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchContentConfiguration.swift; sourceTree = "<group>"; };
 		51F2859A25AD12800019C573 /* CollectionsSearchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchContentView.swift; sourceTree = "<group>"; };
 		51F2DC7A2586E101003BD5CE /* EditorRowNoteTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowNoteTextView.swift; sourceTree = "<group>"; };
-		51F36C5726FAB5C90075A273 /* ExportMarkdownDocActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportMarkdownDocActivity.swift; sourceTree = "<group>"; };
 		51F83B852725BFF30015FC06 /* ReloadVisibleItemsOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReloadVisibleItemsOperation.swift; sourceTree = "<group>"; };
 		51FF2A6A2732B97800208A75 /* ValidatingMenuToolbarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatingMenuToolbarItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -751,18 +741,6 @@
 			path = Intents;
 			sourceTree = "<group>";
 		};
-		51B9D99526140AD100A66859 /* Activities */ = {
-			isa = PBXGroup;
-			children = (
-				51F36C5726FAB5C90075A273 /* ExportMarkdownDocActivity.swift */,
-				51B9D99C26140EDC00A66859 /* ExportMarkdownListActivity.swift */,
-				51B9D99F26140F3A00A66859 /* ExportOPMLActivity.swift */,
-				51DEE82326FE8711006DAA56 /* ExportPDFDocActivity.swift */,
-				51DEE82526FE87CD006DAA56 /* ExportPDFListActivity.swift */,
-			);
-			path = Activities;
-			sourceTree = "<group>";
-		};
 		51C03097257E02FF00609262 /* Row */ = {
 			isa = PBXGroup;
 			children = (
@@ -882,7 +860,6 @@
 				51C4C45A255ACA1B004E0206 /* EditorViewController.swift */,
 				51D28D2B257730DB0039DDFC /* EditorViewController+Drag.swift */,
 				51D28D31257731DC0039DDFC /* EditorViewController+Drop.swift */,
-				51B9D99526140AD100A66859 /* Activities */,
 				511B29F526018F4A00C04239 /* Backlink */,
 				51D460F82729E2E60024EC48 /* Metadata */,
 				51C03097257E02FF00609262 /* Row */,
@@ -1154,13 +1131,10 @@
 				5164B35427582D810039600B /* MainOpenQuicklyViewController.swift in Sources */,
 				519184F927124E9700B7E177 /* GetOutlinesIntentHandler.swift in Sources */,
 				517AF6A725E08CB80044DBAB /* NonIntrinsicLabel.swift in Sources */,
-				51DEE82426FE8711006DAA56 /* ExportPDFDocActivity.swift in Sources */,
 				5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */,
 				5147D0B825CCAB2A004673C3 /* DocumentsViewController+Drop.swift in Sources */,
 				51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */,
 				514F222A25C4FF02004E02CD /* EditorTagInputTextField.swift in Sources */,
-				51F36C5826FAB5C90075A273 /* ExportMarkdownDocActivity.swift in Sources */,
-				51DEE82626FE87CD006DAA56 /* ExportPDFListActivity.swift in Sources */,
 				5147D0B525CB95B4004673C3 /* DocumentsViewController+Drag.swift in Sources */,
 				51077C5227A752DF000C71DB /* UIFont+.swift in Sources */,
 				51D977FA257A2E4F00D98490 /* EditorRowPreviewParameters.swift in Sources */,
@@ -1173,7 +1147,6 @@
 				51F13EFE255E13A9004B85CA /* AppAssets.swift in Sources */,
 				510471BD2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift in Sources */,
 				51028CD525F3159A00B50B71 /* UIColor+.swift in Sources */,
-				51B9D99D26140EDC00A66859 /* ExportMarkdownListActivity.swift in Sources */,
 				512D375225F06733000FA597 /* EditorSearchBar.swift in Sources */,
 				5173B406268BBD4200687117 /* UIImage+.swift in Sources */,
 				51F2859425AD11100019C573 /* CollectionsSearchCell.swift in Sources */,
@@ -1230,7 +1203,6 @@
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,
 				51D28D2C257730DB0039DDFC /* EditorViewController+Drag.swift in Sources */,
-				51B9D9A026140F3A00A66859 /* ExportOPMLActivity.swift in Sources */,
 				51C030B4257E192100609262 /* EditorTitleViewCell.swift in Sources */,
 				519184F12710792300B7E177 /* ExportIntentHandler.swift in Sources */,
 				517342F225EC2C690012EB20 /* UIActivityViewController+.swift in Sources */,

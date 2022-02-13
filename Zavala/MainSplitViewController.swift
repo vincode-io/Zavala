@@ -508,6 +508,14 @@ extension MainSplitViewController: DocumentsDelegate {
 		exportOPMLsForOutlines(outlines)
 	}
 	
+	func printDocs(_: DocumentsViewController, outlines: [Outline]) {
+		printDocsForOutlines(outlines)
+	}
+	
+	func printLists(_: DocumentsViewController, outlines: [Outline]) {
+		printListsForOutlines(outlines)
+	}
+	
 }
 
 // MARK: EditorDelegate

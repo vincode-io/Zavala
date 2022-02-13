@@ -84,6 +84,14 @@ class EditorRowTopicTextView: EditorRowTextView {
 		return lineEnd == endOfDocument
 	}
 	
+	var cursorIsAtBeginning: Bool {
+		return position(from: beginningOfDocument, offset: cursorPosition) == beginningOfDocument
+	}
+	
+	var cursorIsAtEnd: Bool {
+		return position(from: beginningOfDocument, offset: cursorPosition) == endOfDocument
+	}
+	
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 		self.delegate = self
@@ -189,6 +197,9 @@ class EditorRowTopicTextView: EditorRowTextView {
 	}
 	
 	override func update(row: Row) {
+		// Don't update the row if we are in the middle of entering multistage characters, e.g. Japanese
+		guard markedTextRange == nil else { return }
+		
 		self.row = row
 		
 		let cursorRange = selectedTextRange
