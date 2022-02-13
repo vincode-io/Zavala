@@ -266,14 +266,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	override var canBecomeFirstResponder: Bool { return true }
 
-	private var keyboardToolBar: UIToolbar!
-	private var moveRightButton: UIBarButtonItem!
-	private var moveLeftButton: UIBarButtonItem!
-	private var moveUpButton: UIBarButtonItem!
-	private var moveDownButton: UIBarButtonItem!
-	private var insertImageButton: UIBarButtonItem!
-	private var linkButton: UIBarButtonItem!
-
 	private var messageLabel: UILabel?
 	
 	private(set) var outline: Outline?
@@ -308,6 +300,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var filterButton: UIButton!
 	
 	private var doneBarButtonItem: UIBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done))
+
+	private var keyboardToolBar: UIToolbar!
+	private var moveRightButton: UIButton!
+	private var moveLeftButton: UIButton!
+	private var moveUpButton: UIButton!
+	private var moveDownButton: UIButton!
+	private var insertImageButton: UIButton!
+	private var linkButton: UIButton!
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
@@ -403,10 +403,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 		
 		let navButtonsStackView = UIStackView()
-		navButtonsStackView.isLayoutMarginsRelativeArrangement = true
 		navButtonsStackView.alignment = .center
-		navButtonsStackView.spacing = 20
-		navButtonsStackView.layoutMargins.right = 8
+		navButtonsStackView.spacing = 16
 
 		goBackwardButton = ToolbarButton(type: .system)
 		goBackwardButton.addTarget(self, action: #selector(goBackwardOne), for: .touchUpInside)
@@ -437,25 +435,65 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		navButtonsStackView.addArrangedSubview(filterButton)
 		
 		navButtonsBarButtonItem = UIBarButtonItem(customView: navButtonsStackView)
-		
-		moveRightButton = UIBarButtonItem(image: AppAssets.moveRight, style: .plain, target: self, action: #selector(moveCurrentRowsRight))
-		moveRightButton.title = L10n.moveLeft
-		moveLeftButton = UIBarButtonItem(image: AppAssets.moveLeft, style: .plain, target: self, action: #selector(moveCurrentRowsLeft))
-		moveLeftButton.title = L10n.moveRight
-		moveUpButton = UIBarButtonItem(image: AppAssets.moveUp, style: .plain, target: self, action: #selector(moveCurrentRowsUp))
-		moveUpButton.title = L10n.moveUp
-		moveDownButton = UIBarButtonItem(image: AppAssets.moveDown, style: .plain, target: self, action: #selector(moveCurrentRowsDown))
-		moveDownButton.title = L10n.moveDown
-		
-		insertImageButton = UIBarButtonItem(image: AppAssets.insertImage, style: .plain, target: self, action: #selector(insertImage))
-		insertImageButton.title = L10n.insertImage
-		linkButton = UIBarButtonItem(image: AppAssets.link, style: .plain, target: self, action: #selector(link))
-		linkButton.title = L10n.link
 
+		let moveButtonsStackView = UIStackView()
+		moveButtonsStackView.alignment = .center
+		moveButtonsStackView.spacing = 16
+
+		moveLeftButton = ToolbarButton(type: .system)
+		moveLeftButton.addTarget(self, action: #selector(moveCurrentRowsLeft), for: .touchUpInside)
+		moveLeftButton.setImage(AppAssets.moveLeft, for: .normal)
+		moveLeftButton.accessibilityLabel = L10n.moveLeft
+		moveLeftButton.isAccessibilityElement = true
+		moveButtonsStackView.addArrangedSubview(moveLeftButton)
+
+		moveRightButton = ToolbarButton(type: .system)
+		moveRightButton.addTarget(self, action: #selector(moveCurrentRowsRight), for: .touchUpInside)
+		moveRightButton.setImage(AppAssets.moveRight, for: .normal)
+		moveRightButton.accessibilityLabel = L10n.moveRight
+		moveRightButton.isAccessibilityElement = true
+		moveButtonsStackView.addArrangedSubview(moveRightButton)
+
+		moveUpButton = ToolbarButton(type: .system)
+		moveUpButton.addTarget(self, action: #selector(moveCurrentRowsUp), for: .touchUpInside)
+		moveUpButton.setImage(AppAssets.moveUp, for: .normal)
+		moveUpButton.accessibilityLabel = L10n.moveUp
+		moveUpButton.isAccessibilityElement = true
+		moveButtonsStackView.addArrangedSubview(moveUpButton)
+
+		moveDownButton = ToolbarButton(type: .system)
+		moveDownButton.addTarget(self, action: #selector(moveCurrentRowsDown), for: .touchUpInside)
+		moveDownButton.setImage(AppAssets.moveDown, for: .normal)
+		moveDownButton.accessibilityLabel = L10n.moveDown
+		moveDownButton.isAccessibilityElement = true
+		moveButtonsStackView.addArrangedSubview(moveDownButton)
+
+		let moveButtonsBarButtonItem = UIBarButtonItem(customView: moveButtonsStackView)
+		
+		let insertButtonsStackView = UIStackView()
+		insertButtonsStackView.alignment = .center
+		insertButtonsStackView.spacing = 16
+
+		insertImageButton = ToolbarButton(type: .system)
+		insertImageButton.addTarget(self, action: #selector(insertImage), for: .touchUpInside)
+		insertImageButton.setImage(AppAssets.insertImage, for: .normal)
+		insertImageButton.accessibilityLabel = L10n.insertImage
+		insertImageButton.isAccessibilityElement = true
+		insertButtonsStackView.addArrangedSubview(insertImageButton)
+
+		linkButton = ToolbarButton(type: .system)
+		linkButton.addTarget(self, action: #selector(link), for: .touchUpInside)
+		linkButton.setImage(AppAssets.link, for: .normal)
+		linkButton.accessibilityLabel = L10n.link
+		linkButton.isAccessibilityElement = true
+		insertButtonsStackView.addArrangedSubview(linkButton)
+
+		let insertButtonsBarButtonItem = UIBarButtonItem(customView: insertButtonsStackView)
+		
 		if traitCollection.userInterfaceIdiom != .mac {
 			keyboardToolBar = UIToolbar()
 			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-			keyboardToolBar.items = [moveLeftButton, moveRightButton, moveUpButton, moveDownButton, flexibleSpace, insertImageButton, linkButton]
+			keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
 			keyboardToolBar.sizeToFit()
 			navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
 		}
