@@ -2067,8 +2067,14 @@ private extension EditorViewController {
 		if #available(iOS 15, *) {
 			guard let index = row.shadowTableIndex else { return }
 			let indexPath = IndexPath(row: index, section: adjustedRowsSection)
-			UIView.performWithoutAnimation {
-				collectionView.reconfigureItems(at: [indexPath])
+			// This async dispatch is so that when we access typingAttributes in EditorRowTextView it
+			// doesn't try to do layout while we are reconfiguring the row. Yes, just accessing
+			// UITextView.typingAttributes can cause a layout change which will crash Zavala if it
+			// happens right afer reconfigureItmees is called.
+			DispatchQueue.main.async {
+				UIView.performWithoutAnimation {
+					self.collectionView.reconfigureItems(at: [indexPath])
+				}
 			}
 		} else {
 			// This is presumably less effecient than just reconfiguring the item and
