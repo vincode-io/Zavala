@@ -2605,7 +2605,12 @@ private extension EditorViewController {
 
 		for row in rows.sortedWithDecendentsFiltered() {
 			let itemProvider = NSItemProvider()
-			
+
+			// We need to create the RowGroup data before our data representation callback happens
+			// because we might actually be cutting the data and it won't be available anymore at
+			// the time that the callback happens.
+			let data = try? RowGroup(row).asData()
+
 			// We only register the text representation on the first one, since it looks like most text editors only support 1 dragged text item
 			if row == rows[0] {
 				itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
@@ -2620,12 +2625,7 @@ private extension EditorViewController {
 			}
 			
 			itemProvider.registerDataRepresentation(forTypeIdentifier: Row.typeIdentifier, visibility: .ownProcess) { completion in
-				do {
-					let data = try RowGroup(row).asData()
-					completion(data, nil)
-				} catch {
-					completion(nil, error)
-				}
+				completion(data, nil)
 				return nil
 			}
 			
