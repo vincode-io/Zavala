@@ -212,6 +212,7 @@ class EditorRowTextView: UITextView {
 			textStorage.addAttribute(.link, value: url, range: newRange)
 		} else {
 			if newRange.length > 0 {
+				typingAttributes = attrs
 				textStorage.removeAttribute(.link, range: newRange)
 			}
 		}
