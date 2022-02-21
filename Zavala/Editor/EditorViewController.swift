@@ -614,7 +614,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	// MARK: Notifications
 	
 	@objc func outlineFontCacheDidRebuild(_ note: Notification) {
-		collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+		collectionView.reloadData()
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {

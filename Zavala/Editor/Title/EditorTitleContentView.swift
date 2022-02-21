@@ -60,6 +60,7 @@ class EditorTitleContentView: UIView, UIContentView {
 	}
 	
 	private func apply() {
+		textView.font = OutlineFontCache.shared.title
 		textView.text = titleConfiguration.outline?.title
 	}
 	
