@@ -2359,7 +2359,6 @@ extension Outline {
 		
 		let changes = OutlineElementChanges(section: .tags, deletes: deletes, inserts: inserts, moves: moves)
 		outlineElementsDidChange(changes)
-		outlineElementsDidChange(OutlineElementChanges(section: .backlinks, reloads: Set([0])))
 		
 		return updatedRowIDs
 	}
