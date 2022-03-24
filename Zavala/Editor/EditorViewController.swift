@@ -1173,7 +1173,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func share(_ sender: Any? = nil) {
 		guard let outline = outline else { return }
 		let controller = UIActivityViewController(outline: outline)
-		controller.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
+		controller.popoverPresentationController?.sourceView = sender as? UIView
 		present(controller, animated: true)
 	}
 	
@@ -1183,7 +1183,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		AccountManager.shared.cloudKitAccount?.prepareCloudSharingController(document: .outline(outline)) { result in
 			switch result {
 			case .success(let sharingController):
-				sharingController.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
+				sharingController.popoverPresentationController?.sourceView = sender as? UIView
 				sharingController.delegate = self
 				sharingController.availablePermissions = [.allowReadWrite]
 				self.present(sharingController, animated: true)
