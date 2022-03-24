@@ -270,7 +270,10 @@ extension EditorRowTextView: UITextDropDelegate {
 extension EditorRowTextView: NSTextStorageDelegate {
 	
 	func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
-
+		
+		// If you access the typingAttributes while the attributedString is zero, you will crash randomly
+		guard attributedText.length > 0 else { return }
+		
 		var newTypingAttributes = typingAttributes
 		newTypingAttributes.removeValue(forKey: .font)
 
