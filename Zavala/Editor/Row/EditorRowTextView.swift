@@ -295,7 +295,7 @@ extension EditorRowTextView: NSTextStorageDelegate {
 					newAttributes[.backgroundColor] = UIColor.systemGray
 				}
 				
-				if key == .underlineStyle {
+				if key == .underlineStyle || key == .backgroundColor {
 					newAttributes[key] = nil
 				}
 
