@@ -21,7 +21,8 @@ extension NSAttributedString.Key {
 class EditorRowTextView: UITextView {
 	
 	var row: Row?
-	
+	var baseAttributes = [NSAttributedString.Key : Any]()
+
 	var lineHeight: CGFloat {
 		if let textRange = textRange(from: beginningOfDocument, to: beginningOfDocument) {
 			return firstRect(for: textRange).height
@@ -273,11 +274,14 @@ extension EditorRowTextView: NSTextStorageDelegate {
 		
 		// If you access the typingAttributes while the attributedString is zero, you will crash randomly
 		var newTypingAttributes: [NSAttributedString.Key : Any]
-		if attributedText.length > 0 {
-			newTypingAttributes = typingAttributes
+		let attributeLocation = editedRange.location - 1
+		if attributeLocation > -1 {
+			let attributeRange = NSRange(location: attributeLocation, length: 1)
+			textStorage.ensureAttributesAreFixed(in: attributeRange)
+			newTypingAttributes = textStorage.attributes(at: attributeLocation, effectiveRange: nil)
 			newTypingAttributes.removeValue(forKey: .font)
 		} else {
-			newTypingAttributes = [NSAttributedString.Key : Any]()
+			newTypingAttributes = baseAttributes
 		}
 
 		textStorage.enumerateAttributes(in: editedRange, options: .longestEffectiveRangeNotRequired) { (attributes, range, _) in

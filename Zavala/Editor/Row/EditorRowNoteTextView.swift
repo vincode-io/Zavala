@@ -128,11 +128,11 @@ class EditorRowNoteTextView: EditorRowTextView {
 		
 		text = ""
 		
-		var attrs = [NSAttributedString.Key : Any]()
-		attrs[.foregroundColor] = UIColor.secondaryLabel
-		attrs[.font] = OutlineFontCache.shared.note(level: row.level)
+		baseAttributes = [NSAttributedString.Key : Any]()
+		baseAttributes[.foregroundColor] = UIColor.secondaryLabel
+		baseAttributes[.font] = OutlineFontCache.shared.note(level: row.level)
 		
-		typingAttributes = attrs
+		typingAttributes = baseAttributes
         
         if let note = row.note {
             attributedText = note

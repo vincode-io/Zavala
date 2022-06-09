@@ -206,27 +206,27 @@ class EditorRowTopicTextView: EditorRowTextView {
 		
 		text = ""
 
-		var attrs = [NSAttributedString.Key : Any]()
+		baseAttributes = [NSAttributedString.Key : Any]()
 		if row.isComplete || row.isAncestorComplete {
-			attrs[.foregroundColor] = UIColor.tertiaryLabel
+			baseAttributes[.foregroundColor] = UIColor.tertiaryLabel
 			accessibilityLabel = L10n.complete
 		} else {
-			attrs[.foregroundColor] = UIColor.label
+			baseAttributes[.foregroundColor] = UIColor.label
 			accessibilityLabel = nil
 		}
 		
 		if row.isComplete {
-			attrs[.strikethroughStyle] = 1
-			attrs[.strikethroughColor] = UIColor.tertiaryLabel
+			baseAttributes[.strikethroughStyle] = 1
+			baseAttributes[.strikethroughColor] = UIColor.tertiaryLabel
 		} else {
-			attrs[.strikethroughStyle] = 0
+			baseAttributes[.strikethroughStyle] = 0
 		}
 		
-		attrs[.font] = OutlineFontCache.shared.topic(level: row.level)
+		baseAttributes[.font] = OutlineFontCache.shared.topic(level: row.level)
 		
-		typingAttributes = attrs
+		typingAttributes = baseAttributes
 		
-		var linkAttrs = attrs
+		var linkAttrs = baseAttributes
 		linkAttrs[.underlineStyle] = 1
 		linkTextAttributes = linkAttrs
 		
