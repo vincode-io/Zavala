@@ -10,11 +10,23 @@ import Foundation
 public extension Array where Element == Row {
 	
 	func sortedByDisplayOrder() -> Array {
-		return sorted(by: { $0.shadowTableIndex ?? -1 < $1.shadowTableIndex ?? -1 })
+		return sorted(by: {
+			if $0.shadowTableIndex == nil && $1.shadowTableIndex == nil {
+				return true
+			} else {
+				return $0.shadowTableIndex ?? -1 < $1.shadowTableIndex ?? -1
+			}
+		})
 	}
 	
 	func sortedByReverseDisplayOrder() -> Array {
-		return sorted(by: { $0.shadowTableIndex ?? -1 > $1.shadowTableIndex ?? -1 })
+		return sorted(by: {
+			if $0.shadowTableIndex == nil && $1.shadowTableIndex == nil {
+				return false
+			} else {
+				return $0.shadowTableIndex ?? -1 > $1.shadowTableIndex ?? -1
+			}
+		})
 	}
 
 	func sortedWithDecendentsFiltered() -> Array {
