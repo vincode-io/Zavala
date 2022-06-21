@@ -267,14 +267,15 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 	
 	override func selectAll(_ sender: Any?) {
-		guard editorViewController?.isSelectAllRowsUnavailable ?? true else {
-			editorViewController?.selectAllRows()
-			return
-		}
-		
-		guard editorViewController?.isOutlineFunctionsUnavailable ?? true else {
-			documentsViewController?.selectAllDocuments()
-			return
+		documentsViewController?.selectAllDocuments()
+	}
+
+	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+		switch action {
+		case .selectAll:
+			return !(editorViewController?.isInEditMode ?? false)
+		default:
+			return super.canPerformAction(action, withSender: sender)
 		}
 	}
 	

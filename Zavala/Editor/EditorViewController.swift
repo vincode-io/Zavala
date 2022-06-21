@@ -547,6 +547,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
+	override func selectAll(_ sender: Any?) {
+		selectAllRows()
+	}
+	
 	override func cut(_ sender: Any?) {
 		guard let rows = currentRows else { return }
 		cutRows(rows)
@@ -563,6 +567,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
+		case .selectAll:
+			return !isSelectAllRowsUnavailable
 		case .cut, .copy:
 			return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
 		case .paste:
