@@ -1570,8 +1570,8 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		layoutEditor(row: row)
 	}
 	
-	func editorRowMakeCursorVisibleIfNecessary() {
-		makeCursorVisibleIfNecessary()
+	func editorRowScrollEditorToVisible(textView: UITextView, rect: CGRect) {
+		scrollToVisible(textInput: textView, rect: rect)
 	}
 
 	func editorRowTextFieldDidBecomeActive(row: Row) {
@@ -2977,8 +2977,13 @@ private extension EditorViewController {
 
 	func makeCursorVisibleIfNecessary() {
 		guard let textInput = UIResponder.currentFirstResponder as? UITextInput,
-			  let cursorRect = textInput.cursorRect,
-			  var convertedRect = (textInput as? UIView)?.convert(cursorRect, to: collectionView) else { return }
+			  let cursorRect = textInput.cursorRect else { return }
+		
+		scrollToVisible(textInput: textInput, rect: cursorRect)
+	}
+	
+	func scrollToVisible(textInput: UITextInput, rect: CGRect) {
+		guard var convertedRect = (textInput as? UIView)?.convert(rect, to: collectionView) else { return }
 		
 		// This isInNotes hack isn't well understood, but it improves the user experience...
 		if textInput is EditorRowNoteTextView {
@@ -2987,7 +2992,7 @@ private extension EditorViewController {
 		
 		collectionView.scrollRectToVisibleBypass(convertedRect, animated: true)
 	}
-	
+
 	func updateSpotlightIndex() {
 		if let outline = outline {
 			DocumentIndexer.updateIndex(forDocument: .outline(outline))

@@ -22,6 +22,7 @@ class EditorRowTextView: UITextView {
 	
 	var row: Row?
 	var baseAttributes = [NSAttributedString.Key : Any]()
+	var previousSelectedTextRange: UITextRange?
 
 	var lineHeight: CGFloat {
 		if let textRange = textRange(from: beginningOfDocument, to: beginningOfDocument) {
@@ -200,6 +201,10 @@ class EditorRowTextView: UITextView {
 		fatalError("update has not been implemented")
 	}
 	
+	func scrollEditorToVisible(rect: CGRect) {
+		fatalError("scrollEditorToVisible has not been implemented")
+	}
+	
 	func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
         var attrs = typingAttributes
         attrs.removeValue(forKey: .link)
@@ -247,6 +252,35 @@ class EditorRowTextView: UITextView {
     @objc func editLink(_ sender: Any?) {
         fatalError("editLink has not been implemented")
     }
+
+	func handleDidChangeSelection() {
+		guard let selectedTextRange = selectedTextRange, !selectedTextRange.isEmpty else {
+			previousSelectedTextRange = nil
+			return
+		}
+
+		defer {
+			self.previousSelectedTextRange = selectedTextRange
+		}
+
+		guard let previousSelectedTextRange = previousSelectedTextRange else {
+			return
+		}
+		
+		if compare(previousSelectedTextRange.start, to: selectedTextRange.start) == .orderedDescending {
+			if let startHandleEndLocation = position(from: selectedTextRange.start, offset: 1),
+			   let startHandleStartLocation = textRange(from: selectedTextRange.start, to: startHandleEndLocation) {
+				let startHandleRect = firstRect(for: startHandleStartLocation)
+				scrollEditorToVisible(rect: startHandleRect)
+			}
+		} else if compare(previousSelectedTextRange.end, to: selectedTextRange.end) == .orderedAscending {
+			if let endHandleStartLocation = position(from: selectedTextRange.end, offset: -1),
+			   let endHandleEndLocation = textRange(from: endHandleStartLocation, to: selectedTextRange.end) {
+				let endHandleRect = firstRect(for: endHandleEndLocation)
+				scrollEditorToVisible(rect: endHandleRect)
+			}
+		}
+	}
 
 }
 

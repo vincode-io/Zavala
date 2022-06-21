@@ -13,7 +13,7 @@ protocol EditorRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewInputAccessoryView: UIView? { get }
 	func layoutEditor(_ : EditorRowNoteTextView, row: Row)
-	func makeCursorVisibleIfNecessary(_ : EditorRowNoteTextView)
+	func scrollEditorToVisible(_ : EditorRowNoteTextView, rect: CGRect)
 	func didBecomeActive(_ : EditorRowNoteTextView, row: Row)
 	func textChanged(_ : EditorRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
 	func deleteRowNote(_ : EditorRowNoteTextView, row: Row, rowStrings: RowStrings)
@@ -90,7 +90,8 @@ class EditorRowNoteTextView: EditorRowTextView {
 	}
     
     override func makeCursorVisibleIfNecessary() {
-        editorDelegate?.makeCursorVisibleIfNecessary(self)
+		guard let cursorRect = cursorRect else { return }
+        editorDelegate?.scrollEditorToVisible(self, rect: cursorRect)
     }
     
 	override func deleteBackward() {
@@ -142,7 +143,11 @@ class EditorRowNoteTextView: EditorRowTextView {
 		
 		selectedTextRange = cursorRange
     }
-	
+
+	override func scrollEditorToVisible(rect: CGRect) {
+		editorDelegate?.scrollEditorToVisible(self, rect: rect)
+	}
+
 }
 
 // MARK: CursorCoordinatesProvider
@@ -193,4 +198,9 @@ extension EditorRowNoteTextView: UITextViewDelegate {
 		editorDelegate?.zoomImage(self, image, rect: convertedRect)
 		return false
 	}
+	
+	func textViewDidChangeSelection(_ textView: UITextView) {
+		handleDidChangeSelection()
+	}
+
 }

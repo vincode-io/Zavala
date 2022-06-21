@@ -13,7 +13,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewInputAccessoryView: UIView? { get }
 	func didBecomeActive(_: EditorRowTopicTextView, row: Row)
 	func layoutEditor(_: EditorRowTopicTextView, row: Row)
-	func makeCursorVisibleIfNecessary(_: EditorRowTopicTextView)
+	func scrollEditorToVisible(_: EditorRowTopicTextView, rect: CGRect)
 	func moveCursorUp(_: EditorRowTopicTextView, row: Row)
 	func moveCursorDown(_: EditorRowTopicTextView, row: Row)
 	func textChanged(_: EditorRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
@@ -128,7 +128,8 @@ class EditorRowTopicTextView: EditorRowTextView {
 	}
 	
     override func makeCursorVisibleIfNecessary() {
-        editorDelegate?.makeCursorVisibleIfNecessary(self)
+		guard let cursorRect = cursorRect else { return }
+        editorDelegate?.scrollEditorToVisible(self, rect: cursorRect)
     }
     
 	override func deleteBackward() {
@@ -239,6 +240,10 @@ class EditorRowTopicTextView: EditorRowTextView {
 		selectedTextRange = cursorRange
     }
 	
+	override func scrollEditorToVisible(rect: CGRect) {
+		editorDelegate?.scrollEditorToVisible(self, rect: rect)
+	}
+	
 }
 
 // MARK: CursorCoordinatesProvider
@@ -294,4 +299,8 @@ extension EditorRowTopicTextView: UITextViewDelegate {
 		return false
 	}
 	
+	func textViewDidChangeSelection(_ textView: UITextView) {
+		handleDidChangeSelection()
+	}
+
 }
