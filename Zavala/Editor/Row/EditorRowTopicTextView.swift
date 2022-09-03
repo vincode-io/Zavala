@@ -273,13 +273,11 @@ extension EditorRowTopicTextView: UITextViewDelegate {
 	
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
 		guard let row = row else { return true }
+		
 		switch text {
 		case "\n":
 			editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
 			return false
-		case " ":
-			typingAttributes[.link] = nil
-			return true
 		default:
 			return true
 		}

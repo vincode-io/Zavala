@@ -175,16 +175,6 @@ extension EditorRowNoteTextView: UITextViewDelegate {
         processTextEditingEnding()
 	}
 	
-	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-		switch text {
-		case " ":
-			typingAttributes[.link] = nil
-			return true
-		default:
-			return true
-		}
-	}
-	
     func textViewDidChange(_ textView: UITextView) {
         processTextChanges()
     }
