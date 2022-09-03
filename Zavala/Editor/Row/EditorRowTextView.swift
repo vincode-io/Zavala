@@ -340,11 +340,8 @@ extension EditorRowTextView: NSTextStorageDelegate {
 					newAttributes[key] = nil
 				}
 				
-				if key == .link && range.location > 0 {
-					let testRange = NSRange(location: range.location - 1, length: 1)
-					if textStorage.attributedSubstring(from: testRange).string == " " {
-						newAttributes[key] = nil
-					}
+				if key == .link && textStorage.attributedSubstring(from: range).string == " " {
+					newAttributes[key] = nil
 				}
 
 				if key == .font, let oldFont = attributes[key] as? UIFont, let newFont = font {
