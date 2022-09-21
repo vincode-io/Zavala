@@ -216,7 +216,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
-		case #selector(delete(_:)):
+		case .delete:
 			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true)
 		default:
 			return super.canPerformAction(action, withSender: sender)

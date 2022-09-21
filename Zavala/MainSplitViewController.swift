@@ -274,6 +274,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		switch action {
 		case .selectAll:
 			return !(editorViewController?.isInEditMode ?? false)
+		case .delete:
+			guard !(editorViewController?.isInEditMode ?? false) else {
+				return false
+			}
+			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true) || !(editorViewController?.isOutlineFunctionsUnavailable ?? true)
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -381,7 +386,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(delete(_:)):
+		case .delete:
 			if isDeleteEntityUnavailable {
 				command.attributes = .disabled
 			}
