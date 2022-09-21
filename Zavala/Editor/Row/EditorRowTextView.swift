@@ -122,6 +122,8 @@ class EditorRowTextView: UITextView {
 				if $0.name == "dragInitiation"
 					|| $0.name == "dragExclusionRelationships"
 					|| $0.name == "dragFailureRelationships"
+					|| $0.name == "com.apple.UIKit.clickPresentationExclusion"
+					|| $0.name == "com.apple.UIKit.clickPresentationFailure"
 					|| $0.name == "com.apple.UIKit.longPressClickDriverPrimary" {
 					removeGestureRecognizer($0)
 				}
