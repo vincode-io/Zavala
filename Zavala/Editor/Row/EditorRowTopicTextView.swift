@@ -55,7 +55,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 			controlN,
 			UIKeyCommand(action: #selector(moveRight(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.alternate], action: #selector(insertTab(_:))),
-			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(insertReturn(_:))),
+			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(insertNewline(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(insertRow(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(split(_:))),
 			toggleBoldCommand,
@@ -168,10 +168,6 @@ class EditorRowTopicTextView: EditorRowTextView {
 	
 	@objc func insertTab(_ sender: Any) {
 		insertText("\t")
-	}
-	
-	@objc func insertReturn(_ sender: Any) {
-		insertText("\n")
 	}
 	
 	@objc func insertRow(_ sender: Any) {

@@ -253,6 +253,10 @@ class EditorRowTextView: UITextView {
         fatalError("editLink has not been implemented")
     }
 
+	@objc func insertNewline(_ sender: Any) {
+		insertText("\n")
+	}
+	
 	func handleDidChangeSelection() {
 		guard let selectedTextRange = selectedTextRange, !selectedTextRange.isEmpty else {
 			previousSelectedTextRange = nil

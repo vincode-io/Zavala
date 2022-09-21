@@ -75,6 +75,7 @@
 "Cut" = "Cut";
 "Copy" = "Copy";
 "Paste" = "Paste";
+"Newline" = "Newline";
 "Release_Notes" = "Release Notes";
 "GitHub_Repository" = "GitHub Repository";
 "Bug_Tracker" = "Bug Tracker";

@@ -173,6 +173,10 @@ struct AppAssets {
 		return UIImage(systemName: "arrow.up.to.line")!
 	}()
 
+	static var newline: UIImage = {
+		return UIImage(systemName: "return")!
+	}()
+
 	static var note: UIImage = {
 		return UIImage(systemName: "doc.text")!
 	}()

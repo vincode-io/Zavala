@@ -171,11 +171,15 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return currentTextView == nil
 	}
 
+	var isInsertImageUnavailable: Bool {
+		return currentTextView == nil
+	}
+
 	var isLinkUnavailable: Bool {
 		return currentTextView == nil
 	}
 
-	var isInsertImageUnavailable: Bool {
+	var isInsertNewlineUnavailable: Bool {
 		return currentTextView == nil
 	}
 
@@ -308,6 +312,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var moveDownButton: UIButton!
 	private var insertImageButton: UIButton!
 	private var linkButton: UIButton!
+	private var insertNewlineButton: UIButton!
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
@@ -489,6 +494,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		linkButton.accessibilityLabel = L10n.link
 		linkButton.isAccessibilityElement = true
 		insertButtonsStackView.addArrangedSubview(linkButton)
+
+		insertNewlineButton = ToolbarButton(type: .system)
+		insertNewlineButton.addTarget(self, action: #selector(insertNewline), for: .touchUpInside)
+		insertNewlineButton.setImage(AppAssets.newline, for: .normal)
+		insertNewlineButton.accessibilityLabel = L10n.newline
+		insertNewlineButton.isAccessibilityElement = true
+		insertButtonsStackView.addArrangedSubview(insertNewlineButton)
 
 		let insertButtonsBarButtonItem = UIBarButtonItem(customView: insertButtonsStackView)
 		
@@ -905,6 +917,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			moveDownButton.isEnabled = !isMoveRowsDownUnavailable
 			insertImageButton.isEnabled = !isInsertImageUnavailable
 			linkButton.isEnabled = !isLinkUnavailable
+			insertNewlineButton.isEnabled = !isInsertNewlineUnavailable
 		}
 		
 	}
@@ -1159,6 +1172,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func link() {
 		currentTextView?.editLink(self)
+	}
+	
+	@objc func insertNewline() {
+		currentTextView?.insertNewline(self)
 	}
 	
 	@objc func splitRow() {
