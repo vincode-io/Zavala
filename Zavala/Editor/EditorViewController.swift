@@ -303,8 +303,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var moreMenuButton: UIButton!
 	private var filterButton: UIButton!
 	
-	private var doneBarButtonItem: UIBarButtonItem!
-
 	private var keyboardToolBar: UIToolbar!
 	private var moveRightButton: UIButton!
 	private var moveLeftButton: UIButton!
@@ -406,8 +404,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		backlinkRegistration = UICollectionView.CellRegistration<EditorBacklinkViewCell, Outline> { [weak self] (cell, indexPath, outline) in
 			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
-		
-		doneBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done))
 		
 		let navButtonsStackView = UIStackView()
 		navButtonsStackView.isLayoutMarginsRelativeArrangement = true
@@ -514,7 +510,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
 		}
 
-		updatePhoneUI(editMode: false)
 		updateUI()
 		collectionView.reloadData()
 
@@ -745,7 +740,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				UIView.animate(withDuration: 0.25) {
 					self?.collectionView.contentInset = EditorViewController.defaultContentInsets
 				}
-				self?.updatePhoneUI(editMode: false)
 				self?.currentKeyboardHeight = 0
 			}
 			DispatchQueue.main.async(execute: keyboardWorkItem!)
@@ -756,7 +750,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				if self?.collectionView.contentInset != newInsets {
 					self?.collectionView.contentInset = newInsets
 				}
-				self?.updatePhoneUI(editMode: true)
 				self?.makeCursorVisibleIfNecessary()
 				self?.currentKeyboardHeight = keyboardViewEndFrame.height
 			}
@@ -850,16 +843,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	func selectAllRows() {
 		for i in 0..<collectionView.numberOfItems(inSection: adjustedRowsSection) {
 			collectionView.selectItem(at: IndexPath(row: i, section: adjustedRowsSection), animated: false, scrollPosition: [])
-		}
-	}
-	
-	func updatePhoneUI(editMode: Bool) {
-		if traitCollection.userInterfaceIdiom == .phone {
-			if editMode {
-				navigationItem.rightBarButtonItems = [doneBarButtonItem, navButtonsBarButtonItem]
-			} else {
-				navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
-			}
 		}
 	}
 	
@@ -1095,11 +1078,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		} else {
 			collectionView?.refreshControl?.endRefreshing()
 		}
-	}
-	
-	@objc func done() {
-		UIResponder.currentFirstResponder?.resignFirstResponder()
-		CursorCoordinates.clearLastKnownCoordinates()
 	}
 	
 	@objc func toggleFilterOn() {
