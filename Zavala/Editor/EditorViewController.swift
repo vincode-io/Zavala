@@ -303,7 +303,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var moreMenuButton: UIButton!
 	private var filterButton: UIButton!
 	
-	private var doneBarButtonItem: UIBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done))
+	private var doneBarButtonItem: UIBarButtonItem!
 
 	private var keyboardToolBar: UIToolbar!
 	private var moveRightButton: UIButton!
@@ -406,6 +406,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		backlinkRegistration = UICollectionView.CellRegistration<EditorBacklinkViewCell, Outline> { [weak self] (cell, indexPath, outline) in
 			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
+		
+		doneBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done))
 		
 		let navButtonsStackView = UIStackView()
 		navButtonsStackView.isLayoutMarginsRelativeArrangement = true
