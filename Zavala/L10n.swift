@@ -308,6 +308,8 @@ internal enum L10n {
   }
   /// Select
   internal static let select = L10n.tr("Localizable", "Select")
+  /// Settings…
+  internal static let settingsEllipsis = L10n.tr("Localizable", "Settings_Ellipsis")
   /// Share
   internal static let share = L10n.tr("Localizable", "Share")
   /// Share…
