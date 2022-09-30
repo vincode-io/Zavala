@@ -6,15 +6,12 @@
 //
 
 import Foundation
-import os.log
 import RSCore
 
-final class AccountFile {
+final class AccountFile: Logging {
 	
 	public static let filenameComponent = "account.plist"
 	
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "AccountFile")
-
 	private weak var accountManager: AccountManager?
 	private let fileURL: URL
 	private let accountType: AccountType
@@ -68,12 +65,12 @@ private extension AccountFile {
 					fileData = try Data(contentsOf: readURL)
 				}
 			} catch {
-				os_log(.error, log: log, "Account read from disk failed: %@.", error.localizedDescription)
+				logger.error("Account read from disk failed: \(error.localizedDescription, privacy: .public)")
 			}
 		})
 		
 		if let error = errorPointer?.pointee {
-			os_log(.error, log: log, "Account read from disk coordination failed: %@.", error.localizedDescription)
+			logger.error("Account read from disk coordination failed: \(error.localizedDescription, privacy: .public)")
 		}
 
 		guard let accountData = fileData else {
@@ -85,7 +82,7 @@ private extension AccountFile {
 		do {
 			account = try decoder.decode(Account.self, from: accountData)
 		} catch {
-			os_log(.error, log: log, "Account read deserialization failed: %@.", error.localizedDescription)
+			logger.error("Account read deserialization failed: \(error.localizedDescription, privacy: .public)")
 			return
 		}
 
@@ -105,7 +102,7 @@ private extension AccountFile {
 		do {
 			accountData = try encoder.encode(account)
 		} catch {
-			os_log(.error, log: log, "Account read deserialization failed: %@.", error.localizedDescription)
+			logger.error("Account read serialization failed: \(error.localizedDescription, privacy: .public)")
 			return
 		}
 
@@ -118,12 +115,12 @@ private extension AccountFile {
 				let resourceValues = try writeURL.resourceValues(forKeys: [.contentModificationDateKey])
 				lastModificationDate = resourceValues.contentModificationDate
 			} catch let error as NSError {
-				os_log(.error, log: log, "Account save to disk failed: %@.", error.localizedDescription)
+				logger.error("Account save to disk failed: \(error.localizedDescription, privacy: .public)")
 			}
 		})
 		
 		if let error = errorPointer?.pointee {
-			os_log(.error, log: log, "Account save to disk coordination failed: %@.", error.localizedDescription)
+			logger.error("Account save to disk coordination failed: \(error.localizedDescription, privacy: .public)")
 		}
 	}
 	

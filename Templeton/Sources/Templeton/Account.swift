@@ -6,9 +6,9 @@
 //
 
 import UIKit
-import os.log
-import SWXMLHash
 import CloudKit
+import RSCore
+import SWXMLHash
 
 public extension Notification.Name {
 	static let AccountDidInitialize = Notification.Name(rawValue: "AccountDidInitialize")
@@ -31,7 +31,7 @@ public enum AccountError: LocalizedError {
 	}
 }
 
-public final class Account: NSObject, Identifiable, Codable {
+public final class Account: NSObject, Identifiable, Codable, Logging {
 
 	public var id: EntityID {
 		return EntityID.account(type.rawValue)
@@ -72,7 +72,6 @@ public final class Account: NSObject, Identifiable, Codable {
 	var cloudKitManager: CloudKitManager?
 	
 	private let operationQueue = OperationQueue()
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Account")
 
 	private var documentsDictionaryNeedUpdate = true
 	private var _idToDocumentsDictionary = [String: Document]()

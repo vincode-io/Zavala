@@ -15,7 +15,7 @@ public extension Notification.Name {
 	static let CloudKitSyncDidComplete = Notification.Name(rawValue: "CloudKitSyncDidComplete")
 }
 
-public class CloudKitManager {
+public class CloudKitManager: Logging {
 
 	class CombinedRequest {
 		var documentRequest: CloudKitActionRequest?
@@ -24,7 +24,6 @@ public class CloudKitManager {
 	}
 
 	let defaultZone: CloudKitOutlineZone
-	var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "CloudKit")
 
 	var isSyncAvailable: Bool {
 		return !isSyncing && isNetworkAvailable
@@ -244,9 +243,9 @@ private extension CloudKitManager {
 			completion()
 		}
 
-		self.sendChangesBackgroundTaskID = UIApplication.shared.beginBackgroundTask {
+		self.sendChangesBackgroundTaskID = UIApplication.shared.beginBackgroundTask { [weak self] in
 			completeProcessing()
-			os_log("CloudKit sync processing terminated for running too long.", log: self.log, type: .info)
+			self?.logger.info("CloudKit sync processing terminated for running too long.")
 		}
 		
 		let operation = CloudKitModifyOperation()
@@ -327,9 +326,9 @@ private extension CloudKitManager {
 		let op = CKModifySubscriptionsOperation(subscriptionsToSave: [outlineSubscription, rowSubscription], subscriptionIDsToDelete: nil)
 		op.qualityOfService = CloudKitOutlineZone.qualityOfService
 		
-		op.modifySubscriptionsCompletionBlock = { subscriptions, deleted, error in
+		op.modifySubscriptionsCompletionBlock = { [weak self] subscriptions, deleted, error in
 			if error != nil {
-				os_log("Unable to subscribe to shared database.", log: self.log, type: .info)
+				self?.logger.info("Unable to subscribe to shared database.")
 			}
 		}
 		
