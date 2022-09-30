@@ -311,6 +311,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var insertImageButton: UIButton!
 	private var linkButton: UIButton!
 	private var insertNewlineButton: UIButton!
+	private var squareButton: UIButton!
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
@@ -406,10 +407,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 		
 		let navButtonsStackView = UIStackView()
-		navButtonsStackView.isLayoutMarginsRelativeArrangement = true
-		navButtonsStackView.layoutMargins.right = 8
 		navButtonsStackView.alignment = .center
-		navButtonsStackView.spacing = 16
+		navButtonsStackView.spacing = 14
 
 		goBackwardButton = ToolbarButton(type: .system)
 		goBackwardButton.addTarget(self, action: #selector(goBackwardOne), for: .touchUpInside)
@@ -443,7 +442,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		let moveButtonsStackView = UIStackView()
 		moveButtonsStackView.alignment = .center
-		moveButtonsStackView.spacing = 16
+		moveButtonsStackView.spacing = 14
 
 		moveLeftButton = ToolbarButton(type: .system)
 		moveLeftButton.addTarget(self, action: #selector(moveCurrentRowsLeft), for: .touchUpInside)
@@ -477,7 +476,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		let insertButtonsStackView = UIStackView()
 		insertButtonsStackView.alignment = .center
-		insertButtonsStackView.spacing = 16
+		insertButtonsStackView.spacing = 14
 
 		insertImageButton = ToolbarButton(type: .system)
 		insertImageButton.addTarget(self, action: #selector(insertImage), for: .touchUpInside)
@@ -501,11 +500,18 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		insertButtonsStackView.addArrangedSubview(insertNewlineButton)
 
 		let insertButtonsBarButtonItem = UIBarButtonItem(customView: insertButtonsStackView)
-		
+
 		if traitCollection.userInterfaceIdiom != .mac {
 			keyboardToolBar = UIToolbar()
 			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-			keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
+			
+			if traitCollection.userInterfaceIdiom == .pad {
+				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
+			} else {
+				let hideKeyboardBarButtonItem = UIBarButtonItem(image: AppAssets.hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
+				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, hideKeyboardBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
+			}
+			
 			keyboardToolBar.sizeToFit()
 			navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
 		}
@@ -1080,6 +1086,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
+	@objc func hideKeyboard() {
+		UIResponder.currentFirstResponder?.resignFirstResponder()
+		CursorCoordinates.clearLastKnownCoordinates()
+	}
+
 	@objc func toggleFilterOn() {
 		guard let changes = outline?.toggleFilterOn() else { return }
 		applyChangesRestoringState(changes)

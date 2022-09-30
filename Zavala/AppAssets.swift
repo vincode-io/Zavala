@@ -141,6 +141,10 @@ struct AppAssets {
 		return UIImage(systemName: "italic")!
 	}()
 
+	static var hideKeyboard: UIImage = {
+		return UIImage(systemName: "keyboard.chevron.compact.down")!
+	}()
+
 	static var hideNotesActive: UIImage = {
 		return UIImage(systemName: "doc.text.fill")!
 	}()
