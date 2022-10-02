@@ -40,24 +40,28 @@ struct DataDetectorResult {
 		case date(Date)
 	}
 	
-	func attributedString(withAttributes attributes: [NSAttributedString.Key : Any]) -> NSAttributedString? {
-		let attrString: NSMutableAttributedString
+	var url: URL? {
 		switch type {
 		case .url(let url):
-			attrString = NSMutableAttributedString(linkText: matchText, linkURL: url)
+			return url
 		case .phoneNumber(let phoneNumber):
 			guard let phoneNumber = phoneNumber.queryEncoded, let phoneURL = URL(string: "tel://\(phoneNumber)") else { return nil }
-			attrString = NSMutableAttributedString(linkText: matchText, linkURL: phoneURL)
+			return phoneURL
 		case .address:
 			guard let address = matchText.queryEncoded, let addressURL = URL(string: "http://maps.apple.com/?q=\(address)") else { return nil }
-			attrString = NSMutableAttributedString(linkText: matchText, linkURL: addressURL)
-		case .date(let date):
-			guard let calendarURL = URL(string: "calshow:\(date.timeIntervalSinceReferenceDate)") else { return nil }
-			attrString = NSMutableAttributedString(linkText: matchText, linkURL: calendarURL)
+			return addressURL
+		default:
+			return nil
 		}
+	}
+	
+	func attributedString(withAttributes attributes: [NSAttributedString.Key : Any]) -> NSAttributedString? {
+		guard let url = url else { return nil }
 		
 		var newAttributes = attributes
 		newAttributes.removeValue(forKey: .link)
+
+		let attrString = NSMutableAttributedString(linkText: matchText, linkURL: url)
 		attrString.addAttributes(newAttributes, range: NSRange(location: 0, length: attrString.length))
 		
 		return attrString
