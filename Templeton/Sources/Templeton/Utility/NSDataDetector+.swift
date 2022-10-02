@@ -62,7 +62,7 @@ struct DataDetectorResult {
 		newAttributes.removeValue(forKey: .link)
 
 		let attrString = NSMutableAttributedString(linkText: matchText, linkURL: url)
-		attrString.addAttributes(newAttributes, range: NSRange(location: 0, length: attrString.length))
+		attrString.addAttributes(newAttributes)
 		
 		return attrString
 	}

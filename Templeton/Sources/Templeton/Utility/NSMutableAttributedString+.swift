@@ -24,7 +24,7 @@ extension NSMutableAttributedString {
 
 			guard let resultAttributedString = result.attributedString(withAttributes: originalAttributes) else { return }
 			
-			if !originalString.isEqual(to: result.attributedString) {
+			if !originalString.isEqual(to: resultAttributedString) {
 				deleteCharacters(in: result.range)
 				insert(resultAttributedString, at: result.range.location)
 				changeWasMade = true
@@ -47,4 +47,8 @@ extension NSMutableAttributedString {
 		endEditing()
 	}
 	
+	public func addAttributes(_ attrs: [NSAttributedString.Key : Any] = [:]) {
+		addAttributes(attrs, range: NSRange(location: 0, length: length))
+	}
+
 }

@@ -3035,7 +3035,7 @@ private extension EditorViewController {
 		var attrs = [NSAttributedString.Key : Any]()
 		attrs[.foregroundColor] = UIColor.secondaryLabel
 		attrs[.font] = OutlineFontCache.shared.backlink
-		result.addAttributes(attrs, range: NSRange(0..<result.length))
+		result.addAttributes(attrs)
 		return result
 	}
 	

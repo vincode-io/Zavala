@@ -2979,8 +2979,7 @@ private extension Outline {
 			attrs[.paragraphStyle] = titleParagraphStyle
 			
 			let printTitle = NSMutableAttributedString(string: title)
-			let range = NSRange(location: 0, length: printTitle.length)
-			printTitle.addAttributes(attrs, range: range)
+			printTitle.addAttributes(attrs)
 			
 			attrString.append(printTitle)
 		}
