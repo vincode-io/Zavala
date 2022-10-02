@@ -435,6 +435,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		self.topic = importMarkdown(topicMarkdown, isInNotes: false)
 		self.note = importMarkdown(noteMarkdown, isInNotes: true)
 		
+		detectData()
+		
 		outline?.updateImages(rowID: id, images: matchedImages)
 	}
 	
@@ -560,6 +562,20 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		}
 		
 		return actionsTaken
+	}
+	
+	public func detectData() {
+		if let topic = self.topic {
+			let mutableTopic = NSMutableAttributedString(attributedString: topic)
+			mutableTopic.detectData()
+			self.topic = mutableTopic
+		}
+
+		if let note = self.note {
+			let mutableNote = NSMutableAttributedString(attributedString: note)
+			mutableNote.detectData()
+			self.note = mutableNote
+		}
 	}
 	
 	public func visit(visitor: (Row) -> Void) {

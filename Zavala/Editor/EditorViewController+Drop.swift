@@ -273,6 +273,7 @@ private extension EditorViewController {
 			let textRows = text.split(separator: "\n").map { String($0) }
 			for textRow in textRows {
 				let row = Row(outline: outline, topicMarkdown: textRow.trimmingWhitespace)
+				row.detectData()
 				rowGroups.append(RowGroup(row))
 			}
 			

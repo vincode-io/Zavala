@@ -9,6 +9,36 @@
 import UIKit
 
 extension NSMutableAttributedString {
+
+	@discardableResult
+	public func detectData() -> Bool {
+		let text = string
+		guard !string.isEmpty else { return false }
+		
+		var changeWasMade = false
+		
+		let detector = NSDataDetector(dataTypes: [.url])
+		detector.enumerateMatches(in: text) { (range, match) in
+			switch match {
+			case .url(let url), .email(_, let url):
+				var effectiveRange = NSRange()
+				if let link = attribute(.link, at: range.location, effectiveRange: &effectiveRange) as? URL {
+					if range != effectiveRange || link != url {
+						changeWasMade = true
+						removeAttribute(.link, range: effectiveRange)
+						addAttribute(.link, value: url, range: range)
+					}
+				} else {
+					changeWasMade = true
+					addAttribute(.link, value: url, range: range)
+				}
+			default:
+				break
+			}
+		}
+		
+		return changeWasMade
+	}
 	
 	public func replaceFont(with font: UIFont) {
 		beginEditing()

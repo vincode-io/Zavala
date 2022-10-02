@@ -390,31 +390,7 @@ extension EditorRowTextView: NSTextStorageDelegate {
 // MARK: Helpers
 
 extension EditorRowTextView {
-    
-    func detectData() {
-        guard let text = attributedText?.string, !text.isEmpty else { return }
         
-        let detector = NSDataDetector(dataTypes: [.url])
-        detector.enumerateMatches(in: text) { (range, match) in
-            switch match {
-            case .url(let url), .email(_, let url):
-                var effectiveRange = NSRange()
-                if let link = textStorage.attribute(.link, at: range.location, effectiveRange: &effectiveRange) as? URL {
-                    if range != effectiveRange || link != url {
-                        isTextChanged = true
-                        textStorage.removeAttribute(.link, range: effectiveRange)
-                        textStorage.addAttribute(.link, value: url, range: range)
-                    }
-                } else {
-                    isTextChanged = true
-                    textStorage.addAttribute(.link, value: url, range: range)
-                }
-            default:
-                break
-            }
-        }
-    }
-    
     func findAndSelectLink() -> (String?, String?, NSRange) {
         var effectiveRange = NSRange()
         if selectedRange.length == 0 && selectedRange.lowerBound < textStorage.length {
@@ -452,7 +428,9 @@ extension EditorRowTextView {
 	}
 	
     func processTextEditingEnding() {
-        detectData()
+		if textStorage.detectData() {
+			isTextChanged = true
+		}
         saveText()
     }
 

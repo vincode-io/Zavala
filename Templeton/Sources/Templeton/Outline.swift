@@ -1084,6 +1084,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		row.parent = parent
 		
 		createLinkRelationships(for: [row])
+		replaceLinkTitlesIfPossible(rows: [row])
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 
@@ -1124,6 +1125,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 		
 		createLinkRelationships(for: [row])
+		replaceLinkTitlesIfPossible(rows: [row])
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 			
@@ -1192,6 +1194,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 		
 		createLinkRelationships(for: rows)
+		replaceLinkTitlesIfPossible(rows: rows)
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 		
@@ -1225,6 +1228,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 		
 		createLinkRelationships(for: rows)
+		replaceLinkTitlesIfPossible(rows: rows)
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 			
@@ -1243,6 +1247,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 		
 		createLinkRelationships(for: rows)
+		replaceLinkTitlesIfPossible(rows: rows)
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 			
@@ -1262,6 +1267,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 		
 		createLinkRelationships(for: rows)
+		replaceLinkTitlesIfPossible(rows: rows)
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 			
@@ -1294,6 +1300,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 
 		createLinkRelationships(for: rows)
+		replaceLinkTitlesIfPossible(rows: rows)
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 
@@ -2815,11 +2822,15 @@ private extension Outline {
 		switch rowStrings {
 		case .topicMarkdown, .topic:
 			processLinkDiff(oldText: oldTopic, newText: row.topic)
+			replaceLinkTitleIfPossible(row: row, newText: row.topic, isInNotes: false)
 		case .noteMarkdown, .note:
 			processLinkDiff(oldText: oldNote, newText: row.note)
+			replaceLinkTitleIfPossible(row: row, newText: row.note, isInNotes: true)
 		case .both:
 			processLinkDiff(oldText: oldTopic, newText: row.topic)
 			processLinkDiff(oldText: oldNote, newText: row.note)
+			replaceLinkTitleIfPossible(row: row, newText: row.topic, isInNotes: false)
+			replaceLinkTitleIfPossible(row: row, newText: row.note, isInNotes: true)
 		}
 
 	}
@@ -2915,6 +2926,43 @@ private extension Outline {
 				outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
 			}
 		}
+	}
+	
+	func replaceLinkTitlesIfPossible(rows: [Row]) {
+		for row in rows {
+			replaceLinkTitleIfPossible(row: row, newText: row.topic, isInNotes: false)
+			replaceLinkTitleIfPossible(row: row, newText: row.note, isInNotes: true)
+		}
+	}
+	
+	func replaceLinkTitleIfPossible(row: Row, newText: NSAttributedString?, isInNotes: Bool) {
+		guard let newText = newText else { return }
+		
+		let mutableText = NSMutableAttributedString(attributedString: newText)
+		
+		mutableText.enumerateAttribute(.link, in: NSRange(location: 0, length: mutableText.length)) { [weak self] (value, range, match) in
+			guard let url = value as? URL else { return }
+			guard mutableText.attributedSubstring(from: range).string == url.absoluteString else { return }
+			
+			WebPageTitle.find(forURL: url) { [weak self] pageTitle in
+				guard let pageTitle = pageTitle, let self = self else { return }
+				
+				mutableText.removeAttribute(.link, range: range)
+				mutableText.replaceCharacters(in: range, with: pageTitle)
+				mutableText.addAttribute(.link, value: url, range: NSRange(location: range.location, length: pageTitle.count))
+				
+				if !isInNotes {
+					row.topic = mutableText
+				} else {
+					row.note = mutableText
+				}
+
+				if let shadowTableIndex = row.shadowTableIndex {
+					self.outlineElementsDidChange(OutlineElementChanges(section: self.adjustedRowsSection, reloads: Set([shadowTableIndex])))
+				}
+			}
+		}
+		
 	}
 
 	func appendPrintTitle(attrString: NSMutableAttributedString) {

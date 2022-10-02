@@ -42,7 +42,6 @@
 		5147D0B525CB95B4004673C3 /* DocumentsViewController+Drag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0B425CB95B4004673C3 /* DocumentsViewController+Drag.swift */; };
 		5147D0B825CCAB2A004673C3 /* DocumentsViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0B725CCAB2A004673C3 /* DocumentsViewController+Drop.swift */; };
 		5147D0C525CCD6AA004673C3 /* CollectionsViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0C425CCD6AA004673C3 /* CollectionsViewController+Drop.swift */; };
-		5147D0C825CE28AE004673C3 /* NSDataDetector+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */; };
 		514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */; };
 		514F220D25C4CCA7004E02CD /* EditorTagViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F220C25C4CCA6004E02CD /* EditorTagViewCell.swift */; };
 		514F221125C4CCE4004E02CD /* EditorTagContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F221025C4CCE4004E02CD /* EditorTagContentConfiguration.swift */; };
@@ -285,7 +284,6 @@
 		5147D0B425CB95B4004673C3 /* DocumentsViewController+Drag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DocumentsViewController+Drag.swift"; sourceTree = "<group>"; };
 		5147D0B725CCAB2A004673C3 /* DocumentsViewController+Drop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DocumentsViewController+Drop.swift"; sourceTree = "<group>"; };
 		5147D0C425CCD6AA004673C3 /* CollectionsViewController+Drop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CollectionsViewController+Drop.swift"; sourceTree = "<group>"; };
-		5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDataDetector+.swift"; sourceTree = "<group>"; };
 		514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+.swift"; sourceTree = "<group>"; };
 		514F220C25C4CCA6004E02CD /* EditorTagViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagViewCell.swift; sourceTree = "<group>"; };
 		514F221025C4CCE4004E02CD /* EditorTagContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagContentConfiguration.swift; sourceTree = "<group>"; };
@@ -512,7 +510,6 @@
 				517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */,
 				517A9E2A2603E0BF00EF346A /* NSActivity+.swift */,
 				511B29FF2601914400C04239 /* NSAttributedString+.swift */,
-				5147D0C725CE28AE004673C3 /* NSDataDetector+.swift */,
 				517342EE25EC2BE60012EB20 /* OutlineActivityItemSource.swift */,
 				5113B08C260C1F1700DBD11B /* OutlineFontCache.swift */,
 				511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */,
@@ -1174,7 +1171,6 @@
 				514F221825C4D076004E02CD /* EditorTagInputViewCell.swift in Sources */,
 				511B2AC826028EE800C04239 /* MainCoordinator.swift in Sources */,
 				514F221125C4CCE4004E02CD /* EditorTagContentConfiguration.swift in Sources */,
-				5147D0C825CE28AE004673C3 /* NSDataDetector+.swift in Sources */,
 				519185032713146500B7E177 /* RemoveOutlineTagIntentHandler.swift in Sources */,
 				51F2859725AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift in Sources */,
 				51918515271664FB00B7E177 /* AddRowsIntentHandler.swift in Sources */,

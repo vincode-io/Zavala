@@ -36,6 +36,15 @@
           "revision": "9183170d20857753d4f331b0ca63f73c60764bf3",
           "version": "5.0.2"
         }
+      },
+      {
+        "package": "VinXML",
+        "repositoryURL": "https://github.com/vincode-io/VinXML.git",
+        "state": {
+          "branch": "main",
+          "revision": "3e4d076c54ba3b1beb9c13038436f10cb609a6bc",
+          "version": null
+        }
       }
     ]
   },
