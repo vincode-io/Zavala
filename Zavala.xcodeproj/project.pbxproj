@@ -22,7 +22,6 @@
 		511B29F726018FBB00C04239 /* EditorBacklinkContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F626018FBB00C04239 /* EditorBacklinkContentConfiguration.swift */; };
 		511B29FA26018FD100C04239 /* EditorBacklinkContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F926018FD100C04239 /* EditorBacklinkContentView.swift */; };
 		511B29FD2601901C00C04239 /* EditorBacklinkViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29FC2601901C00C04239 /* EditorBacklinkViewCell.swift */; };
-		511B2A002601914400C04239 /* NSAttributedString+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29FF2601914400C04239 /* NSAttributedString+.swift */; };
 		511B2AC826028EE800C04239 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B2AC726028EE700C04239 /* MainCoordinator.swift */; };
 		511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */; };
 		512229682563507E008041AF /* EditorRowViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorRowViewCell.swift */; };
@@ -265,7 +264,6 @@
 		511B29F626018FBB00C04239 /* EditorBacklinkContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBacklinkContentConfiguration.swift; sourceTree = "<group>"; };
 		511B29F926018FD100C04239 /* EditorBacklinkContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBacklinkContentView.swift; sourceTree = "<group>"; };
 		511B29FC2601901C00C04239 /* EditorBacklinkViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBacklinkViewCell.swift; sourceTree = "<group>"; };
-		511B29FF2601914400C04239 /* NSAttributedString+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+.swift"; sourceTree = "<group>"; };
 		511B2AC726028EE700C04239 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLayoutManager.swift; sourceTree = "<group>"; };
 		512229672563507E008041AF /* EditorRowViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowViewCell.swift; sourceTree = "<group>"; };
@@ -509,7 +507,6 @@
 				515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */,
 				517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */,
 				517A9E2A2603E0BF00EF346A /* NSActivity+.swift */,
-				511B29FF2601914400C04239 /* NSAttributedString+.swift */,
 				517342EE25EC2BE60012EB20 /* OutlineActivityItemSource.swift */,
 				5113B08C260C1F1700DBD11B /* OutlineFontCache.swift */,
 				511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */,
@@ -1243,7 +1240,6 @@
 				513B916A2722CDC80051A6BA /* EditOutlineIntentHandler.swift in Sources */,
 				51C71C6B273F07ED00F6C779 /* ImageTransition.swift in Sources */,
 				519185012713116B00B7E177 /* AddOutlineTagIntentHandler.swift in Sources */,
-				511B2A002601914400C04239 /* NSAttributedString+.swift in Sources */,
 				51E5C48F27221F6200A38983 /* IntentOutline+.swift in Sources */,
 				51B2B2C82563A2180090C56B /* EditorRowTopicTextView.swift in Sources */,
 				51BAEA8F2717AA74004F1E84 /* GetRowsIntentHandler.swift in Sources */,

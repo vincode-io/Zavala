@@ -9,6 +9,10 @@ import Foundation
 
 extension String {
 	
+	var queryEncoded: String? {
+		return addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+	}
+	
 	public func makeSearchable() -> String {
 		return trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current)
 	}

@@ -17,23 +17,17 @@ extension NSMutableAttributedString {
 		
 		var changeWasMade = false
 		
-		let detector = NSDataDetector(dataTypes: [.url])
-		detector.enumerateMatches(in: text) { (range, match) in
-			switch match {
-			case .url(let url), .email(_, let url):
-				var effectiveRange = NSRange()
-				if let link = attribute(.link, at: range.location, effectiveRange: &effectiveRange) as? URL {
-					if range != effectiveRange || link != url {
-						changeWasMade = true
-						removeAttribute(.link, range: effectiveRange)
-						addAttribute(.link, value: url, range: range)
-					}
-				} else {
-					changeWasMade = true
-					addAttribute(.link, value: url, range: range)
-				}
-			default:
-				break
+		let detector = NSDataDetector(dataTypes: DataDetectorType.allCases)
+		detector.enumerateMatches(in: text) { result in
+			let originalString = attributedSubstring(from: result.range)
+			let originalAttributes = originalString.attributes(at: 0, effectiveRange: nil)
+
+			guard let resultAttributedString = result.attributedString(withAttributes: originalAttributes) else { return }
+			
+			if !originalString.isEqual(to: result.attributedString) {
+				deleteCharacters(in: result.range)
+				insert(resultAttributedString, at: result.range.location)
+				changeWasMade = true
 			}
 		}
 		
