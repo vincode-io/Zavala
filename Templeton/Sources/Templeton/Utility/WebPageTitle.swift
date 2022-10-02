@@ -12,14 +12,14 @@ import VinXML
 struct WebPageTitle: Logging {
 	
 	static func find(forURL url: URL, completion: @escaping (String?) -> ()) {
-		func finish(_ result:String?) {
+		func finish(_ result:String? = nil) {
 			DispatchQueue.main.async {
 				completion(result)
 			}
 		}
 		
 		guard let scheme = URLComponents(url: url, resolvingAgainstBaseURL: false)?.scheme, scheme.starts(with: "http") else {
-			finish(nil)
+			finish()
 			return
 		}
 
@@ -27,19 +27,19 @@ struct WebPageTitle: Logging {
 		let dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
 			if let error = error {
 				logger.error("Download failed for URL: \(url.absoluteString, privacy: .public) with error: \(error.localizedDescription, privacy: .public)")
-				finish(nil)
+				finish()
 				return
 			}
 			
 			guard let data = data, let html = String(data: data, encoding: .utf8) else {
 				logger.error("Unable to convert result to String for URL: \(url.absoluteString, privacy: .public)")
-				finish(nil)
+				finish()
 				return
 			}
 			
 			guard let doc = try? VinXML.XMLDocument(html: html) else {
 				logger.error("Unable to parse using VinXML.XMLDocument for URL: \(url.absoluteString, privacy: .public)")
-				finish(nil)
+				finish()
 				return
 			}
 			
@@ -47,7 +47,7 @@ struct WebPageTitle: Logging {
 				try finish(Self.extractTitle(doc: doc))
 			} catch {
 				logger.error("Can't extract Title for URL: \(url.absoluteString, privacy: .public) with error: \(error.localizedDescription, privacy: .public)")
-				finish(nil)
+				finish()
 			}
 		}
 		
