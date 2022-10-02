@@ -324,6 +324,8 @@ extension EditorRowTextView: NSTextStorageDelegate {
 			newTypingAttributes = baseAttributes
 		}
 
+		var needsDataDetection = false
+		
 		textStorage.enumerateAttributes(in: editedRange, options: .longestEffectiveRangeNotRequired) { (attributes, range, _) in
 			var newAttributes = attributes
 			
@@ -346,8 +348,12 @@ extension EditorRowTextView: NSTextStorageDelegate {
 					newAttributes[key] = nil
 				}
 				
-				if key == .link && textStorage.attributedSubstring(from: range).string == " " {
-					newAttributes[key] = nil
+				if textStorage.attributedSubstring(from: range).string == " " {
+					if key == .link {
+						newAttributes[key] = nil
+					} else {
+						needsDataDetection = true
+					}
 				}
 
 				if key == .font, let oldFont = attributes[key] as? UIFont, let newFont = font {
@@ -382,6 +388,10 @@ extension EditorRowTextView: NSTextStorageDelegate {
 			}
 			
 			textStorage.setAttributes(newAttributes, range: range)
+		}
+		
+		if needsDataDetection {
+			textStorage.detectData()
 		}
 	}
 	
