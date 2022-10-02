@@ -2043,10 +2043,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		if let keyedRows = keyedRows {
 			beginCloudKitBatchRequest()
-			var cumulativeActionsTaken = LinkResolvingActions()
+			var cumulativeActionsTaken = AltLinkResolvingActions()
 			
 			for row in keyedRows.values {
-				let actionsTaken = row.resolveLinks()
+				let actionsTaken = row.resolveAltLinks()
 				cumulativeActionsTaken.formUnion(actionsTaken)
 				
 				if actionsTaken.contains(.fixedAltLink) {

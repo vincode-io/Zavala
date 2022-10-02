@@ -25,10 +25,10 @@ enum RowError: LocalizedError {
 	}
 }
 
-public struct LinkResolvingActions: OptionSet {
+public struct AltLinkResolvingActions: OptionSet {
 	
-	public static let fixedAltLink = LinkResolvingActions(rawValue: 1)
-	public static let foundAltLink = LinkResolvingActions(rawValue: 2)
+	public static let fixedAltLink = AltLinkResolvingActions(rawValue: 1)
+	public static let foundAltLink = AltLinkResolvingActions(rawValue: 2)
 	
 	public let rawValue: Int
 	public init(rawValue: Int) {
@@ -424,7 +424,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 					}
 				}
 				
-				resolveLinks(attrString: attrString)
+				resolveAltLinks(attrString: attrString)
 				
 				return attrString
 			}
@@ -546,18 +546,18 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return visitor.markdown
 	}
 	
-	public func resolveLinks() -> LinkResolvingActions {
-		var actionsTaken = LinkResolvingActions()
+	public func resolveAltLinks() -> AltLinkResolvingActions {
+		var actionsTaken = AltLinkResolvingActions()
 		
 		if let topic = topic {
 			let mutableTopic = NSMutableAttributedString(attributedString: topic)
-			actionsTaken.formUnion(resolveLinks(attrString: mutableTopic))
+			actionsTaken.formUnion(resolveAltLinks(attrString: mutableTopic))
 			self.topic = mutableTopic
 		}
 		
 		if let note = note {
 			let mutableNote = NSMutableAttributedString(attributedString: note)
-			actionsTaken.formUnion(resolveLinks(attrString: mutableNote))
+			actionsTaken.formUnion(resolveAltLinks(attrString: mutableNote))
 			self.note = mutableNote
 		}
 		
@@ -711,7 +711,7 @@ private extension Row {
 			}
 		}
 		
-		resolveLinks(attrString: result)
+		resolveAltLinks(attrString: result)
 
 		return result
 	}
@@ -724,8 +724,8 @@ private extension Row {
 	}
 	
 	@discardableResult
-	func resolveLinks(attrString: NSMutableAttributedString) -> LinkResolvingActions {
-		var actionsTaken = LinkResolvingActions()
+	func resolveAltLinks(attrString: NSMutableAttributedString) -> AltLinkResolvingActions {
+		var actionsTaken = AltLinkResolvingActions()
 		
 		attrString.enumerateAttribute(.link, in: .init(location: 0, length: attrString.length), options: []) { (value, range, _) in
 			guard let url = value as? URL, url.scheme == nil else { return }
