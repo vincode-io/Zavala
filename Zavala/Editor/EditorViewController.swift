@@ -408,7 +408,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		let navButtonsStackView = UIStackView()
 		navButtonsStackView.alignment = .center
-		navButtonsStackView.spacing = 14
+		navButtonsStackView.spacing = 16
 
 		goBackwardButton = ToolbarButton(type: .system)
 		goBackwardButton.addTarget(self, action: #selector(goBackwardOne), for: .touchUpInside)
