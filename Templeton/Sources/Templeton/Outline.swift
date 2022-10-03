@@ -55,11 +55,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	public var adjustedRowsSection: Section {
 		return isSearching == .notSearching ? Section.rows : Section.title
 	}
-	
-	public var beingViewedCount = 0
-	
-	public var isBeingViewed: Bool {
-		return beingViewedCount > 0
+		
+	public var isBeingUsed: Bool {
+		return beingUsedCount > 0
 	}
 	
 	public var id: EntityID {
@@ -382,6 +380,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 	
+	private var beingUsedCount = 0
+
 	private var selectionRowID: EntityID?
 	private var selectionIsInNotes: Bool?
 	private var selectionLocation: Int?
@@ -412,6 +412,14 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		self.updated = Date()
 		rowsFile = RowsFile(outline: self)
 		imagesFile = ImagesFile(outline: self)
+	}
+	
+	public func incrementBeingUsedCount() {
+		beingUsedCount = beingUsedCount + 1
+	}
+
+	public func decrementBeingUsedCount() {
+		beingUsedCount = beingUsedCount - 1
 	}
 
 	public func reassignAccount(_ accountID: Int) {
@@ -495,7 +503,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineTagsDidChange()
 		requestCloudKitUpdate(for: id)
 
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 		
 		let inserted = tagIDs!.count
 		let reload = inserted - 1
@@ -512,7 +520,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineTagsDidChange()
 		requestCloudKitUpdate(for: id)
 
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 
 		let reload = tagIDs?.count ?? 1
 		var changes = OutlineElementChanges(section: .tags, deletes: Set([index]), reloads: Set([reload]))
@@ -863,7 +871,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineSearchWillEnd()
 		isSearching = .notSearching
 
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 		
 		var changes = rebuildShadowTable()
 
@@ -918,7 +926,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 		
-		guard isBeingViewed else {
+		guard isBeingUsed else {
 			return (impacted, nil)
 		}
 		
@@ -957,7 +965,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 
-		guard isBeingViewed else {
+		guard isBeingUsed else {
 			return (impacted, nil)
 		}
 
@@ -978,7 +986,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 		
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 		
 		let reloads = notes.keys.compactMap { $0.shadowTableIndex }
 		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
@@ -1015,7 +1023,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 		
-		guard isBeingViewed else { return nil }
+		guard isBeingUsed else { return nil }
 		
 		var deletedRows = [Row]()
 		
@@ -1061,7 +1069,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		deleteRows([bottomRow])
 		endCloudKitBatchRequest()
 		
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 
 		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set([topShadowTableIndex]))
 		outlineElementsDidChange(changes)
@@ -1088,7 +1096,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 
-		guard isBeingViewed else { return nil }
+		guard isBeingUsed else { return nil }
 
 		shadowTable?.insert(row, at: shadowTableIndex)
 		resetShadowTableIndexes(startingAt: shadowTableIndex)
@@ -1129,7 +1137,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 			
-		guard isBeingViewed else { return nil }
+		guard isBeingUsed else { return nil }
 
 		let rowShadowTableIndex: Int
 		if let afterRowShadowTableIndex = afterRow?.shadowTableIndex {
@@ -1198,7 +1206,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 		
-		guard isBeingViewed else { return nil }
+		guard isBeingUsed else { return nil }
 
 		var changes = rebuildShadowTable()
 		
@@ -1232,7 +1240,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 			
-		guard isBeingViewed else { return nil }
+		guard isBeingUsed else { return nil }
 
 		outlineElementsDidChange(rebuildShadowTable())
 		return rows.last?.shadowTableIndex
@@ -1251,7 +1259,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 			
-		guard isBeingViewed else { return  }
+		guard isBeingUsed else { return  }
 
 		outlineElementsDidChange(rebuildShadowTable())
 	}
@@ -1271,7 +1279,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 			
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 
 		outlineElementsDidChange(rebuildShadowTable())
 	}
@@ -1304,7 +1312,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 
-		guard isBeingViewed else { return nil }
+		guard isBeingUsed else { return nil }
 
 		outlineElementsDidChange(rebuildShadowTable())
 		return rows.last?.shadowTableIndex
@@ -1340,7 +1348,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 		sortedRows.forEach { $0.visit(visitor: duplicatingVisitor(_:)) }
 		
-		guard isBeingViewed else { return newRows }
+		guard isBeingUsed else { return newRows }
 
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
@@ -1364,7 +1372,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		endCloudKitBatchRequest()
 
-		guard isBeingViewed else { return nil }
+		guard isBeingUsed else { return nil }
 
 		if let rowShadowTableIndex = row.shadowTableIndex {
 			let reloadChanges = OutlineElementChanges(section: adjustedRowsSection, reloads: Set([rowShadowTableIndex]))
@@ -1391,7 +1399,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		outlineContentDidChange()
 		
-		if isBeingViewed && applyChanges {
+		if isBeingUsed && applyChanges {
 			guard let shadowTableIndex = row.shadowTableIndex else { return }
 			let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: [shadowTableIndex])
 			outlineElementsDidChange(changes)
@@ -1462,7 +1470,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 		outlineViewPropertyDidChange()
 		
-		guard isBeingViewed else {
+		guard isBeingUsed else {
 			return impacted
 		}
 
@@ -1516,7 +1524,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		outlineViewPropertyDidChange()
 
-		guard isBeingViewed else {
+		guard isBeingUsed else {
 			return impacted
 		}
 
@@ -1613,7 +1621,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 		
-		guard isBeingViewed else {
+		guard isBeingUsed else {
 			return impacted
 		}
 		
@@ -1680,7 +1688,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 		
-		guard isBeingViewed else {
+		guard isBeingUsed else {
 			return impacted
 		}
 
@@ -1723,7 +1731,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 		
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 
 		outlineElementsDidChange(rebuildShadowTable())
 	}
@@ -1759,7 +1767,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 		
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 
 		outlineElementsDidChange(rebuildShadowTable())
 	}
@@ -1851,7 +1859,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 
 		var changes = rebuildShadowTable()
 		var reloads = reloadsForParentAndChildren(rows: rowMoves.map { $0.row })
@@ -1879,9 +1887,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func unloadRows() {
+		assert(Thread.isMainThread)
 		rowsFile?.save()
 		
-		guard !isBeingViewed else { return }
+		guard !isBeingUsed else { return }
 
 		rowsFile?.suspend()
 		rowsFile = nil
@@ -1898,9 +1907,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func unloadImages() {
+		assert(Thread.isMainThread)
 		imagesFile?.save()
 		
-		guard !isBeingViewed else { return }
+		guard !isBeingUsed else { return }
 		
 		imagesFile?.suspend()
 		imagesFile = nil
@@ -2238,7 +2248,7 @@ extension Outline {
 			documentDidChangeBySync()
 		}
 		
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 
 		var reloadRows = [Row]()
 		
@@ -2277,7 +2287,7 @@ extension Outline {
 		let newTitle = record[CloudKitOutlineZone.CloudKitOutline.Fields.title] as? String
 		if title != newTitle {
 			title = newTitle
-			if isBeingViewed {
+			if isBeingUsed {
 				outlineElementsDidChange(OutlineElementChanges(section: .title, reloads: Set([0])))
 			}
 		}
@@ -2340,7 +2350,7 @@ extension Outline {
 			account.deleteTag(name: tagNameToDelete)
 		}
 		
-		guard isBeingViewed, isSearching == .notSearching else { return updatedRowIDs }
+		guard isBeingUsed, isSearching == .notSearching else { return updatedRowIDs }
 
 		var moves = Set<OutlineElementChanges.Move>()
 		var inserts = Set<Int>()
@@ -2465,7 +2475,7 @@ private extension Outline {
 		currentSearchResult = 0
 		searchResultCoordinates = .init()
 
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 		
 		func clearSearchVisitor(_ visited: Row) {
 			visited.isPartOfSearchResult = false
@@ -2499,7 +2509,7 @@ private extension Outline {
 		endCloudKitBatchRequest()
 		outlineContentDidChange()
 		
-		guard isBeingViewed else { return (impacted, nil) }
+		guard isBeingUsed else { return (impacted, nil) }
 
 		if isCompletedFilterOn {
 			let changes = rebuildShadowTable()
@@ -2583,7 +2593,7 @@ private extension Outline {
 		
 		outlineViewPropertyDidChange()
 		
-		guard isBeingViewed else { return impacted }
+		guard isBeingUsed else { return impacted }
 
 		var changes = rebuildShadowTable()
 		
@@ -2601,7 +2611,7 @@ private extension Outline {
 
 		outlineViewPropertyDidChange()
 		
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 
 		var shadowTableInserts = [Row]()
 
@@ -2676,7 +2686,7 @@ private extension Outline {
 			
 		outlineViewPropertyDidChange()
 		
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 
 		var reloads = Set<Int>()
 
@@ -2899,7 +2909,7 @@ private extension Outline {
 		documentMetaDataDidChange()
 		requestCloudKitUpdate(for: id)
 
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 
 		if documentBacklinks?.count ?? 0 == 1 {
 			outlineAddedBacklinks()
@@ -2917,7 +2927,7 @@ private extension Outline {
 		documentMetaDataDidChange()
 		requestCloudKitUpdate(for: id)
 
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 		
 		if documentBacklinks?.count ?? 0 == 0 {
 			outlineRemovedBacklinks()
@@ -2941,8 +2951,10 @@ private extension Outline {
 		let mutableText = NSMutableAttributedString(attributedString: newText)
 		
 		mutableText.enumerateAttribute(.link, in: NSRange(location: 0, length: mutableText.length)) { [weak self] (value, range, match) in
-			guard let url = value as? URL else { return }
+			guard let url = value as? URL, let self = self else { return }
 			guard mutableText.attributedSubstring(from: range).string == url.absoluteString else { return }
+			
+			incrementBeingUsedCount()
 			
 			WebPageTitle.find(forURL: url) { [weak self] pageTitle in
 				guard let pageTitle = pageTitle, let self = self else { return }
@@ -2951,11 +2963,18 @@ private extension Outline {
 				mutableText.replaceCharacters(in: range, with: pageTitle)
 				mutableText.addAttribute(.link, value: url, range: NSRange(location: range.location, length: pageTitle.count))
 				
+				guard let row = self.findRow(id: row.id) else { return }
+				
 				if !isInNotes {
 					row.topic = mutableText
 				} else {
 					row.note = mutableText
 				}
+				
+				self.decrementBeingUsedCount()
+				self.unload()
+
+				guard self.isBeingUsed else { return }
 
 				if let shadowTableIndex = row.shadowTableIndex {
 					self.outlineElementsDidChange(OutlineElementChanges(section: self.adjustedRowsSection, reloads: Set([shadowTableIndex])))

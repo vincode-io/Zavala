@@ -805,7 +805,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		// After this point as long as we don't have this Outline open in other
 		// windows, no more collection view updates should happen for it.
-		outline?.beingViewedCount = (outline?.beingViewedCount ?? 1) - 1
+		outline?.decrementBeingUsedCount()
 		
 		// End the search collection view updates early
 		isSearching = false
@@ -823,7 +823,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			return
 		}
 
-		outline.beingViewedCount = outline.beingViewedCount + 1
+		outline.incrementBeingUsedCount()
 		outline.load()
 		outline.prepareForViewing()
 			
