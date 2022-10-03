@@ -54,8 +54,8 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		return splitViewController as? MainSplitViewController
 	}
 	
-	private var addBarButtonItem: UIBarButtonItem!
-	private var importBarButtonItem: UIBarButtonItem!
+	private var addButton: UIButton!
+	private var importButton: UIButton!
 
     private var selectBarButtonItem: UIBarButtonItem!
     private var selectDoneBarButtonItem: UIBarButtonItem!
@@ -63,11 +63,10 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
     override func viewDidLoad() {
 		super.viewDidLoad()
 
-		addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
-        addBarButtonItem.title = L10n.add
-
-        importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML(_:)))
-        importBarButtonItem.title = L10n.importOPML
+		let navButtonGroup = ButtonGroup(target: self, location: .navBar)
+		addButton = navButtonGroup.addButton(label: L10n.add, image: AppAssets.createEntity, selector: "createOutline:")
+		importButton = navButtonGroup.addButton(label: L10n.goForward, image: AppAssets.importDocument, selector: "importOPML:")
+		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
         selectBarButtonItem = UIBarButtonItem(title: L10n.select, style: .plain, target: self, action: #selector(multipleSelect))
         selectDoneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(multipleSelectDone))
@@ -89,7 +88,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
         }
 
 		if traitCollection.userInterfaceIdiom == .phone {
-			navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
+			navigationItem.rightBarButtonItem = navButtonsBarButtonItem
 		}
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange(_:)), name: .AccountManagerAccountsDidChange, object: nil)

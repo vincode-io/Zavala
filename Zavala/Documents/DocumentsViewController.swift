@@ -41,8 +41,10 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var heldDocumentContainers: [DocumentContainer]?
 
 	private let searchController = UISearchController(searchResultsController: nil)
-	private var addBarButtonItem: UIBarButtonItem?
-	private var importBarButtonItem: UIBarButtonItem?
+
+	private var navButtonsBarButtonItem: UIBarButtonItem!
+	private var addButton: UIButton!
+	private var importButton: UIButton!
 
 	private var loadDocumentsQueue = CoalescingQueue(name: "Load Documents", interval: 0.5)
     
@@ -67,9 +69,11 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			collectionView.allowsMultipleSelection = true
 			collectionView.contentInset = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0)
 		} else {
-			addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline))
-			importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML))
-			
+			let navButtonGroup = ButtonGroup(target: self, location: .navBar)
+			addButton = navButtonGroup.addButton(label: L10n.add, image: AppAssets.createEntity, selector: "createOutline")
+			importButton = navButtonGroup.addButton(label: L10n.goForward, image: AppAssets.importDocument, selector: "importOPML")
+			navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
+
 			searchController.delegate = self
 			searchController.searchResultsUpdater = self
 			searchController.obscuresBackgroundDuringPresentation = false
@@ -77,9 +81,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			navigationItem.searchController = searchController
 			definesPresentationContext = true
 
-			addBarButtonItem!.title = L10n.add
-			importBarButtonItem!.title = L10n.importOPML
-			navigationItem.rightBarButtonItems = [addBarButtonItem!, importBarButtonItem!]
+			navigationItem.rightBarButtonItem = navButtonsBarButtonItem
 
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
@@ -539,9 +541,9 @@ private extension DocumentsViewController {
         
 		if traitCollection.userInterfaceIdiom != .mac {
 			if defaultAccount == nil {
-				navigationItem.rightBarButtonItems = nil
+				navigationItem.rightBarButtonItem = nil
 			} else {
-				navigationItem.rightBarButtonItems = [addBarButtonItem!, importBarButtonItem!]
+				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
 			}
 		}
 	}
