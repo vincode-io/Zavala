@@ -11,6 +11,8 @@ import VinXML
 
 struct WebPageTitle: Logging {
 	
+	private static let reversedDelimiterHosts = ["github.com"]
+	
 	static func find(forURL url: URL, completion: @escaping (String?) -> ()) {
 		func finish(_ result:String? = nil) {
 			DispatchQueue.main.async {
@@ -18,12 +20,14 @@ struct WebPageTitle: Logging {
 			}
 		}
 		
-		guard let scheme = URLComponents(url: url, resolvingAgainstBaseURL: false)?.scheme, scheme.starts(with: "http") else {
+		guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false),
+			  let scheme = urlComponents.scheme,
+			  let host = urlComponents.host,
+			  scheme.starts(with: "http") else {
 			finish()
 			return
 		}
 
-		
 		let dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
 			if let error = error {
 				logger.error("Download failed for URL: \(url.absoluteString, privacy: .public) with error: \(error.localizedDescription, privacy: .public)")
@@ -44,7 +48,7 @@ struct WebPageTitle: Logging {
 			}
 			
 			do {
-				try finish(Self.extractTitle(doc: doc))
+				try finish(Self.extractTitle(doc: doc, reverseDelimiter: reversedDelimiterHosts.contains(host)))
 			} catch {
 				logger.error("Can't extract Title for URL: \(url.absoluteString, privacy: .public) with error: \(error.localizedDescription, privacy: .public)")
 				finish()
@@ -58,7 +62,7 @@ struct WebPageTitle: Logging {
 
 private extension WebPageTitle {
 	
-	private static func extractTitle(doc: VinXML.XMLDocument) throws -> String? {
+	private static func extractTitle(doc: VinXML.XMLDocument, reverseDelimiter: Bool) throws -> String? {
 		var title: String?
 		
 		let titlePath = "//*/meta[@property='og:title' or @name='og:title' or @property='twitter:title' or @name='twitter:title']"
@@ -77,9 +81,14 @@ private extension WebPageTitle {
 		}
 		
 		// Fix these messed up compound titles that web designers like to use.
-		for weird in [" | ", " • ", " › ", " :: ", " » ", " - ", " : ", " — ", " · "] {
-			if let range = unparsedTitle.range(of: weird) {
-				let result = String(unparsedTitle[..<range.lowerBound]).trimmingWhitespace
+		for delimiter in [" | ", " • ", " › ", " :: ", " » ", " - ", " : ", " — ", " · "] {
+			if let range = unparsedTitle.range(of: delimiter) {
+				let result: String
+				if reverseDelimiter {
+					result = String(unparsedTitle[range.upperBound...]).trimmingWhitespace
+				} else {
+					result = String(unparsedTitle[..<range.lowerBound]).trimmingWhitespace
+				}
 				return result.isEmpty ? nil : result
 			}
 		}
