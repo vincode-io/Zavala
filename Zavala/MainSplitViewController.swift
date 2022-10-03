@@ -322,6 +322,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		link()
 	}
 
+	@objc func createOrDeleteNotes(_ sender: Any?) {
+		createOrDeleteNotes()
+	}
+
 	@objc func toggleOutlineFilter(_ sender: Any?) {
 		toggleCompletedFilter()
 	}
@@ -834,6 +838,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.navigation,
 			.insertImage,
 			.link,
+			.note,
 			.boldface,
 			.italic,
 			.toggleCompletedFilter,
@@ -975,6 +980,33 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = L10n.link
 			item.isBordered = true
 			item.action = #selector(link(_:))
+			item.target = self
+			toolbarItem = item
+		case .note:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				if !(self?.editorViewController?.isCreateRowNotesUnavailable ?? true) {
+					item.image = AppAssets.noteAdd.symbolSizedForCatalyst()
+					item.label = L10n.addNote
+					item.toolTip = L10n.addNote
+					return false
+				} else if !(self?.editorViewController?.isDeleteRowNotesUnavailable ?? true) {
+					item.image = AppAssets.noteDelete.symbolSizedForCatalyst()
+					item.label = L10n.deleteNote
+					item.toolTip = L10n.deleteNote
+					return false
+				} else {
+					item.image = AppAssets.noteAdd.symbolSizedForCatalyst()
+					item.label = L10n.addNote
+					item.toolTip = L10n.addNote
+					return true
+				}
+			}
+			item.image = AppAssets.noteAdd.symbolSizedForCatalyst()
+			item.label = L10n.addNote
+			item.toolTip = L10n.addNote
+			item.isBordered = true
+			item.action = #selector(createOrDeleteNotes(_:))
 			item.target = self
 			toolbarItem = item
 		case .boldface:

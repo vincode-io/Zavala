@@ -16,7 +16,7 @@
 		5113B095260E638400DBD11B /* SettingsFontConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */; };
 		5115C02D2605898900416D67 /* MacOpenQuicklyCollectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5115C02C2605898900416D67 /* MacOpenQuicklyCollectionsViewController.swift */; };
 		5115C0362605F96100416D67 /* MacOpenQuicklyDocumentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5115C0352605F96100416D67 /* MacOpenQuicklyDocumentsViewController.swift */; };
-		511A99F727B9B596001BD443 /* ToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511A99F627B9B596001BD443 /* ToolbarButton.swift */; };
+		511A99F727B9B596001BD443 /* ButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511A99F627B9B596001BD443 /* ButtonGroup.swift */; };
 		511B29E525FEE4DC00C04239 /* LinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29E425FEE4DC00C04239 /* LinkViewController.swift */; };
 		511B29F226014FBA00C04239 /* EnhancedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F126014FBA00C04239 /* EnhancedTextField.swift */; };
 		511B29F726018FBB00C04239 /* EditorBacklinkContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F626018FBB00C04239 /* EditorBacklinkContentConfiguration.swift */; };
@@ -258,7 +258,7 @@
 		5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFontConfigViewController.swift; sourceTree = "<group>"; };
 		5115C02C2605898900416D67 /* MacOpenQuicklyCollectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOpenQuicklyCollectionsViewController.swift; sourceTree = "<group>"; };
 		5115C0352605F96100416D67 /* MacOpenQuicklyDocumentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOpenQuicklyDocumentsViewController.swift; sourceTree = "<group>"; };
-		511A99F627B9B596001BD443 /* ToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButton.swift; sourceTree = "<group>"; };
+		511A99F627B9B596001BD443 /* ButtonGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonGroup.swift; sourceTree = "<group>"; };
 		511B29E425FEE4DC00C04239 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
 		511B29F126014FBA00C04239 /* EnhancedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedTextField.swift; sourceTree = "<group>"; };
 		511B29F626018FBB00C04239 /* EditorBacklinkContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBacklinkContentConfiguration.swift; sourceTree = "<group>"; };
@@ -498,6 +498,7 @@
 			children = (
 				51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */,
 				517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */,
+				511A99F627B9B596001BD443 /* ButtonGroup.swift */,
 				518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */,
 				516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */,
 				511B29F126014FBA00C04239 /* EnhancedTextField.swift */,
@@ -517,7 +518,6 @@
 				51DFDC17259EA8D300C068C6 /* Selector+.swift */,
 				51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */,
 				5163ADF425C79B69008F25CA /* String+.swift */,
-				511A99F627B9B596001BD443 /* ToolbarButton.swift */,
 				517342F125EC2C690012EB20 /* UIActivityViewController+.swift */,
 				5169928925AE4F5C00760C9D /* UICollectionView+.swift */,
 				51028CD425F3159A00B50B71 /* UIColor+.swift */,
@@ -1225,7 +1225,7 @@
 				51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */,
 				51E5C49127221F6F00A38983 /* IntentRow+.swift in Sources */,
 				51C71C74273F264600F6C779 /* ImageSceneDelegate.swift in Sources */,
-				511A99F727B9B596001BD443 /* ToolbarButton.swift in Sources */,
+				511A99F727B9B596001BD443 /* ButtonGroup.swift in Sources */,
 				5191850F271390F100B7E177 /* IntentEntityID+.swift in Sources */,
 				514F221E25C4D0A8004E02CD /* EditorTagInputContentView.swift in Sources */,
 				5191850D271387C300B7E177 /* RemoveOutlineIntentHandler.swift in Sources */,

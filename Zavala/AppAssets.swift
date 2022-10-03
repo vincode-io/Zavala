@@ -181,8 +181,12 @@ struct AppAssets {
 		return UIImage(systemName: "return")!
 	}()
 
-	static var note: UIImage = {
+	static var noteAdd: UIImage = {
 		return UIImage(systemName: "doc.text")!
+	}()
+
+	static var noteDelete: UIImage = {
+		return UIImage(systemName: "doc.text.fill")!
 	}()
 
 	static var noteFont: UIImage = {

@@ -796,7 +796,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func isCreateNotesUnavailable(rows: [Row]) -> Bool {
-		return rows.isEmpty
+		for row in rows {
+			if row.isNoteEmpty {
+				return false
+			}
+		}
+		return true
 	}
 	
 	public func beginSearching(for searchText: String? = nil) {

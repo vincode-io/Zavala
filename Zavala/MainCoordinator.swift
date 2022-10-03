@@ -226,6 +226,10 @@ extension MainCoordinator {
 		editorViewController?.link()
 	}
 	
+	func createOrDeleteNotes() {
+		editorViewController?.createOrDeleteNotes()
+	}
+	
 	func copyDocumentLink() {
 		let documentURL = editorViewController?.outline?.id.url
 		UIPasteboard.general.url = documentURL
@@ -492,6 +496,7 @@ extension NSToolbarItem.Identifier {
 	static let goForward = NSToolbarItem.Identifier("io.vincode.Zavala.goForward")
 	static let insertImage = NSToolbarItem.Identifier("io.vincode.Zavala.insertImage")
 	static let link = NSToolbarItem.Identifier("io.vincode.Zavala.link")
+	static let note = NSToolbarItem.Identifier("io.vincode.Zavala.note")
 	static let boldface = NSToolbarItem.Identifier("io.vincode.Zavala.boldface")
 	static let italic = NSToolbarItem.Identifier("io.vincode.Zavala.italic")
 	static let expandAllInOutline = NSToolbarItem.Identifier("io.vincode.Zavala.expandAllInOutline")

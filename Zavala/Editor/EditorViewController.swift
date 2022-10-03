@@ -297,7 +297,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var isCursoringUp = false
 	private var isCursoringDown = false
 	
-	private var navButtonsBarButtonItem: UIBarButtonItem!
 	private var goBackwardButton: UIButton!
 	private var goForwardButton: UIButton!
 	private var moreMenuButton: UIButton!
@@ -310,6 +309,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var moveDownButton: UIButton!
 	private var insertImageButton: UIButton!
 	private var linkButton: UIButton!
+	private var noteButton: UIButton!
 	private var insertNewlineButton: UIButton!
 	private var squareButton: UIButton!
 
@@ -406,100 +406,26 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
 		
-		let navButtonsStackView = UIStackView()
-		navButtonsStackView.alignment = .center
-		navButtonsStackView.spacing = 16
+		let navButtonGroup = ButtonGroup(target: self, location: .navBar)
+		goBackwardButton = navButtonGroup.addButton(label: L10n.goBackward, image: AppAssets.goBackward, selector: "goBackwardOne")
+		goForwardButton = navButtonGroup.addButton(label: L10n.goForward, image: AppAssets.goForward, selector: "goForwardOne")
+		moreMenuButton = navButtonGroup.addButton(label: L10n.more, image: AppAssets.ellipsis, showMenu: true)
+		filterButton = navButtonGroup.addButton(label: L10n.filter, image: AppAssets.filterInactive, showMenu: true)
+		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
-		goBackwardButton = ToolbarButton(type: .system)
-		goBackwardButton.addTarget(self, action: #selector(goBackwardOne), for: .touchUpInside)
-		goBackwardButton.setImage(AppAssets.goBackward, for: .normal)
-		goBackwardButton.accessibilityLabel = L10n.goBackward
-		goBackwardButton.isAccessibilityElement = true
-		navButtonsStackView.addArrangedSubview(goBackwardButton)
+		let leftToolbarButtonGroup = ButtonGroup(target: self, location: .toolBar)
+		moveLeftButton = leftToolbarButtonGroup.addButton(label: L10n.moveLeft, image: AppAssets.moveLeft, selector: "moveCurrentRowsLeft")
+		moveRightButton = leftToolbarButtonGroup.addButton(label: L10n.moveRight, image: AppAssets.moveRight, selector: "moveCurrentRowsRight")
+		moveUpButton = leftToolbarButtonGroup.addButton(label: L10n.moveUp, image: AppAssets.moveUp, selector: "moveCurrentRowsUp")
+		moveDownButton = leftToolbarButtonGroup.addButton(label: L10n.moveDown, image: AppAssets.moveDown, selector: "moveCurrentRowsDown")
+		let moveButtonsBarButtonItem = leftToolbarButtonGroup.buildBarButtonItem()
 
-		goForwardButton = ToolbarButton(type: .system)
-		goForwardButton.addTarget(self, action: #selector(goForwardOne), for: .touchUpInside)
-		goForwardButton.setImage(AppAssets.goForward, for: .normal)
-		goForwardButton.accessibilityLabel = L10n.goForward
-		goForwardButton.isAccessibilityElement = true
-		navButtonsStackView.addArrangedSubview(goForwardButton)
-
-		moreMenuButton = ToolbarButton(type: .system)
-		moreMenuButton.showsMenuAsPrimaryAction = true
-		moreMenuButton.setImage(AppAssets.ellipsis, for: .normal)
-		moreMenuButton.accessibilityLabel = L10n.more
-		moreMenuButton.isAccessibilityElement = true
-		navButtonsStackView.addArrangedSubview(moreMenuButton)
-
-		filterButton = ToolbarButton(type: .system)
-		filterButton.showsMenuAsPrimaryAction = true
-		filterButton.setImage(AppAssets.filterInactive, for: .normal)
-		filterButton.accessibilityLabel = L10n.filter
-		filterButton.isAccessibilityElement = true
-		navButtonsStackView.addArrangedSubview(filterButton)
-		
-		navButtonsBarButtonItem = UIBarButtonItem(customView: navButtonsStackView)
-
-		let moveButtonsStackView = UIStackView()
-		moveButtonsStackView.alignment = .center
-		moveButtonsStackView.spacing = 14
-
-		moveLeftButton = ToolbarButton(type: .system)
-		moveLeftButton.addTarget(self, action: #selector(moveCurrentRowsLeft), for: .touchUpInside)
-		moveLeftButton.setImage(AppAssets.moveLeft, for: .normal)
-		moveLeftButton.accessibilityLabel = L10n.moveLeft
-		moveLeftButton.isAccessibilityElement = true
-		moveButtonsStackView.addArrangedSubview(moveLeftButton)
-
-		moveRightButton = ToolbarButton(type: .system)
-		moveRightButton.addTarget(self, action: #selector(moveCurrentRowsRight), for: .touchUpInside)
-		moveRightButton.setImage(AppAssets.moveRight, for: .normal)
-		moveRightButton.accessibilityLabel = L10n.moveRight
-		moveRightButton.isAccessibilityElement = true
-		moveButtonsStackView.addArrangedSubview(moveRightButton)
-
-		moveUpButton = ToolbarButton(type: .system)
-		moveUpButton.addTarget(self, action: #selector(moveCurrentRowsUp), for: .touchUpInside)
-		moveUpButton.setImage(AppAssets.moveUp, for: .normal)
-		moveUpButton.accessibilityLabel = L10n.moveUp
-		moveUpButton.isAccessibilityElement = true
-		moveButtonsStackView.addArrangedSubview(moveUpButton)
-
-		moveDownButton = ToolbarButton(type: .system)
-		moveDownButton.addTarget(self, action: #selector(moveCurrentRowsDown), for: .touchUpInside)
-		moveDownButton.setImage(AppAssets.moveDown, for: .normal)
-		moveDownButton.accessibilityLabel = L10n.moveDown
-		moveDownButton.isAccessibilityElement = true
-		moveButtonsStackView.addArrangedSubview(moveDownButton)
-
-		let moveButtonsBarButtonItem = UIBarButtonItem(customView: moveButtonsStackView)
-		
-		let insertButtonsStackView = UIStackView()
-		insertButtonsStackView.alignment = .center
-		insertButtonsStackView.spacing = 14
-
-		insertImageButton = ToolbarButton(type: .system)
-		insertImageButton.addTarget(self, action: #selector(insertImage), for: .touchUpInside)
-		insertImageButton.setImage(AppAssets.insertImage, for: .normal)
-		insertImageButton.accessibilityLabel = L10n.insertImage
-		insertImageButton.isAccessibilityElement = true
-		insertButtonsStackView.addArrangedSubview(insertImageButton)
-
-		linkButton = ToolbarButton(type: .system)
-		linkButton.addTarget(self, action: #selector(link), for: .touchUpInside)
-		linkButton.setImage(AppAssets.link, for: .normal)
-		linkButton.accessibilityLabel = L10n.link
-		linkButton.isAccessibilityElement = true
-		insertButtonsStackView.addArrangedSubview(linkButton)
-
-		insertNewlineButton = ToolbarButton(type: .system)
-		insertNewlineButton.addTarget(self, action: #selector(insertNewline), for: .touchUpInside)
-		insertNewlineButton.setImage(AppAssets.newline, for: .normal)
-		insertNewlineButton.accessibilityLabel = L10n.newline
-		insertNewlineButton.isAccessibilityElement = true
-		insertButtonsStackView.addArrangedSubview(insertNewlineButton)
-
-		let insertButtonsBarButtonItem = UIBarButtonItem(customView: insertButtonsStackView)
+		let rightToolbarButtonGroup = ButtonGroup(target: self, location: .toolBar)
+		insertImageButton = rightToolbarButtonGroup.addButton(label: L10n.insertImage, image: AppAssets.insertImage, selector: "insertImage")
+		linkButton = rightToolbarButtonGroup.addButton(label: L10n.link, image: AppAssets.link, selector: "link")
+		noteButton = rightToolbarButtonGroup.addButton(label: L10n.addNote, image: AppAssets.noteAdd, selector: "createOrDeleteNotes")
+		insertNewlineButton = rightToolbarButtonGroup.addButton(label: L10n.newline, image: AppAssets.newline, selector: "insertNewline")
+		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
 
 		if traitCollection.userInterfaceIdiom != .mac {
 			keyboardToolBar = UIToolbar()
@@ -908,6 +834,24 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			moveDownButton.isEnabled = !isMoveRowsDownUnavailable
 			insertImageButton.isEnabled = !isInsertImageUnavailable
 			linkButton.isEnabled = !isLinkUnavailable
+			
+			// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
+			// only have one row selected at a time while editing and that row eitherh has a note
+			// or it doesn't.
+			if !isCreateRowNotesUnavailable {
+				noteButton.isEnabled = true
+				noteButton.setImage(AppAssets.noteAdd, for: .normal)
+				noteButton.accessibilityLabel = L10n.addNote
+			} else if !isDeleteRowNotesUnavailable {
+				noteButton.isEnabled = true
+				noteButton.setImage(AppAssets.noteDelete, for: .normal)
+				noteButton.accessibilityLabel = L10n.deleteNote
+			} else {
+				noteButton.isEnabled = false
+				noteButton.setImage(AppAssets.noteAdd, for: .normal)
+				noteButton.accessibilityLabel = L10n.addNote
+			}
+			
 			insertNewlineButton.isEnabled = !isInsertNewlineUnavailable
 		}
 		
@@ -1239,6 +1183,16 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		guard let rows = currentRows else { return }
 		moveRowsDown(rows)
 	}
+	
+	@objc func createOrDeleteNotes() {
+		guard let rows = currentRows else { return }
+
+		if !isCreateRowNotesUnavailable {
+			createRowNotes(rows)
+		} else {
+			deleteRowNotes(rows)
+		}
+	}
 
 	@objc func toggleCompleteRows() {
 		guard let outline = outline, let rows = currentRows else { return }
@@ -1443,7 +1397,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			}
 		}
 		
-		return makeRowsContextMenu(rows: rows)
+		return buildRowsContextMenu(rows: rows)
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
@@ -2271,7 +2225,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	func makeRowsContextMenu(rows: [Row]) -> UIContextMenuConfiguration? {
+	func buildRowsContextMenu(rows: [Row]) -> UIContextMenuConfiguration? {
 		guard let firstRow = rows.sortedByDisplayOrder().first else { return nil }
 		
 		return UIContextMenuConfiguration(identifier: firstRow as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
@@ -2296,7 +2250,7 @@ private extension EditorViewController {
 			if !outline.isUncompleteUnavailable(rows: rows) {
 				outlineActions.append(self.uncompleteAction(rows: rows))
 			}
-			if outline.isDeleteNotesUnavailable(rows: rows) {
+			if !outline.isCreateNotesUnavailable(rows: rows) {
 				outlineActions.append(self.createNoteAction(rows: rows))
 			}
 			if !outline.isDeleteNotesUnavailable(rows: rows) {
@@ -2383,7 +2337,7 @@ private extension EditorViewController {
 	}
 	
 	func createNoteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.addNote, image: AppAssets.note) { [weak self] action in
+		return UIAction(title: L10n.addNote, image: AppAssets.noteAdd) { [weak self] action in
 			self?.createRowNotes(rows)
 		}
 	}
