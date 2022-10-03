@@ -11,8 +11,6 @@ import VinXML
 
 struct WebPageTitle: Logging {
 	
-	private static let reversedDelimiterHosts = ["github.com"]
-	
 	static func find(forURL url: URL, completion: @escaping (String?) -> ()) {
 		func finish(_ result:String? = nil) {
 			DispatchQueue.main.async {
@@ -22,7 +20,6 @@ struct WebPageTitle: Logging {
 		
 		guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false),
 			  let scheme = urlComponents.scheme,
-			  let host = urlComponents.host,
 			  scheme.starts(with: "http") else {
 			finish()
 			return
@@ -48,7 +45,7 @@ struct WebPageTitle: Logging {
 			}
 			
 			do {
-				try finish(Self.extractTitle(doc: doc, reverseDelimiter: reversedDelimiterHosts.contains(host)))
+				try finish(Self.extractTitle(doc: doc))
 			} catch {
 				logger.error("Can't extract Title for URL: \(url.absoluteString, privacy: .public) with error: \(error.localizedDescription, privacy: .public)")
 				finish()
@@ -62,7 +59,7 @@ struct WebPageTitle: Logging {
 
 private extension WebPageTitle {
 	
-	private static func extractTitle(doc: VinXML.XMLDocument, reverseDelimiter: Bool) throws -> String? {
+	private static func extractTitle(doc: VinXML.XMLDocument) throws -> String? {
 		var title: String?
 		
 		let titlePath = "//*/meta[@property='og:title' or @name='og:title' or @property='twitter:title' or @name='twitter:title']"
@@ -80,21 +77,19 @@ private extension WebPageTitle {
 			return nil
 		}
 		
+		func prepareResult(_ result: String) -> String? {
+			let trimmedResult = result.trimmingWhitespace
+			return trimmedResult.isEmpty ? nil : trimmedResult
+		}
+		
 		// Fix these messed up compound titles that web designers like to use.
 		for delimiter in [" | ", " • ", " › ", " :: ", " » ", " - ", " : ", " — ", " · "] {
 			if let range = unparsedTitle.range(of: delimiter) {
-				let result: String
-				if reverseDelimiter {
-					result = String(unparsedTitle[range.upperBound...]).trimmingWhitespace
-				} else {
-					result = String(unparsedTitle[..<range.lowerBound]).trimmingWhitespace
-				}
-				return result.isEmpty ? nil : result
+				return prepareResult(String(unparsedTitle[..<range.lowerBound]))
 			}
 		}
 		
-		let result = unparsedTitle.trimmingWhitespace
-		return result.isEmpty ? nil : result
+		return prepareResult(unparsedTitle)
 	}
 	
 }
