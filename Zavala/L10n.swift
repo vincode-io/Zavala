@@ -276,6 +276,8 @@ internal enum L10n {
   internal static let printList = L10n.tr("Localizable", "Print_List")
   /// Print List…
   internal static let printListEllipsis = L10n.tr("Localizable", "Print_List_Ellipsis")
+  /// Privacy Policy
+  internal static let privacyPolicy = L10n.tr("Localizable", "Privacy Policy")
   /// Reference: 
   internal static let reference = L10n.tr("Localizable", "Reference")
   /// References: 

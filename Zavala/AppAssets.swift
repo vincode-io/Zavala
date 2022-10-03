@@ -201,6 +201,8 @@ struct AppAssets {
 		return UIImage(systemName: "printer.dotmatrix")!
 	}()
 
+	static var privacyPolicyURL = "https://vincode.io/privacy-policy/"
+
 	static var releaseNotesURL = "https://github.com/vincode-io/Zavala/releases/tag/\(Bundle.main.versionNumber)"
 	
 	static var rename: UIImage = {
