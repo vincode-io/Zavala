@@ -237,6 +237,16 @@ extension CollectionsViewController {
 	override func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
 		return false
 	}
+	
+	override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+		if traitCollection.userInterfaceIdiom == .pad {
+			if collectionView.allowsMultipleSelection {
+				return !(dataSource.itemIdentifier(for: indexPath)?.entityID?.isSystemCollection ?? false)
+			}
+
+		}
+		return true
+	}
 		
 	override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         updateSelections()
