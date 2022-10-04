@@ -511,6 +511,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
+	override func contentScrollView(for edge: NSDirectionalRectEdge) -> UIScrollView? {
+		return collectionView
+	}
+		
 	override func selectAll(_ sender: Any?) {
 		selectAllRows()
 	}
@@ -1807,7 +1811,11 @@ private extension EditorViewController {
 		view.layoutIfNeeded()
 
 		UIView.animate(withDuration: 0.3) {
-			self.collectionViewTopConstraint.constant = Self.searchBarHeight
+			if self.traitCollection.userInterfaceIdiom == .mac {
+				self.collectionViewTopConstraint.constant = Self.searchBarHeight
+			} else {
+				self.collectionViewTopConstraint.constant = Self.searchBarHeight + self.view.safeAreaInsets.top
+			}
 			self.view.layoutIfNeeded()
 		}
 	}

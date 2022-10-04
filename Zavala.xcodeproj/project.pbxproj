@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		510135AA28EC9F9300F37BCF /* UINavigationController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510135A928EC9F9300F37BCF /* UINavigationController+.swift */; };
 		51028CD525F3159A00B50B71 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51028CD425F3159A00B50B71 /* UIColor+.swift */; };
 		510471BB271940E5001DEFD5 /* MoveRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510471BA271940E5001DEFD5 /* MoveRowsIntentHandler.swift */; };
 		510471BD2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510471BC2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift */; };
@@ -250,7 +249,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		510135A928EC9F9300F37BCF /* UINavigationController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+.swift"; sourceTree = "<group>"; };
 		51028CD425F3159A00B50B71 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		510471BA271940E5001DEFD5 /* MoveRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveRowsIntentHandler.swift; sourceTree = "<group>"; };
 		510471BC2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveRowsIntentHandler.swift; sourceTree = "<group>"; };
@@ -525,7 +523,6 @@
 				51028CD425F3159A00B50B71 /* UIColor+.swift */,
 				51077C5127A752DF000C71DB /* UIFont+.swift */,
 				5173B405268BBD4200687117 /* UIImage+.swift */,
-				510135A928EC9F9300F37BCF /* UINavigationController+.swift */,
 				51DEE82126FE37F9006DAA56 /* UIPrintPageRenderer+.swift */,
 				514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */,
 				5177B7B32733D0AA006EB1E3 /* UITextInput+.swift */,
@@ -1165,7 +1162,6 @@
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
 				51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */,
 				5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */,
-				510135AA28EC9F9300F37BCF /* UINavigationController+.swift in Sources */,
 				51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */,
 				5167608525FBE4E500AC0EBD /* OutlineGetInfoViewController.swift in Sources */,
 				51C71C6D273F087000F6C779 /* ImageScrollView.swift in Sources */,
