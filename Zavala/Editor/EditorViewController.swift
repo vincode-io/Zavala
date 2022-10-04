@@ -355,16 +355,39 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		//NSTextAttachment.registerViewProviderClass(MetadataTextAttachmentViewProvider.self, forFileType: MetadataTextAttachmentViewProvider.fileType)
 		
+		collectionView.translatesAutoresizingMaskIntoConstraints = false
+		
+		// Mac Catalyst and regular iOS use different contraint connections to manage Toolbar and Navigation bar translucency
+		let collectionViewLeadingConstraint: NSLayoutConstraint
+		let collectionViewTrailingConstraint: NSLayoutConstraint
+		let collectionViewBottomConstraint: NSLayoutConstraint
+
 		if traitCollection.userInterfaceIdiom == .mac {
+			collectionViewTopConstraint = collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+			collectionViewLeadingConstraint = collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+			collectionViewTrailingConstraint = collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+			collectionViewBottomConstraint = collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
+			collectionViewTopConstraint = collectionView.topAnchor.constraint(equalTo: view.topAnchor)
+			collectionViewLeadingConstraint = collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+			collectionViewTrailingConstraint = collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+			collectionViewBottomConstraint = collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 		}
-		
+
+		NSLayoutConstraint.activate([
+			collectionViewTopConstraint,
+			collectionViewLeadingConstraint,
+			collectionViewTrailingConstraint,
+			collectionViewBottomConstraint
+		])
+
 		searchBar.delegate = self
-		collectionViewTopConstraint.constant = 0
 		
 		collectionView.collectionViewLayout = createLayout()
 		collectionView.delegate = self
