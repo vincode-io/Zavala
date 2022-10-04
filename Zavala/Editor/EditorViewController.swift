@@ -406,21 +406,21 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
 		
-		let navButtonGroup = ButtonGroup(target: self, location: .navBar)
+		let navButtonGroup = ButtonGroup(target: self, alignment: .right)
 		goBackwardButton = navButtonGroup.addButton(label: L10n.goBackward, image: AppAssets.goBackward, selector: "goBackwardOne")
 		goForwardButton = navButtonGroup.addButton(label: L10n.goForward, image: AppAssets.goForward, selector: "goForwardOne")
 		moreMenuButton = navButtonGroup.addButton(label: L10n.more, image: AppAssets.ellipsis, showMenu: true)
 		filterButton = navButtonGroup.addButton(label: L10n.filter, image: AppAssets.filterInactive, showMenu: true)
 		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
-		let leftToolbarButtonGroup = ButtonGroup(target: self, location: .toolBar)
+		let leftToolbarButtonGroup = ButtonGroup(target: self, alignment: .left)
 		moveLeftButton = leftToolbarButtonGroup.addButton(label: L10n.moveLeft, image: AppAssets.moveLeft, selector: "moveCurrentRowsLeft")
 		moveRightButton = leftToolbarButtonGroup.addButton(label: L10n.moveRight, image: AppAssets.moveRight, selector: "moveCurrentRowsRight")
 		moveUpButton = leftToolbarButtonGroup.addButton(label: L10n.moveUp, image: AppAssets.moveUp, selector: "moveCurrentRowsUp")
 		moveDownButton = leftToolbarButtonGroup.addButton(label: L10n.moveDown, image: AppAssets.moveDown, selector: "moveCurrentRowsDown")
 		let moveButtonsBarButtonItem = leftToolbarButtonGroup.buildBarButtonItem()
 
-		let rightToolbarButtonGroup = ButtonGroup(target: self, location: .toolBar)
+		let rightToolbarButtonGroup = ButtonGroup(target: self, alignment: .right)
 		insertImageButton = rightToolbarButtonGroup.addButton(label: L10n.insertImage, image: AppAssets.insertImage, selector: "insertImage")
 		linkButton = rightToolbarButtonGroup.addButton(label: L10n.link, image: AppAssets.link, selector: "link")
 		noteButton = rightToolbarButtonGroup.addButton(label: L10n.addNote, image: AppAssets.noteAdd, selector: "createOrDeleteNotes")
@@ -428,7 +428,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
 
 		if traitCollection.userInterfaceIdiom != .mac {
-			keyboardToolBar = UIToolbar()
+			keyboardToolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
 			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 			
 			if traitCollection.userInterfaceIdiom == .pad {

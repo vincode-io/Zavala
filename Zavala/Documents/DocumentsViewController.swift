@@ -69,7 +69,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			collectionView.allowsMultipleSelection = true
 			collectionView.contentInset = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0)
 		} else {
-			let navButtonGroup = ButtonGroup(target: self, location: .navBar)
+			let navButtonGroup = ButtonGroup(target: self, alignment: .right)
 			addButton = navButtonGroup.addButton(label: L10n.add, image: AppAssets.createEntity, selector: "createOutline")
 			importButton = navButtonGroup.addButton(label: L10n.goForward, image: AppAssets.importDocument, selector: "importOPML")
 			navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()

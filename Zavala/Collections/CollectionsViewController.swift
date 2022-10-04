@@ -63,7 +63,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
     override func viewDidLoad() {
 		super.viewDidLoad()
 
-		let navButtonGroup = ButtonGroup(target: self, location: .navBar)
+		let navButtonGroup = ButtonGroup(target: self, alignment: .right)
 		addButton = navButtonGroup.addButton(label: L10n.add, image: AppAssets.createEntity, selector: "createOutline:")
 		importButton = navButtonGroup.addButton(label: L10n.goForward, image: AppAssets.importDocument, selector: "importOPML:")
 		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()

@@ -15,25 +15,32 @@ struct ButtonGroup {
 		}
 	}
 	
-	enum Location: CGFloat {
-		case navBar = 16
-		case toolBar = 14
+	enum Alighment {
+		case left
+		case right
 	}
 	
 	private let target: Any
+	private let alignment: Alighment
 	private let stackView: UIStackView
 	
-	init(target: Any, location: Location) {
+	init(target: Any, alignment: Alighment) {
 		self.target = target
+		self.alignment = alignment
 		
 		stackView = UIStackView()
-		stackView.alignment = .center
-		stackView.spacing = location.rawValue
+		stackView.distribution = .fillEqually
+		stackView.isLayoutMarginsRelativeArrangement = true
+		
+		if alignment == .left {
+			stackView.layoutMargins = UIEdgeInsets(top: 0, left: -12, bottom: 0, right: 12)
+		} else {
+			stackView.layoutMargins = UIEdgeInsets(top: 0, left:12, bottom: 0, right: -12)
+		}
 	}
 	
 	func addButton(label: String, image: UIImage, selector: String? = nil, showMenu: Bool = false) -> UIButton {
 		let button = Button(type: .system)
-		
 		button.accessibilityLabel = label
 		button.setImage(image, for: .normal)
 		if let selector {
@@ -48,6 +55,7 @@ struct ButtonGroup {
 	}
 	
 	func buildBarButtonItem() -> UIBarButtonItem {
+		stackView.widthAnchor.constraint(equalToConstant: Double(36 * stackView.arrangedSubviews.count)).isActive = true
 		return UIBarButtonItem(customView: stackView)
 	}
 	
