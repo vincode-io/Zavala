@@ -63,34 +63,29 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
     override func viewDidLoad() {
 		super.viewDidLoad()
 
-		let navButtonGroup = ButtonGroup(target: self, alignment: .right)
-		addButton = navButtonGroup.addButton(label: L10n.add, image: AppAssets.createEntity, selector: "createOutline:")
-		importButton = navButtonGroup.addButton(label: L10n.goForward, image: AppAssets.importDocument, selector: "importOPML:")
-		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
-
-        selectBarButtonItem = UIBarButtonItem(title: L10n.select, style: .plain, target: self, action: #selector(multipleSelect))
-        selectDoneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(multipleSelectDone))
-        
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
+			collectionView.allowsMultipleSelection = true
 		} else {
+			if traitCollection.userInterfaceIdiom == .pad {
+				selectBarButtonItem = UIBarButtonItem(title: L10n.select, style: .plain, target: self, action: #selector(multipleSelect))
+				selectDoneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(multipleSelectDone))
+
+				navigationItem.rightBarButtonItem = selectBarButtonItem
+			} else {
+				let navButtonGroup = ButtonGroup(target: self, alignment: .right)
+				addButton = navButtonGroup.addButton(label: L10n.add, image: AppAssets.createEntity, selector: "createOutline:")
+				importButton = navButtonGroup.addButton(label: L10n.goForward, image: AppAssets.importDocument, selector: "importOPML:")
+				let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
+
+				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
+			}
+
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 		}
         
-        if traitCollection.userInterfaceIdiom == .mac {
-            collectionView.allowsMultipleSelection = true
-        }
-
-        if traitCollection.userInterfaceIdiom == .pad {
-            navigationItem.rightBarButtonItem = selectBarButtonItem
-        }
-
-		if traitCollection.userInterfaceIdiom == .phone {
-			navigationItem.rightBarButtonItem = navButtonsBarButtonItem
-		}
-		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange(_:)), name: .AccountManagerAccountsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidInitialize(_:)), name: .AccountDidInitialize, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
