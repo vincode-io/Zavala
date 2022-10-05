@@ -33,7 +33,7 @@
         <!--Main Split View Controller-->
         <scene sceneID="eSm-MO-bGt">
             <objects>
-                <splitViewController allowDoubleColumnStyle="YES" id="vQK-Gr-dVw" customClass="MainSplitViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
+                <splitViewController allowDoubleColumnStyle="YES" preferredDisplayMode="twoBeside" id="vQK-Gr-dVw" customClass="MainSplitViewController" customModule="Zavala" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
                         <segue destination="ACt-yd-5XI" kind="relationship" relationship="supplementaryViewController" id="TQB-ue-4Ih"/>
                         <segue destination="IH1-qU-b0t" kind="relationship" relationship="masterViewController" id="74Q-CI-tJx"/>
