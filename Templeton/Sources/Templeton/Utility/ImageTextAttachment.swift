@@ -23,7 +23,7 @@ public class ImageTextAttachment: NSTextAttachment {
 	}
 	
 	public override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
-		guard let image = image else {
+		guard let image else {
 			return super.attachmentBounds(for: textContainer, proposedLineFragment: lineFrag, glyphPosition: position, characterIndex: charIndex)
 		}
 		

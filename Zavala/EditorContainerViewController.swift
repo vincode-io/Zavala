@@ -52,7 +52,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		guard activity.activityType != NSUserActivity.ActivityType.newOutline else {
 			let document = newOutlineDocument()
 			editorViewController?.edit(document?.outline, isNew: true)
-			if let document = document {
+			if let document {
 				pinWasVisited(Pin(document: document))
 			}
 			return
@@ -472,7 +472,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 		case .toggleCompletedFilter:
 			let item = ValidatingMenuToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
-				guard let self = self else { return false }
+				guard let self else { return false }
 				
 				if self.editorViewController?.isFilterOn ?? false {
 					item.image = AppAssets.filterActive.symbolSizedForCatalyst(color: .accentColor)

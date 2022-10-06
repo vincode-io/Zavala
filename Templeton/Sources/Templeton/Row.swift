@@ -88,7 +88,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 
 	public weak var outline: Outline? {
 		didSet {
-			if let outline = outline {
+			if let outline {
 				_entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
 			}
 		}
@@ -171,7 +171,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 				var notesImages = images?.filter { $0.isInNotes } ?? [Image]()
 				notesImages.append(contentsOf: newImages)
 
-				if let images = images {
+				if let images {
 					outline?.requestCloudKitUpdates(for: images.filter({ !$0.isInNotes }).map({ $0.id }))
 				}
 				outline?.requestCloudKitUpdates(for: newImages.map({ $0.id }))
@@ -205,7 +205,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 				var topicImages = images?.filter { !$0.isInNotes } ?? [Image]()
 				topicImages.append(contentsOf: newImages)
 
-				if let images = images {
+				if let images {
 					outline?.requestCloudKitUpdates(for: images.filter({ $0.isInNotes }).map({ $0.id }))
 				}
 				outline?.requestCloudKitUpdates(for: newImages.map({ $0.id }))
@@ -397,7 +397,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		var matchedImages = [Image]()
 		
 		func importMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
-			if let markdown = markdown {
+			if let markdown {
 				let mangledMarkdown = markdown.replacingOccurrences(of: "![", with: "!]")
 				let attrString = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 				let strippedString = attrString.string
@@ -517,7 +517,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	
 	/// Returns itself or the first ancestor that shares a parent with the given row
 	public func ancestorSibling(_ row: Row) -> Row? {
-		guard let parent = parent else { return nil }
+		guard let parent else { return nil }
 		
 		if parent.containsRow(row) || containsRow(row) {
 			return self
@@ -549,13 +549,13 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public func resolveAltLinks() -> AltLinkResolvingActions {
 		var actionsTaken = AltLinkResolvingActions()
 		
-		if let topic = topic {
+		if let topic {
 			let mutableTopic = NSMutableAttributedString(attributedString: topic)
 			actionsTaken.formUnion(resolveAltLinks(attrString: mutableTopic))
 			self.topic = mutableTopic
 		}
 		
-		if let note = note {
+		if let note {
 			let mutableNote = NSMutableAttributedString(attributedString: note)
 			actionsTaken.formUnion(resolveAltLinks(attrString: mutableNote))
 			self.note = mutableNote
@@ -613,7 +613,7 @@ extension Row {
 private extension Row {
 	
 	func replaceImages(attrString: NSAttributedString?, isNotes: Bool) -> NSAttributedString? {
-		guard let attrString = attrString else { return nil }
+		guard let attrString else { return nil }
 		let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
 		
 		mutableAttrString.enumerateAttribute(.attachment, in: .init(location: 0, length: mutableAttrString.length), options: []) { (attribute, range, _) in
@@ -635,7 +635,7 @@ private extension Row {
 	}
 	
 	func splitOffImages(attrString: NSAttributedString, isNotes: Bool) -> (NSAttributedString, [Image]) {
-		guard let outline = outline else {
+		guard let outline else {
 			fatalError("Missing Outline")
 		}
 		
@@ -655,7 +655,7 @@ private extension Row {
 	}
 	
 	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, representation: DataRepresentation) -> String? {
-		guard let attrString = attrString else { return nil	}
+		guard let attrString else { return nil	}
 
 		let result = NSMutableAttributedString(attributedString: attrString)
 		

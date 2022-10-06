@@ -79,7 +79,7 @@ class KeyboardTableView: UITableView {
 	}
 
 	@objc func activateSelection() {
-		guard let indexPathForSelectedRow = indexPathForSelectedRow else {
+		guard let indexPathForSelectedRow else {
 			return
 		}
 		delegate?.tableView?(self, didSelectRowAt: indexPathForSelectedRow)

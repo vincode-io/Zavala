@@ -193,7 +193,7 @@ class SettingsViewController: UITableViewController {
 		alertController.addAction(cancelAction)
 		
 		let deleteAction = UIAlertAction(title: L10n.remove, style: .default) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			AppDefaults.shared.enableCloudKit = self.enableCloudKitSwitch.isOn
 		}
 		alertController.addAction(deleteAction)

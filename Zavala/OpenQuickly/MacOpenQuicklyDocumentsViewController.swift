@@ -135,7 +135,7 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 	}
 	
 	func applySnapshot() {
-		guard let documentContainers = documentContainers else {
+		guard let documentContainers else {
 			let snapshot = NSDiffableDataSourceSectionSnapshot<DocumentsItem>()
 			self.dataSourceQueue.add(ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: false))
 			return

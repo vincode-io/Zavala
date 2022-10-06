@@ -26,7 +26,7 @@ struct WebPageTitle: Logging {
 		}
 
 		let dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
-			if let error = error {
+			if let error {
 				logger.error("Download failed for URL: \(url.absoluteString, privacy: .public) with error: \(error.localizedDescription, privacy: .public)")
 				finish()
 				return

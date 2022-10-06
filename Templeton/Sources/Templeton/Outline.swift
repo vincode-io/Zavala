@@ -213,7 +213,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public var tags: [Tag] {
-		guard let account = account else { return [Tag]() }
+		guard let account else { return [Tag]() }
 		return tagIDs?.compactMap { account.findTag(tagID: $0) } ?? [Tag]()
 	}
 	
@@ -283,7 +283,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	public var isAnyRowCompleted: Bool {
 		var anyCompleted = false
 		
-		if let keyedRows = keyedRows {
+		if let keyedRows {
 			for row in keyedRows.values {
 				if row.isComplete {
 					anyCompleted = true
@@ -298,7 +298,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	public var allCompletedRows: [Row] {
 		var completedRows = [Row]()
 		
-		if let keyedRows = keyedRows {
+		if let keyedRows {
 			for row in keyedRows.values {
 				if row.isComplete {
 					completedRows.append(row)
@@ -372,7 +372,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	var rowOrder: OrderedSet<String>?
 	var keyedRows: [String: Row]? {
 		didSet {
-			if let keyedRows = keyedRows {
+			if let keyedRows {
 				for row in keyedRows.values {
 					row.outline = self
 				}
@@ -529,7 +529,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
     public func hasAllTags(_ tags: [Tag]) -> Bool {
-        guard let tagIDs = tagIDs else { return false }
+        guard let tagIDs else { return false }
         for tag in tags {
             if !tagIDs.contains(tag.id) {
                 return false
@@ -539,7 +539,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
     }
     
     public func hasAnyTag(_ tags: [Tag]) -> Bool {
-        guard let tagIDs = tagIDs else { return false }
+        guard let tagIDs else { return false }
         for tag in tags {
             if tagIDs.contains(tag.id) {
                 return true
@@ -549,7 +549,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
     }
     
 	public func hasTag(_ tag: Tag) -> Bool {
-		guard let tagIDs = tagIDs else { return false }
+		guard let tagIDs else { return false }
 		return tagIDs.contains(tag.id)
 	}
 	
@@ -561,7 +561,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			.replacingOccurrences(of: "/", with: "-")
 			.trimmingCharacters(in: .whitespaces)
 		
-		if let disambiguator = disambiguator {
+		if let disambiguator {
 			filename = "\(filename)-\(disambiguator)"
 		}
 		
@@ -691,17 +691,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		if let dateModified = updated?.rfc822String {
 			opml.append("  <dateModified>\(dateModified)</dateModified>\n")
 		}
-		if let ownerName = ownerName {
+		if let ownerName {
 			opml.append("  <ownerName>\(ownerName.escapingSpecialXMLCharacters)</ownerName>\n")
 		}
-		if let ownerEmail = ownerEmail {
+		if let ownerEmail {
 			opml.append("  <ownerEmail>\(ownerEmail.escapingSpecialXMLCharacters)</ownerEmail>\n")
 		}
-		if let ownerURL = ownerURL {
+		if let ownerURL {
 			opml.append("  <ownerID>\(ownerURL.escapingSpecialXMLCharacters)</ownerID>\n")
 		}
 		opml.append("  <expansionState>\(expansionState)</expansionState>\n")
-		if let verticleScrollState = verticleScrollState {
+		if let verticleScrollState {
 			opml.append("  <vertScrollState>\(verticleScrollState)</vertScrollState>\n")
 		}
 		if !(tagIDs?.isEmpty ?? true) {
@@ -1128,7 +1128,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			let insertIndex = parent.firstIndexOfRow(afterRow) ?? -1
 			parent.insertRow(row, at: insertIndex + 1)
 			row.parent = afterRow.parent
-		} else if let afterRow = afterRow {
+		} else if let afterRow {
 			let insertIndex = firstIndexOfRow(afterRow) ?? -1
 			insertRow(row, at: insertIndex + 1)
 			row.parent = self
@@ -1196,7 +1196,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 				let insertIndex = parent.firstIndexOfRow(afterRow) ?? -1
 				parent.insertRow(row, at: insertIndex + 1)
 				row.parent = afterRow.parent
-			} else if let afterRow = afterRow {
+			} else if let afterRow {
 				let insertIndex = firstIndexOfRow(afterRow) ?? -1
 				insertRow(row, at: insertIndex + 1)
 				row.parent = self
@@ -1991,7 +1991,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			}
 		}
 		
-		guard let keyedRows = keyedRows else { return outline }
+		guard let keyedRows else { return outline }
 
 		var rowIDMap = [String: String]()
 		var newKeyedRows = [String: Row]()
@@ -2056,7 +2056,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		loadRows()
 		
-		if let keyedRows = keyedRows {
+		if let keyedRows {
 			beginCloudKitBatchRequest()
 			var cumulativeActionsTaken = AltLinkResolvingActions()
 			
@@ -2143,7 +2143,7 @@ extension Outline {
 		if batchCloudKitRequests > 0 {
 			cloudKitRequestsIDs.insert(entityID)
 		} else {
-			guard let zoneID = zoneID else { return }
+			guard let zoneID else { return }
 			cloudKitManager.addRequest(CloudKitActionRequest(zoneID: zoneID, id: entityID))
 		}
 	}
@@ -2344,7 +2344,7 @@ extension Outline {
 		let cloudKitTagNames = record[CloudKitOutlineZone.CloudKitOutline.Fields.tagNames] as? [String] ?? [String]()
 		let currentTagNames = Set(tags.map { $0.name })
 		
-		guard let account = account else { return updatedRowIDs }
+		guard let account else { return updatedRowIDs }
 
 		let cloudKitTagIDs = cloudKitTagNames.map({ account.createTag(name: $0) }).map({ $0.id })
 		let oldTagIDs = tagIDs ?? [String]()
@@ -2365,13 +2365,13 @@ extension Outline {
 		for change in tagDiff {
 			switch change {
 			case .insert(let offset, _, let associated):
-				if let associated = associated {
+				if let associated {
 					moves.insert(OutlineElementChanges.Move(associated, offset))
 				} else {
 					inserts.insert(offset)
 				}
 			case .remove(let offset, _, let associated):
-				if let associated = associated {
+				if let associated {
 					moves.insert(OutlineElementChanges.Move(offset, associated))
 				} else {
 					deletes.insert(offset)
@@ -2745,13 +2745,13 @@ private extension Outline {
 		for change in diff {
 			switch change {
 			case .insert(let offset, _, let associated):
-				if let associated = associated {
+				if let associated {
 					moves.insert(OutlineElementChanges.Move(associated, offset))
 				} else {
 					inserts.insert(offset)
 				}
 			case .remove(let offset, _, let associated):
-				if let associated = associated {
+				if let associated {
 					moves.insert(OutlineElementChanges.Move(offset, associated))
 				} else {
 					deletes.insert(offset)
@@ -2772,7 +2772,7 @@ private extension Outline {
 	}
 	
 	func resetShadowTableIndexes(startingAt: Int = 0) {
-		guard let shadowTable = shadowTable else { return }
+		guard let shadowTable else { return }
 		for i in startingAt..<shadowTable.count {
 			shadowTable[i].shadowTableIndex = i
 		}
@@ -2951,7 +2951,7 @@ private extension Outline {
 	}
 	
 	func replaceLinkTitleIfPossible(row: Row, newText: NSAttributedString?, isInNotes: Bool) {
-		guard let newText = newText else { return }
+		guard let newText else { return }
 		
 		let mutableText = NSMutableAttributedString(attributedString: newText)
 		
@@ -2990,7 +2990,7 @@ private extension Outline {
 	}
 
 	func appendPrintTitle(attrString: NSMutableAttributedString) {
-		if let title = title {
+		if let title {
 			let titleFont = UIFont.systemFont(ofSize: 18).with(traits: .traitBold)
 			
 			var attrs = [NSAttributedString.Key : Any]()

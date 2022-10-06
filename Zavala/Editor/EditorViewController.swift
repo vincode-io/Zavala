@@ -771,7 +771,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		outline = newOutline
 		
 		// Don't continue if we are just clearing out the editor
-		guard let outline = outline else {
+		guard let outline else {
 			collectionView.reloadData()
 			return
 		}
@@ -785,7 +785,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		updateNavigationMenus()
 		collectionView.reloadData()
 		
-		if let searchText = searchText {
+		if let searchText {
 			discloseSearchBar()
 			searchBar.searchField.text = outline.searchText
 			beginInDocumentSearch(text: searchText)
@@ -806,12 +806,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	func updateNavigationMenus() {
-		guard let delegate = delegate else { return }
+		guard let delegate else { return }
 		
 		var backwardItems = [UIAction]()
 		for (index, pin) in delegate.editorViewControllerGoBackwardStack.enumerated() {
 			backwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
-				guard let self = self else { return }
+				guard let self else { return }
 				DispatchQueue.main.async {
 					delegate.goBackward(self, to: index)
 				}
@@ -822,7 +822,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		var forwardItems = [UIAction]()
 		for (index, pin) in delegate.editorViewControllerGoForwardStack.enumerated() {
 			forwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
-				guard let self = self else { return }
+				guard let self else { return }
 				DispatchQueue.main.async {
 					delegate.goForward(self, to: index)
 				}
@@ -953,12 +953,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	func expandAllInOutline() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		expandAll(containers: [outline])
 	}
 	
 	func collapseAllInOutline() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		collapseAll(containers: [outline])
 	}
 	
@@ -1031,13 +1031,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	func printDoc() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		currentTextView?.saveText()
 		delegate?.printDoc(self, outline: outline)
 	}
 	
 	func printList() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		currentTextView?.saveText()
 		delegate?.printList(self, outline: outline)
 	}
@@ -1156,14 +1156,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func share(_ sender: Any? = nil) {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		let controller = UIActivityViewController(outline: outline)
 		controller.popoverPresentationController?.sourceView = sender as? UIView
 		present(controller, animated: true)
 	}
 	
 	@objc func collaborate(_ sender: Any? = nil) {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		
 		AccountManager.shared.cloudKitAccount?.prepareCloudSharingController(document: .outline(outline)) { result in
 			switch result {
@@ -1179,7 +1179,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func showOutlineGetInfo() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		delegate?.showGetInfo(self, outline: outline)
 	}
 	
@@ -1364,7 +1364,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Outline.Section.title.rawValue:
 			return outline == nil ? 0 : 1
 		case Outline.Section.tags.rawValue:
-			if let outline = outline {
+			if let outline {
 				return outline.tags.count + 1
 			} else {
 				return 0
@@ -1663,7 +1663,7 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 		}
 		
 		result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] (object, error) in
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = RSImage.scaleImage(data, maxPixelSize: 1800) {
 				let scaledImage = UIImage(cgImage: cgImage)
@@ -2218,7 +2218,7 @@ private extension EditorViewController {
 	}
 	
 	func moveCursorToTagInput() {
-		if let outline = outline {
+		if let outline {
 			let indexPath = IndexPath(row: outline.tags.count, section: Outline.Section.tags.rawValue)
 			if let tagInputCell = collectionView.cellForItem(at: indexPath) as? EditorTagInputViewCell {
 				tagInputCell.takeCursor()
@@ -2307,7 +2307,7 @@ private extension EditorViewController {
 	
 	func cutAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.cut, image: AppAssets.cut) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.cutRows(rows)
 			self.delegate?.validateToolbar(self)
 		}
@@ -2321,7 +2321,7 @@ private extension EditorViewController {
 
 	func pasteAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.paste, image: AppAssets.paste) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.pasteRows(afterRows: rows)
 			self.delegate?.validateToolbar(self)
 		}
@@ -2382,7 +2382,7 @@ private extension EditorViewController {
 	func deleteAction(rows: [Row]) -> UIAction {
 		let title = rows.count == 1 ? L10n.deleteRow : L10n.deleteRows
 		return UIAction(title: title, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.deleteRows(rows)
 			self.delegate?.validateToolbar(self)
 		}
@@ -2640,7 +2640,7 @@ private extension EditorViewController {
 				group.enter()
 				itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
 					DispatchQueue.main.async {
-						if let data = data {
+						if let data {
 							do {
 								rowGroups.append(try RowGroup.fromData(data))
 								group.leave()
@@ -2988,7 +2988,7 @@ private extension EditorViewController {
 	}
 
 	func updateSpotlightIndex() {
-		if let outline = outline {
+		if let outline {
 			DocumentIndexer.updateIndex(forDocument: .outline(outline))
 		}
 	}

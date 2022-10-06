@@ -22,7 +22,7 @@ public struct Pin: Equatable {
 	public var containers: [DocumentContainer]? {
 		var containers = [DocumentContainer]()
 		
-		if let containerIDs = containerIDs {
+		if let containerIDs {
             containers = containerIDs.compactMap { AccountManager.shared.findDocumentContainer($0) }
 		}
 		
@@ -34,16 +34,16 @@ public struct Pin: Equatable {
 	}
 	
 	public var document: Document? {
-		guard let documentID = documentID else { return nil }
+		guard let documentID else { return nil }
 		return AccountManager.shared.findDocument(documentID)
 	}
 	
 	public var userInfo: [AnyHashable: AnyHashable] {
 		var userInfo = [AnyHashable: AnyHashable]()
-		if let containerIDs = containerIDs {
+		if let containerIDs {
             userInfo["containerIDs"] = containerIDs.map { $0.userInfo }
 		}
-		if let documentID = documentID {
+		if let documentID {
 			userInfo["documentID"] = documentID.userInfo
 		}
 		return userInfo

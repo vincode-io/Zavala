@@ -269,7 +269,7 @@ class EditorRowTextView: UITextView {
 			self.previousSelectedTextRange = selectedTextRange
 		}
 
-		guard let previousSelectedTextRange = previousSelectedTextRange else {
+		guard let previousSelectedTextRange else {
 			return
 		}
 		

@@ -56,7 +56,7 @@ struct DataDetectorResult {
 	}
 	
 	func attributedString(withAttributes attributes: [NSAttributedString.Key : Any]) -> NSAttributedString? {
-		guard let url = url else { return nil }
+		guard let url else { return nil }
 		
 		var newAttributes = attributes
 		newAttributes.removeValue(forKey: .link)
@@ -85,7 +85,7 @@ extension NSDataDetector {
 	
 	func enumerateMatches(in text: String, completion: (DataDetectorResult) -> ()) {
 		enumerateMatches(in: text, options: [], range: NSRange(location: 0, length: text.utf16.count)) { (result, _, _) in
-			guard let result = result else { return }
+			guard let result else { return }
 			guard let range = Range(result.range, in: text) else { return }
 			let matchText = String(text[range])
 			guard let match = processMatch(result, matchText: matchText) else { return }

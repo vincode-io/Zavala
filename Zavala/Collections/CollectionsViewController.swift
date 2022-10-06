@@ -390,7 +390,7 @@ extension CollectionsViewController {
 		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
 
 		operation.completionBlock = { [weak self] _ in
-			guard let self = self else { return }
+			guard let self else { return }
 			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) }
 			for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
 				self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
@@ -423,7 +423,7 @@ extension CollectionsViewController: CollectionsSearchCellDelegate {
 	}
 
 	func collectionsSearchDidUpdate(searchText: String?) {
-		if let searchText = searchText {
+		if let searchText {
 			selectDocumentContainers([Search(searchText: searchText)], isNavigationBranch: false, animated: true)
 		} else {
 			selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
@@ -462,7 +462,7 @@ private extension CollectionsViewController {
 	
 	func makeDocumentContainerContextMenu(mainItem: CollectionsItem, items: [CollectionsItem]) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: mainItem as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
-			guard let self = self else { return nil }
+			guard let self else { return nil }
 
 			let containers: [DocumentContainer] = items.compactMap { item in
 				if case .documentContainer(let entityID) = item.id {
@@ -486,7 +486,7 @@ private extension CollectionsViewController {
 		guard containers.count == 1, let container = containers.first, let tagDocuments = container as? TagDocuments else { return nil }
 		
 		let action = UIAction(title: L10n.rename, image: AppAssets.rename) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			if self.traitCollection.userInterfaceIdiom == .mac {
 				let renameTagViewController = UIStoryboard.dialog.instantiateController(ofType: MacRenameTagViewController.self)

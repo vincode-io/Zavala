@@ -74,28 +74,28 @@ class EditorRowNoteTextView: EditorRowTextView {
 	}
 	
 	func didBecomeActive() {
-		if let row = row {
+		if let row {
 			editorDelegate?.didBecomeActive(self, row: row)
 		}
 	}
 	
     override func textWasChanged() {
-        guard let row = row else { return }
+        guard let row else { return }
         editorDelegate?.textChanged(self, row: row, isInNotes: true, selection: selectedRange, rowStrings: rowStrings)
     }
     
 	override func layoutEditor() {
-		guard let row = row else { return }
+		guard let row else { return }
 		editorDelegate?.layoutEditor(self, row: row)
 	}
     
     override func makeCursorVisibleIfNecessary() {
-		guard let cursorRect = cursorRect else { return }
+		guard let cursorRect else { return }
         editorDelegate?.scrollEditorToVisible(self, rect: cursorRect)
     }
     
 	override func deleteBackward() {
-		guard let row = row else { return }
+		guard let row else { return }
 		if attributedText.length == 0 {
 			isSavingTextUnnecessary = true
 			editorDelegate?.deleteRowNote(self, row: row, rowStrings: rowStrings)
@@ -105,12 +105,12 @@ class EditorRowNoteTextView: EditorRowTextView {
 	}
 
 	@objc func moveCursorToText(_ sender: Any) {
-		guard let row = row else { return }
+		guard let row else { return }
 		editorDelegate?.moveCursorTo(self, row: row)
 	}
 	
 	@objc func moveCursorDown(_ sender: Any) {
-		guard let row = row else { return }
+		guard let row else { return }
 		editorDelegate?.moveCursorDown(self, row: row)
 	}
 
@@ -155,7 +155,7 @@ class EditorRowNoteTextView: EditorRowTextView {
 extension EditorRowNoteTextView: CursorCoordinatesProvider {
 
 	var coordinates: CursorCoordinates? {
-		if let row = row {
+		if let row {
 			return CursorCoordinates(row: row, isInNotes: true, selection: selectedRange)
 		}
 		return nil

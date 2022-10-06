@@ -112,7 +112,7 @@ public final class AccountManager: Logging {
 	}
 	
 	public func deleteCloudKitAccount() {
-		guard let cloudKitAccount = cloudKitAccount else { return }
+		guard let cloudKitAccount else { return }
 		
 		// Send out all the document delete events for this account to clean up the search index
 		cloudKitAccount.documents?.forEach { $0.documentDidDelete() }

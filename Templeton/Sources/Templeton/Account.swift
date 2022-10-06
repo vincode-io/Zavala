@@ -214,7 +214,7 @@ public final class Account: NSObject, Identifiable, Codable, Logging {
 	}
 	
 	public func disambiguate(document: Document) {
-		guard let documents = documents else { return }
+		guard let documents else { return }
 		
 		if let lastCommon = documents.filter({ $0.title == document.title && $0.id != document.id }).sorted(by: { $0.disambiguator ?? 0 < $1.disambiguator ?? 0 }).last {
 			document.update(disambiguator: (lastCommon.disambiguator ?? 1) + 1)
@@ -232,7 +232,7 @@ public final class Account: NSObject, Identifiable, Codable, Logging {
 		documents!.append(document)
 		accountDocumentsDidChange()
 
-		if let tags = tags {
+		if let tags {
             for tag in tags {
                 outline.createTag(tag)
             }

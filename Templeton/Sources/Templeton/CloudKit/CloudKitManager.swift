@@ -98,7 +98,7 @@ public class CloudKitManager: Logging {
 		let operation = CloudKitQueueRequestsOperation(requests: requests)
 		
 		operation.completionBlock = { [weak self] op in
-			guard let self = self else { return }
+			guard let self else { return }
 			if let error = (op as? BaseMainThreadOperation)?.error {
 				self.presentError(error)
 			} else {
@@ -154,7 +154,7 @@ public class CloudKitManager: Logging {
 		
 		op.acceptSharesCompletionBlock = { [weak self] error in
 			
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			switch CloudKitZoneResult.resolve(error) {
 			case .success:
@@ -279,7 +279,7 @@ private extension CloudKitManager {
 		}
 		
 		op.fetchDatabaseChangesCompletionBlock = { [weak self] token, _, error in
-			guard let self = self else {
+			guard let self else {
 				completion?()
 				return
 			}

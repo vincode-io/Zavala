@@ -768,7 +768,7 @@ private extension MainSplitViewController {
 	func goBackward(to: Int) {
 		guard to < goBackwardStack.count else { return }
 		
-		if let lastPin = lastPin {
+		if let lastPin {
 			goForwardStack.insert(lastPin, at: 0)
 		}
 		
@@ -787,7 +787,7 @@ private extension MainSplitViewController {
 	func goForward(to:  Int) {
 		guard to < goForwardStack.count else { return }
 
-		if let lastPin = lastPin {
+		if let lastPin {
 			goBackwardStack.insert(lastPin, at: 0)
 		}
 		
@@ -920,7 +920,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let goBackwardItem = ValidatingMenuToolbarItem(itemIdentifier: .goBackward)
 			
 			goBackwardItem.checkForUnavailable = { [weak self] toolbarItem in
-				guard let self = self else { return true }
+				guard let self else { return true }
 				var backwardItems = [UIAction]()
 				for (index, pin) in self.goBackwardStack.enumerated() {
 					backwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
@@ -945,7 +945,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let goForwardItem = ValidatingMenuToolbarItem(itemIdentifier: .goForward)
 			
 			goForwardItem.checkForUnavailable = { [weak self] toolbarItem in
-				guard let self = self else { return true }
+				guard let self else { return true }
 				var forwardItems = [UIAction]()
 				for (index, pin) in self.goForwardStack.enumerated() {
 					forwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
@@ -1118,7 +1118,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 		case .toggleCompletedFilter:
 			let item = ValidatingMenuToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
-				guard let self = self else { return false }
+				guard let self else { return false }
 				
 				if self.editorViewController?.isFilterOn ?? false {
 					item.image = AppAssets.filterActive.symbolSizedForCatalyst(color: .accentColor)

@@ -73,13 +73,13 @@ class EditorRowTopicTextView: EditorRowTextView {
 	}
 	
 	var cursorIsOnTopLine: Bool {
-		guard let cursorRect = cursorRect else { return false }
+		guard let cursorRect else { return false }
 		let lineStart = closestPosition(to: CGPoint(x: 0, y: cursorRect.midY))
 		return lineStart == beginningOfDocument
 	}
 	
 	var cursorIsOnBottomLine: Bool {
-		guard let cursorRect = cursorRect else { return false }
+		guard let cursorRect else { return false }
 		let lineEnd = closestPosition(to: CGPoint(x: bounds.maxX, y: cursorRect.midY))
 		return lineEnd == endOfDocument
 	}
@@ -112,28 +112,28 @@ class EditorRowTopicTextView: EditorRowTextView {
 	}
 	
 	func didBecomeActive() {
-		if let row = row {
+		if let row {
 			editorDelegate?.didBecomeActive(self, row: row)
 		}
 	}
     
     override func textWasChanged() {
-        guard let row = row else { return }
+        guard let row else { return }
         editorDelegate?.textChanged(self, row: row, isInNotes: false, selection: selectedRange, rowStrings: rowStrings)
     }
 
 	override func layoutEditor() {
-		guard let row = row else { return }
+		guard let row else { return }
 		editorDelegate?.layoutEditor(self, row: row)
 	}
 	
     override func makeCursorVisibleIfNecessary() {
-		guard let cursorRect = cursorRect else { return }
+		guard let cursorRect else { return }
         editorDelegate?.scrollEditorToVisible(self, rect: cursorRect)
     }
     
 	override func deleteBackward() {
-		guard let row = row else { return }
+		guard let row else { return }
 		if attributedText.length == 0 && row.rowCount == 0 {
 			editorDelegate?.deleteRow(self, row: row, rowStrings: rowStrings)
 		} else {
@@ -142,27 +142,27 @@ class EditorRowTopicTextView: EditorRowTextView {
 	}
 
 	@objc func createRow(_ sender: Any) {
-		guard let row = row else { return }
+		guard let row else { return }
 		editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
 	}
 	
 	@objc func moveCursorUp(_ sender: Any) {
-		guard let row = row else { return }
+		guard let row else { return }
 		editorDelegate?.moveCursorUp(self, row: row)
 	}
 	
 	@objc func moveCursorDown(_ sender: Any) {
-		guard let row = row else { return }
+		guard let row else { return }
 		editorDelegate?.moveCursorDown(self, row: row)
 	}
 	
 	@objc func moveLeft(_ sender: Any) {
-		guard let row = row else { return }
+		guard let row else { return }
 		editorDelegate?.moveRowLeft(self, row: row, rowStrings: rowStrings)
 	}
 	
 	@objc func moveRight(_ sender: Any) {
-		guard let row = row else { return }
+		guard let row else { return }
 		editorDelegate?.moveRowRight(self, row: row, rowStrings: rowStrings)
 	}
 	
@@ -171,13 +171,13 @@ class EditorRowTopicTextView: EditorRowTextView {
 	}
 	
 	@objc func insertRow(_ sender: Any) {
-		guard let row = row else { return }
+		guard let row else { return }
 		isSavingTextUnnecessary = true
 		editorDelegate?.createRow(self, beforeRow: row)
 	}
 
 	@objc func split(_ sender: Any) {
-		guard let row = row else { return }
+		guard let row else { return }
 		
 		isSavingTextUnnecessary = true
 		
@@ -247,7 +247,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 extension EditorRowTopicTextView: CursorCoordinatesProvider {
 
 	var coordinates: CursorCoordinates? {
-		if let row = row {
+		if let row {
 			return CursorCoordinates(row: row, isInNotes: false, selection: selectedRange)
 		}
 		return nil
@@ -268,7 +268,7 @@ extension EditorRowTopicTextView: UITextViewDelegate {
 	}
 	
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-		guard let row = row else { return true }
+		guard let row else { return true }
 		
 		switch text {
 		case "\n":

@@ -284,7 +284,7 @@ open class SearchTextField: EnhancedTextField {
         newRect.origin.x = caretRect.origin.x + caretRect.size.width + textRect.origin.x
         newRect.size.width = newRect.size.width - newRect.origin.x
         
-        if let placeholderLabel = placeholderLabel {
+        if let placeholderLabel {
             placeholderLabel.font = self.font
             placeholderLabel.frame = newRect
         } else {
@@ -310,7 +310,7 @@ open class SearchTextField: EnhancedTextField {
             return
         }
         
-        if let tableView = tableView {
+        if let tableView {
             guard let frame = self.superview?.convert(self.frame, to: nil), let window = window else { return }
             
             //TableViews use estimated cell heights to calculate content size until they
@@ -640,9 +640,9 @@ open class SearchTextField: EnhancedTextField {
     // MARK: - Prepare for draw table result
     
     fileprivate func prepareDrawTableResult() {
-		guard let window = window else { return }
+		guard let window else { return }
         guard let frame = self.superview?.convert(self.frame, to: window) else { return }
-        if let keyboardFrame = keyboardFrame {
+        if let keyboardFrame {
             var newFrame = frame
             newFrame.size.height += theme.cellHeight
             

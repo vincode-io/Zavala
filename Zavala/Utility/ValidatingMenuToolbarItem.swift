@@ -14,7 +14,7 @@ public class ValidatingMenuToolbarItem: NSMenuToolbarItem {
 	var checkForUnavailable: ((NSMenuToolbarItem) -> Bool)?
 	
 	override public func validate() {
-		guard let checkForUnavailable = checkForUnavailable else {
+		guard let checkForUnavailable else {
 			isEnabled = false
 			return
 		}

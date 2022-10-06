@@ -16,7 +16,7 @@ extension IntentEntityID {
 	}
 	
 	func toEntityID() -> EntityID? {
-		guard let identifier = identifier else { return nil }
+		guard let identifier else { return nil }
 		return EntityID(description: identifier)
 	}
 	

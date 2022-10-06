@@ -103,7 +103,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 		let sharingController = UICloudSharingController { [weak self] (_, prepareCompletionHandler) in
 
 			self?.fetch(externalID: document.id.description) { [weak self] result in
-				guard let self = self else {
+				guard let self else {
 					completion(.failure(CloudKitOutlineZoneError.unknown))
 					return
 				}
@@ -115,7 +115,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 					share[CKShare.SystemFieldKey.title] = (document.title ?? "") as CKRecordValue
 
 					self.modify(recordsToSave: [share, unsharedRootRecord], recordIDsToDelete: []) { [weak self] result in
-						guard let self = self else {
+						guard let self else {
 							completion(.failure(CloudKitOutlineZoneError.unknown))
 							return
 						}

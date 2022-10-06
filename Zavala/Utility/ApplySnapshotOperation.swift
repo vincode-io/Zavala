@@ -31,7 +31,7 @@ class ApplySnapshotOperation<S: Hashable, I: Hashable>: BaseMainThreadOperation 
 	
 	override func run() {		
 		dataSource.apply(snapshot, to: section, animatingDifferences: animated) { [weak self] in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.operationDelegate?.operationDidComplete(self)
 		}
 	}
