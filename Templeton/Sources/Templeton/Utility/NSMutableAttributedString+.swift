@@ -9,6 +9,30 @@
 import UIKit
 
 extension NSMutableAttributedString {
+
+	@discardableResult
+	public func detectData() -> Bool {
+		let text = string
+		guard !string.isEmpty else { return false }
+		
+		var changeWasMade = false
+		
+		let detector = NSDataDetector(dataTypes: DataDetectorType.allCases)
+		detector.enumerateMatches(in: text) { result in
+			let originalString = attributedSubstring(from: result.range)
+			let originalAttributes = originalString.attributes(at: 0, effectiveRange: nil)
+
+			guard let resultAttributedString = result.attributedString(withAttributes: originalAttributes) else { return }
+			
+			if !originalString.isEqual(to: resultAttributedString) {
+				deleteCharacters(in: result.range)
+				insert(resultAttributedString, at: result.range.location)
+				changeWasMade = true
+			}
+		}
+		
+		return changeWasMade
+	}
 	
 	public func replaceFont(with font: UIFont) {
 		beginEditing()
@@ -23,4 +47,8 @@ extension NSMutableAttributedString {
 		endEditing()
 	}
 	
+	public func addAttributes(_ attrs: [NSAttributedString.Key : Any] = [:]) {
+		addAttributes(attrs, range: NSRange(location: 0, length: length))
+	}
+
 }

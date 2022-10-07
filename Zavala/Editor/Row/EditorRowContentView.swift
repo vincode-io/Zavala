@@ -25,7 +25,7 @@ class EditorRowContentView: UIView, UIContentView {
 	}()
 
 	var configuration: UIContentConfiguration {
-		get { appliedConfiguration }
+		get { appliedConfiguration! }
 		set {
 			guard let newConfig = newValue as? EditorRowContentConfiguration else { return }
 			apply(configuration: newConfig)
@@ -60,7 +60,7 @@ class EditorRowContentView: UIView, UIContentView {
 	}()
 
 	private var barViews = [UIView]()
-	private var appliedConfiguration: EditorRowContentConfiguration!
+	private var appliedConfiguration: EditorRowContentConfiguration?
 	
 	init(configuration: EditorRowContentConfiguration) {
 		super.init(frame: .zero)
@@ -125,7 +125,7 @@ class EditorRowContentView: UIView, UIContentView {
 		barView.level = row.level
 		barView.indentationWidth = configuration.indentationWidth
 		
-		guard appliedConfiguration == nil || !appliedConfiguration.isLayoutEqual(configuration) else {
+		guard appliedConfiguration == nil || !appliedConfiguration!.isLayoutEqual(configuration) else {
 			return
 		}
 		
@@ -140,67 +140,67 @@ class EditorRowContentView: UIView, UIContentView {
 extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 	
 	var editorRowTopicTextViewUndoManager: UndoManager? {
-		return appliedConfiguration.delegate?.editorRowUndoManager
+		return appliedConfiguration?.delegate?.editorRowUndoManager
 	}
 	
 	var editorRowTopicTextViewInputAccessoryView: UIView? {
-		appliedConfiguration.delegate?.editorRowInputAccessoryView
+		appliedConfiguration?.delegate?.editorRowInputAccessoryView
 	}
 	
 	func layoutEditor(_: EditorRowTopicTextView, row: Row) {
-		appliedConfiguration.delegate?.editorRowLayoutEditor(row: row)
+		appliedConfiguration?.delegate?.editorRowLayoutEditor(row: row)
 	}
 	
-	func makeCursorVisibleIfNecessary(_: EditorRowTopicTextView) {
-		appliedConfiguration.delegate?.editorRowMakeCursorVisibleIfNecessary()
+	func scrollEditorToVisible(_ textView: EditorRowTopicTextView, rect: CGRect) {
+		appliedConfiguration?.delegate?.editorRowScrollEditorToVisible(textView: textView, rect: rect)
 	}
 	
 	func moveCursorUp(_: EditorRowTopicTextView, row: Row) {
-		appliedConfiguration.delegate?.editorRowMoveCursorUp(row: row)
+		appliedConfiguration?.delegate?.editorRowMoveCursorUp(row: row)
 	}
 	
 	func moveCursorDown(_: EditorRowTopicTextView, row: Row) {
-		appliedConfiguration.delegate?.editorRowMoveCursorDown(row: row)
+		appliedConfiguration?.delegate?.editorRowMoveCursorDown(row: row)
 	}
 
 	func didBecomeActive(_: EditorRowTopicTextView, row: Row) {
-		appliedConfiguration.delegate?.editorRowTextFieldDidBecomeActive(row: row)
+		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeActive(row: row)
 	}
 
 	func textChanged(_: EditorRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings) {
-		appliedConfiguration.delegate?.editorRowTextChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
+		appliedConfiguration?.delegate?.editorRowTextChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
 	}
 	
 	func deleteRow(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings) {
-		appliedConfiguration.delegate?.editorRowDeleteRow(row, rowStrings: rowStrings)
+		appliedConfiguration?.delegate?.editorRowDeleteRow(row, rowStrings: rowStrings)
 	}
 	
 	func createRow(_: EditorRowTopicTextView, beforeRow: Row) {
-		appliedConfiguration.delegate?.editorRowCreateRow(beforeRow: beforeRow)
+		appliedConfiguration?.delegate?.editorRowCreateRow(beforeRow: beforeRow)
 	}
 	
 	func createRow(_: EditorRowTopicTextView, afterRow: Row, rowStrings: RowStrings) {
-		appliedConfiguration.delegate?.editorRowCreateRow(afterRow: afterRow, rowStrings: rowStrings)
+		appliedConfiguration?.delegate?.editorRowCreateRow(afterRow: afterRow, rowStrings: rowStrings)
 	}
 	
 	func moveRowLeft(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings) {
-		appliedConfiguration.delegate?.editorRowMoveRowLeft(row, rowStrings: rowStrings)
+		appliedConfiguration?.delegate?.editorRowMoveRowLeft(row, rowStrings: rowStrings)
 	}
 
 	func moveRowRight(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings) {
-		appliedConfiguration.delegate?.editorRowMoveRowRight(row, rowStrings: rowStrings)
+		appliedConfiguration?.delegate?.editorRowMoveRowRight(row, rowStrings: rowStrings)
 	}
 	
 	func splitRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int) {
-		appliedConfiguration.delegate?.editorRowSplitRow(row, topic: topic, cursorPosition: cursorPosition)
+		appliedConfiguration?.delegate?.editorRowSplitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
 	func editLink(_: EditorRowTopicTextView, _ link: String?, text: String?, range: NSRange) {
-		appliedConfiguration.delegate?.editorRowEditLink(link, text: text, range: range)
+		appliedConfiguration?.delegate?.editorRowEditLink(link, text: text, range: range)
 	}
 	
 	func zoomImage(_ topicRow: EditorRowTopicTextView, _ image: UIImage, rect: CGRect) {
-		appliedConfiguration.delegate?.editorRowZoomImage(image, rect: rect)
+		appliedConfiguration?.delegate?.editorRowZoomImage(image, rect: rect)
 	}
 
 }
@@ -208,47 +208,47 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 
 	var editorRowNoteTextViewUndoManager: UndoManager? {
-		return appliedConfiguration.delegate?.editorRowUndoManager
+		return appliedConfiguration?.delegate?.editorRowUndoManager
 	}
 	
 	var editorRowNoteTextViewInputAccessoryView: UIView? {
-		return appliedConfiguration.delegate?.editorRowInputAccessoryView
+		return appliedConfiguration?.delegate?.editorRowInputAccessoryView
 	}
 	
 	func layoutEditor(_: EditorRowNoteTextView, row: Row) {
-		appliedConfiguration.delegate?.editorRowLayoutEditor(row: row)
+		appliedConfiguration?.delegate?.editorRowLayoutEditor(row: row)
 	}
 	
-	func makeCursorVisibleIfNecessary(_: EditorRowNoteTextView) {
-		appliedConfiguration.delegate?.editorRowMakeCursorVisibleIfNecessary()
+	func scrollEditorToVisible(_ textView: EditorRowNoteTextView, rect: CGRect) {
+		appliedConfiguration?.delegate?.editorRowScrollEditorToVisible(textView: textView, rect: rect)
 	}
 
 	func didBecomeActive(_: EditorRowNoteTextView, row: Row) {
-		appliedConfiguration.delegate?.editorRowTextFieldDidBecomeActive(row: row)
+		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeActive(row: row)
 	}
 	
 	func textChanged(_: EditorRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings) {
-		appliedConfiguration.delegate?.editorRowTextChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
+		appliedConfiguration?.delegate?.editorRowTextChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
 	}
 	
 	func deleteRowNote(_: EditorRowNoteTextView, row: Row, rowStrings: RowStrings) {
-		appliedConfiguration.delegate?.editorRowDeleteRowNote(row, rowStrings: rowStrings)
+		appliedConfiguration?.delegate?.editorRowDeleteRowNote(row, rowStrings: rowStrings)
 	}
 	
 	func moveCursorTo(_: EditorRowNoteTextView, row: Row) {
-		appliedConfiguration.delegate?.editorRowMoveCursorTo(row: row)
+		appliedConfiguration?.delegate?.editorRowMoveCursorTo(row: row)
 	}
 	
 	func moveCursorDown(_: EditorRowNoteTextView, row: Row) {
-		appliedConfiguration.delegate?.editorRowMoveCursorDown(row: row)
+		appliedConfiguration?.delegate?.editorRowMoveCursorDown(row: row)
 	}
 	
 	func editLink(_: EditorRowNoteTextView, _ link: String?, text: String?, range: NSRange) {
-		appliedConfiguration.delegate?.editorRowEditLink(link, text: text, range: range)
+		appliedConfiguration?.delegate?.editorRowEditLink(link, text: text, range: range)
 	}
 	
 	func zoomImage(_ noteRow: EditorRowNoteTextView, _ image: UIImage, rect: CGRect) {
-		appliedConfiguration.delegate?.editorRowZoomImage(image, rect: rect)
+		appliedConfiguration?.delegate?.editorRowZoomImage(image, rect: rect)
 	}
 
 }
@@ -258,10 +258,10 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 private extension EditorRowContentView {
 
 	@objc func toggleDisclosure(_ sender: Any?, forEvent event: UIEvent) {
-		guard let row = appliedConfiguration.row else { return }
+		guard let row = appliedConfiguration?.row else { return }
 		disclosureIndicator.toggleDisclosure()
 		let applyToAll = event.modifierFlags.contains(.alternate)
-		appliedConfiguration.delegate?.editorRowToggleDisclosure(row: row, applyToAll: applyToAll)
+		appliedConfiguration?.delegate?.editorRowToggleDisclosure(row: row, applyToAll: applyToAll)
 	}
 	
 	func configureTextViews(config: EditorRowContentConfiguration) {

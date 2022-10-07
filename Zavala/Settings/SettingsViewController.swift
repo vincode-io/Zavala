@@ -110,28 +110,38 @@ class SettingsViewController: UITableViewController {
 	}
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		guard indexPath.section == 3 else { return }
-		
-		switch indexPath.row {
-		case 0:
-			openURL(AppAssets.helpURL)
-		case 1:
-			UIApplication.shared.open(URL(string: AppAssets.feedbackURL)!, options: [:])
-		case 2:
-			openURL(AppAssets.websiteURL)
-		case 3:
-			openURL(AppAssets.releaseNotesURL)
-		case 4:
-			openURL(AppAssets.githubRepositoryURL)
-		case 5:
-			openURL(AppAssets.bugTrackerURL)
-		case 6:
-			openURL(AppAssets.acknowledgementsURL)
-		default:
-			break
+		if indexPath.section == 3 {
+			switch indexPath.row {
+			case 0:
+				openURL(AppAssets.helpURL)
+			case 1:
+				openURL(AppAssets.websiteURL)
+			case 2:
+				openURL(AppAssets.privacyPolicyURL)
+			default:
+				break
+			}
+			tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
 		}
 		
-		tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
+		if indexPath.section == 4 {
+			switch indexPath.row {
+			case 0:
+				UIApplication.shared.open(URL(string: AppAssets.feedbackURL)!, options: [:])
+			case 1:
+				openURL(AppAssets.releaseNotesURL)
+			case 2:
+				openURL(AppAssets.githubRepositoryURL)
+			case 3:
+				openURL(AppAssets.bugTrackerURL)
+			case 4:
+				openURL(AppAssets.acknowledgementsURL)
+			default:
+				break
+			}
+			tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
+		}
+		
 	}
 	
 	override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -183,7 +193,7 @@ class SettingsViewController: UITableViewController {
 		alertController.addAction(cancelAction)
 		
 		let deleteAction = UIAlertAction(title: L10n.remove, style: .default) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			AppDefaults.shared.enableCloudKit = self.enableCloudKitSwitch.isOn
 		}
 		alertController.addAction(deleteAction)

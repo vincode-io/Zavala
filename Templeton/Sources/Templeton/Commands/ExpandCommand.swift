@@ -35,7 +35,7 @@ public final class ExpandCommand: OutlineCommand {
 	}
 	
 	public func undo() {
-		guard let expandedRows = expandedRows else { return }
+		guard let expandedRows else { return }
 		outline.collapse(rows: expandedRows)
 		registerRedo()
 		restoreCursorPosition()

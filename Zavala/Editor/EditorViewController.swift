@@ -171,11 +171,15 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		return currentTextView == nil
 	}
 
+	var isInsertImageUnavailable: Bool {
+		return currentTextView == nil
+	}
+
 	var isLinkUnavailable: Bool {
 		return currentTextView == nil
 	}
 
-	var isInsertImageUnavailable: Bool {
+	var isInsertNewlineUnavailable: Bool {
 		return currentTextView == nil
 	}
 
@@ -232,7 +236,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	var currentRows: [Row]? {
-		if let selected = collectionView?.indexPathsForSelectedItems, !selected.isEmpty {
+		if let selected = collectionView?.indexPathsForSelectedItems?.sorted(), !selected.isEmpty {
 			return selected.compactMap { outline?.shadowTable?[$0.row] }
 		} else if let currentRow = currentTextView?.row {
 			return [currentRow]
@@ -293,14 +297,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var isCursoringUp = false
 	private var isCursoringDown = false
 	
-	private var navButtonsBarButtonItem: UIBarButtonItem!
 	private var goBackwardButton: UIButton!
 	private var goForwardButton: UIButton!
 	private var moreMenuButton: UIButton!
 	private var filterButton: UIButton!
 	
-	private var doneBarButtonItem: UIBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done))
-
 	private var keyboardToolBar: UIToolbar!
 	private var moveRightButton: UIButton!
 	private var moveLeftButton: UIButton!
@@ -308,6 +309,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var moveDownButton: UIButton!
 	private var insertImageButton: UIButton!
 	private var linkButton: UIButton!
+	private var noteButton: UIButton!
+	private var insertNewlineButton: UIButton!
+	private var squareButton: UIButton!
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
@@ -351,16 +355,39 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		//NSTextAttachment.registerViewProviderClass(MetadataTextAttachmentViewProvider.self, forFileType: MetadataTextAttachmentViewProvider.fileType)
 		
+		collectionView.translatesAutoresizingMaskIntoConstraints = false
+		
+		// Mac Catalyst and regular iOS use different contraint connections to manage Toolbar and Navigation bar translucency
+		let collectionViewLeadingConstraint: NSLayoutConstraint
+		let collectionViewTrailingConstraint: NSLayoutConstraint
+		let collectionViewBottomConstraint: NSLayoutConstraint
+
 		if traitCollection.userInterfaceIdiom == .mac {
+			collectionViewTopConstraint = collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+			collectionViewLeadingConstraint = collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+			collectionViewTrailingConstraint = collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+			collectionViewBottomConstraint = collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
+			collectionViewTopConstraint = collectionView.topAnchor.constraint(equalTo: view.topAnchor)
+			collectionViewLeadingConstraint = collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+			collectionViewTrailingConstraint = collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+			collectionViewBottomConstraint = collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 		}
-		
+
+		NSLayoutConstraint.activate([
+			collectionViewTopConstraint,
+			collectionViewLeadingConstraint,
+			collectionViewTrailingConstraint,
+			collectionViewBottomConstraint
+		])
+
 		searchBar.delegate = self
-		collectionViewTopConstraint.constant = 0
 		
 		collectionView.collectionViewLayout = createLayout()
 		collectionView.delegate = self
@@ -402,105 +429,42 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
 		
-		let navButtonsStackView = UIStackView()
-		navButtonsStackView.isLayoutMarginsRelativeArrangement = true
-		navButtonsStackView.layoutMargins.right = 8
-		navButtonsStackView.alignment = .center
-		navButtonsStackView.spacing = 16
+		let navButtonGroup = ButtonGroup(target: self, alignment: .right)
+		goBackwardButton = navButtonGroup.addButton(label: L10n.goBackward, image: AppAssets.goBackward, selector: "goBackwardOne")
+		goForwardButton = navButtonGroup.addButton(label: L10n.goForward, image: AppAssets.goForward, selector: "goForwardOne")
+		moreMenuButton = navButtonGroup.addButton(label: L10n.more, image: AppAssets.ellipsis, showMenu: true)
+		filterButton = navButtonGroup.addButton(label: L10n.filter, image: AppAssets.filterInactive, showMenu: true)
+		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
-		goBackwardButton = ToolbarButton(type: .system)
-		goBackwardButton.addTarget(self, action: #selector(goBackwardOne), for: .touchUpInside)
-		goBackwardButton.setImage(AppAssets.goBackward, for: .normal)
-		goBackwardButton.accessibilityLabel = L10n.goBackward
-		goBackwardButton.isAccessibilityElement = true
-		navButtonsStackView.addArrangedSubview(goBackwardButton)
+		let leftToolbarButtonGroup = ButtonGroup(target: self, alignment: .left)
+		moveLeftButton = leftToolbarButtonGroup.addButton(label: L10n.moveLeft, image: AppAssets.moveLeft, selector: "moveCurrentRowsLeft")
+		moveRightButton = leftToolbarButtonGroup.addButton(label: L10n.moveRight, image: AppAssets.moveRight, selector: "moveCurrentRowsRight")
+		moveUpButton = leftToolbarButtonGroup.addButton(label: L10n.moveUp, image: AppAssets.moveUp, selector: "moveCurrentRowsUp")
+		moveDownButton = leftToolbarButtonGroup.addButton(label: L10n.moveDown, image: AppAssets.moveDown, selector: "moveCurrentRowsDown")
+		let moveButtonsBarButtonItem = leftToolbarButtonGroup.buildBarButtonItem()
 
-		goForwardButton = ToolbarButton(type: .system)
-		goForwardButton.addTarget(self, action: #selector(goForwardOne), for: .touchUpInside)
-		goForwardButton.setImage(AppAssets.goForward, for: .normal)
-		goForwardButton.accessibilityLabel = L10n.goForward
-		goForwardButton.isAccessibilityElement = true
-		navButtonsStackView.addArrangedSubview(goForwardButton)
+		let rightToolbarButtonGroup = ButtonGroup(target: self, alignment: .right)
+		insertImageButton = rightToolbarButtonGroup.addButton(label: L10n.insertImage, image: AppAssets.insertImage, selector: "insertImage")
+		linkButton = rightToolbarButtonGroup.addButton(label: L10n.link, image: AppAssets.link, selector: "link")
+		noteButton = rightToolbarButtonGroup.addButton(label: L10n.addNote, image: AppAssets.noteAdd, selector: "createOrDeleteNotes")
+		insertNewlineButton = rightToolbarButtonGroup.addButton(label: L10n.newline, image: AppAssets.newline, selector: "insertNewline")
+		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
 
-		moreMenuButton = ToolbarButton(type: .system)
-		moreMenuButton.showsMenuAsPrimaryAction = true
-		moreMenuButton.setImage(AppAssets.ellipsis, for: .normal)
-		moreMenuButton.accessibilityLabel = L10n.more
-		moreMenuButton.isAccessibilityElement = true
-		navButtonsStackView.addArrangedSubview(moreMenuButton)
-
-		filterButton = ToolbarButton(type: .system)
-		filterButton.showsMenuAsPrimaryAction = true
-		filterButton.setImage(AppAssets.filterInactive, for: .normal)
-		filterButton.accessibilityLabel = L10n.filter
-		filterButton.isAccessibilityElement = true
-		navButtonsStackView.addArrangedSubview(filterButton)
-		
-		navButtonsBarButtonItem = UIBarButtonItem(customView: navButtonsStackView)
-
-		let moveButtonsStackView = UIStackView()
-		moveButtonsStackView.alignment = .center
-		moveButtonsStackView.spacing = 16
-
-		moveLeftButton = ToolbarButton(type: .system)
-		moveLeftButton.addTarget(self, action: #selector(moveCurrentRowsLeft), for: .touchUpInside)
-		moveLeftButton.setImage(AppAssets.moveLeft, for: .normal)
-		moveLeftButton.accessibilityLabel = L10n.moveLeft
-		moveLeftButton.isAccessibilityElement = true
-		moveButtonsStackView.addArrangedSubview(moveLeftButton)
-
-		moveRightButton = ToolbarButton(type: .system)
-		moveRightButton.addTarget(self, action: #selector(moveCurrentRowsRight), for: .touchUpInside)
-		moveRightButton.setImage(AppAssets.moveRight, for: .normal)
-		moveRightButton.accessibilityLabel = L10n.moveRight
-		moveRightButton.isAccessibilityElement = true
-		moveButtonsStackView.addArrangedSubview(moveRightButton)
-
-		moveUpButton = ToolbarButton(type: .system)
-		moveUpButton.addTarget(self, action: #selector(moveCurrentRowsUp), for: .touchUpInside)
-		moveUpButton.setImage(AppAssets.moveUp, for: .normal)
-		moveUpButton.accessibilityLabel = L10n.moveUp
-		moveUpButton.isAccessibilityElement = true
-		moveButtonsStackView.addArrangedSubview(moveUpButton)
-
-		moveDownButton = ToolbarButton(type: .system)
-		moveDownButton.addTarget(self, action: #selector(moveCurrentRowsDown), for: .touchUpInside)
-		moveDownButton.setImage(AppAssets.moveDown, for: .normal)
-		moveDownButton.accessibilityLabel = L10n.moveDown
-		moveDownButton.isAccessibilityElement = true
-		moveButtonsStackView.addArrangedSubview(moveDownButton)
-
-		let moveButtonsBarButtonItem = UIBarButtonItem(customView: moveButtonsStackView)
-		
-		let insertButtonsStackView = UIStackView()
-		insertButtonsStackView.alignment = .center
-		insertButtonsStackView.spacing = 16
-
-		insertImageButton = ToolbarButton(type: .system)
-		insertImageButton.addTarget(self, action: #selector(insertImage), for: .touchUpInside)
-		insertImageButton.setImage(AppAssets.insertImage, for: .normal)
-		insertImageButton.accessibilityLabel = L10n.insertImage
-		insertImageButton.isAccessibilityElement = true
-		insertButtonsStackView.addArrangedSubview(insertImageButton)
-
-		linkButton = ToolbarButton(type: .system)
-		linkButton.addTarget(self, action: #selector(link), for: .touchUpInside)
-		linkButton.setImage(AppAssets.link, for: .normal)
-		linkButton.accessibilityLabel = L10n.link
-		linkButton.isAccessibilityElement = true
-		insertButtonsStackView.addArrangedSubview(linkButton)
-
-		let insertButtonsBarButtonItem = UIBarButtonItem(customView: insertButtonsStackView)
-		
 		if traitCollection.userInterfaceIdiom != .mac {
-			keyboardToolBar = UIToolbar()
+			keyboardToolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
 			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-			keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
+			
+			if traitCollection.userInterfaceIdiom == .pad {
+				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
+			} else {
+				let hideKeyboardBarButtonItem = UIBarButtonItem(image: AppAssets.hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
+				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, hideKeyboardBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
+			}
+			
 			keyboardToolBar.sizeToFit()
 			navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
 		}
 
-		updatePhoneUI(editMode: false)
 		updateUI()
 		collectionView.reloadData()
 
@@ -547,6 +511,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
+	override func contentScrollView(for edge: NSDirectionalRectEdge) -> UIScrollView? {
+		return collectionView
+	}
+		
+	override func selectAll(_ sender: Any?) {
+		selectAllRows()
+	}
+	
 	override func cut(_ sender: Any?) {
 		guard let rows = currentRows else { return }
 		cutRows(rows)
@@ -563,6 +535,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
+		case .selectAll:
+			return !isSelectAllRowsUnavailable
 		case .cut, .copy:
 			return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
 		case .paste:
@@ -614,7 +588,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	// MARK: Notifications
 	
 	@objc func outlineFontCacheDidRebuild(_ note: Notification) {
-		collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+		collectionView.reloadData()
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
@@ -725,7 +699,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				UIView.animate(withDuration: 0.25) {
 					self?.collectionView.contentInset = EditorViewController.defaultContentInsets
 				}
-				self?.updatePhoneUI(editMode: false)
 				self?.currentKeyboardHeight = 0
 			}
 			DispatchQueue.main.async(execute: keyboardWorkItem!)
@@ -736,7 +709,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				if self?.collectionView.contentInset != newInsets {
 					self?.collectionView.contentInset = newInsets
 				}
-				self?.updatePhoneUI(editMode: true)
 				self?.makeCursorVisibleIfNecessary()
 				self?.currentKeyboardHeight = keyboardViewEndFrame.height
 			}
@@ -786,7 +758,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		// After this point as long as we don't have this Outline open in other
 		// windows, no more collection view updates should happen for it.
-		outline?.beingViewedCount = (outline?.beingViewedCount ?? 1) - 1
+		outline?.decrementBeingUsedCount()
 		
 		// End the search collection view updates early
 		isSearching = false
@@ -799,12 +771,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		outline = newOutline
 		
 		// Don't continue if we are just clearing out the editor
-		guard let outline = outline else {
+		guard let outline else {
 			collectionView.reloadData()
 			return
 		}
 
-		outline.beingViewedCount = outline.beingViewedCount + 1
+		outline.incrementBeingUsedCount()
 		outline.load()
 		outline.prepareForViewing()
 			
@@ -813,7 +785,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		updateNavigationMenus()
 		collectionView.reloadData()
 		
-		if let searchText = searchText {
+		if let searchText {
 			discloseSearchBar()
 			searchBar.searchField.text = outline.searchText
 			beginInDocumentSearch(text: searchText)
@@ -833,23 +805,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
-	func updatePhoneUI(editMode: Bool) {
-		if traitCollection.userInterfaceIdiom == .phone {
-			if editMode {
-				navigationItem.rightBarButtonItems = [doneBarButtonItem, navButtonsBarButtonItem]
-			} else {
-				navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
-			}
-		}
-	}
-	
 	func updateNavigationMenus() {
-		guard let delegate = delegate else { return }
+		guard let delegate else { return }
 		
 		var backwardItems = [UIAction]()
 		for (index, pin) in delegate.editorViewControllerGoBackwardStack.enumerated() {
 			backwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
-				guard let self = self else { return }
+				guard let self else { return }
 				DispatchQueue.main.async {
 					delegate.goBackward(self, to: index)
 				}
@@ -860,7 +822,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		var forwardItems = [UIAction]()
 		for (index, pin) in delegate.editorViewControllerGoForwardStack.enumerated() {
 			forwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
-				guard let self = self else { return }
+				guard let self else { return }
 				DispatchQueue.main.async {
 					delegate.goForward(self, to: index)
 				}
@@ -899,6 +861,25 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			moveDownButton.isEnabled = !isMoveRowsDownUnavailable
 			insertImageButton.isEnabled = !isInsertImageUnavailable
 			linkButton.isEnabled = !isLinkUnavailable
+			
+			// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
+			// only have one row selected at a time while editing and that row eitherh has a note
+			// or it doesn't.
+			if !isCreateRowNotesUnavailable {
+				noteButton.isEnabled = true
+				noteButton.setImage(AppAssets.noteAdd, for: .normal)
+				noteButton.accessibilityLabel = L10n.addNote
+			} else if !isDeleteRowNotesUnavailable {
+				noteButton.isEnabled = true
+				noteButton.setImage(AppAssets.noteDelete, for: .normal)
+				noteButton.accessibilityLabel = L10n.deleteNote
+			} else {
+				noteButton.isEnabled = false
+				noteButton.setImage(AppAssets.noteAdd, for: .normal)
+				noteButton.accessibilityLabel = L10n.addNote
+			}
+			
+			insertNewlineButton.isEnabled = !isInsertNewlineUnavailable
 		}
 		
 	}
@@ -972,12 +953,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	func expandAllInOutline() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		expandAll(containers: [outline])
 	}
 	
 	func collapseAllInOutline() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		collapseAll(containers: [outline])
 	}
 	
@@ -1050,13 +1031,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	func printDoc() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		currentTextView?.saveText()
 		delegate?.printDoc(self, outline: outline)
 	}
 	
 	func printList() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		currentTextView?.saveText()
 		delegate?.printList(self, outline: outline)
 	}
@@ -1076,11 +1057,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
-	@objc func done() {
+	@objc func hideKeyboard() {
 		UIResponder.currentFirstResponder?.resignFirstResponder()
 		CursorCoordinates.clearLastKnownCoordinates()
 	}
-	
+
 	@objc func toggleFilterOn() {
 		guard let changes = outline?.toggleFilterOn() else { return }
 		applyChangesRestoringState(changes)
@@ -1155,6 +1136,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		currentTextView?.editLink(self)
 	}
 	
+	@objc func insertNewline() {
+		currentTextView?.insertNewline(self)
+	}
+	
 	@objc func splitRow() {
 		guard let row = currentRows?.last,
 			  let topic = (currentTextView as? EditorRowTopicTextView)?.attributedText,
@@ -1171,19 +1156,19 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func share(_ sender: Any? = nil) {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		let controller = UIActivityViewController(outline: outline)
-		controller.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
+		controller.popoverPresentationController?.sourceView = sender as? UIView
 		present(controller, animated: true)
 	}
 	
 	@objc func collaborate(_ sender: Any? = nil) {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		
 		AccountManager.shared.cloudKitAccount?.prepareCloudSharingController(document: .outline(outline)) { result in
 			switch result {
 			case .success(let sharingController):
-				sharingController.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
+				sharingController.popoverPresentationController?.sourceView = sender as? UIView
 				sharingController.delegate = self
 				sharingController.availablePermissions = [.allowReadWrite]
 				self.present(sharingController, animated: true)
@@ -1194,7 +1179,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func showOutlineGetInfo() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		delegate?.showGetInfo(self, outline: outline)
 	}
 	
@@ -1224,6 +1209,16 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func moveCurrentRowsDown() {
 		guard let rows = currentRows else { return }
 		moveRowsDown(rows)
+	}
+	
+	@objc func createOrDeleteNotes() {
+		guard let rows = currentRows else { return }
+
+		if !isCreateRowNotesUnavailable {
+			createRowNotes(rows)
+		} else {
+			deleteRowNotes(rows)
+		}
 	}
 
 	@objc func toggleCompleteRows() {
@@ -1369,7 +1364,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Outline.Section.title.rawValue:
 			return outline == nil ? 0 : 1
 		case Outline.Section.tags.rawValue:
-			if let outline = outline {
+			if let outline {
 				return outline.tags.count + 1
 			} else {
 				return 0
@@ -1429,7 +1424,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			}
 		}
 		
-		return makeRowsContextMenu(rows: rows)
+		return buildRowsContextMenu(rows: rows)
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
@@ -1564,8 +1559,8 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		layoutEditor(row: row)
 	}
 	
-	func editorRowMakeCursorVisibleIfNecessary() {
-		makeCursorVisibleIfNecessary()
+	func editorRowScrollEditorToVisible(textView: UITextView, rect: CGRect) {
+		scrollToVisible(textInput: textView, rect: rect)
 	}
 
 	func editorRowTextFieldDidBecomeActive(row: Row) {
@@ -1668,7 +1663,7 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 		}
 		
 		result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] (object, error) in
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = RSImage.scaleImage(data, maxPixelSize: 1800) {
 				let scaledImage = UIImage(cgImage: cgImage)
@@ -1816,7 +1811,11 @@ private extension EditorViewController {
 		view.layoutIfNeeded()
 
 		UIView.animate(withDuration: 0.3) {
-			self.collectionViewTopConstraint.constant = Self.searchBarHeight
+			if self.traitCollection.userInterfaceIdiom == .mac {
+				self.collectionViewTopConstraint.constant = Self.searchBarHeight
+			} else {
+				self.collectionViewTopConstraint.constant = Self.searchBarHeight + self.view.safeAreaInsets.top
+			}
 			self.view.layoutIfNeeded()
 		}
 	}
@@ -2068,7 +2067,7 @@ private extension EditorViewController {
 			guard let index = row.shadowTableIndex else { return }
 			let indexPath = IndexPath(row: index, section: adjustedRowsSection)
 			UIView.performWithoutAnimation {
-				collectionView.reconfigureItems(at: [indexPath])
+				self.collectionView.reconfigureItems(at: [indexPath])
 			}
 		} else {
 			// This is presumably less effecient than just reconfiguring the item and
@@ -2219,7 +2218,7 @@ private extension EditorViewController {
 	}
 	
 	func moveCursorToTagInput() {
-		if let outline = outline {
+		if let outline {
 			let indexPath = IndexPath(row: outline.tags.count, section: Outline.Section.tags.rawValue)
 			if let tagInputCell = collectionView.cellForItem(at: indexPath) as? EditorTagInputViewCell {
 				tagInputCell.takeCursor()
@@ -2257,7 +2256,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	func makeRowsContextMenu(rows: [Row]) -> UIContextMenuConfiguration? {
+	func buildRowsContextMenu(rows: [Row]) -> UIContextMenuConfiguration? {
 		guard let firstRow = rows.sortedByDisplayOrder().first else { return nil }
 		
 		return UIContextMenuConfiguration(identifier: firstRow as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
@@ -2282,7 +2281,7 @@ private extension EditorViewController {
 			if !outline.isUncompleteUnavailable(rows: rows) {
 				outlineActions.append(self.uncompleteAction(rows: rows))
 			}
-			if outline.isDeleteNotesUnavailable(rows: rows) {
+			if !outline.isCreateNotesUnavailable(rows: rows) {
 				outlineActions.append(self.createNoteAction(rows: rows))
 			}
 			if !outline.isDeleteNotesUnavailable(rows: rows) {
@@ -2308,7 +2307,7 @@ private extension EditorViewController {
 	
 	func cutAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.cut, image: AppAssets.cut) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.cutRows(rows)
 			self.delegate?.validateToolbar(self)
 		}
@@ -2322,7 +2321,7 @@ private extension EditorViewController {
 
 	func pasteAction(rows: [Row]) -> UIAction {
 		return UIAction(title: L10n.paste, image: AppAssets.paste) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.pasteRows(afterRows: rows)
 			self.delegate?.validateToolbar(self)
 		}
@@ -2369,7 +2368,7 @@ private extension EditorViewController {
 	}
 	
 	func createNoteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.addNote, image: AppAssets.note) { [weak self] action in
+		return UIAction(title: L10n.addNote, image: AppAssets.noteAdd) { [weak self] action in
 			self?.createRowNotes(rows)
 		}
 	}
@@ -2383,7 +2382,7 @@ private extension EditorViewController {
 	func deleteAction(rows: [Row]) -> UIAction {
 		let title = rows.count == 1 ? L10n.deleteRow : L10n.deleteRows
 		return UIAction(title: title, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.deleteRows(rows)
 			self.delegate?.validateToolbar(self)
 		}
@@ -2599,7 +2598,12 @@ private extension EditorViewController {
 
 		for row in rows.sortedWithDecendentsFiltered() {
 			let itemProvider = NSItemProvider()
-			
+
+			// We need to create the RowGroup data before our data representation callback happens
+			// because we might actually be cutting the data and it won't be available anymore at
+			// the time that the callback happens.
+			let data = try? RowGroup(row).asData()
+
 			// We only register the text representation on the first one, since it looks like most text editors only support 1 dragged text item
 			if row == rows[0] {
 				itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
@@ -2614,12 +2618,7 @@ private extension EditorViewController {
 			}
 			
 			itemProvider.registerDataRepresentation(forTypeIdentifier: Row.typeIdentifier, visibility: .ownProcess) { completion in
-				do {
-					let data = try RowGroup(row).asData()
-					completion(data, nil)
-				} catch {
-					completion(nil, error)
-				}
+				completion(data, nil)
 				return nil
 			}
 			
@@ -2641,7 +2640,7 @@ private extension EditorViewController {
 				group.enter()
 				itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
 					DispatchQueue.main.async {
-						if let data = data {
+						if let data {
 							do {
 								rowGroups.append(try RowGroup.fromData(data))
 								group.leave()
@@ -2688,6 +2687,7 @@ private extension EditorViewController {
 				let textRows = text.split(separator: "\n").map { String($0) }
 				for textRow in textRows {
 					let row = Row(outline: outline, topicMarkdown: textRow.trimmingWhitespace)
+					row.detectData()
 					rowGroups.append(RowGroup(row))
 				}
 				
@@ -2971,8 +2971,13 @@ private extension EditorViewController {
 
 	func makeCursorVisibleIfNecessary() {
 		guard let textInput = UIResponder.currentFirstResponder as? UITextInput,
-			  let cursorRect = textInput.cursorRect,
-			  var convertedRect = (textInput as? UIView)?.convert(cursorRect, to: collectionView) else { return }
+			  let cursorRect = textInput.cursorRect else { return }
+		
+		scrollToVisible(textInput: textInput, rect: cursorRect)
+	}
+	
+	func scrollToVisible(textInput: UITextInput, rect: CGRect) {
+		guard var convertedRect = (textInput as? UIView)?.convert(rect, to: collectionView) else { return }
 		
 		// This isInNotes hack isn't well understood, but it improves the user experience...
 		if textInput is EditorRowNoteTextView {
@@ -2981,9 +2986,9 @@ private extension EditorViewController {
 		
 		collectionView.scrollRectToVisibleBypass(convertedRect, animated: true)
 	}
-	
+
 	func updateSpotlightIndex() {
-		if let outline = outline {
+		if let outline {
 			DocumentIndexer.updateIndex(forDocument: .outline(outline))
 		}
 	}
@@ -3015,7 +3020,7 @@ private extension EditorViewController {
 		var attrs = [NSAttributedString.Key : Any]()
 		attrs[.foregroundColor] = UIColor.secondaryLabel
 		attrs[.font] = OutlineFontCache.shared.backlink
-		result.addAttributes(attrs, range: NSRange(0..<result.length))
+		result.addAttributes(attrs)
 		return result
 	}
 	

@@ -29,7 +29,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		self.mainSplitViewController = mainSplitViewController
 		self.mainSplitViewController.sceneDelegate = self
-		
+		self.mainSplitViewController.showsSecondaryOnlyButton = true
+
 		#if targetEnvironment(macCatalyst)
 		guard let windowScene = scene as? UIWindowScene else { return }
 		

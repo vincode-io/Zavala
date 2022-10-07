@@ -48,11 +48,11 @@ public final class Search: Identifiable, DocumentContainer {
 
 		searchQuery?.completionHandler = { [weak self] error in
 			DispatchQueue.main.async {
-				guard let self = self else {
+				guard let self else {
 					completion(.success([Document]()))
 					return
 				}
-				if let error = error {
+				if let error {
 					completion(.failure(error))
 				} else {
 					completion(.success(self.toDocuments(searchableItems)))

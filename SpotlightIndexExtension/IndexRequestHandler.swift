@@ -6,17 +6,15 @@
 //
 
 import Foundation
-import os.log
 import CoreSpotlight
 import Templeton
+import RSCore
 
-class IndexRequestHandler: CSIndexExtensionRequestHandler {
+class IndexRequestHandler: CSIndexExtensionRequestHandler, Logging {
 	
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "IndexRequestHandler")
-
     override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexAllSearchableItemsWithAcknowledgementHandler acknowledgementHandler: @escaping () -> Void) {
 		DispatchQueue.main.async {
-			os_log("IndexRequestHandler starting...", log: self.log, type: .info)
+			self.logger.info("IndexRequestHandler starting...")
 			
 			self.resume()
 
@@ -34,7 +32,7 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
 			
 			group.notify(queue: .main) {
 				self.suspend()
-				os_log("IndexRequestHandler done.", log: self.log, type: .info)
+				self.logger.info("IndexRequestHandler done.")
 				acknowledgementHandler()
 			}
 		}
@@ -42,7 +40,7 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
     
 	override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexSearchableItemsWithIdentifiers identifiers: [String], acknowledgementHandler: @escaping () -> Void) {
 		DispatchQueue.main.async {
-			os_log("IndexRequestHandler starting...", log: self.log, type: .info)
+			self.logger.info("IndexRequestHandler starting...")
 			
 			self.resume()
 			
@@ -62,7 +60,7 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
 			
 			group.notify(queue: .main) {
 				self.suspend()
-				os_log("IndexRequestHandler done.", log: self.log, type: .info)
+				self.logger.info("IndexRequestHandler done.")
 				acknowledgementHandler()
 			}
 		}
@@ -75,7 +73,7 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
 extension IndexRequestHandler: ErrorHandler {
 	
 	func presentError(_ error: Error, title: String) {
-		os_log(.error, log: log, "IndexRequestHandler failed with error: %@.", error.localizedDescription)
+		self.logger.error("IndexRequestHandler failed with error: \(error.localizedDescription, privacy: .public)")
 	}
 	
 }

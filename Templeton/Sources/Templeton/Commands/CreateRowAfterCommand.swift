@@ -41,7 +41,7 @@ public final class CreateRowAfterCommand: OutlineCommand {
 	}
 	
 	public func undo() {
-		guard let row = row else { return }
+		guard let row else { return }
 		outline.deleteRows([row])
 		registerRedo()
 		restoreCursorPosition()

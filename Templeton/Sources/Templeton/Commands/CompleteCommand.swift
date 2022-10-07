@@ -47,7 +47,7 @@ public final class CompleteCommand: OutlineCommand {
 	}
 	
 	public func undo() {
-		guard let completedRows = completedRows else { return }
+		guard let completedRows else { return }
 		outline.uncomplete(rows: completedRows, rowStrings: oldRowStrings)
 		registerRedo()
 		restoreCursorPosition()

@@ -34,7 +34,7 @@ class FontAndColorPreferencesConfigWindowController: NSWindowController {
 		
 		fieldNameLabel.stringValue = field?.displayName ?? ""
 
-		guard let config = config else { return }
+		guard let config else { return }
 
 		fontNamePopUpButton.menu?.removeAllItems()
 		for fontName in NSFontManager.shared.availableFontFamilies {

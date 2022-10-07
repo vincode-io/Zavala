@@ -34,7 +34,7 @@ class EditorTagInputViewCell: UICollectionViewCell {
 	override func updateConfiguration(using state: UICellConfigurationState) {
 		super.updateConfiguration(using: state)
 
-		guard let outlineID = outlineID else { return }
+		guard let outlineID else { return }
 		var content = EditorTagInputContentConfiguration(outlineID: outlineID).updated(for: state)
 		content.delegate = delegate
 		contentConfiguration = content

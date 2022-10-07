@@ -8,7 +8,7 @@ import Foundation
 import os.log
 import RSCore
 
-final class ImagesFile {
+final class ImagesFile: Logging {
 	
 	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "ImagesFile")
 

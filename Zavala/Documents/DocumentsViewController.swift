@@ -41,8 +41,10 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var heldDocumentContainers: [DocumentContainer]?
 
 	private let searchController = UISearchController(searchResultsController: nil)
-	private var addBarButtonItem: UIBarButtonItem?
-	private var importBarButtonItem: UIBarButtonItem?
+
+	private var navButtonsBarButtonItem: UIBarButtonItem!
+	private var addButton: UIButton!
+	private var importButton: UIButton!
 
 	private var loadDocumentsQueue = CoalescingQueue(name: "Load Documents", interval: 0.5)
     
@@ -67,9 +69,11 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			collectionView.allowsMultipleSelection = true
 			collectionView.contentInset = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0)
 		} else {
-			addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline))
-			importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML))
-			
+			let navButtonGroup = ButtonGroup(target: self, alignment: .right)
+			addButton = navButtonGroup.addButton(label: L10n.add, image: AppAssets.createEntity, selector: "createOutline")
+			importButton = navButtonGroup.addButton(label: L10n.goForward, image: AppAssets.importDocument, selector: "importOPML")
+			navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
+
 			searchController.delegate = self
 			searchController.searchResultsUpdater = self
 			searchController.obscuresBackgroundDuringPresentation = false
@@ -77,9 +81,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			navigationItem.searchController = searchController
 			definesPresentationContext = true
 
-			addBarButtonItem!.title = L10n.add
-			importBarButtonItem!.title = L10n.importOPML
-			navigationItem.rightBarButtonItems = [addBarButtonItem!, importBarButtonItem!]
+			navigationItem.rightBarButtonItem = navButtonsBarButtonItem
 
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
@@ -93,7 +95,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		collectionView.reloadData()
 		
 		rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, Document> { [weak self] (cell, indexPath, document) in
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			let title = (document.title?.isEmpty ?? true) ? L10n.noTitle : document.title!
 			
@@ -160,7 +162,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	}
 
 	func selectDocument(_ document: Document?, isNew: Bool = false, isNavigationBranch: Bool = true, animated: Bool) {
-		guard let documentContainers = documentContainers else { return }
+		guard let documentContainers else { return }
 
 		collectionView.deselectAll()
 
@@ -173,9 +175,13 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	}
 	
 	func selectAllDocuments() {
+		guard let documentContainers else { return }
+
 		for i in 0..<collectionView.numberOfItems(inSection: 0) {
 			collectionView.selectItem(at: IndexPath(row: i, section: 0), animated: false, scrollPosition: [])
 		}
+		
+		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: documents, isNew: false, isNavigationBranch: false, animated: true)
 	}
 	
 	func deleteCurrentDocuments() {
@@ -198,7 +204,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			}
 		}
         
-        if let document = document {
+        if let document {
             loadDocuments(animated: true) {
                 self.selectDocument(document, animated: true)
             }
@@ -323,7 +329,7 @@ extension DocumentsViewController {
 	}
 	
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-		guard let documentContainers = documentContainers else { return }
+		guard let documentContainers else { return }
 		
 		guard let selectedIndexPaths = collectionView.indexPathsForSelectedItems else {
 			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: false, animated: true)
@@ -335,7 +341,7 @@ extension DocumentsViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let documentContainers = documentContainers else { return }
+        guard let documentContainers else { return }
 
 		// We have to figure out double clicks for ourselves
         let now: TimeInterval = Date().timeIntervalSince1970
@@ -361,7 +367,7 @@ extension DocumentsViewController {
 			configuration.showsSeparators = false
 
 			configuration.trailingSwipeActionsConfigurationProvider = { indexPath in
-				guard let self = self else { return nil }
+				guard let self else { return nil }
 				return UISwipeActionsConfiguration(actions: [self.deleteContextualAction(indexPath: indexPath)])
 			}
 
@@ -390,7 +396,7 @@ extension DocumentsViewController {
 	}
 	
 	func loadDocuments(animated: Bool, isNavigationBranch: Bool = false, completion: (() -> Void)? = nil) {
-		guard let documentContainers = documentContainers else {
+		guard let documentContainers else {
 			completion?()
 			return
 		}
@@ -436,13 +442,13 @@ extension DocumentsViewController {
 				for change in diff {
 					switch change {
 					case .insert(let offset, _, let associated):
-						if let associated = associated {
+						if let associated {
 							self.collectionView.moveItem(at: IndexPath(row: associated, section: 0), to: IndexPath(row: offset, section: 0))
 						} else {
 							self.collectionView.insertItems(at: [IndexPath(row: offset, section: 0)])
 						}
 					case .remove(let offset, _, let associated):
-						if let associated = associated {
+						if let associated {
 							self.collectionView.moveItem(at: IndexPath(row: offset, section: 0), to: IndexPath(row: associated, section: 0))
 						} else {
 							self.collectionView.deleteItems(at: [IndexPath(row: offset, section: 0)])
@@ -491,7 +497,7 @@ extension DocumentsViewController: UISearchControllerDelegate {
 	}
 
 	func didDismissSearchController(_ searchController: UISearchController) {
-		if let heldDocumentContainers = heldDocumentContainers {
+		if let heldDocumentContainers {
 			setDocumentContainers(heldDocumentContainers, isNavigationBranch: false)
 			self.heldDocumentContainers = nil
 		}
@@ -535,16 +541,16 @@ private extension DocumentsViewController {
         
 		if traitCollection.userInterfaceIdiom != .mac {
 			if defaultAccount == nil {
-				navigationItem.rightBarButtonItems = nil
+				navigationItem.rightBarButtonItem = nil
 			} else {
-				navigationItem.rightBarButtonItems = [addBarButtonItem!, importBarButtonItem!]
+				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
 			}
 		}
 	}
 	
     func makeOutlineContextMenu(mainRowID: GenericRowIdentifier, allRowIDs: [GenericRowIdentifier]) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: mainRowID as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
-			guard let self = self else { return nil }
+			guard let self else { return nil }
             let documents = allRowIDs.map { self.documents[$0.indexPath.row] }
 			
 			var menuItems = [UIMenuElement]()
@@ -615,7 +621,7 @@ private extension DocumentsViewController {
 	
 	func exportPDFDocsOutlineAction(outlines: [Outline]) -> UIAction {
 		let action = UIAction(title: L10n.exportPDFDocEllipsis) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.delegate?.exportPDFDocs(self, outlines: outlines)
 		}
 		return action
@@ -623,7 +629,7 @@ private extension DocumentsViewController {
 	
 	func exportPDFListsOutlineAction(outlines: [Outline]) -> UIAction {
         let action = UIAction(title: L10n.exportPDFListEllipsis) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.delegate?.exportPDFLists(self, outlines: outlines)
 		}
 		return action
@@ -631,7 +637,7 @@ private extension DocumentsViewController {
 	
 	func exportMarkdownDocsOutlineAction(outlines: [Outline]) -> UIAction {
         let action = UIAction(title: L10n.exportMarkdownDocEllipsis) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.delegate?.exportMarkdownDocs(self, outlines: outlines)
 		}
 		return action
@@ -639,7 +645,7 @@ private extension DocumentsViewController {
 	
 	func exportMarkdownListsOutlineAction(outlines: [Outline]) -> UIAction {
         let action = UIAction(title: L10n.exportMarkdownListEllipsis) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.delegate?.exportMarkdownLists(self, outlines: outlines)
 		}
 		return action
@@ -647,7 +653,7 @@ private extension DocumentsViewController {
 	
 	func exportOPMLsAction(outlines: [Outline]) -> UIAction {
         let action = UIAction(title: L10n.exportOPMLEllipsis) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.delegate?.exportOPMLs(self, outlines: outlines)
 		}
 		return action
@@ -655,7 +661,7 @@ private extension DocumentsViewController {
 	
 	func printDocsAction(outlines: [Outline]) -> UIAction {
 		let action = UIAction(title: L10n.printDocEllipsis) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.delegate?.printDocs(self, outlines: outlines)
 		}
 		return action
@@ -663,7 +669,7 @@ private extension DocumentsViewController {
 	
 	func printListsAction(outlines: [Outline]) -> UIAction {
 		let action = UIAction(title: L10n.printListEllipsis) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.delegate?.printLists(self, outlines: outlines)
 		}
 		return action
@@ -671,7 +677,7 @@ private extension DocumentsViewController {
 	
 	func deleteContextualAction(indexPath: IndexPath) -> UIContextualAction {
 		return UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
-			guard let self = self else { return }
+			guard let self else { return }
 			let document = self.documents[indexPath.row]
 			self.deleteDocuments([document], completion: completion)
 		}

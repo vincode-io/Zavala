@@ -6,9 +6,9 @@
 //
 
 import UIKit
-import os.log
-import SWXMLHash
 import CloudKit
+import RSCore
+import SWXMLHash
 
 public extension Notification.Name {
 	static let AccountDidInitialize = Notification.Name(rawValue: "AccountDidInitialize")
@@ -31,7 +31,7 @@ public enum AccountError: LocalizedError {
 	}
 }
 
-public final class Account: NSObject, Identifiable, Codable {
+public final class Account: NSObject, Identifiable, Codable, Logging {
 
 	public var id: EntityID {
 		return EntityID.account(type.rawValue)
@@ -72,7 +72,6 @@ public final class Account: NSObject, Identifiable, Codable {
 	var cloudKitManager: CloudKitManager?
 	
 	private let operationQueue = OperationQueue()
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Account")
 
 	private var documentsDictionaryNeedUpdate = true
 	private var _idToDocumentsDictionary = [String: Document]()
@@ -215,7 +214,7 @@ public final class Account: NSObject, Identifiable, Codable {
 	}
 	
 	public func disambiguate(document: Document) {
-		guard let documents = documents else { return }
+		guard let documents else { return }
 		
 		if let lastCommon = documents.filter({ $0.title == document.title && $0.id != document.id }).sorted(by: { $0.disambiguator ?? 0 < $1.disambiguator ?? 0 }).last {
 			document.update(disambiguator: (lastCommon.disambiguator ?? 1) + 1)
@@ -233,7 +232,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		documents!.append(document)
 		accountDocumentsDidChange()
 
-		if let tags = tags {
+		if let tags {
             for tag in tags {
                 outline.createTag(tag)
             }

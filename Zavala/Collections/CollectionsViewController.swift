@@ -54,8 +54,8 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		return splitViewController as? MainSplitViewController
 	}
 	
-	private var addBarButtonItem: UIBarButtonItem!
-	private var importBarButtonItem: UIBarButtonItem!
+	private var addButton: UIButton!
+	private var importButton: UIButton!
 
     private var selectBarButtonItem: UIBarButtonItem!
     private var selectDoneBarButtonItem: UIBarButtonItem!
@@ -63,35 +63,29 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
     override func viewDidLoad() {
 		super.viewDidLoad()
 
-		addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
-        addBarButtonItem.title = L10n.add
-
-        importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML(_:)))
-        importBarButtonItem.title = L10n.importOPML
-
-        selectBarButtonItem = UIBarButtonItem(title: L10n.select, style: .plain, target: self, action: #selector(multipleSelect))
-        selectDoneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(multipleSelectDone))
-        
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
+			collectionView.allowsMultipleSelection = true
 		} else {
+			if traitCollection.userInterfaceIdiom == .pad {
+				selectBarButtonItem = UIBarButtonItem(title: L10n.select, style: .plain, target: self, action: #selector(multipleSelect))
+				selectDoneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(multipleSelectDone))
+
+				navigationItem.rightBarButtonItem = selectBarButtonItem
+			} else {
+				let navButtonGroup = ButtonGroup(target: self, alignment: .right)
+				addButton = navButtonGroup.addButton(label: L10n.add, image: AppAssets.createEntity, selector: "createOutline:")
+				importButton = navButtonGroup.addButton(label: L10n.goForward, image: AppAssets.importDocument, selector: "importOPML:")
+				let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
+
+				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
+			}
+
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 		}
         
-        if traitCollection.userInterfaceIdiom == .mac {
-            collectionView.allowsMultipleSelection = true
-        }
-
-        if traitCollection.userInterfaceIdiom == .pad {
-            navigationItem.rightBarButtonItem = selectBarButtonItem
-        }
-
-		if traitCollection.userInterfaceIdiom == .phone {
-			navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
-		}
-		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange(_:)), name: .AccountManagerAccountsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidInitialize(_:)), name: .AccountDidInitialize, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
@@ -243,6 +237,16 @@ extension CollectionsViewController {
 	override func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
 		return false
 	}
+	
+	override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+		if traitCollection.userInterfaceIdiom == .pad {
+			if collectionView.allowsMultipleSelection {
+				return !(dataSource.itemIdentifier(for: indexPath)?.entityID?.isSystemCollection ?? false)
+			}
+
+		}
+		return true
+	}
 		
 	override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         updateSelections()
@@ -386,7 +390,7 @@ extension CollectionsViewController {
 		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
 
 		operation.completionBlock = { [weak self] _ in
-			guard let self = self else { return }
+			guard let self else { return }
 			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) }
 			for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
 				self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
@@ -419,7 +423,7 @@ extension CollectionsViewController: CollectionsSearchCellDelegate {
 	}
 
 	func collectionsSearchDidUpdate(searchText: String?) {
-		if let searchText = searchText {
+		if let searchText {
 			selectDocumentContainers([Search(searchText: searchText)], isNavigationBranch: false, animated: true)
 		} else {
 			selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
@@ -458,7 +462,7 @@ private extension CollectionsViewController {
 	
 	func makeDocumentContainerContextMenu(mainItem: CollectionsItem, items: [CollectionsItem]) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: mainItem as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
-			guard let self = self else { return nil }
+			guard let self else { return nil }
 
 			let containers: [DocumentContainer] = items.compactMap { item in
 				if case .documentContainer(let entityID) = item.id {
@@ -482,7 +486,7 @@ private extension CollectionsViewController {
 		guard containers.count == 1, let container = containers.first, let tagDocuments = container as? TagDocuments else { return nil }
 		
 		let action = UIAction(title: L10n.rename, image: AppAssets.rename) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			if self.traitCollection.userInterfaceIdiom == .mac {
 				let renameTagViewController = UIStoryboard.dialog.instantiateController(ofType: MacRenameTagViewController.self)

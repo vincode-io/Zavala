@@ -21,7 +21,7 @@ extension DocumentsViewController: UICollectionViewDropDelegate {
 		for dropItem in coordinator.items {
 			let provider = dropItem.dragItem.itemProvider
 			provider.loadDataRepresentation(forTypeIdentifier: DataRepresentation.opml.typeIdentifier) { [weak self] (opmlData, error) in
-				guard let opmlData = opmlData else { return }
+				guard let opmlData else { return }
 				DispatchQueue.main.async {
                     let tags = self?.documentContainers?.compactMap { ($0 as? TagDocuments)?.tag }
 					let document = account.importOPML(opmlData, tags: tags)

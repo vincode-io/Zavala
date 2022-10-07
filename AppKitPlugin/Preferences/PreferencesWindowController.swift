@@ -152,7 +152,7 @@ private extension PreferencesWindowController {
 
 		resizeWindow(toFitView: newViewController.view)
 
-		if let currentView = currentView {
+		if let currentView {
 			window!.contentView?.replaceSubview(currentView, with: newViewController.view)
 		}
 		else {

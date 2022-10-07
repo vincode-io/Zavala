@@ -39,7 +39,7 @@ public final class CollapseAllCommand: OutlineCommand {
 	}
 	
 	public func undo() {
-		guard let collapsedRows = collapsedRows else { return }
+		guard let collapsedRows else { return }
 		outline.expand(rows: collapsedRows)
 		registerRedo()
 		restoreCursorPosition()

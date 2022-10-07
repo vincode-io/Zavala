@@ -30,7 +30,7 @@ public final class DuplicateRowCommand: OutlineCommand {
 	
 	public func perform() {
 		saveCursorCoordinates()
-		if let newRows = newRows {
+		if let newRows {
 			outline.createRows(newRows, afterRow: rows.sortedByDisplayOrder().first)
 		} else {
 			newRows = outline.duplicateRows(rows)
@@ -39,7 +39,7 @@ public final class DuplicateRowCommand: OutlineCommand {
 	}
 	
 	public func undo() {
-		guard let newRows = newRows else {
+		guard let newRows else {
 			return
 		}
 

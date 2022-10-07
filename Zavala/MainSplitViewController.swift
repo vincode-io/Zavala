@@ -267,14 +267,20 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 	
 	override func selectAll(_ sender: Any?) {
-		guard editorViewController?.isSelectAllRowsUnavailable ?? true else {
-			editorViewController?.selectAllRows()
-			return
-		}
-		
-		guard editorViewController?.isOutlineFunctionsUnavailable ?? true else {
-			documentsViewController?.selectAllDocuments()
-			return
+		documentsViewController?.selectAllDocuments()
+	}
+
+	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+		switch action {
+		case .selectAll:
+			return !(editorViewController?.isInEditMode ?? false)
+		case .delete:
+			guard !(editorViewController?.isInEditMode ?? false) else {
+				return false
+			}
+			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true) || !(editorViewController?.isOutlineFunctionsUnavailable ?? true)
+		default:
+			return super.canPerformAction(action, withSender: sender)
 		}
 	}
 	
@@ -314,6 +320,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 	@objc func link(_ sender: Any?) {
 		link()
+	}
+
+	@objc func createOrDeleteNotes(_ sender: Any?) {
+		createOrDeleteNotes()
 	}
 
 	@objc func toggleOutlineFilter(_ sender: Any?) {
@@ -380,7 +390,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(delete(_:)):
+		case .delete:
 			if isDeleteEntityUnavailable {
 				command.attributes = .disabled
 			}
@@ -758,7 +768,7 @@ private extension MainSplitViewController {
 	func goBackward(to: Int) {
 		guard to < goBackwardStack.count else { return }
 		
-		if let lastPin = lastPin {
+		if let lastPin {
 			goForwardStack.insert(lastPin, at: 0)
 		}
 		
@@ -777,7 +787,7 @@ private extension MainSplitViewController {
 	func goForward(to:  Int) {
 		guard to < goForwardStack.count else { return }
 
-		if let lastPin = lastPin {
+		if let lastPin {
 			goBackwardStack.insert(lastPin, at: 0)
 		}
 		
@@ -828,6 +838,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.navigation,
 			.insertImage,
 			.link,
+			.note,
 			.boldface,
 			.italic,
 			.toggleCompletedFilter,
@@ -909,7 +920,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let goBackwardItem = ValidatingMenuToolbarItem(itemIdentifier: .goBackward)
 			
 			goBackwardItem.checkForUnavailable = { [weak self] toolbarItem in
-				guard let self = self else { return true }
+				guard let self else { return true }
 				var backwardItems = [UIAction]()
 				for (index, pin) in self.goBackwardStack.enumerated() {
 					backwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
@@ -934,7 +945,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let goForwardItem = ValidatingMenuToolbarItem(itemIdentifier: .goForward)
 			
 			goForwardItem.checkForUnavailable = { [weak self] toolbarItem in
-				guard let self = self else { return true }
+				guard let self else { return true }
 				var forwardItems = [UIAction]()
 				for (index, pin) in self.goForwardStack.enumerated() {
 					forwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
@@ -969,6 +980,33 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = L10n.link
 			item.isBordered = true
 			item.action = #selector(link(_:))
+			item.target = self
+			toolbarItem = item
+		case .note:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				if !(self?.editorViewController?.isCreateRowNotesUnavailable ?? true) {
+					item.image = AppAssets.noteAdd.symbolSizedForCatalyst()
+					item.label = L10n.addNote
+					item.toolTip = L10n.addNote
+					return false
+				} else if !(self?.editorViewController?.isDeleteRowNotesUnavailable ?? true) {
+					item.image = AppAssets.noteDelete.symbolSizedForCatalyst()
+					item.label = L10n.deleteNote
+					item.toolTip = L10n.deleteNote
+					return false
+				} else {
+					item.image = AppAssets.noteAdd.symbolSizedForCatalyst()
+					item.label = L10n.addNote
+					item.toolTip = L10n.addNote
+					return true
+				}
+			}
+			item.image = AppAssets.noteAdd.symbolSizedForCatalyst()
+			item.label = L10n.addNote
+			item.toolTip = L10n.addNote
+			item.isBordered = true
+			item.action = #selector(createOrDeleteNotes(_:))
 			item.target = self
 			toolbarItem = item
 		case .boldface:
@@ -1080,7 +1118,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 		case .toggleCompletedFilter:
 			let item = ValidatingMenuToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
-				guard let self = self else { return false }
+				guard let self else { return false }
 				
 				if self.editorViewController?.isFilterOn ?? false {
 					item.image = AppAssets.filterActive.symbolSizedForCatalyst(color: .accentColor)

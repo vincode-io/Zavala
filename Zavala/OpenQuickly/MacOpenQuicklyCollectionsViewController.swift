@@ -120,7 +120,7 @@ private extension MacOpenQuicklyCollectionsViewController {
 		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
 
 		operation.completionBlock = { [weak self] _ in
-			guard let self = self else { return }
+			guard let self else { return }
 			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) }
 			for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
 				self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])

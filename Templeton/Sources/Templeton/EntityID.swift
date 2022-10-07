@@ -162,7 +162,7 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		}
 	}
 	
-	var isAccount: Bool {
+	public var isAccount: Bool {
 		switch self {
 		case .account(_):
 			return true
@@ -171,7 +171,18 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		}
 	}
 	
-	var isDocument: Bool {
+	public var isSystemCollection: Bool {
+		switch self {
+		case .allDocuments(_):
+			return true
+		case .recentDocuments(_):
+			return true
+		default:
+			return false
+		}
+	}
+	
+	public var isDocument: Bool {
 		switch self {
 		case .document(_, _):
 			return true

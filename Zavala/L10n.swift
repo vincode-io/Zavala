@@ -240,6 +240,8 @@ internal enum L10n {
   internal static let newMainWindow = L10n.tr("Localizable", "New_Main_Window")
   /// New Outline
   internal static let newOutline = L10n.tr("Localizable", "New_Outline")
+  /// Newline
+  internal static let newline = L10n.tr("Localizable", "Newline")
   /// Next Result
   internal static let nextResult = L10n.tr("Localizable", "Next_Result")
   /// (No Title)
@@ -274,6 +276,8 @@ internal enum L10n {
   internal static let printList = L10n.tr("Localizable", "Print_List")
   /// Print List…
   internal static let printListEllipsis = L10n.tr("Localizable", "Print_List_Ellipsis")
+  /// Privacy Policy
+  internal static let privacyPolicy = L10n.tr("Localizable", "Privacy Policy")
   /// Reference: 
   internal static let reference = L10n.tr("Localizable", "Reference")
   /// References: 
@@ -306,6 +310,8 @@ internal enum L10n {
   }
   /// Select
   internal static let select = L10n.tr("Localizable", "Select")
+  /// Settings…
+  internal static let settingsEllipsis = L10n.tr("Localizable", "Settings_Ellipsis")
   /// Share
   internal static let share = L10n.tr("Localizable", "Share")
   /// Share…

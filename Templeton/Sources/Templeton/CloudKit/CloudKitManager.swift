@@ -15,7 +15,7 @@ public extension Notification.Name {
 	static let CloudKitSyncDidComplete = Notification.Name(rawValue: "CloudKitSyncDidComplete")
 }
 
-public class CloudKitManager {
+public class CloudKitManager: Logging {
 
 	class CombinedRequest {
 		var documentRequest: CloudKitActionRequest?
@@ -24,7 +24,6 @@ public class CloudKitManager {
 	}
 
 	let defaultZone: CloudKitOutlineZone
-	var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "CloudKit")
 
 	var isSyncAvailable: Bool {
 		return !isSyncing && isNetworkAvailable
@@ -99,7 +98,7 @@ public class CloudKitManager {
 		let operation = CloudKitQueueRequestsOperation(requests: requests)
 		
 		operation.completionBlock = { [weak self] op in
-			guard let self = self else { return }
+			guard let self else { return }
 			if let error = (op as? BaseMainThreadOperation)?.error {
 				self.presentError(error)
 			} else {
@@ -155,7 +154,7 @@ public class CloudKitManager {
 		
 		op.acceptSharesCompletionBlock = { [weak self] error in
 			
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			switch CloudKitZoneResult.resolve(error) {
 			case .success:
@@ -244,9 +243,9 @@ private extension CloudKitManager {
 			completion()
 		}
 
-		self.sendChangesBackgroundTaskID = UIApplication.shared.beginBackgroundTask {
+		self.sendChangesBackgroundTaskID = UIApplication.shared.beginBackgroundTask { [weak self] in
 			completeProcessing()
-			os_log("CloudKit sync processing terminated for running too long.", log: self.log, type: .info)
+			self?.logger.info("CloudKit sync processing terminated for running too long.")
 		}
 		
 		let operation = CloudKitModifyOperation()
@@ -280,7 +279,7 @@ private extension CloudKitManager {
 		}
 		
 		op.fetchDatabaseChangesCompletionBlock = { [weak self] token, _, error in
-			guard let self = self else {
+			guard let self else {
 				completion?()
 				return
 			}
@@ -327,9 +326,9 @@ private extension CloudKitManager {
 		let op = CKModifySubscriptionsOperation(subscriptionsToSave: [outlineSubscription, rowSubscription], subscriptionIDsToDelete: nil)
 		op.qualityOfService = CloudKitOutlineZone.qualityOfService
 		
-		op.modifySubscriptionsCompletionBlock = { subscriptions, deleted, error in
+		op.modifySubscriptionsCompletionBlock = { [weak self] subscriptions, deleted, error in
 			if error != nil {
-				os_log("Unable to subscribe to shared database.", log: self.log, type: .info)
+				self?.logger.info("Unable to subscribe to shared database.")
 			}
 		}
 		

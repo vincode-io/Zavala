@@ -152,7 +152,7 @@ private extension EditorViewController {
 		}
 		
 		// If we don't have a destination index, drop it at the back
-		guard let targetIndexPath = targetIndexPath else {
+		guard let targetIndexPath else {
 			localRowDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: outline.rowCount)
 			return
 		}
@@ -223,7 +223,7 @@ private extension EditorViewController {
 		for itemProvider in itemProviders {
 			group.enter()
 			itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
-				if let data = data {
+				if let data {
 					do {
 						rowGroups.append(try RowGroup.fromData(data))
 						group.leave()
@@ -241,7 +241,7 @@ private extension EditorViewController {
 	}
 
 	func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
 			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(kUTTypeUTF8PlainText as String) {
@@ -273,6 +273,7 @@ private extension EditorViewController {
 			let textRows = text.split(separator: "\n").map { String($0) }
 			for textRow in textRows {
 				let row = Row(outline: outline, topicMarkdown: textRow.trimmingWhitespace)
+				row.detectData()
 				rowGroups.append(RowGroup(row))
 			}
 			
@@ -303,7 +304,7 @@ private extension EditorViewController {
 		}
 		
 		// If we don't have a destination index, drop it at the back
-		guard let targetIndexPath = targetIndexPath else {
+		guard let targetIndexPath else {
 			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: nil, prefersEnd: true)
 			return
 		}

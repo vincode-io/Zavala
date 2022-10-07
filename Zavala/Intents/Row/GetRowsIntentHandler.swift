@@ -121,13 +121,13 @@ class GetRowsVisitor {
 		var textMatched = true
 		
 		if let text = attrString?.string {
-			if let searchText = searchText {
+			if let searchText {
 				if searchText != text {
 					textMatched = false
 				}
 					
 			}
-			if let searchRegEx = searchRegEx {
+			if let searchRegEx {
 				if !searchRegEx.anyMatch(in: text.makeSearchable()) {
 					textMatched = false
 				}

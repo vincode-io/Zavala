@@ -21,7 +21,9 @@ extension NSAttributedString.Key {
 class EditorRowTextView: UITextView {
 	
 	var row: Row?
-	
+	var baseAttributes = [NSAttributedString.Key : Any]()
+	var previousSelectedTextRange: UITextRange?
+
 	var lineHeight: CGFloat {
 		if let textRange = textRange(from: beginningOfDocument, to: beginningOfDocument) {
 			return firstRect(for: textRange).height
@@ -120,6 +122,8 @@ class EditorRowTextView: UITextView {
 				if $0.name == "dragInitiation"
 					|| $0.name == "dragExclusionRelationships"
 					|| $0.name == "dragFailureRelationships"
+					|| $0.name == "com.apple.UIKit.clickPresentationExclusion"
+					|| $0.name == "com.apple.UIKit.clickPresentationFailure"
 					|| $0.name == "com.apple.UIKit.longPressClickDriverPrimary" {
 					removeGestureRecognizer($0)
 				}
@@ -199,6 +203,10 @@ class EditorRowTextView: UITextView {
 		fatalError("update has not been implemented")
 	}
 	
+	func scrollEditorToVisible(rect: CGRect) {
+		fatalError("scrollEditorToVisible has not been implemented")
+	}
+	
 	func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
         var attrs = typingAttributes
         attrs.removeValue(forKey: .link)
@@ -212,6 +220,7 @@ class EditorRowTextView: UITextView {
 			textStorage.addAttribute(.link, value: url, range: newRange)
 		} else {
 			if newRange.length > 0 {
+				typingAttributes = attrs
 				textStorage.removeAttribute(.link, range: newRange)
 			}
 		}
@@ -246,6 +255,39 @@ class EditorRowTextView: UITextView {
         fatalError("editLink has not been implemented")
     }
 
+	@objc func insertNewline(_ sender: Any) {
+		insertText("\n")
+	}
+	
+	func handleDidChangeSelection() {
+		guard let selectedTextRange = selectedTextRange, !selectedTextRange.isEmpty else {
+			previousSelectedTextRange = nil
+			return
+		}
+
+		defer {
+			self.previousSelectedTextRange = selectedTextRange
+		}
+
+		guard let previousSelectedTextRange else {
+			return
+		}
+		
+		if compare(previousSelectedTextRange.start, to: selectedTextRange.start) == .orderedDescending {
+			if let startHandleEndLocation = position(from: selectedTextRange.start, offset: 1),
+			   let startHandleStartLocation = textRange(from: selectedTextRange.start, to: startHandleEndLocation) {
+				let startHandleRect = firstRect(for: startHandleStartLocation)
+				scrollEditorToVisible(rect: startHandleRect)
+			}
+		} else if compare(previousSelectedTextRange.end, to: selectedTextRange.end) == .orderedAscending {
+			if let endHandleStartLocation = position(from: selectedTextRange.end, offset: -1),
+			   let endHandleEndLocation = textRange(from: endHandleStartLocation, to: selectedTextRange.end) {
+				let endHandleRect = firstRect(for: endHandleEndLocation)
+				scrollEditorToVisible(rect: endHandleRect)
+			}
+		}
+	}
+
 }
 
 extension EditorRowTextView: UITextDropDelegate {
@@ -269,10 +311,21 @@ extension EditorRowTextView: UITextDropDelegate {
 extension EditorRowTextView: NSTextStorageDelegate {
 	
 	func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
+		
+		// If you access the typingAttributes of this UITextView while the attributedString is zero, you will crash randomly
+		var newTypingAttributes: [NSAttributedString.Key : Any]
+		let attributeLocation = editedRange.location - 1
+		if attributeLocation > -1 {
+			let attributeRange = NSRange(location: attributeLocation, length: 1)
+			textStorage.ensureAttributesAreFixed(in: attributeRange)
+			newTypingAttributes = textStorage.attributes(at: attributeLocation, effectiveRange: nil)
+			newTypingAttributes.removeValue(forKey: .font)
+		} else {
+			newTypingAttributes = baseAttributes
+		}
 
-		var newTypingAttributes = typingAttributes
-		newTypingAttributes.removeValue(forKey: .font)
-
+		var needsDataDetection = false
+		
 		textStorage.enumerateAttributes(in: editedRange, options: .longestEffectiveRangeNotRequired) { (attributes, range, _) in
 			var newAttributes = attributes
 			
@@ -291,8 +344,16 @@ extension EditorRowTextView: NSTextStorageDelegate {
 					newAttributes[.backgroundColor] = UIColor.systemGray
 				}
 				
-				if key == .underlineStyle {
+				if key == .underlineStyle || key == .backgroundColor {
 					newAttributes[key] = nil
+				}
+				
+				if textStorage.attributedSubstring(from: range).string == " " {
+					if key == .link {
+						newAttributes[key] = nil
+					} else {
+						needsDataDetection = true
+					}
 				}
 
 				if key == .font, let oldFont = attributes[key] as? UIFont, let newFont = font {
@@ -328,6 +389,10 @@ extension EditorRowTextView: NSTextStorageDelegate {
 			
 			textStorage.setAttributes(newAttributes, range: range)
 		}
+		
+		if needsDataDetection {
+			textStorage.detectData()
+		}
 	}
 	
 }
@@ -335,31 +400,7 @@ extension EditorRowTextView: NSTextStorageDelegate {
 // MARK: Helpers
 
 extension EditorRowTextView {
-    
-    func detectData() {
-        guard let text = attributedText?.string, !text.isEmpty else { return }
         
-        let detector = NSDataDetector(dataTypes: [.url])
-        detector.enumerateMatches(in: text) { (range, match) in
-            switch match {
-            case .url(let url), .email(_, let url):
-                var effectiveRange = NSRange()
-                if let link = textStorage.attribute(.link, at: range.location, effectiveRange: &effectiveRange) as? URL {
-                    if range != effectiveRange || link != url {
-                        isTextChanged = true
-                        textStorage.removeAttribute(.link, range: effectiveRange)
-                        textStorage.addAttribute(.link, value: url, range: range)
-                    }
-                } else {
-                    isTextChanged = true
-                    textStorage.addAttribute(.link, value: url, range: range)
-                }
-            default:
-                break
-            }
-        }
-    }
-    
     func findAndSelectLink() -> (String?, String?, NSRange) {
         var effectiveRange = NSRange()
         if selectedRange.length == 0 && selectedRange.lowerBound < textStorage.length {
@@ -397,7 +438,9 @@ extension EditorRowTextView {
 	}
 	
     func processTextEditingEnding() {
-        detectData()
+		if textStorage.detectData() {
+			isTextChanged = true
+		}
         saveText()
     }
 

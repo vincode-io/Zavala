@@ -42,7 +42,7 @@ public final class MoveRowRightCommand: OutlineCommand {
 	}
 	
 	public func undo() {
-		guard let moveRightRows = moveRightRows else { return }
+		guard let moveRightRows else { return }
 		outline.moveRowsLeft(moveRightRows, rowStrings: oldRowStrings)
 		registerRedo()
 		restoreCursorPosition()

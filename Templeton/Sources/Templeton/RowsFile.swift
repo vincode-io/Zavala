@@ -102,10 +102,8 @@ struct OutlineRows: Codable {
 	}
 }
 
-final class RowsFile {
+final class RowsFile: Logging {
 	
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "RowsFile")
-
 	private weak var outline: Outline?
 	private let fileURL: URL
 	private lazy var managedFile = ManagedResourceFile(fileURL: fileURL,
@@ -152,12 +150,12 @@ final class RowsFile {
 					try FileManager.default.removeItem(atPath: writeURL.path)
 				}
 			} catch let error as NSError {
-				os_log(.error, log: log, "RowsFile delete from disk failed: %@.", error.localizedDescription)
+				logger.error("RowsFile delete from disk failed: \(error.localizedDescription, privacy: .public)")
 			}
 		})
 		
 		if let error = errorPointer?.pointee {
-			os_log(.error, log: log, "RowsFile delete from disk coordination failed: %@.", error.localizedDescription)
+			logger.error("RowsFile delete from disk coordination failed: \(error.localizedDescription, privacy: .public)")
 		}
 	}
 	
@@ -187,7 +185,7 @@ private extension RowsFile {
 		})
 		
 		if let error = errorPointer?.pointee {
-			os_log(.error, log: log, "RowsFile read from disk coordination failed: %@.", error.localizedDescription)
+			logger.error("RowsFile read from disk coordination failed: \(error.localizedDescription, privacy: .public)")
 		}
 
 		guard let rowsData = fileData else {
@@ -199,7 +197,7 @@ private extension RowsFile {
 		do {
 			outlineRows = try decoder.decode(OutlineRows.self, from: rowsData)
 		} catch {
-			os_log(.error, log: log, "RowsFile read deserialization failed: %@.", error.localizedDescription)
+			logger.error("RowsFile read deserialization failed: \(error.localizedDescription, privacy: .public)")
 			return
 		}
 
@@ -218,7 +216,7 @@ private extension RowsFile {
 		do {
 			rowsData = try encoder.encode(outlineRows)
 		} catch {
-			os_log(.error, log: log, "RowsFile read deserialization failed: %@.", error.localizedDescription)
+			logger.error("RowsFile save serialization failed: \(error.localizedDescription, privacy: .public)")
 			return
 		}
 
@@ -231,12 +229,12 @@ private extension RowsFile {
 				let resourceValues = try writeURL.resourceValues(forKeys: [.contentModificationDateKey])
 				lastModificationDate = resourceValues.contentModificationDate
 			} catch let error as NSError {
-				os_log(.error, log: log, "RowsFile save to disk failed: %@.", error.localizedDescription)
+				logger.error("RowsFile save to disk failed: \(error.localizedDescription, privacy: .public)")
 			}
 		})
 		
 		if let error = errorPointer?.pointee {
-			os_log(.error, log: log, "RowsFile save to disk coordination failed: %@.", error.localizedDescription)
+			logger.error("RowsFile save to disk coordination failed: \(error.localizedDescription, privacy: .public)")
 		}
 	}
 	

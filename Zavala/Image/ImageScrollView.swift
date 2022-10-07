@@ -170,7 +170,7 @@ open class ImageScrollView: UIScrollView {
 	
 	@objc open func display(image: UIImage) {
 		
-		if let zoomView = zoomView {
+		if let zoomView {
 			zoomView.removeFromSuperview()
 		}
 		

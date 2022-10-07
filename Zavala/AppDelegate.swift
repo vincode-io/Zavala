@@ -165,10 +165,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		#endif
 	}
 		
-	let showPreferences = UIKeyCommand(title: L10n.preferencesEllipsis,
-										 action: #selector(showPreferences(_:)),
-										 input: ",",
-										 modifierFlags: [.command])
+	let showPreferences: UIKeyCommand = {
+		let title: String
+		if #available(iOS 16, *) {
+			title = L10n.settingsEllipsis
+		} else {
+			title = L10n.preferencesEllipsis
+		}
+		
+		return UIKeyCommand(title: title,
+							action: #selector(showPreferences(_:)),
+							input: ",",
+							modifierFlags: [.command])
+			
+	}()
 	
 	let syncCommand = UIKeyCommand(title: L10n.sync,
 								   action: #selector(syncCommand(_:)),
@@ -385,6 +395,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	let showBugTrackerCommand = UICommand(title: L10n.bugTracker, action: #selector(showBugTrackerCommand(_:)))
 	
 	let showAcknowledgementsCommand = UICommand(title: L10n.acknowledgements, action: #selector(showAcknowledgementsCommand(_:)))
+	
+	let showPrivacyCommand = UICommand(title: L10n.privacyPolicy, action: #selector(showPrivacyPolicyCommand(_:)))
 	
 	let showOpenQuicklyCommand = UIKeyCommand(title: L10n.openQuicklyEllipsis,
 											  action: #selector(showOpenQuicklyCommand(_:)),
@@ -811,6 +823,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.openURL(AppAssets.acknowledgementsURL)
 	}
 
+	@objc func showPrivacyPolicyCommand(_ sender: Any?) {
+		UIApplication.shared.open(URL(string: AppAssets.privacyPolicyURL)!)
+	}
+
 	@objc func showOpenQuicklyCommand(_ sender: Any?) {
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
 			mainSplitViewController.showOpenQuickly()
@@ -1149,13 +1165,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(historyMenu, afterMenu: .view)
 
 		// Help Menu
-		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand,
-																	showFeedbackCommand,
-																	showWebsiteCommand,
-																	showReleaseNotesCommand,
-																	showGitHubRepositoryCommand,
-																	showBugTrackerCommand,
-																	showAcknowledgementsCommand] })
+		let primaryHelpMenu = UIMenu(title: "", options: .displayInline, children: [showHelpCommand,
+																					showWebsiteCommand,
+																					showPrivacyCommand])
+		let secondaryHelpMenu = UIMenu(title: "", options: .displayInline, children: [showFeedbackCommand,
+																			  showReleaseNotesCommand,
+																			  showGitHubRepositoryCommand,
+																			  showBugTrackerCommand,
+																			  showAcknowledgementsCommand])
+		
+		builder.replaceChildren(ofMenu: .help, from: { _ in return [primaryHelpMenu, secondaryHelpMenu] })
 	}
 
 }

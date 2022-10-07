@@ -29,15 +29,42 @@ enum DataDetectorType: CaseIterable {
 }
 
 struct DataDetectorResult {
-	let range: Range<String.Index>
+	let range: NSRange
+	let matchText: String
 	let type: ResultType
 	
 	enum ResultType {
 		case url(URL)
-		case email(email: String, url: URL)
 		case phoneNumber(String)
-		case address(components: [NSTextCheckingKey: String])
+		case address
 		case date(Date)
+	}
+	
+	var url: URL? {
+		switch type {
+		case .url(let url):
+			return url
+		case .phoneNumber(let phoneNumber):
+			guard let phoneNumber = phoneNumber.queryEncoded, let phoneURL = URL(string: "tel://\(phoneNumber)") else { return nil }
+			return phoneURL
+		case .address:
+			guard let address = matchText.queryEncoded, let addressURL = URL(string: "http://maps.apple.com/?q=\(address)") else { return nil }
+			return addressURL
+		default:
+			return nil
+		}
+	}
+	
+	func attributedString(withAttributes attributes: [NSAttributedString.Key : Any]) -> NSAttributedString? {
+		guard let url else { return nil }
+		
+		var newAttributes = attributes
+		newAttributes.removeValue(forKey: .link)
+
+		let attrString = NSMutableAttributedString(linkText: matchText, linkURL: url)
+		attrString.addAttributes(newAttributes)
+		
+		return attrString
 	}
 }
 
@@ -56,14 +83,13 @@ extension NSDataDetector {
 		try! self.init(types: result)
 	}
 	
-	func enumerateMatches(in text: String, block: (_ range: NSRange, _ match: DataDetectorResult.ResultType) -> ()) {
+	func enumerateMatches(in text: String, completion: (DataDetectorResult) -> ()) {
 		enumerateMatches(in: text, options: [], range: NSRange(location: 0, length: text.utf16.count)) { (result, _, _) in
-			guard let result = result else { return }
+			guard let result else { return }
 			guard let range = Range(result.range, in: text) else { return }
-			
-			guard let match = processMatch(result, range: range) else { return }
-			
-			block(result.range, match.type)
+			let matchText = String(text[range])
+			guard let match = processMatch(result, matchText: matchText) else { return }
+			completion(match)
 		}
 	}
 	
@@ -72,34 +98,23 @@ extension NSDataDetector {
 		
 		return matches.compactMap { (match) -> DataDetectorResult? in
 			guard let range = Range(match.range, in: text) else { return nil }
-			
-			return processMatch(match, range: range)
+			let matchText = String(text[range])
+			return processMatch(match, matchText: matchText)
 		}
 	}
 	
-	private func processMatch(_ match: NSTextCheckingResult, range: Range<String.Index>) -> DataDetectorResult? {
-		
+	private func processMatch(_ match: NSTextCheckingResult, matchText: String) -> DataDetectorResult? {
 		if match.resultType == .link {
 			guard let url = match.url else { return nil }
-			
-			if url.absoluteString.hasPrefix("mailto:") {
-				let email = url.absoluteString.replacingOccurrences(of: "mailto:", with: "")
-				return DataDetectorResult(range: range, type: .email(email: email, url: url))
-			} else {
-				return DataDetectorResult(range: range, type: .url(url))
-			}
+			return DataDetectorResult(range: match.range, matchText: matchText, type: .url(url))
 		} else if match.resultType == .phoneNumber {
 			guard let number = match.phoneNumber else { return nil }
-			
-			return DataDetectorResult(range: range, type: .phoneNumber(number))
+			return DataDetectorResult(range: match.range, matchText: matchText, type: .phoneNumber(number))
 		} else if match.resultType == .address {
-			guard let components = match.addressComponents else { return nil }
-			
-			return DataDetectorResult(range: range, type: .address(components: components))
+			return DataDetectorResult(range: match.range, matchText: matchText, type: .address)
 		} else if match.resultType == .date {
 			guard let date = match.date else { return nil }
-			
-			return DataDetectorResult(range: range, type: .date(date))
+			return DataDetectorResult(range: match.range, matchText: matchText, type: .date(date))
 		}
 		
 		return nil

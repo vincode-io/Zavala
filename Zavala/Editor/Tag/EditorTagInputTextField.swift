@@ -65,7 +65,7 @@ class EditorTagInputTextField: SearchTextField {
 		self.textColor = .secondaryLabel
 
 		self.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.text = nil
 			self.invalidateIntrinsicContentSize()
 			let name = filteredResults[index].title

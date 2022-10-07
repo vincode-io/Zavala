@@ -75,6 +75,7 @@
 "Cut" = "Cut";
 "Copy" = "Copy";
 "Paste" = "Paste";
+"Newline" = "Newline";
 "Release_Notes" = "Release Notes";
 "GitHub_Repository" = "GitHub Repository";
 "Bug_Tracker" = "Bug Tracker";
@@ -83,6 +84,7 @@
 "Delete_Tag" = "Delete Tag";
 "Add" = "Add";
 "Preferences_Ellipsis" = "Preferences…";
+"Settings_Ellipsis" = "Settings…";
 "Remove" = "Remove";
 "Sync" = "Sync with iCloud";
 "Delete_Completed" = "Delete Completed";
@@ -120,6 +122,7 @@
 "Select" = "Select";
 "Zavala_Help" = "Zavala Help";
 "Feedback" = "Feedback";
+"Privacy Policy" = "Privacy Policy";
 "Remove_Tag" = "Remove Tag";
 "Delete_Once" = "Delete Once";
 "Delete_Always" = "Always Delete Without Asking";

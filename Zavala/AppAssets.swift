@@ -141,6 +141,10 @@ struct AppAssets {
 		return UIImage(systemName: "italic")!
 	}()
 
+	static var hideKeyboard: UIImage = {
+		return UIImage(systemName: "keyboard.chevron.compact.down")!
+	}()
+
 	static var hideNotesActive: UIImage = {
 		return UIImage(systemName: "doc.text.fill")!
 	}()
@@ -173,8 +177,16 @@ struct AppAssets {
 		return UIImage(systemName: "arrow.up.to.line")!
 	}()
 
-	static var note: UIImage = {
+	static var newline: UIImage = {
+		return UIImage(systemName: "return")!
+	}()
+
+	static var noteAdd: UIImage = {
 		return UIImage(systemName: "doc.text")!
+	}()
+
+	static var noteDelete: UIImage = {
+		return UIImage(systemName: "doc.text.fill")!
 	}()
 
 	static var noteFont: UIImage = {
@@ -192,6 +204,8 @@ struct AppAssets {
 	static var printList: UIImage = {
 		return UIImage(systemName: "printer.dotmatrix")!
 	}()
+
+	static var privacyPolicyURL = "https://vincode.io/privacy-policy/"
 
 	static var releaseNotesURL = "https://github.com/vincode-io/Zavala/releases/tag/\(Bundle.main.versionNumber)"
 	

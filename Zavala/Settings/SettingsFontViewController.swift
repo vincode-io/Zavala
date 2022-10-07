@@ -52,7 +52,7 @@ class SettingsFontViewController: UICollectionViewController {
 		alertController.addAction(cancelAction)
 		
 		let restoreAction = UIAlertAction(title: L10n.restore, style: .default) { [weak self] action in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.fontDefaults = OutlineFontDefaults.defaults
 			AppDefaults.shared.outlineFonts = self.fontDefaults
 			self.applySnapshot()
@@ -176,7 +176,7 @@ private extension SettingsFontViewController {
 
 	func deleteAction(field: OutlineFontField) -> UIContextualAction? {
 		let action =  UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.fontDefaults?.rowFontConfigs.removeValue(forKey: field)
 			AppDefaults.shared.outlineFonts = self.fontDefaults
 			self.applySnapshot()

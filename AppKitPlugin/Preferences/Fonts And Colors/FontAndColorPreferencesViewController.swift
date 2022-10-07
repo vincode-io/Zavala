@@ -81,7 +81,7 @@ class FontAndColorPreferencesViewController: NSViewController {
 			
 		alert.beginSheetModal(for: view.window!) { [weak self] result in
 			if result == NSApplication.ModalResponse.alertFirstButtonReturn {
-				guard let self = self else { return }
+				guard let self else { return }
 				self.fontDefaults = OutlineFontDefaults.defaults
 				AppDefaults.shared.outlineFonts = self.fontDefaults
 				self.sortedFields = self.fontDefaults?.sortedFields

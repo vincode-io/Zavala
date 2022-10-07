@@ -13,7 +13,7 @@ protocol EditorRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewInputAccessoryView: UIView? { get }
 	func layoutEditor(_ : EditorRowNoteTextView, row: Row)
-	func makeCursorVisibleIfNecessary(_ : EditorRowNoteTextView)
+	func scrollEditorToVisible(_ : EditorRowNoteTextView, rect: CGRect)
 	func didBecomeActive(_ : EditorRowNoteTextView, row: Row)
 	func textChanged(_ : EditorRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
 	func deleteRowNote(_ : EditorRowNoteTextView, row: Row, rowStrings: RowStrings)
@@ -74,27 +74,28 @@ class EditorRowNoteTextView: EditorRowTextView {
 	}
 	
 	func didBecomeActive() {
-		if let row = row {
+		if let row {
 			editorDelegate?.didBecomeActive(self, row: row)
 		}
 	}
 	
     override func textWasChanged() {
-        guard let row = row else { return }
+        guard let row else { return }
         editorDelegate?.textChanged(self, row: row, isInNotes: true, selection: selectedRange, rowStrings: rowStrings)
     }
     
 	override func layoutEditor() {
-		guard let row = row else { return }
+		guard let row else { return }
 		editorDelegate?.layoutEditor(self, row: row)
 	}
     
     override func makeCursorVisibleIfNecessary() {
-        editorDelegate?.makeCursorVisibleIfNecessary(self)
+		guard let cursorRect else { return }
+        editorDelegate?.scrollEditorToVisible(self, rect: cursorRect)
     }
     
 	override func deleteBackward() {
-		guard let row = row else { return }
+		guard let row else { return }
 		if attributedText.length == 0 {
 			isSavingTextUnnecessary = true
 			editorDelegate?.deleteRowNote(self, row: row, rowStrings: rowStrings)
@@ -104,12 +105,12 @@ class EditorRowNoteTextView: EditorRowTextView {
 	}
 
 	@objc func moveCursorToText(_ sender: Any) {
-		guard let row = row else { return }
+		guard let row else { return }
 		editorDelegate?.moveCursorTo(self, row: row)
 	}
 	
 	@objc func moveCursorDown(_ sender: Any) {
-		guard let row = row else { return }
+		guard let row else { return }
 		editorDelegate?.moveCursorDown(self, row: row)
 	}
 
@@ -128,11 +129,11 @@ class EditorRowNoteTextView: EditorRowTextView {
 		
 		text = ""
 		
-		var attrs = [NSAttributedString.Key : Any]()
-		attrs[.foregroundColor] = UIColor.secondaryLabel
-		attrs[.font] = OutlineFontCache.shared.note(level: row.level)
+		baseAttributes = [NSAttributedString.Key : Any]()
+		baseAttributes[.foregroundColor] = UIColor.secondaryLabel
+		baseAttributes[.font] = OutlineFontCache.shared.note(level: row.level)
 		
-		typingAttributes = attrs
+		typingAttributes = baseAttributes
         
         if let note = row.note {
             attributedText = note
@@ -142,7 +143,11 @@ class EditorRowNoteTextView: EditorRowTextView {
 		
 		selectedTextRange = cursorRange
     }
-	
+
+	override func scrollEditorToVisible(rect: CGRect) {
+		editorDelegate?.scrollEditorToVisible(self, rect: rect)
+	}
+
 }
 
 // MARK: CursorCoordinatesProvider
@@ -150,7 +155,7 @@ class EditorRowNoteTextView: EditorRowTextView {
 extension EditorRowNoteTextView: CursorCoordinatesProvider {
 
 	var coordinates: CursorCoordinates? {
-		if let row = row {
+		if let row {
 			return CursorCoordinates(row: row, isInNotes: true, selection: selectedRange)
 		}
 		return nil
@@ -170,16 +175,6 @@ extension EditorRowNoteTextView: UITextViewDelegate {
         processTextEditingEnding()
 	}
 	
-	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-		switch text {
-		case " ":
-			typingAttributes[.link] = nil
-			return true
-		default:
-			return true
-		}
-	}
-	
     func textViewDidChange(_ textView: UITextView) {
         processTextChanges()
     }
@@ -193,4 +188,9 @@ extension EditorRowNoteTextView: UITextViewDelegate {
 		editorDelegate?.zoomImage(self, image, rect: convertedRect)
 		return false
 	}
+	
+	func textViewDidChangeSelection(_ textView: UITextView) {
+		handleDidChangeSelection()
+	}
+
 }

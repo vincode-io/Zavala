@@ -179,7 +179,7 @@ private extension EditorSearchBar {
 	@objc func textDidChange(_ notification: Notification) {
 		searchWorkItem?.cancel()
 		searchWorkItem = DispatchWorkItem { [weak self] in
-			guard let self = self else { return }
+			guard let self else { return }
 			self.delegate?.searchBar?(self, textDidChange: self.searchField.text ?? "")
 		}
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: searchWorkItem!)

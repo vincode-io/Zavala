@@ -27,7 +27,7 @@ public extension OutlineCommand {
 	}
 	
 	func restoreCursorPosition() {
-		if let cursorCoordinates = cursorCoordinates {
+		if let cursorCoordinates {
 			delegate?.restoreCursorPosition(cursorCoordinates)
 		}
 	}
