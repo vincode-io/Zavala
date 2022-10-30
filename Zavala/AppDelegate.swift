@@ -165,10 +165,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		#endif
 	}
 		
-	let showPreferences = UIKeyCommand(title: L10n.preferencesEllipsis,
-										 action: #selector(showPreferences(_:)),
-										 input: ",",
-										 modifierFlags: [.command])
+	let showPreferences: UIKeyCommand = {
+		let title: String
+		if #available(iOS 16, *) {
+			title = L10n.settingsEllipsis
+		} else {
+			title = L10n.preferencesEllipsis
+		}
+		
+		return UIKeyCommand(title: title,
+							action: #selector(showPreferences(_:)),
+							input: ",",
+							modifierFlags: [.command])
+			
+	}()
 	
 	let syncCommand = UIKeyCommand(title: L10n.sync,
 								   action: #selector(syncCommand(_:)),
