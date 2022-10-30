@@ -9,13 +9,6 @@ import Foundation
 import RSCore
 
 public final class CompleteCommand: OutlineCommand {
-	public var undoActionName: String
-	public var redoActionName: String
-	public var undoManager: UndoManager
-	weak public var delegate: OutlineCommandDelegate?
-	public var cursorCoordinates: CursorCoordinates?
-	
-	public var outline: Outline
 	var rows: [Row]
 	var completedRows: [Row]?
 	
@@ -24,21 +17,18 @@ public final class CompleteCommand: OutlineCommand {
 	var oldRowStrings: RowStrings?
 	var newRowStrings: RowStrings?
 
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
-		self.undoManager = undoManager
-		self.delegate = delegate
-		self.outline = outline
+	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
 		self.rows = rows
-		self.undoActionName = L10n.complete
-		self.redoActionName = L10n.complete
 		
 		if rows.count == 1, let row = rows.first {
 			self.oldRowStrings = row.rowStrings
 			self.newRowStrings = rowStrings
 		}
+
+		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
-	public func perform() {
+	override public func perform() {
 		saveCursorCoordinates()
 		let (impacted, newCursorIndex) = outline.complete(rows: rows, rowStrings: newRowStrings)
 		completedRows = impacted
@@ -46,7 +36,7 @@ public final class CompleteCommand: OutlineCommand {
 		registerUndo()
 	}
 	
-	public func undo() {
+	override public func undo() {
 		guard let completedRows else { return }
 		outline.uncomplete(rows: completedRows, rowStrings: oldRowStrings)
 		registerRedo()

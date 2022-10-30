@@ -25,8 +25,7 @@ let package = Package(
 				"MarkdownAttributedString",
 				"VinXML",
 				.product(name: "OrderedCollections", package: "swift-collections")
-			],
-			resources: [.copy("Localizable.strings")]),
+			]),
         .testTarget(
             name: "TempletonTests",
             dependencies: ["Templeton"]),

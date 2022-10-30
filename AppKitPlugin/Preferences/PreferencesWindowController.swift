@@ -33,11 +33,11 @@ class PreferencesWindowController : NSWindowController, NSToolbarDelegate {
 	private let toolbarItemSpecs: [PreferencesToolbarItemSpec] = {
 		var specs = [PreferencesToolbarItemSpec]()
 		specs += [PreferencesToolbarItemSpec(identifierRawValue: ToolbarItemIdentifier.General,
-											 name: L10n.general,
-											 image: NSImage(systemSymbolName: "gearshape", accessibilityDescription: nil)!)]
+											 name: AppStringAssets.generalControlLabel,
+											 image: AppKitImageAssets.general)]
 		specs += [PreferencesToolbarItemSpec(identifierRawValue: ToolbarItemIdentifier.Font,
-											 name: L10n.fontsAndColors,
-											 image: NSImage(systemSymbolName: "textformat", accessibilityDescription: nil)!)]
+											 name: AppStringAssets.appearanceControlLabel,
+											 image: AppKitImageAssets.appearance)]
 		return specs
 	}()
 

@@ -8,37 +8,21 @@ import Foundation
 import RSCore
 
 public final class CollapseAllCommand: OutlineCommand {
-	public var undoActionName: String
-	public var redoActionName: String
-	public var undoManager: UndoManager
-	public weak var delegate: OutlineCommandDelegate?
-	public var cursorCoordinates: CursorCoordinates?
-	
-	public var outline: Outline
 	var containers: [RowContainer]
 	var collapsedRows: [Row]?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, containers: [RowContainer]) {
-		self.undoManager = undoManager
-		self.delegate = delegate
-		self.outline = outline
+	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, containers: [RowContainer]) {
 		self.containers = containers
-		if containers.first is Outline {
-			undoActionName = L10n.collapseAllInOutline
-			redoActionName = L10n.collapseAllInOutline
-		} else {
-			undoActionName = L10n.collapseAll
-			redoActionName = L10n.collapseAll
-		}
+		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
-	public func perform() {
+	public override func perform() {
 		saveCursorCoordinates()
 		collapsedRows = outline.collapseAll(containers: containers)
 		registerUndo()
 	}
 	
-	public func undo() {
+	public override func undo() {
 		guard let collapsedRows else { return }
 		outline.expand(rows: collapsedRows)
 		registerRedo()

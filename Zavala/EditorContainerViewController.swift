@@ -124,13 +124,15 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 			return
 		}
 		
-		let deleteAction = UIAlertAction(title: L10n.delete, style: .destructive) { _ in
+		let deleteAction = UIAlertAction(title: AppStringAssets.deleteControlLabel, style: .destructive) { _ in
 			delete()
 		}
 		
-		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel)
+		let cancelAction = UIAlertAction(title: AppStringAssets.cancelControlLabel, style: .cancel)
 		
-		let alert = UIAlertController(title: L10n.deleteOutlinePrompt(document.title ?? ""), message: L10n.deleteOutlineMessage, preferredStyle: .alert)
+		let alert = UIAlertController(title: AppStringAssets.deleteOutlinePrompt(outlineTitle: document.title ?? ""),
+																					message: AppStringAssets.deleteOutlineMessage,
+																					preferredStyle: .alert)
 		alert.addAction(deleteAction)
 		alert.addAction(cancelAction)
 		alert.preferredAction = deleteAction
@@ -320,9 +322,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return false
 			}
-			item.image = AppAssets.delete.symbolSizedForCatalyst()
-			item.label = L10n.deleteOutline
-			item.toolTip = L10n.deleteOutline
+			item.image = ZavalaImageAssets.delete.symbolSizedForCatalyst()
+			item.label = AppStringAssets.deleteOutlineControlLabel
+			item.toolTip = AppStringAssets.deleteOutlineControlLabel
 			item.isBordered = true
 			item.action = #selector(deleteOutline(_:))
 			item.target = self
@@ -332,9 +334,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !AccountManager.shared.isSyncAvailable
 			}
-			item.image = AppAssets.sync.symbolSizedForCatalyst()
-			item.label = L10n.sync
-			item.toolTip = L10n.sync
+			item.image = ZavalaImageAssets.sync.symbolSizedForCatalyst()
+			item.label = AppStringAssets.syncControlLabel
+			item.toolTip = AppStringAssets.syncControlLabel
 			item.isBordered = true
 			item.action = #selector(sync(_:))
 			item.target = self
@@ -344,9 +346,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isInsertImageUnavailable ?? true
 			}
-			item.image = AppAssets.insertImage.symbolSizedForCatalyst()
-			item.label = L10n.insertImage
-			item.toolTip = L10n.insertImage
+			item.image = ZavalaImageAssets.insertImage.symbolSizedForCatalyst()
+			item.label = AppStringAssets.insertImageControlLabel
+			item.toolTip = AppStringAssets.insertImageControlLabel
 			item.isBordered = true
 			item.action = #selector(insertImage(_:))
 			item.target = self
@@ -356,9 +358,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isLinkUnavailable ?? true
 			}
-			item.image = AppAssets.link.symbolSizedForCatalyst()
-			item.label = L10n.link
-			item.toolTip = L10n.link
+			item.image = ZavalaImageAssets.link.symbolSizedForCatalyst()
+			item.label = AppStringAssets.linkControlLabel
+			item.toolTip = AppStringAssets.linkControlLabel
 			item.isBordered = true
 			item.action = #selector(link(_:))
 			item.target = self
@@ -367,15 +369,15 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isBoldToggledOn ?? false {
-					item.image = AppAssets.bold.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
+					item.image = ZavalaImageAssets.bold.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
 				} else {
-					item.image = AppAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
+					item.image = ZavalaImageAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
-			item.label = L10n.bold
-			item.toolTip = L10n.bold
+			item.image = ZavalaImageAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
+			item.label = AppStringAssets.boldControlLabel
+			item.toolTip = AppStringAssets.boldControlLabel
 			item.isBordered = true
 			item.action = #selector(outlineToggleBoldface(_:))
 			item.target = self
@@ -384,15 +386,15 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isItalicToggledOn ?? false {
-					item.image = AppAssets.italic.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
+					item.image = ZavalaImageAssets.italic.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
 				} else {
-					item.image = AppAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
+					item.image = ZavalaImageAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
-			item.label = L10n.italic
-			item.toolTip = L10n.italic
+			item.image = ZavalaImageAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
+			item.label = AppStringAssets.italicControlLabel
+			item.toolTip = AppStringAssets.italicControlLabel
 			item.isBordered = true
 			item.action = #selector(outlineToggleItalics(_:))
 			item.target = self
@@ -402,9 +404,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isExpandAllInOutlineUnavailable ?? true
 			}
-			item.image = AppAssets.expandAll.symbolSizedForCatalyst()
-			item.label = L10n.expand
-			item.toolTip = L10n.expandAllInOutline
+			item.image = ZavalaImageAssets.expandAll.symbolSizedForCatalyst()
+			item.label = AppStringAssets.expandControlLabel
+			item.toolTip = AppStringAssets.expandAllInOutlineControlLabel
 			item.isBordered = true
 			item.action = #selector(expandAllInOutline(_:))
 			item.target = self
@@ -414,9 +416,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isCollapseAllInOutlineUnavailable ?? true
 			}
-			item.image = AppAssets.collapseAll.symbolSizedForCatalyst()
-			item.label = L10n.collapse
-			item.toolTip = L10n.collapseAllInOutline
+			item.image = ZavalaImageAssets.collapseAll.symbolSizedForCatalyst()
+			item.label = AppStringAssets.collapseControlLabel
+			item.toolTip = AppStringAssets.collapseAllInOutlineControlLabel
 			item.isBordered = true
 			item.action = #selector(collapseAllInOutline(_:))
 			item.target = self
@@ -426,9 +428,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsRightUnavailable ?? true
 			}
-			item.image = AppAssets.moveRight.symbolSizedForCatalyst()
-			item.label = L10n.moveRight
-			item.toolTip = L10n.moveRight
+			item.image = ZavalaImageAssets.moveRight.symbolSizedForCatalyst()
+			item.label = AppStringAssets.moveRightControlLabel
+			item.toolTip = AppStringAssets.moveRightControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsRight(_:))
 			item.target = self
@@ -438,9 +440,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsLeftUnavailable ?? true
 			}
-			item.image = AppAssets.moveLeft.symbolSizedForCatalyst()
-			item.label = L10n.moveLeft
-			item.toolTip = L10n.moveLeft
+			item.image = ZavalaImageAssets.moveLeft.symbolSizedForCatalyst()
+			item.label = AppStringAssets.moveLeftControlLabel
+			item.toolTip = AppStringAssets.moveLeftControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsLeft(_:))
 			item.target = self
@@ -450,9 +452,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsUpUnavailable ?? true
 			}
-			item.image = AppAssets.moveUp.symbolSizedForCatalyst()
-			item.label = L10n.moveUp
-			item.toolTip = L10n.moveUp
+			item.image = ZavalaImageAssets.moveUp.symbolSizedForCatalyst()
+			item.label = AppStringAssets.moveUpControlLabel
+			item.toolTip = AppStringAssets.moveUpControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsUp(_:))
 			item.target = self
@@ -462,9 +464,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsDownUnavailable ?? true
 			}
-			item.image = AppAssets.moveDown.symbolSizedForCatalyst()
-			item.label = L10n.moveDown
-			item.toolTip = L10n.moveDown
+			item.image = ZavalaImageAssets.moveDown.symbolSizedForCatalyst()
+			item.label = AppStringAssets.moveDownControlLabel
+			item.toolTip = AppStringAssets.moveDownControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsDown(_:))
 			item.target = self
@@ -475,9 +477,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				guard let self else { return false }
 				
 				if self.editorViewController?.isFilterOn ?? false {
-					item.image = AppAssets.filterActive.symbolSizedForCatalyst(color: .accentColor)
+					item.image = ZavalaImageAssets.filterActive.symbolSizedForCatalyst(color: .accentColor)
 				} else {
-					item.image = AppAssets.filterInactive.symbolSizedForCatalyst()
+					item.image = ZavalaImageAssets.filterInactive.symbolSizedForCatalyst()
 				}
 				
 				let turnFilterOnAction = UIAction() { [weak self] _ in
@@ -486,11 +488,11 @@ extension EditorContainerViewController: NSToolbarDelegate {
 					   }
 				}
 				
-				turnFilterOnAction.title = self.isFilterOn ? L10n.turnFilterOff : L10n.turnFilterOn
+				turnFilterOnAction.title = self.isFilterOn ? AppStringAssets.turnFilterOffControlLabel : AppStringAssets.turnFilterOnControlLabel
 				
 				let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
 				
-				let filterCompletedAction = UIAction(title: L10n.filterCompleted) { [weak self] _ in
+				let filterCompletedAction = UIAction(title: AppStringAssets.filterCompletedControlLabel) { [weak self] _ in
 					DispatchQueue.main.async {
 						   self?.toggleCompletedFilter()
 					   }
@@ -498,7 +500,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				filterCompletedAction.state = self.isCompletedFiltered ? .on : .off
 				filterCompletedAction.attributes = self.isFilterOn ? [] : .disabled
 
-				let filterNotesAction = UIAction(title: L10n.filterNotes) { [weak self] _ in
+				let filterNotesAction = UIAction(title: AppStringAssets.filterNotesControlLabel) { [weak self] _ in
 					DispatchQueue.main.async {
 						   self?.toggleNotesFilter()
 					   }
@@ -512,9 +514,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				
 				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.filterInactive.symbolSizedForCatalyst()
-			item.label = L10n.filter
-			item.toolTip = L10n.filter
+			item.image = ZavalaImageAssets.filterInactive.symbolSizedForCatalyst()
+			item.label = AppStringAssets.filterControlLabel
+			item.toolTip = AppStringAssets.filterControlLabel
 			item.isBordered = true
 			item.target = self
 			item.showsIndicator = false
@@ -524,9 +526,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.printDoc.symbolSizedForCatalyst()
-			item.label = L10n.printDoc
-			item.toolTip = L10n.printDoc
+			item.image = ZavalaImageAssets.printDoc.symbolSizedForCatalyst()
+			item.label = AppStringAssets.printDocControlLabel
+			item.toolTip = AppStringAssets.printDocControlLabel
 			item.isBordered = true
 			item.action = #selector(printDoc(_:))
 			item.target = self
@@ -536,9 +538,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.printList.symbolSizedForCatalyst()
-			item.label = L10n.printList
-			item.toolTip = L10n.printList
+			item.image = ZavalaImageAssets.printList.symbolSizedForCatalyst()
+			item.label = AppStringAssets.printListControlLabel
+			item.toolTip = AppStringAssets.printListControlLabel
 			item.isBordered = true
 			item.action = #selector(printList(_:))
 			item.target = self
@@ -547,25 +549,25 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isDocumentCollaborating ?? false {
-					item.image = AppAssets.collaborating.symbolSizedForCatalyst()
+					item.image = ZavalaImageAssets.collaborating.symbolSizedForCatalyst()
 				} else if self?.editorViewController?.isCollaborateUnavailable ?? true {
-					item.image = AppAssets.statelessCollaborate.symbolSizedForCatalyst()
+					item.image = ZavalaImageAssets.statelessCollaborate.symbolSizedForCatalyst()
 				} else {
-					item.image = AppAssets.collaborate.symbolSizedForCatalyst()
+					item.image = ZavalaImageAssets.collaborate.symbolSizedForCatalyst()
 				}
 				return self?.editorViewController?.isCollaborateUnavailable ?? true
 			}
-			item.image = AppAssets.collaborate.symbolSizedForCatalyst()
-			item.label = L10n.collaborate
-			item.toolTip = L10n.collaborate
+			item.image = ZavalaImageAssets.collaborate.symbolSizedForCatalyst()
+			item.label = AppStringAssets.collaborateControlLabel
+			item.toolTip = AppStringAssets.collaborateControlLabel
 			item.isBordered = true
 			item.action = #selector(collaborate(_:))
 			item.target = self
 			toolbarItem = item
 		case .share:
 			let item = NSSharingServicePickerToolbarItem(itemIdentifier: .share)
-			item.label = L10n.share
-			item.toolTip = L10n.share
+			item.label = AppStringAssets.shareControlLabel
+			item.toolTip = AppStringAssets.shareControlLabel
 			item.activityItemsConfiguration = self
 			toolbarItem = item
 		case .getInfo:
@@ -573,9 +575,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.getInfo.symbolSizedForCatalyst()
-			item.label = L10n.getInfo
-			item.toolTip = L10n.getInfo
+			item.image = ZavalaImageAssets.getInfo.symbolSizedForCatalyst()
+			item.label = AppStringAssets.getInfoControlLabel
+			item.toolTip = AppStringAssets.getInfoControlLabel
 			item.isBordered = true
 			item.action = #selector(outlineGetInfo(_:))
 			item.target = self

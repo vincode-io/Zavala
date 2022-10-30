@@ -24,9 +24,9 @@ public enum AccountError: LocalizedError {
 	public var errorDescription: String? {
 		switch self {
 		case .securityScopeError:
-			return L10n.accountErrorScopedResource
+			return TempletonStringAssets.accountErrorScopedResource
 		case .fileReadError:
-			return L10n.accountErrorImportRead
+			return TempletonStringAssets.accountErrorImportRead
 		}
 	}
 }

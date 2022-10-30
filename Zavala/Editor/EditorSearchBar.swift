@@ -55,7 +55,7 @@ import UIKit
 	
 	override func didMoveToSuperview() {
 		super.didMoveToSuperview()
-		layer.backgroundColor = AppAssets.barBackgroundColor.cgColor
+		layer.backgroundColor = ZavalaImageAssets.barBackgroundColor.cgColor
 		isOpaque = true
 		NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: searchField)
 	}
@@ -97,7 +97,7 @@ import UIKit
 		layoutMargins.right = 8
 
 		doneButton = UIButton(type: .custom)
-		doneButton.setTitle(L10n.done, for: .normal)
+		doneButton.setTitle(AppStringAssets.doneControlLabel, for: .normal)
 		doneButton.isAccessibilityElement = true
 		doneButton.addTarget(self, action: #selector(donePressed), for: .touchUpInside)
 		doneButton.isEnabled = true
@@ -138,7 +138,7 @@ import UIKit
 		prevButton = UIButton(type: .custom)
 		prevButton.isEnabled = false
 		prevButton.setImage(UIImage(systemName: "chevron.up"), for: .normal)
-		prevButton.accessibilityLabel = L10n.previousResult
+		prevButton.accessibilityLabel = AppStringAssets.previousResultControlLabel
 		prevButton.isAccessibilityElement = true
 		prevButton.addTarget(self, action: #selector(previousPressed), for: .touchUpInside)
 		addArrangedSubview(prevButton)
@@ -146,7 +146,7 @@ import UIKit
 		nextButton = UIButton(type: .custom)
 		nextButton.isEnabled = false
 		nextButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-		nextButton.accessibilityLabel = L10n.nextResult
+		nextButton.accessibilityLabel = AppStringAssets.nextResultControlLabel
 		nextButton.isAccessibilityElement = true
 		nextButton.addTarget(self, action: #selector(nextPressed), for: .touchUpInside)
 		addArrangedSubview(nextButton)

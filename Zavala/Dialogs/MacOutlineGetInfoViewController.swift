@@ -41,28 +41,20 @@ class MacOutlineGetInfoViewController: MacFormViewController {
 		ownerEmailTextField.delegate = self
 		ownerURLTextField.delegate = self
 
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateStyle = .medium
-		dateFormatter.timeStyle = .none
-
-		let timeFormatter = DateFormatter()
-		timeFormatter.dateStyle = .none
-		timeFormatter.timeStyle = .short
-	
 		if let created = outline?.created {
-			createdLabel.text = L10n.createdOn(dateFormatter.string(from: created), timeFormatter.string(from: created))
+			createdLabel.text = AppStringAssets.createdOnLabel(date: created)
 		} else {
 			createdLabel.text = " "
 		}
 		
 		if let updated = outline?.updated {
-			updatedLabel.text = L10n.updatedOn(dateFormatter.string(from: updated), timeFormatter.string(from: updated))
+			updatedLabel.text = AppStringAssets.updatedOnLabel(date: updated)
 		} else {
 			updatedLabel.text = " "
 		}
 		
 		if (outline?.ownerName?.isEmpty ?? true) && (outline?.ownerEmail?.isEmpty ?? true) && (outline?.ownerURL?.isEmpty ?? true) {
-			macSubmitButton.setTitle(L10n.add, for: .normal)
+			macSubmitButton.setTitle(AppStringAssets.addControlLabel, for: .normal)
 		}
 	}
 	

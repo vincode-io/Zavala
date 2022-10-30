@@ -30,11 +30,11 @@ class SettingsFontViewController: UICollectionViewController {
 	override func viewDidLoad() {
         super.viewDidLoad()
 
-		restoreBarButtonItem = UIBarButtonItem(image: AppAssets.restore, style: .plain, target: self, action: #selector(restoreDefaults(_:)))
-		restoreBarButtonItem.title = L10n.restore
+		restoreBarButtonItem = UIBarButtonItem(image: ZavalaImageAssets.restore, style: .plain, target: self, action: #selector(restoreDefaults(_:)))
+		restoreBarButtonItem.title = AppStringAssets.restoreControlLabel
 
-		addBarButtonItem = UIBarButtonItem(image: AppAssets.add, style: .plain, target: nil, action: nil)
-		addBarButtonItem.title = L10n.add
+		addBarButtonItem = UIBarButtonItem(image: ZavalaImageAssets.add, style: .plain, target: nil, action: nil)
+		addBarButtonItem.title = AppStringAssets.addControlLabel
 		addBarButtonItem.menu = buildAddMenu()
 
 		navigationItem.rightBarButtonItems = [addBarButtonItem, restoreBarButtonItem]
@@ -46,12 +46,14 @@ class SettingsFontViewController: UICollectionViewController {
     }
 
 	@objc func restoreDefaults(_ sender: Any) {
-		let alertController = UIAlertController(title: L10n.restoreDefaultsMessage, message: L10n.restoreDefaultsInformative, preferredStyle: .alert)
+		let alertController = UIAlertController(title: AppStringAssets.restoreDefaultsMessage,
+												message: AppStringAssets.restoreDefaultsInformative,
+												preferredStyle: .alert)
 		
-		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel)
+		let cancelAction = UIAlertAction(title: AppStringAssets.cancelControlLabel, style: .cancel)
 		alertController.addAction(cancelAction)
 		
-		let restoreAction = UIAlertAction(title: L10n.restore, style: .default) { [weak self] action in
+		let restoreAction = UIAlertAction(title: AppStringAssets.restoreControlLabel, style: .default) { [weak self] action in
 			guard let self else { return }
 			self.fontDefaults = OutlineFontDefaults.defaults
 			AppDefaults.shared.outlineFonts = self.fontDefaults
@@ -151,12 +153,12 @@ private extension SettingsFontViewController {
 	}
 	
 	func buildAddMenu() -> UIMenu {
-		let addTopicLevelAction = UIAction(title: L10n.addTopicLevel, image: AppAssets.topicFont) { [weak self] _ in
+		let addTopicLevelAction = UIAction(title: AppStringAssets.addTopicLevelControlLabel, image: ZavalaImageAssets.topicFont) { [weak self] _ in
 			guard let (field, config) = self?.fontDefaults?.nextTopicDefault else { return }
 			self?.showFontConfig(field: field, config: config)
 		}
 
-		let addNoteLevelAction = UIAction(title: L10n.addNoteLevel, image: AppAssets.noteFont) { [weak self] _ in
+		let addNoteLevelAction = UIAction(title: AppStringAssets.addNoteLevelControlLabel, image: ZavalaImageAssets.noteFont) { [weak self] _ in
 			guard let (field, config) = self?.fontDefaults?.nextNoteDefault else { return }
 			self?.showFontConfig(field: field, config: config)
 		}
@@ -175,7 +177,7 @@ private extension SettingsFontViewController {
 	}
 
 	func deleteAction(field: OutlineFontField) -> UIContextualAction? {
-		let action =  UIContextualAction(style: .destructive, title: L10n.delete) { [weak self] _, _, completion in
+		let action =  UIContextualAction(style: .destructive, title: AppStringAssets.deleteControlLabel) { [weak self] _, _, completion in
 			guard let self else { return }
 			self.fontDefaults?.rowFontConfigs.removeValue(forKey: field)
 			AppDefaults.shared.outlineFonts = self.fontDefaults

@@ -12,7 +12,7 @@ import RSCore
 public final class Search: Identifiable, DocumentContainer {
 	
 	public var id: EntityID
-	public var name: String? = L10n.search
+	public var name: String? = TempletonStringAssets.search
 	public var image: RSImage?
 	public var account: Account? = nil
 

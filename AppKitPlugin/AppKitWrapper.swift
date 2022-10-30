@@ -51,7 +51,7 @@ import os.log
 
 	func configureOpenQuickly(_ window: NSObject?) {
 		guard let nsWindow = window as? NSWindow else { return }
-		nsWindow.title = L10n.openQuickly
+		nsWindow.title = AppStringAssets.openQuicklyWindowTitle
 		nsWindow.titlebarAppearsTransparent = true
 		nsWindow.standardWindowButton(.zoomButton)?.isHidden = true
 		nsWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true

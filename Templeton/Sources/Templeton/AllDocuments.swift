@@ -11,7 +11,7 @@ import RSCore
 public final class AllDocuments: Identifiable, DocumentContainer {
 
 	public var id: EntityID
-	public var name: String? = L10n.all
+	public var name: String? = TempletonStringAssets.all
 	public var image: RSImage? = UIImage(systemName: "tray")!
 
 	public var itemCount: Int? {

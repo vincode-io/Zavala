@@ -31,7 +31,7 @@ class EditorTitleContentView: UIView, UIContentView {
 		addSubview(textView)
 
 		let separator = UIView()
-		separator.backgroundColor = AppAssets.accessory
+		separator.backgroundColor = ZavalaImageAssets.accessoryColor
 		separator.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(separator)
 		

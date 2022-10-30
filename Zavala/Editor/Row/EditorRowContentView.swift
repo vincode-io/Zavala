@@ -39,14 +39,14 @@ class EditorRowContentView: UIView, UIContentView {
 	}()
 	
 	private lazy var bullet: UIView = {
-		let bulletView = UIImageView(image: AppAssets.bullet)
+		let bulletView = UIImageView(image: ZavalaImageAssets.bullet)
 		
 		NSLayoutConstraint.activate([
 			bulletView.widthAnchor.constraint(equalToConstant: 4),
 			bulletView.heightAnchor.constraint(equalToConstant: 4)
 		])
 
-		bulletView.tintColor = AppAssets.accessory
+		bulletView.tintColor = ZavalaImageAssets.accessoryColor
 		bulletView.translatesAutoresizingMaskIntoConstraints = false
 		
 		return bulletView
@@ -366,7 +366,7 @@ private extension EditorRowContentView {
 			let x = (CGFloat(indentLevel) * indentationWidth)
 			let bar = CGRect(x: x, y: 0, width: 2, height: bounds.size.height)
 			
-			AppAssets.verticalBar.setFill()
+			ZavalaImageAssets.verticalBarColor.setFill()
 			let context = UIGraphicsGetCurrentContext();
 			context?.addRect(bar)
 			context?.fill(bar)

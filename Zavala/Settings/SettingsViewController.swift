@@ -96,9 +96,9 @@ class SettingsViewController: UITableViewController {
 		switch (indexPath.section, indexPath.row) {
 		case (0, 0):
 			if traitCollection.userInterfaceIdiom == .phone {
-				cell.textLabel?.text = L10n.enableOnMyIPhone
+				cell.textLabel?.text = AppStringAssets.enableOnMyIPhoneLabel
 			} else {
-				cell.textLabel?.text = L10n.enableOnMyIPad
+				cell.textLabel?.text = AppStringAssets.enableOnMyIPadLabel
 			}
 		case (2, 0):
 			cell.detailTextLabel?.text = AppDefaults.shared.userInterfaceColorPalette.description
@@ -113,11 +113,11 @@ class SettingsViewController: UITableViewController {
 		if indexPath.section == 3 {
 			switch indexPath.row {
 			case 0:
-				openURL(AppAssets.helpURL)
+				openURL(AppStringAssets.helpURL)
 			case 1:
-				openURL(AppAssets.websiteURL)
+				openURL(AppStringAssets.websiteURL)
 			case 2:
-				openURL(AppAssets.privacyPolicyURL)
+				openURL(AppStringAssets.privacyPolicyURL)
 			default:
 				break
 			}
@@ -127,15 +127,15 @@ class SettingsViewController: UITableViewController {
 		if indexPath.section == 4 {
 			switch indexPath.row {
 			case 0:
-				UIApplication.shared.open(URL(string: AppAssets.feedbackURL)!, options: [:])
+				UIApplication.shared.open(URL(string: AppStringAssets.feedbackURL)!, options: [:])
 			case 1:
-				openURL(AppAssets.releaseNotesURL)
+				openURL(AppStringAssets.releaseNotesURL)
 			case 2:
-				openURL(AppAssets.githubRepositoryURL)
+				openURL(AppStringAssets.githubRepositoryURL)
 			case 3:
-				openURL(AppAssets.bugTrackerURL)
+				openURL(AppStringAssets.bugTrackerURL)
 			case 4:
-				openURL(AppAssets.acknowledgementsURL)
+				openURL(AppStringAssets.acknowledgementsURL)
 			default:
 				break
 			}
@@ -185,14 +185,14 @@ class SettingsViewController: UITableViewController {
 			return
 		}
 		
-		let alertController = UIAlertController(title: L10n.removeCloudKitTitle, message: L10n.removeCloudKitMessage, preferredStyle: .alert)
+		let alertController = UIAlertController(title: AppStringAssets.removeICloudAccountTitle, message: AppStringAssets.removeICloudAccountMessage, preferredStyle: .alert)
 		
-		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel) { [weak self] action in
+		let cancelAction = UIAlertAction(title: AppStringAssets.cancelControlLabel, style: .cancel) { [weak self] action in
 			self?.enableCloudKitSwitch.isOn = true
 		}
 		alertController.addAction(cancelAction)
 		
-		let deleteAction = UIAlertAction(title: L10n.remove, style: .default) { [weak self] action in
+		let deleteAction = UIAlertAction(title: AppStringAssets.removeControlLabel, style: .default) { [weak self] action in
 			guard let self else { return }
 			AppDefaults.shared.enableCloudKit = self.enableCloudKitSwitch.isOn
 		}

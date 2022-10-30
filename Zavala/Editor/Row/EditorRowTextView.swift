@@ -94,9 +94,9 @@ class EditorRowTextView: UITextView {
     var textViewHeight: CGFloat?
     var isSavingTextUnnecessary = false
 
-	let toggleBoldCommand = UIKeyCommand(title: L10n.bold, action: .toggleBoldface, input: "b", modifierFlags: [.command])
-	let toggleItalicsCommand = UIKeyCommand(title: L10n.italic, action: .toggleItalics, input: "i", modifierFlags: [.command])
-	let editLinkCommand = UIKeyCommand(title: L10n.link, action: .editLink, input: "k", modifierFlags: [.command])
+	let toggleBoldCommand = UIKeyCommand(title: AppStringAssets.boldControlLabel, action: .toggleBoldface, input: "b", modifierFlags: [.command])
+	let toggleItalicsCommand = UIKeyCommand(title: AppStringAssets.italicControlLabel, action: .toggleItalics, input: "i", modifierFlags: [.command])
+	let editLinkCommand = UIKeyCommand(title: AppStringAssets.linkControlLabel, action: .editLink, input: "k", modifierFlags: [.command])
 
 	private var dropInteractionDelegate: EditorRowDropInteractionDelegate!
 	private var stackedUndoManager: UndoManager?

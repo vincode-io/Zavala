@@ -9,23 +9,11 @@ import Foundation
 import RSCore
 
 public final class CutRowCommand: OutlineCommand {
-	public var undoActionName: String
-	public var redoActionName: String
-	public var undoManager: UndoManager
-	weak public var delegate: OutlineCommandDelegate?
-	public var cursorCoordinates: CursorCoordinates?
-	
-	public var outline: Outline
 	var rows: [Row]
 	var afterRows = [Row: Row]()
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row]) {
-		self.undoManager = undoManager
-		self.delegate = delegate
-		self.outline = outline
+	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row]) {
 		self.rows = rows
-		self.undoActionName = L10n.cut
-		self.redoActionName = L10n.cut
 
 		var allRows = [Row]()
 		
@@ -42,15 +30,17 @@ public final class CutRowCommand: OutlineCommand {
 				afterRows[row] = afterRow
 			}
 		}
+
+		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
-	public func perform() {
+	public override func perform() {
 		saveCursorCoordinates()
 		outline.deleteRows(rows)
 		registerUndo()
 	}
 	
-	public func undo() {
+	public override func undo() {
 		for row in rows.sortedByDisplayOrder() {
 			outline.createRows([row], afterRow: afterRows[row])
 		}

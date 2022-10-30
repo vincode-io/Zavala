@@ -8,35 +8,25 @@ import Foundation
 import RSCore
 
 public final class CreateRowBeforeCommand: OutlineCommand {
-	public var undoActionName: String
-	public var redoActionName: String
-	public var undoManager: UndoManager
-	weak public var delegate: OutlineCommandDelegate?
-	public var cursorCoordinates: CursorCoordinates?
-	
 	public var newCursorIndex: Int?
 
-	public var outline: Outline
 	var row: Row
 	var beforeRow: Row
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, beforeRow: Row) {
-		self.undoManager = undoManager
-		self.delegate = delegate
-		self.outline = outline
+	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, beforeRow: Row) {
 		self.row = Row(outline: outline)
 		self.beforeRow = beforeRow
-		undoActionName = L10n.addRow
-		redoActionName = L10n.addRow
+
+		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
-	public func perform() {
+	public override func perform() {
 		saveCursorCoordinates()
 		newCursorIndex = outline.createRow(row, beforeRow: beforeRow)
 		registerUndo()
 	}
 	
-	public func undo() {
+	public override func undo() {
 		outline.deleteRows([row])
 		registerRedo()
 		restoreCursorPosition()

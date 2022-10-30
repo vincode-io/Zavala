@@ -8,26 +8,14 @@ import Foundation
 import RSCore
 
 public final class DeleteRowCommand: OutlineCommand {
-	public var undoActionName: String
-	public var redoActionName: String
-	public var undoManager: UndoManager
-	weak public var delegate: OutlineCommandDelegate?
-	public var cursorCoordinates: CursorCoordinates?
-	
 	public var newCursorIndex: Int?
 
-	public var outline: Outline
 	var rows: [Row]
 	var rowStrings: RowStrings?
 	var afterRows = [Row: Row]()
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
-		self.undoManager = undoManager
-		self.delegate = delegate
-		self.outline = outline
+	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
 		self.rows = rows
-		self.undoActionName = L10n.deleteRow
-		self.redoActionName = L10n.deleteRow
 
 		var allRows = Set<Row>()
 		
@@ -46,15 +34,17 @@ public final class DeleteRowCommand: OutlineCommand {
 		}
 
 		self.rowStrings = rowStrings
+
+		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
-	public func perform() {
+	public override func perform() {
 		saveCursorCoordinates()
 		newCursorIndex = outline.deleteRows(rows, rowStrings: rowStrings)
 		registerUndo()
 	}
 	
-	public func undo() {
+	public override func undo() {
 		for row in rows.sortedByDisplayOrder() {
 			outline.createRows([row], afterRow: afterRows[row])
 		}
