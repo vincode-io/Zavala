@@ -39,7 +39,7 @@ public class CloudKitManager: Logging {
 
 	private var sendChangesBackgroundTaskID = UIBackgroundTaskIdentifier.invalid
 
-	private var coalescingQueue = CoalescingQueue(name: "Send Modifications", interval: 5)
+	private var coalescingQueue = CoalescingQueue(name: "Send Modifications", interval: 5, maxInterval: 5)
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
 	private let queue = MainThreadOperationQueue()
 
