@@ -44,7 +44,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var addBarButtonItem: UIBarButtonItem?
 	private var importBarButtonItem: UIBarButtonItem?
 
-	private var loadDocumentsQueue = CoalescingQueue(name: "Load Documents", interval: 0.5)
+	private var loadDocumentsQueue = CoalescingQueue(name: "Load Documents", interval: 0.5, maxInterval: 0.5)
     
     private var lastClick: TimeInterval = Date().timeIntervalSince1970
     private var lastIndexPath: IndexPath? = nil

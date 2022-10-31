@@ -47,8 +47,8 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 
 	var dataSource: UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
-	private var applyChangesQueue = CoalescingQueue(name: "Apply Snapshot", interval: 0.5)
-	private var reloadChangedQueue = CoalescingQueue(name: "Reload Visible", interval: 0.5)
+	private var applyChangesQueue = CoalescingQueue(name: "Apply Snapshot", interval: 0.5, maxInterval: 0.5)
+	private var reloadChangedQueue = CoalescingQueue(name: "Reload Visible", interval: 0.5, maxInterval: 0.5)
 
 	private var mainSplitViewController: MainSplitViewController? {
 		return splitViewController as? MainSplitViewController
