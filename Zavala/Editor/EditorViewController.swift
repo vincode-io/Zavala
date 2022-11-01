@@ -2412,9 +2412,7 @@ private extension EditorViewController {
 			return
 		}
 		
-		let indexPath = IndexPath(row: shadowTableIndex - 1, section: adjustedRowsSection)
-		if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView {
-			nextTopicTextView.becomeFirstResponder()
+		func moveCursorUpToNext(nextTopicTextView: EditorRowTopicTextView) {
 			if let topicTextViewCursorRect = topicTextView.cursorRect {
 				let convertedRect = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
 				let nextRect = nextTopicTextView.convert(convertedRect, from: collectionView)
@@ -2424,8 +2422,37 @@ private extension EditorViewController {
 					nextTopicTextView.selectedRange = range
 				}
 			}
+			makeCursorVisibleIfNecessary()
 		}
-		makeCursorVisibleIfNecessary()
+		
+		let indexPath = IndexPath(row: shadowTableIndex - 1, section: adjustedRowsSection)
+		
+		// This is needed because the collection view might not have the cell built yet or the topic won't take the
+		// first responder if it isn't visible.
+		func scrollAndMoveCursorUpToNext() {
+			if let frame = collectionView.collectionViewLayout.layoutAttributesForItem(at: indexPath)?.frame {
+				let xHeight = "X".height(withConstrainedWidth: Double.infinity, font: topicTextView.font!)
+				let totalHeight = xHeight + topicTextView.textContainerInset.top + topicTextView.textContainerInset.bottom
+				let rect = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: totalHeight)
+				collectionView.scrollRectToVisibleBypass(rect, animated: true)
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+					if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView {
+						nextTopicTextView.becomeFirstResponder()
+						moveCursorUpToNext(nextTopicTextView: nextTopicTextView)
+					}
+				}
+			}
+		}
+
+		if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView {
+			if nextTopicTextView.becomeFirstResponder() {
+				moveCursorUpToNext(nextTopicTextView: nextTopicTextView)
+			} else {
+				scrollAndMoveCursorUpToNext()
+			}
+		} else {
+			scrollAndMoveCursorUpToNext()
+		}
 	}
 	
 	func moveCursorDown(topicTextView: EditorRowTopicTextView) {
