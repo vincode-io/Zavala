@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import os.log
 import CloudKit
 import RSCore
 import SWXMLHash
@@ -42,9 +43,31 @@ public final class Account: NSObject, Identifiable, Codable, Logging {
 	}
 	
 	public var type: AccountType
-	public var isActive: Bool
+	public var isActive: Bool {
+		didSet {
+			accountMetadataDidChange()
+		}
+	}
 	
-	public var tags: [Tag]?
+	public private(set) var tags: [Tag]?
+	
+	public var sharedChangeToken: Data? {
+		didSet {
+			accountMetadataDidChange()
+		}
+	}
+
+	public private(set) var documents: [Document]?
+	public private(set) var zoneChangeTokens: [CloudKitChangeTokenKey: Data]?
+
+	enum CodingKeys: String, CodingKey {
+		case type = "type"
+		case isActive = "isActive"
+		case tags = "tags"
+		case documents = "documents"
+		case sharedChangeToken = "sharedChangeToken"
+		case zoneChangeTokens = "zoneChangeTokens"
+	}
 	
 	public var documentContainers: [DocumentContainer] {
 		var containers = [DocumentContainer]()
@@ -57,15 +80,6 @@ public final class Account: NSObject, Identifiable, Codable, Logging {
 		}
 		
 		return containers
-	}
-	
-	public private(set) var documents: [Document]?
-
-	enum CodingKeys: String, CodingKey {
-		case type = "type"
-		case isActive = "isActive"
-		case tags = "tags"
-		case documents = "documents"
 	}
 	
 	var folder: URL?
@@ -94,6 +108,7 @@ public final class Account: NSObject, Identifiable, Codable, Logging {
 	init(accountType: AccountType) {
 		self.type = accountType
 		self.isActive = true
+		self.zoneChangeTokens = [CloudKitChangeTokenKey: Data]()
 		self.documents = [Document]()
 	}
 	
@@ -116,12 +131,18 @@ public final class Account: NSObject, Identifiable, Codable, Logging {
 	public func activate() {
 		guard isActive == false else { return }
 		isActive = true
-		accountMetadataDidChange()
 	}
 	
 	public func deactivate() {
 		guard isActive == true else { return }
 		isActive = false
+	}
+	
+	func store(changeToken: Data?, key: RSCore.CloudKitChangeTokenKey) {
+		if zoneChangeTokens == nil {
+			zoneChangeTokens = [CloudKitChangeTokenKey: Data]()
+		}
+		zoneChangeTokens?[key] = changeToken
 		accountMetadataDidChange()
 	}
 	

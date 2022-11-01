@@ -20,6 +20,14 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate, Logging {
 		self.zoneID = zoneID
 	}
 	
+	func store(changeToken: Data?, key: RSCore.CloudKitChangeTokenKey) {
+		account!.store(changeToken: changeToken, key: key)
+	}
+	
+	func findChangeToken(key: RSCore.CloudKitChangeTokenKey) -> Data? {
+		return account!.zoneChangeTokens?[key]
+	}
+	
 	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey], completion: @escaping (Result<Void, Error>) -> Void) {
 		let pendingIDs = loadPendingIDs()
 		var updates = [EntityID: CloudKitOutlineUpdate]()

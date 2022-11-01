@@ -45,6 +45,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public var shadowTableIndex: Int?
 
 	public var id: String
+	public var syncMetaData: Data?
 	public var syncID: String?
 	public var isExpanded: Bool
 	public internal(set) var rows: [Row] {
