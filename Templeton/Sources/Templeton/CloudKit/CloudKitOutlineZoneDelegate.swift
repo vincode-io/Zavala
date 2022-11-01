@@ -11,7 +11,7 @@ import RSCore
 import CloudKit
 
 class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
-	
+		
 	weak var account: Account?
 	var zoneID: CKRecordZone.ID
 	
@@ -20,6 +20,14 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 	init(account: Account, zoneID: CKRecordZone.ID) {
 		self.account = account
 		self.zoneID = zoneID
+	}
+	
+	func store(changeToken: Data?, key: RSCore.CloudKitChangeTokenKey) {
+		account!.store(changeToken: changeToken, key: key)
+	}
+	
+	func findChangeToken(key: RSCore.CloudKitChangeTokenKey) -> Data? {
+		return account!.zoneChangeTokens?[key]
 	}
 	
 	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey], completion: @escaping (Result<Void, Error>) -> Void) {
