@@ -303,6 +303,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var filterButton: UIButton!
 	
 	private var keyboardToolBar: UIToolbar!
+	private var leftToolbarButtonGroup: ButtonGroup!
+	private var rightToolbarButtonGroup: ButtonGroup!
 	private var moveRightButton: UIButton!
 	private var moveLeftButton: UIButton!
 	private var moveUpButton: UIButton!
@@ -436,14 +438,14 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		filterButton = navButtonGroup.addButton(label: AppStringAssets.filterControlLabel, image: ZavalaImageAssets.filterInactive, showMenu: true)
 		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
-		let leftToolbarButtonGroup = ButtonGroup(target: self, containerType: .toolbar, alignment: .left)
+		leftToolbarButtonGroup = ButtonGroup(target: self, containerType: .toolbar, alignment: .left)
 		moveLeftButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveLeftControlLabel, image: ZavalaImageAssets.moveLeft, selector: "moveCurrentRowsLeft")
 		moveRightButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveRightControlLabel, image: ZavalaImageAssets.moveRight, selector: "moveCurrentRowsRight")
 		moveUpButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveUpControlLabel, image: ZavalaImageAssets.moveUp, selector: "moveCurrentRowsUp")
 		moveDownButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveDownControlLabel, image: ZavalaImageAssets.moveDown, selector: "moveCurrentRowsDown")
 		let moveButtonsBarButtonItem = leftToolbarButtonGroup.buildBarButtonItem()
 
-		let rightToolbarButtonGroup = ButtonGroup(target: self, containerType: .toolbar, alignment: .right)
+		rightToolbarButtonGroup = ButtonGroup(target: self, containerType: .toolbar, alignment: .right)
 		insertImageButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.insertImageControlLabel, image: ZavalaImageAssets.insertImage, selector: "insertImage")
 		linkButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.linkControlLabel, image: ZavalaImageAssets.link, selector: "link")
 		noteButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.addNoteControlLabel, image: ZavalaImageAssets.noteAdd, selector: "createOrDeleteNotes")
@@ -503,6 +505,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if collectionView.contentOffset != .zero {
 			transitionContentOffset = collectionView.contentOffset
 		}
+		
+		leftToolbarButtonGroup.containerWidth = coordinator.containerView.bounds.width
+		rightToolbarButtonGroup.containerWidth = coordinator.containerView.bounds.width
 	}
 	
 	override func viewDidLayoutSubviews() {
@@ -690,6 +695,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func adjustForKeyboard(_ note: Notification) {
 		guard let keyboardValue = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+
+		leftToolbarButtonGroup.containerWidth = view.bounds.width
+		rightToolbarButtonGroup.containerWidth = view.bounds.width
 
 		let keyboardScreenEndFrame = keyboardValue.cgRectValue
 		let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
