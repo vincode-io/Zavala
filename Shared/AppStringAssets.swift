@@ -70,7 +70,7 @@ struct AppStringAssets {
 	static var cutControlLabel = String(localized: "Cut", comment: "Control Label: Cut")
 	
 	static var deleteAlwaysControlLabel = String(localized: "Always Delete Without Asking", comment: "Control Label: Always Delete Without Asking")
-	static var deleteCompletedRowsControlLabel = String(localized: "Delete Completed Rows", comment: "Control Label: Delete Completed Rows")
+	static var deleteCompletedRowsControlLabel = String(localized: "Delete Completed", comment: "Control Label: Delete Completed Rows")
 	static var deleteCompletedRowsTitle = String(localized: "Delete Completed Rows", comment: "Alert Title: Delete Completed Rows")
 	static var deleteCompletedRowsMessage = String(localized: "Are you sure you want to delete the completed rows?", comment: "Alert Message: Delete Completed Rows")
 	static var deleteControlLabel = String(localized: "Delete", comment: "Control Label: Delete an entity")
