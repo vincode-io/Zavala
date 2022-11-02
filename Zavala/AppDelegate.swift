@@ -386,9 +386,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	let showFeedbackCommand = UICommand(title: AppStringAssets.feedbackControlLabel, action: #selector(showFeedbackCommand(_:)))
 
-	let showWebsiteCommand = UICommand(title: AppStringAssets.websiteURL, action: #selector(showWebsiteCommand(_:)))
+	let showWebsiteCommand = UICommand(title: AppStringAssets.websiteControlLabel, action: #selector(showWebsiteCommand(_:)))
 
-	let showReleaseNotesCommand = UICommand(title: AppStringAssets.releaseNotesURL, action: #selector(showReleaseNotesCommand(_:)))
+	let showReleaseNotesCommand = UICommand(title: AppStringAssets.releaseNotesControlLabel, action: #selector(showReleaseNotesCommand(_:)))
 	
 	let showGitHubRepositoryCommand = UICommand(title: AppStringAssets.gitHubRepositoryControlLabel, action: #selector(showGitHubRepositoryCommand(_:)))
 	
