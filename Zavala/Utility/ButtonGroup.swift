@@ -22,7 +22,7 @@ struct ButtonGroup {
 		var width: Int {
 			switch self {
 			case .navbar:
-				return 48
+				return 44
 			case .toolbar:
 				return 36
 			}
@@ -31,9 +31,9 @@ struct ButtonGroup {
 		var wideWidth: Int {
 			switch self {
 			case .navbar:
-				return 48
+				return 44
 			case .toolbar:
-				return 48
+				return 44
 			}
 		}
 		
@@ -47,18 +47,26 @@ struct ButtonGroup {
 	var containerWidth: CGFloat = 0 {
 		didSet {
 			if containerWidth > 480 {
-				stackViewWidthConstraint.constant = Double(containerType.wideWidth * stackView.arrangedSubviews.count)
+				barButtonItem.width = computedWideWidth
 			} else {
-				stackViewWidthConstraint.constant = Double(containerType.width * stackView.arrangedSubviews.count)
+				barButtonItem.width = computedWidth
 			}
 		}
 	}
 
+	var computedWidth: CGFloat {
+		return CGFloat(containerType.width * stackView.arrangedSubviews.count)
+	}
+	
+	var computedWideWidth: CGFloat {
+		return CGFloat(containerType.wideWidth * stackView.arrangedSubviews.count)
+	}
+	
 	private let target: Any
 	private let containerType: ContainerType
 	private let alignment: Alignment
 	private let stackView: UIStackView
-	private let stackViewWidthConstraint: NSLayoutConstraint
+	private let barButtonItem: UIBarButtonItem
 	
 	init(target: Any, containerType: ContainerType, alignment: Alignment) {
 		self.target = target
@@ -70,13 +78,12 @@ struct ButtonGroup {
 		stackView.isLayoutMarginsRelativeArrangement = true
 		
 		if alignment == .left {
-			stackView.layoutMargins = UIEdgeInsets(top: 0, left: -12, bottom: 0, right: 12)
+			stackView.layoutMargins = UIEdgeInsets(top: 0, left: -6, bottom: 0, right: 6)
 		} else {
-			stackView.layoutMargins = UIEdgeInsets(top: 0, left:12, bottom: 0, right: -12)
+			stackView.layoutMargins = UIEdgeInsets(top: 0, left:6, bottom: 0, right: -6)
 		}
-		
-		stackViewWidthConstraint = stackView.widthAnchor.constraint(equalToConstant: 0.0)
-		stackViewWidthConstraint.isActive = true
+
+		barButtonItem = UIBarButtonItem(customView: stackView)
 	}
 	
 	func addButton(label: String, image: UIImage, selector: String? = nil, showMenu: Bool = false) -> UIButton {
@@ -95,8 +102,8 @@ struct ButtonGroup {
 	}
 	
 	func buildBarButtonItem() -> UIBarButtonItem {
-		stackViewWidthConstraint.constant = Double(containerType.width * stackView.arrangedSubviews.count)
-		return UIBarButtonItem(customView: stackView)
+		barButtonItem.width = computedWidth
+		return barButtonItem
 	}
 	
 }
