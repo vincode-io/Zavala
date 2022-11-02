@@ -771,6 +771,14 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		requestCloudKitUpdate(for: id)
 	}
 	
+	func deleteAllBacklinks() {
+		guard let documentBacklinks else { return }
+		
+		for documentBacklink in documentBacklinks {
+			deleteBacklink(documentBacklink)
+		}
+	}
+	
 	public func toggleFilterOn() -> OutlineElementChanges {
 		isFilterOn = !(isFilterOn ?? false)
 		documentMetaDataDidChange()
@@ -2934,7 +2942,6 @@ private extension Outline {
 	}
 
 	func deleteBacklink(_ entityID: EntityID) {
-		
 		documentBacklinks?.removeFirst(object: entityID)
 		
 		documentMetaDataDidChange()

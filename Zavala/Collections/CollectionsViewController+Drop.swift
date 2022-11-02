@@ -93,6 +93,8 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 				}
 			}
 			
+			document.deleteAllBacklinks()
+			
 			document.forceSave()
 			document.unload()
 			return

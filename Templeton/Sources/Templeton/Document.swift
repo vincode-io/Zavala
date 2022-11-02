@@ -211,6 +211,13 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
+	public func deleteAllBacklinks() {
+		switch self {
+		case .outline(let outline):
+			outline.deleteAllBacklinks()
+		}
+	}
+
 	public func load() {
 		switch self {
 		case .outline(let outline):
