@@ -411,11 +411,17 @@ extension EditorRowTextView {
     
     func findAndSelectLink() -> (String?, String?, NSRange) {
         var effectiveRange = NSRange()
-        if selectedRange.length == 0 && selectedRange.lowerBound < textStorage.length {
-            if let link = textStorage.attribute(.link, at: selectedRange.lowerBound, effectiveRange: &effectiveRange) as? URL {
-                let text = textStorage.attributedSubstring(from: effectiveRange).string
-                return (link.absoluteString, text, effectiveRange)
-            }
+		
+		// If nothing is selected, we test before and after it to see if we are touching a link
+        if selectedRange.length == 0 {
+			if selectedRange.lowerBound > 0, let link = textStorage.attribute(.link, at: selectedRange.lowerBound - 1, effectiveRange: &effectiveRange) as? URL {
+				let text = textStorage.attributedSubstring(from: effectiveRange).string
+				return (link.absoluteString, text, effectiveRange)
+			}
+			if selectedRange.lowerBound < textStorage.length, let link = textStorage.attribute(.link, at: selectedRange.lowerBound, effectiveRange: &effectiveRange) as? URL {
+				let text = textStorage.attributedSubstring(from: effectiveRange).string
+				return (link.absoluteString, text, effectiveRange)
+			}
         } else {
             for i in selectedRange.lowerBound..<selectedRange.upperBound {
                 if let link = textStorage.attribute(.link, at: i, effectiveRange: &effectiveRange) as? URL {
@@ -424,6 +430,7 @@ extension EditorRowTextView {
                 }
             }
         }
+		
         let text = textStorage.attributedSubstring(from: selectedRange).string
         return (nil, text, selectedRange)
     }
