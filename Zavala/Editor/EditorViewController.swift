@@ -429,21 +429,21 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
 		
-		let navButtonGroup = ButtonGroup(target: self, alignment: .right)
+		let navButtonGroup = ButtonGroup(target: self, containerType: .navbar, alignment: .right)
 		goBackwardButton = navButtonGroup.addButton(label: AppStringAssets.goBackwardControlLabel, image: ZavalaImageAssets.goBackward, selector: "goBackwardOne")
 		goForwardButton = navButtonGroup.addButton(label: AppStringAssets.goForwardControlLabel, image: ZavalaImageAssets.goForward, selector: "goForwardOne")
 		moreMenuButton = navButtonGroup.addButton(label: AppStringAssets.moreControlLabel, image: ZavalaImageAssets.ellipsis, showMenu: true)
 		filterButton = navButtonGroup.addButton(label: AppStringAssets.filterControlLabel, image: ZavalaImageAssets.filterInactive, showMenu: true)
 		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
-		let leftToolbarButtonGroup = ButtonGroup(target: self, alignment: .left)
+		let leftToolbarButtonGroup = ButtonGroup(target: self, containerType: .toolbar, alignment: .left)
 		moveLeftButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveLeftControlLabel, image: ZavalaImageAssets.moveLeft, selector: "moveCurrentRowsLeft")
 		moveRightButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveRightControlLabel, image: ZavalaImageAssets.moveRight, selector: "moveCurrentRowsRight")
 		moveUpButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveUpControlLabel, image: ZavalaImageAssets.moveUp, selector: "moveCurrentRowsUp")
 		moveDownButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveDownControlLabel, image: ZavalaImageAssets.moveDown, selector: "moveCurrentRowsDown")
 		let moveButtonsBarButtonItem = leftToolbarButtonGroup.buildBarButtonItem()
 
-		let rightToolbarButtonGroup = ButtonGroup(target: self, alignment: .right)
+		let rightToolbarButtonGroup = ButtonGroup(target: self, containerType: .toolbar, alignment: .right)
 		insertImageButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.insertImageControlLabel, image: ZavalaImageAssets.insertImage, selector: "insertImage")
 		linkButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.linkControlLabel, image: ZavalaImageAssets.link, selector: "link")
 		noteButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.addNoteControlLabel, image: ZavalaImageAssets.noteAdd, selector: "createOrDeleteNotes")

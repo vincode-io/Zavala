@@ -69,7 +69,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			collectionView.allowsMultipleSelection = true
 			collectionView.contentInset = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0)
 		} else {
-			let navButtonGroup = ButtonGroup(target: self, alignment: .right)
+			let navButtonGroup = ButtonGroup(target: self, containerType: .navbar, alignment: .right)
 			addButton = navButtonGroup.addButton(label: AppStringAssets.addControlLabel, image: ZavalaImageAssets.createEntity, selector: "createOutline")
 			importButton = navButtonGroup.addButton(label: AppStringAssets.importOPMLControlLabel, image: ZavalaImageAssets.importDocument, selector: "importOPML")
 			navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()

@@ -15,17 +15,34 @@ struct ButtonGroup {
 		}
 	}
 	
-	enum Alighment {
+	enum ContainerType {
+		case navbar
+		case toolbar
+	}
+
+	enum Alignment {
 		case left
 		case right
 	}
-	
+
 	private let target: Any
-	private let alignment: Alighment
+	private let containerType: ContainerType
+	private let alignment: Alignment
+//	private let containerWidth: CGFloat
 	private let stackView: UIStackView
 	
-	init(target: Any, alignment: Alighment) {
+	private var width: Int {
+		switch containerType {
+		case .navbar:
+			return 48
+		case .toolbar:
+			return 36
+		}
+	}
+	
+	init(target: Any, containerType: ContainerType, alignment: Alignment) {
 		self.target = target
+		self.containerType = containerType
 		self.alignment = alignment
 		
 		stackView = UIStackView()
@@ -55,7 +72,7 @@ struct ButtonGroup {
 	}
 	
 	func buildBarButtonItem() -> UIBarButtonItem {
-		stackView.widthAnchor.constraint(equalToConstant: Double(36 * stackView.arrangedSubviews.count)).isActive = true
+		stackView.widthAnchor.constraint(equalToConstant: Double(width * stackView.arrangedSubviews.count)).isActive = true
 		return UIBarButtonItem(customView: stackView)
 	}
 	
