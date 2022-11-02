@@ -505,9 +505,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if collectionView.contentOffset != .zero {
 			transitionContentOffset = collectionView.contentOffset
 		}
-		
-		leftToolbarButtonGroup.containerWidth = coordinator.containerView.bounds.width
-		rightToolbarButtonGroup.containerWidth = coordinator.containerView.bounds.width
 	}
 	
 	override func viewDidLayoutSubviews() {
