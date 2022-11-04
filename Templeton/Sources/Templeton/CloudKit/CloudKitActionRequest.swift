@@ -28,16 +28,19 @@ public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 		case id = "id"
 	}
 
-	public init(zoneName: String, zoneOwner: String, id: EntityID) {
-		self.zoneName = zoneName
-		self.zoneOwner = zoneOwner
-		self.id = id
-	}
-	
 	public init(zoneID: CKRecordZone.ID, id: EntityID) {
 		self.zoneName = zoneID.zoneName
 		self.zoneOwner = zoneID.ownerName
 		self.id = id
+	}
+	
+	static func save(requests: Set<CloudKitActionRequest>) {
+		let encoder = PropertyListEncoder()
+		encoder.outputFormat = .binary
+
+		if let encodedIDs = try? encoder.encode(requests) {
+			try? encodedIDs.write(to: CloudKitActionRequest.actionRequestFile)
+		}
 	}
 	
 	static func loadRequests() -> Set<CloudKitActionRequest>? {

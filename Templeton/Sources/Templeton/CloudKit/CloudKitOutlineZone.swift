@@ -116,7 +116,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 					let share = CKShare(rootRecord: unsharedRootRecord, shareID: shareID)
 					share[CKShare.SystemFieldKey.title] = (document.title ?? "") as CKRecordValue
 
-					self.modify(recordsToSave: [share, unsharedRootRecord], recordIDsToDelete: []) { [weak self] result in
+					self.modify(recordsToSave: [share, unsharedRootRecord], recordIDsToDelete: [], strategy: .overWriteServerValue) { [weak self] result in
 						guard let self = self else {
 							completion(.failure(CloudKitOutlineZoneError.unknown))
 							return

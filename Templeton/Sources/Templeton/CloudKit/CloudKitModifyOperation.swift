@@ -9,10 +9,19 @@ import Foundation
 import CloudKit
 import RSCore
 
-class CloudKitModifyOperation: BaseMainThreadOperation {
-
+class CloudKitModifyOperation: BaseMainThreadOperation, Logging {
+	
+	var errors = [Error]()
 	var modifications = [CKRecordZone.ID: ([CKRecord], [CKRecord.ID])]()
 
+	var account: Account {
+		return AccountManager.shared.cloudKitAccount!
+	}
+	
+	var cloudKitManager: CloudKitManager {
+		account.cloudKitManager!
+	}
+	
 	class CombinedRequest {
 		var documentRequest: CloudKitActionRequest?
 		var rowRequests = [CloudKitActionRequest]()
@@ -21,11 +30,14 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 	
 	override func run() {
 		DispatchQueue.global().async {
-			let combinedRequests = self.loadRequests()
-			DispatchQueue.main.async {
-				self.send(combinedRequests: combinedRequests) {
+			guard let requests = CloudKitActionRequest.loadRequests(), !requests.isEmpty else {
+				DispatchQueue.main.async {
 					self.operationDelegate?.operationDidComplete(self)
 				}
+				return
+			}
+			DispatchQueue.main.async {
+				self.send(requests: requests)
 			}
 		}
 	}
@@ -36,16 +48,63 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 
 private extension CloudKitModifyOperation {
 	
-	func send(combinedRequests: [String : CombinedRequest], completion: @escaping (() -> Void)) {
-		guard !combinedRequests.isEmpty,
-			  let account = AccountManager.shared.cloudKitAccount,
-			  let cloudKitManager = account.cloudKitManager else {
-			completion()
-			return
+	func send(requests: Set<CloudKitActionRequest>) {
+		logger.info("Sending \(requests.count) requests.")
+		
+		let (loadedDocuments, tempFileURLs) = loadAndStageEntities(requests: requests)
+
+		// Send the grouped changes
+		
+		var leftOverRequests = requests
+		
+		let group = DispatchGroup()
+		for zoneID in modifications.keys {
+			group.enter()
+
+			let cloudKitZone = cloudKitManager.findZone(zoneID: zoneID)
+			let (recordsToSave, recordIDsToDelete) = modifications[zoneID]!
+
+			let strategy = CloudKitModifyStrategy.onlyIfServerUnchanged(CloudKitMergeResolver())
+			cloudKitZone.modify(recordsToSave: recordsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy) { [weak self] result in
+				guard let self else { return }
+				
+				switch result {
+				case .success(let (completedSaves, completedDeletes)):
+					self.updateSyncMetaData(savedRecords: completedSaves)
+					
+					let savedEntityIDs = completedSaves.compactMap { EntityID(description: $0.recordID.recordName) }
+					leftOverRequests.subtract(savedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
+					
+					let deletedEntityIDs = completedDeletes.compactMap { EntityID(description: $0.recordName) }
+					leftOverRequests.subtract(deletedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
+				case .failure(let error):
+					self.errors.append(error)
+				}
+				
+				group.leave()
+			}
 		}
 		
+		group.notify(queue: DispatchQueue.main) {
+			loadedDocuments.forEach { $0.unload() }
+			
+			DispatchQueue.global().async {
+				self.logger.info("Saving \(leftOverRequests.count) requests.")
+
+				CloudKitActionRequest.save(requests: leftOverRequests)
+				self.deleteTempFiles(tempFileURLs)
+				
+				DispatchQueue.main.async {
+					self.operationDelegate?.operationDidComplete(self)
+				}
+			}
+		}
+	}
+	
+	func loadAndStageEntities(requests: Set<CloudKitActionRequest>) -> ([Document], [URL]) {
 		var loadedDocuments = [Document]()
 		var tempFileURLs = [URL]()
+		let combinedRequests = combine(requests: requests)
 
 		for documentUUID in combinedRequests.keys {
 			guard let combinedRequest = combinedRequests[documentUUID] else { continue }
@@ -95,101 +154,39 @@ private extension CloudKitModifyOperation {
 			}
 		}
 		
-		// Send the grouped changes
-
-		func updateSyncMetaData(savedRecords: [CKRecord]) {
-			for savedRecord in savedRecords {
-				guard let entityID = EntityID(description: savedRecord.recordID.recordName),
-						let outline = account.findDocument(entityID)?.outline else { continue }
-				
-				switch savedRecord.recordType {
-				case "Outline":
-					outline.syncMetaData = savedRecord.metadata
-				case "Row":
-					(outline.findRowContainer(entityID: entityID) as? Row)?.syncMetaData = savedRecord.metadata
-				case "Image":
-					(outline.findRowContainer(entityID: entityID) as? Row)?.findImage(id: entityID)?.syncMetaData = savedRecord.metadata
-				default:
-					break
-				}
-			}
-		}
-		
-		var savedRecords = [CKRecord]()
-		var deletedRecordIDs = [CKRecord.ID]()
-		
-		let group = DispatchGroup()
-		for zoneID in modifications.keys {
-			group.enter()
-
-			let cloudKitZone = cloudKitManager.findZone(zoneID: zoneID)
-			let (saves, deletes) = modifications[zoneID]!
-
-			let strategy = CloudKitModifyStrategy.onlyIfServerUnchanged(CloudKitMergeResolver())
-			cloudKitZone.modify(recordsToSave: saves, recordIDsToDelete: deletes, strategy: strategy) { [weak self] result in
-				guard let self else { return }
-				
-				switch result {
-				case .success(let (completedSaves, completedDeletes)):
-					savedRecords.append(contentsOf: completedSaves)
-					deletedRecordIDs.append(contentsOf: completedDeletes)
-				case .failure(let error):
-					if case let CloudKitZoneError.unresolvedConflict(ckError) = error {
-						
-					}
-					self.error = error
-				}
-				
-				group.leave()
-			}
-		}
-		
-		group.notify(queue: DispatchQueue.main) {
-			updateSyncMetaData(savedRecords: savedRecords)
-			
-			loadedDocuments.forEach { $0.unload() }
-			
-			if self.error == nil {
-				self.deleteRequests()
-			}
-			
-			self.deleteTempFiles(tempFileURLs)
-			self.operationDelegate?.operationDidComplete(self)
-		}
+		return (loadedDocuments, tempFileURLs)
 	}
 	
-	func loadRequests() -> [String: CombinedRequest] {
+	func combine(requests: Set<CloudKitActionRequest>) -> [String: CombinedRequest] {
 		var combinedRequests = [String: CombinedRequest]()
 
-		guard let queuedRequests = CloudKitActionRequest.loadRequests(), !queuedRequests.isEmpty else { return combinedRequests }
-		
-		for queuedRequest in queuedRequests {
-			switch queuedRequest.id {
+		for request in requests {
+			switch request.id {
 			case .document(_, let documentUUID):
 				if let combinedRequest = combinedRequests[documentUUID] {
-					combinedRequest.documentRequest = queuedRequest
+					combinedRequest.documentRequest = request
 					combinedRequests[documentUUID] = combinedRequest
 				} else {
 					let combinedRequest = CombinedRequest()
-					combinedRequest.documentRequest = queuedRequest
+					combinedRequest.documentRequest = request
 					combinedRequests[documentUUID] = combinedRequest
 				}
 			case .row(_, let documentUUID, _):
 				if let combinedRequest = combinedRequests[documentUUID] {
-					combinedRequest.rowRequests.append(queuedRequest)
+					combinedRequest.rowRequests.append(request)
 					combinedRequests[documentUUID] = combinedRequest
 				} else {
 					let combinedRequest = CombinedRequest()
-					combinedRequest.rowRequests.append(queuedRequest)
+					combinedRequest.rowRequests.append(request)
 					combinedRequests[documentUUID] = combinedRequest
 				}
 			case .image(_, let documentUUID, _, _):
 				if let combinedRequest = combinedRequests[documentUUID] {
-					combinedRequest.imageRequests.append(queuedRequest)
+					combinedRequest.imageRequests.append(request)
 					combinedRequests[documentUUID] = combinedRequest
 				} else {
 					let combinedRequest = CombinedRequest()
-					combinedRequest.imageRequests.append(queuedRequest)
+					combinedRequest.imageRequests.append(request)
 					combinedRequests[documentUUID] = combinedRequest
 				}
 			default:
@@ -200,10 +197,24 @@ private extension CloudKitModifyOperation {
 		return combinedRequests
 	}
 	
-	func deleteRequests() {
-		try? FileManager.default.removeItem(at: CloudKitActionRequest.actionRequestFile)
+	func updateSyncMetaData(savedRecords: [CKRecord]) {
+		for savedRecord in savedRecords {
+			guard let entityID = EntityID(description: savedRecord.recordID.recordName),
+					let outline = account.findDocument(entityID)?.outline else { continue }
+			
+			switch savedRecord.recordType {
+			case "Outline":
+				outline.syncMetaData = savedRecord.metadata
+			case "Row":
+				(outline.findRowContainer(entityID: entityID) as? Row)?.syncMetaData = savedRecord.metadata
+			case "Image":
+				(outline.findRowContainer(entityID: entityID) as? Row)?.findImage(id: entityID)?.syncMetaData = savedRecord.metadata
+			default:
+				break
+			}
+		}
 	}
-	
+
 	func deleteTempFiles(_ urls: [URL]) {
 		for url in urls {
 			try? FileManager.default.removeItem(at: url)

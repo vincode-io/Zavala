@@ -41,14 +41,8 @@ private extension CloudKitQueueRequestsOperation {
 		}
 
 		let mergedRequests = queuedRequests.union(requests)
-		
-		let encoder = PropertyListEncoder()
-		encoder.outputFormat = .binary
+		CloudKitActionRequest.save(requests: mergedRequests)
 
-		if let encodedIDs = try? encoder.encode(mergedRequests) {
-			try? encodedIDs.write(to: CloudKitActionRequest.actionRequestFile)
-		}
-		
 		DispatchQueue.main.async {
 			self.operationDelegate?.operationDidComplete(self)
 		}

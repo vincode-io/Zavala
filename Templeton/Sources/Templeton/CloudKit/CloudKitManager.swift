@@ -160,7 +160,7 @@ public class CloudKitManager {
 			
 			guard let self = self else { return }
 			
-			switch CloudKitZoneResult.resolve(error) {
+			switch CloudKitResult.refine(error) {
 			case .success:
 				let zoneID = shareMetadata.share.recordID.zoneID
 				self.fetchChanges(userInitiated: true, zoneID: zoneID)
@@ -251,11 +251,21 @@ private extension CloudKitManager {
 		let operation = CloudKitModifyOperation()
 		
 		operation.completionBlock = { [weak self] op in
-			if let error = (op as? BaseMainThreadOperation)?.error {
-				if userInitiated {
-					self?.presentError(error)
+			if let errors = (op as? CloudKitModifyOperation)?.errors {
+				
+				for error in errors {
+					if case let CloudKitZoneError.unresolvedConflict(ckError) = error {
+						#warning("This is the wrong error asshole.")
+						self?.presentError(ckError)
+					} else {
+						if userInitiated {
+							self?.presentError(error)
+						}
+					}
 				}
+				
 			}
+			
 			completeProcessing()
 		}
 		
@@ -307,7 +317,7 @@ private extension CloudKitManager {
 		let zone = self.findZone(zoneID: zoneID)
 		zone.fetchChangesInZone() { [weak self] result in
 			if case .failure(let error) = result {
-				if let ckError = (error as? CloudKitError)?.error as? CKError, ckError.code == .zoneNotFound {
+				if let ckError = error as? CKError, ckError.code == .zoneNotFound {
 					AccountManager.shared.cloudKitAccount?.deleteAllDocuments(with: zoneID)
 				} else {
 					if userInitiated {
