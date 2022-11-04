@@ -7,7 +7,6 @@
 
 import Foundation
 import CloudKit
-import RSCore
 
 class CloudKitModifyOperation: BaseMainThreadOperation {
 
@@ -96,24 +95,6 @@ private extension CloudKitModifyOperation {
 		}
 		
 		// Send the grouped changes
-
-		func updateSyncMetaData(savedRecords: [CKRecord]) {
-			for savedRecord in savedRecords {
-				guard let entityID = EntityID(description: savedRecord.recordID.recordName),
-						let outline = account.findDocument(entityID)?.outline else { continue }
-				
-				switch savedRecord.recordType {
-				case "Outline":
-					outline.syncMetaData = savedRecord.metadata
-				case "Row":
-					(outline.findRowContainer(entityID: entityID) as? Row)?.syncMetaData = savedRecord.metadata
-				case "Image":
-					(outline.findRowContainer(entityID: entityID) as? Row)?.findImage(id: entityID)?.syncMetaData = savedRecord.metadata
-				default:
-					break
-				}
-			}
-		}
 		
 		let group = DispatchGroup()
 		
@@ -123,16 +104,10 @@ private extension CloudKitModifyOperation {
 			let cloudKitZone = cloudKitManager.findZone(zoneID: zoneID)
 			let (saves, deletes) = modifications[zoneID]!
 
-			cloudKitZone.modify(recordsToSave: saves, recordIDsToDelete: deletes) { [weak self] result in
-				guard let self else { return }
-				
-				switch result {
-				case .success(let (savedRecords, _)):
-					updateSyncMetaData(savedRecords: savedRecords)
-				case .failure(let error):
+			cloudKitZone.modify(recordsToSave: saves, recordIDsToDelete: deletes) { result in
+				if case .failure(let error) = result {
 					self.error = error
 				}
-				
 				group.leave()
 			}
 		}
@@ -204,14 +179,8 @@ private extension CloudKitModifyOperation {
 		
 		outline.syncID = UUID().uuidString
 		
-		let record: CKRecord = {
-			if let syncMetaData = outline.syncMetaData, let record = CKRecord(syncMetaData) {
-				return record
-			} else {
-				let recordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
-				return CKRecord(recordType: CloudKitOutlineZone.CloudKitOutline.recordType, recordID: recordID)
-			}
-		}()
+		let recordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
+		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitOutline.recordType, recordID: recordID)
 		
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.syncID] = outline.syncID
 		record[CloudKitOutlineZone.CloudKitOutline.Fields.title] = outline.title
@@ -233,15 +202,9 @@ private extension CloudKitModifyOperation {
 	}
 	
 	func addSave(zoneID: CKRecordZone.ID, outlineRecordID: CKRecord.ID, row: Row) {
-		let record: CKRecord = {
-			if let syncMetaData = row.syncMetaData, let record = CKRecord(syncMetaData) {
-				return record
-			} else {
-				let recordID = CKRecord.ID(recordName: row.entityID.description, zoneID: zoneID)
-				return CKRecord(recordType: CloudKitOutlineZone.CloudKitRow.recordType, recordID: recordID)
-			}
-		}()
-
+		let recordID = CKRecord.ID(recordName: row.entityID.description, zoneID: zoneID)
+		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitRow.recordType, recordID: recordID)
+		
 		record.parent = CKRecord.Reference(recordID: outlineRecordID, action: .none)
 		record[CloudKitOutlineZone.CloudKitRow.Fields.outline] = CKRecord.Reference(recordID: outlineRecordID, action: .deleteSelf)
 		record[CloudKitOutlineZone.CloudKitRow.Fields.syncID] = row.syncID
@@ -255,14 +218,8 @@ private extension CloudKitModifyOperation {
 	}
 	
 	func addSave(zoneID: CKRecordZone.ID, image: Image) -> URL {
-		let record: CKRecord = {
-			if let syncMetaData = image.syncMetaData, let record = CKRecord(syncMetaData) {
-				return record
-			} else {
-				let recordID = CKRecord.ID(recordName: image.id.description, zoneID: zoneID)
-				return CKRecord(recordType: CloudKitOutlineZone.CloudKitImage.recordType, recordID: recordID)
-			}
-		}()
+		let recordID = CKRecord.ID(recordName: image.id.description, zoneID: zoneID)
+		let record = CKRecord(recordType: CloudKitOutlineZone.CloudKitImage.recordType, recordID: recordID)
 		
 		let rowID = EntityID.row(image.id.accountID, image.id.documentUUID, image.id.rowUUID)
 		let rowRecordID = CKRecord.ID(recordName: rowID.description, zoneID: zoneID)

@@ -66,14 +66,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 
-	public var syncMetaData: Data? {
-		didSet {
-			if syncMetaData != oldValue {
-				documentMetaDataDidChange()
-			}
-		}
-	}
-	
 	public var syncID: String? {
 		didSet {
 			if syncID != oldValue {
@@ -1405,7 +1397,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 	public func updateRowSyncID(_ row: Row) {
 		row.syncID = UUID().uuidString
-		rowsFile?.markAsDirty()
+		outlineContentDidChange()
 	}
 	
 	public func updateImageSyncID(_ image: Image) {
