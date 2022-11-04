@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "RSCore",
+        "repositoryURL": "https://github.com/Ranchero-Software/RSCore.git",
+        "state": {
+          "branch": "main",
+          "revision": "fdd135b2b37a7e0b7f6f4bb766f1169ea12561fc",
+          "version": null
+        }
+      },
+      {
         "package": "swift-collections",
         "repositoryURL": "https://github.com/apple/swift-collections.git",
         "state": {
@@ -33,7 +42,7 @@
         "repositoryURL": "https://github.com/vincode-io/VinXML.git",
         "state": {
           "branch": "main",
-          "revision": "8422c5362cc3ed27e39f9bde91287568c652723b",
+          "revision": "dd87db1f3ff3c6357da2525a4b3e81b7bcc1401c",
           "version": null
         }
       }

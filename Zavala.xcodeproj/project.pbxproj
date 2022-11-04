@@ -291,7 +291,6 @@
 		514F221A25C4D08D004E02CD /* EditorTagInputContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagInputContentConfiguration.swift; sourceTree = "<group>"; };
 		514F221D25C4D0A8004E02CD /* EditorTagInputContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagInputContentView.swift; sourceTree = "<group>"; };
 		514F222925C4FF02004E02CD /* EditorTagInputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTagInputTextField.swift; sourceTree = "<group>"; };
-		515135532910D89900EB317E /* RSCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RSCore; path = ../RSCore; sourceTree = "<group>"; };
 		515D452026BB553600228229 /* SpotlightIndexExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SpotlightIndexExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		515D452C26BB557200228229 /* SpotlightIndexExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = SpotlightIndexExtension.entitlements; sourceTree = "<group>"; };
 		515D452D26BB557200228229 /* IndexRequestHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexRequestHandler.swift; sourceTree = "<group>"; };
@@ -632,7 +631,6 @@
 			isa = PBXGroup;
 			children = (
 				513F32A12594062C0003048F /* README.md */,
-				515135532910D89900EB317E /* RSCore */,
 				5181A9362554D92000C153E8 /* Zavala */,
 				51E060B025A4547400194066 /* AppKitPlugin */,
 				515D452B26BB557200228229 /* SpotlightIndexExtension */,
