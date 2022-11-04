@@ -72,10 +72,8 @@ public class CloudKitManager: Logging {
 		self.account = account
 		self.defaultZone = CloudKitOutlineZone(container: container)
 		defaultZone.delegate = CloudKitAcountZoneDelegate(account: account, zoneID: self.defaultZone.zoneID)
-		defaultZone.migrateChangeToken()
 		self.zones[defaultZone.zoneID] = defaultZone
 		self.errorHandler = errorHandler
-		migrateChangeToken()
 	}
 	
 	func firstTimeSetup() {
@@ -132,7 +130,6 @@ public class CloudKitManager: Logging {
 		
 		let zone = CloudKitOutlineZone(container: container, database: container.sharedCloudDatabase, zoneID: zoneID)
 		zone.delegate = CloudKitAcountZoneDelegate(account: account!, zoneID: zoneID)
-		zone.migrateChangeToken()
 		zones[zoneID] = zone
 		return zone
 	}
@@ -206,6 +203,10 @@ public class CloudKitManager: Logging {
 			if let zoneID = doc.zoneID {
 				zoneIDs.insert(zoneID)
 			}
+		}
+		
+		for zoneID in zoneIDs {
+			findZone(zoneID: zoneID).resetChangeToken()
 		}
 		
 		sharedDatabaseChangeToken = nil
@@ -345,27 +346,21 @@ private extension CloudKitManager {
 		return subscription
 	}
 	
-	func migrateChangeToken() {
-		if let tokenData = UserDefaults.standard.object(forKey: sharedDatabaseChangeTokenKey) as? Data {
-			account?.sharedChangeToken = tokenData
-			UserDefaults.standard.removeObject(forKey: sharedDatabaseChangeTokenKey)
-		}
-	}
-	
 	var sharedDatabaseChangeTokenKey: String {
 		return "cloudkit.server.token.sharedDatabase"
 	}
 
 	var sharedDatabaseChangeToken: CKServerChangeToken? {
 		get {
-			guard let tokenData = account?.sharedChangeToken else { return nil }
+			guard let tokenData = UserDefaults.standard.object(forKey: sharedDatabaseChangeTokenKey) as? Data else { return nil }
 			return try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: tokenData)
 		}
 		set {
-			guard let token = newValue, let tokenData = try? NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: false) else {
+			guard let token = newValue, let data = try? NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: false) else {
+				UserDefaults.standard.removeObject(forKey: sharedDatabaseChangeTokenKey)
 				return
 			}
-			account?.sharedChangeToken = tokenData
+			UserDefaults.standard.set(data, forKey: sharedDatabaseChangeTokenKey)
 		}
 	}
 	
