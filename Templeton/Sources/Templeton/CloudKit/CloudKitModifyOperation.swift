@@ -115,21 +115,28 @@ private extension CloudKitModifyOperation {
 			}
 		}
 		
-		let group = DispatchGroup()
+		var savedRecords = [CKRecord]()
+		var deletedRecordIDs = [CKRecord.ID]()
 		
+		let group = DispatchGroup()
 		for zoneID in modifications.keys {
 			group.enter()
 
 			let cloudKitZone = cloudKitManager.findZone(zoneID: zoneID)
 			let (saves, deletes) = modifications[zoneID]!
 
-			cloudKitZone.modify(recordsToSave: saves, recordIDsToDelete: deletes) { [weak self] result in
+			let strategy = CloudKitModifyStrategy.onlyIfServerUnchanged(CloudKitMergeResolver())
+			cloudKitZone.modify(recordsToSave: saves, recordIDsToDelete: deletes, strategy: strategy) { [weak self] result in
 				guard let self else { return }
 				
 				switch result {
-				case .success(let (savedRecords, _)):
-					updateSyncMetaData(savedRecords: savedRecords)
+				case .success(let (completedSaves, completedDeletes)):
+					savedRecords.append(contentsOf: completedSaves)
+					deletedRecordIDs.append(contentsOf: completedDeletes)
 				case .failure(let error):
+					if case let CloudKitZoneError.unresolvedConflict(ckError) = error {
+						
+					}
 					self.error = error
 				}
 				
@@ -138,11 +145,15 @@ private extension CloudKitModifyOperation {
 		}
 		
 		group.notify(queue: DispatchQueue.main) {
+			updateSyncMetaData(savedRecords: savedRecords)
+			
 			loadedDocuments.forEach { $0.unload() }
+			
 			if self.error == nil {
 				self.deleteRequests()
-				self.deleteTempFiles(tempFileURLs)
 			}
+			
+			self.deleteTempFiles(tempFileURLs)
 			self.operationDelegate?.operationDidComplete(self)
 		}
 	}
