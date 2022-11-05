@@ -242,6 +242,8 @@ internal enum L10n {
   internal static let newOutline = L10n.tr("Localizable", "New_Outline")
   /// Next Result
   internal static let nextResult = L10n.tr("Localizable", "Next_Result")
+  /// No Selection
+  internal static let noSelection = L10n.tr("Localizable", "No_Selection")
   /// (No Title)
   internal static let noTitle = L10n.tr("Localizable", "No_Title")
   /// Not Available

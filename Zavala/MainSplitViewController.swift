@@ -440,7 +440,9 @@ extension MainSplitViewController: DocumentsDelegate {
 		guard documents.count == 1, let document = documents.first else {
 			activityManager.invalidateSelectDocument()
 			editorViewController?.edit(nil, isNew: isNew)
-			if !documents.isEmpty {
+			if documents.isEmpty {
+				editorViewController?.showMessage(L10n.noSelection)
+			} else {
 				editorViewController?.showMessage(L10n.multipleSelections)
 			}
 			return
