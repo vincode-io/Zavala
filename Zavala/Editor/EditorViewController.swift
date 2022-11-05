@@ -753,6 +753,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	// MARK: API
 	
 	func showMessage(_ message: String) {
+		// This may get called before the collectionView is created when running on the iPhone
+		guard let collectionView else { return }
+		
 		messageLabel?.removeFromSuperview()
 		
 		messageLabel = UILabel()
