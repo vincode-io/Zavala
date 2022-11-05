@@ -166,6 +166,15 @@ class EditorRowTextView: UITextView {
 		}
 	}
     
+	override func paste(_ sender: Any?) {
+		if selectedRange.length > 0 && UIPasteboard.general.hasURLs, let url = UIPasteboard.general.url {
+			textStorage.addAttribute(.link, value: url, range: selectedRange)
+			textWasChanged()
+		} else {
+			super.paste(sender)
+		}
+	}
+	
     func layoutEditor() {
         fatalError("reloadRow has not been implemented")
     }
