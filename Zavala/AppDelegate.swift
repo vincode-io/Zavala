@@ -1108,6 +1108,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let linkMenu = UIMenu(title: "", options: .displayInline, children: [insertImageCommand, linkCommand, copyDocumentLinkCommand])
 		builder.insertSibling(linkMenu, afterMenu: .standardEdit)
 
+		builder.remove(menu: .find)
+		
 		let documentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginDocumentSearchCommand])
 		let inDocumentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginInDocumentSearchCommand, nextInDocumentSearchCommand, previousInDocumentSearchCommand])
 		let useSelectionMenu = UIMenu(title: "", options: .displayInline, children: [useSelectionForSearchCommand])

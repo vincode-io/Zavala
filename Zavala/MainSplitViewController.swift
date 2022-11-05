@@ -449,7 +449,9 @@ extension MainSplitViewController: DocumentsDelegate {
 		guard documents.count == 1, let document = documents.first else {
 			activityManager.invalidateSelectDocument()
 			editorViewController?.edit(nil, isNew: isNew)
-			if !documents.isEmpty {
+			if documents.isEmpty {
+				editorViewController?.showMessage(AppStringAssets.noSelectionLabel)
+			} else {
 				editorViewController?.showMessage(AppStringAssets.multipleSelectionsLabel)
 			}
 			return
@@ -814,6 +816,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.flexibleSpace,
 			.newOutline,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
+			.moveLeft,
+			.moveRight,
+			.space,
 			.insertImage,
 			.link,
 			.boldface,

@@ -138,12 +138,13 @@ struct AppStringAssets {
 	static var moveLeftControlLabel = String(localized: "Move Left", comment: "Control Label: Move Left")
 	static var moveUpControlLabel = String(localized: "Move Up", comment: "Control Label: Move Up")
 	static var moveDownControlLabel = String(localized: "Move Down", comment: "Control Label: Move Down")
-	static var multipleSelectionsLabel = String(localized: "Move Down", comment: "Large Label: Multiple Selections")
+	static var multipleSelectionsLabel = String(localized: "Multiple Selections", comment: "Large Label: Multiple Selections")
 	
 	static var navigationControlLabel = String(localized: "Navigation", comment: "Control Label: Navigation")
 	static var newMainWindowControlLabel = String(localized: "New Main Window", comment: "Control Label: New Main Window")
 	static var newOutlineControlLabel = String(localized: "New New Outline", comment: "Control Label: New New Outline")
 	static var nextResultControlLabel = String(localized: "Next Result", comment: "Control Label: Next Result")
+	static var noSelectionLabel = String(localized: "No Selection", comment: "Large Label: No Selection")
 	static var noTitleLabel = String(localized: "(No Title)", comment: "Control Label: (No Title)")
 	
 	static var openQuicklyEllipsisControlLabel = String(localized: "Open Quickly…", comment: "Control Label: Open Quickly…")

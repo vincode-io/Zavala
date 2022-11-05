@@ -61,9 +61,15 @@ class LinkViewController: UITableViewController {
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
+		if linkTextField.text?.isEmpty ?? true {
+			if UIPasteboard.general.hasURLs {
+				linkTextField.text = UIPasteboard.general.url?.absoluteString
+			}
+		}
+
 		if textTextField.text?.isEmpty ?? true {
 			textTextField.becomeFirstResponder()
-		} else {
+		} else if linkTextField.text?.isEmpty ?? true {
 			linkTextField.becomeFirstResponder()
 		}
 	}

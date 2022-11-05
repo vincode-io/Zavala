@@ -275,6 +275,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 	
 	func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
 		return [
+			.moveLeft,
+			.moveRight,
+			.space,
 			.insertImage,
 			.link,
 			.boldface,
