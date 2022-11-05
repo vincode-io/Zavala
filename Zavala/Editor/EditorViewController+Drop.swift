@@ -88,7 +88,8 @@ private extension EditorViewController {
 	
 	func localDropProposal(session: UIDropSession, targetIndexPath: IndexPath) -> UICollectionViewDropProposal {
 		guard let localDragSession = session.localDragSession,
-			  let shadowTable = outline?.shadowTable else {
+			  let shadowTable = outline?.shadowTable,
+			  targetIndexPath != indexPathForDragCell else {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
 		

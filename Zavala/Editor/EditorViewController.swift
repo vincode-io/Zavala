@@ -257,6 +257,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 
 	var isSearching = false
+	var indexPathForDragCell: IndexPath?
 	
 	var adjustedRowsSection: Int {
 		return outline?.adjustedRowsSection.rawValue ?? Outline.Section.rows.rawValue
