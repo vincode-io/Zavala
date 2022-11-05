@@ -118,12 +118,17 @@ class EditorRowTextView: UITextView {
 
 		// These gesture recognizers will conflict with the row dragging if not removed.
 		gestureRecognizers?.forEach {
-			if $0.name == "dragInitiation"
-				|| $0.name == "dragExclusionRelationships"
-				|| $0.name == "dragFailureRelationships"
-				|| $0.name == "com.apple.UIKit.longPressClickDriverPrimary"
-				|| $0.name == "com.apple.UIKit.clickPresentationExclusion"
-				|| $0.name == "com.apple.UIKit.clickPresentationFailure" {
+			if $0.name == "dragInitiation" ||
+				$0.name == "dragFailureRelationships" ||
+				$0.name == "com.apple.UIKit.longPressClickDriverPrimary" ||
+				$0.name == "com.apple.UIKit.clickPresentationExclusion" ||
+				$0.name == "com.apple.UIKit.clickPresentationFailure" {
+				removeGestureRecognizer($0)
+			}
+			
+			// We need this one removed on iOS, but removing it on the Mac will
+			// cause you to chase the row more while trying to drop into a row
+			if $0.name == "dragExclusionRelationships" && traitCollection.userInterfaceIdiom != .mac {
 				removeGestureRecognizer($0)
 			}
 		}
@@ -292,6 +297,8 @@ class EditorRowTextView: UITextView {
 	}
 
 }
+
+// MARK: UITextDropDelegate
 
 extension EditorRowTextView: UITextDropDelegate {
 	
