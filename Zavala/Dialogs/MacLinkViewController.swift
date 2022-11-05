@@ -36,6 +36,10 @@ class MacLinkViewController: UIViewController {
 		super.viewDidLoad()
 	
 		submitButton.role = .primary
+		if link == nil {
+			submitButton.setTitle(L10n.add, for: .normal)
+		}
+		
 		textTextField.text = text
 		linkTextField.text = link
 
