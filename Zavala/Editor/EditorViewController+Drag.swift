@@ -60,13 +60,7 @@ extension EditorViewController: UICollectionViewDragDelegate {
 			dragItems.append(dragItem)
 		}
 		
-		indexPathForDragCell = indexPath
-
 		return dragItems
-	}
-	
-	func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
-		indexPathForDragCell = nil
 	}
 	
 }
