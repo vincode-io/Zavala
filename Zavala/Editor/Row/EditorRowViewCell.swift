@@ -93,6 +93,11 @@ class EditorRowViewCell: UICollectionViewListCell {
 		content.delegate = delegate
 		contentConfiguration = content
 	}
+	
+	func isDroppable(session: UIDropSession) -> Bool {
+		let cursorLocation = session.location(in: self)
+		return (bounds.minY < cursorLocation.y && bounds.maxY - 1 > cursorLocation.y)
+	}
 
 	func restoreCursor(_ cursorCoordinates: CursorCoordinates) {
 		let textView: EditorRowTextView?
