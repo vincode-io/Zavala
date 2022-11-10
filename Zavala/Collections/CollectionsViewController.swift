@@ -391,9 +391,15 @@ extension CollectionsViewController {
 
 		operation.completionBlock = { [weak self] _ in
 			guard let self else { return }
-			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) }
-			for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
-				self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
+
+			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) } ?? [IndexPath]()
+			
+			if selectedIndexPaths.isEmpty {
+				self.updateSelections()
+			} else {
+				for selectedIndexPath in selectedIndexPaths {
+					self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
+				}
 			}
 		}
 		
