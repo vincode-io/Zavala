@@ -12,6 +12,7 @@ import CloudKit
 import RSCore
 
 public extension Notification.Name {
+	static let CloudKitSyncWillBegin = Notification.Name(rawValue: "CloudKitSyncWillBegin")
 	static let CloudKitSyncDidComplete = Notification.Name(rawValue: "CloudKitSyncDidComplete")
 }
 
@@ -116,11 +117,11 @@ public class CloudKitManager {
 				completion()
 				return
 			}
-			fetchChanges(userInitiated: true, zoneID: zoneId, completion: completion)
+			fetchChanges(userInitiated: false, zoneID: zoneId, completion: completion)
 		}
 		
 		if let dbNote = CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo), dbNote.notificationType == .database {
-			fetchAllChanges(userInitiated: true)
+			fetchAllChanges(userInitiated: false)
 		}
 	}
 	
@@ -141,9 +142,11 @@ public class CloudKitManager {
 			return
 		}
 		
-		sendChanges(userInitiated: true) {
-			self.fetchAllChanges(userInitiated: true) {
-				NotificationCenter.default.post(name: .CloudKitSyncDidComplete, object: self, userInfo: nil)
+		cloudKitSyncWillBegin()
+
+		sendChanges(userInitiated: true) { [weak self] in
+			self?.fetchAllChanges(userInitiated: true) { [weak self] in
+				self?.cloudKitSyncDidComplete()
 				completion?()
 			}
 		}
@@ -160,7 +163,10 @@ public class CloudKitManager {
 			switch CloudKitZoneResult.resolve(error) {
 			case .success:
 				let zoneID = shareMetadata.share.recordID.zoneID
-				self.fetchChanges(userInitiated: true, zoneID: zoneID)
+				self.cloudKitSyncWillBegin()
+				self.fetchChanges(userInitiated: true, zoneID: zoneID) { [weak self] in
+					self?.cloudKitSyncDidComplete()
+				}
 			default:
 				DispatchQueue.main.async {
 					self.presentError(error!)
@@ -221,6 +227,14 @@ private extension CloudKitManager {
 	
 	func presentError(_ error: Error) {
 		errorHandler?.presentError(error, title: "CloudKit Syncing Error")
+	}
+	
+	func cloudKitSyncWillBegin() {
+		NotificationCenter.default.post(name: .CloudKitSyncWillBegin, object: self, userInfo: nil)
+	}
+
+	func cloudKitSyncDidComplete() {
+		NotificationCenter.default.post(name: .CloudKitSyncDidComplete, object: self, userInfo: nil)
 	}
 
 	@objc func sendQueuedChanges() {
@@ -306,7 +320,7 @@ private extension CloudKitManager {
 	
 	func fetchChanges(userInitiated: Bool, zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
 		let zone = self.findZone(zoneID: zoneID)
-		zone.fetchChangesInZone() { [weak self] result in
+		zone.fetchChangesInZone(incremental: false) { [weak self] result in
 			if case .failure(let error) = result {
 				if let ckError = (error as? CloudKitError)?.error as? CKError, ckError.code == .zoneNotFound {
 					AccountManager.shared.cloudKitAccount?.deleteAllDocuments(with: zoneID)

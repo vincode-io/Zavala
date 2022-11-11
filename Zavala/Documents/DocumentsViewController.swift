@@ -84,6 +84,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
+			collectionView.refreshControl!.tintColor = .clear
 		}
 		
 		collectionView.dragDelegate = self
@@ -129,7 +130,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentUpdatedDidChange(_:)), name: .DocumentUpdatedDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentSharingDidChange(_:)), name: .DocumentSharingDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 		
 		scheduleReconfigureAll()
 	}
@@ -244,18 +244,13 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		reload(document: document)
 	}
 	
-	@objc func cloudKitSyncDidComplete(_ note: Notification) {
-		collectionView?.refreshControl?.endRefreshing()
-	}
-	
 	// MARK: Actions
 	
 	@objc func sync() {
 		if AccountManager.shared.isSyncAvailable {
 			AccountManager.shared.sync()
-		} else {
-			collectionView?.refreshControl?.endRefreshing()
 		}
+		collectionView?.refreshControl?.endRefreshing()
 	}
 	
 	@objc func createOutline() {

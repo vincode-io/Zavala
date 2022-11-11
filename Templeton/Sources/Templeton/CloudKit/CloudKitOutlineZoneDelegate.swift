@@ -22,7 +22,7 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 		self.zoneID = zoneID
 	}
 	
-	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey], completion: @escaping (Result<Void, Error>) -> Void) {
+	func cloudKitWasChanged(updated: [CKRecord], deleted: [CloudKitRecordKey], completion: @escaping (Result<Void, Error>) -> Void) {
 		let pendingIDs = loadPendingIDs()
 		var updates = [EntityID: CloudKitOutlineUpdate]()
 
@@ -52,19 +52,19 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 			}
 		}
 
-		for changedRecord in changed {
-			guard let entityID = EntityID(description: changedRecord.recordID.recordName), !pendingIDs.contains(entityID) else { continue }
+		for updatedRecord in updated {
+			guard let entityID = EntityID(description: updatedRecord.recordID.recordName), !pendingIDs.contains(entityID) else { continue }
 			switch entityID {
 			case .document:
-				update(for: entityID, zoneID: changedRecord.recordID.zoneID).saveOutlineRecord = changedRecord
+				update(for: entityID, zoneID: updatedRecord.recordID.zoneID).saveOutlineRecord = updatedRecord
 			case .row(let accountID, let documentUUID, _):
 				let documentID = EntityID.document(accountID, documentUUID)
-				update(for: documentID, zoneID: changedRecord.recordID.zoneID).saveRowRecords.append(changedRecord)
+				update(for: documentID, zoneID: updatedRecord.recordID.zoneID).saveRowRecords.append(updatedRecord)
 			case .image(let accountID, let documentUUID, _, _):
 				let documentID = EntityID.document(accountID, documentUUID)
-				update(for: documentID, zoneID: changedRecord.recordID.zoneID).saveImageRecords.append(changedRecord)
+				update(for: documentID, zoneID: updatedRecord.recordID.zoneID).saveImageRecords.append(updatedRecord)
 			default:
-				assertionFailure("Unknown record type: \(changedRecord.recordType)")
+				assertionFailure("Unknown record type: \(updatedRecord.recordType)")
 			}
 		}
 		
