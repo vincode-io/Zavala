@@ -15,18 +15,22 @@ final class CollectionsItem: NSObject, NSCopying, Identifiable {
 		case search
 		case documentContainer(EntityID)
 		
-		var name: String? {
+		var accountType: AccountType? {
 			if case .header(let section) = self {
 				switch section {
 				case .localAccount:
-					return AccountType.local.name
+					return AccountType.local
 				case .cloudKitAccount:
-					return AccountType.cloudKit.name
+					return AccountType.cloudKit
 				default:
 					break
 				}
 			}
 			return nil
+		}
+		
+		var name: String? {
+			return accountType?.name
 		}
 		
 	}

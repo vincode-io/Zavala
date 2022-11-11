@@ -106,9 +106,9 @@ public final class AccountManager: Logging {
 		let cloudKitAccount = Account(accountType: .cloudKit)
 		accountsDictionary[AccountType.cloudKit.rawValue] = cloudKitAccount
 		initializeFile(accountType: .cloudKit)
-		cloudKitAccount.initializeCloudKit(firstTime: true, errorHandler: errorHandler)
-
 		accountManagerAccountsDidChange()
+
+		cloudKitAccount.initializeCloudKit(firstTime: true, errorHandler: errorHandler)
 	}
 	
 	public func deleteCloudKitAccount() {

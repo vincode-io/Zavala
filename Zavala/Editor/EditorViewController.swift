@@ -380,6 +380,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
+			collectionView.refreshControl!.tintColor = .clear
 		}
 
 		NSLayoutConstraint.activate([
@@ -486,7 +487,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(sceneWillDeactivate(_:)),	name: UIScene.willDeactivateNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
 	}
@@ -684,10 +684,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func didEnterBackground(_ note: Notification) {
 		saveCurrentText()
-	}
-	
-	@objc func cloudKitSyncDidComplete(_ note: Notification) {
-		collectionView?.refreshControl?.endRefreshing()
 	}
 	
 	@objc func adjustForKeyboard(_ note: Notification) {
@@ -1065,9 +1061,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func sync() {
 		if AccountManager.shared.isSyncAvailable {
 			AccountManager.shared.sync()
-		} else {
-			collectionView?.refreshControl?.endRefreshing()
 		}
+		collectionView?.refreshControl?.endRefreshing()
 	}
 	
 	@objc func hideKeyboard() {
