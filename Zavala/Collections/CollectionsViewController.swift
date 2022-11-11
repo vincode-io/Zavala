@@ -418,8 +418,8 @@ extension CollectionsViewController {
 			
 			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) } ?? [IndexPath]()
 			
-			if selectedIndexPaths.isEmpty {
-				self.updateSelections()
+			if let selectedItems, !selectedItems.isEmpty, selectedIndexPaths.isEmpty {
+				self.delegate?.documentContainerSelectionsDidChange(self, documentContainers: [], isNavigationBranch: false, animated: true, completion: nil)
 			} else {
 				for selectedIndexPath in selectedIndexPaths {
 					self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
