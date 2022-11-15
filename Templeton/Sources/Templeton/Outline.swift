@@ -2180,6 +2180,8 @@ extension Outline {
 				continue
 			}
 
+			row.syncMetaData = saveRecord.metadata
+			
 			if isExistingRecord {
 				updatedRowIDs.insert(row.id)
 			}
@@ -2228,6 +2230,7 @@ extension Outline {
 			   let data = try? Data(contentsOf: fileURL) {
 
 				let image = Image(id: saveRecordID, isInNotes: isInNotes, offset: offset, data: data)
+				image.syncMetaData = saveRecord.metadata
 				
 				row.saveImage(image)
 				updatedRowIDs.insert(saveRecordID.rowUUID)
@@ -2274,6 +2277,8 @@ extension Outline {
 		if let recordSyncID = record[CloudKitOutlineZone.CloudKitOutline.Fields.syncID] as? String, recordSyncID == syncID {
 			return []
 		}
+		
+		syncMetaData = record.metadata
 		
 		let newTitle = record[CloudKitOutlineZone.CloudKitOutline.Fields.title] as? String
 		if title != newTitle {
