@@ -23,7 +23,7 @@ public class CloudKitManager {
 		var imageRequests = [CloudKitActionRequest]()
 	}
 
-	let defaultZone: CloudKitOutlineZone
+	let outlineZone: CloudKitOutlineZone
 	var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "CloudKit")
 
 	var isSyncAvailable: Bool {
@@ -71,18 +71,18 @@ public class CloudKitManager {
 		
 	init(account: Account, errorHandler: ErrorHandler) {
 		self.account = account
-		self.defaultZone = CloudKitOutlineZone(container: container)
-		defaultZone.delegate = CloudKitOutlineZoneDelegate(account: account, zoneID: self.defaultZone.zoneID)
-		self.zones[defaultZone.zoneID] = defaultZone
+		self.outlineZone = CloudKitOutlineZone(container: container)
+		outlineZone.delegate = CloudKitOutlineZoneDelegate(account: account, zoneID: self.outlineZone.zoneID)
+		self.zones[outlineZone.zoneID] = outlineZone
 		self.errorHandler = errorHandler
 		migrateChangeToken()
 	}
 	
 	func firstTimeSetup() {
-		defaultZone.fetchZoneRecord {  [weak self] result in
+		outlineZone.fetchZoneRecord {  [weak self] result in
 			switch result {
 			case .success:
-				self?.defaultZone.subscribeToZoneChanges()
+				self?.outlineZone.subscribeToZoneChanges()
 			case .failure(let error):
 				self?.presentError(error)
 			}
@@ -113,7 +113,7 @@ public class CloudKitManager {
 	
 	func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
 		if let zoneNote = CKRecordZoneNotification(fromRemoteNotificationDictionary: userInfo), zoneNote.notificationType == .recordZone {
-			guard let zoneId = zoneNote.databaseScope == .private ? defaultZone.zoneID : zoneNote.recordZoneID else {
+			guard let zoneId = zoneNote.databaseScope == .private ? outlineZone.zoneID : zoneNote.recordZoneID else {
 				completion()
 				return
 			}
@@ -199,7 +199,7 @@ public class CloudKitManager {
 
 		// If the user deletes all the documents prior to deleting the account, we
 		// won't reset the default zone unless we add it manually.
-		zoneIDs.insert(defaultZone.zoneID)
+		zoneIDs.insert(outlineZone.zoneID)
 		
 		for doc in account.documents ?? [Document]() {
 			if let zoneID = doc.zoneID {
@@ -273,7 +273,7 @@ private extension CloudKitManager {
 	func fetchAllChanges(userInitiated: Bool, completion: (() -> Void)? = nil) {
 		isSyncing = true
 		var zoneIDs = Set<CKRecordZone.ID>()
-		zoneIDs.insert(defaultZone.zoneID)
+		zoneIDs.insert(outlineZone.zoneID)
 		
 		let op = CKFetchDatabaseChangesOperation(previousServerChangeToken: sharedDatabaseChangeToken)
 		op.qualityOfService = CloudKitOutlineZone.qualityOfService

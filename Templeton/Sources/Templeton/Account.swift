@@ -218,7 +218,7 @@ public final class Account: NSObject, Identifiable, Codable {
 
 		outline.importRows(outline: outline, rowIndexers: outlineIndexers, images: images)
 		
-		outline.zoneID = cloudKitManager?.defaultZone.zoneID
+		outline.zoneID = cloudKitManager?.outlineZone.zoneID
 		let document = Document.outline(outline)
 		
 		disambiguate(document: document)
@@ -249,7 +249,7 @@ public final class Account: NSObject, Identifiable, Codable {
 			documents = [Document]()
 		}
 		
-		outline.zoneID = cloudKitManager?.defaultZone.zoneID
+		outline.zoneID = cloudKitManager?.outlineZone.zoneID
 		let document = Document.outline(outline)
 		documents!.append(document)
 		accountDocumentsDidChange()
@@ -310,7 +310,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		}
 		
 		var mutableDocument = document
-		mutableDocument.zoneID = cloudKitManager?.defaultZone.zoneID
+		mutableDocument.zoneID = cloudKitManager?.outlineZone.zoneID
 			
 		documents!.append(mutableDocument)
 		accountDocumentsDidChange()
