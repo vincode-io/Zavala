@@ -10,8 +10,8 @@ import os.log
 import RSCore
 import CloudKit
 
-class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
-		
+class CloudKitOutlineZoneDelegate: CloudKitZoneDelegate {
+	
 	weak var account: Account?
 	var zoneID: CKRecordZone.ID
 	
@@ -87,7 +87,7 @@ class CloudKitAcountZoneDelegate: CloudKitZoneDelegate {
 
 // MARK: Helpers
 
-private extension CloudKitAcountZoneDelegate {
+private extension CloudKitOutlineZoneDelegate {
 	
 	func loadPendingIDs() -> [EntityID] {
 		return CloudKitActionRequest.loadRequests()?.filter({ $0.zoneID == zoneID }).map({ $0.id }) ?? [EntityID]()
