@@ -1165,7 +1165,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	
 	@objc func share(_ sender: Any? = nil) {
 		guard let outline else { return }
-		let controller = UIActivityViewController(outline: outline)
+		let controller = UIActivityViewController(documents: [Document.outline(outline)])
 		controller.popoverPresentationController?.sourceView = sender as? UIView
 		present(controller, animated: true)
 	}

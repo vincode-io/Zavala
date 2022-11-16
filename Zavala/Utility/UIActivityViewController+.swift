@@ -10,10 +10,10 @@ import Templeton
 
 extension UIActivityViewController {
 	
-	convenience init(outline: Outline) {
-		let outlineItemSource = OutlineActivityItemSource(outline: outline)
-		let copyDocumentLinkActivity = CopyDocumentLinkActivity(documents: [Document.outline(outline)])
-		self.init(activityItems: [outlineItemSource], applicationActivities: [copyDocumentLinkActivity])
+	convenience init(documents: [Document]) {
+		let outlineItemSources = documents.compactMap({ $0.outline }).map( { OutlineActivityItemSource(outline: $0) } )
+		let copyDocumentLinkActivity = CopyDocumentLinkActivity(documents: documents)
+		self.init(activityItems: outlineItemSources, applicationActivities: [copyDocumentLinkActivity])
 	}
 	
 }
