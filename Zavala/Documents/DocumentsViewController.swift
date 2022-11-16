@@ -554,27 +554,30 @@ private extension DocumentsViewController {
             
 			menuItems.append(self.duplicateAction(documents: documents))
 
-            if documents.count == 1, let document = documents.first {
-                menuItems.append(self.copyLinkAction(document: document))
-            }
-
             let outlines = documents.compactMap { $0.outline }
-            if !outlines.isEmpty {
-				var printActions = [UIAction]()
-				printActions.append(self.printDocsAction(outlines: outlines))
-				printActions.append(self.printListsAction(outlines: outlines))
-				let printMenu = UIMenu(title: L10n.print, image: AppAssets.printDoc, children: printActions)
 
-				var exportActions = [UIAction]()
-				exportActions.append(self.exportPDFDocsOutlineAction(outlines: outlines))
-				exportActions.append(self.exportPDFListsOutlineAction(outlines: outlines))
-				exportActions.append(self.exportMarkdownDocsOutlineAction(outlines: outlines))
-				exportActions.append(self.exportMarkdownListsOutlineAction(outlines: outlines))
-				exportActions.append(self.exportOPMLsAction(outlines: outlines))
-				let exportMenu = UIMenu(title: L10n.export, image: AppAssets.export, children: exportActions)
+			var shareMenuItems = [UIMenuElement]()
 
-				menuItems.append(UIMenu(title: "", options: .displayInline, children: [printMenu, exportMenu]))
+			var printActions = [UIAction]()
+			printActions.append(self.printDocsAction(outlines: outlines))
+			printActions.append(self.printListsAction(outlines: outlines))
+			let printMenu = UIMenu(title: L10n.print, image: AppAssets.printDoc, children: printActions)
+			shareMenuItems.append(printMenu)
+
+			var exportActions = [UIAction]()
+			exportActions.append(self.exportPDFDocsOutlineAction(outlines: outlines))
+			exportActions.append(self.exportPDFListsOutlineAction(outlines: outlines))
+			exportActions.append(self.exportMarkdownDocsOutlineAction(outlines: outlines))
+			exportActions.append(self.exportMarkdownListsOutlineAction(outlines: outlines))
+			exportActions.append(self.exportOPMLsAction(outlines: outlines))
+			let exportMenu = UIMenu(title: L10n.export, image: AppAssets.export, children: exportActions)
+			shareMenuItems.append(exportMenu)
+
+			if let cell = self.collectionView.cellForItem(at: allRowIDs.first!.indexPath) {
+				shareMenuItems.append(self.shareAction(documents: documents, sourceView: cell))
 			}
+
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: shareMenuItems))
 			
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.deleteDocumentsAction(documents: documents)]))
 			
@@ -604,14 +607,15 @@ private extension DocumentsViewController {
 		return action
 	}
 	
-	func copyLinkAction(document: Document) -> UIAction {
-		let action = UIAction(title: L10n.copyDocumentLink, image: AppAssets.link) { action in
-			let documentURL = document.id.url
-			UIPasteboard.general.url = documentURL
+	func shareAction(documents: [Document], sourceView: UIView) -> UIAction {
+		let action = UIAction(title: L10n.shareEllipsis, image: AppAssets.share) { action in
+			let controller = UIActivityViewController(documents: documents)
+			controller.popoverPresentationController?.sourceView = sourceView
+			self.present(controller, animated: true)
 		}
 		return action
 	}
-	
+
 	func exportPDFDocsOutlineAction(outlines: [Outline]) -> UIAction {
 		let action = UIAction(title: L10n.exportPDFDocEllipsis) { [weak self] action in
 			guard let self = self else { return }
