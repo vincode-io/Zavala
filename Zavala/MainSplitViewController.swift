@@ -1244,19 +1244,25 @@ extension MainSplitViewController: NSToolbarDelegate {
 extension MainSplitViewController: UIActivityItemsConfigurationReading {
 	
 	var itemProvidersForActivityItemsConfiguration: [NSItemProvider] {
-		guard let outline = editorViewController?.outline else {
+		guard let documents = documentsViewController?.selectedDocuments, !documents.isEmpty else {
 			return [NSItemProvider]()
 		}
 		
-		let itemProvider = NSItemProvider()
-		
-		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
-			let data = outline.markdownList().data(using: .utf8)
-			completion(data, nil)
-			return nil
+		let itemProviders: [NSItemProvider] = documents.compactMap { document in
+			guard let outline = document.outline else { return nil }
+			
+			let itemProvider = NSItemProvider()
+			
+			itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+				let data = outline.markdownList().data(using: .utf8)
+				completion(data, nil)
+				return nil
+			}
+			
+			return itemProvider
 		}
 		
-		return [itemProvider]
+		return itemProviders
 	}
 	
 }
