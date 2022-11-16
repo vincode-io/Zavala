@@ -560,6 +560,10 @@ private extension DocumentsViewController {
 
 			var shareMenuItems = [UIMenuElement]()
 
+			if let cell = self.collectionView.cellForItem(at: allRowIDs.first!.indexPath) {
+				shareMenuItems.append(self.shareAction(documents: documents, sourceView: cell))
+			}
+
 			var printActions = [UIAction]()
 			printActions.append(self.printDocsAction(outlines: outlines))
 			printActions.append(self.printListsAction(outlines: outlines))
@@ -574,10 +578,6 @@ private extension DocumentsViewController {
 			exportActions.append(self.exportOPMLsAction(outlines: outlines))
 			let exportMenu = UIMenu(title: AppStringAssets.exportControlLabel, image: ZavalaImageAssets.export, children: exportActions)
 			shareMenuItems.append(exportMenu)
-
-			if let cell = self.collectionView.cellForItem(at: allRowIDs.first!.indexPath) {
-				shareMenuItems.append(self.shareAction(documents: documents, sourceView: cell))
-			}
 
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: shareMenuItems))
 			
