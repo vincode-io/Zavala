@@ -9,8 +9,11 @@ import UIKit
 import Templeton
 
 extension UIActivityViewController {
-	convenience init(outline: Outline, applicationActivities: [UIActivity]? = nil) {
+	
+	convenience init(outline: Outline) {
 		let outlineItemSource = OutlineActivityItemSource(outline: outline)
-		self.init(activityItems: [outlineItemSource], applicationActivities: applicationActivities)
+		let copyDocumentLinkActivity = CopyDocumentLinkActivity(documents: [Document.outline(outline)])
+		self.init(activityItems: [outlineItemSource], applicationActivities: [copyDocumentLinkActivity])
 	}
+	
 }
