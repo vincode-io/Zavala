@@ -30,7 +30,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 
 	var selectedDocuments: [Document]? {
 		guard let indexPaths = collectionView.indexPathsForSelectedItems else { return nil }
-        return indexPaths.map { documents[$0.row] }
+		return indexPaths.sorted().map { documents[$0.row] }
 	}
 	
 	var documents = [Document]()
