@@ -67,6 +67,7 @@ struct AppStringAssets {
 	static var completeControlLabel = String(localized: "Complete", comment: "Control Label: Complete")
 	static var copyControlLabel = String(localized: "Copy", comment: "Control Label: Copy")
 	static var copyDocumentLinkControlLabel = String(localized: "Copy Document Link", comment: "Control Label: Copy Document Link")
+	static var copyDocumentLinksControlLabel = String(localized: "Copy Document Links", comment: "Control Label: Copy Document Links")
 	static var cutControlLabel = String(localized: "Cut", comment: "Control Label: Cut")
 	
 	static var deleteAlwaysControlLabel = String(localized: "Always Delete Without Asking", comment: "Control Label: Always Delete Without Asking")

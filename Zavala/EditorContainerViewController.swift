@@ -597,6 +597,13 @@ extension EditorContainerViewController: NSToolbarDelegate {
 
 extension EditorContainerViewController: UIActivityItemsConfigurationReading {
 	
+	var applicationActivitiesForActivityItemsConfiguration: [UIActivity]? {
+		guard let outline = editorViewController?.outline else {
+			return nil
+		}
+		return [CopyDocumentLinkActivity(documents: [Document.outline(outline)])]
+	}
+
 	var itemProvidersForActivityItemsConfiguration: [NSItemProvider] {
 		guard let outline = editorViewController?.outline else {
 			return [NSItemProvider]()

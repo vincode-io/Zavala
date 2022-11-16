@@ -1243,6 +1243,14 @@ extension MainSplitViewController: NSToolbarDelegate {
 
 extension MainSplitViewController: UIActivityItemsConfigurationReading {
 	
+	var applicationActivitiesForActivityItemsConfiguration: [UIActivity]? {
+		guard let documents = documentsViewController?.selectedDocuments, !documents.isEmpty else {
+			return nil
+		}
+		
+		return [CopyDocumentLinkActivity(documents: documents)]
+	}
+	
 	var itemProvidersForActivityItemsConfiguration: [NSItemProvider] {
 		guard let documents = documentsViewController?.selectedDocuments, !documents.isEmpty else {
 			return [NSItemProvider]()
