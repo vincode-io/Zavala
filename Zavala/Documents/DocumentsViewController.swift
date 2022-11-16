@@ -305,7 +305,7 @@ extension DocumentsViewController {
         
         let allRowIDs: [GenericRowIdentifier]
         if let selected = collectionView.indexPathsForSelectedItems, !selected.isEmpty {
-            allRowIDs = selected.compactMap { GenericRowIdentifier(indexPath: $0)}
+			allRowIDs = selected.sorted().compactMap { GenericRowIdentifier(indexPath: $0)}
         } else {
             allRowIDs = [GenericRowIdentifier(indexPath: indexPath)]
         }
