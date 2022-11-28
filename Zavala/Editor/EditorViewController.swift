@@ -36,7 +36,7 @@ protocol EditorDelegate: AnyObject {
 	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate)
 }
 
-class EditorViewController: UIViewController, MainControllerIdentifiable, UndoableCommandRunner {
+class EditorViewController: UIViewController, DocumentsActivityItemsConfigurationDelegate, MainControllerIdentifiable, UndoableCommandRunner {
 
 	private static let searchBarHeight: CGFloat = 44
 	
@@ -53,6 +53,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			completedCommand.wantsPriorityOverSystemBehavior = true
 		}
 		return [completedCommand]
+	}
+	
+	var selectedDocuments: [Document] {
+		guard let outline else { return []	}
+		return [Document.outline(outline)]
 	}
 	
 	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
@@ -1164,8 +1169,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func share(_ sender: Any? = nil) {
-		guard let outline else { return }
-		let controller = UIActivityViewController(documents: [Document.outline(outline)])
+		let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(delegate: self))
 		controller.popoverPresentationController?.sourceView = sender as? UIView
 		present(controller, animated: true)
 	}

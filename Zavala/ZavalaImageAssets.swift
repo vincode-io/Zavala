@@ -33,6 +33,7 @@ struct ZavalaImageAssets {
 				return UIImage(systemName: "chevron.down")!.applyingSymbolConfiguration(.init(pointSize: 14, weight: .medium))!
 		#endif
 	}()
+	static var documentLink = UIImage(named: "DocumentLink")!.applyingSymbolConfiguration(.init(pointSize: 24, weight: .medium))!
 	static var duplicate = UIImage(systemName: "plus.square.on.square")!
 
 	static var ellipsis = UIImage(systemName: "ellipsis.circle")!
@@ -70,6 +71,8 @@ struct ZavalaImageAssets {
 	static var noteAdd = UIImage(systemName: "doc.text")!
 	static var noteDelete = UIImage(systemName: "doc.text.fill")!
 	static var noteFont = UIImage(systemName: "textformat.size.smaller")!
+
+	static var outline = UIImage(named: "Outline")!
 
 	static var paste = UIImage(systemName: "doc.on.clipboard")!
 	static var printDoc = UIImage(systemName: "printer")!

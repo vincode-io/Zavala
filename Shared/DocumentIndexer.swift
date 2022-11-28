@@ -42,7 +42,7 @@ private extension DocumentIndexer {
 			attributeSet.keywords = keywords
 		}
 		attributeSet.relatedUniqueIdentifier = document.id.description
-		attributeSet.textContent = document.string
+		attributeSet.textContent = document.textContent
 		attributeSet.contentModificationDate = document.updated
 		return attributeSet
 	}

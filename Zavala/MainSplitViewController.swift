@@ -48,6 +48,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		return activity
 	}
 	
+	var selectedDocuments: [Document] {
+		return documentsViewController?.selectedDocuments ?? []
+	}
+	
 	var isExportAndPrintUnavailable: Bool {
 		guard let outlines = selectedOutlines else { return true }
 		return outlines.count < 1
@@ -67,7 +71,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
     }
 	
 	var selectedOutlines: [Outline]? {
-		return documentsViewController?.selectedDocuments?.compactMap({ $0.outline })
+		return documentsViewController?.selectedDocuments.compactMap({ $0.outline })
 	}
 
 	var editorViewController: EditorViewController? {
@@ -1217,7 +1221,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = NSSharingServicePickerToolbarItem(itemIdentifier: .share)
 			item.label = AppStringAssets.shareControlLabel
 			item.toolTip = AppStringAssets.shareControlLabel
-			item.activityItemsConfiguration = self
+			item.activityItemsConfiguration = DocumentsActivityItemsConfiguration(delegate: self)
 			toolbarItem = item
 		case .getInfo:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
@@ -1239,40 +1243,6 @@ extension MainSplitViewController: NSToolbarDelegate {
 		
 		return toolbarItem
 	}
-}
-
-extension MainSplitViewController: UIActivityItemsConfigurationReading {
-	
-	var applicationActivitiesForActivityItemsConfiguration: [UIActivity]? {
-		guard let documents = documentsViewController?.selectedDocuments, !documents.isEmpty else {
-			return nil
-		}
-		
-		return [CopyDocumentLinkActivity(documents: documents)]
-	}
-	
-	var itemProvidersForActivityItemsConfiguration: [NSItemProvider] {
-		guard let documents = documentsViewController?.selectedDocuments, !documents.isEmpty else {
-			return [NSItemProvider]()
-		}
-		
-		let itemProviders: [NSItemProvider] = documents.compactMap { document in
-			guard let outline = document.outline else { return nil }
-			
-			let itemProvider = NSItemProvider()
-			
-			itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
-				let data = outline.markdownList().data(using: .utf8)
-				completion(data, nil)
-				return nil
-			}
-			
-			return itemProvider
-		}
-		
-		return itemProviders
-	}
-	
 }
 
 #endif

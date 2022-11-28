@@ -11,12 +11,12 @@ import Templeton
 import SafariServices
 
 class EditorContainerViewController: UIViewController, MainCoordinator {
-	
+		
 	var currentDocumentContainer: DocumentContainer? = nil
 
-	var selectedOutlines: [Outline]? {
-		guard let outline = editorViewController?.outline else { return nil }
-		return [outline]
+	var selectedDocuments: [Document] {
+		guard let editorViewController else { return []	}
+		return editorViewController.selectedDocuments
 	}
 	
 	var editorViewController: EditorViewController? {
@@ -571,7 +571,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = NSSharingServicePickerToolbarItem(itemIdentifier: .share)
 			item.label = AppStringAssets.shareControlLabel
 			item.toolTip = AppStringAssets.shareControlLabel
-			item.activityItemsConfiguration = self
+			item.activityItemsConfiguration = DocumentsActivityItemsConfiguration(delegate: self)
 			toolbarItem = item
 		case .getInfo:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
@@ -592,32 +592,6 @@ extension EditorContainerViewController: NSToolbarDelegate {
 		}
 		
 		return toolbarItem
-	}
-}
-
-extension EditorContainerViewController: UIActivityItemsConfigurationReading {
-	
-	var applicationActivitiesForActivityItemsConfiguration: [UIActivity]? {
-		guard let outline = editorViewController?.outline else {
-			return nil
-		}
-		return [CopyDocumentLinkActivity(documents: [Document.outline(outline)])]
-	}
-
-	var itemProvidersForActivityItemsConfiguration: [NSItemProvider] {
-		guard let outline = editorViewController?.outline else {
-			return [NSItemProvider]()
-		}
-		
-		let itemProvider = NSItemProvider()
-		
-		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
-			let data = outline.markdownList().data(using: .utf8)
-			completion(data, nil)
-			return nil
-		}
-		
-		return [itemProvider]
 	}
 	
 }

@@ -23,13 +23,14 @@ protocol DocumentsDelegate: AnyObject  {
 	func printLists(_: DocumentsViewController, outlines: [Outline])
 }
 
-class DocumentsViewController: UICollectionViewController, MainControllerIdentifiable {
+class DocumentsViewController: UICollectionViewController, MainControllerIdentifiable, DocumentsActivityItemsConfigurationDelegate {
+
 	var mainControllerIdentifer: MainControllerIdentifier { return .documents }
 
 	weak var delegate: DocumentsDelegate?
 
-	var selectedDocuments: [Document]? {
-		guard let indexPaths = collectionView.indexPathsForSelectedItems else { return nil }
+	var selectedDocuments: [Document] {
+		guard let indexPaths = collectionView.indexPathsForSelectedItems else { return [] }
 		return indexPaths.sorted().map { documents[$0.row] }
 	}
 	
@@ -185,8 +186,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	}
 	
 	func deleteCurrentDocuments() {
-		guard let documents = selectedDocuments else { return }
-		deleteDocuments(documents)
+		deleteDocuments(selectedDocuments)
 	}
 	
 	func importOPMLs(urls: [URL]) {
@@ -611,7 +611,7 @@ private extension DocumentsViewController {
 	
 	func shareAction(documents: [Document], sourceView: UIView) -> UIAction {
 		let action = UIAction(title: AppStringAssets.shareEllipsisControlLabel, image: ZavalaImageAssets.share) { action in
-			let controller = UIActivityViewController(documents: documents)
+			let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(selectedDocuments: documents))
 			controller.popoverPresentationController?.sourceView = sourceView
 			self.present(controller, animated: true)
 		}
@@ -692,7 +692,7 @@ private extension DocumentsViewController {
 	
 	func deleteDocuments(_ documents: [Document], completion: ((Bool) -> Void)? = nil) {
 		func delete() {
-            let deselect = !(selectedDocuments?.filter({ documents.contains($0) }).isEmpty ?? true)
+            let deselect = selectedDocuments.filter({ documents.contains($0) }).isEmpty
             if deselect, let documentContainers = self.documentContainers {
 				self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: true, animated: true)
 			}

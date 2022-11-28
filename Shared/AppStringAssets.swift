@@ -235,6 +235,10 @@ struct AppStringAssets {
 		return String(localized: "Are you sure you want to delete \(outlineCount) outlines?", comment: "Confirmation: delete outlines?")
 	}
 	
+	static func documents(count: Int) -> String {
+		return String(localized: "\(count) documents", comment: "Title: number of documents")
+	}
+	
 	static func seeDocumentsInPrompt(documentContainerTitle: String) -> String {
 		return String(localized: "See documents in “\(documentContainerTitle)”", comment: "Prompt: see documents in document container")
 	}
