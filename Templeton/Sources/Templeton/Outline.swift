@@ -633,19 +633,19 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return print
 	}
 	
-	public func string() -> String {
+	public func textContent() -> String {
 		loadRows()
 		
-		var string = "\(title ?? "")\n\n"
+		var textContent = "\(title ?? "")\n\n"
 		rows.forEach {
 			let visitor = StringVisitor()
 			$0.visit(visitor: visitor.visitor)
-			string.append(visitor.string)
-			string.append("\n")
+			textContent.append(visitor.string)
+			textContent.append("\n")
 		}
 		
 		unloadRows()
-		return string
+		return textContent
 	}
 	
 	public func markdownDoc() -> String {

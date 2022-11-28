@@ -60,10 +60,10 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
-	public var string: String? {
+	public var textContent: String? {
 		switch self {
 		case .outline(let outline):
-			return outline.string()
+			return outline.textContent()
 		}
 	}
 	
