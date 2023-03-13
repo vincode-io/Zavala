@@ -58,6 +58,7 @@ struct AboutView: View {
 					AttributedLabelView(string: iconBy)
 				}
 				Link("Acknowledgements", destination: AppAssets.acknowledgementsURL)
+					.buttonStyle(.borderless)
 				Spacer()
 			}
 			VStack {
