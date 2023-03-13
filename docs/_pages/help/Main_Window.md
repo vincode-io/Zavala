@@ -45,4 +45,4 @@ Double clicking an Outline in this area on macOS will open the [Individual Edito
 
 This is where the main action happens and where you will spend the most time. To get started quickly, just add a title, a tag maybe, and then start adding rows.
 
-If you have a keyboard, use the tab key to indent rows and shift-tab to outdent them. If you are on iOS there are arrows above the keyboard to indent, outdent and more. You should be able to figure most things out, but we do have an indent guild at [Editing Outlines](zavala://document?accountID=1&documentUUID=B0BE1D0D-59D4-468D-BEC5-6697E0F20A07) to read.
+If you have a keyboard, use the tab key to indent rows and shift-tab to outdent them. If you are on iOS there are arrows above the keyboard to indent, outdent and more.

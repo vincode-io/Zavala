@@ -15,7 +15,7 @@ Zavala includes extensive support for manipulating Outlines using Shortcuts. Whe
 
 ## Entity ID
 
-When at all possible we allow you to directly specify the object you are working with, be that an Outline, Row, or something else. There are situations where either an Outline or a Row is a possible parameter. For example when specifying the location that you want to add a Row. This is where the Entity ID comes in.
+When at all possible we allow you to directly specify the object you are working with, be that an Outline, Row, or something else. There are situations where either an Outline or a Row is a possible parameter. For example when specifying the location that you want to add a Row. This is where the Entity ID comes in. 
 
 The Entity ID is a way to uniquely identify an Outline or a Row. You can get the Entity ID for an object by accessing its entityID property. This can then be used to specify either an Outline or Row as required by the Shortcut action you are working with.
 
