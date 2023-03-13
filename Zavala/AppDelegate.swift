@@ -1044,7 +1044,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let showAboutCommand = UICommand(title: aboutMenuTitle, action: #selector(showAbout(_:)))
 		builder.replace(menu: .about, with: UIMenu(options: .displayInline, children: [showAboutCommand]))
 		
-		
 		// File Menu
 		builder.remove(menu: .newScene)
 		builder.remove(menu: .openRecent)
