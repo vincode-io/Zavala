@@ -12,6 +12,8 @@ import Foundation
 internal enum L10n {
   /// Unable to read the import file.
   internal static let accountErrorImportRead = L10n.tr("Localizable", "Account_Error_Import_Read")
+  /// Unable to process the OPML data.
+  internal static let accountErrorOPMLParse = L10n.tr("Localizable", "Account_Error_OPML_Parse")
   /// Unable to access security scoped resource.
   internal static let accountErrorScopedResource = L10n.tr("Localizable", "Account_Error_Scoped_Resource")
   /// iCloud

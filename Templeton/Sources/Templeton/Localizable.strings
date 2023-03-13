@@ -16,6 +16,7 @@
 
 "Account_Error_Scoped_Resource" = "Unable to access security scoped resource.";
 "Account_Error_Import_Read" = "Unable to read the import file.";
+"Account_Error_OPML_Parse" = "Unable to process the OPML data.";
 
 /* Commands */
 "Collapse_All_In_Outline" = "Collapse All in Outline";

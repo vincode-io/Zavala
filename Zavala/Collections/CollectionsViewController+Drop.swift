@@ -61,7 +61,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
                         if let tag = (container as? TagDocuments)?.tag {
                             tags = [tag]
                         }
-						if let document = container.account?.importOPML(opmlData, tags: tags) {
+						if let document = try? container.account?.importOPML(opmlData, tags: tags) {
 							DocumentIndexer.updateIndex(forDocument: document)
 						}
 					}
