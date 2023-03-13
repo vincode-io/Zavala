@@ -1037,15 +1037,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		guard builder.system == UIMenuSystem.main else { return }
 
 		// Application Menu
+		let appMenu = UIMenu(title: "", options: .displayInline, children: [showPreferences])
+		builder.insertSibling(appMenu, afterMenu: .about)
+
 		let aboutMenuTitle = builder.menu(for: .about)?.children.first?.title ?? "About Zavala"
 		let showAboutCommand = UICommand(title: aboutMenuTitle, action: #selector(showAbout(_:)))
 		builder.replace(menu: .about, with: UIMenu(options: .displayInline, children: [showAboutCommand]))
 		
-		var appMenuCommands = [UICommand]()
-		appMenuCommands.append(showPreferences)
-
-		let appMenu = UIMenu(title: "", options: .displayInline, children: appMenuCommands)
-		builder.insertSibling(appMenu, afterMenu: .about)
 		
 		// File Menu
 		builder.remove(menu: .newScene)
