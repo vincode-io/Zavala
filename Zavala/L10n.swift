@@ -166,8 +166,6 @@ internal enum L10n {
   internal static let exportPDFDocEllipsis = L10n.tr("Localizable", "Export_PDF_Doc_Ellipsis")
   /// Export PDF List…
   internal static let exportPDFListEllipsis = L10n.tr("Localizable", "Export_PDF_List_Ellipsis")
-  /// Feedback
-  internal static let feedback = L10n.tr("Localizable", "Feedback")
   /// Filter
   internal static let filter = L10n.tr("Localizable", "Filter")
   /// Filter Completed
@@ -292,6 +290,8 @@ internal enum L10n {
   internal static let removeTag = L10n.tr("Localizable", "Remove_Tag")
   /// Rename
   internal static let rename = L10n.tr("Localizable", "Rename")
+  /// Report an Issue
+  internal static let reportAnIssue = L10n.tr("Localizable", "Report an Issue")
   /// Restore
   internal static let restore = L10n.tr("Localizable", "Restore")
   /// Restore Archive

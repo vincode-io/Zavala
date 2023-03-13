@@ -14,14 +14,6 @@ extension Bundle {
 		return infoDictionary?["CFBundleName"] as! String
 	}
 	
-	var versionNumber: String {
-		return infoDictionary?["CFBundleShortVersionString"] as! String
-	}
-	
-	var buildNumber: String {
-		return infoDictionary?["CFBundleVersion"] as! String
-	}
-	
 	var copyright: String {
 		return infoDictionary?["NSHumanReadableCopyright"] as! String
 	}

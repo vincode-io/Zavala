@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 struct AppAssets {
 	
@@ -17,7 +18,11 @@ struct AppAssets {
 		return .tertiaryLabel
 	}()
 	
-	static var acknowledgementsURL = "https://github.com/vincode-io/Zavala/wiki/Acknowledgements"
+	static var aboutPanelBackgroundColor: Color {
+		return Color("AboutBackgroundColor")
+	}
+	
+	static var acknowledgementsURL = URL(string: "https://github.com/vincode-io/Zavala/wiki/Acknowledgements")!
 
 	static var add: UIImage = {
 		return UIImage(systemName: "plus")!
@@ -31,8 +36,6 @@ struct AppAssets {
 		return UIImage(systemName: "bold")!
 	}()
 	
-	static var bugTrackerURL = "https://github.com/vincode-io/Zavala/issues"
-
 	static var bullet: UIImage = {
 		return UIImage(systemName: "circle.fill")!.applyingSymbolConfiguration(.init(pointSize: 4, weight: .heavy))!
 	}()
@@ -121,8 +124,6 @@ struct AppAssets {
 		return UIImage(systemName: "info.circle")!
 	}()
 	
-	static var githubRepositoryURL = "https://github.com/vincode-io/Zavala"
-
 	static var goBackward: UIImage = {
 		return UIImage(systemName: "chevron.left")!
 	}()
@@ -193,8 +194,6 @@ struct AppAssets {
 		return UIImage(systemName: "printer.dotmatrix")!
 	}()
 
-	static var releaseNotesURL = "https://github.com/vincode-io/Zavala/releases/tag/\(Bundle.main.versionNumber)"
-	
 	static var rename: UIImage = {
 		return UIImage(systemName: "pencil")!
 	}()
@@ -219,7 +218,7 @@ struct AppAssets {
 		return UIImage(systemName: "textformat.size.larger")!
 	}()
 
-	static var feedbackURL = "mailto:mo@vincode.io"
+	static var reportAnIssueURL = URL(string: "mailto:mo@vincode.io")!
 	
 	static var uncompleteRow: UIImage = {
 		return UIImage(systemName: "square")!
@@ -229,6 +228,6 @@ struct AppAssets {
 		return .quaternaryLabel
 	}()
 	
-	static var websiteURL = "https://zavala.vincode.io"
+	static var websiteURL = URL(string: "https://zavala.vincode.io")!
 	
 }

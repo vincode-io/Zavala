@@ -5,7 +5,7 @@
 //  Created by Maurice Parker on 3/16/21.
 //
 
-import Foundation
+import UIKit
 
 extension NSAttributedString {
 	
@@ -20,6 +20,11 @@ extension NSAttributedString {
             return false
         }
         return lhs!.isEqual(to: rhs!)
+	}
+	
+	var width: CGFloat {
+		guard let font = attribute(.font, at: 0, effectiveRange: nil) as? UIFont else { return 0 }
+		return string.width(withConstrainedHeight: .greatestFiniteMagnitude, font: font)
 	}
 	
 }

@@ -17,6 +17,11 @@
 		5113B095260E638400DBD11B /* SettingsFontConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */; };
 		5115C02D2605898900416D67 /* MacOpenQuicklyCollectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5115C02C2605898900416D67 /* MacOpenQuicklyCollectionsViewController.swift */; };
 		5115C0362605F96100416D67 /* MacOpenQuicklyDocumentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5115C0352605F96100416D67 /* MacOpenQuicklyDocumentsViewController.swift */; };
+		5116893D29BD6DED00318832 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116893C29BD6DED00318832 /* AboutView.swift */; };
+		5116894029BD72DE00318832 /* AttributedLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116893F29BD72DE00318832 /* AttributedLabelView.swift */; };
+		5116894329BD9E4300318832 /* About.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5116894229BD9E4300318832 /* About.storyboard */; };
+		5116894529BDA0E500318832 /* AboutSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116894429BDA0E500318832 /* AboutSceneDelegate.swift */; };
+		5116894729BDA60E00318832 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116894629BDA60E00318832 /* AboutViewController.swift */; };
 		511A99F727B9B596001BD443 /* ToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511A99F627B9B596001BD443 /* ToolbarButton.swift */; };
 		511B29E525FEE4DC00C04239 /* LinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29E425FEE4DC00C04239 /* LinkViewController.swift */; };
 		511B29F226014FBA00C04239 /* EnhancedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F126014FBA00C04239 /* EnhancedTextField.swift */; };
@@ -72,6 +77,7 @@
 		51692B0C25681AD3006B755F /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51692B0B25681AD3006B755F /* UIViewController+.swift */; };
 		5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5169928925AE4F5C00760C9D /* UICollectionView+.swift */; };
 		516CBCAE274BAF7D0062EB42 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516CBCAD274BAF7D0062EB42 /* UIView+.swift */; };
+		516D1AB929BBE5AA004B9D5C /* BuildInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D1AB829BBE5AA004B9D5C /* BuildInfo.swift */; };
 		516F536C260806150038BAF8 /* EnhancedSearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */; };
 		516F5373260829060038BAF8 /* OutlineFontDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F5372260829060038BAF8 /* OutlineFontDefaults.swift */; };
 		516F5378260972470038BAF8 /* FontAndColorPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F5377260972470038BAF8 /* FontAndColorPreferencesViewController.swift */; };
@@ -262,6 +268,11 @@
 		5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFontConfigViewController.swift; sourceTree = "<group>"; };
 		5115C02C2605898900416D67 /* MacOpenQuicklyCollectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOpenQuicklyCollectionsViewController.swift; sourceTree = "<group>"; };
 		5115C0352605F96100416D67 /* MacOpenQuicklyDocumentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOpenQuicklyDocumentsViewController.swift; sourceTree = "<group>"; };
+		5116893C29BD6DED00318832 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		5116893F29BD72DE00318832 /* AttributedLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedLabelView.swift; sourceTree = "<group>"; };
+		5116894229BD9E4300318832 /* About.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = About.storyboard; sourceTree = "<group>"; };
+		5116894429BDA0E500318832 /* AboutSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSceneDelegate.swift; sourceTree = "<group>"; };
+		5116894629BDA60E00318832 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		511A99F627B9B596001BD443 /* ToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButton.swift; sourceTree = "<group>"; };
 		511B29E425FEE4DC00C04239 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
 		511B29F126014FBA00C04239 /* EnhancedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedTextField.swift; sourceTree = "<group>"; };
@@ -313,6 +324,7 @@
 		5169928925AE4F5C00760C9D /* UICollectionView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+.swift"; sourceTree = "<group>"; };
 		516CBCAB274AFE920062EB42 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		516CBCAD274BAF7D0062EB42 /* UIView+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
+		516D1AB829BBE5AA004B9D5C /* BuildInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildInfo.swift; sourceTree = "<group>"; };
 		516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedSearchTextField.swift; sourceTree = "<group>"; };
 		516F5372260829060038BAF8 /* OutlineFontDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontDefaults.swift; sourceTree = "<group>"; };
 		516F5377260972470038BAF8 /* FontAndColorPreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAndColorPreferencesViewController.swift; sourceTree = "<group>"; };
@@ -503,6 +515,8 @@
 			isa = PBXGroup;
 			children = (
 				51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */,
+				5116893F29BD72DE00318832 /* AttributedLabelView.swift */,
+				516D1AB829BBE5AA004B9D5C /* BuildInfo.swift */,
 				517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */,
 				518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */,
 				516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */,
@@ -628,6 +642,10 @@
 		517AF69E25E08A350044DBAB /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				5116894229BD9E4300318832 /* About.storyboard */,
+				5116893C29BD6DED00318832 /* AboutView.swift */,
+				5116894629BDA60E00318832 /* AboutViewController.swift */,
+				5116894429BDA0E500318832 /* AboutSceneDelegate.swift */,
 				51DEE80F26FB8D89006DAA56 /* ColorPaletteTableViewController.swift */,
 				517AF69F25E08A6B0044DBAB /* Settings.storyboard */,
 				5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */,
@@ -929,6 +947,7 @@
 				51CF10AF2571BB1E005D6D88 /* Run Swiftgen */,
 				5181A9302554D92000C153E8 /* Sources */,
 				5181A9312554D92000C153E8 /* Frameworks */,
+				5197900629BB784D00F1A05D /* Update Info.plist */,
 				5181A9322554D92000C153E8 /* Resources */,
 				51C4C3C22555EB4D004E0206 /* Run VerifyNoBS */,
 				51C4C3F125565282004E0206 /* Embed Frameworks */,
@@ -1030,6 +1049,7 @@
 				517AF6A025E08A6B0044DBAB /* Settings.storyboard in Resources */,
 				5181A9412554D92100C153E8 /* Assets.xcassets in Resources */,
 				51C71C72273F252900F6C779 /* Image.storyboard in Resources */,
+				5116894329BD9E4300318832 /* About.storyboard in Resources */,
 				5181A93F2554D92000C153E8 /* Main.storyboard in Resources */,
 				517A9E332605130200EF346A /* OpenQuickly.storyboard in Resources */,
 				51278E77257F37AC0034F1CB /* Dialog.storyboard in Resources */,
@@ -1069,6 +1089,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Delete the framework that Xcode should have never included\n# https://forums.swift.org/t/is-this-an-xcode-bug-or-somehow-related-to-spm/33987\nrm -rf \"${TARGET_BUILD_DIR}/${PLUGINS_FOLDER_PATH}/SpotlightIndexExtension.appex/Frameworks\"\n";
+		};
+		5197900629BB784D00F1A05D /* Update Info.plist */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Update Info.plist";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${SRCROOT}/tools/PlistBuildInfo.sh\n";
 		};
 		51C4C3C22555EB4D004E0206 /* Run VerifyNoBS */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1137,6 +1175,7 @@
 				5164B35427582D810039600B /* MainOpenQuicklyViewController.swift in Sources */,
 				519184F927124E9700B7E177 /* GetOutlinesIntentHandler.swift in Sources */,
 				517AF6A725E08CB80044DBAB /* NonIntrinsicLabel.swift in Sources */,
+				5116894029BD72DE00318832 /* AttributedLabelView.swift in Sources */,
 				5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */,
 				5147D0B825CCAB2A004673C3 /* DocumentsViewController+Drop.swift in Sources */,
 				51C030AC257E0A7200609262 /* ReloadItemsOperation.swift in Sources */,
@@ -1172,6 +1211,7 @@
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
 				51AC0A8E25741CF5003A7532 /* StackedUndoManager.swift in Sources */,
 				5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */,
+				5116894729BDA60E00318832 /* AboutViewController.swift in Sources */,
 				51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */,
 				5167608525FBE4E500AC0EBD /* OutlineGetInfoViewController.swift in Sources */,
 				51C71C6D273F087000F6C779 /* ImageScrollView.swift in Sources */,
@@ -1195,10 +1235,12 @@
 				5181A93C2554D92000C153E8 /* CollectionsViewController.swift in Sources */,
 				51D460FA2729E30C0024EC48 /* MetadataTextAttachmentViewProvider.swift in Sources */,
 				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
+				516D1AB929BBE5AA004B9D5C /* BuildInfo.swift in Sources */,
 				51AEEC8D2703E6EB00354C59 /* Intents.intentdefinition in Sources */,
 				516F5373260829060038BAF8 /* OutlineFontDefaults.swift in Sources */,
 				51341E04272B55080005425B /* InsetLabel.swift in Sources */,
 				51A1EC4427243B3600463A15 /* GenericRowIdentifier.swift in Sources */,
+				5116894529BDA0E500318832 /* AboutSceneDelegate.swift in Sources */,
 				511B29FD2601901C00C04239 /* EditorBacklinkViewCell.swift in Sources */,
 				51B2B2CE2563AAF60090C56B /* EditorRowContentConfiguration.swift in Sources */,
 				51C030BE257E1B9400609262 /* EditorRowTextView.swift in Sources */,
@@ -1239,6 +1281,7 @@
 				511A99F727B9B596001BD443 /* ToolbarButton.swift in Sources */,
 				5191850F271390F100B7E177 /* IntentEntityID+.swift in Sources */,
 				514F221E25C4D0A8004E02CD /* EditorTagInputContentView.swift in Sources */,
+				5116893D29BD6DED00318832 /* AboutView.swift in Sources */,
 				5191850D271387C300B7E177 /* RemoveOutlineIntentHandler.swift in Sources */,
 				510471BB271940E5001DEFD5 /* MoveRowsIntentHandler.swift in Sources */,
 				5115C02D2605898900416D67 /* MacOpenQuicklyCollectionsViewController.swift in Sources */,
