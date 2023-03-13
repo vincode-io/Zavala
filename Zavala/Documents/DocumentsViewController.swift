@@ -521,9 +521,9 @@ private extension DocumentsViewController {
 	}
 	
 	func updateUI() {
+		guard isViewLoaded else { return }
         let title = documentContainers?.title ?? ""
         navigationItem.title = title
-        view.window?.windowScene?.title = title
         
         var defaultAccount: Account? = nil
         if let containers = documentContainers {

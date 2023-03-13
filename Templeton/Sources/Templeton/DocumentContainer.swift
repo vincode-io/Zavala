@@ -38,4 +38,5 @@ public extension Array where Element == DocumentContainer {
     var title: String {
         ListFormatter.localizedString(byJoining: self.compactMap({ $0.name }).sorted())
     }
+	
 }

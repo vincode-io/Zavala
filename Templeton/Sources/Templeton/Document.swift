@@ -297,3 +297,11 @@ public enum Document: Equatable, Hashable, Codable {
 	}
 	
 }
+
+public extension Array where Element == Document {
+	
+	var title: String {
+		ListFormatter.localizedString(byJoining: self.compactMap({ $0.title }).sorted())
+	}
+	
+}
