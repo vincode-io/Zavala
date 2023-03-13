@@ -59,7 +59,7 @@ import os.log
 
 	func configureShowAbout(_ window: NSObject?) {
 		guard let nsWindow = window as? NSWindow else { return }
-		nsWindow.titlebarAppearsTransparent = true
+		nsWindow.styleMask.insert(.fullSizeContentView)
 		nsWindow.standardWindowButton(.zoomButton)?.isEnabled = false
 		nsWindow.standardWindowButton(.miniaturizeButton)?.isEnabled = false
 	}

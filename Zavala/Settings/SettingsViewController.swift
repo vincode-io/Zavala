@@ -89,8 +89,9 @@ class SettingsViewController: UITableViewController {
 		case 0:
 			let aboutViewController = UIHostingController(rootView: AboutView())
 			aboutViewController.modalPresentationStyle = .formSheet
-			let size = UIFontMetrics(forTextStyle: .body).scaledValue(for: 350)
-			aboutViewController.preferredContentSize = .init(width: size, height: size)
+			let width = UIFontMetrics(forTextStyle: .body).scaledValue(for: 350)
+			let height = UIFontMetrics(forTextStyle: .body).scaledValue(for: 450)
+			aboutViewController.preferredContentSize = .init(width: width, height: height)
 			present(aboutViewController, animated: true)
 		case 1:
 			openURL(AppAssets.helpURL)

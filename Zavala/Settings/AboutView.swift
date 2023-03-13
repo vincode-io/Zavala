@@ -57,8 +57,12 @@ struct AboutView: View {
 					AttributedLabelView(string: developedBy)
 					AttributedLabelView(string: iconBy)
 				}
-				Link("Acknowledgements", destination: AppAssets.acknowledgementsURL)
-					.buttonStyle(.borderless)
+				VStack(spacing: 5) {
+					Link("Acknowledgements", destination: AppAssets.acknowledgementsURL)
+						.buttonStyle(.borderless)
+					Link("Privacy Policy", destination: AppAssets.privacyPolicyURL)
+						.buttonStyle(.borderless)
+				}
 				Spacer()
 			}
 			VStack {

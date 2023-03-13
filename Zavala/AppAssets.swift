@@ -193,6 +193,8 @@ struct AppAssets {
 	static var printList: UIImage = {
 		return UIImage(systemName: "printer.dotmatrix")!
 	}()
+	
+	static var privacyPolicyURL = URL(string: "https://vincode.io/privacy-policy/")!
 
 	static var rename: UIImage = {
 		return UIImage(systemName: "pencil")!

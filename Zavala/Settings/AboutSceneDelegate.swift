@@ -10,7 +10,7 @@ import SwiftUI
 
 class AboutSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
-	private static let windowSize = CGSize(width: 350, height: 350)
+	private static let windowSize = CGSize(width: 300, height: 400)
 	
 	weak var scene: UIScene?
 	weak var session: UISceneSession?
