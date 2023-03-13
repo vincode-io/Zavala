@@ -25,3 +25,6 @@ If there was a mission statement for Zavala, that would be it.
 
 Icon design by [Brad Ellis](https://hachyderm.io/@bradellis)
 
+### Privacy
+
+We respect user privacy and take it very seriously. Please read our <a href="https://vincode.io/privacy-policy/">Privacy Policy<a> to learn more.
