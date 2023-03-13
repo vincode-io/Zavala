@@ -23,5 +23,5 @@ If there was a mission statement for Zavala, that would be it.
 
 ### Credits
 
-Icon design by [Brad Ellis](https://twitter.com/bradellis?s=21)
+Icon design by [Brad Ellis](https://hachyderm.io/@bradellis)
 
