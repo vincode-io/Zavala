@@ -384,18 +384,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let showHelpCommand = UICommand(title: L10n.zavalaHelp, action: #selector(showHelpCommand(_:)))
 
-	let showFeedbackCommand = UICommand(title: L10n.feedback, action: #selector(showFeedbackCommand(_:)))
+	let reportAnIssueCommand = UICommand(title: L10n.reportAnIssue, action: #selector(reportAnIssueCommand(_:)))
 
-	let showWebsiteCommand = UICommand(title: L10n.website, action: #selector(showWebsiteCommand(_:)))
-
-	let showReleaseNotesCommand = UICommand(title: L10n.releaseNotes, action: #selector(showReleaseNotesCommand(_:)))
-	
-	let showGitHubRepositoryCommand = UICommand(title: L10n.gitHubRepository, action: #selector(showGitHubRepositoryCommand(_:)))
-	
-	let showBugTrackerCommand = UICommand(title: L10n.bugTracker, action: #selector(showBugTrackerCommand(_:)))
-	
-	let showAcknowledgementsCommand = UICommand(title: L10n.acknowledgements, action: #selector(showAcknowledgementsCommand(_:)))
-	
 	let showOpenQuicklyCommand = UIKeyCommand(title: L10n.openQuicklyEllipsis,
 											  action: #selector(showOpenQuicklyCommand(_:)),
 											  input: "o",
@@ -589,6 +579,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return UISceneConfiguration(name: "Open Quickly Configuration", sessionRole: connectingSceneSession.role)
 		case NSUserActivity.ActivityType.viewImage:
 			return UISceneConfiguration(name: "Image Configuration", sessionRole: connectingSceneSession.role)
+		case NSUserActivity.ActivityType.showAbout:
+			return UISceneConfiguration(name: "About Configuration", sessionRole: connectingSceneSession.role)
 		default:
 			guard options.userActivities.first?.userInfo == nil else {
 				return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
@@ -797,28 +789,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.openURL(AppAssets.helpURL)
 	}
 
-	@objc func showFeedbackCommand(_ sender: Any?) {
-		UIApplication.shared.open(URL(string: AppAssets.feedbackURL)!)
-	}
-
-	@objc func showWebsiteCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppAssets.websiteURL)
-	}
-
-	@objc func showReleaseNotesCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppAssets.releaseNotesURL)
-	}
-
-	@objc func showGitHubRepositoryCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppAssets.githubRepositoryURL)
-	}
-	
-	@objc func showBugTrackerCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppAssets.bugTrackerURL)
-	}
-	
-	@objc func showAcknowledgementsCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppAssets.acknowledgementsURL)
+	@objc func reportAnIssueCommand(_ sender: Any?) {
+		UIApplication.shared.open(AppAssets.reportAnIssueURL)
 	}
 
 	@objc func showOpenQuicklyCommand(_ sender: Any?) {
@@ -828,6 +800,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openQuickly)
 			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 		}
+	}
+
+	@objc func showAbout(_ sender: Any?) {
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.showAbout)
+		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 
 	@objc func printDocsCommand(_ sender: Any?) {
@@ -1058,18 +1035,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		super.buildMenu(with: builder)
 
 		guard builder.system == UIMenuSystem.main else { return }
-		
-		builder.remove(menu: .newScene)
-		builder.remove(menu: .openRecent)
-		
-		// Application Menu
-		var appMenuCommands = [UICommand]()
-		appMenuCommands.append(showPreferences)
 
-		let appMenu = UIMenu(title: "", options: .displayInline, children: appMenuCommands)
+		// Application Menu
+		let appMenu = UIMenu(title: "", options: .displayInline, children: [showPreferences])
 		builder.insertSibling(appMenu, afterMenu: .about)
+
+		let aboutMenuTitle = builder.menu(for: .about)?.children.first?.title ?? "About Zavala"
+		let showAboutCommand = UICommand(title: aboutMenuTitle, action: #selector(showAbout(_:)))
+		builder.replace(menu: .about, with: UIMenu(options: .displayInline, children: [showAboutCommand]))
 		
 		// File Menu
+		builder.remove(menu: .newScene)
+		builder.remove(menu: .openRecent)
+
 		let cloudKitMenu = UIMenu(title: "", options: .displayInline, children: [collaborateCommand, syncCommand])
 		builder.insertChild(cloudKitMenu, atStartOfMenu: .file)
 
@@ -1102,6 +1080,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let linkMenu = UIMenu(title: "", options: .displayInline, children: [insertImageCommand, linkCommand, copyDocumentLinkCommand])
 		builder.insertSibling(linkMenu, afterMenu: .standardEdit)
 
+		builder.remove(menu: .find)
+		
 		let documentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginDocumentSearchCommand])
 		let inDocumentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginInDocumentSearchCommand, nextInDocumentSearchCommand, previousInDocumentSearchCommand])
 		let useSelectionMenu = UIMenu(title: "", options: .displayInline, children: [useSelectionForSearchCommand])
@@ -1159,13 +1139,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(historyMenu, afterMenu: .view)
 
 		// Help Menu
-		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand,
-																	showFeedbackCommand,
-																	showWebsiteCommand,
-																	showReleaseNotesCommand,
-																	showGitHubRepositoryCommand,
-																	showBugTrackerCommand,
-																	showAcknowledgementsCommand] })
+		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand, reportAnIssueCommand] })
 	}
 
 }

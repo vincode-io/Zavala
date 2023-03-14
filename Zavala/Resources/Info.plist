@@ -171,6 +171,14 @@ All Rights Reserved.</string>
 					<key>UISceneStoryboardFile</key>
 					<string>Image</string>
 				</dict>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>About Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).AboutSceneDelegate</string>
+					<key>UISceneStoryboardFile</key>
+					<string>About</string>
+				</dict>
 			</array>
 		</dict>
 	</dict>

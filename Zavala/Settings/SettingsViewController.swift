@@ -9,6 +9,7 @@
 import UIKit
 import CoreServices
 import SafariServices
+import SwiftUI
 
 class SettingsViewController: UITableViewController {
 
@@ -46,34 +47,6 @@ class SettingsViewController: UITableViewController {
 		ownerNameTextField.text = AppDefaults.shared.ownerName
 		ownerEmailTextField.text = AppDefaults.shared.ownerEmail
 		ownerURLTextField.text = AppDefaults.shared.ownerURL
-
-		let buildLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: 0.0, width: 0.0, height: 0.0))
-		buildLabel.font = UIFont.systemFont(ofSize: 11.0)
-		buildLabel.textColor = UIColor.gray
-		buildLabel.text = "\(Bundle.main.appName) \(Bundle.main.versionNumber) (Build \(Bundle.main.buildNumber))"
-		buildLabel.sizeToFit()
-
-		let creditsLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: buildLabel.frame.maxY + 8, width: 0.0, height: 0.0))
-		creditsLabel.font = UIFont.systemFont(ofSize: 11.0)
-		creditsLabel.textColor = UIColor.gray
-		creditsLabel.text = "App icon by Brad Ellis"
-		creditsLabel.sizeToFit()
-
-		let copyrightLabel = NonIntrinsicLabel()
-		copyrightLabel.numberOfLines = 0
-		copyrightLabel.lineBreakMode = .byWordWrapping
-		copyrightLabel.font = UIFont.systemFont(ofSize: 11.0)
-		copyrightLabel.textColor = UIColor.gray
-		copyrightLabel.text = Bundle.main.copyright
-		let copyrightSize = copyrightLabel.sizeThatFits(CGSize(width: tableView.bounds.width - 32, height: CGFloat.infinity))
-		copyrightLabel.frame = CGRect(x: 32, y: creditsLabel.frame.maxY + 8, width: copyrightSize.width, height: copyrightSize.height)
-
-		let width = max(copyrightLabel.frame.width, buildLabel.frame.width)
-		let wrapperView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: copyrightLabel.frame.maxY + 10))
-		wrapperView.addSubview(copyrightLabel)
-		wrapperView.addSubview(creditsLabel)
-		wrapperView.addSubview(buildLabel)
-		tableView.tableFooterView = wrapperView
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -114,19 +87,16 @@ class SettingsViewController: UITableViewController {
 		
 		switch indexPath.row {
 		case 0:
-			openURL(AppAssets.helpURL)
+			let aboutViewController = UIHostingController(rootView: AboutView())
+			aboutViewController.modalPresentationStyle = .formSheet
+			let width = UIFontMetrics(forTextStyle: .body).scaledValue(for: 350)
+			let height = UIFontMetrics(forTextStyle: .body).scaledValue(for: 450)
+			aboutViewController.preferredContentSize = .init(width: width, height: height)
+			present(aboutViewController, animated: true)
 		case 1:
-			UIApplication.shared.open(URL(string: AppAssets.feedbackURL)!, options: [:])
+			openURL(AppAssets.helpURL)
 		case 2:
-			openURL(AppAssets.websiteURL)
-		case 3:
-			openURL(AppAssets.releaseNotesURL)
-		case 4:
-			openURL(AppAssets.githubRepositoryURL)
-		case 5:
-			openURL(AppAssets.bugTrackerURL)
-		case 6:
-			openURL(AppAssets.acknowledgementsURL)
+			UIApplication.shared.open(AppAssets.reportAnIssueURL, options: [:])
 		default:
 			break
 		}
@@ -182,7 +152,7 @@ class SettingsViewController: UITableViewController {
 		}
 		alertController.addAction(cancelAction)
 		
-		let deleteAction = UIAlertAction(title: L10n.remove, style: .default) { [weak self] action in
+		let deleteAction = UIAlertAction(title: L10n.remove, style: .destructive) { [weak self] action in
 			guard let self = self else { return }
 			AppDefaults.shared.enableCloudKit = self.enableCloudKitSwitch.isOn
 		}

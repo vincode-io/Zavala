@@ -68,6 +68,8 @@ internal enum L10n {
   internal static let copy = L10n.tr("Localizable", "Copy")
   /// Copy Document Link
   internal static let copyDocumentLink = L10n.tr("Localizable", "Copy_Document_Link")
+  /// Copy Document Links
+  internal static let copyDocumentLinks = L10n.tr("Localizable", "Copy_Document_Links")
   /// To help us fix crashing bugs, click “Email It” below. You will have a chance to review the email message before it is sent.
   internal static let crashReporterMessage = L10n.tr("Localizable", "Crash_Reporter_Message")
   /// Crash Log Found
@@ -166,8 +168,6 @@ internal enum L10n {
   internal static let exportPDFDocEllipsis = L10n.tr("Localizable", "Export_PDF_Doc_Ellipsis")
   /// Export PDF List…
   internal static let exportPDFListEllipsis = L10n.tr("Localizable", "Export_PDF_List_Ellipsis")
-  /// Feedback
-  internal static let feedback = L10n.tr("Localizable", "Feedback")
   /// Filter
   internal static let filter = L10n.tr("Localizable", "Filter")
   /// Filter Completed
@@ -242,6 +242,8 @@ internal enum L10n {
   internal static let newOutline = L10n.tr("Localizable", "New_Outline")
   /// Next Result
   internal static let nextResult = L10n.tr("Localizable", "Next_Result")
+  /// No Selection
+  internal static let noSelection = L10n.tr("Localizable", "No_Selection")
   /// (No Title)
   internal static let noTitle = L10n.tr("Localizable", "No_Title")
   /// Not Available
@@ -290,6 +292,8 @@ internal enum L10n {
   internal static let removeTag = L10n.tr("Localizable", "Remove_Tag")
   /// Rename
   internal static let rename = L10n.tr("Localizable", "Rename")
+  /// Report an Issue
+  internal static let reportAnIssue = L10n.tr("Localizable", "Report an Issue")
   /// Restore
   internal static let restore = L10n.tr("Localizable", "Restore")
   /// Restore Archive

@@ -357,6 +357,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
+			collectionView.refreshControl!.tintColor = .clear
 		}
 		
 		searchBar.delegate = self
@@ -519,7 +520,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(sceneWillDeactivate(_:)),	name: UIScene.willDeactivateNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
 	}
@@ -715,10 +715,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		saveCurrentText()
 	}
 	
-	@objc func cloudKitSyncDidComplete(_ note: Notification) {
-		collectionView?.refreshControl?.endRefreshing()
-	}
-	
 	@objc func adjustForKeyboard(_ note: Notification) {
 		guard let keyboardValue = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
 
@@ -753,6 +749,9 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	// MARK: API
 	
 	func showMessage(_ message: String) {
+		// This may get called before the collectionView is created when running on the iPhone
+		guard let collectionView else { return }
+		
 		messageLabel?.removeFromSuperview()
 		
 		messageLabel = UILabel()
@@ -1077,9 +1076,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func sync() {
 		if AccountManager.shared.isSyncAvailable {
 			AccountManager.shared.sync()
-		} else {
-			collectionView?.refreshControl?.endRefreshing()
 		}
+		collectionView?.refreshControl?.endRefreshing()
 	}
 	
 	@objc func done() {
@@ -1177,8 +1175,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func share(_ sender: Any? = nil) {
-		guard let outline = outline else { return }
-		let controller = UIActivityViewController(outline: outline)
+		guard let outline else { return }
+		let controller = UIActivityViewController(documents: [Document.outline(outline)])
 		controller.popoverPresentationController?.sourceView = sender as? UIView
 		present(controller, animated: true)
 	}
@@ -2934,6 +2932,8 @@ private extension EditorViewController {
 	func completeRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
+		let cursorIsInCompletingRows = rows.contains(where: { $0 == currentTextView?.row })
+		
 		let command = CompleteCommand(undoManager: undoManager,
 									  delegate: self,
 									  outline: outline,
@@ -2941,6 +2941,8 @@ private extension EditorViewController {
 									  rowStrings: rowStrings)
 		
 		runCommand(command)
+
+		guard cursorIsInCompletingRows && isCompletedFiltered else { return }
 		
 		if let newCursorIndex = command.newCursorIndex {
 			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {

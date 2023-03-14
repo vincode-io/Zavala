@@ -40,8 +40,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		toolbar.autosavesConfiguration = true
 		
 		if let titlebar = windowScene.titlebar {
+			titlebar.titleVisibility = .hidden
 			titlebar.toolbar = toolbar
-			titlebar.toolbarStyle = .automatic
+			titlebar.toolbarStyle = .unified
 		}
 
 		// If we let the user shrink the window down too small, the collection view will crash itself with a

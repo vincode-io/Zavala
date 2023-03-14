@@ -57,6 +57,13 @@ import os.log
 		nsWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
 	}
 
+	func configureShowAbout(_ window: NSObject?) {
+		guard let nsWindow = window as? NSWindow else { return }
+		nsWindow.styleMask.insert(.fullSizeContentView)
+		nsWindow.standardWindowButton(.zoomButton)?.isEnabled = false
+		nsWindow.standardWindowButton(.miniaturizeButton)?.isEnabled = false
+	}
+
 	func configureWindowSize(_ window: NSObject?, x: Double, y: Double, width: Double, height: Double) {
 		guard let nsWindow = window as? NSWindow else { return }
 		nsWindow.setFrame(CGRect(x: x, y: y, width: width, height: height), display: true)

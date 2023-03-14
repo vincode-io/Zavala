@@ -17,4 +17,27 @@ extension String {
 		return try? NSRegularExpression(pattern: makeSearchable(), options: .caseInsensitive)
 	}
 	
+	var escapingXMLCharacters: String {
+		var escaped = String()
+
+		for char in self {
+			switch char {
+				case "\n":
+					escaped.append("&#10;")
+				case "&":
+					escaped.append("&amp;")
+				case "<":
+					escaped.append("&lt;")
+				case ">":
+					escaped.append("&gt;")
+				case "\"":
+					escaped.append("&quot;")
+				default:
+					escaped.append(char)
+			}
+		}
+
+		return escaped
+	}
+	
 }

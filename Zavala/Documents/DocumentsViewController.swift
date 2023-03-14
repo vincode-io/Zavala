@@ -30,7 +30,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 
 	var selectedDocuments: [Document]? {
 		guard let indexPaths = collectionView.indexPathsForSelectedItems else { return nil }
-        return indexPaths.map { documents[$0.row] }
+		return indexPaths.sorted().map { documents[$0.row] }
 	}
 	
 	var documents = [Document]()
@@ -84,6 +84,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
+			collectionView.refreshControl!.tintColor = .clear
 		}
 		
 		collectionView.dragDelegate = self
@@ -129,7 +130,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentUpdatedDidChange(_:)), name: .DocumentUpdatedDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentSharingDidChange(_:)), name: .DocumentSharingDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 		
 		scheduleReconfigureAll()
 	}
@@ -244,18 +244,13 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		reload(document: document)
 	}
 	
-	@objc func cloudKitSyncDidComplete(_ note: Notification) {
-		collectionView?.refreshControl?.endRefreshing()
-	}
-	
 	// MARK: Actions
 	
 	@objc func sync() {
 		if AccountManager.shared.isSyncAvailable {
 			AccountManager.shared.sync()
-		} else {
-			collectionView?.refreshControl?.endRefreshing()
 		}
+		collectionView?.refreshControl?.endRefreshing()
 	}
 	
 	@objc func createOutline() {
@@ -310,7 +305,7 @@ extension DocumentsViewController {
         
         let allRowIDs: [GenericRowIdentifier]
         if let selected = collectionView.indexPathsForSelectedItems, !selected.isEmpty {
-            allRowIDs = selected.compactMap { GenericRowIdentifier(indexPath: $0)}
+			allRowIDs = selected.sorted().compactMap { GenericRowIdentifier(indexPath: $0)}
         } else {
             allRowIDs = [GenericRowIdentifier(indexPath: indexPath)]
         }
@@ -526,9 +521,9 @@ private extension DocumentsViewController {
 	}
 	
 	func updateUI() {
+		guard isViewLoaded else { return }
         let title = documentContainers?.title ?? ""
         navigationItem.title = title
-        view.window?.windowScene?.title = title
         
         var defaultAccount: Account? = nil
         if let containers = documentContainers {
@@ -559,27 +554,30 @@ private extension DocumentsViewController {
             
 			menuItems.append(self.duplicateAction(documents: documents))
 
-            if documents.count == 1, let document = documents.first {
-                menuItems.append(self.copyLinkAction(document: document))
-            }
-
             let outlines = documents.compactMap { $0.outline }
-            if !outlines.isEmpty {
-				var printActions = [UIAction]()
-				printActions.append(self.printDocsAction(outlines: outlines))
-				printActions.append(self.printListsAction(outlines: outlines))
-				let printMenu = UIMenu(title: L10n.print, image: AppAssets.printDoc, children: printActions)
 
-				var exportActions = [UIAction]()
-				exportActions.append(self.exportPDFDocsOutlineAction(outlines: outlines))
-				exportActions.append(self.exportPDFListsOutlineAction(outlines: outlines))
-				exportActions.append(self.exportMarkdownDocsOutlineAction(outlines: outlines))
-				exportActions.append(self.exportMarkdownListsOutlineAction(outlines: outlines))
-				exportActions.append(self.exportOPMLsAction(outlines: outlines))
-				let exportMenu = UIMenu(title: L10n.export, image: AppAssets.export, children: exportActions)
+			var shareMenuItems = [UIMenuElement]()
 
-				menuItems.append(UIMenu(title: "", options: .displayInline, children: [printMenu, exportMenu]))
+			if let cell = self.collectionView.cellForItem(at: allRowIDs.first!.indexPath) {
+				shareMenuItems.append(self.shareAction(documents: documents, sourceView: cell))
 			}
+
+			var printActions = [UIAction]()
+			printActions.append(self.printDocsAction(outlines: outlines))
+			printActions.append(self.printListsAction(outlines: outlines))
+			let printMenu = UIMenu(title: L10n.print, image: AppAssets.printDoc, children: printActions)
+			shareMenuItems.append(printMenu)
+
+			var exportActions = [UIAction]()
+			exportActions.append(self.exportPDFDocsOutlineAction(outlines: outlines))
+			exportActions.append(self.exportPDFListsOutlineAction(outlines: outlines))
+			exportActions.append(self.exportMarkdownDocsOutlineAction(outlines: outlines))
+			exportActions.append(self.exportMarkdownListsOutlineAction(outlines: outlines))
+			exportActions.append(self.exportOPMLsAction(outlines: outlines))
+			let exportMenu = UIMenu(title: L10n.export, image: AppAssets.export, children: exportActions)
+			shareMenuItems.append(exportMenu)
+
+			menuItems.append(UIMenu(title: "", options: .displayInline, children: shareMenuItems))
 			
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: [self.deleteDocumentsAction(documents: documents)]))
 			
@@ -609,14 +607,15 @@ private extension DocumentsViewController {
 		return action
 	}
 	
-	func copyLinkAction(document: Document) -> UIAction {
-		let action = UIAction(title: L10n.copyDocumentLink, image: AppAssets.link) { action in
-			let documentURL = document.id.url
-			UIPasteboard.general.url = documentURL
+	func shareAction(documents: [Document], sourceView: UIView) -> UIAction {
+		let action = UIAction(title: L10n.shareEllipsis, image: AppAssets.share) { action in
+			let controller = UIActivityViewController(documents: documents)
+			controller.popoverPresentationController?.sourceView = sourceView
+			self.present(controller, animated: true)
 		}
 		return action
 	}
-	
+
 	func exportPDFDocsOutlineAction(outlines: [Outline]) -> UIAction {
 		let action = UIAction(title: L10n.exportPDFDocEllipsis) { [weak self] action in
 			guard let self = self else { return }

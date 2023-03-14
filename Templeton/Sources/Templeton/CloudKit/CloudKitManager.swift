@@ -12,6 +12,7 @@ import CloudKit
 import RSCore
 
 public extension Notification.Name {
+	static let CloudKitSyncWillBegin = Notification.Name(rawValue: "CloudKitSyncWillBegin")
 	static let CloudKitSyncDidComplete = Notification.Name(rawValue: "CloudKitSyncDidComplete")
 }
 
@@ -76,6 +77,7 @@ public class CloudKitManager {
 		self.zones[outlineZone.zoneID] = outlineZone
 		self.errorHandler = errorHandler
 		migrateChangeToken()
+		outlineZone.migrateChangeToken()
 	}
 	
 	func firstTimeSetup() {
@@ -117,11 +119,11 @@ public class CloudKitManager {
 				completion()
 				return
 			}
-			fetchChanges(userInitiated: true, zoneID: zoneId, completion: completion)
+			fetchChanges(userInitiated: false, zoneID: zoneId, completion: completion)
 		}
 		
 		if let dbNote = CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo), dbNote.notificationType == .database {
-			fetchAllChanges(userInitiated: true)
+			fetchAllChanges(userInitiated: false)
 		}
 	}
 	
@@ -142,9 +144,11 @@ public class CloudKitManager {
 			return
 		}
 		
-		sendChanges(userInitiated: true) {
-			self.fetchAllChanges(userInitiated: true) {
-				NotificationCenter.default.post(name: .CloudKitSyncDidComplete, object: self, userInfo: nil)
+		cloudKitSyncWillBegin()
+
+		sendChanges(userInitiated: true) { [weak self] in
+			self?.fetchAllChanges(userInitiated: true) { [weak self] in
+				self?.cloudKitSyncDidComplete()
 				completion?()
 			}
 		}
@@ -161,7 +165,10 @@ public class CloudKitManager {
 			switch CloudKitResult.refine(error) {
 			case .success:
 				let zoneID = shareMetadata.share.recordID.zoneID
-				self.fetchChanges(userInitiated: true, zoneID: zoneID)
+				self.cloudKitSyncWillBegin()
+				self.fetchChanges(userInitiated: true, zoneID: zoneID) { [weak self] in
+					self?.cloudKitSyncDidComplete()
+				}
 			default:
 				DispatchQueue.main.async {
 					self.presentError(error!)
@@ -218,6 +225,14 @@ private extension CloudKitManager {
 	
 	func presentError(_ error: Error) {
 		errorHandler?.presentError(error, title: "CloudKit Syncing Error")
+	}
+	
+	func cloudKitSyncWillBegin() {
+		NotificationCenter.default.post(name: .CloudKitSyncWillBegin, object: self, userInfo: nil)
+	}
+
+	func cloudKitSyncDidComplete() {
+		NotificationCenter.default.post(name: .CloudKitSyncDidComplete, object: self, userInfo: nil)
 	}
 
 	@objc func sendQueuedChanges() {

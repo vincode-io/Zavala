@@ -59,6 +59,8 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 
     private var selectBarButtonItem: UIBarButtonItem!
     private var selectDoneBarButtonItem: UIBarButtonItem!
+	
+	private let iCloudActivityIndicatorView = UIActivityIndicatorView(style: .medium)
 
     override func viewDidLoad() {
 		super.viewDidLoad()
@@ -78,6 +80,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
+			collectionView.refreshControl!.tintColor = .clear
 		}
         
         if traitCollection.userInterfaceIdiom == .mac {
@@ -97,6 +100,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountTagsDidChange(_:)), name: .AccountTagsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineTagsDidChange(_:)), name: .OutlineTagsDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncWillBegin(_:)), name: .CloudKitSyncWillBegin, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
 	}
@@ -161,8 +165,12 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		queueReloadChangeSnapshot()
 	}
 
+	@objc func cloudKitSyncWillBegin(_ note: Notification) {
+		iCloudActivityIndicatorView.startAnimating()
+	}
+	
 	@objc func cloudKitSyncDidComplete(_ note: Notification) {
-		collectionView?.refreshControl?.endRefreshing()
+		iCloudActivityIndicatorView.stopAnimating()
 	}
 	
 	// MARK: Actions
@@ -170,9 +178,8 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	@objc func sync() {
 		if AccountManager.shared.isSyncAvailable {
 			AccountManager.shared.sync()
-		} else {
-			collectionView?.refreshControl?.endRefreshing()
 		}
+		collectionView?.refreshControl?.endRefreshing()
 	}
 	
 	@IBAction func showSettings(_ sender: Any) {
@@ -279,10 +286,12 @@ extension CollectionsViewController {
 		}
 
 		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, CollectionsItem> { [weak self]	(cell, indexPath, item) in
+			guard let self else { return }
+			
 			var contentConfiguration = UIListContentConfiguration.sidebarHeader()
 			
 			contentConfiguration.text = item.id.name
-			if self?.traitCollection.userInterfaceIdiom == .mac {
+			if self.traitCollection.userInterfaceIdiom == .mac {
 				contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .subheadline)
 				contentConfiguration.textProperties.color = .secondaryLabel
 			} else {
@@ -292,6 +301,25 @@ extension CollectionsViewController {
 			
 			cell.contentConfiguration = contentConfiguration
 			cell.accessories = [.outlineDisclosure()]
+			
+			if item.id.accountType == .cloudKit, let textLayoutGuide = (cell.contentView as? UIListContentView)?.textLayoutGuide {
+				self.iCloudActivityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+				
+				let trailingAnchorAdjustment: CGFloat
+				if self.traitCollection.userInterfaceIdiom == .mac {
+					self.iCloudActivityIndicatorView.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
+					trailingAnchorAdjustment = 4
+				} else {
+					trailingAnchorAdjustment = 8
+				}
+				
+				cell.contentView.addSubview(self.iCloudActivityIndicatorView)
+				
+				NSLayoutConstraint.activate([
+					self.iCloudActivityIndicatorView.centerYAnchor.constraint(equalTo: textLayoutGuide.centerYAnchor),
+					self.iCloudActivityIndicatorView.leadingAnchor.constraint(equalTo: textLayoutGuide.trailingAnchor, constant: trailingAnchorAdjustment),
+				])
+			}
 		}
 		
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, CollectionsItem> { (cell, indexPath, item) in
@@ -386,10 +414,16 @@ extension CollectionsViewController {
 		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
 
 		operation.completionBlock = { [weak self] _ in
-			guard let self = self else { return }
-			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) }
-			for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
-				self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
+			guard let self else { return }
+			
+			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) } ?? [IndexPath]()
+			
+			if let selectedItems, !selectedItems.isEmpty, selectedIndexPaths.isEmpty {
+				self.delegate?.documentContainerSelectionsDidChange(self, documentContainers: [], isNavigationBranch: false, animated: true, completion: nil)
+			} else {
+				for selectedIndexPath in selectedIndexPaths {
+					self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
+				}
 			}
 		}
 		

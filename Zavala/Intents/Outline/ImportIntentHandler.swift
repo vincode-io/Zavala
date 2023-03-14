@@ -27,7 +27,7 @@ class ImportIntentHandler: NSObject, ZavalaIntentHandler, ImportIntentHandling {
 			}
 		}
 		
-		guard let outline = account.importOPML(data, tags: nil, images: images).outline else {
+		guard let outline = try? account.importOPML(data, tags: nil, images: images).outline else {
 			suspend()
 			completion(.init(code: .failure, userActivity: nil))
 			return

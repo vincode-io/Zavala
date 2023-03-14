@@ -396,7 +396,17 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 extension MainSplitViewController: CollectionsDelegate {
 	
-	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
+	func documentContainerSelectionsDidChange(_: CollectionsViewController,
+											  documentContainers: [DocumentContainer],
+											  isNavigationBranch: Bool,
+											  animated: Bool,
+											  completion: (() -> Void)? = nil) {
+		
+		// The window might not be quite available at launch, so put a slight delay in to help it get there
+		DispatchQueue.main.async {
+			self.view.window?.windowScene?.title = documentContainers.title
+		}
+		
 		if isNavigationBranch, let lastPin = lastPin {
 			goBackwardStack.insert(lastPin, at: 0)
 			goBackwardStack = Array(goBackwardStack.prefix(10))
@@ -436,11 +446,24 @@ extension MainSplitViewController: CollectionsDelegate {
 
 extension MainSplitViewController: DocumentsDelegate {
 	
-	func documentSelectionDidChange(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], isNew: Bool, isNavigationBranch: Bool, animated: Bool) {
+	func documentSelectionDidChange(_: DocumentsViewController,
+									documentContainers: [DocumentContainer],
+									documents: [Document],
+									isNew: Bool,
+									isNavigationBranch: Bool,
+									animated: Bool) {
+		
+		// Don't overlay the Document Container title if we are just switching Document Containers
+		if !documents.isEmpty {
+			view.window?.windowScene?.title = documents.title
+		}
+		
 		guard documents.count == 1, let document = documents.first else {
 			activityManager.invalidateSelectDocument()
 			editorViewController?.edit(nil, isNew: isNew)
-			if !documents.isEmpty {
+			if documents.isEmpty {
+				editorViewController?.showMessage(L10n.noSelection)
+			} else {
 				editorViewController?.showMessage(L10n.multipleSelections)
 			}
 			return
@@ -1204,20 +1227,34 @@ extension MainSplitViewController: NSToolbarDelegate {
 
 extension MainSplitViewController: UIActivityItemsConfigurationReading {
 	
-	var itemProvidersForActivityItemsConfiguration: [NSItemProvider] {
-		guard let outline = editorViewController?.outline else {
-			return [NSItemProvider]()
-		}
-		
-		let itemProvider = NSItemProvider()
-		
-		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
-			let data = outline.markdownList().data(using: .utf8)
-			completion(data, nil)
+	var applicationActivitiesForActivityItemsConfiguration: [UIActivity]? {
+		guard let documents = documentsViewController?.selectedDocuments, !documents.isEmpty else {
 			return nil
 		}
 		
-		return [itemProvider]
+		return [CopyDocumentLinkActivity(documents: documents)]
+	}
+	
+	var itemProvidersForActivityItemsConfiguration: [NSItemProvider] {
+		guard let documents = documentsViewController?.selectedDocuments, !documents.isEmpty else {
+			return [NSItemProvider]()
+		}
+		
+		let itemProviders: [NSItemProvider] = documents.compactMap { document in
+			guard let outline = document.outline else { return nil }
+			
+			let itemProvider = NSItemProvider()
+			
+			itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+				let data = outline.markdownList().data(using: .utf8)
+				completion(data, nil)
+				return nil
+			}
+			
+			return itemProvider
+		}
+		
+		return itemProviders
 	}
 	
 }

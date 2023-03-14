@@ -120,10 +120,12 @@
 "History" = "History";
 "Select" = "Select";
 "Zavala_Help" = "Zavala Help";
-"Feedback" = "Feedback";
+"Report an Issue" = "Report an Issue";
 "Remove_Tag" = "Remove Tag";
 "Delete_Once" = "Delete Once";
 "Delete_Always" = "Always Delete Without Asking";
+"Copy_Document_Link" = "Copy Document Link";
+"Copy_Document_Links" = "Copy Document Links";
 
 /* State restoration */
 "Unknown_Outline" = "The requested outline could not be found.";
@@ -148,6 +150,7 @@
 "No_Title" = "(No Title)";
 
 /* Editor */
+"No_Selection" = "No Selection";
 "Multiple_Selections" = "Multiple Selections";
 
 /* Generic Eror Handling */

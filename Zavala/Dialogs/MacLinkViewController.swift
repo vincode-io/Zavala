@@ -36,9 +36,18 @@ class MacLinkViewController: UIViewController {
 		super.viewDidLoad()
 	
 		submitButton.role = .primary
+		
 		textTextField.text = text
 		linkTextField.text = link
 
+		if link == nil {
+			submitButton.setTitle(L10n.add, for: .normal)
+			
+			if UIPasteboard.general.hasURLs {
+				linkTextField.text = UIPasteboard.general.url?.absoluteString
+			}
+		}
+		
 		textTextField.delegate = self
 		linkTextField.delegate = self
 		textTextField.maxResultsListHeight = 80
@@ -62,9 +71,9 @@ class MacLinkViewController: UIViewController {
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
-		if text == nil || text!.isEmpty {
+		if textTextField!.text == nil || textTextField!.text!.isEmpty {
 			textTextField.becomeFirstResponder()
-		} else {
+		} else if linkTextField!.text == nil || linkTextField!.text!.isEmpty {
 			linkTextField.becomeFirstResponder()
 		}
 	}

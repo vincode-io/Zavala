@@ -23,7 +23,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 			}
 		}
 		
-		if destinationIndexPath == nil  {
+		guard let destinationIndexPath = correctDestinationIndexPath(session: session) else {
 			if session.localDragSession != nil {
 				return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
 			} else {
@@ -31,31 +31,26 @@ extension EditorViewController: UICollectionViewDropDelegate {
 			}
 		}
 
-		let correctDestination = correctDestinationIndexPath(session: session)
-		guard let targetIndexPath = correctDestination else {
-			return UICollectionViewDropProposal(operation: .cancel, intent: .unspecified)
-		}
-		
-		if targetIndexPath.section > adjustedRowsSection {
+		if destinationIndexPath.section > adjustedRowsSection {
 			return UICollectionViewDropProposal(operation: .cancel, intent: .unspecified)
 		}
 		
 		if session.localDragSession != nil {
-			return localDropProposal(session: session, targetIndexPath: targetIndexPath)
+			return localDropProposal(session: session, destinationIndexPath: destinationIndexPath)
 		} else {
-			return remoteDropProposal(session: session, targetIndexPath: targetIndexPath)
+			return remoteDropProposal(session: session, destinationIndexPath: destinationIndexPath)
 		}
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-		let targetIndexPath = correctDestinationIndexPath(session: coordinator.session)
-
+		let destinationIndexPath = correctDestinationIndexPath(session: coordinator.session)
+		
 		if coordinator.session.localDragSession != nil {
-			localRowDrop(coordinator: coordinator, targetIndexPath: targetIndexPath)
+			localRowDrop(coordinator: coordinator, destinationIndexPath: destinationIndexPath)
 		} else if coordinator.session.hasItemsConforming(toTypeIdentifiers: [Row.typeIdentifier]) {
-			remoteRowDrop(coordinator: coordinator, targetIndexPath: targetIndexPath)
+			remoteRowDrop(coordinator: coordinator, destinationIndexPath: destinationIndexPath)
 		} else {
-			remoteTextDrop(coordinator: coordinator, targetIndexPath: targetIndexPath)
+			remoteTextDrop(coordinator: coordinator, destinationIndexPath: destinationIndexPath)
 		}
 	}
 	
@@ -77,96 +72,89 @@ private extension EditorViewController {
 		return correctDestination
 	}
 	
-	func droppingInto(session: UIDropSession, targetIndexPath: IndexPath) -> Bool {
-		if let destCell = collectionView.cellForItem(at: targetIndexPath) {
-			let fractionHeight = destCell.bounds.height / 20
-			let yInCell = session.location(in: destCell).y
-			return fractionHeight < yInCell && yInCell < fractionHeight * 19
-		}
-		return false
-	}
-	
-	func localDropProposal(session: UIDropSession, targetIndexPath: IndexPath) -> UICollectionViewDropProposal {
-		guard let localDragSession = session.localDragSession,
-			  let shadowTable = outline?.shadowTable else {
+	func localDropProposal(session: UIDropSession, destinationIndexPath: IndexPath) -> UICollectionViewDropProposal {
+		guard let localDragSession = session.localDragSession else {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
 		
+		guard let destinationCell = collectionView.cellForItem(at: destinationIndexPath) as? EditorRowViewCell, let destinationRow = destinationCell.row else {
+			return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+		}
+		
 		let rows = localDragSession.items.compactMap { $0.localObject as? Row }
-		let isDroppingInto = droppingInto(session: session, targetIndexPath: targetIndexPath)
-		
-		if isDroppingInto {
-			let dropInRow = shadowTable[targetIndexPath.row]
 
+		for row in rows {
+			if destinationRow == row {
+				return UICollectionViewDropProposal(operation: .cancel)
+			}
+			if destinationRow.isDecendent(row) {
+				return UICollectionViewDropProposal(operation: .forbidden)
+			}
+		}
+			
+		if let destinationParent = destinationRow.parent as? Row {
 			for row in rows {
-				if dropInRow == row {
+				if destinationParent == row {
 					return UICollectionViewDropProposal(operation: .cancel)
 				}
-				if dropInRow.isDecendent(row) {
+				if destinationParent.isDecendent(row) {
 					return UICollectionViewDropProposal(operation: .forbidden)
 				}
 			}
-			
+		}
+
+		if destinationCell.isDroppable(session: session) {
 			return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
+		} else {
+			return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
 		}
-		
-		if let proposedParent = shadowTable[targetIndexPath.row].parent as? Row {
-
-			for row in rows {
-				if proposedParent == row {
-					return UICollectionViewDropProposal(operation: .cancel)
-				}
-				if proposedParent.isDecendent(row) {
-					return UICollectionViewDropProposal(operation: .forbidden)
-				}
-			}
-			
-		}
-		
-		return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
 	}
 	
-	func remoteDropProposal(session: UIDropSession, targetIndexPath: IndexPath) -> UICollectionViewDropProposal {
-		if droppingInto(session: session, targetIndexPath: targetIndexPath) {
+	func remoteDropProposal(session: UIDropSession, destinationIndexPath: IndexPath) -> UICollectionViewDropProposal {
+		guard let destinationCell = collectionView.cellForItem(at: destinationIndexPath) as? EditorRowViewCell else {
+			return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+		}
+		
+		if destinationCell.isDroppable(session: session) {
 			return UICollectionViewDropProposal(operation: .copy, intent: .insertIntoDestinationIndexPath)
 		} else {
 			return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
 		}
 	}
 	
-	func localRowDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
+	func localRowDrop(coordinator: UICollectionViewDropCoordinator, destinationIndexPath: IndexPath?) {
 		guard let outline = outline, let shadowTable = outline.shadowTable else { return }
 		
 		let rows = coordinator.items.compactMap { $0.dragItem.localObject as? Row }
 
-		// Dropping into a Row is easy peasy
-		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = targetIndexPath {
-			localRowDrop(coordinator: coordinator, rows: rows, toParent: shadowTable[dropInIndexPath.row], toChildIndex: 0)
-			return
-		}
-		
-		// Drop into the first entry in the Outline
-		if targetIndexPath == IndexPath(row: 0, section: adjustedRowsSection) {
-			localRowDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: 0)
-			return
-		}
-		
 		// If we don't have a destination index, drop it at the back
-		guard let targetIndexPath = targetIndexPath else {
+		guard let destinationIndexPath else {
 			localRowDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: outline.rowCount)
 			return
 		}
 
+		// Dropping into a Row is easy peasy
+		if coordinator.proposal.intent == .insertIntoDestinationIndexPath {
+			localRowDrop(coordinator: coordinator, rows: rows, toParent: shadowTable[destinationIndexPath.row], toChildIndex: 0)
+			return
+		}
+		
+		// Drop into the first entry in the Outline
+		if destinationIndexPath == IndexPath(row: 0, section: adjustedRowsSection) {
+			localRowDrop(coordinator: coordinator, rows: rows, toParent: outline, toChildIndex: 0)
+			return
+		}
+		
 		// This is where most of the sibling moves happen at
 		var newParent: RowContainer
 		var newIndex: Int
 		
 		// The target index path points to the following row, but we want the preceding row to be the sibling
-		var newSiblingTargetIndexPath = targetIndexPath.row > 0 ? targetIndexPath.row - 1 : 0
+		var newSiblingTargetIndexPath = destinationIndexPath.row > 0 ? destinationIndexPath.row - 1 : 0
 
 		// Adjust the index path when dragging downward
 		for row in rows {
-			if row.shadowTableIndex ?? 0 < targetIndexPath.row {
+			if row.shadowTableIndex ?? 0 < destinationIndexPath.row {
 				newSiblingTargetIndexPath = newSiblingTargetIndexPath + 1
 				break
 			}
@@ -177,7 +165,7 @@ private extension EditorViewController {
 		// We have to handle dropping into the first entry in a parent in a special way
 		if newSiblingTargetIndexPath + 1 < shadowTable.count {
 			let newSiblingCandidateChildCandidate = shadowTable[newSiblingTargetIndexPath + 1]
-			if newSiblingCandidate.containsRow(newSiblingCandidateChildCandidate) && targetIndexPath.section == adjustedRowsSection {
+			if newSiblingCandidate.containsRow(newSiblingCandidateChildCandidate) && destinationIndexPath.section == adjustedRowsSection {
 				newParent = newSiblingCandidate
 				newIndex = 0
 			} else {
@@ -207,7 +195,7 @@ private extension EditorViewController {
 		runCommand(command)
 	}
 	
-	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
+	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, destinationIndexPath: IndexPath?) {
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
 			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(Row.typeIdentifier) {
 				return dropItem.dragItem.itemProvider
@@ -236,11 +224,11 @@ private extension EditorViewController {
 		}
 
 		group.notify(queue: DispatchQueue.main) {
-			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, targetIndexPath: targetIndexPath)
+			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, destinationIndexPath: destinationIndexPath)
 		}
 	}
 
-	func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, targetIndexPath: IndexPath?) {
+	func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, destinationIndexPath: IndexPath?) {
 		guard let outline = outline else { return }
 		
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
@@ -276,15 +264,15 @@ private extension EditorViewController {
 				rowGroups.append(RowGroup(row))
 			}
 			
-			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, targetIndexPath: targetIndexPath)
+			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, destinationIndexPath: destinationIndexPath)
 		}
 	}
 	
-	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], targetIndexPath: IndexPath?) {
+	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], destinationIndexPath: IndexPath?) {
 		guard !rowGroups.isEmpty, let outline = self.outline, let shadowTable = outline.shadowTable else { return }
 
 		// Dropping into a Row is easy peasy
-		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = targetIndexPath {
+		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = destinationIndexPath {
 			let newParent = shadowTable[dropInIndexPath.row]
 			
 			// We only have to set the parent for dropping into.  Otherwise Templeton figures it out on its own.
@@ -297,19 +285,19 @@ private extension EditorViewController {
 		}
 		
 		// Drop into the first entry in the Outline
-		if targetIndexPath == IndexPath(row: 0, section: adjustedRowsSection) {
+		if destinationIndexPath == IndexPath(row: 0, section: adjustedRowsSection) {
 			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: nil)
 			return
 		}
 		
 		// If we don't have a destination index, drop it at the back
-		guard let targetIndexPath = targetIndexPath else {
+		guard let destinationIndexPath else {
 			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: nil, prefersEnd: true)
 			return
 		}
 
-		if shadowTable.count > 0 && targetIndexPath.row > 0 {
-			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: shadowTable[targetIndexPath.row - 1])
+		if shadowTable.count > 0 && destinationIndexPath.row > 0 {
+			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: shadowTable[destinationIndexPath.row - 1])
 		} else {
 			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: nil)
 		}
