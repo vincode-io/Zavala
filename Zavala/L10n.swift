@@ -68,6 +68,8 @@ internal enum L10n {
   internal static let copy = L10n.tr("Localizable", "Copy")
   /// Copy Document Link
   internal static let copyDocumentLink = L10n.tr("Localizable", "Copy_Document_Link")
+  /// Copy Document Links
+  internal static let copyDocumentLinks = L10n.tr("Localizable", "Copy_Document_Links")
   /// To help us fix crashing bugs, click “Email It” below. You will have a chance to review the email message before it is sent.
   internal static let crashReporterMessage = L10n.tr("Localizable", "Crash_Reporter_Message")
   /// Crash Log Found

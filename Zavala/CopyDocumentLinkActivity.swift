@@ -18,9 +18,9 @@ class CopyDocumentLinkActivity: UIActivity {
 	
 	override var activityTitle: String? {
 		if documents.count > 1 {
-			return "Copy Document Link"
+			return L10n.copyDocumentLinks
 		} else {
-			return "Copy Document Links"
+			return L10n.copyDocumentLink
 		}
 	}
 	
