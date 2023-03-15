@@ -139,8 +139,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 	
-	public private(set) var documentLinks: [EntityID]?
-	public private(set) var documentBacklinks: [EntityID]?
+	public internal(set) var documentLinks: [EntityID]?
+	public internal(set) var documentBacklinks: [EntityID]?
 	public internal(set) var hasAltLinks: Bool? {
 		didSet {
 			if hasAltLinks != oldValue {
@@ -390,19 +390,19 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 	
+	var tagIDs: [String]?
+	
+	var rowsFile: RowsFile?
+	var imagesFile: ImagesFile?
+	
+	var batchCloudKitRequests = 0
+	var cloudKitRequestsIDs = Set<EntityID>()
+	
 	private var selectionRowID: EntityID?
 	private var selectionIsInNotes: Bool?
 	private var selectionLocation: Int?
 	private var selectionLength: Int?
 
-	private var tagIDs: [String]?
-	
-	private var rowsFile: RowsFile?
-	private var imagesFile: ImagesFile?
-	
-	private var batchCloudKitRequests = 0
-	private var cloudKitRequestsIDs = Set<EntityID>()
-	
 	private var searchResultCoordinates = [SearchResultCoordinates]()
 	
 	init(id: EntityID) {
@@ -2017,6 +2017,45 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return outline
 	}
 	
+	func createBacklink(_ entityID: EntityID) {
+		if documentBacklinks == nil {
+			documentBacklinks = [EntityID]()
+		}
+				
+		documentBacklinks?.append(entityID)
+		
+		documentMetaDataDidChange()
+		requestCloudKitUpdate(for: id)
+
+		guard isBeingViewed else { return }
+
+		if documentBacklinks?.count ?? 0 == 1 {
+			outlineAddedBacklinks()
+		} else {
+			if isSearching == .notSearching {
+				outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
+			}
+		}
+	}
+
+	func deleteBacklink(_ entityID: EntityID) {
+		
+		documentBacklinks?.removeFirst(object: entityID)
+		
+		documentMetaDataDidChange()
+		requestCloudKitUpdate(for: id)
+
+		guard isBeingViewed else { return }
+		
+		if documentBacklinks?.count ?? 0 == 0 {
+			outlineRemovedBacklinks()
+		} else {
+			if isSearching == .notSearching {
+				outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
+			}
+		}
+	}
+
 	public func updateAllLinkRelationships() {
 		var newDocumentLinks = [EntityID]()
 		
@@ -2069,16 +2108,52 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 	}
 	
+	func rebuildShadowTable() -> OutlineElementChanges {
+		guard let oldShadowTable = shadowTable else { return OutlineElementChanges(section: adjustedRowsSection) }
+		rebuildTransientData()
+		
+		var moves = Set<OutlineElementChanges.Move>()
+		var inserts = Set<Int>()
+		var deletes = Set<Int>()
+		
+		let diff = shadowTable!.difference(from: oldShadowTable).inferringMoves()
+		for change in diff {
+			switch change {
+			case .insert(let offset, _, let associated):
+				if let associated = associated {
+					moves.insert(OutlineElementChanges.Move(associated, offset))
+				} else {
+					inserts.insert(offset)
+				}
+			case .remove(let offset, _, let associated):
+				if let associated = associated {
+					moves.insert(OutlineElementChanges.Move(offset, associated))
+				} else {
+					deletes.insert(offset)
+				}
+			}
+		}
+		
+		return OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, inserts: inserts, moves: moves)
+	}
+	
+
+	func outlineDidDelete() {
+		NotificationCenter.default.post(name: .DocumentDidDelete, object: Document.outline(self), userInfo: nil)
+	}
+	
+	func outlineElementsDidChange(_ changes: OutlineElementChanges) {
+		var userInfo = [AnyHashable: Any]()
+		userInfo[OutlineElementChanges.userInfoKey] = changes
+		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
+	}
+	
 	public static func == (lhs: Outline, rhs: Outline) -> Bool {
 		return lhs.id == rhs.id
 	}
 	
 	public func hash(into hasher: inout Hasher) {
 		hasher.combine(id)
-	}
-	
-	func outlineDidDelete() {
-		NotificationCenter.default.post(name: .DocumentDidDelete, object: Document.outline(self), userInfo: nil)
 	}
 	
 }
@@ -2112,280 +2187,10 @@ extension Outline: CustomDebugStringConvertible {
 	
 }
 
-// MARK: CloudKit
-
-extension Outline {
-	
-	func beginCloudKitBatchRequest() {
-		batchCloudKitRequests += 1
-	}
-	
-	func requestCloudKitUpdateForSelf() {
-		requestCloudKitUpdate(for: id)
-	}
-	
-	func requestCloudKitUpdate(for entityID: EntityID) {
-		guard let cloudKitManager = account?.cloudKitManager else { return }
-		if batchCloudKitRequests > 0 {
-			cloudKitRequestsIDs.insert(entityID)
-		} else {
-			guard let zoneID = zoneID else { return }
-			cloudKitManager.addRequest(CloudKitActionRequest(zoneID: zoneID, id: entityID))
-		}
-	}
-
-	func requestCloudKitUpdates(for entityIDs: [EntityID]) {
-		for id in entityIDs {
-			requestCloudKitUpdate(for: id)
-		}
-	}
-
-	func endCloudKitBatchRequest() {
-		batchCloudKitRequests = batchCloudKitRequests - 1
-		guard batchCloudKitRequests == 0, let cloudKitManager = account?.cloudKitManager, let zoneID = zoneID else { return }
-
-		let requests = cloudKitRequestsIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) }
-		cloudKitManager.addRequests(Set(requests))
-	}
-
-	func apply(_ update: CloudKitOutlineUpdate) {
-		var updatedRowIDs = Set<String>()
-		
-		if let record = update.saveOutlineRecord {
-			let outlineUpdatedRows = applyOutlineRecord(record)
-			updatedRowIDs.formUnion(outlineUpdatedRows)
-		}
-		
-		if keyedRows == nil {
-			keyedRows = [String: Row]()
-		}
-		
-		for deleteRecordID in update.deleteRowRecordIDs {
-			keyedRows?.removeValue(forKey: deleteRecordID.rowUUID)
-		}
-		
-		for saveRecord in update.saveRowRecords {
-			guard let entityID = EntityID(description: saveRecord.recordID.recordName) else { continue }
-
-			var isExistingRecord = false
-			var row: Row
-			if let existingRow = keyedRows?[entityID.rowUUID] {
-				row = existingRow
-				isExistingRecord = true
-			} else {
-				row = Row(id: entityID.rowUUID)
-			}
-
-			if let recordSyncID = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.syncID] as? String, recordSyncID == row.syncID {
-				continue
-			}
-
-			row.syncMetaData = saveRecord.metadata
-			
-			if isExistingRecord {
-				updatedRowIDs.insert(row.id)
-			}
-			
-			let updatedTopicData = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.topicData] as? Data
-			row.topicData = updatedTopicData
-			
-			let updatedNoteData = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.noteData] as? Data
-			row.noteData = updatedNoteData
-			
-			let updatedIsComplete = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] as? String == "1" ? true : false
-			row.isComplete = updatedIsComplete
-			
-			if let newRowOrder = saveRecord[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] as? [String] {
-				row.rowOrder = OrderedSet(newRowOrder)
-			} else {
-				row.rowOrder = OrderedSet<String>()
-			}
-			
-			keyedRows?[entityID.rowUUID] = row
-		}
-		
-		for deleteRecordID in update.deleteImageRecordIDs {
-			if let row = keyedRows?[deleteRecordID.rowUUID] {
-				if row.findImage(id: deleteRecordID) != nil {
-					row.deleteImage(id: deleteRecordID)
-					updatedRowIDs.insert(deleteRecordID.rowUUID)
-				}
-			}
-		}
-		
-		for saveRecord in update.saveImageRecords {
-			guard let saveRecordID = EntityID(description: saveRecord.recordID.recordName),
-				  let row = keyedRows?[saveRecordID.rowUUID] else { continue }
-			
-			if let syncID = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.syncID] as? String,
-			   let image = row.findImage(id: saveRecordID),
-			   image.syncID == syncID {
-				continue
-			}
-			
-			if let isInNotes = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.isInNotes] as? Bool,
-			   let offset = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.offset] as? Int,
-			   let asset = saveRecord[CloudKitOutlineZone.CloudKitImage.Fields.asset] as? CKAsset,
-			   let fileURL = asset.fileURL,
-			   let data = try? Data(contentsOf: fileURL) {
-
-				let image = Image(id: saveRecordID, isInNotes: isInNotes, offset: offset, data: data)
-				image.syncMetaData = saveRecord.metadata
-				
-				row.saveImage(image)
-				updatedRowIDs.insert(saveRecordID.rowUUID)
-			}
-		}
-		
-		if !updatedRowIDs.isEmpty {
-			rowsFile?.markAsDirty()
-			documentDidChangeBySync()
-		}
-		
-		guard isBeingViewed else { return }
-
-		var reloadRows = [Row]()
-		
-		func reloadVisitor(_ visited: Row) {
-			reloadRows.append(visited)
-			visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
-		}
-
-		for updatedRowID in updatedRowIDs {
-			if let updatedRow = keyedRows?[updatedRowID] {
-				reloadRows.append(updatedRow)
-				updatedRow.rows.forEach { $0.visit(visitor: reloadVisitor(_:)) }
-			}
-		}
-		
-		var changes = rebuildShadowTable()
-		let reloadIndexes = reloadRows.compactMap { $0.shadowTableIndex }
-		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloadIndexes)))
-		
-		if !changes.isEmpty {
-			outlineElementsDidChange(changes)
-		}
-	}
-	
-	private func applyOutlineRecord(_ record: CKRecord) -> [String] {
-		if let shareReference = record.share {
-			cloudKitShareRecordName = shareReference.recordID.recordName
-		} else {
-			cloudKitShareRecordName = nil
-		}
-
-		if let recordSyncID = record[CloudKitOutlineZone.CloudKitOutline.Fields.syncID] as? String, recordSyncID == syncID {
-			return []
-		}
-		
-		syncMetaData = record.metadata
-		
-		let newTitle = record[CloudKitOutlineZone.CloudKitOutline.Fields.title] as? String
-		if title != newTitle {
-			title = newTitle
-			if isBeingViewed {
-				outlineElementsDidChange(OutlineElementChanges(section: .title, reloads: Set([0])))
-			}
-		}
-
-		ownerName = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerName] as? String
-		ownerEmail = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail] as? String
-		ownerURL = record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL] as? String
-		created = record[CloudKitOutlineZone.CloudKitOutline.Fields.created] as? Date
-		updated = record[CloudKitOutlineZone.CloudKitOutline.Fields.updated] as? Date
-		hasAltLinks = record[CloudKitOutlineZone.CloudKitOutline.Fields.hasAltLinks] as? Bool
-		disambiguator = record[CloudKitOutlineZone.CloudKitOutline.Fields.disambiguator] as? Int
-
-		let newRowOrder: OrderedSet<String>
-		if let cloudKitRowOrder = record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] as? [String] {
-			newRowOrder = OrderedSet(cloudKitRowOrder)
-		} else {
-			newRowOrder = OrderedSet<String>()
-		}
-		
-		var updatedRowIDs = [String]()
-		
-		//  We only count newly added children for reloading so that they can indent or outdent
-		let rowDiff = newRowOrder.difference(from: rowOrder ?? OrderedSet<String>())
-		for change in rowDiff {
-			switch change {
-			case .insert(_, let newRowID, _):
-				updatedRowIDs.append(newRowID)
-			default:
-				break
-			}
-		}
-
-		rowOrder = newRowOrder
-
-		let documentLinkDescriptions = record[CloudKitOutlineZone.CloudKitOutline.Fields.documentLinks] as? [String] ?? [String]()
-		documentLinks = documentLinkDescriptions.compactMap { EntityID(description: $0) }
-
-		let documentBacklinkDescriptions = record[CloudKitOutlineZone.CloudKitOutline.Fields.documentBacklinks] as? [String] ?? [String]()
-		let cloudKitBackLinks = documentBacklinkDescriptions.compactMap { EntityID(description: $0) }
-
-		for backlink in Set(cloudKitBackLinks).subtracting(documentBacklinks ?? [EntityID]()) {
-			createBacklink(backlink)
-		}
-
-		for backlink in Set(documentBacklinks ?? [EntityID]()).subtracting(cloudKitBackLinks) {
-			deleteBacklink(backlink)
-		}
-
-		let cloudKitTagNames = record[CloudKitOutlineZone.CloudKitOutline.Fields.tagNames] as? [String] ?? [String]()
-		let currentTagNames = Set(tags.map { $0.name })
-		
-		guard let account = account else { return updatedRowIDs }
-
-		let cloudKitTagIDs = cloudKitTagNames.map({ account.createTag(name: $0) }).map({ $0.id })
-		let oldTagIDs = tagIDs ?? [String]()
-		tagIDs = cloudKitTagIDs
-
-		let tagNamesToDelete = currentTagNames.subtracting(cloudKitTagNames)
-		for tagNameToDelete in tagNamesToDelete {
-			account.deleteTag(name: tagNameToDelete)
-		}
-		
-		guard isBeingViewed, isSearching == .notSearching else { return updatedRowIDs }
-
-		var moves = Set<OutlineElementChanges.Move>()
-		var inserts = Set<Int>()
-		var deletes = Set<Int>()
-		
-		let tagDiff = cloudKitTagIDs.difference(from: oldTagIDs).inferringMoves()
-		for change in tagDiff {
-			switch change {
-			case .insert(let offset, _, let associated):
-				if let associated = associated {
-					moves.insert(OutlineElementChanges.Move(associated, offset))
-				} else {
-					inserts.insert(offset)
-				}
-			case .remove(let offset, _, let associated):
-				if let associated = associated {
-					moves.insert(OutlineElementChanges.Move(offset, associated))
-				} else {
-					deletes.insert(offset)
-				}
-			}
-		}
-		
-		let changes = OutlineElementChanges(section: .tags, deletes: deletes, inserts: inserts, moves: moves)
-		outlineElementsDidChange(changes)
-		
-		return updatedRowIDs
-	}
-	
-}
-
 // MARK: Helpers
 
 private extension Outline {
 	
-	func documentDidChangeBySync() {
-		NotificationCenter.default.post(name: .DocumentDidChangeBySync, object: Document.outline(self), userInfo: nil)
-	}
-
 	func documentTitleDidChange() {
 		NotificationCenter.default.post(name: .DocumentTitleDidChange, object: Document.outline(self), userInfo: nil)
 	}
@@ -2415,12 +2220,6 @@ private extension Outline {
 	
 	func outlineTagsDidChange() {
 		NotificationCenter.default.post(name: .OutlineTagsDidChange, object: self, userInfo: nil)
-	}
-	
-	func outlineElementsDidChange(_ changes: OutlineElementChanges) {
-		var userInfo = [AnyHashable: Any]()
-		userInfo[OutlineElementChanges.userInfoKey] = changes
-		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
 	}
 	
 	func outlineSearchWillBegin() {
@@ -2724,35 +2523,6 @@ private extension Outline {
 		}
 	}
 	
-	func rebuildShadowTable() -> OutlineElementChanges {
-		guard let oldShadowTable = shadowTable else { return OutlineElementChanges(section: adjustedRowsSection) }
-		rebuildTransientData()
-		
-		var moves = Set<OutlineElementChanges.Move>()
-		var inserts = Set<Int>()
-		var deletes = Set<Int>()
-		
-		let diff = shadowTable!.difference(from: oldShadowTable).inferringMoves()
-		for change in diff {
-			switch change {
-			case .insert(let offset, _, let associated):
-				if let associated = associated {
-					moves.insert(OutlineElementChanges.Move(associated, offset))
-				} else {
-					inserts.insert(offset)
-				}
-			case .remove(let offset, _, let associated):
-				if let associated = associated {
-					moves.insert(OutlineElementChanges.Move(offset, associated))
-				} else {
-					deletes.insert(offset)
-				}
-			}
-		}
-		
-		return OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, inserts: inserts, moves: moves)
-	}
-	
 	func rebuildTransientData() {
 		let transient = TransientDataVisitor(isCompletedFilterOn: isCompletedFilterOn, isSearching: isSearching)
 		rows.forEach { row in
@@ -2891,45 +2661,6 @@ private extension Outline {
 		return ids
 	}
 	
-	func createBacklink(_ entityID: EntityID) {
-		if documentBacklinks == nil {
-			documentBacklinks = [EntityID]()
-		}
-				
-		documentBacklinks?.append(entityID)
-		
-		documentMetaDataDidChange()
-		requestCloudKitUpdate(for: id)
-
-		guard isBeingViewed else { return }
-
-		if documentBacklinks?.count ?? 0 == 1 {
-			outlineAddedBacklinks()
-		} else {
-			if isSearching == .notSearching {
-				outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
-			}
-		}
-	}
-
-	func deleteBacklink(_ entityID: EntityID) {
-		
-		documentBacklinks?.removeFirst(object: entityID)
-		
-		documentMetaDataDidChange()
-		requestCloudKitUpdate(for: id)
-
-		guard isBeingViewed else { return }
-		
-		if documentBacklinks?.count ?? 0 == 0 {
-			outlineRemovedBacklinks()
-		} else {
-			if isSearching == .notSearching {
-				outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
-			}
-		}
-	}
-
 	func appendPrintTitle(attrString: NSMutableAttributedString) {
 		if let title = title {
 			let titleFont = UIFont.systemFont(ofSize: 18).with(traits: .traitBold)

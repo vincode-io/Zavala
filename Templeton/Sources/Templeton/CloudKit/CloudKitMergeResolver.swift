@@ -42,10 +42,10 @@ struct CloudKitMergeResolver: CloudKitConflictResolver, Logging {
 
 private extension CloudKitMergeResolver {
 	
-	#warning("Desk check these again...")
+	#warning("Desk check these again and change the keys so that they reference the actual record...")
 	func resolve(_ ckError: CKError) throws -> CKRecord {
 		switch ckError.ancestorRecord?.recordType {
-		case CloudKitOutlineZone.CloudKitOutline.recordType:
+		case Outline.CloudKitRecord.recordType:
 			try ckError.merge(key: "syncID", fieldType: String.self)
 			try ckError.merge(key: "title", fieldType: String.self)
 			try ckError.merge(key: "ownerName", fieldType: String.self)
@@ -59,14 +59,14 @@ private extension CloudKitMergeResolver {
 			try ckError.merge(key: "documentBacklinks", fieldType: [String].self)
 			try ckError.merge(key: "hasAltLinks", fieldType: Bool.self)
 			try ckError.merge(key: "disambiguator", fieldType: Int.self)
-		case CloudKitOutlineZone.CloudKitRow.recordType:
+		case Row.CloudKitRecord.recordType:
 			try ckError.merge(key: "syncID", fieldType: String.self)
 			try ckError.merge(key: "subtype", fieldType: String.self)
 			try ckError.merge(key: "topicData", fieldType: Data.self)
 			try ckError.merge(key: "noteData", fieldType: Data.self)
 			try ckError.merge(key: "isComplete", fieldType: Bool.self)
 			try ckError.mergeArray(key: "rowOrder", fieldType: [String].self)
-		case CloudKitOutlineZone.CloudKitImage.recordType:
+		case Image.CloudKitRecord.recordType:
 			try ckError.merge(key: "syncID", fieldType: String.self)
 			try ckError.merge(key: "isInNotes", fieldType: Bool.self)
 			try ckError.merge(key: "offset", fieldType: Int.self)

@@ -26,50 +26,7 @@ final class CloudKitOutlineZone: CloudKitZone {
 	weak var container: CKContainer?
 	weak var database: CKDatabase?
 	var delegate: CloudKitZoneDelegate?
-	
-	struct CloudKitOutline {
-		static let recordType = "Outline"
-		struct Fields {
-			static let syncID = "syncID"
-			static let title = "title"
-			static let ownerName = "ownerName"
-			static let ownerEmail = "ownerEmail"
-			static let ownerURL = "ownerURL"
-			static let created = "created"
-			static let updated = "updated"
-			static let tagNames = "tagNames"
-			static let rowOrder = "rowOrder"
-			static let documentLinks = "documentLinks"
-			static let documentBacklinks = "documentBacklinks"
-			static let hasAltLinks = "hasAltLinks"
-			static let disambiguator = "disambiguator"
-		}
-	}
-	
-	struct CloudKitRow {
-		static let recordType = "Row"
-		struct Fields {
-			static let syncID = "syncID"
-			static let outline = "outline"
-			static let subtype = "subtype"
-			static let topicData = "topicData"
-			static let noteData = "noteData"
-			static let isComplete = "isComplete"
-			static let rowOrder = "rowOrder"
-		}
-	}
-	
-	struct CloudKitImage {
-		static let recordType = "Image"
-		struct Fields {
-			static let syncID = "syncID"
-			static let row = "row"
-			static let isInNotes = "isInNotes"
-			static let offset = "offset"
-			static let asset = "asset"
-		}
-	}
-	
+		
 	init(container: CKContainer) {
 		self.container = container
 		self.database = container.privateCloudDatabase

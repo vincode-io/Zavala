@@ -343,9 +343,9 @@ private extension CloudKitManager {
 	}
 	
 	func subscribeToSharedDatabaseChanges() {
-		let outlineSubscription = sharedDatabaseSubscription(recordType: CloudKitOutlineZone.CloudKitOutline.recordType)
-		let rowSubscription = sharedDatabaseSubscription(recordType: CloudKitOutlineZone.CloudKitRow.recordType)
-		let imageSubscription = sharedDatabaseSubscription(recordType: CloudKitOutlineZone.CloudKitImage.recordType)
+		let outlineSubscription = sharedDatabaseSubscription(recordType: Outline.CloudKitRecord.recordType)
+		let rowSubscription = sharedDatabaseSubscription(recordType: Row.CloudKitRecord.recordType)
+		let imageSubscription = sharedDatabaseSubscription(recordType: Image.CloudKitRecord.recordType)
 
 		let op = CKModifySubscriptionsOperation(subscriptionsToSave: [outlineSubscription, rowSubscription, imageSubscription], subscriptionIDsToDelete: nil)
 		op.qualityOfService = CloudKitOutlineZone.qualityOfService

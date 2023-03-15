@@ -231,25 +231,25 @@ private extension CloudKitModifyOperation {
 				return record
 			} else {
 				let recordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
-				return CKRecord(recordType: CloudKitOutlineZone.CloudKitOutline.recordType, recordID: recordID)
+				return CKRecord(recordType: Outline.CloudKitRecord.recordType, recordID: recordID)
 			}
 		}()
 		
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.syncID] = outline.syncID
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.title] = outline.title
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerName] = outline.ownerName
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerEmail] = outline.ownerEmail
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.ownerURL] = outline.ownerURL
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.created] = outline.created
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.updated] = outline.updated
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.tagNames] = outline.tags.map { $0.name }
+		record[Outline.CloudKitRecord.Fields.syncID] = outline.syncID
+		record[Outline.CloudKitRecord.Fields.title] = outline.title
+		record[Outline.CloudKitRecord.Fields.ownerName] = outline.ownerName
+		record[Outline.CloudKitRecord.Fields.ownerEmail] = outline.ownerEmail
+		record[Outline.CloudKitRecord.Fields.ownerURL] = outline.ownerURL
+		record[Outline.CloudKitRecord.Fields.created] = outline.created
+		record[Outline.CloudKitRecord.Fields.updated] = outline.updated
+		record[Outline.CloudKitRecord.Fields.tagNames] = outline.tags.map { $0.name }
 		if let rowOrder = outline.rowOrder {
-			record[CloudKitOutlineZone.CloudKitOutline.Fields.rowOrder] = Array(rowOrder)
+			record[Outline.CloudKitRecord.Fields.rowOrder] = Array(rowOrder)
 		}
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.documentLinks] = outline.documentLinks?.map { $0.description }
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.documentBacklinks] = outline.documentBacklinks?.map { $0.description }
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.hasAltLinks] = outline.hasAltLinks
-		record[CloudKitOutlineZone.CloudKitOutline.Fields.disambiguator] = outline.disambiguator
+		record[Outline.CloudKitRecord.Fields.documentLinks] = outline.documentLinks?.map { $0.description }
+		record[Outline.CloudKitRecord.Fields.documentBacklinks] = outline.documentBacklinks?.map { $0.description }
+		record[Outline.CloudKitRecord.Fields.hasAltLinks] = outline.hasAltLinks
+		record[Outline.CloudKitRecord.Fields.disambiguator] = outline.disambiguator
 
 		addSave(zoneID, record)
 	}
@@ -260,18 +260,18 @@ private extension CloudKitModifyOperation {
 				return record
 			} else {
 				let recordID = CKRecord.ID(recordName: row.entityID.description, zoneID: zoneID)
-				return CKRecord(recordType: CloudKitOutlineZone.CloudKitRow.recordType, recordID: recordID)
+				return CKRecord(recordType: Row.CloudKitRecord.recordType, recordID: recordID)
 			}
 		}()
 
 		record.parent = CKRecord.Reference(recordID: outlineRecordID, action: .none)
-		record[CloudKitOutlineZone.CloudKitRow.Fields.outline] = CKRecord.Reference(recordID: outlineRecordID, action: .deleteSelf)
-		record[CloudKitOutlineZone.CloudKitRow.Fields.syncID] = row.syncID
-		record[CloudKitOutlineZone.CloudKitRow.Fields.subtype] = "text"
-		record[CloudKitOutlineZone.CloudKitRow.Fields.topicData] = row.topicData
-		record[CloudKitOutlineZone.CloudKitRow.Fields.noteData] = row.noteData
-		record[CloudKitOutlineZone.CloudKitRow.Fields.isComplete] = row.isComplete ? "1" : "0"
-		record[CloudKitOutlineZone.CloudKitRow.Fields.rowOrder] = Array(row.rowOrder)
+		record[Row.CloudKitRecord.Fields.outline] = CKRecord.Reference(recordID: outlineRecordID, action: .deleteSelf)
+		record[Row.CloudKitRecord.Fields.syncID] = row.syncID
+		record[Row.CloudKitRecord.Fields.subtype] = "text"
+		record[Row.CloudKitRecord.Fields.topicData] = row.topicData
+		record[Row.CloudKitRecord.Fields.noteData] = row.noteData
+		record[Row.CloudKitRecord.Fields.isComplete] = row.isComplete ? "1" : "0"
+		record[Row.CloudKitRecord.Fields.rowOrder] = Array(row.rowOrder)
 
 		addSave(zoneID, record)
 	}
@@ -282,7 +282,7 @@ private extension CloudKitModifyOperation {
 				return record
 			} else {
 				let recordID = CKRecord.ID(recordName: image.id.description, zoneID: zoneID)
-				return CKRecord(recordType: CloudKitOutlineZone.CloudKitImage.recordType, recordID: recordID)
+				return CKRecord(recordType: Image.CloudKitRecord.recordType, recordID: recordID)
 			}
 		}()
 		
@@ -290,14 +290,14 @@ private extension CloudKitModifyOperation {
 		let rowRecordID = CKRecord.ID(recordName: rowID.description, zoneID: zoneID)
 		
 		record.parent = CKRecord.Reference(recordID: rowRecordID, action: .none)
-		record[CloudKitOutlineZone.CloudKitImage.Fields.row] = CKRecord.Reference(recordID: rowRecordID, action: .deleteSelf)
-		record[CloudKitOutlineZone.CloudKitImage.Fields.isInNotes] = image.isInNotes
-		record[CloudKitOutlineZone.CloudKitImage.Fields.offset] = image.offset
-		record[CloudKitOutlineZone.CloudKitImage.Fields.syncID] = image.syncID
+		record[Image.CloudKitRecord.Fields.row] = CKRecord.Reference(recordID: rowRecordID, action: .deleteSelf)
+		record[Image.CloudKitRecord.Fields.isInNotes] = image.isInNotes
+		record[Image.CloudKitRecord.Fields.offset] = image.offset
+		record[Image.CloudKitRecord.Fields.syncID] = image.syncID
 
 		let imageURL = FileManager.default.temporaryDirectory.appendingPathComponent(image.id.imageUUID).appendingPathExtension("png")
 		try? image.data.write(to: imageURL)
-		record[CloudKitOutlineZone.CloudKitImage.Fields.asset] = CKAsset(fileURL: imageURL)
+		record[Image.CloudKitRecord.Fields.asset] = CKAsset(fileURL: imageURL)
 
 		addSave(zoneID, record)
 		
