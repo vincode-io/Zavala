@@ -112,7 +112,6 @@ public final class Account: NSObject, Identifiable, Codable {
 	init(accountType: AccountType) {
 		self.type = accountType
 		self.isActive = true
-		self.zoneChangeTokens = [CloudKitChangeTokenKey: Data]()
 		self.documents = [Document]()
 	}
 	
