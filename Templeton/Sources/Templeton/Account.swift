@@ -142,7 +142,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		isActive = false
 	}
 	
-	func store(changeToken: Data?, key: RSCore.CloudKitChangeTokenKey) {
+	func store(changeToken: Data?, key: CloudKitChangeTokenKey) {
 		if zoneChangeTokens == nil {
 			zoneChangeTokens = [CloudKitChangeTokenKey: Data]()
 		}
