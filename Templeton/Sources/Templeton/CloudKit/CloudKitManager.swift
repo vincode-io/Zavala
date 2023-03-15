@@ -76,7 +76,7 @@ public class CloudKitManager {
 		outlineZone.delegate = CloudKitOutlineZoneDelegate(account: account, zoneID: self.outlineZone.zoneID)
 		self.zones[outlineZone.zoneID] = outlineZone
 		self.errorHandler = errorHandler
-		migrateChangeToken()
+		migrateSharedDatabaseChangeToken()
 		outlineZone.migrateChangeToken()
 	}
 	
@@ -370,7 +370,7 @@ private extension CloudKitManager {
 		return subscription
 	}
 	
-	func migrateChangeToken() {
+	func migrateSharedDatabaseChangeToken() {
 		if let tokenData = UserDefaults.standard.object(forKey: oldSharedDatabaseChangeTokenKey) as? Data {
 			account?.sharedDatabaseChangeToken = tokenData
 			UserDefaults.standard.removeObject(forKey: oldSharedDatabaseChangeTokenKey)
