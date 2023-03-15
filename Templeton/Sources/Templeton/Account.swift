@@ -53,14 +53,14 @@ public final class Account: NSObject, Identifiable, Codable {
 	}
 	
 	public private(set) var tags: [Tag]?
-	
-	public var sharedChangeToken: Data? {
+	public private(set) var documents: [Document]?
+
+	public var sharedDatabaseChangeToken: Data? {
 		didSet {
 			accountMetadataDidChange()
 		}
 	}
 
-	public private(set) var documents: [Document]?
 	public private(set) var zoneChangeTokens: [CloudKitChangeTokenKey: Data]?
 
 	enum CodingKeys: String, CodingKey {
@@ -68,7 +68,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		case isActive = "isActive"
 		case tags = "tags"
 		case documents = "documents"
-		case sharedChangeToken = "sharedChangeToken"
+		case sharedDatabaseChangeToken = "sharedDatabaseChangeToken"
 		case zoneChangeTokens = "zoneChangeTokens"
 	}
 	

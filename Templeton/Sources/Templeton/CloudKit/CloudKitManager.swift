@@ -371,26 +371,26 @@ private extension CloudKitManager {
 	}
 	
 	func migrateChangeToken() {
-		if let tokenData = UserDefaults.standard.object(forKey: sharedDatabaseChangeTokenKey) as? Data {
-			account?.sharedChangeToken = tokenData
-			UserDefaults.standard.removeObject(forKey: sharedDatabaseChangeTokenKey)
+		if let tokenData = UserDefaults.standard.object(forKey: oldSharedDatabaseChangeTokenKey) as? Data {
+			account?.sharedDatabaseChangeToken = tokenData
+			UserDefaults.standard.removeObject(forKey: oldSharedDatabaseChangeTokenKey)
 		}
 	}
 	
-	var sharedDatabaseChangeTokenKey: String {
+	var oldSharedDatabaseChangeTokenKey: String {
 		return "cloudkit.server.token.sharedDatabase"
 	}
 
 	var sharedDatabaseChangeToken: CKServerChangeToken? {
 		get {
-			guard let tokenData = account?.sharedChangeToken else { return nil }
+			guard let tokenData = account?.sharedDatabaseChangeToken else { return nil }
 			return try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: tokenData)
 		}
 		set {
 			guard let token = newValue, let tokenData = try? NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: false) else {
 				return
 			}
-			account?.sharedChangeToken = tokenData
+			account?.sharedDatabaseChangeToken = tokenData
 		}
 	}
 	
