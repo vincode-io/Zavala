@@ -328,7 +328,7 @@ private extension CloudKitManager {
 	
 	func fetchChanges(userInitiated: Bool, zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
 		let zone = self.findZone(zoneID: zoneID)
-		zone.fetchChangesInZone() { [weak self] result in
+		zone.fetchChangesInZone(incremental: false) { [weak self] result in
 			if case .failure(let error) = result {
 				if let ckError = error as? CKError, ckError.code == .zoneNotFound {
 					AccountManager.shared.cloudKitAccount?.deleteAllDocuments(with: zoneID)
