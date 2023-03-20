@@ -36,8 +36,7 @@ class EditorTitleContentView: UIView, UIContentView {
 		addSubview(separator)
 		
 		NSLayoutConstraint.activate([
-			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-			textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+			textView.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor),
 			textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
 			textView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
 		])
