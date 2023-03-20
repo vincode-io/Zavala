@@ -30,11 +30,6 @@ class EditorTitleContentView: UIView, UIContentView {
 		textView.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(textView)
 
-		let separator = UIView()
-		separator.backgroundColor = AppAssets.accessory
-		separator.translatesAutoresizingMaskIntoConstraints = false
-		addSubview(separator)
-		
 		NSLayoutConstraint.activate([
 			textView.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor),
 			textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
