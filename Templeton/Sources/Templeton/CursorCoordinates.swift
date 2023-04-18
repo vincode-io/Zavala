@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  CursorCoordinatesProvider.swift
 //  
 //
 //  Created by Maurice Parker on 12/20/20.
