@@ -15,7 +15,7 @@
         "repositoryURL": "https://github.com/vincode-io/RSCore.git",
         "state": {
           "branch": "cloudkit-rewrite",
-          "revision": "2d3f19223e5e4c23020c40503cdd4e24ce65c091",
+          "revision": "0325bb8358adbace8e4e37e3674bb5d5c5f85767",
           "version": null
         }
       },
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/apple/swift-collections.git",
         "state": {
           "branch": null,
-          "revision": "937e904258d22af6e447a0b72c0bc67583ef64a2",
-          "version": "1.0.4"
+          "revision": "f504716c27d2e5d4144fa4794b12129301d17729",
+          "version": "1.0.3"
         }
       },
       {
