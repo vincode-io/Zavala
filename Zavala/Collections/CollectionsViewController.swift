@@ -75,7 +75,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 
 				navigationItem.rightBarButtonItem = selectBarButtonItem
 			} else {
-				let navButtonGroup = ButtonGroup(target: self, containerType: .navbar, alignment: .right)
+				var navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
 				addButton = navButtonGroup.addButton(label: AppStringAssets.addControlLabel, image: ZavalaImageAssets.createEntity, selector: "createOutline:")
 				importButton = navButtonGroup.addButton(label: AppStringAssets.importOPMLControlLabel, image: ZavalaImageAssets.importDocument, selector: "importOPML:")
 				let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()

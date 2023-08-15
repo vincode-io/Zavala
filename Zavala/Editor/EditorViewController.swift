@@ -175,6 +175,33 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	var isFormatUnavailable: Bool {
 		return currentTextView == nil
 	}
+	
+	var isCutUnavailable: Bool {
+		if let currentTextView {
+			return !currentTextView.canPerformAction(.cut, withSender: nil)
+		}
+		if let currentRows {
+			return currentRows.isEmpty
+		}
+		return true
+	}
+
+	var isCopyUnavailable: Bool {
+		if let currentTextView {
+			return !currentTextView.canPerformAction(.copy, withSender: nil)
+		}
+		if let currentRows {
+			return currentRows.isEmpty
+		}
+		return true
+	}
+
+	var isPasteUnavailable: Bool {
+		if let currentTextView {
+			return !currentTextView.canPerformAction(.paste, withSender: nil)
+		}
+		return !UIPasteboard.general.contains(pasteboardTypes: [Row.typeIdentifier, kUTTypeUTF8PlainText as String], inItemSet: nil)
+	}
 
 	var isInsertImageUnavailable: Bool {
 		return currentTextView == nil
@@ -301,24 +328,38 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var cancelledKeys = Set<UIKey>()
 	private var isCursoringUp = false
 	private var isCursoringDown = false
+
+	private var undoMenuButton: ButtonGroup.Button!
+	private var undoMenuButtonGroup: ButtonGroup!
+	private var undoButton: ButtonGroup.Button!
+	private var cutButton: ButtonGroup.Button!
+	private var copyButton: ButtonGroup.Button!
+	private var pasteButton: ButtonGroup.Button!
+	private var redoButton: ButtonGroup.Button!
+
+	private var navButtonGroup: ButtonGroup!
+	private var goBackwardButton: ButtonGroup.Button!
+	private var goForwardButton: ButtonGroup.Button!
+	private var moreMenuButton: ButtonGroup.Button!
+	private var filterButton: ButtonGroup.Button!
 	
-	private var goBackwardButton: UIButton!
-	private var goForwardButton: UIButton!
-	private var moreMenuButton: UIButton!
-	private var filterButton: UIButton!
-	
+	private var formatMenuButton: ButtonGroup.Button!
+	private var formatMenuButtonGroup: ButtonGroup!
+	private var boldButton: ButtonGroup.Button!
+	private var italicButton: ButtonGroup.Button!
+	private var linkButton: ButtonGroup.Button!
+
 	private var keyboardToolBar: UIToolbar!
 	private var leftToolbarButtonGroup: ButtonGroup!
 	private var rightToolbarButtonGroup: ButtonGroup!
-	private var moveRightButton: UIButton!
-	private var moveLeftButton: UIButton!
-	private var moveUpButton: UIButton!
-	private var moveDownButton: UIButton!
-	private var insertImageButton: UIButton!
-	private var linkButton: UIButton!
-	private var noteButton: UIButton!
-	private var insertNewlineButton: UIButton!
-	private var squareButton: UIButton!
+	private var moveRightButton: ButtonGroup.Button!
+	private var moveLeftButton: ButtonGroup.Button!
+	private var moveUpButton: ButtonGroup.Button!
+	private var moveDownButton: ButtonGroup.Button!
+	private var insertImageButton: ButtonGroup.Button!
+	private var noteButton: ButtonGroup.Button!
+	private var insertNewlineButton: ButtonGroup.Button!
+	private var squareButton: ButtonGroup.Button!
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
@@ -436,44 +477,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		backlinkRegistration = UICollectionView.CellRegistration<EditorBacklinkViewCell, Outline> { [weak self] (cell, indexPath, outline) in
 			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
-		
-		let navButtonGroup = ButtonGroup(target: self, containerType: .navbar, alignment: .right)
-		goBackwardButton = navButtonGroup.addButton(label: AppStringAssets.goBackwardControlLabel, image: ZavalaImageAssets.goBackward, selector: "goBackwardOne")
-		goForwardButton = navButtonGroup.addButton(label: AppStringAssets.goForwardControlLabel, image: ZavalaImageAssets.goForward, selector: "goForwardOne")
-		moreMenuButton = navButtonGroup.addButton(label: AppStringAssets.moreControlLabel, image: ZavalaImageAssets.ellipsis, showMenu: true)
-		filterButton = navButtonGroup.addButton(label: AppStringAssets.filterControlLabel, image: ZavalaImageAssets.filterInactive, showMenu: true)
-		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
-		leftToolbarButtonGroup = ButtonGroup(target: self, containerType: .toolbar, alignment: .left)
-		moveLeftButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveLeftControlLabel, image: ZavalaImageAssets.moveLeft, selector: "moveCurrentRowsLeft")
-		moveRightButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveRightControlLabel, image: ZavalaImageAssets.moveRight, selector: "moveCurrentRowsRight")
-		moveUpButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveUpControlLabel, image: ZavalaImageAssets.moveUp, selector: "moveCurrentRowsUp")
-		moveDownButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveDownControlLabel, image: ZavalaImageAssets.moveDown, selector: "moveCurrentRowsDown")
-		let moveButtonsBarButtonItem = leftToolbarButtonGroup.buildBarButtonItem()
-
-		rightToolbarButtonGroup = ButtonGroup(target: self, containerType: .toolbar, alignment: .right)
-		insertImageButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.insertImageControlLabel, image: ZavalaImageAssets.insertImage, selector: "insertImage")
-		linkButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.linkControlLabel, image: ZavalaImageAssets.link, selector: "link")
-		noteButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.addNoteControlLabel, image: ZavalaImageAssets.noteAdd, selector: "createOrDeleteNotes")
-		insertNewlineButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.newOutlineControlLabel, image: ZavalaImageAssets.newline, selector: "insertNewline")
-		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
-
-		if traitCollection.userInterfaceIdiom != .mac {
-			keyboardToolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
-			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-			
-			if traitCollection.userInterfaceIdiom == .pad {
-				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
-			} else {
-				let hideKeyboardBarButtonItem = UIBarButtonItem(image: ZavalaImageAssets.hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
-				hideKeyboardBarButtonItem.accessibilityLabel = AppStringAssets.hideKeyboardControlLabel
-				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, hideKeyboardBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
-			}
-			
-			keyboardToolBar.sizeToFit()
-			navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
-		}
-
+		configureButtonBars()
 		updateUI()
 		collectionView.reloadData()
 
@@ -510,6 +515,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		if collectionView.contentOffset != .zero {
 			transitionContentOffset = collectionView.contentOffset
 		}
+		
+		navButtonGroup.containerWidth = size.width
+		leftToolbarButtonGroup.containerWidth = size.width
+		rightToolbarButtonGroup.containerWidth = size.width
 	}
 	
 	override func viewDidLayoutSubviews() {
@@ -528,17 +537,33 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	override func cut(_ sender: Any?) {
-		guard let rows = currentRows else { return }
-		cutRows(rows)
+		navButtonGroup?.dismissPopOverMenu()
+		
+		if let currentTextView {
+			currentTextView.cut(sender)
+		} else if let currentRows {
+			cutRows(currentRows)
+		}
 	}
 	
 	override func copy(_ sender: Any?) {
-		guard let rows = currentRows else { return }
-		copyRows(rows)
+		navButtonGroup?.dismissPopOverMenu()
+		
+		if let currentTextView {
+			currentTextView.copy(sender)
+		} else if let currentRows {
+			copyRows(currentRows)
+		}
 	}
 	
 	override func paste(_ sender: Any?) {
-		pasteRows(afterRows: currentRows)
+		navButtonGroup?.dismissPopOverMenu()
+		
+		if let currentTextView {
+			currentTextView.paste(sender)
+		} else {
+			pasteRows(afterRows: currentRows)
+		}
 	}
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -693,9 +718,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc func adjustForKeyboard(_ note: Notification) {
 		guard let keyboardValue = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-
-		leftToolbarButtonGroup.containerWidth = view.bounds.width
-		rightToolbarButtonGroup.containerWidth = view.bounds.width
 
 		let keyboardScreenEndFrame = keyboardValue.cgRectValue
 		let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
@@ -867,13 +889,21 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			
 			goBackwardButton.isEnabled = !isGoBackwardUnavailable
 			goForwardButton.isEnabled = !isGoForwardUnavailable
+			
+			cutButton.isEnabled = !isCutUnavailable
+			copyButton.isEnabled = !isCopyUnavailable
+			pasteButton.isEnabled = !isPasteUnavailable
+			
 			moveLeftButton.isEnabled = !isMoveRowsLeftUnavailable
 			moveRightButton.isEnabled = !isMoveRowsRightUnavailable
 			moveUpButton.isEnabled = !isMoveRowsUpUnavailable
 			moveDownButton.isEnabled = !isMoveRowsDownUnavailable
+			
 			insertImageButton.isEnabled = !isInsertImageUnavailable
 			linkButton.isEnabled = !isLinkUnavailable
-			
+			boldButton.isEnabled = !isFormatUnavailable
+			italicButton.isEnabled = !isFormatUnavailable
+
 			// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
 			// only have one row selected at a time while editing and that row eitherh has a note
 			// or it doesn't.
@@ -1146,6 +1176,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	@objc func link() {
+		rightToolbarButtonGroup.dismissPopOverMenu()
 		currentTextView?.editLink(self)
 	}
 	
@@ -1161,10 +1192,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	@objc func outlineToggleBoldface(_ sender: Any? = nil) {
+		rightToolbarButtonGroup.dismissPopOverMenu()
 		currentTextView?.toggleBoldface(self)
 	}
 	
 	@objc func outlineToggleItalics(_ sender: Any? = nil) {
+		rightToolbarButtonGroup.dismissPopOverMenu()
 		currentTextView?.toggleItalics(self)
 	}
 	
@@ -1201,6 +1234,24 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 	@objc func goForwardOne() {
 		delegate?.goForward(self, to: 0)
+	}
+
+	@objc func showUndoMenu() {
+		updateUI()
+		navButtonGroup.showPopOverMenu(for: undoMenuButton)
+	}
+
+	@objc func undo() {
+		undoManager?.undo()
+	}
+	
+	@objc func redo() {
+		undoManager?.redo()
+	}
+	
+	@objc func showFormatMenu() {
+		updateUI()
+		rightToolbarButtonGroup.showPopOverMenu(for: formatMenuButton)
 	}
 
 	@objc func moveCurrentRowsLeft() {
@@ -1818,6 +1869,69 @@ extension EditorViewController: ImageTransitionDelegate {
 // MARK: Helpers
 
 private extension EditorViewController {
+	
+	func configureButtonBars() {
+		undoMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
+		undoButton = undoMenuButtonGroup.addButton(label: AppStringAssets.undoControlLabel, image: ZavalaImageAssets.undo, selector: "undo")
+		cutButton = undoMenuButtonGroup.addButton(label: AppStringAssets.cutControlLabel, image: ZavalaImageAssets.cut, selector: "cut:")
+		copyButton = undoMenuButtonGroup.addButton(label: AppStringAssets.copyControlLabel, image: ZavalaImageAssets.copy, selector: "copy:")
+		pasteButton = undoMenuButtonGroup.addButton(label: AppStringAssets.pasteControlLabel, image: ZavalaImageAssets.paste, selector: "paste:")
+		redoButton = undoMenuButtonGroup.addButton(label: AppStringAssets.redoControlLabel, image: ZavalaImageAssets.redo, selector: "redo")
+
+		navButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
+		goBackwardButton = navButtonGroup.addButton(label: AppStringAssets.goBackwardControlLabel, image: ZavalaImageAssets.goBackward, selector: "goBackwardOne")
+		goForwardButton = navButtonGroup.addButton(label: AppStringAssets.goForwardControlLabel, image: ZavalaImageAssets.goForward, selector: "goForwardOne")
+		undoMenuButton = navButtonGroup.addButton(label: AppStringAssets.undoMenuControlLabel, image: ZavalaImageAssets.undoMenu, selector: "showUndoMenu")
+		undoMenuButton.popoverButtonGroup = undoMenuButtonGroup
+		moreMenuButton = navButtonGroup.addButton(label: AppStringAssets.moreControlLabel, image: ZavalaImageAssets.ellipsis, showMenu: true)
+		filterButton = navButtonGroup.addButton(label: AppStringAssets.filterControlLabel, image: ZavalaImageAssets.filterInactive, showMenu: true)
+		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
+
+		leftToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .left)
+		moveLeftButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveLeftControlLabel, image: ZavalaImageAssets.moveLeft, selector: "moveCurrentRowsLeft")
+		moveRightButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveRightControlLabel, image: ZavalaImageAssets.moveRight, selector: "moveCurrentRowsRight")
+		moveUpButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveUpControlLabel, image: ZavalaImageAssets.moveUp, selector: "moveCurrentRowsUp")
+		moveDownButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveDownControlLabel, image: ZavalaImageAssets.moveDown, selector: "moveCurrentRowsDown")
+		let moveButtonsBarButtonItem = leftToolbarButtonGroup.buildBarButtonItem()
+
+		formatMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
+		linkButton = formatMenuButtonGroup.addButton(label: AppStringAssets.linkControlLabel, image: ZavalaImageAssets.link, selector: "link")
+		let boldImage = ZavalaImageAssets.bold.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
+		boldButton = formatMenuButtonGroup.addButton(label: AppStringAssets.boldControlLabel, image: boldImage, selector: "outlineToggleBoldface:")
+		let italicImage = ZavalaImageAssets.italic.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
+		italicButton = formatMenuButtonGroup.addButton(label: AppStringAssets.italicControlLabel, image: italicImage, selector: "outlineToggleItalics:")
+
+		rightToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
+		insertImageButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.insertImageControlLabel, image: ZavalaImageAssets.insertImage, selector: "insertImage")
+		formatMenuButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.formatControlLabel, image: ZavalaImageAssets.format, selector: "showFormatMenu")
+		formatMenuButton.popoverButtonGroup = formatMenuButtonGroup
+		noteButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.addNoteControlLabel, image: ZavalaImageAssets.noteAdd, selector: "createOrDeleteNotes")
+		insertNewlineButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.newOutlineControlLabel, image: ZavalaImageAssets.newline, selector: "insertNewline")
+		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
+
+		if traitCollection.userInterfaceIdiom != .mac {
+			keyboardToolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
+			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+			
+			if traitCollection.userInterfaceIdiom == .pad {
+				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
+			} else {
+				let hideKeyboardBarButtonItem = UIBarButtonItem(image: ZavalaImageAssets.hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
+				hideKeyboardBarButtonItem.accessibilityLabel = AppStringAssets.hideKeyboardControlLabel
+				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, hideKeyboardBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
+			}
+			
+			keyboardToolBar.sizeToFit()
+			navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
+
+			if traitCollection.userInterfaceIdiom == .pad {
+				navButtonGroup.remove(undoMenuButton)
+				rightToolbarButtonGroup.remove(formatMenuButton)
+				formatMenuButtonGroup.remove(linkButton)
+				rightToolbarButtonGroup.insert(linkButton, at: 1)
+			}
+		}
+	}
 	
 	func discloseSearchBar() {
 		view.layoutIfNeeded()

@@ -494,6 +494,7 @@
 			isa = PBXGroup;
 			children = (
 				51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */,
+				511A99F627B9B596001BD443 /* ButtonGroup.swift */,
 				518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */,
 				516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */,
 				511B29F126014FBA00C04239 /* EnhancedTextField.swift */,
@@ -512,7 +513,6 @@
 				51DFDC17259EA8D300C068C6 /* Selector+.swift */,
 				51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */,
 				5163ADF425C79B69008F25CA /* String+.swift */,
-				511A99F627B9B596001BD443 /* ButtonGroup.swift */,
 				5169928925AE4F5C00760C9D /* UICollectionView+.swift */,
 				51028CD425F3159A00B50B71 /* UIColor+.swift */,
 				51077C5127A752DF000C71DB /* UIFont+.swift */,

@@ -45,6 +45,7 @@ struct ZavalaImageAssets {
 	static var filterActive = UIImage(systemName: "line.horizontal.3.decrease.circle.fill")!
 	static var filterInactive = UIImage(systemName: "line.horizontal.3.decrease.circle")!
 	static var find = UIImage(systemName: "magnifyingglass")!
+	static var format = UIImage(systemName: "textformat")!
 	static var fullScreenBackgroundColor: UIColor = UIColor(named: "FullScreenBackgroundColor")!
 
 	static var getInfo = UIImage(systemName: "info.circle")!
@@ -78,6 +79,7 @@ struct ZavalaImageAssets {
 	static var printDoc = UIImage(systemName: "printer")!
 	static var printList = UIImage(systemName: "printer.dotmatrix")!
 	
+	static var redo = UIImage(systemName: "arrow.uturn.forward")!
 	static var rename = UIImage(systemName: "pencil")!
 	static var restore = UIImage(systemName: "gobackward")!
 
@@ -88,6 +90,8 @@ struct ZavalaImageAssets {
 	static var topicFont = UIImage(systemName: "textformat.size.larger")!
 	
 	static var uncompleteRow = UIImage(systemName: "square")!
+	static var undo = UIImage(systemName: "arrow.uturn.backward")!
+	static var undoMenu = UIImage(systemName: "arrow.uturn.backward.circle.badge.ellipsis")!
 
 	static var verticalBarColor: UIColor = .quaternaryLabel
 	

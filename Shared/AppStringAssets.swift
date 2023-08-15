@@ -163,6 +163,7 @@ struct AppStringAssets {
 	static var printListControlEllipsisLabel = String(localized: "Print List…", comment: "Control Label: Print List…")
 	static var privacyPolicyControlLabel = String(localized: "Privacy Policy", comment: "Control Label: Privacy Policy")
 	
+	static var redoControlLabel = String(localized: "Redo", comment: "Control Label: Redo")
 	static var releaseNotesControlLabel = String(localized: "Release Notes", comment: "Control Label: Release Notes")
 	static var removeControlLabel = String(localized: "Remove", comment: "Control Label: Remove")
 	static var removeICloudAccountTitle = String(localized: "Remove iCloud Account", comment: "Alert Title: title for removing an iCloud Account")
@@ -196,7 +197,9 @@ struct AppStringAssets {
 	
 	static var useSelectionForFindControlLabel = String(localized: "Use Selection For Find", comment: "Control Label: Use Selection For Find")
 	static var uncompleteControlLabel = String(localized: "Uncomplete", comment: "Control Label: Uncomplete")
-	
+	static var undoControlLabel = String(localized: "Undo", comment: "Control Label: Undo")
+	static var undoMenuControlLabel = String(localized: "Undo Menu", comment: "Control Label: Undo Menu")
+
 	static var websiteControlLabel = String(localized: "Website", comment: "Control Label: Website")
 	
 	static var zavalaHelpControlLabel = String(localized: "Zavala Help", comment: "Control Label: Zavala Help")
