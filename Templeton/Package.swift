@@ -11,7 +11,7 @@ let package = Package(
     ],
     dependencies: [
 		.package(url: "https://github.com/Ranchero-Software/RSCore.git", .branch("main")),
-		.package(url: "https://github.com/drmohundro/SWXMLHash.git", .upToNextMajor(from: "5.0.1")),
+		.package(url: "https://github.com/drmohundro/SWXMLHash.git", .exactItem("5.0.1")),
 		.package(url: "https://github.com/vincode-io/MarkdownAttributedString.git", .branch("master")),
 		.package(url: "https://github.com/vincode-io/VinXML.git", .branch("main")),
 		.package(url: "https://github.com/apple/swift-collections.git", .upToNextMajor(from: "1.0.2")),

@@ -29,4 +29,10 @@ extension NSAttributedString {
         return lhs!.isEqual(to: rhs!)
 	}
 	
+	public func trimmingCharacters(in charSet: CharacterSet) -> NSAttributedString {
+		let modifiedString = NSMutableAttributedString(attributedString: self)
+	   modifiedString.trimCharacters(in: charSet)
+		return NSAttributedString(attributedString: modifiedString)
+	}
+	
 }

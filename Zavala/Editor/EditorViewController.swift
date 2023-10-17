@@ -3077,6 +3077,8 @@ private extension EditorViewController {
 	func completeRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
+		let cursorIsInCompletingRows = rows.contains(where: { $0 == currentTextView?.row })
+		
 		let command = CompleteCommand(actionName: AppStringAssets.completeControlLabel,
 									  undoManager: undoManager,
 									  delegate: self,
@@ -3085,6 +3087,8 @@ private extension EditorViewController {
 									  rowStrings: rowStrings)
 		
 		runCommand(command)
+
+		guard cursorIsInCompletingRows && isCompletedFiltered else { return }
 		
 		if let newCursorIndex = command.newCursorIndex {
 			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {

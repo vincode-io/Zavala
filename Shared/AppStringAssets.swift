@@ -27,7 +27,7 @@ struct AppStringAssets {
 	
 	static var acknowledgementsURL = "https://github.com/vincode-io/Zavala/wiki/Acknowledgements"
 	static var bugTrackerURL = "https://github.com/vincode-io/Zavala/issues"
-	static var feedbackURL = "mailto:mo@vincode.io"
+	static var reportAnIssueURL = "mailto:mo@vincode.io"
 	static var githubRepositoryURL = "https://github.com/vincode-io/Zavala"
 	static var helpURL = "https://zavala.vincode.io/help/Zavala_Help.md/"
 	static var privacyPolicyURL = "https://vincode.io/privacy-policy/"
@@ -102,7 +102,6 @@ struct AppStringAssets {
 	static var expandAllInRowControlLabel = String(localized: "Expand All in Row", comment: "Control Label: Expand All in Row")
 	static var expandControlLabel = String(localized: "Expand", comment: "Control Label: Expand")
 	
-	static var feedbackControlLabel = String(localized: "Feedback", comment: "Control Label: Feedback")
 	static var filterControlLabel = String(localized: "Filter", comment: "Control Label: Filter")
 	static var filterCompletedControlLabel = String(localized: "Filter Completed", comment: "Control Label: Filter Completed")
 	static var filterNotesControlLabel = String(localized: "Filter Notes", comment: "Control Label: Filter Notes")
@@ -174,6 +173,7 @@ struct AppStringAssets {
 	static var renameControlLabel = String(localized: "Rename", comment: "Control Label: Rename")
 	static var referenceLabel = String(localized: "Reference: ", comment: "Label: reference label for backlinks")
 	static var referencesLabel = String(localized: "References: ", comment: "Label: references label for backlinks")
+	static var reportAnIssueControlLabel = String(localized: "Report an Issue", comment: "Control Label: Report an Issue")
 	static var restoreControlLabel = String(localized: "Restore", comment: "Control Label: Restore")
 	static var restoreDefaultsMessage = String(localized: "Restore Defaults", comment: "Alert: message for restoring font defaults")
 	static var restoreDefaultsInformative = String(localized: "Are you sure you want to restore the defaults? All your font customizations will be lost.",

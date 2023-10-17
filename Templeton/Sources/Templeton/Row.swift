@@ -165,6 +165,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		set {
 			if let attrText = newValue {
 				let (cleanAttrText, newImages) = splitOffImages(attrString: attrText, isNotes: false)
+				cleanAttrText.trimCharacters(in: .whitespaces)
 				
 				topicData = try? cleanAttrText.data(from: .init(location: 0, length: cleanAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 				
@@ -199,7 +200,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		set {
 			if let attrText = newValue {
 				let (cleanAttrText, newImages) = splitOffImages(attrString: attrText, isNotes: true)
-				
+				cleanAttrText.trimCharacters(in: .whitespaces)
+
 				noteData = try? cleanAttrText.data(from: .init(location: 0, length: cleanAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 
 				var topicImages = images?.filter { !$0.isInNotes } ?? [Image]()
@@ -634,7 +636,7 @@ private extension Row {
 		return mutableAttrString
 	}
 	
-	func splitOffImages(attrString: NSAttributedString, isNotes: Bool) -> (NSAttributedString, [Image]) {
+	func splitOffImages(attrString: NSAttributedString, isNotes: Bool) -> (NSMutableAttributedString, [Image]) {
 		guard let outline else {
 			fatalError("Missing Outline")
 		}

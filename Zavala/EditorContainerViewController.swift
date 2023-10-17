@@ -593,6 +593,32 @@ extension EditorContainerViewController: NSToolbarDelegate {
 		
 		return toolbarItem
 	}
+}
+
+extension EditorContainerViewController: UIActivityItemsConfigurationReading {
+	
+	var applicationActivitiesForActivityItemsConfiguration: [UIActivity]? {
+		guard let outline = editorViewController?.outline else {
+			return nil
+		}
+		return [CopyDocumentLinkActivity(documents: [Document.outline(outline)])]
+	}
+
+	var itemProvidersForActivityItemsConfiguration: [NSItemProvider] {
+		guard let outline = editorViewController?.outline else {
+			return [NSItemProvider]()
+		}
+		
+		let itemProvider = NSItemProvider()
+		
+		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+			let data = outline.markdownList().data(using: .utf8)
+			completion(data, nil)
+			return nil
+		}
+		
+		return [itemProvider]
+	}
 	
 }
 

@@ -21,5 +21,7 @@ struct TempletonStringAssets {
 	
 	static var accountErrorImportRead = String(localized: "Unable to read the import file.",
 											   comment: "Error Message: Unable to read the import file.")
-	
+	static var accountErrorOPMLParse = String(localized: "Unable to process the OPML data.",
+											   comment: "Error Message: Unable to read the import file.")
+
 }

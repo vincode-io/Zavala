@@ -24,8 +24,9 @@ extension DocumentsViewController: UICollectionViewDropDelegate {
 				guard let opmlData else { return }
 				DispatchQueue.main.async {
                     let tags = self?.documentContainers?.compactMap { ($0 as? TagDocuments)?.tag }
-					let document = account.importOPML(opmlData, tags: tags)
-					DocumentIndexer.updateIndex(forDocument: document)
+					if let document = try? account.importOPML(opmlData, tags: tags) {
+						DocumentIndexer.updateIndex(forDocument: document)
+					}
 				}
 			}
 		}

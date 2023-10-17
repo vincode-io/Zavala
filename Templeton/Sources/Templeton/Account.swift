@@ -21,6 +21,7 @@ public extension Notification.Name {
 public enum AccountError: LocalizedError {
 	case securityScopeError
 	case fileReadError
+	case opmlParserError
 	
 	public var errorDescription: String? {
 		switch self {
@@ -28,6 +29,8 @@ public enum AccountError: LocalizedError {
 			return TempletonStringAssets.accountErrorScopedResource
 		case .fileReadError:
 			return TempletonStringAssets.accountErrorImportRead
+		case .opmlParserError:
+			return TempletonStringAssets.accountErrorOPMLParse
 		}
 	}
 }
@@ -141,14 +144,16 @@ public final class Account: NSObject, Identifiable, Codable, Logging {
 		guard fileError == nil else { throw fileError! }
 		guard let opmlData = fileData else { throw AccountError.fileReadError }
 		
-		return importOPML(opmlData, tags: tags)
+		return try importOPML(opmlData, tags: tags)
 	}
 
 	@discardableResult
-	public func importOPML(_ opmlData: Data, tags: [Tag]?, images: [String:  Data]? = nil) -> Document {
+	public func importOPML(_ opmlData: Data, tags: [Tag]?, images: [String:  Data]? = nil) throws -> Document {
+		let opmlString = try convertOPMLAttributeNewlines(opmlData)
+		
 		let opml = SWXMLHash.config({ config in
 			config.caseInsensitive = true
-		}).parse(opmlData)["opml"]
+		}).parse(opmlString)["opml"]
 		
 		let headIndexer = opml["head"]
 		let bodyIndexer = opml["body"]
@@ -539,4 +544,21 @@ private extension Account {
 		cloudKitManager.addRequests(requests)
 	}
 	
+	func convertOPMLAttributeNewlines(_ opmlData: Data) throws -> String {
+		guard var opmlString = String(data: opmlData, encoding: .utf8),
+			  let regEx = try? NSRegularExpression(pattern: "(text|_note)=\"([^\"]*)\"", options: []) else {
+			throw AccountError.opmlParserError
+		}
+		
+		for match in regEx.allMatches(in: opmlString) {
+			for rangeIndex in 0..<match.numberOfRanges {
+				let matchRange = match.range(at: rangeIndex)
+				if let substringRange = Range(matchRange, in: opmlString) {
+					opmlString = opmlString.replacingOccurrences(of: "\n", with: "&#10;", range: substringRange)
+				}
+			}
+		}
+		
+		return opmlString
+	}
 }

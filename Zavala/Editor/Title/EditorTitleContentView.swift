@@ -30,14 +30,8 @@ class EditorTitleContentView: UIView, UIContentView {
 		textView.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(textView)
 
-		let separator = UIView()
-		separator.backgroundColor = ZavalaImageAssets.accessoryColor
-		separator.translatesAutoresizingMaskIntoConstraints = false
-		addSubview(separator)
-		
 		NSLayoutConstraint.activate([
-			textView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
-			textView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+			textView.centerXAnchor.constraint(equalTo: layoutMarginsGuide.centerXAnchor),
 			textView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
 			textView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
 		])

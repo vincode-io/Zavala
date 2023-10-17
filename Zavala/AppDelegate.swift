@@ -384,20 +384,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let showHelpCommand = UICommand(title: AppStringAssets.zavalaHelpControlLabel, action: #selector(showHelpCommand(_:)))
 
-	let showFeedbackCommand = UICommand(title: AppStringAssets.feedbackControlLabel, action: #selector(showFeedbackCommand(_:)))
+	let reportAnIssueCommand = UICommand(title: AppStringAssets.reportAnIssueControlLabel, action: #selector(reportAnIssueCommand(_:)))
 
-	let showWebsiteCommand = UICommand(title: AppStringAssets.websiteControlLabel, action: #selector(showWebsiteCommand(_:)))
-
-	let showReleaseNotesCommand = UICommand(title: AppStringAssets.releaseNotesControlLabel, action: #selector(showReleaseNotesCommand(_:)))
-	
-	let showGitHubRepositoryCommand = UICommand(title: AppStringAssets.gitHubRepositoryControlLabel, action: #selector(showGitHubRepositoryCommand(_:)))
-	
-	let showBugTrackerCommand = UICommand(title: AppStringAssets.bugTrackerControlLabel, action: #selector(showBugTrackerCommand(_:)))
-	
-	let showAcknowledgementsCommand = UICommand(title: AppStringAssets.acknowledgementsControlLabel, action: #selector(showAcknowledgementsCommand(_:)))
-	
-	let showPrivacyCommand = UICommand(title: AppStringAssets.privacyPolicyControlLabel, action: #selector(showPrivacyPolicyCommand(_:)))
-	
 	let showOpenQuicklyCommand = UIKeyCommand(title: AppStringAssets.openQuicklyEllipsisControlLabel,
 											  action: #selector(showOpenQuicklyCommand(_:)),
 											  input: "o",
@@ -591,6 +579,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return UISceneConfiguration(name: "Open Quickly Configuration", sessionRole: connectingSceneSession.role)
 		case NSUserActivity.ActivityType.viewImage:
 			return UISceneConfiguration(name: "Image Configuration", sessionRole: connectingSceneSession.role)
+		case NSUserActivity.ActivityType.showAbout:
+			return UISceneConfiguration(name: "About Configuration", sessionRole: connectingSceneSession.role)
 		default:
 			guard options.userActivities.first?.userInfo == nil else {
 				return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
@@ -799,32 +789,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.openURL(AppStringAssets.helpURL)
 	}
 
-	@objc func showFeedbackCommand(_ sender: Any?) {
-		UIApplication.shared.open(URL(string: AppStringAssets.feedbackURL)!)
-	}
-
-	@objc func showWebsiteCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppStringAssets.websiteURL)
-	}
-
-	@objc func showReleaseNotesCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppStringAssets.releaseNotesURL)
-	}
-
-	@objc func showGitHubRepositoryCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppStringAssets.githubRepositoryURL)
-	}
-	
-	@objc func showBugTrackerCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppStringAssets.bugTrackerURL)
-	}
-	
-	@objc func showAcknowledgementsCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppStringAssets.acknowledgementsURL)
-	}
-
-	@objc func showPrivacyPolicyCommand(_ sender: Any?) {
-		UIApplication.shared.open(URL(string: AppStringAssets.privacyPolicyURL)!)
+	@objc func reportAnIssueCommand(_ sender: Any?) {
+		UIApplication.shared.open(URL(string: AppStringAssets.reportAnIssueURL)!)
 	}
 
 	@objc func showOpenQuicklyCommand(_ sender: Any?) {
@@ -834,6 +800,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openQuickly)
 			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 		}
+	}
+
+	@objc func showAbout(_ sender: Any?) {
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.showAbout)
+		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 
 	@objc func printDocsCommand(_ sender: Any?) {
@@ -1064,18 +1035,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		super.buildMenu(with: builder)
 
 		guard builder.system == UIMenuSystem.main else { return }
-		
-		builder.remove(menu: .newScene)
-		builder.remove(menu: .openRecent)
-		
-		// Application Menu
-		var appMenuCommands = [UICommand]()
-		appMenuCommands.append(showPreferences)
 
-		let appMenu = UIMenu(title: "", options: .displayInline, children: appMenuCommands)
+		// Application Menu
+		let appMenu = UIMenu(title: "", options: .displayInline, children: [showPreferences])
 		builder.insertSibling(appMenu, afterMenu: .about)
+
+		let aboutMenuTitle = builder.menu(for: .about)?.children.first?.title ?? "About Zavala"
+		let showAboutCommand = UICommand(title: aboutMenuTitle, action: #selector(showAbout(_:)))
+		builder.replace(menu: .about, with: UIMenu(options: .displayInline, children: [showAboutCommand]))
 		
 		// File Menu
+		builder.remove(menu: .newScene)
+		builder.remove(menu: .openRecent)
+
 		let cloudKitMenu = UIMenu(title: "", options: .displayInline, children: [collaborateCommand, syncCommand])
 		builder.insertChild(cloudKitMenu, atStartOfMenu: .file)
 
@@ -1167,16 +1139,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(historyMenu, afterMenu: .view)
 
 		// Help Menu
-		let primaryHelpMenu = UIMenu(title: "", options: .displayInline, children: [showHelpCommand,
-																					showWebsiteCommand,
-																					showPrivacyCommand])
-		let secondaryHelpMenu = UIMenu(title: "", options: .displayInline, children: [showFeedbackCommand,
-																			  showReleaseNotesCommand,
-																			  showGitHubRepositoryCommand,
-																			  showBugTrackerCommand,
-																			  showAcknowledgementsCommand])
-		
-		builder.replaceChildren(ofMenu: .help, from: { _ in return [primaryHelpMenu, secondaryHelpMenu] })
+		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand, reportAnIssueCommand] })
 	}
 
 }

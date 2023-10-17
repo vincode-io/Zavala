@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import SwiftUI
 
 struct ZavalaImageAssets {
 	
+	static var aboutBackgroundColor = Color("AboutBackgroundColor")
 	static var accentColor = UIColor(named: "AccentColor")!
 	static var accessoryColor = UIColor.tertiaryLabel
 	static var add = UIImage(systemName: "plus")!

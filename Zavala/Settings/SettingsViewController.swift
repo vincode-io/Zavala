@@ -9,6 +9,7 @@
 import UIKit
 import CoreServices
 import SafariServices
+import SwiftUI
 
 class SettingsViewController: UITableViewController {
 
@@ -46,34 +47,6 @@ class SettingsViewController: UITableViewController {
 		ownerNameTextField.text = AppDefaults.shared.ownerName
 		ownerEmailTextField.text = AppDefaults.shared.ownerEmail
 		ownerURLTextField.text = AppDefaults.shared.ownerURL
-
-		let buildLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: 0.0, width: 0.0, height: 0.0))
-		buildLabel.font = UIFont.systemFont(ofSize: 11.0)
-		buildLabel.textColor = UIColor.gray
-		buildLabel.text = "\(Bundle.main.appName) \(Bundle.main.versionNumber) (Build \(Bundle.main.buildNumber))"
-		buildLabel.sizeToFit()
-
-		let creditsLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: buildLabel.frame.maxY + 8, width: 0.0, height: 0.0))
-		creditsLabel.font = UIFont.systemFont(ofSize: 11.0)
-		creditsLabel.textColor = UIColor.gray
-		creditsLabel.text = "App icon by Brad Ellis"
-		creditsLabel.sizeToFit()
-
-		let copyrightLabel = NonIntrinsicLabel()
-		copyrightLabel.numberOfLines = 0
-		copyrightLabel.lineBreakMode = .byWordWrapping
-		copyrightLabel.font = UIFont.systemFont(ofSize: 11.0)
-		copyrightLabel.textColor = UIColor.gray
-		copyrightLabel.text = Bundle.main.copyright
-		let copyrightSize = copyrightLabel.sizeThatFits(CGSize(width: tableView.bounds.width - 32, height: CGFloat.infinity))
-		copyrightLabel.frame = CGRect(x: 32, y: creditsLabel.frame.maxY + 8, width: copyrightSize.width, height: copyrightSize.height)
-
-		let width = max(copyrightLabel.frame.width, buildLabel.frame.width)
-		let wrapperView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: copyrightLabel.frame.maxY + 10))
-		wrapperView.addSubview(copyrightLabel)
-		wrapperView.addSubview(creditsLabel)
-		wrapperView.addSubview(buildLabel)
-		tableView.tableFooterView = wrapperView
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -110,38 +83,25 @@ class SettingsViewController: UITableViewController {
 	}
 	
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		if indexPath.section == 3 {
-			switch indexPath.row {
-			case 0:
-				openURL(AppStringAssets.helpURL)
-			case 1:
-				openURL(AppStringAssets.websiteURL)
-			case 2:
-				openURL(AppStringAssets.privacyPolicyURL)
-			default:
-				break
-			}
-			tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
+		guard indexPath.section == 3 else { return }
+		
+		switch indexPath.row {
+		case 0:
+			let aboutViewController = UIHostingController(rootView: AboutView())
+			aboutViewController.modalPresentationStyle = .formSheet
+			let width = UIFontMetrics(forTextStyle: .body).scaledValue(for: 350)
+			let height = UIFontMetrics(forTextStyle: .body).scaledValue(for: 450)
+			aboutViewController.preferredContentSize = .init(width: width, height: height)
+			present(aboutViewController, animated: true)
+		case 1:
+			openURL(AppStringAssets.helpURL)
+		case 2:
+			UIApplication.shared.open(URL(string: AppStringAssets.reportAnIssueURL)!)
+		default:
+			break
 		}
 		
-		if indexPath.section == 4 {
-			switch indexPath.row {
-			case 0:
-				UIApplication.shared.open(URL(string: AppStringAssets.feedbackURL)!, options: [:])
-			case 1:
-				openURL(AppStringAssets.releaseNotesURL)
-			case 2:
-				openURL(AppStringAssets.githubRepositoryURL)
-			case 3:
-				openURL(AppStringAssets.bugTrackerURL)
-			case 4:
-				openURL(AppStringAssets.acknowledgementsURL)
-			default:
-				break
-			}
-			tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
-		}
-		
+		self.tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
 	}
 	
 	override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
