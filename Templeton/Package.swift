@@ -10,7 +10,7 @@ let package = Package(
             targets: ["Templeton"]),
     ],
     dependencies: [
-		.package(url: "https://github.com/Ranchero-Software/RSCore.git", .branch("main")),
+		.package(url: "https://github.com/Ranchero-Software/RSCore.git", .revisionItem("fd64fb77de2c4b6a87a971d353e7eea75100f694")),
 		.package(url: "https://github.com/drmohundro/SWXMLHash.git", .exactItem("5.0.1")),
 		.package(url: "https://github.com/vincode-io/MarkdownAttributedString.git", .branch("master")),
 		.package(url: "https://github.com/vincode-io/VinXML.git", .branch("main")),
