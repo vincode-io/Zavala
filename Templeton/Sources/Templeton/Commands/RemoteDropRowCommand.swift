@@ -1,6 +1,6 @@
 //
 //  RemoteDropRowCommand.swift
-//  
+//
 //
 //  Created by Maurice Parker on 12/30/20.
 //
@@ -15,11 +15,11 @@ public final class RemoteDropRowCommand: OutlineCommand {
 	var prefersEnd: Bool
 	
 	public init(actionName: String, undoManager: UndoManager,
-		 delegate: OutlineCommandDelegate,
-		 outline: Outline,
-		 rowGroups: [RowGroup],
-		 afterRow: Row?,
-		 prefersEnd: Bool) {
+				delegate: OutlineCommandDelegate,
+				outline: Outline,
+				rowGroups: [RowGroup],
+				afterRow: Row?,
+				prefersEnd: Bool) {
 		
 		self.rowGroups = rowGroups
 		self.rows = [Row]()
@@ -51,7 +51,7 @@ public final class RemoteDropRowCommand: OutlineCommand {
 			visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
 		}
 		rows.forEach { $0.visit(visitor: deleteVisitor(_:)) }
-
+		
 		outline.deleteRows(allRows)
 		registerRedo()
 		restoreCursorPosition()
