@@ -36,7 +36,7 @@ public final class PasteRowCommand: OutlineCommand {
 		}
 		rows = newRows
 		
-		outline.createRows(rows, afterRow: afterRow, prefersEnd: true)
+		outline.createRows(rows, afterRow: afterRow)
 		registerUndo()
 	}
 	
