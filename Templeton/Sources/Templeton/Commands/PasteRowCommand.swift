@@ -1,6 +1,5 @@
 //
 //  PasteRowCommand.swift
-//  
 //
 //  Created by Maurice Parker on 12/31/20.
 //
@@ -14,17 +13,17 @@ public final class PasteRowCommand: OutlineCommand {
 	var afterRow: Row?
 	
 	public init(actionName: String, undoManager: UndoManager,
-		 delegate: OutlineCommandDelegate,
-		 outline: Outline,
-		 rowGroups: [RowGroup],
-		 afterRow: Row?) {
-
+				delegate: OutlineCommandDelegate,
+				outline: Outline,
+				rowGroups: [RowGroup],
+				afterRow: Row?) {
+		
 		self.rowGroups = rowGroups
 		self.rows = [Row]()
 		self.afterRow = afterRow
-
+		
 		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
-}
+	}
 	
 	public override func perform() {
 		saveCursorCoordinates()
