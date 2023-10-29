@@ -9,6 +9,7 @@ import Foundation
 import os.log
 import RSCore
 import CloudKit
+import VinCloudKit
 
 class CloudKitOutlineZoneDelegate: CloudKitZoneDelegate {
 	
@@ -22,11 +23,11 @@ class CloudKitOutlineZoneDelegate: CloudKitZoneDelegate {
 		self.zoneID = zoneID
 	}
 	
-	func store(changeToken: Data?, key: RSCore.CloudKitChangeTokenKey) {
+	func store(changeToken: Data?, key: CloudKitChangeTokenKey) {
 		account!.store(changeToken: changeToken, key: key)
 	}
 	
-	func findChangeToken(key: RSCore.CloudKitChangeTokenKey) -> Data? {
+	func findChangeToken(key: CloudKitChangeTokenKey) -> Data? {
 		return account!.zoneChangeTokens?[key]
 	}
 	

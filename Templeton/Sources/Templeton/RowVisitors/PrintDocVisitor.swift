@@ -64,7 +64,7 @@ private extension PrintDocVisitor {
 	func printTopic(_ topic: NSAttributedString, row: Row) {
 		print.append(NSAttributedString(string: "\n\n"))
 		var attrs = [NSAttributedString.Key : Any]()
-		if row.isComplete || row.isAncestorComplete {
+		if row.isComplete || row.isAnyParentComplete {
 			attrs[.foregroundColor] = UIColor.darkGray
 		} else {
 			attrs[.foregroundColor] = UIColor.black

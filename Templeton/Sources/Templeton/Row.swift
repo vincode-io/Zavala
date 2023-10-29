@@ -45,8 +45,21 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public var shadowTableIndex: Int?
 
 	public var id: String
-	public var syncMetaData: Data?
-	public var syncID: String?
+	public var cloudKitMetaData: Data?
+	
+	public var isCloudKit: Bool {
+		return outline?.isCloudKit ?? false
+	}
+
+	var syncIDCloudKitValue: String?
+	public var syncID: String? {
+		willSet {
+			if isCloudKit && syncIDCloudKitValue == nil {
+				syncIDCloudKitValue = syncID
+			}
+		}
+	}
+
 	public var isExpanded: Bool
 	public internal(set) var rows: [Row] {
 		get {
@@ -80,9 +93,9 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return rowOrder.count
 	}
 
-	public var isAncestorComplete: Bool {
+	public var isAnyParentComplete: Bool {
 		if let parentRow = parent as? Row {
-			return parentRow.isComplete || parentRow.isAncestorComplete
+			return parentRow.isComplete || parentRow.isAnyParentComplete
 		}
 		return false
 	}
@@ -102,6 +115,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return entityID
 	}
 
+	var rowOrderCloudKitValue: OrderedSet<String>?
 	var rowOrder: OrderedSet<String>
 
 	var isPartOfSearchResult = false {
@@ -146,7 +160,14 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return isComplete
 	}
 	
-	public internal(set) var isComplete: Bool
+	var isCompleteCloudKitValue: Bool?
+	public internal(set) var isComplete: Bool {
+		willSet {
+			if isCloudKit && isCompleteCloudKitValue == nil {
+				isCompleteCloudKitValue = isComplete
+			}
+		}
+	}
 
 	public var isNoteEmpty: Bool {
 		return note == nil
@@ -245,13 +266,25 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	
 	public var searchResultCoordinates = NSHashTable<SearchResultCoordinates>.weakObjects()
 
+	var topicDataCloudKitValue: Data?
 	var topicData: Data? {
+		willSet {
+			if isCloudKit && topicDataCloudKitValue == nil {
+				topicDataCloudKitValue = topicData
+			}
+		}
 		didSet {
 			topicCache = nil
 		}
 	}
 	
+	var noteDataCloudkitValue: Data?
 	var noteData: Data? {
+		willSet {
+			if isCloudKit && noteDataCloudkitValue == nil {
+				noteDataCloudkitValue = noteData
+			}
+		}
 		didSet {
 			noteCache = nil
 		}
@@ -270,11 +303,16 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	
 	private enum CodingKeys: String, CodingKey {
 		case id = "id"
+		case syncIDCloudKitValue = "syncIDCloudKitValue"
 		case syncID = "syncID"
+		case topicDataCloudKitValue = "topicDataCloudKitValue"
 		case topicData = "topicData"
+		case noteDataCloudkitValue = "noteDataCloudkitValue"
 		case noteData = "noteData"
 		case isExpanded = "isExpanded"
+		case isCompleteCloudKitValue = "isCompleteCloudKitValue"
 		case isComplete = "isComplete"
+		case rowOrderCloudKitValue = "rowOrderCloudKitValue"
 		case rowOrder = "rowOrder"
 	}
 	
@@ -308,6 +346,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		
+		self.isCompleteCloudKitValue = try? container.decode(Bool.self, forKey: .isCompleteCloudKitValue)
 		if let isComplete = try? container.decode(Bool.self, forKey: .isComplete) {
 			self.isComplete = isComplete
 		} else {
@@ -322,12 +361,17 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 			throw RowError.unableToDeserialize
 		}
 		
-		syncID = try? container.decode(String.self, forKey: .syncID)
+		self.syncIDCloudKitValue = try? container.decode(String.self, forKey: .syncIDCloudKitValue)
+		self.syncID = try? container.decode(String.self, forKey: .syncID)
 		
 		if let isExpanded = try? container.decode(Bool.self, forKey: .isExpanded) {
 			self.isExpanded = isExpanded
 		} else {
 			self.isExpanded = true
+		}
+		
+		if let rowOrderCloudKitValue = try? container.decode([String].self, forKey: .rowOrderCloudKitValue) {
+			self.rowOrderCloudKitValue = OrderedSet(rowOrderCloudKitValue)
 		}
 		
 		if let rowOrder = try? container.decode([String].self, forKey: .rowOrder) {
@@ -340,7 +384,9 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 
 		super.init()
 
+		topicDataCloudKitValue = try? container.decode(Data.self, forKey: .topicDataCloudKitValue)
 		topicData = try? container.decode(Data.self, forKey: .topicData)
+		noteDataCloudkitValue = try? container.decode(Data.self, forKey: .noteDataCloudkitValue)
 		noteData = try? container.decode(Data.self, forKey: .noteData)
 	}
 	
@@ -363,11 +409,16 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 		try container.encode(id, forKey: .id)
+		try container.encode(syncIDCloudKitValue, forKey: .syncIDCloudKitValue)
 		try container.encode(syncID, forKey: .syncID)
+		try container.encode(topicDataCloudKitValue, forKey: .topicDataCloudKitValue)
 		try container.encode(topicData, forKey: .topicData)
+		try container.encode(noteDataCloudkitValue, forKey: .noteDataCloudkitValue)
 		try container.encode(noteData, forKey: .noteData)
 		try container.encode(isExpanded, forKey: .isExpanded)
+		try container.encode(isCompleteCloudKitValue, forKey: .isCompleteCloudKitValue)
 		try container.encode(isComplete, forKey: .isComplete)
+		try container.encode(rowOrderCloudKitValue, forKey: .rowOrderCloudKitValue)
 		try container.encode(rowOrder, forKey: .rowOrder)
 	}
 	

@@ -9,6 +9,7 @@ import UIKit
 import os.log
 import RSCore
 import CloudKit
+import VinCloudKit
 
 enum CloudKitOutlineZoneError: LocalizedError {
 	case unknown

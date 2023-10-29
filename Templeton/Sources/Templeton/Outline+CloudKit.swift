@@ -94,11 +94,13 @@ extension Outline {
 				continue
 			}
 
-			row.syncMetaData = saveRecord.metadata
+			row.cloudKitMetaData = saveRecord.metadata
 			
 			if isExistingRecord {
 				updatedRowIDs.insert(row.id)
 			}
+			
+			row.apply(saveRecord)
 			
 			let updatedTopicData = saveRecord[Row.CloudKitRecord.Fields.topicData] as? Data
 			row.topicData = updatedTopicData

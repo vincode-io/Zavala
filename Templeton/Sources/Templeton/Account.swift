@@ -10,6 +10,7 @@ import os.log
 import RSCore
 import SWXMLHash
 import CloudKit
+import VinCloudKit
 
 public extension Notification.Name {
 	static let AccountDidInitialize = Notification.Name(rawValue: "AccountDidInitialize")

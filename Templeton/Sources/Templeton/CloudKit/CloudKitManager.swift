@@ -10,6 +10,7 @@ import os.log
 import SystemConfiguration
 import CloudKit
 import RSCore
+import VinCloudKit
 
 public extension Notification.Name {
 	static let CloudKitSyncWillBegin = Notification.Name(rawValue: "CloudKitSyncWillBegin")

@@ -16,7 +16,7 @@ class PrintListVisitor {
 		if let topic = visited.topic {
 			print.append(NSAttributedString(string: "\n"))
 			var attrs = [NSAttributedString.Key : Any]()
-			if visited.isComplete || visited.isAncestorComplete {
+			if visited.isComplete || visited.isAnyParentComplete {
 				attrs[.foregroundColor] = UIColor.darkGray
 			} else {
 				attrs[.foregroundColor] = UIColor.black

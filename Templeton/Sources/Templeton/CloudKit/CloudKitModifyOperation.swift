@@ -8,6 +8,7 @@
 import Foundation
 import CloudKit
 import RSCore
+import VinCloudKit
 
 class CloudKitModifyOperation: BaseMainThreadOperation, Logging {
 	
@@ -130,12 +131,12 @@ private extension CloudKitModifyOperation {
 			let outlineRecordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
 			
 			// Now process all the rows
-			for imageRequest in combinedRequest.rowRequests {
-				if let row = outline.findRow(id: imageRequest.id.rowUUID) {
+			for rowRequest in combinedRequest.rowRequests {
+				if let row = outline.findRow(id: rowRequest.id.rowUUID) {
 					outline.updateRowSyncID(row)
-					addSave(zoneID: zoneID, outlineRecordID: outlineRecordID, row: row)
+					addSave(zoneID, row.buildClientRecord())
 				} else {
-					addDelete(imageRequest)
+					addDelete(rowRequest)
 				}
 			}
 			
@@ -206,7 +207,7 @@ private extension CloudKitModifyOperation {
 			case "Outline":
 				outline.syncMetaData = savedRecord.metadata
 			case "Row":
-				(outline.findRowContainer(entityID: entityID) as? Row)?.syncMetaData = savedRecord.metadata
+				(outline.findRowContainer(entityID: entityID) as? Row)?.cloudKitMetaData = savedRecord.metadata
 			case "Image":
 				(outline.findRowContainer(entityID: entityID) as? Row)?.findImage(id: entityID)?.syncMetaData = savedRecord.metadata
 			default:
@@ -250,28 +251,6 @@ private extension CloudKitModifyOperation {
 		record[Outline.CloudKitRecord.Fields.documentBacklinks] = outline.documentBacklinks?.map { $0.description }
 		record[Outline.CloudKitRecord.Fields.hasAltLinks] = outline.hasAltLinks
 		record[Outline.CloudKitRecord.Fields.disambiguator] = outline.disambiguator
-
-		addSave(zoneID, record)
-	}
-	
-	func addSave(zoneID: CKRecordZone.ID, outlineRecordID: CKRecord.ID, row: Row) {
-		let record: CKRecord = {
-			if let syncMetaData = row.syncMetaData, let record = CKRecord(syncMetaData) {
-				return record
-			} else {
-				let recordID = CKRecord.ID(recordName: row.entityID.description, zoneID: zoneID)
-				return CKRecord(recordType: Row.CloudKitRecord.recordType, recordID: recordID)
-			}
-		}()
-
-		record.parent = CKRecord.Reference(recordID: outlineRecordID, action: .none)
-		record[Row.CloudKitRecord.Fields.outline] = CKRecord.Reference(recordID: outlineRecordID, action: .deleteSelf)
-		record[Row.CloudKitRecord.Fields.syncID] = row.syncID
-		record[Row.CloudKitRecord.Fields.subtype] = "text"
-		record[Row.CloudKitRecord.Fields.topicData] = row.topicData
-		record[Row.CloudKitRecord.Fields.noteData] = row.noteData
-		record[Row.CloudKitRecord.Fields.isComplete] = row.isComplete ? "1" : "0"
-		record[Row.CloudKitRecord.Fields.rowOrder] = Array(row.rowOrder)
 
 		addSave(zoneID, record)
 	}
