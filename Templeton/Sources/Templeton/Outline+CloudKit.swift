@@ -146,7 +146,7 @@ extension Outline {
 			   let data = try? Data(contentsOf: fileURL) {
 
 				let image = Image(id: saveRecordID, isInNotes: isInNotes, offset: offset, data: data)
-				image.syncMetaData = saveRecord.metadata
+				image.cloudKitMetaData = saveRecord.metadata
 				
 				row.saveImage(image)
 				updatedRowIDs.insert(saveRecordID.rowUUID)
@@ -158,7 +158,7 @@ extension Outline {
 			documentDidChangeBySync()
 		}
 		
-		guard isBeingViewed else { return }
+		guard isBeingUsed else { return }
 
 		var reloadRows = [Row]()
 		
@@ -194,12 +194,12 @@ extension Outline {
 			return []
 		}
 		
-		syncMetaData = record.metadata
+		cloudKitMetaData = record.metadata
 		
 		let newTitle = record[Outline.CloudKitRecord.Fields.title] as? String
 		if title != newTitle {
 			title = newTitle
-			if isBeingViewed {
+			if isBeingUsed {
 				outlineElementsDidChange(OutlineElementChanges(section: .title, reloads: Set([0])))
 			}
 		}
@@ -262,7 +262,7 @@ extension Outline {
 			account.deleteTag(name: tagNameToDelete)
 		}
 		
-		guard isBeingViewed, isSearching == .notSearching else { return updatedRowIDs }
+		guard isBeingUsed, isSearching == .notSearching else { return updatedRowIDs }
 
 		var moves = Set<OutlineElementChanges.Move>()
 		var inserts = Set<Int>()

@@ -8,32 +8,28 @@ import Foundation
 import RSCore
 
 public final class SplitRowCommand: OutlineCommand {
-	public var undoActionName: String
-	public var redoActionName: String
-	public var undoManager: UndoManager
-	weak public var delegate: OutlineCommandDelegate?
-	public var cursorCoordinates: CursorCoordinates?
-	
 	public var newCursorIndex: Int?
 
-	public var outline: Outline
 	var newRow: Row?
 	var row: Row
 	var topic: NSAttributedString
 	var cursorPosition: Int
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, row: Row, topic: NSAttributedString, cursorPosition: Int) {
-		self.undoManager = undoManager
-		self.delegate = delegate
-		self.outline = outline
+	public init(actionName: String,
+				undoManager: UndoManager,
+				delegate: OutlineCommandDelegate,
+				outline: Outline,
+				row: Row,
+				topic: NSAttributedString,
+				cursorPosition: Int) {
 		self.row = row
 		self.topic = topic
 		self.cursorPosition = cursorPosition
-		undoActionName = L10n.splitRow
-		redoActionName = L10n.splitRow
+
+		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
-	public func perform() {
+	public override func perform() {
 		saveCursorCoordinates()
 		if newRow == nil {
 			newRow = Row(outline: outline)
@@ -42,7 +38,7 @@ public final class SplitRowCommand: OutlineCommand {
 		registerUndo()
 	}
 	
-	public func undo() {
+	public override func undo() {
 		guard let newHeadline = newRow else { return }
 		outline.joinRows(topRow: row, bottomRow: newHeadline)
 		registerRedo()

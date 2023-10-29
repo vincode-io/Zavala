@@ -9,39 +9,29 @@ import Foundation
 import RSCore
 
 public final class MoveRowUpCommand: OutlineCommand {
-	public var undoActionName: String
-	public var redoActionName: String
-	public var undoManager: UndoManager
-	weak public var delegate: OutlineCommandDelegate?
-	public var cursorCoordinates: CursorCoordinates?
-	
-	public var outline: Outline
 	var rows: [Row]
 
 	var oldRowStrings: RowStrings?
 	var newRowStrings: RowStrings?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
-		self.undoManager = undoManager
-		self.delegate = delegate
-		self.outline = outline
+	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
 		self.rows = rows
-		self.undoActionName = L10n.moveUp
-		self.redoActionName = L10n.moveUp
 		
 		if rows.count == 1, let row = rows.first {
 			self.oldRowStrings = row.rowStrings
 			self.newRowStrings = rowStrings
 		}
+
+		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
-	public func perform() {
+	public override func perform() {
 		saveCursorCoordinates()
 		outline.moveRowsUp(rows, rowStrings: newRowStrings)
 		registerUndo()
 	}
 	
-	public func undo() {
+	public override func undo() {
 		outline.moveRowsDown(rows, rowStrings: oldRowStrings)
 		registerRedo()
 		restoreCursorPosition()

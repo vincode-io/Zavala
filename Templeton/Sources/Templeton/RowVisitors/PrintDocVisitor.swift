@@ -85,8 +85,7 @@ private extension PrintDocVisitor {
 		attrs[.paragraphStyle] = topicParagraphStyle
 		
 		let printTopic = NSMutableAttributedString(attributedString: topic)
-		let range = NSRange(location: 0, length: printTopic.length)
-		printTopic.addAttributes(attrs, range: range)
+		printTopic.addAttributes(attrs)
 		printTopic.replaceFont(with: topicFont)
 
 		print.append(printTopic)
@@ -109,8 +108,7 @@ private extension PrintDocVisitor {
 
 		let noteTopic = NSMutableAttributedString(string: "\n")
 		noteTopic.append(note)
-		let range = NSRange(location: 0, length: noteTopic.length)
-		noteTopic.addAttributes(attrs, range: range)
+		noteTopic.addAttributes(attrs)
 		noteTopic.replaceFont(with: noteFont)
 
 		print.append(noteTopic)

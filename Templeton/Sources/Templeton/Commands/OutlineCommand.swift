@@ -12,13 +12,43 @@ public protocol OutlineCommandDelegate: AnyObject {
 	func restoreCursorPosition(_: CursorCoordinates)
 }
 
-public protocol OutlineCommand: UndoableCommand {
-	var delegate: OutlineCommandDelegate? { get }
-	var outline: Outline { get }
-	var cursorCoordinates: CursorCoordinates? { get set }
+public class OutlineCommand: UndoableCommand {
+	
+	var actionName: String
+	public var undoActionName: String {
+		return actionName
+	}
+	public var redoActionName: String {
+		return actionName
+	}
+	
+	public var undoManager: UndoManager
+	weak public var delegate: OutlineCommandDelegate?
+	public var cursorCoordinates: CursorCoordinates?
+	public var outline: Outline
+
+	init(actionName: String,
+		 undoManager: UndoManager,
+		 delegate: OutlineCommandDelegate? = nil,
+		 outline: Outline,
+		 cursorCoordinates: CursorCoordinates? = nil) {
+		self.actionName = actionName
+		self.undoManager = undoManager
+		self.delegate = delegate
+		self.outline = outline
+		self.cursorCoordinates = cursorCoordinates
+	}
+	
+	public func perform() {
+		fatalError("Undo function not implemented.")
+	}
+	
+	public func undo() {
+		fatalError("Undo function not implemented.")
+	}
 }
 
-public extension OutlineCommand {
+extension OutlineCommand {
 	
 	func saveCursorCoordinates() {
 		let coordinates = delegate?.currentCoordinates
@@ -27,7 +57,7 @@ public extension OutlineCommand {
 	}
 	
 	func restoreCursorPosition() {
-		if let cursorCoordinates = cursorCoordinates {
+		if let cursorCoordinates {
 			delegate?.restoreCursorPosition(cursorCoordinates)
 		}
 	}

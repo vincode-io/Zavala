@@ -11,13 +11,13 @@ extension UIColor {
 	
 	static var accentColor: UIColor {
 		guard let systemHighlightColor = UserDefaults.standard.string(forKey: "AppleHighlightColor"),
-			  let colorName = systemHighlightColor.components(separatedBy: " ").last else { return AppAssets.accent }
+			  let colorName = systemHighlightColor.components(separatedBy: " ").last else { return ZavalaImageAssets.accentColor }
 		
 		guard colorName != "Graphite" else { return UIColor.systemGray }
 		
 		let selector = NSSelectorFromString(NSString.localizedStringWithFormat("system%@Color", colorName) as String)
-		guard UIColor.responds(to: selector) else { return AppAssets.accent }
-		return UIColor.perform(selector).takeUnretainedValue() as? UIColor ?? AppAssets.accent
+		guard UIColor.responds(to: selector) else { return ZavalaImageAssets.accentColor }
+		return UIColor.perform(selector).takeUnretainedValue() as? UIColor ?? ZavalaImageAssets.accentColor
 	}
 	
 	func asImage() -> UIImage {

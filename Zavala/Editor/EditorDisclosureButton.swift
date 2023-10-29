@@ -21,9 +21,9 @@ class EditorDisclosureButton: UIButton {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 
-		self.setImage(AppAssets.disclosure, for: .normal)
+		self.setImage(ZavalaImageAssets.disclosure, for: .normal)
 		self.adjustsImageWhenHighlighted = false
-		self.tintColor = AppAssets.accessory
+		self.tintColor = ZavalaImageAssets.accessoryColor
 		self.imageView?.contentMode = .center
 		self.imageView?.clipsToBounds = false
 		self.translatesAutoresizingMaskIntoConstraints = false
@@ -67,7 +67,7 @@ class EditorDisclosureButton: UIButton {
 
 		switch currentState {
 		case .expanded:
-			accessibilityLabel = L10n.collapse
+			accessibilityLabel = AppStringAssets.collapseControlLabel
 			if animated {
 				UIView.animate(withDuration: 0.15) {
 					self.transform = CGAffineTransform(rotationAngle: 0)
@@ -76,7 +76,7 @@ class EditorDisclosureButton: UIButton {
 				transform = CGAffineTransform(rotationAngle: 0)
 			}
 		case .collapsed:
-			accessibilityLabel = L10n.expand
+			accessibilityLabel = AppStringAssets.expandControlLabel
 			let rotationAngle: CGFloat = -1.570796
 			if animated {
 				UIView.animate(withDuration: 0.15) {
@@ -86,7 +86,7 @@ class EditorDisclosureButton: UIButton {
 				transform = CGAffineTransform(rotationAngle: rotationAngle)
 			}
 		case .partial:
-			accessibilityLabel = L10n.expand
+			accessibilityLabel = AppStringAssets.expandControlLabel
 			let rotationAngle: CGFloat = -0.785398
 			if animated {
 				UIView.animate(withDuration: 0.15) {

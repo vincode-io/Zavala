@@ -19,7 +19,7 @@ struct AboutView: View {
 	var body: some View {
 		ZStack {
 			if UIDevice.current.userInterfaceIdiom == .mac {
-				AppAssets.aboutPanelBackgroundColor.ignoresSafeArea()
+				ZavalaImageAssets.aboutBackgroundColor.ignoresSafeArea()
 			} else {
 				VStack() {
 					Capsule()
@@ -37,7 +37,7 @@ struct AboutView: View {
 						.frame(width: 75, height: 75)
 						.clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
 						.onTapGesture {
-							UIApplication.shared.open(AppAssets.websiteURL, options: [:])
+							UIApplication.shared.open(URL(string: AppStringAssets.websiteURL)!, options: [:])
 						}
 					Text(Bundle.main.appName)
 						.foregroundColor(.primary)
@@ -58,9 +58,9 @@ struct AboutView: View {
 					AttributedLabelView(string: iconBy)
 				}
 				VStack(spacing: 5) {
-					Link("Acknowledgements", destination: AppAssets.acknowledgementsURL)
+					Link("Acknowledgements", destination: URL(string: AppStringAssets.acknowledgementsURL)!)
 						.buttonStyle(.borderless)
-					Link("Privacy Policy", destination: AppAssets.privacyPolicyURL)
+					Link("Privacy Policy", destination: URL(string: AppStringAssets.privacyPolicyURL)!)
 						.buttonStyle(.borderless)
 				}
 				Spacer()

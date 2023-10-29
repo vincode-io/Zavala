@@ -41,7 +41,7 @@ class MacLinkViewController: UIViewController {
 		linkTextField.text = link
 
 		if link == nil {
-			submitButton.setTitle(L10n.add, for: .normal)
+			submitButton.setTitle(AppStringAssets.addControlLabel, for: .normal)
 			
 			if UIPasteboard.general.hasURLs {
 				linkTextField.text = UIPasteboard.general.url?.absoluteString

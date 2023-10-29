@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import os.log
 import RSCore
 import CloudKit
 import VinCloudKit
@@ -15,8 +14,6 @@ class CloudKitOutlineZoneDelegate: CloudKitZoneDelegate {
 	
 	weak var account: Account?
 	var zoneID: CKRecordZone.ID
-	
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "CloudKit")
 	
 	init(account: Account, zoneID: CKRecordZone.ID) {
 		self.account = account

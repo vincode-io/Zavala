@@ -1,6 +1,6 @@
 //
 //  RemoteDropRowCommand.swift
-//  
+//
 //
 //  Created by Maurice Parker on 12/30/20.
 //
@@ -9,37 +9,27 @@ import Foundation
 import RSCore
 
 public final class RemoteDropRowCommand: OutlineCommand {
-	public var undoActionName: String
-	public var redoActionName: String
-	public var undoManager: UndoManager
-	weak public var delegate: OutlineCommandDelegate?
-	public var cursorCoordinates: CursorCoordinates?
-	
-	public var outline: Outline
 	var rowGroups: [RowGroup]
 	var rows: [Row]
 	var afterRow: Row?
 	var prefersEnd: Bool
 	
-	public init(undoManager: UndoManager,
-		 delegate: OutlineCommandDelegate,
-		 outline: Outline,
-		 rowGroups: [RowGroup],
-		 afterRow: Row?,
-		 prefersEnd: Bool) {
+	public init(actionName: String, undoManager: UndoManager,
+				delegate: OutlineCommandDelegate,
+				outline: Outline,
+				rowGroups: [RowGroup],
+				afterRow: Row?,
+				prefersEnd: Bool) {
 		
-		self.undoManager = undoManager
-		self.delegate = delegate
-		self.outline = outline
 		self.rowGroups = rowGroups
 		self.rows = [Row]()
 		self.afterRow = afterRow
 		self.prefersEnd = prefersEnd
-		self.undoActionName = L10n.copy
-		self.redoActionName = L10n.copy
+		
+		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
-	public func perform() {
+	public override func perform() {
 		saveCursorCoordinates()
 		
 		var newRows = [Row]()
@@ -53,7 +43,7 @@ public final class RemoteDropRowCommand: OutlineCommand {
 		registerUndo()
 	}
 	
-	public func undo() {
+	public override func undo() {
 		var allRows = [Row]()
 		
 		func deleteVisitor(_ visited: Row) {
@@ -61,7 +51,7 @@ public final class RemoteDropRowCommand: OutlineCommand {
 			visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
 		}
 		rows.forEach { $0.visit(visitor: deleteVisitor(_:)) }
-
+		
 		outline.deleteRows(allRows)
 		registerRedo()
 		restoreCursorPosition()

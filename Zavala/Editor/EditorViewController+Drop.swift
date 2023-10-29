@@ -185,7 +185,8 @@ private extension EditorViewController {
 	func localRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], toParent: RowContainer, toChildIndex: Int) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = LocalDropRowCommand(undoManager: undoManager,
+		let command = LocalDropRowCommand(actionName:AppStringAssets.moveControlLabel,
+										  undoManager: undoManager,
 										  delegate: self,
 										  outline: outline,
 										  rows: rows,
@@ -211,7 +212,7 @@ private extension EditorViewController {
 		for itemProvider in itemProviders {
 			group.enter()
 			itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
-				if let data = data {
+				if let data {
 					do {
 						rowGroups.append(try RowGroup.fromData(data))
 						group.leave()
@@ -261,6 +262,7 @@ private extension EditorViewController {
 			let textRows = text.split(separator: "\n").map { String($0) }
 			for textRow in textRows {
 				let row = Row(outline: outline, topicMarkdown: textRow.trimmingWhitespace)
+				row.detectData()
 				rowGroups.append(RowGroup(row))
 			}
 			
@@ -306,7 +308,8 @@ private extension EditorViewController {
 	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], afterRow: Row?, prefersEnd: Bool = false) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = RemoteDropRowCommand(undoManager: undoManager,
+		let command = RemoteDropRowCommand(actionName: AppStringAssets.copyControlLabel,
+										   undoManager: undoManager,
 										   delegate: self,
 										   outline: outline,
 										   rowGroups: rowGroups,

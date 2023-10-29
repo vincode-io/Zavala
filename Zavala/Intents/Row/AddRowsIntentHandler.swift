@@ -31,6 +31,8 @@ class AddRowsIntentHandler: NSObject, ZavalaIntentHandler, AddRowsIntentHandling
 		
 		let rows = topics.map { Row(outline: outline, topicMarkdown: $0) }
 		
+		rows.forEach({ $0.detectData() })
+		
 		switch intent.destination {
 		case .insideAtStart:
 			outline.createRowsInsideAtStart(rows, afterRowContainer: rowContainer)

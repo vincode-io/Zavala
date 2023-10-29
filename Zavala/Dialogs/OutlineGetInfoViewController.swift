@@ -29,38 +29,30 @@ class OutlineGetInfoViewController: UITableViewController {
 		ownerEmailTextField.text = outline?.ownerEmail
 		ownerURLTextField.text = outline?.ownerURL
 	
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateStyle = .medium
-		dateFormatter.timeStyle = .none
-
-		let timeFormatter = DateFormatter()
-		timeFormatter.dateStyle = .none
-		timeFormatter.timeStyle = .short
-	
-		let createLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: 0.0, width: 0.0, height: 0.0))
-		createLabel.font = UIFont.systemFont(ofSize: 12.0)
-		createLabel.textColor = UIColor.gray
+		let createdLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: 0.0, width: 0.0, height: 0.0))
+		createdLabel.font = UIFont.systemFont(ofSize: 12.0)
+		createdLabel.textColor = UIColor.gray
 		if let created = outline?.created {
-			createLabel.text = L10n.createdOn(dateFormatter.string(from: created), timeFormatter.string(from: created))
+			createdLabel.text = AppStringAssets.createdOnLabel(date: created)
 		} else {
-			createLabel.text = " "
+			createdLabel.text = " "
 		}
-		createLabel.sizeToFit()
+		createdLabel.sizeToFit()
 		
-		let updateLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: createLabel.frame.maxY + 8, width: 0.0, height: 0.0))
-		updateLabel.font = UIFont.systemFont(ofSize: 12.0)
-		updateLabel.textColor = UIColor.gray
+		let updatedLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: createdLabel.frame.maxY + 8, width: 0.0, height: 0.0))
+		updatedLabel.font = UIFont.systemFont(ofSize: 12.0)
+		updatedLabel.textColor = UIColor.gray
 		if let updated = outline?.updated {
-			updateLabel.text = L10n.updatedOn(dateFormatter.string(from: updated), timeFormatter.string(from: updated))
+			updatedLabel.text = AppStringAssets.updatedOnLabel(date: updated)
 		} else {
-			updateLabel.text = " "
+			updatedLabel.text = " "
 		}
-		updateLabel.sizeToFit()
+		updatedLabel.sizeToFit()
 		
-		let width = max(createLabel.frame.width, updateLabel.frame.width)
-		let wrapperView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: updateLabel.frame.maxY))
-		wrapperView.addSubview(createLabel)
-		wrapperView.addSubview(updateLabel)
+		let width = max(createdLabel.frame.width, updatedLabel.frame.width)
+		let wrapperView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: updatedLabel.frame.maxY))
+		wrapperView.addSubview(createdLabel)
+		wrapperView.addSubview(updatedLabel)
 		tableView.tableFooterView = wrapperView
 	}
 

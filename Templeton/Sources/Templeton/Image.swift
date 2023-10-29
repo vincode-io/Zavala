@@ -9,11 +9,11 @@ import Foundation
 
 public class Image: Identifiable, Codable, Equatable {
 	
+	public var cloudKitMetaData: Data?
 	public var id: EntityID
 	public var isInNotes: Bool
 	public var offset: Int
 	public var data: Data
-	public var syncMetaData: Data?
 	public var syncID: String?
 
 	private enum CodingKeys: String, CodingKey {
@@ -21,7 +21,6 @@ public class Image: Identifiable, Codable, Equatable {
 		case isInNotes = "isInNotes"
 		case offset = "offset"
 		case data = "data"
-		case syncMetaData = "syncMetaData"
 		case syncID = "syncID"
 	}
 	

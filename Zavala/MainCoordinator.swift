@@ -9,10 +9,10 @@ import UIKit
 import Templeton
 import SafariServices
 
-protocol MainCoordinator: UIViewController {
+protocol MainCoordinator: UIViewController, DocumentsActivityItemsConfigurationDelegate {
 	var editorViewController: EditorViewController? { get }
 	var isExportAndPrintUnavailable: Bool { get }
-	var selectedOutlines: [Outline]? { get }
+	var selectedDocuments: [Document] { get }
 	var isGoBackwardOneUnavailable: Bool { get }
 	var isGoForwardOneUnavailable: Bool { get }
 	func goBackwardOne()
@@ -21,9 +21,8 @@ protocol MainCoordinator: UIViewController {
 
 extension MainCoordinator {
 	
-	var currentDocument: Document? {
-		guard let outline = editorViewController?.outline else { return nil	}
-		return .outline(outline)
+	var selectedOutlines: [Outline] {
+		return selectedDocuments.compactMap { $0.outline }
 	}
 	
 	var isOutlineFunctionsUnavailable: Bool {
@@ -226,6 +225,10 @@ extension MainCoordinator {
 		editorViewController?.link()
 	}
 	
+	func createOrDeleteNotes() {
+		editorViewController?.createOrDeleteNotes()
+	}
+	
 	func copyDocumentLink() {
 		let documentURL = editorViewController?.outline?.id.url
 		UIPasteboard.general.url = documentURL
@@ -326,28 +329,23 @@ extension MainCoordinator {
 	}
 	
 	func exportPDFDocs() {
-		guard let outlines = selectedOutlines else { return }
-		exportPDFDocsForOutlines(outlines)
+		exportPDFDocsForOutlines(selectedOutlines)
 	}
 	
 	func exportPDFLists() {
-		guard let outlines = selectedOutlines else { return }
-		exportPDFListsForOutlines(outlines)
+		exportPDFListsForOutlines(selectedOutlines)
 	}
 	
 	func exportMarkdownDocs() {
-		guard let outlines = selectedOutlines else { return }
-		exportMarkdownDocsForOutlines(outlines)
+		exportMarkdownDocsForOutlines(selectedOutlines)
 	}
 	
 	func exportMarkdownLists() {
-		guard let outlines = selectedOutlines else { return }
-		exportMarkdownListsForOutlines(outlines)
+		exportMarkdownListsForOutlines(selectedOutlines)
 	}
 	
 	func exportOPMLs() {
-		guard let outlines = selectedOutlines else { return }
-		exportOPMLsForOutlines(outlines)
+		exportOPMLsForOutlines(selectedOutlines)
 	}
 	
 	func exportPDFDocsForOutlines(_ outlines: [Outline]) {
@@ -419,8 +417,7 @@ extension MainCoordinator {
 	}
 	
 	func printLists() {
-		guard let outlines = selectedOutlines else { return }
-		printListsForOutlines(outlines)
+		printListsForOutlines(selectedOutlines)
 	}
 	
 	func printListsForOutlines(_ outlines: [Outline]) {
@@ -437,8 +434,7 @@ extension MainCoordinator {
 	}
 
 	func printDocs() {
-		guard let outlines = selectedOutlines else { return }
-		printDocsForOutlines(outlines)
+		printDocsForOutlines(selectedOutlines)
 	}
 
 	func printDocsForOutlines(_ outlines: [Outline]) {
@@ -492,6 +488,7 @@ extension NSToolbarItem.Identifier {
 	static let goForward = NSToolbarItem.Identifier("io.vincode.Zavala.goForward")
 	static let insertImage = NSToolbarItem.Identifier("io.vincode.Zavala.insertImage")
 	static let link = NSToolbarItem.Identifier("io.vincode.Zavala.link")
+	static let note = NSToolbarItem.Identifier("io.vincode.Zavala.note")
 	static let boldface = NSToolbarItem.Identifier("io.vincode.Zavala.boldface")
 	static let italic = NSToolbarItem.Identifier("io.vincode.Zavala.italic")
 	static let expandAllInOutline = NSToolbarItem.Identifier("io.vincode.Zavala.expandAllInOutline")

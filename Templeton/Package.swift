@@ -10,9 +10,10 @@ let package = Package(
             targets: ["Templeton"]),
     ],
     dependencies: [
-		.package(url: "https://github.com/vincode-io/RSCore.git", .branch("cloudkit-rewrite")),
-		.package(url: "https://github.com/drmohundro/SWXMLHash.git", .upToNextMajor(from: "5.0.1")),
+		.package(url: "https://github.com/Ranchero-Software/RSCore.git", .revisionItem("fd64fb77de2c4b6a87a971d353e7eea75100f694")),
+		.package(url: "https://github.com/drmohundro/SWXMLHash.git", .exactItem("5.0.1")),
 		.package(url: "https://github.com/vincode-io/MarkdownAttributedString.git", .branch("master")),
+		.package(url: "https://github.com/vincode-io/VinXML.git", .branch("main")),
 		.package(url: "https://github.com/apple/swift-collections.git", .upToNextMajor(from: "1.0.2")),
 		.package(path: "../VinCloudKit"),
     ],
@@ -24,9 +25,9 @@ let package = Package(
 				"SWXMLHash",
 				"MarkdownAttributedString",
 				"VinCloudKit",
+				"VinXML",
 				.product(name: "OrderedCollections", package: "swift-collections")
-			],
-			resources: [.copy("Localizable.strings")]),
+			]),
         .testTarget(
             name: "TempletonTests",
             dependencies: ["Templeton"]),

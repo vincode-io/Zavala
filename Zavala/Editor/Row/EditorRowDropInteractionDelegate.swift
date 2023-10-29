@@ -27,7 +27,7 @@ class EditorRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {
 	}
 	
 	func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
-		if let textView = textView {
+		if let textView {
 			textView.becomeFirstResponder()
 			let point = session.location(in: textView)
 			if let position = textView.closestPosition(to: point) {

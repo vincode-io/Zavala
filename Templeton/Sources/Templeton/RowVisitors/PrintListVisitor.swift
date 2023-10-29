@@ -42,8 +42,7 @@ class PrintListVisitor {
 			
 			let printTopic = NSMutableAttributedString(string: "\u{2022}\t")
 			printTopic.append(topic)
-			let range = NSRange(location: 0, length: printTopic.length)
-			printTopic.addAttributes(attrs, range: range)
+			printTopic.addAttributes(attrs)
 			printTopic.replaceFont(with: topicFont)
 
 			print.append(printTopic)
@@ -68,8 +67,7 @@ class PrintListVisitor {
 
 			let noteTopic = NSMutableAttributedString(string: "\n")
 			noteTopic.append(note)
-			let range = NSRange(location: 0, length: noteTopic.length)
-			noteTopic.addAttributes(attrs, range: range)
+			noteTopic.addAttributes(attrs)
 			noteTopic.replaceFont(with: noteFont)
 
 			print.append(noteTopic)

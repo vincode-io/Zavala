@@ -94,9 +94,9 @@ class EditorRowTextView: UITextView {
     var textViewHeight: CGFloat?
     var isSavingTextUnnecessary = false
 
-	let toggleBoldCommand = UIKeyCommand(title: L10n.bold, action: .toggleBoldface, input: "b", modifierFlags: [.command])
-	let toggleItalicsCommand = UIKeyCommand(title: L10n.italic, action: .toggleItalics, input: "i", modifierFlags: [.command])
-	let editLinkCommand = UIKeyCommand(title: L10n.link, action: .editLink, input: "k", modifierFlags: [.command])
+	let toggleBoldCommand = UIKeyCommand(title: AppStringAssets.boldControlLabel, action: .toggleBoldface, input: "b", modifierFlags: [.command])
+	let toggleItalicsCommand = UIKeyCommand(title: AppStringAssets.italicControlLabel, action: .toggleItalics, input: "i", modifierFlags: [.command])
+	let editLinkCommand = UIKeyCommand(title: AppStringAssets.linkControlLabel, action: .editLink, input: "k", modifierFlags: [.command])
 
 	private var dropInteractionDelegate: EditorRowDropInteractionDelegate!
 	private var stackedUndoManager: UndoManager?
@@ -267,6 +267,10 @@ class EditorRowTextView: UITextView {
         fatalError("editLink has not been implemented")
     }
 
+	@objc func insertNewline(_ sender: Any) {
+		insertText("\n")
+	}
+	
 	func handleDidChangeSelection() {
 		guard let selectedTextRange = selectedTextRange, !selectedTextRange.isEmpty else {
 			previousSelectedTextRange = nil
@@ -277,7 +281,7 @@ class EditorRowTextView: UITextView {
 			self.previousSelectedTextRange = selectedTextRange
 		}
 
-		guard let previousSelectedTextRange = previousSelectedTextRange else {
+		guard let previousSelectedTextRange else {
 			return
 		}
 		
@@ -334,6 +338,8 @@ extension EditorRowTextView: NSTextStorageDelegate {
 			newTypingAttributes = baseAttributes
 		}
 
+		var needsDataDetection = false
+		
 		textStorage.enumerateAttributes(in: editedRange, options: .longestEffectiveRangeNotRequired) { (attributes, range, _) in
 			var newAttributes = attributes
 			
@@ -356,8 +362,12 @@ extension EditorRowTextView: NSTextStorageDelegate {
 					newAttributes[key] = nil
 				}
 				
-				if key == .link && textStorage.attributedSubstring(from: range).string == " " {
-					newAttributes[key] = nil
+				if textStorage.attributedSubstring(from: range).string == " " {
+					if key == .link {
+						newAttributes[key] = nil
+					} else {
+						needsDataDetection = true
+					}
 				}
 
 				if key == .font, let oldFont = attributes[key] as? UIFont, let newFont = font {
@@ -393,6 +403,10 @@ extension EditorRowTextView: NSTextStorageDelegate {
 			
 			textStorage.setAttributes(newAttributes, range: range)
 		}
+		
+		if needsDataDetection {
+			textStorage.detectData()
+		}
 	}
 	
 }
@@ -400,31 +414,7 @@ extension EditorRowTextView: NSTextStorageDelegate {
 // MARK: Helpers
 
 extension EditorRowTextView {
-    
-    func detectData() {
-        guard let text = attributedText?.string, !text.isEmpty else { return }
         
-        let detector = NSDataDetector(dataTypes: [.url])
-        detector.enumerateMatches(in: text) { (range, match) in
-            switch match {
-            case .url(let url), .email(_, let url):
-                var effectiveRange = NSRange()
-                if let link = textStorage.attribute(.link, at: range.location, effectiveRange: &effectiveRange) as? URL {
-                    if range != effectiveRange || link != url {
-                        isTextChanged = true
-                        textStorage.removeAttribute(.link, range: effectiveRange)
-                        textStorage.addAttribute(.link, value: url, range: range)
-                    }
-                } else {
-                    isTextChanged = true
-                    textStorage.addAttribute(.link, value: url, range: range)
-                }
-            default:
-                break
-            }
-        }
-    }
-    
     func findAndSelectLink() -> (String?, String?, NSRange) {
         var effectiveRange = NSRange()
 		
@@ -469,7 +459,9 @@ extension EditorRowTextView {
 	}
 	
     func processTextEditingEnding() {
-        detectData()
+		if textStorage.detectData() {
+			isTextChanged = true
+		}
         saveText()
     }
 

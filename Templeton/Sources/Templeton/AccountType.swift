@@ -16,16 +16,16 @@ public enum AccountType: Int, Codable {
 		case .local:
 			switch UIDevice.current.userInterfaceIdiom {
 			case .mac:
-				return L10n.accountOnMyMac
+				return TempletonStringAssets.accountOnMyMac
 			case .pad:
-				return L10n.accountOnMyIPad
+				return TempletonStringAssets.accountOnMyIPad
 			case .phone:
-				return L10n.accountOnMyIPhone
+				return TempletonStringAssets.accountOnMyIPhone
 			default:
 				fatalError()
 			}
 		case .cloudKit:
-			return L10n.accountICloud
+			return TempletonStringAssets.accountICloud
 		}
 	}
 

@@ -4,7 +4,7 @@ A dedicated outliner for macOS, iPadOS, and iOS.
 
 ## Download
 
-Zavala 1.2 has been release! You can [download it in the App Store](https://apps.apple.com/us/app/zavala/id1546457750).
+Zavala 2.0 has been released! You can [download it in the App Store](https://apps.apple.com/us/app/zavala/id1546457750).
 
 ## Community
 

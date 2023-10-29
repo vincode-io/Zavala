@@ -62,11 +62,11 @@ final class GeneralPreferencesViewController: NSViewController {
 		
 		let alert = NSAlert()
 		alert.alertStyle = .warning
-		alert.messageText = L10n.removeCloudKitTitle
-		alert.informativeText = L10n.removeCloudKitMessage
+		alert.messageText = AppStringAssets.removeICloudAccountTitle
+		alert.informativeText = AppStringAssets.removeICloudAccountMessage
 		
-		alert.addButton(withTitle: L10n.remove)
-		alert.addButton(withTitle: L10n.cancel)
+		alert.addButton(withTitle: AppStringAssets.removeControlLabel)
+		alert.addButton(withTitle: AppStringAssets.cancelControlLabel)
 			
 		alert.beginSheetModal(for: view.window!) { [weak self] result in
 			if result == NSApplication.ModalResponse.alertFirstButtonReturn {

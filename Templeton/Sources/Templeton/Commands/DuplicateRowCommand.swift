@@ -9,28 +9,18 @@ import Foundation
 import RSCore
 
 public final class DuplicateRowCommand: OutlineCommand {
-	public var undoActionName: String
-	public var redoActionName: String
-	public var undoManager: UndoManager
-	weak public var delegate: OutlineCommandDelegate?
-	public var cursorCoordinates: CursorCoordinates?
-	
-	public var outline: Outline
 	var rows: [Row]
 	var newRows: [Row]?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row]) {
-		self.undoManager = undoManager
-		self.delegate = delegate
-		self.outline = outline
+	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row]) {
 		self.rows = rows
-		self.undoActionName = L10n.duplicate
-		self.redoActionName = L10n.duplicate
+
+		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
-	public func perform() {
+	public override func perform() {
 		saveCursorCoordinates()
-		if let newRows = newRows {
+		if let newRows {
 			outline.createRows(newRows, afterRow: rows.sortedByDisplayOrder().first)
 		} else {
 			newRows = outline.duplicateRows(rows)
@@ -38,8 +28,8 @@ public final class DuplicateRowCommand: OutlineCommand {
 		registerUndo()
 	}
 	
-	public func undo() {
-		guard let newRows = newRows else {
+	public override func undo() {
+		guard let newRows else {
 			return
 		}
 

@@ -38,7 +38,7 @@ class ImageViewController: UIViewController {
         imageScrollView.imageContentMode = .aspectFit
         imageScrollView.initialOffset = .center
 		
-		if let image = image {
+		if let image {
 			imageScrollView.display(image: image)
 		}
     }
@@ -51,7 +51,7 @@ class ImageViewController: UIViewController {
 	}
 	
 	@IBAction func share(_ sender: Any) {
-		guard let image = image else { return }
+		guard let image else { return }
 		let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
 		activityViewController.popoverPresentationController?.sourceView = shareButton
 		activityViewController.popoverPresentationController?.sourceRect = shareButton.bounds

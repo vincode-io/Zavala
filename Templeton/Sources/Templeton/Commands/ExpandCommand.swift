@@ -9,33 +9,23 @@ import Foundation
 import RSCore
 
 public final class ExpandCommand: OutlineCommand {
-	public var undoActionName: String
-	public var redoActionName: String
-	public var undoManager: UndoManager
-	weak public var delegate: OutlineCommandDelegate?
-	public var cursorCoordinates: CursorCoordinates?
-	
-	public var outline: Outline
 	var rows: [Row]
 	var expandedRows: [Row]?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row]) {
-		self.undoManager = undoManager
-		self.delegate = delegate
-		self.outline = outline
+	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row]) {
 		self.rows = rows
-		undoActionName = L10n.expand
-		redoActionName = L10n.expand
+
+		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
-	public func perform() {
+	public override func perform() {
 		saveCursorCoordinates()
 		expandedRows = outline.expand(rows: rows)
 		registerUndo()
 	}
 	
-	public func undo() {
-		guard let expandedRows = expandedRows else { return }
+	public override func undo() {
+		guard let expandedRows else { return }
 		outline.collapse(rows: expandedRows)
 		registerRedo()
 		restoreCursorPosition()

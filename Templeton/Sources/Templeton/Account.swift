@@ -6,10 +6,9 @@
 //
 
 import UIKit
-import os.log
+import CloudKit
 import RSCore
 import SWXMLHash
-import CloudKit
 import VinCloudKit
 
 public extension Notification.Name {
@@ -27,11 +26,11 @@ public enum AccountError: LocalizedError {
 	public var errorDescription: String? {
 		switch self {
 		case .securityScopeError:
-			return L10n.accountErrorScopedResource
+			return TempletonStringAssets.accountErrorScopedResource
 		case .fileReadError:
-			return L10n.accountErrorImportRead
+			return TempletonStringAssets.accountErrorImportRead
 		case .opmlParserError:
-			return L10n.accountErrorOPMLParse
+			return TempletonStringAssets.accountErrorOPMLParse
 		}
 	}
 }
@@ -47,11 +46,7 @@ public final class Account: NSObject, Identifiable, Codable {
 	}
 	
 	public var type: AccountType
-	public var isActive: Bool {
-		didSet {
-			accountMetadataDidChange()
-		}
-	}
+	public var isActive: Bool
 	
 	public private(set) var tags: [Tag]?
 	public private(set) var documents: [Document]?
@@ -90,7 +85,6 @@ public final class Account: NSObject, Identifiable, Codable {
 	var cloudKitManager: CloudKitManager?
 	
 	private let operationQueue = OperationQueue()
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Account")
 
 	private var documentsDictionaryNeedUpdate = true
 	private var _idToDocumentsDictionary = [String: Document]()
@@ -135,6 +129,7 @@ public final class Account: NSObject, Identifiable, Codable {
 	public func activate() {
 		guard isActive == false else { return }
 		isActive = true
+		accountMetadataDidChange()
 	}
 	
 	public func deactivate() {
@@ -241,7 +236,7 @@ public final class Account: NSObject, Identifiable, Codable {
 	}
 	
 	public func disambiguate(document: Document) {
-		guard let documents = documents else { return }
+		guard let documents else { return }
 		
 		if let lastCommon = documents.filter({ $0.title == document.title && $0.id != document.id }).sorted(by: { $0.disambiguator ?? 0 < $1.disambiguator ?? 0 }).last {
 			document.update(disambiguator: (lastCommon.disambiguator ?? 1) + 1)
@@ -259,7 +254,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		documents!.append(document)
 		accountDocumentsDidChange()
 
-		if let tags = tags {
+		if let tags {
             for tag in tags {
                 outline.createTag(tag)
             }

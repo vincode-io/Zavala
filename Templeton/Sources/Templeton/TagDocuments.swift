@@ -20,7 +20,7 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 	#endif
 	
 	public var itemCount: Int? {
-		guard let tag = tag else { return nil }
+		guard let tag else { return nil }
 		return account?.documents?.filter({ $0.hasTag(tag) }).count
 	}
 	
@@ -35,7 +35,7 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 	}
 	
 	public func documents(completion: @escaping (Result<[Document], Error>) -> Void) {
-		guard let tag = tag else {
+		guard let tag else {
 			completion(.success([Document]()))
 			return
 		}

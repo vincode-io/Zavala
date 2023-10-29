@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import os.log
+import RSCore
 
 public extension Notification.Name {
 	static let AccountManagerAccountsDidChange = Notification.Name(rawValue: "AccountManagerAccountsDidChange")
@@ -55,8 +55,6 @@ public final class AccountManager {
 	var localAccountFile: URL
 	var cloudKitAccountFolder: URL
 	var cloudKitAccountFile: URL
-
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "AccountManager")
 
 	private var accountFiles = [Int: AccountFile]()
 	
@@ -114,7 +112,7 @@ public final class AccountManager {
 	}
 	
 	public func deleteCloudKitAccount() {
-		guard let cloudKitAccount = cloudKitAccount else { return }
+		guard let cloudKitAccount else { return }
 		
 		// Send out all the document delete events for this account to clean up the search index
 		cloudKitAccount.documents?.forEach { $0.documentDidDelete() }

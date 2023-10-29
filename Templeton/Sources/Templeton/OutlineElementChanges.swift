@@ -38,22 +38,22 @@ public struct OutlineElementChanges {
 	}
 	
 	public var deleteIndexPaths: [IndexPath]? {
-		guard let deletes = deletes else { return nil }
+		guard let deletes else { return nil }
 		return deletes.map { IndexPath(row: $0, section: section.rawValue) }
 	}
 	
 	public var insertIndexPaths: [IndexPath]? {
-		guard let inserts = inserts else { return nil }
+		guard let inserts else { return nil }
 		return inserts.map { IndexPath(row: $0, section: section.rawValue) }
 	}
 	
 	public var moveIndexPaths: [(IndexPath, IndexPath)]? {
-		guard let moves = moves else { return nil }
+		guard let moves else { return nil }
 		return moves.map { (IndexPath(row: $0.from, section: section.rawValue), IndexPath(row: $0.to, section: section.rawValue)) }
 	}
 	
 	public var reloadIndexPaths: [IndexPath]? {
-		guard let reloads = reloads else { return nil }
+		guard let reloads else { return nil }
 		return reloads.map { IndexPath(row: $0, section: section.rawValue) }
 	}
 	

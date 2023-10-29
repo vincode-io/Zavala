@@ -41,7 +41,7 @@ This Shortcut assumes that you have an outline named “TODO”, with completed 
 
 ## [Archive Account](https://www.icloud.com/shortcuts/0f198e078ee5443ba6b10e7d9156269d)
 
-You can use this shortcut to create a Zavala archive. This is a zip file with OPML exports and any associated images from the selected Account. You can use this archive to backup your Account or use it to migrate to another outline application. 
+You can use this shortcut to create a Zavala archive. This is a zip file with OPML exports and any associated images from the selected Account. You can use this archive to backup your Account or use it to migrate to another outline application.
 
 To restore the archive to an account, you will want to delete all the outlines in that account and then use the Restore Account Shortcut load the archive.
 

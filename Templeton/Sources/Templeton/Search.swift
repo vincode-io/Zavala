@@ -12,7 +12,7 @@ import RSCore
 public final class Search: Identifiable, DocumentContainer {
 	
 	public var id: EntityID
-	public var name: String? = L10n.search
+	public var name: String? = TempletonStringAssets.search
 	public var image: RSImage?
 	public var account: Account? = nil
 
@@ -48,11 +48,11 @@ public final class Search: Identifiable, DocumentContainer {
 
 		searchQuery?.completionHandler = { [weak self] error in
 			DispatchQueue.main.async {
-				guard let self = self else {
+				guard let self else {
 					completion(.success([Document]()))
 					return
 				}
-				if let error = error {
+				if let error {
 					completion(.failure(error))
 				} else {
 					completion(.success(self.toDocuments(searchableItems)))

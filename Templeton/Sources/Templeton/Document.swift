@@ -60,10 +60,17 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
-	public var string: String? {
+	public var textContent: String {
 		switch self {
 		case .outline(let outline):
-			return outline.string()
+			return outline.textContent()
+		}
+	}
+	
+	public var formattedPlainText: String {
+		switch self {
+		case .outline(let outline):
+			return outline.markdownList()
 		}
 	}
 	
@@ -211,6 +218,13 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
+	public func deleteAllBacklinks() {
+		switch self {
+		case .outline(let outline):
+			outline.deleteAllBacklinks()
+		}
+	}
+
 	public func load() {
 		switch self {
 		case .outline(let outline):

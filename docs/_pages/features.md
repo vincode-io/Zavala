@@ -12,6 +12,7 @@ header:
 * Share Outlines using iCloud so that you can collaborate on an Outline with one or more other Zavala users in realtime.
 * Embed images in your Outline text fields.
 * Customize the fonts used in the Outline Editor.
+* Build custom Shortcuts using Zavala's numerous Shortcut actions.
 * You can tag Outlines with any name you want and a tag search is automatically generated in the Sidebar so you can find related Outlines.
 * Quickly open any Outline by just typing a portion of the name into the Open Quickly dialog.
 * Do a full text search in the sidebar to find an Outline.

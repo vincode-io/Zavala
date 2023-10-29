@@ -9,40 +9,30 @@ import Foundation
 import RSCore
 
 public final class MoveRowRightCommand: OutlineCommand {
-	public var undoActionName: String
-	public var redoActionName: String
-	public var undoManager: UndoManager
-	weak public var delegate: OutlineCommandDelegate?
-	public var cursorCoordinates: CursorCoordinates?
-	
-	public var outline: Outline
 	var rows: [Row]
 	var moveRightRows: [Row]?
 	var oldRowStrings: RowStrings?
 	var newRowStrings: RowStrings?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
-		self.undoManager = undoManager
-		self.delegate = delegate
-		self.outline = outline
+	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
 		self.rows = rows
-		self.undoActionName = L10n.moveRight
-		self.redoActionName = L10n.moveRight
 		
 		if rows.count == 1, let row = rows.first {
 			self.oldRowStrings = row.rowStrings
 			self.newRowStrings = rowStrings
 		}
+
+		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
-	public func perform() {
+	public override func perform() {
 		saveCursorCoordinates()
 		moveRightRows = outline.moveRowsRight(rows, rowStrings: newRowStrings)
 		registerUndo()
 	}
 	
-	public func undo() {
-		guard let moveRightRows = moveRightRows else { return }
+	public override func undo() {
+		guard let moveRightRows else { return }
 		outline.moveRowsLeft(moveRightRows, rowStrings: oldRowStrings)
 		registerRedo()
 		restoreCursorPosition()

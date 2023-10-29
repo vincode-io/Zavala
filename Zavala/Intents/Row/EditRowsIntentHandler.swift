@@ -98,6 +98,8 @@ class EditRowsIntentHandler: NSObject, ZavalaIntentHandler, EditRowsIntentHandli
 				completion(.init(code: .failure, userActivity: nil))
 				return
 			}
+			
+			row.detectData()
 		}
 		
 		outlines.forEach { $0.unload() }

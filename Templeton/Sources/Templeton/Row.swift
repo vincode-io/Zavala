@@ -25,10 +25,10 @@ enum RowError: LocalizedError {
 	}
 }
 
-public struct LinkResolvingActions: OptionSet {
+public struct AltLinkResolvingActions: OptionSet {
 	
-	public static let fixedAltLink = LinkResolvingActions(rawValue: 1)
-	public static let foundAltLink = LinkResolvingActions(rawValue: 2)
+	public static let fixedAltLink = AltLinkResolvingActions(rawValue: 1)
+	public static let foundAltLink = AltLinkResolvingActions(rawValue: 2)
 	
 	public let rawValue: Int
 	public init(rawValue: Int) {
@@ -44,12 +44,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public var parent: RowContainer?
 	public var shadowTableIndex: Int?
 
-	public var id: String
-	public var cloudKitMetaData: Data?
-	
 	public var isCloudKit: Bool {
 		return outline?.isCloudKit ?? false
 	}
+
+	public var cloudKitMetaData: Data?
+	public var id: String
 
 	var syncIDCloudKitValue: String?
 	public var syncID: String? {
@@ -102,7 +102,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 
 	public weak var outline: Outline? {
 		didSet {
-			if let outline = outline {
+			if let outline {
 				_entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
 			}
 		}
@@ -194,7 +194,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 				var notesImages = images?.filter { $0.isInNotes } ?? [Image]()
 				notesImages.append(contentsOf: newImages)
 
-				if let images = images {
+				if let images {
 					outline?.requestCloudKitUpdates(for: images.filter({ !$0.isInNotes }).map({ $0.id }))
 				}
 				outline?.requestCloudKitUpdates(for: newImages.map({ $0.id }))
@@ -229,7 +229,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 				var topicImages = images?.filter { !$0.isInNotes } ?? [Image]()
 				topicImages.append(contentsOf: newImages)
 
-				if let images = images {
+				if let images {
 					outline?.requestCloudKitUpdates(for: images.filter({ $0.isInNotes }).map({ $0.id }))
 				}
 				outline?.requestCloudKitUpdates(for: newImages.map({ $0.id }))
@@ -451,7 +451,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		var matchedImages = [Image]()
 		
 		func importMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
-			if let markdown = markdown {
+			if let markdown {
 				let mangledMarkdown = markdown.replacingOccurrences(of: "![", with: "!]")
 				let attrString = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 				let strippedString = attrString.string
@@ -478,7 +478,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 					}
 				}
 				
-				resolveLinks(attrString: attrString)
+				resolveAltLinks(attrString: attrString)
 				
 				return attrString
 			}
@@ -488,6 +488,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		
 		self.topic = importMarkdown(topicMarkdown, isInNotes: false)
 		self.note = importMarkdown(noteMarkdown, isInNotes: true)
+		
+		detectData()
 		
 		outline?.updateImages(rowID: id, images: matchedImages)
 	}
@@ -569,7 +571,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	
 	/// Returns itself or the first ancestor that shares a parent with the given row
 	public func ancestorSibling(_ row: Row) -> Row? {
-		guard let parent = parent else { return nil }
+		guard let parent else { return nil }
 		
 		if parent.containsRow(row) || containsRow(row) {
 			return self
@@ -598,22 +600,36 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return visitor.markdown
 	}
 	
-	public func resolveLinks() -> LinkResolvingActions {
-		var actionsTaken = LinkResolvingActions()
+	public func resolveAltLinks() -> AltLinkResolvingActions {
+		var actionsTaken = AltLinkResolvingActions()
 		
-		if let topic = topic {
+		if let topic {
 			let mutableTopic = NSMutableAttributedString(attributedString: topic)
-			actionsTaken.formUnion(resolveLinks(attrString: mutableTopic))
+			actionsTaken.formUnion(resolveAltLinks(attrString: mutableTopic))
 			self.topic = mutableTopic
 		}
 		
-		if let note = note {
+		if let note {
 			let mutableNote = NSMutableAttributedString(attributedString: note)
-			actionsTaken.formUnion(resolveLinks(attrString: mutableNote))
+			actionsTaken.formUnion(resolveAltLinks(attrString: mutableNote))
 			self.note = mutableNote
 		}
 		
 		return actionsTaken
+	}
+	
+	public func detectData() {
+		if let topic = self.topic {
+			let mutableTopic = NSMutableAttributedString(attributedString: topic)
+			mutableTopic.detectData()
+			self.topic = mutableTopic
+		}
+
+		if let note = self.note {
+			let mutableNote = NSMutableAttributedString(attributedString: note)
+			mutableNote.detectData()
+			self.note = mutableNote
+		}
 	}
 	
 	public func visit(visitor: (Row) -> Void) {
@@ -651,7 +667,7 @@ extension Row {
 private extension Row {
 	
 	func replaceImages(attrString: NSAttributedString?, isNotes: Bool) -> NSAttributedString? {
-		guard let attrString = attrString else { return nil }
+		guard let attrString else { return nil }
 		let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
 		
 		mutableAttrString.enumerateAttribute(.attachment, in: .init(location: 0, length: mutableAttrString.length), options: []) { (attribute, range, _) in
@@ -693,7 +709,7 @@ private extension Row {
 	}
 	
 	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, representation: DataRepresentation) -> String? {
-		guard let attrString = attrString else { return nil	}
+		guard let attrString else { return nil	}
 
 		let result = NSMutableAttributedString(attributedString: attrString)
 		
@@ -749,7 +765,7 @@ private extension Row {
 			}
 		}
 		
-		resolveLinks(attrString: result)
+		resolveAltLinks(attrString: result)
 
 		return result
 	}
@@ -762,8 +778,8 @@ private extension Row {
 	}
 	
 	@discardableResult
-	func resolveLinks(attrString: NSMutableAttributedString) -> LinkResolvingActions {
-		var actionsTaken = LinkResolvingActions()
+	func resolveAltLinks(attrString: NSMutableAttributedString) -> AltLinkResolvingActions {
+		var actionsTaken = AltLinkResolvingActions()
 		
 		attrString.enumerateAttribute(.link, in: .init(location: 0, length: attrString.length), options: []) { (value, range, _) in
 			guard let url = value as? URL, url.scheme == nil else { return }

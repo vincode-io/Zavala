@@ -69,9 +69,9 @@ class SettingsViewController: UITableViewController {
 		switch (indexPath.section, indexPath.row) {
 		case (0, 0):
 			if traitCollection.userInterfaceIdiom == .phone {
-				cell.textLabel?.text = L10n.enableOnMyIPhone
+				cell.textLabel?.text = AppStringAssets.enableOnMyIPhoneLabel
 			} else {
-				cell.textLabel?.text = L10n.enableOnMyIPad
+				cell.textLabel?.text = AppStringAssets.enableOnMyIPadLabel
 			}
 		case (2, 0):
 			cell.detailTextLabel?.text = AppDefaults.shared.userInterfaceColorPalette.description
@@ -94,14 +94,14 @@ class SettingsViewController: UITableViewController {
 			aboutViewController.preferredContentSize = .init(width: width, height: height)
 			present(aboutViewController, animated: true)
 		case 1:
-			openURL(AppAssets.helpURL)
+			openURL(AppStringAssets.helpURL)
 		case 2:
-			UIApplication.shared.open(AppAssets.reportAnIssueURL, options: [:])
+			UIApplication.shared.open(URL(string: AppStringAssets.reportAnIssueURL)!)
 		default:
 			break
 		}
 		
-		tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
+		self.tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
 	}
 	
 	override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -145,15 +145,15 @@ class SettingsViewController: UITableViewController {
 			return
 		}
 		
-		let alertController = UIAlertController(title: L10n.removeCloudKitTitle, message: L10n.removeCloudKitMessage, preferredStyle: .alert)
+		let alertController = UIAlertController(title: AppStringAssets.removeICloudAccountTitle, message: AppStringAssets.removeICloudAccountMessage, preferredStyle: .alert)
 		
-		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel) { [weak self] action in
+		let cancelAction = UIAlertAction(title: AppStringAssets.cancelControlLabel, style: .cancel) { [weak self] action in
 			self?.enableCloudKitSwitch.isOn = true
 		}
 		alertController.addAction(cancelAction)
 		
-		let deleteAction = UIAlertAction(title: L10n.remove, style: .destructive) { [weak self] action in
-			guard let self = self else { return }
+		let deleteAction = UIAlertAction(title: AppStringAssets.removeControlLabel, style: .default) { [weak self] action in
+			guard let self else { return }
 			AppDefaults.shared.enableCloudKit = self.enableCloudKitSwitch.isOn
 		}
 		alertController.addAction(deleteAction)

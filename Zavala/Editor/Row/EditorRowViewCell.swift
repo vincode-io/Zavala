@@ -69,7 +69,7 @@ class EditorRowViewCell: UICollectionViewListCell {
 		
 		layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 
-		guard let row = row else { return }
+		guard let row else { return }
 
 		indentationLevel = row.level
 
@@ -112,7 +112,7 @@ class EditorRowViewCell: UICollectionViewListCell {
 		   let endPosition = textView.position(from: startPosition, offset: cursorCoordinates.selection.length) {
 			textView.selectedTextRange = textView.textRange(from: startPosition, to: endPosition)
 			textView.becomeFirstResponder()
-		} else if let textView = textView {
+		} else if let textView {
 			let endPosition = textView.endOfDocument
 			textView.selectedTextRange = textView.textRange(from: endPosition, to: endPosition)
 			textView.becomeFirstResponder()

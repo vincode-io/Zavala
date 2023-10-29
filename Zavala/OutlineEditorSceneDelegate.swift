@@ -100,7 +100,7 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 	// MARK: API
 	
 	func closeWindow() {
-		guard let session = session else { return }
+		guard let session else { return }
 		UIApplication.shared.requestSceneSessionDestruction(session, options: nil)
 	}
 	

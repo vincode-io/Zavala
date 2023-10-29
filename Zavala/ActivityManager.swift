@@ -78,7 +78,7 @@ private extension ActivityManager {
 	func makeSelectDocumentContainerActivity(_ documentContainers: [DocumentContainer]) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocumentContainer)
 		
-		let title = L10n.seeDocumentsIn(documentContainers.title)
+		let title = AppStringAssets.seeDocumentsInPrompt(documentContainerTitle: documentContainers.title)
 		activity.title = title
 		
 		activity.userInfo = [Pin.UserInfoKeys.pin: Pin(containers: documentContainers).userInfo]
@@ -95,7 +95,7 @@ private extension ActivityManager {
 	func makeSelectDocumentActivity(_ documentContainers: [DocumentContainer]?, _ document: Document) -> NSUserActivity {
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.selectingDocument)
 
-		let title = L10n.editDocument(document.title ?? "")
+		let title = AppStringAssets.editDocumentPrompt(documentTitle: document.title ?? "")
 		activity.title = title
 		
 		activity.userInfo = [Pin.UserInfoKeys.pin: Pin(containers: documentContainers, document: document).userInfo]

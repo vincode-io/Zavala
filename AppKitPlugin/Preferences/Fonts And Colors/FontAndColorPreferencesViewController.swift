@@ -58,12 +58,12 @@ class FontAndColorPreferencesViewController: NSViewController {
 		let menu = NSMenu()
 		
 		let newWebFeedItem = NSMenuItem()
-		newWebFeedItem.title = L10n.addTopicLevel
+		newWebFeedItem.title = AppStringAssets.addTopicLevelControlLabel
 		newWebFeedItem.action = #selector(addTopicLevel(_:))
 		menu.addItem(newWebFeedItem)
 		
 		let newRedditFeedItem = NSMenuItem()
-		newRedditFeedItem.title = L10n.addNoteLevel
+		newRedditFeedItem.title = AppStringAssets.addNoteLevelControlLabel
 		newRedditFeedItem.action = #selector(addNoteLevel(_:))
 		menu.addItem(newRedditFeedItem)
 
@@ -74,14 +74,14 @@ class FontAndColorPreferencesViewController: NSViewController {
 	@IBAction func restoreDefaults(_ sender: Any) {
 		let alert = NSAlert()
 		alert.alertStyle = .warning
-		alert.messageText = L10n.restoreDefaultsMessage
-		alert.informativeText = L10n.restoreDefaultsInformative
-		alert.addButton(withTitle: L10n.restore)
-		alert.addButton(withTitle: L10n.cancel)
+		alert.messageText = AppStringAssets.restoreDefaultsMessage
+		alert.informativeText = AppStringAssets.restoreDefaultsInformative
+		alert.addButton(withTitle: AppStringAssets.restoreControlLabel)
+		alert.addButton(withTitle: AppStringAssets.cancelControlLabel)
 			
 		alert.beginSheetModal(for: view.window!) { [weak self] result in
 			if result == NSApplication.ModalResponse.alertFirstButtonReturn {
-				guard let self = self else { return }
+				guard let self else { return }
 				self.fontDefaults = OutlineFontDefaults.defaults
 				AppDefaults.shared.outlineFonts = self.fontDefaults
 				self.sortedFields = self.fontDefaults?.sortedFields

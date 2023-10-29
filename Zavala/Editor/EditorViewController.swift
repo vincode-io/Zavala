@@ -36,7 +36,7 @@ protocol EditorDelegate: AnyObject {
 	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate)
 }
 
-class EditorViewController: UIViewController, MainControllerIdentifiable, UndoableCommandRunner {
+class EditorViewController: UIViewController, DocumentsActivityItemsConfigurationDelegate, MainControllerIdentifiable, UndoableCommandRunner {
 
 	private static let searchBarHeight: CGFloat = 44
 	
@@ -53,6 +53,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			completedCommand.wantsPriorityOverSystemBehavior = true
 		}
 		return [completedCommand]
+	}
+	
+	var selectedDocuments: [Document] {
+		guard let outline else { return []	}
+		return [Document.outline(outline)]
 	}
 	
 	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
@@ -170,12 +175,43 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	var isFormatUnavailable: Bool {
 		return currentTextView == nil
 	}
+	
+	var isCutUnavailable: Bool {
+		if let currentTextView {
+			return !currentTextView.canPerformAction(.cut, withSender: nil)
+		}
+		if let currentRows {
+			return currentRows.isEmpty
+		}
+		return true
+	}
+
+	var isCopyUnavailable: Bool {
+		if let currentTextView {
+			return !currentTextView.canPerformAction(.copy, withSender: nil)
+		}
+		if let currentRows {
+			return currentRows.isEmpty
+		}
+		return true
+	}
+
+	var isPasteUnavailable: Bool {
+		if let currentTextView {
+			return !currentTextView.canPerformAction(.paste, withSender: nil)
+		}
+		return !UIPasteboard.general.contains(pasteboardTypes: [Row.typeIdentifier, kUTTypeUTF8PlainText as String], inItemSet: nil)
+	}
+
+	var isInsertImageUnavailable: Bool {
+		return currentTextView == nil
+	}
 
 	var isLinkUnavailable: Bool {
 		return currentTextView == nil
 	}
 
-	var isInsertImageUnavailable: Bool {
+	var isInsertNewlineUnavailable: Bool {
 		return currentTextView == nil
 	}
 
@@ -232,7 +268,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	var currentRows: [Row]? {
-		if let selected = collectionView?.indexPathsForSelectedItems, !selected.isEmpty {
+		if let selected = collectionView?.indexPathsForSelectedItems?.sorted(), !selected.isEmpty {
 			return selected.compactMap { outline?.shadowTable?[$0.row] }
 		} else if let currentRow = currentTextView?.row {
 			return [currentRow]
@@ -292,22 +328,38 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	private var cancelledKeys = Set<UIKey>()
 	private var isCursoringUp = false
 	private var isCursoringDown = false
+
+	private var undoMenuButton: ButtonGroup.Button!
+	private var undoMenuButtonGroup: ButtonGroup!
+	private var undoButton: ButtonGroup.Button!
+	private var cutButton: ButtonGroup.Button!
+	private var copyButton: ButtonGroup.Button!
+	private var pasteButton: ButtonGroup.Button!
+	private var redoButton: ButtonGroup.Button!
+
+	private var navButtonGroup: ButtonGroup!
+	private var goBackwardButton: ButtonGroup.Button!
+	private var goForwardButton: ButtonGroup.Button!
+	private var moreMenuButton: ButtonGroup.Button!
+	private var filterButton: ButtonGroup.Button!
 	
-	private var navButtonsBarButtonItem: UIBarButtonItem!
-	private var goBackwardButton: UIButton!
-	private var goForwardButton: UIButton!
-	private var moreMenuButton: UIButton!
-	private var filterButton: UIButton!
-	
-	private var doneBarButtonItem: UIBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: self, action: #selector(done))
+	private var formatMenuButton: ButtonGroup.Button!
+	private var formatMenuButtonGroup: ButtonGroup!
+	private var boldButton: ButtonGroup.Button!
+	private var italicButton: ButtonGroup.Button!
+	private var linkButton: ButtonGroup.Button!
 
 	private var keyboardToolBar: UIToolbar!
-	private var moveRightButton: UIButton!
-	private var moveLeftButton: UIButton!
-	private var moveUpButton: UIButton!
-	private var moveDownButton: UIButton!
-	private var insertImageButton: UIButton!
-	private var linkButton: UIButton!
+	private var leftToolbarButtonGroup: ButtonGroup!
+	private var rightToolbarButtonGroup: ButtonGroup!
+	private var moveRightButton: ButtonGroup.Button!
+	private var moveLeftButton: ButtonGroup.Button!
+	private var moveUpButton: ButtonGroup.Button!
+	private var moveDownButton: ButtonGroup.Button!
+	private var insertImageButton: ButtonGroup.Button!
+	private var noteButton: ButtonGroup.Button!
+	private var insertNewlineButton: ButtonGroup.Button!
+	private var squareButton: ButtonGroup.Button!
 
 	private var titleRegistration: UICollectionView.CellRegistration<EditorTitleViewCell, Outline>?
 	private var tagRegistration: UICollectionView.CellRegistration<EditorTagViewCell, String>?
@@ -351,17 +403,40 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		//NSTextAttachment.registerViewProviderClass(MetadataTextAttachmentViewProvider.self, forFileType: MetadataTextAttachmentViewProvider.fileType)
 		
+		collectionView.translatesAutoresizingMaskIntoConstraints = false
+		
+		// Mac Catalyst and regular iOS use different contraint connections to manage Toolbar and Navigation bar translucency
+		let collectionViewLeadingConstraint: NSLayoutConstraint
+		let collectionViewTrailingConstraint: NSLayoutConstraint
+		let collectionViewBottomConstraint: NSLayoutConstraint
+
 		if traitCollection.userInterfaceIdiom == .mac {
+			collectionViewTopConstraint = collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+			collectionViewLeadingConstraint = collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+			collectionViewTrailingConstraint = collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+			collectionViewBottomConstraint = collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
+			collectionViewTopConstraint = collectionView.topAnchor.constraint(equalTo: view.topAnchor)
+			collectionViewLeadingConstraint = collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+			collectionViewTrailingConstraint = collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+			collectionViewBottomConstraint = collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 			collectionView.refreshControl!.tintColor = .clear
 		}
-		
+
+		NSLayoutConstraint.activate([
+			collectionViewTopConstraint,
+			collectionViewLeadingConstraint,
+			collectionViewTrailingConstraint,
+			collectionViewBottomConstraint
+		])
+
 		searchBar.delegate = self
-		collectionViewTopConstraint.constant = 0
 		
 		collectionView.collectionViewLayout = createLayout()
 		collectionView.delegate = self
@@ -402,106 +477,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		backlinkRegistration = UICollectionView.CellRegistration<EditorBacklinkViewCell, Outline> { [weak self] (cell, indexPath, outline) in
 			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
-		
-		let navButtonsStackView = UIStackView()
-		navButtonsStackView.isLayoutMarginsRelativeArrangement = true
-		navButtonsStackView.layoutMargins.right = 8
-		navButtonsStackView.alignment = .center
-		navButtonsStackView.spacing = 16
 
-		goBackwardButton = ToolbarButton(type: .system)
-		goBackwardButton.addTarget(self, action: #selector(goBackwardOne), for: .touchUpInside)
-		goBackwardButton.setImage(AppAssets.goBackward, for: .normal)
-		goBackwardButton.accessibilityLabel = L10n.goBackward
-		goBackwardButton.isAccessibilityElement = true
-		navButtonsStackView.addArrangedSubview(goBackwardButton)
-
-		goForwardButton = ToolbarButton(type: .system)
-		goForwardButton.addTarget(self, action: #selector(goForwardOne), for: .touchUpInside)
-		goForwardButton.setImage(AppAssets.goForward, for: .normal)
-		goForwardButton.accessibilityLabel = L10n.goForward
-		goForwardButton.isAccessibilityElement = true
-		navButtonsStackView.addArrangedSubview(goForwardButton)
-
-		moreMenuButton = ToolbarButton(type: .system)
-		moreMenuButton.showsMenuAsPrimaryAction = true
-		moreMenuButton.setImage(AppAssets.ellipsis, for: .normal)
-		moreMenuButton.accessibilityLabel = L10n.more
-		moreMenuButton.isAccessibilityElement = true
-		navButtonsStackView.addArrangedSubview(moreMenuButton)
-
-		filterButton = ToolbarButton(type: .system)
-		filterButton.showsMenuAsPrimaryAction = true
-		filterButton.setImage(AppAssets.filterInactive, for: .normal)
-		filterButton.accessibilityLabel = L10n.filter
-		filterButton.isAccessibilityElement = true
-		navButtonsStackView.addArrangedSubview(filterButton)
-		
-		navButtonsBarButtonItem = UIBarButtonItem(customView: navButtonsStackView)
-
-		let moveButtonsStackView = UIStackView()
-		moveButtonsStackView.alignment = .center
-		moveButtonsStackView.spacing = 16
-
-		moveLeftButton = ToolbarButton(type: .system)
-		moveLeftButton.addTarget(self, action: #selector(moveCurrentRowsLeft), for: .touchUpInside)
-		moveLeftButton.setImage(AppAssets.moveLeft, for: .normal)
-		moveLeftButton.accessibilityLabel = L10n.moveLeft
-		moveLeftButton.isAccessibilityElement = true
-		moveButtonsStackView.addArrangedSubview(moveLeftButton)
-
-		moveRightButton = ToolbarButton(type: .system)
-		moveRightButton.addTarget(self, action: #selector(moveCurrentRowsRight), for: .touchUpInside)
-		moveRightButton.setImage(AppAssets.moveRight, for: .normal)
-		moveRightButton.accessibilityLabel = L10n.moveRight
-		moveRightButton.isAccessibilityElement = true
-		moveButtonsStackView.addArrangedSubview(moveRightButton)
-
-		moveUpButton = ToolbarButton(type: .system)
-		moveUpButton.addTarget(self, action: #selector(moveCurrentRowsUp), for: .touchUpInside)
-		moveUpButton.setImage(AppAssets.moveUp, for: .normal)
-		moveUpButton.accessibilityLabel = L10n.moveUp
-		moveUpButton.isAccessibilityElement = true
-		moveButtonsStackView.addArrangedSubview(moveUpButton)
-
-		moveDownButton = ToolbarButton(type: .system)
-		moveDownButton.addTarget(self, action: #selector(moveCurrentRowsDown), for: .touchUpInside)
-		moveDownButton.setImage(AppAssets.moveDown, for: .normal)
-		moveDownButton.accessibilityLabel = L10n.moveDown
-		moveDownButton.isAccessibilityElement = true
-		moveButtonsStackView.addArrangedSubview(moveDownButton)
-
-		let moveButtonsBarButtonItem = UIBarButtonItem(customView: moveButtonsStackView)
-		
-		let insertButtonsStackView = UIStackView()
-		insertButtonsStackView.alignment = .center
-		insertButtonsStackView.spacing = 16
-
-		insertImageButton = ToolbarButton(type: .system)
-		insertImageButton.addTarget(self, action: #selector(insertImage), for: .touchUpInside)
-		insertImageButton.setImage(AppAssets.insertImage, for: .normal)
-		insertImageButton.accessibilityLabel = L10n.insertImage
-		insertImageButton.isAccessibilityElement = true
-		insertButtonsStackView.addArrangedSubview(insertImageButton)
-
-		linkButton = ToolbarButton(type: .system)
-		linkButton.addTarget(self, action: #selector(link), for: .touchUpInside)
-		linkButton.setImage(AppAssets.link, for: .normal)
-		linkButton.accessibilityLabel = L10n.link
-		linkButton.isAccessibilityElement = true
-		insertButtonsStackView.addArrangedSubview(linkButton)
-
-		let insertButtonsBarButtonItem = UIBarButtonItem(customView: insertButtonsStackView)
-		
-		if traitCollection.userInterfaceIdiom != .mac {
-			keyboardToolBar = UIToolbar()
-			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-			keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
-			keyboardToolBar.sizeToFit()
-			navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
-		}
-
-		updatePhoneUI(editMode: false)
+		configureButtonBars()
 		updateUI()
 		collectionView.reloadData()
 
@@ -538,6 +515,10 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		if collectionView.contentOffset != .zero {
 			transitionContentOffset = collectionView.contentOffset
 		}
+		
+		navButtonGroup.containerWidth = size.width
+		leftToolbarButtonGroup.containerWidth = size.width
+		rightToolbarButtonGroup.containerWidth = size.width
 	}
 	
 	override func viewDidLayoutSubviews() {
@@ -547,22 +528,42 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
+	override func contentScrollView(for edge: NSDirectionalRectEdge) -> UIScrollView? {
+		return collectionView
+	}
+		
 	override func selectAll(_ sender: Any?) {
 		selectAllRows()
 	}
 	
 	override func cut(_ sender: Any?) {
-		guard let rows = currentRows else { return }
-		cutRows(rows)
+		navButtonGroup?.dismissPopOverMenu()
+		
+		if let currentTextView {
+			currentTextView.cut(sender)
+		} else if let currentRows {
+			cutRows(currentRows)
+		}
 	}
 	
 	override func copy(_ sender: Any?) {
-		guard let rows = currentRows else { return }
-		copyRows(rows)
+		navButtonGroup?.dismissPopOverMenu()
+		
+		if let currentTextView {
+			currentTextView.copy(sender)
+		} else if let currentRows {
+			copyRows(currentRows)
+		}
 	}
 	
 	override func paste(_ sender: Any?) {
-		pasteRows(afterRows: currentRows)
+		navButtonGroup?.dismissPopOverMenu()
+		
+		if let currentTextView {
+			currentTextView.paste(sender)
+		} else {
+			pasteRows(afterRows: currentRows)
+		}
 	}
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -727,7 +728,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				UIView.animate(withDuration: 0.25) {
 					self?.collectionView.contentInset = EditorViewController.defaultContentInsets
 				}
-				self?.updatePhoneUI(editMode: false)
 				self?.currentKeyboardHeight = 0
 			}
 			DispatchQueue.main.async(execute: keyboardWorkItem!)
@@ -738,7 +738,6 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 				if self?.collectionView.contentInset != newInsets {
 					self?.collectionView.contentInset = newInsets
 				}
-				self?.updatePhoneUI(editMode: true)
 				self?.makeCursorVisibleIfNecessary()
 				self?.currentKeyboardHeight = keyboardViewEndFrame.height
 			}
@@ -791,7 +790,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		
 		// After this point as long as we don't have this Outline open in other
 		// windows, no more collection view updates should happen for it.
-		outline?.beingViewedCount = (outline?.beingViewedCount ?? 1) - 1
+		outline?.decrementBeingUsedCount()
 		
 		// End the search collection view updates early
 		isSearching = false
@@ -804,12 +803,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		outline = newOutline
 		
 		// Don't continue if we are just clearing out the editor
-		guard let outline = outline else {
+		guard let outline else {
 			collectionView.reloadData()
 			return
 		}
 
-		outline.beingViewedCount = outline.beingViewedCount + 1
+		outline.incrementBeingUsedCount()
 		outline.load()
 		outline.prepareForViewing()
 			
@@ -818,7 +817,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		updateNavigationMenus()
 		collectionView.reloadData()
 		
-		if let searchText = searchText {
+		if let searchText {
 			discloseSearchBar()
 			searchBar.searchField.text = outline.searchText
 			beginInDocumentSearch(text: searchText)
@@ -838,23 +837,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		}
 	}
 	
-	func updatePhoneUI(editMode: Bool) {
-		if traitCollection.userInterfaceIdiom == .phone {
-			if editMode {
-				navigationItem.rightBarButtonItems = [doneBarButtonItem, navButtonsBarButtonItem]
-			} else {
-				navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
-			}
-		}
-	}
-	
 	func updateNavigationMenus() {
-		guard let delegate = delegate else { return }
+		guard let delegate else { return }
 		
 		var backwardItems = [UIAction]()
 		for (index, pin) in delegate.editorViewControllerGoBackwardStack.enumerated() {
-			backwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
-				guard let self = self else { return }
+			backwardItems.append(UIAction(title: pin.document?.title ?? AppStringAssets.noTitleLabel) { [weak self] _ in
+				guard let self else { return }
 				DispatchQueue.main.async {
 					delegate.goBackward(self, to: index)
 				}
@@ -864,8 +853,8 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 		var forwardItems = [UIAction]()
 		for (index, pin) in delegate.editorViewControllerGoForwardStack.enumerated() {
-			forwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
-				guard let self = self else { return }
+			forwardItems.append(UIAction(title: pin.document?.title ?? AppStringAssets.noTitleLabel) { [weak self] _ in
+				guard let self else { return }
 				DispatchQueue.main.async {
 					delegate.goForward(self, to: index)
 				}
@@ -881,9 +870,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			moreMenuButton.menu = buildEllipsisMenu()
 
 			if isFilterOn {
-				filterButton.setImage(AppAssets.filterActive, for: .normal)
+				filterButton.accessibilityLabel = AppStringAssets.turnFilterOffControlLabel
+				filterButton.setImage(ZavalaImageAssets.filterActive, for: .normal)
 			} else {
-				filterButton.setImage(AppAssets.filterInactive, for: .normal)
+				filterButton.accessibilityLabel = AppStringAssets.turnFilterOnControlLabel
+				filterButton.setImage(ZavalaImageAssets.filterInactive, for: .normal)
 			}
 
 			filterButton.menu = buildFilterMenu()
@@ -898,12 +889,39 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			
 			goBackwardButton.isEnabled = !isGoBackwardUnavailable
 			goForwardButton.isEnabled = !isGoForwardUnavailable
+			
+			cutButton.isEnabled = !isCutUnavailable
+			copyButton.isEnabled = !isCopyUnavailable
+			pasteButton.isEnabled = !isPasteUnavailable
+			
 			moveLeftButton.isEnabled = !isMoveRowsLeftUnavailable
 			moveRightButton.isEnabled = !isMoveRowsRightUnavailable
 			moveUpButton.isEnabled = !isMoveRowsUpUnavailable
 			moveDownButton.isEnabled = !isMoveRowsDownUnavailable
+			
 			insertImageButton.isEnabled = !isInsertImageUnavailable
 			linkButton.isEnabled = !isLinkUnavailable
+			boldButton.isEnabled = !isFormatUnavailable
+			italicButton.isEnabled = !isFormatUnavailable
+
+			// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
+			// only have one row selected at a time while editing and that row eitherh has a note
+			// or it doesn't.
+			if !isCreateRowNotesUnavailable {
+				noteButton.isEnabled = true
+				noteButton.setImage(ZavalaImageAssets.noteAdd, for: .normal)
+				noteButton.accessibilityLabel = AppStringAssets.addNoteControlLabel
+			} else if !isDeleteRowNotesUnavailable {
+				noteButton.isEnabled = true
+				noteButton.setImage(ZavalaImageAssets.noteDelete, for: .normal)
+				noteButton.accessibilityLabel = AppStringAssets.deleteNoteControlLabel
+			} else {
+				noteButton.isEnabled = false
+				noteButton.setImage(ZavalaImageAssets.noteAdd, for: .normal)
+				noteButton.accessibilityLabel = AppStringAssets.addNoteControlLabel
+			}
+			
+			insertNewlineButton.isEnabled = !isInsertNewlineUnavailable
 		}
 		
 	}
@@ -977,12 +995,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	func expandAllInOutline() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		expandAll(containers: [outline])
 	}
 	
 	func collapseAllInOutline() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		collapseAll(containers: [outline])
 	}
 	
@@ -1021,22 +1039,24 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 			return
 		}
 		
-		let alertController = UIAlertController(title: L10n.deleteCompletedTitle, message: L10n.deleteCompletedMessage, preferredStyle: .alert)
+		let alertController = UIAlertController(title: AppStringAssets.deleteCompletedRowsTitle,
+												message: AppStringAssets.deleteCompletedRowsMessage,
+												preferredStyle: .alert)
 		
-		let alwaysDeleteCompletedAction = UIAlertAction(title: L10n.deleteAlways, style: .destructive) { [weak self] action in
+		let alwaysDeleteCompletedAction = UIAlertAction(title: AppStringAssets.deleteAlwaysControlLabel, style: .destructive) { [weak self] action in
 			AppDefaults.shared.confirmDeleteCompletedRows = false
 			self?.deleteRows(completedRows)
 		}
 		alertController.addAction(alwaysDeleteCompletedAction)
 
-		let deleteCompletedAction = UIAlertAction(title: L10n.deleteOnce, style: .destructive) { [weak self] action in
+		let deleteCompletedAction = UIAlertAction(title: AppStringAssets.deleteOnceControlLabel, style: .destructive) { [weak self] action in
 			self?.deleteRows(completedRows)
 		}
 		
 		alertController.addAction(deleteCompletedAction)
 		alertController.preferredAction = deleteCompletedAction
 
-		let cancelAction = UIAlertAction(title: L10n.cancel, style: .cancel)
+		let cancelAction = UIAlertAction(title: AppStringAssets.cancelControlLabel, style: .cancel)
 		alertController.addAction(cancelAction)
 
 		present(alertController, animated: true)
@@ -1055,13 +1075,13 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	func printDoc() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		currentTextView?.saveText()
 		delegate?.printDoc(self, outline: outline)
 	}
 	
 	func printList() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		currentTextView?.saveText()
 		delegate?.printList(self, outline: outline)
 	}
@@ -1080,11 +1100,11 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 		collectionView?.refreshControl?.endRefreshing()
 	}
 	
-	@objc func done() {
+	@objc func hideKeyboard() {
 		UIResponder.currentFirstResponder?.resignFirstResponder()
 		CursorCoordinates.clearLastKnownCoordinates()
 	}
-	
+
 	@objc func toggleFilterOn() {
 		guard let changes = outline?.toggleFilterOn() else { return }
 		applyChangesRestoringState(changes)
@@ -1156,7 +1176,12 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func link() {
+		rightToolbarButtonGroup.dismissPopOverMenu()
 		currentTextView?.editLink(self)
+	}
+	
+	@objc func insertNewline() {
+		currentTextView?.insertNewline(self)
 	}
 	
 	@objc func splitRow() {
@@ -1167,22 +1192,23 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func outlineToggleBoldface(_ sender: Any? = nil) {
+		rightToolbarButtonGroup.dismissPopOverMenu()
 		currentTextView?.toggleBoldface(self)
 	}
 	
 	@objc func outlineToggleItalics(_ sender: Any? = nil) {
+		rightToolbarButtonGroup.dismissPopOverMenu()
 		currentTextView?.toggleItalics(self)
 	}
 	
 	@objc func share(_ sender: Any? = nil) {
-		guard let outline else { return }
-		let controller = UIActivityViewController(documents: [Document.outline(outline)])
+		let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(delegate: self))
 		controller.popoverPresentationController?.sourceView = sender as? UIView
 		present(controller, animated: true)
 	}
 	
 	@objc func collaborate(_ sender: Any? = nil) {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		
 		AccountManager.shared.cloudKitAccount?.prepareCloudSharingController(document: .outline(outline)) { result in
 			switch result {
@@ -1198,7 +1224,7 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	}
 	
 	@objc func showOutlineGetInfo() {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		delegate?.showGetInfo(self, outline: outline)
 	}
 	
@@ -1208,6 +1234,24 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 
 	@objc func goForwardOne() {
 		delegate?.goForward(self, to: 0)
+	}
+
+	@objc func showUndoMenu() {
+		updateUI()
+		navButtonGroup.showPopOverMenu(for: undoMenuButton)
+	}
+
+	@objc func undo() {
+		undoManager?.undo()
+	}
+	
+	@objc func redo() {
+		undoManager?.redo()
+	}
+	
+	@objc func showFormatMenu() {
+		updateUI()
+		rightToolbarButtonGroup.showPopOverMenu(for: formatMenuButton)
 	}
 
 	@objc func moveCurrentRowsLeft() {
@@ -1228,6 +1272,16 @@ class EditorViewController: UIViewController, MainControllerIdentifiable, Undoab
 	@objc func moveCurrentRowsDown() {
 		guard let rows = currentRows else { return }
 		moveRowsDown(rows)
+	}
+	
+	@objc func createOrDeleteNotes() {
+		guard let rows = currentRows else { return }
+
+		if !isCreateRowNotesUnavailable {
+			createRowNotes(rows)
+		} else {
+			deleteRowNotes(rows)
+		}
 	}
 
 	@objc func toggleCompleteRows() {
@@ -1270,11 +1324,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 								completion(true)
 							}
 							
-							let action = UIContextualAction(style: .normal, title: L10n.uncomplete, handler: actionHandler)
+							let action = UIContextualAction(style: .normal, title: AppStringAssets.uncompleteControlLabel, handler: actionHandler)
 							if self.traitCollection.userInterfaceIdiom == .mac {
-								action.image = AppAssets.uncompleteRow.symbolSizedForCatalyst(color: .white)
+								action.image = ZavalaImageAssets.uncompleteRow.symbolSizedForCatalyst(color: .white)
 							} else {
-								action.image = AppAssets.uncompleteRow
+								action.image = ZavalaImageAssets.uncompleteRow
 							}
 							action.backgroundColor = UIColor.accentColor
 							
@@ -1285,11 +1339,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 								completion(true)
 							}
 							
-							let action = UIContextualAction(style: .normal, title: L10n.complete, handler: actionHandler)
+							let action = UIContextualAction(style: .normal, title: AppStringAssets.completeControlLabel, handler: actionHandler)
 							if self.traitCollection.userInterfaceIdiom == .mac {
-								action.image = AppAssets.completeRow.symbolSizedForCatalyst(color: .white)
+								action.image = ZavalaImageAssets.completeRow.symbolSizedForCatalyst(color: .white)
 							} else {
-								action.image = AppAssets.completeRow
+								action.image = ZavalaImageAssets.completeRow
 							}
 							action.backgroundColor = UIColor.accentColor
 
@@ -1305,11 +1359,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 							completion(true)
 						}
 						
-						let action = UIContextualAction(style: .destructive, title: L10n.delete, handler: actionHandler)
+						let action = UIContextualAction(style: .destructive, title: AppStringAssets.deleteControlLabel, handler: actionHandler)
 						if self.traitCollection.userInterfaceIdiom == .mac {
-							action.image = AppAssets.delete.symbolSizedForCatalyst(color: .white)
+							action.image = ZavalaImageAssets.delete.symbolSizedForCatalyst(color: .white)
 						} else {
-							action.image = AppAssets.delete
+							action.image = ZavalaImageAssets.delete
 						}
 
 						return UISwipeActionsConfiguration(actions: [action])
@@ -1373,7 +1427,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Outline.Section.title.rawValue:
 			return outline == nil ? 0 : 1
 		case Outline.Section.tags.rawValue:
-			if let outline = outline {
+			if let outline {
 				return outline.tags.count + 1
 			} else {
 				return 0
@@ -1433,7 +1487,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			}
 		}
 		
-		return makeRowsContextMenu(rows: rows)
+		return buildRowsContextMenu(rows: rows)
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
@@ -1672,7 +1726,7 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 		}
 		
 		result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] (object, error) in
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = RSImage.scaleImage(data, maxPixelSize: 1800) {
 				let scaledImage = UIImage(cgImage: cgImage)
@@ -1801,7 +1855,7 @@ extension EditorViewController: ImageTransitionDelegate {
 		guard let splitView = splitViewController?.view else { return }
 		let convertedFrame = splitView.convert(frame, to: collectionView)
 		imageBlocker = UIView(frame: convertedFrame)
-		imageBlocker!.backgroundColor = AppAssets.fullScreenBackgroundColor
+		imageBlocker!.backgroundColor = ZavalaImageAssets.fullScreenBackgroundColor
 		collectionView.addSubview(imageBlocker!)
 	}
 	
@@ -1816,11 +1870,78 @@ extension EditorViewController: ImageTransitionDelegate {
 
 private extension EditorViewController {
 	
+	func configureButtonBars() {
+		undoMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
+		undoButton = undoMenuButtonGroup.addButton(label: AppStringAssets.undoControlLabel, image: ZavalaImageAssets.undo, selector: "undo")
+		cutButton = undoMenuButtonGroup.addButton(label: AppStringAssets.cutControlLabel, image: ZavalaImageAssets.cut, selector: "cut:")
+		copyButton = undoMenuButtonGroup.addButton(label: AppStringAssets.copyControlLabel, image: ZavalaImageAssets.copy, selector: "copy:")
+		pasteButton = undoMenuButtonGroup.addButton(label: AppStringAssets.pasteControlLabel, image: ZavalaImageAssets.paste, selector: "paste:")
+		redoButton = undoMenuButtonGroup.addButton(label: AppStringAssets.redoControlLabel, image: ZavalaImageAssets.redo, selector: "redo")
+
+		navButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
+		goBackwardButton = navButtonGroup.addButton(label: AppStringAssets.goBackwardControlLabel, image: ZavalaImageAssets.goBackward, selector: "goBackwardOne")
+		goForwardButton = navButtonGroup.addButton(label: AppStringAssets.goForwardControlLabel, image: ZavalaImageAssets.goForward, selector: "goForwardOne")
+		undoMenuButton = navButtonGroup.addButton(label: AppStringAssets.undoMenuControlLabel, image: ZavalaImageAssets.undoMenu, selector: "showUndoMenu")
+		undoMenuButton.popoverButtonGroup = undoMenuButtonGroup
+		moreMenuButton = navButtonGroup.addButton(label: AppStringAssets.moreControlLabel, image: ZavalaImageAssets.ellipsis, showMenu: true)
+		filterButton = navButtonGroup.addButton(label: AppStringAssets.filterControlLabel, image: ZavalaImageAssets.filterInactive, showMenu: true)
+		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
+
+		leftToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .left)
+		moveLeftButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveLeftControlLabel, image: ZavalaImageAssets.moveLeft, selector: "moveCurrentRowsLeft")
+		moveRightButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveRightControlLabel, image: ZavalaImageAssets.moveRight, selector: "moveCurrentRowsRight")
+		moveUpButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveUpControlLabel, image: ZavalaImageAssets.moveUp, selector: "moveCurrentRowsUp")
+		moveDownButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveDownControlLabel, image: ZavalaImageAssets.moveDown, selector: "moveCurrentRowsDown")
+		let moveButtonsBarButtonItem = leftToolbarButtonGroup.buildBarButtonItem()
+
+		formatMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
+		linkButton = formatMenuButtonGroup.addButton(label: AppStringAssets.linkControlLabel, image: ZavalaImageAssets.link, selector: "link")
+		let boldImage = ZavalaImageAssets.bold.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
+		boldButton = formatMenuButtonGroup.addButton(label: AppStringAssets.boldControlLabel, image: boldImage, selector: "outlineToggleBoldface:")
+		let italicImage = ZavalaImageAssets.italic.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
+		italicButton = formatMenuButtonGroup.addButton(label: AppStringAssets.italicControlLabel, image: italicImage, selector: "outlineToggleItalics:")
+
+		rightToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
+		insertImageButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.insertImageControlLabel, image: ZavalaImageAssets.insertImage, selector: "insertImage")
+		formatMenuButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.formatControlLabel, image: ZavalaImageAssets.format, selector: "showFormatMenu")
+		formatMenuButton.popoverButtonGroup = formatMenuButtonGroup
+		noteButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.addNoteControlLabel, image: ZavalaImageAssets.noteAdd, selector: "createOrDeleteNotes")
+		insertNewlineButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.newOutlineControlLabel, image: ZavalaImageAssets.newline, selector: "insertNewline")
+		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
+
+		if traitCollection.userInterfaceIdiom != .mac {
+			keyboardToolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
+			let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+			
+			if traitCollection.userInterfaceIdiom == .pad {
+				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
+			} else {
+				let hideKeyboardBarButtonItem = UIBarButtonItem(image: ZavalaImageAssets.hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
+				hideKeyboardBarButtonItem.accessibilityLabel = AppStringAssets.hideKeyboardControlLabel
+				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, hideKeyboardBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
+			}
+			
+			keyboardToolBar.sizeToFit()
+			navigationItem.rightBarButtonItems = [navButtonsBarButtonItem]
+
+			if traitCollection.userInterfaceIdiom == .pad {
+				navButtonGroup.remove(undoMenuButton)
+				rightToolbarButtonGroup.remove(formatMenuButton)
+				formatMenuButtonGroup.remove(linkButton)
+				rightToolbarButtonGroup.insert(linkButton, at: 1)
+			}
+		}
+	}
+	
 	func discloseSearchBar() {
 		view.layoutIfNeeded()
 
 		UIView.animate(withDuration: 0.3) {
-			self.collectionViewTopConstraint.constant = Self.searchBarHeight
+			if self.traitCollection.userInterfaceIdiom == .mac {
+				self.collectionViewTopConstraint.constant = Self.searchBarHeight
+			} else {
+				self.collectionViewTopConstraint.constant = Self.searchBarHeight + self.view.safeAreaInsets.top
+			}
 			self.view.layoutIfNeeded()
 		}
 	}
@@ -1828,22 +1949,22 @@ private extension EditorViewController {
 	func buildEllipsisMenu() -> UIMenu {
 		var outlineActions = [UIMenuElement]()
 
-		let getInfoAction = UIAction(title: L10n.getInfo, image: AppAssets.getInfo) { [weak self] _ in
+		let getInfoAction = UIAction(title: AppStringAssets.getInfoControlLabel, image: ZavalaImageAssets.getInfo) { [weak self] _ in
 			self?.showOutlineGetInfo()
 		}
 		outlineActions.append(getInfoAction)
 
-		let findAction = UIAction(title: L10n.findEllipsis, image: AppAssets.find) { [weak self] _ in
+		let findAction = UIAction(title: AppStringAssets.findEllipsisControlLabel, image: ZavalaImageAssets.find) { [weak self] _ in
 			self?.beginInDocumentSearch()
 		}
 		outlineActions.append(findAction)
 
-		let expandAllInOutlineAction = UIAction(title: L10n.expandAllInOutline, image: AppAssets.expandAll) { [weak self] _ in
+		let expandAllInOutlineAction = UIAction(title: AppStringAssets.expandAllInOutlineControlLabel, image: ZavalaImageAssets.expandAll) { [weak self] _ in
 			self?.expandAllInOutline()
 		}
 		outlineActions.append(expandAllInOutlineAction)
 		
-		let collapseAllInOutlineAction = UIAction(title: L10n.collapseAllInOutline, image: AppAssets.collapseAll) { [weak self] _ in
+		let collapseAllInOutlineAction = UIAction(title: AppStringAssets.collapseAllInOutlineControlLabel, image: ZavalaImageAssets.collapseAll) { [weak self] _ in
 			self?.collapseAllInOutline()
 		}
 		outlineActions.append(collapseAllInOutlineAction)
@@ -1851,49 +1972,51 @@ private extension EditorViewController {
 		var shareActions = [UIMenuElement]()
 
 		if !isCollaborateUnavailable {
-			let collaborateAction = UIAction(title: L10n.collaborateEllipsis, image: AppAssets.statelessCollaborate) { [weak self] _ in
+			let collaborateAction = UIAction(title: AppStringAssets.collaborateEllipsisControlLabel, image: ZavalaImageAssets.statelessCollaborate) { [weak self] _ in
 				self?.collaborate(self?.moreMenuButton)
 			}
 			shareActions.append(collaborateAction)
 		}
 
-		let shareAction = UIAction(title: L10n.shareEllipsis, image: AppAssets.share) { [weak self] _ in
+		let shareAction = UIAction(title: AppStringAssets.shareEllipsisControlLabel, image: ZavalaImageAssets.share) { [weak self] _ in
 			self?.share(self?.moreMenuButton)
 		}
 		shareActions.append(shareAction)
 
-		let printDocAction = UIAction(title: L10n.printDocEllipsis) { [weak self] _ in
+		let printDocAction = UIAction(title: AppStringAssets.printDocEllipsisControlLabel) { [weak self] _ in
 			self?.printDoc()
 		}
-		let printListAction = UIAction(title: L10n.printListEllipsis) { [weak self] _ in
+		let printListAction = UIAction(title: AppStringAssets.printListControlEllipsisLabel) { [weak self] _ in
 			self?.printList()
 		}
-		shareActions.append(UIMenu(title: L10n.print, image: AppAssets.printDoc, children: [printDocAction, printListAction]))
+		shareActions.append(UIMenu(title: AppStringAssets.printControlLabel, image: ZavalaImageAssets.printDoc, children: [printDocAction, printListAction]))
 
-		let exportPDFDoc = UIAction(title: L10n.exportPDFDocEllipsis) { [weak self] _ in
+		let exportPDFDoc = UIAction(title: AppStringAssets.exportPDFDocEllipsisControlLabel) { [weak self] _ in
 			guard let self = self, let outline = self.outline else { return }
 			self.delegate?.exportPDFDoc(self, outline: outline)
 		}
-		let exportPDFList = UIAction(title: L10n.exportPDFListEllipsis) { [weak self] _ in
+		let exportPDFList = UIAction(title: AppStringAssets.exportPDFListEllipsisControlLabel) { [weak self] _ in
 			guard let self = self, let outline = self.outline else { return }
 			self.delegate?.exportPDFList(self, outline: outline)
 		}
-		let exportMarkdownDoc = UIAction(title: L10n.exportMarkdownDocEllipsis) { [weak self] _ in
+		let exportMarkdownDoc = UIAction(title: AppStringAssets.exportMarkdownDocEllipsisControlLabel) { [weak self] _ in
 			guard let self = self, let outline = self.outline else { return }
 			self.delegate?.exportMarkdownDoc(self, outline: outline)
 		}
-		let exportMarkdownList = UIAction(title: L10n.exportMarkdownListEllipsis) { [weak self] _ in
+		let exportMarkdownList = UIAction(title: AppStringAssets.exportMarkdownListEllipsisControlLabel) { [weak self] _ in
 			guard let self = self, let outline = self.outline else { return }
 			self.delegate?.exportMarkdownList(self, outline: outline)
 		}
-		let exportOPML = UIAction(title: L10n.exportOPMLEllipsis) { [weak self] _ in
+		let exportOPML = UIAction(title: AppStringAssets.exportOPMLEllipsisControlLabel) { [weak self] _ in
 			guard let self = self, let outline = self.outline else { return }
 			self.delegate?.exportOPML(self, outline: outline)
 		}
 		let exportActions = [exportPDFDoc, exportPDFList, exportMarkdownDoc, exportMarkdownList, exportOPML]
-		shareActions.append(UIMenu(title: L10n.export, image: AppAssets.export, children: exportActions))
+		shareActions.append(UIMenu(title: AppStringAssets.exportControlLabel, image: ZavalaImageAssets.export, children: exportActions))
 
-		let deleteCompletedRowsAction = UIAction(title: L10n.deleteCompleted, image: AppAssets.delete, attributes: .destructive) { [weak self] _ in
+		let deleteCompletedRowsAction = UIAction(title: AppStringAssets.deleteCompletedRowsControlLabel,
+												 image: ZavalaImageAssets.delete,
+												 attributes: .destructive) { [weak self] _ in
 			self?.deleteCompletedRows()
 		}
 		let outlineMenu = UIMenu(title: "", options: .displayInline, children: outlineActions)
@@ -1907,17 +2030,17 @@ private extension EditorViewController {
 		let turnFilterOnAction = UIAction() { [weak self] _ in
 		   self?.toggleFilterOn()
 		}
-		turnFilterOnAction.title = isFilterOn ? L10n.turnFilterOff : L10n.turnFilterOn
+		turnFilterOnAction.title = isFilterOn ? AppStringAssets.turnFilterOffControlLabel : AppStringAssets.turnFilterOnControlLabel
 		
 		let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
 		
-		let filterCompletedAction = UIAction(title: L10n.filterCompleted) { [weak self] _ in
+		let filterCompletedAction = UIAction(title: AppStringAssets.filterCompletedControlLabel) { [weak self] _ in
 			self?.toggleCompletedFilter()
 		}
 		filterCompletedAction.state = isCompletedFiltered ? .on : .off
 		filterCompletedAction.attributes = isFilterOn ? [] : .disabled
 
-		let filterNotesAction = UIAction(title: L10n.filterNotes) { [weak self] _ in
+		let filterNotesAction = UIAction(title: AppStringAssets.filterNotesControlLabel) { [weak self] _ in
 		   self?.toggleNotesFilter()
 		}
 		filterNotesAction.state = isNotesFiltered ? .on : .off
@@ -2223,7 +2346,7 @@ private extension EditorViewController {
 	}
 	
 	func moveCursorToTagInput() {
-		if let outline = outline {
+		if let outline {
 			let indexPath = IndexPath(row: outline.tags.count, section: Outline.Section.tags.rawValue)
 			if let tagInputCell = collectionView.cellForItem(at: indexPath) as? EditorTagInputViewCell {
 				tagInputCell.takeCursor()
@@ -2261,7 +2384,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	func makeRowsContextMenu(rows: [Row]) -> UIContextMenuConfiguration? {
+	func buildRowsContextMenu(rows: [Row]) -> UIContextMenuConfiguration? {
 		guard let firstRow = rows.sortedByDisplayOrder().first else { return nil }
 		
 		return UIContextMenuConfiguration(identifier: firstRow as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
@@ -2286,7 +2409,7 @@ private extension EditorViewController {
 			if !outline.isUncompleteUnavailable(rows: rows) {
 				outlineActions.append(self.uncompleteAction(rows: rows))
 			}
-			if outline.isDeleteNotesUnavailable(rows: rows) {
+			if !outline.isCreateNotesUnavailable(rows: rows) {
 				outlineActions.append(self.createNoteAction(rows: rows))
 			}
 			if !outline.isDeleteNotesUnavailable(rows: rows) {
@@ -2311,29 +2434,29 @@ private extension EditorViewController {
 	}
 	
 	func cutAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.cut, image: AppAssets.cut) { [weak self] action in
-			guard let self = self else { return }
+		return UIAction(title: AppStringAssets.cutControlLabel, image: ZavalaImageAssets.cut) { [weak self] action in
+			guard let self else { return }
 			self.cutRows(rows)
 			self.delegate?.validateToolbar(self)
 		}
 	}
 
 	func copyAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.copy, image: AppAssets.copy) { [weak self] action in
+		return UIAction(title: AppStringAssets.copyControlLabel, image: ZavalaImageAssets.copy) { [weak self] action in
 			self?.copyRows(rows)
 		}
 	}
 
 	func pasteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.paste, image: AppAssets.paste) { [weak self] action in
-			guard let self = self else { return }
+		return UIAction(title: AppStringAssets.pasteControlLabel, image: ZavalaImageAssets.paste) { [weak self] action in
+			guard let self else { return }
 			self.pasteRows(afterRows: rows)
 			self.delegate?.validateToolbar(self)
 		}
 	}
 
 	func addAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.addRow, image: AppAssets.add) { [weak self] action in
+		return UIAction(title: AppStringAssets.addRowControlLabel, image: ZavalaImageAssets.add) { [weak self] action in
 			// Have to let the text field get the first responder by getting it away from this
 			// action which appears to be holding on to it.
 			DispatchQueue.main.async {
@@ -2343,51 +2466,51 @@ private extension EditorViewController {
 	}
 
 	func duplicateAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.duplicate, image: AppAssets.duplicate) { [weak self] action in
+		return UIAction(title: AppStringAssets.duplicateControlLabel, image: ZavalaImageAssets.duplicate) { [weak self] action in
 			self?.duplicateRows(rows)
 		}
 	}
 
 	func expandAllAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.expandAll, image: AppAssets.expandAll) { [weak self] action in
+		return UIAction(title: AppStringAssets.expandAllControlLabel, image: ZavalaImageAssets.expandAll) { [weak self] action in
 			self?.expandAll(containers: rows)
 		}
 	}
 
 	func collapseAllAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.collapseAll, image: AppAssets.collapseAll) { [weak self] action in
+		return UIAction(title: AppStringAssets.collapseAllControlLabel, image: ZavalaImageAssets.collapseAll) { [weak self] action in
 			self?.collapseAll(containers: rows)
 		}
 	}
 
 	func completeAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.complete, image: AppAssets.completeRow) { [weak self] action in
+		return UIAction(title: AppStringAssets.completeControlLabel, image: ZavalaImageAssets.completeRow) { [weak self] action in
 			self?.completeRows(rows)
 		}
 	}
 	
 	func uncompleteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.uncomplete, image: AppAssets.uncompleteRow) { [weak self] action in
+		return UIAction(title: AppStringAssets.uncompleteControlLabel, image: ZavalaImageAssets.uncompleteRow) { [weak self] action in
 			self?.uncompleteRows(rows)
 		}
 	}
 	
 	func createNoteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.addNote, image: AppAssets.note) { [weak self] action in
+		return UIAction(title: AppStringAssets.addNoteControlLabel, image: ZavalaImageAssets.noteAdd) { [weak self] action in
 			self?.createRowNotes(rows)
 		}
 	}
 
 	func deleteNoteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: L10n.deleteNote, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
+		return UIAction(title: AppStringAssets.deleteNoteControlLabel, image: ZavalaImageAssets.delete, attributes: .destructive) { [weak self] action in
 			self?.deleteRowNotes(rows)
 		}
 	}
 
 	func deleteAction(rows: [Row]) -> UIAction {
-		let title = rows.count == 1 ? L10n.deleteRow : L10n.deleteRows
-		return UIAction(title: title, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
-			guard let self = self else { return }
+		let title = rows.count == 1 ? AppStringAssets.deleteRowControlLabel : AppStringAssets.deleteRowsControlLabel
+		return UIAction(title: title, image: ZavalaImageAssets.delete, attributes: .destructive) { [weak self] action in
+			guard let self else { return }
 			self.deleteRows(rows)
 			self.delegate?.validateToolbar(self)
 		}
@@ -2524,7 +2647,8 @@ private extension EditorViewController {
 	func createTag(name: String) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = CreateTagCommand(undoManager: undoManager,
+		let command = CreateTagCommand(actionName: AppStringAssets.addTagControlLabel,
+									   undoManager: undoManager,
 									   delegate: self,
 									   outline: outline,
 									   tagName: name)
@@ -2536,7 +2660,8 @@ private extension EditorViewController {
 	func deleteTag(name: String) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = DeleteTagCommand(undoManager: undoManager,
+		let command = DeleteTagCommand(actionName: AppStringAssets.removeTagControlLabel,
+									   undoManager: undoManager,
 									   delegate: self,
 									   outline: outline,
 									   tagName: name)
@@ -2547,7 +2672,8 @@ private extension EditorViewController {
 	func expand(rows: [Row]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = ExpandCommand(undoManager: undoManager,
+		let command = ExpandCommand(actionName: AppStringAssets.expandControlLabel,
+									undoManager: undoManager,
 									delegate: self,
 									outline: outline,
 									rows: rows)
@@ -2560,7 +2686,8 @@ private extension EditorViewController {
 
 		let currentRow = currentTextView?.row
 		
-		let command = CollapseCommand(undoManager: undoManager,
+		let command = CollapseCommand(actionName: AppStringAssets.collapseControlLabel,
+									  undoManager: undoManager,
 									  delegate: self,
 									  outline: outline,
 									  rows: rows)
@@ -2581,7 +2708,8 @@ private extension EditorViewController {
 	func expandAll(containers: [RowContainer]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = ExpandAllCommand(undoManager: undoManager,
+		let command = ExpandAllCommand(actionName: AppStringAssets.expandAllControlLabel,
+									   undoManager: undoManager,
 									   delegate: self,
 									   outline: outline,
 									   containers: containers)
@@ -2592,7 +2720,8 @@ private extension EditorViewController {
 	func collapseAll(containers: [RowContainer]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = CollapseAllCommand(undoManager: undoManager,
+		let command = CollapseAllCommand(actionName: AppStringAssets.collapseAllControlLabel,
+										 undoManager: undoManager,
 										 delegate: self,
 										 outline: outline,
 										 containers: containers)
@@ -2603,7 +2732,8 @@ private extension EditorViewController {
 	func textChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = TextChangedCommand(undoManager: undoManager,
+		let command = TextChangedCommand(actionName: AppStringAssets.typingControlLabel,
+										 undoManager: undoManager,
 										 delegate: self,
 										 outline: outline,
 										 row: row,
@@ -2617,7 +2747,8 @@ private extension EditorViewController {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		copyRows(rows)
 
-		let command = CutRowCommand(undoManager: undoManager,
+		let command = CutRowCommand(actionName: AppStringAssets.cutControlLabel,
+									undoManager: undoManager,
 									delegate: self,
 									outline: outline,
 									rows: rows)
@@ -2672,7 +2803,7 @@ private extension EditorViewController {
 				group.enter()
 				itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
 					DispatchQueue.main.async {
-						if let data = data {
+						if let data {
 							do {
 								rowGroups.append(try RowGroup.fromData(data))
 								group.leave()
@@ -2686,7 +2817,8 @@ private extension EditorViewController {
 			}
 
 			group.notify(queue: DispatchQueue.main) {
-				let command = PasteRowCommand(undoManager: undoManager,
+				let command = PasteRowCommand(actionName: AppStringAssets.pasteControlLabel,
+											  undoManager: undoManager,
 											  delegate: self,
 											  outline: outline,
 											  rowGroups: rowGroups,
@@ -2719,10 +2851,12 @@ private extension EditorViewController {
 				let textRows = text.split(separator: "\n").map { String($0) }
 				for textRow in textRows {
 					let row = Row(outline: outline, topicMarkdown: textRow.trimmingWhitespace)
+					row.detectData()
 					rowGroups.append(RowGroup(row))
 				}
 				
-				let command = PasteRowCommand(undoManager: undoManager,
+				let command = PasteRowCommand(actionName: AppStringAssets.pasteControlLabel,
+											  undoManager: undoManager,
 											  delegate: self,
 											  outline: outline,
 											  rowGroups: rowGroups,
@@ -2737,7 +2871,8 @@ private extension EditorViewController {
 	func deleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = DeleteRowCommand(undoManager: undoManager,
+		let command = DeleteRowCommand(actionName: AppStringAssets.deleteRowsControlLabel,
+									   undoManager: undoManager,
 									   delegate: self,
 									   outline: outline,
 									   rows: rows,
@@ -2759,7 +2894,8 @@ private extension EditorViewController {
 	func createRow(beforeRows: [Row]) {
 		guard let undoManager = undoManager, let outline = outline, let beforeRow = beforeRows.sortedByDisplayOrder().first else { return }
 
-		let command = CreateRowBeforeCommand(undoManager: undoManager,
+		let command = CreateRowBeforeCommand(actionName: AppStringAssets.addRowControlLabel,
+											 undoManager: undoManager,
 											 delegate: self,
 											 outline: outline,
 											 beforeRow: beforeRow)
@@ -2780,7 +2916,8 @@ private extension EditorViewController {
 		
 		let afterRow = afterRows?.sortedByDisplayOrder().last
 		
-		let command = CreateRowAfterCommand(undoManager: undoManager,
+		let command = CreateRowAfterCommand(actionName: AppStringAssets.addRowAfterControlLabel,
+											undoManager: undoManager,
 											delegate: self,
 											outline: outline,
 											afterRow: afterRow,
@@ -2805,7 +2942,8 @@ private extension EditorViewController {
 		
 		guard let afterRow = afterRows?.sortedByDisplayOrder().last else { return }
 		
-		let command = CreateRowInsideCommand(undoManager: undoManager,
+		let command = CreateRowInsideCommand(actionName: AppStringAssets.addRowInsideControlLabel,
+											 undoManager: undoManager,
 											 delegate: self,
 											 outline: outline,
 											 afterRow: afterRow,
@@ -2830,7 +2968,8 @@ private extension EditorViewController {
 		
 		guard let afterRow = afterRows?.sortedByDisplayOrder().last else { return }
 		
-		let command = CreateRowOutsideCommand(undoManager: undoManager,
+		let command = CreateRowOutsideCommand(actionName: AppStringAssets.addRowOutsideControlLabel,
+											  undoManager: undoManager,
 											  delegate: self,
 											  outline: outline,
 											  afterRow: afterRow,
@@ -2851,7 +2990,8 @@ private extension EditorViewController {
 	func duplicateRows(_ rows: [Row]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = DuplicateRowCommand(undoManager: undoManager,
+		let command = DuplicateRowCommand(actionName: AppStringAssets.duplicateControlLabel,
+										  undoManager: undoManager,
 										  delegate: self,
 										  outline: outline,
 										  rows: rows)
@@ -2862,7 +3002,8 @@ private extension EditorViewController {
 	func moveRowsLeft(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = MoveRowLeftCommand(undoManager: undoManager,
+		let command = MoveRowLeftCommand(actionName: AppStringAssets.moveLeftControlLabel,
+										 undoManager: undoManager,
 										 delegate: self,
 										 outline: outline,
 										 rows: rows,
@@ -2874,7 +3015,8 @@ private extension EditorViewController {
 	func moveRowsRight(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = MoveRowRightCommand(undoManager: undoManager,
+		let command = MoveRowRightCommand(actionName: AppStringAssets.moveRightControlLabel,
+										  undoManager: undoManager,
 										  delegate: self,
 										  outline: outline,
 										  rows: rows,
@@ -2886,7 +3028,8 @@ private extension EditorViewController {
 	func moveRowsUp(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = MoveRowUpCommand(undoManager: undoManager,
+		let command = MoveRowUpCommand(actionName: AppStringAssets.moveUpControlLabel,
+									   undoManager: undoManager,
 									   delegate: self,
 									   outline: outline,
 									   rows: rows,
@@ -2899,7 +3042,8 @@ private extension EditorViewController {
 	func moveRowsDown(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = MoveRowDownCommand(undoManager: undoManager,
+		let command = MoveRowDownCommand(actionName: AppStringAssets.moveDownControlLabel,
+										 undoManager: undoManager,
 										 delegate: self,
 										 outline: outline,
 										 rows: rows,
@@ -2912,7 +3056,8 @@ private extension EditorViewController {
 	func splitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = SplitRowCommand(undoManager: undoManager,
+		let command = SplitRowCommand(actionName: AppStringAssets.splitRowControlLabel,
+									  undoManager: undoManager,
 									  delegate: self,
 									  outline: outline,
 									  row: row,
@@ -2934,7 +3079,8 @@ private extension EditorViewController {
 		
 		let cursorIsInCompletingRows = rows.contains(where: { $0 == currentTextView?.row })
 		
-		let command = CompleteCommand(undoManager: undoManager,
+		let command = CompleteCommand(actionName: AppStringAssets.completeControlLabel,
+									  undoManager: undoManager,
 									  delegate: self,
 									  outline: outline,
 									  rows: rows,
@@ -2954,7 +3100,8 @@ private extension EditorViewController {
 	func uncompleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = UncompleteCommand(undoManager: undoManager,
+		let command = UncompleteCommand(actionName: AppStringAssets.uncompleteControlLabel,
+										undoManager: undoManager,
 										delegate: self,
 										outline: outline,
 										rows: rows,
@@ -2966,7 +3113,8 @@ private extension EditorViewController {
 	func createRowNotes(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = CreateNoteCommand(undoManager: undoManager,
+		let command = CreateNoteCommand(actionName: AppStringAssets.addNoteControlLabel,
+										undoManager: undoManager,
 										delegate: self,
 										outline: outline,
 										rows: rows,
@@ -2989,7 +3137,8 @@ private extension EditorViewController {
 	func deleteRowNotes(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = DeleteNoteCommand(undoManager: undoManager,
+		let command = DeleteNoteCommand(actionName: AppStringAssets.deleteNoteControlLabel,
+										undoManager: undoManager,
 										delegate: self,
 										outline: outline,
 										rows: rows,
@@ -3023,7 +3172,7 @@ private extension EditorViewController {
 	}
 
 	func updateSpotlightIndex() {
-		if let outline = outline {
+		if let outline {
 			DocumentIndexer.updateIndex(forDocument: .outline(outline))
 		}
 	}
@@ -3043,7 +3192,7 @@ private extension EditorViewController {
 			return lhs.string.caseInsensitiveCompare(rhs.string) == .orderedAscending
 		}
 		
-		let refString = references.count == 1 ? L10n.reference : L10n.references
+		let refString = references.count == 1 ? AppStringAssets.referenceLabel : AppStringAssets.referencesLabel
 		let result = NSMutableAttributedString(string: "\(refString)")
 		result.append(references[0])
 		
@@ -3055,7 +3204,7 @@ private extension EditorViewController {
 		var attrs = [NSAttributedString.Key : Any]()
 		attrs[.foregroundColor] = UIColor.secondaryLabel
 		attrs[.font] = OutlineFontCache.shared.backlink
-		result.addAttributes(attrs, range: NSRange(0..<result.length))
+		result.addAttributes(attrs)
 		return result
 	}
 	

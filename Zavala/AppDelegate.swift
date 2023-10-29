@@ -168,9 +168,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	let showPreferences: UIKeyCommand = {
 		let title: String
 		if #available(iOS 16, *) {
-			title = L10n.settingsEllipsis
+			title = AppStringAssets.settingsEllipsisControlLabel
 		} else {
-			title = L10n.preferencesEllipsis
+			title = AppStringAssets.preferencesEllipsisControlLabel
 		}
 		
 		return UIKeyCommand(title: title,
@@ -180,260 +180,260 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			
 	}()
 	
-	let syncCommand = UIKeyCommand(title: L10n.sync,
+	let syncCommand = UIKeyCommand(title: AppStringAssets.syncControlLabel,
 								   action: #selector(syncCommand(_:)),
 								   input: "r",
 								   modifierFlags: [.command])
 	
-	let exportOPMLsCommand = UIKeyCommand(title: L10n.exportOPMLEllipsis,
+	let exportOPMLsCommand = UIKeyCommand(title: AppStringAssets.exportOPMLEllipsisControlLabel,
 										  action: #selector(exportOPMLsCommand(_:)),
 										  input: "e",
 										  modifierFlags: [.shift, .command])
 	
-	let exportPDFDocsCommand = UICommand(title: L10n.exportPDFDocEllipsis, action: #selector(exportPDFDocsCommand(_:)))
+	let exportPDFDocsCommand = UICommand(title: AppStringAssets.exportPDFDocEllipsisControlLabel, action: #selector(exportPDFDocsCommand(_:)))
 
-	let exportPDFListsCommand = UICommand(title: L10n.exportPDFListEllipsis, action: #selector(exportPDFListsCommand(_:)))
+	let exportPDFListsCommand = UICommand(title: AppStringAssets.exportPDFListEllipsisControlLabel, action: #selector(exportPDFListsCommand(_:)))
 
-	let exportMarkdownDocsCommand = UICommand(title: L10n.exportMarkdownDocEllipsis, action: #selector(exportMarkdownDocsCommand(_:)))
+	let exportMarkdownDocsCommand = UICommand(title: AppStringAssets.exportMarkdownDocEllipsisControlLabel, action: #selector(exportMarkdownDocsCommand(_:)))
 	
-	let exportMarkdownListsCommand = UIKeyCommand(title: L10n.exportMarkdownListEllipsis,
+	let exportMarkdownListsCommand = UIKeyCommand(title: AppStringAssets.exportMarkdownListEllipsisControlLabel,
 												  action: #selector(exportMarkdownListsCommand(_:)),
 												  input: "e",
 												  modifierFlags: [.control, .command])
 	
-	let importOPMLCommand = UIKeyCommand(title: L10n.importOPMLEllipsis,
+	let importOPMLCommand = UIKeyCommand(title: AppStringAssets.importOPMLEllipsisControlLabel,
 										 action: #selector(importOPMLCommand(_:)),
 										 input: "i",
 										 modifierFlags: [.shift, .command])
 	
-	let newWindowCommand = UIKeyCommand(title: L10n.newMainWindow,
+	let newWindowCommand = UIKeyCommand(title: AppStringAssets.newMainWindowControlLabel,
 										action: #selector(newWindow(_:)),
 										input: "n",
 										modifierFlags: [.alternate, .command])
 	
-	let newOutlineCommand = UIKeyCommand(title: L10n.newOutline,
+	let newOutlineCommand = UIKeyCommand(title: AppStringAssets.newOutlineControlLabel,
 										 action: #selector(createOutlineCommand(_:)),
 										 input: "n",
 										 modifierFlags: [.command])
 	
-	let toggleSidebarCommand = UIKeyCommand(title: L10n.toggleSidebar,
+	let toggleSidebarCommand = UIKeyCommand(title: AppStringAssets.togglerSidebarControlLabel,
 											action: #selector(toggleSidebarCommand(_:)),
 											input: "s",
 											modifierFlags: [.control, .command])
 	
-	let deleteCommand = UIKeyCommand(title: L10n.delete,
+	let deleteCommand = UIKeyCommand(title: AppStringAssets.deleteControlLabel,
 									 action: #selector(delete),
 									 input: "\u{8}",
 									 modifierFlags: [.command])
 	
-	let goBackwardOneCommand = UIKeyCommand(title: L10n.back,
+	let goBackwardOneCommand = UIKeyCommand(title: AppStringAssets.backControlLabel,
 											action: #selector(goBackwardOneCommand(_:)),
 											input: "[",
 											modifierFlags: [.command])
 	
-	let goForwardOneCommand = UIKeyCommand(title: L10n.forward,
+	let goForwardOneCommand = UIKeyCommand(title: AppStringAssets.forwardControlLabel,
 										   action: #selector(goForwardOneCommand(_:)),
 										   input: "]",
 										   modifierFlags: [.command])
 	
-	let insertRowCommand = UIKeyCommand(title: L10n.addRowAbove,
+	let insertRowCommand = UIKeyCommand(title: AppStringAssets.addRowAboveControlLabel,
 										action: #selector(insertRowCommand(_:)),
 										input: "\n",
 										modifierFlags: [.shift])
 	
-	let createRowCommand = UIKeyCommand(title: L10n.addRowBelow,
+	let createRowCommand = UIKeyCommand(title: AppStringAssets.addRowBelowControlLabel,
 										action: #selector(createRowCommand(_:)),
 										input: "\n",
 										modifierFlags: [])
 	
-	let duplicateRowsCommand = UIKeyCommand(title: L10n.duplicate,
+	let duplicateRowsCommand = UIKeyCommand(title: AppStringAssets.duplicateControlLabel,
 											action: #selector(duplicateRowsCommand(_:)),
 											input: "r",
 											modifierFlags: [.command, .control])
 	
-	let createRowInsideCommand = UIKeyCommand(title: L10n.addRowInside,
+	let createRowInsideCommand = UIKeyCommand(title: AppStringAssets.addRowInsideControlLabel,
 											  action: #selector(createRowInsideCommand(_:)),
 											  input: "}",
 											  modifierFlags: [.command])
 	
-	let createRowOutsideCommand = UIKeyCommand(title: L10n.addRowOutside,
+	let createRowOutsideCommand = UIKeyCommand(title: AppStringAssets.addRowOutsideControlLabel,
 											   action: #selector(createRowOutsideCommand(_:)),
 											   input: "{",
 											   modifierFlags: [.command])
 	
-	let moveRowsUpCommand = UIKeyCommand(title: L10n.moveUp,
+	let moveRowsUpCommand = UIKeyCommand(title: AppStringAssets.moveUpControlLabel,
 										 action: #selector(moveRowsUpCommand(_:)),
 										 input: UIKeyCommand.inputUpArrow,
 										 modifierFlags: [.control, .command])
 	
-	let moveRowsDownCommand = UIKeyCommand(title: L10n.moveDown,
+	let moveRowsDownCommand = UIKeyCommand(title: AppStringAssets.moveDownControlLabel,
 										   action: #selector(moveRowsDownCommand(_:)),
 										   input: UIKeyCommand.inputDownArrow,
 										   modifierFlags: [.control, .command])
 	
-	let moveRowsLeftCommand = UIKeyCommand(title: L10n.moveLeft,
+	let moveRowsLeftCommand = UIKeyCommand(title: AppStringAssets.moveLeftControlLabel,
 										   action: #selector(moveRowsLeftCommand(_:)),
 										   input: UIKeyCommand.inputLeftArrow,
 										   modifierFlags: [.control, .command])
 	
-	let moveRowsRightCommand = UIKeyCommand(title: L10n.moveRight,
+	let moveRowsRightCommand = UIKeyCommand(title: AppStringAssets.moveRightControlLabel,
 											action: #selector(moveRowsRightCommand(_:)),
 											input: UIKeyCommand.inputRightArrow,
 											modifierFlags: [.control, .command])
 	
-	let toggleCompleteRowsCommand = UIKeyCommand(title: L10n.complete,
+	let toggleCompleteRowsCommand = UIKeyCommand(title: AppStringAssets.completeControlLabel,
 												 action: #selector(toggleCompleteRowsCommand(_:)),
 												 input: "\n",
 												 modifierFlags: [.command])
 	
-	let completeRowsCommand = UIKeyCommand(title: L10n.complete,
+	let completeRowsCommand = UIKeyCommand(title: AppStringAssets.completeControlLabel,
 										   action: #selector(toggleCompleteRowsCommand(_:)),
 										   input: "\n",
 										   modifierFlags: [.command])
 	
-	let uncompleteRowsCommand = UIKeyCommand(title: L10n.uncomplete,
+	let uncompleteRowsCommand = UIKeyCommand(title: AppStringAssets.uncompleteControlLabel,
 											 action: #selector(toggleCompleteRowsCommand(_:)),
 											 input: "\n",
 											 modifierFlags: [.command])
 	
-	let createRowNotesCommand = UIKeyCommand(title: L10n.addNote,
+	let createRowNotesCommand = UIKeyCommand(title: AppStringAssets.addNoteLevelControlLabel,
 											 action: #selector(createRowNotesCommand(_:)),
 											 input: "-",
 											 modifierFlags: [.control])
 	
-	let deleteRowNotesCommand = UIKeyCommand(title: L10n.deleteNote,
+	let deleteRowNotesCommand = UIKeyCommand(title: AppStringAssets.deleteNoteControlLabel,
 											 action: #selector(deleteRowNotesCommand(_:)),
 											 input: "-",
 											 modifierFlags: [.control, .shift])
 	
-	let splitRowCommand = UIKeyCommand(title: L10n.splitRow,
+	let splitRowCommand = UIKeyCommand(title: AppStringAssets.splitRowControlLabel,
 									   action: #selector(splitRowCommand(_:)),
 									   input: "\n",
 									   modifierFlags: [.shift, .alternate])
 	
-	let toggleBoldCommand = UIKeyCommand(title: L10n.bold,
+	let toggleBoldCommand = UIKeyCommand(title: AppStringAssets.boldControlLabel,
 										 action: #selector(toggleBoldCommand(_:)),
 										 input: "b",
 										 modifierFlags: [.command])
 	
-	let toggleItalicsCommand = UIKeyCommand(title: L10n.italic,
+	let toggleItalicsCommand = UIKeyCommand(title: AppStringAssets.italicControlLabel,
 											action: #selector(toggleItalicsCommand(_:)),
 											input: "i",
 											modifierFlags: [.command])
 	
-	let insertImageCommand = UIKeyCommand(title: L10n.insertImageEllipsis,
+	let insertImageCommand = UIKeyCommand(title: AppStringAssets.insertImageEllipsisControlLabel,
 										  action: #selector(insertImageCommand(_:)),
 										  input: "i",
 										  modifierFlags: [.alternate, .command])
 	
-	let linkCommand = UIKeyCommand(title: L10n.linkEllipsis,
+	let linkCommand = UIKeyCommand(title: AppStringAssets.linkEllipsisControlLabel,
 								   action: #selector(linkCommand(_:)),
 								   input: "k",
 								   modifierFlags: [.command])
 	
-	let copyDocumentLinkCommand = UICommand(title: L10n.copyDocumentLink, action: #selector(copyDocumentLinkCommand(_:)))
+	let copyDocumentLinkCommand = UICommand(title: AppStringAssets.copyDocumentLinkControlLabel, action: #selector(copyDocumentLinkCommand(_:)))
 	
-	let toggleFilterOnCommand = UIKeyCommand(title: L10n.turnFilterOn,
+	let toggleFilterOnCommand = UIKeyCommand(title: AppStringAssets.turnFilterOnControlLabel,
 											 action: #selector(toggleFilterOnCommand(_:)),
 											 input: "h",
 											 modifierFlags: [.shift, .command])
 	
-	let toggleCompletedFilterCommand = UICommand(title: L10n.filterCompleted, action: #selector(toggleCompletedFilterCommand(_:)))
+	let toggleCompletedFilterCommand = UICommand(title: AppStringAssets.filterCompletedControlLabel, action: #selector(toggleCompletedFilterCommand(_:)))
 	
-	let toggleNotesFilterCommand = UICommand(title: L10n.filterNotes, action: #selector(toggleNotesFilterCommand(_:)))
+	let toggleNotesFilterCommand = UICommand(title: AppStringAssets.filterNotesControlLabel, action: #selector(toggleNotesFilterCommand(_:)))
 	
-	let expandAllInOutlineCommand = UIKeyCommand(title: L10n.expandAllInOutline,
+	let expandAllInOutlineCommand = UIKeyCommand(title: AppStringAssets.expandAllInOutlineControlLabel,
 												 action: #selector(expandAllInOutlineCommand(_:)),
 												 input: "9",
 												 modifierFlags: [.control, .command])
 	
-	let collapseAllInOutlineCommand = UIKeyCommand(title: L10n.collapseAllInOutline,
+	let collapseAllInOutlineCommand = UIKeyCommand(title: AppStringAssets.collapseAllInOutlineControlLabel,
 												   action: #selector(collapseAllInOutlineCommand(_:)),
 												   input: "0",
 												   modifierFlags: [.control, .command])
 	
-	let expandAllCommand = UIKeyCommand(title: L10n.expandAllInRow,
+	let expandAllCommand = UIKeyCommand(title: AppStringAssets.expandAllInRowControlLabel,
 										action: #selector(expandAllCommand(_:)),
 										input: "9",
 										modifierFlags: [.alternate, .command])
 	
-	let collapseAllCommand = UIKeyCommand(title: L10n.collapseAllInRow,
+	let collapseAllCommand = UIKeyCommand(title: AppStringAssets.collapseAllInRowControlLabel,
 										  action: #selector(collapseAllCommand(_:)),
 										  input: "0",
 										  modifierFlags: [.alternate, .command])
 	
-	let expandCommand = UIKeyCommand(title: L10n.expand,
+	let expandCommand = UIKeyCommand(title: AppStringAssets.expandControlLabel,
 									 action: #selector(expandCommand(_:)),
 									 input: "9",
 									 modifierFlags: [.command])
 	
-	let collapseCommand = UIKeyCommand(title: L10n.collapse,
+	let collapseCommand = UIKeyCommand(title: AppStringAssets.collapseControlLabel,
 									   action: #selector(collapseCommand(_:)),
 									   input: "0",
 									   modifierFlags: [.command])
 	
-	let collapseParentRowCommand = UIKeyCommand(title: L10n.collapseParentRow,
+	let collapseParentRowCommand = UIKeyCommand(title: AppStringAssets.collapseParentRowControlLabel,
 												action: #selector(collapseParentRowCommand(_:)),
 												input: "0",
 												modifierFlags: [.control, .alternate, .command])
 	
-	let deleteCompletedRowsCommand = UIKeyCommand(title: L10n.deleteCompletedRows,
+	let deleteCompletedRowsCommand = UIKeyCommand(title: AppStringAssets.deleteCompletedRowsControlLabel,
 									   action: #selector(deleteCompletedRowsCommand(_:)),
 									   input: "d",
 									   modifierFlags: [.command])
 	
-	let showHelpCommand = UICommand(title: L10n.zavalaHelp, action: #selector(showHelpCommand(_:)))
+	let showHelpCommand = UICommand(title: AppStringAssets.zavalaHelpControlLabel, action: #selector(showHelpCommand(_:)))
 
-	let reportAnIssueCommand = UICommand(title: L10n.reportAnIssue, action: #selector(reportAnIssueCommand(_:)))
+	let reportAnIssueCommand = UICommand(title: AppStringAssets.reportAnIssueControlLabel, action: #selector(reportAnIssueCommand(_:)))
 
-	let showOpenQuicklyCommand = UIKeyCommand(title: L10n.openQuicklyEllipsis,
+	let showOpenQuicklyCommand = UIKeyCommand(title: AppStringAssets.openQuicklyEllipsisControlLabel,
 											  action: #selector(showOpenQuicklyCommand(_:)),
 											  input: "o",
 											  modifierFlags: [.shift, .command])
 	
-	let beginDocumentSearchCommand = UIKeyCommand(title: L10n.documentFindEllipsis,
+	let beginDocumentSearchCommand = UIKeyCommand(title: AppStringAssets.documentFindEllipsisControlLabel,
 												  action: #selector(beginDocumentSearchCommand(_:)),
 												  input: "f",
 												  modifierFlags: [.alternate, .command])
 	
-	let beginInDocumentSearchCommand = UIKeyCommand(title: L10n.findEllipsis,
+	let beginInDocumentSearchCommand = UIKeyCommand(title: AppStringAssets.findEllipsisControlLabel,
 													action: #selector(beginInDocumentSearchCommand(_:)),
 													input: "f",
 													modifierFlags: [.command])
 	
-	let useSelectionForSearchCommand = UIKeyCommand(title: L10n.useSelectionForFind,
+	let useSelectionForSearchCommand = UIKeyCommand(title: AppStringAssets.useSelectionForFindControlLabel,
 													action: #selector(useSelectionForSearchCommand(_:)),
 													input: "e",
 													modifierFlags: [.command])
 	
-	let nextInDocumentSearchCommand = UIKeyCommand(title: L10n.findNext,
+	let nextInDocumentSearchCommand = UIKeyCommand(title: AppStringAssets.findNextControlLabel,
 												   action: #selector(nextInDocumentSearchCommand(_:)),
 												   input: "g",
 												   modifierFlags: [.command])
 	
-	let previousInDocumentSearchCommand = UIKeyCommand(title: L10n.findPrevious,
+	let previousInDocumentSearchCommand = UIKeyCommand(title: AppStringAssets.findPreviousControlLabel,
 													   action: #selector(previousInDocumentSearchCommand(_:)),
 													   input: "g",
 													   modifierFlags: [.shift, .command])
 	
-	let printDocsCommand = UIKeyCommand(title: L10n.printDocEllipsis,
+	let printDocsCommand = UIKeyCommand(title: AppStringAssets.printDocEllipsisControlLabel,
 										action: #selector(printDocsCommand(_:)),
 										input: "p",
 										modifierFlags: [.alternate, .command])
 	
-	let printListsCommand = UIKeyCommand(title: L10n.printListEllipsis,
+	let printListsCommand = UIKeyCommand(title: AppStringAssets.printListControlEllipsisLabel,
 										 action: #selector(printListsCommand(_:)),
 										 input: "p",
 										 modifierFlags: [.command])
 
 	// Currently unused because it automatically adds Services menus to my other context menus
-	let shareCommand = UICommand(title: L10n.share,
+	let shareCommand = UICommand(title: AppStringAssets.shareControlLabel,
 								 action: #selector(share(_:)),
 								 propertyList: UICommandTagShare)
 
-	let collaborateCommand = UICommand(title: L10n.collaborateEllipsis, action: #selector(collaborateCommand(_:)))
+	let collaborateCommand = UICommand(title: AppStringAssets.collaborateEllipsisControlLabel, action: #selector(collaborateCommand(_:)))
 
-	let outlineGetInfoCommand = UIKeyCommand(title: L10n.getInfo,
+	let outlineGetInfoCommand = UIKeyCommand(title: AppStringAssets.getInfoControlLabel,
 											 action: #selector(outlineGetInfoCommand(_:)),
 											 input: "i",
 											 modifierFlags: [.control, .command])
@@ -488,9 +488,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange), name: .DocumentTitleDidChange, object: nil)
 
 		var menuItems = [UIMenuItem]()
-		menuItems.append(UIMenuItem(title: L10n.link, action: .editLink))
-		menuItems.append(UIMenuItem(title: L10n.image, action: .insertImage))
-		menuItems.append(UIMenuItem(title: L10n.splitRow, action: .splitRow))
+		menuItems.append(UIMenuItem(title: AppStringAssets.linkControlLabel, action: .editLink))
+		menuItems.append(UIMenuItem(title: AppStringAssets.imageControlLabel, action: .insertImage))
+		menuItems.append(UIMenuItem(title: AppStringAssets.splitRowControlLabel, action: .splitRow))
 		UIMenuController.shared.menuItems = menuItems
 
 		#if targetEnvironment(macCatalyst)
@@ -786,11 +786,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	@objc func showHelpCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppAssets.helpURL)
+		mainCoordinator?.openURL(AppStringAssets.helpURL)
 	}
 
 	@objc func reportAnIssueCommand(_ sender: Any?) {
-		UIApplication.shared.open(AppAssets.reportAnIssueURL)
+		UIApplication.shared.open(URL(string: AppStringAssets.reportAnIssueURL)!)
 	}
 
 	@objc func showOpenQuicklyCommand(_ sender: Any?) {
@@ -925,9 +925,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(toggleCompleteRowsCommand(_:)):
 			if mainCoordinator?.isCompleteRowsAvailable ?? false {
-				command.title = L10n.complete
+				command.title = AppStringAssets.completeControlLabel
 			} else {
-				command.title = L10n.uncomplete
+				command.title = AppStringAssets.uncompleteControlLabel
 			}
 			if mainCoordinator?.isToggleRowCompleteUnavailable ?? true {
 				command.attributes = .disabled
@@ -958,9 +958,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(toggleFilterOnCommand(_:)):
 			if mainCoordinator?.isFilterOn ?? false {
-				command.title = L10n.turnFilterOff
+				command.title = AppStringAssets.turnFilterOffControlLabel
 			} else {
-				command.title = L10n.turnFilterOn
+				command.title = AppStringAssets.turnFilterOnControlLabel
 			}
 		case #selector(toggleCompletedFilterCommand(_:)):
 			if mainCoordinator?.isCompletedFiltered ?? false {
@@ -1051,7 +1051,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let cloudKitMenu = UIMenu(title: "", options: .displayInline, children: [collaborateCommand, syncCommand])
 		builder.insertChild(cloudKitMenu, atStartOfMenu: .file)
 
-		let exportMenu = UIMenu(title: L10n.export, children: [exportPDFDocsCommand, exportPDFListsCommand, exportMarkdownDocsCommand, exportMarkdownListsCommand, exportOPMLsCommand])
+		let exportMenu = UIMenu(title: AppStringAssets.exportControlLabel, children: [exportPDFDocsCommand, exportPDFListsCommand, exportMarkdownDocsCommand, exportMarkdownListsCommand, exportOPMLsCommand])
 		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMenu])
 		builder.insertChild(importExportMenu, atStartOfMenu: .file)
 
@@ -1085,12 +1085,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let documentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginDocumentSearchCommand])
 		let inDocumentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginInDocumentSearchCommand, nextInDocumentSearchCommand, previousInDocumentSearchCommand])
 		let useSelectionMenu = UIMenu(title: "", options: .displayInline, children: [useSelectionForSearchCommand])
-		let findMenu = UIMenu(title: L10n.find, children: [documentFindMenu, inDocumentFindMenu, useSelectionMenu])
+		let findMenu = UIMenu(title: AppStringAssets.findControlLabel, children: [documentFindMenu, inDocumentFindMenu, useSelectionMenu])
 		builder.insertSibling(findMenu, beforeMenu: .spelling)
 		
 		// Format
 		builder.remove(menu: .format)
-		let formatMenu = UIMenu(title: L10n.format, children: [toggleBoldCommand, toggleItalicsCommand])
+		let formatMenu = UIMenu(title: AppStringAssets.formatControlLabel, children: [toggleBoldCommand, toggleItalicsCommand])
 		builder.insertSibling(formatMenu, afterMenu: .edit)
 
 		// View Menu
@@ -1119,7 +1119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												createRowOutsideCommand,
 												duplicateRowsCommand,
 												splitRowCommand])
-		let outlineMenu = UIMenu(title: L10n.outline, children: [mainOutlineMenu, moveRowMenu, completeMenu])
+		let outlineMenu = UIMenu(title: AppStringAssets.outlineControlLabel, children: [mainOutlineMenu, moveRowMenu, completeMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 
 		// History Menu
@@ -1127,7 +1127,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		var historyItems = [UIAction]()
 		for (index, pin) in history.enumerated() {
-			historyItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
+			historyItems.append(UIAction(title: pin.document?.title ?? AppStringAssets.noTitleLabel) { [weak self] _ in
 				DispatchQueue.main.async {
 					self?.openHistoryItem(index: index)
 				}
@@ -1135,7 +1135,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		let historyItemsMenu = UIMenu(title: "", options: .displayInline, children: historyItems)
 
-		let historyMenu = UIMenu(title: L10n.history, children: [navigateMenu, historyItemsMenu])
+		let historyMenu = UIMenu(title: AppStringAssets.historyControlLabel, children: [navigateMenu, historyItemsMenu])
 		builder.insertSibling(historyMenu, afterMenu: .view)
 
 		// Help Menu

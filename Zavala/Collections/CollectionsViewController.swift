@@ -54,8 +54,8 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		return splitViewController as? MainSplitViewController
 	}
 	
-	private var addBarButtonItem: UIBarButtonItem!
-	private var importBarButtonItem: UIBarButtonItem!
+	private var addButton: UIButton!
+	private var importButton: UIButton!
 
     private var selectBarButtonItem: UIBarButtonItem!
     private var selectDoneBarButtonItem: UIBarButtonItem!
@@ -65,36 +65,30 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
     override func viewDidLoad() {
 		super.viewDidLoad()
 
-		addBarButtonItem = UIBarButtonItem(image: AppAssets.createEntity, style: .plain, target: self, action: #selector(createOutline(_:)))
-        addBarButtonItem.title = L10n.add
-
-        importBarButtonItem = UIBarButtonItem(image: AppAssets.importDocument, style: .plain, target: self, action: #selector(importOPML(_:)))
-        importBarButtonItem.title = L10n.importOPML
-
-        selectBarButtonItem = UIBarButtonItem(title: L10n.select, style: .plain, target: self, action: #selector(multipleSelect))
-        selectDoneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(multipleSelectDone))
-        
 		if traitCollection.userInterfaceIdiom == .mac {
 			navigationController?.setNavigationBarHidden(true, animated: false)
+			collectionView.allowsMultipleSelection = true
 		} else {
+			if traitCollection.userInterfaceIdiom == .pad {
+				selectBarButtonItem = UIBarButtonItem(title: AppStringAssets.selectControlLabel, style: .plain, target: self, action: #selector(multipleSelect))
+				selectDoneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(multipleSelectDone))
+
+				navigationItem.rightBarButtonItem = selectBarButtonItem
+			} else {
+				var navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
+				addButton = navButtonGroup.addButton(label: AppStringAssets.addControlLabel, image: ZavalaImageAssets.createEntity, selector: "createOutline:")
+				importButton = navButtonGroup.addButton(label: AppStringAssets.importOPMLControlLabel, image: ZavalaImageAssets.importDocument, selector: "importOPML:")
+				let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
+
+				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
+			}
+
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 			collectionView.refreshControl!.tintColor = .clear
 		}
         
-        if traitCollection.userInterfaceIdiom == .mac {
-            collectionView.allowsMultipleSelection = true
-        }
-
-        if traitCollection.userInterfaceIdiom == .pad {
-            navigationItem.rightBarButtonItem = selectBarButtonItem
-        }
-
-		if traitCollection.userInterfaceIdiom == .phone {
-			navigationItem.rightBarButtonItems = [addBarButtonItem, importBarButtonItem]
-		}
-		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange(_:)), name: .AccountManagerAccountsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDidInitialize(_:)), name: .AccountDidInitialize, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
@@ -249,6 +243,16 @@ extension CollectionsViewController {
     
 	override func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
 		return false
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+		if traitCollection.userInterfaceIdiom == .pad {
+			if collectionView.allowsMultipleSelection {
+				return !(dataSource.itemIdentifier(for: indexPath)?.entityID?.isSystemCollection ?? false)
+			}
+
+		}
+		return true
 	}
 		
 	override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -415,7 +419,7 @@ extension CollectionsViewController {
 
 		operation.completionBlock = { [weak self] _ in
 			guard let self else { return }
-			
+
 			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) } ?? [IndexPath]()
 			
 			if let selectedItems, !selectedItems.isEmpty, selectedIndexPaths.isEmpty {
@@ -453,7 +457,7 @@ extension CollectionsViewController: CollectionsSearchCellDelegate {
 	}
 
 	func collectionsSearchDidUpdate(searchText: String?) {
-		if let searchText = searchText {
+		if let searchText {
 			selectDocumentContainers([Search(searchText: searchText)], isNavigationBranch: false, animated: true)
 		} else {
 			selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
@@ -492,7 +496,7 @@ private extension CollectionsViewController {
 	
 	func makeDocumentContainerContextMenu(mainItem: CollectionsItem, items: [CollectionsItem]) -> UIContextMenuConfiguration {
 		return UIContextMenuConfiguration(identifier: mainItem as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
-			guard let self = self else { return nil }
+			guard let self else { return nil }
 
 			let containers: [DocumentContainer] = items.compactMap { item in
 				if case .documentContainer(let entityID) = item.id {
@@ -515,8 +519,8 @@ private extension CollectionsViewController {
 	func renameTagAction(containers: [DocumentContainer]) -> UIAction? {
 		guard containers.count == 1, let container = containers.first, let tagDocuments = container as? TagDocuments else { return nil }
 		
-		let action = UIAction(title: L10n.rename, image: AppAssets.rename) { [weak self] action in
-			guard let self = self else { return }
+		let action = UIAction(title: AppStringAssets.renameControlLabel, image: ZavalaImageAssets.rename) { [weak self] action in
+			guard let self else { return }
 			
 			if self.traitCollection.userInterfaceIdiom == .mac {
 				let renameTagViewController = UIStoryboard.dialog.instantiateController(ofType: MacRenameTagViewController.self)
@@ -540,8 +544,8 @@ private extension CollectionsViewController {
 		let tagDocuments = containers.compactMap { $0 as? TagDocuments }
 		guard tagDocuments.count == containers.count else { return nil}
 		
-		let action = UIAction(title: L10n.delete, image: AppAssets.delete, attributes: .destructive) { [weak self] action in
-			let deleteAction = UIAlertAction(title: L10n.delete, style: .destructive) { _ in
+		let action = UIAction(title: AppStringAssets.deleteControlLabel, image: ZavalaImageAssets.delete, attributes: .destructive) { [weak self] action in
+			let deleteAction = UIAlertAction(title: AppStringAssets.deleteControlLabel, style: .destructive) { _ in
 				for tagDocument in tagDocuments {
 					if let tag = tagDocument.tag {
 						tagDocument.account?.forceDeleteTag(tag)
@@ -552,16 +556,16 @@ private extension CollectionsViewController {
 			let title: String
 			let message: String
 			if tagDocuments.count == 1, let tag = tagDocuments.first?.tag {
-				title = L10n.deleteTagPrompt(tag.name)
-				message = L10n.deleteTagMessage
+				title = AppStringAssets.deleteTagPrompt(tagName: tag.name)
+				message = AppStringAssets.deleteTagMessage
 			} else {
-				title = L10n.deleteTagsPrompt(tagDocuments.count)
-				message = L10n.deleteTagsMessage
+				title = AppStringAssets.deleteTagsPrompt(tagCount: tagDocuments.count)
+				message = AppStringAssets.deleteTagsMessage
 			}
 			
 			let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
 			alert.addAction(deleteAction)
-			alert.addAction(UIAlertAction(title: L10n.cancel, style: .cancel))
+			alert.addAction(UIAlertAction(title: AppStringAssets.cancelControlLabel, style: .cancel))
 			alert.preferredAction = deleteAction
 			self?.present(alert, animated: true, completion: nil)
 		}

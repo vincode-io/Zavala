@@ -9,28 +9,16 @@ import Foundation
 import RSCore
 
 public final class DeleteTagCommand: OutlineCommand {
-	public var undoActionName: String
-	public var redoActionName: String
-	public var undoManager: UndoManager
-	public weak var delegate: OutlineCommandDelegate?
-	public var cursorCoordinates: CursorCoordinates?
-	
-	public var newCursorIndex: Int?
-
-	public var outline: Outline
 	var tagName: String
 	var tag: Tag?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, tagName: String) {
-		self.undoManager = undoManager
-		self.delegate = delegate
-		self.outline = outline
+	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, tagName: String) {
 		self.tagName = tagName
-		undoActionName = L10n.deleteTag
-		redoActionName = L10n.deleteTag
+
+		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
-	public func perform() {
+	public override func perform() {
 		guard let tag = outline.account?.findTag(name: tagName) else { return }
 		self.tag = tag
 		outline.deleteTag(tag)
@@ -38,8 +26,8 @@ public final class DeleteTagCommand: OutlineCommand {
 		registerUndo()
 	}
 	
-	public func undo() {
-		guard let tag = tag else { return }
+	public override func undo() {
+		guard let tag else { return }
 		outline.account?.createTag(tag)
 		outline.createTag(tag)
 		registerRedo()

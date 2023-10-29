@@ -18,9 +18,9 @@ class CopyDocumentLinkActivity: UIActivity {
 	
 	override var activityTitle: String? {
 		if documents.count > 1 {
-			return L10n.copyDocumentLinks
+			return AppStringAssets.copyDocumentLinksControlLabel
 		} else {
-			return L10n.copyDocumentLink
+			return AppStringAssets.copyDocumentLinkControlLabel
 		}
 	}
 	
@@ -29,7 +29,7 @@ class CopyDocumentLinkActivity: UIActivity {
 	}
 	
 	override var activityImage: UIImage? {
-		AppAssets.link
+		ZavalaImageAssets.link
 	}
 	
 	override class var activityCategory: UIActivity.Category {

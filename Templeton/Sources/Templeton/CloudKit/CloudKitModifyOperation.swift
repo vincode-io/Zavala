@@ -7,11 +7,13 @@
 
 import Foundation
 import CloudKit
-import RSCore
+import os.log
 import VinCloudKit
 
-class CloudKitModifyOperation: BaseMainThreadOperation, Logging {
+class CloudKitModifyOperation: BaseMainThreadOperation {
 	
+	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Templeton")
+
 	var errors = [Error]()
 	var modifications = [CKRecordZone.ID: ([CKRecord], [CKRecord.ID])]()
 
@@ -205,11 +207,11 @@ private extension CloudKitModifyOperation {
 			
 			switch savedRecord.recordType {
 			case "Outline":
-				outline.syncMetaData = savedRecord.metadata
+				outline.cloudKitMetaData = savedRecord.metadata
 			case "Row":
 				(outline.findRowContainer(entityID: entityID) as? Row)?.cloudKitMetaData = savedRecord.metadata
 			case "Image":
-				(outline.findRowContainer(entityID: entityID) as? Row)?.findImage(id: entityID)?.syncMetaData = savedRecord.metadata
+				(outline.findRowContainer(entityID: entityID) as? Row)?.findImage(id: entityID)?.cloudKitMetaData = savedRecord.metadata
 			default:
 				break
 			}
@@ -228,7 +230,7 @@ private extension CloudKitModifyOperation {
 		outline.syncID = UUID().uuidString
 		
 		let record: CKRecord = {
-			if let syncMetaData = outline.syncMetaData, let record = CKRecord(syncMetaData) {
+			if let syncMetaData = outline.cloudKitMetaData, let record = CKRecord(syncMetaData) {
 				return record
 			} else {
 				let recordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
@@ -257,7 +259,7 @@ private extension CloudKitModifyOperation {
 	
 	func addSave(zoneID: CKRecordZone.ID, image: Image) -> URL {
 		let record: CKRecord = {
-			if let syncMetaData = image.syncMetaData, let record = CKRecord(syncMetaData) {
+			if let syncMetaData = image.cloudKitMetaData, let record = CKRecord(syncMetaData) {
 				return record
 			} else {
 				let recordID = CKRecord.ID(recordName: image.id.description, zoneID: zoneID)

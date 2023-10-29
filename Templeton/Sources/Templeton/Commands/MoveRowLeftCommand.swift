@@ -9,13 +9,6 @@ import Foundation
 import RSCore
 
 public final class MoveRowLeftCommand: OutlineCommand {
-	public var undoActionName: String
-	public var redoActionName: String
-	public var undoManager: UndoManager
-	weak public var delegate: OutlineCommandDelegate?
-	public var cursorCoordinates: CursorCoordinates?
-	
-	public var outline: Outline
 	var rows: [Row]
 	var restoreMoves = [Outline.RowMove]()
 	var moveLeftRows: [Row]?
@@ -23,13 +16,8 @@ public final class MoveRowLeftCommand: OutlineCommand {
 	var oldRowStrings: RowStrings?
 	var newRowStrings: RowStrings?
 	
-	public init(undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
-		self.undoManager = undoManager
-		self.delegate = delegate
-		self.outline = outline
+	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
 		self.rows = rows
-		self.undoActionName = L10n.moveLeft
-		self.redoActionName = L10n.moveLeft
 		
 		for row in rows {
 			guard let oldParent = row.parent, let oldChildIndex = oldParent.firstIndexOfRow(row) else { continue }
@@ -40,16 +28,18 @@ public final class MoveRowLeftCommand: OutlineCommand {
 			self.oldRowStrings = row.rowStrings
 			self.newRowStrings = rowStrings
 		}
+
+		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
-	public func perform() {
+	public override func perform() {
 		saveCursorCoordinates()
 		moveLeftRows = outline.moveRowsLeft(rows, rowStrings: newRowStrings)
 		registerUndo()
 	}
 	
-	public func undo() {
-		guard let moveLeftRows = moveLeftRows else { return }
+	public override func undo() {
+		guard let moveLeftRows else { return }
 		let movedLeft = Set(moveLeftRows)
 		let moveLeftRestore = restoreMoves.filter { movedLeft.contains($0.row) }
 		outline.moveRows(moveLeftRestore, rowStrings: oldRowStrings)

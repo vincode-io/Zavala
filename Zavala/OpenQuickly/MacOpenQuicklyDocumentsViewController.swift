@@ -88,11 +88,11 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 			cell.insetBackground = true
 
-			let title = (document.title?.isEmpty ?? true) ? L10n.noTitle : document.title!
+			let title = (document.title?.isEmpty ?? true) ? AppStringAssets.noTitleLabel : document.title!
 
 			if document.isCollaborating {
 				let attrText = NSMutableAttributedString(string: "\(title) ")
-				let shareAttachement = NSTextAttachment(image: AppAssets.collaborating)
+				let shareAttachement = NSTextAttachment(image: ZavalaImageAssets.collaborating)
 				attrText.append(NSAttributedString(attachment: shareAttachement))
 				contentConfiguration.attributedText = attrText
 			} else {
@@ -135,7 +135,7 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 	}
 	
 	func applySnapshot() {
-		guard let documentContainers = documentContainers else {
+		guard let documentContainers else {
 			let snapshot = NSDiffableDataSourceSectionSnapshot<DocumentsItem>()
 			self.dataSourceQueue.add(ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: false))
 			return

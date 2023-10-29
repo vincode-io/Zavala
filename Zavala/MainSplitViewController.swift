@@ -48,6 +48,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		return activity
 	}
 	
+	var selectedDocuments: [Document] {
+		return documentsViewController?.selectedDocuments ?? []
+	}
+	
 	var isExportAndPrintUnavailable: Bool {
 		guard let outlines = selectedOutlines else { return true }
 		return outlines.count < 1
@@ -67,7 +71,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
     }
 	
 	var selectedOutlines: [Outline]? {
-		return documentsViewController?.selectedDocuments?.compactMap({ $0.outline })
+		return documentsViewController?.selectedDocuments.compactMap({ $0.outline })
 	}
 
 	var editorViewController: EditorViewController? {
@@ -274,6 +278,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		switch action {
 		case .selectAll:
 			return !(editorViewController?.isInEditMode ?? false)
+		case .delete:
+			guard !(editorViewController?.isInEditMode ?? false) else {
+				return false
+			}
+			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true) || !(editorViewController?.isOutlineFunctionsUnavailable ?? true)
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -315,6 +324,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 	@objc func link(_ sender: Any?) {
 		link()
+	}
+
+	@objc func createOrDeleteNotes(_ sender: Any?) {
+		createOrDeleteNotes()
 	}
 
 	@objc func toggleOutlineFilter(_ sender: Any?) {
@@ -381,7 +394,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(delete(_:)):
+		case .delete:
 			if isDeleteEntityUnavailable {
 				command.attributes = .disabled
 			}
@@ -462,9 +475,9 @@ extension MainSplitViewController: DocumentsDelegate {
 			activityManager.invalidateSelectDocument()
 			editorViewController?.edit(nil, isNew: isNew)
 			if documents.isEmpty {
-				editorViewController?.showMessage(L10n.noSelection)
+				editorViewController?.showMessage(AppStringAssets.noSelectionLabel)
 			} else {
-				editorViewController?.showMessage(L10n.multipleSelections)
+				editorViewController?.showMessage(AppStringAssets.multipleSelectionsLabel)
 			}
 			return
 		}
@@ -782,7 +795,7 @@ private extension MainSplitViewController {
 	func goBackward(to: Int) {
 		guard to < goBackwardStack.count else { return }
 		
-		if let lastPin = lastPin {
+		if let lastPin {
 			goForwardStack.insert(lastPin, at: 0)
 		}
 		
@@ -801,7 +814,7 @@ private extension MainSplitViewController {
 	func goForward(to:  Int) {
 		guard to < goForwardStack.count else { return }
 
-		if let lastPin = lastPin {
+		if let lastPin {
 			goBackwardStack.insert(lastPin, at: 0)
 		}
 		
@@ -855,6 +868,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.navigation,
 			.insertImage,
 			.link,
+			.note,
 			.boldface,
 			.italic,
 			.toggleCompletedFilter,
@@ -884,9 +898,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !AccountManager.shared.isSyncAvailable
 			}
-			item.image = AppAssets.sync.symbolSizedForCatalyst()
-			item.label = L10n.sync
-			item.toolTip = L10n.sync
+			item.image = ZavalaImageAssets.sync.symbolSizedForCatalyst()
+			item.label = AppStringAssets.syncControlLabel
+			item.toolTip = AppStringAssets.syncControlLabel
 			item.isBordered = true
 			item.action = #selector(sync)
 			item.target = self
@@ -896,9 +910,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return false
 			}
-			item.image = AppAssets.importDocument.symbolSizedForCatalyst()
-			item.label = L10n.importOPML
-			item.toolTip = L10n.importOPML
+			item.image = ZavalaImageAssets.importDocument.symbolSizedForCatalyst()
+			item.label = AppStringAssets.importOPMLControlLabel
+			item.toolTip = AppStringAssets.importOPMLControlLabel
 			item.isBordered = true
 			item.action = #selector(importOPML)
 			item.target = self
@@ -908,9 +922,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return false
 			}
-			item.image = AppAssets.createEntity.symbolSizedForCatalyst()
-			item.label = L10n.newOutline
-			item.toolTip = L10n.newOutline
+			item.image = ZavalaImageAssets.createEntity.symbolSizedForCatalyst()
+			item.label = AppStringAssets.newOutlineControlLabel
+			item.toolTip = AppStringAssets.newOutlineControlLabel
 			item.isBordered = true
 			item.action = #selector(createOutline)
 			item.target = self
@@ -920,9 +934,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isInsertImageUnavailable ?? true
 			}
-			item.image = AppAssets.insertImage.symbolSizedForCatalyst()
-			item.label = L10n.insertImage
-			item.toolTip = L10n.insertImage
+			item.image = ZavalaImageAssets.insertImage.symbolSizedForCatalyst()
+			item.label = AppStringAssets.insertImageControlLabel
+			item.toolTip = AppStringAssets.insertImageControlLabel
 			item.isBordered = true
 			item.action = #selector(insertImage(_:))
 			item.target = self
@@ -931,15 +945,15 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let groupItem = NSToolbarItemGroup(itemIdentifier: .navigation)
 			groupItem.visibilityPriority = .high
 			groupItem.controlRepresentation = .expanded
-			groupItem.label = L10n.navigation
+			groupItem.label = AppStringAssets.navigationControlLabel
 			
 			let goBackwardItem = ValidatingMenuToolbarItem(itemIdentifier: .goBackward)
 			
 			goBackwardItem.checkForUnavailable = { [weak self] toolbarItem in
-				guard let self = self else { return true }
+				guard let self else { return true }
 				var backwardItems = [UIAction]()
 				for (index, pin) in self.goBackwardStack.enumerated() {
-					backwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
+					backwardItems.append(UIAction(title: pin.document?.title ?? AppStringAssets.noTitleLabel) { [weak self] _ in
 						DispatchQueue.main.async {
 							self?.goBackward(to: index)
 						}
@@ -950,9 +964,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 				return self.isGoBackwardOneUnavailable
 			}
 			
-			goBackwardItem.image = AppAssets.goBackward.symbolSizedForCatalyst()
-			goBackwardItem.label = L10n.goBackward
-			goBackwardItem.toolTip = L10n.goBackward
+			goBackwardItem.image = ZavalaImageAssets.goBackward.symbolSizedForCatalyst()
+			goBackwardItem.label = AppStringAssets.goBackwardControlLabel
+			goBackwardItem.toolTip = AppStringAssets.goBackwardControlLabel
 			goBackwardItem.isBordered = true
 			goBackwardItem.action = #selector(goBackwardOne(_:))
 			goBackwardItem.target = self
@@ -961,10 +975,10 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let goForwardItem = ValidatingMenuToolbarItem(itemIdentifier: .goForward)
 			
 			goForwardItem.checkForUnavailable = { [weak self] toolbarItem in
-				guard let self = self else { return true }
+				guard let self else { return true }
 				var forwardItems = [UIAction]()
 				for (index, pin) in self.goForwardStack.enumerated() {
-					forwardItems.append(UIAction(title: pin.document?.title ?? L10n.noTitle) { [weak self] _ in
+					forwardItems.append(UIAction(title: pin.document?.title ?? AppStringAssets.noTitleLabel) { [weak self] _ in
 						DispatchQueue.main.async {
 							self?.goForward(to: index)
 						}
@@ -975,9 +989,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 				return self.isGoForwardOneUnavailable
 			}
 			
-			goForwardItem.image = AppAssets.goForward.symbolSizedForCatalyst()
-			goForwardItem.label = L10n.goForward
-			goForwardItem.toolTip = L10n.goForward
+			goForwardItem.image = ZavalaImageAssets.goForward.symbolSizedForCatalyst()
+			goForwardItem.label = AppStringAssets.goForwardControlLabel
+			goForwardItem.toolTip = AppStringAssets.goForwardControlLabel
 			goForwardItem.isBordered = true
 			goForwardItem.action = #selector(goForwardOne(_:))
 			goForwardItem.target = self
@@ -991,26 +1005,53 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isLinkUnavailable ?? true
 			}
-			item.image = AppAssets.link.symbolSizedForCatalyst()
-			item.label = L10n.link
-			item.toolTip = L10n.link
+			item.image = ZavalaImageAssets.link.symbolSizedForCatalyst()
+			item.label = AppStringAssets.linkControlLabel
+			item.toolTip = AppStringAssets.linkControlLabel
 			item.isBordered = true
 			item.action = #selector(link(_:))
+			item.target = self
+			toolbarItem = item
+		case .note:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				if !(self?.editorViewController?.isCreateRowNotesUnavailable ?? true) {
+					item.image = ZavalaImageAssets.noteAdd.symbolSizedForCatalyst()
+					item.label = AppStringAssets.addNoteControlLabel
+					item.toolTip = AppStringAssets.addNoteControlLabel
+					return false
+				} else if !(self?.editorViewController?.isDeleteRowNotesUnavailable ?? true) {
+					item.image = ZavalaImageAssets.noteDelete.symbolSizedForCatalyst()
+					item.label = AppStringAssets.deleteNoteControlLabel
+					item.toolTip = AppStringAssets.deleteNoteControlLabel
+					return false
+				} else {
+					item.image = ZavalaImageAssets.noteAdd.symbolSizedForCatalyst()
+					item.label = AppStringAssets.addNoteControlLabel
+					item.toolTip = AppStringAssets.addNoteControlLabel
+					return true
+				}
+			}
+			item.image = ZavalaImageAssets.noteAdd.symbolSizedForCatalyst()
+			item.label = AppStringAssets.addNoteControlLabel
+			item.toolTip = AppStringAssets.addNoteControlLabel
+			item.isBordered = true
+			item.action = #selector(createOrDeleteNotes(_:))
 			item.target = self
 			toolbarItem = item
 		case .boldface:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isBoldToggledOn ?? false {
-					item.image = AppAssets.bold.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
+					item.image = ZavalaImageAssets.bold.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
 				} else {
-					item.image = AppAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
+					item.image = ZavalaImageAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
-			item.label = L10n.bold
-			item.toolTip = L10n.bold
+			item.image = ZavalaImageAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
+			item.label = AppStringAssets.boldControlLabel
+			item.toolTip = AppStringAssets.boldControlLabel
 			item.isBordered = true
 			item.action = #selector(outlineToggleBoldface(_:))
 			item.target = self
@@ -1019,15 +1060,15 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isItalicToggledOn ?? false {
-					item.image = AppAssets.italic.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
+					item.image = ZavalaImageAssets.italic.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
 				} else {
-					item.image = AppAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
+					item.image = ZavalaImageAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
-			item.label = L10n.italic
-			item.toolTip = L10n.italic
+			item.image = ZavalaImageAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
+			item.label = AppStringAssets.italicControlLabel
+			item.toolTip = AppStringAssets.italicControlLabel
 			item.isBordered = true
 			item.action = #selector(outlineToggleItalics(_:))
 			item.target = self
@@ -1037,9 +1078,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isExpandAllInOutlineUnavailable ?? true
 			}
-			item.image = AppAssets.expandAll.symbolSizedForCatalyst()
-			item.label = L10n.expand
-			item.toolTip = L10n.expandAllInOutline
+			item.image = ZavalaImageAssets.expandAll.symbolSizedForCatalyst()
+			item.label = AppStringAssets.expandControlLabel
+			item.toolTip = AppStringAssets.expandAllInOutlineControlLabel
 			item.isBordered = true
 			item.action = #selector(expandAllInOutline(_:))
 			item.target = self
@@ -1049,9 +1090,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isCollapseAllInOutlineUnavailable ?? true
 			}
-			item.image = AppAssets.collapseAll.symbolSizedForCatalyst()
-			item.label = L10n.collapse
-			item.toolTip = L10n.collapseAllInOutline
+			item.image = ZavalaImageAssets.collapseAll.symbolSizedForCatalyst()
+			item.label = AppStringAssets.collapseControlLabel
+			item.toolTip = AppStringAssets.collapseAllInOutlineControlLabel
 			item.isBordered = true
 			item.action = #selector(collapseAllInOutline(_:))
 			item.target = self
@@ -1061,9 +1102,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsRightUnavailable ?? true
 			}
-			item.image = AppAssets.moveRight.symbolSizedForCatalyst()
-			item.label = L10n.moveRight
-			item.toolTip = L10n.moveRight
+			item.image = ZavalaImageAssets.moveRight.symbolSizedForCatalyst()
+			item.label = AppStringAssets.moveRightControlLabel
+			item.toolTip = AppStringAssets.moveRightControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsRight(_:))
 			item.target = self
@@ -1073,9 +1114,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsLeftUnavailable ?? true
 			}
-			item.image = AppAssets.moveLeft.symbolSizedForCatalyst()
-			item.label = L10n.moveLeft
-			item.toolTip = L10n.moveLeft
+			item.image = ZavalaImageAssets.moveLeft.symbolSizedForCatalyst()
+			item.label = AppStringAssets.moveLeftControlLabel
+			item.toolTip = AppStringAssets.moveLeftControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsLeft(_:))
 			item.target = self
@@ -1085,9 +1126,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsUpUnavailable ?? true
 			}
-			item.image = AppAssets.moveUp.symbolSizedForCatalyst()
-			item.label = L10n.moveUp
-			item.toolTip = L10n.moveUp
+			item.image = ZavalaImageAssets.moveUp.symbolSizedForCatalyst()
+			item.label = AppStringAssets.moveUpControlLabel
+			item.toolTip = AppStringAssets.moveUpControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsUp(_:))
 			item.target = self
@@ -1097,9 +1138,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsDownUnavailable ?? true
 			}
-			item.image = AppAssets.moveDown.symbolSizedForCatalyst()
-			item.label = L10n.moveDown
-			item.toolTip = L10n.moveDown
+			item.image = ZavalaImageAssets.moveDown.symbolSizedForCatalyst()
+			item.label = AppStringAssets.moveDownControlLabel
+			item.toolTip = AppStringAssets.moveDownControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsDown(_:))
 			item.target = self
@@ -1107,12 +1148,12 @@ extension MainSplitViewController: NSToolbarDelegate {
 		case .toggleCompletedFilter:
 			let item = ValidatingMenuToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
-				guard let self = self else { return false }
+				guard let self else { return false }
 				
 				if self.editorViewController?.isFilterOn ?? false {
-					item.image = AppAssets.filterActive.symbolSizedForCatalyst(color: .accentColor)
+					item.image = ZavalaImageAssets.filterActive.symbolSizedForCatalyst(color: .accentColor)
 				} else {
-					item.image = AppAssets.filterInactive.symbolSizedForCatalyst()
+					item.image = ZavalaImageAssets.filterInactive.symbolSizedForCatalyst()
 				}
 				
 				let turnFilterOnAction = UIAction() { [weak self] _ in
@@ -1121,11 +1162,11 @@ extension MainSplitViewController: NSToolbarDelegate {
 					   }
 				}
 				
-				turnFilterOnAction.title = self.isFilterOn ? L10n.turnFilterOff : L10n.turnFilterOn
+				turnFilterOnAction.title = self.isFilterOn ? AppStringAssets.turnFilterOffControlLabel : AppStringAssets.turnFilterOnControlLabel
 				
 				let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
 				
-				let filterCompletedAction = UIAction(title: L10n.filterCompleted) { [weak self] _ in
+				let filterCompletedAction = UIAction(title: AppStringAssets.filterCompletedControlLabel) { [weak self] _ in
 					DispatchQueue.main.async {
 						   self?.toggleCompletedFilter()
 					   }
@@ -1133,7 +1174,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				filterCompletedAction.state = self.isCompletedFiltered ? .on : .off
 				filterCompletedAction.attributes = self.isFilterOn ? [] : .disabled
 
-				let filterNotesAction = UIAction(title: L10n.filterNotes) { [weak self] _ in
+				let filterNotesAction = UIAction(title: AppStringAssets.filterNotesControlLabel) { [weak self] _ in
 					DispatchQueue.main.async {
 						   self?.toggleNotesFilter()
 					   }
@@ -1147,9 +1188,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 				
 				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.filterInactive.symbolSizedForCatalyst()
-			item.label = L10n.filter
-			item.toolTip = L10n.filter
+			item.image = ZavalaImageAssets.filterInactive.symbolSizedForCatalyst()
+			item.label = AppStringAssets.filterControlLabel
+			item.toolTip = AppStringAssets.filterControlLabel
 			item.isBordered = true
 			item.target = self
 			item.showsIndicator = false
@@ -1159,9 +1200,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.printDoc.symbolSizedForCatalyst()
-			item.label = L10n.printDoc
-			item.toolTip = L10n.printDoc
+			item.image = ZavalaImageAssets.printDoc.symbolSizedForCatalyst()
+			item.label = AppStringAssets.printDocControlLabel
+			item.toolTip = AppStringAssets.printDocControlLabel
 			item.isBordered = true
 			item.action = #selector(printDocs(_:))
 			item.target = self
@@ -1171,9 +1212,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.printList.symbolSizedForCatalyst()
-			item.label = L10n.printList
-			item.toolTip = L10n.printList
+			item.image = ZavalaImageAssets.printList.symbolSizedForCatalyst()
+			item.label = AppStringAssets.printListControlLabel
+			item.toolTip = AppStringAssets.printListControlLabel
 			item.isBordered = true
 			item.action = #selector(printLists(_:))
 			item.target = self
@@ -1182,35 +1223,35 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isDocumentCollaborating ?? false {
-					item.image = AppAssets.collaborating.symbolSizedForCatalyst()
+					item.image = ZavalaImageAssets.collaborating.symbolSizedForCatalyst()
 				} else if self?.editorViewController?.isCollaborateUnavailable ?? true {
-					item.image = AppAssets.statelessCollaborate.symbolSizedForCatalyst()
+					item.image = ZavalaImageAssets.statelessCollaborate.symbolSizedForCatalyst()
 				} else {
-					item.image = AppAssets.collaborate.symbolSizedForCatalyst()
+					item.image = ZavalaImageAssets.collaborate.symbolSizedForCatalyst()
 				}
 				return self?.editorViewController?.isCollaborateUnavailable ?? true
 			}
-			item.image = AppAssets.collaborate.symbolSizedForCatalyst()
-			item.label = L10n.collaborate
-			item.toolTip = L10n.collaborate
+			item.image = ZavalaImageAssets.collaborate.symbolSizedForCatalyst()
+			item.label = AppStringAssets.collaborateControlLabel
+			item.toolTip = AppStringAssets.collaborateControlLabel
 			item.isBordered = true
 			item.action = #selector(collaborate(_:))
 			item.target = self
 			toolbarItem = item
 		case .share:
 			let item = NSSharingServicePickerToolbarItem(itemIdentifier: .share)
-			item.label = L10n.share
-			item.toolTip = L10n.share
-			item.activityItemsConfiguration = self
+			item.label = AppStringAssets.shareControlLabel
+			item.toolTip = AppStringAssets.shareControlLabel
+			item.activityItemsConfiguration = DocumentsActivityItemsConfiguration(delegate: self)
 			toolbarItem = item
 		case .getInfo:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppAssets.getInfo.symbolSizedForCatalyst()
-			item.label = L10n.getInfo
-			item.toolTip = L10n.getInfo
+			item.image = ZavalaImageAssets.getInfo.symbolSizedForCatalyst()
+			item.label = AppStringAssets.getInfoControlLabel
+			item.toolTip = AppStringAssets.getInfoControlLabel
 			item.isBordered = true
 			item.action = #selector(outlineGetInfo(_:))
 			item.target = self
