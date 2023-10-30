@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Templeton
+import VinOutlineKit
 
 extension Selector {
 	static let editLink = #selector(EditorRowTextView.editLink(_:))

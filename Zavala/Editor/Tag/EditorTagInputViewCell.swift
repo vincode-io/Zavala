@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Templeton
+import VinOutlineKit
 
 protocol EditorTagInputViewCellDelegate: AnyObject {
 	var editorTagInputUndoManager: UndoManager? { get }

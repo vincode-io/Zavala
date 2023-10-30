@@ -8,7 +8,7 @@
 import UIKit
 import UniformTypeIdentifiers
 import Combine
-import Templeton
+import VinOutlineKit
 import VinUtility
 
 protocol CollectionsDelegate: AnyObject {

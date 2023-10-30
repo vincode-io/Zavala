@@ -2,12 +2,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "Templeton",
+    name: "VinOutlineKit",
 	platforms: [.macOS(SupportedPlatform.MacOSVersion.v11), .iOS(SupportedPlatform.IOSVersion.v14)],
     products: [
         .library(
-            name: "Templeton",
-            targets: ["Templeton"]),
+            name: "VinOutlineKit",
+            targets: ["VinOutlineKit"]),
     ],
     dependencies: [
 		.package(url: "https://github.com/drmohundro/SWXMLHash.git", .exactItem("5.0.1")),
@@ -18,7 +18,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Templeton",
+            name: "VinOutlineKit",
             dependencies: [
 				"SWXMLHash",
 				"MarkdownAttributedString",
@@ -26,8 +26,5 @@ let package = Package(
 				"VinXML",
 				.product(name: "OrderedCollections", package: "swift-collections")
 			]),
-        .testTarget(
-            name: "TempletonTests",
-            dependencies: ["Templeton"]),
     ]
 )

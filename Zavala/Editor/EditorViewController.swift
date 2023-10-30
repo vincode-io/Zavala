@@ -8,7 +8,7 @@
 import UIKit
 import MobileCoreServices
 import PhotosUI
-import Templeton
+import VinOutlineKit
 import VinUtility
 
 extension Selector {

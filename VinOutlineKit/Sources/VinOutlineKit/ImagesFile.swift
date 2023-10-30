@@ -10,7 +10,7 @@ import VinUtility
 
 final class ImagesFile {
 	
-	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Templeton")
+	private var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
 
 	private weak var outline: Outline?
 	private let fileURL: URL

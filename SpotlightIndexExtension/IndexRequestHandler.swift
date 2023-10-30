@@ -8,7 +8,7 @@
 import Foundation
 import os.log
 import CoreSpotlight
-import Templeton
+import VinOutlineKit
 
 class IndexRequestHandler: CSIndexExtensionRequestHandler {
 	

@@ -25,7 +25,7 @@ public class CloudKitManager {
 		var imageRequests = [CloudKitActionRequest]()
 	}
 
-	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Templeton")
+	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
 
 	let outlineZone: CloudKitOutlineZone
 

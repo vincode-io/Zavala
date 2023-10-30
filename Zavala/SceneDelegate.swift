@@ -7,7 +7,7 @@
 
 import UIKit
 import CloudKit
-import Templeton
+import VinOutlineKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 

@@ -8,7 +8,7 @@
 import UIKit
 import UniformTypeIdentifiers
 import CoreSpotlight
-import Templeton
+import VinOutlineKit
 import VinUtility
 
 protocol DocumentsDelegate: AnyObject  {

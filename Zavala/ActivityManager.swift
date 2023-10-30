@@ -8,7 +8,7 @@
 import UIKit
 import CoreSpotlight
 import CoreServices
-import Templeton
+import VinOutlineKit
 
 class ActivityManager {
 	

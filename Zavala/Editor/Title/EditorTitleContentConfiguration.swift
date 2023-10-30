@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Templeton
+import VinOutlineKit
 
 struct EditorTitleContentConfiguration: UIContentConfiguration {
 

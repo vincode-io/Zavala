@@ -104,7 +104,7 @@ struct OutlineRows: Codable {
 
 final class RowsFile {
 	
-	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Templeton")
+	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
 	
 	private weak var outline: Outline?
 	private let fileURL: URL

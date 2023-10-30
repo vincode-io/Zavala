@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import VinUtility
 
 class OPMLVisitor {
 	

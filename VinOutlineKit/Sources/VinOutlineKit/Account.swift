@@ -25,11 +25,11 @@ public enum AccountError: LocalizedError {
 	public var errorDescription: String? {
 		switch self {
 		case .securityScopeError:
-			return TempletonStringAssets.accountErrorScopedResource
+			return VinOutlineKitStringAssets.accountErrorScopedResource
 		case .fileReadError:
-			return TempletonStringAssets.accountErrorImportRead
+			return VinOutlineKitStringAssets.accountErrorImportRead
 		case .opmlParserError:
-			return TempletonStringAssets.accountErrorOPMLParse
+			return VinOutlineKitStringAssets.accountErrorOPMLParse
 		}
 	}
 }

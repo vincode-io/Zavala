@@ -7,7 +7,7 @@
 
 import UIKit
 import MobileCoreServices
-import Templeton
+import VinOutlineKit
 import VinUtility
 
 class EditorRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {

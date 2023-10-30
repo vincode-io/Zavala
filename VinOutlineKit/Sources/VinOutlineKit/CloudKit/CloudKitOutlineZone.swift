@@ -19,7 +19,7 @@ enum CloudKitOutlineZoneError: LocalizedError {
 
 final class CloudKitOutlineZone: CloudKitZone {
 	
-	var logger: Logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Templeton")
+	var logger: Logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
 	var zoneID: CKRecordZone.ID
 
 	weak var container: CKContainer?

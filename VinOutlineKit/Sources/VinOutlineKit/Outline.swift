@@ -692,13 +692,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			opml.append("  <dateModified>\(dateModified)</dateModified>\n")
 		}
 		if let ownerName {
-			opml.append("  <ownerName>\(ownerName.escapingSpecialXMLCharacters)</ownerName>\n")
+			opml.append("  <ownerName>\(ownerName.escapingXMLCharacters)</ownerName>\n")
 		}
 		if let ownerEmail {
-			opml.append("  <ownerEmail>\(ownerEmail.escapingSpecialXMLCharacters)</ownerEmail>\n")
+			opml.append("  <ownerEmail>\(ownerEmail.escapingXMLCharacters)</ownerEmail>\n")
 		}
 		if let ownerURL {
-			opml.append("  <ownerID>\(ownerURL.escapingSpecialXMLCharacters)</ownerID>\n")
+			opml.append("  <ownerID>\(ownerURL.escapingXMLCharacters)</ownerID>\n")
 		}
 		opml.append("  <expansionState>\(expansionState)</expansionState>\n")
 		if let verticleScrollState {

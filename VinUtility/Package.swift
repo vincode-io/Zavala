@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "VinUtility",
+	platforms: [.macOS(SupportedPlatform.MacOSVersion.v11), .iOS(SupportedPlatform.IOSVersion.v14)],
     products: [
         .library(
             name: "VinUtility",

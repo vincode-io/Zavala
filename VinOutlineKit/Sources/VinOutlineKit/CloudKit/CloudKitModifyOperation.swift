@@ -12,7 +12,7 @@ import VinCloudKit
 
 class CloudKitModifyOperation: BaseMainThreadOperation {
 	
-	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Templeton")
+	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
 
 	var errors = [Error]()
 	var modifications = [CKRecordZone.ID: ([CKRecord], [CKRecord.ID])]()

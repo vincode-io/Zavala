@@ -6,7 +6,7 @@
 //
 
 import Intents
-import Templeton
+import VinOutlineKit
 
 class CopyRowsIntentHandler: NSObject, ZavalaIntentHandler, CopyRowsIntentHandling {
 	

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Templeton
+import VinOutlineKit
 
 class ReloadVisibleItemsOperation<S: Hashable, I: Hashable>: BaseMainThreadOperation {
 	

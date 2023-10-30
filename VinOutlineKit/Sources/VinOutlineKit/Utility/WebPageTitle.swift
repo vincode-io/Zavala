@@ -12,7 +12,7 @@ import VinXML
 
 struct WebPageTitle {
 	
-	private static var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Templeton")
+	private static var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
 
 	static func find(forURL url: URL, completion: @escaping (String?) -> ()) {
 		func finish(_ result:String? = nil) {

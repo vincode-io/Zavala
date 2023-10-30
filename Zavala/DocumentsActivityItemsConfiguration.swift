@@ -8,7 +8,7 @@
 import UIKit
 import MobileCoreServices
 import LinkPresentation
-import Templeton
+import VinOutlineKit
 
 protocol DocumentsActivityItemsConfigurationDelegate: AnyObject {
 	var selectedDocuments: [Document] { get }

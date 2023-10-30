@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Templeton
+import VinOutlineKit
 
 protocol LinkViewControllerDelegate: AnyObject {
 	func createOutline(title: String) -> Outline?

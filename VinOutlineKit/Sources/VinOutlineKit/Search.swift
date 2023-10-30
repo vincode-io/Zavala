@@ -11,7 +11,7 @@ import CoreSpotlight
 public final class Search: Identifiable, DocumentContainer {
 	
 	public var id: EntityID
-	public var name: String? = TempletonStringAssets.search
+	public var name: String? = VinOutlineKitStringAssets.search
 	public var image: UIImage?
 	public var account: Account? = nil
 

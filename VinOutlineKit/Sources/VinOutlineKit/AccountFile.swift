@@ -11,7 +11,7 @@ import VinUtility
 
 final class AccountFile {
 
-	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Templeton")
+	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
 
 	public static let filenameComponent = "account.plist"
 	

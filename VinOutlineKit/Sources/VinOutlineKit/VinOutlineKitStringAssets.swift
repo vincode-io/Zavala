@@ -1,5 +1,5 @@
 //
-//  TempletonAssets.swift
+//  VinOutlineKitStringAssets.swift
 //  
 //
 //  Created by Maurice Parker on 10/6/22.

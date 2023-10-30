@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Templeton
+import VinOutlineKit
 
 protocol EditorRowViewCellDelegate: AnyObject {
 	var editorRowUndoManager: UndoManager? { get }

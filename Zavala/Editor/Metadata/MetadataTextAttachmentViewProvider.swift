@@ -7,7 +7,7 @@
 
 /*
 import UIKit
-import Templeton
+import VinOutlineKit
 
 class MetadataTextAttachmentViewProvider: NSTextAttachmentViewProvider {
 	

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Templeton
+import VinOutlineKit
 import SwiftUI
 
 protocol EditorRowNoteTextViewDelegate: AnyObject {

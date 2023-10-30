@@ -6,6 +6,22 @@ import Foundation
 
 public extension String {
 	
+	init(localized: String, comment: String? = nil) {
+		self = localized
+	}
+	
+	var queryEncoded: String? {
+		return addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+	}
+	
+	func makeSearchable() -> String {
+		return trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current)
+	}
+	
+	func searchRegEx() -> NSRegularExpression? {
+		return try? NSRegularExpression(pattern: makeSearchable(), options: .caseInsensitive)
+	}
+	
 	func trimmed() -> String? {
 		let trimmed = trimmingCharacters(in: .whitespacesAndNewlines)
 		if trimmed.isEmpty {
@@ -17,7 +33,7 @@ public extension String {
 	/// Returns the string with the special XML characters (other than single-quote) ampersand-escaped.
 	///
 	/// The four escaped characters are `<`, `>`, `&`, and `"`.
-	var escapingSpecialXMLCharacters: String {
+	var escapingXMLCharacters: String {
 		var escaped = String()
 
 		for char in self {

@@ -10,7 +10,7 @@ import UIKit
 public final class AllDocuments: Identifiable, DocumentContainer {
 
 	public var id: EntityID
-	public var name: String? = TempletonStringAssets.all
+	public var name: String? = VinOutlineKitStringAssets.all
 	public var image: UIImage? = UIImage(systemName: "tray")!
 
 	public var itemCount: Int? {
