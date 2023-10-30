@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import RSCore
 
 public final class ExpandAllCommand: OutlineCommand {
 	var containers: [RowContainer]

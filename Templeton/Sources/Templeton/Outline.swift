@@ -6,9 +6,9 @@
 //
 
 import UIKit
-import RSCore
 import CloudKit
 import OrderedCollections
+import VinUtility
 
 public extension Notification.Name {
 	static let OutlineTagsDidChange = Notification.Name(rawValue: "OutlineTagsDidChange")
@@ -242,8 +242,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 		set {
 			let expandedRows = newValue.split(separator: ",")
-				.map({ String($0).trimmingWhitespace })
-				.filter({ !$0.isEmpty })
+				.compactMap({ String($0).trimmed() })
 				.compactMap({ Int($0) })
 			
 			var currentRow = 0
@@ -2524,7 +2523,9 @@ private extension Outline {
 			row.visit(visitor: visitor(_:))
 		}
 		
-		shadowTable?.remove(atOffsets: IndexSet(reloads))
+		for reload in reloads.reversed() {
+			shadowTable?.remove(at: reload)
+		}
 		
 		guard let rowShadowTableIndex = row.shadowTableIndex else { return }
 		resetShadowTableIndexes(startingAt: rowShadowTableIndex)

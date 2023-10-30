@@ -5,7 +5,7 @@
 //
 
 import Foundation
-import RSCore
+import VinUtility
 
 public protocol OutlineCommandDelegate: AnyObject {
 	var currentCoordinates: CursorCoordinates? { get }

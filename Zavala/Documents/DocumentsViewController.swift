@@ -8,8 +8,8 @@
 import UIKit
 import UniformTypeIdentifiers
 import CoreSpotlight
-import RSCore
 import Templeton
+import VinUtility
 
 protocol DocumentsDelegate: AnyObject  {
 	func documentSelectionDidChange(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], isNew: Bool, isNavigationBranch: Bool, animated: Bool)

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import RSCore
 
 public extension Notification.Name {
 	static let AccountManagerAccountsDidChange = Notification.Name(rawValue: "AccountManagerAccountsDidChange")

@@ -5,15 +5,14 @@
 //  Created by Maurice Parker on 1/12/21.
 //
 
-import Foundation
+import UIKit
 import CoreSpotlight
-import RSCore
 
 public final class Search: Identifiable, DocumentContainer {
 	
 	public var id: EntityID
 	public var name: String? = TempletonStringAssets.search
-	public var image: RSImage?
+	public var image: UIImage?
 	public var account: Account? = nil
 
 	public var itemCount: Int? {

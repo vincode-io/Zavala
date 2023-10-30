@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import RSCore
 
 public final class CollapseAllCommand: OutlineCommand {
 	var containers: [RowContainer]

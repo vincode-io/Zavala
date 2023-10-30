@@ -9,7 +9,6 @@ import Foundation
 import os.log
 import CoreSpotlight
 import Templeton
-import RSCore
 
 class IndexRequestHandler: CSIndexExtensionRequestHandler {
 	

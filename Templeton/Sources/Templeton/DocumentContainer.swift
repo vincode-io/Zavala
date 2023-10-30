@@ -5,13 +5,12 @@
 //  Created by Maurice Parker on 11/9/20.
 //
 
-import Foundation
-import RSCore
+import UIKit
 
 public protocol DocumentContainer: DocumentProvider {
 	var id: EntityID { get }
 	var name: String? { get }
-	var image: RSImage? { get }
+	var image: UIImage? { get }
 	var itemCount: Int? { get }
 	var account: Account? { get }
 }

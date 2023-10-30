@@ -7,7 +7,6 @@
 
 import UIKit
 import Templeton
-import RSCore
 
 class ApplySnapshotOperation<S: Hashable, I: Hashable>: BaseMainThreadOperation {
 	

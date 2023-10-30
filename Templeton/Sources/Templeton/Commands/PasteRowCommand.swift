@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import RSCore
 
 public final class PasteRowCommand: OutlineCommand {
 	var rowGroups: [RowGroup]

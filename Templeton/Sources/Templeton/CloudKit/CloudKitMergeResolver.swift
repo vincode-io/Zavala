@@ -7,7 +7,6 @@
 
 import Foundation
 import CloudKit
-import RSCore
 import VinCloudKit
 
 struct CloudKitMergeResolver: CloudKitConflictResolver {

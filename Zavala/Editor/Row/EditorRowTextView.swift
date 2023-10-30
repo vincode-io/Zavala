@@ -7,7 +7,6 @@
 
 import UIKit
 import Templeton
-import RSCore
 
 extension Selector {
 	static let editLink = #selector(EditorRowTextView.editLink(_:))

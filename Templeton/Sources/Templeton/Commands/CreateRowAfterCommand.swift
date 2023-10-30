@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import RSCore
 
 public final class CreateRowAfterCommand: OutlineCommand {
 	public var newCursorIndex: Int?

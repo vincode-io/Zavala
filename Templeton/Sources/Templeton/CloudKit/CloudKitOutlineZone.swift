@@ -7,7 +7,6 @@
 
 import UIKit
 import os.log
-import RSCore
 import CloudKit
 import VinCloudKit
 
@@ -19,7 +18,8 @@ enum CloudKitOutlineZoneError: LocalizedError {
 }
 
 final class CloudKitOutlineZone: CloudKitZone {
-
+	
+	var logger: Logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Templeton")
 	var zoneID: CKRecordZone.ID
 
 	weak var container: CKContainer?

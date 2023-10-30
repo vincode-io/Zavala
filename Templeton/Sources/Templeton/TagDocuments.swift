@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import RSCore
 
 public final class TagDocuments: Identifiable, DocumentContainer {
 
@@ -14,9 +13,9 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 	public var name: String?
 
 	#if targetEnvironment(macCatalyst)
-	public var image: RSImage? = UIImage(systemName: "capsule")!.applyingSymbolConfiguration(.init(pointSize: 12))
+	public var image: UIImage? = UIImage(systemName: "capsule")!.applyingSymbolConfiguration(.init(pointSize: 12))
 	#else
-	public var image: RSImage? = UIImage(systemName: "capsule")!.applyingSymbolConfiguration(.init(pointSize: 15))
+	public var image: UIImage? = UIImage(systemName: "capsule")!.applyingSymbolConfiguration(.init(pointSize: 15))
 	#endif
 	
 	public var itemCount: Int? {

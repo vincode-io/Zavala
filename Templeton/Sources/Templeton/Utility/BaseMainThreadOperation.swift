@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import RSCore
+import VinUtility
 
 open class BaseMainThreadOperation: MainThreadOperation {
 	

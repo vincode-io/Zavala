@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import RSCore
 
 public final class MoveRowRightCommand: OutlineCommand {
 	var rows: [Row]

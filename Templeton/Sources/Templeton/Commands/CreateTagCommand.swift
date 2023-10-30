@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import RSCore
 
 public final class CreateTagCommand: OutlineCommand {
 	var tagName: String

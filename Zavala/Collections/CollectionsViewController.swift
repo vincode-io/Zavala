@@ -7,9 +7,9 @@
 
 import UIKit
 import UniformTypeIdentifiers
-import RSCore
 import Combine
 import Templeton
+import VinUtility
 
 protocol CollectionsDelegate: AnyObject {
 	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?)

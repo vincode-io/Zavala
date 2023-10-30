@@ -8,8 +8,8 @@
 import UIKit
 import MobileCoreServices
 import PhotosUI
-import RSCore
 import Templeton
+import VinUtility
 
 extension Selector {
 	static let insertImage = #selector(EditorViewController.insertImage)
@@ -1728,7 +1728,7 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 		result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] (object, error) in
 			guard let self else { return }
 			
-			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = RSImage.scaleImage(data, maxPixelSize: 1800) {
+			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = UIImage.scaleImage(data, maxPixelSize: 1800) {
 				let scaledImage = UIImage(cgImage: cgImage)
 				
 				DispatchQueue.main.async {
@@ -2850,7 +2850,7 @@ private extension EditorViewController {
 				var rowGroups = [RowGroup]()
 				let textRows = text.split(separator: "\n").map { String($0) }
 				for textRow in textRows {
-					let row = Row(outline: outline, topicMarkdown: textRow.trimmingWhitespace)
+					let row = Row(outline: outline, topicMarkdown: textRow.trimmed())
 					row.detectData()
 					rowGroups.append(RowGroup(row))
 				}

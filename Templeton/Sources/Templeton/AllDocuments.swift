@@ -6,13 +6,12 @@
 //
 
 import UIKit
-import RSCore
 
 public final class AllDocuments: Identifiable, DocumentContainer {
 
 	public var id: EntityID
 	public var name: String? = TempletonStringAssets.all
-	public var image: RSImage? = UIImage(systemName: "tray")!
+	public var image: UIImage? = UIImage(systemName: "tray")!
 
 	public var itemCount: Int? {
 		return account?.documents?.count

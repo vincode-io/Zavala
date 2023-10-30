@@ -7,6 +7,7 @@
 
 import UIKit
 import MobileCoreServices
+import VinUtility
 import Templeton
 
 extension EditorViewController: UICollectionViewDropDelegate {
@@ -261,7 +262,7 @@ private extension EditorViewController {
 			var rowGroups = [RowGroup]()
 			let textRows = text.split(separator: "\n").map { String($0) }
 			for textRow in textRows {
-				let row = Row(outline: outline, topicMarkdown: textRow.trimmingWhitespace)
+				let row = Row(outline: outline, topicMarkdown: textRow.trimmed())
 				row.detectData()
 				rowGroups.append(RowGroup(row))
 			}

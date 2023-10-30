@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import RSCore
 
 public final class DeleteRowCommand: OutlineCommand {
 	public var newCursorIndex: Int?

@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import RSCore
 
 public final class CreateNoteCommand: OutlineCommand {
 	public var newCursorIndex: Int?

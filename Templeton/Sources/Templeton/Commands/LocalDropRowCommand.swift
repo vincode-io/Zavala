@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import RSCore
 
 public final class LocalDropRowCommand: OutlineCommand {
 	var rowMoves = [Outline.RowMove]()

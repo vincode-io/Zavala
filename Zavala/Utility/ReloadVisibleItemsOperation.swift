@@ -7,7 +7,6 @@
 
 import UIKit
 import Templeton
-import RSCore
 
 class ReloadVisibleItemsOperation<S: Hashable, I: Hashable>: BaseMainThreadOperation {
 	

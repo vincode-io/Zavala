@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import RSCore
 
 public final class TextChangedCommand: OutlineCommand {
 	var row: Row

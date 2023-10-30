@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import RSCore
 
 public final class DeleteNoteCommand: OutlineCommand {
 	public var newCursorIndex: Int?

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import RSCore
 import CloudKit
 import VinCloudKit
 

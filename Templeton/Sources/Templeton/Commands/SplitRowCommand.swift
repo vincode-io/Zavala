@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import RSCore
 
 public final class SplitRowCommand: OutlineCommand {
 	public var newCursorIndex: Int?

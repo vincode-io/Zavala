@@ -6,8 +6,8 @@
 //
 
 import UIKit
-import RSCore
 import Templeton
+import VinUtility
 
 protocol MacOpenQuicklyDocumentsDelegate: AnyObject {
 	func documentSelectionDidChange(_: MacOpenQuicklyDocumentsViewController, documentID: EntityID?)

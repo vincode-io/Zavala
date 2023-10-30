@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import RSCore
 
 extension UIViewController {
 	
