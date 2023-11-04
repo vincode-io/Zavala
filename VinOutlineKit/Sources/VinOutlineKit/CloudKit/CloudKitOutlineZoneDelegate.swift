@@ -9,7 +9,7 @@ import Foundation
 import CloudKit
 import VinCloudKit
 
-class CloudKitOutlineZoneDelegate: CloudKitZoneDelegate {
+class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 	
 	weak var account: Account?
 	var zoneID: CKRecordZone.ID
@@ -19,16 +19,15 @@ class CloudKitOutlineZoneDelegate: CloudKitZoneDelegate {
 		self.zoneID = zoneID
 	}
 	
-	func store(changeToken: Data?, key: CloudKitChangeTokenKey) {
+	func store(changeToken: Data?, key: VCKChangeTokenKey) {
 		account!.store(changeToken: changeToken, key: key)
 	}
 	
-	func findChangeToken(key: CloudKitChangeTokenKey) -> Data? {
+	func findChangeToken(key: VCKChangeTokenKey) -> Data? {
 		return account!.zoneChangeTokens?[key]
 	}
 	
 	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey], completion: @escaping (Result<Void, Error>) -> Void) {
-		let pendingIDs = loadPendingIDs()
 		var updates = [EntityID: CloudKitOutlineUpdate]()
 
 		func update(for documentID: EntityID, zoneID: CKRecordZone.ID) -> CloudKitOutlineUpdate {
@@ -42,7 +41,7 @@ class CloudKitOutlineZoneDelegate: CloudKitZoneDelegate {
 		}
 
 		for deletedRecordKey in deleted {
-			guard let entityID = EntityID(description: deletedRecordKey.recordID.recordName), !pendingIDs.contains(entityID) else { continue }
+			guard let entityID = EntityID(description: deletedRecordKey.recordID.recordName) else { continue }
 			switch entityID {
 			case .document:
 				update(for: entityID, zoneID: deletedRecordKey.recordID.zoneID).isDelete = true
@@ -58,7 +57,7 @@ class CloudKitOutlineZoneDelegate: CloudKitZoneDelegate {
 		}
 
 		for changedRecord in changed {
-			guard let entityID = EntityID(description: changedRecord.recordID.recordName), !pendingIDs.contains(entityID) else { continue }
+			guard let entityID = EntityID(description: changedRecord.recordID.recordName) else { continue }
 			switch entityID {
 			case .document:
 				update(for: entityID, zoneID: changedRecord.recordID.zoneID).saveOutlineRecord = changedRecord
@@ -80,14 +79,4 @@ class CloudKitOutlineZoneDelegate: CloudKitZoneDelegate {
 		completion(.success(()))
 	}
 
-}
-
-// MARK: Helpers
-
-private extension CloudKitOutlineZoneDelegate {
-	
-	func loadPendingIDs() -> [EntityID] {
-		return CloudKitActionRequest.loadRequests()?.filter({ $0.zoneID == zoneID }).map({ $0.id }) ?? [EntityID]()
-	}
-	
 }

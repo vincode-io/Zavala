@@ -1,5 +1,5 @@
 //
-//  CloudKitResult.swift
+//  VCKResult.swift
 //
 //  Created by Maurice Parker on 3/26/20.
 //  Copyright © 2020 Ranchero Software, LLC. All rights reserved.
@@ -8,7 +8,7 @@
 import Foundation
 import CloudKit
 
-public enum CloudKitResult {
+public enum VCKResult {
 	case success
 	case retry(afterSeconds: Double)
 	case limitExceeded
@@ -19,7 +19,7 @@ public enum CloudKitResult {
 	case userDeletedZone
 	case failure(error: Error)
 	
-	public static func refine(_ error: Error?) -> CloudKitResult {
+	public static func refine(_ error: Error?) -> VCKResult {
         guard error != nil else { return .success }
         
         guard let ckError = error as? CKError else {
@@ -60,9 +60,9 @@ public enum CloudKitResult {
 	
 }
 
-private extension CloudKitResult {
+private extension VCKResult {
 	
-	static func anyRequestErrors(_ errors: [AnyHashable: CKError]) -> CloudKitResult? {
+	static func anyRequestErrors(_ errors: [AnyHashable: CKError]) -> VCKResult? {
 		if errors.values.contains(where: { $0.code == .changeTokenExpired } ) {
 			return .changeTokenExpired
 		}

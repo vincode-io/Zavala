@@ -56,7 +56,7 @@ public final class Account: NSObject, Identifiable, Codable {
 		}
 	}
 
-	public private(set) var zoneChangeTokens: [CloudKitChangeTokenKey: Data]?
+	public private(set) var zoneChangeTokens: [VCKChangeTokenKey: Data]?
 
 	enum CodingKeys: String, CodingKey {
 		case type = "type"
@@ -136,9 +136,9 @@ public final class Account: NSObject, Identifiable, Codable {
 		isActive = false
 	}
 	
-	func store(changeToken: Data?, key: CloudKitChangeTokenKey) {
+	func store(changeToken: Data?, key: VCKChangeTokenKey) {
 		if zoneChangeTokens == nil {
-			zoneChangeTokens = [CloudKitChangeTokenKey: Data]()
+			zoneChangeTokens = [VCKChangeTokenKey: Data]()
 		}
 		zoneChangeTokens?[key] = changeToken
 		accountMetadataDidChange()

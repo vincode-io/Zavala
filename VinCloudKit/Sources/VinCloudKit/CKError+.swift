@@ -10,31 +10,6 @@ import CloudKit
 
 extension CKError: LocalizedError {
 	
-	/// Selects the most current field for merging and assigns it to the server record
-	public func merge<T>(key: String, fieldType: T.Type, ancestorRecord: CKRecord?) throws where T:Equatable, T:CKRecordValueProtocol {
-		guard let ancestorField = ancestorRecord?[key] as? T,
-			  let serverField = serverRecord?[key] as? T,
-			  let clientField = clientRecord?[key] as? T else {	return }
-
-		guard ancestorField == serverField else { return }
-		serverRecord?[key] = clientField
-	}
-
-	/// Merges the contents of an Array and assigns the result to the server record. Use the other merge if you wish to replace the Array.
-	public func mergeArray<T>(key: String, fieldType: T.Type, ancestorRecord: CKRecord?) throws where T:Equatable, T:CKRecordValueProtocol, T:BidirectionalCollection {
-		guard  let ancestorField = ancestorRecord?[key] as? [T],
-			  let serverField = serverRecord?[key] as? [T],
-			  let clientField = clientRecord?[key] as? [T] else {	return }
-
-		let diff = serverField.difference(from: ancestorField)
-		
-		guard let merged = clientField.applying(diff) else {
-			throw CloudKitZoneError.unresolvedConflict(self)
-		}
-		
-		serverRecord?[key] = merged
-	}
-	
 	public var errorDescription: String? {
 		switch code {
 		case .alreadyShared:

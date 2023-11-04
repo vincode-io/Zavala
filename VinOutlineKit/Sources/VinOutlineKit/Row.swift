@@ -51,11 +51,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public var cloudKitMetaData: Data?
 	public var id: String
 
-	var syncIDCloudKitValue: String?
+	var ancestorSyncID: String?
+	var serverSyncID: String?
 	public var syncID: String? {
 		willSet {
-			if isCloudKit && syncIDCloudKitValue == nil {
-				syncIDCloudKitValue = syncID
+			if isCloudKit && ancestorSyncID == nil {
+				ancestorSyncID = syncID
 			}
 		}
 	}
@@ -115,7 +116,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return entityID
 	}
 
-	var rowOrderCloudKitValue: OrderedSet<String>?
+	var ancestorRowOrder: OrderedSet<String>?
+	var serverRowOrder: OrderedSet<String>?
 	var rowOrder: OrderedSet<String>
 
 	var isPartOfSearchResult = false {
@@ -160,11 +162,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return isComplete
 	}
 	
-	var isCompleteCloudKitValue: Bool?
+	var ancestorIsComplete: Bool?
+	var serverIsComplete: Bool?
 	public internal(set) var isComplete: Bool {
 		willSet {
-			if isCloudKit && isCompleteCloudKitValue == nil {
-				isCompleteCloudKitValue = isComplete
+			if isCloudKit && ancestorIsComplete == nil {
+				ancestorIsComplete = isComplete
 			}
 		}
 	}
@@ -266,11 +269,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	
 	public var searchResultCoordinates = NSHashTable<SearchResultCoordinates>.weakObjects()
 
-	var topicDataCloudKitValue: Data?
+	var ancestorTopicData: Data?
+	var serverTopicData: Data?
 	var topicData: Data? {
 		willSet {
-			if isCloudKit && topicDataCloudKitValue == nil {
-				topicDataCloudKitValue = topicData
+			if isCloudKit && ancestorTopicData == nil {
+				ancestorTopicData = topicData
 			}
 		}
 		didSet {
@@ -278,11 +282,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		}
 	}
 	
-	var noteDataCloudkitValue: Data?
+	var ancestorNoteData: Data?
+	var serverNoteData: Data?
 	var noteData: Data? {
 		willSet {
-			if isCloudKit && noteDataCloudkitValue == nil {
-				noteDataCloudkitValue = noteData
+			if isCloudKit && ancestorNoteData == nil {
+				ancestorNoteData = noteData
 			}
 		}
 		didSet {
@@ -346,7 +351,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		
-		self.isCompleteCloudKitValue = try? container.decode(Bool.self, forKey: .isCompleteCloudKitValue)
+		self.ancestorIsComplete = try? container.decode(Bool.self, forKey: .isCompleteCloudKitValue)
 		if let isComplete = try? container.decode(Bool.self, forKey: .isComplete) {
 			self.isComplete = isComplete
 		} else {
@@ -361,7 +366,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 			throw RowError.unableToDeserialize
 		}
 		
-		self.syncIDCloudKitValue = try? container.decode(String.self, forKey: .syncIDCloudKitValue)
+		self.ancestorSyncID = try? container.decode(String.self, forKey: .syncIDCloudKitValue)
 		self.syncID = try? container.decode(String.self, forKey: .syncID)
 		
 		if let isExpanded = try? container.decode(Bool.self, forKey: .isExpanded) {
@@ -371,7 +376,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		}
 		
 		if let rowOrderCloudKitValue = try? container.decode([String].self, forKey: .rowOrderCloudKitValue) {
-			self.rowOrderCloudKitValue = OrderedSet(rowOrderCloudKitValue)
+			self.ancestorRowOrder = OrderedSet(rowOrderCloudKitValue)
 		}
 		
 		if let rowOrder = try? container.decode([String].self, forKey: .rowOrder) {
@@ -384,9 +389,9 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 
 		super.init()
 
-		topicDataCloudKitValue = try? container.decode(Data.self, forKey: .topicDataCloudKitValue)
+		ancestorTopicData = try? container.decode(Data.self, forKey: .topicDataCloudKitValue)
 		topicData = try? container.decode(Data.self, forKey: .topicData)
-		noteDataCloudkitValue = try? container.decode(Data.self, forKey: .noteDataCloudkitValue)
+		ancestorNoteData = try? container.decode(Data.self, forKey: .noteDataCloudkitValue)
 		noteData = try? container.decode(Data.self, forKey: .noteData)
 	}
 	
@@ -409,16 +414,16 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 		try container.encode(id, forKey: .id)
-		try container.encode(syncIDCloudKitValue, forKey: .syncIDCloudKitValue)
+		try container.encode(ancestorSyncID, forKey: .syncIDCloudKitValue)
 		try container.encode(syncID, forKey: .syncID)
-		try container.encode(topicDataCloudKitValue, forKey: .topicDataCloudKitValue)
+		try container.encode(ancestorTopicData, forKey: .topicDataCloudKitValue)
 		try container.encode(topicData, forKey: .topicData)
-		try container.encode(noteDataCloudkitValue, forKey: .noteDataCloudkitValue)
+		try container.encode(ancestorNoteData, forKey: .noteDataCloudkitValue)
 		try container.encode(noteData, forKey: .noteData)
 		try container.encode(isExpanded, forKey: .isExpanded)
-		try container.encode(isCompleteCloudKitValue, forKey: .isCompleteCloudKitValue)
+		try container.encode(ancestorIsComplete, forKey: .isCompleteCloudKitValue)
 		try container.encode(isComplete, forKey: .isComplete)
-		try container.encode(rowOrderCloudKitValue, forKey: .rowOrderCloudKitValue)
+		try container.encode(ancestorRowOrder, forKey: .rowOrderCloudKitValue)
 		try container.encode(rowOrder, forKey: .rowOrder)
 	}
 	
@@ -542,6 +547,10 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 	
 	public func insertRow(_ row: Row, at: Int) {
+		if ancestorRowOrder == nil {
+			ancestorRowOrder = rowOrder
+		}
+		
 		rowOrder.insert(row.id, at: at)
 		outline?.keyedRows?[row.id] = row
 
@@ -549,6 +558,10 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 
 	public func removeRow(_ row: Row) {
+		if ancestorRowOrder == nil {
+			ancestorRowOrder = rowOrder
+		}
+		
 		rowOrder.remove(row.id)
 		outline?.keyedRows?.removeValue(forKey: row.id)
 		
@@ -556,6 +569,10 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 
 	public func appendRow(_ row: Row) {
+		if ancestorRowOrder == nil {
+			ancestorRowOrder = rowOrder
+		}
+
 		rowOrder.append(row.id)
 		outline?.keyedRows?[row.id] = row
 

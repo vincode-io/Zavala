@@ -164,7 +164,7 @@ public class CloudKitManager {
 			
 			guard let self else { return }
 			
-			switch CloudKitResult.refine(error) {
+			switch VCKResult.refine(error) {
 			case .success:
 				let zoneID = shareMetadata.share.recordID.zoneID
 				self.cloudKitSyncWillBegin()
@@ -267,18 +267,11 @@ private extension CloudKitManager {
 		
 		operation.completionBlock = { [weak self] op in
 			if let errors = (op as? CloudKitModifyOperation)?.errors {
-				
 				for error in errors {
-					if case let CloudKitZoneError.unresolvedConflict(ckError) = error {
-						#warning("This is the wrong error asshole.")
-						self?.presentError(ckError)
-					} else {
-						if userInitiated {
-							self?.presentError(error)
-						}
+					if userInitiated {
+						self?.presentError(error)
 					}
 				}
-				
 			}
 			
 			completeProcessing()

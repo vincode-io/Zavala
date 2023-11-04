@@ -21,6 +21,12 @@ extension Image {
 		}
 	}
 	
-
-	
 }
+
+// MARK: CloudKitModel
+
+//extension Image {
+//
+
+//
+//}

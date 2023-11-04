@@ -15,7 +15,7 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
 
 	var errors = [Error]()
-	var modifications = [CKRecordZone.ID: ([CKRecord], [CKRecord.ID])]()
+	var modifications = [CKRecordZone.ID: ([VCKModel], [CKRecord.ID])]()
 
 	var account: Account {
 		return AccountManager.shared.cloudKitAccount!
@@ -65,10 +65,10 @@ private extension CloudKitModifyOperation {
 			group.enter()
 
 			let cloudKitZone = cloudKitManager.findZone(zoneID: zoneID)
-			let (recordsToSave, recordIDsToDelete) = modifications[zoneID]!
+			let (modelsToSave, recordIDsToDelete) = modifications[zoneID]!
 
-			let strategy = CloudKitModifyStrategy.onlyIfServerUnchanged(CloudKitMergeResolver())
-			cloudKitZone.modify(recordsToSave: recordsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy) { [weak self] result in
+			let strategy = VCKModifyStrategy.onlyIfServerUnchanged
+			cloudKitZone.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy) { [weak self] result in
 				guard let self else { return }
 				
 				switch result {
@@ -136,7 +136,7 @@ private extension CloudKitModifyOperation {
 			for rowRequest in combinedRequest.rowRequests {
 				if let row = outline.findRow(id: rowRequest.id.rowUUID) {
 					outline.updateRowSyncID(row)
-					addSave(zoneID, row.buildClientRecord())
+					addSave(zoneID, row)
 				} else {
 					addDelete(rowRequest)
 				}
@@ -285,14 +285,14 @@ private extension CloudKitModifyOperation {
 		return imageURL
 	}
 	
-	func addSave(_ zoneID: CKRecordZone.ID, _ record: CKRecord) {
+	func addSave(_ zoneID: CKRecordZone.ID, _ model: VCKModel) {
 		if let (saves, deletes) = modifications[zoneID] {
 			var mutableSaves = saves
-			mutableSaves.append(record)
+			mutableSaves.append(model)
 			modifications[zoneID] = (mutableSaves, deletes)
 		} else {
-			var saves = [CKRecord]()
-			saves.append(record)
+			var saves = [VCKModel]()
+			saves.append(model)
 			let deletes = [CKRecord.ID]()
 			modifications[zoneID] = (saves, deletes)
 		}
@@ -310,7 +310,7 @@ private extension CloudKitModifyOperation {
 			mutableDeletes.append(recordID)
 			modifications[zoneID] = (saves, mutableDeletes)
 		} else {
-			let saves = [CKRecord]()
+			let saves = [VCKModel]()
 			var deletes = [CKRecord.ID]()
 			deletes.append(recordID)
 			modifications[zoneID] = (saves, deletes)

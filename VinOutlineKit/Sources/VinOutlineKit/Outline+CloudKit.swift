@@ -8,6 +8,7 @@
 import Foundation
 import CloudKit
 import OrderedCollections
+import VinCloudKit
 
 extension Outline {
 	
@@ -101,22 +102,6 @@ extension Outline {
 			}
 			
 			row.apply(saveRecord)
-			
-			let updatedTopicData = saveRecord[Row.CloudKitRecord.Fields.topicData] as? Data
-			row.topicData = updatedTopicData
-			
-			let updatedNoteData = saveRecord[Row.CloudKitRecord.Fields.noteData] as? Data
-			row.noteData = updatedNoteData
-			
-			let updatedIsComplete = saveRecord[Row.CloudKitRecord.Fields.isComplete] as? String == "1" ? true : false
-			row.isComplete = updatedIsComplete
-			
-			if let newRowOrder = saveRecord[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
-				row.rowOrder = OrderedSet(newRowOrder)
-			} else {
-				row.rowOrder = OrderedSet<String>()
-			}
-			
 			keyedRows?[entityID.rowUUID] = row
 		}
 		
@@ -293,6 +278,32 @@ extension Outline {
 	}
 	
 }
+
+// MARK: CloudKitModel
+
+//extension Outline {
+//
+//	public func resolveConflict(_: CKError) throws -> CKRecord {
+//		let ancestorRecord = buildAncestorRecord()
+//
+//		try ckError.merge(key: "syncID", fieldType: String.self, ancestorRecord: ancestorRecord)
+//		try ckError.merge(key: "title", fieldType: String.self, ancestorRecord: ancestorRecord)
+//		try ckError.merge(key: "ownerName", fieldType: String.self, ancestorRecord: ancestorRecord)
+//		try ckError.merge(key: "ownerEmail", fieldType: String.self, ancestorRecord: ancestorRecord)
+//		try ckError.merge(key: "ownerURL", fieldType: String.self, ancestorRecord: ancestorRecord)
+//		try ckError.merge(key: "created", fieldType: Date.self, ancestorRecord: ancestorRecord)
+//		try ckError.merge(key: "updated", fieldType: Date.self, ancestorRecord: ancestorRecord)
+//		try ckError.merge(key: "tagNames", fieldType: [String].self, ancestorRecord: ancestorRecord)
+//		try ckError.mergeArray(key: "rowOrder", fieldType: [String].self, ancestorRecord: ancestorRecord)
+//		try ckError.merge(key: "documentLinks", fieldType: [String].self, ancestorRecord: ancestorRecord)
+//		try ckError.merge(key: "documentBacklinks", fieldType: [String].self, ancestorRecord: ancestorRecord)
+//		try ckError.merge(key: "hasAltLinks", fieldType: Bool.self, ancestorRecord: ancestorRecord)
+//		try ckError.merge(key: "disambiguator", fieldType: Int.self, ancestorRecord: ancestorRecord)
+//
+//		return ckError.serverRecord!
+//	}
+//	
+//}
 
 // MARK: Helpers
 

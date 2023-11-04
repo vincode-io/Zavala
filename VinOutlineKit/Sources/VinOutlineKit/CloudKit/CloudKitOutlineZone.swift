@@ -17,14 +17,14 @@ enum CloudKitOutlineZoneError: LocalizedError {
 	}
 }
 
-final class CloudKitOutlineZone: CloudKitZone {
+final class CloudKitOutlineZone: VCKZone {
 	
 	var logger: Logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
 	var zoneID: CKRecordZone.ID
 
 	weak var container: CKContainer?
 	weak var database: CKDatabase?
-	var delegate: CloudKitZoneDelegate?
+	var delegate: VCKZoneDelegate?
 		
 	init(container: CKContainer) {
 		self.container = container
@@ -72,7 +72,8 @@ final class CloudKitOutlineZone: CloudKitZone {
 					let share = CKShare(rootRecord: unsharedRootRecord, shareID: shareID)
 					share[CKShare.SystemFieldKey.title] = (document.title ?? "") as CKRecordValue
 
-					self.modify(recordsToSave: [share, unsharedRootRecord], recordIDsToDelete: [], strategy: .overWriteServerValue) { [weak self] result in
+					let modelsToSave = [CloudKitModelRecordWrapper(share), CloudKitModelRecordWrapper(unsharedRootRecord)]
+					self.modify(modelsToSave: modelsToSave, recordIDsToDelete: [], strategy: .overWriteServerValue) { [weak self] result in
 						guard let self else {
 							completion(.failure(CloudKitOutlineZoneError.unknown))
 							return
