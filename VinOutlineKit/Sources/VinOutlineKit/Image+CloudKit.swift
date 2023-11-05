@@ -7,6 +7,7 @@
 
 import Foundation
 import CloudKit
+import VinCloudKit
 
 extension Image {
 	
@@ -25,8 +26,31 @@ extension Image {
 
 // MARK: CloudKitModel
 
-//extension Image {
-//
+extension Image: VCKModel {
+    
+    public var cloudKitRecordID: CKRecord.ID {
+        guard let zoneID = outline?.zoneID else { fatalError("Missing Outline in Image.") }
+        return CKRecord.ID(recordName: id.description, zoneID: zoneID)
+    }
+    
+    public func apply(_ record: CKRecord) {
+        
+    }
+    
+    public func apply(_ error: CKError) {
+        
+    }
+    
+    public func buildRecord() -> CKRecord {
+        return CKRecord(recordType: CloudKitRecord.recordType, recordID: cloudKitRecordID)
+    }
+    
+    public func clearSyncData() {
+        
+    }
+    
+    public func deleteTempFiles() {
+        
+    }
 
-//
-//}
+}

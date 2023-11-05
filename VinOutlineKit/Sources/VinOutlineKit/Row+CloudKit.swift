@@ -32,7 +32,7 @@ extension Row {
 extension Row: VCKModel {
 
 	public var cloudKitRecordID: CKRecord.ID {
-		guard let zoneID = outline?.zoneID else { fatalError("Missing Zone ID for CloudKit row record.") }
+		guard let zoneID = outline?.zoneID else { fatalError("Missing Outline in Row.") }
 		return CKRecord.ID(recordName: entityID.description, zoneID: zoneID)
 	}
 	
@@ -75,7 +75,6 @@ extension Row: VCKModel {
 		return record
 	}
 
-	#warning("We also need to do merges when data is coming in...")
 	public func apply(_ record: CKRecord) {
 		let serverSyncID = record[Row.CloudKitRecord.Fields.syncID] as? String
 		syncID = merge(client: syncID, ancestor: ancestorSyncID, server: serverSyncID)

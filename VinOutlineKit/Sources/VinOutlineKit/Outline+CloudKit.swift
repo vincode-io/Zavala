@@ -130,7 +130,7 @@ extension Outline {
 			   let fileURL = asset.fileURL,
 			   let data = try? Data(contentsOf: fileURL) {
 
-				let image = Image(id: saveRecordID, isInNotes: isInNotes, offset: offset, data: data)
+                let image = Image(outline: self, id: saveRecordID, isInNotes: isInNotes, offset: offset, data: data)
 				image.cloudKitMetaData = saveRecord.metadata
 				
 				row.saveImage(image)

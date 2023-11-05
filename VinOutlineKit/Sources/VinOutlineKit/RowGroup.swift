@@ -52,7 +52,7 @@ public class RowGroup: Codable {
 		for (rowID, images) in images {
 			guard let newRowID = idMap[rowID] else { continue }
 			newImages[newRowID] = images.map {
-				return $0.duplicate(accountID: outline.id.accountID, documentUUID: outline.id.documentUUID, rowUUID: newRowID)
+                return $0.duplicate(outline: outline, accountID: outline.id.accountID, documentUUID: outline.id.documentUUID, rowUUID: newRowID)
 			}
 		}
 		

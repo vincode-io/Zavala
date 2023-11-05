@@ -310,7 +310,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return completedRows
 	}
 	
-	public var images: [String: [Image]]?
+    public var images: [String: [Image]]? {
+        didSet {
+            if let images {
+                for imageArray in images.values {
+                    for image in imageArray {
+                        image.outline = self
+                    }
+                }
+            }
+        }
+    }
 	
 	public private(set) var currentSearchResult = 0
 	public var currentSearchResultRow: Row? {

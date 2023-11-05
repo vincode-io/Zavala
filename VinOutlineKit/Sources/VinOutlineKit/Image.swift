@@ -15,6 +15,8 @@ public class Image: Identifiable, Codable, Equatable {
 	public var offset: Int
 	public var data: Data
 	public var syncID: String?
+    
+    public weak var outline: Outline?
 
 	private enum CodingKeys: String, CodingKey {
 		case id = "id"
@@ -24,7 +26,8 @@ public class Image: Identifiable, Codable, Equatable {
 		case syncID = "syncID"
 	}
 	
-	public init(id: EntityID, isInNotes: Bool, offset: Int, data: Data) {
+    public init(outline: Outline, id: EntityID, isInNotes: Bool, offset: Int, data: Data) {
+        self.outline = outline
 		self.id = id
 		self.isInNotes = isInNotes
 		self.offset = offset
@@ -35,9 +38,9 @@ public class Image: Identifiable, Codable, Equatable {
 		return lhs.id == rhs.id && lhs.isInNotes == rhs.isInNotes && lhs.offset == rhs.offset && lhs.data == rhs.data
 	}
 	
-	public func duplicate(accountID: Int, documentUUID: String, rowUUID: String) -> Image {
+    public func duplicate(outline: Outline, accountID: Int, documentUUID: String, rowUUID: String) -> Image {
 		let id = EntityID.image(accountID, documentUUID, rowUUID, UUID().uuidString)
-		return Image(id: id, isInNotes: isInNotes, offset: offset, data: data)
+        return Image(outline: outline, id: id, isInNotes: isInNotes, offset: offset, data: data)
 	}
 	
 }
