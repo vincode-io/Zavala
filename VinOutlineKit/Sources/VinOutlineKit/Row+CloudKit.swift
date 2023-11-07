@@ -36,6 +36,42 @@ extension Row: VCKModel {
 		return CKRecord.ID(recordName: entityID.description, zoneID: zoneID)
 	}
 	
+	public func apply(_ record: CKRecord) {
+		let serverSyncID = record[Row.CloudKitRecord.Fields.syncID] as? String
+		syncID = merge(client: syncID, ancestor: ancestorSyncID, server: serverSyncID)
+
+		if let newRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
+			rowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: OrderedSet(newRowOrder))
+		} else {
+			rowOrder = OrderedSet<String>()
+		}
+
+		let serverIsComplete = record[Row.CloudKitRecord.Fields.isComplete] as? String == "1" ? true : false
+		isComplete = merge(client: isComplete, ancestor: ancestorIsComplete, server: serverIsComplete) ?? false
+		
+		let serverTopicData = record[Row.CloudKitRecord.Fields.topicData] as? Data
+		topicData = merge(client: topicData, ancestor: ancestorTopicData, server: serverTopicData)
+		
+		let serverNoteData = record[Row.CloudKitRecord.Fields.noteData] as? Data
+		noteData = merge(client: noteData, ancestor: ancestorNoteData, server: serverNoteData)
+	}
+	
+	public func apply(_ error: CKError) {
+		guard let record = error.serverRecord else { return }
+		
+		serverSyncID = record[Row.CloudKitRecord.Fields.syncID] as? String
+
+		if let newRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
+			serverRowOrder = OrderedSet(newRowOrder)
+		} else {
+			serverRowOrder = OrderedSet<String>()
+		}
+
+		serverIsComplete = record[Row.CloudKitRecord.Fields.isComplete] as? String == "1" ? true : false
+		serverTopicData = record[Row.CloudKitRecord.Fields.topicData] as? Data
+		serverNoteData = record[Row.CloudKitRecord.Fields.noteData] as? Data
+	}
+	
 	public func buildRecord() -> CKRecord {
 		guard let zoneID = outline?.zoneID,
 			  let outlineRecordName = outline?.id.description
@@ -75,44 +111,7 @@ extension Row: VCKModel {
 		return record
 	}
 
-	public func apply(_ record: CKRecord) {
-		let serverSyncID = record[Row.CloudKitRecord.Fields.syncID] as? String
-		syncID = merge(client: syncID, ancestor: ancestorSyncID, server: serverSyncID)
-
-		if let newRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
-			rowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: OrderedSet(newRowOrder))
-		} else {
-			rowOrder = OrderedSet<String>()
-		}
-
-		let serverIsComplete = record[Row.CloudKitRecord.Fields.isComplete] as? String == "1" ? true : false
-		isComplete = merge(client: isComplete, ancestor: ancestorIsComplete, server: serverIsComplete) ?? false
-		
-		let serverTopicData = record[Row.CloudKitRecord.Fields.topicData] as? Data
-		topicData = merge(client: topicData, ancestor: ancestorTopicData, server: serverTopicData)
-		
-		let serverNoteData = record[Row.CloudKitRecord.Fields.noteData] as? Data
-		noteData = merge(client: noteData, ancestor: ancestorNoteData, server: serverNoteData)
-	}
-	
-	public func apply(_ error: CKError) {
-		guard let record = error.serverRecord else { return }
-		
-		serverSyncID = record[Row.CloudKitRecord.Fields.syncID] as? String
-
-		if let newRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
-			serverRowOrder = OrderedSet(newRowOrder)
-		} else {
-			serverRowOrder = OrderedSet<String>()
-		}
-
-		serverIsComplete = record[Row.CloudKitRecord.Fields.isComplete] as? String == "1" ? true : false
-		serverTopicData = record[Row.CloudKitRecord.Fields.topicData] as? Data
-		serverNoteData = record[Row.CloudKitRecord.Fields.noteData] as? Data
-	}
-	
-	public func deleteTempFiles() {
-	}
+	public func deleteTempFiles() { }
 
 	public func clearSyncData() {
 		ancestorSyncID = nil
