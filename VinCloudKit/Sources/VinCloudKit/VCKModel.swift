@@ -39,6 +39,7 @@ enum VCKMergeScenario {
 
 public protocol VCKModel {
 	
+	var isCloudKit: Bool { get }
 	var cloudKitRecordID: CKRecord.ID { get }
 	var cloudKitMetaData: Data? { get set }
 	
@@ -94,12 +95,15 @@ public extension VCKModel {
 }
 
 public struct CloudKitModelRecordWrapper: VCKModel {
-	
-	
+
 	private let wrapped: CKRecord
 	
+	public var isCloudKit: Bool {
+		return true
+	}
+	
 	public var cloudKitRecordID: CKRecord.ID {
-		wrapped.recordID
+		return wrapped.recordID
 	}
 	
 	public var cloudKitMetaData: Data? = nil

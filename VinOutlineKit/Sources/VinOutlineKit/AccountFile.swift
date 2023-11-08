@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import os.log
+import OSLog
 import VinUtility
 
 final class AccountFile {

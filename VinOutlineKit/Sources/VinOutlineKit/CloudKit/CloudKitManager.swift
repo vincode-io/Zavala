@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import os.log
+import OSLog
 import SystemConfiguration
 import CloudKit
 import VinCloudKit

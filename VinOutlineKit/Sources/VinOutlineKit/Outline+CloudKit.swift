@@ -82,22 +82,20 @@ extension Outline {
 		for saveRecord in update.saveRowRecords {
 			guard let entityID = EntityID(description: saveRecord.recordID.recordName) else { continue }
 
-			var isExistingRecord = false
+			var isExistingRow = false
 			var row: Row
 			if let existingRow = keyedRows?[entityID.rowUUID] {
 				row = existingRow
-				isExistingRecord = true
+				isExistingRow = true
 			} else {
-				row = Row(id: entityID.rowUUID)
+				row = Row(outline: self, id: entityID.rowUUID)
 			}
 
 			if let recordSyncID = saveRecord[Row.CloudKitRecord.Fields.syncID] as? String, recordSyncID == row.syncID {
 				continue
 			}
 
-			row.cloudKitMetaData = saveRecord.metadata
-			
-			if isExistingRecord {
+			if isExistingRow {
 				updatedRowIDs.insert(row.id)
 			}
 			
@@ -115,26 +113,39 @@ extension Outline {
 		}
 		
 		for saveRecord in update.saveImageRecords {
-			guard let saveRecordID = EntityID(description: saveRecord.recordID.recordName),
-				  let row = keyedRows?[saveRecordID.rowUUID] else { continue }
+			guard let entityID = EntityID(description: saveRecord.recordID.recordName),
+				  let row = keyedRows?[entityID.rowUUID] else { continue }
 			
-			if let syncID = saveRecord[Image.CloudKitRecord.Fields.syncID] as? String,
-			   let image = row.findImage(id: saveRecordID),
-			   image.syncID == syncID {
+			var isExistingImage = false
+			var image: Image
+			if let existingImage = row.findImage(id: entityID) {
+				image = existingImage
+				isExistingImage = true
+			} else {
+				image = Image(outline: self, id: entityID)
+			}
+			
+			if let recordSyncID = saveRecord[Image.CloudKitRecord.Fields.syncID] as? String, recordSyncID == image.syncID {
 				continue
 			}
 			
+			if isExistingImage {
+				updatedRowIDs.insert(row.id)
+			}
+
+			image.apply(saveRecord)
+			row.saveImage(image)
+
 			if let isInNotes = saveRecord[Image.CloudKitRecord.Fields.isInNotes] as? Bool,
 			   let offset = saveRecord[Image.CloudKitRecord.Fields.offset] as? Int,
 			   let asset = saveRecord[Image.CloudKitRecord.Fields.asset] as? CKAsset,
 			   let fileURL = asset.fileURL,
 			   let data = try? Data(contentsOf: fileURL) {
 
-                let image = Image(outline: self, id: saveRecordID, isInNotes: isInNotes, offset: offset, data: data)
+                let image = Image(outline: self, id: entityID, isInNotes: isInNotes, offset: offset, data: data)
 				image.cloudKitMetaData = saveRecord.metadata
 				
-				row.saveImage(image)
-				updatedRowIDs.insert(saveRecordID.rowUUID)
+				updatedRowIDs.insert(entityID.rowUUID)
 			}
 		}
 		

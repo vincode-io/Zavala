@@ -398,6 +398,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	var batchCloudKitRequests = 0
 	var cloudKitRequestsIDs = Set<EntityID>()
+	
 	private var beingUsedCount = 0
 
 	private var selectionRowID: EntityID?

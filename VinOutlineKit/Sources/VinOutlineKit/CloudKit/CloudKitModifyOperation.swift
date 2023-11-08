@@ -7,7 +7,7 @@
 
 import Foundation
 import CloudKit
-import os.log
+import OSLog
 import VinCloudKit
 
 class CloudKitModifyOperation: BaseMainThreadOperation {
@@ -54,7 +54,7 @@ private extension CloudKitModifyOperation {
 	func send(requests: Set<CloudKitActionRequest>) {
 		logger.info("Sending \(requests.count) requests.")
 		
-		let (loadedDocuments, tempFileURLs) = loadAndStageEntities(requests: requests)
+		let loadedDocuments = loadAndStageEntities(requests: requests)
 
 		// Send the grouped changes
 		
@@ -95,7 +95,12 @@ private extension CloudKitModifyOperation {
 				self.logger.info("Saving \(leftOverRequests.count) requests.")
 
 				CloudKitActionRequest.save(requests: leftOverRequests)
-				self.deleteTempFiles(tempFileURLs)
+				
+				for mods in self.modifications.values {
+					for save in mods.0 {
+						save.deleteTempFiles()
+					}
+				}
 				
 				DispatchQueue.main.async {
 					self.operationDelegate?.operationDidComplete(self)
@@ -104,9 +109,8 @@ private extension CloudKitModifyOperation {
 		}
 	}
 	
-	func loadAndStageEntities(requests: Set<CloudKitActionRequest>) -> ([Document], [URL]) {
+	func loadAndStageEntities(requests: Set<CloudKitActionRequest>) -> [Document] {
 		var loadedDocuments = [Document]()
-		var tempFileURLs = [URL]()
 		let combinedRequests = combine(requests: requests)
 
 		for documentUUID in combinedRequests.keys {
@@ -148,8 +152,7 @@ private extension CloudKitModifyOperation {
 				if let row = outline.findRow(id: imageRequest.id.rowUUID) {
 					if let image = row.findImage(id: imageRequest.id) {
 						outline.updateImageSyncID(image)
-						let tempFileURL = addSave(zoneID: zoneID, image: image)
-						tempFileURLs.append(tempFileURL)
+						addSave(zoneID, image)
 					} else {
 						addDelete(imageRequest)
 					}
@@ -157,7 +160,7 @@ private extension CloudKitModifyOperation {
 			}
 		}
 		
-		return (loadedDocuments, tempFileURLs)
+		return loadedDocuments
 	}
 	
 	func combine(requests: Set<CloudKitActionRequest>) -> [String: CombinedRequest] {
@@ -218,12 +221,6 @@ private extension CloudKitModifyOperation {
 		}
 	}
 
-	func deleteTempFiles(_ urls: [URL]) {
-		for url in urls {
-			try? FileManager.default.removeItem(at: url)
-		}
-	}
-	
 	func addSave(_ document: Document) {
 		guard let outline = document.outline, let zoneID = outline.zoneID else { return }
 		
@@ -255,34 +252,6 @@ private extension CloudKitModifyOperation {
 		record[Outline.CloudKitRecord.Fields.disambiguator] = outline.disambiguator
 
 		addSave(zoneID, record)
-	}
-	
-	func addSave(zoneID: CKRecordZone.ID, image: Image) -> URL {
-		let record: CKRecord = {
-			if let syncMetaData = image.cloudKitMetaData, let record = CKRecord(syncMetaData) {
-				return record
-			} else {
-				let recordID = CKRecord.ID(recordName: image.id.description, zoneID: zoneID)
-				return CKRecord(recordType: Image.CloudKitRecord.recordType, recordID: recordID)
-			}
-		}()
-		
-		let rowID = EntityID.row(image.id.accountID, image.id.documentUUID, image.id.rowUUID)
-		let rowRecordID = CKRecord.ID(recordName: rowID.description, zoneID: zoneID)
-		
-		record.parent = CKRecord.Reference(recordID: rowRecordID, action: .none)
-		record[Image.CloudKitRecord.Fields.row] = CKRecord.Reference(recordID: rowRecordID, action: .deleteSelf)
-		record[Image.CloudKitRecord.Fields.isInNotes] = image.isInNotes
-		record[Image.CloudKitRecord.Fields.offset] = image.offset
-		record[Image.CloudKitRecord.Fields.syncID] = image.syncID
-
-		let imageURL = FileManager.default.temporaryDirectory.appendingPathComponent(image.id.imageUUID).appendingPathExtension("png")
-		try? image.data.write(to: imageURL)
-		record[Image.CloudKitRecord.Fields.asset] = CKAsset(fileURL: imageURL)
-
-		addSave(zoneID, record)
-		
-		return imageURL
 	}
 	
 	func addSave(_ zoneID: CKRecordZone.ID, _ model: VCKModel) {

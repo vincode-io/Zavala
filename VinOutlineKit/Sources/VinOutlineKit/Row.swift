@@ -307,18 +307,18 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 	
 	private enum CodingKeys: String, CodingKey {
-		case id = "id"
-		case syncIDCloudKitValue = "syncIDCloudKitValue"
-		case syncID = "syncID"
-		case topicDataCloudKitValue = "topicDataCloudKitValue"
-		case topicData = "topicData"
-		case noteDataCloudkitValue = "noteDataCloudkitValue"
-		case noteData = "noteData"
-		case isExpanded = "isExpanded"
-		case isCompleteCloudKitValue = "isCompleteCloudKitValue"
-		case isComplete = "isComplete"
-		case rowOrderCloudKitValue = "rowOrderCloudKitValue"
-		case rowOrder = "rowOrder"
+		case id
+		case ancestorSyncID
+		case syncID
+		case ancestorTopicData
+		case topicData
+		case ancestorNoteData
+		case noteData
+		case isExpanded
+		case ancestorIsComplete
+		case isComplete
+		case ancestorRowOrder
+		case rowOrder
 	}
 	
 	private static let markdownImagePattern = "!\\]\\]\\(([^)]+).png\\)"
@@ -336,6 +336,16 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		super.init()
 	}
 
+	init(outline: Outline, id: String) {
+		self.outline = outline
+		self.isComplete = false
+		self.id = id
+		self.isExpanded = true
+		self.rowOrder = OrderedSet<String>()
+		super.init()
+	}
+	
+
 	public init(outline: Outline, topicMarkdown: String?, noteMarkdown: String? = nil) {
 		self.isComplete = false
 		self.id = UUID().uuidString
@@ -351,7 +361,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		
-		self.ancestorIsComplete = try? container.decode(Bool.self, forKey: .isCompleteCloudKitValue)
+		self.ancestorIsComplete = try? container.decode(Bool.self, forKey: .ancestorIsComplete)
 		if let isComplete = try? container.decode(Bool.self, forKey: .isComplete) {
 			self.isComplete = isComplete
 		} else {
@@ -366,7 +376,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 			throw RowError.unableToDeserialize
 		}
 		
-		self.ancestorSyncID = try? container.decode(String.self, forKey: .syncIDCloudKitValue)
+		self.ancestorSyncID = try? container.decode(String.self, forKey: .ancestorSyncID)
 		self.syncID = try? container.decode(String.self, forKey: .syncID)
 		
 		if let isExpanded = try? container.decode(Bool.self, forKey: .isExpanded) {
@@ -375,7 +385,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 			self.isExpanded = true
 		}
 		
-		if let rowOrderCloudKitValue = try? container.decode([String].self, forKey: .rowOrderCloudKitValue) {
+		if let rowOrderCloudKitValue = try? container.decode([String].self, forKey: .ancestorRowOrder) {
 			self.ancestorRowOrder = OrderedSet(rowOrderCloudKitValue)
 		}
 		
@@ -389,9 +399,9 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 
 		super.init()
 
-		ancestorTopicData = try? container.decode(Data.self, forKey: .topicDataCloudKitValue)
+		ancestorTopicData = try? container.decode(Data.self, forKey: .ancestorTopicData)
 		topicData = try? container.decode(Data.self, forKey: .topicData)
-		ancestorNoteData = try? container.decode(Data.self, forKey: .noteDataCloudkitValue)
+		ancestorNoteData = try? container.decode(Data.self, forKey: .ancestorNoteData)
 		noteData = try? container.decode(Data.self, forKey: .noteData)
 	}
 	
@@ -403,27 +413,19 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		super.init()
 	}
 	
-	init(id: String) {
-		self.isComplete = false
-		self.id = id
-		self.isExpanded = true
-		self.rowOrder = OrderedSet<String>()
-		super.init()
-	}
-	
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 		try container.encode(id, forKey: .id)
-		try container.encode(ancestorSyncID, forKey: .syncIDCloudKitValue)
+		try container.encode(ancestorSyncID, forKey: .ancestorSyncID)
 		try container.encode(syncID, forKey: .syncID)
-		try container.encode(ancestorTopicData, forKey: .topicDataCloudKitValue)
+		try container.encode(ancestorTopicData, forKey: .ancestorTopicData)
 		try container.encode(topicData, forKey: .topicData)
-		try container.encode(ancestorNoteData, forKey: .noteDataCloudkitValue)
+		try container.encode(ancestorNoteData, forKey: .ancestorNoteData)
 		try container.encode(noteData, forKey: .noteData)
 		try container.encode(isExpanded, forKey: .isExpanded)
-		try container.encode(ancestorIsComplete, forKey: .isCompleteCloudKitValue)
+		try container.encode(ancestorIsComplete, forKey: .ancestorIsComplete)
 		try container.encode(isComplete, forKey: .isComplete)
-		try container.encode(ancestorRowOrder, forKey: .rowOrderCloudKitValue)
+		try container.encode(ancestorRowOrder, forKey: .ancestorRowOrder)
 		try container.encode(rowOrder, forKey: .rowOrder)
 	}
 	
@@ -443,7 +445,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		row.isExpanded = isExpanded
 		row.isComplete = isComplete
 		row.rowOrder = rowOrder
-		row.images = images?.map { $0.duplicate(accountID: newOutline.id.accountID, documentUUID: newOutline.id.documentUUID, rowUUID: row.id) }
+		row.images = images?.map { $0.duplicate(outline: newOutline, accountID: newOutline.id.accountID, documentUUID: newOutline.id.documentUUID, rowUUID: row.id) }
 		
 		return row
 	}
@@ -479,7 +481,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 					let imageUUID = String(strippedString[captureRange])
 					if let data = images?[imageUUID] {
 						let imageID = EntityID.image(entityID.accountID, entityID.documentUUID, entityID.rowUUID, imageUUID)
-						matchedImages.append(Image(id: imageID, isInNotes: isInNotes, offset: offset, data: data))
+						matchedImages.append(Image(outline: outline!, id: imageID, isInNotes: isInNotes, offset: offset, data: data))
 					}
 				}
 				
@@ -716,7 +718,7 @@ private extension Row {
 		mutableAttrString.enumerateAttribute(.attachment, in: .init(location: 0, length: mutableAttrString.length), options: []) { (value, range, _) in
 			if let imageTextAttachment = value as? ImageTextAttachment, let imageUUID = imageTextAttachment.imageUUID, let pngData = imageTextAttachment.image?.pngData() {
 				let entityID = EntityID.image(outline.id.accountID, outline.id.documentUUID, id, imageUUID)
-				let image = Image(id: entityID, isInNotes: isNotes, offset: range.location, data: pngData)
+				let image = Image(outline: outline, id: entityID, isInNotes: isNotes, offset: range.location, data: pngData)
 				images.append(image)
 			}
 			mutableAttrString.removeAttribute(.attachment, range: range)

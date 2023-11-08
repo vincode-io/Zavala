@@ -6,7 +6,7 @@
 //
 
 import CloudKit
-import os.log
+import OSLog
 import VinUtility
 
 public struct VCKChangeTokenKey: Hashable, Codable {

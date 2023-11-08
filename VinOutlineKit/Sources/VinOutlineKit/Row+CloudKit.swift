@@ -37,6 +37,8 @@ extension Row: VCKModel {
 	}
 	
 	public func apply(_ record: CKRecord) {
+		cloudKitMetaData = record.metadata
+
 		let serverSyncID = record[Row.CloudKitRecord.Fields.syncID] as? String
 		syncID = merge(client: syncID, ancestor: ancestorSyncID, server: serverSyncID)
 
@@ -47,7 +49,7 @@ extension Row: VCKModel {
 		}
 
 		let serverIsComplete = record[Row.CloudKitRecord.Fields.isComplete] as? String == "1" ? true : false
-		isComplete = merge(client: isComplete, ancestor: ancestorIsComplete, server: serverIsComplete) ?? false
+		isComplete = merge(client: isComplete, ancestor: ancestorIsComplete, server: serverIsComplete)!
 		
 		let serverTopicData = record[Row.CloudKitRecord.Fields.topicData] as? Data
 		topicData = merge(client: topicData, ancestor: ancestorTopicData, server: serverTopicData)
@@ -76,7 +78,7 @@ extension Row: VCKModel {
 		guard let zoneID = outline?.zoneID,
 			  let outlineRecordName = outline?.id.description
 		else {
-			fatalError("There is note enough associated CloudKit information for this object.")
+			fatalError("There is not enough associated CloudKit information for this object.")
 		}
 		
 		let record: CKRecord = {
