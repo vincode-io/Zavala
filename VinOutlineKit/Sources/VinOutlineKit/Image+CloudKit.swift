@@ -9,7 +9,7 @@ import Foundation
 import CloudKit
 import VinCloudKit
 
-extension Image {
+extension Image: VCKModel {
 	
 	struct CloudKitRecord {
 		static let recordType = "Image"
@@ -21,13 +21,7 @@ extension Image {
 			static let asset = "asset"
 		}
 	}
-	
-}
-
-// MARK: CloudKitModel
-
-extension Image: VCKModel {
-    
+	   
     public var cloudKitRecordID: CKRecord.ID {
         guard let zoneID = outline?.zoneID else { fatalError("Missing Outline in Image.") }
         return CKRecord.ID(recordName: id.description, zoneID: zoneID)

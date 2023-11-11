@@ -10,7 +10,7 @@ import CloudKit
 import OrderedCollections
 import VinCloudKit
 
-extension Row {
+extension Row: VCKModel {
 	
 	struct CloudKitRecord {
 		static let recordType = "Row"
@@ -25,12 +25,6 @@ extension Row {
 		}
 	}
 	
-}
-
-// MARK: CloudKitModel
-
-extension Row: VCKModel {
-
 	public var cloudKitRecordID: CKRecord.ID {
 		guard let zoneID = outline?.zoneID else { fatalError("Missing Outline in Row.") }
 		return CKRecord.ID(recordName: entityID.description, zoneID: zoneID)
