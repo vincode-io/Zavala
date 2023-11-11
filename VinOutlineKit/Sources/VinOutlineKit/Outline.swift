@@ -68,7 +68,14 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 
+	var ancestorSyncID: String?
+	var serverSyncID: String?
 	public var syncID: String? {
+		willSet {
+			if isCloudKit && ancestorSyncID == nil {
+				ancestorSyncID = syncID
+			}
+		}
 		didSet {
 			if syncID != oldValue {
 				documentMetaDataDidChange()
@@ -76,13 +83,64 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 	
-	public internal(set) var title: String?
-	public internal(set) var disambiguator: Int?
-	public internal(set) var ownerName: String?
-	public internal(set) var ownerEmail: String?
-	public internal(set) var ownerURL: String?
+	var ancestorTitle: String?
+	var serverTitle: String?
+	public internal(set) var title: String? {
+		willSet {
+			if isCloudKit && ancestorTitle == nil {
+				ancestorTitle = title
+			}
+		}
+	}
+	
+	var ancestorDisambiguator: Int?
+	var serverDisambiguator: Int?
+	public internal(set) var disambiguator: Int? {
+		willSet {
+			if isCloudKit && ancestorDisambiguator == nil {
+				ancestorDisambiguator = disambiguator
+			}
+		}
+	}
+	
+	var ancestorOwnerName: String?
+	var serverOwnerName: String?
+	public internal(set) var ownerName: String? {
+		willSet {
+			if isCloudKit && ancestorOwnerName == nil {
+				ancestorOwnerName = ownerName
+			}
+		}
+	}
+	
+	var ancestorOwnerEmail: String?
+	var serverOwnerEmail: String?
+	public internal(set) var ownerEmail: String? {
+		willSet {
+			if isCloudKit && ancestorOwnerEmail == nil {
+				ancestorOwnerEmail = ownerEmail
+			}
+		}
+	}
+	
+	var ancestorOwnerURL: String?
+	var serverOwnerURL: String?
+	public internal(set) var ownerURL: String? {
+		willSet {
+			if isCloudKit && ancestorOwnerURL == nil {
+				ancestorOwnerURL = ownerURL
+			}
+		}
+	}
 
+	var ancestorCreated: Date?
+	var serverCreated: Date?
 	public var created: Date? {
+		willSet {
+			if isCloudKit && ancestorCreated == nil {
+				ancestorCreated = created
+			}
+		}
 		didSet {
 			if created != oldValue {
 				documentMetaDataDidChange()
@@ -90,7 +148,14 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 	
+	var ancestorUpdated: Date?
+	var serverUpdated: Date?
 	public var updated: Date? {
+		willSet {
+			if isCloudKit && ancestorUpdated == nil {
+				ancestorUpdated = updated
+			}
+		}
 		didSet {
 			if updated != oldValue {
 				documentUpdatedDidChange()
@@ -131,9 +196,22 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 	
+	var ancestorDocumentLinks: [EntityID]?
+	var serverDocumentLinks: [EntityID]?
 	public internal(set) var documentLinks: [EntityID]?
+	
+	var ancestorDocumentBacklinks: [EntityID]?
+	var serverDocumentBacklinks: [EntityID]?
 	public internal(set) var documentBacklinks: [EntityID]?
+	
+	var ancestorHasAltLinks: Bool?
+	var serverHasAltLinks: Bool?
 	public internal(set) var hasAltLinks: Bool? {
+		willSet {
+			if isCloudKit && ancestorHasAltLinks == nil {
+				ancestorHasAltLinks = hasAltLinks
+			}
+		}
 		didSet {
 			if hasAltLinks != oldValue {
 				documentMetaDataDidChange()
@@ -332,30 +410,42 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	enum CodingKeys: String, CodingKey {
-		case id = "id"
-		case syncID = "syncID"
-		case title = "title"
-		case disambiguator = "disambiguator"
-		case created = "created"
-		case updated = "updated"
-		case ownerName = "ownerName"
-		case ownerEmail = "ownerEmail"
-		case ownerURL = "ownerURL"
-		case verticleScrollState = "verticleScrollState"
-		case isFilterOn = "isFilterOn"
-		case isCompletedFiltered = "isCompletedFiltered"
-		case isNotesFiltered = "isNotesFiltered"
-		case selectionRowID = "selectionRowID"
-		case selectionIsInNotes = "selectionIsInNotes"
-		case selectionLocation = "selectionLocation"
-		case selectionLength = "selectionLength"
+		case id
+		case ancestorSyncID
+		case syncID
+		case ancestorTitle
+		case title
+		case ancestorDisambiguator
+		case disambiguator
+		case ancestorCreated
+		case created
+		case ancestorUpdated
+		case updated
+		case ancestorOwnerName
+		case ownerName
+		case ancestorOwnerEmail
+		case ownerEmail
+		case ancestorOwnerURL
+		case ownerURL
+		case verticleScrollState
+		case isFilterOn
+		case isCompletedFiltered
+		case isNotesFiltered
+		case selectionRowID
+		case selectionIsInNotes
+		case selectionLocation
+		case selectionLength
+		case ancestorTagIDs
 		case tagIDs = "tagIDS"
-		case documentLinks = "documentLinks"
-		case documentBacklinks = "documentBacklinks"
-		case hasAltLinks = "hasAltLinks"
-		case cloudKitZoneName = "cloudKitZoneName"
-		case cloudKitZoneOwner = "cloudKitZoneOwner"
-		case cloudKitShareRecordName = "cloudKitShareRecordName"
+		case ancestorDocumentLinks
+		case documentLinks
+		case ancestorDocumentBacklinks
+		case documentBacklinks
+		case ancestorHasAltLinks
+		case hasAltLinks
+		case cloudKitZoneName
+		case cloudKitZoneOwner
+		case cloudKitShareRecordName
 	}
 
 	var zoneID: CKRecordZone.ID? {
@@ -380,6 +470,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 	
+	var ancestorRowOrder: OrderedSet<String>?
+	var serverRowOrder: OrderedSet<String>?
 	var rowOrder: OrderedSet<String>?
 	var keyedRows: [String: Row]? {
 		didSet {
@@ -391,6 +483,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 	
+	var ancestorTagIDs: [String]?
+	var serverTagIDs: [String]?
 	var tagIDs: [String]?
 	
 	var rowsFile: RowsFile?
@@ -464,6 +558,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 
 	public func insertRow(_ row: Row, at: Int) {
+		if isCloudKit && ancestorRowOrder == nil {
+			ancestorRowOrder = rowOrder
+		}
+
 		if rowOrder == nil {
 			rowOrder = OrderedSet<String>()
 		}
@@ -479,6 +577,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 
 	public func removeRow(_ row: Row) {
+		if isCloudKit && ancestorRowOrder == nil {
+			ancestorRowOrder = rowOrder
+		}
+
 		rowOrder?.remove(row.id)
 		keyedRows?.removeValue(forKey: row.id)
 		
@@ -486,6 +588,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 
 	public func appendRow(_ row: Row) {
+		if isCloudKit && ancestorRowOrder == nil {
+			ancestorRowOrder = rowOrder
+		}
+
 		if rowOrder == nil {
 			rowOrder = OrderedSet<String>()
 		}
@@ -501,10 +607,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func createTag(_ tag: Tag) {
-		guard !hasTag(tag) else {
-			return
-		}
+		guard !hasTag(tag) else { return }
 		
+		if isCloudKit && ancestorTagIDs == nil {
+			ancestorTagIDs = tagIDs
+		}
+
 		if tagIDs == nil {
 			tagIDs = [String]()
 		}
@@ -525,6 +633,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	public func deleteTag(_ tag: Tag) {
 		guard let index = tagIDs?.firstIndex(where: { $0 == tag.id }) else { return }
+		
+		if isCloudKit && ancestorTagIDs == nil {
+			ancestorTagIDs = tagIDs
+		}
+
 		tagIDs?.remove(at: index)
 		self.updated = Date()
 
@@ -2051,6 +2164,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	func createBacklink(_ entityID: EntityID) {
+		if isCloudKit && ancestorDocumentBacklinks == nil {
+			ancestorDocumentBacklinks = documentBacklinks
+		}
+
 		if documentBacklinks == nil {
 			documentBacklinks = [EntityID]()
 		}
@@ -2072,7 +2189,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 
 	func deleteBacklink(_ entityID: EntityID) {
-		
+		if isCloudKit && ancestorDocumentBacklinks == nil {
+			ancestorDocumentBacklinks = documentBacklinks
+		}
+
 		documentBacklinks?.removeFirst(object: entityID)
 		
 		documentMetaDataDidChange()
@@ -2670,6 +2790,10 @@ private extension Outline {
 	func createLinkRelationship(_ entityID: EntityID) {
 		guard let outline = AccountManager.shared.findDocument(entityID)?.outline else { return }
 		
+		if isCloudKit && ancestorDocumentLinks == nil {
+			ancestorDocumentLinks = documentLinks
+		}
+
 		outline.createBacklink(id)
 		if documentLinks == nil {
 			documentLinks = [EntityID]()
@@ -2682,6 +2806,10 @@ private extension Outline {
 
 	func deleteLinkRelationship(_ entityID: EntityID) {
 		guard let outline = AccountManager.shared.findDocument(entityID)?.outline else { return }
+
+		if isCloudKit && ancestorDocumentLinks == nil {
+			ancestorDocumentLinks = documentLinks
+		}
 
 		outline.deleteBacklink(id)
 		documentLinks?.removeFirst(object: entityID)
