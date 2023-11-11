@@ -549,7 +549,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 	
 	public func insertRow(_ row: Row, at: Int) {
-		if ancestorRowOrder == nil {
+		if isCloudKit && ancestorRowOrder == nil {
 			ancestorRowOrder = rowOrder
 		}
 		
@@ -560,7 +560,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 
 	public func removeRow(_ row: Row) {
-		if ancestorRowOrder == nil {
+		if isCloudKit && ancestorRowOrder == nil {
 			ancestorRowOrder = rowOrder
 		}
 		
@@ -571,7 +571,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 
 	public func appendRow(_ row: Row) {
-		if ancestorRowOrder == nil {
+		if isCloudKit && ancestorRowOrder == nil {
 			ancestorRowOrder = rowOrder
 		}
 
