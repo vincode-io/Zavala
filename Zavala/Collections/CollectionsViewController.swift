@@ -47,8 +47,8 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 
 	var dataSource: UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>!
 	private let dataSourceQueue = MainThreadOperationQueue()
-	private var applyChangesQueue = CoalescingQueue(name: "Apply Snapshot", interval: 0.5, maxInterval: 0.5)
-	private var reloadChangedQueue = CoalescingQueue(name: "Reload Visible", interval: 0.5, maxInterval: 0.5)
+	private var applyChangeDebouncer = Debouncer(duration: 0.5)
+	private var reloadVisibleDebouncer = Debouncer(duration: 0.5)
 
 	private var mainSplitViewController: MainSplitViewController? {
 		return splitViewController as? MainSplitViewController
@@ -135,28 +135,28 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	// MARK: Notifications
 	
 	@objc func accountManagerAccountsDidChange(_ note: Notification) {
-		queueApplyChangeSnapshot()
+		debounceApplyChangeSnapshot()
 	}
 
 	@objc func accountDidInitialize(_ note: Notification) {
-		queueApplyChangeSnapshot()
+		debounceApplyChangeSnapshot()
 	}
 	
 	@objc func accountMetadataDidChange(_ note: Notification) {
-		queueApplyChangeSnapshot()
+		debounceApplyChangeSnapshot()
 	}
 	
 	@objc func accountTagsDidChange(_ note: Notification) {
-		queueApplyChangeSnapshot()
-		queueReloadChangeSnapshot()
+		debounceApplyChangeSnapshot()
+		debounceReloadVisible()
 	}
 
 	@objc func outlineTagsDidChange(_ note: Notification) {
-		queueReloadChangeSnapshot()
+		debounceReloadVisible()
 	}
 
 	@objc func accountDocumentsDidChange(_ note: Notification) {
-		queueReloadChangeSnapshot()
+		debounceReloadVisible()
 	}
 
 	@objc func cloudKitSyncWillBegin(_ note: Notification) {
@@ -478,20 +478,16 @@ private extension CollectionsViewController {
 		}
 	}
 	
-	func queueApplyChangeSnapshot() {
-		applyChangesQueue.add(self, #selector(applyQueuedChangeSnapshot))
+	func debounceApplyChangeSnapshot() {
+		applyChangeDebouncer.debounce { [weak self] in
+			self?.applyChangeSnapshot()
+		}
 	}
 	
-	@objc func applyQueuedChangeSnapshot() {
-		applyChangeSnapshot()
-	}
-	
-	func queueReloadChangeSnapshot() {
-		reloadChangedQueue.add(self, #selector(reloadQueuedChangeSnapshot))
-	}
-	
-	@objc func reloadQueuedChangeSnapshot() {
-		reloadVisible()
+	func debounceReloadVisible() {
+		reloadVisibleDebouncer.debounce { [weak self] in
+			self?.reloadVisible()
+		}
 	}
 	
 	func makeDocumentContainerContextMenu(mainItem: CollectionsItem, items: [CollectionsItem]) -> UIContextMenuConfiguration {

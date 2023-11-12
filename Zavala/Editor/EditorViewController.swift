@@ -380,7 +380,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var transitionContentOffset: CGPoint?
 	
 	private var isOutlineNewFlag = false
-	private var updateTitleWorkItem: DispatchWorkItem?
+	private var updateTitleDebouncer = Debouncer(duration: 1)
 	private var keyboardWorkItem: DispatchWorkItem?
 
 	private var currentKeyboardHeight: CGFloat = 0
@@ -1551,11 +1551,9 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	}
 	
 	func editorTitleDidUpdate(title: String) {
-		updateTitleWorkItem?.cancel()
-		updateTitleWorkItem = DispatchWorkItem { [weak self] in
+		updateTitleDebouncer.debounce { [weak self] in
 			self?.outline?.update(title: title)
 		}
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: updateTitleWorkItem!)
 	}
 	
 	func editorTitleMoveToTagInput() {

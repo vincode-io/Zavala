@@ -43,7 +43,7 @@ public class CloudKitManager {
 
 	private var sendChangesBackgroundTaskID = UIBackgroundTaskIdentifier.invalid
 
-	private var coalescingQueue = CoalescingQueue(name: "Send Modifications", interval: 5, maxInterval: 5)
+	private var debouncer = Debouncer(duration: 5)
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
 	private let queue = MainThreadOperationQueue()
 
@@ -108,7 +108,12 @@ public class CloudKitManager {
 			if let error = (op as? BaseMainThreadOperation)?.error {
 				self.presentError(error)
 			} else {
-				self.coalescingQueue.add(self, #selector(self.sendQueuedChanges))
+				debouncer.debounce { [weak self] in
+					guard let self, self.isNetworkAvailable else { return }
+					self.sendChanges(userInitiated: false) {
+						self.fetchAllChanges(userInitiated: false)
+					}
+				}
 			}
 		}
 		
@@ -200,7 +205,7 @@ public class CloudKitManager {
 	}
 	
 	func suspend() {
-		coalescingQueue.performCallsImmediately()
+		debouncer.executeNow()
 	}
 	
 	func accountDidDelete(account: Account) {
@@ -235,15 +240,6 @@ private extension CloudKitManager {
 
 	func cloudKitSyncDidComplete() {
 		NotificationCenter.default.post(name: .CloudKitSyncDidComplete, object: self, userInfo: nil)
-	}
-
-	@objc func sendQueuedChanges() {
-		guard isNetworkAvailable else {
-			return
-		}
-		sendChanges(userInitiated: false) {
-			self.fetchAllChanges(userInitiated: false)
-		}
 	}
 
 	func sendChanges(userInitiated: Bool, completion: @escaping (() -> Void)) {

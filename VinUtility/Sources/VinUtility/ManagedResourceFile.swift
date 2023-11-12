@@ -11,25 +11,18 @@ public final class ManagedResourceFile: NSObject, NSFilePresenter {
 	
 	private var isDirty = false {
 		didSet {
-			queueSaveToDiskIfNeeded()
+			debounceSaveToDiskIfNeeded()
 		}
 	}
 	
 	private var isLoading = false
 	private let fileURL: URL
 	private let operationQueue: OperationQueue
-	private var saveQueue: CoalescingQueue
+	private var saveDebouncer = Debouncer(duration: 5)
 
 	private let loadCallback: () -> Void
 	private let saveCallback: () -> Void
 
-	public var saveInterval: TimeInterval = 5.0 {
-		didSet {
-			saveQueue.performCallsImmediately()
-			saveQueue = CoalescingQueue(name: "ManagedResourceFile Save Queue", interval: saveInterval)
-		}
-	}
-	
 	public var presentedItemURL: URL? {
 		return fileURL
 	}
@@ -44,7 +37,6 @@ public final class ManagedResourceFile: NSObject, NSFilePresenter {
 		self.loadCallback = load
 		self.saveCallback = save
 		
-		saveQueue = CoalescingQueue(name: "ManagedResourceFile Save Queue", interval: saveInterval)
 		operationQueue = OperationQueue()
 		operationQueue.qualityOfService = .userInteractive
 		operationQueue.maxConcurrentOperationCount = 1
@@ -67,16 +59,16 @@ public final class ManagedResourceFile: NSObject, NSFilePresenter {
 	}
 	
 	public func relinquishPresentedItem(toReader reader: @escaping ((() -> Void)?) -> Void) {
-		saveQueue.isPaused = true
+		saveDebouncer.pause()
 		reader() {
-			self.saveQueue.isPaused = false
+			self.saveDebouncer.unpause()
 		}
 	}
 	
 	public func relinquishPresentedItem(toWriter writer: @escaping ((() -> Void)?) -> Void) {
-		saveQueue.isPaused = true
+		saveDebouncer.pause()
 		writer() {
-			self.saveQueue.isPaused = false
+			self.saveDebouncer.unpause()
 		}
 	}
 	
@@ -86,8 +78,10 @@ public final class ManagedResourceFile: NSObject, NSFilePresenter {
 		}
 	}
 	
-	public func queueSaveToDiskIfNeeded() {
-		saveQueue.add(self, #selector(saveToDiskIfNeeded))
+	public func debounceSaveToDiskIfNeeded() {
+		saveDebouncer.debounce { [weak self] in
+			self?.saveToDiskIfNeeded()
+		}
 	}
 
 	public func load() {
@@ -97,7 +91,7 @@ public final class ManagedResourceFile: NSObject, NSFilePresenter {
 	}
 	
 	public func saveIfNecessary() {
-		saveQueue.performCallsImmediately()
+		saveDebouncer.executeNow()
 	}
 	
 	public func resume() {

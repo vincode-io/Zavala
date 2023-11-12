@@ -47,7 +47,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var addButton: UIButton!
 	private var importButton: UIButton!
 
-	private var loadDocumentsQueue = CoalescingQueue(name: "Load Documents", interval: 0.5, maxInterval: 0.5)
+	private var loadDocumentsDebouncer = Debouncer(duration: 0.5)
     
     private var lastClick: TimeInterval = Date().timeIntervalSince1970
     private var lastIndexPath: IndexPath? = nil
@@ -223,11 +223,11 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	// MARK: Notifications
 	
 	@objc func accountDocumentsDidChange(_ note: Notification) {
-		queueLoadDocuments()
+		debounceLoadDocuments()
 	}
 	
 	@objc func outlineTagsDidChange(_ note: Notification) {
-		queueLoadDocuments()
+		debounceLoadDocuments()
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
@@ -514,12 +514,10 @@ extension DocumentsViewController: UISearchResultsUpdating {
 
 private extension DocumentsViewController {
 	
-	func queueLoadDocuments() {
-		loadDocumentsQueue.add(self, #selector(executeQueuedLoadDocuments))
-	}
-	
-	@objc func executeQueuedLoadDocuments() {
-		loadDocuments(animated: true)
+	func debounceLoadDocuments() {
+		loadDocumentsDebouncer.debounce { [weak self] in
+			self?.loadDocuments(animated: true)
+		}
 	}
 	
 	func updateUI() {
