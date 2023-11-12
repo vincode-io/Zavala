@@ -1,6 +1,7 @@
 # Zavala
 
 A dedicated outliner for macOS, iPadOS, and iOS.
+:
 
 ## Download
 
