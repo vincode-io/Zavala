@@ -47,7 +47,6 @@ public protocol VCKModel {
 	func apply(_ error: CKError)
 	func buildRecord() -> CKRecord
 	func clearSyncData()
-	func deleteTempFiles()
 	
 }
 
@@ -121,6 +120,5 @@ public struct CloudKitModelRecordWrapper: VCKModel {
 	}
 	
 	public func clearSyncData() { }
-	public func deleteTempFiles() { }
 
 }

@@ -98,7 +98,7 @@ private extension CloudKitModifyOperation {
 				
 				for mods in self.modifications.values {
 					for save in mods.0 {
-						save.deleteTempFiles()
+						save.clearSyncData()
 					}
 				}
 				

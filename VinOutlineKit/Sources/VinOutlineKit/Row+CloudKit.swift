@@ -50,6 +50,8 @@ extension Row: VCKModel {
 		
 		let serverNoteData = record[Row.CloudKitRecord.Fields.noteData] as? Data
 		noteData = merge(client: noteData, ancestor: ancestorNoteData, server: serverNoteData)
+        
+        clearSyncData()
 	}
 	
 	public func apply(_ error: CKError) {
@@ -106,8 +108,6 @@ extension Row: VCKModel {
 		
 		return record
 	}
-
-	public func deleteTempFiles() { }
 
 	public func clearSyncData() {
 		ancestorSyncID = nil

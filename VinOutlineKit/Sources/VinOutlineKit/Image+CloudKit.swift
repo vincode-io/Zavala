@@ -46,6 +46,8 @@ extension Image: VCKModel {
 		} else {
 			data = merge(client: data, ancestor: ancestorData, server: nil)!
 		}
+        
+        clearSyncData()
 	}
     
     public func apply(_ error: CKError) {
@@ -117,12 +119,10 @@ extension Image: VCKModel {
 		
 		ancestorData = nil
 		serverData = nil
+
+        if let tempCloudKitDataURL {
+            try? FileManager.default.removeItem(at: tempCloudKitDataURL)
+        }
     }
     
-    public func deleteTempFiles() {
-		if let tempCloudKitDataURL {
-			try? FileManager.default.removeItem(at: tempCloudKitDataURL)
-		}
-    }
-
 }
