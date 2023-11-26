@@ -10,7 +10,7 @@ import CloudKit
 import OrderedCollections
 import VinCloudKit
 
-extension Outline {
+extension Outline: VCKModel {
 	
 	struct CloudKitRecord {
 		static let recordType = "Outline"
@@ -30,7 +30,11 @@ extension Outline {
 			static let disambiguator = "disambiguator"
 		}
 	}
-
+    
+    public var cloudKitRecordID: CKRecord.ID {
+        return CKRecord.ID(recordName: id.description, zoneID: zoneID!)
+    }
+    
 	func beginCloudKitBatchRequest() {
 		batchCloudKitRequests += 1
 	}
@@ -67,7 +71,7 @@ extension Outline {
 		var updatedRowIDs = Set<String>()
 		
 		if let record = update.saveOutlineRecord {
-			let outlineUpdatedRows = applyOutlineRecord(record)
+			let outlineUpdatedRows = apply(record)
 			updatedRowIDs.formUnion(outlineUpdatedRows)
 		}
 		
@@ -179,7 +183,7 @@ extension Outline {
 		}
 	}
 	
-	private func applyOutlineRecord(_ record: CKRecord) -> [String] {
+	public func apply(_ record: CKRecord) -> [String] {
 		if let shareReference = record.share {
 			cloudKitShareRecordName = shareReference.recordID.recordName
 		} else {
@@ -285,9 +289,111 @@ extension Outline {
 		let changes = OutlineElementChanges(section: .tags, deletes: deletes, inserts: inserts, moves: moves)
 		outlineElementsDidChange(changes)
 		
+        clearSyncData()
+        
 		return updatedRowIDs
 	}
 	
+    public func apply(_ error: CKError) {
+        
+    }
+    
+    public func buildRecord() -> CKRecord {
+        let record: CKRecord = {
+            if let syncMetaData = cloudKitMetaData, let record = CKRecord(syncMetaData) {
+                return record
+            } else {
+                return CKRecord(recordType: Row.CloudKitRecord.recordType, recordID: cloudKitRecordID)
+            }
+        }()
+
+        let recordSyncID = merge(client: syncID, ancestor: ancestorSyncID, server: serverSyncID)
+        record[Outline.CloudKitRecord.Fields.syncID] = recordSyncID
+        
+        let recordTitle = merge(client: title, ancestor: ancestorTitle, server: serverTitle)
+        record[Outline.CloudKitRecord.Fields.title] = recordTitle
+
+        let recordDisambiguator = merge(client: disambiguator, ancestor: ancestorDisambiguator, server: serverDisambiguator)
+        record[Outline.CloudKitRecord.Fields.disambiguator] = recordDisambiguator
+
+        let recordCreated = merge(client: created, ancestor: ancestorCreated, server: serverCreated)
+        record[Outline.CloudKitRecord.Fields.created] = recordCreated
+
+        let recordUpdated = merge(client: updated, ancestor: ancestorUpdated, server: serverUpdated)
+        record[Outline.CloudKitRecord.Fields.updated] = recordUpdated
+
+        let recordOwnerName = merge(client: ownerName, ancestor: ancestorOwnerName, server: serverOwnerName)
+        record[Outline.CloudKitRecord.Fields.ownerName] = recordOwnerName
+
+        let recordOwnerEmail = merge(client: ownerEmail, ancestor: ancestorOwnerEmail, server: serverOwnerEmail)
+        record[Outline.CloudKitRecord.Fields.ownerEmail] = recordOwnerEmail
+
+        let recordOwnerURL = merge(client: ownerURL, ancestor: ancestorOwnerURL, server: serverOwnerURL)
+        record[Outline.CloudKitRecord.Fields.ownerURL] = recordOwnerURL
+
+        let recordRowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: serverRowOrder)
+        record[Outline.CloudKitRecord.Fields.rowOrder] = Array(recordRowOrder)
+
+        if let recordTagIDs = merge(client: tagIDs, ancestor: ancestorTagIDs, server: serverTagIDs) {
+            let recordTags = recordTagIDs.compactMap{ account!.findTag(tagID: $0) }
+            record[Outline.CloudKitRecord.Fields.tagNames] = recordTags.map { $0.name }
+        }
+
+        if let recordDocumentLinks = merge(client: documentLinks, ancestor: ancestorDocumentLinks, server: serverDocumentLinks) {
+            record[Outline.CloudKitRecord.Fields.documentLinks] = recordDocumentLinks.map { $0.description }
+        }
+
+        if let recordDocumentBacklinks = merge(client: documentBacklinks, ancestor: ancestorDocumentBacklinks, server: serverDocumentBacklinks) {
+            record[Outline.CloudKitRecord.Fields.documentBacklinks] = recordDocumentBacklinks.map { $0.description }
+        }
+
+        let recordHasAltLinks = merge(client: hasAltLinks, ancestor: ancestorHasAltLinks, server: serverHasAltLinks)
+        record[Outline.CloudKitRecord.Fields.hasAltLinks] = recordHasAltLinks
+
+        return record
+    }
+    
+    public func clearSyncData() {
+        ancestorSyncID = nil
+        serverSyncID = nil
+
+        ancestorTitle = nil
+        serverTitle = nil
+
+        ancestorDisambiguator = nil
+        serverDisambiguator = nil
+
+        ancestorCreated = nil
+        serverCreated = nil
+
+        ancestorUpdated = nil
+        serverUpdated = nil
+
+        ancestorOwnerName = nil
+        serverOwnerName = nil
+
+        ancestorOwnerEmail = nil
+        serverOwnerEmail = nil
+
+        ancestorOwnerURL = nil
+        serverOwnerURL = nil
+
+        ancestorRowOrder = nil
+        serverRowOrder = nil
+        
+        ancestorTagIDs = nil
+        serverTagIDs = nil
+
+        ancestorDocumentLinks = nil
+        serverDocumentLinks = nil
+
+        ancestorDocumentBacklinks = nil
+        serverDocumentBacklinks = nil
+
+        ancestorHasAltLinks = nil
+        serverHasAltLinks = nil
+    }
+    
 }
 
 // MARK: CloudKitModel

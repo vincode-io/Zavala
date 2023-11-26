@@ -28,17 +28,22 @@ struct OldRow: Decodable {
 
 struct OutlineRows: Codable {
 	let fileVersion = 3
+    var ancestorRowOrder: [String]?
 	var rowOrder: [String]
 	var keyedRows: [String: Row]
 
 	private enum CodingKeys: String, CodingKey {
 		case fileVersion
+        case ancestorRowOrder
 		case rowOrder
 		case keyedRows
 	}
 	
-	public init(rowOrder: [String], keyedRows: [String: Row]) {
-		self.rowOrder = rowOrder
+    public init(ancestorRowOrder: OrderedSet<String>?, rowOrder: OrderedSet<String>, keyedRows: [String: Row]) {
+        if let ancestorRowOrder {
+            self.ancestorRowOrder = Array(ancestorRowOrder)
+        }
+		self.rowOrder = Array(rowOrder)
 		self.keyedRows = keyedRows
 	}
 	
@@ -73,6 +78,9 @@ struct OutlineRows: Codable {
 				allRows = [Row]()
 			}
 		case 3:
+            if let ancestorRowOrder = try? container.decode([String].self, forKey: .ancestorRowOrder) {
+                self.ancestorRowOrder = ancestorRowOrder
+            }
 			if let rowOrder = try? container.decode([String].self, forKey: .rowOrder) {
 				self.rowOrder = rowOrder
 			} else {
@@ -97,6 +105,7 @@ struct OutlineRows: Codable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 		try container.encode(fileVersion, forKey: .fileVersion)
+        try container.encode(ancestorRowOrder, forKey: .ancestorRowOrder)
 		try container.encode(rowOrder, forKey: .rowOrder)
 		try container.encode(Array(keyedRows.values), forKey: .keyedRows)
 	}
@@ -203,13 +212,16 @@ private extension RowsFile {
 			return
 		}
 
+        if let ancestorRowOrder = outlineRows.ancestorRowOrder {
+            outline?.ancestorRowOrder = OrderedSet(ancestorRowOrder)
+        }
 		outline?.rowOrder = OrderedSet(outlineRows.rowOrder)
 		outline?.keyedRows = outlineRows.keyedRows
 	}
 	
 	func saveCallback() {
 		guard let rowOrder = outline?.rowOrder, let keyedRows = outline?.keyedRows else { return }
-		let outlineRows = OutlineRows(rowOrder: Array(rowOrder), keyedRows: keyedRows)
+        let outlineRows = OutlineRows(ancestorRowOrder: outline?.ancestorRowOrder, rowOrder: rowOrder, keyedRows: keyedRows)
 
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary

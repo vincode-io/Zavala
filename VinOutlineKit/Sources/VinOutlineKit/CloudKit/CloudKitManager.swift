@@ -343,7 +343,7 @@ private extension CloudKitManager {
 		
 		op.modifySubscriptionsCompletionBlock = { [weak self] subscriptions, deleted, error in
 			if error != nil {
-//				self?.logger.info("Unable to subscribe to shared database.")
+				self?.logger.info("Unable to subscribe to shared database.")
 			}
 		}
 		

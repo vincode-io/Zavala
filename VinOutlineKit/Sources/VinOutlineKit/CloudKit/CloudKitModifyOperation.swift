@@ -127,15 +127,15 @@ private extension CloudKitModifyOperation {
 			
 			document.load()
 			loadedDocuments.append(document)
-			
+
+            guard let outline = document.outline, let zoneID = outline.zoneID else { continue }
+
 			// This has to be a save for the document
 			if combinedRequest.documentRequest != nil {
-				addSave(document)
+                outline.syncID = UUID().uuidString
+                addSave(zoneID, outline)
 			}
 
-			guard let outline = document.outline, let zoneID = outline.zoneID else { continue }
-			let outlineRecordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
-			
 			// Now process all the rows
 			for rowRequest in combinedRequest.rowRequests {
 				if let row = outline.findRow(id: rowRequest.id.rowUUID) {
@@ -221,39 +221,6 @@ private extension CloudKitModifyOperation {
 		}
 	}
 
-	func addSave(_ document: Document) {
-		guard let outline = document.outline, let zoneID = outline.zoneID else { return }
-		
-		outline.syncID = UUID().uuidString
-		
-		let record: CKRecord = {
-			if let syncMetaData = outline.cloudKitMetaData, let record = CKRecord(syncMetaData) {
-				return record
-			} else {
-				let recordID = CKRecord.ID(recordName: outline.id.description, zoneID: zoneID)
-				return CKRecord(recordType: Outline.CloudKitRecord.recordType, recordID: recordID)
-			}
-		}()
-		
-		record[Outline.CloudKitRecord.Fields.syncID] = outline.syncID
-		record[Outline.CloudKitRecord.Fields.title] = outline.title
-		record[Outline.CloudKitRecord.Fields.ownerName] = outline.ownerName
-		record[Outline.CloudKitRecord.Fields.ownerEmail] = outline.ownerEmail
-		record[Outline.CloudKitRecord.Fields.ownerURL] = outline.ownerURL
-		record[Outline.CloudKitRecord.Fields.created] = outline.created
-		record[Outline.CloudKitRecord.Fields.updated] = outline.updated
-		record[Outline.CloudKitRecord.Fields.tagNames] = outline.tags.map { $0.name }
-		if let rowOrder = outline.rowOrder {
-			record[Outline.CloudKitRecord.Fields.rowOrder] = Array(rowOrder)
-		}
-		record[Outline.CloudKitRecord.Fields.documentLinks] = outline.documentLinks?.map { $0.description }
-		record[Outline.CloudKitRecord.Fields.documentBacklinks] = outline.documentBacklinks?.map { $0.description }
-		record[Outline.CloudKitRecord.Fields.hasAltLinks] = outline.hasAltLinks
-		record[Outline.CloudKitRecord.Fields.disambiguator] = outline.disambiguator
-
-		addSave(zoneID, record)
-	}
-	
 	func addSave(_ zoneID: CKRecordZone.ID, _ model: VCKModel) {
 		if let (saves, deletes) = modifications[zoneID] {
 			var mutableSaves = saves

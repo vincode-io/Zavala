@@ -43,7 +43,6 @@ public protocol VCKModel {
 	var cloudKitRecordID: CKRecord.ID { get }
 	var cloudKitMetaData: Data? { get set }
 	
-	func apply(_ record: CKRecord)
 	func apply(_ error: CKError)
 	func buildRecord() -> CKRecord
 	func clearSyncData()
