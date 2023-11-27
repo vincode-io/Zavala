@@ -25,14 +25,11 @@ enum VCKMergeScenario {
 			// We have all 3 values and need to do a 3 way merge
 			return .merge
 		} else {
-			// If the value was deleted or never existed, client wins
-			guard server != nil else { return .clientWins }
-
-			// The client is trying to delete, but the server has newer value
-			guard client != nil else { return .serverWins }
-
-			// We have both a server and client, try to merge if possible
-			return .merge
+			if server == nil {
+				return .clientWins
+			} else {
+				return .serverWins
+			}
 		}
 	}
 }
