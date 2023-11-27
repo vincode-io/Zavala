@@ -1514,7 +1514,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 	public func updateRowSyncID(_ row: Row) {
 		row.syncID = UUID().uuidString
-		outlineContentDidChange()
 	}
 	
 	public func updateImageSyncID(_ image: Image) {
