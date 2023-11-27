@@ -54,7 +54,7 @@ extension Row: VCKModel {
 	
 	public func apply(_ error: CKError) {
 		guard let record = error.serverRecord else { return }
-		
+		cloudKitMetaData = record.metadata
 		mergeSyncID = UUID().uuidString
 
 		if let errorRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {

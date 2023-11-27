@@ -50,7 +50,7 @@ extension Image: VCKModel {
     
     public func apply(_ error: CKError) {
 		guard let record = error.serverRecord else { return }
-		
+		cloudKitMetaData = record.metadata
 		mergeSyncID = UUID().uuidString
 		
 		serverIsInNotes = record[Image.CloudKitRecord.Fields.isInNotes] as? String == "1" ? true : false

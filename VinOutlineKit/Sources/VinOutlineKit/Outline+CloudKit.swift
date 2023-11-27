@@ -242,7 +242,7 @@ extension Outline: VCKModel {
 	
     public func apply(_ error: CKError) {
         guard let record = error.serverRecord, let account else { return }
-        
+		cloudKitMetaData = record.metadata
         mergeSyncID = UUID().uuidString
 		
         serverTitle = record[Outline.CloudKitRecord.Fields.title] as? String
