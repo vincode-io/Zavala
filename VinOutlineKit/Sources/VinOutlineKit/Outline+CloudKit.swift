@@ -227,99 +227,16 @@ extension Outline: VCKModel {
         let serverOwnerURL = record[Outline.CloudKitRecord.Fields.ownerURL] as? String
         ownerURL = merge(client: ownerURL, ancestor: ancestorOwnerURL, server: serverOwnerURL)
 
-        var updatedRowIDs = [String]()
-        
-        if let serverRowOrder = record[Outline.CloudKitRecord.Fields.rowOrder] as? [String] {
-            let mergedRowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: OrderedSet(serverRowOrder))
-            
-            //  We only count newly added children as updated for reloading so that they can indent or outdent
-            let rowDiff = mergedRowOrder.difference(from: rowOrder ?? OrderedSet<String>())
-            for change in rowDiff {
-                switch change {
-                case .insert(_, let newRowID, _):
-                    updatedRowIDs.append(newRowID)
-                default:
-                    break
-                }
-            }
-            
-            rowOrder = mergedRowOrder
-        } else {
-            rowOrder = OrderedSet<String>()
-        }
-        
-        if let serverDocumentLinkDescs = record[Outline.CloudKitRecord.Fields.documentLinks] as? [String] {
-            let serverDocumentLinks = serverDocumentLinkDescs.compactMap { EntityID(description: $0) }
-            documentLinks = merge(client: documentLinks, ancestor: ancestorDocumentLinks, server: serverDocumentLinks)
-        } else {
-            documentLinks = [EntityID]()
-        }
-
-        if let serverDocumentBacklinkDescs = record[Outline.CloudKitRecord.Fields.documentBacklinks] as? [String] {
-            let serverDocumentBacklinks = serverDocumentBacklinkDescs.isEmpty ? nil : serverDocumentBacklinkDescs.compactMap { EntityID(description: $0) }
-            
-            if let mergedDocumentBackLinks = merge(client: documentBacklinks, ancestor: ancestorDocumentBacklinks, server: serverDocumentBacklinks) {
-                let documentBacklinksDiff = mergedDocumentBackLinks.difference(from: documentLinks ?? [])
-            
-                for change in documentBacklinksDiff {
-                    switch change {
-                    case .insert(_, let documentBacklink, _):
-                        createBacklink(documentBacklink)
-                    case .remove(_, let documentBacklink, _):
-                        deleteBacklink(documentBacklink)
-                    }
-                }
-            }
-        } else {
-            documentBacklinks = [EntityID]()
-        }
+        var updatedRowIDs = applyRowOrder(record)
+		applyTags(record, account)
+		applyDocumentLinks(record)
+		applyDocumentBacklinks(record)
         
         let serverHasAltLinks = record[Outline.CloudKitRecord.Fields.hasAltLinks] as? Bool
         hasAltLinks = merge(client: hasAltLinks, ancestor: ancestorHasAltLinks, server: serverHasAltLinks)
 
-        // TODO: Finish tag merges
-
-		let cloudKitTagNames = record[Outline.CloudKitRecord.Fields.tagNames] as? [String] ?? [String]()
-		let currentTagNames = Set(tags.map { $0.name })
-		
-		let cloudKitTagIDs = cloudKitTagNames.map({ account.createTag(name: $0) }).map({ $0.id })
-		let oldTagIDs = tagIDs ?? [String]()
-		tagIDs = cloudKitTagIDs
-
-		let tagNamesToDelete = currentTagNames.subtracting(cloudKitTagNames)
-		for tagNameToDelete in tagNamesToDelete {
-			account.deleteTag(name: tagNameToDelete)
-		}
-
         clearSyncData()
         
-		guard isBeingUsed, isSearching == .notSearching else { return updatedRowIDs }
-
-		var moves = Set<OutlineElementChanges.Move>()
-		var inserts = Set<Int>()
-		var deletes = Set<Int>()
-		
-		let tagDiff = cloudKitTagIDs.difference(from: oldTagIDs).inferringMoves()
-		for change in tagDiff {
-			switch change {
-			case .insert(let offset, _, let associated):
-				if let associated = associated {
-					moves.insert(OutlineElementChanges.Move(associated, offset))
-				} else {
-					inserts.insert(offset)
-				}
-			case .remove(let offset, _, let associated):
-				if let associated = associated {
-					moves.insert(OutlineElementChanges.Move(offset, associated))
-				} else {
-					deletes.insert(offset)
-				}
-			}
-		}
-		
-		let changes = OutlineElementChanges(section: .tags, deletes: deletes, inserts: inserts, moves: moves)
-		outlineElementsDidChange(changes)
-		
 		return updatedRowIDs
 	}
 	
@@ -450,36 +367,115 @@ extension Outline: VCKModel {
     
 }
 
-// MARK: CloudKitModel
-
-//extension Outline {
-//
-//	public func resolveConflict(_: CKError) throws -> CKRecord {
-//		let ancestorRecord = buildAncestorRecord()
-//
-//		try ckError.merge(key: "syncID", fieldType: String.self, ancestorRecord: ancestorRecord)
-//		try ckError.merge(key: "title", fieldType: String.self, ancestorRecord: ancestorRecord)
-//		try ckError.merge(key: "ownerName", fieldType: String.self, ancestorRecord: ancestorRecord)
-//		try ckError.merge(key: "ownerEmail", fieldType: String.self, ancestorRecord: ancestorRecord)
-//		try ckError.merge(key: "ownerURL", fieldType: String.self, ancestorRecord: ancestorRecord)
-//		try ckError.merge(key: "created", fieldType: Date.self, ancestorRecord: ancestorRecord)
-//		try ckError.merge(key: "updated", fieldType: Date.self, ancestorRecord: ancestorRecord)
-//		try ckError.merge(key: "tagNames", fieldType: [String].self, ancestorRecord: ancestorRecord)
-//		try ckError.mergeArray(key: "rowOrder", fieldType: [String].self, ancestorRecord: ancestorRecord)
-//		try ckError.merge(key: "documentLinks", fieldType: [String].self, ancestorRecord: ancestorRecord)
-//		try ckError.merge(key: "documentBacklinks", fieldType: [String].self, ancestorRecord: ancestorRecord)
-//		try ckError.merge(key: "hasAltLinks", fieldType: Bool.self, ancestorRecord: ancestorRecord)
-//		try ckError.merge(key: "disambiguator", fieldType: Int.self, ancestorRecord: ancestorRecord)
-//
-//		return ckError.serverRecord!
-//	}
-//	
-//}
-
 // MARK: Helpers
 
 private extension Outline {
 	
+	func applyRowOrder(_ record: CKRecord) -> [String] {
+		var updatedRowIDs = [String]()
+
+		if let serverRowOrder = record[Outline.CloudKitRecord.Fields.rowOrder] as? [String] {
+			let mergedRowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: OrderedSet(serverRowOrder))
+			
+			//  We only count newly added children as updated for reloading so that they can indent or outdent
+			let rowDiff = mergedRowOrder.difference(from: rowOrder ?? OrderedSet<String>())
+			for change in rowDiff {
+				switch change {
+				case .insert(_, let newRowID, _):
+					updatedRowIDs.append(newRowID)
+				default:
+					break
+				}
+			}
+			
+			rowOrder = mergedRowOrder
+		} else {
+			rowOrder = OrderedSet<String>()
+		}
+		
+		return updatedRowIDs
+	}
+	
+	func applyTags(_ record: CKRecord, _ account: Account) {
+		let tagNames = tags.map { $0.name }
+		let ancestorTagNames = tags.map { $0.name }
+		let serverTagNames = record[Outline.CloudKitRecord.Fields.tagNames] as? [String] ?? [String]()
+		
+		if let mergedTagNames = merge(client: tagNames, ancestor: ancestorTagNames, server: serverTagNames) {
+			let mergedTagIDs = mergedTagNames.map({ account.createTag(name: $0) }).map({ $0.id })
+			
+			if isBeingUsed && isSearching == .notSearching {
+				updateTagUI(mergedTagIDs, tagIDs ?? [])
+			}
+			
+			tagIDs = mergedTagIDs
+			
+			let tagNamesToDelete = Set(tagNames).subtracting(mergedTagNames)
+			for tagNameToDelete in tagNamesToDelete {
+				account.deleteTag(name: tagNameToDelete)
+			}
+		} else {
+			tagIDs = nil
+		}
+	}
+	
+	func updateTagUI(_ tagIDs: [String], _ oldTagIDs: [String]) {
+		var moves = Set<OutlineElementChanges.Move>()
+		var inserts = Set<Int>()
+		var deletes = Set<Int>()
+		
+		let tagDiff = tagIDs.difference(from: oldTagIDs).inferringMoves()
+		for change in tagDiff {
+			switch change {
+			case .insert(let offset, _, let associated):
+				if let associated = associated {
+					moves.insert(OutlineElementChanges.Move(associated, offset))
+				} else {
+					inserts.insert(offset)
+				}
+			case .remove(let offset, _, let associated):
+				if let associated = associated {
+					moves.insert(OutlineElementChanges.Move(offset, associated))
+				} else {
+					deletes.insert(offset)
+				}
+			}
+		}
+		
+		let changes = OutlineElementChanges(section: .tags, deletes: deletes, inserts: inserts, moves: moves)
+		outlineElementsDidChange(changes)
+	}
+	
+	func applyDocumentLinks(_ record: CKRecord) {
+		if let serverDocumentLinkDescs = record[Outline.CloudKitRecord.Fields.documentLinks] as? [String] {
+			let serverDocumentLinks = serverDocumentLinkDescs.compactMap { EntityID(description: $0) }
+			documentLinks = merge(client: documentLinks, ancestor: ancestorDocumentLinks, server: serverDocumentLinks)
+		} else {
+			documentLinks = [EntityID]()
+		}
+	}
+	
+	func applyDocumentBacklinks(_ record: CKRecord) {
+		if let serverDocumentBacklinkDescs = record[Outline.CloudKitRecord.Fields.documentBacklinks] as? [String] {
+			let serverDocumentBacklinks = serverDocumentBacklinkDescs.isEmpty ? nil : serverDocumentBacklinkDescs.compactMap { EntityID(description: $0) }
+			
+			if let mergedDocumentBackLinks = merge(client: documentBacklinks, ancestor: ancestorDocumentBacklinks, server: serverDocumentBacklinks) {
+				let documentBacklinksDiff = mergedDocumentBackLinks.difference(from: documentLinks ?? [])
+				
+				for change in documentBacklinksDiff {
+					switch change {
+					case .insert(_, let documentBacklink, _):
+						createBacklink(documentBacklink)
+					case .remove(_, let documentBacklink, _):
+						deleteBacklink(documentBacklink)
+					}
+				}
+			}
+		} else {
+			documentBacklinks = [EntityID]()
+		}
+	}
+
 	func documentDidChangeBySync() {
 		NotificationCenter.default.post(name: .DocumentDidChangeBySync, object: Document.outline(self), userInfo: nil)
 	}
