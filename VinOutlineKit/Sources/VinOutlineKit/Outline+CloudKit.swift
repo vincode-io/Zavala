@@ -65,6 +65,8 @@ extension Outline: VCKModel {
 
 		let requests = cloudKitRequestsIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) }
 		cloudKitManager.addRequests(Set(requests))
+		
+		cloudKitRequestsIDs = Set<EntityID>()
 	}
 
 	func apply(_ update: CloudKitOutlineUpdate) {
