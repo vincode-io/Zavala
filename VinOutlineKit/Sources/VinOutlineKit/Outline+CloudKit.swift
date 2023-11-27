@@ -248,11 +248,11 @@ extension Outline: VCKModel {
 			deleteBacklink(backlink)
 		}
 
+        guard let account else { return updatedRowIDs }
+
 		let cloudKitTagNames = record[Outline.CloudKitRecord.Fields.tagNames] as? [String] ?? [String]()
 		let currentTagNames = Set(tags.map { $0.name })
 		
-		guard let account = account else { return updatedRowIDs }
-
 		let cloudKitTagIDs = cloudKitTagNames.map({ account.createTag(name: $0) }).map({ $0.id })
 		let oldTagIDs = tagIDs ?? [String]()
 		tagIDs = cloudKitTagIDs
@@ -295,7 +295,33 @@ extension Outline: VCKModel {
 	}
 	
     public func apply(_ error: CKError) {
+        guard let record = error.serverRecord, let account else { return }
         
+        serverSyncID = record[Outline.CloudKitRecord.Fields.syncID] as? String
+        serverTitle = record[Outline.CloudKitRecord.Fields.title] as? String
+        serverDisambiguator = record[Outline.CloudKitRecord.Fields.disambiguator] as? Int
+        serverCreated = record[Outline.CloudKitRecord.Fields.created] as? Date
+        serverUpdated = record[Outline.CloudKitRecord.Fields.updated] as? Date
+        serverOwnerName = record[Outline.CloudKitRecord.Fields.ownerName] as? String
+        serverOwnerEmail = record[Outline.CloudKitRecord.Fields.ownerEmail] as? String
+        serverOwnerURL = record[Outline.CloudKitRecord.Fields.ownerURL] as? String
+
+        if let errorRowOrder = record[Outline.CloudKitRecord.Fields.rowOrder] as? [String] {
+            serverRowOrder = OrderedSet(errorRowOrder)
+        } else {
+            serverRowOrder = nil
+        }
+
+        let errorTagNames = record[Outline.CloudKitRecord.Fields.tagNames] as? [String] ?? [String]()
+        serverTagIDs = errorTagNames.map({ account.createTag(name: $0) }).map({ $0.id })
+        
+        let errorDocumentLinks = record[Outline.CloudKitRecord.Fields.documentLinks] as? [String] ?? [String]()
+        serverDocumentLinks = errorDocumentLinks.compactMap { EntityID(description: $0) }
+
+        let errorDocumentBacklinks = record[Outline.CloudKitRecord.Fields.documentBacklinks] as? [String] ?? [String]()
+        serverDocumentBacklinks = errorDocumentBacklinks.compactMap { EntityID(description: $0) }
+        
+        hasAltLinks = record[Outline.CloudKitRecord.Fields.hasAltLinks] as? Bool
     }
     
     public func buildRecord() -> CKRecord {

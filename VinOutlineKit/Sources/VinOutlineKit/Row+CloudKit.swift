@@ -59,10 +59,10 @@ extension Row: VCKModel {
 		
 		serverSyncID = record[Row.CloudKitRecord.Fields.syncID] as? String
 
-		if let newRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
-			serverRowOrder = OrderedSet(newRowOrder)
+		if let errorRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
+			serverRowOrder = OrderedSet(errorRowOrder)
 		} else {
-			serverRowOrder = OrderedSet<String>()
+			serverRowOrder = nil
 		}
 
 		serverIsComplete = record[Row.CloudKitRecord.Fields.isComplete] as? String == "1" ? true : false
