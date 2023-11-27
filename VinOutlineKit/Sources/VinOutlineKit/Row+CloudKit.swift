@@ -36,8 +36,8 @@ extension Row: VCKModel {
 		let serverSyncID = record[Row.CloudKitRecord.Fields.syncID] as? String
 		syncID = merge(client: syncID, ancestor: ancestorSyncID, server: serverSyncID)
 
-		if let newRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
-			rowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: OrderedSet(newRowOrder))
+		if let serverRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
+			rowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: OrderedSet(serverRowOrder))
 		} else {
 			rowOrder = OrderedSet<String>()
 		}
