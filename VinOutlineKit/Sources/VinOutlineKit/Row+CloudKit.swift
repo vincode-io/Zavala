@@ -32,9 +32,7 @@ extension Row: VCKModel {
 	
 	public func apply(_ record: CKRecord) {
 		cloudKitMetaData = record.metadata
-
-		let serverSyncID = record[Row.CloudKitRecord.Fields.syncID] as? String
-		syncID = merge(client: syncID, ancestor: ancestorSyncID, server: serverSyncID)
+		syncID = record[Row.CloudKitRecord.Fields.syncID] as? String
 
 		if let serverRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
 			rowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: OrderedSet(serverRowOrder))
@@ -57,7 +55,7 @@ extension Row: VCKModel {
 	public func apply(_ error: CKError) {
 		guard let record = error.serverRecord else { return }
 		
-		serverSyncID = record[Row.CloudKitRecord.Fields.syncID] as? String
+		mergeSyncID = UUID().uuidString
 
 		if let errorRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
 			serverRowOrder = OrderedSet(errorRowOrder)
@@ -91,8 +89,7 @@ extension Row: VCKModel {
 		record[Row.CloudKitRecord.Fields.outline] = CKRecord.Reference(recordID: outlineRecordID, action: .deleteSelf)
 		record[Row.CloudKitRecord.Fields.subtype] = "text"
 		
-		let recordSyncID = merge(client: syncID, ancestor: ancestorSyncID, server: serverSyncID)
-		record[Row.CloudKitRecord.Fields.syncID] = recordSyncID
+		record[Row.CloudKitRecord.Fields.syncID] = mergeSyncID ?? syncID
 		
 		let recordRowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: serverRowOrder)
 		record[Row.CloudKitRecord.Fields.rowOrder] = Array(recordRowOrder)
@@ -110,8 +107,7 @@ extension Row: VCKModel {
 	}
 
 	public func clearSyncData() {
-		ancestorSyncID = nil
-		serverSyncID = nil
+		mergeSyncID = nil
 		
 		ancestorRowOrder = nil
 		serverRowOrder = nil

@@ -29,9 +29,7 @@ extension Image: VCKModel {
     
     public func apply(_ record: CKRecord) {
 		cloudKitMetaData = record.metadata
-
-		let serverSyncID = record[Image.CloudKitRecord.Fields.syncID] as? String
-		syncID = merge(client: syncID, ancestor: ancestorSyncID, server: serverSyncID)
+		syncID = record[Image.CloudKitRecord.Fields.syncID] as? String
 
 		let serverIsInNotes = record[Image.CloudKitRecord.Fields.isInNotes] as? String == "1" ? true : false
 		isInNotes = merge(client: isInNotes, ancestor: ancestorIsInNotes, server: serverIsInNotes)!
@@ -53,7 +51,8 @@ extension Image: VCKModel {
     public func apply(_ error: CKError) {
 		guard let record = error.serverRecord else { return }
 		
-		serverSyncID = record[Image.CloudKitRecord.Fields.syncID] as? String
+		mergeSyncID = UUID().uuidString
+		
 		serverIsInNotes = record[Image.CloudKitRecord.Fields.isInNotes] as? String == "1" ? true : false
 		serverOffset = record[Image.CloudKitRecord.Fields.offset] as? Int
 		
@@ -85,8 +84,7 @@ extension Image: VCKModel {
 		record.parent = CKRecord.Reference(recordID: rowRecordID, action: .none)
 		record[Image.CloudKitRecord.Fields.row] = CKRecord.Reference(recordID: rowRecordID, action: .deleteSelf)
 		
-		let recordSyncID = merge(client: syncID, ancestor: ancestorSyncID, server: serverSyncID)
-		record[Image.CloudKitRecord.Fields.syncID] = recordSyncID
+		record[Image.CloudKitRecord.Fields.syncID] = mergeSyncID ?? syncID
 
 		let recordIsInNotes = merge(client: isInNotes, ancestor: ancestorIsInNotes, server: serverIsInNotes)
 		record[Image.CloudKitRecord.Fields.isInNotes] = recordIsInNotes
@@ -109,7 +107,7 @@ extension Image: VCKModel {
     
     public func clearSyncData() {
 		ancestorData = nil
-		serverSyncID = nil
+		mergeSyncID = nil
 		
 		ancestorIsInNotes = nil
 		serverIsInNotes = nil

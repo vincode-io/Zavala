@@ -95,9 +95,9 @@ extension Outline: VCKModel {
 				row = Row(outline: self, id: entityID.rowUUID)
 			}
 
-//			if let recordSyncID = saveRecord[Row.CloudKitRecord.Fields.syncID] as? String, recordSyncID == row.syncID {
-//				continue
-//			}
+			if let recordSyncID = saveRecord[Row.CloudKitRecord.Fields.syncID] as? String, recordSyncID == row.syncID {
+				continue
+			}
 
 			if isExistingRow {
 				updatedRowIDs.insert(row.id)
@@ -129,9 +129,9 @@ extension Outline: VCKModel {
 				image = Image(outline: self, id: entityID)
 			}
 			
-//			if let recordSyncID = saveRecord[Image.CloudKitRecord.Fields.syncID] as? String, recordSyncID == image.syncID {
-//				continue
-//			}
+			if let recordSyncID = saveRecord[Image.CloudKitRecord.Fields.syncID] as? String, recordSyncID == image.syncID {
+				continue
+			}
 			
 			if isExistingImage {
 				updatedRowIDs.insert(row.id)
@@ -192,14 +192,12 @@ extension Outline: VCKModel {
 			cloudKitShareRecordName = nil
 		}
 
-//		if let recordSyncID = record[Outline.CloudKitRecord.Fields.syncID] as? String, recordSyncID == syncID {
-//			return []
-//		}
+		if let recordSyncID = record[Outline.CloudKitRecord.Fields.syncID] as? String, recordSyncID == syncID {
+			return []
+		}
 		
 		cloudKitMetaData = record.metadata
-		
-        let serverSyncID = record[Outline.CloudKitRecord.Fields.syncID] as? String
-        syncID = merge(client: syncID, ancestor: ancestorSyncID, server: serverSyncID)
+        syncID = record[Outline.CloudKitRecord.Fields.syncID] as? String
         
         let serverTitle = record[Outline.CloudKitRecord.Fields.title] as? String
         let newTitle = merge(client: title, ancestor: ancestorTitle, server: serverTitle)
@@ -328,7 +326,8 @@ extension Outline: VCKModel {
     public func apply(_ error: CKError) {
         guard let record = error.serverRecord, let account else { return }
         
-        serverSyncID = record[Outline.CloudKitRecord.Fields.syncID] as? String
+        mergeSyncID = UUID().uuidString
+		
         serverTitle = record[Outline.CloudKitRecord.Fields.title] as? String
         serverDisambiguator = record[Outline.CloudKitRecord.Fields.disambiguator] as? Int
         serverCreated = record[Outline.CloudKitRecord.Fields.created] as? Date
@@ -364,8 +363,7 @@ extension Outline: VCKModel {
             }
         }()
 
-        let recordSyncID = merge(client: syncID, ancestor: ancestorSyncID, server: serverSyncID)
-        record[Outline.CloudKitRecord.Fields.syncID] = recordSyncID
+        record[Outline.CloudKitRecord.Fields.syncID] = mergeSyncID ?? syncID
         
         let recordTitle = merge(client: title, ancestor: ancestorTitle, server: serverTitle)
         record[Outline.CloudKitRecord.Fields.title] = recordTitle
@@ -411,8 +409,7 @@ extension Outline: VCKModel {
     }
     
     public func clearSyncData() {
-        ancestorSyncID = nil
-        serverSyncID = nil
+        mergeSyncID = nil
 
         ancestorTitle = nil
         serverTitle = nil

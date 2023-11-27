@@ -68,14 +68,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 
-	var ancestorSyncID: String?
-	var serverSyncID: String?
+	var mergeSyncID: String?
 	public var syncID: String? {
-		willSet {
-			if isCloudKit && ancestorSyncID == nil {
-				ancestorSyncID = syncID
-			}
-		}
 		didSet {
 			if syncID != oldValue {
 				documentMetaDataDidChange()
@@ -411,7 +405,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	enum CodingKeys: String, CodingKey {
 		case id
-		case ancestorSyncID
 		case syncID
 		case ancestorTitle
 		case title
