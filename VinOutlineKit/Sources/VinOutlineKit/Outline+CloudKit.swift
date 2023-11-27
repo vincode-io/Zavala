@@ -276,7 +276,7 @@ extension Outline: VCKModel {
             if let syncMetaData = cloudKitMetaData, let record = CKRecord(syncMetaData) {
                 return record
             } else {
-                return CKRecord(recordType: Row.CloudKitRecord.recordType, recordID: cloudKitRecordID)
+                return CKRecord(recordType: Outline.CloudKitRecord.recordType, recordID: cloudKitRecordID)
             }
         }()
 
