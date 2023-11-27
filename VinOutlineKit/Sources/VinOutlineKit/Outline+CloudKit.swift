@@ -229,7 +229,7 @@ extension Outline: VCKModel {
         let serverOwnerURL = record[Outline.CloudKitRecord.Fields.ownerURL] as? String
         ownerURL = merge(client: ownerURL, ancestor: ancestorOwnerURL, server: serverOwnerURL)
 
-        var updatedRowIDs = applyRowOrder(record)
+		let updatedRowIDs = applyRowOrder(record)
 		applyTags(record, account)
 		applyDocumentLinks(record)
 		applyDocumentBacklinks(record)
