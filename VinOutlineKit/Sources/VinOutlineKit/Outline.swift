@@ -2155,7 +2155,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return outline
 	}
 	
-	func createBacklink(_ entityID: EntityID) {
+	func createBacklink(_ entityID: EntityID, updateCloudKit: Bool = true) {
 		if isCloudKit && ancestorDocumentBacklinks == nil {
 			ancestorDocumentBacklinks = documentBacklinks
 		}
@@ -2165,9 +2165,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 				
 		documentBacklinks?.append(entityID)
-		
 		documentMetaDataDidChange()
-		requestCloudKitUpdate(for: id)
+		
+		if updateCloudKit {
+			requestCloudKitUpdate(for: id)
+		}
 
 		guard isBeingUsed else { return }
 
@@ -2180,15 +2182,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 
-	func deleteBacklink(_ entityID: EntityID) {
+	func deleteBacklink(_ entityID: EntityID, updateCloudKit: Bool = true) {
 		if isCloudKit && ancestorDocumentBacklinks == nil {
 			ancestorDocumentBacklinks = documentBacklinks
 		}
 
 		documentBacklinks?.removeFirst(object: entityID)
-		
 		documentMetaDataDidChange()
-		requestCloudKitUpdate(for: id)
+		
+		if updateCloudKit {
+			requestCloudKitUpdate(for: id)
+		}
 
 		guard isBeingUsed else { return }
 		

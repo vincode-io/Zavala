@@ -462,14 +462,14 @@ private extension Outline {
 			let serverDocumentBacklinks = serverDocumentBacklinkDescs.isEmpty ? nil : serverDocumentBacklinkDescs.compactMap { EntityID(description: $0) }
 			
 			if let mergedDocumentBackLinks = merge(client: documentBacklinks, ancestor: ancestorDocumentBacklinks, server: serverDocumentBacklinks) {
-				let documentBacklinksDiff = mergedDocumentBackLinks.difference(from: documentLinks ?? [])
+				let documentBacklinksDiff = mergedDocumentBackLinks.difference(from: documentBacklinks ?? [])
 				
 				for change in documentBacklinksDiff {
 					switch change {
 					case .insert(_, let documentBacklink, _):
-						createBacklink(documentBacklink)
+						createBacklink(documentBacklink, updateCloudKit: false)
 					case .remove(_, let documentBacklink, _):
-						deleteBacklink(documentBacklink)
+						deleteBacklink(documentBacklink, updateCloudKit: false)
 					}
 				}
 			}

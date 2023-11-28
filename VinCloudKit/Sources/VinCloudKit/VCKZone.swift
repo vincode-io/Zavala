@@ -649,9 +649,6 @@ public extension VCKZone {
 					case .batchRequestFailed:
 						// Nothing wrong with this record, it was just part of the batch that failed.
 						return modelToSave
-					case .invalidArguments:
-						// TODO: do something here
-						return nil
 					case .unknownItem:
 						// The record was deleted while the user was offline, so treat it as new
 						var modelToChange = modelToSave
