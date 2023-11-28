@@ -645,12 +645,24 @@ public extension VCKZone {
 						return nil
 					}
 					
-					guard ckErrorForRecord.code != .batchRequestFailed else {
+					switch ckErrorForRecord.code {
+					case .batchRequestFailed:
+						// Nothing wrong with this record, it was just part of the batch that failed.
+						return modelToSave
+					case .invalidArguments:
+						// TODO: do something here
+						return nil
+					case .unknownItem:
+						// The record was deleted while the user was offline, so treat it as new
+						var modelToChange = modelToSave
+						modelToChange.cloudKitMetaData = nil
+						return modelToChange
+					default:
+						// Merge the model and try to save it again
+						modelToSave.apply(ckErrorForRecord)
 						return modelToSave
 					}
 					
-					modelToSave.apply(ckErrorForRecord)
-					return modelToSave
 				}
 				
 				self.logger.info("\(remainingModelsToSave.count, privacy: .public) records resolved. Attempting Modify again...")
