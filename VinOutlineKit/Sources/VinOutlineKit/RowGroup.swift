@@ -85,7 +85,6 @@ public class RowGroup: Codable {
 			newRowRowOrder.append(idMap[newRowOrder]!)
 		}
 		
-		#warning("I'm not sure yet to do here. Do we use the ancestor field or not???")
 		newRow.rowOrder = OrderedSet(newRowRowOrder)
 
 		return newRow
