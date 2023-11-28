@@ -9,15 +9,24 @@
 #if canImport(UIKit)
 import UIKit
 
-extension UIView {
+public extension UIView {
 	
-	public func setFrameIfNotEqual(_ rect: CGRect) {
+	/// Removes all constrains for this view as long as unowned ones only relate to the superview
+	func removeConstraintsOwnedBySuperview() {
+		let constraints = self.superview?.constraints.filter{
+			$0.firstItem as? UIView == self || $0.secondItem as? UIView == self
+		} ?? []
+
+		self.superview?.removeConstraints(constraints)
+	}
+	
+	func setFrameIfNotEqual(_ rect: CGRect) {
 		if !self.frame.equalTo(rect) {
 			self.frame = rect
 		}
 	}
 	
-	public func addChildAndPin(_ view: UIView) {
+	func addChildAndPin(_ view: UIView) {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(view)
 		
@@ -30,7 +39,7 @@ extension UIView {
 		
 	}
 	
-    public func asImage() -> UIImage {
+    func asImage() -> UIImage {
         let renderer = UIGraphicsImageRenderer(bounds: bounds)
         return renderer.image { rendererContext in
             layer.render(in: rendererContext.cgContext)
