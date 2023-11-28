@@ -102,7 +102,7 @@ extension Image: VCKModel {
 			self.logger.error("Unable to write temp file for CloudKit asset data.")
 		}
 
-        return CKRecord(recordType: CloudKitRecord.recordType, recordID: cloudKitRecordID)
+        return record
     }
     
     public func clearSyncData() {
