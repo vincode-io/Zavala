@@ -21,7 +21,7 @@ private let rfc822dateFormatsWithoutComma = ["d MMM yyyy HH:mm:ss zzz", "d MMM y
 
 private var rfc822LastUsedDateFormat: String?
 
-extension Date {
+public extension Date {
 	
 	var rfc822String: String? {
 		if rfc822LastUsedDateFormat != rfc822dateFormatsWithComma[0] {

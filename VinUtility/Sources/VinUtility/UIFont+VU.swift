@@ -5,6 +5,7 @@
 //  Created by Maurice Parker on 3/16/21.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 extension UIFont {
@@ -17,3 +18,4 @@ extension UIFont {
 	}
 	
 }
+#endif

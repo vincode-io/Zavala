@@ -55,6 +55,7 @@ struct DataDetectorResult {
 		}
 	}
 	
+    #if canImport(UIKit)
 	func attributedString(withAttributes attributes: [NSAttributedString.Key : Any]) -> NSAttributedString? {
 		guard let url else { return nil }
 		
@@ -66,6 +67,8 @@ struct DataDetectorResult {
 		
 		return attrString
 	}
+    #endif
+    
 }
 
 extension NSDataDetector {

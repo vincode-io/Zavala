@@ -9,12 +9,14 @@ import Foundation
 
 extension NSAttributedString {
 
+    #if canImport(UIKit)
 	public convenience init(linkText: String, linkURL: URL) {
 		let attrString = NSMutableAttributedString(string: linkText)
 		let range = NSRange(location: 0, length: attrString.length)
 		attrString.addAttribute(.link, value: linkURL, range: range)
 		self.init(attributedString: attrString)
 	}
+    #endif
 
 	public static func isOptionalStringsEqual(lhs: NSAttributedString?, rhs: NSAttributedString?) -> Bool {
 		if lhs == nil && rhs == nil {

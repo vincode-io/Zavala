@@ -6,10 +6,15 @@
 //
 // https://stackoverflow.com/a/47320125
 
+#if canImport(UIKit)
 import UIKit
+#else
+import Foundation
+#endif
 
 extension NSMutableAttributedString {
 
+    #if canImport(UIKit)
 	@discardableResult
 	public func detectData() -> Bool {
 		let text = string
@@ -46,6 +51,7 @@ extension NSMutableAttributedString {
 		}
 		endEditing()
 	}
+    #endif
 	
 	public func addAttributes(_ attrs: [NSAttributedString.Key : Any] = [:]) {
 		addAttributes(attrs, range: NSRange(location: 0, length: length))
