@@ -1300,11 +1300,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		if let afterRow = afterRow, let texts = rowStrings {
 			updateRowStrings(afterRow, texts)
 		}
+		
+		let beginningRowCount = rowCount
 
 		for row in rows.sortedByReverseDisplayOrder() {
 			if afterRow == nil {
 				if prefersEnd {
-					appendRow(row)
+					insertRow(row, at: beginningRowCount)
 				} else {
 					insertRow(row, at: 0)
 				}
