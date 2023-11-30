@@ -11,8 +11,14 @@ let package = Package(
             name: "VinUtility",
             targets: ["VinUtility"]),
     ],
-    targets: [
+	dependencies: [
+		.package(url: "https://github.com/apple/swift-collections.git", .upToNextMajor(from: "1.0.2")),
+	],
+	targets: [
         .target(
-            name: "VinUtility"),
-    ]
+            name: "VinUtility",
+		dependencies: [
+			.product(name: "OrderedCollections", package: "swift-collections")
+		]),
+	]
 )

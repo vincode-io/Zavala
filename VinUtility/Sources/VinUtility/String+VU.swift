@@ -11,10 +11,6 @@ import Foundation
 
 public extension String {
 	
-	init(localized: String, comment: String? = nil) {
-		self = localized
-	}
-	
 	var containsSymbols: Bool {
 		for scalar in unicodeScalars {
 			switch scalar.value {

@@ -25,3 +25,11 @@ struct VinOutlineKitStringAssets {
 											   comment: "Error Message: Unable to read the import file.")
 
 }
+
+private extension String {
+	
+	init(localized: String, comment: String? = nil) {
+		self = localized
+	}
+	
+}

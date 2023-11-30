@@ -39,7 +39,6 @@
 		51341E06272B564A0005425B /* MetadataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51341E05272B564A0005425B /* MetadataView.swift */; };
 		51341E08272B6DB00005425B /* MetadataViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51341E07272B6DB00005425B /* MetadataViewProvider.swift */; };
 		513B916A2722CDC80051A6BA /* EditOutlineIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513B91692722CDC80051A6BA /* EditOutlineIntentHandler.swift */; };
-		51408FF82AEF43BF006AEE75 /* VinUtility in Frameworks */ = {isa = PBXBuildFile; productRef = 51408FF72AEF43BF006AEE75 /* VinUtility */; };
 		51408FFC2AEF44DC006AEE75 /* VinOutlineKit in Frameworks */ = {isa = PBXBuildFile; productRef = 51408FFB2AEF44DC006AEE75 /* VinOutlineKit */; };
 		5142C295260AC78C0094571F /* OutlineFontConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142C294260AC78C0094571F /* OutlineFontConfig.swift */; };
 		5142C297260AC78C0094571F /* OutlineFontConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142C294260AC78C0094571F /* OutlineFontConfig.swift */; };
@@ -455,7 +454,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51408FF82AEF43BF006AEE75 /* VinUtility in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -953,7 +951,6 @@
 			);
 			name = AppKitPlugin;
 			packageProductDependencies = (
-				51408FF72AEF43BF006AEE75 /* VinUtility */,
 			);
 			productName = SparklePlugin;
 			productReference = 51E060AF25A4547400194066 /* AppKitPlugin.bundle */;
@@ -1420,10 +1417,6 @@
 		5126E7562AEF484000015491 /* VinOutlineKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = VinOutlineKit;
-		};
-		51408FF72AEF43BF006AEE75 /* VinUtility */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = VinUtility;
 		};
 		51408FFB2AEF44DC006AEE75 /* VinOutlineKit */ = {
 			isa = XCSwiftPackageProductDependency;

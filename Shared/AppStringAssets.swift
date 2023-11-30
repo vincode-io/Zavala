@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import VinUtility
 
 struct AppStringAssets {
 	
@@ -257,6 +256,14 @@ struct AppStringAssets {
 	
 	static func noteLevelLabel(level: Int) -> String {
 		String(localized: "Note Level \(level)", comment: "Font Label: The font for the given Note Level")
+	}
+	
+}
+
+private extension String {
+	
+	init(localized: String, comment: String? = nil) {
+		self = localized
 	}
 	
 }
