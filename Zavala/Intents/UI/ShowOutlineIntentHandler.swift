@@ -7,7 +7,7 @@
 
 import UIKit
 import Intents
-import Templeton
+import VinOutlineKit
 
 public class ShowOutlineIntentHandler: NSObject, ShowOutlineIntentHandling {
 	

@@ -7,7 +7,7 @@
 
 import Foundation
 import MobileCoreServices
-import Templeton
+import VinOutlineKit
 import CoreSpotlight
 
 class DocumentIndexer {

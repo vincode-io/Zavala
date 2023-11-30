@@ -6,7 +6,7 @@
 //
 
 import Intents
-import Templeton
+import VinOutlineKit
 
 public class GetCurrentTagsIntentHandler: NSObject, GetCurrentTagsIntentHandling {
 	

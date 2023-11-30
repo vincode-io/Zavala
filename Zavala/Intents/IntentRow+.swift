@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Templeton
+import VinOutlineKit
 
 extension IntentRow {
 	
@@ -19,7 +19,7 @@ extension IntentRow {
 		topic = topicMarkdown
 		note = row.noteMarkdown(representation: .markdown)
 		
-		complete = NSNumber(booleanLiteral: row.isComplete)
+		complete = NSNumber(booleanLiteral: row.isComplete ?? false)
 		expanded = NSNumber(booleanLiteral: row.isExpanded)
 		level = NSNumber(integerLiteral: row.level)
 	}

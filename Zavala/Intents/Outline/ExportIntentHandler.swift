@@ -6,7 +6,7 @@
 //
 
 import Intents
-import Templeton
+import VinOutlineKit
 import UIKit
 
 class ExportIntentHandler: NSObject, ZavalaIntentHandler, ExportIntentHandling {

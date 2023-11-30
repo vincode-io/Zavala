@@ -6,7 +6,7 @@
 //
 
 import Intents
-import Templeton
+import VinOutlineKit
 
 class RemoveOutlineTagIntentHandler: NSObject, ZavalaIntentHandler, RemoveOutlineTagIntentHandling {
 

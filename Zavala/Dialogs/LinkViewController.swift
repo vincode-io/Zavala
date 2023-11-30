@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Templeton
+import VinOutlineKit
 
 protocol LinkViewControllerDelegate: AnyObject {
 	func createOutline(title: String) -> Outline?
@@ -140,9 +140,9 @@ private extension LinkViewController {
 	func submitAndDismiss() {
 		guard let cursorCoordinates = cursorCoordinates, let range = range else { return }
 		
-		let text = textTextField.text?.trimmingWhitespace ?? ""
-		if let newLink = linkTextField.text, !newLink.trimmingWhitespace.isEmpty {
-			delegate?.updateLink(cursorCoordinates: cursorCoordinates, text: text, link: newLink.trimmingWhitespace, range: range)
+		let text = textTextField.text?.trimmed() ?? ""
+		if let newLink = linkTextField.text?.trimmed() {
+			delegate?.updateLink(cursorCoordinates: cursorCoordinates, text: text, link: newLink, range: range)
 		} else {
 			delegate?.updateLink(cursorCoordinates: cursorCoordinates, text: text, link: nil, range: range)
 		}

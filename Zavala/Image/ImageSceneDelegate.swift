@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Templeton
+import VinOutlineKit
 
 class ImageSceneDelegate: UIResponder, UIWindowSceneDelegate {
 

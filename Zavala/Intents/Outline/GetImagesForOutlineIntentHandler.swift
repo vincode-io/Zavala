@@ -6,7 +6,7 @@
 //
 
 import Intents
-import Templeton
+import VinOutlineKit
 
 class GetImagesForOutlineIntentHandler: NSObject, ZavalaIntentHandler, GetImagesForOutlineIntentHandling {
 
@@ -32,7 +32,7 @@ class GetImagesForOutlineIntentHandler: NSObject, ZavalaIntentHandler, GetImages
 		let allImages = imageGroups.flatMap({ $0 })
 		
 		for image in allImages {
-			let file = INFile(data: image.data, filename: "\(image.id.imageUUID).png", typeIdentifier: "public.png")
+			let file = INFile(data: image.data!, filename: "\(image.id.imageUUID).png", typeIdentifier: "public.png")
 			files.append(file)
 		}
 		

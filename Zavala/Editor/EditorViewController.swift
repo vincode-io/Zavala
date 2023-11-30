@@ -8,8 +8,8 @@
 import UIKit
 import MobileCoreServices
 import PhotosUI
-import RSCore
-import Templeton
+import VinOutlineKit
+import VinUtility
 
 extension Selector {
 	static let insertImage = #selector(EditorViewController.insertImage)
@@ -380,7 +380,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var transitionContentOffset: CGPoint?
 	
 	private var isOutlineNewFlag = false
-	private var updateTitleWorkItem: DispatchWorkItem?
+	private var updateTitleDebouncer = Debouncer(duration: 1)
 	private var keyboardWorkItem: DispatchWorkItem?
 
 	private var currentKeyboardHeight: CGFloat = 0
@@ -1318,7 +1318,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 					configuration.leadingSwipeActionsConfigurationProvider = { [weak self] indexPath in
 						guard let self = self, let row = self.outline?.shadowTable?[indexPath.row] else { return nil }
 						
-						if row.isComplete {
+						if row.isComplete ?? false {
 							let actionHandler: UIContextualAction.Handler = { action, view, completion in
 								self.uncompleteRows([row])
 								completion(true)
@@ -1551,11 +1551,9 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	}
 	
 	func editorTitleDidUpdate(title: String) {
-		updateTitleWorkItem?.cancel()
-		updateTitleWorkItem = DispatchWorkItem { [weak self] in
+		updateTitleDebouncer.debounce { [weak self] in
 			self?.outline?.update(title: title)
 		}
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: updateTitleWorkItem!)
 	}
 	
 	func editorTitleMoveToTagInput() {
@@ -1728,7 +1726,7 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 		result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] (object, error) in
 			guard let self else { return }
 			
-			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = RSImage.scaleImage(data, maxPixelSize: 1800) {
+			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = UIImage.scaleImage(data, maxPixelSize: 1800) {
 				let scaledImage = UIImage(cgImage: cgImage)
 				
 				DispatchQueue.main.async {
@@ -2850,7 +2848,7 @@ private extension EditorViewController {
 				var rowGroups = [RowGroup]()
 				let textRows = text.split(separator: "\n").map { String($0) }
 				for textRow in textRows {
-					let row = Row(outline: outline, topicMarkdown: textRow.trimmingWhitespace)
+					let row = Row(outline: outline, topicMarkdown: textRow.trimmed())
 					row.detectData()
 					rowGroups.append(RowGroup(row))
 				}

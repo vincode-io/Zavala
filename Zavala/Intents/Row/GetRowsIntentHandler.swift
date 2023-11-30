@@ -6,7 +6,7 @@
 //
 
 import Intents
-import Templeton
+import VinOutlineKit
 
 class GetRowsIntentHandler: NSObject, ZavalaIntentHandler, GetRowsIntentHandling {
 
@@ -105,7 +105,7 @@ class GetRowsVisitor {
 
 		let level = visited.level + 1
 		let depthPassed = startDepth <= level && endDepth >= level
-		let completionPassed = passedCompletion(visited.isComplete)
+		let completionPassed = passedCompletion(visited.isComplete ?? false)
 		let expandedPassed = passedExpanded(visited.isExpanded)
 		
 		if textPassed && depthPassed && completionPassed && expandedPassed {

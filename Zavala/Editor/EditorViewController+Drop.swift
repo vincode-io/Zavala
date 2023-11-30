@@ -7,7 +7,8 @@
 
 import UIKit
 import MobileCoreServices
-import Templeton
+import VinUtility
+import VinOutlineKit
 
 extension EditorViewController: UICollectionViewDropDelegate {
 	
@@ -261,7 +262,7 @@ private extension EditorViewController {
 			var rowGroups = [RowGroup]()
 			let textRows = text.split(separator: "\n").map { String($0) }
 			for textRow in textRows {
-				let row = Row(outline: outline, topicMarkdown: textRow.trimmingWhitespace)
+				let row = Row(outline: outline, topicMarkdown: textRow.trimmed())
 				row.detectData()
 				rowGroups.append(RowGroup(row))
 			}
@@ -277,7 +278,7 @@ private extension EditorViewController {
 		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = destinationIndexPath {
 			let newParent = shadowTable[dropInIndexPath.row]
 			
-			// We only have to set the parent for dropping into.  Otherwise Templeton figures it out on its own.
+			// We only have to set the parent for dropping into.  Otherwise VinOutlineKit figures it out on its own.
 			rowGroups.forEach { rowGroup in
 				rowGroup.row.parent = newParent
 			}

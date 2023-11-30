@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import VinUtility
 
 @objc protocol SearchBarDelegate: NSObjectProtocol {
 	@objc optional func nextWasPressed(_ searchBar: EditorSearchBar)
@@ -24,7 +25,7 @@ import UIKit
 	var background: UIView!
 	
 	weak private var resultsLabel: UILabel!
-	private var searchWorkItem: DispatchWorkItem?
+	private var searchDebouncer = Debouncer(duration: 0.5)
 
 	var resultsCount: Int = 0 {
 		didSet {
@@ -177,12 +178,10 @@ extension EditorSearchBar: UITextFieldDelegate {
 private extension EditorSearchBar {
 	
 	@objc func textDidChange(_ notification: Notification) {
-		searchWorkItem?.cancel()
-		searchWorkItem = DispatchWorkItem { [weak self] in
+		searchDebouncer.debounce { [weak self] in
 			guard let self else { return }
 			self.delegate?.searchBar?(self, textDidChange: self.searchField.text ?? "")
 		}
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: searchWorkItem!)
 		
 		if searchField.text?.isEmpty ?? true {
 			searchField.rightViewMode = .never

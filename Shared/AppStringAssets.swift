@@ -259,3 +259,11 @@ struct AppStringAssets {
 	}
 	
 }
+
+private extension String {
+	
+	init(localized: String, comment: String? = nil) {
+		self = localized
+	}
+	
+}

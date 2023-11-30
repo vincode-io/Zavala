@@ -6,12 +6,14 @@
 //
 
 import Foundation
+import OSLog
 import CoreSpotlight
-import Templeton
-import RSCore
+import VinOutlineKit
 
-class IndexRequestHandler: CSIndexExtensionRequestHandler, Logging {
+class IndexRequestHandler: CSIndexExtensionRequestHandler {
 	
+	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Zavala")
+
     override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexAllSearchableItemsWithAcknowledgementHandler acknowledgementHandler: @escaping () -> Void) {
 		DispatchQueue.main.async {
 			self.logger.info("IndexRequestHandler starting...")

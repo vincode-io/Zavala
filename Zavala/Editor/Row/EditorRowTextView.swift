@@ -6,8 +6,8 @@
 //
 
 import UIKit
-import Templeton
-import RSCore
+import VinOutlineKit
+import VinUtility
 
 extension Selector {
 	static let editLink = #selector(EditorRowTextView.editLink(_:))
@@ -90,7 +90,7 @@ class EditorRowTextView: UITextView {
 		return cleanText
 	}
 	
-    var autosaveWorkItem: DispatchWorkItem?
+	var autoSaveDebouncer = Debouncer(duration: 5.0)
     var textViewHeight: CGFloat?
     var isSavingTextUnnecessary = false
 
@@ -202,8 +202,7 @@ class EditorRowTextView: UITextView {
             textWasChanged()
         }
         
-        autosaveWorkItem?.cancel()
-        autosaveWorkItem = nil
+        autoSaveDebouncer.cancel()
         isTextChanged = false
 	}
 
@@ -482,11 +481,9 @@ extension EditorRowTextView {
         
         makeCursorVisibleIfNecessary()
         
-        autosaveWorkItem?.cancel()
-        autosaveWorkItem = DispatchWorkItem { [weak self] in
-            self?.saveText()
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: autosaveWorkItem!)
+		autoSaveDebouncer.debounce { [weak self] in
+			self?.saveText()
+		}
     }
 
 }

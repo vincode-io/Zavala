@@ -6,7 +6,7 @@
 //
 
 import AppKit
-import os.log
+import OSLog
 
 @objc class AppKitWrapper: NSResponder, AppKitPlugin {
 	

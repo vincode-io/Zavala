@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Templeton
+import VinOutlineKit
 
 protocol EditorRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
@@ -204,7 +204,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 		text = ""
 
 		baseAttributes = [NSAttributedString.Key : Any]()
-		if row.isComplete || row.isAncestorComplete {
+		if row.isComplete ?? false || row.isAnyParentComplete {
 			baseAttributes[.foregroundColor] = UIColor.tertiaryLabel
 			accessibilityLabel = AppStringAssets.completeAccessibilityLabel
 		} else {
@@ -212,7 +212,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 			accessibilityLabel = nil
 		}
 		
-		if row.isComplete {
+		if row.isComplete ?? false {
 			baseAttributes[.strikethroughStyle] = 1
 			baseAttributes[.strikethroughColor] = UIColor.tertiaryLabel
 		} else {

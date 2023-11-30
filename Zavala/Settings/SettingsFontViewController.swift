@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import RSCore
+import VinUtility
 
 class SettingsFontViewController: UICollectionViewController {
 	

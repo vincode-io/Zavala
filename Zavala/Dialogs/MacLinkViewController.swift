@@ -6,8 +6,7 @@
 //
 
 import UIKit
-import RSCore
-import Templeton
+import VinOutlineKit
 
 class MacLinkViewController: UIViewController {
 
@@ -138,9 +137,9 @@ private extension MacLinkViewController {
 		
 		guard let cursorCoordinates = cursorCoordinates, let range = range else { return }
 		
-		let text = textTextField.text?.trimmingWhitespace ?? ""
-		if let newLink = linkTextField.text, !newLink.trimmingWhitespace.isEmpty {
-			delegate?.updateLink(cursorCoordinates: cursorCoordinates, text: text, link: newLink.trimmingWhitespace, range: range)
+		let text = textTextField.text?.trimmed() ?? ""
+		if let newLink = linkTextField.text?.trimmed() {
+			delegate?.updateLink(cursorCoordinates: cursorCoordinates, text: text, link: newLink, range: range)
 		} else {
 			delegate?.updateLink(cursorCoordinates: cursorCoordinates, text: text, link: nil, range: range)
 		}

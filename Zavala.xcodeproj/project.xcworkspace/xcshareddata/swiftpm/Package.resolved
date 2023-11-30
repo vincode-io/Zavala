@@ -11,21 +11,12 @@
         }
       },
       {
-        "package": "RSCore",
-        "repositoryURL": "https://github.com/Ranchero-Software/RSCore.git",
-        "state": {
-          "branch": null,
-          "revision": "fd64fb77de2c4b6a87a971d353e7eea75100f694",
-          "version": null
-        }
-      },
-      {
         "package": "swift-collections",
         "repositoryURL": "https://github.com/apple/swift-collections.git",
         "state": {
           "branch": null,
-          "revision": "a902f1823a7ff3c9ab2fba0f992396b948eda307",
-          "version": "1.0.5"
+          "revision": "48254824bb4248676bf7ce56014ff57b142b77eb",
+          "version": "1.0.2"
         }
       },
       {

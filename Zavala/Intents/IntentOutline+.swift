@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Templeton
+import VinOutlineKit
 
 extension IntentOutline {
 	

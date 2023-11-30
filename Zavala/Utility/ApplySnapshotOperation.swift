@@ -6,8 +6,7 @@
 //
 
 import UIKit
-import Templeton
-import RSCore
+import VinOutlineKit
 
 class ApplySnapshotOperation<S: Hashable, I: Hashable>: BaseMainThreadOperation {
 	

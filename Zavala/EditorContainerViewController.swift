@@ -7,7 +7,7 @@
 
 import UIKit
 import CoreSpotlight
-import Templeton
+import VinOutlineKit
 import SafariServices
 
 class EditorContainerViewController: UIViewController, MainCoordinator {

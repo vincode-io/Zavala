@@ -6,8 +6,8 @@
 //
 
 import UIKit
-import RSCore
-import Templeton
+import VinOutlineKit
+import VinUtility
 
 protocol MacOpenQuicklyCollectionsDelegate: AnyObject {
 	func documentContainerSelectionsDidChange(_: MacOpenQuicklyCollectionsViewController, documentContainers: [DocumentContainer])

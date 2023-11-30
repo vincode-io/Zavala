@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Templeton
+import VinOutlineKit
 
 protocol OpenQuicklyViewControllerDelegate: AnyObject {
 	func quicklyOpenDocument(documentID: EntityID)
