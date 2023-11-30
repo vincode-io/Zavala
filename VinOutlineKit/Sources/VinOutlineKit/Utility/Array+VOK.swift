@@ -22,7 +22,7 @@ public extension Array where Element == Row {
 	func sortedByReverseDisplayOrder() -> Array {
 		return sorted(by: {
 			if $0.shadowTableIndex == nil && $1.shadowTableIndex == nil {
-				return false
+				return true
 			} else {
 				return $0.shadowTableIndex ?? -1 > $1.shadowTableIndex ?? -1
 			}
