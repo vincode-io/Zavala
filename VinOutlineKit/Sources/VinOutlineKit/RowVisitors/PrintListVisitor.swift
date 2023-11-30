@@ -16,13 +16,13 @@ class PrintListVisitor {
 		if let topic = visited.topic {
 			print.append(NSAttributedString(string: "\n"))
 			var attrs = [NSAttributedString.Key : Any]()
-			if visited.isComplete || visited.isAnyParentComplete {
+			if visited.isComplete ?? false || visited.isAnyParentComplete {
 				attrs[.foregroundColor] = UIColor.darkGray
 			} else {
 				attrs[.foregroundColor] = UIColor.black
 			}
 			
-			if visited.isComplete {
+			if visited.isComplete ?? false {
 				attrs[.strikethroughStyle] = 1
 				attrs[.strikethroughColor] = UIColor.darkGray
 			} else {

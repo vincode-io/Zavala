@@ -22,7 +22,7 @@ class OPMLVisitor {
 			opml.append(" _note=\"\(escapedNote)\"")
 		}
 
-		if visited.isComplete {
+		if visited.isComplete ?? false {
 			opml.append(" _status=\"checked\"")
 		}
 		

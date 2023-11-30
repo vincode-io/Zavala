@@ -1318,7 +1318,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 					configuration.leadingSwipeActionsConfigurationProvider = { [weak self] indexPath in
 						guard let self = self, let row = self.outline?.shadowTable?[indexPath.row] else { return nil }
 						
-						if row.isComplete {
+						if row.isComplete ?? false {
 							let actionHandler: UIContextualAction.Handler = { action, view, completion in
 								self.uncompleteRows([row])
 								completion(true)

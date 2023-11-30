@@ -22,7 +22,7 @@ class SearchResultVisitor {
 	}
 	
 	func visitor(_ visited: Row) {
-		guard !(isCompletedFilterOn && visited.isComplete), let searchRegEx = searchRegEx else {
+		guard !(isCompletedFilterOn && visited.isComplete ?? false), let searchRegEx = searchRegEx else {
 			return
 		}
 		

@@ -22,7 +22,7 @@ public class Image: Identifiable, Codable, Equatable {
 
 	var ancestorIsInNotes: Bool?
 	var serverIsInNotes: Bool?
-	public var isInNotes: Bool {
+	public var isInNotes: Bool? {
 		willSet {
 			if isCloudKit && ancestorIsInNotes == nil {
 				ancestorIsInNotes = isInNotes
@@ -32,7 +32,7 @@ public class Image: Identifiable, Codable, Equatable {
 
 	var ancestorOffset: Int?
 	var serverOffset: Int?
-	public var offset: Int {
+	public var offset: Int? {
 		willSet {
 			if isCloudKit && ancestorOffset == nil {
 				ancestorOffset = offset
@@ -42,7 +42,7 @@ public class Image: Identifiable, Codable, Equatable {
 
 	var ancestorData: Data?
 	var serverData: Data?
-	public var data: Data {
+	public var data: Data? {
 		willSet {
 			if isCloudKit && ancestorData == nil {
 				ancestorData = data
@@ -67,7 +67,7 @@ public class Image: Identifiable, Codable, Equatable {
 		case data
 	}
 	
-	public init(outline: Outline, id: EntityID, isInNotes: Bool, offset: Int, data: Data) {
+	public init(outline: Outline, id: EntityID, isInNotes: Bool?, offset: Int?, data: Data?) {
         self.outline = outline
 		self.id = id
 		self.isInNotes = isInNotes
@@ -76,7 +76,7 @@ public class Image: Identifiable, Codable, Equatable {
 	}
 	
 	public convenience init(outline: Outline, id: EntityID) {
-		self.init(outline: outline, id: id, isInNotes: false, offset: 0, data: Data())
+		self.init(outline: outline, id: id, isInNotes: nil, offset: nil, data: nil)
 	}
 
 	public static func == (lhs: Image, rhs: Image) -> Bool {

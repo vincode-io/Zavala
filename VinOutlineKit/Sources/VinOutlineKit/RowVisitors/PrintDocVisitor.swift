@@ -64,13 +64,13 @@ private extension PrintDocVisitor {
 	func printTopic(_ topic: NSAttributedString, row: Row) {
 		print.append(NSAttributedString(string: "\n\n"))
 		var attrs = [NSAttributedString.Key : Any]()
-		if row.isComplete || row.isAnyParentComplete {
+		if row.isComplete ?? false || row.isAnyParentComplete {
 			attrs[.foregroundColor] = UIColor.darkGray
 		} else {
 			attrs[.foregroundColor] = UIColor.black
 		}
 		
-		if row.isComplete {
+		if row.isComplete ?? false {
 			attrs[.strikethroughStyle] = 1
 			attrs[.strikethroughColor] = UIColor.darkGray
 		} else {

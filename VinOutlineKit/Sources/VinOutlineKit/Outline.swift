@@ -358,7 +358,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		if let keyedRows {
 			for row in keyedRows.values {
-				if row.isComplete {
+				if row.isComplete ?? false {
 					anyCompleted = true
 					break
 				}
@@ -373,7 +373,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		if let keyedRows {
 			for row in keyedRows.values {
-				if row.isComplete {
+				if row.isComplete ?? false {
 					completedRows.append(row)
 				}
 			}
@@ -2560,7 +2560,7 @@ private extension Outline {
 		var shadowTableInserts = [Row]()
 
 		func visitor(_ visited: Row) {
-			let shouldFilter = isCompletedFilterOn && visited.isComplete
+			let shouldFilter = isCompletedFilterOn && visited.isComplete ?? false
 			
 			if !shouldFilter {
 				shadowTableInserts.append(visited)

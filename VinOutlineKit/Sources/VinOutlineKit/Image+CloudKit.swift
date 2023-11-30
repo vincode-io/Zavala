@@ -31,7 +31,7 @@ extension Image: VCKModel {
 		cloudKitMetaData = record.metadata
 		syncID = record[Image.CloudKitRecord.Fields.syncID] as? String
 
-		let serverIsInNotes = record[Image.CloudKitRecord.Fields.isInNotes] as? String == "1" ? true : false
+		let serverIsInNotes = record[Image.CloudKitRecord.Fields.isInNotes] as? Bool
 		isInNotes = merge(client: isInNotes, ancestor: ancestorIsInNotes, server: serverIsInNotes)!
 
 		let serverOffset = record[Image.CloudKitRecord.Fields.offset] as? Int
@@ -53,7 +53,7 @@ extension Image: VCKModel {
 		cloudKitMetaData = record.metadata
 		mergeSyncID = UUID().uuidString
 		
-		serverIsInNotes = record[Image.CloudKitRecord.Fields.isInNotes] as? String == "1" ? true : false
+		serverIsInNotes = record[Image.CloudKitRecord.Fields.isInNotes] as? Bool
 		serverOffset = record[Image.CloudKitRecord.Fields.offset] as? Int
 		
 		if let ckAsset = record[Image.CloudKitRecord.Fields.asset] as? CKAsset,

@@ -89,7 +89,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 
 	public var isAnyParentComplete: Bool {
 		if let parentRow = parent as? Row {
-			return parentRow.isComplete || parentRow.isAnyParentComplete
+			return parentRow.isComplete ?? false || parentRow.isAnyParentComplete
 		}
 		return false
 	}
@@ -148,16 +148,16 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 	
 	public var isCompletable: Bool {
-		return !isComplete
+		return !isUncompletable
 	}
 	
 	public var isUncompletable: Bool {
-		return isComplete
+		return isComplete ?? false
 	}
 	
 	var ancestorIsComplete: Bool?
 	var serverIsComplete: Bool?
-	public internal(set) var isComplete: Bool {
+	public internal(set) var isComplete: Bool? {
 		willSet {
 			if isCloudKit && ancestorIsComplete == nil {
 				ancestorIsComplete = isComplete
@@ -187,18 +187,18 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 				
 				topicData = try? cleanAttrText.data(from: .init(location: 0, length: cleanAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 				
-				var notesImages = images?.filter { $0.isInNotes } ?? [Image]()
+				var notesImages = images?.filter { $0.isInNotes ?? false } ?? [Image]()
 				notesImages.append(contentsOf: newImages)
 
 				if let images {
-					outline?.requestCloudKitUpdates(for: images.filter({ !$0.isInNotes }).map({ $0.id }))
+					outline?.requestCloudKitUpdates(for: images.filter({ !($0.isInNotes ?? false) }).map({ $0.id }))
 				}
 				outline?.requestCloudKitUpdates(for: newImages.map({ $0.id }))
 
 				images = notesImages
 			} else {
 				topicData = nil
-				images = images?.filter { $0.isInNotes }
+				images = images?.filter { $0.isInNotes ?? false }
 			}
 			outline?.requestCloudKitUpdate(for: entityID)
 		}
@@ -222,18 +222,18 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 
 				noteData = try? cleanAttrText.data(from: .init(location: 0, length: cleanAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 
-				var topicImages = images?.filter { !$0.isInNotes } ?? [Image]()
+				var topicImages = images?.filter { !($0.isInNotes ?? false) } ?? [Image]()
 				topicImages.append(contentsOf: newImages)
 
 				if let images {
-					outline?.requestCloudKitUpdates(for: images.filter({ $0.isInNotes }).map({ $0.id }))
+					outline?.requestCloudKitUpdates(for: images.filter({ $0.isInNotes ?? false }).map({ $0.id }))
 				}
 				outline?.requestCloudKitUpdates(for: newImages.map({ $0.id }))
 
 				images = topicImages
 			} else {
 				noteData = nil
-				images = images?.filter { !$0.isInNotes }
+				images = images?.filter { !($0.isInNotes ?? false) }
 			}
 			outline?.requestCloudKitUpdate(for: entityID)
 		}
@@ -330,7 +330,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 
 	init(outline: Outline, id: String) {
 		self.outline = outline
-		self.isComplete = false
 		self.id = id
 		self.isExpanded = true
 		self.rowOrder = OrderedSet<String>()
@@ -683,9 +682,9 @@ private extension Row {
 			mutableAttrString.removeAttribute(.attachment, range: range)
 		}
 		
-		for image in images?.sorted(by: { $0.offset < $1.offset }) ?? [Image]() {
+		for image in images?.sorted(by: { $0.offset ?? 0 < $1.offset ?? 0 }) ?? [Image]() {
 			if image.isInNotes == isNotes {
-				insertImageAttachment(attrString: mutableAttrString, image: image, offset: image.offset)
+				insertImageAttachment(attrString: mutableAttrString, image: image, offset: image.offset ?? 0)
 			}
 		}
 		
@@ -733,10 +732,10 @@ private extension Row {
 		}
 
 		if let images = images?.filter({ $0.isInNotes == isInNotes }), !images.isEmpty {
-			let sortedImages = images.sorted(by: { $0.offset > $1.offset })
+			let sortedImages = images.sorted(by: { $0.offset ?? 0 > $1.offset ?? 0 })
 			for image in sortedImages {
 				let markdown = NSAttributedString(string: "![](\(image.id.imageUUID).png)")
-				result.insert(markdown, at: image.offset)
+				result.insert(markdown, at: image.offset ?? 0)
 			}
 		}
 

@@ -15,7 +15,7 @@ class MarkdownListVisitor {
 	func visitor(_ visited: Row) {
 		markdown.append(String(repeating: "\t", count: indentLevel))
 		
-		if visited.isComplete {
+		if visited.isComplete ?? false {
 			markdown.append("* ~~\(visited.topicMarkdown(representation: .markdown) ?? "")~~")
 		} else {
 			markdown.append("* \(visited.topicMarkdown(representation: .markdown) ?? "")")
