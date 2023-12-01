@@ -176,6 +176,22 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return currentTextView == nil
 	}
 	
+	var isUndoUnvailable: Bool {
+		if let currentTextView {
+			return !(currentTextView.undoManager?.canUndo ?? false)
+		} else {
+			return !(undoManager?.canUndo ?? false)
+		}
+	}
+
+	var isRedoUnvailable: Bool {
+		if let currentTextView {
+			return !(currentTextView.undoManager?.canRedo ?? false)
+		} else {
+			return !(undoManager?.canRedo ?? false)
+		}
+	}
+	
 	var isCutUnavailable: Bool {
 		if let currentTextView {
 			return !currentTextView.canPerformAction(.cut, withSender: nil)
@@ -494,6 +510,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineAddedBacklinks(_:)), name: .OutlineAddedBacklinks, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineRemovedBacklinks(_:)), name: .OutlineRemovedBacklinks, object: nil)
 
+		NotificationCenter.default.addObserver(self, selector: #selector(didUndoChange(_:)), name: .NSUndoManagerDidUndoChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(didRedoChange(_:)), name: .NSUndoManagerDidRedoChange, object: nil)
+
 		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(sceneWillDeactivate(_:)),	name: UIScene.willDeactivateNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -504,6 +523,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		moveCursorToTitleOnNew()
+		undoManager?.removeAllActions()
 	}
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -699,6 +719,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		collectionView.deleteSections([Outline.Section.backlinks.rawValue])
 	}
 	
+	@objc func didUndoChange(_ note: Notification) {
+		updateUI()
+	}
+	
+	@objc func didRedoChange(_ note: Notification) {
+		updateUI()
+	}
+	
 	@objc func applicationWillTerminate(_ note: Notification) {
 		updateSpotlightIndex()
 	}
@@ -797,7 +825,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		outline?.endSearching()
 		
 		outline?.unload()
-		clearUndoableCommands()
+		undoManager?.removeAllActions()
 	
 		// Assign the new Outline and load it
 		outline = newOutline
@@ -890,9 +918,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			goBackwardButton.isEnabled = !isGoBackwardUnavailable
 			goForwardButton.isEnabled = !isGoForwardUnavailable
 			
+			undoButton.isEnabled = !isUndoUnvailable
 			cutButton.isEnabled = !isCutUnavailable
 			copyButton.isEnabled = !isCopyUnavailable
 			pasteButton.isEnabled = !isPasteUnavailable
+			redoButton.isEnabled = !isRedoUnvailable
 			
 			moveLeftButton.isEnabled = !isMoveRowsLeftUnavailable
 			moveRightButton.isEnabled = !isMoveRowsRightUnavailable
