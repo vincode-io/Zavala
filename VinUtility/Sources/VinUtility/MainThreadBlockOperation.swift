@@ -1,6 +1,4 @@
 //
-//  MainThreadBlockOperation.swift
-//
 //  Created by Brent Simmons on 1/16/20.
 //  Copyright © 2020 Ranchero Software, LLC. All rights reserved.
 //

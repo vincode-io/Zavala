@@ -1,6 +1,4 @@
 //
-//  Character+RSCore.swift
-//
 //  Created by Maurice Parker on 4/20/20.
 //  Copyright © 2020 Ranchero Software, LLC. All rights reserved.
 //

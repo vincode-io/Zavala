@@ -1,6 +1,4 @@
 //
-//  Array+RSCore.swift
-//
 //  Created by Brent Simmons on 2/17/18.
 //  Copyright © 2018 Ranchero Software, LLC. All rights reserved.
 //

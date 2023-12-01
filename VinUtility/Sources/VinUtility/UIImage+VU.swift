@@ -1,7 +1,4 @@
 //
-//  UIImage+.swift
-//
-//
 //  Created by Maurice Parker on 4/11/19.
 //  Copyright © 2019 Ranchero Software. All rights reserved.
 //

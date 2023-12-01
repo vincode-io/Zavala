@@ -1,6 +1,4 @@
 //
-//  MainThreadOperationQueue.swift
-//
 //  Created by Brent Simmons on 1/10/20.
 //  Copyright © 2020 Ranchero Software, LLC. All rights reserved.
 //

@@ -1,7 +1,4 @@
 //
-//  UIView-Extensions.swift
-//  RSCore
-//
 //  Created by Maurice Parker on 4/20/19.
 //  Copyright © 2019 Ranchero Software, LLC. All rights reserved.
 //

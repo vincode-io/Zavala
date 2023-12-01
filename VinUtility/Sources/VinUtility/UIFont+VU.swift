@@ -1,7 +1,4 @@
 //
-//  UIFont+.swift
-//  Zavala
-//
 //  Created by Maurice Parker on 3/16/21.
 //
 

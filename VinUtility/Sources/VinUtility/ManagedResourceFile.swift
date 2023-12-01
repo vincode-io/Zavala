@@ -1,6 +1,4 @@
 //
-//  ManagedResourceFile.swift
-//
 //  Created by Maurice Parker on 9/13/19.
 //  Copyright © 2020 Ranchero Software, LLC. All rights reserved.
 //

@@ -1,7 +1,4 @@
 //
-//  NSDataDetector+.swift
-//  DataDetectors
-//
 //  Created by Filip Němeček on 31/01/2021.
 //  My experiments making the NSDataDetector more "Swifty" with extensions and strongly typed parameters and results
 //
