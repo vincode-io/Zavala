@@ -26,6 +26,7 @@ final class AppDefaults {
 		static let ownerName = "ownerName"
 		static let ownerEmail = "ownerEmail"
 		static let ownerURL = "ownerURL"
+		static let autoLinkingEnabled = "autoLinking"
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
 		static let lastMainWindowState = "lastMainWindowState"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
@@ -112,6 +113,15 @@ final class AppDefaults {
 		}
 		set {
 			Self.setBool(for: Key.lastMainWindowWasClosed, newValue)
+		}
+	}
+	
+	var autoLinkingEnabled: Bool {
+		get {
+			return Self.bool(for: Key.autoLinkingEnabled)
+		}
+		set {
+			Self.setBool(for: Key.autoLinkingEnabled, newValue)
 		}
 	}
 	

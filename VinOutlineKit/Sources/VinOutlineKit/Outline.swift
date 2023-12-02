@@ -18,6 +18,7 @@ public extension Notification.Name {
 	static let OutlineSearchWillEnd = Notification.Name(rawValue: "OutlineSearchWillEnd")
 	static let OutlineAddedBacklinks = Notification.Name(rawValue: "OutlineAddedBacklinks")
 	static let OutlineRemovedBacklinks = Notification.Name(rawValue: "OutlineRemovedBacklinks")
+	static let OutlineFoundReplacableLinkTitle = Notification.Name(rawValue: "OutlineFoundReplacableLinkTitle")
 }
 
 public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Codable {
@@ -41,7 +42,15 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		case notSearching
 	}
 	
+	public struct ReplacableLinkTitle {
+		public var rowID: String
+		public var isInNotes: Bool
+		public var link: URL
+		public var title: String
+	}
+	
 	public struct UserInfoKeys {
+		public static let replacableLinkTitle = "replacableLinkTitle"
 		public static let searchText = "searchText"
 	}
 	
@@ -93,6 +102,16 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		willSet {
 			if isCloudKit && ancestorDisambiguator == nil {
 				ancestorDisambiguator = disambiguator
+			}
+		}
+	}
+	
+	var ancestorAutoLinkingEnabled: Bool?
+	var serverAutolinkingEnabled: Bool?
+	public internal(set) var autoLinkingEnabled: Bool? {
+		willSet {
+			if isCloudKit && ancestorAutoLinkingEnabled == nil {
+				ancestorAutoLinkingEnabled = autoLinkingEnabled
 			}
 		}
 	}
@@ -414,6 +433,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		case created
 		case ancestorUpdated
 		case updated
+		case ancestorAutoLinkingEnabled
+		case autoLinkingEnabled
 		case ancestorOwnerName
 		case ownerName
 		case ancestorOwnerEmail
@@ -2395,6 +2416,14 @@ private extension Outline {
 		NotificationCenter.default.post(name: .OutlineRemovedBacklinks, object: self, userInfo: nil)
 	}
 	
+	func outlineFoundReplacableLinkTitle(rowID: String, isInNotes: Bool, link: URL, title: String) {
+		let replacableLinkTitle = ReplacableLinkTitle(rowID: rowID, isInNotes: isInNotes, link: link, title: title)
+		
+		var userInfo = [AnyHashable: Any]()
+		userInfo[UserInfoKeys.replacableLinkTitle] = replacableLinkTitle
+		NotificationCenter.default.post(name: .OutlineFoundReplacableLinkTitle, object: self, userInfo: userInfo)
+	}
+	
 	func changeSearchResult(_ changeToResult: Int) {
 		var reloads = Set<Int>()
 		
@@ -2834,7 +2863,7 @@ private extension Outline {
 	}
 	
 	func replaceLinkTitleIfPossible(row: Row, newText: NSAttributedString?, isInNotes: Bool) {
-		guard let newText else { return }
+		guard autoLinkingEnabled ?? false, let newText else { return }
 		
 		let mutableText = NSMutableAttributedString(attributedString: newText)
 		
@@ -2842,30 +2871,10 @@ private extension Outline {
 			guard let url = value as? URL, let self else { return }
 			guard mutableText.attributedSubstring(from: range).string == url.absoluteString else { return }
 			
-			incrementBeingUsedCount()
-			
 			WebPageTitle.find(forURL: url) { [weak self] webPageTitle in
 				guard let webPageTitle, let self else { return }
-				
-				mutableText.removeAttribute(.link, range: range)
-				mutableText.replaceCharacters(in: range, with: webPageTitle)
-				mutableText.addAttribute(.link, value: url, range: NSRange(location: range.location, length: webPageTitle.count))
-				
-				guard let row = self.findRow(id: row.id) else { return }
-				
-				if !isInNotes {
-					row.topic = mutableText
-				} else {
-					row.note = mutableText
-				}
-				
-				self.decrementBeingUsedCount()
-				self.unload()
-
-				guard self.isBeingUsed else { return }
-
-				if let shadowTableIndex = row.shadowTableIndex {
-					self.outlineElementsDidChange(OutlineElementChanges(section: self.adjustedRowsSection, reloads: Set([shadowTableIndex])))
+				DispatchQueue.main.async {
+					self.outlineFoundReplacableLinkTitle(rowID: row.id, isInNotes: isInNotes, link: url, title: webPageTitle)
 				}
 			}
 		}

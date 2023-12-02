@@ -17,6 +17,7 @@ extension Outline: VCKModel {
 		struct Fields {
 			static let syncID = "syncID"
 			static let title = "title"
+			static let autoLinkingEnabled = "autoLinkingEnabled"
 			static let ownerName = "ownerName"
 			static let ownerEmail = "ownerEmail"
 			static let ownerURL = "ownerURL"
@@ -220,7 +221,10 @@ extension Outline: VCKModel {
         let serverUpdated = record[Outline.CloudKitRecord.Fields.updated] as? Date
         updated = merge(client: updated, ancestor: ancestorUpdated, server: serverUpdated)
 
-        let serverOwnerName = record[Outline.CloudKitRecord.Fields.ownerName] as? String
+		let serverAutolinkingEnabled = record[Outline.CloudKitRecord.Fields.autoLinkingEnabled] as? Bool
+		autoLinkingEnabled = merge(client: autoLinkingEnabled, ancestor: ancestorAutoLinkingEnabled, server: serverAutolinkingEnabled)
+
+		let serverOwnerName = record[Outline.CloudKitRecord.Fields.ownerName] as? String
         ownerName = merge(client: ownerName, ancestor: ancestorOwnerName, server: serverOwnerName)
 
         let serverOwnerEmail = record[Outline.CloudKitRecord.Fields.ownerEmail] as? String
@@ -251,6 +255,7 @@ extension Outline: VCKModel {
         serverDisambiguator = record[Outline.CloudKitRecord.Fields.disambiguator] as? Int
         serverCreated = record[Outline.CloudKitRecord.Fields.created] as? Date
         serverUpdated = record[Outline.CloudKitRecord.Fields.updated] as? Date
+		serverAutolinkingEnabled = record[Outline.CloudKitRecord.Fields.autoLinkingEnabled] as? Bool
         serverOwnerName = record[Outline.CloudKitRecord.Fields.ownerName] as? String
         serverOwnerEmail = record[Outline.CloudKitRecord.Fields.ownerEmail] as? String
         serverOwnerURL = record[Outline.CloudKitRecord.Fields.ownerURL] as? String
@@ -295,6 +300,9 @@ extension Outline: VCKModel {
 
         let recordUpdated = merge(client: updated, ancestor: ancestorUpdated, server: serverUpdated)
         record[Outline.CloudKitRecord.Fields.updated] = recordUpdated
+
+		let recordAutoLinkingEnabled = merge(client: autoLinkingEnabled, ancestor: ancestorAutoLinkingEnabled, server: serverAutolinkingEnabled)
+		record[Outline.CloudKitRecord.Fields.autoLinkingEnabled] = recordAutoLinkingEnabled
 
         let recordOwnerName = merge(client: ownerName, ancestor: ancestorOwnerName, server: serverOwnerName)
         record[Outline.CloudKitRecord.Fields.ownerName] = recordOwnerName

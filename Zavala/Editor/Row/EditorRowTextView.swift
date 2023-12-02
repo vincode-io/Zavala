@@ -218,7 +218,7 @@ class EditorRowTextView: UITextView {
 		fatalError("scrollEditorToVisible has not been implemented")
 	}
 	
-	func updateLinkForCurrentSelection(text: String, link: String?, range: NSRange) {
+	func updateLink(text: String, link: String?, range: NSRange) {
         var attrs = typingAttributes
         attrs.removeValue(forKey: .link)
         let attrText = NSMutableAttributedString(string: text, attributes: attrs)
