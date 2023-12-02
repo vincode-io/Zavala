@@ -2839,17 +2839,17 @@ private extension Outline {
 		let mutableText = NSMutableAttributedString(attributedString: newText)
 		
 		mutableText.enumerateAttribute(.link, in: NSRange(location: 0, length: mutableText.length)) { [weak self] (value, range, match) in
-			guard let url = value as? URL, let self = self else { return }
+			guard let url = value as? URL, let self else { return }
 			guard mutableText.attributedSubstring(from: range).string == url.absoluteString else { return }
 			
 			incrementBeingUsedCount()
 			
-			WebPageTitle.find(forURL: url) { [weak self] pageTitle in
-				guard let pageTitle = pageTitle, let self = self else { return }
+			WebPageTitle.find(forURL: url) { [weak self] webPageTitle in
+				guard let webPageTitle, let self else { return }
 				
 				mutableText.removeAttribute(.link, range: range)
-				mutableText.replaceCharacters(in: range, with: pageTitle)
-				mutableText.addAttribute(.link, value: url, range: NSRange(location: range.location, length: pageTitle.count))
+				mutableText.replaceCharacters(in: range, with: webPageTitle)
+				mutableText.addAttribute(.link, value: url, range: NSRange(location: range.location, length: webPageTitle.count))
 				
 				guard let row = self.findRow(id: row.id) else { return }
 				
