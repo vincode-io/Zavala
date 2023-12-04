@@ -12,7 +12,7 @@ import OrderedCollections
 enum VCKMergeScenario {
 	case clientWins
 	case serverWins
-	case merge
+	case threeWayMerge
 	
 	static func evaluate<T>(client: T?, ancestor: T?, server: T?) -> Self where T:Equatable {
 		if let ancestor {
@@ -23,7 +23,7 @@ enum VCKMergeScenario {
 			guard client != nil else { return .serverWins }
 			
 			// We have all 3 values and need to do a 3 way merge
-			return .merge
+			return .threeWayMerge
 		} else {
 			if server == nil {
 				return .clientWins
@@ -54,10 +54,45 @@ public extension VCKModel {
 			return client
 		case .serverWins:
 			return server
-		case .merge:
-			#warning("This should be changed to be smart enough to merge Strings and AttributedStrings")
-			// It should be possible to merge using the raw strings and iterating over the diffs to select the attributes
-			// to create a merged NSAttributedString
+		case .threeWayMerge:
+			return client
+		}
+	}
+	
+	func merge(client: Data?, ancestor: Data?, server: Data?) -> Data? {
+		switch VCKMergeScenario.evaluate(client: client, ancestor: ancestor, server: server) {
+		case .clientWins:
+			return client
+		case .serverWins:
+			return server
+		case .threeWayMerge:
+			guard let clientAttrString = client?.toAttributedString(),
+				  let serverAttrString = server?.toAttributedString(),
+				  let ancestorAttrString = ancestor?.toAttributedString() else {
+				fatalError("We should always have all 3 values for a 3 way merge.")
+			}
+			
+			let diff = serverAttrString.string.difference(from: ancestorAttrString.string).inferringMoves()
+			if !diff.isEmpty {
+				let merged = NSMutableAttributedString(attributedString: clientAttrString)
+				
+				for change in diff {
+					switch change {
+					case .insert(let offset, _, let associated):
+						guard offset < clientAttrString.length else { continue }
+						let serverAttrString = serverAttrString.attributedSubstring(from: NSRange(location: associated ?? offset, length: 1))
+						merged.insert(serverAttrString, at: offset)
+					case .remove(let offset, _, _):
+						guard offset < clientAttrString.length else { continue }
+						merged.deleteCharacters(in: NSRange(location: offset, length: 1))
+					}
+				}
+				
+				return merged.toData()
+			} else {
+				// TODO: Merge attributes only...
+			}
+			
 			return client
 		}
 	}
@@ -78,9 +113,9 @@ public extension VCKModel {
 			return client
 		case .serverWins:
 			return server
-		case .merge:
-			guard let client, let server else { fatalError("We should always have both a server or client if we are merging") }
-			let diff = server.difference(from: ancestor ?? [])
+		case .threeWayMerge:
+			guard let client, let server, let ancestor else { fatalError("We should always have all 3 values for a 3 way merge.") }
+			let diff = server.difference(from: ancestor)
 			guard let merged = client.applying(diff) else {
 				return client
 			}

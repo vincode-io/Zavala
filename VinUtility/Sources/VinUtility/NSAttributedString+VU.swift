@@ -4,10 +4,10 @@
 
 import Foundation
 
-extension NSAttributedString {
+public extension NSAttributedString {
 
     #if canImport(UIKit)
-	public convenience init(linkText: String, linkURL: URL) {
+	convenience init(linkText: String, linkURL: URL) {
 		let attrString = NSMutableAttributedString(string: linkText)
 		let range = NSRange(location: 0, length: attrString.length)
 		attrString.addAttribute(.link, value: linkURL, range: range)
@@ -15,7 +15,7 @@ extension NSAttributedString {
 	}
     #endif
 
-	public static func isOptionalStringsEqual(lhs: NSAttributedString?, rhs: NSAttributedString?) -> Bool {
+	static func isOptionalStringsEqual(lhs: NSAttributedString?, rhs: NSAttributedString?) -> Bool {
 		if lhs == nil && rhs == nil {
 			return true
 		}
@@ -28,10 +28,13 @@ extension NSAttributedString {
         return lhs!.isEqual(to: rhs!)
 	}
 	
-	public func trimmingCharacters(in charSet: CharacterSet) -> NSAttributedString {
+	func trimmingCharacters(in charSet: CharacterSet) -> NSAttributedString {
 		let modifiedString = NSMutableAttributedString(attributedString: self)
 	   modifiedString.trimCharacters(in: charSet)
 		return NSAttributedString(attributedString: modifiedString)
 	}
-	
+
+	func toData() -> Data? {
+		return try? self.data(from: .init(location: 0, length: self.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+	}
 }

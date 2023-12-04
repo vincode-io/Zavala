@@ -173,9 +173,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		get {
 			guard let topic = topicData else { return nil }
 			if topicCache == nil {
-				topicCache = try? NSAttributedString(data: topic,
-													 options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
-													 documentAttributes: nil)
+				topicCache = topic.toAttributedString()
 				topicCache = replaceImages(attrString: topicCache, isNotes: false)
 			}
 			return topicCache
@@ -184,8 +182,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 			if let attrText = newValue {
 				let (cleanAttrText, newImages) = splitOffImages(attrString: attrText, isNotes: false)
 				cleanAttrText.trimCharacters(in: .whitespaces)
-				
-				topicData = try? cleanAttrText.data(from: .init(location: 0, length: cleanAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+				topicData = cleanAttrText.toData()
 				
 				var notesImages = images?.filter { $0.isInNotes ?? false } ?? [Image]()
 				notesImages.append(contentsOf: newImages)
@@ -208,9 +205,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		get {
 			guard let note = noteData else { return nil }
 			if noteCache == nil {
-				noteCache = try? NSAttributedString(data: note,
-													options: [.documentType: NSAttributedString.DocumentType.rtf, .characterEncoding: String.Encoding.utf8.rawValue],
-													documentAttributes: nil)
+				noteCache = note.toAttributedString()
 				noteCache = replaceImages(attrString: noteCache, isNotes: true)
 			}
 			return noteCache
@@ -219,8 +214,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 			if let attrText = newValue {
 				let (cleanAttrText, newImages) = splitOffImages(attrString: attrText, isNotes: true)
 				cleanAttrText.trimCharacters(in: .whitespaces)
-
-				noteData = try? cleanAttrText.data(from: .init(location: 0, length: cleanAttrText.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
+				noteData = cleanAttrText.toData()
 
 				var topicImages = images?.filter { !($0.isInNotes ?? false) } ?? [Image]()
 				topicImages.append(contentsOf: newImages)
