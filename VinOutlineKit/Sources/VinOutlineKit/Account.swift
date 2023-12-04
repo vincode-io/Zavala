@@ -134,6 +134,7 @@ public final class Account: NSObject, Identifiable, Codable {
 	public func deactivate() {
 		guard isActive == true else { return }
 		isActive = false
+		accountMetadataDidChange()
 	}
 	
 	func store(changeToken: Data?, key: VCKChangeTokenKey) {
