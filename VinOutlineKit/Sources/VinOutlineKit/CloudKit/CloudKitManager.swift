@@ -302,9 +302,11 @@ private extension CloudKitManager {
 			
 			for zoneID in zoneIDs {
 				group.enter()
-				self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID) {
-					group.leave()
-				}
+                DispatchQueue.main.async {
+                    self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID) {
+                        group.leave()
+                    }
+                }
 			}
 				
 			group.notify(queue: DispatchQueue.main) {
@@ -318,19 +320,18 @@ private extension CloudKitManager {
 	}
 	
 	func fetchChanges(userInitiated: Bool, zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
-		let zone = self.findZone(zoneID: zoneID)
-		zone.fetchChangesInZone(incremental: false) { [weak self] result in
-			if case .failure(let error) = result {
-				if let ckError = error as? CKError, ckError.code == .zoneNotFound {
-					AccountManager.shared.cloudKitAccount?.deleteAllDocuments(with: zoneID)
-				} else {
-					if userInitiated {
-						self?.presentError(error)
-					}
-				}
-			}
-			completion?()
-		}
+        let operation = CloudKitFetchChangesOperation(zoneID: zoneID)
+        
+        operation.completionBlock = { [weak self] op in
+            if let error = (op as? CloudKitModifyOperation)?.error {
+                if userInitiated {
+                    self?.presentError(error)
+                }
+            }
+            completion?()
+        }
+        
+        self.queue.add(operation)
 	}
 	
 	func subscribeToSharedDatabaseChanges() {

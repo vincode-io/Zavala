@@ -79,11 +79,9 @@ public extension VCKModel {
 				for change in diff {
 					switch change {
 					case .insert(let offset, _, let associated):
-						guard offset < clientAttrString.length else { continue }
 						let serverAttrString = serverAttrString.attributedSubstring(from: NSRange(location: associated ?? offset, length: 1))
 						merged.insert(serverAttrString, at: offset)
 					case .remove(let offset, _, _):
-						guard offset < clientAttrString.length else { continue }
 						merged.deleteCharacters(in: NSRange(location: offset, length: 1))
 					}
 				}
