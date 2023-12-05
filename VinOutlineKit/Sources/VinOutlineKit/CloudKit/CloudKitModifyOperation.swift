@@ -9,6 +9,7 @@ import Foundation
 import CloudKit
 import OSLog
 import VinCloudKit
+import VinUtility
 
 class CloudKitModifyOperation: BaseMainThreadOperation {
 	

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import VinOutlineKit
+import VinUtility
 
 class UpdateSelectionOperation<S: Hashable, I: Hashable>: BaseMainThreadOperation {
 	

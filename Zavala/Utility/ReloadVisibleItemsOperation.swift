@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import VinOutlineKit
+import VinUtility
 
 class ReloadVisibleItemsOperation<S: Hashable, I: Hashable>: BaseMainThreadOperation {
 	

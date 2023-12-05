@@ -7,6 +7,7 @@
 
 import UIKit
 import VinOutlineKit
+import VinUtility
 
 class ReloadItemsOperation<S: Hashable, I: Hashable>: BaseMainThreadOperation {
 	

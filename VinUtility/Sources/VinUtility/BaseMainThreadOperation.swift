@@ -1,12 +1,8 @@
 //
-//  BaseMainThreadOperation.swift
-//  Zavala
-//
 //  Created by Maurice Parker on 11/17/20.
 //
 
 import Foundation
-import VinUtility
 
 open class BaseMainThreadOperation: MainThreadOperation {
 	
