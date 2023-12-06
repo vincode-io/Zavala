@@ -71,26 +71,65 @@ public extension VCKModel {
 				  let ancestorAttrString = ancestor?.toAttributedString() else {
 				fatalError("We should always have all 3 values for a 3 way merge.")
 			}
+
+			// The client offset changes are used to adjust the merge so that we can more accurately place
+			// any server changes.
+			var clientOffsetChanges = [Int]()
 			
-			let diff = serverAttrString.string.difference(from: ancestorAttrString.string).inferringMoves()
-			if !diff.isEmpty {
+			let clientDiff = clientAttrString.string.difference(from: ancestorAttrString.string)
+			for change in clientDiff {
+				switch change {
+				case .insert(let offset, _, _):
+					while clientOffsetChanges.count <= offset {
+						if clientOffsetChanges.count == 0 {
+							clientOffsetChanges.append(offset == 0 ? 1 : 0)
+						} else {
+							let newOffsetChange = clientOffsetChanges.last! + 1
+							clientOffsetChanges.append(newOffsetChange)
+						}
+					}
+				case .remove(let offset, _, _):
+					while clientOffsetChanges.count <= offset {
+						if clientOffsetChanges.count == 0 {
+							clientOffsetChanges.append(offset == 0 ? -1 : 0)
+						} else {
+							let newOffsetChange = clientOffsetChanges.last! - 1
+							clientOffsetChanges.append(newOffsetChange)
+						}
+					}
+				}
+			}
+
+			let serverDiff = serverAttrString.string.difference(from: ancestorAttrString.string).inferringMoves()
+			if !serverDiff.isEmpty {
 				let merged = NSMutableAttributedString(attributedString: clientAttrString)
 				
-				for change in diff {
+				for change in serverDiff {
 					switch change {
 					case .insert(let offset, _, let associated):
-                        let newOffset = offset <= merged.length ? offset : merged.length
-						let serverAttrString = serverAttrString.attributedSubstring(from: NSRange(location: associated ?? offset, length: 1))
+						let serverOffset = associated ?? offset
+						let serverAttrString = serverAttrString.attributedSubstring(from: NSRange(location: serverOffset, length: 1))
+
+						let adjustedOffset: Int
+						if clientOffsetChanges.isEmpty {
+							adjustedOffset = serverOffset
+						} else {
+							let clientOffsetChangesIndex = serverOffset < clientOffsetChanges.count ? serverOffset : clientOffsetChanges.count - 1
+							adjustedOffset = clientOffsetChanges[clientOffsetChangesIndex] + offset
+						}
+						
+						let newOffset = adjustedOffset <= merged.length ? adjustedOffset : merged.length
 						merged.insert(serverAttrString, at: newOffset)
 					case .remove(let offset, _, _):
-                        let newOffset = offset <= merged.length ? offset : merged.length
+						// TODO: This needs to be adjusted just like on the insert side
+						let newOffset = offset <= merged.length ? offset : merged.length
 						merged.deleteCharacters(in: NSRange(location: newOffset, length: 1))
 					}
 				}
 				
 				return merged.toData()
 			} else {
-				// TODO: Merge attributes only...
+				// TODO: Merge attributes only... I think this will work better by converting to and from markdown...
 			}
 			
 			return client
