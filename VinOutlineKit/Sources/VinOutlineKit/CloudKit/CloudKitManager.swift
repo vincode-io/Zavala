@@ -121,20 +121,35 @@ public class CloudKitManager {
 	}
 	
 	func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
-		if let zoneNote = CKRecordZoneNotification(fromRemoteNotificationDictionary: userInfo), zoneNote.notificationType == .recordZone {
+		if let dbNote = CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo), dbNote.notificationType == .database {
+			
+			cloudKitSyncWillBegin()
+			sendChanges(userInitiated: false) { [weak self] in
+				self?.fetchAllChanges(userInitiated: false) {
+					self?.cloudKitSyncDidComplete()
+					completion()
+				}
+			}
+			
+		} else if let zoneNote = CKRecordZoneNotification(fromRemoteNotificationDictionary: userInfo), zoneNote.notificationType == .recordZone {
+			
 			guard let zoneId = zoneNote.databaseScope == .private ? outlineZone.zoneID : zoneNote.recordZoneID else {
 				completion()
 				return
 			}
+			
+			cloudKitSyncWillBegin()
 			sendChanges(userInitiated: false) { [weak self] in
-				self?.fetchChanges(userInitiated: false, zoneID: zoneId, completion: completion)
+				self?.fetchChanges(userInitiated: false, zoneID: zoneId) { [weak self] in
+					self?.cloudKitSyncDidComplete()
+					completion()
+				}
 			}
-		}
-		
-		if let dbNote = CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo), dbNote.notificationType == .database {
-			sendChanges(userInitiated: false) { [weak self] in
-				self?.fetchAllChanges(userInitiated: false)
-			}
+			
+		} else {
+			
+			completion()
+			
 		}
 	}
 	
