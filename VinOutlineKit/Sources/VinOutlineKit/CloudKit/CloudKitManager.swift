@@ -126,11 +126,15 @@ public class CloudKitManager {
 				completion()
 				return
 			}
-			fetchChanges(userInitiated: false, zoneID: zoneId, completion: completion)
+			sendChanges(userInitiated: false) { [weak self] in
+				self?.fetchChanges(userInitiated: false, zoneID: zoneId, completion: completion)
+			}
 		}
 		
 		if let dbNote = CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo), dbNote.notificationType == .database {
-			fetchAllChanges(userInitiated: false)
+			sendChanges(userInitiated: false) { [weak self] in
+				self?.fetchAllChanges(userInitiated: false)
+			}
 		}
 	}
 	
