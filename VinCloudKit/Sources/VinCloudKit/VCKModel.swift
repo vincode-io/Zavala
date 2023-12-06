@@ -76,6 +76,8 @@ public extension VCKModel {
 			// any server changes.
 			var clientOffsetChanges = [Int]()
 			
+			// TODO: Fix this or dump it. It is horribly flawed in its current state!!!
+			
 			let clientDiff = clientAttrString.string.difference(from: ancestorAttrString.string)
 			for change in clientDiff {
 				switch change {
