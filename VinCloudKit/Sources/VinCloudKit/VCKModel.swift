@@ -76,29 +76,22 @@ public extension VCKModel {
 			// any server changes.
 			var clientOffsetChanges = [Int]()
 			
-			// TODO: Fix this or dump it. It is horribly flawed in its current state!!!
-			
 			let clientDiff = clientAttrString.string.difference(from: ancestorAttrString.string)
+			var adjuster = 0
 			for change in clientDiff {
 				switch change {
 				case .insert(let offset, _, _):
-					while clientOffsetChanges.count <= offset {
-						if clientOffsetChanges.count == 0 {
-							clientOffsetChanges.append(offset == 0 ? 1 : 0)
-						} else {
-							let newOffsetChange = clientOffsetChanges.last! + 1
-							clientOffsetChanges.append(newOffsetChange)
-						}
+					while clientOffsetChanges.count < offset {
+						clientOffsetChanges.append(clientOffsetChanges.last!)
 					}
+					adjuster += 1
+					clientOffsetChanges.append(adjuster)
 				case .remove(let offset, _, _):
 					while clientOffsetChanges.count <= offset {
-						if clientOffsetChanges.count == 0 {
-							clientOffsetChanges.append(offset == 0 ? -1 : 0)
-						} else {
-							let newOffsetChange = clientOffsetChanges.last! - 1
-							clientOffsetChanges.append(newOffsetChange)
-						}
+						clientOffsetChanges.append(clientOffsetChanges.last!)
 					}
+					adjuster -= 1
+					clientOffsetChanges.append(adjuster)
 				}
 			}
 
