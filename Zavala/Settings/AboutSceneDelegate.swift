@@ -20,6 +20,8 @@ class AboutSceneDelegate: UIResponder, UIWindowSceneDelegate {
 		self.scene = scene
 		self.session = session
 		
+		updateUserInterfaceStyle()
+
 		#if targetEnvironment(macCatalyst)
 			window?.windowScene?.titlebar?.titleVisibility = .hidden
 			window?.windowScene?.titlebar?.toolbar = nil
