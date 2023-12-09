@@ -82,13 +82,13 @@ public extension VCKModel {
 				switch change {
 				case .insert(let offset, _, _):
 					while clientOffsetChanges.count < offset {
-						clientOffsetChanges.append(clientOffsetChanges.last!)
+						clientOffsetChanges.append(clientOffsetChanges.last ?? 0)
 					}
 					adjuster += 1
 					clientOffsetChanges.append(adjuster)
 				case .remove(let offset, _, _):
 					while clientOffsetChanges.count <= offset {
-						clientOffsetChanges.append(clientOffsetChanges.last!)
+						clientOffsetChanges.append(clientOffsetChanges.last ?? 0)
 					}
 					adjuster -= 1
 					clientOffsetChanges.append(adjuster)
