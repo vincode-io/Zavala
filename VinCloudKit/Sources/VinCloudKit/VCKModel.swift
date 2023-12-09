@@ -67,8 +67,8 @@ public extension VCKModel {
 			return server
 		case .threeWayMerge:
 			guard let clientAttrString = client?.toAttributedString(),
-				  let serverAttrString = server?.toAttributedString(),
-				  let ancestorAttrString = ancestor?.toAttributedString() else {
+				  let ancestorAttrString = ancestor?.toAttributedString(),
+				  let serverAttrString = server?.toAttributedString() else {
 				fatalError("We should always have all 3 values for a 3 way merge.")
 			}
 
@@ -110,10 +110,9 @@ public extension VCKModel {
 				
 				return merged.toData()
 			} else {
-				// TODO: Merge attributes only... I think this will work better by converting to and from markdown...
+				// I haven't figured out how to merge pure attribute changes if they happen. Client wins in this case.
+				return client
 			}
-			
-			return client
 		}
 	}
 	
