@@ -9,6 +9,8 @@ import Cocoa
 
 class FontAndColorPreferencesViewController: NSViewController {
 
+	@IBOutlet weak var rowIndentingPopUpButton: NSPopUpButton!
+	@IBOutlet weak var rowSpacingPopUpButton: NSPopUpButton!
 	@IBOutlet weak var colorPalettePopUpButton: NSPopUpButton!
 	@IBOutlet weak var tableView: NSTableView!
 	@IBOutlet weak var addButton: NSButton!
@@ -28,6 +30,8 @@ class FontAndColorPreferencesViewController: NSViewController {
 	override func viewDidLoad() {
         super.viewDidLoad()
 
+		rowIndentingPopUpButton.selectItem(withTag: AppDefaults.shared.rowIndentSize.rawValue)
+		rowSpacingPopUpButton.selectItem(withTag: AppDefaults.shared.rowSpacingSize.rawValue)
 		colorPalettePopUpButton.selectItem(withTag: AppDefaults.shared.userInterfaceColorPalette.rawValue)
 		fontDefaults = AppDefaults.shared.outlineFonts
 		sortedFields = fontDefaults?.sortedFields
@@ -39,6 +43,18 @@ class FontAndColorPreferencesViewController: NSViewController {
 		addButton.sendAction(on: .leftMouseDown)
 	}
     
+	@IBAction func changeRowIndenting(_ sender: Any) {
+		if let tag = rowIndentingPopUpButton.selectedItem?.tag, let size = DefaultsSize(rawValue: tag) {
+			AppDefaults.shared.rowIndentSize = size
+		}
+	}
+	
+	@IBAction func changeRowSpacing(_ sender: Any) {
+		if let tag = rowSpacingPopUpButton.selectedItem?.tag, let size = DefaultsSize(rawValue: tag) {
+			AppDefaults.shared.rowSpacingSize = size
+		}
+	}
+	
 	@IBAction func changeColorPalette(_ sender: Any) {
 		if let tag = colorPalettePopUpButton.selectedItem?.tag, let palette = UserInterfaceColorPalette(rawValue: tag) {
 			AppDefaults.shared.userInterfaceColorPalette = palette

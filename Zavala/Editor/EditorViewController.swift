@@ -410,6 +410,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	private static var defaultContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
+	private var rowIndentSize = AppDefaults.shared.rowIndentSize
+	private var rowSpacingSize = AppDefaults.shared.rowSpacingSize
 	
 	private lazy var transition = ImageTransition(delegate: self)
 	private var imageBlocker: UIView?
@@ -485,6 +487,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 		rowRegistration = UICollectionView.CellRegistration<EditorRowViewCell, Row> { [weak self] (cell, indexPath, row) in
 			cell.row = row
+			cell.rowIndentSize = self?.rowIndentSize
+			cell.rowSpacingSize = self?.rowSpacingSize
 			cell.isNotesHidden = self?.outline?.isNotesFilterOn ?? false
 			cell.isSearching = self?.isSearching ?? false
 			cell.delegate = self
@@ -514,6 +518,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		NotificationCenter.default.addObserver(self, selector: #selector(didUndoChange(_:)), name: .NSUndoManagerDidUndoChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(didRedoChange(_:)), name: .NSUndoManagerDidRedoChange, object: nil)
 
+		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(applicationWillTerminate(_:)),	name: UIApplication.willTerminateNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(sceneWillDeactivate(_:)),	name: UIScene.willDeactivateNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -643,6 +648,18 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc func outlineFontCacheDidRebuild(_ note: Notification) {
 		collectionView.reloadData()
+	}
+	
+	@objc func userDefaultsDidChange() {
+		if rowIndentSize != AppDefaults.shared.rowIndentSize {
+			rowIndentSize = AppDefaults.shared.rowIndentSize
+			collectionView.reloadData()
+		}
+
+		if rowSpacingSize != AppDefaults.shared.rowSpacingSize {
+			rowSpacingSize = AppDefaults.shared.rowSpacingSize
+			collectionView.reloadData()
+		}
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {

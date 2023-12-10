@@ -38,6 +38,18 @@ class EditorRowViewCell: UICollectionViewListCell {
 		}
 	}
 	
+	var rowIndentSize: DefaultsSize? {
+		didSet {
+			setNeedsUpdateConfiguration()
+		}
+	}
+	
+	var rowSpacingSize: DefaultsSize? {
+		didSet {
+			setNeedsUpdateConfiguration()
+		}
+	}
+	
 	var isNotesHidden: Bool = false {
 		didSet {
 			setNeedsUpdateConfiguration()
@@ -73,12 +85,15 @@ class EditorRowViewCell: UICollectionViewListCell {
 
 		indentationLevel = row.level
 
-		// We make the indentation width the same regardless of device if not compact
-		if traitCollection.horizontalSizeClass != .compact {
-			indentationWidth = 16
-		} else {
+		switch rowIndentSize {
+		case .small:
+			indentationWidth = 10
+		case .medium:
 			indentationWidth = 13
+		default:
+			indentationWidth = 16
 		}
+
 		
 		let isDisclosureVisible = row.rowCount != 0
 		let isNotesVisible = !isNotesHidden && !row.isNoteEmpty
@@ -87,7 +102,9 @@ class EditorRowViewCell: UICollectionViewListCell {
 													isSearching: isSearching,
 													indentationWidth: indentationWidth,
 													isDisclosureVisible: isDisclosureVisible,
-													isNotesVisible: isNotesVisible)
+													isNotesVisible: isNotesVisible,
+													rowIndentSize: rowIndentSize,
+													rowSpacingSize: rowSpacingSize)
 		
 		content = content.updated(for: state)
 		content.delegate = delegate

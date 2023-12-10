@@ -94,6 +94,8 @@
 		517AF6A425E08B7F0044DBAB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */; };
 		517AF6A725E08CB80044DBAB /* NonIntrinsicLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */; };
 		517AF6AA25E08CD30044DBAB /* Bundle-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */; };
+		517B41D32B26738C001EC361 /* RowIndentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517B41D22B26738C001EC361 /* RowIndentTableViewController.swift */; };
+		517B41D52B267424001EC361 /* RowSpacingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517B41D42B267424001EC361 /* RowSpacingTableViewController.swift */; };
 		5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9372554D92000C153E8 /* AppDelegate.swift */; };
 		5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9392554D92000C153E8 /* SceneDelegate.swift */; };
 		5181A93C2554D92000C153E8 /* CollectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A93B2554D92000C153E8 /* CollectionsViewController.swift */; };
@@ -332,6 +334,8 @@
 		517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonIntrinsicLabel.swift; sourceTree = "<group>"; };
 		517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle-Extensions.swift"; sourceTree = "<group>"; };
+		517B41D22B26738C001EC361 /* RowIndentTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowIndentTableViewController.swift; sourceTree = "<group>"; };
+		517B41D42B267424001EC361 /* RowSpacingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowSpacingTableViewController.swift; sourceTree = "<group>"; };
 		5181A9342554D92000C153E8 /* Zavala.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zavala.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5181A9372554D92000C153E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5181A9392554D92000C153E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -611,17 +615,26 @@
 		517AF69E25E08A350044DBAB /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				519897C52ADE1C4A008A6FA4 /* About.storyboard */,
-				5116893C29BD6DED00318832 /* AboutView.swift */,
-				5116894629BDA60E00318832 /* AboutViewController.swift */,
-				5116894429BDA0E500318832 /* AboutSceneDelegate.swift */,
 				51DEE80F26FB8D89006DAA56 /* ColorPaletteTableViewController.swift */,
+				517B41D22B26738C001EC361 /* RowIndentTableViewController.swift */,
+				517B41D42B267424001EC361 /* RowSpacingTableViewController.swift */,
 				517AF69F25E08A6B0044DBAB /* Settings.storyboard */,
 				5113B094260E638400DBD11B /* SettingsFontConfigViewController.swift */,
 				5113B091260E45B400DBD11B /* SettingsFontViewController.swift */,
 				517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		517B41D62B267479001EC361 /* About */ = {
+			isa = PBXGroup;
+			children = (
+				519897C52ADE1C4A008A6FA4 /* About.storyboard */,
+				5116894429BDA0E500318832 /* AboutSceneDelegate.swift */,
+				5116893C29BD6DED00318832 /* AboutView.swift */,
+				5116894629BDA60E00318832 /* AboutViewController.swift */,
+			);
+			path = About;
 			sourceTree = "<group>";
 		};
 		5181A92B2554D92000C153E8 = {
@@ -671,6 +684,7 @@
 				51E14F282560727C00320EDB /* Collections */,
 				51E14F292560728B00320EDB /* Documents */,
 				51E14F2A2560729900320EDB /* Editor */,
+				517B41D62B267479001EC361 /* About */,
 				51F13F01255E13D1004B85CA /* Dialogs */,
 				517A9E31260512DC00EF346A /* OpenQuickly */,
 				517AF69E25E08A350044DBAB /* Settings */,
@@ -1150,6 +1164,7 @@
 				51F2DC7B2586E101003BD5CE /* EditorRowNoteTextView.swift in Sources */,
 				514F221425C4CD00004E02CD /* EditorTagContentView.swift in Sources */,
 				51C568D9258C1CD200AA7B93 /* MacLinkViewController.swift in Sources */,
+				517B41D52B267424001EC361 /* RowSpacingTableViewController.swift in Sources */,
 				51C568CE258B028700AA7B93 /* OutlineTextDropDelegate.swift in Sources */,
 				51DB0DCD27496CBE008312EC /* EditorTagInputPill.swift in Sources */,
 				51C4C449255AA215004E0206 /* MainSplitViewController.swift in Sources */,
@@ -1157,6 +1172,7 @@
 				5169928A25AE4F5C00760C9D /* UICollectionView+.swift in Sources */,
 				5116894729BDA60E00318832 /* AboutViewController.swift in Sources */,
 				51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */,
+				517B41D32B26738C001EC361 /* RowIndentTableViewController.swift in Sources */,
 				5167608525FBE4E500AC0EBD /* OutlineGetInfoViewController.swift in Sources */,
 				51C71C6D273F087000F6C779 /* ImageScrollView.swift in Sources */,
 				514F221825C4D076004E02CD /* EditorTagInputViewCell.swift in Sources */,

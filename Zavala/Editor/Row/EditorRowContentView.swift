@@ -275,6 +275,16 @@ private extension EditorRowContentView {
 			adjustedTrailingIndention = -8
 		}
 		
+		let spacingAdjustment: CGFloat
+		switch config.rowSpacingSize {
+		case .small:
+			spacingAdjustment = 8
+		case .medium:
+			spacingAdjustment = 6
+		default:
+			spacingAdjustment = 4
+		}
+		
 		topicTextView.removeConstraintsOwnedBySuperview()
 		
 		if config.isNotesVisible {
@@ -282,11 +292,11 @@ private extension EditorRowContentView {
 			NSLayoutConstraint.activate([
 				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
 				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-				topicTextView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: -4),
+				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
+				topicTextView.bottomAnchor.constraint(equalTo: noteTextView.topAnchor, constant: spacingAdjustment / 2),
 				noteTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
 				noteTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-				noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+				noteTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: spacingAdjustment),
 				barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor)
 			])
 		} else {
@@ -294,8 +304,8 @@ private extension EditorRowContentView {
 			NSLayoutConstraint.activate([
 				topicTextView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: adjustedLeadingIndention),
 				topicTextView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: adjustedTrailingIndention),
-				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-				topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+				topicTextView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0 - spacingAdjustment),
+				topicTextView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: spacingAdjustment),
 				barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor)
 			])
 		}
@@ -311,7 +321,27 @@ private extension EditorRowContentView {
 		if config.isDisclosureVisible {
 			addSubview(disclosureIndicator)
 
-			let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -12 : -22
+			let indentAdjustment: CGFloat
+			if traitCollection.userInterfaceIdiom == .mac {
+				switch config.rowIndentSize {
+				case .small:
+					indentAdjustment = -6
+				case .medium:
+					indentAdjustment = -9
+				default:
+					indentAdjustment = -12
+				}
+			} else {
+				switch config.rowIndentSize {
+				case .small:
+					indentAdjustment = -16
+				case .medium:
+					indentAdjustment = -19
+				default:
+					indentAdjustment = -22
+				}
+			}
+			
 			NSLayoutConstraint.activate([
 				disclosureIndicator.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: config.indentationWidth + indentAdjustment),
 				disclosureIndicator.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
@@ -319,7 +349,27 @@ private extension EditorRowContentView {
 		} else {
 			addSubview(bullet)
 			
-			let indentAdjustment: CGFloat = traitCollection.userInterfaceIdiom == .mac ? -4 : -2
+			let indentAdjustment: CGFloat
+			if traitCollection.userInterfaceIdiom == .mac {
+				switch config.rowIndentSize {
+				case .small:
+					indentAdjustment = 1
+				case .medium:
+					indentAdjustment = -2
+				default:
+					indentAdjustment = -5
+				}
+			} else {
+				switch config.rowIndentSize {
+				case .small:
+					indentAdjustment = 3
+				case .medium:
+					indentAdjustment = 0
+				default:
+					indentAdjustment = -3
+				}
+			}
+
 			NSLayoutConstraint.activate([
 				bullet.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: config.indentationWidth + indentAdjustment),
 				bullet.centerYAnchor.constraint(equalTo: topicTextView.topAnchor, constant: topAnchorConstant)
@@ -350,8 +400,7 @@ private extension EditorRowContentView {
 		}
 		
 		override func updateConstraints() {
-			let adjustment: CGFloat = traitCollection.horizontalSizeClass == .compact ? 3 : 0
-			let width = (CGFloat(level + 1) * indentationWidth) + adjustment
+			let width = (CGFloat(level + 1) * indentationWidth)
 			barViewWidthConstraint?.constant = width
 			super.updateConstraints()
 		}

@@ -18,13 +18,17 @@ struct EditorRowContentConfiguration: UIContentConfiguration {
 	var indentationWidth: CGFloat
 	var isDisclosureVisible: Bool
 	var isNotesVisible: Bool
+	var rowIndentSize: DefaultsSize?
+	var rowSpacingSize: DefaultsSize?
 	
-	init(row: Row, isSearching: Bool, indentationWidth: CGFloat, isDisclosureVisible: Bool,  isNotesVisible: Bool) {
+	init(row: Row, isSearching: Bool, indentationWidth: CGFloat, isDisclosureVisible: Bool,  isNotesVisible: Bool, rowIndentSize: DefaultsSize?, rowSpacingSize: DefaultsSize?) {
 		self.row = row
 		self.isSearching = isSearching
 		self.indentationWidth = indentationWidth
 		self.isNotesVisible = isNotesVisible
 		self.isDisclosureVisible = isDisclosureVisible
+		self.rowIndentSize = rowIndentSize
+		self.rowSpacingSize = rowSpacingSize
 	}
 	
 	func makeContentView() -> UIView & UIContentView {
@@ -36,7 +40,11 @@ struct EditorRowContentConfiguration: UIContentConfiguration {
 	}
 
 	func isLayoutEqual(_ other: EditorRowContentConfiguration) -> Bool {
-		return indentationWidth == other.indentationWidth && isDisclosureVisible == other.isDisclosureVisible && isNotesVisible == other.isNotesVisible
+		return indentationWidth == other.indentationWidth
+			&& isDisclosureVisible == other.isDisclosureVisible
+			&& isNotesVisible == other.isNotesVisible
+			&& rowIndentSize == other.rowIndentSize
+			&& rowSpacingSize == other.rowSpacingSize
 	}
 	
 }

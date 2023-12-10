@@ -7,6 +7,23 @@
 
 import Foundation
 
+enum DefaultsSize: Int, CustomStringConvertible, CaseIterable {
+	case small = 0
+	case medium = 1
+	case large = 2
+	
+	var description: String {
+		switch self {
+		case .small:
+			return NSLocalizedString("Small", comment: "Small")
+		case .medium:
+			return NSLocalizedString("Medium", comment: "Medium")
+		case .large:
+			return NSLocalizedString("Large", comment: "Large")
+		}
+	}
+}
+
 final class AppDefaults {
 
 	static let shared = AppDefaults()
@@ -31,6 +48,8 @@ final class AppDefaults {
 		static let lastMainWindowState = "lastMainWindowState"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
 		static let userInterfaceColorPalette = "userInterfaceColorPalette";
+		static let rowIndentSize = "rowIndentSize"
+		static let rowSpacingSize = "rowSpacingSize"
 		static let outlineFonts = "outlineFonts"
 		static let documentHistory = "documentHistory"
 		static let confirmDeleteCompletedRows = "confirmDeleteCompletedRows"
@@ -155,6 +174,24 @@ final class AppDefaults {
 		}
 	}
 	
+	var rowIndentSize: DefaultsSize {
+		get {
+			return Self.defaultsSize(for: Key.rowIndentSize)
+		}
+		set {
+			Self.setDefaultsSize(for: Key.rowIndentSize, newValue)
+		}
+	}
+	
+	var rowSpacingSize: DefaultsSize {
+		get {
+			return Self.defaultsSize(for: Key.rowSpacingSize)
+		}
+		set {
+			Self.setDefaultsSize(for: Key.rowSpacingSize, newValue)
+		}
+	}
+	
 	var outlineFonts: OutlineFontDefaults? {
 		get {
 			if let userInfo = AppDefaults.store.object(forKey: Key.outlineFonts) as? [String: [AnyHashable: AnyHashable]] {
@@ -200,6 +237,8 @@ final class AppDefaults {
 		defaults[Key.userInterfaceColorPalette] = UserInterfaceColorPalette.automatic.rawValue
 		defaults[Key.outlineFonts] = OutlineFontDefaults.defaults.userInfo
 		defaults[Key.confirmDeleteCompletedRows] = true
+		defaults[Key.rowIndentSize] = DefaultsSize.medium.rawValue
+		defaults[Key.rowSpacingSize] = DefaultsSize.medium.rawValue
 		
 		AppDefaults.store.register(defaults: defaults)
 		
@@ -250,6 +289,15 @@ private extension AppDefaults {
 
 	static func setData(for key: String, _ data: Data?) {
 		AppDefaults.store.set(data, forKey: key)
+	}
+	
+	static func defaultsSize(for key: String) -> DefaultsSize {
+		let intValue = int(for: key)
+		return DefaultsSize(rawValue: intValue)!
+	}
+	
+	static func setDefaultsSize(for key: String, _ size: DefaultsSize) {
+		setInt(for: key, size.rawValue)
 	}
 	
 	static func upgradeDefaultsToV2() {

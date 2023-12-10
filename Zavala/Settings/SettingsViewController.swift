@@ -25,7 +25,9 @@ class SettingsViewController: UITableViewController {
 	}
 	
 	private var currentPalette = AppDefaults.shared.userInterfaceColorPalette
-	
+	private var currentRowIndentSize = AppDefaults.shared.rowIndentSize
+	private var currentRowSpacingSize = AppDefaults.shared.rowSpacingSize
+
 	override func viewDidLoad() {
 		// This hack mostly works around a bug in static tables with dynamic type.  See: https://spin.atomicobject.com/2018/10/15/dynamic-type-static-uitableview/
 		NotificationCenter.default.removeObserver(tableView!, name: UIContentSizeCategory.didChangeNotification, object: nil)
@@ -74,6 +76,10 @@ class SettingsViewController: UITableViewController {
 				cell.textLabel?.text = AppStringAssets.enableOnMyIPadLabel
 			}
 		case (2, 0):
+			cell.detailTextLabel?.text = AppDefaults.shared.rowIndentSize.description
+		case (2, 1):
+			cell.detailTextLabel?.text = AppDefaults.shared.rowSpacingSize.description
+		case (2, 2):
 			cell.detailTextLabel?.text = AppDefaults.shared.userInterfaceColorPalette.description
 		default:
 			break
@@ -123,6 +129,16 @@ class SettingsViewController: UITableViewController {
 	}
 
 	@objc func userDefaultsDidChange() {
+		if currentRowIndentSize != AppDefaults.shared.rowIndentSize {
+			currentRowIndentSize = AppDefaults.shared.rowIndentSize
+			tableView.reloadData()
+		}
+
+		if currentRowSpacingSize != AppDefaults.shared.rowSpacingSize {
+			currentRowSpacingSize = AppDefaults.shared.rowSpacingSize
+			tableView.reloadData()
+		}
+
 		if currentPalette != AppDefaults.shared.userInterfaceColorPalette {
 			currentPalette = AppDefaults.shared.userInterfaceColorPalette
 			tableView.reloadData()
