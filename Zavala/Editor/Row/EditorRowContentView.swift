@@ -278,11 +278,11 @@ private extension EditorRowContentView {
 		let spacingAdjustment: CGFloat
 		switch config.rowSpacingSize {
 		case .small:
-			spacingAdjustment = 8
-		case .medium:
 			spacingAdjustment = 6
-		default:
+		case .medium:
 			spacingAdjustment = 4
+		default:
+			spacingAdjustment = 2
 		}
 		
 		topicTextView.removeConstraintsOwnedBySuperview()
