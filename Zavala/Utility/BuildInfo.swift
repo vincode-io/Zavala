@@ -43,7 +43,7 @@ struct BuildInfo: Codable {
 	}
 	
 	var versionLabel: String {
-		return "Version \(BuildInfo.shared.versionNumber) (\(BuildInfo.shared.versionNumber))"
+		return "Version \(BuildInfo.shared.versionNumber) (\(BuildInfo.shared.buildNumber))"
 	}
 	
 	var buildLabel: String {
