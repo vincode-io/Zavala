@@ -363,7 +363,7 @@ private extension CloudKitManager {
 	}
 	
 	func sharedDatabaseSubscription(recordType: String) -> CKDatabaseSubscription {
-		let subscription = CKDatabaseSubscription()
+		let subscription = CKDatabaseSubscription(subscriptionID: "\(recordType)-changes")
 		subscription.recordType = recordType
 
 		let notificationInfo = CKSubscription.NotificationInfo()
