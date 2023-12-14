@@ -1052,6 +1052,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		5141785526BE1DB900E9EAA5 /* Delete unintended embedded frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -1070,6 +1071,7 @@
 		};
 		5197900629BB784D00F1A05D /* Update Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -1088,6 +1090,7 @@
 		};
 		51C4C3C22555EB4D004E0206 /* Run VerifyNoBS */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
