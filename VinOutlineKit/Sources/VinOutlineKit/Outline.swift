@@ -2681,7 +2681,7 @@ private extension Outline {
 			row.visit(visitor: visitor(_:))
 		}
 		
-		for reload in reloads.reversed() {
+		for reload in reloads.sorted(by: >) {
 			shadowTable?.remove(at: reload)
 		}
 		
