@@ -104,7 +104,9 @@ public extension VCKModel {
 						merged.insert(serverAttrString, at: newOffset)
 					case .remove(let offset, _, let associated):
 						let (_, newOffset) = computeClientOffset(offset: offset, associated: associated)
-						merged.deleteCharacters(in: NSRange(location: newOffset, length: 1))
+						if newOffset < merged.length {
+							merged.deleteCharacters(in: NSRange(location: newOffset, length: 1))
+						}
 					}
 				}
 				
