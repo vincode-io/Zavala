@@ -224,7 +224,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	let deleteCommand = UIKeyCommand(title: AppStringAssets.deleteControlLabel,
 									 action: #selector(delete),
 									 input: "\u{8}",
-									 modifierFlags: [.command])
+									 modifierFlags: [])
 	
 	let goBackwardOneCommand = UIKeyCommand(title: AppStringAssets.backControlLabel,
 											action: #selector(goBackwardOneCommand(_:)),
