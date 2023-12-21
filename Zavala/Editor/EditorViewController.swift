@@ -45,14 +45,30 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@IBOutlet weak var collectionView: EditorCollectionView!
 	
 	override var keyCommands: [UIKeyCommand]? {
-		guard !isToggleRowCompleteUnavailable else { return nil }
+		var keyCommands = [UIKeyCommand]()
 		
-		// We need to have this here in addition to the AppDelegate, since the iOS won't pick it up for some reason
-		let completedCommand = UIKeyCommand(input: "\r", modifierFlags: [.command], action: #selector(toggleCompleteRows))
-		if #available(iOS 15, *) {
-			completedCommand.wantsPriorityOverSystemBehavior = true
+		let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(moveCurrentRowsLeft))
+		if #available(iOS 15.0, *) {
+			shiftTab.wantsPriorityOverSystemBehavior = true
 		}
-		return [completedCommand]
+		keyCommands.append(shiftTab)
+		
+		let tab = UIKeyCommand(action: #selector(moveCurrentRowsRight), input: "\t")
+		if #available(iOS 15.0, *) {
+			tab.wantsPriorityOverSystemBehavior = true
+		}
+		keyCommands.append(tab)
+		
+		// We need to have this here in addition to the AppDelegate, since iOS won't pick it up for some reason
+		if !isToggleRowCompleteUnavailable {
+			let commandReturn = UIKeyCommand(input: "\r", modifierFlags: [.command], action: #selector(toggleCompleteRows))
+			if #available(iOS 15, *) {
+				commandReturn.wantsPriorityOverSystemBehavior = true
+			}
+			keyCommands.append(commandReturn)
+		}
+		
+		return keyCommands
 	}
 	
 	var selectedDocuments: [Document] {
