@@ -776,7 +776,13 @@ private extension Row {
 		let attachment = ImageTextAttachment(data: image.data, ofType: kUTTypePNG as String)
 		attachment.imageUUID = image.id.imageUUID
 		let imageAttrText = NSAttributedString(attachment: attachment)
-		attrString.insert(imageAttrText, at: offset)
+		
+		// Even though this should never happen, I have seen it. Let's just make sure we don't crash and recover best we can.
+		if offset <= attrString.length {
+			attrString.insert(imageAttrText, at: offset)
+		} else {
+			attrString.insert(imageAttrText, at: attrString.length)
+		}
 	}
 	
 	@discardableResult
