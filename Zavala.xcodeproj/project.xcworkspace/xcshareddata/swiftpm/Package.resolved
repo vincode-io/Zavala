@@ -20,20 +20,11 @@
         }
       },
       {
-        "package": "SWXMLHash",
-        "repositoryURL": "https://github.com/drmohundro/SWXMLHash.git",
-        "state": {
-          "branch": null,
-          "revision": "a4931e5c3bafbedeb1601d3bb76bbe835c6d475a",
-          "version": "5.0.1"
-        }
-      },
-      {
         "package": "VinXML",
         "repositoryURL": "https://github.com/vincode-io/VinXML.git",
         "state": {
           "branch": "main",
-          "revision": "66e6c244df765582bee447b66d6c7f95e852cfec",
+          "revision": "508baa45519d24503c6f9e89eceef76cb5512232",
           "version": null
         }
       }

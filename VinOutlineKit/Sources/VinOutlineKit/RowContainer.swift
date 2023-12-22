@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SWXMLHash
+import VinXML
 
 public protocol RowContainer {
 	var outline: Outline? { get }
@@ -22,20 +22,23 @@ public protocol RowContainer {
 
 public extension RowContainer {
 	
-	func importRows(outline: Outline, rowIndexers: [XMLIndexer], images: [String:  Data]?) {
-		for rowIndexer in rowIndexers {
-			let topicMarkdown = rowIndexer.element?.attribute(by: "text")?.text ?? ""
-			let noteMarkdown = rowIndexer.element?.attribute(by: "_note")?.text
+	func importRows(outline: Outline, rowNodes: [VinXML.XMLNode], images: [String:  Data]?) {
+		for rowNode in rowNodes {
+			let topicMarkdown = rowNode.attributes["text"]
+			let noteMarkdown = rowNode.attributes["_note"]
 			
 			let row = Row(outline: outline)
 			row.importRow(topicMarkdown: topicMarkdown, noteMarkdown: noteMarkdown, images: images)
 
-			if rowIndexer.element?.attribute(by: "_status")?.text == "checked" {
+			if rowNode.attributes["_status"] == "checked" {
 				row.isComplete = true
 			}
 			
 			appendRow(row)
-			row.importRows(outline: outline, rowIndexers: rowIndexer["outline"].all, images: images)
+			
+			if let rowNodes = rowNode["outline"] {
+				row.importRows(outline: outline, rowNodes: rowNodes, images: images)
+			}
 		}
 	}
 	

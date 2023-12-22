@@ -10,7 +10,6 @@ let package = Package(
             targets: ["VinOutlineKit"]),
     ],
     dependencies: [
-		.package(url: "https://github.com/drmohundro/SWXMLHash.git", .exactItem("5.0.1")),
 		.package(url: "https://github.com/vincode-io/MarkdownAttributedString.git", .branch("master")),
 		.package(url: "https://github.com/vincode-io/VinXML.git", .branch("main")),
 		.package(path: "../VinCloudKit"),
@@ -19,7 +18,6 @@ let package = Package(
         .target(
             name: "VinOutlineKit",
             dependencies: [
-				"SWXMLHash",
 				"MarkdownAttributedString",
 				"VinXML",
 				"VinCloudKit",

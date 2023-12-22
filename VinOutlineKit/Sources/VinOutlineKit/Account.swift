@@ -7,7 +7,7 @@
 
 import UIKit
 import CloudKit
-import SWXMLHash
+import VinXML
 import VinCloudKit
 
 public extension Notification.Name {
@@ -167,48 +167,50 @@ public final class Account: NSObject, Identifiable, Codable {
 	public func importOPML(_ opmlData: Data, tags: [Tag]?, images: [String:  Data]? = nil) throws -> Document {
 		let opmlString = try convertOPMLAttributeNewlines(opmlData)
 		
-		let opml = SWXMLHash.config({ config in
-			config.caseInsensitive = true
-		}).parse(opmlString)["opml"]
+		guard let opmlNode = try? VinXML.XMLDocument(xml: opmlString, caseSensitive: false)?.root else {
+			throw AccountError.opmlParserError
+		}
 		
-		let headIndexer = opml["head"]
-		let bodyIndexer = opml["body"]
-		let outlineIndexers = bodyIndexer["outline"].all
+		let headNode = opmlNode["head"]?.first
+		let bodyNode = opmlNode["body"]?.first
+		let rowNodes = bodyNode?["outline"]
 		
-		var title = headIndexer["title"].element?.text
-		if (title == nil || title!.isEmpty) && outlineIndexers.count > 0 {
-			title = outlineIndexers[0].element?.attribute(by: "text")?.text
+		var title = headNode?["title"]?.first?.content
+		if (title == nil || title!.isEmpty) && rowNodes?.count ?? 0 > 0 {
+			title = rowNodes?.first?.attributes["text"]
 		}
 		if title == nil {
 			title = NSLocalizedString("Unavailable", comment: "Unavailable")
 		}
 		
 		let outline = Outline(parentID: id, title: title)
-		documents?.append(.outline(outline))
+		let document = Document.outline(outline)
+		documents?.append(document)
 		accountDocumentsDidChange()
 
-		if let created = headIndexer["dateCreated"].element?.text {
+		if let created = headNode?["dateCreated"]?.first?.content {
 			outline.created = Date.dateFromRFC822(rfc822String: created)
 		}
-		if let updated = headIndexer["dateModified"].element?.text {
+		if let updated = headNode?["dateModified"]?.first?.content {
 			outline.updated = Date.dateFromRFC822(rfc822String: updated)
 		}
-		outline.ownerName = headIndexer["ownerName"].element?.text
-		outline.ownerEmail = headIndexer["ownerEmail"].element?.text
-		outline.ownerURL = headIndexer["ownerID"].element?.text
-		if let verticleScrollState = headIndexer["vertScrollState"].element?.text {
+		outline.ownerName = headNode?["ownerName"]?.first?.content
+		outline.ownerEmail = headNode?["ownerEmail"]?.first?.content
+		outline.ownerURL = headNode?["ownerID"]?.first?.content
+		if let verticleScrollState = headNode?["vertScrollState"]?.first?.content {
 			outline.verticleScrollState = Int(verticleScrollState)
 		}
 		
-		let tagIndexers = headIndexer["tags"]["tag"].all
-		for tagIndexer in tagIndexers {
-			if let tagName = tagIndexer.element?.text {
-				let tag = createTag(name: tagName)
-				outline.createTag(tag)
+		if let tagNodes = headNode?["tags"]?.first?["tag"] {
+			for tagNode in tagNodes {
+				if let tagName = tagNode.content {
+					let tag = createTag(name: tagName)
+					outline.createTag(tag)
+				}
 			}
 		}
 
-		if let expansionState = headIndexer["expansionState"].element?.text {
+		if let expansionState = headNode?["expansionState"]?.first?.content {
 			outline.expansionState = expansionState
 		}
 		
@@ -216,10 +218,11 @@ public final class Account: NSObject, Identifiable, Codable {
 			outline.createTag(tag)
 		}
 
-		outline.importRows(outline: outline, rowIndexers: outlineIndexers, images: images)
+		if let rowNodes {
+			outline.importRows(outline: outline, rowNodes: rowNodes, images: images)
+		}
 		
 		outline.zoneID = cloudKitManager?.outlineZone.zoneID
-		let document = Document.outline(outline)
 		
 		disambiguate(document: document)
 		
