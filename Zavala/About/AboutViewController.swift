@@ -10,8 +10,6 @@ import SwiftUI
 
 class AboutViewController: UIViewController {
 
-	private var aboutViewController: UIHostingController<AboutView>!
-	
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,7 +24,6 @@ class AboutViewController: UIViewController {
 			view.topAnchor.constraint(equalTo: aboutViewController.view.topAnchor),
 			view.bottomAnchor.constraint(equalTo: aboutViewController.view.bottomAnchor)
 		])
-
     }
 
 	override func viewDidAppear(_ animated: Bool) {
