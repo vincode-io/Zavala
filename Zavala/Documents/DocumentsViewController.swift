@@ -216,7 +216,10 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
               let account = documentContainers.uniqueAccount else { return nil }
 
         let document = account.createOutline(title: title, tags: documentContainers.tags)
-		document.outline?.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
+		document.outline?.update(autoLinkingEnabled: AppDefaults.shared.autoLinkingEnabled,
+								 ownerName: AppDefaults.shared.ownerName, 
+								 ownerEmail: AppDefaults.shared.ownerEmail,
+								 ownerURL: AppDefaults.shared.ownerURL)
 		return document
 	}
 	

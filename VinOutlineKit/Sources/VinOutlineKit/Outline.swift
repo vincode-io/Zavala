@@ -893,7 +893,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		requestCloudKitUpdate(for: id)
 	}
 	
-	public func update(ownerName: String?, ownerEmail: String?, ownerURL: String?) {
+	public func update(autoLinkingEnabled: Bool, ownerName: String?, ownerEmail: String?, ownerURL: String?) {
+		self.autoLinkingEnabled = autoLinkingEnabled
 		self.ownerName = ownerName
 		self.ownerEmail = ownerEmail
 		self.ownerURL = ownerURL

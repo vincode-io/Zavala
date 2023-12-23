@@ -209,13 +209,13 @@ struct AppStringAssets {
 	static func createdOnLabel(date: Date) -> String {
 		let dateString = dateFormatter.string(from: date)
 		let timeString = timeFormatter.string(from: date)
-		return String(localized: "Created on \(dateString) at \(timeString)", comment: "Timestame Label: Created")
+		return String(localized: "\(dateString) at \(timeString)", comment: "Timestame Label: Created")
 	}
 	
 	static func updatedOnLabel(date: Date) -> String {
 		let dateString = dateFormatter.string(from: date)
 		let timeString = timeFormatter.string(from: date)
-		return String(localized: "Updated on \(dateString) at \(timeString)", comment: "Timestame Label: Updated")
+		return String(localized: "\(dateString) at \(timeString)", comment: "Timestame Label: Updated")
 	}
 	
 	static func deleteOutlinePrompt(outlineTitle: String) -> String {

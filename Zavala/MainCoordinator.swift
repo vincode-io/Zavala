@@ -311,15 +311,15 @@ extension MainCoordinator {
 	func showGetInfo(outline: Outline) {
 		if traitCollection.userInterfaceIdiom == .mac {
 		
-			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: MacOutlineGetInfoViewController.self)
-			outlineGetInfoViewController.preferredContentSize = CGSize(width: 350, height: 250)
+			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: OutlineGetInfoViewController.self)
+			outlineGetInfoViewController.preferredContentSize = CGSize(width: 350, height: 425)
 			outlineGetInfoViewController.outline = outline
 			present(outlineGetInfoViewController, animated: true)
 		
 		} else {
 			
 			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
-			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 325)
+			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 425, height: 510)
 			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
 			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
 			outlineGetInfoViewController.outline = outline
