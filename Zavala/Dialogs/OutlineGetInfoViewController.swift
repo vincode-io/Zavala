@@ -2,78 +2,71 @@
 //  OutlineGetInfoViewController.swift
 //  Zavala
 //
-//  Created by Maurice Parker on 3/12/21.
+//  Created by Maurice Parker on 3/10/21.
 //
 
 import UIKit
+import SwiftUI
 import VinOutlineKit
 
-class OutlineGetInfoViewController: UITableViewController {
+class OutlineGetInfoViewController: UIViewController {
 
-	weak var outline: Outline?
-	
-	@IBOutlet weak var ownerNameTextField: UITextField!
-	@IBOutlet weak var ownerEmailTextField: UITextField!
-	@IBOutlet weak var ownerURLTextField: UITextField!
-	
-	override func viewDidLoad() {
-        super.viewDidLoad()
-
-		navigationItem.title = outline?.title
-
-		ownerNameTextField.delegate = self
-		ownerEmailTextField.delegate = self
-		ownerURLTextField.delegate = self
-
-		ownerNameTextField.text = outline?.ownerName
-		ownerEmailTextField.text = outline?.ownerEmail
-		ownerURLTextField.text = outline?.ownerURL
-	
-		let createdLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: 0.0, width: 0.0, height: 0.0))
-		createdLabel.font = UIFont.systemFont(ofSize: 12.0)
-		createdLabel.textColor = UIColor.gray
-		if let created = outline?.created {
-			createdLabel.text = AppStringAssets.createdOnLabel(date: created)
-		} else {
-			createdLabel.text = " "
-		}
-		createdLabel.sizeToFit()
-		
-		let updatedLabel = NonIntrinsicLabel(frame: CGRect(x: 32.0, y: createdLabel.frame.maxY + 8, width: 0.0, height: 0.0))
-		updatedLabel.font = UIFont.systemFont(ofSize: 12.0)
-		updatedLabel.textColor = UIColor.gray
-		if let updated = outline?.updated {
-			updatedLabel.text = AppStringAssets.updatedOnLabel(date: updated)
-		} else {
-			updatedLabel.text = " "
-		}
-		updatedLabel.sizeToFit()
-		
-		let width = max(createdLabel.frame.width, updatedLabel.frame.width)
-		let wrapperView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: updatedLabel.frame.maxY))
-		wrapperView.addSubview(createdLabel)
-		wrapperView.addSubview(updatedLabel)
-		tableView.tableFooterView = wrapperView
+	override var keyCommands: [UIKeyCommand]? {
+		[
+			UIKeyCommand(action: #selector(cancel(_:)), input: UIKeyCommand.inputEscape)
+		]
 	}
 
+
+	weak var outline: Outline?
+	var getInfoViewModel: GetInfoViewModel!
+
+	@IBOutlet weak var formView: UIView!
+	
+	@IBOutlet weak var macCancelButton: UIButton!
+	@IBOutlet weak var macSubmitButton: UIButton!
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
+	
+		#if targetEnvironment(macCatalyst)
+			macSubmitButton.role = .primary
+			formView.heightAnchor.constraint(equalToConstant: 360).isActive = true
+		#else
+			navigationItem.title = outline?.title
+			formView.heightAnchor.constraint(equalToConstant: 475).isActive = true
+			macCancelButton.isHidden = true
+			macSubmitButton.isHidden = true
+		#endif
+
+		getInfoViewModel = GetInfoViewModel(outline: outline)
+		let getInfoView = GetInfoView(getInfoViewModel: getInfoViewModel)
+		
+		let hostingController = UIHostingController(rootView: getInfoView)
+		formView.addChildAndPin(hostingController.view)
+		addChild(hostingController)
+	}
+	
 	@IBAction func cancel(_ sender: Any) {
 		dismiss(animated: true)
 	}
 	
 	@IBAction func submit(_ sender: Any) {
-		outline?.update(ownerName: ownerNameTextField.text, ownerEmail: ownerEmailTextField.text, ownerURL: ownerURLTextField.text)
-		dismiss(animated: true)
+		submitAndDismiss()
 	}
 	
 }
 
-// MARK: UITextFieldDelegate
+// MARK: Helpers
 
-extension OutlineGetInfoViewController: UITextFieldDelegate {
+private extension OutlineGetInfoViewController {
 	
-	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		textField.resignFirstResponder()
-		return true
+	func submitAndDismiss() {
+		outline?.update(autoLinkingEnabled: getInfoViewModel.autoLinkingEnabled,
+						ownerName: getInfoViewModel.ownerName,
+						ownerEmail: getInfoViewModel.ownerEmail,
+						ownerURL: getInfoViewModel.ownerURL)
+		dismiss(animated: true)
 	}
 	
 }
