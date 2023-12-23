@@ -349,6 +349,9 @@ extension Outline: VCKModel {
 
         ancestorUpdated = nil
         serverUpdated = nil
+		
+		ancestorAutoLinkingEnabled = nil
+		serverAutolinkingEnabled = nil
 
         ancestorOwnerName = nil
         serverOwnerName = nil
