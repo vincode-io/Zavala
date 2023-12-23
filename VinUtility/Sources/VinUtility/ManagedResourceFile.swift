@@ -78,7 +78,13 @@ public final class ManagedResourceFile: NSObject, NSFilePresenter {
 	
 	public func debounceSaveToDiskIfNeeded() {
 		saveDebouncer.debounce { [weak self] in
-			self?.saveToDiskIfNeeded()
+			if Thread.isMainThread {
+				self?.saveToDiskIfNeeded()
+			} else {
+				DispatchQueue.main.async {
+					self?.saveToDiskIfNeeded()
+				}
+			}
 		}
 	}
 
