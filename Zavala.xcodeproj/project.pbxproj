@@ -880,12 +880,12 @@
 			isa = PBXGroup;
 			children = (
 				51278E76257F37AC0034F1CB /* Dialog.storyboard */,
+				51AC4DCD2B360C76002FF9AD /* GetInfoView.swift */,
 				511B29E425FEE4DC00C04239 /* LinkViewController.swift */,
 				51C568D8258C1CD200AA7B93 /* MacLinkViewController.swift */,
 				519185062713453700B7E177 /* MacRenameTagViewController.swift */,
 				5167607625F9BC9400AC0EBD /* OutlineGetInfoViewController.swift */,
 				5191850427133B4000B7E177 /* RenameTagViewController.swift */,
-				51AC4DCD2B360C76002FF9AD /* GetInfoView.swift */,
 			);
 			path = Dialogs;
 			sourceTree = "<group>";

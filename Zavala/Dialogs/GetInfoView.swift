@@ -44,11 +44,13 @@ struct GetInfoView: View {
 					Text("Created")
 					Spacer()
 					Text(getInfoViewModel.createdLabel)
+						.foregroundStyle(.secondary)
 				}
 				HStack {
 					Text("Updated")
 					Spacer()
 					Text(getInfoViewModel.updatedLabel)
+						.foregroundStyle(.secondary)
 				}
 			}
 		}
