@@ -939,7 +939,6 @@
 				51C4C3C22555EB4D004E0206 /* Run VerifyNoBS */,
 				51C4C3F125565282004E0206 /* Embed Frameworks */,
 				51E060D125A45AA800194066 /* Embed PlugIns */,
-				5141785526BE1DB900E9EAA5 /* Delete unintended embedded frameworks */,
 			);
 			buildRules = (
 			);
@@ -1055,25 +1054,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		5141785526BE1DB900E9EAA5 /* Delete unintended embedded frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Delete unintended embedded frameworks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Delete the framework that Xcode should have never included\n# https://forums.swift.org/t/is-this-an-xcode-bug-or-somehow-related-to-spm/33987\nrm -rf \"${TARGET_BUILD_DIR}/${PLUGINS_FOLDER_PATH}/SpotlightIndexExtension.appex/Frameworks\"\n";
-		};
 		5197900629BB784D00F1A05D /* Update Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
