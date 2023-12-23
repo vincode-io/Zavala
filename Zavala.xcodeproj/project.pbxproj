@@ -92,7 +92,6 @@
 		517AF6A025E08A6B0044DBAB /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 517AF69F25E08A6B0044DBAB /* Settings.storyboard */; };
 		517AF6A425E08B7F0044DBAB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */; };
 		517AF6A725E08CB80044DBAB /* NonIntrinsicLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */; };
-		517AF6AA25E08CD30044DBAB /* Bundle-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */; };
 		517B41D32B26738C001EC361 /* RowIndentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517B41D22B26738C001EC361 /* RowIndentTableViewController.swift */; };
 		517B41D52B267424001EC361 /* RowSpacingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517B41D42B267424001EC361 /* RowSpacingTableViewController.swift */; };
 		5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5181A9372554D92000C153E8 /* AppDelegate.swift */; };
@@ -176,10 +175,8 @@
 		51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */; };
 		51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */; };
 		51E2BCBB290EF849002BA7B2 /* AppStringAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5162AFF528EFB4A90002A61C /* AppStringAssets.swift */; };
-		51E2BCBC290EF927002BA7B2 /* Bundle-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */; };
 		51E2BCBD290EFB15002BA7B2 /* AppKitImageAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5162AFF928EFB5C00002A61C /* AppKitImageAssets.swift */; };
 		51E2BCBE290EFE78002BA7B2 /* AppStringAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5162AFF528EFB4A90002A61C /* AppStringAssets.swift */; };
-		51E2BCBF290F001B002BA7B2 /* Bundle-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */; };
 		51E2BCC0290F0046002BA7B2 /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
 		51E5C48F27221F6200A38983 /* IntentOutline+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C48E27221F6200A38983 /* IntentOutline+.swift */; };
 		51E5C49127221F6F00A38983 /* IntentRow+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C49027221F6F00A38983 /* IntentRow+.swift */; };
@@ -332,7 +329,6 @@
 		517AF69F25E08A6B0044DBAB /* Settings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
 		517AF6A325E08B7F0044DBAB /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		517AF6A625E08CB80044DBAB /* NonIntrinsicLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonIntrinsicLabel.swift; sourceTree = "<group>"; };
-		517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle-Extensions.swift"; sourceTree = "<group>"; };
 		517B41D22B26738C001EC361 /* RowIndentTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowIndentTableViewController.swift; sourceTree = "<group>"; };
 		517B41D42B267424001EC361 /* RowSpacingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowSpacingTableViewController.swift; sourceTree = "<group>"; };
 		5181A9342554D92000C153E8 /* Zavala.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zavala.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -575,7 +571,6 @@
 			children = (
 				517AF69B25E0862E0044DBAB /* AppDefaults.swift */,
 				5162AFF528EFB4A90002A61C /* AppStringAssets.swift */,
-				517AF6A925E08CD30044DBAB /* Bundle-Extensions.swift */,
 				5167606325F95E4600AC0EBD /* DocumentIndexer.swift */,
 				516F5372260829060038BAF8 /* OutlineFontDefaults.swift */,
 				519A2323260A9B900056051E /* OutlineFontField.swift */,
@@ -1115,7 +1110,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				51E2BCBE290EFE78002BA7B2 /* AppStringAssets.swift in Sources */,
-				51E2BCBF290F001B002BA7B2 /* Bundle-Extensions.swift in Sources */,
 				51DEE80E26FB4550006DAA56 /* UserInterfaceColorPalette.swift in Sources */,
 				515D453326BB55C900228229 /* DocumentIndexer.swift in Sources */,
 				515D452F26BB557200228229 /* IndexRequestHandler.swift in Sources */,
@@ -1191,7 +1185,6 @@
 				517AF6A425E08B7F0044DBAB /* SettingsViewController.swift in Sources */,
 				517A9E4A26055C8B00EF346A /* UIWindow+.swift in Sources */,
 				517A9E432605558700EF346A /* MacOpenQuicklyViewController.swift in Sources */,
-				517AF6AA25E08CD30044DBAB /* Bundle-Extensions.swift in Sources */,
 				51DAEC262739838E00BE4A13 /* CollectionsViewController+Drag.swift in Sources */,
 				51E14F342560732F00320EDB /* CollectionsItem.swift in Sources */,
 				51A1EC422723246C00463A15 /* EditRowsIntentHandler.swift in Sources */,
@@ -1290,7 +1283,6 @@
 				516F5383260A92720038BAF8 /* PreferencesTableViewBackgroundView.swift in Sources */,
 				51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */,
 				517AF68C25E07A790044DBAB /* GeneralPrefencesViewController.swift in Sources */,
-				51E2BCBC290EF927002BA7B2 /* Bundle-Extensions.swift in Sources */,
 				519A2326260A9C940056051E /* OutlineFontField.swift in Sources */,
 				51E2BCBB290EF849002BA7B2 /* AppStringAssets.swift in Sources */,
 				51DEE80D26FB4488006DAA56 /* UserInterfaceColorPalette.swift in Sources */,

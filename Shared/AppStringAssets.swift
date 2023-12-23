@@ -26,12 +26,9 @@ struct AppStringAssets {
 	// MARK: URL's
 	
 	static var acknowledgementsURL = "https://github.com/vincode-io/Zavala/wiki/Acknowledgements"
-	static var bugTrackerURL = "https://github.com/vincode-io/Zavala/issues"
 	static var reportAnIssueURL = "mailto:mo@vincode.io"
-	static var githubRepositoryURL = "https://github.com/vincode-io/Zavala"
 	static var helpURL = "https://zavala.vincode.io/help/Zavala_Help.md/"
 	static var privacyPolicyURL = "https://vincode.io/privacy-policy/"
-	static var releaseNotesURL = "https://github.com/vincode-io/Zavala/releases/tag/\(Bundle.main.versionNumber)"
 	static var websiteURL = "https://zavala.vincode.io"
 	
 	// MARK: Localizable Variables

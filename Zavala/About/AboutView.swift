@@ -39,7 +39,7 @@ struct AboutView: View {
 						.onTapGesture {
 							UIApplication.shared.open(URL(string: AppStringAssets.websiteURL)!, options: [:])
 						}
-					Text(Bundle.main.appName)
+					Text("Zavala")
 						.foregroundColor(.primary)
 						.font(.title)
 					Text(secondaryLabel)
