@@ -22,7 +22,7 @@ struct GetInfoView: View {
 		Form {
 			Section(header: Text("Settings")) {
 				Toggle(isOn: $getInfoViewModel.autoLinkingEnabled) {
-					Text("Automatic Link Title Change")
+					Text(AppStringAssets.autoLinkingLabel)
 				}
 			}
 			Section(header: Text("Owner")) {
@@ -35,7 +35,7 @@ struct GetInfoView: View {
 				TextField(text: $getInfoViewModel.ownerURL) {
 					Text("URL")
 				}
-				Text("This information is included in OPML documents to attribute ownership.")
+				Text(AppStringAssets.opmlOwnerFieldNote)
 					.font(.footnote)
 					.foregroundStyle(.secondary)
 			}

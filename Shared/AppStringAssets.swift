@@ -46,6 +46,7 @@ struct AppStringAssets {
 	static var addTagControlLabel = String(localized: "Add Tag", comment: "Control Label: Add Tag.")
 	static var addTopicLevelControlLabel = String(localized: "Add Topic Level", comment: "Control Label: The menu option to add a new Topic Level.")
 	static var appearanceControlLabel = String(localized: "Appearance", comment: "Control Label: Appearance")
+	static var autoLinkingLabel = String(localized: "Automatically Change Link Titles", comment: "Control Label: Auto Linking")
 	
 	static var backControlLabel = String(localized: "Back", comment: "Control Label: Back")
 	static var backlinksLabel = String(localized: "Backlinks", comment: "Font Label: Backlinks")
@@ -148,6 +149,7 @@ struct AppStringAssets {
 	static var openQuicklySearchPlaceholder = String(localized: "Open Quickly", comment: "Search Field Placeholder: Open Quickly")
 	static var openQuicklyWindowTitle = String(localized: "Open Quickly", comment: "Window Title: Open Quickly")
 	static var outlineControlLabel = String(localized: "Outline", comment: "Control Label: Outline")
+	static var opmlOwnerFieldNote = String(localized: "This information is included in OPML documents to attribute ownership.", comment: "Note: OPML Ownership.")
 	
 	static var pasteControlLabel = String(localized: "Paste", comment: "Control Label: Paste")
 	static var preferencesEllipsisControlLabel = String(localized: "Preferences…", comment: "Control Label: Preferences…")
@@ -163,8 +165,7 @@ struct AppStringAssets {
 	static var releaseNotesControlLabel = String(localized: "Release Notes", comment: "Control Label: Release Notes")
 	static var removeControlLabel = String(localized: "Remove", comment: "Control Label: Remove")
 	static var removeICloudAccountTitle = String(localized: "Remove iCloud Account", comment: "Alert Title: title for removing an iCloud Account")
-	static var removeICloudAccountMessage = String(localized: "Are you sure you want to remove the iCloud Account? " +
-												   "All documents in the iCloud Account will be removed from this computer.",
+	static var removeICloudAccountMessage = String(localized: "Are you sure you want to remove the iCloud Account? All documents in the iCloud Account will be removed from this computer.",
 												   comment: "Alert Message: message for removing an iCloud Account")
 	static var removeTagControlLabel = String(localized: "Remove Tag", comment: "Control Label: Remove Tag")
 	static var renameControlLabel = String(localized: "Rename", comment: "Control Label: Rename")
@@ -248,19 +249,16 @@ struct AppStringAssets {
 	}
 	
 	static func topicLevelLabel(level: Int) -> String {
-		String(localized: "Topic Level \(level)", comment: "Font Label: The font for the given Topic Level")
+		return String(localized: "Topic Level \(level)", comment: "Font Label: The font for the given Topic Level")
 	}
 	
 	static func noteLevelLabel(level: Int) -> String {
-		String(localized: "Note Level \(level)", comment: "Font Label: The font for the given Note Level")
+		return String(localized: "Note Level \(level)", comment: "Font Label: The font for the given Note Level")
 	}
 	
-}
-
-private extension String {
-	
-	init(localized: String, comment: String? = nil) {
-		self = localized
+	static func copyrightLabel() -> String {
+		let year = String(Calendar.current.component(.year, from: Date()))
+		return String(localized: "Copyright © Vincode, Inc. 2020-\(year)", comment: "About Box copyright information")
 	}
 	
 }
