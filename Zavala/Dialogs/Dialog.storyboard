@@ -362,12 +362,12 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Outline" id="3j7-Tn-sXN">
-                        <barButtonItem key="leftBarButtonItem" style="plain" systemItem="cancel" id="Y0V-Se-vXi">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Y0V-Se-vXi">
                             <connections>
                                 <action selector="cancel:" destination="nWm-lX-r7r" id="2LK-6w-dHA"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="done" id="fDW-rR-f4Q">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="fDW-rR-f4Q">
                             <connections>
                                 <action selector="submit:" destination="nWm-lX-r7r" id="fHr-d2-1Kr"/>
                             </connections>
@@ -465,7 +465,7 @@
     <resources>
         <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

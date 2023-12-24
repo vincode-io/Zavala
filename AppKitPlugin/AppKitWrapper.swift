@@ -7,6 +7,7 @@
 
 import AppKit
 import OSLog
+import UniformTypeIdentifiers
 
 @objc class AppKitWrapper: NSResponder, AppKitPlugin {
 	
@@ -40,7 +41,9 @@ import OSLog
 		panel.allowsMultipleSelection = false
 		panel.canChooseDirectories = false
 		panel.resolvesAliases = true
-		panel.allowedFileTypes = ["opml"]
+		if let opmlType = UTType(filenameExtension: "opml") {
+			panel.allowedContentTypes = [opmlType]
+		}
 		panel.allowsOtherFileTypes = false
 		
 		let modalResult = panel.runModal()

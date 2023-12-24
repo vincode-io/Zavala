@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import MobileCoreServices
+import UniformTypeIdentifiers
 import LinkPresentation
 import VinOutlineKit
 
@@ -50,7 +50,7 @@ extension DocumentsActivityItemsConfiguration: UIActivityItemsConfigurationReadi
 		let itemProviders: [NSItemProvider] = selectedDocuments.compactMap { document in
 			let itemProvider = NSItemProvider()
 			
-			itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+			itemProvider.registerDataRepresentation(for: UTType.utf8PlainText, visibility: .all) { completion in
 				if Thread.isMainThread {
 					let data = document.formattedPlainText.data(using: .utf8)
 					completion(data, nil)

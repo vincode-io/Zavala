@@ -1286,7 +1286,7 @@ extension MainSplitViewController: UIActivityItemsConfigurationReading {
 			
 			let itemProvider = NSItemProvider()
 			
-			itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+			itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
 				let data = outline.markdownList().data(using: .utf8)
 				completion(data, nil)
 				return nil

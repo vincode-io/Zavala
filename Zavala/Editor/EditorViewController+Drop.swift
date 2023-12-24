@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import MobileCoreServices
+import UniformTypeIdentifiers
 import VinUtility
 import VinOutlineKit
 
@@ -14,7 +14,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
 		guard !(session.items.first?.localObject is Row) else { return true }
-		return session.hasItemsConforming(toTypeIdentifiers: [kUTTypeUTF8PlainText as String, Row.typeIdentifier])
+		return session.hasItemsConforming(toTypeIdentifiers: [UTType.utf8PlainText.identifier, Row.typeIdentifier])
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
@@ -234,7 +234,7 @@ private extension EditorViewController {
 		guard let outline = outline else { return }
 		
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
-			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(kUTTypeUTF8PlainText as String) {
+			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(UTType.utf8PlainText.identifier) {
 				return dropItem.dragItem.itemProvider
 			}
 			return nil
@@ -247,7 +247,7 @@ private extension EditorViewController {
 		
 		for itemProvider in itemProviders {
 			group.enter()
-			itemProvider.loadDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String) { (data, error) in
+			itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
 				if let data = data, let itemText = String(data: data, encoding: .utf8) {
 					texts.append(itemText)
 					group.leave()

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import MobileCoreServices
+import UniformTypeIdentifiers
 import VinOutlineKit
 
 extension EditorViewController: UICollectionViewDragDelegate {
@@ -26,7 +26,7 @@ extension EditorViewController: UICollectionViewDragDelegate {
 			
 			// We only register the text representation on the first one, since it looks like most text editors only support 1 dragged text item
 			if row == rows[0] {
-				itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+				itemProvider.registerDataRepresentation(for: UTType.utf8PlainText, visibility: .all) { completion in
 					var markdowns = [String]()
 					for row in rows {
 						markdowns.append(row.markdownList())

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import MobileCoreServices
+import UniformTypeIdentifiers
 import VinOutlineKit
 import VinUtility
 
@@ -23,7 +23,7 @@ class EditorRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {
 			return false
 		}
 
-		return session.hasItemsConforming(toTypeIdentifiers: [kUTTypeImage as String]) && session.items.count == 1
+		return session.hasItemsConforming(toTypeIdentifiers: [UTType.image.identifier]) && session.items.count == 1
 	}
 	
 	func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
@@ -41,8 +41,8 @@ class EditorRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {
 	}
 	
 	func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-		if let itemProvider = session.items.first(where: { $0.itemProvider.hasItemConformingToTypeIdentifier(kUTTypeImage as String) })?.itemProvider {
-			itemProvider.loadDataRepresentation(forTypeIdentifier: kUTTypeImage as String) { [weak textView] (data, error) in
+		if let itemProvider = session.items.first(where: { $0.itemProvider.hasItemConformingToTypeIdentifier(UTType.image.identifier) })?.itemProvider {
+			itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier) { [weak textView] (data, error) in
 				guard let textView = textView, let data = data, let cgImage = UIImage.scaleImage(data, maxPixelSize: 1800) else { return }
 				let image = UIImage(cgImage: cgImage)
 				DispatchQueue.main.async {

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import MobileCoreServices
+import UniformTypeIdentifiers
 import VinOutlineKit
 
 extension DocumentsViewController: UICollectionViewDragDelegate {
@@ -33,7 +33,7 @@ extension DocumentsViewController: UICollectionViewDragDelegate {
 				return nil
 			}
 
-			itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+			itemProvider.registerDataRepresentation(for: UTType.utf8PlainText, visibility: .all) { completion in
 				let data = outline.markdownList().data(using: .utf8)
 				completion(data, nil)
 				return nil

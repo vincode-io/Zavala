@@ -226,7 +226,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		if let currentTextView {
 			return !currentTextView.canPerformAction(.paste, withSender: nil)
 		}
-		return !UIPasteboard.general.contains(pasteboardTypes: [Row.typeIdentifier, kUTTypeUTF8PlainText as String], inItemSet: nil)
+		return !UIPasteboard.general.contains(pasteboardTypes: [Row.typeIdentifier, UTType.utf8PlainText.identifier], inItemSet: nil)
 	}
 
 	var isInsertImageUnavailable: Bool {
@@ -609,7 +609,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		case .cut, .copy:
 			return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
 		case .paste:
-			return UIPasteboard.general.contains(pasteboardTypes: [kUTTypeUTF8PlainText as String, Row.typeIdentifier])
+			return UIPasteboard.general.contains(pasteboardTypes: [UTType.utf8PlainText.identifier, Row.typeIdentifier])
 		case .splitRow:
 			return !isSplitRowUnavailable
 		default:
@@ -2324,7 +2324,6 @@ private extension EditorViewController {
 	}
 	
 	func applyChangesRestoringState(_ changes: OutlineElementChanges) {
-		let currentCoordinates = CursorCoordinates.currentCoordinates
 		let selectedIndexPaths = collectionView.indexPathsForSelectedItems
 		
 		applyChanges(changes)
@@ -2838,7 +2837,7 @@ private extension EditorViewController {
 
 			// We only register the text representation on the first one, since it looks like most text editors only support 1 dragged text item
 			if row == rows[0] {
-				itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+				itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
 					var markdowns = [String]()
 					for row in rows {
 						markdowns.append(row.markdownList())
@@ -2896,7 +2895,7 @@ private extension EditorViewController {
 				self.runCommand(command)
 			}
 			
-		} else if let stringProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [kUTTypeUTF8PlainText as String]), !stringProviderIndexes.isEmpty {
+		} else if let stringProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [UTType.utf8PlainText.identifier]), !stringProviderIndexes.isEmpty {
 			
 			let group = DispatchGroup()
 			var texts = [String]()
@@ -2904,7 +2903,7 @@ private extension EditorViewController {
 			for index in stringProviderIndexes {
 				let itemProvider = UIPasteboard.general.itemProviders[index]
 				group.enter()
-				itemProvider.loadDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String) { (data, error) in
+				itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
 					if let data = data, let itemText = String(data: data, encoding: .utf8) {
 						texts.append(itemText)
 						group.leave()
