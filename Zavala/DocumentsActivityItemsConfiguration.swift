@@ -74,30 +74,21 @@ extension DocumentsActivityItemsConfiguration: UIActivityItemsConfigurationReadi
 			return nil
 		}
 
-		if #available(iOS 15.0, *) {
-			switch key {
-			case .title:
-				return selectedDocuments[at].title
-			case .linkPresentationMetadata:
-				let iconView = UIImageView(image: ZavalaImageAssets.outline)
-				iconView.backgroundColor = .accentColor
-				iconView.tintColor = .label
-				iconView.contentMode = .scaleAspectFit
-				iconView.bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
-				let metadata = LPLinkMetadata()
-				metadata.title = selectedDocuments[at].title
-				metadata.iconProvider = NSItemProvider(object: iconView.asImage())
-				return metadata
-			default:
-				return nil
-			}
-		} else {
-			switch key {
-			case .title:
-				return selectedDocuments[at].title
-			default:
-				return nil
-			}
+		switch key {
+		case .title:
+			return selectedDocuments[at].title
+		case .linkPresentationMetadata:
+			let iconView = UIImageView(image: ZavalaImageAssets.outline)
+			iconView.backgroundColor = .accentColor
+			iconView.tintColor = .label
+			iconView.contentMode = .scaleAspectFit
+			iconView.bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
+			let metadata = LPLinkMetadata()
+			metadata.title = selectedDocuments[at].title
+			metadata.iconProvider = NSItemProvider(object: iconView.asImage())
+			return metadata
+		default:
+			return nil
 		}
 	}
 

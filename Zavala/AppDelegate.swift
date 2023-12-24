@@ -14,171 +14,11 @@ var appDelegate: AppDelegate!
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
-	override var keyCommands: [UIKeyCommand]? {
-		#if targetEnvironment(macCatalyst)
-		return nil
-		#else
-		if #available(iOS 15.0, *) {
-			return nil
-		}
-		
-		var menuKeyCommands = [UIKeyCommand]()
-		
-		menuKeyCommands.append(showPreferences)
-		menuKeyCommands.append(beginDocumentSearchCommand)
-		menuKeyCommands.append(showOpenQuicklyCommand)
-		
-		if AccountManager.shared.isSyncAvailable {
-			menuKeyCommands.append(syncCommand)
-		}
-
-
-		if !(mainCoordinator?.isOutlineFunctionsUnavailable ?? true) {
-			menuKeyCommands.append(toggleFilterOnCommand)
-			menuKeyCommands.append(beginInDocumentSearchCommand)
-			menuKeyCommands.append(useSelectionForSearchCommand)
-			menuKeyCommands.append(nextInDocumentSearchCommand)
-			menuKeyCommands.append(previousInDocumentSearchCommand)
-			menuKeyCommands.append(printDocsCommand)
-			menuKeyCommands.append(printListsCommand)
-			menuKeyCommands.append(outlineGetInfoCommand)
-		}
-		
-		menuKeyCommands.append(newOutlineCommand)
-		menuKeyCommands.append(importOPMLCommand)
-		
-		if !(mainCoordinator?.isOutlineFunctionsUnavailable ?? true) {
-			menuKeyCommands.append(exportMarkdownListsCommand)
-			menuKeyCommands.append(exportOPMLsCommand)
-		}
-		
-		menuKeyCommands.append(newWindowCommand)
-		menuKeyCommands.append(toggleSidebarCommand)
-		
-		menuKeyCommands.append(deleteCommand)
-
-		if !(mainCoordinator?.isGoBackwardOneUnavailable ?? true) {
-			menuKeyCommands.append(goBackwardOneCommand)
-		}
-		
-		if !(mainCoordinator?.isGoForwardOneUnavailable ?? true) {
-			menuKeyCommands.append(goForwardOneCommand)
-		}
-		
-		if !(mainCoordinator?.isInsertImageUnavailable ?? true) {
-			menuKeyCommands.append(insertImageCommand)
-		}
-		
-		if !(mainCoordinator?.isLinkUnavailable ?? true) {
-			menuKeyCommands.append(linkCommand)
-		}
-		
-		if !(mainCoordinator?.isInsertRowUnavailable ?? true) {
-			menuKeyCommands.append(insertRowCommand)
-		}
-		
-		if !(mainCoordinator?.isCreateRowUnavailable ?? true) {
-			menuKeyCommands.append(createRowCommand)
-		}
-		
-		if !(mainCoordinator?.isDuplicateRowsUnavailable ?? true) {
-			menuKeyCommands.append(duplicateRowsCommand)
-		}
-		
-		if !(mainCoordinator?.isCreateRowInsideUnavailable ?? true) {
-			menuKeyCommands.append(createRowInsideCommand)
-		}
-		
-		if !(mainCoordinator?.isCreateRowOutsideUnavailable ?? true) {
-			menuKeyCommands.append(createRowOutsideCommand)
-		}
-		
-		if !(mainCoordinator?.isMoveRowsUpUnavailable ?? true) {
-			menuKeyCommands.append(moveRowsUpCommand)
-		}
-		
-		if !(mainCoordinator?.isMoveRowsDownUnavailable ?? true) {
-			menuKeyCommands.append(moveRowsDownCommand)
-		}
-		
-		if !(mainCoordinator?.isMoveRowsLeftUnavailable ?? true) {
-			menuKeyCommands.append(moveRowsLeftCommand)
-		}
-		
-		if !(mainCoordinator?.isMoveRowsRightUnavailable ?? true) {
-			menuKeyCommands.append(moveRowsRightCommand)
-		}
-		
-		if !(mainCoordinator?.isToggleRowCompleteUnavailable ?? true) {
-			if mainCoordinator?.isCompleteRowsAvailable ?? false {
-				menuKeyCommands.append(completeRowsCommand)
-			} else {
-				menuKeyCommands.append(uncompleteRowsCommand)
-			}
-		}
-		
-		if !(mainCoordinator?.isCreateRowNotesUnavailable ?? true) {
-			menuKeyCommands.append(createRowNotesCommand)
-		}
-
-		if !(mainCoordinator?.isDeleteRowNotesUnavailable ?? true) {
-			menuKeyCommands.append(deleteRowNotesCommand)
-		}
-
-		if !(mainCoordinator?.isSplitRowUnavailable ?? true) {
-			menuKeyCommands.append(splitRowCommand)
-		}
-
-		if !(mainCoordinator?.isExpandAllInOutlineUnavailable ?? true) {
-			menuKeyCommands.append(expandAllInOutlineCommand)
-		}
-		
-		if !(mainCoordinator?.isCollapseAllInOutlineUnavailable ?? true) {
-			menuKeyCommands.append(collapseAllInOutlineCommand)
-		}
-
-		if !(mainCoordinator?.isExpandAllUnavailable ?? true) {
-			menuKeyCommands.append(expandAllCommand)
-		}
-		
-		if !(mainCoordinator?.isCollapseAllUnavailable ?? true) {
-			menuKeyCommands.append(collapseAllCommand)
-		}
-		
-		if !(mainCoordinator?.isExpandUnavailable ?? true) {
-			menuKeyCommands.append(expandCommand)
-		}
-		
-		if !(mainCoordinator?.isCollapseUnavailable ?? true) {
-			menuKeyCommands.append(collapseCommand)
-		}
-		
-		if !(mainCoordinator?.isCollapseParentRowUnavailable ?? true) {
-			menuKeyCommands.append(collapseParentRowCommand)
-		}
-		
-		if !(mainCoordinator?.isDeleteCompletedRowsUnavailable ?? true) {
-			menuKeyCommands.append(deleteCompletedRowsCommand)
-		}
-
-		return menuKeyCommands
-		#endif
-	}
-		
-	let showPreferences: UIKeyCommand = {
-		let title: String
-		if #available(iOS 16, *) {
-			title = AppStringAssets.settingsEllipsisControlLabel
-		} else {
-			title = AppStringAssets.preferencesEllipsisControlLabel
-		}
-		
-		return UIKeyCommand(title: title,
-							action: #selector(showPreferences(_:)),
-							input: ",",
-							modifierFlags: [.command])
-			
-	}()
+	let showPreferences = UIKeyCommand(title: AppStringAssets.settingsEllipsisControlLabel,
+									   action: #selector(showPreferences(_:)),
+									   input: ",",
+									   modifierFlags: [.command])
+	
 	
 	let syncCommand = UIKeyCommand(title: AppStringAssets.syncControlLabel,
 								   action: #selector(syncCommand(_:)),
@@ -215,11 +55,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 action: #selector(createOutlineCommand(_:)),
 										 input: "n",
 										 modifierFlags: [.command])
-	
-	let toggleSidebarCommand = UIKeyCommand(title: AppStringAssets.togglerSidebarControlLabel,
-											action: #selector(toggleSidebarCommand(_:)),
-											input: "s",
-											modifierFlags: [.control, .command])
 	
 	let deleteCommand = UIKeyCommand(title: AppStringAssets.deleteControlLabel,
 									 action: #selector(delete),
@@ -1101,13 +936,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let toggleFilterOutlineMenu = UIMenu(title: "", options: .displayInline, children: [toggleFilterOnCommand, toggleCompletedFilterCommand, toggleNotesFilterCommand])
 		builder.insertChild(toggleFilterOutlineMenu, atStartOfMenu: .view)
 
-		if #available(macOS 12.0, *) {
-			// This is included automatically on 12 and up
-		} else {
-			let toggleSidebarMenu = UIMenu(title: "", options: .displayInline, children: [toggleSidebarCommand])
-			builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)
-		}
-		
 		// Outline Menu
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand, createRowNotesCommand, deleteRowNotesCommand])
 		let moveRowMenu = UIMenu(title: "", options: .displayInline, children: [moveRowsLeftCommand, moveRowsRightCommand, moveRowsUpCommand, moveRowsDownCommand])

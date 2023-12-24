@@ -468,12 +468,8 @@ extension DocumentsViewController {
 	}
 	
 	private func reconfigureAll() {
-		if #available(iOS 15, *) {
-			let indexPaths = (0..<documents.count).map { IndexPath(row: $0, section: 0) }
-			collectionView.reconfigureItems(at: indexPaths)
-		} else {
-			collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
-		}
+		let indexPaths = (0..<documents.count).map { IndexPath(row: $0, section: 0) }
+		collectionView.reconfigureItems(at: indexPaths)
 	}
 	
 	private func scheduleReconfigureAll() {

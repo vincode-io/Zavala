@@ -48,23 +48,17 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		var keyCommands = [UIKeyCommand]()
 		
 		let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(moveCurrentRowsLeft))
-		if #available(iOS 15.0, *) {
-			shiftTab.wantsPriorityOverSystemBehavior = true
-		}
+		shiftTab.wantsPriorityOverSystemBehavior = true
 		keyCommands.append(shiftTab)
 		
 		let tab = UIKeyCommand(action: #selector(moveCurrentRowsRight), input: "\t")
-		if #available(iOS 15.0, *) {
-			tab.wantsPriorityOverSystemBehavior = true
-		}
+		tab.wantsPriorityOverSystemBehavior = true
 		keyCommands.append(tab)
 		
 		// We need to have this here in addition to the AppDelegate, since iOS won't pick it up for some reason
 		if !isToggleRowCompleteUnavailable {
 			let commandReturn = UIKeyCommand(input: "\r", modifierFlags: [.command], action: #selector(toggleCompleteRows))
-			if #available(iOS 15, *) {
-				commandReturn.wantsPriorityOverSystemBehavior = true
-			}
+			commandReturn.wantsPriorityOverSystemBehavior = true
 			keyCommands.append(commandReturn)
 		}
 		
@@ -2281,18 +2275,10 @@ private extension EditorViewController {
 	}
 	
 	func layoutEditor(row: Row) {
-		if #available(iOS 15, *) {
-			guard let index = row.shadowTableIndex else { return }
-			let indexPath = IndexPath(row: index, section: adjustedRowsSection)
-			UIView.performWithoutAnimation {
-				self.collectionView.reconfigureItems(at: [indexPath])
-			}
-		} else {
-			// This is presumably less effecient than just reconfiguring the item and
-			// it can trigger layout bugs. For example if the first row of a topic above
-			// this row is an image, things go to 💩 in a hurry.
-			collectionView.collectionViewLayout.invalidateLayout()
-			collectionView.layoutIfNeeded()
+		guard let index = row.shadowTableIndex else { return }
+		let indexPath = IndexPath(row: index, section: adjustedRowsSection)
+		UIView.performWithoutAnimation {
+			self.collectionView.reconfigureItems(at: [indexPath])
 		}
 		
 		makeCursorVisibleIfNecessary()
@@ -2321,7 +2307,7 @@ private extension EditorViewController {
 		
 		let hasSectionOtherThanRows = reloads.contains(where: { $0.section != adjustedRowsSection })
 		
-		if #available(iOS 15, *), !hasSectionOtherThanRows {
+		if !hasSectionOtherThanRows {
 			collectionView.reconfigureItems(at: reloads)
 		} else {
 			if changes.isReloadsAnimatable {
@@ -2343,13 +2329,6 @@ private extension EditorViewController {
 		
 		applyChanges(changes)
 
-		if #available(iOS 15, *) {
-		} else {
-			if let coordinates = currentCoordinates {
-				restoreCursorPosition(coordinates, scroll: true)
-			}
-		}
-		
 		if changes.isOnlyReloads, let indexPaths = selectedIndexPaths {
 			for indexPath in indexPaths {
 				collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
