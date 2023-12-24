@@ -294,7 +294,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 	@objc func createOutline() {
 		selectDefaultDocumentContainerIfNecessary() {
-			self.documentsViewController?.createOutline()
+			self.documentsViewController?.createOutline(animated: false)
 		}
 	}
 	
