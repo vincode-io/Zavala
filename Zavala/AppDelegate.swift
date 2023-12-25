@@ -326,12 +326,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange), name: .AccountMetadataDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange), name: .DocumentTitleDidChange, object: nil)
 
-		var menuItems = [UIMenuItem]()
-		menuItems.append(UIMenuItem(title: AppStringAssets.linkControlLabel, action: .editLink))
-		menuItems.append(UIMenuItem(title: AppStringAssets.imageControlLabel, action: .insertImage))
-		menuItems.append(UIMenuItem(title: AppStringAssets.splitRowControlLabel, action: .splitRow))
-		UIMenuController.shared.menuItems = menuItems
-
 		#if targetEnvironment(macCatalyst)
 		guard let pluginPath = (Bundle.main.builtInPlugInsPath as NSString?)?.appendingPathComponent("AppKitPlugin.bundle"),
 			  let bundle = Bundle(path: pluginPath),
