@@ -33,7 +33,8 @@ class EditorRowContentView: UIView, UIContentView {
 	}
 
 	private lazy var disclosureIndicator: EditorDisclosureButton = {
-		let indicator = EditorDisclosureButton()
+		let indicator = EditorDisclosureButton(configuration: .plain())
+		indicator.configure()
 		indicator.addTarget(self, action: #selector(toggleDisclosure(_:forEvent:)), for: UIControl.Event.touchUpInside)
 		return indicator
 	}()
