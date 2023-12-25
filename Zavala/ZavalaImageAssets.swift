@@ -28,13 +28,7 @@ struct ZavalaImageAssets {
 	static var cut = UIImage(systemName: "scissors")!
 
 	static var delete = UIImage(systemName: "trash")!
-	static var disclosure = {
-		#if targetEnvironment(macCatalyst)
-				return UIImage(systemName: "chevron.down")!.applyingSymbolConfiguration(.init(pointSize: 9, weight: .heavy))!
-		#else
-				return UIImage(systemName: "chevron.down")!.applyingSymbolConfiguration(.init(pointSize: 12, weight: .medium))!
-		#endif
-	}()
+	static var disclosure = UIImage(systemName: "chevron.down")!.applyingSymbolConfiguration(.init(pointSize: 12, weight: .medium))!
 	static var documentLink = UIImage(named: "DocumentLink")!.applyingSymbolConfiguration(.init(pointSize: 24, weight: .medium))!
 	static var duplicate = UIImage(systemName: "plus.square.on.square")!
 
