@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 import VinOutlineKit
 import SafariServices
 
@@ -298,9 +299,9 @@ extension MainCoordinator {
 	}
 
 	func showSettings() {
-		let settingsNavController = UIStoryboard.settings.instantiateInitialViewController() as! UINavigationController
-		settingsNavController.modalPresentationStyle = .formSheet
-		present(settingsNavController, animated: true)
+		let settingsViewController = UIHostingController(rootView: SettingsView())
+		settingsViewController.modalPresentationStyle = .formSheet
+		present(settingsViewController, animated: true)
 	}
 	
 	func showGetInfo() {

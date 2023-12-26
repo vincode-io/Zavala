@@ -15,11 +15,11 @@ enum DefaultsSize: Int, CustomStringConvertible, CaseIterable {
 	var description: String {
 		switch self {
 		case .small:
-			return NSLocalizedString("Small", comment: "Small")
+			return AppStringAssets.smallControlLabel
 		case .medium:
-			return NSLocalizedString("Medium", comment: "Medium")
+			return AppStringAssets.mediumControlLabel
 		case .large:
-			return NSLocalizedString("Large", comment: "Large")
+			return AppStringAssets.largeControlLabel
 		}
 	}
 }

@@ -33,6 +33,8 @@ struct AppStringAssets {
 	
 	// MARK: Localizable Variables
 	
+	static var aboutZavala = String(localized: "About Zavala", comment: "Control Label: About Zavala")
+	static var accountsControlLabel = String(localized: "Accounts", comment: "Control Label: Accounts")
 	static var acknowledgementsControlLabel = String(localized: "Acknowledgements", comment: "Control Label: Acknowledgements")
 	static var addControlLabel = String(localized: "Add", comment: "Control Label: Add")
 	static var addNoteControlLabel = String(localized: "Add Note", comment: "Control Label: Add Note.")
@@ -46,7 +48,7 @@ struct AppStringAssets {
 	static var addTagControlLabel = String(localized: "Add Tag", comment: "Control Label: Add Tag.")
 	static var addTopicLevelControlLabel = String(localized: "Add Topic Level", comment: "Control Label: The menu option to add a new Topic Level.")
 	static var appearanceControlLabel = String(localized: "Appearance", comment: "Control Label: Appearance")
-	static var autoLinkingLabel = String(localized: "Automatically Change Link Titles", comment: "Control Label: Auto Linking")
+	static var autoLinkingControlLabel = String(localized: "Automatically Change Link Titles", comment: "Control Label: Auto Linking")
 	
 	static var backControlLabel = String(localized: "Back", comment: "Control Label: Back")
 	static var backlinksLabel = String(localized: "Backlinks", comment: "Font Label: Backlinks")
@@ -61,11 +63,13 @@ struct AppStringAssets {
 	static var collapseAllInRowControlLabel = String(localized: "Collapse All in Row", comment: "Control Label: Collapse All in Row")
 	static var collapseControlLabel = String(localized: "Collapse", comment: "Control Label: Collapse")
 	static var collapseParentRowControlLabel = String(localized: "Collapse Parent Row", comment: "Control Label: Collapse Parent Row")
+	static var colorPalettControlLabel = String(localized: "Color Palette", comment: "Control Label: Color Palette")
 	static var completeAccessibilityLabel = String(localized: "Complete", comment: "Accessibility Label: Complete")
 	static var completeControlLabel = String(localized: "Complete", comment: "Control Label: Complete")
 	static var copyControlLabel = String(localized: "Copy", comment: "Control Label: Copy")
 	static var copyDocumentLinkControlLabel = String(localized: "Copy Document Link", comment: "Control Label: Copy Document Link")
 	static var copyDocumentLinksControlLabel = String(localized: "Copy Document Links", comment: "Control Label: Copy Document Links")
+	static var createdControlLabel = String(localized: "Created", comment: "Control Label: Created")
 	static var cutControlLabel = String(localized: "Cut", comment: "Control Label: Cut")
 	
 	static var deleteAlwaysControlLabel = String(localized: "Always Delete Without Asking", comment: "Control Label: Always Delete Without Asking")
@@ -86,8 +90,11 @@ struct AppStringAssets {
 	static var doneControlLabel = String(localized: "Done", comment: "Control Label: Done")
 	static var duplicateControlLabel = String(localized: "Duplicate", comment: "Control Label: Duplicate")
 	
-	static var enableOnMyIPhoneLabel = String(localized: "Enable On My iPhone", comment: "Label: Enable On My iPhone")
-	static var enableOnMyIPadLabel = String(localized: "Enable On My iPad", comment: "Label: Enable On My iPad")
+	static var emailControlLabel = String(localized: "Email", comment: "Control Label: Email")
+	static var enableCloudKitControlLabel = String(localized: "Enable iCloud", comment: "Control Label: Enable iCloud")
+	static var enableOnMyIPhoneControlLabel = String(localized: "Enable On My iPhone", comment: "Control Label: Enable On My iPhone")
+	static var enableOnMyIPadControlLabel = String(localized: "Enable On My iPad", comment: "Control Label: Enable On My iPad")
+	static var enableOnMyMacControlLabel = String(localized: "Enable On My Mac", comment: "Control Label: Enable On My Mac")
 	static var errorAlertTitle = String(localized: "Error", comment: "Alert Title: Error")
 	static var exportControlLabel = String(localized: "Export", comment: "Control Label: Export")
 	static var exportMarkdownDocEllipsisControlLabel = String(localized: "Export Markdown Doc…", comment: "Control Label: Export Markdown Doc…")
@@ -100,6 +107,7 @@ struct AppStringAssets {
 	static var expandAllInRowControlLabel = String(localized: "Expand All in Row", comment: "Control Label: Expand All in Row")
 	static var expandControlLabel = String(localized: "Expand", comment: "Control Label: Expand")
 	
+	static var feedbackControlLabel = String(localized: "Provide Feedback", comment: "Control Label: Provide Feedback")
 	static var filterControlLabel = String(localized: "Filter", comment: "Control Label: Filter")
 	static var filterCompletedControlLabel = String(localized: "Filter Completed", comment: "Control Label: Filter Completed")
 	static var filterNotesControlLabel = String(localized: "Filter Notes", comment: "Control Label: Filter Notes")
@@ -107,6 +115,7 @@ struct AppStringAssets {
 	static var findEllipsisControlLabel = String(localized: "Find…", comment: "Control Label: Find…")
 	static var findNextControlLabel = String(localized: "Find Next", comment: "Control Label: Find Next")
 	static var findPreviousControlLabel = String(localized: "Find Previous", comment: "Control Label: Find Previous")
+	static var fontsControlLabel = String(localized: "Fonts", comment: "Control Label: Fonts")
 	static var formatControlLabel = String(localized: "Format", comment: "Control Label: Format")
 	static var forwardControlLabel = String(localized: "Forward", comment: "Control Label: Forward")
 	
@@ -116,6 +125,7 @@ struct AppStringAssets {
 	static var goBackwardControlLabel = String(localized: "Go Backward", comment: "Control Label: Go Backward")
 	static var goForwardControlLabel = String(localized: "Go Forward", comment: "Control Label: Go Forward")
 	
+	static var helpControlLabel = String(localized: "Zavala Help", comment: "Control Label: Zavala Help")
 	static var hideKeyboardControlLabel = String(localized: "Hide Keyboard", comment: "Control Label: Hide Keyboard")
 	static var historyControlLabel = String(localized: "History", comment: "Control Label: History")
 	
@@ -127,9 +137,11 @@ struct AppStringAssets {
 	static var insertImageEllipsisControlLabel = String(localized: "Insert Image…", comment: "Control Label: Insert Image…")
 	static var italicControlLabel = String(localized: "Italic", comment: "Control Label: Italic")
 	
+	static var largeControlLabel = String(localized: "Large", comment: "Control Label: Large")
 	static var linkControlLabel = String(localized: "Link", comment: "Control Label: Link")
 	static var linkEllipsisControlLabel = String(localized: "Link…", comment: "Control Label: Link…")
 	
+	static var mediumControlLabel = String(localized: "Medium", comment: "Control Label: Medium")
 	static var moreControlLabel = String(localized: "More", comment: "Control Label: More")
 	static var moveControlLabel = String(localized: "Move", comment: "Control Label: Move")
 	static var moveRightControlLabel = String(localized: "Move Right", comment: "Control Label: Move Right")
@@ -138,6 +150,7 @@ struct AppStringAssets {
 	static var moveDownControlLabel = String(localized: "Move Down", comment: "Control Label: Move Down")
 	static var multipleSelectionsLabel = String(localized: "Multiple Selections", comment: "Large Label: Multiple Selections")
 	
+	static var nameControlLabel = String(localized: "Name", comment: "Control Label: Name")
 	static var navigationControlLabel = String(localized: "Navigation", comment: "Control Label: Navigation")
 	static var newMainWindowControlLabel = String(localized: "New Main Window", comment: "Control Label: New Main Window")
 	static var newOutlineControlLabel = String(localized: "New New Outline", comment: "Control Label: New New Outline")
@@ -149,8 +162,11 @@ struct AppStringAssets {
 	static var openQuicklySearchPlaceholder = String(localized: "Open Quickly", comment: "Search Field Placeholder: Open Quickly")
 	static var openQuicklyWindowTitle = String(localized: "Open Quickly", comment: "Window Title: Open Quickly")
 	static var outlineControlLabel = String(localized: "Outline", comment: "Control Label: Outline")
+	static var outlineOwnerControlLabel = String(localized: "Outline Owner", comment: "Control Label: Outline Owner")
+	static var outlineDefaultsControlLabel = String(localized: "Outline Defaults", comment: "Control Label: Outline Defaults")
 	static var opmlOwnerFieldNote = String(localized: "This information is included in OPML documents to attribute ownership.", comment: "Note: OPML Ownership.")
-	
+	static var ownerControlLabel = String(localized: "Owner", comment: "Control Label: Owner")
+
 	static var pasteControlLabel = String(localized: "Paste", comment: "Control Label: Paste")
 	static var preferencesEllipsisControlLabel = String(localized: "Preferences…", comment: "Control Label: Preferences…")
 	static var previousResultControlLabel = String(localized: "Previous Result", comment: "Control Label: Previous Result")
@@ -176,13 +192,18 @@ struct AppStringAssets {
 	static var restoreDefaultsMessage = String(localized: "Restore Defaults", comment: "Alert: message for restoring font defaults")
 	static var restoreDefaultsInformative = String(localized: "Are you sure you want to restore the defaults? All your font customizations will be lost.",
 												   comment: "Alert: information for restoring font defaults")
-	
+	static var rowIndentControlLabel = String(localized: "Row Indent", comment: "Control Label: Row Indent")
+	static var rowSpacingControlLabel = String(localized: "Row Spacing", comment: "Control Label: Row Spacing")
+
 	static var searchPlaceholder = String(localized: "Search", comment: "Field Placeholder: Search")
 	static var selectControlLabel = String(localized: "Select", comment: "Control Label: Select")
+	static var settingsControlLabel = String(localized: "Settings", comment: "Control Label: Settings")
 	static var settingsEllipsisControlLabel = String(localized: "Settings…", comment: "Control Label: Settings…")
 	static var shareControlLabel = String(localized: "Share", comment: "Control Label: Share")
 	static var shareEllipsisControlLabel = String(localized: "Share…", comment: "Control Label: Share…")
+	static var smallControlLabel = String(localized: "Small", comment: "Control Label: Small")
 	static var splitRowControlLabel = String(localized: "Split Row", comment: "Control Label: Split Row")
+	static var statisticsControlLabel = String(localized: "Statistics", comment: "Control Label: Statistics")
 	static var syncControlLabel = String(localized: "Sync", comment: "Control Label: Sync")
 	
 	static var tagsLabel = String(localized: "Tags", comment: "Font Label: Tags")
@@ -193,10 +214,12 @@ struct AppStringAssets {
 	static var turnFilterOnControlLabel = String(localized: "Turn Filter On", comment: "Control Label: Turn Filter On")
 	static var typingControlLabel = String(localized: "Typing", comment: "Control Label: Typing")
 	
-	static var useSelectionForFindControlLabel = String(localized: "Use Selection For Find", comment: "Control Label: Use Selection For Find")
 	static var uncompleteControlLabel = String(localized: "Uncomplete", comment: "Control Label: Uncomplete")
 	static var undoControlLabel = String(localized: "Undo", comment: "Control Label: Undo")
 	static var undoMenuControlLabel = String(localized: "Undo Menu", comment: "Control Label: Undo Menu")
+	static var updatedControlLabel = String(localized: "Updated", comment: "Control Label: Updated")
+	static var urlControlLabel = String(localized: "URL", comment: "Control Label: URL")
+	static var useSelectionForFindControlLabel = String(localized: "Use Selection For Find", comment: "Control Label: Use Selection For Find")
 
 	static var websiteControlLabel = String(localized: "Website", comment: "Control Label: Website")
 	

@@ -20,40 +20,41 @@ struct GetInfoView: View {
 				.font(.title)
 		#endif
 		Form {
-			Section(header: Text("Settings")) {
+			Section(AppStringAssets.settingsControlLabel) {
 				Toggle(isOn: $getInfoViewModel.autoLinkingEnabled) {
-					Text(AppStringAssets.autoLinkingLabel)
+					Text(AppStringAssets.autoLinkingControlLabel)
 				}
 			}
-			Section(header: Text("Owner")) {
+			Section(AppStringAssets.ownerControlLabel) {
 				TextField(text: $getInfoViewModel.ownerName) {
-					Text("Name")
+					Text(AppStringAssets.nameControlLabel)
 				}
 				TextField(text: $getInfoViewModel.ownerEmail) {
-					Text("Email")
+					Text(AppStringAssets.emailControlLabel)
 				}
 				TextField(text: $getInfoViewModel.ownerURL) {
-					Text("URL")
+					Text(AppStringAssets.urlControlLabel)
 				}
 				Text(AppStringAssets.opmlOwnerFieldNote)
 					.font(.footnote)
 					.foregroundStyle(.secondary)
 			}
-			Section(header: Text("Statistics")) {
+			Section(AppStringAssets.statisticsControlLabel) {
 				HStack {
-					Text("Created")
+					Text(AppStringAssets.createdControlLabel)
 					Spacer()
 					Text(getInfoViewModel.createdLabel)
 						.foregroundStyle(.secondary)
 				}
 				HStack {
-					Text("Updated")
+					Text(AppStringAssets.updatedControlLabel)
 					Spacer()
 					Text(getInfoViewModel.updatedLabel)
 						.foregroundStyle(.secondary)
 				}
 			}
 		}
+		.formStyle(.grouped)
     }
 }
 

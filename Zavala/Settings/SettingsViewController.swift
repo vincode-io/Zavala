@@ -71,9 +71,9 @@ class SettingsViewController: UITableViewController {
 		switch (indexPath.section, indexPath.row) {
 		case (0, 0):
 			if traitCollection.userInterfaceIdiom == .phone {
-				cell.textLabel?.text = AppStringAssets.enableOnMyIPhoneLabel
+				cell.textLabel?.text = AppStringAssets.enableOnMyIPhoneControlLabel
 			} else {
-				cell.textLabel?.text = AppStringAssets.enableOnMyIPadLabel
+				cell.textLabel?.text = AppStringAssets.enableOnMyIPadControlLabel
 			}
 		case (2, 0):
 			cell.detailTextLabel?.text = AppDefaults.shared.rowIndentSize.description
