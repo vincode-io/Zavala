@@ -1,5 +1,5 @@
 //
-//  AccountsView.swift
+//  SettingsAccountsView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/26/23.
@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 
-struct AccountsView: View {
+struct SettingsAccountsView: View {
 	
 	@State var enableLocalAccount = AppDefaults.shared.enableLocalAccount
 	@State var enableCloudKit = AppDefaults.shared.enableCloudKit
@@ -55,5 +55,5 @@ struct AccountsView: View {
 }
 
 #Preview {
-    AccountsView()
+    SettingsAccountsView()
 }

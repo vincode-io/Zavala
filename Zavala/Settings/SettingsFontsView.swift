@@ -1,5 +1,5 @@
 //
-//  FontsView.swift
+//  SettingsFontsView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/26/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FontsView: UIViewControllerRepresentable {
+struct SettingsFontsView: UIViewControllerRepresentable {
 
 	func makeUIViewController(context: Context) -> SettingsFontViewController {
 		return UIStoryboard.settings.instantiateInitialViewController() as! SettingsFontViewController
@@ -19,5 +19,5 @@ struct FontsView: UIViewControllerRepresentable {
 }
 
 #Preview {
-    FontsView()
+    SettingsFontsView()
 }

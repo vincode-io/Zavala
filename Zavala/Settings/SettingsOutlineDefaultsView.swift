@@ -1,5 +1,5 @@
 //
-//  OutlineDefaultsView.swift
+//  SettingsOutlineDefaultsView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/26/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct OutlineDefaultsView: View {
+struct SettingsOutlineDefaultsView: View {
 	
 	@State var autoLinking = AppDefaults.shared.autoLinkingEnabled
 	
@@ -25,5 +25,5 @@ struct OutlineDefaultsView: View {
 }
 
 #Preview {
-    OutlineDefaultsView()
+    SettingsOutlineDefaultsView()
 }

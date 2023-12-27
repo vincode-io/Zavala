@@ -1,5 +1,5 @@
 //
-//  AppearanceView.swift
+//  SettingsAppearanceView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/26/23.
@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-struct AppearanceView: View {
+struct SettingsAppearanceView: View {
 	
 	@State var rowIndent = AppDefaults.shared.rowIndentSize
 	@State var rowSpacing = AppDefaults.shared.rowSpacingSize
@@ -54,7 +54,7 @@ struct AppearanceView: View {
 			
 			if UIDevice.current.userInterfaceIdiom != .mac {
 				NavigationLink(AppStringAssets.fontsControlLabel) {
-					FontsView()
+					SettingsFontsView()
 				}
 			}
 		}
@@ -62,5 +62,5 @@ struct AppearanceView: View {
 }
 
 #Preview {
-    AppearanceView()
+    SettingsAppearanceView()
 }

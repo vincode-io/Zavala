@@ -14,11 +14,11 @@ struct SettingsView: View {
     var body: some View {
 		NavigationStack {
 			Form {
-				AccountsView()
-				OutlineDefaultsView()
-				OutlineOwnerView()
-				AppearanceView()
-				HelpView()
+				SettingsAccountsView()
+				SettingsOutlineDefaultsView()
+				SettingsOutlineOwnerView()
+				SettingsAppearanceView()
+				SettingsHelpView()
 			}
 			.navigationTitle(AppStringAssets.settingsControlLabel)
 			.navigationBarTitleDisplayMode(.inline)

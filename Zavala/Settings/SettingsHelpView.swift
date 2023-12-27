@@ -1,5 +1,5 @@
 //
-//  HelpView.swift
+//  SettingsHelpView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/26/23.
@@ -8,7 +8,7 @@
 import SwiftUI
 import VinUtility
 
-struct HelpView: View {
+struct SettingsHelpView: View {
 	
 	@Environment(\.openURL) private var openURL
 	@State var isPresentingAbout = false
@@ -44,5 +44,5 @@ struct HelpView: View {
 }
 
 #Preview {
-    HelpView()
+    SettingsHelpView()
 }

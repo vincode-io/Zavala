@@ -1,5 +1,5 @@
 //
-//  OutlineOwnerView.swift
+//  SettingsOutlineOwnerView.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 12/26/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct OutlineOwnerView: View {
+struct SettingsOutlineOwnerView: View {
 	
 	@State var name = AppDefaults.shared.ownerName ?? ""
 	@State var email = AppDefaults.shared.ownerEmail ?? ""
@@ -40,5 +40,5 @@ struct OutlineOwnerView: View {
 }
 
 #Preview {
-    OutlineOwnerView()
+    SettingsOutlineOwnerView()
 }
