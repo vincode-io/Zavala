@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import VinUtility
 
 struct HelpView: View {
 	
@@ -20,7 +21,7 @@ struct HelpView: View {
 				Text(AppStringAssets.aboutZavala)
 			}
 			.foregroundStyle(.primary)
-			.sheet(isPresented: $isPresentingAbout) {
+			.formSheet(isPresented: $isPresentingAbout, width: 350, height: 450) {
 				AboutView()
 			}
 
