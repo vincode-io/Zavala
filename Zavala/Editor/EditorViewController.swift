@@ -2399,7 +2399,7 @@ private extension EditorViewController {
 	
 	func moveCursorToTitleOnNew() {
 		if isOutlineNewFlag {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
 				self.moveCursorToTitle()
 			}
 		}

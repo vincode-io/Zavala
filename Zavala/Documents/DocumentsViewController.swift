@@ -211,6 +211,13 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
         }
 	}
 	
+	func createOutline(animated: Bool) {
+		guard let document = createOutlineDocument(title: "") else { return }
+		loadDocuments(animated: animated) {
+			self.selectDocument(document, isNew: true, animated: true)
+		}
+	}
+
 	func createOutlineDocument(title: String) -> Document? {
         guard let documentContainers = documentContainers,
               let account = documentContainers.uniqueAccount else { return nil }
@@ -259,10 +266,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	}
 	
 	@objc func createOutline() {
-		guard let document = createOutlineDocument(title: "") else { return }
-		loadDocuments(animated: true) {
-			self.selectDocument(document, isNew: true, animated: true)
-		}
+		createOutline(animated: true)
 	}
 
 	@objc func importOPML() {
