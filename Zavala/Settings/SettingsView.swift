@@ -23,8 +23,10 @@ struct SettingsView: View {
 			.navigationTitle(AppStringAssets.settingsControlLabel)
 			.navigationBarTitleDisplayMode(.inline)
 			.toolbar {
-				Button(AppStringAssets.doneControlLabel) {
-					dismiss()
+				ToolbarItem(placement: ToolbarItemPlacement.confirmationAction) {
+					Button(AppStringAssets.doneControlLabel) {
+						dismiss()
+					}
 				}
 			}
 		}

@@ -55,7 +55,11 @@ class SettingsFontConfigViewController: UITableViewController {
 	
 	@IBAction func done(_ sender: Any) {
 		guard let field = field, let config = config else { return }
-		delegate?.didUpdateConfig(field: field, config: config)
+		
+		var fontDefaults = AppDefaults.shared.outlineFonts
+		fontDefaults?.rowFontConfigs[field] = config
+		AppDefaults.shared.outlineFonts = fontDefaults
+
 		dismiss(animated: true)
 	}
 	
