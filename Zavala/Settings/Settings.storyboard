@@ -97,13 +97,14 @@
                                 <action selector="cancel:" destination="HId-Wf-dD5" id="2AZ-Vu-B6l"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="MZ3-Su-xdZ">
+                        <barButtonItem key="rightBarButtonItem" title="Done" style="done" changesSelectionAsPrimaryAction="YES" id="MZ3-Su-xdZ">
                             <connections>
                                 <action selector="done:" destination="HId-Wf-dD5" id="TmP-o2-PHt"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="doneBarButtonItem" destination="MZ3-Su-xdZ" id="pj7-ZA-oxx"/>
                         <outlet property="fontNameLabel" destination="flS-m5-pJT" id="QHw-TB-9KK"/>
                         <outlet property="fontSizeLabel" destination="HEZ-H3-8PG" id="Jdn-IE-L5I"/>
                         <outlet property="fontSizeStepper" destination="Aki-5D-XRt" id="SFh-bE-moU"/>

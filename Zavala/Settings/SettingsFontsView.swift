@@ -25,7 +25,7 @@ struct SettingsFontsView: View {
 				Button {
 					restoreAlertIsPresenting = true
 				} label: {
-					Image(systemName: "gobackward")
+					Label(AppStringAssets.restoreControlLabel, systemImage: "gobackward")
 				}
 				.disabled(AppDefaults.shared.outlineFonts == OutlineFontDefaults.defaults)
 			}
@@ -88,7 +88,7 @@ struct SettingsFontAddMenu: View {
 				Label(AppStringAssets.addNoteControlLabel, systemImage: "textformat.size.smaller")
 			}
 		} label: {
-			Image(systemName: "plus")
+			Label(AppStringAssets.addControlLabel, systemImage: "plus")
 		}
 		.popover(item: $presentingFieldConfig) { fieldConfig in
 			SettingsFontConfigView(fieldConfig: fieldConfig)
