@@ -58,7 +58,13 @@ class AddOutlineIntentHandler: NSObject, ZavalaIntentHandler, AddOutlineIntentHa
 			completion(.init(code: .failure, userActivity: nil))
 			return
 		}
-		
+
+		let defaults = AppDefaults.shared
+		outline.update(autoLinkingEnabled: defaults.autoLinkingEnabled,
+					   ownerName: defaults.ownerName,
+					   ownerEmail: defaults.ownerEmail,
+					   ownerURL: defaults.ownerURL)
+
 		suspend()
 		let response = AddOutlineIntentResponse(code: .success, userActivity: nil)
 		response.outline = IntentOutline(outline)
