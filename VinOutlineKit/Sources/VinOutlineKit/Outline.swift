@@ -2326,6 +2326,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	func outlineElementsDidChange(_ changes: OutlineElementChanges) {
+		guard isBeingUsed else { return }
+		
 		var userInfo = [AnyHashable: Any]()
 		userInfo[OutlineElementChanges.userInfoKey] = changes
 		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
@@ -2868,38 +2870,53 @@ private extension Outline {
 	func replaceLinkTitleIfPossible(row: Row, newText: NSAttributedString?, isInNotes: Bool) {
 		guard let newText else { return }
 		
-		let mutableText = NSMutableAttributedString(attributedString: newText)
+		incrementBeingUsedCount()
 		
-		mutableText.enumerateAttribute(.link, in: NSRange(location: 0, length: mutableText.length)) { [weak self] (value, range, match) in
-			guard let url = value as? URL, let self = self else { return }
-			guard mutableText.attributedSubstring(from: range).string == url.absoluteString else { return }
+		var pageTitles = [URL: String]()
+		let group = DispatchGroup()
+		
+		newText.enumerateAttribute(.link, in: NSRange(location: 0, length: newText.length)) { (value, range, match) in
+			guard let url = value as? URL else { return }
 			
-			incrementBeingUsedCount()
+			group.enter()
+			WebPageTitle.find(forURL: url) { pageTitle in
+				pageTitles[url] = pageTitle
+				group.leave()
+			}
+		}
+		
+		group.notify(queue: .main) { [weak self ] in
+			guard let self else { return }
 			
-			WebPageTitle.find(forURL: url) { [weak self] pageTitle in
-				guard let pageTitle = pageTitle, let self = self else { return }
+			let mutableText = NSMutableAttributedString(attributedString: newText)
+			
+			mutableText.enumerateAttribute(.link, in: NSRange(location: 0, length: mutableText.length)) { (value, range, match) in
+				guard let url = value as? URL,
+					  let pageTitle = pageTitles[url],
+					  mutableText.attributedSubstring(from: range).string == url.absoluteString else {
+					return
+				}
 				
 				mutableText.removeAttribute(.link, range: range)
 				mutableText.replaceCharacters(in: range, with: pageTitle)
 				mutableText.addAttribute(.link, value: url, range: NSRange(location: range.location, length: pageTitle.count))
-				
-				guard let row = self.findRow(id: row.id) else { return }
-				
-				if !isInNotes {
-					row.topic = mutableText
-				} else {
-					row.note = mutableText
-				}
-				
-				self.decrementBeingUsedCount()
-				self.unload()
-
-				guard self.isBeingUsed else { return }
-
-				if let shadowTableIndex = row.shadowTableIndex {
-					self.outlineElementsDidChange(OutlineElementChanges(section: self.adjustedRowsSection, reloads: Set([shadowTableIndex])))
-				}
 			}
+			
+			guard let row = self.findRow(id: row.id) else { return }
+			
+			if !isInNotes {
+				row.topic = mutableText
+			} else {
+				row.note = mutableText
+			}
+
+			self.decrementBeingUsedCount()
+			self.unload()
+
+			if let shadowTableIndex = row.shadowTableIndex {
+				self.outlineElementsDidChange(OutlineElementChanges(section: self.adjustedRowsSection, reloads: Set([shadowTableIndex])))
+			}
+
 		}
 		
 	}
