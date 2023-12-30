@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIWindow {
+public extension UIWindow {
 	
 	var nsWindow: NSObject? {
 		guard let nsWindows = NSClassFromString("NSApplication")?.value(forKeyPath: "sharedApplication.windows") as? [NSObject] else { return nil }

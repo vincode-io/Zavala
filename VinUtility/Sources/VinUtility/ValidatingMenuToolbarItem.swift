@@ -1,17 +1,17 @@
 //
-//  ValidatingToolbarItem.swift
+//  ValidatingMenuToolbarItem.swift
 //  Zavala
 //
-//  Created by Maurice Parker on 11/13/20.
+//  Created by Maurice Parker on 11/3/21.
 //
 
 import UIKit
 
 #if targetEnvironment(macCatalyst)
 
-public class ValidatingToolbarItem: NSToolbarItem {
+public class ValidatingMenuToolbarItem: NSMenuToolbarItem {
 
-	var checkForUnavailable: ((ValidatingToolbarItem) -> Bool)?
+	public var checkForUnavailable: ((NSMenuToolbarItem) -> Bool)?
 	
 	override public func validate() {
 		guard let checkForUnavailable else {
@@ -24,3 +24,4 @@ public class ValidatingToolbarItem: NSToolbarItem {
 }
 
 #endif
+

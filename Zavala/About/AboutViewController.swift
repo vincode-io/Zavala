@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import VinUtility
 
 class AboutViewController: UIViewController {
 

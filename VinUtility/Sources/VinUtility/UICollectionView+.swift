@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UICollectionView {
+public extension UICollectionView {
 
     func deselectAll(animated: Bool = true) {
 		indexPathsForSelectedItems?.forEach { indexPath in

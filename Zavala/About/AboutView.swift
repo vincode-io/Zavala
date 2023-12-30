@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import VinUtility
 
 struct AboutView: View {
 	

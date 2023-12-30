@@ -7,8 +7,9 @@
 
 import UIKit
 import CoreSpotlight
-import VinOutlineKit
 import SafariServices
+import VinOutlineKit
+import VinUtility
 
 protocol MainControllerIdentifiable {
 	var mainControllerIdentifer: MainControllerIdentifier { get }
