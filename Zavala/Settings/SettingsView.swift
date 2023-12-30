@@ -39,6 +39,7 @@ struct SettingsView: View {
 		.onAppear {
 			let navigationAppearance = UINavigationBarAppearance()
 			navigationAppearance.configureWithOpaqueBackground()
+			UINavigationBar.appearance().scrollEdgeAppearance = navigationAppearance
 			UINavigationBar.appearance().standardAppearance = navigationAppearance
 		}
 		

@@ -17,7 +17,11 @@ class SettingsSceneDelegate: UIResponder, UIWindowSceneDelegate {
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 		updateUserInterfaceStyle()
 
+		#if targetEnvironment(macCatalyst)
 		window?.windowScene?.titlebar?.titleVisibility = .hidden
+		window?.windowScene?.title = AppStringAssets.settingsControlLabel
+		#endif
+		
 		window?.windowScene?.sizeRestrictions?.minimumSize = Self.windowSize
 		window?.windowScene?.sizeRestrictions?.maximumSize = Self.windowSize
 		

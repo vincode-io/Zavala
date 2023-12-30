@@ -131,7 +131,15 @@ struct SettingsFontConfigView: UIViewControllerRepresentable {
 	func makeUIViewController(context: Context) -> UINavigationController {
 		let navController =  UIStoryboard.settings.instantiateViewController(withIdentifier: "SettingsFontConfigViewControllerNav") as! UINavigationController
 		navController.modalPresentationStyle = .formSheet
-		navController.preferredContentSize = CGSize(width: 350, height: 350)
+		
+		if UIDevice.current.userInterfaceIdiom == .mac {
+			navController.preferredContentSize = CGSize(width: 300, height: 175)
+		} else {
+			let contentWidth = UIFontMetrics(forTextStyle: .body).scaledValue(for: 400)
+			let contentHeight = UIFontMetrics(forTextStyle: .body).scaledValue(for: 250)
+			navController.preferredContentSize = CGSize(width: contentWidth, height: contentHeight)
+		}
+		
 		let controller = navController.topViewController as! SettingsFontConfigViewController
 		controller.field = fieldConfig?.field
 		controller.config = fieldConfig?.config

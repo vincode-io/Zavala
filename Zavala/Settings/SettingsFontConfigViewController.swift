@@ -15,12 +15,12 @@ class SettingsFontConfigViewController: UITableViewController {
 
 	var field: OutlineFontField?
 	var config: OutlineFontConfig?
-	weak var delegate: SettingsFontConfigViewControllerDelegate?
 	
-	@IBOutlet weak var doneBarButtonItem: UIBarButtonItem!
-	@IBOutlet weak var fontNameLabel: UILabel!
-	@IBOutlet weak var fontSizeLabel: UILabel!
-	@IBOutlet weak var fontSizeStepper: UIStepper!
+	@IBOutlet weak var cancelBarButtonItem: UIBarButtonItem!
+	@IBOutlet weak var saveBarButtonItem: UIBarButtonItem!
+	
+	@IBOutlet weak var fontButton: UIButton!
+	@IBOutlet weak var fontValueStepper: ValueStepper!
 	@IBOutlet weak var sampleTextLabel: UILabel!
 	
 	override func viewDidLoad() {
@@ -29,30 +29,37 @@ class SettingsFontConfigViewController: UITableViewController {
 		if let field,
 			let outlineFonts = AppDefaults.shared.outlineFonts,
 			!outlineFonts.rowFontConfigs.keys.contains(field) {
-			doneBarButtonItem.title = AppStringAssets.addControlLabel
+			saveBarButtonItem.title = AppStringAssets.addControlLabel
+		}
+		
+		if UIDevice.current.userInterfaceIdiom == .mac {
+			fontValueStepper.widthAnchor.constraint(equalToConstant: 80).isActive = true
+			fontValueStepper.heightAnchor.constraint(equalToConstant: 19).isActive = true
+		} else {
+			fontValueStepper.widthAnchor.constraint(equalToConstant: 149).isActive = true
+			fontValueStepper.heightAnchor.constraint(equalToConstant: 29).isActive = true
 		}
 		
 		navigationItem.title = field?.displayName
-		fontNameLabel.text = config?.name
-		fontSizeLabel.text = String(config?.size ?? 0)
-//		fontSizeStepper.value = Double(config?.size ?? 0)
+		fontButton.setTitle(config?.name, for: .normal)
+		fontValueStepper.value = Double(config?.size ?? 0)
 		
 		updateUI()
     }
 
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		if indexPath.section == 0 && indexPath.row == 0 {
-			let controller = UIFontPickerViewController()
-			controller.delegate = self
-			present(controller, animated: true)
-		}
 		tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
 	}
 	
+	@IBAction func changeFont(_ sender: Any) {
+		let controller = UIFontPickerViewController()
+		controller.delegate = self
+		present(controller, animated: true)
+	}
+	
 	@IBAction func fontSizeChanged(_ sender: Any) {
-		let stepValue = Int(fontSizeStepper.value)
+		let stepValue = Int(fontValueStepper.value)
 		config?.size = stepValue
-		fontSizeLabel.text = String(stepValue)
 		updateUI()
 	}
 	
@@ -60,7 +67,7 @@ class SettingsFontConfigViewController: UITableViewController {
 		dismiss(animated: true)
 	}
 	
-	@IBAction func done(_ sender: Any) {
+	@IBAction func save(_ sender: Any) {
 		guard let field = field, let config = config else { return }
 		
 		var fontDefaults = AppDefaults.shared.outlineFonts
@@ -79,7 +86,7 @@ extension SettingsFontConfigViewController: UIFontPickerViewControllerDelegate {
 	func fontPickerViewControllerDidPickFont(_ viewController: UIFontPickerViewController) {
 		guard let fontName = viewController.selectedFontDescriptor?.fontAttributes[.family] as? String else { return }
 		viewController.dismiss(animated: true)
-		fontNameLabel.text = fontName
+		fontButton.setTitle(fontName, for: .normal)
 		config?.name = fontName
 		updateUI()
 	}

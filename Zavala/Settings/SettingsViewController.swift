@@ -17,7 +17,9 @@ class SettingsViewController: UIViewController {
 		view.addChildAndPin(settingsViewController.view)
 		addChild(settingsViewController)
 
+		#if targetEnvironment(macCatalyst)
 		appDelegate.appKitPlugin?.configureSettings(view.window?.nsWindow)
+		#endif
 	}
 
 }
