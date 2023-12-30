@@ -2256,7 +2256,7 @@ private extension EditorViewController {
 	}
 	
 	func applyChanges(_ changes: OutlineElementChanges) {
-		if !changes.isOnlyReloads {
+		func performBatchUpdates() {
 			collectionView.performBatchUpdates {
 				if let deletes = changes.deleteIndexPaths, !deletes.isEmpty {
 					collectionView.deleteItems(at: deletes)
@@ -2271,6 +2271,16 @@ private extension EditorViewController {
 						collectionView.moveItem(at: move.0, to: move.1)
 					}
 				}
+			}
+		}
+		
+		if !changes.isOnlyReloads {
+			if AppDefaults.shared.disableEditorAnimations {
+				UIView.performWithoutAnimation {
+					performBatchUpdates()
+				}
+			} else {
+				performBatchUpdates()
 			}
 		}
 		
@@ -2964,14 +2974,18 @@ private extension EditorViewController {
 		
 		runCommand(command)
 		
-		if let newCursorIndex = command.newCursorIndex {
-			let newCursorIndexPath = IndexPath(row: newCursorIndex, section: adjustedRowsSection)
-			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
-				rowCell.moveToEnd()
+		// We won't get the cursor to move from the tag to the new row on return without dispatching
+		DispatchQueue.main.async {
+			if let newCursorIndex = command.newCursorIndex {
+				let newCursorIndexPath = IndexPath(row: newCursorIndex, section: self.adjustedRowsSection)
+				if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
+					rowCell.moveToEnd()
+				}
 			}
+
+			self.makeCursorVisibleIfNecessary()
 		}
 		
-		makeCursorVisibleIfNecessary()
 	}
 	
 	func createRowInside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
@@ -3207,7 +3221,7 @@ private extension EditorViewController {
 			convertedRect.size.height = convertedRect.size.height + 10
 		}
 		
-		collectionView.scrollRectToVisibleBypass(convertedRect, animated: true)
+		collectionView.scrollRectToVisibleBypass(convertedRect, animated: !AppDefaults.shared.disableEditorAnimations)
 	}
 
 	func updateSpotlightIndex() {

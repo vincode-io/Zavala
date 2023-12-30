@@ -87,6 +87,7 @@ struct AppStringAssets {
 	static var deleteRowsControlLabel = String(localized: "Delete Rows", comment: "Control Label: Delete Rows")
 	static var deleteTagMessage = String(localized: "No Outlines associated with this tag will be deleted.", comment: "Alert Message: delete tag")
 	static var deleteTagsMessage = String(localized: "No Outlines associated with these tags will be deleted.", comment: "Alert Message: delete tags")
+	static var disableEditorAnimationsControlLabel = String(localized: "Disable Editor Animations", comment: "Control Label: Disable Editor Animations")
 	static var documentFindEllipsisControlLabel = String(localized: "Document Find…", comment: "Control Label: Document Find…")
 	static var doneControlLabel = String(localized: "Done", comment: "Control Label: Done")
 	static var duplicateControlLabel = String(localized: "Duplicate", comment: "Control Label: Duplicate")

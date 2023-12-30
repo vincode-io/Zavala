@@ -38,6 +38,7 @@ final class AppDefaults {
 	struct Key {
 		static let lastSelectedAccountID = "lastSelectedAccountID"
 		static let enableMainWindowAsDefault = "enableMainWindowAsDefault"
+		static let disableEditorAnimations = "disableEditorAnimations"
 		static let enableLocalAccount = "enableLocalAccount"
 		static let enableCloudKit = "enableCloudKit"
 		static let ownerName = "ownerName"
@@ -78,6 +79,15 @@ final class AppDefaults {
 		}
 		set {
 			Self.setBool(for: Key.enableMainWindowAsDefault, newValue)
+		}
+	}
+	
+	var disableEditorAnimations: Bool {
+		get {
+			return Self.bool(for: Key.disableEditorAnimations)
+		}
+		set {
+			Self.setBool(for: Key.disableEditorAnimations, newValue)
 		}
 	}
 	

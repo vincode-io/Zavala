@@ -10,7 +10,8 @@ import SwiftUI
 struct SettingsAdvancedView: View {
 	
 	@State var enableMainWindowAsDefault = AppDefaults.shared.enableMainWindowAsDefault
-	
+	@State var disableEditorAnimations = AppDefaults.shared.disableEditorAnimations
+
 	var body: some View {
 		Section(AppStringAssets.advancedControlLabel) {
 			Toggle(isOn: $enableMainWindowAsDefault) {
@@ -18,6 +19,12 @@ struct SettingsAdvancedView: View {
 			}
 			.onChange(of: enableMainWindowAsDefault) {
 				AppDefaults.shared.enableMainWindowAsDefault = $0
+			}
+			Toggle(isOn: $disableEditorAnimations) {
+				Text(AppStringAssets.disableEditorAnimationsControlLabel)
+			}
+			.onChange(of: disableEditorAnimations) {
+				AppDefaults.shared.disableEditorAnimations = $0
 			}
 		}
 	}
