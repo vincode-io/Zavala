@@ -523,7 +523,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillEnd(_:)), name: .OutlineSearchWillEnd, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineAddedBacklinks(_:)), name: .OutlineAddedBacklinks, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineRemovedBacklinks(_:)), name: .OutlineRemovedBacklinks, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlineFoundReplacableLinkTitle(_:)), name: .OutlineFoundReplacableLinkTitle, object: nil)
 
 		NotificationCenter.default.addObserver(self, selector: #selector(didUndoChange(_:)), name: .NSUndoManagerDidUndoChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(didRedoChange(_:)), name: .NSUndoManagerDidRedoChange, object: nil)
@@ -745,34 +744,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func outlineRemovedBacklinks(_ note: Notification) {
 		guard note.object as? Outline == outline else { return }
 		collectionView.deleteSections([Outline.Section.backlinks.rawValue])
-	}
-	
-	@objc func outlineFoundReplacableLinkTitle(_ note: Notification) {
-		guard note.object as? Outline == outline,
-			  let replacableLinkTitle = note.userInfo?[Outline.UserInfoKeys.replacableLinkTitle] as? Outline.ReplacableLinkTitle,
-			  let row = outline!.findRow(id: replacableLinkTitle.rowID),
-			  let rowShadowTableIndex = row.shadowTableIndex,
-			  let cell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorRowViewCell else {
-			return
-		}
-		
-		let mutableText: NSMutableAttributedString
-		if replacableLinkTitle.isInNotes, let note = row.note {
-			mutableText = NSMutableAttributedString(attributedString: note)
-		} else if let topic = row.topic {
-			mutableText = NSMutableAttributedString(attributedString: topic)
-		} else {
-			return
-		}
-		
-		mutableText.enumerateAttribute(.link, in: NSRange(location: 0, length: mutableText.length)) { (value, range, match) in
-			guard mutableText.attributedSubstring(from: range).string == replacableLinkTitle.link.absoluteString else { return }
-			if replacableLinkTitle.isInNotes {
-				cell.noteTextView?.updateLink(text: replacableLinkTitle.title, link: replacableLinkTitle.link.absoluteString, range: range)
-			} else {
-				cell.topicTextView?.updateLink(text: replacableLinkTitle.title, link: replacableLinkTitle.link.absoluteString, range: range)
-			}
-		}
 	}
 	
 	@objc func didUndoChange(_ note: Notification) {
