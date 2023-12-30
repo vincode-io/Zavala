@@ -436,7 +436,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	@objc func showPreferences(_ sender: Any?) {
 		#if targetEnvironment(macCatalyst)
 		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.showSettings)
-		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: userActivity, options: nil, errorHandler: nil)
+		let scene = UIApplication.shared.connectedScenes.first(where: { $0.title == AppStringAssets.settingsControlLabel})
+		UIApplication.shared.requestSceneSessionActivation(scene?.session, userActivity: userActivity, options: nil, errorHandler: nil)
 		#else
 		mainCoordinator?.showSettings()
 		#endif
