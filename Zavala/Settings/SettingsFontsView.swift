@@ -35,7 +35,7 @@ struct SettingsFontsView: View {
 		}
 		.alert(AppStringAssets.restoreDefaultsMessage, isPresented: $restoreAlertIsPresenting) {
 			Button(AppStringAssets.cancelControlLabel, role: .cancel) {}
-			Button(AppStringAssets.restoreControlLabel) {
+			Button(AppStringAssets.restoreControlLabel, role: .destructive) {
 				AppDefaults.shared.outlineFonts = OutlineFontDefaults.defaults
 			}
 		} message: {
@@ -129,7 +129,7 @@ struct SettingsFontConfigView: UIViewControllerRepresentable {
 	var fieldConfig: FieldConfig?
 
 	func makeUIViewController(context: Context) -> UINavigationController {
-		let navController =  UIStoryboard.settings.instantiateInitialViewController() as! UINavigationController
+		let navController =  UIStoryboard.settings.instantiateViewController(withIdentifier: "SettingsFontConfigViewControllerNav") as! UINavigationController
 		navController.modalPresentationStyle = .formSheet
 		navController.preferredContentSize = CGSize(width: 350, height: 350)
 		let controller = navController.topViewController as! SettingsFontConfigViewController

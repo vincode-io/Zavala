@@ -20,10 +20,10 @@ struct SettingsAccountsView: View {
 				switch UIDevice.current.userInterfaceIdiom {
 				case .phone:
 					Text(AppStringAssets.enableOnMyIPhoneControlLabel)
-				case .pad:
-					Text(AppStringAssets.enableOnMyIPadControlLabel)
-				default:
+				case .mac:
 					Text(AppStringAssets.enableOnMyMacControlLabel)
+				default:
+					Text(AppStringAssets.enableOnMyIPadControlLabel)
 				}
 			}
 			.onChange(of: enableLocalAccount) {
@@ -32,6 +32,7 @@ struct SettingsAccountsView: View {
 			Toggle(isOn: $enableCloudKit) {
 				Text(AppStringAssets.enableCloudKitControlLabel)
 			}
+			.disabled(AppDefaults.shared.isDeveloperBuild)
 			.onChange(of: enableCloudKit) {
 				if $0 {
 					AppDefaults.shared.enableCloudKit = true

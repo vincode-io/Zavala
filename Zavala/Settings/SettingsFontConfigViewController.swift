@@ -26,7 +26,7 @@ class SettingsFontConfigViewController: UITableViewController {
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
-		if let field, 
+		if let field,
 			let outlineFonts = AppDefaults.shared.outlineFonts,
 			!outlineFonts.rowFontConfigs.keys.contains(field) {
 			doneBarButtonItem.title = AppStringAssets.addControlLabel
@@ -35,7 +35,7 @@ class SettingsFontConfigViewController: UITableViewController {
 		navigationItem.title = field?.displayName
 		fontNameLabel.text = config?.name
 		fontSizeLabel.text = String(config?.size ?? 0)
-		fontSizeStepper.value = Double(config?.size ?? 0)
+//		fontSizeStepper.value = Double(config?.size ?? 0)
 		
 		updateUI()
     }

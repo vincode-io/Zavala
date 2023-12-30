@@ -24,15 +24,7 @@ import UniformTypeIdentifiers
 		movementMonitor = RSAppMovementMonitor()
 	}
 	
-	func showPreferences() {
-		if preferencesWindowController == nil {
-			let bundle = Bundle(for: type(of: self))
-			let storyboard = NSStoryboard(name: NSStoryboard.Name("Preferences"), bundle: bundle)
-			preferencesWindowController = storyboard.instantiateInitialController()! as NSWindowController
-		}
-		preferencesWindowController!.showWindow(self)
-	}
-	
+
 	func importOPML() {
 		let panel = NSOpenPanel()
 		panel.canDownloadUbiquitousContents = true
@@ -60,9 +52,15 @@ import UniformTypeIdentifiers
 		nsWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
 	}
 
-	func configureShowAbout(_ window: NSObject?) {
+	func configureAbout(_ window: NSObject?) {
 		guard let nsWindow = window as? NSWindow else { return }
 		nsWindow.styleMask.insert(.fullSizeContentView)
+		nsWindow.standardWindowButton(.zoomButton)?.isEnabled = false
+		nsWindow.standardWindowButton(.miniaturizeButton)?.isEnabled = false
+	}
+
+	func configureSettings(_ window: NSObject?) {
+		guard let nsWindow = window as? NSWindow else { return }
 		nsWindow.standardWindowButton(.zoomButton)?.isEnabled = false
 		nsWindow.standardWindowButton(.miniaturizeButton)?.isEnabled = false
 	}

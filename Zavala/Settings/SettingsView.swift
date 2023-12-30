@@ -11,28 +11,40 @@ struct SettingsView: View {
 	
 	@Environment(\.dismiss) var dismiss
 	
-    var body: some View {
+	var body: some View {
 		NavigationStack {
 			Form {
 				SettingsAccountsView()
 				SettingsOutlineDefaultsView()
 				SettingsOutlineOwnerView()
 				SettingsAppearanceView()
+				#if targetEnvironment(macCatalyst)
+				SettingsAdvancedView()
+				#else
 				SettingsHelpView()
+				#endif
 			}
 			.navigationTitle(AppStringAssets.settingsControlLabel)
 			.navigationBarTitleDisplayMode(.inline)
+			#if !targetEnvironment(macCatalyst)
 			.toolbar {
-				ToolbarItem(placement: ToolbarItemPlacement.confirmationAction) {
+				ToolbarItem(placement: .confirmationAction) {
 					Button(AppStringAssets.doneControlLabel) {
 						dismiss()
 					}
 				}
 			}
+			#endif
 		}
-    }
+		.onAppear {
+			let navigationAppearance = UINavigationBarAppearance()
+			navigationAppearance.configureWithOpaqueBackground()
+			UINavigationBar.appearance().standardAppearance = navigationAppearance
+		}
+		
+	}
 }
 
 #Preview {
-    SettingsView()
+	SettingsView()
 }

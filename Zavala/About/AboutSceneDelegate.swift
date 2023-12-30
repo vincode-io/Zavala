@@ -6,20 +6,14 @@
 //
 
 import UIKit
-import SwiftUI
 
 class AboutSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	private static let windowSize = CGSize(width: 300, height: 400)
 	
-	weak var scene: UIScene?
-	weak var session: UISceneSession?
 	var window: UIWindow?
 	
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-		self.scene = scene
-		self.session = session
-		
 		updateUserInterfaceStyle()
 
 		#if targetEnvironment(macCatalyst)

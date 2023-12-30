@@ -414,6 +414,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return UISceneConfiguration(name: "Image Configuration", sessionRole: connectingSceneSession.role)
 		case NSUserActivity.ActivityType.showAbout:
 			return UISceneConfiguration(name: "About Configuration", sessionRole: connectingSceneSession.role)
+		case NSUserActivity.ActivityType.showSettings:
+			return UISceneConfiguration(name: "Settings Configuration", sessionRole: connectingSceneSession.role)
 		default:
 			guard options.userActivities.first?.userInfo == nil else {
 				return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
@@ -433,7 +435,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	@objc func showPreferences(_ sender: Any?) {
 		#if targetEnvironment(macCatalyst)
-		appKitPlugin?.showPreferences()
+		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.showSettings)
+		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: userActivity, options: nil, errorHandler: nil)
 		#else
 		mainCoordinator?.showSettings()
 		#endif

@@ -47,6 +47,7 @@ struct AppStringAssets {
 	static var addRowOutsideControlLabel = String(localized: "Add Row Outside", comment: "Control Label: Add Row Outside")
 	static var addTagControlLabel = String(localized: "Add Tag", comment: "Control Label: Add Tag.")
 	static var addTopicLevelControlLabel = String(localized: "Add Topic Level", comment: "Control Label: The menu option to add a new Topic Level.")
+	static var advancedControlLabel = String(localized: "Advanced", comment: "Control Label: Advanced")
 	static var appearanceControlLabel = String(localized: "Appearance", comment: "Control Label: Appearance")
 	static var autoLinkingControlLabel = String(localized: "Automatically Change Link Titles", comment: "Control Label: Auto Linking")
 	
@@ -220,7 +221,8 @@ struct AppStringAssets {
 	static var updatedControlLabel = String(localized: "Updated", comment: "Control Label: Updated")
 	static var urlControlLabel = String(localized: "URL", comment: "Control Label: URL")
 	static var useSelectionForFindControlLabel = String(localized: "Use Selection For Find", comment: "Control Label: Use Selection For Find")
-
+	static var useMainWindowAsDefaultControlLabel = String(localized: "Use Main Window as Default", comment: "Control Label: Use Main Window as Default")
+ 
 	static var websiteControlLabel = String(localized: "Website", comment: "Control Label: Website")
 	
 	static var zavalaHelpControlLabel = String(localized: "Zavala Help", comment: "Control Label: Zavala Help")

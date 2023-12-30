@@ -5,7 +5,6 @@
 //  Created by Maurice Parker on 12/26/23.
 //
 
-import UIKit
 import SwiftUI
 
 struct SettingsAppearanceView: View {
@@ -16,46 +15,62 @@ struct SettingsAppearanceView: View {
 	
     var body: some View {
 		Section(AppStringAssets.appearanceControlLabel) {
-			Picker(selection: $rowIndent) {
-				ForEach(DefaultsSize.allCases, id: \.self) {
-					Text($0.description)
-				}
-			} label: {
+			HStack {
 				Text(AppStringAssets.rowIndentControlLabel)
-			}
-			.pickerStyle(.menu)
-			.onChange(of: rowIndent) {
-				AppDefaults.shared.rowIndentSize = $0
+				Spacer()
+				Picker(selection: $rowIndent) {
+					ForEach(DefaultsSize.allCases, id: \.self) {
+						Text($0.description)
+					}
+				} label: {
+				}
+				#if targetEnvironment(macCatalyst)
+				.frame(width: 100)
+				#endif
+				.pickerStyle(.menu)
+				.onChange(of: rowIndent) {
+					AppDefaults.shared.rowIndentSize = $0
+				}
 			}
 
-			Picker(selection: $rowSpacing) {
-				ForEach(DefaultsSize.allCases, id: \.self) {
-					Text($0.description)
-				}
-			} label: {
+			HStack {
 				Text(AppStringAssets.rowSpacingControlLabel)
-			}
-			.pickerStyle(.menu)
-			.onChange(of: rowSpacing) {
-				AppDefaults.shared.rowSpacingSize = $0
+				Spacer()
+				Picker(selection: $rowSpacing) {
+					ForEach(DefaultsSize.allCases, id: \.self) {
+						Text($0.description)
+					}
+				} label: {
+				}
+				#if targetEnvironment(macCatalyst)
+				.frame(width: 100)
+				#endif
+				.pickerStyle(.menu)
+				.onChange(of: rowSpacing) {
+					AppDefaults.shared.rowSpacingSize = $0
+				}
 			}
 
-			Picker(selection: $colorPalette) {
-				ForEach(UserInterfaceColorPalette.allCases, id: \.self) {
-					Text($0.description)
-				}
-			} label: {
+			HStack {
 				Text(AppStringAssets.colorPalettControlLabel)
-			}
-			.pickerStyle(.menu)
-			.onChange(of: colorPalette) {
-				AppDefaults.shared.userInterfaceColorPalette = $0
+				Spacer()
+				Picker(selection: $colorPalette) {
+					ForEach(UserInterfaceColorPalette.allCases, id: \.self) {
+						Text($0.description)
+					}
+				} label: {
+				}
+				#if targetEnvironment(macCatalyst)
+				.frame(width: 100)
+				#endif
+				.pickerStyle(.menu)
+				.onChange(of: colorPalette) {
+					AppDefaults.shared.userInterfaceColorPalette = $0
+				}
 			}
 			
-			if UIDevice.current.userInterfaceIdiom != .mac {
-				NavigationLink(AppStringAssets.fontsControlLabel) {
-					SettingsFontsView()
-				}
+			NavigationLink(AppStringAssets.fontsControlLabel) {
+				SettingsFontsView()
 			}
 		}
     }

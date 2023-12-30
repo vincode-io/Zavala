@@ -73,7 +73,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	func sceneDidDisconnect(_ scene: UIScene) {
 		if UIApplication.shared.applicationState == .active {
 			if let windows = (scene as? UIWindowScene)?.windows {
-				if !windows.contains(where: { $0.rootViewController is MainSplitViewController }) {
+				if windows.contains(where: { $0.rootViewController is MainSplitViewController }) {
 					AppDefaults.shared.lastMainWindowWasClosed = true
 					AppDefaults.shared.lastMainWindowState = mainSplitViewController.stateRestorationActivity.userInfo
 				}

@@ -20,7 +20,7 @@ class AboutViewController: UIViewController {
 
 	override func viewDidAppear(_ animated: Bool) {
 		#if targetEnvironment(macCatalyst)
-		appDelegate.appKitPlugin?.configureShowAbout(view.window?.nsWindow)
+		appDelegate.appKitPlugin?.configureAbout(view.window?.nsWindow)
 		#endif
 	}
 
