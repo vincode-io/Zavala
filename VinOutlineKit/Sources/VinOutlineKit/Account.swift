@@ -194,13 +194,19 @@ public final class Account: NSObject, Identifiable, Codable {
 		if let updated = headNode?["dateModified"]?.first?.content {
 			outline.updated = Date.dateFromRFC822(rfc822String: updated)
 		}
+		
 		outline.ownerName = headNode?["ownerName"]?.first?.content
 		outline.ownerEmail = headNode?["ownerEmail"]?.first?.content
 		outline.ownerURL = headNode?["ownerID"]?.first?.content
+		
 		if let verticleScrollState = headNode?["vertScrollState"]?.first?.content {
 			outline.verticleScrollState = Int(verticleScrollState)
 		}
 		
+		if let autoLinkingEnabled = headNode?["automaticallyChangeLinkTitles"]?.first?.content {
+			outline.autoLinkingEnabled = autoLinkingEnabled == "true" ? true : false
+		}
+
 		if let tagNodes = headNode?["tags"]?.first?["tag"] {
 			for tagNode in tagNodes {
 				if let tagName = tagNode.content {
