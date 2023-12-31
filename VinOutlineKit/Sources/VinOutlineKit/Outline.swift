@@ -1406,7 +1406,16 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			
 		guard isBeingUsed else { return nil }
 
-		outlineElementsDidChange(rebuildShadowTable())
+		var changes = rebuildShadowTable()
+		
+		var reloads = Set<Int>()
+		if let reload = (afterRowContainer as? Row)?.shadowTableIndex {
+			reloads.insert(reload)
+		}
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
+
+		outlineElementsDidChange(changes)
+		
 		return rows.last?.shadowTableIndex
 	}
 	
