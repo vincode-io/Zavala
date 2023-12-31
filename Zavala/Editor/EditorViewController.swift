@@ -1678,7 +1678,7 @@ extension EditorViewController: EditorRowViewCellDelegate {
 	}
 	
 	func editorRowScrollEditorToVisible(textView: UITextView, rect: CGRect) {
-		scrollToVisible(textInput: textView, rect: rect)
+		scrollToVisible(textInput: textView, rect: rect, animated: true)
 	}
 
 	func editorRowTextFieldDidBecomeActive(row: Row) {
@@ -2983,7 +2983,7 @@ private extension EditorViewController {
 				}
 			}
 
-			self.makeCursorVisibleIfNecessary()
+			self.makeCursorVisibleIfNecessary(animated: false)
 		}
 		
 	}
@@ -3011,7 +3011,7 @@ private extension EditorViewController {
 			}
 		}
 
-		makeCursorVisibleIfNecessary()
+		makeCursorVisibleIfNecessary(animated: false)
 	}
 	
 	func createRowOutside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
@@ -3037,7 +3037,7 @@ private extension EditorViewController {
 			}
 		}
 		
-		makeCursorVisibleIfNecessary()
+		makeCursorVisibleIfNecessary(animated: false)
 	}
 	
 	func duplicateRows(_ rows: [Row]) {
@@ -3184,7 +3184,7 @@ private extension EditorViewController {
 			}
 		}
 
-		makeCursorVisibleIfNecessary()
+		makeCursorVisibleIfNecessary(animated: false)
 	}
 
 	func deleteRowNotes(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -3206,14 +3206,14 @@ private extension EditorViewController {
 		}
 	}
 
-	func makeCursorVisibleIfNecessary() {
+	func makeCursorVisibleIfNecessary(animated: Bool = true) {
 		guard let textInput = UIResponder.currentFirstResponder as? UITextInput,
 			  let cursorRect = textInput.cursorRect else { return }
 		
-		scrollToVisible(textInput: textInput, rect: cursorRect)
+		scrollToVisible(textInput: textInput, rect: cursorRect, animated: animated)
 	}
 	
-	func scrollToVisible(textInput: UITextInput, rect: CGRect) {
+	func scrollToVisible(textInput: UITextInput, rect: CGRect, animated: Bool) {
 		guard var convertedRect = (textInput as? UIView)?.convert(rect, to: collectionView) else { return }
 		
 		// This isInNotes hack isn't well understood, but it improves the user experience...
@@ -3221,7 +3221,7 @@ private extension EditorViewController {
 			convertedRect.size.height = convertedRect.size.height + 10
 		}
 		
-		collectionView.scrollRectToVisibleBypass(convertedRect, animated: !AppDefaults.shared.disableEditorAnimations)
+		collectionView.scrollRectToVisibleBypass(convertedRect, animated: animated)
 	}
 
 	func updateSpotlightIndex() {
