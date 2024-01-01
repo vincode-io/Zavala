@@ -243,28 +243,42 @@ private extension EditorViewController {
 		guard !itemProviders.isEmpty else { return }
 
 		let group = DispatchGroup()
-		var texts = [String]()
+		var textDrops = [TextDrop]()
 		
 		for itemProvider in itemProviders {
 			group.enter()
+			
 			itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
 				if let data = data, let itemText = String(data: data, encoding: .utf8) {
-					texts.append(itemText)
+					
+					if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
+						itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.url.identifier) { (data, error) in
+							if let data = data, let urlString = String(data: data, encoding: .utf8) {
+								textDrops.append(TextDrop(text: itemText, urlString: urlString))
+							}
+							group.leave()
+						}
+					} else {
+						textDrops.append(TextDrop(text: itemText))
+						group.leave()
+					}
+					
+				} else {
 					group.leave()
 				}
 			}
 		}
 
 		group.notify(queue: DispatchQueue.main) {
-			let text = texts.joined(separator: "\n")
-			guard !text.isEmpty else { return }
+			guard !textDrops.isEmpty else { return }
 			
 			var rowGroups = [RowGroup]()
-			let textRows = text.split(separator: "\n").map { String($0) }
-			for textRow in textRows {
-				let row = Row(outline: outline, topicMarkdown: textRow.trimmed())
-				row.detectData()
-				rowGroups.append(RowGroup(row))
+			for textDrop in textDrops {
+				for markdown in textDrop.markdowns {
+					let row = Row(outline: outline, topicMarkdown: markdown)
+					row.detectData()
+					rowGroups.append(RowGroup(row))
+				}
 			}
 			
 			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, destinationIndexPath: destinationIndexPath)
@@ -318,6 +332,25 @@ private extension EditorViewController {
 										   prefersEnd: prefersEnd)
 		
 		runCommand(command)
+	}
+	
+}
+
+private struct TextDrop {
+	
+	var text: String
+	var urlString: String?
+	
+	init(text: String, urlString: String? = nil) {
+		self.text = text
+		self.urlString = urlString
+	}
+	
+	var markdowns: [String] {
+		guard let urlString else {
+			return text.split(separator: "\n").map { String($0) }
+		}
+		return ["[\(text)](\(urlString))"]
 	}
 	
 }
