@@ -839,6 +839,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 	func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
 		return [
 			.toggleSidebar,
+			.primarySidebarTrackingSeparatorItemIdentifier,
+			.navigation,
 			.flexibleSpace,
 			.newOutline,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
@@ -849,11 +851,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.link,
 			.boldface,
 			.italic,
-			.space,
+			.flexibleSpace,
 			.collaborate,
 			.share,
-			.flexibleSpace,
-			.navigation,
 			.space,
 			.toggleCompletedFilter,
 		]
