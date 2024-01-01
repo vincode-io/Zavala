@@ -42,35 +42,6 @@ enum UserInterfaceColorPalette: Int, CustomStringConvertible, CaseIterable {
 	
 }
 
-enum EditorMaxWidth: Int, CustomStringConvertible, CaseIterable {
-	case readable = 0
-	case wide = 1
-	case none = 2
-	
-	var description: String {
-		switch self {
-		case .readable:
-			return AppStringAssets.readableControlLabel
-		case .wide:
-			return AppStringAssets.wideControlLabel
-		case .none:
-			return AppStringAssets.noneControlLabel
-		}
-	}
-	
-	var maxWidth: CGFloat {
-		switch self {
-		case .readable:
-			return 700
-		case .wide:
-			return 1000
-		case .none:
-			return .greatestFiniteMagnitude
-		}
-	}
-	
-}
-
 final class AppDefaults {
 
 	static let shared = AppDefaults()
@@ -96,7 +67,6 @@ final class AppDefaults {
 		static let lastMainWindowState = "lastMainWindowState"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
 		static let userInterfaceColorPalette = "userInterfaceColorPalette";
-		static let editorMaxWidth = "editorMaxWidth"
 		static let rowIndentSize = "rowIndentSize"
 		static let rowSpacingSize = "rowSpacingSize"
 		static let outlineFonts = "outlineFonts"
@@ -232,15 +202,6 @@ final class AppDefaults {
 		}
 	}
 	
-	var editorMaxWidth: EditorMaxWidth {
-		get {
-			return EditorMaxWidth(rawValue: Self.int(for: Key.editorMaxWidth))!
-		}
-		set {
-			Self.setInt(for: Key.editorMaxWidth, newValue.rawValue)
-		}
-	}
-	
 	var rowIndentSize: DefaultsSize {
 		get {
 			return Self.defaultsSize(for: Key.rowIndentSize)
@@ -304,7 +265,6 @@ final class AppDefaults {
 		defaults[Key.userInterfaceColorPalette] = UserInterfaceColorPalette.automatic.rawValue
 		defaults[Key.outlineFonts] = OutlineFontDefaults.defaults.userInfo
 		defaults[Key.confirmDeleteCompletedRows] = true
-		defaults[Key.editorMaxWidth] = EditorMaxWidth.readable.rawValue
 		defaults[Key.rowIndentSize] = DefaultsSize.medium.rawValue
 		defaults[Key.rowSpacingSize] = DefaultsSize.medium.rawValue
 		

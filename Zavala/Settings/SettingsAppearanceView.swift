@@ -10,7 +10,6 @@ import SwiftUI
 struct SettingsAppearanceView: View {
 	
 	@State var colorPalette = AppDefaults.shared.userInterfaceColorPalette
-	@State var editorMaxWidth = AppDefaults.shared.editorMaxWidth
 	@State var rowIndent = AppDefaults.shared.rowIndentSize
 	@State var rowSpacing = AppDefaults.shared.rowSpacingSize
 	
@@ -34,24 +33,6 @@ struct SettingsAppearanceView: View {
 				}
 			}
 			
-			HStack {
-				Text(AppStringAssets.editorMaxWidthControlLabel)
-				Spacer()
-				Picker(selection: $editorMaxWidth) {
-					ForEach(EditorMaxWidth.allCases, id: \.self) {
-						Text($0.description)
-					}
-				} label: {
-				}
-				#if targetEnvironment(macCatalyst)
-				.frame(width: 100)
-				#endif
-				.pickerStyle(.menu)
-				.onChange(of: editorMaxWidth) {
-					AppDefaults.shared.editorMaxWidth = $0
-				}
-			}
-
 			HStack {
 				Text(AppStringAssets.rowIndentControlLabel)
 				Spacer()
