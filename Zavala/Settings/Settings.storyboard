@@ -21,14 +21,14 @@
                             <tableViewSection headerTitle="Font" id="8RY-Ox-fEs">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="X9k-dG-gtn">
-                                        <rect key="frame" x="20" y="55.5" width="374" height="47.5"/>
+                                        <rect key="frame" x="20" y="55.5" width="374" height="47"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="X9k-dG-gtn" id="02K-yT-HLh">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="47.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="47"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hTO-Li-2Hc">
-                                                    <rect key="frame" x="6" y="6" width="75" height="35.5"/>
+                                                    <rect key="frame" x="6" y="6" width="75" height="35"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" title="Button"/>
                                                     <connections>
@@ -82,14 +82,14 @@
                             <tableViewSection headerTitle="Preview" id="9wX-hO-thR">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="g5o-Ds-iZS">
-                                        <rect key="frame" x="20" y="159" width="374" height="43"/>
+                                        <rect key="frame" x="20" y="158.5" width="374" height="35.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="g5o-Ds-iZS" id="NJD-8W-3rP">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="35.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sample Text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SNz-Wt-44U">
-                                                    <rect key="frame" x="26" y="11" width="94" height="21"/>
+                                                    <rect key="frame" x="26" y="7" width="94" height="21.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -97,8 +97,8 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="SNz-Wt-44U" firstAttribute="leading" secondItem="NJD-8W-3rP" secondAttribute="leadingMargin" constant="6" id="F0Z-4n-UZc"/>
-                                                <constraint firstItem="SNz-Wt-44U" firstAttribute="top" secondItem="NJD-8W-3rP" secondAttribute="topMargin" id="SaJ-vS-lcz"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="SNz-Wt-44U" secondAttribute="bottom" id="WQf-nc-vkh"/>
+                                                <constraint firstItem="SNz-Wt-44U" firstAttribute="top" secondItem="NJD-8W-3rP" secondAttribute="topMargin" constant="-4" id="SaJ-vS-lcz"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="SNz-Wt-44U" secondAttribute="bottom" constant="-4" id="WQf-nc-vkh"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>

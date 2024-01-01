@@ -204,6 +204,7 @@ struct AppStringAssets {
 	static var rowIndentControlLabel = String(localized: "Row Indent", comment: "Control Label: Row Indent")
 	static var rowSpacingControlLabel = String(localized: "Row Spacing", comment: "Control Label: Row Spacing")
 
+	static var saveControlLabel = String(localized: "Save", comment: "Control Label: Save")
 	static var searchPlaceholder = String(localized: "Search", comment: "Field Placeholder: Search")
 	static var selectControlLabel = String(localized: "Select", comment: "Control Label: Select")
 	static var settingsControlLabel = String(localized: "Settings", comment: "Control Label: Settings")

@@ -23,6 +23,9 @@ class SettingsFontConfigViewController: UITableViewController {
 	@IBOutlet weak var fontValueStepper: ValueStepper!
 	@IBOutlet weak var sampleTextLabel: UILabel!
 	
+	var cancelButton: UIButton!
+	var saveButton: UIButton!
+
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
@@ -35,6 +38,24 @@ class SettingsFontConfigViewController: UITableViewController {
 		if UIDevice.current.userInterfaceIdiom == .mac {
 			fontValueStepper.widthAnchor.constraint(equalToConstant: 80).isActive = true
 			fontValueStepper.heightAnchor.constraint(equalToConstant: 19).isActive = true
+
+			cancelBarButtonItem.isHidden = true
+			saveBarButtonItem.isHidden = true
+			
+			cancelButton = UIButton(type: .system)
+			cancelButton.setTitle(AppStringAssets.cancelControlLabel, for: .normal)
+			cancelButton.isAccessibilityElement = true
+			cancelButton.addTarget(self, action: #selector(cancel(_:)), for: .touchUpInside)
+//			cancelButton.isEnabled = true
+//			cancelButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+
+			saveButton = UIButton(type: .system)
+			saveButton.setTitle(AppStringAssets.saveControlLabel, for: .normal)
+			saveButton.isAccessibilityElement = true
+			saveButton.addTarget(self, action: #selector(save(_:)), for: .touchUpInside)
+//			saveButton.isEnabled = true
+//			saveButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+
 		} else {
 			fontValueStepper.widthAnchor.constraint(equalToConstant: 149).isActive = true
 			fontValueStepper.heightAnchor.constraint(equalToConstant: 29).isActive = true
@@ -49,6 +70,24 @@ class SettingsFontConfigViewController: UITableViewController {
 
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.selectRow(at: nil, animated: true, scrollPosition: .none)
+	}
+	
+	override func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
+		return UITableView.automaticDimension
+	}
+	
+	override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+		guard UIDevice.current.userInterfaceIdiom == .mac && section == 1 else { return nil }
+		
+		let footer = UIStackView()
+		footer.isLayoutMarginsRelativeArrangement = true
+		footer.spacing = 8
+		footer.layoutMargins.top = 24
+		footer.addArrangedSubview(UIView())
+		footer.addArrangedSubview(cancelButton)
+		footer.addArrangedSubview(saveButton)
+		
+		return footer
 	}
 	
 	@IBAction func changeFont(_ sender: Any) {
