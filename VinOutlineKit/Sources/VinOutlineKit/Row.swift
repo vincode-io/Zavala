@@ -181,7 +181,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		set {
 			if let attrText = newValue {
 				let (cleanAttrText, newImages) = splitOffImages(attrString: attrText, isNotes: false)
-				cleanAttrText.trimCharacters(in: .whitespaces)
 				topicData = cleanAttrText.toData()
 				
 				var notesImages = images?.filter { $0.isInNotes ?? false } ?? [Image]()
@@ -213,7 +212,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		set {
 			if let attrText = newValue {
 				let (cleanAttrText, newImages) = splitOffImages(attrString: attrText, isNotes: true)
-				cleanAttrText.trimCharacters(in: .whitespaces)
 				noteData = cleanAttrText.toData()
 
 				var topicImages = images?.filter { !($0.isInNotes ?? false) } ?? [Image]()
