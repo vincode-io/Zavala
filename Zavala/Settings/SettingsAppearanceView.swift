@@ -9,12 +9,49 @@ import SwiftUI
 
 struct SettingsAppearanceView: View {
 	
+	@State var colorPalette = AppDefaults.shared.userInterfaceColorPalette
+	@State var editorMaxWidth = AppDefaults.shared.editorMaxWidth
 	@State var rowIndent = AppDefaults.shared.rowIndentSize
 	@State var rowSpacing = AppDefaults.shared.rowSpacingSize
-	@State var colorPalette = AppDefaults.shared.userInterfaceColorPalette
 	
     var body: some View {
 		Section(AppStringAssets.appearanceControlLabel) {
+			HStack {
+				Text(AppStringAssets.colorPalettControlLabel)
+				Spacer()
+				Picker(selection: $colorPalette) {
+					ForEach(UserInterfaceColorPalette.allCases, id: \.self) {
+						Text($0.description)
+					}
+				} label: {
+				}
+				#if targetEnvironment(macCatalyst)
+				.frame(width: 100)
+				#endif
+				.pickerStyle(.menu)
+				.onChange(of: colorPalette) {
+					AppDefaults.shared.userInterfaceColorPalette = $0
+				}
+			}
+			
+			HStack {
+				Text(AppStringAssets.editorMaxWidthControlLabel)
+				Spacer()
+				Picker(selection: $editorMaxWidth) {
+					ForEach(EditorMaxWidth.allCases, id: \.self) {
+						Text($0.description)
+					}
+				} label: {
+				}
+				#if targetEnvironment(macCatalyst)
+				.frame(width: 100)
+				#endif
+				.pickerStyle(.menu)
+				.onChange(of: editorMaxWidth) {
+					AppDefaults.shared.editorMaxWidth = $0
+				}
+			}
+
 			HStack {
 				Text(AppStringAssets.rowIndentControlLabel)
 				Spacer()
@@ -51,24 +88,6 @@ struct SettingsAppearanceView: View {
 				}
 			}
 
-			HStack {
-				Text(AppStringAssets.colorPalettControlLabel)
-				Spacer()
-				Picker(selection: $colorPalette) {
-					ForEach(UserInterfaceColorPalette.allCases, id: \.self) {
-						Text($0.description)
-					}
-				} label: {
-				}
-				#if targetEnvironment(macCatalyst)
-				.frame(width: 100)
-				#endif
-				.pickerStyle(.menu)
-				.onChange(of: colorPalette) {
-					AppDefaults.shared.userInterfaceColorPalette = $0
-				}
-			}
-			
 			NavigationLink(AppStringAssets.fontsControlLabel) {
 				SettingsFontsView()
 			}

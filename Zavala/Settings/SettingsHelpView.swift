@@ -14,7 +14,7 @@ struct SettingsHelpView: View {
 	@State var isPresentingAbout = false
 	
     var body: some View {
-		Section() {
+		Section(AppStringAssets.helpControlLabel) {
 			Button {
 				isPresentingAbout = true
 			} label: {
@@ -28,7 +28,7 @@ struct SettingsHelpView: View {
 			Button {
 				openURL(URL(string: AppStringAssets.helpURL)!)
 			} label: {
-				Text(AppStringAssets.helpControlLabel)
+				Text(AppStringAssets.zavalaHelpControlLabel)
 			}
 			.foregroundStyle(.primary)
 

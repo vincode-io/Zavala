@@ -217,7 +217,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									   input: "d",
 									   modifierFlags: [.command])
 	
-	let showHelpCommand = UICommand(title: AppStringAssets.zavalaHelpControlLabel, action: #selector(showHelpCommand(_:)))
+	let showHelpCommand = UICommand(title: AppStringAssets.appHelpControlLabel, action: #selector(showHelpCommand(_:)))
 
 	let reportAnIssueCommand = UICommand(title: AppStringAssets.reportAnIssueControlLabel, action: #selector(reportAnIssueCommand(_:)))
 

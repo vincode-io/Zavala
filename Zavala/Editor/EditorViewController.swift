@@ -420,6 +420,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	private static var defaultContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
+	private var editorMaxWidth = AppDefaults.shared.editorMaxWidth
 	private var rowIndentSize = AppDefaults.shared.rowIndentSize
 	private var rowSpacingSize = AppDefaults.shared.rowSpacingSize
 	
@@ -660,6 +661,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	@objc func userDefaultsDidChange() {
+		if editorMaxWidth != AppDefaults.shared.editorMaxWidth {
+			editorMaxWidth = AppDefaults.shared.editorMaxWidth
+			collectionView.reloadData()
+		}
+		
 		if rowIndentSize != AppDefaults.shared.rowIndentSize {
 			rowIndentSize = AppDefaults.shared.rowIndentSize
 			collectionView.reloadData()

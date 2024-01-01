@@ -10,6 +10,20 @@ import VinOutlineKit
 
 class EditorCollectionViewCompositionalLayout : UICollectionViewCompositionalLayout {
 	
+	override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+		guard let superAttributes = super.layoutAttributesForItem(at: indexPath) else { return nil }
+		
+		// Copy each item to prevent "UICollectionViewFlowLayout has cached frame mismatch" warning
+		guard let attributes = superAttributes.copy() as? UICollectionViewLayoutAttributes else { return nil }
+
+		let editorMaxWidth = AppDefaults.shared.editorMaxWidth.maxWidth
+		if attributes.size.width > editorMaxWidth {
+			attributes.size.width = editorMaxWidth
+		}
+		
+		return attributes
+	}
+	
 	override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
 		guard let superAttributes = super.layoutAttributesForElements(in: rect) else { return nil }
 		
@@ -20,9 +34,15 @@ class EditorCollectionViewCompositionalLayout : UICollectionViewCompositionalLay
 		var tagAttributes = [UICollectionViewLayoutAttributes]()
 		var otherAttributes = [UICollectionViewLayoutAttributes]()
 		for attr in attributes {
-			if attr.indexPath.section == Outline.Section.tags.rawValue {
+			let editorMaxWidth = AppDefaults.shared.editorMaxWidth.maxWidth
+			if attr.size.width > editorMaxWidth {
+				attr.size.width = editorMaxWidth
+			}
+
+			switch attr.indexPath.section {
+			case Outline.Section.tags.rawValue:
 				tagAttributes.append(attr)
-			} else {
+			default:
 				otherAttributes.append(attr)
 			}
 		}
