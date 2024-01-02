@@ -46,15 +46,13 @@ class SettingsFontConfigViewController: UITableViewController {
 			cancelButton.setTitle(AppStringAssets.cancelControlLabel, for: .normal)
 			cancelButton.isAccessibilityElement = true
 			cancelButton.addTarget(self, action: #selector(cancel(_:)), for: .touchUpInside)
-//			cancelButton.isEnabled = true
-//			cancelButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+			cancelButton.role = .cancel
 
 			saveButton = UIButton(type: .system)
 			saveButton.setTitle(AppStringAssets.saveControlLabel, for: .normal)
 			saveButton.isAccessibilityElement = true
 			saveButton.addTarget(self, action: #selector(save(_:)), for: .touchUpInside)
-//			saveButton.isEnabled = true
-//			saveButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+			saveButton.role = .primary
 
 		} else {
 			fontValueStepper.widthAnchor.constraint(equalToConstant: 149).isActive = true
