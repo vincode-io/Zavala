@@ -274,8 +274,9 @@ private extension EditorViewController {
 			
 			var rowGroups = [RowGroup]()
 			for textDrop in textDrops {
-				for markdown in textDrop.markdowns {
-					let row = Row(outline: outline, topicMarkdown: markdown)
+				for attrString in textDrop.attrStrings {
+					let row = Row(outline: outline)
+					row.topic = attrString
 					row.detectData()
 					rowGroups.append(RowGroup(row))
 				}
@@ -346,11 +347,15 @@ private struct TextDrop {
 		self.urlString = urlString
 	}
 	
-	var markdowns: [String] {
-		guard let urlString else {
-			return text.split(separator: "\n").map { String($0) }
+	var attrStrings: [NSAttributedString] {
+		guard let urlString, let url = URL(string: urlString) else {
+			return text.split(separator: "\n").map { NSAttributedString(string: String($0)) }
 		}
-		return ["[\(text)](\(urlString))"]
+		
+		let attrString = NSMutableAttributedString(string: text)
+		attrString.setAttributes([NSAttributedString.Key.link: url], range: .init(location: 0, length: text.count))
+
+		return [attrString]
 	}
 	
 }
