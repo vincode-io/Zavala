@@ -3188,6 +3188,12 @@ private extension EditorViewController {
 	}
 
 	func deleteRowNotes(_ rows: [Row], rowStrings: RowStrings? = nil) {
+		// If the user is currently editing a note and wants to delete it, the text view will try to save
+		// its current contents to the row after the note data was already cleared.
+		if let noteTextView = currentTextView as? EditorRowNoteTextView {
+			noteTextView.isSavingTextUnnecessary = true
+		}
+		
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = DeleteNoteCommand(actionName: AppStringAssets.deleteNoteControlLabel,
