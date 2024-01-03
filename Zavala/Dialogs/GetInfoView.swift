@@ -41,6 +41,12 @@ struct GetInfoView: View {
 			}
 			Section(AppStringAssets.statisticsControlLabel) {
 				HStack {
+					Text(AppStringAssets.wordCountLabel)
+					Spacer()
+					Text(String(getInfoViewModel.wordCount))
+						.foregroundStyle(.secondary)
+				}
+				HStack {
 					Text(AppStringAssets.createdControlLabel)
 					Spacer()
 					Text(getInfoViewModel.createdLabel)
@@ -67,6 +73,7 @@ class GetInfoViewModel: ObservableObject {
 	@Published var ownerURL: String
 	var createdLabel: String
 	var updatedLabel: String
+	var wordCount: Int
 	
 	init(outline: Outline?) {
 		self.title = outline?.title ?? ""
@@ -86,6 +93,8 @@ class GetInfoViewModel: ObservableObject {
 		} else {
 			updatedLabel = ""
 		}
+		
+		wordCount = outline?.wordCount ?? 0
 	}
 	
 }

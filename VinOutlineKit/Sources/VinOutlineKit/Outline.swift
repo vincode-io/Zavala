@@ -176,6 +176,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 	
+	public var wordCount: Int {
+		let wordCountVisitor = WordCountVisitor()
+		rows.forEach { $0.visit(visitor: wordCountVisitor.visitor)	}
+		return wordCountVisitor.count
+	}
+	
 	public var verticleScrollState: Int? {
 		didSet {
 			documentMetaDataDidChange()

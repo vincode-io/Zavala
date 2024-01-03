@@ -234,7 +234,8 @@ struct AppStringAssets {
  
 	static var websiteControlLabel = String(localized: "Website", comment: "Control Label: Website")
 	static var wideControlLabel = String(localized: "Wide", comment: "Control Label: Wide")
-	
+	static var wordCountLabel = String(localized: "Word Count", comment: "Control Label: Word Count")
+
 	static var zavalaHelpControlLabel = String(localized: "Zavala Help", comment: "Control Label: Zavala Help")
 	
 	// MARK: Localizable Functions
