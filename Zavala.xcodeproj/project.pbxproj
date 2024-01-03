@@ -21,7 +21,6 @@
 		5116894029BD72DE00318832 /* AttributedLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116893F29BD72DE00318832 /* AttributedLabelView.swift */; };
 		5116894529BDA0E500318832 /* AboutSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116894429BDA0E500318832 /* AboutSceneDelegate.swift */; };
 		5116894729BDA60E00318832 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116894629BDA60E00318832 /* AboutViewController.swift */; };
-		51194E1E2B37A37B001F1DBE /* OutlineGetInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51194E1D2B37A37B001F1DBE /* OutlineGetInfoViewController.swift */; };
 		511A99F727B9B596001BD443 /* ToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511A99F627B9B596001BD443 /* ToolbarButton.swift */; };
 		511B29E525FEE4DC00C04239 /* LinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29E425FEE4DC00C04239 /* LinkViewController.swift */; };
 		511B29F226014FBA00C04239 /* EnhancedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F126014FBA00C04239 /* EnhancedTextField.swift */; };
@@ -232,7 +231,6 @@
 		5116893F29BD72DE00318832 /* AttributedLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedLabelView.swift; sourceTree = "<group>"; };
 		5116894429BDA0E500318832 /* AboutSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSceneDelegate.swift; sourceTree = "<group>"; };
 		5116894629BDA60E00318832 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
-		51194E1D2B37A37B001F1DBE /* OutlineGetInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutlineGetInfoViewController.swift; sourceTree = "<group>"; };
 		511A99F627B9B596001BD443 /* ToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButton.swift; sourceTree = "<group>"; };
 		511B29E425FEE4DC00C04239 /* LinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkViewController.swift; sourceTree = "<group>"; };
 		511B29F126014FBA00C04239 /* EnhancedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedTextField.swift; sourceTree = "<group>"; };
@@ -823,7 +821,6 @@
 				511B29E425FEE4DC00C04239 /* LinkViewController.swift */,
 				51C568D8258C1CD200AA7B93 /* MacLinkViewController.swift */,
 				519185062713453700B7E177 /* MacRenameTagViewController.swift */,
-				51194E1D2B37A37B001F1DBE /* OutlineGetInfoViewController.swift */,
 				5191850427133B4000B7E177 /* RenameTagViewController.swift */,
 			);
 			path = Dialogs;
@@ -1121,7 +1118,6 @@
 				511EC2C12B3F5AA7002D89A5 /* SettingsViewController.swift in Sources */,
 				511EC2C52B3F8F29002D89A5 /* SettingsAdvancedView.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
-				51194E1E2B37A37B001F1DBE /* OutlineGetInfoViewController.swift in Sources */,
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,
 				51D28D2C257730DB0039DDFC /* EditorViewController+Drag.swift in Sources */,
 				51C030B4257E192100609262 /* EditorTitleViewCell.swift in Sources */,

@@ -11,14 +11,46 @@ import VinOutlineKit
 
 struct GetInfoView: View {
 	
+	@Environment(\.dismiss) var dismiss
 	@ObservedObject var getInfoViewModel: GetInfoViewModel
-
-    var body: some View {
-		#if targetEnvironment(macCatalyst)
-			Text(getInfoViewModel.title)
-				.lineLimit(1)
-				.font(.title)
-		#endif
+	
+	init(outline: Outline) {
+		getInfoViewModel = GetInfoViewModel(outline: outline)
+	}
+	
+#if targetEnvironment(macCatalyst)
+	var body: some View {
+		Text(getInfoViewModel.title)
+			.lineLimit(1)
+			.font(.title)
+			.padding(8)
+		form
+		HStack {
+			Spacer()
+			cancelButton
+			saveButton
+		}
+		.padding(16)
+	}
+#else
+	var body: some View {
+		NavigationStack {
+			form
+				.navigationTitle(getInfoViewModel.title)
+				.navigationBarTitleDisplayMode(.inline)
+				.toolbar {
+					ToolbarItem(placement: .cancellationAction) {
+						cancelButton
+					}
+					ToolbarItem(placement: .confirmationAction) {
+						saveButton
+					}
+				}
+		}
+	}
+#endif
+	
+	var form: some View {
 		Form {
 			Section(AppStringAssets.settingsControlLabel) {
 				Toggle(isOn: $getInfoViewModel.autoLinkingEnabled) {
@@ -61,10 +93,27 @@ struct GetInfoView: View {
 			}
 		}
 		.formStyle(.grouped)
-    }
+	}
+	
+	var cancelButton: some View {
+		Button(AppStringAssets.cancelControlLabel, role: .cancel) {
+			dismiss()
+		}
+		.keyboardShortcut(.cancelAction)
+	}
+	
+	var saveButton: some View {
+		Button(AppStringAssets.saveControlLabel) {
+			getInfoViewModel.update()
+			dismiss()
+		}
+		.keyboardShortcut(.defaultAction)
+	}
 }
 
 class GetInfoViewModel: ObservableObject {
+	
+	private var outline: Outline
 	
 	var title: String
 	@Published var autoLinkingEnabled: Bool
@@ -75,26 +124,35 @@ class GetInfoViewModel: ObservableObject {
 	var updatedLabel: String
 	var wordCount: Int
 	
-	init(outline: Outline?) {
-		self.title = outline?.title ?? ""
-		self.autoLinkingEnabled = outline?.autoLinkingEnabled ?? false
-		self.ownerName = outline?.ownerName ?? ""
-		self.ownerEmail = outline?.ownerEmail ?? ""
-		self.ownerURL = outline?.ownerURL ?? ""
+	init(outline: Outline) {
+		self.outline = outline
 		
-		if let created = outline?.created {
+		self.title = outline.title ?? ""
+		self.autoLinkingEnabled = outline.autoLinkingEnabled ?? false
+		self.ownerName = outline.ownerName ?? ""
+		self.ownerEmail = outline.ownerEmail ?? ""
+		self.ownerURL = outline.ownerURL ?? ""
+		
+		if let created = outline.created {
 			createdLabel = AppStringAssets.createdOnLabel(date: created)
 		} else {
 			createdLabel = ""
 		}
 		
-		if let updated = outline?.updated {
+		if let updated = outline.updated {
 			updatedLabel = AppStringAssets.updatedOnLabel(date: updated)
 		} else {
 			updatedLabel = ""
 		}
 		
-		wordCount = outline?.wordCount ?? 0
+		wordCount = outline.wordCount
+	}
+	
+	func update() {
+		outline.update(autoLinkingEnabled: autoLinkingEnabled,
+					   ownerName: ownerName,
+					   ownerEmail: ownerEmail,
+					   ownerURL: ownerURL)
 	}
 	
 }

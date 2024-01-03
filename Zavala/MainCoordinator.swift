@@ -310,23 +310,17 @@ extension MainCoordinator {
 	}
 	
 	func showGetInfo(outline: Outline) {
+		let getInfoView = GetInfoView(outline: outline)
+		let hostingController = UIHostingController(rootView: getInfoView)
+		hostingController.modalPresentationStyle = .formSheet
+
 		if traitCollection.userInterfaceIdiom == .mac {
-		
-			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: OutlineGetInfoViewController.self)
-			outlineGetInfoViewController.preferredContentSize = CGSize(width: 350, height: 430)
-			outlineGetInfoViewController.outline = outline
-			present(outlineGetInfoViewController, animated: true)
-		
+			hostingController.preferredContentSize = CGSize(width: 350, height: 460)
 		} else {
-			
-			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
-			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 425, height: 510)
-			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
-			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
-			outlineGetInfoViewController.outline = outline
-			present(outlineGetInfoNavViewController, animated: true)
-			
+			hostingController.preferredContentSize = CGSize(width: 425, height: 580)
 		}
+
+		present(hostingController, animated: true)
 	}
 	
 	func exportPDFDocs() {
