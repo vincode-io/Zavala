@@ -178,7 +178,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	public var wordCount: Int {
 		let wordCountVisitor = WordCountVisitor()
+
+		loadRows()
 		rows.forEach { $0.visit(visitor: wordCountVisitor.visitor)	}
+		unloadRows()
+		
 		return wordCountVisitor.count
 	}
 	
