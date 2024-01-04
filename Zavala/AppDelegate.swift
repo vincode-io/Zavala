@@ -283,12 +283,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											 input: "i",
 											 modifierFlags: [.control, .command])
 
-	var frontWindow: UIWindow? {
-		return UIApplication.shared.connectedScenes.compactMap({ ($0 as? UIWindowScene)?.keyWindow }).last
-	}
-	
 	var mainCoordinator: MainCoordinator? {
-		return frontWindow?.rootViewController as? MainCoordinator
+		return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController as? MainCoordinator
 	}
 	
 	private var history = [Pin]()
@@ -1024,8 +1020,10 @@ extension AppDelegate: AppKitPluginDelegate {
 extension AppDelegate: ErrorHandler {
 	
 	func presentError(_ error: Error, title: String) {
-		if let controller = frontWindow?.rootViewController, controller.presentedViewController == nil {
-			controller.presentError(title: title, message: error.localizedDescription)
+		if let controller = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController {
+			if controller.presentedViewController == nil {
+				controller.presentError(title: title, message: error.localizedDescription)
+			}
 		}
 	}
 	

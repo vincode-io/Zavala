@@ -493,6 +493,7 @@ extension NSToolbarItem.Identifier {
 	static let importOPML = NSToolbarItem.Identifier("io.vincode.Zavala.importOPML")
 	static let newOutline = NSToolbarItem.Identifier("io.vincode.Zavala.newOutline")
 	static let filter = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineFilter")
+	static let focus = NSToolbarItem.Identifier("io.vincode.Zavala.focus")
 	static let delete = NSToolbarItem.Identifier("io.vincode.Zavala.delete")
 	static let navigation = NSToolbarItem.Identifier("io.vincode.Zavala.navigation")
 	static let goBackward = NSToolbarItem.Identifier("io.vincode.Zavala.goBackward")

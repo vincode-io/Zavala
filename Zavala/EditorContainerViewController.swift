@@ -198,6 +198,14 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		moveRowsDown()
 	}
 
+	@objc func focusIn(_ sender: Any?) {
+		focusIn()
+	}
+
+	@objc func focusOut(_ sender: Any?) {
+		focusOut()
+	}
+
 	@objc func toggleOutlineHideNotes(_ sender: Any?) {
 		toggleNotesFilter()
 	}
@@ -290,6 +298,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.collaborate,
 			.share,
 			.space,
+			.focus,
 			.filter,
 		]
 	}
@@ -302,6 +311,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.link,
 			.boldface,
 			.italic,
+			.focus,
 			.filter,
 			.expandAllInOutline,
 			.collapseAllInOutline,
@@ -476,6 +486,29 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.toolTip = AppStringAssets.moveDownControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsDown(_:))
+			item.target = self
+			toolbarItem = item
+		case .focus:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				if self?.editorViewController?.isFocusOutUnavailable ?? true {
+					item.image = ZavalaImageAssets.focusInactive.symbolSizedForCatalyst()
+					item.label = AppStringAssets.focusInControlLabel
+					item.toolTip = AppStringAssets.focusInControlLabel
+					item.action = #selector(self?.focusIn(_:))
+				} else {
+					item.image = ZavalaImageAssets.focusActive.symbolSizedForCatalyst(color: .accentColor)
+					item.label = AppStringAssets.focusOutControlLabel
+					item.toolTip = AppStringAssets.focusOutControlLabel
+					item.action = #selector(self?.focusOut(_:))
+				}
+				return self?.editorViewController?.isFocusInUnavailable ?? true
+			}
+			item.image = ZavalaImageAssets.focusInactive.symbolSizedForCatalyst()
+			item.label = AppStringAssets.focusInControlLabel
+			item.toolTip = AppStringAssets.focusInControlLabel
+			item.isBordered = true
+			item.action = #selector(focusIn(_:))
 			item.target = self
 			toolbarItem = item
 		case .filter:

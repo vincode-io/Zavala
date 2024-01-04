@@ -41,6 +41,8 @@ struct ZavalaImageAssets {
 	static var filterActive = UIImage(systemName: "line.horizontal.3.decrease.circle.fill")!
 	static var filterInactive = UIImage(systemName: "line.horizontal.3.decrease.circle")!
 	static var find = UIImage(systemName: "magnifyingglass")!
+	static var focusInactive = UIImage(systemName: "eye")!
+	static var focusActive = UIImage(systemName: "eye.fill")!
 	static var format = UIImage(systemName: "textformat")!
 	static var fullScreenBackgroundColor: UIColor = UIColor(named: "FullScreenBackgroundColor")!
 
