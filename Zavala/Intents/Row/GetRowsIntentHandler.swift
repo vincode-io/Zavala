@@ -103,7 +103,7 @@ class GetRowsVisitor {
 			}
 		}
 
-		let level = visited.level + 1
+		let level = visited.trueLevel + 1
 		let depthPassed = startDepth <= level && endDepth >= level
 		let completionPassed = passedCompletion(visited.isComplete ?? false)
 		let expandedPassed = passedExpanded(visited.isExpanded)

@@ -78,6 +78,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return outline == nil
 	}
 	
+	var isFocusInUnavailable: Bool {
+		return !(currentRows?.count ?? 0 == 1)
+	}
+	
+	var isFocusOutUnavailable: Bool {
+		return outline?.isFocusOutUnavailable() ?? true
+	}
+	
 	var isCollaborateUnavailable: Bool {
 		return outline == nil || !outline!.isCloudKit
 	}
@@ -522,6 +530,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchTextDidChange(_:)), name: .OutlineSearchTextDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillEnd(_:)), name: .OutlineSearchWillEnd, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchDidEnd(_:)), name: .OutlineSearchDidEnd, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineDidFocusOut(_:)), name: .OutlineDidFocusOut, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineAddedBacklinks(_:)), name: .OutlineAddedBacklinks, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineRemovedBacklinks(_:)), name: .OutlineRemovedBacklinks, object: nil)
 
@@ -731,6 +740,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 
 	@objc func outlineSearchDidEnd(_ note: Notification) {
+		if let cursorCoordinates = CursorCoordinates.bestCoordinates {
+			restoreCursorPosition(cursorCoordinates, scroll: true, centered: true)
+		}
+	}
+	
+	@objc func outlineDidFocusOut(_ note: Notification) {
 		if let cursorCoordinates = CursorCoordinates.bestCoordinates {
 			restoreCursorPosition(cursorCoordinates, scroll: true, centered: true)
 		}
@@ -1162,6 +1177,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		CursorCoordinates.clearLastKnownCoordinates()
 	}
 
+	@objc func focusIn() {
+		guard let row = currentRows?.first else { return }
+		outline?.focusIn(row)
+	}
+	
+	@objc func focusOut() {
+		outline?.focusOut()
+	}
+	
 	@objc func toggleFilterOn() {
 		guard let changes = outline?.toggleFilterOn() else { return }
 		applyChangesRestoringState(changes)

@@ -123,7 +123,7 @@ class EditorRowContentView: UIView, UIContentView {
 			disclosureIndicator.setDisclosure(state: .partial, animated: false)
 		}
 
-		barView.level = row.level
+		barView.level = row.currentLevel
 		barView.indentationWidth = configuration.indentationWidth
 		
 		guard appliedConfiguration == nil || !appliedConfiguration!.isLayoutEqual(configuration) else {

@@ -213,7 +213,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 			baseAttributes[.strikethroughStyle] = 0
 		}
 		
-		baseAttributes[.font] = OutlineFontCache.shared.topic(level: row.level)
+		baseAttributes[.font] = OutlineFontCache.shared.topic(level: row.trueLevel)
 		
 		typingAttributes = baseAttributes
 		

@@ -121,6 +121,8 @@ struct AppStringAssets {
 	static var findEllipsisControlLabel = String(localized: "Find…", comment: "Control Label: Find…")
 	static var findNextControlLabel = String(localized: "Find Next", comment: "Control Label: Find Next")
 	static var findPreviousControlLabel = String(localized: "Find Previous", comment: "Control Label: Find Previous")
+	static var focusInControlLabel = String(localized: "Focus In", comment: "Control Label: Focus In")
+	static var focusOutControlLabel = String(localized: "Focus Out", comment: "Control Label: Focus Out")
 	static var fontsControlLabel = String(localized: "Fonts", comment: "Control Label: Fonts")
 	static var formatControlLabel = String(localized: "Format", comment: "Control Label: Format")
 	static var forwardControlLabel = String(localized: "Forward", comment: "Control Label: Forward")

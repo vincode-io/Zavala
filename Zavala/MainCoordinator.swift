@@ -30,6 +30,14 @@ extension MainCoordinator {
 		return editorViewController?.isOutlineFunctionsUnavailable ?? true
 	}
 	
+	var isFocusInUnavailable: Bool {
+		return editorViewController?.isFocusInUnavailable ?? true
+	}
+	
+	var isFocusOutUnavailable: Bool {
+		return editorViewController?.isFocusOutUnavailable ?? true
+	}
+	
 	var isCollaborateUnavailable: Bool {
 		return editorViewController?.isCollaborateUnavailable ?? true
 	}
@@ -148,6 +156,14 @@ extension MainCoordinator {
 	
 	func duplicateRows() {
 		editorViewController?.duplicateCurrentRows()
+	}
+	
+	func focusIn() {
+		editorViewController?.focusIn()
+	}
+	
+	func focusOut() {
+		editorViewController?.focusOut()
 	}
 	
 	func toggleFilterOn() {

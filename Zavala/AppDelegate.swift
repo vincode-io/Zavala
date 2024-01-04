@@ -168,6 +168,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let copyDocumentLinkCommand = UICommand(title: AppStringAssets.copyDocumentLinkControlLabel, action: #selector(copyDocumentLinkCommand(_:)))
 	
+	let focusInCommand = UIKeyCommand(title: AppStringAssets.focusInControlLabel,
+									  action: #selector(focusInCommand(_:)),
+									  input: UIKeyCommand.inputRightArrow,
+									  modifierFlags: [.alternate, .command])
+	
+	let focusOutCommand = UIKeyCommand(title: AppStringAssets.focusOutControlLabel,
+									   action: #selector(focusOutCommand(_:)),
+									   input: UIKeyCommand.inputLeftArrow,
+									   modifierFlags: [.alternate, .command])
+
 	let toggleFilterOnCommand = UIKeyCommand(title: AppStringAssets.turnFilterOnControlLabel,
 											 action: #selector(toggleFilterOnCommand(_:)),
 											 input: "h",
@@ -578,6 +588,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.copyDocumentLink()
 	}
 
+	@objc func focusInCommand(_ sender: Any?) {
+		mainCoordinator?.focusIn()
+	}
+
+	@objc func focusOutCommand(_ sender: Any?) {
+		mainCoordinator?.focusOut()
+	}
+
 	@objc func toggleFilterOnCommand(_ sender: Any?) {
 		mainCoordinator?.toggleFilterOn()
 	}
@@ -793,6 +811,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isLinkUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(focusInCommand(_:)):
+			if mainCoordinator?.isFocusInUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(focusOutCommand(_:)):
+			if mainCoordinator?.isFocusOutUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		case #selector(toggleFilterOnCommand(_:)):
 			if mainCoordinator?.isFilterOn ?? false {
 				command.title = AppStringAssets.turnFilterOffControlLabel
@@ -937,6 +963,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertChild(expandCollapseMenu, atStartOfMenu: .view)
 		let toggleFilterOutlineMenu = UIMenu(title: "", options: .displayInline, children: [toggleFilterOnCommand, toggleCompletedFilterCommand, toggleNotesFilterCommand])
 		builder.insertChild(toggleFilterOutlineMenu, atStartOfMenu: .view)
+
+		let focusMenu = UIMenu(title: "", options: .displayInline, children: [focusInCommand, focusOutCommand])
+		builder.insertChild(focusMenu, atStartOfMenu: .view)
 
 		// Outline Menu
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand, createRowNotesCommand, deleteRowNotesCommand])

@@ -83,7 +83,7 @@ class EditorRowViewCell: UICollectionViewListCell {
 
 		guard let row else { return }
 
-		indentationLevel = row.level
+		indentationLevel = row.currentLevel
 
 		switch rowIndentSize {
 		case .small:

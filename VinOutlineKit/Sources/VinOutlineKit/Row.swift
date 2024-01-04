@@ -127,13 +127,31 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	
 	private var _entityID: EntityID?
 	
-	public var level: Int {
+	public var trueLevel: Int {
 		var parentCount = 0
-		var p = parent as? Row
-		while p != nil {
+		var parentRow = parent as? Row
+		
+		while parentRow != nil {
 			parentCount = parentCount + 1
-			p = p?.parent as? Row
+			parentRow = parentRow?.parent as? Row
 		}
+		
+		return parentCount
+	}
+	
+	public var currentLevel: Int {
+		guard self != outline?.focusRow else {
+			return 0
+		}
+		
+		var parentCount = outline?.focusRow == nil ? 0 : 1
+		var parentRow = parent as? Row
+		
+		while parentRow != nil && parentRow != outline?.focusRow {
+			parentCount = parentCount + 1
+			parentRow = parentRow?.parent as? Row
+		}
+		
 		return parentCount
 	}
 	

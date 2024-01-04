@@ -17,6 +17,7 @@ public extension Notification.Name {
 	static let OutlineSearchTextDidChange = Notification.Name(rawValue: "OutlineSearchTextDidChange")
 	static let OutlineSearchWillEnd = Notification.Name(rawValue: "OutlineSearchWillEnd")
 	static let OutlineSearchDidEnd = Notification.Name(rawValue: "OutlineSearchDidEnd")
+	static let OutlineDidFocusOut = Notification.Name(rawValue: "OutlineDidFocusOut")
 	static let OutlineAddedBacklinks = Notification.Name(rawValue: "OutlineAddedBacklinks")
 	static let OutlineRemovedBacklinks = Notification.Name(rawValue: "OutlineRemovedBacklinks")
 }
@@ -61,6 +62,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	public private(set) var isSearching = SearchState.notSearching
 	public private(set) var searchText = ""
 
+	public private(set) var focusRow: Row?
+	
 	public var adjustedRowsSection: Section {
 		return isSearching == .notSearching ? Section.rows : Section.title
 	}
@@ -1057,6 +1060,52 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineSearchDidEnd()
 	}
 	
+	public func focusIn(_ row: Row) {
+		self.focusRow = row
+		
+		var changes = rebuildShadowTable()
+
+		var reloads = Set<Int>()
+		func reloadVisitor(_ visited: Row) {
+			if let index = visited.shadowTableIndex {
+				reloads.insert(index)
+			}
+			if visited.isExpanded {
+				visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
+			}
+		}
+		reloadVisitor(row)
+
+		changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
+		outlineElementsDidChange(changes)
+	}
+
+	public func isFocusOutUnavailable() -> Bool {
+		return focusRow == nil
+	}
+	
+	public func focusOut() {
+		guard let reloadRow = self.focusRow else { return }
+		
+		self.focusRow = nil
+		var changes = rebuildShadowTable()
+		
+		var reloads = Set<Int>()
+		func reloadVisitor(_ visited: Row) {
+			if let index = visited.shadowTableIndex {
+				reloads.insert(index)
+			}
+			if visited.isExpanded {
+				visited.rows.forEach { $0.visit(visitor: reloadVisitor) }
+			}
+		}
+		reloadVisitor(reloadRow)
+		changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
+		
+		outlineElementsDidChange(changes)
+		outlineDidFocusOut()
+	}
+
 	func findImages(rowID: String) -> [Image]? {
 		return images?[rowID]
 	}
@@ -1831,7 +1880,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	public func isMoveRowsLeftUnavailable(rows: [Row]) -> Bool {
 		for row in rows {
-			if row.level != 0 {
+			if row.currentLevel != 0 {
 				return false
 			}
 		}
@@ -2314,7 +2363,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	func rebuildShadowTable() -> OutlineElementChanges {
 		guard let oldShadowTable = shadowTable else { return OutlineElementChanges(section: adjustedRowsSection) }
-		rebuildTransientData()
+		rebuildTransientData(row: focusRow)
 		
 		var moves = Set<OutlineElementChanges.Move>()
 		var inserts = Set<Int>()
@@ -2444,6 +2493,10 @@ private extension Outline {
 	
 	func outlineSearchDidEnd() {
 		NotificationCenter.default.post(name: .OutlineSearchDidEnd, object: self, userInfo: nil)
+	}
+	
+	func outlineDidFocusOut() {
+		NotificationCenter.default.post(name: .OutlineDidFocusOut, object: self, userInfo: nil)
 	}
 	
 	func outlineAddedBacklinks() {
@@ -2735,12 +2788,18 @@ private extension Outline {
 		}
 	}
 	
-	func rebuildTransientData() {
+	func rebuildTransientData(row: Row? = nil) {
 		let transient = TransientDataVisitor(isCompletedFilterOn: isCompletedFilterOn, isSearching: isSearching)
-		rows.forEach { row in
-			row.parent = self
+		
+		if let row {
 			row.visit(visitor: transient.visitor(_:))
+		} else {
+			rows.forEach { row in
+				row.parent = self
+				row.visit(visitor: transient.visitor(_:))
+			}
 		}
+		
 		self.shadowTable = transient.shadowTable
 	}
 	
