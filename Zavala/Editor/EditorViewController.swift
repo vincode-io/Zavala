@@ -2492,6 +2492,9 @@ private extension EditorViewController {
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: outlineActions))
 
 			var viewActions = [UIAction]()
+			if rows.count == 1 {
+				viewActions.append(self.focusInAction(rows: rows))
+			}
 			if !outline.isExpandAllUnavailable(containers: rows) {
 				viewActions.append(self.expandAllAction(rows: rows))
 			}
@@ -2557,6 +2560,14 @@ private extension EditorViewController {
 		}
 	}
 
+	func focusInAction(rows: [Row]) -> UIAction {
+		return UIAction(title: AppStringAssets.focusInControlLabel, image: ZavalaImageAssets.focusActive) { [weak self] action in
+			guard let self else { return }
+			self.outline?.focusIn(rows.first!)
+			self.delegate?.validateToolbar(self)
+		}
+	}
+	
 	func completeAction(rows: [Row]) -> UIAction {
 		return UIAction(title: AppStringAssets.completeControlLabel, image: ZavalaImageAssets.completeRow) { [weak self] action in
 			self?.completeRows(rows)

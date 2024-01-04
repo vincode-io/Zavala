@@ -1170,7 +1170,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 					item.toolTip = AppStringAssets.focusOutControlLabel
 					item.action = #selector(self?.focusOut(_:))
 				}
-				return self?.editorViewController?.isFocusInUnavailable ?? true
+				return self?.editorViewController?.isFocusInUnavailable ?? true && self?.editorViewController?.isFocusOutUnavailable ?? true
 			}
 			item.image = ZavalaImageAssets.focusInactive.symbolSizedForCatalyst()
 			item.label = AppStringAssets.focusInControlLabel
