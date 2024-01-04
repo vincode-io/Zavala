@@ -691,14 +691,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		guard note.object as? Outline == outline else { return }
 		
 		isSearching = true
-		
-		// I don't understand why, but on iOS deleting the sections will cause random crashes.
-		// I should check periodically to see if this bug is fixed.
-		if traitCollection.userInterfaceIdiom == .mac {
-			collectionView.deleteSections(headerFooterSections)
-		} else {
-			collectionView.reloadData()
-		}
+		collectionView.deleteSections(headerFooterSections)
 		
 		searchBar.becomeFirstResponder()
 		discloseSearchBar()
