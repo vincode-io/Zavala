@@ -375,6 +375,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var goBackwardButton: ButtonGroup.Button!
 	private var goForwardButton: ButtonGroup.Button!
 	private var moreMenuButton: ButtonGroup.Button!
+	private var focusButton: ButtonGroup.Button!
 	private var filterButton: ButtonGroup.Button!
 	
 	private var formatMenuButton: ButtonGroup.Button!
@@ -939,6 +940,20 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		if traitCollection.userInterfaceIdiom != .mac {
 			moreMenuButton.menu = buildEllipsisMenu()
 
+			if isFocusOutUnavailable {
+				focusButton.accessibilityLabel = AppStringAssets.focusInControlLabel
+				focusButton.setImage(ZavalaImageAssets.focusInactive, for: .normal)
+				if currentRows?.count ?? 0 == 1 {
+					focusButton.isEnabled = true
+				} else {
+					focusButton.isEnabled = false
+				}
+			} else {
+				focusButton.accessibilityLabel = AppStringAssets.focusOutControlLabel
+				focusButton.setImage(ZavalaImageAssets.focusActive, for: .normal)
+				focusButton.isEnabled = true
+			}
+			
 			if isFilterOn {
 				filterButton.accessibilityLabel = AppStringAssets.turnFilterOffControlLabel
 				filterButton.setImage(ZavalaImageAssets.filterActive, for: .normal)
@@ -1185,7 +1200,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func focusOut() {
 		outline?.focusOut()
 	}
-	
+
+	@objc func toggleFocus() {
+		if isFocusOutUnavailable {
+			focusIn()
+		} else {
+			focusOut()
+		}
+	}
+
 	@objc func toggleFilterOn() {
 		guard let changes = outline?.toggleFilterOn() else { return }
 		applyChangesRestoringState(changes)
@@ -1963,6 +1986,7 @@ private extension EditorViewController {
 		undoMenuButton = navButtonGroup.addButton(label: AppStringAssets.undoMenuControlLabel, image: ZavalaImageAssets.undoMenu, selector: "showUndoMenu")
 		undoMenuButton.popoverButtonGroup = undoMenuButtonGroup
 		moreMenuButton = navButtonGroup.addButton(label: AppStringAssets.moreControlLabel, image: ZavalaImageAssets.ellipsis, showMenu: true)
+		focusButton = navButtonGroup.addButton(label: AppStringAssets.focusInControlLabel, image: ZavalaImageAssets.focusInactive, selector: "toggleFocus")
 		filterButton = navButtonGroup.addButton(label: AppStringAssets.filterControlLabel, image: ZavalaImageAssets.filterInactive, showMenu: true)
 		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
