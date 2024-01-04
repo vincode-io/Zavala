@@ -585,11 +585,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	@objc func focusInCommand(_ sender: Any?) {
-		mainCoordinator?.focusIn()
+		mainCoordinator?.toggleFocus()
 	}
 
 	@objc func focusOutCommand(_ sender: Any?) {
-		mainCoordinator?.focusOut()
+		mainCoordinator?.toggleFocus()
 	}
 
 	@objc func toggleFilterOnCommand(_ sender: Any?) {

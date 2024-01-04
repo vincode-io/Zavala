@@ -367,12 +367,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		moveRowsDown()
 	}
 
-	@objc func focusIn(_ sender: Any?) {
-		focusIn()
-	}
-
-	@objc func focusOut(_ sender: Any?) {
-		focusOut()
+	@objc func toggleFocus(_ sender: Any?) {
+		toggleFocus()
 	}
 
 	@objc func toggleOutlineHideNotes(_ sender: Any?) {
@@ -1160,15 +1156,13 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isFocusOutUnavailable ?? true {
-					item.image = ZavalaImageAssets.focusInactive.symbolSizedForCatalyst()
+					item.image = ZavalaImageAssets.focusInactive.symbolSizedForCatalyst(pointSize: 17)
 					item.label = AppStringAssets.focusInControlLabel
 					item.toolTip = AppStringAssets.focusInControlLabel
-					item.action = #selector(self?.focusIn(_:))
 				} else {
-					item.image = ZavalaImageAssets.focusActive.symbolSizedForCatalyst(color: .accentColor)
+					item.image = ZavalaImageAssets.focusActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
 					item.label = AppStringAssets.focusOutControlLabel
 					item.toolTip = AppStringAssets.focusOutControlLabel
-					item.action = #selector(self?.focusOut(_:))
 				}
 				return self?.editorViewController?.isFocusInUnavailable ?? true && self?.editorViewController?.isFocusOutUnavailable ?? true
 			}
@@ -1176,7 +1170,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = AppStringAssets.focusInControlLabel
 			item.toolTip = AppStringAssets.focusInControlLabel
 			item.isBordered = true
-			item.action = #selector(focusIn(_:))
+			item.action = #selector(toggleFocus(_:))
 			item.target = self
 			toolbarItem = item
 		case .filter:
@@ -1185,9 +1179,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 				guard let self else { return false }
 				
 				if self.editorViewController?.isFilterOn ?? false {
-					item.image = ZavalaImageAssets.filterActive.symbolSizedForCatalyst(color: .accentColor)
+					item.image = ZavalaImageAssets.filterActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
 				} else {
-					item.image = ZavalaImageAssets.filterInactive.symbolSizedForCatalyst()
+					item.image = ZavalaImageAssets.filterInactive.symbolSizedForCatalyst(pointSize: 17)
 				}
 				
 				let turnFilterOnAction = UIAction() { [weak self] _ in
