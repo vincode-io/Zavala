@@ -15,4 +15,8 @@ public extension UICollectionView {
 		}
 	}
 
+	func isVisible(indexPath: IndexPath) -> Bool {
+		guard let cell = cellForItem(at: indexPath) else { return false }
+		return bounds.contains(convert(cell.frame, to: self))
+	}
 }

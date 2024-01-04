@@ -521,6 +521,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillBegin(_:)), name: .OutlineSearchWillBegin, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchTextDidChange(_:)), name: .OutlineSearchTextDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillEnd(_:)), name: .OutlineSearchWillEnd, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchDidEnd(_:)), name: .OutlineSearchDidEnd, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineAddedBacklinks(_:)), name: .OutlineAddedBacklinks, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineRemovedBacklinks(_:)), name: .OutlineRemovedBacklinks, object: nil)
 
@@ -734,6 +735,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		searchBar.searchField.text = ""
 		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
 		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
+	}
+
+	@objc func outlineSearchDidEnd(_ note: Notification) {
+		if let cursorCoordinates = CursorCoordinates.bestCoordinates {
+			restoreCursorPosition(cursorCoordinates, scroll: true, centered: true)
+		}
 	}
 	
 	@objc func outlineAddedBacklinks(_ note: Notification) {
@@ -2330,7 +2337,7 @@ private extension EditorViewController {
 		}
 	}
 
-	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates, scroll: Bool) {
+	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates, scroll: Bool, centered: Bool = false) {
 		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 
@@ -2344,7 +2351,7 @@ private extension EditorViewController {
 			return
 		}
 		
-		if !collectionView.indexPathsForVisibleItems.contains(indexPath) {
+		if !collectionView.isVisible(indexPath: indexPath) {
 			CATransaction.begin()
 			CATransaction.setCompletionBlock {
 				// Got to wait or the row cell won't be found
@@ -2353,7 +2360,8 @@ private extension EditorViewController {
 				}
 			}
 			if indexPath.row < collectionView.numberOfItems(inSection: indexPath.section) {
-				collectionView.scrollToItem(at: indexPath, at: [], animated: false)
+				let scrollPosition = centered ? UICollectionView.ScrollPosition.centeredVertically : []
+				collectionView.scrollToItem(at: indexPath, at: scrollPosition, animated: false)
 			}
 			CATransaction.commit()
 		} else {

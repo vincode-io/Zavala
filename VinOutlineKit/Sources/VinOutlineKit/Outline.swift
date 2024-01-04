@@ -16,6 +16,7 @@ public extension Notification.Name {
 	static let OutlineSearchWillBegin = Notification.Name(rawValue: "OutlineSearchWillBegin")
 	static let OutlineSearchTextDidChange = Notification.Name(rawValue: "OutlineSearchTextDidChange")
 	static let OutlineSearchWillEnd = Notification.Name(rawValue: "OutlineSearchWillEnd")
+	static let OutlineSearchDidEnd = Notification.Name(rawValue: "OutlineSearchDidEnd")
 	static let OutlineAddedBacklinks = Notification.Name(rawValue: "OutlineAddedBacklinks")
 	static let OutlineRemovedBacklinks = Notification.Name(rawValue: "OutlineRemovedBacklinks")
 }
@@ -1053,6 +1054,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 		
 		outlineElementsDidChange(changes)
+		outlineSearchDidEnd()
 	}
 	
 	func findImages(rowID: String) -> [Image]? {
@@ -2438,6 +2440,10 @@ private extension Outline {
 	
 	func outlineSearchWillEnd() {
 		NotificationCenter.default.post(name: .OutlineSearchWillEnd, object: self, userInfo: nil)
+	}
+	
+	func outlineSearchDidEnd() {
+		NotificationCenter.default.post(name: .OutlineSearchDidEnd, object: self, userInfo: nil)
 	}
 	
 	func outlineAddedBacklinks() {
