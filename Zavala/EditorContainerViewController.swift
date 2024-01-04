@@ -290,7 +290,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.collaborate,
 			.share,
 			.space,
-			.toggleCompletedFilter,
+			.filter,
 		]
 	}
 	
@@ -302,7 +302,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.link,
 			.boldface,
 			.italic,
-			.toggleCompletedFilter,
+			.filter,
 			.expandAllInOutline,
 			.collapseAllInOutline,
 			.moveLeft,
@@ -478,7 +478,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.action = #selector(moveRowsDown(_:))
 			item.target = self
 			toolbarItem = item
-		case .toggleCompletedFilter:
+		case .filter:
 			let item = ValidatingMenuToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
 				guard let self else { return false }
