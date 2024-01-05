@@ -2952,7 +2952,7 @@ private extension Outline {
 	}
 	
 	func replaceLinkTitleIfPossible(row: Row, newText: NSAttributedString?, isInNotes: Bool) {
-		guard let newText else { return }
+		guard autoLinkingEnabled ?? false, let newText else { return }
 		
 		incrementBeingUsedCount()
 		
