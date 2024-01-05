@@ -26,7 +26,7 @@ struct AppStringAssets {
 	// MARK: URL's
 	
 	static var acknowledgementsURL = "https://github.com/vincode-io/Zavala/wiki/Acknowledgements"
-	static var reportAnIssueURL = "mailto:mo@vincode.io"
+	static var feedbackURL = "mailto:mo@vincode.io"
 	static var helpURL = "https://zavala.vincode.io/help/Zavala_Help.md/"
 	static var privacyPolicyURL = "https://vincode.io/privacy-policy/"
 	static var websiteURL = "https://zavala.vincode.io"
@@ -198,7 +198,6 @@ struct AppStringAssets {
 	static var renameControlLabel = String(localized: "Rename", comment: "Control Label: Rename")
 	static var referenceLabel = String(localized: "Reference: ", comment: "Label: reference label for backlinks")
 	static var referencesLabel = String(localized: "References: ", comment: "Label: references label for backlinks")
-	static var reportAnIssueControlLabel = String(localized: "Report an Issue", comment: "Control Label: Report an Issue")
 	static var restoreControlLabel = String(localized: "Restore", comment: "Control Label: Restore")
 	static var restoreDefaultsMessage = String(localized: "Restore Defaults", comment: "Alert: message for restoring font defaults")
 	static var restoreDefaultsInformative = String(localized: "Are you sure you want to restore the defaults? All your font customizations will be lost.",

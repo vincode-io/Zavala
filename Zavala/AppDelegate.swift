@@ -229,7 +229,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let showHelpCommand = UICommand(title: AppStringAssets.appHelpControlLabel, action: #selector(showHelpCommand(_:)))
 
-	let reportAnIssueCommand = UICommand(title: AppStringAssets.reportAnIssueControlLabel, action: #selector(reportAnIssueCommand(_:)))
+	let feedbackCommand = UICommand(title: AppStringAssets.feedbackControlLabel, action: #selector(feedbackCommand(_:)))
 
 	let showOpenQuicklyCommand = UIKeyCommand(title: AppStringAssets.openQuicklyEllipsisControlLabel,
 											  action: #selector(showOpenQuicklyCommand(_:)),
@@ -640,8 +640,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.openURL(AppStringAssets.helpURL)
 	}
 
-	@objc func reportAnIssueCommand(_ sender: Any?) {
-		UIApplication.shared.open(URL(string: AppStringAssets.reportAnIssueURL)!)
+	@objc func feedbackCommand(_ sender: Any?) {
+		UIApplication.shared.open(URL(string: AppStringAssets.feedbackURL)!)
 	}
 
 	@objc func showOpenQuicklyCommand(_ sender: Any?) {
@@ -994,7 +994,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(historyMenu, afterMenu: .view)
 
 		// Help Menu
-		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand, reportAnIssueCommand] })
+		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand, feedbackCommand] })
 	}
 
 }

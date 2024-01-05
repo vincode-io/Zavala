@@ -33,7 +33,7 @@ struct SettingsHelpView: View {
 			.foregroundStyle(.primary)
 
 			Button {
-				openURL(URL(string: AppStringAssets.reportAnIssueURL)!)
+				openURL(URL(string: AppStringAssets.feedbackURL)!)
 			} label: {
 				Text(AppStringAssets.feedbackControlLabel)
 			}
