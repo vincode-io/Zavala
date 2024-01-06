@@ -441,7 +441,7 @@ extension CollectionsViewController {
 	
 	func updateSelections(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?) {
         let items = containers?.map { CollectionsItem.item($0) } ?? [CollectionsItem]()
-		collectionViewQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, items: items, animated: animated))
+		collectionViewQueue.add(UpdateItemSelectionOperation(dataSource: dataSource, collectionView: collectionView, items: items, animated: animated))
         
 		let containers = items.toContainers()
 		delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)

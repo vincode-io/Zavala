@@ -154,7 +154,7 @@
 		51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E060ED25A4B5E600194066 /* AppKitWrapper.swift */; };
 		51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F22255F2D7F00320EDB /* ActivityManager.swift */; };
 		51E14F342560732F00320EDB /* CollectionsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F332560732F00320EDB /* CollectionsItem.swift */; };
-		51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */; };
+		51E14F382560738E00320EDB /* UpdateItemSelectionOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F372560738E00320EDB /* UpdateItemSelectionOperation.swift */; };
 		51E14F3C256073D100320EDB /* ApplySnapshotOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */; };
 		51E2BCBD290EFB15002BA7B2 /* AppKitImageAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5162AFF928EFB5C00002A61C /* AppKitImageAssets.swift */; };
 		51E5C48F27221F6200A38983 /* IntentOutline+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C48E27221F6200A38983 /* IntentOutline+.swift */; };
@@ -381,7 +381,7 @@
 		51E060F325A4C13B00194066 /* AppKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitPlugin.h; sourceTree = "<group>"; };
 		51E14F22255F2D7F00320EDB /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
 		51E14F332560732F00320EDB /* CollectionsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsItem.swift; sourceTree = "<group>"; };
-		51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateSelectionOperation.swift; sourceTree = "<group>"; };
+		51E14F372560738E00320EDB /* UpdateItemSelectionOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateItemSelectionOperation.swift; sourceTree = "<group>"; };
 		51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplySnapshotOperation.swift; sourceTree = "<group>"; };
 		51E5C48E27221F6200A38983 /* IntentOutline+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentOutline+.swift"; sourceTree = "<group>"; };
 		51E5C49027221F6F00A38983 /* IntentRow+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentRow+.swift"; sourceTree = "<group>"; };
@@ -441,7 +441,6 @@
 		514BB9D5255B595300C8DBDF /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */,
 				5116893F29BD72DE00318832 /* AttributedLabelView.swift */,
 				519897C32ADE13F3008A6FA4 /* ButtonGroup.swift */,
 				518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */,
@@ -455,8 +454,6 @@
 				5113B08C260C1F1700DBD11B /* OutlineFontCache.swift */,
 				511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */,
 				51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */,
-				51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */,
-				51F83B852725BFF30015FC06 /* ReloadVisibleItemsOperation.swift */,
 				5163ADF125C78CFB008F25CA /* SearchTextField.swift */,
 				51DFDC17259EA8D300C068C6 /* Selector+.swift */,
 				51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */,
@@ -468,7 +465,6 @@
 				5177B7B32733D0AA006EB1E3 /* UITextInput+.swift */,
 				519184F227107FDA00B7E177 /* UITextView+.swift */,
 				51DEE82726FF951E006DAA56 /* UIWindowSceneDelegate+.swift */,
-				51E14F372560738E00320EDB /* UpdateSelectionOperation.swift */,
 				511EC2C62B409A5B002D89A5 /* ValueStepper.swift */,
 			);
 			path = Utility;
@@ -776,6 +772,7 @@
 				51DAEC252739838E00BE4A13 /* CollectionsViewController+Drag.swift */,
 				5147D0C425CCD6AA004673C3 /* CollectionsViewController+Drop.swift */,
 				51F2859D25AD12860019C573 /* Search */,
+				51E508D82B49CAA90041B826 /* Operations */,
 			);
 			path = Collections;
 			sourceTree = "<group>";
@@ -807,6 +804,17 @@
 				51C030A0257E06EC00609262 /* Title */,
 			);
 			path = Editor;
+			sourceTree = "<group>";
+		};
+		51E508D82B49CAA90041B826 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				51E14F3B256073D100320EDB /* ApplySnapshotOperation.swift */,
+				51C030AB257E0A7200609262 /* ReloadItemsOperation.swift */,
+				51F83B852725BFF30015FC06 /* ReloadVisibleItemsOperation.swift */,
+				51E14F372560738E00320EDB /* UpdateItemSelectionOperation.swift */,
+			);
+			path = Operations;
 			sourceTree = "<group>";
 		};
 		51F13F01255E13D1004B85CA /* Dialogs */ = {
@@ -1099,7 +1107,7 @@
 				51A1EC422723246C00463A15 /* EditRowsIntentHandler.swift in Sources */,
 				5181A93C2554D92000C153E8 /* CollectionsViewController.swift in Sources */,
 				51D460FA2729E30C0024EC48 /* MetadataTextAttachmentViewProvider.swift in Sources */,
-				51E14F382560738E00320EDB /* UpdateSelectionOperation.swift in Sources */,
+				51E14F382560738E00320EDB /* UpdateItemSelectionOperation.swift in Sources */,
 				51AEEC8D2703E6EB00354C59 /* Intents.intentdefinition in Sources */,
 				516F5373260829060038BAF8 /* OutlineFontDefaults.swift in Sources */,
 				51341E04272B55080005425B /* InsetLabel.swift in Sources */,
