@@ -5,6 +5,7 @@
 //  Created by Maurice Parker on 3/19/21.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 public extension UIWindow {
@@ -23,3 +24,4 @@ public extension UIWindow {
 	}
 	
 }
+#endif

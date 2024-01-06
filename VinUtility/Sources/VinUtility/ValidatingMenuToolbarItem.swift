@@ -5,9 +5,9 @@
 //  Created by Maurice Parker on 11/3/21.
 //
 
-import UIKit
+#if canImport(UIKit)
 
-#if targetEnvironment(macCatalyst)
+import UIKit
 
 public class ValidatingMenuToolbarItem: NSMenuToolbarItem {
 

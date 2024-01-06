@@ -5,6 +5,8 @@
 //  Created by Maurice Parker on 1/12/21.
 //
 
+#if canImport(UIKit)
+
 import UIKit
 
 public extension UICollectionView {
@@ -20,3 +22,5 @@ public extension UICollectionView {
 		return bounds.contains(convert(cell.frame, to: self))
 	}
 }
+
+#endif

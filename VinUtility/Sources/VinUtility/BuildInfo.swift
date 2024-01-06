@@ -43,11 +43,11 @@ public struct BuildInfo: Codable {
 	}
 	
 	public var versionLabel: String {
-		return "Version \(BuildInfo.shared.versionNumber) (\(BuildInfo.shared.buildNumber))"
+		return String(localized: "Version \(BuildInfo.shared.versionNumber) (\(BuildInfo.shared.buildNumber))", comment: "Version Label")
 	}
 	
 	public var buildLabel: String {
-		return "Build: (branch: \(gitBranch))\(gitTag.isEmpty ? "" : ", (tag: \(gitTag))"), (hash: \(gitCommitHash))"
+		return String(localized: "Build: (branch: \(gitBranch))\(gitTag.isEmpty ? "" : ", (tag: \(gitTag))"), (hash: \(gitCommitHash))", comment: "Build Label")
 	}
 	
 	init() {

@@ -1,0 +1,42 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "(No Title)" : {
+      "comment" : "OPML Export Title: (No Title)"
+    },
+    "All" : {
+      "comment" : "Collection: Search Documents"
+    },
+    "An unexpected CloudKit error occurred." : {
+      "comment" : "An unexpected CloudKit error occurred."
+    },
+    "iCloud" : {
+      "comment" : "iCloud Account Name: iCloud"
+    },
+    "On My iPad" : {
+      "comment" : "Local Account Name: On My iPad"
+    },
+    "On My iPhone" : {
+      "comment" : "Local Account Name: On My iPhone"
+    },
+    "On My Mac" : {
+      "comment" : "Local Account Name: On My Mac"
+    },
+    "Search" : {
+      "comment" : "Collection: Search Documents"
+    },
+    "Unable to access security scoped resource." : {
+      "comment" : "Error Message: Unable to access security scoped resource."
+    },
+    "Unable to deserialize the row data." : {
+      "comment" : "Error Message: Unable to deserialize the row data."
+    },
+    "Unable to process the OPML data." : {
+      "comment" : "Error Message: Unable to read the import file."
+    },
+    "Unable to read the import file." : {
+      "comment" : "Error Message: Unable to read the import file."
+    }
+  },
+  "version" : "1.0"
+}

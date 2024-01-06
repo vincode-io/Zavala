@@ -13,6 +13,7 @@ struct VinOutlineKitStringAssets {
 	static var accountOnMyIPhone = String(localized: "On My iPhone", comment: "Local Account Name: On My iPhone")
 	static var accountICloud = String(localized: "iCloud", comment: "iCloud Account Name: iCloud")
 
+	static var noTitle = String(localized: "(No Title)", comment: "OPML Export Title: (No Title)")
 	static var all = String(localized: "All", comment: "Collection: Search Documents")
 	static var search = String(localized: "Search", comment: "Collection: Search Documents")
 
@@ -23,13 +24,8 @@ struct VinOutlineKitStringAssets {
 											   comment: "Error Message: Unable to read the import file.")
 	static var accountErrorOPMLParse = String(localized: "Unable to process the OPML data.",
 											   comment: "Error Message: Unable to read the import file.")
-
-}
-
-private extension String {
 	
-	init(localized: String, comment: String? = nil) {
-		self = localized
-	}
-	
+	static var rowDeserializationError = String(localized: "Unable to deserialize the row data.",
+												comment: "Error Message: Unable to deserialize the row data.")
+
 }

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import MobileCoreServices
+import UniformTypeIdentifiers
 import MarkdownAttributedString
 import OrderedCollections
 
@@ -21,7 +21,7 @@ public enum RowStrings {
 enum RowError: LocalizedError {
 	case unableToDeserialize
 	var errorDescription: String? {
-		return NSLocalizedString("Unable to deserialize the row data.", comment: "An unexpected CloudKit error occurred.")
+		return VinOutlineKitStringAssets.rowDeserializationError
 	}
 }
 
@@ -789,7 +789,7 @@ private extension Row {
 	}
 	
 	func insertImageAttachment(attrString: NSMutableAttributedString, image: Image, offset: Int) {
-		let attachment = ImageTextAttachment(data: image.data, ofType: kUTTypePNG as String)
+		let attachment = ImageTextAttachment(data: image.data, ofType: UTType.png.identifier)
 		attachment.imageUUID = image.id.imageUUID
 		let imageAttrText = NSAttributedString(attachment: attachment)
 		

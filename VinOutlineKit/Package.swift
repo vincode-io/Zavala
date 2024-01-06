@@ -1,17 +1,18 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.9
 import PackageDescription
 
 let package = Package(
     name: "VinOutlineKit",
-	platforms: [.macOS(SupportedPlatform.MacOSVersion.v11), .iOS(SupportedPlatform.IOSVersion.v14)],
+	defaultLocalization: "en",
+	platforms: [.macOS(SupportedPlatform.MacOSVersion.v13), .iOS(SupportedPlatform.IOSVersion.v16)],
     products: [
         .library(
             name: "VinOutlineKit",
             targets: ["VinOutlineKit"]),
     ],
     dependencies: [
-		.package(url: "https://github.com/vincode-io/MarkdownAttributedString.git", .branch("master")),
-		.package(url: "https://github.com/vincode-io/VinXML.git", .branch("main")),
+		.package(url: "https://github.com/vincode-io/MarkdownAttributedString.git", branch: "master"),
+		.package(url: "https://github.com/vincode-io/VinXML.git", branch: "main"),
 		.package(path: "../VinCloudKit"),
     ],
     targets: [

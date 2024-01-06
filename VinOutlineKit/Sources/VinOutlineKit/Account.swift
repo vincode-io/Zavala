@@ -180,7 +180,7 @@ public final class Account: NSObject, Identifiable, Codable {
 			title = rowNodes?.first?.attributes["text"]
 		}
 		if title == nil {
-			title = NSLocalizedString("Unavailable", comment: "Unavailable")
+			title = VinOutlineKitStringAssets.noTitle
 		}
 		
 		let outline = Outline(parentID: id, title: title)
