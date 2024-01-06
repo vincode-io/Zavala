@@ -1,5 +1,5 @@
 //
-//  UpdateItemSelectionOperation.swift
+//  SelectItemsOperation.swift
 //  Zavala
 //
 //  Created by Maurice Parker on 11/14/20.
@@ -8,7 +8,7 @@
 import UIKit
 import VinUtility
 
-class UpdateItemSelectionOperation<S: Hashable, I: Hashable>: BaseMainThreadOperation {
+class SelectItemsOperation<S: Hashable, I: Hashable>: BaseMainThreadOperation {
 	
 	private var dataSource: UICollectionViewDiffableDataSource<S, I>
 	private var collectionView: UICollectionView
