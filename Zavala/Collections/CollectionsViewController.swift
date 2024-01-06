@@ -46,7 +46,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	}
 
 	var dataSource: UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>!
-	private let dataSourceQueue = MainThreadOperationQueue()
+	private let collectionViewQueue = MainThreadOperationQueue()
 	private var applyChangeDebouncer = Debouncer(duration: 0.5)
 	private var reloadVisibleDebouncer = Debouncer(duration: 0.5)
 
@@ -436,19 +436,19 @@ extension CollectionsViewController {
 			}
 		}
 		
-		dataSourceQueue.add(operation)
+		collectionViewQueue.add(operation)
 	}
 	
 	func updateSelections(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?) {
         let items = containers?.map { CollectionsItem.item($0) } ?? [CollectionsItem]()
-		dataSourceQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, items: items, animated: animated))
+		collectionViewQueue.add(UpdateSelectionOperation(dataSource: dataSource, collectionView: collectionView, items: items, animated: animated))
         
 		let containers = items.toContainers()
 		delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
 	}
 	
 	func reloadVisible() {
-		dataSourceQueue.add(ReloadVisibleItemsOperation(dataSource: dataSource, collectionView: collectionView))
+		collectionViewQueue.add(ReloadVisibleItemsOperation(dataSource: dataSource, collectionView: collectionView))
 	}
 	
 }
