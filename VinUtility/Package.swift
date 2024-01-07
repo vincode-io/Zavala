@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "VinUtility",
 	defaultLocalization: "en",
-	platforms: [.macOS(SupportedPlatform.MacOSVersion.v13), .iOS(SupportedPlatform.IOSVersion.v16)],
+	platforms: [.macOS(.v13), .iOS(.v16)],
     products: [
         .library(
             name: "VinUtility",
