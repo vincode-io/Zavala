@@ -5,7 +5,11 @@
 //  Created by Maurice Parker on 9/24/21.
 //
 
+#if canImport(UIKit)
 import UIKit
+#else
+import Foundation
+#endif
 
 class PrintDocVisitor {
 	
@@ -62,6 +66,7 @@ class PrintDocVisitor {
 private extension PrintDocVisitor {
 	
 	func printTopic(_ topic: NSAttributedString, row: Row) {
+		#if canImport(UIKit)
 		print.append(NSAttributedString(string: "\n\n"))
 		var attrs = [NSAttributedString.Key : Any]()
 		if row.isComplete ?? false || row.isAnyParentComplete {
@@ -89,9 +94,11 @@ private extension PrintDocVisitor {
 		printTopic.replaceFont(with: topicFont)
 
 		print.append(printTopic)
+		#endif
 	}
 	
 	func printNote(_ note: NSAttributedString) {
+		#if canImport(UIKit)
 		var attrs = [NSAttributedString.Key : Any]()
 		attrs[.foregroundColor] = UIColor.darkGray
 
@@ -112,6 +119,7 @@ private extension PrintDocVisitor {
 		noteTopic.replaceFont(with: noteFont)
 
 		print.append(noteTopic)
+		#endif
 	}
 	
 }

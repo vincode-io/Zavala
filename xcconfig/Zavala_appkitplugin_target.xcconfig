@@ -9,7 +9,7 @@ PROVISIONING_PROFILE_SPECIFIER =
 #include "./Zavala_macos_target_common.xcconfig"
 
 LD_RUNPATH_SEARCH_PATHS = $(inherited) @loader_path/../Frameworks
-INFOPLIST_FILE = AppKitPlugin/Info.plist
+INFOPLIST_FILE = AppKitPlugin/Resources/Info.plist
 PRODUCT_BUNDLE_IDENTIFIER = $(ORGANIZATION_IDENTIFIER).AppKitPlugin
 PRODUCT_NAME = AppKitPlugin
 

@@ -29,7 +29,7 @@ class CopyDocumentLinkActivity: UIActivity {
 	}
 	
 	override var activityImage: UIImage? {
-		ZavalaImageAssets.link
+		AppImageAssets.link
 	}
 	
 	override class var activityCategory: UIActivity.Category {

@@ -19,8 +19,8 @@ class EditorDisclosureButton: UIButton {
 	private let pointerInteractionDelegate = EditorDisclosureButtonInteractionDelegate()
 		
 	func configure() {
-		self.configuration?.image = ZavalaImageAssets.disclosure
-		self.tintColor = ZavalaImageAssets.accessoryColor
+		self.configuration?.image = AppImageAssets.disclosure
+		self.tintColor = AppImageAssets.accessoryColor
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.addInteraction(UIPointerInteraction(delegate: pointerInteractionDelegate))
 		

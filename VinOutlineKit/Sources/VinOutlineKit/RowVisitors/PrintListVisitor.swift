@@ -5,7 +5,11 @@
 //  Created by Maurice Parker on 4/14/21.
 //
 
+#if canImport(UIKit)
 import UIKit
+#else
+import Foundation
+#endif
 
 class PrintListVisitor {
 	
@@ -13,6 +17,7 @@ class PrintListVisitor {
 	var print = NSMutableAttributedString()
 
 	func visitor(_ visited: Row) {
+		#if canImport(UIKit)
 		if let topic = visited.topic {
 			print.append(NSAttributedString(string: "\n"))
 			var attrs = [NSAttributedString.Key : Any]()
@@ -72,6 +77,7 @@ class PrintListVisitor {
 
 			print.append(noteTopic)
 		}
+		#endif
 		
 		indentLevel = indentLevel + 1
 		visited.rows.forEach {

@@ -5,14 +5,21 @@
 //  Created by Maurice Parker on 1/12/21.
 //
 
+#if canImport(UIKit)
 import UIKit
+#else
+import Foundation
+#endif
 import CoreSpotlight
 
 public final class Search: Identifiable, DocumentContainer {
 	
 	public var id: EntityID
 	public var name: String? = VinOutlineKitStringAssets.search
+	
+	#if canImport(UIKit)
 	public var image: UIImage?
+	#endif
 	public var account: Account? = nil
 
 	public var itemCount: Int? {

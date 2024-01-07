@@ -5,7 +5,11 @@
 //  Created by Maurice Parker on 2/6/21.
 //
 
+#if canImport(UIKit)
 import UIKit
+#else
+import Foundation
+#endif
 import OSLog
 import CloudKit
 import VinCloudKit
@@ -38,6 +42,7 @@ final class CloudKitOutlineZone: VCKZone {
 		self.zoneID = zoneID
 	}
 	
+	#if canImport(UIKit)
 	func prepareSharedCloudSharingController(document: Document, completion: @escaping (Result<UICloudSharingController, Error>) -> Void) {
 		guard let shareRecordID = document.shareRecordID else {
 			fatalError()
@@ -94,5 +99,5 @@ final class CloudKitOutlineZone: VCKZone {
 
 		completion(.success(sharingController))
 	}
-	
+	#endif
 }

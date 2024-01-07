@@ -5,7 +5,11 @@
 //  Created by Maurice Parker on 2/6/21.
 //
 
+#if canImport(UIKit)
 import UIKit
+#else
+import Foundation
+#endif
 import OSLog
 import SystemConfiguration
 import CloudKit
@@ -41,7 +45,9 @@ public class CloudKitManager {
 	private weak var errorHandler: ErrorHandler?
 	private weak var account: Account?
 
+	#if canImport(UIKit)
 	private var sendChangesBackgroundTaskID = UIBackgroundTaskIdentifier.invalid
+	#endif
 
 	private var debouncer = Debouncer(duration: 5)
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
@@ -197,6 +203,7 @@ public class CloudKitManager {
 		container.add(op)
 	}
 	
+	#if canImport(UIKit)
 	func prepareCloudSharingController(document: Document, completion: @escaping (Result<UICloudSharingController, Error>) -> Void) {
 		guard let zoneID = document.zoneID else {
 			completion(.failure(CloudKitOutlineZoneError.unknown))
@@ -210,7 +217,8 @@ public class CloudKitManager {
 			zone.prepareNewCloudSharingController(document: document, completion: completion)
 		}
 	}
-
+	#endif
+	
 	func resume() {
 		sync()
 	}
@@ -256,6 +264,7 @@ private extension CloudKitManager {
 	func sendChanges(userInitiated: Bool, completion: @escaping (() -> Void)) {
 		isSyncing = true
 
+		#if canImport(UIKit)
 		let completeProcessing = { [unowned self] in
 			self.isSyncing = false
 			
@@ -269,6 +278,7 @@ private extension CloudKitManager {
 			completeProcessing()
 			self?.logger.info("CloudKit sync processing terminated for running too long.")
 		}
+		#endif
 		
 		let operation = CloudKitModifyOperation()
 		
@@ -281,7 +291,9 @@ private extension CloudKitManager {
 				}
 			}
 			
+			#if canImport(UIKit)
 			completeProcessing()
+			#endif
 		}
 		
 		self.queue.add(operation)

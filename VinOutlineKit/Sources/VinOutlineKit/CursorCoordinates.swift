@@ -5,7 +5,11 @@
 //  Created by Maurice Parker on 12/20/20.
 //
 
+#if canImport(UIKit)
 import UIKit
+#else
+import Foundation
+#endif
 
 public protocol CursorCoordinatesProvider {
 	var coordinates: CursorCoordinates? { get }
@@ -27,9 +31,11 @@ public struct CursorCoordinates {
 
 	@available(iOSApplicationExtension, unavailable)
 	public static var currentCoordinates: CursorCoordinates? {
+		#if canImport(UIKit)
 		if let provider = UIResponder.currentFirstResponder as? CursorCoordinatesProvider {
 			return provider.coordinates
 		}
+		#endif
 		return nil
 	}
 

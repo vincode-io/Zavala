@@ -170,7 +170,6 @@ struct AppStringAssets {
 	
 	static var openQuicklyEllipsisControlLabel = String(localized: "Open Quickly…", comment: "Control Label: Open Quickly…")
 	static var openQuicklySearchPlaceholder = String(localized: "Open Quickly", comment: "Search Field Placeholder: Open Quickly")
-	static var openQuicklyWindowTitle = String(localized: "Open Quickly", comment: "Window Title: Open Quickly")
 	static var outlineControlLabel = String(localized: "Outline", comment: "Control Label: Outline")
 	static var outlineOwnerControlLabel = String(localized: "Outline Owner", comment: "Control Label: Outline Owner")
 	static var outlineDefaultsControlLabel = String(localized: "Outline Defaults", comment: "Control Label: Outline Defaults")

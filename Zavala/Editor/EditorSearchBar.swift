@@ -56,7 +56,7 @@ import VinUtility
 	
 	override func didMoveToSuperview() {
 		super.didMoveToSuperview()
-		layer.backgroundColor = ZavalaImageAssets.barBackgroundColor.cgColor
+		layer.backgroundColor = AppImageAssets.barBackgroundColor.cgColor
 		isOpaque = true
 		NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: searchField)
 	}

@@ -943,7 +943,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 			if isFocusOutUnavailable {
 				focusButton.accessibilityLabel = AppStringAssets.focusInControlLabel
-				focusButton.setImage(ZavalaImageAssets.focusInactive, for: .normal)
+				focusButton.setImage(AppImageAssets.focusInactive, for: .normal)
 				if currentRows?.count ?? 0 == 1 {
 					focusButton.isEnabled = true
 				} else {
@@ -951,16 +951,16 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 				}
 			} else {
 				focusButton.accessibilityLabel = AppStringAssets.focusOutControlLabel
-				focusButton.setImage(ZavalaImageAssets.focusActive, for: .normal)
+				focusButton.setImage(AppImageAssets.focusActive, for: .normal)
 				focusButton.isEnabled = true
 			}
 			
 			if isFilterOn {
 				filterButton.accessibilityLabel = AppStringAssets.turnFilterOffControlLabel
-				filterButton.setImage(ZavalaImageAssets.filterActive, for: .normal)
+				filterButton.setImage(AppImageAssets.filterActive, for: .normal)
 			} else {
 				filterButton.accessibilityLabel = AppStringAssets.turnFilterOnControlLabel
-				filterButton.setImage(ZavalaImageAssets.filterInactive, for: .normal)
+				filterButton.setImage(AppImageAssets.filterInactive, for: .normal)
 			}
 
 			filterButton.menu = buildFilterMenu()
@@ -997,15 +997,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			// or it doesn't.
 			if !isCreateRowNotesUnavailable {
 				noteButton.isEnabled = true
-				noteButton.setImage(ZavalaImageAssets.noteAdd, for: .normal)
+				noteButton.setImage(AppImageAssets.noteAdd, for: .normal)
 				noteButton.accessibilityLabel = AppStringAssets.addNoteControlLabel
 			} else if !isDeleteRowNotesUnavailable {
 				noteButton.isEnabled = true
-				noteButton.setImage(ZavalaImageAssets.noteDelete, for: .normal)
+				noteButton.setImage(AppImageAssets.noteDelete, for: .normal)
 				noteButton.accessibilityLabel = AppStringAssets.deleteNoteControlLabel
 			} else {
 				noteButton.isEnabled = false
-				noteButton.setImage(ZavalaImageAssets.noteAdd, for: .normal)
+				noteButton.setImage(AppImageAssets.noteAdd, for: .normal)
 				noteButton.accessibilityLabel = AppStringAssets.addNoteControlLabel
 			}
 			
@@ -1431,9 +1431,9 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 							
 							let action = UIContextualAction(style: .normal, title: AppStringAssets.uncompleteControlLabel, handler: actionHandler)
 							if self.traitCollection.userInterfaceIdiom == .mac {
-								action.image = ZavalaImageAssets.uncompleteRow.symbolSizedForCatalyst(color: .white)
+								action.image = AppImageAssets.uncompleteRow.symbolSizedForCatalyst(color: .white)
 							} else {
-								action.image = ZavalaImageAssets.uncompleteRow
+								action.image = AppImageAssets.uncompleteRow
 							}
 							action.backgroundColor = UIColor.accentColor
 							
@@ -1446,9 +1446,9 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 							
 							let action = UIContextualAction(style: .normal, title: AppStringAssets.completeControlLabel, handler: actionHandler)
 							if self.traitCollection.userInterfaceIdiom == .mac {
-								action.image = ZavalaImageAssets.completeRow.symbolSizedForCatalyst(color: .white)
+								action.image = AppImageAssets.completeRow.symbolSizedForCatalyst(color: .white)
 							} else {
-								action.image = ZavalaImageAssets.completeRow
+								action.image = AppImageAssets.completeRow
 							}
 							action.backgroundColor = UIColor.accentColor
 
@@ -1466,9 +1466,9 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 						
 						let action = UIContextualAction(style: .destructive, title: AppStringAssets.deleteControlLabel, handler: actionHandler)
 						if self.traitCollection.userInterfaceIdiom == .mac {
-							action.image = ZavalaImageAssets.delete.symbolSizedForCatalyst(color: .white)
+							action.image = AppImageAssets.delete.symbolSizedForCatalyst(color: .white)
 						} else {
-							action.image = ZavalaImageAssets.delete
+							action.image = AppImageAssets.delete
 						}
 
 						return UISwipeActionsConfiguration(actions: [action])
@@ -1958,7 +1958,7 @@ extension EditorViewController: ImageTransitionDelegate {
 		guard let splitView = splitViewController?.view else { return }
 		let convertedFrame = splitView.convert(frame, to: collectionView)
 		imageBlocker = UIView(frame: convertedFrame)
-		imageBlocker!.backgroundColor = ZavalaImageAssets.fullScreenBackgroundColor
+		imageBlocker!.backgroundColor = AppImageAssets.fullScreenBackgroundColor
 		collectionView.addSubview(imageBlocker!)
 	}
 	
@@ -1975,42 +1975,42 @@ private extension EditorViewController {
 	
 	func configureButtonBars() {
 		undoMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
-		undoButton = undoMenuButtonGroup.addButton(label: AppStringAssets.undoControlLabel, image: ZavalaImageAssets.undo, selector: "undo")
-		cutButton = undoMenuButtonGroup.addButton(label: AppStringAssets.cutControlLabel, image: ZavalaImageAssets.cut, selector: "cut:")
-		copyButton = undoMenuButtonGroup.addButton(label: AppStringAssets.copyControlLabel, image: ZavalaImageAssets.copy, selector: "copy:")
-		pasteButton = undoMenuButtonGroup.addButton(label: AppStringAssets.pasteControlLabel, image: ZavalaImageAssets.paste, selector: "paste:")
-		redoButton = undoMenuButtonGroup.addButton(label: AppStringAssets.redoControlLabel, image: ZavalaImageAssets.redo, selector: "redo")
+		undoButton = undoMenuButtonGroup.addButton(label: AppStringAssets.undoControlLabel, image: AppImageAssets.undo, selector: "undo")
+		cutButton = undoMenuButtonGroup.addButton(label: AppStringAssets.cutControlLabel, image: AppImageAssets.cut, selector: "cut:")
+		copyButton = undoMenuButtonGroup.addButton(label: AppStringAssets.copyControlLabel, image: AppImageAssets.copy, selector: "copy:")
+		pasteButton = undoMenuButtonGroup.addButton(label: AppStringAssets.pasteControlLabel, image: AppImageAssets.paste, selector: "paste:")
+		redoButton = undoMenuButtonGroup.addButton(label: AppStringAssets.redoControlLabel, image: AppImageAssets.redo, selector: "redo")
 
 		navButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
-		goBackwardButton = navButtonGroup.addButton(label: AppStringAssets.goBackwardControlLabel, image: ZavalaImageAssets.goBackward, selector: "goBackwardOne")
-		goForwardButton = navButtonGroup.addButton(label: AppStringAssets.goForwardControlLabel, image: ZavalaImageAssets.goForward, selector: "goForwardOne")
-		undoMenuButton = navButtonGroup.addButton(label: AppStringAssets.undoMenuControlLabel, image: ZavalaImageAssets.undoMenu, selector: "showUndoMenu")
+		goBackwardButton = navButtonGroup.addButton(label: AppStringAssets.goBackwardControlLabel, image: AppImageAssets.goBackward, selector: "goBackwardOne")
+		goForwardButton = navButtonGroup.addButton(label: AppStringAssets.goForwardControlLabel, image: AppImageAssets.goForward, selector: "goForwardOne")
+		undoMenuButton = navButtonGroup.addButton(label: AppStringAssets.undoMenuControlLabel, image: AppImageAssets.undoMenu, selector: "showUndoMenu")
 		undoMenuButton.popoverButtonGroup = undoMenuButtonGroup
-		moreMenuButton = navButtonGroup.addButton(label: AppStringAssets.moreControlLabel, image: ZavalaImageAssets.ellipsis, showMenu: true)
-		focusButton = navButtonGroup.addButton(label: AppStringAssets.focusInControlLabel, image: ZavalaImageAssets.focusInactive, selector: "toggleFocus")
-		filterButton = navButtonGroup.addButton(label: AppStringAssets.filterControlLabel, image: ZavalaImageAssets.filterInactive, showMenu: true)
+		moreMenuButton = navButtonGroup.addButton(label: AppStringAssets.moreControlLabel, image: AppImageAssets.ellipsis, showMenu: true)
+		focusButton = navButtonGroup.addButton(label: AppStringAssets.focusInControlLabel, image: AppImageAssets.focusInactive, selector: "toggleFocus")
+		filterButton = navButtonGroup.addButton(label: AppStringAssets.filterControlLabel, image: AppImageAssets.filterInactive, showMenu: true)
 		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
 		leftToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .left)
-		moveLeftButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveLeftControlLabel, image: ZavalaImageAssets.moveLeft, selector: "moveCurrentRowsLeft")
-		moveRightButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveRightControlLabel, image: ZavalaImageAssets.moveRight, selector: "moveCurrentRowsRight")
-		moveUpButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveUpControlLabel, image: ZavalaImageAssets.moveUp, selector: "moveCurrentRowsUp")
-		moveDownButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveDownControlLabel, image: ZavalaImageAssets.moveDown, selector: "moveCurrentRowsDown")
+		moveLeftButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveLeftControlLabel, image: AppImageAssets.moveLeft, selector: "moveCurrentRowsLeft")
+		moveRightButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveRightControlLabel, image: AppImageAssets.moveRight, selector: "moveCurrentRowsRight")
+		moveUpButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveUpControlLabel, image: AppImageAssets.moveUp, selector: "moveCurrentRowsUp")
+		moveDownButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveDownControlLabel, image: AppImageAssets.moveDown, selector: "moveCurrentRowsDown")
 		let moveButtonsBarButtonItem = leftToolbarButtonGroup.buildBarButtonItem()
 
 		formatMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
-		linkButton = formatMenuButtonGroup.addButton(label: AppStringAssets.linkControlLabel, image: ZavalaImageAssets.link, selector: "link")
-		let boldImage = ZavalaImageAssets.bold.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
+		linkButton = formatMenuButtonGroup.addButton(label: AppStringAssets.linkControlLabel, image: AppImageAssets.link, selector: "link")
+		let boldImage = AppImageAssets.bold.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
 		boldButton = formatMenuButtonGroup.addButton(label: AppStringAssets.boldControlLabel, image: boldImage, selector: "outlineToggleBoldface:")
-		let italicImage = ZavalaImageAssets.italic.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
+		let italicImage = AppImageAssets.italic.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
 		italicButton = formatMenuButtonGroup.addButton(label: AppStringAssets.italicControlLabel, image: italicImage, selector: "outlineToggleItalics:")
 
 		rightToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
-		insertImageButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.insertImageControlLabel, image: ZavalaImageAssets.insertImage, selector: "insertImage")
-		formatMenuButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.formatControlLabel, image: ZavalaImageAssets.format, selector: "showFormatMenu")
+		insertImageButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.insertImageControlLabel, image: AppImageAssets.insertImage, selector: "insertImage")
+		formatMenuButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.formatControlLabel, image: AppImageAssets.format, selector: "showFormatMenu")
 		formatMenuButton.popoverButtonGroup = formatMenuButtonGroup
-		noteButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.addNoteControlLabel, image: ZavalaImageAssets.noteAdd, selector: "createOrDeleteNotes")
-		insertNewlineButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.newOutlineControlLabel, image: ZavalaImageAssets.newline, selector: "insertNewline")
+		noteButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.addNoteControlLabel, image: AppImageAssets.noteAdd, selector: "createOrDeleteNotes")
+		insertNewlineButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.newOutlineControlLabel, image: AppImageAssets.newline, selector: "insertNewline")
 		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
 
 		if traitCollection.userInterfaceIdiom != .mac {
@@ -2020,7 +2020,7 @@ private extension EditorViewController {
 			if traitCollection.userInterfaceIdiom == .pad {
 				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
 			} else {
-				let hideKeyboardBarButtonItem = UIBarButtonItem(image: ZavalaImageAssets.hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
+				let hideKeyboardBarButtonItem = UIBarButtonItem(image: AppImageAssets.hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
 				hideKeyboardBarButtonItem.accessibilityLabel = AppStringAssets.hideKeyboardControlLabel
 				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, hideKeyboardBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
 			}
@@ -2053,22 +2053,22 @@ private extension EditorViewController {
 	func buildEllipsisMenu() -> UIMenu {
 		var outlineActions = [UIMenuElement]()
 
-		let getInfoAction = UIAction(title: AppStringAssets.getInfoControlLabel, image: ZavalaImageAssets.getInfo) { [weak self] _ in
+		let getInfoAction = UIAction(title: AppStringAssets.getInfoControlLabel, image: AppImageAssets.getInfo) { [weak self] _ in
 			self?.showOutlineGetInfo()
 		}
 		outlineActions.append(getInfoAction)
 
-		let findAction = UIAction(title: AppStringAssets.findEllipsisControlLabel, image: ZavalaImageAssets.find) { [weak self] _ in
+		let findAction = UIAction(title: AppStringAssets.findEllipsisControlLabel, image: AppImageAssets.find) { [weak self] _ in
 			self?.beginInDocumentSearch()
 		}
 		outlineActions.append(findAction)
 
-		let expandAllInOutlineAction = UIAction(title: AppStringAssets.expandAllInOutlineControlLabel, image: ZavalaImageAssets.expandAll) { [weak self] _ in
+		let expandAllInOutlineAction = UIAction(title: AppStringAssets.expandAllInOutlineControlLabel, image: AppImageAssets.expandAll) { [weak self] _ in
 			self?.expandAllInOutline()
 		}
 		outlineActions.append(expandAllInOutlineAction)
 		
-		let collapseAllInOutlineAction = UIAction(title: AppStringAssets.collapseAllInOutlineControlLabel, image: ZavalaImageAssets.collapseAll) { [weak self] _ in
+		let collapseAllInOutlineAction = UIAction(title: AppStringAssets.collapseAllInOutlineControlLabel, image: AppImageAssets.collapseAll) { [weak self] _ in
 			self?.collapseAllInOutline()
 		}
 		outlineActions.append(collapseAllInOutlineAction)
@@ -2076,13 +2076,13 @@ private extension EditorViewController {
 		var shareActions = [UIMenuElement]()
 
 		if !isCollaborateUnavailable {
-			let collaborateAction = UIAction(title: AppStringAssets.collaborateEllipsisControlLabel, image: ZavalaImageAssets.statelessCollaborate) { [weak self] _ in
+			let collaborateAction = UIAction(title: AppStringAssets.collaborateEllipsisControlLabel, image: AppImageAssets.statelessCollaborate) { [weak self] _ in
 				self?.collaborate(self?.moreMenuButton)
 			}
 			shareActions.append(collaborateAction)
 		}
 
-		let shareAction = UIAction(title: AppStringAssets.shareEllipsisControlLabel, image: ZavalaImageAssets.share) { [weak self] _ in
+		let shareAction = UIAction(title: AppStringAssets.shareEllipsisControlLabel, image: AppImageAssets.share) { [weak self] _ in
 			self?.share(self?.moreMenuButton)
 		}
 		shareActions.append(shareAction)
@@ -2093,7 +2093,7 @@ private extension EditorViewController {
 		let printListAction = UIAction(title: AppStringAssets.printListControlEllipsisLabel) { [weak self] _ in
 			self?.printList()
 		}
-		shareActions.append(UIMenu(title: AppStringAssets.printControlLabel, image: ZavalaImageAssets.printDoc, children: [printDocAction, printListAction]))
+		shareActions.append(UIMenu(title: AppStringAssets.printControlLabel, image: AppImageAssets.printDoc, children: [printDocAction, printListAction]))
 
 		let exportPDFDoc = UIAction(title: AppStringAssets.exportPDFDocEllipsisControlLabel) { [weak self] _ in
 			guard let self = self, let outline = self.outline else { return }
@@ -2116,10 +2116,10 @@ private extension EditorViewController {
 			self.delegate?.exportOPML(self, outline: outline)
 		}
 		let exportActions = [exportPDFDoc, exportPDFList, exportMarkdownDoc, exportMarkdownList, exportOPML]
-		shareActions.append(UIMenu(title: AppStringAssets.exportControlLabel, image: ZavalaImageAssets.export, children: exportActions))
+		shareActions.append(UIMenu(title: AppStringAssets.exportControlLabel, image: AppImageAssets.export, children: exportActions))
 
 		let deleteCompletedRowsAction = UIAction(title: AppStringAssets.deleteCompletedRowsControlLabel,
-												 image: ZavalaImageAssets.delete,
+												 image: AppImageAssets.delete,
 												 attributes: .destructive) { [weak self] _ in
 			self?.deleteCompletedRows()
 		}
@@ -2536,7 +2536,7 @@ private extension EditorViewController {
 	}
 	
 	func cutAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.cutControlLabel, image: ZavalaImageAssets.cut) { [weak self] action in
+		return UIAction(title: AppStringAssets.cutControlLabel, image: AppImageAssets.cut) { [weak self] action in
 			guard let self else { return }
 			self.cutRows(rows)
 			self.delegate?.validateToolbar(self)
@@ -2544,13 +2544,13 @@ private extension EditorViewController {
 	}
 
 	func copyAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.copyControlLabel, image: ZavalaImageAssets.copy) { [weak self] action in
+		return UIAction(title: AppStringAssets.copyControlLabel, image: AppImageAssets.copy) { [weak self] action in
 			self?.copyRows(rows)
 		}
 	}
 
 	func pasteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.pasteControlLabel, image: ZavalaImageAssets.paste) { [weak self] action in
+		return UIAction(title: AppStringAssets.pasteControlLabel, image: AppImageAssets.paste) { [weak self] action in
 			guard let self else { return }
 			self.pasteRows(afterRows: rows)
 			self.delegate?.validateToolbar(self)
@@ -2558,7 +2558,7 @@ private extension EditorViewController {
 	}
 
 	func addAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.addRowControlLabel, image: ZavalaImageAssets.add) { [weak self] action in
+		return UIAction(title: AppStringAssets.addRowControlLabel, image: AppImageAssets.add) { [weak self] action in
 			// Have to let the text field get the first responder by getting it away from this
 			// action which appears to be holding on to it.
 			DispatchQueue.main.async {
@@ -2568,25 +2568,25 @@ private extension EditorViewController {
 	}
 
 	func duplicateAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.duplicateControlLabel, image: ZavalaImageAssets.duplicate) { [weak self] action in
+		return UIAction(title: AppStringAssets.duplicateControlLabel, image: AppImageAssets.duplicate) { [weak self] action in
 			self?.duplicateRows(rows)
 		}
 	}
 
 	func expandAllAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.expandAllControlLabel, image: ZavalaImageAssets.expandAll) { [weak self] action in
+		return UIAction(title: AppStringAssets.expandAllControlLabel, image: AppImageAssets.expandAll) { [weak self] action in
 			self?.expandAll(containers: rows)
 		}
 	}
 
 	func collapseAllAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.collapseAllControlLabel, image: ZavalaImageAssets.collapseAll) { [weak self] action in
+		return UIAction(title: AppStringAssets.collapseAllControlLabel, image: AppImageAssets.collapseAll) { [weak self] action in
 			self?.collapseAll(containers: rows)
 		}
 	}
 
 	func focusInAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.focusInControlLabel, image: ZavalaImageAssets.focusActive) { [weak self] action in
+		return UIAction(title: AppStringAssets.focusInControlLabel, image: AppImageAssets.focusActive) { [weak self] action in
 			guard let self else { return }
 			self.outline?.focusIn(rows.first!)
 			self.delegate?.validateToolbar(self)
@@ -2594,32 +2594,32 @@ private extension EditorViewController {
 	}
 	
 	func completeAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.completeControlLabel, image: ZavalaImageAssets.completeRow) { [weak self] action in
+		return UIAction(title: AppStringAssets.completeControlLabel, image: AppImageAssets.completeRow) { [weak self] action in
 			self?.completeRows(rows)
 		}
 	}
 	
 	func uncompleteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.uncompleteControlLabel, image: ZavalaImageAssets.uncompleteRow) { [weak self] action in
+		return UIAction(title: AppStringAssets.uncompleteControlLabel, image: AppImageAssets.uncompleteRow) { [weak self] action in
 			self?.uncompleteRows(rows)
 		}
 	}
 	
 	func createNoteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.addNoteControlLabel, image: ZavalaImageAssets.noteAdd) { [weak self] action in
+		return UIAction(title: AppStringAssets.addNoteControlLabel, image: AppImageAssets.noteAdd) { [weak self] action in
 			self?.createRowNotes(rows)
 		}
 	}
 
 	func deleteNoteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.deleteNoteControlLabel, image: ZavalaImageAssets.delete, attributes: .destructive) { [weak self] action in
+		return UIAction(title: AppStringAssets.deleteNoteControlLabel, image: AppImageAssets.delete, attributes: .destructive) { [weak self] action in
 			self?.deleteRowNotes(rows)
 		}
 	}
 
 	func deleteAction(rows: [Row]) -> UIAction {
 		let title = rows.count == 1 ? AppStringAssets.deleteRowControlLabel : AppStringAssets.deleteRowsControlLabel
-		return UIAction(title: title, image: ZavalaImageAssets.delete, attributes: .destructive) { [weak self] action in
+		return UIAction(title: title, image: AppImageAssets.delete, attributes: .destructive) { [weak self] action in
 			guard let self else { return }
 			self.deleteRows(rows)
 			self.delegate?.validateToolbar(self)

@@ -20,7 +20,7 @@ struct AboutView: View {
 	var body: some View {
 		ZStack {
 			if UIDevice.current.userInterfaceIdiom == .mac {
-				ZavalaImageAssets.aboutBackgroundColor.ignoresSafeArea()
+				AppImageAssets.aboutBackgroundColor.ignoresSafeArea()
 			} else {
 				VStack() {
 					Capsule()

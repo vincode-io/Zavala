@@ -72,8 +72,8 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			collectionView.contentInset = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0)
 		} else {
 			let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
-			addButton = navButtonGroup.addButton(label: AppStringAssets.addControlLabel, image: ZavalaImageAssets.createEntity, selector: "createOutline")
-			importButton = navButtonGroup.addButton(label: AppStringAssets.importOPMLControlLabel, image: ZavalaImageAssets.importDocument, selector: "importOPML")
+			addButton = navButtonGroup.addButton(label: AppStringAssets.addControlLabel, image: AppImageAssets.createEntity, selector: "createOutline")
+			importButton = navButtonGroup.addButton(label: AppStringAssets.importOPMLControlLabel, image: AppImageAssets.importDocument, selector: "importOPML")
 			navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
 			searchController.delegate = self
@@ -105,7 +105,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 			if document.isCollaborating {
 				let attrText = NSMutableAttributedString(string: "\(title) ")
-				let shareAttachement = NSTextAttachment(image: ZavalaImageAssets.collaborating)
+				let shareAttachement = NSTextAttachment(image: AppImageAssets.collaborating)
 				attrText.append(NSAttributedString(attachment: shareAttachement))
 				contentConfiguration.attributedText = attrText
 			} else {
@@ -564,7 +564,7 @@ private extension DocumentsViewController {
 			var printActions = [UIAction]()
 			printActions.append(self.printDocsAction(outlines: outlines))
 			printActions.append(self.printListsAction(outlines: outlines))
-			let printMenu = UIMenu(title: AppStringAssets.printControlLabel, image: ZavalaImageAssets.printDoc, children: printActions)
+			let printMenu = UIMenu(title: AppStringAssets.printControlLabel, image: AppImageAssets.printDoc, children: printActions)
 			shareMenuItems.append(printMenu)
 
 			var exportActions = [UIAction]()
@@ -573,7 +573,7 @@ private extension DocumentsViewController {
 			exportActions.append(self.exportMarkdownDocsOutlineAction(outlines: outlines))
 			exportActions.append(self.exportMarkdownListsOutlineAction(outlines: outlines))
 			exportActions.append(self.exportOPMLsAction(outlines: outlines))
-			let exportMenu = UIMenu(title: AppStringAssets.exportControlLabel, image: ZavalaImageAssets.export, children: exportActions)
+			let exportMenu = UIMenu(title: AppStringAssets.exportControlLabel, image: AppImageAssets.export, children: exportActions)
 			shareMenuItems.append(exportMenu)
 
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: shareMenuItems))
@@ -585,7 +585,7 @@ private extension DocumentsViewController {
 	}
 
 	func showGetInfoAction(document: Document) -> UIAction {
-		let action = UIAction(title: AppStringAssets.getInfoControlLabel, image: ZavalaImageAssets.getInfo) { [weak self] action in
+		let action = UIAction(title: AppStringAssets.getInfoControlLabel, image: AppImageAssets.getInfo) { [weak self] action in
 			guard let self = self, let outline = document.outline else { return }
 			self.delegate?.showGetInfo(self, outline: outline)
 		}
@@ -593,7 +593,7 @@ private extension DocumentsViewController {
 	}
 	
 	func duplicateAction(documents: [Document]) -> UIAction {
-		let action = UIAction(title: AppStringAssets.duplicateControlLabel, image: ZavalaImageAssets.duplicate) { action in
+		let action = UIAction(title: AppStringAssets.duplicateControlLabel, image: AppImageAssets.duplicate) { action in
             for document in documents {
                 document.load()
                 let newDocument = document.duplicate()
@@ -607,7 +607,7 @@ private extension DocumentsViewController {
 	}
 	
 	func shareAction(documents: [Document], sourceView: UIView) -> UIAction {
-		let action = UIAction(title: AppStringAssets.shareEllipsisControlLabel, image: ZavalaImageAssets.share) { action in
+		let action = UIAction(title: AppStringAssets.shareEllipsisControlLabel, image: AppImageAssets.share) { action in
 			let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(selectedDocuments: documents))
 			controller.popoverPresentationController?.sourceView = sourceView
 			self.present(controller, animated: true)
@@ -680,7 +680,7 @@ private extension DocumentsViewController {
 	}
 	
 	func deleteDocumentsAction(documents: [Document]) -> UIAction {
-		let action = UIAction(title: AppStringAssets.deleteControlLabel, image: ZavalaImageAssets.delete, attributes: .destructive) { [weak self] action in
+		let action = UIAction(title: AppStringAssets.deleteControlLabel, image: AppImageAssets.delete, attributes: .destructive) { [weak self] action in
 			self?.deleteDocuments(documents)
 		}
 		

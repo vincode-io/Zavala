@@ -37,6 +37,7 @@ public struct OutlineElementChanges {
 		return (deletes?.isEmpty ?? true) && (inserts?.isEmpty ?? true) && (moves?.isEmpty ?? true)
 	}
 	
+	#if canImport(UIKit)
 	public var deleteIndexPaths: [IndexPath]? {
 		guard let deletes else { return nil }
 		return deletes.map { IndexPath(row: $0, section: section.rawValue) }
@@ -56,6 +57,7 @@ public struct OutlineElementChanges {
 		guard let reloads else { return nil }
 		return reloads.map { IndexPath(row: $0, section: section.rawValue) }
 	}
+	#endif
 	
 	init(section: Outline.Section, deletes: Set<Int>? = nil, inserts: Set<Int>? = nil, moves: Set<Move>? = nil, reloads: Set<Int>? = nil) {
 		self.section = section

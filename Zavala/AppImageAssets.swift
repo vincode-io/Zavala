@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-struct ZavalaImageAssets {
+struct AppImageAssets {
 	
 	static var aboutBackgroundColor = Color("AboutBackgroundColor")
 	static var accentColor = UIColor(named: "AccentColor")!

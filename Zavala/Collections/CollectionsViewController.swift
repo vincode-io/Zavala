@@ -76,8 +76,8 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 				navigationItem.rightBarButtonItem = selectBarButtonItem
 			} else {
 				let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
-				addButton = navButtonGroup.addButton(label: AppStringAssets.addControlLabel, image: ZavalaImageAssets.createEntity, selector: "createOutline:")
-				importButton = navButtonGroup.addButton(label: AppStringAssets.importOPMLControlLabel, image: ZavalaImageAssets.importDocument, selector: "importOPML:")
+				addButton = navButtonGroup.addButton(label: AppStringAssets.addControlLabel, image: AppImageAssets.createEntity, selector: "createOutline:")
+				importButton = navButtonGroup.addButton(label: AppStringAssets.importOPMLControlLabel, image: AppImageAssets.importDocument, selector: "importOPML:")
 				let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
 				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
@@ -520,7 +520,7 @@ private extension CollectionsViewController {
 	func renameTagAction(containers: [DocumentContainer]) -> UIAction? {
 		guard containers.count == 1, let container = containers.first, let tagDocuments = container as? TagDocuments else { return nil }
 		
-		let action = UIAction(title: AppStringAssets.renameControlLabel, image: ZavalaImageAssets.rename) { [weak self] action in
+		let action = UIAction(title: AppStringAssets.renameControlLabel, image: AppImageAssets.rename) { [weak self] action in
 			guard let self else { return }
 			
 			if self.traitCollection.userInterfaceIdiom == .mac {
@@ -545,7 +545,7 @@ private extension CollectionsViewController {
 		let tagDocuments = containers.compactMap { $0 as? TagDocuments }
 		guard tagDocuments.count == containers.count else { return nil}
 		
-		let action = UIAction(title: AppStringAssets.deleteControlLabel, image: ZavalaImageAssets.delete, attributes: .destructive) { [weak self] action in
+		let action = UIAction(title: AppStringAssets.deleteControlLabel, image: AppImageAssets.delete, attributes: .destructive) { [weak self] action in
 			let deleteAction = UIAlertAction(title: AppStringAssets.deleteControlLabel, style: .destructive) { _ in
 				for tagDocument in tagDocuments {
 					if let tag = tagDocument.tag {

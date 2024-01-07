@@ -59,6 +59,7 @@ public extension VCKModel {
 		}
 	}
 	
+	#if canImport(UIKit)
 	func merge(client: Data?, ancestor: Data?, server: Data?) -> Data? {
 		switch VCKMergeScenario.evaluate(client: client, ancestor: ancestor, server: server) {
 		case .clientWins:
@@ -117,6 +118,7 @@ public extension VCKModel {
 			}
 		}
 	}
+	#endif
 	
 	func merge<T>(client: OrderedSet<T>?, ancestor: OrderedSet<T>?, server: OrderedSet<T>?) -> OrderedSet<T> where T:Equatable {
 		let mergeClient = client != nil ? Array(client!) : nil

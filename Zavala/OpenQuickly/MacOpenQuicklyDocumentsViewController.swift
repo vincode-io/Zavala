@@ -92,7 +92,7 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 
 			if document.isCollaborating {
 				let attrText = NSMutableAttributedString(string: "\(title) ")
-				let shareAttachement = NSTextAttachment(image: ZavalaImageAssets.collaborating)
+				let shareAttachement = NSTextAttachment(image: AppImageAssets.collaborating)
 				attrText.append(NSAttributedString(attachment: shareAttachement))
 				contentConfiguration.attributedText = attrText
 			} else {

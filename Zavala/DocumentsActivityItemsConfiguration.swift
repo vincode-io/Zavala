@@ -78,7 +78,7 @@ extension DocumentsActivityItemsConfiguration: UIActivityItemsConfigurationReadi
 		case .title:
 			return selectedDocuments[at].title
 		case .linkPresentationMetadata:
-			let iconView = UIImageView(image: ZavalaImageAssets.outline)
+			let iconView = UIImageView(image: AppImageAssets.outline)
 			iconView.backgroundColor = .accentColor
 			iconView.tintColor = .label
 			iconView.contentMode = .scaleAspectFit

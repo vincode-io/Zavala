@@ -46,7 +46,7 @@ import UniformTypeIdentifiers
 
 	func configureOpenQuickly(_ window: NSObject?) {
 		guard let nsWindow = window as? NSWindow else { return }
-		nsWindow.title = AppStringAssets.openQuicklyWindowTitle
+		nsWindow.title = String(localized: "Open Quickly", comment: "Window Title: Open Quickly")
 		nsWindow.titlebarAppearsTransparent = true
 		nsWindow.standardWindowButton(.zoomButton)?.isHidden = true
 		nsWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true

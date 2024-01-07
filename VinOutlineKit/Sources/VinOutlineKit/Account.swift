@@ -5,7 +5,11 @@
 //  Created by Maurice Parker on 11/6/20.
 //
 
+#if canImport(UIKit)
 import UIKit
+#else
+import Foundation
+#endif
 import CloudKit
 import VinXML
 import VinCloudKit
@@ -121,9 +125,11 @@ public final class Account: NSObject, Identifiable, Codable {
 		cloudKitManager?.userDidAcceptCloudKitShareWith(shareMetadata)
 	}
 	
+	#if canImport(UIKit)
 	public func prepareCloudSharingController(document: Document, completion: @escaping (Result<UICloudSharingController, Error>) -> Void) {
 		cloudKitManager?.prepareCloudSharingController(document: document, completion: completion)
 	}
+	#endif
 
 	public func activate() {
 		guard isActive == false else { return }

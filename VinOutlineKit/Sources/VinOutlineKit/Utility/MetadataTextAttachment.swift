@@ -5,6 +5,8 @@
 //  Created by Maurice Parker on 10/27/21.
 //
 
+#if canImport(UIKit)
+
 import UIKit
 
 public class MetadataTextAttachment: NSTextAttachment {
@@ -33,3 +35,5 @@ public class MetadataTextAttachment: NSTextAttachment {
 	}
 	
 }
+
+#endif

@@ -5,13 +5,18 @@
 //  Created by Maurice Parker on 1/27/21.
 //
 
+#if canImport(UIKit)
 import UIKit
-
+#else
+import Foundation
+#endif
 public final class AllDocuments: Identifiable, DocumentContainer {
 
 	public var id: EntityID
 	public var name: String? = VinOutlineKitStringAssets.all
+	#if canImport(UIKit)
 	public var image: UIImage? = UIImage(systemName: "tray")!
+	#endif
 
 	public var itemCount: Int? {
 		return account?.documents?.count

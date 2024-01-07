@@ -1,0 +1,30 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ was moved or renamed while open." : {
+      "comment" : "Message text for app moved while running alert"
+    },
+    "Automatic" : {
+      "comment" : "Control Label: Automatic"
+    },
+    "Dark" : {
+      "comment" : "Control Label: Dark"
+    },
+    "Light" : {
+      "comment" : "Control Label: Light"
+    },
+    "Moving an open application can cause unexpected behavior. Manually relaunch the application to continue." : {
+      "comment" : "Informative text for app moved while running alert"
+    },
+    "Open Quickly" : {
+      "comment" : "Window Title: Open Quickly"
+    },
+    "Terminate" : {
+      "comment" : "Relaunch Button"
+    },
+    "This app" : {
+      "comment" : "Backup name if the app name cannot be deduced from the bundle"
+    }
+  },
+  "version" : "1.0"
+}

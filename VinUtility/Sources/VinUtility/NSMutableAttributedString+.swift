@@ -11,7 +11,6 @@ import Foundation
 
 extension NSMutableAttributedString {
 
-    #if canImport(UIKit)
 	@discardableResult
 	public func detectData() -> Bool {
 		let text = string
@@ -19,6 +18,7 @@ extension NSMutableAttributedString {
 		
 		var changeWasMade = false
 		
+		#if canImport(UIKit)
 		let detector = NSDataDetector(dataTypes: DataDetectorType.allCases)
 		detector.enumerateMatches(in: text) { result in
 			let originalString = attributedSubstring(from: result.range)
@@ -32,10 +32,12 @@ extension NSMutableAttributedString {
 				changeWasMade = true
 			}
 		}
+		#endif
 		
 		return changeWasMade
 	}
 	
+	#if canImport(UIKit)
 	public func replaceFont(with font: UIFont) {
 		beginEditing()
 		self.enumerateAttribute(.font, in: NSRange(location: 0, length: self.length)) { (value, range, stop) in
@@ -48,8 +50,8 @@ extension NSMutableAttributedString {
 		}
 		endEditing()
 	}
-    #endif
-	
+	#endif
+
 	public func addAttributes(_ attrs: [NSAttributedString.Key : Any] = [:]) {
 		addAttributes(attrs, range: NSRange(location: 0, length: length))
 	}

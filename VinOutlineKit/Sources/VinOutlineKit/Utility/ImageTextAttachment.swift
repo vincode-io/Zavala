@@ -5,6 +5,7 @@
 //  Created by Maurice Parker on 4/6/21.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 public class ImageTextAttachment: NSTextAttachment {
@@ -39,3 +40,4 @@ public class ImageTextAttachment: NSTextAttachment {
 	}
 	
 }
+#endif

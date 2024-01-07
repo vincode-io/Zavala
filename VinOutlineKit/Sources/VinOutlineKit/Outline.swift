@@ -5,7 +5,11 @@
 //  Created by Maurice Parker on 11/6/20.
 //
 
+#if canImport(UIKit)
 import UIKit
+#else
+import Foundation
+#endif
 import CloudKit
 import OrderedCollections
 import VinUtility
@@ -3006,6 +3010,7 @@ private extension Outline {
 	}
 
 	func appendPrintTitle(attrString: NSMutableAttributedString) {
+		#if canImport(UIKit)
 		if let title {
 			let titleFont = UIFont.systemFont(ofSize: 18).with(traits: .traitBold)
 			
@@ -3023,6 +3028,7 @@ private extension Outline {
 			
 			attrString.append(printTitle)
 		}
+		#endif
 	}
 	
 }

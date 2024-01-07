@@ -34,11 +34,6 @@
 		511EC2C52B3F8F29002D89A5 /* SettingsAdvancedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511EC2C42B3F8F29002D89A5 /* SettingsAdvancedView.swift */; };
 		511EC2C72B409A5B002D89A5 /* ValueStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511EC2C62B409A5B002D89A5 /* ValueStepper.swift */; };
 		511EC2C82B422B22002D89A5 /* DocumentIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167606325F95E4600AC0EBD /* DocumentIndexer.swift */; };
-		511EC2CA2B422B4B002D89A5 /* AppDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517AF69B25E0862E0044DBAB /* AppDefaults.swift */; };
-		511EC2CB2B422B4B002D89A5 /* AppStringAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5162AFF528EFB4A90002A61C /* AppStringAssets.swift */; };
-		511EC2CC2B422B7B002D89A5 /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
-		511EC2CD2B422B7B002D89A5 /* OutlineFontConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142C294260AC78C0094571F /* OutlineFontConfig.swift */; };
-		511EC2CE2B422B7B002D89A5 /* OutlineFontDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F5372260829060038BAF8 /* OutlineFontDefaults.swift */; };
 		512229682563507E008041AF /* EditorRowViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorRowViewCell.swift */; };
 		5125D01A26BE181500703DA4 /* SpotlightIndexExtension.appex in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = 515D452026BB553600228229 /* SpotlightIndexExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5126E7572AEF484000015491 /* VinOutlineKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5126E7562AEF484000015491 /* VinOutlineKit */; };
@@ -163,10 +158,12 @@
 		51E508E12B49F3450041B826 /* ApplyDiffOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E508E02B49F3450041B826 /* ApplyDiffOperation.swift */; };
 		51E508E32B49F5B20041B826 /* ScrollToIndexPathOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E508E22B49F5B20041B826 /* ScrollToIndexPathOperation.swift */; };
 		51E508E52B49F83A0041B826 /* ReconfigureIndexPathsOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E508E42B49F83A0041B826 /* ReconfigureIndexPathsOperation.swift */; };
+		51E508EA2B4A1E3B0041B826 /* AppKitDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E508E92B4A1E3B0041B826 /* AppKitDefaults.swift */; };
+		51E508ED2B4B1F490041B826 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 51E508EC2B4B1F490041B826 /* Localizable.xcstrings */; };
 		51E5C48F27221F6200A38983 /* IntentOutline+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C48E27221F6200A38983 /* IntentOutline+.swift */; };
 		51E5C49127221F6F00A38983 /* IntentRow+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C49027221F6F00A38983 /* IntentRow+.swift */; };
 		51EB162F270F46780079F40C /* ZavalaIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EB162E270F46780079F40C /* ZavalaIntentHandler.swift */; };
-		51F13EFE255E13A9004B85CA /* ZavalaImageAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F13EFD255E13A9004B85CA /* ZavalaImageAssets.swift */; };
+		51F13EFE255E13A9004B85CA /* AppImageAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F13EFD255E13A9004B85CA /* AppImageAssets.swift */; };
 		51F2859425AD11100019C573 /* CollectionsSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859325AD11100019C573 /* CollectionsSearchCell.swift */; };
 		51F2859725AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859625AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift */; };
 		51F2859B25AD12800019C573 /* CollectionsSearchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859A25AD12800019C573 /* CollectionsSearchContentView.swift */; };
@@ -395,10 +392,12 @@
 		51E508E02B49F3450041B826 /* ApplyDiffOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyDiffOperation.swift; sourceTree = "<group>"; };
 		51E508E22B49F5B20041B826 /* ScrollToIndexPathOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToIndexPathOperation.swift; sourceTree = "<group>"; };
 		51E508E42B49F83A0041B826 /* ReconfigureIndexPathsOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReconfigureIndexPathsOperation.swift; sourceTree = "<group>"; };
+		51E508E92B4A1E3B0041B826 /* AppKitDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKitDefaults.swift; sourceTree = "<group>"; };
+		51E508EC2B4B1F490041B826 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		51E5C48E27221F6200A38983 /* IntentOutline+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentOutline+.swift"; sourceTree = "<group>"; };
 		51E5C49027221F6F00A38983 /* IntentRow+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentRow+.swift"; sourceTree = "<group>"; };
 		51EB162E270F46780079F40C /* ZavalaIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZavalaIntentHandler.swift; sourceTree = "<group>"; };
-		51F13EFD255E13A9004B85CA /* ZavalaImageAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZavalaImageAssets.swift; sourceTree = "<group>"; };
+		51F13EFD255E13A9004B85CA /* AppImageAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImageAssets.swift; sourceTree = "<group>"; };
 		51F2859325AD11100019C573 /* CollectionsSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchCell.swift; sourceTree = "<group>"; };
 		51F2859625AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchContentConfiguration.swift; sourceTree = "<group>"; };
 		51F2859A25AD12800019C573 /* CollectionsSearchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchContentView.swift; sourceTree = "<group>"; };
@@ -524,12 +523,7 @@
 		5167606225F95E0400AC0EBD /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				517AF69B25E0862E0044DBAB /* AppDefaults.swift */,
-				5162AFF528EFB4A90002A61C /* AppStringAssets.swift */,
 				5167606325F95E4600AC0EBD /* DocumentIndexer.swift */,
-				5142C294260AC78C0094571F /* OutlineFontConfig.swift */,
-				516F5372260829060038BAF8 /* OutlineFontDefaults.swift */,
-				519A2323260A9B900056051E /* OutlineFontField.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -612,7 +606,9 @@
 				5181A9422554D92100C153E8 /* LaunchScreen.storyboard */,
 				5181A93D2554D92000C153E8 /* Main.storyboard */,
 				5188FAA82602A9CE0020B7DA /* OutlineEditor.storyboard */,
-				51F13EFD255E13A9004B85CA /* ZavalaImageAssets.swift */,
+				517AF69B25E0862E0044DBAB /* AppDefaults.swift */,
+				5162AFF528EFB4A90002A61C /* AppStringAssets.swift */,
+				51F13EFD255E13A9004B85CA /* AppImageAssets.swift */,
 				51E14F22255F2D7F00320EDB /* ActivityManager.swift */,
 				5181A9372554D92000C153E8 /* AppDelegate.swift */,
 				511B2AC726028EE700C04239 /* MainCoordinator.swift */,
@@ -630,6 +626,7 @@
 				517A9E31260512DC00EF346A /* OpenQuickly */,
 				517AF69E25E08A350044DBAB /* Settings */,
 				51C71C70273F22A500F6C779 /* Image */,
+				51E508E82B4A1DBE0041B826 /* OutlineFonts */,
 				514BB9D5255B595300C8DBDF /* Utility */,
 				51AEEC8B2703E6B500354C59 /* Intents */,
 				515F163B255C536600FD98B8 /* Resources */,
@@ -768,10 +765,11 @@
 			children = (
 				51E060F325A4C13B00194066 /* AppKitPlugin.h */,
 				51E060F225A4C13B00194066 /* BridgingHeader.h */,
+				51E508E92B4A1E3B0041B826 /* AppKitDefaults.swift */,
 				5162AFF928EFB5C00002A61C /* AppKitImageAssets.swift */,
 				51E060ED25A4B5E600194066 /* AppKitWrapper.swift */,
 				519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */,
-				51E060B125A4547400194066 /* Info.plist */,
+				51E508EB2B4B1F180041B826 /* Resources */,
 			);
 			path = AppKitPlugin;
 			sourceTree = "<group>";
@@ -841,6 +839,25 @@
 				51E508DC2B49EF390041B826 /* SelectIndexPathsOperation.swift */,
 			);
 			path = Operations;
+			sourceTree = "<group>";
+		};
+		51E508E82B4A1DBE0041B826 /* OutlineFonts */ = {
+			isa = PBXGroup;
+			children = (
+				5142C294260AC78C0094571F /* OutlineFontConfig.swift */,
+				516F5372260829060038BAF8 /* OutlineFontDefaults.swift */,
+				519A2323260A9B900056051E /* OutlineFontField.swift */,
+			);
+			path = OutlineFonts;
+			sourceTree = "<group>";
+		};
+		51E508EB2B4B1F180041B826 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				51E060B125A4547400194066 /* Info.plist */,
+				51E508EC2B4B1F490041B826 /* Localizable.xcstrings */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		51F13F01255E13D1004B85CA /* Dialogs */ = {
@@ -1009,6 +1026,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51E508ED2B4B1F490041B826 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1095,7 +1113,7 @@
 				51F2859B25AD12800019C573 /* CollectionsSearchContentView.swift in Sources */,
 				51FA27462B3B9337008B665E /* SettingsHelpView.swift in Sources */,
 				51C030B8257E198B00609262 /* EditorTitleTextView.swift in Sources */,
-				51F13EFE255E13A9004B85CA /* ZavalaImageAssets.swift in Sources */,
+				51F13EFE255E13A9004B85CA /* AppImageAssets.swift in Sources */,
 				510471BD2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift in Sources */,
 				51E508E32B49F5B20041B826 /* ScrollToIndexPathOperation.swift in Sources */,
 				5109BC50292579A30022E90B /* CopyDocumentLinkActivity.swift in Sources */,
@@ -1222,12 +1240,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				511EC2CC2B422B7B002D89A5 /* OutlineFontField.swift in Sources */,
 				51E2BCBD290EFB15002BA7B2 /* AppKitImageAssets.swift in Sources */,
-				511EC2CA2B422B4B002D89A5 /* AppDefaults.swift in Sources */,
-				511EC2CE2B422B7B002D89A5 /* OutlineFontDefaults.swift in Sources */,
-				511EC2CD2B422B7B002D89A5 /* OutlineFontConfig.swift in Sources */,
-				511EC2CB2B422B4B002D89A5 /* AppStringAssets.swift in Sources */,
+				51E508EA2B4A1E3B0041B826 /* AppKitDefaults.swift in Sources */,
 				519965DC2624EEE500D8468B /* RSAppMovementMonitor.swift in Sources */,
 				51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */,
 			);

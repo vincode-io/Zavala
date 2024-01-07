@@ -457,6 +457,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		var matchedImages = [Image]()
 		
 		func importMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
+			
+			#if canImport(UIKit)
 			if let markdown {
 				let mangledMarkdown = markdown.replacingOccurrences(of: "![", with: "!]")
 				let attrString = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
@@ -488,6 +490,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 				
 				return attrString
 			}
+			#endif
 			
 			return nil
 		}
@@ -714,6 +717,7 @@ private extension Row {
 		let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
 		var images = [Image]()
 		
+		#if canImport(UIKit)
 		mutableAttrString.enumerateAttribute(.attachment, in: .init(location: 0, length: mutableAttrString.length), options: []) { (value, range, _) in
 			if let imageTextAttachment = value as? ImageTextAttachment, let imageUUID = imageTextAttachment.imageUUID, let pngData = imageTextAttachment.image?.pngData() {
 				let entityID = EntityID.image(outline.id.accountID, outline.id.documentUUID, id, imageUUID)
@@ -722,6 +726,7 @@ private extension Row {
 			}
 			mutableAttrString.removeAttribute(.attachment, range: range)
 		}
+		#endif
 		
 		return (mutableAttrString, images)
 	}
@@ -757,6 +762,7 @@ private extension Row {
 			return nil
 		}
 
+		#if canImport(UIKit)
 		let mangledMarkdown = markdown.replacingOccurrences(of: "![", with: "!]")
 		let result = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
 		let strippedString = result.string
@@ -786,9 +792,13 @@ private extension Row {
 		resolveAltLinks(attrString: result)
 
 		return result
+		#else
+		return nil
+		#endif
 	}
 	
 	func insertImageAttachment(attrString: NSMutableAttributedString, image: Image, offset: Int) {
+		#if canImport(UIKit)
 		let attachment = ImageTextAttachment(data: image.data, ofType: UTType.png.identifier)
 		attachment.imageUUID = image.id.imageUUID
 		let imageAttrText = NSAttributedString(attachment: attachment)
@@ -799,6 +809,7 @@ private extension Row {
 		} else {
 			attrString.insert(imageAttrText, at: attrString.length)
 		}
+		#endif
 	}
 	
 	@discardableResult
