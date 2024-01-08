@@ -27,6 +27,7 @@ struct SettingsFontsView: View {
 				} label: {
 					Label(AppStringAssets.restoreControlLabel, systemImage: "gobackward")
 				}
+				.help(AppStringAssets.restoreControlLabel)
 				.disabled(AppDefaults.shared.outlineFonts == OutlineFontDefaults.defaults)
 			}
 			ToolbarItem {
@@ -62,6 +63,7 @@ struct SettingsSelectFontButton: View {
 			}
 		}
 		.foregroundStyle(.primary)
+		.help(AppStringAssets.addControlLabel)
 		.popover(item: $presentingFieldConfig) { fieldConfig in
 			SettingsFontConfigView(fieldConfig: fieldConfig)
 		}
