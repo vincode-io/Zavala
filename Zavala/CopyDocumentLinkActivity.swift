@@ -18,9 +18,9 @@ class CopyDocumentLinkActivity: UIActivity {
 	
 	override var activityTitle: String? {
 		if documents.count > 1 {
-			return AppStringAssets.copyDocumentLinksControlLabel
+			return .copyDocumentLinksControlLabel
 		} else {
-			return AppStringAssets.copyDocumentLinkControlLabel
+			return .copyDocumentLinkControlLabel
 		}
 	}
 	
@@ -29,7 +29,7 @@ class CopyDocumentLinkActivity: UIActivity {
 	}
 	
 	override var activityImage: UIImage? {
-		AppImageAssets.link
+		.link
 	}
 	
 	override class var activityCategory: UIActivity.Category {

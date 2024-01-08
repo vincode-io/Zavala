@@ -24,12 +24,12 @@ struct SettingsView: View {
 				SettingsHelpView()
 				#endif
 			}
-			.navigationTitle(AppStringAssets.settingsControlLabel)
+			.navigationTitle(String.settingsControlLabel)
 			.navigationBarTitleDisplayMode(.inline)
 			#if !targetEnvironment(macCatalyst)
 			.toolbar {
 				ToolbarItem(placement: .confirmationAction) {
-					Button(AppStringAssets.doneControlLabel) {
+					Button(String.doneControlLabel) {
 						dismiss()
 					}
 				}

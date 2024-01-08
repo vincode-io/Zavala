@@ -52,40 +52,40 @@ struct GetInfoView: View {
 	
 	var form: some View {
 		Form {
-			Section(AppStringAssets.settingsControlLabel) {
+			Section(String.settingsControlLabel) {
 				Toggle(isOn: $getInfoViewModel.autoLinkingEnabled) {
-					Text(AppStringAssets.autoLinkingControlLabel)
+					Text(String.autoLinkingControlLabel)
 				}
 			}
-			Section(AppStringAssets.ownerControlLabel) {
+			Section(String.ownerControlLabel) {
 				TextField(text: $getInfoViewModel.ownerName) {
-					Text(AppStringAssets.nameControlLabel)
+					Text(String.nameControlLabel)
 				}
 				TextField(text: $getInfoViewModel.ownerEmail) {
-					Text(AppStringAssets.emailControlLabel)
+					Text(String.emailControlLabel)
 				}
 				TextField(text: $getInfoViewModel.ownerURL) {
-					Text(AppStringAssets.urlControlLabel)
+					Text(String.urlControlLabel)
 				}
-				Text(AppStringAssets.opmlOwnerFieldNote)
+				Text(String.opmlOwnerFieldNote)
 					.font(.footnote)
 					.foregroundStyle(.secondary)
 			}
-			Section(AppStringAssets.statisticsControlLabel) {
+			Section(String.statisticsControlLabel) {
 				HStack {
-					Text(AppStringAssets.wordCountLabel)
+					Text(String.wordCountLabel)
 					Spacer()
 					Text(String(getInfoViewModel.wordCount))
 						.foregroundStyle(.secondary)
 				}
 				HStack {
-					Text(AppStringAssets.createdControlLabel)
+					Text(String.createdControlLabel)
 					Spacer()
 					Text(getInfoViewModel.createdLabel)
 						.foregroundStyle(.secondary)
 				}
 				HStack {
-					Text(AppStringAssets.updatedControlLabel)
+					Text(String.updatedControlLabel)
 					Spacer()
 					Text(getInfoViewModel.updatedLabel)
 						.foregroundStyle(.secondary)
@@ -96,14 +96,14 @@ struct GetInfoView: View {
 	}
 	
 	var cancelButton: some View {
-		Button(AppStringAssets.cancelControlLabel, role: .cancel) {
+		Button(String.cancelControlLabel, role: .cancel) {
 			dismiss()
 		}
 		.keyboardShortcut(.cancelAction)
 	}
 	
 	var saveButton: some View {
-		Button(AppStringAssets.saveControlLabel) {
+		Button(String.saveControlLabel) {
 			getInfoViewModel.update()
 			dismiss()
 		}
@@ -134,13 +134,13 @@ class GetInfoViewModel: ObservableObject {
 		self.ownerURL = outline.ownerURL ?? ""
 		
 		if let created = outline.created {
-			createdLabel = AppStringAssets.createdOnLabel(date: created)
+			createdLabel = .createdOnLabel(date: created)
 		} else {
 			createdLabel = ""
 		}
 		
 		if let updated = outline.updated {
-			updatedLabel = AppStringAssets.updatedOnLabel(date: updated)
+			updatedLabel = .updatedOnLabel(date: updated)
 		} else {
 			updatedLabel = ""
 		}

@@ -12,9 +12,9 @@ struct SettingsOutlineDefaultsView: View {
 	@State var autoLinking = AppDefaults.shared.autoLinkingEnabled
 	
 	var body: some View {
-		Section(AppStringAssets.outlineDefaultsControlLabel) {
+		Section(String.outlineDefaultsControlLabel) {
 			Toggle(isOn: $autoLinking) {
-				Text(AppStringAssets.autoLinkingControlLabel)
+				Text(String.autoLinkingControlLabel)
 			}
 			.onChange(of: autoLinking) {
 				AppDefaults.shared.autoLinkingEnabled = $0

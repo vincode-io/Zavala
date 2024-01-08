@@ -32,15 +32,15 @@ enum OutlineFontField: Hashable, Equatable, CustomStringConvertible {
 	var displayName: String {
 		switch self {
 		case .title:
-			return AppStringAssets.titleLabel
+			return .titleLabel
 		case .tags:
-			return AppStringAssets.tagsLabel
+			return .tagsLabel
 		case .rowTopic(let level):
-			return AppStringAssets.topicLevelLabel(level: level)
+			return .topicLevelLabel(level: level)
 		case .rowNote(let level):
-			return AppStringAssets.noteLevelLabel(level: level)
+			return .noteLevelLabel(level: level)
 		case .backlinks:
-			return AppStringAssets.backlinksLabel
+			return .backlinksLabel
 		}
 	}
 

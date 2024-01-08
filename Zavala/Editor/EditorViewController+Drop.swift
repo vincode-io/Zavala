@@ -186,7 +186,7 @@ private extension EditorViewController {
 	func localRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], toParent: RowContainer, toChildIndex: Int) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = LocalDropRowCommand(actionName:AppStringAssets.moveControlLabel,
+		let command = LocalDropRowCommand(actionName:.moveControlLabel,
 										  undoManager: undoManager,
 										  delegate: self,
 										  outline: outline,
@@ -324,7 +324,7 @@ private extension EditorViewController {
 	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], afterRow: Row?, prefersEnd: Bool = false) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = RemoteDropRowCommand(actionName: AppStringAssets.copyControlLabel,
+		let command = RemoteDropRowCommand(actionName: .copyControlLabel,
 										   undoManager: undoManager,
 										   delegate: self,
 										   outline: outline,

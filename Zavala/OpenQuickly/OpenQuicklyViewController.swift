@@ -24,7 +24,7 @@ class OpenQuicklyViewController: UITableViewController {
 
 		searchTextField.delegate = self
 
-		searchTextField.placeholder = AppStringAssets.openQuicklySearchPlaceholder
+		searchTextField.placeholder = .openQuicklySearchPlaceholder
 		searchTextField.inlineMode = true
 
 		searchTextField.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in

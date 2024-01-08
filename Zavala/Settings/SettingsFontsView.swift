@@ -19,28 +19,28 @@ struct SettingsFontsView: View {
 			}
 		}
 		.formStyle(.grouped)
-		.navigationTitle(AppStringAssets.fontsControlLabel)
+		.navigationTitle(String.fontsControlLabel)
 		.toolbar {
 			ToolbarItem {
 				Button {
 					restoreAlertIsPresenting = true
 				} label: {
-					Label(AppStringAssets.restoreControlLabel, systemImage: "gobackward")
+					Label(String.restoreControlLabel, systemImage: "gobackward")
 				}
-				.help(AppStringAssets.restoreControlLabel)
+				.help(String.restoreControlLabel)
 				.disabled(AppDefaults.shared.outlineFonts == OutlineFontDefaults.defaults)
 			}
 			ToolbarItem {
 				SettingsFontAddMenu()
 			}
 		}
-		.alert(AppStringAssets.restoreDefaultsMessage, isPresented: $restoreAlertIsPresenting) {
-			Button(AppStringAssets.cancelControlLabel, role: .cancel) {}
-			Button(AppStringAssets.restoreControlLabel, role: .destructive) {
+		.alert(String.restoreDefaultsMessage, isPresented: $restoreAlertIsPresenting) {
+			Button(String.cancelControlLabel, role: .cancel) {}
+			Button(String.restoreControlLabel, role: .destructive) {
 				AppDefaults.shared.outlineFonts = OutlineFontDefaults.defaults
 			}
 		} message: {
-			Text(AppStringAssets.restoreDefaultsInformative)
+			Text(String.restoreDefaultsInformative)
 		}
 	}
 	
@@ -63,7 +63,7 @@ struct SettingsSelectFontButton: View {
 			}
 		}
 		.foregroundStyle(.primary)
-		.help(AppStringAssets.addControlLabel)
+		.help(String.addControlLabel)
 		.popover(item: $presentingFieldConfig) { fieldConfig in
 			SettingsFontConfigView(fieldConfig: fieldConfig)
 		}
@@ -81,16 +81,16 @@ struct SettingsFontAddMenu: View {
 				guard let fieldConfig = AppDefaults.shared.outlineFonts?.nextTopicDefault else { return }
 				presentingFieldConfig = FieldConfig(field: fieldConfig.0, config: fieldConfig.1)
 			} label: {
-				Label(AppStringAssets.addTopicLevelControlLabel, systemImage: "textformat.size.larger")
+				Label(String.addTopicLevelControlLabel, systemImage: "textformat.size.larger")
 			}
 			Button {
 				guard let fieldConfig = AppDefaults.shared.outlineFonts?.nextNoteDefault else { return }
 				presentingFieldConfig = FieldConfig(field: fieldConfig.0, config: fieldConfig.1)
 			} label: {
-				Label(AppStringAssets.addNoteControlLabel, systemImage: "textformat.size.smaller")
+				Label(String.addNoteControlLabel, systemImage: "textformat.size.smaller")
 			}
 		} label: {
-			Label(AppStringAssets.addControlLabel, systemImage: "plus")
+			Label(String.addControlLabel, systemImage: "plus")
 		}
 		.popover(item: $presentingFieldConfig) { fieldConfig in
 			SettingsFontConfigView(fieldConfig: fieldConfig)

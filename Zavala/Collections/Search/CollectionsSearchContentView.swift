@@ -17,7 +17,7 @@ class CollectionsSearchContentView: UIView, UIContentView {
 		super.init(frame: .zero)
 		
 		searchTextField.delegate = self
-		searchTextField.placeholder = AppStringAssets.searchPlaceholder
+		searchTextField.placeholder = .searchPlaceholder
 		searchTextField.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(searchTextField)
 

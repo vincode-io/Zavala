@@ -914,7 +914,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 		var backwardItems = [UIAction]()
 		for (index, pin) in delegate.editorViewControllerGoBackwardStack.enumerated() {
-			backwardItems.append(UIAction(title: pin.document?.title ?? AppStringAssets.noTitleLabel) { [weak self] _ in
+			backwardItems.append(UIAction(title: pin.document?.title ?? .noTitleLabel) { [weak self] _ in
 				guard let self else { return }
 				DispatchQueue.main.async {
 					delegate.goBackward(self, to: index)
@@ -925,7 +925,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 		var forwardItems = [UIAction]()
 		for (index, pin) in delegate.editorViewControllerGoForwardStack.enumerated() {
-			forwardItems.append(UIAction(title: pin.document?.title ?? AppStringAssets.noTitleLabel) { [weak self] _ in
+			forwardItems.append(UIAction(title: pin.document?.title ?? .noTitleLabel) { [weak self] _ in
 				guard let self else { return }
 				DispatchQueue.main.async {
 					delegate.goForward(self, to: index)
@@ -942,25 +942,25 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			moreMenuButton.menu = buildEllipsisMenu()
 
 			if isFocusOutUnavailable {
-				focusButton.accessibilityLabel = AppStringAssets.focusInControlLabel
-				focusButton.setImage(AppImageAssets.focusInactive, for: .normal)
+				focusButton.accessibilityLabel = .focusInControlLabel
+				focusButton.setImage(.focusInactive, for: .normal)
 				if currentRows?.count ?? 0 == 1 {
 					focusButton.isEnabled = true
 				} else {
 					focusButton.isEnabled = false
 				}
 			} else {
-				focusButton.accessibilityLabel = AppStringAssets.focusOutControlLabel
-				focusButton.setImage(AppImageAssets.focusActive, for: .normal)
+				focusButton.accessibilityLabel = .focusOutControlLabel
+				focusButton.setImage(.focusActive, for: .normal)
 				focusButton.isEnabled = true
 			}
 			
 			if isFilterOn {
-				filterButton.accessibilityLabel = AppStringAssets.turnFilterOffControlLabel
-				filterButton.setImage(AppImageAssets.filterActive, for: .normal)
+				filterButton.accessibilityLabel = .turnFilterOffControlLabel
+				filterButton.setImage(.filterActive, for: .normal)
 			} else {
-				filterButton.accessibilityLabel = AppStringAssets.turnFilterOnControlLabel
-				filterButton.setImage(AppImageAssets.filterInactive, for: .normal)
+				filterButton.accessibilityLabel = .turnFilterOnControlLabel
+				filterButton.setImage(.filterInactive, for: .normal)
 			}
 
 			filterButton.menu = buildFilterMenu()
@@ -997,16 +997,16 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			// or it doesn't.
 			if !isCreateRowNotesUnavailable {
 				noteButton.isEnabled = true
-				noteButton.setImage(AppImageAssets.noteAdd, for: .normal)
-				noteButton.accessibilityLabel = AppStringAssets.addNoteControlLabel
+				noteButton.setImage(.noteAdd, for: .normal)
+				noteButton.accessibilityLabel = .addNoteControlLabel
 			} else if !isDeleteRowNotesUnavailable {
 				noteButton.isEnabled = true
-				noteButton.setImage(AppImageAssets.noteDelete, for: .normal)
-				noteButton.accessibilityLabel = AppStringAssets.deleteNoteControlLabel
+				noteButton.setImage(.noteDelete, for: .normal)
+				noteButton.accessibilityLabel = .deleteNoteControlLabel
 			} else {
 				noteButton.isEnabled = false
-				noteButton.setImage(AppImageAssets.noteAdd, for: .normal)
-				noteButton.accessibilityLabel = AppStringAssets.addNoteControlLabel
+				noteButton.setImage(.noteAdd, for: .normal)
+				noteButton.accessibilityLabel = .addNoteControlLabel
 			}
 			
 			insertNewlineButton.isEnabled = !isInsertNewlineUnavailable
@@ -1127,24 +1127,24 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return
 		}
 		
-		let alertController = UIAlertController(title: AppStringAssets.deleteCompletedRowsTitle,
-												message: AppStringAssets.deleteCompletedRowsMessage,
+		let alertController = UIAlertController(title: .deleteCompletedRowsTitle,
+												message: .deleteCompletedRowsMessage,
 												preferredStyle: .alert)
 		
-		let alwaysDeleteCompletedAction = UIAlertAction(title: AppStringAssets.deleteAlwaysControlLabel, style: .destructive) { [weak self] action in
+		let alwaysDeleteCompletedAction = UIAlertAction(title: .deleteAlwaysControlLabel, style: .destructive) { [weak self] action in
 			AppDefaults.shared.confirmDeleteCompletedRows = false
 			self?.deleteRows(completedRows)
 		}
 		alertController.addAction(alwaysDeleteCompletedAction)
 
-		let deleteCompletedAction = UIAlertAction(title: AppStringAssets.deleteOnceControlLabel, style: .destructive) { [weak self] action in
+		let deleteCompletedAction = UIAlertAction(title: .deleteOnceControlLabel, style: .destructive) { [weak self] action in
 			self?.deleteRows(completedRows)
 		}
 		
 		alertController.addAction(deleteCompletedAction)
 		alertController.preferredAction = deleteCompletedAction
 
-		let cancelAction = UIAlertAction(title: AppStringAssets.cancelControlLabel, style: .cancel)
+		let cancelAction = UIAlertAction(title: .cancelControlLabel, style: .cancel)
 		alertController.addAction(cancelAction)
 
 		present(alertController, animated: true)
@@ -1429,11 +1429,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 								completion(true)
 							}
 							
-							let action = UIContextualAction(style: .normal, title: AppStringAssets.uncompleteControlLabel, handler: actionHandler)
+							let action = UIContextualAction(style: .normal, title: .uncompleteControlLabel, handler: actionHandler)
 							if self.traitCollection.userInterfaceIdiom == .mac {
-								action.image = AppImageAssets.uncompleteRow.symbolSizedForCatalyst(color: .white)
+								action.image = .uncompleteRow.symbolSizedForCatalyst(color: .white)
 							} else {
-								action.image = AppImageAssets.uncompleteRow
+								action.image = .uncompleteRow
 							}
 							action.backgroundColor = UIColor.accentColor
 							
@@ -1444,11 +1444,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 								completion(true)
 							}
 							
-							let action = UIContextualAction(style: .normal, title: AppStringAssets.completeControlLabel, handler: actionHandler)
+							let action = UIContextualAction(style: .normal, title: .completeControlLabel, handler: actionHandler)
 							if self.traitCollection.userInterfaceIdiom == .mac {
-								action.image = AppImageAssets.completeRow.symbolSizedForCatalyst(color: .white)
+								action.image = .completeRow.symbolSizedForCatalyst(color: .white)
 							} else {
-								action.image = AppImageAssets.completeRow
+								action.image = .completeRow
 							}
 							action.backgroundColor = UIColor.accentColor
 
@@ -1464,11 +1464,11 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 							completion(true)
 						}
 						
-						let action = UIContextualAction(style: .destructive, title: AppStringAssets.deleteControlLabel, handler: actionHandler)
+						let action = UIContextualAction(style: .destructive, title: .deleteControlLabel, handler: actionHandler)
 						if self.traitCollection.userInterfaceIdiom == .mac {
-							action.image = AppImageAssets.delete.symbolSizedForCatalyst(color: .white)
+							action.image = .delete.symbolSizedForCatalyst(color: .white)
 						} else {
-							action.image = AppImageAssets.delete
+							action.image = .delete
 						}
 
 						return UISwipeActionsConfiguration(actions: [action])
@@ -1958,7 +1958,7 @@ extension EditorViewController: ImageTransitionDelegate {
 		guard let splitView = splitViewController?.view else { return }
 		let convertedFrame = splitView.convert(frame, to: collectionView)
 		imageBlocker = UIView(frame: convertedFrame)
-		imageBlocker!.backgroundColor = AppImageAssets.fullScreenBackgroundColor
+		imageBlocker!.backgroundColor = .fullScreenBackgroundColor
 		collectionView.addSubview(imageBlocker!)
 	}
 	
@@ -1975,42 +1975,42 @@ private extension EditorViewController {
 	
 	func configureButtonBars() {
 		undoMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
-		undoButton = undoMenuButtonGroup.addButton(label: AppStringAssets.undoControlLabel, image: AppImageAssets.undo, selector: "undo")
-		cutButton = undoMenuButtonGroup.addButton(label: AppStringAssets.cutControlLabel, image: AppImageAssets.cut, selector: "cut:")
-		copyButton = undoMenuButtonGroup.addButton(label: AppStringAssets.copyControlLabel, image: AppImageAssets.copy, selector: "copy:")
-		pasteButton = undoMenuButtonGroup.addButton(label: AppStringAssets.pasteControlLabel, image: AppImageAssets.paste, selector: "paste:")
-		redoButton = undoMenuButtonGroup.addButton(label: AppStringAssets.redoControlLabel, image: AppImageAssets.redo, selector: "redo")
+		undoButton = undoMenuButtonGroup.addButton(label: .undoControlLabel, image: .undo, selector: "undo")
+		cutButton = undoMenuButtonGroup.addButton(label: .cutControlLabel, image: .cut, selector: "cut:")
+		copyButton = undoMenuButtonGroup.addButton(label: .copyControlLabel, image: .copy, selector: "copy:")
+		pasteButton = undoMenuButtonGroup.addButton(label: .pasteControlLabel, image: .paste, selector: "paste:")
+		redoButton = undoMenuButtonGroup.addButton(label: .redoControlLabel, image: .redo, selector: "redo")
 
 		navButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
-		goBackwardButton = navButtonGroup.addButton(label: AppStringAssets.goBackwardControlLabel, image: AppImageAssets.goBackward, selector: "goBackwardOne")
-		goForwardButton = navButtonGroup.addButton(label: AppStringAssets.goForwardControlLabel, image: AppImageAssets.goForward, selector: "goForwardOne")
-		undoMenuButton = navButtonGroup.addButton(label: AppStringAssets.undoMenuControlLabel, image: AppImageAssets.undoMenu, selector: "showUndoMenu")
+		goBackwardButton = navButtonGroup.addButton(label: .goBackwardControlLabel, image: .goBackward, selector: "goBackwardOne")
+		goForwardButton = navButtonGroup.addButton(label: .goForwardControlLabel, image: .goForward, selector: "goForwardOne")
+		undoMenuButton = navButtonGroup.addButton(label: .undoMenuControlLabel, image: .undoMenu, selector: "showUndoMenu")
 		undoMenuButton.popoverButtonGroup = undoMenuButtonGroup
-		moreMenuButton = navButtonGroup.addButton(label: AppStringAssets.moreControlLabel, image: AppImageAssets.ellipsis, showMenu: true)
-		focusButton = navButtonGroup.addButton(label: AppStringAssets.focusInControlLabel, image: AppImageAssets.focusInactive, selector: "toggleFocus")
-		filterButton = navButtonGroup.addButton(label: AppStringAssets.filterControlLabel, image: AppImageAssets.filterInactive, showMenu: true)
+		moreMenuButton = navButtonGroup.addButton(label: .moreControlLabel, image: .ellipsis, showMenu: true)
+		focusButton = navButtonGroup.addButton(label: .focusInControlLabel, image: .focusInactive, selector: "toggleFocus")
+		filterButton = navButtonGroup.addButton(label: .filterControlLabel, image: .filterInactive, showMenu: true)
 		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
 		leftToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .left)
-		moveLeftButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveLeftControlLabel, image: AppImageAssets.moveLeft, selector: "moveCurrentRowsLeft")
-		moveRightButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveRightControlLabel, image: AppImageAssets.moveRight, selector: "moveCurrentRowsRight")
-		moveUpButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveUpControlLabel, image: AppImageAssets.moveUp, selector: "moveCurrentRowsUp")
-		moveDownButton = leftToolbarButtonGroup.addButton(label: AppStringAssets.moveDownControlLabel, image: AppImageAssets.moveDown, selector: "moveCurrentRowsDown")
+		moveLeftButton = leftToolbarButtonGroup.addButton(label: .moveLeftControlLabel, image: .moveLeft, selector: "moveCurrentRowsLeft")
+		moveRightButton = leftToolbarButtonGroup.addButton(label: .moveRightControlLabel, image: .moveRight, selector: "moveCurrentRowsRight")
+		moveUpButton = leftToolbarButtonGroup.addButton(label: .moveUpControlLabel, image: .moveUp, selector: "moveCurrentRowsUp")
+		moveDownButton = leftToolbarButtonGroup.addButton(label: .moveDownControlLabel, image: .moveDown, selector: "moveCurrentRowsDown")
 		let moveButtonsBarButtonItem = leftToolbarButtonGroup.buildBarButtonItem()
 
 		formatMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
-		linkButton = formatMenuButtonGroup.addButton(label: AppStringAssets.linkControlLabel, image: AppImageAssets.link, selector: "link")
-		let boldImage = AppImageAssets.bold.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
-		boldButton = formatMenuButtonGroup.addButton(label: AppStringAssets.boldControlLabel, image: boldImage, selector: "outlineToggleBoldface:")
-		let italicImage = AppImageAssets.italic.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
-		italicButton = formatMenuButtonGroup.addButton(label: AppStringAssets.italicControlLabel, image: italicImage, selector: "outlineToggleItalics:")
+		linkButton = formatMenuButtonGroup.addButton(label: .linkControlLabel, image: .link, selector: "link")
+		let boldImage = UIImage.bold.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
+		boldButton = formatMenuButtonGroup.addButton(label: .boldControlLabel, image: boldImage, selector: "outlineToggleBoldface:")
+		let italicImage = UIImage.italic.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
+		italicButton = formatMenuButtonGroup.addButton(label: .italicControlLabel, image: italicImage, selector: "outlineToggleItalics:")
 
 		rightToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
-		insertImageButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.insertImageControlLabel, image: AppImageAssets.insertImage, selector: "insertImage")
-		formatMenuButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.formatControlLabel, image: AppImageAssets.format, selector: "showFormatMenu")
+		insertImageButton = rightToolbarButtonGroup.addButton(label: .insertImageControlLabel, image: .insertImage, selector: "insertImage")
+		formatMenuButton = rightToolbarButtonGroup.addButton(label: .formatControlLabel, image: .format, selector: "showFormatMenu")
 		formatMenuButton.popoverButtonGroup = formatMenuButtonGroup
-		noteButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.addNoteControlLabel, image: AppImageAssets.noteAdd, selector: "createOrDeleteNotes")
-		insertNewlineButton = rightToolbarButtonGroup.addButton(label: AppStringAssets.newOutlineControlLabel, image: AppImageAssets.newline, selector: "insertNewline")
+		noteButton = rightToolbarButtonGroup.addButton(label: .addNoteControlLabel, image: .noteAdd, selector: "createOrDeleteNotes")
+		insertNewlineButton = rightToolbarButtonGroup.addButton(label: .newOutlineControlLabel, image: .newline, selector: "insertNewline")
 		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
 
 		if traitCollection.userInterfaceIdiom != .mac {
@@ -2020,8 +2020,8 @@ private extension EditorViewController {
 			if traitCollection.userInterfaceIdiom == .pad {
 				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
 			} else {
-				let hideKeyboardBarButtonItem = UIBarButtonItem(image: AppImageAssets.hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
-				hideKeyboardBarButtonItem.accessibilityLabel = AppStringAssets.hideKeyboardControlLabel
+				let hideKeyboardBarButtonItem = UIBarButtonItem(image: .hideKeyboard, style: .plain, target: self, action: #selector(hideKeyboard))
+				hideKeyboardBarButtonItem.accessibilityLabel = .hideKeyboardControlLabel
 				keyboardToolBar.items = [moveButtonsBarButtonItem, flexibleSpace, hideKeyboardBarButtonItem, flexibleSpace, insertButtonsBarButtonItem]
 			}
 			
@@ -2053,22 +2053,22 @@ private extension EditorViewController {
 	func buildEllipsisMenu() -> UIMenu {
 		var outlineActions = [UIMenuElement]()
 
-		let getInfoAction = UIAction(title: AppStringAssets.getInfoControlLabel, image: AppImageAssets.getInfo) { [weak self] _ in
+		let getInfoAction = UIAction(title: .getInfoControlLabel, image: .getInfo) { [weak self] _ in
 			self?.showOutlineGetInfo()
 		}
 		outlineActions.append(getInfoAction)
 
-		let findAction = UIAction(title: AppStringAssets.findEllipsisControlLabel, image: AppImageAssets.find) { [weak self] _ in
+		let findAction = UIAction(title: .findEllipsisControlLabel, image: .find) { [weak self] _ in
 			self?.beginInDocumentSearch()
 		}
 		outlineActions.append(findAction)
 
-		let expandAllInOutlineAction = UIAction(title: AppStringAssets.expandAllInOutlineControlLabel, image: AppImageAssets.expandAll) { [weak self] _ in
+		let expandAllInOutlineAction = UIAction(title: .expandAllInOutlineControlLabel, image: .expandAll) { [weak self] _ in
 			self?.expandAllInOutline()
 		}
 		outlineActions.append(expandAllInOutlineAction)
 		
-		let collapseAllInOutlineAction = UIAction(title: AppStringAssets.collapseAllInOutlineControlLabel, image: AppImageAssets.collapseAll) { [weak self] _ in
+		let collapseAllInOutlineAction = UIAction(title: .collapseAllInOutlineControlLabel, image: .collapseAll) { [weak self] _ in
 			self?.collapseAllInOutline()
 		}
 		outlineActions.append(collapseAllInOutlineAction)
@@ -2076,50 +2076,50 @@ private extension EditorViewController {
 		var shareActions = [UIMenuElement]()
 
 		if !isCollaborateUnavailable {
-			let collaborateAction = UIAction(title: AppStringAssets.collaborateEllipsisControlLabel, image: AppImageAssets.statelessCollaborate) { [weak self] _ in
+			let collaborateAction = UIAction(title: .collaborateEllipsisControlLabel, image: .statelessCollaborate) { [weak self] _ in
 				self?.collaborate(self?.moreMenuButton)
 			}
 			shareActions.append(collaborateAction)
 		}
 
-		let shareAction = UIAction(title: AppStringAssets.shareEllipsisControlLabel, image: AppImageAssets.share) { [weak self] _ in
+		let shareAction = UIAction(title: .shareEllipsisControlLabel, image: .share) { [weak self] _ in
 			self?.share(self?.moreMenuButton)
 		}
 		shareActions.append(shareAction)
 
-		let printDocAction = UIAction(title: AppStringAssets.printDocEllipsisControlLabel) { [weak self] _ in
+		let printDocAction = UIAction(title: .printDocEllipsisControlLabel) { [weak self] _ in
 			self?.printDoc()
 		}
-		let printListAction = UIAction(title: AppStringAssets.printListControlEllipsisLabel) { [weak self] _ in
+		let printListAction = UIAction(title: .printListControlEllipsisLabel) { [weak self] _ in
 			self?.printList()
 		}
-		shareActions.append(UIMenu(title: AppStringAssets.printControlLabel, image: AppImageAssets.printDoc, children: [printDocAction, printListAction]))
+		shareActions.append(UIMenu(title: .printControlLabel, image: .printDoc, children: [printDocAction, printListAction]))
 
-		let exportPDFDoc = UIAction(title: AppStringAssets.exportPDFDocEllipsisControlLabel) { [weak self] _ in
+		let exportPDFDoc = UIAction(title: .exportPDFDocEllipsisControlLabel) { [weak self] _ in
 			guard let self = self, let outline = self.outline else { return }
 			self.delegate?.exportPDFDoc(self, outline: outline)
 		}
-		let exportPDFList = UIAction(title: AppStringAssets.exportPDFListEllipsisControlLabel) { [weak self] _ in
+		let exportPDFList = UIAction(title: .exportPDFListEllipsisControlLabel) { [weak self] _ in
 			guard let self = self, let outline = self.outline else { return }
 			self.delegate?.exportPDFList(self, outline: outline)
 		}
-		let exportMarkdownDoc = UIAction(title: AppStringAssets.exportMarkdownDocEllipsisControlLabel) { [weak self] _ in
+		let exportMarkdownDoc = UIAction(title: .exportMarkdownDocEllipsisControlLabel) { [weak self] _ in
 			guard let self = self, let outline = self.outline else { return }
 			self.delegate?.exportMarkdownDoc(self, outline: outline)
 		}
-		let exportMarkdownList = UIAction(title: AppStringAssets.exportMarkdownListEllipsisControlLabel) { [weak self] _ in
+		let exportMarkdownList = UIAction(title: .exportMarkdownListEllipsisControlLabel) { [weak self] _ in
 			guard let self = self, let outline = self.outline else { return }
 			self.delegate?.exportMarkdownList(self, outline: outline)
 		}
-		let exportOPML = UIAction(title: AppStringAssets.exportOPMLEllipsisControlLabel) { [weak self] _ in
+		let exportOPML = UIAction(title: .exportOPMLEllipsisControlLabel) { [weak self] _ in
 			guard let self = self, let outline = self.outline else { return }
 			self.delegate?.exportOPML(self, outline: outline)
 		}
 		let exportActions = [exportPDFDoc, exportPDFList, exportMarkdownDoc, exportMarkdownList, exportOPML]
-		shareActions.append(UIMenu(title: AppStringAssets.exportControlLabel, image: AppImageAssets.export, children: exportActions))
+		shareActions.append(UIMenu(title: .exportControlLabel, image: .export, children: exportActions))
 
-		let deleteCompletedRowsAction = UIAction(title: AppStringAssets.deleteCompletedRowsControlLabel,
-												 image: AppImageAssets.delete,
+		let deleteCompletedRowsAction = UIAction(title: .deleteCompletedRowsControlLabel,
+												 image: .delete,
 												 attributes: .destructive) { [weak self] _ in
 			self?.deleteCompletedRows()
 		}
@@ -2134,17 +2134,17 @@ private extension EditorViewController {
 		let turnFilterOnAction = UIAction() { [weak self] _ in
 		   self?.toggleFilterOn()
 		}
-		turnFilterOnAction.title = isFilterOn ? AppStringAssets.turnFilterOffControlLabel : AppStringAssets.turnFilterOnControlLabel
+		turnFilterOnAction.title = isFilterOn ? .turnFilterOffControlLabel : .turnFilterOnControlLabel
 		
 		let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
 		
-		let filterCompletedAction = UIAction(title: AppStringAssets.filterCompletedControlLabel) { [weak self] _ in
+		let filterCompletedAction = UIAction(title: .filterCompletedControlLabel) { [weak self] _ in
 			self?.toggleCompletedFilter()
 		}
 		filterCompletedAction.state = isCompletedFiltered ? .on : .off
 		filterCompletedAction.attributes = isFilterOn ? [] : .disabled
 
-		let filterNotesAction = UIAction(title: AppStringAssets.filterNotesControlLabel) { [weak self] _ in
+		let filterNotesAction = UIAction(title: .filterNotesControlLabel) { [weak self] _ in
 		   self?.toggleNotesFilter()
 		}
 		filterNotesAction.state = isNotesFiltered ? .on : .off
@@ -2536,7 +2536,7 @@ private extension EditorViewController {
 	}
 	
 	func cutAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.cutControlLabel, image: AppImageAssets.cut) { [weak self] action in
+		return UIAction(title: .cutControlLabel, image: .cut) { [weak self] action in
 			guard let self else { return }
 			self.cutRows(rows)
 			self.delegate?.validateToolbar(self)
@@ -2544,13 +2544,13 @@ private extension EditorViewController {
 	}
 
 	func copyAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.copyControlLabel, image: AppImageAssets.copy) { [weak self] action in
+		return UIAction(title: .copyControlLabel, image: .copy) { [weak self] action in
 			self?.copyRows(rows)
 		}
 	}
 
 	func pasteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.pasteControlLabel, image: AppImageAssets.paste) { [weak self] action in
+		return UIAction(title: .pasteControlLabel, image: .paste) { [weak self] action in
 			guard let self else { return }
 			self.pasteRows(afterRows: rows)
 			self.delegate?.validateToolbar(self)
@@ -2558,7 +2558,7 @@ private extension EditorViewController {
 	}
 
 	func addAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.addRowControlLabel, image: AppImageAssets.add) { [weak self] action in
+		return UIAction(title: .addRowControlLabel, image: .add) { [weak self] action in
 			// Have to let the text field get the first responder by getting it away from this
 			// action which appears to be holding on to it.
 			DispatchQueue.main.async {
@@ -2568,25 +2568,25 @@ private extension EditorViewController {
 	}
 
 	func duplicateAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.duplicateControlLabel, image: AppImageAssets.duplicate) { [weak self] action in
+		return UIAction(title: .duplicateControlLabel, image: .duplicate) { [weak self] action in
 			self?.duplicateRows(rows)
 		}
 	}
 
 	func expandAllAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.expandAllControlLabel, image: AppImageAssets.expandAll) { [weak self] action in
+		return UIAction(title: .expandAllControlLabel, image: .expandAll) { [weak self] action in
 			self?.expandAll(containers: rows)
 		}
 	}
 
 	func collapseAllAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.collapseAllControlLabel, image: AppImageAssets.collapseAll) { [weak self] action in
+		return UIAction(title: .collapseAllControlLabel, image: .collapseAll) { [weak self] action in
 			self?.collapseAll(containers: rows)
 		}
 	}
 
 	func focusInAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.focusInControlLabel, image: AppImageAssets.focusActive) { [weak self] action in
+		return UIAction(title: .focusInControlLabel, image: .focusActive) { [weak self] action in
 			guard let self else { return }
 			self.outline?.focusIn(rows.first!)
 			self.delegate?.validateToolbar(self)
@@ -2594,32 +2594,32 @@ private extension EditorViewController {
 	}
 	
 	func completeAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.completeControlLabel, image: AppImageAssets.completeRow) { [weak self] action in
+		return UIAction(title: .completeControlLabel, image: .completeRow) { [weak self] action in
 			self?.completeRows(rows)
 		}
 	}
 	
 	func uncompleteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.uncompleteControlLabel, image: AppImageAssets.uncompleteRow) { [weak self] action in
+		return UIAction(title: .uncompleteControlLabel, image: .uncompleteRow) { [weak self] action in
 			self?.uncompleteRows(rows)
 		}
 	}
 	
 	func createNoteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.addNoteControlLabel, image: AppImageAssets.noteAdd) { [weak self] action in
+		return UIAction(title: .addNoteControlLabel, image: .noteAdd) { [weak self] action in
 			self?.createRowNotes(rows)
 		}
 	}
 
 	func deleteNoteAction(rows: [Row]) -> UIAction {
-		return UIAction(title: AppStringAssets.deleteNoteControlLabel, image: AppImageAssets.delete, attributes: .destructive) { [weak self] action in
+		return UIAction(title: .deleteNoteControlLabel, image: .delete, attributes: .destructive) { [weak self] action in
 			self?.deleteRowNotes(rows)
 		}
 	}
 
 	func deleteAction(rows: [Row]) -> UIAction {
-		let title = rows.count == 1 ? AppStringAssets.deleteRowControlLabel : AppStringAssets.deleteRowsControlLabel
-		return UIAction(title: title, image: AppImageAssets.delete, attributes: .destructive) { [weak self] action in
+		let title = rows.count == 1 ? String.deleteRowControlLabel : String.deleteRowsControlLabel
+		return UIAction(title: title, image: .delete, attributes: .destructive) { [weak self] action in
 			guard let self else { return }
 			self.deleteRows(rows)
 			self.delegate?.validateToolbar(self)
@@ -2757,7 +2757,7 @@ private extension EditorViewController {
 	func createTag(name: String) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = CreateTagCommand(actionName: AppStringAssets.addTagControlLabel,
+		let command = CreateTagCommand(actionName: .addTagControlLabel,
 									   undoManager: undoManager,
 									   delegate: self,
 									   outline: outline,
@@ -2770,7 +2770,7 @@ private extension EditorViewController {
 	func deleteTag(name: String) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = DeleteTagCommand(actionName: AppStringAssets.removeTagControlLabel,
+		let command = DeleteTagCommand(actionName: .removeTagControlLabel,
 									   undoManager: undoManager,
 									   delegate: self,
 									   outline: outline,
@@ -2782,7 +2782,7 @@ private extension EditorViewController {
 	func expand(rows: [Row]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = ExpandCommand(actionName: AppStringAssets.expandControlLabel,
+		let command = ExpandCommand(actionName: .expandControlLabel,
 									undoManager: undoManager,
 									delegate: self,
 									outline: outline,
@@ -2796,7 +2796,7 @@ private extension EditorViewController {
 
 		let currentRow = currentTextView?.row
 		
-		let command = CollapseCommand(actionName: AppStringAssets.collapseControlLabel,
+		let command = CollapseCommand(actionName: .collapseControlLabel,
 									  undoManager: undoManager,
 									  delegate: self,
 									  outline: outline,
@@ -2818,7 +2818,7 @@ private extension EditorViewController {
 	func expandAll(containers: [RowContainer]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = ExpandAllCommand(actionName: AppStringAssets.expandAllControlLabel,
+		let command = ExpandAllCommand(actionName: .expandAllControlLabel,
 									   undoManager: undoManager,
 									   delegate: self,
 									   outline: outline,
@@ -2830,7 +2830,7 @@ private extension EditorViewController {
 	func collapseAll(containers: [RowContainer]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = CollapseAllCommand(actionName: AppStringAssets.collapseAllControlLabel,
+		let command = CollapseAllCommand(actionName: .collapseAllControlLabel,
 										 undoManager: undoManager,
 										 delegate: self,
 										 outline: outline,
@@ -2842,7 +2842,7 @@ private extension EditorViewController {
 	func textChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = TextChangedCommand(actionName: AppStringAssets.typingControlLabel,
+		let command = TextChangedCommand(actionName: .typingControlLabel,
 										 undoManager: undoManager,
 										 delegate: self,
 										 outline: outline,
@@ -2857,7 +2857,7 @@ private extension EditorViewController {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		copyRows(rows)
 
-		let command = CutRowCommand(actionName: AppStringAssets.cutControlLabel,
+		let command = CutRowCommand(actionName: .cutControlLabel,
 									undoManager: undoManager,
 									delegate: self,
 									outline: outline,
@@ -2927,7 +2927,7 @@ private extension EditorViewController {
 			}
 
 			group.notify(queue: DispatchQueue.main) {
-				let command = PasteRowCommand(actionName: AppStringAssets.pasteControlLabel,
+				let command = PasteRowCommand(actionName: .pasteControlLabel,
 											  undoManager: undoManager,
 											  delegate: self,
 											  outline: outline,
@@ -2965,7 +2965,7 @@ private extension EditorViewController {
 					rowGroups.append(RowGroup(row))
 				}
 				
-				let command = PasteRowCommand(actionName: AppStringAssets.pasteControlLabel,
+				let command = PasteRowCommand(actionName: .pasteControlLabel,
 											  undoManager: undoManager,
 											  delegate: self,
 											  outline: outline,
@@ -2981,7 +2981,7 @@ private extension EditorViewController {
 	func deleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = DeleteRowCommand(actionName: AppStringAssets.deleteRowsControlLabel,
+		let command = DeleteRowCommand(actionName: .deleteRowsControlLabel,
 									   undoManager: undoManager,
 									   delegate: self,
 									   outline: outline,
@@ -3004,7 +3004,7 @@ private extension EditorViewController {
 	func createRow(beforeRows: [Row]) {
 		guard let undoManager = undoManager, let outline = outline, let beforeRow = beforeRows.sortedByDisplayOrder().first else { return }
 
-		let command = CreateRowBeforeCommand(actionName: AppStringAssets.addRowControlLabel,
+		let command = CreateRowBeforeCommand(actionName: .addRowControlLabel,
 											 undoManager: undoManager,
 											 delegate: self,
 											 outline: outline,
@@ -3026,7 +3026,7 @@ private extension EditorViewController {
 		
 		let afterRow = afterRows?.sortedByDisplayOrder().last
 		
-		let command = CreateRowAfterCommand(actionName: AppStringAssets.addRowAfterControlLabel,
+		let command = CreateRowAfterCommand(actionName: .addRowAfterControlLabel,
 											undoManager: undoManager,
 											delegate: self,
 											outline: outline,
@@ -3056,7 +3056,7 @@ private extension EditorViewController {
 		
 		guard let afterRow = afterRows?.sortedByDisplayOrder().last else { return }
 		
-		let command = CreateRowInsideCommand(actionName: AppStringAssets.addRowInsideControlLabel,
+		let command = CreateRowInsideCommand(actionName: .addRowInsideControlLabel,
 											 undoManager: undoManager,
 											 delegate: self,
 											 outline: outline,
@@ -3082,7 +3082,7 @@ private extension EditorViewController {
 		
 		guard let afterRow = afterRows?.sortedByDisplayOrder().last else { return }
 		
-		let command = CreateRowOutsideCommand(actionName: AppStringAssets.addRowOutsideControlLabel,
+		let command = CreateRowOutsideCommand(actionName: .addRowOutsideControlLabel,
 											  undoManager: undoManager,
 											  delegate: self,
 											  outline: outline,
@@ -3104,7 +3104,7 @@ private extension EditorViewController {
 	func duplicateRows(_ rows: [Row]) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = DuplicateRowCommand(actionName: AppStringAssets.duplicateControlLabel,
+		let command = DuplicateRowCommand(actionName: .duplicateControlLabel,
 										  undoManager: undoManager,
 										  delegate: self,
 										  outline: outline,
@@ -3116,7 +3116,7 @@ private extension EditorViewController {
 	func moveRowsLeft(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = MoveRowLeftCommand(actionName: AppStringAssets.moveLeftControlLabel,
+		let command = MoveRowLeftCommand(actionName: .moveLeftControlLabel,
 										 undoManager: undoManager,
 										 delegate: self,
 										 outline: outline,
@@ -3129,7 +3129,7 @@ private extension EditorViewController {
 	func moveRowsRight(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = MoveRowRightCommand(actionName: AppStringAssets.moveRightControlLabel,
+		let command = MoveRowRightCommand(actionName: .moveRightControlLabel,
 										  undoManager: undoManager,
 										  delegate: self,
 										  outline: outline,
@@ -3142,7 +3142,7 @@ private extension EditorViewController {
 	func moveRowsUp(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = MoveRowUpCommand(actionName: AppStringAssets.moveUpControlLabel,
+		let command = MoveRowUpCommand(actionName: .moveUpControlLabel,
 									   undoManager: undoManager,
 									   delegate: self,
 									   outline: outline,
@@ -3156,7 +3156,7 @@ private extension EditorViewController {
 	func moveRowsDown(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = MoveRowDownCommand(actionName: AppStringAssets.moveDownControlLabel,
+		let command = MoveRowDownCommand(actionName: .moveDownControlLabel,
 										 undoManager: undoManager,
 										 delegate: self,
 										 outline: outline,
@@ -3170,7 +3170,7 @@ private extension EditorViewController {
 	func splitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 
-		let command = SplitRowCommand(actionName: AppStringAssets.splitRowControlLabel,
+		let command = SplitRowCommand(actionName: .splitRowControlLabel,
 									  undoManager: undoManager,
 									  delegate: self,
 									  outline: outline,
@@ -3193,7 +3193,7 @@ private extension EditorViewController {
 		
 		let cursorIsInCompletingRows = rows.contains(where: { $0 == currentTextView?.row })
 		
-		let command = CompleteCommand(actionName: AppStringAssets.completeControlLabel,
+		let command = CompleteCommand(actionName: .completeControlLabel,
 									  undoManager: undoManager,
 									  delegate: self,
 									  outline: outline,
@@ -3214,7 +3214,7 @@ private extension EditorViewController {
 	func uncompleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = UncompleteCommand(actionName: AppStringAssets.uncompleteControlLabel,
+		let command = UncompleteCommand(actionName: .uncompleteControlLabel,
 										undoManager: undoManager,
 										delegate: self,
 										outline: outline,
@@ -3227,7 +3227,7 @@ private extension EditorViewController {
 	func createRowNotes(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = CreateNoteCommand(actionName: AppStringAssets.addNoteControlLabel,
+		let command = CreateNoteCommand(actionName: .addNoteControlLabel,
 										undoManager: undoManager,
 										delegate: self,
 										outline: outline,
@@ -3257,7 +3257,7 @@ private extension EditorViewController {
 		
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
-		let command = DeleteNoteCommand(actionName: AppStringAssets.deleteNoteControlLabel,
+		let command = DeleteNoteCommand(actionName: .deleteNoteControlLabel,
 										undoManager: undoManager,
 										delegate: self,
 										outline: outline,
@@ -3312,7 +3312,7 @@ private extension EditorViewController {
 			return lhs.string.caseInsensitiveCompare(rhs.string) == .orderedAscending
 		}
 		
-		let refString = references.count == 1 ? AppStringAssets.referenceLabel : AppStringAssets.referencesLabel
+		let refString = references.count == 1 ? String.referenceLabel : String.referencesLabel
 		let result = NSMutableAttributedString(string: "\(refString)")
 		result.append(references[0])
 		

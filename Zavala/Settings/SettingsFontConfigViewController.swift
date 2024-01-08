@@ -32,7 +32,7 @@ class SettingsFontConfigViewController: UITableViewController {
 		if let field,
 			let outlineFonts = AppDefaults.shared.outlineFonts,
 			!outlineFonts.rowFontConfigs.keys.contains(field) {
-			saveBarButtonItem.title = AppStringAssets.addControlLabel
+			saveBarButtonItem.title = .addControlLabel
 		}
 		
 		if UIDevice.current.userInterfaceIdiom == .mac {
@@ -43,13 +43,13 @@ class SettingsFontConfigViewController: UITableViewController {
 			saveBarButtonItem.isHidden = true
 			
 			cancelButton = UIButton(type: .system)
-			cancelButton.setTitle(AppStringAssets.cancelControlLabel, for: .normal)
+			cancelButton.setTitle(.cancelControlLabel, for: .normal)
 			cancelButton.isAccessibilityElement = true
 			cancelButton.addTarget(self, action: #selector(cancel(_:)), for: .touchUpInside)
 			cancelButton.role = .cancel
 
 			saveButton = UIButton(type: .system)
-			saveButton.setTitle(AppStringAssets.saveControlLabel, for: .normal)
+			saveButton.setTitle(.saveControlLabel, for: .normal)
 			saveButton.isAccessibilityElement = true
 			saveButton.addTarget(self, action: #selector(save(_:)), for: .touchUpInside)
 			saveButton.role = .primary

@@ -55,7 +55,7 @@ class EditorTagInputTextField: SearchTextField {
 		self.textDropDelegate = Self.dropDelegate
 		self.delegate = self
 		
-		self.placeholder = AppStringAssets.tagDataEntryPlaceholder
+		self.placeholder = .tagDataEntryPlaceholder
 		self.borderStyle = .none
 		self.autocorrectionType = .no
 		self.tableXOffset = -8

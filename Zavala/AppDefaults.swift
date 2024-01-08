@@ -15,11 +15,11 @@ enum DefaultsSize: Int, CustomStringConvertible, CaseIterable {
 	var description: String {
 		switch self {
 		case .small:
-			return AppStringAssets.smallControlLabel
+			return .smallControlLabel
 		case .medium:
-			return AppStringAssets.mediumControlLabel
+			return .mediumControlLabel
 		case .large:
-			return AppStringAssets.largeControlLabel
+			return .largeControlLabel
 		}
 	}
 }
@@ -32,11 +32,11 @@ enum UserInterfaceColorPalette: Int, CustomStringConvertible, CaseIterable {
 	var description: String {
 		switch self {
 		case .automatic:
-			return AppStringAssets.automaticControlLabel
+			return .automaticControlLabel
 		case .light:
-			return AppStringAssets.lightControlLabel
+			return .lightControlLabel
 		case .dark:
-			return AppStringAssets.darkControlLabel
+			return .darkControlLabel
 		}
 	}
 	

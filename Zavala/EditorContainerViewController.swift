@@ -128,14 +128,14 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 			return
 		}
 		
-		let deleteAction = UIAlertAction(title: AppStringAssets.deleteControlLabel, style: .destructive) { _ in
+		let deleteAction = UIAlertAction(title: .deleteControlLabel, style: .destructive) { _ in
 			delete()
 		}
 		
-		let cancelAction = UIAlertAction(title: AppStringAssets.cancelControlLabel, style: .cancel)
+		let cancelAction = UIAlertAction(title: .cancelControlLabel, style: .cancel)
 		
-		let alert = UIAlertController(title: AppStringAssets.deleteOutlinePrompt(outlineTitle: document.title ?? ""),
-																					message: AppStringAssets.deleteOutlineMessage,
+		let alert = UIAlertController(title: .deleteOutlinePrompt(outlineTitle: document.title ?? ""),
+																					message: .deleteOutlineMessage,
 																					preferredStyle: .alert)
 		alert.addAction(deleteAction)
 		alert.addAction(cancelAction)
@@ -335,9 +335,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return false
 			}
-			item.image = AppImageAssets.delete.symbolSizedForCatalyst()
-			item.label = AppStringAssets.deleteOutlineControlLabel
-			item.toolTip = AppStringAssets.deleteOutlineControlLabel
+			item.image = .delete.symbolSizedForCatalyst()
+			item.label = .deleteOutlineControlLabel
+			item.toolTip = .deleteOutlineControlLabel
 			item.isBordered = true
 			item.action = #selector(deleteOutline(_:))
 			item.target = self
@@ -347,9 +347,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !AccountManager.shared.isSyncAvailable
 			}
-			item.image = AppImageAssets.sync.symbolSizedForCatalyst()
-			item.label = AppStringAssets.syncControlLabel
-			item.toolTip = AppStringAssets.syncControlLabel
+			item.image = .sync.symbolSizedForCatalyst()
+			item.label = .syncControlLabel
+			item.toolTip = .syncControlLabel
 			item.isBordered = true
 			item.action = #selector(sync(_:))
 			item.target = self
@@ -359,9 +359,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isInsertImageUnavailable ?? true
 			}
-			item.image = AppImageAssets.insertImage.symbolSizedForCatalyst()
-			item.label = AppStringAssets.insertImageControlLabel
-			item.toolTip = AppStringAssets.insertImageControlLabel
+			item.image = .insertImage.symbolSizedForCatalyst()
+			item.label = .insertImageControlLabel
+			item.toolTip = .insertImageControlLabel
 			item.isBordered = true
 			item.action = #selector(insertImage(_:))
 			item.target = self
@@ -371,9 +371,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isLinkUnavailable ?? true
 			}
-			item.image = AppImageAssets.link.symbolSizedForCatalyst()
-			item.label = AppStringAssets.linkControlLabel
-			item.toolTip = AppStringAssets.linkControlLabel
+			item.image = .link.symbolSizedForCatalyst()
+			item.label = .linkControlLabel
+			item.toolTip = .linkControlLabel
 			item.isBordered = true
 			item.action = #selector(link(_:))
 			item.target = self
@@ -382,15 +382,15 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isBoldToggledOn ?? false {
-					item.image = AppImageAssets.bold.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
+					item.image = .bold.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
 				} else {
-					item.image = AppImageAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
+					item.image = .bold.symbolSizedForCatalyst(pointSize: 18.0)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppImageAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
-			item.label = AppStringAssets.boldControlLabel
-			item.toolTip = AppStringAssets.boldControlLabel
+			item.image = .bold.symbolSizedForCatalyst(pointSize: 18.0)
+			item.label = .boldControlLabel
+			item.toolTip = .boldControlLabel
 			item.isBordered = true
 			item.action = #selector(outlineToggleBoldface(_:))
 			item.target = self
@@ -399,15 +399,15 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isItalicToggledOn ?? false {
-					item.image = AppImageAssets.italic.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
+					item.image = .italic.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
 				} else {
-					item.image = AppImageAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
+					item.image = .italic.symbolSizedForCatalyst(pointSize: 18.0)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppImageAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
-			item.label = AppStringAssets.italicControlLabel
-			item.toolTip = AppStringAssets.italicControlLabel
+			item.image = .italic.symbolSizedForCatalyst(pointSize: 18.0)
+			item.label = .italicControlLabel
+			item.toolTip = .italicControlLabel
 			item.isBordered = true
 			item.action = #selector(outlineToggleItalics(_:))
 			item.target = self
@@ -417,9 +417,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isExpandAllInOutlineUnavailable ?? true
 			}
-			item.image = AppImageAssets.expandAll.symbolSizedForCatalyst()
-			item.label = AppStringAssets.expandControlLabel
-			item.toolTip = AppStringAssets.expandAllInOutlineControlLabel
+			item.image = .expandAll.symbolSizedForCatalyst()
+			item.label = .expandControlLabel
+			item.toolTip = .expandAllInOutlineControlLabel
 			item.isBordered = true
 			item.action = #selector(expandAllInOutline(_:))
 			item.target = self
@@ -429,9 +429,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isCollapseAllInOutlineUnavailable ?? true
 			}
-			item.image = AppImageAssets.collapseAll.symbolSizedForCatalyst()
-			item.label = AppStringAssets.collapseControlLabel
-			item.toolTip = AppStringAssets.collapseAllInOutlineControlLabel
+			item.image = .collapseAll.symbolSizedForCatalyst()
+			item.label = .collapseControlLabel
+			item.toolTip = .collapseAllInOutlineControlLabel
 			item.isBordered = true
 			item.action = #selector(collapseAllInOutline(_:))
 			item.target = self
@@ -441,9 +441,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsRightUnavailable ?? true
 			}
-			item.image = AppImageAssets.moveRight.symbolSizedForCatalyst()
-			item.label = AppStringAssets.moveRightControlLabel
-			item.toolTip = AppStringAssets.moveRightControlLabel
+			item.image = .moveRight.symbolSizedForCatalyst()
+			item.label = .moveRightControlLabel
+			item.toolTip = .moveRightControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsRight(_:))
 			item.target = self
@@ -453,9 +453,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsLeftUnavailable ?? true
 			}
-			item.image = AppImageAssets.moveLeft.symbolSizedForCatalyst()
-			item.label = AppStringAssets.moveLeftControlLabel
-			item.toolTip = AppStringAssets.moveLeftControlLabel
+			item.image = .moveLeft.symbolSizedForCatalyst()
+			item.label = .moveLeftControlLabel
+			item.toolTip = .moveLeftControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsLeft(_:))
 			item.target = self
@@ -465,9 +465,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsUpUnavailable ?? true
 			}
-			item.image = AppImageAssets.moveUp.symbolSizedForCatalyst()
-			item.label = AppStringAssets.moveUpControlLabel
-			item.toolTip = AppStringAssets.moveUpControlLabel
+			item.image = .moveUp.symbolSizedForCatalyst()
+			item.label = .moveUpControlLabel
+			item.toolTip = .moveUpControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsUp(_:))
 			item.target = self
@@ -477,9 +477,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsDownUnavailable ?? true
 			}
-			item.image = AppImageAssets.moveDown.symbolSizedForCatalyst()
-			item.label = AppStringAssets.moveDownControlLabel
-			item.toolTip = AppStringAssets.moveDownControlLabel
+			item.image = .moveDown.symbolSizedForCatalyst()
+			item.label = .moveDownControlLabel
+			item.toolTip = .moveDownControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsDown(_:))
 			item.target = self
@@ -488,19 +488,19 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isFocusOutUnavailable ?? true {
-					item.image = AppImageAssets.focusInactive.symbolSizedForCatalyst(pointSize: 17)
-					item.label = AppStringAssets.focusInControlLabel
-					item.toolTip = AppStringAssets.focusInControlLabel
+					item.image = .focusInactive.symbolSizedForCatalyst(pointSize: 17)
+					item.label = .focusInControlLabel
+					item.toolTip = .focusInControlLabel
 				} else {
-					item.image = AppImageAssets.focusActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
-					item.label = AppStringAssets.focusOutControlLabel
-					item.toolTip = AppStringAssets.focusOutControlLabel
+					item.image = .focusActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
+					item.label = .focusOutControlLabel
+					item.toolTip = .focusOutControlLabel
 				}
 				return self?.editorViewController?.isFocusInUnavailable ?? true && self?.editorViewController?.isFocusOutUnavailable ?? true
 			}
-			item.image = AppImageAssets.focusInactive.symbolSizedForCatalyst()
-			item.label = AppStringAssets.focusInControlLabel
-			item.toolTip = AppStringAssets.focusInControlLabel
+			item.image = .focusInactive.symbolSizedForCatalyst()
+			item.label = .focusInControlLabel
+			item.toolTip = .focusInControlLabel
 			item.isBordered = true
 			item.action = #selector(toggleFocus(_:))
 			item.target = self
@@ -511,9 +511,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				guard let self else { return false }
 				
 				if self.editorViewController?.isFilterOn ?? false {
-					item.image = AppImageAssets.filterActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
+					item.image = .filterActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
 				} else {
-					item.image = AppImageAssets.filterInactive.symbolSizedForCatalyst(pointSize: 17)
+					item.image = .filterInactive.symbolSizedForCatalyst(pointSize: 17)
 				}
 				
 				let turnFilterOnAction = UIAction() { [weak self] _ in
@@ -522,11 +522,11 @@ extension EditorContainerViewController: NSToolbarDelegate {
 					   }
 				}
 				
-				turnFilterOnAction.title = self.isFilterOn ? AppStringAssets.turnFilterOffControlLabel : AppStringAssets.turnFilterOnControlLabel
+				turnFilterOnAction.title = self.isFilterOn ? .turnFilterOffControlLabel : .turnFilterOnControlLabel
 				
 				let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
 				
-				let filterCompletedAction = UIAction(title: AppStringAssets.filterCompletedControlLabel) { [weak self] _ in
+				let filterCompletedAction = UIAction(title: .filterCompletedControlLabel) { [weak self] _ in
 					DispatchQueue.main.async {
 						   self?.toggleCompletedFilter()
 					   }
@@ -534,7 +534,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				filterCompletedAction.state = self.isCompletedFiltered ? .on : .off
 				filterCompletedAction.attributes = self.isFilterOn ? [] : .disabled
 
-				let filterNotesAction = UIAction(title: AppStringAssets.filterNotesControlLabel) { [weak self] _ in
+				let filterNotesAction = UIAction(title: .filterNotesControlLabel) { [weak self] _ in
 					DispatchQueue.main.async {
 						   self?.toggleNotesFilter()
 					   }
@@ -548,9 +548,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				
 				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppImageAssets.filterInactive.symbolSizedForCatalyst()
-			item.label = AppStringAssets.filterControlLabel
-			item.toolTip = AppStringAssets.filterControlLabel
+			item.image = .filterInactive.symbolSizedForCatalyst()
+			item.label = .filterControlLabel
+			item.toolTip = .filterControlLabel
 			item.isBordered = true
 			item.target = self
 			item.showsIndicator = false
@@ -560,9 +560,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppImageAssets.printDoc.symbolSizedForCatalyst()
-			item.label = AppStringAssets.printDocControlLabel
-			item.toolTip = AppStringAssets.printDocControlLabel
+			item.image = .printDoc.symbolSizedForCatalyst()
+			item.label = .printDocControlLabel
+			item.toolTip = .printDocControlLabel
 			item.isBordered = true
 			item.action = #selector(printDoc(_:))
 			item.target = self
@@ -572,9 +572,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppImageAssets.printList.symbolSizedForCatalyst()
-			item.label = AppStringAssets.printListControlLabel
-			item.toolTip = AppStringAssets.printListControlLabel
+			item.image = .printList.symbolSizedForCatalyst()
+			item.label = .printListControlLabel
+			item.toolTip = .printListControlLabel
 			item.isBordered = true
 			item.action = #selector(printList(_:))
 			item.target = self
@@ -583,25 +583,25 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isDocumentCollaborating ?? false {
-					item.image = AppImageAssets.collaborating.symbolSizedForCatalyst()
+					item.image = .collaborating.symbolSizedForCatalyst()
 				} else if self?.editorViewController?.isCollaborateUnavailable ?? true {
-					item.image = AppImageAssets.statelessCollaborate.symbolSizedForCatalyst()
+					item.image = .statelessCollaborate.symbolSizedForCatalyst()
 				} else {
-					item.image = AppImageAssets.collaborate.symbolSizedForCatalyst()
+					item.image = .collaborate.symbolSizedForCatalyst()
 				}
 				return self?.editorViewController?.isCollaborateUnavailable ?? true
 			}
-			item.image = AppImageAssets.collaborate.symbolSizedForCatalyst()
-			item.label = AppStringAssets.collaborateControlLabel
-			item.toolTip = AppStringAssets.collaborateControlLabel
+			item.image = .collaborate.symbolSizedForCatalyst()
+			item.label = .collaborateControlLabel
+			item.toolTip = .collaborateControlLabel
 			item.isBordered = true
 			item.action = #selector(collaborate(_:))
 			item.target = self
 			toolbarItem = item
 		case .share:
 			let item = NSSharingServicePickerToolbarItem(itemIdentifier: .share)
-			item.label = AppStringAssets.shareControlLabel
-			item.toolTip = AppStringAssets.shareControlLabel
+			item.label = .shareControlLabel
+			item.toolTip = .shareControlLabel
 			item.activityItemsConfiguration = DocumentsActivityItemsConfiguration(delegate: self)
 			toolbarItem = item
 		case .getInfo:
@@ -609,9 +609,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppImageAssets.getInfo.symbolSizedForCatalyst()
-			item.label = AppStringAssets.getInfoControlLabel
-			item.toolTip = AppStringAssets.getInfoControlLabel
+			item.image = .getInfo.symbolSizedForCatalyst()
+			item.label = .getInfoControlLabel
+			item.toolTip = .getInfoControlLabel
 			item.isBordered = true
 			item.action = #selector(outlineGetInfo(_:))
 			item.target = self

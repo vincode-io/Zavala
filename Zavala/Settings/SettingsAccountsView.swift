@@ -15,22 +15,22 @@ struct SettingsAccountsView: View {
 	@State var cloudKitAlertIsPresenting = false
 	
 	var body: some View {
-		Section(AppStringAssets.accountsControlLabel) {
+		Section(String.accountsControlLabel) {
 			Toggle(isOn: $enableLocalAccount) {
 				switch UIDevice.current.userInterfaceIdiom {
 				case .phone:
-					Text(AppStringAssets.enableOnMyIPhoneControlLabel)
+					Text(String.enableOnMyIPhoneControlLabel)
 				case .mac:
-					Text(AppStringAssets.enableOnMyMacControlLabel)
+					Text(String.enableOnMyMacControlLabel)
 				default:
-					Text(AppStringAssets.enableOnMyIPadControlLabel)
+					Text(String.enableOnMyIPadControlLabel)
 				}
 			}
 			.onChange(of: enableLocalAccount) {
 				AppDefaults.shared.enableLocalAccount = $0
 			}
 			Toggle(isOn: $enableCloudKit) {
-				Text(AppStringAssets.enableCloudKitControlLabel)
+				Text(String.enableCloudKitControlLabel)
 			}
 			.disabled(AppDefaults.shared.isDeveloperBuild)
 			.onChange(of: enableCloudKit) {
@@ -41,15 +41,15 @@ struct SettingsAccountsView: View {
 				}
 			}
 		}
-		.alert(AppStringAssets.removeICloudAccountTitle, isPresented: $cloudKitAlertIsPresenting) {
-			Button(AppStringAssets.cancelControlLabel, role: .cancel) {
+		.alert(String.removeICloudAccountTitle, isPresented: $cloudKitAlertIsPresenting) {
+			Button(String.cancelControlLabel, role: .cancel) {
 				enableCloudKit = true
 			}
-			Button(AppStringAssets.removeControlLabel, role: .destructive) {
+			Button(String.removeControlLabel, role: .destructive) {
 				AppDefaults.shared.enableCloudKit = false
 			}
 		} message: {
-			Text(AppStringAssets.removeICloudAccountMessage)
+			Text(String.removeICloudAccountMessage)
 		}
 
     }

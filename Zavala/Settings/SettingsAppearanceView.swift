@@ -14,9 +14,9 @@ struct SettingsAppearanceView: View {
 	@State var rowSpacing = AppDefaults.shared.rowSpacingSize
 	
     var body: some View {
-		Section(AppStringAssets.appearanceControlLabel) {
+		Section(String.appearanceControlLabel) {
 			HStack {
-				Text(AppStringAssets.colorPalettControlLabel)
+				Text(String.colorPalettControlLabel)
 				Spacer()
 				Picker(selection: $colorPalette) {
 					ForEach(UserInterfaceColorPalette.allCases, id: \.self) {
@@ -34,7 +34,7 @@ struct SettingsAppearanceView: View {
 			}
 			
 			HStack {
-				Text(AppStringAssets.rowIndentControlLabel)
+				Text(String.rowIndentControlLabel)
 				Spacer()
 				Picker(selection: $rowIndent) {
 					ForEach(DefaultsSize.allCases, id: \.self) {
@@ -52,7 +52,7 @@ struct SettingsAppearanceView: View {
 			}
 
 			HStack {
-				Text(AppStringAssets.rowSpacingControlLabel)
+				Text(String.rowSpacingControlLabel)
 				Spacer()
 				Picker(selection: $rowSpacing) {
 					ForEach(DefaultsSize.allCases, id: \.self) {
@@ -69,7 +69,7 @@ struct SettingsAppearanceView: View {
 				}
 			}
 
-			NavigationLink(AppStringAssets.fontsControlLabel) {
+			NavigationLink(String.fontsControlLabel) {
 				SettingsFontsView()
 			}
 		}

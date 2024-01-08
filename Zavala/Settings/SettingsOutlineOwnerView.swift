@@ -14,26 +14,26 @@ struct SettingsOutlineOwnerView: View {
 	@State var url = AppDefaults.shared.ownerURL ?? ""
 	
     var body: some View {
-		Section(AppStringAssets.outlineOwnerControlLabel) {
+		Section(String.outlineOwnerControlLabel) {
 			TextField(text: $name) {
-				Text(AppStringAssets.nameControlLabel)
+				Text(String.nameControlLabel)
 					.onChange(of: name) {
 						AppDefaults.shared.ownerName = $0
 					}
 			}
 			TextField(text: $email) {
-				Text(AppStringAssets.emailControlLabel)
+				Text(String.emailControlLabel)
 					.onChange(of: email) {
 						AppDefaults.shared.ownerEmail = $0
 					}
 			}
 			TextField(text: $url) {
-				Text(AppStringAssets.urlControlLabel)
+				Text(String.urlControlLabel)
 					.onChange(of: url) {
 						AppDefaults.shared.ownerURL = $0
 					}
 			}
-			Text(AppStringAssets.opmlOwnerFieldNote)
+			Text(String.opmlOwnerFieldNote)
 				.font(.footnote)
 				.foregroundStyle(.secondary)
 		}    }

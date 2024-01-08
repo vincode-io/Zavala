@@ -70,14 +70,14 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 			collectionView.allowsMultipleSelection = true
 		} else {
 			if traitCollection.userInterfaceIdiom == .pad {
-				selectBarButtonItem = UIBarButtonItem(title: AppStringAssets.selectControlLabel, style: .plain, target: self, action: #selector(multipleSelect))
+				selectBarButtonItem = UIBarButtonItem(title: .selectControlLabel, style: .plain, target: self, action: #selector(multipleSelect))
 				selectDoneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(multipleSelectDone))
 
 				navigationItem.rightBarButtonItem = selectBarButtonItem
 			} else {
 				let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
-				addButton = navButtonGroup.addButton(label: AppStringAssets.addControlLabel, image: AppImageAssets.createEntity, selector: "createOutline:")
-				importButton = navButtonGroup.addButton(label: AppStringAssets.importOPMLControlLabel, image: AppImageAssets.importDocument, selector: "importOPML:")
+				addButton = navButtonGroup.addButton(label: .addControlLabel, image: .createEntity, selector: "createOutline:")
+				importButton = navButtonGroup.addButton(label: .importOPMLControlLabel, image: .importDocument, selector: "importOPML:")
 				let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
 				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
@@ -520,7 +520,7 @@ private extension CollectionsViewController {
 	func renameTagAction(containers: [DocumentContainer]) -> UIAction? {
 		guard containers.count == 1, let container = containers.first, let tagDocuments = container as? TagDocuments else { return nil }
 		
-		let action = UIAction(title: AppStringAssets.renameControlLabel, image: AppImageAssets.rename) { [weak self] action in
+		let action = UIAction(title: .renameControlLabel, image: .rename) { [weak self] action in
 			guard let self else { return }
 			
 			if self.traitCollection.userInterfaceIdiom == .mac {
@@ -545,8 +545,8 @@ private extension CollectionsViewController {
 		let tagDocuments = containers.compactMap { $0 as? TagDocuments }
 		guard tagDocuments.count == containers.count else { return nil}
 		
-		let action = UIAction(title: AppStringAssets.deleteControlLabel, image: AppImageAssets.delete, attributes: .destructive) { [weak self] action in
-			let deleteAction = UIAlertAction(title: AppStringAssets.deleteControlLabel, style: .destructive) { _ in
+		let action = UIAction(title: .deleteControlLabel, image: .delete, attributes: .destructive) { [weak self] action in
+			let deleteAction = UIAlertAction(title: .deleteControlLabel, style: .destructive) { _ in
 				for tagDocument in tagDocuments {
 					if let tag = tagDocument.tag {
 						tagDocument.account?.forceDeleteTag(tag)
@@ -557,16 +557,16 @@ private extension CollectionsViewController {
 			let title: String
 			let message: String
 			if tagDocuments.count == 1, let tag = tagDocuments.first?.tag {
-				title = AppStringAssets.deleteTagPrompt(tagName: tag.name)
-				message = AppStringAssets.deleteTagMessage
+				title = .deleteTagPrompt(tagName: tag.name)
+				message = .deleteTagMessage
 			} else {
-				title = AppStringAssets.deleteTagsPrompt(tagCount: tagDocuments.count)
-				message = AppStringAssets.deleteTagsMessage
+				title = .deleteTagsPrompt(tagCount: tagDocuments.count)
+				message = .deleteTagsMessage
 			}
 			
 			let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
 			alert.addAction(deleteAction)
-			alert.addAction(UIAlertAction(title: AppStringAssets.cancelControlLabel, style: .cancel))
+			alert.addAction(UIAlertAction(title: .cancelControlLabel, style: .cancel))
 			alert.preferredAction = deleteAction
 			self?.present(alert, animated: true, completion: nil)
 		}

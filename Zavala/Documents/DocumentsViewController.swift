@@ -72,14 +72,14 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			collectionView.contentInset = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0)
 		} else {
 			let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
-			addButton = navButtonGroup.addButton(label: AppStringAssets.addControlLabel, image: AppImageAssets.createEntity, selector: "createOutline")
-			importButton = navButtonGroup.addButton(label: AppStringAssets.importOPMLControlLabel, image: AppImageAssets.importDocument, selector: "importOPML")
+			addButton = navButtonGroup.addButton(label: .addControlLabel, image: .createEntity, selector: "createOutline")
+			importButton = navButtonGroup.addButton(label: .importOPMLControlLabel, image: .importDocument, selector: "importOPML")
 			navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
 			searchController.delegate = self
 			searchController.searchResultsUpdater = self
 			searchController.obscuresBackgroundDuringPresentation = false
-			searchController.searchBar.placeholder = AppStringAssets.searchPlaceholder
+			searchController.searchBar.placeholder = .searchPlaceholder
 			navigationItem.searchController = searchController
 			definesPresentationContext = true
 
@@ -100,12 +100,12 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, Document> { [weak self] (cell, indexPath, document) in
 			guard let self else { return }
 			
-			let title = (document.title?.isEmpty ?? true) ? AppStringAssets.noTitleLabel : document.title!
+			let title = (document.title?.isEmpty ?? true) ? .noTitleLabel : document.title!
 			
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 			if document.isCollaborating {
 				let attrText = NSMutableAttributedString(string: "\(title) ")
-				let shareAttachement = NSTextAttachment(image: AppImageAssets.collaborating)
+				let shareAttachement = NSTextAttachment(image: .collaborating)
 				attrText.append(NSAttributedString(attachment: shareAttachement))
 				contentConfiguration.attributedText = attrText
 			} else {
@@ -205,7 +205,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 				document = try account.importOPML(url, tags: tags)
 				DocumentIndexer.updateIndex(forDocument: document!)
 			} catch {
-				self.presentError(title: AppStringAssets.importFailedTitle, message: error.localizedDescription)
+				self.presentError(title: .importFailedTitle, message: error.localizedDescription)
 			}
 		}
         
@@ -564,7 +564,7 @@ private extension DocumentsViewController {
 			var printActions = [UIAction]()
 			printActions.append(self.printDocsAction(outlines: outlines))
 			printActions.append(self.printListsAction(outlines: outlines))
-			let printMenu = UIMenu(title: AppStringAssets.printControlLabel, image: AppImageAssets.printDoc, children: printActions)
+			let printMenu = UIMenu(title: .printControlLabel, image: .printDoc, children: printActions)
 			shareMenuItems.append(printMenu)
 
 			var exportActions = [UIAction]()
@@ -573,7 +573,7 @@ private extension DocumentsViewController {
 			exportActions.append(self.exportMarkdownDocsOutlineAction(outlines: outlines))
 			exportActions.append(self.exportMarkdownListsOutlineAction(outlines: outlines))
 			exportActions.append(self.exportOPMLsAction(outlines: outlines))
-			let exportMenu = UIMenu(title: AppStringAssets.exportControlLabel, image: AppImageAssets.export, children: exportActions)
+			let exportMenu = UIMenu(title: .exportControlLabel, image: .export, children: exportActions)
 			shareMenuItems.append(exportMenu)
 
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: shareMenuItems))
@@ -585,7 +585,7 @@ private extension DocumentsViewController {
 	}
 
 	func showGetInfoAction(document: Document) -> UIAction {
-		let action = UIAction(title: AppStringAssets.getInfoControlLabel, image: AppImageAssets.getInfo) { [weak self] action in
+		let action = UIAction(title: .getInfoControlLabel, image: .getInfo) { [weak self] action in
 			guard let self = self, let outline = document.outline else { return }
 			self.delegate?.showGetInfo(self, outline: outline)
 		}
@@ -593,7 +593,7 @@ private extension DocumentsViewController {
 	}
 	
 	func duplicateAction(documents: [Document]) -> UIAction {
-		let action = UIAction(title: AppStringAssets.duplicateControlLabel, image: AppImageAssets.duplicate) { action in
+		let action = UIAction(title: .duplicateControlLabel, image: .duplicate) { action in
             for document in documents {
                 document.load()
                 let newDocument = document.duplicate()
@@ -607,7 +607,7 @@ private extension DocumentsViewController {
 	}
 	
 	func shareAction(documents: [Document], sourceView: UIView) -> UIAction {
-		let action = UIAction(title: AppStringAssets.shareEllipsisControlLabel, image: AppImageAssets.share) { action in
+		let action = UIAction(title: .shareEllipsisControlLabel, image: .share) { action in
 			let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(selectedDocuments: documents))
 			controller.popoverPresentationController?.sourceView = sourceView
 			self.present(controller, animated: true)
@@ -616,7 +616,7 @@ private extension DocumentsViewController {
 	}
 
 	func exportPDFDocsOutlineAction(outlines: [Outline]) -> UIAction {
-		let action = UIAction(title: AppStringAssets.exportPDFDocEllipsisControlLabel) { [weak self] action in
+		let action = UIAction(title: .exportPDFDocEllipsisControlLabel) { [weak self] action in
 			guard let self else { return }
 			self.delegate?.exportPDFDocs(self, outlines: outlines)
 		}
@@ -624,7 +624,7 @@ private extension DocumentsViewController {
 	}
 	
 	func exportPDFListsOutlineAction(outlines: [Outline]) -> UIAction {
-        let action = UIAction(title: AppStringAssets.exportPDFListEllipsisControlLabel) { [weak self] action in
+        let action = UIAction(title: .exportPDFListEllipsisControlLabel) { [weak self] action in
 			guard let self else { return }
 			self.delegate?.exportPDFLists(self, outlines: outlines)
 		}
@@ -632,7 +632,7 @@ private extension DocumentsViewController {
 	}
 	
 	func exportMarkdownDocsOutlineAction(outlines: [Outline]) -> UIAction {
-        let action = UIAction(title: AppStringAssets.exportMarkdownDocEllipsisControlLabel) { [weak self] action in
+        let action = UIAction(title: .exportMarkdownDocEllipsisControlLabel) { [weak self] action in
 			guard let self else { return }
 			self.delegate?.exportMarkdownDocs(self, outlines: outlines)
 		}
@@ -640,7 +640,7 @@ private extension DocumentsViewController {
 	}
 	
 	func exportMarkdownListsOutlineAction(outlines: [Outline]) -> UIAction {
-        let action = UIAction(title: AppStringAssets.exportMarkdownListEllipsisControlLabel) { [weak self] action in
+        let action = UIAction(title: .exportMarkdownListEllipsisControlLabel) { [weak self] action in
 			guard let self else { return }
 			self.delegate?.exportMarkdownLists(self, outlines: outlines)
 		}
@@ -648,7 +648,7 @@ private extension DocumentsViewController {
 	}
 	
 	func exportOPMLsAction(outlines: [Outline]) -> UIAction {
-        let action = UIAction(title: AppStringAssets.exportOPMLEllipsisControlLabel) { [weak self] action in
+        let action = UIAction(title: .exportOPMLEllipsisControlLabel) { [weak self] action in
 			guard let self else { return }
 			self.delegate?.exportOPMLs(self, outlines: outlines)
 		}
@@ -656,7 +656,7 @@ private extension DocumentsViewController {
 	}
 	
 	func printDocsAction(outlines: [Outline]) -> UIAction {
-		let action = UIAction(title: AppStringAssets.printDocEllipsisControlLabel) { [weak self] action in
+		let action = UIAction(title: .printDocEllipsisControlLabel) { [weak self] action in
 			guard let self else { return }
 			self.delegate?.printDocs(self, outlines: outlines)
 		}
@@ -664,7 +664,7 @@ private extension DocumentsViewController {
 	}
 	
 	func printListsAction(outlines: [Outline]) -> UIAction {
-		let action = UIAction(title: AppStringAssets.printListControlEllipsisLabel) { [weak self] action in
+		let action = UIAction(title: .printListControlEllipsisLabel) { [weak self] action in
 			guard let self else { return }
 			self.delegate?.printLists(self, outlines: outlines)
 		}
@@ -672,7 +672,7 @@ private extension DocumentsViewController {
 	}
 	
 	func deleteContextualAction(indexPath: IndexPath) -> UIContextualAction {
-		return UIContextualAction(style: .destructive, title: AppStringAssets.deleteControlLabel) { [weak self] _, _, completion in
+		return UIContextualAction(style: .destructive, title: .deleteControlLabel) { [weak self] _, _, completion in
 			guard let self else { return }
 			let document = self.documents[indexPath.row]
 			self.deleteDocuments([document], completion: completion)
@@ -680,7 +680,7 @@ private extension DocumentsViewController {
 	}
 	
 	func deleteDocumentsAction(documents: [Document]) -> UIAction {
-		let action = UIAction(title: AppStringAssets.deleteControlLabel, image: AppImageAssets.delete, attributes: .destructive) { [weak self] action in
+		let action = UIAction(title: .deleteControlLabel, image: .delete, attributes: .destructive) { [weak self] action in
 			self?.deleteDocuments(documents)
 		}
 		
@@ -704,22 +704,22 @@ private extension DocumentsViewController {
 			return
 		}
 		
-		let deleteAction = UIAlertAction(title: AppStringAssets.deleteControlLabel, style: .destructive) { _ in
+		let deleteAction = UIAlertAction(title: .deleteControlLabel, style: .destructive) { _ in
 			delete()
 		}
 		
-		let cancelAction = UIAlertAction(title: AppStringAssets.cancelControlLabel, style: .cancel) { _ in
+		let cancelAction = UIAlertAction(title: .cancelControlLabel, style: .cancel) { _ in
 			completion?(true)
 		}
 		
         let title: String
         let message: String
         if documents.count > 1 {
-			title = AppStringAssets.deleteOutlinesPrompt(outlineCount: documents.count)
-            message = AppStringAssets.deleteOutlinesMessage
+			title = .deleteOutlinesPrompt(outlineCount: documents.count)
+            message = .deleteOutlinesMessage
         } else {
-			title = AppStringAssets.deleteOutlinePrompt(outlineName: documents.first?.title ?? "")
-            message = AppStringAssets.deleteOutlineMessage
+			title = .deleteOutlinePrompt(outlineName: documents.first?.title ?? "")
+            message = .deleteOutlineMessage
         }
         
 		let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)

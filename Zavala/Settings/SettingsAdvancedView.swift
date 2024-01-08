@@ -13,15 +13,15 @@ struct SettingsAdvancedView: View {
 	@State var disableEditorAnimations = AppDefaults.shared.disableEditorAnimations
 
 	var body: some View {
-		Section(AppStringAssets.advancedControlLabel) {
+		Section(String.advancedControlLabel) {
 			Toggle(isOn: $enableMainWindowAsDefault) {
-				Text(AppStringAssets.useMainWindowAsDefaultControlLabel)
+				Text(String.useMainWindowAsDefaultControlLabel)
 			}
 			.onChange(of: enableMainWindowAsDefault) {
 				AppDefaults.shared.enableMainWindowAsDefault = $0
 			}
 			Toggle(isOn: $disableEditorAnimations) {
-				Text(AppStringAssets.disableEditorAnimationsControlLabel)
+				Text(String.disableEditorAnimationsControlLabel)
 			}
 			.onChange(of: disableEditorAnimations) {
 				AppDefaults.shared.disableEditorAnimations = $0

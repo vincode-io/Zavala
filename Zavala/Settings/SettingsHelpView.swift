@@ -14,11 +14,11 @@ struct SettingsHelpView: View {
 	@State var isPresentingAbout = false
 	
     var body: some View {
-		Section(AppStringAssets.helpControlLabel) {
+		Section(String.helpControlLabel) {
 			Button {
 				isPresentingAbout = true
 			} label: {
-				Text(AppStringAssets.aboutZavala)
+				Text(String.aboutZavala)
 			}
 			.foregroundStyle(.primary)
 			.formSheet(isPresented: $isPresentingAbout, width: 350, height: 450) {
@@ -26,16 +26,16 @@ struct SettingsHelpView: View {
 			}
 
 			Button {
-				openURL(URL(string: AppStringAssets.helpURL)!)
+				openURL(URL(string: String.helpURL)!)
 			} label: {
-				Text(AppStringAssets.zavalaHelpControlLabel)
+				Text(String.zavalaHelpControlLabel)
 			}
 			.foregroundStyle(.primary)
 
 			Button {
-				openURL(URL(string: AppStringAssets.feedbackURL)!)
+				openURL(URL(string: String.feedbackURL)!)
 			} label: {
-				Text(AppStringAssets.feedbackControlLabel)
+				Text(String.feedbackControlLabel)
 			}
 			.foregroundStyle(.primary)
 

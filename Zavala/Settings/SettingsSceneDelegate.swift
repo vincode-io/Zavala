@@ -19,7 +19,7 @@ class SettingsSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		#if targetEnvironment(macCatalyst)
 		window?.windowScene?.titlebar?.titleVisibility = .hidden
-		window?.windowScene?.title = AppStringAssets.settingsControlLabel
+		window?.windowScene?.title = .settingsControlLabel
 		#endif
 		
 		window?.windowScene?.sizeRestrictions?.minimumSize = Self.windowSize

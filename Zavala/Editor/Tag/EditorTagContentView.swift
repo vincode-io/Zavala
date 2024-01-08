@@ -27,7 +27,7 @@ class EditorTagContentView: UIView, UIContentView {
 		button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
 		button.layer.cornerRadius = button.intrinsicContentSize.height / 2
 
-		let deleteAction = UIAction(title: AppStringAssets.removeTagControlLabel, image: AppImageAssets.delete, attributes: .destructive) { [weak self] _ in
+		let deleteAction = UIAction(title: .removeTagControlLabel, image: .delete, attributes: .destructive) { [weak self] _ in
 			guard let self = self, let name = self.button.currentTitle else { return }
 			self.delegate?.editorTagDeleteTag(name: name)
 		}

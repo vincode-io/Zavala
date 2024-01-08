@@ -480,9 +480,9 @@ extension MainSplitViewController: DocumentsDelegate {
 			activityManager.invalidateSelectDocument()
 			editorViewController?.edit(nil, isNew: isNew)
 			if documents.isEmpty {
-				editorViewController?.showMessage(AppStringAssets.noSelectionLabel)
+				editorViewController?.showMessage(.noSelectionLabel)
 			} else {
-				editorViewController?.showMessage(AppStringAssets.multipleSelectionsLabel)
+				editorViewController?.showMessage(.multipleSelectionsLabel)
 			}
 			return
 		}
@@ -905,9 +905,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return !AccountManager.shared.isSyncAvailable
 			}
-			item.image = AppImageAssets.sync.symbolSizedForCatalyst()
-			item.label = AppStringAssets.syncControlLabel
-			item.toolTip = AppStringAssets.syncControlLabel
+			item.image = .sync.symbolSizedForCatalyst()
+			item.label = .syncControlLabel
+			item.toolTip = .syncControlLabel
 			item.isBordered = true
 			item.action = #selector(sync)
 			item.target = self
@@ -917,9 +917,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return false
 			}
-			item.image = AppImageAssets.importDocument.symbolSizedForCatalyst()
-			item.label = AppStringAssets.importOPMLControlLabel
-			item.toolTip = AppStringAssets.importOPMLControlLabel
+			item.image = .importDocument.symbolSizedForCatalyst()
+			item.label = .importOPMLControlLabel
+			item.toolTip = .importOPMLControlLabel
 			item.isBordered = true
 			item.action = #selector(importOPML)
 			item.target = self
@@ -929,9 +929,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { _ in
 				return false
 			}
-			item.image = AppImageAssets.createEntity.symbolSizedForCatalyst()
-			item.label = AppStringAssets.newOutlineControlLabel
-			item.toolTip = AppStringAssets.newOutlineControlLabel
+			item.image = .createEntity.symbolSizedForCatalyst()
+			item.label = .newOutlineControlLabel
+			item.toolTip = .newOutlineControlLabel
 			item.isBordered = true
 			item.action = #selector(createOutline)
 			item.target = self
@@ -941,9 +941,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isInsertImageUnavailable ?? true
 			}
-			item.image = AppImageAssets.insertImage.symbolSizedForCatalyst()
-			item.label = AppStringAssets.insertImageControlLabel
-			item.toolTip = AppStringAssets.insertImageControlLabel
+			item.image = .insertImage.symbolSizedForCatalyst()
+			item.label = .insertImageControlLabel
+			item.toolTip = .insertImageControlLabel
 			item.isBordered = true
 			item.action = #selector(insertImage(_:))
 			item.target = self
@@ -952,7 +952,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let groupItem = NSToolbarItemGroup(itemIdentifier: .navigation)
 			groupItem.visibilityPriority = .high
 			groupItem.controlRepresentation = .expanded
-			groupItem.label = AppStringAssets.navigationControlLabel
+			groupItem.label = .navigationControlLabel
 			
 			let goBackwardItem = ValidatingMenuToolbarItem(itemIdentifier: .goBackward)
 			
@@ -960,7 +960,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				guard let self else { return true }
 				var backwardItems = [UIAction]()
 				for (index, pin) in self.goBackwardStack.enumerated() {
-					backwardItems.append(UIAction(title: pin.document?.title ?? AppStringAssets.noTitleLabel) { [weak self] _ in
+					backwardItems.append(UIAction(title: pin.document?.title ?? .noTitleLabel) { [weak self] _ in
 						DispatchQueue.main.async {
 							self?.goBackward(to: index)
 						}
@@ -971,9 +971,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 				return self.isGoBackwardOneUnavailable
 			}
 			
-			goBackwardItem.image = AppImageAssets.goBackward.symbolSizedForCatalyst()
-			goBackwardItem.label = AppStringAssets.goBackwardControlLabel
-			goBackwardItem.toolTip = AppStringAssets.goBackwardControlLabel
+			goBackwardItem.image = .goBackward.symbolSizedForCatalyst()
+			goBackwardItem.label = .goBackwardControlLabel
+			goBackwardItem.toolTip = .goBackwardControlLabel
 			goBackwardItem.isBordered = true
 			goBackwardItem.action = #selector(goBackwardOne(_:))
 			goBackwardItem.target = self
@@ -985,7 +985,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				guard let self else { return true }
 				var forwardItems = [UIAction]()
 				for (index, pin) in self.goForwardStack.enumerated() {
-					forwardItems.append(UIAction(title: pin.document?.title ?? AppStringAssets.noTitleLabel) { [weak self] _ in
+					forwardItems.append(UIAction(title: pin.document?.title ?? .noTitleLabel) { [weak self] _ in
 						DispatchQueue.main.async {
 							self?.goForward(to: index)
 						}
@@ -996,9 +996,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 				return self.isGoForwardOneUnavailable
 			}
 			
-			goForwardItem.image = AppImageAssets.goForward.symbolSizedForCatalyst()
-			goForwardItem.label = AppStringAssets.goForwardControlLabel
-			goForwardItem.toolTip = AppStringAssets.goForwardControlLabel
+			goForwardItem.image = .goForward.symbolSizedForCatalyst()
+			goForwardItem.label = .goForwardControlLabel
+			goForwardItem.toolTip = .goForwardControlLabel
 			goForwardItem.isBordered = true
 			goForwardItem.action = #selector(goForwardOne(_:))
 			goForwardItem.target = self
@@ -1012,9 +1012,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isLinkUnavailable ?? true
 			}
-			item.image = AppImageAssets.link.symbolSizedForCatalyst()
-			item.label = AppStringAssets.linkControlLabel
-			item.toolTip = AppStringAssets.linkControlLabel
+			item.image = .link.symbolSizedForCatalyst()
+			item.label = .linkControlLabel
+			item.toolTip = .linkControlLabel
 			item.isBordered = true
 			item.action = #selector(link(_:))
 			item.target = self
@@ -1023,25 +1023,25 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if !(self?.editorViewController?.isCreateRowNotesUnavailable ?? true) {
-					item.image = AppImageAssets.noteAdd.symbolSizedForCatalyst()
-					item.label = AppStringAssets.addNoteControlLabel
-					item.toolTip = AppStringAssets.addNoteControlLabel
+					item.image = .noteAdd.symbolSizedForCatalyst()
+					item.label = .addNoteControlLabel
+					item.toolTip = .addNoteControlLabel
 					return false
 				} else if !(self?.editorViewController?.isDeleteRowNotesUnavailable ?? true) {
-					item.image = AppImageAssets.noteDelete.symbolSizedForCatalyst()
-					item.label = AppStringAssets.deleteNoteControlLabel
-					item.toolTip = AppStringAssets.deleteNoteControlLabel
+					item.image = .noteDelete.symbolSizedForCatalyst()
+					item.label = .deleteNoteControlLabel
+					item.toolTip = .deleteNoteControlLabel
 					return false
 				} else {
-					item.image = AppImageAssets.noteAdd.symbolSizedForCatalyst()
-					item.label = AppStringAssets.addNoteControlLabel
-					item.toolTip = AppStringAssets.addNoteControlLabel
+					item.image = .noteAdd.symbolSizedForCatalyst()
+					item.label = .addNoteControlLabel
+					item.toolTip = .addNoteControlLabel
 					return true
 				}
 			}
-			item.image = AppImageAssets.noteAdd.symbolSizedForCatalyst()
-			item.label = AppStringAssets.addNoteControlLabel
-			item.toolTip = AppStringAssets.addNoteControlLabel
+			item.image = .noteAdd.symbolSizedForCatalyst()
+			item.label = .addNoteControlLabel
+			item.toolTip = .addNoteControlLabel
 			item.isBordered = true
 			item.action = #selector(createOrDeleteNotes(_:))
 			item.target = self
@@ -1050,15 +1050,15 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isBoldToggledOn ?? false {
-					item.image = AppImageAssets.bold.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
+					item.image = .bold.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
 				} else {
-					item.image = AppImageAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
+					item.image = .bold.symbolSizedForCatalyst(pointSize: 18.0)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppImageAssets.bold.symbolSizedForCatalyst(pointSize: 18.0)
-			item.label = AppStringAssets.boldControlLabel
-			item.toolTip = AppStringAssets.boldControlLabel
+			item.image = .bold.symbolSizedForCatalyst(pointSize: 18.0)
+			item.label = .boldControlLabel
+			item.toolTip = .boldControlLabel
 			item.isBordered = true
 			item.action = #selector(outlineToggleBoldface(_:))
 			item.target = self
@@ -1067,15 +1067,15 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isItalicToggledOn ?? false {
-					item.image = AppImageAssets.italic.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
+					item.image = .italic.symbolSizedForCatalyst(pointSize: 18.0, color: .systemBlue)
 				} else {
-					item.image = AppImageAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
+					item.image = .italic.symbolSizedForCatalyst(pointSize: 18.0)
 				}
 				return self?.editorViewController?.isFormatUnavailable ?? true
 			}
-			item.image = AppImageAssets.italic.symbolSizedForCatalyst(pointSize: 18.0)
-			item.label = AppStringAssets.italicControlLabel
-			item.toolTip = AppStringAssets.italicControlLabel
+			item.image = .italic.symbolSizedForCatalyst(pointSize: 18.0)
+			item.label = .italicControlLabel
+			item.toolTip = .italicControlLabel
 			item.isBordered = true
 			item.action = #selector(outlineToggleItalics(_:))
 			item.target = self
@@ -1085,9 +1085,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isExpandAllInOutlineUnavailable ?? true
 			}
-			item.image = AppImageAssets.expandAll.symbolSizedForCatalyst()
-			item.label = AppStringAssets.expandControlLabel
-			item.toolTip = AppStringAssets.expandAllInOutlineControlLabel
+			item.image = .expandAll.symbolSizedForCatalyst()
+			item.label = .expandControlLabel
+			item.toolTip = .expandAllInOutlineControlLabel
 			item.isBordered = true
 			item.action = #selector(expandAllInOutline(_:))
 			item.target = self
@@ -1097,9 +1097,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isCollapseAllInOutlineUnavailable ?? true
 			}
-			item.image = AppImageAssets.collapseAll.symbolSizedForCatalyst()
-			item.label = AppStringAssets.collapseControlLabel
-			item.toolTip = AppStringAssets.collapseAllInOutlineControlLabel
+			item.image = .collapseAll.symbolSizedForCatalyst()
+			item.label = .collapseControlLabel
+			item.toolTip = .collapseAllInOutlineControlLabel
 			item.isBordered = true
 			item.action = #selector(collapseAllInOutline(_:))
 			item.target = self
@@ -1109,9 +1109,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsRightUnavailable ?? true
 			}
-			item.image = AppImageAssets.moveRight.symbolSizedForCatalyst()
-			item.label = AppStringAssets.moveRightControlLabel
-			item.toolTip = AppStringAssets.moveRightControlLabel
+			item.image = .moveRight.symbolSizedForCatalyst()
+			item.label = .moveRightControlLabel
+			item.toolTip = .moveRightControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsRight(_:))
 			item.target = self
@@ -1121,9 +1121,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsLeftUnavailable ?? true
 			}
-			item.image = AppImageAssets.moveLeft.symbolSizedForCatalyst()
-			item.label = AppStringAssets.moveLeftControlLabel
-			item.toolTip = AppStringAssets.moveLeftControlLabel
+			item.image = .moveLeft.symbolSizedForCatalyst()
+			item.label = .moveLeftControlLabel
+			item.toolTip = .moveLeftControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsLeft(_:))
 			item.target = self
@@ -1133,9 +1133,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsUpUnavailable ?? true
 			}
-			item.image = AppImageAssets.moveUp.symbolSizedForCatalyst()
-			item.label = AppStringAssets.moveUpControlLabel
-			item.toolTip = AppStringAssets.moveUpControlLabel
+			item.image = .moveUp.symbolSizedForCatalyst()
+			item.label = .moveUpControlLabel
+			item.toolTip = .moveUpControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsUp(_:))
 			item.target = self
@@ -1145,9 +1145,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isMoveRowsDownUnavailable ?? true
 			}
-			item.image = AppImageAssets.moveDown.symbolSizedForCatalyst()
-			item.label = AppStringAssets.moveDownControlLabel
-			item.toolTip = AppStringAssets.moveDownControlLabel
+			item.image = .moveDown.symbolSizedForCatalyst()
+			item.label = .moveDownControlLabel
+			item.toolTip = .moveDownControlLabel
 			item.isBordered = true
 			item.action = #selector(moveRowsDown(_:))
 			item.target = self
@@ -1156,19 +1156,19 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isFocusOutUnavailable ?? true {
-					item.image = AppImageAssets.focusInactive.symbolSizedForCatalyst(pointSize: 17)
-					item.label = AppStringAssets.focusInControlLabel
-					item.toolTip = AppStringAssets.focusInControlLabel
+					item.image = .focusInactive.symbolSizedForCatalyst(pointSize: 17)
+					item.label = .focusInControlLabel
+					item.toolTip = .focusInControlLabel
 				} else {
-					item.image = AppImageAssets.focusActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
-					item.label = AppStringAssets.focusOutControlLabel
-					item.toolTip = AppStringAssets.focusOutControlLabel
+					item.image = .focusActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
+					item.label = .focusOutControlLabel
+					item.toolTip = .focusOutControlLabel
 				}
 				return self?.editorViewController?.isFocusInUnavailable ?? true && self?.editorViewController?.isFocusOutUnavailable ?? true
 			}
-			item.image = AppImageAssets.focusInactive.symbolSizedForCatalyst()
-			item.label = AppStringAssets.focusInControlLabel
-			item.toolTip = AppStringAssets.focusInControlLabel
+			item.image = .focusInactive.symbolSizedForCatalyst()
+			item.label = .focusInControlLabel
+			item.toolTip = .focusInControlLabel
 			item.isBordered = true
 			item.action = #selector(toggleFocus(_:))
 			item.target = self
@@ -1179,9 +1179,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 				guard let self else { return false }
 				
 				if self.editorViewController?.isFilterOn ?? false {
-					item.image = AppImageAssets.filterActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
+					item.image = .filterActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
 				} else {
-					item.image = AppImageAssets.filterInactive.symbolSizedForCatalyst(pointSize: 17)
+					item.image = .filterInactive.symbolSizedForCatalyst(pointSize: 17)
 				}
 				
 				let turnFilterOnAction = UIAction() { [weak self] _ in
@@ -1190,11 +1190,11 @@ extension MainSplitViewController: NSToolbarDelegate {
 					   }
 				}
 				
-				turnFilterOnAction.title = self.isFilterOn ? AppStringAssets.turnFilterOffControlLabel : AppStringAssets.turnFilterOnControlLabel
+				turnFilterOnAction.title = self.isFilterOn ? .turnFilterOffControlLabel : .turnFilterOnControlLabel
 				
 				let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
 				
-				let filterCompletedAction = UIAction(title: AppStringAssets.filterCompletedControlLabel) { [weak self] _ in
+				let filterCompletedAction = UIAction(title: .filterCompletedControlLabel) { [weak self] _ in
 					DispatchQueue.main.async {
 						   self?.toggleCompletedFilter()
 					   }
@@ -1202,7 +1202,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				filterCompletedAction.state = self.isCompletedFiltered ? .on : .off
 				filterCompletedAction.attributes = self.isFilterOn ? [] : .disabled
 
-				let filterNotesAction = UIAction(title: AppStringAssets.filterNotesControlLabel) { [weak self] _ in
+				let filterNotesAction = UIAction(title: .filterNotesControlLabel) { [weak self] _ in
 					DispatchQueue.main.async {
 						   self?.toggleNotesFilter()
 					   }
@@ -1216,9 +1216,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 				
 				return self.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppImageAssets.filterInactive.symbolSizedForCatalyst()
-			item.label = AppStringAssets.filterControlLabel
-			item.toolTip = AppStringAssets.filterControlLabel
+			item.image = .filterInactive.symbolSizedForCatalyst()
+			item.label = .filterControlLabel
+			item.toolTip = .filterControlLabel
 			item.isBordered = true
 			item.target = self
 			item.showsIndicator = false
@@ -1228,9 +1228,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppImageAssets.printDoc.symbolSizedForCatalyst()
-			item.label = AppStringAssets.printDocControlLabel
-			item.toolTip = AppStringAssets.printDocControlLabel
+			item.image = .printDoc.symbolSizedForCatalyst()
+			item.label = .printDocControlLabel
+			item.toolTip = .printDocControlLabel
 			item.isBordered = true
 			item.action = #selector(printDocs(_:))
 			item.target = self
@@ -1240,9 +1240,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppImageAssets.printList.symbolSizedForCatalyst()
-			item.label = AppStringAssets.printListControlLabel
-			item.toolTip = AppStringAssets.printListControlLabel
+			item.image = .printList.symbolSizedForCatalyst()
+			item.label = .printListControlLabel
+			item.toolTip = .printListControlLabel
 			item.isBordered = true
 			item.action = #selector(printLists(_:))
 			item.target = self
@@ -1251,25 +1251,25 @@ extension MainSplitViewController: NSToolbarDelegate {
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] _ in
 				if self?.editorViewController?.isDocumentCollaborating ?? false {
-					item.image = AppImageAssets.collaborating.symbolSizedForCatalyst()
+					item.image = .collaborating.symbolSizedForCatalyst()
 				} else if self?.editorViewController?.isCollaborateUnavailable ?? true {
-					item.image = AppImageAssets.statelessCollaborate.symbolSizedForCatalyst()
+					item.image = .statelessCollaborate.symbolSizedForCatalyst()
 				} else {
-					item.image = AppImageAssets.collaborate.symbolSizedForCatalyst()
+					item.image = .collaborate.symbolSizedForCatalyst()
 				}
 				return self?.editorViewController?.isCollaborateUnavailable ?? true
 			}
-			item.image = AppImageAssets.collaborate.symbolSizedForCatalyst()
-			item.label = AppStringAssets.collaborateControlLabel
-			item.toolTip = AppStringAssets.collaborateControlLabel
+			item.image = .collaborate.symbolSizedForCatalyst()
+			item.label = .collaborateControlLabel
+			item.toolTip = .collaborateControlLabel
 			item.isBordered = true
 			item.action = #selector(collaborate(_:))
 			item.target = self
 			toolbarItem = item
 		case .share:
 			let item = NSSharingServicePickerToolbarItem(itemIdentifier: .share)
-			item.label = AppStringAssets.shareControlLabel
-			item.toolTip = AppStringAssets.shareControlLabel
+			item.label = .shareControlLabel
+			item.toolTip = .shareControlLabel
 			item.activityItemsConfiguration = DocumentsActivityItemsConfiguration(delegate: self)
 			toolbarItem = item
 		case .getInfo:
@@ -1277,9 +1277,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] _ in
 				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
 			}
-			item.image = AppImageAssets.getInfo.symbolSizedForCatalyst()
-			item.label = AppStringAssets.getInfoControlLabel
-			item.toolTip = AppStringAssets.getInfoControlLabel
+			item.image = .getInfo.symbolSizedForCatalyst()
+			item.label = .getInfoControlLabel
+			item.toolTip = .getInfoControlLabel
 			item.isBordered = true
 			item.action = #selector(outlineGetInfo(_:))
 			item.target = self

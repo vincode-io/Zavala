@@ -56,7 +56,7 @@ import VinUtility
 	
 	override func didMoveToSuperview() {
 		super.didMoveToSuperview()
-		layer.backgroundColor = AppImageAssets.barBackgroundColor.cgColor
+		layer.backgroundColor = UIColor.barBackgroundColor.cgColor
 		isOpaque = true
 		NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: searchField)
 	}
@@ -98,7 +98,7 @@ import VinUtility
 		layoutMargins.right = 8
 
 		doneButton = UIButton(type: .custom)
-		doneButton.setTitle(AppStringAssets.doneControlLabel, for: .normal)
+		doneButton.setTitle(.doneControlLabel, for: .normal)
 		doneButton.isAccessibilityElement = true
 		doneButton.addTarget(self, action: #selector(donePressed), for: .touchUpInside)
 		doneButton.isEnabled = true
@@ -139,7 +139,7 @@ import VinUtility
 		prevButton = UIButton(type: .custom)
 		prevButton.isEnabled = false
 		prevButton.setImage(UIImage(systemName: "chevron.up"), for: .normal)
-		prevButton.accessibilityLabel = AppStringAssets.previousResultControlLabel
+		prevButton.accessibilityLabel = .previousResultControlLabel
 		prevButton.isAccessibilityElement = true
 		prevButton.addTarget(self, action: #selector(previousPressed), for: .touchUpInside)
 		addArrangedSubview(prevButton)
@@ -147,7 +147,7 @@ import VinUtility
 		nextButton = UIButton(type: .custom)
 		nextButton.isEnabled = false
 		nextButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-		nextButton.accessibilityLabel = AppStringAssets.nextResultControlLabel
+		nextButton.accessibilityLabel = .nextResultControlLabel
 		nextButton.isAccessibilityElement = true
 		nextButton.addTarget(self, action: #selector(nextPressed), for: .touchUpInside)
 		addArrangedSubview(nextButton)

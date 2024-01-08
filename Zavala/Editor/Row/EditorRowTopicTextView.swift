@@ -200,7 +200,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 		baseAttributes = [NSAttributedString.Key : Any]()
 		if row.isComplete ?? false || row.isAnyParentComplete {
 			baseAttributes[.foregroundColor] = UIColor.tertiaryLabel
-			accessibilityLabel = AppStringAssets.completeAccessibilityLabel
+			accessibilityLabel = .completeAccessibilityLabel
 		} else {
 			baseAttributes[.foregroundColor] = UIColor.label
 			accessibilityLabel = nil

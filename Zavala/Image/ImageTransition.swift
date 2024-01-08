@@ -52,7 +52,7 @@ private extension ImageTransition {
 		let fromView = transitionContext.view(forKey: .from)!
 		fromView.removeFromSuperview()
 
-		transitionContext.containerView.backgroundColor = AppImageAssets.fullScreenBackgroundColor
+		transitionContext.containerView.backgroundColor = .fullScreenBackgroundColor
 		transitionContext.containerView.addSubview(imageView)
 		
 		delegate?.hideImage(self, frame: originFrame)

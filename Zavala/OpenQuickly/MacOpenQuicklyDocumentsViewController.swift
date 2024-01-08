@@ -88,11 +88,11 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 			cell.insetBackground = true
 
-			let title = (document.title?.isEmpty ?? true) ? AppStringAssets.noTitleLabel : document.title!
+			let title = (document.title?.isEmpty ?? true) ? .noTitleLabel : document.title!
 
 			if document.isCollaborating {
 				let attrText = NSMutableAttributedString(string: "\(title) ")
-				let shareAttachement = NSTextAttachment(image: AppImageAssets.collaborating)
+				let shareAttachement = NSTextAttachment(image: .collaborating)
 				attrText.append(NSAttributedString(attachment: shareAttachement))
 				contentConfiguration.attributedText = attrText
 			} else {

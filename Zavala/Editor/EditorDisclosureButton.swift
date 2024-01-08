@@ -19,8 +19,8 @@ class EditorDisclosureButton: UIButton {
 	private let pointerInteractionDelegate = EditorDisclosureButtonInteractionDelegate()
 		
 	func configure() {
-		self.configuration?.image = AppImageAssets.disclosure
-		self.tintColor = AppImageAssets.accessoryColor
+		self.configuration?.image = .disclosure
+		self.tintColor = .accessoryColor
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.addInteraction(UIPointerInteraction(delegate: pointerInteractionDelegate))
 		
@@ -58,7 +58,7 @@ class EditorDisclosureButton: UIButton {
 
 		switch currentState {
 		case .expanded:
-			accessibilityLabel = AppStringAssets.collapseControlLabel
+			accessibilityLabel = .collapseControlLabel
 			if animated {
 				UIView.animate(withDuration: 0.15) {
 					self.transform = CGAffineTransform(rotationAngle: 0)
@@ -67,7 +67,7 @@ class EditorDisclosureButton: UIButton {
 				transform = CGAffineTransform(rotationAngle: 0)
 			}
 		case .collapsed:
-			accessibilityLabel = AppStringAssets.expandControlLabel
+			accessibilityLabel = .expandControlLabel
 			let rotationAngle: CGFloat = -1.570796
 			if animated {
 				UIView.animate(withDuration: 0.15) {
@@ -77,7 +77,7 @@ class EditorDisclosureButton: UIButton {
 				transform = CGAffineTransform(rotationAngle: rotationAngle)
 			}
 		case .partial:
-			accessibilityLabel = AppStringAssets.expandControlLabel
+			accessibilityLabel = .expandControlLabel
 			let rotationAngle: CGFloat = -0.785398
 			if animated {
 				UIView.animate(withDuration: 0.15) {

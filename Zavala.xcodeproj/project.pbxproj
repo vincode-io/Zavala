@@ -59,7 +59,7 @@
 		514F222A25C4FF02004E02CD /* EditorTagInputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514F222925C4FF02004E02CD /* EditorTagInputTextField.swift */; };
 		515D452F26BB557200228229 /* IndexRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515D452D26BB557200228229 /* IndexRequestHandler.swift */; };
 		515F164B255C9F8E00FD98B8 /* MacFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */; };
-		5162AFF628EFB4A90002A61C /* AppStringAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5162AFF528EFB4A90002A61C /* AppStringAssets.swift */; };
+		5162AFF628EFB4A90002A61C /* AppAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5162AFF528EFB4A90002A61C /* AppAssets.swift */; };
 		5163ADF225C78CFB008F25CA /* SearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5163ADF125C78CFB008F25CA /* SearchTextField.swift */; };
 		5164B35427582D810039600B /* MainOpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5164B35327582D810039600B /* MainOpenQuicklyViewController.swift */; };
 		5167606425F95E4600AC0EBD /* DocumentIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167606325F95E4600AC0EBD /* DocumentIndexer.swift */; };
@@ -163,7 +163,6 @@
 		51E5C48F27221F6200A38983 /* IntentOutline+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C48E27221F6200A38983 /* IntentOutline+.swift */; };
 		51E5C49127221F6F00A38983 /* IntentRow+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C49027221F6F00A38983 /* IntentRow+.swift */; };
 		51EB162F270F46780079F40C /* ZavalaIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EB162E270F46780079F40C /* ZavalaIntentHandler.swift */; };
-		51F13EFE255E13A9004B85CA /* AppImageAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F13EFD255E13A9004B85CA /* AppImageAssets.swift */; };
 		51F2859425AD11100019C573 /* CollectionsSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859325AD11100019C573 /* CollectionsSearchCell.swift */; };
 		51F2859725AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859625AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift */; };
 		51F2859B25AD12800019C573 /* CollectionsSearchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859A25AD12800019C573 /* CollectionsSearchContentView.swift */; };
@@ -278,7 +277,7 @@
 		515D452D26BB557200228229 /* IndexRequestHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexRequestHandler.swift; sourceTree = "<group>"; };
 		515D452E26BB557200228229 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFormViewController.swift; sourceTree = "<group>"; };
-		5162AFF528EFB4A90002A61C /* AppStringAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStringAssets.swift; sourceTree = "<group>"; };
+		5162AFF528EFB4A90002A61C /* AppAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAssets.swift; sourceTree = "<group>"; };
 		5162AFF928EFB5C00002A61C /* AppKitImageAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKitImageAssets.swift; sourceTree = "<group>"; };
 		5163ADF125C78CFB008F25CA /* SearchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextField.swift; sourceTree = "<group>"; };
 		5164B35327582D810039600B /* MainOpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainOpenQuicklyViewController.swift; sourceTree = "<group>"; };
@@ -397,7 +396,6 @@
 		51E5C48E27221F6200A38983 /* IntentOutline+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentOutline+.swift"; sourceTree = "<group>"; };
 		51E5C49027221F6F00A38983 /* IntentRow+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentRow+.swift"; sourceTree = "<group>"; };
 		51EB162E270F46780079F40C /* ZavalaIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZavalaIntentHandler.swift; sourceTree = "<group>"; };
-		51F13EFD255E13A9004B85CA /* AppImageAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImageAssets.swift; sourceTree = "<group>"; };
 		51F2859325AD11100019C573 /* CollectionsSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchCell.swift; sourceTree = "<group>"; };
 		51F2859625AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchContentConfiguration.swift; sourceTree = "<group>"; };
 		51F2859A25AD12800019C573 /* CollectionsSearchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchContentView.swift; sourceTree = "<group>"; };
@@ -607,8 +605,7 @@
 				5181A93D2554D92000C153E8 /* Main.storyboard */,
 				5188FAA82602A9CE0020B7DA /* OutlineEditor.storyboard */,
 				517AF69B25E0862E0044DBAB /* AppDefaults.swift */,
-				5162AFF528EFB4A90002A61C /* AppStringAssets.swift */,
-				51F13EFD255E13A9004B85CA /* AppImageAssets.swift */,
+				5162AFF528EFB4A90002A61C /* AppAssets.swift */,
 				51E14F22255F2D7F00320EDB /* ActivityManager.swift */,
 				5181A9372554D92000C153E8 /* AppDelegate.swift */,
 				511B2AC726028EE700C04239 /* MainCoordinator.swift */,
@@ -1113,7 +1110,6 @@
 				51F2859B25AD12800019C573 /* CollectionsSearchContentView.swift in Sources */,
 				51FA27462B3B9337008B665E /* SettingsHelpView.swift in Sources */,
 				51C030B8257E198B00609262 /* EditorTitleTextView.swift in Sources */,
-				51F13EFE255E13A9004B85CA /* AppImageAssets.swift in Sources */,
 				510471BD2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift in Sources */,
 				51E508E32B49F5B20041B826 /* ScrollToIndexPathOperation.swift in Sources */,
 				5109BC50292579A30022E90B /* CopyDocumentLinkActivity.swift in Sources */,
@@ -1139,7 +1135,7 @@
 				51C71C6D273F087000F6C779 /* ImageScrollView.swift in Sources */,
 				514F221825C4D076004E02CD /* EditorTagInputViewCell.swift in Sources */,
 				511B2AC826028EE800C04239 /* MainCoordinator.swift in Sources */,
-				5162AFF628EFB4A90002A61C /* AppStringAssets.swift in Sources */,
+				5162AFF628EFB4A90002A61C /* AppAssets.swift in Sources */,
 				51AC4DCE2B360C76002FF9AD /* GetInfoView.swift in Sources */,
 				514F221125C4CCE4004E02CD /* EditorTagContentConfiguration.swift in Sources */,
 				519185032713146500B7E177 /* RemoveOutlineTagIntentHandler.swift in Sources */,

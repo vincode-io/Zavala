@@ -20,7 +20,7 @@ struct AboutView: View {
 	var body: some View {
 		ZStack {
 			if UIDevice.current.userInterfaceIdiom == .mac {
-				AppImageAssets.aboutBackgroundColor.ignoresSafeArea()
+				Color.aboutBackgroundColor.ignoresSafeArea()
 			} else {
 				VStack() {
 					Capsule()
@@ -38,7 +38,7 @@ struct AboutView: View {
 						.frame(width: 75, height: 75)
 						.clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
 						.onTapGesture {
-							UIApplication.shared.open(URL(string: AppStringAssets.websiteURL)!, options: [:])
+							UIApplication.shared.open(URL(string: .websiteURL)!, options: [:])
 						}
 					Text(BuildInfo.shared.appName)
 						.foregroundColor(.primary)
@@ -59,16 +59,16 @@ struct AboutView: View {
 					AttributedLabelView(string: iconBy)
 				}
 				VStack(spacing: 5) {
-					Link(AppStringAssets.acknowledgementsControlLabel, destination: URL(string: AppStringAssets.acknowledgementsURL)!)
+					Link(String.acknowledgementsControlLabel, destination: URL(string: .acknowledgementsURL)!)
 						.buttonStyle(.borderless)
-					Link(AppStringAssets.privacyPolicyControlLabel, destination: URL(string: AppStringAssets.privacyPolicyURL)!)
+					Link(String.privacyPolicyControlLabel, destination: URL(string: .privacyPolicyURL)!)
 						.buttonStyle(.borderless)
 				}
 				Spacer()
 			}
 			VStack {
 				Spacer()
-				Text(AppStringAssets.copyrightLabel())
+				Text(String.copyrightLabel())
 					.font(.footnote)
 					.padding(10)
 			}
