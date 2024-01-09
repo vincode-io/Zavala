@@ -265,7 +265,12 @@ private extension CloudKitManager {
 		isSyncing = true
 
 		#if canImport(UIKit)
-		let completeProcessing = { [unowned self] in
+		let completeProcessing = { [weak self] in
+			guard let self else {
+				completion()
+				return
+			}
+			
 			self.isSyncing = false
 			
 			UIApplication.shared.endBackgroundTask(self.sendChangesBackgroundTaskID)
@@ -274,13 +279,16 @@ private extension CloudKitManager {
 			completion()
 		}
 
+		let operation = CloudKitModifyOperation()
+
 		self.sendChangesBackgroundTaskID = UIApplication.shared.beginBackgroundTask { [weak self] in
+			DispatchQueue.main.async {
+				operation.cancel()
+			}
 			completeProcessing()
 			self?.logger.info("CloudKit sync processing terminated for running too long.")
 		}
 		#endif
-		
-		let operation = CloudKitModifyOperation()
 		
 		operation.completionBlock = { [weak self] op in
 			if let errors = (op as? CloudKitModifyOperation)?.errors {
@@ -293,6 +301,8 @@ private extension CloudKitManager {
 			
 			#if canImport(UIKit)
 			completeProcessing()
+			#else
+			completion()
 			#endif
 		}
 		
