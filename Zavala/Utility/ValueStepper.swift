@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import VinOutlineKit
 
 /// Button tags
 ///
@@ -417,7 +418,7 @@ private enum Button: Int {
 	// MARK: Helpers
 
 	func getTopMostViewController() -> UIViewController? {
-		if var topController = UIApplication.shared.keyWindow?.rootViewController {
+		if var topController = UIApplication.shared.foregroundActiveScene?.keyWindow?.rootViewController {
 			while let presentedViewController = topController.presentedViewController {
 				topController = presentedViewController
 			}
