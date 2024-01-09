@@ -284,7 +284,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											 modifierFlags: [.control, .command])
 
 	var mainCoordinator: MainCoordinator? {
-		return UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController as? MainCoordinator
+		return UIApplication.shared.foregroundActiveScene?.keyWindow?.rootViewController as? MainCoordinator
 	}
 	
 	private var history = [Pin]()
@@ -1020,10 +1020,8 @@ extension AppDelegate: AppKitPluginDelegate {
 extension AppDelegate: ErrorHandler {
 	
 	func presentError(_ error: Error, title: String) {
-		if let controller = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.rootViewController {
-			if controller.presentedViewController == nil {
-				controller.presentError(title: title, message: error.localizedDescription)
-			}
+		if mainCoordinator?.presentedViewController == nil {
+			mainCoordinator?.presentError(title: title, message: error.localizedDescription)
 		}
 	}
 	
