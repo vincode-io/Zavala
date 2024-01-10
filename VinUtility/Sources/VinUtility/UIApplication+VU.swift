@@ -2,6 +2,8 @@
 //  Created by Maurice Parker on 1/9/24.
 //
 
+#if canImport(UIKit)
+
 import UIKit
 
 public extension UIApplication {
@@ -11,3 +13,5 @@ public extension UIApplication {
 	}
 	
 }
+
+#endif

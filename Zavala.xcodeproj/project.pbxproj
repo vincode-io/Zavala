@@ -66,6 +66,7 @@
 		5167702D261CB5F300EFFD40 /* EditorRowDropInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167702C261CB5F300EFFD40 /* EditorRowDropInteractionDelegate.swift */; };
 		516B938D2B48C3D80063EC94 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 516B938C2B48C3D80063EC94 /* Localizable.xcstrings */; };
 		516B938F2B48CE3C0063EC94 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 516B938E2B48CE3C0063EC94 /* InfoPlist.xcstrings */; };
+		516D223C2B4F0BE200440901 /* RequestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516D223B2B4F0BE200440901 /* RequestReview.swift */; };
 		516F536C260806150038BAF8 /* EnhancedSearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */; };
 		516F5373260829060038BAF8 /* OutlineFontDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 516F5372260829060038BAF8 /* OutlineFontDefaults.swift */; };
 		5177B7B42733D0AA006EB1E3 /* UITextInput+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5177B7B32733D0AA006EB1E3 /* UITextInput+.swift */; };
@@ -287,6 +288,7 @@
 		516B938C2B48C3D80063EC94 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		516B938E2B48CE3C0063EC94 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		516CBCAB274AFE920062EB42 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		516D223B2B4F0BE200440901 /* RequestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestReview.swift; sourceTree = "<group>"; };
 		516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnhancedSearchTextField.swift; sourceTree = "<group>"; };
 		516F5372260829060038BAF8 /* OutlineFontDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontDefaults.swift; sourceTree = "<group>"; };
 		5177B7B32733D0AA006EB1E3 /* UITextInput+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextInput+.swift"; sourceTree = "<group>"; };
@@ -866,6 +868,7 @@
 				51C568D8258C1CD200AA7B93 /* MacLinkViewController.swift */,
 				519185062713453700B7E177 /* MacRenameTagViewController.swift */,
 				5191850427133B4000B7E177 /* RenameTagViewController.swift */,
+				516D223B2B4F0BE200440901 /* RequestReview.swift */,
 			);
 			path = Dialogs;
 			sourceTree = "<group>";
@@ -1189,6 +1192,7 @@
 				51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */,
 				5181A93A2554D92000C153E8 /* SceneDelegate.swift in Sources */,
 				51FA273E2B3B6A12008B665E /* SettingsView.swift in Sources */,
+				516D223C2B4F0BE200440901 /* RequestReview.swift in Sources */,
 				519185072713453700B7E177 /* MacRenameTagViewController.swift in Sources */,
 				519184F52710F93700B7E177 /* ImportIntentHandler.swift in Sources */,
 				51D28D32257731DC0039DDFC /* EditorViewController+Drop.swift in Sources */,

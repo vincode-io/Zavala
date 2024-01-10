@@ -8,7 +8,6 @@
 import UIKit
 import SwiftUI
 import VinOutlineKit
-import SafariServices
 
 protocol MainCoordinator: UIViewController, DocumentsActivityItemsConfigurationDelegate {
 	var editorViewController: EditorViewController? { get }
@@ -307,13 +306,6 @@ extension MainCoordinator {
 		editorViewController?.previousInDocumentSearch()
 	}
 	
-	func openURL(_ urlString: String) {
-		guard let url = URL(string: urlString) else { return }
-		let vc = SFSafariViewController(url: url)
-		vc.modalPresentationStyle = .pageSheet
-		present(vc, animated: true)
-	}
-
 	func showSettings() {
 		let settingsViewController = UIHostingController(rootView: SettingsView())
 		settingsViewController.modalPresentationStyle = .formSheet
