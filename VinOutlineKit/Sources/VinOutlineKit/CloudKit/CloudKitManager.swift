@@ -89,7 +89,7 @@ public class CloudKitManager {
 	}
 	
 	func firstTimeSetup() {
-		outlineZone.fetchZoneRecord {  [weak self] result in
+		outlineZone.fetchRecordZone {  [weak self] result in
 			switch result {
 			case .success:
 				self?.outlineZone.subscribeToZoneChanges()
@@ -182,20 +182,20 @@ public class CloudKitManager {
 		let op = CKAcceptSharesOperation(shareMetadatas: [shareMetadata])
 		op.qualityOfService = CloudKitOutlineZone.qualityOfService
 		
-		op.acceptSharesCompletionBlock = { [weak self] error in
+		op.acceptSharesResultBlock = { [weak self] result in
 			
 			guard let self else { return }
 			
-			switch VCKResult.refine(error) {
+			switch result {
 			case .success:
 				let zoneID = shareMetadata.share.recordID.zoneID
 				self.cloudKitSyncWillBegin()
 				self.fetchChanges(userInitiated: true, zoneID: zoneID) { [weak self] in
 					self?.cloudKitSyncDidComplete()
 				}
-			default:
+			case .failure(let error):
 				DispatchQueue.main.async {
-					self.presentError(error!)
+					self.presentError(error)
 				}
 			}
 		}
@@ -325,27 +325,32 @@ private extension CloudKitManager {
 			zoneIDs.insert(zoneID)
 		}
 		
-		op.fetchDatabaseChangesCompletionBlock = { [weak self] token, _, error in
+		op.fetchDatabaseChangesResultBlock = { [weak self] result in
 			guard let self else {
 				completion?()
 				return
 			}
 			
-			let group = DispatchGroup()
-			
-			for zoneID in zoneIDs {
-				group.enter()
-                DispatchQueue.main.async {
-                    self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID) {
-                        group.leave()
-                    }
-                }
-			}
+			switch result {
+			case .success((let token, _)):
+				let group = DispatchGroup()
 				
-			group.notify(queue: DispatchQueue.main) {
-				self.sharedDatabaseChangeToken = token
+				for zoneID in zoneIDs {
+					group.enter()
+					DispatchQueue.main.async {
+						self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID) {
+							group.leave()
+						}
+					}
+				}
+					
+				group.notify(queue: DispatchQueue.main) {
+					self.sharedDatabaseChangeToken = token
+					completion?()
+					self.isSyncing = false
+				}
+			case .failure:
 				completion?()
-				self.isSyncing = false
 			}
 		}
 		
@@ -375,9 +380,12 @@ private extension CloudKitManager {
 		let op = CKModifySubscriptionsOperation(subscriptionsToSave: [outlineSubscription, rowSubscription, imageSubscription], subscriptionIDsToDelete: nil)
 		op.qualityOfService = CloudKitOutlineZone.qualityOfService
 		
-		op.modifySubscriptionsCompletionBlock = { [weak self] subscriptions, deleted, error in
-			if error != nil {
-				self?.logger.info("Unable to subscribe to shared database.")
+		op.modifySubscriptionsResultBlock = { [weak self] result in
+			switch result {
+			case .success:
+				break
+			case .failure(let error):
+				self?.presentError(error)
 			}
 		}
 		

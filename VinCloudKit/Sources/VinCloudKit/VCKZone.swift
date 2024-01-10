@@ -124,41 +124,43 @@ public extension VCKZone {
 	}
 
 	/// Retrieves the zone record for this zone only. If the record isn't found it will be created.
-	func fetchZoneRecord(completion: @escaping (Result<CKRecordZone?, Error>) -> Void) {
+	func fetchRecordZone(completion: @escaping (Result<CKRecordZone?, Error>) -> Void) {
 		let op = CKFetchRecordZonesOperation(recordZoneIDs: [zoneID])
 		op.qualityOfService = Self.qualityOfService
 
-		op.fetchRecordZonesCompletionBlock = { [weak self] (zoneRecords, error) in
-			guard let self = self else {
+		op.perRecordZoneResultBlock = { [weak self] _, result in
+			guard let self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
 
-			switch VCKResult.refine(error) {
-			case .success:
-				completion(.success(zoneRecords?[self.zoneID]))
-			case .zoneNotFound, .userDeletedZone:
-				self.createZoneRecord() { result in
-					switch result {
-					case .success:
-						self.fetchZoneRecord(completion: completion)
-					case .failure(let error):
-						DispatchQueue.main.async {
-							completion(.failure(error))
+			switch result {
+			case .success(let recordZone):
+				completion(.success(recordZone))
+			case .failure(let error):
+				switch VCKResult.refine(error) {
+				case .zoneNotFound, .userDeletedZone:
+					self.createZoneRecord() { result in
+						switch result {
+						case .success:
+							self.fetchRecordZone(completion: completion)
+						case .failure(let error):
+							DispatchQueue.main.async {
+								completion(.failure(error))
+							}
 						}
 					}
-				}
-			case .retry(let timeToWait):
-                self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone fetch changes retry in \(timeToWait, privacy: .public) seconds.")
-				self.retryIfPossible(after: timeToWait) {
-					self.fetchZoneRecord(completion: completion)
-				}
-			default:
-				DispatchQueue.main.async {
-					completion(.failure(error!))
+				case .retry(let timeToWait):
+					self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone fetch changes retry in \(timeToWait, privacy: .public) seconds.")
+					self.retryIfPossible(after: timeToWait) {
+						self.fetchRecordZone(completion: completion)
+					}
+				default:
+					DispatchQueue.main.async {
+						completion(.failure(error))
+					}
 				}
 			}
-			
 		}
 
 		database?.add(op)
@@ -210,48 +212,56 @@ public extension VCKZone {
 			op.desiredKeys = desiredKeys
 		}
 		
-		op.recordFetchedBlock = { record in
-			records.append(record)
+		op.recordMatchedBlock = { _, result in
+			switch result {
+			case .success(let record):
+				records.append(record)
+			default:
+				break // Ignore fetch errors
+			}
 		}
 		
-		op.queryCompletionBlock = { [weak self] (cursor, error) in
+		op.queryResultBlock = { [weak self] result in
 			guard let self = self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
 
-			switch VCKResult.refine(error) {
-            case .success:
+			switch result {
+			case .success(let cursor):
 				DispatchQueue.main.async {
-					if let cursor = cursor {
+					if let cursor {
 						self.query(cursor: cursor, desiredKeys: desiredKeys, carriedRecords: records, completion: completion)
 					} else {
 						completion(.success(records))
 					}
 				}
-			case .zoneNotFound:
-				self.createZoneRecord() { result in
-					switch result {
-					case .success:
-						self.query(ckQuery, desiredKeys: desiredKeys, completion: completion)
-					case .failure(let error):
-						DispatchQueue.main.async {
-							completion(.failure(error))
+			case .failure(let error):
+				switch VCKResult.refine(error) {
+				case .zoneNotFound:
+					self.createZoneRecord() { result in
+						switch result {
+						case .success:
+							self.query(ckQuery, desiredKeys: desiredKeys, completion: completion)
+						case .failure(let error):
+							DispatchQueue.main.async {
+								completion(.failure(error))
+							}
 						}
 					}
-				}
-			case .retry(let timeToWait):
-                self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone query retry in \(timeToWait, privacy: .public) seconds.")
-				self.retryIfPossible(after: timeToWait) {
-					self.query(ckQuery, desiredKeys: desiredKeys, completion: completion)
-				}
-			case .userDeletedZone:
-				DispatchQueue.main.async {
-					completion(.failure(VCKError.userDeletedZone))
-				}
-			default:
-				DispatchQueue.main.async {
-					completion(.failure(error!))
+				case .retry(let timeToWait):
+					self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone query retry in \(timeToWait, privacy: .public) seconds.")
+					self.retryIfPossible(after: timeToWait) {
+						self.query(ckQuery, desiredKeys: desiredKeys, completion: completion)
+					}
+				case .userDeletedZone:
+					DispatchQueue.main.async {
+						completion(.failure(VCKError.userDeletedZone))
+					}
+				default:
+					DispatchQueue.main.async {
+						completion(.failure(error))
+					}
 				}
 			}
 		}
@@ -270,18 +280,23 @@ public extension VCKZone {
 			op.desiredKeys = desiredKeys
 		}
 		
-		op.recordFetchedBlock = { record in
-			records.append(record)
+		op.recordMatchedBlock = { _, result in
+			switch result {
+			case .success(let record):
+				records.append(record)
+			default:
+				break // Ignore fetch errors
+			}
 		}
-		
-		op.queryCompletionBlock = { [weak self] (newCursor, error) in
+
+		op.queryResultBlock = { [weak self] result in
 			guard let self = self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
 
-			switch VCKResult.refine(error) {
-			case .success:
+			switch result {
+			case .success(let newCursor):
 				DispatchQueue.main.async {
 					if let newCursor = newCursor {
 						self.query(cursor: newCursor, desiredKeys: desiredKeys, carriedRecords: records, completion: completion)
@@ -289,29 +304,32 @@ public extension VCKZone {
 						completion(.success(records))
 					}
 				}
-			case .zoneNotFound:
-				self.createZoneRecord() { result in
-					switch result {
-					case .success:
-						self.query(cursor: cursor, desiredKeys: desiredKeys, carriedRecords: records, completion: completion)
-					case .failure(let error):
-						DispatchQueue.main.async {
-							completion(.failure(error))
+			case .failure(let error):
+				switch VCKResult.refine(error) {
+				case .zoneNotFound:
+					self.createZoneRecord() { result in
+						switch result {
+						case .success:
+							self.query(cursor: cursor, desiredKeys: desiredKeys, carriedRecords: records, completion: completion)
+						case .failure(let error):
+							DispatchQueue.main.async {
+								completion(.failure(error))
+							}
 						}
 					}
-				}
-			case .retry(let timeToWait):
-                self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone query retry in \(timeToWait, privacy: .public) seconds.")
-				self.retryIfPossible(after: timeToWait) {
-					self.query(cursor: cursor, desiredKeys: desiredKeys, carriedRecords: records, completion: completion)
-				}
-			case .userDeletedZone:
-				DispatchQueue.main.async {
-					completion(.failure(VCKError.userDeletedZone))
-				}
-			default:
-				DispatchQueue.main.async {
-					completion(.failure(error!))
+				case .retry(let timeToWait):
+					self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone query retry in \(timeToWait, privacy: .public) seconds.")
+					self.retryIfPossible(after: timeToWait) {
+						self.query(cursor: cursor, desiredKeys: desiredKeys, carriedRecords: records, completion: completion)
+					}
+				case .userDeletedZone:
+					DispatchQueue.main.async {
+						completion(.failure(VCKError.userDeletedZone))
+					}
+				default:
+					DispatchQueue.main.async {
+						completion(.failure(error))
+					}
 				}
 			}
 		}
@@ -416,31 +434,40 @@ public extension VCKZone {
 		
 		let op = CKQueryOperation(query: ckQuery)
 		op.qualityOfService = Self.qualityOfService
-		op.recordFetchedBlock = { record in
-			records.append(record)
-		}
 		
-		op.queryCompletionBlock = { [weak self] (cursor, error) in
+		op.recordMatchedBlock = { _, result in
+			switch result {
+			case .success(let record):
+				records.append(record)
+			default:
+				break // Ignore fetch errors
+			}
+		}
+
+		op.queryResultBlock = { [weak self] result in
 			guard let self = self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
 
-
-			if let cursor = cursor {
-				self.delete(cursor: cursor, carriedRecords: records, completion: completion)
-			} else {
-				guard !records.isEmpty else {
-					DispatchQueue.main.async {
-						completion(.success(([], [])))
+			switch result {
+			case .success(let cursor):
+				if let cursor = cursor {
+					self.delete(cursor: cursor, carriedRecords: records, completion: completion)
+				} else {
+					guard !records.isEmpty else {
+						DispatchQueue.main.async {
+							completion(.success(([], [])))
+						}
+						return
 					}
-					return
+					
+					let recordIDs = records.map { $0.recordID }
+					self.modify(modelsToSave: [], recordIDsToDelete: recordIDs, strategy: .overWriteServerValue, completion: completion)
 				}
-				
-				let recordIDs = records.map { $0.recordID }
-				self.modify(modelsToSave: [], recordIDsToDelete: recordIDs, strategy: .overWriteServerValue, completion: completion)
+			case .failure:
+				break // Ignore records that couldn't be deleted
 			}
-			
 		}
 		
 		database?.add(op)
@@ -453,23 +480,34 @@ public extension VCKZone {
 		
 		let op = CKQueryOperation(cursor: cursor)
 		op.qualityOfService = Self.qualityOfService
-		op.recordFetchedBlock = { record in
-			records.append(record)
+
+		op.recordMatchedBlock = { _, result in
+			switch result {
+			case .success(let record):
+				records.append(record)
+			default:
+				break // Ignore fetch errors
+			}
 		}
 		
-		op.queryCompletionBlock = { [weak self] (cursor, error) in
+		op.queryResultBlock = { [weak self] result in
 			guard let self = self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
 
 			records.append(contentsOf: carriedRecords)
-			
-			if let cursor = cursor {
-				self.delete(cursor: cursor, carriedRecords: records, completion: completion)
-			} else {
-				let recordIDs = records.map { $0.recordID }
-				self.modify(modelsToSave: [], recordIDsToDelete: recordIDs, strategy: .overWriteServerValue, completion: completion)
+
+			switch result {
+			case .success(let cursor):
+				if let cursor {
+					self.delete(cursor: cursor, carriedRecords: records, completion: completion)
+				} else {
+					let recordIDs = records.map { $0.recordID }
+					self.modify(modelsToSave: [], recordIDsToDelete: recordIDs, strategy: .overWriteServerValue, completion: completion)
+				}
+			case .failure:
+				break // Ignore delete errors
 			}
 			
 		}
@@ -537,136 +575,159 @@ public extension VCKZone {
 			return
 		}
 
+		var savedRecords = [CKRecord]()
+		var deletedRecordIDs = [CKRecord.ID]()
+		
 		let recordsToSave = modelsToSave.compactMap { $0.buildRecord() }
 		let op = CKModifyRecordsOperation(recordsToSave: recordsToSave, recordIDsToDelete: recordIDsToDelete)
 		op.savePolicy = strategy.recordSavePolicy
 		op.isAtomic = true
 		op.qualityOfService = Self.qualityOfService
 
-		op.modifyRecordsCompletionBlock = { [weak self] (savedRecords, deletedRecordIDs, error) in
-			
+		op.perRecordSaveBlock = { _, result in
+			switch result {
+			case .success(let record):
+				savedRecords.append(record)
+			case .failure:
+				break // We will handle per record failures below
+			}
+		}
+		
+		op.perRecordDeleteBlock = { recordID, result in
+			switch result {
+			case .success:
+				deletedRecordIDs.append(recordID)
+			case .failure:
+				break // We will handle per record failures below
+			}
+		}
+		
+		op.modifyRecordsResultBlock = { [weak self] result in
 			guard let self = self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
 
-			let refinedResult = VCKResult.refine(error)
-			
-			switch refinedResult {
+			switch result {
 			case .success:
 				DispatchQueue.main.async {
-					self.logger.info("Successfully modified \(savedRecords?.count ?? 0, privacy: .public) records and deleted \(deletedRecordIDs?.count ?? 0, privacy: .public) records.")
-					completion(.success((savedRecords ?? [], deletedRecordIDs ?? [])))
+					self.logger.info("Successfully modified \(savedRecords.count, privacy: .public) records and deleted \(deletedRecordIDs.count, privacy: .public) records.")
+					completion(.success((savedRecords, deletedRecordIDs)))
 				}
-			case .zoneNotFound:
-				self.createZoneRecord() { result in
-					switch result {
-					case .success:
-						self.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
-					case .failure(let error):
-						DispatchQueue.main.async {
-							completion(.failure(error))
-						}
-					}
-				}
-			case .userDeletedZone:
-				DispatchQueue.main.async {
-					completion(.failure(VCKError.userDeletedZone))
-				}
-			case .retry(let timeToWait):
-				self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone modify retry in \(timeToWait, privacy: .public) seconds.")
-				self.retryIfPossible(after: timeToWait) {
-					self.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
-				}
-			case .limitExceeded:
-				var modelsToSaveChunks = modelsToSave.chunked(into: 200)
-				var recordIDsToDeleteChunks = recordIDsToDelete.chunked(into: 200)
-
-				func saveChunks(completion: @escaping (Result<Void, Error>) -> Void) {
-					if !modelsToSaveChunks.isEmpty {
-						let modelsToSaveChunk = modelsToSaveChunks.removeFirst()
-						self.modify(modelsToSave: modelsToSaveChunk, recordIDsToDelete: [], strategy: strategy) { result in
-							switch result {
-							case .success:
-								self.logger.info("Modified \(modelsToSaveChunk.count, privacy: .public) chunked records.")
-								saveChunks(completion: completion)
-							case .failure(let error):
+			case .failure(let error):
+				let refinedResult = VCKResult.refine(error)
+				
+				switch refinedResult {
+				case .zoneNotFound:
+					self.createZoneRecord() { result in
+						switch result {
+						case .success:
+							self.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
+						case .failure(let error):
+							DispatchQueue.main.async {
 								completion(.failure(error))
 							}
 						}
-					} else {
-						completion(.success(()))
 					}
-				}
-				
-				func deleteChunks() {
-					if !recordIDsToDeleteChunks.isEmpty {
-						let recordIDsToDeleteChunk = recordIDsToDeleteChunks.removeFirst()
-						self.modify(modelsToSave: [], recordIDsToDelete: recordIDsToDeleteChunk, strategy: strategy) { result in
-							switch result {
-							case .success:
-								self.logger.error("Deleted \(recordIDsToDeleteChunk.count, privacy: .public) chunked records.")
-								deleteChunks()
-							case .failure(let error):
-								DispatchQueue.main.async {
+				case .userDeletedZone:
+					DispatchQueue.main.async {
+						completion(.failure(VCKError.userDeletedZone))
+					}
+				case .retry(let timeToWait):
+					self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone modify retry in \(timeToWait, privacy: .public) seconds.")
+					self.retryIfPossible(after: timeToWait) {
+						self.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
+					}
+				case .limitExceeded:
+					var modelsToSaveChunks = modelsToSave.chunked(into: 200)
+					var recordIDsToDeleteChunks = recordIDsToDelete.chunked(into: 200)
+
+					func saveChunks(completion: @escaping (Result<Void, Error>) -> Void) {
+						if !modelsToSaveChunks.isEmpty {
+							let modelsToSaveChunk = modelsToSaveChunks.removeFirst()
+							self.modify(modelsToSave: modelsToSaveChunk, recordIDsToDelete: [], strategy: strategy) { result in
+								switch result {
+								case .success:
+									self.logger.info("Modified \(modelsToSaveChunk.count, privacy: .public) chunked records.")
+									saveChunks(completion: completion)
+								case .failure(let error):
 									completion(.failure(error))
 								}
 							}
-						}
-					} else {
-						DispatchQueue.main.async {
-							completion(.success(([], [])))
+						} else {
+							completion(.success(()))
 						}
 					}
-				}
-				
-				saveChunks() { result in
-					switch result {
-					case .success:
-						deleteChunks()
-					case .failure(let error):
-						DispatchQueue.main.async {
-							completion(.failure(error))
+					
+					func deleteChunks() {
+						if !recordIDsToDeleteChunks.isEmpty {
+							let recordIDsToDeleteChunk = recordIDsToDeleteChunks.removeFirst()
+							self.modify(modelsToSave: [], recordIDsToDelete: recordIDsToDeleteChunk, strategy: strategy) { result in
+								switch result {
+								case .success:
+									self.logger.error("Deleted \(recordIDsToDeleteChunk.count, privacy: .public) chunked records.")
+									deleteChunks()
+								case .failure(let error):
+									DispatchQueue.main.async {
+										completion(.failure(error))
+									}
+								}
+							}
+						} else {
+							DispatchQueue.main.async {
+								completion(.success(([], [])))
+							}
 						}
 					}
-				}
-				
-			case .serverRecordChanged(let ckError):
-				self.logger.info("Modify failed: \(ckError.localizedDescription, privacy: .public). Attempting to recover...")
-				modelsToSave[0].apply(ckError)
-				self.logger.info("\(modelsToSave.count, privacy: .public) records resolved. Attempting Modify again...")
-				self.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
+					
+					saveChunks() { result in
+						switch result {
+						case .success:
+							deleteChunks()
+						case .failure(let error):
+							DispatchQueue.main.async {
+								completion(.failure(error))
+							}
+						}
+					}
+					
+				case .serverRecordChanged(let ckError):
+					self.logger.info("Modify failed: \(ckError.localizedDescription, privacy: .public). Attempting to recover...")
+					modelsToSave[0].apply(ckError)
+					self.logger.info("\(modelsToSave.count, privacy: .public) records resolved. Attempting Modify again...")
+					self.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
 
-			case .partialFailure(let ckError):
-				self.logger.info("Modify failed: \(ckError.localizedDescription, privacy: .public). Attempting to recover...")
-				
-				let remainingModelsToSave: [VCKModel] = modelsToSave.compactMap { modelToSave in
-					guard let ckErrorForRecord = ckError.partialErrorsByItemID?[modelToSave.cloudKitRecordID] as? CKError else {
-						return nil
+				case .partialFailure(let ckError):
+					self.logger.info("Modify failed: \(ckError.localizedDescription, privacy: .public). Attempting to recover...")
+					
+					let remainingModelsToSave: [VCKModel] = modelsToSave.compactMap { modelToSave in
+						guard let ckErrorForRecord = ckError.partialErrorsByItemID?[modelToSave.cloudKitRecordID] as? CKError else {
+							return nil
+						}
+						
+						switch ckErrorForRecord.code {
+						case .batchRequestFailed:
+							// Nothing wrong with this record, it was just part of the batch that failed.
+							return modelToSave
+						case .unknownItem:
+							// The record was deleted while the user was offline, so treat it as new
+							var modelToChange = modelToSave
+							modelToChange.cloudKitMetaData = nil
+							return modelToChange
+						default:
+							// Merge the model and try to save it again
+							modelToSave.apply(ckErrorForRecord)
+							return modelToSave
+						}
+						
 					}
 					
-					switch ckErrorForRecord.code {
-					case .batchRequestFailed:
-						// Nothing wrong with this record, it was just part of the batch that failed.
-						return modelToSave
-					case .unknownItem:
-						// The record was deleted while the user was offline, so treat it as new
-						var modelToChange = modelToSave
-						modelToChange.cloudKitMetaData = nil
-						return modelToChange
-					default:
-						// Merge the model and try to save it again
-						modelToSave.apply(ckErrorForRecord)
-						return modelToSave
+					self.logger.info("\(remainingModelsToSave.count, privacy: .public) records resolved. Attempting Modify again...")
+					self.modify(modelsToSave: remainingModelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
+				default:
+					DispatchQueue.main.async {
+						completion(.failure(error))
 					}
-					
-				}
-				
-				self.logger.info("\(remainingModelsToSave.count, privacy: .public) records resolved. Attempting Modify again...")
-				self.modify(modelsToSave: remainingModelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
-			default:
-				DispatchQueue.main.async {
-					completion(.failure(error!))
 				}
 			}
 		}
@@ -726,8 +787,13 @@ public extension VCKZone {
 			deletedRecordKeys = [CloudKitRecordKey]()
         }
 
-        op.recordChangedBlock = { record in
-			updatedRecords.append(record)
+        op.recordWasChangedBlock = { _, result in
+			switch result {
+			case .success(let record):
+				updatedRecords.append(record)
+			case .failure:
+				break // I'm not even clear on how we could get an error here...
+			}
         }
 
         op.recordWithIDWasDeletedBlock = { recordID, recordType in
@@ -735,29 +801,31 @@ public extension VCKZone {
 			deletedRecordKeys.append(recordKey)
         }
 
-        op.recordZoneFetchCompletionBlock = { zoneID ,token, _, finalChange, error in
-			if case .success = VCKResult.refine(error) {
+        op.recordZoneFetchResultBlock = { zoneID, result in
+			switch result {
+			case .success((let token, _, _)):
 				wasChanged(updated: updatedRecords, deleted: deletedRecordKeys, token: token) { error in
 					if let error {
 						op.cancel()
 						completion(.failure(error))
 					}
 				}
+			case .failure:
+				break
 			}
 			updatedRecords = [CKRecord]()
 			deletedRecordKeys = [CloudKitRecordKey]()
         }
 
-        op.fetchRecordZoneChangesCompletionBlock = { [weak self] error in
+        op.fetchRecordZoneChangesResultBlock = { [weak self] result in
 			guard let self = self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
 
-			switch VCKResult.refine(error) {
+			switch result {
 			case .success:
 				let op = CloudKitZoneApplyChangesOperation()
-				
 				op.completionBlock = { _ in
 					completion(.success(()))
 				}
@@ -765,37 +833,40 @@ public extension VCKZone {
 				DispatchQueue.main.async {
 					CloudKitZoneApplyChangesOperation.mainThreadOperationQueue.add(op)
 				}
-			case .zoneNotFound:
-				self.createZoneRecord() { result in
-					switch result {
-					case .success:
-						self.fetchChangesInZone(incremental: incremental, completion: completion)
-					case .failure(let error):
-						DispatchQueue.main.async {
-							completion(.failure(error))
+			case .failure(let error):
+				switch VCKResult.refine(error) {
+				case .zoneNotFound:
+					self.createZoneRecord() { result in
+						switch result {
+						case .success:
+							self.fetchChangesInZone(incremental: incremental, completion: completion)
+						case .failure(let error):
+							DispatchQueue.main.async {
+								completion(.failure(error))
+							}
 						}
 					}
+				case .userDeletedZone:
+					DispatchQueue.main.async {
+						completion(.failure(VCKError.userDeletedZone))
+					}
+				case .retry(let timeToWait):
+					self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone fetch changes retry in \(timeToWait, privacy: .public) seconds.")
+					self.retryIfPossible(after: timeToWait) {
+						self.fetchChangesInZone(incremental: incremental, completion: completion)
+					}
+				case .changeTokenExpired:
+					DispatchQueue.main.async {
+						self.changeToken = nil
+						self.fetchChangesInZone(incremental: incremental, completion: completion)
+					}
+				default:
+					DispatchQueue.main.async {
+						completion(.failure(error))
+					}
 				}
-			case .userDeletedZone:
-				DispatchQueue.main.async {
-					completion(.failure(VCKError.userDeletedZone))
-				}
-			case .retry(let timeToWait):
-                self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone fetch changes retry in \(timeToWait, privacy: .public) seconds.")
-				self.retryIfPossible(after: timeToWait) {
-					self.fetchChangesInZone(incremental: incremental, completion: completion)
-				}
-			case .changeTokenExpired:
-				DispatchQueue.main.async {
-					self.changeToken = nil
-					self.fetchChangesInZone(incremental: incremental, completion: completion)
-				}
-			default:
-				DispatchQueue.main.async {
-					completion(.failure(error!))
-				}
+
 			}
-			
         }
 
         database?.add(op)
