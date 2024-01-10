@@ -637,7 +637,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	@objc func showHelpCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppStringAssets.helpURL)
+		UIApplication.shared.open(URL(string: AppStringAssets.helpURL)!)
 	}
 
 	@objc func feedbackCommand(_ sender: Any?) {
