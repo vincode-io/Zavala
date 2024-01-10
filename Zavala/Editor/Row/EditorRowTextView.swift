@@ -90,7 +90,7 @@ class EditorRowTextView: UITextView {
 		return cleanText
 	}
 	
-	var autoSaveDebouncer = Debouncer(duration: 5.0)
+	var inactivityDebouncer = Debouncer(duration: 5.0)
     var textViewHeight: CGFloat?
     var isSavingTextUnnecessary = false
 
@@ -204,7 +204,7 @@ class EditorRowTextView: UITextView {
             textWasChanged()
         }
         
-        autoSaveDebouncer.cancel()
+        inactivityDebouncer.cancel()
         isTextChanged = false
 	}
 
@@ -483,8 +483,9 @@ extension EditorRowTextView {
         
         makeCursorVisibleIfNecessary()
         
-		autoSaveDebouncer.debounce { [weak self] in
+		inactivityDebouncer.debounce { [weak self] in
 			self?.saveText()
+			RequestReview.request()
 		}
     }
 

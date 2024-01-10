@@ -73,6 +73,8 @@ final class AppDefaults {
 		static let documentHistory = "documentHistory"
 		static let confirmDeleteCompletedRows = "confirmDeleteCompletedRows"
 		static let upgradedDefaultsToV2 = "upgradedDefaultsToV2"
+		static let lastReviewPromptDate = "lastReviewPromptDate"
+		static let lastReviewPromptAppVersion = "lastReviewPromptAppVersion"
 	}
 	
 	let isDeveloperBuild: Bool = {
@@ -258,6 +260,25 @@ final class AppDefaults {
 			Self.setBool(for: Key.upgradedDefaultsToV2, newValue)
 		}
 	}
+
+	var lastReviewPromptDate: Date? {
+		get {
+			Self.date(for: Key.lastReviewPromptDate)
+		}
+		set {
+			Self.setDate(for: Key.lastReviewPromptDate, newValue)
+		}
+	}
+
+	var lastReviewPromptAppVersion: String? {
+		get {
+			Self.string(for: Key.lastReviewPromptAppVersion)
+		}
+		set {
+			Self.setString(for: Key.lastReviewPromptAppVersion, newValue)
+		}
+	}
+
 
 	static func registerDefaults() {
 		var defaults: [String : Any] = [Key.enableLocalAccount: true]
