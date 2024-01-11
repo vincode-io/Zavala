@@ -66,12 +66,14 @@ struct GetInfoView: View {
 				TextField(text: $getInfoViewModel.ownerEmail) {
 					Text(String.emailControlLabel)
 				}
+				.textInputAutocapitalization(.never)
 				.textContentType(.emailAddress)
 				.keyboardType(.emailAddress)
 
 				TextField(text: $getInfoViewModel.ownerURL) {
 					Text(String.urlControlLabel)
 				}
+				.textInputAutocapitalization(.never)
 				.textContentType(.URL)
 				.keyboardType(.URL)
 
