@@ -29,6 +29,7 @@ struct SettingsOutlineOwnerView: View {
 						AppDefaults.shared.ownerEmail = $0
 					}
 			}
+			.textInputAutocapitalization(.never)
 			.textContentType(.emailAddress)
 			.keyboardType(.emailAddress)
 			
@@ -38,6 +39,7 @@ struct SettingsOutlineOwnerView: View {
 						AppDefaults.shared.ownerURL = $0
 					}
 			}
+			.textInputAutocapitalization(.never)
 			.textContentType(.URL)
 			.keyboardType(.URL)
 			
