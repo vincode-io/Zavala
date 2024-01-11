@@ -61,12 +61,20 @@ struct GetInfoView: View {
 				TextField(text: $getInfoViewModel.ownerName) {
 					Text(String.nameControlLabel)
 				}
+				.textContentType(.name)
+
 				TextField(text: $getInfoViewModel.ownerEmail) {
 					Text(String.emailControlLabel)
 				}
+				.textContentType(.emailAddress)
+				.keyboardType(.emailAddress)
+
 				TextField(text: $getInfoViewModel.ownerURL) {
 					Text(String.urlControlLabel)
 				}
+				.textContentType(.URL)
+				.keyboardType(.URL)
+
 				Text(String.opmlOwnerFieldNote)
 					.font(.footnote)
 					.foregroundStyle(.secondary)
@@ -78,12 +86,14 @@ struct GetInfoView: View {
 					Text(String(getInfoViewModel.wordCount))
 						.foregroundStyle(.secondary)
 				}
+				
 				HStack {
 					Text(String.createdControlLabel)
 					Spacer()
 					Text(getInfoViewModel.createdLabel)
 						.foregroundStyle(.secondary)
 				}
+				
 				HStack {
 					Text(String.updatedControlLabel)
 					Spacer()

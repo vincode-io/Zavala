@@ -21,24 +21,29 @@ struct SettingsOutlineOwnerView: View {
 						AppDefaults.shared.ownerName = $0
 					}
 			}
+			.textContentType(.name)
+			
 			TextField(text: $email) {
 				Text(String.emailControlLabel)
 					.onChange(of: email) {
 						AppDefaults.shared.ownerEmail = $0
 					}
 			}
+			.textContentType(.emailAddress)
+			.keyboardType(.emailAddress)
+			
 			TextField(text: $url) {
 				Text(String.urlControlLabel)
 					.onChange(of: url) {
 						AppDefaults.shared.ownerURL = $0
 					}
 			}
+			.textContentType(.URL)
+			.keyboardType(.URL)
+			
 			Text(String.opmlOwnerFieldNote)
 				.font(.footnote)
 				.foregroundStyle(.secondary)
-		}    }
-}
-
-#Preview {
-    SettingsOutlineOwnerView()
+		}
+	}
 }
