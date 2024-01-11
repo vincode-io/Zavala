@@ -13,7 +13,7 @@ struct SettingsOutlineOwnerView: View {
 	@State var email = AppDefaults.shared.ownerEmail ?? ""
 	@State var url = AppDefaults.shared.ownerURL ?? ""
 	
-    var body: some View {
+	var body: some View {
 		Section(AppStringAssets.outlineOwnerControlLabel) {
 			TextField(text: $name) {
 				Text(AppStringAssets.nameControlLabel)
@@ -21,22 +21,31 @@ struct SettingsOutlineOwnerView: View {
 						AppDefaults.shared.ownerName = $0
 					}
 			}
+			.textContentType(.name)
+			
 			TextField(text: $email) {
 				Text(AppStringAssets.emailControlLabel)
 					.onChange(of: email) {
 						AppDefaults.shared.ownerEmail = $0
 					}
 			}
+			.textContentType(.emailAddress)
+			.keyboardType(.emailAddress)
+			
 			TextField(text: $url) {
 				Text(AppStringAssets.urlControlLabel)
 					.onChange(of: url) {
 						AppDefaults.shared.ownerURL = $0
 					}
 			}
+			.textContentType(.URL)
+			.keyboardType(.URL)
+			
 			Text(AppStringAssets.opmlOwnerFieldNote)
 				.font(.footnote)
 				.foregroundStyle(.secondary)
-		}    }
+		}
+	}
 }
 
 #Preview {
