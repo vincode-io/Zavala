@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import MobileCoreServices
+import UniformTypeIdentifiers
 import VinUtility
 import VinOutlineKit
 
@@ -14,7 +14,7 @@ extension EditorViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
 		guard !(session.items.first?.localObject is Row) else { return true }
-		return session.hasItemsConforming(toTypeIdentifiers: [kUTTypeUTF8PlainText as String, Row.typeIdentifier])
+		return session.hasItemsConforming(toTypeIdentifiers: [UTType.utf8PlainText.identifier, Row.typeIdentifier])
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
@@ -234,7 +234,7 @@ private extension EditorViewController {
 		guard let outline = outline else { return }
 		
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
-			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(kUTTypeUTF8PlainText as String) {
+			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(UTType.utf8PlainText.identifier) {
 				return dropItem.dragItem.itemProvider
 			}
 			return nil
@@ -243,28 +243,43 @@ private extension EditorViewController {
 		guard !itemProviders.isEmpty else { return }
 
 		let group = DispatchGroup()
-		var texts = [String]()
+		var textDrops = [TextDrop]()
 		
 		for itemProvider in itemProviders {
 			group.enter()
-			itemProvider.loadDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String) { (data, error) in
+			
+			itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
 				if let data = data, let itemText = String(data: data, encoding: .utf8) {
-					texts.append(itemText)
+					
+					if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
+						itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.url.identifier) { (data, error) in
+							if let data = data, let urlString = String(data: data, encoding: .utf8) {
+								textDrops.append(TextDrop(text: itemText, urlString: urlString))
+							}
+							group.leave()
+						}
+					} else {
+						textDrops.append(TextDrop(text: itemText))
+						group.leave()
+					}
+					
+				} else {
 					group.leave()
 				}
 			}
 		}
 
 		group.notify(queue: DispatchQueue.main) {
-			let text = texts.joined(separator: "\n")
-			guard !text.isEmpty else { return }
+			guard !textDrops.isEmpty else { return }
 			
 			var rowGroups = [RowGroup]()
-			let textRows = text.split(separator: "\n").map { String($0) }
-			for textRow in textRows {
-				let row = Row(outline: outline, topicMarkdown: textRow.trimmed())
-				row.detectData()
-				rowGroups.append(RowGroup(row))
+			for textDrop in textDrops {
+				for attrString in textDrop.attrStrings {
+					let row = Row(outline: outline)
+					row.topic = attrString
+					row.detectData()
+					rowGroups.append(RowGroup(row))
+				}
 			}
 			
 			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, destinationIndexPath: destinationIndexPath)
@@ -318,6 +333,29 @@ private extension EditorViewController {
 										   prefersEnd: prefersEnd)
 		
 		runCommand(command)
+	}
+	
+}
+
+private struct TextDrop {
+	
+	var text: String
+	var urlString: String?
+	
+	init(text: String, urlString: String? = nil) {
+		self.text = text
+		self.urlString = urlString
+	}
+	
+	var attrStrings: [NSAttributedString] {
+		guard let urlString, let url = URL(string: urlString) else {
+			return text.split(separator: "\n").map { NSAttributedString(string: String($0)) }
+		}
+		
+		let attrString = NSMutableAttributedString(string: text)
+		attrString.setAttributes([NSAttributedString.Key.link: url], range: .init(location: 0, length: text.count))
+
+		return [attrString]
 	}
 	
 }

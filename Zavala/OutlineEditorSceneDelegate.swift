@@ -56,7 +56,7 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 		if let userActivity = connectionOptions.userActivities.first {
 			editorContainerViewController.handle(userActivity)
 			if let windowFrame = window?.frame {
-				window?.frame = CGRect(x: windowFrame.origin.x, y: windowFrame.origin.y, width: 700, height: 600)
+				window?.frame = CGRect(x: windowFrame.origin.x, y: windowFrame.origin.y, width: 720, height: 600)
 			}
 			return
 		}
@@ -64,7 +64,7 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 		if let url = connectionOptions.urlContexts.first?.url, let documentID = EntityID(url: url) {
 			editorContainerViewController.openDocument(documentID)
 			if let windowFrame = window?.frame {
-				window?.frame = CGRect(x: windowFrame.origin.x, y: windowFrame.origin.y, width: 700, height: 600)
+				window?.frame = CGRect(x: windowFrame.origin.x, y: windowFrame.origin.y, width: 720, height: 600)
 			}
 		}
 		

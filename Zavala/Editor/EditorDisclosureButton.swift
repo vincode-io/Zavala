@@ -17,15 +17,10 @@ class EditorDisclosureButton: UIButton {
 	
 	private var currentState = State.expanded
 	private let pointerInteractionDelegate = EditorDisclosureButtonInteractionDelegate()
-	
-	override init(frame: CGRect) {
-		super.init(frame: frame)
-
-		self.setImage(ZavalaImageAssets.disclosure, for: .normal)
-		self.adjustsImageWhenHighlighted = false
+		
+	func configure() {
+		self.configuration?.image = ZavalaImageAssets.disclosure
 		self.tintColor = ZavalaImageAssets.accessoryColor
-		self.imageView?.contentMode = .center
-		self.imageView?.clipsToBounds = false
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.addInteraction(UIPointerInteraction(delegate: pointerInteractionDelegate))
 		
@@ -34,10 +29,6 @@ class EditorDisclosureButton: UIButton {
 			self.widthAnchor.constraint(equalToConstant: dimension),
 			self.heightAnchor.constraint(equalToConstant: dimension)
 		])
-	}
-	
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
 	}
 	
 	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

@@ -33,7 +33,8 @@ class EditorRowContentView: UIView, UIContentView {
 	}
 
 	private lazy var disclosureIndicator: EditorDisclosureButton = {
-		let indicator = EditorDisclosureButton()
+		let indicator = EditorDisclosureButton(configuration: .plain())
+		indicator.configure()
 		indicator.addTarget(self, action: #selector(toggleDisclosure(_:forEvent:)), for: UIControl.Event.touchUpInside)
 		return indicator
 	}()
@@ -122,7 +123,7 @@ class EditorRowContentView: UIView, UIContentView {
 			disclosureIndicator.setDisclosure(state: .partial, animated: false)
 		}
 
-		barView.level = row.level
+		barView.level = row.currentLevel
 		barView.indentationWidth = configuration.indentationWidth
 		
 		guard appliedConfiguration == nil || !appliedConfiguration!.isLayoutEqual(configuration) else {

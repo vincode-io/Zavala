@@ -45,14 +45,24 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@IBOutlet weak var collectionView: EditorCollectionView!
 	
 	override var keyCommands: [UIKeyCommand]? {
-		guard !isToggleRowCompleteUnavailable else { return nil }
+		var keyCommands = [UIKeyCommand]()
 		
-		// We need to have this hear in addition to the AppDelegate, since the iOS won't pick it up for some reason
-		let completedCommand = UIKeyCommand(input: "\r", modifierFlags: [.command], action: #selector(toggleCompleteRows))
-		if #available(iOS 15, *) {
-			completedCommand.wantsPriorityOverSystemBehavior = true
+		let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(moveCurrentRowsLeft))
+		shiftTab.wantsPriorityOverSystemBehavior = true
+		keyCommands.append(shiftTab)
+		
+		let tab = UIKeyCommand(action: #selector(moveCurrentRowsRight), input: "\t")
+		tab.wantsPriorityOverSystemBehavior = true
+		keyCommands.append(tab)
+		
+		// We need to have this here in addition to the AppDelegate, since iOS won't pick it up for some reason
+		if !isToggleRowCompleteUnavailable {
+			let commandReturn = UIKeyCommand(input: "\r", modifierFlags: [.command], action: #selector(toggleCompleteRows))
+			commandReturn.wantsPriorityOverSystemBehavior = true
+			keyCommands.append(commandReturn)
 		}
-		return [completedCommand]
+		
+		return keyCommands
 	}
 	
 	var selectedDocuments: [Document] {
@@ -66,6 +76,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	var isOutlineFunctionsUnavailable: Bool {
 		return outline == nil
+	}
+	
+	var isFocusInUnavailable: Bool {
+		return !(currentRows?.count ?? 0 == 1)
+	}
+	
+	var isFocusOutUnavailable: Bool {
+		return outline?.isFocusOutUnavailable() ?? true
 	}
 	
 	var isCollaborateUnavailable: Bool {
@@ -216,7 +234,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		if let currentTextView {
 			return !currentTextView.canPerformAction(.paste, withSender: nil)
 		}
-		return !UIPasteboard.general.contains(pasteboardTypes: [Row.typeIdentifier, kUTTypeUTF8PlainText as String], inItemSet: nil)
+		return !UIPasteboard.general.contains(pasteboardTypes: [Row.typeIdentifier, UTType.utf8PlainText.identifier], inItemSet: nil)
 	}
 
 	var isInsertImageUnavailable: Bool {
@@ -357,6 +375,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var goBackwardButton: ButtonGroup.Button!
 	private var goForwardButton: ButtonGroup.Button!
 	private var moreMenuButton: ButtonGroup.Button!
+	private var focusButton: ButtonGroup.Button!
 	private var filterButton: ButtonGroup.Button!
 	
 	private var formatMenuButton: ButtonGroup.Button!
@@ -511,9 +530,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillBegin(_:)), name: .OutlineSearchWillBegin, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchTextDidChange(_:)), name: .OutlineSearchTextDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillEnd(_:)), name: .OutlineSearchWillEnd, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchDidEnd(_:)), name: .OutlineSearchDidEnd, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineDidFocusOut(_:)), name: .OutlineDidFocusOut, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineAddedBacklinks(_:)), name: .OutlineAddedBacklinks, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineRemovedBacklinks(_:)), name: .OutlineRemovedBacklinks, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlineFoundReplacableLinkTitle(_:)), name: .OutlineFoundReplacableLinkTitle, object: nil)
 
 		NotificationCenter.default.addObserver(self, selector: #selector(didUndoChange(_:)), name: .NSUndoManagerDidUndoChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(didRedoChange(_:)), name: .NSUndoManagerDidRedoChange, object: nil)
@@ -599,7 +619,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		case .cut, .copy:
 			return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
 		case .paste:
-			return UIPasteboard.general.contains(pasteboardTypes: [kUTTypeUTF8PlainText as String, Row.typeIdentifier])
+			return UIPasteboard.general.contains(pasteboardTypes: [UTType.utf8PlainText.identifier, Row.typeIdentifier])
 		case .splitRow:
 			return !isSplitRowUnavailable
 		default:
@@ -681,14 +701,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		guard note.object as? Outline == outline else { return }
 		
 		isSearching = true
-		
-		// I don't understand why, but on iOS deleting the sections will cause random crashes.
-		// I should check periodically to see if this bug is fixed.
-		if traitCollection.userInterfaceIdiom == .mac {
-			collectionView.deleteSections(headerFooterSections)
-		} else {
-			collectionView.reloadData()
-		}
+		collectionView.deleteSections(headerFooterSections)
 		
 		searchBar.becomeFirstResponder()
 		discloseSearchBar()
@@ -726,6 +739,18 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
 		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
 	}
+
+	@objc func outlineSearchDidEnd(_ note: Notification) {
+		if let cursorCoordinates = CursorCoordinates.bestCoordinates {
+			restoreCursorPosition(cursorCoordinates, scroll: true, centered: true)
+		}
+	}
+	
+	@objc func outlineDidFocusOut(_ note: Notification) {
+		if let cursorCoordinates = CursorCoordinates.bestCoordinates {
+			restoreCursorPosition(cursorCoordinates, scroll: true, centered: true)
+		}
+	}
 	
 	@objc func outlineAddedBacklinks(_ note: Notification) {
 		guard note.object as? Outline == outline else { return }
@@ -735,34 +760,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func outlineRemovedBacklinks(_ note: Notification) {
 		guard note.object as? Outline == outline else { return }
 		collectionView.deleteSections([Outline.Section.backlinks.rawValue])
-	}
-	
-	@objc func outlineFoundReplacableLinkTitle(_ note: Notification) {
-		guard note.object as? Outline == outline,
-			  let replacableLinkTitle = note.userInfo?[Outline.UserInfoKeys.replacableLinkTitle] as? Outline.ReplacableLinkTitle,
-			  let row = outline!.findRow(id: replacableLinkTitle.rowID),
-			  let rowShadowTableIndex = row.shadowTableIndex,
-			  let cell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorRowViewCell else {
-			return
-		}
-		
-		let mutableText: NSMutableAttributedString
-		if replacableLinkTitle.isInNotes, let note = row.note {
-			mutableText = NSMutableAttributedString(attributedString: note)
-		} else if let topic = row.topic {
-			mutableText = NSMutableAttributedString(attributedString: topic)
-		} else {
-			return
-		}
-		
-		mutableText.enumerateAttribute(.link, in: NSRange(location: 0, length: mutableText.length)) { (value, range, match) in
-			guard mutableText.attributedSubstring(from: range).string == replacableLinkTitle.link.absoluteString else { return }
-			if replacableLinkTitle.isInNotes {
-				cell.noteTextView?.updateLink(text: replacableLinkTitle.title, link: replacableLinkTitle.link.absoluteString, range: range)
-			} else {
-				cell.topicTextView?.updateLink(text: replacableLinkTitle.title, link: replacableLinkTitle.link.absoluteString, range: range)
-			}
-		}
 	}
 	
 	@objc func didUndoChange(_ note: Notification) {
@@ -869,6 +866,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		// End the search collection view updates early
 		isSearching = false
 		outline?.endSearching()
+		focusOut()
 		
 		outline?.unload()
 		undoManager?.removeAllActions()
@@ -943,6 +941,20 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		if traitCollection.userInterfaceIdiom != .mac {
 			moreMenuButton.menu = buildEllipsisMenu()
 
+			if isFocusOutUnavailable {
+				focusButton.accessibilityLabel = AppStringAssets.focusInControlLabel
+				focusButton.setImage(ZavalaImageAssets.focusInactive, for: .normal)
+				if currentRows?.count ?? 0 == 1 {
+					focusButton.isEnabled = true
+				} else {
+					focusButton.isEnabled = false
+				}
+			} else {
+				focusButton.accessibilityLabel = AppStringAssets.focusOutControlLabel
+				focusButton.setImage(ZavalaImageAssets.focusActive, for: .normal)
+				focusButton.isEnabled = true
+			}
+			
 			if isFilterOn {
 				filterButton.accessibilityLabel = AppStringAssets.turnFilterOffControlLabel
 				filterButton.setImage(ZavalaImageAssets.filterActive, for: .normal)
@@ -1179,6 +1191,23 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func hideKeyboard() {
 		UIResponder.currentFirstResponder?.resignFirstResponder()
 		CursorCoordinates.clearLastKnownCoordinates()
+	}
+
+	@objc func focusIn() {
+		guard let row = currentRows?.first else { return }
+		outline?.focusIn(row)
+	}
+	
+	@objc func focusOut() {
+		outline?.focusOut()
+	}
+
+	@objc func toggleFocus() {
+		if isFocusOutUnavailable {
+			focusIn()
+		} else {
+			focusOut()
+		}
 	}
 
 	@objc func toggleFilterOn() {
@@ -1697,7 +1726,7 @@ extension EditorViewController: EditorRowViewCellDelegate {
 	}
 	
 	func editorRowScrollEditorToVisible(textView: UITextView, rect: CGRect) {
-		scrollToVisible(textInput: textView, rect: rect)
+		scrollToVisible(textInput: textView, rect: rect, animated: true)
 	}
 
 	func editorRowTextFieldDidBecomeActive(row: Row) {
@@ -1958,6 +1987,7 @@ private extension EditorViewController {
 		undoMenuButton = navButtonGroup.addButton(label: AppStringAssets.undoMenuControlLabel, image: ZavalaImageAssets.undoMenu, selector: "showUndoMenu")
 		undoMenuButton.popoverButtonGroup = undoMenuButtonGroup
 		moreMenuButton = navButtonGroup.addButton(label: AppStringAssets.moreControlLabel, image: ZavalaImageAssets.ellipsis, showMenu: true)
+		focusButton = navButtonGroup.addButton(label: AppStringAssets.focusInControlLabel, image: ZavalaImageAssets.focusInactive, selector: "toggleFocus")
 		filterButton = navButtonGroup.addButton(label: AppStringAssets.filterControlLabel, image: ZavalaImageAssets.filterInactive, showMenu: true)
 		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
@@ -2265,25 +2295,17 @@ private extension EditorViewController {
 	}
 	
 	func layoutEditor(row: Row) {
-		if #available(iOS 15, *) {
-			guard let index = row.shadowTableIndex else { return }
-			let indexPath = IndexPath(row: index, section: adjustedRowsSection)
-			UIView.performWithoutAnimation {
-				self.collectionView.reconfigureItems(at: [indexPath])
-			}
-		} else {
-			// This is presumably less effecient than just reconfiguring the item and
-			// it can trigger layout bugs. For example if the first row of a topic above
-			// this row is an image, things go to 💩 in a hurry.
-			collectionView.collectionViewLayout.invalidateLayout()
-			collectionView.layoutIfNeeded()
+		guard let index = row.shadowTableIndex else { return }
+		let indexPath = IndexPath(row: index, section: adjustedRowsSection)
+		UIView.performWithoutAnimation {
+			self.collectionView.reconfigureItems(at: [indexPath])
 		}
 		
 		makeCursorVisibleIfNecessary()
 	}
 	
 	func applyChanges(_ changes: OutlineElementChanges) {
-		if !changes.isOnlyReloads {
+		func performBatchUpdates() {
 			collectionView.performBatchUpdates {
 				if let deletes = changes.deleteIndexPaths, !deletes.isEmpty {
 					collectionView.deleteItems(at: deletes)
@@ -2301,11 +2323,21 @@ private extension EditorViewController {
 			}
 		}
 		
+		if !changes.isOnlyReloads {
+			if AppDefaults.shared.disableEditorAnimations {
+				UIView.performWithoutAnimation {
+					performBatchUpdates()
+				}
+			} else {
+				performBatchUpdates()
+			}
+		}
+		
 		guard let reloads = changes.reloadIndexPaths, !reloads.isEmpty else { return }
 		
 		let hasSectionOtherThanRows = reloads.contains(where: { $0.section != adjustedRowsSection })
 		
-		if #available(iOS 15, *), !hasSectionOtherThanRows {
+		if !hasSectionOtherThanRows {
 			collectionView.reconfigureItems(at: reloads)
 		} else {
 			if changes.isReloadsAnimatable {
@@ -2322,18 +2354,10 @@ private extension EditorViewController {
 	}
 	
 	func applyChangesRestoringState(_ changes: OutlineElementChanges) {
-		let currentCoordinates = CursorCoordinates.currentCoordinates
 		let selectedIndexPaths = collectionView.indexPathsForSelectedItems
 		
 		applyChanges(changes)
 
-		if #available(iOS 15, *) {
-		} else {
-			if let coordinates = currentCoordinates {
-				restoreCursorPosition(coordinates, scroll: true)
-			}
-		}
-		
 		if changes.isOnlyReloads, let indexPaths = selectedIndexPaths {
 			for indexPath in indexPaths {
 				collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
@@ -2355,7 +2379,7 @@ private extension EditorViewController {
 		}
 	}
 
-	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates, scroll: Bool) {
+	func restoreCursorPosition(_ cursorCoordinates: CursorCoordinates, scroll: Bool, centered: Bool = false) {
 		guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
 		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
 
@@ -2369,7 +2393,7 @@ private extension EditorViewController {
 			return
 		}
 		
-		if !collectionView.indexPathsForVisibleItems.contains(indexPath) {
+		if !collectionView.isVisible(indexPath: indexPath) {
 			CATransaction.begin()
 			CATransaction.setCompletionBlock {
 				// Got to wait or the row cell won't be found
@@ -2378,7 +2402,8 @@ private extension EditorViewController {
 				}
 			}
 			if indexPath.row < collectionView.numberOfItems(inSection: indexPath.section) {
-				collectionView.scrollToItem(at: indexPath, at: [], animated: false)
+				let scrollPosition = centered ? UICollectionView.ScrollPosition.centeredVertically : []
+				collectionView.scrollToItem(at: indexPath, at: scrollPosition, animated: false)
 			}
 			CATransaction.commit()
 		} else {
@@ -2492,6 +2517,9 @@ private extension EditorViewController {
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: outlineActions))
 
 			var viewActions = [UIAction]()
+			if rows.count == 1 {
+				viewActions.append(self.focusInAction(rows: rows))
+			}
 			if !outline.isExpandAllUnavailable(containers: rows) {
 				viewActions.append(self.expandAllAction(rows: rows))
 			}
@@ -2557,6 +2585,14 @@ private extension EditorViewController {
 		}
 	}
 
+	func focusInAction(rows: [Row]) -> UIAction {
+		return UIAction(title: AppStringAssets.focusInControlLabel, image: ZavalaImageAssets.focusActive) { [weak self] action in
+			guard let self else { return }
+			self.outline?.focusIn(rows.first!)
+			self.delegate?.validateToolbar(self)
+		}
+	}
+	
 	func completeAction(rows: [Row]) -> UIAction {
 		return UIAction(title: AppStringAssets.completeControlLabel, image: ZavalaImageAssets.completeRow) { [weak self] action in
 			self?.completeRows(rows)
@@ -2843,7 +2879,7 @@ private extension EditorViewController {
 
 			// We only register the text representation on the first one, since it looks like most text editors only support 1 dragged text item
 			if row == rows[0] {
-				itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+				itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
 					var markdowns = [String]()
 					for row in rows {
 						markdowns.append(row.markdownList())
@@ -2901,7 +2937,7 @@ private extension EditorViewController {
 				self.runCommand(command)
 			}
 			
-		} else if let stringProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [kUTTypeUTF8PlainText as String]), !stringProviderIndexes.isEmpty {
+		} else if let stringProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [UTType.utf8PlainText.identifier]), !stringProviderIndexes.isEmpty {
 			
 			let group = DispatchGroup()
 			var texts = [String]()
@@ -2909,7 +2945,7 @@ private extension EditorViewController {
 			for index in stringProviderIndexes {
 				let itemProvider = UIPasteboard.general.itemProviders[index]
 				group.enter()
-				itemProvider.loadDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String) { (data, error) in
+				itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
 					if let data = data, let itemText = String(data: data, encoding: .utf8) {
 						texts.append(itemText)
 						group.leave()
@@ -2999,14 +3035,18 @@ private extension EditorViewController {
 		
 		runCommand(command)
 		
-		if let newCursorIndex = command.newCursorIndex {
-			let newCursorIndexPath = IndexPath(row: newCursorIndex, section: adjustedRowsSection)
-			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
-				rowCell.moveToEnd()
+		// We won't get the cursor to move from the tag to the new row on return without dispatching
+		DispatchQueue.main.async {
+			if let newCursorIndex = command.newCursorIndex {
+				let newCursorIndexPath = IndexPath(row: newCursorIndex, section: self.adjustedRowsSection)
+				if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
+					rowCell.moveToEnd()
+				}
 			}
+
+			self.makeCursorVisibleIfNecessary(animated: false)
 		}
 		
-		makeCursorVisibleIfNecessary()
 	}
 	
 	func createRowInside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
@@ -3032,7 +3072,7 @@ private extension EditorViewController {
 			}
 		}
 
-		makeCursorVisibleIfNecessary()
+		makeCursorVisibleIfNecessary(animated: false)
 	}
 	
 	func createRowOutside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
@@ -3058,7 +3098,7 @@ private extension EditorViewController {
 			}
 		}
 		
-		makeCursorVisibleIfNecessary()
+		makeCursorVisibleIfNecessary(animated: false)
 	}
 	
 	func duplicateRows(_ rows: [Row]) {
@@ -3205,10 +3245,16 @@ private extension EditorViewController {
 			}
 		}
 
-		makeCursorVisibleIfNecessary()
+		makeCursorVisibleIfNecessary(animated: false)
 	}
 
 	func deleteRowNotes(_ rows: [Row], rowStrings: RowStrings? = nil) {
+		// If the user is currently editing a note and wants to delete it, the text view will try to save
+		// its current contents to the row after the note data was already cleared.
+		if let noteTextView = currentTextView as? EditorRowNoteTextView {
+			noteTextView.isSavingTextUnnecessary = true
+		}
+		
 		guard let undoManager = undoManager, let outline = outline else { return }
 		
 		let command = DeleteNoteCommand(actionName: AppStringAssets.deleteNoteControlLabel,
@@ -3227,14 +3273,14 @@ private extension EditorViewController {
 		}
 	}
 
-	func makeCursorVisibleIfNecessary() {
+	func makeCursorVisibleIfNecessary(animated: Bool = true) {
 		guard let textInput = UIResponder.currentFirstResponder as? UITextInput,
 			  let cursorRect = textInput.cursorRect else { return }
 		
-		scrollToVisible(textInput: textInput, rect: cursorRect)
+		scrollToVisible(textInput: textInput, rect: cursorRect, animated: animated)
 	}
 	
-	func scrollToVisible(textInput: UITextInput, rect: CGRect) {
+	func scrollToVisible(textInput: UITextInput, rect: CGRect, animated: Bool) {
 		guard var convertedRect = (textInput as? UIView)?.convert(rect, to: collectionView) else { return }
 		
 		// This isInNotes hack isn't well understood, but it improves the user experience...
@@ -3242,7 +3288,7 @@ private extension EditorViewController {
 			convertedRect.size.height = convertedRect.size.height + 10
 		}
 		
-		collectionView.scrollRectToVisibleBypass(convertedRect, animated: true)
+		collectionView.scrollRectToVisibleBypass(convertedRect, animated: animated)
 	}
 
 	func updateSpotlightIndex() {

@@ -47,6 +47,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var addButton: UIButton!
 	private var importButton: UIButton!
 
+	private let collectionViewQueue = MainThreadOperationQueue()
 	private var loadDocumentsDebouncer = Debouncer(duration: 0.5)
     
     private var lastClick: TimeInterval = Date().timeIntervalSince1970
@@ -94,7 +95,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		collectionView.dropDelegate = self
 		collectionView.remembersLastFocusedIndexPath = true
 		collectionView.collectionViewLayout = createLayout()
-		collectionView.reloadData()
+		collectionViewQueue.add(ReloadAllOperation(collectionView: collectionView))
 		
 		rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, Document> { [weak self] (cell, indexPath, document) in
 			guard let self else { return }
@@ -147,7 +148,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		func updateContainer() {
 			self.documentContainers = documentContainers
 			updateUI()
-			collectionView.deselectAll()
+			collectionViewQueue.add(SelectIndexPathsOperation(collectionView: collectionView, at: [], scrollPosition: [], animated: true))
 			loadDocuments(animated: false, isNavigationBranch: isNavigationBranch, completion: completion)
 		}
 		
@@ -165,10 +166,11 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	func selectDocument(_ document: Document?, isNew: Bool = false, isNavigationBranch: Bool = true, animated: Bool) {
 		guard let documentContainers else { return }
 
-		collectionView.deselectAll()
+		collectionViewQueue.add(SelectIndexPathsOperation(collectionView: collectionView, at: [], scrollPosition: [], animated: false))
 
 		if let document = document, let index = documents.firstIndex(of: document) {
-			collectionView.selectItem(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .centeredVertically)
+			let indexPath = IndexPath(row: index, section: 0)
+			collectionViewQueue.add(SelectIndexPathsOperation(collectionView: collectionView, at: [indexPath], scrollPosition: .centeredVertically, animated: false))
 			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [document], isNew: isNew, isNavigationBranch: isNavigationBranch, animated: animated)
 		} else {
 			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: isNew, isNavigationBranch: isNavigationBranch, animated: animated)
@@ -178,9 +180,12 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	func selectAllDocuments() {
 		guard let documentContainers else { return }
 
+		var indexPaths = [IndexPath]()
 		for i in 0..<collectionView.numberOfItems(inSection: 0) {
-			collectionView.selectItem(at: IndexPath(row: i, section: 0), animated: false, scrollPosition: [])
+			indexPaths.append(IndexPath(row: i, section: 0))
 		}
+		collectionViewQueue.add(SelectIndexPathsOperation(collectionView: collectionView, at: indexPaths, scrollPosition: [], animated: false))
+
 		
 		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: documents, isNew: false, isNavigationBranch: false, animated: true)
 	}
@@ -223,7 +228,10 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
               let account = documentContainers.uniqueAccount else { return nil }
 
         let document = account.createOutline(title: title, tags: documentContainers.tags)
-		document.outline?.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
+		document.outline?.update(autoLinkingEnabled: AppDefaults.shared.autoLinkingEnabled,
+								 ownerName: AppDefaults.shared.ownerName, 
+								 ownerEmail: AppDefaults.shared.ownerEmail,
+								 ownerURL: AppDefaults.shared.ownerURL)
 		return document
 	}
 	
@@ -306,7 +314,7 @@ extension DocumentsViewController {
 		}
         
         if !(collectionView.indexPathsForSelectedItems?.contains(indexPath) ?? false) {
-            collectionView.deselectAll()
+			collectionViewQueue.add(SelectIndexPathsOperation(collectionView: collectionView, at: [], scrollPosition: [], animated: true))
         }
         
         let allRowIDs: [GenericRowIdentifier]
@@ -376,7 +384,7 @@ extension DocumentsViewController {
 	}
 	
 	func openDocumentInNewWindow(indexPath: IndexPath) {
-        collectionView.deselectAll()
+		collectionViewQueue.add(SelectIndexPathsOperation(collectionView: collectionView, at: [], scrollPosition: [], animated: true))
 		let document = documents[indexPath.row]
 		
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
@@ -387,10 +395,10 @@ extension DocumentsViewController {
 	func reload(document: Document) {
 		let selectedIndexPaths = self.collectionView.indexPathsForSelectedItems
 		if let index = documents.firstIndex(of: document) {
-			collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+			collectionViewQueue.add(ReloadIndexPathsOperation(collectionView: collectionView, at: [IndexPath(row: index, section: 0)]))
 		}
-		if let selectedItem = selectedIndexPaths?.first {
-			collectionView.selectItem(at: selectedItem, animated: false, scrollPosition: [])
+		if let selectedIndexPaths {
+			collectionViewQueue.add(SelectIndexPathsOperation(collectionView: collectionView, at:selectedIndexPaths, scrollPosition: [], animated: false))
 		}
 	}
 	
@@ -421,60 +429,47 @@ extension DocumentsViewController {
             }
         }
         
-        group.notify(queue: DispatchQueue.main) {
+		group.notify(queue: DispatchQueue.main) {
 			let sortedDocuments = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
 
             guard animated else {
                 self.documents = sortedDocuments
-				self.collectionView.reloadData()
-				self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
+				self.collectionViewQueue.add(ReloadAllOperation(collectionView: self.collectionView))
+				self.delegate?.documentSelectionDidChange(self,
+														  documentContainers: documentContainers,
+														  documents: [],
+														  isNew: false,
+														  isNavigationBranch: isNavigationBranch,
+														  animated: true)
 				completion?()
 				return
 			}
 			
 			let prevSelectedDoc = self.collectionView.indexPathsForSelectedItems?.map({ self.documents[$0.row] }).first
-
-			let diff = sortedDocuments.difference(from: self.documents).inferringMoves()
-            self.documents = sortedDocuments
-
-			self.collectionView.performBatchUpdates {
-				for change in diff {
-					switch change {
-					case .insert(let offset, _, let associated):
-						if let associated {
-							self.collectionView.moveItem(at: IndexPath(row: associated, section: 0), to: IndexPath(row: offset, section: 0))
-						} else {
-							self.collectionView.insertItems(at: [IndexPath(row: offset, section: 0)])
-						}
-					case .remove(let offset, _, let associated):
-						if let associated {
-							self.collectionView.moveItem(at: IndexPath(row: offset, section: 0), to: IndexPath(row: associated, section: 0))
-						} else {
-							self.collectionView.deleteItems(at: [IndexPath(row: offset, section: 0)])
-						}
-					}
-				}
-			}
 			
-			if let prevSelectedDoc = prevSelectedDoc, let index = self.documents.firstIndex(of: prevSelectedDoc) {
+			self.collectionViewQueue.add(ApplyDiffOperation(collectionView: self.collectionView, oldDocuments: Array(self.documents), newDocuments: sortedDocuments))
+			self.documents = sortedDocuments
+
+			if let prevSelectedDoc = prevSelectedDoc, let index = sortedDocuments.firstIndex(of: prevSelectedDoc) {
 				let indexPath = IndexPath(row: index, section: 0)
-				self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-				self.collectionView.scrollToItem(at: indexPath, at: [], animated: true)
+				self.collectionViewQueue.add(SelectIndexPathsOperation(collectionView: self.collectionView, at: [indexPath], scrollPosition: [], animated: false))
+				self.collectionViewQueue.add(ScrollToIndexPathOperation(collectionView: self.collectionView, at: indexPath, scrollPosition: [], animated: true))
 			} else {
-				self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
+				self.delegate?.documentSelectionDidChange(self,
+														  documentContainers: documentContainers,
+														  documents: [],
+														  isNew: false,
+														  isNavigationBranch: isNavigationBranch,
+														  animated: true)
 			}
-			
+
 			completion?()
 		}
 	}
 	
 	private func reconfigureAll() {
-		if #available(iOS 15, *) {
-			let indexPaths = (0..<documents.count).map { IndexPath(row: $0, section: 0) }
-			collectionView.reconfigureItems(at: indexPaths)
-		} else {
-			collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
-		}
+		let indexPaths = (0..<documents.count).map { IndexPath(row: $0, section: 0) }
+		collectionViewQueue.add(ReconfigureIndexPathsOperation(collectionView: collectionView, indexPaths: indexPaths))
 	}
 	
 	private func scheduleReconfigureAll() {

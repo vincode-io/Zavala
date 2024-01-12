@@ -35,19 +35,13 @@ class EditorRowTopicTextView: EditorRowTextView {
 	
 	override var keyCommands: [UIKeyCommand]? {
 		let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(moveLeft(_:)))
-		if #available(iOS 15.0, *) {
-			shiftTab.wantsPriorityOverSystemBehavior = true
-		}
+		shiftTab.wantsPriorityOverSystemBehavior = true
 		
 		let controlP = UIKeyCommand(input: "p", modifierFlags: [.control], action: #selector(moveCursorUp(_:)))
-		if #available(iOS 15.0, *) {
-			shiftTab.wantsPriorityOverSystemBehavior = true
-		}
+		shiftTab.wantsPriorityOverSystemBehavior = true
 
 		let controlN = UIKeyCommand(input: "n", modifierFlags: [.control], action: #selector(moveCursorDown(_:)))
-		if #available(iOS 15.0, *) {
-			shiftTab.wantsPriorityOverSystemBehavior = true
-		}
+		shiftTab.wantsPriorityOverSystemBehavior = true
 
 		let keys = [
 			shiftTab,
@@ -219,7 +213,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 			baseAttributes[.strikethroughStyle] = 0
 		}
 		
-		baseAttributes[.font] = OutlineFontCache.shared.topic(level: row.level)
+		baseAttributes[.font] = OutlineFontCache.shared.topic(level: row.trueLevel)
 		
 		typingAttributes = baseAttributes
 		

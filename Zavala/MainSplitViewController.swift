@@ -7,8 +7,9 @@
 
 import UIKit
 import CoreSpotlight
-import VinOutlineKit
 import SafariServices
+import VinOutlineKit
+import VinUtility
 
 protocol MainControllerIdentifiable {
 	var mainControllerIdentifer: MainControllerIdentifier { get }
@@ -364,6 +365,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 	@objc func moveRowsDown(_ sender: Any?) {
 		moveRowsDown()
+	}
+
+	@objc func toggleFocus(_ sender: Any?) {
+		toggleFocus()
 	}
 
 	@objc func toggleOutlineHideNotes(_ sender: Any?) {
@@ -838,6 +843,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 	func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
 		return [
 			.toggleSidebar,
+			.primarySidebarTrackingSeparatorItemIdentifier,
+			.navigation,
 			.flexibleSpace,
 			.newOutline,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
@@ -848,13 +855,12 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.link,
 			.boldface,
 			.italic,
-			.space,
+			.flexibleSpace,
 			.collaborate,
 			.share,
-			.flexibleSpace,
-			.navigation,
 			.space,
-			.toggleCompletedFilter,
+			.focus,
+			.filter,
 		]
 	}
 	
@@ -871,7 +877,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.note,
 			.boldface,
 			.italic,
-			.toggleCompletedFilter,
+			.focus,
+			.filter,
 			.expandAllInOutline,
 			.collapseAllInOutline,
 			.moveLeft,
@@ -1145,15 +1152,36 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.action = #selector(moveRowsDown(_:))
 			item.target = self
 			toolbarItem = item
-		case .toggleCompletedFilter:
+		case .focus:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				if self?.editorViewController?.isFocusOutUnavailable ?? true {
+					item.image = ZavalaImageAssets.focusInactive.symbolSizedForCatalyst(pointSize: 17)
+					item.label = AppStringAssets.focusInControlLabel
+					item.toolTip = AppStringAssets.focusInControlLabel
+				} else {
+					item.image = ZavalaImageAssets.focusActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
+					item.label = AppStringAssets.focusOutControlLabel
+					item.toolTip = AppStringAssets.focusOutControlLabel
+				}
+				return self?.editorViewController?.isFocusInUnavailable ?? true && self?.editorViewController?.isFocusOutUnavailable ?? true
+			}
+			item.image = ZavalaImageAssets.focusInactive.symbolSizedForCatalyst()
+			item.label = AppStringAssets.focusInControlLabel
+			item.toolTip = AppStringAssets.focusInControlLabel
+			item.isBordered = true
+			item.action = #selector(toggleFocus(_:))
+			item.target = self
+			toolbarItem = item
+		case .filter:
 			let item = ValidatingMenuToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
 				guard let self else { return false }
 				
 				if self.editorViewController?.isFilterOn ?? false {
-					item.image = ZavalaImageAssets.filterActive.symbolSizedForCatalyst(color: .accentColor)
+					item.image = ZavalaImageAssets.filterActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
 				} else {
-					item.image = ZavalaImageAssets.filterInactive.symbolSizedForCatalyst()
+					item.image = ZavalaImageAssets.filterInactive.symbolSizedForCatalyst(pointSize: 17)
 				}
 				
 				let turnFilterOnAction = UIAction() { [weak self] _ in
@@ -1286,7 +1314,7 @@ extension MainSplitViewController: UIActivityItemsConfigurationReading {
 			
 			let itemProvider = NSItemProvider()
 			
-			itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+			itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
 				let data = outline.markdownList().data(using: .utf8)
 				completion(data, nil)
 				return nil

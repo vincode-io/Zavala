@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import MobileCoreServices
+import UniformTypeIdentifiers
 import LinkPresentation
 import VinOutlineKit
 
@@ -50,7 +50,7 @@ extension DocumentsActivityItemsConfiguration: UIActivityItemsConfigurationReadi
 		let itemProviders: [NSItemProvider] = selectedDocuments.compactMap { document in
 			let itemProvider = NSItemProvider()
 			
-			itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+			itemProvider.registerDataRepresentation(for: UTType.utf8PlainText, visibility: .all) { completion in
 				if Thread.isMainThread {
 					let data = document.formattedPlainText.data(using: .utf8)
 					completion(data, nil)
@@ -74,30 +74,21 @@ extension DocumentsActivityItemsConfiguration: UIActivityItemsConfigurationReadi
 			return nil
 		}
 
-		if #available(iOS 15.0, *) {
-			switch key {
-			case .title:
-				return selectedDocuments[at].title
-			case .linkPresentationMetadata:
-				let iconView = UIImageView(image: ZavalaImageAssets.outline)
-				iconView.backgroundColor = .accentColor
-				iconView.tintColor = .label
-				iconView.contentMode = .scaleAspectFit
-				iconView.bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
-				let metadata = LPLinkMetadata()
-				metadata.title = selectedDocuments[at].title
-				metadata.iconProvider = NSItemProvider(object: iconView.asImage())
-				return metadata
-			default:
-				return nil
-			}
-		} else {
-			switch key {
-			case .title:
-				return selectedDocuments[at].title
-			default:
-				return nil
-			}
+		switch key {
+		case .title:
+			return selectedDocuments[at].title
+		case .linkPresentationMetadata:
+			let iconView = UIImageView(image: ZavalaImageAssets.outline)
+			iconView.backgroundColor = .accentColor
+			iconView.tintColor = .label
+			iconView.contentMode = .scaleAspectFit
+			iconView.bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
+			let metadata = LPLinkMetadata()
+			metadata.title = selectedDocuments[at].title
+			metadata.iconProvider = NSItemProvider(object: iconView.asImage())
+			return metadata
+		default:
+			return nil
 		}
 	}
 

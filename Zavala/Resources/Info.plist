@@ -100,7 +100,7 @@
 	<key>NSAppleScriptEnabled</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2020-2022 Maurice C. Parker
+	<string>Copyright © 2020-2024 Maurice C. Parker
 All Rights Reserved.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Zavala wants to use your photos so that you can insert them into outlines.</string>
@@ -183,6 +183,14 @@ All Rights Reserved.</string>
 					<string>$(PRODUCT_MODULE_NAME).AboutSceneDelegate</string>
 					<key>UISceneStoryboardFile</key>
 					<string>About</string>
+				</dict>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Settings Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SettingsSceneDelegate</string>
+					<key>UISceneStoryboardFile</key>
+					<string>Settings</string>
 				</dict>
 			</array>
 		</dict>

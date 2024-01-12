@@ -7,6 +7,7 @@
 
 import AppKit
 import OSLog
+import UniformTypeIdentifiers
 
 @objc class AppKitWrapper: NSResponder, AppKitPlugin {
 	
@@ -23,15 +24,7 @@ import OSLog
 		movementMonitor = RSAppMovementMonitor()
 	}
 	
-	func showPreferences() {
-		if preferencesWindowController == nil {
-			let bundle = Bundle(for: type(of: self))
-			let storyboard = NSStoryboard(name: NSStoryboard.Name("Preferences"), bundle: bundle)
-			preferencesWindowController = storyboard.instantiateInitialController()! as NSWindowController
-		}
-		preferencesWindowController!.showWindow(self)
-	}
-	
+
 	func importOPML() {
 		let panel = NSOpenPanel()
 		panel.canDownloadUbiquitousContents = true
@@ -40,7 +33,9 @@ import OSLog
 		panel.allowsMultipleSelection = false
 		panel.canChooseDirectories = false
 		panel.resolvesAliases = true
-		panel.allowedFileTypes = ["opml"]
+		if let opmlType = UTType(filenameExtension: "opml") {
+			panel.allowedContentTypes = [opmlType]
+		}
 		panel.allowsOtherFileTypes = false
 		
 		let modalResult = panel.runModal()
@@ -57,9 +52,15 @@ import OSLog
 		nsWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
 	}
 
-	func configureShowAbout(_ window: NSObject?) {
+	func configureAbout(_ window: NSObject?) {
 		guard let nsWindow = window as? NSWindow else { return }
 		nsWindow.styleMask.insert(.fullSizeContentView)
+		nsWindow.standardWindowButton(.zoomButton)?.isEnabled = false
+		nsWindow.standardWindowButton(.miniaturizeButton)?.isEnabled = false
+	}
+
+	func configureSettings(_ window: NSObject?) {
+		guard let nsWindow = window as? NSWindow else { return }
 		nsWindow.standardWindowButton(.zoomButton)?.isEnabled = false
 		nsWindow.standardWindowButton(.miniaturizeButton)?.isEnabled = false
 	}

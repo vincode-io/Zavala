@@ -12,10 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol AppKitPlugin <NSObject>
 - (void)setDelegate:(nullable id<AppKitPluginDelegate>)delegate;
 - (void)start;
-- (void)showPreferences;
 - (void)importOPML;
 - (void)configureOpenQuickly:(NSObject  * _Nullable)window;
-- (void)configureShowAbout:(NSObject  * _Nullable)window;
+- (void)configureAbout:(NSObject  * _Nullable)window;
+- (void)configureSettings:(NSObject  * _Nullable)window;
 - (void)configureWindowSize:(NSObject  * _Nullable)window x:(double)x y:(double)y width:(double)width height:(double)height;
 - (void)configureWindowAspectRatio:(NSObject  * _Nullable)window width:(double)width height:(double)height;
 - (void)updateAppearance:(NSObject  * _Nullable)window;

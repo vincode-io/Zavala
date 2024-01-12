@@ -14,6 +14,7 @@ extension NSUserActivity {
 		static let newOutline = "io.vincode.Zavala.newOutline"
 		static let openQuickly = "io.vincode.Zavala.openQuickly"
 		static let showAbout = "io.vincode.Zavala.showAbout"
+		static let showSettings = "io.vincode.Zavala.showSettings"
 		static let viewImage = "io.vincode.Zavala.viewImage"
 
 		static let restoration = "io.vincode.Zavala.restoration"

@@ -3,7 +3,6 @@
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
 .DS_Store
-wildcat_settings
 
 ## Build generated
 build/
@@ -31,10 +30,6 @@ xcuserdata/
 *.dSYM.zip
 *.dSYM
 
-## Playgrounds
-timeline.xctimeline
-playground.xcworkspace
-
 # Swift Package Manager
 #
 # Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
@@ -42,4 +37,3 @@ playground.xcworkspace
 # Package.pins
 .build/
 
-#tools/swiftgen-6.4.0

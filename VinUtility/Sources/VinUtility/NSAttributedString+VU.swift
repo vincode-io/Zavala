@@ -34,7 +34,10 @@ public extension NSAttributedString {
 		return NSAttributedString(attributedString: modifiedString)
 	}
 
+	#if canImport(UIKit)
 	func toData() -> Data? {
 		return try? self.data(from: .init(location: 0, length: self.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])
 	}
+	#endif
+	
 }

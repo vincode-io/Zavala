@@ -7,8 +7,9 @@
 
 import UIKit
 import CoreSpotlight
-import VinOutlineKit
 import SafariServices
+import VinOutlineKit
+import VinUtility
 
 class EditorContainerViewController: UIViewController, MainCoordinator {
 		
@@ -88,7 +89,10 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		
 		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return nil }
 		let document = account.createOutline(title: title)
-		document.outline?.update(ownerName: AppDefaults.shared.ownerName, ownerEmail: AppDefaults.shared.ownerEmail, ownerURL: AppDefaults.shared.ownerURL)
+		document.outline?.update(autoLinkingEnabled: AppDefaults.shared.autoLinkingEnabled,
+								 ownerName: AppDefaults.shared.ownerName,
+								 ownerEmail: AppDefaults.shared.ownerEmail,
+								 ownerURL: AppDefaults.shared.ownerURL)
 		
 		return document
 	}
@@ -194,6 +198,10 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		moveRowsDown()
 	}
 
+	@objc func toggleFocus(_ sender: Any?) {
+		toggleFocus()
+	}
+
 	@objc func toggleOutlineHideNotes(_ sender: Any?) {
 		toggleNotesFilter()
 	}
@@ -286,7 +294,8 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.collaborate,
 			.share,
 			.space,
-			.toggleCompletedFilter,
+			.focus,
+			.filter,
 		]
 	}
 	
@@ -298,7 +307,8 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.link,
 			.boldface,
 			.italic,
-			.toggleCompletedFilter,
+			.focus,
+			.filter,
 			.expandAllInOutline,
 			.collapseAllInOutline,
 			.moveLeft,
@@ -474,15 +484,36 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.action = #selector(moveRowsDown(_:))
 			item.target = self
 			toolbarItem = item
-		case .toggleCompletedFilter:
+		case .focus:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				if self?.editorViewController?.isFocusOutUnavailable ?? true {
+					item.image = ZavalaImageAssets.focusInactive.symbolSizedForCatalyst(pointSize: 17)
+					item.label = AppStringAssets.focusInControlLabel
+					item.toolTip = AppStringAssets.focusInControlLabel
+				} else {
+					item.image = ZavalaImageAssets.focusActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
+					item.label = AppStringAssets.focusOutControlLabel
+					item.toolTip = AppStringAssets.focusOutControlLabel
+				}
+				return self?.editorViewController?.isFocusInUnavailable ?? true && self?.editorViewController?.isFocusOutUnavailable ?? true
+			}
+			item.image = ZavalaImageAssets.focusInactive.symbolSizedForCatalyst()
+			item.label = AppStringAssets.focusInControlLabel
+			item.toolTip = AppStringAssets.focusInControlLabel
+			item.isBordered = true
+			item.action = #selector(toggleFocus(_:))
+			item.target = self
+			toolbarItem = item
+		case .filter:
 			let item = ValidatingMenuToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
 				guard let self else { return false }
 				
 				if self.editorViewController?.isFilterOn ?? false {
-					item.image = ZavalaImageAssets.filterActive.symbolSizedForCatalyst(color: .accentColor)
+					item.image = ZavalaImageAssets.filterActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
 				} else {
-					item.image = ZavalaImageAssets.filterInactive.symbolSizedForCatalyst()
+					item.image = ZavalaImageAssets.filterInactive.symbolSizedForCatalyst(pointSize: 17)
 				}
 				
 				let turnFilterOnAction = UIAction() { [weak self] _ in
@@ -611,7 +642,7 @@ extension EditorContainerViewController: UIActivityItemsConfigurationReading {
 		
 		let itemProvider = NSItemProvider()
 		
-		itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypeUTF8PlainText as String, visibility: .all) { completion in
+		itemProvider.registerDataRepresentation(for: UTType.utf8PlainText, visibility: .all) { completion in
 			let data = outline.markdownList().data(using: .utf8)
 			completion(data, nil)
 			return nil

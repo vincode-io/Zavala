@@ -131,7 +131,7 @@ class EditorRowNoteTextView: EditorRowTextView {
 		
 		baseAttributes = [NSAttributedString.Key : Any]()
 		baseAttributes[.foregroundColor] = UIColor.secondaryLabel
-		baseAttributes[.font] = OutlineFontCache.shared.note(level: row.level)
+		baseAttributes[.font] = OutlineFontCache.shared.note(level: row.trueLevel)
 		
 		typingAttributes = baseAttributes
         

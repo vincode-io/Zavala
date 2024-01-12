@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import VinUtility
 
 struct AboutView: View {
 	
@@ -39,7 +40,7 @@ struct AboutView: View {
 						.onTapGesture {
 							UIApplication.shared.open(URL(string: AppStringAssets.websiteURL)!, options: [:])
 						}
-					Text(Bundle.main.appName)
+					Text(BuildInfo.shared.appName)
 						.foregroundColor(.primary)
 						.font(.title)
 					Text(secondaryLabel)
@@ -58,16 +59,16 @@ struct AboutView: View {
 					AttributedLabelView(string: iconBy)
 				}
 				VStack(spacing: 5) {
-					Link("Acknowledgements", destination: URL(string: AppStringAssets.acknowledgementsURL)!)
+					Link(AppStringAssets.acknowledgementsControlLabel, destination: URL(string: AppStringAssets.acknowledgementsURL)!)
 						.buttonStyle(.borderless)
-					Link("Privacy Policy", destination: URL(string: AppStringAssets.privacyPolicyURL)!)
+					Link(AppStringAssets.privacyPolicyControlLabel, destination: URL(string: AppStringAssets.privacyPolicyURL)!)
 						.buttonStyle(.borderless)
 				}
 				Spacer()
 			}
 			VStack {
 				Spacer()
-				Text(verbatim: "Copyright © Vincode, Inc. 2020-\(Calendar.current.component(.year, from: Date()))")
+				Text(AppStringAssets.copyrightLabel())
 					.font(.footnote)
 					.padding(10)
 			}

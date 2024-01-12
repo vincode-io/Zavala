@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct BuildInfo: Codable {
+public struct BuildInfo: Codable {
 	
-	static let shared = {
+	public static let shared = {
 		guard let buildInfoPlist = Bundle.main.url(forResource: "BuildInfo", withExtension: "plist"),
 			  let data = try? Data(contentsOf: buildInfoPlist),
 			  let buildInfo = try? PropertyListDecoder().decode(BuildInfo.self, from: data) else {
@@ -18,10 +18,10 @@ struct BuildInfo: Codable {
 		return buildInfo
 	}()
 	
-	let buildTime: String
-	let gitBranch: String
-	let gitTag: String
-	let gitCommitHash: String
+	public let buildTime: String
+	public let gitBranch: String
+	public let gitTag: String
+	public let gitCommitHash: String
 	
 	enum CodingKeys: String, CodingKey {
 		case buildTime = "BuildTime"
@@ -30,24 +30,24 @@ struct BuildInfo: Codable {
 		case gitCommitHash = "GitCommitHash"
 	}
 	
-	var appName: String {
+	public var appName: String {
 		return Bundle.main.infoDictionary?["CFBundleName"] as! String
 	}
 	
-	var versionNumber: String {
+	public var versionNumber: String {
 		return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
 	}
 	
-	var buildNumber: String {
+	public var buildNumber: String {
 		return Bundle.main.infoDictionary?["CFBundleVersion"] as! String
 	}
 	
-	var versionLabel: String {
-		return "Version \(BuildInfo.shared.versionNumber) (\(BuildInfo.shared.buildNumber))"
+	public var versionLabel: String {
+		return String(localized: "Version \(BuildInfo.shared.versionNumber) (\(BuildInfo.shared.buildNumber))", comment: "Version Label")
 	}
 	
-	var buildLabel: String {
-		return "Build: (branch: \(gitBranch))\(gitTag.isEmpty ? "" : ", (tag: \(gitTag))"), (hash: \(gitCommitHash))"
+	public var buildLabel: String {
+		return String(localized: "Build: (branch: \(gitBranch))\(gitTag.isEmpty ? "" : ", (tag: \(gitTag))"), (hash: \(gitCommitHash))", comment: "Build Label")
 	}
 	
 	init() {

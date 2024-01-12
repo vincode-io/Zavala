@@ -21,7 +21,7 @@ extension IntentRow {
 		
 		complete = NSNumber(booleanLiteral: row.isComplete ?? false)
 		expanded = NSNumber(booleanLiteral: row.isExpanded)
-		level = NSNumber(integerLiteral: row.level)
+		level = NSNumber(integerLiteral: row.trueLevel)
 	}
 	
 }

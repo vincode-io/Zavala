@@ -38,12 +38,10 @@ class EditorTagInputTextField: SearchTextField {
 	
 	override var keyCommands: [UIKeyCommand]? {
 		let tab = UIKeyCommand(action: #selector(createTag), input: "\t")
+		tab.wantsPriorityOverSystemBehavior = true
+
 		let esc = UIKeyCommand(action: #selector(closeSuggestionList), input: UIKeyCommand.inputEscape)
-		
-		if #available(iOS 15.0, *) {
-			tab.wantsPriorityOverSystemBehavior = true
-			esc.wantsPriorityOverSystemBehavior = true
-		}
+		esc.wantsPriorityOverSystemBehavior = true
 
 		return [tab, esc]
 	}

@@ -5,9 +5,10 @@
 //  Created by Maurice Parker on 3/19/21.
 //
 
+#if canImport(UIKit)
 import UIKit
 
-extension UIWindow {
+public extension UIWindow {
 	
 	var nsWindow: NSObject? {
 		guard let nsWindows = NSClassFromString("NSApplication")?.value(forKeyPath: "sharedApplication.windows") as? [NSObject] else { return nil }
@@ -23,3 +24,4 @@ extension UIWindow {
 	}
 	
 }
+#endif

@@ -14,171 +14,11 @@ var appDelegate: AppDelegate!
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
-	override var keyCommands: [UIKeyCommand]? {
-		#if targetEnvironment(macCatalyst)
-		return nil
-		#else
-		if #available(iOS 15.0, *) {
-			return nil
-		}
-		
-		var menuKeyCommands = [UIKeyCommand]()
-		
-		menuKeyCommands.append(showPreferences)
-		menuKeyCommands.append(beginDocumentSearchCommand)
-		menuKeyCommands.append(showOpenQuicklyCommand)
-		
-		if AccountManager.shared.isSyncAvailable {
-			menuKeyCommands.append(syncCommand)
-		}
-
-
-		if !(mainCoordinator?.isOutlineFunctionsUnavailable ?? true) {
-			menuKeyCommands.append(toggleFilterOnCommand)
-			menuKeyCommands.append(beginInDocumentSearchCommand)
-			menuKeyCommands.append(useSelectionForSearchCommand)
-			menuKeyCommands.append(nextInDocumentSearchCommand)
-			menuKeyCommands.append(previousInDocumentSearchCommand)
-			menuKeyCommands.append(printDocsCommand)
-			menuKeyCommands.append(printListsCommand)
-			menuKeyCommands.append(outlineGetInfoCommand)
-		}
-		
-		menuKeyCommands.append(newOutlineCommand)
-		menuKeyCommands.append(importOPMLCommand)
-		
-		if !(mainCoordinator?.isOutlineFunctionsUnavailable ?? true) {
-			menuKeyCommands.append(exportMarkdownListsCommand)
-			menuKeyCommands.append(exportOPMLsCommand)
-		}
-		
-		menuKeyCommands.append(newWindowCommand)
-		menuKeyCommands.append(toggleSidebarCommand)
-		
-		menuKeyCommands.append(deleteCommand)
-
-		if !(mainCoordinator?.isGoBackwardOneUnavailable ?? true) {
-			menuKeyCommands.append(goBackwardOneCommand)
-		}
-		
-		if !(mainCoordinator?.isGoForwardOneUnavailable ?? true) {
-			menuKeyCommands.append(goForwardOneCommand)
-		}
-		
-		if !(mainCoordinator?.isInsertImageUnavailable ?? true) {
-			menuKeyCommands.append(insertImageCommand)
-		}
-		
-		if !(mainCoordinator?.isLinkUnavailable ?? true) {
-			menuKeyCommands.append(linkCommand)
-		}
-		
-		if !(mainCoordinator?.isInsertRowUnavailable ?? true) {
-			menuKeyCommands.append(insertRowCommand)
-		}
-		
-		if !(mainCoordinator?.isCreateRowUnavailable ?? true) {
-			menuKeyCommands.append(createRowCommand)
-		}
-		
-		if !(mainCoordinator?.isDuplicateRowsUnavailable ?? true) {
-			menuKeyCommands.append(duplicateRowsCommand)
-		}
-		
-		if !(mainCoordinator?.isCreateRowInsideUnavailable ?? true) {
-			menuKeyCommands.append(createRowInsideCommand)
-		}
-		
-		if !(mainCoordinator?.isCreateRowOutsideUnavailable ?? true) {
-			menuKeyCommands.append(createRowOutsideCommand)
-		}
-		
-		if !(mainCoordinator?.isMoveRowsUpUnavailable ?? true) {
-			menuKeyCommands.append(moveRowsUpCommand)
-		}
-		
-		if !(mainCoordinator?.isMoveRowsDownUnavailable ?? true) {
-			menuKeyCommands.append(moveRowsDownCommand)
-		}
-		
-		if !(mainCoordinator?.isMoveRowsLeftUnavailable ?? true) {
-			menuKeyCommands.append(moveRowsLeftCommand)
-		}
-		
-		if !(mainCoordinator?.isMoveRowsRightUnavailable ?? true) {
-			menuKeyCommands.append(moveRowsRightCommand)
-		}
-		
-		if !(mainCoordinator?.isToggleRowCompleteUnavailable ?? true) {
-			if mainCoordinator?.isCompleteRowsAvailable ?? false {
-				menuKeyCommands.append(completeRowsCommand)
-			} else {
-				menuKeyCommands.append(uncompleteRowsCommand)
-			}
-		}
-		
-		if !(mainCoordinator?.isCreateRowNotesUnavailable ?? true) {
-			menuKeyCommands.append(createRowNotesCommand)
-		}
-
-		if !(mainCoordinator?.isDeleteRowNotesUnavailable ?? true) {
-			menuKeyCommands.append(deleteRowNotesCommand)
-		}
-
-		if !(mainCoordinator?.isSplitRowUnavailable ?? true) {
-			menuKeyCommands.append(splitRowCommand)
-		}
-
-		if !(mainCoordinator?.isExpandAllInOutlineUnavailable ?? true) {
-			menuKeyCommands.append(expandAllInOutlineCommand)
-		}
-		
-		if !(mainCoordinator?.isCollapseAllInOutlineUnavailable ?? true) {
-			menuKeyCommands.append(collapseAllInOutlineCommand)
-		}
-
-		if !(mainCoordinator?.isExpandAllUnavailable ?? true) {
-			menuKeyCommands.append(expandAllCommand)
-		}
-		
-		if !(mainCoordinator?.isCollapseAllUnavailable ?? true) {
-			menuKeyCommands.append(collapseAllCommand)
-		}
-		
-		if !(mainCoordinator?.isExpandUnavailable ?? true) {
-			menuKeyCommands.append(expandCommand)
-		}
-		
-		if !(mainCoordinator?.isCollapseUnavailable ?? true) {
-			menuKeyCommands.append(collapseCommand)
-		}
-		
-		if !(mainCoordinator?.isCollapseParentRowUnavailable ?? true) {
-			menuKeyCommands.append(collapseParentRowCommand)
-		}
-		
-		if !(mainCoordinator?.isDeleteCompletedRowsUnavailable ?? true) {
-			menuKeyCommands.append(deleteCompletedRowsCommand)
-		}
-
-		return menuKeyCommands
-		#endif
-	}
-		
-	let showPreferences: UIKeyCommand = {
-		let title: String
-		if #available(iOS 16, *) {
-			title = AppStringAssets.settingsEllipsisControlLabel
-		} else {
-			title = AppStringAssets.preferencesEllipsisControlLabel
-		}
-		
-		return UIKeyCommand(title: title,
-							action: #selector(showPreferences(_:)),
-							input: ",",
-							modifierFlags: [.command])
-			
-	}()
+	let showPreferences = UIKeyCommand(title: AppStringAssets.settingsEllipsisControlLabel,
+									   action: #selector(showPreferences(_:)),
+									   input: ",",
+									   modifierFlags: [.command])
+	
 	
 	let syncCommand = UIKeyCommand(title: AppStringAssets.syncControlLabel,
 								   action: #selector(syncCommand(_:)),
@@ -216,15 +56,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 input: "n",
 										 modifierFlags: [.command])
 	
-	let toggleSidebarCommand = UIKeyCommand(title: AppStringAssets.togglerSidebarControlLabel,
-											action: #selector(toggleSidebarCommand(_:)),
-											input: "s",
-											modifierFlags: [.control, .command])
-	
 	let deleteCommand = UIKeyCommand(title: AppStringAssets.deleteControlLabel,
 									 action: #selector(delete),
 									 input: "\u{8}",
-									 modifierFlags: [.command])
+									 modifierFlags: [])
 	
 	let goBackwardOneCommand = UIKeyCommand(title: AppStringAssets.backControlLabel,
 											action: #selector(goBackwardOneCommand(_:)),
@@ -333,6 +168,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let copyDocumentLinkCommand = UICommand(title: AppStringAssets.copyDocumentLinkControlLabel, action: #selector(copyDocumentLinkCommand(_:)))
 	
+	let focusInCommand = UIKeyCommand(title: AppStringAssets.focusInControlLabel,
+									  action: #selector(focusInCommand(_:)),
+									  input: UIKeyCommand.inputRightArrow,
+									  modifierFlags: [.alternate, .command])
+	
+	let focusOutCommand = UIKeyCommand(title: AppStringAssets.focusOutControlLabel,
+									   action: #selector(focusOutCommand(_:)),
+									   input: UIKeyCommand.inputLeftArrow,
+									   modifierFlags: [.alternate, .command])
+
 	let toggleFilterOnCommand = UIKeyCommand(title: AppStringAssets.turnFilterOnControlLabel,
 											 action: #selector(toggleFilterOnCommand(_:)),
 											 input: "h",
@@ -382,9 +227,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									   input: "d",
 									   modifierFlags: [.command])
 	
-	let showHelpCommand = UICommand(title: AppStringAssets.zavalaHelpControlLabel, action: #selector(showHelpCommand(_:)))
+	let showHelpCommand = UICommand(title: AppStringAssets.appHelpControlLabel, action: #selector(showHelpCommand(_:)))
 
-	let reportAnIssueCommand = UICommand(title: AppStringAssets.reportAnIssueControlLabel, action: #selector(reportAnIssueCommand(_:)))
+	let feedbackCommand = UICommand(title: AppStringAssets.feedbackControlLabel, action: #selector(feedbackCommand(_:)))
 
 	let showOpenQuicklyCommand = UIKeyCommand(title: AppStringAssets.openQuicklyEllipsisControlLabel,
 											  action: #selector(showOpenQuicklyCommand(_:)),
@@ -487,12 +332,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange), name: .AccountMetadataDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange), name: .DocumentTitleDidChange, object: nil)
 
-		var menuItems = [UIMenuItem]()
-		menuItems.append(UIMenuItem(title: AppStringAssets.linkControlLabel, action: .editLink))
-		menuItems.append(UIMenuItem(title: AppStringAssets.imageControlLabel, action: .insertImage))
-		menuItems.append(UIMenuItem(title: AppStringAssets.splitRowControlLabel, action: .splitRow))
-		UIMenuController.shared.menuItems = menuItems
-
 		#if targetEnvironment(macCatalyst)
 		guard let pluginPath = (Bundle.main.builtInPlugInsPath as NSString?)?.appendingPathComponent("AppKitPlugin.bundle"),
 			  let bundle = Bundle(path: pluginPath),
@@ -581,6 +420,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return UISceneConfiguration(name: "Image Configuration", sessionRole: connectingSceneSession.role)
 		case NSUserActivity.ActivityType.showAbout:
 			return UISceneConfiguration(name: "About Configuration", sessionRole: connectingSceneSession.role)
+		case NSUserActivity.ActivityType.showSettings:
+			return UISceneConfiguration(name: "Settings Configuration", sessionRole: connectingSceneSession.role)
 		default:
 			guard options.userActivities.first?.userInfo == nil else {
 				return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
@@ -600,7 +441,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	@objc func showPreferences(_ sender: Any?) {
 		#if targetEnvironment(macCatalyst)
-		appKitPlugin?.showPreferences()
+		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.showSettings)
+		let scene = UIApplication.shared.connectedScenes.first(where: { $0.title == AppStringAssets.settingsControlLabel})
+		UIApplication.shared.requestSceneSessionActivation(scene?.session, userActivity: userActivity, options: nil, errorHandler: nil)
 		#else
 		mainCoordinator?.showSettings()
 		#endif
@@ -741,6 +584,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.copyDocumentLink()
 	}
 
+	@objc func focusInCommand(_ sender: Any?) {
+		mainCoordinator?.toggleFocus()
+	}
+
+	@objc func focusOutCommand(_ sender: Any?) {
+		mainCoordinator?.toggleFocus()
+	}
+
 	@objc func toggleFilterOnCommand(_ sender: Any?) {
 		mainCoordinator?.toggleFilterOn()
 	}
@@ -786,11 +637,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	@objc func showHelpCommand(_ sender: Any?) {
-		mainCoordinator?.openURL(AppStringAssets.helpURL)
+		UIApplication.shared.open(URL(string: AppStringAssets.helpURL)!)
 	}
 
-	@objc func reportAnIssueCommand(_ sender: Any?) {
-		UIApplication.shared.open(URL(string: AppStringAssets.reportAnIssueURL)!)
+	@objc func feedbackCommand(_ sender: Any?) {
+		UIApplication.shared.open(URL(string: AppStringAssets.feedbackURL)!)
 	}
 
 	@objc func showOpenQuicklyCommand(_ sender: Any?) {
@@ -956,6 +807,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isLinkUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(focusInCommand(_:)):
+			if mainCoordinator?.isFocusInUnavailable ?? true {
+				command.attributes = .disabled
+			}
+		case #selector(focusOutCommand(_:)):
+			if mainCoordinator?.isFocusOutUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		case #selector(toggleFilterOnCommand(_:)):
 			if mainCoordinator?.isFilterOn ?? false {
 				command.title = AppStringAssets.turnFilterOffControlLabel
@@ -1101,13 +960,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let toggleFilterOutlineMenu = UIMenu(title: "", options: .displayInline, children: [toggleFilterOnCommand, toggleCompletedFilterCommand, toggleNotesFilterCommand])
 		builder.insertChild(toggleFilterOutlineMenu, atStartOfMenu: .view)
 
-		if #available(macOS 12.0, *) {
-			// This is included automatically on 12 and up
-		} else {
-			let toggleSidebarMenu = UIMenu(title: "", options: .displayInline, children: [toggleSidebarCommand])
-			builder.insertSibling(toggleSidebarMenu, afterMenu: .toolbar)
-		}
-		
+		let focusMenu = UIMenu(title: "", options: .displayInline, children: [focusInCommand, focusOutCommand])
+		builder.insertChild(focusMenu, atStartOfMenu: .view)
+
 		// Outline Menu
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand, createRowNotesCommand, deleteRowNotesCommand])
 		let moveRowMenu = UIMenu(title: "", options: .displayInline, children: [moveRowsLeftCommand, moveRowsRightCommand, moveRowsUpCommand, moveRowsDownCommand])
@@ -1139,7 +994,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(historyMenu, afterMenu: .view)
 
 		// Help Menu
-		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand, reportAnIssueCommand] })
+		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand, feedbackCommand] })
 	}
 
 }

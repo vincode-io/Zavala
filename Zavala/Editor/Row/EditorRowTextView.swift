@@ -90,7 +90,7 @@ class EditorRowTextView: UITextView {
 		return cleanText
 	}
 	
-	var autoSaveDebouncer = Debouncer(duration: 5.0)
+	var inactivityDebouncer = Debouncer(duration: 5.0)
     var textViewHeight: CGFloat?
     var isSavingTextUnnecessary = false
 
@@ -155,18 +155,6 @@ class EditorRowTextView: UITextView {
 			return super.canPerformAction(action, withSender: sender)
 		}
 	}
-	
-	override func buildMenu(with builder: UIMenuBuilder) {
-		super.buildMenu(with: builder)
-		
-		if isSelecting {
-			let formattingMenu = UIMenu(title: "", options: .displayInline, children: [toggleBoldCommand, toggleItalicsCommand])
-			builder.insertSibling(formattingMenu, afterMenu: .standardEdit)
-			
-			let editMenu = UIMenu(title: "", options: .displayInline, children: [editLinkCommand])
-			builder.insertSibling(editMenu, afterMenu: .standardEdit)
-		}
-	}
     
 	override func paste(_ sender: Any?) {
 		if selectedRange.length > 0 && UIPasteboard.general.hasURLs, let url = UIPasteboard.general.url {
@@ -177,6 +165,25 @@ class EditorRowTextView: UITextView {
 		}
 	}
 	
+	override func editMenu(for textRange: UITextRange, suggestedActions: [UIMenuElement]) -> UIMenu? {
+		var results = [UIMenuElement]()
+		
+		for suggestedAction in suggestedActions {
+			guard let menu = suggestedAction as? UIMenu else {
+				results.append(suggestedAction)
+				continue
+			}
+			
+			guard menu.identifier != .font else { continue }
+			
+			results.append(menu)
+		}
+		
+		return UIMenu(children: results)
+	}
+	
+	// MARK: API
+	
     func layoutEditor() {
         fatalError("reloadRow has not been implemented")
     }
@@ -185,8 +192,6 @@ class EditorRowTextView: UITextView {
         fatalError("makeCursorVisibleIfNecessary has not been implemented")
     }
 
-    // MARK: API
-	
 	func saveText() {
         guard isTextChanged else { return }
         
@@ -199,7 +204,7 @@ class EditorRowTextView: UITextView {
             textWasChanged()
         }
         
-        autoSaveDebouncer.cancel()
+        inactivityDebouncer.cancel()
         isTextChanged = false
 	}
 
@@ -478,8 +483,9 @@ extension EditorRowTextView {
         
         makeCursorVisibleIfNecessary()
         
-		autoSaveDebouncer.debounce { [weak self] in
+		inactivityDebouncer.debounce { [weak self] in
 			self?.saveText()
+			RequestReview.request()
 		}
     }
 

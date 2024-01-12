@@ -1,0 +1,604 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "(No Title)" : {
+      "comment" : "Control Label: (No Title)"
+    },
+    "%@ at %@" : {
+      "comment" : "Timestame Label: Created",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ at %2$@"
+          }
+        }
+      }
+    },
+    "%d of %d" : {
+      "comment" : "Results selection and count",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$d of %2$d"
+          }
+        }
+      }
+    },
+    "%lld documents" : {
+      "comment" : "Title: number of documents"
+    },
+    "About Zavala" : {
+      "comment" : "Control Label: About Zavala"
+    },
+    "Accounts" : {
+      "comment" : "Control Label: Accounts"
+    },
+    "Acknowledgements" : {
+      "comment" : "Control Label: Acknowledgements"
+    },
+    "Add" : {
+      "comment" : "Control Label: Add"
+    },
+    "Add Note" : {
+      "comment" : "Control Label: Add Note."
+    },
+    "Add Note Level" : {
+      "comment" : "Control Label: The menu option to add a new Note Level."
+    },
+    "Add Row" : {
+      "comment" : "Control Label: Add Row"
+    },
+    "Add Row Above" : {
+      "comment" : "Control Label: Add Row Above"
+    },
+    "Add Row After" : {
+      "comment" : "Control Label: Add Row After"
+    },
+    "Add Row Below" : {
+      "comment" : "Control Label: Add Row Below"
+    },
+    "Add Row Inside" : {
+      "comment" : "Control Label: Add Row Inside"
+    },
+    "Add Row Outside" : {
+      "comment" : "Control Label: Add Row Outside"
+    },
+    "Add Tag" : {
+      "comment" : "Control Label: Add Tag."
+    },
+    "Add Topic Level" : {
+      "comment" : "Control Label: The menu option to add a new Topic Level."
+    },
+    "Advanced" : {
+      "comment" : "Control Label: Advanced"
+    },
+    "Always Delete Without Asking" : {
+      "comment" : "Control Label: Always Delete Without Asking"
+    },
+    "Appearance" : {
+      "comment" : "Control Label: Appearance"
+    },
+    "Are you sure you want to delete %lld outlines?" : {
+      "comment" : "Confirmation: delete outlines?"
+    },
+    "Are you sure you want to delete %lld tags?" : {
+      "comment" : "Confirmation: delete tags?"
+    },
+    "Are you sure you want to delete the “%@” outline?" : {
+      "comment" : "Confirmation: delete outline?"
+    },
+    "Are you sure you want to delete the “%@” tag?" : {
+      "comment" : "Confirmation: delete tag?"
+    },
+    "Are you sure you want to delete the completed rows?" : {
+      "comment" : "Alert Message: Delete Completed Rows"
+    },
+    "Are you sure you want to remove the iCloud Account? All documents in the iCloud Account will be removed from this computer." : {
+      "comment" : "Alert Message: message for removing an iCloud Account"
+    },
+    "Are you sure you want to restore the defaults? All your font customizations will be lost." : {
+      "comment" : "Alert: information for restoring font defaults"
+    },
+    "Automatic" : {
+      "comment" : "Control Label: Automatic"
+    },
+    "Automatically Change Link Titles" : {
+      "comment" : "Control Label: Auto Linking"
+    },
+    "Back" : {
+      "comment" : "Control Label: Back"
+    },
+    "Backlinks" : {
+      "comment" : "Font Label: Backlinks"
+    },
+    "Bold" : {
+      "comment" : "Control Label: Bold"
+    },
+    "Bug Tracker" : {
+      "comment" : "Control Label: Bug Tracker"
+    },
+    "Cancel" : {
+      "comment" : "Control Label: Cancel the proposed action"
+    },
+    "Close" : {
+      "comment" : "Close"
+    },
+    "Collaborate" : {
+      "comment" : "Control Label: Collaborate"
+    },
+    "Collaborate…" : {
+      "comment" : "Control Label: Collaborate…"
+    },
+    "Collapse" : {
+      "comment" : "Control Label: Collapse"
+    },
+    "Collapse All" : {
+      "comment" : "Control Label: Collapse All"
+    },
+    "Collapse All in Outline" : {
+      "comment" : "Control Label: Collapse All in Outline"
+    },
+    "Collapse All in Row" : {
+      "comment" : "Control Label: Collapse All in Row"
+    },
+    "Collapse Parent Row" : {
+      "comment" : "Control Label: Collapse Parent Row"
+    },
+    "Color Palette" : {
+      "comment" : "Control Label: Color Palette"
+    },
+    "Complete" : {
+      "comment" : "Accessibility Label: Complete"
+    },
+    "Copy" : {
+      "comment" : "Control Label: Copy"
+    },
+    "Copy Document Link" : {
+      "comment" : "Control Label: Copy Document Link"
+    },
+    "Copy Document Links" : {
+      "comment" : "Control Label: Copy Document Links"
+    },
+    "Copyright © Vincode, Inc. 2020-%@" : {
+      "comment" : "About Box copyright information"
+    },
+    "Created" : {
+      "comment" : "Control Label: Created"
+    },
+    "Cut" : {
+      "comment" : "Control Label: Cut"
+    },
+    "Dark" : {
+      "comment" : "Control Label: Dark"
+    },
+    "Delete" : {
+      "comment" : "Control Label: Delete an entity"
+    },
+    "Delete Completed" : {
+      "comment" : "Control Label: Delete Completed Rows"
+    },
+    "Delete Completed Rows" : {
+      "comment" : "Alert Title: Delete Completed Rows"
+    },
+    "Delete Note" : {
+      "comment" : "Control Label: Delete Note"
+    },
+    "Delete Once" : {
+      "comment" : "Control Label: Delete Once"
+    },
+    "Delete Outline" : {
+      "comment" : "Control Label: Delete Outline"
+    },
+    "Delete Row" : {
+      "comment" : "Control Label: Delete Row"
+    },
+    "Delete Rows" : {
+      "comment" : "Control Label: Delete Rows"
+    },
+    "Disable Editor Animations" : {
+      "comment" : "Control Label: Disable Editor Animations"
+    },
+    "Document Find…" : {
+      "comment" : "Control Label: Document Find…"
+    },
+    "Done" : {
+      "comment" : "Control Label: Done"
+    },
+    "Duplicate" : {
+      "comment" : "Control Label: Duplicate"
+    },
+    "Edit document “%@”" : {
+      "comment" : "Prompt: edit document"
+    },
+    "Editor Max Width" : {
+      "comment" : "Control Label: Editor Max Width"
+    },
+    "Email" : {
+      "comment" : "Control Label: Email"
+    },
+    "Enable iCloud" : {
+      "comment" : "Control Label: Enable iCloud"
+    },
+    "Enable On My iPad" : {
+      "comment" : "Control Label: Enable On My iPad"
+    },
+    "Enable On My iPhone" : {
+      "comment" : "Control Label: Enable On My iPhone"
+    },
+    "Enable On My Mac" : {
+      "comment" : "Control Label: Enable On My Mac"
+    },
+    "Error" : {
+      "comment" : "Alert Title: Error"
+    },
+    "Expand" : {
+      "comment" : "Control Label: Expand"
+    },
+    "Expand All" : {
+      "comment" : "Control Label: Expand All"
+    },
+    "Expand All in Outline" : {
+      "comment" : "Control Label: Expand All in Outline"
+    },
+    "Expand All in Row" : {
+      "comment" : "Control Label: Expand All in Row"
+    },
+    "Export" : {
+      "comment" : "Control Label: Export"
+    },
+    "Export Export PDF List…" : {
+      "comment" : "Control Label: Export PDF List…"
+    },
+    "Export Markdown Doc…" : {
+      "comment" : "Control Label: Export Markdown Doc…"
+    },
+    "Export Markdown List…" : {
+      "comment" : "Control Label: Export Markdown List…"
+    },
+    "Export OPML…" : {
+      "comment" : "Control Label: Export OPML…"
+    },
+    "Export PDF Doc…" : {
+      "comment" : "Control Label: Export PDF Doc…"
+    },
+    "Filter" : {
+      "comment" : "Control Label: Filter"
+    },
+    "Filter Completed" : {
+      "comment" : "Control Label: Filter Completed"
+    },
+    "Filter Notes" : {
+      "comment" : "Control Label: Filter Notes"
+    },
+    "Find" : {
+      "comment" : "Control Label: Find"
+    },
+    "Find Next" : {
+      "comment" : "Control Label: Find Next"
+    },
+    "Find Previous" : {
+      "comment" : "Control Label: Find Previous"
+    },
+    "Find…" : {
+      "comment" : "Control Label: Find…"
+    },
+    "Focus In" : {
+      "comment" : "Control Label: Focus In"
+    },
+    "Focus Out" : {
+      "comment" : "Control Label: Focus Out"
+    },
+    "Fonts" : {
+      "comment" : "Control Label: Fonts"
+    },
+    "Format" : {
+      "comment" : "Control Label: Format"
+    },
+    "Forward" : {
+      "comment" : "Control Label: Forward"
+    },
+    "General" : {
+      "comment" : "Control Label: General"
+    },
+    "Get Info" : {
+      "comment" : "Control Label: Get Info"
+    },
+    "GitHub Repository" : {
+      "comment" : "Control Label: GitHub Repository"
+    },
+    "Go Backward" : {
+      "comment" : "Control Label: Go Backward"
+    },
+    "Go Forward" : {
+      "comment" : "Control Label: Go Forward"
+    },
+    "Help" : {
+      "comment" : "Control Label: Help"
+    },
+    "Hide Keyboard" : {
+      "comment" : "Control Label: Hide Keyboard"
+    },
+    "History" : {
+      "comment" : "Control Label: History"
+    },
+    "Image" : {
+      "comment" : "Control Label: Image"
+    },
+    "Import Failed" : {
+      "comment" : "Error Message Title: Import Failed"
+    },
+    "Import OPML" : {
+      "comment" : "Control Label: Import OPML"
+    },
+    "Import OPML…" : {
+      "comment" : "Control Label: Import OPML…"
+    },
+    "Insert Image" : {
+      "comment" : "Control Label: Insert Image"
+    },
+    "Insert Image…" : {
+      "comment" : "Control Label: Insert Image…"
+    },
+    "Italic" : {
+      "comment" : "Control Label: Italic"
+    },
+    "Large" : {
+      "comment" : "Control Label: Large"
+    },
+    "Light" : {
+      "comment" : "Control Label: Light"
+    },
+    "Link" : {
+      "comment" : "Control Label: Link"
+    },
+    "Link…" : {
+      "comment" : "Control Label: Link…"
+    },
+    "Medium" : {
+      "comment" : "Control Label: Medium"
+    },
+    "More" : {
+      "comment" : "Control Label: More"
+    },
+    "Move" : {
+      "comment" : "Control Label: Move"
+    },
+    "Move Down" : {
+      "comment" : "Control Label: Move Down"
+    },
+    "Move Left" : {
+      "comment" : "Control Label: Move Left"
+    },
+    "Move Right" : {
+      "comment" : "Control Label: Move Right"
+    },
+    "Move Up" : {
+      "comment" : "Control Label: Move Up"
+    },
+    "Multiple Selections" : {
+      "comment" : "Large Label: Multiple Selections"
+    },
+    "Name" : {
+      "comment" : "Control Label: Name"
+    },
+    "Navigation" : {
+      "comment" : "Control Label: Navigation"
+    },
+    "New Main Window" : {
+      "comment" : "Control Label: New Main Window"
+    },
+    "New New Outline" : {
+      "comment" : "Control Label: New New Outline"
+    },
+    "Next Result" : {
+      "comment" : "Control Label: Next Result"
+    },
+    "No Outlines associated with these tags will be deleted." : {
+      "comment" : "Alert Message: delete tags"
+    },
+    "No Outlines associated with this tag will be deleted." : {
+      "comment" : "Alert Message: delete tag"
+    },
+    "No Selection" : {
+      "comment" : "Large Label: No Selection"
+    },
+    "None" : {
+      "comment" : "Control Label: None"
+    },
+    "Note Level %lld" : {
+      "comment" : "Font Label: The font for the given Note Level"
+    },
+    "Open Quickly" : {
+      "comment" : "Search Field Placeholder: Open Quickly"
+    },
+    "Open Quickly…" : {
+      "comment" : "Control Label: Open Quickly…"
+    },
+    "Outline" : {
+      "comment" : "Control Label: Outline"
+    },
+    "Outline Defaults" : {
+      "comment" : "Control Label: Outline Defaults"
+    },
+    "Outline Owner" : {
+      "comment" : "Control Label: Outline Owner"
+    },
+    "Owner" : {
+      "comment" : "Control Label: Owner"
+    },
+    "Paste" : {
+      "comment" : "Control Label: Paste"
+    },
+    "Preferences…" : {
+      "comment" : "Control Label: Preferences…"
+    },
+    "Previous Result" : {
+      "comment" : "Control Label: Previous Result"
+    },
+    "Print" : {
+      "comment" : "Control Label: Print"
+    },
+    "Print Doc" : {
+      "comment" : "Control Label: Print Doc"
+    },
+    "Print Doc…" : {
+      "comment" : "Control Label: Print Doc…"
+    },
+    "Print List" : {
+      "comment" : "Control Label: Print List"
+    },
+    "Print List…" : {
+      "comment" : "Control Label: Print List…"
+    },
+    "Privacy Policy" : {
+      "comment" : "Control Label: Privacy Policy"
+    },
+    "Provide Feedback" : {
+      "comment" : "Control Label: Provide Feedback"
+    },
+    "Readable" : {
+      "comment" : "Control Label: Readable"
+    },
+    "Redo" : {
+      "comment" : "Control Label: Redo"
+    },
+    "Reference: " : {
+      "comment" : "Label: reference label for backlinks"
+    },
+    "References: " : {
+      "comment" : "Label: references label for backlinks"
+    },
+    "Release Notes" : {
+      "comment" : "Control Label: Release Notes"
+    },
+    "Remove" : {
+      "comment" : "Control Label: Remove"
+    },
+    "Remove iCloud Account" : {
+      "comment" : "Alert Title: title for removing an iCloud Account"
+    },
+    "Remove Tag" : {
+      "comment" : "Control Label: Remove Tag"
+    },
+    "Rename" : {
+      "comment" : "Control Label: Rename"
+    },
+    "Restore" : {
+      "comment" : "Control Label: Restore"
+    },
+    "Restore Defaults" : {
+      "comment" : "Alert: message for restoring font defaults"
+    },
+    "Row Indent" : {
+      "comment" : "Control Label: Row Indent"
+    },
+    "Row Spacing" : {
+      "comment" : "Control Label: Row Spacing"
+    },
+    "Save" : {
+      "comment" : "Control Label: Save"
+    },
+    "Search" : {
+      "comment" : "Field Placeholder: Search"
+    },
+    "See documents in “%@”" : {
+      "comment" : "Prompt: see documents in document container"
+    },
+    "Select" : {
+      "comment" : "Control Label: Select"
+    },
+    "Settings" : {
+      "comment" : "Control Label: Settings"
+    },
+    "Settings…" : {
+      "comment" : "Control Label: Settings…"
+    },
+    "Share" : {
+      "comment" : "Control Label: Share\nShare"
+    },
+    "Share…" : {
+      "comment" : "Control Label: Share…"
+    },
+    "Small" : {
+      "comment" : "Control Label: Small"
+    },
+    "Split Row" : {
+      "comment" : "Control Label: Split Row"
+    },
+    "Statistics" : {
+      "comment" : "Control Label: Statistics"
+    },
+    "Sync" : {
+      "comment" : "Control Label: Sync"
+    },
+    "Tag" : {
+      "comment" : "Data Entry Placeholder: Tag"
+    },
+    "Tags" : {
+      "comment" : "Font Label: Tags"
+    },
+    "The outline be deleted and unrecoverable." : {
+      "comment" : "Alert Message: delete outline"
+    },
+    "The outlines be deleted and unrecoverable." : {
+      "comment" : "Alert Message: delete outline"
+    },
+    "This information is included in OPML documents to attribute ownership." : {
+      "comment" : "Note: OPML Ownership."
+    },
+    "Title" : {
+      "comment" : "Font Label: Title"
+    },
+    "Toggle Sidebar" : {
+      "comment" : "Control Label: Toggle Sidebar"
+    },
+    "Topic Level %lld" : {
+      "comment" : "Font Label: The font for the given Topic Level"
+    },
+    "Turn Filter Off" : {
+      "comment" : "Control Label: Turn Filter Off"
+    },
+    "Turn Filter On" : {
+      "comment" : "Control Label: Turn Filter On"
+    },
+    "Typing" : {
+      "comment" : "Control Label: Typing"
+    },
+    "Uncomplete" : {
+      "comment" : "Control Label: Uncomplete"
+    },
+    "Undo" : {
+      "comment" : "Control Label: Undo"
+    },
+    "Undo Menu" : {
+      "comment" : "Control Label: Undo Menu"
+    },
+    "Updated" : {
+      "comment" : "Control Label: Updated"
+    },
+    "URL" : {
+      "comment" : "Control Label: URL"
+    },
+    "Use Main Window as Default" : {
+      "comment" : "Control Label: Use Main Window as Default"
+    },
+    "Use Selection For Find" : {
+      "comment" : "Control Label: Use Selection For Find"
+    },
+    "Website" : {
+      "comment" : "Control Label: Website"
+    },
+    "Wide" : {
+      "comment" : "Control Label: Wide"
+    },
+    "Word Count" : {
+      "comment" : "Control Label: Word Count"
+    },
+    "Zavala Help" : {
+      "comment" : "Control Label: Zavala Help"
+    }
+  },
+  "version" : "1.0"
+}

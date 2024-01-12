@@ -5,13 +5,13 @@
 //  Created by Maurice Parker on 11/3/21.
 //
 
-import UIKit
-
 #if targetEnvironment(macCatalyst)
+
+import UIKit
 
 public class ValidatingMenuToolbarItem: NSMenuToolbarItem {
 
-	var checkForUnavailable: ((NSMenuToolbarItem) -> Bool)?
+	public var checkForUnavailable: ((NSMenuToolbarItem) -> Bool)?
 	
 	override public func validate() {
 		guard let checkForUnavailable else {

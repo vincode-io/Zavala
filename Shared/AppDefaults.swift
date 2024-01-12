@@ -15,13 +15,31 @@ enum DefaultsSize: Int, CustomStringConvertible, CaseIterable {
 	var description: String {
 		switch self {
 		case .small:
-			return NSLocalizedString("Small", comment: "Small")
+			return AppStringAssets.smallControlLabel
 		case .medium:
-			return NSLocalizedString("Medium", comment: "Medium")
+			return AppStringAssets.mediumControlLabel
 		case .large:
-			return NSLocalizedString("Large", comment: "Large")
+			return AppStringAssets.largeControlLabel
 		}
 	}
+}
+
+enum UserInterfaceColorPalette: Int, CustomStringConvertible, CaseIterable {
+	case automatic = 0
+	case light = 1
+	case dark = 2
+
+	var description: String {
+		switch self {
+		case .automatic:
+			return AppStringAssets.automaticControlLabel
+		case .light:
+			return AppStringAssets.lightControlLabel
+		case .dark:
+			return AppStringAssets.darkControlLabel
+		}
+	}
+	
 }
 
 final class AppDefaults {
@@ -38,6 +56,7 @@ final class AppDefaults {
 	struct Key {
 		static let lastSelectedAccountID = "lastSelectedAccountID"
 		static let enableMainWindowAsDefault = "enableMainWindowAsDefault"
+		static let disableEditorAnimations = "disableEditorAnimations"
 		static let enableLocalAccount = "enableLocalAccount"
 		static let enableCloudKit = "enableCloudKit"
 		static let ownerName = "ownerName"
@@ -54,6 +73,8 @@ final class AppDefaults {
 		static let documentHistory = "documentHistory"
 		static let confirmDeleteCompletedRows = "confirmDeleteCompletedRows"
 		static let upgradedDefaultsToV2 = "upgradedDefaultsToV2"
+		static let lastReviewPromptDate = "lastReviewPromptDate"
+		static let lastReviewPromptAppVersion = "lastReviewPromptAppVersion"
 	}
 	
 	let isDeveloperBuild: Bool = {
@@ -78,6 +99,15 @@ final class AppDefaults {
 		}
 		set {
 			Self.setBool(for: Key.enableMainWindowAsDefault, newValue)
+		}
+	}
+	
+	var disableEditorAnimations: Bool {
+		get {
+			return Self.bool(for: Key.disableEditorAnimations)
+		}
+		set {
+			Self.setBool(for: Key.disableEditorAnimations, newValue)
 		}
 	}
 	
@@ -230,6 +260,25 @@ final class AppDefaults {
 			Self.setBool(for: Key.upgradedDefaultsToV2, newValue)
 		}
 	}
+
+	var lastReviewPromptDate: Date? {
+		get {
+			Self.date(for: Key.lastReviewPromptDate)
+		}
+		set {
+			Self.setDate(for: Key.lastReviewPromptDate, newValue)
+		}
+	}
+
+	var lastReviewPromptAppVersion: String? {
+		get {
+			Self.string(for: Key.lastReviewPromptAppVersion)
+		}
+		set {
+			Self.setString(for: Key.lastReviewPromptAppVersion, newValue)
+		}
+	}
+
 
 	static func registerDefaults() {
 		var defaults: [String : Any] = [Key.enableLocalAccount: true]

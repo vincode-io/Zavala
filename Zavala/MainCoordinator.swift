@@ -6,8 +6,8 @@
 //
 
 import UIKit
+import SwiftUI
 import VinOutlineKit
-import SafariServices
 
 protocol MainCoordinator: UIViewController, DocumentsActivityItemsConfigurationDelegate {
 	var editorViewController: EditorViewController? { get }
@@ -27,6 +27,14 @@ extension MainCoordinator {
 	
 	var isOutlineFunctionsUnavailable: Bool {
 		return editorViewController?.isOutlineFunctionsUnavailable ?? true
+	}
+	
+	var isFocusInUnavailable: Bool {
+		return editorViewController?.isFocusInUnavailable ?? true
+	}
+	
+	var isFocusOutUnavailable: Bool {
+		return editorViewController?.isFocusOutUnavailable ?? true
 	}
 	
 	var isCollaborateUnavailable: Bool {
@@ -147,6 +155,14 @@ extension MainCoordinator {
 	
 	func duplicateRows() {
 		editorViewController?.duplicateCurrentRows()
+	}
+	
+	func toggleFocus() {
+		editorViewController?.toggleFocus()
+	}
+	
+	func focusOut() {
+		editorViewController?.focusOut()
 	}
 	
 	func toggleFilterOn() {
@@ -290,17 +306,10 @@ extension MainCoordinator {
 		editorViewController?.previousInDocumentSearch()
 	}
 	
-	func openURL(_ urlString: String) {
-		guard let url = URL(string: urlString) else { return }
-		let vc = SFSafariViewController(url: url)
-		vc.modalPresentationStyle = .pageSheet
-		present(vc, animated: true)
-	}
-
 	func showSettings() {
-		let settingsNavController = UIStoryboard.settings.instantiateInitialViewController() as! UINavigationController
-		settingsNavController.modalPresentationStyle = .formSheet
-		present(settingsNavController, animated: true)
+		let settingsViewController = UIHostingController(rootView: SettingsView())
+		settingsViewController.modalPresentationStyle = .formSheet
+		present(settingsViewController, animated: true)
 	}
 	
 	func showGetInfo() {
@@ -309,23 +318,17 @@ extension MainCoordinator {
 	}
 	
 	func showGetInfo(outline: Outline) {
+		let getInfoView = GetInfoView(outline: outline)
+		let hostingController = UIHostingController(rootView: getInfoView)
+		hostingController.modalPresentationStyle = .formSheet
+
 		if traitCollection.userInterfaceIdiom == .mac {
-		
-			let outlineGetInfoViewController = UIStoryboard.dialog.instantiateController(ofType: MacOutlineGetInfoViewController.self)
-			outlineGetInfoViewController.preferredContentSize = CGSize(width: 350, height: 250)
-			outlineGetInfoViewController.outline = outline
-			present(outlineGetInfoViewController, animated: true)
-		
+			hostingController.preferredContentSize = CGSize(width: 350, height: 460)
 		} else {
-			
-			let outlineGetInfoNavViewController = UIStoryboard.dialog.instantiateViewController(withIdentifier: "OutlineGetInfoViewControllerNav") as! UINavigationController
-			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 325)
-			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
-			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OutlineGetInfoViewController
-			outlineGetInfoViewController.outline = outline
-			present(outlineGetInfoNavViewController, animated: true)
-			
+			hostingController.preferredContentSize = CGSize(width: 425, height: 580)
 		}
+
+		present(hostingController, animated: true)
 	}
 	
 	func exportPDFDocs() {
@@ -481,7 +484,8 @@ extension NSToolbarItem.Identifier {
 	static let sync = NSToolbarItem.Identifier("io.vincode.Zavala.refresh")
 	static let importOPML = NSToolbarItem.Identifier("io.vincode.Zavala.importOPML")
 	static let newOutline = NSToolbarItem.Identifier("io.vincode.Zavala.newOutline")
-	static let toggleCompletedFilter = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineFilter")
+	static let filter = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineFilter")
+	static let focus = NSToolbarItem.Identifier("io.vincode.Zavala.focus")
 	static let delete = NSToolbarItem.Identifier("io.vincode.Zavala.delete")
 	static let navigation = NSToolbarItem.Identifier("io.vincode.Zavala.navigation")
 	static let goBackward = NSToolbarItem.Identifier("io.vincode.Zavala.goBackward")

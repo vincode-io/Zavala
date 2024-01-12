@@ -186,7 +186,7 @@ public extension VCKZone {
 
 	/// Subscribes to zone changes
 	func subscribeToZoneChanges() {
-		let subscription = CKRecordZoneSubscription(zoneID: zoneID)
+		let subscription = CKRecordZoneSubscription(zoneID: zoneID, subscriptionID: "\(zoneID.zoneName)-changes")
         
 		let info = CKSubscription.NotificationInfo()
         info.shouldSendContentAvailable = true
