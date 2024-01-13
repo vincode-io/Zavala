@@ -9,9 +9,9 @@ header:
 
 
 
-## ![](/assets/images/help/ABC61B3B-CD0C-44A9-9217-06FBE38F40E3.png)￼ 
+## ![](/assets/images/help/F1B9E149-F2CE-4090-9221-189DF45D87B0.png)￼
 
-There are several ways to access the Get Info dialog. You can use the File menu on macOS and you can use the More Options menu on iOS. You can also access it in the context menu on the Outlines column.
+There are several ways to access the Get Info dialog. You can use the File menu on macOS and you can use the More Options menu on iOS. You can also access it in the context menu on the Documents panel.
 
 ## Owner Information
 
