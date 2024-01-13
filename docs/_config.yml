@@ -30,8 +30,6 @@ github_username:  vincode-io
 
 logo: "/assets/images/88x88.png"
 repository: "vincode-io/Zavala"
-twitter:
-  username: "vincode_io"
 og_image: "/assets/images/site-logo.png"
 timezone: "US/Central"
 
@@ -64,7 +62,7 @@ defaults:
     values:
       layout: single
       author_profile: true
-      share: true
+      share: false
       show_date: true 
       read_time: true
 
