@@ -169,8 +169,32 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return !isUncompletable
 	}
 	
+	public var isAutoCompletable: Bool {
+		guard isCompletable else { return false }
+		
+		for child in rows {
+			if child.isCompletable {
+				return false
+			}
+		}
+		
+		return true
+	}
+	
 	public var isUncompletable: Bool {
 		return isComplete ?? false
+	}
+	
+	public var isAutoUncompletable: Bool {
+		guard isUncompletable else { return false }
+
+		for child in rows {
+			if child.isCompletable {
+				return true
+			}
+		}
+		
+		return false
 	}
 	
 	var ancestorIsComplete: Bool?

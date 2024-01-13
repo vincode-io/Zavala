@@ -1232,6 +1232,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 
 		var deletes = Set<Int>()
+		var parentReloads = Set<Int>()
 
 		func deleteVisitor(_ visited: Row) {
 			if let shadowTableIndex = visited.shadowTableIndex {
@@ -1244,6 +1245,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			row.parent?.removeRow(row)
 			removeImages(rowID: row.id)
 			row.visit(visitor: deleteVisitor(_:))
+			
+			if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+				if let parentRowIndex = parentRow.shadowTableIndex {
+					parentReloads.insert(parentRowIndex)
+				}
+			}
 		}
 
 		deleteLinkRelationships(for: rows)
@@ -1264,7 +1271,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		guard let lowestShadowTableIndex = sortedDeletes.last else { return nil }
 		resetShadowTableIndexes(startingAt: lowestShadowTableIndex)
 		
-		let reloads = rows.compactMap { ($0.parent as? Row)?.shadowTableIndex }
+		var reloads = rows.compactMap { ($0.parent as? Row)?.shadowTableIndex }
+		reloads.append(contentsOf: parentReloads)
+		
 		let deleteSet = Set(deletes)
 		let reloadSet = Set(reloads).subtracting(deleteSet)
 		
@@ -1318,6 +1327,14 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		parent.insertRow(row, at: index)
 		row.parent = parent
 		
+		var reloads = Set<Int>()
+		
+		if let parentRow = parent as? Row, autoCompleteUncomplete(row: parentRow) {
+			if let parentRowIndex = parentRow.shadowTableIndex {
+				reloads.insert(parentRowIndex)
+			}
+		}
+		
 		createLinkRelationships(for: [row])
 		replaceLinkTitlesIfPossible(rows: [row])
 		endCloudKitBatchRequest()
@@ -1327,7 +1344,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 		shadowTable?.insert(row, at: shadowTableIndex)
 		resetShadowTableIndexes(startingAt: shadowTableIndex)
-		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: [shadowTableIndex])
+		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: [shadowTableIndex], reloads: reloads)
 		outlineElementsDidChange(changes)
 		
 		return shadowTableIndex
@@ -1358,6 +1375,14 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			insertRow(row, at: 0)
 			row.parent = self
 		}
+
+		var reloads = [Int]()
+
+		if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+			if let parentRowIndex = parentRow.shadowTableIndex {
+				reloads.append(parentRowIndex)
+			}
+		}
 		
 		createLinkRelationships(for: [row])
 		replaceLinkTitlesIfPossible(rows: [row])
@@ -1373,7 +1398,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			rowShadowTableIndex = 0
 		}
 		
-		var reloads = [Int]()
 		if let reload = afterRow?.shadowTableIndex {
 			reloads.append(reload)
 		}
@@ -1398,6 +1422,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			updateRowStrings(afterRow, texts)
 		}
 		
+		var reloads = Set<Int>()
 		let beginningRowCount = rowCount
 
 		for row in rows.sortedByReverseDisplayOrder() {
@@ -1428,6 +1453,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 				insertRow(row, at: 0)
 				row.parent = self
 			}
+			
+			if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+				if let parentRowIndex = parentRow.shadowTableIndex {
+					reloads.insert(parentRowIndex)
+				}
+			}
 		}
 		
 		createLinkRelationships(for: rows)
@@ -1439,7 +1470,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 		var changes = rebuildShadowTable()
 		
-		var reloads = Set<Int>()
 		if let reload = afterRow?.shadowTableIndex {
 			reloads.insert(reload)
 		}
@@ -1459,10 +1489,18 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			updateRowStrings(afterRow, texts)
 		}
 
+		var reloads = Set<Int>()
+
 		for row in rows.reversed() {
 			afterRowContainer.insertRow(row, at: 0)
 			row.parent = afterRowContainer
-		}
+						
+			if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+				if let parentRowIndex = parentRow.shadowTableIndex {
+					reloads.insert(parentRowIndex)
+				}
+			}
+}
 		
 		createLinkRelationships(for: rows)
 		replaceLinkTitlesIfPossible(rows: rows)
@@ -1473,7 +1511,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 		var changes = rebuildShadowTable()
 		
-		var reloads = Set<Int>()
 		if let reload = (afterRowContainer as? Row)?.shadowTableIndex {
 			reloads.insert(reload)
 		}
@@ -1487,9 +1524,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	public func createRowsInsideAtEnd(_ rows: [Row], afterRowContainer: RowContainer) {
 		beginCloudKitBatchRequest()
 
+		var reloads = Set<Int>()
+
 		for row in rows {
 			afterRowContainer.appendRow(row)
 			row.parent = afterRowContainer
+			
+			if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+				if let parentRowIndex = parentRow.shadowTableIndex {
+					reloads.insert(parentRowIndex)
+				}
+			}
 		}
 		
 		createLinkRelationships(for: rows)
@@ -1499,16 +1544,26 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			
 		guard isBeingUsed else { return  }
 
-		outlineElementsDidChange(rebuildShadowTable())
+		var changes = rebuildShadowTable()
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
+		outlineElementsDidChange(changes)
 	}
 
 	public func createRowsDirectlyAfter(_ rows: [Row], afterRow: Row) {
 		beginCloudKitBatchRequest()
-		
+
+		var reloads = Set<Int>()
+
 		if let afterRowParent = afterRow.parent, let afterRowChildIndex = afterRowParent.firstIndexOfRow(afterRow) {
 			for (i, row) in rows.enumerated() {
 				afterRowParent.insertRow(row, at: afterRowChildIndex + i + 1)
 				row.parent = afterRowParent
+
+				if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+					if let parentRowIndex = parentRow.shadowTableIndex {
+						reloads.insert(parentRowIndex)
+					}
+				}
 			}
 		}
 		
@@ -1519,7 +1574,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			
 		guard isBeingUsed else { return }
 
-		outlineElementsDidChange(rebuildShadowTable())
+		var changes = rebuildShadowTable()
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
+		outlineElementsDidChange(changes)
 	}
 
 	public func isCreateRowOutsideUnavailable(rows: [Row]) -> Bool {
@@ -1540,9 +1597,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			return nil
 		}
 		
+		var reloads = Set<Int>()
+
 		for (i, row) in rows.enumerated() {
 			afterParentRowParent.insertRow(row, at: index + i + 1)
 			row.parent = afterParentRowParent
+			
+			if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+				if let parentRowIndex = parentRow.shadowTableIndex {
+					reloads.insert(parentRowIndex)
+				}
+			}
 		}
 
 		createLinkRelationships(for: rows)
@@ -1552,7 +1617,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 		guard isBeingUsed else { return nil }
 
-		outlineElementsDidChange(rebuildShadowTable())
+		var changes = rebuildShadowTable()
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
+		outlineElementsDidChange(changes)
+
 		return rows.last?.shadowTableIndex
 	}
 
@@ -2548,6 +2616,7 @@ private extension Outline {
 		outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 	}
 	
+	@discardableResult
 	func completeUncomplete(rows: [Row], isComplete: Bool, rowStrings: RowStrings?) -> ([Row], Int?) {
 		beginCloudKitBatchRequest()
 		
@@ -2563,6 +2632,9 @@ private extension Outline {
 					row.complete()
 				} else {
 					row.uncomplete()
+				}
+				if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+					impacted.append(parentRow)
 				}
 				impacted.append(row)
 			}
@@ -2607,6 +2679,20 @@ private extension Outline {
 		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: reloads)
 		outlineElementsDidChange(changes)
 		return (impacted, nil)
+	}
+	
+	func autoCompleteUncomplete(row: Row) -> Bool {
+		if row.isAutoCompletable {
+			completeUncomplete(rows: [row], isComplete: true, rowStrings: nil)
+			return true
+		}
+
+		if row.isAutoUncompletable {
+			completeUncomplete(rows: [row], isComplete: false, rowStrings: nil)
+			return true
+		}
+		
+		return false
 	}
 
 	func isExpandAllUnavailable(container: RowContainer) -> Bool {
