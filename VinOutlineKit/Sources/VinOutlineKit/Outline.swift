@@ -1930,6 +1930,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 			newParentRow.isExpanded = true
 
+			autoCompleteUncomplete(row: newParentRow)
+			
 			// If the new parent row doesn't have a shadow table index, it is because it is filtered
 			if let newParentRowShadowTableIndex = newParentRow.shadowTableIndex {
 				reloads.insert(newParentRowShadowTableIndex)
@@ -1987,7 +1989,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 
 		var impacted = [Row]()
-
+		var reloads = Set<Int>()
+		
 		for row in rows.sortedWithDecendentsFiltered().reversed() {
 			guard let oldParent = row.parent as? Row,
 				  let oldRowIndex = oldParent.rows.firstIndex(of: row),
@@ -2005,6 +2008,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			newParent.insertRow(row, at: oldParentIndex + 1)
 			
 			row.parent = oldParent.parent
+
+			if autoCompleteUncomplete(row: oldParent) {
+				if let parentRowIndex = oldParent.shadowTableIndex {
+					reloads.insert(parentRowIndex)
+				}
+			}
 		}
 
 		endCloudKitBatchRequest()
@@ -2015,7 +2024,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 
 		var changes = rebuildShadowTable()
-		let reloads = reloadsForParentAndChildren(rows: impacted)
+		reloads.formUnion(reloadsForParentAndChildren(rows: impacted))
 		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		outlineElementsDidChange(changes)
 		
@@ -2698,6 +2707,7 @@ private extension Outline {
 		return (impacted, nil)
 	}
 	
+	@discardableResult
 	func autoCompleteUncomplete(row: Row) -> Bool {
 		if row.isAutoCompletable {
 			completeUncomplete(rows: [row], isComplete: true, rowStrings: nil)

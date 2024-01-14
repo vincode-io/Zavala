@@ -172,13 +172,22 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public var isAutoCompletable: Bool {
 		guard isCompletable else { return false }
 		
+		var foundOneChildCompleted = false
+		var foundOneChildUncompleted = false
+		
 		for child in rows {
+			if child.isUncompletable {
+				foundOneChildCompleted = true
+			}
 			if child.isCompletable {
+				foundOneChildUncompleted = true
+			}
+			if foundOneChildCompleted && foundOneChildUncompleted {
 				return false
 			}
 		}
 		
-		return true
+		return foundOneChildCompleted
 	}
 	
 	public var isUncompletable: Bool {
