@@ -866,7 +866,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		// End the search collection view updates early
 		isSearching = false
 		outline?.endSearching()
-		focusOut()
 		
 		outline?.unload()
 		undoManager?.removeAllActions()
