@@ -66,7 +66,22 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	public private(set) var isSearching = SearchState.notSearching
 	public private(set) var searchText = ""
 
-	public private(set) var focusRow: Row?
+	public private(set) var focusRow: Row? {
+		get {
+			if let focusRowID {
+				return findRow(id: focusRowID)
+			} else {
+				return nil
+			}
+		}
+		set {
+			if let newValue {
+				focusRowID = newValue.id
+			} else {
+				focusRowID = nil
+			}
+		}
+	}
 	
 	public var adjustedRowsSection: Section {
 		return isSearching == .notSearching ? Section.rows : Section.title
@@ -462,6 +477,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		case isFilterOn
 		case isCompletedFiltered
 		case isNotesFiltered
+		case focusRowID
 		case selectionRowID
 		case selectionIsInNotes
 		case selectionLocation
@@ -526,6 +542,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	private var beingUsedCount = 0
 
+	private var focusRowID: String?
 	private var selectionRowID: EntityID?
 	private var selectionIsInNotes: Bool?
 	private var selectionLocation: Int?
@@ -2435,7 +2452,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	func rebuildShadowTable() -> OutlineElementChanges {
 		guard let oldShadowTable = shadowTable else { return OutlineElementChanges(section: adjustedRowsSection) }
-		rebuildTransientData(row: focusRow)
+		rebuildTransientData()
 		
 		var moves = Set<OutlineElementChanges.Move>()
 		var inserts = Set<Int>()
@@ -2878,11 +2895,11 @@ private extension Outline {
 		}
 	}
 	
-	func rebuildTransientData(row: Row? = nil) {
+	func rebuildTransientData() {
 		let transient = TransientDataVisitor(isCompletedFilterOn: isCompletedFilterOn, isSearching: isSearching)
 		
-		if let row {
-			row.visit(visitor: transient.visitor(_:))
+		if let focusRow {
+			focusRow.visit(visitor: transient.visitor(_:))
 		} else {
 			rows.forEach { row in
 				row.parent = self
