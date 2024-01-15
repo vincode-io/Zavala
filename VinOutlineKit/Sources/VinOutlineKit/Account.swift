@@ -213,6 +213,14 @@ public final class Account: NSObject, Identifiable, Codable {
 			outline.autoLinkingEnabled = autoLinkingEnabled == "true" ? true : false
 		}
 
+		if let checkSpellingWhileTyping = headNode?["checkSpellingWhileTyping"]?.first?.content {
+			outline.checkSpellingWhileTyping = checkSpellingWhileTyping == "true" ? true : false
+		}
+
+		if let correctSpellingAutomatically = headNode?["correctSpellingAutomatically"]?.first?.content {
+			outline.correctSpellingAutomatically = correctSpellingAutomatically == "true" ? true : false
+		}
+
 		if let tagNodes = headNode?["tags"]?.first?["tag"] {
 			for tagNode in tagNodes {
 				if let tagName = tagNode.content {

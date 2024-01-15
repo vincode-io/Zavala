@@ -20,10 +20,17 @@ struct GetInfoView: View {
 	
 #if targetEnvironment(macCatalyst)
 	var body: some View {
-		Text(getInfoViewModel.title)
-			.lineLimit(1)
-			.font(.title)
-			.padding(8)
+		if getInfoViewModel.title.isEmpty {
+			Text(String.noTitleLabel)
+				.lineLimit(1)
+				.font(.title)
+				.padding(8)
+		} else {
+			Text(getInfoViewModel.title)
+				.lineLimit(1)
+				.font(.title)
+				.padding(8)
+		}
 		form
 		HStack {
 			Spacer()
@@ -53,6 +60,13 @@ struct GetInfoView: View {
 	var form: some View {
 		Form {
 			Section(String.settingsControlLabel) {
+				Toggle(isOn: $getInfoViewModel.checkSpellingWhileTyping) {
+					Text(String.checkSpellingWhileTypingControlLabel)
+				}
+				Toggle(isOn: $getInfoViewModel.correctSpellingAutomatically) {
+					Text(String.correctSpellingAutomaticallyControlLabel)
+				}
+				.disabled(getInfoViewModel.checkSpellingWhileTyping == false)
 				Toggle(isOn: $getInfoViewModel.autoLinkingEnabled) {
 					Text(String.autoLinkingControlLabel)
 				}
@@ -128,6 +142,8 @@ class GetInfoViewModel: ObservableObject {
 	private var outline: Outline
 	
 	var title: String
+	@Published var checkSpellingWhileTyping: Bool
+	@Published var correctSpellingAutomatically: Bool
 	@Published var autoLinkingEnabled: Bool
 	@Published var ownerName: String
 	@Published var ownerEmail: String
@@ -140,6 +156,8 @@ class GetInfoViewModel: ObservableObject {
 		self.outline = outline
 		
 		self.title = outline.title ?? ""
+		self.checkSpellingWhileTyping = outline.checkSpellingWhileTyping ?? true
+		self.correctSpellingAutomatically = outline.correctSpellingAutomatically ?? true
 		self.autoLinkingEnabled = outline.autoLinkingEnabled ?? false
 		self.ownerName = outline.ownerName ?? ""
 		self.ownerEmail = outline.ownerEmail ?? ""
@@ -161,7 +179,9 @@ class GetInfoViewModel: ObservableObject {
 	}
 	
 	func update() {
-		outline.update(autoLinkingEnabled: autoLinkingEnabled,
+		outline.update(checkSpellingWhileTyping: checkSpellingWhileTyping,
+					   correctSpellingAutomatically: correctSpellingAutomatically,
+					   autoLinkingEnabled: autoLinkingEnabled,
 					   ownerName: ownerName,
 					   ownerEmail: ownerEmail,
 					   ownerURL: ownerURL)

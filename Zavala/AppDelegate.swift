@@ -947,6 +947,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let findMenu = UIMenu(title: .findControlLabel, children: [documentFindMenu, inDocumentFindMenu, useSelectionMenu])
 		builder.insertSibling(findMenu, beforeMenu: .spelling)
 		
+		builder.remove(menu: .spelling)
+		builder.remove(menu: .substitutions)
+
 		// Format
 		builder.remove(menu: .format)
 		let formatMenu = UIMenu(title: .formatControlLabel, children: [toggleBoldCommand, toggleItalicsCommand])

@@ -175,7 +175,9 @@ class EditorRowTextView: UITextView {
 			}
 			
 			guard menu.identifier != .font else { continue }
-			
+			guard menu.identifier != .spelling else { continue }
+			guard menu.identifier != .substitutions else { continue }
+
 			results.append(menu)
 		}
 		
@@ -183,6 +185,20 @@ class EditorRowTextView: UITextView {
 	}
 	
 	// MARK: API
+	
+	func updateTextPreferences() {
+		if row?.outline?.checkSpellingWhileTyping ?? true {
+			self.spellCheckingType = .yes
+		} else {
+			self.spellCheckingType = .no
+		}
+		
+		if row?.outline?.correctSpellingAutomatically ?? true {
+			self.autocorrectionType = .yes
+		} else {
+			self.autocorrectionType = .no
+		}
+	}
 	
     func layoutEditor() {
         fatalError("reloadRow has not been implemented")

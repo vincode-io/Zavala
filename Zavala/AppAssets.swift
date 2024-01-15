@@ -155,6 +155,7 @@ extension String {
 	static var bugTrackerControlLabel = String(localized: "Bug Tracker", comment: "Control Label: Bug Tracker")
 	
 	static var cancelControlLabel = String(localized: "Cancel", comment: "Control Label: Cancel the proposed action")
+	static var checkSpellingWhileTypingControlLabel = String(localized: "Check Spelling While Typing", comment: "Control Label: Check Spelling While Typing")
 	static var collaborateControlLabel = String(localized: "Collaborate", comment: "Control Label: Collaborate")
 	static var collaborateEllipsisControlLabel = String(localized: "Collaborate…", comment: "Control Label: Collaborate…")
 	static var collapseAllControlLabel = String(localized: "Collapse All", comment: "Control Label: Collapse All")
@@ -168,6 +169,7 @@ extension String {
 	static var copyControlLabel = String(localized: "Copy", comment: "Control Label: Copy")
 	static var copyDocumentLinkControlLabel = String(localized: "Copy Document Link", comment: "Control Label: Copy Document Link")
 	static var copyDocumentLinksControlLabel = String(localized: "Copy Document Links", comment: "Control Label: Copy Document Links")
+	static var correctSpellingAutomaticallyControlLabel = String(localized: "Correct Spelling Automatically", comment: "Control Label: Correct Spelling Automatically")
 	static var createdControlLabel = String(localized: "Created", comment: "Control Label: Created")
 	static var cutControlLabel = String(localized: "Cut", comment: "Control Label: Cut")
 	

@@ -16,6 +16,7 @@ import VinUtility
 
 public extension Notification.Name {
 	static let OutlineTagsDidChange = Notification.Name(rawValue: "OutlineTagsDidChange")
+	static let OutlineTextPreferencesDidChange = Notification.Name(rawValue: "OutlineTextPreferencesDidChange")
 	static let OutlineElementsDidChange = Notification.Name(rawValue: "OutlineElementsDidChange")
 	static let OutlineSearchWillBegin = Notification.Name(rawValue: "OutlineSearchWillBegin")
 	static let OutlineSearchTextDidChange = Notification.Name(rawValue: "OutlineSearchTextDidChange")
@@ -134,6 +135,26 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		willSet {
 			if isCloudKit && ancestorAutoLinkingEnabled == nil {
 				ancestorAutoLinkingEnabled = autoLinkingEnabled
+			}
+		}
+	}
+	
+	var ancestorCheckSpellingWhileTyping: Bool?
+	var serverCheckSpellingWhileTyping: Bool?
+	public internal(set) var checkSpellingWhileTyping: Bool? {
+		willSet {
+			if isCloudKit && ancestorCheckSpellingWhileTyping == nil {
+				ancestorCheckSpellingWhileTyping = checkSpellingWhileTyping
+			}
+		}
+	}
+	
+	var ancestorCorrectSpellingAutomatically: Bool?
+	var serverCorrectSpellingAutomatically: Bool?
+	public internal(set) var correctSpellingAutomatically: Bool? {
+		willSet {
+			if isCloudKit && ancestorCorrectSpellingAutomatically == nil {
+				ancestorCorrectSpellingAutomatically = correctSpellingAutomatically
 			}
 		}
 	}
@@ -467,6 +488,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		case updated
 		case ancestorAutoLinkingEnabled
 		case autoLinkingEnabled
+		case ancestorCheckSpellingWhileTyping
+		case checkSpellingWhileTyping
+		case ancestorCorrectSpellingAutomatically
+		case correctSpellingAutomatically
 		case ancestorOwnerName
 		case ownerName
 		case ancestorOwnerEmail
@@ -885,7 +910,15 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		if let autoLinkingEnabled {
 			opml.append("  <automaticallyChangeLinkTitles>\(autoLinkingEnabled ? "true" : "false")</automaticallyChangeLinkTitles>\n")
 		}
+
+		if let checkSpellingWhileTyping {
+			opml.append("  <checkSpellingWhileTyping>\(checkSpellingWhileTyping ? "true" : "false")</checkSpellingWhileTyping>\n")
+		}
 		
+		if let correctSpellingAutomatically {
+			opml.append("  <correctSpellingAutomatically>\(correctSpellingAutomatically ? "true" : "false")</correctSpellingAutomatically>\n")
+		}
+
 		if !(tagIDs?.isEmpty ?? true) {
 			opml.append("  <tags>\n")
 			for tag in tags {
@@ -938,11 +971,35 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		requestCloudKitUpdate(for: id)
 	}
 	
-	public func update(autoLinkingEnabled: Bool, ownerName: String?, ownerEmail: String?, ownerURL: String?) {
+	public func update(checkSpellingWhileTyping: Bool,
+					   correctSpellingAutomatically: Bool,
+					   autoLinkingEnabled: Bool,
+					   ownerName: String?,
+					   ownerEmail: String?,
+					   ownerURL: String?) {
+		
+		var textPrefsChanged = false
+		
+		if self.checkSpellingWhileTyping != checkSpellingWhileTyping {
+			textPrefsChanged = true
+		}
+		
+		if self.correctSpellingAutomatically != correctSpellingAutomatically {
+			textPrefsChanged = true
+		}
+		
+		self.checkSpellingWhileTyping = checkSpellingWhileTyping
+		self.correctSpellingAutomatically = correctSpellingAutomatically
+		
+		if textPrefsChanged {
+			outlineTextPreferencesDidChange()
+		}
+		
 		self.autoLinkingEnabled = autoLinkingEnabled
 		self.ownerName = ownerName
 		self.ownerEmail = ownerEmail
 		self.ownerURL = ownerURL
+		
 		updated = Date()
 		requestCloudKitUpdate(for: id)
 	}
@@ -2573,6 +2630,10 @@ private extension Outline {
 	
 	func outlineTagsDidChange() {
 		NotificationCenter.default.post(name: .OutlineTagsDidChange, object: self, userInfo: nil)
+	}
+	
+	func outlineTextPreferencesDidChange() {
+		NotificationCenter.default.post(name: .OutlineTextPreferencesDidChange, object: self, userInfo: nil)
 	}
 	
 	func outlineSearchWillBegin() {

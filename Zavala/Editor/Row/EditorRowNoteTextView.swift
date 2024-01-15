@@ -125,6 +125,8 @@ class EditorRowNoteTextView: EditorRowTextView {
 		
 		self.row = row
 		
+		updateTextPreferences()
+		
 		let cursorRange = selectedTextRange
 		
 		text = ""

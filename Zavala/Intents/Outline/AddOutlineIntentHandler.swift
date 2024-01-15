@@ -60,7 +60,9 @@ class AddOutlineIntentHandler: NSObject, ZavalaIntentHandler, AddOutlineIntentHa
 		}
 
 		let defaults = AppDefaults.shared
-		outline.update(autoLinkingEnabled: defaults.autoLinkingEnabled,
+		outline.update(checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
+					   correctSpellingAutomatically: defaults.correctSpellingAutomatically,
+					   autoLinkingEnabled: defaults.autoLinkingEnabled,
 					   ownerName: defaults.ownerName,
 					   ownerEmail: defaults.ownerEmail,
 					   ownerURL: defaults.ownerURL)

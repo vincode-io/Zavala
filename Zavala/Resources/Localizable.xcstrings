@@ -122,6 +122,9 @@
     "Cancel" : {
       "comment" : "Control Label: Cancel the proposed action"
     },
+    "Check Spelling While Typing" : {
+      "comment" : "Control Label: Check Spelling While Typing"
+    },
     "Close" : {
       "comment" : "Close"
     },
@@ -163,6 +166,9 @@
     },
     "Copyright © Vincode, Inc. 2020-%@" : {
       "comment" : "About Box copyright information"
+    },
+    "Correct Spelling Automatically" : {
+      "comment" : "Control Label: Correct Spelling Automatically"
     },
     "Created" : {
       "comment" : "Control Label: Created"

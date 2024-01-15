@@ -18,6 +18,8 @@ extension Outline: VCKModel {
 			static let syncID = "syncID"
 			static let title = "title"
 			static let autoLinkingEnabled = "autoLinkingEnabled"
+			static let checkSpellingWhileTyping = "checkSpellingWhileTyping"
+			static let correctSpellingAutomatically = "correctSpellingAutomatically"
 			static let ownerName = "ownerName"
 			static let ownerEmail = "ownerEmail"
 			static let ownerURL = "ownerURL"
@@ -224,6 +226,12 @@ extension Outline: VCKModel {
 		let serverAutolinkingEnabled = record[Outline.CloudKitRecord.Fields.autoLinkingEnabled] as? Bool
 		autoLinkingEnabled = merge(client: autoLinkingEnabled, ancestor: ancestorAutoLinkingEnabled, server: serverAutolinkingEnabled)
 
+		let serverCheckSpellingWhileTyping = record[Outline.CloudKitRecord.Fields.checkSpellingWhileTyping] as? Bool
+		checkSpellingWhileTyping = merge(client: checkSpellingWhileTyping, ancestor: ancestorCheckSpellingWhileTyping, server: serverCheckSpellingWhileTyping)
+
+		let serverCorrectSpellingAutomatically = record[Outline.CloudKitRecord.Fields.correctSpellingAutomatically] as? Bool
+		correctSpellingAutomatically = merge(client: correctSpellingAutomatically, ancestor: ancestorCorrectSpellingAutomatically, server: serverCorrectSpellingAutomatically)
+
 		let serverOwnerName = record[Outline.CloudKitRecord.Fields.ownerName] as? String
         ownerName = merge(client: ownerName, ancestor: ancestorOwnerName, server: serverOwnerName)
 
@@ -304,6 +312,12 @@ extension Outline: VCKModel {
 		let recordAutoLinkingEnabled = merge(client: autoLinkingEnabled, ancestor: ancestorAutoLinkingEnabled, server: serverAutolinkingEnabled)
 		record[Outline.CloudKitRecord.Fields.autoLinkingEnabled] = recordAutoLinkingEnabled
 
+		let recordCheckSpellingWhileTyping = merge(client: checkSpellingWhileTyping, ancestor: ancestorCheckSpellingWhileTyping, server: serverCheckSpellingWhileTyping)
+		record[Outline.CloudKitRecord.Fields.checkSpellingWhileTyping] = recordCheckSpellingWhileTyping
+
+		let recordCorrectSpellingAutomatically = merge(client: correctSpellingAutomatically, ancestor: ancestorCorrectSpellingAutomatically, server: serverCorrectSpellingAutomatically)
+		record[Outline.CloudKitRecord.Fields.correctSpellingAutomatically] = recordCorrectSpellingAutomatically
+
         let recordOwnerName = merge(client: ownerName, ancestor: ancestorOwnerName, server: serverOwnerName)
         record[Outline.CloudKitRecord.Fields.ownerName] = recordOwnerName
 
@@ -353,6 +367,12 @@ extension Outline: VCKModel {
 		ancestorAutoLinkingEnabled = nil
 		serverAutolinkingEnabled = nil
 
+		ancestorCheckSpellingWhileTyping = nil
+		serverCheckSpellingWhileTyping = nil
+		
+		ancestorCorrectSpellingAutomatically = nil
+		serverCorrectSpellingAutomatically = nil
+		
         ancestorOwnerName = nil
         serverOwnerName = nil
 

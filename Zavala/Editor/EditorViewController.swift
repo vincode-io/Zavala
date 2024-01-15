@@ -534,6 +534,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineDidFocusOut(_:)), name: .OutlineDidFocusOut, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineAddedBacklinks(_:)), name: .OutlineAddedBacklinks, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineRemovedBacklinks(_:)), name: .OutlineRemovedBacklinks, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineTextPreferencesDidChange(_:)), name: .OutlineTextPreferencesDidChange, object: nil)
 
 		NotificationCenter.default.addObserver(self, selector: #selector(didUndoChange(_:)), name: .NSUndoManagerDidUndoChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(didRedoChange(_:)), name: .NSUndoManagerDidRedoChange, object: nil)
@@ -680,6 +681,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			rowSpacingSize = AppDefaults.shared.rowSpacingSize
 			collectionView.reloadData()
 		}
+	}
+	
+	@objc func outlineTextPreferencesDidChange(_ note: Notification) {
+		collectionView.reloadData()
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
@@ -896,7 +901,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 
 		updateUI()
-
 		restoreScrollPosition()
 		restoreOutlineCursorPosition()
 		moveCursorToTitleOnNew()

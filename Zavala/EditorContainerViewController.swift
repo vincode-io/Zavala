@@ -89,10 +89,14 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		
 		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return nil }
 		let document = account.createOutline(title: title)
-		document.outline?.update(autoLinkingEnabled: AppDefaults.shared.autoLinkingEnabled,
-								 ownerName: AppDefaults.shared.ownerName,
-								 ownerEmail: AppDefaults.shared.ownerEmail,
-								 ownerURL: AppDefaults.shared.ownerURL)
+		
+		let defaults = AppDefaults.shared
+		document.outline?.update(checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
+								 correctSpellingAutomatically: defaults.correctSpellingAutomatically,
+								 autoLinkingEnabled: defaults.autoLinkingEnabled,
+								 ownerName: defaults.ownerName,
+								 ownerEmail: defaults.ownerEmail,
+								 ownerURL: defaults.ownerURL)
 		
 		return document
 	}

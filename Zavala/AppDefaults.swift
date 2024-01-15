@@ -63,6 +63,8 @@ final class AppDefaults {
 		static let ownerEmail = "ownerEmail"
 		static let ownerURL = "ownerURL"
 		static let autoLinkingEnabled = "autoLinking"
+		static let checkSpellingWhileTyping = "checkSpellingWhileTyping"
+		static let correctSpellingAutomatically = "correctSpellingAutomatically"
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
 		static let lastMainWindowState = "lastMainWindowState"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
@@ -171,6 +173,24 @@ final class AppDefaults {
 		}
 		set {
 			Self.setBool(for: Key.autoLinkingEnabled, newValue)
+		}
+	}
+	
+	var checkSpellingWhileTyping: Bool {
+		get {
+			return Self.bool(for: Key.checkSpellingWhileTyping)
+		}
+		set {
+			Self.setBool(for: Key.checkSpellingWhileTyping, newValue)
+		}
+	}
+	
+	var correctSpellingAutomatically: Bool {
+		get {
+			return Self.bool(for: Key.correctSpellingAutomatically)
+		}
+		set {
+			Self.setBool(for: Key.correctSpellingAutomatically, newValue)
 		}
 	}
 	
@@ -288,6 +308,8 @@ final class AppDefaults {
 		defaults[Key.confirmDeleteCompletedRows] = true
 		defaults[Key.rowIndentSize] = DefaultsSize.medium.rawValue
 		defaults[Key.rowSpacingSize] = DefaultsSize.medium.rawValue
+		defaults[Key.checkSpellingWhileTyping] = true
+		defaults[Key.correctSpellingAutomatically] = true
 		
 		AppDefaults.store.register(defaults: defaults)
 		
