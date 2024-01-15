@@ -881,6 +881,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 
 		outline.incrementBeingUsedCount()
 		outline.load()
+		checkForCorruptOutline()
 		outline.prepareForViewing()
 			
 		guard isViewLoaded else { return }
@@ -2152,6 +2153,25 @@ private extension EditorViewController {
 		let filterOptionsMenu = UIMenu(title: "", options: .displayInline, children: [filterCompletedAction, filterNotesAction])
 
 		return UIMenu(title: "", children: [turnFilterOnMenu, filterOptionsMenu])
+	}
+	
+	func checkForCorruptOutline() {
+		guard let outline, outline.isRecoveringRowsPossible else { return }
+		
+		let alertController = UIAlertController(title: AppStringAssets.corruptedOutlineTitle,
+												message: AppStringAssets.corruptedOutlineMessage,
+												preferredStyle: .alert)
+		
+		let recoverAction = UIAlertAction(title: AppStringAssets.recoverControlLabel, style: .default) { [weak self] action in
+			self?.outline?.recoverLostRows()
+		}
+		alertController.addAction(recoverAction)
+		alertController.preferredAction = recoverAction
+
+		let cancelAction = UIAlertAction(title: AppStringAssets.cancelControlLabel, style: .cancel)
+		alertController.addAction(cancelAction)
+
+		present(alertController, animated: true)
 	}
 	
 	func pressesBeganForEditMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
