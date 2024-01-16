@@ -65,6 +65,7 @@ final class AppDefaults {
 		static let autoLinkingEnabled = "autoLinking"
 		static let checkSpellingWhileTyping = "checkSpellingWhileTyping"
 		static let correctSpellingAutomatically = "correctSpellingAutomatically"
+		static let registeredSpellingDefaults = "spellingRegisteredDefaults"
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
 		static let lastMainWindowState = "lastMainWindowState"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
@@ -169,28 +170,37 @@ final class AppDefaults {
 	
 	var autoLinkingEnabled: Bool {
 		get {
-			return Self.bool(for: Key.autoLinkingEnabled)
+			return NSUbiquitousKeyValueStore.default.bool(forKey: Key.autoLinkingEnabled)
 		}
 		set {
-			Self.setBool(for: Key.autoLinkingEnabled, newValue)
+			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.autoLinkingEnabled)
 		}
 	}
 	
 	var checkSpellingWhileTyping: Bool {
 		get {
-			return Self.bool(for: Key.checkSpellingWhileTyping)
+			return NSUbiquitousKeyValueStore.default.bool(forKey: Key.checkSpellingWhileTyping)
 		}
 		set {
-			Self.setBool(for: Key.checkSpellingWhileTyping, newValue)
+			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.checkSpellingWhileTyping)
 		}
 	}
 	
 	var correctSpellingAutomatically: Bool {
 		get {
-			return Self.bool(for: Key.correctSpellingAutomatically)
+			return NSUbiquitousKeyValueStore.default.bool(forKey: Key.correctSpellingAutomatically)
 		}
 		set {
-			Self.setBool(for: Key.correctSpellingAutomatically, newValue)
+			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.correctSpellingAutomatically)
+		}
+	}
+	
+	var registeredSpellingDefaults: Bool {
+		get {
+			return NSUbiquitousKeyValueStore.default.bool(forKey: Key.registeredSpellingDefaults)
+		}
+		set {
+			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.registeredSpellingDefaults)
 		}
 	}
 	
@@ -299,19 +309,22 @@ final class AppDefaults {
 		}
 	}
 
-
 	static func registerDefaults() {
-		var defaults: [String : Any] = [Key.enableLocalAccount: true]
+		var defaults: [String: Any] = [Key.enableLocalAccount: true]
 		
 		defaults[Key.userInterfaceColorPalette] = UserInterfaceColorPalette.automatic.rawValue
 		defaults[Key.outlineFonts] = OutlineFontDefaults.defaults.userInfo
 		defaults[Key.confirmDeleteCompletedRows] = true
 		defaults[Key.rowIndentSize] = DefaultsSize.medium.rawValue
 		defaults[Key.rowSpacingSize] = DefaultsSize.medium.rawValue
-		defaults[Key.checkSpellingWhileTyping] = true
-		defaults[Key.correctSpellingAutomatically] = true
 		
 		AppDefaults.store.register(defaults: defaults)
+		
+		if !AppDefaults.shared.registeredSpellingDefaults {
+			AppDefaults.shared.checkSpellingWhileTyping = true
+			AppDefaults.shared.correctSpellingAutomatically = true
+			AppDefaults.shared.registeredSpellingDefaults = true
+		}
 		
 		upgradeDefaultsToV2()
 	}
