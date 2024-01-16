@@ -152,6 +152,9 @@
     "Color Palette" : {
       "comment" : "Control Label: Color Palette"
     },
+    "Community Discussion" : {
+      "comment" : "Control Label: Community Discussion"
+    },
     "Complete" : {
       "comment" : "Accessibility Label: Complete"
     },
@@ -169,7 +172,7 @@
     },
     "Correct Spelling Automatically" : {
       "comment" : "Control Label: Correct Spelling Automatically"
-	},
+    },
     "Corrupted Outline" : {
       "comment" : "Alert Title: Corrupted Outline"
     },

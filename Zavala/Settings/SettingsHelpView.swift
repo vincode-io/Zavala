@@ -26,19 +26,25 @@ struct SettingsHelpView: View {
 			}
 
 			Button {
-				openURL(URL(string: String.helpURL)!)
+				openURL(URL(string: .helpURL)!)
 			} label: {
 				Text(String.zavalaHelpControlLabel)
 			}
 			.foregroundStyle(.primary)
 
 			Button {
-				openURL(URL(string: String.feedbackURL)!)
+				openURL(URL(string: .communityURL)!)
+			} label: {
+				Text(String.communityControlLabel)
+			}
+			.foregroundStyle(.primary)
+
+			Button {
+				openURL(URL(string: .feedbackURL)!)
 			} label: {
 				Text(String.feedbackControlLabel)
 			}
 			.foregroundStyle(.primary)
-
 		}
     }
 }

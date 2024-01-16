@@ -122,6 +122,7 @@ extension String {
 	// MARK: URL's
 	
 	static var acknowledgementsURL = "https://github.com/vincode-io/Zavala/wiki/Acknowledgements"
+	static var communityURL = "https://github.com/vincode-io/Zavala/discussions"
 	static var feedbackURL = "mailto:mo@vincode.io"
 	static var helpURL = "https://zavala.vincode.io/help/Zavala_Help.md/"
 	static var privacyPolicyURL = "https://vincode.io/privacy-policy/"
@@ -164,6 +165,7 @@ extension String {
 	static var collapseControlLabel = String(localized: "Collapse", comment: "Control Label: Collapse")
 	static var collapseParentRowControlLabel = String(localized: "Collapse Parent Row", comment: "Control Label: Collapse Parent Row")
 	static var colorPalettControlLabel = String(localized: "Color Palette", comment: "Control Label: Color Palette")
+	static var communityControlLabel = String(localized: "Community Discussion", comment: "Control Label: Community Discussion")
 	static var completeAccessibilityLabel = String(localized: "Complete", comment: "Accessibility Label: Complete")
 	static var completeControlLabel = String(localized: "Complete", comment: "Control Label: Complete")
 	static var copyControlLabel = String(localized: "Copy", comment: "Control Label: Copy")

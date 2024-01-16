@@ -229,6 +229,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let showHelpCommand = UICommand(title: .appHelpControlLabel, action: #selector(showHelpCommand(_:)))
 
+	let showCommunityCommand = UICommand(title: .communityControlLabel, action: #selector(showCommunityCommand(_:)))
+
 	let feedbackCommand = UICommand(title: .feedbackControlLabel, action: #selector(feedbackCommand(_:)))
 
 	let showOpenQuicklyCommand = UIKeyCommand(title: .openQuicklyEllipsisControlLabel,
@@ -640,6 +642,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UIApplication.shared.open(URL(string: .helpURL)!)
 	}
 
+	@objc func showCommunityCommand(_ sender: Any?) {
+		UIApplication.shared.open(URL(string: .communityURL)!)
+	}
+
 	@objc func feedbackCommand(_ sender: Any?) {
 		UIApplication.shared.open(URL(string: .feedbackURL)!)
 	}
@@ -997,7 +1003,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(historyMenu, afterMenu: .view)
 
 		// Help Menu
-		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand, feedbackCommand] })
+		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand, showCommunityCommand, feedbackCommand] })
 	}
 
 }
