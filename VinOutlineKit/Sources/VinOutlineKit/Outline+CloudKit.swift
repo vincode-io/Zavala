@@ -125,11 +125,9 @@ extension Outline: VCKModel {
 			guard let entityID = EntityID(description: saveRecord.recordID.recordName),
 				  let row = keyedRows?[entityID.rowUUID] else { continue }
 			
-			var isExistingImage = false
 			var image: Image
 			if let existingImage = row.findImage(id: entityID) {
 				image = existingImage
-				isExistingImage = true
 			} else {
 				image = Image(outline: self, id: entityID)
 			}
@@ -138,24 +136,9 @@ extension Outline: VCKModel {
 				continue
 			}
 			
-			if isExistingImage {
-				updatedRowIDs.insert(row.id)
-			}
-
 			image.apply(saveRecord)
 			row.saveImage(image)
-
-			if let isInNotes = saveRecord[Image.CloudKitRecord.Fields.isInNotes] as? Bool,
-			   let offset = saveRecord[Image.CloudKitRecord.Fields.offset] as? Int,
-			   let asset = saveRecord[Image.CloudKitRecord.Fields.asset] as? CKAsset,
-			   let fileURL = asset.fileURL,
-			   let data = try? Data(contentsOf: fileURL) {
-
-                let image = Image(outline: self, id: entityID, isInNotes: isInNotes, offset: offset, data: data)
-				image.cloudKitMetaData = saveRecord.metadata
-				
-				updatedRowIDs.insert(entityID.rowUUID)
-			}
+			updatedRowIDs.insert(row.id)
 		}
 		
 		if !updatedRowIDs.isEmpty {

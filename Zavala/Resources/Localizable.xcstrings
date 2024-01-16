@@ -169,6 +169,8 @@
     },
     "Correct Spelling Automatically" : {
       "comment" : "Control Label: Correct Spelling Automatically"
+    "Corrupted Outline" : {
+      "comment" : "Alert Title: Corrupted Outline"
     },
     "Created" : {
       "comment" : "Control Label: Created"
@@ -467,6 +469,9 @@
     "Readable" : {
       "comment" : "Control Label: Readable"
     },
+    "Recover" : {
+      "comment" : "Control Label: Recover"
+    },
     "Redo" : {
       "comment" : "Control Label: Redo"
     },
@@ -553,6 +558,9 @@
     },
     "This information is included in OPML documents to attribute ownership." : {
       "comment" : "Note: OPML Ownership."
+    },
+    "This outline appears to be corrupted. Would you like to attempt to recover any lost rows?" : {
+      "comment" : "Alert Message: Corrupted Outline"
     },
     "Title" : {
       "comment" : "Font Label: Title"

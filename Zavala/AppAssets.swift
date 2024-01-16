@@ -170,6 +170,8 @@ extension String {
 	static var copyDocumentLinkControlLabel = String(localized: "Copy Document Link", comment: "Control Label: Copy Document Link")
 	static var copyDocumentLinksControlLabel = String(localized: "Copy Document Links", comment: "Control Label: Copy Document Links")
 	static var correctSpellingAutomaticallyControlLabel = String(localized: "Correct Spelling Automatically", comment: "Control Label: Correct Spelling Automatically")
+	static var corruptedOutlineTitle = String(localized: "Corrupted Outline", comment: "Alert Title: Corrupted Outline")
+	static var corruptedOutlineMessage = String(localized: "This outline appears to be corrupted. Would you like to attempt to recover any lost rows?", comment: "Alert Message: Corrupted Outline")
 	static var createdControlLabel = String(localized: "Created", comment: "Control Label: Created")
 	static var cutControlLabel = String(localized: "Cut", comment: "Control Label: Cut")
 	
@@ -285,6 +287,7 @@ extension String {
 	static var privacyPolicyControlLabel = String(localized: "Privacy Policy", comment: "Control Label: Privacy Policy")
 	
 	static var readableControlLabel = String(localized: "Readable", comment: "Control Label: Readable")
+	static var recoverControlLabel = String(localized: "Recover", comment: "Control Label: Recover")
 	static var redoControlLabel = String(localized: "Redo", comment: "Control Label: Redo")
 	static var releaseNotesControlLabel = String(localized: "Release Notes", comment: "Control Label: Release Notes")
 	static var removeControlLabel = String(localized: "Remove", comment: "Control Label: Remove")

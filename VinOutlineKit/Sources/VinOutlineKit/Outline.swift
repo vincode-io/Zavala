@@ -92,6 +92,19 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return beingUsedCount > 0
 	}
 	
+	public var isRecoveringRowsPossible: Bool {
+		guard let rowOrder, let keyedRows else { return false }
+		
+		let childRows = Set(keyedRows.values.flatMap({ $0.rowOrder }))
+		for row in keyedRows.values {
+			if !rowOrder.contains(row.id) && !childRows.contains(row.id) {
+				return true
+			}
+		}
+		
+		return false
+	}
+	
 	public var cloudKitMetaData: Data?
 
 	public var id: EntityID {
@@ -606,6 +619,21 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	public func prepareForViewing() {
 		rebuildTransientData()
+	}
+	
+	public func recoverLostRows() {
+		guard let rowOrder, let keyedRows else { return }
+		
+		let childRows = Set(keyedRows.values.flatMap({ $0.rowOrder }))
+		
+		for row in keyedRows.values {
+			if !rowOrder.contains(row.id) && !childRows.contains(row.id) {
+				self.rowOrder?.append(row.id)
+			}
+		}
+		
+		outlineContentDidChange()
+		outlineElementsDidChange(rebuildShadowTable())
 	}
 	
 	public func findRowContainer(entityID: EntityID) -> RowContainer? {

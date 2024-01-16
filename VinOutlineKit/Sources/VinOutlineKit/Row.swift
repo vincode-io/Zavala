@@ -754,8 +754,14 @@ private extension Row {
 		mutableAttrString.enumerateAttribute(.attachment, in: .init(location: 0, length: mutableAttrString.length), options: []) { (value, range, _) in
 			if let imageTextAttachment = value as? ImageTextAttachment, let imageUUID = imageTextAttachment.imageUUID, let pngData = imageTextAttachment.image?.pngData() {
 				let entityID = EntityID.image(outline.id.accountID, outline.id.documentUUID, id, imageUUID)
-				let image = Image(outline: outline, id: entityID, isInNotes: isNotes, offset: range.location, data: pngData)
-				images.append(image)
+				
+				if let image = findImage(id: entityID) {
+					image.offset = range.location
+					images.append(image)
+				} else {
+					let image = Image(outline: outline, id: entityID, isInNotes: isNotes, offset: range.location, data: pngData)
+					images.append(image)
+				}
 			}
 			mutableAttrString.removeAttribute(.attachment, range: range)
 		}
