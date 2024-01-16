@@ -19,6 +19,7 @@ extension UIColor {
 	static var accessoryColor = UIColor.tertiaryLabel
 	static var barBackgroundColor = UIColor(named: "BarBackgroundColor")!
 	static var fullScreenBackgroundColor: UIColor = UIColor(named: "FullScreenBackgroundColor")!
+	static var textSelectColor: UIColor = UIColor(named: "TextSelectColor")!
 	static var verticalBarColor: UIColor = .quaternaryLabel
 	
 }
