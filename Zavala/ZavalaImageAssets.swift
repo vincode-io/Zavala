@@ -85,6 +85,7 @@ struct ZavalaImageAssets {
 	static var statelessCollaborate = UIImage(systemName: "person.crop.circle")!
 	static var sync = UIImage(systemName: "arrow.clockwise")!
 
+	static var textSelectColor: UIColor = UIColor(named: "TextSelectColor")!
 	static var topicFont = UIImage(systemName: "textformat.size.larger")!
 	
 	static var uncompleteRow = UIImage(systemName: "square")!

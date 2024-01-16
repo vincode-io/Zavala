@@ -135,6 +135,7 @@ class EditorRowTextView: UITextView {
 		self.textContainer.lineFragmentPadding = 0
 		self.textContainerInset = .zero
 		self.backgroundColor = .clear
+		self.tintColor = ZavalaImageAssets.textSelectColor
 	}
 	
 	required init?(coder: NSCoder) {
