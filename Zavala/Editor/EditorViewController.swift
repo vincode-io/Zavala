@@ -2162,17 +2162,17 @@ private extension EditorViewController {
 	func checkForCorruptOutline() {
 		guard let outline, outline.isRecoveringRowsPossible else { return }
 		
-		let alertController = UIAlertController(title: AppStringAssets.corruptedOutlineTitle,
-												message: AppStringAssets.corruptedOutlineMessage,
+		let alertController = UIAlertController(title: .corruptedOutlineTitle,
+												message: .corruptedOutlineMessage,
 												preferredStyle: .alert)
 		
-		let recoverAction = UIAlertAction(title: AppStringAssets.recoverControlLabel, style: .default) { [weak self] action in
+		let recoverAction = UIAlertAction(title: .recoverControlLabel, style: .default) { [weak self] action in
 			self?.outline?.recoverLostRows()
 		}
 		alertController.addAction(recoverAction)
 		alertController.preferredAction = recoverAction
 
-		let cancelAction = UIAlertAction(title: AppStringAssets.cancelControlLabel, style: .cancel)
+		let cancelAction = UIAlertAction(title: .cancelControlLabel, style: .cancel)
 		alertController.addAction(cancelAction)
 
 		present(alertController, animated: true)

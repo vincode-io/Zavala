@@ -169,6 +169,7 @@
     },
     "Correct Spelling Automatically" : {
       "comment" : "Control Label: Correct Spelling Automatically"
+	},
     "Corrupted Outline" : {
       "comment" : "Alert Title: Corrupted Outline"
     },
