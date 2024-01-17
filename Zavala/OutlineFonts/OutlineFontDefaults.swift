@@ -15,14 +15,14 @@ struct OutlineFontDefaults: Equatable {
 		defaults.rowFontConfigs[.title] = OutlineFontConfig(name: "Helvetica Neue", size: 26)
 		defaults.rowFontConfigs[.tags] = tagConfigV2
 		defaults.rowFontConfigs[.rowTopic(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 14)
-		defaults.rowFontConfigs[.rowNote(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 13)
-		defaults.rowFontConfigs[.backlinks] = OutlineFontConfig(name: "Helvetica Neue", size: 12)
+		defaults.rowFontConfigs[.rowNote(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 13, secondaryColor: true)
+		defaults.rowFontConfigs[.backlinks] = OutlineFontConfig(name: "Helvetica Neue", size: 12, secondaryColor: true)
 		#else
 		defaults.rowFontConfigs[.title] = OutlineFontConfig(name: "Helvetica Neue", size: 34)
 		defaults.rowFontConfigs[.tags] = tagConfigV2
 		defaults.rowFontConfigs[.rowTopic(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 17)
-		defaults.rowFontConfigs[.rowNote(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 16)
-		defaults.rowFontConfigs[.backlinks] = OutlineFontConfig(name: "Helvetica Neue", size: 14)
+		defaults.rowFontConfigs[.rowNote(1)] = OutlineFontConfig(name: "Helvetica Neue", size: 16, secondaryColor: true)
+		defaults.rowFontConfigs[.backlinks] = OutlineFontConfig(name: "Helvetica Neue", size: 14, secondaryColor: true)
 		#endif
 		return defaults
 	}
@@ -100,6 +100,22 @@ struct OutlineFontDefaults: Equatable {
 				rowFontConfigs[field] = config
 			}
 		}
+	}
+	
+	static func addSecondaryColorFields(userInfo: [String: [AnyHashable: AnyHashable]]) -> [String: [AnyHashable: AnyHashable]]  {
+		var updatedUserInfo = [String: [AnyHashable: AnyHashable]]()
+		userInfo.forEach { (key: String, value: [AnyHashable : AnyHashable]) in
+			var config = value
+			
+			if let field = OutlineFontField(description: key), (field.isNote || field.isBacklink) {
+				config[OutlineFontConfig.Keys.secondaryColor] = true
+			} else {
+				config[OutlineFontConfig.Keys.secondaryColor] = false
+			}
+			
+			updatedUserInfo[key] = config
+		}
+		return updatedUserInfo
 	}
 	
 	static func == (lhs: Self, rhs: Self) -> Bool {

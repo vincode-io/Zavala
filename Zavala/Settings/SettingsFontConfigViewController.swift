@@ -19,8 +19,12 @@ class SettingsFontConfigViewController: UITableViewController {
 	@IBOutlet weak var cancelBarButtonItem: UIBarButtonItem!
 	@IBOutlet weak var saveBarButtonItem: UIBarButtonItem!
 	
+	@IBOutlet weak var fontButtonLeadingConstraint: NSLayoutConstraint!
 	@IBOutlet weak var fontButton: UIButton!
 	@IBOutlet weak var fontValueStepper: ValueStepper!
+	@IBOutlet weak var secondaryColorMacSwitch: UISwitch!
+	@IBOutlet weak var secondaryColorSwitch: UISwitch!
+	@IBOutlet weak var secondaryColorLabel: UILabel!
 	@IBOutlet weak var sampleTextLabel: UILabel!
 	
 	var cancelButton: UIButton!
@@ -29,9 +33,10 @@ class SettingsFontConfigViewController: UITableViewController {
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
-		if let field,
-			let outlineFonts = AppDefaults.shared.outlineFonts,
-			!outlineFonts.rowFontConfigs.keys.contains(field) {
+		guard let field, let config else { return }
+		
+		if let outlineFonts = AppDefaults.shared.outlineFonts,
+		   !outlineFonts.rowFontConfigs.keys.contains(field) {
 			saveBarButtonItem.title = .addControlLabel
 		}
 		
@@ -54,14 +59,25 @@ class SettingsFontConfigViewController: UITableViewController {
 			saveButton.addTarget(self, action: #selector(save(_:)), for: .touchUpInside)
 			saveButton.role = .primary
 
+			fontButtonLeadingConstraint.constant = 12
+			secondaryColorMacSwitch.title = .secondaryColorControlLabel
+			secondaryColorLabel.isHidden = true
+			secondaryColorSwitch.isHidden = true
+			
 		} else {
 			fontValueStepper.widthAnchor.constraint(equalToConstant: 149).isActive = true
 			fontValueStepper.heightAnchor.constraint(equalToConstant: 29).isActive = true
+			
+			secondaryColorLabel.text = .secondaryColorControlLabel
+			secondaryColorMacSwitch.isHidden = true
 		}
 		
-		navigationItem.title = field?.displayName
-		fontButton.setTitle(config?.name, for: .normal)
-		fontValueStepper.value = Double(config?.size ?? 0)
+		navigationItem.title = field.displayName
+		fontButton.setTitle(config.name, for: .normal)
+		fontValueStepper.value = Double(config.size)
+		
+		secondaryColorSwitch.isOn = config.secondaryColor
+		secondaryColorMacSwitch.isOn = config.secondaryColor
 		
 		updateUI()
     }
@@ -100,6 +116,11 @@ class SettingsFontConfigViewController: UITableViewController {
 		updateUI()
 	}
 	
+	@IBAction func secondaryColorChanged(_ sender: UISwitch) {
+		config?.secondaryColor = sender.isOn
+		updateUI()
+	}
+	
 	@IBAction func cancel(_ sender: Any) {
 		dismiss(animated: true)
 	}
@@ -135,8 +156,11 @@ extension SettingsFontConfigViewController: UIFontPickerViewControllerDelegate {
 private extension SettingsFontConfigViewController {
 
 	func updateUI() {
-		guard let config = config, let font = UIFont(name: config.name, size: CGFloat(config.size)) else { return }
+		guard let field, let config, let font = UIFont(name: config.name, size: CGFloat(config.size)) else { return }
 		sampleTextLabel.font = font
+		
+		sampleTextLabel.textColor = config.secondaryColor ? .secondaryLabel : .label
+		
 		tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
 	}
 

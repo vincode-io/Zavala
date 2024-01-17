@@ -310,6 +310,7 @@ extension String {
 
 	static var saveControlLabel = String(localized: "Save", comment: "Control Label: Save")
 	static var searchPlaceholder = String(localized: "Search", comment: "Field Placeholder: Search")
+	static var secondaryColorControlLabel = String(localized: "Secondary Color", comment: "Control Label: Secondary Color")
 	static var selectControlLabel = String(localized: "Select", comment: "Control Label: Select")
 	static var settingsControlLabel = String(localized: "Settings", comment: "Control Label: Settings")
 	static var settingsEllipsisControlLabel = String(localized: "Settings…", comment: "Control Label: Settings…")

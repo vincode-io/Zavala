@@ -14,6 +14,24 @@ enum OutlineFontField: Hashable, Equatable, CustomStringConvertible {
 	case rowNote(Int) // Level
 	case backlinks
 	
+	var isNote: Bool {
+		switch self {
+		case .rowNote:
+			return true
+		default:
+			return false
+		}
+	}
+	
+	var isBacklink: Bool {
+		switch self {
+		case .backlinks:
+			return true
+		default:
+			return false
+		}
+	}
+	
 	var description: String {
 		switch self {
 		case .title:

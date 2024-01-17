@@ -204,7 +204,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 			baseAttributes[.foregroundColor] = UIColor.tertiaryLabel
 			accessibilityLabel = .completeAccessibilityLabel
 		} else {
-			baseAttributes[.foregroundColor] = UIColor.label
+			baseAttributes[.foregroundColor] = OutlineFontCache.shared.topicColor(level: row.trueLevel)
 			accessibilityLabel = nil
 		}
 		
@@ -215,7 +215,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 			baseAttributes[.strikethroughStyle] = 0
 		}
 		
-		baseAttributes[.font] = OutlineFontCache.shared.topic(level: row.trueLevel)
+		baseAttributes[.font] = OutlineFontCache.shared.topicFont(level: row.trueLevel)
 		
 		typingAttributes = baseAttributes
 		

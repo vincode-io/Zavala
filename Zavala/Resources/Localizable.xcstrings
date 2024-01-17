@@ -518,6 +518,9 @@
     "Search" : {
       "comment" : "Field Placeholder: Search"
     },
+    "Secondary Color" : {
+      "comment" : "Control Label: Secondary Color"
+    },
     "See documents in “%@”" : {
       "comment" : "Prompt: see documents in document container"
     },

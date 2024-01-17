@@ -45,7 +45,8 @@ class EditorTagInputPill: UIView {
 
 		textField.editorDelegate = self
 		textField.placeholder = "Tag"
-		textField.font = OutlineFontCache.shared.tag
+		textField.font = OutlineFontCache.shared.tagFont
+		textField.textColor = OutlineFontCache.shared.tagColor
 		textField.translatesAutoresizingMaskIntoConstraints = false
 		border.addSubview(textField)
 
@@ -97,11 +98,12 @@ class EditorTagInputPill: UIView {
 	// MARK: API
 	
 	func updateAppearance() {
-		textField.font = OutlineFontCache.shared.tag
+		textField.font = OutlineFontCache.shared.tagFont
+		textField.textColor = OutlineFontCache.shared.tagColor
 		let cornerRadius = cornerRadius
 		layer.cornerRadius = cornerRadius
 		border.layer.cornerRadius = cornerRadius
-		button.titleLabel?.font = UIFont.systemFont(ofSize: OutlineFontCache.shared.tag.pointSize)
+		button.titleLabel?.font = UIFont.systemFont(ofSize: OutlineFontCache.shared.tagFont.pointSize)
 	}
 	
 	func reset() {

@@ -23,7 +23,6 @@ class EditorBacklinkContentView: UIView, UIContentView {
 		textView.backgroundColor = .clear
 		textView.adjustsFontForContentSizeCategory = true
 		textView.translatesAutoresizingMaskIntoConstraints = false
-		textView.linkTextAttributes = [.foregroundColor: UIColor.secondaryLabel, .underlineStyle: 1]
 		addSubview(textView)
 		
 		let adjustment: CGFloat = traitCollection.horizontalSizeClass == .compact ? 10 : 6
@@ -52,6 +51,7 @@ class EditorBacklinkContentView: UIView, UIContentView {
 	private func apply(configuration: EditorBacklinkContentConfiguration) {
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
+		textView.linkTextAttributes = [.foregroundColor: OutlineFontCache.shared.backlinkColor, .underlineStyle: 1]
 		textView.attributedText = configuration.reference
 	}
 	

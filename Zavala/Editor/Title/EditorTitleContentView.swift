@@ -22,7 +22,8 @@ class EditorTitleContentView: UIView, UIContentView {
 		textView.isScrollEnabled = false
 		textView.textContainer.lineFragmentPadding = 0
 		textView.textContainerInset = .zero
-		textView.font = OutlineFontCache.shared.title
+		textView.font = OutlineFontCache.shared.titleFont
+		textView.textColor = OutlineFontCache.shared.titleColor
 		textView.textAlignment = .center
 		textView.backgroundColor = .clear
 		textView.autocapitalizationType = .words
@@ -56,7 +57,8 @@ class EditorTitleContentView: UIView, UIContentView {
 	}
 	
 	private func apply() {
-		textView.font = OutlineFontCache.shared.title
+		textView.font = OutlineFontCache.shared.titleFont
+		textView.textColor = OutlineFontCache.shared.titleColor
 		textView.text = titleConfiguration.outline?.title
 	}
 	

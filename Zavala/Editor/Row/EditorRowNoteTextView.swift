@@ -132,9 +132,9 @@ class EditorRowNoteTextView: EditorRowTextView {
 		text = ""
 		
 		baseAttributes = [NSAttributedString.Key : Any]()
-		baseAttributes[.foregroundColor] = UIColor.secondaryLabel
-		baseAttributes[.font] = OutlineFontCache.shared.note(level: row.trueLevel)
-		
+		baseAttributes[.font] = OutlineFontCache.shared.noteFont(level: row.trueLevel)
+		baseAttributes[.foregroundColor] = OutlineFontCache.shared.noteColor(level: row.trueLevel)
+
 		typingAttributes = baseAttributes
         
         if let note = row.note {

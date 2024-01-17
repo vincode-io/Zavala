@@ -42,7 +42,7 @@ private extension MetadataView {
 		let keyLabel = InsetLabel(top: 1.0, left: 2.0, bottom: 1.0, right: 2.0)
 		keyLabel.text = text
 		keyLabel.textColor = .label
-		keyLabel.font = OutlineFontCache.shared.metadata(level: level)
+		keyLabel.font = OutlineFontCache.shared.metadataFont(level: level)
 		keyLabel.backgroundColor = .systemGray4
 		keyLabel.sizeToFit()
 		return keyLabel

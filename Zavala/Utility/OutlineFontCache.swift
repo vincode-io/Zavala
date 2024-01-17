@@ -19,13 +19,18 @@ class OutlineFontCache {
 	
 	var lastOutlineFonts: OutlineFontDefaults?
 	
-	var title = UIFont.preferredFont(forTextStyle: .largeTitle)
-	var tag = UIFont.preferredFont(forTextStyle: .body)
-	var backlink = UIFont.preferredFont(forTextStyle: .footnote).with(traits: .traitItalic)
-	
-	private var topics = [UIFont]()
-	private var metadatum = [UIFont]()
-	private var notes = [UIFont]()
+	var titleFont = UIFont.preferredFont(forTextStyle: .largeTitle)
+	var titleColor = UIColor.label
+	var tagFont = UIFont.preferredFont(forTextStyle: .body)
+	var tagColor = UIColor.label
+	var backlinkFont = UIFont.preferredFont(forTextStyle: .footnote).with(traits: .traitItalic)
+	var backlinkColor = UIColor.secondaryLabel
+
+	private var topicFonts = [UIFont]()
+	private var topicColors = [UIColor]()
+	private var metadatumFonts = [UIFont]()
+	private var noteFonts = [UIFont]()
+	private var noteColors = [UIColor]()
 
 	init() {
 		buildCache(AppDefaults.shared.outlineFonts)
@@ -34,32 +39,50 @@ class OutlineFontCache {
 	}
 	
 	/// This is a 0 based index lookup
-	func topic(level: Int) -> UIFont {
-		if level < topics.count {
-			return topics[level]
+	func topicFont(level: Int) -> UIFont {
+		if level < topicFonts.count {
+			return topicFonts[level]
 		} else {
-			return topics.last ?? UIFont.preferredFont(forTextStyle: .body)
+			return topicFonts.last ?? UIFont.preferredFont(forTextStyle: .body)
 		}
 	}
 	
 	/// This is a 0 based index lookup
-	func metadata(level: Int) -> UIFont {
-		if level < metadatum.count {
-			return metadatum[level]
+	func topicColor(level: Int) -> UIColor {
+		if level < topicColors.count {
+			return topicColors[level]
 		} else {
-			return metadatum.last ?? UIFont.preferredFont(forTextStyle: .title1)
+			return topicColors.last ?? .label
+		}
+	}
+
+	/// This is a 0 based index lookup
+	func metadataFont(level: Int) -> UIFont {
+		if level < metadatumFonts.count {
+			return metadatumFonts[level]
+		} else {
+			return metadatumFonts.last ?? UIFont.preferredFont(forTextStyle: .title1)
 		}
 	}
 	
 	/// This is a 0 based index lookup
-	func note(level: Int) -> UIFont {
-		if level < notes.count {
-			return notes[level]
+	func noteFont(level: Int) -> UIFont {
+		if level < noteFonts.count {
+			return noteFonts[level]
 		} else {
-			return notes.last ?? UIFont.preferredFont(forTextStyle: .body)
+			return noteFonts.last ?? UIFont.preferredFont(forTextStyle: .body)
 		}
 	}
 	
+	/// This is a 0 based index lookup
+	func noteColor(level: Int) -> UIColor {
+		if level < noteColors.count {
+			return noteColors[level]
+		} else {
+			return noteColors.last ?? .secondaryLabel
+		}
+	}
+
 }
 
 extension OutlineFontCache {
@@ -79,8 +102,10 @@ extension OutlineFontCache {
 		lastOutlineFonts = outlineFonts
 		guard let sortedFields = outlineFonts?.sortedFields else { return }
 		
-		topics.removeAll()
-		notes.removeAll()
+		topicFonts.removeAll()
+		topicColors.removeAll()
+		noteFonts.removeAll()
+		noteColors.removeAll()
 		
 		for field in sortedFields {
 			guard let config = outlineFonts?.rowFontConfigs[field],
@@ -88,18 +113,23 @@ extension OutlineFontCache {
 			
 			switch field {
 			case .title:
-				title = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: font).with(traits: .traitBold)
+				titleFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: font).with(traits: .traitBold)
+				titleColor = config.secondaryColor ? .secondaryLabel : .label
 			case .tags:
-				tag = UIFontMetrics(forTextStyle: .body).scaledFont(for: font).with(traits: .traitBold)
+				tagFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font).with(traits: .traitBold)
+				tagColor = config.secondaryColor ? .secondaryLabel : .label
 			case .rowTopic:
 				let topicFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
-				topics.append(topicFont)
+				topicFonts.append(topicFont)
+				topicColors.append(config.secondaryColor ? .secondaryLabel : .label)
 				let metadataFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font.withSize(font.pointSize - 2))
-				metadatum.append(metadataFont)
+				metadatumFonts.append(metadataFont)
 			case .rowNote:
-				notes.append(UIFontMetrics(forTextStyle: .body).scaledFont(for: font))
+				noteFonts.append(UIFontMetrics(forTextStyle: .body).scaledFont(for: font))
+				noteColors.append(config.secondaryColor ? .secondaryLabel : .label)
 			case .backlinks:
-				backlink = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: font).with(traits: .traitItalic)
+				backlinkFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: font).with(traits: .traitItalic)
+				backlinkColor = config.secondaryColor ? .secondaryLabel : .label
 			}
 		}
 

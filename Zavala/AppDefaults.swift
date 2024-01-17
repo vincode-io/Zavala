@@ -65,7 +65,6 @@ final class AppDefaults {
 		static let autoLinkingEnabled = "autoLinking"
 		static let checkSpellingWhileTyping = "checkSpellingWhileTyping"
 		static let correctSpellingAutomatically = "correctSpellingAutomatically"
-		static let registeredSpellingDefaults = "spellingRegisteredDefaults"
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
 		static let lastMainWindowState = "lastMainWindowState"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
@@ -76,6 +75,7 @@ final class AppDefaults {
 		static let documentHistory = "documentHistory"
 		static let confirmDeleteCompletedRows = "confirmDeleteCompletedRows"
 		static let upgradedDefaultsToV2 = "upgradedDefaultsToV2"
+		static let upgradedDefaultsToV2dot3 = "upgradedDefaultsToV2dot3"
 		static let lastReviewPromptDate = "lastReviewPromptDate"
 		static let lastReviewPromptAppVersion = "lastReviewPromptAppVersion"
 	}
@@ -195,15 +195,6 @@ final class AppDefaults {
 		}
 	}
 	
-	var registeredSpellingDefaults: Bool {
-		get {
-			return NSUbiquitousKeyValueStore.default.bool(forKey: Key.registeredSpellingDefaults)
-		}
-		set {
-			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.registeredSpellingDefaults)
-		}
-	}
-	
 	var lastMainWindowState: [AnyHashable: Any]? {
 		get {
 			return AppDefaults.store.object(forKey: Key.lastMainWindowState) as? [AnyHashable : Any]
@@ -291,6 +282,15 @@ final class AppDefaults {
 		}
 	}
 
+	var upgradedDefaultsToV2dot3: Bool {
+		get {
+			return Self.bool(for: Key.upgradedDefaultsToV2dot3)
+		}
+		set {
+			Self.setBool(for: Key.upgradedDefaultsToV2dot3, newValue)
+		}
+	}
+
 	var lastReviewPromptDate: Date? {
 		get {
 			Self.date(for: Key.lastReviewPromptDate)
@@ -320,13 +320,8 @@ final class AppDefaults {
 		
 		AppDefaults.store.register(defaults: defaults)
 		
-		if !AppDefaults.shared.registeredSpellingDefaults {
-			AppDefaults.shared.checkSpellingWhileTyping = true
-			AppDefaults.shared.correctSpellingAutomatically = true
-			AppDefaults.shared.registeredSpellingDefaults = true
-		}
-		
 		upgradeDefaultsToV2()
+		upgradeDefaultsToV2dot3()
 	}
 
 }
@@ -394,4 +389,19 @@ private extension AppDefaults {
 		Self.shared.outlineFonts = outlineFonts
 		Self.shared.upgradedDefaultsToV2 = true
 	}
+
+	static func upgradeDefaultsToV2dot3() {
+		guard !Self.shared.upgradedDefaultsToV2dot3 else { return }
+		
+		AppDefaults.shared.checkSpellingWhileTyping = true
+		AppDefaults.shared.correctSpellingAutomatically = true
+
+		if let userInfo = AppDefaults.store.object(forKey: Key.outlineFonts) as? [String: [AnyHashable: AnyHashable]] {
+			let updatedUserInfo = OutlineFontDefaults.addSecondaryColorFields(userInfo: userInfo)
+			AppDefaults.store.set(updatedUserInfo, forKey: Key.outlineFonts)
+		}
+
+		Self.shared.upgradedDefaultsToV2dot3 = true
+	}
+	
 }
