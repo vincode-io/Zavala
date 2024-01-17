@@ -362,6 +362,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var cancelledKeys = Set<UIKey>()
 	private var isCursoringUp = false
 	private var isCursoringDown = false
+	private static var slowRepeatInterval = 1.0
+	private static var fastRepeatInterval = 0.1
+	private lazy var cursorUpRepeatInterval: Double = Self.slowRepeatInterval
+	private lazy var cursorDownRepeatInterval: Double = Self.slowRepeatInterval
 
 	private var undoMenuButton: ButtonGroup.Button!
 	private var undoMenuButtonGroup: ButtonGroup!
@@ -1234,8 +1238,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	@objc func repeatMoveCursorUp() {
-		guard isCursoringUp else { return }
-
 		if let textView = UIResponder.currentFirstResponder as? EditorRowTopicTextView {
 			moveCursorUp(topicTextView: textView)
 		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
@@ -1247,14 +1249,17 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			}
 		}
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-			self.repeatMoveCursorUp()
+		DispatchQueue.main.asyncAfter(deadline: .now() + cursorUpRepeatInterval) { [weak self] in
+			if self?.isCursoringUp ?? false {
+				self?.cursorUpRepeatInterval = Self.fastRepeatInterval
+				self?.repeatMoveCursorUp()
+			} else {
+				self?.cursorUpRepeatInterval = Self.slowRepeatInterval
+			}
 		}
 	}
-
+	
 	@objc func repeatMoveCursorDown() {
-		guard isCursoringDown else { return }
-		
 		if let textView = UIResponder.currentFirstResponder as? EditorRowTopicTextView {
 			moveCursorDown(topicTextView: textView)
 		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
@@ -1270,8 +1275,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			moveCursorToTagInput()
 		}
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-			self.repeatMoveCursorDown()
+		DispatchQueue.main.asyncAfter(deadline: .now() + cursorDownRepeatInterval) { [weak self] in
+			if self?.isCursoringDown ?? false {
+				self?.cursorDownRepeatInterval = Self.fastRepeatInterval
+				self?.repeatMoveCursorDown()
+			} else {
+				self?.cursorDownRepeatInterval = Self.slowRepeatInterval
+			}
 		}
 	}
 	
