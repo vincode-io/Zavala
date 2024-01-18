@@ -544,7 +544,7 @@ private extension Account {
 	}
 	
 	func deleteDocument(_ document: Document, updateCloudKit: Bool) {
-		documents?.removeFirst(object: document)
+		documents?.removeAll(where: { $0.id == document.id})
 		accountDocumentsDidChange()
 		
 		if updateCloudKit {
