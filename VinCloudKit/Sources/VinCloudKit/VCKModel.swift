@@ -130,21 +130,35 @@ public extension VCKModel {
 		return OrderedSet(merged)
 	}
 	
-	func merge<T>(client: [T]?, ancestor: [T]?, server: [T]?) -> [T]? where T:Equatable {
+	func merge<T>(client: [T]?, ancestor: [T]?, server: [T]?) -> [T]? where T:Equatable, T:Hashable {
 		switch VCKMergeScenario.evaluate(client: client, ancestor: ancestor, server: server) {
 		case .clientWins:
 			return client
 		case .serverWins:
 			return server
 		case .threeWayMerge:
-			guard let client, let server, let ancestor else { fatalError("We should always have all 3 values for a 3 way merge.") }
-			let diff = server.difference(from: ancestor)
-			guard let merged = client.applying(diff) else {
-				return client
+			guard let client, let ancestor, let server else { fatalError("We should always have all 3 values for a 3 way merge.") }
+
+			var merged = client
+			let diffs = server.difference(from: ancestor).inferringMoves()
+			
+			for diff in diffs {
+				switch diff {
+				case .insert(let offset, let value, _):
+					if offset < merged.count {
+						merged.insert(value, at: offset)
+					} else {
+						merged.insert(value, at: merged.count)
+					}
+				case .remove(_, let value, _):
+					merged.removeFirst(object: value)
+				}
 			}
+
 			return merged
 		}
 	}
+	
 }
 
 private extension VCKModel {
