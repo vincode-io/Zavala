@@ -18,9 +18,8 @@ struct SettingsView: View {
 				SettingsOutlineDefaultsView()
 				SettingsOutlineOwnerView()
 				SettingsAppearanceView()
-				#if targetEnvironment(macCatalyst)
 				SettingsAdvancedView()
-				#else
+				#if !targetEnvironment(macCatalyst)
 				SettingsHelpView()
 				#endif
 			}
@@ -48,4 +47,5 @@ struct SettingsView: View {
 
 #Preview {
 	SettingsView()
+		.frame(width: 400)
 }

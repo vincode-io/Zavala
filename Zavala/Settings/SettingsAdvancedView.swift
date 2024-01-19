@@ -14,12 +14,15 @@ struct SettingsAdvancedView: View {
 
 	var body: some View {
 		Section(String.advancedControlLabel) {
+			#if targetEnvironment(macCatalyst)
 			Toggle(isOn: $enableMainWindowAsDefault) {
 				Text(String.useMainWindowAsDefaultControlLabel)
 			}
 			.onChange(of: enableMainWindowAsDefault) {
 				AppDefaults.shared.enableMainWindowAsDefault = $0
 			}
+			#endif
+			
 			Toggle(isOn: $disableEditorAnimations) {
 				Text(String.disableEditorAnimationsControlLabel)
 			}
