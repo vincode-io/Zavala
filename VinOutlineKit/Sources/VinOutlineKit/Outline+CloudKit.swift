@@ -141,7 +141,7 @@ extension Outline: VCKModel {
 			updatedRowIDs.insert(row.id)
 		}
 		
-		if !updatedRowIDs.isEmpty {
+		if !updatedRowIDs.isEmpty || !update.deleteRowRecordIDs.isEmpty  {
 			rowsFile?.markAsDirty()
 			documentDidChangeBySync()
 		}
