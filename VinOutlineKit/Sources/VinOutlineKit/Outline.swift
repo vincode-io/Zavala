@@ -2266,6 +2266,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		// Move the rows in the tree
 		for rowMove in sortedRowMoves {
 			rowMove.row.parent?.removeRow(rowMove.row)
+			
+			if let parentRow = rowMove.row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
+				if let parentRowIndex = parentRow.shadowTableIndex {
+					oldParentReloads.insert(parentRowIndex)
+				}
+			}
+
 			if let oldParentShadowTableIndex = (rowMove.row.parent as? Row)?.shadowTableIndex {
 				oldParentReloads.insert(oldParentShadowTableIndex)
 			}
@@ -2274,6 +2281,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 				rowMove.toParent.appendRow(rowMove.row)
 			} else {
 				rowMove.toParent.insertRow(rowMove.row, at: rowMove.toChildIndex)
+			}
+
+			if let parentRow = rowMove.toParent as? Row {
+				autoCompleteUncomplete(row: parentRow)
 			}
 		}
 
