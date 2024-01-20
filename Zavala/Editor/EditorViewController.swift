@@ -1002,7 +1002,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			italicButton.isEnabled = !isFormatUnavailable
 
 			// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
-			// only have one row selected at a time while editing and that row eitherh has a note
+			// only have one row selected at a time while editing and that row either has a note
 			// or it doesn't.
 			if !isCreateRowNotesUnavailable {
 				noteButton.isEnabled = true
