@@ -34,6 +34,11 @@ class EditorFindSession: UIFindSession {
 		return outline.currentSearchResult
 	}
 	
+	override var searchResultDisplayStyle: UIFindSession.SearchResultDisplayStyle {
+		set {}
+		get { .none } // The other two options simply don't work right now...
+	}
+	
 	override func performSearch(query: String, options: UITextSearchOptions?) {
 		guard let outline = delegate.outline else { return }
 		outline.search(for: query)
