@@ -1323,7 +1323,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc func share(_ sender: Any? = nil) {
 		let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(delegate: self))
-		controller.popoverPresentationController?.sourceView = sender as? UIView
+		if let sendingView = sender as? UIView {
+			controller.popoverPresentationController?.sourceView = sendingView
+		} else {
+			controller.popoverPresentationController?.sourceView = collectionView
+			var rect = collectionView.bounds
+			rect.size.height = rect.size.height / 4
+			controller.popoverPresentationController?.sourceRect = rect
+		}
 		present(controller, animated: true)
 	}
 	

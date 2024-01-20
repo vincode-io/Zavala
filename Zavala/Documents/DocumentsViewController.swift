@@ -565,12 +565,6 @@ private extension DocumentsViewController {
 				shareMenuItems.append(self.shareAction(documents: documents, sourceView: cell))
 			}
 
-			var printActions = [UIAction]()
-			printActions.append(self.printDocsAction(outlines: outlines))
-			printActions.append(self.printListsAction(outlines: outlines))
-			let printMenu = UIMenu(title: .printControlLabel, image: .printDoc, children: printActions)
-			shareMenuItems.append(printMenu)
-
 			var exportActions = [UIAction]()
 			exportActions.append(self.exportPDFDocsOutlineAction(outlines: outlines))
 			exportActions.append(self.exportPDFListsOutlineAction(outlines: outlines))
@@ -579,6 +573,12 @@ private extension DocumentsViewController {
 			exportActions.append(self.exportOPMLsAction(outlines: outlines))
 			let exportMenu = UIMenu(title: .exportControlLabel, image: .export, children: exportActions)
 			shareMenuItems.append(exportMenu)
+
+			var printActions = [UIAction]()
+			printActions.append(self.printDocsAction(outlines: outlines))
+			printActions.append(self.printListsAction(outlines: outlines))
+			let printMenu = UIMenu(title: .printControlLabel, image: .printDoc, children: printActions)
+			shareMenuItems.append(printMenu)
 
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: shareMenuItems))
 			

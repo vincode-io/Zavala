@@ -274,9 +274,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 modifierFlags: [.command])
 
 	// Currently unused because it automatically adds Services menus to my other context menus
-	let shareCommand = UICommand(title: .shareControlLabel,
-								 action: #selector(share(_:)),
-								 propertyList: UICommandTagShare)
+	let shareCommand = UICommand(title: .shareEllipsisControlLabel, action: #selector(shareCommand(_:)))
 
 	let collaborateCommand = UICommand(title: .collaborateEllipsisControlLabel, action: #selector(collaborateCommand(_:)))
 
@@ -672,7 +670,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.printLists()
 	}
 
-	@objc func share(_ sender: Any?) {
+	@objc func shareCommand(_ sender: Any?) {
 		mainCoordinator?.share()
 	}
 
@@ -881,6 +879,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isCollaborateUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(shareCommand(_:)):
+			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		case #selector(beginInDocumentSearchCommand(_:)),
 			#selector(useSelectionForSearchCommand(_:)),
 			#selector(nextInDocumentSearchCommand(_:)),
@@ -912,22 +914,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// File Menu
 		builder.remove(menu: .newScene)
 		builder.remove(menu: .openRecent)
-
-		let cloudKitMenu = UIMenu(title: "", options: .displayInline, children: [collaborateCommand, syncCommand])
-		builder.insertChild(cloudKitMenu, atStartOfMenu: .file)
-
-		let exportMenu = UIMenu(title: .exportControlLabel, children: [exportPDFDocsCommand, exportPDFListsCommand, exportMarkdownDocsCommand, exportMarkdownListsCommand, exportOPMLsCommand])
-		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, exportMenu])
-		builder.insertChild(importExportMenu, atStartOfMenu: .file)
+		builder.remove(menu: .document)
 
 		let newMenu = UIMenu(title: "", options: .displayInline, children: [newOutlineCommand, newWindowCommand, showOpenQuicklyCommand])
 		builder.insertChild(newMenu, atStartOfMenu: .file)
 
-		let printMenu = UIMenu(title: "", options: .displayInline, children: [printDocsCommand, printListsCommand])
-		builder.insertChild(printMenu, atEndOfMenu: .file)
+		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
+		builder.insertChild(syncMenu, atEndOfMenu: .file)
 
 		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: [outlineGetInfoCommand])
 		builder.insertChild(getInfoMenu, atEndOfMenu: .file)
+
+		let exportMenu = UIMenu(title: .exportControlLabel, children: [exportPDFDocsCommand, exportPDFListsCommand, exportMarkdownDocsCommand, exportMarkdownListsCommand, exportOPMLsCommand])
+		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, collaborateCommand, shareCommand, exportMenu])
+		builder.insertChild(importExportMenu, atEndOfMenu: .file)
+
+		let printMenu = UIMenu(title: "", options: .displayInline, children: [printDocsCommand, printListsCommand])
+		builder.insertChild(printMenu, atEndOfMenu: .file)
 
 		// Edit
 		builder.replaceChildren(ofMenu: .standardEdit) { oldElements in
