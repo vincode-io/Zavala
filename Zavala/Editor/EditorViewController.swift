@@ -36,12 +36,10 @@ protocol EditorDelegate: AnyObject {
 	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate)
 }
 
-class EditorViewController: UIViewController, DocumentsActivityItemsConfigurationDelegate, MainControllerIdentifiable, UndoableCommandRunner {
+class EditorViewController: UIViewController, DocumentsActivityItemsConfigurationDelegate, MainControllerIdentifiable, UndoableCommandRunner, EditorFindSessionDelegate {
 
 	private static let searchBarHeight: CGFloat = 44
 	
-	@IBOutlet weak var searchBar: EditorSearchBar!
-	@IBOutlet weak var collectionViewTopConstraint: NSLayoutConstraint!
 	@IBOutlet weak var collectionView: EditorCollectionView!
 	
 	override var keyCommands: [UIKeyCommand]? {
@@ -436,6 +434,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var rowIndentSize = AppDefaults.shared.rowIndentSize
 	private var rowSpacingSize = AppDefaults.shared.rowSpacingSize
 	
+	private lazy var findInteraction = UIFindInteraction(sessionDelegate: self)
+	
 	private lazy var transition = ImageTransition(delegate: self)
 	private var imageBlocker: UIView?
 	
@@ -446,39 +446,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 		collectionView.translatesAutoresizingMaskIntoConstraints = false
 		
-		// Mac Catalyst and regular iOS use different contraint connections to manage Toolbar and Navigation bar translucency
-		let collectionViewLeadingConstraint: NSLayoutConstraint
-		let collectionViewTrailingConstraint: NSLayoutConstraint
-		let collectionViewBottomConstraint: NSLayoutConstraint
-
 		if traitCollection.userInterfaceIdiom == .mac {
-			collectionViewTopConstraint = collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-			collectionViewLeadingConstraint = collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-			collectionViewTrailingConstraint = collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-			collectionViewBottomConstraint = collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-
 			navigationController?.setNavigationBarHidden(true, animated: false)
 		} else {
-			collectionViewTopConstraint = collectionView.topAnchor.constraint(equalTo: view.topAnchor)
-			collectionViewLeadingConstraint = collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-			collectionViewTrailingConstraint = collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-			collectionViewBottomConstraint = collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-
 			collectionView.refreshControl = UIRefreshControl()
 			collectionView.alwaysBounceVertical = true
 			collectionView.refreshControl!.addTarget(self, action: #selector(sync), for: .valueChanged)
 			collectionView.refreshControl!.tintColor = .clear
 		}
 
-		NSLayoutConstraint.activate([
-			collectionViewTopConstraint,
-			collectionViewLeadingConstraint,
-			collectionViewTrailingConstraint,
-			collectionViewBottomConstraint
-		])
-
-		searchBar.delegate = self
-		
 		collectionView.collectionViewLayout = createLayout()
 		collectionView.delegate = self
 		collectionView.dataSource = self
@@ -488,6 +464,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		collectionView.allowsMultipleSelection = true
 		collectionView.selectionFollowsFocus = false
 		collectionView.contentInset = EditorViewController.defaultContentInsets
+		collectionView.addInteraction(findInteraction)
 
 		let tapGestureRecogniser = UITapGestureRecognizer(target: self, action: #selector(createInitialRowIfNecessary))
 		tapGestureRecogniser.delegate = self
@@ -532,7 +509,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		NotificationCenter.default.addObserver(self, selector: #selector(documentTitleDidChange(_:)), name: .DocumentTitleDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineElementsDidChange(_:)), name: .OutlineElementsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillBegin(_:)), name: .OutlineSearchWillBegin, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchTextDidChange(_:)), name: .OutlineSearchTextDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchResultDidChange(_:)), name: .OutlineSearchResultDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchWillEnd(_:)), name: .OutlineSearchWillEnd, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineSearchDidEnd(_:)), name: .OutlineSearchDidEnd, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineDidFocusOut(_:)), name: .OutlineDidFocusOut, object: nil)
@@ -711,42 +688,22 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 		isSearching = true
 		collectionView.deleteSections(headerFooterSections)
-		
-		searchBar.becomeFirstResponder()
-		discloseSearchBar()
 	}
 	
-	@objc func outlineSearchTextDidChange(_ note: Notification) {
-		guard note.object as? Outline == outline else { return }
-		if let searchText = note.userInfo?[Outline.UserInfoKeys.searchText] as? String {
-			searchBar.searchField.text = searchText
-		}
+	@objc func outlineSearchResultDidChange(_ note: Notification) {
+		scrollSearchResultIntoView()
 	}
 	
 	@objc func outlineSearchWillEnd(_ note: Notification) {
 		guard note.object as? Outline == outline else { return }
-
-		if searchBar.searchField.isFirstResponder {
-			searchBar.searchField.resignFirstResponder()
-		}
 		
-		guard isSearching else {
-			self.collectionViewTopConstraint.constant = 0
-			return
-		}
+		// If a user changed the outline without dismissing find interaction, then
+		// this will get set to false in the edit function so that we don't try
+		// to insert the header and footer sections, preventing a crash.
+		guard isSearching else { return	}
 		
-		view.layoutIfNeeded()
-		UIView.animate(withDuration: 0.3) {
-			self.collectionViewTopConstraint.constant = 0
-			self.view.layoutIfNeeded()
-		}
-
 		isSearching = false
 		collectionView.insertSections(headerFooterSections)
-
-		searchBar.searchField.text = ""
-		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
-		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
 	}
 
 	@objc func outlineSearchDidEnd(_ note: Notification) {
@@ -873,8 +830,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		outline?.decrementBeingUsedCount()
 		
 		// End the search collection view updates early
-		isSearching = false
-		outline?.endSearching()
+		isSearching = false // Necessary to prevent crashing while switching outlines during a find session
+		findInteraction.dismissFindNavigator()
 		
 		outline?.unload()
 		undoManager?.removeAllActions()
@@ -900,9 +857,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		collectionView.reloadData()
 		
 		if let searchText {
-			discloseSearchBar()
-			searchBar.searchField.text = outline.searchText
-			beginInDocumentSearch(text: searchText)
+			DispatchQueue.main.async {
+				self.beginInDocumentSearch(text: searchText)
+			}
 			return
 		}
 
@@ -1025,14 +982,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	func beginInDocumentSearch(text: String? = nil) {
 		guard !isSearching else {
-			searchBar.searchField.becomeFirstResponder()
 			return
 		}
 
-		searchBar.searchField.text = text
-		outline?.beginSearching(for: text)
-		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
-		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
+		findInteraction.searchText = text ?? ""
+		findInteraction.presentFindNavigator(showingReplace: false)
 
 		// I don't know why, but if you are clicking down the documents with a collections search active
 		// the title row won't reload and you will get titles when you should only have search results.
@@ -1164,11 +1118,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	func nextInDocumentSearch() {
-		nextSearchResult()
+		findInteraction.findNext()
 	}
 	
 	func previousInDocumentSearch() {
-		previousSearchResult()
+		findInteraction.findPrevious()
 	}
 	
 	func printDoc() {
@@ -1917,26 +1871,21 @@ extension EditorViewController: LinkViewControllerDelegate {
 	
 }
 
-// MARK: SearchBarDelegate
+// MARK: UIFindInteractionDelegate
 
-extension EditorViewController: SearchBarDelegate {
-
-	func nextWasPressed(_ searchBar: EditorSearchBar) {
-		nextSearchResult()
+extension EditorViewController: UIFindInteractionDelegate {
+	
+	func findInteraction(_ interaction: UIFindInteraction, sessionFor view: UIView) -> UIFindSession? {
+		return EditorFindSession(delegate: self)
 	}
-
-	func previousWasPressed(_ searchBar: EditorSearchBar) {
-		previousSearchResult()
+	
+	func findInteraction(_ interaction: UIFindInteraction, didBegin session: UIFindSession) {
+//		outline?.beginSearching(for: interaction.searchText)
 	}
-
-	func doneWasPressed(_ searchBar: EditorSearchBar) {
+	
+	func findInteraction(_ interaction: UIFindInteraction, didEnd session: UIFindSession) {
 		outline?.endSearching()
 	}
-	
-	func searchBar(_ searchBar: EditorSearchBar, textDidChange: String) {
-		search(for: textDidChange)
-	}
-	
 }
 
 // MARK: UICloudSharingControllerDelegate
@@ -2060,19 +2009,6 @@ private extension EditorViewController {
 				formatMenuButtonGroup.remove(linkButton)
 				rightToolbarButtonGroup.insert(linkButton, at: 1)
 			}
-		}
-	}
-	
-	func discloseSearchBar() {
-		view.layoutIfNeeded()
-
-		UIView.animate(withDuration: 0.3) {
-			if self.traitCollection.userInterfaceIdiom == .mac {
-				self.collectionViewTopConstraint.constant = Self.searchBarHeight
-			} else {
-				self.collectionViewTopConstraint.constant = Self.searchBarHeight + self.view.safeAreaInsets.top
-			}
-			self.view.layoutIfNeeded()
 		}
 	}
 	
@@ -3380,25 +3316,6 @@ private extension EditorViewController {
 			return result
 		}
 		return NSAttributedString()
-	}
-	
-	func search(for searchText: String) {
-		outline?.search(for: searchText)
-		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
-		searchBar.resultsCount = (outline?.searchResultCount ?? 0)
-		scrollSearchResultIntoView()
-	}
-	
-	func nextSearchResult() {
-		outline?.nextSearchResult()
-		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
-		scrollSearchResultIntoView()
-	}
-	
-	func previousSearchResult() {
-		outline?.previousSearchResult()
-		searchBar.selectedResult = (outline?.currentSearchResult ?? 0) + 1
-		scrollSearchResultIntoView()
 	}
 	
 	func scrollSearchResultIntoView() {

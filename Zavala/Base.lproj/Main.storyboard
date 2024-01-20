@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vQK-Gr-dVw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vQK-Gr-dVw">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -52,13 +52,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view verifyAmbiguity="off" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k1S-h6-VDy" customClass="EditorSearchBar" customModule="Zavala" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="88" width="414" height="44"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="wlS-l8-EoL" customClass="EditorCollectionView" customModule="Zavala" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="136" width="414" height="726"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="wlS-l8-EoL" customClass="EditorCollectionView" customModule="Zavala" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="414" height="770"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="TbK-Ej-rdi">
                                     <size key="itemSize" width="128" height="128"/>
@@ -72,14 +67,14 @@
                         <viewLayoutGuide key="safeArea" id="sTb-Jg-icV"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="k1S-h6-VDy" firstAttribute="leading" secondItem="sTb-Jg-icV" secondAttribute="leading" id="8b3-XC-h6o"/>
-                            <constraint firstItem="sTb-Jg-icV" firstAttribute="trailing" secondItem="k1S-h6-VDy" secondAttribute="trailing" id="jAo-Om-REl"/>
-                            <constraint firstItem="k1S-h6-VDy" firstAttribute="top" secondItem="sTb-Jg-icV" secondAttribute="top" id="mNh-CK-3kR"/>
+                            <constraint firstItem="wlS-l8-EoL" firstAttribute="trailing" secondItem="sTb-Jg-icV" secondAttribute="trailing" id="BML-kU-evR"/>
+                            <constraint firstItem="wlS-l8-EoL" firstAttribute="leading" secondItem="sTb-Jg-icV" secondAttribute="leading" id="VN3-ip-0Iw"/>
+                            <constraint firstItem="wlS-l8-EoL" firstAttribute="top" secondItem="sTb-Jg-icV" secondAttribute="top" id="sHr-Mk-0yH"/>
+                            <constraint firstItem="wlS-l8-EoL" firstAttribute="bottom" secondItem="sTb-Jg-icV" secondAttribute="bottom" id="uD9-NN-MuR"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="wlS-l8-EoL" id="Wvh-Is-z5g"/>
-                        <outlet property="searchBar" destination="k1S-h6-VDy" id="WdA-ql-6Cc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KaB-gp-ltU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

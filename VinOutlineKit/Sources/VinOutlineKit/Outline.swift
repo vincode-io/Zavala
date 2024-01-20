@@ -19,7 +19,7 @@ public extension Notification.Name {
 	static let OutlineTextPreferencesDidChange = Notification.Name(rawValue: "OutlineTextPreferencesDidChange")
 	static let OutlineElementsDidChange = Notification.Name(rawValue: "OutlineElementsDidChange")
 	static let OutlineSearchWillBegin = Notification.Name(rawValue: "OutlineSearchWillBegin")
-	static let OutlineSearchTextDidChange = Notification.Name(rawValue: "OutlineSearchTextDidChange")
+	static let OutlineSearchResultDidChange = Notification.Name(rawValue: "OutlineSearchResultDidChange")
 	static let OutlineSearchWillEnd = Notification.Name(rawValue: "OutlineSearchWillEnd")
 	static let OutlineSearchDidEnd = Notification.Name(rawValue: "OutlineSearchDidEnd")
 	static let OutlineDidFocusOut = Notification.Name(rawValue: "OutlineDidFocusOut")
@@ -479,7 +479,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
         }
     }
 	
-	public private(set) var currentSearchResult = 0
+	public private(set) var currentSearchResult = -1
 	public var currentSearchResultRow: Row? {
 		guard currentSearchResult < searchResultCoordinates.count else { return nil }
 		return searchResultCoordinates[currentSearchResult].row
@@ -1081,30 +1081,21 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return true
 	}
 	
-	public func beginSearching(for searchText: String? = nil) {
-		isSearching = .beginSearch
-		outlineSearchWillBegin()
-
-		guard searchText == nil else {
-			search(for: searchText!)
+	public func search(for searchText: String) {
+		guard self.searchText != searchText else {
 			return
 		}
 		
-		var changes = rebuildShadowTable()
-
-		if let inserts = changes.inserts {
-			let reloads = inserts.compactMap { (shadowTable?[$0].parent as? Row)?.shadowTableIndex }
-			changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
+		if isSearching == .notSearching {
+			isSearching = .beginSearch
+			outlineSearchWillBegin()
 		}
 		
-		outlineElementsDidChange(changes)
-	}
-	
-	public func search(for searchText: String) {
 		self.searchText = searchText
-		
+
+		var reloads = searchResultCoordinates.compactMap { $0.row.shadowTableIndex }
 		clearSearchResults()
-		
+
 		if searchText.isEmpty {
 			isSearching = .beginSearch
 		} else {
@@ -1113,11 +1104,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			rows.forEach { $0.visit(visitor: searchVisitor.visitor(_:))	}
 			searchResultCoordinates = searchVisitor.searchResultCoordinates
 		}
-		
-		outlineSearchTextDidChange(searchText)
-		
+				
 		var changes = rebuildShadowTable()
-		let reloads = searchResultCoordinates.compactMap { $0.row.shadowTableIndex }
+		reloads.append(contentsOf: searchResultCoordinates.compactMap({ $0.row.shadowTableIndex }))
 		changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
 		outlineElementsDidChange(changes)
 	}
@@ -1149,9 +1138,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func endSearching() {
-		clearSearchResults()
 		outlineSearchWillEnd()
 		isSearching = .notSearching
+		searchText = ""
 
 		guard isBeingUsed else { return }
 		
@@ -2684,10 +2673,8 @@ private extension Outline {
 		NotificationCenter.default.post(name: .OutlineSearchWillBegin, object: self, userInfo: nil)
 	}
 	
-	func outlineSearchTextDidChange(_ searchText: String) {
-		var userInfo = [AnyHashable: Any]()
-		userInfo[UserInfoKeys.searchText] = searchText
-		NotificationCenter.default.post(name: .OutlineSearchTextDidChange, object: self, userInfo: userInfo)
+	func outlineSearchResultDidChange() {
+		NotificationCenter.default.post(name: .OutlineSearchResultDidChange, object: self, userInfo: nil)
 	}
 	
 	func outlineSearchWillEnd() {
@@ -2713,10 +2700,12 @@ private extension Outline {
 	func changeSearchResult(_ changeToResult: Int) {
 		var reloads = Set<Int>()
 		
-		let currentCoordinates = searchResultCoordinates[currentSearchResult]
-		currentCoordinates.isCurrentResult = false
-		if let shadowTableIndex = currentCoordinates.row.shadowTableIndex {
-			reloads.insert(shadowTableIndex)
+		if currentSearchResult != -1 {
+			let currentCoordinates = searchResultCoordinates[currentSearchResult]
+			currentCoordinates.isCurrentResult = false
+			if let shadowTableIndex = currentCoordinates.row.shadowTableIndex {
+				reloads.insert(shadowTableIndex)
+			}
 		}
 		
 		let changeToCoordinates = searchResultCoordinates[changeToResult]
@@ -2728,12 +2717,13 @@ private extension Outline {
 		currentSearchResult = changeToResult
 		
 		outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
+		outlineSearchResultDidChange()
 	}
 	
 	func clearSearchResults() {
 		let reloads = Set(searchResultCoordinates.compactMap({ $0.row.shadowTableIndex }))
 		
-		currentSearchResult = 0
+		currentSearchResult = -1
 		searchResultCoordinates = .init()
 
 		guard isBeingUsed else { return }
