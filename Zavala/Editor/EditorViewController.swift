@@ -1752,9 +1752,13 @@ extension EditorViewController: EditorRowViewCellDelegate {
 	}
 
 	func editorRowTextFieldDidBecomeActive(row: Row) {
-		collectionView.deselectAll()
-		updateUI()
-		delegate?.validateToolbar(self)
+		// This makes doing row insertions much faster because this work will
+		// be performed a cycle after the actual insertion was completed.
+		DispatchQueue.main.async {
+			self.collectionView.deselectAll()
+			self.updateUI()
+			self.delegate?.validateToolbar(self)
+		}
 	}
 
 	func editorRowToggleDisclosure(row: Row, applyToAll: Bool) {
