@@ -10,7 +10,7 @@ import VinOutlineKit
 
 class EditorCollectionViewCompositionalLayout : UICollectionViewCompositionalLayout {
 	
-	private static let editorMaxWidth: CGFloat = 700
+	var editorMaxWidth: CGFloat? = AppDefaults.shared.editorMaxWidth.pixels
 	
 	override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 		guard let superAttributes = super.layoutAttributesForItem(at: indexPath) else { return nil }
@@ -18,8 +18,10 @@ class EditorCollectionViewCompositionalLayout : UICollectionViewCompositionalLay
 		// Copy each item to prevent "UICollectionViewFlowLayout has cached frame mismatch" warning
 		guard let attributes = superAttributes.copy() as? UICollectionViewLayoutAttributes else { return nil }
 
-		if attributes.size.width > Self.editorMaxWidth {
-			attributes.size.width = Self.editorMaxWidth
+		if let editorMaxWidth {
+			if attributes.size.width > editorMaxWidth {
+				attributes.size.width = editorMaxWidth
+			}
 		}
 		
 		return attributes
@@ -35,8 +37,10 @@ class EditorCollectionViewCompositionalLayout : UICollectionViewCompositionalLay
 		var tagAttributes = [UICollectionViewLayoutAttributes]()
 		var otherAttributes = [UICollectionViewLayoutAttributes]()
 		for attr in attributes {
-			if attr.size.width > Self.editorMaxWidth {
-				attr.size.width = Self.editorMaxWidth
+			if let editorMaxWidth {
+				if attr.size.width > editorMaxWidth {
+					attr.size.width = editorMaxWidth
+				}
 			}
 
 			switch attr.indexPath.section {

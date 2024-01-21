@@ -662,6 +662,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			rowSpacingSize = AppDefaults.shared.rowSpacingSize
 			collectionView.reloadData()
 		}
+		
+		guard let layout = collectionView.collectionViewLayout as? EditorCollectionViewCompositionalLayout else { return }
+		if layout.editorMaxWidth != AppDefaults.shared.editorMaxWidth.pixels {
+			layout.editorMaxWidth = AppDefaults.shared.editorMaxWidth.pixels
+			collectionView.reloadData()
+		}
 	}
 	
 	@objc func outlineTextPreferencesDidChange(_ note: Notification) {

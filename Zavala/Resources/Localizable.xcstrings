@@ -300,6 +300,9 @@
     "Forward" : {
       "comment" : "Control Label: Forward"
     },
+    "Full Width" : {
+      "comment" : "Control Label: Full Width"
+    },
     "General" : {
       "comment" : "Control Label: General"
     },
@@ -407,6 +410,9 @@
     },
     "None" : {
       "comment" : "Control Label: None"
+    },
+    "Normal" : {
+      "comment" : "Control Label: Normal"
     },
     "Note Level %lld" : {
       "comment" : "Font Label: The font for the given Note Level"

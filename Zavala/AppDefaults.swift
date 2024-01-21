@@ -5,24 +5,7 @@
 //  Created by Maurice Parker on 11/10/20.
 //
 
-import Foundation
-
-enum DefaultsSize: Int, CustomStringConvertible, CaseIterable {
-	case small = 0
-	case medium = 1
-	case large = 2
-	
-	var description: String {
-		switch self {
-		case .small:
-			return .smallControlLabel
-		case .medium:
-			return .mediumControlLabel
-		case .large:
-			return .largeControlLabel
-		}
-	}
-}
+import UIKit
 
 enum UserInterfaceColorPalette: Int, CustomStringConvertible, CaseIterable {
 	case automatic = 0
@@ -40,6 +23,51 @@ enum UserInterfaceColorPalette: Int, CustomStringConvertible, CaseIterable {
 		}
 	}
 	
+}
+
+enum EditorMaxWidth: Int, CustomStringConvertible, CaseIterable {
+	case normal = 0
+	case wide = 1
+	case fullWidth = 2
+	
+	var pixels: CGFloat? {
+		switch self {
+		case .normal:
+			return UIFontMetrics(forTextStyle: .body).scaledValue(for: 700)
+		case .wide:
+			return UIFontMetrics(forTextStyle: .body).scaledValue(for: 900)
+		case .fullWidth:
+			return nil
+		}
+	}
+	
+	var description: String {
+		switch self {
+		case .normal:
+			return .normalControlLabel
+		case .wide:
+			return .wideControlLabel
+		case .fullWidth:
+			return .fullWidthControlLabel
+		}
+	}
+}
+
+enum DefaultsSize: Int, CustomStringConvertible, CaseIterable {
+	case small = 0
+	case medium = 1
+	case large = 2
+	
+	var description: String {
+		switch self {
+		case .small:
+			return .smallControlLabel
+		case .medium:
+			return .mediumControlLabel
+		case .large:
+			return .largeControlLabel
+		}
+	}
 }
 
 final class AppDefaults {
@@ -69,6 +97,7 @@ final class AppDefaults {
 		static let lastMainWindowState = "lastMainWindowState"
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
 		static let userInterfaceColorPalette = "userInterfaceColorPalette";
+		static let editorMaxWidth = "editorWidth";
 		static let rowIndentSize = "rowIndentSize"
 		static let rowSpacingSize = "rowSpacingSize"
 		static let outlineFonts = "outlineFonts"
@@ -222,6 +251,18 @@ final class AppDefaults {
 		}
 		set {
 			Self.setInt(for: Key.userInterfaceColorPalette, newValue.rawValue)
+		}
+	}
+	
+	var editorMaxWidth: EditorMaxWidth {
+		get {
+			if let result = EditorMaxWidth(rawValue: Self.int(for: Key.editorMaxWidth)) {
+				return result
+			}
+			return .normal
+		}
+		set {
+			Self.setInt(for: Key.editorMaxWidth, newValue.rawValue)
 		}
 	}
 	

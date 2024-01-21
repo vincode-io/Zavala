@@ -229,7 +229,8 @@ extension String {
 	static var fontsControlLabel = String(localized: "Fonts", comment: "Control Label: Fonts")
 	static var formatControlLabel = String(localized: "Format", comment: "Control Label: Format")
 	static var forwardControlLabel = String(localized: "Forward", comment: "Control Label: Forward")
-	
+	static var fullWidthControlLabel = String(localized: "Full Width", comment: "Control Label: Full Width")
+
 	static var getInfoControlLabel = String(localized: "Get Info", comment: "Control Label: Get Info")
 	static var generalControlLabel = String(localized: "General", comment: "Control Label: General")
 	static var gitHubRepositoryControlLabel = String(localized: "GitHub Repository", comment: "Control Label: GitHub Repository")
@@ -268,6 +269,7 @@ extension String {
 	static var newOutlineControlLabel = String(localized: "New New Outline", comment: "Control Label: New New Outline")
 	static var nextResultControlLabel = String(localized: "Next Result", comment: "Control Label: Next Result")
 	static var noneControlLabel = String(localized: "None", comment: "Control Label: None")
+	static var normalControlLabel = String(localized: "Normal", comment: "Control Label: Normal")
 	static var noSelectionLabel = String(localized: "No Selection", comment: "Large Label: No Selection")
 	static var noTitleLabel = String(localized: "(No Title)", comment: "Control Label: (No Title)")
 	
