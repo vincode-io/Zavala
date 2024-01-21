@@ -222,6 +222,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												input: "0",
 												modifierFlags: [.control, .alternate, .command])
 	
+	let zoomInCommand = UIKeyCommand(title: .zoomInControlLabel,
+									 action: #selector(zoomInCommand(_:)),
+									 input: ">",
+									 modifierFlags: [.command])
+	
+	let zoomOutCommand = UIKeyCommand(title: .zoomOutControlLabel,
+									 action: #selector(zoomOutCommand(_:)),
+									 input: "<",
+									 modifierFlags: [.command])
+	
+	let actualSizeCommand = UICommand(title: .actualSizeControlLabel, action: #selector(actualSizeCommand(_:)))
+	
 	let deleteCompletedRowsCommand = UIKeyCommand(title: .deleteCompletedRowsControlLabel,
 									   action: #selector(deleteCompletedRowsCommand(_:)),
 									   input: "d",
@@ -632,6 +644,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.collapseParentRow()
 	}
 	
+	@objc func zoomInCommand(_ sender: Any?) {
+		AppDefaults.shared.textZoom = AppDefaults.shared.textZoom + 1
+	}
+	
+	@objc func zoomOutCommand(_ sender: Any?) {
+		AppDefaults.shared.textZoom = AppDefaults.shared.textZoom - 1
+	}
+	
+	@objc func actualSizeCommand(_ sender: Any?) {
+		AppDefaults.shared.textZoom = 0
+	}
+	
 	@objc func deleteCompletedRowsCommand(_ sender: Any?) {
 		mainCoordinator?.deleteCompletedRows()
 	}
@@ -965,10 +989,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertSibling(formatMenu, afterMenu: .edit)
 
 		// View Menu
+		let zoomMenu = UIMenu(title: "", options: .displayInline, children: [zoomInCommand, zoomOutCommand, actualSizeCommand])
+		builder.insertChild(zoomMenu, atStartOfMenu: .view)
+		
 		let expandCollapseMenu = UIMenu(title: "",
 										options: .displayInline,
 										children: [expandAllInOutlineCommand, expandAllCommand, expandCommand, collapseAllInOutlineCommand, collapseAllCommand, collapseCommand, collapseParentRowCommand])
 		builder.insertChild(expandCollapseMenu, atStartOfMenu: .view)
+		
 		let toggleFilterOutlineMenu = UIMenu(title: "", options: .displayInline, children: [toggleFilterOnCommand, toggleCompletedFilterCommand, toggleNotesFilterCommand])
 		builder.insertChild(toggleFilterOutlineMenu, atStartOfMenu: .view)
 

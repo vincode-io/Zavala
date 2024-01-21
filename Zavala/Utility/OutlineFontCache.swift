@@ -18,6 +18,7 @@ class OutlineFontCache {
 	static let shared = OutlineFontCache()
 	
 	var outlineFonts: OutlineFontDefaults?
+	var textZoom = 0
 	
 	var titleFont = UIFont.preferredFont(forTextStyle: .largeTitle)
 	var titleColor = UIColor.label
@@ -88,7 +89,8 @@ class OutlineFontCache {
 extension OutlineFontCache {
 
 	@objc private func userDefaultsDidChange() {
-		if outlineFonts != AppDefaults.shared.outlineFonts {
+		let defaults = AppDefaults.shared
+		if outlineFonts != defaults.outlineFonts || textZoom != defaults.textZoom {
 			buildCache()
 		}
 	}
@@ -99,6 +101,8 @@ extension OutlineFontCache {
 	
 	private func buildCache() {
 		outlineFonts = AppDefaults.shared.outlineFonts
+		textZoom = AppDefaults.shared.textZoom
+		
 		guard let sortedFields = outlineFonts?.sortedFields else { return }
 		
 		topicFonts.removeAll()
@@ -107,8 +111,10 @@ extension OutlineFontCache {
 		noteColors.removeAll()
 		
 		for field in sortedFields {
-			guard let config = outlineFonts?.rowFontConfigs[field],
-				  let font = UIFont(name: config.name, size: CGFloat(config.size)) else { continue }
+			guard let config = outlineFonts?.rowFontConfigs[field] else { continue }
+			
+			let fontSize = config.size + textZoom > 0 ? config.size + textZoom : 1
+			guard let font = UIFont(name: config.name, size: CGFloat(fontSize)) else { continue }
 			
 			switch field {
 			case .title:

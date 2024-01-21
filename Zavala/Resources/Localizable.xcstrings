@@ -27,6 +27,9 @@
     "Acknowledgements" : {
       "comment" : "Control Label: Acknowledgements"
     },
+    "Actual Size" : {
+      "comment" : "Control Label: Actual Size"
+    },
     "Add" : {
       "comment" : "Control Label: Add"
     },
@@ -614,6 +617,12 @@
     },
     "Zavala Help" : {
       "comment" : "Control Label: Zavala Help"
+    },
+    "Zoom In" : {
+      "comment" : "Control Label: Zoom In"
+    },
+    "Zoom Out" : {
+      "comment" : "Control Label: Zoom Out"
     }
   },
   "version" : "1.0"

@@ -100,6 +100,7 @@ final class AppDefaults {
 		static let editorMaxWidth = "editorWidth";
 		static let rowIndentSize = "rowIndentSize"
 		static let rowSpacingSize = "rowSpacingSize"
+		static let textZoom = "textZoom"
 		static let outlineFonts = "outlineFonts"
 		static let documentHistory = "documentHistory"
 		static let confirmDeleteCompletedRows = "confirmDeleteCompletedRows"
@@ -281,6 +282,15 @@ final class AppDefaults {
 		}
 		set {
 			Self.setDefaultsSize(for: Key.rowSpacingSize, newValue)
+		}
+	}
+	
+	var textZoom: Int {
+		get {
+			return Self.int(for: Key.textZoom)
+		}
+		set {
+			Self.setInt(for: Key.textZoom, newValue)
 		}
 	}
 	

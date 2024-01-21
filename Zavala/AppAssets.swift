@@ -134,6 +134,7 @@ extension String {
 	static var aboutZavala = String(localized: "About Zavala", comment: "Control Label: About Zavala")
 	static var accountsControlLabel = String(localized: "Accounts", comment: "Control Label: Accounts")
 	static var acknowledgementsControlLabel = String(localized: "Acknowledgements", comment: "Control Label: Acknowledgements")
+	static var actualSizeControlLabel = String(localized: "Actual Size", comment: "Control Label: Actual Size")
 	static var addControlLabel = String(localized: "Add", comment: "Control Label: Add")
 	static var addNoteControlLabel = String(localized: "Add Note", comment: "Control Label: Add Note.")
 	static var addNoteLevelControlLabel = String(localized: "Add Note Level", comment: "Control Label: The menu option to add a new Note Level.")
@@ -344,7 +345,9 @@ extension String {
 	static var wordCountLabel = String(localized: "Word Count", comment: "Control Label: Word Count")
 
 	static var zavalaHelpControlLabel = String(localized: "Zavala Help", comment: "Control Label: Zavala Help")
-	
+	static var zoomInControlLabel = String(localized: "Zoom In", comment: "Control Label: Zoom In")
+	static var zoomOutControlLabel = String(localized: "Zoom Out", comment: "Control Label: Zoom Out")
+
 	// MARK: Localizable Functions
 	
 	static func createdOnLabel(date: Date) -> String {
