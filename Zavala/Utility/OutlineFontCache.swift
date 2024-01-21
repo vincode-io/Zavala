@@ -34,8 +34,8 @@ class OutlineFontCache {
 
 	init() {
 		buildCache(AppDefaults.shared.outlineFonts)
-		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChangeNotification), name: UserDefaults.didChangeNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChangeNotification), name: UIContentSizeCategory.didChangeNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
 	}
 	
 	/// This is a 0 based index lookup
@@ -87,14 +87,14 @@ class OutlineFontCache {
 
 extension OutlineFontCache {
 
-	@objc private func userDefaultsDidChangeNotification() {
+	@objc private func userDefaultsDidChange() {
 		let outlineFonts = AppDefaults.shared.outlineFonts
 		if outlineFonts != lastOutlineFonts {
 			buildCache(outlineFonts)
 		}
 	}
 	
-	@objc private func contentSizeCategoryDidChangeNotification() {
+	@objc private func contentSizeCategoryDidChange() {
 		buildCache(AppDefaults.shared.outlineFonts)
 	}
 	
