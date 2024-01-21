@@ -17,7 +17,7 @@ class OutlineFontCache {
 	
 	static let shared = OutlineFontCache()
 	
-	var lastOutlineFonts: OutlineFontDefaults?
+	var outlineFonts: OutlineFontDefaults?
 	
 	var titleFont = UIFont.preferredFont(forTextStyle: .largeTitle)
 	var titleColor = UIColor.label
@@ -33,7 +33,7 @@ class OutlineFontCache {
 	private var noteColors = [UIColor]()
 
 	init() {
-		buildCache(AppDefaults.shared.outlineFonts)
+		buildCache()
 		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
 	}
@@ -88,18 +88,17 @@ class OutlineFontCache {
 extension OutlineFontCache {
 
 	@objc private func userDefaultsDidChange() {
-		let outlineFonts = AppDefaults.shared.outlineFonts
-		if outlineFonts != lastOutlineFonts {
-			buildCache(outlineFonts)
+		if outlineFonts != AppDefaults.shared.outlineFonts {
+			buildCache()
 		}
 	}
 	
 	@objc private func contentSizeCategoryDidChange() {
-		buildCache(AppDefaults.shared.outlineFonts)
+		buildCache()
 	}
 	
-	private func buildCache(_ outlineFonts: OutlineFontDefaults?) {
-		lastOutlineFonts = outlineFonts
+	private func buildCache() {
+		outlineFonts = AppDefaults.shared.outlineFonts
 		guard let sortedFields = outlineFonts?.sortedFields else { return }
 		
 		topicFonts.removeAll()
