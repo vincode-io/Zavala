@@ -662,11 +662,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			rowSpacingSize = AppDefaults.shared.rowSpacingSize
 			collectionView.reloadData()
 		}
-		
-		guard let layout = collectionView.collectionViewLayout as? EditorCollectionViewCompositionalLayout else { return }
-		if layout.editorMaxWidth != AppDefaults.shared.editorMaxWidth.pixels {
-			layout.editorMaxWidth = AppDefaults.shared.editorMaxWidth.pixels
-			collectionView.reloadData()
+
+		// We have to get the layout on the main thread.
+		DispatchQueue.main.async {
+			guard let layout = self.collectionView.collectionViewLayout as? EditorCollectionViewCompositionalLayout else { return }
+			if layout.editorMaxWidth != AppDefaults.shared.editorMaxWidth.pixels {
+				layout.editorMaxWidth = AppDefaults.shared.editorMaxWidth.pixels
+				self.collectionView.reloadData()
+			}
 		}
 	}
 	
