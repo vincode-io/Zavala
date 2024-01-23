@@ -29,17 +29,17 @@ struct OutlineFontDefaults: Equatable {
 	
 	static var tagConfigV1: OutlineFontConfig {
 		#if targetEnvironment(macCatalyst) || canImport(AppKit)
-		return OutlineFontConfig(name: "Helvetica Neue", size: 14, color: .primaryText)
+		return OutlineFontConfig(name: "Helvetica Neue", size: 14, color: .secondaryText)
 		#else
-		return OutlineFontConfig(name: "Helvetica Neue", size: 17, color: .primaryText)
+		return OutlineFontConfig(name: "Helvetica Neue", size: 17, color: .secondaryText)
 		#endif
 	}
 	
 	static var tagConfigV2: OutlineFontConfig {
 		#if targetEnvironment(macCatalyst) || canImport(AppKit)
-		return OutlineFontConfig(name: "Helvetica Neue", size: 11, color: .primaryText)
+		return OutlineFontConfig(name: "Helvetica Neue", size: 11, color: .secondaryText)
 		#else
-		return OutlineFontConfig(name: "Helvetica Neue", size: 14, color: .primaryText)
+		return OutlineFontConfig(name: "Helvetica Neue", size: 14, color: .secondaryText)
 		#endif
 	}
 	
@@ -107,7 +107,7 @@ struct OutlineFontDefaults: Equatable {
 		userInfo.forEach { (key: String, value: [AnyHashable : AnyHashable]) in
 			var config = value
 			
-			if let field = OutlineFontField(description: key), (field.isNote || field.isBacklink) {
+			if let field = OutlineFontField(description: key), field.isSecondary {
 				config[OutlineFontConfig.Keys.color] = OutlineFontColor.secondaryText.rawValue
 			} else {
 				config[OutlineFontConfig.Keys.color] = OutlineFontColor.primaryText.rawValue
