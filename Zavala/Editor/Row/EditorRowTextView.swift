@@ -136,9 +136,11 @@ class EditorRowTextView: UITextView {
 		self.textContainerInset = .zero
 		self.backgroundColor = .clear
 	
+		#if targetEnvironment(macCatalyst)
 		let appleColorPreferencesChangedNotification = Notification.Name(rawValue: "AppleColorPreferencesChangedNotification")
 		DistributedNotificationCenter.default.addObserver(self, selector: #selector(appleColorPreferencesChanged(_:)), name: appleColorPreferencesChangedNotification, object: nil)
-
+		#endif
+		
 		updateTintColor()
 	}
 	
