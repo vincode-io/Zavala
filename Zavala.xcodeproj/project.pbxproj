@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		51028CD525F3159A00B50B71 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51028CD425F3159A00B50B71 /* UIColor+.swift */; };
 		510471BB271940E5001DEFD5 /* MoveRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510471BA271940E5001DEFD5 /* MoveRowsIntentHandler.swift */; };
 		510471BD2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 510471BC2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift */; };
 		51077C5227A752DF000C71DB /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51077C5127A752DF000C71DB /* UIFont+.swift */; };
@@ -222,7 +221,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		51028CD425F3159A00B50B71 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		510471BA271940E5001DEFD5 /* MoveRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveRowsIntentHandler.swift; sourceTree = "<group>"; };
 		510471BC2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveRowsIntentHandler.swift; sourceTree = "<group>"; };
 		51077C5127A752DF000C71DB /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
@@ -471,7 +469,6 @@
 				51DFDC17259EA8D300C068C6 /* Selector+.swift */,
 				51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */,
 				511A99F627B9B596001BD443 /* ToolbarButton.swift */,
-				51028CD425F3159A00B50B71 /* UIColor+.swift */,
 				51077C5127A752DF000C71DB /* UIFont+.swift */,
 				51DEE82126FE37F9006DAA56 /* UIPrintPageRenderer+.swift */,
 				514BB9E6255B609600C8DBDF /* UIStoryboard+.swift */,
@@ -1120,7 +1117,6 @@
 				510471BD2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift in Sources */,
 				51E508E32B49F5B20041B826 /* ScrollToIndexPathOperation.swift in Sources */,
 				5109BC50292579A30022E90B /* CopyDocumentLinkActivity.swift in Sources */,
-				51028CD525F3159A00B50B71 /* UIColor+.swift in Sources */,
 				51F2859425AD11100019C573 /* CollectionsSearchCell.swift in Sources */,
 				51E508E52B49F83A0041B826 /* ReconfigureIndexPathsOperation.swift in Sources */,
 				51DFDC18259EA8D300C068C6 /* Selector+.swift in Sources */,

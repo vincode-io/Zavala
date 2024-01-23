@@ -135,7 +135,11 @@ class EditorRowTextView: UITextView {
 		self.textContainer.lineFragmentPadding = 0
 		self.textContainerInset = .zero
 		self.backgroundColor = .clear
-		self.tintColor = .textSelectColor
+	
+		let appleColorPreferencesChangedNotification = Notification.Name(rawValue: "AppleColorPreferencesChangedNotification")
+		DistributedNotificationCenter.default.addObserver(self, selector: #selector(appleColorPreferencesChanged(_:)), name: appleColorPreferencesChangedNotification, object: nil)
+
+		updateTintColor()
 	}
 	
 	required init?(coder: NSCoder) {
@@ -318,6 +322,10 @@ class EditorRowTextView: UITextView {
 		}
 	}
 
+	@objc func appleColorPreferencesChanged(_ note: Notification? = nil) {
+		updateTintColor()
+	}
+	
 }
 
 // MARK: UITextDropDelegate
@@ -432,7 +440,15 @@ extension EditorRowTextView: NSTextStorageDelegate {
 // MARK: Helpers
 
 extension EditorRowTextView {
-        
+    
+	func updateTintColor() {
+		if UIColor.accentColor.isDefaultAccentColor {
+			tintColor = .accentColor.brighten(0.35)
+		} else {
+			tintColor = .accentColor
+		}
+	}
+	
     func findAndSelectLink() -> (String?, String?, NSRange) {
         var effectiveRange = NSRange()
 		
