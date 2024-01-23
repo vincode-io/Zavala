@@ -17,8 +17,12 @@ class ReloadAllOperation: BaseMainThreadOperation {
 	}
 	
 	override func run() {
+		CATransaction.begin()
+		CATransaction.setCompletionBlock {
+			self.operationDelegate?.operationDidComplete(self)
+		}
 		collectionView.reloadData()
-		self.operationDelegate?.operationDidComplete(self)
+		CATransaction.commit()
 	}
 	
 }
