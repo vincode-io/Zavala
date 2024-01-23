@@ -89,13 +89,6 @@ private enum Button: Int {
 		}
 	}
 
-	/// The text color of the value label in positioned in the center.
-	@IBInspectable public var labelTextColor: UIColor = .white {
-		didSet {
-			valueLabel.textColor = labelTextColor
-		}
-	}
-
 	/// Describes the format of the value.
 	public var numberFormatter: NumberFormatter = {
 		let formatter = NumberFormatter()
@@ -231,7 +224,7 @@ private enum Button: Int {
 		let iconSize: CGFloat = sliceHeight * 0.6
 
 		valueLabel.backgroundColor = backgroundLabelColor
-		valueLabel.textColor = labelTextColor
+		valueLabel.textColor = tintColor
 
 		// Layer customizations
 		layer.borderColor = tintColor.cgColor
@@ -408,7 +401,7 @@ private enum Button: Int {
 	open override func tintColorDidChange() {
 		layer.borderColor = tintColor.cgColor
 		iconButtonColor = tintColor
-		valueLabel.textColor = labelTextColor
+		valueLabel.textColor = tintColor
 		leftSeparator.strokeColor = tintColor.cgColor
 		rightSeparator.strokeColor = tintColor.cgColor
 		increaseLayer.strokeColor = tintColor.cgColor

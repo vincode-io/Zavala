@@ -95,6 +95,7 @@ class SettingsFontConfigViewController: UITableViewController {
 		}
 		
 		fontColorPopupButton.menu = UIMenu(children: colorMenuItems)
+		fontColorPopupButton.tintColor = .accentColor
 		
 		updateUI()
     }
