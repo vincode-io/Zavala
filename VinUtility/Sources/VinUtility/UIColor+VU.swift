@@ -26,7 +26,6 @@ public extension UIColor {
 	func brighten(_ percent: CGFloat) -> UIColor {
 		let ciColor = CIColor(cgColor: cgColor)
 		
-		print("**********************")
 		let r = brighten(percent: percent, component: ciColor.red)
 		let g = brighten(percent: percent, component: ciColor.green)
 		let b = brighten(percent: percent, component: ciColor.blue)
@@ -49,9 +48,7 @@ public extension UIColor {
 private extension UIColor {
 	
 	func brighten(percent: CGFloat, component: CGFloat) -> CGFloat {
-		let result = ((1 - component) * percent) + component
-		print("***** \(component) : \(result)")
-		return result
+		return ((1 - component) * percent) + component
 	}
 	
 }
