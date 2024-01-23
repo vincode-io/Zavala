@@ -198,10 +198,14 @@ class EditorRowTopicTextView: EditorRowTextView {
 		let cursorRange = selectedTextRange
 		
 		text = ""
-
+		let fontColor = OutlineFontCache.shared.topicColor(level: row.trueLevel)
 		baseAttributes = [NSAttributedString.Key : Any]()
 		if row.isComplete ?? false || row.isAnyParentComplete {
-			baseAttributes[.foregroundColor] = UIColor.tertiaryLabel
+			if fontColor.cgColor.alpha > 0.3 {
+				baseAttributes[.foregroundColor] = fontColor.withAlphaComponent(0.3)
+			} else {
+				baseAttributes[.foregroundColor] = fontColor
+			}
 			accessibilityLabel = .completeAccessibilityLabel
 		} else {
 			baseAttributes[.foregroundColor] = OutlineFontCache.shared.topicColor(level: row.trueLevel)
@@ -210,7 +214,11 @@ class EditorRowTopicTextView: EditorRowTextView {
 		
 		if row.isComplete ?? false {
 			baseAttributes[.strikethroughStyle] = 1
-			baseAttributes[.strikethroughColor] = UIColor.tertiaryLabel
+			if fontColor.cgColor.alpha > 0.3 {
+				baseAttributes[.strikethroughColor] = fontColor.withAlphaComponent(0.3)
+			} else {
+				baseAttributes[.strikethroughColor] = fontColor
+			}
 		} else {
 			baseAttributes[.strikethroughStyle] = 0
 		}
