@@ -22,14 +22,14 @@
                             <tableViewSection headerTitle="Font" id="8RY-Ox-fEs">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="X9k-dG-gtn">
-                                        <rect key="frame" x="20" y="55.5" width="374" height="57"/>
+                                        <rect key="frame" x="20" y="55.5" width="374" height="86"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="X9k-dG-gtn" id="02K-yT-HLh">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="57"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="86"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zm6-ZX-RUU">
-                                                    <rect key="frame" x="0.0" y="-9" width="75" height="34.5"/>
+                                                    <rect key="frame" x="0.0" y="5.5" width="75" height="34.5"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" title="Button">
@@ -40,9 +40,13 @@
                                                         <action selector="changeFont:" destination="HId-Wf-dD5" eventType="touchUpInside" id="ILz-E6-fdg"/>
                                                     </connections>
                                                 </button>
-                                                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U3h-4m-sOp" customClass="ValueStepper" customModule="Zavala" customModuleProvider="target">
-                                                    <rect key="frame" x="221" y="8" width="141" height="0.5"/>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U3h-4m-sOp" customClass="ValueStepper" customModule="Zavala" customModuleProvider="target">
+                                                    <rect key="frame" x="213" y="8" width="149" height="29"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="29" placeholder="YES" id="5f2-zN-Lxk"/>
+                                                        <constraint firstAttribute="width" constant="149" placeholder="YES" id="pGG-jF-11C"/>
+                                                    </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="minimumValue">
                                                             <real key="value" value="1"/>
@@ -72,13 +76,13 @@
                                                     </connections>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Color" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dva-9n-Wrm" userLabel="Font Color Label">
-                                                    <rect key="frame" x="12" y="23.5" width="41" height="20.5"/>
+                                                    <rect key="frame" x="12" y="52.5" width="41" height="20.5"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" changesSelectionAsPrimaryAction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OId-zK-KYw">
-                                                    <rect key="frame" x="288.5" y="16.5" width="85.5" height="34.5"/>
+                                                    <rect key="frame" x="288.5" y="45" width="85.5" height="35"/>
                                                     <menu key="menu" id="2rD-NP-u5t">
                                                         <children>
                                                             <command title="Item 1" id="0n5-hS-FVg"/>
@@ -109,14 +113,14 @@
                             <tableViewSection headerTitle="Preview" id="9wX-hO-thR">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="g5o-Ds-iZS">
-                                        <rect key="frame" x="20" y="168.5" width="374" height="35.5"/>
+                                        <rect key="frame" x="20" y="197.5" width="374" height="35"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="g5o-Ds-iZS" id="NJD-8W-3rP">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="35.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="35"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sample Text" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SNz-Wt-44U">
-                                                    <rect key="frame" x="26" y="7" width="94" height="21.5"/>
+                                                    <rect key="frame" x="26" y="7" width="94" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
