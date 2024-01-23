@@ -135,10 +135,10 @@ struct SettingsFontConfigView: UIViewControllerRepresentable {
 		navController.modalPresentationStyle = .formSheet
 		
 		if UIDevice.current.userInterfaceIdiom == .mac {
-			navController.preferredContentSize = CGSize(width: 300, height: 200)
+			navController.preferredContentSize = CGSize(width: 300, height: 210)
 		} else {
 			let contentWidth = UIFontMetrics(forTextStyle: .body).scaledValue(for: 400)
-			let contentHeight = UIFontMetrics(forTextStyle: .body).scaledValue(for: 250)
+			let contentHeight = UIFontMetrics(forTextStyle: .body).scaledValue(for: 275)
 			navController.preferredContentSize = CGSize(width: contentWidth, height: contentHeight)
 		}
 		
@@ -162,6 +162,6 @@ struct FieldConfig: Identifiable {
 	}
 }
 
-#Preview {
-    SettingsFontsView()
-}
+//#Preview {
+//    SettingsFontsView()
+//}

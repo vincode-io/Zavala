@@ -7,6 +7,7 @@
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="UIMenu" message="Requires Xcode 11 or later." minToolsVersion="11.0" requiredIntegratedClassName="UICommandDiff"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -21,22 +22,26 @@
                             <tableViewSection headerTitle="Font" id="8RY-Ox-fEs">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="X9k-dG-gtn">
-                                        <rect key="frame" x="20" y="55.5" width="374" height="84"/>
+                                        <rect key="frame" x="20" y="55.5" width="374" height="57"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="X9k-dG-gtn" id="02K-yT-HLh">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="84"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="57"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hTO-Li-2Hc">
-                                                    <rect key="frame" x="0.0" y="6" width="75" height="35"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zm6-ZX-RUU">
+                                                    <rect key="frame" x="0.0" y="-9" width="75" height="34.5"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" title="Button">
+                                                        <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
+                                                        <color key="baseForegroundColor" name="AccentColor"/>
+                                                    </buttonConfiguration>
                                                     <connections>
-                                                        <action selector="changeFont:" destination="HId-Wf-dD5" eventType="touchUpInside" id="Hs3-3e-4a3"/>
+                                                        <action selector="changeFont:" destination="HId-Wf-dD5" eventType="touchUpInside" id="ILz-E6-fdg"/>
                                                     </connections>
                                                 </button>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U3h-4m-sOp" customClass="ValueStepper" customModule="Zavala" customModuleProvider="target">
-                                                    <rect key="frame" x="221" y="6" width="141" height="35"/>
+                                                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U3h-4m-sOp" customClass="ValueStepper" customModule="Zavala" customModuleProvider="target">
+                                                    <rect key="frame" x="221" y="8" width="141" height="0.5"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="minimumValue">
@@ -66,45 +71,37 @@
                                                         <action selector="fontSizeChanged:" destination="HId-Wf-dD5" eventType="valueChanged" id="awv-Z6-bhw"/>
                                                     </connections>
                                                 </view>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YX5-FS-me3">
-                                                    <rect key="frame" x="0.0" y="47" width="51" height="31"/>
-                                                    <connections>
-                                                        <action selector="secondaryColorChanged:" destination="HId-Wf-dD5" eventType="valueChanged" id="lfK-PL-iZF"/>
-                                                    </connections>
-                                                </switch>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dva-9n-Wrm">
-                                                    <rect key="frame" x="12" y="48.5" width="0.0" height="0.0"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Color" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dva-9n-Wrm" userLabel="Font Color Label">
+                                                    <rect key="frame" x="12" y="23.5" width="41" height="20.5"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eYF-1K-v07">
-                                                    <rect key="frame" x="313" y="47" width="51" height="31"/>
-                                                    <connections>
-                                                        <action selector="secondaryColorChanged:" destination="HId-Wf-dD5" eventType="valueChanged" id="SEP-oC-jb9"/>
-                                                    </connections>
-                                                </switch>
+                                                <button opaque="NO" contentMode="scaleToFill" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" changesSelectionAsPrimaryAction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OId-zK-KYw">
+                                                    <rect key="frame" x="288.5" y="16.5" width="85.5" height="34.5"/>
+                                                    <menu key="menu" id="2rD-NP-u5t">
+                                                        <children>
+                                                            <command title="Item 1" id="0n5-hS-FVg"/>
+                                                            <command title="Item 2" id="SaO-VL-YXj"/>
+                                                        </children>
+                                                    </menu>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" title="Button">
+                                                        <fontDescription key="titleFontDescription" style="UICTFontTextStyleBody"/>
+                                                    </buttonConfiguration>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="YX5-FS-me3" secondAttribute="bottom" constant="6" id="2lf-29-aCc"/>
-                                                <constraint firstItem="YX5-FS-me3" firstAttribute="leading" secondItem="hTO-Li-2Hc" secondAttribute="leading" id="6db-ww-h8C"/>
-                                                <constraint firstItem="eYF-1K-v07" firstAttribute="trailing" secondItem="U3h-4m-sOp" secondAttribute="trailing" id="FXl-8A-lFE"/>
-                                                <constraint firstItem="dva-9n-Wrm" firstAttribute="top" secondItem="hTO-Li-2Hc" secondAttribute="bottom" constant="7.5" id="GE6-Az-Ujg"/>
-                                                <constraint firstItem="U3h-4m-sOp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hTO-Li-2Hc" secondAttribute="trailing" constant="8" id="LKo-zN-v92"/>
-                                                <constraint firstItem="hTO-Li-2Hc" firstAttribute="centerY" secondItem="U3h-4m-sOp" secondAttribute="centerY" id="QJ5-iS-dbF"/>
-                                                <constraint firstItem="hTO-Li-2Hc" firstAttribute="top" secondItem="02K-yT-HLh" secondAttribute="top" constant="6" id="SEr-bk-6Cm"/>
+                                                <constraint firstAttribute="bottom" secondItem="OId-zK-KYw" secondAttribute="bottom" constant="6" id="5ej-1Q-BT6"/>
+                                                <constraint firstItem="U3h-4m-sOp" firstAttribute="bottom" secondItem="OId-zK-KYw" secondAttribute="top" constant="-8" id="6gs-WE-hPg"/>
+                                                <constraint firstItem="zm6-ZX-RUU" firstAttribute="leading" secondItem="02K-yT-HLh" secondAttribute="leading" id="7UR-K7-fGG"/>
+                                                <constraint firstItem="zm6-ZX-RUU" firstAttribute="centerY" secondItem="U3h-4m-sOp" secondAttribute="centerY" id="Ecp-ck-4RP"/>
+                                                <constraint firstAttribute="trailing" secondItem="OId-zK-KYw" secondAttribute="trailing" id="NWW-Mf-FAL"/>
                                                 <constraint firstItem="dva-9n-Wrm" firstAttribute="leading" secondItem="02K-yT-HLh" secondAttribute="leading" constant="12" id="ViZ-el-2Hq"/>
                                                 <constraint firstAttribute="trailing" secondItem="U3h-4m-sOp" secondAttribute="trailing" constant="12" id="nAj-6e-hqq"/>
-                                                <constraint firstItem="eYF-1K-v07" firstAttribute="top" secondItem="U3h-4m-sOp" secondAttribute="bottom" constant="6" id="nJK-5B-YHV"/>
-                                                <constraint firstItem="YX5-FS-me3" firstAttribute="top" secondItem="hTO-Li-2Hc" secondAttribute="bottom" constant="6" id="p8M-a9-A3v"/>
-                                                <constraint firstItem="hTO-Li-2Hc" firstAttribute="leading" secondItem="02K-yT-HLh" secondAttribute="leading" id="sfv-9s-5Js"/>
-                                                <constraint firstAttribute="bottom" secondItem="eYF-1K-v07" secondAttribute="bottom" constant="6" id="zOg-4h-ycC"/>
+                                                <constraint firstItem="U3h-4m-sOp" firstAttribute="top" secondItem="02K-yT-HLh" secondAttribute="top" constant="8" id="oIy-Ip-Z0p"/>
+                                                <constraint firstItem="dva-9n-Wrm" firstAttribute="centerY" secondItem="OId-zK-KYw" secondAttribute="centerY" id="rc2-SX-lg7"/>
                                             </constraints>
-                                            <variation key="heightClass=regular-userInterfaceIdiom=mac-widthClass=compact">
-                                                <mask key="subviews">
-                                                    <exclude reference="YX5-FS-me3"/>
-                                                </mask>
-                                            </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -112,7 +109,7 @@
                             <tableViewSection headerTitle="Preview" id="9wX-hO-thR">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="g5o-Ds-iZS">
-                                        <rect key="frame" x="20" y="195.5" width="374" height="35.5"/>
+                                        <rect key="frame" x="20" y="168.5" width="374" height="35.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="g5o-Ds-iZS" id="NJD-8W-3rP">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="35.5"/>
@@ -154,19 +151,18 @@
                     </navigationItem>
                     <connections>
                         <outlet property="cancelBarButtonItem" destination="osQ-MD-NhT" id="BGB-CC-GLN"/>
-                        <outlet property="fontButton" destination="hTO-Li-2Hc" id="nLo-cw-v5h"/>
-                        <outlet property="fontButtonLeadingConstraint" destination="sfv-9s-5Js" id="hQt-QI-k6W"/>
+                        <outlet property="fontButton" destination="zm6-ZX-RUU" id="c2g-Il-QDU"/>
+                        <outlet property="fontButtonLeadingConstraint" destination="7UR-K7-fGG" id="NLl-4f-ZsQ"/>
+                        <outlet property="fontColorPopupButton" destination="OId-zK-KYw" id="Avn-bM-lA8"/>
+                        <outlet property="fontColorPopupTrailingConstraint" destination="NWW-Mf-FAL" id="aUs-dy-L3I"/>
                         <outlet property="fontValueStepper" destination="U3h-4m-sOp" id="177-Pa-Iux"/>
                         <outlet property="sampleTextLabel" destination="SNz-Wt-44U" id="5ca-HZ-ucn"/>
                         <outlet property="saveBarButtonItem" destination="MZ3-Su-xdZ" id="mtT-tx-jC1"/>
-                        <outlet property="secondaryColorLabel" destination="dva-9n-Wrm" id="i7N-CG-5AA"/>
-                        <outlet property="secondaryColorMacSwitch" destination="YX5-FS-me3" id="nsV-2U-ZEa"/>
-                        <outlet property="secondaryColorSwitch" destination="eYF-1K-v07" id="uss-S9-vPj"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hRw-kH-vug" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2405.7971014492755" y="926.78571428571422"/>
+            <point key="canvasLocation" x="2621.739130434783" y="904.6875"/>
         </scene>
         <!--Settings-->
         <scene sceneID="84a-Xu-cgl">
@@ -200,11 +196,6 @@
             <point key="canvasLocation" x="1661" y="927"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="U3h-4m-sOp">
-            <size key="intrinsicContentSize" width="141" height="29"/>
-        </designable>
-    </designables>
     <resources>
         <namedColor name="AccentColor">
             <color red="0.25490196078431371" green="0.45882352941176469" blue="0.019607843137254902" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -105,8 +105,14 @@
     "Backlinks" : {
       "comment" : "Font Label: Backlinks"
     },
+    "Blue" : {
+      "comment" : "Control Label: Blue"
+    },
     "Bold" : {
       "comment" : "Control Label: Bold"
+    },
+    "Brown" : {
+      "comment" : "Control Label: Brown"
     },
     "Bug Tracker" : {
       "comment" : "Control Label: Bug Tracker"
@@ -173,6 +179,9 @@
     },
     "Cut" : {
       "comment" : "Control Label: Cut"
+    },
+    "Cyan" : {
+      "comment" : "Control Label: Cyan"
     },
     "Dark" : {
       "comment" : "Control Label: Dark"
@@ -321,6 +330,9 @@
     "Go Forward" : {
       "comment" : "Control Label: Go Forward"
     },
+    "Green" : {
+      "comment" : "Control Label: Green"
+    },
     "Help" : {
       "comment" : "Control Label: Help"
     },
@@ -341,6 +353,9 @@
     },
     "Import OPML…" : {
       "comment" : "Control Label: Import OPML…"
+    },
+    "Indigo" : {
+      "comment" : "Control Label: Indigo"
     },
     "Insert Image" : {
       "comment" : "Control Label: Insert Image"
@@ -365,6 +380,9 @@
     },
     "Medium" : {
       "comment" : "Control Label: Medium"
+    },
+    "Mint" : {
+      "comment" : "Control Label: Mint"
     },
     "More" : {
       "comment" : "Control Label: More"
@@ -426,6 +444,9 @@
     "Open Quickly…" : {
       "comment" : "Control Label: Open Quickly…"
     },
+    "Orange" : {
+      "comment" : "Control Label: Orange"
+    },
     "Outline" : {
       "comment" : "Control Label: Outline"
     },
@@ -441,11 +462,17 @@
     "Paste" : {
       "comment" : "Control Label: Paste"
     },
+    "Pink" : {
+      "comment" : "Control Label: Pink"
+    },
     "Preferences…" : {
       "comment" : "Control Label: Preferences…"
     },
     "Previous Result" : {
       "comment" : "Control Label: Previous Result"
+    },
+    "Primary Text" : {
+      "comment" : "Control Label: Primary Text"
     },
     "Print" : {
       "comment" : "Control Label: Print"
@@ -468,11 +495,20 @@
     "Provide Feedback" : {
       "comment" : "Control Label: Provide Feedback"
     },
+    "Purple" : {
+      "comment" : "Control Label: Purple"
+    },
+    "Quaternary Text" : {
+      "comment" : "Control Label: Quaternary Text"
+    },
     "Readable" : {
       "comment" : "Control Label: Readable"
     },
     "Recover" : {
       "comment" : "Control Label: Recover"
+    },
+    "Red" : {
+      "comment" : "Control Label: Red"
     },
     "Redo" : {
       "comment" : "Control Label: Redo"
@@ -516,8 +552,8 @@
     "Search" : {
       "comment" : "Field Placeholder: Search"
     },
-    "Secondary Color" : {
-      "comment" : "Control Label: Secondary Color"
+    "Secondary Text" : {
+      "comment" : "Control Label: Secondary Text"
     },
     "See documents in “%@”" : {
       "comment" : "Prompt: see documents in document container"
@@ -554,6 +590,12 @@
     },
     "Tags" : {
       "comment" : "Font Label: Tags"
+    },
+    "Teal" : {
+      "comment" : "Control Label: Teal"
+    },
+    "Tertiary Text" : {
+      "comment" : "Control Label: Tertiary Text"
     },
     "The outline be deleted and unrecoverable." : {
       "comment" : "Alert Message: delete outline"
@@ -614,6 +656,9 @@
     },
     "Word Count" : {
       "comment" : "Control Label: Word Count"
+    },
+    "Yellow" : {
+      "comment" : "Control Label: Yellow"
     },
     "Zavala Help" : {
       "comment" : "Control Label: Zavala Help"

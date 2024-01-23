@@ -20,8 +20,7 @@ extension UIColor {
 		return UIColor.perform(selector).takeUnretainedValue() as? UIColor ?? UIColor(named: "AccentColor")!
 	}
 	
-	func asImage() -> UIImage {
-		let size = CGSize(width: 1, height: 1)
+	func asImage(size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
 		return UIGraphicsImageRenderer(size: size).image(actions: { (context) in
 			context.cgContext.setFillColor(cgColor)
 			context.fill(.init(origin: .zero, size: size))

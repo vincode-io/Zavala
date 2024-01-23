@@ -85,6 +85,11 @@ extension UIImage {
 	static var outline = UIImage(named: "Outline")!
 
 	static var paste = UIImage(systemName: "doc.on.clipboard")!
+	#if targetEnvironment(macCatalyst)
+	static var popupChevrons = UIImage(systemName: "chevron.up.chevron.down")!.applyingSymbolConfiguration(.init(pointSize: 10, weight: .bold))!
+	#else
+	static var popupChevrons = UIImage(systemName: "chevron.up.chevron.down")!.applyingSymbolConfiguration(.init(pointSize: 13, weight: .medium))!
+	#endif
 	static var printDoc = UIImage(systemName: "printer")!
 	static var printList = UIImage(systemName: "printer.dotmatrix")!
 	
@@ -154,7 +159,9 @@ extension String {
 
 	static var backControlLabel = String(localized: "Back", comment: "Control Label: Back")
 	static var backlinksLabel = String(localized: "Backlinks", comment: "Font Label: Backlinks")
+	static var blueControlLabel = String(localized: "Blue", comment: "Control Label: Blue")
 	static var boldControlLabel = String(localized: "Bold", comment: "Control Label: Bold")
+	static var brownControlLabel = String(localized: "Brown", comment: "Control Label: Brown")
 	static var bugTrackerControlLabel = String(localized: "Bug Tracker", comment: "Control Label: Bug Tracker")
 	
 	static var cancelControlLabel = String(localized: "Cancel", comment: "Control Label: Cancel the proposed action")
@@ -178,7 +185,8 @@ extension String {
 	static var corruptedOutlineMessage = String(localized: "This outline appears to be corrupted. Would you like to attempt to recover any lost rows?", comment: "Alert Message: Corrupted Outline")
 	static var createdControlLabel = String(localized: "Created", comment: "Control Label: Created")
 	static var cutControlLabel = String(localized: "Cut", comment: "Control Label: Cut")
-	
+	static var cyanControlLabel = String(localized: "Cyan", comment: "Control Label: Cyan")
+
 	static var darkControlLabel = String(localized: "Dark", comment: "Control Label: Dark")
 	static var deleteAlwaysControlLabel = String(localized: "Always Delete Without Asking", comment: "Control Label: Always Delete Without Asking")
 	static var deleteCompletedRowsControlLabel = String(localized: "Delete Completed", comment: "Control Label: Delete Completed Rows")
@@ -237,7 +245,8 @@ extension String {
 	static var gitHubRepositoryControlLabel = String(localized: "GitHub Repository", comment: "Control Label: GitHub Repository")
 	static var goBackwardControlLabel = String(localized: "Go Backward", comment: "Control Label: Go Backward")
 	static var goForwardControlLabel = String(localized: "Go Forward", comment: "Control Label: Go Forward")
-	
+	static var greenControlLabel = String(localized: "Green", comment: "Control Label: Green")
+
 	static var helpControlLabel = String(localized: "Help", comment: "Control Label: Help")
 	static var hideKeyboardControlLabel = String(localized: "Hide Keyboard", comment: "Control Label: Hide Keyboard")
 	static var historyControlLabel = String(localized: "History", comment: "Control Label: History")
@@ -246,6 +255,7 @@ extension String {
 	static var importFailedTitle = String(localized: "Import Failed", comment: "Error Message Title: Import Failed")
 	static var importOPMLControlLabel = String(localized: "Import OPML", comment: "Control Label: Import OPML")
 	static var importOPMLEllipsisControlLabel = String(localized: "Import OPML…", comment: "Control Label: Import OPML…")
+	static var indigoControlLabel = String(localized: "Indigo", comment: "Control Label: Indigo")
 	static var insertImageControlLabel = String(localized: "Insert Image", comment: "Control Label: Insert Image")
 	static var insertImageEllipsisControlLabel = String(localized: "Insert Image…", comment: "Control Label: Insert Image…")
 	static var italicControlLabel = String(localized: "Italic", comment: "Control Label: Italic")
@@ -256,6 +266,7 @@ extension String {
 	static var lightControlLabel = String(localized: "Light", comment: "Control Label: Light")
 
 	static var mediumControlLabel = String(localized: "Medium", comment: "Control Label: Medium")
+	static var mintControlLabel = String(localized: "Mint", comment: "Control Label: Mint")
 	static var moreControlLabel = String(localized: "More", comment: "Control Label: More")
 	static var moveControlLabel = String(localized: "Move", comment: "Control Label: Move")
 	static var moveRightControlLabel = String(localized: "Move Right", comment: "Control Label: Move Right")
@@ -280,18 +291,25 @@ extension String {
 	static var outlineOwnerControlLabel = String(localized: "Outline Owner", comment: "Control Label: Outline Owner")
 	static var outlineDefaultsControlLabel = String(localized: "Outline Defaults", comment: "Control Label: Outline Defaults")
 	static var opmlOwnerFieldNote = String(localized: "This information is included in OPML documents to attribute ownership.", comment: "Note: OPML Ownership.")
+	static var orangeControlLabel = String(localized: "Orange", comment: "Control Label: Orange")
 	static var ownerControlLabel = String(localized: "Owner", comment: "Control Label: Owner")
 
 	static var pasteControlLabel = String(localized: "Paste", comment: "Control Label: Paste")
 	static var preferencesEllipsisControlLabel = String(localized: "Preferences…", comment: "Control Label: Preferences…")
 	static var previousResultControlLabel = String(localized: "Previous Result", comment: "Control Label: Previous Result")
+	static var pinkControlLabel = String(localized: "Pink", comment: "Control Label: Pink")
+	static var primaryTextControlLabel = String(localized: "Primary Text", comment: "Control Label: Primary Text")
 	static var printControlLabel = String(localized: "Print", comment: "Control Label: Print")
 	static var printDocControlLabel = String(localized: "Print Doc", comment: "Control Label: Print Doc")
 	static var printDocEllipsisControlLabel = String(localized: "Print Doc…", comment: "Control Label: Print Doc…")
 	static var printListControlLabel = String(localized: "Print List", comment: "Control Label: Print List")
 	static var printListControlEllipsisLabel = String(localized: "Print List…", comment: "Control Label: Print List…")
 	static var privacyPolicyControlLabel = String(localized: "Privacy Policy", comment: "Control Label: Privacy Policy")
-	
+	static var purpleControlLabel = String(localized: "Purple", comment: "Control Label: Purple")
+
+	static var quaternaryTextControlLabel = String(localized: "Quaternary Text", comment: "Control Label: Quaternary Text")
+
+	static var redControlLabel = String(localized: "Red", comment: "Control Label: Red")
 	static var readableControlLabel = String(localized: "Readable", comment: "Control Label: Readable")
 	static var recoverControlLabel = String(localized: "Recover", comment: "Control Label: Recover")
 	static var redoControlLabel = String(localized: "Redo", comment: "Control Label: Redo")
@@ -313,7 +331,7 @@ extension String {
 
 	static var saveControlLabel = String(localized: "Save", comment: "Control Label: Save")
 	static var searchPlaceholder = String(localized: "Search", comment: "Field Placeholder: Search")
-	static var secondaryColorControlLabel = String(localized: "Secondary Color", comment: "Control Label: Secondary Color")
+	static var secondaryTextControlLabel = String(localized: "Secondary Text", comment: "Control Label: Secondary Text")
 	static var selectControlLabel = String(localized: "Select", comment: "Control Label: Select")
 	static var settingsControlLabel = String(localized: "Settings", comment: "Control Label: Settings")
 	static var settingsEllipsisControlLabel = String(localized: "Settings…", comment: "Control Label: Settings…")
@@ -326,6 +344,8 @@ extension String {
 	
 	static var tagsLabel = String(localized: "Tags", comment: "Font Label: Tags")
 	static var tagDataEntryPlaceholder = String(localized: "Tag", comment: "Data Entry Placeholder: Tag")
+	static var tealControlLabel = String(localized: "Teal", comment: "Control Label: Teal")
+	static var tertiaryTextControlLabel = String(localized: "Tertiary Text", comment: "Control Label: Tertiary Text")
 	static var titleLabel = String(localized: "Title", comment: "Font Label: Title")
 	static var togglerSidebarControlLabel = String(localized: "Toggle Sidebar", comment: "Control Label: Toggle Sidebar")
 	static var turnFilterOffControlLabel = String(localized: "Turn Filter Off", comment: "Control Label: Turn Filter Off")
@@ -343,6 +363,8 @@ extension String {
 	static var websiteControlLabel = String(localized: "Website", comment: "Control Label: Website")
 	static var wideControlLabel = String(localized: "Wide", comment: "Control Label: Wide")
 	static var wordCountLabel = String(localized: "Word Count", comment: "Control Label: Word Count")
+
+	static var yellowControlLabel = String(localized: "Yellow", comment: "Control Label: Yellow")
 
 	static var zavalaHelpControlLabel = String(localized: "Zavala Help", comment: "Control Label: Zavala Help")
 	static var zoomInControlLabel = String(localized: "Zoom In", comment: "Control Label: Zoom In")

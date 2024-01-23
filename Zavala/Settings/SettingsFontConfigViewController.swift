@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import VinUtility
 
 protocol SettingsFontConfigViewControllerDelegate: AnyObject {
 	func didUpdateConfig(field: OutlineFontField, config: OutlineFontConfig)
@@ -16,15 +17,24 @@ class SettingsFontConfigViewController: UITableViewController {
 	var field: OutlineFontField?
 	var config: OutlineFontConfig?
 	
+	var fontButtonTitle: NSAttributedString {
+		let imageAttachment = NSTextAttachment()
+		imageAttachment.image = .popupChevrons.tinted(color: .accentColor)
+		
+		let title = NSMutableAttributedString(string: "\(config?.name ?? "") ")
+		title.append(NSAttributedString(attachment: imageAttachment))
+		title.addAttribute(.foregroundColor, value: UIColor.accentColor, range: NSRange(location: 0, length: title.length))
+		return title
+	}
+	
 	@IBOutlet weak var cancelBarButtonItem: UIBarButtonItem!
 	@IBOutlet weak var saveBarButtonItem: UIBarButtonItem!
 	
 	@IBOutlet weak var fontButtonLeadingConstraint: NSLayoutConstraint!
 	@IBOutlet weak var fontButton: UIButton!
 	@IBOutlet weak var fontValueStepper: ValueStepper!
-	@IBOutlet weak var secondaryColorMacSwitch: UISwitch!
-	@IBOutlet weak var secondaryColorSwitch: UISwitch!
-	@IBOutlet weak var secondaryColorLabel: UILabel!
+	@IBOutlet weak var fontColorPopupTrailingConstraint: NSLayoutConstraint!
+	@IBOutlet weak var fontColorPopupButton: UIButton!
 	@IBOutlet weak var sampleTextLabel: UILabel!
 	
 	var cancelButton: UIButton!
@@ -35,8 +45,7 @@ class SettingsFontConfigViewController: UITableViewController {
 		
 		guard let field, let config else { return }
 		
-		if let outlineFonts = AppDefaults.shared.outlineFonts,
-		   !outlineFonts.rowFontConfigs.keys.contains(field) {
+		if let outlineFonts = AppDefaults.shared.outlineFonts, !outlineFonts.rowFontConfigs.keys.contains(field) {
 			saveBarButtonItem.title = .addControlLabel
 		}
 		
@@ -59,25 +68,33 @@ class SettingsFontConfigViewController: UITableViewController {
 			saveButton.addTarget(self, action: #selector(save(_:)), for: .touchUpInside)
 			saveButton.role = .primary
 
-			fontButtonLeadingConstraint.constant = 12
-			secondaryColorMacSwitch.title = .secondaryColorControlLabel
-			secondaryColorLabel.isHidden = true
-			secondaryColorSwitch.isHidden = true
-			
+			fontButtonLeadingConstraint.constant = 10
+			fontColorPopupTrailingConstraint.constant = 6
+
 		} else {
 			fontValueStepper.widthAnchor.constraint(equalToConstant: 149).isActive = true
 			fontValueStepper.heightAnchor.constraint(equalToConstant: 29).isActive = true
 			
-			secondaryColorLabel.text = .secondaryColorControlLabel
-			secondaryColorMacSwitch.isHidden = true
 		}
 		
 		navigationItem.title = field.displayName
-		fontButton.setTitle(config.name, for: .normal)
+		fontButton.setAttributedTitle(fontButtonTitle, for: .normal)
 		fontValueStepper.value = Double(config.size)
+		var colorMenuItems = [UIAction]()
 		
-		secondaryColorSwitch.isOn = config.secondaryColor
-		secondaryColorMacSwitch.isOn = config.secondaryColor
+		for fontColor in OutlineFontColor.allCases {
+			let image = fontColor.uiColor.asImage(size: .init(width: 12, height: 12))
+			let state: UIAction.State = config.color == fontColor ? .on : .off
+			
+			let action = UIAction(title: fontColor.description, image: image, state: state) { [weak self] _ in
+				self?.config?.color = fontColor
+				self?.updateUI()
+			}
+			
+			colorMenuItems.append(action)
+		}
+		
+		fontColorPopupButton.menu = UIMenu(children: colorMenuItems)
 		
 		updateUI()
     }
@@ -116,11 +133,6 @@ class SettingsFontConfigViewController: UITableViewController {
 		updateUI()
 	}
 	
-	@IBAction func secondaryColorChanged(_ sender: UISwitch) {
-		config?.secondaryColor = sender.isOn
-		updateUI()
-	}
-	
 	@IBAction func cancel(_ sender: Any) {
 		dismiss(animated: true)
 	}
@@ -144,8 +156,8 @@ extension SettingsFontConfigViewController: UIFontPickerViewControllerDelegate {
 	func fontPickerViewControllerDidPickFont(_ viewController: UIFontPickerViewController) {
 		guard let fontName = viewController.selectedFontDescriptor?.fontAttributes[.family] as? String else { return }
 		viewController.dismiss(animated: true)
-		fontButton.setTitle(fontName, for: .normal)
 		config?.name = fontName
+		fontButton.setAttributedTitle(fontButtonTitle, for: .normal)
 		updateUI()
 	}
 	
@@ -157,9 +169,9 @@ private extension SettingsFontConfigViewController {
 
 	func updateUI() {
 		guard let field, let config, let font = UIFont(name: config.name, size: CGFloat(config.size)) else { return }
-		sampleTextLabel.font = font
 		
-		sampleTextLabel.textColor = config.secondaryColor ? .secondaryLabel : .label
+		sampleTextLabel.font = font
+		sampleTextLabel.textColor = config.color.uiColor
 		
 		tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
 	}

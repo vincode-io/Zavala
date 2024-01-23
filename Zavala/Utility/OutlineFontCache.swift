@@ -119,22 +119,22 @@ extension OutlineFontCache {
 			switch field {
 			case .title:
 				titleFont = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: font).with(traits: .traitBold)
-				titleColor = config.secondaryColor ? .secondaryLabel : .label
+				titleColor = config.color.uiColor
 			case .tags:
 				tagFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font).with(traits: .traitBold)
-				tagColor = config.secondaryColor ? .secondaryLabel : .label
+				tagColor = config.color.uiColor
 			case .rowTopic:
 				let topicFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
 				topicFonts.append(topicFont)
-				topicColors.append(config.secondaryColor ? .secondaryLabel : .label)
+				topicColors.append(config.color.uiColor)
 				let metadataFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font.withSize(font.pointSize - 2))
 				metadatumFonts.append(metadataFont)
 			case .rowNote:
 				noteFonts.append(UIFontMetrics(forTextStyle: .body).scaledFont(for: font))
-				noteColors.append(config.secondaryColor ? .secondaryLabel : .label)
+				noteColors.append(config.color.uiColor)
 			case .backlinks:
 				backlinkFont = UIFontMetrics(forTextStyle: .footnote).scaledFont(for: font).with(traits: .traitItalic)
-				backlinkColor = config.secondaryColor ? .secondaryLabel : .label
+				backlinkColor = config.color.uiColor
 			}
 		}
 
