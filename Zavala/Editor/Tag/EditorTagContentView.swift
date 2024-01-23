@@ -22,9 +22,8 @@ class EditorTagContentView: UIView, UIContentView {
 		
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.titleLabel?.font = OutlineFontCache.shared.tagFont
-		button.titleLabel?.textColor = OutlineFontCache.shared.tagColor
 		button.backgroundColor = .systemGray4
-		button.setTitleColor(.secondaryLabel, for: .normal)
+		button.setTitleColor(OutlineFontCache.shared.tagColor, for: .normal)
 		button.contentEdgeInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
 		button.layer.cornerRadius = button.intrinsicContentSize.height / 2
 
@@ -59,7 +58,7 @@ class EditorTagContentView: UIView, UIContentView {
 	
 	private func apply(configuration: EditorTagContentConfiguration) {
 		button.titleLabel?.font = OutlineFontCache.shared.tagFont
-		button.titleLabel?.textColor = OutlineFontCache.shared.tagColor
+		button.setTitleColor(OutlineFontCache.shared.tagColor, for: .normal)
 		button.layer.cornerRadius = button.intrinsicContentSize.height / 2
 		guard appliedConfiguration != configuration else { return }
 		appliedConfiguration = configuration
