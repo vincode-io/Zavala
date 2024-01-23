@@ -19,8 +19,12 @@ class ReloadIndexPathsOperation: BaseMainThreadOperation {
 	}
 	
 	override func run() {
+		CATransaction.begin()
+		CATransaction.setCompletionBlock {
+			self.operationDelegate?.operationDidComplete(self)
+		}
 		collectionView.reloadItems(at: indexPaths)
-		self.operationDelegate?.operationDidComplete(self)
+		CATransaction.commit()
 	}
 	
 }
