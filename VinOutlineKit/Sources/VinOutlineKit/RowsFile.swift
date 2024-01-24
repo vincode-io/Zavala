@@ -217,6 +217,7 @@ private extension RowsFile {
         }
 		outline?.rowOrder = OrderedSet(outlineRows.rowOrder)
 		outline?.keyedRows = outlineRows.keyedRows
+		outline?.rowsFileDidLoad()
 	}
 	
 	func saveCallback() {

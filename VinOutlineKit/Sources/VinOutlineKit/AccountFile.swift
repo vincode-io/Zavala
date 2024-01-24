@@ -91,7 +91,12 @@ private extension AccountFile {
 
 		account.folder = fileURL.deletingLastPathComponent()
 		
+		let initialLoad = accountManager?.accountsDictionary[accountType.rawValue] == nil
 		accountManager?.accountsDictionary[accountType.rawValue] = account
+		
+		if !initialLoad {
+			account.accountDidReload()
+		}
 	}
 	
 	func saveCallback() {

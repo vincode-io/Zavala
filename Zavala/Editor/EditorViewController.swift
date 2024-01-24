@@ -855,8 +855,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return
 		}
 
-		outline.incrementBeingUsedCount()
 		outline.load()
+		outline.incrementBeingUsedCount()
 		checkForCorruptOutline()
 		outline.prepareForViewing()
 			

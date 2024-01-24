@@ -621,6 +621,16 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		rebuildTransientData()
 	}
 	
+	public func rowsFileDidLoad() {
+		guard isBeingUsed else { return }
+		
+		var changes = rebuildShadowTable()
+		let reloads = Set(shadowTable!.compactMap { $0.shadowTableIndex })
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
+		
+		outlineElementsDidChange(changes)
+	}
+	
 	public func recoverLostRows() {
 		guard let rowOrder, let keyedRows else { return }
 		

@@ -90,7 +90,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		}
         
 		NotificationCenter.default.addObserver(self, selector: #selector(accountManagerAccountsDidChange(_:)), name: .AccountManagerAccountsDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(accountDidInitialize(_:)), name: .AccountDidInitialize, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(accountDidReload(_:)), name: .AccountDidReload, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountTagsDidChange(_:)), name: .AccountTagsDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(outlineTagsDidChange(_:)), name: .OutlineTagsDidChange, object: nil)
@@ -138,8 +138,10 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		debounceApplyChangeSnapshot()
 	}
 
-	@objc func accountDidInitialize(_ note: Notification) {
+	@objc func accountDidReload(_ note: Notification) {
 		debounceApplyChangeSnapshot()
+		debounceReloadVisible()
+		updateSelections()
 	}
 	
 	@objc func accountMetadataDidChange(_ note: Notification) {

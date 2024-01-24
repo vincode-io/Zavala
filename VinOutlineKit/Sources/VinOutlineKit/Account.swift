@@ -15,7 +15,7 @@ import VinXML
 import VinCloudKit
 
 public extension Notification.Name {
-	static let AccountDidInitialize = Notification.Name(rawValue: "AccountDidInitialize")
+	static let AccountDidReload = Notification.Name(rawValue: "AccountDidReload")
 	static let AccountMetadataDidChange = Notification.Name(rawValue: "AccountMetadataDidChange")
 	static let AccountDocumentsDidChange = Notification.Name(rawValue: "AccountDocumentsDidChange")
 	static let AccountTagsDidChange = Notification.Name(rawValue: "AccountTagsDidChange")
@@ -479,8 +479,8 @@ public final class Account: NSObject, Identifiable, Codable {
 		}
 	}
 	
-	func accountDidInitialize() {
-		NotificationCenter.default.post(name: .AccountDidInitialize, object: self, userInfo: nil)
+	func accountDidReload() {
+		NotificationCenter.default.post(name: .AccountDidReload, object: self, userInfo: nil)
 	}
 	
 	public static func == (lhs: Account, rhs: Account) -> Bool {
