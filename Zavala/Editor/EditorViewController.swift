@@ -865,8 +865,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		updateNavigationMenus()
 		collectionView.reloadData()
 		
+		// If we don't have this delay, when switching between documents in the documents view, while searching,
+		// causes the find interaction to glitch out. This is especially true on macOS. We could have a shorter
+		// duration on iOS, but I don't see the need to complicate the code.
 		if let searchText {
-			DispatchQueue.main.async {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 				self.beginInDocumentSearch(text: searchText)
 			}
 			return
