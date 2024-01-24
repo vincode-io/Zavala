@@ -251,8 +251,20 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
-		reload(document: document)
-		self.loadDocuments(animated: true)
+
+		// This should be able to use reload(document: document), but if you do
+		// you get tangled up with loadDocuments(). The result is that the wrong
+		// document index gets reloaded. Fix this when we update to using Swift
+		// Concurrency's Actors to isolate the collectionView.
+		let selectedIndexPaths = self.collectionView.indexPathsForSelectedItems
+		if let index = documents.firstIndex(of: document) {
+			collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+		}
+		if let selectedItem = selectedIndexPaths?.first {
+			collectionView.selectItem(at: selectedItem, animated: false, scrollPosition: [])
+		}
+
+		loadDocuments(animated: true)
 	}
 	
 	@objc func documentUpdatedDidChange(_ note: Notification) {
