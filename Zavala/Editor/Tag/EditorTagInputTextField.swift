@@ -69,6 +69,13 @@ class EditorTagInputTextField: SearchTextField {
 			let name = filteredResults[index].title
 			self.editorDelegate?.createTag(self, name: name)
 		}
+		
+		#if targetEnvironment(macCatalyst)
+		let appleColorPreferencesChangedNotification = Notification.Name(rawValue: "AppleColorPreferencesChangedNotification")
+		DistributedNotificationCenter.default.addObserver(self, selector: #selector(appleColorPreferencesChanged(_:)), name: appleColorPreferencesChangedNotification, object: nil)
+		#endif
+
+		updateTintColor()
 	}
 	
 	required init?(coder: NSCoder) {
@@ -138,6 +145,18 @@ private extension EditorTagInputTextField {
 	func resetFilterStrings() {
 		let filterStrings = editorDelegate?.editorTagInputTextFieldTags?.compactMap({ $0.name }) ?? [String]()
 		self.filterStrings(filterStrings)
+	}
+	
+	func updateTintColor() {
+		if UIColor.accentColor.isDefaultAccentColor {
+			tintColor = .accentColor.brighten(0.35)
+		} else {
+			tintColor = .accentColor
+		}
+	}
+
+	@objc func appleColorPreferencesChanged(_ note: Notification? = nil) {
+		updateTintColor()
 	}
 	
 }
