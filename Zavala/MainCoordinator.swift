@@ -157,12 +157,16 @@ extension MainCoordinator {
 		editorViewController?.duplicateCurrentRows()
 	}
 	
-	func toggleFocus() {
-		editorViewController?.toggleFocus()
+	func focusIn() {
+		editorViewController?.focusIn()
 	}
 	
 	func focusOut() {
 		editorViewController?.focusOut()
+	}
+	
+	func toggleFocus() {
+		editorViewController?.toggleFocus()
 	}
 	
 	func toggleFilterOn() {
