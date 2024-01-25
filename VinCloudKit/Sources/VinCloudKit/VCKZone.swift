@@ -688,7 +688,7 @@ public extension VCKZone {
 						// Nothing wrong with this record, it was just part of the batch that failed.
 						return modelToSave
 					case .unknownItem:
-						// The record was deleted while the user was offline, so treat it as new
+						// The record was deleted while the user was offline, so don't try to update it.
 						return nil
 					default:
 						// Merge the model and try to save it again
