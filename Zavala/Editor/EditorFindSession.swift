@@ -40,8 +40,18 @@ class EditorFindSession: UIFindSession {
 	}
 	
 	override func performSearch(query: String, options: UITextSearchOptions?) {
+		var outlineSearchOptions = Outline.SearchOptions()
+		
+		if options?.stringCompareOptions.contains(.caseInsensitive) ?? false {
+			outlineSearchOptions.formUnion(.caseInsensitive)
+		}
+		
+		if options?.wordMatchMethod == .fullWord {
+			outlineSearchOptions.formUnion(.wholeWords)
+		}
+		
 		guard let outline = delegate.outline else { return }
-		outline.search(for: query)
+		outline.search(for: query, options: outlineSearchOptions)
 	}
 	
 	override func highlightNextResult(in direction: UITextStorageDirection) {
@@ -59,7 +69,7 @@ class EditorFindSession: UIFindSession {
 	
 	override func invalidateFoundResults() {
 		guard let outline = delegate.outline else { return }
-		outline.search(for: "")
+		outline.search(for: "", options: [])
 	}
 	
 }

@@ -42,6 +42,16 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		public var toChildIndex: Int
 	}
 	
+	public struct SearchOptions: OptionSet {
+		public static let wholeWords = SearchOptions(rawValue: 1)
+		public static let caseInsensitive = SearchOptions(rawValue: 2)
+		
+		public let rawValue: Int
+		public init(rawValue: Int) {
+			self.rawValue = rawValue
+		}
+	}
+	
 	public enum SearchState {
 		case beginSearch
 		case searching
@@ -1074,7 +1084,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return true
 	}
 	
-	public func search(for searchText: String) {
+	public func search(for searchText: String, options: SearchOptions) {
 		guard self.searchText != searchText else {
 			return
 		}
@@ -1093,7 +1103,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			isSearching = .beginSearch
 		} else {
 			isSearching = .searching
-			let searchVisitor = SearchResultVisitor(searchText: searchText, isCompletedFilterOn: isCompletedFilterOn, isNotesFilterOn: isNotesFilterOn)
+			let searchVisitor = SearchResultVisitor(searchText: searchText, options: options, isCompletedFilterOn: isCompletedFilterOn, isNotesFilterOn: isNotesFilterOn)
 			rows.forEach { $0.visit(visitor: searchVisitor.visitor(_:))	}
 			searchResultCoordinates = searchVisitor.searchResultCoordinates
 		}

@@ -47,12 +47,16 @@ public extension String {
 		return addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
 	}
 	
-	func makeSearchable() -> String {
-		return trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current)
+	func makeSearchable(diacriticInsensitive: Bool = true) -> String {
+		if diacriticInsensitive {
+			return trimmingCharacters(in: .whitespacesAndNewlines).folding(options: .diacriticInsensitive, locale: .current)
+		} else {
+			return trimmingCharacters(in: .whitespacesAndNewlines)
+		}
 	}
 	
-	func searchRegEx() -> NSRegularExpression? {
-		return try? NSRegularExpression(pattern: makeSearchable(), options: .caseInsensitive)
+	func searchRegEx(caseInsensitive: Bool = true) -> NSRegularExpression? {
+		return try? NSRegularExpression(pattern: makeSearchable(diacriticInsensitive: caseInsensitive), options: caseInsensitive ? .caseInsensitive : [])
 	}
 	
 	func trimmed() -> String? {

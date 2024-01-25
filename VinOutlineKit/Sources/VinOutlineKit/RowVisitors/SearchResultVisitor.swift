@@ -15,8 +15,15 @@ class SearchResultVisitor {
 	var searchResultCoordinates = [SearchResultCoordinates]()
 	var firstMatch = true
 	
-	init(searchText: String, isCompletedFilterOn: Bool, isNotesFilterOn: Bool) {
-		searchRegEx = searchText.searchRegEx()
+	init(searchText: String, options: Outline.SearchOptions, isCompletedFilterOn: Bool, isNotesFilterOn: Bool) {
+		let search = options.contains(.wholeWords) ? "\\b\(searchText)\\b" : searchText
+		
+		if options.contains(.caseInsensitive) {
+			searchRegEx = search.searchRegEx(caseInsensitive: true)
+		} else {
+			searchRegEx = search.searchRegEx(caseInsensitive: false)
+		}
+		
 		self.isCompletedFilterOn = isCompletedFilterOn
 		self.isNotesFilterOn = isNotesFilterOn
 	}
