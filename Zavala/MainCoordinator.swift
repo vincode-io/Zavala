@@ -290,22 +290,6 @@ extension MainCoordinator {
 		editorViewController?.share()
 	}
 	
-	func beginInDocumentSearch() {
-		editorViewController?.beginInDocumentSearch()
-	}
-	
-	func useSelectionForSearch() {
-		editorViewController?.useSelectionForSearch()
-	}
-	
-	func nextInDocumentSearch() {
-		editorViewController?.nextInDocumentSearch()
-	}
-	
-	func previousInDocumentSearch() {
-		editorViewController?.previousInDocumentSearch()
-	}
-	
 	func showSettings() {
 		let settingsViewController = UIHostingController(rootView: SettingsView())
 		settingsViewController.modalPresentationStyle = .formSheet

@@ -254,27 +254,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												  action: #selector(beginDocumentSearchCommand(_:)),
 												  input: "f",
 												  modifierFlags: [.alternate, .command])
-	
-	let beginInDocumentSearchCommand = UIKeyCommand(title: .findEllipsisControlLabel,
-													action: #selector(beginInDocumentSearchCommand(_:)),
-													input: "f",
-													modifierFlags: [.command])
-	
-	let useSelectionForSearchCommand = UIKeyCommand(title: .useSelectionForFindControlLabel,
-													action: #selector(useSelectionForSearchCommand(_:)),
-													input: "e",
-													modifierFlags: [.command])
-	
-	let nextInDocumentSearchCommand = UIKeyCommand(title: .findNextControlLabel,
-												   action: #selector(nextInDocumentSearchCommand(_:)),
-												   input: "g",
-												   modifierFlags: [.command])
-	
-	let previousInDocumentSearchCommand = UIKeyCommand(title: .findPreviousControlLabel,
-													   action: #selector(previousInDocumentSearchCommand(_:)),
-													   input: "g",
-													   modifierFlags: [.shift, .command])
-	
+		
 	let printDocsCommand = UIKeyCommand(title: .printDocEllipsisControlLabel,
 										action: #selector(printDocsCommand(_:)),
 										input: "p",
@@ -708,22 +688,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 
-	@objc func beginInDocumentSearchCommand(_ sender: Any?) {
-		mainCoordinator?.beginInDocumentSearch()
-	}
-
-	@objc func useSelectionForSearchCommand(_ sender: Any?) {
-		mainCoordinator?.useSelectionForSearch()
-	}
-
-	@objc func nextInDocumentSearchCommand(_ sender: Any?) {
-		mainCoordinator?.nextInDocumentSearch()
-	}
-
-	@objc func previousInDocumentSearchCommand(_ sender: Any?) {
-		mainCoordinator?.previousInDocumentSearch()
-	}
-	
 	@objc func outlineGetInfoCommand(_ sender: Any?) {
 		mainCoordinator?.showGetInfo()
 	}
@@ -907,11 +871,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(beginInDocumentSearchCommand(_:)),
-			#selector(useSelectionForSearchCommand(_:)),
-			#selector(nextInDocumentSearchCommand(_:)),
-			#selector(previousInDocumentSearchCommand(_:)),
-			#selector(copyDocumentLinkCommand(_:)):
+		case #selector(copyDocumentLinkCommand(_:)):
 			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
@@ -972,14 +932,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let linkMenu = UIMenu(title: "", options: .displayInline, children: [insertImageCommand, linkCommand, copyDocumentLinkCommand])
 		builder.insertSibling(linkMenu, afterMenu: .standardEdit)
 
-		builder.remove(menu: .find)
-		
-		let documentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginDocumentSearchCommand])
-		let inDocumentFindMenu = UIMenu(title: "", options: .displayInline, children: [beginInDocumentSearchCommand, nextInDocumentSearchCommand, previousInDocumentSearchCommand])
-		let useSelectionMenu = UIMenu(title: "", options: .displayInline, children: [useSelectionForSearchCommand])
-		let findMenu = UIMenu(title: .findControlLabel, children: [documentFindMenu, inDocumentFindMenu, useSelectionMenu])
-		builder.insertSibling(findMenu, beforeMenu: .spelling)
-		
 		builder.remove(menu: .spelling)
 		builder.remove(menu: .substitutions)
 

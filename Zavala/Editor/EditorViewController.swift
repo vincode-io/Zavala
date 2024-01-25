@@ -597,6 +597,26 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			pasteRows(afterRows: currentRows)
 		}
 	}
+
+	override func find(_ sender: Any?) {
+		showFindInteraction()
+	}
+	
+	override func findAndReplace(_ sender: Any?) {
+		showFindInteraction(replace: true)
+	}
+	
+	override func findNext(_ sender: Any?) {
+		findInteraction.findNext()
+	}
+	
+	override func findPrevious(_ sender: Any?) {
+		findInteraction.findPrevious()
+	}
+	
+	override func useSelectionForFind(_ sender: Any?) {
+		showFindInteraction(text: currentTextView?.selectedText)
+	}
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
@@ -608,6 +628,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return UIPasteboard.general.contains(pasteboardTypes: [UTType.utf8PlainText.identifier, Row.typeIdentifier])
 		case .splitRow:
 			return !isSplitRowUnavailable
+		case .find, .findAndReplace, .findNext, .findPrevious, .useSelectionForFind:
+			if isOutlineFunctionsUnavailable {
+				return false
+			} else {
+				return super.canPerformAction(action, withSender: sender)
+			}
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -874,7 +900,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		// duration on iOS, but I don't see the need to complicate the code.
 		if let searchText {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-				self.beginInDocumentSearch(text: searchText)
+				self.showFindInteraction(text: searchText)
 			}
 			return
 		}
@@ -996,21 +1022,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 	}
 	
-	func beginInDocumentSearch(text: String? = nil) {
-		guard !isSearching else {
-			return
-		}
-
-		findInteraction.searchText = text ?? ""
-		findInteraction.presentFindNavigator(showingReplace: false)
-
-		// I don't know why, but if you are clicking down the documents with a collections search active
-		// the title row won't reload and you will get titles when you should only have search results.
-		if outline?.shadowTable?.count ?? 0 > 0  {
-			collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
-		}
-	}
-	
 	func deleteCurrentRows() {
 		guard let rows = currentRows else { return }
 		deleteRows(rows)
@@ -1127,18 +1138,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		alertController.addAction(cancelAction)
 
 		present(alertController, animated: true)
-	}
-	
-	func useSelectionForSearch() {
-		beginInDocumentSearch(text: currentTextView?.selectedText)
-	}
-	
-	func nextInDocumentSearch() {
-		findInteraction.findNext()
-	}
-	
-	func previousInDocumentSearch() {
-		findInteraction.findPrevious()
 	}
 	
 	func printDoc() {
@@ -2039,7 +2038,7 @@ private extension EditorViewController {
 		outlineActions.append(getInfoAction)
 
 		let findAction = UIAction(title: .findEllipsisControlLabel, image: .find) { [weak self] _ in
-			self?.beginInDocumentSearch()
+			self?.showFindInteraction()
 		}
 		outlineActions.append(findAction)
 
@@ -2133,6 +2132,21 @@ private extension EditorViewController {
 		let filterOptionsMenu = UIMenu(title: "", options: .displayInline, children: [filterCompletedAction, filterNotesAction])
 
 		return UIMenu(title: "", children: [turnFilterOnMenu, filterOptionsMenu])
+	}
+	
+	func showFindInteraction(text: String? = nil, replace: Bool = false) {
+		guard !isSearching else {
+			return
+		}
+
+		findInteraction.searchText = text ?? ""
+		findInteraction.presentFindNavigator(showingReplace: replace)
+
+		// I don't know why, but if you are clicking down the documents with a collections search active
+		// the title row won't reload and you will get titles when you should only have search results.
+		if outline?.shadowTable?.count ?? 0 > 0  {
+			collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
+		}
 	}
 	
 	func checkForCorruptOutline() {
