@@ -14,7 +14,6 @@ extension Image: VCKModel {
 	struct CloudKitRecord {
 		static let recordType = "Image"
 		struct Fields {
-			static let syncID = "syncID"
 			static let row = "row"
 			static let isInNotes = "isInNotes"
 			static let offset = "offset"
@@ -27,31 +26,46 @@ extension Image: VCKModel {
         return CKRecord.ID(recordName: id.description, zoneID: zoneID)
     }
     
-    public func apply(_ record: CKRecord) {
+    public func apply(_ record: CKRecord) -> Bool {
 		cloudKitMetaData = record.metadata
-		syncID = record[Image.CloudKitRecord.Fields.syncID] as? String
 
+		var updated = false
+		
 		let serverIsInNotes = record[Image.CloudKitRecord.Fields.isInNotes] as? Bool
-		isInNotes = merge(client: isInNotes, ancestor: ancestorIsInNotes, server: serverIsInNotes)!
-
+		let mergedIsInNotes = merge(client: isInNotes, ancestor: ancestorIsInNotes, server: serverIsInNotes)!
+		if mergedIsInNotes != isInNotes {
+			updated = true
+			isInNotes = mergedIsInNotes
+		}
+		
 		let serverOffset = record[Image.CloudKitRecord.Fields.offset] as? Int
-		offset = merge(client: offset, ancestor: ancestorOffset, server: serverOffset)!
+		let mergedOffset = merge(client: offset, ancestor: ancestorOffset, server: serverOffset)!
+		if mergedOffset != offset {
+			updated = true
+			offset = mergedOffset
+		}
 
+		let mergedData: Data
 		if let ckAsset = record[Image.CloudKitRecord.Fields.asset] as? CKAsset,
 		   let fileURL = ckAsset.fileURL,
 		   let fileData = try? Data(contentsOf: fileURL) {
-			data = merge(client: data, ancestor: ancestorData, server: fileData)!
+			mergedData = merge(client: data, ancestor: ancestorData, server: fileData)!
 		} else {
-			data = merge(client: data, ancestor: ancestorData, server: nil)!
+			mergedData = merge(client: data, ancestor: ancestorData, server: nil)!
 		}
-        
+		if mergedData != data {
+			updated = true
+			data = mergedData
+		}
+
         clearSyncData()
+		
+		return updated
 	}
     
     public func apply(_ error: CKError) {
 		guard let record = error.serverRecord else { return }
 		cloudKitMetaData = record.metadata
-		mergeSyncID = UUID().uuidString
 		
 		serverIsInNotes = record[Image.CloudKitRecord.Fields.isInNotes] as? Bool
 		serverOffset = record[Image.CloudKitRecord.Fields.offset] as? Int
@@ -84,8 +98,6 @@ extension Image: VCKModel {
 		record.parent = CKRecord.Reference(recordID: rowRecordID, action: .none)
 		record[Image.CloudKitRecord.Fields.row] = CKRecord.Reference(recordID: rowRecordID, action: .deleteSelf)
 		
-		record[Image.CloudKitRecord.Fields.syncID] = mergeSyncID ?? syncID
-
 		let recordIsInNotes = merge(client: isInNotes, ancestor: ancestorIsInNotes, server: serverIsInNotes)
 		record[Image.CloudKitRecord.Fields.isInNotes] = recordIsInNotes
 		
@@ -106,9 +118,6 @@ extension Image: VCKModel {
     }
     
     public func clearSyncData() {
-		ancestorData = nil
-		mergeSyncID = nil
-		
 		ancestorIsInNotes = nil
 		serverIsInNotes = nil
 		

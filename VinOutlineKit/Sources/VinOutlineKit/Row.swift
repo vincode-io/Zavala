@@ -51,9 +51,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public var cloudKitMetaData: Data?
 	public var id: String
 
-	var mergeSyncID: String?
-	public var syncID: String?
-
 	public var isExpanded: Bool
 	public internal(set) var rows: [Row] {
 		get {
@@ -344,7 +341,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	
 	private enum CodingKeys: String, CodingKey {
 		case id
-		case syncID
 		case ancestorTopicData
 		case topicData
 		case ancestorNoteData
@@ -410,8 +406,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 			throw RowError.unableToDeserialize
 		}
 		
-		self.syncID = try? container.decode(String.self, forKey: .syncID)
-		
 		if let isExpanded = try? container.decode(Bool.self, forKey: .isExpanded) {
 			self.isExpanded = isExpanded
 		} else {
@@ -449,7 +443,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
 		try container.encode(id, forKey: .id)
-		try container.encode(syncID, forKey: .syncID)
 		try container.encode(ancestorTopicData, forKey: .ancestorTopicData)
 		try container.encode(topicData, forKey: .topicData)
 		try container.encode(ancestorNoteData, forKey: .ancestorNoteData)

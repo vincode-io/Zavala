@@ -133,14 +133,12 @@ private extension CloudKitModifyOperation {
 
 			// This has to be a save for the document
 			if combinedRequest.documentRequest != nil {
-                outline.syncID = UUID().uuidString
                 addSave(zoneID, outline)
 			}
 
 			// Now process all the rows
 			for rowRequest in combinedRequest.rowRequests {
 				if let row = outline.findRow(id: rowRequest.id.rowUUID) {
-					outline.updateRowSyncID(row)
 					addSave(zoneID, row)
 				} else {
 					addDelete(rowRequest)
@@ -152,7 +150,6 @@ private extension CloudKitModifyOperation {
 				// if the row is gone, we don't need to process the images because we cascade our deletes
 				if let row = outline.findRow(id: imageRequest.id.rowUUID) {
 					if let image = row.findImage(id: imageRequest.id) {
-						outline.updateImageSyncID(image)
 						addSave(zoneID, image)
 					} else {
 						addDelete(imageRequest)

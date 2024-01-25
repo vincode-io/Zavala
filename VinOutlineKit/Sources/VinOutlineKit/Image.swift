@@ -17,9 +17,6 @@ public class Image: Identifiable, Codable, Equatable {
 	public var cloudKitMetaData: Data?
 	public var id: EntityID
 
-	var mergeSyncID: String?
-	public var syncID: String?
-
 	var ancestorIsInNotes: Bool?
 	var serverIsInNotes: Bool?
 	public var isInNotes: Bool? {
@@ -58,7 +55,6 @@ public class Image: Identifiable, Codable, Equatable {
 	
 	private enum CodingKeys: String, CodingKey {
 		case id
-		case syncID
 		case ancestorIsInNotes
 		case isInNotes
 		case ancestorOffset

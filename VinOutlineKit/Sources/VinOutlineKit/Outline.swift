@@ -113,15 +113,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 
-	var mergeSyncID: String?
-	public var syncID: String? {
-		didSet {
-			if syncID != oldValue {
-				documentMetaDataDidChange()
-			}
-		}
-	}
-	
 	var ancestorTitle: String?
 	var serverTitle: String?
 	public internal(set) var title: String? {
@@ -490,7 +481,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	enum CodingKeys: String, CodingKey {
 		case id
-		case syncID
 		case ancestorTitle
 		case title
 		case ancestorDisambiguator
@@ -1794,15 +1784,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return newCursorIndex
 	}
 
-	public func updateRowSyncID(_ row: Row) {
-		row.syncID = UUID().uuidString
-	}
-	
-	public func updateImageSyncID(_ image: Image) {
-		image.syncID = UUID().uuidString
-		imagesFile?.markAsDirty()
-	}
-	
 	public func updateRow(_ row: Row, rowStrings: RowStrings?, applyChanges: Bool) {
 		if let texts = rowStrings {
 			updateRowStrings(row, texts)
