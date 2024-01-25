@@ -474,12 +474,19 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
     }
 	
 	public private(set) var currentSearchResult = -1
+	
 	public var currentSearchResultRow: Row? {
 		guard currentSearchResult < searchResultCoordinates.count else { return nil }
 		return searchResultCoordinates[currentSearchResult].row
 	}
+	
 	public var searchResultCount: Int {
 		return searchResultCoordinates.count
+	}
+	
+	public var isCurrentSearchResultReplacable: Bool {
+		guard currentSearchResult >= 0 else { return false }
+		return searchResultCoordinates[currentSearchResult].range.length != 0
 	}
 	
 	enum CodingKeys: String, CodingKey {
@@ -1112,6 +1119,41 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		reloads.append(contentsOf: searchResultCoordinates.compactMap({ $0.row.shadowTableIndex }))
 		changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
 		outlineElementsDidChange(changes)
+	}
+	
+	public func replaceCurrentSearchResult(with replacement: String) {
+		replaceSearchResult(index: currentSearchResult, with: replacement)
+	}
+	
+	public func replaceAllSearchResults(with replacement: String) {
+		for i in 0..<searchResultCoordinates.count {
+			replaceSearchResult(index: i, with: replacement)
+		}
+	}
+	
+	private func replaceSearchResult(index: Int, with replacement: String) {
+		guard index >= 0 else { return }
+		
+		let coordinates = searchResultCoordinates[index]
+		guard coordinates.range.length != 0 else { return }
+		
+		if coordinates.isInNotes {
+			guard let attrString = coordinates.row.note else { return }
+			let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
+			mutableAttrString.replaceCharacters(in: coordinates.range, with: replacement)
+			coordinates.row.note = mutableAttrString
+		} else {
+			guard let attrString = coordinates.row.topic else { return }
+			let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
+			mutableAttrString.replaceCharacters(in: coordinates.range, with: replacement)
+			coordinates.row.topic = mutableAttrString
+		}
+		
+		coordinates.range.length = 0
+		
+		if let reload = coordinates.row.shadowTableIndex {
+			outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: Set([reload])))
+		}
 	}
 		
 	public func nextSearchResult() {

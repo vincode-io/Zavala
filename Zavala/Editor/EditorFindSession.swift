@@ -20,10 +20,6 @@ class EditorFindSession: UIFindSession {
 		self.delegate = delegate
 	}
 	
-	override var supportsReplacement: Bool {
-		return true
-	}
-	
 	override var resultCount: Int {
 		guard let outline = delegate.outline else { return 0 }
 		return outline.searchResultCount
@@ -32,6 +28,15 @@ class EditorFindSession: UIFindSession {
 	override var highlightedResultIndex: Int {
 		guard let outline = delegate.outline else { return 0 }
 		return outline.currentSearchResult
+	}
+	
+	override var supportsReplacement: Bool {
+		return true
+	}
+	
+	override var allowsReplacementForCurrentlyHighlightedResult: Bool {
+		guard let outline = delegate.outline else { return false }
+		return outline.isCurrentSearchResultReplacable
 	}
 	
 	override var searchResultDisplayStyle: UIFindSession.SearchResultDisplayStyle {
@@ -65,6 +70,16 @@ class EditorFindSession: UIFindSession {
 		@unknown default:
 			fatalError()
 		}
+	}
+	
+	override func performSingleReplacement(query searchQuery: String, replacementString: String, options: UITextSearchOptions?) {
+		guard let outline = delegate.outline else { return }
+		outline.replaceCurrentSearchResult(with: replacementString)
+	}
+	
+	override func replaceAll(searchQuery: String, replacementString: String, options: UITextSearchOptions?) {
+		guard let outline = delegate.outline else { return }
+		outline.replaceAllSearchResults(with: replacementString)
 	}
 	
 	override func invalidateFoundResults() {
