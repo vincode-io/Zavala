@@ -48,13 +48,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		case notSearching
 	}
 	
-	public struct ReplacableLinkTitle {
-		public var rowID: String
-		public var isInNotes: Bool
-		public var link: URL
-		public var title: String
-	}
-	
 	public struct UserInfoKeys {
 		public static let replacableLinkTitle = "replacableLinkTitle"
 		public static let searchText = "searchText"
