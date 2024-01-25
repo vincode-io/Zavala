@@ -13,7 +13,7 @@ protocol EditorTagInputTextFieldDelegate: AnyObject {
 	var editorTagInputTextFieldTags: [Tag]? { get }
 	func didBecomeActive(_ : EditorTagInputTextField)
 	func textDidChange(_ : EditorTagInputTextField)
-	func createRow(_ : EditorTagInputTextField)
+	func didReturn(_ : EditorTagInputTextField)
 	func createTag(_ : EditorTagInputTextField, name: String)
 }
 
@@ -131,7 +131,7 @@ extension EditorTagInputTextField: UITextFieldDelegate {
 			resetFilterStrings()
 		}
 		
-		editorDelegate?.createRow(self)
+		editorDelegate?.didReturn(self)
 		
 		return false
 	}

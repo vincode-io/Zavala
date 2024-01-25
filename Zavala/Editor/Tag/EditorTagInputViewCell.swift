@@ -13,7 +13,7 @@ protocol EditorTagInputViewCellDelegate: AnyObject {
 	var editorTagInputTags: [Tag]? { get }
 	func editorTagInputLayoutEditor()
 	func editorTagInputTextFieldDidBecomeActive()
-	func editorTagInputTextFieldCreateRow()
+	func editorTagInputTextFieldDidReturn()
 	func editorTagInputTextFieldCreateTag(name: String)
 }
 

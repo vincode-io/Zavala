@@ -325,6 +325,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 
 	var isSearching = false
+	var isFocusing: Bool {
+		guard let outline else { return false }
+		return outline.focusRow != nil
+	}
 	
 	var adjustedRowsSection: Int {
 		return outline?.adjustedRowsSection.rawValue ?? Outline.Section.rows.rawValue
@@ -1178,10 +1182,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 
 	@objc func toggleFocus() {
-		if isFocusOutUnavailable {
-			focusIn()
-		} else {
+		if isFocusing {
 			focusOut()
+		} else {
+			focusIn()
 		}
 	}
 
@@ -1232,10 +1236,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			if tagInput.isShowingResults {
 				tagInput.selectBelow()
 				return
-			} else if outline?.shadowTable?.count ?? 0 > 0 {
-				if let rowCell = collectionView.cellForItem(at: IndexPath(row: 0, section: adjustedRowsSection)) as? EditorRowViewCell {
-					rowCell.moveToEnd()
-				}
+			} else {
+				moveCursorToFirstRow()
 			}
 		} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting {
 			moveCursorToTagInput()
@@ -1677,8 +1679,12 @@ extension EditorViewController: EditorTagInputViewCellDelegate {
 		collectionView.deselectAll()
 	}
 		
-	func editorTagInputTextFieldCreateRow() {
-		createRow(afterRows: nil)
+	func editorTagInputTextFieldDidReturn() {
+		if isFocusing {
+			moveCursorToFirstRow()
+		} else {
+			createRow(afterRows: nil)
+		}
 	}
 	
 	func editorTagInputTextFieldCreateTag(name: String) {
@@ -2445,6 +2451,14 @@ private extension EditorViewController {
 			}
 		}
 		makeCursorVisibleIfNecessary()
+	}
+	
+	func moveCursorToFirstRow() {
+		if outline?.shadowTable?.count ?? 0 > 0 {
+			if let rowCell = collectionView.cellForItem(at: IndexPath(row: 0, section: adjustedRowsSection)) as? EditorRowViewCell {
+				rowCell.moveToEnd()
+			}
+		}
 	}
 	
 	func editLink(_ link: String?, text: String?, range: NSRange) {

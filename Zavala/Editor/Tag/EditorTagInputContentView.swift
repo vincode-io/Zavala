@@ -76,8 +76,8 @@ extension EditorTagInputContentView: EditorTagInputPillDelegate {
 		delegate?.editorTagInputTextFieldDidBecomeActive()
 	}
 	
-	func createRow(_: EditorTagInputPill) {
-		delegate?.editorTagInputTextFieldCreateRow()
+	func didReturn(_: EditorTagInputPill) {
+		delegate?.editorTagInputTextFieldDidReturn()
 	}
 	
 	func createTag(_: EditorTagInputPill, name: String) {
