@@ -689,9 +689,7 @@ public extension VCKZone {
 						return modelToSave
 					case .unknownItem:
 						// The record was deleted while the user was offline, so treat it as new
-						var modelToChange = modelToSave
-						modelToChange.cloudKitMetaData = nil
-						return modelToChange
+						return nil
 					default:
 						// Merge the model and try to save it again
 						modelToSave.apply(ckErrorForRecord)
