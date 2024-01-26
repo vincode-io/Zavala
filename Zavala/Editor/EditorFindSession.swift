@@ -10,6 +10,8 @@ import VinOutlineKit
 
 protocol EditorFindSessionDelegate {
 	var outline: Outline? { get }
+	func replaceCurrentSearchResult(with replacementText: String)
+	func replaceAllSearchResults(with replacementText: String)
 }
 
 class EditorFindSession: UIFindSession {
@@ -73,13 +75,12 @@ class EditorFindSession: UIFindSession {
 	}
 	
 	override func performSingleReplacement(query searchQuery: String, replacementString: String, options: UITextSearchOptions?) {
-		guard let outline = delegate.outline else { return }
-		outline.replaceCurrentSearchResult(with: replacementString)
+		delegate.replaceCurrentSearchResult(with: replacementString)
 	}
 	
 	override func replaceAll(searchQuery: String, replacementString: String, options: UITextSearchOptions?) {
 		guard let outline = delegate.outline else { return }
-		outline.replaceAllSearchResults(with: replacementString)
+		delegate.replaceAllSearchResults(with: replacementString)
 	}
 	
 	override func invalidateFoundResults() {

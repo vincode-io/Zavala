@@ -36,7 +36,7 @@ protocol EditorDelegate: AnyObject {
 	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate)
 }
 
-class EditorViewController: UIViewController, DocumentsActivityItemsConfigurationDelegate, MainControllerIdentifiable, UndoableCommandRunner, EditorFindSessionDelegate {
+class EditorViewController: UIViewController, DocumentsActivityItemsConfigurationDelegate, MainControllerIdentifiable, UndoableCommandRunner {
 
 	private static let searchBarHeight: CGFloat = 44
 	
@@ -1896,13 +1896,43 @@ extension EditorViewController: UIFindInteractionDelegate {
 		return EditorFindSession(delegate: self)
 	}
 	
-	func findInteraction(_ interaction: UIFindInteraction, didBegin session: UIFindSession) {
-//		outline?.beginSearching(for: interaction.searchText)
-	}
-	
 	func findInteraction(_ interaction: UIFindInteraction, didEnd session: UIFindSession) {
 		outline?.endSearching()
 	}
+}
+
+// MARK: EditorFindSessionDelegate
+
+extension EditorViewController: EditorFindSessionDelegate {
+	
+	func replaceCurrentSearchResult(with replacementText: String) {
+		guard let outline, let undoManager else { return }
+		
+		let coordinate = outline.searchResultCoordinates[outline.currentSearchResult]
+		let command = ReplaceSearchResultCommand(actionName: .replaceControlLabel,
+												 undoManager: undoManager,
+												 delegate: self,
+												 outline: outline,
+												 coordinates: [coordinate],
+												 replacementText: replacementText)
+		
+		runCommand(command)
+
+	}
+	
+	func replaceAllSearchResults(with replacementText: String) {
+		guard let outline, let undoManager else { return }
+		
+		let command = ReplaceSearchResultCommand(actionName: .replaceControlLabel,
+												 undoManager: undoManager,
+												 delegate: self,
+												 outline: outline,
+												 coordinates: outline.searchResultCoordinates,
+												 replacementText: replacementText)
+		
+		runCommand(command)
+	}
+	
 }
 
 // MARK: UICloudSharingControllerDelegate

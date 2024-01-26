@@ -679,6 +679,11 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		}
 	}
 	
+	public func clearSearchResults() {
+		isPartOfSearchResult = false
+		searchResultCoordinates = NSHashTable<SearchResultCoordinates>.weakObjects()
+	}
+	
 	public func visit(visitor: (Row) -> Void) {
 		visitor(self)
 	}

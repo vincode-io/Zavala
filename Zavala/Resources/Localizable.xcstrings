@@ -534,6 +534,9 @@
     "Rename" : {
       "comment" : "Control Label: Rename"
     },
+    "Replace" : {
+      "comment" : "Control Label: Replace"
+    },
     "Restore" : {
       "comment" : "Control Label: Restore"
     },
@@ -597,10 +600,10 @@
     "Tertiary Text" : {
       "comment" : "Control Label: Tertiary Text"
     },
-    "The outline be deleted and unrecoverable." : {
+    "The outline will be deleted and unrecoverable." : {
       "comment" : "Alert Message: delete outline"
     },
-    "The outlines be deleted and unrecoverable." : {
+    "The outlines will be deleted and unrecoverable." : {
       "comment" : "Alert Message: delete outline"
     },
     "This information is included in OPML documents to attribute ownership." : {

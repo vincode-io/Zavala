@@ -474,6 +474,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
     }
 	
 	public private(set) var currentSearchResult = -1
+	public private(set) var searchResultCoordinates = [SearchResultCoordinates]()
 	
 	public var currentSearchResultRow: Row? {
 		guard currentSearchResult < searchResultCoordinates.count else { return nil }
@@ -586,8 +587,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	private var selectionLocation: Int?
 	private var selectionLength: Int?
 
-	private var searchResultCoordinates = [SearchResultCoordinates]()
-	
 	init(id: EntityID) {
 		self.id = id
 		self.created = Date()
@@ -1121,39 +1120,32 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineElementsDidChange(changes)
 	}
 	
-	public func replaceCurrentSearchResult(with replacement: String) {
-		replaceSearchResult(index: currentSearchResult, with: replacement)
-	}
-	
-	public func replaceAllSearchResults(with replacement: String) {
-		for i in 0..<searchResultCoordinates.count {
-			replaceSearchResult(index: i, with: replacement)
-		}
-	}
-	
-	private func replaceSearchResult(index: Int, with replacement: String) {
-		guard index >= 0 else { return }
+	public func replaceSearchResults(_ coordinates: [SearchResultCoordinates], with replacement: String) {
+		var reloads = Set<Int>()
 		
-		let coordinates = searchResultCoordinates[index]
-		guard coordinates.range.length != 0 else { return }
-		
-		if coordinates.isInNotes {
-			guard let attrString = coordinates.row.note else { return }
-			let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
-			mutableAttrString.replaceCharacters(in: coordinates.range, with: replacement)
-			coordinates.row.note = mutableAttrString
-		} else {
-			guard let attrString = coordinates.row.topic else { return }
-			let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
-			mutableAttrString.replaceCharacters(in: coordinates.range, with: replacement)
-			coordinates.row.topic = mutableAttrString
+		for coordinate in coordinates {
+			guard coordinate.range.length != 0 else { continue }
+			
+			if coordinate.isInNotes {
+				guard let attrString = coordinate.row.note else { continue }
+				let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
+				mutableAttrString.replaceCharacters(in: coordinate.range, with: replacement)
+				coordinate.row.note = mutableAttrString
+			} else {
+				guard let attrString = coordinate.row.topic else { continue }
+				let mutableAttrString = NSMutableAttributedString(attributedString: attrString)
+				mutableAttrString.replaceCharacters(in: coordinate.range, with: replacement)
+				coordinate.row.topic = mutableAttrString
+			}
+			
+			coordinate.range.length = 0
+
+			if let reload = coordinate.row.shadowTableIndex {
+				reloads.insert(reload)
+			}
 		}
 		
-		coordinates.range.length = 0
-		
-		if let reload = coordinates.row.shadowTableIndex {
-			outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: Set([reload])))
-		}
+		outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 	}
 		
 	public func nextSearchResult() {
@@ -2765,7 +2757,7 @@ private extension Outline {
 		guard isBeingUsed else { return }
 		
 		func clearSearchVisitor(_ visited: Row) {
-			visited.isPartOfSearchResult = false
+			visited.clearSearchResults()
 			visited.rows.forEach { $0.visit(visitor: clearSearchVisitor) }
 		}
 		rows.forEach { $0.visit(visitor: clearSearchVisitor(_:)) }

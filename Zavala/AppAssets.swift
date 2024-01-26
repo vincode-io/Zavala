@@ -317,10 +317,11 @@ extension String {
 	static var removeICloudAccountTitle = String(localized: "Remove iCloud Account", comment: "Alert Title: title for removing an iCloud Account")
 	static var removeICloudAccountMessage = String(localized: "Are you sure you want to remove the iCloud Account? All documents in the iCloud Account will be removed from this computer.",
 												   comment: "Alert Message: message for removing an iCloud Account")
-	static var removeTagControlLabel = String(localized: "Remove Tag", comment: "Control Label: Remove Tag")
-	static var renameControlLabel = String(localized: "Rename", comment: "Control Label: Rename")
 	static var referenceLabel = String(localized: "Reference: ", comment: "Label: reference label for backlinks")
 	static var referencesLabel = String(localized: "References: ", comment: "Label: references label for backlinks")
+	static var removeTagControlLabel = String(localized: "Remove Tag", comment: "Control Label: Remove Tag")
+	static var renameControlLabel = String(localized: "Rename", comment: "Control Label: Rename")
+	static var replaceControlLabel = String(localized: "Replace", comment: "Control Label: Replace")
 	static var restoreControlLabel = String(localized: "Restore", comment: "Control Label: Restore")
 	static var restoreDefaultsMessage = String(localized: "Restore Defaults", comment: "Alert: message for restoring font defaults")
 	static var restoreDefaultsInformative = String(localized: "Are you sure you want to restore the defaults? All your font customizations will be lost.",
