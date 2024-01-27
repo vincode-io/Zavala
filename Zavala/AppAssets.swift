@@ -71,10 +71,10 @@ extension UIImage {
 
 	static var link = UIImage(systemName: "link")!
 
-	static var moveDown = UIImage(systemName: "arrow.down.to.line")!
-	static var moveLeft = UIImage(systemName: "arrow.left.to.line")!
-	static var moveRight = UIImage(systemName: "arrow.right.to.line")!
-	static var moveUp = UIImage(systemName: "arrow.up.to.line")!
+	static var moveDown = UIImage(systemName: "arrow.down.to.line.compact")!
+	static var moveLeft = UIImage(systemName: "arrow.left.to.line.compact")!
+	static var moveRight = UIImage(systemName: "arrow.right.to.line.compact")!
+	static var moveUp = UIImage(systemName: "arrow.up.to.line.compact")!
 
 	static var newline = UIImage(systemName: "return")!
 	static var noteAdd = UIImage(systemName: "doc.text")!
