@@ -35,7 +35,9 @@ extension UIResponder {
 	}
 
 	@objc internal func findFirstResponder(sender: AnyObject) {
-		UIResponder._currentFirstResponder = self
+		if self.isFirstResponder {
+			UIResponder._currentFirstResponder = self
+		}
 	}
 	
 }
