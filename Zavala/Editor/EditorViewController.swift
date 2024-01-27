@@ -301,7 +301,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	var currentRows: [Row]? {
 		if let selected = collectionView?.indexPathsForSelectedItems?.sorted(), !selected.isEmpty {
-			return selected.compactMap { outline?.shadowTable?[$0.row] }
+			return selected.compactMap {
+				if $0.row < outline?.shadowTable?.count ?? 0 {
+					return outline?.shadowTable?[$0.row]
+				} else {
+					return nil
+				}
+			}
 		} else if let currentRow = currentTextView?.row {
 			return [currentRow]
 		}
