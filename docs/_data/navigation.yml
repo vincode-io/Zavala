@@ -6,5 +6,5 @@ main:
      url: /features/
    - title: "About"
      url: /about/
-   - title: "Blog"
-     url: /blog/
+   - title: "Community"
+     url: https://github.com/vincode-io/Zavala/discussions
