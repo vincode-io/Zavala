@@ -301,7 +301,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	var currentRows: [Row]? {
 		if let selected = collectionView?.indexPathsForSelectedItems?.sorted(), !selected.isEmpty {
-			return selected.compactMap { outline?.shadowTable?[$0.row] }
+			return selected.compactMap {
+				if $0.row < outline?.shadowTable?.count ?? 0 {
+					return outline?.shadowTable?[$0.row]
+				} else {
+					return nil
+				}
+			}
 		} else if let currentRow = currentTextView?.row {
 			return [currentRow]
 		}
@@ -2681,11 +2687,24 @@ private extension EditorViewController {
 		guard let shadowTableIndex = row.shadowTableIndex else {
 			return
 		}
+		moveCursorToRow(index: shadowTableIndex)
+	}
+	
+	func moveCursorToRow(index: Int) {
+		let newCursorIndexPath = IndexPath(row: index, section: adjustedRowsSection)
 		
-		let indexPath = IndexPath(row: shadowTableIndex, section: adjustedRowsSection)
-		if let rowCell = collectionView.cellForItem(at: indexPath) as? EditorRowViewCell {
+		if let rowCell = collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
 			rowCell.moveToEnd()
+			makeCursorVisibleIfNecessary(animated: false)
+		} else {
+			DispatchQueue.main.async {
+				if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
+					rowCell.moveToEnd()
+					self.makeCursorVisibleIfNecessary(animated: false)
+				}
+			}
 		}
+
 	}
 	
 	func moveCursorUp(topicTextView: EditorRowTopicTextView) {
@@ -3045,9 +3064,7 @@ private extension EditorViewController {
 			if newCursorIndex == -1 {
 				moveCursorToTagInput()
 			} else {
-				if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {
-					rowCell.moveToEnd()
-				}
+				moveCursorToRow(index: newCursorIndex)
 			}
 		}
 	}
@@ -3064,9 +3081,7 @@ private extension EditorViewController {
 		runCommand(command)
 		
 		if let newCursorIndex = command.newCursorIndex {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {
-				rowCell.moveToEnd()
-			}
+			moveCursorToRow(index: newCursorIndex)
 		}
 	}
 	
@@ -3086,18 +3101,9 @@ private extension EditorViewController {
 		
 		runCommand(command)
 		
-		// We won't get the cursor to move from the tag to the new row on return without dispatching
-		DispatchQueue.main.async {
-			if let newCursorIndex = command.newCursorIndex {
-				let newCursorIndexPath = IndexPath(row: newCursorIndex, section: self.adjustedRowsSection)
-				if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
-					rowCell.moveToEnd()
-				}
-			}
-
-			self.makeCursorVisibleIfNecessary(animated: false)
+		if let newCursorIndex = command.newCursorIndex {
+			moveCursorToRow(index: newCursorIndex)
 		}
-		
 	}
 	
 	func createRowInside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
@@ -3117,13 +3123,8 @@ private extension EditorViewController {
 		runCommand(command)
 		
 		if let newCursorIndex = command.newCursorIndex {
-			let newCursorIndexPath = IndexPath(row: newCursorIndex, section: adjustedRowsSection)
-			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
-				rowCell.moveToEnd()
-			}
+			moveCursorToRow(index: newCursorIndex)
 		}
-
-		makeCursorVisibleIfNecessary(animated: false)
 	}
 	
 	func createRowOutside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
@@ -3143,13 +3144,8 @@ private extension EditorViewController {
 		runCommand(command)
 		
 		if let newCursorIndex = command.newCursorIndex {
-			let newCursorIndexPath = IndexPath(row: newCursorIndex, section: adjustedRowsSection)
-			if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
-				rowCell.moveToEnd()
-			}
+			moveCursorToRow(index: newCursorIndex)
 		}
-		
-		makeCursorVisibleIfNecessary(animated: false)
 	}
 	
 	func duplicateRows(_ rows: [Row]) {
