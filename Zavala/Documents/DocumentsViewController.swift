@@ -72,8 +72,8 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			collectionView.contentInset = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0)
 		} else {
 			let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
-			addButton = navButtonGroup.addButton(label: .addControlLabel, image: .createEntity, selector: "createOutline")
 			importButton = navButtonGroup.addButton(label: .importOPMLControlLabel, image: .importDocument, selector: "importOPML")
+			addButton = navButtonGroup.addButton(label: .addControlLabel, image: .createEntity, selector: "createOutline")
 			navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
 			searchController.delegate = self

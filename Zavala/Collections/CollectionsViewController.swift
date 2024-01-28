@@ -76,8 +76,8 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 				navigationItem.rightBarButtonItem = selectBarButtonItem
 			} else {
 				let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
-				addButton = navButtonGroup.addButton(label: .addControlLabel, image: .createEntity, selector: "createOutline:")
 				importButton = navButtonGroup.addButton(label: .importOPMLControlLabel, image: .importDocument, selector: "importOPML:")
+				addButton = navButtonGroup.addButton(label: .addControlLabel, image: .createEntity, selector: "createOutline:")
 				let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
 				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
