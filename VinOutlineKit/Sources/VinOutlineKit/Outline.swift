@@ -95,13 +95,31 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return beingUsedCount > 0
 	}
 	
-	public var isRecoveringRowsPossible: Bool {
+	public var isOutlineCorrupted: Bool {
 		guard let rowOrder, let keyedRows else { return false }
 		
-		let childRows = Set(keyedRows.values.flatMap({ $0.rowOrder }))
+		var allRowOrderIDs = Set(keyedRows.values.flatMap({ $0.rowOrder }))
+		allRowOrderIDs.formUnion(rowOrder)
+		
+		// If we have any extra rows that don't have an order, we have corruption
 		for row in keyedRows.values {
-			if !rowOrder.contains(row.id) && !childRows.contains(row.id) {
+			if !allRowOrderIDs.contains(row.id) {
 				return true
+			}
+		}
+		
+		// If we have any rowOrder values that don't have keyedRows, we have corruption
+		for rowID in rowOrder {
+			if !keyedRows.keys.contains(rowID) {
+				return true
+			}
+		}
+		
+		for row in keyedRows.values {
+			for rowID in row.rowOrder {
+				if !keyedRows.keys.contains(rowID) {
+					return true
+				}
 			}
 		}
 		
@@ -630,17 +648,40 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineElementsDidChange(changes)
 	}
 	
-	public func recoverLostRows() {
+	public func correctCorruption() {
 		guard let rowOrder, let keyedRows else { return }
 		
-		let childRows = Set(keyedRows.values.flatMap({ $0.rowOrder }))
+		beginCloudKitBatchRequest()
 		
+		var allRowOrderIDs = Set(keyedRows.values.flatMap({ $0.rowOrder }))
+		allRowOrderIDs.formUnion(rowOrder)
+		
+		// Fix any keyRows that don't have rowOrder entries
 		for row in keyedRows.values {
-			if !rowOrder.contains(row.id) && !childRows.contains(row.id) {
+			if !allRowOrderIDs.contains(row.id) {
 				self.rowOrder?.append(row.id)
+				requestCloudKitUpdate(for: self.id)
+			}
+		}
+	
+		// Fix any rowOrder values that don't have keyedRows
+		for rowID in rowOrder {
+			if !keyedRows.keys.contains(rowID) {
+				self.rowOrder?.remove(rowID)
+				requestCloudKitUpdate(for: self.id)
 			}
 		}
 		
+		for row in keyedRows.values {
+			for rowID in row.rowOrder {
+				if !keyedRows.keys.contains(rowID) {
+					row.rowOrder.remove(rowID)
+					requestCloudKitUpdate(for: row.entityID)
+				}
+			}
+		}
+
+		endCloudKitBatchRequest()
 		outlineContentDidChange()
 		outlineElementsDidChange(rebuildShadowTable())
 	}
