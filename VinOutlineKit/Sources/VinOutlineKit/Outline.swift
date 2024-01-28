@@ -509,6 +509,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	enum CodingKeys: String, CodingKey {
+		case cloudKitMetaData
 		case id
 		case ancestorTitle
 		case title

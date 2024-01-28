@@ -340,6 +340,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 	
 	private enum CodingKeys: String, CodingKey {
+		case cloudKitMetaData
 		case id
 		case ancestorTopicData
 		case topicData
@@ -397,6 +398,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		} else {
 			self.isComplete = false
 		}
+		
+		cloudKitMetaData = try? container.decode(Data.self, forKey: .cloudKitMetaData)
 
 		if let id = try? container.decode(String.self, forKey: .id) {
 			self.id = id
@@ -442,6 +445,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
+		try container.encode(cloudKitMetaData, forKey: .cloudKitMetaData)
 		try container.encode(id, forKey: .id)
 		try container.encode(ancestorTopicData, forKey: .ancestorTopicData)
 		try container.encode(topicData, forKey: .topicData)

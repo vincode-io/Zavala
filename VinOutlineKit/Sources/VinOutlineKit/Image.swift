@@ -54,6 +54,7 @@ public class Image: Identifiable, Codable, Equatable {
 	var tempCloudKitDataURL: URL?
 	
 	private enum CodingKeys: String, CodingKey {
+		case cloudKitMetaData
 		case id
 		case ancestorIsInNotes
 		case isInNotes
