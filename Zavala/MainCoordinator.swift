@@ -311,7 +311,7 @@ extension MainCoordinator {
 		hostingController.modalPresentationStyle = .formSheet
 
 		if traitCollection.userInterfaceIdiom == .mac {
-			hostingController.preferredContentSize = CGSize(width: 350, height: 510)
+			hostingController.preferredContentSize = CGSize(width: 350, height: 520)
 		} else {
 			hostingController.preferredContentSize = CGSize(width: 425, height: 660)
 		}
