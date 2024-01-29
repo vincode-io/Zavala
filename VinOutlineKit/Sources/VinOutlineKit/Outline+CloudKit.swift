@@ -161,16 +161,19 @@ extension Outline: VCKModel {
 	}
 	
 	public func apply(_ record: CKRecord) -> [String] {
-        guard let account else { return [] }
-        
+		guard let account,
+			  let metaData = cloudKitMetaData,
+			  let recordChangeTag = CKRecord(metaData)?.recordChangeTag,
+			  record.recordChangeTag != recordChangeTag else { return [] }
+
+		cloudKitMetaData = record.metadata
+		
 		if let shareReference = record.share {
 			cloudKitShareRecordName = shareReference.recordID.recordName
 		} else {
 			cloudKitShareRecordName = nil
 		}
 
-		cloudKitMetaData = record.metadata
-        
         let serverTitle = record[Outline.CloudKitRecord.Fields.title] as? String
         let newTitle = merge(client: title, ancestor: ancestorTitle, server: serverTitle)
 
