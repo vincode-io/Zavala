@@ -27,9 +27,11 @@ extension Image: VCKModel {
     }
     
     public func apply(_ record: CKRecord) -> Bool {
-		guard let metaData = cloudKitMetaData,
-			  let recordChangeTag = CKRecord(metaData)?.recordChangeTag,
-			  record.recordChangeTag != recordChangeTag else { return false }
+		if let metaData = cloudKitMetaData,
+		   let recordChangeTag = CKRecord(metaData)?.recordChangeTag,
+		   record.recordChangeTag == recordChangeTag {
+			return false
+		}
 
 		cloudKitMetaData = record.metadata
 
