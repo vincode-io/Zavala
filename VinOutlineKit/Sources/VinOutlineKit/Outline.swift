@@ -661,7 +661,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		for row in keyedRows.values {
 			if !allRowOrderIDs.contains(row.id) {
 				self.rowOrder?.append(row.id)
-				requestCloudKitUpdate(for: self.id)
+				requestCloudKitUpdates(for: [self.id, row.entityID])
 			}
 		}
 	

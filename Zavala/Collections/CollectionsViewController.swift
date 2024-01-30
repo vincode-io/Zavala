@@ -163,7 +163,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 
 	@objc func cloudKitSyncWillBegin(_ note: Notification) {
 		// Let any pending UI things like adding the account happen so that we have something to put the spinner on
-		DispatchQueue.main.async {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
 			self.iCloudActivityIndicatorView.startAnimating()
 		}
 	}

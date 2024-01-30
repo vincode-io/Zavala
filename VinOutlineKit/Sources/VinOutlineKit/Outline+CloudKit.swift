@@ -161,10 +161,13 @@ extension Outline: VCKModel {
 	}
 	
 	public func apply(_ record: CKRecord) -> [String] {
-		guard let account,
-			  let metaData = cloudKitMetaData,
-			  let recordChangeTag = CKRecord(metaData)?.recordChangeTag,
-			  record.recordChangeTag != recordChangeTag else { return [] }
+		guard let account else { return [] }
+		
+		if let metaData = cloudKitMetaData,
+		   let recordChangeTag = CKRecord(metaData)?.recordChangeTag,
+		   record.recordChangeTag == recordChangeTag {
+			return []
+		}
 
 		cloudKitMetaData = record.metadata
 		
