@@ -49,6 +49,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 
 	public var cloudKitMetaData: Data?
+	public var isCloudKitMerging: Bool = false
+
 	public var id: String
 
 	public var isExpanded: Bool

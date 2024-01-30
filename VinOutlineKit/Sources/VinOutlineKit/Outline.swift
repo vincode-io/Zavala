@@ -127,6 +127,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public var cloudKitMetaData: Data?
+	public var isCloudKitMerging: Bool = false
 
 	public var id: EntityID {
 		didSet {

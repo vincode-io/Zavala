@@ -15,6 +15,8 @@ public class Image: Identifiable, Codable, Equatable {
 	}
 
 	public var cloudKitMetaData: Data?
+	public var isCloudKitMerging: Bool = false
+	
 	public var id: EntityID
 
 	var ancestorIsInNotes: Bool?

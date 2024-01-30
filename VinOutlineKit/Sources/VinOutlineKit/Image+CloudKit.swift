@@ -83,7 +83,9 @@ extension Image: VCKModel {
 		} else {
 			serverData = nil
 		}
-    }
+
+		isCloudKitMerging = true
+	}
     
     public func buildRecord() -> CKRecord {
 		guard let zoneID = outline?.zoneID else {
@@ -124,6 +126,8 @@ extension Image: VCKModel {
     }
     
     public func clearSyncData() {
+		isCloudKitMerging = false
+		
 		ancestorIsInNotes = nil
 		serverIsInNotes = nil
 		

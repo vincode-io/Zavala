@@ -201,6 +201,10 @@ private extension CloudKitModifyOperation {
 		return combinedRequests
 	}
 	
+	// Don't update the sync metadata if we just performed a merge. When that happens what is in the cloud
+	// is out of sync with what we currently have a record of. We will immediately do a sync after this,
+	// where we will get a batch of data to sync. If we store the metadata of any merged records, we won't
+	// try to apply the received record changes in the various mode apply() methods.
 	func updateSyncMetaData(savedRecords: [CKRecord]) {
 		for savedRecord in savedRecords {
 			guard let entityID = EntityID(description: savedRecord.recordID.recordName),
@@ -208,11 +212,17 @@ private extension CloudKitModifyOperation {
 			
 			switch savedRecord.recordType {
 			case "Outline":
-				outline.cloudKitMetaData = savedRecord.metadata
+				if !outline.isCloudKitMerging {
+					outline.cloudKitMetaData = savedRecord.metadata
+				}
 			case "Row":
-				(outline.findRowContainer(entityID: entityID) as? Row)?.cloudKitMetaData = savedRecord.metadata
+				if let row = outline.findRowContainer(entityID: entityID) as? Row, !row.isCloudKitMerging {
+					row.cloudKitMetaData = savedRecord.metadata
+				}
 			case "Image":
-				(outline.findRowContainer(entityID: entityID) as? Row)?.findImage(id: entityID)?.cloudKitMetaData = savedRecord.metadata
+				if let image = (outline.findRowContainer(entityID: entityID) as? Row)?.findImage(id: entityID), !image.isCloudKitMerging {
+					image.cloudKitMetaData = savedRecord.metadata
+				}
 			default:
 				break
 			}

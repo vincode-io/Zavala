@@ -256,7 +256,9 @@ extension Outline: VCKModel {
         serverDocumentBacklinks = errorDocumentBacklinks.compactMap { EntityID(description: $0) }
         
         hasAltLinks = record[Outline.CloudKitRecord.Fields.hasAltLinks] as? Bool
-    }
+
+		isCloudKitMerging = true
+	}
     
     public func buildRecord() -> CKRecord {
         let record: CKRecord = {
@@ -320,7 +322,9 @@ extension Outline: VCKModel {
     }
     
     public func clearSyncData() {
-        ancestorTitle = nil
+		isCloudKitMerging = false
+
+		ancestorTitle = nil
         serverTitle = nil
 
         ancestorDisambiguator = nil

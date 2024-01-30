@@ -39,6 +39,7 @@ public protocol VCKModel {
 	var isCloudKit: Bool { get }
 	var cloudKitRecordID: CKRecord.ID { get }
 	var cloudKitMetaData: Data? { get set }
+	var isCloudKitMerging: Bool { get set }
 	
 	func apply(_ error: CKError)
 	func buildRecord() -> CKRecord
@@ -203,7 +204,8 @@ public struct CloudKitModelRecordWrapper: VCKModel {
 	}
 	
 	public var cloudKitMetaData: Data? = nil
-	
+	public var isCloudKitMerging: Bool = false
+
 	public init(_ wrapped: CKRecord) {
 		self.wrapped = wrapped
 	}

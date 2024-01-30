@@ -89,6 +89,8 @@ extension Row: VCKModel {
 		serverIsComplete = record[Row.CloudKitRecord.Fields.isComplete] as? String == "1" ? true : false
 		serverTopicData = record[Row.CloudKitRecord.Fields.topicData] as? Data
 		serverNoteData = record[Row.CloudKitRecord.Fields.noteData] as? Data
+
+		isCloudKitMerging = true
 	}
 	
 	public func buildRecord() -> CKRecord {
@@ -128,6 +130,8 @@ extension Row: VCKModel {
 	}
 
 	public func clearSyncData() {
+		isCloudKitMerging = false
+
 		ancestorRowOrder = nil
 		serverRowOrder = nil
 		
