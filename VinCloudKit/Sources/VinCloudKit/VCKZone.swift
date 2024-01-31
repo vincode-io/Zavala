@@ -102,10 +102,10 @@ public extension VCKZone {
 	}
 
 	func retryIfPossible(after: Double, block: @escaping () -> ()) {
-		let delayTime = DispatchTime.now() + after
-		DispatchQueue.main.asyncAfter(deadline: delayTime, execute: {
+		Task { @MainActor in
+			try await Task.sleep(for: .seconds(after))
 			block()
-		})
+		}
 	}
 	
 	func receiveRemoteNotification(userInfo: [AnyHashable : Any], incrementalFetch: Bool = true, completion: @escaping () -> Void) {
