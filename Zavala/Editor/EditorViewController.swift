@@ -132,7 +132,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 
 	var isCreateRowOutsideUnavailable: Bool {
-		guard let outline = outline, let rows = currentRows else { return true }
+		guard let outline, let rows = currentRows else { return true }
 		return outline.isCreateRowOutsideUnavailable(rows: rows)
 	}
 
@@ -145,42 +145,42 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	var isMoveRowsRightUnavailable: Bool {
-		guard let outline = outline, let rows = currentRows else { return true }
+		guard let outline, let rows = currentRows else { return true }
 		return outline.isMoveRowsRightUnavailable(rows: rows)
 	}
 
 	var isMoveRowsLeftUnavailable: Bool {
-		guard let outline = outline, let rows = currentRows else { return true }
+		guard let outline, let rows = currentRows else { return true }
 		return outline.isMoveRowsLeftUnavailable(rows: rows)
 	}
 
 	var isMoveRowsUpUnavailable: Bool {
-		guard let outline = outline, let rows = currentRows else { return true }
+		guard let outline, let rows = currentRows else { return true }
 		return outline.isMoveRowsUpUnavailable(rows: rows)
 	}
 
 	var isMoveRowsDownUnavailable: Bool {
-		guard let outline = outline, let rows = currentRows else { return true }
+		guard let outline, let rows = currentRows else { return true }
 		return outline.isMoveRowsDownUnavailable(rows: rows)
 	}
 
 	var isToggleRowCompleteUnavailable: Bool {
-		guard let outline = outline, let rows = currentRows else { return true }
+		guard let outline, let rows = currentRows else { return true }
 		return outline.isCompleteUnavailable(rows: rows) && outline.isUncompleteUnavailable(rows: rows)
 	}
 
 	var isCompleteRowsAvailable: Bool {
-		guard let outline = outline, let rows = currentRows else { return true }
+		guard let outline, let rows = currentRows else { return true }
 		return !outline.isCompleteUnavailable(rows: rows)
 	}
 	
 	var isCreateRowNotesUnavailable: Bool {
-		guard let outline = outline, let rows = currentRows else { return true }
+		guard let outline, let rows = currentRows else { return true }
 		return outline.isCreateNotesUnavailable(rows: rows)
 	}
 
 	var isDeleteRowNotesUnavailable: Bool {
-		guard let outline = outline, let rows = currentRows else { return true }
+		guard let outline, let rows = currentRows else { return true }
 		return outline.isDeleteNotesUnavailable(rows: rows)
 	}
 
@@ -256,12 +256,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 
 	var isExpandAllUnavailable: Bool {
-		guard let outline = outline, let rows = currentRows else { return true }
+		guard let outline, let rows = currentRows else { return true }
 		return outline.isExpandAllUnavailable(containers: rows)
 	}
 
 	var isCollapseAllUnavailable: Bool {
-		guard let outline = outline, let rows = currentRows else { return true }
+		guard let outline, let rows = currentRows else { return true }
 		return outline.isCollapseAllUnavailable(containers: rows)
 	}
 
@@ -1161,7 +1161,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	// MARK: Actions
 	
 	@objc func createInitialRowIfNecessary() {
-		guard let outline = outline, outline.rowCount == 0 else { return }
+		guard let outline, outline.rowCount == 0 else { return }
 		createRow(afterRows: nil)
 	}
 	
@@ -1385,7 +1385,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 
 	@objc func toggleCompleteRows() {
-		guard let outline = outline, let rows = currentRows else { return }
+		guard let outline, let rows = currentRows else { return }
 		if !outline.isCompleteUnavailable(rows: rows) {
 			completeRows(rows)
 		} else if !outline.isUncompleteUnavailable(rows: rows) {
@@ -1416,7 +1416,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 				
 				if sectionIndex == self?.adjustedRowsSection {
 					configuration.leadingSwipeActionsConfigurationProvider = { [weak self] indexPath in
-						guard let self = self, let row = self.outline?.shadowTable?[indexPath.row] else { return nil }
+						guard let self, let row = self.outline?.shadowTable?[indexPath.row] else { return nil }
 						
 						if row.isComplete ?? false {
 							let actionHandler: UIContextualAction.Handler = { action, view, completion in
@@ -1452,7 +1452,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 					}
 					
 					configuration.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
-						guard let self = self, let row = self.outline?.shadowTable?[indexPath.row] else { return nil }
+						guard let self, let row = self.outline?.shadowTable?[indexPath.row] else { return nil }
 
 						let actionHandler: UIContextualAction.Handler = { action, view, completion in
 							self.deleteRows([row])
@@ -1546,7 +1546,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Outline.Section.title.rawValue:
 			return collectionView.dequeueConfiguredReusableCell(using: titleRegistration!, for: indexPath, item: outline)
 		case Outline.Section.tags.rawValue:
-			if let outline = outline, indexPath.row < outline.tagCount {
+			if let outline, indexPath.row < outline.tagCount {
 				let tag = outline.tags[indexPath.row]
 				return collectionView.dequeueConfiguredReusableCell(using: tagRegistration!, for: indexPath, item: tag.name)
 			} else {
@@ -2111,23 +2111,23 @@ private extension EditorViewController {
 		shareActions.append(UIMenu(title: .printControlLabel, image: .printDoc, children: [printDocAction, printListAction]))
 
 		let exportPDFDoc = UIAction(title: .exportPDFDocEllipsisControlLabel) { [weak self] _ in
-			guard let self = self, let outline = self.outline else { return }
+			guard let self, let outline = self.outline else { return }
 			self.delegate?.exportPDFDoc(self, outline: outline)
 		}
 		let exportPDFList = UIAction(title: .exportPDFListEllipsisControlLabel) { [weak self] _ in
-			guard let self = self, let outline = self.outline else { return }
+			guard let self, let outline = self.outline else { return }
 			self.delegate?.exportPDFList(self, outline: outline)
 		}
 		let exportMarkdownDoc = UIAction(title: .exportMarkdownDocEllipsisControlLabel) { [weak self] _ in
-			guard let self = self, let outline = self.outline else { return }
+			guard let self, let outline = self.outline else { return }
 			self.delegate?.exportMarkdownDoc(self, outline: outline)
 		}
 		let exportMarkdownList = UIAction(title: .exportMarkdownListEllipsisControlLabel) { [weak self] _ in
-			guard let self = self, let outline = self.outline else { return }
+			guard let self, let outline = self.outline else { return }
 			self.delegate?.exportMarkdownList(self, outline: outline)
 		}
 		let exportOPML = UIAction(title: .exportOPMLEllipsisControlLabel) { [weak self] _ in
-			guard let self = self, let outline = self.outline else { return }
+			guard let self, let outline = self.outline else { return }
 			self.delegate?.exportOPML(self, outline: outline)
 		}
 		let exportActions = [exportPDFDoc, exportPDFList, exportMarkdownDoc, exportMarkdownList, exportOPML]
@@ -2544,7 +2544,7 @@ private extension EditorViewController {
 		guard let firstRow = rows.sortedByDisplayOrder().first else { return nil }
 		
 		return UIContextMenuConfiguration(identifier: firstRow as NSCopying, previewProvider: nil, actionProvider: { [weak self] suggestedActions in
-			guard let self = self, let outline = self.outline else { return nil }
+			guard let self, let outline = self.outline else { return nil }
 			
 			var menuItems = [UIMenu]()
 
@@ -2825,7 +2825,7 @@ private extension EditorViewController {
 	}
 
 	func createTag(name: String) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		
 		let command = CreateTagCommand(actionName: .addTagControlLabel,
 									   undoManager: undoManager,
@@ -2838,7 +2838,7 @@ private extension EditorViewController {
 	}
 
 	func deleteTag(name: String) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 
 		let command = DeleteTagCommand(actionName: .removeTagControlLabel,
 									   undoManager: undoManager,
@@ -2850,7 +2850,7 @@ private extension EditorViewController {
 	}
 	
 	func expand(rows: [Row]) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		
 		let command = ExpandCommand(actionName: .expandControlLabel,
 									undoManager: undoManager,
@@ -2862,7 +2862,7 @@ private extension EditorViewController {
 	}
 
 	func collapse(rows: [Row]) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 
 		let currentRow = currentTextView?.row
 		
@@ -2886,7 +2886,7 @@ private extension EditorViewController {
 	}
 
 	func expandAll(containers: [RowContainer]) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		
 		let command = ExpandAllCommand(actionName: .expandAllControlLabel,
 									   undoManager: undoManager,
@@ -2898,7 +2898,7 @@ private extension EditorViewController {
 	}
 
 	func collapseAll(containers: [RowContainer]) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		
 		let command = CollapseAllCommand(actionName: .collapseAllControlLabel,
 										 undoManager: undoManager,
@@ -2910,7 +2910,7 @@ private extension EditorViewController {
 	}
 
 	func textChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		
 		let command = TextChangedCommand(actionName: .typingControlLabel,
 										 undoManager: undoManager,
@@ -2924,7 +2924,7 @@ private extension EditorViewController {
 	}
 
 	func cutRows(_ rows: [Row]) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		copyRows(rows)
 
 		let command = CutRowCommand(actionName: .cutControlLabel,
@@ -2972,7 +2972,7 @@ private extension EditorViewController {
 	}
 
 	func pasteRows(afterRows: [Row]?) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 
 		if let rowProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [Row.typeIdentifier]), !rowProviderIndexes.isEmpty {
 			let group = DispatchGroup()
@@ -3016,7 +3016,7 @@ private extension EditorViewController {
 				let itemProvider = UIPasteboard.general.itemProviders[index]
 				group.enter()
 				itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
-					if let data = data, let itemText = String(data: data, encoding: .utf8) {
+					if let data, let itemText = String(data: data, encoding: .utf8) {
 						texts.append(itemText)
 						group.leave()
 					}
@@ -3049,7 +3049,7 @@ private extension EditorViewController {
 	}
 
 	func deleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 
 		let command = DeleteRowCommand(actionName: .deleteRowsControlLabel,
 									   undoManager: undoManager,
@@ -3070,7 +3070,7 @@ private extension EditorViewController {
 	}
 	
 	func createRow(beforeRows: [Row]) {
-		guard let undoManager = undoManager, let outline = outline, let beforeRow = beforeRows.sortedByDisplayOrder().first else { return }
+		guard let undoManager, let outline, let beforeRow = beforeRows.sortedByDisplayOrder().first else { return }
 
 		let command = CreateRowBeforeCommand(actionName: .addRowControlLabel,
 											 undoManager: undoManager,
@@ -3086,7 +3086,7 @@ private extension EditorViewController {
 	}
 	
 	func createRow(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 
 		scrollRowToShowBottom()
 		
@@ -3107,7 +3107,7 @@ private extension EditorViewController {
 	}
 	
 	func createRowInside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 
 		scrollRowToShowBottom()
 		
@@ -3128,7 +3128,7 @@ private extension EditorViewController {
 	}
 	
 	func createRowOutside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 
 		scrollRowToShowBottom()
 		
@@ -3149,7 +3149,7 @@ private extension EditorViewController {
 	}
 	
 	func duplicateRows(_ rows: [Row]) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 
 		let command = DuplicateRowCommand(actionName: .duplicateControlLabel,
 										  undoManager: undoManager,
@@ -3161,7 +3161,7 @@ private extension EditorViewController {
 	}
 	
 	func moveRowsLeft(_ rows: [Row], rowStrings: RowStrings? = nil) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		
 		let command = MoveRowLeftCommand(actionName: .moveLeftControlLabel,
 										 undoManager: undoManager,
@@ -3174,7 +3174,7 @@ private extension EditorViewController {
 	}
 
 	func moveRowsRight(_ rows: [Row], rowStrings: RowStrings? = nil) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		
 		let command = MoveRowRightCommand(actionName: .moveRightControlLabel,
 										  undoManager: undoManager,
@@ -3187,7 +3187,7 @@ private extension EditorViewController {
 	}
 
 	func moveRowsUp(_ rows: [Row], rowStrings: RowStrings? = nil) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		
 		let command = MoveRowUpCommand(actionName: .moveUpControlLabel,
 									   undoManager: undoManager,
@@ -3201,7 +3201,7 @@ private extension EditorViewController {
 	}
 
 	func moveRowsDown(_ rows: [Row], rowStrings: RowStrings? = nil) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		
 		let command = MoveRowDownCommand(actionName: .moveDownControlLabel,
 										 undoManager: undoManager,
@@ -3215,7 +3215,7 @@ private extension EditorViewController {
 	}
 
 	func splitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 
 		let command = SplitRowCommand(actionName: .splitRowControlLabel,
 									  undoManager: undoManager,
@@ -3236,7 +3236,7 @@ private extension EditorViewController {
 	}
 
 	func completeRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		
 		let cursorIsInCompletingRows = rows.contains(where: { $0 == currentTextView?.row })
 		
@@ -3259,7 +3259,7 @@ private extension EditorViewController {
 	}
 	
 	func uncompleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		
 		let command = UncompleteCommand(actionName: .uncompleteControlLabel,
 										undoManager: undoManager,
@@ -3272,7 +3272,7 @@ private extension EditorViewController {
 	}
 	
 	func createRowNotes(_ rows: [Row], rowStrings: RowStrings? = nil) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		
 		let command = CreateNoteCommand(actionName: .addNoteControlLabel,
 										undoManager: undoManager,
@@ -3302,7 +3302,7 @@ private extension EditorViewController {
 			noteTextView.isSavingTextUnnecessary = true
 		}
 		
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 		
 		let command = DeleteNoteCommand(actionName: .deleteNoteControlLabel,
 										undoManager: undoManager,

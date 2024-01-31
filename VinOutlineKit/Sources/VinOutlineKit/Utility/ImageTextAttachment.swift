@@ -14,7 +14,7 @@ public class ImageTextAttachment: NSTextAttachment {
 
 	public override init(data contentData: Data?, ofType uti: String?) {
 		super.init(data: contentData, ofType: uti)
-		if image == nil, let contentData = contentData {
+		if image == nil, let contentData {
 			image = UIImage(data: contentData)
 		}
 	}

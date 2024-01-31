@@ -27,7 +27,7 @@ class MainOpenQuicklyViewController: UIViewController {
 		searchTextField.inlineMode = true
 
 		searchTextField.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in
-			guard let self = self, let documentID = filteredResults[index].associatedObject as? EntityID else {
+			guard let self, let documentID = filteredResults[index].associatedObject as? EntityID else {
 				return
 			}
 			self.delegate?.quicklyOpenDocument(documentID: documentID)

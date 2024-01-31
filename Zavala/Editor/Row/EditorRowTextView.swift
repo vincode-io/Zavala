@@ -252,7 +252,7 @@ class EditorRowTextView: UITextView {
         textStorage.replaceCharacters(in: range, with: attrText)
 
         let newRange = NSRange(location: range.location, length: attrText.length)
-		if let link = link, let url = URL(string: link) {
+		if let link, let url = URL(string: link) {
 			textStorage.addAttribute(.link, value: url, range: newRange)
 		} else {
 			if newRange.length > 0 {
@@ -296,7 +296,7 @@ class EditorRowTextView: UITextView {
 	}
 	
 	func handleDidChangeSelection() {
-		guard let selectedTextRange = selectedTextRange, !selectedTextRange.isEmpty else {
+		guard let selectedTextRange, !selectedTextRange.isEmpty else {
 			previousSelectedTextRange = nil
 			return
 		}

@@ -334,7 +334,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 	public var rows: [Row] {
 		get {
-			if let rowOrder = rowOrder, let rowData = keyedRows {
+			if let rowOrder, let rowData = keyedRows {
 				return rowOrder.compactMap { rowData[$0] }
 			} else {
 				return [Row]()
@@ -567,7 +567,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	var shareRecordID: CKRecord.ID? {
 		get {
-			guard let recordName = cloudKitShareRecordName, let zoneID = zoneID else { return nil }
+			guard let recordName = cloudKitShareRecordName, let zoneID else { return nil }
 			return CKRecord.ID(recordName: recordName, zoneID: zoneID)
 		}
 		set {
@@ -1529,7 +1529,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	func createRow(_ row: Row, afterRow: Row? = nil, rowStrings: RowStrings? = nil) -> Int? {
 		beginCloudKitBatchRequest()
 		
-		if let afterRow = afterRow, let texts = rowStrings {
+		if let afterRow, let texts = rowStrings {
 			updateRowStrings(afterRow, texts)
 		}
 		
@@ -1539,7 +1539,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		} else if afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
 			afterRow?.insertRow(row, at: 0)
 			row.parent = afterRow
-		} else if let afterRow = afterRow, let parent = afterRow.parent {
+		} else if let afterRow, let parent = afterRow.parent {
 			let insertIndex = parent.firstIndexOfRow(afterRow) ?? -1
 			parent.insertRow(row, at: insertIndex + 1)
 			row.parent = afterRow.parent
@@ -1594,7 +1594,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		beginCloudKitBatchRequest()
 		
-		if let afterRow = afterRow, let texts = rowStrings {
+		if let afterRow, let texts = rowStrings {
 			updateRowStrings(afterRow, texts)
 		}
 		
@@ -1611,13 +1611,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 				row.parent = self
 			} else if let parent = row.parent, parent as? Row == afterRow {
 				parent.insertRow(row, at: 0)
-			} else if let parent = row.parent, let afterRow = afterRow {
+			} else if let parent = row.parent, let afterRow {
 				let insertIndex = parent.firstIndexOfRow(afterRow) ?? parent.rowCount - 1
 				parent.insertRow(row, at: insertIndex + 1)
 			} else if afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
 				afterRow?.insertRow(row, at: 0)
 				row.parent = afterRow
-			} else if let afterRow = afterRow, let parent = afterRow.parent {
+			} else if let afterRow, let parent = afterRow.parent {
 				let insertIndex = parent.firstIndexOfRow(afterRow) ?? -1
 				parent.insertRow(row, at: insertIndex + 1)
 				row.parent = afterRow.parent
@@ -2632,13 +2632,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		for change in diff {
 			switch change {
 			case .insert(let offset, _, let associated):
-				if let associated = associated {
+				if let associated {
 					moves.insert(OutlineElementChanges.Move(associated, offset))
 				} else {
 					inserts.insert(offset)
 				}
 			case .remove(let offset, _, let associated):
-				if let associated = associated {
+				if let associated {
 					moves.insert(OutlineElementChanges.Move(offset, associated))
 				} else {
 					deletes.insert(offset)

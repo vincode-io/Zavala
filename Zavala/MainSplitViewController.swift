@@ -425,7 +425,7 @@ extension MainSplitViewController: CollectionsDelegate {
 			self.view.window?.windowScene?.title = documentContainers.title
 		}
 		
-		if isNavigationBranch, let lastPin = lastPin {
+		if isNavigationBranch, let lastPin {
 			goBackwardStack.insert(lastPin, at: 0)
 			goBackwardStack = Array(goBackwardStack.prefix(10))
 			self.lastPin = nil
@@ -494,7 +494,7 @@ extension MainSplitViewController: DocumentsDelegate {
 			goBackwardStack.removeFirst()
 		}
 		
-		if isNavigationBranch, let lastPin = lastPin, lastPin.document != document {
+		if isNavigationBranch, let lastPin, lastPin.document != document {
 			goBackwardStack.insert(lastPin, at: 0)
 			goBackwardStack = Array(goBackwardStack.prefix(10))
 			self.lastPin = nil

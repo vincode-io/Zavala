@@ -113,11 +113,11 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	func selectDocumentContainers(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
         collectionView.deselectAll()
         
-        if let containers = containers, containers.count > 1, traitCollection.userInterfaceIdiom == .pad {
+        if let containers, containers.count > 1, traitCollection.userInterfaceIdiom == .pad {
             multipleSelect()
         }
         
-        if let containers = containers, containers.count == 1, let search = containers.first as? Search {
+        if let containers, containers.count == 1, let search = containers.first as? Search {
 			DispatchQueue.main.async {
 				if let searchCellIndexPath = self.dataSource.indexPath(for: CollectionsItem.searchItem()) {
 					if let searchCell = self.collectionView.cellForItem(at: searchCellIndexPath) as? CollectionsSearchCell {

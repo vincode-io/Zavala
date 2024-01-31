@@ -16,7 +16,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-		guard let destinationIndexPath = destinationIndexPath,
+		guard let destinationIndexPath,
 			  let item = dataSource.itemIdentifier(for: destinationIndexPath),
 			  let entityID = item.entityID,
 			  let container = AccountManager.shared.findDocumentContainer(entityID) else {

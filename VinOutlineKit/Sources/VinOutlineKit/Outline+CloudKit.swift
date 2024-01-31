@@ -50,7 +50,7 @@ extension Outline: VCKModel {
 		if batchCloudKitRequests > 0 {
 			cloudKitRequestsIDs.insert(entityID)
 		} else {
-			guard let zoneID = zoneID else { return }
+			guard let zoneID else { return }
 			cloudKitManager.addRequest(CloudKitActionRequest(zoneID: zoneID, id: entityID))
 		}
 	}
@@ -63,7 +63,7 @@ extension Outline: VCKModel {
 
 	func endCloudKitBatchRequest() {
 		batchCloudKitRequests = batchCloudKitRequests - 1
-		guard batchCloudKitRequests == 0, let cloudKitManager = account?.cloudKitManager, let zoneID = zoneID else { return }
+		guard batchCloudKitRequests == 0, let cloudKitManager = account?.cloudKitManager, let zoneID else { return }
 
 		let requests = cloudKitRequestsIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) }
 		cloudKitManager.addRequests(Set(requests))
@@ -433,13 +433,13 @@ private extension Outline {
 		for change in tagDiff {
 			switch change {
 			case .insert(let offset, _, let associated):
-				if let associated = associated {
+				if let associated {
 					moves.insert(OutlineElementChanges.Move(associated, offset))
 				} else {
 					inserts.insert(offset)
 				}
 			case .remove(let offset, _, let associated):
-				if let associated = associated {
+				if let associated {
 					moves.insert(OutlineElementChanges.Move(offset, associated))
 				} else {
 					deletes.insert(offset)

@@ -35,7 +35,7 @@ class RemoveRowsIntentHandler: NSObject, ZavalaIntentHandler, RemoveRowsIntentHa
 		let groupedInputRows = Dictionary(grouping: inputRows, by: { $0.outline })
 		
 		for outline in groupedInputRows.keys {
-			if let outline = outline, let deleteRows = groupedInputRows[outline] {
+			if let outline, let deleteRows = groupedInputRows[outline] {
 				outline.deleteRows(deleteRows)
 			}
 		}

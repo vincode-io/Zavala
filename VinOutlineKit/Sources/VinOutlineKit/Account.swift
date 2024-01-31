@@ -559,7 +559,7 @@ private extension Account {
 	}
 	
 	func saveToCloudKit(_ document: Document) {
-		guard let cloudKitManager = cloudKitManager, let zoneID = document.zoneID else { return }
+		guard let cloudKitManager, let zoneID = document.zoneID else { return }
 		
 		var requests = Set<CloudKitActionRequest>()
 		requests.insert(CloudKitActionRequest(zoneID: zoneID, id: document.id))
@@ -577,7 +577,7 @@ private extension Account {
 	}
 	
 	func deleteFromCloudKit(_ document: Document) {
-		guard let cloudKitManager = cloudKitManager, let zoneID = document.zoneID else { return }
+		guard let cloudKitManager, let zoneID = document.zoneID else { return }
 		var requests = Set<CloudKitActionRequest>()
 		requests.insert(CloudKitActionRequest(zoneID: zoneID, id: document.id))
 		cloudKitManager.addRequests(requests)

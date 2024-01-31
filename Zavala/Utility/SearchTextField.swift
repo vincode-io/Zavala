@@ -245,7 +245,7 @@ open class SearchTextField: EnhancedTextField {
     
     // Create the filter table and shadow view
     fileprivate func buildSearchTableView() {
-        guard let tableView = tableView, let shadowView = shadowView else {
+        guard let tableView, let shadowView else {
             self.tableView = KeyboardTableView(frame: CGRect.zero)
             self.shadowView = UIView(frame: CGRect.zero)
             buildSearchTableView()
@@ -311,7 +311,7 @@ open class SearchTextField: EnhancedTextField {
         }
         
         if let tableView {
-            guard let frame = self.superview?.convert(self.frame, to: nil), let window = window else { return }
+            guard let frame = self.superview?.convert(self.frame, to: nil), let window else { return }
             
             //TableViews use estimated cell heights to calculate content size until they
             //  are on-screen. We must set this to the theme cell height to avoid getting an

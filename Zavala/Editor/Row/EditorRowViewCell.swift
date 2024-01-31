@@ -124,7 +124,7 @@ class EditorRowViewCell: UICollectionViewListCell {
 			textView = (contentView as? EditorRowContentView)?.topicTextView
 		}
 		
-		if let textView = textView,
+		if let textView,
 		   let startPosition = textView.position(from: textView.beginningOfDocument, offset: cursorCoordinates.selection.location),
 		   let endPosition = textView.position(from: startPosition, offset: cursorCoordinates.selection.length) {
 			textView.selectedTextRange = textView.textRange(from: startPosition, to: endPosition)

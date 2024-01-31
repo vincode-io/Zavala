@@ -28,7 +28,7 @@ class EditorTagContentView: UIView, UIContentView {
 		button.layer.cornerRadius = button.intrinsicContentSize.height / 2
 
 		let deleteAction = UIAction(title: .removeTagControlLabel, image: .delete, attributes: .destructive) { [weak self] _ in
-			guard let self = self, let name = self.button.currentTitle else { return }
+			guard let self, let name = self.button.currentTitle else { return }
 			self.delegate?.editorTagDeleteTag(name: name)
 		}
 		let menu = UIMenu(title: "", image: nil, identifier: nil, options: [], children: [deleteAction])

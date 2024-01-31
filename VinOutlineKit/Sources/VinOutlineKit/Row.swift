@@ -801,7 +801,7 @@ private extension Row {
 	}
 	
 	func convertMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
-		guard let markdown = markdown, let regEx = try? NSRegularExpression(pattern: Self.markdownImagePattern, options: []) else {
+		guard let markdown, let regEx = try? NSRegularExpression(pattern: Self.markdownImagePattern, options: []) else {
 			return nil
 		}
 

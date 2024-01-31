@@ -45,7 +45,7 @@ class MacOpenQuicklyViewController: UIViewController {
 		searchTextField.layer.cornerRadius = 3
 		
 		searchTextField.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in
-			guard let self = self, let documentID = filteredResults[index].associatedObject as? EntityID else {
+			guard let self, let documentID = filteredResults[index].associatedObject as? EntityID else {
 				return
 			}
 			self.openDocument(documentID)

@@ -26,7 +26,7 @@ public struct Pin: Equatable {
             containers = containerIDs.compactMap { AccountManager.shared.findDocumentContainer($0) }
 		}
 		
-		if containers.isEmpty, let documentID = documentID, let container = AccountManager.shared.findDocumentContainer(.allDocuments(documentID.accountID)) {
+		if containers.isEmpty, let documentID, let container = AccountManager.shared.findDocumentContainer(.allDocuments(documentID.accountID)) {
 			containers = [container]
 		}
 		

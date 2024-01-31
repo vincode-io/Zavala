@@ -168,7 +168,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 
 		collectionView.deselectAll()
 
-		if let document = document, let index = documents.firstIndex(of: document) {
+		if let document, let index = documents.firstIndex(of: document) {
 			collectionView.selectItem(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .centeredVertically)
 			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [document], isNew: isNew, isNavigationBranch: isNavigationBranch, animated: animated)
 		} else {
@@ -191,7 +191,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	}
 	
 	func importOPMLs(urls: [URL]) {
-		guard let documentContainers = documentContainers,
+		guard let documentContainers,
 			  let account = documentContainers.uniqueAccount else { return }
 
 		var document: Document?
@@ -220,7 +220,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	}
 
 	func createOutlineDocument(title: String) -> Document? {
-		guard let documentContainers = documentContainers,
+		guard let documentContainers,
 			  let account = documentContainers.uniqueAccount else { return nil }
 
         let document = account.createOutline(title: title, tags: documentContainers.tags)
@@ -464,7 +464,7 @@ extension DocumentsViewController {
 				}
 			}
 			
-			if let prevSelectedDoc = prevSelectedDoc, let index = self.documents.firstIndex(of: prevSelectedDoc) {
+			if let prevSelectedDoc, let index = self.documents.firstIndex(of: prevSelectedDoc) {
 				let indexPath = IndexPath(row: index, section: 0)
 				self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
 				self.collectionView.scrollToItem(at: indexPath, at: [], animated: true)
@@ -595,7 +595,7 @@ private extension DocumentsViewController {
 
 	func showGetInfoAction(document: Document) -> UIAction {
 		let action = UIAction(title: .getInfoControlLabel, image: .getInfo) { [weak self] action in
-			guard let self = self, let outline = document.outline else { return }
+			guard let self, let outline = document.outline else { return }
 			self.delegate?.showGetInfo(self, outline: outline)
 		}
 		return action

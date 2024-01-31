@@ -65,7 +65,7 @@ class EditorRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {
 					if itemProvider.hasItemConformingToTypeIdentifier(UTType.utf8PlainText.identifier) {
 						itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
 
-							if let data = data, let text = String(data: data, encoding: .utf8) {
+							if let data, let text = String(data: data, encoding: .utf8) {
 								let attrString = NSMutableAttributedString(string: text)
 								attrString.setAttributes([NSAttributedString.Key.link: url], range: .init(location: 0, length: text.count))
 								DispatchQueue.main.async {

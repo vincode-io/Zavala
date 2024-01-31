@@ -35,7 +35,7 @@ struct WebPageTitle {
 				return
 			}
 			
-			guard let data = data, let html = String(data: data, encoding: .utf8) else {
+			guard let data, let html = String(data: data, encoding: .utf8) else {
 				logger.error("Unable to convert result to String for URL: \(url.absoluteString, privacy: .public)")
 				finish()
 				return

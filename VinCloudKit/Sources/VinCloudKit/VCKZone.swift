@@ -153,13 +153,13 @@ public extension VCKZone {
 
 	/// Creates the zone record
 	func createZoneRecord(completion: @escaping (Result<Void, Error>) -> Void) {
-		guard let database = database else {
+		guard let database else {
 			completion(.failure(VCKError.unknown))
 			return
 		}
 
 		database.save(CKRecordZone(zoneID: zoneID)) { (recordZone, error) in
-			if let error = error {
+			if let error {
 				DispatchQueue.main.async {
 					completion(.failure(error))
 				}
@@ -193,7 +193,7 @@ public extension VCKZone {
 		let op = CKQueryOperation(query: ckQuery)
 		op.qualityOfService = Self.qualityOfService
 		
-		if let desiredKeys = desiredKeys {
+		if let desiredKeys {
 			op.desiredKeys = desiredKeys
 		}
 		
@@ -207,7 +207,7 @@ public extension VCKZone {
 		}
 		
 		op.queryResultBlock = { [weak self] result in
-			guard let self = self else {
+			guard let self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
@@ -261,7 +261,7 @@ public extension VCKZone {
 		let op = CKQueryOperation(cursor: cursor)
 		op.qualityOfService = Self.qualityOfService
 		
-		if let desiredKeys = desiredKeys {
+		if let desiredKeys {
 			op.desiredKeys = desiredKeys
 		}
 		
@@ -275,7 +275,7 @@ public extension VCKZone {
 		}
 
 		op.queryResultBlock = { [weak self] result in
-			guard let self = self else {
+			guard let self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
@@ -283,7 +283,7 @@ public extension VCKZone {
 			switch result {
 			case .success(let newCursor):
 				DispatchQueue.main.async {
-					if let newCursor = newCursor {
+					if let newCursor {
 						self.query(cursor: newCursor, desiredKeys: desiredKeys, carriedRecords: records, completion: completion)
 					} else {
 						completion(.success(records))
@@ -325,7 +325,7 @@ public extension VCKZone {
 
 	/// Fetch a CKRecord by using its externalID
 	func fetch(externalID: String?, completion: @escaping (Result<CKRecord, Error>) -> Void) {
-		guard let externalID = externalID else {
+		guard let externalID else {
 			completion(.failure(VCKError.corruptAccount))
 			return
 		}
@@ -333,7 +333,7 @@ public extension VCKZone {
 		let recordID = CKRecord.ID(recordName: externalID, zoneID: zoneID)
 		
 		database?.fetch(withRecordID: recordID) { [weak self] record, error in
-			guard let self = self else {
+			guard let self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
@@ -341,7 +341,7 @@ public extension VCKZone {
 			switch VCKResult.refine(error) {
             case .success:
 				DispatchQueue.main.async {
-					if let record = record {
+					if let record {
 						completion(.success(record))
 					} else {
 						completion(.failure(VCKError.unknown))
@@ -378,7 +378,7 @@ public extension VCKZone {
 	/// Save the CKSubscription
 	func save(_ subscription: CKSubscription, completion: @escaping (Result<CKSubscription, Error>) -> Void) {
 		database?.save(subscription) { [weak self] savedSubscription, error in
-			guard let self = self else {
+			guard let self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
@@ -430,14 +430,14 @@ public extension VCKZone {
 		}
 
 		op.queryResultBlock = { [weak self] result in
-			guard let self = self else {
+			guard let self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
 
 			switch result {
 			case .success(let cursor):
-				if let cursor = cursor {
+				if let cursor {
 					self.delete(cursor: cursor, carriedRecords: records, completion: completion)
 				} else {
 					guard !records.isEmpty else {
@@ -476,7 +476,7 @@ public extension VCKZone {
 		}
 		
 		op.queryResultBlock = { [weak self] result in
-			guard let self = self else {
+			guard let self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
@@ -512,7 +512,7 @@ public extension VCKZone {
 
 	/// Delete a CKRecord using its externalID
 	func delete(externalID: String?, completion: @escaping (Result<([CKRecord], [CKRecord.ID]), Error>) -> Void) {
-		guard let externalID = externalID else {
+		guard let externalID else {
 			completion(.failure(VCKError.corruptAccount))
 			return
 		}
@@ -524,7 +524,7 @@ public extension VCKZone {
 	/// Delete a CKSubscription
 	func delete(subscriptionID: String, completion: @escaping (Result<Void, Error>) -> Void) {
 		database?.delete(withSubscriptionID: subscriptionID) { [weak self] _, error in
-			guard let self = self else {
+			guard let self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
@@ -608,7 +608,7 @@ public extension VCKZone {
 		}
 		
 		op.modifyRecordsResultBlock = { [weak self] result in
-			guard let self = self else {
+			guard let self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
@@ -731,7 +731,7 @@ public extension VCKZone {
 			let op = CloudKitZoneApplyChangesOperation(delegate: delegate, updated: updated, deleted: deleted, changeToken: token)
 			
 			op.completionBlock = { [weak self] mainThreadOperation in
-				guard let self = self, let zoneOperation = mainThreadOperation as? CloudKitZoneApplyChangesOperation else {
+				guard let self, let zoneOperation = mainThreadOperation as? CloudKitZoneApplyChangesOperation else {
 					completion(nil)
 					return
 				}
@@ -802,7 +802,7 @@ public extension VCKZone {
         }
 
         op.fetchRecordZoneChangesResultBlock = { [weak self] result in
-			guard let self = self else {
+			guard let self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
@@ -891,13 +891,13 @@ private class CloudKitZoneApplyChangesOperation: MainThreadOperation {
 	}
 	
 	func run() {
-		guard let delegate = delegate else {
+		guard let delegate else {
 			self.operationDelegate?.operationDidComplete(self)
 			return
 		}
 		
 		delegate.cloudKitDidModify(changed: updated, deleted: deleted) { [weak self] result in
-			guard let self = self else { return }
+			guard let self else { return }
 			
 			switch result {
 			case .success:

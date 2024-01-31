@@ -52,7 +52,7 @@ class MacLinkViewController: UIViewController {
 		textTextField.maxResultsListHeight = 80
 		
 		textTextField.itemSelectionHandler = { [weak self] (filteredResults: [SearchTextFieldItem], index: Int) in
-			guard let self = self, let documentID = filteredResults[index].associatedObject as? EntityID else {
+			guard let self, let documentID = filteredResults[index].associatedObject as? EntityID else {
 				return
 			}
 			self.textTextField.text = filteredResults[index].title
@@ -135,7 +135,7 @@ private extension MacLinkViewController {
 			return
 		}
 		
-		guard let cursorCoordinates = cursorCoordinates, let range = range else { return }
+		guard let cursorCoordinates, let range else { return }
 		
 		let text = textTextField.text?.trimmed() ?? ""
 		if let newLink = linkTextField.text?.trimmed() {

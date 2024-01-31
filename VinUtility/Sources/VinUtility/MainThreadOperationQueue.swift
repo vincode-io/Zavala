@@ -80,7 +80,7 @@ public final class MainThreadOperationQueue {
 	public func cancelAllOperations() {
 		precondition(Thread.isMainThread)
 		var operationIDsToCancel = pendingOperationIDs
-		if let currentOperationID = currentOperationID {
+		if let currentOperationID {
 			operationIDsToCancel.append(currentOperationID)
 		}
 		cancel(operationIDsToCancel)
@@ -171,7 +171,7 @@ private extension MainThreadOperationQueue {
 			assertionFailure("Expected operation.id, got nil")
 			return
 		}
-		if let currentOperationID = currentOperationID, currentOperationID == operationID {
+		if let currentOperationID, currentOperationID == operationID {
 			self.currentOperationID = nil
 		}
 
@@ -274,7 +274,7 @@ private extension MainThreadOperationQueue {
 	}
 
 	func clearCurrentOperationIDIfContained(by operationIDs: [Int]) {
-		if let currentOperationID = currentOperationID, operationIDs.contains(currentOperationID) {
+		if let currentOperationID, operationIDs.contains(currentOperationID) {
 			self.currentOperationID = nil
 		}
 	}

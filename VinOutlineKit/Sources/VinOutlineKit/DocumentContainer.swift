@@ -26,7 +26,7 @@ public extension Array where Element == DocumentContainer {
     var uniqueAccount: Account? {
         var account: Account? = nil
         for container in self {
-            if let account = account, let containerAccount = container.account {
+            if let account, let containerAccount = container.account {
                 if account != containerAccount {
                     return nil
                 }

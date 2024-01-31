@@ -124,7 +124,7 @@ private extension EditorViewController {
 	}
 	
 	func localRowDrop(coordinator: UICollectionViewDropCoordinator, destinationIndexPath: IndexPath?) {
-		guard let outline = outline, let shadowTable = outline.shadowTable else { return }
+		guard let outline, let shadowTable = outline.shadowTable else { return }
 		
 		let rows = coordinator.items.compactMap { $0.dragItem.localObject as? Row }
 
@@ -184,7 +184,7 @@ private extension EditorViewController {
 	}
 	
 	func localRowDrop(coordinator: UICollectionViewDropCoordinator, rows: [Row], toParent: RowContainer, toChildIndex: Int) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 
 		let command = LocalDropRowCommand(actionName:.moveControlLabel,
 										  undoManager: undoManager,
@@ -231,7 +231,7 @@ private extension EditorViewController {
 	}
 
 	func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, destinationIndexPath: IndexPath?) {
-		guard let outline = outline else { return }
+		guard let outline else { return }
 		
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
 			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(UTType.utf8PlainText.identifier) {
@@ -249,11 +249,11 @@ private extension EditorViewController {
 			group.enter()
 			
 			itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
-				if let data = data, let itemText = String(data: data, encoding: .utf8) {
+				if let data, let itemText = String(data: data, encoding: .utf8) {
 					
 					if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
 						itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.url.identifier) { (data, error) in
-							if let data = data, let urlString = String(data: data, encoding: .utf8) {
+							if let data, let urlString = String(data: data, encoding: .utf8) {
 								textDrops.append(TextDrop(text: itemText, urlString: urlString))
 							}
 							group.leave()
@@ -322,7 +322,7 @@ private extension EditorViewController {
 	}
 	
 	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], afterRow: Row?, prefersEnd: Bool = false) {
-		guard let undoManager = undoManager, let outline = outline else { return }
+		guard let undoManager, let outline else { return }
 
 		let command = RemoteDropRowCommand(actionName: .copyControlLabel,
 										   undoManager: undoManager,

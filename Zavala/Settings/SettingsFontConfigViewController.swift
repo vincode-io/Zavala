@@ -139,7 +139,7 @@ class SettingsFontConfigViewController: UITableViewController {
 	}
 	
 	@IBAction func save(_ sender: Any) {
-		guard let field = field, let config = config else { return }
+		guard let field, let config else { return }
 		
 		var fontDefaults = AppDefaults.shared.outlineFonts
 		fontDefaults?.rowFontConfigs[field] = config
