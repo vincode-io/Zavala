@@ -630,7 +630,7 @@ public extension VCKZone {
 
 			switch result {
 			case .success:
-				if modelsToRetry.isEmpty {
+				if modelsToRetry.isEmpty && deletesToRetry.isEmpty {
 					DispatchQueue.main.async {
 						self.logger.info("Successfully modified \(savedRecords.count, privacy: .public) records and deleted \(deletedRecordIDs.count, privacy: .public) records.")
 						completion(.success((savedRecords, deletedRecordIDs)))
