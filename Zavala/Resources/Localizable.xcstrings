@@ -297,6 +297,9 @@
     "Find…" : {
       "comment" : "Control Label: Find…"
     },
+    "Fix It" : {
+      "comment" : "Control Label: Fix It"
+    },
     "Focus In" : {
       "comment" : "Control Label: Focus In"
     },
@@ -504,9 +507,6 @@
     "Readable" : {
       "comment" : "Control Label: Readable"
     },
-    "Recover" : {
-      "comment" : "Control Label: Recover"
-    },
     "Red" : {
       "comment" : "Control Label: Red"
     },
@@ -609,7 +609,7 @@
     "This information is included in OPML documents to attribute ownership." : {
       "comment" : "Note: OPML Ownership."
     },
-    "This outline appears to be corrupted. Would you like to attempt to recover any lost rows?" : {
+    "This outline appears to be corrupted. Would you like to fix it?" : {
       "comment" : "Alert Message: Corrupted Outline"
     },
     "Title" : {

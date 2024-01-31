@@ -575,134 +575,158 @@ public extension VCKZone {
 			return
 		}
 
+		var savedRecords = [CKRecord]()
+		var deletedRecordIDs = [CKRecord.ID]()
+		
+		var modelsToRetry = [VCKModel]()
+		var deletesToRetry = [CKRecord.ID]()
+		
 		let recordsToSave = modelsToSave.compactMap { $0.buildRecord() }
 		let op = CKModifyRecordsOperation(recordsToSave: recordsToSave, recordIDsToDelete: recordIDsToDelete)
 		op.savePolicy = strategy.recordSavePolicy
 		op.isAtomic = true
 		op.qualityOfService = Self.qualityOfService
 
-		op.modifyRecordsCompletionBlock = { [weak self] (savedRecords, deletedRecordIDs, error) in
-			
+		op.perRecordSaveBlock = { recordID, result in
+			switch result {
+			case .success(let record):
+				savedRecords.append(record)
+			case .failure(let error):
+				guard let ckError = error as? CKError else { break }
+				
+				switch ckError.code {
+				case .batchRequestFailed:
+					// Nothing wrong with this record, it was just part of the batch that failed.
+					if let model = modelsToSave.first(where: { $0.cloudKitRecordID == recordID }) {
+						modelsToRetry.append(model)
+					}
+				case .unknownItem:
+					// The record was deleted by another device or user, so don't try to update it.
+					break
+				default:
+					// Merge the model and try to save it again
+					if let model = modelsToSave.first(where: { $0.cloudKitRecordID == recordID }) {
+						model.apply(ckError)
+						modelsToRetry.append(model)
+					}
+				}
+			}
+		}
+		
+		op.perRecordDeleteBlock = { recordID, result in
+			switch result {
+			case .success:
+				deletedRecordIDs.append(recordID)
+			case .failure:
+				deletesToRetry.append(recordID)
+			}
+		}
+		
+		op.modifyRecordsResultBlock = { [weak self] result in
 			guard let self = self else {
 				completion(.failure(VCKError.unknown))
 				return
 			}
 
-			let refinedResult = VCKResult.refine(error)
-			
-			switch refinedResult {
+			switch result {
 			case .success:
-				DispatchQueue.main.async {
-					self.logger.info("Successfully modified \(savedRecords?.count ?? 0, privacy: .public) records and deleted \(deletedRecordIDs?.count ?? 0, privacy: .public) records.")
-					completion(.success((savedRecords ?? [], deletedRecordIDs ?? [])))
-				}
-			case .zoneNotFound:
-				self.createZoneRecord() { result in
-					switch result {
-					case .success:
-						self.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
-					case .failure(let error):
-						DispatchQueue.main.async {
-							completion(.failure(error))
-						}
+				if modelsToRetry.isEmpty {
+					DispatchQueue.main.async {
+						self.logger.info("Successfully modified \(savedRecords.count, privacy: .public) records and deleted \(deletedRecordIDs.count, privacy: .public) records.")
+						completion(.success((savedRecords, deletedRecordIDs)))
 					}
-				}
-			case .userDeletedZone:
-				DispatchQueue.main.async {
-					completion(.failure(VCKError.userDeletedZone))
-				}
-			case .retry(let timeToWait):
-				self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone modify retry in \(timeToWait, privacy: .public) seconds.")
-				self.retryIfPossible(after: timeToWait) {
-					self.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
-				}
-			case .limitExceeded:
-				var modelsToSaveChunks = modelsToSave.chunked(into: 200)
-				var recordIDsToDeleteChunks = recordIDsToDelete.chunked(into: 200)
+				} else {
+					self.logger.info("Modify failed. \(modelsToRetry.count, privacy: .public) records resolved. Attempting Modify again...")
+					self.modify(modelsToSave: modelsToRetry, recordIDsToDelete: deletesToRetry, strategy: strategy, completion: completion)
 
-				func saveChunks(completion: @escaping (Result<Void, Error>) -> Void) {
-					if !modelsToSaveChunks.isEmpty {
-						let modelsToSaveChunk = modelsToSaveChunks.removeFirst()
-						self.modify(modelsToSave: modelsToSaveChunk, recordIDsToDelete: [], strategy: strategy) { result in
-							switch result {
-							case .success:
-								self.logger.info("Modified \(modelsToSaveChunk.count, privacy: .public) chunked records.")
-								saveChunks(completion: completion)
-							case .failure(let error):
+				}
+			case .failure(let error):
+				let refinedResult = VCKResult.refine(error)
+				
+				switch refinedResult {
+				case .zoneNotFound:
+					self.createZoneRecord() { result in
+						switch result {
+						case .success:
+							self.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
+						case .failure(let error):
+							DispatchQueue.main.async {
 								completion(.failure(error))
 							}
 						}
-					} else {
-						completion(.success(()))
 					}
-				}
-				
-				func deleteChunks() {
-					if !recordIDsToDeleteChunks.isEmpty {
-						let recordIDsToDeleteChunk = recordIDsToDeleteChunks.removeFirst()
-						self.modify(modelsToSave: [], recordIDsToDelete: recordIDsToDeleteChunk, strategy: strategy) { result in
-							switch result {
-							case .success:
-								self.logger.error("Deleted \(recordIDsToDeleteChunk.count, privacy: .public) chunked records.")
-								deleteChunks()
-							case .failure(let error):
-								DispatchQueue.main.async {
+				case .userDeletedZone:
+					DispatchQueue.main.async {
+						completion(.failure(VCKError.userDeletedZone))
+					}
+				case .retry(let timeToWait):
+					self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone modify retry in \(timeToWait, privacy: .public) seconds.")
+					self.retryIfPossible(after: timeToWait) {
+						self.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
+					}
+				case .limitExceeded:
+					var modelsToSaveChunks = modelsToSave.chunked(into: 200)
+					var recordIDsToDeleteChunks = recordIDsToDelete.chunked(into: 200)
+
+					func saveChunks(completion: @escaping (Result<Void, Error>) -> Void) {
+						if !modelsToSaveChunks.isEmpty {
+							let modelsToSaveChunk = modelsToSaveChunks.removeFirst()
+							self.modify(modelsToSave: modelsToSaveChunk, recordIDsToDelete: [], strategy: strategy) { result in
+								switch result {
+								case .success:
+									self.logger.info("Modified \(modelsToSaveChunk.count, privacy: .public) chunked records.")
+									saveChunks(completion: completion)
+								case .failure(let error):
 									completion(.failure(error))
 								}
 							}
-						}
-					} else {
-						DispatchQueue.main.async {
-							completion(.success(([], [])))
+						} else {
+							completion(.success(()))
 						}
 					}
-				}
-				
-				saveChunks() { result in
-					switch result {
-					case .success:
-						deleteChunks()
-					case .failure(let error):
-						DispatchQueue.main.async {
-							completion(.failure(error))
+					
+					func deleteChunks() {
+						if !recordIDsToDeleteChunks.isEmpty {
+							let recordIDsToDeleteChunk = recordIDsToDeleteChunks.removeFirst()
+							self.modify(modelsToSave: [], recordIDsToDelete: recordIDsToDeleteChunk, strategy: strategy) { result in
+								switch result {
+								case .success:
+									self.logger.error("Deleted \(recordIDsToDeleteChunk.count, privacy: .public) chunked records.")
+									deleteChunks()
+								case .failure(let error):
+									DispatchQueue.main.async {
+										completion(.failure(error))
+									}
+								}
+							}
+						} else {
+							DispatchQueue.main.async {
+								completion(.success(([], [])))
+							}
 						}
 					}
-				}
-				
-			case .serverRecordChanged(let ckError):
-				self.logger.info("Modify failed: \(ckError.localizedDescription, privacy: .public). Attempting to recover...")
-				modelsToSave[0].apply(ckError)
-				self.logger.info("\(modelsToSave.count, privacy: .public) records resolved. Attempting Modify again...")
-				self.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
+					
+					saveChunks() { result in
+						switch result {
+						case .success:
+							deleteChunks()
+						case .failure(let error):
+							DispatchQueue.main.async {
+								completion(.failure(error))
+							}
+						}
+					}
+					
+				case .serverRecordChanged(let ckError):
+					self.logger.info("Modify failed: \(ckError.localizedDescription, privacy: .public). Attempting to recover...")
+					modelsToSave[0].apply(ckError)
+					self.logger.info("\(modelsToSave.count, privacy: .public) records resolved. Attempting Modify again...")
+					self.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
 
-			case .partialFailure(let ckError):
-				self.logger.info("Modify failed: \(ckError.localizedDescription, privacy: .public). Attempting to recover...")
-				
-				let remainingModelsToSave: [VCKModel] = modelsToSave.compactMap { modelToSave in
-					guard let ckErrorForRecord = ckError.partialErrorsByItemID?[modelToSave.cloudKitRecordID] as? CKError else {
-						return nil
+				default:
+					DispatchQueue.main.async {
+						completion(.failure(error))
 					}
-					
-					switch ckErrorForRecord.code {
-					case .batchRequestFailed:
-						// Nothing wrong with this record, it was just part of the batch that failed.
-						return modelToSave
-					case .unknownItem:
-						// The record was deleted while the user was offline, so don't try to update it.
-						return nil
-					default:
-						// Merge the model and try to save it again
-						modelToSave.apply(ckErrorForRecord)
-						return modelToSave
-					}
-					
-				}
-				
-				self.logger.info("\(remainingModelsToSave.count, privacy: .public) records resolved. Attempting Modify again...")
-				self.modify(modelsToSave: remainingModelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
-			default:
-				DispatchQueue.main.async {
-					completion(.failure(error!))
 				}
 			}
 		}
