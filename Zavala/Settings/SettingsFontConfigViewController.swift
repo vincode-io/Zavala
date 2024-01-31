@@ -169,7 +169,7 @@ extension SettingsFontConfigViewController: UIFontPickerViewControllerDelegate {
 private extension SettingsFontConfigViewController {
 
 	func updateUI() {
-		guard let field, let config, let font = UIFont(name: config.name, size: CGFloat(config.size)) else { return }
+		guard let config, let font = UIFont(name: config.name, size: CGFloat(config.size)) else { return }
 		
 		sampleTextLabel.font = font
 		sampleTextLabel.textColor = config.color.uiColor
