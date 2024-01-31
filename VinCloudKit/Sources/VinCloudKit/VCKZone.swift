@@ -108,21 +108,6 @@ public extension VCKZone {
 		}
 	}
 	
-	func receiveRemoteNotification(userInfo: [AnyHashable : Any], incrementalFetch: Bool = true, completion: @escaping () -> Void) {
-		let note = CKRecordZoneNotification(fromRemoteNotificationDictionary: userInfo)
-		guard note?.recordZoneID?.zoneName == zoneID.zoneName else {
-			completion()
-			return
-		}
-		
-		fetchChangesInZone(incremental: incrementalFetch) { result in
-			if case .failure(let error) = result {
-                self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone remote notification fetch error: \(error.localizedDescription, privacy: .public)")
-			}
-			completion()
-		}
-	}
-
 	/// Retrieves the zone record for this zone only. If the record isn't found it will be created.
 	func fetchRecordZone(completion: @escaping (Result<CKRecordZone?, Error>) -> Void) {
 		let op = CKFetchRecordZonesOperation(recordZoneIDs: [zoneID])
