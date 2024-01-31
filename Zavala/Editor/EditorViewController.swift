@@ -2192,7 +2192,7 @@ private extension EditorViewController {
 												message: .corruptedOutlineMessage,
 												preferredStyle: .alert)
 		
-		let recoverAction = UIAlertAction(title: .recoverControlLabel, style: .default) { [weak self] action in
+		let recoverAction = UIAlertAction(title: .fixItControlLabel, style: .default) { [weak self] action in
 			self?.outline?.correctCorruption()
 		}
 		alertController.addAction(recoverAction)
