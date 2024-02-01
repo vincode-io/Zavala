@@ -126,7 +126,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return false
 	}
 	
-	public var cloudKitMetaData: Data?
+	public var cloudKitMetaData: Data? {
+		didSet {
+			documentMetaDataDidChange()
+		}
+	}
+	
 	public var isCloudKitMerging: Bool = false
 
 	public var id: EntityID {

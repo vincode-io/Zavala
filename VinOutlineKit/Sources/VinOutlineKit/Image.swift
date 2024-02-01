@@ -14,7 +14,12 @@ public class Image: Identifiable, Codable, Equatable {
 		return outline?.isCloudKit ?? false
 	}
 
-	public var cloudKitMetaData: Data?
+	public var cloudKitMetaData: Data? {
+		didSet {
+			outline?.imagesFile?.markAsDirty()
+		}
+	}
+	
 	public var isCloudKitMerging: Bool = false
 	
 	public var id: EntityID
