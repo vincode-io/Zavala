@@ -48,7 +48,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		return outline?.isCloudKit ?? false
 	}
 
-	public var cloudKitMetaData: Data?
+	public var cloudKitMetaData: Data? {
+		didSet {
+			outline?.rowsFile?.markAsDirty()
+		}
+	}
+	
 	public var isCloudKitMerging: Bool = false
 
 	public var id: String
