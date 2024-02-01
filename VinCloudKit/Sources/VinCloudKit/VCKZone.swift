@@ -186,9 +186,11 @@ public extension VCKZone {
         info.shouldSendContentAvailable = true
         subscription.notificationInfo = info
         
-		save(subscription) { result in
-			if case .failure(let error) = result {
-                self.logger.error("\(self.zoneID.zoneName, privacy: .public) subscribe to changes error: \(error.localizedDescription, privacy: .public)")
+		Task {
+			do {
+				try await save(subscription)
+			} catch {
+				self.logger.error("\(self.zoneID.zoneName, privacy: .public) subscribe to changes error: \(error.localizedDescription, privacy: .public)")
 			}
 		}
     }
@@ -234,38 +236,25 @@ public extension VCKZone {
 	}
 	
 	/// Save the CKSubscription
-	func save(_ subscription: CKSubscription, completion: @escaping (Result<CKSubscription, Error>) -> Void) {
-		database?.save(subscription) { [weak self] savedSubscription, error in
-			guard let self else {
-				completion(.failure(VCKError.unknown))
-				return
-			}
-
+	@discardableResult
+	func save(_ subscription: CKSubscription) async throws -> CKSubscription {
+		guard let database else {
+			throw VCKError.unknown
+		}
+		
+		do {
+			return try await database.save(subscription)
+		} catch {
 			switch VCKResult.refine(error) {
-			case .success:
-				DispatchQueue.main.async {
-					completion(.success((savedSubscription!)))
-				}
 			case .zoneNotFound:
-				self.createRecordZone() { result in
-					switch result {
-					case .success:
-						self.save(subscription, completion: completion)
-					case .failure(let error):
-						DispatchQueue.main.async {
-							completion(.failure(error))
-						}
-					}
-				}
+				try await createRecordZone()
+				return try await save(subscription)
 			case .retry(let timeToWait):
-                self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone save subscription retry in \(timeToWait, privacy: .public) seconds.")
-				self.retryIfPossible(after: timeToWait) {
-					self.save(subscription, completion: completion)
-				}
+				self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone save subscription retry in \(timeToWait, privacy: .public) seconds.")
+				try await Task.sleep(for: .seconds(timeToWait))
+				return try await save(subscription)
 			default:
-				DispatchQueue.main.async {
-					completion(.failure(error!))
-				}
+				throw error
 			}
 		}
 	}
