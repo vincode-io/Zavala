@@ -125,7 +125,7 @@ public extension VCKZone {
 			case .failure(let error):
 				switch VCKResult.refine(error) {
 				case .zoneNotFound, .userDeletedZone:
-					self.createZoneRecord() { result in
+					self.createRecordZone() { result in
 						switch result {
 						case .success:
 							self.fetchRecordZone(completion: completion)
@@ -152,23 +152,25 @@ public extension VCKZone {
 	}
 
 	/// Creates the zone record
-	func createZoneRecord(completion: @escaping (Result<Void, Error>) -> Void) {
-		guard let database else {
-			completion(.failure(VCKError.unknown))
-			return
-		}
-
-		database.save(CKRecordZone(zoneID: zoneID)) { (recordZone, error) in
-			if let error {
-				DispatchQueue.main.async {
-					completion(.failure(error))
-				}
-			} else {
-				DispatchQueue.main.async {
-					completion(.success(()))
-				}
+	@available(*, renamed: "createRecordZone()")
+	func createRecordZone(completion: @escaping (Result<Void, Error>) -> Void) {
+		Task {
+			do {
+				try await createRecordZone()
+				completion(.success(()))
+			} catch {
+				completion(.failure(error))
 			}
 		}
+	}
+	
+	
+	func createRecordZone() async throws {
+		guard let database else {
+			throw VCKError.unknown
+		}
+		
+		try await database.save(CKRecordZone(zoneID: zoneID))
 	}
 
 	/// Subscribes to zone changes
@@ -224,7 +226,7 @@ public extension VCKZone {
 			case .failure(let error):
 				switch VCKResult.refine(error) {
 				case .zoneNotFound:
-					self.createZoneRecord() { result in
+					self.createRecordZone() { result in
 						switch result {
 						case .success:
 							self.query(ckQuery, desiredKeys: desiredKeys, completion: completion)
@@ -292,7 +294,7 @@ public extension VCKZone {
 			case .failure(let error):
 				switch VCKResult.refine(error) {
 				case .zoneNotFound:
-					self.createZoneRecord() { result in
+					self.createRecordZone() { result in
 						switch result {
 						case .success:
 							self.query(cursor: cursor, desiredKeys: desiredKeys, carriedRecords: records, completion: completion)
@@ -348,7 +350,7 @@ public extension VCKZone {
 					}
 				}
 			case .zoneNotFound:
-				self.createZoneRecord() { result in
+				self.createRecordZone() { result in
 					switch result {
 					case .success:
 						self.fetch(externalID: externalID, completion: completion)
@@ -389,7 +391,7 @@ public extension VCKZone {
 					completion(.success((savedSubscription!)))
 				}
 			case .zoneNotFound:
-				self.createZoneRecord() { result in
+				self.createRecordZone() { result in
 					switch result {
 					case .success:
 						self.save(subscription, completion: completion)
@@ -630,7 +632,7 @@ public extension VCKZone {
 				
 				switch refinedResult {
 				case .zoneNotFound:
-					self.createZoneRecord() { result in
+					self.createRecordZone() { result in
 						switch result {
 						case .success:
 							self.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy, completion: completion)
@@ -820,7 +822,7 @@ public extension VCKZone {
 			case .failure(let error):
 				switch VCKResult.refine(error) {
 				case .zoneNotFound:
-					self.createZoneRecord() { result in
+					self.createRecordZone() { result in
 						switch result {
 						case .success:
 							self.fetchChangesInZone(incremental: incremental, completion: completion)
