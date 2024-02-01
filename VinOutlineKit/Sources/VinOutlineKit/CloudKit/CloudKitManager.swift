@@ -89,12 +89,12 @@ public class CloudKitManager {
 	}
 	
 	func firstTimeSetup() {
-		outlineZone.fetchRecordZone {  [weak self] result in
-			switch result {
-			case .success:
-				self?.outlineZone.subscribeToZoneChanges()
-			case .failure(let error):
-				self?.presentError(error)
+		Task {
+			do {
+				let _ = try await outlineZone.fetchRecordZone()
+				outlineZone.subscribeToZoneChanges()
+			} catch {
+				presentError(error)
 			}
 		}
 		subscribeToSharedDatabaseChanges()

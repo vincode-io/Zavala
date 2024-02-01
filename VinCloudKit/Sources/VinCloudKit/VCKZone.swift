@@ -102,53 +102,58 @@ public extension VCKZone {
 	}
 
 	func retryIfPossible(after: Double, block: @escaping () -> ()) {
-		Task { @MainActor in
+		Task {
 			try await Task.sleep(for: .seconds(after))
 			block()
 		}
 	}
 	
-	/// Retrieves the zone record for this zone only. If the record isn't found it will be created.
-	func fetchRecordZone(completion: @escaping (Result<CKRecordZone?, Error>) -> Void) {
-		let op = CKFetchRecordZonesOperation(recordZoneIDs: [zoneID])
-		op.qualityOfService = Self.qualityOfService
+	func fetchRecordZone() async throws -> CKRecordZone {
+		return try await withCheckedThrowingContinuation { continuation in
+			let op = CKFetchRecordZonesOperation(recordZoneIDs: [zoneID])
+			op.qualityOfService = Self.qualityOfService
 
-		op.perRecordZoneResultBlock = { [weak self] _, result in
-			guard let self else {
-				completion(.failure(VCKError.unknown))
-				return
-			}
+			op.perRecordZoneResultBlock = { [weak self] _, result in
+				guard let self else {
+					continuation.resume(throwing: VCKError.unknown)
+					return
+				}
 
-			switch result {
-			case .success(let recordZone):
-				completion(.success(recordZone))
-			case .failure(let error):
-				switch VCKResult.refine(error) {
-				case .zoneNotFound, .userDeletedZone:
-					self.createRecordZone() { result in
-						switch result {
-						case .success:
-							self.fetchRecordZone(completion: completion)
-						case .failure(let error):
-							DispatchQueue.main.async {
-								completion(.failure(error))
+				switch result {
+				case .success(let recordZone):
+					continuation.resume(returning: recordZone)
+				case .failure(let error):
+					switch VCKResult.refine(error) {
+					case .zoneNotFound, .userDeletedZone:
+						Task {
+							do {
+								try await self.createRecordZone()
+								let recordZone = try await self.fetchRecordZone()
+								continuation.resume(returning: recordZone)
+							} catch {
+								continuation.resume(throwing: error)
 							}
 						}
-					}
-				case .retry(let timeToWait):
-					self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone fetch changes retry in \(timeToWait, privacy: .public) seconds.")
-					self.retryIfPossible(after: timeToWait) {
-						self.fetchRecordZone(completion: completion)
-					}
-				default:
-					DispatchQueue.main.async {
-						completion(.failure(error))
+					case .retry(let timeToWait):
+						self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone fetch changes retry in \(timeToWait, privacy: .public) seconds.")
+						self.retryIfPossible(after: timeToWait) {
+							Task {
+								do {
+									let recordZone = try await self.fetchRecordZone()
+									continuation.resume(returning: recordZone)
+								} catch {
+									continuation.resume(throwing: error)
+								}
+							}
+						}
+					default:
+						continuation.resume(throwing: error)
 					}
 				}
 			}
-		}
 
-		database?.add(op)
+			database?.add(op)
+		}
 	}
 
 	/// Creates the zone record
