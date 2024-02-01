@@ -192,55 +192,43 @@ public extension VCKZone {
 			}
 		}
     }
-		
-	/// Fetch a CKRecord by using its externalID
-	func fetch(externalID: String?, completion: @escaping (Result<CKRecord, Error>) -> Void) {
-		guard let externalID else {
-			completion(.failure(VCKError.corruptAccount))
-			return
-		}
 
+	/// Fetch a CKRecord by using its externalID
+	@available(*, deprecated, renamed: "fetch()", message: "Move to the new async version.")
+	func fetch(externalID: String, completion: @escaping (Result<CKRecord, Error>) -> Void) {
+		Task { @MainActor in
+			do {
+				let record = try await fetch(externalID: externalID)
+				completion(.success(record))
+			} catch {
+				completion(.failure(error))
+			}
+		}
+	}
+	
+	/// Fetch a CKRecord by using its externalID
+	func fetch(externalID: String) async throws -> CKRecord {
 		let recordID = CKRecord.ID(recordName: externalID, zoneID: zoneID)
 		
-		database?.fetch(withRecordID: recordID) { [weak self] record, error in
-			guard let self else {
-				completion(.failure(VCKError.unknown))
-				return
+		do {
+			if let record = try await database?.record(for: recordID) {
+				return record
+			} else {
+				throw VCKError.corruptAccount
 			}
-
+		} catch {
 			switch VCKResult.refine(error) {
-            case .success:
-				DispatchQueue.main.async {
-					if let record {
-						completion(.success(record))
-					} else {
-						completion(.failure(VCKError.unknown))
-					}
-				}
 			case .zoneNotFound:
-				self.createRecordZone() { result in
-					switch result {
-					case .success:
-						self.fetch(externalID: externalID, completion: completion)
-					case .failure(let error):
-						DispatchQueue.main.async {
-							completion(.failure(error))
-						}
-					}
-				}
+				try await createRecordZone()
+				return try await fetch(externalID: externalID)
 			case .retry(let timeToWait):
-                self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone fetch retry in \(timeToWait, privacy: .public) seconds.")
-				self.retryIfPossible(after: timeToWait) {
-					self.fetch(externalID: externalID, completion: completion)
-				}
+				logger.error("\(self.zoneID.zoneName, privacy: .public) zone fetch retry in \(timeToWait, privacy: .public) seconds.")
+				try await Task.sleep(for: .seconds(timeToWait))
+				return try await self.fetch(externalID: externalID)
 			case .userDeletedZone:
-				DispatchQueue.main.async {
-					completion(.failure(VCKError.userDeletedZone))
-				}
+				throw VCKError.userDeletedZone
 			default:
-				DispatchQueue.main.async {
-					completion(.failure(error!))
-				}
+				throw error
 			}
 		}
 	}
