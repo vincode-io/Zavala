@@ -157,7 +157,7 @@ public extension VCKZone {
 	}
 
 	/// Creates the zone record
-	@available(*, renamed: "createRecordZone()")
+	@available(*, deprecated, renamed: "createRecordZone()")
 	func createRecordZone(completion: @escaping (Result<Void, Error>) -> Void) {
 		Task {
 			do {
