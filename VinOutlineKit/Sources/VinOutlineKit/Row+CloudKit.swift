@@ -58,14 +58,28 @@ extension Row: VCKModel {
 		}
 
 		let serverTopicData = record[Row.CloudKitRecord.Fields.topicData] as? Data
-		let mergedTopicData = merge(client: topicData, ancestor: ancestorTopicData, server: serverTopicData)
+		
+		let topicString = topicData?.toAttributedString()
+		let ancestorTopicString = ancestorTopicData?.toAttributedString()
+		let serverTopicString = serverTopicData?.toAttributedString()
+		
+		let mergedTopicString = merge(client: topicString, ancestor: ancestorTopicString, server: serverTopicString)
+		let mergedTopicData = mergedTopicString?.toData()
+		
 		if mergedTopicData != topicData {
 			updated = true
 			topicData = mergedTopicData
 		}
 
 		let serverNoteData = record[Row.CloudKitRecord.Fields.noteData] as? Data
-		let mergedNoteData = merge(client: noteData, ancestor: ancestorNoteData, server: serverNoteData)
+		
+		let noteString = noteData?.toAttributedString()
+		let ancestorNoteString = ancestorNoteData?.toAttributedString()
+		let serverNoteString = serverNoteData?.toAttributedString()
+		
+		let mergedNoteString = merge(client: noteString, ancestor: ancestorNoteString, server: serverNoteString)
+		let mergedNoteData = mergedNoteString?.toData()
+		
 		if mergedNoteData != noteData {
 			updated = true
 			noteData = mergedNoteData
@@ -120,11 +134,19 @@ extension Row: VCKModel {
 		let recordIsComplete = merge(client: isComplete, ancestor: ancestorIsComplete, server: serverIsComplete)
 		record[Row.CloudKitRecord.Fields.isComplete] = recordIsComplete! ? "1" : "0"
 		
-		let recordTopicData = merge(client: topicData, ancestor: ancestorTopicData, server: serverTopicData)
-		record[Row.CloudKitRecord.Fields.topicData] = recordTopicData
+		let topicString = topicData?.toAttributedString()
+		let ancestorTopicString = ancestorTopicData?.toAttributedString()
+		let serverTopicString = serverTopicData?.toAttributedString()
 		
-		let recordNoteData = merge(client: noteData, ancestor: ancestorNoteData, server: serverNoteData)
-		record[Row.CloudKitRecord.Fields.noteData] = recordNoteData
+		let recordTopicString = merge(client: topicString, ancestor: ancestorTopicString, server: serverTopicString)
+		record[Row.CloudKitRecord.Fields.topicData] = recordTopicString?.toData()
+		
+		let noteString = noteData?.toAttributedString()
+		let ancestorNoteString = ancestorNoteData?.toAttributedString()
+		let serverNoteString = serverNoteData?.toAttributedString()
+
+		let recordNoteString = merge(client: noteString, ancestor: ancestorNoteString, server: serverNoteString)
+		record[Row.CloudKitRecord.Fields.noteData] = recordNoteString?.toData()
 		
 		return record
 	}
