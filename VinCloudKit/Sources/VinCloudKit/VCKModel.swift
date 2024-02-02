@@ -61,26 +61,24 @@ public extension VCKModel {
 	}
 	
 	#if canImport(UIKit)
-	func merge(client: Data?, ancestor: Data?, server: Data?) -> Data? {
+	func merge(client: NSAttributedString?, ancestor: NSAttributedString?, server: NSAttributedString?) -> NSAttributedString? {
 		switch VCKMergeScenario.evaluate(client: client, ancestor: ancestor, server: server) {
 		case .clientWins:
 			return client
 		case .serverWins:
 			return server
 		case .threeWayMerge:
-			guard let clientAttrString = client?.toAttributedString(),
-				  let ancestorAttrString = ancestor?.toAttributedString(),
-				  let serverAttrString = server?.toAttributedString() else {
+			guard let client, let ancestor, let server else {
 				fatalError("We should always have all 3 values for a 3 way merge.")
 			}
 
 			// The client offset changes are used to adjust the merge so that we can more accurately place
 			// any server changes.
-			let clientOffsetChanges = buildClientOffsetChanges(clientAttrString, ancestorAttrString)
+			let clientOffsetChanges = buildClientOffsetChanges(client, ancestor)
 			
-			let serverDiff = serverAttrString.string.difference(from: ancestorAttrString.string).inferringMoves()
+			let serverDiff = server.string.difference(from: ancestor.string).inferringMoves()
 			if !serverDiff.isEmpty {
-				let merged = NSMutableAttributedString(attributedString: clientAttrString)
+				let merged = NSMutableAttributedString(attributedString: client)
 				
 				func computeClientOffset(offset: Int, associated: Int?) -> (Int, Int) {
 					let serverOffset = associated ?? offset
@@ -102,7 +100,7 @@ public extension VCKModel {
 					switch change {
 					case .insert(let offset, _, let associated):
 						let (serverOffset, newOffset) = computeClientOffset(offset: offset, associated: associated)
-						let serverAttrString = serverAttrString.attributedSubstring(from: NSRange(location: serverOffset, length: 1))
+						let serverAttrString = server.attributedSubstring(from: NSRange(location: serverOffset, length: 1))
 						merged.insert(serverAttrString, at: newOffset)
 					case .remove(let offset, _, let associated):
 						let (_, newOffset) = computeClientOffset(offset: offset, associated: associated)
@@ -112,7 +110,7 @@ public extension VCKModel {
 					}
 				}
 				
-				return merged.toData()
+				return merged
 			} else {
 				// I haven't figured out how to merge pure attribute changes if they happen. Client wins in this case.
 				return client
