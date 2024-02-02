@@ -31,7 +31,7 @@ public enum VCKModifyStrategy {
 public protocol VCKZoneDelegate: AnyObject {
 	func store(changeToken: Data?, key: VCKChangeTokenKey)
 	func findChangeToken(key: VCKChangeTokenKey) -> Data?
-	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey], completion: @escaping (Result<Void, Error>) -> Void);
+	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey]) async throws;
 }
 
 public typealias CloudKitRecordKey = (recordType: CKRecord.RecordType, recordID: CKRecord.ID)
@@ -101,13 +101,6 @@ public extension VCKZone {
 		return CKRecord.ID(recordName: UUID().uuidString, zoneID: zoneID)
 	}
 
-	func retryIfPossible(after: Double, block: @escaping () -> ()) {
-		Task {
-			try await Task.sleep(for: .seconds(after))
-			block()
-		}
-	}
-	
 	func fetchRecordZone() async throws -> CKRecordZone {
 		return try await withCheckedThrowingContinuation { continuation in
 			let op = CKFetchRecordZonesOperation(recordZoneIDs: [zoneID])
@@ -154,21 +147,8 @@ public extension VCKZone {
 			database?.add(op)
 		}
 	}
-
-	/// Creates the zone record
-	@available(*, deprecated, renamed: "createRecordZone()")
-	func createRecordZone(completion: @escaping (Result<Void, Error>) -> Void) {
-		Task {
-			do {
-				try await createRecordZone()
-				completion(.success(()))
-			} catch {
-				completion(.failure(error))
-			}
-		}
-	}
 	
-	
+	/// Creates the record zone
 	func createRecordZone() async throws {
 		guard let database else {
 			throw VCKError.unknown
@@ -436,199 +416,140 @@ public extension VCKZone {
 		}
 	}
 	
-	/// Fetch all the changes in the CKZone since the last time we checked
 	func fetchChangesInZone(incremental: Bool = true, completion: @escaping (Result<Void, Error>) -> Void) {
+		Task { @MainActor in
+			do {
+				try await fetchChangesInZone(incremental: incremental)
+				completion(.success(()))
+			} catch {
+				completion(.failure(error))
+			}
+		}
+	}
+	
+	/// Fetch all the changes in the CKZone since the last time we checked
+	func fetchChangesInZone(incremental: Bool = true) async throws {
 
 		var updatedRecords = [CKRecord]()
 		var deletedRecordKeys = [CloudKitRecordKey]()
 		
-		func wasChanged(updated: [CKRecord], deleted: [CloudKitRecordKey], token: CKServerChangeToken?, completion: @escaping (Error?) -> Void) {
+		@Sendable func wasChanged(updated: [CKRecord], deleted: [CloudKitRecordKey], token: CKServerChangeToken?) async throws {
 			logger.debug("Received \(updated.count, privacy: .public) updated records and \(deleted.count, privacy: .public) delete requests.")
-
-			let op = CloudKitZoneApplyChangesOperation(delegate: delegate, updated: updated, deleted: deleted, changeToken: token)
+			try await delegate?.cloudKitDidModify(changed: updated, deleted: deleted)
+			self.changeToken = token
+		}
+		
+		return try await withCheckedThrowingContinuation { continuation in
 			
-			op.completionBlock = { [weak self] mainThreadOperation in
-				guard let self, let zoneOperation = mainThreadOperation as? CloudKitZoneApplyChangesOperation else {
-					completion(nil)
+			let zoneConfig = CKFetchRecordZoneChangesOperation.ZoneConfiguration()
+			zoneConfig.previousServerChangeToken = changeToken
+			let op = CKFetchRecordZoneChangesOperation(recordZoneIDs: [zoneID], configurationsByRecordZoneID: [zoneID: zoneConfig])
+			op.fetchAllChanges = true
+			op.qualityOfService = Self.qualityOfService
+			
+			op.recordZoneChangeTokensUpdatedBlock = { zoneID, token, _ in
+				guard incremental else { return }
+
+				let updatedRecordsToSend = updatedRecords
+				let deletedRecordKeysToSend = deletedRecordKeys
+
+				Task {
+					do {
+						try await wasChanged(updated: updatedRecordsToSend, deleted: deletedRecordKeysToSend, token: token)
+					} catch {
+						op.cancel()
+						continuation.resume(throwing: error)
+					}
+				}
+
+				updatedRecords = [CKRecord]()
+				deletedRecordKeys = [CloudKitRecordKey]()
+			}
+			
+			op.recordWasChangedBlock = { _, result in
+				switch result {
+				case .success(let record):
+					updatedRecords.append(record)
+				case .failure:
+					break // I'm not even clear on how we could get an error here...
+				}
+			}
+			
+			op.recordWithIDWasDeletedBlock = { recordID, recordType in
+				let recordKey = CloudKitRecordKey(recordType: recordType, recordID: recordID)
+				deletedRecordKeys.append(recordKey)
+			}
+			
+			op.recordZoneFetchResultBlock = { zoneID, result in
+				switch result {
+				case .success((let token, _, _)):
+					let updatedRecordsToSend = updatedRecords
+					let deletedRecordKeysToSend = deletedRecordKeys
+					Task {
+						do {
+							try await wasChanged(updated: updatedRecordsToSend, deleted: deletedRecordKeysToSend, token: token)
+						} catch {
+							op.cancel()
+							continuation.resume(throwing: error)
+						}
+					}
+				case .failure:
+					break
+				}
+				updatedRecords = [CKRecord]()
+				deletedRecordKeys = [CloudKitRecordKey]()
+			}
+			
+			op.fetchRecordZoneChangesResultBlock = { [weak self] result in
+				guard let self else {
+					continuation.resume(throwing: VCKError.unknown)
 					return
 				}
 				
-				if let error = zoneOperation.error {
-					completion(error)
-				} else {
-					if let changeToken = zoneOperation.changeToken {
-						self.changeToken = changeToken
-					}
-					completion(nil)
-				}
-			}
-			
-			DispatchQueue.main.async {
-				CloudKitZoneApplyChangesOperation.mainThreadOperationQueue.add(op)
-			}
-			
-		}
-		
-		let zoneConfig = CKFetchRecordZoneChangesOperation.ZoneConfiguration()
-		zoneConfig.previousServerChangeToken = changeToken
-		let op = CKFetchRecordZoneChangesOperation(recordZoneIDs: [zoneID], configurationsByRecordZoneID: [zoneID: zoneConfig])
-        op.fetchAllChanges = true
-		op.qualityOfService = Self.qualityOfService
-
-        op.recordZoneChangeTokensUpdatedBlock = { zoneID, token, _ in
-			guard incremental else { return }
-			
-			wasChanged(updated: updatedRecords, deleted: deletedRecordKeys, token: token) { error in
-				if let error {
-					op.cancel()
-					completion(.failure(error))
-				}
-			}
-			updatedRecords = [CKRecord]()
-			deletedRecordKeys = [CloudKitRecordKey]()
-        }
-
-        op.recordWasChangedBlock = { _, result in
-			switch result {
-			case .success(let record):
-				updatedRecords.append(record)
-			case .failure:
-				break // I'm not even clear on how we could get an error here...
-			}
-        }
-
-        op.recordWithIDWasDeletedBlock = { recordID, recordType in
-			let recordKey = CloudKitRecordKey(recordType: recordType, recordID: recordID)
-			deletedRecordKeys.append(recordKey)
-        }
-
-        op.recordZoneFetchResultBlock = { zoneID, result in
-			switch result {
-			case .success((let token, _, _)):
-				wasChanged(updated: updatedRecords, deleted: deletedRecordKeys, token: token) { error in
-					if let error {
-						op.cancel()
-						completion(.failure(error))
-					}
-				}
-			case .failure:
-				break
-			}
-			updatedRecords = [CKRecord]()
-			deletedRecordKeys = [CloudKitRecordKey]()
-        }
-
-        op.fetchRecordZoneChangesResultBlock = { [weak self] result in
-			guard let self else {
-				completion(.failure(VCKError.unknown))
-				return
-			}
-
-			switch result {
-			case .success:
-				let op = CloudKitZoneApplyChangesOperation()
-				op.completionBlock = { _ in
-					completion(.success(()))
-				}
-				
-				DispatchQueue.main.async {
-					CloudKitZoneApplyChangesOperation.mainThreadOperationQueue.add(op)
-				}
-			case .failure(let error):
-				switch VCKResult.refine(error) {
-				case .zoneNotFound:
-					self.createRecordZone() { result in
-						switch result {
-						case .success:
-							self.fetchChangesInZone(incremental: incremental, completion: completion)
-						case .failure(let error):
-							DispatchQueue.main.async {
-								completion(.failure(error))
+				switch result {
+				case .success:
+					continuation.resume()
+				case .failure(let error):
+					switch VCKResult.refine(error) {
+					case .zoneNotFound:
+						Task {
+							do {
+								try await self.createRecordZone()
+								try await self.fetchChangesInZone(incremental: incremental)
+								continuation.resume()
+							} catch {
+								continuation.resume(throwing: error)
 							}
 						}
+					case .userDeletedZone:
+						continuation.resume(throwing: VCKError.userDeletedZone)
+					case .retry(let timeToWait):
+						self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone fetch changes retry in \(timeToWait, privacy: .public) seconds.")
+						Task {
+							do {
+								try await Task.sleep(for: .seconds(timeToWait))
+								try await self.fetchChangesInZone(incremental: incremental)
+								continuation.resume()
+							} catch {
+								continuation.resume(throwing: error)
+							}
+						}
+					case .changeTokenExpired:
+						Task {
+							self.changeToken = nil
+							try await self.fetchChangesInZone(incremental: incremental)
+							continuation.resume()
+						}
+					default:
+						continuation.resume(throwing: error)
 					}
-				case .userDeletedZone:
-					DispatchQueue.main.async {
-						completion(.failure(VCKError.userDeletedZone))
-					}
-				case .retry(let timeToWait):
-					self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone fetch changes retry in \(timeToWait, privacy: .public) seconds.")
-					self.retryIfPossible(after: timeToWait) {
-						self.fetchChangesInZone(incremental: incremental, completion: completion)
-					}
-				case .changeTokenExpired:
-					DispatchQueue.main.async {
-						self.changeToken = nil
-						self.fetchChangesInZone(incremental: incremental, completion: completion)
-					}
-				default:
-					DispatchQueue.main.async {
-						completion(.failure(error))
-					}
+					
 				}
-
 			}
-        }
-
-        database?.add(op)
-    }
-	
-}
-
-private class CloudKitZoneApplyChangesOperation: MainThreadOperation {
-	
-	static let mainThreadOperationQueue = MainThreadOperationQueue()
-
-	// MainThreadOperation
-	public var isCanceled = false
-	public var id: Int?
-	public weak var operationDelegate: MainThreadOperationDelegate?
-	public var name: String? = "CloudKitReceiveStatusOperation"
-	public var completionBlock: MainThreadOperation.MainThreadOperationCompletionBlock?
-
-	private weak var delegate: VCKZoneDelegate?
-	private var updated: [CKRecord]
-	private var deleted: [CloudKitRecordKey]
-	
-	private(set) var error: Error?
-	private(set) var changeToken: CKServerChangeToken?
-	
-	/// Used to queue up the final success call so that it doesn't happen before we are done processing records
-	init() {
-		updated = []
-		deleted = []
-	}
-	
-	/// Used for regular record processing
-	init(delegate: VCKZoneDelegate?, updated: [CKRecord], deleted: [CloudKitRecordKey], changeToken: CKServerChangeToken?) {
-		self.delegate = delegate
-		self.updated = updated
-		self.deleted = deleted
-		self.changeToken = changeToken
-	}
-	
-	func run() {
-		guard let delegate else {
-			self.operationDelegate?.operationDidComplete(self)
-			return
-		}
-		
-		delegate.cloudKitDidModify(changed: updated, deleted: deleted) { [weak self] result in
-			guard let self else { return }
 			
-			switch result {
-			case .success:
-				self.operationDelegate?.operationDidComplete(self)
-			case .failure(let error):
-				self.error = error
-				self.operationDelegate?.cancelOperation(self)
-			}
+			database?.add(op)
+			
 		}
-
-	}
-	
-}
-
-private actor ModifyWork {
+    }
 	
 }

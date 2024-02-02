@@ -27,7 +27,7 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 		return account!.zoneChangeTokens?[key]
 	}
 	
-	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey], completion: @escaping (Result<Void, Error>) -> Void) {
+	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey]) async throws {
 		var updates = [EntityID: CloudKitOutlineUpdate]()
 
 		func update(for documentID: EntityID, zoneID: CKRecordZone.ID) -> CloudKitOutlineUpdate {
@@ -73,10 +73,11 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 		}
 		
 		for update in updates.values {
-			account?.apply(update)
+			Task { @MainActor in
+				account?.apply(update)
+			}
 		}
 		
-		completion(.success(()))
 	}
 
 }
