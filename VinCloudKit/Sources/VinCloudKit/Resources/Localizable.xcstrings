@@ -5,7 +5,7 @@
       "comment" : "Known iCloud Error"
     },
     "An unexpected CloudKit error occurred." : {
-      "comment" : "An unexpected CloudKit error occurred."
+      "comment" : "Error Message: An unexpected CloudKit error occurred."
     },
     "Asset File Modified: the content of the specified asset file was modified while being saved." : {
       "comment" : "Known iCloud Error"
@@ -89,10 +89,10 @@
       "comment" : "Known iCloud Error"
     },
     "The iCloud data was deleted.  Please remove the application iCloud account and add it again to continue using the application's iCloud support." : {
-      "comment" : "User deleted zone."
+      "comment" : "Error Message: User deleted zone."
     },
     "There is an unrecoverable problem with your application iCloud account. Please make sure you have iCloud and iCloud Drive enabled in System Preferences. Then remove the application iCloud account and add it again." : {
-      "comment" : "Corrupt account."
+      "comment" : "Error Message: Corrupt account."
     },
     "Too Many Participants: a share cannot be saved because too many participants are attached to the share." : {
       "comment" : "Known iCloud Error"

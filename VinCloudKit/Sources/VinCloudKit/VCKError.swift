@@ -16,13 +16,13 @@ public enum VCKError: LocalizedError {
 		switch self {
 		case .userDeletedZone:
 			return String(localized: "The iCloud data was deleted.  Please remove the application iCloud account and add it again to continue using the application's iCloud support.", 
-									 comment: "User deleted zone.")
+									 comment: "Error Message: User deleted zone.")
 		case .corruptAccount:
 			return String(localized: "There is an unrecoverable problem with your application iCloud account. Please make sure you have iCloud and iCloud Drive enabled in System Preferences. Then remove the application iCloud account and add it again.", 
-									 comment: "Corrupt account.")
+									 comment: "Error Message: Corrupt account.")
 		default:
 			return String(localized: "An unexpected CloudKit error occurred.", 
-									 comment: "An unexpected CloudKit error occurred.")
+									 comment: "Error Message: An unexpected CloudKit error occurred.")
 		}
 	}
 }
