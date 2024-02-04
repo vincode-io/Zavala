@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CloudKit
 import UniformTypeIdentifiers
 import LinkPresentation
 import VinOutlineKit
@@ -64,10 +65,12 @@ extension DocumentsActivityItemsConfiguration: UIActivityItemsConfigurationReadi
 			}
 			
 			if document.isCloudKit, let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer {
+				let sharingOptions = CKAllowedSharingOptions(allowedParticipantPermissionOptions: .readWrite, allowedParticipantAccessOptions: .any)
+
 				if let shareRecord = document.shareRecord {
-					itemProvider.registerCKShare(shareRecord, container: container)
+					itemProvider.registerCKShare(shareRecord, container: container, allowedSharingOptions: sharingOptions)
 				} else {
-					itemProvider.registerCKShare(container: container, allowedSharingOptions: .standard) {
+					itemProvider.registerCKShare(container: container, allowedSharingOptions: sharingOptions) {
 						let share = try await AccountManager.shared.cloudKitAccount!.generateCKShare(for: document)
 						Task { @MainActor in
 							AccountManager.shared.sync()
