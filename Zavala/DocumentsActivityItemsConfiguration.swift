@@ -68,7 +68,11 @@ extension DocumentsActivityItemsConfiguration: UIActivityItemsConfigurationReadi
 					itemProvider.registerCKShare(shareRecord, container: container)
 				} else {
 					itemProvider.registerCKShare(container: container, allowedSharingOptions: .standard) {
-						return try await AccountManager.shared.cloudKitAccount!.generateCKShare(for: document)
+						let share = try await AccountManager.shared.cloudKitAccount!.generateCKShare(for: document)
+						Task { @MainActor in
+							AccountManager.shared.sync()
+						}
+						return share
 					}
 				}
 			}
