@@ -190,8 +190,10 @@ public class CloudKitManager {
 			case .success:
 				let zoneID = shareMetadata.share.recordID.zoneID
 				self.cloudKitSyncWillBegin()
-				self.fetchChanges(userInitiated: true, zoneID: zoneID) { [weak self] in
-					self?.cloudKitSyncDidComplete()
+				DispatchQueue.main.async {
+					self.fetchChanges(userInitiated: true, zoneID: zoneID) { [weak self] in
+						self?.cloudKitSyncDidComplete()
+					}
 				}
 			case .failure(let error):
 				DispatchQueue.main.async {
