@@ -9,9 +9,9 @@ header:
 
 
 
-## Personal Knowledge Management (PMK)
+## Personal Knowledge Management (PKM)
 
-Linking is very important in Zavala. It allows Zavala to function as a PMK. Traditionally these are a lot like a personal Wiki that a user can build up and maintain for themselves.
+Linking is very important in Zavala. It allows Zavala to function as a PKM system. Traditionally these are a lot like a personal Wiki that a user can build up and maintain for themselves.
 
 Linking enables us to create links to other Outlines within Zavala. As you would expect, we can also create links to pages on the Web in Zavala. Additionally we can create links to other resources on your device, like an email message and allow other applications to link to Outlines in Zavala.
 

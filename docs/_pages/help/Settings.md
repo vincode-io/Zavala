@@ -8,8 +8,7 @@ header:
 ---
 
 
-
-![](/assets/images/help/FA819D4D-E125-440B-A1D5-16C464697A8C.png)￼
+* ![](/assets/images/help/DFF37EFA-C57B-47F9-8FE2-74AF4EB5522C.png)￼
 
 ## Accounts
 
@@ -30,6 +29,14 @@ When you disable the iCloud account all the iCloud Outlines on your device will 
 ## Outline Defaults
 
 Like the Outline Owner information, Outline Defaults are used to assign default values to newly created Outlines.
+
+### Check Spelling While Typing
+
+Same as the standard system setting.
+
+### Correct Spelling Automatically
+
+Same as the standard system setting.
 
 ### Automatically Change Link Titles
 
@@ -55,7 +62,8 @@ This is the default information that gets added to each Outline that you create.
 	  This is the distance between the bottom of one row and the top of the next.
 
 
-	* Fonts![](/assets/images/help/C99CD867-502D-4AA0-BC4C-13ABFFA98602.png)￼
+	* Fonts
+![](/assets/images/help/1478E827-B8B9-4415-8E06-31676BFAC95F.png)￼
 
 	  Various elements of the Outline Editor have configurable fonts. This enables you to customize the Editor to your personal tastes or needs. You can even install your own fonts and select them here to use them.
 
@@ -68,4 +76,9 @@ This is the default information that gets added to each Outline that you create.
 	* Use Main Window as Default
 
 	  When there are no windows open and Zavala gets activated the [Open Quickly](Open_Quickly.md) window will open. If you don’t like this behavior, you can select “Use Main Window as Default” to open the [Main Window](Main_Window.md) instead.
+
+
+	* Disable Editor Animations
+
+	  Some users are more used to other outliners than don’t animate user interface elements. This allows them to disable those animations.
 
