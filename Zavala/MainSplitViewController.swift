@@ -252,7 +252,15 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	func goForwardOne() {
 		goForward(to: 0)
 	}
-
+	
+	func share() {
+		documentsViewController?.share()
+	}
+	
+	func manageSharing() {
+		documentsViewController?.manageSharing()
+	}
+	
 	func validateToolbar() {
 		self.sceneDelegate?.validateToolbar()
 	}

@@ -17,6 +17,8 @@ protocol MainCoordinator: UIViewController, DocumentsActivityItemsConfigurationD
 	var isGoForwardOneUnavailable: Bool { get }
 	func goBackwardOne()
 	func goForwardOne()
+	func share()
+	func manageSharing()
 }
 
 extension MainCoordinator {
@@ -147,6 +149,10 @@ extension MainCoordinator {
 	
 	var isDeleteCompletedRowsUnavailable: Bool {
 		return editorViewController?.isDeleteCompletedRowsUnavailable ?? true
+	}
+	
+	var isManageSharingUnavailable: Bool {
+		return !(selectedDocuments.count == 1 && selectedDocuments.first!.isCollaborating)
 	}
 	
 	func duplicateRows() {
@@ -280,10 +286,6 @@ extension MainCoordinator {
 	
 	func deleteCompletedRows() {
 		editorViewController?.deleteCompletedRows()
-	}
-	
-	func share() {
-		editorViewController?.share()
 	}
 	
 	func showSettings() {

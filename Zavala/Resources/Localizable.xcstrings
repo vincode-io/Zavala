@@ -381,6 +381,9 @@
     "Link…" : {
       "comment" : "Control Label: Link…"
     },
+    "Manage Sharing…" : {
+      "comment" : "Control Label: Manage Sharing…"
+    },
     "Medium" : {
       "comment" : "Control Label: Medium"
     },

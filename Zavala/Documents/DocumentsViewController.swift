@@ -235,6 +235,30 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		return document
 	}
 	
+	func share() {
+		guard let indexPath = collectionView.indexPathsForSelectedItems?.first,
+			  let cell = collectionView.cellForItem(at: indexPath) else { return }
+		
+		let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(selectedDocuments: selectedDocuments))
+		controller.popoverPresentationController?.sourceView = cell
+		self.present(controller, animated: true)
+	}
+	
+	func manageSharing() {
+		guard let document = selectedDocuments.first,
+			  let shareRecord = document.shareRecord,
+			  let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer,
+			  let indexPath = collectionView.indexPathsForSelectedItems?.first,
+			  let cell = collectionView.cellForItem(at: indexPath) else {
+			return
+		}
+
+		let controller = UICloudSharingController(share: shareRecord, container: container)
+		controller.popoverPresentationController?.sourceView = cell
+		controller.delegate = self
+		self.present(controller, animated: true)
+	}
+	
 	// MARK: Notifications
 	
 	@objc func accountDocumentsDidChange(_ note: Notification) {
@@ -291,6 +315,26 @@ extension DocumentsViewController: UIDocumentPickerDelegate {
 	
 	func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
 		importOPMLs(urls: urls)
+	}
+	
+}
+
+// MARK: UICloudSharingControllerDelegate
+
+extension DocumentsViewController: UICloudSharingControllerDelegate {
+	
+	func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
+	}
+	
+	func itemTitle(for csc: UICloudSharingController) -> String? {
+		return nil
+	}
+	
+	func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
+		Task { @MainActor in
+			try await Task.sleep(for: .seconds(2))
+			AccountManager.shared.sync()
+		}
 	}
 	
 }
@@ -569,6 +613,14 @@ private extension DocumentsViewController {
 			if let cell = self.collectionView.cellForItem(at: allRowIDs.first!.indexPath) {
 				shareMenuItems.append(self.shareAction(documents: documents, sourceView: cell))
 			}
+			
+			if documents.count == 1,
+			   let document = documents.first,
+			   documents.first!.isCollaborating,
+			   let cell = self.collectionView.cellForItem(at: allRowIDs.first!.indexPath),
+			   let action = manageSharingAction(document: document, sourceView: cell) {
+				shareMenuItems.append(action)
+			}
 
 			var exportActions = [UIAction]()
 			exportActions.append(self.exportPDFDocsOutlineAction(outlines: outlines))
@@ -619,6 +671,21 @@ private extension DocumentsViewController {
 		let action = UIAction(title: .shareEllipsisControlLabel, image: .share) { action in
 			let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(selectedDocuments: documents))
 			controller.popoverPresentationController?.sourceView = sourceView
+			self.present(controller, animated: true)
+		}
+		return action
+	}
+	
+	func manageSharingAction(document: Document, sourceView: UIView) -> UIAction? {
+		guard let shareRecord = document.shareRecord, let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer else {
+			return nil
+		}
+
+		let action = UIAction(title: .manageSharingEllipsisControlLabel, image: .collaborating) { [weak self] action in
+			guard let self else { return }
+			let controller = UICloudSharingController(share: shareRecord, container: container)
+			controller.popoverPresentationController?.sourceView = sourceView
+			controller.delegate = self
 			self.present(controller, animated: true)
 		}
 		return action

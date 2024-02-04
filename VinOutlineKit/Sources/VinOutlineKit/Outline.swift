@@ -371,7 +371,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public var iCollaborating: Bool {
-		return cloudKitShareRecordName != nil
+		return cloudKitShareRecord != nil
 	}
 	
 	private var collapseAllInOutlineUnavailable = true

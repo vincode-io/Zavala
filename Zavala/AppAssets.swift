@@ -263,6 +263,7 @@ extension String {
 	static var linkEllipsisControlLabel = String(localized: "Link…", comment: "Control Label: Link…")
 	static var lightControlLabel = String(localized: "Light", comment: "Control Label: Light")
 
+	static var manageSharingEllipsisControlLabel = String(localized: "Manage Sharing…", comment: "Control Label: Manage Sharing…")
 	static var mediumControlLabel = String(localized: "Medium", comment: "Control Label: Medium")
 	static var mintControlLabel = String(localized: "Mint", comment: "Control Label: Mint")
 	static var moreControlLabel = String(localized: "More", comment: "Control Label: More")

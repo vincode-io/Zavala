@@ -265,9 +265,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 input: "p",
 										 modifierFlags: [.command])
 
-	// Currently unused because it automatically adds Services menus to my other context menus
 	let shareCommand = UICommand(title: .shareEllipsisControlLabel, action: #selector(shareCommand(_:)))
 
+	let manageSharingCommand = UICommand(title: .manageSharingEllipsisControlLabel, action: #selector(manageSharingCommand(_:)))
+	
 	let outlineGetInfoCommand = UIKeyCommand(title: .getInfoControlLabel,
 											 action: #selector(outlineGetInfoCommand(_:)),
 											 input: "i",
@@ -676,6 +677,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.share()
 	}
 
+	@objc func manageSharingCommand(_ sender: Any?) {
+		mainCoordinator?.manageSharing()
+	}
+
 	@objc func beginDocumentSearchCommand(_ sender: Any?) {
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
 			mainSplitViewController.beginDocumentSearch()
@@ -861,6 +866,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(manageSharingCommand(_:)):
+			if mainCoordinator?.isManageSharingUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		case #selector(copyDocumentLinkCommand(_:)):
 			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
@@ -900,7 +909,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertChild(getInfoMenu, atEndOfMenu: .file)
 
 		let exportMenu = UIMenu(title: .exportControlLabel, children: [exportPDFDocsCommand, exportPDFListsCommand, exportMarkdownDocsCommand, exportMarkdownListsCommand, exportOPMLsCommand])
-		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, shareCommand, exportMenu])
+		let importExportMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLCommand, shareCommand, manageSharingCommand, exportMenu])
 		builder.insertChild(importExportMenu, atEndOfMenu: .file)
 
 		let printMenu = UIMenu(title: "", options: .displayInline, children: [printDocsCommand, printListsCommand])

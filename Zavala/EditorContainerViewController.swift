@@ -104,6 +104,20 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	func goBackwardOne() {	}
 	func goForwardOne() { }
 	
+	func share() {
+		editorViewController?.share()
+	}
+	
+	func manageSharing() {
+		guard let shareRecord = selectedDocuments.first!.shareRecord, let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer else {
+			return
+		}
+		
+		let controller = UICloudSharingController(share: shareRecord, container: container)
+		controller.delegate = self
+		self.present(controller, animated: true)
+	}
+	
 	func shutdown() {
 		activityManager.invalidateSelectDocument()
 		editorViewController?.edit(nil, isNew: false)
@@ -273,6 +287,26 @@ extension EditorContainerViewController: EditorDelegate {
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 
+}
+
+// MARK: UICloudSharingControllerDelegate
+
+extension EditorContainerViewController: UICloudSharingControllerDelegate {
+	
+	func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
+	}
+	
+	func itemTitle(for csc: UICloudSharingController) -> String? {
+		return nil
+	}
+	
+	func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
+		Task { @MainActor in
+			try await Task.sleep(for: .seconds(2))
+			AccountManager.shared.sync()
+		}
+	}
+	
 }
 
 // MARK: Toolbar
