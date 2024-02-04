@@ -84,6 +84,10 @@ public final class Account: NSObject, Identifiable, Codable {
 		return containers
 	}
 	
+	public var cloudKitContainer: CKContainer? {
+		return cloudKitManager?.container
+	}
+	
 	var folder: URL?
 	var cloudKitManager: CloudKitManager?
 	
@@ -115,6 +119,11 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	func initializeCloudKit(firstTime: Bool, errorHandler: ErrorHandler) {
 		cloudKitManager = CloudKitManager(account: self, errorHandler: errorHandler)
+		
+		for document in documents ?? [] {
+			cloudKitManager?.addSyncRecordIfNeeded(document: document)
+		}
+		
 		if firstTime {
 			cloudKitManager?.firstTimeSetup()
 			cloudKitManager?.sync()
@@ -124,13 +133,12 @@ public final class Account: NSObject, Identifiable, Codable {
 	public func userDidAcceptCloudKitShareWith(_ shareMetadata: CKShare.Metadata) {
 		cloudKitManager?.userDidAcceptCloudKitShareWith(shareMetadata)
 	}
-	
-	#if canImport(UIKit)
-	public func prepareCloudSharingController(document: Document, completion: @escaping (Result<UICloudSharingController, Error>) -> Void) {
-		cloudKitManager?.prepareCloudSharingController(document: document, completion: completion)
-	}
-	#endif
 
+	public func generateCKShare(for document: Document) async throws -> CKShare {
+		guard let cloudKitManager else { fatalError() }
+		return try await cloudKitManager.generateCKShare(for: document)
+	}
+	
 	public func activate() {
 		guard isActive == false else { return }
 		isActive = true
@@ -459,6 +467,10 @@ public final class Account: NSObject, Identifiable, Codable {
 		return idToDocumentsDictionary[documentUUID]
 	}
 
+	func findDocument(shareRecordID: CKRecord.ID) -> Document? {
+		return documents?.first(where: { $0.shareRecordID == shareRecordID })
+	}
+	
 	func deleteAllDocuments(with zoneID: CKRecordZone.ID) {
 		for doc in documents ?? [Document]() {
 			if doc.zoneID == zoneID {

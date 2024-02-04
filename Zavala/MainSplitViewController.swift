@@ -383,10 +383,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		printLists()
 	}
 
-	@objc func collaborate(_ sender: Any?) {
-		collaborate()
-	}
-
 	@objc func outlineGetInfo(_ sender: Any?) {
 		showGetInfo()
 	}
@@ -856,7 +852,6 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.boldface,
 			.italic,
 			.flexibleSpace,
-			.collaborate,
 			.share,
 			.space,
 			.focus,
@@ -887,7 +882,6 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.moveDown,
 			.printDoc,
 			.printList,
-			.collaborate,
 			.share,
 			.getInfo,
 			.space,
@@ -1247,25 +1241,6 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.action = #selector(printLists(_:))
 			item.target = self
 			toolbarItem = item
-		case .collaborate:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				if self?.editorViewController?.isDocumentCollaborating ?? false {
-					item.image = .collaborating.symbolSizedForCatalyst()
-				} else if self?.editorViewController?.isCollaborateUnavailable ?? true {
-					item.image = .statelessCollaborate.symbolSizedForCatalyst()
-				} else {
-					item.image = .collaborate.symbolSizedForCatalyst()
-				}
-				return self?.editorViewController?.isCollaborateUnavailable ?? true
-			}
-			item.image = .collaborate.symbolSizedForCatalyst()
-			item.label = .collaborateControlLabel
-			item.toolTip = .collaborateControlLabel
-			item.isBordered = true
-			item.action = #selector(collaborate(_:))
-			item.target = self
-			toolbarItem = item
 		case .share:
 			let item = NSSharingServicePickerToolbarItem(itemIdentifier: .share)
 			item.label = .shareControlLabel
@@ -1292,40 +1267,6 @@ extension MainSplitViewController: NSToolbarDelegate {
 		
 		return toolbarItem
 	}
-}
-
-extension MainSplitViewController: UIActivityItemsConfigurationReading {
-	
-	var applicationActivitiesForActivityItemsConfiguration: [UIActivity]? {
-		guard let documents = documentsViewController?.selectedDocuments, !documents.isEmpty else {
-			return nil
-		}
-		
-		return [CopyDocumentLinkActivity(documents: documents)]
-	}
-	
-	var itemProvidersForActivityItemsConfiguration: [NSItemProvider] {
-		guard let documents = documentsViewController?.selectedDocuments, !documents.isEmpty else {
-			return [NSItemProvider]()
-		}
-		
-		let itemProviders: [NSItemProvider] = documents.compactMap { document in
-			guard let outline = document.outline else { return nil }
-			
-			let itemProvider = NSItemProvider()
-			
-			itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
-				let data = outline.markdownList().data(using: .utf8)
-				completion(data, nil)
-				return nil
-			}
-			
-			return itemProvider
-		}
-		
-		return itemProviders
-	}
-	
 }
 
 #endif

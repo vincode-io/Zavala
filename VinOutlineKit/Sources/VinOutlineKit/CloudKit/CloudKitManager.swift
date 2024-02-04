@@ -37,7 +37,7 @@ public class CloudKitManager {
 		return !isSyncing && isNetworkAvailable
 	}
 	
-	private let container: CKContainer = {
+	public let container: CKContainer = {
 		let orgID = Bundle.main.object(forInfoDictionaryKey: "OrganizationIdentifier") as! String
 		return CKContainer(identifier: "iCloud.\(orgID).Zavala")
 	}()
@@ -203,21 +203,14 @@ public class CloudKitManager {
 		container.add(op)
 	}
 	
-	#if canImport(UIKit)
-	func prepareCloudSharingController(document: Document, completion: @escaping (Result<UICloudSharingController, Error>) -> Void) {
+	func generateCKShare(for document: Document) async throws -> CKShare {
 		guard let zoneID = document.zoneID else {
-			completion(.failure(CloudKitOutlineZoneError.unknown))
-			return
+			throw CloudKitOutlineZoneError.unknown
 		}
 		
 		let zone = findZone(zoneID: zoneID)
-		if document.isCollaborating {
-			zone.prepareSharedCloudSharingController(document: document, completion: completion)
-		} else {
-			zone.prepareNewCloudSharingController(document: document, completion: completion)
-		}
+		return try await zone.generateCKShare(for: document)
 	}
-	#endif
 	
 	func resume() {
 		sync()
@@ -241,6 +234,23 @@ public class CloudKitManager {
 		}
 		
 		sharedDatabaseChangeToken = nil
+	}
+	
+	// This should be able to be removed at some point. It is only here because at one time we didn't
+	// sync the CKShare records.
+	func addSyncRecordIfNeeded(document: Document) {
+		guard let outline = document.outline,
+			  outline.cloudKitShareRecordName != nil && outline.cloudKitShareRecordData == nil,
+			  let zoneID = outline.zoneID,
+			  isNetworkAvailable else { return }
+		
+		let zone = findZone(zoneID: zoneID)
+
+		Task { @MainActor in
+			if let shareRecord = try await zone.fetch(externalID: outline.cloudKitShareRecordName!) as? CKShare {
+				outline.cloudKitShareRecord = shareRecord
+			}
+		}
 	}
 	
 }

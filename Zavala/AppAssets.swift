@@ -30,7 +30,6 @@ extension UIImage {
 	static var bold = UIImage(systemName: "bold")!
 	static var bullet = UIImage(systemName: "circle.fill")!.applyingSymbolConfiguration(.init(pointSize: 4, weight: .heavy))!
 
-	static var collaborate = UIImage(systemName: "person.crop.circle.badge.plus")!
 	static var collaborating = UIImage(systemName: "person.crop.circle.badge.checkmark")!
 	static var collapseAll = UIImage(systemName: "arrow.down.right.and.arrow.up.left")!
 	static var completeRow = UIImage(systemName: "checkmark.square")!
@@ -97,7 +96,6 @@ extension UIImage {
 	static var restore = UIImage(systemName: "gobackward")!
 
 	static var share = UIImage(systemName: "square.and.arrow.up")!
-	static var statelessCollaborate = UIImage(systemName: "person.crop.circle")!
 	static var sync = UIImage(systemName: "arrow.clockwise")!
 
 	static var topicFont = UIImage(systemName: "textformat.size.larger")!

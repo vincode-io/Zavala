@@ -63,6 +63,16 @@ extension DocumentsActivityItemsConfiguration: UIActivityItemsConfigurationReadi
 				return nil
 			}
 			
+			if document.isCloudKit, let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer {
+				if let shareRecord = document.shareRecord {
+					itemProvider.registerCKShare(shareRecord, container: container)
+				} else {
+					itemProvider.registerCKShare(container: container, allowedSharingOptions: .standard) {
+						return try await AccountManager.shared.cloudKitAccount!.generateCKShare(for: document)
+					}
+				}
+			}
+			
 			return itemProvider
 		}
 		
@@ -70,7 +80,7 @@ extension DocumentsActivityItemsConfiguration: UIActivityItemsConfigurationReadi
 	}
 	
 	func activityItemsConfigurationMetadataForItem(at: Int, key: UIActivityItemsConfigurationMetadataKey) -> Any? {
-		guard !selectedDocuments.isEmpty else {
+		guard !selectedDocuments.isEmpty, at < selectedDocuments.count else {
 			return nil
 		}
 

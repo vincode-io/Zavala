@@ -218,10 +218,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		printLists()
 	}
 
-	@objc func collaborate(_ sender: Any?) {
-		collaborate()
-	}
-
 	@objc func outlineGetInfo(_ sender: Any?) {
 		showGetInfo()
 	}
@@ -295,7 +291,6 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.boldface,
 			.italic,
 			.space,
-			.collaborate,
 			.share,
 			.space,
 			.focus,
@@ -321,7 +316,6 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.moveDown,
 			.printDoc,
 			.printList,
-			.collaborate,
 			.share,
 			.getInfo,
 			.space,
@@ -583,25 +577,6 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.action = #selector(printList(_:))
 			item.target = self
 			toolbarItem = item
-		case .collaborate:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				if self?.editorViewController?.isDocumentCollaborating ?? false {
-					item.image = .collaborating.symbolSizedForCatalyst()
-				} else if self?.editorViewController?.isCollaborateUnavailable ?? true {
-					item.image = .statelessCollaborate.symbolSizedForCatalyst()
-				} else {
-					item.image = .collaborate.symbolSizedForCatalyst()
-				}
-				return self?.editorViewController?.isCollaborateUnavailable ?? true
-			}
-			item.image = .collaborate.symbolSizedForCatalyst()
-			item.label = .collaborateControlLabel
-			item.toolTip = .collaborateControlLabel
-			item.isBordered = true
-			item.action = #selector(collaborate(_:))
-			item.target = self
-			toolbarItem = item
 		case .share:
 			let item = NSSharingServicePickerToolbarItem(itemIdentifier: .share)
 			item.label = .shareControlLabel
@@ -628,33 +603,6 @@ extension EditorContainerViewController: NSToolbarDelegate {
 		
 		return toolbarItem
 	}
-}
-
-extension EditorContainerViewController: UIActivityItemsConfigurationReading {
-	
-	var applicationActivitiesForActivityItemsConfiguration: [UIActivity]? {
-		guard let outline = editorViewController?.outline else {
-			return nil
-		}
-		return [CopyDocumentLinkActivity(documents: [Document.outline(outline)])]
-	}
-
-	var itemProvidersForActivityItemsConfiguration: [NSItemProvider] {
-		guard let outline = editorViewController?.outline else {
-			return [NSItemProvider]()
-		}
-		
-		let itemProvider = NSItemProvider()
-		
-		itemProvider.registerDataRepresentation(for: UTType.utf8PlainText, visibility: .all) { completion in
-			let data = outline.markdownList().data(using: .utf8)
-			completion(data, nil)
-			return nil
-		}
-		
-		return [itemProvider]
-	}
-	
 }
 
 #endif

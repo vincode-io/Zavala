@@ -37,10 +37,6 @@ extension MainCoordinator {
 		return editorViewController?.isFocusOutUnavailable ?? true
 	}
 	
-	var isCollaborateUnavailable: Bool {
-		return editorViewController?.isCollaborateUnavailable ?? true
-	}
-	
 	var isFilterOn: Bool {
 		return editorViewController?.isFilterOn ?? false
 	}
@@ -286,10 +282,6 @@ extension MainCoordinator {
 		editorViewController?.deleteCompletedRows()
 	}
 	
-	func collaborate() {
-		editorViewController?.collaborate()
-	}
-	
 	func share() {
 		editorViewController?.share()
 	}
@@ -491,7 +483,6 @@ extension NSToolbarItem.Identifier {
 	static let moveDown = NSToolbarItem.Identifier("io.vincode.Zavala.moveDown")
 	static let printDoc = NSToolbarItem.Identifier("io.vincode.Zavala.printDoc")
 	static let printList = NSToolbarItem.Identifier("io.vincode.Zavala.printList")
-	static let collaborate = NSToolbarItem.Identifier("io.vincode.Zavala.share")
 	static let share = NSToolbarItem.Identifier("io.vincode.Zavala.sendCopy")
 	static let getInfo = NSToolbarItem.Identifier("io.vincode.Zavala.getInfo")
 }

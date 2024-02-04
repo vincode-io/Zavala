@@ -84,14 +84,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return outline?.isFocusOutUnavailable() ?? true
 	}
 	
-	var isCollaborateUnavailable: Bool {
-		return outline == nil || !outline!.isCloudKit
-	}
-	
-	var isDocumentCollaborating: Bool {
-		return outline?.iCollaborating ?? false
-	}
-	
 	var isFilterOn: Bool {
 		return outline?.isFilterOn ?? false
 	}
@@ -1307,22 +1299,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		present(controller, animated: true)
 	}
 	
-	@objc func collaborate(_ sender: Any? = nil) {
-		guard let outline else { return }
-		
-		AccountManager.shared.cloudKitAccount?.prepareCloudSharingController(document: .outline(outline)) { result in
-			switch result {
-			case .success(let sharingController):
-				sharingController.popoverPresentationController?.sourceView = sender as? UIView
-				sharingController.delegate = self
-				sharingController.availablePermissions = [.allowReadWrite]
-				self.present(sharingController, animated: true)
-			case .failure(let error):
-				self.presentError(error)
-			}
-		}
-	}
-	
 	@objc func showOutlineGetInfo() {
 		guard let outline else { return }
 		delegate?.showGetInfo(self, outline: outline)
@@ -2089,13 +2065,6 @@ private extension EditorViewController {
 		outlineActions.append(collapseAllInOutlineAction)
 		
 		var shareActions = [UIMenuElement]()
-
-		if !isCollaborateUnavailable {
-			let collaborateAction = UIAction(title: .collaborateEllipsisControlLabel, image: .statelessCollaborate) { [weak self] _ in
-				self?.collaborate(self?.moreMenuButton)
-			}
-			shareActions.append(collaborateAction)
-		}
 
 		let shareAction = UIAction(title: .shareEllipsisControlLabel, image: .share) { [weak self] _ in
 			self?.share(self?.moreMenuButton)

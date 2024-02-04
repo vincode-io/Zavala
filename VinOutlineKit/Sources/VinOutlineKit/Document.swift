@@ -116,6 +116,28 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
+	public var isCloudKit: Bool {
+		switch self {
+		case .outline(let outline):
+			return outline.isCloudKit
+		}
+	}
+	
+	public var shareRecord: CKShare? {
+		get {
+			switch self {
+			case .outline(let outline):
+				return outline.cloudKitShareRecord
+			}
+		}
+		set {
+			switch self {
+			case .outline(let outline):
+				outline.cloudKitShareRecord = newValue
+			}
+		}
+	}
+	
 	var shareRecordID: CKRecord.ID? {
 		get {
 			switch self {

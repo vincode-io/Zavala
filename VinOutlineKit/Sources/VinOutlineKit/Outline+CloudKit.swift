@@ -37,6 +37,24 @@ extension Outline: VCKModel {
         return CKRecord.ID(recordName: id.description, zoneID: zoneID!)
     }
     
+	public var cloudKitShareRecord: CKShare? {
+		get {
+			if let cloudKitShareRecordData {
+				return try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKShare.self, from: cloudKitShareRecordData)
+			} else {
+				return nil
+			}
+		}
+		set {
+			if let newValue {
+				cloudKitShareRecordData = try? NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: false)
+			} else {
+				cloudKitShareRecordData = nil
+			}
+
+		}
+	}
+	
 	func beginCloudKitBatchRequest() {
 		batchCloudKitRequests += 1
 	}

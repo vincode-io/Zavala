@@ -336,6 +336,15 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			}
 		}
 	}
+	
+	public var cloudKitShareRecordData: Data? {
+		didSet {
+			if cloudKitShareRecordData != oldValue {
+				documentSharingDidChange()
+				documentMetaDataDidChange()
+			}
+		}
+	}
 
 	public var rows: [Row] {
 		get {
@@ -557,6 +566,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		case cloudKitZoneName
 		case cloudKitZoneOwner
 		case cloudKitShareRecordName
+		case cloudKitShareRecordData
 	}
 
 	var zoneID: CKRecordZone.ID? {

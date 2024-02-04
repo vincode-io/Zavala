@@ -175,28 +175,11 @@ public extension VCKZone {
     }
 
 	/// Fetch a CKRecord by using its externalID
-	@available(*, deprecated, renamed: "fetch()", message: "Move to the new async version.")
-	func fetch(externalID: String, completion: @escaping (Result<CKRecord, Error>) -> Void) {
-		Task { @MainActor in
-			do {
-				let record = try await fetch(externalID: externalID)
-				completion(.success(record))
-			} catch {
-				completion(.failure(error))
-			}
-		}
-	}
-	
-	/// Fetch a CKRecord by using its externalID
-	func fetch(externalID: String) async throws -> CKRecord {
+	func fetch(externalID: String) async throws -> CKRecord? {
 		let recordID = CKRecord.ID(recordName: externalID, zoneID: zoneID)
 		
 		do {
-			if let record = try await database?.record(for: recordID) {
-				return record
-			} else {
-				throw VCKError.corruptAccount
-			}
+			return try await database?.record(for: recordID)
 		} catch {
 			switch VCKResult.refine(error) {
 			case .zoneNotFound:
