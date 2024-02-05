@@ -19,8 +19,10 @@ class EditorDisclosureButton: UIButton {
 	private let pointerInteractionDelegate = EditorDisclosureButtonInteractionDelegate()
 		
 	func configure() {
-		self.configuration?.image = .disclosure
+		self.setImage(.disclosure, for: .normal)
 		self.tintColor = .accessoryColor
+		self.imageView?.contentMode = .center
+		self.imageView?.clipsToBounds = false
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.addInteraction(UIPointerInteraction(delegate: pointerInteractionDelegate))
 		
