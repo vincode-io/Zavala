@@ -326,11 +326,11 @@ private extension EditorRowContentView {
 			if traitCollection.userInterfaceIdiom == .mac {
 				switch config.rowIndentSize {
 				case .small:
-					indentAdjustment = -6
+					indentAdjustment = -5
 				case .medium:
-					indentAdjustment = -9
+					indentAdjustment = -8
 				default:
-					indentAdjustment = -12
+					indentAdjustment = -11
 				}
 			} else {
 				switch config.rowIndentSize {
