@@ -222,21 +222,6 @@ public extension VCKZone {
 	}
 
 	
-	@available(*, deprecated, renamed: "modify()", message: "Move to the new async version.")
-	func modify(modelsToSave: [VCKModel],
-				recordIDsToDelete: [CKRecord.ID],
-				strategy: VCKModifyStrategy,
-				completion: @escaping (Result<([CKRecord], [CKRecord.ID]), Error>) -> Void) {
-		Task { @MainActor in
-			do {
-				let result = try await modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy)
-				completion(.success(result))
-			} catch {
-				completion(.failure(error))
-			}
-		}
-	}
-	
 	/// Modify and delete the supplied CKRecords and CKRecord.IDs
 	func modify(modelsToSave: [VCKModel], recordIDsToDelete: [CKRecord.ID], strategy: VCKModifyStrategy) async throws -> ([CKRecord], [CKRecord.ID]) {
 		guard !(modelsToSave.isEmpty && recordIDsToDelete.isEmpty) else {

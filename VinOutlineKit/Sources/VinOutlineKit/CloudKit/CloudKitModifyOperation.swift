@@ -33,16 +33,14 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 	}
 	
 	override func run() {
-		DispatchQueue.global().async {
+		Task {
 			guard let requests = CloudKitActionRequest.loadRequests(), !requests.isEmpty else {
-				DispatchQueue.main.async {
-					self.operationDelegate?.operationDidComplete(self)
-				}
+				informOperationDelegateOfCompletion()
 				return
 			}
-			DispatchQueue.main.async {
-				self.send(requests: requests)
-			}
+
+			await send(requests: requests)
+			informOperationDelegateOfCompletion()
 		}
 	}
 	
@@ -52,28 +50,26 @@ class CloudKitModifyOperation: BaseMainThreadOperation {
 
 private extension CloudKitModifyOperation {
 	
-	func send(requests: Set<CloudKitActionRequest>) {
+	@MainActor
+	func send(requests: Set<CloudKitActionRequest>) async {
 		logger.info("Sending \(requests.count) requests.")
 		
-		let loadedDocuments = loadAndStageEntities(requests: requests)
+		let loadedDocuments = loadDocumentsAndStageModifications(requests: requests)
 
 		// Send the grouped changes
 		
-		var leftOverRequests = requests
-		
-		let group = DispatchGroup()
-		for zoneID in modifications.keys {
-			group.enter()
-
-			let cloudKitZone = cloudKitManager.findZone(zoneID: zoneID)
-			let (modelsToSave, recordIDsToDelete) = modifications[zoneID]!
-
-			let strategy = VCKModifyStrategy.onlyIfServerUnchanged
-			cloudKitZone.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy) { [weak self] result in
-				guard let self else { return }
+		let (leftOverRequests, errors) = await withTaskGroup(of: CloudKitActionRequest.self, returning: (Set<CloudKitActionRequest>, [Error]).self) { taskGroup in
+			var leftOverRequests = requests
+			var errors = [Error]()
+			
+			for zoneID in modifications.keys {
+				let cloudKitZone = cloudKitManager.findZone(zoneID: zoneID)
+				let (modelsToSave, recordIDsToDelete) = modifications[zoneID]!
 				
-				switch result {
-				case .success(let (completedSaves, completedDeletes)):
+				let strategy = VCKModifyStrategy.onlyIfServerUnchanged
+				
+				do {
+					let (completedSaves, completedDeletes) = try await cloudKitZone.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy)
 					self.updateSyncMetaData(savedRecords: completedSaves)
 					
 					let savedEntityIDs = completedSaves.compactMap { EntityID(description: $0.recordID.recordName) }
@@ -81,36 +77,30 @@ private extension CloudKitModifyOperation {
 					
 					let deletedEntityIDs = completedDeletes.compactMap { EntityID(description: $0.recordName) }
 					leftOverRequests.subtract(deletedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
-				case .failure(let error):
-					self.errors.append(error)
+				} catch {
+					errors.append(error)
 				}
-				
-				group.leave()
 			}
+			
+			return (leftOverRequests, errors)
 		}
 		
-		group.notify(queue: DispatchQueue.main) {
-			loadedDocuments.forEach { $0.unload() }
+		self.errors = errors
+		loadedDocuments.forEach { $0.unload() }
 			
-			DispatchQueue.global().async {
-				self.logger.info("Saving \(leftOverRequests.count) requests.")
-
-				CloudKitActionRequest.save(requests: leftOverRequests)
+		Task {
+			self.logger.info("Saving \(leftOverRequests.count) requests.")
+			CloudKitActionRequest.save(requests: leftOverRequests)
+		}
 				
-				for mods in self.modifications.values {
-					for save in mods.0 {
-						save.clearSyncData()
-					}
-				}
-				
-				DispatchQueue.main.async {
-					self.operationDelegate?.operationDidComplete(self)
-				}
+		for mods in self.modifications.values {
+			for save in mods.0 {
+				save.clearSyncData()
 			}
 		}
 	}
 	
-	func loadAndStageEntities(requests: Set<CloudKitActionRequest>) -> [Document] {
+	func loadDocumentsAndStageModifications(requests: Set<CloudKitActionRequest>) -> [Document] {
 		var loadedDocuments = [Document]()
 		let combinedRequests = combine(requests: requests)
 
