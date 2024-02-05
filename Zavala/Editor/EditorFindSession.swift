@@ -79,7 +79,6 @@ class EditorFindSession: UIFindSession {
 	}
 	
 	override func replaceAll(searchQuery: String, replacementString: String, options: UITextSearchOptions?) {
-		guard let outline = delegate.outline else { return }
 		delegate.replaceAllSearchResults(with: replacementString)
 	}
 	
