@@ -178,7 +178,9 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	
 	@objc func sync() {
 		if AccountManager.shared.isSyncAvailable {
-			AccountManager.shared.sync()
+			Task {
+				await AccountManager.shared.sync()
+			}
 		}
 		collectionView?.refreshControl?.endRefreshing()
 	}

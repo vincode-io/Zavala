@@ -3,7 +3,7 @@
 //
 //  Created by Maurice Parker on 3/5/21.
 //
-
+#if canImport(UIKit)
 import UIKit
 
 public extension UIColor {
@@ -52,3 +52,5 @@ private extension UIColor {
 	}
 	
 }
+
+#endif

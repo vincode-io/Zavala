@@ -298,7 +298,9 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 	
 	@objc func sync() {
-		AccountManager.shared.sync()
+		Task {
+			await AccountManager.shared.sync()
+		}
 	}
 	
 	@objc func createOutline() {

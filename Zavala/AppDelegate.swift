@@ -343,16 +343,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-		DispatchQueue.main.async {
+		if UIApplication.shared.applicationState == .background {
+			AccountManager.shared.resume()
+		}
+		Task {
+			await AccountManager.shared.receiveRemoteNotification(userInfo: userInfo)
 			if UIApplication.shared.applicationState == .background {
-				AccountManager.shared.resume()
+				AccountManager.shared.suspend()
 			}
-			AccountManager.shared.receiveRemoteNotification(userInfo: userInfo) {
-				if UIApplication.shared.applicationState == .background {
-					AccountManager.shared.suspend()
-				}
-				completionHandler(.newData)
-			}
+			completionHandler(.newData)
 		}
 	}
 	
@@ -441,7 +440,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	@objc func syncCommand(_ sender: Any?) {
-		AccountManager.shared.sync()
+		Task {
+			await AccountManager.shared.sync()
+		}
 	}
 
 	@objc func importOPMLCommand(_ sender: Any?) {

@@ -1159,7 +1159,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc func sync() {
 		if AccountManager.shared.isSyncAvailable {
-			AccountManager.shared.sync()
+			Task {
+				await AccountManager.shared.sync()
+			}
 		}
 		collectionView?.refreshControl?.endRefreshing()
 	}
@@ -1930,11 +1932,15 @@ extension EditorViewController: UICloudSharingControllerDelegate {
 	}
 	
 	func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
-		AccountManager.shared.sync()
+		Task {
+			await AccountManager.shared.sync()
+		}
 	}
 	
 	func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
-		AccountManager.shared.sync()
+		Task {
+			await AccountManager.shared.sync()
+		}
 	}
 
 }

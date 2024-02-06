@@ -125,13 +125,15 @@ public final class Account: NSObject, Identifiable, Codable {
 		}
 		
 		if firstTime {
-			cloudKitManager?.firstTimeSetup()
-			cloudKitManager?.sync()
+			Task { 
+				await cloudKitManager?.firstTimeSetup()
+				await cloudKitManager?.sync()
+			}
 		}
 	}
 	
-	public func userDidAcceptCloudKitShareWith(_ shareMetadata: CKShare.Metadata) {
-		cloudKitManager?.userDidAcceptCloudKitShareWith(shareMetadata)
+	public func userDidAcceptCloudKitShareWith(_ shareMetadata: CKShare.Metadata) async {
+		await cloudKitManager?.userDidAcceptCloudKitShareWith(shareMetadata)
 	}
 
 	public func generateCKShare(for document: Document) async throws -> CKShare {

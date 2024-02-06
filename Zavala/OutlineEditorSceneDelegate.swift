@@ -106,7 +106,9 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 	
 	func windowScene(_ windowScene: UIWindowScene, userDidAcceptCloudKitShareWith shareMetadata: CKShare.Metadata) {
-		AccountManager.shared.cloudKitAccount?.userDidAcceptCloudKitShareWith(shareMetadata)
+		Task {
+			await AccountManager.shared.cloudKitAccount?.userDidAcceptCloudKitShareWith(shareMetadata)
+		}
 	}
 	
 	// MARK: API

@@ -289,7 +289,9 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	
 	@objc func sync() {
 		if AccountManager.shared.isSyncAvailable {
-			AccountManager.shared.sync()
+			Task {
+				await AccountManager.shared.sync()
+			}
 		}
 		collectionView?.refreshControl?.endRefreshing()
 	}
@@ -331,9 +333,9 @@ extension DocumentsViewController: UICloudSharingControllerDelegate {
 	}
 	
 	func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
-		Task { @MainActor in
+		Task {
 			try await Task.sleep(for: .seconds(2))
-			AccountManager.shared.sync()
+			await AccountManager.shared.sync()
 		}
 	}
 	

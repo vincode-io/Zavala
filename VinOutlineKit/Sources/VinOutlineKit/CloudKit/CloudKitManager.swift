@@ -13,6 +13,7 @@ import Foundation
 import OSLog
 import SystemConfiguration
 import CloudKit
+import Semaphore
 import VinCloudKit
 import VinUtility
 
@@ -51,8 +52,8 @@ public class CloudKitManager {
 
 	private var debouncer = Debouncer(duration: 5)
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
-	private let queue = MainThreadOperationQueue()
-
+	private let requestsSemaphore = AsyncSemaphore(value: 1)
+	
 	private var isSyncing = false
 	private var isNetworkAvailable: Bool {
 		var zeroAddress = sockaddr_in()
@@ -88,16 +89,15 @@ public class CloudKitManager {
 		outlineZone.migrateChangeToken()
 	}
 	
-	func firstTimeSetup() {
-		Task {
-			do {
-				let _ = try await outlineZone.fetchRecordZone()
-				outlineZone.subscribeToZoneChanges()
-			} catch {
-				presentError(error)
-			}
+	func firstTimeSetup() async {
+		do {
+			// This will create the record zone if one doesn't exist
+			let _ = try await outlineZone.fetchRecordZone()
+			try await outlineZone.subscribeToZoneChanges()
+			try await subscribeToSharedDatabaseChanges()
+		} catch {
+			await presentError(error)
 		}
-		subscribeToSharedDatabaseChanges()
 	}
 	
 	func addRequest(_ request: CloudKitActionRequest) {
@@ -107,102 +107,116 @@ public class CloudKitManager {
 	}
 	
 	func addRequests(_ requests: Set<CloudKitActionRequest>) {
-		let operation = CloudKitQueueRequestsOperation(requests: requests)
-		
-		operation.completionBlock = { [weak self] op in
-			guard let self else { return }
-			if let error = (op as? BaseMainThreadOperation)?.error {
-				self.presentError(error)
+		Task {
+			await requestsSemaphore.wait()
+			defer { requestsSemaphore.signal() }
+
+			let queuedRequests: Set<CloudKitActionRequest>
+			
+			if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
+				let decoder = PropertyListDecoder()
+				if let decodedRequests = try? decoder.decode(Set<CloudKitActionRequest>.self, from: fileData) {
+					queuedRequests = decodedRequests
+				} else {
+					queuedRequests = Set<CloudKitActionRequest>()
+				}
 			} else {
-				debouncer.debounce { [weak self] in
-					guard let self, self.isNetworkAvailable else { return }
-					self.sendChanges(userInitiated: false) {
-						self.fetchAllChanges(userInitiated: false)
+				queuedRequests = Set<CloudKitActionRequest>()
+			}
+			
+			let mergedRequests = queuedRequests.union(requests)
+			CloudKitActionRequest.save(requests: mergedRequests)
+			
+			debouncer.debounce { [weak self] in
+				guard let self, self.isNetworkAvailable else { return }
+				Task {
+					do {
+						try await self.sendChanges(userInitiated: false)
+						try await self.fetchAllChanges(userInitiated: false)
+					} catch {
+						await self.presentError(error)
 					}
 				}
 			}
 		}
-		
-		self.queue.add(operation)
 	}
 	
-	func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
-		if let dbNote = CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo), dbNote.notificationType == .database {
-			
-			sendChanges(userInitiated: false) { [weak self] in
-				self?.fetchAllChanges(userInitiated: false, completion: completion)
+	func receiveRemoteNotification(userInfo: [AnyHashable : Any]) async {
+		await requestsSemaphore.wait()
+		defer { requestsSemaphore.signal() }
+
+		do {
+			if let dbNote = CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo), dbNote.notificationType == .database {
+				try await sendChanges(userInitiated: false)
+				try await fetchAllChanges(userInitiated: false)
+			} else if let zoneNote = CKRecordZoneNotification(fromRemoteNotificationDictionary: userInfo), zoneNote.notificationType == .recordZone {
+				guard let zoneId = zoneNote.databaseScope == .private ? outlineZone.zoneID : zoneNote.recordZoneID else {
+					return
+				}
+				try await sendChanges(userInitiated: false)
+				try await fetchChanges(userInitiated: false, zoneID: zoneId)
 			}
-			
-		} else if let zoneNote = CKRecordZoneNotification(fromRemoteNotificationDictionary: userInfo), zoneNote.notificationType == .recordZone {
-			
-			guard let zoneId = zoneNote.databaseScope == .private ? outlineZone.zoneID : zoneNote.recordZoneID else {
-				completion()
-				return
-			}
-			
-			sendChanges(userInitiated: false) { [weak self] in
-				self?.fetchChanges(userInitiated: false, zoneID: zoneId, completion: completion)
-			}
-			
-		} else {
-			
-			completion()
-			
+		} catch {
+			await presentError(error)
 		}
 	}
 	
-	func findZone(zoneID: CKRecordZone.ID) -> CloudKitOutlineZone {
-		if let zone = zones[zoneID] {
-			return zone
-		}
-		
-		let zone = CloudKitOutlineZone(container: container, database: container.sharedCloudDatabase, zoneID: zoneID)
-		zone.delegate = CloudKitOutlineZoneDelegate(account: account!, zoneID: zoneID)
-		zones[zoneID] = zone
-		return zone
-	}
-	
-	func sync(completion: (() -> Void)? = nil) {
+	func sync() async {
+		await requestsSemaphore.wait()
+		defer { requestsSemaphore.signal() }
+
 		guard isNetworkAvailable else {
-			completion?()
 			return
 		}
 		
 		cloudKitSyncWillBegin()
 
-		sendChanges(userInitiated: true) { [weak self] in
-			self?.fetchAllChanges(userInitiated: true) { [weak self] in
-				self?.cloudKitSyncDidComplete()
-				completion?()
-			}
+		do {
+			try await sendChanges(userInitiated: true)
+			try await fetchAllChanges(userInitiated: true)
+		} catch {
+			await presentError(error)
 		}
+		
+		cloudKitSyncDidComplete()
 	}
 	
-	func userDidAcceptCloudKitShareWith(_ shareMetadata: CKShare.Metadata) {
-		let op = CKAcceptSharesOperation(shareMetadatas: [shareMetadata])
-		op.qualityOfService = CloudKitOutlineZone.qualityOfService
+	func userDidAcceptCloudKitShareWith(_ shareMetadata: CKShare.Metadata) async {
+		await requestsSemaphore.wait()
+		defer { requestsSemaphore.signal() }
 		
-		op.acceptSharesResultBlock = { [weak self] result in
+		return await withCheckedContinuation { continuation in
+			let op = CKAcceptSharesOperation(shareMetadatas: [shareMetadata])
+			op.qualityOfService = CloudKitOutlineZone.qualityOfService
 			
-			guard let self else { return }
-			
-			switch result {
-			case .success:
-				let zoneID = shareMetadata.share.recordID.zoneID
-				self.cloudKitSyncWillBegin()
-				DispatchQueue.main.async {
-					self.fetchChanges(userInitiated: true, zoneID: zoneID) { [weak self] in
-						self?.cloudKitSyncDidComplete()
+			op.acceptSharesResultBlock = { [weak self] result in
+				guard let self else { return }
+				
+				switch result {
+				case .success:
+					let zoneID = shareMetadata.share.recordID.zoneID
+					Task {
+						self.cloudKitSyncWillBegin()
+						do {
+							try await self.fetchChanges(userInitiated: true, zoneID: zoneID)
+							self.cloudKitSyncDidComplete()
+							continuation.resume()
+						} catch {
+							await self.presentError(error)
+							self.cloudKitSyncDidComplete()
+							continuation.resume()
+						}
+					}
+				case .failure(let error):
+					Task {
+						await self.presentError(error)
+						continuation.resume()
 					}
 				}
-			case .failure(let error):
-				DispatchQueue.main.async {
-					self.presentError(error)
-				}
 			}
+			
+			container.add(op)
 		}
-		
-		container.add(op)
 	}
 	
 	func generateCKShare(for document: Document) async throws -> CKShare {
@@ -214,8 +228,8 @@ public class CloudKitManager {
 		return try await zone.generateCKShare(for: document)
 	}
 	
-	func resume() {
-		sync()
+	func resume() async {
+		await sync()
 	}
 	
 	func suspend() {
@@ -261,6 +275,7 @@ public class CloudKitManager {
 
 private extension CloudKitManager {
 	
+	@MainActor
 	func presentError(_ error: Error) {
 		errorHandler?.presentError(error, title: "CloudKit Syncing Error")
 	}
@@ -273,135 +288,325 @@ private extension CloudKitManager {
 		NotificationCenter.default.post(name: .CloudKitSyncDidComplete, object: self, userInfo: nil)
 	}
 
-	func sendChanges(userInitiated: Bool, completion: @escaping (() -> Void)) {
+	func findZone(zoneID: CKRecordZone.ID) -> CloudKitOutlineZone {
+		if let zone = zones[zoneID] {
+			return zone
+		}
+		
+		let zone = CloudKitOutlineZone(container: container, database: container.sharedCloudDatabase, zoneID: zoneID)
+		zone.delegate = CloudKitOutlineZoneDelegate(account: account!, zoneID: zoneID)
+		zones[zoneID] = zone
+		return zone
+	}
+	
+	@MainActor
+	func sendChanges(userInitiated: Bool) async throws {
 		isSyncing = true
 
+		guard let requests = CloudKitActionRequest.loadRequests(), !requests.isEmpty else {
+			return
+		}
+		
 		#if canImport(UIKit)
 		let completeProcessing = { [weak self] in
 			guard let self else {
-				completion()
 				return
 			}
 			
 			self.isSyncing = false
-			
-			UIApplication.shared.endBackgroundTask(self.sendChangesBackgroundTaskID)
 			self.sendChangesBackgroundTaskID = UIBackgroundTaskIdentifier.invalid
 			
-			completion()
-		}
-
-		let operation = CloudKitModifyOperation()
-
-		self.sendChangesBackgroundTaskID = UIApplication.shared.beginBackgroundTask { [weak self] in
-			DispatchQueue.main.async {
-				operation.cancel()
+			Task { @MainActor in
+				UIApplication.shared.endBackgroundTask(self.sendChangesBackgroundTaskID)
 			}
-			completeProcessing()
+		}
+		
+		self.sendChangesBackgroundTaskID = UIApplication.shared.beginBackgroundTask { [weak self] in
 			self?.logger.info("CloudKit sync processing terminated for running too long.")
 		}
 		#endif
 		
-		operation.completionBlock = { [weak self] op in
-			if let errors = (op as? CloudKitModifyOperation)?.errors {
-				for error in errors {
-					if userInitiated {
-						self?.presentError(error)
-					}
-				}
+		logger.info("Sending \(requests.count) requests.")
+		
+		let (loadedDocuments, modifications) = loadDocumentsAndStageModifications(requests: requests)
+
+		// Send the grouped changes
+		
+		let leftOverRequests = try await withThrowingTaskGroup(of: CloudKitActionRequest.self, returning: Set<CloudKitActionRequest>.self) { taskGroup in
+			var leftOverRequests = requests
+			
+			for zoneID in modifications.keys {
+				let cloudKitZone = findZone(zoneID: zoneID)
+				let (modelsToSave, recordIDsToDelete) = modifications[zoneID]!
+				
+				let strategy = VCKModifyStrategy.onlyIfServerUnchanged
+				
+				let (completedSaves, completedDeletes) = try await cloudKitZone.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy)
+				self.updateSyncMetaData(savedRecords: completedSaves)
+				
+				let savedEntityIDs = completedSaves.compactMap { EntityID(description: $0.recordID.recordName) }
+				leftOverRequests.subtract(savedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
+				
+				let deletedEntityIDs = completedDeletes.compactMap { EntityID(description: $0.recordName) }
+				leftOverRequests.subtract(deletedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
 			}
 			
-			#if canImport(UIKit)
-			completeProcessing()
-			#else
-			completion()
-			#endif
+			return leftOverRequests
 		}
 		
-		self.queue.add(operation)
+		loadedDocuments.forEach { $0.unload() }
+			
+		self.logger.info("Saving \(leftOverRequests.count) requests.")
+		CloudKitActionRequest.save(requests: leftOverRequests)
+				
+		for mods in modifications.values {
+			for save in mods.0 {
+				save.clearSyncData()
+			}
+		}
+
+		completeProcessing()
 	}
 	
-	func fetchAllChanges(userInitiated: Bool, completion: (() -> Void)? = nil) {
+	func fetchAllChanges(userInitiated: Bool) async throws {
 		isSyncing = true
 		var zoneIDs = Set<CKRecordZone.ID>()
 		zoneIDs.insert(outlineZone.zoneID)
 		
-		let op = CKFetchDatabaseChangesOperation(previousServerChangeToken: sharedDatabaseChangeToken)
-		op.qualityOfService = CloudKitOutlineZone.qualityOfService
-		
-		op.recordZoneWithIDWasDeletedBlock = { zoneID in
-			zoneIDs.insert(zoneID)
-		}
-
-		op.recordZoneWithIDChangedBlock = { zoneID in
-			zoneIDs.insert(zoneID)
-		}
-		
-		op.fetchDatabaseChangesResultBlock = { [weak self] result in
-			guard let self else {
-				completion?()
-				return
+		return try await withCheckedThrowingContinuation { continuation in
+			let op = CKFetchDatabaseChangesOperation(previousServerChangeToken: sharedDatabaseChangeToken)
+			op.qualityOfService = CloudKitOutlineZone.qualityOfService
+			
+			op.recordZoneWithIDWasDeletedBlock = { zoneID in
+				zoneIDs.insert(zoneID)
 			}
 			
-			switch result {
-			case .success((let token, _)):
-				let group = DispatchGroup()
+			op.recordZoneWithIDChangedBlock = { zoneID in
+				zoneIDs.insert(zoneID)
+			}
+			
+			op.fetchDatabaseChangesResultBlock = { [weak self] result in
+				guard let self else {
+					continuation.resume()
+					return
+				}
 				
-				for zoneID in zoneIDs {
-					group.enter()
-					DispatchQueue.main.async {
-						self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID) {
-							group.leave()
+				switch result {
+				case .success((let token, _)):
+					let zoneIDs = zoneIDs
+					Task {
+						await withTaskGroup(of: CKRecordZone.ID.self) { taskGroup in
+							for zoneID in zoneIDs {
+								do {
+									try await self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID)
+								} catch {
+									await self.presentError(error)
+								}
+							}
 						}
+
+						self.sharedDatabaseChangeToken = token
+						self.isSyncing = false
+						continuation.resume()
 					}
+				case .failure(let error):
+					continuation.resume(throwing: error)
 				}
-					
-				group.notify(queue: DispatchQueue.main) {
-					self.sharedDatabaseChangeToken = token
-					completion?()
-					self.isSyncing = false
-				}
-			case .failure:
-				completion?()
+			}
+			
+			container.sharedCloudDatabase.add(op)
+		}
+		
+	}
+	
+	@MainActor
+	func fetchChanges(userInitiated: Bool, zoneID: CKRecordZone.ID) async throws {
+		let zone = findZone(zoneID: zoneID)
+		
+		do {
+			try await zone.fetchChangesInZone(incremental: false)
+		} catch {
+			if let ckError = error as? CKError, ckError.code == .zoneNotFound {
+				account?.deleteAllDocuments(with: zoneID)
+			} else {
+				throw error
+			}
+		}
+	}
+	
+	func loadDocumentsAndStageModifications(requests: Set<CloudKitActionRequest>) -> ([Document], [CKRecordZone.ID: ([VCKModel], [CKRecord.ID])]) {
+		var loadedDocuments = [Document]()
+		var modifications = [CKRecordZone.ID: ([VCKModel], [CKRecord.ID])]()
+
+		func addSave(_ zoneID: CKRecordZone.ID, _ model: VCKModel) {
+			if let (saves, deletes) = modifications[zoneID] {
+				var mutableSaves = saves
+				mutableSaves.append(model)
+				modifications[zoneID] = (mutableSaves, deletes)
+			} else {
+				var saves = [VCKModel]()
+				saves.append(model)
+				let deletes = [CKRecord.ID]()
+				modifications[zoneID] = (saves, deletes)
 			}
 		}
 		
-		container.sharedCloudDatabase.add(op)
+		func addDelete(_ request: CloudKitActionRequest) {
+			let zoneID = request.zoneID
+			let recordID = CKRecord.ID(recordName: request.id.description, zoneID: zoneID)
+			addDelete(zoneID, recordID)
+		}
+		
+		func addDelete(_ zoneID: CKRecordZone.ID, _ recordID: CKRecord.ID) {
+			if let (saves, deletes) = modifications[zoneID] {
+				var mutableDeletes = deletes
+				mutableDeletes.append(recordID)
+				modifications[zoneID] = (saves, mutableDeletes)
+			} else {
+				let saves = [VCKModel]()
+				var deletes = [CKRecord.ID]()
+				deletes.append(recordID)
+				modifications[zoneID] = (saves, deletes)
+			}
+		}
+
+		let combinedRequests = combine(requests: requests)
+
+		for documentUUID in combinedRequests.keys {
+			guard let combinedRequest = combinedRequests[documentUUID] else { continue }
+			
+			// If we don't have a document, we probably have a delete request to send.
+			// We don't have to continue processing since we cascade delete our rows.
+			guard let document = account?.findDocument(documentUUID: documentUUID) else {
+				if let docRequest = combinedRequest.documentRequest {
+					addDelete(docRequest)
+				}
+				continue
+			}
+			
+			document.load()
+			loadedDocuments.append(document)
+
+			guard let outline = document.outline, let zoneID = outline.zoneID else { continue }
+
+			// This has to be a save for the document
+			if combinedRequest.documentRequest != nil {
+				addSave(zoneID, outline)
+			}
+
+			// Now process all the rows
+			for rowRequest in combinedRequest.rowRequests {
+				if let row = outline.findRow(id: rowRequest.id.rowUUID) {
+					addSave(zoneID, row)
+				} else {
+					addDelete(rowRequest)
+				}
+			}
+			
+			// Now process all the images
+			for imageRequest in combinedRequest.imageRequests {
+				// if the row is gone, we don't need to process the images because we cascade our deletes
+				if let row = outline.findRow(id: imageRequest.id.rowUUID) {
+					if let image = row.findImage(id: imageRequest.id) {
+						addSave(zoneID, image)
+					} else {
+						addDelete(imageRequest)
+					}
+				}
+			}
+		}
+		
+		return (loadedDocuments, modifications)
 	}
 	
-	func fetchChanges(userInitiated: Bool, zoneID: CKRecordZone.ID, completion: (() -> Void)? = nil) {
-        let operation = CloudKitFetchChangesOperation(zoneID: zoneID)
-        
-        operation.completionBlock = { [weak self] op in
-            if let error = (op as? CloudKitModifyOperation)?.error {
-                if userInitiated {
-                    self?.presentError(error)
-                }
-            }
-            completion?()
-        }
-        
-        self.queue.add(operation)
+	func combine(requests: Set<CloudKitActionRequest>) -> [String: CombinedRequest] {
+		var combinedRequests = [String: CombinedRequest]()
+
+		for request in requests {
+			switch request.id {
+			case .document(_, let documentUUID):
+				if let combinedRequest = combinedRequests[documentUUID] {
+					combinedRequest.documentRequest = request
+					combinedRequests[documentUUID] = combinedRequest
+				} else {
+					let combinedRequest = CombinedRequest()
+					combinedRequest.documentRequest = request
+					combinedRequests[documentUUID] = combinedRequest
+				}
+			case .row(_, let documentUUID, _):
+				if let combinedRequest = combinedRequests[documentUUID] {
+					combinedRequest.rowRequests.append(request)
+					combinedRequests[documentUUID] = combinedRequest
+				} else {
+					let combinedRequest = CombinedRequest()
+					combinedRequest.rowRequests.append(request)
+					combinedRequests[documentUUID] = combinedRequest
+				}
+			case .image(_, let documentUUID, _, _):
+				if let combinedRequest = combinedRequests[documentUUID] {
+					combinedRequest.imageRequests.append(request)
+					combinedRequests[documentUUID] = combinedRequest
+				} else {
+					let combinedRequest = CombinedRequest()
+					combinedRequest.imageRequests.append(request)
+					combinedRequests[documentUUID] = combinedRequest
+				}
+			default:
+				fatalError()
+			}
+		}
+		
+		return combinedRequests
 	}
 	
-	func subscribeToSharedDatabaseChanges() {
+	// Don't update the sync metadata if we just performed a merge. When that happens what is in the cloud
+	// is out of sync with what we currently have a record of. We will immediately do a sync after this,
+	// where we will get a batch of data to sync. If we store the metadata of any merged records, we won't
+	// try to apply the received record changes in the various mode apply() methods.
+	func updateSyncMetaData(savedRecords: [CKRecord]) {
+		for savedRecord in savedRecords {
+			guard let entityID = EntityID(description: savedRecord.recordID.recordName),
+					let outline = account?.findDocument(entityID)?.outline else { continue }
+			
+			switch savedRecord.recordType {
+			case "Outline":
+				if !outline.isCloudKitMerging {
+					outline.cloudKitMetaData = savedRecord.metadata
+				}
+			case "Row":
+				if let row = outline.findRowContainer(entityID: entityID) as? Row, !row.isCloudKitMerging {
+					row.cloudKitMetaData = savedRecord.metadata
+				}
+			case "Image":
+				if let image = (outline.findRowContainer(entityID: entityID) as? Row)?.findImage(id: entityID), !image.isCloudKitMerging {
+					image.cloudKitMetaData = savedRecord.metadata
+				}
+			default:
+				break
+			}
+		}
+	}
+	
+	func subscribeToSharedDatabaseChanges() async throws {
 		let outlineSubscription = sharedDatabaseSubscription(recordType: Outline.CloudKitRecord.recordType)
 		let rowSubscription = sharedDatabaseSubscription(recordType: Row.CloudKitRecord.recordType)
 		let imageSubscription = sharedDatabaseSubscription(recordType: Image.CloudKitRecord.recordType)
 
-		let op = CKModifySubscriptionsOperation(subscriptionsToSave: [outlineSubscription, rowSubscription, imageSubscription], subscriptionIDsToDelete: nil)
-		op.qualityOfService = CloudKitOutlineZone.qualityOfService
-		
-		op.modifySubscriptionsResultBlock = { [weak self] result in
-			switch result {
-			case .success:
-				break
-			case .failure(let error):
-				self?.presentError(error)
+		return try await withCheckedThrowingContinuation { continuation in
+			let op = CKModifySubscriptionsOperation(subscriptionsToSave: [outlineSubscription, rowSubscription, imageSubscription], subscriptionIDsToDelete: nil)
+			op.qualityOfService = CloudKitOutlineZone.qualityOfService
+			
+			op.modifySubscriptionsResultBlock = { result in
+				switch result {
+				case .success:
+					continuation.resume()
+				case .failure(let error):
+					continuation.resume(throwing: error)
+				}
 			}
+			
+			container.sharedCloudDatabase.add(op)
 		}
-		
-		container.sharedCloudDatabase.add(op)
 	}
 	
 	func sharedDatabaseSubscription(recordType: String) -> CKDatabaseSubscription {

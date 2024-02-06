@@ -157,18 +157,20 @@ public final class AccountManager {
 		}
 	}
 	
-	public func receiveRemoteNotification(userInfo: [AnyHashable : Any], completion: @escaping (() -> Void)) {
-		cloudKitAccount?.cloudKitManager?.receiveRemoteNotification(userInfo: userInfo, completion: completion)
+	public func receiveRemoteNotification(userInfo: [AnyHashable : Any]) async {
+		await cloudKitAccount?.cloudKitManager?.receiveRemoteNotification(userInfo: userInfo)
 	}
 	
-	public func sync(completion: (() -> Void)? = nil) {
-		cloudKitAccount?.cloudKitManager?.sync(completion: completion)
+	public func sync() async {
+		await cloudKitAccount?.cloudKitManager?.sync()
 	}
 	
 	public func resume() {
-		cloudKitAccount?.cloudKitManager?.resume()
 		accountFiles.values.forEach { $0.resume() }
 		activeDocuments.forEach { $0.resume() }
+		Task {
+			await cloudKitAccount?.cloudKitManager?.resume()
+		}
 	}
 	
 	public func suspend() {

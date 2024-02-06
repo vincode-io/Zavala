@@ -51,7 +51,7 @@ public protocol VCKZone: AnyObject {
 	func generateRecordID() -> CKRecord.ID
 	
 	/// Subscribe to changes at a zone level
-	func subscribeToZoneChanges()
+	func subscribeToZoneChanges() async throws
 	
 }
 
@@ -158,20 +158,14 @@ public extension VCKZone {
 	}
 
 	/// Subscribes to zone changes
-	func subscribeToZoneChanges() {
+	func subscribeToZoneChanges() async throws {
 		let subscription = CKRecordZoneSubscription(zoneID: zoneID, subscriptionID: "\(zoneID.zoneName)-changes")
         
 		let info = CKSubscription.NotificationInfo()
         info.shouldSendContentAvailable = true
         subscription.notificationInfo = info
         
-		Task {
-			do {
-				try await save(subscription)
-			} catch {
-				self.logger.error("\(self.zoneID.zoneName, privacy: .public) subscribe to changes error: \(error.localizedDescription, privacy: .public)")
-			}
-		}
+		try await save(subscription)
     }
 
 	/// Fetch a CKRecord by using its externalID

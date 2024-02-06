@@ -169,7 +169,9 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	}
 
 	@objc func sync(_ sender: Any?) {
-		AccountManager.shared.sync()
+		Task {
+			await AccountManager.shared.sync()
+		}
 	}
 
 	@objc func insertImage(_ sender: Any?) {
@@ -301,9 +303,9 @@ extension EditorContainerViewController: UICloudSharingControllerDelegate {
 	}
 	
 	func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
-		Task { @MainActor in
+		Task { 
 			try await Task.sleep(for: .seconds(2))
-			AccountManager.shared.sync()
+			await AccountManager.shared.sync()
 		}
 	}
 	

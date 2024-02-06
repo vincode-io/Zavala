@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "semaphore",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/groue/Semaphore.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "b92ec84502425e11a72a93852fe9427f78dce81a"
+      }
+    },
+    {
       "identity" : "swift-collections",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections.git",
