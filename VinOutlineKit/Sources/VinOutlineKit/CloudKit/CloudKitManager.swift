@@ -304,6 +304,7 @@ private extension CloudKitManager {
 		isSyncing = true
 
 		guard let requests = CloudKitActionRequest.loadRequests(), !requests.isEmpty else {
+			logger.info("No pending requests to send.")
 			return
 		}
 		
