@@ -252,8 +252,9 @@ public class CloudKitManager {
 		sharedDatabaseChangeToken = nil
 	}
 	
-	// This should be able to be removed at some point. It is only here because at one time we didn't
-	// sync the CKShare records.
+	// We need this function because at one time we didn't store the CKShare records locally. We
+	// probably need to keep it, becaust we sometimes miss the CKShare when accepting a shared
+	// outline. This fixes that problem.
 	func addSyncRecordIfNeeded(document: Document) {
 		guard let outline = document.outline,
 			  outline.cloudKitShareRecordName != nil && outline.cloudKitShareRecordData == nil,
