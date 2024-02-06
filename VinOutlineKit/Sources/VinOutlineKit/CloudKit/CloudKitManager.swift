@@ -395,7 +395,7 @@ private extension CloudKitManager {
 				case .success((let token, _)):
 					let zoneIDs = zoneIDs
 					Task {
-						await withTaskGroup(of: CKRecordZone.ID.self) { taskGroup in
+						await withTaskGroup(of: Void.self) { taskGroup in
 							for zoneID in zoneIDs {
 								do {
 									try await self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID)
