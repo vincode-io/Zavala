@@ -463,7 +463,19 @@ extension MainSplitViewController: CollectionsDelegate {
 		
 		documentsViewController?.setDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch, completion: completion)
 	}
+
+	func showSettings(_: CollectionsViewController) {
+		showSettings()
+	}
 	
+	func importOPML(_: CollectionsViewController) {
+		importOPML()
+	}
+	
+	func createOutline(_: CollectionsViewController) {
+		createOutline()
+	}
+
 }
 
 // MARK: DocumentsDelegate
@@ -925,7 +937,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = .importOPMLControlLabel
 			item.toolTip = .importOPMLControlLabel
 			item.isBordered = true
-			item.action = #selector(importOPML)
+			item.action = #selector(importOPML as () -> ())
 			item.target = self
 			toolbarItem = item
 		case .newOutline:
@@ -937,7 +949,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = .newOutlineControlLabel
 			item.toolTip = .newOutlineControlLabel
 			item.isBordered = true
-			item.action = #selector(createOutline)
+			item.action = #selector(createOutline as () -> ())
 			item.target = self
 			toolbarItem = item
 		case .insertImage:

@@ -13,6 +13,9 @@ import VinUtility
 
 protocol CollectionsDelegate: AnyObject {
 	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?)
+	func showSettings(_: CollectionsViewController)
+	func importOPML(_: CollectionsViewController)
+	func createOutline(_: CollectionsViewController)
 }
 
 enum CollectionsSection: Int {
@@ -50,10 +53,6 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	private var applyChangeDebouncer = Debouncer(duration: 0.5)
 	private var reloadVisibleDebouncer = Debouncer(duration: 0.5)
 
-	private var mainSplitViewController: MainSplitViewController? {
-		return splitViewController as? MainSplitViewController
-	}
-	
 	private var addButton: UIButton!
 	private var importButton: UIButton!
 
@@ -186,15 +185,15 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	}
 	
 	@IBAction func showSettings(_ sender: Any) {
-		mainSplitViewController?.showSettings()
+		delegate?.showSettings(self)
 	}
 	
 	@objc func importOPML(_ sender: Any) {
-		mainSplitViewController?.importOPML()
+		delegate?.importOPML(self)
 	}
 
     @objc func createOutline(_ sender: Any) {
-        mainSplitViewController?.createOutline()
+        delegate?.createOutline(self)
     }
     
     @objc func multipleSelect() {
