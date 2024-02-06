@@ -168,7 +168,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	}
 	
 	@objc func cloudKitSyncDidComplete(_ note: Notification) {
-		DispatchQueue.main.async {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
 			self.iCloudActivityIndicatorView.stopAnimating()
 		}
 	}
