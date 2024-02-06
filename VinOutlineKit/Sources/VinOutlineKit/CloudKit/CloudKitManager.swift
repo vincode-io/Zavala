@@ -342,14 +342,23 @@ private extension CloudKitManager {
 				
 				let strategy = VCKModifyStrategy.onlyIfServerUnchanged
 				
-				let (completedSaves, completedDeletes) = try await cloudKitZone.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy)
-				self.updateSyncMetaData(savedRecords: completedSaves)
-				
-				let savedEntityIDs = completedSaves.compactMap { EntityID(description: $0.recordID.recordName) }
-				leftOverRequests.subtract(savedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
-				
-				let deletedEntityIDs = completedDeletes.compactMap { EntityID(description: $0.recordName) }
-				leftOverRequests.subtract(deletedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
+				do {
+					let (completedSaves, completedDeletes) = try await cloudKitZone.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy)
+					self.updateSyncMetaData(savedRecords: completedSaves)
+					
+					let savedEntityIDs = completedSaves.compactMap { EntityID(description: $0.recordID.recordName) }
+					leftOverRequests.subtract(savedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
+					
+					let deletedEntityIDs = completedDeletes.compactMap { EntityID(description: $0.recordName) }
+					leftOverRequests.subtract(deletedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
+				} catch {
+					if let ckError = error as? CKError, ckError.code == .userDeletedZone {
+						account?.deleteAllDocuments(with: zoneID)
+						throw VCKError.userDeletedZone
+					} else {
+						throw error
+					}
+				}
 			}
 			
 			return leftOverRequests
@@ -427,8 +436,9 @@ private extension CloudKitManager {
 		do {
 			try await zone.fetchChangesInZone(incremental: false)
 		} catch {
-			if let ckError = error as? CKError, ckError.code == .zoneNotFound {
+			if let ckError = error as? CKError, ckError.code == .userDeletedZone {
 				account?.deleteAllDocuments(with: zoneID)
+				throw VCKError.userDeletedZone
 			} else {
 				throw error
 			}

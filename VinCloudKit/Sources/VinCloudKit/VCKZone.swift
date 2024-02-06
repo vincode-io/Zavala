@@ -224,6 +224,8 @@ public extension VCKZone {
 
 		return try await withCheckedThrowingContinuation { continuation in
 			
+			var perRecordError: Error?
+			
 			var savedRecords = [CKRecord]()
 			var deletedRecordIDs = [CKRecord.ID]()
 			
@@ -244,6 +246,9 @@ public extension VCKZone {
 					guard let ckError = error as? CKError else { break }
 					
 					switch ckError.code {
+					case .zoneNotFound, .userDeletedZone:
+						perRecordError = error
+						op.cancel()
 					case .batchRequestFailed:
 						// Nothing wrong with this record, it was just part of the batch that failed.
 						if let model = modelsToSave.first(where: { $0.cloudKitRecordID == recordID }) {
@@ -272,8 +277,16 @@ public extension VCKZone {
 				switch result {
 				case .success:
 					deletedRecordIDs.append(recordID)
-				case .failure:
-					deletesToRetry.append(recordID)
+				case .failure(let error):
+					guard let ckError = error as? CKError else { break }
+					switch ckError.code {
+					case .zoneNotFound, .userDeletedZone:
+						perRecordError = error
+						op.cancel()
+					default:
+						deletesToRetry.append(recordID)
+
+					}
 				}
 			}
 			
@@ -283,25 +296,7 @@ public extension VCKZone {
 					return
 				}
 				
-				switch result {
-				case .success:
-					if modelsToRetry.isEmpty && deletesToRetry.isEmpty {
-						self.logger.info("Successfully modified \(savedRecords.count, privacy: .public) records and deleted \(deletedRecordIDs.count, privacy: .public) records.")
-						continuation.resume(returning: (savedRecords, deletedRecordIDs))
-					} else {
-						self.logger.info("Modify failed. \(modelsToRetry.count, privacy: .public) records resolved. Attempting Modify again...")
-						let modelsToSend = modelsToRetry
-						let deletesToSend = deletesToRetry
-						Task {
-							do {
-								let result = try await self.modify(modelsToSave: modelsToSend, recordIDsToDelete: deletesToSend, strategy: strategy)
-								continuation.resume(returning: result)
-							} catch {
-								continuation.resume(throwing: error)
-							}
-						}
-					}
-				case .failure(let error):
+				func handleError(_ error: Error) {
 					let modelsToSend = modelsToSave
 					let deletesToSend = recordIDsToDelete
 
@@ -318,7 +313,7 @@ public extension VCKZone {
 							}
 						}
 					case .userDeletedZone:
-						continuation.resume(throwing: VCKError.userDeletedZone)
+						continuation.resume(throwing: error)
 					case .retry(let timeToWait):
 						self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone modify retry in \(timeToWait, privacy: .public) seconds.")
 						Task {
@@ -372,6 +367,32 @@ public extension VCKZone {
 						continuation.resume(throwing: error)
 					}
 				}
+				
+				switch result {
+				case .success:
+					if modelsToRetry.isEmpty && deletesToRetry.isEmpty {
+						self.logger.info("Successfully modified \(savedRecords.count, privacy: .public) records and deleted \(deletedRecordIDs.count, privacy: .public) records.")
+						continuation.resume(returning: (savedRecords, deletedRecordIDs))
+					} else {
+						self.logger.info("Modify failed. \(modelsToRetry.count, privacy: .public) records resolved. Attempting Modify again...")
+						let modelsToSend = modelsToRetry
+						let deletesToSend = deletesToRetry
+						Task {
+							do {
+								let result = try await self.modify(modelsToSave: modelsToSend, recordIDsToDelete: deletesToSend, strategy: strategy)
+								continuation.resume(returning: result)
+							} catch {
+								continuation.resume(throwing: error)
+							}
+						}
+					}
+				case .failure(let error):
+					if let perRecordError {
+						handleError(perRecordError)
+					} else {
+						handleError(error)
+					}
+				}
 			}
 			
 			database?.add(op)
@@ -403,6 +424,8 @@ public extension VCKZone {
 		
 		return try await withCheckedThrowingContinuation { continuation in
 			
+			var perRecordError: Error?
+			
 			let zoneConfig = CKFetchRecordZoneChangesOperation.ZoneConfiguration()
 			zoneConfig.previousServerChangeToken = changeToken
 			let op = CKFetchRecordZoneChangesOperation(recordZoneIDs: [zoneID], configurationsByRecordZoneID: [zoneID: zoneConfig])
@@ -432,8 +455,9 @@ public extension VCKZone {
 				switch result {
 				case .success(let record):
 					updatedRecords.append(record)
-				case .failure:
-					break // I'm not even clear on how we could get an error here...
+				case .failure(let error):
+					perRecordError = error
+					op.cancel()
 				}
 			}
 			
@@ -468,10 +492,7 @@ public extension VCKZone {
 					return
 				}
 				
-				switch result {
-				case .success:
-					continuation.resume()
-				case .failure(let error):
+				func handleError(_ error: Error) {
 					switch VCKResult.refine(error) {
 					case .zoneNotFound:
 						Task {
@@ -484,7 +505,7 @@ public extension VCKZone {
 							}
 						}
 					case .userDeletedZone:
-						continuation.resume(throwing: VCKError.userDeletedZone)
+						continuation.resume(throwing: error)
 					case .retry(let timeToWait):
 						self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone fetch changes retry in \(timeToWait, privacy: .public) seconds.")
 						Task {
@@ -505,7 +526,17 @@ public extension VCKZone {
 					default:
 						continuation.resume(throwing: error)
 					}
-					
+				}
+				
+				switch result {
+				case .success:
+					continuation.resume()
+				case .failure(let error):
+					if let perRecordError {
+						handleError(perRecordError)
+					} else {
+						handleError(error)
+					}
 				}
 			}
 			
