@@ -47,7 +47,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var addButton: UIButton!
 	private var importButton: UIButton!
 
-	private let collectionViewQueue = MainThreadOperationQueue()
 	private var loadDocumentsDebouncer = Debouncer(duration: 0.5)
 	
 	private var lastClick: TimeInterval = Date().timeIntervalSince1970
