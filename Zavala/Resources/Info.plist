@@ -63,8 +63,8 @@
 	</dict>
 	<key>CKSharingSupported</key>
 	<true/>
-	<key>LSMultipleInstancesProhibited</key>
-	<true/>
+<!--	<key>LSMultipleInstancesProhibited</key>-->
+<!--	<true/>-->
 	<key>DeveloperEntitlements</key>
 	<string>$(DEVELOPER_ENTITLEMENTS)</string>
 	<key>INIntentsSupported</key>
