@@ -18,7 +18,6 @@ class MacOpenQuicklyCollectionsViewController: UICollectionViewController {
 	weak var delegate: MacOpenQuicklyCollectionsDelegate?
 	
 	var dataSource: UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>!
-	private let dataSourceQueue = MainThreadOperationQueue()
 
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,17 +116,13 @@ private extension MacOpenQuicklyCollectionsViewController {
 	func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<CollectionsItem>, section: CollectionsSection, animated: Bool) {
 		let selectedItems = collectionView.indexPathsForSelectedItems?.compactMap({ dataSource.itemIdentifier(for: $0) })
 		
-		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
-
-		operation.completionBlock = { [weak self] _ in
+		dataSource.apply(snapshot, to: section, animatingDifferences: animated) { [weak self] in
 			guard let self else { return }
 			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) }
 			for selectedIndexPath in selectedIndexPaths ?? [IndexPath]() {
 				self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
 			}
 		}
-		
-		dataSourceQueue.add(operation)
 	}
 	
 	func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {

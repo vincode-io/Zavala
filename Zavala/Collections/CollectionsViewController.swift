@@ -49,7 +49,6 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	}
 
 	var dataSource: UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>!
-	private let collectionViewQueue = MainThreadOperationQueue()
 	private var applyChangeDebouncer = Debouncer(duration: 0.5)
 	private var reloadVisibleDebouncer = Debouncer(duration: 0.5)
 
@@ -423,9 +422,7 @@ extension CollectionsViewController {
 	func applySnapshot(_ snapshot: NSDiffableDataSourceSectionSnapshot<CollectionsItem>, section: CollectionsSection, animated: Bool) {
 		let selectedItems = collectionView.indexPathsForSelectedItems?.compactMap({ dataSource.itemIdentifier(for: $0) })
 		
-		let operation = ApplySnapshotOperation(dataSource: dataSource, section: section, snapshot: snapshot, animated: animated)
-
-		operation.completionBlock = { [weak self] _ in
+		dataSource.apply(snapshot, to: section, animatingDifferences: animated) { [weak self] in
 			guard let self else { return }
 
 			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) } ?? [IndexPath]()
@@ -438,20 +435,31 @@ extension CollectionsViewController {
 				}
 			}
 		}
-		
-		collectionViewQueue.add(operation)
+
 	}
 	
 	func updateSelections(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?) {
         let items = containers?.map { CollectionsItem.item($0) } ?? [CollectionsItem]()
-		collectionViewQueue.add(SelectItemsOperation(dataSource: dataSource, collectionView: collectionView, items: items, animated: animated))
-        
+		let indexPaths = items.compactMap { dataSource.indexPath(for: $0) }
+
+		if !indexPaths.isEmpty {
+			for indexPath in indexPaths {
+				collectionView.selectItem(at: indexPath, animated: animated, scrollPosition: .centeredVertically)
+			}
+		} else {
+			collectionView.deselectAll()
+		}
+		
 		let containers = items.toContainers()
 		delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
 	}
 	
 	func reloadVisible() {
-		collectionViewQueue.add(ReloadVisibleItemsOperation(dataSource: dataSource, collectionView: collectionView))
+		let visibleIndexPaths = collectionView.indexPathsForVisibleItems
+		let items = visibleIndexPaths.compactMap { dataSource.itemIdentifier(for: $0) }
+		var snapshot = dataSource.snapshot()
+		snapshot.reloadItems(items)
+		dataSource.apply(snapshot)
 	}
 	
 }

@@ -50,7 +50,6 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 	private var documentContainers: [DocumentContainer]?
 
 	private var dataSource: UICollectionViewDiffableDataSource<Int, DocumentsItem>!
-	private let dataSourceQueue = MainThreadOperationQueue()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -137,7 +136,7 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 	func applySnapshot() {
 		guard let documentContainers else {
 			let snapshot = NSDiffableDataSourceSectionSnapshot<DocumentsItem>()
-			self.dataSourceQueue.add(ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: false))
+			self.dataSource.apply(snapshot, to: 0, animatingDifferences: false)
 			return
 		}
 		
@@ -168,8 +167,7 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 			var snapshot = NSDiffableDataSourceSectionSnapshot<DocumentsItem>()
 			snapshot.append(items)
 
-			let snapshotOp = ApplySnapshotOperation(dataSource: self.dataSource, section: 0, snapshot: snapshot, animated: false)
-			self.dataSourceQueue.add(snapshotOp)
+			self.dataSource.apply(snapshot, to: 0, animatingDifferences: false)
 		}
 	}
 }
