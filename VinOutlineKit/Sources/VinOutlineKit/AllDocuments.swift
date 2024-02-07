@@ -12,6 +12,11 @@ import Foundation
 #endif
 public final class AllDocuments: Identifiable, DocumentContainer {
 
+	public var documents: [Document] {
+		return account?.documents ?? []
+	}
+	
+
 	public var id: EntityID
 	public var name: String? = VinOutlineKitStringAssets.all
 	#if canImport(UIKit)

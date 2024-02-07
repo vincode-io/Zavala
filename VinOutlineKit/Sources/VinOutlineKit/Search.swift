@@ -30,43 +30,50 @@ public final class Search: Identifiable, DocumentContainer {
 	
 	private var searchQuery: CSSearchQuery?
 
+	public var documents: [Document] {
+		get async throws {
+			searchQuery?.cancel()
+			
+			guard searchText.count > 2 else {
+				return []
+			}
+			
+			return try await withCheckedThrowingContinuation { continuation in
+				var  foundItems = [CSSearchableItem]()
+				
+				let queryString = "title == \"*\(searchText)*\"c || textContent == \"*\(searchText)*\"c"
+				searchQuery = CSSearchQuery(queryString: queryString, attributes: nil)
+				
+				searchQuery?.foundItemsHandler = { items in
+					foundItems.append(contentsOf: items)
+				}
+				
+				searchQuery?.completionHandler = { error in
+					if let error {
+						continuation.resume(throwing: error)
+					} else {
+						let documents = foundItems.compactMap {
+							if let entityID = EntityID(description: $0.uniqueIdentifier) {
+								if let document = AccountManager.shared.findDocument(entityID) {
+									return document
+								}
+							}
+							return nil
+						}
+						continuation.resume(returning: documents)
+					}
+				}
+				
+				searchQuery?.start()
+			}
+		}
+		
+	}
+
+
 	public init(searchText: String) {
 		self.id = .search(searchText)
 		self.searchText = searchText
-	}
-	
-	public func documents(completion: @escaping (Result<[Document], Error>) -> Void) {
-		searchQuery?.cancel()
-
-		var searchableItems = [CSSearchableItem]()
-
-		guard searchText.count > 2 else {
-			completion(.success([Document]()))
-			return
-		}
-		
-		let queryString = "title == \"*\(searchText)*\"c || textContent == \"*\(searchText)*\"c"
-		searchQuery = CSSearchQuery(queryString: queryString, attributes: nil)
-
-		searchQuery?.foundItemsHandler = { items in
-			searchableItems.append(contentsOf: items)
-		}
-
-		searchQuery?.completionHandler = { [weak self] error in
-			DispatchQueue.main.async {
-				guard let self else {
-					completion(.success([Document]()))
-					return
-				}
-				if let error {
-					completion(.failure(error))
-				} else {
-					completion(.success(self.toDocuments(searchableItems)))
-				}
-			}
-		}
-
-		searchQuery?.start()
 	}
 	
 	deinit {

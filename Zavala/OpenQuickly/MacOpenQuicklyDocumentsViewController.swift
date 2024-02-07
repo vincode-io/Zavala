@@ -141,33 +141,32 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 		}
 		
 		let tags = documentContainers.tags
-		var selectionContainers: [DocumentProvider]
+		let selectionContainers: [DocumentProvider]
 		if !tags.isEmpty {
 			selectionContainers = [TagsDocuments(tags: tags)]
 		} else {
 			selectionContainers = documentContainers
 		}
-		
-		var documents = Set<Document>()
-		let group = DispatchGroup()
-		
-		for container in selectionContainers {
-			group.enter()
-			container.documents { result in
-				if let containerDocuments = try? result.get() {
-					documents.formUnion(containerDocuments)
+	
+		Task {
+			let documents = await withTaskGroup(of: DocumentProvider.self, returning: Set<Document>.self) { taskGroup in
+				var documents = Set<Document>()
+				for container in selectionContainers {
+					if let containerDocuments = try? await container.documents {
+						documents.formUnion(containerDocuments)
+					}
 				}
-				group.leave()
+				return documents
 			}
-		}
-		
-		group.notify(queue: DispatchQueue.main) {
+			
 			let sortedDocuments = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
 			let items = sortedDocuments.map { DocumentsItem.item($0) }
 			var snapshot = NSDiffableDataSourceSectionSnapshot<DocumentsItem>()
 			snapshot.append(items)
 
-			self.dataSource.apply(snapshot, to: 0, animatingDifferences: false)
+			Task { @MainActor in
+				dataSource.apply(snapshot, to: 0, animatingDifferences: false)
+			}
 		}
 	}
 }

@@ -343,10 +343,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-		if UIApplication.shared.applicationState == .background {
-			AccountManager.shared.resume()
-		}
-		Task {
+		Task { @MainActor in
+			if UIApplication.shared.applicationState == .background {
+				AccountManager.shared.resume()
+			}
 			await AccountManager.shared.receiveRemoteNotification(userInfo: userInfo)
 			if UIApplication.shared.applicationState == .background {
 				AccountManager.shared.suspend()

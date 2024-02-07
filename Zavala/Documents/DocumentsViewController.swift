@@ -8,6 +8,7 @@
 import UIKit
 import UniformTypeIdentifiers
 import CoreSpotlight
+import Semaphore
 import VinOutlineKit
 import VinUtility
 
@@ -47,6 +48,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var addButton: UIButton!
 	private var importButton: UIButton!
 
+	private let loadDocumentsSemaphore = AsyncSemaphore(value: 1)
 	private var loadDocumentsDebouncer = Debouncer(duration: 0.5)
 	
 	private var lastClick: TimeInterval = Date().timeIntervalSince1970
@@ -148,7 +150,10 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			self.documentContainers = documentContainers
 			updateUI()
 			collectionView.deselectAll()
-			loadDocuments(animated: false, isNavigationBranch: isNavigationBranch, completion: completion)
+			Task {
+				await loadDocuments(animated: false, isNavigationBranch: isNavigationBranch)
+				completion?()
+			}
 		}
 		
 		if documentContainers.count == 1, documentContainers.first is Search {
@@ -205,16 +210,18 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		}
 		
 		if let document {
-			loadDocuments(animated: true) {
-				self.selectDocument(document, animated: true)
+			Task {
+				await loadDocuments(animated: true)
+				selectDocument(document, animated: true)
 			}
 		}
 	}
 	
 	func createOutline(animated: Bool) {
 		guard let document = createOutlineDocument(title: "") else { return }
-		loadDocuments(animated: animated) {
-			self.selectDocument(document, isNew: true, animated: true)
+		Task {
+			await loadDocuments(animated: animated)
+			selectDocument(document, isNew: true, animated: true)
 		}
 	}
 
@@ -271,7 +278,9 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	@objc func documentTitleDidChange(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
 		reload(document: document)
-		self.loadDocuments(animated: true)
+		Task {
+			await loadDocuments(animated: true)
+		}
 	}
 	
 	@objc func documentUpdatedDidChange(_ note: Notification) {
@@ -447,12 +456,14 @@ extension DocumentsViewController {
 		}
 	}
 	
-	func loadDocuments(animated: Bool, isNavigationBranch: Bool = false, completion: (() -> Void)? = nil) {
+	func loadDocuments(animated: Bool, isNavigationBranch: Bool = false) async {
 		guard let documentContainers else {
-			completion?()
 			return
 		}
 		
+		await loadDocumentsSemaphore.wait()
+		defer { loadDocumentsSemaphore.signal() }
+
 		let tags = documentContainers.tags
 		var selectionContainers: [DocumentProvider]
 		if !tags.isEmpty {
@@ -461,63 +472,55 @@ extension DocumentsViewController {
 			selectionContainers = documentContainers
 		}
 		
-		var documents = Set<Document>()
-		let group = DispatchGroup()
-		
-		for container in selectionContainers {
-			group.enter()
-			container.documents { result in
-				if let containerDocuments = try? result.get() {
+		let documents = await withTaskGroup(of: DocumentProvider.self, returning: Set<Document>.self) { taskGroup in
+			var documents = Set<Document>()
+			for container in selectionContainers {
+				if let containerDocuments = try? await container.documents {
 					documents.formUnion(containerDocuments)
 				}
-				group.leave()
 			}
+			return documents
 		}
 		
-		group.notify(queue: DispatchQueue.main) {
-			let sortedDocuments = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
+		let sortedDocuments = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
 
-			guard animated else {
-				self.documents = sortedDocuments
-				self.collectionView.reloadData()
-				self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
-				completion?()
-				return
-			}
-			
-			let prevSelectedDoc = self.collectionView.indexPathsForSelectedItems?.map({ self.documents[$0.row] }).first
-
-			let diff = sortedDocuments.difference(from: self.documents).inferringMoves()
+		guard animated else {
 			self.documents = sortedDocuments
+			self.collectionView.reloadData()
+			self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
+			return
+		}
+		
+		let prevSelectedDoc = self.collectionView.indexPathsForSelectedItems?.map({ self.documents[$0.row] }).first
 
-			self.collectionView.performBatchUpdates {
-				for change in diff {
-					switch change {
-					case .insert(let offset, _, let associated):
-						if let associated {
-							self.collectionView.moveItem(at: IndexPath(row: associated, section: 0), to: IndexPath(row: offset, section: 0))
-						} else {
-							self.collectionView.insertItems(at: [IndexPath(row: offset, section: 0)])
-						}
-					case .remove(let offset, _, let associated):
-						if let associated {
-							self.collectionView.moveItem(at: IndexPath(row: offset, section: 0), to: IndexPath(row: associated, section: 0))
-						} else {
-							self.collectionView.deleteItems(at: [IndexPath(row: offset, section: 0)])
-						}
+		let diff = sortedDocuments.difference(from: self.documents).inferringMoves()
+		self.documents = sortedDocuments
+
+		self.collectionView.performBatchUpdates {
+			for change in diff {
+				switch change {
+				case .insert(let offset, _, let associated):
+					if let associated {
+						self.collectionView.moveItem(at: IndexPath(row: associated, section: 0), to: IndexPath(row: offset, section: 0))
+					} else {
+						self.collectionView.insertItems(at: [IndexPath(row: offset, section: 0)])
+					}
+				case .remove(let offset, _, let associated):
+					if let associated {
+						self.collectionView.moveItem(at: IndexPath(row: offset, section: 0), to: IndexPath(row: associated, section: 0))
+					} else {
+						self.collectionView.deleteItems(at: [IndexPath(row: offset, section: 0)])
 					}
 				}
 			}
-			
-			if let prevSelectedDoc, let index = self.documents.firstIndex(of: prevSelectedDoc) {
-				let indexPath = IndexPath(row: index, section: 0)
-				self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
-				self.collectionView.scrollToItem(at: indexPath, at: [], animated: true)
-			} else {
-				self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
-			}
-			
-			completion?()
+		}
+		
+		if let prevSelectedDoc, let index = self.documents.firstIndex(of: prevSelectedDoc) {
+			let indexPath = IndexPath(row: index, section: 0)
+			self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+			self.collectionView.scrollToItem(at: indexPath, at: [], animated: true)
+		} else {
+			self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
 		}
 	}
 	
@@ -569,7 +572,9 @@ private extension DocumentsViewController {
 	
 	func debounceLoadDocuments() {
 		loadDocumentsDebouncer.debounce { [weak self] in
-			self?.loadDocuments(animated: true)
+			Task {
+				await self?.loadDocuments(animated: true)
+			}
 		}
 	}
 	

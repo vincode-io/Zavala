@@ -116,14 +116,14 @@ class GetOutlinesIntentHandler: NSObject, ZavalaIntentHandler, GetOutlinesIntent
 
 		search = Search(searchText: searchText)
 		
-		search!.documents { result in
-			switch result {
-			case .success(let documents):
+		Task {
+			do {
+				let documents = try await search!.documents
 				self.filter(documents: documents, intent: intent, completion: completion)
-			case .failure:
+			} catch {
 				completion(.init(code: .failure, userActivity: nil))
 			}
-		}
+		}		
 	}
 	
 }

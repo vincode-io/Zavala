@@ -32,21 +32,16 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 	public weak var account: Account?
 	public weak var tag: Tag?
 	
+	public var documents: [Document] {
+		guard let tag, let documents = account?.documents else { return [] }
+		return documents.filter { $0.hasTag(tag) }
+	}
+
 	public init(account: Account, tag: Tag) {
 		self.id = .tagDocuments(account.id.accountID, tag.id)
 		self.account = account
 		self.tag = tag
 		self.name = tag.name
-	}
-	
-	public func documents(completion: @escaping (Result<[Document], Error>) -> Void) {
-		guard let tag else {
-			completion(.success([Document]()))
-			return
-		}
-		
-		let tagDocuments = account?.documents?.filter { $0.hasTag(tag) }
-		completion(.success(tagDocuments ?? [Document]()))
 	}
 	
 }

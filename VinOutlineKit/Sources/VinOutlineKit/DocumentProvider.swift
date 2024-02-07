@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol DocumentProvider {
-    func documents(completion: @escaping (Result<[Document], Error>) -> Void)
+	var documents: [Document] { get async throws }
 }
