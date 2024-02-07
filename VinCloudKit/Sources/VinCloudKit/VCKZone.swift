@@ -399,17 +399,6 @@ public extension VCKZone {
 		}
 	}
 	
-	func fetchChangesInZone(incremental: Bool = true, completion: @escaping (Result<Void, Error>) -> Void) {
-		Task { @MainActor in
-			do {
-				try await fetchChangesInZone(incremental: incremental)
-				completion(.success(()))
-			} catch {
-				completion(.failure(error))
-			}
-		}
-	}
-	
 	/// Fetch all the changes in the CKZone since the last time we checked
 	func fetchChangesInZone(incremental: Bool = true) async throws {
 

@@ -83,13 +83,13 @@ extension NSDataDetector {
 		try! self.init(types: result)
 	}
 	
-	func enumerateMatches(in text: String, completion: (DataDetectorResult) -> ()) {
+	func enumerateMatches(in text: String, match: (DataDetectorResult) -> ()) {
 		enumerateMatches(in: text, options: [], range: NSRange(location: 0, length: text.utf16.count)) { (result, _, _) in
 			guard let result else { return }
 			guard let range = Range(result.range, in: text) else { return }
 			let matchText = String(text[range])
-			guard let match = processMatch(result, matchText: matchText) else { return }
-			completion(match)
+			guard let dataDetectorResult = processMatch(result, matchText: matchText) else { return }
+			match(dataDetectorResult)
 		}
 	}
 	

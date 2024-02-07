@@ -34,8 +34,4 @@ public final class AllDocuments: Identifiable, DocumentContainer {
 		self.account = account
 	}
 	
-	public func documents(completion: @escaping (Result<[Document], Error>) -> Void) {
-		completion(.success(account?.documents ?? [Document]()))
-	}
-	
 }

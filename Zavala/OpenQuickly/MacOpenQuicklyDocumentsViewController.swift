@@ -63,7 +63,7 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 		applySnapshot()
 	}
 
-	func setDocumentContainers(_ documentContainers: [DocumentContainer], completion: (() -> Void)? = nil) {
+	func setDocumentContainers(_ documentContainers: [DocumentContainer]) {
 		self.documentContainers = documentContainers
 		collectionView.deselectAll()
 		applySnapshot()
