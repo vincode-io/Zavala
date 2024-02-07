@@ -38,7 +38,7 @@ public enum AccountError: LocalizedError {
 	}
 }
 
-public final class Account: NSObject, Identifiable, Codable {
+public final class Account: Identifiable, Equatable, Codable {
 
 	public var id: EntityID {
 		return EntityID.account(type.rawValue)
@@ -499,20 +499,6 @@ public final class Account: NSObject, Identifiable, Codable {
 	
 	public static func == (lhs: Account, rhs: Account) -> Bool {
 		return lhs.id == rhs.id
-	}
-	
-}
-
-// MARK: NSFilePresenter
-
-extension Account: NSFilePresenter {
-	
-	public var presentedItemURL: URL? {
-		return folder
-	}
-	
-	public var presentedItemOperationQueue: OperationQueue {
-		return operationQueue
 	}
 	
 }
