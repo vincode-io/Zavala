@@ -149,14 +149,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
 	}
 	
-	func handle(_ activity: NSUserActivity, isNavigationBranch: Bool) {
+	func handle(_ activity: NSUserActivity, isNavigationBranch: Bool) async {
 		guard let userInfo = activity.userInfo else { return }
-		handle(userInfo, isNavigationBranch: isNavigationBranch)
+		await handle(userInfo, isNavigationBranch: isNavigationBranch)
 	}
 
-	func handle(_ userInfo: [AnyHashable: Any], isNavigationBranch: Bool) {
+	func handle(_ userInfo: [AnyHashable: Any], isNavigationBranch: Bool) async {
 		if let searchIdentifier = userInfo[CSSearchableItemActivityIdentifier] as? String, let documentID = EntityID(description: searchIdentifier) {
-			handleDocument(documentID, isNavigationBranch: isNavigationBranch)
+			await handleDocument(documentID, isNavigationBranch: isNavigationBranch)
 			return
 		}
 		
@@ -184,44 +184,41 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			return
 		}
 		
-		collectionsViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch, animated: false) {
-			self.lastMainControllerToAppear = .documents
+		await collectionsViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch, animated: false)
+		lastMainControllerToAppear = .documents
 
-			guard let document = pin.document else {
-				return
-			}
-			
-			self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
+		guard let document = pin.document else {
+			return
 		}
+		
+		handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 	}
 	
-	func handleDocument(_ documentID: EntityID, isNavigationBranch: Bool) {
+	func handleDocument(_ documentID: EntityID, isNavigationBranch: Bool) async {
 		guard let account = AccountManager.shared.findAccount(accountID: documentID.accountID),
 			  let document = account.findDocument(documentID) else { return }
 		
 		if let collectionsTags = selectedTags, document.hasAnyTag(collectionsTags) {
 			self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 		} else if document.tagCount == 1, let tag = document.tags?.first {
-			collectionsViewController?.selectDocumentContainers([TagDocuments(account: account, tag: tag)], isNavigationBranch: true, animated: false) {
-				self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
-			}
+			await collectionsViewController?.selectDocumentContainers([TagDocuments(account: account, tag: tag)], isNavigationBranch: true, animated: false)
+			handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 		} else {
-			collectionsViewController?.selectDocumentContainers([AllDocuments(account: account)], isNavigationBranch: true, animated: false) {
-				self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
-			}
+			await collectionsViewController?.selectDocumentContainers([AllDocuments(account: account)], isNavigationBranch: true, animated: false)
+			handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 		}
 	}
 	
-	func handlePin(_ pin: Pin) {
+	func handlePin(_ pin: Pin) async {
 		guard let documentContainers = pin.containers else { return }
-		collectionsViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: true, animated: false) {
-			self.documentsViewController?.selectDocument(pin.document, isNavigationBranch: true, animated: false)
-		}
+		await collectionsViewController?.selectDocumentContainers(documentContainers, isNavigationBranch: true, animated: false)
+		documentsViewController?.selectDocument(pin.document, isNavigationBranch: true, animated: false)
 	}
 	
 	func importOPMLs(urls: [URL]) {
-		selectDefaultDocumentContainerIfNecessary {
-			self.documentsViewController?.importOPMLs(urls: urls)
+		Task {
+			await selectDefaultDocumentContainerIfNecessary()
+			documentsViewController?.importOPMLs(urls: urls)
 		}
 	}
 	
@@ -304,14 +301,16 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 	
 	@objc func createOutline() {
-		selectDefaultDocumentContainerIfNecessary() {
-			self.documentsViewController?.createOutline(animated: false)
+		Task {
+			await selectDefaultDocumentContainerIfNecessary()
+			documentsViewController?.createOutline(animated: false)
 		}
 	}
 	
 	@objc func importOPML() {
-		selectDefaultDocumentContainerIfNecessary() {
-			self.documentsViewController?.importOPML()
+		Task {
+			await selectDefaultDocumentContainerIfNecessary()
+			documentsViewController?.importOPML()
 		}
 	}
 	
@@ -423,8 +422,7 @@ extension MainSplitViewController: CollectionsDelegate {
 	func documentContainerSelectionsDidChange(_: CollectionsViewController,
 											  documentContainers: [DocumentContainer],
 											  isNavigationBranch: Bool,
-											  animated: Bool,
-											  completion: (() -> Void)? = nil) {
+											  animated: Bool) async {
 		
 		// The window might not be quite available at launch, so put a slight delay in to help it get there
 		DispatchQueue.main.async {
@@ -461,7 +459,7 @@ extension MainSplitViewController: CollectionsDelegate {
 			activityManager.invalidateSelectDocumentContainers()
 		}
 		
-		documentsViewController?.setDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch, completion: completion)
+		await documentsViewController?.setDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch)
 	}
 
 	func showSettings(_: CollectionsViewController) {
@@ -712,7 +710,9 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 
 		// If we are showing the Feeds and only the feeds start clearing stuff
 		if isCollapsed && viewController === collectionsViewController && lastMainControllerToAppear == .documents {
-			collectionsViewController?.selectDocumentContainers(nil, isNavigationBranch: false, animated: false)
+			Task {
+				await collectionsViewController?.selectDocumentContainers(nil, isNavigationBranch: false, animated: false)
+			}
 			return
 		}
 
@@ -730,7 +730,9 @@ extension MainSplitViewController: UINavigationControllerDelegate {
 extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 	
 	func quicklyOpenDocument(documentID: EntityID) {
-		handleDocument(documentID, isNavigationBranch: true)
+		Task {
+			await handleDocument(documentID, isNavigationBranch: true)
+		}
 	}
 	
 }
@@ -759,28 +761,24 @@ private extension MainSplitViewController {
 		}
 	}
 	
-	func selectDefaultDocumentContainerIfNecessary(completion: @escaping () -> Void) {
+	func selectDefaultDocumentContainerIfNecessary() async {
 		guard collectionsViewController?.selectedAccount == nil else {
-			completion()
 			return
 		}
 
-		selectDefaultDocumentContainer(completion: completion)
+		await selectDefaultDocumentContainer()
 	}
 	
-	func selectDefaultDocumentContainer(completion: @escaping () -> Void) {
+	func selectDefaultDocumentContainer() async {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		
 		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else {
-			completion()
 			return
 		}
 		
 		let documentContainer = account.documentContainers[0]
 		
-		collectionsViewController?.selectDocumentContainers([documentContainer], isNavigationBranch: true, animated: true) {
-			completion()
-		}
+		await collectionsViewController?.selectDocumentContainers([documentContainer], isNavigationBranch: true, animated: true)
 	}
 	
 	func cleanUpNavigationStacks() {
@@ -829,8 +827,10 @@ private extension MainSplitViewController {
 		
 		let pin = goBackwardStack.removeFirst()
 		lastPin = pin
-		collectionsViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false) {
-			self.documentsViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
+		
+		Task {
+			await collectionsViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false)
+			documentsViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
 		}
 	}
 	
@@ -847,8 +847,10 @@ private extension MainSplitViewController {
 		}
 		
 		let pin = goForwardStack.removeFirst()
-		collectionsViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false) {
-			self.documentsViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
+		
+		Task {
+			await collectionsViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false)
+			documentsViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
 		}
 	}
 	

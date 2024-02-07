@@ -55,17 +55,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		mainSplitViewController.startUp()
 
 		if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
-			mainSplitViewController.handle(userActivity, isNavigationBranch: true)
+			Task {
+				await mainSplitViewController.handle(userActivity, isNavigationBranch: true)
+			}
 			return
 		}
 		
 		if let url = connectionOptions.urlContexts.first?.url, let documentID = EntityID(url: url) {
-			mainSplitViewController.handleDocument(documentID, isNavigationBranch: true)
+			Task {
+				await mainSplitViewController.handleDocument(documentID, isNavigationBranch: true)
+			}
 			return
 		}
 		
 		if let userInfo = AppDefaults.shared.lastMainWindowState {
-			mainSplitViewController.handle(userInfo, isNavigationBranch: true)
+			Task {
+				await mainSplitViewController.handle(userInfo, isNavigationBranch: true)
+			}
 			AppDefaults.shared.lastMainWindowState = nil
 		}
 	}
@@ -86,12 +92,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 	
 	func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-		mainSplitViewController.handle(userActivity, isNavigationBranch: true)
+		Task {
+			await mainSplitViewController.handle(userActivity, isNavigationBranch: true)
+		}
 	}
 	
 	func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
 		if let url = urlContexts.first?.url, let documentID = EntityID(url: url) {
-			mainSplitViewController.handleDocument(documentID, isNavigationBranch: true)
+			Task {
+				await mainSplitViewController.handleDocument(documentID, isNavigationBranch: true)
+			}
 			return
 		}
 		

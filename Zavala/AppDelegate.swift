@@ -1090,7 +1090,9 @@ private extension AppDelegate {
 		let pin = history[index]
 		
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.handlePin(pin)
+			Task {
+				await mainSplitViewController.handlePin(pin)
+			}
 		} else {
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 			activity.userInfo = [Pin.UserInfoKeys.pin: pin.userInfo]

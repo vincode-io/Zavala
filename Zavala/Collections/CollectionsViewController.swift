@@ -12,7 +12,7 @@ import VinOutlineKit
 import VinUtility
 
 protocol CollectionsDelegate: AnyObject {
-	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?)
+	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool) async
 	func showSettings(_: CollectionsViewController)
 	func importOPML(_: CollectionsViewController)
 	func createOutline(_: CollectionsViewController)
@@ -108,7 +108,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		applyInitialSnapshot()
 	}
 	
-	func selectDocumentContainers(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)? = nil) {
+	func selectDocumentContainers(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool) async {
         collectionView.deselectAll()
         
         if let containers, containers.count > 1, traitCollection.userInterfaceIdiom == .pad {
@@ -127,7 +127,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 			clearSearchField()
 		}
 
-		updateSelections(containers, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
+		await updateSelections(containers, isNavigationBranch: isNavigationBranch, animated: animated)
 	}
 	
 	// MARK: Notifications
@@ -196,15 +196,19 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
     }
     
     @objc func multipleSelect() {
-        selectDocumentContainers(nil, isNavigationBranch: true, animated: true)
-        collectionView.allowsMultipleSelection = true
-        navigationItem.rightBarButtonItem = selectDoneBarButtonItem
+		Task {
+			await selectDocumentContainers(nil, isNavigationBranch: true, animated: true)
+			collectionView.allowsMultipleSelection = true
+			navigationItem.rightBarButtonItem = selectDoneBarButtonItem
+		}
     }
 
     @objc func multipleSelectDone() {
-        selectDocumentContainers(nil, isNavigationBranch: true, animated: true)
-        collectionView.allowsMultipleSelection = false
-        navigationItem.rightBarButtonItem = selectBarButtonItem
+		Task {
+			await selectDocumentContainers(nil, isNavigationBranch: true, animated: true)
+			collectionView.allowsMultipleSelection = false
+			navigationItem.rightBarButtonItem = selectBarButtonItem
+		}
     }
 
 	// MARK: API
@@ -276,7 +280,9 @@ extension CollectionsViewController {
         let items = selectedIndexes.compactMap { dataSource.itemIdentifier(for: $0) }
 		let containers = items.toContainers()
         
-        delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: true, animated: true, completion: nil)
+		Task {
+			await delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: true, animated: true)
+		}
     }
     
 	private func createLayout() -> UICollectionViewLayout {
@@ -428,7 +434,9 @@ extension CollectionsViewController {
 			let selectedIndexPaths = selectedItems?.compactMap { self.dataSource.indexPath(for: $0) } ?? [IndexPath]()
 			
 			if let selectedItems, !selectedItems.isEmpty, selectedIndexPaths.isEmpty {
-				self.delegate?.documentContainerSelectionsDidChange(self, documentContainers: [], isNavigationBranch: false, animated: true, completion: nil)
+				Task {
+					await self.delegate?.documentContainerSelectionsDidChange(self, documentContainers: [], isNavigationBranch: false, animated: true)
+				}
 			} else {
 				for selectedIndexPath in selectedIndexPaths {
 					self.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
@@ -438,7 +446,7 @@ extension CollectionsViewController {
 
 	}
 	
-	func updateSelections(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool, completion: (() -> Void)?) {
+	func updateSelections(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool) async {
         let items = containers?.map { CollectionsItem.item($0) } ?? [CollectionsItem]()
 		let indexPaths = items.compactMap { dataSource.indexPath(for: $0) }
 
@@ -451,7 +459,7 @@ extension CollectionsViewController {
 		}
 		
 		let containers = items.toContainers()
-		delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: isNavigationBranch, animated: animated, completion: completion)
+		await delegate?.documentContainerSelectionsDidChange(self, documentContainers: containers, isNavigationBranch: isNavigationBranch, animated: animated)
 	}
 	
 	func reloadVisible() {
@@ -469,14 +477,19 @@ extension CollectionsViewController {
 extension CollectionsViewController: CollectionsSearchCellDelegate {
 
 	func collectionsSearchDidBecomeActive() {
-		selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
+		Task {
+			await selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
+		}
 	}
 
 	func collectionsSearchDidUpdate(searchText: String?) {
-		if let searchText {
-			selectDocumentContainers([Search(searchText: searchText)], isNavigationBranch: false, animated: true)
-		} else {
-			selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
+		Task {
+			if let searchText {
+				await selectDocumentContainers([Search(searchText: searchText)], isNavigationBranch: false, animated: true)
+			} else {
+				await selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
+			}
+
 		}
 	}
 	

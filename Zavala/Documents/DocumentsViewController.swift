@@ -145,25 +145,21 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	
 	// MARK: API
 	
-	func setDocumentContainers(_ documentContainers: [DocumentContainer], isNavigationBranch: Bool, completion: (() -> Void)? = nil) {
-		func updateContainer() {
+	func setDocumentContainers(_ documentContainers: [DocumentContainer], isNavigationBranch: Bool) async {
+		func updateContainer() async {
 			self.documentContainers = documentContainers
 			updateUI()
 			collectionView.deselectAll()
-			Task {
-				await loadDocuments(animated: false, isNavigationBranch: isNavigationBranch)
-				completion?()
-			}
+			await loadDocuments(animated: false, isNavigationBranch: isNavigationBranch)
 		}
 		
 		if documentContainers.count == 1, documentContainers.first is Search {
-			updateContainer()
+			await updateContainer()
 		} else {
-			searchController.searchBar.text = ""
 			heldDocumentContainers = nil
-			searchController.dismiss(animated: false) {
-				updateContainer()
-			}
+			searchController.searchBar.text = ""
+			searchController.dismiss(animated: false)
+			await updateContainer()
 		}
 	}
 
@@ -472,12 +468,16 @@ extension DocumentsViewController {
 			selectionContainers = documentContainers
 		}
 		
-		let documents = await withTaskGroup(of: DocumentProvider.self, returning: Set<Document>.self) { taskGroup in
-			var documents = Set<Document>()
+		let documents = await withTaskGroup(of: [Document].self, returning: Set<Document>.self) { taskGroup in
 			for container in selectionContainers {
-				if let containerDocuments = try? await container.documents {
-					documents.formUnion(containerDocuments)
+				taskGroup.addTask {
+					return (try? await container.documents) ?? []
 				}
+			}
+			
+			var documents = Set<Document>()
+			for await containerDocuments in taskGroup {
+				documents.formUnion(containerDocuments)
 			}
 			return documents
 		}
@@ -544,13 +544,17 @@ extension DocumentsViewController: UISearchControllerDelegate {
 
 	func willPresentSearchController(_ searchController: UISearchController) {
 		heldDocumentContainers = documentContainers
-		setDocumentContainers([Search(searchText: "")], isNavigationBranch: false)
+		Task {
+			await setDocumentContainers([Search(searchText: "")], isNavigationBranch: false)
+		}
 	}
 
 	func didDismissSearchController(_ searchController: UISearchController) {
 		if let heldDocumentContainers {
-			setDocumentContainers(heldDocumentContainers, isNavigationBranch: false)
-			self.heldDocumentContainers = nil
+			Task {
+				await setDocumentContainers(heldDocumentContainers, isNavigationBranch: false)
+				self.heldDocumentContainers = nil
+			}
 		}
 	}
 
@@ -561,7 +565,11 @@ extension DocumentsViewController: UISearchControllerDelegate {
 extension DocumentsViewController: UISearchResultsUpdating {
 
 	func updateSearchResults(for searchController: UISearchController) {
-		setDocumentContainers([Search(searchText: searchController.searchBar.text!)], isNavigationBranch: false)
+		guard heldDocumentContainers != nil else { return }
+		
+		Task {
+			await setDocumentContainers([Search(searchText: searchController.searchBar.text!)], isNavigationBranch: false)
+		}
 	}
 
 }

@@ -334,7 +334,7 @@ private extension CloudKitManager {
 
 		// Send the grouped changes
 		
-		let leftOverRequests = try await withThrowingTaskGroup(of: CloudKitActionRequest.self, returning: Set<CloudKitActionRequest>.self) { taskGroup in
+		let leftOverRequests = try await withThrowingTaskGroup(of: ([EntityID], [EntityID]).self, returning: Set<CloudKitActionRequest>.self) { taskGroup in
 			var leftOverRequests = requests
 			
 			for zoneID in modifications.keys {
@@ -343,15 +343,21 @@ private extension CloudKitManager {
 				
 				let strategy = VCKModifyStrategy.onlyIfServerUnchanged
 				
-				do {
+				taskGroup.addTask {
 					let (completedSaves, completedDeletes) = try await cloudKitZone.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy)
 					self.updateSyncMetaData(savedRecords: completedSaves)
-					
+
 					let savedEntityIDs = completedSaves.compactMap { EntityID(description: $0.recordID.recordName) }
-					leftOverRequests.subtract(savedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
-					
 					let deletedEntityIDs = completedDeletes.compactMap { EntityID(description: $0.recordName) }
-					leftOverRequests.subtract(deletedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
+					
+					return (savedEntityIDs, deletedEntityIDs)
+				}
+								
+				do {
+					for try await (savedEntityIDs, deletedEntityIDs) in taskGroup {
+						leftOverRequests.subtract(savedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
+						leftOverRequests.subtract(deletedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
+					}
 				} catch {
 					if let ckError = error as? CKError, ckError.code == .userDeletedZone {
 						account?.deleteAllDocuments(with: zoneID)
@@ -408,10 +414,12 @@ private extension CloudKitManager {
 					Task {
 						await withTaskGroup(of: Void.self) { taskGroup in
 							for zoneID in zoneIDs {
-								do {
-									try await self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID)
-								} catch {
-									await self.presentError(error)
+								taskGroup.addTask {
+									do {
+										try await self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID)
+									} catch {
+										await self.presentError(error)
+									}
 								}
 							}
 						}

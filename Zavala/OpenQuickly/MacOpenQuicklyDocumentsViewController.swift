@@ -149,13 +149,17 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 		}
 	
 		Task {
-			let documents = await withTaskGroup(of: DocumentProvider.self, returning: Set<Document>.self) { taskGroup in
-				var documents = Set<Document>()
+			let documents = await withTaskGroup(of: [Document].self, returning: Set<Document>.self) { taskGroup in
 				for container in selectionContainers {
-					if let containerDocuments = try? await container.documents {
-						documents.formUnion(containerDocuments)
+					taskGroup.addTask {
+						return (try? await container.documents) ?? []
 					}
 				}
+				
+				var documents = Set<Document>()
+				for await containerDocuments in taskGroup {
+					documents.formUnion(containerDocuments)
+				}				
 				return documents
 			}
 			

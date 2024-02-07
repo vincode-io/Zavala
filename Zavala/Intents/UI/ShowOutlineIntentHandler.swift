@@ -24,7 +24,9 @@ public class ShowOutlineIntentHandler: NSObject, ShowOutlineIntentHandling {
 		}
 		
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.handleDocument(documentID, isNavigationBranch: true)
+			Task {
+				await mainSplitViewController.handleDocument(documentID, isNavigationBranch: true)
+			}
 			
 			#if targetEnvironment(macCatalyst)
 			appDelegate.appKitPlugin?.activateIgnoringOtherApps()
