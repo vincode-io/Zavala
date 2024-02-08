@@ -232,7 +232,7 @@ public class CloudKitManager {
 		await sync()
 	}
 	
-	func suspend() {
+	func suspend() async {
 		debouncer.executeNow()
 	}
 	

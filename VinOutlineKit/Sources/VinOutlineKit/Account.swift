@@ -88,7 +88,14 @@ public final class Account: Identifiable, Equatable, Codable {
 		return cloudKitManager?.container
 	}
 	
-	var folder: URL?
+	var folder: URL {
+		switch type {
+		case .local:
+			return AccountManager.shared.localAccountFolder
+		case .cloudKit:
+			return AccountManager.shared.cloudKitAccountFolder
+		}
+	}
 	var cloudKitManager: CloudKitManager?
 	
 	private let operationQueue = OperationQueue()

@@ -10,6 +10,7 @@ import UIKit
 #else
 import Foundation
 #endif
+import OSLog
 import CloudKit
 import OrderedCollections
 import VinUtility
@@ -523,6 +524,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return searchResultCoordinates[currentSearchResult].range.length != 0
 	}
 	
+	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
+
 	enum CodingKeys: String, CodingKey {
 		case cloudKitMetaData
 		case id
@@ -2395,10 +2398,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	public func unloadRows() {
 		assert(Thread.isMainThread)
-		rowsFile?.save()
 		
 		guard !isBeingUsed else { return }
 
+		rowsFile?.saveIfNecessary()
 		rowsFile?.suspend()
 		rowsFile = nil
 		shadowTable = nil
@@ -2415,10 +2418,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	public func unloadImages() {
 		assert(Thread.isMainThread)
-		imagesFile?.save()
 		
 		guard !isBeingUsed else { return }
 		
+		imagesFile?.saveIfNecessary()
 		imagesFile?.suspend()
 		imagesFile = nil
 		images = nil
@@ -2435,8 +2438,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func save() {
-		rowsFile?.save()
-		imagesFile?.save()
+		rowsFile?.saveIfNecessary()
+		imagesFile?.saveIfNecessary()
 	}
 	
 	public func forceSave() {
@@ -2444,10 +2447,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			rowsFile = RowsFile(outline: self)
 		}
 		rowsFile?.markAsDirty()
-		rowsFile?.save()
+		rowsFile?.saveIfNecessary()
 		
 		imagesFile?.markAsDirty()
-		imagesFile?.save()
+		imagesFile?.saveIfNecessary()
 	}
 	
 	public func delete() {

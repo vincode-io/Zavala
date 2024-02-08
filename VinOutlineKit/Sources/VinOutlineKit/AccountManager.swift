@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 public extension Notification.Name {
 	static let AccountManagerAccountsDidChange = Notification.Name(rawValue: "AccountManagerAccountsDidChange")
@@ -47,6 +48,8 @@ public final class AccountManager {
 		return activeAccounts.reduce(into: [Document]()) { $0.append(contentsOf: $1.documents ?? [Document]() ) }
 	}
 	
+	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
+
 	var accountsDictionary = [Int: Account]()
 
 	var accountsFolder: URL
@@ -175,7 +178,7 @@ public final class AccountManager {
 	
 	public func suspend() {
 		accountFiles.values.forEach {
-			$0.save()
+			$0.saveIfNecessary()
 			$0.suspend()
 		}
 
@@ -184,7 +187,9 @@ public final class AccountManager {
 			$0.suspend()
 		}
 
-		cloudKitAccount?.cloudKitManager?.suspend()
+		Task {
+			await cloudKitAccount?.cloudKitManager?.suspend()
+		}
 	}
 	
 }
@@ -230,7 +235,17 @@ private extension AccountManager {
 		markAsDirty(account)
 	}
 
-	// MARK: Helpers
+	func sort(_ accounts: [Account]) -> [Account] {
+		return accounts.sorted { (account1, account2) -> Bool in
+			if account1.type == .local {
+				return true
+			}
+			if account2.type == .local {
+				return false
+			}
+			return (account1.name as NSString).localizedStandardCompare(account2.name) == .orderedAscending
+		}
+	}
 	
 	func initializeFile(accountType: AccountType) {
 		let file: URL
@@ -245,18 +260,6 @@ private extension AccountManager {
 		accountFiles[accountType.rawValue] = managedFile
 	}
 
-	func sort(_ accounts: [Account]) -> [Account] {
-		return accounts.sorted { (account1, account2) -> Bool in
-			if account1.type == .local {
-				return true
-			}
-			if account2.type == .local {
-				return false
-			}
-			return (account1.name as NSString).localizedStandardCompare(account2.name) == .orderedAscending
-		}
-	}
-	
 	func markAsDirty(_ account: Account) {
 		let accountFile = accountFiles[account.type.rawValue]!
 		accountFile.markAsDirty()

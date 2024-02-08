@@ -1,12 +1,14 @@
 //
 //  Created by Maurice Parker on 9/13/19.
-//  Copyright © 2020 Ranchero Software, LLC. All rights reserved.
 //
 
 import Foundation
+import OSLog
 
-public final class ManagedResourceFile: NSObject, NSFilePresenter {
+open class ManagedResourceFile: NSObject, NSFilePresenter {
 	
+	private var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinUtility")
+
 	private var isDirty = false {
 		didSet {
 			debounceSaveToDiskIfNeeded()
@@ -17,9 +19,7 @@ public final class ManagedResourceFile: NSObject, NSFilePresenter {
 	private let fileURL: URL
 	private let operationQueue: OperationQueue
 	private var saveDebouncer = Debouncer(duration: 5)
-
-	private let loadCallback: () -> Void
-	private let saveCallback: () -> Void
+	private var lastModificationDate: Date?
 
 	public var presentedItemURL: URL? {
 		return fileURL
@@ -29,11 +29,9 @@ public final class ManagedResourceFile: NSObject, NSFilePresenter {
 		return operationQueue
 	}
 	
-	public init(fileURL: URL, load: @escaping () -> Void, save: @escaping () -> Void) {
+	public init(fileURL: URL) {
 		
 		self.fileURL = fileURL
-		self.loadCallback = load
-		self.saveCallback = save
 		
 		operationQueue = OperationQueue()
 		operationQueue.qualityOfService = .userInteractive
@@ -76,28 +74,20 @@ public final class ManagedResourceFile: NSObject, NSFilePresenter {
 		}
 	}
 	
-	public func debounceSaveToDiskIfNeeded() {
-		saveDebouncer.debounce { [weak self] in
-			if Thread.isMainThread {
-				self?.saveToDiskIfNeeded()
-			} else {
-				DispatchQueue.main.async {
-					self?.saveToDiskIfNeeded()
-				}
-			}
-		}
-	}
-
 	public func load() {
 		isLoading = true
-		loadCallback()
+		loadFile()
 		isLoading = false
 	}
 	
 	public func saveIfNecessary() {
 		saveDebouncer.executeNow()
 	}
-	
+
+	public func delete() {
+		deleteFile()
+	}
+
 	public func resume() {
 		NSFileCoordinator.addFilePresenter(self)
 	}
@@ -106,14 +96,97 @@ public final class ManagedResourceFile: NSObject, NSFilePresenter {
 		NSFileCoordinator.removeFilePresenter(self)
 	}
 	
+	open func fileDidLoad(data: Data) {
+		fatalError("Function not implemented")
+	}
+	
+	open func fileWillSave() -> Data? {
+		fatalError("Function not implemented")
+	}
+
 }
 
 private extension ManagedResourceFile {
 	
-	@objc func saveToDiskIfNeeded() {
+	func debounceSaveToDiskIfNeeded() {
+		saveDebouncer.debounce { [weak self] in
+			self?.saveToDiskIfNeeded()
+		}
+	}
+
+	func saveToDiskIfNeeded() {
 		if isDirty {
 			isDirty = false
-			saveCallback()
+			saveFile()
+		}
+	}
+
+	func loadFile() {
+		
+		var fileData: Data? = nil
+		let errorPointer: NSErrorPointer = nil
+		let fileCoordinator = NSFileCoordinator(filePresenter: self)
+		
+		fileCoordinator.coordinate(readingItemAt: fileURL, options: [], error: errorPointer, byAccessor: { readURL in
+			do {
+				let resourceValues = try readURL.resourceValues(forKeys: [.contentModificationDateKey])
+				if lastModificationDate != resourceValues.contentModificationDate {
+					lastModificationDate = resourceValues.contentModificationDate
+					fileData = try Data(contentsOf: readURL)
+				}
+			} catch {
+				logger.error("Account read from disk failed: \(error.localizedDescription, privacy: .public)")
+			}
+		})
+		
+		if let error = errorPointer?.pointee {
+			logger.error("Account read from disk coordination failed: \(error.localizedDescription, privacy: .public)")
+		}
+
+		guard let fileData else { return }
+		
+		fileDidLoad(data: fileData)
+	}
+	
+	func saveFile() {
+		guard let fileData = fileWillSave() else { return }
+
+		print("****** saveFile: \(fileURL.absoluteString)")
+
+		let errorPointer: NSErrorPointer = nil
+		let fileCoordinator = NSFileCoordinator(filePresenter: self)
+		
+		fileCoordinator.coordinate(writingItemAt: fileURL, options: [], error: errorPointer, byAccessor: { writeURL in
+			do {
+				try fileData.write(to: writeURL)
+				let resourceValues = try writeURL.resourceValues(forKeys: [.contentModificationDateKey])
+				lastModificationDate = resourceValues.contentModificationDate
+			} catch let error as NSError {
+				logger.error("Save to disk failed: \(error.localizedDescription, privacy: .public)")
+			}
+		})
+		
+		if let error = errorPointer?.pointee {
+			logger.error("Save to disk coordination failed: \(error.localizedDescription, privacy: .public)")
+		}
+	}
+	
+	func deleteFile() {
+		let errorPointer: NSErrorPointer = nil
+		let fileCoordinator = NSFileCoordinator(filePresenter: self)
+		
+		fileCoordinator.coordinate(writingItemAt: fileURL, options: [.forDeleting], error: errorPointer, byAccessor: { writeURL in
+			do {
+				if FileManager.default.fileExists(atPath: writeURL.path) {
+					try FileManager.default.removeItem(atPath: writeURL.path)
+				}
+			} catch let error as NSError {
+				logger.error("Delete from disk failed: \(error.localizedDescription, privacy: .public)")
+			}
+		})
+		
+		if let error = errorPointer?.pointee {
+			logger.error("Delete from disk coordination failed: \(error.localizedDescription, privacy: .public)")
 		}
 	}
 
