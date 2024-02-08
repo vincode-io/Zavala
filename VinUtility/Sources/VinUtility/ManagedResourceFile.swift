@@ -151,8 +151,6 @@ private extension ManagedResourceFile {
 	func saveFile() {
 		guard let fileData = fileWillSave() else { return }
 
-		print("****** saveFile: \(fileURL.absoluteString)")
-
 		let errorPointer: NSErrorPointer = nil
 		let fileCoordinator = NSFileCoordinator(filePresenter: self)
 		
