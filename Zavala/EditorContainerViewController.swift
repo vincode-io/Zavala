@@ -182,6 +182,10 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		link()
 	}
 
+	@objc func createOrDeleteNotes(_ sender: Any?) {
+		createOrDeleteNotes()
+	}
+
 	@objc func toggleOutlineFilter(_ sender: Any?) {
 		toggleCompletedFilter()
 	}
@@ -340,6 +344,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			.sync,
 			.insertImage,
 			.link,
+			.note,
 			.boldface,
 			.italic,
 			.focus,
@@ -410,6 +415,33 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.toolTip = .linkControlLabel
 			item.isBordered = true
 			item.action = #selector(link(_:))
+			item.target = self
+			toolbarItem = item
+		case .note:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				if !(self?.editorViewController?.isCreateRowNotesUnavailable ?? true) {
+					item.image = .noteAdd.symbolSizedForCatalyst()
+					item.label = .addNoteControlLabel
+					item.toolTip = .addNoteControlLabel
+					return false
+				} else if !(self?.editorViewController?.isDeleteRowNotesUnavailable ?? true) {
+					item.image = .noteDelete.symbolSizedForCatalyst()
+					item.label = .deleteNoteControlLabel
+					item.toolTip = .deleteNoteControlLabel
+					return false
+				} else {
+					item.image = .noteAdd.symbolSizedForCatalyst()
+					item.label = .addNoteControlLabel
+					item.toolTip = .addNoteControlLabel
+					return true
+				}
+			}
+			item.image = .noteAdd.symbolSizedForCatalyst()
+			item.label = .addNoteControlLabel
+			item.toolTip = .addNoteControlLabel
+			item.isBordered = true
+			item.action = #selector(createOrDeleteNotes(_:))
 			item.target = self
 			toolbarItem = item
 		case .boldface:
