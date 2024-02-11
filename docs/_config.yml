@@ -38,6 +38,8 @@ minimal_mistakes_skin: "dirt"
 paginate: 5
 paginate_path: "/blog/page:num"
 
+excerpt_separator: "<!--more-->"
+
 author:
   name: "Maurice Parker"
   avatar: "/assets/images/avatar.jpg"
