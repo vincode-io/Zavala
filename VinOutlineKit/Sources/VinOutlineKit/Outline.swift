@@ -1455,11 +1455,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		let changes = OutlineElementChanges(section: adjustedRowsSection, deletes: deleteSet, reloads: reloadSet)
 		
-		// Give the UI a chance to move the cursor before sending the deletes to it. This can prevent the keyboard from
-		// bouncing.
-		DispatchQueue.main.async {
-			self.outlineElementsDidChange(changes)
-		}
+		outlineElementsDidChange(changes)
 		
 		if deletedRows.contains(where: { $0.id == selectionRowID?.rowUUID }) {
 			if let firstDelete = deletes.first, firstDelete > 0 {
