@@ -37,17 +37,13 @@ public final class DeleteRowCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
 		outline.deleteRows(rows, rowStrings: rowStrings)
-		registerUndo()
 	}
 	
 	public override func undo() {
 		for row in rows.sortedByDisplayOrder() {
 			outline.createRows([row], afterRow: afterRows[row])
 		}
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

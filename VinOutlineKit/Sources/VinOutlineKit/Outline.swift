@@ -2051,7 +2051,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	@discardableResult
-	public func complete(rows: [Row], rowStrings: RowStrings? = nil) -> ([Row], Int?) {
+	public func complete(rows: [Row], rowStrings: RowStrings? = nil) -> [Row] {
 		return completeUncomplete(rows: rows, isComplete: true, rowStrings: rowStrings)
 	}
 	
@@ -2066,8 +2066,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	@discardableResult
 	public func uncomplete(rows: [Row], rowStrings: RowStrings? = nil) -> [Row] {
-		let (impacted, _) = completeUncomplete(rows: rows, isComplete: false, rowStrings: rowStrings)
-		return impacted
+		return completeUncomplete(rows: rows, isComplete: false, rowStrings: rowStrings)
 	}
 	
 	public func isMoveRowsRightUnavailable(rows: [Row]) -> Bool {
@@ -2830,7 +2829,7 @@ private extension Outline {
 	}
 	
 	@discardableResult
-	func completeUncomplete(rows: [Row], isComplete: Bool, rowStrings: RowStrings?) -> ([Row], Int?) {
+	func completeUncomplete(rows: [Row], isComplete: Bool, rowStrings: RowStrings?) -> [Row] {
 		beginCloudKitBatchRequest()
 		
 		if rowCount == 1, let row = rows.first, let texts = rowStrings {
@@ -2856,16 +2855,16 @@ private extension Outline {
 		outlineContentDidChange()
 		endCloudKitBatchRequest()
 
-		guard isBeingViewed else { return (impacted, nil) }
+		guard isBeingViewed else { return impacted }
 
 		if isCompletedFilterOn {
-			let changes = rebuildShadowTable()
-			outlineElementsDidChange(changes)
+			var changes = rebuildShadowTable()
 			if let firstComplete = changes.deletes?.sorted().first, firstComplete > 0 {
-				return (impacted, firstComplete - 1)
+				changes.newCursorIndex = firstComplete - 1
 			} else {
-				return (impacted, 0)
+				changes.newCursorIndex = 0
 			}
+			outlineElementsDidChange(changes)
 		}
 		
 		var reloads = Set<Int>()
@@ -2891,7 +2890,7 @@ private extension Outline {
 		
 		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: reloads)
 		outlineElementsDidChange(changes)
-		return (impacted, nil)
+		return impacted
 	}
 	
 	@discardableResult

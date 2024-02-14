@@ -26,15 +26,11 @@ public final class CreateNoteCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
 		noteCreatedRows = outline.createNotes(rows: rows, rowStrings: newRowStrings)
-		registerUndo()
 	}
 	
 	public override func undo() {
 		outline.deleteNotes(rows: noteCreatedRows ?? [Row](), rowStrings: oldRowStrings)
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

@@ -28,19 +28,15 @@ public final class SplitRowCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
 		if newRow == nil {
 			newRow = Row(outline: outline)
 		}
 		outline.splitRow(newRow: newRow!, row: row, topic: topic, cursorPosition: cursorPosition)
-		registerUndo()
 	}
 	
 	public override func undo() {
 		guard let newHeadline = newRow else { return }
 		outline.joinRows(topRow: row, bottomRow: newHeadline)
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

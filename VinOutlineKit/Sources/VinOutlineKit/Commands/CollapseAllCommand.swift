@@ -17,16 +17,12 @@ public final class CollapseAllCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
 		collapsedRows = outline.collapseAll(containers: containers)
-		registerUndo()
 	}
 	
 	public override func undo() {
 		guard let collapsedRows else { return }
 		outline.expand(rows: collapsedRows)
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

@@ -26,8 +26,6 @@ public final class PasteRowCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
-		
 		var newRows = [Row]()
 		for rowGroup in rowGroups {
 			let newRow = rowGroup.attach(to: outline)
@@ -36,7 +34,6 @@ public final class PasteRowCommand: OutlineCommand {
 		rows = newRows
 		
 		outline.createRows(rows, afterRow: afterRow)
-		registerUndo()
 	}
 	
 	public override func undo() {
@@ -49,8 +46,6 @@ public final class PasteRowCommand: OutlineCommand {
 		rows.forEach { $0.visit(visitor: deleteVisitor(_:)) }
 		
 		outline.deleteRows(allRows)
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

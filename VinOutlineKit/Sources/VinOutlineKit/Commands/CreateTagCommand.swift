@@ -22,14 +22,12 @@ public final class CreateTagCommand: OutlineCommand {
 		guard let tag = outline.account?.createTag(name: tagName) else { return }
 		self.tag = tag
 		outline.createTag(tag)
-		registerUndo()
 	}
 	
 	public override func undo() {
 		guard let tag else { return }
 		outline.deleteTag(tag)
 		outline.account?.deleteTag(tag)
-		registerRedo()
 	}
 	
 }

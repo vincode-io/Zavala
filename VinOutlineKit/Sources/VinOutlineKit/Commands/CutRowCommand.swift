@@ -35,17 +35,13 @@ public final class CutRowCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
 		outline.deleteRows(rows)
-		registerUndo()
 	}
 	
 	public override func undo() {
 		for row in rows.sortedByDisplayOrder() {
 			outline.createRows([row], afterRow: afterRows[row])
 		}
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

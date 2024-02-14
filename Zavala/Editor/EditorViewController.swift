@@ -37,7 +37,7 @@ protocol EditorDelegate: AnyObject {
 	func zoomImage(_: EditorViewController, image: UIImage, transitioningDelegate: UIViewControllerTransitioningDelegate)
 }
 
-class EditorViewController: UIViewController, DocumentsActivityItemsConfigurationDelegate, MainControllerIdentifiable, UndoableCommandRunner {
+class EditorViewController: UIViewController, DocumentsActivityItemsConfigurationDelegate, MainControllerIdentifiable {
 
 	private static let searchBarHeight: CGFloat = 44
 	
@@ -342,8 +342,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	var adjustedRowsSection: Int {
 		return outline?.adjustedRowsSection.rawValue ?? Outline.Section.rows.rawValue
 	}
-	
-	var undoableCommands = [UndoableCommand]()
 	
 	override var canBecomeFirstResponder: Bool { return true }
 
@@ -1896,7 +1894,7 @@ extension EditorViewController: EditorFindSessionDelegate {
 												 coordinates: [coordinate],
 												 replacementText: replacementText)
 		
-		runCommand(command)
+		command.execute()
 
 	}
 	
@@ -1910,7 +1908,7 @@ extension EditorViewController: EditorFindSessionDelegate {
 												 coordinates: outline.searchResultCoordinates,
 												 replacementText: replacementText)
 		
-		runCommand(command)
+		command.execute()
 	}
 	
 }
@@ -2824,7 +2822,7 @@ private extension EditorViewController {
 									   outline: outline,
 									   tagName: name)
 		
-		runCommand(command)
+		command.execute()
 		moveCursorToTagInput()
 	}
 
@@ -2837,7 +2835,7 @@ private extension EditorViewController {
 									   outline: outline,
 									   tagName: name)
 		
-		runCommand(command)
+		command.execute()
 	}
 	
 	func expand(rows: [Row]) {
@@ -2849,7 +2847,7 @@ private extension EditorViewController {
 									outline: outline,
 									rows: rows)
 		
-		runCommand(command)
+		command.execute()
 	}
 
 	func collapse(rows: [Row]) {
@@ -2863,7 +2861,7 @@ private extension EditorViewController {
 									  outline: outline,
 									  rows: rows)
 		
-		runCommand(command)
+		command.execute()
 		
 		if let cursorRow = currentRow {
 			for row in rows {
@@ -2885,7 +2883,7 @@ private extension EditorViewController {
 									   outline: outline,
 									   containers: containers)
 		
-		runCommand(command)
+		command.execute()
 	}
 
 	func collapseAll(containers: [RowContainer]) {
@@ -2897,7 +2895,7 @@ private extension EditorViewController {
 										 outline: outline,
 										 containers: containers)
 
-		runCommand(command)
+		command.execute()
 	}
 
 	func textChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
@@ -2911,7 +2909,7 @@ private extension EditorViewController {
 										 rowStrings: rowStrings,
 										 isInNotes: isInNotes,
 										 selection: selection)
-		runCommand(command)
+		command.execute()
 	}
 
 	func cutRows(_ rows: [Row]) {
@@ -2924,7 +2922,7 @@ private extension EditorViewController {
 									outline: outline,
 									rows: rows)
 
-		runCommand(command)
+		command.execute()
 	}
 
 	func copyRows(_ rows: [Row]) {
@@ -2995,7 +2993,7 @@ private extension EditorViewController {
 											  rowGroups: rowGroups,
 											  afterRow: afterRows?.last)
 
-				self.runCommand(command)
+				command.execute()
 			}
 			
 		} else if let stringProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [UTType.utf8PlainText.identifier]), !stringProviderIndexes.isEmpty {
@@ -3033,7 +3031,7 @@ private extension EditorViewController {
 											  rowGroups: rowGroups,
 											  afterRow: afterRows?.last)
 
-				self.runCommand(command)
+				command.execute()
 			}
 
 		}
@@ -3049,7 +3047,7 @@ private extension EditorViewController {
 									   rows: rows,
 									   rowStrings: rowStrings)
 
-		runCommand(command)
+		command.execute()
 	}
 	
 	func createRow(beforeRows: [Row]) {
@@ -3061,7 +3059,7 @@ private extension EditorViewController {
 											 outline: outline,
 											 beforeRow: beforeRow)
 		
-		runCommand(command)
+		command.execute()
 	}
 	
 	func createRow(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
@@ -3078,7 +3076,7 @@ private extension EditorViewController {
 											afterRow: afterRow,
 											rowStrings: rowStrings)
 		
-		runCommand(command)
+		command.execute()
 	}
 	
 	func createRowInside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
@@ -3095,8 +3093,8 @@ private extension EditorViewController {
 											 afterRow: afterRow,
 											 rowStrings: rowStrings)
 		
-		runCommand(command)
-	}
+		command.execute()
+}
 	
 	func createRowOutside(afterRows: [Row]?, rowStrings: RowStrings? = nil) {
 		guard let undoManager, let outline else { return }
@@ -3112,7 +3110,7 @@ private extension EditorViewController {
 											  afterRow: afterRow,
 											  rowStrings: rowStrings)
 		
-		runCommand(command)
+		command.execute()
 	}
 	
 	func duplicateRows(_ rows: [Row]) {
@@ -3124,7 +3122,7 @@ private extension EditorViewController {
 										  outline: outline,
 										  rows: rows)
 		
-		runCommand(command)
+		command.execute()
 	}
 	
 	func moveRowsLeft(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -3137,7 +3135,7 @@ private extension EditorViewController {
 										 rows: rows,
 										 rowStrings: rowStrings)
 		
-		runCommand(command)
+		command.execute()
 	}
 
 	func moveRowsRight(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -3150,7 +3148,7 @@ private extension EditorViewController {
 										  rows: rows,
 										  rowStrings: rowStrings)
 		
-		runCommand(command)
+		command.execute()
 	}
 
 	func moveRowsUp(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -3163,7 +3161,7 @@ private extension EditorViewController {
 									   rows: rows,
 									   rowStrings: rowStrings)
 		
-		runCommand(command)
+		command.execute()
 		makeCursorVisibleIfNecessary()
 	}
 
@@ -3177,7 +3175,7 @@ private extension EditorViewController {
 										 rows: rows,
 										 rowStrings: rowStrings)
 		
-		runCommand(command)
+		command.execute()
 		makeCursorVisibleIfNecessary()
 	}
 
@@ -3193,7 +3191,7 @@ private extension EditorViewController {
 									  cursorPosition: cursorPosition)
 												  
 		
-		runCommand(command)
+		command.execute()
 	}
 
 	func completeRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -3208,15 +3206,7 @@ private extension EditorViewController {
 									  rows: rows,
 									  rowStrings: rowStrings)
 		
-		runCommand(command)
-
-		guard cursorIsInCompletingRows && isCompletedFiltered else { return }
-		
-		if let newCursorIndex = command.newCursorIndex {
-			if let rowCell = collectionView.cellForItem(at: IndexPath(row: newCursorIndex, section: adjustedRowsSection)) as? EditorRowViewCell {
-				rowCell.moveToTopicEnd()
-			}
-		}
+		command.execute()
 	}
 	
 	func uncompleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -3229,7 +3219,7 @@ private extension EditorViewController {
 										rows: rows,
 										rowStrings: rowStrings)
 		
-		runCommand(command)
+		command.execute()
 	}
 	
 	func createRowNotes(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -3242,7 +3232,7 @@ private extension EditorViewController {
 										rows: rows,
 										rowStrings: rowStrings)
 		
-		runCommand(command)
+		command.execute()
 	}
 
 	func deleteRowNotes(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -3261,7 +3251,7 @@ private extension EditorViewController {
 										rows: rows,
 										rowStrings: rowStrings)
 		
-		runCommand(command)
+		command.execute()
 	}
 
 	func makeCursorVisibleIfNecessary(animated: Bool = true) {

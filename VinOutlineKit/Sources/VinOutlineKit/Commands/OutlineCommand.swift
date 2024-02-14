@@ -12,15 +12,9 @@ public protocol OutlineCommandDelegate: AnyObject {
 	func restoreCursorPosition(_: CursorCoordinates)
 }
 
-public class OutlineCommand: UndoableCommand {
+public class OutlineCommand {
 	
 	var actionName: String
-	public var undoActionName: String {
-		return actionName
-	}
-	public var redoActionName: String {
-		return actionName
-	}
 	
 	public var undoManager: UndoManager
 	weak public var delegate: OutlineCommandDelegate?
@@ -39,16 +33,39 @@ public class OutlineCommand: UndoableCommand {
 		self.cursorCoordinates = cursorCoordinates
 	}
 	
-	public func perform() {
+	public func execute() {
+		registerUndo()
+		saveCursorCoordinates()
+		perform()
+	}
+	
+	func unexecute() {
+		registerRedo()
+		undo()
+		restoreCursorPosition()
+	}
+	
+	func perform() {
+		fatalError("Perform function not implemented.")
+	}
+	
+	func undo() {
 		fatalError("Undo function not implemented.")
 	}
 	
-	public func undo() {
-		fatalError("Undo function not implemented.")
+	func registerUndo() {
+		undoManager.setActionName(actionName)
+		undoManager.registerUndo(withTarget: self) { _ in
+			self.unexecute()
+		}
 	}
-}
 
-extension OutlineCommand {
+	func registerRedo() {
+		undoManager.setActionName(actionName)
+		undoManager.registerUndo(withTarget: self) { _ in
+			self.execute()
+		}
+	}
 	
 	func saveCursorCoordinates() {
 		let coordinates = delegate?.currentCoordinates

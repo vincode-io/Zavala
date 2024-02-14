@@ -18,16 +18,12 @@ public final class ExpandAllCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
 		expandedRows = outline.expandAll(containers: containers)
-		registerUndo()
 	}
 	
 	public override func undo() {
 		guard let expandedRows else { return }
 		outline.collapse(rows: expandedRows)
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

@@ -25,15 +25,11 @@ public final class DeleteNoteCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
 		deletedRowNotes = outline.deleteNotes(rows: rows, rowStrings: newRowStrings)
-		registerUndo()
 	}
 	
 	public override func undo() {
 		outline.restoreNotes(deletedRowNotes ?? [Row: NSAttributedString]())
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

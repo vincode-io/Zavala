@@ -19,15 +19,11 @@ public final class CreateRowBeforeCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
 		outline.createRow(row, beforeRow: beforeRow)
-		registerUndo()
 	}
 	
 	public override func undo() {
 		outline.deleteRows([row])
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

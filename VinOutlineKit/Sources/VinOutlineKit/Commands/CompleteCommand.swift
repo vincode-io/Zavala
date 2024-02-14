@@ -12,8 +12,6 @@ public final class CompleteCommand: OutlineCommand {
 	var rows: [Row]
 	var completedRows: [Row]?
 	
-	public var newCursorIndex: Int?
-	
 	var oldRowStrings: RowStrings?
 	var newRowStrings: RowStrings?
 
@@ -29,18 +27,12 @@ public final class CompleteCommand: OutlineCommand {
 	}
 	
 	override public func perform() {
-		saveCursorCoordinates()
-		let (impacted, newCursorIndex) = outline.complete(rows: rows, rowStrings: newRowStrings)
-		completedRows = impacted
-		self.newCursorIndex = newCursorIndex
-		registerUndo()
+		completedRows = outline.complete(rows: rows, rowStrings: newRowStrings)
 	}
 	
 	override public func undo() {
 		guard let completedRows else { return }
 		outline.uncomplete(rows: completedRows, rowStrings: oldRowStrings)
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

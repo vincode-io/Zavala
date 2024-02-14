@@ -33,9 +33,7 @@ public final class MoveRowLeftCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
 		moveLeftRows = outline.moveRowsLeft(rows, rowStrings: newRowStrings)
-		registerUndo()
 	}
 	
 	public override func undo() {
@@ -43,8 +41,6 @@ public final class MoveRowLeftCommand: OutlineCommand {
 		let movedLeft = Set(moveLeftRows)
 		let moveLeftRestore = restoreMoves.filter { movedLeft.contains($0.row) }
 		outline.moveRows(moveLeftRestore, rowStrings: oldRowStrings)
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

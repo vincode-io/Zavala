@@ -27,16 +27,12 @@ public final class UncompleteCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
 		completedRows = outline.uncomplete(rows: rows, rowStrings: newRowStrings)
-		registerUndo()
 	}
 	
 	public override func undo() {
 		guard let completedRows else { return }
 		outline.complete(rows: completedRows, rowStrings: oldRowStrings)
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

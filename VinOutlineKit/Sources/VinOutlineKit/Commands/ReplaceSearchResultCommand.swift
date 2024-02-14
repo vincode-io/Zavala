@@ -34,9 +34,7 @@ public final class ReplaceSearchResultCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
 		outline.replaceSearchResults(coordinates, with: replacementText)
-		registerUndo()
 	}
 	
 	public override func undo() {
@@ -47,9 +45,6 @@ public final class ReplaceSearchResultCommand: OutlineCommand {
 		for (row, rowStrings) in oldRowStrings {
 			outline.updateRow(row, rowStrings: rowStrings, applyChanges: true)
 		}
-		
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

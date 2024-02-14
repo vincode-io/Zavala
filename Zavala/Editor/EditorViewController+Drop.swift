@@ -194,7 +194,7 @@ private extension EditorViewController {
 										  toParent: toParent,
 										  toChildIndex: toChildIndex)
 		
-		runCommand(command)
+		command.execute()
 	}
 	
 	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, destinationIndexPath: IndexPath?) {
@@ -332,7 +332,7 @@ private extension EditorViewController {
 										   afterRow: afterRow,
 										   prefersEnd: prefersEnd)
 		
-		runCommand(command)
+		command.execute()
 	}
 	
 }

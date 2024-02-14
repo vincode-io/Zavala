@@ -26,15 +26,11 @@ public final class MoveRowUpCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
 		outline.moveRowsUp(rows, rowStrings: newRowStrings)
-		registerUndo()
 	}
 	
 	public override func undo() {
 		outline.moveRowsDown(rows, rowStrings: oldRowStrings)
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

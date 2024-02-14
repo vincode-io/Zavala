@@ -21,19 +21,15 @@ public final class CreateRowOutsideCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
 		if row == nil {
 			row = Row(outline: outline)
 		}
 		outline.createRowsOutside([row!], afterRow: afterRow, rowStrings: rowStrings)
-		registerUndo()
 	}
 	
 	public override func undo() {
 		guard let row else { return }
 		outline.deleteRows([row])
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }

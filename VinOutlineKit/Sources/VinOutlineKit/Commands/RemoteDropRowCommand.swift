@@ -30,8 +30,6 @@ public final class RemoteDropRowCommand: OutlineCommand {
 	}
 	
 	public override func perform() {
-		saveCursorCoordinates()
-		
 		var newRows = [Row]()
 		for rowGroup in rowGroups {
 			let newRow = rowGroup.attach(to: outline)
@@ -40,12 +38,11 @@ public final class RemoteDropRowCommand: OutlineCommand {
 		rows = newRows
 		
 		outline.createRows(rows, afterRow: afterRow, prefersEnd: prefersEnd)
-		registerUndo()
 	}
 	
 	public override func undo() {
 		var allRows = [Row]()
-		
+			
 		func deleteVisitor(_ visited: Row) {
 			allRows.append(visited)
 			visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
@@ -53,8 +50,6 @@ public final class RemoteDropRowCommand: OutlineCommand {
 		rows.forEach { $0.visit(visitor: deleteVisitor(_:)) }
 		
 		outline.deleteRows(allRows)
-		registerRedo()
-		restoreCursorPosition()
 	}
 	
 }
