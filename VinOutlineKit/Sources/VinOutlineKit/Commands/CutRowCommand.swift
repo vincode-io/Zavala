@@ -8,6 +8,7 @@
 import Foundation
 
 public final class CutRowCommand: OutlineCommand {
+	
 	var rows: [Row]
 	var afterRows = [Row: Row]()
 	

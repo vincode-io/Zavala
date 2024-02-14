@@ -1330,7 +1330,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		imagesFile?.markAsDirty()
 	}
 	
-	func createNotes(rows: [Row], rowStrings: RowStrings?) -> ([Row], Int?) {
+	func createNotes(rows: [Row], rowStrings: RowStrings?) -> [Row] {
 		beginCloudKitBatchRequest()
 		
 		if rowCount == 1, let row = rows.first, let texts = rowStrings {
@@ -1349,14 +1349,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else {
-			return (impacted, nil)
+			return impacted
 		}
 		
 		let reloads = impacted.compactMap { $0.shadowTableIndex }
 		var changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
 		changes.isReloadsAnimatable = true
+		changes.cursorMoveIsToNote = true
+		changes.newCursorIndex = reloads.sorted().first
 		outlineElementsDidChange(changes)
-		return (impacted, reloads.sorted().first)
+		
+		return impacted
 	}
 	
 	public func isDeleteNotesUnavailable(rows: [Row]) -> Bool {
@@ -1369,7 +1372,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	@discardableResult
-	public func deleteNotes(rows: [Row], rowStrings: RowStrings? = nil) -> ([Row: NSAttributedString], Int?) {
+	public func deleteNotes(rows: [Row], rowStrings: RowStrings? = nil) -> [Row: NSAttributedString] {
 		beginCloudKitBatchRequest()
 		
 		if rowCount == 1, let row = rows.first, let texts = rowStrings {
@@ -1388,14 +1391,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		endCloudKitBatchRequest()
 
 		guard isBeingViewed else {
-			return (impacted, nil)
+			return impacted
 		}
 
 		let reloads = impacted.keys.compactMap { $0.shadowTableIndex }
 		var changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads))
 		changes.isReloadsAnimatable = true
+		changes.cursorMoveIsBeforeChanges = true
+		changes.newCursorIndex = reloads.sorted().first
 		outlineElementsDidChange(changes)
-		return (impacted, reloads.sorted().first)
+		
+		return impacted
 	}
 	
 	func restoreNotes(_ notes: [Row: NSAttributedString]) {
@@ -1416,8 +1422,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 	}
 	
-	@discardableResult
-	public func deleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) -> Int? {
+	public func deleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
 		beginCloudKitBatchRequest()
@@ -1452,7 +1457,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineContentDidChange()
 		endCloudKitBatchRequest()
 		
-		guard isBeingViewed else { return nil }
+		guard isBeingViewed else { return }
 		
 		var deletedRows = [Row]()
 		
@@ -1463,7 +1468,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			}
 		}
 		
-		guard let lowestShadowTableIndex = sortedDeletes.last else { return nil }
+		guard let lowestShadowTableIndex = sortedDeletes.last else { return }
 		resetShadowTableIndexes(startingAt: lowestShadowTableIndex)
 		
 		var reloads = rows.compactMap { ($0.parent as? Row)?.shadowTableIndex }
@@ -1472,19 +1477,19 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		let deleteSet = Set(deletes)
 		let reloadSet = Set(reloads).subtracting(deleteSet)
 		
-		let changes = OutlineElementChanges(section: adjustedRowsSection, deletes: deleteSet, reloads: reloadSet)
-		
-		outlineElementsDidChange(changes)
+		var changes = OutlineElementChanges(section: adjustedRowsSection, deletes: deleteSet, reloads: reloadSet)
+		changes.cursorMoveIsBeforeChanges = true
 		
 		if deletedRows.contains(where: { $0.id == selectionRowID?.rowUUID }) {
 			if let firstDelete = deletes.first, firstDelete > 0 {
-				return firstDelete - 1
+				changes.newCursorIndex = firstDelete - 1
 			} else {
-				return -1
+				changes.newCursorIndex = -1
 			}
-		} else {
-			return nil
 		}
+
+		outlineElementsDidChange(changes)
+		
 	}
 	
 	func joinRows(topRow: Row, bottomRow: Row) {
@@ -1507,7 +1512,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineElementsDidChange(changes)
 	}
 	
-	func createRow(_ row: Row, beforeRow: Row, rowStrings: RowStrings? = nil) -> Int? {
+	func createRow(_ row: Row, beforeRow: Row, rowStrings: RowStrings? = nil) {
 		beginCloudKitBatchRequest()
 		
 		if let texts = rowStrings {
@@ -1519,7 +1524,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		guard let parent = beforeRow.parent,
 			  let index = parent.firstIndexOfRow(beforeRow),
 			  let shadowTableIndex = beforeRow.shadowTableIndex else {
-			return nil
+			return
 		}
 		
 		parent.insertRow(row, at: index)
@@ -1538,17 +1543,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineContentDidChange()
 		endCloudKitBatchRequest()
 
-		guard isBeingViewed else { return nil }
+		guard isBeingViewed else { return }
 
 		shadowTable?.insert(row, at: shadowTableIndex)
 		resetShadowTableIndexes(startingAt: shadowTableIndex)
-		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: [shadowTableIndex], reloads: reloads)
-		outlineElementsDidChange(changes)
 		
-		return shadowTableIndex
+		var changes = OutlineElementChanges(section: adjustedRowsSection, inserts: [shadowTableIndex], reloads: reloads)
+		changes.newCursorIndex = shadowTableIndex
+		outlineElementsDidChange(changes)
 	}
 	
-	func createRow(_ row: Row, afterRow: Row? = nil, rowStrings: RowStrings? = nil) -> Int? {
+	func createRow(_ row: Row, afterRow: Row? = nil, rowStrings: RowStrings? = nil) {
 		beginCloudKitBatchRequest()
 		
 		if let afterRow, let texts = rowStrings {
@@ -1589,7 +1594,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineContentDidChange()
 		endCloudKitBatchRequest()
 			
-		guard isBeingViewed else { return nil }
+		guard isBeingViewed else { return }
 
 		let rowShadowTableIndex: Int
 		if let afterRowShadowTableIndex = afterRow?.shadowTableIndex {
@@ -1606,10 +1611,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		shadowTable?.insert(row, at: rowShadowTableIndex)
 		
 		resetShadowTableIndexes(startingAt: afterRow?.shadowTableIndex ?? 0)
-		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: Set(inserts), reloads: Set(reloads))
+		var changes = OutlineElementChanges(section: adjustedRowsSection, inserts: Set(inserts), reloads: Set(reloads))
+		changes.newCursorIndex = inserts[0]
 		outlineElementsDidChange(changes)
-
-		return inserts[0]
 	}
 
 	@discardableResult
@@ -1683,8 +1687,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return inserts.count > 0 ? inserts[0] : nil
 	}
 
-	@discardableResult
-	public func createRowsInsideAtStart(_ rows: [Row], afterRowContainer: RowContainer, rowStrings: RowStrings? = nil) -> Int? {
+	public func createRowsInsideAtStart(_ rows: [Row], afterRowContainer: RowContainer, rowStrings: RowStrings? = nil) {
 		beginCloudKitBatchRequest()
 		
 		if let texts = rowStrings, let afterRow = afterRowContainer as? Row {
@@ -1711,18 +1714,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineContentDidChange()
 		endCloudKitBatchRequest()
 
-		guard isBeingViewed else { return nil }
+		guard isBeingViewed else { return }
 
 		var changes = rebuildShadowTable()
 		
 		if let reload = (afterRowContainer as? Row)?.shadowTableIndex {
 			reloads.insert(reload)
 		}
-		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
+		changes.newCursorIndex = rows.last?.shadowTableIndex
 		outlineElementsDidChange(changes)
-		
-		return rows.last?.shadowTableIndex
 	}
 	
 	public func createRowsInsideAtEnd(_ rows: [Row], afterRowContainer: RowContainer) {
@@ -1791,8 +1793,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return isMoveRowsLeftUnavailable(rows: rows)
 	}
 	
-	@discardableResult
-	public func createRowsOutside(_ rows: [Row], afterRow: Row, rowStrings: RowStrings? = nil) -> Int? {
+	public func createRowsOutside(_ rows: [Row], afterRow: Row, rowStrings: RowStrings? = nil) {
 		beginCloudKitBatchRequest()
 		
 		resetPreviouslyUsed(rows: rows)
@@ -1804,7 +1805,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		guard let afterParentRow = afterRow.parent as? Row,
 			  let afterParentRowParent = afterParentRow.parent,
 			  let index = afterParentRowParent.firstIndexOfRow(afterParentRow) else {
-			return nil
+			return
 		}
 		
 		var reloads = Set<Int>()
@@ -1825,13 +1826,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineContentDidChange()
 		endCloudKitBatchRequest()
 
-		guard isBeingViewed else { return nil }
+		guard isBeingViewed else { return }
 
 		var changes = rebuildShadowTable()
 		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
+		changes.newCursorIndex = rows.last?.shadowTableIndex
 		outlineElementsDidChange(changes)
-
-		return rows.last?.shadowTableIndex
 	}
 
 	func duplicateRows(_ rows: [Row]) -> [Row] {
@@ -1873,7 +1873,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return newRows
 	}
 
-	func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) -> Int? {
+	func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		beginCloudKitBatchRequest()
 		
 		let newTopicRange = NSRange(location: cursorPosition, length: topic.length - cursorPosition)
@@ -1888,14 +1888,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		endCloudKitBatchRequest()
 
-		guard isBeingViewed else { return nil }
-
-		if let rowShadowTableIndex = row.shadowTableIndex {
-			let reloadChanges = OutlineElementChanges(section: adjustedRowsSection, reloads: Set([rowShadowTableIndex]))
-			outlineElementsDidChange(reloadChanges)
-		}
-
-		return newCursorIndex
+		guard isBeingViewed else { return }
+		guard let rowShadowTableIndex = row.shadowTableIndex else { return }
+		
+		var changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set([rowShadowTableIndex]))
+		changes.newCursorIndex = newCursorIndex
+		outlineElementsDidChange(changes)
 	}
 
 	public func updateRow(_ row: Row, rowStrings: RowStrings?, applyChanges: Bool) {

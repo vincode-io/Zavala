@@ -8,7 +8,8 @@
 import Foundation
 
 public final class UncompleteCommand: OutlineCommand {
-var rows: [Row]
+	
+	var rows: [Row]
 	var completedRows: [Row]?
 	
 	var oldRowStrings: RowStrings?

@@ -8,6 +8,7 @@
 import Foundation
 
 public final class MoveRowRightCommand: OutlineCommand {
+	
 	var rows: [Row]
 	var moveRightRows: [Row]?
 	var oldRowStrings: RowStrings?

@@ -8,6 +8,7 @@
 import Foundation
 
 public final class MoveRowLeftCommand: OutlineCommand {
+	
 	var rows: [Row]
 	var restoreMoves = [Outline.RowMove]()
 	var moveLeftRows: [Row]?

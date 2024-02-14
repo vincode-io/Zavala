@@ -8,6 +8,7 @@
 import Foundation
 
 public final class RemoteDropRowCommand: OutlineCommand {
+	
 	var rowGroups: [RowGroup]
 	var rows: [Row]
 	var afterRow: Row?

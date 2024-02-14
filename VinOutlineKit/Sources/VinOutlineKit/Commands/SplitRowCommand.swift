@@ -7,7 +7,6 @@
 import Foundation
 
 public final class SplitRowCommand: OutlineCommand {
-	public var newCursorIndex: Int?
 
 	var newRow: Row?
 	var row: Row
@@ -33,7 +32,7 @@ public final class SplitRowCommand: OutlineCommand {
 		if newRow == nil {
 			newRow = Row(outline: outline)
 		}
-		newCursorIndex = outline.splitRow(newRow: newRow!, row: row, topic: topic, cursorPosition: cursorPosition)
+		outline.splitRow(newRow: newRow!, row: row, topic: topic, cursorPosition: cursorPosition)
 		registerUndo()
 	}
 	

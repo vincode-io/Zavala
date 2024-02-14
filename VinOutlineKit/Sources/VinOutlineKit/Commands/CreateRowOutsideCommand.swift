@@ -8,7 +8,6 @@
 import Foundation
 
 public final class CreateRowOutsideCommand: OutlineCommand {
-	public var newCursorIndex: Int?
 
 	var row: Row?
 	var afterRow: Row
@@ -26,7 +25,7 @@ public final class CreateRowOutsideCommand: OutlineCommand {
 		if row == nil {
 			row = Row(outline: outline)
 		}
-		newCursorIndex = outline.createRowsOutside([row!], afterRow: afterRow, rowStrings: rowStrings)
+		outline.createRowsOutside([row!], afterRow: afterRow, rowStrings: rowStrings)
 		registerUndo()
 	}
 	

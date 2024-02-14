@@ -7,7 +7,6 @@
 import Foundation
 
 public final class DeleteRowCommand: OutlineCommand {
-	public var newCursorIndex: Int?
 
 	var rows: [Row]
 	var rowStrings: RowStrings?
@@ -39,7 +38,7 @@ public final class DeleteRowCommand: OutlineCommand {
 	
 	public override func perform() {
 		saveCursorCoordinates()
-		newCursorIndex = outline.deleteRows(rows, rowStrings: rowStrings)
+		outline.deleteRows(rows, rowStrings: rowStrings)
 		registerUndo()
 	}
 	

@@ -8,6 +8,7 @@
 import Foundation
 
 public final class MoveRowUpCommand: OutlineCommand {
+	
 	var rows: [Row]
 
 	var oldRowStrings: RowStrings?

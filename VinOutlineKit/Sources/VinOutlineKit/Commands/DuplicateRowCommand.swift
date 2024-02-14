@@ -8,6 +8,7 @@
 import Foundation
 
 public final class DuplicateRowCommand: OutlineCommand {
+	
 	var rows: [Row]
 	var newRows: [Row]?
 	

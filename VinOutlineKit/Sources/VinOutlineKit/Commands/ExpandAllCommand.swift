@@ -7,6 +7,7 @@
 import Foundation
 
 public final class ExpandAllCommand: OutlineCommand {
+	
 	var containers: [RowContainer]
 	var expandedRows: [Row]?
 	

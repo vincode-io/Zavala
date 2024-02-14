@@ -7,7 +7,6 @@
 import Foundation
 
 public final class DeleteNoteCommand: OutlineCommand {
-	public var newCursorIndex: Int?
 
 	var rows: [Row]
 	var oldRowStrings: RowStrings?
@@ -27,9 +26,7 @@ public final class DeleteNoteCommand: OutlineCommand {
 	
 	public override func perform() {
 		saveCursorCoordinates()
-		let (impacted, newCursorIndex) = outline.deleteNotes(rows: rows, rowStrings: newRowStrings)
-		deletedRowNotes = impacted
-		self.newCursorIndex = newCursorIndex
+		deletedRowNotes = outline.deleteNotes(rows: rows, rowStrings: newRowStrings)
 		registerUndo()
 	}
 	

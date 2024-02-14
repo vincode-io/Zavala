@@ -8,6 +8,7 @@
 import Foundation
 
 public final class CollapseCommand: OutlineCommand {
+	
 	var rows: [Row]
 	var collapsedRows: [Row]?
 	

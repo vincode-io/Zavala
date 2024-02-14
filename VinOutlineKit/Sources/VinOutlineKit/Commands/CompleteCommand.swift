@@ -8,6 +8,7 @@
 import Foundation
 
 public final class CompleteCommand: OutlineCommand {
+	
 	var rows: [Row]
 	var completedRows: [Row]?
 	

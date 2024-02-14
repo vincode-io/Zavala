@@ -29,6 +29,10 @@ public struct OutlineElementChanges {
 	/* I would like to remove this property. The VinOutlineKit layer shouldn't know about limitations of the UI layer. */
 	public var isReloadsAnimatable = false
 	
+	public var cursorMoveIsBeforeChanges = false
+	public var cursorMoveIsToNote = false
+	public var newCursorIndex: Int?
+	
 	public var isEmpty: Bool {
 		return (deletes?.isEmpty ?? true) && (inserts?.isEmpty ?? true) && (moves?.isEmpty ?? true) && (reloads?.isEmpty ?? true)
 	}

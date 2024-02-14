@@ -7,6 +7,7 @@
 import Foundation
 
 public final class CollapseAllCommand: OutlineCommand {
+	
 	var containers: [RowContainer]
 	var collapsedRows: [Row]?
 	

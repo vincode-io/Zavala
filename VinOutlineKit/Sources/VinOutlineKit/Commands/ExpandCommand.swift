@@ -8,6 +8,7 @@
 import Foundation
 
 public final class ExpandCommand: OutlineCommand {
+	
 	var rows: [Row]
 	var expandedRows: [Row]?
 	

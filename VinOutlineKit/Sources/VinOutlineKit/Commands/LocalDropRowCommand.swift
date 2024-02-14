@@ -7,6 +7,7 @@
 import Foundation
 
 public final class LocalDropRowCommand: OutlineCommand {
+	
 	var rowMoves = [Outline.RowMove]()
 	var restoreMoves = [Outline.RowMove]()
 	

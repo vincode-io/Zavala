@@ -8,6 +8,7 @@
 import Foundation
 
 public final class DeleteTagCommand: OutlineCommand {
+	
 	var tagName: String
 	var tag: Tag?
 	

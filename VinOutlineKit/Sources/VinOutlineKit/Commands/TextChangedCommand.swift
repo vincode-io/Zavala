@@ -7,6 +7,7 @@
 import Foundation
 
 public final class TextChangedCommand: OutlineCommand {
+	
 	var row: Row
 	var oldRowStrings: RowStrings?
 	var newRowStrings: RowStrings
