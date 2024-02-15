@@ -263,14 +263,13 @@ public final class Account: Identifiable, Equatable, Codable {
 		
 		disambiguate(document: document)
 		
-		saveToCloudKit(document)
-		
 		outline.updateAllLinkRelationships()
 		
 		fixAltLinks(excluding: outline)
 		
 		outline.forceSave()
-		outline.unloadRows()
+		saveToCloudKit(document)
+		outline.unload()
 
 		return document
 	}
@@ -576,6 +575,13 @@ private extension Account {
 			if let rows = outline.keyedRows?.values {
 				for row in rows {
 					requests.insert(CloudKitActionRequest(zoneID: zoneID, id: row.entityID))
+				}
+			}
+			if let rowImages = outline.images?.values {
+				for images in rowImages {
+					for image in images {
+						requests.insert(CloudKitActionRequest(zoneID: zoneID, id: image.id))
+					}
 				}
 			}
 		}
