@@ -1698,10 +1698,6 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		return keyboardToolBar
 	}
 	
-    func editorRowLayoutEditor(row: Row) {
-		layoutEditor(row: row)
-	}
-	
 	func editorRowScrollEditorToVisible(textView: UITextView, rect: CGRect) {
 		scrollToVisible(textInput: textView, rect: rect, animated: true)
 	}
@@ -2316,16 +2312,6 @@ private extension EditorViewController {
 	func layoutEditor() {
 		collectionView.collectionViewLayout.invalidateLayout()
 		collectionView.layoutIfNeeded()
-	}
-	
-	func layoutEditor(row: Row) {
-		guard let index = row.shadowTableIndex else { return }
-		let indexPath = IndexPath(row: index, section: adjustedRowsSection)
-		UIView.performWithoutAnimation {
-			self.collectionView.reconfigureItems(at: [indexPath])
-		}
-		
-		makeCursorVisibleIfNecessary()
 	}
 	
 	func applyChanges(_ changes: OutlineElementChanges) {

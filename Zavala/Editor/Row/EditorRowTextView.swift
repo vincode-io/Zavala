@@ -207,8 +207,8 @@ class EditorRowTextView: UITextView {
 		}
 	}
 	
-    func layoutEditor() {
-        fatalError("reloadRow has not been implemented")
+    func resize() {
+        fatalError("resize has not been implemented")
     }
     
     func makeCursorVisibleIfNecessary() {
@@ -513,7 +513,7 @@ extension EditorRowTextView {
         if let currentHeight = textViewHeight, abs(fittingSize.height - currentHeight) > 0 {
 			CursorCoordinates.updateLastKnownCoordinates()
             textViewHeight = fittingSize.height
-            layoutEditor()
+            resize()
         }
         
         makeCursorVisibleIfNecessary()

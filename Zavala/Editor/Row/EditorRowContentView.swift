@@ -148,8 +148,8 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowInputAccessoryView
 	}
 	
-	func layoutEditor(_: EditorRowTopicTextView, row: Row) {
-		appliedConfiguration?.delegate?.editorRowLayoutEditor(row: row)
+	func resize(_: EditorRowTopicTextView) {
+		resize()
 	}
 	
 	func scrollEditorToVisible(_ textView: EditorRowTopicTextView, rect: CGRect) {
@@ -216,8 +216,8 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 		return appliedConfiguration?.delegate?.editorRowInputAccessoryView
 	}
 	
-	func layoutEditor(_: EditorRowNoteTextView, row: Row) {
-		appliedConfiguration?.delegate?.editorRowLayoutEditor(row: row)
+	func resize(_: EditorRowNoteTextView) {
+		resize()
 	}
 	
 	func scrollEditorToVisible(_ textView: EditorRowNoteTextView, rect: CGRect) {
@@ -310,6 +310,17 @@ private extension EditorRowContentView {
 				barView.trailingAnchor.constraint(equalTo: topicTextView.leadingAnchor)
 			])
 		}
+	}
+	
+	func resize() {
+		if AppDefaults.shared.disableEditorAnimations {
+			UIView.performWithoutAnimation {
+				invalidateIntrinsicContentSize()
+			}
+		} else {
+			invalidateIntrinsicContentSize()
+		}
+
 	}
 	
 	func configureBulletOrDisclosure(config: EditorRowContentConfiguration) {

@@ -12,7 +12,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewUndoManager: UndoManager? { get }
 	var editorRowTopicTextViewInputAccessoryView: UIView? { get }
 	func didBecomeActive(_: EditorRowTopicTextView, row: Row)
-	func layoutEditor(_: EditorRowTopicTextView, row: Row)
+	func resize(_: EditorRowTopicTextView)
 	func scrollEditorToVisible(_: EditorRowTopicTextView, rect: CGRect)
 	func moveCursorUp(_: EditorRowTopicTextView, row: Row)
 	func moveCursorDown(_: EditorRowTopicTextView, row: Row)
@@ -116,9 +116,8 @@ class EditorRowTopicTextView: EditorRowTextView {
         editorDelegate?.textChanged(self, row: row, isInNotes: false, selection: selectedRange, rowStrings: rowStrings)
     }
 
-	override func layoutEditor() {
-		guard let row else { return }
-		editorDelegate?.layoutEditor(self, row: row)
+	override func resize() {
+		editorDelegate?.resize(self)
 	}
 	
     override func makeCursorVisibleIfNecessary() {
@@ -232,6 +231,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 		linkTextAttributes = linkAttrs
 		
         if let topic = row.topic {
+			print("!!!!!!!! updating row: \(topic.string)")
             attributedText = topic
         }
         
