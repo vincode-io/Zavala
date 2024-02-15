@@ -231,7 +231,6 @@ class EditorRowTopicTextView: EditorRowTextView {
 		linkTextAttributes = linkAttrs
 		
         if let topic = row.topic {
-			print("!!!!!!!! updating row: \(topic.string)")
             attributedText = topic
         }
         
