@@ -9,7 +9,7 @@ import Foundation
 
 public struct BuildInfo: Codable {
 	
-	nonisolated(unsafe) public static let shared = {
+	public static let shared = {
 		guard let buildInfoPlist = Bundle.main.url(forResource: "BuildInfo", withExtension: "plist"),
 			  let data = try? Data(contentsOf: buildInfoPlist),
 			  let buildInfo = try? PropertyListDecoder().decode(BuildInfo.self, from: data) else {

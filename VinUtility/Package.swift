@@ -20,8 +20,8 @@ let package = Package(
             name: "VinUtility",
 		dependencies: [
 			.product(name: "OrderedCollections", package: "swift-collections")
-		],
-		swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
+		]
+//		swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
 	),
 	]
 )
