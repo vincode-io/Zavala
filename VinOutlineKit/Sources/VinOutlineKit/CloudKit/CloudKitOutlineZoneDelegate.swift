@@ -89,6 +89,9 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 				account?.apply(update)
 			}
 			
+			// Even though we handle the delete share records here, they don't usually work. That's
+			// because the share record id is removed from the outline by the time we get here. No worries.
+			// The outline will remove the share record data itself when its recordID gets removed.
 			for (shareRecordID, shareRecord) in shareUpdatesToSend {
 				if let outline = account?.findDocument(shareRecordID: shareRecordID)?.outline {
 					outline.cloudKitShareRecord = shareRecord

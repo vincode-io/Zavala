@@ -331,6 +331,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 	public var cloudKitShareRecordName: String? {
 		didSet {
+			if cloudKitShareRecordName == nil {
+				cloudKitShareRecordData = nil
+			}
 			if cloudKitShareRecordName != oldValue {
 				documentSharingDidChange()
 				documentMetaDataDidChange()
