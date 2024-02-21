@@ -29,6 +29,7 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 	
 	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey]) async throws {
 		var updates = [EntityID: CloudKitOutlineUpdate]()
+		var shareUpdates = [(CKRecord.ID, CKShare?)]()
 
 		func update(for documentID: EntityID, zoneID: CKRecordZone.ID) -> CloudKitOutlineUpdate {
 			if let update = updates[documentID] {
@@ -42,11 +43,7 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 
 		for deletedRecordKey in deleted {
 			if deletedRecordKey.recordType == CKRecord.SystemType.share {
-				if let outline = AccountManager.shared.cloudKitAccount?.findDocument(shareRecordID: deletedRecordKey.recordID)?.outline {
-					Task { @MainActor in
-						outline.cloudKitShareRecord = nil
-					}
-				}
+				shareUpdates.append((deletedRecordKey.recordID, nil))
 			} else {
 				guard let entityID = EntityID(description: deletedRecordKey.recordID.recordName) else { continue }
 				switch entityID {
@@ -66,11 +63,7 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 
 		for changedRecord in changed {
 			if let shareRecord = changedRecord as? CKShare {
-				if let outline = AccountManager.shared.cloudKitAccount?.findDocument(shareRecordID: shareRecord.recordID)?.outline {
-					Task { @MainActor in
-						outline.cloudKitShareRecord = shareRecord
-					}
-				}
+				shareUpdates.append((shareRecord.recordID, shareRecord))
 			} else {
 				guard let entityID = EntityID(description: changedRecord.recordID.recordName) else { continue }
 				switch entityID {
@@ -88,9 +81,18 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 			}
 		}
 		
-		for update in updates.values {
-			Task { @MainActor in
+		let updatesToSend = updates
+		let shareUpdatesToSend = shareUpdates
+		
+		Task { @MainActor in
+			for update in updatesToSend.values {
 				account?.apply(update)
+			}
+			
+			for (shareRecordID, shareRecord) in shareUpdatesToSend {
+				if let outline = account?.findDocument(shareRecordID: shareRecordID)?.outline {
+					outline.cloudKitShareRecord = shareRecord
+				}
 			}
 		}
 		
