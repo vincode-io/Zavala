@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import OSLog
 import Intents
 import VinOutlineKit
 
@@ -280,6 +281,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	private var history = [Pin]()
 	private var documentIndexer: DocumentIndexer?
+	private var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Zavala")
 	
 	#if targetEnvironment(macCatalyst)
 	var appKitPlugin: AppKitPlugin?
@@ -1036,7 +1038,16 @@ private extension AppDelegate {
 	}
 	
 	@objc private func didEnterBackground() {
-		AccountManager.shared.suspend()
+		let backgroundTaskID = UIApplication.shared.beginBackgroundTask { [weak self] in
+			self?.logger.info("CloudKit sync processing terminated for running too long.")
+		}
+
+		Task {
+			await AccountManager.shared.sync()
+			AccountManager.shared.suspend()
+			UIApplication.shared.endBackgroundTask(backgroundTaskID)
+		}
+		
 		AppDefaults.shared.documentHistory = history.map { $0.userInfo }
 	}
 	

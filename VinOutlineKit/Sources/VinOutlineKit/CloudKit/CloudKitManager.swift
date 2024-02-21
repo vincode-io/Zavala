@@ -46,10 +46,6 @@ public class CloudKitManager {
 	private weak var errorHandler: ErrorHandler?
 	private weak var account: Account?
 
-	#if canImport(UIKit)
-	private var sendChangesBackgroundTaskID = UIBackgroundTaskIdentifier.invalid
-	#endif
-
 	private var debouncer = Debouncer(duration: 5)
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
 	private let requestsSemaphore = AsyncSemaphore(value: 1)
@@ -233,7 +229,8 @@ public class CloudKitManager {
 	}
 	
 	func suspend() async {
-		debouncer.executeNow()
+		debouncer.cancel()
+		await sync()
 	}
 	
 	func accountDidDelete(account: Account) {
@@ -309,25 +306,6 @@ private extension CloudKitManager {
 			return
 		}
 		
-		#if canImport(UIKit)
-		let completeProcessing = { [weak self] in
-			guard let self else {
-				return
-			}
-			
-			self.isSyncing = false
-			self.sendChangesBackgroundTaskID = UIBackgroundTaskIdentifier.invalid
-			
-			Task { @MainActor in
-				UIApplication.shared.endBackgroundTask(self.sendChangesBackgroundTaskID)
-			}
-		}
-		
-		self.sendChangesBackgroundTaskID = UIApplication.shared.beginBackgroundTask { [weak self] in
-			self?.logger.info("CloudKit sync processing terminated for running too long.")
-		}
-		#endif
-		
 		logger.info("Sending \(requests.count) requests.")
 		
 		let (loadedDocuments, modifications) = loadDocumentsAndStageModifications(requests: requests)
@@ -382,7 +360,7 @@ private extension CloudKitManager {
 			}
 		}
 
-		completeProcessing()
+		self.isSyncing = false
 	}
 	
 	func fetchAllChanges(userInitiated: Bool) async throws {
@@ -429,6 +407,7 @@ private extension CloudKitManager {
 						continuation.resume()
 					}
 				case .failure(let error):
+					self.isSyncing = false
 					continuation.resume(throwing: error)
 				}
 			}
