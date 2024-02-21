@@ -337,9 +337,16 @@ private extension CloudKitManager {
 						leftOverRequests.subtract(deletedEntityIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) })
 					}
 				} catch {
-					if let ckError = error as? CKError, ckError.code == .userDeletedZone {
-						account?.deleteAllDocuments(with: zoneID)
-						throw VCKError.userDeletedZone
+					if let ckError = error as? CKError {
+						switch ckError.code {
+						case .zoneNotFound:
+							account?.deleteAllDocuments(with: zoneID)
+						case .userDeletedZone:
+							account?.deleteAllDocuments(with: zoneID)
+							throw VCKError.userDeletedZone
+						default:
+							throw error
+						}
 					} else {
 						throw error
 					}
@@ -424,9 +431,16 @@ private extension CloudKitManager {
 		do {
 			try await zone.fetchChangesInZone(incremental: false)
 		} catch {
-			if let ckError = error as? CKError, ckError.code == .userDeletedZone {
-				account?.deleteAllDocuments(with: zoneID)
-				throw VCKError.userDeletedZone
+			if let ckError = error as? CKError {
+				switch ckError.code {
+				case .zoneNotFound:
+					account?.deleteAllDocuments(with: zoneID)
+				case .userDeletedZone:
+					account?.deleteAllDocuments(with: zoneID)
+					throw VCKError.userDeletedZone
+				default:
+					throw error
+				}
 			} else {
 				throw error
 			}

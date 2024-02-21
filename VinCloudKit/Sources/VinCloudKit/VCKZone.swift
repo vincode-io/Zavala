@@ -302,17 +302,7 @@ public extension VCKZone {
 
 					let refinedResult = VCKResult.refine(error)
 					switch refinedResult {
-					case .zoneNotFound:
-						Task {
-							do {
-								try await self.createRecordZone()
-								let result = try await self.modify(modelsToSave: modelsToSend, recordIDsToDelete: deletesToSend, strategy: strategy)
-								continuation.resume(returning: result)
-							} catch {
-								continuation.resume(throwing: error)
-							}
-						}
-					case .userDeletedZone:
+					case .zoneNotFound, .userDeletedZone:
 						continuation.resume(throwing: error)
 					case .retry(let timeToWait):
 						self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone modify retry in \(timeToWait, privacy: .public) seconds.")
@@ -483,17 +473,7 @@ public extension VCKZone {
 				
 				func handleError(_ error: Error) {
 					switch VCKResult.refine(error) {
-					case .zoneNotFound:
-						Task {
-							do {
-								try await self.createRecordZone()
-								try await self.fetchChangesInZone(incremental: incremental)
-								continuation.resume()
-							} catch {
-								continuation.resume(throwing: error)
-							}
-						}
-					case .userDeletedZone:
+					case .zoneNotFound, .userDeletedZone:
 						continuation.resume(throwing: error)
 					case .retry(let timeToWait):
 						self.logger.error("\(self.zoneID.zoneName, privacy: .public) zone fetch changes retry in \(timeToWait, privacy: .public) seconds.")
