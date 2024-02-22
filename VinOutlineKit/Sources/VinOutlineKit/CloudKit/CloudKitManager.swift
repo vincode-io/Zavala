@@ -341,6 +341,8 @@ private extension CloudKitManager {
 						switch ckError.code {
 						case .zoneNotFound:
 							account?.deleteAllDocuments(with: zoneID)
+							// We remove everything so that we get any child row requests as well. We probably could be more surgical here.
+							leftOverRequests.removeAll()
 						case .userDeletedZone:
 							account?.deleteAllDocuments(with: zoneID)
 							throw VCKError.userDeletedZone
