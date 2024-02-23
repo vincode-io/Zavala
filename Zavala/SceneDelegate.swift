@@ -53,6 +53,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		#endif
 
 		mainSplitViewController.startUp()
+		
+		if let shareMetadata = connectionOptions.cloudKitShareMetadata {
+			acceptShare(shareMetadata)
+			return
+		}
 
 		if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
 			Task {
@@ -116,9 +121,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 	
 	func windowScene(_ windowScene: UIWindowScene, userDidAcceptCloudKitShareWith shareMetadata: CKShare.Metadata) {
-		Task {
-			await AccountManager.shared.cloudKitAccount?.userDidAcceptCloudKitShareWith(shareMetadata)
-		}
+		acceptShare(shareMetadata)
 	}
 	
 	// MARK: API
@@ -138,4 +141,13 @@ private extension SceneDelegate {
 		updateUserInterfaceStyle()
 	}
 
+	func acceptShare(_ shareMetadata: CKShare.Metadata) {
+		Task {
+			await AccountManager.shared.cloudKitAccount?.userDidAcceptCloudKitShareWith(shareMetadata)
+			if let documentID = AccountManager.shared.cloudKitAccount?.findDocument(shareRecordID: shareMetadata.share.recordID)?.id {
+				await mainSplitViewController.handleDocument(documentID, isNavigationBranch: true)
+			}
+		}
+	}
+	
 }

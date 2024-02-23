@@ -48,6 +48,11 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		let _ = editorContainerViewController.view
 		
+		if let shareMetadata = connectionOptions.cloudKitShareMetadata {
+			acceptShare(shareMetadata)
+			return
+		}
+		
 		if let userActivity = session.stateRestorationActivity {
 			editorContainerViewController.handle(userActivity)
 			return
@@ -106,9 +111,7 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 	
 	func windowScene(_ windowScene: UIWindowScene, userDidAcceptCloudKitShareWith shareMetadata: CKShare.Metadata) {
-		Task {
-			await AccountManager.shared.cloudKitAccount?.userDidAcceptCloudKitShareWith(shareMetadata)
-		}
+		acceptShare(shareMetadata)
 	}
 	
 	// MARK: API
@@ -132,5 +135,15 @@ private extension OutlineEditorSceneDelegate {
 	@objc func userDefaultsDidChange() {
 		updateUserInterfaceStyle()
 	}
+
+	func acceptShare(_ shareMetadata: CKShare.Metadata) {
+		Task {
+			await AccountManager.shared.cloudKitAccount?.userDidAcceptCloudKitShareWith(shareMetadata)
+			if let documentID = AccountManager.shared.cloudKitAccount?.findDocument(shareRecordID: shareMetadata.share.recordID)?.id {
+				editorContainerViewController.openDocument(documentID)
+			}
+		}
+	}
+	
 
 }

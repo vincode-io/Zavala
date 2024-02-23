@@ -471,14 +471,14 @@ public final class Account: Identifiable, Equatable, Codable {
 		return tags?.first(where: { $0.name == name })
 	}
 
+	public func findDocument(shareRecordID: CKRecord.ID) -> Document? {
+		return documents?.first(where: { $0.shareRecordID == shareRecordID })
+	}
+	
 	func findDocument(documentUUID: String) -> Document? {
 		return idToDocumentsDictionary[documentUUID]
 	}
 
-	func findDocument(shareRecordID: CKRecord.ID) -> Document? {
-		return documents?.first(where: { $0.shareRecordID == shareRecordID })
-	}
-	
 	func deleteAllDocuments(with zoneID: CKRecordZone.ID) {
 		for doc in documents ?? [Document]() {
 			if doc.zoneID == zoneID {
