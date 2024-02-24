@@ -401,12 +401,14 @@ extension DocumentsViewController {
 		guard let documentContainers else { return }
 
 		// We have to figure out double clicks for ourselves
+		#if targetEnvironment(macCatalyst)
 		let now: TimeInterval = Date().timeIntervalSince1970
 		if now - lastClick < 0.3 && lastIndexPath?.row == indexPath.row {
 			openDocumentInNewWindow(indexPath: indexPath)
 		}
 		lastClick = now
 		lastIndexPath = indexPath
+		#endif
 		
 		guard let selectedIndexPaths = collectionView.indexPathsForSelectedItems else {
 			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: false, animated: true)
