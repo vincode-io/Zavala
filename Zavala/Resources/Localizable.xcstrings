@@ -261,9 +261,6 @@
     "Export" : {
       "comment" : "Control Label: Export"
     },
-    "Export Export PDF List…" : {
-      "comment" : "Control Label: Export PDF List…"
-    },
     "Export Markdown Doc…" : {
       "comment" : "Control Label: Export Markdown Doc…"
     },
@@ -275,6 +272,9 @@
     },
     "Export PDF Doc…" : {
       "comment" : "Control Label: Export PDF Doc…"
+    },
+    "Export PDF List…" : {
+      "comment" : "Control Label: Export PDF List…"
     },
     "Filter" : {
       "comment" : "Control Label: Filter"

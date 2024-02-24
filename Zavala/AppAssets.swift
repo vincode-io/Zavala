@@ -215,7 +215,7 @@ extension String {
 	static var exportMarkdownDocEllipsisControlLabel = String(localized: "Export Markdown Doc…", comment: "Control Label: Export Markdown Doc…")
 	static var exportMarkdownListEllipsisControlLabel = String(localized: "Export Markdown List…", comment: "Control Label: Export Markdown List…")
 	static var exportPDFDocEllipsisControlLabel = String(localized: "Export PDF Doc…", comment: "Control Label: Export PDF Doc…")
-	static var exportPDFListEllipsisControlLabel = String(localized: "Export Export PDF List…", comment: "Control Label: Export PDF List…")
+	static var exportPDFListEllipsisControlLabel = String(localized: "Export PDF List…", comment: "Control Label: Export PDF List…")
 	static var exportOPMLEllipsisControlLabel = String(localized: "Export OPML…", comment: "Control Label: Export OPML…")
 	static var expandAllControlLabel = String(localized: "Expand All", comment: "Control Label: Expand All")
 	static var expandAllInOutlineControlLabel = String(localized: "Expand All in Outline", comment: "Control Label: Expand All in Outline")
