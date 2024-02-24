@@ -864,7 +864,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 		// After this point as long as we don't have this Outline open in other
 		// windows, no more collection view updates should happen for it.
-		outline?.decrementBeingUsedCount()
+		outline?.decrementBeingViewedCount()
 		
 		// End the search collection view updates early
 		isSearching = false // Necessary to prevent crashing while switching outlines during a find session
@@ -884,7 +884,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 
 		outline.load()
-		outline.incrementBeingUsedCount()
+		outline.incrementBeingViewedCount()
 		checkForCorruptOutline()
 		outline.prepareForViewing()
 			

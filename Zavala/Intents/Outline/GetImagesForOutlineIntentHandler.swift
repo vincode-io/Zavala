@@ -21,9 +21,10 @@ class GetImagesForOutlineIntentHandler: NSObject, ZavalaIntentHandler, GetImages
 		
 		var files = [INFile]()
 		
-		outline.loadImages()
+		outline.load()
 		
 		guard let imageGroups = outline.images?.values, !imageGroups.isEmpty else {
+			outline.unload()
 			suspend()
 			completion(.init(code: .success, userActivity: nil))
 			return
@@ -36,9 +37,9 @@ class GetImagesForOutlineIntentHandler: NSObject, ZavalaIntentHandler, GetImages
 			files.append(file)
 		}
 		
-		outline.unloadImages()
-		
+		outline.unload()
 		suspend()
+		
 		let response = GetImagesForOutlineIntentResponse(code: .success, userActivity: nil)
 		response.images = files
 		completion(response)

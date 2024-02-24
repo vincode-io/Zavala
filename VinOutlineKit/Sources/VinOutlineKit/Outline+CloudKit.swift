@@ -153,7 +153,7 @@ extension Outline: VCKModel {
 			documentDidChangeBySync()
 		}
 		
-		guard isBeingUsed else { return }
+		guard isBeingViewed else { return }
 
 		var reloadRows = [Row]()
 		
@@ -200,7 +200,7 @@ extension Outline: VCKModel {
 
 		if title != newTitle {
 			title = newTitle
-			if isBeingUsed {
+			if isBeingViewed {
 				outlineElementsDidChange(OutlineElementChanges(section: .title, reloads: Set([0])))
 			}
 		}
@@ -427,7 +427,7 @@ private extension Outline {
 		if let mergedTagNames = merge(client: tagNames, ancestor: ancestorTagNames, server: serverTagNames) {
 			let mergedTagIDs = mergedTagNames.map({ account.createTag(name: $0) }).map({ $0.id })
 			
-			if isBeingUsed && isSearching == .notSearching {
+			if isBeingViewed && isSearching == .notSearching {
 				updateTagUI(mergedTagIDs, tagIDs ?? [])
 			}
 			
