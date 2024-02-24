@@ -139,7 +139,6 @@ extension String {
 	static var actualSizeControlLabel = String(localized: "Actual Size", comment: "Control Label: Actual Size")
 	static var addControlLabel = String(localized: "Add", comment: "Control Label: Add")
 	static var addNoteControlLabel = String(localized: "Add Note", comment: "Control Label: Add Note.")
-	static var addNoteLevelControlLabel = String(localized: "Add Note Level", comment: "Control Label: The menu option to add a new Note Level.")
 	static var addRowAboveControlLabel = String(localized: "Add Row Above", comment: "Control Label: Add Row Above")
 	static var addRowAfterControlLabel = String(localized: "Add Row After", comment: "Control Label: Add Row After")
 	static var addRowBelowControlLabel = String(localized: "Add Row Below", comment: "Control Label: Add Row Below")

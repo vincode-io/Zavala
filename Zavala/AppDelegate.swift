@@ -132,7 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											 input: "\n",
 											 modifierFlags: [.command])
 	
-	let createRowNotesCommand = UIKeyCommand(title: .addNoteLevelControlLabel,
+	let createRowNotesCommand = UIKeyCommand(title: .addNoteControlLabel,
 											 action: #selector(createRowNotesCommand(_:)),
 											 input: "-",
 											 modifierFlags: [.control])

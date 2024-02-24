@@ -36,9 +36,6 @@
     "Add Note" : {
       "comment" : "Control Label: Add Note."
     },
-    "Add Note Level" : {
-      "comment" : "Control Label: The menu option to add a new Note Level."
-    },
     "Add Row" : {
       "comment" : "Control Label: Add Row"
     },
