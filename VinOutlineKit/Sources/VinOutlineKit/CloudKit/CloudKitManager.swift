@@ -127,6 +127,9 @@ public class CloudKitManager {
 				guard let self, self.isNetworkAvailable else { return }
 				Task {
 					do {
+						await self.requestsSemaphore.wait()
+						defer { self.requestsSemaphore.signal() }
+
 						try await self.sendChanges(userInitiated: false)
 						try await self.fetchAllChanges(userInitiated: false)
 					} catch {
