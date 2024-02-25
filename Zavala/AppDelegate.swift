@@ -142,6 +142,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											 input: "-",
 											 modifierFlags: [.control, .shift])
 	
+	let deleteCurrentRowsCommand = UIKeyCommand(title: .deleteRowControlLabel,
+											 action: #selector(deleteCurrentRowsCommand(_:)),
+											 input: UIKeyCommand.inputDelete,
+												modifierFlags: [.shift, .command])
+	
 	let splitRowCommand = UIKeyCommand(title: .splitRowControlLabel,
 									   action: #selector(splitRowCommand(_:)),
 									   input: "\n",
@@ -554,6 +559,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.deleteRowNotes()
 	}
 	
+	@objc func deleteCurrentRowsCommand(_ sender: Any?) {
+		mainCoordinator?.deleteCurrentRows()
+	}
+	
 	@objc func splitRowCommand(_ sender: Any?) {
 		mainCoordinator?.splitRow()
 	}
@@ -958,8 +967,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.insertChild(focusMenu, atStartOfMenu: .view)
 
 		// Outline Menu
-		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand, createRowNotesCommand, deleteRowNotesCommand])
-		let moveRowMenu = UIMenu(title: "", options: .displayInline, children: [moveRowsLeftCommand, moveRowsRightCommand, moveRowsUpCommand, moveRowsDownCommand])
 		let mainOutlineMenu = UIMenu(title: "",
 									 options: .displayInline,
 									 children: [insertRowCommand,
@@ -967,8 +974,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												createRowInsideCommand,
 												createRowOutsideCommand,
 												duplicateRowsCommand,
-												splitRowCommand])
-		let outlineMenu = UIMenu(title: .outlineControlLabel, children: [mainOutlineMenu, moveRowMenu, completeMenu])
+												splitRowCommand,
+												deleteCurrentRowsCommand])
+		let moveRowMenu = UIMenu(title: "", options: .displayInline, children: [moveRowsLeftCommand, moveRowsRightCommand, moveRowsUpCommand, moveRowsDownCommand])
+		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand])
+		let noteMenu = UIMenu(title: "", options: .displayInline, children: [createRowNotesCommand, deleteRowNotesCommand])
+
+		let outlineMenu = UIMenu(title: .outlineControlLabel, children: [mainOutlineMenu, moveRowMenu, completeMenu, noteMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)
 
 		// History Menu

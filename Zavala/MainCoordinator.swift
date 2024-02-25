@@ -284,6 +284,10 @@ extension MainCoordinator {
 		editorViewController?.collapseParentRow()
 	}
 	
+	func deleteCurrentRows() {
+		editorViewController?.deleteCurrentRows()
+	}
+	
 	func deleteCompletedRows() {
 		editorViewController?.deleteCompletedRows()
 	}
