@@ -1515,6 +1515,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			updateRowStrings(beforeRow, texts)
 		}
 
+		resetPreviouslyUsed(rows: [row])
+		
 		guard let parent = beforeRow.parent,
 			  let index = parent.firstIndexOfRow(beforeRow),
 			  let shadowTableIndex = beforeRow.shadowTableIndex else {
@@ -1553,6 +1555,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		if let afterRow, let texts = rowStrings {
 			updateRowStrings(afterRow, texts)
 		}
+
+		resetPreviouslyUsed(rows: [row])
 		
 		if afterRow == nil {
 			insertRow(row, at: 0)
@@ -1618,6 +1622,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		if let afterRow, let texts = rowStrings {
 			updateRowStrings(afterRow, texts)
 		}
+		
+		resetPreviouslyUsed(rows: rows)
 		
 		var reloads = Set<Int>()
 		let beginningRowCount = rowCount
@@ -1685,6 +1691,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		if let texts = rowStrings, let afterRow = afterRowContainer as? Row {
 			updateRowStrings(afterRow, texts)
 		}
+		
+		resetPreviouslyUsed(rows: rows)
 
 		var reloads = Set<Int>()
 
@@ -1721,6 +1729,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	public func createRowsInsideAtEnd(_ rows: [Row], afterRowContainer: RowContainer) {
 		beginCloudKitBatchRequest()
 
+		resetPreviouslyUsed(rows: rows)
+
 		var reloads = Set<Int>()
 
 		for row in rows {
@@ -1748,6 +1758,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 	public func createRowsDirectlyAfter(_ rows: [Row], afterRow: Row) {
 		beginCloudKitBatchRequest()
+
+		resetPreviouslyUsed(rows: rows)
 
 		var reloads = Set<Int>()
 
@@ -1784,6 +1796,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	public func createRowsOutside(_ rows: [Row], afterRow: Row, rowStrings: RowStrings? = nil) -> Int? {
 		beginCloudKitBatchRequest()
 		
+		resetPreviouslyUsed(rows: rows)
+
 		if let texts = rowStrings {
 			updateRowStrings(afterRow, texts)
 		}
@@ -3129,6 +3143,15 @@ private extension Outline {
 		}
 
 		return reloads
+	}
+	
+	// When creating rows that previously existed, we need to strip the cloudKitMetadata or they won't sync. A prime example
+	// of this is when we delete some rows and then undelete them. The undeleted rows must have their metadata stripped so that
+	// CloudKit doesn't consider them "not found" records and recreates them.
+	func resetPreviouslyUsed(rows: [Row]) {
+		for row in rows {
+			row.cloudKitMetaData = nil
+		}
 	}
 	
 	func deleteLinkRelationships(for rows: [Row]) {
