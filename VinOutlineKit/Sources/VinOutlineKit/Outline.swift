@@ -723,7 +723,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func findRow(id: String) -> Row? {
-		assert(keyedRows != nil, "Accessing an Outline that doesn't have the rows loaded properly!!!")
 		return keyedRows?[id]
 	}
 	
