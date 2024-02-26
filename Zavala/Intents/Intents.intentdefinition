@@ -446,11 +446,11 @@
 	<key>INIntentDefinitionNamespace</key>
 	<string>LEx6zX</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>21A559</string>
+	<string>23D60</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>13A1030d</string>
+	<string>15C500b</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>13.1</string>
+	<string>15.2</string>
 	<key>INIntents</key>
 	<array>
 		<dict>
@@ -2876,9 +2876,11 @@
 					<key>INIntentParameterMetadata</key>
 					<dict>
 						<key>INIntentParameterMetadataDefaultValue</key>
-						<integer>200</integer>
+						<integer>1</integer>
 						<key>INIntentParameterMetadataMaximumValue</key>
 						<integer>200</integer>
+						<key>INIntentParameterMetadataMinimumValue</key>
+						<integer>1</integer>
 						<key>INIntentParameterMetadataType</key>
 						<string>Field</string>
 					</dict>

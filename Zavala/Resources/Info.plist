@@ -6,8 +6,6 @@
 	<string>group.$(ORGANIZATION_IDENTIFIER).Zavala</string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(AppIdentifierPrefix)</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDocumentTypes</key>
@@ -56,15 +54,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
 	<key>CKSharingSupported</key>
 	<true/>
-<!--	<key>LSMultipleInstancesProhibited</key>-->
-<!--	<true/>-->
 	<key>DeveloperEntitlements</key>
 	<string>$(DEVELOPER_ENTITLEMENTS)</string>
 	<key>INIntentsSupported</key>
@@ -89,6 +80,8 @@
 		<string>ShowOutlineIntent</string>
 		<string>SetOutlineTitleIntent</string>
 	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.productivity</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -99,6 +92,11 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
@@ -127,10 +125,10 @@ All Rights Reserved.</string>
 		<string>RemoveRowsIntent</string>
 		<string>ShowOutlineIntent</string>
 		<string>io.vincode.Zavala.newWindow</string>
-		<string>io.vincode.Zavala.viewImage</string>
 		<string>io.vincode.Zavala.restoration</string>
 		<string>io.vincode.Zavala.selectingDocument</string>
 		<string>io.vincode.Zavala.selectingDocumentContainer</string>
+		<string>io.vincode.Zavala.viewImage</string>
 	</array>
 	<key>OrganizationIdentifier</key>
 	<string>$(ORGANIZATION_IDENTIFIER)</string>

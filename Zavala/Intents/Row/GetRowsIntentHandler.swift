@@ -62,6 +62,7 @@ class GetRowsVisitor {
 	let expandedState: IntentRowExpandedState
 	let excludedRowIDs: [EntityID]?
 	var results = [Row]()
+	var level = 0
 	
 	init(searchText: String?, regularExpression: Bool, startDepth: Int, endDepth: Int, completionState: IntentRowCompletionState, expandedState: IntentRowExpandedState, excludedRowIDs: [EntityID]?) {
 		if regularExpression {
@@ -103,7 +104,7 @@ class GetRowsVisitor {
 			}
 		}
 
-		let level = visited.trueLevel + 1
+		level = level + 1
 		let depthPassed = startDepth <= level && endDepth >= level
 		let completionPassed = passedCompletion(visited.isComplete ?? false)
 		let expandedPassed = passedExpanded(visited.isExpanded)
@@ -115,6 +116,8 @@ class GetRowsVisitor {
 		visited.rows.forEach { row in
 			row.visit(visitor: visitor)
 		}
+		
+		level = level - 1
 	}
 
 	func matchedText(_ attrString: NSAttributedString?) -> Bool {
