@@ -208,11 +208,11 @@ extension MainCoordinator {
 	}
 	
 	func moveRowsLeft() {
-		editorViewController?.moveRowsLeft()
+		editorViewController?.moveCurrentRowsLeft()
 	}
 	
 	func moveRowsRight() {
-		editorViewController?.moveRowsRight()
+		editorViewController?.moveCurrentRowsRight()
 	}
 	
 	func toggleCompleteRows() {

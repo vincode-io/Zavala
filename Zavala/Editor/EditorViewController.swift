@@ -45,13 +45,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	override var keyCommands: [UIKeyCommand]? {
 		var keyCommands = [UIKeyCommand]()
 		
-		let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(moveCurrentRowsLeft))
-		shiftTab.wantsPriorityOverSystemBehavior = true
-		keyCommands.append(shiftTab)
-		
-		let tab = UIKeyCommand(action: #selector(moveCurrentRowsRight), input: "\t")
-		tab.wantsPriorityOverSystemBehavior = true
-		keyCommands.append(tab)
+		if !isEditingNotes {
+			let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(moveCurrentRowsLeft))
+			shiftTab.wantsPriorityOverSystemBehavior = true
+			keyCommands.append(shiftTab)
+			
+			let tab = UIKeyCommand(action: #selector(moveCurrentRowsRight), input: "\t")
+			tab.wantsPriorityOverSystemBehavior = true
+			keyCommands.append(tab)
+		}
 		
 		// We need to have this here in addition to the AppDelegate, since iOS won't pick it up for some reason
 		if !isToggleRowCompleteUnavailable {
@@ -308,6 +310,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	var isInEditMode: Bool {
 		if let responder = UIResponder.currentFirstResponder, responder is UITextField || responder is UITextView {
+			return true
+		} else {
+			return false
+		}
+	}
+	
+	var isEditingNotes: Bool {
+		if let responder = UIResponder.currentFirstResponder, responder is EditorRowNoteTextView {
 			return true
 		} else {
 			return false
@@ -1050,16 +1060,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		createRowOutside(afterRows: rows)
 	}
 	
-	func moveRowsLeft() {
-		guard let rows = currentRows else { return }
-		moveRowsLeft(rows)
-	}
-	
-	func moveRowsRight() {
-		guard let rows = currentRows else { return }
-		moveRowsRight(rows)
-	}
-	
 	func createRowNotes() {
 		guard let rows = currentRows else { return }
 		createRowNotes(rows)
@@ -1731,14 +1731,6 @@ extension EditorViewController: EditorRowViewCellDelegate {
 	func editorRowCreateRow(afterRow: Row?, rowStrings: RowStrings?) {
 		let afterRows = afterRow == nil ? nil : [afterRow!]
 		createRow(afterRows: afterRows, rowStrings: rowStrings)
-	}
-	
-	func editorRowMoveRowLeft(_ row: Row, rowStrings: RowStrings) {
-		moveRowsLeft([row], rowStrings: rowStrings)
-	}
-	
-	func editorRowMoveRowRight(_ row: Row, rowStrings: RowStrings) {
-		moveRowsRight([row], rowStrings: rowStrings)
 	}
 	
 	func editorRowSplitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {

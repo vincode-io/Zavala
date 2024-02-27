@@ -184,14 +184,6 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowCreateRow(afterRow: afterRow, rowStrings: rowStrings)
 	}
 	
-	func moveRowLeft(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings) {
-		appliedConfiguration?.delegate?.editorRowMoveRowLeft(row, rowStrings: rowStrings)
-	}
-
-	func moveRowRight(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings) {
-		appliedConfiguration?.delegate?.editorRowMoveRowRight(row, rowStrings: rowStrings)
-	}
-	
 	func splitRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		appliedConfiguration?.delegate?.editorRowSplitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}

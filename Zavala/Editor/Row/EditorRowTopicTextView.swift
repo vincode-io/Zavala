@@ -20,8 +20,6 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	func deleteRow(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings)
 	func createRow(_: EditorRowTopicTextView, beforeRow: Row)
 	func createRow(_: EditorRowTopicTextView, afterRow: Row, rowStrings: RowStrings)
-	func moveRowLeft(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings)
-	func moveRowRight(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings)
 	func splitRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
 	func editLink(_: EditorRowTopicTextView, _ link: String?, text: String?, range: NSRange)
 	func zoomImage(_: EditorRowTopicTextView, _ image: UIImage, rect: CGRect)
@@ -34,20 +32,15 @@ class EditorRowTopicTextView: EditorRowTextView {
 	}
 	
 	override var keyCommands: [UIKeyCommand]? {
-		let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(moveLeft(_:)))
-		shiftTab.wantsPriorityOverSystemBehavior = true
-		
 		let controlP = UIKeyCommand(input: "p", modifierFlags: [.control], action: #selector(moveCursorUp(_:)))
-		shiftTab.wantsPriorityOverSystemBehavior = true
+		controlP.wantsPriorityOverSystemBehavior = true
 
 		let controlN = UIKeyCommand(input: "n", modifierFlags: [.control], action: #selector(moveCursorDown(_:)))
-		shiftTab.wantsPriorityOverSystemBehavior = true
+		controlN.wantsPriorityOverSystemBehavior = true
 
 		let keys = [
-			shiftTab,
 			controlP,
 			controlN,
-			UIKeyCommand(action: #selector(moveRight(_:)), input: "\t"),
 			UIKeyCommand(input: "\t", modifierFlags: [.alternate], action: #selector(insertTab(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(insertNewline(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(insertRow(_:))),
@@ -147,16 +140,6 @@ class EditorRowTopicTextView: EditorRowTextView {
 	@objc func moveCursorDown(_ sender: Any) {
 		guard let row else { return }
 		editorDelegate?.moveCursorDown(self, row: row)
-	}
-	
-	@objc func moveLeft(_ sender: Any) {
-		guard let row else { return }
-		editorDelegate?.moveRowLeft(self, row: row, rowStrings: rowStrings)
-	}
-	
-	@objc func moveRight(_ sender: Any) {
-		guard let row else { return }
-		editorDelegate?.moveRowRight(self, row: row, rowStrings: rowStrings)
 	}
 	
 	@objc func insertTab(_ sender: Any) {
