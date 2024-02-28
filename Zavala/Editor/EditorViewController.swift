@@ -8,6 +8,7 @@
 import UIKit
 import MobileCoreServices
 import PhotosUI
+import AsyncAlgorithms
 import VinOutlineKit
 import VinUtility
 
@@ -429,7 +430,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var transitionContentOffset: CGPoint?
 	
 	private var isOutlineNewFlag = false
-	private var updateTitleDebouncer = Debouncer(duration: 1)
+	private var updateTitleChannel = AsyncChannel<String>()
+
 	private var keyboardWorkItem: DispatchWorkItem?
 
 	private var currentKeyboardHeight: CGFloat = 0
@@ -538,6 +540,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
+		
+		Task {
+			for await title in updateTitleChannel.debounce(for: .seconds(1)) {
+				outline?.update(title: title)
+			}
+		}
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -1629,8 +1637,8 @@ extension EditorViewController: EditorTitleViewCellDelegate {
 	}
 	
 	func editorTitleDidUpdate(title: String) {
-		updateTitleDebouncer.debounce { [weak self] in
-			self?.outline?.update(title: title)
+		Task {
+			await updateTitleChannel.send(title)
 		}
 	}
 	

@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import AsyncAlgorithms
 import OSLog
 
 open class ManagedResourceFile: NSObject, NSFilePresenter {
@@ -11,14 +12,15 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 
 	private var isDirty = false {
 		didSet {
-			debounceSaveToDiskIfNeeded()
+			debounceSaveToDisk()
 		}
 	}
 	
 	private var isLoading = false
 	private let fileURL: URL
 	private let operationQueue: OperationQueue
-	private var saveDebouncer = Debouncer(duration: 5)
+	private var saveTask: Task<(), Never>?
+	private var saveChannel = AsyncChannel<(() -> Void)>()
 	private var lastModificationDate: Date?
 
 	public var presentedItemURL: URL? {
@@ -40,6 +42,8 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 		super.init()
 		
 		NSFileCoordinator.addFilePresenter(self)
+		
+		startSaveTask()
 	}
 	
 	public func presentedItemDidChange() {
@@ -55,16 +59,16 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 	}
 	
 	public func relinquishPresentedItem(toReader reader: @escaping ((() -> Void)?) -> Void) {
-		saveDebouncer.pause()
+		stopSaveTask()
 		reader() {
-			self.saveDebouncer.unpause()
+			self.startSaveTask()
 		}
 	}
 	
 	public func relinquishPresentedItem(toWriter writer: @escaping ((() -> Void)?) -> Void) {
-		saveDebouncer.pause()
+		stopSaveTask()
 		writer() {
-			self.saveDebouncer.unpause()
+			self.startSaveTask()
 		}
 	}
 	
@@ -81,7 +85,10 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 	}
 	
 	public func saveIfNecessary() {
-		saveDebouncer.executeNow()
+		if isDirty {
+			isDirty = false
+			saveFile()
+		}
 	}
 
 	public func delete() {
@@ -107,23 +114,37 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 
 }
 
+// MARK: Helpers
+
 private extension ManagedResourceFile {
 	
-	func debounceSaveToDiskIfNeeded() {
-		saveDebouncer.debounce { [weak self] in
-			self?.saveToDiskIfNeeded()
+	func startSaveTask() {
+		saveTask = Task {
+			for await save in saveChannel.debounce(for: .seconds(5.0)) {
+				if !Task.isCancelled {
+					save()
+				}
+			}
 		}
 	}
-
-	func saveToDiskIfNeeded() {
-		if isDirty {
-			isDirty = false
-			saveFile()
+	
+	func stopSaveTask() {
+		saveTask?.cancel()
+		saveTask = nil
+	}
+	
+	func debounceSaveToDisk() {
+		Task {
+			await saveChannel.send(saveIfNecessary)
 		}
+	}
+	
+	func restartActivityMonitoring() {
+		stopSaveTask()
+		startSaveTask()
 	}
 
 	func loadFile() {
-		
 		var fileData: Data? = nil
 		let errorPointer: NSErrorPointer = nil
 		let fileCoordinator = NSFileCoordinator(filePresenter: self)

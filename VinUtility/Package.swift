@@ -14,12 +14,14 @@ let package = Package(
     ],
 	dependencies: [
 		.package(url: "https://github.com/apple/swift-collections.git", .upToNextMajor(from: "1.0.2")),
+		.package(url: "https://github.com/apple/swift-async-algorithms", from: "1.0.0"),
 	],
 	targets: [
         .target(
             name: "VinUtility",
 		dependencies: [
-			.product(name: "OrderedCollections", package: "swift-collections")
+			.product(name: "OrderedCollections", package: "swift-collections"),
+			.product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
 		]
 //		swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
 	),

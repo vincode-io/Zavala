@@ -7,7 +7,7 @@
 
 import UIKit
 import UniformTypeIdentifiers
-import Combine
+import AsyncAlgorithms
 import VinOutlineKit
 import VinUtility
 
@@ -49,8 +49,8 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	}
 
 	var dataSource: UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>!
-	private var applyChangeDebouncer = Debouncer(duration: 0.5)
-	private var reloadVisibleDebouncer = Debouncer(duration: 0.5)
+	private var applyChangeChannel = AsyncChannel<() -> Void>()
+	private var reloadVisibleChannel = AsyncChannel<() -> Void>()
 
 	private var addButton: UIButton!
 	private var importButton: UIButton!
@@ -95,6 +95,15 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncWillBegin(_:)), name: .CloudKitSyncWillBegin, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
+		
+		Task {
+			for await applyChange in applyChangeChannel.debounce(for: .seconds(0.5)) {
+				applyChange()
+			}
+			for await reloadVisible in reloadVisibleChannel.debounce(for: .seconds(0.5)) {
+				reloadVisible()
+			}
+		}
 	}
 	
 	// MARK: API
@@ -508,14 +517,14 @@ private extension CollectionsViewController {
 	}
 	
 	func debounceApplyChangeSnapshot() {
-		applyChangeDebouncer.debounce { [weak self] in
-			self?.applyChangeSnapshot()
+		Task {
+			await applyChangeChannel.send(applyChangeSnapshot)
 		}
 	}
 	
 	func debounceReloadVisible() {
-		reloadVisibleDebouncer.debounce { [weak self] in
-			self?.reloadVisible()
+		Task {
+			await reloadVisibleChannel.send(reloadVisible)
 		}
 	}
 	

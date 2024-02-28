@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AsyncAlgorithms
 import VinOutlineKit
 import VinUtility
 
@@ -90,7 +91,8 @@ class EditorRowTextView: UITextView {
 		return cleanText
 	}
 	
-	var inactivityDebouncer = Debouncer(duration: 5.0)
+	var inactivityTask: Task<(), Never>?
+	var activityChannel = AsyncChannel<(() -> Void)>()
     var textViewHeight: CGFloat?
     var isSavingTextUnnecessary = false
 
@@ -142,6 +144,8 @@ class EditorRowTextView: UITextView {
 		#endif
 		
 		updateTintColor()
+		
+		startActivityMonitoring()
 	}
 	
 	required init?(coder: NSCoder) {
@@ -227,7 +231,7 @@ class EditorRowTextView: UITextView {
             textWasChanged()
         }
         
-        inactivityDebouncer.cancel()
+        restartActivityMonitoring()
         isTextChanged = false
 	}
 
@@ -442,7 +446,37 @@ extension EditorRowTextView: NSTextStorageDelegate {
 // MARK: Helpers
 
 extension EditorRowTextView {
-    
+   
+	func startActivityMonitoring() {
+		inactivityTask = Task {
+			for await inactivity in activityChannel.debounce(for: .seconds(5.0)) {
+				if !Task.isCancelled {
+					inactivity()
+				}
+			}
+		}
+	}
+	
+	func stopActivityMonitoring() {
+		inactivityTask?.cancel()
+		inactivityTask = nil
+	}
+	
+	func debounceActivity() {
+		Task {
+			await activityChannel.send({ [weak self] in
+				self?.saveText()
+				RequestReview.request()
+			})
+		}
+	}
+	
+	func restartActivityMonitoring() {
+		stopActivityMonitoring()
+		startActivityMonitoring()
+		debounceActivity()
+	}
+	
 	func updateTintColor() {
 		if UIColor.accentColor.isDefaultAccentColor {
 			tintColor = .accentColor.brighten(0.35)
@@ -518,10 +552,7 @@ extension EditorRowTextView {
         
         makeCursorVisibleIfNecessary()
         
-		inactivityDebouncer.debounce { [weak self] in
-			self?.saveText()
-			RequestReview.request()
-		}
+		debounceActivity()
     }
 
 }

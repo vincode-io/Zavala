@@ -8,6 +8,7 @@
 import UIKit
 import UniformTypeIdentifiers
 import CoreSpotlight
+import AsyncAlgorithms
 import Semaphore
 import VinOutlineKit
 import VinUtility
@@ -49,7 +50,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var importButton: UIButton!
 
 	private let loadDocumentsSemaphore = AsyncSemaphore(value: 1)
-	private var loadDocumentsDebouncer = Debouncer(duration: 0.5)
+	private var loadDocumentsChannel = AsyncChannel<(() -> Void)>()
 	
 	private var lastClick: TimeInterval = Date().timeIntervalSince1970
 	private var lastIndexPath: IndexPath? = nil
@@ -137,6 +138,12 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		NotificationCenter.default.addObserver(self, selector: #selector(documentSharingDidChange(_:)), name: .DocumentSharingDidChange, object: nil)
 		
 		scheduleReconfigureAll()
+		
+		Task {
+			for await loadDocuments in loadDocumentsChannel.debounce(for: .seconds(0.5)) {
+				loadDocuments()
+			}
+		}
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -581,10 +588,12 @@ extension DocumentsViewController: UISearchResultsUpdating {
 private extension DocumentsViewController {
 	
 	func debounceLoadDocuments() {
-		loadDocumentsDebouncer.debounce { [weak self] in
-			Task {
-				await self?.loadDocuments(animated: true)
-			}
+		Task {
+			await loadDocumentsChannel.send({ [weak self] in
+				Task {
+					await self?.loadDocuments(animated: true)
+				}
+			})
 		}
 	}
 	

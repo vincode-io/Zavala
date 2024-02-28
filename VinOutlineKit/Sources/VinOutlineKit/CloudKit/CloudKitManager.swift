@@ -13,6 +13,7 @@ import Foundation
 import OSLog
 import SystemConfiguration
 import CloudKit
+import AsyncAlgorithms
 import Semaphore
 import VinCloudKit
 import VinUtility
@@ -46,7 +47,8 @@ public class CloudKitManager {
 	private weak var errorHandler: ErrorHandler?
 	private weak var account: Account?
 
-	private var debouncer = Debouncer(duration: 5)
+	private var workTask: Task<(), Never>?
+	private var workChannel = AsyncChannel<(() -> Void)>()
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
 	private let requestsSemaphore = AsyncSemaphore(value: 1)
 	
@@ -83,6 +85,8 @@ public class CloudKitManager {
 		self.errorHandler = errorHandler
 		migrateSharedDatabaseChangeToken()
 		outlineZone.migrateChangeToken()
+		
+		startWorkTask()
 	}
 	
 	func firstTimeSetup() async {
@@ -123,7 +127,7 @@ public class CloudKitManager {
 			let mergedRequests = queuedRequests.union(requests)
 			CloudKitActionRequest.save(requests: mergedRequests)
 			
-			debouncer.debounce { [weak self] in
+			await workChannel.send({ [weak self] in
 				guard let self, self.isNetworkAvailable else { return }
 				Task {
 					do {
@@ -136,7 +140,7 @@ public class CloudKitManager {
 						await self.presentError(error)
 					}
 				}
-			}
+			})
 		}
 	}
 	
@@ -229,10 +233,11 @@ public class CloudKitManager {
 	
 	func resume() async {
 		await sync()
+		startWorkTask()
 	}
 	
 	func suspend() async {
-		debouncer.cancel()
+		stopWorkTask()
 		await sync()
 	}
 	
@@ -275,6 +280,21 @@ public class CloudKitManager {
 // MARK: Helpers
 
 private extension CloudKitManager {
+	
+	func startWorkTask() {
+		workTask = Task {
+			for await work in workChannel.debounce(for: .seconds(5)) {
+				if !Task.isCancelled {
+					work()
+				}
+			}
+		}
+	}
+	
+	func stopWorkTask() {
+		workTask?.cancel()
+		workTask = nil
+	}
 	
 	@MainActor
 	func presentError(_ error: Error) {
