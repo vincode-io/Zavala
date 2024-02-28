@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct Debouncer {
+public class Debouncer {
 	
 	private var isPaused = false
 	private let duration: Double
@@ -14,7 +14,7 @@ public struct Debouncer {
 		self.duration = duration
 	}
 	
-	public mutating func debounce(_ work: @escaping () -> Void) {
+	public func debounce(_ work: @escaping () -> Void) {
 		guard !isPaused else { return }
 		
 		workItem?.cancel()
@@ -25,13 +25,13 @@ public struct Debouncer {
 		DispatchQueue.main.asyncAfter(deadline: .now() + duration, execute: workItem!)
 	}
 	
-	public mutating func pause() {
+	public func pause() {
 		guard !isPaused else { return }
 		executeNow()
 		isPaused = true
 	}
 	
-	public mutating func unpause() {
+	public func unpause() {
 		guard isPaused else { return }
 		isPaused = false
 	}
