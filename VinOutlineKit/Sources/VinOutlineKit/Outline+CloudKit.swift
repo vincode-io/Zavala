@@ -480,7 +480,7 @@ private extension Outline {
 	
 	func applyDocumentBacklinks(_ record: CKRecord) {
 		if let serverDocumentBacklinkDescs = record[Outline.CloudKitRecord.Fields.documentBacklinks] as? [String] {
-			let serverDocumentBacklinks = serverDocumentBacklinkDescs.isEmpty ? nil : serverDocumentBacklinkDescs.compactMap { EntityID(description: $0) }
+			let serverDocumentBacklinks = serverDocumentBacklinkDescs.compactMap { EntityID(description: $0) }
 			
 			if let mergedDocumentBackLinks = merge(client: documentBacklinks, ancestor: ancestorDocumentBacklinks, server: serverDocumentBacklinks) {
 				let documentBacklinksDiff = mergedDocumentBackLinks.difference(from: documentBacklinks ?? [])
