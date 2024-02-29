@@ -8,6 +8,7 @@
 import UIKit
 import UniformTypeIdentifiers
 import AsyncAlgorithms
+import Semaphore
 import VinOutlineKit
 import VinUtility
 
@@ -49,6 +50,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	}
 
 	var dataSource: UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>!
+	private var dataSourceSemaphore = AsyncSemaphore(value: 1)
 	private var applyChangeChannel = AsyncChannel<() -> Void>()
 	private var reloadVisibleChannel = AsyncChannel<() -> Void>()
 
@@ -96,11 +98,19 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitSyncDidComplete(_:)), name: .CloudKitSyncDidComplete, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountDocumentsDidChange(_:)), name: .AccountDocumentsDidChange, object: nil)
 		
+		// Using a semaphore here to make sure these two debouncers don't overlap when doing a lot of fast hits like when doing an account restore
 		Task {
 			for await applyChange in applyChangeChannel.debounce(for: .seconds(0.5)) {
+				await dataSourceSemaphore.wait()
+				defer { dataSourceSemaphore.signal() }
 				applyChange()
 			}
+		}
+		
+		Task {
 			for await reloadVisible in reloadVisibleChannel.debounce(for: .seconds(0.5)) {
+				await dataSourceSemaphore.wait()
+				defer { dataSourceSemaphore.signal() }
 				reloadVisible()
 			}
 		}
