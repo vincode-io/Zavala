@@ -10,13 +10,7 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 	
 	private var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinUtility")
 
-	private var isDirty = false {
-		didSet {
-			debounceSaveToDisk()
-		}
-	}
-	
-	private var isLoading = false
+	private var isDirty = false
 	private let fileURL: URL
 	private let operationQueue: OperationQueue
 	private var saveTask: Task<(), Never>?
@@ -73,15 +67,13 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 	}
 	
 	public func markAsDirty() {
-		if !isLoading {
-			isDirty = true
-		}
+		isDirty = true
+		debounceSaveToDisk()
 	}
 	
 	public func load() {
-		isLoading = true
+		guard !isDirty else { return }
 		loadFile()
-		isLoading = false
 	}
 	
 	public func saveIfNecessary() {

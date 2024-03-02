@@ -707,8 +707,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			}
 		}
 
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 		outlineElementsDidChange(rebuildShadowTable())
 	}
 	
@@ -1345,8 +1345,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			}
 		}
 		
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else {
 			return (impacted, nil)
@@ -1384,8 +1384,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			}
 		}
 
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 
 		guard isBeingViewed else {
 			return (impacted, nil)
@@ -1405,8 +1405,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			row.note = note
 		}
 
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else { return }
 		
@@ -1449,8 +1449,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 
 		deleteLinkRelationships(for: rows)
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else { return nil }
 		
@@ -1535,8 +1535,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		createLinkRelationships(for: [row])
 		replaceLinkTitlesIfPossible(rows: [row])
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 
 		guard isBeingViewed else { return nil }
 
@@ -1586,8 +1586,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		createLinkRelationships(for: [row])
 		replaceLinkTitlesIfPossible(rows: [row])
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 			
 		guard isBeingViewed else { return nil }
 
@@ -1665,9 +1665,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		createLinkRelationships(for: rows)
 		replaceLinkTitlesIfPossible(rows: rows)
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
-		
+		endCloudKitBatchRequest()
+
 		guard isBeingViewed else { return nil }
 
 		var changes = rebuildShadowTable()
@@ -1708,9 +1708,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		createLinkRelationships(for: rows)
 		replaceLinkTitlesIfPossible(rows: rows)
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
-			
+		endCloudKitBatchRequest()
+
 		guard isBeingViewed else { return nil }
 
 		var changes = rebuildShadowTable()
@@ -1745,9 +1745,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		createLinkRelationships(for: rows)
 		replaceLinkTitlesIfPossible(rows: rows)
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
-			
+		endCloudKitBatchRequest()
+
 		guard isBeingViewed else { return  }
 
 		var changes = rebuildShadowTable()
@@ -1777,9 +1777,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		createLinkRelationships(for: rows)
 		replaceLinkTitlesIfPossible(rows: rows)
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
-			
+		endCloudKitBatchRequest()
+
 		guard isBeingViewed else { return }
 
 		var changes = rebuildShadowTable()
@@ -1822,8 +1822,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 
 		createLinkRelationships(for: rows)
 		replaceLinkTitlesIfPossible(rows: rows)
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 
 		guard isBeingViewed else { return nil }
 
@@ -1866,8 +1866,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		guard isBeingViewed else { return newRows }
 
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 		outlineElementsDidChange(rebuildShadowTable())
 
 		return newRows
@@ -2126,8 +2126,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			}
 		}
 		
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else {
 			return impacted
@@ -2200,8 +2200,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			}
 		}
 
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else {
 			return impacted
@@ -2243,8 +2243,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			}
 		}
 		
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else { return }
 
@@ -2279,8 +2279,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			}
 		}
 		
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else { return }
 
@@ -2382,8 +2382,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			}
 		}
 
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
+		endCloudKitBatchRequest()
 
 		guard isBeingViewed else { return }
 
@@ -2626,8 +2626,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 				
 				if actionsTaken.contains(.fixedAltLink) {
 					createLinkRelationships(for: [row])
-					outlineContentDidChange()
 					requestCloudKitUpdate(for: row.entityID)
+					outlineContentDidChange()
 				}
 			}
 			
@@ -2855,9 +2855,9 @@ private extension Outline {
 			}
 		}
 		
-		endCloudKitBatchRequest()
 		outlineContentDidChange()
-		
+		endCloudKitBatchRequest()
+
 		guard isBeingViewed else { return (impacted, nil) }
 
 		if isCompletedFilterOn {
