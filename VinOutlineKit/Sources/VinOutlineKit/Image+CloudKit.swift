@@ -38,30 +38,26 @@ extension Image: VCKModel {
 		var updated = false
 		
 		let serverIsInNotes = record[Image.CloudKitRecord.Fields.isInNotes] as? Bool
-		let mergedIsInNotes = merge(client: isInNotes, ancestor: ancestorIsInNotes, server: serverIsInNotes)!
-		if mergedIsInNotes != isInNotes {
+		if serverIsInNotes != isInNotes {
 			updated = true
-			isInNotes = mergedIsInNotes
+			isInNotes = serverIsInNotes
 		}
 		
 		let serverOffset = record[Image.CloudKitRecord.Fields.offset] as? Int
-		let mergedOffset = merge(client: offset, ancestor: ancestorOffset, server: serverOffset)!
-		if mergedOffset != offset {
+		if serverOffset != offset {
 			updated = true
-			offset = mergedOffset
+			offset = serverOffset
 		}
 
-		let mergedData: Data
+		var serverData: Data? = nil
 		if let ckAsset = record[Image.CloudKitRecord.Fields.asset] as? CKAsset,
 		   let fileURL = ckAsset.fileURL,
 		   let fileData = try? Data(contentsOf: fileURL) {
-			mergedData = merge(client: data, ancestor: ancestorData, server: fileData)!
-		} else {
-			mergedData = merge(client: data, ancestor: ancestorData, server: nil)!
+			serverData = merge(client: data, ancestor: ancestorData, server: fileData)!
 		}
-		if mergedData != data {
+		if serverData != data {
 			updated = true
-			data = mergedData
+			data = serverData
 		}
 
         clearSyncData()
