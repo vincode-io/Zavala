@@ -48,3 +48,7 @@ To restore the archive to an account, you will want to delete all the outlines i
 ## [Restore Account](https://www.icloud.com/shortcuts/2540483cb2124f31b5f52c635049cf8f)
 
 You can use this Shortcut to restore a Zavala archive to an Account. You will probably want to delete all the Outlines in the Account prior to executing this Shortcut or you will end up with duplicates.
+
+## [Export to Reminders](https://www.icloud.com/shortcuts/f2865613b0ee47da8a2cf0cb27cdb945)
+
+This shortcut will take the currently selected Outline and export it to Reminders as a Reminder List with Tasks taken from the Outline’s rows.
