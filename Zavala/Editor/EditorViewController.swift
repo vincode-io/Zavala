@@ -2383,7 +2383,11 @@ private extension EditorViewController {
 		}
 	}
 	
+	// Currently only used on the Mac to get the cursor back while scrolling. On iOS we don't want the cursor to comeback
+	// and show the keyboard again until the user selects something. Don't try to restore the cursor on the Mac if we
+	// are selecting rows. That will deselect them.
 	func restoreBestKnownCursorPosition() {
+		guard collectionView.indexPathsForSelectedItems == nil || collectionView.indexPathsForSelectedItems!.isEmpty else { return }
 		if let cursorCoordinates = CursorCoordinates.bestCoordinates {
 			restoreCursorPosition(cursorCoordinates, scroll: false)
 		}

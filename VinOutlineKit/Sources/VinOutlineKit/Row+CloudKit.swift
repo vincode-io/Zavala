@@ -41,48 +41,31 @@ extension Row: VCKModel {
 		var updated = false
 		
 		if let serverRowOrder = record[Row.CloudKitRecord.Fields.rowOrder] as? [String] {
-			let mergedRowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: OrderedSet(serverRowOrder))
-			if mergedRowOrder != rowOrder {
+			let serverRowOrderedSet = OrderedSet(serverRowOrder)
+			if serverRowOrderedSet != rowOrder {
 				updated = true
-				rowOrder = mergedRowOrder
+				rowOrder = serverRowOrderedSet
 			}
 		} else {
 			rowOrder = OrderedSet<String>()
 		}
 
 		let serverIsComplete = record[Row.CloudKitRecord.Fields.isComplete] as? String == "1" ? true : false
-		let mergedIsComplete = merge(client: isComplete, ancestor: ancestorIsComplete, server: serverIsComplete)!
-		if mergedIsComplete != isComplete {
+		if serverIsComplete != isComplete {
 			updated = true
-			isComplete = mergedIsComplete
+			isComplete = serverIsComplete
 		}
 
 		let serverTopicData = record[Row.CloudKitRecord.Fields.topicData] as? Data
-		
-		let topicString = topicData?.toAttributedString()
-		let ancestorTopicString = ancestorTopicData?.toAttributedString()
-		let serverTopicString = serverTopicData?.toAttributedString()
-		
-		let mergedTopicString = merge(client: topicString, ancestor: ancestorTopicString, server: serverTopicString)
-		let mergedTopicData = mergedTopicString?.toData()
-		
-		if mergedTopicData != topicData {
+		if serverTopicData != topicData {
 			updated = true
-			topicData = mergedTopicData
+			topicData = serverTopicData
 		}
 
 		let serverNoteData = record[Row.CloudKitRecord.Fields.noteData] as? Data
-		
-		let noteString = noteData?.toAttributedString()
-		let ancestorNoteString = ancestorNoteData?.toAttributedString()
-		let serverNoteString = serverNoteData?.toAttributedString()
-		
-		let mergedNoteString = merge(client: noteString, ancestor: ancestorNoteString, server: serverNoteString)
-		let mergedNoteData = mergedNoteString?.toData()
-		
-		if mergedNoteData != noteData {
+		if serverNoteData != noteData {
 			updated = true
-			noteData = mergedNoteData
+			noteData = serverNoteData
 		}
 
         clearSyncData()

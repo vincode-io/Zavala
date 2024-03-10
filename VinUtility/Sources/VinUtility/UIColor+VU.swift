@@ -7,16 +7,18 @@
 import UIKit
 
 public extension UIColor {
-	
+
+	static var definedAccentColor = UIColor(named: "AccentColor")!
+
 	static var accentColor: UIColor {
 		guard let systemHighlightColor = UserDefaults.standard.string(forKey: "AppleHighlightColor"),
-			  let colorName = systemHighlightColor.components(separatedBy: " ").last else { return UIColor(named: "AccentColor")! }
+			  let colorName = systemHighlightColor.components(separatedBy: " ").last else { return .definedAccentColor }
 		
 		guard colorName != "Graphite" else { return UIColor.systemGray }
 		
 		let selector = NSSelectorFromString(NSString.localizedStringWithFormat("system%@Color", colorName) as String)
 		guard UIColor.responds(to: selector) else { return UIColor(named: "AccentColor")! }
-		return UIColor.perform(selector).takeUnretainedValue() as? UIColor ?? UIColor(named: "AccentColor")!
+		return UIColor.perform(selector).takeUnretainedValue() as? UIColor ?? .definedAccentColor
 	}
 	
 	var isDefaultAccentColor: Bool {

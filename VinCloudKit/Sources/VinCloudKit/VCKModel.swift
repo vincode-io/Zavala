@@ -72,49 +72,26 @@ public extension VCKModel {
 				fatalError("We should always have all 3 values for a 3 way merge.")
 			}
 
-			// The client offset changes are used to adjust the merge so that we can more accurately place
-			// any server changes.
-			let clientOffsetChanges = buildClientOffsetChanges(client, ancestor)
+			let clientOffsetChanges = buildClientOffsetChanges(client.string, ancestor.string)
 			
 			let serverDiff = server.string.difference(from: ancestor.string).inferringMoves()
-			if !serverDiff.isEmpty {
-				let merged = NSMutableAttributedString(attributedString: client)
+			let merged = NSMutableAttributedString(attributedString: client)
 				
-				func computeClientOffset(offset: Int, associated: Int?) -> (Int, Int) {
-					let serverOffset = associated ?? offset
-
-					let adjustedOffset: Int
-					if clientOffsetChanges.isEmpty {
-						adjustedOffset = serverOffset
-					} else {
-						let clientOffsetChangesIndex = serverOffset < clientOffsetChanges.count ? serverOffset : clientOffsetChanges.count - 1
-						adjustedOffset = clientOffsetChanges[clientOffsetChangesIndex] + offset
-					}
-					
-					let newOffset = adjustedOffset <= merged.length ? adjustedOffset : merged.length
-					
-					return (serverOffset, newOffset)
-				}
-				
-				for change in serverDiff {
-					switch change {
-					case .insert(let offset, _, let associated):
-						let (serverOffset, newOffset) = computeClientOffset(offset: offset, associated: associated)
-						let serverAttrString = server.attributedSubstring(from: NSRange(location: serverOffset, length: 1))
-						merged.insert(serverAttrString, at: newOffset)
-					case .remove(let offset, _, let associated):
-						let (_, newOffset) = computeClientOffset(offset: offset, associated: associated)
-						if newOffset < merged.length {
-							merged.deleteCharacters(in: NSRange(location: newOffset, length: 1))
-						}
+			for change in serverDiff {
+				switch change {
+				case .insert(let offset, _, let associated):
+					let (serverOffset, newOffset) = computeClientOffset(clientOffsetChanges: clientOffsetChanges, maxLength: merged.length, offset: offset, associated: associated)
+					let serverAttrString = server.attributedSubstring(from: NSRange(location: serverOffset, length: 1))
+					merged.insert(serverAttrString, at: newOffset)
+				case .remove(let offset, _, let associated):
+					let (_, newOffset) = computeClientOffset(clientOffsetChanges: clientOffsetChanges, maxLength: merged.length, offset: offset, associated: associated)
+					if newOffset < merged.length {
+						merged.deleteCharacters(in: NSRange(location: newOffset, length: 1))
 					}
 				}
-				
-				return merged
-			} else {
-				// I haven't figured out how to merge pure attribute changes if they happen. Client wins in this case.
-				return client
 			}
+				
+			return merged
 		}
 	}
 	#endif
@@ -138,17 +115,15 @@ public extension VCKModel {
 		case .threeWayMerge:
 			guard let client, let ancestor, let server else { fatalError("We should always have all 3 values for a 3 way merge.") }
 
+			let clientOffsetChanges = buildClientOffsetChanges(client, ancestor)
 			var merged = client
 			let diffs = server.difference(from: ancestor).inferringMoves()
 			
 			for diff in diffs {
 				switch diff {
-				case .insert(let offset, let value, _):
-					if offset < merged.count {
-						merged.insert(value, at: offset)
-					} else {
-						merged.insert(value, at: merged.count)
-					}
+				case .insert(let offset, let value, let associated):
+					let (_, newOffset) = computeClientOffset(clientOffsetChanges: clientOffsetChanges, maxLength: merged.count, offset: offset, associated: associated)
+					merged.insert(value, at: newOffset)
 				case .remove(_, let value, _):
 					merged.removeFirst(object: value)
 				}
@@ -162,10 +137,12 @@ public extension VCKModel {
 
 private extension VCKModel {
 	
-	func buildClientOffsetChanges(_ clientAttrString: NSAttributedString, _ ancestorAttrString: NSAttributedString) -> [Int] {
+	// The client offset changes are used to adjust the merge so that we can more accurately place
+	// any server changes.
+	func buildClientOffsetChanges<T>(_ client: T, _ ancestor: T) -> [Int]  where T:BidirectionalCollection, T.Element:Equatable {
 		var clientOffsetChanges = [Int]()
 		
-		let clientDiff = clientAttrString.string.difference(from: ancestorAttrString.string)
+		let clientDiff = client.difference(from: ancestor)
 		var adjuster = 0
 		for change in clientDiff {
 			switch change {
@@ -187,6 +164,22 @@ private extension VCKModel {
 		return clientOffsetChanges
 	}
 
+	func computeClientOffset(clientOffsetChanges: [Int], maxLength: Int, offset: Int, associated: Int?) -> (Int, Int) {
+		let serverOffset = associated ?? offset
+
+		let adjustedOffset: Int
+		if clientOffsetChanges.isEmpty {
+			adjustedOffset = serverOffset
+		} else {
+			let clientOffsetChangesIndex = serverOffset < clientOffsetChanges.count ? serverOffset : clientOffsetChanges.count - 1
+			adjustedOffset = clientOffsetChanges[clientOffsetChangesIndex] + offset
+		}
+		
+		let newOffset = adjustedOffset <= maxLength ? adjustedOffset : maxLength
+		
+		return (serverOffset, newOffset)
+	}
+	
 }
 
 public struct CloudKitModelRecordWrapper: VCKModel {
