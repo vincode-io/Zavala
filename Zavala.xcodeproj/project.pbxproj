@@ -99,6 +99,7 @@
 		5191850D271387C300B7E177 /* RemoveOutlineIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850C271387C300B7E177 /* RemoveOutlineIntentHandler.swift */; };
 		5191850F271390F100B7E177 /* IntentEntityID+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5191850E271390F100B7E177 /* IntentEntityID+.swift */; };
 		51918515271664FB00B7E177 /* AddRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51918514271664FB00B7E177 /* AddRowsIntentHandler.swift */; };
+		5191D43F2BA35559004D06D9 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 5191D43E2BA353C0004D06D9 /* PrivacyInfo.xcprivacy */; };
 		51922210271E27FD000CDC1F /* EditorCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5192220F271E27FD000CDC1F /* EditorCollectionView.swift */; };
 		51922212271E4AE9000CDC1F /* CopyRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51922211271E4AE9000CDC1F /* CopyRowsIntentHandler.swift */; };
 		5193C8A625FD757900E63F94 /* OpenQuicklyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */; };
@@ -314,6 +315,7 @@
 		5191850C271387C300B7E177 /* RemoveOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveOutlineIntentHandler.swift; sourceTree = "<group>"; };
 		5191850E271390F100B7E177 /* IntentEntityID+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentEntityID+.swift"; sourceTree = "<group>"; };
 		51918514271664FB00B7E177 /* AddRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRowsIntentHandler.swift; sourceTree = "<group>"; };
+		5191D43E2BA353C0004D06D9 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5192220F271E27FD000CDC1F /* EditorCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCollectionView.swift; sourceTree = "<group>"; };
 		51922211271E4AE9000CDC1F /* CopyRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyRowsIntentHandler.swift; sourceTree = "<group>"; };
 		5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuicklyViewController.swift; sourceTree = "<group>"; };
@@ -495,6 +497,7 @@
 				516CBCAB274AFE920062EB42 /* Credits.rtf */,
 				5181A9402554D92100C153E8 /* Assets.xcassets */,
 				516B938C2B48C3D80063EC94 /* Localizable.xcstrings */,
+				5191D43E2BA353C0004D06D9 /* PrivacyInfo.xcprivacy */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -964,6 +967,7 @@
 				5181A9442554D92100C153E8 /* LaunchScreen.storyboard in Resources */,
 				517AF6A025E08A6B0044DBAB /* Settings.storyboard in Resources */,
 				5181A9412554D92100C153E8 /* Assets.xcassets in Resources */,
+				5191D43F2BA35559004D06D9 /* PrivacyInfo.xcprivacy in Resources */,
 				51C71C72273F252900F6C779 /* Image.storyboard in Resources */,
 				5181A93F2554D92000C153E8 /* Main.storyboard in Resources */,
 				516B938D2B48C3D80063EC94 /* Localizable.xcstrings in Resources */,
