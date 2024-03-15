@@ -422,7 +422,7 @@ public extension VCKZone {
 				let updatedRecordsToSend = updatedRecords
 				let deletedRecordKeysToSend = deletedRecordKeys
 
-				Task {
+				Task { @MainActor in
 					do {
 						try await wasChanged(updated: updatedRecordsToSend, deleted: deletedRecordKeysToSend, token: token)
 					} catch {
@@ -455,7 +455,7 @@ public extension VCKZone {
 				case .success((let token, _, _)):
 					let updatedRecordsToSend = updatedRecords
 					let deletedRecordKeysToSend = deletedRecordKeys
-					Task {
+					Task { @MainActor in
 						do {
 							try await wasChanged(updated: updatedRecordsToSend, deleted: deletedRecordKeysToSend, token: token)
 						} catch {
