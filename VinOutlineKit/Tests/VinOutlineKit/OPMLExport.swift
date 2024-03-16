@@ -27,10 +27,8 @@ final class OPMLExport: VOKTestCase {
 		}
 		
 		let headNode = opmlNode["head"]?.first
-		let bodyNode = opmlNode["body"]?.first
-		let rowNodes = bodyNode?["outline"]
 		
-		var title = headNode?["title"]?.first?.content
+		let title = headNode?["title"]?.first?.content
 		XCTAssertEqual(title, "Test Case")
     }
 
