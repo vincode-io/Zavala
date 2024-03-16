@@ -113,6 +113,18 @@ public final class AccountManager {
 		cloudKitAccount.initializeCloudKit(firstTime: true, errorHandler: errorHandler)
 	}
 	
+	public func deleteLocalAccount() {
+		// Send out all the document delete events for this account to clean up the search index
+		localAccount.documents?.forEach { $0.documentDidDelete() }
+
+		accountsDictionary[AccountType.local.rawValue] = nil
+		accountFiles[AccountType.local.rawValue] = nil
+
+		try? FileManager.default.removeItem(atPath: localAccountFolder.path)
+
+		accountManagerAccountsDidChange()
+	}
+	
 	public func deleteCloudKitAccount() {
 		guard let cloudKitAccount else { return }
 		
