@@ -18,8 +18,9 @@ extension UIColor {
 	
 	static var accessoryColor = UIColor.tertiaryLabel
 	static var barBackgroundColor = UIColor(named: "BarBackgroundColor")!
-	static var fullScreenBackgroundColor: UIColor = UIColor(named: "FullScreenBackgroundColor")!
-	static var verticalBarColor: UIColor = .quaternaryLabel
+	static var fullScreenBackgroundColor = UIColor(named: "FullScreenBackgroundColor")!
+	static var verticalBarColor = UIColor.quaternaryLabel
+	static var brightenedDefaultAccentColor = UIColor.accentColor.brighten(by: 50)
 	
 }
 

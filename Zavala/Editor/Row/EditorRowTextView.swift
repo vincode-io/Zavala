@@ -479,7 +479,7 @@ extension EditorRowTextView {
 	
 	func updateTintColor() {
 		if UIColor.accentColor.isDefaultAccentColor {
-			tintColor = .accentColor.brighten(by: 50)
+			tintColor = .brightenedDefaultAccentColor
 		} else {
 			tintColor = .accentColor
 		}
