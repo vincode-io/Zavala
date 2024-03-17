@@ -3,8 +3,7 @@
 //
 
 import XCTest
-import VinOutlineKit
-import VinXML
+@testable import VinOutlineKit
 
 class VOKTestCase: XCTestCase, ErrorHandler {
 	
@@ -23,4 +22,12 @@ class VOKTestCase: XCTestCase, ErrorHandler {
 		AccountManager.shared.deleteLocalAccount()
 	}
 
+	func loadOutline() throws -> Outline {
+		guard let opmlLocation = Bundle.module.url(forResource: "Resources/StarterOutline", withExtension: "opml"),
+			  let outline = try AccountManager.shared.localAccount.importOPML(opmlLocation, tags: nil).outline else {
+			fatalError()
+		}
+		outline.load()
+		return outline
+	}
 }

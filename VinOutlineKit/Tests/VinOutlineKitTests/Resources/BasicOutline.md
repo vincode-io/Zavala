@@ -1,0 +1,32 @@
+- 2.0
+	- Change it so that we are reusing the Topic again - this is probably a performance problem and we may have solved for the reasons we changed it in other ways
+		- Change it so that we are reusing the Topic again - this is probably a performance problem and we may have solved for the reasons we changed it in other ways
+			- Come to think of it… we should probably do the same for Notes - this just needs to be a separate cell type instead of the same one
+				- The only factors that should impact layout
+					- Notes is available or not
+					- Horizontal Size Class
+					- Current Font - Both Topic and Note
+			- We should probably be drawing the bars instead of using views
+				- Could we just have one view that is always there that will draw them based on the current width?
+		- We should probably be drawing the bars instead of using views
+		- Could we just have one view that is always there that will draw them based on the current width?
+	- We are scrolling again when the cursor is scrolled off and we alt-tab away from the application
+	- We are losing data now. What changed to make this happen?
+	- I lost focus while editing in the notes view. Is it possible that CloudKit is causing an event that might make us lose first responder?
+	- Remove the makeCursorVisible stuff from the Command functions if they are already making things into first responders.
+	- Implement the Extract command
+	- How come Quick Open keeps opening instead of some other windows?
+	- Finish Zavala Help
+	- Beta testing
+		- Use Airport to reach more people
+	- Release
+		- Update the screenshots
+			- On the website
+			- On the App Store
+		- Update the tagline
+			- On the website
+			- On the App Store
+		- Update the feature set
+			- On the website
+			- On the App Store
+		- Promote the release. Some examples of how [here](https://nemecek.be/blog/129/places-you-can-promote-your-app-for-free).

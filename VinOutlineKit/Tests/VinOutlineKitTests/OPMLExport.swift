@@ -16,7 +16,7 @@ final class OPMLExport: VOKTestCase {
 		try commonTearDown()
     }
 
-    func testExample() throws {
+    func testExport() throws {
 		guard let outline = AccountManager.shared.localAccount.createOutline(title: "Test Case").outline else {
 			XCTFail()
 			return

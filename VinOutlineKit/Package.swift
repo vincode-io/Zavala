@@ -26,13 +26,9 @@ let package = Package(
 				"VinCloudKit",
 		]),
 		.testTarget(
-			name: "VinOutlineTests",
+			name: "VinOutlineKitTests",
 			dependencies: [
 				"VinOutlineKit",
-//				"MarkdownAttributedString",
-//				"Semaphore",
-//				"VinXML",
-//				"VinCloudKit",
 			],
 			resources: [.copy("Resources")
 		]),
