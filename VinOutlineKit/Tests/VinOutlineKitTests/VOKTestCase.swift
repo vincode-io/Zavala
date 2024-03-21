@@ -12,6 +12,14 @@ class VOKTestCase: XCTestCase, ErrorHandler {
 		print("!!!!!!!!!! \(error.localizedDescription)")
 	}
 	
+	override func setUpWithError() throws {
+		try commonSetup()
+	}
+
+	override func tearDownWithError() throws {
+		try commonTearDown()
+	}
+
 	func commonSetup() throws {
 		let tempDirectory = FileManager.default.temporaryDirectory
 		let tempAccountDirectory = tempDirectory.appendingPathComponent("Accounts")

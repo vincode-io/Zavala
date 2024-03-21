@@ -9,14 +9,6 @@ import XCTest
 
 final class OPMLImportTests: VOKTestCase {
 
-	override func setUpWithError() throws {
-		try commonSetup()
-	}
-
-	override func tearDownWithError() throws {
-		try commonTearDown()
-	}
-
     func testImport() throws {
 		let outline = try loadOutline()
 		XCTAssertEqual(outline.rows.count, 6)

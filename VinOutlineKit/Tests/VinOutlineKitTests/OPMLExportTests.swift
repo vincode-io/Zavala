@@ -8,14 +8,6 @@ import VinXML
 
 final class OPMLExportTests: VOKTestCase {
 	
-    override func setUpWithError() throws {
-		try commonSetup()
-    }
-
-    override func tearDownWithError() throws {
-		try commonTearDown()
-    }
-
     func testExport() throws {
 		guard let outline = AccountManager.shared.localAccount.createOutline(title: "Test Case").outline else {
 			XCTFail()
