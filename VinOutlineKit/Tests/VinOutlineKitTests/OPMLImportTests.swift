@@ -7,7 +7,7 @@
 
 import XCTest
 
-final class OPMLImport: VOKTestCase {
+final class OPMLImportTests: VOKTestCase {
 
 	override func setUpWithError() throws {
 		try commonSetup()

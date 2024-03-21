@@ -6,7 +6,7 @@ import XCTest
 import VinOutlineKit
 import VinXML
 
-final class OPMLExport: VOKTestCase {
+final class OPMLExportTests: VOKTestCase {
 	
     override func setUpWithError() throws {
 		try commonSetup()

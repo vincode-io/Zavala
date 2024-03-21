@@ -22,8 +22,8 @@ class VOKTestCase: XCTestCase, ErrorHandler {
 		AccountManager.shared.deleteLocalAccount()
 	}
 
-	func loadOutline() throws -> Outline {
-		guard let opmlLocation = Bundle.module.url(forResource: "Resources/StarterOutline", withExtension: "opml"),
+	func loadOutline(_ name: String = "StarterOutline") throws -> Outline {
+		guard let opmlLocation = Bundle.module.url(forResource: "Resources/\(name)", withExtension: "opml"),
 			  let outline = try AccountManager.shared.localAccount.importOPML(opmlLocation, tags: nil).outline else {
 			fatalError()
 		}
