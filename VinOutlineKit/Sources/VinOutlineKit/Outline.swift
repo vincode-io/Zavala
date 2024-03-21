@@ -2832,7 +2832,7 @@ private extension Outline {
 	func completeUncomplete(rows: [Row], isComplete: Bool, rowStrings: RowStrings?) -> [Row] {
 		beginCloudKitBatchRequest()
 		
-		if rowCount == 1, let row = rows.first, let texts = rowStrings {
+		if rowCount > 0, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
 		

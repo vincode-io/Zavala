@@ -3,7 +3,7 @@
 //
 
 import XCTest
-import VinOutlineKit
+@testable import VinOutlineKit
 import VinXML
 
 final class OPMLExportTests: VOKTestCase {

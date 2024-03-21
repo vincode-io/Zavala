@@ -5,11 +5,20 @@
 import XCTest
 @testable import VinOutlineKit
 
-class VOKTestCase: XCTestCase, ErrorHandler {
-	
+class VOKTestCase: XCTestCase, ErrorHandler, OutlineCommandDelegate {
+
+	var undoManager: UndoManager!
+
 	func presentError(_ error: any Error, title: String) {
 		print("!!!!!!!!!! \(title)")
 		print("!!!!!!!!!! \(error.localizedDescription)")
+	}
+	
+	var currentCoordinates: VinOutlineKit.CursorCoordinates? {
+		return nil
+	}
+	
+	func restoreCursorPosition(_: VinOutlineKit.CursorCoordinates) {
 	}
 	
 	override func setUpWithError() throws {
@@ -24,6 +33,8 @@ class VOKTestCase: XCTestCase, ErrorHandler {
 		let tempDirectory = FileManager.default.temporaryDirectory
 		let tempAccountDirectory = tempDirectory.appendingPathComponent("Accounts")
 		AccountManager.shared = AccountManager(accountsFolderPath: tempAccountDirectory.path(), errorHandler: self)
+		
+		undoManager = UndoManager()
 	}
 
 	func commonTearDown() throws {
@@ -38,4 +49,13 @@ class VOKTestCase: XCTestCase, ErrorHandler {
 		outline.load()
 		return outline
 	}
+	
+	func loadOPML(_ name: String) -> String {
+		guard let opmlLocation = Bundle.module.url(forResource: "Resources/\(name)", withExtension: "opml"),
+			  let opml = try? String(contentsOf: opmlLocation) else {
+			fatalError()
+		}
+		return opml
+	}
+	
 }
