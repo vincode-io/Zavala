@@ -143,6 +143,7 @@ class ButtonGroup: NSObject {
 	
 	func dismissPopOverMenu() {
 		popoverController?.dismiss(animated: true)
+		popoverController?.view = nil
 		popoverController = nil
 	}
 	
