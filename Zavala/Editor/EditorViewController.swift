@@ -667,7 +667,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		if collectionView.indexPathsForSelectedItems?.isEmpty ?? true {
 			pressesBeganForEditMode(presses, with: event)
 		} else {
-			pressesBeganForSelectMode(presses, with: event)
+			pressesBeganForOutlineMode(presses, with: event)
 		}
 	}
 	
@@ -2276,7 +2276,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	func pressesBeganForSelectMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+	func pressesBeganForOutlineMode(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
 		if presses.count == 1, let key = presses.first?.key {
 			guard cancelledKeys.remove(key) == nil else {
 				return
