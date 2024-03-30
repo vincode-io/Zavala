@@ -379,13 +379,16 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	private var cancelledKeys = Set<UIKey>()
-	private var isCursoringUp = false
-	private var isCursoringDown = false
+
 	private static var slowRepeatInterval = 1.0
 	private static var fastRepeatInterval = 0.1
-	private lazy var cursorUpRepeatInterval: Double = Self.slowRepeatInterval
-	private lazy var cursorDownRepeatInterval: Double = Self.slowRepeatInterval
-
+	
+	private var isGoingUp = false
+	private var isGoingDown = false
+	private lazy var goingUpRepeatInterval: Double = Self.slowRepeatInterval
+	private lazy var goingDownRepeatInterval: Double = Self.slowRepeatInterval
+	private var shiftStartIndex: Int?
+	
 	private var undoMenuButton: ButtonGroup.Button!
 	private var undoMenuButtonGroup: ButtonGroup!
 	private var undoButton: ButtonGroup.Button!
@@ -675,19 +678,22 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		super.pressesEnded(presses, with: event)
 		for press in presses {
 			if let key = press.key {
-				if key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty {
-					if key.keyCode == .keyboardUpArrow {
-						isCursoringUp = false
-					}
-					if key.keyCode == .keyboardDownArrow {
-						isCursoringDown = false
-					}
+				if key.keyCode == .keyboardUpArrow {
+					isGoingUp = false
 				}
+				if key.keyCode == .keyboardDownArrow {
+					isGoingDown = false
+				}
+				
 				if key.modifierFlags.contains(.control) && key.keyCode == .keyboardP {
-					isCursoringUp = false
+					isGoingUp = false
 				}
 				if key.modifierFlags.contains(.control) && key.keyCode == .keyboardN {
-					isCursoringDown = false
+					isGoingDown = false
+				}
+				
+				if key.keyCode == .keyboardLeftShift || key.keyCode == .keyboardRightShift {
+					shiftStartIndex = nil
 				}
 			}
 			
@@ -1244,53 +1250,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		applyChangesRestoringState(changes)
 		updateUI()
 	}
-	
-	@objc func repeatMoveCursorUp() {
-		if let textView = UIResponder.currentFirstResponder as? EditorRowTopicTextView {
-			moveCursorUp(topicTextView: textView)
-		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
-			if tagInput.isShowingResults {
-				tagInput.selectAbove()
-				return
-			} else {
-				moveCursorToTitle()
-			}
-		}
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + cursorUpRepeatInterval) { [weak self] in
-			if self?.isCursoringUp ?? false {
-				self?.cursorUpRepeatInterval = Self.fastRepeatInterval
-				self?.repeatMoveCursorUp()
-			} else {
-				self?.cursorUpRepeatInterval = Self.slowRepeatInterval
-			}
-		}
-	}
-	
-	@objc func repeatMoveCursorDown() {
-		if let textView = UIResponder.currentFirstResponder as? EditorRowTopicTextView {
-			moveCursorDown(topicTextView: textView)
-		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
-			if tagInput.isShowingResults {
-				tagInput.selectBelow()
-				return
-			} else {
-				moveCursorToFirstRow()
-			}
-		} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting {
-			moveCursorToTagInput()
-		}
-		
-		DispatchQueue.main.asyncAfter(deadline: .now() + cursorDownRepeatInterval) { [weak self] in
-			if self?.isCursoringDown ?? false {
-				self?.cursorDownRepeatInterval = Self.fastRepeatInterval
-				self?.repeatMoveCursorDown()
-			} else {
-				self?.cursorDownRepeatInterval = Self.slowRepeatInterval
-			}
-		}
-	}
-	
 	@objc func insertImage() {
 		var config = PHPickerConfiguration()
 		config.filter = PHPickerFilter.images
@@ -2221,25 +2181,25 @@ private extension EditorViewController {
             case (.keyboardUpArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				if let topic = currentTextView as? EditorRowTopicTextView {
 					if topic.cursorIsOnTopLine {
-						isCursoringUp = true
+						isGoingUp = true
 						repeatMoveCursorUp()
 					} else {
 						super.pressesBegan(presses, with: event)
 					}
 				} else {
-					isCursoringUp = true
+					isGoingUp = true
 					repeatMoveCursorUp()
 				}
 			case (.keyboardDownArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				if let topic = currentTextView as? EditorRowTopicTextView {
 					if topic.cursorIsOnBottomLine {
-						isCursoringDown = true
+						isGoingDown = true
 						repeatMoveCursorDown()
 					} else {
 						super.pressesBegan(presses, with: event)
 					}
 				} else {
-					isCursoringDown = true
+					isGoingDown = true
 					repeatMoveCursorDown()
 				}
 			case (.keyboardLeftArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
@@ -2282,38 +2242,26 @@ private extension EditorViewController {
 				return
 			}
 			
-			switch key.keyCode {
-			case .keyboardUpArrow:
-				if let first = collectionView.indexPathsForSelectedItems?.sorted().first {
-					if first.row > 0 {
-						if let cell = collectionView.cellForItem(at: IndexPath(row: first.row - 1, section: first.section)) as? EditorRowViewCell {
-							cell.moveToTopicEnd()
-						}
-					} else {
-						if let cell = collectionView.cellForItem(at: first) as? EditorRowViewCell {
-							cell.moveToTopicStart()
-						}
-					}
-				}
-			case .keyboardDownArrow:
-				if let last = collectionView.indexPathsForSelectedItems?.sorted().last {
-					if last.row + 1 < outline?.shadowTable?.count ?? 0 {
-						if let cell = collectionView.cellForItem(at: IndexPath(row: last.row + 1, section: last.section)) as? EditorRowViewCell {
-							cell.moveToTopicEnd()
-						}
-					} else {
-						if let cell = collectionView.cellForItem(at: last) as? EditorRowViewCell {
-							cell.moveToTopicEnd()
-						}
-					}
-				}
-			case .keyboardLeftArrow:
+			switch (key.keyCode, true) {
+			case (.keyboardUpArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
+				isGoingUp = true
+				repeatMoveSelectionUp(keepSelection: false)
+			case (.keyboardDownArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
+				isGoingDown = true
+				repeatMoveSelectionDown(keepSelection: false)
+			case (.keyboardUpArrow, key.modifierFlags.contains(.shift)):
+				isGoingUp = true
+				repeatMoveSelectionUp(keepSelection: true)
+			case (.keyboardDownArrow, key.modifierFlags.contains(.shift)):
+				isGoingDown = true
+				repeatMoveSelectionDown(keepSelection: true)
+			case (.keyboardLeftArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				if let first = collectionView.indexPathsForSelectedItems?.sorted().first {
 					if let cell = collectionView.cellForItem(at: first) as? EditorRowViewCell {
 						cell.moveToTopicStart()
 					}
 				}
-			case .keyboardRightArrow:
+			case (.keyboardRightArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				if let last = collectionView.indexPathsForSelectedItems?.sorted().last {
 					if let cell = collectionView.cellForItem(at: last) as? EditorRowViewCell {
 						cell.moveToTopicEnd()
@@ -2327,7 +2275,155 @@ private extension EditorViewController {
 			super.pressesBegan(presses, with: event)
 		}
 	}
+
+	func repeatMoveSelectionUp(keepSelection: Bool) {
+		if let sortedIndexPaths = collectionView.indexPathsForSelectedItems?.sorted(),
+		   let first = sortedIndexPaths.first,
+		   let last = sortedIndexPaths.last {
+			
+			if keepSelection {
+				if shiftStartIndex == nil {
+					shiftStartIndex = first.row
+				}
+				
+				let shiftNextIndex: Int
+				if last.row > shiftStartIndex! {
+					shiftNextIndex = last.row
+				} else {
+					if first.row > 0 {
+						shiftNextIndex = first.row - 1
+					} else {
+						shiftNextIndex = first.row
+					}
+				}
+				
+				let indexPath = IndexPath(row: shiftNextIndex, section: first.section)
+				if shiftNextIndex > shiftStartIndex! {
+					collectionView.deselectItem(at: indexPath, animated: false)
+				} else if shiftNextIndex < shiftStartIndex! {
+					collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+				}
+				collectionView.scrollToItem(at: indexPath, at: [], animated: true)
+			} else {
+				// This shouldn't be necessary, but when hitting keys fast sometimes the shiftStartIndex doesn't get cleared
+				shiftStartIndex = nil
+				
+				if first.row > 0 {
+					collectionView.deselectAll(animated: false)
+					let indexPath = IndexPath(row: first.row - 1, section: first.section)
+					collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+					collectionView.scrollToItem(at: indexPath, at: [], animated: true)
+				}
+			}
+		}
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + goingUpRepeatInterval) { [weak self] in
+			if self?.isGoingUp ?? false {
+				self?.goingUpRepeatInterval = Self.fastRepeatInterval
+				self?.repeatMoveSelectionUp(keepSelection: keepSelection)
+			} else {
+				self?.goingUpRepeatInterval = Self.slowRepeatInterval
+			}
+		}
+	}
 	
+	func repeatMoveSelectionDown(keepSelection: Bool) {
+		if let sortedIndexPaths = collectionView.indexPathsForSelectedItems?.sorted(),
+		   let first = sortedIndexPaths.first,
+		   let last = sortedIndexPaths.last {
+			
+			if keepSelection {
+				if shiftStartIndex == nil {
+					shiftStartIndex = last.row
+				}
+				
+				let shiftNextIndex: Int
+				if first.row < shiftStartIndex! {
+					shiftNextIndex = first.row
+				} else {
+					if last.row + 1 < outline?.shadowTable?.count ?? 0 {
+						shiftNextIndex = last.row + 1
+					} else {
+						shiftNextIndex = last.row
+					}
+				}
+				
+				let indexPath = IndexPath(row: shiftNextIndex, section: first.section)
+				if shiftNextIndex < shiftStartIndex! {
+					collectionView.deselectItem(at: indexPath, animated: false)
+				} else if shiftNextIndex > shiftStartIndex! {
+					collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+				}
+				collectionView.scrollToItem(at: indexPath, at: [], animated: true)
+			} else {
+				// This shouldn't be necessary, but when hitting keys fast sometimes the shiftStartIndex doesn't get cleared
+				shiftStartIndex = nil
+				
+				if last.row + 1 < outline?.shadowTable?.count ?? 0 {
+					collectionView.deselectAll(animated: false)
+					let indexPath = IndexPath(row: last.row + 1, section: last.section)
+					collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+					collectionView.scrollToItem(at: indexPath, at: [], animated: true)
+				}
+			}
+		}
+
+		DispatchQueue.main.asyncAfter(deadline: .now() + goingDownRepeatInterval) { [weak self] in
+			if self?.isGoingDown ?? false {
+				self?.goingDownRepeatInterval = Self.fastRepeatInterval
+				self?.repeatMoveSelectionDown(keepSelection: keepSelection)
+			} else {
+				self?.goingDownRepeatInterval = Self.slowRepeatInterval
+			}
+		}
+	}
+	
+	func repeatMoveCursorUp() {
+		if let textView = UIResponder.currentFirstResponder as? EditorRowTopicTextView {
+			moveCursorUp(topicTextView: textView)
+		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
+			if tagInput.isShowingResults {
+				tagInput.selectAbove()
+				return
+			} else {
+				moveCursorToTitle()
+			}
+		}
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + goingUpRepeatInterval) { [weak self] in
+			if self?.isGoingUp ?? false {
+				self?.goingUpRepeatInterval = Self.fastRepeatInterval
+				self?.repeatMoveCursorUp()
+			} else {
+				self?.goingUpRepeatInterval = Self.slowRepeatInterval
+			}
+		}
+	}
+	
+	func repeatMoveCursorDown() {
+		if let textView = UIResponder.currentFirstResponder as? EditorRowTopicTextView {
+			moveCursorDown(topicTextView: textView)
+		} else if let tagInput = UIResponder.currentFirstResponder as? EditorTagInputTextField {
+			if tagInput.isShowingResults {
+				tagInput.selectBelow()
+				return
+			} else {
+				moveCursorToFirstRow()
+			}
+		} else if let textView = UIResponder.currentFirstResponder as? EditorTitleTextView, !textView.isSelecting {
+			moveCursorToTagInput()
+		}
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + goingDownRepeatInterval) { [weak self] in
+			if self?.isGoingDown ?? false {
+				self?.goingDownRepeatInterval = Self.fastRepeatInterval
+				self?.repeatMoveCursorDown()
+			} else {
+				self?.goingDownRepeatInterval = Self.slowRepeatInterval
+			}
+		}
+	}
+
 	func scrollRowToShowBottom() {
 		// If we don't do this when we are creating a row after a really long one, for
 		// some reason the newly created topic will not become the first responder.
