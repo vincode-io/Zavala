@@ -2243,36 +2243,18 @@ private extension EditorViewController {
 			}
 			
 			switch (key.keyCode, true) {
+			case (.keyboardUpArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
+				isGoingUp = true
+				repeatMoveSelectionUp(keepSelection: false)
+			case (.keyboardDownArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
+				isGoingDown = true
+				repeatMoveSelectionDown(keepSelection: false)
 			case (.keyboardUpArrow, key.modifierFlags.contains(.shift)):
 				isGoingUp = true
 				repeatMoveSelectionUp(keepSelection: true)
 			case (.keyboardDownArrow, key.modifierFlags.contains(.shift)):
 				isGoingDown = true
 				repeatMoveSelectionDown(keepSelection: true)
-			case (.keyboardUpArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
-				if let first = collectionView.indexPathsForSelectedItems?.sorted().first {
-					if first.row > 0 {
-						if let cell = collectionView.cellForItem(at: IndexPath(row: first.row - 1, section: first.section)) as? EditorRowViewCell {
-							cell.moveToTopicEnd()
-						}
-					} else {
-						if let cell = collectionView.cellForItem(at: first) as? EditorRowViewCell {
-							cell.moveToTopicStart()
-						}
-					}
-				}
-			case (.keyboardDownArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
-				if let last = collectionView.indexPathsForSelectedItems?.sorted().last {
-					if last.row + 1 < outline?.shadowTable?.count ?? 0 {
-						if let cell = collectionView.cellForItem(at: IndexPath(row: last.row + 1, section: last.section)) as? EditorRowViewCell {
-							cell.moveToTopicEnd()
-						}
-					} else {
-						if let cell = collectionView.cellForItem(at: last) as? EditorRowViewCell {
-							cell.moveToTopicEnd()
-						}
-					}
-				}
 			case (.keyboardLeftArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				if let first = collectionView.indexPathsForSelectedItems?.sorted().first {
 					if let cell = collectionView.cellForItem(at: first) as? EditorRowViewCell {
