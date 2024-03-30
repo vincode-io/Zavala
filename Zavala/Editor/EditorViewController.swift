@@ -1759,6 +1759,11 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		createRow(afterRows: afterRows, rowStrings: rowStrings)
 	}
 	
+	func editorRowSelectRow(_ row: Row) {
+		guard let shadowTableIndex = row.shadowTableIndex else { return }
+		collectionView.selectItem(at: IndexPath(row: shadowTableIndex, section: adjustedRowsSection), animated: true, scrollPosition: [])
+	}
+	
 	func editorRowSplitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}

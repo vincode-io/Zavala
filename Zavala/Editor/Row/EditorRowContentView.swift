@@ -139,7 +139,7 @@ class EditorRowContentView: UIView, UIContentView {
 // MARK: EditorTextViewDelegate
 
 extension EditorRowContentView: EditorRowTopicTextViewDelegate {
-	
+		
 	var editorRowTopicTextViewUndoManager: UndoManager? {
 		return appliedConfiguration?.delegate?.editorRowUndoManager
 	}
@@ -184,6 +184,10 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowCreateRow(afterRow: afterRow, rowStrings: rowStrings)
 	}
 	
+	func selectRow(_: EditorRowTopicTextView, row: Row) {
+		appliedConfiguration?.delegate?.editorRowSelectRow(row)
+	}
+
 	func splitRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		appliedConfiguration?.delegate?.editorRowSplitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
