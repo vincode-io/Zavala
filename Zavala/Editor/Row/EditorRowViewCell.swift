@@ -21,7 +21,6 @@ protocol EditorRowViewCellDelegate: AnyObject {
 	func editorRowDeleteRow(_ row: Row, rowStrings: RowStrings)
 	func editorRowCreateRow(beforeRow: Row)
 	func editorRowCreateRow(afterRow: Row?, rowStrings: RowStrings?)
-	func editorRowSelectRow(_ row: Row)
 	func editorRowSplitRow(_: Row, topic: NSAttributedString, cursorPosition: Int)
 	func editorRowDeleteRowNote(_ row: Row, rowStrings: RowStrings)
 	func editorRowEditLink(_ link: String?, text: String?, range: NSRange)

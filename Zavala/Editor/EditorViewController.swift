@@ -63,6 +63,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			keyCommands.append(commandReturn)
 		}
 		
+		keyCommands.append(UIKeyCommand(action: #selector(toggleMode), input: UIKeyCommand.inputEscape))
+
 		return keyCommands
 	}
 	
@@ -1075,13 +1077,13 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	func moveCursorToCurrentRowTopic() {
-		guard let rowShadowTableIndex = currentRows?.first?.shadowTableIndex,
+		guard let rowShadowTableIndex = currentRows?.last?.shadowTableIndex,
 			  let currentRowViewCell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorRowViewCell else { return }
 		currentRowViewCell.moveToTopicEnd()
 	}
 	
 	func moveCursorToCurrentRowNote() {
-		guard let rowShadowTableIndex = currentRows?.first?.shadowTableIndex,
+		guard let rowShadowTableIndex = currentRows?.last?.shadowTableIndex,
 			  let currentRowViewCell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorRowViewCell else { return }
 		currentRowViewCell.moveToNoteEnd()
 	}
@@ -1195,6 +1197,17 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func hideKeyboard() {
 		UIResponder.currentFirstResponder?.resignFirstResponder()
 		CursorCoordinates.clearLastKnownCoordinates()
+	}
+	
+	@objc func toggleMode() {
+		guard let topicView = currentTextView as? EditorRowTopicTextView,
+			  let shadowTableIndex = topicView.row?.shadowTableIndex else {
+			moveCursorToCurrentRowTopic()
+			return
+		}
+		
+		topicView.resignFirstResponder()
+		collectionView.selectItem(at: IndexPath(row: shadowTableIndex, section: adjustedRowsSection), animated: true, scrollPosition: [])
 	}
 
 	@objc func focusIn() {
@@ -1757,11 +1770,6 @@ extension EditorViewController: EditorRowViewCellDelegate {
 	func editorRowCreateRow(afterRow: Row?, rowStrings: RowStrings?) {
 		let afterRows = afterRow == nil ? nil : [afterRow!]
 		createRow(afterRows: afterRows, rowStrings: rowStrings)
-	}
-	
-	func editorRowSelectRow(_ row: Row) {
-		guard let shadowTableIndex = row.shadowTableIndex else { return }
-		collectionView.selectItem(at: IndexPath(row: shadowTableIndex, section: adjustedRowsSection), animated: true, scrollPosition: [])
 	}
 	
 	func editorRowSplitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {

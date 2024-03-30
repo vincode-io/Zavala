@@ -20,7 +20,6 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	func deleteRow(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings)
 	func createRow(_: EditorRowTopicTextView, beforeRow: Row)
 	func createRow(_: EditorRowTopicTextView, afterRow: Row, rowStrings: RowStrings)
-	func selectRow(_: EditorRowTopicTextView, row: Row)
 	func splitRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
 	func editLink(_: EditorRowTopicTextView, _ link: String?, text: String?, range: NSRange)
 	func zoomImage(_: EditorRowTopicTextView, _ image: UIImage, rect: CGRect)
@@ -46,7 +45,6 @@ class EditorRowTopicTextView: EditorRowTextView {
 			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(insertNewline(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(insertRow(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(split(_:))),
-			UIKeyCommand(action: #selector(selectRow(_:)), input: UIKeyCommand.inputEscape),
 			toggleBoldCommand,
 			toggleItalicsCommand,
 			editLinkCommand
@@ -132,12 +130,6 @@ class EditorRowTopicTextView: EditorRowTextView {
 	@objc func createRow(_ sender: Any) {
 		guard let row else { return }
 		editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
-	}
-	
-	@objc func selectRow(_ sender: Any) {
-		resignFirstResponder()
-		guard let row else { return }
-		editorDelegate?.selectRow(self, row: row)
 	}
 	
 	@objc func moveCursorUp(_ sender: Any) {
