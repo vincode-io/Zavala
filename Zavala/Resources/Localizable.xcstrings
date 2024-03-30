@@ -366,6 +366,12 @@
     "Italic" : {
       "comment" : "Control Label: Italic"
     },
+    "Jump to Note" : {
+      "comment" : "Control Label: Jump to Note"
+    },
+    "Jump to Topic" : {
+      "comment" : "Control Label: Jump to Topic"
+    },
     "Large" : {
       "comment" : "Control Label: Large"
     },

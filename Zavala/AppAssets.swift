@@ -257,7 +257,10 @@ extension String {
 	static var insertImageControlLabel = String(localized: "Insert Image", comment: "Control Label: Insert Image")
 	static var insertImageEllipsisControlLabel = String(localized: "Insert Image…", comment: "Control Label: Insert Image…")
 	static var italicControlLabel = String(localized: "Italic", comment: "Control Label: Italic")
-	
+
+	static var jumpToNoteControlLabel = String(localized: "Jump to Note", comment: "Control Label: Jump to Note")
+	static var jumpToTopicControlLabel = String(localized: "Jump to Topic", comment: "Control Label: Jump to Topic")
+
 	static var largeControlLabel = String(localized: "Large", comment: "Control Label: Large")
 	static var linkControlLabel = String(localized: "Link", comment: "Control Label: Link")
 	static var linkEllipsisControlLabel = String(localized: "Link…", comment: "Control Label: Link…")

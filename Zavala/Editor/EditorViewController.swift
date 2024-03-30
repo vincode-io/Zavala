@@ -46,7 +46,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	override var keyCommands: [UIKeyCommand]? {
 		var keyCommands = [UIKeyCommand]()
 		
-		if !isEditingNotes {
+		if !isEditingNote {
 			let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(moveCurrentRowsLeft))
 			shiftTab.wantsPriorityOverSystemBehavior = true
 			keyCommands.append(shiftTab)
@@ -317,7 +317,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 	}
 	
-	var isEditingNotes: Bool {
+	var isEditingTopic: Bool {
+		if let responder = UIResponder.currentFirstResponder, responder is EditorRowTopicTextView {
+			return true
+		} else {
+			return false
+		}
+	}
+	
+	var isEditingNote: Bool {
 		if let responder = UIResponder.currentFirstResponder, responder is EditorRowNoteTextView {
 			return true
 		} else {
@@ -1064,6 +1072,18 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	func createRowOutside() {
 		guard let rows = currentRows else { return }
 		createRowOutside(afterRows: rows)
+	}
+	
+	func moveCursorToCurrentRowTopic() {
+		guard let rowShadowTableIndex = currentRows?.first?.shadowTableIndex,
+			  let currentRowViewCell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorRowViewCell else { return }
+		currentRowViewCell.moveToTopicEnd()
+	}
+	
+	func moveCursorToCurrentRowNote() {
+		guard let rowShadowTableIndex = currentRows?.first?.shadowTableIndex,
+			  let currentRowViewCell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorRowViewCell else { return }
+		currentRowViewCell.moveToNoteEnd()
 	}
 	
 	func createRowNotes() {

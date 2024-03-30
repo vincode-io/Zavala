@@ -132,10 +132,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											 input: "\n",
 											 modifierFlags: [.command])
 	
-	let createRowNotesCommand = UIKeyCommand(title: .addNoteControlLabel,
-											 action: #selector(createRowNotesCommand(_:)),
-											 input: "-",
-											 modifierFlags: [.control])
+	let rowNotesCommand = UIKeyCommand(title: .addNoteControlLabel,
+									   action: #selector(rowNotesCommand(_:)),
+									   input: "-",
+									   modifierFlags: [.control])
 	
 	let deleteRowNotesCommand = UIKeyCommand(title: .deleteNoteControlLabel,
 											 action: #selector(deleteRowNotesCommand(_:)),
@@ -551,8 +551,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.toggleCompleteRows()
 	}
 	
-	@objc func createRowNotesCommand(_ sender: Any?) {
-		mainCoordinator?.createRowNotes()
+	@objc func rowNotesCommand(_ sender: Any?) {
+		if mainCoordinator?.isCreateRowNotesUnavailable ?? true {
+			if mainCoordinator?.isEditingTopic ?? false {
+				mainCoordinator?.moveCursorToCurrentRowNote()
+			} else if mainCoordinator?.isEditingNotes ?? false {
+				mainCoordinator?.moveCursorToCurrentRowTopic()
+			}
+		} else {
+			mainCoordinator?.createRowNotes()
+		}
 	}
 	
 	@objc func deleteRowNotesCommand(_ sender: Any?) {
@@ -786,9 +794,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isToggleRowCompleteUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(createRowNotesCommand(_:)):
+		case #selector(rowNotesCommand(_:)):
 			if mainCoordinator?.isCreateRowNotesUnavailable ?? true  {
-				command.attributes = .disabled
+				if mainCoordinator?.isEditingTopic ?? false {
+					command.title = .jumpToNoteControlLabel
+				} else if mainCoordinator?.isEditingNotes ?? false {
+					command.title = .jumpToTopicControlLabel
+				} else {
+					command.title = .addNoteControlLabel
+					command.attributes = .disabled
+				}
+			} else {
+				command.title = .addNoteControlLabel
 			}
 		case #selector(deleteRowNotesCommand(_:)):
 			if mainCoordinator?.isDeleteRowNotesUnavailable ?? true {
@@ -978,7 +995,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												deleteCurrentRowsCommand])
 		let moveRowMenu = UIMenu(title: "", options: .displayInline, children: [moveRowsLeftCommand, moveRowsRightCommand, moveRowsUpCommand, moveRowsDownCommand])
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand])
-		let noteMenu = UIMenu(title: "", options: .displayInline, children: [createRowNotesCommand, deleteRowNotesCommand])
+		let noteMenu = UIMenu(title: "", options: .displayInline, children: [rowNotesCommand, deleteRowNotesCommand])
 
 		let outlineMenu = UIMenu(title: .outlineControlLabel, children: [mainOutlineMenu, moveRowMenu, completeMenu, noteMenu])
 		builder.insertSibling(outlineMenu, afterMenu: .view)

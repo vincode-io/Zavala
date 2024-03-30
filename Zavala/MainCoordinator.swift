@@ -155,6 +155,14 @@ extension MainCoordinator {
 		return !(selectedDocuments.count == 1 && selectedDocuments.first!.isCollaborating)
 	}
 	
+	var isEditingTopic: Bool {
+		return editorViewController?.isEditingTopic ?? false
+	}
+	
+	var isEditingNotes: Bool {
+		return editorViewController?.isEditingNote ?? false
+	}
+
 	func duplicateRows() {
 		editorViewController?.duplicateCurrentRows()
 	}
@@ -217,6 +225,14 @@ extension MainCoordinator {
 	
 	func toggleCompleteRows() {
 		editorViewController?.toggleCompleteRows()
+	}
+	
+	func moveCursorToCurrentRowTopic() {
+		editorViewController?.moveCursorToCurrentRowTopic()
+	}
+	
+	func moveCursorToCurrentRowNote() {
+		editorViewController?.moveCursorToCurrentRowNote()
 	}
 	
 	func createRowNotes() {
