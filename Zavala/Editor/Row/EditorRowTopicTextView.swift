@@ -135,6 +135,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 	}
 	
 	@objc func selectRow(_ sender: Any) {
+		resignFirstResponder()
 		guard let row else { return }
 		editorDelegate?.selectRow(self, row: row)
 	}
