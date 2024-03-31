@@ -387,6 +387,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var isGoingDown = false
 	private lazy var goingUpRepeatInterval: Double = Self.slowRepeatInterval
 	private lazy var goingDownRepeatInterval: Double = Self.slowRepeatInterval
+	private var goingUpOrDownTask: Task<(()), Never>?
 	private var shiftStartIndex: Int?
 	
 	private var undoMenuButton: ButtonGroup.Button!
@@ -2317,12 +2318,16 @@ private extension EditorViewController {
 			}
 		}
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + goingUpRepeatInterval) { [weak self] in
-			if self?.isGoingUp ?? false {
-				self?.goingUpRepeatInterval = Self.fastRepeatInterval
-				self?.repeatMoveSelectionUp(keepSelection: keepSelection)
+		goingUpOrDownTask?.cancel()
+		goingUpOrDownTask = Task {
+			try? await Task.sleep(for: .seconds(goingUpRepeatInterval))
+			guard !Task.isCancelled else { return }
+			
+			if self.isGoingUp {
+				self.goingUpRepeatInterval = Self.fastRepeatInterval
+				self.repeatMoveSelectionUp(keepSelection: keepSelection)
 			} else {
-				self?.goingUpRepeatInterval = Self.slowRepeatInterval
+				self.goingUpRepeatInterval = Self.slowRepeatInterval
 			}
 		}
 	}
@@ -2368,12 +2373,16 @@ private extension EditorViewController {
 			}
 		}
 
-		DispatchQueue.main.asyncAfter(deadline: .now() + goingDownRepeatInterval) { [weak self] in
-			if self?.isGoingDown ?? false {
-				self?.goingDownRepeatInterval = Self.fastRepeatInterval
-				self?.repeatMoveSelectionDown(keepSelection: keepSelection)
+		goingUpOrDownTask?.cancel()
+		goingUpOrDownTask = Task {
+			try? await Task.sleep(for: .seconds(goingDownRepeatInterval))
+			guard !Task.isCancelled else { return }
+			
+			if self.isGoingDown {
+				self.goingDownRepeatInterval = Self.fastRepeatInterval
+				self.repeatMoveSelectionDown(keepSelection: keepSelection)
 			} else {
-				self?.goingDownRepeatInterval = Self.slowRepeatInterval
+				self.goingDownRepeatInterval = Self.slowRepeatInterval
 			}
 		}
 	}
@@ -2390,12 +2399,16 @@ private extension EditorViewController {
 			}
 		}
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + goingUpRepeatInterval) { [weak self] in
-			if self?.isGoingUp ?? false {
-				self?.goingUpRepeatInterval = Self.fastRepeatInterval
-				self?.repeatMoveCursorUp()
+		goingUpOrDownTask?.cancel()
+		goingUpOrDownTask = Task {
+			try? await Task.sleep(for: .seconds(goingUpRepeatInterval))
+			guard !Task.isCancelled else { return }
+			
+			if self.isGoingUp {
+				self.goingUpRepeatInterval = Self.fastRepeatInterval
+				self.repeatMoveCursorUp()
 			} else {
-				self?.goingUpRepeatInterval = Self.slowRepeatInterval
+				self.goingUpRepeatInterval = Self.slowRepeatInterval
 			}
 		}
 	}
@@ -2414,12 +2427,16 @@ private extension EditorViewController {
 			moveCursorToTagInput()
 		}
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + goingDownRepeatInterval) { [weak self] in
-			if self?.isGoingDown ?? false {
-				self?.goingDownRepeatInterval = Self.fastRepeatInterval
-				self?.repeatMoveCursorDown()
+		goingUpOrDownTask?.cancel()
+		goingUpOrDownTask = Task {
+			try? await Task.sleep(for: .seconds(goingDownRepeatInterval))
+			guard !Task.isCancelled else { return }
+			
+			if self.isGoingDown {
+				self.goingDownRepeatInterval = Self.fastRepeatInterval
+				self.repeatMoveCursorDown()
 			} else {
-				self?.goingDownRepeatInterval = Self.slowRepeatInterval
+				self.goingDownRepeatInterval = Self.slowRepeatInterval
 			}
 		}
 	}
