@@ -2403,8 +2403,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func load() {
-		assert(Thread.isMainThread)
-		
 		beingUsedCount = beingUsedCount + 1
 		
 		guard rowsFile == nil, beingUsedCount == 1 else { return }
@@ -2419,8 +2417,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func unload() {
-		assert(Thread.isMainThread)
-		
 		if beingUsedCount > 0 {
 			beingUsedCount = beingUsedCount - 1
 		}

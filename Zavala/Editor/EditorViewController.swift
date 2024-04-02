@@ -897,7 +897,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			textField.endEditing(true)
 		}
 		
-		updateSpotlightIndex()
+		Task.detached {
+			await self.updateSpotlightIndex()
+		}
 		
 		// After this point as long as we don't have this Outline open in other
 		// windows, no more collection view updates should happen for it.
@@ -907,7 +909,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		isSearching = false // Necessary to prevent crashing while switching outlines during a find session
 		findInteraction.dismissFindNavigator()
 		
-		outline?.unload()
+		let oldOutline = outline
+		Task.detached {
+			oldOutline?.unload()
+		}
 		undoManager?.removeAllActions()
 	
 		// Assign the new Outline and load it
@@ -3434,7 +3439,9 @@ private extension EditorViewController {
 
 	func updateSpotlightIndex() {
 		if let outline {
+			outline.load()
 			DocumentIndexer.updateIndex(forDocument: .outline(outline))
+			outline.unload()
 		}
 	}
 	
