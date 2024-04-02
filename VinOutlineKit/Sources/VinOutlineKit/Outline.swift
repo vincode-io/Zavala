@@ -1422,7 +1422,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 	}
 	
-	public func deleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
+	public func deleteRows(_ rows: [Row], rowStrings: RowStrings? = nil, isInOutlineMode: Bool = false) {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
 		beginCloudKitBatchRequest()
@@ -1478,13 +1478,24 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		let reloadSet = Set(reloads).subtracting(deleteSet)
 		
 		var changes = OutlineElementChanges(section: adjustedRowsSection, deletes: deleteSet, reloads: reloadSet)
-		changes.cursorMoveIsBeforeChanges = true
 		
-		if deletedRows.contains(where: { $0.id == selectionRowID?.rowUUID }) {
-			if let firstDelete = deletes.first, firstDelete > 0 {
-				changes.newCursorIndex = firstDelete - 1
-			} else {
-				changes.newCursorIndex = -1
+		if isInOutlineMode {
+			if let firstDelete = deletes.first, firstDelete >= 0 {
+				let shadowTableCount = shadowTable?.count ?? 0
+				if firstDelete < shadowTableCount {
+					changes.newSelectIndex = firstDelete
+				} else if shadowTableCount > 0 {
+					changes.newSelectIndex = shadowTableCount - 1
+				}
+			}
+		} else {
+			changes.cursorMoveIsBeforeChanges = true
+			if deletedRows.contains(where: { $0.id == selectionRowID?.rowUUID }) {
+				if let firstDelete = deletes.first, firstDelete > 0 {
+					changes.newCursorIndex = firstDelete - 1
+				} else {
+					changes.newCursorIndex = -1
+				}
 			}
 		}
 

@@ -311,6 +311,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return nil
 	}
 	
+	var isInOutlineMode: Bool {
+		return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
+	}
+	
 	var isInEditMode: Bool {
 		if let responder = UIResponder.currentFirstResponder, responder is UITextField || responder is UITextView {
 			return true
@@ -2534,6 +2538,8 @@ private extension EditorViewController {
 			} else {
 				moveCursorToRow(index: newCursorIndex, toNote: changes.cursorMoveIsToNote)
 			}
+		} else if let newSelectIndex = changes.newSelectIndex {
+			moveSelectionToRow(index: newSelectIndex)
 		}
 
 		updateUI()
@@ -2818,28 +2824,34 @@ private extension EditorViewController {
 	}
 	
 	func moveCursorToRow(index: Int, toNote: Bool = false) {
-		let newCursorIndexPath = IndexPath(row: index, section: adjustedRowsSection)
+		let indexPath = IndexPath(row: index, section: adjustedRowsSection)
 		
-		if let rowCell = collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
+		func move(rowCell: EditorRowViewCell) {
 			if toNote {
 				rowCell.moveToNoteEnd()
 			} else {
 				rowCell.moveToTopicEnd()
 			}
 			makeCursorVisibleIfNecessary(animated: false)
+		}
+		
+		if let rowCell = collectionView.cellForItem(at: indexPath) as? EditorRowViewCell {
+			move(rowCell: rowCell)
 		} else {
 			DispatchQueue.main.async {
-				if let rowCell = self.collectionView.cellForItem(at: newCursorIndexPath) as? EditorRowViewCell {
-					if toNote {
-						rowCell.moveToNoteEnd()
-					} else {
-						rowCell.moveToTopicEnd()
-					}
-					self.makeCursorVisibleIfNecessary(animated: false)
+				if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell {
+					move(rowCell: rowCell)
 				}
 			}
 		}
 
+	}
+	
+	func moveSelectionToRow(index: Int) {
+		let indexPath = IndexPath(row: index, section: adjustedRowsSection)
+		collectionView.deselectAll()
+		collectionView.scrollToItem(at: indexPath, at: [], animated: false)
+		collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
 	}
 	
 	func moveCursorUp(topicTextView: EditorRowTopicTextView) {
@@ -3066,7 +3078,8 @@ private extension EditorViewController {
 									undoManager: undoManager,
 									delegate: self,
 									outline: outline,
-									rows: rows)
+									rows: rows,
+									isInOutlineMode: isInOutlineMode)
 
 		command.execute()
 	}
@@ -3191,7 +3204,8 @@ private extension EditorViewController {
 									   delegate: self,
 									   outline: outline,
 									   rows: rows,
-									   rowStrings: rowStrings)
+									   rowStrings: rowStrings,
+									   isInOutlineMode: isInOutlineMode)
 
 		command.execute()
 	}

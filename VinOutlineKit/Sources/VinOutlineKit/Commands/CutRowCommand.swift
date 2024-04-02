@@ -11,8 +11,9 @@ public final class CutRowCommand: OutlineCommand {
 	
 	var rows: [Row]
 	var afterRows = [Row: Row]()
+	var isInOutlineMode: Bool
 	
-	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row]) {
+	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], isInOutlineMode: Bool) {
 		self.rows = rows
 
 		var allRows = [Row]()
@@ -31,11 +32,13 @@ public final class CutRowCommand: OutlineCommand {
 			}
 		}
 
+		self.isInOutlineMode = isInOutlineMode
+		
 		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
 	public override func perform() {
-		outline.deleteRows(rows)
+		outline.deleteRows(rows, isInOutlineMode: isInOutlineMode)
 	}
 	
 	public override func undo() {

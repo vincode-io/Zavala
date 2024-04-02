@@ -11,8 +11,9 @@ public final class DeleteRowCommand: OutlineCommand {
 	var rows: [Row]
 	var rowStrings: RowStrings?
 	var afterRows = [Row: Row]()
+	var isInOutlineMode: Bool
 	
-	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?) {
+	public init(actionName: String, undoManager: UndoManager, delegate: OutlineCommandDelegate, outline: Outline, rows: [Row], rowStrings: RowStrings?, isInOutlineMode: Bool) {
 		self.rows = rows
 
 		var allRows = Set<Row>()
@@ -32,12 +33,13 @@ public final class DeleteRowCommand: OutlineCommand {
 		}
 
 		self.rowStrings = rowStrings
+		self.isInOutlineMode = isInOutlineMode
 
 		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
 	
 	public override func perform() {
-		outline.deleteRows(rows, rowStrings: rowStrings)
+		outline.deleteRows(rows, rowStrings: rowStrings, isInOutlineMode: isInOutlineMode)
 	}
 	
 	public override func undo() {

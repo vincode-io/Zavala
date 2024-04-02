@@ -32,7 +32,8 @@ public struct OutlineElementChanges {
 	public var cursorMoveIsBeforeChanges = false
 	public var cursorMoveIsToNote = false
 	public var newCursorIndex: Int?
-	
+	public var newSelectIndex: Int?
+
 	public var isEmpty: Bool {
 		return (deletes?.isEmpty ?? true) && (inserts?.isEmpty ?? true) && (moves?.isEmpty ?? true) && (reloads?.isEmpty ?? true)
 	}
