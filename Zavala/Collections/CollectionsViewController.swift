@@ -502,11 +502,12 @@ extension CollectionsViewController: CollectionsSearchCellDelegate {
 	}
 
 	func collectionsSearchDidUpdate(searchText: String?) {
+		collectionView.deselectAll()
 		Task {
 			if let searchText {
-				await selectDocumentContainers([Search(searchText: searchText)], isNavigationBranch: false, animated: true)
+				await updateSelections([Search(searchText: searchText)], isNavigationBranch: false, animated: true)
 			} else {
-				await selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
+				await updateSelections([Search(searchText: "")], isNavigationBranch: false, animated: true)
 			}
 
 		}
