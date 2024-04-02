@@ -3362,8 +3362,6 @@ private extension EditorViewController {
 	func completeRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager, let outline else { return }
 		
-		let cursorIsInCompletingRows = rows.contains(where: { $0 == currentTextView?.row })
-		
 		let command = CompleteCommand(actionName: .completeControlLabel,
 									  undoManager: undoManager,
 									  delegate: self,
