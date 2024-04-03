@@ -423,8 +423,8 @@
     "New Main Window" : {
       "comment" : "Control Label: New Main Window"
     },
-    "New New Outline" : {
-      "comment" : "Control Label: New New Outline"
+    "New Outline" : {
+      "comment" : "Control Label: New Outline"
     },
     "Next Result" : {
       "comment" : "Control Label: Next Result"

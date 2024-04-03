@@ -280,7 +280,7 @@ extension String {
 	static var nameControlLabel = String(localized: "Name", comment: "Control Label: Name")
 	static var navigationControlLabel = String(localized: "Navigation", comment: "Control Label: Navigation")
 	static var newMainWindowControlLabel = String(localized: "New Main Window", comment: "Control Label: New Main Window")
-	static var newOutlineControlLabel = String(localized: "New New Outline", comment: "Control Label: New New Outline")
+	static var newOutlineControlLabel = String(localized: "New Outline", comment: "Control Label: New Outline")
 	static var nextResultControlLabel = String(localized: "Next Result", comment: "Control Label: Next Result")
 	static var noneControlLabel = String(localized: "None", comment: "Control Label: None")
 	static var normalControlLabel = String(localized: "Normal", comment: "Control Label: Normal")
