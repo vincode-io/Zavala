@@ -373,6 +373,16 @@ extension CollectionsViewController {
 
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			cell.contentConfiguration = contentConfiguration
+			
+			cell.configurationUpdateHandler = { cell, state in
+				guard var config = cell.contentConfiguration?.updated(for: state) as? UIListContentConfiguration else { return }
+				if state.isSelected || state.isHighlighted {
+					config.imageProperties.tintColor = .white
+				} else {
+					config.imageProperties.tintColor = nil
+				}
+				cell.contentConfiguration = config
+			}
 		}
 		
 		dataSource = UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
