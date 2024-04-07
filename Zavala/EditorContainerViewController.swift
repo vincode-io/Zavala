@@ -81,6 +81,12 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 			activityManager.selectingDocument(nil, document)
 			editorViewController?.edit(outline, isNew: false)
 			pinWasVisited(Pin(document: document))
+		} else {
+			Task {
+				self.presentError(title: .documentNotFoundTitle, message: .documentNotFoundMessage) {
+					self.sceneDelegate?.closeWindow()
+				}
+			}
 		}
 	}
 

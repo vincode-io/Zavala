@@ -196,7 +196,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 	func handleDocument(_ documentID: EntityID, isNavigationBranch: Bool) async {
 		guard let account = AccountManager.shared.findAccount(accountID: documentID.accountID),
-			  let document = account.findDocument(documentID) else { return }
+			  let document = account.findDocument(documentID) else {
+			presentError(title: .documentNotFoundTitle, message: .documentNotFoundMessage)
+			return
+		}
 		
 		if let collectionsTags = selectedTags, document.hasAnyTag(collectionsTags) {
 			self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
