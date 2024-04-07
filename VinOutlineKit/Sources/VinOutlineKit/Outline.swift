@@ -2545,7 +2545,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return outline
 	}
 	
-	func createBacklink(_ entityID: EntityID, updateCloudKit: Bool = true) {
+	func createBacklink(_ entityID: EntityID) {
 		if isCloudKit && ancestorDocumentBacklinks == nil {
 			ancestorDocumentBacklinks = documentBacklinks
 		}
@@ -2557,9 +2557,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		documentBacklinks?.append(entityID)
 		documentMetaDataDidChange()
 		
-		if updateCloudKit {
-			requestCloudKitUpdate(for: id)
-		}
+		requestCloudKitUpdate(for: id)
 
 		guard isBeingViewed else { return }
 
@@ -2572,7 +2570,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 
-	func deleteBacklink(_ entityID: EntityID, updateCloudKit: Bool = true) {
+	func deleteBacklink(_ entityID: EntityID) {
 		if isCloudKit && ancestorDocumentBacklinks == nil {
 			ancestorDocumentBacklinks = documentBacklinks
 		}
@@ -2580,9 +2578,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		documentBacklinks?.removeFirst(object: entityID)
 		documentMetaDataDidChange()
 		
-		if updateCloudKit {
-			requestCloudKitUpdate(for: id)
-		}
+		requestCloudKitUpdate(for: id)
 
 		guard isBeingViewed else { return }
 		
@@ -2676,7 +2672,14 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, inserts: inserts, moves: moves)
 	}
 	
-
+	func outlineAddedBacklinks() {
+		NotificationCenter.default.post(name: .OutlineAddedBacklinks, object: self, userInfo: nil)
+	}
+	
+	func outlineRemovedBacklinks() {
+		NotificationCenter.default.post(name: .OutlineRemovedBacklinks, object: self, userInfo: nil)
+	}
+	
 	func outlineDidDelete() {
 		NotificationCenter.default.post(name: .DocumentDidDelete, object: Document.outline(self), userInfo: nil)
 	}
@@ -2785,14 +2788,6 @@ private extension Outline {
 	
 	func outlineDidFocusOut() {
 		NotificationCenter.default.post(name: .OutlineDidFocusOut, object: self, userInfo: nil)
-	}
-	
-	func outlineAddedBacklinks() {
-		NotificationCenter.default.post(name: .OutlineAddedBacklinks, object: self, userInfo: nil)
-	}
-	
-	func outlineRemovedBacklinks() {
-		NotificationCenter.default.post(name: .OutlineRemovedBacklinks, object: self, userInfo: nil)
 	}
 	
 	func changeSearchResult(_ changeToResult: Int) {
