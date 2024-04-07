@@ -459,14 +459,31 @@ private extension Outline {
 	func applyDocumentBacklinks(_ record: CKRecord) {
 		let serverDocumentBacklinkDescs = record[Outline.CloudKitRecord.Fields.documentBacklinks] as? [String] ?? []
 		let serverDocumentBacklinks = serverDocumentBacklinkDescs.compactMap { EntityID(description: $0) }
-		let documentBacklinksDiff = serverDocumentBacklinks.difference(from: documentBacklinks ?? [])
+		let oldDocumentBacklinks = documentBacklinks
+		documentBacklinks = serverDocumentBacklinks
 		
-		for change in documentBacklinksDiff {
+		if isBeingViewed && isSearching == .notSearching {
+			updateDocumentBacklinksUI(documentBacklinks ?? [], oldDocumentBacklinks ?? [])
+		}
+	}
+	
+	func updateDocumentBacklinksUI(_ documentBacklinks: [EntityID], _ oldDocumentBacklinks: [EntityID]) {
+		let documentLinksDiff = documentBacklinks.difference(from: oldDocumentBacklinks)
+		
+		for change in documentLinksDiff {
 			switch change {
-			case .insert(_, let documentBacklink, _):
-				createBacklink(documentBacklink, updateCloudKit: false)
-			case .remove(_, let documentBacklink, _):
-				deleteBacklink(documentBacklink, updateCloudKit: false)
+			case .insert(_, _, _):
+				if oldDocumentBacklinks.count == 0 {
+					outlineAddedBacklinks()
+				} else {
+					outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
+				}
+			case .remove(_, _, _):
+				if documentBacklinks.count == 0 {
+					outlineRemovedBacklinks()
+				} else {
+					outlineElementsDidChange(OutlineElementChanges(section: Section.backlinks, reloads: Set([0])))
+				}
 			}
 		}
 	}

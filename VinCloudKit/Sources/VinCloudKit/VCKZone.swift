@@ -262,6 +262,9 @@ public extension VCKZone {
 //							}
 //						}
 						break
+					case .limitExceeded:
+						perRecordError = VCKError.maxChildCountExceeded
+						op.cancel()
 					case .serverRecordChanged:
 						// Merge the model and try to save it again
 						if let model = modelsToSave.first(where: { $0.cloudKitRecordID == recordID }) {

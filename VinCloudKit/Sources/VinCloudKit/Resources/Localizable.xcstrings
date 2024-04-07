@@ -91,6 +91,9 @@
     "The iCloud data was deleted.  Please remove the application iCloud account and add it again to continue using the application's iCloud support." : {
       "comment" : "Error Message: User deleted zone."
     },
+    "The maximum number of child rows that iCloud can sync is 750. This limit has been exceeded. Please reduce the number of child rows to continue syncing." : {
+      "comment" : "Error Message: Max child count exceeeded."
+    },
     "There is an unrecoverable problem with your application iCloud account. Please make sure you have iCloud and iCloud Drive enabled in System Preferences. Then remove the application iCloud account and add it again." : {
       "comment" : "Error Message: Corrupt account."
     },
