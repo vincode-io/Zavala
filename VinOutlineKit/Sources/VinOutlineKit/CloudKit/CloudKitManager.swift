@@ -109,24 +109,9 @@ public class CloudKitManager {
 	func addRequests(_ requests: Set<CloudKitActionRequest>) {
 		Task {
 			await requestsSemaphore.wait()
-			defer { requestsSemaphore.signal() }
+			CloudKitActionRequest.append(requests: requests)
+			requestsSemaphore.signal()
 
-			let queuedRequests: Set<CloudKitActionRequest>
-			
-			if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
-				let decoder = PropertyListDecoder()
-				if let decodedRequests = try? decoder.decode(Set<CloudKitActionRequest>.self, from: fileData) {
-					queuedRequests = decodedRequests
-				} else {
-					queuedRequests = Set<CloudKitActionRequest>()
-				}
-			} else {
-				queuedRequests = Set<CloudKitActionRequest>()
-			}
-			
-			let mergedRequests = queuedRequests.union(requests)
-			CloudKitActionRequest.save(requests: mergedRequests)
-			
 			await workChannel.send({ [weak self] in
 				guard let self, self.isNetworkAvailable else { return }
 				Task {
@@ -317,16 +302,21 @@ private extension CloudKitManager {
 	
 	@MainActor
 	func sendChanges(userInitiated: Bool) async throws {
-		await requestsSemaphore.wait()
-		defer { requestsSemaphore.signal() }
-
 		isSyncing = true
-
-		guard let requests = CloudKitActionRequest.loadRequests(), !requests.isEmpty else {
-			logger.info("No pending requests to send.")
-			return
+		defer {
+			isSyncing = false
 		}
 		
+		await requestsSemaphore.wait()
+		guard let requests = CloudKitActionRequest.load(), !requests.isEmpty else {
+			logger.info("No pending requests to send.")
+			requestsSemaphore.signal()
+			return
+		}
+
+		CloudKitActionRequest.clear()
+		requestsSemaphore.signal()
+
 		logger.info("Sending \(requests.count) requests.")
 		
 		let (loadedDocuments, modifications) = loadDocumentsAndStageModifications(requests: requests)
@@ -388,13 +378,18 @@ private extension CloudKitManager {
 		loadedDocuments.forEach { $0.unload() }
 			
 		self.logger.info("Saving \(leftOverRequests.count) requests.")
-		CloudKitActionRequest.save(requests: leftOverRequests)
-				
-		self.isSyncing = false
+		
+		await requestsSemaphore.wait()
+		CloudKitActionRequest.append(requests: leftOverRequests)
+		requestsSemaphore.signal()
 	}
 	
 	func fetchAllChanges(userInitiated: Bool) async throws {
 		isSyncing = true
+		defer {
+			isSyncing = false
+		}
+		
 		var zoneIDs = Set<CKRecordZone.ID>()
 		zoneIDs.insert(outlineZone.zoneID)
 		
@@ -433,11 +428,9 @@ private extension CloudKitManager {
 						}
 
 						self.sharedDatabaseChangeToken = token
-						self.isSyncing = false
 						continuation.resume()
 					}
 				case .failure(let error):
-					self.isSyncing = false
 					continuation.resume(throwing: error)
 				}
 			}
