@@ -723,6 +723,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func findRow(id: String) -> Row? {
+		guard keyedRows != nil else { fatalError("Missing rows file data while trying to find a row.") }
 		return keyedRows?[id]
 	}
 	
