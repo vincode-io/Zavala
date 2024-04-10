@@ -3104,7 +3104,7 @@ private extension EditorViewController {
 			if row == rows[0] {
 				itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
 					var markdowns = [String]()
-					for row in rows {
+					for row in rows.sortedWithDecendentsFiltered() {
 						markdowns.append(row.markdownList())
 					}
 					let data = markdowns.joined(separator: "\n").data(using: .utf8)
