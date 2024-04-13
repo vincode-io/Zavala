@@ -30,6 +30,7 @@ public struct OutlineElementChanges {
 	public var isReloadsAnimatable = false
 	
 	public var cursorMoveIsBeforeChanges = false
+	public var cursorMoveIsToStart = false
 	public var cursorMoveIsToNote = false
 	public var newCursorIndex: Int?
 	public var newSelectIndex: Int?

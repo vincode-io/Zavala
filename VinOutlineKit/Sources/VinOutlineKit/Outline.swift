@@ -1503,27 +1503,22 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 	}
 	
-	func joinRows(topRow: Row, bottomRow: Row) {
+	func joinRows(topRow: Row, bottomRow: Row, topic: NSAttributedString? = nil) {
 		beginCloudKitBatchRequest()
 		
-		guard let topTopic = topRow.topic,
-			  let topShadowTableIndex = topRow.shadowTableIndex,
-			  let bottomTopic = bottomRow.topic else { return }
-		
-		let mutableText = NSMutableAttributedString(attributedString: topTopic)
-		mutableText.append(bottomTopic)
-		topRow.topic = mutableText
-		
+		requestCloudKitUpdate(for: topRow.entityID)
+		updateRowStrings(topRow, .topic(topic))
 		deleteRows([bottomRow])
+
 		endCloudKitBatchRequest()
 		
-		guard isBeingViewed else { return }
+		guard isBeingViewed, let topShadowTableIndex = topRow.shadowTableIndex else { return }
 
 		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set([topShadowTableIndex]))
 		outlineElementsDidChange(changes)
 	}
 	
-	func createRow(_ row: Row, beforeRow: Row, rowStrings: RowStrings? = nil) {
+	func createRow(_ row: Row, beforeRow: Row, rowStrings: RowStrings? = nil, moveCursor: Bool) {
 		beginCloudKitBatchRequest()
 		
 		if let texts = rowStrings {
@@ -1560,7 +1555,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		resetShadowTableIndexes(startingAt: shadowTableIndex)
 		
 		var changes = OutlineElementChanges(section: adjustedRowsSection, inserts: [shadowTableIndex], reloads: reloads)
-		changes.newCursorIndex = shadowTableIndex
+		if moveCursor {
+			changes.newCursorIndex = shadowTableIndex
+		}
 		outlineElementsDidChange(changes)
 	}
 	
@@ -1904,6 +1901,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		var changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set([rowShadowTableIndex]))
 		changes.newCursorIndex = newCursorIndex
+		changes.cursorMoveIsToStart = true
 		outlineElementsDidChange(changes)
 	}
 

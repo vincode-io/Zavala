@@ -18,9 +18,10 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	func moveCursorDown(_: EditorRowTopicTextView, row: Row)
 	func textChanged(_: EditorRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
 	func deleteRow(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings)
-	func createRow(_: EditorRowTopicTextView, beforeRow: Row)
+	func createRow(_: EditorRowTopicTextView, beforeRow: Row, moveCursor: Bool)
 	func createRow(_: EditorRowTopicTextView, afterRow: Row, rowStrings: RowStrings)
 	func splitRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
+	func joinRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString)
 	func editLink(_: EditorRowTopicTextView, _ link: String?, text: String?, range: NSRange)
 	func zoomImage(_: EditorRowTopicTextView, _ image: UIImage, rect: CGRect)
 }
@@ -122,8 +123,21 @@ class EditorRowTopicTextView: EditorRowTextView {
 		guard let row else { return }
 		if attributedText.length == 0 && row.rowCount == 0 {
 			editorDelegate?.deleteRow(self, row: row, rowStrings: rowStrings)
-		} else {
-			super.deleteBackward()
+			return
+		}
+		
+		let originalTextLength = attributedText.length
+		super.deleteBackward()
+		
+		if originalTextLength == attributedText.length,
+		   cursorIsAtBeginning,
+		   let shadowTableIndex = row.shadowTableIndex,
+		   shadowTableIndex > 0,
+		   let topRow = row.outline?.rows[shadowTableIndex - 1] {
+			let attrString = NSMutableAttributedString(attributedString: topRow.topic ?? NSAttributedString())
+			attrString.append(cleansedAttributedText)
+			
+			editorDelegate?.joinRow(self, row: row, topic: attrString)
 		}
 	}
 
@@ -149,7 +163,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 	@objc func insertRow(_ sender: Any) {
 		guard let row else { return }
 		isSavingTextUnnecessary = true
-		editorDelegate?.createRow(self, beforeRow: row)
+		editorDelegate?.createRow(self, beforeRow: row, moveCursor: true)
 	}
 
 	@objc func split(_ sender: Any) {
@@ -158,7 +172,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 		isSavingTextUnnecessary = true
 		
 		if cursorPosition == 0 {
-			editorDelegate?.createRow(self, beforeRow: row)
+			editorDelegate?.createRow(self, beforeRow: row, moveCursor: false)
 		} else {
 			editorDelegate?.splitRow(self, row: row, topic: attributedText, cursorPosition: cursorPosition)
 		}
@@ -258,7 +272,13 @@ extension EditorRowTopicTextView: UITextViewDelegate {
 		
 		switch text {
 		case "\n":
-			editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
+			if cursorIsAtBeginning {
+				editorDelegate?.createRow(self, beforeRow: row, moveCursor: false)
+			} else if cursorIsAtEnd {
+				editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
+			} else {
+				editorDelegate?.splitRow(self, row: row, topic: attributedText, cursorPosition: cursorPosition)
+			}
 			return false
 		default:
 			return true
