@@ -56,6 +56,10 @@ extension Outline: VCKModel {
 	}
 	
 	func beginCloudKitBatchRequest() {
+		guard account?.type == .cloudKit else { return }
+		guard account?.cloudKitManager != nil else {
+			fatalError("Missing CloudKitManager somehow...")
+		}
 		batchCloudKitRequests += 1
 	}
 	
