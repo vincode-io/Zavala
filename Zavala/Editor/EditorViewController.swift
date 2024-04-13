@@ -1725,6 +1725,10 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		toggleDisclosure(row: row, applyToAll: applyToAll)
 	}
 	
+	func editorRowMoveRowLeft(row: Row) {
+		moveRowsLeft([row])
+	}
+
 	func editorRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
 		textChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
 	}

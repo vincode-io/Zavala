@@ -16,6 +16,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	func scrollEditorToVisible(_: EditorRowTopicTextView, rect: CGRect)
 	func moveCursorUp(_: EditorRowTopicTextView, row: Row)
 	func moveCursorDown(_: EditorRowTopicTextView, row: Row)
+	func moveRowLeft(_: EditorRowTopicTextView, row: Row)
 	func textChanged(_: EditorRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
 	func deleteRow(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings)
 	func createRow(_: EditorRowTopicTextView, beforeRow: Row, moveCursor: Bool)
@@ -133,6 +134,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 		   cursorIsAtBeginning,
 		   let shadowTableIndex = row.shadowTableIndex,
 		   shadowTableIndex > 0,
+		   shadowTableIndex < row.outline?.rows.count ?? 0,
 		   let topRow = row.outline?.rows[shadowTableIndex - 1] {
 			let attrString = NSMutableAttributedString(attributedString: topRow.topic ?? NSAttributedString())
 			attrString.append(cleansedAttributedText)
@@ -273,7 +275,11 @@ extension EditorRowTopicTextView: UITextViewDelegate {
 		switch text {
 		case "\n":
 			if cursorIsAtBeginning {
-				editorDelegate?.createRow(self, beforeRow: row, moveCursor: false)
+				if row.outline?.shouldMoveLeftOnReturn(row: row) ?? false {
+					editorDelegate?.moveRowLeft(self, row: row)
+				} else {
+					editorDelegate?.createRow(self, beforeRow: row, moveCursor: false)
+				}
 			} else if cursorIsAtEnd {
 				editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
 			} else {

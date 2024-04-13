@@ -164,6 +164,10 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowMoveCursorDown(row: row)
 	}
 
+	func moveRowLeft(_: EditorRowTopicTextView, row: Row) {
+		appliedConfiguration?.delegate?.editorRowMoveRowLeft(row: row)
+	}
+
 	func didBecomeActive(_: EditorRowTopicTextView, row: Row) {
 		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeActive(row: row)
 	}
