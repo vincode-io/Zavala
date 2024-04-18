@@ -34,7 +34,7 @@ public final class JoinRowCommand: OutlineCommand {
 	}
 	
 	public override func undo() {
-		outline.splitRow(newRow: bottomRow, row: topRow, topic: topic ?? NSAttributedString(), cursorPosition: splitCursorPosition)
+		outline.splitRow(newRow: bottomRow, row: topRow, topic: topic, cursorPosition: splitCursorPosition)
 	}
 	
 }
