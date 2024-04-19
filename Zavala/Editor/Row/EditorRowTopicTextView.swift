@@ -134,8 +134,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 		   cursorIsAtBeginning,
 		   let shadowTableIndex = row.shadowTableIndex,
 		   shadowTableIndex > 0,
-		   shadowTableIndex < row.outline?.rows.count ?? 0,
-		   let topRow = row.outline?.rows[shadowTableIndex - 1] {
+		   let topRow = row.outline?.shadowTable?[shadowTableIndex - 1] {
 			let attrString = NSMutableAttributedString(attributedString: topRow.topic ?? NSAttributedString())
 			attrString.append(cleansedAttributedText)
 			

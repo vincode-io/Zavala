@@ -2068,9 +2068,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return true
 	}
 	
-	@discardableResult
-	public func complete(rows: [Row], rowStrings: RowStrings? = nil) -> [Row] {
-		return completeUncomplete(rows: rows, isComplete: true, rowStrings: rowStrings)
+	public func complete(rows: [Row], rowStrings: RowStrings? = nil) {
+		completeUncomplete(rows: rows, isComplete: true, rowStrings: rowStrings)
 	}
 	
 	public func isUncompleteUnavailable(rows: [Row]) -> Bool {
@@ -2082,9 +2081,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return true
 	}
 	
-	@discardableResult
-	public func uncomplete(rows: [Row], rowStrings: RowStrings? = nil) -> [Row] {
-		return completeUncomplete(rows: rows, isComplete: false, rowStrings: rowStrings)
+	public func uncomplete(rows: [Row], rowStrings: RowStrings? = nil) {
+		completeUncomplete(rows: rows, isComplete: false, rowStrings: rowStrings)
 	}
 	
 	public func isMoveRowsRightUnavailable(rows: [Row]) -> Bool {
@@ -2837,8 +2835,7 @@ private extension Outline {
 		outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 	}
 	
-	@discardableResult
-	func completeUncomplete(rows: [Row], isComplete: Bool, rowStrings: RowStrings?) -> [Row] {
+	func completeUncomplete(rows: [Row], isComplete: Bool, rowStrings: RowStrings?) {
 		beginCloudKitBatchRequest()
 		
 		if rowCount > 0, let row = rows.first, let texts = rowStrings {
@@ -2864,7 +2861,7 @@ private extension Outline {
 		outlineContentDidChange()
 		endCloudKitBatchRequest()
 
-		guard isBeingViewed else { return impacted }
+		guard isBeingViewed else { return }
 
 		if isCompletedFilterOn {
 			var changes = rebuildShadowTable()
@@ -2899,7 +2896,6 @@ private extension Outline {
 		
 		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: reloads)
 		outlineElementsDidChange(changes)
-		return impacted
 	}
 	
 	@discardableResult

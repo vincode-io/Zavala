@@ -2201,7 +2201,7 @@ private extension EditorViewController {
 				   topic.cursorIsAtEnd,
 				   let shadowTableIndex = topic.row?.shadowTableIndex,
 				   shadowTableIndex + 1 < outline?.shadowTable?.count ?? 0,
-				   let bottomRow = outline?.rows[shadowTableIndex + 1] {
+				   let bottomRow = outline?.shadowTable?[shadowTableIndex + 1] {
 					let attrString = NSMutableAttributedString(attributedString: topic.cleansedAttributedText)
 					attrString.append(bottomRow.topic ?? NSAttributedString())
 
@@ -3390,9 +3390,9 @@ private extension EditorViewController {
 		guard let undoManager,
 			  let outline,
 			  let rowShadowTableIndex = bottomRow.shadowTableIndex,
-			  rowShadowTableIndex > 0 else { return }
+			  rowShadowTableIndex > 0,
+			  let topRow = outline.shadowTable?[rowShadowTableIndex - 1] else { return }
 
-		let topRow = outline.rows[rowShadowTableIndex - 1]
 		let command = JoinRowCommand(actionName: .splitRowControlLabel,
 									 undoManager: undoManager,
 									 delegate: self,
