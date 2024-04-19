@@ -12,6 +12,7 @@ public final class JoinRowCommand: OutlineCommand {
 	var topRow: Row
 	var bottomRow: Row
 	var topic: NSAttributedString
+	var undoTopic: NSAttributedString
 	var splitCursorPosition: Int
 	
 	public init(actionName: String,
@@ -24,6 +25,11 @@ public final class JoinRowCommand: OutlineCommand {
 		self.topRow = topRow
 		self.bottomRow = bottomRow
 		self.topic = topic
+		
+		let attrString = NSMutableAttributedString(attributedString: topRow.topic ?? NSAttributedString())
+		attrString.append(bottomRow.topic ?? NSAttributedString())
+		self.undoTopic = attrString
+		
 		self.splitCursorPosition = topRow.topic?.length ?? 0
 
 		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
@@ -34,7 +40,7 @@ public final class JoinRowCommand: OutlineCommand {
 	}
 	
 	public override func undo() {
-		outline.splitRow(newRow: bottomRow, row: topRow, topic: topic, cursorPosition: splitCursorPosition)
+		outline.splitRow(newRow: bottomRow, row: topRow, topic: undoTopic, cursorPosition: splitCursorPosition)
 	}
 	
 }
