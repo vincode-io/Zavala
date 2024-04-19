@@ -1513,6 +1513,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	func joinRows(topRow: Row, bottomRow: Row, topic: NSAttributedString? = nil) {
+		// We only allow joining siblings - it just doesn't make sense to me that we would join rows on different levels
+		guard topRow.parent?.firstIndexOfRow(bottomRow) != nil else { return }
+		
 		beginCloudKitBatchRequest()
 		
 		requestCloudKitUpdate(for: topRow.entityID)
