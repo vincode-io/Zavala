@@ -14,7 +14,6 @@ import VinUtility
 
 extension Selector {
 	static let insertImage = #selector(EditorViewController.insertImage)
-	static let splitRow = #selector(EditorViewController.splitRow as (EditorViewController) -> () -> Void)
 }
 
 protocol EditorDelegate: AnyObject {
@@ -179,10 +178,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	var isDeleteRowNotesUnavailable: Bool {
 		guard let outline, let rows = currentRows else { return true }
 		return outline.isDeleteNotesUnavailable(rows: rows)
-	}
-
-	var isSplitRowUnavailable: Bool {
-		return !(UIResponder.currentFirstResponder is EditorRowTopicTextView)
 	}
 
 	var isFormatUnavailable: Bool {
@@ -658,8 +653,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
 		case .paste:
 			return UIPasteboard.general.contains(pasteboardTypes: [UTType.utf8PlainText.identifier, Row.typeIdentifier])
-		case .splitRow:
-			return !isSplitRowUnavailable
 		case .find, .findAndReplace, .findNext, .findPrevious, .useSelectionForFind:
 			if isOutlineFunctionsUnavailable {
 				return false
@@ -1278,13 +1271,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc func insertNewline() {
 		currentTextView?.insertNewline(self)
-	}
-	
-	@objc func splitRow() {
-		guard let row = currentRows?.last,
-			  let topic = (currentTextView as? EditorRowTopicTextView)?.attributedText,
-			  let cursorPosition = currentCursorPosition else { return }
-		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
 	@objc func outlineToggleBoldface(_ sender: Any? = nil) {

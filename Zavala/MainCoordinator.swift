@@ -103,10 +103,6 @@ extension MainCoordinator {
 		return editorViewController?.isDeleteRowNotesUnavailable ?? true
 	}
 	
-	var isSplitRowUnavailable: Bool {
-		return editorViewController?.isSplitRowUnavailable ?? true
-	}
-	
 	var isFormatUnavailable: Bool {
 		return editorViewController?.isFormatUnavailable ?? true
 	}
@@ -241,10 +237,6 @@ extension MainCoordinator {
 	
 	func deleteRowNotes() {
 		editorViewController?.deleteRowNotes()
-	}
-	
-	func splitRow() {
-		editorViewController?.splitRow()
 	}
 	
 	func outlineToggleBoldface() {

@@ -147,11 +147,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											 input: UIKeyCommand.inputDelete,
 												modifierFlags: [.shift, .command])
 	
-	let splitRowCommand = UIKeyCommand(title: .splitRowControlLabel,
-									   action: #selector(splitRowCommand(_:)),
-									   input: "\n",
-									   modifierFlags: [.shift, .alternate])
-	
 	let toggleBoldCommand = UIKeyCommand(title: .boldControlLabel,
 										 action: #selector(toggleBoldCommand(_:)),
 										 input: "b",
@@ -571,10 +566,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.deleteCurrentRows()
 	}
 	
-	@objc func splitRowCommand(_ sender: Any?) {
-		mainCoordinator?.splitRow()
-	}
-	
 	@objc func toggleBoldCommand(_ sender: Any?) {
 		mainCoordinator?.outlineToggleBoldface()
 	}
@@ -811,10 +802,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isDeleteRowNotesUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(splitRowCommand(_:)):
-			if mainCoordinator?.isSplitRowUnavailable ?? true {
-				command.attributes = .disabled
-			}
 		case #selector(toggleBoldCommand(_:)), #selector(toggleItalicsCommand(_:)):
 			if mainCoordinator?.isFormatUnavailable ?? true {
 				command.attributes = .disabled
@@ -991,7 +978,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												createRowInsideCommand,
 												createRowOutsideCommand,
 												duplicateRowsCommand,
-												splitRowCommand,
 												deleteCurrentRowsCommand])
 		let moveRowMenu = UIMenu(title: "", options: .displayInline, children: [moveRowsLeftCommand, moveRowsRightCommand, moveRowsUpCommand, moveRowsDownCommand])
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand])
