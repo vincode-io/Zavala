@@ -1637,7 +1637,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 
 	@discardableResult
-	func createRows(_ rows: [Row], afterRow: Row? = nil, rowStrings: RowStrings? = nil, prefersEnd: Bool = false) -> Int? {
+	func createRows(_ rows: [Row], afterRow: Row? = nil, rowStrings: RowStrings? = nil, prefersEnd: Bool = false, testExpanded: Bool = true) -> Int? {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
 		beginCloudKitBatchRequest()
@@ -1664,7 +1664,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			} else if let parent = row.parent, let afterRow {
 				let insertIndex = parent.firstIndexOfRow(afterRow) ?? parent.rowCount - 1
 				parent.insertRow(row, at: insertIndex + 1)
-			} else if afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
+			} else if testExpanded && afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
 				afterRow?.insertRow(row, at: 0)
 				row.parent = afterRow
 			} else if let afterRow, let parent = afterRow.parent {
@@ -1904,7 +1904,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		let topicText = topic.attributedSubstring(from: topicRange)
 		row.topic = topicText
 
-		let newCursorIndex = createRows([newRow], afterRow: row)
+		let newCursorIndex = createRows([newRow], afterRow: row, testExpanded: false)
 		
 		endCloudKitBatchRequest()
 
