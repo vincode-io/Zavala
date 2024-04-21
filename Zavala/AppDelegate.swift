@@ -82,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										input: "\n",
 										modifierFlags: [])
 	
-	let duplicateRowsCommand = UIKeyCommand(title: .duplicateControlLabel,
+	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowControlLabel,
 											action: #selector(duplicateRowsCommand(_:)),
 											input: "r",
 											modifierFlags: [.command, .control])

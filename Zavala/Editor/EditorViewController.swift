@@ -3294,7 +3294,7 @@ private extension EditorViewController {
 	func duplicateRows(_ rows: [Row]) {
 		guard let undoManager, let outline else { return }
 
-		let command = DuplicateRowCommand(actionName: .duplicateControlLabel,
+		let command = DuplicateRowCommand(actionName: .duplicateRowControlLabel,
 										  undoManager: undoManager,
 										  delegate: self,
 										  outline: outline,
