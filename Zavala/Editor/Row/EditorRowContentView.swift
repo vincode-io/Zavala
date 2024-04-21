@@ -164,6 +164,10 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowMoveCursorDown(row: row)
 	}
 
+	func moveRowLeft(_: EditorRowTopicTextView, row: Row) {
+		appliedConfiguration?.delegate?.editorRowMoveRowLeft(row: row)
+	}
+
 	func didBecomeActive(_: EditorRowTopicTextView, row: Row) {
 		appliedConfiguration?.delegate?.editorRowTextFieldDidBecomeActive(row: row)
 	}
@@ -176,8 +180,8 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowDeleteRow(row, rowStrings: rowStrings)
 	}
 	
-	func createRow(_: EditorRowTopicTextView, beforeRow: Row) {
-		appliedConfiguration?.delegate?.editorRowCreateRow(beforeRow: beforeRow)
+	func createRow(_: EditorRowTopicTextView, beforeRow: Row, moveCursor: Bool) {
+		appliedConfiguration?.delegate?.editorRowCreateRow(beforeRow: beforeRow, moveCursor: moveCursor)
 	}
 	
 	func createRow(_: EditorRowTopicTextView, afterRow: Row, rowStrings: RowStrings) {
@@ -186,6 +190,10 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 	
 	func splitRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		appliedConfiguration?.delegate?.editorRowSplitRow(row, topic: topic, cursorPosition: cursorPosition)
+	}
+	
+	func joinRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString) {
+		appliedConfiguration?.delegate?.editorRowJoinRow(row, topic: topic)
 	}
 	
 	func editLink(_: EditorRowTopicTextView, _ link: String?, text: String?, range: NSRange) {

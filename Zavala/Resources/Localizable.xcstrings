@@ -213,11 +213,17 @@
     "Document Find…" : {
       "comment" : "Control Label: Document Find…"
     },
+    "Document Not Found" : {
+      "comment" : "Alert Title: Document Not Found"
+    },
     "Done" : {
       "comment" : "Control Label: Done"
     },
     "Duplicate" : {
       "comment" : "Control Label: Duplicate"
+    },
+    "Duplicate Row" : {
+      "comment" : "Control Label: Duplicate Row"
     },
     "Edit document “%@”" : {
       "comment" : "Prompt: edit document"
@@ -611,6 +617,9 @@
     },
     "The outlines will be deleted and unrecoverable." : {
       "comment" : "Alert Message: delete outline"
+    },
+    "The requested document could not be found. It was most likely deleted and is no longer available." : {
+      "comment" : "Alert Message: Document Not Found"
     },
     "This information is included in OPML documents to attribute ownership." : {
       "comment" : "Note: OPML Ownership."

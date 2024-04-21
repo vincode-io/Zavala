@@ -14,7 +14,6 @@ import VinUtility
 
 extension Selector {
 	static let insertImage = #selector(EditorViewController.insertImage)
-	static let splitRow = #selector(EditorViewController.splitRow as (EditorViewController) -> () -> Void)
 }
 
 protocol EditorDelegate: AnyObject {
@@ -179,10 +178,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	var isDeleteRowNotesUnavailable: Bool {
 		guard let outline, let rows = currentRows else { return true }
 		return outline.isDeleteNotesUnavailable(rows: rows)
-	}
-
-	var isSplitRowUnavailable: Bool {
-		return !(UIResponder.currentFirstResponder is EditorRowTopicTextView)
 	}
 
 	var isFormatUnavailable: Bool {
@@ -658,8 +653,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
 		case .paste:
 			return UIPasteboard.general.contains(pasteboardTypes: [UTType.utf8PlainText.identifier, Row.typeIdentifier])
-		case .splitRow:
-			return !isSplitRowUnavailable
 		case .find, .findAndReplace, .findNext, .findPrevious, .useSelectionForFind:
 			if isOutlineFunctionsUnavailable {
 				return false
@@ -1069,7 +1062,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	func insertRow() {
 		guard let rows = currentRows else { return }
-		createRow(beforeRows: rows)
+		createRow(beforeRows: rows, moveCursor: true)
 	}
 	
 	func createRow() {
@@ -1278,13 +1271,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	@objc func insertNewline() {
 		currentTextView?.insertNewline(self)
-	}
-	
-	@objc func splitRow() {
-		guard let row = currentRows?.last,
-			  let topic = (currentTextView as? EditorRowTopicTextView)?.attributedText,
-			  let cursorPosition = currentCursorPosition else { return }
-		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
 	@objc func outlineToggleBoldface(_ sender: Any? = nil) {
@@ -1725,6 +1711,10 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		toggleDisclosure(row: row, applyToAll: applyToAll)
 	}
 	
+	func editorRowMoveRowLeft(row: Row) {
+		moveRowsLeft([row])
+	}
+
 	func editorRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
 		textChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
 	}
@@ -1733,8 +1723,8 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		deleteRows([row], rowStrings: rowStrings)
 	}
 	
-	func editorRowCreateRow(beforeRow: Row) {
-		createRow(beforeRows: [beforeRow])
+	func editorRowCreateRow(beforeRow: Row, moveCursor: Bool) {
+		createRow(beforeRows: [beforeRow], moveCursor: moveCursor)
 	}
 	
 	func editorRowCreateRow(afterRow: Row?, rowStrings: RowStrings?) {
@@ -1746,6 +1736,10 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		splitRow(row, topic: topic, cursorPosition: cursorPosition)
 	}
 	
+	func editorRowJoinRow(_ row: Row, topic: NSAttributedString) {
+		joinRow(row, topic: topic)
+	}
+
 	func editorRowDeleteRowNote(_ row: Row, rowStrings: RowStrings) {
 		deleteRowNotes([row], rowStrings: rowStrings)
 	}
@@ -2188,6 +2182,20 @@ private extension EditorViewController {
 			}
 			
 			switch (key.keyCode, true) {
+			case (.keyboardDeleteForward, true):
+				if let topic = currentTextView as? EditorRowTopicTextView,
+				   topic.cursorIsAtEnd,
+				   let shadowTableIndex = topic.row?.shadowTableIndex,
+				   shadowTableIndex + 1 < outline?.shadowTable?.count ?? 0,
+				   let bottomRow = outline?.shadowTable?[shadowTableIndex + 1] {
+					let attrString = NSMutableAttributedString(attributedString: topic.cleansedAttributedText)
+					attrString.append(bottomRow.topic ?? NSAttributedString())
+
+					topic.isSavingTextUnnecessary = true
+					joinRow(bottomRow, topic: attrString)
+				} else {
+					super.pressesBegan(presses, with: event)
+				}
             case (.keyboardUpArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				if let topic = currentTextView as? EditorRowTopicTextView {
 					if topic.cursorIsOnTopLine {
@@ -2524,7 +2532,7 @@ private extension EditorViewController {
 			if newCursorIndex == -1 {
 				moveCursorToTagInput()
 			} else {
-				moveCursorToRow(index: newCursorIndex, toNote: changes.cursorMoveIsToNote)
+				moveCursorToRow(index: newCursorIndex, toStart: changes.cursorMoveIsToStart, toNote: changes.cursorMoveIsToNote)
 			}
 		}
 		
@@ -2541,7 +2549,7 @@ private extension EditorViewController {
 			if newCursorIndex == -1 {
 				moveCursorToTagInput()
 			} else {
-				moveCursorToRow(index: newCursorIndex, toNote: changes.cursorMoveIsToNote)
+				moveCursorToRow(index: newCursorIndex, toStart: changes.cursorMoveIsToStart, toNote: changes.cursorMoveIsToNote)
 			}
 		} else if let newSelectIndex = changes.newSelectIndex {
 			moveSelectionToRow(index: newSelectIndex)
@@ -2828,14 +2836,18 @@ private extension EditorViewController {
 		moveCursorToRow(index: shadowTableIndex)
 	}
 	
-	func moveCursorToRow(index: Int, toNote: Bool = false) {
+	func moveCursorToRow(index: Int, toStart: Bool = false, toNote: Bool = false) {
 		let indexPath = IndexPath(row: index, section: adjustedRowsSection)
 		
 		func move(rowCell: EditorRowViewCell) {
 			if toNote {
 				rowCell.moveToNoteEnd()
 			} else {
-				rowCell.moveToTopicEnd()
+				if toStart {
+					rowCell.moveToTopicStart()
+				} else {
+					rowCell.moveToTopicEnd()
+				}
 			}
 			makeCursorVisibleIfNecessary(animated: false)
 		}
@@ -3104,7 +3116,7 @@ private extension EditorViewController {
 			if row == rows[0] {
 				itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
 					var markdowns = [String]()
-					for row in rows {
+					for row in rows.sortedWithDecendentsFiltered() {
 						markdowns.append(row.markdownList())
 					}
 					let data = markdowns.joined(separator: "\n").data(using: .utf8)
@@ -3215,14 +3227,15 @@ private extension EditorViewController {
 		command.execute()
 	}
 	
-	func createRow(beforeRows: [Row]) {
+	func createRow(beforeRows: [Row], moveCursor: Bool) {
 		guard let undoManager, let outline, let beforeRow = beforeRows.sortedByDisplayOrder().first else { return }
 
 		let command = CreateRowBeforeCommand(actionName: .addRowControlLabel,
 											 undoManager: undoManager,
 											 delegate: self,
 											 outline: outline,
-											 beforeRow: beforeRow)
+											 beforeRow: beforeRow,
+											 moveCursor: moveCursor)
 		
 		command.execute()
 	}
@@ -3281,7 +3294,7 @@ private extension EditorViewController {
 	func duplicateRows(_ rows: [Row]) {
 		guard let undoManager, let outline else { return }
 
-		let command = DuplicateRowCommand(actionName: .duplicateControlLabel,
+		let command = DuplicateRowCommand(actionName: .duplicateRowControlLabel,
 										  undoManager: undoManager,
 										  delegate: self,
 										  outline: outline,
@@ -3354,6 +3367,25 @@ private extension EditorViewController {
 									  row: row,
 									  topic: topic,
 									  cursorPosition: cursorPosition)
+												  
+		
+		command.execute()
+	}
+
+	func joinRow(_ bottomRow: Row, topic: NSAttributedString) {
+		guard let undoManager,
+			  let outline,
+			  let rowShadowTableIndex = bottomRow.shadowTableIndex,
+			  rowShadowTableIndex > 0,
+			  let topRow = outline.shadowTable?[rowShadowTableIndex - 1] else { return }
+
+		let command = JoinRowCommand(actionName: .splitRowControlLabel,
+									 undoManager: undoManager,
+									 delegate: self,
+									 outline: outline,
+									 topRow: topRow,
+									 bottomRow: bottomRow,
+									 topic: topic)
 												  
 		
 		command.execute()

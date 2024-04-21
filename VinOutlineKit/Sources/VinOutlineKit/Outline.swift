@@ -1108,6 +1108,15 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		requestCloudKitUpdate(for: id)
 	}
 	
+	public func shouldMoveLeftOnReturn(row: Row) -> Bool {
+		guard row.topic == nil else { return false }
+		if row.parent?.rows.last == row {
+			return true
+		} else {
+			return false
+		}
+	}
+	
 	func deleteAllBacklinks() {
 		guard let documentBacklinks else { return }
 		
@@ -1503,27 +1512,25 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 	}
 	
-	func joinRows(topRow: Row, bottomRow: Row) {
+	func joinRows(topRow: Row, bottomRow: Row, topic: NSAttributedString? = nil) {
+		// We only allow joining siblings - it just doesn't make sense to me that we would join rows on different levels
+		guard topRow.parent?.firstIndexOfRow(bottomRow) != nil else { return }
+		
 		beginCloudKitBatchRequest()
 		
-		guard let topTopic = topRow.topic,
-			  let topShadowTableIndex = topRow.shadowTableIndex,
-			  let bottomTopic = bottomRow.topic else { return }
-		
-		let mutableText = NSMutableAttributedString(attributedString: topTopic)
-		mutableText.append(bottomTopic)
-		topRow.topic = mutableText
-		
+		requestCloudKitUpdate(for: topRow.entityID)
+		updateRowStrings(topRow, .topic(topic))
 		deleteRows([bottomRow])
+
 		endCloudKitBatchRequest()
 		
-		guard isBeingViewed else { return }
+		guard isBeingViewed, let topShadowTableIndex = topRow.shadowTableIndex else { return }
 
 		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set([topShadowTableIndex]))
 		outlineElementsDidChange(changes)
 	}
 	
-	func createRow(_ row: Row, beforeRow: Row, rowStrings: RowStrings? = nil) {
+	func createRow(_ row: Row, beforeRow: Row, rowStrings: RowStrings? = nil, moveCursor: Bool) {
 		beginCloudKitBatchRequest()
 		
 		if let texts = rowStrings {
@@ -1560,7 +1567,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		resetShadowTableIndexes(startingAt: shadowTableIndex)
 		
 		var changes = OutlineElementChanges(section: adjustedRowsSection, inserts: [shadowTableIndex], reloads: reloads)
-		changes.newCursorIndex = shadowTableIndex
+		if moveCursor {
+			changes.newCursorIndex = shadowTableIndex
+		}
 		outlineElementsDidChange(changes)
 	}
 	
@@ -1628,7 +1637,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 
 	@discardableResult
-	func createRows(_ rows: [Row], afterRow: Row? = nil, rowStrings: RowStrings? = nil, prefersEnd: Bool = false) -> Int? {
+	func createRows(_ rows: [Row], afterRow: Row? = nil, rowStrings: RowStrings? = nil, prefersEnd: Bool = false, testExpanded: Bool = true) -> Int? {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
 		beginCloudKitBatchRequest()
@@ -1655,7 +1664,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			} else if let parent = row.parent, let afterRow {
 				let insertIndex = parent.firstIndexOfRow(afterRow) ?? parent.rowCount - 1
 				parent.insertRow(row, at: insertIndex + 1)
-			} else if afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
+			} else if testExpanded && afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
 				afterRow?.insertRow(row, at: 0)
 				row.parent = afterRow
 			} else if let afterRow, let parent = afterRow.parent {
@@ -1895,7 +1904,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		let topicText = topic.attributedSubstring(from: topicRange)
 		row.topic = topicText
 
-		let newCursorIndex = createRows([newRow], afterRow: row)
+		let newCursorIndex = createRows([newRow], afterRow: row, testExpanded: false)
 		
 		endCloudKitBatchRequest()
 
@@ -1904,6 +1913,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		var changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set([rowShadowTableIndex]))
 		changes.newCursorIndex = newCursorIndex
+		changes.cursorMoveIsToStart = true
 		outlineElementsDidChange(changes)
 	}
 
@@ -2061,9 +2071,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return true
 	}
 	
-	@discardableResult
-	public func complete(rows: [Row], rowStrings: RowStrings? = nil) -> [Row] {
-		return completeUncomplete(rows: rows, isComplete: true, rowStrings: rowStrings)
+	public func complete(rows: [Row], rowStrings: RowStrings? = nil) {
+		completeUncomplete(rows: rows, isComplete: true, rowStrings: rowStrings)
 	}
 	
 	public func isUncompleteUnavailable(rows: [Row]) -> Bool {
@@ -2075,9 +2084,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return true
 	}
 	
-	@discardableResult
-	public func uncomplete(rows: [Row], rowStrings: RowStrings? = nil) -> [Row] {
-		return completeUncomplete(rows: rows, isComplete: false, rowStrings: rowStrings)
+	public func uncomplete(rows: [Row], rowStrings: RowStrings? = nil) {
+		completeUncomplete(rows: rows, isComplete: false, rowStrings: rowStrings)
 	}
 	
 	public func isMoveRowsRightUnavailable(rows: [Row]) -> Bool {
@@ -2830,8 +2838,7 @@ private extension Outline {
 		outlineElementsDidChange(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 	}
 	
-	@discardableResult
-	func completeUncomplete(rows: [Row], isComplete: Bool, rowStrings: RowStrings?) -> [Row] {
+	func completeUncomplete(rows: [Row], isComplete: Bool, rowStrings: RowStrings?) {
 		beginCloudKitBatchRequest()
 		
 		if rowCount > 0, let row = rows.first, let texts = rowStrings {
@@ -2857,7 +2864,7 @@ private extension Outline {
 		outlineContentDidChange()
 		endCloudKitBatchRequest()
 
-		guard isBeingViewed else { return impacted }
+		guard isBeingViewed else { return }
 
 		if isCompletedFilterOn {
 			var changes = rebuildShadowTable()
@@ -2892,7 +2899,6 @@ private extension Outline {
 		
 		let changes = OutlineElementChanges(section: adjustedRowsSection, reloads: reloads)
 		outlineElementsDidChange(changes)
-		return impacted
 	}
 	
 	@discardableResult

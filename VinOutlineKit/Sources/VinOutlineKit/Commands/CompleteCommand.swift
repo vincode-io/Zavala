@@ -10,7 +10,6 @@ import Foundation
 public final class CompleteCommand: OutlineCommand {
 	
 	var rows: [Row]
-	var completedRows: [Row]?
 	
 	var oldRowStrings: RowStrings?
 	var newRowStrings: RowStrings?
@@ -27,12 +26,11 @@ public final class CompleteCommand: OutlineCommand {
 	}
 	
 	override public func perform() {
-		completedRows = outline.complete(rows: rows, rowStrings: newRowStrings)
+		outline.complete(rows: rows, rowStrings: newRowStrings)
 	}
 	
 	override public func undo() {
-		guard let completedRows else { return }
-		outline.uncomplete(rows: completedRows, rowStrings: oldRowStrings)
+		outline.uncomplete(rows: rows, rowStrings: oldRowStrings)
 	}
 	
 }

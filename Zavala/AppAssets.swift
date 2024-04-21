@@ -201,9 +201,12 @@ extension String {
 	static var deleteTagsMessage = String(localized: "No Outlines associated with these tags will be deleted.", comment: "Alert Message: delete tags")
 	static var disableEditorAnimationsControlLabel = String(localized: "Disable Editor Animations", comment: "Control Label: Disable Editor Animations")
 	static var documentFindEllipsisControlLabel = String(localized: "Document Find…", comment: "Control Label: Document Find…")
+	static var documentNotFoundTitle = String(localized: "Document Not Found", comment: "Alert Title: Document Not Found")
+	static var documentNotFoundMessage = String(localized: "The requested document could not be found. It was most likely deleted and is no longer available.", comment: "Alert Message: Document Not Found")
 	static var doneControlLabel = String(localized: "Done", comment: "Control Label: Done")
 	static var duplicateControlLabel = String(localized: "Duplicate", comment: "Control Label: Duplicate")
-	
+	static var duplicateRowControlLabel = String(localized: "Duplicate Row", comment: "Control Label: Duplicate Row")
+
 	static var editorMaxWidthControlLabel = String(localized: "Editor Max Width", comment: "Control Label: Editor Max Width")
 	static var emailControlLabel = String(localized: "Email", comment: "Control Label: Email")
 	static var enableCloudKitControlLabel = String(localized: "Enable iCloud", comment: "Control Label: Enable iCloud")

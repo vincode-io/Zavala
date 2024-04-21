@@ -34,16 +34,29 @@ public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 		self.id = id
 	}
 	
-	static func save(requests: Set<CloudKitActionRequest>) {
-		let encoder = PropertyListEncoder()
-		encoder.outputFormat = .binary
-
-		if let encodedIDs = try? encoder.encode(requests) {
-			try? encodedIDs.write(to: CloudKitActionRequest.actionRequestFile)
+	static func append(requests: Set<CloudKitActionRequest>) {
+		let queuedRequests: Set<CloudKitActionRequest>
+		
+		if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
+			let decoder = PropertyListDecoder()
+			if let decodedRequests = try? decoder.decode(Set<CloudKitActionRequest>.self, from: fileData) {
+				queuedRequests = decodedRequests
+			} else {
+				queuedRequests = Set<CloudKitActionRequest>()
+			}
+		} else {
+			queuedRequests = Set<CloudKitActionRequest>()
 		}
+		
+		let mergedRequests = queuedRequests.union(requests)
+		Self.save(requests: mergedRequests)
 	}
 	
-	static func loadRequests() -> Set<CloudKitActionRequest>? {
+	static func clear() {
+		save(requests: Set<CloudKitActionRequest>())
+	}
+	
+	static func load() -> Set<CloudKitActionRequest>? {
 		var queuedRequests: Set<CloudKitActionRequest>? = nil
 		if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
 			let decoder = PropertyListDecoder()
@@ -52,6 +65,21 @@ public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 			}
 		}
 		return queuedRequests
+	}
+	
+}
+
+// MARK: Helpers
+
+private extension CloudKitActionRequest {
+	
+	static func save(requests: Set<CloudKitActionRequest>) {
+		let encoder = PropertyListEncoder()
+		encoder.outputFormat = .binary
+
+		if let encodedIDs = try? encoder.encode(requests) {
+			try? encodedIDs.write(to: CloudKitActionRequest.actionRequestFile)
+		}
 	}
 	
 }

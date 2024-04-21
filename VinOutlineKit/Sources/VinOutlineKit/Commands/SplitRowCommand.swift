@@ -35,8 +35,8 @@ public final class SplitRowCommand: OutlineCommand {
 	}
 	
 	public override func undo() {
-		guard let newHeadline = newRow else { return }
-		outline.joinRows(topRow: row, bottomRow: newHeadline)
+		guard let newRow else { return }
+		outline.joinRows(topRow: row, bottomRow: newRow, topic: topic)
 	}
 	
 }
