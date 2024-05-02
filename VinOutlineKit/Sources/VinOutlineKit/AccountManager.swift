@@ -183,9 +183,6 @@ public final class AccountManager {
 	public func resume() {
 		accountFiles.values.forEach { $0.resume() }
 		activeDocuments.forEach { $0.resume() }
-		Task {
-			await cloudKitAccount?.cloudKitManager?.resume()
-		}
 	}
 	
 	public func suspend() {
@@ -197,10 +194,6 @@ public final class AccountManager {
 		activeDocuments.forEach {
 			$0.save()
 			$0.suspend()
-		}
-
-		Task {
-			await cloudKitAccount?.cloudKitManager?.suspend()
 		}
 	}
 	

@@ -185,6 +185,7 @@ extension String {
 	static var cyanControlLabel = String(localized: "Cyan", comment: "Control Label: Cyan")
 
 	static var darkControlLabel = String(localized: "Dark", comment: "Control Label: Dark")
+	static var debugControlLabel = String(localized: "Debug", comment: "Control Label: Debug")
 	static var deleteAlwaysControlLabel = String(localized: "Always Delete Without Asking", comment: "Control Label: Always Delete Without Asking")
 	static var deleteCompletedRowsControlLabel = String(localized: "Delete Completed", comment: "Control Label: Delete Completed Rows")
 	static var deleteCompletedRowsTitle = String(localized: "Delete Completed Rows", comment: "Alert Title: Delete Completed Rows")
@@ -213,6 +214,8 @@ extension String {
 	static var enableOnMyIPhoneControlLabel = String(localized: "Enable On My iPhone", comment: "Control Label: Enable On My iPhone")
 	static var enableOnMyIPadControlLabel = String(localized: "Enable On My iPad", comment: "Control Label: Enable On My iPad")
 	static var enableOnMyMacControlLabel = String(localized: "Enable On My Mac", comment: "Control Label: Enable On My Mac")
+	static var enterBackgroundControlLabel = String(localized: "Enter Background", comment: "Control Label: Enter Background")
+	static var enterForgroundControlLabel = String(localized: "Enter Forground", comment: "Control Label: Enter Forground")
 	static var errorAlertTitle = String(localized: "Error", comment: "Alert Title: Error")
 	static var exportControlLabel = String(localized: "Export", comment: "Control Label: Export")
 	static var exportMarkdownDocEllipsisControlLabel = String(localized: "Export Markdown Doc…", comment: "Control Label: Export Markdown Doc…")
