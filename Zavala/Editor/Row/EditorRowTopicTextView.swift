@@ -175,7 +175,7 @@ class EditorRowTopicTextView: EditorRowTextView {
 		if cursorPosition == 0 {
 			editorDelegate?.createRow(self, beforeRow: row, moveCursor: false)
 		} else {
-			editorDelegate?.splitRow(self, row: row, topic: attributedText, cursorPosition: cursorPosition)
+			editorDelegate?.splitRow(self, row: row, topic: cleansedAttributedText, cursorPosition: cursorPosition)
 		}
 	}
 	
@@ -282,7 +282,8 @@ extension EditorRowTopicTextView: UITextViewDelegate {
 			} else if cursorIsAtEnd {
 				editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
 			} else {
-				editorDelegate?.splitRow(self, row: row, topic: attributedText, cursorPosition: cursorPosition)
+				isSavingTextUnnecessary = true
+				editorDelegate?.splitRow(self, row: row, topic: cleansedAttributedText, cursorPosition: cursorPosition)
 			}
 			return false
 		default:

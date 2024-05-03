@@ -1902,9 +1902,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		
 		let topicRange = NSRange(location: 0, length: cursorPosition)
 		let topicText = topic.attributedSubstring(from: topicRange)
-		row.topic = topicText
 
-		let newCursorIndex = createRows([newRow], afterRow: row, testExpanded: false)
+		let newCursorIndex = createRows([newRow], afterRow: row, rowStrings: .topic(topicText), testExpanded: false)
 		
 		endCloudKitBatchRequest()
 
