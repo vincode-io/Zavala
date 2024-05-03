@@ -57,6 +57,8 @@ public final class AccountManager {
 	var localAccountFile: URL
 	var cloudKitAccountFolder: URL
 	var cloudKitAccountFile: URL
+	
+	weak var errorHandler: ErrorHandler?
 
 	private var accountFiles = [Int: AccountFile]()
 	
@@ -66,6 +68,7 @@ public final class AccountManager {
 		self.localAccountFile = localAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
 		self.cloudKitAccountFolder = accountsFolder.appendingPathComponent(AccountType.cloudKit.folderName)
 		self.cloudKitAccountFile = cloudKitAccountFolder.appendingPathComponent(AccountFile.filenameComponent)
+		self.errorHandler = errorHandler
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(accountMetadataDidChange(_:)), name: .AccountMetadataDidChange, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(accountTagsDidChange(_:)), name: .AccountTagsDidChange, object: nil)
@@ -91,13 +94,12 @@ public final class AccountManager {
 		
 		if FileManager.default.fileExists(atPath: cloudKitAccountFile.path) {
 			initializeFile(accountType: .cloudKit)
-			cloudKitAccount?.initializeCloudKit(firstTime: false, errorHandler: errorHandler)
 		}
 	}
 
 	// MARK: API
 	
-	public func createCloudKitAccount(errorHandler: ErrorHandler) {
+	public func createCloudKitAccount() {
 		do {
 			try FileManager.default.createDirectory(atPath: cloudKitAccountFolder.path, withIntermediateDirectories: true, attributes: nil)
 		} catch {
@@ -109,8 +111,8 @@ public final class AccountManager {
 		accountsDictionary[AccountType.cloudKit.rawValue] = cloudKitAccount
 		initializeFile(accountType: .cloudKit)
 		accountManagerAccountsDidChange()
-
-		cloudKitAccount.initializeCloudKit(firstTime: true, errorHandler: errorHandler)
+		self.cloudKitAccount?.initializeCloudKit(errorHandler: errorHandler!)
+		self.cloudKitAccount?.firstTimeCloudKitSetup()
 	}
 	
 	public func deleteLocalAccount() {

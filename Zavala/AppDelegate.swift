@@ -1101,7 +1101,7 @@ private extension AppDelegate {
 		let cloudKitAccount = AccountManager.shared.cloudKitAccount
 		
 		if AppDefaults.shared.enableCloudKit && cloudKitAccount == nil {
-			AccountManager.shared.createCloudKitAccount(errorHandler: self)
+			AccountManager.shared.createCloudKitAccount()
 		} else if !AppDefaults.shared.enableCloudKit && cloudKitAccount != nil {
 			AccountManager.shared.deleteCloudKitAccount()
 		}
