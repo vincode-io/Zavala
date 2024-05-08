@@ -8,7 +8,7 @@ import UIKit
 
 public extension UIColor {
 
-	static var definedAccentColor = UIColor(named: "AccentColor")!
+	nonisolated(unsafe) static let definedAccentColor = UIColor(named: "AccentColor")!
 
 	static var accentColor: UIColor {
 		guard let systemHighlightColor = UserDefaults.standard.string(forKey: "AppleHighlightColor"),
