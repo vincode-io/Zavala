@@ -208,14 +208,6 @@ public class CloudKitManager {
 		return try await zone.generateCKShare(for: document)
 	}
 	
-	func resume() async {
-		await sync()
-	}
-	
-	func suspend() async {
-		await sync()
-	}
-	
 	func accountDidDelete(account: Account) {
 		var zoneIDs = Set<CKRecordZone.ID>()
 

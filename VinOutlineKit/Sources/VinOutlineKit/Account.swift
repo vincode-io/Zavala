@@ -124,18 +124,18 @@ public final class Account: Identifiable, Equatable, Codable {
 		self.documents = [Document]()
 	}
 	
-	func initializeCloudKit(firstTime: Bool, errorHandler: ErrorHandler) {
+	func initializeCloudKit(errorHandler: ErrorHandler) {
 		cloudKitManager = CloudKitManager(account: self, errorHandler: errorHandler)
 		
 		for document in documents ?? [] {
 			cloudKitManager?.addSyncRecordIfNeeded(document: document)
 		}
-		
-		if firstTime {
-			Task { 
-				await cloudKitManager?.firstTimeSetup()
-				await cloudKitManager?.sync()
-			}
+	}
+	
+	public func firstTimeCloudKitSetup() {
+		Task {
+			await cloudKitManager?.firstTimeSetup()
+			await cloudKitManager?.sync()
 		}
 	}
 	

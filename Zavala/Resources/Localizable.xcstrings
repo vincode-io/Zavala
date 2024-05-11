@@ -183,6 +183,9 @@
     "Dark" : {
       "comment" : "Control Label: Dark"
     },
+    "Debug" : {
+      "comment" : "Control Label: Debug"
+    },
     "Delete" : {
       "comment" : "Control Label: Delete an entity"
     },
@@ -245,6 +248,12 @@
     },
     "Enable On My Mac" : {
       "comment" : "Control Label: Enable On My Mac"
+    },
+    "Enter Background" : {
+      "comment" : "Control Label: Enter Background"
+    },
+    "Enter Forground" : {
+      "comment" : "Control Label: Enter Forground"
     },
     "Error" : {
       "comment" : "Alert Title: Error"

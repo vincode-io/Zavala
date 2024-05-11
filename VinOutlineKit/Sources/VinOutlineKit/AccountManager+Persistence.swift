@@ -22,6 +22,10 @@ public extension AccountManager {
 		let initialLoad = accountsDictionary[accountType.rawValue] == nil
 		accountsDictionary[accountType.rawValue] = account
 		
+		if accountType == .cloudKit {
+			account.initializeCloudKit(errorHandler: errorHandler!)
+		}
+		
 		if !initialLoad {
 			account.accountDidReload()
 		}

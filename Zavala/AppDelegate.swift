@@ -246,6 +246,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	let feedbackCommand = UICommand(title: .feedbackControlLabel, action: #selector(feedbackCommand(_:)))
 
+	let enterBackgroundCommand = UICommand(title: .enterBackgroundControlLabel, action: #selector(enterBackgroundCommand(_:)))
+
+	let enterForgroundCommand = UICommand(title: .enterForgroundControlLabel, action: #selector(enterForgroundCommand(_:)))
+
 	let showOpenQuicklyCommand = UIKeyCommand(title: .openQuicklyEllipsisControlLabel,
 											  action: #selector(showOpenQuicklyCommand(_:)),
 											  input: "o",
@@ -662,6 +666,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UIApplication.shared.open(URL(string: .feedbackURL)!)
 	}
 
+	@objc func enterForgroundCommand(_ sender: Any?) {
+		willEnterForeground()
+	}
+
+	@objc func enterBackgroundCommand(_ sender: Any?) {
+		didEnterBackground()
+	}
+
 	@objc func showOpenQuicklyCommand(_ sender: Any?) {
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
 			mainSplitViewController.showOpenQuickly()
@@ -1002,6 +1014,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let historyMenu = UIMenu(title: .historyControlLabel, children: [navigateMenu, historyItemsMenu])
 		builder.insertSibling(historyMenu, afterMenu: .view)
 
+		// Debug Menu
+		#if DEBUG
+		let debugMenu = UIMenu(title: .debugControlLabel, children: [enterBackgroundCommand, enterForgroundCommand])
+		builder.insertSibling(debugMenu, beforeMenu: .window)
+		#endif
+
 		// Help Menu
 		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand, showCommunityCommand, feedbackCommand] })
 	}
@@ -1044,11 +1062,14 @@ private extension AppDelegate {
 		checkForUserDefaultsChanges()
 		AccountManager.shared.resume()
 		
+		Task {
+			await AccountManager.shared.sync()
+		}
+		
 		if let userInfos = AppDefaults.shared.documentHistory {
 			history = userInfos.compactMap { Pin(userInfo: $0) }
 		}
 		cleanUpHistory()
-		
 		UIMenuSystem.main.setNeedsRebuild()
 	}
 	
@@ -1080,7 +1101,7 @@ private extension AppDelegate {
 		let cloudKitAccount = AccountManager.shared.cloudKitAccount
 		
 		if AppDefaults.shared.enableCloudKit && cloudKitAccount == nil {
-			AccountManager.shared.createCloudKitAccount(errorHandler: self)
+			AccountManager.shared.createCloudKitAccount()
 		} else if !AppDefaults.shared.enableCloudKit && cloudKitAccount != nil {
 			AccountManager.shared.deleteCloudKitAccount()
 		}

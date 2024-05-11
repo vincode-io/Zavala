@@ -158,7 +158,6 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	@objc func accountDidReload(_ note: Notification) {
 		debounceApplyChangeSnapshot()
 		debounceReloadVisible()
-		updateSelections()
 	}
 	
 	@objc func accountMetadataDidChange(_ note: Notification) {
