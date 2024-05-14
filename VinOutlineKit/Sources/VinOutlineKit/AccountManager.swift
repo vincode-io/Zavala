@@ -268,7 +268,7 @@ private extension AccountManager {
 	}
 
 	func markAsDirty(_ account: Account) {
-		let accountFile = accountFiles[account.type.rawValue]!
+		guard let accountFile = accountFiles[account.type.rawValue] else { return }
 		accountFile.markAsDirty()
 	}
 	
