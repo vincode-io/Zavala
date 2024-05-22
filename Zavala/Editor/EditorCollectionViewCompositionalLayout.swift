@@ -12,6 +12,17 @@ class EditorCollectionViewCompositionalLayout : UICollectionViewCompositionalLay
 	
 	var editorMaxWidth: CGFloat? = AppDefaults.shared.editorMaxWidth.pixels
 	
+	override var collectionViewContentSize: CGSize {
+		guard let visibleSize = super.collectionView?.visibleSize else {
+			return super.collectionViewContentSize
+		}
+		
+		// Allow the editor overscroll by 50%
+		var contentSize = super.collectionViewContentSize
+		contentSize.height = contentSize.height + (visibleSize.height / 2)
+		return contentSize
+	}
+	
 	override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 		guard let superAttributes = super.layoutAttributesForItem(at: indexPath) else { return nil }
 		
