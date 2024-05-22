@@ -1110,6 +1110,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	public func shouldMoveLeftOnReturn(row: Row) -> Bool {
 		guard row.topic == nil else { return false }
+		
+		guard row.parent is Row else { return false }
+		
 		if row.parent?.rows.last == row {
 			return true
 		} else {
