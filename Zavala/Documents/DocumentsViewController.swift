@@ -49,7 +49,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var addButton: UIButton!
 	private var importButton: UIButton!
 
-	private let loadDocumentsSemaphore = AsyncSemaphore(value: 1)
+	private let documentsSemaphore = AsyncSemaphore(value: 1)
 	private var loadDocumentsChannel = AsyncChannel<(() -> Void)>()
 	
 	private var lastClick: TimeInterval = Date().timeIntervalSince1970
@@ -280,20 +280,24 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
-		reload(document: document)
 		Task {
+			await reload(document: document)
 			await loadDocuments(animated: true)
 		}
 	}
 	
 	@objc func documentUpdatedDidChange(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
-		reload(document: document)
+		Task {
+			await reload(document: document)
+		}
 	}
 	
 	@objc func documentSharingDidChange(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
-		reload(document: document)
+		Task {
+			await reload(document: document)
+		}
 	}
 	
 	// MARK: Actions
@@ -451,7 +455,10 @@ extension DocumentsViewController {
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 	
-	func reload(document: Document) {
+	func reload(document: Document) async {
+		await documentsSemaphore.wait()
+		defer { documentsSemaphore.signal() }
+
 		let selectedIndexPaths = self.collectionView.indexPathsForSelectedItems
 		if let index = documents.firstIndex(of: document) {
 			collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
@@ -466,8 +473,8 @@ extension DocumentsViewController {
 			return
 		}
 		
-		await loadDocumentsSemaphore.wait()
-		defer { loadDocumentsSemaphore.signal() }
+		await documentsSemaphore.wait()
+		defer { documentsSemaphore.signal() }
 
 		let tags = documentContainers.tags
 		var selectionContainers: [DocumentProvider]
