@@ -60,14 +60,8 @@
     "Add Topic Level" : {
       "comment" : "Control Label: The menu option to add a new Topic Level."
     },
-    "Advanced" : {
-      "comment" : "Control Label: Advanced"
-    },
     "Always Delete Without Asking" : {
       "comment" : "Control Label: Always Delete Without Asking"
-    },
-    "Appearance" : {
-      "comment" : "Control Label: Appearance"
     },
     "Are you sure you want to delete %lld outlines?" : {
       "comment" : "Confirmation: delete outlines?"
@@ -210,8 +204,8 @@
     "Delete Rows" : {
       "comment" : "Control Label: Delete Rows"
     },
-    "Disable Editor Animations" : {
-      "comment" : "Control Label: Disable Editor Animations"
+    "Disable Animations" : {
+      "comment" : "Control Label: Disable Animations"
     },
     "Document Find…" : {
       "comment" : "Control Label: Document Find…"
@@ -231,8 +225,8 @@
     "Edit document “%@”" : {
       "comment" : "Prompt: edit document"
     },
-    "Editor Max Width" : {
-      "comment" : "Control Label: Editor Max Width"
+    "Editor" : {
+      "comment" : "Control Label: Editor"
     },
     "Email" : {
       "comment" : "Control Label: Email"
@@ -401,6 +395,9 @@
     },
     "Manage Sharing…" : {
       "comment" : "Control Label: Manage Sharing…"
+    },
+    "Max Width" : {
+      "comment" : "Control Label: Max Width"
     },
     "Medium" : {
       "comment" : "Control Label: Medium"
@@ -573,6 +570,9 @@
     "Save" : {
       "comment" : "Control Label: Save"
     },
+    "Scroll Mode" : {
+      "comment" : "Control Label: Scroll Mode"
+    },
     "Search" : {
       "comment" : "Field Placeholder: Search"
     },
@@ -650,6 +650,9 @@
     },
     "Turn Filter On" : {
       "comment" : "Control Label: Turn Filter On"
+    },
+    "Typewriter" : {
+      "comment" : "Control Label: Typewriter"
     },
     "Typing" : {
       "comment" : "Control Label: Typing"

@@ -148,8 +148,6 @@ extension String {
 	static var addRowOutsideControlLabel = String(localized: "Add Row Outside", comment: "Control Label: Add Row Outside")
 	static var addTagControlLabel = String(localized: "Add Tag", comment: "Control Label: Add Tag.")
 	static var addTopicLevelControlLabel = String(localized: "Add Topic Level", comment: "Control Label: The menu option to add a new Topic Level.")
-	static var advancedControlLabel = String(localized: "Advanced", comment: "Control Label: Advanced")
-	static var appearanceControlLabel = String(localized: "Appearance", comment: "Control Label: Appearance")
 	static var appHelpControlLabel = String(localized: "Zavala Help", comment: "Control Label: Zavala Help")
 	static var autoLinkingControlLabel = String(localized: "Automatically Change Link Titles", comment: "Control Label: Auto Linking")
 	static var automaticControlLabel = String(localized: "Automatic", comment: "Control Label: Automatic")
@@ -200,7 +198,7 @@ extension String {
 	static var deleteRowsControlLabel = String(localized: "Delete Rows", comment: "Control Label: Delete Rows")
 	static var deleteTagMessage = String(localized: "No Outlines associated with this tag will be deleted.", comment: "Alert Message: delete tag")
 	static var deleteTagsMessage = String(localized: "No Outlines associated with these tags will be deleted.", comment: "Alert Message: delete tags")
-	static var disableEditorAnimationsControlLabel = String(localized: "Disable Editor Animations", comment: "Control Label: Disable Editor Animations")
+	static var disableAnimationsControlLabel = String(localized: "Disable Animations", comment: "Control Label: Disable Animations")
 	static var documentFindEllipsisControlLabel = String(localized: "Document Find…", comment: "Control Label: Document Find…")
 	static var documentNotFoundTitle = String(localized: "Document Not Found", comment: "Alert Title: Document Not Found")
 	static var documentNotFoundMessage = String(localized: "The requested document could not be found. It was most likely deleted and is no longer available.", comment: "Alert Message: Document Not Found")
@@ -208,7 +206,7 @@ extension String {
 	static var duplicateControlLabel = String(localized: "Duplicate", comment: "Control Label: Duplicate")
 	static var duplicateRowControlLabel = String(localized: "Duplicate Row", comment: "Control Label: Duplicate Row")
 
-	static var editorMaxWidthControlLabel = String(localized: "Editor Max Width", comment: "Control Label: Editor Max Width")
+	static var editorControlLabel = String(localized: "Editor", comment: "Control Label: Editor")
 	static var emailControlLabel = String(localized: "Email", comment: "Control Label: Email")
 	static var enableCloudKitControlLabel = String(localized: "Enable iCloud", comment: "Control Label: Enable iCloud")
 	static var enableOnMyIPhoneControlLabel = String(localized: "Enable On My iPhone", comment: "Control Label: Enable On My iPhone")
@@ -273,6 +271,7 @@ extension String {
 	static var lightControlLabel = String(localized: "Light", comment: "Control Label: Light")
 
 	static var manageSharingEllipsisControlLabel = String(localized: "Manage Sharing…", comment: "Control Label: Manage Sharing…")
+	static var maxWidthControlLabel = String(localized: "Max Width", comment: "Control Label: Max Width")
 	static var mediumControlLabel = String(localized: "Medium", comment: "Control Label: Medium")
 	static var mintControlLabel = String(localized: "Mint", comment: "Control Label: Mint")
 	static var moreControlLabel = String(localized: "More", comment: "Control Label: More")
@@ -338,6 +337,7 @@ extension String {
 	static var rowSpacingControlLabel = String(localized: "Row Spacing", comment: "Control Label: Row Spacing")
 
 	static var saveControlLabel = String(localized: "Save", comment: "Control Label: Save")
+	static var scrollModeControlLabel = String(localized: "Scroll Mode", comment: "Control Label: Scroll Mode")
 	static var searchPlaceholder = String(localized: "Search", comment: "Field Placeholder: Search")
 	static var secondaryTextControlLabel = String(localized: "Secondary Text", comment: "Control Label: Secondary Text")
 	static var selectControlLabel = String(localized: "Select", comment: "Control Label: Select")
@@ -359,7 +359,8 @@ extension String {
 	static var turnFilterOffControlLabel = String(localized: "Turn Filter Off", comment: "Control Label: Turn Filter Off")
 	static var turnFilterOnControlLabel = String(localized: "Turn Filter On", comment: "Control Label: Turn Filter On")
 	static var typingControlLabel = String(localized: "Typing", comment: "Control Label: Typing")
-	
+	static var typewriterCenterControlLabel = String(localized: "Typewriter", comment: "Control Label: Typewriter")
+
 	static var uncompleteControlLabel = String(localized: "Uncomplete", comment: "Control Label: Uncomplete")
 	static var undoControlLabel = String(localized: "Undo", comment: "Control Label: Undo")
 	static var undoMenuControlLabel = String(localized: "Undo Menu", comment: "Control Label: Undo Menu")

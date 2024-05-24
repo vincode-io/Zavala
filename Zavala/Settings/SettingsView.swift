@@ -9,16 +9,18 @@ import SwiftUI
 
 struct SettingsView: View {
 	
+	static var pickerWidth: CGFloat = 110
+	
 	@Environment(\.dismiss) var dismiss
 	
 	var body: some View {
 		NavigationStack {
 			Form {
+				SettingsGeneralView()
 				SettingsAccountsView()
 				SettingsOutlineDefaultsView()
 				SettingsOutlineOwnerView()
-				SettingsAppearanceView()
-				SettingsAdvancedView()
+				SettingsEditorView()
 				#if !targetEnvironment(macCatalyst)
 				SettingsHelpView()
 				#endif

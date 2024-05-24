@@ -7,35 +7,20 @@
 
 import SwiftUI
 
-struct SettingsAppearanceView: View {
+struct SettingsEditorView: View {
 	
-	@State var colorPalette = AppDefaults.shared.userInterfaceColorPalette
 	@State var editorMaxWidth = AppDefaults.shared.editorMaxWidth
+	@State var scrollMode = AppDefaults.shared.scrollMode
 	@State var rowIndent = AppDefaults.shared.rowIndentSize
 	@State var rowSpacing = AppDefaults.shared.rowSpacingSize
-	
+	@State var disableEditorAnimations = AppDefaults.shared.disableEditorAnimations
+
     var body: some View {
-		Section(String.appearanceControlLabel) {
-			HStack {
-				Text(String.colorPalettControlLabel)
-				Spacer()
-				Picker(selection: $colorPalette) {
-					ForEach(UserInterfaceColorPalette.allCases, id: \.self) {
-						Text($0.description)
-					}
-				} label: {
-				}
-				#if targetEnvironment(macCatalyst)
-				.frame(width: 100)
-				#endif
-				.pickerStyle(.menu)
-				.onChange(of: colorPalette) {
-					AppDefaults.shared.userInterfaceColorPalette = $0
-				}
-			}
+		Section(String.editorControlLabel) {
 			
 			HStack {
-				Text(String.editorMaxWidthControlLabel)
+				Text(String.maxWidthControlLabel)
+					.font(.body)
 				Spacer()
 				Picker(selection: $editorMaxWidth) {
 					ForEach(EditorMaxWidth.allCases, id: \.self) {
@@ -44,7 +29,7 @@ struct SettingsAppearanceView: View {
 				} label: {
 				}
 				#if targetEnvironment(macCatalyst)
-				.frame(width: 100)
+				.frame(width: SettingsView.pickerWidth)
 				#endif
 				.pickerStyle(.menu)
 				.onChange(of: editorMaxWidth) {
@@ -53,7 +38,27 @@ struct SettingsAppearanceView: View {
 			}
 
 			HStack {
+				Text(String.scrollModeControlLabel)
+					.font(.body)
+				Spacer()
+				Picker(selection: $scrollMode) {
+					ForEach(ScrollMode.allCases, id: \.self) {
+						Text($0.description)
+					}
+				} label: {
+				}
+				#if targetEnvironment(macCatalyst)
+				.frame(width: SettingsView.pickerWidth)
+				#endif
+				.pickerStyle(.menu)
+				.onChange(of: scrollMode) {
+					AppDefaults.shared.scrollMode = $0
+				}
+			}
+
+			HStack {
 				Text(String.rowIndentControlLabel)
+					.font(.body)
 				Spacer()
 				Picker(selection: $rowIndent) {
 					ForEach(DefaultsSize.allCases, id: \.self) {
@@ -62,7 +67,7 @@ struct SettingsAppearanceView: View {
 				} label: {
 				}
 				#if targetEnvironment(macCatalyst)
-				.frame(width: 100)
+				.frame(width: SettingsView.pickerWidth)
 				#endif
 				.pickerStyle(.menu)
 				.onChange(of: rowIndent) {
@@ -72,6 +77,7 @@ struct SettingsAppearanceView: View {
 
 			HStack {
 				Text(String.rowSpacingControlLabel)
+					.font(.body)
 				Spacer()
 				Picker(selection: $rowSpacing) {
 					ForEach(DefaultsSize.allCases, id: \.self) {
@@ -80,7 +86,7 @@ struct SettingsAppearanceView: View {
 				} label: {
 				}
 				#if targetEnvironment(macCatalyst)
-				.frame(width: 100)
+				.frame(width: SettingsView.pickerWidth)
 				#endif
 				.pickerStyle(.menu)
 				.onChange(of: rowSpacing) {
@@ -91,12 +97,20 @@ struct SettingsAppearanceView: View {
 			NavigationLink(String.fontsControlLabel) {
 				SettingsFontsView()
 			}
+			.font(.body)
+
+			Toggle(isOn: $disableEditorAnimations) {
+				Text(String.disableAnimationsControlLabel)
+			}
+			.onChange(of: disableEditorAnimations) {
+				AppDefaults.shared.disableEditorAnimations = $0
+			}
 		}
     }
 }
 
 #Preview {
 	Form {
-		SettingsAppearanceView()
+		SettingsEditorView()
 	}
 }

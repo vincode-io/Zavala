@@ -53,6 +53,20 @@ enum EditorMaxWidth: Int, CustomStringConvertible, CaseIterable {
 	}
 }
 
+enum ScrollMode: Int, CustomStringConvertible, CaseIterable {
+	case normal = 0
+	case typewriterCenter = 1
+	
+	var description: String {
+		switch self {
+		case .normal:
+			return .normalControlLabel
+		case .typewriterCenter:
+			return .typewriterCenterControlLabel
+		}
+	}
+}
+
 enum DefaultsSize: Int, CustomStringConvertible, CaseIterable {
 	case small = 0
 	case medium = 1
@@ -98,6 +112,7 @@ final class AppDefaults {
 		static let openQuicklyDocumentContainerID = "openQuicklyDocumentContainerID"
 		static let userInterfaceColorPalette = "userInterfaceColorPalette";
 		static let editorMaxWidth = "editorWidth";
+		static let scrollMode = "scrollMode";
 		static let rowIndentSize = "rowIndentSize"
 		static let rowSpacingSize = "rowSpacingSize"
 		static let textZoom = "textZoom"
@@ -264,6 +279,18 @@ final class AppDefaults {
 		}
 		set {
 			Self.setInt(for: Key.editorMaxWidth, newValue.rawValue)
+		}
+	}
+	
+	var scrollMode: ScrollMode {
+		get {
+			if let result = ScrollMode(rawValue: Self.int(for: Key.scrollMode)) {
+				return result
+			}
+			return .normal
+		}
+		set {
+			Self.setInt(for: Key.scrollMode, newValue.rawValue)
 		}
 	}
 	

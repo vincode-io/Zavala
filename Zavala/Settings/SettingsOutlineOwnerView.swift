@@ -22,6 +22,7 @@ struct SettingsOutlineOwnerView: View {
 					}
 			}
 			.textContentType(.name)
+			.font(.body)
 			
 			TextField(text: $email) {
 				Text(String.emailControlLabel)
@@ -32,7 +33,8 @@ struct SettingsOutlineOwnerView: View {
 			.textInputAutocapitalization(.never)
 			.textContentType(.emailAddress)
 			.keyboardType(.emailAddress)
-			
+			.font(.body)
+
 			TextField(text: $url) {
 				Text(String.urlControlLabel)
 					.onChange(of: url) {
@@ -42,7 +44,8 @@ struct SettingsOutlineOwnerView: View {
 			.textInputAutocapitalization(.never)
 			.textContentType(.URL)
 			.keyboardType(.URL)
-			
+			.font(.body)
+
 			Text(String.opmlOwnerFieldNote)
 				.font(.footnote)
 				.foregroundStyle(.secondary)

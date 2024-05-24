@@ -31,7 +31,7 @@
 		511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */; };
 		511EC2BF2B3F58E0002D89A5 /* SettingsSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511EC2BE2B3F58E0002D89A5 /* SettingsSceneDelegate.swift */; };
 		511EC2C12B3F5AA7002D89A5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511EC2C02B3F5AA7002D89A5 /* SettingsViewController.swift */; };
-		511EC2C52B3F8F29002D89A5 /* SettingsAdvancedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511EC2C42B3F8F29002D89A5 /* SettingsAdvancedView.swift */; };
+		511EC2C52B3F8F29002D89A5 /* SettingsGeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511EC2C42B3F8F29002D89A5 /* SettingsGeneralView.swift */; };
 		511EC2C72B409A5B002D89A5 /* ValueStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511EC2C62B409A5B002D89A5 /* ValueStepper.swift */; };
 		511EC2C82B422B22002D89A5 /* DocumentIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5167606325F95E4600AC0EBD /* DocumentIndexer.swift */; };
 		512229682563507E008041AF /* EditorRowViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512229672563507E008041AF /* EditorRowViewCell.swift */; };
@@ -164,7 +164,7 @@
 		51FA273C2B3B68DE008B665E /* SettingsOutlineOwnerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FA273B2B3B68DE008B665E /* SettingsOutlineOwnerView.swift */; };
 		51FA273E2B3B6A12008B665E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FA273D2B3B6A12008B665E /* SettingsView.swift */; };
 		51FA27402B3B718B008B665E /* SettingsOutlineDefaultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FA273F2B3B718B008B665E /* SettingsOutlineDefaultsView.swift */; };
-		51FA27422B3B748C008B665E /* SettingsAppearanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FA27412B3B748C008B665E /* SettingsAppearanceView.swift */; };
+		51FA27422B3B748C008B665E /* SettingsEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FA27412B3B748C008B665E /* SettingsEditorView.swift */; };
 		51FA27442B3B8F2B008B665E /* SettingsFontsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FA27432B3B8F2B008B665E /* SettingsFontsView.swift */; };
 		51FA27462B3B9337008B665E /* SettingsHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51FA27452B3B9337008B665E /* SettingsHelpView.swift */; };
 /* End PBXBuildFile section */
@@ -237,7 +237,7 @@
 		511EC2BA2B3F5727002D89A5 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		511EC2BE2B3F58E0002D89A5 /* SettingsSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSceneDelegate.swift; sourceTree = "<group>"; };
 		511EC2C02B3F5AA7002D89A5 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		511EC2C42B3F8F29002D89A5 /* SettingsAdvancedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAdvancedView.swift; sourceTree = "<group>"; };
+		511EC2C42B3F8F29002D89A5 /* SettingsGeneralView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsGeneralView.swift; sourceTree = "<group>"; };
 		511EC2C62B409A5B002D89A5 /* ValueStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueStepper.swift; sourceTree = "<group>"; };
 		512229672563507E008041AF /* EditorRowViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowViewCell.swift; sourceTree = "<group>"; };
 		51278E76257F37AC0034F1CB /* Dialog.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
@@ -388,7 +388,7 @@
 		51FA273B2B3B68DE008B665E /* SettingsOutlineOwnerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOutlineOwnerView.swift; sourceTree = "<group>"; };
 		51FA273D2B3B6A12008B665E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		51FA273F2B3B718B008B665E /* SettingsOutlineDefaultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOutlineDefaultsView.swift; sourceTree = "<group>"; };
-		51FA27412B3B748C008B665E /* SettingsAppearanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAppearanceView.swift; sourceTree = "<group>"; };
+		51FA27412B3B748C008B665E /* SettingsEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsEditorView.swift; sourceTree = "<group>"; };
 		51FA27432B3B8F2B008B665E /* SettingsFontsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFontsView.swift; sourceTree = "<group>"; };
 		51FA27452B3B9337008B665E /* SettingsHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHelpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -534,12 +534,12 @@
 			isa = PBXGroup;
 			children = (
 				51FA273D2B3B6A12008B665E /* SettingsView.swift */,
+				511EC2C42B3F8F29002D89A5 /* SettingsGeneralView.swift */,
 				51FA27392B3B6493008B665E /* SettingsAccountsView.swift */,
 				51FA273F2B3B718B008B665E /* SettingsOutlineDefaultsView.swift */,
 				51FA273B2B3B68DE008B665E /* SettingsOutlineOwnerView.swift */,
-				51FA27412B3B748C008B665E /* SettingsAppearanceView.swift */,
+				51FA27412B3B748C008B665E /* SettingsEditorView.swift */,
 				51FA27432B3B8F2B008B665E /* SettingsFontsView.swift */,
-				511EC2C42B3F8F29002D89A5 /* SettingsAdvancedView.swift */,
 				51FA27452B3B9337008B665E /* SettingsHelpView.swift */,
 				517AF69F25E08A6B0044DBAB /* Settings.storyboard */,
 				511EC2BE2B3F58E0002D89A5 /* SettingsSceneDelegate.swift */,
@@ -1061,7 +1061,7 @@
 				511EC2BF2B3F58E0002D89A5 /* SettingsSceneDelegate.swift in Sources */,
 				5116894029BD72DE00318832 /* AttributedLabelView.swift in Sources */,
 				5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */,
-				51FA27422B3B748C008B665E /* SettingsAppearanceView.swift in Sources */,
+				51FA27422B3B748C008B665E /* SettingsEditorView.swift in Sources */,
 				5147D0B825CCAB2A004673C3 /* DocumentsViewController+Drop.swift in Sources */,
 				51CB201A2B5F25D6006CAC1A /* OutlineFontColor.swift in Sources */,
 				514F222A25C4FF02004E02CD /* EditorTagInputTextField.swift in Sources */,
@@ -1126,7 +1126,7 @@
 				51DEE82826FF951E006DAA56 /* UIWindowSceneDelegate+.swift in Sources */,
 				51C4C442255A0DE1004E0206 /* DocumentsViewController.swift in Sources */,
 				511EC2C12B3F5AA7002D89A5 /* SettingsViewController.swift in Sources */,
-				511EC2C52B3F8F29002D89A5 /* SettingsAdvancedView.swift in Sources */,
+				511EC2C52B3F8F29002D89A5 /* SettingsGeneralView.swift in Sources */,
 				5181A9382554D92000C153E8 /* AppDelegate.swift in Sources */,
 				514BB9E7255B609600C8DBDF /* UIStoryboard+.swift in Sources */,
 				51D28D2C257730DB0039DDFC /* EditorViewController+Drag.swift in Sources */,
