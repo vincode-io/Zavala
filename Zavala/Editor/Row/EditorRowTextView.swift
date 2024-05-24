@@ -215,8 +215,8 @@ class EditorRowTextView: UITextView {
         fatalError("resize has not been implemented")
     }
     
-    func makeCursorVisibleIfNecessary() {
-        fatalError("makeCursorVisibleIfNecessary has not been implemented")
+    func scrollIfNecessary() {
+        fatalError("scrollIfNecessary has not been implemented")
     }
 
 	func saveText() {
@@ -550,8 +550,7 @@ extension EditorRowTextView {
             resize()
         }
         
-        makeCursorVisibleIfNecessary()
-        
+        scrollIfNecessary()
 		debounceActivity()
     }
 

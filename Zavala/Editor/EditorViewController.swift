@@ -842,7 +842,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 				if self?.collectionView.contentInset != newInsets {
 					self?.collectionView.contentInset = newInsets
 				}
-				self?.makeCursorVisibleIfNecessary()
+				self?.scrollIfNecessary()
 				self?.currentKeyboardHeight = keyboardViewEndFrame.height
 			}
 			DispatchQueue.main.async(execute: keyboardWorkItem!)
@@ -1692,7 +1692,11 @@ extension EditorViewController: EditorRowViewCellDelegate {
 	var editorRowInputAccessoryView: UIView? {
 		return keyboardToolBar
 	}
-	
+
+	func editorRowScrollIfNecessary() {
+		scrollIfNecessary()
+	}
+
 	func editorRowScrollEditorToVisible(textView: UITextView, rect: CGRect) {
 		scrollToVisible(textInput: textView, rect: rect, animated: true)
 	}
@@ -2203,6 +2207,7 @@ private extension EditorViewController {
 						repeatMoveCursorUp()
 					} else {
 						super.pressesBegan(presses, with: event)
+						scrollIfNecessary()
 					}
 				} else {
 					isGoingUp = true
@@ -2215,6 +2220,7 @@ private extension EditorViewController {
 						repeatMoveCursorDown()
 					} else {
 						super.pressesBegan(presses, with: event)
+						scrollIfNecessary()
 					}
 				} else {
 					isGoingDown = true
@@ -2228,6 +2234,7 @@ private extension EditorViewController {
 					cell.moveToTopicEnd()
 				} else {
 					super.pressesBegan(presses, with: event)
+					scrollIfNecessary()
 				}
 			case (.keyboardRightArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				if let topic = currentTextView as? EditorRowTopicTextView, topic.cursorIsAtEnd,
@@ -2237,6 +2244,7 @@ private extension EditorViewController {
 					cell.moveToTopicStart()
 				} else {
 					super.pressesBegan(presses, with: event)
+					scrollIfNecessary()
 				}
 			default:
 				super.pressesBegan(presses, with: event)
@@ -2245,7 +2253,7 @@ private extension EditorViewController {
 		} else {
 			switch (key.keyCode, true) {
 			case (.keyboardUpArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty), (.keyboardDownArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
-				makeCursorVisibleIfNecessary()
+				scrollIfNecessary()
 			default:
 				break
 			}
@@ -2545,11 +2553,15 @@ private extension EditorViewController {
 		}
 
 		// Usually we need to move the cursor after the change because we are moving to a newly created element
-		if !changes.cursorMoveIsBeforeChanges, let newCursorIndex = changes.newCursorIndex {
-			if newCursorIndex == -1 {
-				moveCursorToTagInput()
+		if !changes.cursorMoveIsBeforeChanges {
+			if let newCursorIndex = changes.newCursorIndex {
+				if newCursorIndex == -1 {
+					moveCursorToTagInput()
+				} else {
+					moveCursorToRow(index: newCursorIndex, toStart: changes.cursorMoveIsToStart, toNote: changes.cursorMoveIsToNote)
+				}
 			} else {
-				moveCursorToRow(index: newCursorIndex, toStart: changes.cursorMoveIsToStart, toNote: changes.cursorMoveIsToNote)
+				scrollIfNecessary(animated: false)
 			}
 		} else if let newSelectIndex = changes.newSelectIndex {
 			moveSelectionToRow(index: newSelectIndex)
@@ -2636,7 +2648,7 @@ private extension EditorViewController {
 		if let titleCell = self.collectionView.cellForItem(at: IndexPath(row: 0, section: Outline.Section.title.rawValue)) as? EditorTitleViewCell {
 			titleCell.takeCursor()
 		}
-		makeCursorVisibleIfNecessary()
+		scrollIfNecessary()
 	}
 	
 	func moveCursorToTagInput() {
@@ -2646,7 +2658,7 @@ private extension EditorViewController {
 				tagInputCell.takeCursor()
 			}
 		}
-		makeCursorVisibleIfNecessary()
+		scrollIfNecessary()
 	}
 	
 	func moveCursorToFirstRow() {
@@ -2849,7 +2861,7 @@ private extension EditorViewController {
 					rowCell.moveToTopicEnd()
 				}
 			}
-			makeCursorVisibleIfNecessary(animated: false)
+			scrollIfNecessary(animated: false)
 		}
 		
 		if let rowCell = collectionView.cellForItem(at: indexPath) as? EditorRowViewCell {
@@ -2887,7 +2899,7 @@ private extension EditorViewController {
 					nextTopicTextView.selectedRange = range
 				}
 			}
-			makeCursorVisibleIfNecessary()
+			scrollIfNecessary()
 		}
 		
 		let indexPath = IndexPath(row: shadowTableIndex - 1, section: adjustedRowsSection)
@@ -2941,7 +2953,7 @@ private extension EditorViewController {
 					let range = NSRange(location: cursorOffset, length: 0)
 					nextTopicTextView.selectedRange = range
 				}
-				makeCursorVisibleIfNecessary()
+				scrollIfNecessary()
 			}
 		}
 		
@@ -3340,7 +3352,7 @@ private extension EditorViewController {
 									   rowStrings: rowStrings)
 		
 		command.execute()
-		makeCursorVisibleIfNecessary()
+		scrollIfNecessary()
 	}
 
 	func moveRowsDown(_ rows: [Row], rowStrings: RowStrings? = nil) {
@@ -3354,7 +3366,7 @@ private extension EditorViewController {
 										 rowStrings: rowStrings)
 		
 		command.execute()
-		makeCursorVisibleIfNecessary()
+		scrollIfNecessary()
 	}
 
 	func splitRow(_ row: Row, topic: NSAttributedString, cursorPosition: Int) {
@@ -3449,11 +3461,35 @@ private extension EditorViewController {
 		command.execute()
 	}
 
-	func makeCursorVisibleIfNecessary(animated: Bool = true) {
-		guard let textInput = UIResponder.currentFirstResponder as? UITextInput,
-			  let cursorRect = textInput.cursorRect else { return }
+	func scrollIfNecessary(animated: Bool = true) {
+		// If we don't use a Task here, the cursorRect will sometimes comeback as .zero
+		Task {
+			guard let textInput = UIResponder.currentFirstResponder as? UITextInput,
+				  let cursorRect = textInput.cursorRect else { return }
+			
+			if AppDefaults.shared.scrollMode == .typewriterCenter {
+				self.scrollToCenter(textInput: textInput, rect: cursorRect, animated: animated)
+			} else {
+				self.scrollToVisible(textInput: textInput, rect: cursorRect, animated: animated)
+			}
+		}
+	}
+
+	func scrollToCenter(textInput: UITextInput, rect: CGRect, animated: Bool) {
+		guard let convertedRect = (textInput as? UIView)?.convert(rect, to: collectionView) else { return }
 		
-		scrollToVisible(textInput: textInput, rect: cursorRect, animated: animated)
+		let halfHeight = (collectionView.visibleSize.height - currentKeyboardHeight) / 2
+		let offsetY = convertedRect.midY - halfHeight
+
+		if offsetY > 0 {
+			if AppDefaults.shared.disableEditorAnimations {
+				collectionView.contentOffset = CGPoint(x: 0, y: offsetY)
+			} else {
+				UIView.animate(withDuration: 0.33) {
+					self.collectionView.contentOffset = CGPoint(x: 0, y: offsetY)
+				}
+			}
+		}
 	}
 	
 	func scrollToVisible(textInput: UITextInput, rect: CGRect, animated: Bool) {

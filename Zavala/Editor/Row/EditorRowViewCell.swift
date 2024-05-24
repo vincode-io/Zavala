@@ -11,6 +11,7 @@ import VinOutlineKit
 protocol EditorRowViewCellDelegate: AnyObject {
 	var editorRowUndoManager: UndoManager? { get }
 	var editorRowInputAccessoryView: UIView? { get }
+	func editorRowScrollIfNecessary()
 	func editorRowScrollEditorToVisible(textView: UITextView, rect: CGRect)
 	func editorRowTextFieldDidBecomeActive(row: Row)
 	func editorRowToggleDisclosure(row: Row, applyToAll: Bool)

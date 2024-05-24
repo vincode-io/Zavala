@@ -13,6 +13,7 @@ protocol EditorRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewInputAccessoryView: UIView? { get }
 	func resize(_ : EditorRowNoteTextView)
+	func scrollIfNecessary(_ : EditorRowNoteTextView)
 	func scrollEditorToVisible(_ : EditorRowNoteTextView, rect: CGRect)
 	func didBecomeActive(_ : EditorRowNoteTextView, row: Row)
 	func textChanged(_ : EditorRowNoteTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
@@ -88,9 +89,8 @@ class EditorRowNoteTextView: EditorRowTextView {
 		editorDelegate?.resize(self)
 	}
     
-    override func makeCursorVisibleIfNecessary() {
-		guard let cursorRect else { return }
-        editorDelegate?.scrollEditorToVisible(self, rect: cursorRect)
+    override func scrollIfNecessary() {
+        editorDelegate?.scrollIfNecessary(self)
     }
     
 	override func deleteBackward() {

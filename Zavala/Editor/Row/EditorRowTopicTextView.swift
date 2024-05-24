@@ -13,6 +13,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	var editorRowTopicTextViewInputAccessoryView: UIView? { get }
 	func didBecomeActive(_: EditorRowTopicTextView, row: Row)
 	func resize(_: EditorRowTopicTextView)
+	func scrollIfNecessary(_: EditorRowTopicTextView)
 	func scrollEditorToVisible(_: EditorRowTopicTextView, rect: CGRect)
 	func moveCursorUp(_: EditorRowTopicTextView, row: Row)
 	func moveCursorDown(_: EditorRowTopicTextView, row: Row)
@@ -115,9 +116,8 @@ class EditorRowTopicTextView: EditorRowTextView {
 		editorDelegate?.resize(self)
 	}
 	
-    override func makeCursorVisibleIfNecessary() {
-		guard let cursorRect else { return }
-        editorDelegate?.scrollEditorToVisible(self, rect: cursorRect)
+    override func scrollIfNecessary() {
+        editorDelegate?.scrollIfNecessary(self)
     }
     
 	override func deleteBackward() {

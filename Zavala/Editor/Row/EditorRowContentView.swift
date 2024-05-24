@@ -152,6 +152,10 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		resize()
 	}
 	
+	func scrollIfNecessary(_: EditorRowTopicTextView) {
+		appliedConfiguration?.delegate?.editorRowScrollIfNecessary()
+	}
+	
 	func scrollEditorToVisible(_ textView: EditorRowTopicTextView, rect: CGRect) {
 		appliedConfiguration?.delegate?.editorRowScrollEditorToVisible(textView: textView, rect: rect)
 	}
@@ -220,6 +224,10 @@ extension EditorRowContentView: EditorRowNoteTextViewDelegate {
 		resize()
 	}
 	
+	func scrollIfNecessary(_: EditorRowNoteTextView) {
+		appliedConfiguration?.delegate?.editorRowScrollIfNecessary()
+	}
+
 	func scrollEditorToVisible(_ textView: EditorRowNoteTextView, rect: CGRect) {
 		appliedConfiguration?.delegate?.editorRowScrollEditorToVisible(textView: textView, rect: rect)
 	}
