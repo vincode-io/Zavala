@@ -3467,10 +3467,10 @@ private extension EditorViewController {
 			guard let textInput = UIResponder.currentFirstResponder as? UITextInput,
 				  let cursorRect = textInput.cursorRect else { return }
 			
+			self.scrollToVisible(textInput: textInput, rect: cursorRect, animated: animated)
+
 			if AppDefaults.shared.scrollMode == .typewriterCenter {
 				self.scrollToCenter(textInput: textInput, rect: cursorRect, animated: animated)
-			} else {
-				self.scrollToVisible(textInput: textInput, rect: cursorRect, animated: animated)
 			}
 		}
 	}
