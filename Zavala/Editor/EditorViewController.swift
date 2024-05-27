@@ -2651,7 +2651,6 @@ private extension EditorViewController {
 			if let titleCell = self.collectionView.cellForItem(at: indexPath) as? EditorTitleViewCell {
 				titleCell.takeCursor()
 			}
-			scrollIfNecessary()
 		}
 	}
 	
@@ -2663,7 +2662,6 @@ private extension EditorViewController {
 				if let tagInputCell = collectionView.cellForItem(at: indexPath) as? EditorTagInputViewCell {
 					tagInputCell.takeCursor()
 				}
-				scrollIfNecessary()
 			}
 		}
 	}
