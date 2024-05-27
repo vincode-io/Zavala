@@ -2645,20 +2645,27 @@ private extension EditorViewController {
 	}
 	
 	func moveCursorToTitle() {
-		if let titleCell = self.collectionView.cellForItem(at: IndexPath(row: 0, section: Outline.Section.title.rawValue)) as? EditorTitleViewCell {
-			titleCell.takeCursor()
+		let indexPath = IndexPath(row: 0, section: Outline.Section.title.rawValue)
+		collectionView.scrollToItem(at: indexPath, at: [], animated: !AppDefaults.shared.disableEditorAnimations)
+		Task {
+			if let titleCell = self.collectionView.cellForItem(at: indexPath) as? EditorTitleViewCell {
+				titleCell.takeCursor()
+			}
+			scrollIfNecessary()
 		}
-		scrollIfNecessary()
 	}
 	
 	func moveCursorToTagInput() {
 		if let outline {
 			let indexPath = IndexPath(row: outline.tags.count, section: Outline.Section.tags.rawValue)
-			if let tagInputCell = collectionView.cellForItem(at: indexPath) as? EditorTagInputViewCell {
-				tagInputCell.takeCursor()
+			collectionView.scrollToItem(at: indexPath, at: [], animated: !AppDefaults.shared.disableEditorAnimations)
+			Task {
+				if let tagInputCell = collectionView.cellForItem(at: indexPath) as? EditorTagInputViewCell {
+					tagInputCell.takeCursor()
+				}
+				scrollIfNecessary()
 			}
 		}
-		scrollIfNecessary()
 	}
 	
 	func moveCursorToFirstRow() {
