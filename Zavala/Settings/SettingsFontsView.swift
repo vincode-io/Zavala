@@ -57,6 +57,7 @@ struct SettingsSelectFontButton: View {
 		} label: {
 			HStack {
 				Text(fieldConfig.field.displayName)
+					.font(.body)
 				Spacer()
 				Text(fieldConfig.config.displayName)
 					.font(.footnote)
