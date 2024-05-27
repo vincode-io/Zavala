@@ -167,8 +167,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 								   input: "k",
 								   modifierFlags: [.command])
 	
+	let copyRowLinkCommand = UICommand(title: .copyRowLinkControlLabel, action: #selector(copyRowLinkCommand(_:)))
+
 	let copyDocumentLinkCommand = UICommand(title: .copyDocumentLinkControlLabel, action: #selector(copyDocumentLinkCommand(_:)))
-	
+
 	let focusInCommand = UIKeyCommand(title: .focusInControlLabel,
 									  action: #selector(focusInCommand(_:)),
 									  input: UIKeyCommand.inputRightArrow,
@@ -586,6 +588,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.link()
 	}
 
+	@objc func copyRowLinkCommand(_ sender: Any?) {
+		mainCoordinator?.copyRowLink()
+	}
+
 	@objc func copyDocumentLinkCommand(_ sender: Any?) {
 		mainCoordinator?.copyDocumentLink()
 	}
@@ -898,6 +904,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isManageSharingUnavailable ?? true {
 				command.attributes = .disabled
 			}
+		case #selector(copyRowLinkCommand(_:)):
+			if mainCoordinator?.isCopyRowLinkUnavailable ?? true {
+				command.attributes = .disabled
+			}
 		case #selector(copyDocumentLinkCommand(_:)):
 			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
@@ -947,16 +957,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		builder.replaceChildren(ofMenu: .standardEdit) { oldElements in
 			var newElements = [UIMenuElement]()
 			for oldElement in oldElements {
-				if let oldCommand = oldElement as? UICommand, oldCommand.action == #selector(delete) {
-					newElements.append(deleteCommand)
-				} else {
-					newElements.append(oldElement)
+				if let oldCommand = oldElement as? UICommand {
+					switch oldCommand.action {
+					case #selector(UIResponderStandardEditActions.delete):
+						newElements.append(deleteCommand)
+					case #selector(UIResponderStandardEditActions.copy):
+						newElements.append(oldElement)
+						newElements.append(copyRowLinkCommand)
+						newElements.append(copyDocumentLinkCommand)
+					default:
+						newElements.append(oldElement)
+					}
 				}
 			}
 			return newElements
 		}
 		
-		let linkMenu = UIMenu(title: "", options: .displayInline, children: [insertImageCommand, linkCommand, copyDocumentLinkCommand])
+		let linkMenu = UIMenu(title: "", options: .displayInline, children: [insertImageCommand, linkCommand])
 		builder.insertSibling(linkMenu, afterMenu: .standardEdit)
 
 		builder.remove(menu: .spelling)

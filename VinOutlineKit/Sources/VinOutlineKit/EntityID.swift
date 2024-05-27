@@ -157,6 +157,18 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			urlComponents.queryItems = queryItems
 			
 			return urlComponents.url!
+		case .row(let acct, let documentUUID, let rowUUID):
+			var urlComponents = URLComponents()
+			urlComponents.scheme = "zavala"
+			urlComponents.host = "row"
+			
+			var queryItems = [URLQueryItem]()
+			queryItems.append(URLQueryItem(name: "accountID", value: String(acct)))
+			queryItems.append(URLQueryItem(name: "documentUUID", value: String(documentUUID)))
+			queryItems.append(URLQueryItem(name: "rowUUID", value: String(rowUUID)))
+			urlComponents.queryItems = queryItems
+			
+			return urlComponents.url!
 		default:
 			return nil
 		}

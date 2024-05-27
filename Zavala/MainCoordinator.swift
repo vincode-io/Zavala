@@ -107,6 +107,10 @@ extension MainCoordinator {
 		return editorViewController?.isFormatUnavailable ?? true
 	}
 	
+	var isCopyRowLinkUnavailable: Bool {
+		return editorViewController?.isCopyRowLinkUnavailable ?? true
+	}
+	
 	var isInsertImageUnavailable: Bool {
 		return editorViewController?.isInsertImageUnavailable ?? true
 	}
@@ -257,6 +261,10 @@ extension MainCoordinator {
 	
 	func createOrDeleteNotes() {
 		editorViewController?.createOrDeleteNotes()
+	}
+	
+	func copyRowLink() {
+		editorViewController?.copyRowLink()
 	}
 	
 	func copyDocumentLink() {

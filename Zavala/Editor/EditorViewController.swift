@@ -227,6 +227,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return !UIPasteboard.general.contains(pasteboardTypes: [Row.typeIdentifier, UTType.utf8PlainText.identifier], inItemSet: nil)
 	}
 
+	var isCopyRowLinkUnavailable: Bool {
+		return currentRows?.count != 1
+	}
+	
 	var isInsertImageUnavailable: Bool {
 		return currentTextView == nil
 	}
@@ -1283,6 +1287,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		currentTextView?.toggleItalics(self)
 	}
 	
+	@objc func copyRowLink() {
+		guard let entityID = currentRows?.first?.entityID else { return }
+		UIPasteboard.general.url = entityID.url
+	}
+
 	@objc func share(_ sender: Any? = nil) {
 		let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(delegate: self))
 		if let sendingView = sender as? UIView {
@@ -2714,6 +2723,9 @@ private extension EditorViewController {
 			var standardEditActions = [UIAction]()
 			standardEditActions.append(self.cutAction(rows: rows))
 			standardEditActions.append(self.copyAction(rows: rows))
+			if rows.count == 1 {
+				standardEditActions.append(self.copyRowLinkAction(rows: rows))
+			}
 			if self.canPerformAction(.paste, withSender: nil) {
 				standardEditActions.append(self.pasteAction(rows: rows))
 			}
@@ -2766,6 +2778,12 @@ private extension EditorViewController {
 	func copyAction(rows: [Row]) -> UIAction {
 		return UIAction(title: .copyControlLabel, image: .copy) { [weak self] action in
 			self?.copyRows(rows)
+		}
+	}
+
+	func copyRowLinkAction(rows: [Row]) -> UIAction {
+		return UIAction(title: .copyRowLinkControlLabel, image: .copyRowLink) { [weak self] action in
+			self?.copyRowLink()
 		}
 	}
 
@@ -3229,7 +3247,7 @@ private extension EditorViewController {
 
 		}
 	}
-
+	
 	func deleteRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager, let outline else { return }
 

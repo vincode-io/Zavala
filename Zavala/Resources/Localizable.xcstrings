@@ -156,6 +156,9 @@
     "Copy Document Links" : {
       "comment" : "Control Label: Copy Document Links"
     },
+    "Copy Row Link" : {
+      "comment" : "Control Label: Copy Row Link"
+    },
     "Copyright © Vincode, Inc. 2020-%@" : {
       "comment" : "About Box copyright information"
     },

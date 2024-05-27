@@ -35,6 +35,7 @@ extension UIImage {
 	static var collapseAll = UIImage(systemName: "arrow.down.right.and.arrow.up.left")!
 	static var completeRow = UIImage(systemName: "checkmark.square")!
 	static var copy = UIImage(systemName: "doc.on.doc")!
+	static var copyRowLink = UIImage(systemName: "link.circle")!
 	static var createEntity = UIImage(systemName: "square.and.pencil")!
 	static var cut = UIImage(systemName: "scissors")!
 
@@ -175,6 +176,7 @@ extension String {
 	static var copyControlLabel = String(localized: "Copy", comment: "Control Label: Copy")
 	static var copyDocumentLinkControlLabel = String(localized: "Copy Document Link", comment: "Control Label: Copy Document Link")
 	static var copyDocumentLinksControlLabel = String(localized: "Copy Document Links", comment: "Control Label: Copy Document Links")
+	static var copyRowLinkControlLabel = String(localized: "Copy Row Link", comment: "Control Label: Copy Row Link")
 	static var correctSpellingAutomaticallyControlLabel = String(localized: "Correct Spelling Automatically", comment: "Control Label: Correct Spelling Automatically")
 	static var corruptedOutlineTitle = String(localized: "Corrupted Outline", comment: "Alert Title: Corrupted Outline")
 	static var corruptedOutlineMessage = String(localized: "This outline appears to be corrupted. Would you like to fix it?", comment: "Alert Message: Corrupted Outline")
