@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import VinOutlineKit
 
 protocol EditorTitleTextViewDelegate: AnyObject {
 	var editorTitleTextViewUndoManager: UndoManager? { get }
@@ -43,6 +44,7 @@ class EditorTitleTextView: UITextView {
 	@discardableResult
 	override func becomeFirstResponder() -> Bool {
 		let result = super.becomeFirstResponder()
+		CursorCoordinates.clearLastKnownCoordinates()
 		editorDelegate?.didBecomeActive(self)
 		return result
 	}
