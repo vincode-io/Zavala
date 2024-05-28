@@ -356,7 +356,17 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 			  let documentUUID = urlComponents.queryItems?.first(where: { $0.name == "documentUUID" })?.value else {
 			return nil
 		}
-		self = .document(accountID, documentUUID)
+		
+		if urlComponents.host == "document" {
+			self = .document(accountID, documentUUID)
+			return
+		}
+		
+		guard let rowUUID = urlComponents.queryItems?.first(where: { $0.name == "rowUUID" })?.value else {
+			return nil
+		}
+		
+		self = .row(accountID, documentUUID, rowUUID)
 	}
 
 	public func encode(to encoder: Encoder) throws {
