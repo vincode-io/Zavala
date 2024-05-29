@@ -29,7 +29,7 @@ class CopyDocumentLinkActivity: UIActivity {
 	}
 	
 	override var activityImage: UIImage? {
-		.link
+		.documentLink
 	}
 	
 	override class var activityCategory: UIActivity.Category {
