@@ -745,23 +745,9 @@ extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 private extension MainSplitViewController {
 	
 	func handleSelectDocument(_ document: Document, isNavigationBranch: Bool) {
-		// This is done because the restore state navigation used to rely on the fact that
-		// the TimeliniewController used a diffable datasource that didn't complete until after
-		// some navigation had occurred. Changing this assumption broke state restoration
-		// on the iPhone.
-		//
-		// When DocumentsViewController was rewritten without diffable datasources, was when this
-		// assumption was broken. Rather than rewrite how we handle navigation (which would
-		// not be easy. CollectionsViewController still uses a diffable datasource), we made it
-		// look like it still works the same way by dispatching to the next run loop to occur.
-		//
-		// Someday this should be refactored. How the UINavigationControllerDelegate works would
-		// be the main challenge.
-		DispatchQueue.main.async {
-			self.documentsViewController?.selectDocument(document, isNavigationBranch: isNavigationBranch, animated: false)
-			self.lastMainControllerToAppear = .editor
-			self.validateToolbar()
-		}
+		self.documentsViewController?.selectDocument(document, isNavigationBranch: isNavigationBranch, animated: false)
+		self.lastMainControllerToAppear = .editor
+		self.validateToolbar()
 	}
 	
 	func selectDefaultDocumentContainerIfNecessary() async {
