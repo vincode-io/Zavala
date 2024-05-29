@@ -3496,8 +3496,11 @@ private extension EditorViewController {
 	}
 
 	func scrollIfNecessary(animated: Bool = true) {
-		// If we don't use a Task here, the cursorRect will sometimes comeback as .zero
+		// If we don't use a Task here, the cursorRect will sometimes comeback as .zero and if we
+		// don't sleep for a bit, the cursorRect will be slightly less than it should be on the
+		// iPhone.
 		Task {
+			try? await Task.sleep(for: .seconds(0.1))
 			guard let textInput = UIResponder.currentFirstResponder as? UITextInput,
 				  let cursorRect = textInput.cursorRect else { return }
 			
