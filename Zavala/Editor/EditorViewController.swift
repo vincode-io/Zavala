@@ -875,7 +875,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		])
 	}
 	
-	func edit(_ newOutline: Outline?, isNew: Bool, searchText: String? = nil) {
+	func edit(_ newOutline: Outline?, selectRow: EntityID? = nil, isNew: Bool, searchText: String? = nil) {
 		guard outline != newOutline else { return }
 		isOutlineNewFlag = isNew
 		
@@ -943,9 +943,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 
 		updateUI()
-		restoreScrollPosition()
-		restoreOutlineCursorPosition()
-		moveCursorToTitleOnNew()
+		
+		if let selectRow {
+			guard let index = outline.shadowTable?.first(where: { $0.entityID == selectRow })?.shadowTableIndex else { return }
+			collectionView.selectItem(at: IndexPath(row: index, section: adjustedRowsSection), animated: false, scrollPosition: [.centeredVertically])
+		} else {
+			restoreScrollPosition()
+			restoreOutlineCursorPosition()
+			moveCursorToTitleOnNew()
+		}
 	}
 	
 	func selectAllRows() {

@@ -203,6 +203,15 @@ public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
 		}
 	}
 	
+	public var isRow: Bool {
+		switch self {
+		case .row(_, _, _):
+			return true
+		default:
+			return false
+		}
+	}
+	
 	private enum CodingKeys: String, CodingKey {
 		case type
 		case searchText

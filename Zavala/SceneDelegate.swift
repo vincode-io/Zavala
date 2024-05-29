@@ -66,9 +66,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			return
 		}
 		
-		if let url = connectionOptions.urlContexts.first?.url, let documentID = EntityID(url: url) {
+		if let url = connectionOptions.urlContexts.first?.url, let entityID = EntityID(url: url) {
 			Task {
-				await mainSplitViewController.handleDocument(documentID, isNavigationBranch: true)
+				await mainSplitViewController.handleDocument(entityID, isNavigationBranch: true)
 			}
 			return
 		}
@@ -103,9 +103,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 	
 	func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
-		if let url = urlContexts.first?.url, let documentID = EntityID(url: url) {
+		if let url = urlContexts.first?.url, let entityID = EntityID(url: url) {
 			Task {
-				await mainSplitViewController.handleDocument(documentID, isNavigationBranch: true)
+				await mainSplitViewController.handleDocument(entityID, isNavigationBranch: true)
 			}
 			return
 		}

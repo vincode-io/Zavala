@@ -155,8 +155,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 
 	func handle(_ userInfo: [AnyHashable: Any], isNavigationBranch: Bool) async {
-		if let searchIdentifier = userInfo[CSSearchableItemActivityIdentifier] as? String, let documentID = EntityID(description: searchIdentifier) {
-			await handleDocument(documentID, isNavigationBranch: isNavigationBranch)
+		if let searchIdentifier = userInfo[CSSearchableItemActivityIdentifier] as? String, let entityID = EntityID(description: searchIdentifier) {
+			await handleDocument(entityID, isNavigationBranch: isNavigationBranch)
 			return
 		}
 		
@@ -194,21 +194,23 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
 	}
 	
-	func handleDocument(_ documentID: EntityID, isNavigationBranch: Bool) async {
-		guard let account = AccountManager.shared.findAccount(accountID: documentID.accountID),
-			  let document = account.findDocument(documentID) else {
+	func handleDocument(_ entityID: EntityID, isNavigationBranch: Bool) async {
+		guard let account = AccountManager.shared.findAccount(accountID: entityID.accountID),
+			  let document = account.findDocument(entityID) else {
 			presentError(title: .documentNotFoundTitle, message: .documentNotFoundMessage)
 			return
 		}
 		
+		let selectRow = entityID.isRow ? entityID : nil
+		
 		if let collectionsTags = selectedTags, document.hasAnyTag(collectionsTags) {
-			self.handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
+			self.handleSelectDocument(document, selectRow: selectRow, isNavigationBranch: isNavigationBranch)
 		} else if document.tagCount == 1, let tag = document.tags?.first {
 			await collectionsViewController?.selectDocumentContainers([TagDocuments(account: account, tag: tag)], isNavigationBranch: true, animated: false)
-			handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
+			handleSelectDocument(document, selectRow: selectRow, isNavigationBranch: isNavigationBranch)
 		} else {
 			await collectionsViewController?.selectDocumentContainers([AllDocuments(account: account)], isNavigationBranch: true, animated: false)
-			handleSelectDocument(document, isNavigationBranch: isNavigationBranch)
+			handleSelectDocument(document, selectRow: selectRow, isNavigationBranch: isNavigationBranch)
 		}
 	}
 	
@@ -486,6 +488,7 @@ extension MainSplitViewController: DocumentsDelegate {
 	func documentSelectionDidChange(_: DocumentsViewController,
 									documentContainers: [DocumentContainer],
 									documents: [Document],
+									selectRow: EntityID?,
 									isNew: Bool,
 									isNavigationBranch: Bool,
 									animated: Bool) {
@@ -540,7 +543,7 @@ extension MainSplitViewController: DocumentsDelegate {
 				pinWasVisited(Pin(containers: documentContainers, document: document))
 			}
 		} else {
-			editorViewController?.edit(document.outline, isNew: isNew)
+			editorViewController?.edit(document.outline, selectRow: selectRow, isNew: isNew)
 			pinWasVisited(Pin(containers: documentContainers, document: document))
 		}
 	}
@@ -744,8 +747,8 @@ extension MainSplitViewController: OpenQuicklyViewControllerDelegate {
 
 private extension MainSplitViewController {
 	
-	func handleSelectDocument(_ document: Document, isNavigationBranch: Bool) {
-		self.documentsViewController?.selectDocument(document, isNavigationBranch: isNavigationBranch, animated: false)
+	func handleSelectDocument(_ document: Document, selectRow: EntityID? = nil, isNavigationBranch: Bool) {
+		self.documentsViewController?.selectDocument(document, selectRow: selectRow, isNavigationBranch: isNavigationBranch, animated: false)
 		self.lastMainControllerToAppear = .editor
 		self.validateToolbar()
 	}

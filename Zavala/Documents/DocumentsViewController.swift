@@ -14,7 +14,7 @@ import VinOutlineKit
 import VinUtility
 
 protocol DocumentsDelegate: AnyObject  {
-	func documentSelectionDidChange(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], isNew: Bool, isNavigationBranch: Bool, animated: Bool)
+	func documentSelectionDidChange(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], selectRow: EntityID?, isNew: Bool, isNavigationBranch: Bool, animated: Bool)
 	func showGetInfo(_: DocumentsViewController, outline: Outline)
 	func exportPDFDocs(_: DocumentsViewController, outlines: [Outline])
 	func exportPDFLists(_: DocumentsViewController, outlines: [Outline])
@@ -170,16 +170,28 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		}
 	}
 
-	func selectDocument(_ document: Document?, isNew: Bool = false, isNavigationBranch: Bool = true, animated: Bool) {
+	func selectDocument(_ document: Document?, selectRow: EntityID? = nil, isNew: Bool = false, isNavigationBranch: Bool = true, animated: Bool) {
 		guard let documentContainers else { return }
 
 		collectionView.deselectAll()
 
 		if let document, let index = documents.firstIndex(of: document) {
 			collectionView.selectItem(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .centeredVertically)
-			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [document], isNew: isNew, isNavigationBranch: isNavigationBranch, animated: animated)
+			delegate?.documentSelectionDidChange(self, 
+												 documentContainers: documentContainers,
+												 documents: [document],
+												 selectRow: selectRow,
+												 isNew: isNew,
+												 isNavigationBranch: isNavigationBranch,
+												 animated: animated)
 		} else {
-			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: isNew, isNavigationBranch: isNavigationBranch, animated: animated)
+			delegate?.documentSelectionDidChange(self, 
+												 documentContainers: documentContainers,
+												 documents: [],
+												 selectRow: selectRow, 
+												 isNew: isNew,
+												 isNavigationBranch: isNavigationBranch,
+												 animated: animated)
 		}
 	}
 	
@@ -190,7 +202,13 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			collectionView.selectItem(at: IndexPath(row: i, section: 0), animated: false, scrollPosition: [])
 		}
 		
-		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: documents, isNew: false, isNavigationBranch: false, animated: true)
+		delegate?.documentSelectionDidChange(self, 
+											 documentContainers: documentContainers,
+											 documents: documents,
+											 selectRow: nil,
+											 isNew: false,
+											 isNavigationBranch: false,
+											 animated: true)
 	}
 	
 	func deleteCurrentDocuments() {
@@ -400,12 +418,24 @@ extension DocumentsViewController {
 		guard let documentContainers else { return }
 		
 		guard let selectedIndexPaths = collectionView.indexPathsForSelectedItems else {
-			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: false, animated: true)
+			delegate?.documentSelectionDidChange(self,
+												 documentContainers: documentContainers,
+												 documents: [],
+												 selectRow: nil,
+												 isNew: false,
+												 isNavigationBranch: false,
+												 animated: true)
 			return
 		}
 		
 		let selectedDocuments = selectedIndexPaths.map { documents[$0.row] }
-		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: selectedDocuments, isNew: false, isNavigationBranch: true, animated: true)
+		delegate?.documentSelectionDidChange(self,
+											 documentContainers: documentContainers,
+											 documents: selectedDocuments,
+											 selectRow: nil,
+											 isNew: false,
+											 isNavigationBranch: true,
+											 animated: true)
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -422,12 +452,24 @@ extension DocumentsViewController {
 		#endif
 		
 		guard let selectedIndexPaths = collectionView.indexPathsForSelectedItems else {
-			delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: false, animated: true)
+			delegate?.documentSelectionDidChange(self,
+												 documentContainers: documentContainers,
+												 documents: [],
+												 selectRow: nil,
+												 isNew: false,
+												 isNavigationBranch: false,
+												 animated: true)
 			return
 		}
 		
 		let selectedDocuments = selectedIndexPaths.map { documents[$0.row] }
-		delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: selectedDocuments, isNew: false, isNavigationBranch: true, animated: true)
+		delegate?.documentSelectionDidChange(self,
+											 documentContainers: documentContainers,
+											 documents: selectedDocuments,
+											 selectRow: nil,
+											 isNew: false,
+											 isNavigationBranch: true,
+											 animated: true)
 	}
 	
 	private func createLayout() -> UICollectionViewLayout {
@@ -503,7 +545,13 @@ extension DocumentsViewController {
 		guard animated else {
 			self.documents = sortedDocuments
 			self.collectionView.reloadData()
-			self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
+			self.delegate?.documentSelectionDidChange(self,
+													  documentContainers: documentContainers,
+													  documents: [],
+													  selectRow: nil,
+													  isNew: false,
+													  isNavigationBranch: isNavigationBranch,
+													  animated: true)
 			return
 		}
 		
@@ -536,7 +584,13 @@ extension DocumentsViewController {
 			self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
 			self.collectionView.scrollToItem(at: indexPath, at: [], animated: true)
 		} else {
-			self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: isNavigationBranch, animated: true)
+			self.delegate?.documentSelectionDidChange(self,
+													  documentContainers: documentContainers,
+													  documents: [],
+													  selectRow: nil,
+													  isNew: false,
+													  isNavigationBranch: isNavigationBranch, 
+													  animated: true)
 		}
 	}
 	
@@ -799,7 +853,13 @@ private extension DocumentsViewController {
 		func delete() {
 			let deselect = selectedDocuments.filter({ documents.contains($0) }).isEmpty
 			if deselect, let documentContainers = self.documentContainers {
-				self.delegate?.documentSelectionDidChange(self, documentContainers: documentContainers, documents: [], isNew: false, isNavigationBranch: true, animated: true)
+				self.delegate?.documentSelectionDidChange(self,
+														  documentContainers: documentContainers,
+														  documents: [],
+														  selectRow: nil,
+														  isNew: false,
+														  isNavigationBranch: true,
+														  animated: true)
 			}
 			for document in documents {
 				document.account?.deleteDocument(document)
