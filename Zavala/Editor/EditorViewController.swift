@@ -2782,8 +2782,13 @@ private extension EditorViewController {
 	}
 
 	func copyRowLinkAction(rows: [Row]) -> UIAction {
-		return UIAction(title: .copyRowLinkControlLabel, image: .copyRowLink) { [weak self] action in
-			self?.copyRowLink()
+		return UIAction(title: .copyRowLinkControlLabel, image: .copyRowLink) { action in
+			var urls = [URL]()
+			for row in rows {
+				guard let url = row.entityID.url else { continue }
+				urls.append(url)
+			}
+			UIPasteboard.general.urls = urls
 		}
 	}
 
