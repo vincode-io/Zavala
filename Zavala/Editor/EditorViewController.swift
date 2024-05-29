@@ -846,7 +846,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 				if self?.collectionView.contentInset != newInsets {
 					self?.collectionView.contentInset = newInsets
 				}
-				self?.scrollIfNecessary()
+				self?.scrollCursorToVisible()
 				self?.currentKeyboardHeight = keyboardViewEndFrame.height
 			}
 			DispatchQueue.main.async(execute: keyboardWorkItem!)
@@ -3524,6 +3524,13 @@ private extension EditorViewController {
 				}
 			}
 		}
+	}
+	
+	func scrollCursorToVisible(animated: Bool = true) {
+		guard let textInput = UIResponder.currentFirstResponder as? UITextInput,
+			  let cursorRect = textInput.cursorRect else { return }
+
+		scrollToVisible(textInput: textInput, rect: cursorRect, animated: animated)
 	}
 	
 	func scrollToVisible(textInput: UITextInput, rect: CGRect, animated: Bool) {
