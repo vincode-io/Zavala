@@ -1516,6 +1516,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	func joinRows(topRow: Row, bottomRow: Row, topic: NSAttributedString? = nil) {
+		// If we Join a Row with children we need to transfer the child Rows or they will
+		// be orphaned. For now, I've opted to just not allow this action.
+		guard bottomRow.rowCount == 0 else { return }
+		
 		beginCloudKitBatchRequest()
 		
 		requestCloudKitUpdate(for: topRow.entityID)
