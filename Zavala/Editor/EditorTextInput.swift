@@ -1,13 +1,15 @@
 //
-//  UITextInput+.swift
-//  Zavala
-//
 //  Created by Maurice Parker on 11/4/21.
 //
 
 import UIKit
 
-extension UITextInput {
+/***
+ Marker protocol to make sure we don't pick up system provided text inputs when going after the current responder.
+ */
+protocol EditorTextInput: UITextInput {}
+
+extension EditorTextInput {
 	
 	var cursorRect: CGRect? {
 		guard let caratPosition = selectedTextRange?.start else { return nil }

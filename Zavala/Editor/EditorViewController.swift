@@ -3501,7 +3501,7 @@ private extension EditorViewController {
 		// iPhone.
 		Task {
 			try? await Task.sleep(for: .seconds(0.1))
-			guard let textInput = UIResponder.currentFirstResponder as? UITextInput,
+			guard let textInput = UIResponder.currentFirstResponder as? EditorTextInput,
 				  let cursorRect = textInput.cursorRect else { return }
 			
 			self.scrollToVisible(textInput: textInput, rect: cursorRect, animated: animated)
@@ -3530,7 +3530,7 @@ private extension EditorViewController {
 	}
 	
 	func scrollCursorToVisible(animated: Bool = true) {
-		guard let textInput = UIResponder.currentFirstResponder as? UITextInput,
+		guard let textInput = UIResponder.currentFirstResponder as? EditorTextInput,
 			  let cursorRect = textInput.cursorRect else { return }
 
 		scrollToVisible(textInput: textInput, rect: cursorRect, animated: animated)

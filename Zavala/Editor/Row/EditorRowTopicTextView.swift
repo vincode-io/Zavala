@@ -28,7 +28,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	func zoomImage(_: EditorRowTopicTextView, _ image: UIImage, rect: CGRect)
 }
 
-class EditorRowTopicTextView: EditorRowTextView {
+class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	
 	override var editorUndoManager: UndoManager? {
 		return editorDelegate?.editorRowTopicTextViewUndoManager

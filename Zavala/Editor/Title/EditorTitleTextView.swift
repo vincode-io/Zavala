@@ -13,7 +13,7 @@ protocol EditorTitleTextViewDelegate: AnyObject {
 	func didBecomeActive(_: EditorTitleTextView)
 }
 
-class EditorTitleTextView: UITextView {
+class EditorTitleTextView: UITextView, EditorTextInput {
 	
 	weak var editorDelegate: EditorTitleTextViewDelegate?
 

@@ -17,7 +17,7 @@ protocol EditorTagInputTextFieldDelegate: AnyObject {
 	func createTag(_ : EditorTagInputTextField, name: String)
 }
 
-class EditorTagInputTextField: SearchTextField {
+class EditorTagInputTextField: SearchTextField, EditorTextInput {
 
 	#if targetEnvironment(macCatalyst)
 	@objc(_focusRingType)
