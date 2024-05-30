@@ -15,6 +15,9 @@ public final class JoinRowCommand: OutlineCommand {
 	var undoTopic: NSAttributedString
 	var splitCursorPosition: Int
 	
+	var restoreParent: RowContainer?
+	var restoreIndex: Int?
+	
 	public init(actionName: String,
 				undoManager: UndoManager,
 				delegate: OutlineCommandDelegate,
@@ -31,6 +34,9 @@ public final class JoinRowCommand: OutlineCommand {
 		self.undoTopic = attrString
 		
 		self.splitCursorPosition = topRow.topic?.length ?? 0
+		
+		self.restoreParent = bottomRow.parent
+		self.restoreIndex = bottomRow.parent?.firstIndexOfRow(bottomRow)
 
 		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
@@ -40,7 +46,7 @@ public final class JoinRowCommand: OutlineCommand {
 	}
 	
 	public override func undo() {
-		outline.splitRow(newRow: bottomRow, row: topRow, topic: undoTopic, cursorPosition: splitCursorPosition)
+		outline.splitRow(newRow: bottomRow, toParent: restoreParent, toIndex: restoreIndex, row: topRow, topic: undoTopic, cursorPosition: splitCursorPosition)
 	}
 	
 }

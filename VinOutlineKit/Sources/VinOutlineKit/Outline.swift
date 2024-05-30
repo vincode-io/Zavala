@@ -1516,9 +1516,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	func joinRows(topRow: Row, bottomRow: Row, topic: NSAttributedString? = nil) {
-		// We only allow joining siblings - it just doesn't make sense to me that we would join rows on different levels
-		guard topRow.parent?.firstIndexOfRow(bottomRow) != nil else { return }
-		
 		beginCloudKitBatchRequest()
 		
 		requestCloudKitUpdate(for: topRow.entityID)
@@ -1576,16 +1573,19 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineElementsDidChange(changes)
 	}
 	
-	func createRow(_ row: Row, afterRow: Row? = nil, rowStrings: RowStrings? = nil) {
+	@discardableResult
+	func createRow(_ row: Row, parent: RowContainer? = nil, index: Int? = nil, afterRow: Row? = nil, rowStrings: RowStrings? = nil) -> Int? {
 		beginCloudKitBatchRequest()
 		
 		if let afterRow, let texts = rowStrings {
 			updateRowStrings(afterRow, texts)
 		}
-
+		
 		resetPreviouslyUsed(rows: [row])
 		
-		if afterRow == nil {
+		if let parent, let index {
+			parent.insertRow(row, at: index)
+		} else if afterRow == nil {
 			insertRow(row, at: 0)
 			row.parent = self
 		} else if afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
@@ -1617,7 +1617,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineContentDidChange()
 		endCloudKitBatchRequest()
 			
-		guard isBeingViewed else { return }
+		guard isBeingViewed else { return nil }
 
 		let rowShadowTableIndex: Int
 		if let afterRowShadowTableIndex = afterRow?.shadowTableIndex {
@@ -1637,10 +1637,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		var changes = OutlineElementChanges(section: adjustedRowsSection, inserts: Set(inserts), reloads: Set(reloads))
 		changes.newCursorIndex = inserts[0]
 		outlineElementsDidChange(changes)
+		
+		return inserts[0]
 	}
 
-	@discardableResult
-	func createRows(_ rows: [Row], afterRow: Row? = nil, rowStrings: RowStrings? = nil, prefersEnd: Bool = false, testExpanded: Bool = true) -> Int? {
+	func createRows(_ rows: [Row], afterRow: Row? = nil, rowStrings: RowStrings? = nil, prefersEnd: Bool = false) {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
 		beginCloudKitBatchRequest()
@@ -1667,7 +1668,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			} else if let parent = row.parent, let afterRow {
 				let insertIndex = parent.firstIndexOfRow(afterRow) ?? parent.rowCount - 1
 				parent.insertRow(row, at: insertIndex + 1)
-			} else if testExpanded && afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
+			} else if afterRow?.isExpanded ?? true && !(afterRow?.rowCount == 0) {
 				afterRow?.insertRow(row, at: 0)
 				row.parent = afterRow
 			} else if let afterRow, let parent = afterRow.parent {
@@ -1695,7 +1696,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineContentDidChange()
 		endCloudKitBatchRequest()
 
-		guard isBeingViewed else { return nil }
+		guard isBeingViewed else { return }
 
 		var changes = rebuildShadowTable()
 		
@@ -1705,9 +1706,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		
 		outlineElementsDidChange(changes)
-		
-		let inserts = Array(changes.inserts ?? Set<Int>()).sorted()
-		return inserts.count > 0 ? inserts[0] : nil
 	}
 
 	public func createRowsInsideAtStart(_ rows: [Row], afterRowContainer: RowContainer, rowStrings: RowStrings? = nil) {
@@ -1730,7 +1728,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 					reloads.insert(parentRowIndex)
 				}
 			}
-}
+		}
 		
 		createLinkRelationships(for: rows)
 		replaceLinkTitlesIfPossible(rows: rows)
@@ -1896,7 +1894,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return newRows
 	}
 
-	func splitRow(newRow: Row, row: Row, topic: NSAttributedString, cursorPosition: Int) {
+	func splitRow(newRow: Row, toParent: RowContainer? = nil, toIndex: Int? = nil, row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		beginCloudKitBatchRequest()
 		
 		let newTopicRange = NSRange(location: cursorPosition, length: topic.length - cursorPosition)
@@ -1906,7 +1904,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		let topicRange = NSRange(location: 0, length: cursorPosition)
 		let topicText = topic.attributedSubstring(from: topicRange)
 
-		let newCursorIndex = createRows([newRow], afterRow: row, rowStrings: .topic(topicText), testExpanded: false)
+		let newCursorIndex = createRow(newRow, parent: toParent, index: toIndex, afterRow: row, rowStrings: .topic(topicText))
 		
 		endCloudKitBatchRequest()
 
