@@ -1170,15 +1170,15 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func search(for searchText: String, options: SearchOptions) {
-		guard self.searchText != searchText else {
-			return
-		}
-		
 		if isSearching == .notSearching {
 			isSearching = .beginSearch
 			outlineSearchWillBegin()
 		}
-		
+
+		guard self.searchText != searchText else {
+			return
+		}
+
 		self.searchText = searchText
 
 		var reloads = searchResultCoordinates.compactMap { $0.row.shadowTableIndex }

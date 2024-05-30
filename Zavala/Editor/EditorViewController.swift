@@ -1890,6 +1890,14 @@ extension EditorViewController: UIFindInteractionDelegate {
 		return EditorFindSession(delegate: self)
 	}
 	
+	func findInteraction(_ interaction: UIFindInteraction, didBegin session: UIFindSession) {
+		// When the search field isn't already loaded from history, the search wasn't already initiated before getting
+		// here, so we have to initialize it by calling search.
+		if interaction.searchText?.isEmpty ?? true {
+			outline?.search(for: "", options: [])
+		}
+	}
+	
 	func findInteraction(_ interaction: UIFindInteraction, didEnd session: UIFindSession) {
 		outline?.endSearching()
 	}
