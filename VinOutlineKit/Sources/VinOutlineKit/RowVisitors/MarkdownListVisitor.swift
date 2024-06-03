@@ -9,19 +9,24 @@ import Foundation
 
 class MarkdownListVisitor {
 	
+	let useAltLinks: Bool
 	var indentLevel = 0
 	var markdown = String()
+	
+	init(useAltLinks: Bool) {
+		self.useAltLinks = useAltLinks
+	}
 	
 	func visitor(_ visited: Row) {
 		markdown.append(String(repeating: "\t", count: indentLevel))
 		
 		if visited.isComplete ?? false {
-			markdown.append("* ~~\(visited.topicMarkdown(representation: .markdown) ?? "")~~")
+			markdown.append("* ~~\(visited.topicMarkdown(representation: .markdown, useAltLinks: useAltLinks) ?? "")~~")
 		} else {
-			markdown.append("* \(visited.topicMarkdown(representation: .markdown) ?? "")")
+			markdown.append("* \(visited.topicMarkdown(representation: .markdown, useAltLinks: useAltLinks) ?? "")")
 		}
 		
-		if let noteMarkdown = visited.noteMarkdown(representation: .markdown), !noteMarkdown.isEmpty {
+		if let noteMarkdown = visited.noteMarkdown(representation: .markdown, useAltLinks: useAltLinks), !noteMarkdown.isEmpty {
 			markdown.append("\n\n")
 			let paragraphs = noteMarkdown.components(separatedBy: "\n\n")
 			for paragraph in paragraphs {

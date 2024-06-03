@@ -10,7 +10,11 @@ import VinOutlineKit
 import UIKit
 
 class ExportIntentHandler: NSObject, ZavalaIntentHandler, ExportIntentHandling {
-
+	
+	func resolveAltLinks(for intent: ExportIntent, with completion: @escaping (INBooleanResolutionResult) -> Void) {
+		completion(.success(with: intent.altLinks == 1))
+	}
+	
 	func resolveExportType(for intent: ExportIntent, with completion: @escaping (IntentExportTypeResolutionResult) -> Void) {
 		guard intent.exportType != .unknown else {
 			completion(.needsValue())
@@ -28,19 +32,21 @@ class ExportIntentHandler: NSObject, ZavalaIntentHandler, ExportIntentHandling {
 			return
 		}
 		
+		let useAltLinks = intent.altLinks == 1
+		
 		let response = ExportIntentResponse(code: .success, userActivity: nil)
 		
 		switch intent.exportType {
 		case .opml:
-			if let opmlData = outline.opml().data(using: .utf8) {
+			if let opmlData = outline.opml(useAltLinks: useAltLinks).data(using: .utf8) {
 				response.exportFile = INFile(data: opmlData, filename: outline.filename(representation: DataRepresentation.opml), typeIdentifier: DataRepresentation.opml.typeIdentifier)
 			}
 		case .markdownDoc:
-			if let markdownData = outline.markdownDoc().data(using: .utf8) {
+			if let markdownData = outline.markdownDoc(useAltLinks: useAltLinks).data(using: .utf8) {
 				response.exportFile = INFile(data: markdownData, filename: outline.filename(representation: DataRepresentation.markdown), typeIdentifier: DataRepresentation.markdown.typeIdentifier)
 			}
 		case .markdownList:
-			if let markdownData = outline.markdownList().data(using: .utf8) {
+			if let markdownData = outline.markdownList(useAltLinks: useAltLinks).data(using: .utf8) {
 				response.exportFile = INFile(data: markdownData, filename: outline.filename(representation: DataRepresentation.markdown), typeIdentifier: DataRepresentation.markdown.typeIdentifier)
 			}
 		case .pdfDoc:

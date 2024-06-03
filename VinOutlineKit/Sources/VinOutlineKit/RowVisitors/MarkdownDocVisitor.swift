@@ -9,10 +9,15 @@ import Foundation
 
 class MarkdownDocVisitor {
 	
+	let useAltLinks: Bool
 	var indentLevel = 0
 	var markdown = String()
 	
 	var previousRowWasParagraph = false
+	
+	init(useAltLinks: Bool) {
+		self.useAltLinks = useAltLinks
+	}
 	
 	func visitor(_ visited: Row) {
 		
@@ -24,8 +29,8 @@ class MarkdownDocVisitor {
 			indentLevel = indentLevel - 1
 		}
 
-		if let topicMarkdown = visited.topicMarkdown(representation: .markdown), !topicMarkdown.isEmpty {
-			if let noteMarkdown = visited.noteMarkdown(representation: .markdown), !noteMarkdown.isEmpty {
+		if let topicMarkdown = visited.topicMarkdown(representation: .markdown, useAltLinks: useAltLinks), !topicMarkdown.isEmpty {
+			if let noteMarkdown = visited.noteMarkdown(representation: .markdown, useAltLinks: useAltLinks), !noteMarkdown.isEmpty {
 				markdown.append("\n\n")
 				markdown.append(String(repeating: "#", count: indentLevel + 2))
 				markdown.append(" \(topicMarkdown)")
@@ -38,7 +43,7 @@ class MarkdownDocVisitor {
 					markdown.append("\n")
 				}
 
-				let listVisitor = MarkdownListVisitor()
+				let listVisitor = MarkdownListVisitor(useAltLinks: useAltLinks)
 				markdown.append("\n")
 				visited.visit(visitor: listVisitor.visitor)
 				markdown.append(listVisitor.markdown)
@@ -46,7 +51,7 @@ class MarkdownDocVisitor {
 				previousRowWasParagraph = false
 			}
 		} else {
-			if let noteMarkdown = visited.noteMarkdown(representation: .markdown), !noteMarkdown.isEmpty {
+			if let noteMarkdown = visited.noteMarkdown(representation: .markdown, useAltLinks: useAltLinks), !noteMarkdown.isEmpty {
 				markdown.append("\n\n\(noteMarkdown)")
 				previousRowWasParagraph = true
 			} else {

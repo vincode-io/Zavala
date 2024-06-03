@@ -465,12 +465,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		try container.encode(rowOrder, forKey: .rowOrder)
 	}
 	
-	public func topicMarkdown(representation: DataRepresentation) -> String? {
-		return convertAttrString(topic, isInNotes: false, representation: representation)
+	public func topicMarkdown(representation: DataRepresentation, useAltLinks: Bool = false) -> String? {
+		return convertAttrString(topic, isInNotes: false, representation: representation, useAltLinks: useAltLinks)
 	}
 	
-	public func noteMarkdown(representation: DataRepresentation) -> String? {
-		return convertAttrString(note, isInNotes: true, representation: representation)
+	public func noteMarkdown(representation: DataRepresentation, useAltLinks: Bool = false) -> String? {
+		return convertAttrString(note, isInNotes: true, representation: representation, useAltLinks: useAltLinks)
 	}
 	
 	public func duplicate(newOutline: Outline) -> Row {
@@ -653,7 +653,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 	
 	public func markdownList() -> String {
-		let visitor = MarkdownListVisitor()
+		let visitor = MarkdownListVisitor(useAltLinks: false)
 		visit(visitor: visitor.visitor)
 		return visitor.markdown
 	}
@@ -779,19 +779,21 @@ private extension Row {
 		return (mutableAttrString, images)
 	}
 	
-	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, representation: DataRepresentation) -> String? {
+	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, representation: DataRepresentation, useAltLinks: Bool) -> String? {
 		guard let attrString else { return nil	}
 
 		let result = NSMutableAttributedString(attributedString: attrString)
 		
-		result.enumerateAttribute(.link, in: .init(location: 0, length: result.length), options: []) { (value, range, _) in
-			guard let url = value as? URL,
-				  let entityID = EntityID(url: url),
-				  let document = AccountManager.shared.findDocument(entityID),
-				  let newURL = URL(string: document.filename(representation: representation)) else { return }
-			
-			result.removeAttribute(.link, range: range)
-			result.addAttribute(.link, value: newURL, range: range)
+		if useAltLinks {
+			result.enumerateAttribute(.link, in: .init(location: 0, length: result.length), options: []) { (value, range, _) in
+				guard let url = value as? URL,
+					  let entityID = EntityID(url: url),
+					  let document = AccountManager.shared.findDocument(entityID),
+					  let newURL = URL(string: document.filename(representation: representation)) else { return }
+				
+				result.removeAttribute(.link, range: range)
+				result.addAttribute(.link, value: newURL, range: range)
+			}
 		}
 
 		if let images = images?.filter({ $0.isInNotes == isInNotes }), !images.isEmpty {

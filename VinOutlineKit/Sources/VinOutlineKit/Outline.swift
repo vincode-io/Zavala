@@ -949,11 +949,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return textContent
 	}
 	
-	public func markdownDoc() -> String {
+	public func markdownDoc(useAltLinks: Bool = false) -> String {
 		load()
 		
 		var md = "# \(title ?? "")"
-		let visitor = MarkdownDocVisitor()
+		let visitor = MarkdownDocVisitor(useAltLinks: useAltLinks)
 		rows.forEach {
 			$0.visit(visitor: visitor.visitor)
 		}
@@ -963,12 +963,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return md
 	}
 	
-	public func markdownList() -> String {
+	public func markdownList(useAltLinks: Bool = false) -> String {
 		load()
 		
 		var md = "# \(title ?? "")\n\n"
 		rows.forEach {
-			let visitor = MarkdownListVisitor()
+			let visitor = MarkdownListVisitor(useAltLinks: useAltLinks)
 			$0.visit(visitor: visitor.visitor)
 			md.append(visitor.markdown)
 			md.append("\n")
@@ -978,7 +978,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return md
 	}
 	
-	public func opml(indentLevel: Int = 0) -> String {
+	public func opml(indentLevel: Int = 0, useAltLinks: Bool = false) -> String {
 		load()
 
 		var opml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -1034,7 +1034,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		opml.append("</head>\n")
 		opml.append("<body>\n")
 		rows.forEach {
-			let visitor = OPMLVisitor()
+			let visitor = OPMLVisitor(useAltLinks: useAltLinks)
 			$0.visit(visitor: visitor.visitor)
 			opml.append(visitor.opml)
 		}
