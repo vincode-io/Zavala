@@ -440,6 +440,49 @@
 				</dict>
 			</array>
 		</dict>
+		<dict>
+			<key>INEnumDisplayName</key>
+			<string>Export Link Type</string>
+			<key>INEnumDisplayNameID</key>
+			<string>qvyXUN</string>
+			<key>INEnumGeneratesHeader</key>
+			<true/>
+			<key>INEnumName</key>
+			<string>ExportLinkType</string>
+			<key>INEnumType</key>
+			<string>Regular</string>
+			<key>INEnumValues</key>
+			<array>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>unknown</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>nyisrO</string>
+					<key>INEnumValueName</key>
+					<string>unknown</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Zavala Deep Links</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>aOvbFC</string>
+					<key>INEnumValueIndex</key>
+					<integer>1</integer>
+					<key>INEnumValueName</key>
+					<string>zavalaLinks</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Relative File Links</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>TqmEPM</string>
+					<key>INEnumValueIndex</key>
+					<integer>2</integer>
+					<key>INEnumValueName</key>
+					<string>altLinks</string>
+				</dict>
+			</array>
+		</dict>
 	</array>
 	<key>INIntentDefinitionModelVersion</key>
 	<string>1.2</string>
@@ -675,15 +718,15 @@
 			<key>INIntentInput</key>
 			<string>outline</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>8</integer>
+			<integer>10</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>outline,exportType,altLinks</key>
+				<key>outline,exportType,exportLinkType</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Export the${outline}as ${exportType}using ${altLinks}</string>
+					<string>Export the${outline}as ${exportType}using ${exportLinkType}</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>sSRmym</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
@@ -791,25 +834,25 @@
 				<dict>
 					<key>INIntentParameterConfigurable</key>
 					<true/>
+					<key>INIntentParameterCustomDisambiguation</key>
+					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Alt Links</string>
+					<string>Export Link Type</string>
 					<key>INIntentParameterDisplayNameID</key>
-					<string>K8l6jx</string>
+					<string>uvsDVL</string>
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>3</integer>
+					<key>INIntentParameterEnumType</key>
+					<string>ExportLinkType</string>
+					<key>INIntentParameterEnumTypeNamespace</key>
+					<string>LEx6zX</string>
 					<key>INIntentParameterMetadata</key>
 					<dict>
-						<key>INIntentParameterMetadataFalseDisplayName</key>
-						<string>false</string>
-						<key>INIntentParameterMetadataFalseDisplayNameID</key>
-						<string>QYkNaJ</string>
-						<key>INIntentParameterMetadataTrueDisplayName</key>
-						<string>true</string>
-						<key>INIntentParameterMetadataTrueDisplayNameID</key>
-						<string>SoXepp</string>
+						<key>INIntentParameterMetadataDefaultValue</key>
+						<string>zavalaLinks</string>
 					</dict>
 					<key>INIntentParameterName</key>
-					<string>altLinks</string>
+					<string>exportLinkType</string>
 					<key>INIntentParameterPromptDialogs</key>
 					<array>
 						<dict>
@@ -821,20 +864,36 @@
 						<dict>
 							<key>INIntentParameterPromptDialogCustom</key>
 							<true/>
-							<key>INIntentParameterPromptDialogFormatString</key>
-							<string>Use alternate links?</string>
-							<key>INIntentParameterPromptDialogFormatStringID</key>
-							<string>iKOdWl</string>
 							<key>INIntentParameterPromptDialogType</key>
 							<string>Primary</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>There are ${count} options matching ‘${exportLinkType}’.</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>fplWdW</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>DisambiguationIntroduction</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>Just to confirm, you wanted ‘${exportLinkType}’?</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>ligoZZ</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Confirmation</string>
 						</dict>
 					</array>
 					<key>INIntentParameterSupportsResolution</key>
 					<true/>
 					<key>INIntentParameterTag</key>
-					<integer>8</integer>
+					<integer>10</integer>
 					<key>INIntentParameterType</key>
-					<string>Boolean</string>
+					<string>Integer</string>
 				</dict>
 			</array>
 			<key>INIntentResponse</key>

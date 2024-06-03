@@ -10,9 +10,13 @@ import VinOutlineKit
 import UIKit
 
 class ExportIntentHandler: NSObject, ZavalaIntentHandler, ExportIntentHandling {
-	
-	func resolveAltLinks(for intent: ExportIntent, with completion: @escaping (INBooleanResolutionResult) -> Void) {
-		completion(.success(with: intent.altLinks == 1))
+
+	func resolveExportLinkType(for intent: ExportIntent, with completion: @escaping (ExportLinkTypeResolutionResult) -> Void) {
+		guard intent.exportLinkType != .unknown else {
+			completion(.needsValue())
+			return
+		}
+		completion(.success(with: intent.exportLinkType))
 	}
 	
 	func resolveExportType(for intent: ExportIntent, with completion: @escaping (IntentExportTypeResolutionResult) -> Void) {
@@ -32,7 +36,7 @@ class ExportIntentHandler: NSObject, ZavalaIntentHandler, ExportIntentHandling {
 			return
 		}
 		
-		let useAltLinks = intent.altLinks == 1
+		let useAltLinks = intent.exportLinkType == .altLinks
 		
 		let response = ExportIntentResponse(code: .success, userActivity: nil)
 		
