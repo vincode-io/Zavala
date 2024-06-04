@@ -88,7 +88,7 @@ struct SettingsFontAddMenu: View {
 				guard let fieldConfig = AppDefaults.shared.outlineFonts?.nextNoteDefault else { return }
 				presentingFieldConfig = FieldConfig(field: fieldConfig.0, config: fieldConfig.1)
 			} label: {
-				Label(String.addNoteControlLabel, systemImage: "textformat.size.smaller")
+				Label(String.addNoteLevelControlLabel, systemImage: "textformat.size.smaller")
 			}
 		} label: {
 			Label(String.addControlLabel, systemImage: "plus")

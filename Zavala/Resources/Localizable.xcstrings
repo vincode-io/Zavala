@@ -34,7 +34,10 @@
       "comment" : "Control Label: Add"
     },
     "Add Note" : {
-      "comment" : "Control Label: Add Note."
+      "comment" : "Control Label: Add Note"
+    },
+    "Add Note Level" : {
+      "comment" : "Control Label: Add Note Level"
     },
     "Add Row" : {
       "comment" : "Control Label: Add Row"
