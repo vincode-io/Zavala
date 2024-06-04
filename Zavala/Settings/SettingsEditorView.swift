@@ -38,25 +38,6 @@ struct SettingsEditorView: View {
 			}
 
 			HStack {
-				Text(String.scrollModeControlLabel)
-					.font(.body)
-				Spacer()
-				Picker(selection: $scrollMode) {
-					ForEach(ScrollMode.allCases, id: \.self) {
-						Text($0.description)
-					}
-				} label: {
-				}
-				#if targetEnvironment(macCatalyst)
-				.frame(width: SettingsView.pickerWidth)
-				#endif
-				.pickerStyle(.menu)
-				.onChange(of: scrollMode) {
-					AppDefaults.shared.scrollMode = $0
-				}
-			}
-
-			HStack {
 				Text(String.rowIndentControlLabel)
 					.font(.body)
 				Spacer()
@@ -94,10 +75,24 @@ struct SettingsEditorView: View {
 				}
 			}
 
-			NavigationLink(String.fontsControlLabel) {
-				SettingsFontsView()
+			HStack {
+				Text(String.scrollModeControlLabel)
+					.font(.body)
+				Spacer()
+				Picker(selection: $scrollMode) {
+					ForEach(ScrollMode.allCases, id: \.self) {
+						Text($0.description)
+					}
+				} label: {
+				}
+				#if targetEnvironment(macCatalyst)
+				.frame(width: SettingsView.pickerWidth)
+				#endif
+				.pickerStyle(.menu)
+				.onChange(of: scrollMode) {
+					AppDefaults.shared.scrollMode = $0
+				}
 			}
-			.font(.body)
 
 			Toggle(isOn: $disableEditorAnimations) {
 				Text(String.disableAnimationsControlLabel)
@@ -106,6 +101,11 @@ struct SettingsEditorView: View {
 			.onChange(of: disableEditorAnimations) {
 				AppDefaults.shared.disableEditorAnimations = $0
 			}
+
+			NavigationLink(String.fontsControlLabel) {
+				SettingsFontsView()
+			}
+			.font(.body)
 		}
     }
 }
