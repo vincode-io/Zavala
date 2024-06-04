@@ -37,6 +37,7 @@ struct SettingsGeneralView: View {
 			Toggle(isOn: $enableMainWindowAsDefault) {
 				Text(String.useMainWindowAsDefaultControlLabel)
 			}
+			.toggleStyle(.switch)
 			.onChange(of: enableMainWindowAsDefault) {
 				AppDefaults.shared.enableMainWindowAsDefault = $0
 			}

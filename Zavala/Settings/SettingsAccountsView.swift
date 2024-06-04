@@ -26,12 +26,14 @@ struct SettingsAccountsView: View {
 					Text(String.enableOnMyIPadControlLabel)
 				}
 			}
+			.toggleStyle(.switch)
 			.onChange(of: enableLocalAccount) {
 				AppDefaults.shared.enableLocalAccount = $0
 			}
 			Toggle(isOn: $enableCloudKit) {
 				Text(String.enableCloudKitControlLabel)
 			}
+			.toggleStyle(.switch)
 			.disabled(AppDefaults.shared.isDeveloperBuild)
 			.onChange(of: enableCloudKit) {
 				if $0 {

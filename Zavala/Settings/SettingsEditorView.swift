@@ -102,6 +102,7 @@ struct SettingsEditorView: View {
 			Toggle(isOn: $disableEditorAnimations) {
 				Text(String.disableAnimationsControlLabel)
 			}
+			.toggleStyle(.switch)
 			.onChange(of: disableEditorAnimations) {
 				AppDefaults.shared.disableEditorAnimations = $0
 			}
