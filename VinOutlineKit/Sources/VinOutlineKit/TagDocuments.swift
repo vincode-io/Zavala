@@ -12,9 +12,10 @@ import Foundation
 #endif
 
 public final class TagDocuments: Identifiable, DocumentContainer {
-
+	
 	public var id: EntityID
 	public var name: String?
+	public var partialName: String?
 
 	#if canImport(UIKit)
 	#if targetEnvironment(macCatalyst)
@@ -26,15 +27,31 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 
 	public var itemCount: Int? {
 		guard let tag else { return nil }
-		return account?.documents?.filter({ $0.hasTag(tag) }).count
+		var count = account?.documents?.filter({ $0.hasTag(tag) }).count ?? 0
+		
+		for child in children {
+			count += child.itemCount ?? 0
+		}
+		
+		return count
 	}
+	
+	public var children = [DocumentContainer]()
 	
 	public weak var account: Account?
 	public weak var tag: Tag?
 	
 	public var documents: [Document] {
-		guard let tag, let documents = account?.documents else { return [] }
-		return documents.filter { $0.hasTag(tag) }
+		get async throws {
+			guard let tag, let documents = account?.documents else { return [] }
+			var docs = Set(documents.filter { $0.hasTag(tag) })
+			
+			for child in children {
+				docs.formUnion(try await child.documents)
+			}
+			
+			return Array(docs)
+		}
 	}
 
 	public init(account: Account, tag: Tag) {
@@ -42,6 +59,21 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 		self.account = account
 		self.tag = tag
 		self.name = tag.name
+		self.partialName = tag.partialName
+
+		guard let name, let accountTags = account.tags else {
+			return
+		}
+		
+		let suffix = "\(name)/"
+		
+		for tag in accountTags {
+			if let range = tag.name.range(of: suffix) {
+				if !tag.name[range.upperBound...].contains("/") {
+					children.append(TagDocuments(account: account, tag: tag))
+				}
+			}
+		}
 	}
 	
 }

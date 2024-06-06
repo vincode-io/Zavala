@@ -12,6 +12,17 @@ public class Tag: Identifiable, Codable, Equatable {
 	public var id: String
 	public var name: String
 	
+	public var level: Int {
+		name.split(separator: "/").count - 1
+	}
+
+	public var partialName: String {
+		if let lastElement = name.split(separator: "/").last {
+			return String(lastElement)
+		}
+		return name
+	}
+	
 	private enum CodingKeys: String, CodingKey {
 		case id = "id"
 		case name = "name"

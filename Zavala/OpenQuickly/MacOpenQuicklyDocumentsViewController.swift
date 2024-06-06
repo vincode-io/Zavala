@@ -140,10 +140,9 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 			return
 		}
 		
-		let tags = documentContainers.tags
 		let selectionContainers: [DocumentProvider]
-		if !tags.isEmpty {
-			selectionContainers = [TagsDocuments(tags: tags)]
+		if documentContainers.count > 1 {
+			selectionContainers = [TagsDocuments(containers: documentContainers)]
 		} else {
 			selectionContainers = documentContainers
 		}

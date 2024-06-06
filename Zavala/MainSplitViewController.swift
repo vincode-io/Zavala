@@ -29,6 +29,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		static let goForwardStack = "goForwardStack"
 		static let collectionsWidth = "collectionsWidth"
 		static let documentsWidth = "documentsWidth"
+		static let collectionsExpandedState = "collectionsExpandedState"
 	}
 	
 	weak var sceneDelegate: SceneDelegate?
@@ -45,6 +46,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			userInfo![UserInfoKeys.documentsWidth] = supplementaryColumnWidth
 		}
 
+		userInfo![UserInfoKeys.collectionsExpandedState] = collectionsViewController?.expandedState
+		
 		activity.userInfo = userInfo
 		return activity
 	}
@@ -176,6 +179,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		
 		if let documentsWidth = userInfo[UserInfoKeys.documentsWidth] as? CGFloat, documentsWidth != 0 {
 			preferredSupplementaryColumnWidth = documentsWidth
+		}
+		
+		if let collectionsExpandedState = userInfo[UserInfoKeys.collectionsExpandedState] as? [[AnyHashable: AnyHashable]] {
+			collectionsViewController?.expandedState = collectionsExpandedState
 		}
 
 		let pin = Pin(userInfo: userInfo[Pin.UserInfoKeys.pin])

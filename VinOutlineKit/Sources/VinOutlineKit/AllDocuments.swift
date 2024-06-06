@@ -11,14 +11,15 @@ import UIKit
 import Foundation
 #endif
 public final class AllDocuments: Identifiable, DocumentContainer {
-
+	
 	public var documents: [Document] {
 		return account?.documents ?? []
 	}
-	
 
 	public var id: EntityID
 	public var name: String? = VinOutlineKitStringAssets.all
+	public var partialName: String? = VinOutlineKitStringAssets.all
+
 	#if canImport(UIKit)
 	public var image: UIImage? = UIImage(systemName: "tray")!
 	#endif
@@ -27,6 +28,8 @@ public final class AllDocuments: Identifiable, DocumentContainer {
 		return account?.documents?.count
 	}
 	
+	public var children: [DocumentContainer] = []
+
 	public weak var account: Account?
 	
 	public init(account: Account) {

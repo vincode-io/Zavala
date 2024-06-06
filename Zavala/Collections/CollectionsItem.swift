@@ -56,9 +56,13 @@ final class CollectionsItem: NSObject, NSCopying, Identifiable {
 		return CollectionsItem(id: id)
 	}
 	
-	static func item(_ documentContainer: DocumentContainer) -> CollectionsItem {
-		let id = CollectionsItem.ID.documentContainer(documentContainer.id)
+	static func item(_ entityID: EntityID) -> CollectionsItem {
+		let id = CollectionsItem.ID.documentContainer(entityID)
 		return CollectionsItem(id: id)
+	}
+
+	static func item(_ documentContainer: DocumentContainer) -> CollectionsItem {
+		return item(documentContainer.id)
 	}
 
 	override func isEqual(_ object: Any?) -> Bool {

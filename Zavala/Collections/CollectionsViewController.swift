@@ -48,12 +48,31 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
             return nil
         }
 	}
+	
+	var expandedState: [[AnyHashable: AnyHashable]] {
+		get {
+			return expandedItems.compactMap { $0.entityID?.userInfo }
+		}
+		set {
+			var items = Set<CollectionsItem>()
+			for userInfo in newValue {
+				if let id = EntityID(userInfo: userInfo) {
+					items.insert(CollectionsItem.item(id))
+				}
+			}
+			expandedItems = items
+			
+			applyChangeSnapshot(animated: false)
+		}
+	}
 
 	var dataSource: UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>!
 	private var dataSourceSemaphore = AsyncSemaphore(value: 1)
 	private var applyChangeChannel = AsyncChannel<() -> Void>()
 	private var reloadVisibleChannel = AsyncChannel<() -> Void>()
 
+	private var expandedItems = Set<CollectionsItem>()
+	
 	private var addButton: UIButton!
 	private var importButton: UIButton!
 
@@ -361,18 +380,32 @@ extension CollectionsViewController {
 			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
 			
 			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
-				contentConfiguration.text = container.name
+				contentConfiguration.text = container.partialName
 				contentConfiguration.image = container.image
 				
 				if let count = container.itemCount {
 					contentConfiguration.secondaryTextProperties.font = UIFont.preferredFont(forTextStyle: .body)
 					contentConfiguration.secondaryText = String(count)
 				}
+
+				if UIDevice.current.userInterfaceIdiom == .mac {
+					if container.children.isEmpty {
+						cell.accessories = [.outlineDisclosure(options: .init(isHidden: true, reservedLayoutWidth: .custom(6)))]
+					} else {
+						cell.accessories = [.outlineDisclosure(options: .init(isHidden: false, reservedLayoutWidth: .custom(6)))]
+					}
+				} else {
+					if container.children.isEmpty {
+						cell.accessories = [.outlineDisclosure(options: .init(isHidden: true))]
+					} else {
+						cell.accessories = [.outlineDisclosure(options: .init(isHidden: false))]
+					}
+				}
 			}
 
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			cell.contentConfiguration = contentConfiguration
-			
+						
 			cell.configurationUpdateHandler = { cell, state in
 				guard var config = cell.contentConfiguration?.updated(for: state) as? UIListContentConfiguration else { return }
 				if state.isSelected || state.isHighlighted {
@@ -394,6 +427,15 @@ extension CollectionsViewController {
 				return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: item)
 			}
 		}
+		
+		dataSource.sectionSnapshotHandlers.willExpandItem = { [weak self] item in
+			self?.expandedItems.insert(item)
+		}
+		
+		dataSource.sectionSnapshotHandlers.willCollapseItem = { [weak self] item in
+			self?.expandedItems.remove(item)
+		}
+		
 	}
 	
 	private func searchSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem> {
@@ -408,13 +450,26 @@ extension CollectionsViewController {
 		guard localAccount.isActive else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
+
 		let header = CollectionsItem.item(id: .header(.localAccount))
-		
-		let items = localAccount.documentContainers.map { CollectionsItem.item($0) }
-		
 		snapshot.append([header])
 		snapshot.expand([header])
-		snapshot.append(items, to: header)
+
+		func appendToSnapshot(_ docContainer: DocumentContainer, to: CollectionsItem) {
+			let item = CollectionsItem.item(docContainer)
+			snapshot.append([item], to: to)
+			for child in docContainer.children {
+				appendToSnapshot(child, to: item)
+			}
+		}
+		
+		let documentContainers = localAccount.documentContainers
+		for docContainer in documentContainers {
+			appendToSnapshot(docContainer, to: header)
+		}
+		
+		snapshot.expand(Array(expandedItems))
+
 		return snapshot
 	}
 	
@@ -422,13 +477,26 @@ extension CollectionsViewController {
 		guard let cloudKitAccount = AccountManager.shared.cloudKitAccount else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
+
 		let header = CollectionsItem.item(id: .header(.cloudKitAccount))
-		
-		let items = cloudKitAccount.documentContainers.map { CollectionsItem.item($0) }
-		
 		snapshot.append([header])
 		snapshot.expand([header])
-		snapshot.append(items, to: header)
+
+		func appendToSnapshot(_ docContainer: DocumentContainer, to: CollectionsItem) {
+			let item = CollectionsItem.item(docContainer)
+			snapshot.append([item], to: to)
+			for child in docContainer.children {
+				appendToSnapshot(child, to: item)
+			}
+		}
+		
+		let documentContainers = cloudKitAccount.documentContainers
+		for docContainer in documentContainers {
+			appendToSnapshot(docContainer, to: header)
+		}
+		
+		snapshot.expand(Array(expandedItems))
+
 		return snapshot
 	}
 	
@@ -436,20 +504,20 @@ extension CollectionsViewController {
 		if traitCollection.userInterfaceIdiom == .mac {
 			applySnapshot(searchSnapshot(), section: .search, animated: false)
 		}
-		applyChangeSnapshot()
+		applyChangeSnapshot(animated: false)
 	}
 	
-	private func applyChangeSnapshot() {
+	private func applyChangeSnapshot(animated: Bool) {
 		if let snapshot = localAccountSnapshot() {
-			applySnapshot(snapshot, section: .localAccount, animated: true)
+			applySnapshot(snapshot, section: .localAccount, animated: animated)
 		} else {
-			applySnapshot(NSDiffableDataSourceSectionSnapshot<CollectionsItem>(), section: .localAccount, animated: true)
+			applySnapshot(NSDiffableDataSourceSectionSnapshot<CollectionsItem>(), section: .localAccount, animated: animated)
 		}
 
 		if let snapshot = self.cloudKitAccountSnapshot() {
-			applySnapshot(snapshot, section: .cloudKitAccount, animated: true)
+			applySnapshot(snapshot, section: .cloudKitAccount, animated: animated)
 		} else {
-			applySnapshot(NSDiffableDataSourceSectionSnapshot<CollectionsItem>(), section: .cloudKitAccount, animated: true)
+			applySnapshot(NSDiffableDataSourceSectionSnapshot<CollectionsItem>(), section: .cloudKitAccount, animated: animated)
 		}
 	}
 	
@@ -538,7 +606,9 @@ private extension CollectionsViewController {
 	
 	func debounceApplyChangeSnapshot() {
 		Task {
-			await applyChangeChannel.send(applyChangeSnapshot)
+			await applyChangeChannel.send({ [weak self] in
+				self?.applyChangeSnapshot(animated: true)
+			})
 		}
 	}
 	

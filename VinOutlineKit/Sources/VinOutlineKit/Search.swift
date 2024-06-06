@@ -16,7 +16,8 @@ public final class Search: Identifiable, DocumentContainer {
 	
 	public var id: EntityID
 	public var name: String? = VinOutlineKitStringAssets.search
-	
+	public var partialName: String? = VinOutlineKitStringAssets.search
+
 	#if canImport(UIKit)
 	public var image: UIImage?
 	#endif
@@ -25,7 +26,9 @@ public final class Search: Identifiable, DocumentContainer {
 	public var itemCount: Int? {
 		return nil
 	}
-	
+
+	public var children: [DocumentContainer] = []
+
 	public var searchText: String
 	
 	private var searchQuery: CSSearchQuery?

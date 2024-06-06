@@ -518,10 +518,9 @@ extension DocumentsViewController {
 		await documentsSemaphore.wait()
 		defer { documentsSemaphore.signal() }
 
-		let tags = documentContainers.tags
 		var selectionContainers: [DocumentProvider]
-		if !tags.isEmpty {
-			selectionContainers = [TagsDocuments(tags: tags)]
+		if documentContainers.count > 1 {
+			selectionContainers = [TagsDocuments(containers: documentContainers)]
 		} else {
 			selectionContainers = documentContainers
 		}

@@ -76,7 +76,7 @@ public final class Account: Identifiable, Equatable, Codable {
 		containers.append(AllDocuments(account: self))
 
 		for tagDocuments in tags?
-			.sorted(by: { $0.name.caseInsensitiveCompare($1.name) == .orderedAscending })
+			.filter({ $0.level == 0 })
 			.compactMap({ TagDocuments(account: self, tag: $0) }) ?? [TagDocuments]() {
 			containers.append(tagDocuments)
 		}
@@ -422,7 +422,7 @@ public final class Account: Identifiable, Equatable, Codable {
 		}
 		
 		tags?.append(tag)
-		tags?.sort(by: { $0.name < $1.name })
+		tags?.sort(by: { $0.name.caseInsensitiveCompare($1.name) == .orderedAscending })
 		accountTagsDidChange()
 		
 		return tag
@@ -430,7 +430,7 @@ public final class Account: Identifiable, Equatable, Codable {
 	
 	public func renameTag(_ tag: Tag, to newTagName: String) {
 		tag.name = newTagName
-		tags?.sort(by: { $0.name < $1.name })
+		tags?.sort(by: { $0.name.caseInsensitiveCompare($1.name) == .orderedAscending })
 		accountTagsDidChange()
 
 		for doc in documents ?? [Document]() {

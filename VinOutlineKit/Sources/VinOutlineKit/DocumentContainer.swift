@@ -14,10 +14,13 @@ import Foundation
 public protocol DocumentContainer: DocumentProvider {
 	var id: EntityID { get }
 	var name: String? { get }
+	var partialName: String? { get }
 	#if canImport(UIKit)
 	var image: UIImage? { get }
 	#endif
 	var itemCount: Int? { get }
+	var children: [DocumentContainer] { get }
+	
 	var account: Account? { get }
 }
 
