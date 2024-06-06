@@ -15,26 +15,30 @@ public final class AllDocuments: Identifiable, DocumentContainer {
 	public var documents: [Document] {
 		return account?.documents ?? []
 	}
-
+	
 	public var id: EntityID
 	public var name: String? = VinOutlineKitStringAssets.all
 	public var partialName: String? = VinOutlineKitStringAssets.all
-
-	#if canImport(UIKit)
+	
+#if canImport(UIKit)
 	public var image: UIImage? = UIImage(systemName: "tray")!
-	#endif
-
+#endif
+	
 	public var itemCount: Int? {
 		return account?.documents?.count
 	}
 	
 	public var children: [DocumentContainer] = []
-
+	
 	public weak var account: Account?
 	
 	public init(account: Account) {
 		self.id = .allDocuments(account.id.accountID)
 		self.account = account
+	}
+	
+	public func hasDecendent(_ entityID: EntityID) -> Bool {
+		return false
 	}
 	
 }

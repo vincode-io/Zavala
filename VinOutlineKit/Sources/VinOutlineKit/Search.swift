@@ -79,6 +79,10 @@ public final class Search: Identifiable, DocumentContainer {
 		self.searchText = searchText
 	}
 	
+	public func hasDecendent(_ entityID: EntityID) -> Bool {
+		return false
+	}
+
 	deinit {
 		searchQuery?.cancel()
 	}

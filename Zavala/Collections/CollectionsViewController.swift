@@ -433,7 +433,25 @@ extension CollectionsViewController {
 		}
 		
 		dataSource.sectionSnapshotHandlers.willCollapseItem = { [weak self] item in
-			self?.expandedItems.remove(item)
+			guard let self else { return }
+			
+			self.expandedItems.remove(item)
+			
+			// The collection view should deselect collapsed items on its own in my opinion, but it doesn't 🤷🏼‍♂️
+			guard let entityID = item.entityID,
+				  let collapsingDocumentContainer = AccountManager.shared.findDocumentContainer(entityID),
+				  let selectedIndexPaths = self.collectionView.indexPathsForSelectedItems else {
+				return
+			}
+			
+			for selectedIndexPath in selectedIndexPaths {
+				guard let entityID = self.dataSource.itemIdentifier(for: selectedIndexPath)?.entityID else { continue }
+				
+				if collapsingDocumentContainer.hasDecendent(entityID) {
+					self.collectionView.deselectItem(at: selectedIndexPath, animated: true)
+					self.updateSelections()
+				}
+			}
 		}
 		
 	}

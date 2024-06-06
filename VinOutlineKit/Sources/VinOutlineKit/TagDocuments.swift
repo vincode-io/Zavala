@@ -76,5 +76,26 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 		}
 	}
 	
+	public func hasDecendent(_ entityID: EntityID) -> Bool {
+		func decendentCheck(_ docContainer: DocumentContainer) -> Bool {
+			if docContainer.id == entityID {
+				return true
+			}
+			for child in docContainer.children {
+				if decendentCheck(child) {
+					return true
+				}
+			}
+			return false
+		}
+		
+		for child in children {
+			if decendentCheck(child) {
+				return true
+			}
+		}
+		return false
+	}
+
 }
 

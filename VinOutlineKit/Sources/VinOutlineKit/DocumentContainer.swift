@@ -22,6 +22,8 @@ public protocol DocumentContainer: DocumentProvider {
 	var children: [DocumentContainer] { get }
 	
 	var account: Account? { get }
+	
+	func hasDecendent(_ entityID: EntityID) -> Bool
 }
 
 public extension Array where Element == DocumentContainer {
