@@ -80,7 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	let createRowCommand = UIKeyCommand(title: .addRowBelowControlLabel,
 										action: #selector(createRowCommand(_:)),
 										input: "\n",
-										modifierFlags: [])
+										modifierFlags: [.control])
 	
 	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowControlLabel,
 											action: #selector(duplicateRowsCommand(_:)),
