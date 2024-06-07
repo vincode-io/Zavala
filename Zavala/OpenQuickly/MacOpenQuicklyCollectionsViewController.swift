@@ -77,7 +77,6 @@ private extension MacOpenQuicklyCollectionsViewController {
 		}
 		
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, CollectionsItem> { (cell, indexPath, item) in
-			cell.highlightImageInWhite = true
 			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
 
 			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
@@ -87,6 +86,16 @@ private extension MacOpenQuicklyCollectionsViewController {
 
 			cell.backgroundConfiguration?.backgroundColor = .systemBackground
 			cell.contentConfiguration = contentConfiguration
+
+			cell.configurationUpdateHandler = { cell, state in
+				guard var config = cell.contentConfiguration?.updated(for: state) as? UIListContentConfiguration else { return }
+				if state.isSelected || state.isHighlighted {
+					config.imageProperties.tintColor = .label
+				} else {
+					config.imageProperties.tintColor = nil
+				}
+				cell.contentConfiguration = config
+			}
 		}
 		
 		dataSource = UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
