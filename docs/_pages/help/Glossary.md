@@ -21,6 +21,10 @@ Zavala supports linking between Outlines. If you link from outline A to outline 
 
 The left-most column in the Main Window that groups together Outlines using different criteria.
 
+## Deep Link
+
+A Zavala Deep Link can be used to identify an Outline or a Row. When clicked from another program, Zavala will open and show you the requested resource.
+
 ## Documents View
 
 The middle column of the Main Window shows Outlines from the currently selected collection in the Collections View.

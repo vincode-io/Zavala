@@ -53,7 +53,7 @@ Updates the Outline with the specified changes.
 
 ### Export
 
-This will export the Outline in the specified format.
+This will export the Outline in the specified format. You can also specify Relative File Links, which will point linked Outline URL’s to a relative file name. This can be useful if you are exporting multiple, linked Outlines so that they can be edited in another editor.
 
 ### Get Images for Outline
 

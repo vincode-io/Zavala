@@ -37,8 +37,10 @@ Since you may be doing research on sensitive subjects, we don’t enable this fe
 
 If an application puts a link on the Pasteboard with the name of the resource, Zavala can link to it. For example, if drag an email out of Mail.app to Zavala we will create a link to that email. Clicking that link in Zavala will open Mail.app and show you the original mail message.
 
-* Linking to the Web
-
-## Linking to Zavala
+## Linking to a Zavala Outline
 
 To get the URL to use to link to Zavala, you first press the Share button and then click on the Copy Document Link option. This copies the URL to the pasteboard. Different apps have different ways of inputing links, but most support the ⌘-K keyboard shortcut.
+
+## Linking to a Zavala Row
+
+You need the URL to the Row which can be put on the pasteboard using the Row Context Menu. Just bring up the Row Context Menu and select the Copy Row Link option.

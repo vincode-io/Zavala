@@ -23,7 +23,7 @@ Outlines allow you to track progress by marking Rows as completed. Zavala shows 
 
 ![](/assets/images/help/BFEA95F3-0FF6-4578-97B8-B622BB7FD68F.png)￼
 
-Completing items is fast and easy. Just swipe righton a Row as complete or unmark it if you didn’t mean to complete it.
+Completing items is fast and easy. Just swipe right on a Row as complete or unmark it if you didn’t mean to complete it.
 
 * Outliner Uses
 	* Taking notes

@@ -11,7 +11,7 @@ header:
 
 ## ![](/assets/images/help/F65AD672-ED7D-4F95-8A3D-DA6F6F33E413.png)￼
 
-Notes don’t get a leading bullet, only Topics do. Notes are shown in a slightly smaller, lighter colored font directly below the Topic they are associated with.
+Notes don’t get a leading bullet, only Topics do. Notes are shown in a slightly smaller, lighter colored font directly below the Topic they are associated with although this can be changed in [Settings.](Settings.md) 
 
 ## Proper Usage
 
@@ -25,7 +25,7 @@ While Zavala is a dedicated outliner, we do support using it as a structured wor
 
 When the Outline is processed in this manner, the Topic is used for a Heading and the Note is used for paragraphs. Each level of indentation gets smaller Heading font than its parent, while the paragraph font stays the same.
 
-If you’ve ever used the Microsoft Word outline mode, you are familiar with this concept. Topics are headings and Notes are content when you switch to another mode.
+If you’ve ever used Microsoft Word’s outline mode, you are familiar with this concept. Topics are headings and Notes are content when you switch to another mode.
 
 You may have noticed that Microsoft Word doesn’t make a very good outliner. Well, Zavala doesn’t make a very good word processor. I certainly wouldn’t try to make a resume or business letter with it.
 

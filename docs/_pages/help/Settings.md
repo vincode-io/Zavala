@@ -8,7 +8,18 @@ header:
 ---
 
 
-* ![](/assets/images/help/DFF37EFA-C57B-47F9-8FE2-74AF4EB5522C.png)￼
+* ![](/assets/images/help/57043C37-8162-48A2-80A0-6E76C099972D.png)￼
+* General
+	* Color Palette
+
+	  You can use this override the default system light mode or dark mode setting.
+
+
+	* Use Main Window as Default
+
+	  This is a Mac only setting. When there are no windows open and Zavala gets activated the [Open Quickly](Open_Quickly.md) window will open. If you don’t like this behavior, you can select “Use Main Window as Default” to open the [Main Window](Main_Window.md) instead.
+
+
 
 ## Accounts
 
@@ -46,10 +57,10 @@ Zavala can automatically change a link into something readable buy fetching the 
 
 This is the default information that gets added to each Outline that you create. It is used when exporting OPML files.
 
-* Appearance
-	* Color Palette
+* Editor
+	* Max Width
 
-	  You can use this override the default system light mode or dark mode setting.
+	  Limiting the width of the Editor helps with readability. The Normal setting is generally considered the optimal readable width on computer screen. If that doesn’t feel like enough, there is a Wide setting and a Full Width one. 
 
 
 	* Row Indent
@@ -62,6 +73,16 @@ This is the default information that gets added to each Outline that you create.
 	  This is the distance between the bottom of one row and the top of the next.
 
 
+	* Scroll Mode
+
+	  There are two different ways that the Editor can scroll as you type, Normal and Typewriter. Normal works like your typical text editor and scrolls when you reach the bottom of the visible area. Typewriter will keep your cursor in the middle of the vertical Editor, similar to how a typewriter works.
+
+
+	* Disable Animations
+
+	  Some users are more used to other outliners than don’t animate user interface elements. This allows them to disable those animations.
+
+
 	* Fonts
 ![](/assets/images/help/1478E827-B8B9-4415-8E06-31676BFAC95F.png)￼
 
@@ -70,15 +91,4 @@ This is the default information that gets added to each Outline that you create.
 	  Fonts can be for different indent levels. Lower indent levels inherent their fonts from the higher levels if the aren’t specifically set in Settings.
 
 	  On iPad and iPhone the Editor will adjust the size of your fonts if you have increased or decreased the font size using [Dynamic Type](https://support.apple.com/en-us/HT202828).
-
-
-* Advanced
-	* Use Main Window as Default
-
-	  When there are no windows open and Zavala gets activated the [Open Quickly](Open_Quickly.md) window will open. If you don’t like this behavior, you can select “Use Main Window as Default” to open the [Main Window](Main_Window.md) instead.
-
-
-	* Disable Editor Animations
-
-	  Some users are more used to other outliners than don’t animate user interface elements. This allows them to disable those animations.
 
