@@ -376,7 +376,7 @@ extension CollectionsViewController {
 			cell.configurationUpdateHandler = { cell, state in
 				guard var config = cell.contentConfiguration?.updated(for: state) as? UIListContentConfiguration else { return }
 				if state.isSelected || state.isHighlighted {
-					config.imageProperties.tintColor = .white
+					config.imageProperties.tintColor = .label
 				} else {
 					config.imageProperties.tintColor = nil
 				}
