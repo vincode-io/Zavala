@@ -405,15 +405,17 @@ extension CollectionsViewController {
 
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			cell.contentConfiguration = contentConfiguration
-						
-			cell.configurationUpdateHandler = { cell, state in
-				guard var config = cell.contentConfiguration?.updated(for: state) as? UIListContentConfiguration else { return }
-				if state.isSelected || state.isHighlighted {
-					config.imageProperties.tintColor = .label
-				} else {
-					config.imageProperties.tintColor = nil
+			
+			if UIDevice.current.userInterfaceIdiom != .mac {
+				cell.configurationUpdateHandler = { cell, state in
+					guard var config = cell.contentConfiguration?.updated(for: state) as? UIListContentConfiguration else { return }
+					if state.isSelected || state.isHighlighted {
+						config.imageProperties.tintColor = .white
+					} else {
+						config.imageProperties.tintColor = nil
+					}
+					cell.contentConfiguration = config
 				}
-				cell.contentConfiguration = config
 			}
 		}
 		
