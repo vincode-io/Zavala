@@ -63,13 +63,16 @@ struct GetInfoView: View {
 				Toggle(isOn: $getInfoViewModel.checkSpellingWhileTyping) {
 					Text(String.checkSpellingWhileTypingControlLabel)
 				}
+				.toggleStyle(.switch)
 				Toggle(isOn: $getInfoViewModel.correctSpellingAutomatically) {
 					Text(String.correctSpellingAutomaticallyControlLabel)
 				}
+				.toggleStyle(.switch)
 				.disabled(getInfoViewModel.checkSpellingWhileTyping == false)
 				Toggle(isOn: $getInfoViewModel.autoLinkingEnabled) {
 					Text(String.autoLinkingControlLabel)
 				}
+				.toggleStyle(.switch)
 			}
 			Section(String.ownerControlLabel) {
 				TextField(text: $getInfoViewModel.ownerName) {
