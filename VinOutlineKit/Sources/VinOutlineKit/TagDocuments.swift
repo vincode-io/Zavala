@@ -14,8 +14,14 @@ import Foundation
 public final class TagDocuments: Identifiable, DocumentContainer {
 	
 	public var id: EntityID
-	public var name: String?
-	public var partialName: String?
+	
+	public var name: String? {
+		return tag?.name
+	}
+	
+	public var partialName: String? {
+		return tag?.partialName
+	}
 
 	#if canImport(UIKit)
 	#if targetEnvironment(macCatalyst)
@@ -36,10 +42,10 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 		
 		var result = [DocumentContainer]()
 		
-		for tag in accountTags {
-			if let range = tag.name.range(of: "\(name)/") {
-				if !tag.name[range.upperBound...].contains("/") {
-					result.append(TagDocuments(account: account, tag: tag))
+		for accountTag in accountTags {
+			if let range = accountTag.name.range(of: "\(name)/") {
+				if !accountTag.name[range.upperBound...].contains("/") {
+					result.append(TagDocuments(account: account, tag: accountTag))
 				}
 			}
 		}
@@ -65,8 +71,6 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 		self.id = .tagDocuments(account.id.accountID, tag.id)
 		self.account = account
 		self.tag = tag
-		self.name = tag.name
-		self.partialName = tag.partialName
 	}
 	
 	public func hasDecendent(_ entityID: EntityID) -> Bool {
