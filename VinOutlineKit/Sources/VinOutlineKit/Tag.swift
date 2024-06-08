@@ -33,6 +33,15 @@ public class Tag: Identifiable, Codable, Equatable {
 		self.name = name
 	}
 	
+	public func isChild(of tag: Tag) -> Bool {
+		if let range = name.range(of: "\(tag.name)/") {
+			if !name[range.upperBound...].contains("/") {
+				return true
+			}
+		}
+		return false
+	}
+	
 	public static func == (lhs: Tag, rhs: Tag) -> Bool {
 		return lhs.id == rhs.id
 	}

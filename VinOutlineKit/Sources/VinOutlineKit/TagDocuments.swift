@@ -36,17 +36,15 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 	}
 	
 	public var children: [DocumentContainer] {
-		guard let name, let account, let accountTags = account.tags else {
+		guard let account, let tag, let accountTags = account.tags else {
 			return []
 		}
 		
 		var result = [DocumentContainer]()
 		
 		for accountTag in accountTags {
-			if let range = accountTag.name.range(of: "\(name)/") {
-				if !accountTag.name[range.upperBound...].contains("/") {
-					result.append(TagDocuments(account: account, tag: accountTag))
-				}
+			if accountTag.isChild(of: tag) {
+				result.append(TagDocuments(account: account, tag: accountTag))
 			}
 		}
 		
