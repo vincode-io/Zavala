@@ -26,14 +26,7 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 	#endif
 
 	public var itemCount: Int? {
-		guard let tag else { return nil }
-		var count = account?.documents?.filter({ $0.hasTag(tag) }).count ?? 0
-		
-		for child in children {
-			count += child.itemCount ?? 0
-		}
-		
-		return count
+		documents.count
 	}
 	
 	public var children = [DocumentContainer]()
@@ -42,16 +35,14 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 	public weak var tag: Tag?
 	
 	public var documents: [Document] {
-		get async throws {
-			guard let tag, let documents = account?.documents else { return [] }
-			var docs = Set(documents.filter { $0.hasTag(tag) })
-			
-			for child in children {
-				docs.formUnion(try await child.documents)
-			}
-			
-			return Array(docs)
+		guard let tag, let documents = account?.documents else { return [] }
+		var docs = Set(documents.filter { $0.hasTag(tag) })
+		
+		for case let child as TagDocuments in children {
+			docs.formUnion(child.documents)
 		}
+		
+		return Array(docs)
 	}
 
 	public init(account: Account, tag: Tag) {
