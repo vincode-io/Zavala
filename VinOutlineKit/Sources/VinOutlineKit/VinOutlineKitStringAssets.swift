@@ -14,7 +14,7 @@ struct VinOutlineKitStringAssets {
 	static var accountICloud = String(localized: "iCloud", comment: "iCloud Account Name: iCloud")
 
 	static var noTitle = String(localized: "(No Title)", comment: "OPML Export Title: (No Title)")
-	static var all = String(localized: "All", comment: "Collection: Search Documents")
+	static var all = String(localized: "All", comment: "Collection: All Documents")
 	static var search = String(localized: "Search", comment: "Collection: Search Documents")
 
 	static var accountErrorScopedResource =	String(localized: "Unable to access security scoped resource.",
