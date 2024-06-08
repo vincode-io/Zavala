@@ -12,16 +12,17 @@ public final class TagsDocuments: DocumentProvider {
     private let containers: [DocumentContainer]
 
 	public var documents: [Document] {
-		get async throws {
-			var documents = [Document]()
-
-			for container in containers {
-				documents.append(contentsOf: try await container.documents)
+		var intersection: Set<Document>?
+		
+		for case let container as TagDocuments in containers {
+			if let work = intersection {
+				intersection = work.intersection(container.documents)
+			} else {
+				intersection = Set(container.documents)
 			}
-
-			let tags = containers.tags
-			return documents.filter { $0.hasAllTags(tags) }
 		}
+		
+		return Array(intersection ?? Set<Document>())
 	}
 
     public init(containers: [DocumentContainer]) {

@@ -829,16 +829,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineElementsDidChange(changes)
 	}
 	
-    public func hasAllTags(_ tags: [Tag]) -> Bool {
-        guard let tagIDs else { return false }
-        for tag in tags {
-            if !tagIDs.contains(tag.id) {
-                return false
-            }
-        }
-        return true
-    }
-    
     public func hasAnyTag(_ tags: [Tag]) -> Bool {
         guard let tagIDs else { return false }
         for tag in tags {
