@@ -29,7 +29,23 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 		documents.count
 	}
 	
-	public var children = [DocumentContainer]()
+	public var children: [DocumentContainer] {
+		guard let name, let account, let accountTags = account.tags else {
+			return []
+		}
+		
+		var result = [DocumentContainer]()
+		
+		for tag in accountTags {
+			if let range = tag.name.range(of: "\(name)/") {
+				if !tag.name[range.upperBound...].contains("/") {
+					result.append(TagDocuments(account: account, tag: tag))
+				}
+			}
+		}
+		
+		return result
+	}
 	
 	public weak var account: Account?
 	public weak var tag: Tag?
@@ -51,20 +67,6 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 		self.tag = tag
 		self.name = tag.name
 		self.partialName = tag.partialName
-
-		guard let name, let accountTags = account.tags else {
-			return
-		}
-		
-		let suffix = "\(name)/"
-		
-		for tag in accountTags {
-			if let range = tag.name.range(of: suffix) {
-				if !tag.name[range.upperBound...].contains("/") {
-					children.append(TagDocuments(account: account, tag: tag))
-				}
-			}
-		}
 	}
 	
 	public func hasDecendent(_ entityID: EntityID) -> Bool {
