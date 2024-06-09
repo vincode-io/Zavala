@@ -515,6 +515,12 @@ open class SearchTextField: EnhancedTextField {
 			selectAbove()
 		case (.keyboardDownArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
 			selectBelow()
+		case (.keyboardRightArrow, key.modifierFlags.subtracting(.numericPad).isEmpty):
+			if let indexPath = tableView?.indexPathForSelectedRow {
+				self.text = filteredResults[(indexPath as NSIndexPath).row].title
+				self.textFieldDidChange()
+				clearResults()
+			}
 		default:
 			super.pressesBegan(presses, with: event)
 		}
