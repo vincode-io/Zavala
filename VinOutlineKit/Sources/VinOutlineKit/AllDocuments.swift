@@ -21,7 +21,7 @@ public final class AllDocuments: Identifiable, DocumentContainer {
 	public var partialName: String? = VinOutlineKitStringAssets.all
 	
 #if canImport(UIKit)
-	public var image: UIImage? = UIImage(systemName: "tray")!
+	public var image: UIImage? = UIImage(systemName: "tray")!.applyingSymbolConfiguration(.init(weight: .medium))
 #endif
 	
 	public var itemCount: Int? {

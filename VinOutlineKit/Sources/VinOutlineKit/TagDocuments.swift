@@ -27,7 +27,7 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 	#if targetEnvironment(macCatalyst)
 	public var image: UIImage? {
 		if children.isEmpty {
-			return UIImage(systemName: "capsule")!.applyingSymbolConfiguration(.init(pointSize: 12))
+			return UIImage(systemName: "capsule")!.applyingSymbolConfiguration(.init(pointSize: 12, weight: .medium))
 		} else {
 			return UIImage(named: "Tags")!.applyingSymbolConfiguration(.init(pointSize: 16, weight: .regular, scale: .small))
 		}
@@ -35,7 +35,7 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 	#else
 	public var image: UIImage? {
 		if children.isEmpty {
-			return UIImage(systemName: "capsule")!.applyingSymbolConfiguration(.init(pointSize: 15))
+			return UIImage(systemName: "capsule")!.applyingSymbolConfiguration(.init(pointSize: 15, weight: .medium))
 		} else {
 			return UIImage(named: "Tags")!.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .small))
 		}
