@@ -395,28 +395,35 @@ extension CollectionsViewController {
 						cell.accessories = [.outlineDisclosure(options: .init(isHidden: false, reservedLayoutWidth: .custom(6)))]
 					}
 				} else {
-					if container.children.isEmpty {
-						cell.accessories = [.outlineDisclosure(options: .init(isHidden: true))]
-					} else {
-						cell.accessories = [.outlineDisclosure(options: .init(isHidden: false))]
+					cell.configurationUpdateHandler = { cell, state in
+						guard let cell = cell as? ConsistentCollectionViewListCell,
+							  var config = cell.contentConfiguration?.updated(for: state) as? UIListContentConfiguration else { return }
+						
+						if state.isSelected || state.isHighlighted {
+							config.imageProperties.tintColor = .white
+
+							if container.children.isEmpty {
+								cell.accessories = [.outlineDisclosure(options: .init(isHidden: true))]
+							} else {
+								cell.accessories = [.outlineDisclosure(options: .init(isHidden: false, tintColor: .lightGray))]
+							}
+						} else {
+							config.imageProperties.tintColor = nil
+
+							if container.children.isEmpty {
+								cell.accessories = [.outlineDisclosure(options: .init(isHidden: true))]
+							} else {
+								cell.accessories = [.outlineDisclosure(options: .init(isHidden: false))]
+							}
+						}
+						
+						cell.contentConfiguration = config
 					}
 				}
 			}
 
 			contentConfiguration.prefersSideBySideTextAndSecondaryText = true
 			cell.contentConfiguration = contentConfiguration
-			
-			if UIDevice.current.userInterfaceIdiom != .mac {
-				cell.configurationUpdateHandler = { cell, state in
-					guard var config = cell.contentConfiguration?.updated(for: state) as? UIListContentConfiguration else { return }
-					if state.isSelected || state.isHighlighted {
-						config.imageProperties.tintColor = .white
-					} else {
-						config.imageProperties.tintColor = nil
-					}
-					cell.contentConfiguration = config
-				}
-			}
 		}
 		
 		dataSource = UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell in
