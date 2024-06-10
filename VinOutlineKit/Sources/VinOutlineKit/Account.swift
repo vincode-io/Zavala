@@ -421,6 +421,11 @@ public final class Account: Identifiable, Equatable, Codable {
 			tags = [Tag]()
 		}
 		
+		// Recursively try to create any skipped tag levels
+		if let tagParentName = tag.parentName {
+			createTag(name: tagParentName)
+		}
+		
 		tags?.append(tag)
 		tags?.sort(by: { $0.name.caseInsensitiveCompare($1.name) == .orderedAscending })
 		accountTagsDidChange()
@@ -429,7 +434,15 @@ public final class Account: Identifiable, Equatable, Codable {
 	}
 	
 	public func renameTag(_ tag: Tag, to newTagName: String) {
+		let oldTagParentName = tag.parentName
+		
 		tag.name = newTagName
+		
+		// Recursively try to create any skipped tag levels
+		if let tagParentName = tag.parentName {
+			createTag(name: tagParentName)
+		}
+
 		tags?.sort(by: { $0.name.caseInsensitiveCompare($1.name) == .orderedAscending })
 		accountTagsDidChange()
 
@@ -437,6 +450,11 @@ public final class Account: Identifiable, Equatable, Codable {
 			if doc.hasTag(tag) {
 				doc.requestCloudKitUpdateForSelf()
 			}
+		}
+		
+		// Recursively try to delete any unused tag levels
+		if let oldTagParentName {
+			deleteTag(name: oldTagParentName)
 		}
 	}
 	
@@ -452,6 +470,11 @@ public final class Account: Identifiable, Equatable, Codable {
 			if doc.hasTag(tag) {
 				return
 			}
+		}
+		
+		// Recursively try to delete any unused tag levels
+		if let tagParentName = tag.parentName {
+			deleteTag(name: tagParentName)
 		}
 		
 		tags?.removeFirst(object: tag)

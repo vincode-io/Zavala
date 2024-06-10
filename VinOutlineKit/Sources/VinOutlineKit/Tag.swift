@@ -22,6 +22,11 @@ public class Tag: Identifiable, Codable, Equatable {
 		}
 		return name
 	}
+
+	public var parentName: String? {
+		guard let index = name.lastIndex(of: "/") else { return nil }
+		return String(name[..<index])
+	}
 	
 	private enum CodingKeys: String, CodingKey {
 		case id = "id"
