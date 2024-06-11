@@ -19,6 +19,7 @@ public extension Notification.Name {
 
 public enum Document: Equatable, Hashable, Codable {
 	case outline(Outline)
+	case dummy
 	
 	private enum CodingKeys: String, CodingKey {
 		case type
@@ -29,6 +30,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.id
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 	
@@ -50,6 +53,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.title
+		case .dummy:
+			return nil
 		}
 	}
 	
@@ -57,6 +62,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.disambiguator
+		case .dummy:
+			return nil
 		}
 	}
 	
@@ -64,6 +71,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.textContent()
+		case .dummy:
+			return ""
 		}
 	}
 	
@@ -71,6 +80,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.markdownList()
+		case .dummy:
+			return ""
 		}
 	}
 	
@@ -78,6 +89,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.tagCount
+		case .dummy:
+			return 0
 		}
 	}
 	
@@ -85,6 +98,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.tags
+		case .dummy:
+			return nil
 		}
 	}
 	
@@ -92,6 +107,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.created
+		case .dummy:
+			return nil
 		}
 	}
 	
@@ -99,6 +116,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.updated
+		case .dummy:
+			return nil
 		}
 	}
 	
@@ -106,6 +125,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.isEmpty
+		case .dummy:
+			return true
 		}
 	}
 	
@@ -113,6 +134,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.iCollaborating
+		case .dummy:
+			return false
 		}
 	}
 	
@@ -120,6 +143,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.isCloudKit
+		case .dummy:
+			return false
 		}
 	}
 	
@@ -128,12 +153,16 @@ public enum Document: Equatable, Hashable, Codable {
 			switch self {
 			case .outline(let outline):
 				return outline.cloudKitShareRecord
+			case .dummy:
+				fatalError("The dummy document shouldn't be accessed in this way.")
 			}
 		}
 		set {
 			switch self {
 			case .outline(let outline):
 				outline.cloudKitShareRecord = newValue
+			case .dummy:
+				fatalError("The dummy document shouldn't be accessed in this way.")
 			}
 		}
 	}
@@ -143,12 +172,16 @@ public enum Document: Equatable, Hashable, Codable {
 			switch self {
 			case .outline(let outline):
 				return outline.shareRecordID
+			case .dummy:
+				fatalError("The dummy document shouldn't be accessed in this way.")
 			}
 		}
 		set {
 			switch self {
 			case .outline(let outline):
 				outline.shareRecordID = newValue
+			case .dummy:
+				fatalError("The dummy document shouldn't be accessed in this way.")
 			}
 		}
 	}
@@ -158,12 +191,16 @@ public enum Document: Equatable, Hashable, Codable {
 			switch self {
 			case .outline(let outline):
 				return outline.zoneID
+			case .dummy:
+				fatalError("The dummy document shouldn't be accessed in this way.")
 			}
 		}
 		set {
 			switch self {
 			case .outline(let outline):
 				outline.zoneID = newValue
+			case .dummy:
+				fatalError("The dummy document shouldn't be accessed in this way.")
 			}
 		}
 	}
@@ -188,6 +225,8 @@ public enum Document: Equatable, Hashable, Codable {
 		case .outline(let outline):
 			try container.encode("outline", forKey: .type)
 			try container.encode(outline, forKey: .outline)
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 	
@@ -195,6 +234,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.update(disambiguator: disambiguator)
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 	
@@ -202,6 +243,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.reassignAccount(accountID)
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 
@@ -209,6 +252,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.createTag(tag)
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 	
@@ -216,6 +261,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.deleteTag(tag)
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 	
@@ -223,6 +270,8 @@ public enum Document: Equatable, Hashable, Codable {
         switch self {
         case .outline(let outline):
             return outline.hasAnyTag(tags)
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
         }
     }
     
@@ -230,6 +279,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.hasTag(tag)
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 	
@@ -237,6 +288,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.deleteAllBacklinks()
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 
@@ -244,6 +297,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.load()
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 
@@ -251,6 +306,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.unload()
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 
@@ -258,6 +315,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.save()
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 
@@ -265,6 +324,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.forceSave()
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 
@@ -272,6 +333,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.suspend()
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 
@@ -279,6 +342,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.resume()
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 
@@ -286,6 +351,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.delete()
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 	
@@ -293,6 +360,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.outlineDidDelete()
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 	
@@ -300,6 +369,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return Document.outline(outline.duplicate())
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 	
@@ -307,6 +378,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			return outline.filename(representation: representation)
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 	
@@ -314,6 +387,8 @@ public enum Document: Equatable, Hashable, Codable {
 		switch self {
 		case .outline(let outline):
 			outline.requestCloudKitUpdateForSelf()
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 	

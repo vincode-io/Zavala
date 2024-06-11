@@ -620,6 +620,8 @@ private extension Account {
 					}
 				}
 			}
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 		
 		cloudKitManager.addRequests(requests)

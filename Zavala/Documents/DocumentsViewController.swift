@@ -407,7 +407,14 @@ extension DocumentsViewController {
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: documents[indexPath.row])
+		if indexPath.row < documents.count {
+			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: documents[indexPath.row])
+		} else {
+			// This should never happen, but does. If you are using an iPad and the collection isn't visible when performBatchUpdates
+			// is called, when deleting the selected Tag, and the last item is removed this gets called with a row index of 0. This
+			// happens before any updates are made in performBatchUpdates, so the 0 document count is invalid.
+			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration, for: indexPath, item: Document.dummy)
+		}
 	}
 
 	override func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {

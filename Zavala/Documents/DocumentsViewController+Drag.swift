@@ -38,6 +38,8 @@ extension DocumentsViewController: UICollectionViewDragDelegate {
 				completion(data, nil)
 				return nil
 			}
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 		
 		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.newWindow)
