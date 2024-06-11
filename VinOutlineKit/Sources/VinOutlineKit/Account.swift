@@ -403,11 +403,13 @@ public final class Account: Identifiable, Equatable, Codable {
 	
 	@discardableResult
 	public func createTag(name: String) -> Tag {
-		if let tag = tags?.first(where: { $0.name == name }) {
+		let normalizedName = Tag.normalize(name: name)
+		
+		if let tag = tags?.first(where: { $0.name == normalizedName }) {
 			return tag
 		}
 		
-		let tag = Tag(name: name)
+		let tag = Tag(name: normalizedName)
 		return createTag(tag)
 	}
 	
@@ -436,7 +438,7 @@ public final class Account: Identifiable, Equatable, Codable {
 	public func renameTag(_ tag: Tag, to newTagName: String) {
 		let oldTagParentName = tag.parentName
 		
-		tag.name = newTagName
+		tag.name = Tag.normalize(name: newTagName)
 		
 		// Recursively try to create any skipped tag levels
 		if let tagParentName = tag.parentName {

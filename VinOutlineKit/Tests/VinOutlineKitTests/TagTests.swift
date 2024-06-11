@@ -12,4 +12,7 @@ final class TagTests: VOKTestCase {
 		XCTAssertEqual(tag.parentName, "work/project1")
 	}
 
+	func testNormalizeName() {
+		XCTAssertEqual("work/project 1", Tag.normalize(name: "/ work / project 1 /"))
+	}
 }

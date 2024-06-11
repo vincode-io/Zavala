@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import VinUtility
 
 public class Tag: Identifiable, Codable, Equatable {
 	
@@ -45,6 +46,19 @@ public class Tag: Identifiable, Codable, Equatable {
 			}
 		}
 		return false
+	}
+	
+	public static func normalize(name: String) -> String {
+		var trimmedElements = [String]()
+		let elements = name.split(separator: "/")
+		
+		for element in elements {
+			if let trimmed = String(element).trimmed() {
+				trimmedElements.append(trimmed)
+			}
+		}
+		
+		return trimmedElements.joined(separator: "/")
 	}
 	
 	public static func == (lhs: Tag, rhs: Tag) -> Bool {
