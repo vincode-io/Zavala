@@ -36,8 +36,13 @@ class RenameTagViewController: UITableViewController {
 	
 	@IBAction func submit(_ sender: Any) {
 		guard let tagName = tagNameTextField.text, let tag = tagDocuments?.tag else { return }
-		tagDocuments?.account?.renameTag(tag, to: tagName)
-		dismiss(animated: true)
+		
+		do {
+			try tagDocuments?.account?.renameTag(tag, to: tagName)
+			dismiss(animated: true)
+		} catch {
+			presentError(error)
+		}
 	}
 	
 }

@@ -17,14 +17,15 @@ struct VinOutlineKitStringAssets {
 	static var all = String(localized: "All", comment: "Collection: All Documents")
 	static var search = String(localized: "Search", comment: "Collection: Search Documents")
 
-	static var accountErrorScopedResource =	String(localized: "Unable to access security scoped resource.",
-												   comment: "Error Message: Unable to access security scoped resource.")
-	
 	static var accountErrorImportRead = String(localized: "Unable to read the import file.",
 											   comment: "Error Message: Unable to read the import file.")
 	static var accountErrorOPMLParse = String(localized: "Unable to process the OPML data.",
 											   comment: "Error Message: Unable to read the import file.")
-	
+	static var accountErrorRenameTagExists = String(localized: "This Tag name already exists. Please choose a different name.",
+												   comment: "Error Message: This Tag name already exists. Please choose a different name.")
+	static var accountErrorScopedResource =	String(localized: "Unable to access security scoped resource.",
+												   comment: "Error Message: Unable to access security scoped resource.")
+
 	static var rowDeserializationError = String(localized: "Unable to deserialize the row data.",
 												comment: "Error Message: Unable to deserialize the row data.")
 

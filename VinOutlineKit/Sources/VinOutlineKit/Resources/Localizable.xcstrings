@@ -25,6 +25,9 @@
     "Search" : {
       "comment" : "Collection: Search Documents"
     },
+    "This Tag name already exists. Please choose a different name." : {
+      "comment" : "Error Message: This Tag name already exists. Please choose a different name."
+    },
     "Unable to access security scoped resource." : {
       "comment" : "Error Message: Unable to access security scoped resource."
     },

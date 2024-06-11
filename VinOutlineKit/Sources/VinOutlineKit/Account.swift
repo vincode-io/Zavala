@@ -25,15 +25,18 @@ public enum AccountError: LocalizedError {
 	case securityScopeError
 	case fileReadError
 	case opmlParserError
+	case renameTagNameExistsError
 	
 	public var errorDescription: String? {
 		switch self {
-		case .securityScopeError:
-			return VinOutlineKitStringAssets.accountErrorScopedResource
 		case .fileReadError:
 			return VinOutlineKitStringAssets.accountErrorImportRead
 		case .opmlParserError:
 			return VinOutlineKitStringAssets.accountErrorOPMLParse
+		case .renameTagNameExistsError:
+			return VinOutlineKitStringAssets.accountErrorRenameTagExists
+		case .securityScopeError:
+			return VinOutlineKitStringAssets.accountErrorScopedResource
 		}
 	}
 }
@@ -435,7 +438,11 @@ public final class Account: Identifiable, Equatable, Codable {
 		return tag
 	}
 	
-	public func renameTag(_ tag: Tag, to newTagName: String) {
+	public func renameTag(_ tag: Tag, to newTagName: String) throws {
+		if hasTag(name: newTagName) {
+			throw AccountError.renameTagNameExistsError
+		}
+		
 		let oldTagParentName = tag.parentName
 		
 		tag.name = Tag.normalize(name: newTagName)
@@ -496,6 +503,10 @@ public final class Account: Identifiable, Equatable, Codable {
 		return tags?.first(where: { $0.name == name })
 	}
 
+	public func hasTag(name: String) -> Bool {
+		return findTag(name: name) != nil
+	}
+	
 	public func findDocument(shareRecordID: CKRecord.ID) -> Document? {
 		return documents?.first(where: { $0.shareRecordID == shareRecordID })
 	}
