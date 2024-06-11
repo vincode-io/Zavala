@@ -475,27 +475,45 @@ public final class Account: Identifiable, Equatable, Codable {
 	}
 
 	public func deleteTag(_ tag: Tag) {
+		guard !isParentTag(tag) else { return }
+		
 		for doc in documents ?? [Document]() {
 			if doc.hasTag(tag) {
 				return
 			}
 		}
 		
-		// Recursively try to delete any unused tag levels
+		tags?.removeFirst(object: tag)
+
+		// Recursively try to delete any unused parent tag levels
 		if let tagParentName = tag.parentName {
 			deleteTag(name: tagParentName)
 		}
 		
-		tags?.removeFirst(object: tag)
 		accountTagsDidChange()
 	}
 	
 	public func forceDeleteTag(_ tag: Tag) {
+		guard let accountTags = tags else { return }
+		
+		// We recursively force delete any child tags
+		for accountTag in accountTags {
+			if accountTag.isChild(of: tag) {
+				forceDeleteTag(accountTag)
+			}
+		}
+
 		for doc in documents ?? [Document]() {
 			doc.deleteTag(tag)
 		}
-		
+
 		tags?.removeFirst(object: tag)
+
+		// Recursively try to delete any unused parent tag levels
+		if let tagParentName = tag.parentName {
+			deleteTag(name: tagParentName)
+		}
+		
 		accountTagsDidChange()
 	}
 	
@@ -505,6 +523,18 @@ public final class Account: Identifiable, Equatable, Codable {
 
 	public func hasTag(name: String) -> Bool {
 		return findTag(name: name) != nil
+	}
+	
+	public func isParentTag(_ tag: Tag) -> Bool {
+		guard let accountTags = tags else { return false }
+		
+		for accountTag in accountTags {
+			if accountTag.isChild(of: tag) {
+				return true
+			}
+		}
+		
+		return false
 	}
 	
 	public func findDocument(shareRecordID: CKRecord.ID) -> Document? {

@@ -66,6 +66,12 @@
     "Always Delete Without Asking" : {
       "comment" : "Control Label: Always Delete Without Asking"
     },
+    "Any child Tag associated with these Tags will also be deleted. No Outlines associated with these Tags will be deleted." : {
+      "comment" : "Alert Message: delete tags"
+    },
+    "Any child Tag associated with this Tag will also be deleted. No Outlines associated with this Tag will be deleted." : {
+      "comment" : "Alert Message: delete tag"
+    },
     "Are you sure you want to delete %lld outlines?" : {
       "comment" : "Confirmation: delete outlines?"
     },
@@ -446,12 +452,6 @@
     },
     "Next Result" : {
       "comment" : "Control Label: Next Result"
-    },
-    "No Outlines associated with these tags will be deleted." : {
-      "comment" : "Alert Message: delete tags"
-    },
-    "No Outlines associated with this tag will be deleted." : {
-      "comment" : "Alert Message: delete tag"
     },
     "No Selection" : {
       "comment" : "Large Label: No Selection"
