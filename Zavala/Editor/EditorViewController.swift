@@ -2909,7 +2909,7 @@ private extension EditorViewController {
 		if let rowCell = collectionView.cellForItem(at: indexPath) as? EditorRowViewCell {
 			move(rowCell: rowCell)
 		} else {
-			DispatchQueue.main.async {
+			Task {
 				if let rowCell = self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell {
 					move(rowCell: rowCell)
 				}

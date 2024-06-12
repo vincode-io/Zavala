@@ -130,9 +130,9 @@ extension EditorTagInputTextField: UITextFieldDelegate {
 			invalidateIntrinsicContentSize()
 			editorDelegate?.createTag(self, name: name)
 			resetFilterStrings()
+		} else {
+			editorDelegate?.didReturn(self)
 		}
-		
-		editorDelegate?.didReturn(self)
 		
 		return false
 	}
