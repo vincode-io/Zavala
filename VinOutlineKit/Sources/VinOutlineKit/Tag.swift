@@ -48,6 +48,12 @@ public class Tag: Identifiable, Codable, Equatable {
 		return false
 	}
 	
+	public func renamePath(from: String, to: String) {
+		let startIndex = name.index(name.startIndex, offsetBy: from.count)
+		let remainder = name[startIndex...]
+		name = to.appending(remainder)
+	}
+	
 	public static func normalize(name: String) -> String {
 		var trimmedElements = [String]()
 		let elements = name.split(separator: "/")

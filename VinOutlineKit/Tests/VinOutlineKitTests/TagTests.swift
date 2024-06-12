@@ -13,6 +13,13 @@ final class TagTests: VOKTestCase {
 	}
 
 	func testNormalizeName() {
-		XCTAssertEqual("work/project 1", Tag.normalize(name: "/ work / project 1 /"))
+		XCTAssertEqual(Tag.normalize(name: "/ work / project 1 /"), "work/project 1")
 	}
+	
+	func testRenamePath() {
+		let tag = Tag(name: "work/project1/presentation")
+		tag.renamePath(from: "work/project1", to: "test")
+		XCTAssertEqual(tag.name, "test/presentation")
+	}
+	
 }

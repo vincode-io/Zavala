@@ -439,21 +439,29 @@ public final class Account: Identifiable, Equatable, Codable {
 	}
 	
 	public func renameTag(_ tag: Tag, to newTagName: String) throws {
-		if hasTag(name: newTagName) {
+		guard let accountTags = tags else { return }
+
+		let normalizedTagName = Tag.normalize(name: newTagName)
+
+		if hasTag(name: normalizedTagName) {
 			throw AccountError.renameTagNameExistsError
 		}
 		
+		// Rename any children with this tag as a path
+		for accountTag in accountTags {
+			if accountTag.isChild(of: tag) {
+				accountTag.renamePath(from: tag.name, to: normalizedTagName)
+			}
+		}
+
 		let oldTagParentName = tag.parentName
-		
-		tag.name = Tag.normalize(name: newTagName)
+		tag.name = normalizedTagName
 		
 		// Recursively try to create any skipped tag levels
 		if let tagParentName = tag.parentName {
 			createTag(name: tagParentName)
 		}
 
-		tags?.sort(by: { $0.name.caseInsensitiveCompare($1.name) == .orderedAscending })
-		accountTagsDidChange()
 
 		for doc in documents ?? [Document]() {
 			if doc.hasTag(tag) {
@@ -465,6 +473,9 @@ public final class Account: Identifiable, Equatable, Codable {
 		if let oldTagParentName {
 			deleteTag(name: oldTagParentName)
 		}
+
+		tags?.sort(by: { $0.name.caseInsensitiveCompare($1.name) == .orderedAscending })
+		accountTagsDidChange()
 	}
 	
 	public func deleteTag(name: String) {
