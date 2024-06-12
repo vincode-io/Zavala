@@ -47,6 +47,25 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 		documents.count
 	}
 	
+	public var ancestors: [DocumentContainer] {
+		guard let account else { return [] }
+		
+		var result = [DocumentContainer]()
+
+		var parentTagName = tag?.parentName
+		while (parentTagName != nil) {
+			if let parentTag = account.findTag(name: parentTagName!) {
+				result.append(TagDocuments(account: account, tag: parentTag))
+				parentTagName = parentTag.parentName
+			} else {
+				// This should never happen. I'm just being paranoid.
+				parentTagName = nil
+			}
+		}
+		
+		return result
+	}
+	
 	public var children: [DocumentContainer] {
 		guard let account, let tag, let accountTags = account.tags else {
 			return []

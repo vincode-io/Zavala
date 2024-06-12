@@ -28,6 +28,7 @@ public final class AllDocuments: Identifiable, DocumentContainer {
 		return account?.documents?.count
 	}
 	
+	public var ancestors: [DocumentContainer] = []
 	public var children: [DocumentContainer] = []
 	
 	public weak var account: Account?

@@ -570,6 +570,17 @@ extension CollectionsViewController {
 	}
 	
 	func updateSelections(_ containers: [DocumentContainer]?, isNavigationBranch: Bool, animated: Bool) async {
+		
+		// Expand any parent rows that we need to in order to show the selection. Don't apply the snapshot if unnecessary.
+		if let containers {
+			let expandCandidates = Set(containers.flatMap({ $0.ancestors }).map({ CollectionsItem.item($0) }))
+			let expandNeeded = expandCandidates.subtracting(expandedItems)
+			if !expandNeeded.isEmpty {
+				expandedItems.formUnion(expandNeeded)
+				applyChangeSnapshot(animated: animated)
+			}
+		}
+		
         let items = containers?.map { CollectionsItem.item($0) } ?? [CollectionsItem]()
 		let indexPaths = items.compactMap { dataSource.indexPath(for: $0) }
 

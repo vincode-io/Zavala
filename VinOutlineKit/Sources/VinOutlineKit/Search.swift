@@ -27,6 +27,7 @@ public final class Search: Identifiable, DocumentContainer {
 		return nil
 	}
 
+	public var ancestors: [DocumentContainer] = []
 	public var children: [DocumentContainer] = []
 
 	public var searchText: String

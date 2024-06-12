@@ -19,6 +19,8 @@ public protocol DocumentContainer: DocumentProvider {
 	var image: UIImage? { get }
 	#endif
 	var itemCount: Int? { get }
+
+	var ancestors: [DocumentContainer] { get }
 	var children: [DocumentContainer] { get }
 	
 	var account: Account? { get }
