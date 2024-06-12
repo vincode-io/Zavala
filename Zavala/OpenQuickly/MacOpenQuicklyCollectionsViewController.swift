@@ -82,6 +82,12 @@ private extension MacOpenQuicklyCollectionsViewController {
 			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
 				contentConfiguration.text = container.name
 				contentConfiguration.image = container.image
+
+				if container.children.isEmpty {
+					cell.accessories = [.outlineDisclosure(options: .init(isHidden: true, reservedLayoutWidth: .custom(6)))]
+				} else {
+					cell.accessories = [.outlineDisclosure(options: .init(isHidden: false, reservedLayoutWidth: .custom(6)))]
+				}
 			}
 
 			cell.backgroundConfiguration?.backgroundColor = .systemBackground
@@ -141,12 +147,22 @@ private extension MacOpenQuicklyCollectionsViewController {
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
 		let header = CollectionsItem.item(id: .header(.localAccount))
-		
-		let items = localAccount.documentContainers.map { CollectionsItem.item($0) }
-		
 		snapshot.append([header])
 		snapshot.expand([header])
-		snapshot.append(items, to: header)
+		
+		func appendToSnapshot(_ docContainer: DocumentContainer, to: CollectionsItem) {
+			let item = CollectionsItem.item(docContainer)
+			snapshot.append([item], to: to)
+			for child in docContainer.children {
+				appendToSnapshot(child, to: item)
+			}
+		}
+		
+		let documentContainers = localAccount.documentContainers
+		for docContainer in documentContainers {
+			appendToSnapshot(docContainer, to: header)
+		}
+		
 		return snapshot
 	}
 	
@@ -155,12 +171,22 @@ private extension MacOpenQuicklyCollectionsViewController {
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
 		let header = CollectionsItem.item(id: .header(.cloudKitAccount))
-		
-		let items = cloudKitAccount.documentContainers.map { CollectionsItem.item($0) }
-		
 		snapshot.append([header])
 		snapshot.expand([header])
-		snapshot.append(items, to: header)
+
+		func appendToSnapshot(_ docContainer: DocumentContainer, to: CollectionsItem) {
+			let item = CollectionsItem.item(docContainer)
+			snapshot.append([item], to: to)
+			for child in docContainer.children {
+				appendToSnapshot(child, to: item)
+			}
+		}
+		
+		let documentContainers = cloudKitAccount.documentContainers
+		for docContainer in documentContainers {
+			appendToSnapshot(docContainer, to: header)
+		}
+
 		return snapshot
 	}
 
