@@ -9,6 +9,7 @@ import UIKit
 import MobileCoreServices
 import PhotosUI
 import AsyncAlgorithms
+import Markdown
 import VinOutlineKit
 import VinUtility
 
@@ -67,7 +68,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return keyCommands
 	}
 	
-	var selectedDocuments: [Document] {
+	var selectedDocuments: [VinOutlineKit.Document] {
 		guard let outline else { return []	}
 		return [Document.outline(outline)]
 	}
@@ -740,7 +741,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	@objc func documentTitleDidChange(_ note: Notification) {
-		guard let document = note.object as? Document,
+		guard let document = note.object as? VinOutlineKit.Document,
 			  let updatedOutline = document.outline,
 			  updatedOutline == outline,
 			  currentTitle != outline?.title else { return }
@@ -3246,11 +3247,12 @@ private extension EditorViewController {
 				let text = texts.joined(separator: "\n")
 				guard !text.isEmpty else { return }
 				
+				let document = Markdown.Document(parsing: text)
+				var walker = SimpleRowWalker(outline: outline)
+				walker.visit(document)
+				
 				var rowGroups = [RowGroup]()
-				let textRows = text.split(separator: "\n").map { String($0) }
-				for textRow in textRows {
-					let row = Row(outline: outline, topicMarkdown: textRow.trimmed())
-					row.detectData()
+				for row in walker.rows {
 					rowGroups.append(RowGroup(row))
 				}
 				

@@ -7,6 +7,7 @@
 
 import UIKit
 import UniformTypeIdentifiers
+import Markdown
 import VinUtility
 import VinOutlineKit
 
@@ -272,16 +273,20 @@ private extension EditorViewController {
 		group.notify(queue: DispatchQueue.main) {
 			guard !textDrops.isEmpty else { return }
 			
-			var rowGroups = [RowGroup]()
+			var text = String()
 			for textDrop in textDrops {
-				for attrString in textDrop.attrStrings {
-					let row = Row(outline: outline)
-					row.topic = attrString
-					row.detectData()
-					rowGroups.append(RowGroup(row))
-				}
+				text.append(textDrop.markdownStrings.joined(separator: "\n"))
 			}
+
+			let document = Markdown.Document(parsing: text)
+			var walker = SimpleRowWalker(outline: outline)
+			walker.visit(document)
 			
+			var rowGroups = [RowGroup]()
+			for row in walker.rows {
+				rowGroups.append(RowGroup(row))
+			}
+
 			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, destinationIndexPath: destinationIndexPath)
 		}
 	}
@@ -347,15 +352,15 @@ private struct TextDrop {
 		self.urlString = urlString
 	}
 	
-	var attrStrings: [NSAttributedString] {
+	var markdownStrings: [String] {
 		guard let urlString, let url = URL(string: urlString) else {
-			return text.split(separator: "\n").map { NSAttributedString(string: String($0)) }
+			return text.split(separator: "\n").map { NSAttributedString(string: String($0)).markdownRepresentation }
 		}
 		
 		let attrString = NSMutableAttributedString(string: text)
 		attrString.setAttributes([NSAttributedString.Key.link: url], range: .init(location: 0, length: text.count))
 
-		return [attrString]
+		return [attrString.markdownRepresentation]
 	}
 	
 }

@@ -11,6 +11,7 @@ let package = Package(
 			targets: ["VinOutlineKit"]),
 	],
 	dependencies: [
+		.package(url: "https://github.com/apple/swift-markdown.git", branch: "main"),
 		.package(url: "https://github.com/vincode-io/MarkdownAttributedString.git", branch: "master"),
 		.package(url: "https://github.com/groue/Semaphore.git", branch: "main"),
 		.package(url: "https://github.com/vincode-io/VinXML.git", branch: "main"),
@@ -20,6 +21,7 @@ let package = Package(
 		.target(
 			name: "VinOutlineKit",
 			dependencies: [
+				.product(name: "Markdown", package: "swift-markdown"),
 				"MarkdownAttributedString",
 				"Semaphore",
 				"VinXML",
