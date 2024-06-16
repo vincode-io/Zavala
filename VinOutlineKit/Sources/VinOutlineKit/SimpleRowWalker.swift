@@ -8,15 +8,17 @@ import VinUtility
 
 public struct SimpleRowWalker: MarkupWalker {
 		
-	public var rows = [Row]()
+	public var rows: [Row] {
+		return outline?.rows ?? []
+	}
 
-	private weak var outline: Outline?
+	private var outline: Outline?
 	private var isList = false
 	private var parentRowStack = [Row]()
 	private var lastBuiltRow: Row?
 	
-	public init(outline: Outline) {
-		self.outline = outline
+	public init() {
+		self.outline = Outline(id: .document(0, UUID().uuidString))
 	}
 	
 	mutating public func visitText(_ text: Text) {
@@ -24,7 +26,7 @@ public struct SimpleRowWalker: MarkupWalker {
 		
 		let row = Row(outline: outline, topicMarkdown: text.format())
 		row.detectData()
-		rows.append(row)
+		outline.appendRow(row)
 	}
 	
 	mutating public func visitLink(_ link: Link) -> () {
@@ -32,7 +34,7 @@ public struct SimpleRowWalker: MarkupWalker {
 
 		let row = Row(outline: outline, topicMarkdown: link.format())
 		row.detectData()
-		rows.append(row)
+		outline.appendRow(row)
 	}
 	
 	mutating public func visitUnorderedList(_ unorderedList: UnorderedList) {
@@ -72,7 +74,7 @@ public struct SimpleRowWalker: MarkupWalker {
 		if let parentRow = parentRowStack.last {
 			parentRow.appendRow(row)
 		} else {
-			rows.append(row)
+			outline.appendRow(row)
 		}
 		
 		descendInto(listItem)
