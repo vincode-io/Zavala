@@ -16,7 +16,9 @@ struct SettingsFontsView: View {
 		Form {
 			ForEach(fontsViewModel.fieldConfigs, id: \.0) {
 				SettingsSelectFontButton(fieldConfig: FieldConfig(field: $0, config: $1))
+					.deleteDisabled(fontsViewModel.deleteUnavailable($0))
 			}
+			.onDelete(perform: fontsViewModel.delete)
 		}
 		.formStyle(.grouped)
 		.navigationTitle(String.fontsControlLabel)
@@ -123,6 +125,29 @@ class SettingsFontsViewModel: ObservableObject {
 				self.lastOutlineFonts = AppDefaults.shared.outlineFonts
 			}
 		}
+	}
+	
+	func deleteUnavailable(_ fontField: OutlineFontField) -> Bool {
+		switch fontField {
+		case .rowTopic(let level):
+			guard level > 1 else { return true }
+			return lastOutlineFonts?.deepestTopicLevel ?? -1 != level
+		case .rowNote(let level):
+			guard level > 1 else { return true }
+			return lastOutlineFonts?.deepestNoteLevel ?? -1 != level
+		default:
+			return true
+		}
+	}
+	
+	func delete(at offsets: IndexSet) {
+		guard let firstOffset = offsets.first else { return }
+		
+		let fontField = fieldConfigs[firstOffset].0
+		var outlineFonts = AppDefaults.shared.outlineFonts
+		outlineFonts?.rowFontConfigs.removeValue(forKey: fontField)
+		
+		AppDefaults.shared.outlineFonts = outlineFonts
 	}
 	
 }
