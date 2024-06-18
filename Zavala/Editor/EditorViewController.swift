@@ -3248,7 +3248,7 @@ private extension EditorViewController {
 				guard !text.isEmpty else { return }
 				
 				let document = Markdown.Document(parsing: text)
-				var walker = SimpleRowWalker(outline: outline)
+				var walker = SimpleRowWalker()
 				walker.visit(document)
 				
 				var rowGroups = [RowGroup]()
