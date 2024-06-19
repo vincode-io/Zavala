@@ -3270,7 +3270,7 @@ private extension Outline {
 		
 		load()
 		
-		Task {
+		Task { @MainActor in
 			let pageTitles = await withTaskGroup(of: (URL, String?).self, returning: [URL: String].self) { taskGroup in
 				newText.enumerateAttribute(.link, in: NSRange(location: 0, length: newText.length)) { (value, range, match) in
 					guard let url = value as? URL else { return }

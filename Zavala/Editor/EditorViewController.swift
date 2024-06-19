@@ -751,9 +751,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func outlineElementsDidChange(_ note: Notification) {
 		if note.object as? Outline == outline {
 			guard let changes = note.userInfo?[OutlineElementChanges.userInfoKey] as? OutlineElementChanges else { return }
-			Task { @MainActor in
-				applyChangesRestoringState(changes)
-			}
+			applyChangesRestoringState(changes)
 		}
 	}
 	
