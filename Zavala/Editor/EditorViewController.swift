@@ -448,8 +448,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var isOutlineNewFlag = false
 	private var updateTitleChannel = AsyncChannel<String>()
 
-	private var keyboardWorkItem: DispatchWorkItem?
-
 	private var currentKeyboardHeight: CGFloat = 0
 	
 	private var headerFooterSections: IndexSet {
@@ -832,25 +830,17 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
 
 		if note.name == UIResponder.keyboardWillHideNotification {
-			keyboardWorkItem?.cancel()
-			keyboardWorkItem = DispatchWorkItem { [weak self] in
-				UIView.animate(withDuration: 0.25) {
-					self?.collectionView.contentInset = EditorViewController.defaultContentInsets
-				}
-				self?.currentKeyboardHeight = 0
+			UIView.animate(withDuration: 0.25) {
+				self.collectionView.contentInset = EditorViewController.defaultContentInsets
 			}
-			DispatchQueue.main.async(execute: keyboardWorkItem!)
+			currentKeyboardHeight = 0
 		} else {
-			keyboardWorkItem?.cancel()
-			keyboardWorkItem = DispatchWorkItem { [weak self] in
-				let newInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
-				if self?.collectionView.contentInset != newInsets {
-					self?.collectionView.contentInset = newInsets
-				}
-				self?.scrollCursorToVisible()
-				self?.currentKeyboardHeight = keyboardViewEndFrame.height
+			let newInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
+			if collectionView.contentInset != newInsets {
+				collectionView.contentInset = newInsets
 			}
-			DispatchQueue.main.async(execute: keyboardWorkItem!)
+			scrollCursorToVisible()
+			currentKeyboardHeight = keyboardViewEndFrame.height
 		}
 	}
 	
