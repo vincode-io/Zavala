@@ -13,58 +13,53 @@ import VinOutlineKit
 class IndexRequestHandler: CSIndexExtensionRequestHandler {
 	
 	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Zavala")
-
+	
     override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexAllSearchableItemsWithAcknowledgementHandler acknowledgementHandler: @escaping () -> Void) {
-		DispatchQueue.main.async {
+		Task { @MainActor in
 			self.logger.info("IndexRequestHandler starting...")
 			
 			self.resume()
 
-			let group = DispatchGroup()
-			
 			for document in AccountManager.shared.documents {
-				autoreleasepool {
+				self.logger.info("IndexRequestHandler indexing \(document.title ?? "", privacy: .public).")
+				
+				await withCheckedContinuation { continuation in
 					let searchableItem = DocumentIndexer.makeSearchableItem(forDocument: document)
-					group.enter()
 					searchableIndex.indexSearchableItems([searchableItem]) { _ in
-						group.leave()
+						continuation.resume()
 					}
 				}
 			}
 			
-			group.notify(queue: .main) {
-				self.suspend()
-				self.logger.info("IndexRequestHandler done.")
-				acknowledgementHandler()
-			}
+			self.suspend()
+			self.logger.info("IndexRequestHandler done.")
+			acknowledgementHandler()
 		}
     }
     
 	override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexSearchableItemsWithIdentifiers identifiers: [String], acknowledgementHandler: @escaping () -> Void) {
-		DispatchQueue.main.async {
+		Task { @MainActor in
 			self.logger.info("IndexRequestHandler starting...")
 			
 			self.resume()
 			
-			let group = DispatchGroup()
-			
 			for description in identifiers {
 				if let entityID = EntityID(description: description), let document = AccountManager.shared.findDocument(entityID) {
-					autoreleasepool {
+					
+					self.logger.info("IndexRequestHandler indexing \(document.title ?? "", privacy: .public).")
+					
+					await withCheckedContinuation { continuation in
 						let searchableItem = DocumentIndexer.makeSearchableItem(forDocument: document)
-						group.enter()
 						searchableIndex.indexSearchableItems([searchableItem]) { _ in
-							group.leave()
+							continuation.resume()
 						}
 					}
 				}
 			}
-			
-			group.notify(queue: .main) {
-				self.suspend()
-				self.logger.info("IndexRequestHandler done.")
-				acknowledgementHandler()
-			}
+
+			self.suspend()
+			self.logger.info("IndexRequestHandler done.")
+			acknowledgementHandler()
 		}
 	}
 	
