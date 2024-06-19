@@ -5,7 +5,7 @@
       "comment" : "Control Label: (No Title)"
     },
     "%@ at %@" : {
-      "comment" : "Timestame Label: Created",
+      "comment" : "Timestame Label: Created\nTimestame Label: Updated",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -154,7 +154,7 @@
       "comment" : "Control Label: Community Discussion"
     },
     "Complete" : {
-      "comment" : "Accessibility Label: Complete"
+      "comment" : "Accessibility Label: Complete\nControl Label: Complete"
     },
     "Copy" : {
       "comment" : "Control Label: Copy"
