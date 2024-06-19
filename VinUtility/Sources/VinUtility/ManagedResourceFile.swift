@@ -90,9 +90,13 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 
 	public func resume() {
 		NSFileCoordinator.addFilePresenter(self)
+		startSaveTask()
 	}
 	
 	public func suspend() {
+		saveTask?.cancel()
+		saveTask = nil
+		saveChannel.finish()
 		NSFileCoordinator.removeFilePresenter(self)
 	}
 	

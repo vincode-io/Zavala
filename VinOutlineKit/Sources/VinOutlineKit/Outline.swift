@@ -925,7 +925,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	public func textContent() -> String {
-		load()
+		load(includeImages: false)
 		
 		var textContent = "\(title ?? "")\n\n"
 		rows.forEach {
@@ -2404,7 +2404,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		outlineElementsDidChange(changes)
 	}
 	
-	public func load() {
+	public func load(includeImages: Bool = true) {
 		beingUsedCount = beingUsedCount + 1
 		
 		guard rowsFile == nil, beingUsedCount == 1 else { return }
@@ -2412,9 +2412,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		rowsFile = RowsFile(outline: self)
 		rowsFile?.load()
 
-		imagesFile = ImagesFile(outline: self)
-		imagesFile?.load()
-
+		if includeImages {
+			imagesFile = ImagesFile(outline: self)
+			imagesFile?.load()
+		}
+		
 		prepareRowsForProcessing()
 	}
 	
