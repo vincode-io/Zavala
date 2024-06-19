@@ -3268,23 +3268,27 @@ private extension Outline {
 	func replaceLinkTitleIfPossible(row: Row, newText: NSAttributedString?, isInNotes: Bool) {
 		guard autoLinkingEnabled ?? false, let newText else { return }
 		
-		var pageTitles = [URL: String]()
-		let group = DispatchGroup()
-		
 		load()
 		
-		newText.enumerateAttribute(.link, in: NSRange(location: 0, length: newText.length)) { (value, range, match) in
-			guard let url = value as? URL else { return }
-			
-			group.enter()
-			WebPageTitle.find(forURL: url) { pageTitle in
-				pageTitles[url] = pageTitle
-				group.leave()
+		Task {
+			let pageTitles = await withTaskGroup(of: (URL, String?).self, returning: [URL: String].self) { taskGroup in
+				newText.enumerateAttribute(.link, in: NSRange(location: 0, length: newText.length)) { (value, range, match) in
+					guard let url = value as? URL else { return }
+					
+					taskGroup.addTask {
+						let pageTitle = await WebPageTitle.find(forURL: url)
+						return (url, pageTitle)
+					}
+				}
+				
+				var pageTitles = [URL: String]()
+				for await result in taskGroup {
+					if let pageTitle = result.1 {
+						pageTitles[result.0] = pageTitle
+					}
+				}
+				return pageTitles
 			}
-		}
-		
-		group.notify(queue: .main) { [weak self ] in
-			guard let self else { return }
 			
 			let mutableText = NSMutableAttributedString(attributedString: newText)
 			
@@ -3307,13 +3311,12 @@ private extension Outline {
 			} else {
 				row.note = mutableText
 			}
-
+			
 			self.unload()
-
+			
 			if let shadowTableIndex = row.shadowTableIndex {
 				self.outlineElementsDidChange(OutlineElementChanges(section: self.adjustedRowsSection, reloads: Set([shadowTableIndex])))
 			}
-
 		}
 		
 	}

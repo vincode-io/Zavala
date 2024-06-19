@@ -727,7 +727,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 
 		// We have to get the layout on the main thread.
-		DispatchQueue.main.async {
+		Task { @MainActor in
 			guard let layout = self.collectionView.collectionViewLayout as? EditorCollectionViewCompositionalLayout else { return }
 			if layout.editorMaxWidth != AppDefaults.shared.editorMaxWidth.pixels {
 				layout.editorMaxWidth = AppDefaults.shared.editorMaxWidth.pixels
@@ -751,7 +751,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func outlineElementsDidChange(_ note: Notification) {
 		if note.object as? Outline == outline {
 			guard let changes = note.userInfo?[OutlineElementChanges.userInfoKey] as? OutlineElementChanges else { return }
-			applyChangesRestoringState(changes)
+			Task { @MainActor in
+				applyChangesRestoringState(changes)
+			}
 		}
 	}
 	

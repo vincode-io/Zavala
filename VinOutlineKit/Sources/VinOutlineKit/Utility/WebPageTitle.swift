@@ -12,50 +12,35 @@ import VinXML
 
 struct WebPageTitle {
 	
-	private static var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
+	private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
 
-	static func find(forURL url: URL, completion: @escaping (String?) -> ()) {
-		func finish(_ result:String? = nil) {
-			DispatchQueue.main.async {
-				completion(result)
-			}
-		}
-		
+	static func find(forURL url: URL) async -> String? {
 		guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false),
 			  let scheme = urlComponents.scheme,
 			  scheme.starts(with: "http") else {
-			finish()
-			return
+			return nil
 		}
 
-		let dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
-			if let error {
-				logger.error("Download failed for URL: \(url.absoluteString, privacy: .public) with error: \(error.localizedDescription, privacy: .public)")
-				finish()
-				return
-			}
-			
-			guard let data, let html = String(data: data, encoding: .utf8) else {
-				logger.error("Unable to convert result to String for URL: \(url.absoluteString, privacy: .public)")
-				finish()
-				return
-			}
-			
-			guard let doc = try? VinXML.XMLDocument(html: html) else {
-				logger.error("Unable to parse using VinXML.XMLDocument for URL: \(url.absoluteString, privacy: .public)")
-				finish()
-				return
-			}
-			
-			do {
-				try finish(Self.extractTitle(doc: doc))
-			} catch {
-				logger.error("Can't extract Title for URL: \(url.absoluteString, privacy: .public) with error: \(error.localizedDescription, privacy: .public)")
-				finish()
-			}
+		guard let (data, _) = try? await URLSession.shared.data(from: url) else {
+			return nil
 		}
 		
-		dataTask.resume()
+		guard let html = String(data: data, encoding: .utf8) else {
+			logger.error("Unable to convert result to String for URL: \(url.absoluteString, privacy: .public)")
+			return nil
+		}
+		
+		guard let doc = try? VinXML.XMLDocument(html: html) else {
+			logger.error("Unable to parse using VinXML.XMLDocument for URL: \(url.absoluteString, privacy: .public)")
+			return nil
+		}
+		
+		do {
+			return try Self.extractTitle(doc: doc)
+		} catch {
+			logger.error("Can't extract Title for URL: \(url.absoluteString, privacy: .public) with error: \(error.localizedDescription, privacy: .public)")
+			return nil
+		}
 	}
 	
 }
