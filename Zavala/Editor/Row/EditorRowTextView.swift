@@ -419,7 +419,7 @@ extension EditorRowTextView: NSTextStorageDelegate {
 				}
 				
 				if key == .attachment, let nsAttachment = attributes[key] as? NSTextAttachment {
-					guard !(nsAttachment is ImageTextAttachment) && !(nsAttachment is MetadataTextAttachment) else { continue }
+					guard !(nsAttachment is ImageTextAttachment) else { continue }
 					if let image = nsAttachment.image {
 						let attachment = ImageTextAttachment(data: nil, ofType: nil)
 						attachment.image = image

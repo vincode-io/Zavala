@@ -469,8 +469,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	override func viewDidLoad() {
         super.viewDidLoad()
 		
-		//NSTextAttachment.registerViewProviderClass(MetadataTextAttachmentViewProvider.self, forFileType: MetadataTextAttachmentViewProvider.fileType)
-		
 		collectionView.translatesAutoresizingMaskIntoConstraints = false
 		
 		if traitCollection.userInterfaceIdiom == .mac {
