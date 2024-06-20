@@ -8,9 +8,9 @@
 import UIKit
 import VinOutlineKit
 
-final class CollectionsItem: NSObject, NSCopying, Identifiable {
+final class CollectionsItem: NSObject, NSCopying, Identifiable, Sendable {
 	
-	enum ID: Hashable {
+	enum ID: Hashable, Sendable {
 		case header(CollectionsSection)
 		case search
 		case documentContainer(EntityID)

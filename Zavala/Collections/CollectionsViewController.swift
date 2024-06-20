@@ -12,6 +12,7 @@ import Semaphore
 import VinOutlineKit
 import VinUtility
 
+@MainActor
 protocol CollectionsDelegate: AnyObject {
 	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool) async
 	func showSettings(_: CollectionsViewController)

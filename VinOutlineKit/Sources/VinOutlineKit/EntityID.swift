@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable {
+public enum EntityID: CustomStringConvertible, Hashable, Equatable, Codable, Sendable {
 	case account(Int)
 	case document(Int, String) // Account, Document
 	case row(Int, String, String) // Account, Document, Row

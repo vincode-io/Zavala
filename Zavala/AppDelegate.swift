@@ -10,7 +10,7 @@ import OSLog
 import Intents
 import VinOutlineKit
 
-var appDelegate: AppDelegate!
+@MainActor var appDelegate: AppDelegate!
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
