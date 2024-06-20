@@ -9,7 +9,6 @@ import UIKit
 import MobileCoreServices
 import PhotosUI
 import AsyncAlgorithms
-import Markdown
 import VinOutlineKit
 import VinUtility
 
@@ -3183,68 +3182,29 @@ private extension EditorViewController {
 
 	func pasteRows(afterRows: [Row]?) {
 		guard let undoManager, let outline else { return }
-
-		if let rowProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [Row.typeIdentifier]), !rowProviderIndexes.isEmpty {
-			let group = DispatchGroup()
-			var rowGroups = [RowGroup]()
-			
-			for index in rowProviderIndexes {
-				let itemProvider = UIPasteboard.general.itemProviders[index]
-				group.enter()
-				itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
-					DispatchQueue.main.async {
-						if let data {
-							do {
-								rowGroups.append(try RowGroup.fromData(data))
-								group.leave()
-							} catch {
-								self?.presentError(error)
-								group.leave()
-							}
-						}
-					}
-				}
-			}
-
-			group.notify(queue: DispatchQueue.main) {
-				let command = PasteRowCommand(actionName: .pasteControlLabel,
-											  undoManager: undoManager,
-											  delegate: self,
-											  outline: outline,
-											  rowGroups: rowGroups,
-											  afterRow: afterRows?.last)
-
-				command.execute()
-			}
-			
-		} else if let stringProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [UTType.utf8PlainText.identifier]), !stringProviderIndexes.isEmpty {
-			
-			let group = DispatchGroup()
-			var texts = [String]()
-			
-			for index in stringProviderIndexes {
-				let itemProvider = UIPasteboard.general.itemProviders[index]
-				group.enter()
-				itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
-					if let data, let itemText = String(data: data, encoding: .utf8) {
-						texts.append(itemText)
-						group.leave()
-					}
-				}
-			}
-
-			group.notify(queue: DispatchQueue.main) {
-				let text = texts.joined(separator: "\n")
-				guard !text.isEmpty else { return }
+		
+		Task {
+			if let rowProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [Row.typeIdentifier]), !rowProviderIndexes.isEmpty {
+				let itemProviders = rowProviderIndexes.compactMap { UIPasteboard.general.itemProviders[$0] }
 				
-				let document = Markdown.Document(parsing: text)
-				var walker = SimpleRowWalker()
-				walker.visit(document)
+				do {
+					let rowGroups = try await RowGroup.fromRowItemProviders(itemProviders)
+					
+					let command = PasteRowCommand(actionName: .pasteControlLabel,
+												  undoManager: undoManager,
+												  delegate: self,
+												  outline: outline,
+												  rowGroups: rowGroups,
+												  afterRow: afterRows?.last)
 				
-				var rowGroups = [RowGroup]()
-				for row in walker.rows {
-					rowGroups.append(RowGroup(row))
+					command.execute()
+				} catch {
+					presentError(error)
 				}
+			} else if let textProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [UTType.utf8PlainText.identifier]), !textProviderIndexes.isEmpty {
+				let itemProviders = textProviderIndexes.compactMap { UIPasteboard.general.itemProviders[$0] }
+				
+				let rowGroups = await RowGroup.fromTextItemProviders(itemProviders)
 				
 				let command = PasteRowCommand(actionName: .pasteControlLabel,
 											  undoManager: undoManager,
@@ -3252,10 +3212,9 @@ private extension EditorViewController {
 											  outline: outline,
 											  rowGroups: rowGroups,
 											  afterRow: afterRows?.last)
-
+				
 				command.execute()
 			}
-
 		}
 	}
 	

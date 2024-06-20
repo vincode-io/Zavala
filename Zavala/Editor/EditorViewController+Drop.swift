@@ -7,7 +7,6 @@
 
 import UIKit
 import UniformTypeIdentifiers
-import Markdown
 import VinUtility
 import VinOutlineKit
 
@@ -208,26 +207,13 @@ private extension EditorViewController {
 		
 		guard !itemProviders.isEmpty else { return }
 
-		let group = DispatchGroup()
-		var rowGroups = [RowGroup]()
-		
-		for itemProvider in itemProviders {
-			group.enter()
-			itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
-				if let data {
-					do {
-						rowGroups.append(try RowGroup.fromData(data))
-						group.leave()
-					} catch {
-						self?.presentError(error)
-						group.leave()
-					}
-				}
+		Task {
+			do {
+				let rowGroups = try await RowGroup.fromRowItemProviders(itemProviders)
+				self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, destinationIndexPath: destinationIndexPath)
+			} catch {
+				presentError(error)
 			}
-		}
-
-		group.notify(queue: DispatchQueue.main) {
-			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, destinationIndexPath: destinationIndexPath)
 		}
 	}
 
@@ -243,50 +229,8 @@ private extension EditorViewController {
 		
 		guard !itemProviders.isEmpty else { return }
 
-		let group = DispatchGroup()
-		var textDrops = [TextDrop]()
-		
-		for itemProvider in itemProviders {
-			group.enter()
-			
-			itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
-				if let data, let itemText = String(data: data, encoding: .utf8) {
-					
-					if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-						itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.url.identifier) { (data, error) in
-							if let data, let urlString = String(data: data, encoding: .utf8) {
-								textDrops.append(TextDrop(text: itemText, urlString: urlString))
-							}
-							group.leave()
-						}
-					} else {
-						textDrops.append(TextDrop(text: itemText))
-						group.leave()
-					}
-					
-				} else {
-					group.leave()
-				}
-			}
-		}
-
-		group.notify(queue: DispatchQueue.main) {
-			guard !textDrops.isEmpty else { return }
-			
-			var text = String()
-			for textDrop in textDrops {
-				text.append(textDrop.markdownStrings.joined(separator: "\n"))
-			}
-
-			let document = Markdown.Document(parsing: text)
-			var walker = SimpleRowWalker()
-			walker.visit(document)
-			
-			var rowGroups = [RowGroup]()
-			for row in walker.rows {
-				rowGroups.append(RowGroup(row))
-			}
-
+		Task {
+			let rowGroups = try await RowGroup.fromTextItemProviders(itemProviders)
 			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, destinationIndexPath: destinationIndexPath)
 		}
 	}
@@ -338,29 +282,6 @@ private extension EditorViewController {
 										   prefersEnd: prefersEnd)
 		
 		command.execute()
-	}
-	
-}
-
-private struct TextDrop {
-	
-	var text: String
-	var urlString: String?
-	
-	init(text: String, urlString: String? = nil) {
-		self.text = text
-		self.urlString = urlString
-	}
-	
-	var markdownStrings: [String] {
-		guard let urlString, let url = URL(string: urlString) else {
-			return text.split(separator: "\n").map { NSAttributedString(string: String($0)).markdownRepresentation }
-		}
-		
-		let attrString = NSMutableAttributedString(string: text)
-		attrString.setAttributes([NSAttributedString.Key.link: url], range: .init(location: 0, length: text.count))
-
-		return [attrString.markdownRepresentation]
 	}
 	
 }

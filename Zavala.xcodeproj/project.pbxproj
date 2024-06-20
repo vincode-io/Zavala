@@ -109,6 +109,7 @@
 		519897C62ADE1C4A008A6FA4 /* About.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 519897C52ADE1C4A008A6FA4 /* About.storyboard */; };
 		519965DC2624EEE500D8468B /* RSAppMovementMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */; };
 		519A2324260A9B900056051E /* OutlineFontField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519A2323260A9B900056051E /* OutlineFontField.swift */; };
+		519D78FB2C2490F200041506 /* RowGroup+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519D78FA2C2490ED00041506 /* RowGroup+.swift */; };
 		51A1EC422723246C00463A15 /* EditRowsIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A1EC412723246C00463A15 /* EditRowsIntentHandler.swift */; };
 		51A1EC4427243B3600463A15 /* GenericRowIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A1EC4327243B3600463A15 /* GenericRowIdentifier.swift */; };
 		51A586FC2B5898F600F1EB60 /* EditorFindSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A586FB2B5898F600F1EB60 /* EditorFindSession.swift */; };
@@ -323,6 +324,7 @@
 		519897C52ADE1C4A008A6FA4 /* About.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = About.storyboard; sourceTree = "<group>"; };
 		519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSAppMovementMonitor.swift; sourceTree = "<group>"; };
 		519A2323260A9B900056051E /* OutlineFontField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontField.swift; sourceTree = "<group>"; };
+		519D78FA2C2490ED00041506 /* RowGroup+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RowGroup+.swift"; sourceTree = "<group>"; };
 		51A1EC412723246C00463A15 /* EditRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRowsIntentHandler.swift; sourceTree = "<group>"; };
 		51A1EC4327243B3600463A15 /* GenericRowIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericRowIdentifier.swift; sourceTree = "<group>"; };
 		51A586FB2B5898F600F1EB60 /* EditorFindSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorFindSession.swift; sourceTree = "<group>"; };
@@ -454,6 +456,7 @@
 				5113B08C260C1F1700DBD11B /* OutlineFontCache.swift */,
 				511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */,
 				51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */,
+				519D78FA2C2490ED00041506 /* RowGroup+.swift */,
 				5163ADF125C78CFB008F25CA /* SearchTextField.swift */,
 				51DFDC17259EA8D300C068C6 /* Selector+.swift */,
 				51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */,
@@ -1063,6 +1066,7 @@
 				5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */,
 				51FA27422B3B748C008B665E /* SettingsEditorView.swift in Sources */,
 				5147D0B825CCAB2A004673C3 /* DocumentsViewController+Drop.swift in Sources */,
+				519D78FB2C2490F200041506 /* RowGroup+.swift in Sources */,
 				51CB201A2B5F25D6006CAC1A /* OutlineFontColor.swift in Sources */,
 				514F222A25C4FF02004E02CD /* EditorTagInputTextField.swift in Sources */,
 				5147D0B525CB95B4004673C3 /* DocumentsViewController+Drag.swift in Sources */,
