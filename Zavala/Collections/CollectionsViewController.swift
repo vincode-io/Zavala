@@ -154,7 +154,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
         }
         
         if let containers, containers.count == 1, let search = containers.first as? Search {
-			DispatchQueue.main.async {
+			Task { @MainActor in
 				if let searchCellIndexPath = self.dataSource.indexPath(for: CollectionsItem.searchItem()) {
 					if let searchCell = self.collectionView.cellForItem(at: searchCellIndexPath) as? CollectionsSearchCell {
 						searchCell.setSearchField(searchText: search.searchText)
@@ -198,13 +198,15 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 
 	@objc func cloudKitSyncWillBegin(_ note: Notification) {
 		// Let any pending UI things like adding the account happen so that we have something to put the spinner on
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+		Task { @MainActor in
+			try? await Task.sleep(for: .seconds(0.2))
 			self.iCloudActivityIndicatorView.startAnimating()
 		}
 	}
 	
 	@objc func cloudKitSyncDidComplete(_ note: Notification) {
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+		Task { @MainActor in
+			try? await Task.sleep(for: .seconds(0.2))
 			self.iCloudActivityIndicatorView.stopAnimating()
 		}
 	}

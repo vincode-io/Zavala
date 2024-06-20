@@ -52,14 +52,9 @@ extension DocumentsActivityItemsConfiguration: UIActivityItemsConfigurationReadi
 			let itemProvider = NSItemProvider()
 			
 			itemProvider.registerDataRepresentation(for: UTType.utf8PlainText, visibility: .all) { completion in
-				if Thread.isMainThread {
+				Task { @MainActor in
 					let data = document.formattedPlainText.data(using: .utf8)
 					completion(data, nil)
-				} else {
-					DispatchQueue.main.async {
-						let data = document.formattedPlainText.data(using: .utf8)
-						completion(data, nil)
-					}
 				}
 				return nil
 			}

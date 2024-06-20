@@ -55,7 +55,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 				let provider = dropItem.dragItem.itemProvider
 				provider.loadDataRepresentation(forTypeIdentifier: DataRepresentation.opml.typeIdentifier) { (opmlData, error) in
 					guard let opmlData else { return }
-					DispatchQueue.main.async {
+					Task { @MainActor in
                         var tags: [Tag]? = nil
                         if let tag = (container as? TagDocuments)?.tag {
                             tags = [tag]

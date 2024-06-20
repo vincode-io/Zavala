@@ -10,7 +10,7 @@ import UIKit
 extension UIWindowSceneDelegate {
 	
 	func updateUserInterfaceStyle() {
-		DispatchQueue.main.async {
+		Task { @MainActor in
 			switch AppDefaults.shared.userInterfaceColorPalette {
 			case .automatic:
 				self.window??.overrideUserInterfaceStyle = .unspecified

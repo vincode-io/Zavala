@@ -17,9 +17,9 @@ class DocumentIndexer {
 	}
 	
 	static func updateIndex(forDocument document: Document) {
-		DispatchQueue.main.async {
+		Task { @MainActor in
 			let searchableItem = makeSearchableItem(forDocument: document)
-			CSSearchableIndex.default().indexSearchableItems([searchableItem])
+			try? await CSSearchableIndex.default().indexSearchableItems([searchableItem])
 		}
 	}
 	

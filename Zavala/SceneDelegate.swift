@@ -114,7 +114,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		mainSplitViewController.importOPMLs(urls: opmlURLs)
 		
 		#if targetEnvironment(macCatalyst)
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+		Task { @MainActor in
+			try? await Task.sleep(for: .seconds(1))
 			appDelegate.appKitPlugin?.clearRecentDocuments()
 		}
 		#endif

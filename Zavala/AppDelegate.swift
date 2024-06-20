@@ -1021,7 +1021,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		var historyItems = [UIAction]()
 		for (index, pin) in history.enumerated() {
 			historyItems.append(UIAction(title: pin.document?.title ?? .noTitleLabel) { [weak self] _ in
-				DispatchQueue.main.async {
+				Task { @MainActor in
 					self?.openHistoryItem(index: index)
 				}
 			})

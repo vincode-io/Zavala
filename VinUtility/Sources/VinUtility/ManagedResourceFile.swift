@@ -42,7 +42,7 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 	
 	public func presentedItemDidChange() {
 		guard !isDirty else { return }
-		DispatchQueue.main.async {
+		Task { @MainActor in
 			self.load()
 		}
 	}

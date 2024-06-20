@@ -926,7 +926,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		// causes the find interaction to glitch out. This is especially true on macOS. We could have a shorter
 		// duration on iOS, but I don't see the need to complicate the code.
 		if let searchText {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			Task { @MainActor in
+				try? await Task.sleep(for: .seconds(0.5))
 				self.showFindInteraction(text: searchText)
 			}
 			return
@@ -957,7 +958,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		for (index, pin) in delegate.editorViewControllerGoBackwardStack.enumerated() {
 			backwardItems.append(UIAction(title: pin.document?.title ?? .noTitleLabel) { [weak self] _ in
 				guard let self else { return }
-				DispatchQueue.main.async {
+				Task { @MainActor in
 					delegate.goBackward(self, to: index)
 				}
 			})
@@ -968,7 +969,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		for (index, pin) in delegate.editorViewControllerGoForwardStack.enumerated() {
 			forwardItems.append(UIAction(title: pin.document?.title ?? .noTitleLabel) { [weak self] _ in
 				guard let self else { return }
-				DispatchQueue.main.async {
+				Task { @MainActor in
 					delegate.goForward(self, to: index)
 				}
 			})
@@ -1709,7 +1710,7 @@ extension EditorViewController: EditorRowViewCellDelegate {
 	func editorRowTextFieldDidBecomeActive(row: Row) {
 		// This makes doing row insertions much faster because this work will
 		// be performed a cycle after the actual insertion was completed.
-		DispatchQueue.main.async {
+		Task { @MainActor in
 			self.collectionView.deselectAll()
 			self.updateUI()
 			self.delegate?.validateToolbar(self)
@@ -1815,7 +1816,7 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = UIImage.scaleImage(data, maxPixelSize: 1800) {
 				let scaledImage = UIImage(cgImage: cgImage)
 				
-				DispatchQueue.main.async {
+				Task { @MainActor in
 					self.restoreCursorPosition(cursorCoordinates)
 					
 					guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
@@ -2617,7 +2618,8 @@ private extension EditorViewController {
 			CATransaction.begin()
 			CATransaction.setCompletionBlock {
 				// Got to wait or the row cell won't be found
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+				Task { @MainActor in
+					try? await Task.sleep(for: .seconds(0.5))
 					restoreCursor()
 				}
 			}
@@ -2635,7 +2637,7 @@ private extension EditorViewController {
 		let rowCount = collectionView.numberOfItems(inSection: adjustedRowsSection)
 		if let verticleScrollState = outline?.verticleScrollState, verticleScrollState != 0, verticleScrollState < rowCount {
 			collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: adjustedRowsSection), at: .top, animated: false)
-			DispatchQueue.main.async {
+			Task { @MainActor in
 				let rowCount = self.collectionView.numberOfItems(inSection: self.adjustedRowsSection)
 				if verticleScrollState < rowCount {
 					self.collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: self.adjustedRowsSection), at: .top, animated: false)
@@ -2650,7 +2652,8 @@ private extension EditorViewController {
 	
 	func moveCursorToTitleOnNew() {
 		if isOutlineNewFlag {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+			Task { @MainActor in
+				try? await Task.sleep(for: .seconds(0.6))
 				self.moveCursorToTitle()
 			}
 		}
@@ -2808,7 +2811,7 @@ private extension EditorViewController {
 		return UIAction(title: .addRowControlLabel, image: .add) { [weak self] action in
 			// Have to let the text field get the first responder by getting it away from this
 			// action which appears to be holding on to it.
-			DispatchQueue.main.async {
+			Task { @MainActor in
 				self?.createRow(afterRows: rows)
 			}
 		}
@@ -2944,7 +2947,8 @@ private extension EditorViewController {
 				let totalHeight = xHeight + topicTextView.textContainerInset.top + topicTextView.textContainerInset.bottom
 				let rect = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: totalHeight)
 				collectionView.scrollRectToVisibleBypass(rect, animated: true)
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+				Task { @MainActor in
+					try? await Task.sleep(for: .seconds(0.3))
 					if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView {
 						nextTopicTextView.becomeFirstResponder()
 						moveCursorUpToNext(nextTopicTextView: nextTopicTextView)
@@ -2999,7 +3003,8 @@ private extension EditorViewController {
 				let totalHeight = xHeight + topicTextView.textContainerInset.top + topicTextView.textContainerInset.bottom
 				let rect = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: totalHeight)
 				collectionView.scrollRectToVisibleBypass(rect, animated: true)
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+				Task { @MainActor in
+					try? await Task.sleep(for: .seconds(0.3))
 					if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView {
 						nextTopicTextView.becomeFirstResponder()
 						moveCursorDownToNext(nextTopicTextView: nextTopicTextView)

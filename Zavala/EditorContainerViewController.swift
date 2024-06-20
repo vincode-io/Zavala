@@ -589,9 +589,9 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				}
 				
 				let turnFilterOnAction = UIAction() { [weak self] _ in
-					DispatchQueue.main.async {
-						   self?.toggleFilterOn()
-					   }
+					Task { @MainActor in
+						self?.toggleFilterOn()
+					}
 				}
 				
 				turnFilterOnAction.title = self.isFilterOn ? .turnFilterOffControlLabel : .turnFilterOnControlLabel
@@ -599,17 +599,17 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
 				
 				let filterCompletedAction = UIAction(title: .filterCompletedControlLabel) { [weak self] _ in
-					DispatchQueue.main.async {
-						   self?.toggleCompletedFilter()
-					   }
+					Task { @MainActor in
+						self?.toggleCompletedFilter()
+					}
 				}
 				filterCompletedAction.state = self.isCompletedFiltered ? .on : .off
 				filterCompletedAction.attributes = self.isFilterOn ? [] : .disabled
 
 				let filterNotesAction = UIAction(title: .filterNotesControlLabel) { [weak self] _ in
-					DispatchQueue.main.async {
-						   self?.toggleNotesFilter()
-					   }
+					Task { @MainActor in
+						self?.toggleNotesFilter()
+					}
 				}
 				filterNotesAction.state = self.isNotesFiltered ? .on : .off
 				filterNotesAction.attributes = self.isFilterOn ? [] : .disabled

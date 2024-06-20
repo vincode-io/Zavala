@@ -437,7 +437,7 @@ extension MainSplitViewController: CollectionsDelegate {
 											  animated: Bool) async {
 		
 		// The window might not be quite available at launch, so put a slight delay in to help it get there
-		DispatchQueue.main.async {
+		Task { @MainActor in
 			self.view.window?.windowScene?.title = documentContainers.title
 		}
 		
@@ -978,7 +978,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				var backwardItems = [UIAction]()
 				for (index, pin) in self.goBackwardStack.enumerated() {
 					backwardItems.append(UIAction(title: pin.document?.title ?? .noTitleLabel) { [weak self] _ in
-						DispatchQueue.main.async {
+						Task { @MainActor in
 							self?.goBackward(to: index)
 						}
 					})
@@ -1003,7 +1003,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				var forwardItems = [UIAction]()
 				for (index, pin) in self.goForwardStack.enumerated() {
 					forwardItems.append(UIAction(title: pin.document?.title ?? .noTitleLabel) { [weak self] _ in
-						DispatchQueue.main.async {
+						Task { @MainActor in
 							self?.goForward(to: index)
 						}
 					})
@@ -1202,9 +1202,9 @@ extension MainSplitViewController: NSToolbarDelegate {
 				}
 				
 				let turnFilterOnAction = UIAction() { [weak self] _ in
-					DispatchQueue.main.async {
-						   self?.toggleFilterOn()
-					   }
+					Task { @MainActor in
+						self?.toggleFilterOn()
+					}
 				}
 				
 				turnFilterOnAction.title = self.isFilterOn ? .turnFilterOffControlLabel : .turnFilterOnControlLabel
@@ -1212,17 +1212,17 @@ extension MainSplitViewController: NSToolbarDelegate {
 				let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
 				
 				let filterCompletedAction = UIAction(title: .filterCompletedControlLabel) { [weak self] _ in
-					DispatchQueue.main.async {
-						   self?.toggleCompletedFilter()
-					   }
+					Task { @MainActor in
+						self?.toggleCompletedFilter()
+					}
 				}
 				filterCompletedAction.state = self.isCompletedFiltered ? .on : .off
 				filterCompletedAction.attributes = self.isFilterOn ? [] : .disabled
 
 				let filterNotesAction = UIAction(title: .filterNotesControlLabel) { [weak self] _ in
-					DispatchQueue.main.async {
-						   self?.toggleNotesFilter()
-					   }
+					Task { @MainActor in
+						self?.toggleNotesFilter()
+					}
 				}
 				filterNotesAction.state = self.isNotesFiltered ? .on : .off
 				filterNotesAction.attributes = self.isFilterOn ? [] : .disabled

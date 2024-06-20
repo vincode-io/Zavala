@@ -402,7 +402,8 @@ open class SearchTextField: EnhancedTextField {
     }
     
     @objc open func keyboardDidChangeFrame(_ notification: Notification) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+		Task { @MainActor [weak self] in
+			try? await Task.sleep(for: .seconds(0.1))
             self?.keyboardFrame = ((notification as NSNotification).userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
             self?.prepareDrawTableResult()
         }

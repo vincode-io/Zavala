@@ -51,7 +51,7 @@ class EditorRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {
 			itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier) { [weak textView] (data, error) in
 				guard let textView, let data, let cgImage = UIImage.scaleImage(data, maxPixelSize: 1800) else { return }
 				let image = UIImage(cgImage: cgImage)
-				DispatchQueue.main.async {
+				Task { @MainActor in
 					textView.replaceCharacters(textView.selectedRange, withImage: image)
 				}
 			}
@@ -68,7 +68,7 @@ class EditorRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {
 							if let data, let text = String(data: data, encoding: .utf8) {
 								let attrString = NSMutableAttributedString(string: text)
 								attrString.setAttributes([NSAttributedString.Key.link: url], range: .init(location: 0, length: text.count))
-								DispatchQueue.main.async {
+								Task { @MainActor in
 									textView.textStorage.insert(attrString, at: textView.selectedRange.location)
 									textView.textWasChanged()
 								}
@@ -80,7 +80,7 @@ class EditorRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {
 						
 						let attrString = NSMutableAttributedString(string: urlString)
 						attrString.setAttributes([NSAttributedString.Key.link: url], range: .init(location: 0, length: urlString.count))
-						DispatchQueue.main.async {
+						Task { @MainActor in
 							textView.textStorage.insert(attrString, at: textView.selectedRange.location)
 							textView.textWasChanged()
 						}
