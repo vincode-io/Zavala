@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct DataRepresentation {
+public struct DataRepresentation: Sendable {
 	
 	public let suffix: String
 	public let typeIdentifier: StringLiteralType
