@@ -25,7 +25,7 @@ enum CollectionsSection: Int {
 }
 
 class CollectionsViewController: UICollectionViewController, MainControllerIdentifiable {
-	var mainControllerIdentifer: MainControllerIdentifier { return .collections }
+	nonisolated var mainControllerIdentifer: MainControllerIdentifier { return .collections }
 	
 	weak var delegate: CollectionsDelegate?
 	
@@ -69,8 +69,8 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 
 	var dataSource: UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>!
 	private var dataSourceSemaphore = AsyncSemaphore(value: 1)
-	private var applyChangeChannel = AsyncChannel<() -> Void>()
-	private var reloadVisibleChannel = AsyncChannel<() -> Void>()
+	private var applyChangeChannel = AsyncChannel<Void>()
+	private var reloadVisibleChannel = AsyncChannel<Void>()
 
 	private var expandedItems = Set<CollectionsItem>()
 	
@@ -120,15 +120,15 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		
 		// Using a semaphore here to make sure these two debouncers don't overlap when doing a lot of fast hits like when doing an account restore
 		Task {
-			for await applyChange in applyChangeChannel.debounce(for: .seconds(0.5)) {
+			for await _ in applyChangeChannel.debounce(for: .seconds(0.5)) {
 				await dataSourceSemaphore.wait()
 				defer { dataSourceSemaphore.signal() }
-				applyChange()
+				applyChangeSnapshot(animated: true)
 			}
 		}
 		
 		Task {
-			for await reloadVisible in reloadVisibleChannel.debounce(for: .seconds(0.5)) {
+			for await _ in reloadVisibleChannel.debounce(for: .seconds(0.5)) {
 				await dataSourceSemaphore.wait()
 				defer { dataSourceSemaphore.signal() }
 				reloadVisible()
@@ -613,15 +613,15 @@ extension CollectionsViewController {
 
 extension CollectionsViewController: CollectionsSearchCellDelegate {
 
-	func collectionsSearchDidBecomeActive() {
+	nonisolated func collectionsSearchDidBecomeActive() {
 		Task {
 			await selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
 		}
 	}
 
-	func collectionsSearchDidUpdate(searchText: String?) {
-		collectionView.deselectAll()
+	nonisolated func collectionsSearchDidUpdate(searchText: String?) {
 		Task {
+			await collectionView.deselectAll()
 			if let searchText {
 				await updateSelections([Search(searchText: searchText)], isNavigationBranch: false, animated: true)
 			} else {
@@ -647,15 +647,13 @@ private extension CollectionsViewController {
 	
 	func debounceApplyChangeSnapshot() {
 		Task {
-			await applyChangeChannel.send({ [weak self] in
-				self?.applyChangeSnapshot(animated: true)
-			})
+			await applyChangeChannel.send(())
 		}
 	}
 	
 	func debounceReloadVisible() {
 		Task {
-			await reloadVisibleChannel.send(reloadVisible)
+			await reloadVisibleChannel.send(())
 		}
 	}
 	
