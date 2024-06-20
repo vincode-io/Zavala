@@ -30,7 +30,6 @@ class OutlineFontCache {
 
 	private var topicFonts = [UIFont]()
 	private var topicColors = [UIColor]()
-	private var metadatumFonts = [UIFont]()
 	private var noteFonts = [UIFont]()
 	private var noteColors = [UIColor]()
 
@@ -58,15 +57,6 @@ class OutlineFontCache {
 		}
 	}
 
-	/// This is a 0 based index lookup
-	func metadataFont(level: Int) -> UIFont {
-		if level < metadatumFonts.count {
-			return metadatumFonts[level]
-		} else {
-			return metadatumFonts.last ?? UIFont.preferredFont(forTextStyle: .title1)
-		}
-	}
-	
 	/// This is a 0 based index lookup
 	func noteFont(level: Int) -> UIFont {
 		if level < noteFonts.count {
@@ -128,8 +118,6 @@ extension OutlineFontCache {
 				let topicFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
 				topicFonts.append(topicFont)
 				topicColors.append(config.color.uiColor)
-				let metadataFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font.withSize(font.pointSize - 2))
-				metadatumFonts.append(metadataFont)
 			case .rowNote:
 				noteFonts.append(UIFontMetrics(forTextStyle: .body).scaledFont(for: font))
 				noteColors.append(config.color.uiColor)

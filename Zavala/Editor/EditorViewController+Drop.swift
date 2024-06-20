@@ -218,8 +218,6 @@ private extension EditorViewController {
 	}
 
 	func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, destinationIndexPath: IndexPath?) {
-		guard let outline else { return }
-		
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
 			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(UTType.utf8PlainText.identifier) {
 				return dropItem.dragItem.itemProvider
@@ -230,7 +228,7 @@ private extension EditorViewController {
 		guard !itemProviders.isEmpty else { return }
 
 		Task {
-			let rowGroups = try await RowGroup.fromTextItemProviders(itemProviders)
+			let rowGroups = await RowGroup.fromTextItemProviders(itemProviders)
 			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, destinationIndexPath: destinationIndexPath)
 		}
 	}
