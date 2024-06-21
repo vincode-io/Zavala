@@ -27,7 +27,7 @@ protocol DocumentsDelegate: AnyObject  {
 
 class DocumentsViewController: UICollectionViewController, MainControllerIdentifiable, DocumentsActivityItemsConfigurationDelegate {
 
-	var mainControllerIdentifer: MainControllerIdentifier { return .documents }
+	nonisolated var mainControllerIdentifer: MainControllerIdentifier { return .documents }
 
 	weak var delegate: DocumentsDelegate?
 
@@ -50,7 +50,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var importButton: UIButton!
 
 	private let documentsSemaphore = AsyncSemaphore(value: 1)
-	private var loadDocumentsChannel = AsyncChannel<(() -> Void)>()
+	private var loadDocumentsChannel = AsyncChannel<Void>()
 	
 	private var lastClick: TimeInterval = Date().timeIntervalSince1970
 	private var lastIndexPath: IndexPath? = nil
@@ -140,8 +140,8 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		scheduleReconfigureAll()
 		
 		Task {
-			for await loadDocuments in loadDocumentsChannel.debounce(for: .seconds(0.5)) {
-				loadDocuments()
+			for await _ in loadDocumentsChannel.debounce(for: .seconds(0.5)) {
+				await loadDocuments(animated: true)
 			}
 		}
 	}
@@ -657,11 +657,7 @@ private extension DocumentsViewController {
 	
 	func debounceLoadDocuments() {
 		Task {
-			await loadDocumentsChannel.send({ [weak self] in
-				Task {
-					await self?.loadDocuments(animated: true)
-				}
-			})
+			await loadDocumentsChannel.send(())
 		}
 	}
 	

@@ -16,14 +16,16 @@ public class GetCurrentOutlineIntentHandler: NSObject, GetCurrentOutlineIntentHa
 	}
 	
 	public func handle(intent: GetCurrentOutlineIntent, completion: @escaping (GetCurrentOutlineIntentResponse) -> Void) {
-		guard let outline = mainCoordinator?.selectedDocuments.first?.outline else {
-			completion(GetCurrentOutlineIntentResponse(code: .notFound, userActivity: nil))
-			return
+		Task { @MainActor in
+			guard let outline = mainCoordinator?.selectedDocuments.first?.outline else {
+				completion(GetCurrentOutlineIntentResponse(code: .notFound, userActivity: nil))
+				return
+			}
+			
+			let response = GetCurrentOutlineIntentResponse(code: .success, userActivity: nil)
+			response.outline = IntentOutline(outline)
+			completion(response)
 		}
-		
-		let response = GetCurrentOutlineIntentResponse(code: .success, userActivity: nil)
-		response.outline = IntentOutline(outline)
-		completion(response)
 	}
 		
 }

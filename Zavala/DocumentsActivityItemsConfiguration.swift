@@ -11,10 +11,12 @@ import UniformTypeIdentifiers
 import LinkPresentation
 import VinOutlineKit
 
+@MainActor
 protocol DocumentsActivityItemsConfigurationDelegate: AnyObject {
 	var selectedDocuments: [Document] { get }
 }
 
+@MainActor
 class DocumentsActivityItemsConfiguration: NSObject {
 	
 	private weak var delegate: DocumentsActivityItemsConfigurationDelegate?
