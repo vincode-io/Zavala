@@ -46,7 +46,7 @@ public final class Search: Identifiable, DocumentContainer {
 				var  foundItems = [CSSearchableItem]()
 				
 				let queryString = "title == \"*\(searchText)*\"c || textContent == \"*\(searchText)*\"c"
-				searchQuery = CSSearchQuery(queryString: queryString, attributes: nil)
+				searchQuery = CSSearchQuery(queryString: queryString, queryContext: nil)
 				
 				searchQuery?.foundItemsHandler = { items in
 					foundItems.append(contentsOf: items)
