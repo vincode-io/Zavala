@@ -149,7 +149,6 @@
 		51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E060ED25A4B5E600194066 /* AppKitWrapper.swift */; };
 		51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F22255F2D7F00320EDB /* ActivityManager.swift */; };
 		51E14F342560732F00320EDB /* CollectionsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F332560732F00320EDB /* CollectionsItem.swift */; };
-		51E2BCBD290EFB15002BA7B2 /* AppKitImageAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5162AFF928EFB5C00002A61C /* AppKitImageAssets.swift */; };
 		51E508ED2B4B1F490041B826 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 51E508EC2B4B1F490041B826 /* Localizable.xcstrings */; };
 		51E5C48F27221F6200A38983 /* IntentOutline+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C48E27221F6200A38983 /* IntentOutline+.swift */; };
 		51E5C49127221F6F00A38983 /* IntentRow+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E5C49027221F6F00A38983 /* IntentRow+.swift */; };
@@ -264,7 +263,6 @@
 		515D452E26BB557200228229 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacFormViewController.swift; sourceTree = "<group>"; };
 		5162AFF528EFB4A90002A61C /* AppAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAssets.swift; sourceTree = "<group>"; };
-		5162AFF928EFB5C00002A61C /* AppKitImageAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKitImageAssets.swift; sourceTree = "<group>"; };
 		5163ADF125C78CFB008F25CA /* SearchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTextField.swift; sourceTree = "<group>"; };
 		5164B35327582D810039600B /* MainOpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainOpenQuicklyViewController.swift; sourceTree = "<group>"; };
 		5167605525F95B2900AC0EBD /* Zavala_spotlightext_target.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Zavala_spotlightext_target.xcconfig; sourceTree = "<group>"; };
@@ -739,7 +737,6 @@
 				51E060F325A4C13B00194066 /* AppKitPlugin.h */,
 				51E060F225A4C13B00194066 /* BridgingHeader.h */,
 				519672692B61B1CD006A564A /* AppKitDefaults.swift */,
-				5162AFF928EFB5C00002A61C /* AppKitImageAssets.swift */,
 				51E060ED25A4B5E600194066 /* AppKitWrapper.swift */,
 				519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */,
 				51E508EB2B4B1F180041B826 /* Resources */,
@@ -1179,7 +1176,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5196726A2B61B1CD006A564A /* AppKitDefaults.swift in Sources */,
-				51E2BCBD290EFB15002BA7B2 /* AppKitImageAssets.swift in Sources */,
 				519965DC2624EEE500D8468B /* RSAppMovementMonitor.swift in Sources */,
 				51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */,
 			);
