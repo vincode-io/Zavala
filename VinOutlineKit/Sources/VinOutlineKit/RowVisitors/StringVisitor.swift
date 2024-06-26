@@ -7,7 +7,8 @@
 
 import Foundation
 
-class StringVisitor {
+@MainActor
+final class StringVisitor {
 
 	var indentLevel = 0
 	var string = String()

@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 public protocol ErrorHandler: AnyObject {
 	func presentError(_ error: Error, title: String)
 }

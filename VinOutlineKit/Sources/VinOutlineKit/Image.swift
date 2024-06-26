@@ -8,7 +8,8 @@
 import Foundation
 import OSLog
 
-public class Image: Identifiable, Codable, Equatable {
+@MainActor
+final public class Image: Identifiable, Codable, Equatable {
 	
 	public var isCloudKit: Bool {
 		return outline?.isCloudKit ?? false

@@ -21,21 +21,26 @@ extension DocumentsViewController: UICollectionViewDragDelegate {
 		case .outline(let outline):
 			let filename = outline.filename(representation: DataRepresentation.opml)
 			itemProvider.suggestedName = filename
-			itemProvider.registerFileRepresentation(forTypeIdentifier: DataRepresentation.opml.typeIdentifier, visibility: .all) { (completionHandler) -> Progress? in
+			
+			itemProvider.registerFileRepresentation(forTypeIdentifier: DataRepresentation.opml.typeIdentifier, visibility: .all) { completion -> Progress? in
 				let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
-				do {
-					let opml = outline.opml()
-					try opml.write(to: tempFile, atomically: true, encoding: String.Encoding.utf8)
-					completionHandler(tempFile, true, nil)
-				} catch {
-					completionHandler(nil, false, error)
+				Task { @MainActor in
+					do {
+						let opml = outline.opml()
+						try opml.write(to: tempFile, atomically: true, encoding: String.Encoding.utf8)
+						completion(tempFile, true, nil)
+					} catch {
+						completion(nil, false, error)
+					}
 				}
 				return nil
 			}
-
-			itemProvider.registerDataRepresentation(for: UTType.utf8PlainText, visibility: .all) { completion in
-				let data = outline.markdownList().data(using: .utf8)
-				completion(data, nil)
+			
+			itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.plainText.identifier, visibility: .all) { completion in
+				Task { @MainActor in
+					let data = outline.markdownList().data(using: .utf8)
+					completion(data, nil)
+				}
 				return nil
 			}
 		case .dummy:

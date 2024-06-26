@@ -12,6 +12,7 @@ public extension Notification.Name {
 	static let AccountManagerAccountsDidChange = Notification.Name(rawValue: "AccountManagerAccountsDidChange")
 }
 
+@MainActor
 public final class AccountManager {
 	
 	nonisolated(unsafe)public static var shared: AccountManager!
@@ -187,15 +188,15 @@ public final class AccountManager {
 		activeDocuments.forEach { $0.resume() }
 	}
 	
-	public func suspend() {
-		accountFiles.values.forEach {
-			$0.saveIfNecessary()
-			$0.suspend()
+	public func suspend() async {
+		for file in accountFiles.values {
+			await file.saveIfNecessary()
+			file.suspend()
 		}
 
-		activeDocuments.forEach {
-			$0.save()
-			$0.suspend()
+		for document in activeDocuments {
+			await document.save()
+			document.suspend()
 		}
 	}
 	

@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 public final class TagsDocuments: DocumentProvider {
     
     private let containers: [DocumentContainer]

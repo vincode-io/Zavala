@@ -8,6 +8,7 @@
 import Foundation
 import CloudKit
 
+@MainActor
 public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 
 	static var actionRequestFile: URL {

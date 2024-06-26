@@ -12,6 +12,7 @@ public protocol OutlineCommandDelegate: AnyObject {
 	func restoreCursorPosition(_: CursorCoordinates)
 }
 
+@MainActor
 public class OutlineCommand {
 	
 	var actionName: String

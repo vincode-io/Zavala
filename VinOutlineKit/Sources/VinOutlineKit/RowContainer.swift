@@ -8,6 +8,7 @@
 import Foundation
 import VinXML
 
+@MainActor
 public protocol RowContainer {
 	var outline: Outline? { get }
 	var rows: [Row] { get }

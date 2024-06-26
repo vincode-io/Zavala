@@ -34,6 +34,7 @@ enum VCKMergeScenario {
 	}
 }
 
+@MainActor
 public protocol VCKModel {
 	
 	var isCloudKit: Bool { get }

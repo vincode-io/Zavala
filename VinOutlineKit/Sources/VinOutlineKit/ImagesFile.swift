@@ -12,6 +12,7 @@ final class ImagesFile: ManagedResourceFile {
 	
 	private weak var outline: Outline?
 	
+	@MainActor
 	init?(outline: Outline) {
 		self.outline = outline
 
@@ -24,11 +25,15 @@ final class ImagesFile: ManagedResourceFile {
 	}
 	
 	public override func fileDidLoad(data: Data) {
-		outline?.loadImageFileData(data)
+		Task { @MainActor in
+			outline?.loadImageFileData(data)
+		}
 	}
 	
-	public override func fileWillSave() -> Data? {
-		return outline?.buildImageFileData()
+	public override func fileWillSave() async -> Data? {
+		return await Task { @MainActor in
+			return outline?.buildImageFileData()
+		}.value
 	}
 	
 }

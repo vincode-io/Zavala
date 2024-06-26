@@ -19,7 +19,8 @@ public class RowGroup: Codable {
 		case childRows
 		case images
 	}
-	
+
+	@MainActor
 	public init(_ row: Row) {
 		self.row = row
 		self.childRows = [Row]()
@@ -35,6 +36,7 @@ public class RowGroup: Codable {
 		row.rows.forEach { $0.visit(visitor: keyedRowsVisitor(_:)) }
 	}
 
+	@MainActor
 	public func attach(to outline: Outline) -> Row {
 		var idMap = [String: String]()
 		var newChildRows = [Row]()

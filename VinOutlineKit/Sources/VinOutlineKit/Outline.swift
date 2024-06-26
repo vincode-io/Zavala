@@ -28,7 +28,8 @@ public extension Notification.Name {
 	static let OutlineRemovedBacklinks = Notification.Name(rawValue: "OutlineRemovedBacklinks")
 }
 
-public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Codable {
+@MainActor
+public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	public enum Section: Int {
 		case title = 0
@@ -135,11 +136,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	public var isCloudKitMerging: Bool = false
 
-	public var id: EntityID {
-		didSet {
-			documentMetaDataDidChange()
-		}
-	}
+	nonisolated public let id: EntityID
 
 	var ancestorTitle: String?
 	var serverTitle: String?
@@ -256,9 +253,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		let wordCountVisitor = WordCountVisitor()
 
 		load()
-		rows.forEach { $0.visit(visitor: wordCountVisitor.visitor)	}
-		unload()
 		
+		rows.forEach { $0.visit(visitor: wordCountVisitor.visitor)	}
+		
+		Task {
+			await unload()
+		}
+
 		return wordCountVisitor.count
 	}
 	
@@ -646,6 +647,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		imagesFile = ImagesFile(outline: self)
 	}
 	
+	init(coder: OutlineCoder) {
+		
+	}
+	
 	public func incrementBeingViewedCount() {
 		beingViewedCount = beingViewedCount + 1
 	}
@@ -654,10 +659,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		beingViewedCount = beingViewedCount - 1
 	}
 
-	public func reassignAccount(_ accountID: Int) {
-		self.id = .document(accountID, id.documentUUID)
-	}
-	
 	public func prepareForViewing() {
 		rebuildTransientData()
 	}
@@ -904,7 +905,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 		print.append(visitor.print)
 
-		unload()
+		Task {
+			await unload()
+		}
+		
 		return print
 	}
 	
@@ -920,7 +924,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			print.append(visitor.print)
 		}
 
-		unload()
+		Task {
+			await unload()
+		}
+		
 		return print
 	}
 	
@@ -935,7 +942,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			textContent.append("\n")
 		}
 		
-		unload()
+		Task {
+			await unload()
+		}
+		
 		return textContent
 	}
 	
@@ -949,7 +959,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 		md.append(visitor.markdown)
 
-		unload()
+		Task {
+			await unload()
+		}
+		
 		return md
 	}
 	
@@ -964,7 +977,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			md.append("\n")
 		}
 		
-		unload()
+		Task {
+			await unload()
+		}
+		
 		return md
 	}
 	
@@ -1031,7 +1047,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		opml.append("</body>\n")
 		opml.append("</opml>\n")
 
-		unload()
+		Task {
+			await unload()
+		}
+		
 		return opml
 	}
 	
@@ -2420,21 +2439,21 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		prepareRowsForProcessing()
 	}
 	
-	public func unload() {
+	public func unload() async {
 		if beingUsedCount > 0 {
 			beingUsedCount = beingUsedCount - 1
 		}
 		
 		guard beingUsedCount == 0 else { return }
 
-		rowsFile?.saveIfNecessary()
+		await rowsFile?.saveIfNecessary()
 		rowsFile?.suspend()
 		rowsFile = nil
 		shadowTable = nil
 		rowOrder = nil
 		keyedRows = nil
 
-		imagesFile?.saveIfNecessary()
+		await imagesFile?.saveIfNecessary()
 		imagesFile?.suspend()
 		imagesFile = nil
 		images = nil
@@ -2450,20 +2469,21 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		imagesFile?.resume()
 	}
 	
-	public func save() {
-		rowsFile?.saveIfNecessary()
-		imagesFile?.saveIfNecessary()
+	public func save() async {
+		await rowsFile?.saveIfNecessary()
+		await imagesFile?.saveIfNecessary()
 	}
 	
-	public func forceSave() {
+	public func forceSave() async {
 		if rowsFile == nil {
 			rowsFile = RowsFile(outline: self)
 		}
+		
 		rowsFile?.markAsDirty()
-		rowsFile?.saveIfNecessary()
+		await rowsFile?.saveIfNecessary()
 		
 		imagesFile?.markAsDirty()
-		imagesFile?.saveIfNecessary()
+		await imagesFile?.saveIfNecessary()
 	}
 	
 	public func delete() {
@@ -2643,7 +2663,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			endCloudKitBatchRequest()
 		}
 		
-		unload()
+		Task {
+			await unload()
+		}
 		
 	}
 	
@@ -2676,6 +2698,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, inserts: inserts, moves: moves)
 	}
 	
+	func toCoder() -> OutlineCoder {
+		return OutlineCoder()
+	}
+	
 	func outlineAddedBacklinks() {
 		NotificationCenter.default.post(name: .OutlineAddedBacklinks, object: self, userInfo: nil)
 	}
@@ -2696,41 +2722,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
 	}
 	
-	public static func == (lhs: Outline, rhs: Outline) -> Bool {
+	nonisolated public static func == (lhs: Outline, rhs: Outline) -> Bool {
 		return lhs.id == rhs.id
 	}
 	
-	public func hash(into hasher: inout Hasher) {
+	nonisolated public func hash(into hasher: inout Hasher) {
 		hasher.combine(id)
-	}
-	
-}
-
-// MARK: CustomDebugStringConvertible
-
-extension Outline: CustomDebugStringConvertible {
-	
-	public var debugDescription: String {
-		var output = ""
-		for row in rows {
-			output.append(dumpRow(level: 0, row: row))
-		}
-		return output
-	}
-	
-	private func dumpRow(level: Int, row: Row) -> String {
-		var output = ""
-		for _ in 0..<level {
-			output.append(" -- ")
-		}
-		output.append(row.debugDescription)
-		output.append("\n")
-		
-		for child in row.rows {
-			output.append(dumpRow(level: level + 1, row: child))
-		}
-		
-		return output
 	}
 	
 }
@@ -3314,7 +3311,7 @@ private extension Outline {
 				row.note = mutableText
 			}
 			
-			self.unload()
+			await self.unload()
 			
 			if let shadowTableIndex = row.shadowTableIndex {
 				self.outlineElementsDidChange(OutlineElementChanges(section: self.adjustedRowsSection, reloads: Set([shadowTableIndex])))

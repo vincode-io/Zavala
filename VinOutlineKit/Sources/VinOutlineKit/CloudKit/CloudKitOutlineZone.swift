@@ -45,9 +45,9 @@ final class CloudKitOutlineZone: VCKZone {
 		
 		let shareID = self.generateRecordID()
 		let share = CKShare(rootRecord: unsharedRootRecord, shareID: shareID)
-		share[CKShare.SystemFieldKey.title] = (document.title ?? "") as CKRecordValue
+		share[CKShare.SystemFieldKey.title] = (await document.title ?? "") as CKRecordValue
 		
-		let modelsToSave = [CloudKitModelRecordWrapper(share), CloudKitModelRecordWrapper(unsharedRootRecord)]
+		let modelsToSave = await [CloudKitModelRecordWrapper(share), CloudKitModelRecordWrapper(unsharedRootRecord)]
 		let result = try await self.modify(modelsToSave: modelsToSave, recordIDsToDelete: [], strategy: .overWriteServerValue)
 		
 		return result.0.first! as! CKShare

@@ -14,7 +14,7 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 	private let fileURL: URL
 	private let operationQueue: OperationQueue
 	private var saveTask: Task<(), Never>?
-	private var saveChannel = AsyncChannel<(() -> Void)>()
+	private var saveChannel = AsyncChannel<Void>()
 	private var lastModificationDate: Date?
 
 	public var presentedItemURL: URL? {
@@ -48,18 +48,20 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 	}
 	
 	public func savePresentedItemChanges(completionHandler: @escaping (Error?) -> Void) {
-		saveIfNecessary()
-		completionHandler(nil)
+		Task {
+			await saveIfNecessary()
+			completionHandler(nil)
+		}
 	}
 	
-	public func relinquishPresentedItem(toReader reader: @escaping ((() -> Void)?) -> Void) {
+	public func relinquishPresentedItem(toReader reader: @escaping @Sendable (( @Sendable() -> Void)?) -> Void) {
 		stopSaveTask()
 		reader() {
 			self.startSaveTask()
 		}
 	}
 	
-	public func relinquishPresentedItem(toWriter writer: @escaping ((() -> Void)?) -> Void) {
+	public func relinquishPresentedItem(toWriter writer: @escaping @Sendable (( @Sendable () -> Void)?) -> Void) {
 		stopSaveTask()
 		writer() {
 			self.startSaveTask()
@@ -76,10 +78,10 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 		loadFile()
 	}
 	
-	public func saveIfNecessary() {
+	public func saveIfNecessary() async {
 		if isDirty {
 			isDirty = false
-			saveFile()
+			await saveFile()
 		}
 	}
 
@@ -104,7 +106,7 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 		fatalError("Function not implemented")
 	}
 	
-	open func fileWillSave() -> Data? {
+	open func fileWillSave() async -> Data? {
 		fatalError("Function not implemented")
 	}
 
@@ -116,9 +118,9 @@ private extension ManagedResourceFile {
 	
 	func startSaveTask() {
 		saveTask = Task {
-			for await save in saveChannel.debounce(for: .seconds(5.0)) {
+			for await _ in saveChannel.debounce(for: .seconds(5.0)) {
 				if !Task.isCancelled {
-					save()
+					await saveIfNecessary()
 				}
 			}
 		}
@@ -131,7 +133,7 @@ private extension ManagedResourceFile {
 	
 	func debounceSaveToDisk() {
 		Task {
-			await saveChannel.send(saveIfNecessary)
+			await saveChannel.send(())
 		}
 	}
 	
@@ -166,8 +168,8 @@ private extension ManagedResourceFile {
 		fileDidLoad(data: fileData)
 	}
 	
-	func saveFile() {
-		guard let fileData = fileWillSave() else { return }
+	func saveFile() async {
+		guard let fileData = await fileWillSave() else { return }
 
 		let errorPointer: NSErrorPointer = nil
 		let fileCoordinator = NSFileCoordinator(filePresenter: self)

@@ -9,7 +9,9 @@ import VinUtility
 public struct SimpleRowWalker: MarkupWalker {
 		
 	public var rows: [Row] {
-		return outline?.rows ?? []
+		MainActor.assumeIsolated {
+			return outline?.rows ?? []
+		}
 	}
 
 	private var outline: Outline?
@@ -18,23 +20,29 @@ public struct SimpleRowWalker: MarkupWalker {
 	private var lastBuiltRow: Row?
 	
 	public init() {
-		self.outline = Outline(id: .document(0, UUID().uuidString))
+		MainActor.assumeIsolated {
+			self.outline = Outline(id: .document(0, UUID().uuidString))
+		}
 	}
 	
 	mutating public func visitText(_ text: Text) {
 		guard !isList, let outline else { return }
 		
-		let row = Row(outline: outline, topicMarkdown: text.format())
-		row.detectData()
-		outline.appendRow(row)
+		MainActor.assumeIsolated {
+			let row = Row(outline: outline, topicMarkdown: text.format())
+			row.detectData()
+			outline.appendRow(row)
+		}
 	}
 	
 	mutating public func visitLink(_ link: Link) -> () {
 		guard !isList, let outline else { return }
 
-		let row = Row(outline: outline, topicMarkdown: link.format())
-		row.detectData()
-		outline.appendRow(row)
+		MainActor.assumeIsolated {
+			let row = Row(outline: outline, topicMarkdown: link.format())
+			row.detectData()
+			outline.appendRow(row)
+		}
 	}
 	
 	mutating public func visitUnorderedList(_ unorderedList: UnorderedList) {
@@ -67,14 +75,16 @@ public struct SimpleRowWalker: MarkupWalker {
 			}
 		}
 
-		let row = Row(outline: outline, topicMarkdown: topic)
-		row.detectData()
-		lastBuiltRow = row
-		
-		if let parentRow = parentRowStack.last {
-			parentRow.appendRow(row)
-		} else {
-			outline.appendRow(row)
+		MainActor.assumeIsolated {
+			let row = Row(outline: outline, topicMarkdown: topic)
+			row.detectData()
+			lastBuiltRow = row
+			
+			if let parentRow = parentRowStack.last {
+				parentRow.appendRow(row)
+			} else {
+				outline.appendRow(row)
+			}
 		}
 		
 		descendInto(listItem)
