@@ -530,52 +530,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
 
-	enum CodingKeys: String, CodingKey {
-		case cloudKitMetaData
-		case id
-		case ancestorTitle
-		case title
-		case ancestorDisambiguator
-		case disambiguator
-		case ancestorCreated
-		case created
-		case ancestorUpdated
-		case updated
-		case ancestorAutoLinkingEnabled
-		case autoLinkingEnabled
-		case ancestorCheckSpellingWhileTyping
-		case checkSpellingWhileTyping
-		case ancestorCorrectSpellingAutomatically
-		case correctSpellingAutomatically
-		case ancestorOwnerName
-		case ownerName
-		case ancestorOwnerEmail
-		case ownerEmail
-		case ancestorOwnerURL
-		case ownerURL
-		case verticleScrollState
-		case isFilterOn
-		case isCompletedFiltered
-		case isNotesFiltered
-		case focusRowID
-		case selectionRowID
-		case selectionIsInNotes
-		case selectionLocation
-		case selectionLength
-		case ancestorTagIDs
-		case tagIDs = "tagIDS"
-		case ancestorDocumentLinks
-		case documentLinks
-		case ancestorDocumentBacklinks
-		case documentBacklinks
-		case ancestorHasAltLinks
-		case hasAltLinks
-		case cloudKitZoneName
-		case cloudKitZoneOwner
-		case cloudKitShareRecordName
-		case cloudKitShareRecordData
-	}
-
 	var zoneID: CKRecordZone.ID? {
 		get {
 			guard let zoneName = cloudKitZoneName, let zoneOwner = cloudKitZoneOwner else { return nil }
@@ -648,7 +602,49 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 	
 	init(coder: OutlineCoder) {
-		
+		self.cloudKitMetaData = coder.cloudKitMetaData
+		self.id = coder.id
+		self.ancestorTitle = coder.ancestorTitle
+		self.title = coder.title
+		self.ancestorDisambiguator = coder.ancestorDisambiguator
+		self.disambiguator = coder.disambiguator
+		self.ancestorCreated = coder.ancestorCreated
+		self.created = coder.created
+		self.ancestorUpdated = coder.ancestorUpdated
+		self.updated = coder.updated
+		self.ancestorAutoLinkingEnabled = coder.ancestorAutoLinkingEnabled
+		self.autoLinkingEnabled = coder.autoLinkingEnabled
+		self.ancestorCheckSpellingWhileTyping = coder.ancestorCheckSpellingWhileTyping
+		self.checkSpellingWhileTyping = coder.checkSpellingWhileTyping
+		self.ancestorCorrectSpellingAutomatically = coder.ancestorCorrectSpellingAutomatically
+		self.correctSpellingAutomatically = coder.correctSpellingAutomatically
+		self.ancestorOwnerName = coder.ancestorOwnerName
+		self.ownerName = coder.ownerName
+		self.ancestorOwnerEmail = coder.ancestorOwnerEmail
+		self.ownerEmail = coder.ownerEmail
+		self.ancestorOwnerURL = coder.ancestorOwnerURL
+		self.ownerURL = coder.ownerURL
+		self.verticleScrollState = coder.verticleScrollState
+		self.isFilterOn = coder.isFilterOn
+		self.isCompletedFiltered = coder.isCompletedFiltered
+		self.isNotesFiltered = coder.isNotesFiltered
+		self.focusRowID = coder.focusRowID
+		self.selectionRowID = coder.selectionRowID
+		self.selectionIsInNotes = coder.selectionIsInNotes
+		self.selectionLocation = coder.selectionLocation
+		self.selectionLength = coder.selectionLength
+		self.ancestorTagIDs = coder.ancestorTagIDs
+		self.tagIDs = coder.tagIDs
+		self.ancestorDocumentLinks = coder.ancestorDocumentLinks
+		self.documentLinks = coder.documentLinks
+		self.ancestorDocumentBacklinks = coder.ancestorDocumentBacklinks
+		self.documentBacklinks = coder.documentBacklinks
+		self.ancestorHasAltLinks = coder.ancestorHasAltLinks
+		self.hasAltLinks = coder.hasAltLinks
+		self.cloudKitZoneName = coder.cloudKitZoneName
+		self.cloudKitZoneOwner = coder.cloudKitZoneOwner
+		self.cloudKitShareRecordName = coder.cloudKitShareRecordName
+		self.cloudKitShareRecordData = coder.cloudKitShareRecordData
 	}
 	
 	public func incrementBeingViewedCount() {
@@ -2699,7 +2695,49 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 	
 	func toCoder() -> OutlineCoder {
-		return OutlineCoder()
+		return OutlineCoder(cloudKitMetaData: cloudKitMetaData,
+							id: id, 
+							ancestorTitle: ancestorTitle,
+							title: title,
+							ancestorDisambiguator: ancestorDisambiguator,
+							disambiguator: disambiguator,
+							ancestorCreated: ancestorCreated,
+							created: created,
+							ancestorUpdated: ancestorUpdated,
+							updated: updated,
+							ancestorAutoLinkingEnabled: ancestorAutoLinkingEnabled,
+							autoLinkingEnabled: autoLinkingEnabled,
+							ancestorCheckSpellingWhileTyping: ancestorCheckSpellingWhileTyping,
+							checkSpellingWhileTyping: checkSpellingWhileTyping,
+							ancestorCorrectSpellingAutomatically: ancestorCorrectSpellingAutomatically,
+							correctSpellingAutomatically: correctSpellingAutomatically,
+							ancestorOwnerName: ancestorOwnerName,
+							ownerName: ownerName,
+							ancestorOwnerEmail: ancestorOwnerEmail,
+							ownerEmail: ownerEmail,
+							ancestorOwnerURL: ancestorOwnerURL,
+							ownerURL: ownerURL,
+							verticleScrollState: verticleScrollState,
+							isFilterOn: isFilterOn,
+							isCompletedFiltered: isCompletedFiltered, 
+							isNotesFiltered: isNotesFiltered,
+							focusRowID: focusRowID,
+							selectionRowID: selectionRowID,
+							selectionIsInNotes: selectionIsInNotes,
+							selectionLocation: selectionLocation,
+							selectionLength: selectionLength,
+							ancestorTagIDs: ancestorTagIDs,
+							tagIDs: tagIDs,
+							ancestorDocumentLinks: ancestorDocumentLinks,
+							documentLinks: documentLinks,
+							ancestorDocumentBacklinks: ancestorDocumentBacklinks,
+							documentBacklinks: documentBacklinks,
+							ancestorHasAltLinks: ancestorHasAltLinks,
+							hasAltLinks: hasAltLinks,
+							cloudKitZoneName: cloudKitZoneName,
+							cloudKitZoneOwner: cloudKitZoneOwner,
+							cloudKitShareRecordName: cloudKitShareRecordName,
+							cloudKitShareRecordData: cloudKitShareRecordData)
 	}
 	
 	func outlineAddedBacklinks() {

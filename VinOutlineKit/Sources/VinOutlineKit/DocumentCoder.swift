@@ -33,5 +33,4 @@ struct DocumentCoder: Codable {
 		try container.encode(outline, forKey: .outline)
 	}
 	
-
 }
