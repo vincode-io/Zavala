@@ -9,7 +9,7 @@ import Foundation
 import OSLog
 
 @MainActor
-final public class Image: Identifiable, Codable, Equatable {
+final public class Image: Identifiable {
 	
 	public var isCloudKit: Bool {
 		return outline?.isCloudKit ?? false
@@ -23,7 +23,7 @@ final public class Image: Identifiable, Codable, Equatable {
 	
 	public var isCloudKitMerging: Bool = false
 	
-	public var id: EntityID
+	nonisolated public let id: EntityID
 
 	var ancestorIsInNotes: Bool?
 	var serverIsInNotes: Bool?
@@ -61,15 +61,15 @@ final public class Image: Identifiable, Codable, Equatable {
 
 	var tempCloudKitDataURL: URL?
 	
-	private enum CodingKeys: String, CodingKey {
-		case cloudKitMetaData
-		case id
-		case ancestorIsInNotes
-		case isInNotes
-		case ancestorOffset
-		case offset
-		case ancestorData
-		case data
+	init(coder: ImageCoder) {
+		self.cloudKitMetaData = coder.cloudKitMetaData
+		self.id = coder.id
+		self.ancestorIsInNotes = coder.ancestorIsInNotes
+		self.isInNotes = coder.isInNotes
+		self.ancestorOffset = coder.ancestorOffset
+		self.offset = coder.offset
+		self.ancestorData = coder.ancestorData
+		self.data = coder.data
 	}
 	
 	public init(outline: Outline, id: EntityID, isInNotes: Bool?, offset: Int?, data: Data?) {
@@ -84,13 +84,24 @@ final public class Image: Identifiable, Codable, Equatable {
 		self.init(outline: outline, id: id, isInNotes: nil, offset: nil, data: nil)
 	}
 
-	public static func == (lhs: Image, rhs: Image) -> Bool {
-		return lhs.id == rhs.id && lhs.isInNotes == rhs.isInNotes && lhs.offset == rhs.offset && lhs.data == rhs.data
-	}
-	
     public func duplicate(outline: Outline, accountID: Int, documentUUID: String, rowUUID: String) -> Image {
 		let id = EntityID.image(accountID, documentUUID, rowUUID, UUID().uuidString)
         return Image(outline: outline, id: id, isInNotes: isInNotes, offset: offset, data: data)
 	}
+
+	func toCoder() -> ImageCoder {
+		return ImageCoder(cloudKitMetaData: cloudKitMetaData, 
+						  id: id,
+						  ancestorIsInNotes: ancestorIsInNotes,
+						  isInNotes: isInNotes,
+						  ancestorOffset: ancestorOffset,
+						  offset: offset,
+						  ancestorData: ancestorData,
+						  data: data)
+	}
+	
+//	public static func == (lhs: Image, rhs: Image) -> Bool {
+//		return lhs.id == rhs.id && lhs.isInNotes == rhs.isInNotes && lhs.offset == rhs.offset && lhs.data == rhs.data
+//	}
 	
 }

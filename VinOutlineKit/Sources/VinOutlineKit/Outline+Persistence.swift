@@ -47,12 +47,17 @@ public extension Outline {
 	
 	func loadImageFileData(_ data: Data) {
 		let decoder = PropertyListDecoder()
-		let outlineImages: [String: [Image]]
+		let outlineImageCoders: [String: [ImageCoder]]
 		do {
-			outlineImages = try decoder.decode([String: [Image]].self, from: data)
+			outlineImageCoders = try decoder.decode([String: [ImageCoder]].self, from: data)
 		} catch {
 			logger.error("Images read deserialization failed: \(error.localizedDescription, privacy: .public)")
 			return
+		}
+		
+		var outlineImages = [String: [Image]]()
+		for (key, imageCoders) in outlineImageCoders {
+			outlineImages[key] = imageCoders.map{ Image(coder: $0) }
 		}
 
 		// We probably shoudld be trying to update the UI when this happens.
@@ -64,13 +69,18 @@ public extension Outline {
 			imagesFile?.delete()
 			return nil
 		}
-
+		
+		var imageCoders = [String: [ImageCoder]]()
+		for (key, images) in images {
+			imageCoders[key] = images.map{ $0.toCoder() }
+		}
+		
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary
 
 		var imagesData: Data
 		do {
-			imagesData = try encoder.encode(images)
+			imagesData = try encoder.encode(imageCoders)
 		} catch {
 			logger.error("Images save serialization failed: \(error.localizedDescription, privacy: .public)")
 			return nil
