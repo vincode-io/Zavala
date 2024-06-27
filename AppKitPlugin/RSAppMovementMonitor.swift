@@ -9,6 +9,7 @@
 
 import Cocoa
 
+@MainActor
 public class RSAppMovementMonitor: NSObject {
 
 	// If provided, the handler will be consulted when the app is moved.
@@ -80,15 +81,19 @@ public class RSAppMovementMonitor: NSObject {
 			NotificationCenter.default.addObserver(forName: NSApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
 				// Removing observer in invalidate doesn't seem to prevent this getting called? Maybe
 				// because it's on the same invocation of the runloop?
-				if self.isValid() && self.originalAppURL != self.appTrackingURL?.absoluteURL {
-					self.invokeEventHandler()
+				Task { @MainActor in
+					if self.isValid() && self.originalAppURL != self.appTrackingURL?.absoluteURL {
+						self.invokeEventHandler()
+					}
 				}
 			}
 		}
 	}
 
 	deinit {
-		self.invalidate()
+		Task { @MainActor in
+			self.invalidate()
+		}
 	}
 
 	func invokeEventHandler() {
