@@ -9,6 +9,7 @@ import UIKit
 import VinOutlineKit
 import SwiftUI
 
+@MainActor
 protocol EditorRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewInputAccessoryView: UIView? { get }

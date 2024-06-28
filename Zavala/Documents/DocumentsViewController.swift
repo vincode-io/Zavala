@@ -13,6 +13,7 @@ import Semaphore
 import VinOutlineKit
 import VinUtility
 
+@MainActor
 protocol DocumentsDelegate: AnyObject  {
 	func documentSelectionDidChange(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], selectRow: EntityID?, isNew: Bool, isNavigationBranch: Bool, animated: Bool)
 	func showGetInfo(_: DocumentsViewController, outline: Outline)
@@ -49,7 +50,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var addButton: UIButton!
 	private var importButton: UIButton!
 
-	private let documentsSemaphore = AsyncSemaphore(value: 1)
 	private var loadDocumentsChannel = AsyncChannel<Void>()
 	
 	private var lastClick: TimeInterval = Date().timeIntervalSince1970
@@ -503,9 +503,6 @@ extension DocumentsViewController {
 	}
 	
 	func reload(document: Document) async {
-		await documentsSemaphore.wait()
-		defer { documentsSemaphore.signal() }
-
 		let selectedIndexPaths = self.collectionView.indexPathsForSelectedItems
 		if let index = documents.firstIndex(of: document) {
 			collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
@@ -520,28 +517,16 @@ extension DocumentsViewController {
 			return
 		}
 		
-		await documentsSemaphore.wait()
-		defer { documentsSemaphore.signal() }
-
 		var selectionContainers: [DocumentProvider]
 		if documentContainers.count > 1 {
 			selectionContainers = [TagsDocuments(containers: documentContainers)]
 		} else {
 			selectionContainers = documentContainers
 		}
-		
-		let documents = await withTaskGroup(of: [Document].self, returning: Set<Document>.self) { taskGroup in
-			for container in selectionContainers {
-				taskGroup.addTask {
-					return (try? await container.documents) ?? []
-				}
-			}
-			
-			var documents = Set<Document>()
-			for await containerDocuments in taskGroup {
-				documents.formUnion(containerDocuments)
-			}
-			return documents
+
+		var documents = Set<Document>()
+		for selectionContainer in selectionContainers {
+			documents.formUnion((try? await selectionContainer.documents) ?? [])
 		}
 		
 		let sortedDocuments = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })

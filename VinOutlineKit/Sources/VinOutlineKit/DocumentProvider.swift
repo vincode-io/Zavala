@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 public protocol DocumentProvider {
 	var documents: [Document] { get async throws }
 }

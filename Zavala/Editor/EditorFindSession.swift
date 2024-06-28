@@ -8,6 +8,7 @@
 import UIKit
 import VinOutlineKit
 
+@MainActor
 protocol EditorFindSessionDelegate {
 	var outline: Outline? { get }
 	func replaceCurrentSearchResult(with replacementText: String)

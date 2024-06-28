@@ -8,6 +8,7 @@
 import UIKit
 import VinOutlineKit
 
+@MainActor
 protocol LinkViewControllerDelegate: AnyObject {
 	func createOutline(title: String) -> Outline?
 	func updateLink(cursorCoordinates: CursorCoordinates, text: String, link: String?, range: NSRange)
