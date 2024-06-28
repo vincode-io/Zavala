@@ -17,8 +17,8 @@ public final class AccountManager {
 	
 	nonisolated(unsafe)public static var shared: AccountManager!
 	
-	public var localAccount: Account {
-		return accountsDictionary[AccountType.local.rawValue]!
+	public var localAccount: Account? {
+		return accountsDictionary[AccountType.local.rawValue]
 	}
 
 	public var cloudKitAccount: Account? {
@@ -117,6 +117,8 @@ public final class AccountManager {
 	}
 	
 	public func deleteLocalAccount() {
+		guard let localAccount else { return }
+		
 		// Send out all the document delete events for this account to clean up the search index
 		localAccount.documents?.forEach { $0.documentDidDelete() }
 

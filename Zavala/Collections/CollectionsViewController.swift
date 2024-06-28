@@ -475,9 +475,7 @@ extension CollectionsViewController {
 	}
 	
 	private func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
-		let localAccount = AccountManager.shared.localAccount
-		
-		guard localAccount.isActive else { return nil }
+		guard let localAccount = AccountManager.shared.localAccount, localAccount.isActive else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
 

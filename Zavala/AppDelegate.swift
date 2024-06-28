@@ -1106,7 +1106,7 @@ private extension AppDelegate {
 	}
 	
 	@objc private func checkForUserDefaultsChanges() {
-		let localAccount = AccountManager.shared.localAccount
+		guard let localAccount = AccountManager.shared.localAccount else { return }
 		
 		if AppDefaults.shared.enableLocalAccount != localAccount.isActive {
 			if AppDefaults.shared.enableLocalAccount {
