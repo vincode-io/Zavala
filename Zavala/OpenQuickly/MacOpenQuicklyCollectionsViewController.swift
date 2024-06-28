@@ -9,6 +9,7 @@ import UIKit
 import VinOutlineKit
 import VinUtility
 
+@MainActor
 protocol MacOpenQuicklyCollectionsDelegate: AnyObject {
 	func documentContainerSelectionsDidChange(_: MacOpenQuicklyCollectionsViewController, documentContainers: [DocumentContainer])
 }

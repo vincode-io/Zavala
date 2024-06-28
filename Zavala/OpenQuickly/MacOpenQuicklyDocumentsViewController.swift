@@ -9,6 +9,7 @@ import UIKit
 import VinOutlineKit
 import VinUtility
 
+@MainActor
 protocol MacOpenQuicklyDocumentsDelegate: AnyObject {
 	func documentSelectionDidChange(_: MacOpenQuicklyDocumentsViewController, documentID: EntityID?)
 	func openDocument(_: MacOpenQuicklyDocumentsViewController, documentID: EntityID)
