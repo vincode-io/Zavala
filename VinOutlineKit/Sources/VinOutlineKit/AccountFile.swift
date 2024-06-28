@@ -22,15 +22,11 @@ final class AccountFile: ManagedResourceFile {
 	}
 	
 	public override func fileDidLoad(data: Data) {
-		Task { @MainActor in
-			accountManager?.loadAccountFileData(data, accountType: accountType)
-		}
+		accountManager?.loadAccountFileData(data, accountType: accountType)
 	}
 	
 	public override func fileWillSave() async -> Data? {
-		return await Task { @MainActor in
-			return accountManager?.buildAccountFileData(accountType: accountType)
-		}.value
+		return accountManager?.buildAccountFileData(accountType: accountType)
 	}
 	
 }

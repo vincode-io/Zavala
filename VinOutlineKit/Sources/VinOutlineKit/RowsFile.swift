@@ -27,15 +27,11 @@ final class RowsFile: ManagedResourceFile {
 	}
 	
 	public override func fileDidLoad(data: Data) {
-		Task { @MainActor in
-			outline?.loadRowFileData(data)
-		}
+		outline?.loadRowFileData(data)
 	}
 	
 	public override func fileWillSave() async -> Data? {
-		return await Task { @MainActor in
-			return outline?.buildRowFileData()
-		}.value
+		return outline?.buildRowFileData()
 	}
 	
 }

@@ -73,6 +73,7 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 		debounceSaveToDisk()
 	}
 	
+	@MainActor
 	public func load() {
 		guard !isDirty else { return }
 		loadFile()
@@ -102,10 +103,12 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 		NSFileCoordinator.removeFilePresenter(self)
 	}
 	
+	@MainActor
 	open func fileDidLoad(data: Data) {
 		fatalError("Function not implemented")
 	}
 	
+	@MainActor
 	open func fileWillSave() async -> Data? {
 		fatalError("Function not implemented")
 	}
@@ -142,6 +145,7 @@ private extension ManagedResourceFile {
 		startSaveTask()
 	}
 
+	@MainActor
 	func loadFile() {
 		var fileData: Data? = nil
 		let errorPointer: NSErrorPointer = nil

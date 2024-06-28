@@ -25,15 +25,11 @@ final class ImagesFile: ManagedResourceFile {
 	}
 	
 	public override func fileDidLoad(data: Data) {
-		Task { @MainActor in
-			outline?.loadImageFileData(data)
-		}
+		outline?.loadImageFileData(data)
 	}
 	
 	public override func fileWillSave() async -> Data? {
-		return await Task { @MainActor in
-			return outline?.buildImageFileData()
-		}.value
+		return outline?.buildImageFileData()
 	}
 	
 }
