@@ -1327,8 +1327,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 	
 	func updateImages(rowID: String, images: [Image]?) {
-		guard self.images?[rowID] != images else { return }
-		
 		if self.images == nil {
 			self.images = [String: [Image]]()
 		}

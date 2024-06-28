@@ -7,16 +7,17 @@
 
 import Foundation
 import OSLog
-import CoreSpotlight
+@preconcurrency import CoreSpotlight
 import VinOutlineKit
 
-class IndexRequestHandler: CSIndexExtensionRequestHandler {
+final class IndexRequestHandler: CSIndexExtensionRequestHandler {
 	
-	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Zavala")
+	let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Zavala")
 	
     override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexAllSearchableItemsWithAcknowledgementHandler acknowledgementHandler: @escaping () -> Void) {
+		self.logger.info("IndexRequestHandler starting...")
+
 		Task { @MainActor in
-			self.logger.info("IndexRequestHandler starting...")
 			
 			self.resume()
 
@@ -31,15 +32,16 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
 				}
 			}
 			
-			self.suspend()
+			await self.suspend()
 			self.logger.info("IndexRequestHandler done.")
 			acknowledgementHandler()
 		}
     }
     
 	override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexSearchableItemsWithIdentifiers identifiers: [String], acknowledgementHandler: @escaping () -> Void) {
+		self.logger.info("IndexRequestHandler starting...")
+
 		Task { @MainActor in
-			self.logger.info("IndexRequestHandler starting...")
 			
 			self.resume()
 			
@@ -57,7 +59,7 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
 				}
 			}
 
-			self.suspend()
+			await self.suspend()
 			self.logger.info("IndexRequestHandler done.")
 			acknowledgementHandler()
 		}
@@ -79,6 +81,7 @@ extension IndexRequestHandler: ErrorHandler {
 
 private extension IndexRequestHandler {
 	
+	@MainActor
 	func resume() {
 		if AccountManager.shared == nil {
 			let appGroup = Bundle.main.object(forInfoDictionaryKey: "AppGroup") as! String
@@ -90,8 +93,9 @@ private extension IndexRequestHandler {
 		}
 	}
 	
-	func suspend() {
-		AccountManager.shared.suspend()
+	@MainActor
+	func suspend() async {
+		await AccountManager.shared.suspend()
 	}
 	
 }

@@ -413,7 +413,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		row.isExpanded = isExpanded
 		row.isComplete = isComplete
 		row.rowOrder = rowOrder
-		row.images = images?.map { $0.duplicate(outline: newOutline, accountID: newOutline.id.accountID, documentUUID: newOutline.id.documentUUID, rowUUID: row.id) }
 		
 		return row
 	}

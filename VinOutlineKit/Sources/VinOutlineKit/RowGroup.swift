@@ -10,9 +10,9 @@ import OrderedCollections
 
 public class RowGroup: Codable {
 	
-	public var row: Row
-	var childRows: [Row]
-	var images: [String: [Image]]
+	let row: RowCoder
+	let childRows: [RowCoder]
+	let images: [String: [ImageCoder]]
 
 	private enum CodingKeys: String, CodingKey {
 		case row
@@ -22,18 +22,28 @@ public class RowGroup: Codable {
 
 	@MainActor
 	public init(_ row: Row) {
-		self.row = row
-		self.childRows = [Row]()
-		self.images = [String: [Image]]()
+		self.row = row.toCoder()
 		
-		self.images[row.id] = row.images
+		var childRows = [Row]()
+		var images = [String: [Image]]()
+		
+		images[row.id] = row.images
 		
 		func keyedRowsVisitor(_ visited: Row) {
-			self.childRows.append(visited)
-			self.images[visited.id] = visited.images
+			childRows.append(visited)
+			images[visited.id] = visited.images
 			visited.rows.forEach { $0.visit(visitor: keyedRowsVisitor) }
 		}
+		
 		row.rows.forEach { $0.visit(visitor: keyedRowsVisitor(_:)) }
+		
+		self.childRows = childRows.map { $0.toCoder() }
+		
+		var imageCoders = [String: [ImageCoder]]()
+		for (rowID, images) in images {
+			imageCoders[rowID] = images.map { $0.toCoder() }
+		}
+		self.images = imageCoders
 	}
 
 	@MainActor
@@ -42,11 +52,11 @@ public class RowGroup: Codable {
 		var newChildRows = [Row]()
 		var newImages = [String: [Image]]()
 
-		let newRow = row.duplicate(newOutline: outline)
+		let newRow = Row(coder: row).duplicate(newOutline: outline)
 		idMap[row.id] = newRow.id
 
 		for childRow in childRows {
-			let newChildRow = childRow.duplicate(newOutline: outline)
+			let newChildRow = Row(coder: childRow).duplicate(newOutline: outline)
 			idMap[childRow.id] = newChildRow.id
 			newChildRows.append(newChildRow)
 		}
@@ -54,12 +64,12 @@ public class RowGroup: Codable {
 		for (rowID, images) in images {
 			guard let newRowID = idMap[rowID] else { continue }
 			newImages[newRowID] = images.map {
-                return $0.duplicate(outline: outline, accountID: outline.id.accountID, documentUUID: outline.id.documentUUID, rowUUID: newRowID)
+				return Image(coder: $0).duplicate(outline: outline, accountID: outline.id.accountID, documentUUID: outline.id.documentUUID, rowUUID: newRowID)
 			}
 		}
 		
 		if outline.keyedRows == nil {
-			outline.keyedRows = [String: Row]()
+			outline.keyedRows = [:]
 		}
 		
 		outline.beginCloudKitBatchRequest()
@@ -81,7 +91,8 @@ public class RowGroup: Codable {
 		
 		outline.endCloudKitBatchRequest()
 		
-		newRow.parent = row.parent
+		// This code looks invalid to me. Delete it later if it does nothing.
+//		newRow.parent = row.parent
 		var newRowRowOrder = [String]()
 		for newRowOrder in newRow.rowOrder {
 			newRowRowOrder.append(idMap[newRowOrder]!)
