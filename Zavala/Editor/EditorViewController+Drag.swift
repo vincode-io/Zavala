@@ -26,23 +26,27 @@ extension EditorViewController: UICollectionViewDragDelegate {
 			
 			// We only register the text representation on the first one, since it looks like most text editors only support 1 dragged text item
 			if row == rows[0] {
-				itemProvider.registerDataRepresentation(for: UTType.utf8PlainText, visibility: .all) { completion in
-					var markdowns = [String]()
-					for row in rows {
-						markdowns.append(row.markdownList())
+				itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
+					Task { @MainActor in
+						var markdowns = [String]()
+						for row in rows {
+							markdowns.append(row.markdownList())
+						}
+						let data = markdowns.joined(separator: "\n").data(using: .utf8)
+						completion(data, nil)
 					}
-					let data = markdowns.joined(separator: "\n").data(using: .utf8)
-					completion(data, nil)
 					return nil
 				}
 			}
 			
 			itemProvider.registerDataRepresentation(forTypeIdentifier: Row.typeIdentifier, visibility: .ownProcess) { completion in
-				do {
-					let data = try RowGroup(row).asData()
-					completion(data, nil)
-				} catch {
-					completion(nil, error)
+				Task { @MainActor in
+					do {
+						let data = try RowGroup(row).asData()
+						completion(data, nil)
+					} catch {
+						completion(nil, error)
+					}
 				}
 				return nil
 			}
