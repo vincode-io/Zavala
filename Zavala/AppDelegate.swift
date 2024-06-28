@@ -355,54 +355,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 			await AccountManager.shared.receiveRemoteNotification(userInfo: userInfo)
 			if UIApplication.shared.applicationState == .background {
-				AccountManager.shared.suspend()
+				await AccountManager.shared.suspend()
 			}
 			completionHandler(.newData)
 		}
 	}
 	
-	func application(_ application: UIApplication, handlerFor intent: INIntent) -> Any? {
-		switch intent {
-		case is AddOutlineIntent:
-			return AddOutlineIntentHandler()
-		case is AddOutlineTagIntent:
-			return AddOutlineTagIntentHandler()
-		case is AddRowsIntent:
-			return AddRowsIntentHandler()
-		case is CopyRowsIntent:
-			return CopyRowsIntentHandler()
-		case is EditOutlineIntent:
-			return EditOutlineIntentHandler()
-		case is EditRowsIntent:
-			return EditRowsIntentHandler()
-		case is ExportIntent:
-			return ExportIntentHandler()
-		case is GetCurrentOutlineIntent:
-			return GetCurrentOutlineIntentHandler(mainCoordinator: mainCoordinator)
-		case is GetCurrentTagsIntent:
-			return GetCurrentTagsIntentHandler(mainCoordinator: mainCoordinator)
-		case is GetImagesForOutlineIntent:
-			return GetImagesForOutlineIntentHandler()
-		case is GetOutlinesIntent:
-			return GetOutlinesIntentHandler()
-		case is GetRowsIntent:
-			return GetRowsIntentHandler()
-		case is ImportIntent:
-			return ImportIntentHandler()
-		case is MoveRowsIntent:
-			return MoveRowsIntentHandler()
-		case is RemoveOutlineIntent:
-			return RemoveOutlineIntentHandler()
-		case is RemoveOutlineTagIntent:
-			return RemoveOutlineTagIntentHandler()
-		case is RemoveRowsIntent:
-			return RemoveRowsIntentHandler()
-		case is ShowOutlineIntent:
-			return ShowOutlineIntentHandler(mainCoordinator: mainCoordinator)
-		default:
-			fatalError("Unhandled intent type: \(intent)")
-		}
-	}
+//	func application(_ application: UIApplication, handlerFor intent: INIntent) -> Any? {
+//		switch intent {
+//		case is AddOutlineIntent:
+//			return AddOutlineIntentHandler()
+//		case is AddOutlineTagIntent:
+//			return AddOutlineTagIntentHandler()
+//		case is AddRowsIntent:
+//			return AddRowsIntentHandler()
+//		case is CopyRowsIntent:
+//			return CopyRowsIntentHandler()
+//		case is EditOutlineIntent:
+//			return EditOutlineIntentHandler()
+//		case is EditRowsIntent:
+//			return EditRowsIntentHandler()
+//		case is ExportIntent:
+//			return ExportIntentHandler()
+//		case is GetCurrentOutlineIntent:
+//			return GetCurrentOutlineIntentHandler(mainCoordinator: mainCoordinator)
+//		case is GetCurrentTagsIntent:
+//			return GetCurrentTagsIntentHandler(mainCoordinator: mainCoordinator)
+//		case is GetImagesForOutlineIntent:
+//			return GetImagesForOutlineIntentHandler()
+//		case is GetOutlinesIntent:
+//			return GetOutlinesIntentHandler()
+//		case is GetRowsIntent:
+//			return GetRowsIntentHandler()
+//		case is ImportIntent:
+//			return ImportIntentHandler()
+//		case is MoveRowsIntent:
+//			return MoveRowsIntentHandler()
+//		case is RemoveOutlineIntent:
+//			return RemoveOutlineIntentHandler()
+//		case is RemoveOutlineTagIntent:
+//			return RemoveOutlineTagIntentHandler()
+//		case is RemoveRowsIntent:
+//			return RemoveRowsIntentHandler()
+//		case is ShowOutlineIntent:
+//			return ShowOutlineIntentHandler(mainCoordinator: mainCoordinator)
+//		default:
+//			fatalError("Unhandled intent type: \(intent)")
+//		}
+//	}
 	
 	// MARK: UISceneSession Lifecycle
 
@@ -1048,11 +1048,14 @@ extension AppDelegate: AppKitPluginDelegate {
 	func importOPML(_ url: URL) {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return }
-		guard let document = try? account.importOPML(url, tags: nil) else { return }
+		
+		Task {
+			guard let document = try? await account.importOPML(url, tags: nil) else { return }
 
-		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-		activity.userInfo = [Pin.UserInfoKeys.pin: Pin(document: document).userInfo]
-		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(document: document).userInfo]
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+		}
 	}
 	
 }
@@ -1095,7 +1098,7 @@ private extension AppDelegate {
 
 		Task {
 			await AccountManager.shared.sync()
-			AccountManager.shared.suspend()
+			await AccountManager.shared.suspend()
 			UIApplication.shared.endBackgroundTask(backgroundTaskID)
 		}
 		

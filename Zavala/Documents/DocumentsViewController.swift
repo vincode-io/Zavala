@@ -219,21 +219,19 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		guard let documentContainers,
 			  let account = documentContainers.uniqueAccount else { return }
 
-		var document: Document?
 		for url in urls {
-			do {
-				let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
-				document = try account.importOPML(url, tags: tags)
-				DocumentIndexer.updateIndex(forDocument: document!)
-			} catch {
-				self.presentError(title: .importFailedTitle, message: error.localizedDescription)
-			}
-		}
-		
-		if let document {
 			Task {
-				await loadDocuments(animated: true)
-				selectDocument(document, animated: true)
+				do {
+					let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
+					let document = try await account.importOPML(url, tags: tags)
+					
+					await loadDocuments(animated: true)
+					selectDocument(document, animated: true)
+					
+					DocumentIndexer.updateIndex(forDocument: document)
+				} catch {
+					self.presentError(title: .importFailedTitle, message: error.localizedDescription)
+				}
 			}
 		}
 	}
@@ -745,12 +743,14 @@ private extension DocumentsViewController {
 	func duplicateAction(documents: [Document]) -> UIAction {
 		let action = UIAction(title: .duplicateControlLabel, image: .duplicate) { action in
             for document in documents {
-                document.load()
-                let newDocument = document.duplicate()
-                document.account?.createDocument(newDocument)
-                newDocument.forceSave()
-                newDocument.unload()
-                document.unload()
+				Task {
+					document.load()
+					let newDocument = document.duplicate()
+					document.account?.createDocument(newDocument)
+					await newDocument.forceSave()
+					await newDocument.unload()
+					await document.unload()
+				}
             }
 		}
 		return action
