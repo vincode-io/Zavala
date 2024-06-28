@@ -80,7 +80,7 @@ private extension MacOpenQuicklyCollectionsViewController {
 			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
 
 			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
-				contentConfiguration.text = container.name
+				contentConfiguration.text = container.partialName
 				contentConfiguration.image = container.image
 
 				if container.children.isEmpty {
