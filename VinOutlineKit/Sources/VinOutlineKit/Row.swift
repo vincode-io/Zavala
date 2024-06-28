@@ -18,13 +18,6 @@ public enum RowStrings {
 	case both(NSAttributedString?, NSAttributedString?)
 }
 
-enum RowError: LocalizedError {
-	case unableToDeserialize
-	var errorDescription: String? {
-		return VinOutlineKitStringAssets.rowDeserializationError
-	}
-}
-
 public struct AltLinkResolvingActions: OptionSet {
 	
 	public static let fixedAltLink = AltLinkResolvingActions(rawValue: 1)
@@ -37,17 +30,17 @@ public struct AltLinkResolvingActions: OptionSet {
 	
 }
 
-public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable {
+public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	
 	public static let typeIdentifier = "io.vincode.Zavala.Row"
 	
 	public var parent: RowContainer?
 	public var shadowTableIndex: Int?
-
+	
 	public var isCloudKit: Bool {
 		return outline?.isCloudKit ?? false
 	}
-
+	
 	public var cloudKitMetaData: Data? {
 		didSet {
 			outline?.rowsFile?.markAsDirty()
@@ -55,9 +48,9 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 	
 	public var isCloudKitMerging: Bool = false
-
+	
 	public var id: String
-
+	
 	public var isExpanded: Bool
 	public internal(set) var rows: [Row] {
 		get {
@@ -74,7 +67,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 				outline.keyedRows?.removeValue(forKey: id)
 				outline.requestCloudKitUpdate(for: entityID)
 			}
-
+			
 			var order = OrderedSet<String>()
 			for row in newValue {
 				order.append(row.id)
@@ -90,14 +83,14 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public var rowCount: Int {
 		return rowOrder.count
 	}
-
+	
 	public var isAnyParentComplete: Bool {
 		if let parentRow = parent as? Row {
 			return parentRow.isComplete ?? false || parentRow.isAnyParentComplete
 		}
 		return false
 	}
-
+	
 	public weak var outline: Outline? {
 		didSet {
 			if let outline {
@@ -112,11 +105,11 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		}
 		return entityID
 	}
-
+	
 	var ancestorRowOrder: OrderedSet<String>?
 	var serverRowOrder: OrderedSet<String>?
 	var rowOrder: OrderedSet<String>
-
+	
 	var isPartOfSearchResult = false {
 		didSet {
 			guard isPartOfSearchResult else { return }
@@ -163,7 +156,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		guard rowCount > 0 else { return false }
 		return !isExpanded
 	}
-
+	
 	public var isCollapsable: Bool {
 		guard rowCount > 0 else { return false }
 		return isExpanded
@@ -200,7 +193,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	
 	public var isAutoUncompletable: Bool {
 		guard isUncompletable else { return false }
-
+		
 		for child in rows {
 			if child.isCompletable {
 				return true
@@ -219,7 +212,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 			}
 		}
 	}
-
+	
 	public var isNoteEmpty: Bool {
 		return note == nil
 	}
@@ -240,12 +233,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 				
 				var notesImages = images?.filter { $0.isInNotes ?? false } ?? [Image]()
 				notesImages.append(contentsOf: newImages)
-
+				
 				if let images {
 					outline?.requestCloudKitUpdates(for: images.filter({ !($0.isInNotes ?? false) }).map({ $0.id }))
 				}
 				outline?.requestCloudKitUpdates(for: newImages.map({ $0.id }))
-
+				
 				images = notesImages
 			} else {
 				topicData = nil
@@ -268,15 +261,15 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 			if let attrText = newValue {
 				let (cleanAttrText, newImages) = splitOffImages(attrString: attrText, isNotes: true)
 				noteData = cleanAttrText.toData()
-
+				
 				var topicImages = images?.filter { !($0.isInNotes ?? false) } ?? [Image]()
 				topicImages.append(contentsOf: newImages)
-
+				
 				if let images {
 					outline?.requestCloudKitUpdates(for: images.filter({ $0.isInNotes ?? false }).map({ $0.id }))
 				}
 				outline?.requestCloudKitUpdates(for: newImages.map({ $0.id }))
-
+				
 				images = topicImages
 			} else {
 				noteData = nil
@@ -308,7 +301,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	}
 	
 	public var searchResultCoordinates = NSHashTable<SearchResultCoordinates>.weakObjects()
-
+	
 	var ancestorTopicData: Data?
 	var serverTopicData: Data?
 	var topicData: Data? {
@@ -346,25 +339,11 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		}
 	}
 	
-	private enum CodingKeys: String, CodingKey {
-		case cloudKitMetaData
-		case id
-		case ancestorTopicData
-		case topicData
-		case ancestorNoteData
-		case noteData
-		case isExpanded
-		case ancestorIsComplete
-		case isComplete
-		case ancestorRowOrder
-		case rowOrder
-	}
-	
 	private static let markdownImagePattern = "!\\]\\]\\(([^)]+).png\\)"
 	
 	private var topicCache: NSAttributedString?
 	private var noteCache: NSAttributedString?
-
+	
 	public init(outline: Outline) {
 		self.isComplete = false
 		self.id = UUID().uuidString
@@ -374,7 +353,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		self.rowOrder = OrderedSet<String>()
 		super.init()
 	}
-
+	
 	init(outline: Outline, id: String) {
 		self.outline = outline
 		self.id = id
@@ -383,7 +362,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		super.init()
 	}
 	
-
+	
 	public init(outline: Outline, topicMarkdown: String?, noteMarkdown: String? = nil) {
 		self.isComplete = false
 		self.id = UUID().uuidString
@@ -396,52 +375,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		self.note = convertMarkdown(noteMarkdown, isInNotes: true)
 	}
 	
-	public init(from decoder: Decoder) throws {
-		let container = try decoder.container(keyedBy: CodingKeys.self)
-		
-		self.ancestorIsComplete = try? container.decode(Bool.self, forKey: .ancestorIsComplete)
-		if let isComplete = try? container.decode(Bool.self, forKey: .isComplete) {
-			self.isComplete = isComplete
-		} else {
-			self.isComplete = false
-		}
-		
-		cloudKitMetaData = try? container.decode(Data.self, forKey: .cloudKitMetaData)
-
-		if let id = try? container.decode(String.self, forKey: .id) {
-			self.id = id
-		} else if let id = try? container.decode(EntityID.self, forKey: .id) {
-			self.id = id.rowUUID
-		} else {
-			throw RowError.unableToDeserialize
-		}
-		
-		if let isExpanded = try? container.decode(Bool.self, forKey: .isExpanded) {
-			self.isExpanded = isExpanded
-		} else {
-			self.isExpanded = true
-		}
-		
-		if let rowOrderCloudKitValue = try? container.decode([String].self, forKey: .ancestorRowOrder) {
-			self.ancestorRowOrder = OrderedSet(rowOrderCloudKitValue)
-		}
-		
-		if let rowOrder = try? container.decode([String].self, forKey: .rowOrder) {
-			self.rowOrder = OrderedSet(rowOrder)
-		} else if let rowOrder = try? container.decode([EntityID].self, forKey: .rowOrder) {
-			self.rowOrder = OrderedSet(rowOrder.map { $0.rowUUID })
-		} else {
-			throw RowError.unableToDeserialize
-		}
-
-		super.init()
-
-		ancestorTopicData = try? container.decode(Data.self, forKey: .ancestorTopicData)
-		topicData = try? container.decode(Data.self, forKey: .topicData)
-		ancestorNoteData = try? container.decode(Data.self, forKey: .ancestorNoteData)
-		noteData = try? container.decode(Data.self, forKey: .noteData)
-	}
-	
 	public override init() {
 		self.isComplete = false
 		self.id = UUID().uuidString
@@ -450,19 +383,18 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		super.init()
 	}
 	
-	public func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(cloudKitMetaData, forKey: .cloudKitMetaData)
-		try container.encode(id, forKey: .id)
-		try container.encode(ancestorTopicData, forKey: .ancestorTopicData)
-		try container.encode(topicData, forKey: .topicData)
-		try container.encode(ancestorNoteData, forKey: .ancestorNoteData)
-		try container.encode(noteData, forKey: .noteData)
-		try container.encode(isExpanded, forKey: .isExpanded)
-		try container.encode(ancestorIsComplete, forKey: .ancestorIsComplete)
-		try container.encode(isComplete, forKey: .isComplete)
-		try container.encode(ancestorRowOrder, forKey: .ancestorRowOrder)
-		try container.encode(rowOrder, forKey: .rowOrder)
+	init(coder: RowCoder) {
+		self.cloudKitMetaData = coder.cloudKitMetaData
+		self.id = coder.id
+		self.ancestorTopicData = coder.ancestorTopicData
+		self.topicData = coder.topicData
+		self.ancestorNoteData = coder.ancestorNoteData
+		self.noteData = coder.noteData
+		self.isExpanded = coder.isExpanded
+		self.ancestorIsComplete = coder.ancestorIsComplete
+		self.isComplete = coder.isComplete
+		self.ancestorRowOrder = coder.ancestorRowOrder
+		self.rowOrder = coder.rowOrder
 	}
 	
 	public func topicMarkdown(representation: DataRepresentation, useAltLinks: Bool = false) -> String? {
@@ -475,7 +407,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	
 	public func duplicate(newOutline: Outline) -> Row {
 		let row = Row(outline: newOutline)
-
+		
 		row.topicData = topicData
 		row.noteData = noteData
 		row.isExpanded = isExpanded
@@ -495,7 +427,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		
 		func importMarkdown(_ markdown: String?, isInNotes: Bool) -> NSAttributedString? {
 			
-			#if canImport(UIKit)
+#if canImport(UIKit)
 			if let markdown {
 				let mangledMarkdown = markdown.replacingOccurrences(of: "![", with: "!]")
 				let attrString = NSMutableAttributedString(markdownRepresentation: mangledMarkdown, attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
@@ -527,7 +459,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 				
 				return attrString
 			}
-			#endif
+#endif
 			
 			return nil
 		}
@@ -543,7 +475,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	public func findImage(id: EntityID) -> Image? {
 		return images?.first(where: { $0.id == id })
 	}
-
+	
 	public func saveImage(_ image: Image) {
 		var foundImages = images
 		
@@ -560,13 +492,13 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		topicCache = nil
 		noteCache = nil
 	}
-
+	
 	public func deleteImage(id: EntityID) {
 		images?.removeAll(where: { $0.id == id })
 		topicCache = nil
 		noteCache = nil
 	}
-
+	
 	public func complete() {
 		guard isCompletable else { return }
 		isComplete = true
@@ -578,7 +510,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		isComplete = false
 		outline?.requestCloudKitUpdate(for: entityID)
 	}
-
+	
 	public func firstIndexOfRow(_ row: Row) -> Int? {
 		return rowOrder.firstIndex(of: row.id)
 	}
@@ -594,10 +526,10 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		
 		rowOrder.insert(row.id, at: at)
 		outline?.keyedRows?[row.id] = row
-
+		
 		outline?.requestCloudKitUpdates(for: [entityID, row.entityID])
 	}
-
+	
 	public func removeRow(_ row: Row) {
 		if isCloudKit && ancestorRowOrder == nil {
 			ancestorRowOrder = rowOrder
@@ -608,18 +540,18 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 		
 		outline?.requestCloudKitUpdates(for: [entityID, row.entityID])
 	}
-
+	
 	public func appendRow(_ row: Row) {
 		if isCloudKit && ancestorRowOrder == nil {
 			ancestorRowOrder = rowOrder
 		}
-
+		
 		rowOrder.append(row.id)
 		outline?.keyedRows?[row.id] = row
-
+		
 		outline?.requestCloudKitUpdates(for: [entityID, row.entityID])
 	}
-
+	
 	public func isDecendent(_ row: Row) -> Bool {
 		if let parentRow = parent as? Row, parentRow.id == row.id || parentRow.isDecendent(row) {
 			return true
@@ -682,7 +614,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 			mutableTopic.detectData()
 			self.topic = mutableTopic
 		}
-
+		
 		if let note = self.note {
 			let mutableNote = NSMutableAttributedString(attributedString: note)
 			mutableNote.detectData()
@@ -713,6 +645,20 @@ public final class Row: NSObject, NSCopying, RowContainer, Codable, Identifiable
 	
 	public func copy(with zone: NSZone? = nil) -> Any {
 		return self
+	}
+	
+	func toCoder() -> RowCoder {
+		return RowCoder(cloudKitMetaData: cloudKitMetaData, 
+						id: id,
+						ancestorTopicData: ancestorTopicData,
+						topicData: topicData,
+						ancestorNoteData: ancestorNoteData,
+						noteData: noteData,
+						isExpanded: isExpanded,
+						ancestorIsComplete: ancestorIsComplete,
+						isComplete: isComplete,
+						ancestorRowOrder: ancestorRowOrder,
+						rowOrder: rowOrder)
 	}
 	
 }
