@@ -8,9 +8,10 @@
 import Foundation
 import VinUtility
 
+@MainActor
 public class Tag: Identifiable, Equatable {
 	
-	public var id: String
+	public let id: String
 	public var name: String
 	
 	public var level: Int {
@@ -76,7 +77,7 @@ public class Tag: Identifiable, Equatable {
 		return trimmedElements.joined(separator: "/")
 	}
 	
-	public static func == (lhs: Tag, rhs: Tag) -> Bool {
+	nonisolated public static func == (lhs: Tag, rhs: Tag) -> Bool {
 		return lhs.id == rhs.id
 	}
 	
