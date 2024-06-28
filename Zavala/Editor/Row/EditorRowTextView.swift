@@ -92,7 +92,7 @@ class EditorRowTextView: UITextView {
 	}
 	
 	var inactivityTask: Task<(), Never>?
-	var activityChannel = AsyncChannel<(() -> Void)>()
+	var activityChannel = AsyncChannel<Void>()
     var textViewHeight: CGFloat?
     var isSavingTextUnnecessary = false
 
@@ -449,9 +449,10 @@ extension EditorRowTextView {
    
 	func startActivityMonitoring() {
 		inactivityTask = Task {
-			for await inactivity in activityChannel.debounce(for: .seconds(5.0)) {
+			for await _ in activityChannel.debounce(for: .seconds(5.0)) {
 				if !Task.isCancelled {
-					inactivity()
+					saveText()
+					RequestReview.request()
 				}
 			}
 		}
@@ -464,10 +465,7 @@ extension EditorRowTextView {
 	
 	func debounceActivity() {
 		Task {
-			await activityChannel.send({ [weak self] in
-				self?.saveText()
-				RequestReview.request()
-			})
+			await activityChannel.send(())
 		}
 	}
 	
