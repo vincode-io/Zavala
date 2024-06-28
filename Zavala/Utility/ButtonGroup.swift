@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 class ButtonGroup: NSObject {
 	
 	class Button: UIButton {
