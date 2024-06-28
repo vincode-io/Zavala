@@ -601,6 +601,33 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		imagesFile = ImagesFile(outline: self)
 	}
 	
+	public init(id: EntityID, outline: Outline) {
+		self.id = id
+		self.title = outline.title
+		self.disambiguator = outline.disambiguator
+		self.created = outline.created
+		self.updated = outline.updated
+		self.autoLinkingEnabled = outline.autoLinkingEnabled
+		self.checkSpellingWhileTyping = outline.checkSpellingWhileTyping
+		self.correctSpellingAutomatically = outline.correctSpellingAutomatically
+		self.ownerName = outline.ownerName
+		self.ownerEmail = outline.ownerEmail
+		self.ownerURL = outline.ownerURL
+		self.verticleScrollState = outline.verticleScrollState
+		self.isFilterOn = outline.isFilterOn
+		self.isCompletedFiltered = outline.isCompletedFiltered
+		self.isNotesFiltered = outline.isNotesFiltered
+		self.focusRowID = outline.focusRowID
+		self.selectionRowID = outline.selectionRowID
+		self.selectionIsInNotes = outline.selectionIsInNotes
+		self.selectionLocation = outline.selectionLocation
+		self.selectionLength = outline.selectionLength
+		self.tagIDs = outline.tagIDs
+		self.documentLinks = outline.documentLinks
+		self.documentBacklinks = outline.documentBacklinks
+		self.hasAltLinks = outline.hasAltLinks
+	}
+	
 	init(coder: OutlineCoder) {
 		self.cloudKitMetaData = coder.cloudKitMetaData
 		self.id = coder.id
