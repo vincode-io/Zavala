@@ -10,6 +10,7 @@ import StoreKit
 import VinOutlineKit
 import VinUtility
 
+@MainActor
 struct RequestReview {
 	
 	// Only prompt every 30 days if they have 10 active documents and the app version is different

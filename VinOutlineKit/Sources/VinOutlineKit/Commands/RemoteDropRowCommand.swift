@@ -13,18 +13,21 @@ public final class RemoteDropRowCommand: OutlineCommand {
 	var rows: [Row]
 	var afterRow: Row?
 	var prefersEnd: Bool
+	var afterRowIsNewParent: Bool
 	
 	public init(actionName: String, undoManager: UndoManager,
 				delegate: OutlineCommandDelegate,
 				outline: Outline,
 				rowGroups: [RowGroup],
 				afterRow: Row?,
-				prefersEnd: Bool) {
+				prefersEnd: Bool,
+				afterRowIsNewParent: Bool) {
 		
 		self.rowGroups = rowGroups
 		self.rows = [Row]()
 		self.afterRow = afterRow
 		self.prefersEnd = prefersEnd
+		self.afterRowIsNewParent = afterRowIsNewParent
 		
 		super.init(actionName: actionName, undoManager: undoManager, delegate: delegate, outline: outline)
 	}
@@ -36,6 +39,13 @@ public final class RemoteDropRowCommand: OutlineCommand {
 			newRows.append(newRow)
 		}
 		rows = newRows
+		
+		// This helps Outline understand that this is a drop-into
+		if afterRowIsNewParent {
+			for row in rows {
+				row.parent = afterRow
+			}
+		}
 		
 		outline.createRows(rows, afterRow: afterRow, prefersEnd: prefersEnd)
 	}
