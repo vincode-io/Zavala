@@ -14,12 +14,12 @@ protocol MacOpenQuicklyDocumentsDelegate: AnyObject {
 	func openDocument(_: MacOpenQuicklyDocumentsViewController, documentID: EntityID)
 }
 
-final class DocumentsItem: NSObject, NSCopying, Identifiable {
+final class DocumentsItem: NSObject, NSCopying, Identifiable, Sendable {
 
 		let id: EntityID
 
 		init(id: EntityID) {
-				self.id = id
+			self.id = id
 		}
 
 		static func item(_ document: Document) -> DocumentsItem {
@@ -146,30 +146,19 @@ class MacOpenQuicklyDocumentsViewController: UICollectionViewController {
 		} else {
 			selectionContainers = documentContainers
 		}
-	
+
 		Task {
-			let documents = await withTaskGroup(of: [Document].self, returning: Set<Document>.self) { taskGroup in
-				for container in selectionContainers {
-					taskGroup.addTask {
-						return (try? await container.documents) ?? []
-					}
-				}
-				
-				var documents = Set<Document>()
-				for await containerDocuments in taskGroup {
-					documents.formUnion(containerDocuments)
-				}				
-				return documents
+			var documents = Set<Document>()
+			for selectionContainer in selectionContainers {
+				documents.formUnion((try? await selectionContainer.documents) ?? [])
 			}
 			
 			let sortedDocuments = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
 			let items = sortedDocuments.map { DocumentsItem.item($0) }
 			var snapshot = NSDiffableDataSourceSectionSnapshot<DocumentsItem>()
 			snapshot.append(items)
-
-			Task { @MainActor in
-				dataSource.apply(snapshot, to: 0, animatingDifferences: false)
-			}
+			
+			await dataSource.apply(snapshot, to: 0, animatingDifferences: false)
 		}
 	}
 }

@@ -44,7 +44,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		public var toChildIndex: Int
 	}
 	
-	public struct SearchOptions: OptionSet {
+	public struct SearchOptions: OptionSet, Sendable {
 		public static let wholeWords = SearchOptions(rawValue: 1)
 		public static let caseInsensitive = SearchOptions(rawValue: 2)
 		
