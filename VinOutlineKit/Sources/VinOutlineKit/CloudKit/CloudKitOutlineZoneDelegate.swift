@@ -20,7 +20,7 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 		self.zoneID = zoneID
 	}
 	
-	func store(changeToken: Data?, key: VCKChangeTokenKey) {
+	func store(changeToken: Data?, key: VCKChangeTokenKey) async {
 		account?.store(changeToken: changeToken, key: key)
 	}
 	

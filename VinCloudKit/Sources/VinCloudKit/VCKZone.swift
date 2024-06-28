@@ -29,7 +29,7 @@ public enum VCKModifyStrategy {
 }
 
 public protocol VCKZoneDelegate: AnyObject {
-	func store(changeToken: Data?, key: VCKChangeTokenKey)
+	func store(changeToken: Data?, key: VCKChangeTokenKey) async
 	func findChangeToken(key: VCKChangeTokenKey) async -> Data?
 	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey]) async throws;
 }
@@ -85,17 +85,23 @@ public extension VCKZone {
 
 	func setChangeToken(_ token: CKServerChangeToken?) {
 		guard let token, let tokenData = try? NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: false) else {
-			delegate!.store(changeToken: nil, key: changeTokenKey)
+			Task {
+				await delegate!.store(changeToken: nil, key: changeTokenKey)
+			}
 			return
 		}
-		delegate!.store(changeToken: tokenData, key: changeTokenKey)
+		Task {
+			await delegate!.store(changeToken: tokenData, key: changeTokenKey)
+		}
 	}
 	
 	/// Moves the change token to the new key name.  This can eventually be removed.
 	func migrateChangeToken() {
 		if let tokenData = UserDefaults.standard.object(forKey: oldChangeTokenKey) as? Data {
-			delegate!.store(changeToken: tokenData, key: changeTokenKey)
-			UserDefaults.standard.removeObject(forKey: oldChangeTokenKey)
+			Task {
+				await delegate!.store(changeToken: tokenData, key: changeTokenKey)
+				UserDefaults.standard.removeObject(forKey: oldChangeTokenKey)
+			}
 		}
 	}
 	
