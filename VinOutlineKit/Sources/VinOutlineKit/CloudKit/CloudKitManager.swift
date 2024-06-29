@@ -49,7 +49,7 @@ public class CloudKitManager {
 	private weak var account: Account?
 
 	private var workTask: Task<(), Never>?
-	private var workChannel = AsyncChannel<(() -> Void)>()
+	private var workChannel = AsyncChannel<Void>()
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
 	private let requestsSemaphore = AsyncSemaphore(value: 1)
 	
@@ -113,17 +113,7 @@ public class CloudKitManager {
 			CloudKitActionRequest.append(requests: requests)
 			requestsSemaphore.signal()
 
-			await workChannel.send({ [weak self] in
-				guard let self, self.isNetworkAvailable else { return }
-				Task {
-					do {
-						try await self.sendChanges(userInitiated: false)
-						try await self.fetchAllChanges(userInitiated: false)
-					} catch {
-						self.presentError(error)
-					}
-				}
-			})
+			await workChannel.send(())
 		}
 	}
 	
@@ -251,9 +241,15 @@ private extension CloudKitManager {
 	
 	func startWorkTask() {
 		workTask = Task {
-			for await work in workChannel.debounce(for: .seconds(5)) {
+			for await _ in workChannel.debounce(for: .seconds(5)) {
+				guard self.isNetworkAvailable else { return }
 				if !Task.isCancelled {
-					work()
+					do {
+						try await self.sendChanges(userInitiated: false)
+						try await self.fetchAllChanges(userInitiated: false)
+					} catch {
+						self.presentError(error)
+					}
 				}
 			}
 		}
