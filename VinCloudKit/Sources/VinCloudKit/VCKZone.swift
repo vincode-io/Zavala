@@ -14,7 +14,7 @@ public struct VCKChangeTokenKey: Hashable, Codable, Sendable {
 	public let ownerName: String
 }
 
-public enum VCKModifyStrategy {
+public enum VCKModifyStrategy: Sendable {
 	case overWriteServerValue
 	case onlyIfServerUnchanged
 	
@@ -114,12 +114,7 @@ public extension VCKZone {
 			let op = CKFetchRecordZonesOperation(recordZoneIDs: [zoneID])
 			op.qualityOfService = Self.qualityOfService
 
-			op.perRecordZoneResultBlock = { [weak self] _, result in
-				guard let self else {
-					continuation.resume(throwing: VCKError.unknown)
-					return
-				}
-
+			op.perRecordZoneResultBlock = { _, result in
 				switch result {
 				case .success(let recordZone):
 					continuation.resume(returning: recordZone)
@@ -299,11 +294,7 @@ public extension VCKZone {
 				}
 			}
 			
-			op.modifyRecordsResultBlock = { [weak self] result in
-				guard let self else {
-					continuation.resume(throwing: VCKError.unknown)
-					return
-				}
+			op.modifyRecordsResultBlock = { result in
 				
 				func handleError(_ error: Error) {
 					let modelsToSend = modelsToSave
@@ -489,11 +480,7 @@ public extension VCKZone {
 				deletedRecordKeys = [CloudKitRecordKey]()
 			}
 			
-			op.fetchRecordZoneChangesResultBlock = { [weak self] result in
-				guard let self else {
-					continuation.resume(throwing: VCKError.unknown)
-					return
-				}
+			op.fetchRecordZoneChangesResultBlock = { result in
 				
 				func handleError(_ error: Error) {
 					switch VCKResult.refine(error) {
