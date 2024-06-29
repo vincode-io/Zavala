@@ -20,8 +20,8 @@ let package = Package(
 			name: "VinCloudKit",             
 			dependencies: [
 				"VinUtility",
-			]
-//			swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
+			],
+			swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
 		),
 	]
 )
