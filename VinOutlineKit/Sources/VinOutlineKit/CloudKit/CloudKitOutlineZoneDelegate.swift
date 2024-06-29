@@ -13,7 +13,7 @@ import VinCloudKit
 class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 	
 	weak var account: Account?
-	var zoneID: CKRecordZone.ID
+	let zoneID: CKRecordZone.ID
 	
 	init(account: Account, zoneID: CKRecordZone.ID) {
 		self.account = account

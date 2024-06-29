@@ -28,7 +28,7 @@ public enum VCKModifyStrategy: Sendable {
 	}
 }
 
-public protocol VCKZoneDelegate: AnyObject {
+public protocol VCKZoneDelegate: Sendable {
 	func store(changeToken: Data?, key: VCKChangeTokenKey) async
 	func findChangeToken(key: VCKChangeTokenKey) async -> Data?
 	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey]) async throws;
@@ -36,7 +36,7 @@ public protocol VCKZoneDelegate: AnyObject {
 
 public typealias CloudKitRecordKey = (recordType: CKRecord.RecordType, recordID: CKRecord.ID)
 
-public protocol VCKZone: AnyObject {
+public protocol VCKZone: Sendable {
 	
 	static var qualityOfService: QualityOfService { get }
 
