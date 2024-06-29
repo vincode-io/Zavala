@@ -6,16 +6,51 @@ import Foundation
 import AsyncAlgorithms
 import OSLog
 
-open class ManagedResourceFile: NSObject, NSFilePresenter {
+open class ManagedResourceFile: NSObject, NSFilePresenter, @unchecked Sendable {
 	
-	private var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinUtility")
-
-	private var isDirty = false
+	private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinUtility")
 	private let fileURL: URL
 	private let operationQueue: OperationQueue
-	private var saveTask: Task<(), Never>?
-	private var saveChannel = AsyncChannel<Void>()
-	private var lastModificationDate: Date?
+
+	private let _isDirty = OSAllocatedUnfairLock<Bool>(initialState: false)
+	private var isDirty: Bool {
+		get {
+			_isDirty.withLock { $0 }
+		}
+		set {
+			_isDirty.withLock { $0 = newValue }
+		}
+	}
+	
+	private let _saveTask = OSAllocatedUnfairLock<Task<(), Never>?>(initialState: nil)
+	private var saveTask: Task<(), Never>? {
+		get {
+			_saveTask.withLock { $0 }
+		}
+		set {
+			_saveTask.withLock { $0 = newValue }
+		}
+	}
+	
+	private let _saveChannel = OSAllocatedUnfairLock<AsyncChannel<Void>>(initialState: AsyncChannel<Void>())
+	private var saveChannel: AsyncChannel<Void> {
+		get {
+			_saveChannel.withLock { $0 }
+		}
+		set {
+			_saveChannel.withLock { $0 = newValue }
+		}
+	}
+	
+	private let _lastModificationDate = OSAllocatedUnfairLock<Date?>(initialState: nil)
+	private var lastModificationDate: Date? {
+		get {
+			_lastModificationDate.withLock { $0 }
+		}
+		set {
+			_lastModificationDate.withLock { $0 = newValue }
+		}
+	}
 
 	public var presentedItemURL: URL? {
 		return fileURL
@@ -47,7 +82,7 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 		}
 	}
 	
-	public func savePresentedItemChanges(completionHandler: @escaping (Error?) -> Void) {
+	public func savePresentedItemChanges(completionHandler: @escaping @Sendable (Error?) -> Void) {
 		Task {
 			await saveIfNecessary()
 			completionHandler(nil)
