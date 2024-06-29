@@ -13,6 +13,7 @@ public extension Notification.Name {
 	static let OutlineFontCacheDidRebuild = Notification.Name(rawValue: "OutlineFontCacheDidRebuild")
 }
 
+@MainActor
 class OutlineFontCache {
 	
 	static let shared = OutlineFontCache()

@@ -9,6 +9,7 @@ import UIKit
 import VinOutlineKit
 import VinUtility
 
+@MainActor
 protocol MacOpenQuicklyCollectionsDelegate: AnyObject {
 	func documentContainerSelectionsDidChange(_: MacOpenQuicklyCollectionsViewController, documentContainers: [DocumentContainer])
 }
@@ -141,9 +142,7 @@ private extension MacOpenQuicklyCollectionsViewController {
 	}
 	
 	func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
-		let localAccount = AccountManager.shared.localAccount
-		
-		guard localAccount.isActive else { return nil }
+		guard let localAccount = AccountManager.shared.localAccount, localAccount.isActive else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
 		let header = CollectionsItem.item(id: .header(.localAccount))

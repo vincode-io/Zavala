@@ -16,6 +16,7 @@ extension Selector {
 	static let insertImage = #selector(EditorViewController.insertImage)
 }
 
+@MainActor
 protocol EditorDelegate: AnyObject {
 	var editorViewControllerIsGoBackUnavailable: Bool { get }
 	var editorViewControllerIsGoForwardUnavailable: Bool { get }
@@ -72,7 +73,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return [Document.outline(outline)]
 	}
 	
-	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
+	nonisolated var mainControllerIdentifer: MainControllerIdentifier { return .editor }
 
 	weak var delegate: EditorDelegate?
 	
@@ -896,7 +897,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 		let oldOutline = outline
 		Task.detached {
-			oldOutline?.unload()
+			await oldOutline?.unload()
 		}
 		undoManager?.removeAllActions()
 	
@@ -3162,12 +3163,14 @@ private extension EditorViewController {
 			// We only register the text representation on the first one, since it looks like most text editors only support 1 dragged text item
 			if row == rows[0] {
 				itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
-					var markdowns = [String]()
-					for row in rows.sortedWithDecendentsFiltered() {
-						markdowns.append(row.markdownList())
+					Task { @MainActor in
+						var markdowns = [String]()
+						for row in rows.sortedWithDecendentsFiltered() {
+							markdowns.append(row.markdownList())
+						}
+						let data = markdowns.joined(separator: "\n").data(using: .utf8)
+						completion(data, nil)
 					}
-					let data = markdowns.joined(separator: "\n").data(using: .utf8)
-					completion(data, nil)
 					return nil
 				}
 			}
@@ -3513,7 +3516,9 @@ private extension EditorViewController {
 		if let outline {
 			outline.load()
 			DocumentIndexer.updateIndex(forDocument: .outline(outline))
-			outline.unload()
+			Task {
+				await outline.unload()
+			}
 		}
 	}
 	

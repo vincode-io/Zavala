@@ -23,6 +23,7 @@ public extension Notification.Name {
 	static let CloudKitSyncDidComplete = Notification.Name(rawValue: "CloudKitSyncDidComplete")
 }
 
+@MainActor
 public class CloudKitManager {
 
 	class CombinedRequest {
@@ -48,7 +49,7 @@ public class CloudKitManager {
 	private weak var account: Account?
 
 	private var workTask: Task<(), Never>?
-	private var workChannel = AsyncChannel<(() -> Void)>()
+	private var workChannel = AsyncChannel<Void>()
 	private var zones = [CKRecordZone.ID: CloudKitOutlineZone]()
 	private let requestsSemaphore = AsyncSemaphore(value: 1)
 	
@@ -79,8 +80,10 @@ public class CloudKitManager {
 		
 	init(account: Account, errorHandler: ErrorHandler) {
 		self.account = account
-		self.outlineZone = CloudKitOutlineZone(container: container)
-		outlineZone.delegate = CloudKitOutlineZoneDelegate(account: account, zoneID: self.outlineZone.zoneID)
+
+		let delegate = CloudKitOutlineZoneDelegate(account: account, zoneID: CloudKitOutlineZone.defaultZoneID)
+		self.outlineZone = CloudKitOutlineZone(container: container, delegate: delegate)
+
 		self.zones[outlineZone.zoneID] = outlineZone
 		self.errorHandler = errorHandler
 		migrateSharedDatabaseChangeToken()
@@ -96,7 +99,7 @@ public class CloudKitManager {
 			try await outlineZone.subscribeToZoneChanges()
 			try await subscribeToSharedDatabaseChanges()
 		} catch {
-			await presentError(error)
+			presentError(error)
 		}
 	}
 	
@@ -112,17 +115,7 @@ public class CloudKitManager {
 			CloudKitActionRequest.append(requests: requests)
 			requestsSemaphore.signal()
 
-			await workChannel.send({ [weak self] in
-				guard let self, self.isNetworkAvailable else { return }
-				Task {
-					do {
-						try await self.sendChanges(userInitiated: false)
-						try await self.fetchAllChanges(userInitiated: false)
-					} catch {
-						await self.presentError(error)
-					}
-				}
-			})
+			await workChannel.send(())
 		}
 	}
 	
@@ -141,7 +134,7 @@ public class CloudKitManager {
 				try await fetchChanges(userInitiated: false, zoneID: zoneId)
 			}
 		} catch {
-			await presentError(error)
+			presentError(error)
 		}
 	}
 	
@@ -158,7 +151,7 @@ public class CloudKitManager {
 			try await sendChanges(userInitiated: true)
 			try await fetchAllChanges(userInitiated: true)
 		} catch {
-			await presentError(error)
+			presentError(error)
 		}
 		
 		cloudKitSyncDidComplete()
@@ -182,14 +175,14 @@ public class CloudKitManager {
 							self.cloudKitSyncDidComplete()
 							continuation.resume()
 						} catch {
-							await self.presentError(error)
+							self.presentError(error)
 							self.cloudKitSyncDidComplete()
 							continuation.resume()
 						}
 					}
 				case .failure(let error):
 					Task {
-						await self.presentError(error)
+						self.presentError(error)
 						continuation.resume()
 					}
 				}
@@ -250,9 +243,15 @@ private extension CloudKitManager {
 	
 	func startWorkTask() {
 		workTask = Task {
-			for await work in workChannel.debounce(for: .seconds(5)) {
+			for await _ in workChannel.debounce(for: .seconds(5)) {
+				guard self.isNetworkAvailable else { return }
 				if !Task.isCancelled {
-					work()
+					do {
+						try await self.sendChanges(userInitiated: false)
+						try await self.fetchAllChanges(userInitiated: false)
+					} catch {
+						self.presentError(error)
+					}
 				}
 			}
 		}
@@ -285,14 +284,13 @@ private extension CloudKitManager {
 		if let zone = zones[zoneID] {
 			return zone
 		}
-		
-		let zone = CloudKitOutlineZone(container: container, database: container.sharedCloudDatabase, zoneID: zoneID)
-		zone.delegate = CloudKitOutlineZoneDelegate(account: account!, zoneID: zoneID)
+
+		let delegate = CloudKitOutlineZoneDelegate(account: account!, zoneID: zoneID)
+		let zone = CloudKitOutlineZone(container: container, database: container.sharedCloudDatabase, zoneID: zoneID, delegate: delegate)
 		zones[zoneID] = zone
 		return zone
 	}
 	
-	@MainActor
 	func sendChanges(userInitiated: Bool) async throws {
 		isSyncing = true
 		defer {
@@ -326,7 +324,7 @@ private extension CloudKitManager {
 				
 				taskGroup.addTask {
 					let (completedSaves, completedDeletes) = try await cloudKitZone.modify(modelsToSave: modelsToSave, recordIDsToDelete: recordIDsToDelete, strategy: strategy)
-					self.updateSyncMetaData(savedRecords: completedSaves)
+					await self.updateSyncMetaData(savedRecords: completedSaves)
 
 					let savedEntityIDs = completedSaves.compactMap { EntityID(description: $0.recordID.recordName) }
 					let deletedEntityIDs = completedDeletes.compactMap { EntityID(description: $0.recordName) }
@@ -367,7 +365,9 @@ private extension CloudKitManager {
 			}
 		}
 
-		loadedDocuments.forEach { $0.unload() }
+		for document in loadedDocuments {
+			await document.unload()
+		}
 			
 		self.logger.info("Saving \(leftOverRequests.count) requests.")
 		

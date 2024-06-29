@@ -10,6 +10,7 @@ import MobileCoreServices
 import VinOutlineKit
 import CoreSpotlight
 
+@MainActor
 class DocumentIndexer {
 	
 	init() {
@@ -17,10 +18,8 @@ class DocumentIndexer {
 	}
 	
 	static func updateIndex(forDocument document: Document) {
-		Task { @MainActor in
-			let searchableItem = makeSearchableItem(forDocument: document)
-			try? await CSSearchableIndex.default().indexSearchableItems([searchableItem])
-		}
+		let searchableItem = makeSearchableItem(forDocument: document)
+		CSSearchableIndex.default().indexSearchableItems([searchableItem])
 	}
 	
 	static func makeSearchableItem(forDocument document: Document) -> CSSearchableItem {

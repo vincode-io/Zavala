@@ -5,10 +5,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+NS_SWIFT_UI_ACTOR
 @protocol AppKitPluginDelegate <NSObject>
 - (void)importOPML:(nonnull NSURL *)url;
 @end
 
+NS_SWIFT_UI_ACTOR
 @protocol AppKitPlugin <NSObject>
 - (void)setDelegate:(nullable id<AppKitPluginDelegate>)delegate;
 - (void)start;

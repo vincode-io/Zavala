@@ -10,11 +10,11 @@ import OSLog
 import OrderedCollections
 import VinUtility
 
-
-final class RowsFile: ManagedResourceFile {
+final class RowsFile: ManagedResourceFile, @unchecked Sendable {
 	
 	private weak var outline: Outline?
 	
+	@MainActor
 	init?(outline: Outline) {
 		self.outline = outline
 
@@ -30,7 +30,7 @@ final class RowsFile: ManagedResourceFile {
 		outline?.loadRowFileData(data)
 	}
 	
-	public override func fileWillSave() -> Data? {
+	public override func fileWillSave() async -> Data? {
 		return outline?.buildRowFileData()
 	}
 	

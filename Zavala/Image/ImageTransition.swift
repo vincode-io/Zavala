@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 protocol ImageTransitionDelegate: AnyObject {
 	func hideImage(_: ImageTransition, frame: CGRect);
 	func unhideImage(_: ImageTransition);

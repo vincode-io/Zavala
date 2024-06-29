@@ -7,11 +7,13 @@
 import Foundation
 import VinUtility
 
+@MainActor
 public protocol OutlineCommandDelegate: AnyObject {
 	var currentCoordinates: CursorCoordinates? { get }
 	func restoreCursorPosition(_: CursorCoordinates)
 }
 
+@MainActor
 public class OutlineCommand {
 	
 	var actionName: String

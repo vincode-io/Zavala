@@ -239,13 +239,7 @@ private extension EditorViewController {
 		// Dropping into a Row is easy peasy
 		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = destinationIndexPath {
 			let newParent = shadowTable[dropInIndexPath.row]
-			
-			// We only have to set the parent for dropping into.  Otherwise VinOutlineKit figures it out on its own.
-			rowGroups.forEach { rowGroup in
-				rowGroup.row.parent = newParent
-			}
-			
-			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: newParent)
+			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: newParent, afterRowIsNewParent: true)
 			return
 		}
 		
@@ -268,7 +262,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], afterRow: Row?, prefersEnd: Bool = false) {
+	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], afterRow: Row?, prefersEnd: Bool = false, afterRowIsNewParent: Bool = false) {
 		guard let undoManager, let outline else { return }
 
 		let command = RemoteDropRowCommand(actionName: .copyControlLabel,
@@ -277,7 +271,8 @@ private extension EditorViewController {
 										   outline: outline,
 										   rowGroups: rowGroups,
 										   afterRow: afterRow,
-										   prefersEnd: prefersEnd)
+										   prefersEnd: prefersEnd,
+										   afterRowIsNewParent: afterRowIsNewParent)
 		
 		command.execute()
 	}

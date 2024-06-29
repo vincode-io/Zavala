@@ -8,7 +8,7 @@
 import Foundation
 import CloudKit
 
-extension CKError: LocalizedError {
+extension CKError: @retroactive LocalizedError {
 	
 	public var errorDescription: String? {
 		switch code {

@@ -9,6 +9,7 @@ import Foundation
 
 public extension Array where Element == Row {
 	
+	@MainActor
 	func sortedByDisplayOrder() -> Array {
 		return sorted(by: {
 			if $0.shadowTableIndex == nil && $1.shadowTableIndex == nil {
@@ -19,6 +20,7 @@ public extension Array where Element == Row {
 		})
 	}
 	
+	@MainActor
 	func sortedByReverseDisplayOrder() -> Array {
 		return sorted(by: {
 			if $0.shadowTableIndex == nil && $1.shadowTableIndex == nil {
@@ -29,6 +31,7 @@ public extension Array where Element == Row {
 		})
 	}
 
+	@MainActor
 	func sortedWithDecendentsFiltered() -> Array {
 		let sortedRows = sortedByDisplayOrder()
 		

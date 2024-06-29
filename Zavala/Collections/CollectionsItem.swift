@@ -8,9 +8,10 @@
 import UIKit
 import VinOutlineKit
 
-final class CollectionsItem: NSObject, NSCopying, Identifiable {
+@MainActor
+final class CollectionsItem: NSObject, NSCopying, Identifiable, Sendable {
 	
-	enum ID: Hashable {
+	enum ID: Hashable, Sendable {
 		case header(CollectionsSection)
 		case search
 		case documentContainer(EntityID)
@@ -29,6 +30,7 @@ final class CollectionsItem: NSObject, NSCopying, Identifiable {
 			return nil
 		}
 		
+		@MainActor
 		var name: String? {
 			return accountType?.name
 		}
@@ -77,7 +79,7 @@ final class CollectionsItem: NSObject, NSCopying, Identifiable {
 		return hasher.finalize()
 	}
 	
-	func copy(with zone: NSZone? = nil) -> Any {
+	nonisolated func copy(with zone: NSZone? = nil) -> Any {
 		return self
 	}
 	
@@ -85,6 +87,7 @@ final class CollectionsItem: NSObject, NSCopying, Identifiable {
 
 extension Array where Element == CollectionsItem {
 	
+	@MainActor
 	func toContainers() -> [DocumentContainer] {
 		return self.compactMap { item in
 			if case .documentContainer(let entityID) = item.id {

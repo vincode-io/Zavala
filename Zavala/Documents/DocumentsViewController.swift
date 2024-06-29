@@ -13,6 +13,7 @@ import Semaphore
 import VinOutlineKit
 import VinUtility
 
+@MainActor
 protocol DocumentsDelegate: AnyObject  {
 	func documentSelectionDidChange(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], selectRow: EntityID?, isNew: Bool, isNavigationBranch: Bool, animated: Bool)
 	func showGetInfo(_: DocumentsViewController, outline: Outline)
@@ -27,7 +28,7 @@ protocol DocumentsDelegate: AnyObject  {
 
 class DocumentsViewController: UICollectionViewController, MainControllerIdentifiable, DocumentsActivityItemsConfigurationDelegate {
 
-	var mainControllerIdentifer: MainControllerIdentifier { return .documents }
+	nonisolated var mainControllerIdentifer: MainControllerIdentifier { return .documents }
 
 	weak var delegate: DocumentsDelegate?
 
@@ -49,8 +50,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private var addButton: UIButton!
 	private var importButton: UIButton!
 
-	private let documentsSemaphore = AsyncSemaphore(value: 1)
-	private var loadDocumentsChannel = AsyncChannel<(() -> Void)>()
+	private var loadDocumentsChannel = AsyncChannel<Void>()
 	
 	private var lastClick: TimeInterval = Date().timeIntervalSince1970
 	private var lastIndexPath: IndexPath? = nil
@@ -140,8 +140,8 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		scheduleReconfigureAll()
 		
 		Task {
-			for await loadDocuments in loadDocumentsChannel.debounce(for: .seconds(0.5)) {
-				loadDocuments()
+			for await _ in loadDocumentsChannel.debounce(for: .seconds(0.5)) {
+				await loadDocuments(animated: true)
 			}
 		}
 	}
@@ -219,21 +219,19 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		guard let documentContainers,
 			  let account = documentContainers.uniqueAccount else { return }
 
-		var document: Document?
 		for url in urls {
-			do {
-				let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
-				document = try account.importOPML(url, tags: tags)
-				DocumentIndexer.updateIndex(forDocument: document!)
-			} catch {
-				self.presentError(title: .importFailedTitle, message: error.localizedDescription)
-			}
-		}
-		
-		if let document {
 			Task {
-				await loadDocuments(animated: true)
-				selectDocument(document, animated: true)
+				do {
+					let tags = documentContainers.compactMap { ($0 as? TagDocuments)?.tag }
+					let document = try await account.importOPML(url, tags: tags)
+					
+					await loadDocuments(animated: true)
+					selectDocument(document, animated: true)
+					
+					DocumentIndexer.updateIndex(forDocument: document)
+				} catch {
+					self.presentError(title: .importFailedTitle, message: error.localizedDescription)
+				}
 			}
 		}
 	}
@@ -505,9 +503,6 @@ extension DocumentsViewController {
 	}
 	
 	func reload(document: Document) async {
-		await documentsSemaphore.wait()
-		defer { documentsSemaphore.signal() }
-
 		let selectedIndexPaths = self.collectionView.indexPathsForSelectedItems
 		if let index = documents.firstIndex(of: document) {
 			collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
@@ -522,28 +517,16 @@ extension DocumentsViewController {
 			return
 		}
 		
-		await documentsSemaphore.wait()
-		defer { documentsSemaphore.signal() }
-
 		var selectionContainers: [DocumentProvider]
 		if documentContainers.count > 1 {
 			selectionContainers = [TagsDocuments(containers: documentContainers)]
 		} else {
 			selectionContainers = documentContainers
 		}
-		
-		let documents = await withTaskGroup(of: [Document].self, returning: Set<Document>.self) { taskGroup in
-			for container in selectionContainers {
-				taskGroup.addTask {
-					return (try? await container.documents) ?? []
-				}
-			}
-			
-			var documents = Set<Document>()
-			for await containerDocuments in taskGroup {
-				documents.formUnion(containerDocuments)
-			}
-			return documents
+
+		var documents = Set<Document>()
+		for selectionContainer in selectionContainers {
+			documents.formUnion((try? await selectionContainer.documents) ?? [])
 		}
 		
 		let sortedDocuments = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
@@ -657,11 +640,7 @@ private extension DocumentsViewController {
 	
 	func debounceLoadDocuments() {
 		Task {
-			await loadDocumentsChannel.send({ [weak self] in
-				Task {
-					await self?.loadDocuments(animated: true)
-				}
-			})
+			await loadDocumentsChannel.send(())
 		}
 	}
 	
@@ -749,12 +728,14 @@ private extension DocumentsViewController {
 	func duplicateAction(documents: [Document]) -> UIAction {
 		let action = UIAction(title: .duplicateControlLabel, image: .duplicate) { action in
             for document in documents {
-                document.load()
-                let newDocument = document.duplicate()
-                document.account?.createDocument(newDocument)
-                newDocument.forceSave()
-                newDocument.unload()
-                document.unload()
+				Task {
+					document.load()
+					let newDocument = document.duplicate()
+					document.account?.createDocument(newDocument)
+					await newDocument.forceSave()
+					await newDocument.unload()
+					await document.unload()
+				}
             }
 		}
 		return action

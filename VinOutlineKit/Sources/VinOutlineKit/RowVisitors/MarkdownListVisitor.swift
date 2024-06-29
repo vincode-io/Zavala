@@ -7,7 +7,8 @@
 
 import Foundation
 
-class MarkdownListVisitor {
+@MainActor
+final class MarkdownListVisitor {
 	
 	let useAltLinks: Bool
 	var indentLevel = 0

@@ -8,7 +8,8 @@
 import Foundation
 import VinUtility
 
-class OPMLVisitor {
+@MainActor
+final class OPMLVisitor {
 	
 	let useAltLinks: Bool
 	var indentLevel = 0

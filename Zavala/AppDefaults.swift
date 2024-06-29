@@ -86,10 +86,10 @@ enum DefaultsSize: Int, CustomStringConvertible, CaseIterable {
 
 final class AppDefaults {
 
-	static let shared = AppDefaults()
+	nonisolated(unsafe) static let shared = AppDefaults()
 	private init() {}
 	
-	static var store: UserDefaults = {
+	nonisolated(unsafe) static let store: UserDefaults = {
 		let appIdentifierPrefix = Bundle.main.object(forInfoDictionaryKey: "AppIdentifierPrefix") as! String
 		let suiteName = "\(appIdentifierPrefix)group.\(Bundle.main.bundleIdentifier!)"
 		return UserDefaults.init(suiteName: suiteName)!

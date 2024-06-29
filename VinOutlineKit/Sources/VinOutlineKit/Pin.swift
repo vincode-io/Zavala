@@ -10,6 +10,7 @@ public extension Notification.Name {
 	static let PinWasVisited = Notification.Name(rawValue: "PinWasVisited")
 }
 
+@MainActor
 public struct Pin: Equatable {
 	
 	public struct UserInfoKeys {

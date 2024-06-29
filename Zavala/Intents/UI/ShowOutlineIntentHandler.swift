@@ -29,7 +29,9 @@ public class ShowOutlineIntentHandler: NSObject, ShowOutlineIntentHandling {
 			}
 			
 			#if targetEnvironment(macCatalyst)
-			appDelegate.appKitPlugin?.activateIgnoringOtherApps()
+			Task { @MainActor in
+				appDelegate.appKitPlugin?.activateIgnoringOtherApps()
+			}
 			#endif
 			
 			completion(.init(code: .success, userActivity: nil))
@@ -41,7 +43,9 @@ public class ShowOutlineIntentHandler: NSObject, ShowOutlineIntentHandling {
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 		
 		#if targetEnvironment(macCatalyst)
-		appDelegate.appKitPlugin?.activateIgnoringOtherApps()
+		Task { @MainActor in
+			appDelegate.appKitPlugin?.activateIgnoringOtherApps()
+		}
 		#endif
 
 		completion(.init(code: .success, userActivity: nil))

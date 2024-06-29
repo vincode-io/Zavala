@@ -18,24 +18,28 @@ enum CloudKitOutlineZoneError: LocalizedError {
 }
 
 final class CloudKitOutlineZone: VCKZone {
+
+	static let defaultZoneID = CKRecordZone.ID(zoneName: "Outline", ownerName: CKCurrentUserDefaultName)
+
+	let logger: Logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
+	let zoneID: CKRecordZone.ID
 	
-	var logger: Logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
-	var zoneID: CKRecordZone.ID
+	let container: CKContainer?
+	let database: CKDatabase?
+	let delegate: VCKZoneDelegate?
 	
-	weak var container: CKContainer?
-	weak var database: CKDatabase?
-	var delegate: VCKZoneDelegate?
-	
-	init(container: CKContainer) {
+	init(container: CKContainer, delegate: VCKZoneDelegate) {
 		self.container = container
 		self.database = container.privateCloudDatabase
 		self.zoneID = CKRecordZone.ID(zoneName: "Outline", ownerName: CKCurrentUserDefaultName)
+		self.delegate = delegate
 	}
 	
-	init(container: CKContainer, database: CKDatabase, zoneID: CKRecordZone.ID) {
+	init(container: CKContainer, database: CKDatabase, zoneID: CKRecordZone.ID, delegate: VCKZoneDelegate) {
 		self.container = container
 		self.database = database
 		self.zoneID = zoneID
+		self.delegate = delegate
 	}
 	
 	func generateCKShare(for document: Document) async throws -> CKShare {
@@ -45,9 +49,9 @@ final class CloudKitOutlineZone: VCKZone {
 		
 		let shareID = self.generateRecordID()
 		let share = CKShare(rootRecord: unsharedRootRecord, shareID: shareID)
-		share[CKShare.SystemFieldKey.title] = (document.title ?? "") as CKRecordValue
+		share[CKShare.SystemFieldKey.title] = (await document.title ?? "") as CKRecordValue
 		
-		let modelsToSave = [CloudKitModelRecordWrapper(share), CloudKitModelRecordWrapper(unsharedRootRecord)]
+		let modelsToSave = await [CloudKitModelRecordWrapper(share), CloudKitModelRecordWrapper(unsharedRootRecord)]
 		let result = try await self.modify(modelsToSave: modelsToSave, recordIDsToDelete: [], strategy: .overWriteServerValue)
 		
 		return result.0.first! as! CKShare

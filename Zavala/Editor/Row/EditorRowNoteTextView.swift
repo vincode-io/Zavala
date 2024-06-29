@@ -9,6 +9,7 @@ import UIKit
 import VinOutlineKit
 import SwiftUI
 
+@MainActor
 protocol EditorRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewInputAccessoryView: UIView? { get }
@@ -51,6 +52,8 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 		return RowStrings.note(cleansedAttributedText)
 	}
 
+	private var textStorageDelegate: EditorRowTextStorageDelegate?
+	
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 		
@@ -135,7 +138,10 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 		baseAttributes[.foregroundColor] = OutlineFontCache.shared.noteColor(level: row.trueLevel)
 
 		typingAttributes = baseAttributes
-        
+		
+		textStorageDelegate = EditorRowTextStorageDelegate(baseAttributes: baseAttributes)
+		self.textStorage.delegate = textStorageDelegate
+		
         if let note = row.note {
             attributedText = note
         }

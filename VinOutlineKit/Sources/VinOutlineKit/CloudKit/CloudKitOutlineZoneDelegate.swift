@@ -9,21 +9,22 @@ import Foundation
 import CloudKit
 import VinCloudKit
 
+@MainActor
 class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 	
 	weak var account: Account?
-	var zoneID: CKRecordZone.ID
+	let zoneID: CKRecordZone.ID
 	
 	init(account: Account, zoneID: CKRecordZone.ID) {
 		self.account = account
 		self.zoneID = zoneID
 	}
 	
-	func store(changeToken: Data?, key: VCKChangeTokenKey) {
+	func store(changeToken: Data?, key: VCKChangeTokenKey) async {
 		account?.store(changeToken: changeToken, key: key)
 	}
 	
-	func findChangeToken(key: VCKChangeTokenKey) -> Data? {
+	func findChangeToken(key: VCKChangeTokenKey) async -> Data? {
 		return account?.zoneChangeTokens?[key]
 	}
 	
@@ -84,21 +85,18 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 		let updatesToSend = updates
 		let shareUpdatesToSend = shareUpdates
 		
-		Task { @MainActor in
-			for update in updatesToSend.values {
-				account?.apply(update)
-			}
-			
-			// Even though we handle the delete share records here, they don't usually work. That's
-			// because the share record id is removed from the outline by the time we get here. No worries.
-			// The outline will remove the share record data itself when its recordID gets removed.
-			for (shareRecordID, shareRecord) in shareUpdatesToSend {
-				if let outline = account?.findDocument(shareRecordID: shareRecordID)?.outline {
-					outline.cloudKitShareRecord = shareRecord
-				}
-			}
+		for update in updatesToSend.values {
+			await account?.apply(update)
 		}
 		
+		// Even though we handle the delete share records here, they don't usually work. That's
+		// because the share record id is removed from the outline by the time we get here. No worries.
+		// The outline will remove the share record data itself when its recordID gets removed.
+		for (shareRecordID, shareRecord) in shareUpdatesToSend {
+			if let outline = account?.findDocument(shareRecordID: shareRecordID)?.outline {
+				outline.cloudKitShareRecord = shareRecord
+			}
+		}
 	}
 
 }

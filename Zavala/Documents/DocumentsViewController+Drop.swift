@@ -18,13 +18,14 @@ extension DocumentsViewController: UICollectionViewDropDelegate {
 	func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
 		guard let account = documentContainers?.uniqueAccount else { return }
 
+		let tags = documentContainers?.compactMap { ($0 as? TagDocuments)?.tag }
+
 		for dropItem in coordinator.items {
 			let provider = dropItem.dragItem.itemProvider
-			provider.loadDataRepresentation(forTypeIdentifier: DataRepresentation.opml.typeIdentifier) { [weak self] (opmlData, error) in
+			provider.loadDataRepresentation(forTypeIdentifier: DataRepresentation.opml.typeIdentifier) { (opmlData, error) in
 				guard let opmlData else { return }
 				Task { @MainActor in
-                    let tags = self?.documentContainers?.compactMap { ($0 as? TagDocuments)?.tag }
-					if let document = try? account.importOPML(opmlData, tags: tags) {
+					if let document = try? await account.importOPML(opmlData, tags: tags) {
 						DocumentIndexer.updateIndex(forDocument: document)
 					}
 				}

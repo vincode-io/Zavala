@@ -8,9 +8,10 @@
 import Foundation
 import VinUtility
 
-public class Tag: Identifiable, Codable, Equatable {
+@MainActor
+public class Tag: Identifiable, Equatable {
 	
-	public var id: String
+	public let id: String
 	public var name: String
 	
 	public var level: Int {
@@ -39,6 +40,11 @@ public class Tag: Identifiable, Codable, Equatable {
 		self.name = name
 	}
 	
+	init(coder: TagCoder) {
+		self.id = coder.id
+		self.name = coder.name
+	}
+	
 	public func isChild(of tag: Tag) -> Bool {
 		if let range = name.range(of: "\(tag.name)/") {
 			if !name[range.upperBound...].contains("/") {
@@ -54,6 +60,10 @@ public class Tag: Identifiable, Codable, Equatable {
 		name = to.appending(remainder)
 	}
 	
+	func toCoder() -> TagCoder {
+		return TagCoder(id: id, name: name)
+	}
+	
 	public static func normalize(name: String) -> String {
 		var trimmedElements = [String]()
 		let elements = name.split(separator: "/")
@@ -67,7 +77,7 @@ public class Tag: Identifiable, Codable, Equatable {
 		return trimmedElements.joined(separator: "/")
 	}
 	
-	public static func == (lhs: Tag, rhs: Tag) -> Bool {
+	nonisolated public static func == (lhs: Tag, rhs: Tag) -> Bool {
 		return lhs.id == rhs.id
 	}
 	

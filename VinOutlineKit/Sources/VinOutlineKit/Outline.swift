@@ -28,7 +28,8 @@ public extension Notification.Name {
 	static let OutlineRemovedBacklinks = Notification.Name(rawValue: "OutlineRemovedBacklinks")
 }
 
-public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Codable {
+@MainActor
+public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	public enum Section: Int {
 		case title = 0
@@ -43,7 +44,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		public var toChildIndex: Int
 	}
 	
-	public struct SearchOptions: OptionSet {
+	public struct SearchOptions: OptionSet, Sendable {
 		public static let wholeWords = SearchOptions(rawValue: 1)
 		public static let caseInsensitive = SearchOptions(rawValue: 2)
 		
@@ -135,11 +136,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	public var isCloudKitMerging: Bool = false
 
-	public var id: EntityID {
-		didSet {
-			documentMetaDataDidChange()
-		}
-	}
+	nonisolated public let id: EntityID
 
 	var ancestorTitle: String?
 	var serverTitle: String?
@@ -256,9 +253,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		let wordCountVisitor = WordCountVisitor()
 
 		load()
-		rows.forEach { $0.visit(visitor: wordCountVisitor.visitor)	}
-		unload()
 		
+		rows.forEach { $0.visit(visitor: wordCountVisitor.visitor)	}
+		
+		Task {
+			await unload()
+		}
+
 		return wordCountVisitor.count
 	}
 	
@@ -529,52 +530,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	
 	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinOutlineKit")
 
-	enum CodingKeys: String, CodingKey {
-		case cloudKitMetaData
-		case id
-		case ancestorTitle
-		case title
-		case ancestorDisambiguator
-		case disambiguator
-		case ancestorCreated
-		case created
-		case ancestorUpdated
-		case updated
-		case ancestorAutoLinkingEnabled
-		case autoLinkingEnabled
-		case ancestorCheckSpellingWhileTyping
-		case checkSpellingWhileTyping
-		case ancestorCorrectSpellingAutomatically
-		case correctSpellingAutomatically
-		case ancestorOwnerName
-		case ownerName
-		case ancestorOwnerEmail
-		case ownerEmail
-		case ancestorOwnerURL
-		case ownerURL
-		case verticleScrollState
-		case isFilterOn
-		case isCompletedFiltered
-		case isNotesFiltered
-		case focusRowID
-		case selectionRowID
-		case selectionIsInNotes
-		case selectionLocation
-		case selectionLength
-		case ancestorTagIDs
-		case tagIDs = "tagIDS"
-		case ancestorDocumentLinks
-		case documentLinks
-		case ancestorDocumentBacklinks
-		case documentBacklinks
-		case ancestorHasAltLinks
-		case hasAltLinks
-		case cloudKitZoneName
-		case cloudKitZoneOwner
-		case cloudKitShareRecordName
-		case cloudKitShareRecordData
-	}
-
 	var zoneID: CKRecordZone.ID? {
 		get {
 			guard let zoneName = cloudKitZoneName, let zoneOwner = cloudKitZoneOwner else { return nil }
@@ -646,6 +601,79 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		imagesFile = ImagesFile(outline: self)
 	}
 	
+	public init(id: EntityID, outline: Outline) {
+		self.id = id
+		self.title = outline.title
+		self.disambiguator = outline.disambiguator
+		self.created = outline.created
+		self.updated = outline.updated
+		self.autoLinkingEnabled = outline.autoLinkingEnabled
+		self.checkSpellingWhileTyping = outline.checkSpellingWhileTyping
+		self.correctSpellingAutomatically = outline.correctSpellingAutomatically
+		self.ownerName = outline.ownerName
+		self.ownerEmail = outline.ownerEmail
+		self.ownerURL = outline.ownerURL
+		self.verticleScrollState = outline.verticleScrollState
+		self.isFilterOn = outline.isFilterOn
+		self.isCompletedFiltered = outline.isCompletedFiltered
+		self.isNotesFiltered = outline.isNotesFiltered
+		self.focusRowID = outline.focusRowID
+		self.selectionRowID = outline.selectionRowID
+		self.selectionIsInNotes = outline.selectionIsInNotes
+		self.selectionLocation = outline.selectionLocation
+		self.selectionLength = outline.selectionLength
+		self.tagIDs = outline.tagIDs
+		self.documentLinks = outline.documentLinks
+		self.documentBacklinks = outline.documentBacklinks
+		self.hasAltLinks = outline.hasAltLinks
+	}
+	
+	init(coder: OutlineCoder) {
+		self.cloudKitMetaData = coder.cloudKitMetaData
+		self.id = coder.id
+		self.ancestorTitle = coder.ancestorTitle
+		self.title = coder.title
+		self.ancestorDisambiguator = coder.ancestorDisambiguator
+		self.disambiguator = coder.disambiguator
+		self.ancestorCreated = coder.ancestorCreated
+		self.created = coder.created
+		self.ancestorUpdated = coder.ancestorUpdated
+		self.updated = coder.updated
+		self.ancestorAutoLinkingEnabled = coder.ancestorAutoLinkingEnabled
+		self.autoLinkingEnabled = coder.autoLinkingEnabled
+		self.ancestorCheckSpellingWhileTyping = coder.ancestorCheckSpellingWhileTyping
+		self.checkSpellingWhileTyping = coder.checkSpellingWhileTyping
+		self.ancestorCorrectSpellingAutomatically = coder.ancestorCorrectSpellingAutomatically
+		self.correctSpellingAutomatically = coder.correctSpellingAutomatically
+		self.ancestorOwnerName = coder.ancestorOwnerName
+		self.ownerName = coder.ownerName
+		self.ancestorOwnerEmail = coder.ancestorOwnerEmail
+		self.ownerEmail = coder.ownerEmail
+		self.ancestorOwnerURL = coder.ancestorOwnerURL
+		self.ownerURL = coder.ownerURL
+		self.verticleScrollState = coder.verticleScrollState
+		self.isFilterOn = coder.isFilterOn
+		self.isCompletedFiltered = coder.isCompletedFiltered
+		self.isNotesFiltered = coder.isNotesFiltered
+		self.focusRowID = coder.focusRowID
+		self.selectionRowID = coder.selectionRowID
+		self.selectionIsInNotes = coder.selectionIsInNotes
+		self.selectionLocation = coder.selectionLocation
+		self.selectionLength = coder.selectionLength
+		self.ancestorTagIDs = coder.ancestorTagIDs
+		self.tagIDs = coder.tagIDs
+		self.ancestorDocumentLinks = coder.ancestorDocumentLinks
+		self.documentLinks = coder.documentLinks
+		self.ancestorDocumentBacklinks = coder.ancestorDocumentBacklinks
+		self.documentBacklinks = coder.documentBacklinks
+		self.ancestorHasAltLinks = coder.ancestorHasAltLinks
+		self.hasAltLinks = coder.hasAltLinks
+		self.cloudKitZoneName = coder.cloudKitZoneName
+		self.cloudKitZoneOwner = coder.cloudKitZoneOwner
+		self.cloudKitShareRecordName = coder.cloudKitShareRecordName
+		self.cloudKitShareRecordData = coder.cloudKitShareRecordData
+	}
+	
 	public func incrementBeingViewedCount() {
 		beingViewedCount = beingViewedCount + 1
 	}
@@ -654,10 +682,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		beingViewedCount = beingViewedCount - 1
 	}
 
-	public func reassignAccount(_ accountID: Int) {
-		self.id = .document(accountID, id.documentUUID)
-	}
-	
 	public func prepareForViewing() {
 		rebuildTransientData()
 	}
@@ -904,7 +928,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 		print.append(visitor.print)
 
-		unload()
+		Task {
+			await unload()
+		}
+		
 		return print
 	}
 	
@@ -920,7 +947,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			print.append(visitor.print)
 		}
 
-		unload()
+		Task {
+			await unload()
+		}
+		
 		return print
 	}
 	
@@ -935,7 +965,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			textContent.append("\n")
 		}
 		
-		unload()
+		Task {
+			await unload()
+		}
+		
 		return textContent
 	}
 	
@@ -949,7 +982,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 		md.append(visitor.markdown)
 
-		unload()
+		Task {
+			await unload()
+		}
+		
 		return md
 	}
 	
@@ -964,7 +1000,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			md.append("\n")
 		}
 		
-		unload()
+		Task {
+			await unload()
+		}
+		
 		return md
 	}
 	
@@ -1031,7 +1070,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		opml.append("</body>\n")
 		opml.append("</opml>\n")
 
-		unload()
+		Task {
+			await unload()
+		}
+		
 		return opml
 	}
 	
@@ -1312,8 +1354,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 	}
 	
 	func updateImages(rowID: String, images: [Image]?) {
-		guard self.images?[rowID] != images else { return }
-		
 		if self.images == nil {
 			self.images = [String: [Image]]()
 		}
@@ -2420,21 +2460,21 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		prepareRowsForProcessing()
 	}
 	
-	public func unload() {
+	public func unload() async {
 		if beingUsedCount > 0 {
 			beingUsedCount = beingUsedCount - 1
 		}
 		
 		guard beingUsedCount == 0 else { return }
 
-		rowsFile?.saveIfNecessary()
+		await rowsFile?.saveIfNecessary()
 		rowsFile?.suspend()
 		rowsFile = nil
 		shadowTable = nil
 		rowOrder = nil
 		keyedRows = nil
 
-		imagesFile?.saveIfNecessary()
+		await imagesFile?.saveIfNecessary()
 		imagesFile?.suspend()
 		imagesFile = nil
 		images = nil
@@ -2450,20 +2490,21 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		imagesFile?.resume()
 	}
 	
-	public func save() {
-		rowsFile?.saveIfNecessary()
-		imagesFile?.saveIfNecessary()
+	public func save() async {
+		await rowsFile?.saveIfNecessary()
+		await imagesFile?.saveIfNecessary()
 	}
 	
-	public func forceSave() {
+	public func forceSave() async {
 		if rowsFile == nil {
 			rowsFile = RowsFile(outline: self)
 		}
+		
 		rowsFile?.markAsDirty()
-		rowsFile?.saveIfNecessary()
+		await rowsFile?.saveIfNecessary()
 		
 		imagesFile?.markAsDirty()
-		imagesFile?.saveIfNecessary()
+		await imagesFile?.saveIfNecessary()
 	}
 	
 	public func delete() {
@@ -2643,7 +2684,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 			endCloudKitBatchRequest()
 		}
 		
-		unload()
+		Task {
+			await unload()
+		}
 		
 	}
 	
@@ -2676,6 +2719,52 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		return OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, inserts: inserts, moves: moves)
 	}
 	
+	func toCoder() -> OutlineCoder {
+		return OutlineCoder(cloudKitMetaData: cloudKitMetaData,
+							id: id, 
+							ancestorTitle: ancestorTitle,
+							title: title,
+							ancestorDisambiguator: ancestorDisambiguator,
+							disambiguator: disambiguator,
+							ancestorCreated: ancestorCreated,
+							created: created,
+							ancestorUpdated: ancestorUpdated,
+							updated: updated,
+							ancestorAutoLinkingEnabled: ancestorAutoLinkingEnabled,
+							autoLinkingEnabled: autoLinkingEnabled,
+							ancestorCheckSpellingWhileTyping: ancestorCheckSpellingWhileTyping,
+							checkSpellingWhileTyping: checkSpellingWhileTyping,
+							ancestorCorrectSpellingAutomatically: ancestorCorrectSpellingAutomatically,
+							correctSpellingAutomatically: correctSpellingAutomatically,
+							ancestorOwnerName: ancestorOwnerName,
+							ownerName: ownerName,
+							ancestorOwnerEmail: ancestorOwnerEmail,
+							ownerEmail: ownerEmail,
+							ancestorOwnerURL: ancestorOwnerURL,
+							ownerURL: ownerURL,
+							verticleScrollState: verticleScrollState,
+							isFilterOn: isFilterOn,
+							isCompletedFiltered: isCompletedFiltered, 
+							isNotesFiltered: isNotesFiltered,
+							focusRowID: focusRowID,
+							selectionRowID: selectionRowID,
+							selectionIsInNotes: selectionIsInNotes,
+							selectionLocation: selectionLocation,
+							selectionLength: selectionLength,
+							ancestorTagIDs: ancestorTagIDs,
+							tagIDs: tagIDs,
+							ancestorDocumentLinks: ancestorDocumentLinks,
+							documentLinks: documentLinks,
+							ancestorDocumentBacklinks: ancestorDocumentBacklinks,
+							documentBacklinks: documentBacklinks,
+							ancestorHasAltLinks: ancestorHasAltLinks,
+							hasAltLinks: hasAltLinks,
+							cloudKitZoneName: cloudKitZoneName,
+							cloudKitZoneOwner: cloudKitZoneOwner,
+							cloudKitShareRecordName: cloudKitShareRecordName,
+							cloudKitShareRecordData: cloudKitShareRecordData)
+	}
+	
 	func outlineAddedBacklinks() {
 		NotificationCenter.default.post(name: .OutlineAddedBacklinks, object: self, userInfo: nil)
 	}
@@ -2696,41 +2785,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		NotificationCenter.default.post(name: .OutlineElementsDidChange, object: self, userInfo: userInfo)
 	}
 	
-	public static func == (lhs: Outline, rhs: Outline) -> Bool {
+	nonisolated public static func == (lhs: Outline, rhs: Outline) -> Bool {
 		return lhs.id == rhs.id
 	}
 	
-	public func hash(into hasher: inout Hasher) {
+	nonisolated public func hash(into hasher: inout Hasher) {
 		hasher.combine(id)
-	}
-	
-}
-
-// MARK: CustomDebugStringConvertible
-
-extension Outline: CustomDebugStringConvertible {
-	
-	public var debugDescription: String {
-		var output = ""
-		for row in rows {
-			output.append(dumpRow(level: 0, row: row))
-		}
-		return output
-	}
-	
-	private func dumpRow(level: Int, row: Row) -> String {
-		var output = ""
-		for _ in 0..<level {
-			output.append(" -- ")
-		}
-		output.append(row.debugDescription)
-		output.append("\n")
-		
-		for child in row.rows {
-			output.append(dumpRow(level: level + 1, row: child))
-		}
-		
-		return output
 	}
 	
 }
@@ -3314,7 +3374,7 @@ private extension Outline {
 				row.note = mutableText
 			}
 			
-			self.unload()
+			await self.unload()
 			
 			if let shadowTableIndex = row.shadowTableIndex {
 				self.outlineElementsDidChange(OutlineElementChanges(section: self.adjustedRowsSection, reloads: Set([shadowTableIndex])))

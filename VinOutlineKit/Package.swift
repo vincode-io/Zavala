@@ -26,7 +26,9 @@ let package = Package(
 				"Semaphore",
 				"VinXML",
 				"VinCloudKit",
-		]),
+			],
+			swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
+		),
 		.testTarget(
 			name: "VinOutlineKitTests",
 			dependencies: [

@@ -11,10 +11,11 @@ import UIKit
 import Foundation
 #endif
 
-public enum AccountType: Int, Codable {
+public enum AccountType: Int, Codable, Sendable {
 	case local = 0
 	case cloudKit = 1
 	
+	@MainActor
 	public var name: String {
 		switch self {
 		case .local:

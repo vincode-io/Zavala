@@ -7,7 +7,8 @@
 
 import Foundation
 
-class TransientDataVisitor {
+@MainActor
+final class TransientDataVisitor {
 	
 	let isCompletedFilterOn: Bool
 	let isSearching: Outline.SearchState

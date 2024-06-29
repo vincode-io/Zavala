@@ -6,16 +6,51 @@ import Foundation
 import AsyncAlgorithms
 import OSLog
 
-open class ManagedResourceFile: NSObject, NSFilePresenter {
+open class ManagedResourceFile: NSObject, NSFilePresenter, @unchecked Sendable {
 	
-	private var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinUtility")
-
-	private var isDirty = false
+	private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "VinUtility")
 	private let fileURL: URL
 	private let operationQueue: OperationQueue
-	private var saveTask: Task<(), Never>?
-	private var saveChannel = AsyncChannel<(() -> Void)>()
-	private var lastModificationDate: Date?
+
+	private let _isDirty = OSAllocatedUnfairLock<Bool>(initialState: false)
+	private var isDirty: Bool {
+		get {
+			_isDirty.withLock { $0 }
+		}
+		set {
+			_isDirty.withLock { $0 = newValue }
+		}
+	}
+	
+	private let _saveTask = OSAllocatedUnfairLock<Task<(), Never>?>(initialState: nil)
+	private var saveTask: Task<(), Never>? {
+		get {
+			_saveTask.withLock { $0 }
+		}
+		set {
+			_saveTask.withLock { $0 = newValue }
+		}
+	}
+	
+	private let _saveChannel = OSAllocatedUnfairLock<AsyncChannel<Void>>(initialState: AsyncChannel<Void>())
+	private var saveChannel: AsyncChannel<Void> {
+		get {
+			_saveChannel.withLock { $0 }
+		}
+		set {
+			_saveChannel.withLock { $0 = newValue }
+		}
+	}
+	
+	private let _lastModificationDate = OSAllocatedUnfairLock<Date?>(initialState: nil)
+	private var lastModificationDate: Date? {
+		get {
+			_lastModificationDate.withLock { $0 }
+		}
+		set {
+			_lastModificationDate.withLock { $0 = newValue }
+		}
+	}
 
 	public var presentedItemURL: URL? {
 		return fileURL
@@ -47,19 +82,21 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 		}
 	}
 	
-	public func savePresentedItemChanges(completionHandler: @escaping (Error?) -> Void) {
-		saveIfNecessary()
-		completionHandler(nil)
+	public func savePresentedItemChanges(completionHandler: @escaping @Sendable (Error?) -> Void) {
+		Task {
+			await saveIfNecessary()
+			completionHandler(nil)
+		}
 	}
 	
-	public func relinquishPresentedItem(toReader reader: @escaping ((() -> Void)?) -> Void) {
+	public func relinquishPresentedItem(toReader reader: @escaping @Sendable (( @Sendable() -> Void)?) -> Void) {
 		stopSaveTask()
 		reader() {
 			self.startSaveTask()
 		}
 	}
 	
-	public func relinquishPresentedItem(toWriter writer: @escaping ((() -> Void)?) -> Void) {
+	public func relinquishPresentedItem(toWriter writer: @escaping @Sendable (( @Sendable () -> Void)?) -> Void) {
 		stopSaveTask()
 		writer() {
 			self.startSaveTask()
@@ -71,15 +108,16 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 		debounceSaveToDisk()
 	}
 	
+	@MainActor
 	public func load() {
 		guard !isDirty else { return }
 		loadFile()
 	}
 	
-	public func saveIfNecessary() {
+	public func saveIfNecessary() async {
 		if isDirty {
 			isDirty = false
-			saveFile()
+			await saveFile()
 		}
 	}
 
@@ -100,11 +138,13 @@ open class ManagedResourceFile: NSObject, NSFilePresenter {
 		NSFileCoordinator.removeFilePresenter(self)
 	}
 	
+	@MainActor
 	open func fileDidLoad(data: Data) {
 		fatalError("Function not implemented")
 	}
 	
-	open func fileWillSave() -> Data? {
+	@MainActor
+	open func fileWillSave() async -> Data? {
 		fatalError("Function not implemented")
 	}
 
@@ -116,9 +156,9 @@ private extension ManagedResourceFile {
 	
 	func startSaveTask() {
 		saveTask = Task {
-			for await save in saveChannel.debounce(for: .seconds(5.0)) {
+			for await _ in saveChannel.debounce(for: .seconds(5.0)) {
 				if !Task.isCancelled {
-					save()
+					await saveIfNecessary()
 				}
 			}
 		}
@@ -131,7 +171,7 @@ private extension ManagedResourceFile {
 	
 	func debounceSaveToDisk() {
 		Task {
-			await saveChannel.send(saveIfNecessary)
+			await saveChannel.send(())
 		}
 	}
 	
@@ -140,6 +180,7 @@ private extension ManagedResourceFile {
 		startSaveTask()
 	}
 
+	@MainActor
 	func loadFile() {
 		var fileData: Data? = nil
 		let errorPointer: NSErrorPointer = nil
@@ -166,8 +207,8 @@ private extension ManagedResourceFile {
 		fileDidLoad(data: fileData)
 	}
 	
-	func saveFile() {
-		guard let fileData = fileWillSave() else { return }
+	func saveFile() async {
+		guard let fileData = await fileWillSave() else { return }
 
 		let errorPointer: NSErrorPointer = nil
 		let fileCoordinator = NSFileCoordinator(filePresenter: self)

@@ -9,6 +9,7 @@ import UIKit
 import SwiftUI
 import VinOutlineKit
 
+@MainActor
 protocol MainCoordinator: UIViewController, DocumentsActivityItemsConfigurationDelegate {
 	var editorViewController: EditorViewController? { get }
 	var isExportAndPrintUnavailable: Bool { get }
