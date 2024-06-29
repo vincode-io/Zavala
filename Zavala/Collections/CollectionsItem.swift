@@ -30,6 +30,7 @@ final class CollectionsItem: NSObject, NSCopying, Identifiable, Sendable {
 			return nil
 		}
 		
+		@MainActor
 		var name: String? {
 			return accountType?.name
 		}
