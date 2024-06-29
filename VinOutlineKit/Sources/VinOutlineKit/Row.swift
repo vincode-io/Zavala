@@ -49,7 +49,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	
 	public var isCloudKitMerging: Bool = false
 	
-	public var id: String
+	public let id: String
 	
 	public var isExpanded: Bool
 	public internal(set) var rows: [Row] {
