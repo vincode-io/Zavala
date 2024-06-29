@@ -58,7 +58,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	}
 	
 	weak var editorDelegate: EditorRowTopicTextViewDelegate?
-	
+
 	override var rowStrings: RowStrings {
 		return RowStrings.topic(cleansedAttributedText)
 	}
@@ -82,7 +82,9 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	var cursorIsAtEnd: Bool {
 		return position(from: beginningOfDocument, offset: cursorPosition) == endOfDocument
 	}
-	
+
+	private var textStorageDelegate: EditorRowTextStorageDelegate?
+
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 		self.delegate = self
@@ -225,6 +227,9 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 		
 		typingAttributes = baseAttributes
 		
+		textStorageDelegate = EditorRowTextStorageDelegate(baseAttributes: baseAttributes)
+		self.textStorage.delegate = textStorageDelegate
+
 		var linkAttrs = baseAttributes
 		linkAttrs[.underlineStyle] = 1
 		linkTextAttributes = linkAttrs
