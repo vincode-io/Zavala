@@ -9,7 +9,7 @@ import CloudKit
 import OSLog
 import VinUtility
 
-public struct VCKChangeTokenKey: Hashable, Codable {
+public struct VCKChangeTokenKey: Hashable, Codable, Sendable {
 	public let zoneName: String
 	public let ownerName: String
 }

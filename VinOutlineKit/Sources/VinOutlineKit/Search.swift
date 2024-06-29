@@ -14,7 +14,7 @@ import CoreSpotlight
 
 public final class Search: Identifiable, DocumentContainer {
 	
-	public var id: EntityID
+	public let id: EntityID
 	public var name: String? = VinOutlineKitStringAssets.search
 	public var partialName: String? = VinOutlineKitStringAssets.search
 
@@ -84,10 +84,6 @@ public final class Search: Identifiable, DocumentContainer {
 		return false
 	}
 
-	deinit {
-		searchQuery?.cancel()
-	}
-	
 }
 
 // MARK: Helpers
