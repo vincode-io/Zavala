@@ -18,7 +18,7 @@ public enum RowStrings {
 	case both(NSAttributedString?, NSAttributedString?)
 }
 
-public struct AltLinkResolvingActions: OptionSet {
+public struct AltLinkResolvingActions: OptionSet, Sendable {
 	
 	public static let fixedAltLink = AltLinkResolvingActions(rawValue: 1)
 	public static let foundAltLink = AltLinkResolvingActions(rawValue: 2)
@@ -642,7 +642,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		return hasher.finalize()
 	}
 	
-	public func copy(with zone: NSZone? = nil) -> Any {
+	nonisolated public func copy(with zone: NSZone? = nil) -> Any {
 		return self
 	}
 	
