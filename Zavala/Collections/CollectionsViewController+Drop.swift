@@ -94,24 +94,23 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 						tagNames.append(tag.name)
 					}
 					
+					guard let containerAccount = container.account, let outline = document.outline else { return }
+					
 					document.account?.deleteDocument(document)
-					if let containerAccount = container.account, let outline = document.outline {
-						let id = EntityID.document(container.id.accountID, UUID().uuidString)
-						let newOutline = Outline(id: id, outline: outline)
-						let newDocument = Document.outline(newOutline)
-						containerAccount.createDocument(newDocument)
+
+					let id = EntityID.document(container.id.accountID, UUID().uuidString)
+					let newOutline = Outline(id: id, outline: outline)
+					let newDocument = Document.outline(newOutline)
+					containerAccount.createDocument(newDocument)
+					
+					if let tag = (container as? TagDocuments)?.tag {
+						newDocument.createTag(tag)
 					}
 					
-					for tagName in tagNames {
-						if let tag = container.account?.createTag(name: tagName) {
-							document.createTag(tag)
-						}
-					}
+					newDocument.deleteAllBacklinks()
 					
-					document.deleteAllBacklinks()
-					
-					await document.forceSave()
-					await document.unload()
+					await newDocument.forceSave()
+					await newDocument.unload()
 				}
 			}
 		}

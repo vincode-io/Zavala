@@ -622,10 +622,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		self.selectionIsInNotes = outline.selectionIsInNotes
 		self.selectionLocation = outline.selectionLocation
 		self.selectionLength = outline.selectionLength
-		self.tagIDs = outline.tagIDs
 		self.documentLinks = outline.documentLinks
 		self.documentBacklinks = outline.documentBacklinks
 		self.hasAltLinks = outline.hasAltLinks
+		self.rowOrder = outline.rowOrder
+		self.keyedRows = outline.keyedRows
 	}
 	
 	init(coder: OutlineCoder) {
