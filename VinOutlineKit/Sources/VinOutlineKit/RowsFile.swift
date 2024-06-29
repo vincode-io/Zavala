@@ -10,7 +10,7 @@ import OSLog
 import OrderedCollections
 import VinUtility
 
-final class RowsFile: ManagedResourceFile {
+final class RowsFile: ManagedResourceFile, @unchecked Sendable {
 	
 	private weak var outline: Outline?
 	

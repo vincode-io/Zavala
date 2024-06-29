@@ -8,7 +8,7 @@ import Foundation
 import OSLog
 import VinUtility
 
-final class ImagesFile: ManagedResourceFile {
+final class ImagesFile: ManagedResourceFile, @unchecked Sendable {
 	
 	private weak var outline: Outline?
 	

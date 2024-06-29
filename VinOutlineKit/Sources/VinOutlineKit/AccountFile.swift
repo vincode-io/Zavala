@@ -9,12 +9,13 @@ import Foundation
 import OSLog
 import VinUtility
 
-final class AccountFile: ManagedResourceFile {
+final class AccountFile: ManagedResourceFile, @unchecked Sendable {
 
 	public static let filenameComponent = "account.plist"
 	private let accountType: AccountType
 	private weak var accountManager: AccountManager?
 	
+	@MainActor
 	public init(fileURL: URL, accountType: AccountType, accountManager: AccountManager) {
 		self.accountType = accountType
 		self.accountManager = accountManager
