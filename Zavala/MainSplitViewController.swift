@@ -813,41 +813,41 @@ private extension MainSplitViewController {
 	}
 	
 	func goBackward(to: Int) {
-		guard to < goBackwardStack.count else { return }
-		
-		if let lastPin {
-			goForwardStack.insert(lastPin, at: 0)
-		}
-		
-		for _ in 0..<to {
-			let pin = goBackwardStack.removeFirst()
-			goForwardStack.insert(pin, at: 0)
-		}
-		
-		let pin = goBackwardStack.removeFirst()
-		lastPin = pin
-		
 		Task {
+			guard to < goBackwardStack.count else { return }
+			
+			if let lastPin {
+				goForwardStack.insert(lastPin, at: 0)
+			}
+			
+			for _ in 0..<to {
+				let pin = goBackwardStack.removeFirst()
+				goForwardStack.insert(pin, at: 0)
+			}
+			
+			let pin = goBackwardStack.removeFirst()
+			lastPin = pin
+			
 			await collectionsViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false)
 			documentsViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
 		}
 	}
 	
 	func goForward(to:  Int) {
-		guard to < goForwardStack.count else { return }
-
-		if let lastPin {
-			goBackwardStack.insert(lastPin, at: 0)
-		}
-		
-		for _ in 0..<to {
-			let pin = goForwardStack.removeFirst()
-			goBackwardStack.insert(pin, at: 0)
-		}
-		
-		let pin = goForwardStack.removeFirst()
-		
 		Task {
+			guard to < goForwardStack.count else { return }
+
+			if let lastPin {
+				goBackwardStack.insert(lastPin, at: 0)
+			}
+			
+			for _ in 0..<to {
+				let pin = goForwardStack.removeFirst()
+				goBackwardStack.insert(pin, at: 0)
+			}
+			
+			let pin = goForwardStack.removeFirst()
+		
 			await collectionsViewController?.selectDocumentContainers(pin.containers, isNavigationBranch: false, animated: false)
 			documentsViewController?.selectDocument(pin.document, isNavigationBranch: false, animated: false)
 		}
