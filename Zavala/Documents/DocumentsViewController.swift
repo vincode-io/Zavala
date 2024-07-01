@@ -730,7 +730,7 @@ private extension DocumentsViewController {
             for document in documents {
 				Task {
 					document.load()
-					let newDocument = document.duplicate()
+					let newDocument = document.duplicate(accountID: document.id.accountID)
 					document.account?.createDocument(newDocument)
 					await newDocument.forceSave()
 					await newDocument.unload()

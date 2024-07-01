@@ -331,10 +331,10 @@ public enum Document: Equatable, Hashable {
 		}
 	}
 	
-	public func duplicate() -> Document {
+	public func duplicate(accountID: Int) -> Document {
 		switch self {
 		case .outline(let outline):
-			return Document.outline(outline.duplicate())
+			return Document.outline(outline.duplicate(accountID: accountID))
 		case .dummy:
 			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
