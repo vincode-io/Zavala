@@ -94,7 +94,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 						tagNames.append(tag.name)
 					}
 					
-					guard let containerAccount = container.account, let outline = document.outline else { return }
+					guard let containerAccount = container.account else { return }
 					
 					let newDocument = document.duplicate(accountID: containerAccount.id.accountID)
 					document.account?.deleteDocument(document)

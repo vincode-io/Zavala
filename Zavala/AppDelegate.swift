@@ -528,7 +528,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	@objc func createRowOutsideCommand(_ sender: Any?) {
 		mainCoordinator?.createRowOutside()
 	}
-	
 
 	@objc func moveRowsUpCommand(_ sender: Any?) {
 		mainCoordinator?.moveRowsUp()
