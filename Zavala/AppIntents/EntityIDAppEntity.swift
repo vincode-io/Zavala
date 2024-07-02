@@ -39,5 +39,10 @@ struct EntityIDAppEntity: TransientAppEntity, EntityIdentifierConvertible, Hasha
 		}
 		return EntityIDAppEntity(entityID: entityID)
 	}
-	
+
+	func hash(into hasher: inout Hasher) {
+		guard let entityID else { fatalError("Must populate the entityID first.")}
+		hasher.combine(entityID)
+	}
+
 }
