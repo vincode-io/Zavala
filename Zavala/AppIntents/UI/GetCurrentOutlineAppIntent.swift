@@ -18,29 +18,10 @@ struct GetCurrentOutlineAppIntent: AppIntent {
 	func perform() async throws -> some IntentResult & ReturnsValue<OutlineAppEntity> {
 		guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
 			  let outline = appDelegate.mainCoordinator?.selectedDocuments.first?.outline else {
-			throw GetCurrentOutlineError.outlineNotFound
+			throw ZavalaAppIntentError.outlineNotBeingViewed
 		}
 		
-		let outlineAppEntity = OutlineAppEntity()
-		outlineAppEntity.id = EntityIDAppEntity(entityID: outline.id)
-		outlineAppEntity.title = outline.title
-		outlineAppEntity.ownerName = outline.ownerName
-		outlineAppEntity.ownerEmail = outline.ownerEmail
-		outlineAppEntity.ownerURL = outline.ownerURL
-		outlineAppEntity.url = outline.id.url
-		
-        return .result(value: outlineAppEntity)
+		return .result(value: OutlineAppEntity(outline: outline))
     }
-}
-
-private enum GetCurrentOutlineError: Error, CustomLocalizedStringResourceConvertible {
-	case outlineNotFound
-	
-	var localizedStringResource: LocalizedStringResource {
-		switch self {
-		case .outlineNotFound:
-			return "There isn't an outline currently being viewed."
-		}
-	}
 }
 

@@ -40,6 +40,16 @@ struct OutlineAppEntity: AppEntity {
     init() {
     }
 
+	@MainActor
+	init(outline: Outline) {
+		self.id = EntityIDAppEntity(entityID: outline.id)
+		self.title = outline.title
+		self.ownerName = outline.ownerName
+		self.ownerEmail = outline.ownerEmail
+		self.ownerURL = outline.ownerURL
+		self.url = outline.id.url
+	}
+	
 	static var defaultQuery: OutlineEntityQuery {
 		return OutlineEntityQuery()
 	}
