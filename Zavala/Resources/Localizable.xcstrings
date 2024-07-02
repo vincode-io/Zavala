@@ -261,6 +261,9 @@
     "Enter Forground" : {
       "comment" : "Control Label: Enter Forground"
     },
+    "Entity ID" : {
+
+    },
     "Error" : {
       "comment" : "Alert Title: Error"
     },
@@ -339,8 +342,14 @@
     "General" : {
       "comment" : "Control Label: General"
     },
+    "Get Current Outline" : {
+
+    },
     "Get Info" : {
       "comment" : "Control Label: Get Info"
+    },
+    "Get the currently viewed outline from the foremost window for Zavala." : {
+
     },
     "GitHub Repository" : {
       "comment" : "Control Label: GitHub Repository"
@@ -362,6 +371,9 @@
     },
     "History" : {
       "comment" : "Control Label: History"
+    },
+    "ID" : {
+
     },
     "Image" : {
       "comment" : "Control Label: Image"
@@ -485,6 +497,15 @@
     },
     "Owner" : {
       "comment" : "Control Label: Owner"
+    },
+    "Owner Email" : {
+
+    },
+    "Owner Name" : {
+
+    },
+    "Owner URL" : {
+
     },
     "Paste" : {
       "comment" : "Control Label: Paste"
@@ -636,6 +657,9 @@
     "The requested document could not be found. It was most likely deleted and is no longer available." : {
       "comment" : "Alert Message: Document Not Found"
     },
+    "There isn't an outline currently being viewed." : {
+
+    },
     "This information is included in OPML documents to attribute ownership." : {
       "comment" : "Note: OPML Ownership."
     },
@@ -671,6 +695,9 @@
     },
     "Undo Menu" : {
       "comment" : "Control Label: Undo Menu"
+    },
+    "Unimplemented" : {
+
     },
     "Updated" : {
       "comment" : "Control Label: Updated"

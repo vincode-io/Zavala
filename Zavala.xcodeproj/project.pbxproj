@@ -98,6 +98,9 @@
 		51AC4DCE2B360C76002FF9AD /* GetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51AC4DCD2B360C76002FF9AD /* GetInfoView.swift */; };
 		51B2B2C82563A2180090C56B /* EditorRowTopicTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2C72563A2180090C56B /* EditorRowTopicTextView.swift */; };
 		51B2B2CE2563AAF60090C56B /* EditorRowContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B2B2CD2563AAF60090C56B /* EditorRowContentConfiguration.swift */; };
+		51B4B4A52C33402E005DCCEB /* GetCurrentOutlineAppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B4B4A22C33402E005DCCEB /* GetCurrentOutlineAppIntent.swift */; };
+		51B4B4A62C33402E005DCCEB /* OutlineAppEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B4B4A32C33402E005DCCEB /* OutlineAppEntity.swift */; };
+		51B4B4A82C334D7B005DCCEB /* EntityIDAppEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B4B4A72C334D75005DCCEB /* EntityIDAppEntity.swift */; };
 		51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */; };
 		51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */; };
 		51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A5257E084E00609262 /* EditorTitleContentView.swift */; };
@@ -305,6 +308,9 @@
 		51AEEC8E2703EB6700354C59 /* GetCurrentOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentOutlineIntentHandler.swift; sourceTree = "<group>"; };
 		51B2B2C72563A2180090C56B /* EditorRowTopicTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowTopicTextView.swift; sourceTree = "<group>"; };
 		51B2B2CD2563AAF60090C56B /* EditorRowContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowContentConfiguration.swift; sourceTree = "<group>"; };
+		51B4B4A22C33402E005DCCEB /* GetCurrentOutlineAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentOutlineAppIntent.swift; sourceTree = "<group>"; };
+		51B4B4A32C33402E005DCCEB /* OutlineAppEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineAppEntity.swift; sourceTree = "<group>"; };
+		51B4B4A72C334D75005DCCEB /* EntityIDAppEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityIDAppEntity.swift; sourceTree = "<group>"; };
 		51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDisclosureButton.swift; sourceTree = "<group>"; };
 		51BAEA8E2717AA74004F1E84 /* GetRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRowsIntentHandler.swift; sourceTree = "<group>"; };
 		51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentConfiguration.swift; sourceTree = "<group>"; };
@@ -589,6 +595,7 @@
 				51E508E82B4A1DBE0041B826 /* OutlineFonts */,
 				514BB9D5255B595300C8DBDF /* Utility */,
 				51AEEC8B2703E6B500354C59 /* Intents */,
+				51B4B4822C333F9B005DCCEB /* AppIntents */,
 				515F163B255C536600FD98B8 /* Resources */,
 			);
 			path = Zavala;
@@ -646,6 +653,24 @@
 				5191851827166AA300B7E177 /* UI */,
 			);
 			path = Intents;
+			sourceTree = "<group>";
+		};
+		51B4B4822C333F9B005DCCEB /* AppIntents */ = {
+			isa = PBXGroup;
+			children = (
+				51B4B4A92C346164005DCCEB /* UI */,
+				51B4B4A72C334D75005DCCEB /* EntityIDAppEntity.swift */,
+				51B4B4A32C33402E005DCCEB /* OutlineAppEntity.swift */,
+			);
+			path = AppIntents;
+			sourceTree = "<group>";
+		};
+		51B4B4A92C346164005DCCEB /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				51B4B4A22C33402E005DCCEB /* GetCurrentOutlineAppIntent.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 		51C03097257E02FF00609262 /* Row */ = {
@@ -1028,6 +1053,8 @@
 				519D78FB2C2490F200041506 /* RowGroup+.swift in Sources */,
 				51CB201A2B5F25D6006CAC1A /* OutlineFontColor.swift in Sources */,
 				514F222A25C4FF02004E02CD /* EditorTagInputTextField.swift in Sources */,
+				51B4B4A52C33402E005DCCEB /* GetCurrentOutlineAppIntent.swift in Sources */,
+				51B4B4A62C33402E005DCCEB /* OutlineAppEntity.swift in Sources */,
 				5147D0B525CB95B4004673C3 /* DocumentsViewController+Drag.swift in Sources */,
 				51077C5227A752DF000C71DB /* UIFont+.swift in Sources */,
 				51FA273A2B3B6493008B665E /* SettingsAccountsView.swift in Sources */,
@@ -1113,6 +1140,7 @@
 				51DB0DCB2748101B008312EC /* EditorCollectionViewCompositionalLayout.swift in Sources */,
 				5191850527133B4000B7E177 /* RenameTagViewController.swift in Sources */,
 				5167702D261CB5F300EFFD40 /* EditorRowDropInteractionDelegate.swift in Sources */,
+				51B4B4A82C334D7B005DCCEB /* EntityIDAppEntity.swift in Sources */,
 				51C71C6B273F07ED00F6C779 /* ImageTransition.swift in Sources */,
 				51B2B2C82563A2180090C56B /* EditorRowTopicTextView.swift in Sources */,
 				511B29FA26018FD100C04239 /* EditorBacklinkContentView.swift in Sources */,
