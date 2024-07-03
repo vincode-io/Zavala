@@ -34,7 +34,7 @@ struct OutlineAppEntity: AppEntity {
     var url: URL?
 
     var displayRepresentation: DisplayRepresentation {
-        DisplayRepresentation(title: "Unimplemented")
+		DisplayRepresentation(stringLiteral: title ?? .noTitleLabel)
     }
 
     init() {
