@@ -5,7 +5,8 @@
 import UIKit
 import AppIntents
 
-struct GetCurrentOutlineAppIntent: AppIntent {
+struct GetCurrentOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent {
+	static let intentClassName = "GetCurrentOutlineIntent"
 
     static let title: LocalizedStringResource = "Get Current Outline"
     static let description = IntentDescription("Get the currently viewed outline from the foremost window for Zavala.")

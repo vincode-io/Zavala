@@ -14,9 +14,16 @@ struct OutlineAppEntity: AppEntity {
 	typealias DefaultQuery = OutlineEntityQuery
 	
 	static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Outline")
+
+	static var defaultQuery: OutlineEntityQuery {
+		return OutlineEntityQuery()
+	}
 	
     @Property(title: "ID")
     var id: EntityIDAppEntity
+
+	@Property(title: "Entity ID")
+	var entityID: EntityIDAppEntity
 
     @Property(title: "Title")
     var title: String?
@@ -43,15 +50,12 @@ struct OutlineAppEntity: AppEntity {
 	@MainActor
 	init(outline: Outline) {
 		self.id = EntityIDAppEntity(entityID: outline.id)
+		self.entityID = self.id
 		self.title = outline.title
 		self.ownerName = outline.ownerName
 		self.ownerEmail = outline.ownerEmail
 		self.ownerURL = outline.ownerURL
 		self.url = outline.id.url
-	}
-	
-	static var defaultQuery: OutlineEntityQuery {
-		return OutlineEntityQuery()
 	}
 	
 	struct OutlineEntityQuery: EntityStringQuery {
