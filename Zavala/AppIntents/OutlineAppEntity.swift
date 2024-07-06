@@ -58,14 +58,34 @@ struct OutlineAppEntity: AppEntity {
 		self.url = outline.id.url
 	}
 	
-	struct OutlineEntityQuery: EntityStringQuery {
-		
-		func entities(for identifiers: [OutlineAppEntity.ID]) -> [OutlineAppEntity] {
-			[]
+	struct OutlineEntityQuery: EntityStringQuery, ZavalaAppIntent {
+	
+		func entities(for identifiers: [OutlineAppEntity.ID]) async -> [OutlineAppEntity] {
+			await resume()
+			
+			var results = [OutlineAppEntity]()
+			for identifier in identifiers {
+				if let entityID = identifier.entityID, let outline = await AccountManager.shared.findDocument(entityID)?.outline {
+					await results.append(OutlineAppEntity(outline: outline))
+				}
+			}
+			
+			await suspend()
+			return results
 		}
 		
-		func entities(matching string: String) -> [OutlineAppEntity] {
-			[]
+		func entities(matching string: String) async -> [OutlineAppEntity] {
+			await resume()
+			
+			var results = [OutlineAppEntity]()
+			for document in await AccountManager.shared.documents {
+				if await document.title?.localizedCaseInsensitiveContains(string) ?? false, let outline = await document.outline {
+					await results.append(OutlineAppEntity(outline: outline))
+				}
+			}
+
+			await suspend()
+			return results
 		}
 	}
 	

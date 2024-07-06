@@ -101,7 +101,7 @@
 		51B4B4A52C33402E005DCCEB /* GetCurrentOutlineAppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B4B4A22C33402E005DCCEB /* GetCurrentOutlineAppIntent.swift */; };
 		51B4B4A62C33402E005DCCEB /* OutlineAppEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B4B4A32C33402E005DCCEB /* OutlineAppEntity.swift */; };
 		51B4B4A82C334D7B005DCCEB /* EntityIDAppEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B4B4A72C334D75005DCCEB /* EntityIDAppEntity.swift */; };
-		51B4B4E82C349ED5005DCCEB /* ZavalaAppIntentError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B4B4E72C349ECC005DCCEB /* ZavalaAppIntentError.swift */; };
+		51B4B4E82C349ED5005DCCEB /* ZavalaAppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B4B4E72C349ECC005DCCEB /* ZavalaAppIntent.swift */; };
 		51B9D51725A9080A00579D19 /* EditorDisclosureButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */; };
 		51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */; };
 		51C030A6257E084E00609262 /* EditorTitleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51C030A5257E084E00609262 /* EditorTitleContentView.swift */; };
@@ -312,7 +312,7 @@
 		51B4B4A22C33402E005DCCEB /* GetCurrentOutlineAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentOutlineAppIntent.swift; sourceTree = "<group>"; };
 		51B4B4A32C33402E005DCCEB /* OutlineAppEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineAppEntity.swift; sourceTree = "<group>"; };
 		51B4B4A72C334D75005DCCEB /* EntityIDAppEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityIDAppEntity.swift; sourceTree = "<group>"; };
-		51B4B4E72C349ECC005DCCEB /* ZavalaAppIntentError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZavalaAppIntentError.swift; sourceTree = "<group>"; };
+		51B4B4E72C349ECC005DCCEB /* ZavalaAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZavalaAppIntent.swift; sourceTree = "<group>"; };
 		51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDisclosureButton.swift; sourceTree = "<group>"; };
 		51BAEA8E2717AA74004F1E84 /* GetRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRowsIntentHandler.swift; sourceTree = "<group>"; };
 		51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentConfiguration.swift; sourceTree = "<group>"; };
@@ -662,7 +662,7 @@
 			children = (
 				51B4B4A72C334D75005DCCEB /* EntityIDAppEntity.swift */,
 				51B4B4A32C33402E005DCCEB /* OutlineAppEntity.swift */,
-				51B4B4E72C349ECC005DCCEB /* ZavalaAppIntentError.swift */,
+				51B4B4E72C349ECC005DCCEB /* ZavalaAppIntent.swift */,
 				51B4B4A92C346164005DCCEB /* UI */,
 			);
 			path = AppIntents;
@@ -1119,7 +1119,7 @@
 				51922210271E27FD000CDC1F /* EditorCollectionView.swift in Sources */,
 				5113B095260E638400DBD11B /* SettingsFontConfigViewController.swift in Sources */,
 				512229682563507E008041AF /* EditorRowViewCell.swift in Sources */,
-				51B4B4E82C349ED5005DCCEB /* ZavalaAppIntentError.swift in Sources */,
+				51B4B4E82C349ED5005DCCEB /* ZavalaAppIntent.swift in Sources */,
 				51C71C6F273F088D00F6C779 /* ImageViewController.swift in Sources */,
 				511B29F726018FBB00C04239 /* EditorBacklinkContentConfiguration.swift in Sources */,
 				519184F327107FDA00B7E177 /* UITextView+.swift in Sources */,
