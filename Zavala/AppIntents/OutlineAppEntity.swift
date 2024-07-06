@@ -10,14 +10,8 @@ import AppIntents
 import VinOutlineKit
 
 struct OutlineAppEntity: AppEntity {
-	
-	typealias DefaultQuery = OutlineEntityQuery
-	
 	static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Outline")
-
-	static var defaultQuery: OutlineEntityQuery {
-		return OutlineEntityQuery()
-	}
+	static let defaultQuery = OutlineEntityQuery()
 	
     @Property(title: "ID")
     var id: EntityIDAppEntity

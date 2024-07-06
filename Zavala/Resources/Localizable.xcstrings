@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "(No Title)" : {
       "comment" : "Control Label: (No Title)"
     },
@@ -21,6 +24,9 @@
     "About Zavala" : {
       "comment" : "Control Label: About Zavala"
     },
+    "Account Type" : {
+
+    },
     "Accounts" : {
       "comment" : "Control Label: Accounts"
     },
@@ -33,11 +39,59 @@
     "Add" : {
       "comment" : "Control Label: Add"
     },
+    "Add %@ to %@ at %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Add %1$@ to %2$@ at %3$@"
+          }
+        }
+      }
+    },
+    "Add %@to %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Add %1$@to %2$@"
+          }
+        }
+      }
+    },
+    "Add ${tagName} to ${outline}" : {
+
+    },
+    "Add ${topics} to ${entityID} at ${destination}" : {
+
+    },
+    "Add a Tag to the given Outline." : {
+
+    },
     "Add Note" : {
       "comment" : "Control Label: Add Note"
     },
     "Add Note Level" : {
       "comment" : "Control Label: Add Note Level"
+    },
+    "Add Outline" : {
+
+    },
+    "Add Outline Tag" : {
+
+    },
+    "Add Outline titled%@to%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Add Outline titled%1$@to%2$@"
+          }
+        }
+      }
+    },
+    "Add Outline titled${title}to${accountType}" : {
+
     },
     "Add Row" : {
       "comment" : "Control Label: Add Row"
@@ -57,11 +111,20 @@
     "Add Row Outside" : {
       "comment" : "Control Label: Add Row Outside"
     },
+    "Add Rows" : {
+
+    },
+    "Add Rows to an Outline." : {
+
+    },
     "Add Tag" : {
       "comment" : "Control Label: Add Tag."
     },
     "Add Topic Level" : {
       "comment" : "Control Label: The menu option to add a new Topic Level."
+    },
+    "Adds an Outline." : {
+
     },
     "Always Delete Without Asking" : {
       "comment" : "Control Label: Always Delete Without Asking"
@@ -92,6 +155,9 @@
     },
     "Are you sure you want to restore the defaults? All your font customizations will be lost." : {
       "comment" : "Alert: information for restoring font defaults"
+    },
+    "At least one %@ is required." : {
+
     },
     "Automatic" : {
       "comment" : "Control Label: Automatic"
@@ -147,6 +213,9 @@
     "Collapse Parent Row" : {
       "comment" : "Control Label: Collapse Parent Row"
     },
+    "Collapsed" : {
+
+    },
     "Color Palette" : {
       "comment" : "Control Label: Color Palette"
     },
@@ -156,8 +225,24 @@
     "Complete" : {
       "comment" : "Accessibility Label: Complete\nControl Label: Complete"
     },
+    "Completion State" : {
+
+    },
     "Copy" : {
       "comment" : "Control Label: Copy"
+    },
+    "Copy %@ to %@ at %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Copy %1$@ to %2$@ at %3$@"
+          }
+        }
+      }
+    },
+    "Copy ${rows} to ${entityID} at ${destination}" : {
+
     },
     "Copy Document Link" : {
       "comment" : "Control Label: Copy Document Link"
@@ -167,6 +252,12 @@
     },
     "Copy Row Link" : {
       "comment" : "Control Label: Copy Row Link"
+    },
+    "Copy Rows" : {
+
+    },
+    "Copy Rows in or between Outlines." : {
+
     },
     "Copyright © Vincode, Inc. 2020-%@" : {
       "comment" : "About Box copyright information"
@@ -179,6 +270,12 @@
     },
     "Created" : {
       "comment" : "Control Label: Created"
+    },
+    "Created End Date" : {
+
+    },
+    "Created Start Date" : {
+
     },
     "Cut" : {
       "comment" : "Control Label: Cut"
@@ -216,6 +313,21 @@
     "Delete Rows" : {
       "comment" : "Control Label: Delete Rows"
     },
+    "Delete the specified Rows." : {
+
+    },
+    "Deletes an Outline." : {
+
+    },
+    "Destination" : {
+
+    },
+    "Detail" : {
+
+    },
+    "Directly After" : {
+
+    },
     "Disable Animations" : {
       "comment" : "Control Label: Disable Animations"
     },
@@ -237,6 +349,12 @@
     "Edit document “%@”" : {
       "comment" : "Prompt: edit document"
     },
+    "Edit Outline" : {
+
+    },
+    "Edit Rows" : {
+
+    },
     "Editor" : {
       "comment" : "Control Label: Editor"
     },
@@ -255,17 +373,29 @@
     "Enable On My Mac" : {
       "comment" : "Control Label: Enable On My Mac"
     },
+    "End Depth" : {
+
+    },
     "Enter Background" : {
       "comment" : "Control Label: Enter Background"
     },
     "Enter Forground" : {
       "comment" : "Control Label: Enter Forground"
     },
+    "Enter the %@for this Outline" : {
+
+    },
+    "Enter the %@of this Outline." : {
+
+    },
     "Entity ID" : {
 
     },
     "Error" : {
       "comment" : "Alert Title: Error"
+    },
+    "Excluded Rows" : {
+
     },
     "Expand" : {
       "comment" : "Control Label: Expand"
@@ -279,8 +409,17 @@
     "Expand All in Row" : {
       "comment" : "Control Label: Expand All in Row"
     },
+    "Expanded" : {
+
+    },
+    "Expanded State" : {
+
+    },
     "Export" : {
       "comment" : "Control Label: Export"
+    },
+    "Export Link Type" : {
+
     },
     "Export Markdown Doc…" : {
       "comment" : "Control Label: Export Markdown Doc…"
@@ -296,6 +435,25 @@
     },
     "Export PDF List…" : {
       "comment" : "Control Label: Export PDF List…"
+    },
+    "Export the outline in various formats." : {
+
+    },
+    "Export the%@as %@using %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Export the%1$@as %2$@using %3$@"
+          }
+        }
+      }
+    },
+    "Export the${outline}as ${exportType}using ${exportLinkType}" : {
+
+    },
+    "Export Type" : {
+
     },
     "Filter" : {
       "comment" : "Control Label: Filter"
@@ -345,10 +503,53 @@
     "Get Current Outline" : {
 
     },
+    "Get Current Tags" : {
+
+    },
+    "Get Images For Outline" : {
+
+    },
+    "Get Images for%@" : {
+
+    },
+    "Get Images for${outline}" : {
+
+    },
     "Get Info" : {
       "comment" : "Control Label: Get Info"
     },
+    "Get Outlines" : {
+
+    },
+    "Get outlines based on search criteria." : {
+
+    },
+    "Get Rows" : {
+
+    },
+    "Get Rows from an Outline." : {
+
+    },
+    "Get Rows matching %@ starting at %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Get Rows matching %1$@ starting at %2$@"
+          }
+        }
+      }
+    },
+    "Get Rows matching ${search} starting at ${entityID}" : {
+
+    },
     "Get the currently viewed outline from the foremost window for Zavala." : {
+
+    },
+    "Gets all the images associated with the given Outline. Useful for integrating with outlines exported as Markdown." : {
+
+    },
+    "Gets the name of the currently selected Tags if there are any." : {
 
     },
     "GitHub Repository" : {
@@ -372,11 +573,20 @@
     "History" : {
       "comment" : "Control Label: History"
     },
+    "iCloud" : {
+
+    },
     "ID" : {
 
     },
     "Image" : {
       "comment" : "Control Label: Image"
+    },
+    "Import" : {
+
+    },
+    "Import an outline." : {
+
     },
     "Import Failed" : {
       "comment" : "Error Message Title: Import Failed"
@@ -387,14 +597,42 @@
     "Import OPML…" : {
       "comment" : "Control Label: Import OPML…"
     },
+    "Import the ${importType} ${inputFile} into ${accountType}" : {
+
+    },
+    "Import the%@%@into%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Import the%1$@%2$@into%3$@"
+          }
+        }
+      }
+    },
+    "Import Type" : {
+
+    },
     "Indigo" : {
       "comment" : "Control Label: Indigo"
+    },
+    "Input File" : {
+
+    },
+    "Input Images" : {
+
     },
     "Insert Image" : {
       "comment" : "Control Label: Insert Image"
     },
     "Insert Image…" : {
       "comment" : "Control Label: Insert Image…"
+    },
+    "Inside at End" : {
+
+    },
+    "Inside at Start" : {
+
     },
     "Italic" : {
       "comment" : "Control Label: Italic"
@@ -405,8 +643,14 @@
     "Jump to Topic" : {
       "comment" : "Control Label: Jump to Topic"
     },
+    "Just to confirm, you wanted ‘%@’?" : {
+
+    },
     "Large" : {
       "comment" : "Control Label: Large"
+    },
+    "Level" : {
+
     },
     "Light" : {
       "comment" : "Control Label: Light"
@@ -419,6 +663,18 @@
     },
     "Manage Sharing…" : {
       "comment" : "Control Label: Manage Sharing…"
+    },
+    "Mark complete as %@" : {
+
+    },
+    "Mark expanded as %@" : {
+
+    },
+    "Markdown Doc" : {
+
+    },
+    "Markdown List" : {
+
     },
     "Max Width" : {
       "comment" : "Control Label: Max Width"
@@ -435,6 +691,19 @@
     "Move" : {
       "comment" : "Control Label: Move"
     },
+    "Move %@ to %@ at %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move %1$@ to %2$@ at %3$@"
+          }
+        }
+      }
+    },
+    "Move ${rows} to ${entityID} at ${destination}" : {
+
+    },
     "Move Down" : {
       "comment" : "Control Label: Move Down"
     },
@@ -443,6 +712,12 @@
     },
     "Move Right" : {
       "comment" : "Control Label: Move Right"
+    },
+    "Move Rows" : {
+
+    },
+    "Move Rows in or between Outlines." : {
+
     },
     "Move Up" : {
       "comment" : "Control Label: Move Up"
@@ -474,14 +749,23 @@
     "Normal" : {
       "comment" : "Control Label: Normal"
     },
+    "Note" : {
+
+    },
     "Note Level %lld" : {
       "comment" : "Font Label: The font for the given Note Level"
+    },
+    "On My Device" : {
+
     },
     "Open Quickly" : {
       "comment" : "Search Field Placeholder: Open Quickly"
     },
     "Open Quickly…" : {
       "comment" : "Control Label: Open Quickly…"
+    },
+    "OPML" : {
+
     },
     "Orange" : {
       "comment" : "Control Label: Orange"
@@ -492,8 +776,14 @@
     "Outline Defaults" : {
       "comment" : "Control Label: Outline Defaults"
     },
+    "Outline Detail" : {
+
+    },
     "Outline Owner" : {
       "comment" : "Control Label: Outline Owner"
+    },
+    "Outside" : {
+
     },
     "Owner" : {
       "comment" : "Control Label: Owner"
@@ -510,8 +800,17 @@
     "Paste" : {
       "comment" : "Control Label: Paste"
     },
+    "PDF Doc" : {
+
+    },
+    "PDF List" : {
+
+    },
     "Pink" : {
       "comment" : "Control Label: Pink"
+    },
+    "Please supply the Input File." : {
+
     },
     "Preferences…" : {
       "comment" : "Control Label: Preferences…"
@@ -564,17 +863,60 @@
     "References: " : {
       "comment" : "Label: references label for backlinks"
     },
+    "Regular Expression" : {
+
+    },
+    "Relative File Links" : {
+
+    },
     "Release Notes" : {
       "comment" : "Control Label: Release Notes"
     },
     "Remove" : {
       "comment" : "Control Label: Remove"
     },
+    "Remove %@" : {
+
+    },
+    "Remove %@ from %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Remove %1$@ from %2$@"
+          }
+        }
+      }
+    },
+    "Remove ${rows}" : {
+
+    },
+    "Remove ${tagName} from ${outline}" : {
+
+    },
     "Remove iCloud Account" : {
       "comment" : "Alert Title: title for removing an iCloud Account"
     },
+    "Remove Outline" : {
+
+    },
+    "Remove Outline Tag" : {
+
+    },
+    "Remove Rows" : {
+
+    },
     "Remove Tag" : {
       "comment" : "Control Label: Remove Tag"
+    },
+    "Remove%@" : {
+
+    },
+    "Remove${outline}" : {
+
+    },
+    "Removes a Tag from the given Outline." : {
+
     },
     "Rename" : {
       "comment" : "Control Label: Rename"
@@ -588,11 +930,29 @@
     "Restore Defaults" : {
       "comment" : "Alert: message for restoring font defaults"
     },
+    "Row" : {
+
+    },
+    "Row Completion State" : {
+
+    },
+    "Row Destination" : {
+
+    },
+    "Row Detail" : {
+
+    },
+    "Row Expanded State" : {
+
+    },
     "Row Indent" : {
       "comment" : "Control Label: Row Indent"
     },
     "Row Spacing" : {
       "comment" : "Control Label: Row Spacing"
+    },
+    "Rows" : {
+
     },
     "Save" : {
       "comment" : "Control Label: Save"
@@ -612,6 +972,102 @@
     "Select" : {
       "comment" : "Control Label: Select"
     },
+    "Select a%@" : {
+
+    },
+    "Select an %@" : {
+
+    },
+    "Set %@ of %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Set %1$@ of %2$@"
+          }
+        }
+      }
+    },
+    "Set %@ of %@ to %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Set %1$@ of %2$@ to %3$@"
+          }
+        }
+      }
+    },
+    "Set %@of %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Set %1$@of %2$@"
+          }
+        }
+      }
+    },
+    "Set %@of %@to %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Set %1$@of %2$@to %3$@"
+          }
+        }
+      }
+    },
+    "Set ${detail} of ${outline}" : {
+
+    },
+    "Set ${detail} of ${outline} to ${ownerEmail}" : {
+
+    },
+    "Set ${detail} of ${outline} to ${ownerName}" : {
+
+    },
+    "Set ${detail} of ${outline} to ${ownerURL}" : {
+
+    },
+    "Set ${detail} of ${outline} to ${title}" : {
+
+    },
+    "Set ${detail} of ${rows}" : {
+
+    },
+    "Set ${detail} of ${rows} to ${complete}" : {
+
+    },
+    "Set ${detail} of ${rows} to ${expanded}" : {
+
+    },
+    "Set ${detail} of ${rows} to ${note}" : {
+
+    },
+    "Set ${detail} of ${rows} to ${topic}" : {
+
+    },
+    "Set%@of%@to %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Set%1$@of%2$@to %3$@"
+          }
+        }
+      }
+    },
+    "Set%@of%@to%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Set%1$@of%2$@to%3$@"
+          }
+        }
+      }
+    },
     "Settings" : {
       "comment" : "Control Label: Settings"
     },
@@ -624,11 +1080,26 @@
     "Share…" : {
       "comment" : "Control Label: Share…"
     },
+    "Show %@" : {
+
+    },
+    "Show ${outline}" : {
+
+    },
+    "Show Outline" : {
+
+    },
+    "Shows the given outline in the foremost window of Zavala." : {
+
+    },
     "Small" : {
       "comment" : "Control Label: Small"
     },
     "Split Row" : {
       "comment" : "Control Label: Split Row"
+    },
+    "Start Depth" : {
+
     },
     "Statistics" : {
       "comment" : "Control Label: Statistics"
@@ -639,6 +1110,12 @@
     "Tag" : {
       "comment" : "Data Entry Placeholder: Tag"
     },
+    "Tag Name" : {
+
+    },
+    "Tag Names" : {
+
+    },
     "Tags" : {
       "comment" : "Font Label: Tags"
     },
@@ -648,6 +1125,15 @@
     "Tertiary Text" : {
       "comment" : "Control Label: Tertiary Text"
     },
+    "The %@ is required." : {
+
+    },
+    "The Account Type is required." : {
+
+    },
+    "The Import Type is required." : {
+
+    },
     "The outline will be deleted and unrecoverable." : {
       "comment" : "Alert Message: delete outline"
     },
@@ -656,6 +1142,16 @@
     },
     "The requested document could not be found. It was most likely deleted and is no longer available." : {
       "comment" : "Alert Message: Document Not Found"
+    },
+    "There are %lld options matching ‘%@’." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "There are %1$lld options matching ‘%2$@’."
+          }
+        }
+      }
     },
     "There isn't an outline currently being viewed." : {
 
@@ -672,8 +1168,14 @@
     "Toggle Sidebar" : {
       "comment" : "Control Label: Toggle Sidebar"
     },
+    "Topic" : {
+
+    },
     "Topic Level %lld" : {
       "comment" : "Font Label: The font for the given Topic Level"
+    },
+    "Topics" : {
+
     },
     "Turn Filter Off" : {
       "comment" : "Control Label: Turn Filter Off"
@@ -696,8 +1198,20 @@
     "Undo Menu" : {
       "comment" : "Control Label: Undo Menu"
     },
+    "Update the details of a Row." : {
+
+    },
+    "Update the details of an Outline." : {
+
+    },
     "Updated" : {
       "comment" : "Control Label: Updated"
+    },
+    "Updated End Date" : {
+
+    },
+    "Updated Start Date" : {
+
     },
     "URL" : {
       "comment" : "Control Label: URL"
@@ -711,6 +1225,40 @@
     "Website" : {
       "comment" : "Control Label: Website"
     },
+    "What are the %@ you would like add?" : {
+
+    },
+    "What is the %@" : {
+
+    },
+    "What is the %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "What is the %1$@ %2$@"
+          }
+        }
+      }
+    },
+    "What is the %@ to add?" : {
+
+    },
+    "What is the %@ to remove?" : {
+
+    },
+    "What is the %@?" : {
+
+    },
+    "What is the %@criteria?" : {
+
+    },
+    "What is the ownerURL" : {
+
+    },
+    "What is the%@term?" : {
+
+    },
     "Wide" : {
       "comment" : "Control Label: Wide"
     },
@@ -719,6 +1267,12 @@
     },
     "Yellow" : {
       "comment" : "Control Label: Yellow"
+    },
+    "You must specify a Row for this Destination." : {
+
+    },
+    "Zavala Deep Links" : {
+
     },
     "Zavala Help" : {
       "comment" : "Control Label: Zavala Help"
