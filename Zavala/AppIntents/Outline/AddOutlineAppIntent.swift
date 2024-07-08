@@ -71,23 +71,3 @@ struct AddOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictabl
     }
 }
 
-private extension IntentDialog {
-	
-	static func accountTypeParameterDisambiguationIntro(count: Int, accountType: AccountTypeAppEnum) -> Self {
-        "There are \(count) options matching ‘\(accountType)’."
-    }
-	
-    static func accountTypeParameterConfirmation(accountType: AccountTypeAppEnum) -> Self {
-        "Just to confirm, you wanted ‘\(accountType)’?"
-    }
-	
-    static func titleParameterPrompt(title: String) -> Self {
-        "Enter the \(title) of this Outline."
-    }
-	
-    static func tagNamesParameterPrompt(tagNames: String) -> Self {
-        "Enter the \(tagNames) for this Outline"
-    }
-	
-}
-

@@ -8,16 +8,16 @@
 import Foundation
 import AppIntents
 
-struct AddOutlineTagAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent {
+struct AddOutlineTagAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "AddOutlineTagIntent"
     static let title: LocalizedStringResource = "Add Outline Tag"
     static let description = IntentDescription("Add a Tag to the given Outline.")
 
     @Parameter(title: "Outline")
-	var outline: OutlineAppEntity?
+	var outline: OutlineAppEntity
 
     @Parameter(title: "Tag Name")
-    var tagName: String?
+    var tagName: String
 
     static var parameterSummary: some ParameterSummary {
         Summary("Add \(\.$tagName) to \(\.$outline)")
@@ -26,15 +26,25 @@ struct AddOutlineTagAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predict
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$outline, \.$tagName)) { outline, tagName in
             DisplayRepresentation(
-                title: "Add \(tagName!)to \(outline!)",
+                title: "Add \(tagName) to \(outline)",
                 subtitle: ""
             )
         }
     }
 
     func perform() async throws -> some IntentResult {
-        // TODO: Place your refactored intent handler code here.
-        return .result()
+		await resume()
+		
+		guard let outline = await findOutline(outline),
+			  let tag = await outline.account?.createTag(name: tagName) else {
+			await suspend()
+			throw ZavalaAppIntentError.unexpectedError
+		}
+		
+		await outline.createTag(tag)
+		await suspend()
+		
+		return .result()
     }
 }
 
