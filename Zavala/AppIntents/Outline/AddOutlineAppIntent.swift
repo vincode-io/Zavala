@@ -7,23 +7,24 @@
 
 import Foundation
 import AppIntents
+import VinOutlineKit
 
-struct AddOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent {
+struct AddOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "AddOutlineIntent"
     static let title: LocalizedStringResource = "Add Outline"
     static let description = IntentDescription("Adds an Outline.")
 
-    @Parameter(title: "Account Type")
-	var accountType: AccountTypeAppEnum?
+	@Parameter(title: "Account Type", requestValueDialog: "Which Account did you want to add this Outline to?")
+	var accountType: AccountTypeAppEnum
 
-    @Parameter(title: "Title")
-    var title: String?
+	@Parameter(title: "Title", requestValueDialog: "What is the title for the new Outline?")
+    var title: String
 
     @Parameter(title: "Tag Names")
     var tagNames: [String]?
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Add Outline titled\(\.$title)to\(\.$accountType)") {
+        Summary("Add Outline titled \(\.$title) to \(\.$accountType)") {
             \.$tagNames
         }
     }
@@ -31,30 +32,62 @@ struct AddOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictabl
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$title, \.$tagNames, \.$accountType)) { title, tagNames, accountType in
             DisplayRepresentation(
-                title: "Add Outline titled\(title!)to\(accountType!)",
+                title: "Add Outline titled \(title) to \(accountType)",
                 subtitle: ""
             )
         }
     }
 
 	func perform() async throws -> some IntentResult & ReturnsValue<OutlineAppEntity> {
-        // TODO: Place your refactored intent handler code here.
-        return .result(value: OutlineAppEntity(/* fill in result initializer here */))
+		await resume()
+		
+		let acctType = accountType == .onMyDevice ? AccountType.local : AccountType.cloudKit
+		guard let account = await AccountManager.shared.findAccount(accountType: acctType) else {
+			await suspend()
+			throw ZavalaAppIntentError.unavailableAccount
+		}
+		
+		var tags = [Tag]()
+		for tagName in tagNames ?? [] {
+			if !tagName.isEmpty {
+				await tags.append(account.createTag(name: tagName))
+			}
+		}
+		
+		guard let outline = await account.createOutline(title: title, tags: tags).outline else {
+			await suspend()
+			throw ZavalaAppIntentError.unexpectedError
+		}
+
+		let defaults = AppDefaults.shared
+		await outline.update(checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
+							 correctSpellingAutomatically: defaults.correctSpellingAutomatically,
+							 autoLinkingEnabled: defaults.autoLinkingEnabled,
+							 ownerName: defaults.ownerName,
+							 ownerEmail: defaults.ownerEmail,
+							 ownerURL: defaults.ownerURL)
+		
+		return await .result(value: OutlineAppEntity(outline: outline))
     }
 }
 
 private extension IntentDialog {
+	
 	static func accountTypeParameterDisambiguationIntro(count: Int, accountType: AccountTypeAppEnum) -> Self {
         "There are \(count) options matching ‘\(accountType)’."
     }
+	
     static func accountTypeParameterConfirmation(accountType: AccountTypeAppEnum) -> Self {
         "Just to confirm, you wanted ‘\(accountType)’?"
     }
+	
     static func titleParameterPrompt(title: String) -> Self {
-        "Enter the \(title)of this Outline."
+        "Enter the \(title) of this Outline."
     }
+	
     static func tagNamesParameterPrompt(tagNames: String) -> Self {
-        "Enter the \(tagNames)for this Outline"
+        "Enter the \(tagNames) for this Outline"
     }
+	
 }
 

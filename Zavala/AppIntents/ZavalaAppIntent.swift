@@ -41,12 +41,19 @@ extension ZavalaAppIntent {
 }
 
 enum ZavalaAppIntentError: Error, CustomLocalizedStringResourceConvertible {
+	case unexpectedError
 	case outlineNotBeingViewed
+	case unavailableAccount
 	
 	var localizedStringResource: LocalizedStringResource {
 		switch self {
+		case .unexpectedError:
+			return "An unexpected error occurred. Please try again."
 		case .outlineNotBeingViewed:
-			return "There isn't an outline currently being viewed."
+			return "There isn't an Outline currently being viewed."
+		case .unavailableAccount:
+			return "The specified Account isn't available to be used."
 		}
+		
 	}
 }

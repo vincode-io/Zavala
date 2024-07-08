@@ -80,17 +80,17 @@
     "Add Outline Tag" : {
 
     },
-    "Add Outline titled%@to%@" : {
+    "Add Outline titled %@ to %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Add Outline titled%1$@to%2$@"
+            "value" : "Add Outline titled %1$@ to %2$@"
           }
         }
       }
     },
-    "Add Outline titled${title}to${accountType}" : {
+    "Add Outline titled ${title} to ${accountType}" : {
 
     },
     "Add Row" : {
@@ -128,6 +128,9 @@
     },
     "Always Delete Without Asking" : {
       "comment" : "Control Label: Always Delete Without Asking"
+    },
+    "An unexpected error occurred. Please try again." : {
+
     },
     "Any child Tag associated with these Tags will also be deleted. No Outlines associated with these Tags will be deleted." : {
       "comment" : "Alert Message: delete tags"
@@ -382,10 +385,10 @@
     "Enter Forground" : {
       "comment" : "Control Label: Enter Forground"
     },
-    "Enter the %@for this Outline" : {
+    "Enter the %@ for this Outline" : {
 
     },
-    "Enter the %@of this Outline." : {
+    "Enter the %@ of this Outline." : {
 
     },
     "Entity ID" : {
@@ -1143,6 +1146,9 @@
     "The requested document could not be found. It was most likely deleted and is no longer available." : {
       "comment" : "Alert Message: Document Not Found"
     },
+    "The specified Account isn't available to be used." : {
+
+    },
     "There are %lld options matching ‘%@’." : {
       "localizations" : {
         "en" : {
@@ -1153,7 +1159,7 @@
         }
       }
     },
-    "There isn't an outline currently being viewed." : {
+    "There isn't an Outline currently being viewed." : {
 
     },
     "This information is included in OPML documents to attribute ownership." : {
@@ -1256,7 +1262,13 @@
     "What is the ownerURL" : {
 
     },
+    "What is the title for the new Outline?" : {
+
+    },
     "What is the%@term?" : {
+
+    },
+    "Which Account did you want to add this Outline to?" : {
 
     },
     "Wide" : {
