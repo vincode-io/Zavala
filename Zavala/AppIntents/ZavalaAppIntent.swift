@@ -34,8 +34,8 @@ extension ZavalaAppIntent {
 	func findOutline(_ entityID: EntityIDAppEntity?) -> Outline? {
 		guard let id = entityID?.entityID,
 			  let outline = AccountManager.shared.findDocument(id)?.outline else {
-				  return nil
-			  }
+			return nil
+		}
 		return outline
 	}
 }
