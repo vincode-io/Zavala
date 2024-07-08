@@ -746,6 +746,9 @@
     "No Selection" : {
       "comment" : "Large Label: No Selection"
     },
+    "No Tags are currently selected." : {
+
+    },
     "None" : {
       "comment" : "Control Label: None"
     },

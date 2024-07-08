@@ -43,6 +43,7 @@ extension ZavalaAppIntent {
 enum ZavalaAppIntentError: Error, CustomLocalizedStringResourceConvertible {
 	case unexpectedError
 	case outlineNotBeingViewed
+	case noTagsSelected
 	case unavailableAccount
 	
 	var localizedStringResource: LocalizedStringResource {
@@ -51,6 +52,8 @@ enum ZavalaAppIntentError: Error, CustomLocalizedStringResourceConvertible {
 			return "An unexpected error occurred. Please try again."
 		case .outlineNotBeingViewed:
 			return "There isn't an Outline currently being viewed."
+		case .noTagsSelected:
+			return "No Tags are currently selected."
 		case .unavailableAccount:
 			return "The specified Account isn't available to be used."
 		}

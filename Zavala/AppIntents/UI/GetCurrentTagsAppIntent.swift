@@ -5,8 +5,9 @@
 //  Created by Maurice Parker on 7/6/24.
 //
 
-import Foundation
+import UIKit
 import AppIntents
+import VinOutlineKit
 
 struct GetCurrentTagsAppIntent: AppIntent, CustomIntentMigratedAppIntent {
     static let intentClassName = "GetCurrentTagsIntent"
@@ -17,9 +18,15 @@ struct GetCurrentTagsAppIntent: AppIntent, CustomIntentMigratedAppIntent {
         Summary("Get Current Tags")
     }
 
-    func perform() async throws -> some IntentResult & ReturnsValue<String> {
-        // TODO: Place your refactored intent handler code here.
-        return .result(value: String(/* fill in result initializer here */))
+	@MainActor
+    func perform() async throws -> some IntentResult & ReturnsValue<[String]> {
+		guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+			  let tags = (appDelegate.mainCoordinator as? MainSplitViewController)?.selectedTags else {
+			throw ZavalaAppIntentError.noTagsSelected
+		}
+			
+		let tagNames = tags.map { $0.name }
+		return .result(value: tagNames)
     }
 }
 

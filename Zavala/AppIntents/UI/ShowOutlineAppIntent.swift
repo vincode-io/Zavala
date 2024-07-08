@@ -44,7 +44,7 @@ struct ShowOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictab
 		#endif
 
 		guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-			  let mainCoordinator = appDelegate.mainCoordinator as? MainSplitViewController else {
+			  let mainSplitViewController = appDelegate.mainCoordinator as? MainSplitViewController else {
 			
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
 			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(documentID: entityID).userInfo]
@@ -53,7 +53,7 @@ struct ShowOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictab
 			return .result()
 		}
 		
-		await mainCoordinator.handleDocument(entityID, isNavigationBranch: false)
+		await mainSplitViewController.handleDocument(entityID, isNavigationBranch: false)
 	
         return .result()
     }
