@@ -89,7 +89,7 @@ struct EditOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictab
 		
 		guard let outline = await findOutline(outline) else {
 			await suspend()
-			throw ZavalaAppIntentError.unexpectedError
+			throw ZavalaAppIntentError.outlineNotFound
 		}
 		
 		switch detail {

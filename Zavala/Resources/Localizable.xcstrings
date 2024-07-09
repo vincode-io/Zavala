@@ -503,13 +503,13 @@
     "Get Current Tags" : {
 
     },
+    "Get Images for %@" : {
+
+    },
+    "Get Images for ${outline}" : {
+
+    },
     "Get Images For Outline" : {
-
-    },
-    "Get Images for%@" : {
-
-    },
-    "Get Images for${outline}" : {
 
     },
     "Get Info" : {
@@ -543,7 +543,7 @@
     "Get the currently viewed outline from the foremost window for Zavala." : {
 
     },
-    "Gets all the images associated with the given Outline. Useful for integrating with outlines exported as Markdown." : {
+    "Gets all the Images associated with the given Outline. Useful for integrating with Outlines exported as Markdown." : {
 
     },
     "Gets the name of the currently selected Tags if there are any." : {
@@ -1097,6 +1097,9 @@
     },
     "The requested document could not be found. It was most likely deleted and is no longer available." : {
       "comment" : "Alert Message: Document Not Found"
+    },
+    "The requested Outline was not found." : {
+
     },
     "The specified Account isn't available to be used." : {
 

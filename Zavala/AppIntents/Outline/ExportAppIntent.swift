@@ -43,7 +43,7 @@ struct ExportAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableInt
 		
 		guard let outline = findOutline(outline) else {
 			await suspend()
-			throw ZavalaAppIntentError.unexpectedError
+			throw ZavalaAppIntentError.outlineNotFound
 		}
 
 		let useAltLinks = exportLinkType == .altLinks

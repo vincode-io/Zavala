@@ -35,8 +35,12 @@ struct AddOutlineTagAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predict
     func perform() async throws -> some IntentResult {
 		await resume()
 		
-		guard let outline = await findOutline(outline),
-			  let tag = await outline.account?.createTag(name: tagName) else {
+		guard let outline = await findOutline(outline) else {
+			await suspend()
+			throw ZavalaAppIntentError.outlineNotFound
+		}
+		
+		guard let tag = await outline.account?.createTag(name: tagName) else {
 			await suspend()
 			throw ZavalaAppIntentError.unexpectedError
 		}
