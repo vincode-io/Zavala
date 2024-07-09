@@ -29,9 +29,9 @@ struct GetImagesForOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, P
         }
     }
 
-    func perform() async throws -> some IntentResult & ReturnsValue<IntentFile> {
+    func perform() async throws -> some IntentResult & ReturnsValue<[IntentFile]> {
         // TODO: Place your refactored intent handler code here.
-		return .result(value: IntentFile(fileURL: URL(string: "")!))
+		return .result(value: [IntentFile(fileURL: URL(string: "")!)])
     }
 }
 

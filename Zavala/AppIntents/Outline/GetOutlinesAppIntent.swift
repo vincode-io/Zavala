@@ -7,8 +7,10 @@
 
 import Foundation
 import AppIntents
+import VinOutlineKit
+import VinUtility
 
-struct GetOutlinesAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent {
+struct GetOutlinesAppIntent: AppIntent, CustomIntentMigratedAppIntent, ZavalaAppIntent {
     static let intentClassName = "GetOutlinesIntent"
     static let title: LocalizedStringResource = "Get Outlines"
     static let description = IntentDescription("Get outlines based on search criteria.")
@@ -19,25 +21,11 @@ struct GetOutlinesAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictab
     @Parameter(title: "Account Type")
 	var accountType: AccountTypeAppEnum?
 
-    @Parameter(title: "Tag", optionsProvider: tagStringOptionsProvider())
+    @Parameter(title: "Tag", optionsProvider: TagStringOptionsProvider())
     var tagNames: [String]?
 
-    struct tagStringOptionsProvider: DynamicOptionsProvider {
-        func results() async throws -> [String] {
-            // TODO: Return possible options here.
-            return []
-        }
-    }
-
-    @Parameter(title: "Outline", optionsProvider: outlineStringOptionsProvider())
+    @Parameter(title: "Outline", optionsProvider: OutlineStringOptionsProvider())
     var outlineNames: [String]?
-
-    struct outlineStringOptionsProvider: DynamicOptionsProvider {
-        func results() async throws -> [String] {
-            // TODO: Return possible options here.
-            return []
-        }
-    }
 
     @Parameter(title: "Created Start Date")
     var createdStartDate: DateComponents?
@@ -64,60 +52,136 @@ struct GetOutlinesAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictab
         }
     }
 
-    static var predictionConfiguration: some IntentPredictionConfiguration {
-        IntentPrediction(parameters: (\.$accountType, \.$outlineNames, \.$tagNames, \.$createdStartDate, \.$createdEndDate, \.$updatedStartDate, \.$updatedEndDate, \.$search)) { accountType, outlineNames, tagNames, createdStartDate, createdEndDate, updatedStartDate, updatedEndDate, search in
-            DisplayRepresentation(
-                title: "Get Outlines",
-                subtitle: ""
-            )
-        }
-    }
+	func perform() async throws -> some IntentResult & ReturnsValue<[OutlineAppEntity]> {
+        await resume()
 
-	func perform() async throws -> some IntentResult & ReturnsValue<OutlineAppEntity> {
-        // TODO: Place your refactored intent handler code here.
-		return .result(value: OutlineAppEntity(/* fill in result initializer here */))
+		guard let searchText = search, !searchText.isEmpty else {
+			let outlines = await filter(documents: AccountManager.shared.documents)
+			await suspend()
+			return .result(value: outlines)
+		}
+
+		let searchContainer = await Search(searchText: searchText)
+		let documents = try await searchContainer.documents
+		let outlines = await filter(documents: documents)
+
+		await suspend()
+		return .result(value: outlines)
     }
+	
 }
 
-private extension IntentDialog {
-    static func searchParameterPrompt(search: String) -> Self {
-        "What is the \(search)criteria?"
-    }
-	static func accountTypeParameterDisambiguationIntro(count: Int, accountType: AccountTypeAppEnum) -> Self {
-        "There are \(count) options matching ‘\(accountType)’."
-    }
-	static func accountTypeParameterConfirmation(accountType: AccountTypeAppEnum) -> Self {
-        "Just to confirm, you wanted ‘\(accountType)’?"
-    }
-    static func tagNamesParameterConfiguration(tagNames: String) -> Self {
-        "Select a\(tagNames)"
-    }
-    static func tagNamesParameterPrompt(tagNames: String) -> Self {
-        "What is the \(tagNames)?"
-    }
-    static func tagNamesParameterDisambiguationIntro(count: Int, tagNames: String) -> Self {
-        "There are \(count) options matching ‘\(tagNames)’."
-    }
-    static func tagNamesParameterConfirmation(tagNames: String) -> Self {
-        "Just to confirm, you wanted ‘\(tagNames)’?"
-    }
-    static func outlineNamesParameterConfiguration(outlineNames: String) -> Self {
-        "Select an \(outlineNames)"
-    }
-    static func outlineNamesParameterPrompt(outlineNames: String) -> Self {
-        "What is the \(outlineNames)?"
-    }
-    static func createdStartDateParameterPrompt(createdStartDate: DateComponents) -> Self {
-		"What is the \(String(describing: createdStartDate))?"
-    }
-    static func createdEndDateParameterPrompt(createdEndDate: DateComponents) -> Self {
-        "What is the \(String(describing: createdEndDate))?"
-    }
-    static func updatedStartDateParameterPrompt(updatedStartDate: DateComponents) -> Self {
-        "What is the \(String(describing: updatedStartDate))?"
-    }
-    static func updatedEndDateParameterPrompt(updatedEndDate: DateComponents) -> Self {
-        "What is the \(String(describing: updatedEndDate))?"
-    }
-}
+// MARK: Helpers
 
+private extension GetOutlinesAppIntent {
+	
+	struct TagStringOptionsProvider: DynamicOptionsProvider, ZavalaAppIntent {
+
+		@MainActor
+		func results() async throws -> [String] {
+			resume()
+			let results = Set(AccountManager.shared.activeTags.compactMap({ $0.name }))
+			await suspend()
+			return results.sorted(by: { $0.caseInsensitiveCompare($1) == .orderedAscending })
+		}
+
+	}
+
+	struct OutlineStringOptionsProvider: DynamicOptionsProvider, ZavalaAppIntent {
+		
+		@MainActor
+		func results() async throws -> [String] {
+			resume()
+			let results = Set(AccountManager.shared.activeDocuments.compactMap({ $0.title ?? "" as String }))
+			await suspend()
+			return results.sorted(by: { $0.caseInsensitiveCompare($1) == .orderedAscending })
+		}
+		
+	}
+
+	@MainActor
+	func filter(documents: [Document]) async -> [OutlineAppEntity] {
+		var documents = documents
+		
+		switch accountType {
+		case .onMyDevice:
+			documents = documents.filter { $0.id.accountID == AccountType.local.rawValue }
+		case .iCloud:
+			documents = documents.filter { $0.id.accountID == AccountType.cloudKit.rawValue }
+		default:
+			break
+		}
+		
+		if let outlineNames, !outlineNames.isEmpty {
+			var foundDocuments = Set<Document>()
+			for outlineName in outlineNames {
+				for document in documents {
+					if outlineName.caseInsensitiveCompare(document.title ?? "") == .orderedSame {
+						foundDocuments.insert(document)
+					}
+				}
+			}
+			documents = Array(foundDocuments)
+		}
+
+		if let tagNames, !tagNames.isEmpty {
+			var foundDocuments = Set<Document>()
+			for tagName in tagNames {
+				for document in documents {
+					for tag in document.tags ?? [Tag]() {
+						if tagName.caseInsensitiveCompare(tag.name) == .orderedSame {
+							foundDocuments.insert(document)
+						}
+					}
+				}
+			}
+			documents = Array(foundDocuments)
+		}
+		
+		if let createdStartDate = createdStartDate?.startOfDay {
+			var foundDocuments = Set<Document>()
+			for document in documents {
+				if let createdDate = document.created, Calendar.current.compare(createdStartDate, to: createdDate, toGranularity: .day) != .orderedDescending {
+					foundDocuments.insert(document)
+				}
+			}
+			documents = Array(foundDocuments)
+		}
+
+		if let createdEndDate = createdEndDate?.startOfDay {
+			var foundDocuments = Set<Document>()
+			for document in documents {
+				if let createdDate = document.created, Calendar.current.compare(createdEndDate, to: createdDate, toGranularity: .day) != .orderedAscending {
+					foundDocuments.insert(document)
+				}
+			}
+			documents = Array(foundDocuments)
+		}
+
+		
+		if let updatedStartDate = updatedStartDate?.startOfDay {
+			var foundDocuments = Set<Document>()
+			for document in documents {
+				if let updatedDate = document.updated, Calendar.current.compare(updatedStartDate, to: updatedDate, toGranularity: .day) != .orderedDescending {
+					foundDocuments.insert(document)
+				}
+			}
+			documents = Array(foundDocuments)
+		}
+
+		if let updatedEndDate = updatedEndDate?.startOfDay {
+			var foundDocuments = Set<Document>()
+			for document in documents {
+				if let updatedDate = document.updated, Calendar.current.compare(updatedEndDate, to: updatedDate, toGranularity: .day) != .orderedAscending {
+					foundDocuments.insert(document)
+				}
+			}
+			documents = Array(foundDocuments)
+		}
+		
+		documents = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare(($1.title ?? "")) == .orderedAscending })
+		
+		return documents.compactMap({ $0.outline }).map({ OutlineAppEntity(outline: $0) })
+	}
+	
+}

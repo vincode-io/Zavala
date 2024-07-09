@@ -35,9 +35,9 @@ struct AddRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
         }
     }
 
-	func perform() async throws -> some IntentResult & ReturnsValue<RowAppEntity> {
+	func perform() async throws -> some IntentResult & ReturnsValue<[RowAppEntity]> {
         // TODO: Place your refactored intent handler code here.
-		return .result(value: RowAppEntity(/* fill in result initializer here */))
+		return .result(value: [RowAppEntity(/* fill in result initializer here */)])
     }
 }
 

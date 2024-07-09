@@ -41,6 +41,10 @@ public final class AccountManager {
 		return sort(activeAccounts)
 	}
 	
+	public var activeTags: [Tag] {
+		return activeAccounts.reduce(into: [Tag]()) { $0.append(contentsOf: $1.tags ?? [Tag]() ) }
+	}
+	
 	public var documents: [Document] {
 		return accounts.reduce(into: [Document]()) { $0.append(contentsOf: $1.documents ?? [Document]() ) }
 	}

@@ -972,12 +972,6 @@
     "Select" : {
       "comment" : "Control Label: Select"
     },
-    "Select a%@" : {
-
-    },
-    "Select an %@" : {
-
-    },
     "Set %@ of %@" : {
       "localizations" : {
         "en" : {
@@ -1248,12 +1242,6 @@
 
     },
     "What is the %@ to remove?" : {
-
-    },
-    "What is the %@?" : {
-
-    },
-    "What is the %@criteria?" : {
 
     },
     "What is the ownerURL" : {
