@@ -885,6 +885,9 @@
         }
       }
     },
+    "Remove ${outline}" : {
+
+    },
     "Remove ${rows}" : {
 
     },
@@ -905,12 +908,6 @@
     },
     "Remove Tag" : {
       "comment" : "Control Label: Remove Tag"
-    },
-    "Remove%@" : {
-
-    },
-    "Remove${outline}" : {
-
     },
     "Removes a Tag from the given Outline." : {
 
