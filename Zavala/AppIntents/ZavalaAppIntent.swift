@@ -31,9 +31,8 @@ extension ZavalaAppIntent {
 	}
 	
 	@MainActor
-	func findOutline(_ entityID: EntityIDAppEntity?) -> Outline? {
-		guard let id = entityID?.entityID,
-			  let outline = AccountManager.shared.findDocument(id)?.outline else {
+	func findOutline(_ entityID: EntityID?) -> Outline? {
+		guard let entityID, let outline = AccountManager.shared.findDocument(entityID)?.outline else {
 			return nil
 		}
 		return outline
@@ -41,24 +40,30 @@ extension ZavalaAppIntent {
 }
 
 enum ZavalaAppIntentError: Error, CustomLocalizedStringResourceConvertible {
-	case unexpectedError
+	case invalidDestinationForOutline
 	case outlineNotBeingViewed
 	case outlineNotFound
 	case noTagsSelected
+	case rowContainerNotFound
 	case unavailableAccount
-	
+	case unexpectedError
+
 	var localizedStringResource: LocalizedStringResource {
 		switch self {
-		case .unexpectedError:
-			return "An unexpected error occurred. Please try again."
+		case .invalidDestinationForOutline:
+			return "The specified Destination is not a valid for the Outline specified by the Entity ID."
 		case .outlineNotBeingViewed:
 			return "There isn't an Outline currently being viewed."
 		case .outlineNotFound:
 			return "The requested Outline was not found."
 		case .noTagsSelected:
 			return "No Tags are currently selected."
+		case .rowContainerNotFound:
+			return "Unable to find the Outline or Row specified by the Entity ID."
 		case .unavailableAccount:
 			return "The specified Account isn't available to be used."
+		case .unexpectedError:
+			return "An unexpected error occurred. Please try again."
 		}
 		
 	}

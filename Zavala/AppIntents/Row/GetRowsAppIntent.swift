@@ -7,6 +7,7 @@
 
 import Foundation
 import AppIntents
+import VinOutlineKit
 
 struct GetRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent {
     static let intentClassName = "GetRowsIntent"
@@ -14,7 +15,7 @@ struct GetRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
     static let description = IntentDescription("Get Rows from an Outline.")
 
     @Parameter(title: "Entity ID")
-	var entityID: EntityIDAppEntity?
+	var entityID: EntityID
 
     @Parameter(title: "Search")
     var search: String?
@@ -35,7 +36,7 @@ struct GetRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
     var expandedState: RowExpandedStateAppEnum?
 
     @Parameter(title: "Excluded Rows")
-	var excludedRows: [EntityIDAppEntity]?
+	var excludedRows: [EntityID]?
 
     static var parameterSummary: some ParameterSummary {
         Summary("Get Rows matching \(\.$search) starting at \(\.$entityID)") {
@@ -51,7 +52,7 @@ struct GetRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$entityID, \.$search, \.$regularExpression, \.$completionState, \.$expandedState, \.$excludedRows, \.$startDepth, \.$endDepth)) { entityID, search, regularExpression, completionState, expandedState, excludedRows, startDepth, endDepth in
             DisplayRepresentation(
-                title: "Get Rows matching \(search!) starting at \(entityID!)",
+                title: "Get Rows matching \(search!) starting at \(entityID)",
                 subtitle: ""
             )
         }

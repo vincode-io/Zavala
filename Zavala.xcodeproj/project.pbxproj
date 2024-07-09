@@ -109,7 +109,7 @@
 		51A6A3132C39E8B3002AFEC1 /* GetImagesForOutlineAppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A6A2D92C39E63B002AFEC1 /* GetImagesForOutlineAppIntent.swift */; };
 		51A6A3142C39E8B3002AFEC1 /* RowDetailAppEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A6A2E72C39E63B002AFEC1 /* RowDetailAppEnum.swift */; };
 		51A6A3152C39E8B3002AFEC1 /* AddRowsAppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A6A2D02C39E63B002AFEC1 /* AddRowsAppIntent.swift */; };
-		51A6A3162C39E8B3002AFEC1 /* EntityIDAppEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B4B4A72C334D75005DCCEB /* EntityIDAppEntity.swift */; };
+		51A6A3162C39E8B3002AFEC1 /* EntityID+AppEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B4B4A72C334D75005DCCEB /* EntityID+AppEntity.swift */; };
 		51A6A3172C39E8B3002AFEC1 /* RemoveOutlineAppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A6A2E12C39E63B002AFEC1 /* RemoveOutlineAppIntent.swift */; };
 		51A6A3182C39E8B3002AFEC1 /* AddOutlineAppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A6A2CE2C39E63B002AFEC1 /* AddOutlineAppIntent.swift */; };
 		51A6A3192C39E8B3002AFEC1 /* GetOutlinesAppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A6A2DA2C39E63B002AFEC1 /* GetOutlinesAppIntent.swift */; };
@@ -365,7 +365,7 @@
 		51B2B2CD2563AAF60090C56B /* EditorRowContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowContentConfiguration.swift; sourceTree = "<group>"; };
 		51B4B4A22C33402E005DCCEB /* GetCurrentOutlineAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentOutlineAppIntent.swift; sourceTree = "<group>"; };
 		51B4B4A32C33402E005DCCEB /* OutlineAppEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineAppEntity.swift; sourceTree = "<group>"; };
-		51B4B4A72C334D75005DCCEB /* EntityIDAppEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityIDAppEntity.swift; sourceTree = "<group>"; };
+		51B4B4A72C334D75005DCCEB /* EntityID+AppEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntityID+AppEntity.swift"; sourceTree = "<group>"; };
 		51B4B4E72C349ECC005DCCEB /* ZavalaAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZavalaAppIntent.swift; sourceTree = "<group>"; };
 		51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDisclosureButton.swift; sourceTree = "<group>"; };
 		51BAEA8E2717AA74004F1E84 /* GetRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRowsIntentHandler.swift; sourceTree = "<group>"; };
@@ -744,7 +744,7 @@
 			isa = PBXGroup;
 			children = (
 				51A6A2CD2C39E63B002AFEC1 /* AccountTypeAppEnum.swift */,
-				51B4B4A72C334D75005DCCEB /* EntityIDAppEntity.swift */,
+				51B4B4A72C334D75005DCCEB /* EntityID+AppEntity.swift */,
 				51A6A2D62C39E63B002AFEC1 /* ExportLinkTypeAppEnum.swift */,
 				51A6A2D72C39E63B002AFEC1 /* ExportTypeAppEnum.swift */,
 				51A6A2DD2C39E63B002AFEC1 /* ImportTypeAppEnum.swift */,
@@ -1182,7 +1182,7 @@
 				51A6A3132C39E8B3002AFEC1 /* GetImagesForOutlineAppIntent.swift in Sources */,
 				51A6A3142C39E8B3002AFEC1 /* RowDetailAppEnum.swift in Sources */,
 				51A6A3152C39E8B3002AFEC1 /* AddRowsAppIntent.swift in Sources */,
-				51A6A3162C39E8B3002AFEC1 /* EntityIDAppEntity.swift in Sources */,
+				51A6A3162C39E8B3002AFEC1 /* EntityID+AppEntity.swift in Sources */,
 				51A6A3172C39E8B3002AFEC1 /* RemoveOutlineAppIntent.swift in Sources */,
 				51A6A3182C39E8B3002AFEC1 /* AddOutlineAppIntent.swift in Sources */,
 				51A6A3192C39E8B3002AFEC1 /* GetOutlinesAppIntent.swift in Sources */,

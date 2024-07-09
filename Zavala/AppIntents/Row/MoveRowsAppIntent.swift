@@ -7,6 +7,7 @@
 
 import Foundation
 import AppIntents
+import VinOutlineKit
 
 struct MoveRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent {
     static let intentClassName = "MoveRowsIntent"
@@ -17,7 +18,7 @@ struct MoveRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 	var rows: [RowAppEntity]?
 
     @Parameter(title: "Entity ID")
-	var entityID: EntityIDAppEntity?
+	var entityID: EntityID
 
     @Parameter(title: "Destination")
     var destination: RowDestinationAppEnum?
@@ -29,7 +30,7 @@ struct MoveRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$rows, \.$entityID, \.$destination)) { rows, entityID, destination in
             DisplayRepresentation(
-                title: "Move \(rows!, format: .list(type: .and)) to \(entityID!) at \(destination!)",
+                title: "Move \(rows!, format: .list(type: .and)) to \(entityID) at \(destination!)",
                 subtitle: ""
             )
         }

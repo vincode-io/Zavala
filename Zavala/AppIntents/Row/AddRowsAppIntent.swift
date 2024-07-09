@@ -7,20 +7,21 @@
 
 import Foundation
 import AppIntents
+import VinOutlineKit
 
-struct AddRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent {
+struct AddRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "AddRowsIntent"
     static let title: LocalizedStringResource = "Add Rows"
     static let description = IntentDescription("Add Rows to an Outline.")
 
     @Parameter(title: "Entity ID")
-	var entityID: EntityIDAppEntity?
+	var entityID: EntityID
 
     @Parameter(title: "Destination")
-    var destination: RowDestinationAppEnum?
+    var destination: RowDestinationAppEnum
 
     @Parameter(title: "Topics")
-    var topics: [String]?
+    var topics: [String]
 
     static var parameterSummary: some ParameterSummary {
         Summary("Add \(\.$topics) to \(\.$entityID) at \(\.$destination)")
@@ -29,30 +30,59 @@ struct AddRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$entityID, \.$destination, \.$topics)) { entityID, destination, topics in
             DisplayRepresentation(
-                title: "Add \(topics!, format: .list(type: .and)) to \(entityID!) at \(destination!)",
+                title: "Add \(topics, format: .list(type: .and)) to \(entityID) at \(destination)",
                 subtitle: ""
             )
         }
     }
 
+	@MainActor
 	func perform() async throws -> some IntentResult & ReturnsValue<[RowAppEntity]> {
-        // TODO: Place your refactored intent handler code here.
-		return .result(value: [RowAppEntity(/* fill in result initializer here */)])
+		resume()
+		
+		guard let outline = findOutline(entityID) else {
+			await suspend()
+			throw ZavalaAppIntentError.outlineNotFound
+		}
+		
+		outline.load()
+	
+		guard let rowContainer = outline.findRowContainer(entityID: entityID) else {
+			await outline.unload()
+			await suspend()
+			throw ZavalaAppIntentError.rowContainerNotFound
+		}
+
+		
+		let rows = topics.map { Row(outline: outline, topicMarkdown: $0) }
+		
+		rows.forEach({ $0.detectData() })
+		
+		switch destination {
+		case .insideAtStart:
+			outline.createRowsInsideAtStart(rows, afterRowContainer: rowContainer)
+		case .insideAtEnd:
+			outline.createRowsInsideAtEnd(rows, afterRowContainer: rowContainer)
+		case .outside:
+			if let afterRow = rowContainer as? Row {
+				outline.createRowsOutside(rows, afterRow: afterRow)
+			} else {
+				await outline.unload()
+				await suspend()
+				throw ZavalaAppIntentError.invalidDestinationForOutline
+			}
+		case .directlyAfter:
+			if let afterRow = rowContainer as? Row {
+				outline.createRowsDirectlyAfter(rows, afterRow: afterRow)
+			} else {
+				await outline.unload()
+				await suspend()
+				throw ZavalaAppIntentError.invalidDestinationForOutline
+			}
+		}
+		
+		await outline.unload()
+		await suspend()
+		return .result(value: rows.map({RowAppEntity(row: $0)}))
     }
 }
-
-private extension IntentDialog {
-    static func destinationParameterDisambiguationIntro(count: Int, destination: RowDestinationAppEnum) -> Self {
-        "There are \(count) options matching ‘\(destination)’."
-    }
-    static func destinationParameterConfirmation(destination: RowDestinationAppEnum) -> Self {
-        "Just to confirm, you wanted ‘\(destination)’?"
-    }
-    static func topicsParameterPrompt(topics: String) -> Self {
-        "What are the \(topics) you would like add?"
-    }
-    static func topicsParameterRequired(topics: String) -> Self {
-        "At least one \(topics) is required."
-    }
-}
-

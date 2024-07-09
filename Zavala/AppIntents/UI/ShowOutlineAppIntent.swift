@@ -33,10 +33,6 @@ struct ShowOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictab
 
 	@MainActor
 	func perform() async throws -> some IntentResult {
-		guard let entityID = outline.id.entityID else {
-			throw ZavalaAppIntentError.unexpectedError
-		}
-
 		#if targetEnvironment(macCatalyst)
 		defer {
 			appDelegate.appKitPlugin?.activateIgnoringOtherApps()
@@ -47,13 +43,13 @@ struct ShowOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictab
 			  let mainSplitViewController = appDelegate.mainCoordinator as? MainSplitViewController else {
 			
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(documentID: entityID).userInfo]
+			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(documentID: outline.id).userInfo]
 			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 
 			return .result()
 		}
 		
-		await mainSplitViewController.handleDocument(entityID, isNavigationBranch: false)
+		await mainSplitViewController.handleDocument(outline.id, isNavigationBranch: false)
 	
         return .result()
     }

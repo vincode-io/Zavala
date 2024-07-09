@@ -14,10 +14,10 @@ struct OutlineAppEntity: AppEntity {
 	static let defaultQuery = OutlineEntityQuery()
 	
     @Property(title: "ID")
-    var id: EntityIDAppEntity
+    var id: EntityID
 
 	@Property(title: "Entity ID")
-	var entityID: EntityIDAppEntity
+	var entityID: EntityID
 
     @Property(title: "Title")
     var title: String?
@@ -43,7 +43,7 @@ struct OutlineAppEntity: AppEntity {
 
 	@MainActor
 	init(outline: Outline) {
-		self.id = EntityIDAppEntity(entityID: outline.id)
+		self.id = outline.id
 		self.entityID = self.id
 		self.title = outline.title
 		self.ownerName = outline.ownerName
@@ -54,12 +54,12 @@ struct OutlineAppEntity: AppEntity {
 	
 	struct OutlineEntityQuery: EntityStringQuery, ZavalaAppIntent {
 	
-		func entities(for identifiers: [OutlineAppEntity.ID]) async -> [OutlineAppEntity] {
+		func entities(for entityIDs: [OutlineAppEntity.ID]) async -> [OutlineAppEntity] {
 			await resume()
 			
 			var results = [OutlineAppEntity]()
-			for identifier in identifiers {
-				if let entityID = identifier.entityID, let outline = await AccountManager.shared.findDocument(entityID)?.outline {
+			for entityID in entityIDs {
+				if let outline = await AccountManager.shared.findDocument(entityID)?.outline {
 					await results.append(OutlineAppEntity(outline: outline))
 				}
 			}
