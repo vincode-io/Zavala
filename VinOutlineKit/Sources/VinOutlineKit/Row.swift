@@ -397,12 +397,12 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		self.rowOrder = coder.rowOrder
 	}
 	
-	public func topicMarkdown(representation: DataRepresentation, useAltLinks: Bool = false) -> String? {
-		return convertAttrString(topic, isInNotes: false, representation: representation, useAltLinks: useAltLinks)
+	public func topicMarkdown(type: UTType, useAltLinks: Bool = false) -> String? {
+		return convertAttrString(topic, isInNotes: false, type: type, useAltLinks: useAltLinks)
 	}
 	
-	public func noteMarkdown(representation: DataRepresentation, useAltLinks: Bool = false) -> String? {
-		return convertAttrString(note, isInNotes: true, representation: representation, useAltLinks: useAltLinks)
+	public func noteMarkdown(type: UTType, useAltLinks: Bool = false) -> String? {
+		return convertAttrString(note, isInNotes: true, type: type, useAltLinks: useAltLinks)
 	}
 	
 	public func duplicate(newOutline: Outline) -> Row {
@@ -725,7 +725,7 @@ private extension Row {
 		return (mutableAttrString, images)
 	}
 	
-	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, representation: DataRepresentation, useAltLinks: Bool) -> String? {
+	func convertAttrString(_ attrString: NSAttributedString?, isInNotes: Bool, type: UTType, useAltLinks: Bool) -> String? {
 		guard let attrString else { return nil	}
 
 		let result = NSMutableAttributedString(attributedString: attrString)
@@ -735,7 +735,7 @@ private extension Row {
 				guard let url = value as? URL,
 					  let entityID = EntityID(url: url),
 					  let document = AccountManager.shared.findDocument(entityID),
-					  let newURL = URL(string: document.filename(representation: representation)) else { return }
+					  let newURL = URL(string: document.filename(type: type)) else { return }
 				
 				result.removeAttribute(.link, range: range)
 				result.addAttribute(.link, value: newURL, range: range)

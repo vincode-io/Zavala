@@ -371,7 +371,7 @@ extension MainCoordinator {
             let textView = UITextView()
             textView.attributedText = pdf.attrString
             let data = textView.generatePDF()
-			let filename = pdf.outline.filename(representation: DataRepresentation.pdf)
+			let filename = pdf.outline.filename(type: .pdf)
             exports.append((data: data, filename: filename))
         }
 		
@@ -381,7 +381,7 @@ extension MainCoordinator {
 	func exportMarkdownDocsForOutlines(_ outlines: [Outline]) {
         export(outlines.compactMap {
             if let data = $0.markdownDoc().data(using: .utf8) {
-				return (data: data, filename: $0.filename(representation: DataRepresentation.markdown))
+				return (data: data, filename: $0.filename(type: .markdown))
             }
             return nil
         })
@@ -390,7 +390,7 @@ extension MainCoordinator {
 	func exportMarkdownListsForOutlines(_ outlines: [Outline]) {
         export(outlines.compactMap {
             if let data = $0.markdownList().data(using: .utf8) {
-                return (data: data, filename: $0.filename(representation: DataRepresentation.markdown))
+                return (data: data, filename: $0.filename(type: .markdown))
             }
             return nil
         })
@@ -399,7 +399,7 @@ extension MainCoordinator {
 	func exportOPMLsForOutlines(_ outlines: [Outline]) {
         export(outlines.compactMap {
             if let data = $0.opml().data(using: .utf8) {
-				return (data: data, filename: $0.filename(representation: DataRepresentation.opml))
+				return (data: data, filename: $0.filename(type: .opml))
             }
             return nil
         })

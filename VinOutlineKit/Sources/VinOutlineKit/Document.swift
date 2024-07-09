@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 import CloudKit
 
 public extension Notification.Name {
@@ -340,10 +341,10 @@ public enum Document: Equatable, Hashable {
 		}
 	}
 	
-	public func filename(representation: DataRepresentation) -> String {
+	public func filename(type: UTType) -> String {
 		switch self {
 		case .outline(let outline):
-			return outline.filename(representation: representation)
+			return outline.filename(type: type)
 		case .dummy:
 			fatalError("The dummy document shouldn't be accessed in this way.")
 		}

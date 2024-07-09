@@ -10,6 +10,7 @@ import UIKit
 #else
 import Foundation
 #endif
+import UniformTypeIdentifiers
 import OSLog
 import CloudKit
 import OrderedCollections
@@ -841,7 +842,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return tagIDs.contains(tag.id)
 	}
 	
-	public func filename(representation: DataRepresentation) -> String {
+	public func filename(type: UTType) -> String {
 		var filename = title ?? "Outline"
 		
 		filename = filename
@@ -853,7 +854,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			filename = "\(filename)-\(disambiguator)"
 		}
 		
-		filename = "\(filename).\(representation.suffix)"
+		filename = "\(filename).\(type.preferredFilenameExtension!)"
 		return filename
 	}
 		

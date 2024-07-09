@@ -6,8 +6,10 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 import CloudKit
 import VinOutlineKit
+import VinUtility
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -110,7 +112,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			return
 		}
 		
-		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == DataRepresentation.opml.suffix }).map({ $0.url })
+		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == UTType.opml.preferredFilenameExtension }).map({ $0.url })
 		mainSplitViewController.importOPMLs(urls: opmlURLs)
 		
 		#if targetEnvironment(macCatalyst)

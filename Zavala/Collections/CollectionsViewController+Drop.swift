@@ -6,13 +6,15 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 import VinOutlineKit
+import VinUtility
 
 extension CollectionsViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
 		guard !(session.items.first?.localObject is Document) else { return true }
-		return session.hasItemsConforming(toTypeIdentifiers: [DataRepresentation.opml.typeIdentifier])
+		return session.hasItemsConforming(toTypeIdentifiers: [UTType.opml.identifier])
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
@@ -59,7 +61,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 		guard coordinator.items.first?.dragItem.localObject != nil else {
 			for dropItem in coordinator.items {
 				let provider = dropItem.dragItem.itemProvider
-				provider.loadDataRepresentation(forTypeIdentifier: DataRepresentation.opml.typeIdentifier) { (opmlData, error) in
+				provider.loadDataRepresentation(forTypeIdentifier: UTType.opml.identifier) { (opmlData, error) in
 					guard let opmlData else { return }
 					Task { @MainActor in
 						if let document = try? await account.importOPML(opmlData, tags: tags) {

@@ -433,20 +433,20 @@
     "Export PDF List…" : {
       "comment" : "Control Label: Export PDF List…"
     },
-    "Export the outline in various formats." : {
-
-    },
-    "Export the%@as %@using %@" : {
+    "Export the %@ as %@ using %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Export the%1$@as %2$@using %3$@"
+            "value" : "Export the %1$@ as %2$@ using %3$@"
           }
         }
       }
     },
-    "Export the${outline}as ${exportType}using ${exportLinkType}" : {
+    "Export the ${outline} as ${exportType} using ${exportLinkType}" : {
+
+    },
+    "Export the outline in various formats." : {
 
     },
     "Export Type" : {
