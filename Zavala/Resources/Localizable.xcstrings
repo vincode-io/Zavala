@@ -594,18 +594,18 @@
     "Import OPML…" : {
       "comment" : "Control Label: Import OPML…"
     },
-    "Import the ${importType} ${inputFile} into ${accountType}" : {
-
-    },
-    "Import the%@%@into%@" : {
+    "Import the %@ %@ into %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Import the%1$@%2$@into%3$@"
+            "value" : "Import the %1$@ %2$@ into %3$@"
           }
         }
       }
+    },
+    "Import the ${importType} ${inputFile} into ${accountType}" : {
+
     },
     "Import Type" : {
 
@@ -808,9 +808,6 @@
     },
     "Pink" : {
       "comment" : "Control Label: Pink"
-    },
-    "Please supply the Input File." : {
-
     },
     "Preferences…" : {
       "comment" : "Control Label: Preferences…"
@@ -1090,12 +1087,6 @@
       "comment" : "Control Label: Tertiary Text"
     },
     "The %@ is required." : {
-
-    },
-    "The Account Type is required." : {
-
-    },
-    "The Import Type is required." : {
 
     },
     "The outline will be deleted and unrecoverable." : {
