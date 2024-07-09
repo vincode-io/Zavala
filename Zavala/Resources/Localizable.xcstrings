@@ -992,26 +992,6 @@
         }
       }
     },
-    "Set %@of %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Set %1$@of %2$@"
-          }
-        }
-      }
-    },
-    "Set %@of %@to %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Set %1$@of %2$@to %3$@"
-          }
-        }
-      }
-    },
     "Set ${detail} of ${outline}" : {
 
     },
@@ -1042,22 +1022,12 @@
     "Set ${detail} of ${rows} to ${topic}" : {
 
     },
-    "Set%@of%@to %@" : {
+    "Set%@ of%@ to %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Set%1$@of%2$@to %3$@"
-          }
-        }
-      }
-    },
-    "Set%@of%@to%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Set%1$@of%2$@to%3$@"
+            "value" : "Set%1$@ of%2$@ to %3$@"
           }
         }
       }
@@ -1225,9 +1195,6 @@
     "What are the %@ you would like add?" : {
 
     },
-    "What is the %@" : {
-
-    },
     "What is the %@ %@" : {
       "localizations" : {
         "en" : {
@@ -1242,9 +1209,6 @@
 
     },
     "What is the %@ to remove?" : {
-
-    },
-    "What is the ownerURL" : {
 
     },
     "What is the title for the new Outline?" : {

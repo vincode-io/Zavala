@@ -8,16 +8,16 @@
 import Foundation
 import AppIntents
 
-struct EditOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent {
+struct EditOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "EditOutlineIntent"
     static let title: LocalizedStringResource = "Edit Outline"
     static let description = IntentDescription("Update the details of an Outline.")
 
     @Parameter(title: "Outline")
-	var outline: OutlineAppEntity?
+	var outline: OutlineAppEntity
 
     @Parameter(title: "Detail")
-    var detail: OutlineDetailAppEnum?
+    var detail: OutlineDetailAppEnum
 
     @Parameter(title: "Title")
     var title: String?
@@ -54,60 +54,56 @@ struct EditOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictab
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$outline, \.$detail, \.$ownerName)) { outline, detail, ownerName in
             DisplayRepresentation(
-                title: "Set \(detail!)of \(outline!)to \(ownerName!)",
+                title: "Set \(detail) of \(outline) to \(ownerName!)",
                 subtitle: ""
             )
         }
         IntentPrediction(parameters: (\.$outline, \.$detail, \.$ownerURL)) { outline, detail, ownerURL in
             DisplayRepresentation(
-                title: "Set \(detail!)of \(outline!)to \(ownerURL!)",
+                title: "Set \(detail) of \(outline) to \(ownerURL!)",
                 subtitle: ""
             )
         }
         IntentPrediction(parameters: (\.$outline, \.$detail, \.$title)) { outline, detail, title in
             DisplayRepresentation(
-                title: "Set\(detail!)of\(outline!)to\(title!)",
+                title: "Set\(detail) of\(outline) to \(title!)",
                 subtitle: ""
             )
         }
         IntentPrediction(parameters: (\.$outline, \.$detail, \.$ownerEmail)) { outline, detail, ownerEmail in
             DisplayRepresentation(
-                title: "Set\(detail!)of\(outline!)to \(ownerEmail!)",
+                title: "Set\(detail) of\(outline) to \(ownerEmail!)",
                 subtitle: ""
             )
         }
         IntentPrediction(parameters: (\.$outline, \.$detail)) { outline, detail in
             DisplayRepresentation(
-                title: "Set \(detail!)of \(outline!)",
+                title: "Set \(detail) of \(outline)",
                 subtitle: ""
             )
         }
     }
 
 	func perform() async throws -> some IntentResult & ReturnsValue<OutlineAppEntity> {
-        // TODO: Place your refactored intent handler code here.
-        return .result(value: OutlineAppEntity(/* fill in result initializer here */))
+		await resume()
+		
+		guard let outline = await findOutline(outline) else {
+			await suspend()
+			throw ZavalaAppIntentError.unexpectedError
+		}
+		
+		switch detail {
+		case .title:
+			await outline.update(title: title)
+		case .ownerName:
+			await outline.update(ownerName: ownerName)
+		case .ownerEmail:
+			await outline.update(ownerEmail: ownerEmail)
+		case .ownerURL:
+			await outline.update(ownerURL: ownerURL)
+		}
+		
+		await suspend()
+		return await .result(value: OutlineAppEntity(outline: outline))
     }
 }
-
-private extension IntentDialog {
-    static func detailParameterDisambiguationIntro(count: Int, detail: OutlineDetailAppEnum) -> Self {
-        "There are \(count) options matching ‘\(detail)’."
-    }
-    static func detailParameterConfirmation(detail: OutlineDetailAppEnum) -> Self {
-        "Just to confirm, you wanted ‘\(detail)’?"
-    }
-    static func titleParameterPrompt(title: String) -> Self {
-        "What is the \(title)"
-    }
-    static func ownerNameParameterPrompt(ownerName: String) -> Self {
-        "What is the \(ownerName)"
-    }
-    static func ownerEmailParameterPrompt(ownerEmail: String) -> Self {
-        "What is the \(ownerEmail)"
-    }
-    static var ownerURLParameterPrompt: Self {
-        "What is the ownerURL"
-    }
-}
-
