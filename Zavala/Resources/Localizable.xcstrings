@@ -1202,9 +1202,6 @@
     "What is the title for the new Outline?" : {
 
     },
-    "What is the%@term?" : {
-
-    },
     "Which Account did you want to add this Outline to?" : {
 
     },
@@ -1216,9 +1213,6 @@
     },
     "Yellow" : {
       "comment" : "Control Label: Yellow"
-    },
-    "You must specify a Row for this Destination." : {
-
     },
     "Zavala Deep Links" : {
 

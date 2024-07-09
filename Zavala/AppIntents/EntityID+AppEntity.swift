@@ -42,6 +42,6 @@ extension EntityID: @retroactive AppEntity, @retroactive EntityIdentifierConvert
 		public func entities(for identifiers: [EntityID.ID]) async throws -> [EntityID] {
 			return identifiers
 		}
-
 	}
+	
 }

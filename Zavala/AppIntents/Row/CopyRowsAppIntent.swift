@@ -15,13 +15,13 @@ struct CopyRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
     static let description = IntentDescription("Copy Rows in or between Outlines.")
 
     @Parameter(title: "Rows")
-	var rows: [RowAppEntity]?
+	var rows: [RowAppEntity]
 
     @Parameter(title: "Entity ID")
 	var entityID: EntityID
 
     @Parameter(title: "Destination")
-    var destination: RowDestinationAppEnum?
+    var destination: RowDestinationAppEnum
 
     static var parameterSummary: some ParameterSummary {
         Summary("Copy \(\.$rows) to \(\.$entityID) at \(\.$destination)")
@@ -30,7 +30,7 @@ struct CopyRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$rows, \.$entityID, \.$destination)) { rows, entityID, destination in
             DisplayRepresentation(
-                title: "Copy \(rows!, format: .list(type: .and)) to \(entityID) at \(destination!)",
+                title: "Copy \(rows, format: .list(type: .and)) to \(entityID) at \(destination)",
                 subtitle: ""
             )
         }
@@ -41,16 +41,3 @@ struct CopyRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 		return .result(value: [RowAppEntity(/* fill in result initializer here */)])
     }
 }
-
-private extension IntentDialog {
-    static func destinationParameterDisambiguationIntro(count: Int, destination: RowDestinationAppEnum) -> Self {
-        "There are \(count) options matching ‘\(destination)’."
-    }
-    static func destinationParameterConfirmation(destination: RowDestinationAppEnum) -> Self {
-        "Just to confirm, you wanted ‘\(destination)’?"
-    }
-    static func destinationParameterRequired(destination: RowDestinationAppEnum) -> Self {
-        "The \(destination) is required."
-    }
-}
-
