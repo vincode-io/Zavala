@@ -16,6 +16,18 @@
     "Markdown" : {
 
     },
+    "MDItemKeywords" : {
+      "comment" : "Spotlight Search Terms",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outliner"
+          }
+        }
+      }
+    },
     "NSHumanReadableCopyright" : {
       "comment" : "Copyright (human-readable)",
       "extractionState" : "extracted_with_value",
@@ -41,6 +53,12 @@
       }
     },
     "OPML" : {
+
+    },
+    "zavala outliner" : {
+
+    },
+    "Zavala Outliner" : {
 
     }
   },

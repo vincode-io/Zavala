@@ -80,6 +80,19 @@
 		<string>ShowOutlineIntent</string>
 		<string>SetOutlineTitleIntent</string>
 	</array>
+	<key>MDItemKeywords</key>
+	<array>
+		<string>Outliner</string>
+	</array>
+	<key>INAlternativeAppNames</key>
+	<array>
+		<dict>
+			<key>INAlternativeAppName</key>
+			<string>Zavala Outliner</string>
+			<key>INAlternativeAppNamePronunciationHint</key>
+			<string>zavala outliner</string>
+		</dict>
+	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>
