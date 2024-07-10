@@ -218,8 +218,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		510471BA271940E5001DEFD5 /* MoveRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveRowsIntentHandler.swift; sourceTree = "<group>"; };
-		510471BC2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveRowsIntentHandler.swift; sourceTree = "<group>"; };
 		51077C5127A752DF000C71DB /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		5109BC4F292579A30022E90B /* CopyDocumentLinkActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyDocumentLinkActivity.swift; sourceTree = "<group>"; };
 		5109BC51293445EB0022E90B /* DocumentsActivityItemsConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentsActivityItemsConfiguration.swift; sourceTree = "<group>"; };
@@ -249,7 +247,6 @@
 		51278E76257F37AC0034F1CB /* Dialog.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Dialog.storyboard; sourceTree = "<group>"; };
 		512D375025EEFC01000FA597 /* Zavala-dev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Zavala-dev.entitlements"; sourceTree = "<group>"; };
 		51341E03272B55080005425B /* InsetLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetLabel.swift; sourceTree = "<group>"; };
-		513B91692722CDC80051A6BA /* EditOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditOutlineIntentHandler.swift; sourceTree = "<group>"; };
 		513F32A12594062C0003048F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		51408FF42AEF41C8006AEE75 /* VinOutlineKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = VinOutlineKit; sourceTree = "<group>"; };
 		5142C294260AC78C0094571F /* OutlineFontConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontConfig.swift; sourceTree = "<group>"; };
@@ -302,24 +299,11 @@
 		5181A96A2554D93B00C153E8 /* Zavala.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Zavala.entitlements; sourceTree = "<group>"; };
 		5188FAA82602A9CE0020B7DA /* OutlineEditor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OutlineEditor.storyboard; sourceTree = "<group>"; };
 		518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistentCollectionViewListCell.swift; sourceTree = "<group>"; };
-		519184ED270FAFE100B7E177 /* GetImagesForOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetImagesForOutlineIntentHandler.swift; sourceTree = "<group>"; };
-		519184F02710792300B7E177 /* ExportIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportIntentHandler.swift; sourceTree = "<group>"; };
 		519184F227107FDA00B7E177 /* UITextView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+.swift"; sourceTree = "<group>"; };
-		519184F42710F93700B7E177 /* ImportIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportIntentHandler.swift; sourceTree = "<group>"; };
-		519184F6271115CE00B7E177 /* ShowOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowOutlineIntentHandler.swift; sourceTree = "<group>"; };
-		519184F827124E9700B7E177 /* GetOutlinesIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetOutlinesIntentHandler.swift; sourceTree = "<group>"; };
-		519185002713116B00B7E177 /* AddOutlineTagIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddOutlineTagIntentHandler.swift; sourceTree = "<group>"; };
-		519185022713146500B7E177 /* RemoveOutlineTagIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveOutlineTagIntentHandler.swift; sourceTree = "<group>"; };
 		5191850427133B4000B7E177 /* RenameTagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameTagViewController.swift; sourceTree = "<group>"; };
 		519185062713453700B7E177 /* MacRenameTagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacRenameTagViewController.swift; sourceTree = "<group>"; };
-		5191850827137DFD00B7E177 /* GetCurrentTagsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentTagsIntentHandler.swift; sourceTree = "<group>"; };
-		5191850A2713828F00B7E177 /* AddOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddOutlineIntentHandler.swift; sourceTree = "<group>"; };
-		5191850C271387C300B7E177 /* RemoveOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveOutlineIntentHandler.swift; sourceTree = "<group>"; };
-		5191850E271390F100B7E177 /* IntentEntityID+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentEntityID+.swift"; sourceTree = "<group>"; };
-		51918514271664FB00B7E177 /* AddRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRowsIntentHandler.swift; sourceTree = "<group>"; };
 		5191D43E2BA353C0004D06D9 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5192220F271E27FD000CDC1F /* EditorCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCollectionView.swift; sourceTree = "<group>"; };
-		51922211271E4AE9000CDC1F /* CopyRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyRowsIntentHandler.swift; sourceTree = "<group>"; };
 		5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuicklyViewController.swift; sourceTree = "<group>"; };
 		519672692B61B1CD006A564A /* AppKitDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppKitDefaults.swift; sourceTree = "<group>"; };
 		519897C32ADE13F3008A6FA4 /* ButtonGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonGroup.swift; sourceTree = "<group>"; };
@@ -327,7 +311,6 @@
 		519965DB2624EEE500D8468B /* RSAppMovementMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSAppMovementMonitor.swift; sourceTree = "<group>"; };
 		519A2323260A9B900056051E /* OutlineFontField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontField.swift; sourceTree = "<group>"; };
 		519D78FA2C2490ED00041506 /* RowGroup+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RowGroup+.swift"; sourceTree = "<group>"; };
-		51A1EC412723246C00463A15 /* EditRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditRowsIntentHandler.swift; sourceTree = "<group>"; };
 		51A1EC4327243B3600463A15 /* GenericRowIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericRowIdentifier.swift; sourceTree = "<group>"; };
 		51A586FB2B5898F600F1EB60 /* EditorFindSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorFindSession.swift; sourceTree = "<group>"; };
 		51A6A2CD2C39E63B002AFEC1 /* AccountTypeAppEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTypeAppEnum.swift; sourceTree = "<group>"; };
@@ -359,8 +342,6 @@
 		51A6A2E92C39E63B002AFEC1 /* ShowOutlineAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowOutlineAppIntent.swift; sourceTree = "<group>"; };
 		51AC0A8D25741CF5003A7532 /* StackedUndoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedUndoManager.swift; sourceTree = "<group>"; };
 		51AC4DCD2B360C76002FF9AD /* GetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoView.swift; sourceTree = "<group>"; };
-		51AEEC8C2703E6EB00354C59 /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
-		51AEEC8E2703EB6700354C59 /* GetCurrentOutlineIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentOutlineIntentHandler.swift; sourceTree = "<group>"; };
 		51B2B2C72563A2180090C56B /* EditorRowTopicTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowTopicTextView.swift; sourceTree = "<group>"; };
 		51B2B2CD2563AAF60090C56B /* EditorRowContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowContentConfiguration.swift; sourceTree = "<group>"; };
 		51B4B4A22C33402E005DCCEB /* GetCurrentOutlineAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentOutlineAppIntent.swift; sourceTree = "<group>"; };
@@ -368,7 +349,6 @@
 		51B4B4A72C334D75005DCCEB /* EntityID+AppEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntityID+AppEntity.swift"; sourceTree = "<group>"; };
 		51B4B4E72C349ECC005DCCEB /* ZavalaAppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZavalaAppIntent.swift; sourceTree = "<group>"; };
 		51B9D51625A9080A00579D19 /* EditorDisclosureButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDisclosureButton.swift; sourceTree = "<group>"; };
-		51BAEA8E2717AA74004F1E84 /* GetRowsIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRowsIntentHandler.swift; sourceTree = "<group>"; };
 		51C030A1257E071300609262 /* EditorTitleContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentConfiguration.swift; sourceTree = "<group>"; };
 		51C030A5257E084E00609262 /* EditorTitleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleContentView.swift; sourceTree = "<group>"; };
 		51C030B3257E192100609262 /* EditorTitleViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTitleViewCell.swift; sourceTree = "<group>"; };
@@ -412,9 +392,6 @@
 		51E14F22255F2D7F00320EDB /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
 		51E14F332560732F00320EDB /* CollectionsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsItem.swift; sourceTree = "<group>"; };
 		51E508EC2B4B1F490041B826 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		51E5C48E27221F6200A38983 /* IntentOutline+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentOutline+.swift"; sourceTree = "<group>"; };
-		51E5C49027221F6F00A38983 /* IntentRow+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IntentRow+.swift"; sourceTree = "<group>"; };
-		51EB162E270F46780079F40C /* ZavalaIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZavalaIntentHandler.swift; sourceTree = "<group>"; };
 		51F2859325AD11100019C573 /* CollectionsSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchCell.swift; sourceTree = "<group>"; };
 		51F2859625AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchContentConfiguration.swift; sourceTree = "<group>"; };
 		51F2859A25AD12800019C573 /* CollectionsSearchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchContentView.swift; sourceTree = "<group>"; };
@@ -650,50 +627,10 @@
 				51C71C70273F22A500F6C779 /* Image */,
 				51E508E82B4A1DBE0041B826 /* OutlineFonts */,
 				514BB9D5255B595300C8DBDF /* Utility */,
-				51AEEC8B2703E6B500354C59 /* Intents */,
 				51B4B4822C333F9B005DCCEB /* AppIntents */,
 				515F163B255C536600FD98B8 /* Resources */,
 			);
 			path = Zavala;
-			sourceTree = "<group>";
-		};
-		5191851827166AA300B7E177 /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				51AEEC8E2703EB6700354C59 /* GetCurrentOutlineIntentHandler.swift */,
-				5191850827137DFD00B7E177 /* GetCurrentTagsIntentHandler.swift */,
-				519184F6271115CE00B7E177 /* ShowOutlineIntentHandler.swift */,
-			);
-			path = UI;
-			sourceTree = "<group>";
-		};
-		5191851927166ABB00B7E177 /* Outline */ = {
-			isa = PBXGroup;
-			children = (
-				5191850A2713828F00B7E177 /* AddOutlineIntentHandler.swift */,
-				519185002713116B00B7E177 /* AddOutlineTagIntentHandler.swift */,
-				513B91692722CDC80051A6BA /* EditOutlineIntentHandler.swift */,
-				519184F02710792300B7E177 /* ExportIntentHandler.swift */,
-				519184ED270FAFE100B7E177 /* GetImagesForOutlineIntentHandler.swift */,
-				519184F827124E9700B7E177 /* GetOutlinesIntentHandler.swift */,
-				519184F42710F93700B7E177 /* ImportIntentHandler.swift */,
-				5191850C271387C300B7E177 /* RemoveOutlineIntentHandler.swift */,
-				519185022713146500B7E177 /* RemoveOutlineTagIntentHandler.swift */,
-			);
-			path = Outline;
-			sourceTree = "<group>";
-		};
-		5191851A27166AE300B7E177 /* Row */ = {
-			isa = PBXGroup;
-			children = (
-				51918514271664FB00B7E177 /* AddRowsIntentHandler.swift */,
-				51922211271E4AE9000CDC1F /* CopyRowsIntentHandler.swift */,
-				51A1EC412723246C00463A15 /* EditRowsIntentHandler.swift */,
-				51BAEA8E2717AA74004F1E84 /* GetRowsIntentHandler.swift */,
-				510471BA271940E5001DEFD5 /* MoveRowsIntentHandler.swift */,
-				510471BC2719AEFA001DEFD5 /* RemoveRowsIntentHandler.swift */,
-			);
-			path = Row;
 			sourceTree = "<group>";
 		};
 		51A6A2EA2C39E664002AFEC1 /* Outline */ = {
@@ -723,21 +660,6 @@
 				51A6A2E32C39E63B002AFEC1 /* RemoveRowsAppIntent.swift */,
 			);
 			path = Row;
-			sourceTree = "<group>";
-		};
-		51AEEC8B2703E6B500354C59 /* Intents */ = {
-			isa = PBXGroup;
-			children = (
-				51AEEC8C2703E6EB00354C59 /* Intents.intentdefinition */,
-				5191850E271390F100B7E177 /* IntentEntityID+.swift */,
-				51E5C48E27221F6200A38983 /* IntentOutline+.swift */,
-				51E5C49027221F6F00A38983 /* IntentRow+.swift */,
-				51EB162E270F46780079F40C /* ZavalaIntentHandler.swift */,
-				5191851927166ABB00B7E177 /* Outline */,
-				5191851A27166AE300B7E177 /* Row */,
-				5191851827166AA300B7E177 /* UI */,
-			);
-			path = Intents;
 			sourceTree = "<group>";
 		};
 		51B4B4822C333F9B005DCCEB /* AppIntents */ = {

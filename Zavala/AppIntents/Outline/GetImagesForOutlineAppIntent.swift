@@ -57,7 +57,7 @@ struct GetImagesForOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, P
 		await outline.unload()
 
 		await suspend()
-		return .result(value: [IntentFile(fileURL: URL(string: "")!)])
+		return .result(value: files)
     }
 	
 }
