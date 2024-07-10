@@ -637,9 +637,6 @@
     "Jump to Topic" : {
       "comment" : "Control Label: Jump to Topic"
     },
-    "Just to confirm, you wanted ‘%@’?" : {
-
-    },
     "Large" : {
       "comment" : "Control Label: Large"
     },
@@ -1074,9 +1071,6 @@
     "Tertiary Text" : {
       "comment" : "Control Label: Tertiary Text"
     },
-    "The %@ is required." : {
-
-    },
     "The outline will be deleted and unrecoverable." : {
       "comment" : "Alert Message: delete outline"
     },
@@ -1094,16 +1088,6 @@
     },
     "The specified Destination is not a valid for the Outline specified by the Entity ID." : {
 
-    },
-    "There are %lld options matching ‘%@’." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "There are %1$lld options matching ‘%2$@’."
-          }
-        }
-      }
     },
     "There isn't an Outline currently being viewed." : {
 
