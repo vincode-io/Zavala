@@ -34,7 +34,9 @@ class SettingsSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	@objc func userDefaultsDidChange() {
 		if userInterfaceColorPalette != AppDefaults.shared.userInterfaceColorPalette {
-			updateUserInterfaceStyle()
+			Task { @MainActor in
+				updateUserInterfaceStyle()
+			}
 		}
 	}
 }
