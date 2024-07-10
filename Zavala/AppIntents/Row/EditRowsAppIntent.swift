@@ -7,17 +7,18 @@
 
 import Foundation
 import AppIntents
+import VinOutlineKit
 
-struct EditRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent {
+struct EditRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "EditRowsIntent"
     static let title: LocalizedStringResource = "Edit Rows"
     static let description = IntentDescription("Update the details of a Row.")
 
     @Parameter(title: "Rows")
-	var rows: [RowAppEntity]?
+	var rows: [RowAppEntity]
 
     @Parameter(title: "Detail")
-    var detail: RowDetailAppEnum?
+    var detail: RowDetailAppEnum
 
     @Parameter(title: "Topic")
     var topic: String?
@@ -54,60 +55,92 @@ struct EditRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction(parameters: (\.$rows, \.$detail, \.$topic)) { rows, detail, topic in
             DisplayRepresentation(
-                title: "Set \(detail!) of \(rows!, format: .list(type: .and)) to \(topic!)",
+                title: "Set \(detail) of \(rows, format: .list(type: .and)) to \(topic!)",
                 subtitle: ""
             )
         }
         IntentPrediction(parameters: (\.$rows, \.$detail, \.$note)) { rows, detail, note in
             DisplayRepresentation(
-                title: "Set \(detail!) of \(rows!, format: .list(type: .and)) to \(note!)",
+                title: "Set \(detail) of \(rows, format: .list(type: .and)) to \(note!)",
                 subtitle: ""
             )
         }
         IntentPrediction(parameters: (\.$rows, \.$detail, \.$complete)) { rows, detail, complete in
             DisplayRepresentation(
-                title: "Set \(detail!) of \(rows!, format: .list(type: .and)) to \(String(describing: complete!))",
+                title: "Set \(detail) of \(rows, format: .list(type: .and)) to \(String(describing: complete!))",
                 subtitle: ""
             )
         }
         IntentPrediction(parameters: (\.$rows, \.$detail, \.$expanded)) { rows, detail, expanded in
             DisplayRepresentation(
-                title: "Set \(detail!) of \(rows!, format: .list(type: .and)) to \(String(describing: expanded!))",
+                title: "Set \(detail) of \(rows, format: .list(type: .and)) to \(String(describing: expanded!))",
                 subtitle: ""
             )
         }
         IntentPrediction(parameters: (\.$rows, \.$detail)) { rows, detail in
             DisplayRepresentation(
-                title: "Set \(detail!) of \(rows!, format: .list(type: .and))",
+                title: "Set \(detail) of \(rows, format: .list(type: .and))",
                 subtitle: ""
             )
         }
     }
 
+	@MainActor
     func perform() async throws -> some IntentResult {
-        // TODO: Place your refactored intent handler code here.
-        return .result()
-    }
-}
+		resume()
+		
+		var outlines = Set<Outline>()
+		
+		let rows: [Row] = self.rows
+			.compactMap { $0.entityID }
+			.compactMap {
+				if let rowOutline = AccountManager.shared.findDocument($0)?.outline {
+					rowOutline.load()
+					outlines.insert(rowOutline)
+					return rowOutline.findRow(id: $0.rowUUID)
+				}
+				return nil
+			}
+		
+		for row in rows {
+			switch detail {
+			case .topic:
+				if let markdown = topic {
+					row.outline?.updateRow(row, rowStrings: .topicMarkdown(markdown), applyChanges: true)
+				}
+			case .note:
+				if let markdown = note, !markdown.isEmpty {
+					row.outline?.updateRow(row, rowStrings: .noteMarkdown(markdown), applyChanges: true)
+				} else {
+					row.outline?.deleteNotes(rows: [row])
+				}
+			case .complete:
+				if let complete {
+					if complete {
+						row.outline?.complete(rows: [row])
+					} else {
+						row.outline?.uncomplete(rows: [row])
+					}
+				}
+			case .expanded:
+				if let expanded {
+					if expanded {
+						row.outline?.expand(rows: [row])
+					} else {
+						row.outline?.collapse(rows: [row])
+					}
+				}
+			}
+			
+			row.detectData()
+		}
+		
+		for outline in outlines {
+			await outline.unload()
+		}
 
-private extension IntentDialog {
-    static func detailParameterDisambiguationIntro(count: Int, detail: RowDetailAppEnum) -> Self {
-        "There are \(count) options matching ‘\(detail)’."
-    }
-    static func detailParameterConfirmation(detail: RowDetailAppEnum) -> Self {
-        "Just to confirm, you wanted ‘\(detail)’?"
-    }
-	static func topicParameterPrompt(rows: RowAppEntity, topic: String) -> Self {
-        "What is the \(rows) \(topic)"
-    }
-	static func noteParameterPrompt(rows: RowAppEntity, topic: String) -> Self {
-        "What is the \(rows) \(topic)"
-    }
-    static func completeParameterPrompt(complete: Bool) -> Self {
-		"Mark complete as \(String(describing: complete))"
-    }
-    static func expandedParameterPrompt(expanded: Bool) -> Self {
-		"Mark expanded as \(String(describing: expanded))"
+		await suspend()
+        return .result()
     }
 }
 

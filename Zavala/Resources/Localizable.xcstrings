@@ -658,12 +658,6 @@
     "Manage Sharing…" : {
       "comment" : "Control Label: Manage Sharing…"
     },
-    "Mark complete as %@" : {
-
-    },
-    "Mark expanded as %@" : {
-
-    },
     "Markdown Doc" : {
 
     },
@@ -1185,16 +1179,6 @@
     },
     "Website" : {
       "comment" : "Control Label: Website"
-    },
-    "What is the %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "What is the %1$@ %2$@"
-          }
-        }
-      }
     },
     "What is the %@ to add?" : {
 
