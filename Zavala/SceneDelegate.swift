@@ -141,7 +141,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 private extension SceneDelegate {
 	
 	@objc func userDefaultsDidChange() {
-		updateUserInterfaceStyle()
+		Task { @MainActor in
+			updateUserInterfaceStyle()
+		}
 	}
 
 	func acceptShare(_ shareMetadata: CKShare.Metadata) {
