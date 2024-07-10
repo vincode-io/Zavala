@@ -52,14 +52,30 @@ struct RowAppEntity: AppEntity {
 		self.level = row.trueLevel
 	}
 
-    struct RowAppEntityQuery: EntityQuery {
-        func entities(for identifiers: [RowAppEntity.ID]) async throws -> [RowAppEntity] {
-            // TODO: return Row entities with the specified identifiers here.
-            return []
+    struct RowAppEntityQuery: EntityQuery, ZavalaAppIntent {
+		
+        func entities(for entityIDs: [RowAppEntity.ID]) async throws -> [RowAppEntity] {
+			await resume()
+			
+			var results = [RowAppEntity]()
+			
+			for entityID in entityIDs {
+				if let outline = await AccountManager.shared.findDocument(entityID)?.outline {
+					await outline.load()
+					
+					if let row = await outline.findRow(id: entityID.rowUUID) {
+						await results.append(RowAppEntity(row: row))
+					}
+					
+					await outline.unload()
+				}
+			}
+			
+			await suspend()
+			return results
         }
 
     }
-	
 
 }
 

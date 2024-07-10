@@ -9,7 +9,7 @@ import Foundation
 import AppIntents
 import VinOutlineKit
 
-struct CopyRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent {
+struct CopyRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
     static let intentClassName = "CopyRowsIntent"
     static let title: LocalizedStringResource = "Copy Rows"
     static let description = IntentDescription("Copy Rows in or between Outlines.")
@@ -36,8 +36,61 @@ struct CopyRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
         }
     }
 
+	@MainActor
 	func perform() async throws -> some IntentResult & ReturnsValue<[RowAppEntity]> {
-        // TODO: Place your refactored intent handler code here.
-		return .result(value: [RowAppEntity(/* fill in result initializer here */)])
+		resume()
+		
+		guard let outline = findOutline(entityID) else {
+			await suspend()
+			throw ZavalaAppIntentError.outlineNotFound
+		}
+		
+		var outlines = Set<Outline>()
+		outline.load()
+		outlines.insert(outline)
+		
+		guard let rowContainer = outline.findRowContainer(entityID: entityID) else {
+			await outline.unload()
+			await suspend()
+			throw ZavalaAppIntentError.rowContainerNotFound
+		}
+		
+		let rows: [Row] = self.rows
+			.compactMap { $0.entityID }
+			.compactMap {
+				if let rowOutline = AccountManager.shared.findDocument($0)?.outline {
+					rowOutline.load()
+					outlines.insert(rowOutline)
+					return rowOutline.findRow(id: $0.rowUUID)
+				}
+				return nil
+			}
+		
+		for row in rows {
+			let rowGroup = RowGroup(row)
+			let attachedRow = rowGroup.attach(to: outline)
+
+			switch destination {
+			case .insideAtStart:
+				outline.createRowsInsideAtStart([attachedRow], afterRowContainer: rowContainer)
+			case .insideAtEnd:
+				outline.createRowsInsideAtEnd([attachedRow], afterRowContainer: rowContainer)
+			case .outside:
+				if let afterRow = rowContainer as? Row {
+					outline.createRowsOutside([attachedRow], afterRow: afterRow)
+				}
+			case .directlyAfter:
+				if let afterRow = rowContainer as? Row {
+					outline.createRowsDirectlyAfter([attachedRow], afterRow: afterRow)
+				}
+			}
+		}
+
+		for outline in outlines {
+			await outline.unload()
+		}
+		
+		await suspend()
+		return .result(value: rows.map({RowAppEntity(row: $0)}))
     }
 }
