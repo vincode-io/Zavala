@@ -38,6 +38,8 @@ struct MoveRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 
 	@MainActor
 	func perform() async throws -> some IntentResult & ReturnsValue<[RowAppEntity]> {
+		resume()
+		
 		guard let outline = findOutline(entityID) else {
 			await suspend()
 			throw ZavalaAppIntentError.outlineNotFound
