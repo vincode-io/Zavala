@@ -3152,35 +3152,35 @@ private extension EditorViewController {
 	func copyRows(_ rows: [Row]) {
 		var itemProviders = [NSItemProvider]()
 
+		let markdownItemProvider = NSItemProvider()
+
+		var markdowns = [String]()
 		for row in rows.sortedWithDecendentsFiltered() {
-			let itemProvider = NSItemProvider()
+			markdowns.append(row.markdownList())
+		}
+		let markdownData = markdowns.joined(separator: "\n").data(using: .utf8)
+
+		markdownItemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
+			completion(markdownData, nil)
+			return nil
+		}
+
+		itemProviders.append(markdownItemProvider)
+		
+		for row in rows.sortedWithDecendentsFiltered() {
+			let rowItemProvider = NSItemProvider()
 
 			// We need to create the RowGroup data before our data representation callback happens
 			// because we might actually be cutting the data and it won't be available anymore at
 			// the time that the callback happens.
-			let data = try? RowGroup(row).asData()
-
-			// We only register the text representation on the first one, since it looks like most text editors only support 1 dragged text item
-			if row == rows[0] {
-				itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
-					Task { @MainActor in
-						var markdowns = [String]()
-						for row in rows.sortedWithDecendentsFiltered() {
-							markdowns.append(row.markdownList())
-						}
-						let data = markdowns.joined(separator: "\n").data(using: .utf8)
-						completion(data, nil)
-					}
-					return nil
-				}
-			}
+			let rowData = try? RowGroup(row).asData()
 			
-			itemProvider.registerDataRepresentation(forTypeIdentifier: Row.typeIdentifier, visibility: .ownProcess) { completion in
-				completion(data, nil)
+			rowItemProvider.registerDataRepresentation(forTypeIdentifier: Row.typeIdentifier, visibility: .ownProcess) { completion in
+				completion(rowData, nil)
 				return nil
 			}
 			
-			itemProviders.append(itemProvider)
+			itemProviders.append(rowItemProvider)
 		}
 		
 		UIPasteboard.general.setItemProviders(itemProviders, localOnly: false, expirationDate: nil)
