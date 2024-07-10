@@ -13,7 +13,7 @@ import VinUtility
 struct GetOutlinesAppIntent: AppIntent, CustomIntentMigratedAppIntent, ZavalaAppIntent {
     static let intentClassName = "GetOutlinesIntent"
     static let title: LocalizedStringResource = "Get Outlines"
-    static let description = IntentDescription("Get outlines based on search criteria.")
+    static let description = IntentDescription("Get Outlines based on search criteria.")
 
     @Parameter(title: "Search")
     var search: String?

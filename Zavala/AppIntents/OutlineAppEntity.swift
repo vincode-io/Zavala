@@ -22,6 +22,9 @@ struct OutlineAppEntity: AppEntity {
     @Property(title: "Title")
     var title: String?
 
+	@Property(title: "Tags")
+	var tags: [String]?
+
     @Property(title: "Owner Name")
     var ownerName: String?
 
@@ -30,6 +33,12 @@ struct OutlineAppEntity: AppEntity {
 
     @Property(title: "Owner URL")
     var ownerURL: String?
+
+	@Property(title: "Created")
+	var created: Date?
+
+	@Property(title: "Updated")
+	var updated: Date?
 
     @Property(title: "URL")
     var url: URL?
@@ -46,41 +55,67 @@ struct OutlineAppEntity: AppEntity {
 		self.id = outline.id
 		self.entityID = self.id
 		self.title = outline.title
+		self.tags = outline.tags.map({ $0.name })
 		self.ownerName = outline.ownerName
 		self.ownerEmail = outline.ownerEmail
 		self.ownerURL = outline.ownerURL
+		self.created = outline.created
+		self.updated = outline.updated
 		self.url = outline.id.url
 	}
 	
-	struct OutlineEntityQuery: EntityStringQuery, ZavalaAppIntent {
+}
+
+struct OutlineEntityQuery: EntityQuery, ZavalaAppIntent {
 	
-		func entities(for entityIDs: [OutlineAppEntity.ID]) async -> [OutlineAppEntity] {
-			await resume()
-			
-			var results = [OutlineAppEntity]()
-			for entityID in entityIDs {
-				if let outline = await AccountManager.shared.findDocument(entityID)?.outline {
-					await results.append(OutlineAppEntity(outline: outline))
-				}
+	func entities(for entityIDs: [OutlineAppEntity.ID]) async -> [OutlineAppEntity] {
+		await resume()
+		
+		var results = [OutlineAppEntity]()
+		for entityID in entityIDs {
+			if let outline = await AccountManager.shared.findDocument(entityID)?.outline {
+				await results.append(OutlineAppEntity(outline: outline))
 			}
-			
-			await suspend()
-			return results
 		}
 		
-		func entities(matching string: String) async -> [OutlineAppEntity] {
-			await resume()
-			
-			var results = [OutlineAppEntity]()
-			for document in await AccountManager.shared.documents {
-				if await document.title?.localizedCaseInsensitiveContains(string) ?? false, let outline = await document.outline {
-					await results.append(OutlineAppEntity(outline: outline))
-				}
-			}
+		await suspend()
+		return results
+	}
+	
+}
 
-			await suspend()
-			return results
+extension OutlineEntityQuery: EntityStringQuery {
+	
+	func entities(matching string: String) async -> [OutlineAppEntity] {
+		await resume()
+		
+		var results = [OutlineAppEntity]()
+		for document in await AccountManager.shared.documents {
+			if await document.title?.localizedCaseInsensitiveContains(string) ?? false, let outline = await document.outline {
+				await results.append(OutlineAppEntity(outline: outline))
+			}
 		}
+		
+		await suspend()
+		return results
+	}
+	
+}
+
+extension OutlineEntityQuery: EnumerableEntityQuery {
+	
+	func allEntities() async throws -> [OutlineAppEntity] {
+		await resume()
+		
+		var results = [OutlineAppEntity]()
+		for document in await AccountManager.shared.documents {
+			if let outline = await document.outline {
+				await results.append(OutlineAppEntity(outline: outline))
+			}
+		}
+
+		await suspend()
+		return results
 	}
 	
 }
