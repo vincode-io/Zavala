@@ -26,7 +26,7 @@ struct GetRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIn
     @Parameter(title: "Start Depth", default: 1)
     var startDepth: Int?
 
-    @Parameter(title: "End Depth", default: 1)
+    @Parameter(title: "End Depth", default: 200)
     var endDepth: Int?
 
     @Parameter(title: "Completion State")
