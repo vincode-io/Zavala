@@ -19,16 +19,16 @@ struct SettingsOutlineDefaultsView: View {
 				Text(String.checkSpellingWhileTypingControlLabel)
 			}
 			.toggleStyle(.switch)
-			.onChange(of: checkSpellingWhileTyping) {
-				AppDefaults.shared.checkSpellingWhileTyping = $0
+			.onChange(of: checkSpellingWhileTyping) { old, new in
+				AppDefaults.shared.checkSpellingWhileTyping = new
 			}
 
 			Toggle(isOn: $correctSpellingAutomatically) {
 				Text(String.correctSpellingAutomaticallyControlLabel)
 			}
 			.toggleStyle(.switch)
-			.onChange(of: correctSpellingAutomatically) {
-				AppDefaults.shared.correctSpellingAutomatically = $0
+			.onChange(of: correctSpellingAutomatically) { old, new in
+				AppDefaults.shared.correctSpellingAutomatically = new
 			}
 			.disabled(checkSpellingWhileTyping == false)
 
@@ -36,8 +36,8 @@ struct SettingsOutlineDefaultsView: View {
 				Text(String.autoLinkingControlLabel)
 			}
 			.toggleStyle(.switch)
-			.onChange(of: autoLinking) {
-				AppDefaults.shared.autoLinkingEnabled = $0
+			.onChange(of: autoLinking) { old, new in
+				AppDefaults.shared.autoLinkingEnabled = new
 			}
 		}
 	}

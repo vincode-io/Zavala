@@ -28,8 +28,8 @@ struct SettingsGeneralView: View {
 				.frame(width: SettingsView.pickerWidth)
 				#endif
 				.pickerStyle(.menu)
-				.onChange(of: colorPalette) {
-					AppDefaults.shared.userInterfaceColorPalette = $0
+				.onChange(of: colorPalette) { old, new in
+					AppDefaults.shared.userInterfaceColorPalette = new
 				}
 			}
 
@@ -38,8 +38,8 @@ struct SettingsGeneralView: View {
 				Text(String.useMainWindowAsDefaultControlLabel)
 			}
 			.toggleStyle(.switch)
-			.onChange(of: enableMainWindowAsDefault) {
-				AppDefaults.shared.enableMainWindowAsDefault = $0
+			.onChange(of: enableMainWindowAsDefault) { old, new in
+				AppDefaults.shared.enableMainWindowAsDefault = new
 			}
 			#endif
 		}

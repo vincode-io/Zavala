@@ -17,8 +17,8 @@ struct SettingsOutlineOwnerView: View {
 		Section(String.outlineOwnerControlLabel) {
 			TextField(text: $name) {
 				Text(String.nameControlLabel)
-					.onChange(of: name) {
-						AppDefaults.shared.ownerName = $0
+					.onChange(of: name) { old, new in
+						AppDefaults.shared.ownerName = new
 					}
 			}
 			.textContentType(.name)
@@ -26,8 +26,8 @@ struct SettingsOutlineOwnerView: View {
 			
 			TextField(text: $email) {
 				Text(String.emailControlLabel)
-					.onChange(of: email) {
-						AppDefaults.shared.ownerEmail = $0
+					.onChange(of: email) { old, new in
+						AppDefaults.shared.ownerEmail = new
 					}
 			}
 			.textInputAutocapitalization(.never)
@@ -37,8 +37,8 @@ struct SettingsOutlineOwnerView: View {
 
 			TextField(text: $url) {
 				Text(String.urlControlLabel)
-					.onChange(of: url) {
-						AppDefaults.shared.ownerURL = $0
+					.onChange(of: url) { old, new in
+						AppDefaults.shared.ownerURL = new
 					}
 			}
 			.textInputAutocapitalization(.never)
