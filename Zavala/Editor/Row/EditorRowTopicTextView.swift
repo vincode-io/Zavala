@@ -301,14 +301,20 @@ extension EditorRowTopicTextView: UITextViewDelegate {
         processTextChanges()
     }
     
-	func textView(_ textView: UITextView, shouldInteractWith textAttachment: NSTextAttachment, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-		guard interaction == .invokeDefaultAction,
-			  let firstRect = firstRect(for: characterRange),
-			  let image = textAttachment.image	else { return true }
-		
-		let convertedRect = convert(firstRect, to: nil)
-		editorDelegate?.zoomImage(self, image, rect: convertedRect)
-		return false
+	func textView(_ textView: UITextView, primaryActionFor textItem: UITextItem, defaultAction: UIAction) -> UIAction? {
+		if case .textAttachment(let attachment) = textItem.content,
+		   let firstRect = firstRect(for: textItem.range),
+		   let image = attachment.image {
+			
+			return UIAction { [weak self] action in
+				guard let self else { return }
+				let convertedRect = convert(firstRect, to: nil)
+				self.editorDelegate?.zoomImage(self, image, rect: convertedRect)
+			}
+							
+		}
+							
+		return defaultAction
 	}
 	
 	func textViewDidChangeSelection(_ textView: UITextView) {
