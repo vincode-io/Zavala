@@ -83,39 +83,3 @@ struct OutlineEntityQuery: EntityQuery, ZavalaAppIntent {
 	}
 	
 }
-
-extension OutlineEntityQuery: EntityStringQuery {
-	
-	func entities(matching string: String) async -> [OutlineAppEntity] {
-		await resume()
-		
-		var results = [OutlineAppEntity]()
-		for document in await AccountManager.shared.documents {
-			if await document.title?.localizedCaseInsensitiveContains(string) ?? false, let outline = await document.outline {
-				await results.append(OutlineAppEntity(outline: outline))
-			}
-		}
-		
-		await suspend()
-		return results
-	}
-	
-}
-
-extension OutlineEntityQuery: EnumerableEntityQuery {
-	
-	func allEntities() async throws -> [OutlineAppEntity] {
-		await resume()
-		
-		var results = [OutlineAppEntity]()
-		for document in await AccountManager.shared.documents {
-			if let outline = await document.outline {
-				await results.append(OutlineAppEntity(outline: outline))
-			}
-		}
-
-		await suspend()
-		return results
-	}
-	
-}
