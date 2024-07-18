@@ -711,19 +711,18 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		collectionView.reloadData()
 	}
 	
-	@objc func userDefaultsDidChange() {
-		if rowIndentSize != AppDefaults.shared.rowIndentSize {
-			rowIndentSize = AppDefaults.shared.rowIndentSize
-			collectionView.reloadData()
-		}
-
-		if rowSpacingSize != AppDefaults.shared.rowSpacingSize {
-			rowSpacingSize = AppDefaults.shared.rowSpacingSize
-			collectionView.reloadData()
-		}
-
-		// We have to get the layout on the main thread.
+	@objc nonisolated func userDefaultsDidChange() {
 		Task { @MainActor in
+			if rowIndentSize != AppDefaults.shared.rowIndentSize {
+				rowIndentSize = AppDefaults.shared.rowIndentSize
+				collectionView.reloadData()
+			}
+			
+			if rowSpacingSize != AppDefaults.shared.rowSpacingSize {
+				rowSpacingSize = AppDefaults.shared.rowSpacingSize
+				collectionView.reloadData()
+			}
+
 			guard let layout = self.collectionView.collectionViewLayout as? EditorCollectionViewCompositionalLayout else { return }
 			if layout.editorMaxWidth != AppDefaults.shared.editorMaxWidth.pixels {
 				layout.editorMaxWidth = AppDefaults.shared.editorMaxWidth.pixels

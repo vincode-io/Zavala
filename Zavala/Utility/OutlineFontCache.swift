@@ -79,10 +79,12 @@ class OutlineFontCache {
 
 extension OutlineFontCache {
 
-	@objc private func userDefaultsDidChange() {
-		let defaults = AppDefaults.shared
-		if outlineFonts != defaults.outlineFonts || textZoom != defaults.textZoom {
-			buildCache()
+	@objc nonisolated private func userDefaultsDidChange() {
+		Task { @MainActor in
+			let defaults = AppDefaults.shared
+			if outlineFonts != defaults.outlineFonts || textZoom != defaults.textZoom {
+				buildCache()
+			}
 		}
 	}
 	

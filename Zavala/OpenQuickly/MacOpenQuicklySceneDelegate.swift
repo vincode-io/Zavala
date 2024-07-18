@@ -63,8 +63,10 @@ class MacOpenQuicklySceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 private extension MacOpenQuicklySceneDelegate {
 	
-	@objc func userDefaultsDidChange() {
-		updateUserInterfaceStyle()
+	@objc nonisolated func userDefaultsDidChange() {
+		Task { @MainActor in
+			updateUserInterfaceStyle()
+		}
 	}
 
 }

@@ -1061,23 +1061,25 @@ private extension AppDelegate {
 		AppDefaults.shared.documentHistory = history.map { $0.userInfo }
 	}
 	
-	@objc private func checkForUserDefaultsChanges() {
-		guard let localAccount = AccountManager.shared.localAccount else { return }
-		
-		if AppDefaults.shared.enableLocalAccount != localAccount.isActive {
-			if AppDefaults.shared.enableLocalAccount {
-				localAccount.activate()
-			} else {
-				localAccount.deactivate()
+	@objc nonisolated private func checkForUserDefaultsChanges() {
+		Task { @MainActor in
+			guard let localAccount = AccountManager.shared.localAccount else { return }
+			
+			if AppDefaults.shared.enableLocalAccount != localAccount.isActive {
+				if AppDefaults.shared.enableLocalAccount {
+					localAccount.activate()
+				} else {
+					localAccount.deactivate()
+				}
 			}
-		}
-		
-		let cloudKitAccount = AccountManager.shared.cloudKitAccount
-		
-		if AppDefaults.shared.enableCloudKit && cloudKitAccount == nil {
-			AccountManager.shared.createCloudKitAccount()
-		} else if !AppDefaults.shared.enableCloudKit && cloudKitAccount != nil {
-			AccountManager.shared.deleteCloudKitAccount()
+			
+			let cloudKitAccount = AccountManager.shared.cloudKitAccount
+			
+			if AppDefaults.shared.enableCloudKit && cloudKitAccount == nil {
+				AccountManager.shared.createCloudKitAccount()
+			} else if !AppDefaults.shared.enableCloudKit && cloudKitAccount != nil {
+				AccountManager.shared.deleteCloudKitAccount()
+			}
 		}
 	}
 

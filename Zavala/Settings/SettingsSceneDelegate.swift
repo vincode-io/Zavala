@@ -32,9 +32,9 @@ class SettingsSceneDelegate: UIResponder, UIWindowSceneDelegate {
 		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
 	}
 
-	@objc func userDefaultsDidChange() {
-		if userInterfaceColorPalette != AppDefaults.shared.userInterfaceColorPalette {
-			Task { @MainActor in
+	@objc nonisolated func userDefaultsDidChange() {
+		Task { @MainActor in
+			if userInterfaceColorPalette != AppDefaults.shared.userInterfaceColorPalette {
 				updateUserInterfaceStyle()
 			}
 		}

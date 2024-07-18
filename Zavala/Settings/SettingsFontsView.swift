@@ -102,6 +102,7 @@ struct SettingsFontAddMenu: View {
 	
 }
 
+@MainActor
 class SettingsFontsViewModel: ObservableObject {
 	
 	@Published var fieldConfigs: [(OutlineFontField, OutlineFontConfig)]
@@ -140,14 +141,16 @@ class SettingsFontsViewModel: ObservableObject {
 		AppDefaults.shared.outlineFonts = outlineFonts
 	}
 	
-	@objc private func checkForUserDefaultsChanges() {
-		if AppDefaults.shared.outlineFonts != self.lastOutlineFonts {
-			if let outlineFonts = AppDefaults.shared.outlineFonts {
-				self.fieldConfigs = outlineFonts.sortedFields.map { ($0, outlineFonts.rowFontConfigs[$0]!) }
-			} else {
-				self.fieldConfigs = []
+	@objc nonisolated private func checkForUserDefaultsChanges() {
+		Task { @MainActor in
+			if AppDefaults.shared.outlineFonts != self.lastOutlineFonts {
+				if let outlineFonts = AppDefaults.shared.outlineFonts {
+					self.fieldConfigs = outlineFonts.sortedFields.map { ($0, outlineFonts.rowFontConfigs[$0]!) }
+				} else {
+					self.fieldConfigs = []
+				}
+				self.lastOutlineFonts = AppDefaults.shared.outlineFonts
 			}
-			self.lastOutlineFonts = AppDefaults.shared.outlineFonts
 		}
 	}
 	

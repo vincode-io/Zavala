@@ -132,7 +132,7 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 private extension OutlineEditorSceneDelegate {
 	
-	@objc func userDefaultsDidChange() {
+	@objc nonisolated func userDefaultsDidChange() {
 		Task { @MainActor in
 			updateUserInterfaceStyle()
 		}

@@ -140,7 +140,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 private extension SceneDelegate {
 	
-	@objc func userDefaultsDidChange() {
+	@objc nonisolated func userDefaultsDidChange() {
 		Task { @MainActor in
 			updateUserInterfaceStyle()
 		}
