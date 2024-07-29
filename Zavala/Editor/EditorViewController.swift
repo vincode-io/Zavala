@@ -181,10 +181,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return outline.isDeleteNotesUnavailable(rows: rows)
 	}
 
-	var isFormatUnavailable: Bool {
-		return currentTextView == nil
-	}
-	
 	var isUndoUnvailable: Bool {
 		if let currentTextView {
 			return !(currentTextView.undoManager?.canUndo ?? false)
@@ -233,10 +229,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	var isInsertImageUnavailable: Bool {
-		return currentTextView == nil
-	}
-
-	var isLinkUnavailable: Bool {
 		return currentTextView == nil
 	}
 
@@ -1028,9 +1020,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			moveDownButton.isEnabled = !isMoveRowsDownUnavailable
 			
 			insertImageButton.isEnabled = !isInsertImageUnavailable
-			linkButton.isEnabled = !isLinkUnavailable
-			boldButton.isEnabled = !isFormatUnavailable
-			italicButton.isEnabled = !isFormatUnavailable
+			linkButton.isEnabled = UIResponder.valid(action: .editLink)
+			boldButton.isEnabled = UIResponder.valid(action: .toggleBoldface)
+			italicButton.isEnabled = UIResponder.valid(action: .toggleItalics)
 
 			// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
 			// only have one row selected at a time while editing and that row either has a note

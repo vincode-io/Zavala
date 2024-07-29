@@ -34,6 +34,10 @@ extension UIResponder {
 		}
 	}
 
+	public static func valid(action: Selector) -> Bool {
+		return Self.currentFirstResponder?.target(forAction: action, withSender: nil) != nil
+	}
+	
 	@objc internal func findFirstResponder(sender: AnyObject) {
 		if self.isFirstResponder {
 			UIResponder._currentFirstResponder = self

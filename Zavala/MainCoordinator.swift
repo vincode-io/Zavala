@@ -104,20 +104,12 @@ extension MainCoordinator {
 		return editorViewController?.isDeleteRowNotesUnavailable ?? true
 	}
 	
-	var isFormatUnavailable: Bool {
-		return editorViewController?.isFormatUnavailable ?? true
-	}
-	
 	var isCopyRowLinkUnavailable: Bool {
 		return editorViewController?.isCopyRowLinkUnavailable ?? true
 	}
 	
 	var isInsertImageUnavailable: Bool {
 		return editorViewController?.isInsertImageUnavailable ?? true
-	}
-	
-	var isLinkUnavailable: Bool {
-		return editorViewController?.isLinkUnavailable ?? true
 	}
 	
 	var isExpandAllInOutlineUnavailable: Bool {
@@ -244,20 +236,8 @@ extension MainCoordinator {
 		editorViewController?.deleteRowNotes()
 	}
 	
-	func outlineToggleBoldface() {
-		editorViewController?.outlineToggleBoldface()
-	}
-	
-	func outlineToggleItalics() {
-		editorViewController?.outlineToggleItalics()
-	}
-	
 	func insertImage() {
 		editorViewController?.insertImage()
-	}
-	
-	func link() {
-		editorViewController?.link()
 	}
 	
 	func createOrDeleteNotes() {

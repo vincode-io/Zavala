@@ -96,10 +96,6 @@ class EditorRowTextView: UITextView {
     var textViewHeight: CGFloat?
     var isSavingTextUnnecessary = false
 
-	let toggleBoldCommand = UIKeyCommand(title: .boldControlLabel, action: .toggleBoldface, input: "b", modifierFlags: [.command])
-	let toggleItalicsCommand = UIKeyCommand(title: .italicControlLabel, action: .toggleItalics, input: "i", modifierFlags: [.command])
-	let editLinkCommand = UIKeyCommand(title: .linkControlLabel, action: .editLink, input: "k", modifierFlags: [.command])
-
 	private var dropInteractionDelegate: EditorRowDropInteractionDelegate!
 	private var stackedUndoManager: UndoManager?
 
@@ -159,6 +155,8 @@ class EditorRowTextView: UITextView {
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
+		case .editLink:
+			return isFirstResponder
 		case .toggleUnderline:
 			return false
 		default:

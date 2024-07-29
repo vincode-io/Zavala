@@ -40,9 +40,6 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 			keys.append(UIKeyCommand(action: #selector(moveCursorDown(_:)), input: UIKeyCommand.inputDownArrow))
 		}
 		keys.append(UIKeyCommand(action: #selector(moveCursorToText(_:)), input: UIKeyCommand.inputEscape))
-		keys.append(toggleBoldCommand)
-		keys.append(toggleItalicsCommand)
-		keys.append(editLinkCommand)
 		return keys
 	}
 	

@@ -148,12 +148,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												modifierFlags: [.shift, .command])
 	
 	let toggleBoldCommand = UIKeyCommand(title: .boldControlLabel,
-										 action: #selector(toggleBoldCommand(_:)),
+										 action: .toggleBoldface,
 										 input: "b",
 										 modifierFlags: [.command])
 	
 	let toggleItalicsCommand = UIKeyCommand(title: .italicControlLabel,
-											action: #selector(toggleItalicsCommand(_:)),
+											action: .toggleItalics,
 											input: "i",
 											modifierFlags: [.command])
 	
@@ -163,7 +163,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										  modifierFlags: [.alternate, .command])
 	
 	let linkCommand = UIKeyCommand(title: .linkEllipsisControlLabel,
-								   action: #selector(linkCommand(_:)),
+								   action: .editLink,
 								   input: "k",
 								   modifierFlags: [.command])
 	
@@ -526,20 +526,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.deleteCurrentRows()
 	}
 	
-	@objc func toggleBoldCommand(_ sender: Any?) {
-		mainCoordinator?.outlineToggleBoldface()
-	}
-	
-	@objc func toggleItalicsCommand(_ sender: Any?) {
-		mainCoordinator?.outlineToggleItalics()
-	}
-	
 	@objc func insertImageCommand(_ sender: Any?) {
 		mainCoordinator?.insertImage()
-	}
-
-	@objc func linkCommand(_ sender: Any?) {
-		mainCoordinator?.link()
 	}
 
 	@objc func copyRowLinkCommand(_ sender: Any?) {
@@ -774,16 +762,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if mainCoordinator?.isDeleteRowNotesUnavailable ?? true {
 				command.attributes = .disabled
 			}
-		case #selector(toggleBoldCommand(_:)), #selector(toggleItalicsCommand(_:)):
-			if mainCoordinator?.isFormatUnavailable ?? true {
-				command.attributes = .disabled
-			}
 		case #selector(insertImageCommand(_:)):
 			if mainCoordinator?.isInsertImageUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(linkCommand(_:)):
-			if mainCoordinator?.isLinkUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(focusInCommand(_:)):

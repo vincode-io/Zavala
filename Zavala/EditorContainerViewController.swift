@@ -184,24 +184,12 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		insertImage()
 	}
 
-	@objc func link(_ sender: Any?) {
-		link()
-	}
-
 	@objc func createOrDeleteNotes(_ sender: Any?) {
 		createOrDeleteNotes()
 	}
 
 	@objc func toggleOutlineFilter(_ sender: Any?) {
 		toggleCompletedFilter()
-	}
-
-	@objc func outlineToggleBoldface(_ sender: Any?) {
-		outlineToggleBoldface()
-	}
-
-	@objc func outlineToggleItalics(_ sender: Any?) {
-		outlineToggleItalics()
 	}
 
 	@objc func expandAllInOutline(_ sender: Any?) {
@@ -413,15 +401,11 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .link:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isLinkUnavailable ?? true
-			}
 			item.image = .link.symbolSizedForCatalyst()
 			item.label = .linkControlLabel
 			item.toolTip = .linkControlLabel
 			item.isBordered = true
-			item.action = #selector(link(_:))
-			item.target = self
+			item.action = .editLink
 			toolbarItem = item
 		case .note:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
@@ -458,14 +442,13 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				} else {
 					item.image = .bold.symbolSizedForCatalyst(pointSize: 18.0)
 				}
-				return self?.editorViewController?.isFormatUnavailable ?? true
+				return !UIResponder.valid(action: .toggleBoldface)
 			}
 			item.image = .bold.symbolSizedForCatalyst(pointSize: 18.0)
 			item.label = .boldControlLabel
 			item.toolTip = .boldControlLabel
 			item.isBordered = true
-			item.action = #selector(outlineToggleBoldface(_:))
-			item.target = self
+			item.action = .toggleBoldface
 			toolbarItem = item
 		case .italic:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
@@ -475,14 +458,13 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				} else {
 					item.image = .italic.symbolSizedForCatalyst(pointSize: 18.0)
 				}
-				return self?.editorViewController?.isFormatUnavailable ?? true
+				return !UIResponder.valid(action: .toggleItalics)
 			}
 			item.image = .italic.symbolSizedForCatalyst(pointSize: 18.0)
 			item.label = .italicControlLabel
 			item.toolTip = .italicControlLabel
 			item.isBordered = true
-			item.action = #selector(outlineToggleItalics(_:))
-			item.target = self
+			item.action = .toggleItalics
 			toolbarItem = item
 		case .expandAllInOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)

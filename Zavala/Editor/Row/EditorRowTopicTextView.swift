@@ -49,9 +49,6 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 			UIKeyCommand(input: "\r", modifierFlags: [.alternate], action: #selector(insertNewline(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift], action: #selector(insertRow(_:))),
 			UIKeyCommand(input: "\r", modifierFlags: [.shift, .alternate], action: #selector(split(_:))),
-			toggleBoldCommand,
-			toggleItalicsCommand,
-			editLinkCommand
 		]
 		
 		return keys
