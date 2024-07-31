@@ -9,6 +9,11 @@ import UIKit
 import SwiftUI
 import VinOutlineKit
 
+extension Selector {
+	static let share = Selector(("share"))
+	static let manageSharing = Selector(("manageSharing"))
+}
+
 @MainActor
 protocol MainCoordinator: UIViewController, DocumentsActivityItemsConfigurationDelegate {
 	var editorViewController: EditorViewController? { get }
@@ -18,8 +23,6 @@ protocol MainCoordinator: UIViewController, DocumentsActivityItemsConfigurationD
 	var isGoForwardOneUnavailable: Bool { get }
 	func goBackwardOne()
 	func goForwardOne()
-	func share()
-	func manageSharing()
 }
 
 extension MainCoordinator {

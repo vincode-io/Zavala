@@ -1279,10 +1279,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		UIPasteboard.general.url = entityID.url
 	}
 
-	@objc func share(_ sender: Any? = nil) {
+	func share(sourceView: UIView? = nil) {
 		let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(delegate: self))
-		if let sendingView = sender as? UIView {
-			controller.popoverPresentationController?.sourceView = sendingView
+		if let sourceView {
+			controller.popoverPresentationController?.sourceView = sourceView
 		} else {
 			controller.popoverPresentationController?.sourceView = collectionView
 			var rect = collectionView.bounds
@@ -2072,7 +2072,7 @@ private extension EditorViewController {
 		var shareActions = [UIMenuElement]()
 
 		let shareAction = UIAction(title: .shareEllipsisControlLabel, image: .share) { [weak self] _ in
-			self?.share(self?.moreMenuButton)
+			self?.share(sourceView: self?.moreMenuButton)
 		}
 		shareActions.append(shareAction)
 

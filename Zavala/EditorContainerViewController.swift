@@ -110,20 +110,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	func goBackwardOne() {	}
 	func goForwardOne() { }
 	
-	func share() {
-		editorViewController?.share()
-	}
-	
-	func manageSharing() {
-		guard let shareRecord = selectedDocuments.first!.shareRecord, let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer else {
-			return
-		}
-		
-		let controller = UICloudSharingController(share: shareRecord, container: container)
-		controller.delegate = self
-		self.present(controller, animated: true)
-	}
-	
 	func shutdown() {
 		activityManager.invalidateSelectDocument()
 		editorViewController?.edit(nil, isNew: false)
@@ -236,12 +222,31 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		showGetInfo()
 	}
 
+	@objc func share() {
+		editorViewController?.share()
+	}
+	
+	@objc func manageSharing() {
+		guard let shareRecord = selectedDocuments.first!.shareRecord, let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer else {
+			return
+		}
+		
+		let controller = UICloudSharingController(share: shareRecord, container: container)
+		controller.delegate = self
+		self.present(controller, animated: true)
+	}
+	
+
 	// MARK: Validation
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
 		case .delete:
 			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true)
+		case .share:
+			return !isOutlineFunctionsUnavailable
+		case .manageSharing:
+			return !isManageSharingUnavailable
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}

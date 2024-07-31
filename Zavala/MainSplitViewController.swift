@@ -262,14 +262,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		goForward(to: 0)
 	}
 	
-	func share() {
-		documentsViewController?.share()
-	}
-	
-	func manageSharing() {
-		documentsViewController?.manageSharing()
-	}
-	
 	func validateToolbar() {
 		self.sceneDelegate?.validateToolbar()
 	}
@@ -301,6 +293,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 				return false
 			}
 			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true) || !(editorViewController?.isOutlineFunctionsUnavailable ?? true)
+		case .share:
+			return !isOutlineFunctionsUnavailable
+		case .manageSharing:
+			return !isManageSharingUnavailable
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -396,6 +392,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		showGetInfo()
 	}
 
+	@objc func share() {
+		documentsViewController?.share()
+	}
+	
+	@objc func manageSharing() {
+		documentsViewController?.manageSharing()
+	}
+	
 	func beginDocumentSearch() {
 		collectionsViewController?.beginDocumentSearch()
 	}

@@ -272,9 +272,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 input: "p",
 										 modifierFlags: [.command])
 
-	let shareCommand = UICommand(title: .shareEllipsisControlLabel, action: #selector(shareCommand(_:)))
+	let shareCommand = UICommand(title: .shareEllipsisControlLabel, action: .share)
 
-	let manageSharingCommand = UICommand(title: .manageSharingEllipsisControlLabel, action: #selector(manageSharingCommand(_:)))
+	let manageSharingCommand = UICommand(title: .manageSharingEllipsisControlLabel, action: .manageSharing)
 	
 	let outlineGetInfoCommand = UIKeyCommand(title: .getInfoControlLabel,
 											 action: #selector(outlineGetInfoCommand(_:)),
@@ -644,14 +644,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.printLists()
 	}
 
-	@objc func shareCommand(_ sender: Any?) {
-		mainCoordinator?.share()
-	}
-
-	@objc func manageSharingCommand(_ sender: Any?) {
-		mainCoordinator?.manageSharing()
-	}
-
 	@objc func beginDocumentSearchCommand(_ sender: Any?) {
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
 			mainSplitViewController.beginDocumentSearch()
@@ -828,14 +820,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(deleteCompletedRowsCommand(_:)):
 			if mainCoordinator?.isDeleteCompletedRowsUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(shareCommand(_:)):
-			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(manageSharingCommand(_:)):
-			if mainCoordinator?.isManageSharingUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(copyRowLinkCommand(_:)):
