@@ -202,7 +202,6 @@ extension String {
 	static let deleteTagMessage = String(localized: "Any child Tag associated with this Tag will also be deleted. No Outlines associated with this Tag will be deleted.", comment: "Alert Message: delete tag")
 	static let deleteTagsMessage = String(localized: "Any child Tag associated with these Tags will also be deleted. No Outlines associated with these Tags will be deleted.", comment: "Alert Message: delete tags")
 	static let disableAnimationsControlLabel = String(localized: "Disable Animations", comment: "Control Label: Disable Animations")
-	static let documentFindEllipsisControlLabel = String(localized: "Document Find…", comment: "Control Label: Document Find…")
 	static let documentNotFoundTitle = String(localized: "Document Not Found", comment: "Alert Title: Document Not Found")
 	static let documentNotFoundMessage = String(localized: "The requested document could not be found. It was most likely deleted and is no longer available.", comment: "Alert Message: Document Not Found")
 	static let doneControlLabel = String(localized: "Done", comment: "Control Label: Done")

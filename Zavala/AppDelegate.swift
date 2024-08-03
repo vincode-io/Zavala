@@ -257,11 +257,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											  input: "o",
 											  modifierFlags: [.shift, .command])
 	
-	let beginDocumentSearchCommand = UIKeyCommand(title: .documentFindEllipsisControlLabel,
-												  action: #selector(beginDocumentSearchCommand(_:)),
-												  input: "f",
-												  modifierFlags: [.alternate, .command])
-		
 	let printDocsCommand = UIKeyCommand(title: .printDocEllipsisControlLabel,
 										action: .printDocs,
 										input: "p",
@@ -601,20 +596,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 
-	@objc func beginDocumentSearchCommand(_ sender: Any?) {
-		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.beginDocumentSearch()
-		}
-	}
-
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(beginDocumentSearchCommand(_:)):
-			if !(mainCoordinator is MainSplitViewController) {
-				command.attributes = .disabled
-			}
 		case #selector(goBackwardOneCommand(_:)):
 			if mainCoordinator?.isGoBackwardOneUnavailable ?? true {
 				command.attributes = .disabled

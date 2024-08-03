@@ -251,16 +251,6 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		}
     }
 
-	// MARK: API
-	
-	func beginDocumentSearch() {
-		if let searchCellIndexPath = self.dataSource.indexPath(for: CollectionsItem.searchItem()) {
-			if let searchCell = self.collectionView.cellForItem(at: searchCellIndexPath) as? CollectionsSearchCell {
-				searchCell.setSearchField(searchText: "")
-			}
-		}
-	}
-	
 }
 
 // MARK: Collection View

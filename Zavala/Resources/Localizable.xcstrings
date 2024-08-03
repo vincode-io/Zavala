@@ -331,9 +331,6 @@
     "Disable Animations" : {
       "comment" : "Control Label: Disable Animations"
     },
-    "Document Find…" : {
-      "comment" : "Control Label: Document Find…"
-    },
     "Document Not Found" : {
       "comment" : "Alert Title: Document Not Found"
     },

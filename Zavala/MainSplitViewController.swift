@@ -411,10 +411,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		documentsViewController?.manageSharing()
 	}
 	
-	func beginDocumentSearch() {
-		collectionsViewController?.beginDocumentSearch()
-	}
-	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {

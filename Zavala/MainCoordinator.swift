@@ -11,6 +11,7 @@ import VinOutlineKit
 
 extension Selector {
 	static let sync = Selector(("sync:"))
+	static let showGetInfo = Selector(("showGetInfo:"))
 	static let share = Selector(("share:"))
 	static let manageSharing = Selector(("manageSharing:"))
 	static let exportPDFDocs = Selector(("exportPDFDocs:"))
@@ -20,7 +21,6 @@ extension Selector {
 	static let exportOPMLs = Selector(("exportOPMLs:"))
 	static let printDocs = Selector(("printDocs:"))
 	static let printLists = Selector(("printLists:"))
-	static let showGetInfo = Selector(("showGetInfo:"))
 }
 
 @MainActor
