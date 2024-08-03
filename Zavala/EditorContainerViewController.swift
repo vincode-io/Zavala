@@ -24,10 +24,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		return children.first as? EditorViewController
 	}
 
-	var isExportAndPrintUnavailable: Bool {
-		return editorViewController?.isOutlineFunctionsUnavailable ?? true
-	}
-	
 	var isGoBackwardOneUnavailable: Bool = false
 	var isGoForwardOneUnavailable: Bool = false
 
@@ -263,12 +259,10 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		switch action {
 		case .sync:
 			return AccountManager.shared.isSyncAvailable
-		case .share:
-			return !isOutlineFunctionsUnavailable
 		case .manageSharing:
 			return !isManageSharingUnavailable
-		case .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
-			return !isExportAndPrintUnavailable
+		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
+			return !isOutlineFunctionsUnavailable
 		case .delete:
 			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true)
 		default:

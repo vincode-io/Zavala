@@ -20,12 +20,12 @@ extension Selector {
 	static let exportOPMLs = Selector(("exportOPMLs:"))
 	static let printDocs = Selector(("printDocs:"))
 	static let printLists = Selector(("printLists:"))
+	static let showGetInfo = Selector(("showGetInfo:"))
 }
 
 @MainActor
 protocol MainCoordinator: UIViewController, DocumentsActivityItemsConfigurationDelegate {
 	var editorViewController: EditorViewController? { get }
-	var isExportAndPrintUnavailable: Bool { get }
 	var selectedDocuments: [Document] { get }
 	var isGoBackwardOneUnavailable: Bool { get }
 	var isGoForwardOneUnavailable: Bool { get }

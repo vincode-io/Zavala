@@ -56,11 +56,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		return documentsViewController?.selectedDocuments ?? []
 	}
 	
-	var isExportAndPrintUnavailable: Bool {
-		guard let outlines = selectedOutlines else { return true }
-		return outlines.count < 1
-	}
-
 	var isDeleteEntityUnavailable: Bool {
 		return (editorViewController?.isOutlineFunctionsUnavailable ?? true) &&
 			(editorViewController?.isDeleteCurrentRowUnavailable ?? true) 
@@ -288,12 +283,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		switch action {
 		case .sync:
 			return AccountManager.shared.isSyncAvailable
-		case .share:
-			return !isOutlineFunctionsUnavailable
 		case .manageSharing:
 			return !isManageSharingUnavailable
-		case .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
-			return !isExportAndPrintUnavailable
+		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
+			return !isOutlineFunctionsUnavailable
 		case .selectAll:
 			return !(editorViewController?.isInEditMode ?? false)
 		case .delete:
@@ -412,7 +405,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		printLists()
 	}
 
-	@objc func outlineGetInfo(_ sender: Any?) {
+	@objc func showGetInfo(_ sender: Any?) {
 		showGetInfo()
 	}
 
@@ -1283,14 +1276,14 @@ extension MainSplitViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .getInfo:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .showGetInfo)
 			}
 			item.image = .getInfo.symbolSizedForCatalyst()
 			item.label = .getInfoControlLabel
 			item.toolTip = .getInfoControlLabel
 			item.isBordered = true
-			item.action = #selector(outlineGetInfo(_:))
+			item.action = .showGetInfo
 			item.target = self
 			toolbarItem = item
 		case .toggleSidebar:

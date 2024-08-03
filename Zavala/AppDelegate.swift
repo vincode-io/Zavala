@@ -276,10 +276,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	let manageSharingCommand = UICommand(title: .manageSharingEllipsisControlLabel, action: .manageSharing)
 	
-	let outlineGetInfoCommand = UIKeyCommand(title: .getInfoControlLabel,
-											 action: #selector(outlineGetInfoCommand(_:)),
-											 input: "i",
-											 modifierFlags: [.control, .command])
+	let showGetInfoCommand = UIKeyCommand(title: .getInfoControlLabel, action: .showGetInfo, input: "i", modifierFlags: [.control, .command])
 
 	var mainCoordinator: MainCoordinator? {
 		return UIApplication.shared.foregroundActiveScene?.keyWindow?.rootViewController as? MainCoordinator
@@ -616,10 +613,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 
-	@objc func outlineGetInfoCommand(_ sender: Any?) {
-		mainCoordinator?.showGetInfo()
-	}
-	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
@@ -630,10 +623,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(beginDocumentSearchCommand(_:)):
 			if !(mainCoordinator is MainSplitViewController) {
-				command.attributes = .disabled
-			}
-		case #selector(outlineGetInfoCommand(_:)):
-			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(goBackwardOneCommand(_:)):
@@ -813,7 +802,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atEndOfMenu: .file)
 
-		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: [outlineGetInfoCommand])
+		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: [showGetInfoCommand])
 		builder.insertChild(getInfoMenu, atEndOfMenu: .file)
 
 		let exportMenu = UIMenu(title: .exportControlLabel, children: [exportPDFDocsCommand, exportPDFListsCommand, exportMarkdownDocsCommand, exportMarkdownListsCommand, exportOPMLsCommand])
