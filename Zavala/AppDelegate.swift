@@ -63,12 +63,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									 modifierFlags: [])
 	
 	let goBackwardOneCommand = UIKeyCommand(title: .backControlLabel,
-											action: #selector(goBackwardOneCommand(_:)),
+											action: .goBackwardOne,
 											input: "[",
 											modifierFlags: [.command])
 	
 	let goForwardOneCommand = UIKeyCommand(title: .forwardControlLabel,
-										   action: #selector(goForwardOneCommand(_:)),
+										   action: .goForwardOne,
 										   input: "]",
 										   modifierFlags: [.command])
 	
@@ -418,14 +418,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func goBackwardOneCommand(_ sender: Any?) {
-		mainCoordinator?.goBackwardOne()
-	}
-	
-	@objc func goForwardOneCommand(_ sender: Any?) {
-		mainCoordinator?.goForwardOne()
-	}
-	
 	@objc func insertRowCommand(_ sender: Any?) {
 		mainCoordinator?.insertRow()
 	}
@@ -600,14 +592,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(goBackwardOneCommand(_:)):
-			if mainCoordinator?.isGoBackwardOneUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(goForwardOneCommand(_:)):
-			if mainCoordinator?.isGoForwardOneUnavailable ?? true {
-				command.attributes = .disabled
-			}
 		case #selector(insertRowCommand(_:)):
 			if mainCoordinator?.isInsertRowUnavailable ?? true {
 				command.attributes = .disabled

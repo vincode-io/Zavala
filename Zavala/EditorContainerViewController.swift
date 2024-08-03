@@ -24,9 +24,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		return children.first as? EditorViewController
 	}
 
-	var isGoBackwardOneUnavailable: Bool = false
-	var isGoForwardOneUnavailable: Bool = false
-
 	weak var sceneDelegate: OutlineEditorSceneDelegate?
 	
 	var stateRestorationActivity: NSUserActivity {
@@ -103,9 +100,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		return document
 	}
 
-	func goBackwardOne() {	}
-	func goForwardOne() { }
-	
 	func shutdown() {
 		activityManager.invalidateSelectDocument()
 		editorViewController?.edit(nil, isNew: false)

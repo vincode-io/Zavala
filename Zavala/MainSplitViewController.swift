@@ -11,6 +11,11 @@ import SafariServices
 import VinOutlineKit
 import VinUtility
 
+extension Selector {
+	static let goBackwardOne = Selector(("goBackwardOne:"))
+	static let goForwardOne = Selector(("goForwardOne:"))
+}
+
 protocol MainControllerIdentifiable {
 	var mainControllerIdentifer: MainControllerIdentifier { get }
 }
@@ -77,14 +82,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		viewController(for: .secondary) as? EditorViewController
 	}
 	
-	var isGoBackwardOneUnavailable: Bool {
-		return goBackwardStack.isEmpty
-	}
-	
-	var isGoForwardOneUnavailable: Bool {
-		return goForwardStack.isEmpty
-	}
-    
     private let activityManager = ActivityManager()
 	
 	private var collectionsViewController: CollectionsViewController? {
@@ -249,14 +246,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 	
-	func goBackwardOne() {
-		goBackward(to: 0)
-	}
-	
-	func goForwardOne() {
-		goForward(to: 0)
-	}
-	
 	func validateToolbar() {
 		self.sceneDelegate?.validateToolbar()
 	}
@@ -294,6 +283,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 				return false
 			}
 			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true) || !(editorViewController?.isOutlineFunctionsUnavailable ?? true)
+		case .goBackwardOne:
+			return !goBackwardStack.isEmpty
+		case .goForwardOne:
+			return !goForwardStack.isEmpty
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -593,11 +586,11 @@ extension MainSplitViewController: DocumentsDelegate {
 extension MainSplitViewController: EditorDelegate {
 	
 	var editorViewControllerIsGoBackUnavailable: Bool {
-		return isGoBackwardOneUnavailable
+		return UIResponder.valid(action: .goBackwardOne)
 	}
 	
 	var editorViewControllerIsGoForwardUnavailable: Bool {
-		return isGoForwardOneUnavailable
+		return UIResponder.valid(action: .goForwardOne)
 	}
 	
 	var editorViewControllerGoBackwardStack: [Pin] {
@@ -984,14 +977,14 @@ extension MainSplitViewController: NSToolbarDelegate {
 				}
 				toolbarItem.itemMenu = UIMenu(title: "", children: backwardItems)
 				
-				return self.isGoBackwardOneUnavailable
+				return !UIResponder.valid(action: .goBackwardOne)
 			}
 			
 			goBackwardItem.image = .goBackward.symbolSizedForCatalyst()
 			goBackwardItem.label = .goBackwardControlLabel
 			goBackwardItem.toolTip = .goBackwardControlLabel
 			goBackwardItem.isBordered = true
-			goBackwardItem.action = #selector(goBackwardOne(_:))
+			goBackwardItem.action = .goBackwardOne
 			goBackwardItem.target = self
 			goBackwardItem.showsIndicator = false
 
@@ -1009,14 +1002,14 @@ extension MainSplitViewController: NSToolbarDelegate {
 				}
 				toolbarItem.itemMenu = UIMenu(title: "", children: forwardItems)
 				
-				return self.isGoForwardOneUnavailable
+				return !UIResponder.valid(action: .goForwardOne)
 			}
 			
 			goForwardItem.image = .goForward.symbolSizedForCatalyst()
 			goForwardItem.label = .goForwardControlLabel
 			goForwardItem.toolTip = .goForwardControlLabel
 			goForwardItem.isBordered = true
-			goForwardItem.action = #selector(goForwardOne(_:))
+			goForwardItem.action = .goForwardOne
 			goForwardItem.target = self
 			goForwardItem.showsIndicator = false
 			

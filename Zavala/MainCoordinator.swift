@@ -27,10 +27,6 @@ extension Selector {
 protocol MainCoordinator: UIViewController, DocumentsActivityItemsConfigurationDelegate {
 	var editorViewController: EditorViewController? { get }
 	var selectedDocuments: [Document] { get }
-	var isGoBackwardOneUnavailable: Bool { get }
-	var isGoForwardOneUnavailable: Bool { get }
-	func goBackwardOne()
-	func goForwardOne()
 }
 
 extension MainCoordinator {
