@@ -144,7 +144,10 @@ public class CloudKitManager {
 		guard isNetworkAvailable else {
 			return
 		}
-		
+
+		// Set this a little early so that any validations using the sync will begin
+		// notification will be correct.
+		isSyncing = true
 		cloudKitSyncWillBegin()
 
 		do {
@@ -158,6 +161,9 @@ public class CloudKitManager {
 	}
 	
 	func userDidAcceptCloudKitShareWith(_ shareMetadata: CKShare.Metadata) async {
+		isSyncing = true
+		cloudKitSyncWillBegin()
+		
 		return await withCheckedContinuation { continuation in
 			let op = CKAcceptSharesOperation(shareMetadatas: [shareMetadata])
 			op.qualityOfService = CloudKitOutlineZone.qualityOfService

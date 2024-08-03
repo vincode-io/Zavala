@@ -261,14 +261,16 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
-		case .delete:
-			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true)
+		case .sync:
+			return AccountManager.shared.isSyncAvailable
 		case .share:
 			return !isOutlineFunctionsUnavailable
 		case .manageSharing:
 			return !isManageSharingUnavailable
 		case .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
 			return !isExportAndPrintUnavailable
+		case .delete:
+			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true)
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -405,7 +407,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 		case .sync:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { _ in
-				return !AccountManager.shared.isSyncAvailable
+				return !UIResponder.valid(action: .sync)
 			}
 			item.image = .sync.symbolSizedForCatalyst()
 			item.label = .syncControlLabel

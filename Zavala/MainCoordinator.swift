@@ -10,6 +10,7 @@ import SwiftUI
 import VinOutlineKit
 
 extension Selector {
+	static let sync = Selector(("sync:"))
 	static let share = Selector(("share:"))
 	static let manageSharing = Selector(("manageSharing:"))
 	static let exportPDFDocs = Selector(("exportPDFDocs:"))

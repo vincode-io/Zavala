@@ -26,7 +26,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		updateUserInterfaceStyle()
 		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
-		
+		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitStateDidChange), name: .CloudKitSyncWillBegin, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitStateDidChange), name: .CloudKitSyncDidComplete, object: nil)
+
 		AppDefaults.shared.lastMainWindowWasClosed = false
 		
 		self.mainSplitViewController = mainSplitViewController
@@ -144,6 +146,10 @@ private extension SceneDelegate {
 		Task { @MainActor in
 			updateUserInterfaceStyle()
 		}
+	}
+
+	@objc func cloudKitStateDidChange() {
+		validateToolbar()
 	}
 
 	func acceptShare(_ shareMetadata: CKShare.Metadata) {

@@ -26,7 +26,9 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		updateUserInterfaceStyle()
 		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
-		
+		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitStateDidChange), name: .CloudKitSyncWillBegin, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitStateDidChange), name: .CloudKitSyncDidComplete, object: nil)
+
 		self.editorContainerViewController = editorContainerViewController
 		self.editorContainerViewController.sceneDelegate = self
 		
@@ -136,6 +138,10 @@ private extension OutlineEditorSceneDelegate {
 		Task { @MainActor in
 			updateUserInterfaceStyle()
 		}
+	}
+	
+	@objc func cloudKitStateDidChange() {
+		validateToolbar()
 	}
 
 	func acceptShare(_ shareMetadata: CKShare.Metadata) {

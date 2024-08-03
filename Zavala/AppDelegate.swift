@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	
 	let syncCommand = UIKeyCommand(title: .syncControlLabel,
-								   action: #selector(syncCommand(_:)),
+								   action: .sync,
 								   input: "r",
 								   modifierFlags: [.command])
 	
@@ -402,12 +402,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		#endif
 	}
 
-	@objc func syncCommand(_ sender: Any?) {
-		Task {
-			await AccountManager.shared.sync()
-		}
-	}
-
 	@objc func importOPMLCommand(_ sender: Any?) {
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
 			mainSplitViewController.importOPML()
@@ -636,10 +630,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(beginDocumentSearchCommand(_:)):
 			if !(mainCoordinator is MainSplitViewController) {
-				command.attributes = .disabled
-			}
-		case #selector(syncCommand(_:)):
-			if !AccountManager.shared.isSyncAvailable {
 				command.attributes = .disabled
 			}
 		case #selector(outlineGetInfoCommand(_:)):

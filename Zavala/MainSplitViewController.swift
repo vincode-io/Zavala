@@ -286,6 +286,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
+		case .sync:
+			return AccountManager.shared.isSyncAvailable
+		case .share:
+			return !isOutlineFunctionsUnavailable
+		case .manageSharing:
+			return !isManageSharingUnavailable
+		case .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
+			return !isExportAndPrintUnavailable
 		case .selectAll:
 			return !(editorViewController?.isInEditMode ?? false)
 		case .delete:
@@ -293,18 +301,12 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 				return false
 			}
 			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true) || !(editorViewController?.isOutlineFunctionsUnavailable ?? true)
-		case .share:
-			return !isOutlineFunctionsUnavailable
-		case .manageSharing:
-			return !isManageSharingUnavailable
-		case .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
-			return !isExportAndPrintUnavailable
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
 	}
 	
-	@objc func sync() {
+	@objc func sync(_ sender: Any?) {
 		Task {
 			await AccountManager.shared.sync()
 		}
@@ -934,7 +936,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 		case .sync:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { _ in
-				return !AccountManager.shared.isSyncAvailable
+				return !UIResponder.valid(action: .sync)
 			}
 			item.image = .sync.symbolSizedForCatalyst()
 			item.label = .syncControlLabel
