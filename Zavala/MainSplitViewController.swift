@@ -1253,8 +1253,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .printDoc:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .printDocs)
 			}
 			item.image = .printDoc.symbolSizedForCatalyst()
 			item.label = .printDocControlLabel
@@ -1265,8 +1265,8 @@ extension MainSplitViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .printList:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .printLists)
 			}
 			item.image = .printList.symbolSizedForCatalyst()
 			item.label = .printListControlLabel
