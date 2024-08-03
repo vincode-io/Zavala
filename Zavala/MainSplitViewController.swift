@@ -319,12 +319,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 	
-	@objc func toggleSidebar() {
-		UIView.animate(withDuration: 0.25) {
-			self.preferredDisplayMode = self.displayMode == .twoBesideSecondary ? .secondaryOnly : .twoBesideSecondary
-		}
-	}
-
 	@objc func insertImage(_ sender: Any?) {
 		insertImage()
 	}

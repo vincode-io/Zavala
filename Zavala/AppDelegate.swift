@@ -423,12 +423,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func toggleSidebarCommand(_ sender: Any?) {
-		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.toggleSidebar()
-		}
-	}
-	
 	@objc func goBackwardOneCommand(_ sender: Any?) {
 		mainCoordinator?.goBackwardOne()
 	}
@@ -617,10 +611,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(toggleSidebarCommand(_:)):
-			if !(mainCoordinator is MainSplitViewController) {
-				command.attributes = .disabled
-			}
 		case #selector(beginDocumentSearchCommand(_:)):
 			if !(mainCoordinator is MainSplitViewController) {
 				command.attributes = .disabled
