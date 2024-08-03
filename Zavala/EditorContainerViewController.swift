@@ -210,6 +210,26 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		toggleNotesFilter()
 	}
 
+	@objc func exportPDFDocs(_ sender: Any?) {
+		exportPDFDocs()
+	}
+
+	@objc func exportPDFLists(_ sender: Any?) {
+		exportPDFLists()
+	}
+
+	@objc func exportMarkdownDocs(_ sender: Any?) {
+		exportMarkdownDocs()
+	}
+
+	@objc func exportMarkdownLists(_ sender: Any?) {
+		exportMarkdownLists()
+	}
+
+	@objc func exportOPMLs(_ sender: Any?) {
+		exportOPMLs()
+	}
+
 	@objc func printDoc(_ sender: Any?) {
 		printDocs()
 	}
@@ -247,7 +267,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 			return !isOutlineFunctionsUnavailable
 		case .manageSharing:
 			return !isManageSharingUnavailable
-		case .printDocs, .printLists:
+		case .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
 			return !isExportAndPrintUnavailable
 		default:
 			return super.canPerformAction(action, withSender: sender)

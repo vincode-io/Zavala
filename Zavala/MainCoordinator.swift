@@ -12,6 +12,11 @@ import VinOutlineKit
 extension Selector {
 	static let share = Selector(("share:"))
 	static let manageSharing = Selector(("manageSharing:"))
+	static let exportPDFDocs = Selector(("exportPDFDocs:"))
+	static let exportPDFLists = Selector(("exportPDFLists:"))
+	static let exportMarkdownDocs = Selector(("exportMarkdownDocs:"))
+	static let exportMarkdownLists = Selector(("exportMarkdownLists:"))
+	static let exportOPMLs = Selector(("exportOPMLs:"))
 	static let printDocs = Selector(("printDocs:"))
 	static let printLists = Selector(("printLists:"))
 }

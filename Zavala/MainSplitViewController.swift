@@ -297,7 +297,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			return !isOutlineFunctionsUnavailable
 		case .manageSharing:
 			return !isManageSharingUnavailable
-		case .printDocs, .printLists:
+		case .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
 			return !isExportAndPrintUnavailable
 		default:
 			return super.canPerformAction(action, withSender: sender)
@@ -380,6 +380,26 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 
 	@objc func toggleOutlineHideNotes(_ sender: Any?) {
 		toggleNotesFilter()
+	}
+
+	@objc func exportPDFDocs(_ sender: Any?) {
+		exportPDFDocs()
+	}
+
+	@objc func exportPDFLists(_ sender: Any?) {
+		exportPDFLists()
+	}
+
+	@objc func exportMarkdownDocs(_ sender: Any?) {
+		exportMarkdownDocs()
+	}
+
+	@objc func exportMarkdownLists(_ sender: Any?) {
+		exportMarkdownLists()
+	}
+
+	@objc func exportOPMLs(_ sender: Any?) {
+		exportOPMLs()
 	}
 
 	@objc func printDocs(_ sender: Any?) {

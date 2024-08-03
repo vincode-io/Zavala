@@ -27,18 +27,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 								   modifierFlags: [.command])
 	
 	let exportOPMLsCommand = UIKeyCommand(title: .exportOPMLEllipsisControlLabel,
-										  action: #selector(exportOPMLsCommand(_:)),
+										  action: .exportOPMLs,
 										  input: "e",
 										  modifierFlags: [.shift, .command])
 	
-	let exportPDFDocsCommand = UICommand(title: .exportPDFDocEllipsisControlLabel, action: #selector(exportPDFDocsCommand(_:)))
+	let exportPDFDocsCommand = UICommand(title: .exportPDFDocEllipsisControlLabel, action: .exportPDFDocs)
 
-	let exportPDFListsCommand = UICommand(title: .exportPDFListEllipsisControlLabel, action: #selector(exportPDFListsCommand(_:)))
+	let exportPDFListsCommand = UICommand(title: .exportPDFListEllipsisControlLabel, action: .exportPDFLists)
 
-	let exportMarkdownDocsCommand = UICommand(title: .exportMarkdownDocEllipsisControlLabel, action: #selector(exportMarkdownDocsCommand(_:)))
+	let exportMarkdownDocsCommand = UICommand(title: .exportMarkdownDocEllipsisControlLabel, action: .exportMarkdownDocs)
 	
 	let exportMarkdownListsCommand = UIKeyCommand(title: .exportMarkdownListEllipsisControlLabel,
-												  action: #selector(exportMarkdownListsCommand(_:)),
+												  action: .exportMarkdownLists,
 												  input: "e",
 												  modifierFlags: [.control, .command])
 	
@@ -418,26 +418,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 
-	@objc func exportPDFDocsCommand(_ sender: Any?) {
-		mainCoordinator?.exportPDFDocs()
-	}
-
-	@objc func exportPDFListsCommand(_ sender: Any?) {
-		mainCoordinator?.exportPDFLists()
-	}
-
-	@objc func exportMarkdownDocsCommand(_ sender: Any?) {
-		mainCoordinator?.exportMarkdownDocs()
-	}
-
-	@objc func exportMarkdownListsCommand(_ sender: Any?) {
-		mainCoordinator?.exportMarkdownLists()
-	}
-
-	@objc func exportOPMLsCommand(_ sender: Any?) {
-		mainCoordinator?.exportOPMLs()
-	}
-
 	@objc func newWindow(_ sender: Any?) {
 		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.newWindow)
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: userActivity, options: nil, errorHandler: nil)
@@ -664,14 +644,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(outlineGetInfoCommand(_:)):
 			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(exportPDFDocsCommand(_:)),
-			#selector(exportPDFListsCommand(_:)),
-			#selector(exportMarkdownDocsCommand(_:)),
-			#selector(exportMarkdownListsCommand(_:)),
-			#selector(exportOPMLsCommand(_:)):
-			if mainCoordinator?.isExportAndPrintUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(goBackwardOneCommand(_:)):
