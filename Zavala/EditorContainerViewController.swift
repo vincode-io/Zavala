@@ -222,11 +222,11 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		showGetInfo()
 	}
 
-	@objc func share() {
+	@objc func share(_ sender: Any?) {
 		editorViewController?.share()
 	}
 	
-	@objc func manageSharing() {
+	@objc func manageSharing(_ sender: Any?) {
 		guard let shareRecord = selectedDocuments.first!.shareRecord, let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer else {
 			return
 		}

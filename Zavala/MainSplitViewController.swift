@@ -392,11 +392,11 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		showGetInfo()
 	}
 
-	@objc func share() {
+	@objc func share(_ sender: Any?) {
 		documentsViewController?.share()
 	}
 	
-	@objc func manageSharing() {
+	@objc func manageSharing(_ sender: Any?) {
 		documentsViewController?.manageSharing()
 	}
 	

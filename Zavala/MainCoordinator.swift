@@ -10,8 +10,8 @@ import SwiftUI
 import VinOutlineKit
 
 extension Selector {
-	static let share = Selector(("share"))
-	static let manageSharing = Selector(("manageSharing"))
+	static let share = Selector(("share:"))
+	static let manageSharing = Selector(("manageSharing:"))
 }
 
 @MainActor
