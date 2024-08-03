@@ -395,8 +395,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	@objc func importOPMLCommand(_ sender: Any?) {
-		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.importOPML()
+		if UIResponder.valid(action: .importOPML) {
+			UIApplication.shared.sendAction(.importOPML, to: nil, from: nil, for: nil)
 		} else {
 			#if targetEnvironment(macCatalyst)
 			appKitPlugin?.importOPML()
@@ -410,8 +410,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	@objc func createOutlineCommand(_ sender: Any?) {
-		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.createOutline()
+		if UIResponder.valid(action: .createOutline) {
+			UIApplication.shared.sendAction(.createOutline, to: nil, from: nil, for: nil)
 		} else {
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.newOutline)
 			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)

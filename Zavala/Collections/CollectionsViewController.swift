@@ -16,8 +16,6 @@ import VinUtility
 protocol CollectionsDelegate: AnyObject {
 	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool) async
 	func showSettings(_: CollectionsViewController)
-	func importOPML(_: CollectionsViewController)
-	func createOutline(_: CollectionsViewController)
 }
 
 enum CollectionsSection: Int {
@@ -227,14 +225,6 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		delegate?.showSettings(self)
 	}
 	
-	@objc func importOPML(_ sender: Any) {
-		delegate?.importOPML(self)
-	}
-
-    @objc func createOutline(_ sender: Any) {
-        delegate?.createOutline(self)
-    }
-    
     @objc func multipleSelect() {
 		Task {
 			await selectDocumentContainers(nil, isNavigationBranch: true, animated: true)

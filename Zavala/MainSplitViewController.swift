@@ -12,8 +12,10 @@ import VinOutlineKit
 import VinUtility
 
 extension Selector {
-	static let goBackwardOne = Selector(("goBackwardOne:"))
-	static let goForwardOne = Selector(("goForwardOne:"))
+	static let createOutline = #selector(MainSplitViewController.createOutline(_:))
+	static let importOPML = #selector(MainSplitViewController.importOPML(_:))
+	static let goBackwardOne = #selector(MainSplitViewController.goBackwardOne(_:))
+	static let goForwardOne = #selector(MainSplitViewController.goForwardOne(_:))
 }
 
 protocol MainControllerIdentifiable {
@@ -298,14 +300,14 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 	
-	@objc func createOutline() {
+	@objc func createOutline(_ sender: Any?) {
 		Task {
 			await selectDefaultDocumentContainerIfNecessary()
 			documentsViewController?.createOutline(animated: false)
 		}
 	}
 	
-	@objc func importOPML() {
+	@objc func importOPML(_ sender: Any?) {
 		Task {
 			await selectDefaultDocumentContainerIfNecessary()
 			documentsViewController?.importOPML()
@@ -470,14 +472,6 @@ extension MainSplitViewController: CollectionsDelegate {
 		showSettings()
 	}
 	
-	func importOPML(_: CollectionsViewController) {
-		importOPML()
-	}
-	
-	func createOutline(_: CollectionsViewController) {
-		createOutline()
-	}
-
 }
 
 // MARK: DocumentsDelegate
@@ -930,7 +924,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = .importOPMLControlLabel
 			item.toolTip = .importOPMLControlLabel
 			item.isBordered = true
-			item.action = #selector(importOPML as () -> ())
+			item.action = .importOPML
 			item.target = self
 			toolbarItem = item
 		case .newOutline:
@@ -942,7 +936,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = .newOutlineControlLabel
 			item.toolTip = .newOutlineControlLabel
 			item.isBordered = true
-			item.action = #selector(createOutline as () -> ())
+			item.action = .createOutline
 			item.target = self
 			toolbarItem = item
 		case .insertImage:
