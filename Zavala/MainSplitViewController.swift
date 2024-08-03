@@ -297,6 +297,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			return !isOutlineFunctionsUnavailable
 		case .manageSharing:
 			return !isManageSharingUnavailable
+		case .printDocs, .printLists:
+			return !isExportAndPrintUnavailable
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -1236,7 +1238,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = .printDocControlLabel
 			item.toolTip = .printDocControlLabel
 			item.isBordered = true
-			item.action = #selector(printDocs(_:))
+			item.action = .printDocs
 			item.target = self
 			toolbarItem = item
 		case .printList:
@@ -1248,7 +1250,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = .printListControlLabel
 			item.toolTip = .printListControlLabel
 			item.isBordered = true
-			item.action = #selector(printLists(_:))
+			item.action = .printLists
 			item.target = self
 			toolbarItem = item
 		case .share:

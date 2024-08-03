@@ -12,6 +12,8 @@ import VinOutlineKit
 extension Selector {
 	static let share = Selector(("share:"))
 	static let manageSharing = Selector(("manageSharing:"))
+	static let printDocs = Selector(("printDocs:"))
+	static let printLists = Selector(("printLists:"))
 }
 
 @MainActor

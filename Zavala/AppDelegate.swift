@@ -263,12 +263,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												  modifierFlags: [.alternate, .command])
 		
 	let printDocsCommand = UIKeyCommand(title: .printDocEllipsisControlLabel,
-										action: #selector(printDocsCommand(_:)),
+										action: .printDocs,
 										input: "p",
 										modifierFlags: [.alternate, .command])
 	
 	let printListsCommand = UIKeyCommand(title: .printListControlEllipsisLabel,
-										 action: #selector(printListsCommand(_:)),
+										 action: .printLists,
 										 input: "p",
 										 modifierFlags: [.command])
 
@@ -636,14 +636,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 
-	@objc func printDocsCommand(_ sender: Any?) {
-		mainCoordinator?.printDocs()
-	}
-
-	@objc func printListsCommand(_ sender: Any?) {
-		mainCoordinator?.printLists()
-	}
-
 	@objc func beginDocumentSearchCommand(_ sender: Any?) {
 		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
 			mainSplitViewController.beginDocumentSearch()
@@ -678,9 +670,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			#selector(exportPDFListsCommand(_:)),
 			#selector(exportMarkdownDocsCommand(_:)),
 			#selector(exportMarkdownListsCommand(_:)),
-			#selector(exportOPMLsCommand(_:)),
-			#selector(printDocsCommand(_:)),
-			#selector(printListsCommand(_:)):
+			#selector(exportOPMLsCommand(_:)):
 			if mainCoordinator?.isExportAndPrintUnavailable ?? true {
 				command.attributes = .disabled
 			}

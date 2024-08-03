@@ -247,6 +247,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 			return !isOutlineFunctionsUnavailable
 		case .manageSharing:
 			return !isManageSharingUnavailable
+		case .printDocs, .printLists:
+			return !isExportAndPrintUnavailable
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -615,27 +617,21 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.showsIndicator = false
 			toolbarItem = item
 		case .printDoc:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
-			}
+			let item = NSToolbarItem(itemIdentifier: itemIdentifier)
 			item.image = .printDoc.symbolSizedForCatalyst()
 			item.label = .printDocControlLabel
 			item.toolTip = .printDocControlLabel
 			item.isBordered = true
-			item.action = #selector(printDoc(_:))
+			item.action = .printDocs
 			item.target = self
 			toolbarItem = item
 		case .printList:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
-			}
+			let item = NSToolbarItem(itemIdentifier: itemIdentifier)
 			item.image = .printList.symbolSizedForCatalyst()
 			item.label = .printListControlLabel
 			item.toolTip = .printListControlLabel
 			item.isBordered = true
-			item.action = #selector(printList(_:))
+			item.action = .printLists
 			item.target = self
 			toolbarItem = item
 		case .share:
