@@ -181,9 +181,6 @@ private enum Button: Int {
 		decreaseButton.addTarget(self, action: #selector(stopContinuous(_:)), for: .touchUpOutside)
 		decreaseButton.addTarget(self, action: #selector(selected(_:)), for: .touchDown)
 		increaseButton.addTarget(self, action: #selector(selected(_:)), for: .touchDown)
-
-		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(labelPressed(_:)))
-		valueLabel.addGestureRecognizer(tapGesture)
 	}
 
 	// MARK: Storyboard preview setup
@@ -343,25 +340,6 @@ private enum Button: Int {
 		}
 	}
 
-	@objc func labelPressed(_ sender: UITapGestureRecognizer) {
-		let alertController = UIAlertController(title: "Enter Value", message: nil, preferredStyle: .alert)
-		alertController.addTextField { textField in
-			textField.placeholder = "Value"
-			textField.keyboardType = .decimalPad
-		}
-		alertController.addAction(UIAlertAction(title: "Confirm", style: .default) { _ in
-			if let newString = alertController.textFields?.first?.text, let newValue = Double(newString) {
-				if newValue >= self.minimumValue || newValue <= self.maximumValue {
-					self.value = newValue
-				}
-			}
-		})
-		alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-		getTopMostViewController()?.present(alertController, animated: true, completion: nil)
-	}
-
-	// MARK: Actions
-
 	// Set correct state of the buttons (in case we reached the minimum or maximum value).
 	private func setState() {
 		if value >= maximumValue {
@@ -408,17 +386,6 @@ private enum Button: Int {
 		decreaseLayer.strokeColor = tintColor.cgColor
 	}
 
-	// MARK: Helpers
-
-	func getTopMostViewController() -> UIViewController? {
-		if var topController = UIApplication.shared.foregroundActiveScene?.keyWindow?.rootViewController {
-			while let presentedViewController = topController.presentedViewController {
-				topController = presentedViewController
-			}
-			return topController
-		}
-		return nil
-	}
 }
 
 extension Double {
