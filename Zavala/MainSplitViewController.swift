@@ -14,6 +14,7 @@ import VinUtility
 
 extension Selector {
 	static let showSettings = #selector(MainSplitViewController.showSettings(_:))
+	static let showOpenQuickly = #selector(MainSplitViewController.showOpenQuickly(_:))
 	static let createOutline = #selector(MainSplitViewController.createOutline(_:))
 	static let importOPML = #selector(MainSplitViewController.importOPML(_:))
 	static let goBackwardOne = #selector(MainSplitViewController.goBackwardOne(_:))
@@ -230,26 +231,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 	
-	func showOpenQuickly() {
-		if traitCollection.userInterfaceIdiom == .mac {
-		
-			let openQuicklyViewController = UIStoryboard.openQuickly.instantiateController(ofType: MainOpenQuicklyViewController.self)
-			openQuicklyViewController.preferredContentSize = CGSize(width: 300, height: 60)
-			openQuicklyViewController.delegate = self
-			present(openQuicklyViewController, animated: true)
-		
-		} else {
-
-			let outlineGetInfoNavViewController = UIStoryboard.openQuickly.instantiateViewController(withIdentifier: "OpenQuicklyViewControllerNav") as! UINavigationController
-			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 100)
-			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
-			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OpenQuicklyViewController
-			outlineGetInfoViewController.delegate = self
-			present(outlineGetInfoNavViewController, animated: true)
-			
-		}
-	}
-	
 	func validateToolbar() {
 		self.sceneDelegate?.validateToolbar()
 	}
@@ -414,6 +395,27 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		present(settingsViewController, animated: true)
 	}
 	
+	@objc func showOpenQuickly(_ sender: Any?) {
+		if traitCollection.userInterfaceIdiom == .mac {
+		
+			let openQuicklyViewController = UIStoryboard.openQuickly.instantiateController(ofType: MainOpenQuicklyViewController.self)
+			openQuicklyViewController.preferredContentSize = CGSize(width: 300, height: 60)
+			openQuicklyViewController.delegate = self
+			present(openQuicklyViewController, animated: true)
+		
+		} else {
+
+			let outlineGetInfoNavViewController = UIStoryboard.openQuickly.instantiateViewController(withIdentifier: "OpenQuicklyViewControllerNav") as! UINavigationController
+			outlineGetInfoNavViewController.preferredContentSize = CGSize(width: 400, height: 100)
+			outlineGetInfoNavViewController.modalPresentationStyle = .formSheet
+			let outlineGetInfoViewController = outlineGetInfoNavViewController.topViewController as! OpenQuicklyViewController
+			outlineGetInfoViewController.delegate = self
+			present(outlineGetInfoNavViewController, animated: true)
+			
+		}
+	}
+	
+
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {

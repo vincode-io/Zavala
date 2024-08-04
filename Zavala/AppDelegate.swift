@@ -571,8 +571,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	@objc func showOpenQuicklyCommand(_ sender: Any?) {
-		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.showOpenQuickly()
+		if UIResponder.valid(action: .showOpenQuickly) {
+			UIApplication.shared.sendAction(.showOpenQuickly, to: nil, from: nil, for: nil)
 		} else {
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openQuickly)
 			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
