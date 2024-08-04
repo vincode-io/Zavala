@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import SwiftUI
 import CoreSpotlight
 import SafariServices
 import VinOutlineKit
 import VinUtility
 
 extension Selector {
+	static let showSettings = #selector(MainSplitViewController.showSettings(_:))
 	static let createOutline = #selector(MainSplitViewController.createOutline(_:))
 	static let importOPML = #selector(MainSplitViewController.importOPML(_:))
 	static let goBackwardOne = #selector(MainSplitViewController.goBackwardOne(_:))
@@ -406,6 +408,12 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		documentsViewController?.manageSharing()
 	}
 	
+	@objc func showSettings(_ sender: Any?) {
+		let settingsViewController = UIHostingController(rootView: SettingsView())
+		settingsViewController.modalPresentationStyle = .formSheet
+		present(settingsViewController, animated: true)
+	}
+	
 	// MARK: Validations
 	
 	override func validate(_ command: UICommand) {
@@ -468,10 +476,6 @@ extension MainSplitViewController: CollectionsDelegate {
 		await documentsViewController?.setDocumentContainers(documentContainers, isNavigationBranch: isNavigationBranch)
 	}
 
-	func showSettings(_: CollectionsViewController) {
-		showSettings()
-	}
-	
 }
 
 // MARK: DocumentsDelegate

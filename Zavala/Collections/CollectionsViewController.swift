@@ -15,7 +15,6 @@ import VinUtility
 @MainActor
 protocol CollectionsDelegate: AnyObject {
 	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool) async
-	func showSettings(_: CollectionsViewController)
 }
 
 enum CollectionsSection: Int {
@@ -75,6 +74,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 	private var addButton: UIButton!
 	private var importButton: UIButton!
 
+	private var settingsBarButtonItem: UIBarButtonItem!
     private var selectBarButtonItem: UIBarButtonItem!
     private var selectDoneBarButtonItem: UIBarButtonItem!
 	
@@ -87,6 +87,10 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 			navigationController?.setNavigationBarHidden(true, animated: false)
 			collectionView.allowsMultipleSelection = true
 		} else {
+			settingsBarButtonItem = UIBarButtonItem(image: .settings, style: .plain, target: nil, action: .showSettings)
+			settingsBarButtonItem.accessibilityLabel = .settingsControlLabel
+			navigationItem.leftBarButtonItem = settingsBarButtonItem
+			
 			if traitCollection.userInterfaceIdiom == .pad {
 				selectBarButtonItem = UIBarButtonItem(title: .selectControlLabel, style: .plain, target: self, action: #selector(multipleSelect))
 				selectDoneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(multipleSelectDone))
@@ -220,11 +224,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		}
 		collectionView?.refreshControl?.endRefreshing()
 	}
-	
-	@IBAction func showSettings(_ sender: Any) {
-		delegate?.showSettings(self)
-	}
-	
+		
     @objc func multipleSelect() {
 		Task {
 			await selectDocumentContainers(nil, isNavigationBranch: true, animated: true)

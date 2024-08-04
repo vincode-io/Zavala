@@ -97,6 +97,7 @@ extension UIImage {
 	static let rename = UIImage(systemName: "pencil")!
 	static let restore = UIImage(systemName: "gobackward")!
 
+	static let settings = UIImage(systemName: "gear")!
 	static let share = UIImage(systemName: "square.and.arrow.up")!
 	static let sync = UIImage(systemName: "arrow.clockwise")!
 

@@ -296,12 +296,6 @@ extension MainCoordinator {
 		editorViewController?.deleteCompletedRows()
 	}
 	
-	func showSettings() {
-		let settingsViewController = UIHostingController(rootView: SettingsView())
-		settingsViewController.modalPresentationStyle = .formSheet
-		present(settingsViewController, animated: true)
-	}
-	
 	func showGetInfo() {
 		guard let outline = editorViewController?.outline else { return }
 		showGetInfo(outline: outline)

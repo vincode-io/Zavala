@@ -385,13 +385,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// MARK: Actions
 
 	@objc func showPreferences(_ sender: Any?) {
-		#if targetEnvironment(macCatalyst)
 		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.showSettings)
 		let scene = UIApplication.shared.connectedScenes.first(where: { $0.delegate is SettingsSceneDelegate})
 		UIApplication.shared.requestSceneSessionActivation(scene?.session, userActivity: userActivity, options: nil, errorHandler: nil)
-		#else
-		mainCoordinator?.showSettings()
-		#endif
 	}
 
 	@objc func importOPMLCommand(_ sender: Any?) {
