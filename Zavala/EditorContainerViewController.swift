@@ -169,22 +169,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		collapseAllInOutline()
 	}
 
-	@objc func moveRowsRight(_ sender: Any?) {
-		moveRowsRight()
-	}
-
-	@objc func moveRowsLeft(_ sender: Any?) {
-		moveRowsLeft()
-	}
-
-	@objc func moveRowsUp(_ sender: Any?) {
-		moveRowsUp()
-	}
-
-	@objc func moveRowsDown(_ sender: Any?) {
-		moveRowsDown()
-	}
-
 	@objc func toggleFocus(_ sender: Any?) {
 		toggleFocus()
 	}
@@ -498,53 +482,49 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.action = #selector(collapseAllInOutline(_:))
 			item.target = self
 			toolbarItem = item
-		case .moveRight:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isMoveRowsRightUnavailable ?? true
-			}
-			item.image = .moveRight.symbolSizedForCatalyst()
-			item.label = .moveRightControlLabel
-			item.toolTip = .moveRightControlLabel
-			item.isBordered = true
-			item.action = #selector(moveRowsRight(_:))
-			item.target = self
-			toolbarItem = item
 		case .moveLeft:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isMoveRowsLeftUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .moveCurrentRowsLeft)
 			}
 			item.image = .moveLeft.symbolSizedForCatalyst()
 			item.label = .moveLeftControlLabel
 			item.toolTip = .moveLeftControlLabel
 			item.isBordered = true
-			item.action = #selector(moveRowsLeft(_:))
-			item.target = self
+			item.action = .moveCurrentRowsLeft
+			toolbarItem = item
+		case .moveRight:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .moveCurrentRowsRight)
+			}
+			item.image = .moveRight.symbolSizedForCatalyst()
+			item.label = .moveRightControlLabel
+			item.toolTip = .moveRightControlLabel
+			item.isBordered = true
+			item.action = .moveCurrentRowsRight
 			toolbarItem = item
 		case .moveUp:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isMoveRowsUpUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .moveCurrentRowsUp)
 			}
 			item.image = .moveUp.symbolSizedForCatalyst()
 			item.label = .moveUpControlLabel
 			item.toolTip = .moveUpControlLabel
 			item.isBordered = true
-			item.action = #selector(moveRowsUp(_:))
-			item.target = self
+			item.action = .moveCurrentRowsUp
 			toolbarItem = item
 		case .moveDown:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isMoveRowsDownUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .moveCurrentRowsDown)
 			}
 			item.image = .moveDown.symbolSizedForCatalyst()
 			item.label = .moveDownControlLabel
 			item.toolTip = .moveDownControlLabel
 			item.isBordered = true
-			item.action = #selector(moveRowsDown(_:))
-			item.target = self
+			item.action = .moveCurrentRowsDown
 			toolbarItem = item
 		case .focus:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)

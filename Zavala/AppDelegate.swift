@@ -102,25 +102,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											input: "r",
 											modifierFlags: [.command, .control])
 	
-	let moveRowsUpCommand = UIKeyCommand(title: .moveUpControlLabel,
-										 action: #selector(moveRowsUpCommand(_:)),
-										 input: UIKeyCommand.inputUpArrow,
-										 modifierFlags: [.control, .command])
-	
-	let moveRowsDownCommand = UIKeyCommand(title: .moveDownControlLabel,
-										   action: #selector(moveRowsDownCommand(_:)),
-										   input: UIKeyCommand.inputDownArrow,
-										   modifierFlags: [.control, .command])
-	
 	let moveRowsLeftCommand = UIKeyCommand(title: .moveLeftControlLabel,
-										   action: #selector(moveRowsLeftCommand(_:)),
+										   action: .moveCurrentRowsLeft,
 										   input: UIKeyCommand.inputLeftArrow,
 										   modifierFlags: [.control, .command])
 	
 	let moveRowsRightCommand = UIKeyCommand(title: .moveRightControlLabel,
-											action: #selector(moveRowsRightCommand(_:)),
+											action: .moveCurrentRowsRight,
 											input: UIKeyCommand.inputRightArrow,
 											modifierFlags: [.control, .command])
+	
+	let moveRowsUpCommand = UIKeyCommand(title: .moveUpControlLabel,
+										 action: .moveCurrentRowsUp,
+										 input: UIKeyCommand.inputUpArrow,
+										 modifierFlags: [.control, .command])
+	
+	let moveRowsDownCommand = UIKeyCommand(title: .moveDownControlLabel,
+										   action: .moveCurrentRowsDown,
+										   input: UIKeyCommand.inputDownArrow,
+										   modifierFlags: [.control, .command])
 	
 	let toggleCompleteRowsCommand = UIKeyCommand(title: .completeControlLabel,
 												 action: #selector(toggleCompleteRowsCommand(_:)),
@@ -418,22 +418,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.duplicateRows()
 	}
 	
-	@objc func moveRowsUpCommand(_ sender: Any?) {
-		mainCoordinator?.moveRowsUp()
-	}
-	
-	@objc func moveRowsDownCommand(_ sender: Any?) {
-		mainCoordinator?.moveRowsDown()
-	}
-	
-	@objc func moveRowsLeftCommand(_ sender: Any?) {
-		mainCoordinator?.moveRowsLeft()
-	}
-	
-	@objc func moveRowsRightCommand(_ sender: Any?) {
-		mainCoordinator?.moveRowsRight()
-	}
-	
 	@objc func toggleCompleteRowsCommand(_ sender: Any?) {
 		mainCoordinator?.toggleCompleteRows()
 	}
@@ -570,22 +554,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		switch command.action {
 		case #selector(duplicateRowsCommand(_:)):
 			if mainCoordinator?.isDuplicateRowsUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(moveRowsUpCommand(_:)):
-			if mainCoordinator?.isMoveRowsUpUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(moveRowsDownCommand(_:)):
-			if mainCoordinator?.isMoveRowsDownUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(moveRowsLeftCommand(_:)):
-			if mainCoordinator?.isMoveRowsLeftUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(moveRowsRightCommand(_:)):
-			if mainCoordinator?.isMoveRowsRightUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(toggleCompleteRowsCommand(_:)):

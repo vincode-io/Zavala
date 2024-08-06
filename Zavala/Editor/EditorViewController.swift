@@ -18,6 +18,10 @@ extension Selector {
 	static let createRowInside = #selector(EditorViewController.createRowInside(_:))
 	static let createRowOutside = #selector(EditorViewController.createRowOutside(_:))
 	static let deleteCurrentRows = #selector(EditorViewController.deleteCurrentRows(_:))
+	static let moveCurrentRowsLeft = #selector(EditorViewController.moveCurrentRowsLeft(_:))
+	static let moveCurrentRowsRight = #selector(EditorViewController.moveCurrentRowsRight(_:))
+	static let moveCurrentRowsUp = #selector(EditorViewController.moveCurrentRowsUp(_:))
+	static let moveCurrentRowsDown = #selector(EditorViewController.moveCurrentRowsDown(_:))
 }
 
 @MainActor
@@ -124,26 +128,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return delegate?.editorViewControllerIsGoForwardUnavailable ?? true
 	}
 	
-	var isMoveRowsRightUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isMoveRowsRightUnavailable(rows: rows)
-	}
-
-	var isMoveRowsLeftUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isMoveRowsLeftUnavailable(rows: rows)
-	}
-
-	var isMoveRowsUpUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isMoveRowsUpUnavailable(rows: rows)
-	}
-
-	var isMoveRowsDownUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isMoveRowsDownUnavailable(rows: rows)
-	}
-
 	var isToggleRowCompleteUnavailable: Bool {
 		guard let outline, let rows = currentRows else { return true }
 		return outline.isCompleteUnavailable(rows: rows) && outline.isUncompleteUnavailable(rows: rows)
@@ -644,13 +628,34 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		case .addRowAbove, .addRowBelow, .createRowInside, .deleteCurrentRows:
 			return currentRows != nil
 		case .createRowOutside:
-			guard let outline, let rows = currentRows else {
+			if let outline, let currentRows, !outline.isCreateRowOutsideUnavailable(rows: currentRows) {
+				return true
+			} else {
 				return false
 			}
-			if outline.isCreateRowOutsideUnavailable(rows: rows) {
-				return false
-			} else {
+		case .moveCurrentRowsLeft:
+			if let outline, let currentRows, !outline.isMoveRowsLeftUnavailable(rows: currentRows) {
 				return true
+			} else {
+				return false
+			}
+		case .moveCurrentRowsRight:
+			if let outline, let currentRows, !outline.isMoveRowsRightUnavailable(rows: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .moveCurrentRowsUp:
+			if let outline, let currentRows, !outline.isMoveRowsUpUnavailable(rows: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .moveCurrentRowsDown:
+			if let outline, let currentRows, !outline.isMoveRowsDownUnavailable(rows: currentRows) {
+				return true
+			} else {
+				return false
 			}
 		default:
 			return super.canPerformAction(action, withSender: sender)
@@ -1021,10 +1026,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			pasteButton.isEnabled = !isPasteUnavailable
 			redoButton.isEnabled = !isRedoUnvailable
 			
-			moveLeftButton.isEnabled = !isMoveRowsLeftUnavailable
-			moveRightButton.isEnabled = !isMoveRowsRightUnavailable
-			moveUpButton.isEnabled = !isMoveRowsUpUnavailable
-			moveDownButton.isEnabled = !isMoveRowsDownUnavailable
+			moveLeftButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsLeft)
+			moveRightButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsRight)
+			moveUpButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsUp)
+			moveDownButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsDown)
 			
 			insertImageButton.isEnabled = !isInsertImageUnavailable
 			linkButton.isEnabled = UIResponder.valid(action: .editLink)
@@ -1267,6 +1272,26 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		deleteRows(rows)
 	}
 	
+	@objc func moveCurrentRowsLeft(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		moveRowsLeft(rows)
+	}
+	
+	@objc func moveCurrentRowsRight(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		moveRowsRight(rows)
+	}
+	
+	@objc func moveCurrentRowsUp(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		moveRowsUp(rows)
+	}
+	
+	@objc func moveCurrentRowsDown(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		moveRowsDown(rows)
+	}
+	
 	@objc func insertNewline() {
 		currentTextView?.insertNewline(self)
 	}
@@ -1330,26 +1355,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		rightToolbarButtonGroup.showPopOverMenu(for: formatMenuButton)
 	}
 
-	@objc func moveCurrentRowsLeft() {
-		guard let rows = currentRows else { return }
-		moveRowsLeft(rows)
-	}
-	
-	@objc func moveCurrentRowsRight() {
-		guard let rows = currentRows else { return }
-		moveRowsRight(rows)
-	}
-	
-	@objc func moveCurrentRowsUp() {
-		guard let rows = currentRows else { return }
-		moveRowsUp(rows)
-	}
-	
-	@objc func moveCurrentRowsDown() {
-		guard let rows = currentRows else { return }
-		moveRowsDown(rows)
-	}
-	
 	@objc func createOrDeleteNotes() {
 		guard let rows = currentRows else { return }
 
@@ -2008,10 +2013,10 @@ private extension EditorViewController {
 		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
 		leftToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .left)
-		moveLeftButton = leftToolbarButtonGroup.addButton(label: .moveLeftControlLabel, image: .moveLeft, selector: "moveCurrentRowsLeft")
-		moveRightButton = leftToolbarButtonGroup.addButton(label: .moveRightControlLabel, image: .moveRight, selector: "moveCurrentRowsRight")
-		moveUpButton = leftToolbarButtonGroup.addButton(label: .moveUpControlLabel, image: .moveUp, selector: "moveCurrentRowsUp")
-		moveDownButton = leftToolbarButtonGroup.addButton(label: .moveDownControlLabel, image: .moveDown, selector: "moveCurrentRowsDown")
+		moveLeftButton = leftToolbarButtonGroup.addButton(label: .moveLeftControlLabel, image: .moveLeft, selector: "moveCurrentRowsLeft:")
+		moveRightButton = leftToolbarButtonGroup.addButton(label: .moveRightControlLabel, image: .moveRight, selector: "moveCurrentRowsRight:")
+		moveUpButton = leftToolbarButtonGroup.addButton(label: .moveUpControlLabel, image: .moveUp, selector: "moveCurrentRowsUp:")
+		moveDownButton = leftToolbarButtonGroup.addButton(label: .moveDownControlLabel, image: .moveDown, selector: "moveCurrentRowsDown:")
 		let moveButtonsBarButtonItem = leftToolbarButtonGroup.buildBarButtonItem()
 
 		formatMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
