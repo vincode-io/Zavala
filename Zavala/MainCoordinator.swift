@@ -59,10 +59,6 @@ extension MainCoordinator {
 		return editorViewController?.isNotesFiltered ?? false
 	}
 
-	var isCreateRowUnavailable: Bool {
-		return editorViewController?.isCreateRowUnavailable ?? true
-	}
-	
 	var isDuplicateRowsUnavailable: Bool {
 		return editorViewController?.isDuplicateRowsUnavailable ?? true
 	}
@@ -185,10 +181,6 @@ extension MainCoordinator {
 	
 	func toggleNotesFilter() {
 		editorViewController?.toggleNotesFilter()
-	}
-	
-	func createRow() {
-		editorViewController?.createRow()
 	}
 	
 	func createRowInside() {

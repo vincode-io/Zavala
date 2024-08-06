@@ -14,6 +14,7 @@ import VinUtility
 
 extension Selector {
 	static let addRowAbove = #selector(EditorViewController.addRowAbove(_:))
+	static let addRowBelow = #selector(EditorViewController.addRowBelow(_:))
 }
 
 @MainActor
@@ -109,14 +110,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	var isDeleteCurrentRowUnavailable: Bool {
-		return currentRows == nil
-	}
-	
-	var isInsertRowUnavailable: Bool {
-		return currentRows == nil
-	}
-	
-	var isCreateRowUnavailable: Bool {
 		return currentRows == nil
 	}
 	
@@ -659,8 +652,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case .addRowAbove:
-			if isInsertRowUnavailable {
+		case .addRowAbove, .addRowBelow:
+			if currentRows == nil {
 				command.attributes = .disabled
 			}
 		default:
@@ -1062,11 +1055,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		deleteRows(rows)
 	}
 	
-	func createRow() {
-		guard let rows = currentRows else { return }
-		createRow(afterRows: rows)
-	}
-	
 	func duplicateCurrentRows() {
 		guard let rows = currentRows else { return }
 		duplicateRows(rows)
@@ -1269,6 +1257,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func addRowAbove(_ sender: Any?) {
 		guard let rows = currentRows else { return }
 		createRow(beforeRows: rows, moveCursor: true)
+	}
+	
+	@objc func addRowBelow(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		createRow(afterRows: rows)
 	}
 	
 	@objc func insertNewline() {

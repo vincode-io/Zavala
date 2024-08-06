@@ -77,10 +77,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										  input: "\n",
 										  modifierFlags: [.shift])
 	
-	let createRowCommand = UIKeyCommand(title: .addRowBelowControlLabel,
-										action: #selector(createRowCommand(_:)),
-										input: "\n",
-										modifierFlags: [.control])
+	let addRowBelowCommand = UIKeyCommand(title: .addRowBelowControlLabel,
+										  action: .addRowBelow,
+										  input: "\n",
+										  modifierFlags: [.control])
 	
 	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowControlLabel,
 											action: #selector(duplicateRowsCommand(_:)),
@@ -414,10 +414,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func createRowCommand(_ sender: Any?) {
-		mainCoordinator?.createRow()
-	}
-	
 	@objc func duplicateRowsCommand(_ sender: Any?) {
 		mainCoordinator?.duplicateRows()
 	}
@@ -584,10 +580,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(createRowCommand(_:)):
-			if mainCoordinator?.isCreateRowUnavailable ?? true {
-				command.attributes = .disabled
-			}
 		case #selector(duplicateRowsCommand(_:)):
 			if mainCoordinator?.isDuplicateRowsUnavailable ?? true {
 				command.attributes = .disabled
@@ -809,7 +801,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let mainOutlineMenu = UIMenu(title: "",
 									 options: .displayInline,
 									 children: [addRowAboveCommand,
-												createRowCommand,
+												addRowBelowCommand,
 												createRowInsideCommand,
 												createRowOutsideCommand,
 												duplicateRowsCommand,
