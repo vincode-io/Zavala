@@ -633,10 +633,21 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		case .paste:
 			return UIPasteboard.general.contains(pasteboardTypes: [UTType.utf8PlainText.identifier, Row.typeIdentifier])
 		case .find, .findAndReplace, .findNext, .findPrevious, .useSelectionForFind:
-			if isOutlineFunctionsUnavailable {
+			if outline == nil {
 				return false
 			} else {
 				return super.canPerformAction(action, withSender: sender)
+			}
+		case .addRowAbove, .addRowBelow, .createRowInside:
+			return currentRows != nil
+		case .createRowOutside:
+			guard let outline, let rows = currentRows else {
+				return false
+			}
+			if outline.isCreateRowOutsideUnavailable(rows: rows) {
+				return false
+			} else {
+				return true
 			}
 		default:
 			return super.canPerformAction(action, withSender: sender)
@@ -645,18 +656,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case .addRowAbove, .addRowBelow, .createRowInside:
-			if currentRows == nil {
-				command.attributes = .disabled
-			}
-		case .createRowOutside:
-			guard let outline, let rows = currentRows else {
-				command.attributes = .disabled
-				return
-			}
-			if outline.isCreateRowOutsideUnavailable(rows: rows) {
-				command.attributes = .disabled
-			}
 		default:
 			break
 		}
