@@ -72,10 +72,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										   input: "]",
 										   modifierFlags: [.command])
 	
-	let insertRowCommand = UIKeyCommand(title: .addRowAboveControlLabel,
-										action: .addRowAbove,
-										input: "\n",
-										modifierFlags: [.shift])
+	let addRowAboveCommand = UIKeyCommand(title: .addRowAboveControlLabel,
+										  action: .addRowAbove,
+										  input: "\n",
+										  modifierFlags: [.shift])
 	
 	let createRowCommand = UIKeyCommand(title: .addRowBelowControlLabel,
 										action: #selector(createRowCommand(_:)),
@@ -808,7 +808,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Outline Menu
 		let mainOutlineMenu = UIMenu(title: "",
 									 options: .displayInline,
-									 children: [insertRowCommand,
+									 children: [addRowAboveCommand,
 												createRowCommand,
 												createRowInsideCommand,
 												createRowOutsideCommand,
