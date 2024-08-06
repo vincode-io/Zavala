@@ -1,5 +1,5 @@
 {
-  "originHash" : "e73d7423f27164d2def0fe21d656a3639efb31b860bd6ceff7ca9278d546203c",
+  "originHash" : "291fb0769c8b6469e682fabc16c8c721d8bcd83c08ada6782990192ca89dae17",
   "pins" : [
     {
       "identity" : "markdownattributedstring",
@@ -16,7 +16,7 @@
       "location" : "https://github.com/groue/Semaphore.git",
       "state" : {
         "branch" : "main",
-        "revision" : "b92ec84502425e11a72a93852fe9427f78dce81a"
+        "revision" : "2543679282aa6f6c8ecf2138acd613ed20790bc2"
       }
     },
     {
@@ -24,17 +24,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-async-algorithms",
       "state" : {
-        "revision" : "da4e36f86544cdf733a40d59b3a2267e3a7bbf36",
-        "version" : "1.0.0"
+        "revision" : "6ae9a051f76b81cc668305ceed5b0e0a7fd93d20",
+        "version" : "1.0.1"
       }
     },
     {
       "identity" : "swift-cmark",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-cmark.git",
+      "location" : "https://github.com/swiftlang/swift-cmark.git",
       "state" : {
         "branch" : "gfm",
-        "revision" : "2c47322cb32cbed555f13bf5cbfaa488cc30a785"
+        "revision" : "fc07ab5da47975c5ef5f336acadfc02e8f706d30"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections.git",
       "state" : {
-        "revision" : "a902f1823a7ff3c9ab2fba0f992396b948eda307",
-        "version" : "1.0.5"
+        "revision" : "3d2dc41a01f9e49d84f0a3925fb858bed64f702d",
+        "version" : "1.1.2"
       }
     },
     {
@@ -52,7 +52,7 @@
       "location" : "https://github.com/apple/swift-markdown.git",
       "state" : {
         "branch" : "main",
-        "revision" : "365bf2d61d5fbca5cbd3b359b203ef6a69d9381f"
+        "revision" : "d21714073e0d16ba78eebdf36724863afc36871d"
       }
     },
     {
