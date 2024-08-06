@@ -17,6 +17,7 @@ extension Selector {
 	static let addRowBelow = #selector(EditorViewController.addRowBelow(_:))
 	static let createRowInside = #selector(EditorViewController.createRowInside(_:))
 	static let createRowOutside = #selector(EditorViewController.createRowOutside(_:))
+	static let deleteCurrentRows = #selector(EditorViewController.deleteCurrentRows(_:))
 }
 
 @MainActor
@@ -109,10 +110,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return false
 		}
 		return true
-	}
-	
-	var isDeleteCurrentRowUnavailable: Bool {
-		return currentRows == nil
 	}
 	
 	var isDuplicateRowsUnavailable: Bool {
@@ -604,6 +601,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 	}
 
+	override func delete(_ sender: Any?) {
+		deleteCurrentRows(sender)
+	}
+
 	override func find(_ sender: Any?) {
 		showFindInteraction()
 	}
@@ -632,13 +633,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
 		case .paste:
 			return UIPasteboard.general.contains(pasteboardTypes: [UTType.utf8PlainText.identifier, Row.typeIdentifier])
+		case .delete:
+			return currentRows != nil && !isInEditMode
 		case .find, .findAndReplace, .findNext, .findPrevious, .useSelectionForFind:
 			if outline == nil {
 				return false
 			} else {
 				return super.canPerformAction(action, withSender: sender)
 			}
-		case .addRowAbove, .addRowBelow, .createRowInside:
+		case .addRowAbove, .addRowBelow, .createRowInside, .deleteCurrentRows:
 			return currentRows != nil
 		case .createRowOutside:
 			guard let outline, let rows = currentRows else {
@@ -1050,11 +1053,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 	}
 	
-	func deleteCurrentRows() {
-		guard let rows = currentRows else { return }
-		deleteRows(rows)
-	}
-	
 	func duplicateCurrentRows() {
 		guard let rows = currentRows else { return }
 		duplicateRows(rows)
@@ -1262,6 +1260,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func createRowOutside(_ sender: Any?) {
 		guard let rows = currentRows else { return }
 		createRowOutside(afterRows: rows)
+	}
+	
+	@objc func deleteCurrentRows(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		deleteRows(rows)
 	}
 	
 	@objc func insertNewline() {

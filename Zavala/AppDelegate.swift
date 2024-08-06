@@ -92,6 +92,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											   input: "{",
 											   modifierFlags: [.command])
 	
+	let deleteCurrentRowsCommand = UIKeyCommand(title: .deleteRowControlLabel,
+												action: .deleteCurrentRows,
+												input: UIKeyCommand.inputDelete,
+												modifierFlags: [.shift, .command])
+	
 	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowControlLabel,
 											action: #selector(duplicateRowsCommand(_:)),
 											input: "r",
@@ -141,11 +146,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											 action: #selector(deleteRowNotesCommand(_:)),
 											 input: "-",
 											 modifierFlags: [.control, .shift])
-	
-	let deleteCurrentRowsCommand = UIKeyCommand(title: .deleteRowControlLabel,
-											 action: #selector(deleteCurrentRowsCommand(_:)),
-											 input: UIKeyCommand.inputDelete,
-												modifierFlags: [.shift, .command])
 	
 	let toggleBoldCommand = UIKeyCommand(title: .boldControlLabel,
 										 action: .toggleBoldface,
@@ -452,10 +452,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	@objc func deleteRowNotesCommand(_ sender: Any?) {
 		mainCoordinator?.deleteRowNotes()
-	}
-	
-	@objc func deleteCurrentRowsCommand(_ sender: Any?) {
-		mainCoordinator?.deleteCurrentRows()
 	}
 	
 	@objc func insertImageCommand(_ sender: Any?) {

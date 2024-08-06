@@ -107,13 +107,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	
 	// MARK: Actions
 	
-	override func delete(_ sender: Any?) {
-		guard editorViewController?.isDeleteCurrentRowUnavailable ?? true else {
-			editorViewController?.deleteCurrentRows()
-			return
-		}
-	}
-
 	@objc func deleteOutline(_ sender: Any?) {
 		guard let outline = editorViewController?.outline else { return }
 		let document = Document.outline(outline)
@@ -257,8 +250,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 			return !isManageSharingUnavailable
 		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
 			return !isOutlineFunctionsUnavailable
-		case .delete:
-			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true)
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}

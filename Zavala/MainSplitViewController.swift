@@ -66,11 +66,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		return documentsViewController?.selectedDocuments ?? []
 	}
 	
-	var isDeleteEntityUnavailable: Bool {
-		return (editorViewController?.isOutlineFunctionsUnavailable ?? true) &&
-			(editorViewController?.isDeleteCurrentRowUnavailable ?? true) 
-	}
-
 	var selectedDocumentContainers: [DocumentContainer]? {
 		return collectionsViewController?.selectedDocumentContainers
 	}
@@ -238,15 +233,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	// MARK: Actions
 	
 	override func delete(_ sender: Any?) {
-		guard editorViewController?.isDeleteCurrentRowUnavailable ?? true else {
-			editorViewController?.deleteCurrentRows()
-			return
-		}
-		
-		guard editorViewController?.isOutlineFunctionsUnavailable ?? true else {
-			documentsViewController?.deleteCurrentDocuments()
-			return
-		}
+		documentsViewController?.deleteCurrentDocuments()
 	}
 	
 	override func selectAll(_ sender: Any?) {
@@ -264,10 +251,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		case .selectAll:
 			return !(editorViewController?.isInEditMode ?? false)
 		case .delete:
-			guard !(editorViewController?.isInEditMode ?? false) else {
-				return false
-			}
-			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true) || !(editorViewController?.isOutlineFunctionsUnavailable ?? true)
+			return !selectedOutlines.isEmpty
 		case .goBackwardOne:
 			return !goBackwardStack.isEmpty
 		case .goForwardOne:
@@ -412,20 +396,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			outlineGetInfoViewController.delegate = self
 			present(outlineGetInfoNavViewController, animated: true)
 			
-		}
-	}
-	
-
-	// MARK: Validations
-	
-	override func validate(_ command: UICommand) {
-		switch command.action {
-		case .delete:
-			if isDeleteEntityUnavailable {
-				command.attributes = .disabled
-			}
-		default:
-			break
 		}
 	}
 	
