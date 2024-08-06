@@ -73,7 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										   modifierFlags: [.command])
 	
 	let insertRowCommand = UIKeyCommand(title: .addRowAboveControlLabel,
-										action: #selector(insertRowCommand(_:)),
+										action: .addRowAbove,
 										input: "\n",
 										modifierFlags: [.shift])
 	
@@ -414,10 +414,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func insertRowCommand(_ sender: Any?) {
-		mainCoordinator?.insertRow()
-	}
-	
 	@objc func createRowCommand(_ sender: Any?) {
 		mainCoordinator?.createRow()
 	}
@@ -588,10 +584,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(insertRowCommand(_:)):
-			if mainCoordinator?.isInsertRowUnavailable ?? true {
-				command.attributes = .disabled
-			}
 		case #selector(createRowCommand(_:)):
 			if mainCoordinator?.isCreateRowUnavailable ?? true {
 				command.attributes = .disabled

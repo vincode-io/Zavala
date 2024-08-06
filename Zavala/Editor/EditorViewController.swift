@@ -13,7 +13,7 @@ import VinOutlineKit
 import VinUtility
 
 extension Selector {
-	static let insertImage = #selector(EditorViewController.insertImage)
+	static let addRowAbove = #selector(EditorViewController.addRowAbove(_:))
 }
 
 @MainActor
@@ -657,6 +657,17 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 	}
 	
+	override func validate(_ command: UICommand) {
+		switch command.action {
+		case .addRowAbove:
+			if isInsertRowUnavailable {
+				command.attributes = .disabled
+			}
+		default:
+			break
+		}
+	}
+
 	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
 		if collectionView.indexPathsForSelectedItems?.isEmpty ?? true {
 			pressesBeganForEditMode(presses, with: event)
@@ -1051,11 +1062,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		deleteRows(rows)
 	}
 	
-	func insertRow() {
-		guard let rows = currentRows else { return }
-		createRow(beforeRows: rows, moveCursor: true)
-	}
-	
 	func createRow() {
 		guard let rows = currentRows else { return }
 		createRow(afterRows: rows)
@@ -1258,6 +1264,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func link() {
 		rightToolbarButtonGroup.dismissPopOverMenu()
 		currentTextView?.editLink(self)
+	}
+
+	@objc func addRowAbove(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		createRow(beforeRows: rows, moveCursor: true)
 	}
 	
 	@objc func insertNewline() {
