@@ -88,7 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											  modifierFlags: [.command])
 	
 	let createRowOutsideCommand = UIKeyCommand(title: .addRowOutsideControlLabel,
-											   action: #selector(createRowOutsideCommand(_:)),
+											   action: .createRowOutside,
 											   input: "{",
 											   modifierFlags: [.command])
 	
@@ -418,10 +418,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.duplicateRows()
 	}
 	
-	@objc func createRowOutsideCommand(_ sender: Any?) {
-		mainCoordinator?.createRowOutside()
-	}
-
 	@objc func moveRowsUpCommand(_ sender: Any?) {
 		mainCoordinator?.moveRowsUp()
 	}
@@ -578,10 +574,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		switch command.action {
 		case #selector(duplicateRowsCommand(_:)):
 			if mainCoordinator?.isDuplicateRowsUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(createRowOutsideCommand(_:)):
-			if mainCoordinator?.isCreateRowOutsideUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(moveRowsUpCommand(_:)):

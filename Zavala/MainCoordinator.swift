@@ -63,10 +63,6 @@ extension MainCoordinator {
 		return editorViewController?.isDuplicateRowsUnavailable ?? true
 	}
 	
-	var isCreateRowOutsideUnavailable: Bool {
-		return editorViewController?.isCreateRowOutsideUnavailable ?? true
-	}
-	
 	var isMoveRowsUpUnavailable: Bool {
 		return editorViewController?.isMoveRowsUpUnavailable ?? true
 	}
@@ -177,10 +173,6 @@ extension MainCoordinator {
 	
 	func toggleNotesFilter() {
 		editorViewController?.toggleNotesFilter()
-	}
-	
-	func createRowOutside() {
-		editorViewController?.createRowOutside()
 	}
 	
 	func moveRowsUp() {

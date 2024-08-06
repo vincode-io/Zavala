@@ -16,6 +16,7 @@ extension Selector {
 	static let addRowAbove = #selector(EditorViewController.addRowAbove(_:))
 	static let addRowBelow = #selector(EditorViewController.addRowBelow(_:))
 	static let createRowInside = #selector(EditorViewController.createRowInside(_:))
+	static let createRowOutside = #selector(EditorViewController.createRowOutside(_:))
 }
 
 @MainActor
@@ -118,11 +119,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return currentRows == nil
 	}
 	
-	var isCreateRowOutsideUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isCreateRowOutsideUnavailable(rows: rows)
-	}
-
 	var isGoBackwardUnavailable: Bool {
 		return delegate?.editorViewControllerIsGoBackUnavailable ?? true
 	}
@@ -653,6 +649,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			if currentRows == nil {
 				command.attributes = .disabled
 			}
+		case .createRowOutside:
+			guard let outline, let rows = currentRows else {
+				command.attributes = .disabled
+				return
+			}
+			if outline.isCreateRowOutsideUnavailable(rows: rows) {
+				command.attributes = .disabled
+			}
 		default:
 			break
 		}
@@ -1057,11 +1061,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		duplicateRows(rows)
 	}
 	
-	func createRowOutside() {
-		guard let rows = currentRows else { return }
-		createRowOutside(afterRows: rows)
-	}
-	
 	func moveCursorToCurrentRowTopic() {
 		guard let rowShadowTableIndex = currentRows?.last?.shadowTableIndex,
 			  let currentRowViewCell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorRowViewCell else { return }
@@ -1259,6 +1258,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func createRowInside(_ sender: Any?) {
 		guard let rows = currentRows else { return }
 		createRowInside(afterRows: rows)
+	}
+	
+	@objc func createRowOutside(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		createRowOutside(afterRows: rows)
 	}
 	
 	@objc func insertNewline() {
