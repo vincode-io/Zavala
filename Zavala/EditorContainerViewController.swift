@@ -220,15 +220,15 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		exportOPMLs()
 	}
 
-	@objc func printDoc(_ sender: Any?) {
+	@objc func printDocs(_ sender: Any?) {
 		printDocs()
 	}
 
-	@objc func printList(_ sender: Any?) {
+	@objc func printLists(_ sender: Any?) {
 		printLists()
 	}
 
-	@objc func outlineGetInfo(_ sender: Any?) {
+	@objc func showGetInfo(_ sender: Any?) {
 		showGetInfo()
 	}
 
@@ -627,7 +627,10 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.showsIndicator = false
 			toolbarItem = item
 		case .printDoc:
-			let item = NSToolbarItem(itemIdentifier: itemIdentifier)
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .printDocs)
+			}
 			item.image = .printDoc.symbolSizedForCatalyst()
 			item.label = .printDocControlLabel
 			item.toolTip = .printDocControlLabel
@@ -636,7 +639,10 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.target = self
 			toolbarItem = item
 		case .printList:
-			let item = NSToolbarItem(itemIdentifier: itemIdentifier)
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .printLists)
+			}
 			item.image = .printList.symbolSizedForCatalyst()
 			item.label = .printListControlLabel
 			item.toolTip = .printListControlLabel
@@ -652,14 +658,14 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .getInfo:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .showGetInfo)
 			}
 			item.image = .getInfo.symbolSizedForCatalyst()
 			item.label = .getInfoControlLabel
 			item.toolTip = .getInfoControlLabel
 			item.isBordered = true
-			item.action = #selector(outlineGetInfo(_:))
+			item.action = .showGetInfo
 			item.target = self
 			toolbarItem = item
 		case .toggleSidebar:
