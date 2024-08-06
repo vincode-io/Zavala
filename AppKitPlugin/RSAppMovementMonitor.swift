@@ -60,20 +60,22 @@ public class RSAppMovementMonitor: NSObject {
 		if let originalAppPath = originalAppURL?.path {
 			self.fileDescriptor = open(originalAppPath, O_EVTONLY)
 			if self.fileDescriptor != -1 {
-				self.dispatchSource = DispatchSource.makeFileSystemObjectSource(fileDescriptor: self.fileDescriptor, eventMask: [.delete, .rename], queue: DispatchQueue.main)
-				if let source = self.dispatchSource {
-					source.setEventHandler {
-						self.invokeEventHandler()
+				Task { @MainActor in
+					self.dispatchSource = DispatchSource.makeFileSystemObjectSource(fileDescriptor: self.fileDescriptor, eventMask: [.delete, .rename], queue: DispatchQueue.main)
+					if let source = self.dispatchSource {
+						source.setEventHandler {
+							self.invokeEventHandler()
+						}
+						
+						source.setCancelHandler {
+							self.invalidate()
+						}
+						
+						source.resume()
 					}
-
-					source.setCancelHandler {
-						self.invalidate()
-					}
-
-					source.resume()
 				}
 			}
-
+			
 			// Also install a notification to re-check the location of the app on disk
 			// every time the app becomes active. This catches a good number of edge-case
 			// changes to the app bundle's path, such as when a containing folder or the

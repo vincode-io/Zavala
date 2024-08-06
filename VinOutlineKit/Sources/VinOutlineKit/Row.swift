@@ -663,14 +663,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	
 }
 
-// MARK: CustomDebugStringConvertible
-
-extension Row {
-	override public var debugDescription: String {
-		return "\(topic?.string ?? "") (\(id))"
-	}
-}
-
 // MARK: Helpers
 
 private extension Row {

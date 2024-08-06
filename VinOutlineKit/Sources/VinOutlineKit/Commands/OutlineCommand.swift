@@ -58,14 +58,18 @@ public class OutlineCommand {
 	func registerUndo() {
 		undoManager.setActionName(actionName)
 		undoManager.registerUndo(withTarget: self) { _ in
-			self.unexecute()
+			Task { @MainActor in
+				self.unexecute()
+			}
 		}
 	}
 
 	func registerRedo() {
 		undoManager.setActionName(actionName)
 		undoManager.registerUndo(withTarget: self) { _ in
-			self.execute()
+			Task { @MainActor in
+				self.execute()
+			}
 		}
 	}
 	

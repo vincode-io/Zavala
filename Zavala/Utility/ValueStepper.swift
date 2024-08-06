@@ -183,12 +183,6 @@ private enum Button: Int {
 		increaseButton.addTarget(self, action: #selector(selected(_:)), for: .touchDown)
 	}
 
-	// MARK: Storyboard preview setup
-
-	override open func prepareForInterfaceBuilder() {
-		setUp()
-	}
-
 	open override var intrinsicContentSize: CGSize {
 		return CGSize(width: defaultWidth, height: defaultHeight)
 	}
