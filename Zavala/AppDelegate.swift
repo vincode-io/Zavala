@@ -82,13 +82,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										  input: "\n",
 										  modifierFlags: [.control])
 	
-	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowControlLabel,
-											action: #selector(duplicateRowsCommand(_:)),
-											input: "r",
-											modifierFlags: [.command, .control])
-	
 	let createRowInsideCommand = UIKeyCommand(title: .addRowInsideControlLabel,
-											  action: #selector(createRowInsideCommand(_:)),
+											  action: .createRowInside,
 											  input: "}",
 											  modifierFlags: [.command])
 	
@@ -96,6 +91,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											   action: #selector(createRowOutsideCommand(_:)),
 											   input: "{",
 											   modifierFlags: [.command])
+	
+	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowControlLabel,
+											action: #selector(duplicateRowsCommand(_:)),
+											input: "r",
+											modifierFlags: [.command, .control])
 	
 	let moveRowsUpCommand = UIKeyCommand(title: .moveUpControlLabel,
 										 action: #selector(moveRowsUpCommand(_:)),
@@ -418,10 +418,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.duplicateRows()
 	}
 	
-	@objc func createRowInsideCommand(_ sender: Any?) {
-		mainCoordinator?.createRowInside()
-	}
-	
 	@objc func createRowOutsideCommand(_ sender: Any?) {
 		mainCoordinator?.createRowOutside()
 	}
@@ -582,10 +578,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		switch command.action {
 		case #selector(duplicateRowsCommand(_:)):
 			if mainCoordinator?.isDuplicateRowsUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(createRowInsideCommand(_:)):
-			if mainCoordinator?.isCreateRowInsideUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(createRowOutsideCommand(_:)):
