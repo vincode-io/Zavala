@@ -3,7 +3,6 @@
 //
 
 import Foundation
-import AsyncAlgorithms
 import OSLog
 
 open class ManagedResourceFile: NSObject, NSFilePresenter, @unchecked Sendable {
@@ -21,27 +20,7 @@ open class ManagedResourceFile: NSObject, NSFilePresenter, @unchecked Sendable {
 			_isDirty.withLock { $0 = newValue }
 		}
 	}
-	
-	private let _saveTask = OSAllocatedUnfairLock<Task<(), Never>?>(initialState: nil)
-	private var saveTask: Task<(), Never>? {
-		get {
-			_saveTask.withLock { $0 }
-		}
-		set {
-			_saveTask.withLock { $0 = newValue }
-		}
-	}
-	
-	private let _saveChannel = OSAllocatedUnfairLock<AsyncChannel<Void>>(initialState: AsyncChannel<Void>())
-	private var saveChannel: AsyncChannel<Void> {
-		get {
-			_saveChannel.withLock { $0 }
-		}
-		set {
-			_saveChannel.withLock { $0 = newValue }
-		}
-	}
-	
+
 	private let _lastModificationDate = OSAllocatedUnfairLock<Date?>(initialState: nil)
 	private var lastModificationDate: Date? {
 		get {
@@ -51,6 +30,9 @@ open class ManagedResourceFile: NSObject, NSFilePresenter, @unchecked Sendable {
 			_lastModificationDate.withLock { $0 = newValue }
 		}
 	}
+
+	private var saveLock = OSAllocatedUnfairLock()
+	private var saveWorkItem: DispatchWorkItem?
 
 	public var presentedItemURL: URL? {
 		return fileURL
@@ -71,8 +53,6 @@ open class ManagedResourceFile: NSObject, NSFilePresenter, @unchecked Sendable {
 		super.init()
 		
 		NSFileCoordinator.addFilePresenter(self)
-		
-		startSaveTask()
 	}
 	
 	public func presentedItemDidChange() {
@@ -90,17 +70,11 @@ open class ManagedResourceFile: NSObject, NSFilePresenter, @unchecked Sendable {
 	}
 	
 	public func relinquishPresentedItem(toReader reader: @escaping @Sendable (( @Sendable() -> Void)?) -> Void) {
-		stopSaveTask()
-		reader() {
-			self.startSaveTask()
-		}
+		performWorkItem()
 	}
 	
 	public func relinquishPresentedItem(toWriter writer: @escaping @Sendable (( @Sendable () -> Void)?) -> Void) {
-		stopSaveTask()
-		writer() {
-			self.startSaveTask()
-		}
+		performWorkItem()
 	}
 	
 	public func markAsDirty() {
@@ -128,13 +102,10 @@ open class ManagedResourceFile: NSObject, NSFilePresenter, @unchecked Sendable {
 
 	public func resume() {
 		NSFileCoordinator.addFilePresenter(self)
-		startSaveTask()
 	}
 	
 	public func suspend() {
-		saveTask?.cancel()
-		saveTask = nil
-		saveChannel.finish()
+		performWorkItem()
 		NSFileCoordinator.removeFilePresenter(self)
 	}
 	
@@ -154,32 +125,29 @@ open class ManagedResourceFile: NSObject, NSFilePresenter, @unchecked Sendable {
 
 private extension ManagedResourceFile {
 	
-	func startSaveTask() {
-		saveTask = Task {
-			for await _ in saveChannel.debounce(for: .seconds(5.0)) {
-				if !Task.isCancelled {
-					await saveIfNecessary()
-				}
+	func debounceSaveToDisk() {
+		saveLock.lock()
+		defer { saveLock.unlock() }
+		
+		saveWorkItem?.cancel()
+		saveWorkItem = DispatchWorkItem { [weak self] in
+			guard let self = self else { return }
+			Task {
+				await self.saveIfNecessary()
 			}
 		}
+		
+		DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + 5.0, execute: saveWorkItem!)
 	}
 	
-	func stopSaveTask() {
-		saveTask?.cancel()
-		saveTask = nil
-	}
-	
-	func debounceSaveToDisk() {
-		Task {
-			await saveChannel.send(())
-		}
-	}
-	
-	func restartActivityMonitoring() {
-		stopSaveTask()
-		startSaveTask()
-	}
+	func performWorkItem() {
+		saveLock.lock()
+		defer { saveLock.unlock() }
 
+		saveWorkItem?.perform()
+		saveWorkItem = nil
+	}
+	
 	@MainActor
 	func loadFile() {
 		var fileData: Data? = nil
