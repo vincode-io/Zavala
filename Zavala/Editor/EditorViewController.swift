@@ -1474,6 +1474,10 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			if traitCollection.userInterfaceIdiom != .mac {
 				CursorCoordinates.clearLastKnownCoordinates()
 			}                      
+		} else if let titleOrTagInput = UIResponder.currentFirstResponder as? EditorTextInput & UIResponder {
+			if traitCollection.userInterfaceIdiom != .mac {
+				titleOrTagInput.resignFirstResponder()
+			}
 		}
 	}
 	
