@@ -17,6 +17,7 @@ extension Selector {
 	static let addRowBelow = #selector(EditorViewController.addRowBelow(_:))
 	static let createRowInside = #selector(EditorViewController.createRowInside(_:))
 	static let createRowOutside = #selector(EditorViewController.createRowOutside(_:))
+	static let duplicateCurrentRows = #selector(EditorViewController.duplicateCurrentRows(_:))
 	static let deleteCurrentRows = #selector(EditorViewController.deleteCurrentRows(_:))
 	static let moveCurrentRowsLeft = #selector(EditorViewController.moveCurrentRowsLeft(_:))
 	static let moveCurrentRowsRight = #selector(EditorViewController.moveCurrentRowsRight(_:))
@@ -115,10 +116,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return false
 		}
 		return true
-	}
-	
-	var isDuplicateRowsUnavailable: Bool {
-		return currentRows == nil
 	}
 	
 	var isGoBackwardUnavailable: Bool {
@@ -616,7 +613,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			} else {
 				return super.canPerformAction(action, withSender: sender)
 			}
-		case .addRowAbove, .addRowBelow, .createRowInside, .deleteCurrentRows:
+		case .addRowAbove, .addRowBelow, .createRowInside, .duplicateCurrentRows, .deleteCurrentRows:
 			return currentRows != nil
 		case .createRowOutside:
 			if let outline, let currentRows, !outline.isCreateRowOutsideUnavailable(rows: currentRows) {
@@ -1064,11 +1061,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 	}
 	
-	func duplicateCurrentRows() {
-		guard let rows = currentRows else { return }
-		duplicateRows(rows)
-	}
-	
 	func moveCursorToCurrentRowTopic() {
 		guard let rowShadowTableIndex = currentRows?.last?.shadowTableIndex,
 			  let currentRowViewCell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorRowViewCell else { return }
@@ -1271,6 +1263,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func createRowOutside(_ sender: Any?) {
 		guard let rows = currentRows else { return }
 		createRowOutside(afterRows: rows)
+	}
+	
+	@objc func duplicateCurrentRows(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		duplicateRows(rows)
 	}
 	
 	@objc func deleteCurrentRows(_ sender: Any?) {

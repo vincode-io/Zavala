@@ -59,10 +59,6 @@ extension MainCoordinator {
 		return editorViewController?.isNotesFiltered ?? false
 	}
 
-	var isDuplicateRowsUnavailable: Bool {
-		return editorViewController?.isDuplicateRowsUnavailable ?? true
-	}
-	
 	var isCreateRowNotesUnavailable: Bool {
 		return editorViewController?.isCreateRowNotesUnavailable ?? true
 	}
@@ -123,10 +119,6 @@ extension MainCoordinator {
 		return editorViewController?.isEditingNote ?? false
 	}
 
-	func duplicateRows() {
-		editorViewController?.duplicateCurrentRows()
-	}
-	
 	func focusIn() {
 		editorViewController?.focusIn()
 	}

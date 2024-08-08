@@ -98,7 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												modifierFlags: [.shift, .command])
 	
 	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowControlLabel,
-											action: #selector(duplicateRowsCommand(_:)),
+											action: .duplicateCurrentRows,
 											input: "r",
 											modifierFlags: [.command, .control])
 	
@@ -404,10 +404,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func duplicateRowsCommand(_ sender: Any?) {
-		mainCoordinator?.duplicateRows()
-	}
-	
 	@objc func rowNotesCommand(_ sender: Any?) {
 		if mainCoordinator?.isCreateRowNotesUnavailable ?? true {
 			if mainCoordinator?.isEditingTopic ?? false {
@@ -538,10 +534,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(duplicateRowsCommand(_:)):
-			if mainCoordinator?.isDuplicateRowsUnavailable ?? true {
-				command.attributes = .disabled
-			}
 		case #selector(rowNotesCommand(_:)):
 			if mainCoordinator?.isCreateRowNotesUnavailable ?? true  {
 				if mainCoordinator?.isEditingTopic ?? false {
