@@ -228,9 +228,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	let actualSizeCommand = UICommand(title: .actualSizeControlLabel, action: #selector(actualSizeCommand(_:)))
 	
 	let deleteCompletedRowsCommand = UIKeyCommand(title: .deleteCompletedRowsControlLabel,
-									   action: #selector(deleteCompletedRowsCommand(_:)),
-									   input: "d",
-									   modifierFlags: [.command])
+												  action: .deleteCompletedRows,
+												  input: "d",
+												  modifierFlags: [.command])
 	
 	let showHelpCommand = UICommand(title: .appHelpControlLabel, action: #selector(showHelpCommand(_:)))
 
@@ -492,10 +492,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		AppDefaults.shared.textZoom = 0
 	}
 	
-	@objc func deleteCompletedRowsCommand(_ sender: Any?) {
-		mainCoordinator?.deleteCompletedRows()
-	}
-	
 	@objc func showHelpCommand(_ sender: Any?) {
 		UIApplication.shared.open(URL(string: .helpURL)!)
 	}
@@ -613,10 +609,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(collapseParentRowCommand(_:)):
 			if mainCoordinator?.isCollapseParentRowUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(deleteCompletedRowsCommand(_:)):
-			if mainCoordinator?.isDeleteCompletedRowsUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(copyRowLinkCommand(_:)):

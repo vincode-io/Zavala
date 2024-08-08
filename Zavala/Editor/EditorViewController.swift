@@ -24,6 +24,7 @@ extension Selector {
 	static let moveCurrentRowsUp = #selector(EditorViewController.moveCurrentRowsUp(_:))
 	static let moveCurrentRowsDown = #selector(EditorViewController.moveCurrentRowsDown(_:))
 	static let toggleCompleteRows = #selector(EditorViewController.toggleCompleteRows(_:))
+	static let deleteCompletedRows = #selector(EditorViewController.deleteCompletedRows(_:))
 }
 
 @MainActor
@@ -237,10 +238,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			}
 		}
 		return true
-	}
-	
-	var isDeleteCompletedRowsUnavailable: Bool {
-		return !(outline?.isAnyRowCompleted ?? false)
 	}
 	
 	var currentRows: [Row]? {
@@ -651,6 +648,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			} else {
 				return false
 			}
+		case .deleteCompletedRows:
+			return outline?.isAnyRowCompleted ?? false
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -1120,37 +1119,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		collapse(rows: parentRows)
 	}
 	
-	func deleteCompletedRows() {
-		guard let completedRows = outline?.allCompletedRows else { return }
-
-		guard AppDefaults.shared.confirmDeleteCompletedRows else {
-			deleteRows(completedRows)
-			return
-		}
-		
-		let alertController = UIAlertController(title: .deleteCompletedRowsTitle,
-												message: .deleteCompletedRowsMessage,
-												preferredStyle: .alert)
-		
-		let alwaysDeleteCompletedAction = UIAlertAction(title: .deleteAlwaysControlLabel, style: .destructive) { [weak self] action in
-			AppDefaults.shared.confirmDeleteCompletedRows = false
-			self?.deleteRows(completedRows)
-		}
-		alertController.addAction(alwaysDeleteCompletedAction)
-
-		let deleteCompletedAction = UIAlertAction(title: .deleteOnceControlLabel, style: .destructive) { [weak self] action in
-			self?.deleteRows(completedRows)
-		}
-		
-		alertController.addAction(deleteCompletedAction)
-		alertController.preferredAction = deleteCompletedAction
-
-		let cancelAction = UIAlertAction(title: .cancelControlLabel, style: .cancel)
-		alertController.addAction(cancelAction)
-
-		present(alertController, animated: true)
-	}
-	
 	func printDoc() {
 		guard let outline else { return }
 		currentTextView?.saveText()
@@ -1302,6 +1270,37 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		} else if !outline.isUncompleteUnavailable(rows: rows) {
 			uncompleteRows(rows)
 		}
+	}
+	
+	@objc func deleteCompletedRows(_ sender: Any?) {
+		guard let completedRows = outline?.allCompletedRows else { return }
+
+		guard AppDefaults.shared.confirmDeleteCompletedRows else {
+			deleteRows(completedRows)
+			return
+		}
+		
+		let alertController = UIAlertController(title: .deleteCompletedRowsTitle,
+												message: .deleteCompletedRowsMessage,
+												preferredStyle: .alert)
+		
+		let alwaysDeleteCompletedAction = UIAlertAction(title: .deleteAlwaysControlLabel, style: .destructive) { [weak self] action in
+			AppDefaults.shared.confirmDeleteCompletedRows = false
+			self?.deleteRows(completedRows)
+		}
+		alertController.addAction(alwaysDeleteCompletedAction)
+
+		let deleteCompletedAction = UIAlertAction(title: .deleteOnceControlLabel, style: .destructive) { [weak self] action in
+			self?.deleteRows(completedRows)
+		}
+		
+		alertController.addAction(deleteCompletedAction)
+		alertController.preferredAction = deleteCompletedAction
+
+		let cancelAction = UIAlertAction(title: .cancelControlLabel, style: .cancel)
+		alertController.addAction(cancelAction)
+
+		present(alertController, animated: true)
 	}
 	
 	@objc func insertNewline() {
@@ -2129,7 +2128,7 @@ private extension EditorViewController {
 		let deleteCompletedRowsAction = UIAction(title: .deleteCompletedRowsControlLabel,
 												 image: .delete,
 												 attributes: .destructive) { [weak self] _ in
-			self?.deleteCompletedRows()
+			self?.deleteCompletedRows(nil)
 		}
 		let outlineMenu = UIMenu(title: "", options: .displayInline, children: outlineActions)
 		let shareMenu = UIMenu(title: "", options: .displayInline, children: shareActions)

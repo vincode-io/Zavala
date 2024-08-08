@@ -103,10 +103,6 @@ extension MainCoordinator {
 		return editorViewController?.isCollapseParentRowUnavailable ?? true
 	}
 	
-	var isDeleteCompletedRowsUnavailable: Bool {
-		return editorViewController?.isDeleteCompletedRowsUnavailable ?? true
-	}
-	
 	var isManageSharingUnavailable: Bool {
 		return !(selectedDocuments.count == 1 && selectedDocuments.first!.isCollaborating)
 	}
@@ -202,10 +198,6 @@ extension MainCoordinator {
 	
 	func collapseParentRow() {
 		editorViewController?.collapseParentRow()
-	}
-	
-	func deleteCompletedRows() {
-		editorViewController?.deleteCompletedRows()
 	}
 	
 	func showGetInfo() {
