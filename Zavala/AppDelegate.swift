@@ -123,19 +123,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										   modifierFlags: [.control, .command])
 	
 	let toggleCompleteRowsCommand = UIKeyCommand(title: .completeControlLabel,
-												 action: #selector(toggleCompleteRowsCommand(_:)),
+												 action: .toggleCompleteRows,
 												 input: "\n",
 												 modifierFlags: [.command])
-	
-	let completeRowsCommand = UIKeyCommand(title: .completeControlLabel,
-										   action: #selector(toggleCompleteRowsCommand(_:)),
-										   input: "\n",
-										   modifierFlags: [.command])
-	
-	let uncompleteRowsCommand = UIKeyCommand(title: .uncompleteControlLabel,
-											 action: #selector(toggleCompleteRowsCommand(_:)),
-											 input: "\n",
-											 modifierFlags: [.command])
 	
 	let rowNotesCommand = UIKeyCommand(title: .addNoteControlLabel,
 									   action: #selector(rowNotesCommand(_:)),
@@ -418,10 +408,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		mainCoordinator?.duplicateRows()
 	}
 	
-	@objc func toggleCompleteRowsCommand(_ sender: Any?) {
-		mainCoordinator?.toggleCompleteRows()
-	}
-	
 	@objc func rowNotesCommand(_ sender: Any?) {
 		if mainCoordinator?.isCreateRowNotesUnavailable ?? true {
 			if mainCoordinator?.isEditingTopic ?? false {
@@ -554,15 +540,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		switch command.action {
 		case #selector(duplicateRowsCommand(_:)):
 			if mainCoordinator?.isDuplicateRowsUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(toggleCompleteRowsCommand(_:)):
-			if mainCoordinator?.isCompleteRowsAvailable ?? false {
-				command.title = .completeControlLabel
-			} else {
-				command.title = .uncompleteControlLabel
-			}
-			if mainCoordinator?.isToggleRowCompleteUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(rowNotesCommand(_:)):

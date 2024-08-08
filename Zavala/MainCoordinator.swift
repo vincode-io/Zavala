@@ -63,14 +63,6 @@ extension MainCoordinator {
 		return editorViewController?.isDuplicateRowsUnavailable ?? true
 	}
 	
-	var isToggleRowCompleteUnavailable: Bool {
-		return editorViewController?.isToggleRowCompleteUnavailable ?? true
-	}
-	
-	var isCompleteRowsAvailable: Bool {
-		return editorViewController?.isCompleteRowsAvailable ?? false
-	}
-
 	var isCreateRowNotesUnavailable: Bool {
 		return editorViewController?.isCreateRowNotesUnavailable ?? true
 	}
@@ -157,10 +149,6 @@ extension MainCoordinator {
 	
 	func toggleNotesFilter() {
 		editorViewController?.toggleNotesFilter()
-	}
-	
-	func toggleCompleteRows() {
-		editorViewController?.toggleCompleteRows()
 	}
 	
 	func moveCursorToCurrentRowTopic() {

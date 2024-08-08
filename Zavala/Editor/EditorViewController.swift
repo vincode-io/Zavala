@@ -22,6 +22,7 @@ extension Selector {
 	static let moveCurrentRowsRight = #selector(EditorViewController.moveCurrentRowsRight(_:))
 	static let moveCurrentRowsUp = #selector(EditorViewController.moveCurrentRowsUp(_:))
 	static let moveCurrentRowsDown = #selector(EditorViewController.moveCurrentRowsDown(_:))
+	static let toggleCompleteRows = #selector(EditorViewController.toggleCompleteRows(_:))
 }
 
 @MainActor
@@ -55,18 +56,18 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		var keyCommands = [UIKeyCommand]()
 		
 		if !isEditingNote {
-			let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(moveCurrentRowsLeft))
+			let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: .moveCurrentRowsLeft)
 			shiftTab.wantsPriorityOverSystemBehavior = true
 			keyCommands.append(shiftTab)
 			
-			let tab = UIKeyCommand(action: #selector(moveCurrentRowsRight), input: "\t")
+			let tab = UIKeyCommand(action: .moveCurrentRowsRight, input: "\t")
 			tab.wantsPriorityOverSystemBehavior = true
 			keyCommands.append(tab)
 		}
 		
 		// We need to have this here in addition to the AppDelegate, since iOS won't pick it up for some reason
-		if !isToggleRowCompleteUnavailable {
-			let commandReturn = UIKeyCommand(input: "\r", modifierFlags: [.command], action: #selector(toggleCompleteRows))
+		if UIResponder.valid(action: .toggleCompleteRows) {
+			let commandReturn = UIKeyCommand(input: "\r", modifierFlags: [.command], action: .toggleCompleteRows)
 			commandReturn.wantsPriorityOverSystemBehavior = true
 			keyCommands.append(commandReturn)
 		}
@@ -126,16 +127,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	var isGoForwardUnavailable: Bool {
 		return delegate?.editorViewControllerIsGoForwardUnavailable ?? true
-	}
-	
-	var isToggleRowCompleteUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isCompleteUnavailable(rows: rows) && outline.isUncompleteUnavailable(rows: rows)
-	}
-
-	var isCompleteRowsAvailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return !outline.isCompleteUnavailable(rows: rows)
 	}
 	
 	var isCreateRowNotesUnavailable: Bool {
@@ -657,6 +648,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			} else {
 				return false
 			}
+		case .toggleCompleteRows:
+			if let outline, let currentRows, !(outline.isCompleteUnavailable(rows: currentRows) && outline.isUncompleteUnavailable(rows: currentRows)) {
+				return true
+			} else {
+				return false
+			}
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -664,6 +661,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
+		case .toggleCompleteRows:
+			if  let outline, let currentRows, !outline.isCompleteUnavailable(rows: currentRows) {
+				command.title = .completeControlLabel
+			} else {
+				command.title = .uncompleteControlLabel
+			}
+			if !UIResponder.valid(action: command.action) {
+				command.attributes = .disabled
+			}
 		default:
 			break
 		}
@@ -1292,6 +1298,15 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		moveRowsDown(rows)
 	}
 	
+	@objc func toggleCompleteRows(_ sender: Any?) {
+		guard let outline, let rows = currentRows else { return }
+		if !outline.isCompleteUnavailable(rows: rows) {
+			completeRows(rows)
+		} else if !outline.isUncompleteUnavailable(rows: rows) {
+			uncompleteRows(rows)
+		}
+	}
+	
 	@objc func insertNewline() {
 		currentTextView?.insertNewline(self)
 	}
@@ -1365,15 +1380,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 	}
 
-	@objc func toggleCompleteRows() {
-		guard let outline, let rows = currentRows else { return }
-		if !outline.isCompleteUnavailable(rows: rows) {
-			completeRows(rows)
-		} else if !outline.isUncompleteUnavailable(rows: rows) {
-			uncompleteRows(rows)
-		}
-	}
-	
 }
 
 // MARK: UICollectionViewDelegate, UICollectionViewDataSource
