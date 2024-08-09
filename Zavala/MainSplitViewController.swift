@@ -280,10 +280,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		}
 	}
 	
-	@objc func insertImage(_ sender: Any?) {
-		insertImage()
-	}
-
 	@objc func goBackwardOne(_ sender: Any?) {
 		goBackward(to: 0)
 	}
@@ -894,15 +890,14 @@ extension MainSplitViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .insertImage:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isInsertImageUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .insertImage)
 			}
 			item.image = .insertImage.symbolSizedForCatalyst()
 			item.label = .insertImageControlLabel
 			item.toolTip = .insertImageControlLabel
 			item.isBordered = true
-			item.action = #selector(insertImage(_:))
-			item.target = self
+			item.action = .insertImage
 			toolbarItem = item
 		case .navigation:
 			let groupItem = NSToolbarItemGroup(itemIdentifier: .navigation)

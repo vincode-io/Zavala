@@ -148,7 +148,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 											modifierFlags: [.command])
 	
 	let insertImageCommand = UIKeyCommand(title: .insertImageEllipsisControlLabel,
-										  action: #selector(insertImageCommand(_:)),
+										  action: .insertImage,
 										  input: "i",
 										  modifierFlags: [.alternate, .command])
 	
@@ -398,10 +398,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func insertImageCommand(_ sender: Any?) {
-		mainCoordinator?.insertImage()
-	}
-
 	@objc func copyRowLinkCommand(_ sender: Any?) {
 		mainCoordinator?.copyRowLink()
 	}
@@ -508,10 +504,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(insertImageCommand(_:)):
-			if mainCoordinator?.isInsertImageUnavailable ?? true {
-				command.attributes = .disabled
-			}
 		case #selector(focusInCommand(_:)):
 			if mainCoordinator?.isFocusInUnavailable ?? true {
 				command.attributes = .disabled

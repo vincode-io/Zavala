@@ -64,10 +64,6 @@ extension MainCoordinator {
 		return editorViewController?.isCopyRowLinkUnavailable ?? true
 	}
 	
-	var isInsertImageUnavailable: Bool {
-		return editorViewController?.isInsertImageUnavailable ?? true
-	}
-	
 	var isExpandAllInOutlineUnavailable: Bool {
 		return editorViewController?.isExpandAllInOutlineUnavailable ?? true
 	}
@@ -130,10 +126,6 @@ extension MainCoordinator {
 	
 	func toggleNotesFilter() {
 		editorViewController?.toggleNotesFilter()
-	}
-	
-	func insertImage() {
-		editorViewController?.insertImage()
 	}
 	
 	func copyRowLink() {

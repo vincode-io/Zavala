@@ -149,10 +149,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		}
 	}
 
-	@objc func insertImage(_ sender: Any?) {
-		insertImage()
-	}
-
 	@objc func toggleOutlineFilter(_ sender: Any?) {
 		toggleCompletedFilter()
 	}
@@ -381,15 +377,14 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .insertImage:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isInsertImageUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .insertImage)
 			}
 			item.image = .insertImage.symbolSizedForCatalyst()
 			item.label = .insertImageControlLabel
 			item.toolTip = .insertImageControlLabel
 			item.isBordered = true
-			item.action = #selector(insertImage(_:))
-			item.target = self
+			item.action = .insertImage
 			toolbarItem = item
 		case .link:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)

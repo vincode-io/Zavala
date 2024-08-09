@@ -13,6 +13,7 @@ import VinOutlineKit
 import VinUtility
 
 extension Selector {
+	static let insertImage = #selector(EditorViewController.insertImage(_:))
 	static let addRowAbove = #selector(EditorViewController.addRowAbove(_:))
 	static let addRowBelow = #selector(EditorViewController.addRowBelow(_:))
 	static let createRowInside = #selector(EditorViewController.createRowInside(_:))
@@ -187,10 +188,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return currentRows?.count != 1
 	}
 	
-	var isInsertImageUnavailable: Bool {
-		return currentTextView == nil
-	}
-
 	var isInsertNewlineUnavailable: Bool {
 		return currentTextView == nil
 	}
@@ -613,6 +610,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			} else {
 				return super.canPerformAction(action, withSender: sender)
 			}
+		case .insertImage:
+			return currentTextView != nil
 		case .addRowAbove, .addRowBelow, .createRowInside, .duplicateCurrentRows, .deleteCurrentRows:
 			return currentRows != nil
 		case .createRowOutside:
@@ -1053,7 +1052,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			moveUpButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsUp)
 			moveDownButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsDown)
 			
-			insertImageButton.isEnabled = !isInsertImageUnavailable
+			insertImageButton.isEnabled =  UIResponder.valid(action: .insertImage)
 			linkButton.isEnabled = UIResponder.valid(action: .editLink)
 			boldButton.isEnabled = UIResponder.valid(action: .toggleBoldface)
 			italicButton.isEnabled = UIResponder.valid(action: .toggleItalics)
@@ -1204,7 +1203,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		updateUI()
 	}
 		
-	@objc func insertImage() {
+	@objc func insertImage(_ sender: Any?) {
 		var config = PHPickerConfiguration()
 		config.filter = PHPickerFilter.images
 		config.selectionLimit = 1
