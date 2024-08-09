@@ -1339,7 +1339,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		deleteRowNotes(rows)
 	}
 
-	@objc func insertNewline() {
+	@objc func insertNewline(_ sender: Any?) {
 		currentTextView?.insertNewline(self)
 	}
 	
@@ -2063,7 +2063,7 @@ private extension EditorViewController {
 		formatMenuButton = rightToolbarButtonGroup.addButton(label: .formatControlLabel, image: .format, selector: "showFormatMenu")
 		formatMenuButton.popoverButtonGroup = formatMenuButtonGroup
 		noteButton = rightToolbarButtonGroup.addButton(label: .addNoteControlLabel, image: .noteAdd, selector: "createOrDeleteNotes:")
-		insertNewlineButton = rightToolbarButtonGroup.addButton(label: .newOutlineControlLabel, image: .newline, selector: "insertNewline")
+		insertNewlineButton = rightToolbarButtonGroup.addButton(label: .newOutlineControlLabel, image: .newline, selector: "insertNewline:")
 		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
 
 		if traitCollection.userInterfaceIdiom != .mac {
