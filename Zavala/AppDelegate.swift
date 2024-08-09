@@ -159,7 +159,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	let copyRowLinkCommand = UICommand(title: .copyRowLinkControlLabel, action: .copyRowLink)
 
-	let copyDocumentLinkCommand = UICommand(title: .copyDocumentLinkControlLabel, action: #selector(copyDocumentLinkCommand(_:)))
+	let copyDocumentLinkCommand = UICommand(title: .copyDocumentLinkControlLabel, action: .copyDocumentLink)
 
 	let focusInCommand = UIKeyCommand(title: .focusInControlLabel,
 									  action: #selector(focusInCommand(_:)),
@@ -398,10 +398,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func copyDocumentLinkCommand(_ sender: Any?) {
-		mainCoordinator?.copyDocumentLink()
-	}
-
 	@objc func focusInCommand(_ sender: Any?) {
 		mainCoordinator?.focusIn()
 	}
@@ -558,10 +554,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(collapseParentRowCommand(_:)):
 			if mainCoordinator?.isCollapseParentRowUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(copyDocumentLinkCommand(_:)):
-			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		default:

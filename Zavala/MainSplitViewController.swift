@@ -255,6 +255,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 			return !goBackwardStack.isEmpty
 		case .goForwardOne:
 			return !goForwardStack.isEmpty
+		case .copyDocumentLink:
+			return selectedDocuments.count == 1
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -350,6 +352,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	
 	@objc func showSettings(_ sender: Any?) {
 		showSettings()
+	}
+	
+	@objc func copyDocumentLink(_ sender: Any?) {
+		copyDocumentLink()
 	}
 	
 	@objc func showOpenQuickly(_ sender: Any?) {

@@ -16,8 +16,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	var currentDocumentContainer: DocumentContainer? = nil
 
 	var selectedDocuments: [Document] {
-		guard let editorViewController else { return []	}
-		return editorViewController.selectedDocuments
+		return editorViewController?.selectedDocuments ?? []
 	}
 	
 	var editorViewController: EditorViewController? {
@@ -205,6 +204,10 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		showGetInfo()
 	}
 
+	@objc func copyDocumentLink(_ sender: Any?) {
+		copyDocumentLink()
+	}
+	
 	@objc func share(_ sender: Any?) {
 		editorViewController?.share()
 	}
@@ -230,6 +233,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 			return !isManageSharingUnavailable
 		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
 			return !isOutlineFunctionsUnavailable
+		case .copyDocumentLink:
+			return selectedDocuments.count == 1
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}

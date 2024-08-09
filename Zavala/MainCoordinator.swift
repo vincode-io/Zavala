@@ -22,6 +22,7 @@ extension Selector {
 	static let exportOPMLs = Selector(("exportOPMLs:"))
 	static let printDocs = Selector(("printDocs:"))
 	static let printLists = Selector(("printLists:"))
+	static let copyDocumentLink = Selector(("copyDocumentLink:"))
 }
 
 @MainActor
@@ -125,8 +126,7 @@ extension MainCoordinator {
 	}
 	
 	func copyDocumentLink() {
-		let documentURL = editorViewController?.outline?.id.url
-		UIPasteboard.general.url = documentURL
+		UIPasteboard.general.url = selectedDocuments.first?.id.url
 	}
 	
 	func expandAllInOutline() {
