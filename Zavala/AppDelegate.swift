@@ -133,7 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									   modifierFlags: [.control])
 	
 	let deleteRowNotesCommand = UIKeyCommand(title: .deleteNoteControlLabel,
-											 action: #selector(deleteRowNotesCommand(_:)),
+											 action: .deleteRowNotes,
 											 input: "-",
 											 modifierFlags: [.control, .shift])
 	
@@ -398,10 +398,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func deleteRowNotesCommand(_ sender: Any?) {
-		mainCoordinator?.deleteRowNotes()
-	}
-	
 	@objc func insertImageCommand(_ sender: Any?) {
 		mainCoordinator?.insertImage()
 	}
@@ -512,10 +508,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(deleteRowNotesCommand(_:)):
-			if mainCoordinator?.isDeleteRowNotesUnavailable ?? true {
-				command.attributes = .disabled
-			}
 		case #selector(insertImageCommand(_:)):
 			if mainCoordinator?.isInsertImageUnavailable ?? true {
 				command.attributes = .disabled

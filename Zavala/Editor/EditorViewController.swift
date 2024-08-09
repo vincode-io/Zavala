@@ -27,6 +27,7 @@ extension Selector {
 	static let deleteCompletedRows = #selector(EditorViewController.deleteCompletedRows(_:))
 	static let toggleRowNotes = #selector(EditorViewController.toggleRowNotes(_:))
 	static let createOrDeleteNotes = #selector(EditorViewController.createOrDeleteNotes(_:))
+	static let deleteRowNotes = #selector(EditorViewController.deleteRowNotes(_:))
 }
 
 @MainActor
@@ -654,6 +655,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return outline?.isAnyRowCompleted ?? false
 		case .toggleRowNotes:
 			return isInEditMode
+		case .deleteRowNotes:
+			return !isDeleteRowNotesUnavailable
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -1085,16 +1088,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		currentRowViewCell.moveToNoteEnd()
 	}
 	
-	func createRowNotes() {
-		guard let rows = currentRows else { return }
-		createRowNotes(rows)
-	}
-	
-	func deleteRowNotes() {
-		guard let rows = currentRows else { return }
-		deleteRowNotes(rows)
-	}
-	
 	func expandAllInOutline() {
 		guard let outline else { return }
 		expandAll(containers: [outline])
@@ -1326,7 +1319,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 				moveCursorToCurrentRowTopic()
 			}
 		} else {
-			createRowNotes()
+			createRowNotes(currentRows)
 		}
 	}
 
@@ -1338,6 +1331,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		} else {
 			deleteRowNotes(currentRows)
 		}
+	}
+	
+	@objc func deleteRowNotes(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		deleteRowNotes(rows)
 	}
 
 	@objc func insertNewline() {

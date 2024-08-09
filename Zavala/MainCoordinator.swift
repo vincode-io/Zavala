@@ -60,10 +60,6 @@ extension MainCoordinator {
 		return editorViewController?.isNotesFiltered ?? false
 	}
 
-	var isDeleteRowNotesUnavailable: Bool {
-		return editorViewController?.isDeleteRowNotesUnavailable ?? true
-	}
-	
 	var isCopyRowLinkUnavailable: Bool {
 		return editorViewController?.isCopyRowLinkUnavailable ?? true
 	}
@@ -134,10 +130,6 @@ extension MainCoordinator {
 	
 	func toggleNotesFilter() {
 		editorViewController?.toggleNotesFilter()
-	}
-	
-	func deleteRowNotes() {
-		editorViewController?.deleteRowNotes()
 	}
 	
 	func insertImage() {
