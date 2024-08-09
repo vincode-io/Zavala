@@ -293,10 +293,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		goForward(to: 0)
 	}
 
-	@objc func createOrDeleteNotes(_ sender: Any?) {
-		createOrDeleteNotes()
-	}
-
 	@objc func toggleOutlineFilter(_ sender: Any?) {
 		toggleCompletedFilter()
 	}
@@ -1002,8 +998,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.label = .addNoteControlLabel
 			item.toolTip = .addNoteControlLabel
 			item.isBordered = true
-			item.action = #selector(createOrDeleteNotes(_:))
-			item.target = self
+			item.action = .createOrDeleteNotes
 			toolbarItem = item
 		case .boldface:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)

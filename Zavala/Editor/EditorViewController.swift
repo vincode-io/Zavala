@@ -25,6 +25,8 @@ extension Selector {
 	static let moveCurrentRowsDown = #selector(EditorViewController.moveCurrentRowsDown(_:))
 	static let toggleCompleteRows = #selector(EditorViewController.toggleCompleteRows(_:))
 	static let deleteCompletedRows = #selector(EditorViewController.deleteCompletedRows(_:))
+	static let toggleRowNotes = #selector(EditorViewController.toggleRowNotes(_:))
+	static let createOrDeleteNotes = #selector(EditorViewController.createOrDeleteNotes(_:))
 }
 
 @MainActor
@@ -650,6 +652,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			}
 		case .deleteCompletedRows:
 			return outline?.isAnyRowCompleted ?? false
+		case .toggleRowNotes:
+			return isInEditMode
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -663,11 +667,24 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			} else {
 				command.title = .uncompleteControlLabel
 			}
-			if !UIResponder.valid(action: command.action) {
-				command.attributes = .disabled
+		case .toggleRowNotes:
+			if isCreateRowNotesUnavailable {
+				if isEditingTopic {
+					command.title = .jumpToNoteControlLabel
+				} else if isEditingNote {
+					command.title = .jumpToTopicControlLabel
+				} else {
+					command.title = .addNoteControlLabel
+				}
+			} else {
+				command.title = .addNoteControlLabel
 			}
 		default:
 			break
+		}
+
+		if !UIResponder.valid(action: command.action) {
+			command.attributes = .disabled
 		}
 	}
 
@@ -1041,18 +1058,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
 			// only have one row selected at a time while editing and that row either has a note
 			// or it doesn't.
-			if !isCreateRowNotesUnavailable {
+			if let outline, let currentRows, !outline.isCreateNotesUnavailable(rows: currentRows) {
 				noteButton.isEnabled = true
 				noteButton.setImage(.noteAdd, for: .normal)
 				noteButton.accessibilityLabel = .addNoteControlLabel
-			} else if !isDeleteRowNotesUnavailable {
+			} else {
 				noteButton.isEnabled = true
 				noteButton.setImage(.noteDelete, for: .normal)
 				noteButton.accessibilityLabel = .deleteNoteControlLabel
-			} else {
-				noteButton.isEnabled = false
-				noteButton.setImage(.noteAdd, for: .normal)
-				noteButton.accessibilityLabel = .addNoteControlLabel
 			}
 			
 			insertNewlineButton.isEnabled = !isInsertNewlineUnavailable
@@ -1303,6 +1316,30 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		present(alertController, animated: true)
 	}
 	
+	@objc func toggleRowNotes(_ sender: Any?) {
+		guard let outline, let currentRows else { return }
+		
+		if outline.isCreateNotesUnavailable(rows: currentRows) {
+			if isEditingTopic {
+				moveCursorToCurrentRowNote()
+			} else if isEditingNote {
+				moveCursorToCurrentRowTopic()
+			}
+		} else {
+			createRowNotes()
+		}
+	}
+
+	@objc func createOrDeleteNotes(_ sender: Any?) {
+		guard let currentRows else { return }
+
+		if isDeleteRowNotesUnavailable {
+			createRowNotes(currentRows)
+		} else {
+			deleteRowNotes(currentRows)
+		}
+	}
+
 	@objc func insertNewline() {
 		currentTextView?.insertNewline(self)
 	}
@@ -1364,16 +1401,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func showFormatMenu() {
 		updateUI()
 		rightToolbarButtonGroup.showPopOverMenu(for: formatMenuButton)
-	}
-
-	@objc func createOrDeleteNotes() {
-		guard let rows = currentRows else { return }
-
-		if !isCreateRowNotesUnavailable {
-			createRowNotes(rows)
-		} else {
-			deleteRowNotes(rows)
-		}
 	}
 
 }
@@ -2036,7 +2063,7 @@ private extension EditorViewController {
 		insertImageButton = rightToolbarButtonGroup.addButton(label: .insertImageControlLabel, image: .insertImage, selector: "insertImage")
 		formatMenuButton = rightToolbarButtonGroup.addButton(label: .formatControlLabel, image: .format, selector: "showFormatMenu")
 		formatMenuButton.popoverButtonGroup = formatMenuButtonGroup
-		noteButton = rightToolbarButtonGroup.addButton(label: .addNoteControlLabel, image: .noteAdd, selector: "createOrDeleteNotes")
+		noteButton = rightToolbarButtonGroup.addButton(label: .addNoteControlLabel, image: .noteAdd, selector: "createOrDeleteNotes:")
 		insertNewlineButton = rightToolbarButtonGroup.addButton(label: .newOutlineControlLabel, image: .newline, selector: "insertNewline")
 		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
 

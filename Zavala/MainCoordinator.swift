@@ -59,10 +59,6 @@ extension MainCoordinator {
 		return editorViewController?.isNotesFiltered ?? false
 	}
 
-	var isCreateRowNotesUnavailable: Bool {
-		return editorViewController?.isCreateRowNotesUnavailable ?? true
-	}
-	
 	var isDeleteRowNotesUnavailable: Bool {
 		return editorViewController?.isDeleteRowNotesUnavailable ?? true
 	}
@@ -139,28 +135,12 @@ extension MainCoordinator {
 		editorViewController?.toggleNotesFilter()
 	}
 	
-	func moveCursorToCurrentRowTopic() {
-		editorViewController?.moveCursorToCurrentRowTopic()
-	}
-	
-	func moveCursorToCurrentRowNote() {
-		editorViewController?.moveCursorToCurrentRowNote()
-	}
-	
-	func createRowNotes() {
-		editorViewController?.createRowNotes()
-	}
-	
 	func deleteRowNotes() {
 		editorViewController?.deleteRowNotes()
 	}
 	
 	func insertImage() {
 		editorViewController?.insertImage()
-	}
-	
-	func createOrDeleteNotes() {
-		editorViewController?.createOrDeleteNotes()
 	}
 	
 	func copyRowLink() {

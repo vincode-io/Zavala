@@ -128,7 +128,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												 modifierFlags: [.command])
 	
 	let rowNotesCommand = UIKeyCommand(title: .addNoteControlLabel,
-									   action: #selector(rowNotesCommand(_:)),
+									   action: .toggleRowNotes,
 									   input: "-",
 									   modifierFlags: [.control])
 	
@@ -404,18 +404,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func rowNotesCommand(_ sender: Any?) {
-		if mainCoordinator?.isCreateRowNotesUnavailable ?? true {
-			if mainCoordinator?.isEditingTopic ?? false {
-				mainCoordinator?.moveCursorToCurrentRowNote()
-			} else if mainCoordinator?.isEditingNotes ?? false {
-				mainCoordinator?.moveCursorToCurrentRowTopic()
-			}
-		} else {
-			mainCoordinator?.createRowNotes()
-		}
-	}
-	
 	@objc func deleteRowNotesCommand(_ sender: Any?) {
 		mainCoordinator?.deleteRowNotes()
 	}
@@ -530,19 +518,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(rowNotesCommand(_:)):
-			if mainCoordinator?.isCreateRowNotesUnavailable ?? true  {
-				if mainCoordinator?.isEditingTopic ?? false {
-					command.title = .jumpToNoteControlLabel
-				} else if mainCoordinator?.isEditingNotes ?? false {
-					command.title = .jumpToTopicControlLabel
-				} else {
-					command.title = .addNoteControlLabel
-					command.attributes = .disabled
-				}
-			} else {
-				command.title = .addNoteControlLabel
-			}
 		case #selector(deleteRowNotesCommand(_:)):
 			if mainCoordinator?.isDeleteRowNotesUnavailable ?? true {
 				command.attributes = .disabled
