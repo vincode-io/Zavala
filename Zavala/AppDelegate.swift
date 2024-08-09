@@ -15,10 +15,10 @@ import VinOutlineKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
-	let showPreferences = UIKeyCommand(title: .settingsEllipsisControlLabel,
-									   action: #selector(showPreferences(_:)),
-									   input: ",",
-									   modifierFlags: [.command])
+	let showSettings = UIKeyCommand(title: .settingsEllipsisControlLabel,
+									action: .showSettings,
+									input: ",",
+									modifierFlags: [.command])
 	
 	
 	let syncCommand = UIKeyCommand(title: .syncControlLabel,
@@ -374,12 +374,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	// MARK: Actions
 
-	@objc func showPreferences(_ sender: Any?) {
-		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.showSettings)
-		let scene = UIApplication.shared.connectedScenes.first(where: { $0.delegate is SettingsSceneDelegate})
-		UIApplication.shared.requestSceneSessionActivation(scene?.session, userActivity: userActivity, options: nil, errorHandler: nil)
-	}
-
 	@objc func importOPMLCommand(_ sender: Any?) {
 		if UIResponder.valid(action: .importOPML) {
 			UIApplication.shared.sendAction(.importOPML, to: nil, from: nil, for: nil)
@@ -607,7 +601,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		guard builder.system == UIMenuSystem.main else { return }
 
 		// Application Menu
-		let appMenu = UIMenu(title: "", options: .displayInline, children: [showPreferences])
+		let appMenu = UIMenu(title: "", options: .displayInline, children: [showSettings])
 		builder.insertSibling(appMenu, afterMenu: .about)
 
 		let aboutMenuTitle = builder.menu(for: .about)?.children.first?.title ?? "About Zavala"

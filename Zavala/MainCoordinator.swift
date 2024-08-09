@@ -10,6 +10,7 @@ import SwiftUI
 import VinOutlineKit
 
 extension Selector {
+	static let showSettings = Selector(("showSettings:"))
 	static let sync = Selector(("sync:"))
 	static let showGetInfo = Selector(("showGetInfo:"))
 	static let share = Selector(("share:"))
@@ -178,6 +179,18 @@ extension MainCoordinator {
 	
 	func collapseParentRow() {
 		editorViewController?.collapseParentRow()
+	}
+	
+	func showSettings() {
+		#if targetEnvironment(macCatalyst)
+		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.showSettings)
+		let scene = UIApplication.shared.connectedScenes.first(where: { $0.delegate is SettingsSceneDelegate})
+		UIApplication.shared.requestSceneSessionActivation(scene?.session, userActivity: userActivity, options: nil, errorHandler: nil)
+		#else
+		let settingsViewController = UIHostingController(rootView: SettingsView())
+		settingsViewController.modalPresentationStyle = .formSheet
+		present(settingsViewController, animated: true)
+		#endif
 	}
 	
 	func showGetInfo() {

@@ -13,7 +13,6 @@ import VinOutlineKit
 import VinUtility
 
 extension Selector {
-	static let showSettings = #selector(MainSplitViewController.showSettings(_:))
 	static let showOpenQuickly = #selector(MainSplitViewController.showOpenQuickly(_:))
 	static let createOutline = #selector(MainSplitViewController.createOutline(_:))
 	static let importOPML = #selector(MainSplitViewController.importOPML(_:))
@@ -354,9 +353,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 	}
 	
 	@objc func showSettings(_ sender: Any?) {
-		let settingsViewController = UIHostingController(rootView: SettingsView())
-		settingsViewController.modalPresentationStyle = .formSheet
-		present(settingsViewController, animated: true)
+		showSettings()
 	}
 	
 	@objc func showOpenQuickly(_ sender: Any?) {

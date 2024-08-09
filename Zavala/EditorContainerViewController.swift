@@ -173,6 +173,10 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		toggleNotesFilter()
 	}
 
+	@objc func showSettings(_ sender: Any?) {
+		showSettings()
+	}
+	
 	@objc func exportPDFDocs(_ sender: Any?) {
 		exportPDFDocs()
 	}
