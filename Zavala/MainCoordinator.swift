@@ -60,10 +60,6 @@ extension MainCoordinator {
 		return editorViewController?.isNotesFiltered ?? false
 	}
 
-	var isCopyRowLinkUnavailable: Bool {
-		return editorViewController?.isCopyRowLinkUnavailable ?? true
-	}
-	
 	var isExpandAllInOutlineUnavailable: Bool {
 		return editorViewController?.isExpandAllInOutlineUnavailable ?? true
 	}
@@ -126,10 +122,6 @@ extension MainCoordinator {
 	
 	func toggleNotesFilter() {
 		editorViewController?.toggleNotesFilter()
-	}
-	
-	func copyRowLink() {
-		editorViewController?.copyRowLink()
 	}
 	
 	func copyDocumentLink() {

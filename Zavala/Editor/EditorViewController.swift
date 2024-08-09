@@ -13,6 +13,7 @@ import VinOutlineKit
 import VinUtility
 
 extension Selector {
+	static let copyRowLink = #selector(EditorViewController.copyRowLink(_:))
 	static let insertImage = #selector(EditorViewController.insertImage(_:))
 	static let addRowAbove = #selector(EditorViewController.addRowAbove(_:))
 	static let addRowBelow = #selector(EditorViewController.addRowBelow(_:))
@@ -186,10 +187,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return !UIPasteboard.general.contains(pasteboardTypes: [Row.typeIdentifier, UTType.utf8PlainText.identifier], inItemSet: nil)
 	}
 
-	var isCopyRowLinkUnavailable: Bool {
-		return currentRows?.count != 1
-	}
-	
 	var isInsertNewlineUnavailable: Bool {
 		return currentTextView == nil
 	}
@@ -612,6 +609,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			} else {
 				return super.canPerformAction(action, withSender: sender)
 			}
+		case .copyRowLink:
+			return currentRows?.count == 1
 		case .insertImage:
 			return currentTextView != nil
 		case .addRowAbove, .addRowBelow, .createRowInside, .duplicateCurrentRows, .deleteCurrentRows:
@@ -1205,6 +1204,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		updateUI()
 	}
 		
+	@objc func copyRowLink(_ sender: Any?) {
+		guard let entityID = currentRows?.first?.entityID else { return }
+		UIPasteboard.general.url = entityID.url
+	}
+
 	@objc func insertImage(_ sender: Any?) {
 		var config = PHPickerConfiguration()
 		config.filter = PHPickerFilter.images
@@ -1353,11 +1357,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		currentTextView?.toggleItalics(self)
 	}
 	
-	@objc func copyRowLink() {
-		guard let entityID = currentRows?.first?.entityID else { return }
-		UIPasteboard.general.url = entityID.url
-	}
-
 	func share(sourceView: UIView? = nil) {
 		let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(delegate: self))
 		if let sourceView {

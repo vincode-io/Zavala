@@ -157,7 +157,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 								   input: "k",
 								   modifierFlags: [.command])
 	
-	let copyRowLinkCommand = UICommand(title: .copyRowLinkControlLabel, action: #selector(copyRowLinkCommand(_:)))
+	let copyRowLinkCommand = UICommand(title: .copyRowLinkControlLabel, action: .copyRowLink)
 
 	let copyDocumentLinkCommand = UICommand(title: .copyDocumentLinkControlLabel, action: #selector(copyDocumentLinkCommand(_:)))
 
@@ -398,10 +398,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func copyRowLinkCommand(_ sender: Any?) {
-		mainCoordinator?.copyRowLink()
-	}
-
 	@objc func copyDocumentLinkCommand(_ sender: Any?) {
 		mainCoordinator?.copyDocumentLink()
 	}
@@ -562,10 +558,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		case #selector(collapseParentRowCommand(_:)):
 			if mainCoordinator?.isCollapseParentRowUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(copyRowLinkCommand(_:)):
-			if mainCoordinator?.isCopyRowLinkUnavailable ?? true {
 				command.attributes = .disabled
 			}
 		case #selector(copyDocumentLinkCommand(_:)):
