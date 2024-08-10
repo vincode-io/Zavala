@@ -600,7 +600,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		case .paste:
 			return UIPasteboard.general.contains(pasteboardTypes: [UTType.utf8PlainText.identifier, Row.typeIdentifier])
 		case .delete:
-			return currentRows != nil && !isInEditMode
+			return currentRows != nil
 		case .find, .findAndReplace, .findNext, .findPrevious, .useSelectionForFind:
 			if outline == nil {
 				return false
