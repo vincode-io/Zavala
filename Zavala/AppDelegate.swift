@@ -58,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 modifierFlags: [.command])
 	
 	let deleteCommand = UIKeyCommand(title: .deleteControlLabel,
-									 action: #selector(delete),
+									 action: .delete,
 									 input: "\u{8}",
 									 modifierFlags: [])
 	
