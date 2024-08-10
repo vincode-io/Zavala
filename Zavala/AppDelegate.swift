@@ -162,12 +162,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	let copyDocumentLinkCommand = UICommand(title: .copyDocumentLinkControlLabel, action: .copyDocumentLink)
 
 	let focusInCommand = UIKeyCommand(title: .focusInControlLabel,
-									  action: #selector(focusInCommand(_:)),
+									  action: .focusIn,
 									  input: UIKeyCommand.inputRightArrow,
 									  modifierFlags: [.alternate, .command])
 	
 	let focusOutCommand = UIKeyCommand(title: .focusOutControlLabel,
-									   action: #selector(focusOutCommand(_:)),
+									   action: .focusOut,
 									   input: UIKeyCommand.inputLeftArrow,
 									   modifierFlags: [.alternate, .command])
 
@@ -398,14 +398,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func focusInCommand(_ sender: Any?) {
-		mainCoordinator?.focusIn()
-	}
-
-	@objc func focusOutCommand(_ sender: Any?) {
-		mainCoordinator?.focusOut()
-	}
-
 	@objc func toggleFilterOnCommand(_ sender: Any?) {
 		mainCoordinator?.toggleFilterOn()
 	}
@@ -496,14 +488,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(focusInCommand(_:)):
-			if mainCoordinator?.isFocusInUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(focusOutCommand(_:)):
-			if mainCoordinator?.isFocusOutUnavailable ?? true {
-				command.attributes = .disabled
-			}
 		case #selector(toggleFilterOnCommand(_:)):
 			if mainCoordinator?.isFilterOn ?? false {
 				command.title = .turnFilterOffControlLabel

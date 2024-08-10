@@ -302,10 +302,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator {
 		collapseAllInOutline()
 	}
 
-	@objc func toggleFocus(_ sender: Any?) {
-		toggleFocus()
-	}
-
 	@objc func toggleOutlineHideNotes(_ sender: Any?) {
 		toggleNotesFilter()
 	}
@@ -1101,24 +1097,23 @@ extension MainSplitViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .focus:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				if self?.editorViewController?.isFocusOutUnavailable ?? true {
-					item.image = .focusInactive.symbolSizedForCatalyst(pointSize: 17)
-					item.label = .focusInControlLabel
-					item.toolTip = .focusInControlLabel
-				} else {
+			item.checkForUnavailable = { _ in
+				if UIResponder.valid(action: .focusOut) {
 					item.image = .focusActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
 					item.label = .focusOutControlLabel
 					item.toolTip = .focusOutControlLabel
+				} else {
+					item.image = .focusInactive.symbolSizedForCatalyst(pointSize: 17)
+					item.label = .focusInControlLabel
+					item.toolTip = .focusInControlLabel
 				}
-				return self?.editorViewController?.isFocusInUnavailable ?? true && self?.editorViewController?.isFocusOutUnavailable ?? true
+				return !UIResponder.valid(action: .toggleFocus)
 			}
 			item.image = .focusInactive.symbolSizedForCatalyst()
 			item.label = .focusInControlLabel
 			item.toolTip = .focusInControlLabel
 			item.isBordered = true
-			item.action = #selector(toggleFocus(_:))
-			item.target = self
+			item.action = .toggleFocus
 			toolbarItem = item
 		case .filter:
 			let item = ValidatingMenuToolbarItem(itemIdentifier: itemIdentifier)

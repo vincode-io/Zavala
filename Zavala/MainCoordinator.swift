@@ -41,14 +41,6 @@ extension MainCoordinator {
 		return editorViewController?.isOutlineFunctionsUnavailable ?? true
 	}
 	
-	var isFocusInUnavailable: Bool {
-		return editorViewController?.isFocusInUnavailable ?? true
-	}
-	
-	var isFocusOutUnavailable: Bool {
-		return editorViewController?.isFocusOutUnavailable ?? true
-	}
-	
 	var isFilterOn: Bool {
 		return editorViewController?.isFilterOn ?? false
 	}
@@ -101,18 +93,6 @@ extension MainCoordinator {
 		return editorViewController?.isEditingNote ?? false
 	}
 
-	func focusIn() {
-		editorViewController?.focusIn()
-	}
-	
-	func focusOut() {
-		editorViewController?.focusOut()
-	}
-	
-	func toggleFocus() {
-		editorViewController?.toggleFocus()
-	}
-	
 	func toggleFilterOn() {
 		editorViewController?.toggleFilterOn()
 	}

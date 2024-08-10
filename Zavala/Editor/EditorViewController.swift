@@ -15,6 +15,9 @@ import VinUtility
 extension Selector {
 	static let copyRowLink = #selector(EditorViewController.copyRowLink(_:))
 	static let insertImage = #selector(EditorViewController.insertImage(_:))
+	static let focusIn = #selector(EditorViewController.focusIn(_:))
+	static let focusOut = #selector(EditorViewController.focusOut(_:))
+	static let toggleFocus = #selector(EditorViewController.toggleFocus(_:))
 	static let addRowAbove = #selector(EditorViewController.addRowAbove(_:))
 	static let addRowBelow = #selector(EditorViewController.addRowBelow(_:))
 	static let createRowInside = #selector(EditorViewController.createRowInside(_:))
@@ -100,14 +103,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	var isOutlineFunctionsUnavailable: Bool {
 		return outline == nil
-	}
-	
-	var isFocusInUnavailable: Bool {
-		return !(currentRows?.count ?? 0 == 1)
-	}
-	
-	var isFocusOutUnavailable: Bool {
-		return outline?.isFocusOutUnavailable() ?? true
 	}
 	
 	var isFilterOn: Bool {
@@ -616,6 +611,16 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return currentRows?.count == 1
 		case .insertImage:
 			return currentTextView != nil
+		case .focusIn:
+			return currentRows?.count == 1
+		case .focusOut:
+			return !(outline?.isFocusOutUnavailable() ?? true)
+		case .toggleFocus:
+			if isFocusing {
+				return true
+			} else {
+				return currentRows?.count == 1
+			}
 		case .addRowAbove, .addRowBelow, .createRowInside, .duplicateCurrentRows, .deleteCurrentRows:
 			return currentRows != nil
 		case .createRowOutside:
@@ -1005,77 +1010,79 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	func updateUI() {
-		navigationItem.largeTitleDisplayMode = .never
-		
-		if traitCollection.userInterfaceIdiom != .mac {
-			moreMenuButton.menu = buildEllipsisMenu()
-
-			if isFocusOutUnavailable {
-				focusButton.accessibilityLabel = .focusInControlLabel
-				focusButton.setImage(.focusInactive, for: .normal)
-				if currentRows?.count ?? 0 == 1 {
-					focusButton.isEnabled = true
-				} else {
-					focusButton.isEnabled = false
-				}
-			} else {
-				focusButton.accessibilityLabel = .focusOutControlLabel
-				focusButton.setImage(.focusActive, for: .normal)
-				focusButton.isEnabled = true
-			}
-			
-			if isFilterOn {
-				filterButton.accessibilityLabel = .turnFilterOffControlLabel
-				filterButton.setImage(.filterActive, for: .normal)
-			} else {
-				filterButton.accessibilityLabel = .turnFilterOnControlLabel
-				filterButton.setImage(.filterInactive, for: .normal)
-			}
-
-			filterButton.menu = buildFilterMenu()
-			
-			if outline == nil {
-				filterButton.isEnabled = false
-				moreMenuButton.isEnabled = false
-			} else {
-				filterButton.isEnabled = true
-				moreMenuButton.isEnabled = true
-			}
-			
-			goBackwardButton.isEnabled = !isGoBackwardUnavailable
-			goForwardButton.isEnabled = !isGoForwardUnavailable
-			
-			undoButton.isEnabled = !isUndoUnvailable
-			cutButton.isEnabled = !isCutUnavailable
-			copyButton.isEnabled = !isCopyUnavailable
-			pasteButton.isEnabled = !isPasteUnavailable
-			redoButton.isEnabled = !isRedoUnvailable
-			
-			moveLeftButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsLeft)
-			moveRightButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsRight)
-			moveUpButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsUp)
-			moveDownButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsDown)
-			
-			insertImageButton.isEnabled =  UIResponder.valid(action: .insertImage)
-			linkButton.isEnabled = UIResponder.valid(action: .editLink)
-			boldButton.isEnabled = UIResponder.valid(action: .toggleBoldface)
-			italicButton.isEnabled = UIResponder.valid(action: .toggleItalics)
-
-			// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
-			// only have one row selected at a time while editing and that row either has a note
-			// or it doesn't.
-			if let outline, let currentRows, !outline.isCreateNotesUnavailable(rows: currentRows) {
-				noteButton.isEnabled = true
-				noteButton.setImage(.noteAdd, for: .normal)
-				noteButton.accessibilityLabel = .addNoteControlLabel
-			} else {
-				noteButton.isEnabled = true
-				noteButton.setImage(.noteDelete, for: .normal)
-				noteButton.accessibilityLabel = .deleteNoteControlLabel
-			}
-			
-			insertNewlineButton.isEnabled = !isInsertNewlineUnavailable
+		guard traitCollection.userInterfaceIdiom != .mac else {
+			delegate?.validateToolbar(self)
+			return
 		}
+		
+		navigationItem.largeTitleDisplayMode = .never
+		moreMenuButton.menu = buildEllipsisMenu()
+		
+		if UIResponder.valid(action: .focusOut) {
+			focusButton.accessibilityLabel = .focusOutControlLabel
+			focusButton.setImage(.focusActive, for: .normal)
+			focusButton.isEnabled = true
+		} else {
+			focusButton.accessibilityLabel = .focusInControlLabel
+			focusButton.setImage(.focusInactive, for: .normal)
+			if currentRows?.count ?? 0 == 1 {
+				focusButton.isEnabled = true
+			} else {
+				focusButton.isEnabled = false
+			}
+		}
+		
+		if isFilterOn {
+			filterButton.accessibilityLabel = .turnFilterOffControlLabel
+			filterButton.setImage(.filterActive, for: .normal)
+		} else {
+			filterButton.accessibilityLabel = .turnFilterOnControlLabel
+			filterButton.setImage(.filterInactive, for: .normal)
+		}
+		
+		filterButton.menu = buildFilterMenu()
+		
+		if outline == nil {
+			filterButton.isEnabled = false
+			moreMenuButton.isEnabled = false
+		} else {
+			filterButton.isEnabled = true
+			moreMenuButton.isEnabled = true
+		}
+		
+		goBackwardButton.isEnabled = !isGoBackwardUnavailable
+		goForwardButton.isEnabled = !isGoForwardUnavailable
+		
+		undoButton.isEnabled = !isUndoUnvailable
+		cutButton.isEnabled = !isCutUnavailable
+		copyButton.isEnabled = !isCopyUnavailable
+		pasteButton.isEnabled = !isPasteUnavailable
+		redoButton.isEnabled = !isRedoUnvailable
+		
+		moveLeftButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsLeft)
+		moveRightButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsRight)
+		moveUpButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsUp)
+		moveDownButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsDown)
+		
+		insertImageButton.isEnabled =  UIResponder.valid(action: .insertImage)
+		linkButton.isEnabled = UIResponder.valid(action: .editLink)
+		boldButton.isEnabled = UIResponder.valid(action: .toggleBoldface)
+		italicButton.isEnabled = UIResponder.valid(action: .toggleItalics)
+		
+		// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
+		// only have one row selected at a time while editing and that row either has a note
+		// or it doesn't.
+		if let outline, let currentRows, !outline.isCreateNotesUnavailable(rows: currentRows) {
+			noteButton.isEnabled = true
+			noteButton.setImage(.noteAdd, for: .normal)
+			noteButton.accessibilityLabel = .addNoteControlLabel
+		} else {
+			noteButton.isEnabled = true
+			noteButton.setImage(.noteDelete, for: .normal)
+			noteButton.accessibilityLabel = .deleteNoteControlLabel
+		}
+		
+		insertNewlineButton.isEnabled = !isInsertNewlineUnavailable
 		
 	}
 	
@@ -1224,6 +1231,23 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func link() {
 		rightToolbarButtonGroup.dismissPopOverMenu()
 		currentTextView?.editLink(self)
+	}
+
+	@objc func focusIn(_ sender: Any?) {
+		guard let row = currentRows?.first else { return }
+		outline?.focusIn(row)
+	}
+	
+	@objc func focusOut(_ sender: Any?) {
+		outline?.focusOut()
+	}
+
+	@objc func toggleFocus(_ sender: Any?) {
+		if isFocusing {
+			focusOut(sender)
+		} else {
+			focusIn(sender)
+		}
 	}
 
 	@objc func addRowAbove(_ sender: Any?) {
@@ -1748,7 +1772,6 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		Task { @MainActor in
 			self.collectionView.deselectAll()
 			self.updateUI()
-			self.delegate?.validateToolbar(self)
 		}
 	}
 
@@ -2875,7 +2898,6 @@ private extension EditorViewController {
 		return UIAction(title: .focusInControlLabel, image: .focusActive) { [weak self] action in
 			guard let self else { return }
 			self.outline?.focusIn(rows.first!)
-			self.delegate?.validateToolbar(self)
 		}
 	}
 	
