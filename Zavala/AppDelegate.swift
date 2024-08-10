@@ -127,6 +127,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												 input: "\n",
 												 modifierFlags: [.command])
 	
+	let deleteCompletedRowsCommand = UIKeyCommand(title: .deleteCompletedRowsControlLabel,
+												  action: .deleteCompletedRows,
+												  input: "d",
+												  modifierFlags: [.command])
+	
 	let rowNotesCommand = UIKeyCommand(title: .addNoteControlLabel,
 									   action: .toggleRowNotes,
 									   input: "-",
@@ -226,11 +231,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									 modifierFlags: [.command])
 	
 	let actualSizeCommand = UICommand(title: .actualSizeControlLabel, action: #selector(actualSizeCommand(_:)))
-	
-	let deleteCompletedRowsCommand = UIKeyCommand(title: .deleteCompletedRowsControlLabel,
-												  action: .deleteCompletedRows,
-												  input: "d",
-												  modifierFlags: [.command])
 	
 	let showHelpCommand = UICommand(title: .appHelpControlLabel, action: #selector(showHelpCommand(_:)))
 
