@@ -531,11 +531,11 @@ extension MainSplitViewController: DocumentsDelegate {
 extension MainSplitViewController: EditorDelegate {
 	
 	var editorViewControllerIsGoBackUnavailable: Bool {
-		return UIResponder.valid(action: .goBackwardOne)
+		return !UIResponder.valid(action: .goBackwardOne)
 	}
 	
 	var editorViewControllerIsGoForwardUnavailable: Bool {
-		return UIResponder.valid(action: .goForwardOne)
+		return !UIResponder.valid(action: .goForwardOne)
 	}
 	
 	var editorViewControllerGoBackwardStack: [Pin] {
