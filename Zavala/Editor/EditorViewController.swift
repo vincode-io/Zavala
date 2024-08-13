@@ -15,9 +15,15 @@ import VinUtility
 extension Selector {
 	static let copyRowLink = #selector(EditorViewController.copyRowLink(_:))
 	static let insertImage = #selector(EditorViewController.insertImage(_:))
+	
 	static let focusIn = #selector(EditorViewController.focusIn(_:))
 	static let focusOut = #selector(EditorViewController.focusOut(_:))
 	static let toggleFocus = #selector(EditorViewController.toggleFocus(_:))
+
+	static let toggleFilterOn = #selector(EditorViewController.toggleFilterOn(_:))
+	static let toggleCompletedFilter = #selector(EditorViewController.toggleCompletedFilter(_:))
+	static let toggleNotesFilter = #selector(EditorViewController.toggleNotesFilter(_:))
+
 	static let addRowAbove = #selector(EditorViewController.addRowAbove(_:))
 	static let addRowBelow = #selector(EditorViewController.addRowBelow(_:))
 	static let createRowInside = #selector(EditorViewController.createRowInside(_:))
@@ -621,6 +627,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			} else {
 				return currentRows?.count == 1
 			}
+		case .toggleFilterOn:
+			return outline != nil
+		case .toggleCompletedFilter, .toggleNotesFilter:
+			return isFilterOn
 		case .addRowAbove, .addRowBelow, .createRowInside, .duplicateCurrentRows, .deleteCurrentRows:
 			return currentRows != nil
 		case .createRowOutside:
@@ -689,6 +699,24 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 				}
 			} else {
 				command.title = .addNoteControlLabel
+			}
+		case .toggleFilterOn:
+			if isFilterOn {
+				command.title = .turnFilterOffControlLabel
+			} else {
+				command.title = .turnFilterOnControlLabel
+			}
+		case .toggleCompletedFilter:
+			if isCompletedFiltered {
+				command.state = .on
+			} else {
+				command.state = .off
+			}
+		case .toggleNotesFilter:
+			if isNotesFiltered {
+				command.state = .on
+			} else {
+				command.state = .off
 			}
 		default:
 			break
@@ -1178,41 +1206,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		collectionView.selectItem(at: IndexPath(row: shadowTableIndex, section: adjustedRowsSection), animated: true, scrollPosition: [])
 	}
 
-	@objc func focusIn() {
-		guard let row = currentRows?.first else { return }
-		outline?.focusIn(row)
-	}
-	
-	@objc func focusOut() {
-		outline?.focusOut()
-	}
-
-	@objc func toggleFocus() {
-		if isFocusing {
-			focusOut()
-		} else {
-			focusIn()
-		}
-	}
-
-	@objc func toggleFilterOn() {
-		guard let changes = outline?.toggleFilterOn() else { return }
-		applyChangesRestoringState(changes)
-		updateUI()
-	}
-	
-	@objc func toggleCompletedFilter() {
-		guard let changes = outline?.toggleCompletedFilter() else { return }
-		applyChangesRestoringState(changes)
-		updateUI()
-	}
-	
-	@objc func toggleNotesFilter() {
-		guard let changes = outline?.toggleNotesFilter() else { return }
-		applyChangesRestoringState(changes)
-		updateUI()
-	}
-		
 	@objc func copyRowLink(_ sender: Any?) {
 		guard let entityID = currentRows?.first?.entityID else { return }
 		UIPasteboard.general.url = entityID.url
@@ -1250,6 +1243,24 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		}
 	}
 
+	@objc func toggleFilterOn(_ sender: Any?) {
+		guard let changes = outline?.toggleFilterOn() else { return }
+		applyChangesRestoringState(changes)
+		updateUI()
+	}
+	
+	@objc func toggleCompletedFilter(_ sender: Any?) {
+		guard let changes = outline?.toggleCompletedFilter() else { return }
+		applyChangesRestoringState(changes)
+		updateUI()
+	}
+	
+	@objc func toggleNotesFilter(_ sender: Any?) {
+		guard let changes = outline?.toggleNotesFilter() else { return }
+		applyChangesRestoringState(changes)
+		updateUI()
+	}
+		
 	@objc func addRowAbove(_ sender: Any?) {
 		guard let rows = currentRows else { return }
 		createRow(beforeRows: rows, moveCursor: true)
@@ -2064,7 +2075,7 @@ private extension EditorViewController {
 		undoMenuButton = navButtonGroup.addButton(label: .undoMenuControlLabel, image: .undoMenu, selector: "showUndoMenu")
 		undoMenuButton.popoverButtonGroup = undoMenuButtonGroup
 		moreMenuButton = navButtonGroup.addButton(label: .moreControlLabel, image: .ellipsis, showMenu: true)
-		focusButton = navButtonGroup.addButton(label: .focusInControlLabel, image: .focusInactive, selector: "toggleFocus")
+		focusButton = navButtonGroup.addButton(label: .focusInControlLabel, image: .focusInactive, selector: "toggleFocus:")
 		filterButton = navButtonGroup.addButton(label: .filterControlLabel, image: .filterInactive, showMenu: true)
 		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
@@ -2189,20 +2200,20 @@ private extension EditorViewController {
 	
 	func buildFilterMenu() -> UIMenu {
 		let turnFilterOnAction = UIAction() { [weak self] _ in
-		   self?.toggleFilterOn()
+		   self?.toggleFilterOn(self)
 		}
 		turnFilterOnAction.title = isFilterOn ? .turnFilterOffControlLabel : .turnFilterOnControlLabel
 		
 		let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
 		
 		let filterCompletedAction = UIAction(title: .filterCompletedControlLabel) { [weak self] _ in
-			self?.toggleCompletedFilter()
+			self?.toggleCompletedFilter(self)
 		}
 		filterCompletedAction.state = isCompletedFiltered ? .on : .off
 		filterCompletedAction.attributes = isFilterOn ? [] : .disabled
 
 		let filterNotesAction = UIAction(title: .filterNotesControlLabel) { [weak self] _ in
-		   self?.toggleNotesFilter()
+		   self?.toggleNotesFilter(self)
 		}
 		filterNotesAction.state = isNotesFiltered ? .on : .off
 		filterNotesAction.attributes = isFilterOn ? [] : .disabled

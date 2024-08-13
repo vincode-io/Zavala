@@ -177,13 +177,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									   modifierFlags: [.alternate, .command])
 
 	let toggleFilterOnCommand = UIKeyCommand(title: .turnFilterOnControlLabel,
-											 action: #selector(toggleFilterOnCommand(_:)),
+											 action: .toggleFilterOn,
 											 input: "h",
 											 modifierFlags: [.shift, .command])
 	
-	let toggleCompletedFilterCommand = UICommand(title: .filterCompletedControlLabel, action: #selector(toggleCompletedFilterCommand(_:)))
+	let toggleCompletedFilterCommand = UICommand(title: .filterCompletedControlLabel, action: .toggleCompletedFilter)
 	
-	let toggleNotesFilterCommand = UICommand(title: .filterNotesControlLabel, action: #selector(toggleNotesFilterCommand(_:)))
+	let toggleNotesFilterCommand = UICommand(title: .filterNotesControlLabel, action: .toggleNotesFilter)
 	
 	let expandAllInOutlineCommand = UIKeyCommand(title: .expandAllInOutlineControlLabel,
 												 action: #selector(expandAllInOutlineCommand(_:)),
@@ -398,18 +398,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func toggleFilterOnCommand(_ sender: Any?) {
-		mainCoordinator?.toggleFilterOn()
-	}
-
-	@objc func toggleCompletedFilterCommand(_ sender: Any?) {
-		mainCoordinator?.toggleCompletedFilter()
-	}
-
-	@objc func toggleNotesFilterCommand(_ sender: Any?) {
-		mainCoordinator?.toggleNotesFilter()
-	}
-
 	@objc func expandAllInOutlineCommand(_ sender: Any?) {
 		mainCoordinator?.expandAllInOutline()
 	}
@@ -488,30 +476,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
-		case #selector(toggleFilterOnCommand(_:)):
-			if mainCoordinator?.isFilterOn ?? false {
-				command.title = .turnFilterOffControlLabel
-			} else {
-				command.title = .turnFilterOnControlLabel
-			}
-		case #selector(toggleCompletedFilterCommand(_:)):
-			if mainCoordinator?.isCompletedFiltered ?? false {
-				command.state = .on
-			} else {
-				command.state = .off
-			}
-			if !(mainCoordinator?.isFilterOn ?? false) {
-				command.attributes = .disabled
-			}
-		case #selector(toggleNotesFilterCommand(_:)):
-			if mainCoordinator?.isNotesFiltered ?? false {
-				command.state = .on
-			} else {
-				command.state = .off
-			}
-			if !(mainCoordinator?.isFilterOn ?? false) {
-				command.attributes = .disabled
-			}
 		case #selector(expandAllInOutlineCommand(_:)):
 			if mainCoordinator?.isExpandAllInOutlineUnavailable ?? true {
 				command.attributes = .disabled

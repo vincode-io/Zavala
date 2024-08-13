@@ -148,20 +148,12 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		}
 	}
 
-	@objc func toggleOutlineFilter(_ sender: Any?) {
-		toggleCompletedFilter()
-	}
-
 	@objc func expandAllInOutline(_ sender: Any?) {
 		expandAllInOutline()
 	}
 
 	@objc func collapseAllInOutline(_ sender: Any?) {
 		collapseAllInOutline()
-	}
-
-	@objc func toggleOutlineHideNotes(_ sender: Any?) {
-		toggleNotesFilter()
 	}
 
 	@objc func showSettings(_ sender: Any?) {
@@ -546,37 +538,39 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.checkForUnavailable = { [weak self] item in
 				guard let self else { return false }
 				
-				if self.editorViewController?.isFilterOn ?? false {
+				let isFilterOn = self.editorViewController?.isFilterOn ?? false
+				
+				if isFilterOn {
 					item.image = .filterActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
 				} else {
 					item.image = .filterInactive.symbolSizedForCatalyst(pointSize: 17)
 				}
 				
-				let turnFilterOnAction = UIAction() { [weak self] _ in
+				let turnFilterOnAction = UIAction() { _ in
 					Task { @MainActor in
-						self?.toggleFilterOn()
+						UIApplication.shared.sendAction(.toggleFilterOn, to: nil, from: nil, for: nil)
 					}
 				}
 				
-				turnFilterOnAction.title = self.isFilterOn ? .turnFilterOffControlLabel : .turnFilterOnControlLabel
+				turnFilterOnAction.title = isFilterOn ? .turnFilterOffControlLabel : .turnFilterOnControlLabel
 				
 				let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
 				
-				let filterCompletedAction = UIAction(title: .filterCompletedControlLabel) { [weak self] _ in
+				let filterCompletedAction = UIAction(title: .filterCompletedControlLabel) { _ in
 					Task { @MainActor in
-						self?.toggleCompletedFilter()
+						UIApplication.shared.sendAction(.toggleCompletedFilter, to: nil, from: nil, for: nil)
 					}
 				}
-				filterCompletedAction.state = self.isCompletedFiltered ? .on : .off
-				filterCompletedAction.attributes = self.isFilterOn ? [] : .disabled
+				filterCompletedAction.state = self.editorViewController?.isCompletedFiltered ?? false ? .on : .off
+				filterCompletedAction.attributes = isFilterOn ? [] : .disabled
 
-				let filterNotesAction = UIAction(title: .filterNotesControlLabel) { [weak self] _ in
+				let filterNotesAction = UIAction(title: .filterNotesControlLabel) { _ in
 					Task { @MainActor in
-						self?.toggleNotesFilter()
+						UIApplication.shared.sendAction(.toggleNotesFilter, to: nil, from: nil, for: nil)
 					}
 				}
-				filterNotesAction.state = self.isNotesFiltered ? .on : .off
-				filterNotesAction.attributes = self.isFilterOn ? [] : .disabled
+				filterNotesAction.state = self.editorViewController?.isNotesFiltered ?? false ? .on : .off
+				filterNotesAction.attributes = isFilterOn ? [] : .disabled
 
 				let filterOptionsMenu = UIMenu(title: "", options: .displayInline, children: [filterCompletedAction, filterNotesAction])
 

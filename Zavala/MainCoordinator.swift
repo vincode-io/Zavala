@@ -41,18 +41,6 @@ extension MainCoordinator {
 		return editorViewController?.isOutlineFunctionsUnavailable ?? true
 	}
 	
-	var isFilterOn: Bool {
-		return editorViewController?.isFilterOn ?? false
-	}
-	
-	var isCompletedFiltered: Bool {
-		return editorViewController?.isCompletedFiltered ?? false
-	}
-	
-	var isNotesFiltered: Bool {
-		return editorViewController?.isNotesFiltered ?? false
-	}
-
 	var isExpandAllInOutlineUnavailable: Bool {
 		return editorViewController?.isExpandAllInOutlineUnavailable ?? true
 	}
@@ -93,18 +81,6 @@ extension MainCoordinator {
 		return editorViewController?.isEditingNote ?? false
 	}
 
-	func toggleFilterOn() {
-		editorViewController?.toggleFilterOn()
-	}
-	
-	func toggleCompletedFilter() {
-		editorViewController?.toggleCompletedFilter()
-	}
-	
-	func toggleNotesFilter() {
-		editorViewController?.toggleNotesFilter()
-	}
-	
 	func copyDocumentLink() {
 		UIPasteboard.general.url = selectedDocuments.first?.id.url
 	}
