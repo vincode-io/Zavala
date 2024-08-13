@@ -148,14 +148,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		}
 	}
 
-	@objc func expandAllInOutline(_ sender: Any?) {
-		expandAllInOutline()
-	}
-
-	@objc func collapseAllInOutline(_ sender: Any?) {
-		collapseAllInOutline()
-	}
-
 	@objc func showSettings(_ sender: Any?) {
 		showSettings()
 	}
@@ -447,27 +439,25 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .expandAllInOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isExpandAllInOutlineUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .expandAllInOutline)
 			}
 			item.image = .expandAll.symbolSizedForCatalyst()
 			item.label = .expandControlLabel
 			item.toolTip = .expandAllInOutlineControlLabel
 			item.isBordered = true
-			item.action = #selector(expandAllInOutline(_:))
-			item.target = self
+			item.action = .expandAllInOutline
 			toolbarItem = item
 		case .collapseAllInOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isCollapseAllInOutlineUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .collapseAllInOutline)
 			}
 			item.image = .collapseAll.symbolSizedForCatalyst()
 			item.label = .collapseControlLabel
 			item.toolTip = .collapseAllInOutlineControlLabel
 			item.isBordered = true
-			item.action = #selector(collapseAllInOutline(_:))
-			item.target = self
+			item.action = .collapseAllInOutline
 			toolbarItem = item
 		case .moveLeft:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)

@@ -24,6 +24,14 @@ extension Selector {
 	static let toggleCompletedFilter = #selector(EditorViewController.toggleCompletedFilter(_:))
 	static let toggleNotesFilter = #selector(EditorViewController.toggleNotesFilter(_:))
 
+	static let expandAllInOutline = #selector(EditorViewController.expandAllInOutline(_:))
+	static let collapseAllInOutline = #selector(EditorViewController.collapseAllInOutline(_:))
+	static let expandAll = #selector(EditorViewController.expandAll(_:))
+	static let collapseAll = #selector(EditorViewController.collapseAll(_:))
+	static let expand = #selector(EditorViewController.expand(_:))
+	static let collapse = #selector(EditorViewController.collapse(_:))
+	static let collapseParentRow = #selector(EditorViewController.collapseParentRow(_:))
+
 	static let addRowAbove = #selector(EditorViewController.addRowAbove(_:))
 	static let addRowBelow = #selector(EditorViewController.addRowBelow(_:))
 	static let createRowInside = #selector(EditorViewController.createRowInside(_:))
@@ -195,54 +203,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return currentTextView == nil
 	}
 
-	var isExpandAllInOutlineUnavailable: Bool {
-		return outline == nil || outline!.isExpandAllInOutlineUnavailable
-	}
-
-	var isCollapseAllInOutlineUnavailable: Bool {
-		return outline == nil || outline!.isCollapseAllInOutlineUnavailable
-	}
-
-	var isExpandAllUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isExpandAllUnavailable(containers: rows)
-	}
-
-	var isCollapseAllUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isCollapseAllUnavailable(containers: rows)
-	}
-
-	var isExpandUnavailable: Bool {
-		guard let rows = currentRows else { return true }
-		for row in rows {
-			if row.isExpandable {
-				return false
-			}
-		}
-		return true
-	}
-
-	var isCollapseUnavailable: Bool {
-		guard let rows = currentRows else { return true }
-		for row in rows {
-			if row.isCollapsable {
-				return false
-			}
-		}
-		return true
-	}
-
-	var isCollapseParentRowUnavailable: Bool {
-		guard let rows = currentRows else { return true }
-		for row in rows {
-			if (row.parent as? Row)?.isCollapsable ?? false {
-				return false
-			}
-		}
-		return true
-	}
-	
 	var currentRows: [Row]? {
 		if let selected = collectionView?.indexPathsForSelectedItems?.sorted(), !selected.isEmpty {
 			return selected.compactMap {
@@ -631,6 +591,63 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return outline != nil
 		case .toggleCompletedFilter, .toggleNotesFilter:
 			return isFilterOn
+		case .expandAllInOutline:
+			if let outline, !outline.isExpandAllInOutlineUnavailable {
+				return true
+			} else {
+				return false
+			}
+		case .collapseAllInOutline:
+			if let outline, !outline.isCollapseAllInOutlineUnavailable {
+				return true
+			} else {
+				return false
+			}
+		case .expandAll:
+			if let outline, let currentRows, !outline.isExpandAllUnavailable(containers: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .collapseAll:
+			if let outline, let currentRows, !outline.isCollapseAllUnavailable(containers: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .expand:
+			if let currentRows {
+				for row in currentRows {
+					if !row.isExpandable {
+						return false
+					}
+				}
+				return true
+			} else {
+				return false
+			}
+		case .collapse:
+			if let currentRows {
+				for row in currentRows {
+					if !row.isCollapsable {
+						return false
+					}
+				}
+				return true
+			} else {
+				return false
+			}
+		case .collapseParentRow:
+			if let currentRows {
+				for row in currentRows {
+					if !((row.parent as? Row)?.isCollapsable ?? false) {
+						return false
+					}
+				}
+				return true
+			} else {
+				return false
+			}
 		case .addRowAbove, .addRowBelow, .createRowInside, .duplicateCurrentRows, .deleteCurrentRows:
 			return currentRows != nil
 		case .createRowOutside:
@@ -1126,43 +1143,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		currentRowViewCell.moveToNoteEnd()
 	}
 	
-	func expandAllInOutline() {
-		guard let outline else { return }
-		expandAll(containers: [outline])
-	}
-	
-	func collapseAllInOutline() {
-		guard let outline else { return }
-		collapseAll(containers: [outline])
-	}
-	
-	func expandAll() {
-		guard let rows = currentRows else { return }
-		expandAll(containers: rows)
-	}
-	
-	func collapseAll() {
-		guard let rows = currentRows else { return }
-		collapseAll(containers: rows)
-	}
-	
-	func expand() {
-		guard let rows = currentRows else { return }
-		expand(rows: rows)
-	}
-	
-	func collapse() {
-		guard let rows = currentRows else { return }
-		collapse(rows: rows)
-	}
-	
-	func collapseParentRow() {
-		guard let rows = currentRows else { return }
-		let parentRows = rows.compactMap { $0.parent as? Row }
-		guard !parentRows.isEmpty else { return }
-		collapse(rows: parentRows)
-	}
-	
 	func printDoc() {
 		guard let outline else { return }
 		currentTextView?.saveText()
@@ -1261,6 +1241,43 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		updateUI()
 	}
 		
+	@objc func expandAllInOutline(_ sender: Any?) {
+		guard let outline else { return }
+		expandAll(containers: [outline])
+	}
+	
+	@objc func collapseAllInOutline(_ sender: Any?) {
+		guard let outline else { return }
+		collapseAll(containers: [outline])
+	}
+	
+	@objc func expandAll(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		expandAll(containers: rows)
+	}
+	
+	@objc func collapseAll(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		collapseAll(containers: rows)
+	}
+	
+	@objc func expand(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		expand(rows: rows)
+	}
+	
+	@objc func collapse(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		collapse(rows: rows)
+	}
+	
+	@objc func collapseParentRow(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		let parentRows = rows.compactMap { $0.parent as? Row }
+		guard !parentRows.isEmpty else { return }
+		collapse(rows: parentRows)
+	}
+	
 	@objc func addRowAbove(_ sender: Any?) {
 		guard let rows = currentRows else { return }
 		createRow(beforeRows: rows, moveCursor: true)
@@ -2139,12 +2156,12 @@ private extension EditorViewController {
 		outlineActions.append(findAction)
 
 		let expandAllInOutlineAction = UIAction(title: .expandAllInOutlineControlLabel, image: .expandAll) { [weak self] _ in
-			self?.expandAllInOutline()
+			self?.expandAllInOutline(self)
 		}
 		outlineActions.append(expandAllInOutlineAction)
 		
 		let collapseAllInOutlineAction = UIAction(title: .collapseAllInOutlineControlLabel, image: .collapseAll) { [weak self] _ in
-			self?.collapseAllInOutline()
+			self?.collapseAllInOutline(self)
 		}
 		outlineActions.append(collapseAllInOutlineAction)
 		

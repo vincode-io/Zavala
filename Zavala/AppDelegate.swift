@@ -186,37 +186,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	let toggleNotesFilterCommand = UICommand(title: .filterNotesControlLabel, action: .toggleNotesFilter)
 	
 	let expandAllInOutlineCommand = UIKeyCommand(title: .expandAllInOutlineControlLabel,
-												 action: #selector(expandAllInOutlineCommand(_:)),
+												 action: .expandAllInOutline,
 												 input: "9",
 												 modifierFlags: [.control, .command])
 	
 	let collapseAllInOutlineCommand = UIKeyCommand(title: .collapseAllInOutlineControlLabel,
-												   action: #selector(collapseAllInOutlineCommand(_:)),
+												   action: .collapseAllInOutline,
 												   input: "0",
 												   modifierFlags: [.control, .command])
 	
 	let expandAllCommand = UIKeyCommand(title: .expandAllInRowControlLabel,
-										action: #selector(expandAllCommand(_:)),
+										action: .expandAll,
 										input: "9",
 										modifierFlags: [.alternate, .command])
 	
 	let collapseAllCommand = UIKeyCommand(title: .collapseAllInRowControlLabel,
-										  action: #selector(collapseAllCommand(_:)),
+										  action: .collapseAll,
 										  input: "0",
 										  modifierFlags: [.alternate, .command])
 	
 	let expandCommand = UIKeyCommand(title: .expandControlLabel,
-									 action: #selector(expandCommand(_:)),
+									 action: .expand,
 									 input: "9",
 									 modifierFlags: [.command])
 	
 	let collapseCommand = UIKeyCommand(title: .collapseControlLabel,
-									   action: #selector(collapseCommand(_:)),
+									   action: .collapse,
 									   input: "0",
 									   modifierFlags: [.command])
 	
 	let collapseParentRowCommand = UIKeyCommand(title: .collapseParentRowControlLabel,
-												action: #selector(collapseParentRowCommand(_:)),
+												action: .collapseParentRow,
 												input: "0",
 												modifierFlags: [.control, .alternate, .command])
 	
@@ -398,34 +398,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
-	@objc func expandAllInOutlineCommand(_ sender: Any?) {
-		mainCoordinator?.expandAllInOutline()
-	}
-
-	@objc func collapseAllInOutlineCommand(_ sender: Any?) {
-		mainCoordinator?.collapseAllInOutline()
-	}
-
-	@objc func expandAllCommand(_ sender: Any?) {
-		mainCoordinator?.expandAll()
-	}
-
-	@objc func collapseAllCommand(_ sender: Any?) {
-		mainCoordinator?.collapseAll()
-	}
-
-	@objc func expandCommand(_ sender: Any?) {
-		mainCoordinator?.expand()
-	}
-
-	@objc func collapseCommand(_ sender: Any?) {
-		mainCoordinator?.collapse()
-	}
-	
-	@objc func collapseParentRowCommand(_ sender: Any?) {
-		mainCoordinator?.collapseParentRow()
-	}
-	
 	@objc func zoomInCommand(_ sender: Any?) {
 		AppDefaults.shared.textZoom = AppDefaults.shared.textZoom + 1
 	}
@@ -472,43 +444,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 
-	// MARK: Validations
-	
-	override func validate(_ command: UICommand) {
-		switch command.action {
-		case #selector(expandAllInOutlineCommand(_:)):
-			if mainCoordinator?.isExpandAllInOutlineUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(collapseAllInOutlineCommand(_:)):
-			if mainCoordinator?.isCollapseAllInOutlineUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(expandAllCommand(_:)):
-			if mainCoordinator?.isExpandAllUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(collapseAllCommand(_:)):
-			if mainCoordinator?.isCollapseAllUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(expandCommand(_:)):
-			if mainCoordinator?.isExpandUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(collapseCommand(_:)):
-			if mainCoordinator?.isCollapseUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(collapseParentRowCommand(_:)):
-			if mainCoordinator?.isCollapseParentRowUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		default:
-			break
-		}
-	}
-		
 	// MARK: Menu
 
 	override func buildMenu(with builder: UIMenuBuilder) {

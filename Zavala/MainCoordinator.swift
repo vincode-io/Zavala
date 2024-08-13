@@ -41,34 +41,6 @@ extension MainCoordinator {
 		return editorViewController?.isOutlineFunctionsUnavailable ?? true
 	}
 	
-	var isExpandAllInOutlineUnavailable: Bool {
-		return editorViewController?.isExpandAllInOutlineUnavailable ?? true
-	}
-
-	var isCollapseAllInOutlineUnavailable: Bool {
-		return editorViewController?.isCollapseAllInOutlineUnavailable ?? true
-	}
-
-	var isExpandAllUnavailable: Bool {
-		return editorViewController?.isExpandAllUnavailable ?? true
-	}
-
-	var isCollapseAllUnavailable: Bool {
-		return editorViewController?.isCollapseAllUnavailable ?? true
-	}
-
-	var isExpandUnavailable: Bool {
-		return editorViewController?.isExpandUnavailable ?? true
-	}
-
-	var isCollapseUnavailable: Bool {
-		return editorViewController?.isCollapseUnavailable ?? true
-	}
-	
-	var isCollapseParentRowUnavailable: Bool {
-		return editorViewController?.isCollapseParentRowUnavailable ?? true
-	}
-	
 	var isManageSharingUnavailable: Bool {
 		return !(selectedDocuments.count == 1 && selectedDocuments.first!.isCollaborating)
 	}
@@ -83,34 +55,6 @@ extension MainCoordinator {
 
 	func copyDocumentLink() {
 		UIPasteboard.general.url = selectedDocuments.first?.id.url
-	}
-	
-	func expandAllInOutline() {
-		editorViewController?.expandAllInOutline()
-	}
-	
-	func collapseAllInOutline() {
-		editorViewController?.collapseAllInOutline()
-	}
-	
-	func expandAll() {
-		editorViewController?.expandAll()
-	}
-	
-	func collapseAll() {
-		editorViewController?.collapseAll()
-	}
-	
-	func expand() {
-		editorViewController?.expand()
-	}
-	
-	func collapse() {
-		editorViewController?.collapse()
-	}
-	
-	func collapseParentRow() {
-		editorViewController?.collapseParentRow()
 	}
 	
 	func showSettings() {
