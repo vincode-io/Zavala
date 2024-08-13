@@ -354,7 +354,7 @@ private extension CloudKitManager {
 							account?.deleteAllDocuments(with: zoneID)
 							throw VCKError.userDeletedZone
 						default:
-							throw error
+							throw ckError
 						}
 					} else {
 						throw error
