@@ -12,6 +12,11 @@ import VinOutlineKit
 
 @MainActor var appDelegate: AppDelegate!
 
+extension Selector {
+	static let importOPML = Selector(("importOPML:"))
+	static let createOutline = Selector(("createOutline:"))
+}
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
@@ -43,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												  modifierFlags: [.control, .command])
 	
 	let importOPMLCommand = UIKeyCommand(title: .importOPMLEllipsisControlLabel,
-										 action: #selector(importOPMLCommand(_:)),
+										 action: .importOPML,
 										 input: "i",
 										 modifierFlags: [.shift, .command])
 	
@@ -53,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										modifierFlags: [.alternate, .command])
 	
 	let newOutlineCommand = UIKeyCommand(title: .newOutlineControlLabel,
-										 action: #selector(createOutlineCommand(_:)),
+										 action: .createOutline,
 										 input: "n",
 										 modifierFlags: [.command])
 	
@@ -374,14 +379,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	// MARK: Actions
 
-	@objc func importOPMLCommand(_ sender: Any?) {
-		if UIResponder.valid(action: .importOPML) {
-			UIApplication.shared.sendAction(.importOPML, to: nil, from: nil, for: nil)
-		} else {
-			#if targetEnvironment(macCatalyst)
-			appKitPlugin?.importOPML()
-			#endif
-		}
+	@objc func importOPML(_ sender: Any?) {
+		#if targetEnvironment(macCatalyst)
+		appKitPlugin?.importOPML()
+		#endif
 	}
 
 	@objc func newWindow(_ sender: Any?) {
@@ -389,13 +390,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: userActivity, options: nil, errorHandler: nil)
 	}
 	
-	@objc func createOutlineCommand(_ sender: Any?) {
-		if UIResponder.valid(action: .createOutline) {
-			UIApplication.shared.sendAction(.createOutline, to: nil, from: nil, for: nil)
-		} else {
-			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.newOutline)
-			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
-		}
+	@objc func createOutline(_ sender: Any?) {
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.newOutline)
+		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 	
 	@objc func zoomInCommand(_ sender: Any?) {
@@ -574,7 +571,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: AppKitPluginDelegate {
 	
-	func importOPML(_ url: URL) {
+	func importFile(_ url: URL) {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return }
 		

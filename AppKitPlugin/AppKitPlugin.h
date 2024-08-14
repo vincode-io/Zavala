@@ -7,7 +7,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_SWIFT_UI_ACTOR
 @protocol AppKitPluginDelegate <NSObject>
-- (void)importOPML:(nonnull NSURL *)url;
+- (void)importFile:(nonnull NSURL *)url;
 @end
 
 NS_SWIFT_UI_ACTOR

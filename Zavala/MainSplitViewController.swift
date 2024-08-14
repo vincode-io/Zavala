@@ -14,8 +14,6 @@ import VinUtility
 
 extension Selector {
 	static let showOpenQuickly = #selector(MainSplitViewController.showOpenQuickly(_:))
-	static let createOutline = #selector(MainSplitViewController.createOutline(_:))
-	static let importOPML = #selector(MainSplitViewController.importOPML(_:))
 	static let goBackwardOne = #selector(MainSplitViewController.goBackwardOne(_:))
 	static let goForwardOne = #selector(MainSplitViewController.goForwardOne(_:))
 }

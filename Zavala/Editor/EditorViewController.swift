@@ -15,15 +15,16 @@ import VinUtility
 extension Selector {
 	static let copyRowLink = #selector(EditorViewController.copyRowLink(_:))
 	static let insertImage = #selector(EditorViewController.insertImage(_:))
-	
+	static let insertNewline = #selector(EditorViewController.insertNewline(_:))
+
 	static let focusIn = #selector(EditorViewController.focusIn(_:))
 	static let focusOut = #selector(EditorViewController.focusOut(_:))
 	static let toggleFocus = #selector(EditorViewController.toggleFocus(_:))
-
+	
 	static let toggleFilterOn = #selector(EditorViewController.toggleFilterOn(_:))
 	static let toggleCompletedFilter = #selector(EditorViewController.toggleCompletedFilter(_:))
 	static let toggleNotesFilter = #selector(EditorViewController.toggleNotesFilter(_:))
-
+	
 	static let expandAllInOutline = #selector(EditorViewController.expandAllInOutline(_:))
 	static let collapseAllInOutline = #selector(EditorViewController.collapseAllInOutline(_:))
 	static let expandAll = #selector(EditorViewController.expandAll(_:))
@@ -31,7 +32,7 @@ extension Selector {
 	static let expand = #selector(EditorViewController.expand(_:))
 	static let collapse = #selector(EditorViewController.collapse(_:))
 	static let collapseParentRow = #selector(EditorViewController.collapseParentRow(_:))
-
+	
 	static let addRowAbove = #selector(EditorViewController.addRowAbove(_:))
 	static let addRowBelow = #selector(EditorViewController.addRowBelow(_:))
 	static let createRowInside = #selector(EditorViewController.createRowInside(_:))
@@ -47,6 +48,15 @@ extension Selector {
 	static let toggleRowNotes = #selector(EditorViewController.toggleRowNotes(_:))
 	static let createOrDeleteNotes = #selector(EditorViewController.createOrDeleteNotes(_:))
 	static let deleteRowNotes = #selector(EditorViewController.deleteRowNotes(_:))
+	
+	static let undo = Selector(("undo:"))
+	static let redo = Selector(("redo:"))
+	static let showUndoMenu = #selector(EditorViewController.showUndoMenu(_:))
+	static let showFormatMenu = #selector(EditorViewController.showFormatMenu(_:))
+	
+	static let editorLink = #selector(EditorViewController.editorLink(_:))
+	static let editorToggleBoldface = #selector(EditorViewController.editorToggleBoldface(_:))
+	static let editorToggleItalics = #selector(EditorViewController.editorToggleItalics(_:))
 }
 
 @MainActor
@@ -154,49 +164,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	var isDeleteRowNotesUnavailable: Bool {
 		guard let outline, let rows = currentRows else { return true }
 		return outline.isDeleteNotesUnavailable(rows: rows)
-	}
-
-	var isUndoUnvailable: Bool {
-		if let currentTextView {
-			return !(currentTextView.undoManager?.canUndo ?? false)
-		} else {
-			return !(undoManager?.canUndo ?? false)
-		}
-	}
-
-	var isRedoUnvailable: Bool {
-		if let currentTextView {
-			return !(currentTextView.undoManager?.canRedo ?? false)
-		} else {
-			return !(undoManager?.canRedo ?? false)
-		}
-	}
-	
-	var isCutUnavailable: Bool {
-		if let currentTextView {
-			return !currentTextView.canPerformAction(.cut, withSender: nil)
-		}
-		if let currentRows {
-			return currentRows.isEmpty
-		}
-		return true
-	}
-
-	var isCopyUnavailable: Bool {
-		if let currentTextView {
-			return !currentTextView.canPerformAction(.copy, withSender: nil)
-		}
-		if let currentRows {
-			return currentRows.isEmpty
-		}
-		return true
-	}
-
-	var isPasteUnavailable: Bool {
-		if let currentTextView {
-			return !currentTextView.canPerformAction(.paste, withSender: nil)
-		}
-		return !UIPasteboard.general.contains(pasteboardTypes: [Row.typeIdentifier, UTType.utf8PlainText.identifier], inItemSet: nil)
 	}
 
 	var isInsertNewlineUnavailable: Bool {
@@ -1098,11 +1065,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		goBackwardButton.isEnabled = !isGoBackwardUnavailable
 		goForwardButton.isEnabled = !isGoForwardUnavailable
 		
-		undoButton.isEnabled = !isUndoUnvailable
-		cutButton.isEnabled = !isCutUnavailable
-		copyButton.isEnabled = !isCopyUnavailable
-		pasteButton.isEnabled = !isPasteUnavailable
-		redoButton.isEnabled = !isRedoUnvailable
+		undoButton.isEnabled = UIResponder.valid(action: .undo)
+		cutButton.isEnabled = UIResponder.valid(action: .cut)
+		copyButton.isEnabled = UIResponder.valid(action: .copy)
+		pasteButton.isEnabled = UIResponder.valid(action: .paste)
+		redoButton.isEnabled = UIResponder.valid(action: .redo)
 		
 		moveLeftButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsLeft)
 		moveRightButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsRight)
@@ -1201,11 +1168,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		self.present(pickerViewController, animated: true, completion: nil)
 	}
 	
-	@objc func link() {
-		rightToolbarButtonGroup.dismissPopOverMenu()
-		currentTextView?.editLink(self)
-	}
-
 	@objc func focusIn(_ sender: Any?) {
 		guard let row = currentRows?.first else { return }
 		outline?.focusIn(row)
@@ -1401,12 +1363,17 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		currentTextView?.insertNewline(self)
 	}
 	
-	@objc func outlineToggleBoldface(_ sender: Any? = nil) {
+	@objc func editorLink(_ sender: Any?) {
+		rightToolbarButtonGroup.dismissPopOverMenu()
+		currentTextView?.editLink(self)
+	}
+
+	@objc func editorToggleBoldface(_ sender: Any? = nil) {
 		rightToolbarButtonGroup.dismissPopOverMenu()
 		currentTextView?.toggleBoldface(self)
 	}
 	
-	@objc func outlineToggleItalics(_ sender: Any? = nil) {
+	@objc func editorToggleItalics(_ sender: Any? = nil) {
 		rightToolbarButtonGroup.dismissPopOverMenu()
 		currentTextView?.toggleItalics(self)
 	}
@@ -1429,28 +1396,20 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		delegate?.showGetInfo(self, outline: outline)
 	}
 	
-	@objc func goBackwardOne() {
-		delegate?.goBackward(self, to: 0)
-	}
-
-	@objc func goForwardOne() {
-		delegate?.goForward(self, to: 0)
-	}
-
-	@objc func showUndoMenu() {
+//	@objc func undo(_ sender: Any?) {
+//		undoManager?.undo()
+//	}
+//	
+//	@objc func redo(_ sender: Any?) {
+//		undoManager?.redo()
+//	}
+//	
+	@objc func showUndoMenu(_ sender: Any?) {
 		updateUI()
 		navButtonGroup.showPopOverMenu(for: undoMenuButton)
 	}
 
-	@objc func undo() {
-		undoManager?.undo()
-	}
-	
-	@objc func redo() {
-		undoManager?.redo()
-	}
-	
-	@objc func showFormatMenu() {
+	@objc func showFormatMenu(_ sender: Any?) {
 		updateUI()
 		rightToolbarButtonGroup.showPopOverMenu(for: formatMenuButton)
 	}
@@ -2080,42 +2039,42 @@ private extension EditorViewController {
 	
 	func configureButtonBars() {
 		undoMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
-		undoButton = undoMenuButtonGroup.addButton(label: .undoControlLabel, image: .undo, selector: "undo")
-		cutButton = undoMenuButtonGroup.addButton(label: .cutControlLabel, image: .cut, selector: "cut:")
-		copyButton = undoMenuButtonGroup.addButton(label: .copyControlLabel, image: .copy, selector: "copy:")
-		pasteButton = undoMenuButtonGroup.addButton(label: .pasteControlLabel, image: .paste, selector: "paste:")
-		redoButton = undoMenuButtonGroup.addButton(label: .redoControlLabel, image: .redo, selector: "redo")
+		undoButton = undoMenuButtonGroup.addButton(label: .undoControlLabel, image: .undo, selector: .undo)
+		cutButton = undoMenuButtonGroup.addButton(label: .cutControlLabel, image: .cut, selector: .cut)
+		copyButton = undoMenuButtonGroup.addButton(label: .copyControlLabel, image: .copy, selector: .copy)
+		pasteButton = undoMenuButtonGroup.addButton(label: .pasteControlLabel, image: .paste, selector: .paste)
+		redoButton = undoMenuButtonGroup.addButton(label: .redoControlLabel, image: .redo, selector: .redo)
 
 		navButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
-		goBackwardButton = navButtonGroup.addButton(label: .goBackwardControlLabel, image: .goBackward, selector: "goBackwardOne")
-		goForwardButton = navButtonGroup.addButton(label: .goForwardControlLabel, image: .goForward, selector: "goForwardOne")
-		undoMenuButton = navButtonGroup.addButton(label: .undoMenuControlLabel, image: .undoMenu, selector: "showUndoMenu")
+		goBackwardButton = navButtonGroup.addButton(label: .goBackwardControlLabel, image: .goBackward, selector: .goBackwardOne)
+		goForwardButton = navButtonGroup.addButton(label: .goForwardControlLabel, image: .goForward, selector: .goForwardOne)
+		undoMenuButton = navButtonGroup.addButton(label: .undoMenuControlLabel, image: .undoMenu, selector: .showUndoMenu)
 		undoMenuButton.popoverButtonGroup = undoMenuButtonGroup
 		moreMenuButton = navButtonGroup.addButton(label: .moreControlLabel, image: .ellipsis, showMenu: true)
-		focusButton = navButtonGroup.addButton(label: .focusInControlLabel, image: .focusInactive, selector: "toggleFocus:")
+		focusButton = navButtonGroup.addButton(label: .focusInControlLabel, image: .focusInactive, selector: .toggleFocus)
 		filterButton = navButtonGroup.addButton(label: .filterControlLabel, image: .filterInactive, showMenu: true)
 		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
 		leftToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .left)
-		moveLeftButton = leftToolbarButtonGroup.addButton(label: .moveLeftControlLabel, image: .moveLeft, selector: "moveCurrentRowsLeft:")
-		moveRightButton = leftToolbarButtonGroup.addButton(label: .moveRightControlLabel, image: .moveRight, selector: "moveCurrentRowsRight:")
-		moveUpButton = leftToolbarButtonGroup.addButton(label: .moveUpControlLabel, image: .moveUp, selector: "moveCurrentRowsUp:")
-		moveDownButton = leftToolbarButtonGroup.addButton(label: .moveDownControlLabel, image: .moveDown, selector: "moveCurrentRowsDown:")
+		moveLeftButton = leftToolbarButtonGroup.addButton(label: .moveLeftControlLabel, image: .moveLeft, selector: .moveCurrentRowsLeft)
+		moveRightButton = leftToolbarButtonGroup.addButton(label: .moveRightControlLabel, image: .moveRight, selector: .moveCurrentRowsRight)
+		moveUpButton = leftToolbarButtonGroup.addButton(label: .moveUpControlLabel, image: .moveUp, selector: .moveCurrentRowsUp)
+		moveDownButton = leftToolbarButtonGroup.addButton(label: .moveDownControlLabel, image: .moveDown, selector: .moveCurrentRowsDown)
 		let moveButtonsBarButtonItem = leftToolbarButtonGroup.buildBarButtonItem()
 
 		formatMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
-		linkButton = formatMenuButtonGroup.addButton(label: .linkControlLabel, image: .link, selector: "link")
+		linkButton = formatMenuButtonGroup.addButton(label: .linkControlLabel, image: .link, target: self, selector: .editorLink)
 		let boldImage = UIImage.bold.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
-		boldButton = formatMenuButtonGroup.addButton(label: .boldControlLabel, image: boldImage, selector: "outlineToggleBoldface:")
+		boldButton = formatMenuButtonGroup.addButton(label: .boldControlLabel, image: boldImage, target: self, selector: .editorToggleBoldface)
 		let italicImage = UIImage.italic.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
-		italicButton = formatMenuButtonGroup.addButton(label: .italicControlLabel, image: italicImage, selector: "outlineToggleItalics:")
+		italicButton = formatMenuButtonGroup.addButton(label: .italicControlLabel, image: italicImage, target: self, selector: .editorToggleItalics)
 
 		rightToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
-		insertImageButton = rightToolbarButtonGroup.addButton(label: .insertImageControlLabel, image: .insertImage, selector: "insertImage")
-		formatMenuButton = rightToolbarButtonGroup.addButton(label: .formatControlLabel, image: .format, selector: "showFormatMenu")
+		insertImageButton = rightToolbarButtonGroup.addButton(label: .insertImageControlLabel, image: .insertImage, selector: .insertImage)
+		formatMenuButton = rightToolbarButtonGroup.addButton(label: .formatControlLabel, image: .format, selector: .showFormatMenu)
 		formatMenuButton.popoverButtonGroup = formatMenuButtonGroup
-		noteButton = rightToolbarButtonGroup.addButton(label: .addNoteControlLabel, image: .noteAdd, selector: "createOrDeleteNotes:")
-		insertNewlineButton = rightToolbarButtonGroup.addButton(label: .newOutlineControlLabel, image: .newline, selector: "insertNewline:")
+		noteButton = rightToolbarButtonGroup.addButton(label: .addNoteControlLabel, image: .noteAdd, selector: .createOrDeleteNotes)
+		insertNewlineButton = rightToolbarButtonGroup.addButton(label: .newOutlineControlLabel, image: .newline, selector: .insertNewline)
 		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
 
 		if traitCollection.userInterfaceIdiom != .mac {

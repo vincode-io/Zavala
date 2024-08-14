@@ -96,12 +96,12 @@ class ButtonGroup: NSObject {
 		}
 	}
 	
-	func addButton(label: String, image: UIImage, selector: String? = nil, showMenu: Bool = false) -> Button {
+	func addButton(label: String, image: UIImage, target: Any? = nil, selector: Selector? = nil, showMenu: Bool = false) -> Button {
 		let button = Button(type: .system)
 		button.accessibilityLabel = label
 		button.setImage(image, for: .normal)
 		if let selector {
-			button.addTarget(hostController, action: Selector(selector), for: .touchUpInside)
+			button.addTarget(target, action: selector, for: .touchUpInside)
 		}
 		button.isAccessibilityElement = true
 		button.showsMenuAsPrimaryAction = showMenu
