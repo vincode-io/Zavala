@@ -273,7 +273,6 @@ private extension CloudKitManager {
 		startWorkTask()
 	}
 	
-	@MainActor
 	func presentError(_ error: Error) {
 		errorHandler?.presentError(error, title: "CloudKit Syncing Error")
 	}
@@ -438,7 +437,6 @@ private extension CloudKitManager {
 		
 	}
 	
-	@MainActor
 	func fetchChanges(userInitiated: Bool, zoneID: CKRecordZone.ID) async throws {
 		let zone = findZone(zoneID: zoneID)
 		
