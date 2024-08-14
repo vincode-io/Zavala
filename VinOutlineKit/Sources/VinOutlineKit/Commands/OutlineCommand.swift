@@ -58,7 +58,7 @@ public class OutlineCommand {
 	func registerUndo() {
 		undoManager.setActionName(actionName)
 		undoManager.registerUndo(withTarget: self) { _ in
-			Task { @MainActor in
+			MainActor.assumeIsolated {
 				self.unexecute()
 			}
 		}
@@ -67,7 +67,7 @@ public class OutlineCommand {
 	func registerRedo() {
 		undoManager.setActionName(actionName)
 		undoManager.registerUndo(withTarget: self) { _ in
-			Task { @MainActor in
+			MainActor.assumeIsolated {
 				self.execute()
 			}
 		}
