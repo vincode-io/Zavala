@@ -13,7 +13,6 @@ import VinOutlineKit
 import VinUtility
 
 extension Selector {
-	static let showOpenQuickly = #selector(MainSplitViewController.showOpenQuickly(_:))
 	static let goBackwardOne = #selector(MainSplitViewController.goBackwardOne(_:))
 	static let goForwardOne = #selector(MainSplitViewController.goForwardOne(_:))
 }

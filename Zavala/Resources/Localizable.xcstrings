@@ -286,9 +286,6 @@
     "Dark" : {
       "comment" : "Control Label: Dark"
     },
-    "Debug" : {
-      "comment" : "Control Label: Debug"
-    },
     "Delete" : {
       "comment" : "Control Label: Delete an entity"
     },
@@ -372,12 +369,6 @@
     },
     "End Depth" : {
 
-    },
-    "Enter Background" : {
-      "comment" : "Control Label: Enter Background"
-    },
-    "Enter Forground" : {
-      "comment" : "Control Label: Enter Forground"
     },
     "Entity ID" : {
 

@@ -15,6 +15,14 @@ import VinOutlineKit
 extension Selector {
 	static let importOPML = Selector(("importOPML:"))
 	static let createOutline = Selector(("createOutline:"))
+	static let newWindow = #selector(AppDelegate.newWindow(_:))
+	static let showOpenQuickly = Selector(("showOpenQuickly:"))
+	static let zoomIn = #selector(AppDelegate.zoomIn(_:))
+	static let zoomOut = #selector(AppDelegate.zoomOut(_:))
+	static let actualSize = #selector(AppDelegate.actualSize(_:))
+	static let showHelp = #selector(AppDelegate.showHelp(_:))
+	static let showCommunity = #selector(AppDelegate.showCommunity(_:))
+	static let feedback = #selector(AppDelegate.feedback(_:))
 }
 
 @main
@@ -24,8 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									action: .showSettings,
 									input: ",",
 									modifierFlags: [.command])
-	
-	
+		
 	let syncCommand = UIKeyCommand(title: .syncControlLabel,
 								   action: .sync,
 								   input: "r",
@@ -53,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 										 modifierFlags: [.shift, .command])
 	
 	let newWindowCommand = UIKeyCommand(title: .newMainWindowControlLabel,
-										action: #selector(newWindow(_:)),
+										action: .newWindow,
 										input: "n",
 										modifierFlags: [.alternate, .command])
 	
@@ -226,29 +233,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 												modifierFlags: [.control, .alternate, .command])
 	
 	let zoomInCommand = UIKeyCommand(title: .zoomInControlLabel,
-									 action: #selector(zoomInCommand(_:)),
+									 action: .zoomIn,
 									 input: ">",
 									 modifierFlags: [.command])
 	
 	let zoomOutCommand = UIKeyCommand(title: .zoomOutControlLabel,
-									 action: #selector(zoomOutCommand(_:)),
-									 input: "<",
-									 modifierFlags: [.command])
+									  action: .zoomOut,
+									  input: "<",
+									  modifierFlags: [.command])
 	
-	let actualSizeCommand = UICommand(title: .actualSizeControlLabel, action: #selector(actualSizeCommand(_:)))
+	let actualSizeCommand = UICommand(title: .actualSizeControlLabel, action: .actualSize)
 	
-	let showHelpCommand = UICommand(title: .appHelpControlLabel, action: #selector(showHelpCommand(_:)))
+	let showHelpCommand = UICommand(title: .appHelpControlLabel, action: .showHelp)
 
-	let showCommunityCommand = UICommand(title: .communityControlLabel, action: #selector(showCommunityCommand(_:)))
+	let showCommunityCommand = UICommand(title: .communityControlLabel, action: .showCommunity)
 
-	let feedbackCommand = UICommand(title: .feedbackControlLabel, action: #selector(feedbackCommand(_:)))
-
-	let enterBackgroundCommand = UICommand(title: .enterBackgroundControlLabel, action: #selector(enterBackgroundCommand(_:)))
-
-	let enterForgroundCommand = UICommand(title: .enterForgroundControlLabel, action: #selector(enterForgroundCommand(_:)))
+	let feedbackCommand = UICommand(title: .feedbackControlLabel, action: .feedback)
 
 	let showOpenQuicklyCommand = UIKeyCommand(title: .openQuicklyEllipsisControlLabel,
-											  action: #selector(showOpenQuicklyCommand(_:)),
+											  action: .showOpenQuickly,
 											  input: "o",
 											  modifierFlags: [.shift, .command])
 	
@@ -266,7 +269,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	let manageSharingCommand = UICommand(title: .manageSharingEllipsisControlLabel, action: .manageSharing)
 	
-	let showGetInfoCommand = UIKeyCommand(title: .getInfoControlLabel, action: .showGetInfo, input: "i", modifierFlags: [.control, .command])
+	let showGetInfoCommand = UIKeyCommand(title: .getInfoControlLabel,
+										  action: .showGetInfo,
+										  input: "i",
+										  modifierFlags: [.control, .command])
 
 	var mainCoordinator: MainCoordinator? {
 		return UIApplication.shared.foregroundActiveScene?.keyWindow?.rootViewController as? MainCoordinator
@@ -395,45 +401,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 	
-	@objc func zoomInCommand(_ sender: Any?) {
+	@objc func zoomIn(_ sender: Any?) {
 		AppDefaults.shared.textZoom = AppDefaults.shared.textZoom + 1
 	}
 	
-	@objc func zoomOutCommand(_ sender: Any?) {
+	@objc func zoomOut(_ sender: Any?) {
 		AppDefaults.shared.textZoom = AppDefaults.shared.textZoom - 1
 	}
 	
-	@objc func actualSizeCommand(_ sender: Any?) {
+	@objc func actualSize(_ sender: Any?) {
 		AppDefaults.shared.textZoom = 0
 	}
 	
-	@objc func showHelpCommand(_ sender: Any?) {
+	@objc func showHelp(_ sender: Any?) {
 		UIApplication.shared.open(URL(string: .helpURL)!)
 	}
 
-	@objc func showCommunityCommand(_ sender: Any?) {
+	@objc func showCommunity(_ sender: Any?) {
 		UIApplication.shared.open(URL(string: .communityURL)!)
 	}
 
-	@objc func feedbackCommand(_ sender: Any?) {
+	@objc func feedback(_ sender: Any?) {
 		UIApplication.shared.open(URL(string: .feedbackURL)!)
 	}
 
-	@objc func enterForgroundCommand(_ sender: Any?) {
-		willEnterForeground()
-	}
-
-	@objc func enterBackgroundCommand(_ sender: Any?) {
-		didEnterBackground()
-	}
-
-	@objc func showOpenQuicklyCommand(_ sender: Any?) {
-		if UIResponder.valid(action: .showOpenQuickly) {
-			UIApplication.shared.sendAction(.showOpenQuickly, to: nil, from: nil, for: nil)
-		} else {
-			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openQuickly)
-			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
-		}
+	@objc func showOpenQuickly(_ sender: Any?) {
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openQuickly)
+		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 
 	@objc func showAbout(_ sender: Any?) {
@@ -554,12 +548,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		let historyMenu = UIMenu(title: .historyControlLabel, children: [navigateMenu, historyItemsMenu])
 		builder.insertSibling(historyMenu, afterMenu: .view)
-
-		// Debug Menu
-		#if DEBUG
-		let debugMenu = UIMenu(title: .debugControlLabel, children: [enterBackgroundCommand, enterForgroundCommand])
-		builder.insertSibling(debugMenu, beforeMenu: .window)
-		#endif
 
 		// Help Menu
 		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand, showCommunityCommand, feedbackCommand] })
