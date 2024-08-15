@@ -221,8 +221,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 extension EditorContainerViewController: EditorDelegate {
 
 	// These aren't used when running in the EditorContainerViewController
-	var editorViewControllerIsGoBackUnavailable: Bool { return true }
-	var editorViewControllerIsGoForwardUnavailable: Bool { return true  }
 	var editorViewControllerGoBackwardStack: [Pin] { return [Pin]() }
 	var editorViewControllerGoForwardStack: [Pin] { return [Pin]() }
 	func goBackward(_ : EditorViewController, to: Int) {}

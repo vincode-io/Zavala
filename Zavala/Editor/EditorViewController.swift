@@ -61,8 +61,6 @@ extension Selector {
 
 @MainActor
 protocol EditorDelegate: AnyObject {
-	var editorViewControllerIsGoBackUnavailable: Bool { get }
-	var editorViewControllerIsGoForwardUnavailable: Bool { get }
 	var editorViewControllerGoBackwardStack: [Pin] { get }
 	var editorViewControllerGoForwardStack: [Pin] { get }
 	func goBackward(_: EditorViewController, to: Int)
@@ -146,14 +144,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return false
 		}
 		return true
-	}
-	
-	var isGoBackwardUnavailable: Bool {
-		return delegate?.editorViewControllerIsGoBackUnavailable ?? true
-	}
-	
-	var isGoForwardUnavailable: Bool {
-		return delegate?.editorViewControllerIsGoForwardUnavailable ?? true
 	}
 	
 	var isCreateRowNotesUnavailable: Bool {
@@ -1062,8 +1052,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			moreMenuButton.isEnabled = true
 		}
 		
-		goBackwardButton.isEnabled = !isGoBackwardUnavailable
-		goForwardButton.isEnabled = !isGoForwardUnavailable
+		goBackwardButton.isEnabled = UIResponder.valid(action: .goBackwardOne)
+		goForwardButton.isEnabled = UIResponder.valid(action: .goForwardOne)
 		
 		undoButton.isEnabled = UIResponder.valid(action: .undo)
 		cutButton.isEnabled = UIResponder.valid(action: .cut)
