@@ -690,10 +690,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		default:
 			break
 		}
-
-		if !UIResponder.valid(action: command.action) {
-			command.attributes = .disabled
-		}
 	}
 
 	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
