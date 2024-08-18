@@ -9,6 +9,7 @@ import UIKit
 extension UIResponder {
 	
 	private weak static var _currentFirstResponder: UIResponder? = nil
+	private weak static var _currentTopResponder: UIResponder? = nil
 
 	@available(iOSApplicationExtension, unavailable)
 	public static var isFirstResponderTextField: Bool {
@@ -28,6 +29,13 @@ extension UIResponder {
 	}
 	
 	@available(iOSApplicationExtension, unavailable)
+	internal static var currentTopResponder: UIResponder? {
+		UIResponder._currentTopResponder = nil
+		UIApplication.shared.sendAction(#selector(findTopResponder(sender:)), to: nil, from: nil, for: nil)
+		return UIResponder._currentTopResponder
+	}
+	
+	@available(iOSApplicationExtension, unavailable)
 	public static func resignCurrentFirstResponder() {
 		if let responder = currentFirstResponder {
 			responder.resignFirstResponder()
@@ -35,7 +43,7 @@ extension UIResponder {
 	}
 
 	public static func valid(action: Selector) -> Bool {
-		return Self.currentFirstResponder?.target(forAction: action, withSender: nil) != nil
+		return Self.currentTopResponder?.target(forAction: action, withSender: nil) != nil
 	}
 	
 	@objc internal func findFirstResponder(sender: AnyObject) {
@@ -44,5 +52,8 @@ extension UIResponder {
 		}
 	}
 	
+	@objc internal func findTopResponder(sender: AnyObject) {
+		UIResponder._currentTopResponder = self
+	}
 }
 #endif
