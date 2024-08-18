@@ -1382,14 +1382,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		delegate?.showGetInfo(self, outline: outline)
 	}
 	
-//	@objc func undo(_ sender: Any?) {
-//		undoManager?.undo()
-//	}
-//	
-//	@objc func redo(_ sender: Any?) {
-//		undoManager?.redo()
-//	}
-//	
 	@objc func showUndoMenu(_ sender: Any?) {
 		updateUI()
 		navButtonGroup.showPopOverMenu(for: undoMenuButton)
