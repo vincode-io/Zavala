@@ -104,12 +104,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			keyCommands.append(commandReturn)
 		}
 
-		// Beginning with SDK iOS 17, this no longer gets called when in Outline Mode and are trying to enter Edit mode.
-		// We handle that in pressesBegan. However, when in Edit mode and you hit ESC, pressesBegan doesn't get called
-		// for some strange reason. So we have to handle that scenario here.
-		let esc = UIKeyCommand(action: #selector(enterOutlineMode), input: UIKeyCommand.inputEscape)
-		esc.wantsPriorityOverSystemBehavior = true
-		keyCommands.append(esc)
+		keyCommands.append(UIKeyCommand(action: #selector(toggleMode), input: UIKeyCommand.inputEscape))
 
 		return keyCommands
 	}
@@ -1133,9 +1128,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		CursorCoordinates.clearLastKnownCoordinates()
 	}
 	
-	@objc func enterOutlineMode() {
+	@objc func toggleMode() {
 		guard let topicView = currentTextView as? EditorRowTopicTextView,
 			  let shadowTableIndex = topicView.row?.shadowTableIndex else {
+			moveCursorToCurrentRowTopic()
 			return
 		}
 		
@@ -2336,8 +2332,7 @@ private extension EditorViewController {
 						cell.moveToTopicStart()
 					}
 				}
-			case (.keyboardEscape, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty),
-				(.keyboardRightArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
+			case (.keyboardRightArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
 				if let last = collectionView.indexPathsForSelectedItems?.sorted().last {
 					if let cell = collectionView.cellForItem(at: last) as? EditorRowViewCell {
 						cell.moveToTopicEnd()
