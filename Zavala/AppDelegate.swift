@@ -13,6 +13,8 @@ import VinOutlineKit
 @MainActor var appDelegate: AppDelegate!
 
 extension Selector {
+	static let showSettings = #selector(FileActionResponder.showSettings(_:))
+	static let sync = #selector(FileActionResponder.sync(_:))
 	static let importOPML = #selector(FileActionResponder.importOPML(_:))
 	static let createOutline = #selector(FileActionResponder.createOutline(_:))
 	static let newWindow = #selector(AppDelegate.newWindow(_:))
@@ -27,6 +29,8 @@ extension Selector {
 
 @MainActor
 @objc public protocol FileActionResponder {
+	@objc func showSettings(_ sender: Any?)
+	@objc func sync(_ sender: Any?)
 	@objc func importOPML(_ sender: Any?)
 	@objc func createOutline(_ sender: Any?)
 	@objc func showOpenQuickly(_ sender: Any?)
@@ -391,6 +395,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	}
 
 	// MARK: Actions
+
+	@objc func showSettings(_ sender: Any?) {
+		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.showSettings)
+		let scene = UIApplication.shared.connectedScenes.first(where: { $0.delegate is SettingsSceneDelegate})
+		UIApplication.shared.requestSceneSessionActivation(scene?.session, userActivity: userActivity, options: nil, errorHandler: nil)
+	}
+	
+	@objc func sync(_ sender: Any?) {
+		Task {
+			await AccountManager.shared.sync()
+		}
+	}
 
 	@objc func importOPML(_ sender: Any?) {
 		#if targetEnvironment(macCatalyst)

@@ -830,13 +830,13 @@ extension MainSplitViewController: NSToolbarDelegate {
 		case .sync:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { _ in
-				return !UIResponder.valid(action: .sync)
+				return !AccountManager.shared.isSyncAvailable
 			}
 			item.image = .sync.symbolSizedForCatalyst()
 			item.label = .syncControlLabel
 			item.toolTip = .syncControlLabel
 			item.isBordered = true
-			item.action = #selector(sync)
+			item.action = .sync
 			item.target = self
 			toolbarItem = item
 		case .importOPML:
@@ -849,7 +849,6 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = .importOPMLControlLabel
 			item.isBordered = true
 			item.action = .importOPML
-			item.target = self
 			toolbarItem = item
 		case .newOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
@@ -861,7 +860,6 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.toolTip = .newOutlineControlLabel
 			item.isBordered = true
 			item.action = .createOutline
-			item.target = self
 			toolbarItem = item
 		case .insertImage:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)

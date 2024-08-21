@@ -343,7 +343,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 		case .sync:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { _ in
-				return !UIResponder.valid(action: .sync)
+				return !AccountManager.shared.isSyncAvailable
 			}
 			item.image = .sync.symbolSizedForCatalyst()
 			item.label = .syncControlLabel

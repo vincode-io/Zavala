@@ -10,8 +10,6 @@ import SwiftUI
 import VinOutlineKit
 
 extension Selector {
-	static let showSettings = #selector(MainCoordinatorResponder.showSettings(_:))
-	static let sync = #selector(MainCoordinatorResponder.sync(_:))
 	static let showGetInfo = #selector(MainCoordinatorResponder.showGetInfo(_:))
 	static let share = #selector(MainCoordinatorResponder.share(_:))
 	static let manageSharing = #selector(MainCoordinatorResponder.manageSharing(_:))
@@ -27,8 +25,6 @@ extension Selector {
 
 @MainActor
 @objc public protocol MainCoordinatorResponder {
-	@objc func showSettings(_ sender: Any?)
-	@objc func sync(_ sender: Any?)
 	@objc func showGetInfo(_ sender: Any?)
 	@objc func share(_ sender: Any?)
 	@objc func manageSharing(_ sender: Any?)
