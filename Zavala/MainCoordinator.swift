@@ -10,19 +10,36 @@ import SwiftUI
 import VinOutlineKit
 
 extension Selector {
-	static let showSettings = Selector(("showSettings:"))
-	static let sync = Selector(("sync:"))
-	static let showGetInfo = Selector(("showGetInfo:"))
-	static let share = Selector(("share:"))
-	static let manageSharing = Selector(("manageSharing:"))
-	static let exportPDFDocs = Selector(("exportPDFDocs:"))
-	static let exportPDFLists = Selector(("exportPDFLists:"))
-	static let exportMarkdownDocs = Selector(("exportMarkdownDocs:"))
-	static let exportMarkdownLists = Selector(("exportMarkdownLists:"))
-	static let exportOPMLs = Selector(("exportOPMLs:"))
-	static let printDocs = Selector(("printDocs:"))
-	static let printLists = Selector(("printLists:"))
-	static let copyDocumentLink = Selector(("copyDocumentLink:"))
+	static let showSettings = #selector(MainCoordinatorResponder.showSettings(_:))
+	static let sync = #selector(MainCoordinatorResponder.sync(_:))
+	static let showGetInfo = #selector(MainCoordinatorResponder.showGetInfo(_:))
+	static let share = #selector(MainCoordinatorResponder.share(_:))
+	static let manageSharing = #selector(MainCoordinatorResponder.manageSharing(_:))
+	static let exportPDFDocs = #selector(MainCoordinatorResponder.exportPDFDocs(_:))
+	static let exportPDFLists = #selector(MainCoordinatorResponder.exportPDFLists(_:))
+	static let exportMarkdownDocs = #selector(MainCoordinatorResponder.exportMarkdownDocs(_:))
+	static let exportMarkdownLists = #selector(MainCoordinatorResponder.exportMarkdownLists(_:))
+	static let exportOPMLs = #selector(MainCoordinatorResponder.exportOPMLs(_:))
+	static let printDocs = #selector(MainCoordinatorResponder.printDocs(_:))
+	static let printLists = #selector(MainCoordinatorResponder.printLists(_:))
+	static let copyDocumentLink = #selector(MainCoordinatorResponder.copyDocumentLink(_:))
+}
+
+@MainActor
+@objc public protocol MainCoordinatorResponder {
+	@objc func showSettings(_ sender: Any?)
+	@objc func sync(_ sender: Any?)
+	@objc func showGetInfo(_ sender: Any?)
+	@objc func share(_ sender: Any?)
+	@objc func manageSharing(_ sender: Any?)
+	@objc func exportPDFDocs(_ sender: Any?)
+	@objc func exportPDFLists(_ sender: Any?)
+	@objc func exportMarkdownDocs(_ sender: Any?)
+	@objc func exportMarkdownLists(_ sender: Any?)
+	@objc func exportOPMLs(_ sender: Any?)
+	@objc func printDocs(_ sender: Any?)
+	@objc func printLists(_ sender: Any?)
+	@objc func copyDocumentLink(_ sender: Any?)
 }
 
 @MainActor

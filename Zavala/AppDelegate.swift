@@ -13,10 +13,10 @@ import VinOutlineKit
 @MainActor var appDelegate: AppDelegate!
 
 extension Selector {
-	static let importOPML = Selector(("importOPML:"))
-	static let createOutline = Selector(("createOutline:"))
+	static let importOPML = #selector(FileActionResponder.importOPML(_:))
+	static let createOutline = #selector(FileActionResponder.createOutline(_:))
 	static let newWindow = #selector(AppDelegate.newWindow(_:))
-	static let showOpenQuickly = Selector(("showOpenQuickly:"))
+	static let showOpenQuickly = #selector(FileActionResponder.showOpenQuickly(_:))
 	static let zoomIn = #selector(AppDelegate.zoomIn(_:))
 	static let zoomOut = #selector(AppDelegate.zoomOut(_:))
 	static let actualSize = #selector(AppDelegate.actualSize(_:))
@@ -25,8 +25,15 @@ extension Selector {
 	static let feedback = #selector(AppDelegate.feedback(_:))
 }
 
+@MainActor
+@objc public protocol FileActionResponder {
+	@objc func importOPML(_ sender: Any?)
+	@objc func createOutline(_ sender: Any?)
+	@objc func showOpenQuickly(_ sender: Any?)
+}
+
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	
 	let showSettings = UIKeyCommand(title: .settingsEllipsisControlLabel,
 									action: .showSettings,

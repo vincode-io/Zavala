@@ -11,7 +11,7 @@ import SafariServices
 import VinOutlineKit
 import VinUtility
 
-class EditorContainerViewController: UIViewController, MainCoordinator {
+class EditorContainerViewController: UIViewController, MainCoordinator, MainCoordinatorResponder {
 		
 	var currentDocumentContainer: DocumentContainer? = nil
 

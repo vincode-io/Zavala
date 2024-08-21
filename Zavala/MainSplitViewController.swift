@@ -28,7 +28,7 @@ enum MainControllerIdentifier {
 	case editor
 }
 
-class MainSplitViewController: UISplitViewController, MainCoordinator {
+class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoordinatorResponder, FileActionResponder {
 	
 	struct UserInfoKeys {
 		static let goBackwardStack = "goBackwardStack"
