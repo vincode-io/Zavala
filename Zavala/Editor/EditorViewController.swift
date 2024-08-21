@@ -63,9 +63,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			keyCommands.append(commandReturn)
 		}
 		
-		let esc = UIKeyCommand(action: #selector(toggleMode), input: UIKeyCommand.inputEscape)
-		esc.wantsPriorityOverSystemBehavior = true
-		keyCommands.append(esc)
+		keyCommands.append(UIKeyCommand(action: #selector(toggleMode), input: UIKeyCommand.inputEscape))
 
 		return keyCommands
 	}
