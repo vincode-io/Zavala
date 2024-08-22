@@ -150,6 +150,15 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		updateUI()
 	}
 	
+	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+		switch action {
+		case .delete:
+			return !UIResponder.isFirstResponderTextField && !selectedDocuments.isEmpty
+		default:
+			return super.canPerformAction(action, withSender: sender)
+		}
+	}
+	
 	// MARK: API
 	
 	func setDocumentContainers(_ documentContainers: [DocumentContainer], isNavigationBranch: Bool) async {
@@ -193,26 +202,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 												 isNavigationBranch: isNavigationBranch,
 												 animated: animated)
 		}
-	}
-	
-	func selectAllDocuments() {
-		guard let documentContainers else { return }
-
-		for i in 0..<collectionView.numberOfItems(inSection: 0) {
-			collectionView.selectItem(at: IndexPath(row: i, section: 0), animated: false, scrollPosition: [])
-		}
-		
-		delegate?.documentSelectionDidChange(self, 
-											 documentContainers: documentContainers,
-											 documents: documents,
-											 selectRow: nil,
-											 isNew: false,
-											 isNavigationBranch: false,
-											 animated: true)
-	}
-	
-	func deleteCurrentDocuments() {
-		deleteDocuments(selectedDocuments)
 	}
 	
 	func importOPMLs(urls: [URL]) {
@@ -337,6 +326,26 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		docPicker.modalPresentationStyle = .formSheet
 		docPicker.allowsMultipleSelection = true
 		self.present(docPicker, animated: true)
+	}
+
+	override func delete(_ sender: Any?) {
+		deleteDocuments(selectedDocuments)
+	}
+	
+	override func selectAll(_ sender: Any?) {
+		guard let documentContainers else { return }
+
+		for i in 0..<collectionView.numberOfItems(inSection: 0) {
+			collectionView.selectItem(at: IndexPath(row: i, section: 0), animated: false, scrollPosition: [])
+		}
+		
+		delegate?.documentSelectionDidChange(self,
+											 documentContainers: documentContainers,
+											 documents: documents,
+											 selectRow: nil,
+											 isNew: false,
+											 isNavigationBranch: false,
+											 animated: true)
 	}
 
 }

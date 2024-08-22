@@ -227,15 +227,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 	}
 	
 	// MARK: Actions
-	
-	override func delete(_ sender: Any?) {
-		documentsViewController?.deleteCurrentDocuments()
-	}
-	
-	override func selectAll(_ sender: Any?) {
-		documentsViewController?.selectAllDocuments()
-	}
-
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
 		case .sync:
@@ -244,10 +235,6 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 			return !isManageSharingUnavailable
 		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
 			return !isOutlineFunctionsUnavailable
-		case .selectAll:
-			return !(editorViewController?.isInEditMode ?? false)
-		case .delete:
-			return !selectedOutlines.isEmpty
 		case .goBackwardOne:
 			return !goBackwardStack.isEmpty
 		case .goForwardOne:

@@ -513,12 +513,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		switch action {
 		case .selectAll:
 			return !isSelectAllRowsUnavailable
-		case .cut, .copy:
+		case .cut, .copy, .delete:
 			return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
 		case .paste:
 			return UIPasteboard.general.contains(pasteboardTypes: [UTType.utf8PlainText.identifier, Row.typeIdentifier])
-		case .delete:
-			return currentRows != nil
 		case .find, .findAndReplace, .findNext, .findPrevious, .useSelectionForFind:
 			if outline == nil {
 				return false
