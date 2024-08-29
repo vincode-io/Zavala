@@ -395,7 +395,8 @@ private extension CloudKitManager {
 				let op = CKFetchDatabaseChangesOperation(previousServerChangeToken: await self.sharedDatabaseChangeToken)
 				op.qualityOfService = CloudKitOutlineZone.qualityOfService
 				
-				op.recordZoneWithIDWasDeletedBlock = { zoneID in
+				op.recordZoneWithIDWasDeletedBlock = { [weak self] zoneID in
+					guard let self else { return }
 					Task { @MainActor in
 						self.account?.deleteAllDocuments(with: zoneID)
 					}
