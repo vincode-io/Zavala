@@ -154,6 +154,8 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		switch action {
 		case .delete:
 			return !UIResponder.isFirstResponderTextField && !selectedDocuments.isEmpty
+		case .selectAll:
+			return !UIResponder.isFirstResponderTextField
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
