@@ -100,11 +100,11 @@ class EditorRowTextView: UITextView {
 	private var stackedUndoManager: UndoManager?
 
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
-		let textStorage = NSTextStorage()
-		let layoutManager = OutlineLayoutManager()
-		textStorage.addLayoutManager(layoutManager)
+		let textStorage = NSTextContentStorage()
+		let layoutManager = NSTextLayoutManager()
+		textStorage.addTextLayoutManager(layoutManager)
 		let textContainer = NSTextContainer()
-		layoutManager.addTextContainer(textContainer)
+		layoutManager.textContainer = textContainer
 		
 		super.init(frame: frame, textContainer: textContainer)
 		
