@@ -220,7 +220,7 @@ public class CloudKitManager {
 			}
 		}
 		
-		sharedDatabaseChangeToken = nil
+		updateSharedDatabaseChangeToken(nil)
 	}
 	
 	// We need this function because at one time we didn't store the CKShare records locally. We
@@ -386,53 +386,57 @@ private extension CloudKitManager {
 		defer {
 			isSyncing = false
 		}
-		
-		var zoneIDs = Set<CKRecordZone.ID>()
-		zoneIDs.insert(outlineZone.zoneID)
-		
+			
 		return try await withCheckedThrowingContinuation { continuation in
-			let op = CKFetchDatabaseChangesOperation(previousServerChangeToken: sharedDatabaseChangeToken)
-			op.qualityOfService = CloudKitOutlineZone.qualityOfService
-			
-			op.recordZoneWithIDWasDeletedBlock = { [weak self] zoneID in
-				self?.account?.deleteAllDocuments(with: zoneID)
-			}
-			
-			op.recordZoneWithIDChangedBlock = { zoneID in
-				zoneIDs.insert(zoneID)
-			}
-			
-			op.fetchDatabaseChangesResultBlock = { [weak self] result in
-				guard let self else {
-					continuation.resume()
-					return
+			Task.detached {
+				var zoneIDs = Set<CKRecordZone.ID>()
+				zoneIDs.insert(self.outlineZone.zoneID)
+
+				let op = CKFetchDatabaseChangesOperation(previousServerChangeToken: await self.sharedDatabaseChangeToken)
+				op.qualityOfService = CloudKitOutlineZone.qualityOfService
+				
+				op.recordZoneWithIDWasDeletedBlock = { zoneID in
+					Task { @MainActor in
+						self.account?.deleteAllDocuments(with: zoneID)
+					}
 				}
 				
-				switch result {
-				case .success((let token, _)):
-					let zoneIDs = zoneIDs
-					Task {
-						await withTaskGroup(of: Void.self) { taskGroup in
-							for zoneID in zoneIDs {
-								taskGroup.addTask {
-									do {
-										try await self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID)
-									} catch {
-										await self.presentError(error)
+				op.recordZoneWithIDChangedBlock = { zoneID in
+					zoneIDs.insert(zoneID)
+				}
+				
+				op.fetchDatabaseChangesResultBlock = { [weak self] result in
+					guard let self else {
+						continuation.resume()
+						return
+					}
+					
+					switch result {
+					case .success((let token, _)):
+						let zoneIDs = zoneIDs
+						Task {
+							await withTaskGroup(of: Void.self) { taskGroup in
+								for zoneID in zoneIDs {
+									taskGroup.addTask {
+										do {
+											try await self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID)
+										} catch {
+											await self.presentError(error)
+										}
 									}
 								}
 							}
+							
+							await self.updateSharedDatabaseChangeToken(token)
+							continuation.resume()
 						}
-
-						self.sharedDatabaseChangeToken = token
-						continuation.resume()
+					case .failure(let error):
+						continuation.resume(throwing: error)
 					}
-				case .failure(let error):
-					continuation.resume(throwing: error)
 				}
+				
+				self.container.sharedCloudDatabase.add(op)
 			}
-			
-			container.sharedCloudDatabase.add(op)
 		}
 		
 	}
@@ -661,12 +665,12 @@ private extension CloudKitManager {
 			guard let tokenData = account?.sharedDatabaseChangeToken else { return nil }
 			return try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: tokenData)
 		}
-		set {
-			guard let token = newValue, let tokenData = try? NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: false) else {
-				return
-			}
-			account?.sharedDatabaseChangeToken = tokenData
-		}
 	}
-	
+
+	func updateSharedDatabaseChangeToken(_ token: CKServerChangeToken?) {
+		guard let token, let tokenData = try? NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: false) else {
+			return
+		}
+		account?.sharedDatabaseChangeToken = tokenData
+	}
 }
