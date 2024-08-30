@@ -387,7 +387,7 @@ private extension CloudKitManager {
 			isSyncing = false
 		}
 			
-		return try await withCheckedThrowingContinuation { continuation in
+		try await withCheckedThrowingContinuation { continuation in
 			Task.detached {
 				var zoneIDs = Set<CKRecordZone.ID>()
 				zoneIDs.insert(self.outlineZone.zoneID)
