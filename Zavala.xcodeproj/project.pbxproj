@@ -26,7 +26,6 @@
 		511B29FA26018FD100C04239 /* EditorBacklinkContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29F926018FD100C04239 /* EditorBacklinkContentView.swift */; };
 		511B29FD2601901C00C04239 /* EditorBacklinkViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B29FC2601901C00C04239 /* EditorBacklinkViewCell.swift */; };
 		511B2AC826028EE800C04239 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511B2AC726028EE700C04239 /* MainCoordinator.swift */; };
-		511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */; };
 		511EC2BF2B3F58E0002D89A5 /* SettingsSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511EC2BE2B3F58E0002D89A5 /* SettingsSceneDelegate.swift */; };
 		511EC2C12B3F5AA7002D89A5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511EC2C02B3F5AA7002D89A5 /* SettingsViewController.swift */; };
 		511EC2C52B3F8F29002D89A5 /* SettingsGeneralView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511EC2C42B3F8F29002D89A5 /* SettingsGeneralView.swift */; };
@@ -237,7 +236,6 @@
 		511B29F926018FD100C04239 /* EditorBacklinkContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBacklinkContentView.swift; sourceTree = "<group>"; };
 		511B29FC2601901C00C04239 /* EditorBacklinkViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBacklinkViewCell.swift; sourceTree = "<group>"; };
 		511B2AC726028EE700C04239 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
-		511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLayoutManager.swift; sourceTree = "<group>"; };
 		511EC2BA2B3F5727002D89A5 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		511EC2BE2B3F58E0002D89A5 /* SettingsSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSceneDelegate.swift; sourceTree = "<group>"; };
 		511EC2C02B3F5AA7002D89A5 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -464,7 +462,6 @@
 				515F164A255C9F8E00FD98B8 /* MacFormViewController.swift */,
 				517A9E2A2603E0BF00EF346A /* NSActivity+.swift */,
 				5113B08C260C1F1700DBD11B /* OutlineFontCache.swift */,
-				511D9C7C25F6E5D300CC6C00 /* OutlineLayoutManager.swift */,
 				51C568CD258B028700AA7B93 /* OutlineTextDropDelegate.swift */,
 				519D78FA2C2490ED00041506 /* RowGroup+.swift */,
 				5163ADF125C78CFB008F25CA /* SearchTextField.swift */,
@@ -1064,7 +1061,6 @@
 			files = (
 				51C030A2257E071300609262 /* EditorTitleContentConfiguration.swift in Sources */,
 				5167606425F95E4600AC0EBD /* DocumentIndexer.swift in Sources */,
-				511D9C7D25F6E5D300CC6C00 /* OutlineLayoutManager.swift in Sources */,
 				517A9E3C26052D8800EF346A /* MacOpenQuicklySceneDelegate.swift in Sources */,
 				516F536C260806150038BAF8 /* EnhancedSearchTextField.swift in Sources */,
 				5164B35427582D810039600B /* MainOpenQuicklyViewController.swift in Sources */,

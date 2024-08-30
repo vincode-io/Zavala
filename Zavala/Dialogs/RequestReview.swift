@@ -23,7 +23,7 @@ struct RequestReview {
 			AppDefaults.shared.lastReviewPromptDate = Date()
 			
 			guard let scene = UIApplication.shared.foregroundActiveScene else { return }
-			SKStoreReviewController.requestReview(in: scene)
+			AppStore.requestReview(in: scene)
 		}
 	}
 	
