@@ -325,7 +325,7 @@ extension CollectionsViewController {
 		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, CollectionsItem> { [weak self]	(cell, indexPath, item) in
 			guard let self else { return }
 			
-			var contentConfiguration = UIListContentConfiguration.sidebarHeader()
+			var contentConfiguration = UIListContentConfiguration.header()
 			
 			contentConfiguration.text = item.id.name
 			if self.traitCollection.userInterfaceIdiom == .mac {
@@ -360,7 +360,7 @@ extension CollectionsViewController {
 		}
 		
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, CollectionsItem> { (cell, indexPath, item) in
-			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
+			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 			
 			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
 				contentConfiguration.text = container.partialName

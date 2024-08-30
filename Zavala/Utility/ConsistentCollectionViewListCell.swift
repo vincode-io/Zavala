@@ -16,7 +16,7 @@ class ConsistentCollectionViewListCell: UICollectionViewListCell {
 		
 		guard var contentConfig = contentConfiguration as? UIListContentConfiguration else { return }
 		
-		var backgroundConfig = UIBackgroundConfiguration.listSidebarCell().updated(for: state)
+		var backgroundConfig = UIBackgroundConfiguration.listCell().updated(for: state)
 
 		if state.traitCollection.userInterfaceIdiom == .mac {
 			backgroundConfig.cornerRadius = 5

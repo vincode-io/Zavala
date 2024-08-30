@@ -68,7 +68,7 @@ private extension MacOpenQuicklyCollectionsViewController {
 	func configureDataSource() {
 
 		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, CollectionsItem> {	(cell, indexPath, item) in
-			var contentConfiguration = UIListContentConfiguration.sidebarHeader()
+			var contentConfiguration = UIListContentConfiguration.header()
 			contentConfiguration.text = item.id.name
 			contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .subheadline)
 			contentConfiguration.textProperties.color = .secondaryLabel
@@ -78,7 +78,7 @@ private extension MacOpenQuicklyCollectionsViewController {
 		}
 		
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, CollectionsItem> { (cell, indexPath, item) in
-			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
+			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 
 			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
 				contentConfiguration.text = container.partialName
