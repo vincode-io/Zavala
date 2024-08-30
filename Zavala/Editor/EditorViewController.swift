@@ -247,6 +247,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private lazy var goingUpRepeatInterval: Double = Self.slowRepeatInterval
 	private lazy var goingDownRepeatInterval: Double = Self.slowRepeatInterval
 	private var goingUpOrDownTask: Task<(()), Never>?
+	private var savedCursorRectForUpAndDownArrowing: CGRect?
 	private var shiftStartIndex: Int?
 	
 	private var undoMenuButton: ButtonGroup.Button!
@@ -1740,6 +1741,7 @@ extension EditorViewController: EditorRowViewCellDelegate {
 
 	func editorRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
 		textChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
+		savedCursorRectForUpAndDownArrowing = nil
 	}
 	
 	func editorRowDeleteRow(_ row: Row, rowStrings: RowStrings) {
@@ -2205,6 +2207,15 @@ private extension EditorViewController {
 		guard presses.count == 1, let key = presses.first?.key else {
 			super.pressesBegan(presses, with: event)
 			return
+		}
+
+		switch (key.keyCode, true) {
+		case (.keyboardUpArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
+			break
+		case (.keyboardDownArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
+			break
+		default:
+			savedCursorRectForUpAndDownArrowing = nil
 		}
 		
 		if !(CursorCoordinates.currentCoordinates?.isInNotes ?? false) {
@@ -2937,9 +2948,12 @@ private extension EditorViewController {
 		}
 		
 		func moveCursorUpToNext(nextTopicTextView: EditorRowTopicTextView) {
-			if let topicTextViewCursorRect = topicTextView.cursorRect {
-				let convertedRect = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
-				let nextRect = nextTopicTextView.convert(convertedRect, from: collectionView)
+			if savedCursorRectForUpAndDownArrowing == nil, let topicTextViewCursorRect = topicTextView.cursorRect {
+				savedCursorRectForUpAndDownArrowing = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
+			}
+
+			if let savedCursorRectForUpAndDownArrowing {
+				let nextRect = nextTopicTextView.convert(savedCursorRectForUpAndDownArrowing, from: collectionView)
 				if let cursorPosition = nextTopicTextView.closestPosition(to: CGPoint(x: nextRect.midX, y: nextTopicTextView.bounds.height - 1)) {
 					let cursorOffset = nextTopicTextView.offset(from: nextTopicTextView.beginningOfDocument, to: cursorPosition)
 					let range = NSRange(location: cursorOffset, length: 0)
@@ -2993,14 +3007,19 @@ private extension EditorViewController {
 		}
 		
 		func moveCursorDownToNext(nextTopicTextView: EditorRowTopicTextView) {
-			if let topicTextViewCursorRect = topicTextView.cursorRect {
-				let convertedRect = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
-				let nextRect = nextTopicTextView.convert(convertedRect, from: collectionView)
+			if savedCursorRectForUpAndDownArrowing == nil, let topicTextViewCursorRect = topicTextView.cursorRect {
+				savedCursorRectForUpAndDownArrowing = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
+			}
+
+			if let savedCursorRectForUpAndDownArrowing {
+				let nextRect = nextTopicTextView.convert(savedCursorRectForUpAndDownArrowing, from: collectionView)
+				
 				if let cursorPosition = nextTopicTextView.closestPosition(to: CGPoint(x: nextRect.midX, y: 0)) {
 					let cursorOffset = nextTopicTextView.offset(from: nextTopicTextView.beginningOfDocument, to: cursorPosition)
 					let range = NSRange(location: cursorOffset, length: 0)
 					nextTopicTextView.selectedRange = range
 				}
+				
 				scrollIfNecessary()
 			}
 		}
