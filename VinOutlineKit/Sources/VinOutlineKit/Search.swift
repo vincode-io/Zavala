@@ -57,7 +57,6 @@ public final class Search: Identifiable, DocumentContainer {
 
 			return documents
 		}
-		
 	}
 
 
