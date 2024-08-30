@@ -237,10 +237,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return currentTextView?.rowStrings
 	}
 	
-	private var currentCursorPosition: Int? {
-		return currentTextView?.cursorPosition
-	}
-	
 	private var cancelledKeys = Set<UIKey>()
 
 	private static var slowRepeatInterval = 1.0
