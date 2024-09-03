@@ -160,6 +160,7 @@
 		51E060EE25A4B5E600194066 /* AppKitWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E060ED25A4B5E600194066 /* AppKitWrapper.swift */; };
 		51E14F23255F2D7F00320EDB /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F22255F2D7F00320EDB /* ActivityManager.swift */; };
 		51E14F342560732F00320EDB /* CollectionsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F332560732F00320EDB /* CollectionsItem.swift */; };
+		51E2156D2C8766C400358782 /* EditorRowSearchLayoutFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E2156C2C8766AD00358782 /* EditorRowSearchLayoutFragment.swift */; };
 		51E508ED2B4B1F490041B826 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 51E508EC2B4B1F490041B826 /* Localizable.xcstrings */; };
 		51F2859425AD11100019C573 /* CollectionsSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859325AD11100019C573 /* CollectionsSearchCell.swift */; };
 		51F2859725AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F2859625AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift */; };
@@ -389,6 +390,7 @@
 		51E060F325A4C13B00194066 /* AppKitPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitPlugin.h; sourceTree = "<group>"; };
 		51E14F22255F2D7F00320EDB /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
 		51E14F332560732F00320EDB /* CollectionsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsItem.swift; sourceTree = "<group>"; };
+		51E2156C2C8766AD00358782 /* EditorRowSearchLayoutFragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRowSearchLayoutFragment.swift; sourceTree = "<group>"; };
 		51E508EC2B4B1F490041B826 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		51F2859325AD11100019C573 /* CollectionsSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchCell.swift; sourceTree = "<group>"; };
 		51F2859625AD11DB0019C573 /* CollectionsSearchContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsSearchContentConfiguration.swift; sourceTree = "<group>"; };
@@ -700,8 +702,9 @@
 				5167702C261CB5F300EFFD40 /* EditorRowDropInteractionDelegate.swift */,
 				51F2DC7A2586E101003BD5CE /* EditorRowNoteTextView.swift */,
 				51D977F9257A2E4F00D98490 /* EditorRowPreviewParameters.swift */,
-				51C030BD257E1B9400609262 /* EditorRowTextView.swift */,
+				51E2156C2C8766AD00358782 /* EditorRowSearchLayoutFragment.swift */,
 				51CC2DF02C3057F100DA55D8 /* EditorRowTextStorageDelegate.swift */,
+				51C030BD257E1B9400609262 /* EditorRowTextView.swift */,
 				51B2B2C72563A2180090C56B /* EditorRowTopicTextView.swift */,
 				512229672563507E008041AF /* EditorRowViewCell.swift */,
 			);
@@ -1104,6 +1107,7 @@
 				51A6A3172C39E8B3002AFEC1 /* RemoveOutlineAppIntent.swift in Sources */,
 				51A6A3182C39E8B3002AFEC1 /* AddOutlineAppIntent.swift in Sources */,
 				51A6A3192C39E8B3002AFEC1 /* GetOutlinesAppIntent.swift in Sources */,
+				51E2156D2C8766C400358782 /* EditorRowSearchLayoutFragment.swift in Sources */,
 				51A6A31A2C39E8B3002AFEC1 /* CopyRowsAppIntent.swift in Sources */,
 				51A6A31B2C39E8B3002AFEC1 /* OutlineAppEntity.swift in Sources */,
 				51A6A31C2C39E8B3002AFEC1 /* ShowOutlineAppIntent.swift in Sources */,

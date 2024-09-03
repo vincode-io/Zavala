@@ -37,12 +37,7 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 			for key in attributes.keys {
 				
 				if key == .selectedSearchResult {
-					newAttributes[.backgroundColor] = UIColor.systemYellow
 					newAttributes[.foregroundColor] = UIColor.black
-				}
-				
-				if key == .searchResult {
-					newAttributes[.backgroundColor] = UIColor.systemGray
 				}
 				
 				if key == .underlineStyle || key == .backgroundColor {

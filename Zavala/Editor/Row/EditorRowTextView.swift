@@ -100,14 +100,15 @@ class EditorRowTextView: UITextView {
 	private var stackedUndoManager: UndoManager?
 
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
-		let textStorage = NSTextContentStorage()
-		let layoutManager = NSTextLayoutManager()
-		textStorage.addTextLayoutManager(layoutManager)
+		let textContentStorage = NSTextContentStorage()
+		let textLayoutManager = NSTextLayoutManager()
+		textContentStorage.addTextLayoutManager(textLayoutManager)
 		let textContainer = NSTextContainer()
-		layoutManager.textContainer = textContainer
+		textLayoutManager.textContainer = textContainer
 		
 		super.init(frame: frame, textContainer: textContainer)
 		
+		textLayoutManager.delegate = self
 		textDropDelegate = self
 		
 		self.dropInteractionDelegate = EditorRowDropInteractionDelegate(textView: self)
@@ -331,6 +332,14 @@ class EditorRowTextView: UITextView {
 		updateTintColor()
 	}
 	
+}
+
+// MARK: NSTextLayoutManagerDelegate
+
+extension EditorRowTextView: NSTextLayoutManagerDelegate {
+	nonisolated func textLayoutManager(_ textLayoutManager: NSTextLayoutManager, textLayoutFragmentFor location: NSTextLocation, in textElement: NSTextElement) -> NSTextLayoutFragment {
+		return EditorRowSearchLayoutFragment(textElement: textElement, range: textElement.elementRange)
+	}
 }
 
 // MARK: UITextDropDelegate
