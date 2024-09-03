@@ -10,6 +10,8 @@ import UIKit
 
 public class ImageTextAttachment: NSTextAttachment {
 	
+	public override class var supportsSecureCoding: Bool { return true }
+	
 	public var imageUUID: String? = nil
 
 	public override init(data contentData: Data?, ofType uti: String?) {
@@ -20,7 +22,13 @@ public class ImageTextAttachment: NSTextAttachment {
 	}
 
 	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
+		super.init(coder: coder)
+		imageUUID = coder.decodeObject(forKey: "imageUUID") as? String
+	}
+	
+	public override func encode(with coder: NSCoder) {
+		coder.encode(imageUUID, forKey: "imageUUID")
+		super.encode(with: coder)
 	}
 	
 	public override func attachmentBounds(for textContainer: NSTextContainer?, proposedLineFragment lineFrag: CGRect, glyphPosition position: CGPoint, characterIndex charIndex: Int) -> CGRect {
