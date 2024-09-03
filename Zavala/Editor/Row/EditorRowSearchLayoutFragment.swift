@@ -16,12 +16,11 @@ final class EditorRowSearchLayoutFragment: NSTextLayoutFragment {
 	
 	override func draw(at renderingOrigin: CGPoint, in ctx: CGContext) {
 		for lineFragment in textLineFragments {
-			let lineFragmentRange = NSRange(location: 0, length: lineFragment.attributedString.length)
-			lineFragment.attributedString.enumerateAttributes(in: lineFragmentRange, options: []) { (_, range, _) in
-				if lineFragment.attributedString.attribute(.selectedSearchResult, at: range.location, effectiveRange: nil) as? Bool == true {
+			lineFragment.attributedString.enumerateAttributes(in: lineFragment.characterRange, options: []) { (attributes, range, _) in
+				if attributes[.selectedSearchResult] as? Bool == true {
 					highlight(lineFragment: lineFragment, range: range, color: UIColor.systemYellow.cgColor, in: ctx)
 				}
-				if lineFragment.attributedString.attribute(.searchResult, at: range.location, effectiveRange: nil) as? Bool == true {
+				if attributes[.searchResult] as? Bool == true {
 					highlight(lineFragment: lineFragment, range: range, color: UIColor.systemGray.cgColor, in: ctx)
 				}
 			}
