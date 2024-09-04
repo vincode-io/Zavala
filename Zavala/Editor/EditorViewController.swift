@@ -904,8 +904,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		outline?.decrementBeingViewedCount()
 		
 		// End the search collection view updates early
-		isSearching = false // Necessary to prevent crashing while switching outlines during a find session
-		findInteraction.dismissFindNavigator()
+		if isSearching {
+			isSearching = false // Necessary to prevent crashing while switching outlines during a find session
+			findInteraction.dismissFindNavigator()
+		}
 		
 		let oldOutline = outline
 		Task.detached {
