@@ -133,13 +133,18 @@ class EditorRowTextView: UITextView {
 		self.textContainer.lineFragmentPadding = 0
 		self.textContainerInset = .zero
 		self.backgroundColor = .clear
-		self.writingToolsAllowedInputOptions = [.plainText, .richText]
+
+		if #available(iOS 18.0, *) {
+			self.writingToolsAllowedInputOptions = [.plainText, .richText]
+		}
 	
 		#if targetEnvironment(macCatalyst)
 		let appleColorPreferencesChangedNotification = Notification.Name(rawValue: "AppleColorPreferencesChangedNotification")
 		DistributedNotificationCenter.default.addObserver(self, selector: #selector(appleColorPreferencesChanged(_:)), name: appleColorPreferencesChangedNotification, object: nil)
 		#else
-		self.textFormattingConfiguration = nil
+		if #available(iOS 18.0, *) {
+			self.textFormattingConfiguration = nil
+		}
 		#endif
 		
 		updateTintColor()

@@ -325,7 +325,7 @@ extension CollectionsViewController {
 		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, CollectionsItem> { [weak self]	(cell, indexPath, item) in
 			guard let self else { return }
 			
-			var contentConfiguration = UIListContentConfiguration.header()
+			var contentConfiguration = UIListContentConfiguration.sidebarHeader()
 			
 			contentConfiguration.text = item.id.name
 			if self.traitCollection.userInterfaceIdiom == .mac {

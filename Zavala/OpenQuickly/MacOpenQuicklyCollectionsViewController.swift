@@ -68,7 +68,7 @@ private extension MacOpenQuicklyCollectionsViewController {
 	func configureDataSource() {
 
 		let headerRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, CollectionsItem> {	(cell, indexPath, item) in
-			var contentConfiguration = UIListContentConfiguration.header()
+			var contentConfiguration = UIListContentConfiguration.sidebarHeader()
 			contentConfiguration.text = item.id.name
 			contentConfiguration.textProperties.font = .preferredFont(forTextStyle: .subheadline)
 			contentConfiguration.textProperties.color = .secondaryLabel
