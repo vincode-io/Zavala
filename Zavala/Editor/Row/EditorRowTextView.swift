@@ -133,6 +133,7 @@ class EditorRowTextView: UITextView {
 		self.textContainer.lineFragmentPadding = 0
 		self.textContainerInset = .zero
 		self.backgroundColor = .clear
+		self.writingToolsAllowedInputOptions = [.plainText, .richText]
 	
 		#if targetEnvironment(macCatalyst)
 		let appleColorPreferencesChangedNotification = Notification.Name(rawValue: "AppleColorPreferencesChangedNotification")
