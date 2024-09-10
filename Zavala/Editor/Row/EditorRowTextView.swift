@@ -135,7 +135,7 @@ class EditorRowTextView: UITextView {
 		self.backgroundColor = .clear
 
 		if #available(iOS 18.0, *) {
-			self.writingToolsAllowedInputOptions = [.plainText, .richText]
+			self.allowedWritingToolsResultOptions = [.plainText, .richText]
 		}
 	
 		#if targetEnvironment(macCatalyst)

@@ -352,6 +352,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		return true
 	}
 
+	func applicationWillTerminate(_ application: UIApplication) {
+	#if targetEnvironment(macCatalyst)
+		appKitPlugin?.stop()
+	#endif
+	}
+	
 	func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
 		Task { @MainActor in
 			if UIApplication.shared.applicationState == .background {

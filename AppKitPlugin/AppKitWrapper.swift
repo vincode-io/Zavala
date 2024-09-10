@@ -24,7 +24,10 @@ import UniformTypeIdentifiers
 		movementMonitor = RSAppMovementMonitor()
 	}
 	
-
+	func stop() {
+		movementMonitor?.invalidate()
+	}
+	
 	func importOPML() {
 		let panel = NSOpenPanel()
 		panel.canDownloadUbiquitousContents = true

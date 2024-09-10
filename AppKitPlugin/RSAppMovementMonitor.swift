@@ -92,12 +92,6 @@ public class RSAppMovementMonitor: NSObject {
 		}
 	}
 
-	deinit {
-		Task { @MainActor in
-			self.invalidate()
-		}
-	}
-
 	func invokeEventHandler() {
 		// Prevent re-entry when the app is activated while running handler
 		self.invalidate()

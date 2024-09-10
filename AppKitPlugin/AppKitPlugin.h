@@ -14,6 +14,7 @@ NS_SWIFT_UI_ACTOR
 @protocol AppKitPlugin <NSObject>
 - (void)setDelegate:(nullable id<AppKitPluginDelegate>)delegate;
 - (void)start;
+- (void)stop;
 - (void)importOPML;
 - (void)configureOpenQuickly:(NSObject  * _Nullable)window;
 - (void)configureAbout:(NSObject  * _Nullable)window;
