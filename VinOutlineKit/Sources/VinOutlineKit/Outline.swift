@@ -674,6 +674,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		guard let rowOrder, let keyedRows else { return }
 		
 		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
 		
 		var allRowOrderIDs = Set(keyedRows.values.flatMap({ $0.rowOrder }))
 		allRowOrderIDs.formUnion(rowOrder)
@@ -706,7 +709,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 		outlineElementsDidChange(rebuildShadowTable())
 	}
 	
@@ -1348,6 +1350,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	func createNotes(rows: [Row], rowStrings: RowStrings?) -> [Row] {
 		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
 		
 		if rowCount == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
@@ -1362,7 +1367,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 		
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else {
 			return impacted
@@ -1390,6 +1394,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	@discardableResult
 	public func deleteNotes(rows: [Row], rowStrings: RowStrings? = nil) -> [Row: NSAttributedString] {
 		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
 		
 		if rowCount == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
@@ -1404,7 +1411,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 
 		guard isBeingViewed else {
 			return impacted
@@ -1422,13 +1428,15 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	func restoreNotes(_ notes: [Row: NSAttributedString]) {
 		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
 		
 		for (row, note) in notes {
 			row.note = note
 		}
 
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else { return }
 		
@@ -1442,6 +1450,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
 		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
 		
 		if rowCount == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
@@ -1471,7 +1482,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 		deleteLinkRelationships(for: rows)
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else { return }
 		
@@ -1525,12 +1535,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		guard bottomRow.rowCount == 0 else { return }
 		
 		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
 		
 		requestCloudKitUpdate(for: topRow.entityID)
 		updateRowStrings(topRow, .topic(topic))
 		deleteRows([bottomRow])
-
-		endCloudKitBatchRequest()
 		
 		guard isBeingViewed, let topShadowTableIndex = topRow.shadowTableIndex else { return }
 
@@ -1540,6 +1551,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	func createRow(_ row: Row, beforeRow: Row, rowStrings: RowStrings? = nil, moveCursor: Bool) {
 		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
 		
 		if let texts = rowStrings {
 			updateRowStrings(beforeRow, texts)
@@ -1567,7 +1581,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		createLinkRelationships(for: [row])
 		replaceLinkTitlesIfPossible(rows: [row])
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 
 		guard isBeingViewed else { return }
 
@@ -1584,6 +1597,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	@discardableResult
 	func createRow(_ row: Row, parent: RowContainer? = nil, index: Int? = nil, afterRow: Row? = nil, rowStrings: RowStrings? = nil) -> Int? {
 		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
 		
 		if let afterRow, let texts = rowStrings {
 			updateRowStrings(afterRow, texts)
@@ -1623,7 +1639,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		createLinkRelationships(for: [row])
 		replaceLinkTitlesIfPossible(rows: [row])
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 			
 		guard isBeingViewed else { return nil }
 
@@ -1653,6 +1668,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 		
 		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
 		
 		if let afterRow, let texts = rowStrings {
 			updateRowStrings(afterRow, texts)
@@ -1702,7 +1720,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		createLinkRelationships(for: rows)
 		replaceLinkTitlesIfPossible(rows: rows)
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 
 		guard isBeingViewed else { return }
 
@@ -1718,6 +1735,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 	public func createRowsInsideAtStart(_ rows: [Row], afterRowContainer: RowContainer, rowStrings: RowStrings? = nil) {
 		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
 		
 		if let texts = rowStrings, let afterRow = afterRowContainer as? Row {
 			updateRowStrings(afterRow, texts)
@@ -1741,7 +1761,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		createLinkRelationships(for: rows)
 		replaceLinkTitlesIfPossible(rows: rows)
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 
 		guard isBeingViewed else { return }
 
@@ -1758,6 +1777,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	public func createRowsInsideAtEnd(_ rows: [Row], afterRowContainer: RowContainer) {
 		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
 
 		resetPreviouslyUsed(rows: rows)
 
@@ -1777,7 +1799,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		createLinkRelationships(for: rows)
 		replaceLinkTitlesIfPossible(rows: rows)
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 
 		guard isBeingViewed else { return  }
 
@@ -1788,6 +1809,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 	public func createRowsDirectlyAfter(_ rows: [Row], afterRow: Row) {
 		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
 
 		resetPreviouslyUsed(rows: rows)
 
@@ -1809,7 +1833,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		createLinkRelationships(for: rows)
 		replaceLinkTitlesIfPossible(rows: rows)
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 
 		guard isBeingViewed else { return }
 
@@ -1824,7 +1847,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	public func createRowsOutside(_ rows: [Row], afterRow: Row, rowStrings: RowStrings? = nil) {
 		beginCloudKitBatchRequest()
-		
+		defer {
+			endCloudKitBatchRequest()
+		}
+
 		resetPreviouslyUsed(rows: rows)
 
 		if let texts = rowStrings {
@@ -1853,7 +1879,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		createLinkRelationships(for: rows)
 		replaceLinkTitlesIfPossible(rows: rows)
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 
 		guard isBeingViewed else { return }
 
@@ -1865,6 +1890,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 	func duplicateRows(_ rows: [Row]) -> [Row] {
 		beginCloudKitBatchRequest()
+		defer {
+			endCloudKitBatchRequest()
+		}
 
 		var newRows = [Row]()
 		var idDict = [String: Row]()
@@ -1896,7 +1924,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		guard isBeingViewed else { return newRows }
 
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 		outlineElementsDidChange(rebuildShadowTable())
 
 		return newRows
@@ -1904,7 +1931,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 	func splitRow(newRow: Row, toParent: RowContainer? = nil, toIndex: Int? = nil, row: Row, topic: NSAttributedString, cursorPosition: Int) {
 		beginCloudKitBatchRequest()
-		
+		defer {
+			endCloudKitBatchRequest()
+		}
+
 		let newTopicRange = NSRange(location: cursorPosition, length: topic.length - cursorPosition)
 		let newTopicText = topic.attributedSubstring(from: newTopicRange)
 		newRow.topic = newTopicText
@@ -1914,8 +1944,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 		let newCursorIndex = createRow(newRow, parent: toParent, index: toIndex, afterRow: row, rowStrings: .topic(topicText))
 		
-		endCloudKitBatchRequest()
-
 		guard isBeingViewed else { return }
 		guard let rowShadowTableIndex = row.shadowTableIndex else { return }
 		
@@ -2109,7 +2137,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 
 		beginCloudKitBatchRequest()
-		
+		defer {
+			endCloudKitBatchRequest()
+		}
+
 		if rowCount == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
@@ -2151,7 +2182,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 		
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else {
 			return impacted
@@ -2191,7 +2221,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		collapseAllInOutlineUnavailableNeedsUpdate = true
 
 		beginCloudKitBatchRequest()
-		
+		defer {
+			endCloudKitBatchRequest()
+		}
+
 		if rowCount == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
@@ -2225,7 +2258,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else {
 			return impacted
@@ -2255,7 +2287,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 	func moveRowsUp(_ rows: [Row], rowStrings: RowStrings?) {
 		beginCloudKitBatchRequest()
-		
+		defer {
+			endCloudKitBatchRequest()
+		}
+
 		if rowCount == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
@@ -2268,8 +2303,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 		
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
-		
+   
 		guard isBeingViewed else { return }
 
 		outlineElementsDidChange(rebuildShadowTable())
@@ -2291,7 +2325,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 	func moveRowsDown(_ rows: [Row], rowStrings: RowStrings?) {
 		beginCloudKitBatchRequest()
-		
+		defer {
+			endCloudKitBatchRequest()
+		}
+
 		if rowCount == 1, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
@@ -2304,7 +2341,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 		
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 		
 		guard isBeingViewed else { return }
 
@@ -2352,7 +2388,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 	func moveRows(_ rowMoves: [RowMove], rowStrings: RowStrings? = nil) {
 		beginCloudKitBatchRequest()
-		
+		defer {
+			endCloudKitBatchRequest()
+		}
+
 		if rowMoves.count == 1, let row = rowMoves.first?.row, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
@@ -2407,7 +2446,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 
 		guard isBeingViewed else { return }
 
@@ -2637,6 +2675,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		
 		if let keyedRows {
 			beginCloudKitBatchRequest()
+			defer {
+				endCloudKitBatchRequest()
+			}
+
 			var cumulativeActionsTaken = AltLinkResolvingActions()
 			
 			for row in keyedRows.values {
@@ -2654,8 +2696,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				hasAltLinks = false
 				requestCloudKitUpdate(for: id)
 			}
-			
-			endCloudKitBatchRequest()
 		}
 		
 		Task {
@@ -2870,7 +2910,10 @@ private extension Outline {
 	
 	func completeUncomplete(rows: [Row], isComplete: Bool, rowStrings: RowStrings?) {
 		beginCloudKitBatchRequest()
-		
+		defer {
+			endCloudKitBatchRequest()
+		}
+
 		if rowCount > 0, let row = rows.first, let texts = rowStrings {
 			updateRowStrings(row, texts)
 		}
@@ -2892,7 +2935,6 @@ private extension Outline {
 		}
 		
 		outlineContentDidChange()
-		endCloudKitBatchRequest()
 
 		guard isBeingViewed else { return }
 
