@@ -36,6 +36,10 @@ public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 	}
 	
 	static func append(requests: Set<CloudKitActionRequest>) {
+		guard requests.count != 0 else {
+			return
+		}
+
 		let queuedRequests: Set<CloudKitActionRequest>
 		
 		if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
