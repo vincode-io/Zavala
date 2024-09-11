@@ -119,6 +119,13 @@ public class CloudKitManager {
 		}
 	}
 	
+	func loadRequests() async -> Set<CloudKitActionRequest> {
+		await requestsSemaphore.wait()
+		let requests = CloudKitActionRequest.load()
+		requestsSemaphore.signal()
+		return requests ?? []
+	}
+	
 	func receiveRemoteNotification(userInfo: [AnyHashable : Any]) async {
 		restartWorkTask()
 		
@@ -483,7 +490,7 @@ private extension CloudKitManager {
 		
 		func addDelete(_ request: CloudKitActionRequest) {
 			let zoneID = request.zoneID
-			let recordID = CKRecord.ID(recordName: request.id.description, zoneID: zoneID)
+			let recordID = request.recordID
 			addDelete(zoneID, recordID)
 		}
 		
