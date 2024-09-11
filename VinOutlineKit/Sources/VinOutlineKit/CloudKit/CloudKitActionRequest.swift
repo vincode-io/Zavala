@@ -21,6 +21,10 @@ public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 	var zoneID: CKRecordZone.ID {
 		return CKRecordZone.ID(zoneName: zoneName, ownerName: zoneOwner)
 	}
+	
+	var recordID: CKRecord.ID {
+		return CKRecord.ID(recordName: id.description, zoneID: zoneID)
+	}
 
 	enum CodingKeys: String, CodingKey {
 		case zoneName = "zoneName"

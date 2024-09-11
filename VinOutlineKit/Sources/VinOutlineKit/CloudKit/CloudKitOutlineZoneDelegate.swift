@@ -28,6 +28,9 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 	}
 	
 	func cloudKitDidModify(changed: [CKRecord], deleted: [CloudKitRecordKey]) async throws {
+		let requests = await account?.cloudKitManager?.loadRequests() ?? []
+		let requestRecordIDs = Set(requests.map({ $0.recordID }))
+		
 		var updates = [EntityID: CloudKitOutlineUpdate]()
 		var shareUpdates = [(CKRecord.ID, CKShare?)]()
 
@@ -42,6 +45,10 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 		}
 
 		for deletedRecordKey in deleted {
+			guard !requestRecordIDs.contains(deletedRecordKey.recordID) else {
+				continue
+			}
+			
 			if deletedRecordKey.recordType == CKRecord.SystemType.share {
 				shareUpdates.append((deletedRecordKey.recordID, nil))
 			} else {
@@ -62,6 +69,10 @@ class CloudKitOutlineZoneDelegate: VCKZoneDelegate {
 		}
 
 		for changedRecord in changed {
+			guard !requestRecordIDs.contains(changedRecord.recordID) else {
+				continue
+			}
+
 			if let shareRecord = changedRecord as? CKShare {
 				shareUpdates.append((shareRecord.recordID, shareRecord))
 			} else {
