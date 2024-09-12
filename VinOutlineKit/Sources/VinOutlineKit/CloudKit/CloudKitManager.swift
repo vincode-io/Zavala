@@ -14,6 +14,7 @@ import OSLog
 import SystemConfiguration
 import CloudKit
 import AsyncAlgorithms
+import OrderedCollections
 import Semaphore
 import VinCloudKit
 import VinUtility
@@ -104,12 +105,12 @@ public class CloudKitManager {
 	}
 	
 	func addRequest(_ request: CloudKitActionRequest) {
-		var requests = Set<CloudKitActionRequest>()
-		requests.insert(request)
+		var requests = OrderedSet<CloudKitActionRequest>()
+		requests.append(request)
 		addRequests(requests)
 	}
 	
-	func addRequests(_ requests: Set<CloudKitActionRequest>) {
+	func addRequests(_ requests: OrderedSet<CloudKitActionRequest>) {
 		Task {
 			await requestsSemaphore.wait()
 			CloudKitActionRequest.append(requests: requests)
@@ -119,7 +120,7 @@ public class CloudKitManager {
 		}
 	}
 	
-	func loadRequests() async -> Set<CloudKitActionRequest> {
+	func loadRequests() async -> OrderedSet<CloudKitActionRequest> {
 		await requestsSemaphore.wait()
 		let requests = CloudKitActionRequest.load()
 		requestsSemaphore.signal()
@@ -325,7 +326,7 @@ private extension CloudKitManager {
 
 		// Send the grouped changes
 		
-		let leftOverRequests = try await withThrowingTaskGroup(of: ([EntityID], [EntityID]).self, returning: Set<CloudKitActionRequest>.self) { taskGroup in
+		let leftOverRequests = try await withThrowingTaskGroup(of: ([EntityID], [EntityID]).self, returning: OrderedSet<CloudKitActionRequest>.self) { taskGroup in
 			var leftOverRequests = requests
 			
 			for zoneID in modifications.keys {
@@ -471,7 +472,7 @@ private extension CloudKitManager {
 		}
 	}
 	
-	func loadDocumentsAndStageModifications(requests: Set<CloudKitActionRequest>) -> ([Document], [CKRecordZone.ID: ([VCKModel], [CKRecord.ID])]) {
+	func loadDocumentsAndStageModifications(requests: OrderedSet<CloudKitActionRequest>) -> ([Document], [CKRecordZone.ID: ([VCKModel], [CKRecord.ID])]) {
 		var loadedDocuments = [Document]()
 		var modifications = [CKRecordZone.ID: ([VCKModel], [CKRecord.ID])]()
 
@@ -556,7 +557,7 @@ private extension CloudKitManager {
 		return (loadedDocuments, modifications)
 	}
 	
-	func combine(requests: Set<CloudKitActionRequest>) -> [String: CombinedRequest] {
+	func combine(requests: OrderedSet<CloudKitActionRequest>) -> [String: CombinedRequest] {
 		var combinedRequests = [String: CombinedRequest]()
 
 		for request in requests {

@@ -11,6 +11,7 @@ import UIKit
 import Foundation
 #endif
 import CloudKit
+import OrderedCollections
 import VinXML
 import VinCloudKit
 
@@ -671,20 +672,18 @@ private extension Account {
 	func saveToCloudKit(_ document: Document) {
 		guard let cloudKitManager, let zoneID = document.zoneID else { return }
 		
-		var requests = Set<CloudKitActionRequest>()
-		requests.insert(CloudKitActionRequest(zoneID: zoneID, id: document.id))
+		var requests = OrderedSet<CloudKitActionRequest>()
+		requests.append(CloudKitActionRequest(zoneID: zoneID, id: document.id))
 		
 		switch document {
 		case .outline(let outline):
-			if let rows = outline.keyedRows?.values {
-				for row in rows {
-					requests.insert(CloudKitActionRequest(zoneID: zoneID, id: row.entityID))
-				}
+			for row in outline.allRows {
+				requests.append(CloudKitActionRequest(zoneID: zoneID, id: row.entityID))
 			}
 			if let rowImages = outline.images?.values {
 				for images in rowImages {
 					for image in images {
-						requests.insert(CloudKitActionRequest(zoneID: zoneID, id: image.id))
+						requests.append(CloudKitActionRequest(zoneID: zoneID, id: image.id))
 					}
 				}
 			}
@@ -697,9 +696,7 @@ private extension Account {
 	
 	func deleteFromCloudKit(_ document: Document) {
 		guard let cloudKitManager, let zoneID = document.zoneID else { return }
-		var requests = Set<CloudKitActionRequest>()
-		requests.insert(CloudKitActionRequest(zoneID: zoneID, id: document.id))
-		cloudKitManager.addRequests(requests)
+		cloudKitManager.addRequest(CloudKitActionRequest(zoneID: zoneID, id: document.id))
 	}
 	
 	func convertOPMLAttributeNewlines(_ opmlData: Data) throws -> String {
