@@ -88,7 +88,7 @@ extension Outline: VCKModel {
 		guard batchCloudKitRequests == 0, let cloudKitManager = account?.cloudKitManager, let zoneID else { return }
 
 		let requests = cloudKitRequestsIDs.map { CloudKitActionRequest(zoneID: zoneID, id: $0) }
-		cloudKitManager.addRequests(Set(requests))
+		cloudKitManager.addRequests(OrderedSet(requests))
 		
 		cloudKitRequestsIDs = Set<EntityID>()
 	}

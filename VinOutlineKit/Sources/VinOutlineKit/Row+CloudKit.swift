@@ -91,10 +91,14 @@ extension Row: VCKModel {
 	}
 	
 	public func buildRecord() -> CKRecord {
-		guard let zoneID = outline?.zoneID,
-			  let outlineRecordName = outline?.id.description
-		else {
+		guard let zoneID = outline?.zoneID else {
 			fatalError("There is not enough associated CloudKit information for this object.")
+		}
+		
+		let parentRecordName: String = if let parentRow = parent as? Row {
+			parentRow.entityID.description
+		} else {
+			(parent as! Outline).id.description
 		}
 		
 		let record: CKRecord = {
@@ -105,10 +109,10 @@ extension Row: VCKModel {
 			}
 		}()
 
-		let outlineRecordID = CKRecord.ID(recordName: outlineRecordName, zoneID: zoneID)
-		record.parent = CKRecord.Reference(recordID: outlineRecordID, action: .none)
+		let parentRecordID = CKRecord.ID(recordName: parentRecordName, zoneID: zoneID)
+		record.parent = CKRecord.Reference(recordID: parentRecordID, action: .none)
 		
-		record[Row.CloudKitRecord.Fields.outline] = CKRecord.Reference(recordID: outlineRecordID, action: .deleteSelf)
+		record[Row.CloudKitRecord.Fields.outline] = CKRecord.Reference(recordID: parentRecordID, action: .deleteSelf)
 		record[Row.CloudKitRecord.Fields.subtype] = "text"
 		
 		let recordRowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: serverRowOrder)

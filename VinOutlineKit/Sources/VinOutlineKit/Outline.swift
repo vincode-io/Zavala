@@ -360,6 +360,21 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable, Cod
 		}
 	}
 	
+	public var allRows: [Row] {
+		get {
+			var all = [Row]()
+
+			func allRowVisitor(_ visited: Row) {
+				all.append(visited)
+				visited.rows.forEach { $0.visit(visitor: allRowVisitor) }
+			}
+
+			rows.forEach { $0.visit(visitor: allRowVisitor(_:)) }
+
+			return all
+		}
+	}
+	
 	public var rowCount: Int {
 		return rowOrder?.count ?? 0
 	}

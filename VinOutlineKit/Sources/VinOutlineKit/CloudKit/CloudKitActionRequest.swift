@@ -7,6 +7,7 @@
 
 import Foundation
 import CloudKit
+import OrderedCollections
 
 public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 
@@ -38,36 +39,47 @@ public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 		self.id = id
 	}
 	
-	static func append(requests: Set<CloudKitActionRequest>) {
-		let queuedRequests: Set<CloudKitActionRequest>
+	static func append(requests: OrderedSet<CloudKitActionRequest>) {
+		guard requests.count != 0 else {
+			return
+		}
+
+		var queuedRequests: OrderedSet<CloudKitActionRequest>
 		
 		if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
 			let decoder = PropertyListDecoder()
-			if let decodedRequests = try? decoder.decode(Set<CloudKitActionRequest>.self, from: fileData) {
+			
+			if let decodedRequests = try? decoder.decode(OrderedSet<CloudKitActionRequest>.self, from: fileData) {
 				queuedRequests = decodedRequests
+			} else if let decodedRequests = try? decoder.decode(Set<CloudKitActionRequest>.self, from: fileData) {
+				queuedRequests = OrderedSet(decodedRequests)
 			} else {
-				queuedRequests = Set<CloudKitActionRequest>()
+				queuedRequests = OrderedSet<CloudKitActionRequest>()
 			}
 		} else {
-			queuedRequests = Set<CloudKitActionRequest>()
+			queuedRequests = OrderedSet<CloudKitActionRequest>()
 		}
 		
-		let mergedRequests = queuedRequests.union(requests)
-		Self.save(requests: mergedRequests)
+		queuedRequests.append(contentsOf: requests)
+		Self.save(requests: queuedRequests)
 	}
 	
 	static func clear() {
-		save(requests: Set<CloudKitActionRequest>())
+		save(requests: OrderedSet<CloudKitActionRequest>())
 	}
 	
-	static func load() -> Set<CloudKitActionRequest>? {
-		var queuedRequests: Set<CloudKitActionRequest>? = nil
+	static func load() -> OrderedSet<CloudKitActionRequest>? {
+		var queuedRequests: OrderedSet<CloudKitActionRequest>? = nil
+		
 		if let fileData = try? Data(contentsOf: CloudKitActionRequest.actionRequestFile) {
 			let decoder = PropertyListDecoder()
-			if let decodedRequests = try? decoder.decode(Set<CloudKitActionRequest>.self, from: fileData) {
+			if let decodedRequests = try? decoder.decode(OrderedSet<CloudKitActionRequest>.self, from: fileData) {
 				queuedRequests = decodedRequests
+			} else if let decodedRequests = try? decoder.decode(Set<CloudKitActionRequest>.self, from: fileData) {
+				queuedRequests = OrderedSet(decodedRequests)
 			}
 		}
+		
 		return queuedRequests
 	}
 	
@@ -77,7 +89,7 @@ public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 
 private extension CloudKitActionRequest {
 	
-	static func save(requests: Set<CloudKitActionRequest>) {
+	static func save(requests: OrderedSet<CloudKitActionRequest>) {
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary
 
