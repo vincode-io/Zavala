@@ -40,7 +40,7 @@ private extension EditorRowSearchLayoutFragment {
 		lineFragmentBounds.origin.x = lowerBound
 		lineFragmentBounds.size.width = upperBound - lowerBound
 		
-		let drawingPath = lineFragmentBounds.insetBy(dx: -2, dy: -1)
+		let drawingPath = lineFragmentBounds.insetBy(dx: -1, dy: 0)
 
 		ctx.saveGState()
 		
