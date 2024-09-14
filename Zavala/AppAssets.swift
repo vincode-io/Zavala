@@ -351,7 +351,6 @@ extension String {
 	static let shareControlLabel = String(localized: "Share", comment: "Control Label: Share")
 	static let shareEllipsisControlLabel = String(localized: "Share…", comment: "Control Label: Share…")
 	static let smallControlLabel = String(localized: "Small", comment: "Control Label: Small")
-	static let sortRowControlLabel = String(localized: "Sort Row", comment: "Control Label: Sort Row")
 	static let sortRowsControlLabel = String(localized: "Sort Rows", comment: "Control Label: Sort Rows")
 	static let splitRowControlLabel = String(localized: "Split Row", comment: "Control Label: Split Row")
 	static let statisticsControlLabel = String(localized: "Statistics", comment: "Control Label: Statistics")

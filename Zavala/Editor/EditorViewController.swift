@@ -672,12 +672,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			} else {
 				command.title = .groupRowControlLabel
 			}
-		case .sortCurrentRows:
-			if currentRows?.count ?? 0 > 1 {
-				command.title = .sortRowsControlLabel
-			} else {
-				command.title = .sortRowControlLabel
-			}
 		case .deleteCurrentRows:
 			if currentRows?.count ?? 0 > 1 {
 				command.title = .deleteRowsControlLabel
@@ -2963,8 +2957,7 @@ private extension EditorViewController {
 	}
 
 	func sortAction(rows: [Row]) -> UIAction {
-		let title = rows.count == 1 ? String.sortRowControlLabel : String.sortRowsControlLabel
-		return UIAction(title: title, image: .sortRows) { [weak self] action in
+		return UIAction(title: .sortRowsControlLabel, image: .sortRows) { [weak self] action in
 			self?.sortCurrentRows(rows)
 		}
 	}

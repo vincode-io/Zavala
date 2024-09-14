@@ -1038,9 +1038,6 @@
     "Small" : {
       "comment" : "Control Label: Small"
     },
-    "Sort Row" : {
-      "comment" : "Control Label: Sort Row"
-    },
     "Sort Rows" : {
       "comment" : "Control Label: Sort Rows"
     },
