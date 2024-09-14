@@ -653,6 +653,24 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	override func validate(_ command: UICommand) {
 		switch command.action {
+		case .duplicateCurrentRows:
+			if currentRows?.count ?? 0 > 1 {
+				command.title = .duplicateRowsControlLabel
+			} else {
+				command.title = .duplicateRowControlLabel
+			}
+		case .groupCurrentRows:
+			if currentRows?.count ?? 0 > 1 {
+				command.title = .groupRowsControlLabel
+			} else {
+				command.title = .groupRowControlLabel
+			}
+		case .deleteCurrentRows:
+			if currentRows?.count ?? 0 > 1 {
+				command.title = .deleteRowsControlLabel
+			} else {
+				command.title = .deleteRowControlLabel
+			}
 		case .toggleCompleteRows:
 			if  let outline, let currentRows, !outline.isCompleteUnavailable(rows: currentRows) {
 				command.title = .completeControlLabel
