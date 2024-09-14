@@ -337,8 +337,8 @@
     "Duplicate" : {
       "comment" : "Control Label: Duplicate"
     },
-    "Duplicate Row" : {
-      "comment" : "Control Label: Duplicate Row"
+    "Duplicate Rows" : {
+      "comment" : "Control Label: Duplicate Rows"
     },
     "Edit document “%@”" : {
       "comment" : "Prompt: edit document"

@@ -115,7 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 											   input: "{",
 											   modifierFlags: [.command])
 	
-	let deleteCurrentRowsCommand = UIKeyCommand(title: .deleteRowControlLabel,
+	let deleteCurrentRowsCommand = UIKeyCommand(title: .deleteRowsControlLabel,
 												action: .deleteCurrentRows,
 												input: UIKeyCommand.inputDelete,
 												modifierFlags: [.shift, .command])
@@ -125,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 												input: "g",
 											   modifierFlags: [.alternate, .command])
 	
-	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowControlLabel,
+	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowsControlLabel,
 											action: .duplicateCurrentRows,
 											input: "r",
 											modifierFlags: [.command, .control])
@@ -559,8 +559,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 												createRowInsideCommand,
 												createRowOutsideCommand,
 												duplicateRowsCommand,
-												deleteCurrentRowsCommand,
-												groupCurrentRowsCommand])
+												groupCurrentRowsCommand,
+												deleteCurrentRowsCommand
+											   ])
 		let moveRowMenu = UIMenu(title: "", options: .displayInline, children: [moveRowsLeftCommand, moveRowsRightCommand, moveRowsUpCommand, moveRowsDownCommand])
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand])
 		let noteMenu = UIMenu(title: "", options: .displayInline, children: [rowNotesCommand, deleteRowNotesCommand])

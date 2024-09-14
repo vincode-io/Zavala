@@ -207,7 +207,7 @@ extension String {
 	static let documentNotFoundMessage = String(localized: "The requested document could not be found. It was most likely deleted and is no longer available.", comment: "Alert Message: Document Not Found")
 	static let doneControlLabel = String(localized: "Done", comment: "Control Label: Done")
 	static let duplicateControlLabel = String(localized: "Duplicate", comment: "Control Label: Duplicate")
-	static let duplicateRowControlLabel = String(localized: "Duplicate Row", comment: "Control Label: Duplicate Row")
+	static let duplicateRowsControlLabel = String(localized: "Duplicate Rows", comment: "Control Label: Duplicate Rows")
 
 	static let editorControlLabel = String(localized: "Editor", comment: "Control Label: Editor")
 	static let emailControlLabel = String(localized: "Email", comment: "Control Label: Email")
