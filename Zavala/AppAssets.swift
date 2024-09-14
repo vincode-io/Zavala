@@ -60,6 +60,7 @@ extension UIImage {
 	static let getInfo = UIImage(systemName: "info.circle")!
 	static let goBackward = UIImage(systemName: "chevron.left")!
 	static let goForward = UIImage(systemName: "chevron.right")!
+	static let groupRows = UIImage(systemName: "increase.indent")!
 
 	static let importDocument = UIImage(systemName: "square.and.arrow.down")!
 	static let italic = UIImage(systemName: "italic")!
@@ -248,6 +249,7 @@ extension String {
 	static let goBackwardControlLabel = String(localized: "Go Backward", comment: "Control Label: Go Backward")
 	static let goForwardControlLabel = String(localized: "Go Forward", comment: "Control Label: Go Forward")
 	static let greenControlLabel = String(localized: "Green", comment: "Control Label: Green")
+	static let groupRowsControlLabel = String(localized: "Group Rows", comment: "Control Label: Group Rows")
 
 	static let helpControlLabel = String(localized: "Help", comment: "Control Label: Help")
 	static let hideKeyboardControlLabel = String(localized: "Hide Keyboard", comment: "Control Label: Hide Keyboard")

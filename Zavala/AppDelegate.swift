@@ -120,6 +120,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 												input: UIKeyCommand.inputDelete,
 												modifierFlags: [.shift, .command])
 	
+	let groupCurrentRowsCommand = UIKeyCommand(title: .groupRowsControlLabel,
+											   action: .groupCurrentRows,
+												input: "g",
+											   modifierFlags: [.alternate, .command])
+	
 	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowControlLabel,
 											action: .duplicateCurrentRows,
 											input: "r",
@@ -554,7 +559,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 												createRowInsideCommand,
 												createRowOutsideCommand,
 												duplicateRowsCommand,
-												deleteCurrentRowsCommand])
+												deleteCurrentRowsCommand,
+												groupCurrentRowsCommand])
 		let moveRowMenu = UIMenu(title: "", options: .displayInline, children: [moveRowsLeftCommand, moveRowsRightCommand, moveRowsUpCommand, moveRowsDownCommand])
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand])
 		let noteMenu = UIMenu(title: "", options: .displayInline, children: [rowNotesCommand, deleteRowNotesCommand])

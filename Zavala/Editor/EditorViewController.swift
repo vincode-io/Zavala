@@ -39,6 +39,7 @@ extension Selector {
 	static let createRowOutside = #selector(EditorViewController.createRowOutside(_:))
 	static let duplicateCurrentRows = #selector(EditorViewController.duplicateCurrentRows(_:))
 	static let deleteCurrentRows = #selector(EditorViewController.deleteCurrentRows(_:))
+	static let groupCurrentRows = #selector(EditorViewController.groupCurrentRows(_:))
 	static let moveCurrentRowsLeft = #selector(EditorViewController.moveCurrentRowsLeft(_:))
 	static let moveCurrentRowsRight = #selector(EditorViewController.moveCurrentRowsRight(_:))
 	static let moveCurrentRowsUp = #selector(EditorViewController.moveCurrentRowsUp(_:))
@@ -599,6 +600,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			return currentRows != nil
 		case .createRowOutside:
 			if let outline, let currentRows, !outline.isCreateRowOutsideUnavailable(rows: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .groupCurrentRows:
+			if let outline, let currentRows, !outline.isGroupRowsUnavailable(rows: currentRows) {
 				return true
 			} else {
 				return false
@@ -1267,6 +1274,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func moveCurrentRowsDown(_ sender: Any?) {
 		guard let rows = currentRows else { return }
 		moveRowsDown(rows)
+	}
+
+	@objc func groupCurrentRows(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		groupRows(rows)
 	}
 	
 	@objc func toggleCompleteRows(_ sender: Any?) {
@@ -2779,6 +2791,9 @@ private extension EditorViewController {
 			if !outline.isDeleteNotesUnavailable(rows: rows) {
 				outlineActions.append(self.deleteNoteAction(rows: rows))
 			}
+			if !outline.isGroupRowsUnavailable(rows: rows) {
+				outlineActions.append(self.groupAction(rows: rows))
+6			}
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: outlineActions))
 
 			var viewActions = [UIAction]()
@@ -2898,6 +2913,12 @@ private extension EditorViewController {
 			guard let self else { return }
 			self.deleteRows(rows)
 			self.delegate?.validateToolbar(self)
+		}
+	}
+
+	func groupAction(rows: [Row]) -> UIAction {
+		return UIAction(title: .groupRowsControlLabel, image: .groupRows) { [weak self] action in
+			self?.groupCurrentRows(rows)
 		}
 	}
 
@@ -3435,6 +3456,20 @@ private extension EditorViewController {
 		
 		command.execute()
 	}
+
+	func groupRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
+		guard let undoManager, let outline else { return }
+		
+		let command = GroupCommand(actionName: .groupRowsControlLabel,
+								   undoManager: undoManager,
+								   delegate: self,
+								   outline: outline,
+								   rows: rows,
+								   rowStrings: rowStrings)
+		
+		command.execute()
+	}
+
 
 	func completeRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager, let outline else { return }

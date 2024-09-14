@@ -1564,6 +1564,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		outlineElementsDidChange(changes)
 	}
 	
+	public func isGroupRowsUnavailable(rows: [Row]) -> Bool {
+		guard let parent = rows.first?.parent else { return true }
+	
+		for row in rows {
+			if !parent.containsRow(row) {
+				return true
+			}
+		}
+		return false
+	}
+	
 	func createRow(_ row: Row, beforeRow: Row, rowStrings: RowStrings? = nil, moveCursor: Bool) {
 		beginCloudKitBatchRequest()
 		defer {
