@@ -40,6 +40,7 @@ extension Selector {
 	static let duplicateCurrentRows = #selector(EditorViewController.duplicateCurrentRows(_:))
 	static let deleteCurrentRows = #selector(EditorViewController.deleteCurrentRows(_:))
 	static let groupCurrentRows = #selector(EditorViewController.groupCurrentRows(_:))
+	static let sortCurrentRows = #selector(EditorViewController.sortCurrentRows(_:))
 	static let moveCurrentRowsLeft = #selector(EditorViewController.moveCurrentRowsLeft(_:))
 	static let moveCurrentRowsRight = #selector(EditorViewController.moveCurrentRowsRight(_:))
 	static let moveCurrentRowsUp = #selector(EditorViewController.moveCurrentRowsUp(_:))
@@ -610,6 +611,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			} else {
 				return false
 			}
+		case .sortCurrentRows:
+			if let outline, let currentRows, !outline.isSortRowsUnavailable(rows: currentRows) {
+				return true
+			} else {
+				return false
+			}
 		case .moveCurrentRowsLeft:
 			if let outline, let currentRows, !outline.isMoveRowsLeftUnavailable(rows: currentRows) {
 				return true
@@ -664,6 +671,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 				command.title = .groupRowsControlLabel
 			} else {
 				command.title = .groupRowControlLabel
+			}
+		case .sortCurrentRows:
+			if currentRows?.count ?? 0 > 1 {
+				command.title = .sortRowsControlLabel
+			} else {
+				command.title = .sortRowControlLabel
 			}
 		case .deleteCurrentRows:
 			if currentRows?.count ?? 0 > 1 {
@@ -1297,6 +1310,11 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	@objc func groupCurrentRows(_ sender: Any?) {
 		guard let rows = currentRows else { return }
 		groupRows(rows)
+	}
+	
+	@objc func sortCurrentRows(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		sortRows(rows)
 	}
 	
 	@objc func toggleCompleteRows(_ sender: Any?) {
@@ -2811,7 +2829,10 @@ private extension EditorViewController {
 			}
 			if !outline.isGroupRowsUnavailable(rows: rows) {
 				outlineActions.append(self.groupAction(rows: rows))
-6			}
+			}
+			if !outline.isSortRowsUnavailable(rows: rows) {
+				outlineActions.append(self.sortAction(rows: rows))
+			}
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: outlineActions))
 
 			var viewActions = [UIAction]()
@@ -2938,6 +2959,13 @@ private extension EditorViewController {
 		let title = rows.count == 1 ? String.groupRowControlLabel : String.groupRowsControlLabel
 		return UIAction(title: title, image: .groupRows) { [weak self] action in
 			self?.groupCurrentRows(rows)
+		}
+	}
+
+	func sortAction(rows: [Row]) -> UIAction {
+		let title = rows.count == 1 ? String.sortRowControlLabel : String.sortRowsControlLabel
+		return UIAction(title: title, image: .sortRows) { [weak self] action in
+			self?.sortCurrentRows(rows)
 		}
 	}
 
@@ -3489,6 +3517,17 @@ private extension EditorViewController {
 		command.execute()
 	}
 
+	func sortRows(_ rows: [Row]) {
+		guard let undoManager, let outline else { return }
+		
+		let command = SortRowsCommand(actionName: .groupRowsControlLabel,
+									  undoManager: undoManager,
+									  delegate: self,
+									  outline: outline,
+									  rows: rows)
+		
+		command.execute()
+	}
 
 	func completeRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager, let outline else { return }

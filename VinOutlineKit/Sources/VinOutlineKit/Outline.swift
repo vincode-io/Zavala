@@ -1565,14 +1565,37 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	}
 	
 	public func isGroupRowsUnavailable(rows: [Row]) -> Bool {
-		guard let parent = rows.first?.parent else { return true }
+		return !areRowsContiguous(rows: rows)
+	}
 	
-		for row in rows {
-			if !parent.containsRow(row) {
-				return true
+	public func isSortRowsUnavailable(rows: [Row]) -> Bool {
+		guard rows.count > 1 else { return true }
+		return !areRowsContiguous(rows: rows)
+	}
+	
+	func areRowsContiguous(rows: [Row]) -> Bool {
+		let sortedRows = rows.sortedByDisplayOrder()
+		
+		guard let firstRow = sortedRows.first,
+			  let parent = firstRow.parent,
+			  let firstIndex = parent.firstIndexOfRow(firstRow) else {
+			return false
+		}
+		
+		for i in 0..<sortedRows.count {
+			let row = sortedRows[i]
+			guard let index = parent.firstIndexOfRow(row) else {
+				return false
+			}
+
+			if index == firstIndex + i {
+				continue
+			} else {
+				return false
 			}
 		}
-		return false
+		
+		return true
 	}
 	
 	func createRow(_ row: Row, beforeRow: Row, rowStrings: RowStrings? = nil, moveCursor: Bool) {

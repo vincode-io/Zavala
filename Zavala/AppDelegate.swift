@@ -122,8 +122,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	
 	let groupCurrentRowsCommand = UIKeyCommand(title: .groupRowsControlLabel,
 											   action: .groupCurrentRows,
-												input: "g",
+											   input: "g",
 											   modifierFlags: [.alternate, .command])
+	
+	let sortCurrentRowsCommand = UIKeyCommand(title: .sortRowsControlLabel,
+											  action: .sortCurrentRows,
+											  input: "s",
+											  modifierFlags: [.alternate, .command])
 	
 	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowsControlLabel,
 											action: .duplicateCurrentRows,
@@ -560,6 +565,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 												createRowOutsideCommand,
 												duplicateRowsCommand,
 												groupCurrentRowsCommand,
+												sortCurrentRowsCommand,
 												deleteCurrentRowsCommand
 											   ])
 		let moveRowMenu = UIMenu(title: "", options: .displayInline, children: [moveRowsLeftCommand, moveRowsRightCommand, moveRowsUpCommand, moveRowsDownCommand])
