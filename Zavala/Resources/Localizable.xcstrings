@@ -546,6 +546,9 @@
     "Green" : {
       "comment" : "Control Label: Green"
     },
+    "Group Row" : {
+      "comment" : "Control Label: Group Row"
+    },
     "Group Rows" : {
       "comment" : "Control Label: Group Rows"
     },

@@ -2917,7 +2917,8 @@ private extension EditorViewController {
 	}
 
 	func groupAction(rows: [Row]) -> UIAction {
-		return UIAction(title: .groupRowsControlLabel, image: .groupRows) { [weak self] action in
+		let title = rows.count == 1 ? String.groupRowControlLabel : String.groupRowsControlLabel
+		return UIAction(title: title, image: .groupRows) { [weak self] action in
 			self?.groupCurrentRows(rows)
 		}
 	}
