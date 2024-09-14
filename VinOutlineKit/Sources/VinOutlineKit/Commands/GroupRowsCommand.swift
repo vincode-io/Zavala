@@ -4,7 +4,7 @@
 
 import Foundation
 
-public final class GroupCommand: OutlineCommand {
+public final class GroupRowsCommand: OutlineCommand {
 	
 	var newRow: Row
 	var rows: [Row]

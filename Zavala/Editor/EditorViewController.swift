@@ -3479,12 +3479,12 @@ private extension EditorViewController {
 	func groupRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
 		guard let undoManager, let outline else { return }
 		
-		let command = GroupCommand(actionName: .groupRowsControlLabel,
-								   undoManager: undoManager,
-								   delegate: self,
-								   outline: outline,
-								   rows: rows,
-								   rowStrings: rowStrings)
+		let command = GroupRowsCommand(actionName: .groupRowsControlLabel,
+									   undoManager: undoManager,
+									   delegate: self,
+									   outline: outline,
+									   rows: rows,
+									   rowStrings: rowStrings)
 		
 		command.execute()
 	}
