@@ -457,9 +457,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	override func cut(_ sender: Any?) {
 		navButtonGroup?.dismissPopOverMenu()
 		
-		if let currentTextView {
-			currentTextView.cut(sender)
-		} else if let currentRows {
+		if let currentRows {
 			cutRows(currentRows)
 		}
 	}
@@ -467,21 +465,14 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	override func copy(_ sender: Any?) {
 		navButtonGroup?.dismissPopOverMenu()
 		
-		if let currentTextView {
-			currentTextView.copy(sender)
-		} else if let currentRows {
+		if let currentRows {
 			copyRows(currentRows)
 		}
 	}
 	
 	override func paste(_ sender: Any?) {
 		navButtonGroup?.dismissPopOverMenu()
-		
-		if let currentTextView {
-			currentTextView.paste(sender)
-		} else {
-			pasteRows(afterRows: currentRows)
-		}
+		pasteRows(afterRows: currentRows)
 	}
 
 	override func delete(_ sender: Any?) {
