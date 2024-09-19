@@ -2808,7 +2808,6 @@ private extension EditorViewController {
 
 			var outlineActions = [UIAction]()
 			outlineActions.append(self.addAction(rows: rows))
-			outlineActions.append(self.duplicateAction(rows: rows))
 			if !outline.isCompleteUnavailable(rows: rows) {
 				outlineActions.append(self.completeAction(rows: rows))
 			}
@@ -2821,6 +2820,7 @@ private extension EditorViewController {
 			if !outline.isDeleteNotesUnavailable(rows: rows) {
 				outlineActions.append(self.deleteNoteAction(rows: rows))
 			}
+			outlineActions.append(self.duplicateAction(rows: rows))
 			if !outline.isGroupRowsUnavailable(rows: rows) {
 				outlineActions.append(self.groupAction(rows: rows))
 			}
@@ -2892,7 +2892,8 @@ private extension EditorViewController {
 	}
 
 	func duplicateAction(rows: [Row]) -> UIAction {
-		return UIAction(title: .duplicateControlLabel, image: .duplicate) { [weak self] action in
+		let title = rows.count == 1 ? String.duplicateRowControlLabel : String.duplicateRowsControlLabel
+		return UIAction(title: title, image: .duplicate) { [weak self] action in
 			self?.duplicateRows(rows)
 		}
 	}
