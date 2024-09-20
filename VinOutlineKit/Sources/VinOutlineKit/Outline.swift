@@ -2828,6 +2828,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 							cloudKitShareRecordData: cloudKitShareRecordData)
 	}
 	
+	func documentTitleDidChange() {
+		NotificationCenter.default.post(name: .DocumentTitleDidChange, object: Document.outline(self), userInfo: nil)
+	}
+	
 	func outlineAddedBacklinks() {
 		NotificationCenter.default.post(name: .OutlineAddedBacklinks, object: self, userInfo: nil)
 	}
@@ -2862,10 +2866,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 private extension Outline {
 	
-	func documentTitleDidChange() {
-		NotificationCenter.default.post(name: .DocumentTitleDidChange, object: Document.outline(self), userInfo: nil)
-	}
-
 	func documentUpdatedDidChange() {
 		NotificationCenter.default.post(name: .DocumentUpdatedDidChange, object: Document.outline(self), userInfo: nil)
 	}
