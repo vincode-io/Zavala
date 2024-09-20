@@ -631,19 +631,21 @@ private extension CloudKitManager {
 		let imageSubscription = sharedDatabaseSubscription(recordType: Image.CloudKitRecord.recordType)
 
 		return try await withCheckedThrowingContinuation { continuation in
-			let op = CKModifySubscriptionsOperation(subscriptionsToSave: [outlineSubscription, rowSubscription, imageSubscription], subscriptionIDsToDelete: nil)
-			op.qualityOfService = CloudKitOutlineZone.qualityOfService
-			
-			op.modifySubscriptionsResultBlock = { result in
-				switch result {
-				case .success:
-					continuation.resume()
-				case .failure(let error):
-					continuation.resume(throwing: error)
+			Task.detached {
+				let op = CKModifySubscriptionsOperation(subscriptionsToSave: [outlineSubscription, rowSubscription, imageSubscription], subscriptionIDsToDelete: nil)
+				op.qualityOfService = CloudKitOutlineZone.qualityOfService
+				
+				op.modifySubscriptionsResultBlock = { result in
+					switch result {
+					case .success:
+						continuation.resume()
+					case .failure(let error):
+						continuation.resume(throwing: error)
+					}
 				}
+				
+				self.container.sharedCloudDatabase.add(op)
 			}
-			
-			container.sharedCloudDatabase.add(op)
 		}
 	}
 	
