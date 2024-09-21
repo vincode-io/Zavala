@@ -100,6 +100,13 @@ struct OutlineFontDefaults: Equatable {
 				rowFontConfigs[field] = config
 			}
 		}
+		
+		// Heal any broken user defaults. We were getting a crash that shows someone's was corrupted
+		for config in Self.defaults.rowFontConfigs {
+			if rowFontConfigs[config.key] == nil {
+				rowFontConfigs[config.key] = config.value
+			}
+		}
 	}
 	
 	static func addSecondaryColorFields(userInfo: [String: [AnyHashable: AnyHashable]]) -> [String: [AnyHashable: AnyHashable]]  {
