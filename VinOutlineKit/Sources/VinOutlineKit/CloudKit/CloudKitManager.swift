@@ -173,36 +173,40 @@ public class CloudKitManager {
 		cloudKitSyncWillBegin()
 		
 		return await withCheckedContinuation { continuation in
-			let op = CKAcceptSharesOperation(shareMetadatas: [shareMetadata])
-			op.qualityOfService = CloudKitOutlineZone.qualityOfService
-			
-			op.acceptSharesResultBlock = { [weak self] result in
+			Task.detached { [weak self] in
 				guard let self else { return }
 				
-				switch result {
-				case .success:
-					let zoneID = shareMetadata.share.recordID.zoneID
-					Task {
-						self.cloudKitSyncWillBegin()
-						do {
-							try await self.fetchChanges(userInitiated: true, zoneID: zoneID)
-							self.cloudKitSyncDidComplete()
-							continuation.resume()
-						} catch {
-							self.presentError(error)
-							self.cloudKitSyncDidComplete()
+				let op = CKAcceptSharesOperation(shareMetadatas: [shareMetadata])
+				op.qualityOfService = CloudKitOutlineZone.qualityOfService
+				
+				op.acceptSharesResultBlock = { [weak self] result in
+					guard let self else { return }
+					
+					switch result {
+					case .success:
+						let zoneID = shareMetadata.share.recordID.zoneID
+						Task {
+							await self.cloudKitSyncWillBegin()
+							do {
+								try await self.fetchChanges(userInitiated: true, zoneID: zoneID)
+								await self.cloudKitSyncDidComplete()
+								continuation.resume()
+							} catch {
+								await self.presentError(error)
+								await self.cloudKitSyncDidComplete()
+								continuation.resume()
+							}
+						}
+					case .failure(let error):
+						Task {
+							await self.presentError(error)
 							continuation.resume()
 						}
 					}
-				case .failure(let error):
-					Task {
-						self.presentError(error)
-						continuation.resume()
-					}
 				}
+				
+				self.container.add(op)
 			}
-			
-			container.add(op)
 		}
 	}
 	
@@ -396,7 +400,9 @@ private extension CloudKitManager {
 		}
 			
 		try await withCheckedThrowingContinuation { continuation in
-			Task.detached {
+			Task.detached { [weak self] in
+				guard let self else { return }
+				
 				var zoneIDs = Set<CKRecordZone.ID>()
 				zoneIDs.insert(self.outlineZone.zoneID)
 
@@ -631,7 +637,9 @@ private extension CloudKitManager {
 		let imageSubscription = sharedDatabaseSubscription(recordType: Image.CloudKitRecord.recordType)
 
 		return try await withCheckedThrowingContinuation { continuation in
-			Task.detached {
+			Task.detached { [weak self] in
+				guard let self else { return }
+				
 				let op = CKModifySubscriptionsOperation(subscriptionsToSave: [outlineSubscription, rowSubscription, imageSubscription], subscriptionIDsToDelete: nil)
 				op.qualityOfService = CloudKitOutlineZone.qualityOfService
 				
