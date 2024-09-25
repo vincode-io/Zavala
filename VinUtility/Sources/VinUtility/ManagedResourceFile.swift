@@ -71,10 +71,12 @@ open class ManagedResourceFile: NSObject, NSFilePresenter, @unchecked Sendable {
 	
 	public func relinquishPresentedItem(toReader reader: @escaping @Sendable (( @Sendable() -> Void)?) -> Void) {
 		performWorkItem()
+		reader() {}
 	}
 	
 	public func relinquishPresentedItem(toWriter writer: @escaping @Sendable (( @Sendable () -> Void)?) -> Void) {
 		performWorkItem()
+		writer() {}
 	}
 	
 	public func markAsDirty() {
