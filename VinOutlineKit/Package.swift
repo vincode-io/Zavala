@@ -16,7 +16,7 @@ let package = Package(
 		.package(url: "https://github.com/vincode-io/MarkdownAttributedString.git", branch: "master"),
 		.package(url: "https://github.com/groue/Semaphore.git", branch: "main"),
 		.package(url: "https://github.com/vincode-io/VinXML.git", branch: "main"),
-		.package(path: "../VinCloudKit"),
+		.package(url: "https://github.com/vincode-io/VinCloudKit.git", branch: "main"),
 	],
 	targets: [
 		.target(
