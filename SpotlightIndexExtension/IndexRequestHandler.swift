@@ -24,12 +24,8 @@ final class IndexRequestHandler: CSIndexExtensionRequestHandler {
 			for document in AccountManager.shared.documents {
 				logger.info("IndexRequestHandler indexing \(document.title ?? "", privacy: .public).")
 				
-				await withCheckedContinuation { continuation in
-					let searchableItem = DocumentIndexer.makeSearchableItem(forDocument: document)
-					searchableIndex.indexSearchableItems([searchableItem]) { _ in
-						continuation.resume()
-					}
-				}
+				let documentIndexAttributes = DocumentIndexAttributes(document: document)
+				try? await searchableIndex.indexSearchableItems([documentIndexAttributes.searchableItem])
 			}
 			
 			await Self.suspend()
@@ -50,12 +46,8 @@ final class IndexRequestHandler: CSIndexExtensionRequestHandler {
 					
 					logger.info("IndexRequestHandler indexing \(document.title ?? "", privacy: .public).")
 					
-					await withCheckedContinuation { continuation in
-						let searchableItem = DocumentIndexer.makeSearchableItem(forDocument: document)
-						searchableIndex.indexSearchableItems([searchableItem]) { _ in
-							continuation.resume()
-						}
-					}
+					let documentIndexAttributes = DocumentIndexAttributes(document: document)
+					try? await searchableIndex.indexSearchableItems([documentIndexAttributes.searchableItem])
 				}
 			}
 
