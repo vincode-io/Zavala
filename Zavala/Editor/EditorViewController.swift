@@ -1063,8 +1063,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			moreMenuButton.isEnabled = true
 		}
 		
-		goBackwardButton.isEnabled = UIResponder.valid(action: .goBackwardOne)
-		goForwardButton.isEnabled = UIResponder.valid(action: .goForwardOne)
+		goBackwardButton.isEnabled = !(delegate?.editorViewControllerGoBackwardStack.isEmpty ?? false)
+		goForwardButton.isEnabled = !(delegate?.editorViewControllerGoForwardStack.isEmpty ?? false)
 		
 		undoButton.isEnabled = UIResponder.valid(action: .undo)
 		cutButton.isEnabled = UIResponder.valid(action: .cut)

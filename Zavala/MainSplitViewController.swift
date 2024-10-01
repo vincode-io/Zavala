@@ -879,7 +879,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				}
 				toolbarItem.itemMenu = UIMenu(title: "", children: backwardItems)
 				
-				return !UIResponder.valid(action: .goBackwardOne)
+				return goBackwardStack.isEmpty
 			}
 			
 			goBackwardItem.image = .goBackward.symbolSizedForCatalyst()
@@ -904,7 +904,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 				}
 				toolbarItem.itemMenu = UIMenu(title: "", children: forwardItems)
 				
-				return !UIResponder.valid(action: .goForwardOne)
+				return goForwardStack.isEmpty
 			}
 			
 			goForwardItem.image = .goForward.symbolSizedForCatalyst()
