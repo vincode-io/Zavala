@@ -504,8 +504,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public var allCompletedRows: [Row] {
 		var completedRows = [Row]()
 		
-		if let keyedRows {
-			for row in keyedRows.values {
+		if let shadowTable {
+			for row in shadowTable {
 				if row.isComplete ?? false {
 					completedRows.append(row)
 				}
