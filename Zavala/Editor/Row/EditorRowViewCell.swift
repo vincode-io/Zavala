@@ -8,6 +8,7 @@
 import UIKit
 import VinOutlineKit
 
+@MainActor
 protocol EditorRowViewCellDelegate: AnyObject {
 	var editorRowUndoManager: UndoManager? { get }
 	var editorRowInputAccessoryView: UIView? { get }

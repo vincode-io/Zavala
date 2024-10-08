@@ -42,9 +42,10 @@ public enum AccountError: LocalizedError {
 	}
 }
 
-public final class Account: Identifiable, Equatable, Codable {
+@MainActor
+public final class Account: Identifiable, Equatable {
 
-	public var id: EntityID {
+	nonisolated public var id: EntityID {
 		return EntityID.account(type.rawValue)
 	}
 	
@@ -52,7 +53,7 @@ public final class Account: Identifiable, Equatable, Codable {
 		return type.name
 	}
 	
-	public var type: AccountType
+	nonisolated public let type: AccountType
 	public var isActive: Bool
 	
 	public private(set) var tags: [Tag]?
@@ -65,15 +66,6 @@ public final class Account: Identifiable, Equatable, Codable {
 	}
 
 	public private(set) var zoneChangeTokens: [VCKChangeTokenKey: Data]?
-
-	enum CodingKeys: String, CodingKey {
-		case type = "type"
-		case isActive = "isActive"
-		case tags = "tags"
-		case documents = "documents"
-		case sharedDatabaseChangeToken = "sharedDatabaseChangeToken"
-		case zoneChangeTokens = "zoneChangeTokens"
-	}
 	
 	public var documentContainers: [DocumentContainer] {
 		var containers = [DocumentContainer]()
@@ -128,6 +120,22 @@ public final class Account: Identifiable, Equatable, Codable {
 		self.documents = [Document]()
 	}
 	
+	init(coder: AccountCoder) {
+		self.type = coder.type
+		self.isActive = coder.isActive
+		
+		if let tagCoders = coder.tags {
+			self.tags = tagCoders.map { Tag(coder: $0) }
+		}
+		
+		if let documentCoders = coder.documents {
+			self.documents = documentCoders.map { Document(coder: $0)}
+		}
+		
+		self.sharedDatabaseChangeToken = coder.sharedDatabaseChangeToken
+		self.zoneChangeTokens = coder.zoneChangeTokens
+	}
+	
 	func initializeCloudKit(errorHandler: ErrorHandler) {
 		cloudKitManager = CloudKitManager(account: self, errorHandler: errorHandler)
 		
@@ -172,7 +180,7 @@ public final class Account: Identifiable, Equatable, Codable {
 		accountMetadataDidChange()
 	}
 	
-	public func importOPML(_ url: URL, tags: [Tag]?) throws -> Document {
+	public func importOPML(_ url: URL, tags: [Tag]?) async throws -> Document {
 		guard url.startAccessingSecurityScopedResource() else { throw AccountError.securityScopeError }
 		defer {
 			url.stopAccessingSecurityScopedResource()
@@ -187,11 +195,11 @@ public final class Account: Identifiable, Equatable, Codable {
 		guard fileError == nil else { throw fileError! }
 		guard let opmlData = fileData else { throw AccountError.fileReadError }
 		
-		return try importOPML(opmlData, tags: tags)
+		return try await importOPML(opmlData, tags: tags)
 	}
 
 	@discardableResult
-	public func importOPML(_ opmlData: Data, tags: [Tag]?, images: [String:  Data]? = nil) throws -> Document {
+	public func importOPML(_ opmlData: Data, tags: [Tag]?, images: [String:  Data]? = nil) async throws -> Document {
 		let opmlString = try convertOPMLAttributeNewlines(opmlData)
 		
 		guard let opmlNode = try? VinXML.XMLDocument(xml: opmlString, caseSensitive: false)?.root else {
@@ -271,9 +279,9 @@ public final class Account: Identifiable, Equatable, Codable {
 		
 		fixAltLinks(excluding: outline)
 		
-		outline.forceSave()
+		await outline.forceSave()
 		saveToCloudKit(document)
-		outline.unload()
+		await outline.unload()
 
 		return document
 	}
@@ -310,7 +318,7 @@ public final class Account: Identifiable, Equatable, Codable {
 		return document
 	}
 	
-	func apply(_ update: CloudKitOutlineUpdate) {
+	func apply(_ update: CloudKitOutlineUpdate) async {
 		guard !update.isDelete else {
 			guard let document = findDocument(documentUUID: update.documentID.documentUUID) else { return }
 			deleteDocument(document, updateCloudKit: false)
@@ -321,8 +329,8 @@ public final class Account: Identifiable, Equatable, Codable {
 			let outline = document.outline!
 			outline.load()
 			outline.apply(update)
-			outline.forceSave()
-			outline.unload()
+			await outline.forceSave()
+			await outline.unload()
 		} else {
 			guard update.saveOutlineRecord != nil else {
 				return
@@ -331,8 +339,8 @@ public final class Account: Identifiable, Equatable, Codable {
 			outline.zoneID = update.zoneID
 
 			outline.apply(update)
-			outline.forceSave()
-			outline.unload()
+			await outline.forceSave()
+			await outline.unload()
 			
 			if documents == nil {
 				documents = [Document]()
@@ -577,11 +585,30 @@ public final class Account: Identifiable, Equatable, Codable {
 		}
 	}
 	
+	func toCoder() -> AccountCoder {
+		var tagCoders = [TagCoder]()
+		for tag in tags ?? [Tag]() {
+			tagCoders.append(tag.toCoder())
+		}
+		
+		var documentCoders = [DocumentCoder]()
+		for document in documents ?? [Document]() {
+			documentCoders.append(document.toCoder())
+		}
+		
+		return AccountCoder(type: type,
+							isActive: isActive,
+							tags: tagCoders,
+							documents: documentCoders,
+							sharedDatabaseChangeToken: sharedDatabaseChangeToken,
+							zoneChangeTokens: zoneChangeTokens)
+	}
+	
 	func accountDidReload() {
 		NotificationCenter.default.post(name: .AccountDidReload, object: self, userInfo: nil)
 	}
 	
-	public static func == (lhs: Account, rhs: Account) -> Bool {
+	nonisolated public static func == (lhs: Account, rhs: Account) -> Bool {
 		return lhs.id == rhs.id
 	}
 	

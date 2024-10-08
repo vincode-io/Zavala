@@ -8,10 +8,11 @@ import Foundation
 import OSLog
 import VinUtility
 
-final class ImagesFile: ManagedResourceFile {
+final class ImagesFile: ManagedResourceFile, @unchecked Sendable {
 	
 	private weak var outline: Outline?
 	
+	@MainActor
 	init?(outline: Outline) {
 		self.outline = outline
 
@@ -27,7 +28,7 @@ final class ImagesFile: ManagedResourceFile {
 		outline?.loadImageFileData(data)
 	}
 	
-	public override func fileWillSave() -> Data? {
+	public override func fileWillSave() async -> Data? {
 		return outline?.buildImageFileData()
 	}
 	

@@ -51,42 +51,49 @@ class EditorRowDropInteractionDelegate: NSObject, UIDropInteractionDelegate {
 			itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier) { [weak textView] (data, error) in
 				guard let textView, let data, let cgImage = UIImage.scaleImage(data, maxPixelSize: 1800) else { return }
 				let image = UIImage(cgImage: cgImage)
-				DispatchQueue.main.async {
+				Task { @MainActor in
 					textView.replaceCharacters(textView.selectedRange, withImage: image)
 				}
 			}
 		}
 		
 		if let itemProvider = session.items.first(where: { $0.itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) })?.itemProvider {
-			itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.url.identifier) { (data, error) in
-
-				if let data, let urlString = String(data: data, encoding: .utf8), let url = URL(string: urlString) {
-
-					if itemProvider.hasItemConformingToTypeIdentifier(UTType.utf8PlainText.identifier) {
-						itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
-
-							if let data, let text = String(data: data, encoding: .utf8) {
-								let attrString = NSMutableAttributedString(string: text)
-								attrString.setAttributes([NSAttributedString.Key.link: url], range: .init(location: 0, length: text.count))
-								DispatchQueue.main.async {
-									textView.textStorage.insert(attrString, at: textView.selectedRange.location)
-									textView.textWasChanged()
-								}
-							}
-							
+			Task {
+				let itemURL: String? = await withCheckedContinuation { continuation in
+					itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.url.identifier) { (data, error) in
+						if let data, let itemURL = String(data: data, encoding: .utf8) {
+							continuation.resume(returning: itemURL)
+						} else {
+							continuation.resume(returning: nil)
 						}
-
-					} else {
-						
-						let attrString = NSMutableAttributedString(string: urlString)
-						attrString.setAttributes([NSAttributedString.Key.link: url], range: .init(location: 0, length: urlString.count))
-						DispatchQueue.main.async {
-							textView.textStorage.insert(attrString, at: textView.selectedRange.location)
-							textView.textWasChanged()
-						}
-						
 					}
 				}
+				
+				let itemText: String? = await withCheckedContinuation { continuation in
+					itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
+						if let data, let itemText = String(data: data, encoding: .utf8) {
+							continuation.resume(returning: itemText)
+						} else {
+							continuation.resume(returning: nil)
+						}
+					}
+				}
+				
+				guard let itemURL, let url = URL(string: itemURL) else { return }
+				
+				guard let itemText else {
+					let attrString = NSMutableAttributedString(string: itemURL)
+					attrString.setAttributes([NSAttributedString.Key.link: url], range: .init(location: 0, length: itemURL.count))
+					textView.textStorage.insert(attrString, at: textView.selectedRange.location)
+					textView.textWasChanged()
+					return
+				}
+				
+				let attrString = NSMutableAttributedString(string: itemText)
+				attrString.setAttributes([NSAttributedString.Key.link: url], range: .init(location: 0, length: itemText.count))
+				textView.textStorage.insert(attrString, at: textView.selectedRange.location)
+				textView.textWasChanged()
+
 			}
 		}
 	}

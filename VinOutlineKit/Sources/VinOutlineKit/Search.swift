@@ -14,7 +14,7 @@ import CoreSpotlight
 
 public final class Search: Identifiable, DocumentContainer {
 	
-	public var id: EntityID
+	public let id: EntityID
 	public var name: String? = VinOutlineKitStringAssets.search
 	public var partialName: String? = VinOutlineKitStringAssets.search
 
@@ -42,36 +42,21 @@ public final class Search: Identifiable, DocumentContainer {
 				return []
 			}
 			
-			return try await withCheckedThrowingContinuation { continuation in
-				var  foundItems = [CSSearchableItem]()
-				
-				let queryString = "title == \"*\(searchText)*\"c || textContent == \"*\(searchText)*\"c"
-				searchQuery = CSSearchQuery(queryString: queryString, attributes: nil)
-				
-				searchQuery?.foundItemsHandler = { items in
-					foundItems.append(contentsOf: items)
-				}
-				
-				searchQuery?.completionHandler = { error in
-					if let error {
-						continuation.resume(throwing: error)
-					} else {
-						let documents = foundItems.compactMap {
-							if let entityID = EntityID(description: $0.uniqueIdentifier) {
-								if let document = AccountManager.shared.findDocument(entityID) {
-									return document
-								}
-							}
-							return nil
-						}
-						continuation.resume(returning: documents)
+			let queryString = "title == \"*\(searchText)*\"c || textContent == \"*\(searchText)*\"c"
+			searchQuery = CSSearchQuery(queryString: queryString, queryContext: nil)
+
+			var documents = [Document]()
+			
+			for try await result in searchQuery!.results {
+				if let entityID = EntityID(description: result.item.uniqueIdentifier) {
+					if let document = AccountManager.shared.findDocument(entityID) {
+						documents.append(document)
 					}
 				}
-				
-				searchQuery?.start()
 			}
+
+			return documents
 		}
-		
 	}
 
 
@@ -84,10 +69,6 @@ public final class Search: Identifiable, DocumentContainer {
 		return false
 	}
 
-	deinit {
-		searchQuery?.cancel()
-	}
-	
 }
 
 // MARK: Helpers

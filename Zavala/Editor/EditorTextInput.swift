@@ -7,6 +7,7 @@ import UIKit
 /***
  Marker protocol to make sure we don't pick up system provided text inputs when going after the current responder.
  */
+@MainActor
 protocol EditorTextInput: UITextInput {}
 
 extension EditorTextInput {

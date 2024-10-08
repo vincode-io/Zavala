@@ -10,6 +10,7 @@ import StoreKit
 import VinOutlineKit
 import VinUtility
 
+@MainActor
 struct RequestReview {
 	
 	// Only prompt every 30 days if they have 10 active documents and the app version is different
@@ -22,7 +23,7 @@ struct RequestReview {
 			AppDefaults.shared.lastReviewPromptDate = Date()
 			
 			guard let scene = UIApplication.shared.foregroundActiveScene else { return }
-			SKStoreReviewController.requestReview(in: scene)
+			AppStore.requestReview(in: scene)
 		}
 	}
 	

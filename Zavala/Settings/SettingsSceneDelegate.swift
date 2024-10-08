@@ -29,12 +29,14 @@ class SettingsSceneDelegate: UIResponder, UIWindowSceneDelegate {
 			window?.frame = CGRect(x: windowFrame.origin.x, y: windowFrame.origin.y, width: Self.windowSize.width, height: Self.windowSize.height)
 		}
 
-		
-		NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
-			if self?.userInterfaceColorPalette != AppDefaults.shared.userInterfaceColorPalette {
-				self?.updateUserInterfaceStyle()
+		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
+	}
+
+	@objc nonisolated func userDefaultsDidChange() {
+		Task { @MainActor in
+			if userInterfaceColorPalette != AppDefaults.shared.userInterfaceColorPalette {
+				updateUserInterfaceStyle()
 			}
 		}
 	}
-	
 }

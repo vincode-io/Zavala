@@ -7,7 +7,6 @@
 
 import UIKit
 import UniformTypeIdentifiers
-import Markdown
 import VinUtility
 import VinOutlineKit
 
@@ -208,32 +207,17 @@ private extension EditorViewController {
 		
 		guard !itemProviders.isEmpty else { return }
 
-		let group = DispatchGroup()
-		var rowGroups = [RowGroup]()
-		
-		for itemProvider in itemProviders {
-			group.enter()
-			itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
-				if let data {
-					do {
-						rowGroups.append(try RowGroup.fromData(data))
-						group.leave()
-					} catch {
-						self?.presentError(error)
-						group.leave()
-					}
-				}
+		Task {
+			do {
+				let rowGroups = try await RowGroup.fromRowItemProviders(itemProviders)
+				self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, destinationIndexPath: destinationIndexPath)
+			} catch {
+				presentError(error)
 			}
-		}
-
-		group.notify(queue: DispatchQueue.main) {
-			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, destinationIndexPath: destinationIndexPath)
 		}
 	}
 
 	func remoteTextDrop(coordinator: UICollectionViewDropCoordinator, destinationIndexPath: IndexPath?) {
-		guard let outline else { return }
-		
 		let itemProviders = coordinator.items.compactMap { dropItem -> NSItemProvider? in
 			if dropItem.dragItem.itemProvider.hasItemConformingToTypeIdentifier(UTType.utf8PlainText.identifier) {
 				return dropItem.dragItem.itemProvider
@@ -243,50 +227,8 @@ private extension EditorViewController {
 		
 		guard !itemProviders.isEmpty else { return }
 
-		let group = DispatchGroup()
-		var textDrops = [TextDrop]()
-		
-		for itemProvider in itemProviders {
-			group.enter()
-			
-			itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
-				if let data, let itemText = String(data: data, encoding: .utf8) {
-					
-					if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-						itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.url.identifier) { (data, error) in
-							if let data, let urlString = String(data: data, encoding: .utf8) {
-								textDrops.append(TextDrop(text: itemText, urlString: urlString))
-							}
-							group.leave()
-						}
-					} else {
-						textDrops.append(TextDrop(text: itemText))
-						group.leave()
-					}
-					
-				} else {
-					group.leave()
-				}
-			}
-		}
-
-		group.notify(queue: DispatchQueue.main) {
-			guard !textDrops.isEmpty else { return }
-			
-			var text = String()
-			for textDrop in textDrops {
-				text.append(textDrop.markdownStrings.joined(separator: "\n"))
-			}
-
-			let document = Markdown.Document(parsing: text)
-			var walker = SimpleRowWalker()
-			walker.visit(document)
-			
-			var rowGroups = [RowGroup]()
-			for row in walker.rows {
-				rowGroups.append(RowGroup(row))
-			}
-
+		Task {
+			let rowGroups = await RowGroup.fromTextItemProviders(itemProviders)
 			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, destinationIndexPath: destinationIndexPath)
 		}
 	}
@@ -297,13 +239,7 @@ private extension EditorViewController {
 		// Dropping into a Row is easy peasy
 		if coordinator.proposal.intent == .insertIntoDestinationIndexPath, let dropInIndexPath = destinationIndexPath {
 			let newParent = shadowTable[dropInIndexPath.row]
-			
-			// We only have to set the parent for dropping into.  Otherwise VinOutlineKit figures it out on its own.
-			rowGroups.forEach { rowGroup in
-				rowGroup.row.parent = newParent
-			}
-			
-			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: newParent)
+			self.remoteRowDrop(coordinator: coordinator, rowGroups: rowGroups, afterRow: newParent, afterRowIsNewParent: true)
 			return
 		}
 		
@@ -326,7 +262,7 @@ private extension EditorViewController {
 		}
 	}
 	
-	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], afterRow: Row?, prefersEnd: Bool = false) {
+	func remoteRowDrop(coordinator: UICollectionViewDropCoordinator, rowGroups: [RowGroup], afterRow: Row?, prefersEnd: Bool = false, afterRowIsNewParent: Bool = false) {
 		guard let undoManager, let outline else { return }
 
 		let command = RemoteDropRowCommand(actionName: .copyControlLabel,
@@ -335,32 +271,10 @@ private extension EditorViewController {
 										   outline: outline,
 										   rowGroups: rowGroups,
 										   afterRow: afterRow,
-										   prefersEnd: prefersEnd)
+										   prefersEnd: prefersEnd,
+										   afterRowIsNewParent: afterRowIsNewParent)
 		
 		command.execute()
-	}
-	
-}
-
-private struct TextDrop {
-	
-	var text: String
-	var urlString: String?
-	
-	init(text: String, urlString: String? = nil) {
-		self.text = text
-		self.urlString = urlString
-	}
-	
-	var markdownStrings: [String] {
-		guard let urlString, let url = URL(string: urlString) else {
-			return text.split(separator: "\n").map { NSAttributedString(string: String($0)).markdownRepresentation }
-		}
-		
-		let attrString = NSMutableAttributedString(string: text)
-		attrString.setAttributes([NSAttributedString.Key.link: url], range: .init(location: 0, length: text.count))
-
-		return [attrString.markdownRepresentation]
 	}
 	
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 protocol EditorTagViewCellDelegate: AnyObject {
 	func editorTagDeleteTag(name: String)
 }

@@ -8,6 +8,7 @@
 import UIKit
 import VinOutlineKit
 
+@MainActor
 protocol EditorTitleViewCellDelegate: AnyObject {
 	var editorTitleUndoManager: UndoManager? { get }
 	func editorTitleLayoutEditor()

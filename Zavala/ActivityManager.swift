@@ -10,6 +10,7 @@ import CoreSpotlight
 import CoreServices
 import VinOutlineKit
 
+@MainActor
 class ActivityManager {
 	
 	private var selectDocumentContainerActivity: NSUserActivity?

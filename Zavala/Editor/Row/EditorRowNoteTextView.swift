@@ -9,6 +9,7 @@ import UIKit
 import VinOutlineKit
 import SwiftUI
 
+@MainActor
 protocol EditorRowNoteTextViewDelegate: AnyObject {
 	var editorRowNoteTextViewUndoManager: UndoManager? { get }
 	var editorRowNoteTextViewInputAccessoryView: UIView? { get }
@@ -39,9 +40,6 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 			keys.append(UIKeyCommand(action: #selector(moveCursorDown(_:)), input: UIKeyCommand.inputDownArrow))
 		}
 		keys.append(UIKeyCommand(action: #selector(moveCursorToText(_:)), input: UIKeyCommand.inputEscape))
-		keys.append(toggleBoldCommand)
-		keys.append(toggleItalicsCommand)
-		keys.append(editLinkCommand)
 		return keys
 	}
 	
@@ -51,6 +49,8 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 		return RowStrings.note(cleansedAttributedText)
 	}
 
+	private var textStorageDelegate: EditorRowTextStorageDelegate?
+	
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
 		super.init(frame: frame, textContainer: textContainer)
 		
@@ -135,7 +135,10 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 		baseAttributes[.foregroundColor] = OutlineFontCache.shared.noteColor(level: row.trueLevel)
 
 		typingAttributes = baseAttributes
-        
+		
+		textStorageDelegate = EditorRowTextStorageDelegate(baseAttributes: baseAttributes)
+		self.textStorage.delegate = textStorageDelegate
+		
         if let note = row.note {
             attributedText = note
         }
@@ -179,17 +182,23 @@ extension EditorRowNoteTextView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         processTextChanges()
     }
-    
-	func textView(_ textView: UITextView, shouldInteractWith textAttachment: NSTextAttachment, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-		guard interaction == .invokeDefaultAction,
-			  let firstRect = firstRect(for: characterRange),
-			  let image = textAttachment.image	else { return true }
-		
-		let convertedRect = convert(firstRect, to: nil)
-		editorDelegate?.zoomImage(self, image, rect: convertedRect)
-		return false
-	}
 	
+	func textView(_ textView: UITextView, primaryActionFor textItem: UITextItem, defaultAction: UIAction) -> UIAction? {
+		if case .textAttachment(let attachment) = textItem.content,
+		   let firstRect = firstRect(for: textItem.range),
+		   let image = attachment.image {
+			
+			return UIAction { [weak self] action in
+				guard let self else { return }
+				let convertedRect = convert(firstRect, to: nil)
+				self.editorDelegate?.zoomImage(self, image, rect: convertedRect)
+			}
+							
+		}
+							
+		return defaultAction
+	}
+
 	func textViewDidChangeSelection(_ textView: UITextView) {
 		handleDidChangeSelection()
 	}

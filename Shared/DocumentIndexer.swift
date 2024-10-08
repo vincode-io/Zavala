@@ -10,6 +10,7 @@ import MobileCoreServices
 import VinOutlineKit
 import CoreSpotlight
 
+@MainActor
 class DocumentIndexer {
 	
 	init() {
@@ -17,16 +18,8 @@ class DocumentIndexer {
 	}
 	
 	static func updateIndex(forDocument document: Document) {
-		DispatchQueue.main.async {
-			let searchableItem = makeSearchableItem(forDocument: document)
-			CSSearchableIndex.default().indexSearchableItems([searchableItem])
-		}
-	}
-	
-	static func makeSearchableItem(forDocument document: Document) -> CSSearchableItem {
-		let attributeSet = makeSearchableItemAttributes(forDocument: document)
-		let identifier = attributeSet.relatedUniqueIdentifier
-		return CSSearchableItem(uniqueIdentifier: identifier, domainIdentifier: "io.vincode", attributeSet: attributeSet)
+		let documentIndexAttributes = DocumentIndexAttributes(document: document)
+		CSSearchableIndex.default().indexSearchableItems([documentIndexAttributes.searchableItem])
 	}
 	
 }
@@ -35,21 +28,40 @@ class DocumentIndexer {
 
 private extension DocumentIndexer {
 	
-	static func makeSearchableItemAttributes(forDocument document: Document) -> CSSearchableItemAttributeSet {
-		let attributeSet = CSSearchableItemAttributeSet(contentType: UTType.text)
-		attributeSet.title = document.title ?? ""
-		if let keywords = document.tags?.map({ $0.name }) {
-			attributeSet.keywords = keywords
-		}
-		attributeSet.relatedUniqueIdentifier = document.id.description
-		attributeSet.textContent = document.textContent
-		attributeSet.contentModificationDate = document.updated
-		return attributeSet
-	}
-	
 	@objc func documentDidChangeBySync(_ note: Notification) {
 		guard let document = note.object as? Document else { return }
 		Self.updateIndex(forDocument: document)
 	}
 	
+}
+
+struct DocumentIndexAttributes: Sendable {
+	let title: String
+	let keywords: [String]
+	let relatedUniqueIdentifier: String
+	let textContent: String
+	let contentModificationDate: Date
+	
+	var searchableItem: CSSearchableItem {
+		return CSSearchableItem(uniqueIdentifier: relatedUniqueIdentifier, domainIdentifier: "io.vincode", attributeSet: searchableItemAttributeSet)
+	}
+	
+	private var searchableItemAttributeSet: CSSearchableItemAttributeSet {
+		let attributeSet = CSSearchableItemAttributeSet(contentType: UTType.text)
+		attributeSet.title = title
+		attributeSet.keywords = keywords
+		attributeSet.relatedUniqueIdentifier = relatedUniqueIdentifier
+		attributeSet.textContent = textContent
+		attributeSet.contentModificationDate = contentModificationDate
+		return attributeSet
+	}
+	
+	@MainActor
+	init(document: Document) {
+		title = document.title ?? ""
+		keywords = document.tags?.map({ $0.name }) ?? []
+		relatedUniqueIdentifier = document.id.description
+		textContent = document.textContent
+		contentModificationDate = document.updated ?? Date()
+	}
 }

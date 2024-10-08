@@ -10,276 +10,290 @@ import OSLog
 import Intents
 import VinOutlineKit
 
-var appDelegate: AppDelegate!
+@MainActor var appDelegate: AppDelegate!
+
+extension Selector {
+	static let showSettings = #selector(FileActionResponder.showSettings(_:))
+	static let sync = #selector(FileActionResponder.sync(_:))
+	static let importOPML = #selector(FileActionResponder.importOPML(_:))
+	static let createOutline = #selector(FileActionResponder.createOutline(_:))
+	static let newWindow = #selector(AppDelegate.newWindow(_:))
+	static let showOpenQuickly = #selector(FileActionResponder.showOpenQuickly(_:))
+	static let zoomIn = #selector(AppDelegate.zoomIn(_:))
+	static let zoomOut = #selector(AppDelegate.zoomOut(_:))
+	static let actualSize = #selector(AppDelegate.actualSize(_:))
+	static let showHelp = #selector(AppDelegate.showHelp(_:))
+	static let showCommunity = #selector(AppDelegate.showCommunity(_:))
+	static let feedback = #selector(AppDelegate.feedback(_:))
+}
+
+@MainActor
+@objc public protocol FileActionResponder {
+	@objc func showSettings(_ sender: Any?)
+	@objc func sync(_ sender: Any?)
+	@objc func importOPML(_ sender: Any?)
+	@objc func createOutline(_ sender: Any?)
+	@objc func showOpenQuickly(_ sender: Any?)
+}
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	
-	let showPreferences = UIKeyCommand(title: .settingsEllipsisControlLabel,
-									   action: #selector(showPreferences(_:)),
-									   input: ",",
-									   modifierFlags: [.command])
-	
-	
+	let showSettings = UIKeyCommand(title: .settingsEllipsisControlLabel,
+									action: .showSettings,
+									input: ",",
+									modifierFlags: [.command])
+		
 	let syncCommand = UIKeyCommand(title: .syncControlLabel,
-								   action: #selector(syncCommand(_:)),
+								   action: .sync,
 								   input: "r",
 								   modifierFlags: [.command])
 	
 	let exportOPMLsCommand = UIKeyCommand(title: .exportOPMLEllipsisControlLabel,
-										  action: #selector(exportOPMLsCommand(_:)),
+										  action: .exportOPMLs,
 										  input: "e",
 										  modifierFlags: [.shift, .command])
 	
-	let exportPDFDocsCommand = UICommand(title: .exportPDFDocEllipsisControlLabel, action: #selector(exportPDFDocsCommand(_:)))
+	let exportPDFDocsCommand = UICommand(title: .exportPDFDocEllipsisControlLabel, action: .exportPDFDocs)
 
-	let exportPDFListsCommand = UICommand(title: .exportPDFListEllipsisControlLabel, action: #selector(exportPDFListsCommand(_:)))
+	let exportPDFListsCommand = UICommand(title: .exportPDFListEllipsisControlLabel, action: .exportPDFLists)
 
-	let exportMarkdownDocsCommand = UICommand(title: .exportMarkdownDocEllipsisControlLabel, action: #selector(exportMarkdownDocsCommand(_:)))
+	let exportMarkdownDocsCommand = UICommand(title: .exportMarkdownDocEllipsisControlLabel, action: .exportMarkdownDocs)
 	
 	let exportMarkdownListsCommand = UIKeyCommand(title: .exportMarkdownListEllipsisControlLabel,
-												  action: #selector(exportMarkdownListsCommand(_:)),
+												  action: .exportMarkdownLists,
 												  input: "e",
 												  modifierFlags: [.control, .command])
 	
 	let importOPMLCommand = UIKeyCommand(title: .importOPMLEllipsisControlLabel,
-										 action: #selector(importOPMLCommand(_:)),
+										 action: .importOPML,
 										 input: "i",
 										 modifierFlags: [.shift, .command])
 	
 	let newWindowCommand = UIKeyCommand(title: .newMainWindowControlLabel,
-										action: #selector(newWindow(_:)),
+										action: .newWindow,
 										input: "n",
 										modifierFlags: [.alternate, .command])
 	
 	let newOutlineCommand = UIKeyCommand(title: .newOutlineControlLabel,
-										 action: #selector(createOutlineCommand(_:)),
+										 action: .createOutline,
 										 input: "n",
 										 modifierFlags: [.command])
 	
 	let deleteCommand = UIKeyCommand(title: .deleteControlLabel,
-									 action: #selector(delete),
+									 action: .delete,
 									 input: "\u{8}",
 									 modifierFlags: [])
 	
 	let goBackwardOneCommand = UIKeyCommand(title: .backControlLabel,
-											action: #selector(goBackwardOneCommand(_:)),
+											action: .goBackwardOne,
 											input: "[",
 											modifierFlags: [.command])
 	
 	let goForwardOneCommand = UIKeyCommand(title: .forwardControlLabel,
-										   action: #selector(goForwardOneCommand(_:)),
+										   action: .goForwardOne,
 										   input: "]",
 										   modifierFlags: [.command])
 	
-	let insertRowCommand = UIKeyCommand(title: .addRowAboveControlLabel,
-										action: #selector(insertRowCommand(_:)),
-										input: "\n",
-										modifierFlags: [.shift])
+	let addRowAboveCommand = UIKeyCommand(title: .addRowAboveControlLabel,
+										  action: .addRowAbove,
+										  input: "\n",
+										  modifierFlags: [.shift])
 	
-	let createRowCommand = UIKeyCommand(title: .addRowBelowControlLabel,
-										action: #selector(createRowCommand(_:)),
-										input: "\n",
-										modifierFlags: [.control])
-	
-	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowControlLabel,
-											action: #selector(duplicateRowsCommand(_:)),
-											input: "r",
-											modifierFlags: [.command, .control])
+	let addRowBelowCommand = UIKeyCommand(title: .addRowBelowControlLabel,
+										  action: .addRowBelow,
+										  input: "\n",
+										  modifierFlags: [.control])
 	
 	let createRowInsideCommand = UIKeyCommand(title: .addRowInsideControlLabel,
-											  action: #selector(createRowInsideCommand(_:)),
+											  action: .createRowInside,
 											  input: "}",
 											  modifierFlags: [.command])
 	
 	let createRowOutsideCommand = UIKeyCommand(title: .addRowOutsideControlLabel,
-											   action: #selector(createRowOutsideCommand(_:)),
+											   action: .createRowOutside,
 											   input: "{",
 											   modifierFlags: [.command])
 	
-	let moveRowsUpCommand = UIKeyCommand(title: .moveUpControlLabel,
-										 action: #selector(moveRowsUpCommand(_:)),
-										 input: UIKeyCommand.inputUpArrow,
-										 modifierFlags: [.control, .command])
+	let deleteCurrentRowsCommand = UIKeyCommand(title: .deleteRowsControlLabel,
+												action: .deleteCurrentRows,
+												input: UIKeyCommand.inputDelete,
+												modifierFlags: [.shift, .command])
 	
-	let moveRowsDownCommand = UIKeyCommand(title: .moveDownControlLabel,
-										   action: #selector(moveRowsDownCommand(_:)),
-										   input: UIKeyCommand.inputDownArrow,
-										   modifierFlags: [.control, .command])
+	let groupCurrentRowsCommand = UIKeyCommand(title: .groupRowsControlLabel,
+											   action: .groupCurrentRows,
+											   input: "g",
+											   modifierFlags: [.alternate, .command])
+	
+	let sortCurrentRowsCommand = UIKeyCommand(title: .sortRowsControlLabel,
+											  action: .sortCurrentRows,
+											  input: "s",
+											  modifierFlags: [.alternate, .command])
+	
+	let duplicateRowsCommand = UIKeyCommand(title: .duplicateRowsControlLabel,
+											action: .duplicateCurrentRows,
+											input: "r",
+											modifierFlags: [.command, .control])
 	
 	let moveRowsLeftCommand = UIKeyCommand(title: .moveLeftControlLabel,
-										   action: #selector(moveRowsLeftCommand(_:)),
+										   action: .moveCurrentRowsLeft,
 										   input: UIKeyCommand.inputLeftArrow,
 										   modifierFlags: [.control, .command])
 	
 	let moveRowsRightCommand = UIKeyCommand(title: .moveRightControlLabel,
-											action: #selector(moveRowsRightCommand(_:)),
+											action: .moveCurrentRowsRight,
 											input: UIKeyCommand.inputRightArrow,
 											modifierFlags: [.control, .command])
 	
+	let moveRowsUpCommand = UIKeyCommand(title: .moveUpControlLabel,
+										 action: .moveCurrentRowsUp,
+										 input: UIKeyCommand.inputUpArrow,
+										 modifierFlags: [.control, .command])
+	
+	let moveRowsDownCommand = UIKeyCommand(title: .moveDownControlLabel,
+										   action: .moveCurrentRowsDown,
+										   input: UIKeyCommand.inputDownArrow,
+										   modifierFlags: [.control, .command])
+	
 	let toggleCompleteRowsCommand = UIKeyCommand(title: .completeControlLabel,
-												 action: #selector(toggleCompleteRowsCommand(_:)),
+												 action: .toggleCompleteRows,
 												 input: "\n",
 												 modifierFlags: [.command])
 	
-	let completeRowsCommand = UIKeyCommand(title: .completeControlLabel,
-										   action: #selector(toggleCompleteRowsCommand(_:)),
-										   input: "\n",
-										   modifierFlags: [.command])
-	
-	let uncompleteRowsCommand = UIKeyCommand(title: .uncompleteControlLabel,
-											 action: #selector(toggleCompleteRowsCommand(_:)),
-											 input: "\n",
-											 modifierFlags: [.command])
+	let deleteCompletedRowsCommand = UIKeyCommand(title: .deleteCompletedRowsControlLabel,
+												  action: .deleteCompletedRows,
+												  input: "d",
+												  modifierFlags: [.command])
 	
 	let rowNotesCommand = UIKeyCommand(title: .addNoteControlLabel,
-									   action: #selector(rowNotesCommand(_:)),
+									   action: .toggleRowNotes,
 									   input: "-",
 									   modifierFlags: [.control])
 	
 	let deleteRowNotesCommand = UIKeyCommand(title: .deleteNoteControlLabel,
-											 action: #selector(deleteRowNotesCommand(_:)),
+											 action: .deleteRowNotes,
 											 input: "-",
 											 modifierFlags: [.control, .shift])
 	
-	let deleteCurrentRowsCommand = UIKeyCommand(title: .deleteRowControlLabel,
-											 action: #selector(deleteCurrentRowsCommand(_:)),
-											 input: UIKeyCommand.inputDelete,
-												modifierFlags: [.shift, .command])
-	
 	let toggleBoldCommand = UIKeyCommand(title: .boldControlLabel,
-										 action: #selector(toggleBoldCommand(_:)),
+										 action: .toggleBoldface,
 										 input: "b",
 										 modifierFlags: [.command])
 	
 	let toggleItalicsCommand = UIKeyCommand(title: .italicControlLabel,
-											action: #selector(toggleItalicsCommand(_:)),
+											action: .toggleItalics,
 											input: "i",
 											modifierFlags: [.command])
 	
 	let insertImageCommand = UIKeyCommand(title: .insertImageEllipsisControlLabel,
-										  action: #selector(insertImageCommand(_:)),
+										  action: .insertImage,
 										  input: "i",
 										  modifierFlags: [.alternate, .command])
 	
 	let linkCommand = UIKeyCommand(title: .linkEllipsisControlLabel,
-								   action: #selector(linkCommand(_:)),
+								   action: .editLink,
 								   input: "k",
 								   modifierFlags: [.command])
 	
-	let copyRowLinkCommand = UICommand(title: .copyRowLinkControlLabel, action: #selector(copyRowLinkCommand(_:)))
+	let copyRowLinkCommand = UICommand(title: .copyRowLinkControlLabel, action: .copyRowLink)
 
-	let copyDocumentLinkCommand = UICommand(title: .copyDocumentLinkControlLabel, action: #selector(copyDocumentLinkCommand(_:)))
+	let copyDocumentLinkCommand = UICommand(title: .copyDocumentLinkControlLabel, action: .copyDocumentLink)
 
 	let focusInCommand = UIKeyCommand(title: .focusInControlLabel,
-									  action: #selector(focusInCommand(_:)),
+									  action: .focusIn,
 									  input: UIKeyCommand.inputRightArrow,
 									  modifierFlags: [.alternate, .command])
 	
 	let focusOutCommand = UIKeyCommand(title: .focusOutControlLabel,
-									   action: #selector(focusOutCommand(_:)),
+									   action: .focusOut,
 									   input: UIKeyCommand.inputLeftArrow,
 									   modifierFlags: [.alternate, .command])
 
 	let toggleFilterOnCommand = UIKeyCommand(title: .turnFilterOnControlLabel,
-											 action: #selector(toggleFilterOnCommand(_:)),
+											 action: .toggleFilterOn,
 											 input: "h",
 											 modifierFlags: [.shift, .command])
 	
-	let toggleCompletedFilterCommand = UICommand(title: .filterCompletedControlLabel, action: #selector(toggleCompletedFilterCommand(_:)))
+	let toggleCompletedFilterCommand = UICommand(title: .filterCompletedControlLabel, action: .toggleCompletedFilter)
 	
-	let toggleNotesFilterCommand = UICommand(title: .filterNotesControlLabel, action: #selector(toggleNotesFilterCommand(_:)))
+	let toggleNotesFilterCommand = UICommand(title: .filterNotesControlLabel, action: .toggleNotesFilter)
 	
 	let expandAllInOutlineCommand = UIKeyCommand(title: .expandAllInOutlineControlLabel,
-												 action: #selector(expandAllInOutlineCommand(_:)),
+												 action: .expandAllInOutline,
 												 input: "9",
 												 modifierFlags: [.control, .command])
 	
 	let collapseAllInOutlineCommand = UIKeyCommand(title: .collapseAllInOutlineControlLabel,
-												   action: #selector(collapseAllInOutlineCommand(_:)),
+												   action: .collapseAllInOutline,
 												   input: "0",
 												   modifierFlags: [.control, .command])
 	
 	let expandAllCommand = UIKeyCommand(title: .expandAllInRowControlLabel,
-										action: #selector(expandAllCommand(_:)),
+										action: .expandAll,
 										input: "9",
 										modifierFlags: [.alternate, .command])
 	
 	let collapseAllCommand = UIKeyCommand(title: .collapseAllInRowControlLabel,
-										  action: #selector(collapseAllCommand(_:)),
+										  action: .collapseAll,
 										  input: "0",
 										  modifierFlags: [.alternate, .command])
 	
 	let expandCommand = UIKeyCommand(title: .expandControlLabel,
-									 action: #selector(expandCommand(_:)),
+									 action: .expand,
 									 input: "9",
 									 modifierFlags: [.command])
 	
 	let collapseCommand = UIKeyCommand(title: .collapseControlLabel,
-									   action: #selector(collapseCommand(_:)),
+									   action: .collapse,
 									   input: "0",
 									   modifierFlags: [.command])
 	
 	let collapseParentRowCommand = UIKeyCommand(title: .collapseParentRowControlLabel,
-												action: #selector(collapseParentRowCommand(_:)),
+												action: .collapseParentRow,
 												input: "0",
 												modifierFlags: [.control, .alternate, .command])
 	
 	let zoomInCommand = UIKeyCommand(title: .zoomInControlLabel,
-									 action: #selector(zoomInCommand(_:)),
+									 action: .zoomIn,
 									 input: ">",
 									 modifierFlags: [.command])
 	
 	let zoomOutCommand = UIKeyCommand(title: .zoomOutControlLabel,
-									 action: #selector(zoomOutCommand(_:)),
-									 input: "<",
-									 modifierFlags: [.command])
+									  action: .zoomOut,
+									  input: "<",
+									  modifierFlags: [.command])
 	
-	let actualSizeCommand = UICommand(title: .actualSizeControlLabel, action: #selector(actualSizeCommand(_:)))
+	let actualSizeCommand = UICommand(title: .actualSizeControlLabel, action: .actualSize)
 	
-	let deleteCompletedRowsCommand = UIKeyCommand(title: .deleteCompletedRowsControlLabel,
-									   action: #selector(deleteCompletedRowsCommand(_:)),
-									   input: "d",
-									   modifierFlags: [.command])
-	
-	let showHelpCommand = UICommand(title: .appHelpControlLabel, action: #selector(showHelpCommand(_:)))
+	let showHelpCommand = UICommand(title: .appHelpControlLabel, action: .showHelp)
 
-	let showCommunityCommand = UICommand(title: .communityControlLabel, action: #selector(showCommunityCommand(_:)))
+	let showCommunityCommand = UICommand(title: .communityControlLabel, action: .showCommunity)
 
-	let feedbackCommand = UICommand(title: .feedbackControlLabel, action: #selector(feedbackCommand(_:)))
-
-	let enterBackgroundCommand = UICommand(title: .enterBackgroundControlLabel, action: #selector(enterBackgroundCommand(_:)))
-
-	let enterForgroundCommand = UICommand(title: .enterForgroundControlLabel, action: #selector(enterForgroundCommand(_:)))
+	let feedbackCommand = UICommand(title: .feedbackControlLabel, action: .feedback)
 
 	let showOpenQuicklyCommand = UIKeyCommand(title: .openQuicklyEllipsisControlLabel,
-											  action: #selector(showOpenQuicklyCommand(_:)),
+											  action: .showOpenQuickly,
 											  input: "o",
 											  modifierFlags: [.shift, .command])
 	
-	let beginDocumentSearchCommand = UIKeyCommand(title: .documentFindEllipsisControlLabel,
-												  action: #selector(beginDocumentSearchCommand(_:)),
-												  input: "f",
-												  modifierFlags: [.alternate, .command])
-		
 	let printDocsCommand = UIKeyCommand(title: .printDocEllipsisControlLabel,
-										action: #selector(printDocsCommand(_:)),
+										action: .printDocs,
 										input: "p",
 										modifierFlags: [.alternate, .command])
 	
 	let printListsCommand = UIKeyCommand(title: .printListControlEllipsisLabel,
-										 action: #selector(printListsCommand(_:)),
+										 action: .printLists,
 										 input: "p",
 										 modifierFlags: [.command])
 
-	let shareCommand = UICommand(title: .shareEllipsisControlLabel, action: #selector(shareCommand(_:)))
+	let shareCommand = UICommand(title: .shareEllipsisControlLabel, action: .share)
 
-	let manageSharingCommand = UICommand(title: .manageSharingEllipsisControlLabel, action: #selector(manageSharingCommand(_:)))
+	let manageSharingCommand = UICommand(title: .manageSharingEllipsisControlLabel, action: .manageSharing)
 	
-	let outlineGetInfoCommand = UIKeyCommand(title: .getInfoControlLabel,
-											 action: #selector(outlineGetInfoCommand(_:)),
-											 input: "i",
-											 modifierFlags: [.control, .command])
+	let showGetInfoCommand = UIKeyCommand(title: .getInfoControlLabel,
+										  action: .showGetInfo,
+										  input: "i",
+										  modifierFlags: [.control, .command])
 
 	var mainCoordinator: MainCoordinator? {
 		return UIApplication.shared.foregroundActiveScene?.keyWindow?.rootViewController as? MainCoordinator
@@ -312,8 +326,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath, errorHandler: self)
 		let _ = OutlineFontCache.shared
-		
-		MetadataViewManager.provider = MetadataViewProvider()
 		
 		return true
 	}
@@ -350,6 +362,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return true
 	}
 
+	func applicationWillTerminate(_ application: UIApplication) {
+	#if targetEnvironment(macCatalyst)
+		appKitPlugin?.stop()
+	#endif
+	}
+	
 	func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
 		Task { @MainActor in
 			if UIApplication.shared.applicationState == .background {
@@ -357,52 +375,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 			await AccountManager.shared.receiveRemoteNotification(userInfo: userInfo)
 			if UIApplication.shared.applicationState == .background {
-				AccountManager.shared.suspend()
+				await AccountManager.shared.suspend()
 			}
 			completionHandler(.newData)
-		}
-	}
-	
-	func application(_ application: UIApplication, handlerFor intent: INIntent) -> Any? {
-		switch intent {
-		case is AddOutlineIntent:
-			return AddOutlineIntentHandler()
-		case is AddOutlineTagIntent:
-			return AddOutlineTagIntentHandler()
-		case is AddRowsIntent:
-			return AddRowsIntentHandler()
-		case is CopyRowsIntent:
-			return CopyRowsIntentHandler()
-		case is EditOutlineIntent:
-			return EditOutlineIntentHandler()
-		case is EditRowsIntent:
-			return EditRowsIntentHandler()
-		case is ExportIntent:
-			return ExportIntentHandler()
-		case is GetCurrentOutlineIntent:
-			return GetCurrentOutlineIntentHandler(mainCoordinator: mainCoordinator)
-		case is GetCurrentTagsIntent:
-			return GetCurrentTagsIntentHandler(mainCoordinator: mainCoordinator)
-		case is GetImagesForOutlineIntent:
-			return GetImagesForOutlineIntentHandler()
-		case is GetOutlinesIntent:
-			return GetOutlinesIntentHandler()
-		case is GetRowsIntent:
-			return GetRowsIntentHandler()
-		case is ImportIntent:
-			return ImportIntentHandler()
-		case is MoveRowsIntent:
-			return MoveRowsIntentHandler()
-		case is RemoveOutlineIntent:
-			return RemoveOutlineIntentHandler()
-		case is RemoveOutlineTagIntent:
-			return RemoveOutlineTagIntentHandler()
-		case is RemoveRowsIntent:
-			return RemoveRowsIntentHandler()
-		case is ShowOutlineIntent:
-			return ShowOutlineIntentHandler(mainCoordinator: mainCoordinator)
-		default:
-			fatalError("Unhandled intent type: \(intent)")
 		}
 	}
 	
@@ -437,50 +412,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	// MARK: Actions
 
-	@objc func showPreferences(_ sender: Any?) {
-		#if targetEnvironment(macCatalyst)
+	@objc func showSettings(_ sender: Any?) {
 		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.showSettings)
 		let scene = UIApplication.shared.connectedScenes.first(where: { $0.delegate is SettingsSceneDelegate})
 		UIApplication.shared.requestSceneSessionActivation(scene?.session, userActivity: userActivity, options: nil, errorHandler: nil)
-		#else
-		mainCoordinator?.showSettings()
-		#endif
 	}
-
-	@objc func syncCommand(_ sender: Any?) {
+	
+	@objc func sync(_ sender: Any?) {
 		Task {
 			await AccountManager.shared.sync()
 		}
 	}
 
-	@objc func importOPMLCommand(_ sender: Any?) {
-		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.importOPML()
-		} else {
-			#if targetEnvironment(macCatalyst)
-			appKitPlugin?.importOPML()
-			#endif
-		}
-	}
-
-	@objc func exportPDFDocsCommand(_ sender: Any?) {
-		mainCoordinator?.exportPDFDocs()
-	}
-
-	@objc func exportPDFListsCommand(_ sender: Any?) {
-		mainCoordinator?.exportPDFLists()
-	}
-
-	@objc func exportMarkdownDocsCommand(_ sender: Any?) {
-		mainCoordinator?.exportMarkdownDocs()
-	}
-
-	@objc func exportMarkdownListsCommand(_ sender: Any?) {
-		mainCoordinator?.exportMarkdownLists()
-	}
-
-	@objc func exportOPMLsCommand(_ sender: Any?) {
-		mainCoordinator?.exportOPMLs()
+	@objc func importOPML(_ sender: Any?) {
+		#if targetEnvironment(macCatalyst)
+		appKitPlugin?.importOPML()
+		#endif
 	}
 
 	@objc func newWindow(_ sender: Any?) {
@@ -488,205 +435,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: userActivity, options: nil, errorHandler: nil)
 	}
 	
-	@objc func createOutlineCommand(_ sender: Any?) {
-		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.createOutline()
-		} else {
-			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.newOutline)
-			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
-		}
+	@objc func createOutline(_ sender: Any?) {
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.newOutline)
+		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 	
-	@objc func toggleSidebarCommand(_ sender: Any?) {
-		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.toggleSidebar()
-		}
-	}
-	
-	@objc func goBackwardOneCommand(_ sender: Any?) {
-		mainCoordinator?.goBackwardOne()
-	}
-	
-	@objc func goForwardOneCommand(_ sender: Any?) {
-		mainCoordinator?.goForwardOne()
-	}
-	
-	@objc func insertRowCommand(_ sender: Any?) {
-		mainCoordinator?.insertRow()
-	}
-	
-	@objc func createRowCommand(_ sender: Any?) {
-		mainCoordinator?.createRow()
-	}
-	
-	@objc func duplicateRowsCommand(_ sender: Any?) {
-		mainCoordinator?.duplicateRows()
-	}
-	
-	@objc func createRowInsideCommand(_ sender: Any?) {
-		mainCoordinator?.createRowInside()
-	}
-	
-	@objc func createRowOutsideCommand(_ sender: Any?) {
-		mainCoordinator?.createRowOutside()
-	}
-	
-
-	@objc func moveRowsUpCommand(_ sender: Any?) {
-		mainCoordinator?.moveRowsUp()
-	}
-	
-	@objc func moveRowsDownCommand(_ sender: Any?) {
-		mainCoordinator?.moveRowsDown()
-	}
-	
-	@objc func moveRowsLeftCommand(_ sender: Any?) {
-		mainCoordinator?.moveRowsLeft()
-	}
-	
-	@objc func moveRowsRightCommand(_ sender: Any?) {
-		mainCoordinator?.moveRowsRight()
-	}
-	
-	@objc func toggleCompleteRowsCommand(_ sender: Any?) {
-		mainCoordinator?.toggleCompleteRows()
-	}
-	
-	@objc func rowNotesCommand(_ sender: Any?) {
-		if mainCoordinator?.isCreateRowNotesUnavailable ?? true {
-			if mainCoordinator?.isEditingTopic ?? false {
-				mainCoordinator?.moveCursorToCurrentRowNote()
-			} else if mainCoordinator?.isEditingNotes ?? false {
-				mainCoordinator?.moveCursorToCurrentRowTopic()
-			}
-		} else {
-			mainCoordinator?.createRowNotes()
-		}
-	}
-	
-	@objc func deleteRowNotesCommand(_ sender: Any?) {
-		mainCoordinator?.deleteRowNotes()
-	}
-	
-	@objc func deleteCurrentRowsCommand(_ sender: Any?) {
-		mainCoordinator?.deleteCurrentRows()
-	}
-	
-	@objc func toggleBoldCommand(_ sender: Any?) {
-		mainCoordinator?.outlineToggleBoldface()
-	}
-	
-	@objc func toggleItalicsCommand(_ sender: Any?) {
-		mainCoordinator?.outlineToggleItalics()
-	}
-	
-	@objc func insertImageCommand(_ sender: Any?) {
-		mainCoordinator?.insertImage()
-	}
-
-	@objc func linkCommand(_ sender: Any?) {
-		mainCoordinator?.link()
-	}
-
-	@objc func copyRowLinkCommand(_ sender: Any?) {
-		mainCoordinator?.copyRowLink()
-	}
-
-	@objc func copyDocumentLinkCommand(_ sender: Any?) {
-		mainCoordinator?.copyDocumentLink()
-	}
-
-	@objc func focusInCommand(_ sender: Any?) {
-		mainCoordinator?.focusIn()
-	}
-
-	@objc func focusOutCommand(_ sender: Any?) {
-		mainCoordinator?.focusOut()
-	}
-
-	@objc func toggleFilterOnCommand(_ sender: Any?) {
-		mainCoordinator?.toggleFilterOn()
-	}
-
-	@objc func toggleCompletedFilterCommand(_ sender: Any?) {
-		mainCoordinator?.toggleCompletedFilter()
-	}
-
-	@objc func toggleNotesFilterCommand(_ sender: Any?) {
-		mainCoordinator?.toggleNotesFilter()
-	}
-
-	@objc func expandAllInOutlineCommand(_ sender: Any?) {
-		mainCoordinator?.expandAllInOutline()
-	}
-
-	@objc func collapseAllInOutlineCommand(_ sender: Any?) {
-		mainCoordinator?.collapseAllInOutline()
-	}
-
-	@objc func expandAllCommand(_ sender: Any?) {
-		mainCoordinator?.expandAll()
-	}
-
-	@objc func collapseAllCommand(_ sender: Any?) {
-		mainCoordinator?.collapseAll()
-	}
-
-	@objc func expandCommand(_ sender: Any?) {
-		mainCoordinator?.expand()
-	}
-
-	@objc func collapseCommand(_ sender: Any?) {
-		mainCoordinator?.collapse()
-	}
-	
-	@objc func collapseParentRowCommand(_ sender: Any?) {
-		mainCoordinator?.collapseParentRow()
-	}
-	
-	@objc func zoomInCommand(_ sender: Any?) {
+	@objc func zoomIn(_ sender: Any?) {
 		AppDefaults.shared.textZoom = AppDefaults.shared.textZoom + 1
 	}
 	
-	@objc func zoomOutCommand(_ sender: Any?) {
+	@objc func zoomOut(_ sender: Any?) {
 		AppDefaults.shared.textZoom = AppDefaults.shared.textZoom - 1
 	}
 	
-	@objc func actualSizeCommand(_ sender: Any?) {
+	@objc func actualSize(_ sender: Any?) {
 		AppDefaults.shared.textZoom = 0
 	}
 	
-	@objc func deleteCompletedRowsCommand(_ sender: Any?) {
-		mainCoordinator?.deleteCompletedRows()
-	}
-	
-	@objc func showHelpCommand(_ sender: Any?) {
+	@objc func showHelp(_ sender: Any?) {
 		UIApplication.shared.open(URL(string: .helpURL)!)
 	}
 
-	@objc func showCommunityCommand(_ sender: Any?) {
+	@objc func showCommunity(_ sender: Any?) {
 		UIApplication.shared.open(URL(string: .communityURL)!)
 	}
 
-	@objc func feedbackCommand(_ sender: Any?) {
+	@objc func feedback(_ sender: Any?) {
 		UIApplication.shared.open(URL(string: .feedbackURL)!)
 	}
 
-	@objc func enterForgroundCommand(_ sender: Any?) {
-		willEnterForeground()
-	}
-
-	@objc func enterBackgroundCommand(_ sender: Any?) {
-		didEnterBackground()
-	}
-
-	@objc func showOpenQuicklyCommand(_ sender: Any?) {
-		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.showOpenQuickly()
-		} else {
-			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openQuickly)
-			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
-		}
+	@objc func showOpenQuickly(_ sender: Any?) {
+		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openQuickly)
+		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 
 	@objc func showAbout(_ sender: Any?) {
@@ -694,229 +474,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 
-	@objc func printDocsCommand(_ sender: Any?) {
-		mainCoordinator?.printDocs()
-	}
-
-	@objc func printListsCommand(_ sender: Any?) {
-		mainCoordinator?.printLists()
-	}
-
-	@objc func shareCommand(_ sender: Any?) {
-		mainCoordinator?.share()
-	}
-
-	@objc func manageSharingCommand(_ sender: Any?) {
-		mainCoordinator?.manageSharing()
-	}
-
-	@objc func beginDocumentSearchCommand(_ sender: Any?) {
-		if let mainSplitViewController = mainCoordinator as? MainSplitViewController {
-			mainSplitViewController.beginDocumentSearch()
-		}
-	}
-
-	@objc func outlineGetInfoCommand(_ sender: Any?) {
-		mainCoordinator?.showGetInfo()
-	}
-	
-	// MARK: Validations
-	
-	override func validate(_ command: UICommand) {
-		switch command.action {
-		case #selector(toggleSidebarCommand(_:)):
-			if !(mainCoordinator is MainSplitViewController) {
-				command.attributes = .disabled
-			}
-		case #selector(beginDocumentSearchCommand(_:)):
-			if !(mainCoordinator is MainSplitViewController) {
-				command.attributes = .disabled
-			}
-		case #selector(syncCommand(_:)):
-			if !AccountManager.shared.isSyncAvailable {
-				command.attributes = .disabled
-			}
-		case #selector(outlineGetInfoCommand(_:)):
-			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(exportPDFDocsCommand(_:)),
-			#selector(exportPDFListsCommand(_:)),
-			#selector(exportMarkdownDocsCommand(_:)),
-			#selector(exportMarkdownListsCommand(_:)),
-			#selector(exportOPMLsCommand(_:)),
-			#selector(printDocsCommand(_:)),
-			#selector(printListsCommand(_:)):
-			if mainCoordinator?.isExportAndPrintUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(goBackwardOneCommand(_:)):
-			if mainCoordinator?.isGoBackwardOneUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(goForwardOneCommand(_:)):
-			if mainCoordinator?.isGoForwardOneUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(insertRowCommand(_:)):
-			if mainCoordinator?.isInsertRowUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(createRowCommand(_:)):
-			if mainCoordinator?.isCreateRowUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(duplicateRowsCommand(_:)):
-			if mainCoordinator?.isDuplicateRowsUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(createRowInsideCommand(_:)):
-			if mainCoordinator?.isCreateRowInsideUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(createRowOutsideCommand(_:)):
-			if mainCoordinator?.isCreateRowOutsideUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(moveRowsUpCommand(_:)):
-			if mainCoordinator?.isMoveRowsUpUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(moveRowsDownCommand(_:)):
-			if mainCoordinator?.isMoveRowsDownUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(moveRowsLeftCommand(_:)):
-			if mainCoordinator?.isMoveRowsLeftUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(moveRowsRightCommand(_:)):
-			if mainCoordinator?.isMoveRowsRightUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(toggleCompleteRowsCommand(_:)):
-			if mainCoordinator?.isCompleteRowsAvailable ?? false {
-				command.title = .completeControlLabel
-			} else {
-				command.title = .uncompleteControlLabel
-			}
-			if mainCoordinator?.isToggleRowCompleteUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(rowNotesCommand(_:)):
-			if mainCoordinator?.isCreateRowNotesUnavailable ?? true  {
-				if mainCoordinator?.isEditingTopic ?? false {
-					command.title = .jumpToNoteControlLabel
-				} else if mainCoordinator?.isEditingNotes ?? false {
-					command.title = .jumpToTopicControlLabel
-				} else {
-					command.title = .addNoteControlLabel
-					command.attributes = .disabled
-				}
-			} else {
-				command.title = .addNoteControlLabel
-			}
-		case #selector(deleteRowNotesCommand(_:)):
-			if mainCoordinator?.isDeleteRowNotesUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(toggleBoldCommand(_:)), #selector(toggleItalicsCommand(_:)):
-			if mainCoordinator?.isFormatUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(insertImageCommand(_:)):
-			if mainCoordinator?.isInsertImageUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(linkCommand(_:)):
-			if mainCoordinator?.isLinkUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(focusInCommand(_:)):
-			if mainCoordinator?.isFocusInUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(focusOutCommand(_:)):
-			if mainCoordinator?.isFocusOutUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(toggleFilterOnCommand(_:)):
-			if mainCoordinator?.isFilterOn ?? false {
-				command.title = .turnFilterOffControlLabel
-			} else {
-				command.title = .turnFilterOnControlLabel
-			}
-		case #selector(toggleCompletedFilterCommand(_:)):
-			if mainCoordinator?.isCompletedFiltered ?? false {
-				command.state = .on
-			} else {
-				command.state = .off
-			}
-			if !(mainCoordinator?.isFilterOn ?? false) {
-				command.attributes = .disabled
-			}
-		case #selector(toggleNotesFilterCommand(_:)):
-			if mainCoordinator?.isNotesFiltered ?? false {
-				command.state = .on
-			} else {
-				command.state = .off
-			}
-			if !(mainCoordinator?.isFilterOn ?? false) {
-				command.attributes = .disabled
-			}
-		case #selector(expandAllInOutlineCommand(_:)):
-			if mainCoordinator?.isExpandAllInOutlineUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(collapseAllInOutlineCommand(_:)):
-			if mainCoordinator?.isCollapseAllInOutlineUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(expandAllCommand(_:)):
-			if mainCoordinator?.isExpandAllUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(collapseAllCommand(_:)):
-			if mainCoordinator?.isCollapseAllUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(expandCommand(_:)):
-			if mainCoordinator?.isExpandUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(collapseCommand(_:)):
-			if mainCoordinator?.isCollapseUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(collapseParentRowCommand(_:)):
-			if mainCoordinator?.isCollapseParentRowUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(deleteCompletedRowsCommand(_:)):
-			if mainCoordinator?.isDeleteCompletedRowsUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(shareCommand(_:)):
-			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(manageSharingCommand(_:)):
-			if mainCoordinator?.isManageSharingUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(copyRowLinkCommand(_:)):
-			if mainCoordinator?.isCopyRowLinkUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		case #selector(copyDocumentLinkCommand(_:)):
-			if mainCoordinator?.isOutlineFunctionsUnavailable ?? true {
-				command.attributes = .disabled
-			}
-		default:
-			break
-		}
-	}
-		
 	// MARK: Menu
 
 	override func buildMenu(with builder: UIMenuBuilder) {
@@ -925,7 +482,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		guard builder.system == UIMenuSystem.main else { return }
 
 		// Application Menu
-		let appMenu = UIMenu(title: "", options: .displayInline, children: [showPreferences])
+		let appMenu = UIMenu(title: "", options: .displayInline, children: [showSettings])
 		builder.insertSibling(appMenu, afterMenu: .about)
 
 		let aboutMenuTitle = builder.menu(for: .about)?.children.first?.title ?? "About Zavala"
@@ -943,7 +500,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		let syncMenu = UIMenu(title: "", options: .displayInline, children: [syncCommand])
 		builder.insertChild(syncMenu, atEndOfMenu: .file)
 
-		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: [outlineGetInfoCommand])
+		let getInfoMenu = UIMenu(title: "", options: .displayInline, children: [showGetInfoCommand])
 		builder.insertChild(getInfoMenu, atEndOfMenu: .file)
 
 		let exportMenu = UIMenu(title: .exportControlLabel, children: [exportPDFDocsCommand, exportPDFListsCommand, exportMarkdownDocsCommand, exportMarkdownListsCommand, exportOPMLsCommand])
@@ -1002,12 +559,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Outline Menu
 		let mainOutlineMenu = UIMenu(title: "",
 									 options: .displayInline,
-									 children: [insertRowCommand,
-												createRowCommand,
+									 children: [addRowAboveCommand,
+												addRowBelowCommand,
 												createRowInsideCommand,
 												createRowOutsideCommand,
 												duplicateRowsCommand,
-												deleteCurrentRowsCommand])
+												groupCurrentRowsCommand,
+												sortCurrentRowsCommand,
+												deleteCurrentRowsCommand
+											   ])
 		let moveRowMenu = UIMenu(title: "", options: .displayInline, children: [moveRowsLeftCommand, moveRowsRightCommand, moveRowsUpCommand, moveRowsDownCommand])
 		let completeMenu = UIMenu(title: "", options: .displayInline, children: [toggleCompleteRowsCommand, deleteCompletedRowsCommand])
 		let noteMenu = UIMenu(title: "", options: .displayInline, children: [rowNotesCommand, deleteRowNotesCommand])
@@ -1021,7 +581,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		var historyItems = [UIAction]()
 		for (index, pin) in history.enumerated() {
 			historyItems.append(UIAction(title: pin.document?.title ?? .noTitleLabel) { [weak self] _ in
-				DispatchQueue.main.async {
+				Task { @MainActor in
 					self?.openHistoryItem(index: index)
 				}
 			})
@@ -1030,12 +590,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		let historyMenu = UIMenu(title: .historyControlLabel, children: [navigateMenu, historyItemsMenu])
 		builder.insertSibling(historyMenu, afterMenu: .view)
-
-		// Debug Menu
-		#if DEBUG
-		let debugMenu = UIMenu(title: .debugControlLabel, children: [enterBackgroundCommand, enterForgroundCommand])
-		builder.insertSibling(debugMenu, beforeMenu: .window)
-		#endif
 
 		// Help Menu
 		builder.replaceChildren(ofMenu: .help, from: { _ in return [showHelpCommand, showCommunityCommand, feedbackCommand] })
@@ -1047,14 +601,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: AppKitPluginDelegate {
 	
-	func importOPML(_ url: URL) {
+	func importFile(_ url: URL) {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
 		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return }
-		guard let document = try? account.importOPML(url, tags: nil) else { return }
+		
+		Task {
+			guard let document = try? await account.importOPML(url, tags: nil) else { return }
 
-		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-		activity.userInfo = [Pin.UserInfoKeys.pin: Pin(document: document).userInfo]
-		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
+			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(document: document).userInfo]
+			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
+		}
 	}
 	
 }
@@ -1097,30 +654,32 @@ private extension AppDelegate {
 
 		Task {
 			await AccountManager.shared.sync()
-			AccountManager.shared.suspend()
+			await AccountManager.shared.suspend()
 			UIApplication.shared.endBackgroundTask(backgroundTaskID)
 		}
 		
 		AppDefaults.shared.documentHistory = history.map { $0.userInfo }
 	}
 	
-	@objc private func checkForUserDefaultsChanges() {
-		let localAccount = AccountManager.shared.localAccount
-		
-		if AppDefaults.shared.enableLocalAccount != localAccount.isActive {
-			if AppDefaults.shared.enableLocalAccount {
-				localAccount.activate()
-			} else {
-				localAccount.deactivate()
+	@objc nonisolated private func checkForUserDefaultsChanges() {
+		Task { @MainActor in
+			guard let localAccount = AccountManager.shared.localAccount else { return }
+			
+			if AppDefaults.shared.enableLocalAccount != localAccount.isActive {
+				if AppDefaults.shared.enableLocalAccount {
+					localAccount.activate()
+				} else {
+					localAccount.deactivate()
+				}
 			}
-		}
-		
-		let cloudKitAccount = AccountManager.shared.cloudKitAccount
-		
-		if AppDefaults.shared.enableCloudKit && cloudKitAccount == nil {
-			AccountManager.shared.createCloudKitAccount()
-		} else if !AppDefaults.shared.enableCloudKit && cloudKitAccount != nil {
-			AccountManager.shared.deleteCloudKitAccount()
+			
+			let cloudKitAccount = AccountManager.shared.cloudKitAccount
+			
+			if AppDefaults.shared.enableCloudKit && cloudKitAccount == nil {
+				AccountManager.shared.createCloudKitAccount()
+			} else if !AppDefaults.shared.enableCloudKit && cloudKitAccount != nil {
+				AccountManager.shared.deleteCloudKitAccount()
+			}
 		}
 	}
 

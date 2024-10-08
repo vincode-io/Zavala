@@ -9,17 +9,60 @@ import UIKit
 import MobileCoreServices
 import PhotosUI
 import AsyncAlgorithms
-import Markdown
 import VinOutlineKit
 import VinUtility
 
 extension Selector {
-	static let insertImage = #selector(EditorViewController.insertImage)
+	static let copyRowLink = #selector(EditorViewController.copyRowLink(_:))
+	static let insertImage = #selector(EditorViewController.insertImage(_:))
+	static let insertNewline = #selector(EditorViewController.insertNewline(_:))
+
+	static let focusIn = #selector(EditorViewController.focusIn(_:))
+	static let focusOut = #selector(EditorViewController.focusOut(_:))
+	static let toggleFocus = #selector(EditorViewController.toggleFocus(_:))
+	
+	static let toggleFilterOn = #selector(EditorViewController.toggleFilterOn(_:))
+	static let toggleCompletedFilter = #selector(EditorViewController.toggleCompletedFilter(_:))
+	static let toggleNotesFilter = #selector(EditorViewController.toggleNotesFilter(_:))
+	
+	static let expandAllInOutline = #selector(EditorViewController.expandAllInOutline(_:))
+	static let collapseAllInOutline = #selector(EditorViewController.collapseAllInOutline(_:))
+	static let expandAll = #selector(EditorViewController.expandAll(_:))
+	static let collapseAll = #selector(EditorViewController.collapseAll(_:))
+	static let expand = #selector(EditorViewController.expand(_:))
+	static let collapse = #selector(EditorViewController.collapse(_:))
+	static let collapseParentRow = #selector(EditorViewController.collapseParentRow(_:))
+	
+	static let addRowAbove = #selector(EditorViewController.addRowAbove(_:))
+	static let addRowBelow = #selector(EditorViewController.addRowBelow(_:))
+	static let createRowInside = #selector(EditorViewController.createRowInside(_:))
+	static let createRowOutside = #selector(EditorViewController.createRowOutside(_:))
+	static let duplicateCurrentRows = #selector(EditorViewController.duplicateCurrentRows(_:))
+	static let deleteCurrentRows = #selector(EditorViewController.deleteCurrentRows(_:))
+	static let groupCurrentRows = #selector(EditorViewController.groupCurrentRows(_:))
+	static let sortCurrentRows = #selector(EditorViewController.sortCurrentRows(_:))
+	static let moveCurrentRowsLeft = #selector(EditorViewController.moveCurrentRowsLeft(_:))
+	static let moveCurrentRowsRight = #selector(EditorViewController.moveCurrentRowsRight(_:))
+	static let moveCurrentRowsUp = #selector(EditorViewController.moveCurrentRowsUp(_:))
+	static let moveCurrentRowsDown = #selector(EditorViewController.moveCurrentRowsDown(_:))
+	static let toggleCompleteRows = #selector(EditorViewController.toggleCompleteRows(_:))
+	static let deleteCompletedRows = #selector(EditorViewController.deleteCompletedRows(_:))
+	static let toggleRowNotes = #selector(EditorViewController.toggleRowNotes(_:))
+	static let createOrDeleteNotes = #selector(EditorViewController.createOrDeleteNotes(_:))
+	static let deleteRowNotes = #selector(EditorViewController.deleteRowNotes(_:))
+	
+	static let undo = Selector(("undo:"))
+	static let redo = Selector(("redo:"))
+	static let showUndoMenu = #selector(EditorViewController.showUndoMenu(_:))
+	static let showFormatMenu = #selector(EditorViewController.showFormatMenu(_:))
+	
+	static let editorLink = #selector(EditorViewController.editorLink(_:))
+	static let editorToggleBoldface = #selector(EditorViewController.editorToggleBoldface(_:))
+	static let editorToggleItalics = #selector(EditorViewController.editorToggleItalics(_:))
 }
 
+@MainActor
 protocol EditorDelegate: AnyObject {
-	var editorViewControllerIsGoBackUnavailable: Bool { get }
-	var editorViewControllerIsGoForwardUnavailable: Bool { get }
 	var editorViewControllerGoBackwardStack: [Pin] { get }
 	var editorViewControllerGoForwardStack: [Pin] { get }
 	func goBackward(_: EditorViewController, to: Int)
@@ -47,22 +90,22 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		var keyCommands = [UIKeyCommand]()
 		
 		if !isEditingNote {
-			let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: #selector(moveCurrentRowsLeft))
+			let shiftTab = UIKeyCommand(input: "\t", modifierFlags: [.shift], action: .moveCurrentRowsLeft)
 			shiftTab.wantsPriorityOverSystemBehavior = true
 			keyCommands.append(shiftTab)
 			
-			let tab = UIKeyCommand(action: #selector(moveCurrentRowsRight), input: "\t")
+			let tab = UIKeyCommand(action: .moveCurrentRowsRight, input: "\t")
 			tab.wantsPriorityOverSystemBehavior = true
 			keyCommands.append(tab)
 		}
 		
 		// We need to have this here in addition to the AppDelegate, since iOS won't pick it up for some reason
-		if !isToggleRowCompleteUnavailable {
-			let commandReturn = UIKeyCommand(input: "\r", modifierFlags: [.command], action: #selector(toggleCompleteRows))
+		if UIResponder.valid(action: .toggleCompleteRows) {
+			let commandReturn = UIKeyCommand(input: "\r", modifierFlags: [.command], action: .toggleCompleteRows)
 			commandReturn.wantsPriorityOverSystemBehavior = true
 			keyCommands.append(commandReturn)
 		}
-		
+
 		keyCommands.append(UIKeyCommand(action: #selector(toggleMode), input: UIKeyCommand.inputEscape))
 
 		return keyCommands
@@ -73,20 +116,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return [Document.outline(outline)]
 	}
 	
-	var mainControllerIdentifer: MainControllerIdentifier { return .editor }
+	nonisolated var mainControllerIdentifer: MainControllerIdentifier { return .editor }
 
 	weak var delegate: EditorDelegate?
 	
 	var isOutlineFunctionsUnavailable: Bool {
 		return outline == nil
-	}
-	
-	var isFocusInUnavailable: Bool {
-		return !(currentRows?.count ?? 0 == 1)
-	}
-	
-	var isFocusOutUnavailable: Bool {
-		return outline?.isFocusOutUnavailable() ?? true
 	}
 	
 	var isFilterOn: Bool {
@@ -108,69 +143,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return true
 	}
 	
-	var isDeleteCurrentRowUnavailable: Bool {
-		return currentRows == nil
-	}
-	
-	var isInsertRowUnavailable: Bool {
-		return currentRows == nil
-	}
-	
-	var isCreateRowUnavailable: Bool {
-		return currentRows == nil
-	}
-	
-	var isDuplicateRowsUnavailable: Bool {
-		return currentRows == nil
-	}
-	
-	var isCreateRowInsideUnavailable: Bool {
-		return currentRows == nil
-	}
-
-	var isCreateRowOutsideUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isCreateRowOutsideUnavailable(rows: rows)
-	}
-
-	var isGoBackwardUnavailable: Bool {
-		return delegate?.editorViewControllerIsGoBackUnavailable ?? true
-	}
-	
-	var isGoForwardUnavailable: Bool {
-		return delegate?.editorViewControllerIsGoForwardUnavailable ?? true
-	}
-	
-	var isMoveRowsRightUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isMoveRowsRightUnavailable(rows: rows)
-	}
-
-	var isMoveRowsLeftUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isMoveRowsLeftUnavailable(rows: rows)
-	}
-
-	var isMoveRowsUpUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isMoveRowsUpUnavailable(rows: rows)
-	}
-
-	var isMoveRowsDownUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isMoveRowsDownUnavailable(rows: rows)
-	}
-
-	var isToggleRowCompleteUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isCompleteUnavailable(rows: rows) && outline.isUncompleteUnavailable(rows: rows)
-	}
-
-	var isCompleteRowsAvailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return !outline.isCompleteUnavailable(rows: rows)
-	}
-	
 	var isCreateRowNotesUnavailable: Bool {
 		guard let outline, let rows = currentRows else { return true }
 		return outline.isCreateNotesUnavailable(rows: rows)
@@ -181,121 +153,10 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return outline.isDeleteNotesUnavailable(rows: rows)
 	}
 
-	var isFormatUnavailable: Bool {
-		return currentTextView == nil
-	}
-	
-	var isUndoUnvailable: Bool {
-		if let currentTextView {
-			return !(currentTextView.undoManager?.canUndo ?? false)
-		} else {
-			return !(undoManager?.canUndo ?? false)
-		}
-	}
-
-	var isRedoUnvailable: Bool {
-		if let currentTextView {
-			return !(currentTextView.undoManager?.canRedo ?? false)
-		} else {
-			return !(undoManager?.canRedo ?? false)
-		}
-	}
-	
-	var isCutUnavailable: Bool {
-		if let currentTextView {
-			return !currentTextView.canPerformAction(.cut, withSender: nil)
-		}
-		if let currentRows {
-			return currentRows.isEmpty
-		}
-		return true
-	}
-
-	var isCopyUnavailable: Bool {
-		if let currentTextView {
-			return !currentTextView.canPerformAction(.copy, withSender: nil)
-		}
-		if let currentRows {
-			return currentRows.isEmpty
-		}
-		return true
-	}
-
-	var isPasteUnavailable: Bool {
-		if let currentTextView {
-			return !currentTextView.canPerformAction(.paste, withSender: nil)
-		}
-		return !UIPasteboard.general.contains(pasteboardTypes: [Row.typeIdentifier, UTType.utf8PlainText.identifier], inItemSet: nil)
-	}
-
-	var isCopyRowLinkUnavailable: Bool {
-		return currentRows?.count != 1
-	}
-	
-	var isInsertImageUnavailable: Bool {
-		return currentTextView == nil
-	}
-
-	var isLinkUnavailable: Bool {
-		return currentTextView == nil
-	}
-
 	var isInsertNewlineUnavailable: Bool {
 		return currentTextView == nil
 	}
 
-	var isExpandAllInOutlineUnavailable: Bool {
-		return outline == nil || outline!.isExpandAllInOutlineUnavailable
-	}
-
-	var isCollapseAllInOutlineUnavailable: Bool {
-		return outline == nil || outline!.isCollapseAllInOutlineUnavailable
-	}
-
-	var isExpandAllUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isExpandAllUnavailable(containers: rows)
-	}
-
-	var isCollapseAllUnavailable: Bool {
-		guard let outline, let rows = currentRows else { return true }
-		return outline.isCollapseAllUnavailable(containers: rows)
-	}
-
-	var isExpandUnavailable: Bool {
-		guard let rows = currentRows else { return true }
-		for row in rows {
-			if row.isExpandable {
-				return false
-			}
-		}
-		return true
-	}
-
-	var isCollapseUnavailable: Bool {
-		guard let rows = currentRows else { return true }
-		for row in rows {
-			if row.isCollapsable {
-				return false
-			}
-		}
-		return true
-	}
-
-	var isCollapseParentRowUnavailable: Bool {
-		guard let rows = currentRows else { return true }
-		for row in rows {
-			if (row.parent as? Row)?.isCollapsable ?? false {
-				return false
-			}
-		}
-		return true
-	}
-	
-	var isDeleteCompletedRowsUnavailable: Bool {
-		return !(outline?.isAnyRowCompleted ?? false)
-	}
-	
 	var currentRows: [Row]? {
 		if let selected = collectionView?.indexPathsForSelectedItems?.sorted(), !selected.isEmpty {
 			return selected.compactMap {
@@ -378,10 +239,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		return currentTextView?.rowStrings
 	}
 	
-	private var currentCursorPosition: Int? {
-		return currentTextView?.cursorPosition
-	}
-	
 	private var cancelledKeys = Set<UIKey>()
 
 	private static var slowRepeatInterval = 1.0
@@ -392,6 +249,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private lazy var goingUpRepeatInterval: Double = Self.slowRepeatInterval
 	private lazy var goingDownRepeatInterval: Double = Self.slowRepeatInterval
 	private var goingUpOrDownTask: Task<(()), Never>?
+	private var savedCursorRectForUpAndDownArrowing: CGRect?
 	private var shiftStartIndex: Int?
 	
 	private var undoMenuButton: ButtonGroup.Button!
@@ -448,8 +306,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	private var isOutlineNewFlag = false
 	private var updateTitleChannel = AsyncChannel<String>()
 
-	private var keyboardWorkItem: DispatchWorkItem?
-
 	private var currentKeyboardHeight: CGFloat = 0
 	
 	private var headerFooterSections: IndexSet {
@@ -471,8 +327,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
-		
-		//NSTextAttachment.registerViewProviderClass(MetadataTextAttachmentViewProvider.self, forFileType: MetadataTextAttachmentViewProvider.fileType)
 		
 		collectionView.translatesAutoresizingMaskIntoConstraints = false
 		
@@ -603,9 +457,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	override func cut(_ sender: Any?) {
 		navButtonGroup?.dismissPopOverMenu()
 		
-		if let currentTextView {
-			currentTextView.cut(sender)
-		} else if let currentRows {
+		if let currentRows {
 			cutRows(currentRows)
 		}
 	}
@@ -613,21 +465,18 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	override func copy(_ sender: Any?) {
 		navButtonGroup?.dismissPopOverMenu()
 		
-		if let currentTextView {
-			currentTextView.copy(sender)
-		} else if let currentRows {
+		if let currentRows {
 			copyRows(currentRows)
 		}
 	}
 	
 	override func paste(_ sender: Any?) {
 		navButtonGroup?.dismissPopOverMenu()
-		
-		if let currentTextView {
-			currentTextView.paste(sender)
-		} else {
-			pasteRows(afterRows: currentRows)
-		}
+		pasteRows(afterRows: currentRows)
+	}
+
+	override func delete(_ sender: Any?) {
+		deleteCurrentRows(sender)
 	}
 
 	override func find(_ sender: Any?) {
@@ -654,21 +503,213 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		switch action {
 		case .selectAll:
 			return !isSelectAllRowsUnavailable
-		case .cut, .copy:
+		case .cut, .copy, .delete:
 			return !(collectionView.indexPathsForSelectedItems?.isEmpty ?? true)
 		case .paste:
 			return UIPasteboard.general.contains(pasteboardTypes: [UTType.utf8PlainText.identifier, Row.typeIdentifier])
 		case .find, .findAndReplace, .findNext, .findPrevious, .useSelectionForFind:
-			if isOutlineFunctionsUnavailable {
+			if outline == nil {
 				return false
 			} else {
 				return super.canPerformAction(action, withSender: sender)
 			}
+		case .copyRowLink:
+			return currentRows?.count == 1
+		case .insertImage:
+			return currentTextView != nil
+		case .focusIn:
+			return currentRows?.count == 1
+		case .focusOut:
+			return !(outline?.isFocusOutUnavailable() ?? true)
+		case .toggleFocus:
+			if isFocusing {
+				return true
+			} else {
+				return currentRows?.count == 1
+			}
+		case .toggleFilterOn:
+			return outline != nil
+		case .toggleCompletedFilter, .toggleNotesFilter:
+			return isFilterOn
+		case .expandAllInOutline:
+			if let outline, !outline.isExpandAllInOutlineUnavailable {
+				return true
+			} else {
+				return false
+			}
+		case .collapseAllInOutline:
+			if let outline, !outline.isCollapseAllInOutlineUnavailable {
+				return true
+			} else {
+				return false
+			}
+		case .expandAll:
+			if let outline, let currentRows, !outline.isExpandAllUnavailable(containers: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .collapseAll:
+			if let outline, let currentRows, !outline.isCollapseAllUnavailable(containers: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .expand:
+			if let currentRows {
+				for row in currentRows {
+					if !row.isExpandable {
+						return false
+					}
+				}
+				return true
+			} else {
+				return false
+			}
+		case .collapse:
+			if let currentRows {
+				for row in currentRows {
+					if !row.isCollapsable {
+						return false
+					}
+				}
+				return true
+			} else {
+				return false
+			}
+		case .collapseParentRow:
+			if let currentRows {
+				for row in currentRows {
+					if !((row.parent as? Row)?.isCollapsable ?? false) {
+						return false
+					}
+				}
+				return true
+			} else {
+				return false
+			}
+		case .addRowAbove, .addRowBelow, .createRowInside, .duplicateCurrentRows, .deleteCurrentRows:
+			return currentRows != nil
+		case .createRowOutside:
+			if let outline, let currentRows, !outline.isCreateRowOutsideUnavailable(rows: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .groupCurrentRows:
+			if let outline, let currentRows, !outline.isGroupRowsUnavailable(rows: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .sortCurrentRows:
+			if let outline, let currentRows, !outline.isSortRowsUnavailable(rows: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .moveCurrentRowsLeft:
+			if let outline, let currentRows, !outline.isMoveRowsLeftUnavailable(rows: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .moveCurrentRowsRight:
+			if let outline, let currentRows, !outline.isMoveRowsRightUnavailable(rows: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .moveCurrentRowsUp:
+			if let outline, let currentRows, !outline.isMoveRowsUpUnavailable(rows: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .moveCurrentRowsDown:
+			if let outline, let currentRows, !outline.isMoveRowsDownUnavailable(rows: currentRows) {
+				return true
+			} else {
+				return false
+			}
+		case .toggleCompleteRows:
+			if let outline, let currentRows, !(outline.isCompleteUnavailable(rows: currentRows) && outline.isUncompleteUnavailable(rows: currentRows)) {
+				return true
+			} else {
+				return false
+			}
+		case .deleteCompletedRows:
+			return outline?.isAnyRowCompleted ?? false
+		case .toggleRowNotes:
+			return isInEditMode
+		case .deleteRowNotes:
+			return !isDeleteRowNotesUnavailable
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
 	}
 	
+	override func validate(_ command: UICommand) {
+		switch command.action {
+		case .duplicateCurrentRows:
+			if currentRows?.count ?? 0 > 1 {
+				command.title = .duplicateRowsControlLabel
+			} else {
+				command.title = .duplicateRowControlLabel
+			}
+		case .groupCurrentRows:
+			if currentRows?.count ?? 0 > 1 {
+				command.title = .groupRowsControlLabel
+			} else {
+				command.title = .groupRowControlLabel
+			}
+		case .deleteCurrentRows:
+			if currentRows?.count ?? 0 > 1 {
+				command.title = .deleteRowsControlLabel
+			} else {
+				command.title = .deleteRowControlLabel
+			}
+		case .toggleCompleteRows:
+			if  let outline, let currentRows, !outline.isCompleteUnavailable(rows: currentRows) {
+				command.title = .completeControlLabel
+			} else {
+				command.title = .uncompleteControlLabel
+			}
+		case .toggleRowNotes:
+			if isCreateRowNotesUnavailable {
+				if isEditingTopic {
+					command.title = .jumpToNoteControlLabel
+				} else if isEditingNote {
+					command.title = .jumpToTopicControlLabel
+				} else {
+					command.title = .addNoteControlLabel
+				}
+			} else {
+				command.title = .addNoteControlLabel
+			}
+		case .toggleFilterOn:
+			if isFilterOn {
+				command.title = .turnFilterOffControlLabel
+			} else {
+				command.title = .turnFilterOnControlLabel
+			}
+		case .toggleCompletedFilter:
+			if isCompletedFiltered {
+				command.state = .on
+			} else {
+				command.state = .off
+			}
+		case .toggleNotesFilter:
+			if isNotesFiltered {
+				command.state = .on
+			} else {
+				command.state = .off
+			}
+		default:
+			break
+		}
+	}
+
 	override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
 		if collectionView.indexPathsForSelectedItems?.isEmpty ?? true {
 			pressesBeganForEditMode(presses, with: event)
@@ -715,19 +756,18 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		collectionView.reloadData()
 	}
 	
-	@objc func userDefaultsDidChange() {
-		if rowIndentSize != AppDefaults.shared.rowIndentSize {
-			rowIndentSize = AppDefaults.shared.rowIndentSize
-			collectionView.reloadData()
-		}
+	@objc nonisolated func userDefaultsDidChange() {
+		Task { @MainActor in
+			if rowIndentSize != AppDefaults.shared.rowIndentSize {
+				rowIndentSize = AppDefaults.shared.rowIndentSize
+				collectionView.reloadData()
+			}
+			
+			if rowSpacingSize != AppDefaults.shared.rowSpacingSize {
+				rowSpacingSize = AppDefaults.shared.rowSpacingSize
+				collectionView.reloadData()
+			}
 
-		if rowSpacingSize != AppDefaults.shared.rowSpacingSize {
-			rowSpacingSize = AppDefaults.shared.rowSpacingSize
-			collectionView.reloadData()
-		}
-
-		// We have to get the layout on the main thread.
-		DispatchQueue.main.async {
 			guard let layout = self.collectionView.collectionViewLayout as? EditorCollectionViewCompositionalLayout else { return }
 			if layout.editorMaxWidth != AppDefaults.shared.editorMaxWidth.pixels {
 				layout.editorMaxWidth = AppDefaults.shared.editorMaxWidth.pixels
@@ -832,25 +872,17 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
 
 		if note.name == UIResponder.keyboardWillHideNotification {
-			keyboardWorkItem?.cancel()
-			keyboardWorkItem = DispatchWorkItem { [weak self] in
-				UIView.animate(withDuration: 0.25) {
-					self?.collectionView.contentInset = EditorViewController.defaultContentInsets
-				}
-				self?.currentKeyboardHeight = 0
+			UIView.animate(withDuration: 0.25) {
+				self.collectionView.contentInset = EditorViewController.defaultContentInsets
 			}
-			DispatchQueue.main.async(execute: keyboardWorkItem!)
+			currentKeyboardHeight = 0
 		} else {
-			keyboardWorkItem?.cancel()
-			keyboardWorkItem = DispatchWorkItem { [weak self] in
-				let newInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
-				if self?.collectionView.contentInset != newInsets {
-					self?.collectionView.contentInset = newInsets
-				}
-				self?.scrollCursorToVisible()
-				self?.currentKeyboardHeight = keyboardViewEndFrame.height
+			let newInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
+			if collectionView.contentInset != newInsets {
+				collectionView.contentInset = newInsets
 			}
-			DispatchQueue.main.async(execute: keyboardWorkItem!)
+			scrollCursorToVisible()
+			currentKeyboardHeight = keyboardViewEndFrame.height
 		}
 	}
 	
@@ -911,7 +943,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 		let oldOutline = outline
 		Task.detached {
-			oldOutline?.unload()
+			await oldOutline?.unload()
 		}
 		undoManager?.removeAllActions()
 	
@@ -939,7 +971,8 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		// causes the find interaction to glitch out. This is especially true on macOS. We could have a shorter
 		// duration on iOS, but I don't see the need to complicate the code.
 		if let searchText {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			Task { @MainActor in
+				try? await Task.sleep(for: .seconds(0.5))
 				self.showFindInteraction(text: searchText)
 			}
 			return
@@ -970,7 +1003,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		for (index, pin) in delegate.editorViewControllerGoBackwardStack.enumerated() {
 			backwardItems.append(UIAction(title: pin.document?.title ?? .noTitleLabel) { [weak self] _ in
 				guard let self else { return }
-				DispatchQueue.main.async {
+				Task { @MainActor in
 					delegate.goBackward(self, to: index)
 				}
 			})
@@ -981,7 +1014,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		for (index, pin) in delegate.editorViewControllerGoForwardStack.enumerated() {
 			forwardItems.append(UIAction(title: pin.document?.title ?? .noTitleLabel) { [weak self] _ in
 				guard let self else { return }
-				DispatchQueue.main.async {
+				Task { @MainActor in
 					delegate.goForward(self, to: index)
 				}
 			})
@@ -990,112 +1023,80 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	func updateUI() {
-		navigationItem.largeTitleDisplayMode = .never
-		
-		if traitCollection.userInterfaceIdiom != .mac {
-			moreMenuButton.menu = buildEllipsisMenu()
-
-			if isFocusOutUnavailable {
-				focusButton.accessibilityLabel = .focusInControlLabel
-				focusButton.setImage(.focusInactive, for: .normal)
-				if currentRows?.count ?? 0 == 1 {
-					focusButton.isEnabled = true
-				} else {
-					focusButton.isEnabled = false
-				}
-			} else {
-				focusButton.accessibilityLabel = .focusOutControlLabel
-				focusButton.setImage(.focusActive, for: .normal)
-				focusButton.isEnabled = true
-			}
-			
-			if isFilterOn {
-				filterButton.accessibilityLabel = .turnFilterOffControlLabel
-				filterButton.setImage(.filterActive, for: .normal)
-			} else {
-				filterButton.accessibilityLabel = .turnFilterOnControlLabel
-				filterButton.setImage(.filterInactive, for: .normal)
-			}
-
-			filterButton.menu = buildFilterMenu()
-			
-			if outline == nil {
-				filterButton.isEnabled = false
-				moreMenuButton.isEnabled = false
-			} else {
-				filterButton.isEnabled = true
-				moreMenuButton.isEnabled = true
-			}
-			
-			goBackwardButton.isEnabled = !isGoBackwardUnavailable
-			goForwardButton.isEnabled = !isGoForwardUnavailable
-			
-			undoButton.isEnabled = !isUndoUnvailable
-			cutButton.isEnabled = !isCutUnavailable
-			copyButton.isEnabled = !isCopyUnavailable
-			pasteButton.isEnabled = !isPasteUnavailable
-			redoButton.isEnabled = !isRedoUnvailable
-			
-			moveLeftButton.isEnabled = !isMoveRowsLeftUnavailable
-			moveRightButton.isEnabled = !isMoveRowsRightUnavailable
-			moveUpButton.isEnabled = !isMoveRowsUpUnavailable
-			moveDownButton.isEnabled = !isMoveRowsDownUnavailable
-			
-			insertImageButton.isEnabled = !isInsertImageUnavailable
-			linkButton.isEnabled = !isLinkUnavailable
-			boldButton.isEnabled = !isFormatUnavailable
-			italicButton.isEnabled = !isFormatUnavailable
-
-			// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
-			// only have one row selected at a time while editing and that row either has a note
-			// or it doesn't.
-			if !isCreateRowNotesUnavailable {
-				noteButton.isEnabled = true
-				noteButton.setImage(.noteAdd, for: .normal)
-				noteButton.accessibilityLabel = .addNoteControlLabel
-			} else if !isDeleteRowNotesUnavailable {
-				noteButton.isEnabled = true
-				noteButton.setImage(.noteDelete, for: .normal)
-				noteButton.accessibilityLabel = .deleteNoteControlLabel
-			} else {
-				noteButton.isEnabled = false
-				noteButton.setImage(.noteAdd, for: .normal)
-				noteButton.accessibilityLabel = .addNoteControlLabel
-			}
-			
-			insertNewlineButton.isEnabled = !isInsertNewlineUnavailable
+		guard traitCollection.userInterfaceIdiom != .mac else {
+			delegate?.validateToolbar(self)
+			return
 		}
 		
-	}
-	
-	func deleteCurrentRows() {
-		guard let rows = currentRows else { return }
-		deleteRows(rows)
-	}
-	
-	func insertRow() {
-		guard let rows = currentRows else { return }
-		createRow(beforeRows: rows, moveCursor: true)
-	}
-	
-	func createRow() {
-		guard let rows = currentRows else { return }
-		createRow(afterRows: rows)
-	}
-	
-	func duplicateCurrentRows() {
-		guard let rows = currentRows else { return }
-		duplicateRows(rows)
-	}
-	
-	func createRowInside() {
-		guard let rows = currentRows else { return }
-		createRowInside(afterRows: rows)
-	}
-	
-	func createRowOutside() {
-		guard let rows = currentRows else { return }
-		createRowOutside(afterRows: rows)
+		navigationItem.largeTitleDisplayMode = .never
+		moreMenuButton.menu = buildEllipsisMenu()
+		
+		if UIResponder.valid(action: .focusOut) {
+			focusButton.accessibilityLabel = .focusOutControlLabel
+			focusButton.setImage(.focusActive, for: .normal)
+			focusButton.isEnabled = true
+		} else {
+			focusButton.accessibilityLabel = .focusInControlLabel
+			focusButton.setImage(.focusInactive, for: .normal)
+			if currentRows?.count ?? 0 == 1 {
+				focusButton.isEnabled = true
+			} else {
+				focusButton.isEnabled = false
+			}
+		}
+		
+		if isFilterOn {
+			filterButton.accessibilityLabel = .turnFilterOffControlLabel
+			filterButton.setImage(.filterActive, for: .normal)
+		} else {
+			filterButton.accessibilityLabel = .turnFilterOnControlLabel
+			filterButton.setImage(.filterInactive, for: .normal)
+		}
+		
+		filterButton.menu = buildFilterMenu()
+		
+		if outline == nil {
+			filterButton.isEnabled = false
+			moreMenuButton.isEnabled = false
+		} else {
+			filterButton.isEnabled = true
+			moreMenuButton.isEnabled = true
+		}
+		
+		goBackwardButton.isEnabled = !(delegate?.editorViewControllerGoBackwardStack.isEmpty ?? false)
+		goForwardButton.isEnabled = !(delegate?.editorViewControllerGoForwardStack.isEmpty ?? false)
+		
+		undoButton.isEnabled = UIResponder.valid(action: .undo)
+		cutButton.isEnabled = UIResponder.valid(action: .cut)
+		copyButton.isEnabled = UIResponder.valid(action: .copy)
+		pasteButton.isEnabled = UIResponder.valid(action: .paste)
+		redoButton.isEnabled = UIResponder.valid(action: .redo)
+		
+		moveLeftButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsLeft)
+		moveRightButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsRight)
+		moveUpButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsUp)
+		moveDownButton.isEnabled = UIResponder.valid(action: .moveCurrentRowsDown)
+		
+		insertImageButton.isEnabled =  UIResponder.valid(action: .insertImage)
+		linkButton.isEnabled = UIResponder.valid(action: .editLink)
+		boldButton.isEnabled = UIResponder.valid(action: .toggleBoldface)
+		italicButton.isEnabled = UIResponder.valid(action: .toggleItalics)
+		
+		// Because these items are in the Toolbar, they shouldn't ever be disabled. We will
+		// only have one row selected at a time while editing and that row either has a note
+		// or it doesn't.
+		if let outline, let currentRows, !outline.isCreateNotesUnavailable(rows: currentRows) {
+			noteButton.isEnabled = true
+			noteButton.setImage(.noteAdd, for: .normal)
+			noteButton.accessibilityLabel = .addNoteControlLabel
+		} else {
+			noteButton.isEnabled = true
+			noteButton.setImage(.noteDelete, for: .normal)
+			noteButton.accessibilityLabel = .deleteNoteControlLabel
+		}
+		
+		insertNewlineButton.isEnabled = !isInsertNewlineUnavailable
+		
 	}
 	
 	func moveCursorToCurrentRowTopic() {
@@ -1108,84 +1109,6 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		guard let rowShadowTableIndex = currentRows?.last?.shadowTableIndex,
 			  let currentRowViewCell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorRowViewCell else { return }
 		currentRowViewCell.moveToNoteEnd()
-	}
-	
-	func createRowNotes() {
-		guard let rows = currentRows else { return }
-		createRowNotes(rows)
-	}
-	
-	func deleteRowNotes() {
-		guard let rows = currentRows else { return }
-		deleteRowNotes(rows)
-	}
-	
-	func expandAllInOutline() {
-		guard let outline else { return }
-		expandAll(containers: [outline])
-	}
-	
-	func collapseAllInOutline() {
-		guard let outline else { return }
-		collapseAll(containers: [outline])
-	}
-	
-	func expandAll() {
-		guard let rows = currentRows else { return }
-		expandAll(containers: rows)
-	}
-	
-	func collapseAll() {
-		guard let rows = currentRows else { return }
-		collapseAll(containers: rows)
-	}
-	
-	func expand() {
-		guard let rows = currentRows else { return }
-		expand(rows: rows)
-	}
-	
-	func collapse() {
-		guard let rows = currentRows else { return }
-		collapse(rows: rows)
-	}
-	
-	func collapseParentRow() {
-		guard let rows = currentRows else { return }
-		let parentRows = rows.compactMap { $0.parent as? Row }
-		guard !parentRows.isEmpty else { return }
-		collapse(rows: parentRows)
-	}
-	
-	func deleteCompletedRows() {
-		guard let completedRows = outline?.allCompletedRows else { return }
-
-		guard AppDefaults.shared.confirmDeleteCompletedRows else {
-			deleteRows(completedRows)
-			return
-		}
-		
-		let alertController = UIAlertController(title: .deleteCompletedRowsTitle,
-												message: .deleteCompletedRowsMessage,
-												preferredStyle: .alert)
-		
-		let alwaysDeleteCompletedAction = UIAlertAction(title: .deleteAlwaysControlLabel, style: .destructive) { [weak self] action in
-			AppDefaults.shared.confirmDeleteCompletedRows = false
-			self?.deleteRows(completedRows)
-		}
-		alertController.addAction(alwaysDeleteCompletedAction)
-
-		let deleteCompletedAction = UIAlertAction(title: .deleteOnceControlLabel, style: .destructive) { [weak self] action in
-			self?.deleteRows(completedRows)
-		}
-		
-		alertController.addAction(deleteCompletedAction)
-		alertController.preferredAction = deleteCompletedAction
-
-		let cancelAction = UIAlertAction(title: .cancelControlLabel, style: .cancel)
-		alertController.addAction(cancelAction)
-
-		present(alertController, animated: true)
 	}
 	
 	func printDoc() {
@@ -1232,42 +1155,12 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		collectionView.selectItem(at: IndexPath(row: shadowTableIndex, section: adjustedRowsSection), animated: true, scrollPosition: [])
 	}
 
-	@objc func focusIn() {
-		guard let row = currentRows?.first else { return }
-		outline?.focusIn(row)
-	}
-	
-	@objc func focusOut() {
-		outline?.focusOut()
+	@objc func copyRowLink(_ sender: Any?) {
+		guard let entityID = currentRows?.first?.entityID else { return }
+		UIPasteboard.general.url = entityID.url
 	}
 
-	@objc func toggleFocus() {
-		if isFocusing {
-			focusOut()
-		} else {
-			focusIn()
-		}
-	}
-
-	@objc func toggleFilterOn() {
-		guard let changes = outline?.toggleFilterOn() else { return }
-		applyChangesRestoringState(changes)
-		updateUI()
-	}
-	
-	@objc func toggleCompletedFilter() {
-		guard let changes = outline?.toggleCompletedFilter() else { return }
-		applyChangesRestoringState(changes)
-		updateUI()
-	}
-	
-	@objc func toggleNotesFilter() {
-		guard let changes = outline?.toggleNotesFilter() else { return }
-		applyChangesRestoringState(changes)
-		updateUI()
-	}
-		
-	@objc func insertImage() {
+	@objc func insertImage(_ sender: Any?) {
 		var config = PHPickerConfiguration()
 		config.filter = PHPickerFilter.images
 		config.selectionLimit = 1
@@ -1277,34 +1170,230 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		self.present(pickerViewController, animated: true, completion: nil)
 	}
 	
-	@objc func link() {
-		rightToolbarButtonGroup.dismissPopOverMenu()
-		currentTextView?.editLink(self)
+	@objc func focusIn(_ sender: Any?) {
+		guard let row = currentRows?.first else { return }
+		outline?.focusIn(row)
 	}
 	
-	@objc func insertNewline() {
+	@objc func focusOut(_ sender: Any?) {
+		outline?.focusOut()
+	}
+
+	@objc func toggleFocus(_ sender: Any?) {
+		if isFocusing {
+			focusOut(sender)
+		} else {
+			focusIn(sender)
+		}
+	}
+
+	@objc func toggleFilterOn(_ sender: Any?) {
+		guard let changes = outline?.toggleFilterOn() else { return }
+		applyChangesRestoringState(changes)
+		updateUI()
+	}
+	
+	@objc func toggleCompletedFilter(_ sender: Any?) {
+		guard let changes = outline?.toggleCompletedFilter() else { return }
+		applyChangesRestoringState(changes)
+		updateUI()
+	}
+	
+	@objc func toggleNotesFilter(_ sender: Any?) {
+		guard let changes = outline?.toggleNotesFilter() else { return }
+		applyChangesRestoringState(changes)
+		updateUI()
+	}
+		
+	@objc func expandAllInOutline(_ sender: Any?) {
+		guard let outline else { return }
+		expandAll(containers: [outline])
+	}
+	
+	@objc func collapseAllInOutline(_ sender: Any?) {
+		guard let outline else { return }
+		collapseAll(containers: [outline])
+	}
+	
+	@objc func expandAll(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		expandAll(containers: rows)
+	}
+	
+	@objc func collapseAll(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		collapseAll(containers: rows)
+	}
+	
+	@objc func expand(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		expand(rows: rows)
+	}
+	
+	@objc func collapse(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		collapse(rows: rows)
+	}
+	
+	@objc func collapseParentRow(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		let parentRows = rows.compactMap { $0.parent as? Row }
+		guard !parentRows.isEmpty else { return }
+		collapse(rows: parentRows)
+	}
+	
+	@objc func addRowAbove(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		createRow(beforeRows: rows, moveCursor: true)
+	}
+	
+	@objc func addRowBelow(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		createRow(afterRows: rows)
+	}
+	
+	@objc func createRowInside(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		createRowInside(afterRows: rows)
+	}
+	
+	@objc func createRowOutside(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		createRowOutside(afterRows: rows)
+	}
+	
+	@objc func duplicateCurrentRows(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		duplicateRows(rows)
+	}
+	
+	@objc func deleteCurrentRows(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		deleteRows(rows)
+	}
+	
+	@objc func moveCurrentRowsLeft(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		moveRowsLeft(rows)
+	}
+	
+	@objc func moveCurrentRowsRight(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		moveRowsRight(rows)
+	}
+	
+	@objc func moveCurrentRowsUp(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		moveRowsUp(rows)
+	}
+	
+	@objc func moveCurrentRowsDown(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		moveRowsDown(rows)
+	}
+
+	@objc func groupCurrentRows(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		groupRows(rows)
+	}
+	
+	@objc func sortCurrentRows(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		sortRows(rows)
+	}
+	
+	@objc func toggleCompleteRows(_ sender: Any?) {
+		guard let outline, let rows = currentRows else { return }
+		if !outline.isCompleteUnavailable(rows: rows) {
+			completeRows(rows)
+		} else if !outline.isUncompleteUnavailable(rows: rows) {
+			uncompleteRows(rows)
+		}
+	}
+	
+	@objc func deleteCompletedRows(_ sender: Any?) {
+		guard let completedRows = outline?.allCompletedRows else { return }
+
+		guard AppDefaults.shared.confirmDeleteCompletedRows else {
+			deleteRows(completedRows)
+			return
+		}
+		
+		let alertController = UIAlertController(title: .deleteCompletedRowsTitle,
+												message: .deleteCompletedRowsMessage,
+												preferredStyle: .alert)
+		
+		let alwaysDeleteCompletedAction = UIAlertAction(title: .deleteAlwaysControlLabel, style: .destructive) { [weak self] action in
+			AppDefaults.shared.confirmDeleteCompletedRows = false
+			self?.deleteRows(completedRows)
+		}
+		alertController.addAction(alwaysDeleteCompletedAction)
+
+		let deleteCompletedAction = UIAlertAction(title: .deleteOnceControlLabel, style: .destructive) { [weak self] action in
+			self?.deleteRows(completedRows)
+		}
+		
+		alertController.addAction(deleteCompletedAction)
+		alertController.preferredAction = deleteCompletedAction
+
+		let cancelAction = UIAlertAction(title: .cancelControlLabel, style: .cancel)
+		alertController.addAction(cancelAction)
+
+		present(alertController, animated: true)
+	}
+	
+	@objc func toggleRowNotes(_ sender: Any?) {
+		guard let outline, let currentRows else { return }
+		
+		if outline.isCreateNotesUnavailable(rows: currentRows) {
+			if isEditingTopic {
+				moveCursorToCurrentRowNote()
+			} else if isEditingNote {
+				moveCursorToCurrentRowTopic()
+			}
+		} else {
+			createRowNotes(currentRows)
+		}
+	}
+
+	@objc func createOrDeleteNotes(_ sender: Any?) {
+		guard let currentRows else { return }
+
+		if isDeleteRowNotesUnavailable {
+			createRowNotes(currentRows)
+		} else {
+			deleteRowNotes(currentRows)
+		}
+	}
+	
+	@objc func deleteRowNotes(_ sender: Any?) {
+		guard let rows = currentRows else { return }
+		deleteRowNotes(rows)
+	}
+
+	@objc func insertNewline(_ sender: Any?) {
 		currentTextView?.insertNewline(self)
 	}
 	
-	@objc func outlineToggleBoldface(_ sender: Any? = nil) {
+	@objc func editorLink(_ sender: Any?) {
+		rightToolbarButtonGroup.dismissPopOverMenu()
+		currentTextView?.editLink(self)
+	}
+
+	@objc func editorToggleBoldface(_ sender: Any? = nil) {
 		rightToolbarButtonGroup.dismissPopOverMenu()
 		currentTextView?.toggleBoldface(self)
 	}
 	
-	@objc func outlineToggleItalics(_ sender: Any? = nil) {
+	@objc func editorToggleItalics(_ sender: Any? = nil) {
 		rightToolbarButtonGroup.dismissPopOverMenu()
 		currentTextView?.toggleItalics(self)
 	}
 	
-	@objc func copyRowLink() {
-		guard let entityID = currentRows?.first?.entityID else { return }
-		UIPasteboard.general.url = entityID.url
-	}
-
-	@objc func share(_ sender: Any? = nil) {
+	func share(sourceView: UIView? = nil) {
 		let controller = UIActivityViewController(activityItemsConfiguration: DocumentsActivityItemsConfiguration(delegate: self))
-		if let sendingView = sender as? UIView {
-			controller.popoverPresentationController?.sourceView = sendingView
+		if let sourceView {
+			controller.popoverPresentationController?.sourceView = sourceView
 		} else {
 			controller.popoverPresentationController?.sourceView = collectionView
 			var rect = collectionView.bounds
@@ -1319,71 +1408,16 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		delegate?.showGetInfo(self, outline: outline)
 	}
 	
-	@objc func goBackwardOne() {
-		delegate?.goBackward(self, to: 0)
-	}
-
-	@objc func goForwardOne() {
-		delegate?.goForward(self, to: 0)
-	}
-
-	@objc func showUndoMenu() {
+	@objc func showUndoMenu(_ sender: Any?) {
 		updateUI()
 		navButtonGroup.showPopOverMenu(for: undoMenuButton)
 	}
 
-	@objc func undo() {
-		undoManager?.undo()
-	}
-	
-	@objc func redo() {
-		undoManager?.redo()
-	}
-	
-	@objc func showFormatMenu() {
+	@objc func showFormatMenu(_ sender: Any?) {
 		updateUI()
 		rightToolbarButtonGroup.showPopOverMenu(for: formatMenuButton)
 	}
 
-	@objc func moveCurrentRowsLeft() {
-		guard let rows = currentRows else { return }
-		moveRowsLeft(rows)
-	}
-	
-	@objc func moveCurrentRowsRight() {
-		guard let rows = currentRows else { return }
-		moveRowsRight(rows)
-	}
-	
-	@objc func moveCurrentRowsUp() {
-		guard let rows = currentRows else { return }
-		moveRowsUp(rows)
-	}
-	
-	@objc func moveCurrentRowsDown() {
-		guard let rows = currentRows else { return }
-		moveRowsDown(rows)
-	}
-	
-	@objc func createOrDeleteNotes() {
-		guard let rows = currentRows else { return }
-
-		if !isCreateRowNotesUnavailable {
-			createRowNotes(rows)
-		} else {
-			deleteRowNotes(rows)
-		}
-	}
-
-	@objc func toggleCompleteRows() {
-		guard let outline, let rows = currentRows else { return }
-		if !outline.isCompleteUnavailable(rows: rows) {
-			completeRows(rows)
-		} else if !outline.isUncompleteUnavailable(rows: rows) {
-			uncompleteRows(rows)
-		}
-	}
-	
 }
 
 // MARK: UICollectionViewDelegate, UICollectionViewDataSource
@@ -1484,6 +1518,10 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			if traitCollection.userInterfaceIdiom != .mac {
 				CursorCoordinates.clearLastKnownCoordinates()
 			}                      
+		} else if let titleOrTagInput = UIResponder.currentFirstResponder as? EditorTextInput & UIResponder {
+			if traitCollection.userInterfaceIdiom != .mac {
+				titleOrTagInput.resignFirstResponder()
+			}
 		}
 	}
 	
@@ -1722,10 +1760,9 @@ extension EditorViewController: EditorRowViewCellDelegate {
 	func editorRowTextFieldDidBecomeActive(row: Row) {
 		// This makes doing row insertions much faster because this work will
 		// be performed a cycle after the actual insertion was completed.
-		DispatchQueue.main.async {
+		Task { @MainActor in
 			self.collectionView.deselectAll()
 			self.updateUI()
-			self.delegate?.validateToolbar(self)
 		}
 	}
 
@@ -1739,6 +1776,7 @@ extension EditorViewController: EditorRowViewCellDelegate {
 
 	func editorRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange) {
 		textChanged(row: row, rowStrings: rowStrings, isInNotes: isInNotes, selection: selection)
+		savedCursorRectForUpAndDownArrowing = nil
 	}
 	
 	func editorRowDeleteRow(_ row: Row, rowStrings: RowStrings) {
@@ -1828,7 +1866,7 @@ extension EditorViewController: PHPickerViewControllerDelegate {
 			if let data = (object as? UIImage)?.rotateImage()?.pngData(), let cgImage = UIImage.scaleImage(data, maxPixelSize: 1800) {
 				let scaledImage = UIImage(cgImage: cgImage)
 				
-				DispatchQueue.main.async {
+				Task { @MainActor in
 					self.restoreCursorPosition(cursorCoordinates)
 					
 					guard let shadowTableIndex = cursorCoordinates.row.shadowTableIndex else { return }
@@ -2006,42 +2044,42 @@ private extension EditorViewController {
 	
 	func configureButtonBars() {
 		undoMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
-		undoButton = undoMenuButtonGroup.addButton(label: .undoControlLabel, image: .undo, selector: "undo")
-		cutButton = undoMenuButtonGroup.addButton(label: .cutControlLabel, image: .cut, selector: "cut:")
-		copyButton = undoMenuButtonGroup.addButton(label: .copyControlLabel, image: .copy, selector: "copy:")
-		pasteButton = undoMenuButtonGroup.addButton(label: .pasteControlLabel, image: .paste, selector: "paste:")
-		redoButton = undoMenuButtonGroup.addButton(label: .redoControlLabel, image: .redo, selector: "redo")
+		undoButton = undoMenuButtonGroup.addButton(label: .undoControlLabel, image: .undo, selector: .undo)
+		cutButton = undoMenuButtonGroup.addButton(label: .cutControlLabel, image: .cut, selector: .cut)
+		copyButton = undoMenuButtonGroup.addButton(label: .copyControlLabel, image: .copy, selector: .copy)
+		pasteButton = undoMenuButtonGroup.addButton(label: .pasteControlLabel, image: .paste, selector: .paste)
+		redoButton = undoMenuButtonGroup.addButton(label: .redoControlLabel, image: .redo, selector: .redo)
 
 		navButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
-		goBackwardButton = navButtonGroup.addButton(label: .goBackwardControlLabel, image: .goBackward, selector: "goBackwardOne")
-		goForwardButton = navButtonGroup.addButton(label: .goForwardControlLabel, image: .goForward, selector: "goForwardOne")
-		undoMenuButton = navButtonGroup.addButton(label: .undoMenuControlLabel, image: .undoMenu, selector: "showUndoMenu")
+		goBackwardButton = navButtonGroup.addButton(label: .goBackwardControlLabel, image: .goBackward, selector: .goBackwardOne)
+		goForwardButton = navButtonGroup.addButton(label: .goForwardControlLabel, image: .goForward, selector: .goForwardOne)
+		undoMenuButton = navButtonGroup.addButton(label: .undoMenuControlLabel, image: .undoMenu, selector: .showUndoMenu)
 		undoMenuButton.popoverButtonGroup = undoMenuButtonGroup
 		moreMenuButton = navButtonGroup.addButton(label: .moreControlLabel, image: .ellipsis, showMenu: true)
-		focusButton = navButtonGroup.addButton(label: .focusInControlLabel, image: .focusInactive, selector: "toggleFocus")
+		focusButton = navButtonGroup.addButton(label: .focusInControlLabel, image: .focusInactive, selector: .toggleFocus)
 		filterButton = navButtonGroup.addButton(label: .filterControlLabel, image: .filterInactive, showMenu: true)
 		let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
 		leftToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .left)
-		moveLeftButton = leftToolbarButtonGroup.addButton(label: .moveLeftControlLabel, image: .moveLeft, selector: "moveCurrentRowsLeft")
-		moveRightButton = leftToolbarButtonGroup.addButton(label: .moveRightControlLabel, image: .moveRight, selector: "moveCurrentRowsRight")
-		moveUpButton = leftToolbarButtonGroup.addButton(label: .moveUpControlLabel, image: .moveUp, selector: "moveCurrentRowsUp")
-		moveDownButton = leftToolbarButtonGroup.addButton(label: .moveDownControlLabel, image: .moveDown, selector: "moveCurrentRowsDown")
+		moveLeftButton = leftToolbarButtonGroup.addButton(label: .moveLeftControlLabel, image: .moveLeft, selector: .moveCurrentRowsLeft)
+		moveRightButton = leftToolbarButtonGroup.addButton(label: .moveRightControlLabel, image: .moveRight, selector: .moveCurrentRowsRight)
+		moveUpButton = leftToolbarButtonGroup.addButton(label: .moveUpControlLabel, image: .moveUp, selector: .moveCurrentRowsUp)
+		moveDownButton = leftToolbarButtonGroup.addButton(label: .moveDownControlLabel, image: .moveDown, selector: .moveCurrentRowsDown)
 		let moveButtonsBarButtonItem = leftToolbarButtonGroup.buildBarButtonItem()
 
 		formatMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
-		linkButton = formatMenuButtonGroup.addButton(label: .linkControlLabel, image: .link, selector: "link")
+		linkButton = formatMenuButtonGroup.addButton(label: .linkControlLabel, image: .link, target: self, selector: .editorLink)
 		let boldImage = UIImage.bold.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
-		boldButton = formatMenuButtonGroup.addButton(label: .boldControlLabel, image: boldImage, selector: "outlineToggleBoldface:")
+		boldButton = formatMenuButtonGroup.addButton(label: .boldControlLabel, image: boldImage, target: self, selector: .editorToggleBoldface)
 		let italicImage = UIImage.italic.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .medium))!
-		italicButton = formatMenuButtonGroup.addButton(label: .italicControlLabel, image: italicImage, selector: "outlineToggleItalics:")
+		italicButton = formatMenuButtonGroup.addButton(label: .italicControlLabel, image: italicImage, target: self, selector: .editorToggleItalics)
 
 		rightToolbarButtonGroup = ButtonGroup(hostController: self, containerType: .compactable, alignment: .right)
-		insertImageButton = rightToolbarButtonGroup.addButton(label: .insertImageControlLabel, image: .insertImage, selector: "insertImage")
-		formatMenuButton = rightToolbarButtonGroup.addButton(label: .formatControlLabel, image: .format, selector: "showFormatMenu")
+		insertImageButton = rightToolbarButtonGroup.addButton(label: .insertImageControlLabel, image: .insertImage, selector: .insertImage)
+		formatMenuButton = rightToolbarButtonGroup.addButton(label: .formatControlLabel, image: .format, selector: .showFormatMenu)
 		formatMenuButton.popoverButtonGroup = formatMenuButtonGroup
-		noteButton = rightToolbarButtonGroup.addButton(label: .addNoteControlLabel, image: .noteAdd, selector: "createOrDeleteNotes")
-		insertNewlineButton = rightToolbarButtonGroup.addButton(label: .newOutlineControlLabel, image: .newline, selector: "insertNewline")
+		noteButton = rightToolbarButtonGroup.addButton(label: .addNoteControlLabel, image: .noteAdd, selector: .createOrDeleteNotes)
+		insertNewlineButton = rightToolbarButtonGroup.addButton(label: .newOutlineControlLabel, image: .newline, selector: .insertNewline)
 		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
 
 		if traitCollection.userInterfaceIdiom != .mac {
@@ -2082,19 +2120,19 @@ private extension EditorViewController {
 		outlineActions.append(findAction)
 
 		let expandAllInOutlineAction = UIAction(title: .expandAllInOutlineControlLabel, image: .expandAll) { [weak self] _ in
-			self?.expandAllInOutline()
+			self?.expandAllInOutline(self)
 		}
 		outlineActions.append(expandAllInOutlineAction)
 		
 		let collapseAllInOutlineAction = UIAction(title: .collapseAllInOutlineControlLabel, image: .collapseAll) { [weak self] _ in
-			self?.collapseAllInOutline()
+			self?.collapseAllInOutline(self)
 		}
 		outlineActions.append(collapseAllInOutlineAction)
 		
 		var shareActions = [UIMenuElement]()
 
 		let shareAction = UIAction(title: .shareEllipsisControlLabel, image: .share) { [weak self] _ in
-			self?.share(self?.moreMenuButton)
+			self?.share(sourceView: self?.moreMenuButton)
 		}
 		shareActions.append(shareAction)
 
@@ -2132,7 +2170,7 @@ private extension EditorViewController {
 		let deleteCompletedRowsAction = UIAction(title: .deleteCompletedRowsControlLabel,
 												 image: .delete,
 												 attributes: .destructive) { [weak self] _ in
-			self?.deleteCompletedRows()
+			self?.deleteCompletedRows(nil)
 		}
 		let outlineMenu = UIMenu(title: "", options: .displayInline, children: outlineActions)
 		let shareMenu = UIMenu(title: "", options: .displayInline, children: shareActions)
@@ -2143,20 +2181,20 @@ private extension EditorViewController {
 	
 	func buildFilterMenu() -> UIMenu {
 		let turnFilterOnAction = UIAction() { [weak self] _ in
-		   self?.toggleFilterOn()
+		   self?.toggleFilterOn(self)
 		}
 		turnFilterOnAction.title = isFilterOn ? .turnFilterOffControlLabel : .turnFilterOnControlLabel
 		
 		let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
 		
 		let filterCompletedAction = UIAction(title: .filterCompletedControlLabel) { [weak self] _ in
-			self?.toggleCompletedFilter()
+			self?.toggleCompletedFilter(self)
 		}
 		filterCompletedAction.state = isCompletedFiltered ? .on : .off
 		filterCompletedAction.attributes = isFilterOn ? [] : .disabled
 
 		let filterNotesAction = UIAction(title: .filterNotesControlLabel) { [weak self] _ in
-		   self?.toggleNotesFilter()
+		   self?.toggleNotesFilter(self)
 		}
 		filterNotesAction.state = isNotesFiltered ? .on : .off
 		filterNotesAction.attributes = isFilterOn ? [] : .disabled
@@ -2204,6 +2242,15 @@ private extension EditorViewController {
 		guard presses.count == 1, let key = presses.first?.key else {
 			super.pressesBegan(presses, with: event)
 			return
+		}
+
+		switch (key.keyCode, true) {
+		case (.keyboardUpArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
+			break
+		case (.keyboardDownArrow, key.modifierFlags.subtracting([.alphaShift, .numericPad]).isEmpty):
+			break
+		default:
+			savedCursorRectForUpAndDownArrowing = nil
 		}
 		
 		if !(CursorCoordinates.currentCoordinates?.isInNotes ?? false) {
@@ -2630,7 +2677,8 @@ private extension EditorViewController {
 			CATransaction.begin()
 			CATransaction.setCompletionBlock {
 				// Got to wait or the row cell won't be found
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+				Task { @MainActor in
+					try? await Task.sleep(for: .seconds(0.5))
 					restoreCursor()
 				}
 			}
@@ -2648,7 +2696,7 @@ private extension EditorViewController {
 		let rowCount = collectionView.numberOfItems(inSection: adjustedRowsSection)
 		if let verticleScrollState = outline?.verticleScrollState, verticleScrollState != 0, verticleScrollState < rowCount {
 			collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: adjustedRowsSection), at: .top, animated: false)
-			DispatchQueue.main.async {
+			Task { @MainActor in
 				let rowCount = self.collectionView.numberOfItems(inSection: self.adjustedRowsSection)
 				if verticleScrollState < rowCount {
 					self.collectionView.scrollToItem(at: IndexPath(row: verticleScrollState, section: self.adjustedRowsSection), at: .top, animated: false)
@@ -2663,7 +2711,8 @@ private extension EditorViewController {
 	
 	func moveCursorToTitleOnNew() {
 		if isOutlineNewFlag {
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+			Task { @MainActor in
+				try? await Task.sleep(for: .seconds(0.6))
 				self.moveCursorToTitle()
 			}
 		}
@@ -2750,7 +2799,6 @@ private extension EditorViewController {
 
 			var outlineActions = [UIAction]()
 			outlineActions.append(self.addAction(rows: rows))
-			outlineActions.append(self.duplicateAction(rows: rows))
 			if !outline.isCompleteUnavailable(rows: rows) {
 				outlineActions.append(self.completeAction(rows: rows))
 			}
@@ -2762,6 +2810,13 @@ private extension EditorViewController {
 			}
 			if !outline.isDeleteNotesUnavailable(rows: rows) {
 				outlineActions.append(self.deleteNoteAction(rows: rows))
+			}
+			outlineActions.append(self.duplicateAction(rows: rows))
+			if !outline.isGroupRowsUnavailable(rows: rows) {
+				outlineActions.append(self.groupAction(rows: rows))
+			}
+			if !outline.isSortRowsUnavailable(rows: rows) {
+				outlineActions.append(self.sortAction(rows: rows))
 			}
 			menuItems.append(UIMenu(title: "", options: .displayInline, children: outlineActions))
 
@@ -2821,14 +2876,15 @@ private extension EditorViewController {
 		return UIAction(title: .addRowControlLabel, image: .add) { [weak self] action in
 			// Have to let the text field get the first responder by getting it away from this
 			// action which appears to be holding on to it.
-			DispatchQueue.main.async {
+			Task { @MainActor in
 				self?.createRow(afterRows: rows)
 			}
 		}
 	}
 
 	func duplicateAction(rows: [Row]) -> UIAction {
-		return UIAction(title: .duplicateControlLabel, image: .duplicate) { [weak self] action in
+		let title = rows.count == 1 ? String.duplicateRowControlLabel : String.duplicateRowsControlLabel
+		return UIAction(title: title, image: .duplicate) { [weak self] action in
 			self?.duplicateRows(rows)
 		}
 	}
@@ -2849,7 +2905,6 @@ private extension EditorViewController {
 		return UIAction(title: .focusInControlLabel, image: .focusActive) { [weak self] action in
 			guard let self else { return }
 			self.outline?.focusIn(rows.first!)
-			self.delegate?.validateToolbar(self)
 		}
 	}
 	
@@ -2883,6 +2938,19 @@ private extension EditorViewController {
 			guard let self else { return }
 			self.deleteRows(rows)
 			self.delegate?.validateToolbar(self)
+		}
+	}
+
+	func groupAction(rows: [Row]) -> UIAction {
+		let title = rows.count == 1 ? String.groupRowControlLabel : String.groupRowsControlLabel
+		return UIAction(title: title, image: .groupRows) { [weak self] action in
+			self?.groupCurrentRows(rows)
+		}
+	}
+
+	func sortAction(rows: [Row]) -> UIAction {
+		return UIAction(title: .sortRowsControlLabel, image: .sortRows) { [weak self] action in
+			self?.sortCurrentRows(rows)
 		}
 	}
 
@@ -2935,9 +3003,12 @@ private extension EditorViewController {
 		}
 		
 		func moveCursorUpToNext(nextTopicTextView: EditorRowTopicTextView) {
-			if let topicTextViewCursorRect = topicTextView.cursorRect {
-				let convertedRect = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
-				let nextRect = nextTopicTextView.convert(convertedRect, from: collectionView)
+			if savedCursorRectForUpAndDownArrowing == nil, let topicTextViewCursorRect = topicTextView.cursorRect {
+				savedCursorRectForUpAndDownArrowing = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
+			}
+
+			if let savedCursorRectForUpAndDownArrowing {
+				let nextRect = nextTopicTextView.convert(savedCursorRectForUpAndDownArrowing, from: collectionView)
 				if let cursorPosition = nextTopicTextView.closestPosition(to: CGPoint(x: nextRect.midX, y: nextTopicTextView.bounds.height - 1)) {
 					let cursorOffset = nextTopicTextView.offset(from: nextTopicTextView.beginningOfDocument, to: cursorPosition)
 					let range = NSRange(location: cursorOffset, length: 0)
@@ -2957,7 +3028,8 @@ private extension EditorViewController {
 				let totalHeight = xHeight + topicTextView.textContainerInset.top + topicTextView.textContainerInset.bottom
 				let rect = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: totalHeight)
 				collectionView.scrollRectToVisibleBypass(rect, animated: true)
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+				Task { @MainActor in
+					try? await Task.sleep(for: .seconds(0.3))
 					if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView {
 						nextTopicTextView.becomeFirstResponder()
 						moveCursorUpToNext(nextTopicTextView: nextTopicTextView)
@@ -2990,14 +3062,19 @@ private extension EditorViewController {
 		}
 		
 		func moveCursorDownToNext(nextTopicTextView: EditorRowTopicTextView) {
-			if let topicTextViewCursorRect = topicTextView.cursorRect {
-				let convertedRect = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
-				let nextRect = nextTopicTextView.convert(convertedRect, from: collectionView)
+			if savedCursorRectForUpAndDownArrowing == nil, let topicTextViewCursorRect = topicTextView.cursorRect {
+				savedCursorRectForUpAndDownArrowing = topicTextView.convert(topicTextViewCursorRect, to: collectionView)
+			}
+
+			if let savedCursorRectForUpAndDownArrowing {
+				let nextRect = nextTopicTextView.convert(savedCursorRectForUpAndDownArrowing, from: collectionView)
+				
 				if let cursorPosition = nextTopicTextView.closestPosition(to: CGPoint(x: nextRect.midX, y: 0)) {
 					let cursorOffset = nextTopicTextView.offset(from: nextTopicTextView.beginningOfDocument, to: cursorPosition)
 					let range = NSRange(location: cursorOffset, length: 0)
 					nextTopicTextView.selectedRange = range
 				}
+				
 				scrollIfNecessary()
 			}
 		}
@@ -3012,7 +3089,8 @@ private extension EditorViewController {
 				let totalHeight = xHeight + topicTextView.textContainerInset.top + topicTextView.textContainerInset.bottom
 				let rect = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: totalHeight)
 				collectionView.scrollRectToVisibleBypass(rect, animated: true)
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+				Task { @MainActor in
+					try? await Task.sleep(for: .seconds(0.3))
 					if let nextTopicTextView = (self.collectionView.cellForItem(at: indexPath) as? EditorRowViewCell)?.topicTextView {
 						nextTopicTextView.becomeFirstResponder()
 						moveCursorDownToNext(nextTopicTextView: nextTopicTextView)
@@ -3161,33 +3239,35 @@ private extension EditorViewController {
 	func copyRows(_ rows: [Row]) {
 		var itemProviders = [NSItemProvider]()
 
+		let markdownItemProvider = NSItemProvider()
+
+		var markdowns = [String]()
 		for row in rows.sortedWithDecendentsFiltered() {
-			let itemProvider = NSItemProvider()
+			markdowns.append(row.markdownList())
+		}
+		let markdownData = markdowns.joined(separator: "\n").data(using: .utf8)
+
+		markdownItemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
+			completion(markdownData, nil)
+			return nil
+		}
+
+		itemProviders.append(markdownItemProvider)
+		
+		for row in rows.sortedWithDecendentsFiltered() {
+			let rowItemProvider = NSItemProvider()
 
 			// We need to create the RowGroup data before our data representation callback happens
 			// because we might actually be cutting the data and it won't be available anymore at
 			// the time that the callback happens.
-			let data = try? RowGroup(row).asData()
-
-			// We only register the text representation on the first one, since it looks like most text editors only support 1 dragged text item
-			if row == rows[0] {
-				itemProvider.registerDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier, visibility: .all) { completion in
-					var markdowns = [String]()
-					for row in rows.sortedWithDecendentsFiltered() {
-						markdowns.append(row.markdownList())
-					}
-					let data = markdowns.joined(separator: "\n").data(using: .utf8)
-					completion(data, nil)
-					return nil
-				}
-			}
+			let rowData = try? RowGroup(row).asData()
 			
-			itemProvider.registerDataRepresentation(forTypeIdentifier: Row.typeIdentifier, visibility: .ownProcess) { completion in
-				completion(data, nil)
+			rowItemProvider.registerDataRepresentation(forTypeIdentifier: Row.typeIdentifier, visibility: .ownProcess) { completion in
+				completion(rowData, nil)
 				return nil
 			}
 			
-			itemProviders.append(itemProvider)
+			itemProviders.append(rowItemProvider)
 		}
 		
 		UIPasteboard.general.setItemProviders(itemProviders, localOnly: false, expirationDate: nil)
@@ -3195,68 +3275,29 @@ private extension EditorViewController {
 
 	func pasteRows(afterRows: [Row]?) {
 		guard let undoManager, let outline else { return }
-
-		if let rowProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [Row.typeIdentifier]), !rowProviderIndexes.isEmpty {
-			let group = DispatchGroup()
-			var rowGroups = [RowGroup]()
-			
-			for index in rowProviderIndexes {
-				let itemProvider = UIPasteboard.general.itemProviders[index]
-				group.enter()
-				itemProvider.loadDataRepresentation(forTypeIdentifier: Row.typeIdentifier) { [weak self] (data, error) in
-					DispatchQueue.main.async {
-						if let data {
-							do {
-								rowGroups.append(try RowGroup.fromData(data))
-								group.leave()
-							} catch {
-								self?.presentError(error)
-								group.leave()
-							}
-						}
-					}
-				}
-			}
-
-			group.notify(queue: DispatchQueue.main) {
-				let command = PasteRowCommand(actionName: .pasteControlLabel,
-											  undoManager: undoManager,
-											  delegate: self,
-											  outline: outline,
-											  rowGroups: rowGroups,
-											  afterRow: afterRows?.last)
-
-				command.execute()
-			}
-			
-		} else if let stringProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [UTType.utf8PlainText.identifier]), !stringProviderIndexes.isEmpty {
-			
-			let group = DispatchGroup()
-			var texts = [String]()
-			
-			for index in stringProviderIndexes {
-				let itemProvider = UIPasteboard.general.itemProviders[index]
-				group.enter()
-				itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
-					if let data, let itemText = String(data: data, encoding: .utf8) {
-						texts.append(itemText)
-						group.leave()
-					}
-				}
-			}
-
-			group.notify(queue: DispatchQueue.main) {
-				let text = texts.joined(separator: "\n")
-				guard !text.isEmpty else { return }
+		
+		Task {
+			if let rowProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [Row.typeIdentifier]), !rowProviderIndexes.isEmpty {
+				let itemProviders = rowProviderIndexes.compactMap { UIPasteboard.general.itemProviders[$0] }
 				
-				let document = Markdown.Document(parsing: text)
-				var walker = SimpleRowWalker()
-				walker.visit(document)
+				do {
+					let rowGroups = try await RowGroup.fromRowItemProviders(itemProviders)
+					
+					let command = PasteRowCommand(actionName: .pasteControlLabel,
+												  undoManager: undoManager,
+												  delegate: self,
+												  outline: outline,
+												  rowGroups: rowGroups,
+												  afterRow: afterRows?.last)
 				
-				var rowGroups = [RowGroup]()
-				for row in walker.rows {
-					rowGroups.append(RowGroup(row))
+					command.execute()
+				} catch {
+					presentError(error)
 				}
+			} else if let textProviderIndexes = UIPasteboard.general.itemSet(withPasteboardTypes: [UTType.utf8PlainText.identifier]), !textProviderIndexes.isEmpty {
+				let itemProviders = textProviderIndexes.compactMap { UIPasteboard.general.itemProviders[$0] }
+				
+				let rowGroups = await RowGroup.fromTextItemProviders(itemProviders)
 				
 				let command = PasteRowCommand(actionName: .pasteControlLabel,
 											  undoManager: undoManager,
@@ -3264,10 +3305,9 @@ private extension EditorViewController {
 											  outline: outline,
 											  rowGroups: rowGroups,
 											  afterRow: afterRows?.last)
-
+				
 				command.execute()
 			}
-
 		}
 	}
 	
@@ -3352,7 +3392,7 @@ private extension EditorViewController {
 	func duplicateRows(_ rows: [Row]) {
 		guard let undoManager, let outline else { return }
 
-		let command = DuplicateRowCommand(actionName: .duplicateRowControlLabel,
+		let command = DuplicateRowCommand(actionName: .duplicateRowsControlLabel,
 										  undoManager: undoManager,
 										  delegate: self,
 										  outline: outline,
@@ -3445,6 +3485,31 @@ private extension EditorViewController {
 									 bottomRow: bottomRow,
 									 topic: topic)
 												  
+		
+		command.execute()
+	}
+
+	func groupRows(_ rows: [Row], rowStrings: RowStrings? = nil) {
+		guard let undoManager, let outline else { return }
+		
+		let command = GroupRowsCommand(actionName: .groupRowsControlLabel,
+									   undoManager: undoManager,
+									   delegate: self,
+									   outline: outline,
+									   rows: rows,
+									   rowStrings: rowStrings)
+		
+		command.execute()
+	}
+
+	func sortRows(_ rows: [Row]) {
+		guard let undoManager, let outline else { return }
+		
+		let command = SortRowsCommand(actionName: .groupRowsControlLabel,
+									  undoManager: undoManager,
+									  delegate: self,
+									  outline: outline,
+									  rows: rows)
 		
 		command.execute()
 	}
@@ -3563,7 +3628,9 @@ private extension EditorViewController {
 		if let outline {
 			outline.load()
 			DocumentIndexer.updateIndex(forDocument: .outline(outline))
-			outline.unload()
+			Task {
+				await outline.unload()
+			}
 		}
 	}
 	

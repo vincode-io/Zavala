@@ -11,12 +11,13 @@ public final class LocalDropRowCommand: OutlineCommand {
 	var rowMoves = [Outline.RowMove]()
 	var restoreMoves = [Outline.RowMove]()
 	
-	public init(actionName: String, undoManager: UndoManager,
-		 delegate: OutlineCommandDelegate,
-		 outline: Outline,
-		 rows: [Row],
-		 toParent: RowContainer,
-		 toChildIndex: Int) {
+	public init(actionName: String,
+				undoManager: UndoManager,
+				delegate: OutlineCommandDelegate,
+				outline: Outline,
+				rows: [Row],
+				toParent: RowContainer,
+				toChildIndex: Int) {
 		
 		for i in 0..<rows.count {
 			let row = rows[i]

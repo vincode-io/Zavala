@@ -27,16 +27,16 @@ struct SettingsAccountsView: View {
 				}
 			}
 			.toggleStyle(.switch)
-			.onChange(of: enableLocalAccount) {
-				AppDefaults.shared.enableLocalAccount = $0
+			.onChange(of: enableLocalAccount) { old, new in
+				AppDefaults.shared.enableLocalAccount = new
 			}
 			Toggle(isOn: $enableCloudKit) {
 				Text(String.enableCloudKitControlLabel)
 			}
 			.toggleStyle(.switch)
 			.disabled(AppDefaults.shared.isDeveloperBuild)
-			.onChange(of: enableCloudKit) {
-				if $0 {
+			.onChange(of: enableCloudKit) { old, new in
+				if new {
 					AppDefaults.shared.enableCloudKit = true
 				} else {
 					cloudKitAlertIsPresenting = true

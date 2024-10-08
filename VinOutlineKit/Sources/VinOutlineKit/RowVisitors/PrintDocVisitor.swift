@@ -11,7 +11,8 @@ import UIKit
 import Foundation
 #endif
 
-class PrintDocVisitor {
+@MainActor
+final class PrintDocVisitor {
 	
 	var indentLevel = 0
 	var print = NSMutableAttributedString()

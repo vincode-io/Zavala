@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import VinUtility
 
-class MarkdownDocVisitor {
+@MainActor
+final class MarkdownDocVisitor {
 	
 	let useAltLinks: Bool
 	var indentLevel = 0
@@ -29,8 +31,8 @@ class MarkdownDocVisitor {
 			indentLevel = indentLevel - 1
 		}
 
-		if let topicMarkdown = visited.topicMarkdown(representation: .markdown, useAltLinks: useAltLinks), !topicMarkdown.isEmpty {
-			if let noteMarkdown = visited.noteMarkdown(representation: .markdown, useAltLinks: useAltLinks), !noteMarkdown.isEmpty {
+		if let topicMarkdown = visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks), !topicMarkdown.isEmpty {
+			if let noteMarkdown = visited.noteMarkdown(type: .markdown, useAltLinks: useAltLinks), !noteMarkdown.isEmpty {
 				markdown.append("\n\n")
 				markdown.append(String(repeating: "#", count: indentLevel + 2))
 				markdown.append(" \(topicMarkdown)")
@@ -51,7 +53,7 @@ class MarkdownDocVisitor {
 				previousRowWasParagraph = false
 			}
 		} else {
-			if let noteMarkdown = visited.noteMarkdown(representation: .markdown, useAltLinks: useAltLinks), !noteMarkdown.isEmpty {
+			if let noteMarkdown = visited.noteMarkdown(type: .markdown, useAltLinks: useAltLinks), !noteMarkdown.isEmpty {
 				markdown.append("\n\n\(noteMarkdown)")
 				previousRowWasParagraph = true
 			} else {

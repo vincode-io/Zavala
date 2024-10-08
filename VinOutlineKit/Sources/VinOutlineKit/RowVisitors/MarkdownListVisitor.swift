@@ -7,7 +7,8 @@
 
 import Foundation
 
-class MarkdownListVisitor {
+@MainActor
+final class MarkdownListVisitor {
 	
 	let useAltLinks: Bool
 	var indentLevel = 0
@@ -21,12 +22,12 @@ class MarkdownListVisitor {
 		markdown.append(String(repeating: "\t", count: indentLevel))
 		
 		if visited.isComplete ?? false {
-			markdown.append("* ~~\(visited.topicMarkdown(representation: .markdown, useAltLinks: useAltLinks) ?? "")~~")
+			markdown.append("* ~~\(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")~~")
 		} else {
-			markdown.append("* \(visited.topicMarkdown(representation: .markdown, useAltLinks: useAltLinks) ?? "")")
+			markdown.append("* \(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")")
 		}
 		
-		if let noteMarkdown = visited.noteMarkdown(representation: .markdown, useAltLinks: useAltLinks), !noteMarkdown.isEmpty {
+		if let noteMarkdown = visited.noteMarkdown(type: .markdown, useAltLinks: useAltLinks), !noteMarkdown.isEmpty {
 			markdown.append("\n\n")
 			let paragraphs = noteMarkdown.components(separatedBy: "\n\n")
 			for paragraph in paragraphs {

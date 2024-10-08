@@ -12,11 +12,9 @@ import Semaphore
 import VinOutlineKit
 import VinUtility
 
+@MainActor
 protocol CollectionsDelegate: AnyObject {
 	func documentContainerSelectionsDidChange(_: CollectionsViewController, documentContainers: [DocumentContainer], isNavigationBranch: Bool, animated: Bool) async
-	func showSettings(_: CollectionsViewController)
-	func importOPML(_: CollectionsViewController)
-	func createOutline(_: CollectionsViewController)
 }
 
 enum CollectionsSection: Int {
@@ -24,7 +22,7 @@ enum CollectionsSection: Int {
 }
 
 class CollectionsViewController: UICollectionViewController, MainControllerIdentifiable {
-	var mainControllerIdentifer: MainControllerIdentifier { return .collections }
+	nonisolated var mainControllerIdentifer: MainControllerIdentifier { return .collections }
 	
 	weak var delegate: CollectionsDelegate?
 	
@@ -68,14 +66,15 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 
 	var dataSource: UICollectionViewDiffableDataSource<CollectionsSection, CollectionsItem>!
 	private var dataSourceSemaphore = AsyncSemaphore(value: 1)
-	private var applyChangeChannel = AsyncChannel<() -> Void>()
-	private var reloadVisibleChannel = AsyncChannel<() -> Void>()
+	private var applyChangeChannel = AsyncChannel<Void>()
+	private var reloadVisibleChannel = AsyncChannel<Void>()
 
 	private var expandedItems = Set<CollectionsItem>()
 	
 	private var addButton: UIButton!
 	private var importButton: UIButton!
 
+	private var settingsBarButtonItem: UIBarButtonItem!
     private var selectBarButtonItem: UIBarButtonItem!
     private var selectDoneBarButtonItem: UIBarButtonItem!
 	
@@ -88,6 +87,10 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 			navigationController?.setNavigationBarHidden(true, animated: false)
 			collectionView.allowsMultipleSelection = true
 		} else {
+			settingsBarButtonItem = UIBarButtonItem(image: .settings, style: .plain, target: nil, action: .showSettings)
+			settingsBarButtonItem.accessibilityLabel = .settingsControlLabel
+			navigationItem.leftBarButtonItem = settingsBarButtonItem
+			
 			if traitCollection.userInterfaceIdiom == .pad {
 				selectBarButtonItem = UIBarButtonItem(title: .selectControlLabel, style: .plain, target: self, action: #selector(multipleSelect))
 				selectDoneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(multipleSelectDone))
@@ -95,8 +98,8 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 				navigationItem.rightBarButtonItem = selectBarButtonItem
 			} else {
 				let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
-				importButton = navButtonGroup.addButton(label: .importOPMLControlLabel, image: .importDocument, selector: "importOPML:")
-				addButton = navButtonGroup.addButton(label: .addControlLabel, image: .createEntity, selector: "createOutline:")
+				importButton = navButtonGroup.addButton(label: .importOPMLControlLabel, image: .importDocument, selector: .importOPML)
+				addButton = navButtonGroup.addButton(label: .addControlLabel, image: .createEntity, selector: .createOutline)
 				let navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
 				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
@@ -119,15 +122,15 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		
 		// Using a semaphore here to make sure these two debouncers don't overlap when doing a lot of fast hits like when doing an account restore
 		Task {
-			for await applyChange in applyChangeChannel.debounce(for: .seconds(0.5)) {
+			for await _ in applyChangeChannel.debounce(for: .seconds(0.5)) {
 				await dataSourceSemaphore.wait()
 				defer { dataSourceSemaphore.signal() }
-				applyChange()
+				applyChangeSnapshot(animated: true)
 			}
 		}
 		
 		Task {
-			for await reloadVisible in reloadVisibleChannel.debounce(for: .seconds(0.5)) {
+			for await _ in reloadVisibleChannel.debounce(for: .seconds(0.5)) {
 				await dataSourceSemaphore.wait()
 				defer { dataSourceSemaphore.signal() }
 				reloadVisible()
@@ -154,7 +157,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
         }
         
         if let containers, containers.count == 1, let search = containers.first as? Search {
-			DispatchQueue.main.async {
+			Task { @MainActor in
 				if let searchCellIndexPath = self.dataSource.indexPath(for: CollectionsItem.searchItem()) {
 					if let searchCell = self.collectionView.cellForItem(at: searchCellIndexPath) as? CollectionsSearchCell {
 						searchCell.setSearchField(searchText: search.searchText)
@@ -198,13 +201,15 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 
 	@objc func cloudKitSyncWillBegin(_ note: Notification) {
 		// Let any pending UI things like adding the account happen so that we have something to put the spinner on
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+		Task { @MainActor in
+			try? await Task.sleep(for: .seconds(0.2))
 			self.iCloudActivityIndicatorView.startAnimating()
 		}
 	}
 	
 	@objc func cloudKitSyncDidComplete(_ note: Notification) {
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+		Task { @MainActor in
+			try? await Task.sleep(for: .seconds(0.2))
 			self.iCloudActivityIndicatorView.stopAnimating()
 		}
 	}
@@ -219,19 +224,7 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		}
 		collectionView?.refreshControl?.endRefreshing()
 	}
-	
-	@IBAction func showSettings(_ sender: Any) {
-		delegate?.showSettings(self)
-	}
-	
-	@objc func importOPML(_ sender: Any) {
-		delegate?.importOPML(self)
-	}
-
-    @objc func createOutline(_ sender: Any) {
-        delegate?.createOutline(self)
-    }
-    
+		
     @objc func multipleSelect() {
 		Task {
 			await selectDocumentContainers(nil, isNavigationBranch: true, animated: true)
@@ -248,16 +241,6 @@ class CollectionsViewController: UICollectionViewController, MainControllerIdent
 		}
     }
 
-	// MARK: API
-	
-	func beginDocumentSearch() {
-		if let searchCellIndexPath = self.dataSource.indexPath(for: CollectionsItem.searchItem()) {
-			if let searchCell = self.collectionView.cellForItem(at: searchCellIndexPath) as? CollectionsSearchCell {
-				searchCell.setSearchField(searchText: "")
-			}
-		}
-	}
-	
 }
 
 // MARK: Collection View
@@ -377,7 +360,7 @@ extension CollectionsViewController {
 		}
 		
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, CollectionsItem> { (cell, indexPath, item) in
-			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
+			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 			
 			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
 				contentConfiguration.text = container.partialName
@@ -472,9 +455,7 @@ extension CollectionsViewController {
 	}
 	
 	private func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
-		let localAccount = AccountManager.shared.localAccount
-		
-		guard localAccount.isActive else { return nil }
+		guard let localAccount = AccountManager.shared.localAccount, localAccount.isActive else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
 
@@ -610,15 +591,15 @@ extension CollectionsViewController {
 
 extension CollectionsViewController: CollectionsSearchCellDelegate {
 
-	func collectionsSearchDidBecomeActive() {
+	nonisolated func collectionsSearchDidBecomeActive() {
 		Task {
 			await selectDocumentContainers([Search(searchText: "")], isNavigationBranch: false, animated: false)
 		}
 	}
 
-	func collectionsSearchDidUpdate(searchText: String?) {
-		collectionView.deselectAll()
+	nonisolated func collectionsSearchDidUpdate(searchText: String?) {
 		Task {
+			await collectionView.deselectAll()
 			if let searchText {
 				await updateSelections([Search(searchText: searchText)], isNavigationBranch: false, animated: true)
 			} else {
@@ -644,15 +625,13 @@ private extension CollectionsViewController {
 	
 	func debounceApplyChangeSnapshot() {
 		Task {
-			await applyChangeChannel.send({ [weak self] in
-				self?.applyChangeSnapshot(animated: true)
-			})
+			await applyChangeChannel.send(())
 		}
 	}
 	
 	func debounceReloadVisible() {
 		Task {
-			await reloadVisibleChannel.send(reloadVisible)
+			await reloadVisibleChannel.send(())
 		}
 	}
 	

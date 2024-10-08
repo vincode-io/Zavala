@@ -45,6 +45,10 @@ A plain text formatting syntax that is good for translating into other formats, 
 
 This the menu that is shown in the top right of the Editor on iOS. It is a circle with ellipsis in it.
 
+## Nested Tag
+
+A type of Tag that has multiple elements separated with forward slashes. For example “work/presentations”. Nested Tags are useful because the Zavala sidebar will turn them into an expandable and collapsable groups.
+
 ## Note
 
 Detail information about the Topic is associated with. See [The Notes Field.](The_Notes_Field.md)

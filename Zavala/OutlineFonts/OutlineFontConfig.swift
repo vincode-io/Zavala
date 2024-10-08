@@ -10,9 +10,9 @@ import UIKit
 struct OutlineFontConfig: Equatable, Hashable {
 	
 	struct Keys {
-		static var name = "name"
-		static var size = "size"
-		static var color = "color"
+		static let name = "name"
+		static let size = "size"
+		static let color = "color"
 	}
 	
 	var name: String

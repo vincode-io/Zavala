@@ -13,6 +13,7 @@ public extension Notification.Name {
 	static let OutlineFontCacheDidRebuild = Notification.Name(rawValue: "OutlineFontCacheDidRebuild")
 }
 
+@MainActor
 class OutlineFontCache {
 	
 	static let shared = OutlineFontCache()
@@ -29,7 +30,6 @@ class OutlineFontCache {
 
 	private var topicFonts = [UIFont]()
 	private var topicColors = [UIColor]()
-	private var metadatumFonts = [UIFont]()
 	private var noteFonts = [UIFont]()
 	private var noteColors = [UIColor]()
 
@@ -58,15 +58,6 @@ class OutlineFontCache {
 	}
 
 	/// This is a 0 based index lookup
-	func metadataFont(level: Int) -> UIFont {
-		if level < metadatumFonts.count {
-			return metadatumFonts[level]
-		} else {
-			return metadatumFonts.last ?? UIFont.preferredFont(forTextStyle: .title1)
-		}
-	}
-	
-	/// This is a 0 based index lookup
 	func noteFont(level: Int) -> UIFont {
 		if level < noteFonts.count {
 			return noteFonts[level]
@@ -88,10 +79,12 @@ class OutlineFontCache {
 
 extension OutlineFontCache {
 
-	@objc private func userDefaultsDidChange() {
-		let defaults = AppDefaults.shared
-		if outlineFonts != defaults.outlineFonts || textZoom != defaults.textZoom {
-			buildCache()
+	@objc nonisolated private func userDefaultsDidChange() {
+		Task { @MainActor in
+			let defaults = AppDefaults.shared
+			if outlineFonts != defaults.outlineFonts || textZoom != defaults.textZoom {
+				buildCache()
+			}
 		}
 	}
 	
@@ -127,8 +120,6 @@ extension OutlineFontCache {
 				let topicFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
 				topicFonts.append(topicFont)
 				topicColors.append(config.color.uiColor)
-				let metadataFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font.withSize(font.pointSize - 2))
-				metadatumFonts.append(metadataFont)
 			case .rowNote:
 				noteFonts.append(UIFontMetrics(forTextStyle: .body).scaledFont(for: font))
 				noteColors.append(config.color.uiColor)

@@ -12,12 +12,13 @@ public extension Notification.Name {
 	static let AccountManagerAccountsDidChange = Notification.Name(rawValue: "AccountManagerAccountsDidChange")
 }
 
+@MainActor
 public final class AccountManager {
 	
-	public static var shared: AccountManager!
+	nonisolated(unsafe)public static var shared: AccountManager!
 	
-	public var localAccount: Account {
-		return accountsDictionary[AccountType.local.rawValue]!
+	public var localAccount: Account? {
+		return accountsDictionary[AccountType.local.rawValue]
 	}
 
 	public var cloudKitAccount: Account? {
@@ -38,6 +39,10 @@ public final class AccountManager {
 
 	public var sortedActiveAccounts: [Account] {
 		return sort(activeAccounts)
+	}
+	
+	public var activeTags: [Tag] {
+		return activeAccounts.reduce(into: [Tag]()) { $0.append(contentsOf: $1.tags ?? [Tag]() ) }
 	}
 	
 	public var documents: [Document] {
@@ -116,6 +121,8 @@ public final class AccountManager {
 	}
 	
 	public func deleteLocalAccount() {
+		guard let localAccount else { return }
+		
 		// Send out all the document delete events for this account to clean up the search index
 		localAccount.documents?.forEach { $0.documentDidDelete() }
 
@@ -187,15 +194,15 @@ public final class AccountManager {
 		activeDocuments.forEach { $0.resume() }
 	}
 	
-	public func suspend() {
-		accountFiles.values.forEach {
-			$0.saveIfNecessary()
-			$0.suspend()
+	public func suspend() async {
+		for file in accountFiles.values {
+			await file.saveIfNecessary()
+			file.suspend()
 		}
 
-		activeDocuments.forEach {
-			$0.save()
-			$0.suspend()
+		for document in activeDocuments {
+			await document.save()
+			document.suspend()
 		}
 	}
 	

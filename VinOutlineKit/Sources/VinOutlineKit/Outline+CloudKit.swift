@@ -203,7 +203,7 @@ extension Outline: VCKModel {
 		if title != serverTitle {
 			title = serverTitle
 			if isBeingViewed {
-				outlineElementsDidChange(OutlineElementChanges(section: .title, reloads: Set([0])))
+				documentTitleDidChange()
 			}
 		}
 

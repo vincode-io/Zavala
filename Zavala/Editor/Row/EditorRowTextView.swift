@@ -92,27 +92,23 @@ class EditorRowTextView: UITextView {
 	}
 	
 	var inactivityTask: Task<(), Never>?
-	var activityChannel = AsyncChannel<(() -> Void)>()
+	var activityChannel = AsyncChannel<Void>()
     var textViewHeight: CGFloat?
     var isSavingTextUnnecessary = false
-
-	let toggleBoldCommand = UIKeyCommand(title: .boldControlLabel, action: .toggleBoldface, input: "b", modifierFlags: [.command])
-	let toggleItalicsCommand = UIKeyCommand(title: .italicControlLabel, action: .toggleItalics, input: "i", modifierFlags: [.command])
-	let editLinkCommand = UIKeyCommand(title: .linkControlLabel, action: .editLink, input: "k", modifierFlags: [.command])
 
 	private var dropInteractionDelegate: EditorRowDropInteractionDelegate!
 	private var stackedUndoManager: UndoManager?
 
 	override init(frame: CGRect, textContainer: NSTextContainer?) {
-		let textStorage = NSTextStorage()
-		let layoutManager = OutlineLayoutManager()
-		textStorage.addLayoutManager(layoutManager)
+		let textContentStorage = NSTextContentStorage()
+		let textLayoutManager = NSTextLayoutManager()
+		textContentStorage.addTextLayoutManager(textLayoutManager)
 		let textContainer = NSTextContainer()
-		layoutManager.addTextContainer(textContainer)
+		textLayoutManager.textContainer = textContainer
 		
 		super.init(frame: frame, textContainer: textContainer)
 		
-		textStorage.delegate = self
+		textLayoutManager.delegate = self
 		textDropDelegate = self
 		
 		self.dropInteractionDelegate = EditorRowDropInteractionDelegate(textView: self)
@@ -137,6 +133,10 @@ class EditorRowTextView: UITextView {
 		self.textContainer.lineFragmentPadding = 0
 		self.textContainerInset = .zero
 		self.backgroundColor = .clear
+
+		if #available(iOS 18.0, *) {
+			self.allowedWritingToolsResultOptions = [.plainText, .richText]
+		}
 	
 		#if targetEnvironment(macCatalyst)
 		let appleColorPreferencesChangedNotification = Notification.Name(rawValue: "AppleColorPreferencesChangedNotification")
@@ -164,6 +164,8 @@ class EditorRowTextView: UITextView {
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
+		case .editLink:
+			return isFirstResponder
 		case .toggleUnderline:
 			return false
 		default:
@@ -338,6 +340,14 @@ class EditorRowTextView: UITextView {
 	
 }
 
+// MARK: NSTextLayoutManagerDelegate
+
+extension EditorRowTextView: NSTextLayoutManagerDelegate {
+	nonisolated func textLayoutManager(_ textLayoutManager: NSTextLayoutManager, textLayoutFragmentFor location: NSTextLocation, in textElement: NSTextElement) -> NSTextLayoutFragment {
+		return EditorRowSearchLayoutFragment(textElement: textElement, range: textElement.elementRange)
+	}
+}
+
 // MARK: UITextDropDelegate
 
 extension EditorRowTextView: UITextDropDelegate {
@@ -356,106 +366,16 @@ extension EditorRowTextView: UITextDropDelegate {
 	
 }
 
-// MARK: NSTextStorageDelegate
-
-extension EditorRowTextView: NSTextStorageDelegate {
-	
-	func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
-		
-		// If you access the typingAttributes of this UITextView while the attributedString is zero, you will crash randomly
-		var newTypingAttributes: [NSAttributedString.Key : Any]
-		let attributeLocation = editedRange.location - 1
-		if attributeLocation > -1 {
-			let attributeRange = NSRange(location: attributeLocation, length: 1)
-			textStorage.ensureAttributesAreFixed(in: attributeRange)
-			newTypingAttributes = textStorage.attributes(at: attributeLocation, effectiveRange: nil)
-			newTypingAttributes.removeValue(forKey: .font)
-		} else {
-			newTypingAttributes = baseAttributes
-		}
-
-		var needsDataDetection = false
-		
-		textStorage.enumerateAttributes(in: editedRange, options: .longestEffectiveRangeNotRequired) { (attributes, range, _) in
-			var newAttributes = attributes
-			
-			newAttributes.merge(newTypingAttributes) { old, new in new }
-			
-			for key in attributes.keys {
-				
-				if key == .selectedSearchResult {
-					newAttributes[.backgroundColor] = UIColor.systemYellow
-					if traitCollection.userInterfaceStyle == .dark {
-						newAttributes[.foregroundColor] = UIColor.black
-					}
-				}
-				
-				if key == .searchResult {
-					newAttributes[.backgroundColor] = UIColor.systemGray
-				}
-				
-				if key == .underlineStyle || key == .backgroundColor {
-					newAttributes[key] = nil
-				}
-				
-				if textStorage.attributedSubstring(from: range).string == " " {
-					if key == .link {
-						newAttributes[key] = nil
-					} else {
-						needsDataDetection = true
-					}
-				}
-
-				if key == .font, let oldFont = attributes[key] as? UIFont, let newFont = font {
-					let charsInRange = textStorage.attributedSubstring(from: range).string
-					if charsInRange.containsEmoji || charsInRange.containsSymbols {
-						newAttributes[key] = oldFont.withSize(newFont.pointSize)
-					} else {
-						let ufd = oldFont.fontDescriptor.withFamily(newFont.familyName).withSymbolicTraits(oldFont.fontDescriptor.symbolicTraits) ?? oldFont.fontDescriptor.withFamily(newFont.familyName)
-						let newFont = UIFont(descriptor: ufd, size: newFont.pointSize)
-						
-						if newFont.isValidFor(value: charsInRange) {
-							newAttributes[key] = newFont
-						} else {
-							newAttributes[key] = oldFont
-						}
-					}
-				}
-				
-				if key == .attachment, let nsAttachment = attributes[key] as? NSTextAttachment {
-					guard !(nsAttachment is ImageTextAttachment) && !(nsAttachment is MetadataTextAttachment) else { continue }
-					if let image = nsAttachment.image {
-						let attachment = ImageTextAttachment(data: nil, ofType: nil)
-						attachment.image = image
-						attachment.imageUUID = UUID().uuidString
-						newAttributes[key] = attachment
-					} else if let fileContents = nsAttachment.fileWrapper?.regularFileContents {
-						let attachment = ImageTextAttachment(data: fileContents, ofType: nsAttachment.fileType)
-						attachment.imageUUID = UUID().uuidString
-						newAttributes[key] = attachment
-					}
-				}
-			}
-			
-			textStorage.setAttributes(newAttributes, range: range)
-		}
-		
-		if needsDataDetection {
-			textStorage.detectData()
-		}
-	}
-	
-}
-
 // MARK: Helpers
 
 extension EditorRowTextView {
    
 	func startActivityMonitoring() {
 		inactivityTask = Task {
-			for await inactivity in activityChannel.debounce(for: .seconds(5.0)) {
+			for await _ in activityChannel.debounce(for: .seconds(5.0)) {
 				if !Task.isCancelled {
-					inactivity()
+					saveText()
+					RequestReview.request()
 				}
 			}
 		}
@@ -468,10 +388,7 @@ extension EditorRowTextView {
 	
 	func debounceActivity() {
 		Task {
-			await activityChannel.send({ [weak self] in
-				self?.saveText()
-				RequestReview.request()
-			})
+			await activityChannel.send(())
 		}
 	}
 	

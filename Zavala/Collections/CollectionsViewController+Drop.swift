@@ -6,13 +6,15 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 import VinOutlineKit
+import VinUtility
 
 extension CollectionsViewController: UICollectionViewDropDelegate {
 	
 	func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
 		guard !(session.items.first?.localObject is Document) else { return true }
-		return session.hasItemsConforming(toTypeIdentifiers: [DataRepresentation.opml.typeIdentifier])
+		return session.hasItemsConforming(toTypeIdentifiers: [UTType.opml.identifier])
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
@@ -47,20 +49,22 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 		guard let destinationIndexPath = coordinator.destinationIndexPath,
 			  let item = dataSource.itemIdentifier(for: destinationIndexPath),
 			  let entityID = item.entityID,
-			  let container = AccountManager.shared.findDocumentContainer(entityID) else { return }
+			  let container = AccountManager.shared.findDocumentContainer(entityID),
+			  let account = container.account else { return }
 		
+		var tags: [Tag]? = nil
+		if let tag = (container as? TagDocuments)?.tag {
+			tags = [tag]
+		}
+
 		// Dragging an OPML file into the Collections View
 		guard coordinator.items.first?.dragItem.localObject != nil else {
 			for dropItem in coordinator.items {
 				let provider = dropItem.dragItem.itemProvider
-				provider.loadDataRepresentation(forTypeIdentifier: DataRepresentation.opml.typeIdentifier) { (opmlData, error) in
+				provider.loadDataRepresentation(forTypeIdentifier: UTType.opml.identifier) { (opmlData, error) in
 					guard let opmlData else { return }
-					DispatchQueue.main.async {
-                        var tags: [Tag]? = nil
-                        if let tag = (container as? TagDocuments)?.tag {
-                            tags = [tag]
-                        }
-						if let document = try? container.account?.importOPML(opmlData, tags: tags) {
+					Task { @MainActor in
+						if let document = try? await account.importOPML(opmlData, tags: tags) {
 							DocumentIndexer.updateIndex(forDocument: document)
 						}
 					}
@@ -71,42 +75,42 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 
 		for dropItem in coordinator.items {
 			if let document = dropItem.dragItem.localObject as? Document {
-				guard document.account != container.account else {
-					guard let tag = (container as? TagDocuments)?.tag else {
+				Task {
+					guard document.account != container.account else {
+						guard let tag = (container as? TagDocuments)?.tag else {
+							return
+						}
+						
+						// Adding a tag by dragging a document to it within the same account
+						document.createTag(tag)
 						return
 					}
-
-					// Adding a tag by dragging a document to it within the same account
-					document.createTag(tag)
-					return
-				}
-				
-				// Local copy between accounts
-				document.load()
-				
-				var tagNames = [String]()
-				for tag in document.tags ?? [Tag]() {
-					document.deleteTag(tag)
-					document.account?.deleteTag(tag)
-					tagNames.append(tag.name)
-				}
-				
-				document.account?.deleteDocument(document)
-				if let containerAccount = container.account {
-					document.reassignAccount(containerAccount.id.accountID)
-					containerAccount.createDocument(document)
-				}
-				
-				for tagName in tagNames {
-					if let tag = container.account?.createTag(name: tagName) {
-						document.createTag(tag)
+					
+					// Local copy between accounts
+					document.load()
+					
+					var tagNames = [String]()
+					for tag in document.tags ?? [Tag]() {
+						document.deleteTag(tag)
+						document.account?.deleteTag(tag)
+						tagNames.append(tag.name)
 					}
+					
+					guard let containerAccount = container.account else { return }
+					
+					let newDocument = document.duplicate(accountID: containerAccount.id.accountID)
+					document.account?.deleteDocument(document)
+					containerAccount.createDocument(newDocument)
+					
+					if let tag = (container as? TagDocuments)?.tag {
+						newDocument.createTag(tag)
+					}
+					
+					newDocument.deleteAllBacklinks()
+					
+					await newDocument.forceSave()
+					await newDocument.unload()
 				}
-				
-				document.deleteAllBacklinks()
-				
-				document.forceSave()
-				document.unload()
 			}
 		}
 	}

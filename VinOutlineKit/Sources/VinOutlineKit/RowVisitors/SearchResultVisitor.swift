@@ -7,7 +7,8 @@
 
 import Foundation
 
-class SearchResultVisitor {
+@MainActor
+final class SearchResultVisitor {
 	
 	let searchRegEx: NSRegularExpression?
 	let isCompletedFilterOn: Bool

@@ -9,16 +9,39 @@ import UIKit
 import SwiftUI
 import VinOutlineKit
 
+extension Selector {
+	static let showGetInfo = #selector(MainCoordinatorResponder.showGetInfo(_:))
+	static let share = #selector(MainCoordinatorResponder.share(_:))
+	static let manageSharing = #selector(MainCoordinatorResponder.manageSharing(_:))
+	static let exportPDFDocs = #selector(MainCoordinatorResponder.exportPDFDocs(_:))
+	static let exportPDFLists = #selector(MainCoordinatorResponder.exportPDFLists(_:))
+	static let exportMarkdownDocs = #selector(MainCoordinatorResponder.exportMarkdownDocs(_:))
+	static let exportMarkdownLists = #selector(MainCoordinatorResponder.exportMarkdownLists(_:))
+	static let exportOPMLs = #selector(MainCoordinatorResponder.exportOPMLs(_:))
+	static let printDocs = #selector(MainCoordinatorResponder.printDocs(_:))
+	static let printLists = #selector(MainCoordinatorResponder.printLists(_:))
+	static let copyDocumentLink = #selector(MainCoordinatorResponder.copyDocumentLink(_:))
+}
+
+@MainActor
+@objc public protocol MainCoordinatorResponder {
+	@objc func showGetInfo(_ sender: Any?)
+	@objc func share(_ sender: Any?)
+	@objc func manageSharing(_ sender: Any?)
+	@objc func exportPDFDocs(_ sender: Any?)
+	@objc func exportPDFLists(_ sender: Any?)
+	@objc func exportMarkdownDocs(_ sender: Any?)
+	@objc func exportMarkdownLists(_ sender: Any?)
+	@objc func exportOPMLs(_ sender: Any?)
+	@objc func printDocs(_ sender: Any?)
+	@objc func printLists(_ sender: Any?)
+	@objc func copyDocumentLink(_ sender: Any?)
+}
+
+@MainActor
 protocol MainCoordinator: UIViewController, DocumentsActivityItemsConfigurationDelegate {
 	var editorViewController: EditorViewController? { get }
-	var isExportAndPrintUnavailable: Bool { get }
 	var selectedDocuments: [Document] { get }
-	var isGoBackwardOneUnavailable: Bool { get }
-	var isGoForwardOneUnavailable: Bool { get }
-	func goBackwardOne()
-	func goForwardOne()
-	func share()
-	func manageSharing()
 }
 
 extension MainCoordinator {
@@ -29,126 +52,6 @@ extension MainCoordinator {
 	
 	var isOutlineFunctionsUnavailable: Bool {
 		return editorViewController?.isOutlineFunctionsUnavailable ?? true
-	}
-	
-	var isFocusInUnavailable: Bool {
-		return editorViewController?.isFocusInUnavailable ?? true
-	}
-	
-	var isFocusOutUnavailable: Bool {
-		return editorViewController?.isFocusOutUnavailable ?? true
-	}
-	
-	var isFilterOn: Bool {
-		return editorViewController?.isFilterOn ?? false
-	}
-	
-	var isCompletedFiltered: Bool {
-		return editorViewController?.isCompletedFiltered ?? false
-	}
-	
-	var isNotesFiltered: Bool {
-		return editorViewController?.isNotesFiltered ?? false
-	}
-
-	var isInsertRowUnavailable: Bool {
-		return editorViewController?.isInsertRowUnavailable ?? true
-	}
-	
-	var isCreateRowUnavailable: Bool {
-		return editorViewController?.isCreateRowUnavailable ?? true
-	}
-	
-	var isDuplicateRowsUnavailable: Bool {
-		return editorViewController?.isDuplicateRowsUnavailable ?? true
-	}
-	
-	var isCreateRowInsideUnavailable: Bool {
-		return editorViewController?.isCreateRowInsideUnavailable ?? true
-	}
-	
-	var isCreateRowOutsideUnavailable: Bool {
-		return editorViewController?.isCreateRowOutsideUnavailable ?? true
-	}
-	
-	var isMoveRowsUpUnavailable: Bool {
-		return editorViewController?.isMoveRowsUpUnavailable ?? true
-	}
-
-	var isMoveRowsDownUnavailable: Bool {
-		return editorViewController?.isMoveRowsDownUnavailable ?? true
-	}
-
-	var isMoveRowsLeftUnavailable: Bool {
-		return editorViewController?.isMoveRowsLeftUnavailable ?? true
-	}
-
-	var isMoveRowsRightUnavailable: Bool {
-		return editorViewController?.isMoveRowsRightUnavailable ?? true
-	}
-
-	var isToggleRowCompleteUnavailable: Bool {
-		return editorViewController?.isToggleRowCompleteUnavailable ?? true
-	}
-	
-	var isCompleteRowsAvailable: Bool {
-		return editorViewController?.isCompleteRowsAvailable ?? false
-	}
-
-	var isCreateRowNotesUnavailable: Bool {
-		return editorViewController?.isCreateRowNotesUnavailable ?? true
-	}
-	
-	var isDeleteRowNotesUnavailable: Bool {
-		return editorViewController?.isDeleteRowNotesUnavailable ?? true
-	}
-	
-	var isFormatUnavailable: Bool {
-		return editorViewController?.isFormatUnavailable ?? true
-	}
-	
-	var isCopyRowLinkUnavailable: Bool {
-		return editorViewController?.isCopyRowLinkUnavailable ?? true
-	}
-	
-	var isInsertImageUnavailable: Bool {
-		return editorViewController?.isInsertImageUnavailable ?? true
-	}
-	
-	var isLinkUnavailable: Bool {
-		return editorViewController?.isLinkUnavailable ?? true
-	}
-	
-	var isExpandAllInOutlineUnavailable: Bool {
-		return editorViewController?.isExpandAllInOutlineUnavailable ?? true
-	}
-
-	var isCollapseAllInOutlineUnavailable: Bool {
-		return editorViewController?.isCollapseAllInOutlineUnavailable ?? true
-	}
-
-	var isExpandAllUnavailable: Bool {
-		return editorViewController?.isExpandAllUnavailable ?? true
-	}
-
-	var isCollapseAllUnavailable: Bool {
-		return editorViewController?.isCollapseAllUnavailable ?? true
-	}
-
-	var isExpandUnavailable: Bool {
-		return editorViewController?.isExpandUnavailable ?? true
-	}
-
-	var isCollapseUnavailable: Bool {
-		return editorViewController?.isCollapseUnavailable ?? true
-	}
-	
-	var isCollapseParentRowUnavailable: Bool {
-		return editorViewController?.isCollapseParentRowUnavailable ?? true
-	}
-	
-	var isDeleteCompletedRowsUnavailable: Bool {
-		return editorViewController?.isDeleteCompletedRowsUnavailable ?? true
 	}
 	
 	var isManageSharingUnavailable: Bool {
@@ -163,155 +66,20 @@ extension MainCoordinator {
 		return editorViewController?.isEditingNote ?? false
 	}
 
-	func duplicateRows() {
-		editorViewController?.duplicateCurrentRows()
-	}
-	
-	func focusIn() {
-		editorViewController?.focusIn()
-	}
-	
-	func focusOut() {
-		editorViewController?.focusOut()
-	}
-	
-	func toggleFocus() {
-		editorViewController?.toggleFocus()
-	}
-	
-	func toggleFilterOn() {
-		editorViewController?.toggleFilterOn()
-	}
-	
-	func toggleCompletedFilter() {
-		editorViewController?.toggleCompletedFilter()
-	}
-	
-	func toggleNotesFilter() {
-		editorViewController?.toggleNotesFilter()
-	}
-	
-	func insertRow() {
-		editorViewController?.insertRow()
-	}
-	
-	func createRow() {
-		editorViewController?.createRow()
-	}
-	
-	func createRowInside() {
-		editorViewController?.createRowInside()
-	}
-	
-	func createRowOutside() {
-		editorViewController?.createRowOutside()
-	}
-	
-	func moveRowsUp() {
-		editorViewController?.moveCurrentRowsUp()
-	}
-	
-	func moveRowsDown() {
-		editorViewController?.moveCurrentRowsDown()
-	}
-	
-	func moveRowsLeft() {
-		editorViewController?.moveCurrentRowsLeft()
-	}
-	
-	func moveRowsRight() {
-		editorViewController?.moveCurrentRowsRight()
-	}
-	
-	func toggleCompleteRows() {
-		editorViewController?.toggleCompleteRows()
-	}
-	
-	func moveCursorToCurrentRowTopic() {
-		editorViewController?.moveCursorToCurrentRowTopic()
-	}
-	
-	func moveCursorToCurrentRowNote() {
-		editorViewController?.moveCursorToCurrentRowNote()
-	}
-	
-	func createRowNotes() {
-		editorViewController?.createRowNotes()
-	}
-	
-	func deleteRowNotes() {
-		editorViewController?.deleteRowNotes()
-	}
-	
-	func outlineToggleBoldface() {
-		editorViewController?.outlineToggleBoldface()
-	}
-	
-	func outlineToggleItalics() {
-		editorViewController?.outlineToggleItalics()
-	}
-	
-	func insertImage() {
-		editorViewController?.insertImage()
-	}
-	
-	func link() {
-		editorViewController?.link()
-	}
-	
-	func createOrDeleteNotes() {
-		editorViewController?.createOrDeleteNotes()
-	}
-	
-	func copyRowLink() {
-		editorViewController?.copyRowLink()
-	}
-	
 	func copyDocumentLink() {
-		let documentURL = editorViewController?.outline?.id.url
-		UIPasteboard.general.url = documentURL
-	}
-	
-	func expandAllInOutline() {
-		editorViewController?.expandAllInOutline()
-	}
-	
-	func collapseAllInOutline() {
-		editorViewController?.collapseAllInOutline()
-	}
-	
-	func expandAll() {
-		editorViewController?.expandAll()
-	}
-	
-	func collapseAll() {
-		editorViewController?.collapseAll()
-	}
-	
-	func expand() {
-		editorViewController?.expand()
-	}
-	
-	func collapse() {
-		editorViewController?.collapse()
-	}
-	
-	func collapseParentRow() {
-		editorViewController?.collapseParentRow()
-	}
-	
-	func deleteCurrentRows() {
-		editorViewController?.deleteCurrentRows()
-	}
-	
-	func deleteCompletedRows() {
-		editorViewController?.deleteCompletedRows()
+		UIPasteboard.general.url = selectedDocuments.first?.id.url
 	}
 	
 	func showSettings() {
+		#if targetEnvironment(macCatalyst)
+		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.showSettings)
+		let scene = UIApplication.shared.connectedScenes.first(where: { $0.delegate is SettingsSceneDelegate})
+		UIApplication.shared.requestSceneSessionActivation(scene?.session, userActivity: userActivity, options: nil, errorHandler: nil)
+		#else
 		let settingsViewController = UIHostingController(rootView: SettingsView())
 		settingsViewController.modalPresentationStyle = .formSheet
 		present(settingsViewController, animated: true)
+		#endif
 	}
 	
 	func showGetInfo() {
@@ -370,7 +138,7 @@ extension MainCoordinator {
             let textView = UITextView()
             textView.attributedText = pdf.attrString
             let data = textView.generatePDF()
-			let filename = pdf.outline.filename(representation: DataRepresentation.pdf)
+			let filename = pdf.outline.filename(type: .pdf)
             exports.append((data: data, filename: filename))
         }
 		
@@ -380,7 +148,7 @@ extension MainCoordinator {
 	func exportMarkdownDocsForOutlines(_ outlines: [Outline]) {
         export(outlines.compactMap {
             if let data = $0.markdownDoc().data(using: .utf8) {
-				return (data: data, filename: $0.filename(representation: DataRepresentation.markdown))
+				return (data: data, filename: $0.filename(type: .markdown))
             }
             return nil
         })
@@ -389,7 +157,7 @@ extension MainCoordinator {
 	func exportMarkdownListsForOutlines(_ outlines: [Outline]) {
         export(outlines.compactMap {
             if let data = $0.markdownList().data(using: .utf8) {
-                return (data: data, filename: $0.filename(representation: DataRepresentation.markdown))
+                return (data: data, filename: $0.filename(type: .markdown))
             }
             return nil
         })
@@ -398,7 +166,7 @@ extension MainCoordinator {
 	func exportOPMLsForOutlines(_ outlines: [Outline]) {
         export(outlines.compactMap {
             if let data = $0.opml().data(using: .utf8) {
-				return (data: data, filename: $0.filename(representation: DataRepresentation.opml))
+				return (data: data, filename: $0.filename(type: .opml))
             }
             return nil
         })

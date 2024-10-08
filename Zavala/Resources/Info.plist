@@ -26,6 +26,23 @@
 				<string>org.opml.opml</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>md</string>
+				<string>markdown</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Markdown</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>None</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>net.daringfireball.markdown</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
@@ -58,27 +75,14 @@
 	<true/>
 	<key>DeveloperEntitlements</key>
 	<string>$(DEVELOPER_ENTITLEMENTS)</string>
-	<key>INIntentsSupported</key>
+	<key>INAlternativeAppNames</key>
 	<array>
-		<string>AddOutlineIntent</string>
-		<string>AddOutlineTagIntent</string>
-		<string>AddRowsIntent</string>
-		<string>CopyRowsIntent</string>
-		<string>EditOutlineIntent</string>
-		<string>EditRowsIntent</string>
-		<string>ExportIntent</string>
-		<string>GetCurrentOutlineIntent</string>
-		<string>GetCurrentTagsIntent</string>
-		<string>GetImagesForOutlineIntent</string>
-		<string>GetOutlinesIntent</string>
-		<string>GetRowsIntent</string>
-		<string>ImportIntent</string>
-		<string>MoveRowsIntent</string>
-		<string>RemoveOutlineIntent</string>
-		<string>RemoveOutlineTagIntent</string>
-		<string>RemoveRowsIntent</string>
-		<string>ShowOutlineIntent</string>
-		<string>SetOutlineTitleIntent</string>
+		<dict>
+			<key>INAlternativeAppName</key>
+			<string>Zavala Outliner</string>
+			<key>INAlternativeAppNamePronunciationHint</key>
+			<string>zavala outliner</string>
+		</dict>
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
@@ -92,6 +96,10 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>MDItemKeywords</key>
+	<array>
+		<string>Outliner</string>
+	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

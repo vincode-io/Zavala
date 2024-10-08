@@ -4,7 +4,8 @@
 
 import Foundation
 
-class WordCountVisitor {
+@MainActor
+final class WordCountVisitor {
 
 	var count = 0
 	

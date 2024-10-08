@@ -1,7 +1,4 @@
 //
-//  File.swift
-//  
-//
 //  Created by Maurice Parker on 2/7/24.
 //
 
@@ -13,7 +10,8 @@ public extension AccountManager {
 		let decoder = PropertyListDecoder()
 		let account: Account
 		do {
-			account = try decoder.decode(Account.self, from: data)
+			let accountCoder = try decoder.decode(AccountCoder.self, from: data)
+			account = Account(coder: accountCoder)
 		} catch {
 			logger.error("Account read deserialization failed: \(error.localizedDescription, privacy: .public)")
 			return
@@ -39,7 +37,7 @@ public extension AccountManager {
 		
 		let accountData: Data
 		do {
-			accountData = try encoder.encode(account)
+			accountData = try encoder.encode(account.toCoder())
 		} catch {
 			logger.error("Account read serialization failed: \(error.localizedDescription, privacy: .public)")
 			return nil

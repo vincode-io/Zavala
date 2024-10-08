@@ -7,11 +7,13 @@
 import Foundation
 import VinUtility
 
+@MainActor
 public protocol OutlineCommandDelegate: AnyObject {
 	var currentCoordinates: CursorCoordinates? { get }
 	func restoreCursorPosition(_: CursorCoordinates)
 }
 
+@MainActor
 public class OutlineCommand {
 	
 	var actionName: String
@@ -56,14 +58,18 @@ public class OutlineCommand {
 	func registerUndo() {
 		undoManager.setActionName(actionName)
 		undoManager.registerUndo(withTarget: self) { _ in
-			self.unexecute()
+			MainActor.assumeIsolated {
+				self.unexecute()
+			}
 		}
 	}
 
 	func registerRedo() {
 		undoManager.setActionName(actionName)
 		undoManager.registerUndo(withTarget: self) { _ in
-			self.execute()
+			MainActor.assumeIsolated {
+				self.execute()
+			}
 		}
 	}
 	

@@ -8,6 +8,7 @@
 import UIKit
 import VinOutlineKit
 
+@MainActor
 protocol OpenQuicklyViewControllerDelegate: AnyObject {
 	func quicklyOpenDocument(documentID: EntityID)
 }

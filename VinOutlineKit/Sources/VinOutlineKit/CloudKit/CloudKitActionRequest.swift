@@ -9,6 +9,7 @@ import Foundation
 import CloudKit
 import OrderedCollections
 
+@MainActor
 public struct CloudKitActionRequest: Codable, Hashable, Equatable {
 
 	static var actionRequestFile: URL {

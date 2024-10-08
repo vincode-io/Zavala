@@ -6,10 +6,13 @@ import Foundation
 import Markdown
 import VinUtility
 
+@MainActor
 public struct SimpleRowWalker: MarkupWalker {
 		
 	public var rows: [Row] {
-		return outline?.rows ?? []
+		MainActor.assumeIsolated {
+			return outline?.rows ?? []
+		}
 	}
 
 	private var outline: Outline?
@@ -21,40 +24,52 @@ public struct SimpleRowWalker: MarkupWalker {
 		self.outline = Outline(id: .document(0, UUID().uuidString))
 	}
 	
-	mutating public func visitText(_ text: Text) {
-		guard !isList, let outline else { return }
+	nonisolated mutating public func visitText(_ text: Text) {
+		let formattedText = text.format()
 		
-		let row = Row(outline: outline, topicMarkdown: text.format())
-		row.detectData()
-		outline.appendRow(row)
-	}
-	
-	mutating public func visitLink(_ link: Link) -> () {
-		guard !isList, let outline else { return }
+		MainActor.assumeIsolated {
+			guard !isList, let outline else { return }
 
-		let row = Row(outline: outline, topicMarkdown: link.format())
-		row.detectData()
-		outline.appendRow(row)
+			let row = Row(outline: outline, topicMarkdown: formattedText)
+			row.detectData()
+			outline.appendRow(row)
+		}
 	}
 	
-	mutating public func visitUnorderedList(_ unorderedList: UnorderedList) {
-		isList = true
+	nonisolated mutating public func visitLink(_ link: Link) -> () {
+		let formattedLink = link.format()
 		
-		if let parentRow = lastBuiltRow {
-			parentRowStack.append(parentRow)
+		MainActor.assumeIsolated {
+			guard !isList, let outline else { return }
+
+			let row = Row(outline: outline, topicMarkdown: formattedLink)
+			row.detectData()
+			outline.appendRow(row)
 		}
-		
+	}
+	
+	nonisolated mutating public func visitUnorderedList(_ unorderedList: UnorderedList) {
+		MainActor.assumeIsolated {
+			isList = true
+			
+			if let parentRow = lastBuiltRow {
+				parentRowStack.append(parentRow)
+			}
+		}
+			
 		descendInto(unorderedList)
-		
-		if !parentRowStack.isEmpty {
-			parentRowStack.removeLast()
+			
+		MainActor.assumeIsolated {
+			if !parentRowStack.isEmpty {
+				parentRowStack.removeLast()
+			}
 		}
 	}
 	
-	mutating public func visitListItem(_ listItem: ListItem) {
-		guard let outline else { return }
-		
-		isList = true
+	nonisolated mutating public func visitListItem(_ listItem: ListItem) {
+		MainActor.assumeIsolated {
+			isList = true
+		}
 
 		var topic = String()
 		
@@ -67,14 +82,18 @@ public struct SimpleRowWalker: MarkupWalker {
 			}
 		}
 
-		let row = Row(outline: outline, topicMarkdown: topic)
-		row.detectData()
-		lastBuiltRow = row
-		
-		if let parentRow = parentRowStack.last {
-			parentRow.appendRow(row)
-		} else {
-			outline.appendRow(row)
+		MainActor.assumeIsolated {
+			guard let outline else { return }
+
+			let row = Row(outline: outline, topicMarkdown: topic)
+			row.detectData()
+			lastBuiltRow = row
+			
+			if let parentRow = parentRowStack.last {
+				parentRow.appendRow(row)
+			} else {
+				outline.appendRow(row)
+			}
 		}
 		
 		descendInto(listItem)

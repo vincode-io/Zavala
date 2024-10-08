@@ -32,8 +32,8 @@ struct SettingsEditorView: View {
 				.frame(width: SettingsView.pickerWidth)
 				#endif
 				.pickerStyle(.menu)
-				.onChange(of: editorMaxWidth) {
-					AppDefaults.shared.editorMaxWidth = $0
+				.onChange(of: editorMaxWidth) { old, new in
+					AppDefaults.shared.editorMaxWidth = new
 				}
 			}
 
@@ -51,8 +51,8 @@ struct SettingsEditorView: View {
 				.frame(width: SettingsView.pickerWidth)
 				#endif
 				.pickerStyle(.menu)
-				.onChange(of: rowIndent) {
-					AppDefaults.shared.rowIndentSize = $0
+				.onChange(of: rowIndent) { old, new in
+					AppDefaults.shared.rowIndentSize = new
 				}
 			}
 
@@ -70,8 +70,8 @@ struct SettingsEditorView: View {
 				.frame(width: SettingsView.pickerWidth)
 				#endif
 				.pickerStyle(.menu)
-				.onChange(of: rowSpacing) {
-					AppDefaults.shared.rowSpacingSize = $0
+				.onChange(of: rowSpacing) { old, new in
+					AppDefaults.shared.rowSpacingSize = new
 				}
 			}
 
@@ -89,8 +89,8 @@ struct SettingsEditorView: View {
 				.frame(width: SettingsView.pickerWidth)
 				#endif
 				.pickerStyle(.menu)
-				.onChange(of: scrollMode) {
-					AppDefaults.shared.scrollMode = $0
+				.onChange(of: scrollMode) { old, new in
+					AppDefaults.shared.scrollMode = new
 				}
 			}
 
@@ -98,8 +98,8 @@ struct SettingsEditorView: View {
 				Text(String.disableAnimationsControlLabel)
 			}
 			.toggleStyle(.switch)
-			.onChange(of: disableEditorAnimations) {
-				AppDefaults.shared.disableEditorAnimations = $0
+			.onChange(of: disableEditorAnimations) { old, new in
+				AppDefaults.shared.disableEditorAnimations = new
 			}
 
 			NavigationLink(String.fontsControlLabel) {

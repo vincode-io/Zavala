@@ -6,8 +6,10 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 import CloudKit
 import VinOutlineKit
+import VinUtility
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -24,7 +26,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		updateUserInterfaceStyle()
 		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange), name: UserDefaults.didChangeNotification, object: nil)
-		
+		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitStateDidChange), name: .CloudKitSyncWillBegin, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(cloudKitStateDidChange), name: .CloudKitSyncDidComplete, object: nil)
+
 		AppDefaults.shared.lastMainWindowWasClosed = false
 		
 		self.mainSplitViewController = mainSplitViewController
@@ -110,11 +114,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			return
 		}
 		
-		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == DataRepresentation.opml.suffix }).map({ $0.url })
+		let opmlURLs = urlContexts.filter({ $0.url.pathExtension == UTType.opml.preferredFilenameExtension }).map({ $0.url })
 		mainSplitViewController.importOPMLs(urls: opmlURLs)
 		
 		#if targetEnvironment(macCatalyst)
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+		Task { @MainActor in
+			try? await Task.sleep(for: .seconds(1))
 			appDelegate.appKitPlugin?.clearRecentDocuments()
 		}
 		#endif
@@ -137,8 +142,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 private extension SceneDelegate {
 	
-	@objc func userDefaultsDidChange() {
-		updateUserInterfaceStyle()
+	@objc nonisolated func userDefaultsDidChange() {
+		Task { @MainActor in
+			updateUserInterfaceStyle()
+		}
+	}
+
+	@objc func cloudKitStateDidChange() {
+		validateToolbar()
 	}
 
 	func acceptShare(_ shareMetadata: CKShare.Metadata) {

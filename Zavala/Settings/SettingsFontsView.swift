@@ -102,6 +102,7 @@ struct SettingsFontAddMenu: View {
 	
 }
 
+@MainActor
 class SettingsFontsViewModel: ObservableObject {
 	
 	@Published var fieldConfigs: [(OutlineFontField, OutlineFontConfig)]
@@ -114,19 +115,9 @@ class SettingsFontsViewModel: ObservableObject {
 			self.fieldConfigs = []
 		}
 		
-		NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
-			guard let self else { return }
-			if AppDefaults.shared.outlineFonts != self.lastOutlineFonts {
-				if let outlineFonts = AppDefaults.shared.outlineFonts {
-					self.fieldConfigs = outlineFonts.sortedFields.map { ($0, outlineFonts.rowFontConfigs[$0]!) }
-				} else {
-					self.fieldConfigs = []
-				}
-				self.lastOutlineFonts = AppDefaults.shared.outlineFonts
-			}
-		}
+		NotificationCenter.default.addObserver(self, selector: #selector(checkForUserDefaultsChanges), name: UserDefaults.didChangeNotification, object: nil)
 	}
-	
+
 	func deleteUnavailable(_ fontField: OutlineFontField) -> Bool {
 		switch fontField {
 		case .rowTopic(let level):
@@ -148,6 +139,19 @@ class SettingsFontsViewModel: ObservableObject {
 		outlineFonts?.rowFontConfigs.removeValue(forKey: fontField)
 		
 		AppDefaults.shared.outlineFonts = outlineFonts
+	}
+	
+	@objc nonisolated private func checkForUserDefaultsChanges() {
+		Task { @MainActor in
+			if AppDefaults.shared.outlineFonts != self.lastOutlineFonts {
+				if let outlineFonts = AppDefaults.shared.outlineFonts {
+					self.fieldConfigs = outlineFonts.sortedFields.map { ($0, outlineFonts.rowFontConfigs[$0]!) }
+				} else {
+					self.fieldConfigs = []
+				}
+				self.lastOutlineFonts = AppDefaults.shared.outlineFonts
+			}
+		}
 	}
 	
 }

@@ -1,0 +1,88 @@
+//
+//  AddRows.swift
+//  Zavala
+//
+//  Created by Maurice Parker on 7/6/24.
+//
+
+import Foundation
+import AppIntents
+import VinOutlineKit
+
+struct AddRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ZavalaAppIntent {
+    static let intentClassName = "AddRowsIntent"
+    static let title: LocalizedStringResource = "Add Rows"
+    static let description = IntentDescription("Add Rows to an Outline.")
+
+    @Parameter(title: "Entity ID")
+	var entityID: EntityID
+
+    @Parameter(title: "Destination")
+    var destination: RowDestinationAppEnum
+
+    @Parameter(title: "Topics")
+    var topics: [String]
+
+    static var parameterSummary: some ParameterSummary {
+        Summary("Add \(\.$topics) to \(\.$entityID) at \(\.$destination)")
+    }
+
+    static var predictionConfiguration: some IntentPredictionConfiguration {
+        IntentPrediction(parameters: (\.$entityID, \.$destination, \.$topics)) { entityID, destination, topics in
+            DisplayRepresentation(
+                title: "Add \(topics, format: .list(type: .and)) to \(entityID) at \(destination)",
+                subtitle: ""
+            )
+        }
+    }
+
+	@MainActor
+	func perform() async throws -> some IntentResult & ReturnsValue<[RowAppEntity]> {
+		resume()
+		
+		guard let outline = findOutline(entityID) else {
+			await suspend()
+			throw ZavalaAppIntentError.outlineNotFound
+		}
+		
+		outline.load()
+	
+		guard let rowContainer = outline.findRowContainer(entityID: entityID) else {
+			await outline.unload()
+			await suspend()
+			throw ZavalaAppIntentError.rowContainerNotFound
+		}
+
+		
+		let rows = topics.map { Row(outline: outline, topicMarkdown: $0) }
+		
+		rows.forEach({ $0.detectData() })
+		
+		switch destination {
+		case .insideAtStart:
+			outline.createRowsInsideAtStart(rows, afterRowContainer: rowContainer)
+		case .insideAtEnd:
+			outline.createRowsInsideAtEnd(rows, afterRowContainer: rowContainer)
+		case .outside:
+			if let afterRow = rowContainer as? Row {
+				outline.createRowsOutside(rows, afterRow: afterRow)
+			} else {
+				await outline.unload()
+				await suspend()
+				throw ZavalaAppIntentError.invalidDestinationForOutline
+			}
+		case .directlyAfter:
+			if let afterRow = rowContainer as? Row {
+				outline.createRowsDirectlyAfter(rows, afterRow: afterRow)
+			} else {
+				await outline.unload()
+				await suspend()
+				throw ZavalaAppIntentError.invalidDestinationForOutline
+			}
+		}
+		
+		await outline.unload()
+		await suspend()
+		return .result(value: rows.map({RowAppEntity(row: $0)}))
+    }
+}

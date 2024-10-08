@@ -9,6 +9,7 @@ import UIKit
 import VinOutlineKit
 import VinUtility
 
+@MainActor
 protocol MacOpenQuicklyCollectionsDelegate: AnyObject {
 	func documentContainerSelectionsDidChange(_: MacOpenQuicklyCollectionsViewController, documentContainers: [DocumentContainer])
 }
@@ -77,7 +78,7 @@ private extension MacOpenQuicklyCollectionsViewController {
 		}
 		
 		let rowRegistration = UICollectionView.CellRegistration<ConsistentCollectionViewListCell, CollectionsItem> { (cell, indexPath, item) in
-			var contentConfiguration = UIListContentConfiguration.sidebarSubtitleCell()
+			var contentConfiguration = UIListContentConfiguration.subtitleCell()
 
 			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
 				contentConfiguration.text = container.partialName
@@ -141,9 +142,7 @@ private extension MacOpenQuicklyCollectionsViewController {
 	}
 	
 	func localAccountSnapshot() -> NSDiffableDataSourceSectionSnapshot<CollectionsItem>? {
-		let localAccount = AccountManager.shared.localAccount
-		
-		guard localAccount.isActive else { return nil }
+		guard let localAccount = AccountManager.shared.localAccount, localAccount.isActive else { return nil }
 		
 		var snapshot = NSDiffableDataSourceSectionSnapshot<CollectionsItem>()
 		let header = CollectionsItem.item(id: .header(.localAccount))

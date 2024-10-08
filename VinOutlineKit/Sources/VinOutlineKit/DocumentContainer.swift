@@ -11,6 +11,7 @@ import UIKit
 import Foundation
 #endif
 
+@MainActor
 public protocol DocumentContainer: DocumentProvider {
 	var id: EntityID { get }
 	var name: String? { get }
@@ -30,6 +31,7 @@ public protocol DocumentContainer: DocumentProvider {
 
 public extension Array where Element == DocumentContainer {
     
+	@MainActor
     var uniqueAccount: Account? {
         var account: Account? = nil
         for container in self {
@@ -43,10 +45,12 @@ public extension Array where Element == DocumentContainer {
         return account
     }
     
+	@MainActor
     var tags: [Tag] {
         return self.compactMap { ($0 as? TagDocuments)?.tag }
     }
 
+	@MainActor
     var title: String {
 		ListFormatter.localizedString(byJoining: self.compactMap({ $0.partialName }).sorted())
     }

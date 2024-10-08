@@ -11,10 +11,12 @@ import UIKit
 import Foundation
 #endif
 
+@MainActor
 public protocol CursorCoordinatesProvider {
 	var coordinates: CursorCoordinates? { get }
 }
 
+@MainActor
 public struct CursorCoordinates {
 
 	public var row: Row

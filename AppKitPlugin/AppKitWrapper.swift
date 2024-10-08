@@ -24,7 +24,10 @@ import UniformTypeIdentifiers
 		movementMonitor = RSAppMovementMonitor()
 	}
 	
-
+	func stop() {
+		movementMonitor?.invalidate()
+	}
+	
 	func importOPML() {
 		let panel = NSOpenPanel()
 		panel.canDownloadUbiquitousContents = true
@@ -40,7 +43,7 @@ import UniformTypeIdentifiers
 		
 		let modalResult = panel.runModal()
 		if modalResult == NSApplication.ModalResponse.OK, let url = panel.url {
-			delegate?.importOPML(url)
+			delegate?.importFile(url)
 		}
 	}
 

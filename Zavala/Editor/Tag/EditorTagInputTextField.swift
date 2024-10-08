@@ -8,6 +8,7 @@
 import UIKit
 import VinOutlineKit
 
+@MainActor
 protocol EditorTagInputTextFieldDelegate: AnyObject {
 	var editorTagInputTextFieldUndoManager: UndoManager? { get }
 	var editorTagInputTextFieldTags: [Tag]? { get }

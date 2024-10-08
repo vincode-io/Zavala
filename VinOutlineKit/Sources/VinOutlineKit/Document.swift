@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 import CloudKit
 
 public extension Notification.Name {
@@ -17,16 +18,12 @@ public extension Notification.Name {
 	static let DocumentSharingDidChange = Notification.Name(rawValue: "DocumentSharingDidChange")
 }
 
-public enum Document: Equatable, Hashable, Codable {
+@MainActor
+public enum Document: Equatable, Hashable {
 	case outline(Outline)
 	case dummy
 	
-	private enum CodingKeys: String, CodingKey {
-		case type
-		case outline
-	}
-	
-	public var id: EntityID {
+	nonisolated public var id: EntityID {
 		switch self {
 		case .outline(let outline):
 			return outline.id
@@ -205,29 +202,8 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
-	public init(from decoder: Decoder) throws {
-		let container = try decoder.container(keyedBy: CodingKeys.self)
-		let type = try container.decode(String.self, forKey: .type)
-		
-		switch type {
-		case "outline":
-			let outline = try container.decode(Outline.self, forKey: .outline)
-			self = .outline(outline)
-		default:
-			fatalError()
-		}
-	}
-	
-	public func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-
-		switch self {
-		case .outline(let outline):
-			try container.encode("outline", forKey: .type)
-			try container.encode(outline, forKey: .outline)
-		case .dummy:
-			fatalError("The dummy document shouldn't be accessed in this way.")
-		}
+	init(coder: DocumentCoder) {
+		self = .outline(Outline(coder: coder.outline))
 	}
 	
 	public func update(disambiguator: Int) {
@@ -239,15 +215,6 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
-	public func reassignAccount(_ accountID: Int) {
-		switch self {
-		case .outline(let outline):
-			outline.reassignAccount(accountID)
-		case .dummy:
-			fatalError("The dummy document shouldn't be accessed in this way.")
-		}
-	}
-
 	public func createTag(_ tag: Tag) {
 		switch self {
 		case .outline(let outline):
@@ -302,28 +269,28 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 
-	public func unload() {
+	public func unload() async {
 		switch self {
 		case .outline(let outline):
-			outline.unload()
+			await outline.unload()
 		case .dummy:
 			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 
-	public func save() {
+	public func save() async {
 		switch self {
 		case .outline(let outline):
-			outline.save()
+			await outline.save()
 		case .dummy:
 			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 
-	public func forceSave() {
+	public func forceSave() async {
 		switch self {
 		case .outline(let outline):
-			outline.forceSave()
+			await outline.forceSave()
 		case .dummy:
 			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
@@ -365,19 +332,19 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
-	public func duplicate() -> Document {
+	public func duplicate(accountID: Int) -> Document {
 		switch self {
 		case .outline(let outline):
-			return Document.outline(outline.duplicate())
+			return Document.outline(outline.duplicate(accountID: accountID))
 		case .dummy:
 			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
 	}
 	
-	public func filename(representation: DataRepresentation) -> String {
+	public func filename(type: UTType) -> String {
 		switch self {
 		case .outline(let outline):
-			return outline.filename(representation: representation)
+			return outline.filename(type: type)
 		case .dummy:
 			fatalError("The dummy document shouldn't be accessed in this way.")
 		}
@@ -392,11 +359,20 @@ public enum Document: Equatable, Hashable, Codable {
 		}
 	}
 	
-	public static func == (lhs: Document, rhs: Document) -> Bool {
+	func toCoder() -> DocumentCoder {
+		switch self {
+		case .outline(let outline):
+			return DocumentCoder(outline: outline.toCoder())
+		case .dummy:
+			fatalError("The dummy document shouldn't be accessed in this way.")
+		}
+	}
+	
+	nonisolated public static func == (lhs: Document, rhs: Document) -> Bool {
 		return lhs.id == rhs.id
 	}
 	
-	public func hash(into hasher: inout Hasher) {
+	nonisolated public func hash(into hasher: inout Hasher) {
 		hasher.combine(id)
 	}
 	
@@ -404,6 +380,7 @@ public enum Document: Equatable, Hashable, Codable {
 
 public extension Array where Element == Document {
 	
+	@MainActor
 	var title: String {
 		ListFormatter.localizedString(byJoining: self.compactMap({ $0.title }).sorted())
 	}

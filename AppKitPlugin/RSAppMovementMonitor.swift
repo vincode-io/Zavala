@@ -9,6 +9,7 @@
 
 import Cocoa
 
+@MainActor
 public class RSAppMovementMonitor: NSObject {
 
 	// If provided, the handler will be consulted when the app is moved.
@@ -59,20 +60,22 @@ public class RSAppMovementMonitor: NSObject {
 		if let originalAppPath = originalAppURL?.path {
 			self.fileDescriptor = open(originalAppPath, O_EVTONLY)
 			if self.fileDescriptor != -1 {
-				self.dispatchSource = DispatchSource.makeFileSystemObjectSource(fileDescriptor: self.fileDescriptor, eventMask: [.delete, .rename], queue: DispatchQueue.main)
-				if let source = self.dispatchSource {
-					source.setEventHandler {
-						self.invokeEventHandler()
+				Task { @MainActor in
+					self.dispatchSource = DispatchSource.makeFileSystemObjectSource(fileDescriptor: self.fileDescriptor, eventMask: [.delete, .rename], queue: DispatchQueue.main)
+					if let source = self.dispatchSource {
+						source.setEventHandler {
+							self.invokeEventHandler()
+						}
+						
+						source.setCancelHandler {
+							self.invalidate()
+						}
+						
+						source.resume()
 					}
-
-					source.setCancelHandler {
-						self.invalidate()
-					}
-
-					source.resume()
 				}
 			}
-
+			
 			// Also install a notification to re-check the location of the app on disk
 			// every time the app becomes active. This catches a good number of edge-case
 			// changes to the app bundle's path, such as when a containing folder or the
@@ -80,15 +83,13 @@ public class RSAppMovementMonitor: NSObject {
 			NotificationCenter.default.addObserver(forName: NSApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
 				// Removing observer in invalidate doesn't seem to prevent this getting called? Maybe
 				// because it's on the same invocation of the runloop?
-				if self.isValid() && self.originalAppURL != self.appTrackingURL?.absoluteURL {
-					self.invokeEventHandler()
+				Task { @MainActor in
+					if self.isValid() && self.originalAppURL != self.appTrackingURL?.absoluteURL {
+						self.invokeEventHandler()
+					}
 				}
 			}
 		}
-	}
-
-	deinit {
-		self.invalidate()
 	}
 
 	func invokeEventHandler() {

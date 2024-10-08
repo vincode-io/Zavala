@@ -140,6 +140,7 @@ struct GetInfoView: View {
 	}
 }
 
+@MainActor
 class GetInfoViewModel: ObservableObject {
 	
 	private var outline: Outline

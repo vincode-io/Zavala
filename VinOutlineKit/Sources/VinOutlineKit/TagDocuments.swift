@@ -11,9 +11,10 @@ import UIKit
 import Foundation
 #endif
 
+@MainActor
 public final class TagDocuments: Identifiable, DocumentContainer {
 	
-	public var id: EntityID
+	nonisolated public let id: EntityID
 	
 	public var name: String? {
 		return tag?.name

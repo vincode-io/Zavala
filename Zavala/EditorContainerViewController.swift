@@ -11,25 +11,17 @@ import SafariServices
 import VinOutlineKit
 import VinUtility
 
-class EditorContainerViewController: UIViewController, MainCoordinator {
+class EditorContainerViewController: UIViewController, MainCoordinator, MainCoordinatorResponder {
 		
 	var currentDocumentContainer: DocumentContainer? = nil
 
 	var selectedDocuments: [Document] {
-		guard let editorViewController else { return []	}
-		return editorViewController.selectedDocuments
+		return editorViewController?.selectedDocuments ?? []
 	}
 	
 	var editorViewController: EditorViewController? {
 		return children.first as? EditorViewController
 	}
-
-	var isExportAndPrintUnavailable: Bool {
-		return editorViewController?.isOutlineFunctionsUnavailable ?? true
-	}
-	
-	var isGoBackwardOneUnavailable: Bool = false
-	var isGoForwardOneUnavailable: Bool = false
 
 	weak var sceneDelegate: OutlineEditorSceneDelegate?
 	
@@ -107,23 +99,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		return document
 	}
 
-	func goBackwardOne() {	}
-	func goForwardOne() { }
-	
-	func share() {
-		editorViewController?.share()
-	}
-	
-	func manageSharing() {
-		guard let shareRecord = selectedDocuments.first!.shareRecord, let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer else {
-			return
-		}
-		
-		let controller = UICloudSharingController(share: shareRecord, container: container)
-		controller.delegate = self
-		self.present(controller, animated: true)
-	}
-	
 	func shutdown() {
 		activityManager.invalidateSelectDocument()
 		editorViewController?.edit(nil, isNew: false)
@@ -131,13 +106,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 	
 	// MARK: Actions
 	
-	override func delete(_ sender: Any?) {
-		guard editorViewController?.isDeleteCurrentRowUnavailable ?? true else {
-			editorViewController?.deleteCurrentRows()
-			return
-		}
-	}
-
 	@objc func deleteOutline(_ sender: Any?) {
 		guard let outline = editorViewController?.outline else { return }
 		let document = Document.outline(outline)
@@ -168,92 +136,79 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 		present(alert, animated: true, completion: nil)
 	}
 
-	override func selectAll(_ sender: Any?) {
-		if !(editorViewController?.isSelectAllRowsUnavailable ?? true) {
-			editorViewController?.selectAllRows()
-		}
-	}
-
 	@objc func sync(_ sender: Any?) {
 		Task {
 			await AccountManager.shared.sync()
 		}
 	}
 
-	@objc func insertImage(_ sender: Any?) {
-		insertImage()
+	@objc func showSettings(_ sender: Any?) {
+		showSettings()
+	}
+	
+	@objc func exportPDFDocs(_ sender: Any?) {
+		exportPDFDocs()
 	}
 
-	@objc func link(_ sender: Any?) {
-		link()
+	@objc func exportPDFLists(_ sender: Any?) {
+		exportPDFLists()
 	}
 
-	@objc func createOrDeleteNotes(_ sender: Any?) {
-		createOrDeleteNotes()
+	@objc func exportMarkdownDocs(_ sender: Any?) {
+		exportMarkdownDocs()
 	}
 
-	@objc func toggleOutlineFilter(_ sender: Any?) {
-		toggleCompletedFilter()
+	@objc func exportMarkdownLists(_ sender: Any?) {
+		exportMarkdownLists()
 	}
 
-	@objc func outlineToggleBoldface(_ sender: Any?) {
-		outlineToggleBoldface()
+	@objc func exportOPMLs(_ sender: Any?) {
+		exportOPMLs()
 	}
 
-	@objc func outlineToggleItalics(_ sender: Any?) {
-		outlineToggleItalics()
-	}
-
-	@objc func expandAllInOutline(_ sender: Any?) {
-		expandAllInOutline()
-	}
-
-	@objc func collapseAllInOutline(_ sender: Any?) {
-		collapseAllInOutline()
-	}
-
-	@objc func moveRowsRight(_ sender: Any?) {
-		moveRowsRight()
-	}
-
-	@objc func moveRowsLeft(_ sender: Any?) {
-		moveRowsLeft()
-	}
-
-	@objc func moveRowsUp(_ sender: Any?) {
-		moveRowsUp()
-	}
-
-	@objc func moveRowsDown(_ sender: Any?) {
-		moveRowsDown()
-	}
-
-	@objc func toggleFocus(_ sender: Any?) {
-		toggleFocus()
-	}
-
-	@objc func toggleOutlineHideNotes(_ sender: Any?) {
-		toggleNotesFilter()
-	}
-
-	@objc func printDoc(_ sender: Any?) {
+	@objc func printDocs(_ sender: Any?) {
 		printDocs()
 	}
 
-	@objc func printList(_ sender: Any?) {
+	@objc func printLists(_ sender: Any?) {
 		printLists()
 	}
 
-	@objc func outlineGetInfo(_ sender: Any?) {
+	@objc func showGetInfo(_ sender: Any?) {
 		showGetInfo()
 	}
+
+	@objc func copyDocumentLink(_ sender: Any?) {
+		copyDocumentLink()
+	}
+	
+	@objc func share(_ sender: Any?) {
+		editorViewController?.share()
+	}
+	
+	@objc func manageSharing(_ sender: Any?) {
+		guard let shareRecord = selectedDocuments.first!.shareRecord, let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer else {
+			return
+		}
+		
+		let controller = UICloudSharingController(share: shareRecord, container: container)
+		controller.delegate = self
+		self.present(controller, animated: true)
+	}
+	
 
 	// MARK: Validation
 	
 	override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
 		switch action {
-		case .delete:
-			return !(editorViewController?.isDeleteCurrentRowUnavailable ?? true)
+		case .sync:
+			return AccountManager.shared.isSyncAvailable
+		case .manageSharing:
+			return !isManageSharingUnavailable
+		case .share, .showGetInfo, .exportPDFDocs, .exportPDFLists, .exportMarkdownDocs, .exportMarkdownLists, .exportOPMLs, .printDocs, .printLists:
+			return !isOutlineFunctionsUnavailable
+		case .copyDocumentLink:
+			return selectedDocuments.count == 1
 		default:
 			return super.canPerformAction(action, withSender: sender)
 		}
@@ -266,8 +221,6 @@ class EditorContainerViewController: UIViewController, MainCoordinator {
 extension EditorContainerViewController: EditorDelegate {
 
 	// These aren't used when running in the EditorContainerViewController
-	var editorViewControllerIsGoBackUnavailable: Bool { return true }
-	var editorViewControllerIsGoForwardUnavailable: Bool { return true  }
 	var editorViewControllerGoBackwardStack: [Pin] { return [Pin]() }
 	var editorViewControllerGoForwardStack: [Pin] { return [Pin]() }
 	func goBackward(_ : EditorViewController, to: Int) {}
@@ -401,27 +354,22 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .insertImage:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isInsertImageUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .insertImage)
 			}
 			item.image = .insertImage.symbolSizedForCatalyst()
 			item.label = .insertImageControlLabel
 			item.toolTip = .insertImageControlLabel
 			item.isBordered = true
-			item.action = #selector(insertImage(_:))
-			item.target = self
+			item.action = .insertImage
 			toolbarItem = item
 		case .link:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isLinkUnavailable ?? true
-			}
 			item.image = .link.symbolSizedForCatalyst()
 			item.label = .linkControlLabel
 			item.toolTip = .linkControlLabel
 			item.isBordered = true
-			item.action = #selector(link(_:))
-			item.target = self
+			item.action = .editLink
 			toolbarItem = item
 		case .note:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
@@ -447,8 +395,7 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			item.label = .addNoteControlLabel
 			item.toolTip = .addNoteControlLabel
 			item.isBordered = true
-			item.action = #selector(createOrDeleteNotes(_:))
-			item.target = self
+			item.action = .createOrDeleteNotes
 			toolbarItem = item
 		case .boldface:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
@@ -458,14 +405,13 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				} else {
 					item.image = .bold.symbolSizedForCatalyst(pointSize: 18.0)
 				}
-				return self?.editorViewController?.isFormatUnavailable ?? true
+				return !UIResponder.valid(action: .toggleBoldface)
 			}
 			item.image = .bold.symbolSizedForCatalyst(pointSize: 18.0)
 			item.label = .boldControlLabel
 			item.toolTip = .boldControlLabel
 			item.isBordered = true
-			item.action = #selector(outlineToggleBoldface(_:))
-			item.target = self
+			item.action = .toggleBoldface
 			toolbarItem = item
 		case .italic:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
@@ -475,144 +421,138 @@ extension EditorContainerViewController: NSToolbarDelegate {
 				} else {
 					item.image = .italic.symbolSizedForCatalyst(pointSize: 18.0)
 				}
-				return self?.editorViewController?.isFormatUnavailable ?? true
+				return !UIResponder.valid(action: .toggleItalics)
 			}
 			item.image = .italic.symbolSizedForCatalyst(pointSize: 18.0)
 			item.label = .italicControlLabel
 			item.toolTip = .italicControlLabel
 			item.isBordered = true
-			item.action = #selector(outlineToggleItalics(_:))
-			item.target = self
+			item.action = .toggleItalics
 			toolbarItem = item
 		case .expandAllInOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isExpandAllInOutlineUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .expandAllInOutline)
 			}
 			item.image = .expandAll.symbolSizedForCatalyst()
 			item.label = .expandControlLabel
 			item.toolTip = .expandAllInOutlineControlLabel
 			item.isBordered = true
-			item.action = #selector(expandAllInOutline(_:))
-			item.target = self
+			item.action = .expandAllInOutline
 			toolbarItem = item
 		case .collapseAllInOutline:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isCollapseAllInOutlineUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .collapseAllInOutline)
 			}
 			item.image = .collapseAll.symbolSizedForCatalyst()
 			item.label = .collapseControlLabel
 			item.toolTip = .collapseAllInOutlineControlLabel
 			item.isBordered = true
-			item.action = #selector(collapseAllInOutline(_:))
-			item.target = self
-			toolbarItem = item
-		case .moveRight:
-			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isMoveRowsRightUnavailable ?? true
-			}
-			item.image = .moveRight.symbolSizedForCatalyst()
-			item.label = .moveRightControlLabel
-			item.toolTip = .moveRightControlLabel
-			item.isBordered = true
-			item.action = #selector(moveRowsRight(_:))
-			item.target = self
+			item.action = .collapseAllInOutline
 			toolbarItem = item
 		case .moveLeft:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isMoveRowsLeftUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .moveCurrentRowsLeft)
 			}
 			item.image = .moveLeft.symbolSizedForCatalyst()
 			item.label = .moveLeftControlLabel
 			item.toolTip = .moveLeftControlLabel
 			item.isBordered = true
-			item.action = #selector(moveRowsLeft(_:))
-			item.target = self
+			item.action = .moveCurrentRowsLeft
+			toolbarItem = item
+		case .moveRight:
+			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .moveCurrentRowsRight)
+			}
+			item.image = .moveRight.symbolSizedForCatalyst()
+			item.label = .moveRightControlLabel
+			item.toolTip = .moveRightControlLabel
+			item.isBordered = true
+			item.action = .moveCurrentRowsRight
 			toolbarItem = item
 		case .moveUp:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isMoveRowsUpUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .moveCurrentRowsUp)
 			}
 			item.image = .moveUp.symbolSizedForCatalyst()
 			item.label = .moveUpControlLabel
 			item.toolTip = .moveUpControlLabel
 			item.isBordered = true
-			item.action = #selector(moveRowsUp(_:))
-			item.target = self
+			item.action = .moveCurrentRowsUp
 			toolbarItem = item
 		case .moveDown:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isMoveRowsDownUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .moveCurrentRowsDown)
 			}
 			item.image = .moveDown.symbolSizedForCatalyst()
 			item.label = .moveDownControlLabel
 			item.toolTip = .moveDownControlLabel
 			item.isBordered = true
-			item.action = #selector(moveRowsDown(_:))
-			item.target = self
+			item.action = .moveCurrentRowsDown
 			toolbarItem = item
 		case .focus:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				if self?.editorViewController?.isFocusOutUnavailable ?? true {
-					item.image = .focusInactive.symbolSizedForCatalyst(pointSize: 17)
-					item.label = .focusInControlLabel
-					item.toolTip = .focusInControlLabel
-				} else {
+			item.checkForUnavailable = { _ in
+				if UIResponder.valid(action: .focusOut) {
 					item.image = .focusActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
 					item.label = .focusOutControlLabel
 					item.toolTip = .focusOutControlLabel
+				} else {
+					item.image = .focusInactive.symbolSizedForCatalyst(pointSize: 17)
+					item.label = .focusInControlLabel
+					item.toolTip = .focusInControlLabel
 				}
-				return self?.editorViewController?.isFocusInUnavailable ?? true && self?.editorViewController?.isFocusOutUnavailable ?? true
+				return !UIResponder.valid(action: .toggleFocus)
 			}
 			item.image = .focusInactive.symbolSizedForCatalyst()
 			item.label = .focusInControlLabel
 			item.toolTip = .focusInControlLabel
 			item.isBordered = true
-			item.action = #selector(toggleFocus(_:))
-			item.target = self
+			item.action = .toggleFocus
 			toolbarItem = item
 		case .filter:
 			let item = ValidatingMenuToolbarItem(itemIdentifier: itemIdentifier)
 			item.checkForUnavailable = { [weak self] item in
 				guard let self else { return false }
 				
-				if self.editorViewController?.isFilterOn ?? false {
+				let isFilterOn = self.editorViewController?.isFilterOn ?? false
+				
+				if isFilterOn {
 					item.image = .filterActive.symbolSizedForCatalyst(pointSize: 17, color: .accentColor)
 				} else {
 					item.image = .filterInactive.symbolSizedForCatalyst(pointSize: 17)
 				}
 				
-				let turnFilterOnAction = UIAction() { [weak self] _ in
-					DispatchQueue.main.async {
-						   self?.toggleFilterOn()
-					   }
+				let turnFilterOnAction = UIAction() { _ in
+					Task { @MainActor in
+						UIApplication.shared.sendAction(.toggleFilterOn, to: nil, from: nil, for: nil)
+					}
 				}
 				
-				turnFilterOnAction.title = self.isFilterOn ? .turnFilterOffControlLabel : .turnFilterOnControlLabel
+				turnFilterOnAction.title = isFilterOn ? .turnFilterOffControlLabel : .turnFilterOnControlLabel
 				
 				let turnFilterOnMenu = UIMenu(title: "", options: .displayInline, children: [turnFilterOnAction])
 				
-				let filterCompletedAction = UIAction(title: .filterCompletedControlLabel) { [weak self] _ in
-					DispatchQueue.main.async {
-						   self?.toggleCompletedFilter()
-					   }
+				let filterCompletedAction = UIAction(title: .filterCompletedControlLabel) { _ in
+					Task { @MainActor in
+						UIApplication.shared.sendAction(.toggleCompletedFilter, to: nil, from: nil, for: nil)
+					}
 				}
-				filterCompletedAction.state = self.isCompletedFiltered ? .on : .off
-				filterCompletedAction.attributes = self.isFilterOn ? [] : .disabled
+				filterCompletedAction.state = self.editorViewController?.isCompletedFiltered ?? false ? .on : .off
+				filterCompletedAction.attributes = isFilterOn ? [] : .disabled
 
-				let filterNotesAction = UIAction(title: .filterNotesControlLabel) { [weak self] _ in
-					DispatchQueue.main.async {
-						   self?.toggleNotesFilter()
-					   }
+				let filterNotesAction = UIAction(title: .filterNotesControlLabel) { _ in
+					Task { @MainActor in
+						UIApplication.shared.sendAction(.toggleNotesFilter, to: nil, from: nil, for: nil)
+					}
 				}
-				filterNotesAction.state = self.isNotesFiltered ? .on : .off
-				filterNotesAction.attributes = self.isFilterOn ? [] : .disabled
+				filterNotesAction.state = self.editorViewController?.isNotesFiltered ?? false ? .on : .off
+				filterNotesAction.attributes = isFilterOn ? [] : .disabled
 
 				let filterOptionsMenu = UIMenu(title: "", options: .displayInline, children: [filterCompletedAction, filterNotesAction])
 
@@ -629,26 +569,26 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .printDoc:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .printDocs)
 			}
 			item.image = .printDoc.symbolSizedForCatalyst()
 			item.label = .printDocControlLabel
 			item.toolTip = .printDocControlLabel
 			item.isBordered = true
-			item.action = #selector(printDoc(_:))
+			item.action = .printDocs
 			item.target = self
 			toolbarItem = item
 		case .printList:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .printLists)
 			}
 			item.image = .printList.symbolSizedForCatalyst()
 			item.label = .printListControlLabel
 			item.toolTip = .printListControlLabel
 			item.isBordered = true
-			item.action = #selector(printList(_:))
+			item.action = .printLists
 			item.target = self
 			toolbarItem = item
 		case .share:
@@ -659,14 +599,14 @@ extension EditorContainerViewController: NSToolbarDelegate {
 			toolbarItem = item
 		case .getInfo:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)
-			item.checkForUnavailable = { [weak self] _ in
-				return self?.editorViewController?.isOutlineFunctionsUnavailable ?? true
+			item.checkForUnavailable = { _ in
+				return !UIResponder.valid(action: .showGetInfo)
 			}
 			item.image = .getInfo.symbolSizedForCatalyst()
 			item.label = .getInfoControlLabel
 			item.toolTip = .getInfoControlLabel
 			item.isBordered = true
-			item.action = #selector(outlineGetInfo(_:))
+			item.action = .showGetInfo
 			item.target = self
 			toolbarItem = item
 		case .toggleSidebar:

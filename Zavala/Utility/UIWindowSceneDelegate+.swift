@@ -9,21 +9,20 @@ import UIKit
 
 extension UIWindowSceneDelegate {
 	
+	@MainActor
 	func updateUserInterfaceStyle() {
-		DispatchQueue.main.async {
-			switch AppDefaults.shared.userInterfaceColorPalette {
-			case .automatic:
-				self.window??.overrideUserInterfaceStyle = .unspecified
-			case .light:
-				self.window??.overrideUserInterfaceStyle = .light
-			case .dark:
-				self.window??.overrideUserInterfaceStyle = .dark
-			}
-			
-			#if targetEnvironment(macCatalyst)
-			appDelegate.appKitPlugin?.updateAppearance(self.window??.nsWindow)
-			#endif
+		switch AppDefaults.shared.userInterfaceColorPalette {
+		case .automatic:
+			self.window??.overrideUserInterfaceStyle = .unspecified
+		case .light:
+			self.window??.overrideUserInterfaceStyle = .light
+		case .dark:
+			self.window??.overrideUserInterfaceStyle = .dark
 		}
+		
+		#if targetEnvironment(macCatalyst)
+		appDelegate.appKitPlugin?.updateAppearance(self.window??.nsWindow)
+		#endif
 	}
 	
 }

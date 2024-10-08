@@ -7,58 +7,52 @@
 
 import Foundation
 import OSLog
-import CoreSpotlight
+@preconcurrency import CoreSpotlight
 import VinOutlineKit
 
-class IndexRequestHandler: CSIndexExtensionRequestHandler {
+let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Zavala")
+
+final class IndexRequestHandler: CSIndexExtensionRequestHandler {
 	
-	var logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "Zavala")
-	
-    override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexAllSearchableItemsWithAcknowledgementHandler acknowledgementHandler: @escaping () -> Void) {
+    override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexAllSearchableItemsWithAcknowledgementHandler acknowledgementHandler: @escaping @Sendable () -> Void) {
+		logger.info("IndexRequestHandler starting...")
+
 		Task { @MainActor in
-			self.logger.info("IndexRequestHandler starting...")
 			
-			self.resume()
+			Self.resume()
 
 			for document in AccountManager.shared.documents {
-				self.logger.info("IndexRequestHandler indexing \(document.title ?? "", privacy: .public).")
+				logger.info("IndexRequestHandler indexing \(document.title ?? "", privacy: .public).")
 				
-				await withCheckedContinuation { continuation in
-					let searchableItem = DocumentIndexer.makeSearchableItem(forDocument: document)
-					searchableIndex.indexSearchableItems([searchableItem]) { _ in
-						continuation.resume()
-					}
-				}
+				let documentIndexAttributes = DocumentIndexAttributes(document: document)
+				try? await searchableIndex.indexSearchableItems([documentIndexAttributes.searchableItem])
 			}
 			
-			self.suspend()
-			self.logger.info("IndexRequestHandler done.")
+			await Self.suspend()
+			logger.info("IndexRequestHandler done.")
 			acknowledgementHandler()
 		}
     }
     
-	override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexSearchableItemsWithIdentifiers identifiers: [String], acknowledgementHandler: @escaping () -> Void) {
+	override func searchableIndex(_ searchableIndex: CSSearchableIndex, reindexSearchableItemsWithIdentifiers identifiers: [String], acknowledgementHandler: @escaping @Sendable () -> Void) {
+		logger.info("IndexRequestHandler starting...")
+
 		Task { @MainActor in
-			self.logger.info("IndexRequestHandler starting...")
 			
-			self.resume()
+			Self.resume()
 			
 			for description in identifiers {
 				if let entityID = EntityID(description: description), let document = AccountManager.shared.findDocument(entityID) {
 					
-					self.logger.info("IndexRequestHandler indexing \(document.title ?? "", privacy: .public).")
+					logger.info("IndexRequestHandler indexing \(document.title ?? "", privacy: .public).")
 					
-					await withCheckedContinuation { continuation in
-						let searchableItem = DocumentIndexer.makeSearchableItem(forDocument: document)
-						searchableIndex.indexSearchableItems([searchableItem]) { _ in
-							continuation.resume()
-						}
-					}
+					let documentIndexAttributes = DocumentIndexAttributes(document: document)
+					try? await searchableIndex.indexSearchableItems([documentIndexAttributes.searchableItem])
 				}
 			}
 
-			self.suspend()
-			self.logger.info("IndexRequestHandler done.")
+			await Self.suspend()
+			logger.info("IndexRequestHandler done.")
 			acknowledgementHandler()
 		}
 	}
@@ -67,10 +61,10 @@ class IndexRequestHandler: CSIndexExtensionRequestHandler {
 
 // MARK: ErrorHandler
 
-extension IndexRequestHandler: ErrorHandler {
+final class IndexRequestHandlerErrorHandler: ErrorHandler {
 	
 	func presentError(_ error: Error, title: String) {
-		self.logger.error("IndexRequestHandler failed with error: \(error.localizedDescription, privacy: .public)")
+		logger.error("IndexRequestHandler failed with error: \(error.localizedDescription, privacy: .public)")
 	}
 	
 }
@@ -79,19 +73,23 @@ extension IndexRequestHandler: ErrorHandler {
 
 private extension IndexRequestHandler {
 	
-	func resume() {
+	static let errorHandler = IndexRequestHandlerErrorHandler()
+	
+	@MainActor
+	static func resume() {
 		if AccountManager.shared == nil {
 			let appGroup = Bundle.main.object(forInfoDictionaryKey: "AppGroup") as! String
 			let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
 			let documentAccountsFolderPath = containerURL!.appendingPathComponent("Accounts").path
-			AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath, errorHandler: self)
+			AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath, errorHandler: Self.errorHandler)
 		} else {
 			AccountManager.shared.resume()
 		}
 	}
 	
-	func suspend() {
-		AccountManager.shared.suspend()
+	@MainActor
+	static func suspend() async {
+		await AccountManager.shared.suspend()
 	}
 	
 }

@@ -16,7 +16,7 @@ public final class AllDocuments: Identifiable, DocumentContainer {
 		return account?.documents ?? []
 	}
 	
-	public var id: EntityID
+	public let id: EntityID
 	public var name: String? = VinOutlineKitStringAssets.all
 	public var partialName: String? = VinOutlineKitStringAssets.all
 	
