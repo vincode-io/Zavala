@@ -85,7 +85,7 @@ class EditorFindSession: UIFindSession {
 	
 	override func invalidateFoundResults() {
 		guard let outline = delegate.outline else { return }
-		outline.search(for: "", options: [])
+		outline.restartSearch()
 	}
 	
 }

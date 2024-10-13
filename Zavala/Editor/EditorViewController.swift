@@ -1940,6 +1940,8 @@ extension EditorViewController: UIFindInteractionDelegate {
 	}
 	
 	func findInteraction(_ interaction: UIFindInteraction, didEnd session: UIFindSession) {
+		// FindInteraction likes to call this a bunch of times when a find is ending. Buggy AF.
+		guard isSearching else { return }
 		outline?.endSearching()
 	}
 }

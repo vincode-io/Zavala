@@ -1204,7 +1204,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 		self.searchText = searchText
 
-		var reloads = searchResultCoordinates.compactMap { $0.row.shadowTableIndex }
 		clearSearchResults()
 
 		if searchText.isEmpty {
@@ -1217,9 +1216,20 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 				
 		var changes = rebuildShadowTable()
-		reloads.append(contentsOf: searchResultCoordinates.compactMap({ $0.row.shadowTableIndex }))
+		let reloads = searchResultCoordinates.compactMap { $0.row.shadowTableIndex }
 		changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
 		outlineElementsDidChange(changes)
+	}
+	
+	public func restartSearch() {
+		guard isSearching == .searching else { return }
+		
+		searchText = ""
+		isSearching = .beginSearch
+		clearSearchResults()
+		outlineElementsDidChange(rebuildShadowTable())
+		
+		isSearching = .searching
 	}
 	
 	public func replaceSearchResults(_ coordinates: [SearchResultCoordinates], with replacement: String) {
