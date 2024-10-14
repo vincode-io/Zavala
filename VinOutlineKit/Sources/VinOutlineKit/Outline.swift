@@ -531,7 +531,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	public private(set) var searchResultCoordinates = [SearchResultCoordinates]()
 	
 	public var currentSearchResultRow: Row? {
-		guard currentSearchResult < searchResultCoordinates.count else { return nil }
+		guard currentSearchResult > -1 && currentSearchResult < searchResultCoordinates.count else { return nil }
 		return searchResultCoordinates[currentSearchResult].row
 	}
 	
