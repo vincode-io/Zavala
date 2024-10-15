@@ -79,7 +79,7 @@ private extension EditorCollectionViewCompositionalLayout {
 		
 		// Constants
 		let leftPadding: CGFloat = 8
-		let interItemSpacing: CGFloat = -8
+		let interItemSpacing: CGFloat = 0
 		
 		// Tracking values
 		var leftMargin: CGFloat = leftPadding // Modified to determine origin.x for each item

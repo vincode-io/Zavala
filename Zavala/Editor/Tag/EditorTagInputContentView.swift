@@ -20,6 +20,8 @@ class EditorTagInputContentView: UIView, UIContentView {
 		self.delegate = configuration.delegate
 		super.init(frame: .zero)
 
+		layoutMargins = .init(top: 8, left: 4, bottom: 8, right: 4)
+		
 		inputPill.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(inputPill)
 
