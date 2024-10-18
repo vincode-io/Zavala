@@ -66,7 +66,7 @@ class ButtonGroup: NSObject {
 	private var popoverController: UIViewController?
 
 	private var width: CGFloat {
-		if containerWidth > 480 {
+		if containerWidth >= 440 {
 			return containerType.wideWidth * CGFloat(stackView.arrangedSubviews.count)
 		} else {
 			return containerType.width * CGFloat(stackView.arrangedSubviews.count)

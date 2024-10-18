@@ -382,7 +382,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			cell.reference = self?.generateBacklinkVerbaige(outline: outline)
 		}
 
-		configureButtonBars()
+		configureButtonBars(size: view.bounds.size)
 		updateUI()
 		collectionView.reloadData()
 
@@ -2044,7 +2044,7 @@ extension EditorViewController: ImageTransitionDelegate {
 
 private extension EditorViewController {
 	
-	func configureButtonBars() {
+	func configureButtonBars(size: CGSize) {
 		undoMenuButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .none)
 		undoButton = undoMenuButtonGroup.addButton(label: .undoControlLabel, image: .undo, selector: .undo)
 		cutButton = undoMenuButtonGroup.addButton(label: .cutControlLabel, image: .cut, selector: .cut)
@@ -2105,7 +2105,12 @@ private extension EditorViewController {
 				formatMenuButtonGroup.remove(linkButton)
 				rightToolbarButtonGroup.insert(linkButton, at: 1)
 			}
+
+			navButtonGroup.containerWidth = size.width
+			leftToolbarButtonGroup.containerWidth = size.width
+			rightToolbarButtonGroup.containerWidth = size.width
 		}
+
 	}
 	
 	func buildEllipsisMenu() -> UIMenu {
