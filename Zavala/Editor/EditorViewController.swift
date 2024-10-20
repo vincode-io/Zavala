@@ -952,6 +952,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		
 		// Don't continue if we are just clearing out the editor
 		guard let outline else {
+			guard isViewLoaded else { return }
 			updateUI()
 			collectionView.reloadData()
 			return
