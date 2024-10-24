@@ -365,6 +365,7 @@ extension CollectionsViewController {
 			if case .documentContainer(let entityID) = item.id, let container = AccountManager.shared.findDocumentContainer(entityID) {
 				contentConfiguration.text = container.partialName
 				contentConfiguration.image = container.image
+				contentConfiguration.textProperties.lineBreakMode = .byTruncatingMiddle
 				
 				if let count = container.itemCount {
 					contentConfiguration.secondaryTextProperties.font = UIFont.preferredFont(forTextStyle: .body)

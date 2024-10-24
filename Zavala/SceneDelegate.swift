@@ -52,7 +52,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		// If we let the user shrink the window down too small, the collection view will crash itself with a
 		// no selector found error on an internal Apple API
-		windowScene.sizeRestrictions?.minimumSize = CGSize(width: 800, height: 600)
+		windowScene.sizeRestrictions?.minimumSize = CGSize(width: 900, height: 600)
 		
 		#endif
 

@@ -35,12 +35,15 @@ class EditorTagContentView: UIView, UIContentView {
 		}
 		let menu = UIMenu(title: "", image: nil, identifier: nil, options: [], children: [deleteAction])
 		button.menu = menu
+		
+		let buttonMaxWidth = UIFontMetrics(forTextStyle: .body).scaledValue(for: 250)
 
 		NSLayoutConstraint.activate([
 			button.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
 			button.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
 			button.topAnchor.constraint(equalTo: topAnchor),
 			button.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+			button.widthAnchor.constraint(lessThanOrEqualToConstant: buttonMaxWidth),
 		])
 
 		apply(configuration: configuration)

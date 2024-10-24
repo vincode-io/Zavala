@@ -60,6 +60,8 @@ class EditorTagInputPill: UIView {
 		buttonWidthConstraint = button.widthAnchor.constraint(equalToConstant: layoutMargins.right)
 		textFieldTrailingConstraint = textField.trailingAnchor.constraint(equalTo: button.leadingAnchor)
 		
+		let textFieldMaxWidth = UIFontMetrics(forTextStyle: .body).scaledValue(for: 200)
+		
 		NSLayoutConstraint.activate([
 			border.topAnchor.constraint(equalTo: topAnchor),
 			border.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -68,6 +70,7 @@ class EditorTagInputPill: UIView {
 			textField.topAnchor.constraint(equalTo: border.topAnchor, constant: 4),
 			textField.leadingAnchor.constraint(equalTo: border.layoutMarginsGuide.leadingAnchor),
 			textField.bottomAnchor.constraint(equalTo: border.bottomAnchor, constant: -4),
+			textField.widthAnchor.constraint(lessThanOrEqualToConstant: textFieldMaxWidth),
 			button.topAnchor.constraint(equalTo: topAnchor),
 			button.trailingAnchor.constraint(equalTo: trailingAnchor),
 			button.bottomAnchor.constraint(equalTo: bottomAnchor),
