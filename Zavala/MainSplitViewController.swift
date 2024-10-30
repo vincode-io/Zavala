@@ -105,6 +105,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 			if preferredSupplementaryColumnWidth < 1 {
 				preferredSupplementaryColumnWidth = 300
 			}
+			maximumPrimaryColumnWidth = 250
+			maximumSupplementaryColumnWidth = 350
 			presentsWithGesture = false
 		}
 
