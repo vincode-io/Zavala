@@ -707,10 +707,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		// Fix any rowOrder values that don't have keyedRows. Sync the RowContainer with the bad
 		// rowOrder as well as any missing rows that it had referenced. Another device might still
 		// have that row causing a back and forth between devices about which rowOrder is correct or not.
+		//
+		// Do not request CloudKit updates for any rows removed from the the rowOrder tables. They may actually
+		// have just not synced to the current device yet and we don't want to remove them from iCloud if so.
 		for rowID in rowOrder {
 			if !keyedRows.keys.contains(rowID) {
 				self.rowOrder?.remove(rowID)
-				requestCloudKitUpdates(for: [self.id, .row(self.id.accountID, self.id.documentUUID, rowID)])
 			}
 		}
 		
@@ -718,7 +720,6 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			for rowID in row.rowOrder {
 				if !keyedRows.keys.contains(rowID) {
 					row.rowOrder.remove(rowID)
-					requestCloudKitUpdates(for: [row.entityID, .row(row.entityID.accountID, row.entityID.documentUUID, rowID)])
 				}
 			}
 		}
