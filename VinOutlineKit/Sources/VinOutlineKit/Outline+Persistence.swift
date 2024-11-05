@@ -34,14 +34,12 @@ public extension Outline {
 	}
 	
 	func buildRowFileData() -> Data? {
-		guard let rowOrder, let keyedRows else { return nil }
-		
 		var keyedRowCoders = [String: RowCoder]()
-		for (key, row) in keyedRows {
+		for (key, row) in keyedRows ?? [:] {
 			keyedRowCoders[key] = row.toCoder()
 		}
 		
-		let outlineRows = OutlineRows(ancestorRowOrder: outline?.ancestorRowOrder, rowOrder: rowOrder, keyedRows: keyedRowCoders)
+		let outlineRows = OutlineRows(ancestorRowOrder: outline?.ancestorRowOrder, rowOrder: rowOrder ?? [], keyedRows: keyedRowCoders)
 
 		let encoder = PropertyListEncoder()
 		encoder.outputFormat = .binary

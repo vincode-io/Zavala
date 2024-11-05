@@ -332,9 +332,6 @@ public final class Account: Identifiable, Equatable {
 			await outline.forceSave()
 			await outline.unload()
 		} else {
-			guard update.saveOutlineRecord != nil else {
-				return
-			}
 			let outline = Outline(id: update.documentID)
 			outline.zoneID = update.zoneID
 
@@ -345,6 +342,7 @@ public final class Account: Identifiable, Equatable {
 			if documents == nil {
 				documents = [Document]()
 			}
+			
 			let document = Document.outline(outline)
 			documents!.append(document)
 			accountDocumentsDidChange()
