@@ -2007,7 +2007,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		guard isBeingViewed else { return }
 		guard let rowShadowTableIndex = row.shadowTableIndex else { return }
 		
-		var changes = OutlineElementChanges(section: adjustedRowsSection, reloads: Set([rowShadowTableIndex]))
+		var changes = rebuildShadowTable()
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: Set([rowShadowTableIndex])))
 		changes.newCursorIndex = newCursorIndex
 		changes.cursorMoveIsToStart = true
 		outlineElementsDidChange(changes)
