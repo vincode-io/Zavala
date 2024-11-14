@@ -454,9 +454,9 @@ public final class Account: Identifiable, Equatable {
 			throw AccountError.renameTagNameExistsError
 		}
 		
-		// Rename any children with this tag as a path
+		// Rename any decendents with this tag as a path
 		for accountTag in accountTags {
-			if accountTag.isChild(of: tag) {
+			if accountTag.isDecendent(of: tag) {
 				accountTag.renamePath(from: tag.name, to: normalizedTagName)
 			}
 		}
@@ -514,9 +514,9 @@ public final class Account: Identifiable, Equatable {
 	public func forceDeleteTag(_ tag: Tag) {
 		guard let accountTags = tags else { return }
 		
-		// We recursively force delete any child tags
+		// We recursively force delete any decendent tags
 		for accountTag in accountTags {
-			if accountTag.isChild(of: tag) {
+			if accountTag.isDecendent(of: tag) {
 				forceDeleteTag(accountTag)
 			}
 		}

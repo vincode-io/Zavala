@@ -46,11 +46,23 @@ public class Tag: Identifiable, Equatable {
 	}
 	
 	public func isChild(of tag: Tag) -> Bool {
-		if let range = name.range(of: "\(tag.name)/") {
-			if !name[range.upperBound...].contains("/") {
-				return true
-			}
+		let fullName = tag.name + "/" + partialName
+		if name == fullName {
+			return true
 		}
+		return false
+	}
+	
+	public func isDecendent(of tag: Tag) -> Bool {
+		guard tag.name != name else { return false }
+		
+		if let range = name.range(of: "\(tag.name)/") {
+			if range.lowerBound != tag.name.startIndex {
+				return false
+			}
+			return true
+		}
+		
 		return false
 	}
 	
