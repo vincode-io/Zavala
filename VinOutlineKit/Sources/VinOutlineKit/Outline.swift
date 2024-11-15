@@ -1218,7 +1218,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 				
 		var changes = rebuildShadowTable()
 		let reloads = searchResultCoordinates.compactMap { $0.row.shadowTableIndex }
-		changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads)))
 		outlineElementsDidChange(changes)
 	}
 	
