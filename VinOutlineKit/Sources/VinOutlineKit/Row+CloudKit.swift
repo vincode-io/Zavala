@@ -118,8 +118,8 @@ extension Row: VCKModel {
 		let recordRowOrder = merge(client: rowOrder, ancestor: ancestorRowOrder, server: serverRowOrder)
 		record[Row.CloudKitRecord.Fields.rowOrder] = Array(recordRowOrder)
 		
-		let recordIsComplete = merge(client: isComplete, ancestor: ancestorIsComplete, server: serverIsComplete)
-		record[Row.CloudKitRecord.Fields.isComplete] = recordIsComplete! ? "1" : "0"
+		let recordIsComplete = merge(client: isComplete, ancestor: ancestorIsComplete, server: serverIsComplete) ?? false
+		record[Row.CloudKitRecord.Fields.isComplete] = recordIsComplete ? "1" : "0"
 		
 		let topicString = topicData?.toAttributedString()
 		let ancestorTopicString = ancestorTopicData?.toAttributedString()
