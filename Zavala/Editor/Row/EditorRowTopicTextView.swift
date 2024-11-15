@@ -123,6 +123,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	override func deleteBackward() {
 		guard let row else { return }
 		if attributedText.length == 0 && row.rowCount == 0 {
+			isSavingTextUnnecessary = true
 			editorDelegate?.deleteRow(self, row: row, rowStrings: rowStrings)
 			return
 		}
