@@ -515,7 +515,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			}
 		case .copyRowLink:
 			return currentRows?.count == 1
-		case .insertImage:
+		case .insertImage, .insertNewline:
 			return currentTextView != nil
 		case .focusIn:
 			return currentRows?.count == 1
