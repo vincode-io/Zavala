@@ -15,7 +15,7 @@ import VinUtility
 extension Selector {
 	static let copyRowLink = #selector(EditorViewController.copyRowLink(_:))
 	static let insertImage = #selector(EditorViewController.insertImage(_:))
-	static let insertNewline = #selector(EditorViewController.insertNewline(_:))
+	static let insertReturn = #selector(EditorViewController.insertReturn(_:))
 
 	static let focusIn = #selector(EditorViewController.focusIn(_:))
 	static let focusOut = #selector(EditorViewController.focusOut(_:))
@@ -515,7 +515,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			}
 		case .copyRowLink:
 			return currentRows?.count == 1
-		case .insertImage, .insertNewline:
+		case .insertImage, .insertReturn:
 			return currentTextView != nil
 		case .focusIn:
 			return currentRows?.count == 1
@@ -1372,7 +1372,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		deleteRowNotes(rows)
 	}
 
-	@objc func insertNewline(_ sender: Any?) {
+	@objc func insertReturn(_ sender: Any?) {
 		currentTextView?.insertNewline(self)
 	}
 	
@@ -2082,7 +2082,7 @@ private extension EditorViewController {
 		formatMenuButton = rightToolbarButtonGroup.addButton(label: .formatControlLabel, image: .format, selector: .showFormatMenu)
 		formatMenuButton.popoverButtonGroup = formatMenuButtonGroup
 		noteButton = rightToolbarButtonGroup.addButton(label: .addNoteControlLabel, image: .noteAdd, selector: .createOrDeleteNotes)
-		insertNewlineButton = rightToolbarButtonGroup.addButton(label: .newOutlineControlLabel, image: .newline, selector: .insertNewline)
+		insertNewlineButton = rightToolbarButtonGroup.addButton(label: .newOutlineControlLabel, image: .newline, selector: .insertReturn)
 		let insertButtonsBarButtonItem = rightToolbarButtonGroup.buildBarButtonItem()
 
 		if traitCollection.userInterfaceIdiom != .mac {
