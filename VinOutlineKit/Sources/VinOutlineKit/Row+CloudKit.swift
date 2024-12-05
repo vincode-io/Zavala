@@ -90,9 +90,9 @@ extension Row: VCKModel {
 		isCloudKitMerging = true
 	}
 	
-	public func buildRecord() -> CKRecord {
+	public func buildRecord() -> CKRecord? {
 		guard let zoneID = outline?.zoneID else {
-			fatalError("There is not enough associated CloudKit information for this object.")
+			return nil
 		}
 		
 		let parentRecordName: String = if let parentRow = parent as? Row {

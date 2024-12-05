@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-async-algorithms",
       "state" : {
-        "revision" : "6ae9a051f76b81cc668305ceed5b0e0a7fd93d20",
-        "version" : "1.0.1"
+        "revision" : "5c8bd186f48c16af0775972700626f0b74588278",
+        "version" : "1.0.2"
       }
     },
     {
@@ -61,7 +61,7 @@
       "location" : "https://github.com/vincode-io/VinCloudKit.git",
       "state" : {
         "branch" : "main",
-        "revision" : "aa7870605851c14f819204ac9c7eba44fa7b6508"
+        "revision" : "a3535ecf6d4e47ab874607ba816bde601e5e518a"
       }
     },
     {

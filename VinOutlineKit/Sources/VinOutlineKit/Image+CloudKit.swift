@@ -83,9 +83,9 @@ extension Image: VCKModel {
 		isCloudKitMerging = true
 	}
     
-    public func buildRecord() -> CKRecord {
+    public func buildRecord() -> CKRecord? {
 		guard let zoneID = outline?.zoneID else {
-			fatalError("There is not a Zone ID for this object.")
+			return nil
 		}
 
 		let record: CKRecord = {

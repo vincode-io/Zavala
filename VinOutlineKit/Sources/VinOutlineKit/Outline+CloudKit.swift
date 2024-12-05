@@ -265,7 +265,7 @@ extension Outline: VCKModel {
 		isCloudKitMerging = true
 	}
     
-    public func buildRecord() -> CKRecord {
+    public func buildRecord() -> CKRecord? {
         let record: CKRecord = {
             if let syncMetaData = cloudKitMetaData, let record = CKRecord(syncMetaData) {
                 return record
