@@ -1321,7 +1321,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 		reloadVisitor(row)
 
-		changes.append(OutlineElementChanges(section: .rows, reloads: Set(reloads)))
+		changes.append(OutlineElementChanges(section: .rows, reloads: reloads))
 		outlineElementsDidChange(changes)
 	}
 
