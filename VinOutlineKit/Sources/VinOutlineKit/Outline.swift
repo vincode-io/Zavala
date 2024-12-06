@@ -1491,6 +1491,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			if let shadowTableIndex = visited.shadowTableIndex {
 				deletes.insert(shadowTableIndex)
 			}
+			removeImages(rowID: visited.id)
 			visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
 		}
 		
