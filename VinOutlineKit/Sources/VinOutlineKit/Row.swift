@@ -344,11 +344,13 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	private var topicCache: NSAttributedString?
 	private var noteCache: NSAttributedString?
 	
-	public init(outline: Outline) {
+	public init(outline: Outline?) {
 		self.isComplete = false
 		self.id = UUID().uuidString
 		self.outline = outline
-		self._entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
+		if let outline {
+			self._entityID = .row(outline.id.accountID, outline.id.documentUUID, id)
+		}
 		self.isExpanded = true
 		self.rowOrder = OrderedSet<String>()
 		super.init()
@@ -373,14 +375,6 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		super.init()
 		self.topic = convertMarkdown(topicMarkdown, isInNotes: false)
 		self.note = convertMarkdown(noteMarkdown, isInNotes: true)
-	}
-	
-	public override init() {
-		self.isComplete = false
-		self.id = UUID().uuidString
-		self.isExpanded = true
-		self.rowOrder = OrderedSet<String>()
-		super.init()
 	}
 	
 	init(coder: RowCoder) {

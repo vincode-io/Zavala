@@ -1585,7 +1585,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		case Outline.Section.backlinks.rawValue:
 			return collectionView.dequeueConfiguredReusableCell(using: backlinkRegistration!, for: indexPath, item: outline)
 		default:
-			let row = outline?.shadowTable?[indexPath.row] ?? Row()
+			let row = outline?.shadowTable?[indexPath.row] ?? Row(outline: outline)
 			return collectionView.dequeueConfiguredReusableCell(using: rowRegistration!, for: indexPath, item: row)
 		}
 	}
