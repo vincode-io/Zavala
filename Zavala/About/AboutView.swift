@@ -12,11 +12,6 @@ struct AboutView: View {
 	
 	@State private var secondaryLabel = BuildInfo.shared.versionLabel
 	
-	private var developedBy = NSAttributedString(markdownRepresentation: "Developed by [Maurice C. Parker](https://vincode.io)",
-												 attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
-	private var iconBy = NSAttributedString(markdownRepresentation: "App icon by [Brad Ellis](https://hachyderm.io/@bradellis)",
-											attributes: [.font : UIFont.preferredFont(forTextStyle: .body)])
-	
 	var body: some View {
 		ZStack {
 			if UIDevice.current.userInterfaceIdiom == .mac {
@@ -55,8 +50,10 @@ struct AboutView: View {
 						}
 				}
 				VStack(spacing: 5) {
-					AttributedLabelView(string: developedBy)
-					AttributedLabelView(string: iconBy)
+					Text("Developed by [Maurice C. Parker](https://vincode.io)")
+						.tint(.accentColor)
+					Text("App icon by [Brad Ellis](https://hachyderm.io/@bradellis)")
+						.tint(.accentColor)
 				}
 				VStack(spacing: 5) {
 					Link(String.acknowledgementsControlLabel, destination: URL(string: .acknowledgementsURL)!)

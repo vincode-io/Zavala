@@ -138,6 +138,9 @@
     "Any child Tag associated with this Tag will also be deleted. No Outlines associated with this Tag will be deleted." : {
       "comment" : "Alert Message: delete tag"
     },
+    "App icon by [Brad Ellis](https://hachyderm.io/@bradellis)" : {
+
+    },
     "Are you sure you want to delete %lld outlines?" : {
       "comment" : "Confirmation: delete outlines?"
     },
@@ -321,6 +324,9 @@
     },
     "Detail" : {
 
+    },
+    "Developed by [Maurice C. Parker](https://vincode.io)" : {
+      "comment" : "Label: Developed By"
     },
     "Directly After" : {
 

@@ -16,7 +16,6 @@
 		5115C02D2605898900416D67 /* MacOpenQuicklyCollectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5115C02C2605898900416D67 /* MacOpenQuicklyCollectionsViewController.swift */; };
 		5115C0362605F96100416D67 /* MacOpenQuicklyDocumentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5115C0352605F96100416D67 /* MacOpenQuicklyDocumentsViewController.swift */; };
 		5116893D29BD6DED00318832 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116893C29BD6DED00318832 /* AboutView.swift */; };
-		5116894029BD72DE00318832 /* AttributedLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116893F29BD72DE00318832 /* AttributedLabelView.swift */; };
 		5116894529BDA0E500318832 /* AboutSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116894429BDA0E500318832 /* AboutSceneDelegate.swift */; };
 		5116894729BDA60E00318832 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5116894629BDA60E00318832 /* AboutViewController.swift */; };
 		511A99F727B9B596001BD443 /* ToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511A99F627B9B596001BD443 /* ToolbarButton.swift */; };
@@ -226,7 +225,6 @@
 		5115C02C2605898900416D67 /* MacOpenQuicklyCollectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOpenQuicklyCollectionsViewController.swift; sourceTree = "<group>"; };
 		5115C0352605F96100416D67 /* MacOpenQuicklyDocumentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOpenQuicklyDocumentsViewController.swift; sourceTree = "<group>"; };
 		5116893C29BD6DED00318832 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
-		5116893F29BD72DE00318832 /* AttributedLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedLabelView.swift; sourceTree = "<group>"; };
 		5116894429BDA0E500318832 /* AboutSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSceneDelegate.swift; sourceTree = "<group>"; };
 		5116894629BDA60E00318832 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		511A99F627B9B596001BD443 /* ToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButton.swift; sourceTree = "<group>"; };
@@ -451,7 +449,6 @@
 		514BB9D5255B595300C8DBDF /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				5116893F29BD72DE00318832 /* AttributedLabelView.swift */,
 				519897C32ADE13F3008A6FA4 /* ButtonGroup.swift */,
 				518F2E37257AEA4C00D05D99 /* ConsistentCollectionViewListCell.swift */,
 				516F536B260806150038BAF8 /* EnhancedSearchTextField.swift */,
@@ -1064,7 +1061,6 @@
 				516F536C260806150038BAF8 /* EnhancedSearchTextField.swift in Sources */,
 				5164B35427582D810039600B /* MainOpenQuicklyViewController.swift in Sources */,
 				511EC2BF2B3F58E0002D89A5 /* SettingsSceneDelegate.swift in Sources */,
-				5116894029BD72DE00318832 /* AttributedLabelView.swift in Sources */,
 				5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */,
 				51FA27422B3B748C008B665E /* SettingsEditorView.swift in Sources */,
 				5147D0B825CCAB2A004673C3 /* DocumentsViewController+Drop.swift in Sources */,
