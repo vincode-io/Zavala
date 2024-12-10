@@ -11,6 +11,7 @@ struct SettingsOutlineDefaultsView: View {
 	
 	@State var checkSpellingWhileTyping = AppDefaults.shared.checkSpellingWhileTyping
 	@State var correctSpellingAutomatically = AppDefaults.shared.correctSpellingAutomatically
+	@State var automaticallyCreateLinks = AppDefaults.shared.automaticallyCreateLinks
 	@State var autoLinking = AppDefaults.shared.autoLinkingEnabled
 
 	var body: some View {
@@ -31,6 +32,14 @@ struct SettingsOutlineDefaultsView: View {
 				AppDefaults.shared.correctSpellingAutomatically = new
 			}
 			.disabled(checkSpellingWhileTyping == false)
+
+			Toggle(isOn: $automaticallyCreateLinks) {
+				Text(String.automaticallyCreateLinksControlLabel)
+			}
+			.toggleStyle(.switch)
+			.onChange(of: automaticallyCreateLinks) { old, new in
+				AppDefaults.shared.automaticallyCreateLinks = new
+			}
 
 			Toggle(isOn: $autoLinking) {
 				Text(String.autoLinkingControlLabel)

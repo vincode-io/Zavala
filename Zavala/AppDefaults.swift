@@ -104,6 +104,7 @@ final class AppDefaults {
 		static let ownerName = "ownerName"
 		static let ownerEmail = "ownerEmail"
 		static let ownerURL = "ownerURL"
+		static let automaticallyCreateLinks = "automaticallyCreateLinks"
 		static let autoLinkingEnabled = "autoLinking"
 		static let checkSpellingWhileTyping = "checkSpellingWhileTyping"
 		static let correctSpellingAutomatically = "correctSpellingAutomatically"
@@ -121,6 +122,7 @@ final class AppDefaults {
 		static let confirmDeleteCompletedRows = "confirmDeleteCompletedRows"
 		static let upgradedDefaultsToV2 = "upgradedDefaultsToV2"
 		static let upgradedDefaultsToV2dot3 = "upgradedDefaultsToV2dot3"
+		static let upgradedDefaultsToV3dot1 = "upgradedDefaultsToV3dot1"
 		static let lastReviewPromptDate = "lastReviewPromptDate"
 		static let lastReviewPromptAppVersion = "lastReviewPromptAppVersion"
 	}
@@ -219,6 +221,15 @@ final class AppDefaults {
 		}
 		set {
 			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.autoLinkingEnabled)
+		}
+	}
+	
+	var automaticallyCreateLinks: Bool {
+		get {
+			return NSUbiquitousKeyValueStore.default.bool(forKey: Key.automaticallyCreateLinks)
+		}
+		set {
+			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.automaticallyCreateLinks)
 		}
 	}
 	
@@ -369,6 +380,15 @@ final class AppDefaults {
 		}
 	}
 
+	var upgradedDefaultsToV3dot1: Bool {
+		get {
+			return Self.bool(for: Key.upgradedDefaultsToV3dot1)
+		}
+		set {
+			Self.setBool(for: Key.upgradedDefaultsToV3dot1, newValue)
+		}
+	}
+
 	var lastReviewPromptDate: Date? {
 		get {
 			Self.date(for: Key.lastReviewPromptDate)
@@ -400,6 +420,7 @@ final class AppDefaults {
 		
 		upgradeDefaultsToV2()
 		upgradeDefaultsToV2dot3()
+		upgradeDefaultsToV3dot1()
 	}
 
 }
@@ -482,4 +503,11 @@ private extension AppDefaults {
 		Self.shared.upgradedDefaultsToV2dot3 = true
 	}
 	
+	static func upgradeDefaultsToV3dot1() {
+		guard !Self.shared.upgradedDefaultsToV3dot1 else { return }
+		
+		AppDefaults.shared.automaticallyCreateLinks = true
+		
+		Self.shared.upgradedDefaultsToV3dot1 = true
+	}
 }

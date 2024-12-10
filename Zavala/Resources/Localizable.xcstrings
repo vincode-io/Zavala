@@ -165,9 +165,6 @@
     "Automatic" : {
       "comment" : "Control Label: Automatic"
     },
-    "Automatically Change Link Titles" : {
-      "comment" : "Control Label: Auto Linking"
-    },
     "Back" : {
       "comment" : "Control Label: Back"
     },
@@ -188,6 +185,9 @@
     },
     "Cancel" : {
       "comment" : "Control Label: Cancel the proposed action"
+    },
+    "Change Link Titles Automatically" : {
+      "comment" : "Control Label: Auto Linking"
     },
     "Check Spelling While Typing" : {
       "comment" : "Control Label: Check Spelling While Typing"
@@ -270,6 +270,9 @@
     },
     "Corrupted Outline" : {
       "comment" : "Alert Title: Corrupted Outline"
+    },
+    "Create Links Automatically" : {
+      "comment" : "Control Label: Automatically Create Links"
     },
     "Created" : {
       "comment" : "Control Label: Created"
