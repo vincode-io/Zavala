@@ -105,7 +105,7 @@ final class AppDefaults {
 		static let ownerEmail = "ownerEmail"
 		static let ownerURL = "ownerURL"
 		static let automaticallyCreateLinks = "automaticallyCreateLinks"
-		static let autoLinkingEnabled = "autoLinking"
+		static let automaticallyChangeLinkTitles = "autoLinking"
 		static let checkSpellingWhileTyping = "checkSpellingWhileTyping"
 		static let correctSpellingAutomatically = "correctSpellingAutomatically"
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
@@ -215,12 +215,12 @@ final class AppDefaults {
 		}
 	}
 	
-	var autoLinkingEnabled: Bool {
+	var automaticallyChangeLinkTitles: Bool {
 		get {
-			return NSUbiquitousKeyValueStore.default.bool(forKey: Key.autoLinkingEnabled)
+			return NSUbiquitousKeyValueStore.default.bool(forKey: Key.automaticallyChangeLinkTitles)
 		}
 		set {
-			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.autoLinkingEnabled)
+			NSUbiquitousKeyValueStore.default.set(newValue, forKey: Key.automaticallyChangeLinkTitles)
 		}
 	}
 	

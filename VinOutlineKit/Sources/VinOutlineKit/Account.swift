@@ -238,8 +238,8 @@ public final class Account: Identifiable, Equatable {
 			outline.verticleScrollState = Int(verticleScrollState)
 		}
 		
-		if let autoLinkingEnabled = headNode?["automaticallyChangeLinkTitles"]?.first?.content {
-			outline.autoLinkingEnabled = autoLinkingEnabled == "true" ? true : false
+		if let automaticallyChangeLinkTitles = headNode?["automaticallyChangeLinkTitles"]?.first?.content {
+			outline.automaticallyChangeLinkTitles = automaticallyChangeLinkTitles == "true" ? true : false
 		}
 
 		if let checkSpellingWhileTyping = headNode?["checkSpellingWhileTyping"]?.first?.content {

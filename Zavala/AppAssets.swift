@@ -154,7 +154,7 @@ extension String {
 	static let addTagControlLabel = String(localized: "Add Tag", comment: "Control Label: Add Tag.")
 	static let addTopicLevelControlLabel = String(localized: "Add Topic Level", comment: "Control Label: The menu option to add a new Topic Level.")
 	static let appHelpControlLabel = String(localized: "Zavala Help", comment: "Control Label: Zavala Help")
-	static let autoLinkingControlLabel = String(localized: "Change Link Titles Automatically", comment: "Control Label: Auto Linking")
+	static let automaticallyChangeLinkTitlesControlLabel = String(localized: "Change Link Titles Automatically", comment: "Control Label: Auto Linking")
 	static let automaticallyCreateLinksControlLabel = String(localized: "Create Links Automatically", comment: "Control Label: Automatically Create Links")
 	static let automaticControlLabel = String(localized: "Automatic", comment: "Control Label: Automatic")
 

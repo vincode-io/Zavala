@@ -69,8 +69,8 @@ struct GetInfoView: View {
 				}
 				.toggleStyle(.switch)
 				.disabled(getInfoViewModel.checkSpellingWhileTyping == false)
-				Toggle(isOn: $getInfoViewModel.autoLinkingEnabled) {
-					Text(String.autoLinkingControlLabel)
+				Toggle(isOn: $getInfoViewModel.automaticallyChangeLinkTitles) {
+					Text(String.automaticallyChangeLinkTitlesControlLabel)
 				}
 				.toggleStyle(.switch)
 			}
@@ -148,7 +148,7 @@ class GetInfoViewModel: ObservableObject {
 	var title: String
 	@Published var checkSpellingWhileTyping: Bool
 	@Published var correctSpellingAutomatically: Bool
-	@Published var autoLinkingEnabled: Bool
+	@Published var automaticallyChangeLinkTitles: Bool
 	@Published var ownerName: String
 	@Published var ownerEmail: String
 	@Published var ownerURL: String
@@ -162,7 +162,7 @@ class GetInfoViewModel: ObservableObject {
 		self.title = outline.title ?? ""
 		self.checkSpellingWhileTyping = outline.checkSpellingWhileTyping ?? true
 		self.correctSpellingAutomatically = outline.correctSpellingAutomatically ?? true
-		self.autoLinkingEnabled = outline.autoLinkingEnabled ?? false
+		self.automaticallyChangeLinkTitles = outline.automaticallyChangeLinkTitles ?? false
 		self.ownerName = outline.ownerName ?? ""
 		self.ownerEmail = outline.ownerEmail ?? ""
 		self.ownerURL = outline.ownerURL ?? ""
@@ -185,7 +185,7 @@ class GetInfoViewModel: ObservableObject {
 	func update() {
 		outline.update(checkSpellingWhileTyping: checkSpellingWhileTyping,
 					   correctSpellingAutomatically: correctSpellingAutomatically,
-					   autoLinkingEnabled: autoLinkingEnabled,
+					   automaticallyChangeLinkTitles: automaticallyChangeLinkTitles,
 					   ownerName: ownerName,
 					   ownerEmail: ownerEmail,
 					   ownerURL: ownerURL)

@@ -91,7 +91,7 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 		let defaults = AppDefaults.shared
 		document.outline?.update(checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
 								 correctSpellingAutomatically: defaults.correctSpellingAutomatically,
-								 autoLinkingEnabled: defaults.autoLinkingEnabled,
+								 automaticallyChangeLinkTitles: defaults.automaticallyChangeLinkTitles,
 								 ownerName: defaults.ownerName,
 								 ownerEmail: defaults.ownerEmail,
 								 ownerURL: defaults.ownerURL)

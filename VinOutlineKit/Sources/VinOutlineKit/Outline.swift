@@ -159,12 +159,12 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 	}
 	
-	var ancestorAutoLinkingEnabled: Bool?
-	var serverAutolinkingEnabled: Bool?
-	public internal(set) var autoLinkingEnabled: Bool? {
+	var ancestorAutomaticallyChangeLinkTitles: Bool?
+	var serverAutomaticallyChangeLinkTitles: Bool?
+	public internal(set) var automaticallyChangeLinkTitles: Bool? {
 		willSet {
-			if isCloudKit && ancestorAutoLinkingEnabled == nil {
-				ancestorAutoLinkingEnabled = autoLinkingEnabled
+			if isCloudKit && ancestorAutomaticallyChangeLinkTitles == nil {
+				ancestorAutomaticallyChangeLinkTitles = automaticallyChangeLinkTitles
 			}
 		}
 	}
@@ -628,8 +628,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		self.created = coder.created
 		self.ancestorUpdated = coder.ancestorUpdated
 		self.updated = coder.updated
-		self.ancestorAutoLinkingEnabled = coder.ancestorAutoLinkingEnabled
-		self.autoLinkingEnabled = coder.autoLinkingEnabled
+		self.ancestorAutomaticallyChangeLinkTitles = coder.ancestorAutomaticallyChangeLinkTitles
+		self.automaticallyChangeLinkTitles = coder.automaticallyChangeLinkTitles
 		self.ancestorCheckSpellingWhileTyping = coder.ancestorCheckSpellingWhileTyping
 		self.checkSpellingWhileTyping = coder.checkSpellingWhileTyping
 		self.ancestorCorrectSpellingAutomatically = coder.ancestorCorrectSpellingAutomatically
@@ -1032,8 +1032,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			opml.append("  <vertScrollState>\(verticleScrollState)</vertScrollState>\n")
 		}
 		
-		if let autoLinkingEnabled {
-			opml.append("  <automaticallyChangeLinkTitles>\(autoLinkingEnabled ? "true" : "false")</automaticallyChangeLinkTitles>\n")
+		if let automaticallyChangeLinkTitles {
+			opml.append("  <automaticallyChangeLinkTitles>\(automaticallyChangeLinkTitles ? "true" : "false")</automaticallyChangeLinkTitles>\n")
 		}
 
 		if let checkSpellingWhileTyping {
@@ -1101,7 +1101,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	public func update(checkSpellingWhileTyping: Bool,
 					   correctSpellingAutomatically: Bool,
-					   autoLinkingEnabled: Bool,
+					   automaticallyChangeLinkTitles: Bool,
 					   ownerName: String?,
 					   ownerEmail: String?,
 					   ownerURL: String?) {
@@ -1123,7 +1123,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			outlineTextPreferencesDidChange()
 		}
 		
-		self.autoLinkingEnabled = autoLinkingEnabled
+		self.automaticallyChangeLinkTitles = automaticallyChangeLinkTitles
 		self.ownerName = ownerName
 		self.ownerEmail = ownerEmail
 		self.ownerURL = ownerURL
@@ -2780,8 +2780,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 							created: created,
 							ancestorUpdated: ancestorUpdated,
 							updated: updated,
-							ancestorAutoLinkingEnabled: ancestorAutoLinkingEnabled,
-							autoLinkingEnabled: autoLinkingEnabled,
+							ancestorAutomaticallyChangeLinkTitles: ancestorAutomaticallyChangeLinkTitles,
+							automaticallyChangeLinkTitles: automaticallyChangeLinkTitles,
 							ancestorCheckSpellingWhileTyping: ancestorCheckSpellingWhileTyping,
 							checkSpellingWhileTyping: checkSpellingWhileTyping,
 							ancestorCorrectSpellingAutomatically: ancestorCorrectSpellingAutomatically,
@@ -3326,7 +3326,7 @@ private extension Outline {
 	}
 	
 	func replaceLinkTitleIfPossible(row: Row, newText: NSAttributedString?, isInNotes: Bool) {
-		guard autoLinkingEnabled ?? false, let newText else { return }
+		guard automaticallyChangeLinkTitles ?? false, let newText else { return }
 		
 		load()
 		

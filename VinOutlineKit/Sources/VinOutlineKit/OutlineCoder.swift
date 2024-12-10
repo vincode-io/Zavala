@@ -16,8 +16,8 @@ struct OutlineCoder: Codable {
 	public let created: Date?
 	public let ancestorUpdated: Date?
 	public let updated: Date?
-	public let ancestorAutoLinkingEnabled: Bool?
-	public let autoLinkingEnabled: Bool?
+	public let ancestorAutomaticallyChangeLinkTitles: Bool?
+	public let automaticallyChangeLinkTitles: Bool?
 	public let ancestorCheckSpellingWhileTyping: Bool?
 	public let checkSpellingWhileTyping: Bool?
 	public let ancestorCorrectSpellingAutomatically: Bool?
@@ -61,8 +61,8 @@ struct OutlineCoder: Codable {
 		case created
 		case ancestorUpdated
 		case updated
-		case ancestorAutoLinkingEnabled
-		case autoLinkingEnabled
+		case ancestorAutomaticallyChangeLinkTitles = "ancestorAutoLinkingEnabled"
+		case automaticallyChangeLinkTitles = "autoLinkingEnabled"
 		case ancestorCheckSpellingWhileTyping
 		case checkSpellingWhileTyping
 		case ancestorCorrectSpellingAutomatically

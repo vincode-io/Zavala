@@ -12,7 +12,7 @@ struct SettingsOutlineDefaultsView: View {
 	@State var checkSpellingWhileTyping = AppDefaults.shared.checkSpellingWhileTyping
 	@State var correctSpellingAutomatically = AppDefaults.shared.correctSpellingAutomatically
 	@State var automaticallyCreateLinks = AppDefaults.shared.automaticallyCreateLinks
-	@State var autoLinking = AppDefaults.shared.autoLinkingEnabled
+	@State var automaticallyChangeLinkTitles = AppDefaults.shared.automaticallyChangeLinkTitles
 
 	var body: some View {
 		Section(String.outlineDefaultsControlLabel) {
@@ -41,12 +41,12 @@ struct SettingsOutlineDefaultsView: View {
 				AppDefaults.shared.automaticallyCreateLinks = new
 			}
 
-			Toggle(isOn: $autoLinking) {
-				Text(String.autoLinkingControlLabel)
+			Toggle(isOn: $automaticallyChangeLinkTitles) {
+				Text(String.automaticallyChangeLinkTitlesControlLabel)
 			}
 			.toggleStyle(.switch)
-			.onChange(of: autoLinking) { old, new in
-				AppDefaults.shared.autoLinkingEnabled = new
+			.onChange(of: automaticallyChangeLinkTitles) { old, new in
+				AppDefaults.shared.automaticallyChangeLinkTitles = new
 			}
 		}
 	}
