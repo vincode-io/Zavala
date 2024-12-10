@@ -450,9 +450,6 @@ extension EditorRowTextView {
 	}
 	
     func processTextEditingEnding() {
-		if textStorage.detectData() {
-			isTextChanged = true
-		}
         saveText()
     }
 

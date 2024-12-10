@@ -159,6 +159,16 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		}
 	}
 	
+	var ancestorAutomaticallyCreateLinks: Bool?
+	var serverAutomaticallyCreateLinks: Bool?
+	public internal(set) var automaticallyCreateLinks: Bool? {
+		willSet {
+			if isCloudKit && ancestorAutomaticallyCreateLinks == nil {
+				ancestorAutomaticallyCreateLinks = automaticallyCreateLinks
+			}
+		}
+	}
+	
 	var ancestorAutomaticallyChangeLinkTitles: Bool?
 	var serverAutomaticallyChangeLinkTitles: Bool?
 	public internal(set) var automaticallyChangeLinkTitles: Bool? {
@@ -628,6 +638,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		self.created = coder.created
 		self.ancestorUpdated = coder.ancestorUpdated
 		self.updated = coder.updated
+		self.ancestorAutomaticallyCreateLinks = coder.ancestorAutomaticallyCreateLinks
+		self.automaticallyCreateLinks = coder.automaticallyCreateLinks
 		self.ancestorAutomaticallyChangeLinkTitles = coder.ancestorAutomaticallyChangeLinkTitles
 		self.automaticallyChangeLinkTitles = coder.automaticallyChangeLinkTitles
 		self.ancestorCheckSpellingWhileTyping = coder.ancestorCheckSpellingWhileTyping
@@ -1032,6 +1044,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			opml.append("  <vertScrollState>\(verticleScrollState)</vertScrollState>\n")
 		}
 		
+		if let automaticallyCreateLinks {
+			opml.append("  <automaticallyCreateLinks>\(automaticallyCreateLinks ? "true" : "false")</automaticallyCreateLinks>\n")
+		}
+
 		if let automaticallyChangeLinkTitles {
 			opml.append("  <automaticallyChangeLinkTitles>\(automaticallyChangeLinkTitles ? "true" : "false")</automaticallyChangeLinkTitles>\n")
 		}
@@ -1101,6 +1117,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	public func update(checkSpellingWhileTyping: Bool,
 					   correctSpellingAutomatically: Bool,
+					   automaticallyCreateLinks: Bool,
 					   automaticallyChangeLinkTitles: Bool,
 					   ownerName: String?,
 					   ownerEmail: String?,
@@ -1123,6 +1140,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			outlineTextPreferencesDidChange()
 		}
 		
+		self.automaticallyCreateLinks = automaticallyCreateLinks
 		self.automaticallyChangeLinkTitles = automaticallyChangeLinkTitles
 		self.ownerName = ownerName
 		self.ownerEmail = ownerEmail
@@ -2780,6 +2798,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 							created: created,
 							ancestorUpdated: ancestorUpdated,
 							updated: updated,
+							ancestorAutomaticallyCreateLinks: ancestorAutomaticallyCreateLinks,
+							automaticallyCreateLinks: automaticallyCreateLinks,
 							ancestorAutomaticallyChangeLinkTitles: ancestorAutomaticallyChangeLinkTitles,
 							automaticallyChangeLinkTitles: automaticallyChangeLinkTitles,
 							ancestorCheckSpellingWhileTyping: ancestorCheckSpellingWhileTyping,
@@ -3240,6 +3260,8 @@ private extension Outline {
 
 		row.rowStrings = rowStrings
 
+		row.detectData()
+		
 		switch rowStrings {
 		case .topicMarkdown, .topic:
 			processLinkDiff(oldText: oldTopic, newText: row.topic)

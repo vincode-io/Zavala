@@ -62,6 +62,7 @@ struct AddOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictabl
 		let defaults = AppDefaults.shared
 		await outline.update(checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
 							 correctSpellingAutomatically: defaults.correctSpellingAutomatically,
+							 automaticallyCreateLinks: defaults.automaticallyCreateLinks,
 							 automaticallyChangeLinkTitles: defaults.automaticallyChangeLinkTitles,
 							 ownerName: defaults.ownerName,
 							 ownerEmail: defaults.ownerEmail,

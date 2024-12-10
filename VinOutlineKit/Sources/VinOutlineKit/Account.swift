@@ -238,6 +238,10 @@ public final class Account: Identifiable, Equatable {
 			outline.verticleScrollState = Int(verticleScrollState)
 		}
 		
+		if let automaticallyCreateLinks = headNode?["automaticallyCreateLinks"]?.first?.content {
+			outline.automaticallyCreateLinks = automaticallyCreateLinks == "true" ? true : false
+		}
+
 		if let automaticallyChangeLinkTitles = headNode?["automaticallyChangeLinkTitles"]?.first?.content {
 			outline.automaticallyChangeLinkTitles = automaticallyChangeLinkTitles == "true" ? true : false
 		}

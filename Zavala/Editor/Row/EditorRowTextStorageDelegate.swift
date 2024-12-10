@@ -27,8 +27,6 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 			newTypingAttributes = baseAttributes
 		}
 
-		var needsDataDetection = false
-		
 		textStorage.enumerateAttributes(in: editedRange, options: .longestEffectiveRangeNotRequired) { (attributes, range, _) in
 			var newAttributes = attributes
 			
@@ -47,8 +45,6 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 				if textStorage.attributedSubstring(from: range).string == " " {
 					if key == .link {
 						newAttributes[key] = nil
-					} else {
-						needsDataDetection = true
 					}
 				}
 
@@ -84,10 +80,6 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 			}
 			
 			textStorage.setAttributes(newAttributes, range: range)
-		}
-		
-		if needsDataDetection {
-			textStorage.detectData()
 		}
 	}
 	

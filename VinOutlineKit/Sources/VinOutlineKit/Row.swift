@@ -603,6 +603,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	}
 	
 	public func detectData() {
+		guard outline?.automaticallyCreateLinks ?? true else { return }
+		
 		if let topic = self.topic {
 			let mutableTopic = NSMutableAttributedString(attributedString: topic)
 			mutableTopic.detectData()
