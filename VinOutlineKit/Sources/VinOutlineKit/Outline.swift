@@ -1628,13 +1628,13 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 
 		guard isBeingViewed else { return }
 
-		shadowTable?.insert(row, at: shadowTableIndex)
-		resetShadowTableIndexes(startingAt: shadowTableIndex)
+		var changes = rebuildShadowTable()
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		
-		var changes = OutlineElementChanges(section: adjustedRowsSection, inserts: [shadowTableIndex], reloads: reloads)
 		if moveCursor {
 			changes.newCursorIndex = shadowTableIndex
 		}
+		
 		outlineElementsDidChange(changes)
 	}
 	
@@ -1672,11 +1672,11 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			row.parent = self
 		}
 
-		var reloads = [Int]()
+		var reloads = Set<Int>()
 
 		if let parentRow = row.parent as? Row, autoCompleteUncomplete(row: parentRow) {
 			if let parentRowIndex = parentRow.shadowTableIndex {
-				reloads.append(parentRowIndex)
+				reloads.insert(parentRowIndex)
 			}
 		}
 		
@@ -1686,26 +1686,17 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			
 		guard isBeingViewed else { return nil }
 
-		let rowShadowTableIndex: Int
-		if let afterRowShadowTableIndex = afterRow?.shadowTableIndex {
-			rowShadowTableIndex = afterRowShadowTableIndex + 1
-		} else {
-			rowShadowTableIndex = 0
-		}
-		
 		if let reload = afterRow?.shadowTableIndex {
-			reloads.append(reload)
+			reloads.insert(reload)
 		}
 
-		let inserts = [rowShadowTableIndex]
-		shadowTable?.insert(row, at: rowShadowTableIndex)
+		var changes = rebuildShadowTable()
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: reloads))
 		
-		resetShadowTableIndexes(startingAt: afterRow?.shadowTableIndex ?? 0)
-		var changes = OutlineElementChanges(section: adjustedRowsSection, inserts: Set(inserts), reloads: Set(reloads))
-		changes.newCursorIndex = inserts[0]
+		changes.newCursorIndex = row.shadowTableIndex
 		outlineElementsDidChange(changes)
 		
-		return inserts[0]
+		return row.shadowTableIndex
 	}
 
 	func createRows(_ rows: [Row], afterRow: Row? = nil, rowStrings: RowStrings? = nil, prefersEnd: Bool = false) {
@@ -3099,35 +3090,9 @@ private extension Outline {
 		
 		guard isBeingViewed else { return }
 
-		var shadowTableInserts = [Row]()
-
-		func visitor(_ visited: Row) {
-			let shouldFilter = isCompletedFilterOn && visited.isComplete ?? false
-			
-			if !shouldFilter {
-				shadowTableInserts.append(visited)
-
-				if visited.isExpanded {
-					visited.rows.forEach {
-						$0.visit(visitor: visitor)
-					}
-				}
-			}
-		}
-
-		row.rows.forEach { row in
-			row.visit(visitor: visitor(_:))
-		}
-		
-		var inserts = Set<Int>()
-		for i in 0..<shadowTableInserts.count {
-			let newIndex = i + rowShadowTableIndex + 1
-			shadowTable?.insert(shadowTableInserts[i], at: newIndex)
-			inserts.insert(newIndex)
-		}
-		
-		resetShadowTableIndexes(startingAt: rowShadowTableIndex)
-		let changes = OutlineElementChanges(section: adjustedRowsSection, inserts: inserts, reloads: [rowShadowTableIndex])
+		var changes = rebuildShadowTable()
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: [rowShadowTableIndex]))
+					   
 		outlineElementsDidChange(changes)
 	}
 
@@ -3173,32 +3138,11 @@ private extension Outline {
 		outlineViewPropertyDidChange()
 		
 		guard isBeingViewed else { return }
-
-		var reloads = Set<Int>()
-
-		func visitor(_ visited: Row) {
-			if let shadowTableIndex = visited.shadowTableIndex {
-				reloads.insert(shadowTableIndex)
-			}
-
-			if visited.isExpanded {
-				visited.rows.forEach {
-					$0.visit(visitor: visitor)
-				}
-			}
-		}
-		
-		row.rows.forEach { row in
-			row.visit(visitor: visitor(_:))
-		}
-		
-		for reload in reloads.sorted(by: >) {
-			shadowTable?.remove(at: reload)
-		}
-		
 		guard let rowShadowTableIndex = row.shadowTableIndex else { return }
-		resetShadowTableIndexes(startingAt: rowShadowTableIndex)
-		let changes = OutlineElementChanges(section: adjustedRowsSection, deletes: reloads, reloads: Set([rowShadowTableIndex]))
+
+		var changes = rebuildShadowTable()
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: [rowShadowTableIndex]))
+
 		outlineElementsDidChange(changes)
 	}
 	
@@ -3229,13 +3173,6 @@ private extension Outline {
 		}
 		
 		self.shadowTable = transient.shadowTable
-	}
-	
-	func resetShadowTableIndexes(startingAt: Int = 0) {
-		guard let shadowTable else { return }
-		for i in startingAt..<shadowTable.count {
-			shadowTable[i].shadowTableIndex = i
-		}
 	}
 	
 	func reloadsForParentAndChildren(rows: [Row]) -> Set<Int> {
