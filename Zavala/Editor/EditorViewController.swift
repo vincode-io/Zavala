@@ -784,7 +784,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 		guard let document = note.object as? VinOutlineKit.Document,
 			  let updatedOutline = document.outline,
 			  updatedOutline == outline,
-			  currentTitle != outline?.title else { return }
+			  currentTitle != outline?.title,
+			  collectionView.numberOfSections > Outline.Section.title.rawValue,
+			  collectionView.numberOfItems(inSection: Outline.Section.title.rawValue) > 0 else { return }
 		collectionView.reloadItems(at: [IndexPath(row: 0, section: Outline.Section.title.rawValue)])
 	}
 	
