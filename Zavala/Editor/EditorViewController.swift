@@ -2635,7 +2635,9 @@ private extension EditorViewController {
 
 		// Usually we need to move the cursor after the change because we are moving to a newly created element
 		if !changes.cursorMoveIsBeforeChanges {
-			if let newCursorIndex = changes.newCursorIndex {
+			if let newSelectIndex = changes.newSelectIndex {
+				moveSelectionToRow(index: newSelectIndex)
+			} else if let newCursorIndex = changes.newCursorIndex {
 				if newCursorIndex == -1 {
 					moveCursorToTagInput()
 				} else {
@@ -2644,8 +2646,6 @@ private extension EditorViewController {
 			} else {
 				scrollIfNecessary(animated: false)
 			}
-		} else if let newSelectIndex = changes.newSelectIndex {
-			moveSelectionToRow(index: newSelectIndex)
 		}
 
 		updateUI()
