@@ -1484,13 +1484,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			updateRowStrings(row, texts)
 		}
 
-		var deletes = Set<Int>()
 		var parentReloads = Set<Int>()
 
 		func deleteVisitor(_ visited: Row) {
-			if let shadowTableIndex = visited.shadowTableIndex {
-				deletes.insert(shadowTableIndex)
-			}
 			removeImages(rowID: visited.id)
 			visited.rows.forEach { $0.visit(visitor: deleteVisitor) }
 		}
@@ -1512,28 +1508,15 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		
 		guard isBeingViewed else { return }
 		
-		var deletedRows = [Row]()
-		
-		let sortedDeletes = deletes.sorted(by: { $0 > $1 })
-		for index in sortedDeletes {
-			if let deletedRow = shadowTable?.remove(at: index) {
-				deletedRows.append(deletedRow)
-			}
-		}
-		
-		guard let lowestShadowTableIndex = sortedDeletes.last else { return }
-		resetShadowTableIndexes(startingAt: lowestShadowTableIndex)
+		var changes = rebuildShadowTable()
 		
 		var reloads = rows.compactMap { ($0.parent as? Row)?.shadowTableIndex }
 		reloads.append(contentsOf: parentReloads)
-		
-		let deleteSet = Set(deletes)
-		let reloadSet = Set(reloads).subtracting(deleteSet)
-		
-		var changes = OutlineElementChanges(section: adjustedRowsSection, deletes: deleteSet, reloads: reloadSet)
+
+		changes.append(OutlineElementChanges(section: adjustedRowsSection, reloads: Set(reloads)))
 		
 		if isInOutlineMode {
-			if let firstDelete = deletes.first, firstDelete >= 0 {
+			if let firstDelete = rows.first?.shadowTableIndex, firstDelete >= 0 {
 				let shadowTableCount = shadowTable?.count ?? 0
 				if firstDelete < shadowTableCount {
 					changes.newSelectIndex = firstDelete
@@ -1543,8 +1526,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			}
 		} else {
 			changes.cursorMoveIsBeforeChanges = true
-			if deletedRows.contains(where: { $0.id == selectionRowID?.rowUUID }) {
-				if let firstDelete = deletes.first, firstDelete > 0 {
+			if rows.contains(where: { $0.id == selectionRowID?.rowUUID }) {
+				if let firstDelete = rows.first?.shadowTableIndex, firstDelete > 0 {
 					changes.newCursorIndex = firstDelete - 1
 				} else {
 					changes.newCursorIndex = -1
