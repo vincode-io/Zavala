@@ -93,9 +93,9 @@ extension MainCoordinator {
 		hostingController.modalPresentationStyle = .formSheet
 
 		if traitCollection.userInterfaceIdiom == .mac {
-			hostingController.preferredContentSize = CGSize(width: 350, height: 520)
+			hostingController.preferredContentSize = CGSize(width: 350, height: 540)
 		} else {
-			hostingController.preferredContentSize = CGSize(width: 425, height: 660)
+			hostingController.preferredContentSize = CGSize(width: 425, height: 705)
 		}
 
 		present(hostingController, animated: true)
