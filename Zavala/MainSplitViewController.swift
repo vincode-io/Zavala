@@ -36,6 +36,7 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		static let collectionsWidth = "collectionsWidth"
 		static let documentsWidth = "documentsWidth"
 		static let collectionsExpandedState = "collectionsExpandedState"
+		static let documentSortOrderState = "documentSortOrders"
 	}
 	
 	weak var sceneDelegate: SceneDelegate?
@@ -53,7 +54,8 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		}
 
 		userInfo![UserInfoKeys.collectionsExpandedState] = collectionsViewController?.expandedState
-		
+		userInfo![UserInfoKeys.documentSortOrderState] = documentsViewController?.documentSortOrderState
+
 		activity.userInfo = userInfo
 		return activity
 	}
@@ -173,6 +175,10 @@ class MainSplitViewController: UISplitViewController, MainCoordinator, MainCoord
 		
 		if let collectionsExpandedState = userInfo[UserInfoKeys.collectionsExpandedState] as? [[AnyHashable: AnyHashable]] {
 			collectionsViewController?.expandedState = collectionsExpandedState
+		}
+
+		if let documentSortOrderState = userInfo[UserInfoKeys.documentSortOrderState] as? [[AnyHashable: AnyHashable]: [AnyHashable: AnyHashable]] {
+			documentsViewController?.documentSortOrderState = documentSortOrderState
 		}
 
 		let pin = Pin(userInfo: userInfo[Pin.UserInfoKeys.pin])

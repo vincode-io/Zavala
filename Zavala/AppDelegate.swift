@@ -199,6 +199,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 
 	let copyDocumentLinkCommand = UICommand(title: .copyDocumentLinkControlLabel, action: .copyDocumentLink)
 
+	let sortByTitleCommand = UICommand(title: .titleControlLabel, action: .sortByTitle)
+	let sortByCreatedCommand = UICommand(title: .createdControlLabel, action: .sortByCreated)
+	let sortByUpdatedCommand = UICommand(title: .updatedControlLabel, action: .sortByUpdated)
+	let sortAscendingCommand = UICommand(title: .ascendingControlLabel, action: .sortAscending)
+	let sortDecendingCommand = UICommand(title: .decendingControlLabel, action: .sortDecending)
+
 	let focusInCommand = UIKeyCommand(title: .focusInControlLabel,
 									  action: .focusIn,
 									  input: UIKeyCommand.inputRightArrow,
@@ -555,6 +561,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 
 		let focusMenu = UIMenu(title: "", options: .displayInline, children: [focusInCommand, focusOutCommand])
 		builder.insertChild(focusMenu, atStartOfMenu: .view)
+
+		let sortDocumentsField = UIMenu(title: "", options: .displayInline, children: [sortByTitleCommand, sortByCreatedCommand, sortByUpdatedCommand])
+		let sortDocumentsOrdered = UIMenu(title: "", options: .displayInline, children: [sortAscendingCommand, sortDecendingCommand])
+		let sortDocumentsMenu = UIMenu(title: .sortDocumentsControlLabel, children: [sortDocumentsField, sortDocumentsOrdered])
+		builder.insertChild(sortDocumentsMenu, atStartOfMenu: .view)
 
 		// Outline Menu
 		let mainOutlineMenu = UIMenu(title: "",

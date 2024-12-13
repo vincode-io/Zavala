@@ -162,6 +162,9 @@
     "Are you sure you want to restore the defaults? All your font customizations will be lost." : {
       "comment" : "Alert: information for restoring font defaults"
     },
+    "Ascending" : {
+      "comment" : "Control Label: Ascending"
+    },
     "Automatic" : {
       "comment" : "Control Label: Automatic"
     },
@@ -291,6 +294,9 @@
     },
     "Dark" : {
       "comment" : "Control Label: Dark"
+    },
+    "Decending" : {
+      "comment" : "Control Label: Decending"
     },
     "Delete" : {
       "comment" : "Control Label: Delete an entity"
@@ -1047,6 +1053,9 @@
     "Small" : {
       "comment" : "Control Label: Small"
     },
+    "Sort Documents" : {
+      "comment" : "Control Label: Sort Documents"
+    },
     "Sort Rows" : {
       "comment" : "Control Label: Sort Rows"
     },
@@ -1108,7 +1117,7 @@
       "comment" : "Alert Message: Corrupted Outline"
     },
     "Title" : {
-      "comment" : "Font Label: Title"
+      "comment" : "Control Label: Title\nFont Label: Title"
     },
     "Toggle Sidebar" : {
       "comment" : "Control Label: Toggle Sidebar"

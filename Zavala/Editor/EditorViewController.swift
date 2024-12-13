@@ -2959,7 +2959,7 @@ private extension EditorViewController {
 	}
 
 	func sortAction(rows: [Row]) -> UIAction {
-		return UIAction(title: .sortRowsControlLabel, image: .sortRows) { [weak self] action in
+		return UIAction(title: .sortRowsControlLabel, image: .sort) { [weak self] action in
 			self?.sortCurrentRows(rows)
 		}
 	}

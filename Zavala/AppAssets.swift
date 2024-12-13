@@ -100,7 +100,7 @@ extension UIImage {
 
 	static let settings = UIImage(systemName: "gear")!
 	static let share = UIImage(systemName: "square.and.arrow.up")!
-	static let sortRows = UIImage(systemName: "arrow.up.arrow.down")!
+	static let sort = UIImage(systemName: "arrow.up.arrow.down")!
 	static let sync = UIImage(systemName: "arrow.clockwise")!
 
 	static let topicFont = UIImage(systemName: "textformat.size.larger")!
@@ -154,6 +154,7 @@ extension String {
 	static let addTagControlLabel = String(localized: "Add Tag", comment: "Control Label: Add Tag.")
 	static let addTopicLevelControlLabel = String(localized: "Add Topic Level", comment: "Control Label: The menu option to add a new Topic Level.")
 	static let appHelpControlLabel = String(localized: "Zavala Help", comment: "Control Label: Zavala Help")
+	static let ascendingControlLabel = String(localized: "Ascending", comment: "Control Label: Ascending")
 	static let automaticallyChangeLinkTitlesControlLabel = String(localized: "Change Link Titles Automatically", comment: "Control Label: Auto Linking")
 	static let automaticallyCreateLinksControlLabel = String(localized: "Create Links Automatically", comment: "Control Label: Automatically Create Links")
 	static let automaticControlLabel = String(localized: "Automatic", comment: "Control Label: Automatic")
@@ -204,6 +205,7 @@ extension String {
 	static let deleteRowsControlLabel = String(localized: "Delete Rows", comment: "Control Label: Delete Rows")
 	static let deleteTagMessage = String(localized: "Any child Tag associated with this Tag will also be deleted. No Outlines associated with this Tag will be deleted.", comment: "Alert Message: delete tag")
 	static let deleteTagsMessage = String(localized: "Any child Tag associated with these Tags will also be deleted. No Outlines associated with these Tags will be deleted.", comment: "Alert Message: delete tags")
+	static let decendingControlLabel = String(localized: "Decending", comment: "Control Label: Decending")
 	static let disableAnimationsControlLabel = String(localized: "Disable Animations", comment: "Control Label: Disable Animations")
 	static let documentNotFoundTitle = String(localized: "Document Not Found", comment: "Alert Title: Document Not Found")
 	static let documentNotFoundMessage = String(localized: "The requested document could not be found. It was most likely deleted and is no longer available.", comment: "Alert Message: Document Not Found")
@@ -352,6 +354,7 @@ extension String {
 	static let shareControlLabel = String(localized: "Share", comment: "Control Label: Share")
 	static let shareEllipsisControlLabel = String(localized: "Share…", comment: "Control Label: Share…")
 	static let smallControlLabel = String(localized: "Small", comment: "Control Label: Small")
+	static let sortDocumentsControlLabel = String(localized: "Sort Documents", comment: "Control Label: Sort Documents")
 	static let sortRowsControlLabel = String(localized: "Sort Rows", comment: "Control Label: Sort Rows")
 	static let splitRowControlLabel = String(localized: "Split Row", comment: "Control Label: Split Row")
 	static let statisticsControlLabel = String(localized: "Statistics", comment: "Control Label: Statistics")
@@ -362,6 +365,7 @@ extension String {
 	static let tealControlLabel = String(localized: "Teal", comment: "Control Label: Teal")
 	static let tertiaryTextControlLabel = String(localized: "Tertiary Text", comment: "Control Label: Tertiary Text")
 	static let titleLabel = String(localized: "Title", comment: "Font Label: Title")
+	static let titleControlLabel = String(localized: "Title", comment: "Control Label: Title")
 	static let togglerSidebarControlLabel = String(localized: "Toggle Sidebar", comment: "Control Label: Toggle Sidebar")
 	static let turnFilterOffControlLabel = String(localized: "Turn Filter Off", comment: "Control Label: Turn Filter Off")
 	static let turnFilterOnControlLabel = String(localized: "Turn Filter On", comment: "Control Label: Turn Filter On")

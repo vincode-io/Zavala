@@ -13,6 +13,14 @@ import Semaphore
 import VinOutlineKit
 import VinUtility
 
+extension Selector {
+	static let sortByTitle = #selector(DocumentsViewController.sortByTitle(_:))
+	static let sortByCreated = #selector(DocumentsViewController.sortByCreated(_:))
+	static let sortByUpdated = #selector(DocumentsViewController.sortByUpdated(_:))
+	static let sortAscending = #selector(DocumentsViewController.sortAscending(_:))
+	static let sortDecending = #selector(DocumentsViewController.sortDecending(_:))
+}
+
 @MainActor
 protocol DocumentsDelegate: AnyObject  {
 	func documentSelectionDidChange(_: DocumentsViewController, documentContainers: [DocumentContainer], documents: [Document], selectRow: EntityID?, isNew: Bool, isNavigationBranch: Bool, animated: Bool)
@@ -38,11 +46,31 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	}
 	
 	var documents = [Document]()
+	
+	var documentSortOrderState: [[AnyHashable: AnyHashable]: [AnyHashable: AnyHashable]] {
+		get {
+			var userInfos = [[AnyHashable: AnyHashable]: [AnyHashable: AnyHashable]]()
+			for (id, order) in documentSortOrders {
+				userInfos[id.userInfo] = order.userInfo
+			}
+			return userInfos
+		}
+		set {
+			var docSortOrders = [EntityID: DocumentSortOrder]()
+			for (id, order) in newValue {
+				if let entityID = EntityID(userInfo: id) {
+					docSortOrders[entityID] = .init(userInfo: order)
+				}
+			}
+			documentSortOrders = docSortOrders
+		}
+	}
 
 	override var canBecomeFirstResponder: Bool { return true }
 
 	private(set) var documentContainers: [DocumentContainer]?
 	private var heldDocumentContainers: [DocumentContainer]?
+	private var documentSortOrders = [EntityID: DocumentSortOrder]()
 
 	private let searchController = UISearchController(searchResultsController: nil)
 
@@ -158,6 +186,69 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			return !UIResponder.isFirstResponderTextField
 		default:
 			return super.canPerformAction(action, withSender: sender)
+		}
+	}
+	
+	override func validate(_ command: UICommand) {
+		let currentSortOrder: DocumentSortOrder = if documentContainers?.count == 1, let id = documentContainers?.first?.id {
+			documentSortOrders[id] ?? .default
+		} else {
+			.default
+		}
+		
+		switch command.action {
+		case .sortByTitle:
+			if documentContainers?.count == 1 {
+				if currentSortOrder.field == .title {
+					command.state = .on
+				} else {
+					command.state = .off
+				}
+			} else {
+				command.attributes = [.disabled]
+			}
+		case .sortByCreated:
+			if documentContainers?.count == 1 {
+				if currentSortOrder.field == .created {
+					command.state = .on
+				} else {
+					command.state = .off
+				}
+			} else {
+				command.attributes = [.disabled]
+			}
+		case .sortByUpdated:
+			if documentContainers?.count == 1 {
+				if currentSortOrder.field == .updated {
+					command.state = .on
+				} else {
+					command.state = .off
+				}
+			} else {
+				command.attributes = [.disabled]
+			}
+		case .sortAscending:
+			if documentContainers?.count == 1 {
+				if currentSortOrder.ordered == .ascending {
+					command.state = .on
+				} else {
+					command.state = .off
+				}
+			} else {
+				command.attributes = [.disabled]
+			}
+		case .sortDecending:
+			if documentContainers?.count == 1 {
+				if currentSortOrder.ordered == .descending {
+					command.state = .on
+				} else {
+					command.state = .off
+				}
+			} else {
+				command.attributes = [.disabled]
+			}
+		default:
+			break
 		}
 	}
 	
@@ -331,6 +422,26 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		self.present(docPicker, animated: true)
 	}
 
+	@objc func sortByTitle(_ sender: Any?) {
+		changeSortField(.title)
+	}
+	
+	@objc func sortByCreated(_ sender: Any?) {
+		changeSortField(.created)
+	}
+	
+	@objc func sortByUpdated(_ sender: Any?) {
+		changeSortField(.updated)
+	}
+	
+	@objc func sortAscending(_ sender: Any?) {
+		changeSortOrder(.ascending)
+	}
+	
+	@objc func sortDecending(_ sender: Any?) {
+		changeSortOrder(.descending)
+	}
+	
 	override func delete(_ sender: Any?) {
 		deleteDocuments(selectedDocuments)
 	}
@@ -540,7 +651,32 @@ extension DocumentsViewController {
 			documents.formUnion((try? await selectionContainer.documents) ?? [])
 		}
 		
-		let sortedDocuments = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
+		let sortedDocuments: [Document]
+		
+		if documentContainers.count == 1, let id = documentContainers.first?.id, let sortOrder = documentSortOrders[id] {
+			switch sortOrder.ordered {
+			case .ascending:
+				switch sortOrder.field {
+				case .title:
+					sortedDocuments = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
+				case .created:
+					sortedDocuments = documents.sorted(by: { $0.created ?? Date() < $1.created ?? Date() })
+				case .updated:
+					sortedDocuments = documents.sorted(by: { $0.updated ?? Date() < $1.updated ?? Date() })
+				}
+			case .descending:
+				switch sortOrder.field {
+				case .title:
+					sortedDocuments = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedDescending })
+				case .created:
+					sortedDocuments = documents.sorted(by: { $0.created ?? Date() > $1.created ?? Date() })
+				case .updated:
+					sortedDocuments = documents.sorted(by: { $0.updated ?? Date() > $1.updated ?? Date() })
+				}
+			}
+		} else {
+			sortedDocuments = documents.sorted(by: { ($0.title ?? "").caseInsensitiveCompare($1.title ?? "") == .orderedAscending })
+		}
 
 		guard animated else {
 			self.documents = sortedDocuments
@@ -673,6 +809,42 @@ private extension DocumentsViewController {
 			} else {
 				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
 			}
+		}
+	}
+	
+	func changeSortField(_ field: DocumentSortOrder.Field) {
+		guard documentContainers?.count == 1, let docContainerID = documentContainers?.first?.id else { return }
+		
+		var documentSort = documentSortOrders[docContainerID]
+		
+		if documentSort == nil {
+			documentSort = DocumentSortOrder(field: field, ordered: .ascending)
+		} else {
+			documentSort?.field = field
+		}
+		
+		documentSortOrders[docContainerID] = documentSort
+		
+		Task {
+			await loadDocuments(animated: true)
+		}
+	}
+	
+	func changeSortOrder(_ ordered: DocumentSortOrder.Ordered) {
+		guard documentContainers?.count == 1, let docContainerID = documentContainers?.first?.id else { return }
+		
+		var documentSort = documentSortOrders[docContainerID]
+
+		if documentSort == nil {
+			documentSort = DocumentSortOrder(field: .title, ordered: ordered)
+		} else {
+			documentSort?.ordered = ordered
+		}
+
+		documentSortOrders[docContainerID] = documentSort
+
+		Task {
+			await loadDocuments(animated: true)
 		}
 	}
 	

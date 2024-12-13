@@ -37,6 +37,7 @@
 		51341E04272B55080005425B /* InsetLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51341E03272B55080005425B /* InsetLabel.swift */; };
 		51408FFC2AEF44DC006AEE75 /* VinOutlineKit in Frameworks */ = {isa = PBXBuildFile; productRef = 51408FFB2AEF44DC006AEE75 /* VinOutlineKit */; };
 		5142C295260AC78C0094571F /* OutlineFontConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5142C294260AC78C0094571F /* OutlineFontConfig.swift */; };
+		5147287A2D0CEB75009CDB0D /* DocumentSortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 514728792D0CEB75009CDB0D /* DocumentSortOrder.swift */; };
 		5147D0AD25CB6F2D004673C3 /* KeyboardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */; };
 		5147D0B525CB95B4004673C3 /* DocumentsViewController+Drag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0B425CB95B4004673C3 /* DocumentsViewController+Drag.swift */; };
 		5147D0B825CCAB2A004673C3 /* DocumentsViewController+Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147D0B725CCAB2A004673C3 /* DocumentsViewController+Drop.swift */; };
@@ -246,6 +247,7 @@
 		513F32A12594062C0003048F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		51408FF42AEF41C8006AEE75 /* VinOutlineKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = VinOutlineKit; sourceTree = "<group>"; };
 		5142C294260AC78C0094571F /* OutlineFontConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineFontConfig.swift; sourceTree = "<group>"; };
+		514728792D0CEB75009CDB0D /* DocumentSortOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentSortOrder.swift; sourceTree = "<group>"; };
 		5147D0AC25CB6F2D004673C3 /* KeyboardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTableView.swift; sourceTree = "<group>"; };
 		5147D0B425CB95B4004673C3 /* DocumentsViewController+Drag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DocumentsViewController+Drag.swift"; sourceTree = "<group>"; };
 		5147D0B725CCAB2A004673C3 /* DocumentsViewController+Drop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DocumentsViewController+Drop.swift"; sourceTree = "<group>"; };
@@ -779,6 +781,7 @@
 		51E14F292560728B00320EDB /* Documents */ = {
 			isa = PBXGroup;
 			children = (
+				514728792D0CEB75009CDB0D /* DocumentSortOrder.swift */,
 				51C4C441255A0DE1004E0206 /* DocumentsViewController.swift */,
 				5147D0B425CB95B4004673C3 /* DocumentsViewController+Drag.swift */,
 				5147D0B725CCAB2A004673C3 /* DocumentsViewController+Drop.swift */,
@@ -1174,6 +1177,7 @@
 				519897C42ADE13F3008A6FA4 /* ButtonGroup.swift in Sources */,
 				51FA27402B3B718B008B665E /* SettingsOutlineDefaultsView.swift in Sources */,
 				5109BC52293445EB0022E90B /* DocumentsActivityItemsConfiguration.swift in Sources */,
+				5147287A2D0CEB75009CDB0D /* DocumentSortOrder.swift in Sources */,
 				51C71C74273F264600F6C779 /* ImageSceneDelegate.swift in Sources */,
 				511A99F727B9B596001BD443 /* ToolbarButton.swift in Sources */,
 				514F221E25C4D0A8004E02CD /* EditorTagInputContentView.swift in Sources */,
