@@ -295,9 +295,6 @@
     "Dark" : {
       "comment" : "Control Label: Dark"
     },
-    "Decending" : {
-      "comment" : "Control Label: Decending"
-    },
     "Delete" : {
       "comment" : "Control Label: Delete an entity"
     },
@@ -327,6 +324,9 @@
     },
     "Deletes an Outline." : {
 
+    },
+    "Descending" : {
+      "comment" : "Control Label: Descending"
     },
     "Destination" : {
 

@@ -18,7 +18,7 @@ extension Selector {
 	static let sortByCreated = #selector(DocumentsViewController.sortByCreated(_:))
 	static let sortByUpdated = #selector(DocumentsViewController.sortByUpdated(_:))
 	static let sortAscending = #selector(DocumentsViewController.sortAscending(_:))
-	static let sortDecending = #selector(DocumentsViewController.sortDecending(_:))
+	static let sortDescending = #selector(DocumentsViewController.sortDescending(_:))
 }
 
 @MainActor
@@ -75,8 +75,8 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	private let searchController = UISearchController(searchResultsController: nil)
 
 	private var navButtonsBarButtonItem: UIBarButtonItem!
-	private var addButton: UIButton!
-	private var importButton: UIButton!
+	private var moreMenuButton: ButtonGroup.Button!
+	private var addButton: ButtonGroup.Button!
 
 	private var loadDocumentsChannel = AsyncChannel<Void>()
 	
@@ -93,6 +93,14 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		return relativeDateTimeFormatter
 	}()
 	
+	private var currentSortOrder: DocumentSortOrder {
+		if documentContainers?.count == 1, let id = documentContainers?.first?.id {
+			return documentSortOrders[id] ?? .default
+		} else {
+			return .default
+		}
+	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
@@ -102,7 +110,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			collectionView.contentInset = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0)
 		} else {
 			let navButtonGroup = ButtonGroup(hostController: self, containerType: .standard, alignment: .right)
-			importButton = navButtonGroup.addButton(label: .importOPMLControlLabel, image: .importDocument, selector: .importOPML)
+			moreMenuButton = navButtonGroup.addButton(label: .moreControlLabel, image: .ellipsis, showMenu: true)
 			addButton = navButtonGroup.addButton(label: .addControlLabel, image: .createEntity, selector: .createOutline)
 			navButtonsBarButtonItem = navButtonGroup.buildBarButtonItem()
 
@@ -190,12 +198,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 	}
 	
 	override func validate(_ command: UICommand) {
-		let currentSortOrder: DocumentSortOrder = if documentContainers?.count == 1, let id = documentContainers?.first?.id {
-			documentSortOrders[id] ?? .default
-		} else {
-			.default
-		}
-		
 		switch command.action {
 		case .sortByTitle:
 			if documentContainers?.count == 1 {
@@ -237,7 +239,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 			} else {
 				command.attributes = [.disabled]
 			}
-		case .sortDecending:
+		case .sortDescending:
 			if documentContainers?.count == 1 {
 				if currentSortOrder.ordered == .descending {
 					command.state = .on
@@ -438,7 +440,7 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		changeSortOrder(.ascending)
 	}
 	
-	@objc func sortDecending(_ sender: Any?) {
+	@objc func sortDescending(_ sender: Any?) {
 		changeSortOrder(.descending)
 	}
 	
@@ -809,7 +811,61 @@ private extension DocumentsViewController {
 			} else {
 				navigationItem.rightBarButtonItem = navButtonsBarButtonItem
 			}
+
+			moreMenuButton.menu = buildEllipsisMenu()
 		}
+	}
+	
+	func buildEllipsisMenu() -> UIMenu {
+
+		let importOPMLAction = UIAction(title: .importOPMLControlLabel, image: .importDocument) { [weak self] _ in
+			self?.importOPML()
+		}
+
+		let currentSortOrder = currentSortOrder
+		
+		let sortByTitle = UIAction(title: .titleControlLabel) { [weak self] _ in
+			self?.sortByTitle(nil)
+		}
+		if currentSortOrder.field == .title {
+			sortByTitle.state = .on
+		}
+		
+		let sortByCreated = UIAction(title: .createdControlLabel) { [weak self] _ in
+			self?.sortByCreated(nil)
+		}
+		if currentSortOrder.field == .created {
+			sortByCreated.state = .on
+		}
+
+		let sortByUpdated = UIAction(title: .updatedControlLabel) { [weak self] _ in
+			self?.sortByUpdated(nil)
+		}
+		if currentSortOrder.field == .updated {
+			sortByUpdated.state = .on
+		}
+
+		let sortAscending = UIAction(title: .ascendingControlLabel) { [weak self] _ in
+			self?.sortAscending(nil)
+		}
+		if currentSortOrder.ordered == .ascending {
+			sortAscending.state = .on
+		}
+
+		let sortDescending = UIAction(title: .descendingControlLabel) { [weak self] _ in
+			self?.sortDescending(nil)
+		}
+		if currentSortOrder.ordered == .descending {
+			sortDescending.state = .on
+		}
+
+		let sortByMenu = UIMenu(title: "", options: .displayInline, children: [sortByTitle, sortByCreated, sortByUpdated])
+		let sortOrderMenu = UIMenu(title: "", options: .displayInline, children: [sortAscending, sortDescending])
+		
+		let importMenu = UIMenu(title: "", options: .displayInline, children: [importOPMLAction])
+		let sortMenu = UIMenu(title: "", options: .displayInline, children: [UIMenu(title: .sortDocumentsControlLabel, image: .sort, children: [sortByMenu, sortOrderMenu])])
+
+		return UIMenu(title: "", image: nil, identifier: nil, options: [], children: [importMenu, sortMenu])
 	}
 	
 	func changeSortField(_ field: DocumentSortOrder.Field) {
@@ -827,6 +883,7 @@ private extension DocumentsViewController {
 		
 		Task {
 			await loadDocuments(animated: true)
+			updateUI()
 		}
 	}
 	
@@ -845,6 +902,7 @@ private extension DocumentsViewController {
 
 		Task {
 			await loadDocuments(animated: true)
+			updateUI()
 		}
 	}
 	

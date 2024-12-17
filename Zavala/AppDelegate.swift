@@ -203,7 +203,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	let sortByCreatedCommand = UICommand(title: .createdControlLabel, action: .sortByCreated)
 	let sortByUpdatedCommand = UICommand(title: .updatedControlLabel, action: .sortByUpdated)
 	let sortAscendingCommand = UICommand(title: .ascendingControlLabel, action: .sortAscending)
-	let sortDecendingCommand = UICommand(title: .decendingControlLabel, action: .sortDecending)
+	let sortDescendingCommand = UICommand(title: .descendingControlLabel, action: .sortDescending)
 
 	let focusInCommand = UIKeyCommand(title: .focusInControlLabel,
 									  action: .focusIn,
@@ -563,7 +563,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 		builder.insertChild(focusMenu, atStartOfMenu: .view)
 
 		let sortDocumentsField = UIMenu(title: "", options: .displayInline, children: [sortByTitleCommand, sortByCreatedCommand, sortByUpdatedCommand])
-		let sortDocumentsOrdered = UIMenu(title: "", options: .displayInline, children: [sortAscendingCommand, sortDecendingCommand])
+		let sortDocumentsOrdered = UIMenu(title: "", options: .displayInline, children: [sortAscendingCommand, sortDescendingCommand])
 		let sortDocumentsMenu = UIMenu(title: .sortDocumentsControlLabel, children: [sortDocumentsField, sortDocumentsOrdered])
 		builder.insertChild(sortDocumentsMenu, atStartOfMenu: .view)
 
