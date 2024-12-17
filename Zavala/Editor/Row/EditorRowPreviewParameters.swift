@@ -14,18 +14,25 @@ class EditorRowPreviewParameters: UIDragPreviewParameters {
 		super.init()
 	}
 	
-	init(cell: EditorRowViewCell, row: Row, isCompact: Bool) {
+	init(cell: EditorRowViewCell) {
 		super.init()
 
-		let topicSize = cell.topicTextView!.bounds.size
-
 		let x = CGFloat(6) + (CGFloat(cell.indentationLevel + 1) * cell.indentationWidth)
+		let y: CGFloat = switch AppDefaults.shared.rowSpacingSize {
+		case .small:
+			1
+		case .medium:
+			2
+		case .large:
+			4
+		}
 		
+		let topicSize = cell.topicTextView!.bounds.size
 		let width = topicSize.width + 12
 		let height = topicSize.height + 4
 
-		let newBounds = CGRect(x: x, y: 6, width: width, height: height)
-		let visiblePath = UIBezierPath(roundedRect: newBounds, cornerRadius: 4)
+		let newBounds = CGRect(x: x, y: y, width: width, height: height)
+		let visiblePath = UIBezierPath(roundedRect: newBounds, cornerRadius: 6)
 		self.visiblePath = visiblePath
 
 	}

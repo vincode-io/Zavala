@@ -1592,10 +1592,7 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 		}
 	}
 	
-	func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-		let adjustedSection = isSearching ? indexPath.section + 2: indexPath.section
-		guard adjustedSection == Outline.Section.rows.rawValue else { return nil }
-		
+	func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
 		// Force save the text if the context menu has been requested so that we don't lose our
 		// text changes when the cell configuration gets applied
 		saveCurrentText()
@@ -1604,31 +1601,14 @@ extension EditorViewController: UICollectionViewDelegate, UICollectionViewDataSo
 			responder.resignFirstResponder()
 		}
 		
-		if !(collectionView.indexPathsForSelectedItems?.contains(indexPath) ?? false) {
-			collectionView.deselectAll()
-		}
-		
-		let rows: [Row]
-		if let selected = collectionView.indexPathsForSelectedItems, !selected.isEmpty {
-			rows = selected.compactMap { outline?.shadowTable?[$0.row] }
-		} else {
-			if let row = outline?.shadowTable?[indexPath.row] {
-				rows = [row]
-			} else {
-				rows = [Row]()
-			}
-		}
-		
+		let rows: [Row] = indexPaths.map(\.row).compactMap { outline?.shadowTable?[$0] }
 		return buildRowsContextMenu(rows: rows)
+
 	}
 	
-	func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-		guard let row = configuration.identifier as? Row,
-			  let rowShadowTableIndex = row.shadowTableIndex,
-			  let cell = collectionView.cellForItem(at: IndexPath(row: rowShadowTableIndex, section: adjustedRowsSection)) as? EditorRowViewCell else { return nil }
-		
-		let isCompact = traitCollection.horizontalSizeClass == .compact
-		return UITargetedPreview(view: cell, parameters: EditorRowPreviewParameters(cell: cell, row: row, isCompact: isCompact))
+	func collectionView(_ collectionView: UICollectionView, contextMenuConfiguration configuration: UIContextMenuConfiguration, highlightPreviewForItemAt indexPath: IndexPath) -> UITargetedPreview? {
+		guard let cell = collectionView.cellForItem(at:indexPath) as? EditorRowViewCell else { return nil }		
+		return UITargetedPreview(view: cell, parameters: EditorRowPreviewParameters(cell: cell))
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {

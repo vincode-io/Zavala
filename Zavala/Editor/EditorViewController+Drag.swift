@@ -48,11 +48,9 @@ extension EditorViewController: UICollectionViewDragDelegate {
 			let dragItem = UIDragItem(itemProvider: itemProvider)
 			dragItem.localObject = row
 		
-			let isCompact = traitCollection.horizontalSizeClass == .compact
-			
 			dragItem.previewProvider = { () -> UIDragPreview? in
 				guard let cell = collectionView.cellForItem(at: indexPath) as? EditorRowViewCell else { return nil}
-				return UIDragPreview(view: cell, parameters: EditorRowPreviewParameters(cell: cell, row: row, isCompact: isCompact))
+				return UIDragPreview(view: cell, parameters: EditorRowPreviewParameters(cell: cell))
 			}
 			
 			dragItems.append(dragItem)
