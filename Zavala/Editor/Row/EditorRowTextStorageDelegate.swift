@@ -42,7 +42,8 @@ final class EditorRowTextStorageDelegate: NSObject, NSTextStorageDelegate {
 					newAttributes[key] = nil
 				}
 				
-				if textStorage.attributedSubstring(from: range).string == " " {
+				let changedString = textStorage.attributedSubstring(from: range).string
+				if changedString == " " || changedString == "\n" {
 					if key == .link {
 						newAttributes[key] = nil
 					}
