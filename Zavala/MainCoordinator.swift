@@ -252,6 +252,7 @@ private extension MainCoordinator {
 
 extension NSToolbarItem.Identifier {
 	static let sync = NSToolbarItem.Identifier("io.vincode.Zavala.refresh")
+	static let sortDocuments = NSToolbarItem.Identifier("io.vincode.Zavala.sortDocuments")
 	static let importOPML = NSToolbarItem.Identifier("io.vincode.Zavala.importOPML")
 	static let newOutline = NSToolbarItem.Identifier("io.vincode.Zavala.newOutline")
 	static let filter = NSToolbarItem.Identifier("io.vincode.Zavala.toggleOutlineFilter")

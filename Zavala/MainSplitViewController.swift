@@ -770,6 +770,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.primarySidebarTrackingSeparatorItemIdentifier,
 			.navigation,
 			.flexibleSpace,
+			.sortDocuments,
 			.newOutline,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
 			.moveLeft,
@@ -792,6 +793,7 @@ extension MainSplitViewController: NSToolbarDelegate {
 			.sync,
 			.toggleSidebar,
 			.supplementarySidebarTrackingSeparatorItemIdentifier,
+			.sortDocuments,
 			.importOPML,
 			.newOutline,
 			.navigation,
@@ -833,6 +835,60 @@ extension MainSplitViewController: NSToolbarDelegate {
 			item.isBordered = true
 			item.action = .sync
 			item.target = self
+			toolbarItem = item
+		case .sortDocuments:
+			let item = ValidatingMenuToolbarItem(itemIdentifier: itemIdentifier)
+			item.checkForUnavailable = { [weak self] _ in
+				guard let currentSortOrder = self?.documentsViewController?.currentSortOrder else { return false }
+				
+				let sortByTitleAction = UIAction(title: .titleControlLabel) { _ in
+					Task { @MainActor in
+						UIApplication.shared.sendAction(.sortByTitle, to: nil, from: nil, for: nil)
+					}
+				}
+				sortByTitleAction.state = currentSortOrder.field == .title ? .on : .off
+				
+				let sortByCreatedAction = UIAction(title: .createdControlLabel) { _ in
+					Task { @MainActor in
+						UIApplication.shared.sendAction(.sortByCreated, to: nil, from: nil, for: nil)
+					}
+				}
+				sortByCreatedAction.state = currentSortOrder.field == .created ? .on : .off
+				
+				let sortByUpdatedAction = UIAction(title: .updatedControlLabel) { _ in
+					Task { @MainActor in
+						UIApplication.shared.sendAction(.sortByUpdated, to: nil, from: nil, for: nil)
+					}
+				}
+				sortByUpdatedAction.state = currentSortOrder.field == .updated ? .on : .off
+				
+				let sortAscendingAction = UIAction(title: .ascendingControlLabel) { _ in
+					Task { @MainActor in
+						UIApplication.shared.sendAction(.sortAscending, to: nil, from: nil, for: nil)
+					}
+				}
+				sortAscendingAction.state = currentSortOrder.ordered == .ascending ? .on : .off
+				
+				let sortDescendingAction = UIAction(title: .descendingControlLabel) { _ in
+					Task { @MainActor in
+						UIApplication.shared.sendAction(.sortDescending, to: nil, from: nil, for: nil)
+					}
+				}
+				sortDescendingAction.state = currentSortOrder.ordered == .descending ? .on : .off
+				
+				let sortByMenu = UIMenu(title: "", options: .displayInline, children: [sortByTitleAction, sortByCreatedAction, sortByUpdatedAction])
+				let sortOrderedMenu = UIMenu(title: "", options: .displayInline, children: [sortAscendingAction, sortDescendingAction])
+
+				item.itemMenu = UIMenu(title: "", children: [sortByMenu, sortOrderedMenu])
+				
+				return self?.documentsViewController?.documentContainers?.count != 1
+			}
+			item.image = .sort.symbolSizedForCatalyst(pointSize: 15)
+			item.label = .sortDocumentsControlLabel
+			item.toolTip = .sortDocumentsControlLabel
+			item.isBordered = true
+			item.target = self
+			item.showsIndicator = false
 			toolbarItem = item
 		case .importOPML:
 			let item = ValidatingToolbarItem(itemIdentifier: itemIdentifier)

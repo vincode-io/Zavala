@@ -66,6 +66,14 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		}
 	}
 
+	var currentSortOrder: DocumentSortOrder {
+		if documentContainers?.count == 1, let id = documentContainers?.first?.id {
+			return documentSortOrders[id] ?? .default
+		} else {
+			return .default
+		}
+	}
+	
 	override var canBecomeFirstResponder: Bool { return true }
 
 	private(set) var documentContainers: [DocumentContainer]?
@@ -92,14 +100,6 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
 		relativeDateTimeFormatter.formattingContext = .beginningOfSentence
 		return relativeDateTimeFormatter
 	}()
-	
-	private var currentSortOrder: DocumentSortOrder {
-		if documentContainers?.count == 1, let id = documentContainers?.first?.id {
-			return documentSortOrders[id] ?? .default
-		} else {
-			return .default
-		}
-	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
