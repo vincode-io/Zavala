@@ -117,9 +117,9 @@ class EditorRowTextView: UITextView {
 		// These gesture recognizers will conflict with the row dragging if not removed.
 		if traitCollection.userInterfaceIdiom != .mac {
 			gestureRecognizers?.forEach {
-				if $0.name == "dragInitiation" ||
-					$0.name == "dragFailureRelationships" ||
-					$0.name == "dragExclusionRelationships" ||
+				if $0.name == "com.apple.UIKit.dragInitiation" ||
+					$0.name == "com.apple.UIKit.dragFailureRelationships" ||
+					$0.name == "com.apple.UIKit.dragExclusionRelationships" ||
 					$0.name == "com.apple.UIKit.longPressClickDriverPrimary" ||
 					$0.name == "com.apple.UIKit.clickPresentationExclusion" ||
 					$0.name == "com.apple.UIKit.clickPresentationFailure" {
