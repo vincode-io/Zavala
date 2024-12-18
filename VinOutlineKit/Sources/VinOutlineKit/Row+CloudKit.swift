@@ -91,7 +91,7 @@ extension Row: VCKModel {
 	}
 	
 	public func buildRecord() -> CKRecord? {
-		guard let zoneID = outline?.zoneID else {
+		guard let zoneID = outline?.zoneID, let parent else {
 			return nil
 		}
 		
