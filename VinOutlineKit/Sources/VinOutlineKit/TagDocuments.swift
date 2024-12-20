@@ -25,23 +25,13 @@ public final class TagDocuments: Identifiable, DocumentContainer {
 	}
 
 	#if canImport(UIKit)
-	#if targetEnvironment(macCatalyst)
 	public var image: UIImage? {
 		if children.isEmpty {
-			return UIImage(systemName: "capsule")!.applyingSymbolConfiguration(.init(pointSize: 12, weight: .medium))
+			return UIImage(systemName: "capsule")
 		} else {
-			return UIImage(named: "Tags")!.applyingSymbolConfiguration(.init(pointSize: 16, weight: .regular, scale: .small))
+			return UIImage(named: "capsule.on.capsule")
 		}
 	}
-	#else
-	public var image: UIImage? {
-		if children.isEmpty {
-			return UIImage(systemName: "capsule")!.applyingSymbolConfiguration(.init(pointSize: 15, weight: .medium))
-		} else {
-			return UIImage(named: "Tags")!.applyingSymbolConfiguration(.init(pointSize: 25, weight: .regular, scale: .small))
-		}
-	}
-	#endif
 	#endif
 
 	public var itemCount: Int? {
