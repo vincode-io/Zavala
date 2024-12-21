@@ -30,7 +30,7 @@ extension DocumentsViewController: UICollectionViewDragDelegate {
 		
 		let userActivity = NSUserActivity(activityType: NSUserActivity.ActivityType.newWindow)
 		var userInfo = [AnyHashable: Any]()
-		userInfo[Pin.UserInfoKeys.pin] = Pin(containers: documentContainers, document: document).userInfo
+		userInfo[Pin.UserInfoKeys.pin] = Pin(accountManager: appDelegate.accountManager, containers: documentContainers, document: document).userInfo
 		userActivity.userInfo = userInfo
 		itemProvider.registerObject(userActivity, visibility: .all)
 

@@ -94,7 +94,7 @@ struct EditRowsAppIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableI
 		let rows: [Row] = self.rows
 			.compactMap { $0.entityID }
 			.compactMap {
-				if let rowOutline = AccountManager.shared.findDocument($0)?.outline {
+				if let rowOutline = appDelegate.accountManager.findDocument($0)?.outline {
 					rowOutline.load()
 					outlines.insert(rowOutline)
 					return rowOutline.findRow(id: $0.rowUUID)

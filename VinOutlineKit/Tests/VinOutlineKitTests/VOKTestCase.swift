@@ -2,10 +2,11 @@
 //  Created by Maurice Parker on 3/16/24.
 //
 
-import XCTest
+import Foundation
+import Testing
 @testable import VinOutlineKit
 
-class VOKTestCase: XCTestCase, ErrorHandler, OutlineCommandDelegate {
+class VOKTestCase: ErrorHandler, OutlineCommandDelegate {
 
 	var undoManager: UndoManager!
 
@@ -20,30 +21,20 @@ class VOKTestCase: XCTestCase, ErrorHandler, OutlineCommandDelegate {
 	
 	func restoreCursorPosition(_: VinOutlineKit.CursorCoordinates) {
 	}
-	
-	override func setUpWithError() throws {
-		try commonSetup()
-	}
 
-	override func tearDownWithError() throws {
-		try commonTearDown()
-	}
-
-	func commonSetup() throws {
+	func buildAccountManager() -> AccountManager {
 		let tempDirectory = FileManager.default.temporaryDirectory
-		let tempAccountDirectory = tempDirectory.appendingPathComponent("Accounts")
-		AccountManager.shared = AccountManager(accountsFolderPath: tempAccountDirectory.path(), errorHandler: self)
-		
-		undoManager = UndoManager()
+		let tempAccountDirectory = tempDirectory.appendingPathComponent("Accounts-\(UUID().uuidString)")
+		return AccountManager(accountsFolderPath: tempAccountDirectory.path(), errorHandler: self)
 	}
-
-	func commonTearDown() throws {
-		AccountManager.shared.deleteLocalAccount()
+	
+	func deleteAccountManager(_ accountManager: AccountManager) {
+		accountManager.deleteLocalAccount()
 	}
-
-	func loadOutline(_ name: String = "StarterOutline") throws -> Outline {
+	
+	func loadOutline(_ name: String = "StarterOutline", accountManager: AccountManager) async throws -> Outline {
 		guard let opmlLocation = Bundle.module.url(forResource: "Resources/\(name)", withExtension: "opml"),
-			  let outline = try AccountManager.shared.localAccount.importOPML(opmlLocation, tags: nil).outline else {
+			  let outline = try await accountManager.localAccount?.importOPML(opmlLocation, tags: nil).outline else {
 			fatalError()
 		}
 		outline.load()

@@ -39,6 +39,8 @@ extension Selector {
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	
+	public private(set) var accountManager: AccountManager!
+	
 	let showSettings = UIKeyCommand(title: .settingsEllipsisControlLabel,
 									action: .showSettings,
 									input: ",",
@@ -330,7 +332,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 			try? FileManager.default.moveItem(atPath: oldDocumentAccountsFolderPath, toPath: documentAccountsFolderPath)
 		}
 		
-		AccountManager.shared = AccountManager(accountsFolderPath: documentAccountsFolderPath, errorHandler: self)
+		accountManager = AccountManager(accountsFolderPath: documentAccountsFolderPath, errorHandler: self)
 		let _ = OutlineFontCache.shared
 		
 		return true
@@ -377,11 +379,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
 		Task { @MainActor in
 			if UIApplication.shared.applicationState == .background {
-				AccountManager.shared.resume()
+				accountManager.resume()
 			}
-			await AccountManager.shared.receiveRemoteNotification(userInfo: userInfo)
+			await accountManager.receiveRemoteNotification(userInfo: userInfo)
 			if UIApplication.shared.applicationState == .background {
-				await AccountManager.shared.suspend()
+				await accountManager.suspend()
 			}
 			completionHandler(.newData)
 		}
@@ -426,7 +428,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FileActionResponder {
 	
 	@objc func sync(_ sender: Any?) {
 		Task {
-			await AccountManager.shared.sync()
+			await accountManager.sync()
 		}
 	}
 
@@ -614,13 +616,13 @@ extension AppDelegate: AppKitPluginDelegate {
 	
 	func importFile(_ url: URL) {
 		let accountID = AppDefaults.shared.lastSelectedAccountID
-		guard let account = AccountManager.shared.findAccount(accountID: accountID) ?? AccountManager.shared.activeAccounts.first else { return }
+		guard let account = accountManager.findAccount(accountID: accountID) ?? accountManager.activeAccounts.first else { return }
 		
 		Task {
 			guard let document = try? await account.importOPML(url, tags: nil) else { return }
 
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(document: document).userInfo]
+			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: accountManager, document: document).userInfo]
 			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 		}
 	}
@@ -645,14 +647,14 @@ private extension AppDelegate {
 	
 	@objc func willEnterForeground() {
 		checkForUserDefaultsChanges()
-		AccountManager.shared.resume()
+		accountManager.resume()
 		
 		Task {
-			await AccountManager.shared.sync()
+			await accountManager.sync()
 		}
 		
 		if let userInfos = AppDefaults.shared.documentHistory {
-			history = userInfos.compactMap { Pin(userInfo: $0) }
+			history = userInfos.compactMap { Pin(accountManager: accountManager, userInfo: $0) }
 		}
 		cleanUpHistory()
 		UIMenuSystem.main.setNeedsRebuild()
@@ -664,8 +666,8 @@ private extension AppDelegate {
 		}
 
 		Task {
-			await AccountManager.shared.sync()
-			await AccountManager.shared.suspend()
+			await accountManager.sync()
+			await accountManager.suspend()
 			UIApplication.shared.endBackgroundTask(backgroundTaskID)
 		}
 		
@@ -674,7 +676,7 @@ private extension AppDelegate {
 	
 	@objc nonisolated private func checkForUserDefaultsChanges() {
 		Task { @MainActor in
-			guard let localAccount = AccountManager.shared.localAccount else { return }
+			guard let localAccount = accountManager.localAccount else { return }
 			
 			if AppDefaults.shared.enableLocalAccount != localAccount.isActive {
 				if AppDefaults.shared.enableLocalAccount {
@@ -684,12 +686,12 @@ private extension AppDelegate {
 				}
 			}
 			
-			let cloudKitAccount = AccountManager.shared.cloudKitAccount
+			let cloudKitAccount = accountManager.cloudKitAccount
 			
 			if AppDefaults.shared.enableCloudKit && cloudKitAccount == nil {
-				AccountManager.shared.createCloudKitAccount()
+				accountManager.createCloudKitAccount()
 			} else if !AppDefaults.shared.enableCloudKit && cloudKitAccount != nil {
-				AccountManager.shared.deleteCloudKitAccount()
+				accountManager.deleteCloudKitAccount()
 			}
 		}
 	}
@@ -736,7 +738,7 @@ private extension AppDelegate {
 	}
 
 	private func cleanUpHistory() {
-		let allDocumentIDs = AccountManager.shared.activeDocuments.map { $0.id }
+		let allDocumentIDs = accountManager.activeDocuments.map { $0.id }
 		
 		for pin in history {
 			if let documentID = pin.documentID {

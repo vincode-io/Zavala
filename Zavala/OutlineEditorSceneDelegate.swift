@@ -104,7 +104,7 @@ class OutlineEditorSceneDelegate: UIResponder, UIWindowSceneDelegate {
 			} else {
 				
 				let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-				activity.userInfo = [Pin.UserInfoKeys.pin: Pin(documentID: documentID).userInfo]
+				activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, documentID: documentID).userInfo]
 				UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 				
 			}
@@ -146,8 +146,8 @@ private extension OutlineEditorSceneDelegate {
 
 	func acceptShare(_ shareMetadata: CKShare.Metadata) {
 		Task {
-			await AccountManager.shared.cloudKitAccount?.userDidAcceptCloudKitShareWith(shareMetadata)
-			if let documentID = AccountManager.shared.cloudKitAccount?.findDocument(shareRecordID: shareMetadata.share.recordID)?.id {
+			await appDelegate.accountManager.cloudKitAccount?.userDidAcceptCloudKitShareWith(shareMetadata)
+			if let documentID = appDelegate.accountManager.cloudKitAccount?.findDocument(shareRecordID: shareMetadata.share.recordID)?.id {
 				editorContainerViewController.openDocument(documentID)
 			}
 		}

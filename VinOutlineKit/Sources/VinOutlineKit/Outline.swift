@@ -425,9 +425,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		return expandAllInOutlineUnavailable
 	}
 	
-	public var account: Account? {
-		return AccountManager.shared.findAccount(accountID: id.accountID)
-	}
+	public private(set) weak var account: Account?
 	
 	public var tags: [Tag] {
 		guard let account else { return [Tag]() }
@@ -610,7 +608,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	private var selectionLocation: Int?
 	private var selectionLength: Int?
 
-	init(id: EntityID) {
+	init(account: Account?, id: EntityID) {
+		self.account = account
 		self.id = id
 		self.created = Date()
 		self.updated = Date()
@@ -618,7 +617,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		imagesFile = ImagesFile(outline: self)
 	}
 
-	init(parentID: EntityID, title: String?) {
+	init(account: Account?, parentID: EntityID, title: String?) {
+		self.account = account
 		self.id = .document(parentID.accountID, UUID().uuidString)
 		self.title = title
 		self.created = Date()
@@ -627,7 +627,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		imagesFile = ImagesFile(outline: self)
 	}
 	
-	init(coder: OutlineCoder) {
+	init(account: Account?, coder: OutlineCoder) {
+		self.account = account
 		self.cloudKitMetaData = coder.cloudKitMetaData
 		self.id = coder.id
 		self.ancestorTitle = coder.ancestorTitle
@@ -2575,7 +2576,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	public func delete() {
 		for link in documentLinks ?? [EntityID]() {
-			if let outline = AccountManager.shared.findDocument(link)?.outline {
+			if let outline = account?.accountManager?.findDocument(link)?.outline {
 				outline.deleteBacklink(id)
 			}
 		}
@@ -2597,8 +2598,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		outlineDidDelete()
 	}
 	
-	public func duplicate(accountID: Int) -> Outline {
-		let outline = Outline(id: .document(accountID, UUID().uuidString))
+	public func duplicate(account: Account) -> Outline {
+		let outline = Outline(account: account, id: .document(account.id.accountID, UUID().uuidString))
 
 		outline.title = title
 		outline.ownerName = ownerName
@@ -2611,7 +2612,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		outline.documentLinks = documentLinks
 		
 		for linkedDocumentID in outline.documentLinks ?? [EntityID]() {
-			if let linkedOutline = AccountManager.shared.findDocument(linkedDocumentID)?.outline {
+			if let linkedOutline = account.accountManager?.findDocument(linkedDocumentID)?.outline {
 				linkedOutline.createBacklink(outline.id)
 			}
 		}
@@ -3300,7 +3301,7 @@ private extension Outline {
 	}
 	
 	func createLinkRelationship(_ entityID: EntityID) {
-		guard let outline = AccountManager.shared.findDocument(entityID)?.outline else { return }
+		guard let outline = account?.accountManager?.findDocument(entityID)?.outline else { return }
 		
 		if isCloudKit && ancestorDocumentLinks == nil {
 			ancestorDocumentLinks = documentLinks
@@ -3317,7 +3318,7 @@ private extension Outline {
 	}
 
 	func deleteLinkRelationship(_ entityID: EntityID) {
-		guard let outline = AccountManager.shared.findDocument(entityID)?.outline else { return }
+		guard let outline = account?.accountManager?.findDocument(entityID)?.outline else { return }
 
 		if isCloudKit && ancestorDocumentLinks == nil {
 			ancestorDocumentLinks = documentLinks

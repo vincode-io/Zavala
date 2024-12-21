@@ -42,7 +42,7 @@ struct AddOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictabl
 		await resume()
 		
 		let acctType = accountType == .onMyDevice ? AccountType.local : AccountType.cloudKit
-		guard let account = await AccountManager.shared.findAccount(accountType: acctType) else {
+		guard let account = await appDelegate.accountManager.findAccount(accountType: acctType) else {
 			await suspend()
 			throw ZavalaAppIntentError.unavailableAccount
 		}

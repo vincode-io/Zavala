@@ -5,29 +5,30 @@
 //  Created by Maurice Parker on 3/21/24.
 //
 
-import XCTest
+import Foundation
+import Testing
 @testable import VinOutlineKit
 
 final class CompleteCommandTests: VOKTestCase {
 
-	func testExecute() throws {
-		let outline = try loadOutline()
+	@Test func execute() async throws {
+		let accountManager = buildAccountManager()
+		let undoManager = UndoManager()
 		
-		guard let row = outline.rows.first else {
-			XCTFail()
-			return
-		}
-		
+		let outline = try await loadOutline(accountManager: accountManager)
+		let row = try #require(outline.rows.first)
 		let rowStrings = RowStrings.topic(NSAttributedString(string: "Test 1 - Changed"))
 		
 		let command = CompleteCommand(actionName: "Complete", undoManager: undoManager, delegate: self, outline: outline, rows: [row], rowStrings: rowStrings)
 		command.execute()
+
+		#expect(outline.rows.first!.isComplete!)
+		#expect(outline.rows.first!.topic!.string == "Test 1 - Changed")
 		
-		XCTAssertTrue(outline.rows.first!.isComplete!)
-		XCTAssertEqual(outline.rows.first!.topic!.string, "Test 1 - Changed")
 		undoManager.undo()
-		XCTAssertFalse(outline.rows.first!.isComplete!)
-		XCTAssertEqual(outline.rows.first!.topic!.string, "Test 1")
+		
+		#expect(outline.rows.first!.isComplete! == false)
+		#expect(outline.rows.first!.topic!.string == "Test 1")
 	}
 
 }

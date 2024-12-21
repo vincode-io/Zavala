@@ -15,8 +15,6 @@ public extension Notification.Name {
 @MainActor
 public final class AccountManager {
 	
-	nonisolated(unsafe)public static var shared: AccountManager!
-	
 	public var localAccount: Account? {
 		return accountsDictionary[AccountType.local.rawValue]
 	}
@@ -92,7 +90,7 @@ public final class AccountManager {
 				abort()
 			}
 			
-			let localAccount = Account(accountType: .local)
+			let localAccount = Account(accountManager: self, accountType: .local)
 			accountsDictionary[AccountType.local.rawValue] = localAccount
 			initializeFile(accountType: .local)
 		}
@@ -112,7 +110,7 @@ public final class AccountManager {
 			abort()
 		}
 		
-		let cloudKitAccount = Account(accountType: .cloudKit)
+		let cloudKitAccount = Account(accountManager: self, accountType: .cloudKit)
 		accountsDictionary[AccountType.cloudKit.rawValue] = cloudKitAccount
 		initializeFile(accountType: .cloudKit)
 		accountManagerAccountsDidChange()
@@ -162,7 +160,7 @@ public final class AccountManager {
 	public func findDocumentContainer(_ entityID: EntityID) -> DocumentContainer? {
 		switch entityID {
 		case .search(let searchText):
-			return Search(searchText: searchText)
+			return Search(accountManager: self, searchText: searchText)
 		case .allDocuments(let accountID), .recentDocuments(let accountID), .tagDocuments(let accountID, _):
 			return findAccount(accountID: accountID)?.findDocumentContainer(entityID)
 		default:

@@ -21,7 +21,7 @@ public struct SimpleRowWalker: MarkupWalker {
 	private var lastBuiltRow: Row?
 	
 	public init() {
-		self.outline = Outline(id: .document(0, UUID().uuidString))
+		self.outline = Outline(account: nil, id: .document(0, UUID().uuidString))
 	}
 	
 	nonisolated mutating public func visitText(_ text: Text) {

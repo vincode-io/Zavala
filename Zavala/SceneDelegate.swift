@@ -154,8 +154,8 @@ private extension SceneDelegate {
 
 	func acceptShare(_ shareMetadata: CKShare.Metadata) {
 		Task {
-			await AccountManager.shared.cloudKitAccount?.userDidAcceptCloudKitShareWith(shareMetadata)
-			if let documentID = AccountManager.shared.cloudKitAccount?.findDocument(shareRecordID: shareMetadata.share.recordID)?.id {
+			await appDelegate.accountManager.cloudKitAccount?.userDidAcceptCloudKitShareWith(shareMetadata)
+			if let documentID = appDelegate.accountManager.cloudKitAccount?.findDocument(shareRecordID: shareMetadata.share.recordID)?.id {
 				await mainSplitViewController.handleDocument(documentID, isNavigationBranch: true)
 			}
 		}

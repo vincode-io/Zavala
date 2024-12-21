@@ -2,39 +2,40 @@
 //  Created by Maurice Parker on 6/12/24.
 //
 
-import XCTest
+import Foundation
+import Testing
 import Markdown
 @testable import VinOutlineKit
 
 final class SimpleRowWalkerTests: VOKTestCase {
 	
-	func testSingleTextRow() throws {
+	@Test func singleTextRow() throws {
 		let document = Document(parsing: "This is just a sentence.")
-		var walker = SimpleRowWalker(outline: try loadOutline())
+		var walker = SimpleRowWalker()
 		walker.visit(document)
 		
-		XCTAssertEqual(walker.rows.count, 1)
-		XCTAssertEqual(walker.rows[0].topicMarkdown(representation: .markdown), "This is just a sentence.")
+		#expect(walker.rows.count == 1)
+		#expect(walker.rows[0].topicMarkdown(type: .markdown) == "This is just a sentence.")
 	}
 	
-	func testMultipleTextRow() throws {
+	@Test func multipleTextRow() throws {
 		let document = Document(parsing: "This is just a sentence.\nSo is this.\nThe third sentence.")
-		var walker = SimpleRowWalker(outline: try loadOutline())
+		var walker = SimpleRowWalker()
 		walker.visit(document)
 		
-		XCTAssertEqual(walker.rows.count, 3)
+		#expect(walker.rows.count == 3)
 	}
 	
-	func testSingleBulletRow() throws {
+	@Test func singleBulletRow() throws {
 		let document = Document(parsing: "*\tThis is *just* a sentence.")
-		var walker = SimpleRowWalker(outline: try loadOutline())
+		var walker = SimpleRowWalker()
 		walker.visit(document)
 		
-		XCTAssertEqual(walker.rows.count, 1)
-		XCTAssertEqual(walker.rows[0].topicMarkdown(representation: .markdown), "This is _just_ a sentence.")
+		#expect(walker.rows.count == 1)
+		#expect(walker.rows[0].topicMarkdown(type: .markdown) == "This is _just_ a sentence.")
 	}
 	
-	func testUnorderedList() throws {
+	@Test func unorderedList() throws {
 		let outline = """
 * Row 1
 	* Row 1.1
@@ -49,15 +50,14 @@ final class SimpleRowWalkerTests: VOKTestCase {
 		* Row 3.1.2
 """
 		let document = Document(parsing: outline)
-		print(document.debugDescription())
-		var walker = SimpleRowWalker(outline: try loadOutline())
+		var walker = SimpleRowWalker()
 		walker.visit(document)
-		
-		XCTAssertEqual(walker.rows.count, 3)
-		XCTAssertEqual(walker.rows[0].rows.count, 2)
-		XCTAssertEqual(walker.rows[1].rows.count, 3)
-		XCTAssertEqual(walker.rows[2].rows.count, 1)
-		XCTAssertEqual(walker.rows[2].rows[0].rows.count, 2)
+
+		#expect(walker.rows.count == 3)
+		#expect(walker.rows[0].rows.count == 2)
+		#expect(walker.rows[1].rows.count == 3)
+		#expect(walker.rows[2].rows.count == 1)
+		#expect(walker.rows[2].rows[0].rows.count == 2)
 	}
 	
 }

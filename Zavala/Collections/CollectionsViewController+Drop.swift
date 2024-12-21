@@ -21,7 +21,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 		guard let destinationIndexPath,
 			  let item = dataSource.itemIdentifier(for: destinationIndexPath),
 			  let entityID = item.entityID,
-			  let container = AccountManager.shared.findDocumentContainer(entityID) else {
+			  let container = appDelegate.accountManager.findDocumentContainer(entityID) else {
 			return UICollectionViewDropProposal(operation: .cancel)
 		}
 		
@@ -49,7 +49,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 		guard let destinationIndexPath = coordinator.destinationIndexPath,
 			  let item = dataSource.itemIdentifier(for: destinationIndexPath),
 			  let entityID = item.entityID,
-			  let container = AccountManager.shared.findDocumentContainer(entityID),
+			  let container = appDelegate.accountManager.findDocumentContainer(entityID),
 			  let account = container.account else { return }
 		
 		var tags: [Tag]? = nil
@@ -98,7 +98,7 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 					
 					guard let containerAccount = container.account else { return }
 					
-					let newDocument = document.duplicate(accountID: containerAccount.id.accountID)
+					let newDocument = document.duplicate(account: containerAccount)
 					document.account?.deleteDocument(document)
 					containerAccount.createDocument(newDocument)
 					

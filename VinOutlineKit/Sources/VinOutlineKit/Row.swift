@@ -722,7 +722,8 @@ private extension Row {
 			result.enumerateAttribute(.link, in: .init(location: 0, length: result.length), options: []) { (value, range, _) in
 				guard let url = value as? URL,
 					  let entityID = EntityID(url: url),
-					  let document = AccountManager.shared.findDocument(entityID),
+					  let accountManager = outline?.account?.accountManager,
+					  let document = accountManager.findDocument(entityID),
 					  let newURL = URL(string: document.filename(type: type)) else { return }
 				
 				result.removeAttribute(.link, range: range)

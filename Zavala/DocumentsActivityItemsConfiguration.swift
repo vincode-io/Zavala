@@ -60,16 +60,16 @@ extension DocumentsActivityItemsConfiguration: UIActivityItemsConfigurationReadi
 				return nil
 			}
 			
-			if document.isCloudKit, let container = AccountManager.shared.cloudKitAccount?.cloudKitContainer {
+			if document.isCloudKit, let container = appDelegate.accountManager.cloudKitAccount?.cloudKitContainer {
 				let sharingOptions = CKAllowedSharingOptions(allowedParticipantPermissionOptions: .readWrite, allowedParticipantAccessOptions: .any)
 
 				if let shareRecord = document.shareRecord {
 					itemProvider.registerCKShare(shareRecord, container: container, allowedSharingOptions: sharingOptions)
 				} else {
 					itemProvider.registerCKShare(container: container, allowedSharingOptions: sharingOptions) {
-						let share = try await AccountManager.shared.cloudKitAccount!.generateCKShare(for: document)
-						Task { 
-							await AccountManager.shared.sync()
+						let share = try await appDelegate.accountManager.cloudKitAccount!.generateCKShare(for: document)
+						Task {
+							await appDelegate.accountManager.sync()
 						}
 						return share
 					}

@@ -91,7 +91,7 @@ extension Array where Element == CollectionsItem {
 	func toContainers() -> [DocumentContainer] {
 		return self.compactMap { item in
 			if case .documentContainer(let entityID) = item.id {
-				return AccountManager.shared.findDocumentContainer(entityID)
+				return appDelegate.accountManager.findDocumentContainer(entityID)
 			}
 			return nil
 		}

@@ -60,7 +60,7 @@ class MacLinkViewController: UIViewController {
 			self.updateUI()
 		}
 		
-		let searchItems = AccountManager.shared.activeDocuments.map { SearchTextFieldItem(title: $0.title ?? "", associatedObject: $0.id) }
+		let searchItems = appDelegate.accountManager.activeDocuments.map { SearchTextFieldItem(title: $0.title ?? "", associatedObject: $0.id) }
 		textTextField.filterItems(searchItems)
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: UITextField.textDidChangeNotification, object: textTextField)

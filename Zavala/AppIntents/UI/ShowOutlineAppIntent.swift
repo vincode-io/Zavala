@@ -43,7 +43,7 @@ struct ShowOutlineAppIntent: AppIntent, CustomIntentMigratedAppIntent, Predictab
 			  let mainSplitViewController = appDelegate.mainCoordinator as? MainSplitViewController else {
 			
 			let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(documentID: outline.id).userInfo]
+			activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, documentID: outline.id).userInfo]
 			UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 
 			return .result()

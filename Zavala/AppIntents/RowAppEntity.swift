@@ -60,7 +60,7 @@ struct RowAppEntity: AppEntity {
 			var results = [RowAppEntity]()
 			
 			for entityID in entityIDs {
-				if let outline = await AccountManager.shared.findDocument(entityID)?.outline {
+				if let outline = await appDelegate.accountManager.findDocument(entityID)?.outline {
 					await outline.load()
 					
 					if let row = await outline.findRow(id: entityID.rowUUID) {

@@ -1134,9 +1134,9 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 	}
 	
 	@objc func sync() {
-		if AccountManager.shared.isSyncAvailable {
+		if appDelegate.accountManager.isSyncAvailable {
 			Task {
-				await AccountManager.shared.sync()
+				await appDelegate.accountManager.sync()
 			}
 		}
 		collectionView?.refreshControl?.endRefreshing()
@@ -1977,13 +1977,13 @@ extension EditorViewController: UICloudSharingControllerDelegate {
 	
 	func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
 		Task {
-			await AccountManager.shared.sync()
+			await appDelegate.accountManager.sync()
 		}
 	}
 	
 	func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
 		Task {
-			await AccountManager.shared.sync()
+			await appDelegate.accountManager.sync()
 		}
 	}
 
@@ -3656,7 +3656,7 @@ private extension EditorViewController {
 	}
 	
 	func generateBacklink(id: EntityID) -> NSAttributedString {
-		if let title = AccountManager.shared.findDocument(id)?.title, !title.isEmpty, let url = id.url {
+		if let title = appDelegate.accountManager.findDocument(id)?.title, !title.isEmpty, let url = id.url {
 			let result = NSMutableAttributedString(string: title)
 			result.addAttribute(.link, value: url, range: NSRange(0..<result.length))
 			return result

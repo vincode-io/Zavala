@@ -51,7 +51,7 @@ class MacOpenQuicklyViewController: UIViewController {
 			self.openDocument(documentID)
 		}
 
-		let searchItems = AccountManager.shared.activeDocuments.map { SearchTextFieldItem(title: $0.title ?? "", associatedObject: $0.id) }
+		let searchItems = appDelegate.accountManager.activeDocuments.map { SearchTextFieldItem(title: $0.title ?? "", associatedObject: $0.id) }
 		searchTextField.filterItems(searchItems)
 	}
 
@@ -137,7 +137,7 @@ private extension MacOpenQuicklyViewController {
 	func openDocument(_ documentID: EntityID) {
 		self.sceneDelegate?.closeWindow()
 		let activity = NSUserActivity(activityType: NSUserActivity.ActivityType.openEditor)
-		activity.userInfo = [Pin.UserInfoKeys.pin: Pin(documentID: documentID).userInfo]
+		activity.userInfo = [Pin.UserInfoKeys.pin: Pin(accountManager: appDelegate.accountManager, documentID: documentID).userInfo]
 		UIApplication.shared.requestSceneSessionActivation(nil, userActivity: activity, options: nil, errorHandler: nil)
 	}
 	
