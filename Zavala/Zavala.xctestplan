@@ -23,7 +23,13 @@
     }
   },
   "testTargets" : [
-
+    {
+      "target" : {
+        "containerPath" : "container:VinOutlineKit",
+        "identifier" : "VinOutlineKitTests",
+        "name" : "VinOutlineKitTests"
+      }
+    }
   ],
   "version" : 1
 }

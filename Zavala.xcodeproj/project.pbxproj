@@ -302,6 +302,7 @@
 		5191D43E2BA353C0004D06D9 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5192220F271E27FD000CDC1F /* EditorCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCollectionView.swift; sourceTree = "<group>"; };
 		5193C8A525FD757900E63F94 /* OpenQuicklyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQuicklyViewController.swift; sourceTree = "<group>"; };
+		519457862D18B390002D96B8 /* Zavala.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = Zavala.xctestplan; path = Zavala/Zavala.xctestplan; sourceTree = "<group>"; };
 		519672692B61B1CD006A564A /* AppKitDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppKitDefaults.swift; sourceTree = "<group>"; };
 		519897C32ADE13F3008A6FA4 /* ButtonGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonGroup.swift; sourceTree = "<group>"; };
 		519897C52ADE1C4A008A6FA4 /* About.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = About.storyboard; sourceTree = "<group>"; };
@@ -571,6 +572,7 @@
 		5181A92B2554D92000C153E8 = {
 			isa = PBXGroup;
 			children = (
+				519457862D18B390002D96B8 /* Zavala.xctestplan */,
 				513F32A12594062C0003048F /* README.md */,
 				5181A9362554D92000C153E8 /* Zavala */,
 				51E060B025A4547400194066 /* AppKitPlugin */,
