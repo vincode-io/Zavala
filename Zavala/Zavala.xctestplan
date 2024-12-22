@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "39B819A4-A373-4FC6-A4FF-E0E8492E4289",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "environmentVariableEntries" : [
+      {
+        "key" : "LIBDISPATCH_COOPERATIVE_POOL_STRICT",
+        "value" : "1"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Zavala.xcodeproj",
+      "identifier" : "5181A9332554D92000C153E8",
+      "name" : "Zavala"
+    }
+  },
+  "testTargets" : [
+
+  ],
+  "version" : 1
+}
