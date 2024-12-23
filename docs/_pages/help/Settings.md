@@ -49,7 +49,11 @@ Same as the standard system setting.
 
 Same as the standard system setting.
 
-### Automatically Change Link Titles
+### Change Links Automatically
+
+Disable this if you don’t want new Outlines to automatically link addresses, phone numbers, and URLs.
+
+### Change Link Titles Automatically
 
 Zavala can automatically change a link into something readable buy fetching the webpage and using its title. See [Linking](Linking.md) for more details.
 
