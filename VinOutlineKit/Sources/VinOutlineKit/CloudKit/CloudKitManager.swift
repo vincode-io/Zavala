@@ -290,7 +290,11 @@ private extension CloudKitManager {
 	}
 	
 	func presentError(_ error: Error) {
-		errorHandler?.presentError(error, title: "CloudKit Syncing Error")
+		if let ckError = error as? CKError {
+			errorHandler?.presentError(VCKError.ckError(ckError), title: "iCloud Syncing Error")
+		} else {
+			errorHandler?.presentError(error, title: "iCloud Syncing Error")
+		}
 	}
 	
 	func cloudKitSyncWillBegin() {
