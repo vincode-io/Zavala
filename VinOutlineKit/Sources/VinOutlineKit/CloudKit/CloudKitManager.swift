@@ -100,7 +100,7 @@ public class CloudKitManager {
 			try await outlineZone.subscribeToZoneChanges()
 			try await subscribeToSharedDatabaseChanges()
 		} catch {
-			presentError(error)
+			handleError(error)
 		}
 	}
 	
@@ -142,7 +142,7 @@ public class CloudKitManager {
 				try await fetchChanges(userInitiated: false, zoneID: zoneId)
 			}
 		} catch {
-			presentError(error)
+			handleError(error)
 		}
 	}
 	
@@ -162,7 +162,7 @@ public class CloudKitManager {
 			try await sendChanges(userInitiated: true)
 			try await fetchAllChanges(userInitiated: true)
 		} catch {
-			presentError(error)
+			handleError(error)
 		}
 		
 		cloudKitSyncDidComplete()
@@ -192,14 +192,14 @@ public class CloudKitManager {
 								await self.cloudKitSyncDidComplete()
 								continuation.resume()
 							} catch {
-								await self.presentError(error)
+								await self.handleError(error)
 								await self.cloudKitSyncDidComplete()
 								continuation.resume()
 							}
 						}
 					case .failure(let error):
 						Task {
-							await self.presentError(error)
+							await self.handleError(error)
 							continuation.resume()
 						}
 					}
@@ -268,7 +268,7 @@ private extension CloudKitManager {
 						try await self.sendChanges(userInitiated: false)
 						try await self.fetchAllChanges(userInitiated: false)
 					} catch {
-						self.presentError(error)
+						self.handleError(error)
 					}
 				}
 			}
@@ -285,9 +285,17 @@ private extension CloudKitManager {
 		startWorkTask()
 	}
 	
-	func presentError(_ error: Error) {
+	func handleError(_ error: Error) {
 		if let ckError = error as? CKError {
-			errorHandler?.presentError(VCKError.ckError(ckError), title: "iCloud Syncing Error")
+			// Since this happens so frequently and clears itself up eventually, we won't bother the user
+			// with it. Instead we try again in another 5 seconds until it succeeds.
+			if ckError.code == .networkFailure || ckError.code == .networkUnavailable {
+				Task {
+					await workChannel.send(())
+				}
+			} else {
+				errorHandler?.presentError(VCKError.ckError(ckError), title: "iCloud Syncing Error")
+			}
 		} else {
 			errorHandler?.presentError(error, title: "iCloud Syncing Error")
 		}
@@ -440,7 +448,7 @@ private extension CloudKitManager {
 										do {
 											try await self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID)
 										} catch {
-											await self.presentError(error)
+											await self.handleError(error)
 										}
 									}
 								}
