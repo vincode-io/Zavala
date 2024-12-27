@@ -132,14 +132,14 @@ public class CloudKitManager {
 		
 		do {
 			if let dbNote = CKDatabaseNotification(fromRemoteNotificationDictionary: userInfo), dbNote.notificationType == .database {
-				try await sendChanges(userInitiated: false)
-				try await fetchAllChanges(userInitiated: false)
+				try await sendChanges()
+				try await fetchAllChanges()
 			} else if let zoneNote = CKRecordZoneNotification(fromRemoteNotificationDictionary: userInfo), zoneNote.notificationType == .recordZone {
 				guard let zoneId = zoneNote.databaseScope == .private ? outlineZone.zoneID : zoneNote.recordZoneID else {
 					return
 				}
-				try await sendChanges(userInitiated: false)
-				try await fetchChanges(userInitiated: false, zoneID: zoneId)
+				try await sendChanges()
+				try await fetchChanges(zoneID: zoneId)
 			}
 		} catch {
 			handleError(error)
@@ -159,8 +159,8 @@ public class CloudKitManager {
 		cloudKitSyncWillBegin()
 
 		do {
-			try await sendChanges(userInitiated: true)
-			try await fetchAllChanges(userInitiated: true)
+			try await sendChanges()
+			try await fetchAllChanges()
 		} catch {
 			handleError(error)
 		}
@@ -188,7 +188,7 @@ public class CloudKitManager {
 						Task {
 							await self.cloudKitSyncWillBegin()
 							do {
-								try await self.fetchChanges(userInitiated: true, zoneID: zoneID)
+								try await self.fetchChanges(zoneID: zoneID)
 								await self.cloudKitSyncDidComplete()
 								continuation.resume()
 							} catch {
@@ -265,8 +265,8 @@ private extension CloudKitManager {
 				guard self.isNetworkAvailable else { return }
 				if !Task.isCancelled {
 					do {
-						try await self.sendChanges(userInitiated: false)
-						try await self.fetchAllChanges(userInitiated: false)
+						try await self.sendChanges()
+						try await self.fetchAllChanges()
 					} catch {
 						self.handleError(error)
 					}
@@ -320,7 +320,7 @@ private extension CloudKitManager {
 		return zone
 	}
 	
-	func sendChanges(userInitiated: Bool) async throws {
+	func sendChanges() async throws {
 		isSyncing = true
 		defer {
 			isSyncing = false
@@ -405,7 +405,7 @@ private extension CloudKitManager {
 		requestsSemaphore.signal()
 	}
 	
-	func fetchAllChanges(userInitiated: Bool) async throws {
+	func fetchAllChanges() async throws {
 		isSyncing = true
 		defer {
 			isSyncing = false
@@ -446,7 +446,7 @@ private extension CloudKitManager {
 								for zoneID in zoneIDs {
 									taskGroup.addTask {
 										do {
-											try await self.fetchChanges(userInitiated: userInitiated, zoneID: zoneID)
+											try await self.fetchChanges(zoneID: zoneID)
 										} catch {
 											await self.handleError(error)
 										}
@@ -468,7 +468,7 @@ private extension CloudKitManager {
 		
 	}
 	
-	func fetchChanges(userInitiated: Bool, zoneID: CKRecordZone.ID) async throws {
+	func fetchChanges(zoneID: CKRecordZone.ID) async throws {
 		let zone = findZone(zoneID: zoneID)
 		
 		do {
