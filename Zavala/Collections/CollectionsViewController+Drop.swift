@@ -106,6 +106,11 @@ extension CollectionsViewController: UICollectionViewDropDelegate {
 						newDocument.createTag(tag)
 					}
 					
+					for tagName in tagNames {
+						let tag = containerAccount.createTag(name: tagName)
+						newDocument.createTag(tag)
+					}
+					
 					newDocument.deleteAllBacklinks()
 					
 					await newDocument.forceSave()
