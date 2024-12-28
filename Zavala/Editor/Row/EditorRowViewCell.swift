@@ -22,7 +22,7 @@ protocol EditorRowViewCellDelegate: AnyObject {
 	func editorRowMoveRowLeft(row: Row)
 	func editorRowTextChanged(row: Row, rowStrings: RowStrings, isInNotes: Bool, selection: NSRange)
 	func editorRowDeleteRow(_ row: Row, rowStrings: RowStrings)
-	func editorRowCreateRow(beforeRow: Row, moveCursor: Bool)
+	func editorRowCreateRow(beforeRow: Row, rowStrings: RowStrings?, moveCursor: Bool)
 	func editorRowCreateRow(afterRow: Row?, rowStrings: RowStrings?)
 	func editorRowSplitRow(_: Row, topic: NSAttributedString, cursorPosition: Int)
 	func editorRowJoinRow(_: Row, topic: NSAttributedString)

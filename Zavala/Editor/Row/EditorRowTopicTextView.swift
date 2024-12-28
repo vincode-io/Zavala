@@ -21,7 +21,7 @@ protocol EditorRowTopicTextViewDelegate: AnyObject {
 	func moveRowLeft(_: EditorRowTopicTextView, row: Row)
 	func textChanged(_: EditorRowTopicTextView, row: Row, isInNotes: Bool, selection: NSRange, rowStrings: RowStrings)
 	func deleteRow(_: EditorRowTopicTextView, row: Row, rowStrings: RowStrings)
-	func createRow(_: EditorRowTopicTextView, beforeRow: Row, moveCursor: Bool)
+	func createRow(_: EditorRowTopicTextView, beforeRow: Row, rowStrings: RowStrings, moveCursor: Bool)
 	func createRow(_: EditorRowTopicTextView, afterRow: Row, rowStrings: RowStrings)
 	func splitRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString, cursorPosition: Int)
 	func joinRow(_: EditorRowTopicTextView, row: Row, topic: NSAttributedString)
@@ -165,7 +165,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 	@objc func insertRow(_ sender: Any) {
 		guard let row else { return }
 		isSavingTextUnnecessary = true
-		editorDelegate?.createRow(self, beforeRow: row, moveCursor: true)
+		editorDelegate?.createRow(self, beforeRow: row, rowStrings: rowStrings, moveCursor: true)
 	}
 
 	@objc func split(_ sender: Any) {
@@ -174,7 +174,7 @@ class EditorRowTopicTextView: EditorRowTextView, EditorTextInput {
 		isSavingTextUnnecessary = true
 		
 		if cursorPosition == 0 {
-			editorDelegate?.createRow(self, beforeRow: row, moveCursor: false)
+			editorDelegate?.createRow(self, beforeRow: row, rowStrings: rowStrings, moveCursor: false)
 		} else {
 			editorDelegate?.splitRow(self, row: row, topic: cleansedAttributedText, cursorPosition: cursorPosition)
 		}
@@ -281,9 +281,11 @@ extension EditorRowTopicTextView: UITextViewDelegate {
 				if row.outline?.shouldMoveLeftOnReturn(row: row) ?? false {
 					editorDelegate?.moveRowLeft(self, row: row)
 				} else {
-					editorDelegate?.createRow(self, beforeRow: row, moveCursor: false)
+					isSavingTextUnnecessary = true
+					editorDelegate?.createRow(self, beforeRow: row, rowStrings: rowStrings, moveCursor: false)
 				}
 			} else if cursorIsAtEnd {
+				isSavingTextUnnecessary = true
 				editorDelegate?.createRow(self, afterRow: row, rowStrings: rowStrings)
 			} else {
 				isSavingTextUnnecessary = true

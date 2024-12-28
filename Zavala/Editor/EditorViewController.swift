@@ -1766,8 +1766,8 @@ extension EditorViewController: EditorRowViewCellDelegate {
 		deleteRows([row], rowStrings: rowStrings)
 	}
 	
-	func editorRowCreateRow(beforeRow: Row, moveCursor: Bool) {
-		createRow(beforeRows: [beforeRow], moveCursor: moveCursor)
+	func editorRowCreateRow(beforeRow: Row, rowStrings: RowStrings?, moveCursor: Bool) {
+		createRow(beforeRows: [beforeRow], rowStrings: rowStrings, moveCursor: moveCursor)
 	}
 	
 	func editorRowCreateRow(afterRow: Row?, rowStrings: RowStrings?) {
@@ -3315,7 +3315,7 @@ private extension EditorViewController {
 		command.execute()
 	}
 	
-	func createRow(beforeRows: [Row], moveCursor: Bool) {
+	func createRow(beforeRows: [Row], rowStrings: RowStrings? = nil, moveCursor: Bool) {
 		guard let undoManager, let outline, let beforeRow = beforeRows.sortedByDisplayOrder().first else { return }
 
 		let command = CreateRowBeforeCommand(actionName: .addRowControlLabel,
@@ -3323,6 +3323,7 @@ private extension EditorViewController {
 											 delegate: self,
 											 outline: outline,
 											 beforeRow: beforeRow,
+											 rowStrings: rowStrings,
 											 moveCursor: moveCursor)
 		
 		command.execute()

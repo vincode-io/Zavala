@@ -184,8 +184,8 @@ extension EditorRowContentView: EditorRowTopicTextViewDelegate {
 		appliedConfiguration?.delegate?.editorRowDeleteRow(row, rowStrings: rowStrings)
 	}
 	
-	func createRow(_: EditorRowTopicTextView, beforeRow: Row, moveCursor: Bool) {
-		appliedConfiguration?.delegate?.editorRowCreateRow(beforeRow: beforeRow, moveCursor: moveCursor)
+	func createRow(_: EditorRowTopicTextView, beforeRow: Row, rowStrings: RowStrings, moveCursor: Bool) {
+		appliedConfiguration?.delegate?.editorRowCreateRow(beforeRow: beforeRow, rowStrings: rowStrings, moveCursor: moveCursor)
 	}
 	
 	func createRow(_: EditorRowTopicTextView, afterRow: Row, rowStrings: RowStrings) {
