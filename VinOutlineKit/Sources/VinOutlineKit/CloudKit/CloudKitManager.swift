@@ -541,6 +541,9 @@ private extension CloudKitManager {
 				if let docRequest = combinedRequest.documentRequest {
 					addDelete(docRequest)
 				}
+				for rowRequest in combinedRequest.rowRequests {
+					addDelete(rowRequest)
+				}
 				continue
 			}
 			
