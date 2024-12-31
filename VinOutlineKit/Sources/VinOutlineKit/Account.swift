@@ -241,6 +241,10 @@ public final class Account: Identifiable, Equatable {
 			outline.verticleScrollState = Int(verticleScrollState)
 		}
 		
+		if let numberingStyle = headNode?["numberingStyle"]?.first?.content {
+			outline.numberingStyle = Outline.NumberingStyle(rawValue: numberingStyle)
+		}
+
 		if let automaticallyCreateLinks = headNode?["automaticallyCreateLinks"]?.first?.content {
 			outline.automaticallyCreateLinks = automaticallyCreateLinks == "true" ? true : false
 		}

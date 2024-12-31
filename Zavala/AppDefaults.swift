@@ -235,15 +235,15 @@ final class AppDefaults {
 		}
 	}
 	
-	var numberingStyle: Outline.NumberingStyle? {
+	var numberingStyle: Outline.NumberingStyle {
 		get {
 			guard let numberingStyleRawValue = NSUbiquitousKeyValueStore.default.string(forKey: Key.numberingStyle) else {
 				return Outline.NumberingStyle.none
 			}
-			return Outline.NumberingStyle(rawValue: numberingStyleRawValue)
+			return Outline.NumberingStyle(rawValue: numberingStyleRawValue) ?? .none
 		}
 		set {
-			NSUbiquitousKeyValueStore.default.set(newValue?.rawValue, forKey: Key.numberingStyle)
+			NSUbiquitousKeyValueStore.default.set(newValue.rawValue, forKey: Key.numberingStyle)
 		}
 	}
 		

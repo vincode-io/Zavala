@@ -16,6 +16,8 @@ struct OutlineCoder: Codable {
 	public let created: Date?
 	public let ancestorUpdated: Date?
 	public let updated: Date?
+	public let ancestorNumberingStyle: Outline.NumberingStyle?
+	public let numberingStyle: Outline.NumberingStyle?
 	public let ancestorAutomaticallyCreateLinks: Bool?
 	public let automaticallyCreateLinks: Bool?
 	public let ancestorAutomaticallyChangeLinkTitles: Bool?
@@ -63,6 +65,8 @@ struct OutlineCoder: Codable {
 		case created
 		case ancestorUpdated
 		case updated
+		case ancestorNumberingStyle
+		case numberingStyle
 		case ancestorAutomaticallyCreateLinks
 		case automaticallyCreateLinks
 		case ancestorAutomaticallyChangeLinkTitles = "ancestorAutoLinkingEnabled"

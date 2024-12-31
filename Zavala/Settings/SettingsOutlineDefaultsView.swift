@@ -14,7 +14,7 @@ struct SettingsOutlineDefaultsView: View {
 	@State var correctSpellingAutomatically = AppDefaults.shared.correctSpellingAutomatically
 	@State var automaticallyCreateLinks = AppDefaults.shared.automaticallyCreateLinks
 	@State var automaticallyChangeLinkTitles = AppDefaults.shared.automaticallyChangeLinkTitles
-	@State var numberingStyle = AppDefaults.shared.numberingStyle ?? .none
+	@State var numberingStyle = AppDefaults.shared.numberingStyle
 
 	var body: some View {
 		Section(String.outlineDefaultsControlLabel) {

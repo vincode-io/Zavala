@@ -335,7 +335,8 @@ class DocumentsViewController: UICollectionViewController, MainControllerIdentif
         let document = account.createOutline(title: title, tags: documentContainers.tags)
 		
 		let defaults = AppDefaults.shared
-		document.outline?.update(checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
+		document.outline?.update(numberingStyle: defaults.numberingStyle,
+								 checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
 								 correctSpellingAutomatically: defaults.correctSpellingAutomatically,
 								 automaticallyCreateLinks: defaults.automaticallyCreateLinks,
 								 automaticallyChangeLinkTitles: defaults.automaticallyChangeLinkTitles,

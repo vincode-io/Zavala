@@ -89,7 +89,8 @@ class EditorContainerViewController: UIViewController, MainCoordinator, MainCoor
 		let document = account.createOutline(title: title)
 		
 		let defaults = AppDefaults.shared
-		document.outline?.update(checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
+		document.outline?.update(numberingStyle: defaults.numberingStyle,
+								 checkSpellingWhileTyping: defaults.checkSpellingWhileTyping,
 								 correctSpellingAutomatically: defaults.correctSpellingAutomatically,
 								 automaticallyCreateLinks: defaults.automaticallyCreateLinks,
 								 automaticallyChangeLinkTitles: defaults.automaticallyChangeLinkTitles,

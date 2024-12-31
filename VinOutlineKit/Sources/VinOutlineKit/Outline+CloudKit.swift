@@ -16,6 +16,7 @@ extension Outline: VCKModel {
 		static let recordType = "Outline"
 		struct Fields {
 			static let title = "title"
+			static let numberingStyle = "numberingStyle"
 			static let automaticallyCreateLinks = "automaticallyCreateLinks"
 			static let automaticallyChangeLinkTitles = "autoLinkingEnabled"
 			static let checkSpellingWhileTyping = "checkSpellingWhileTyping"
@@ -212,6 +213,11 @@ extension Outline: VCKModel {
 
 		created = record[Outline.CloudKitRecord.Fields.created] as? Date
         updated = record[Outline.CloudKitRecord.Fields.updated] as? Date
+		
+		if let numberingStyleRawValue = record[Outline.CloudKitRecord.Fields.numberingStyle] as? String {
+			numberingStyle = NumberingStyle(rawValue: numberingStyleRawValue)
+		}
+		
 		automaticallyCreateLinks = record[Outline.CloudKitRecord.Fields.automaticallyCreateLinks] as? Bool
 		automaticallyChangeLinkTitles = record[Outline.CloudKitRecord.Fields.automaticallyChangeLinkTitles] as? Bool
 		checkSpellingWhileTyping = record[Outline.CloudKitRecord.Fields.checkSpellingWhileTyping] as? Bool
@@ -287,6 +293,9 @@ extension Outline: VCKModel {
 
         let recordUpdated = merge(client: updated, ancestor: ancestorUpdated, server: serverUpdated)
         record[Outline.CloudKitRecord.Fields.updated] = recordUpdated
+
+		let recordNumberingStyle = merge(client: numberingStyle, ancestor: ancestorNumberingStyle, server: serverNumberingStyle)
+		record[Outline.CloudKitRecord.Fields.numberingStyle] = recordNumberingStyle?.rawValue
 
 		let recordAutomaticallyCreateLinks = merge(client: automaticallyCreateLinks, ancestor: ancestorAutomaticallyCreateLinks, server: serverAutomaticallyCreateLinks)
 		record[Outline.CloudKitRecord.Fields.automaticallyCreateLinks] = recordAutomaticallyCreateLinks

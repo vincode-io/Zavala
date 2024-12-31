@@ -61,7 +61,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		case notSearching
 	}
 	
-	public enum NumberingStyle: String, CustomStringConvertible, CaseIterable {
+	public enum NumberingStyle: String, CustomStringConvertible, CaseIterable, Equatable, Codable {
 		case none = "none"
 		case decimal = "decimal"
 
@@ -170,6 +170,16 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		willSet {
 			if isCloudKit && ancestorDisambiguator == nil {
 				ancestorDisambiguator = disambiguator
+			}
+		}
+	}
+	
+	var ancestorNumberingStyle: NumberingStyle?
+	var serverNumberingStyle: NumberingStyle?
+	public internal(set) var numberingStyle: NumberingStyle? {
+		willSet {
+			if isCloudKit && ancestorNumberingStyle == nil {
+				ancestorNumberingStyle = numberingStyle
 			}
 		}
 	}
@@ -655,6 +665,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		self.ancestorUpdated = coder.ancestorUpdated
 		self.updated = coder.updated
 		self.ancestorAutomaticallyCreateLinks = coder.ancestorAutomaticallyCreateLinks
+		self.numberingStyle = coder.numberingStyle
+		self.ancestorNumberingStyle = coder.ancestorNumberingStyle
 		self.automaticallyCreateLinks = coder.automaticallyCreateLinks
 		self.ancestorAutomaticallyChangeLinkTitles = coder.ancestorAutomaticallyChangeLinkTitles
 		self.automaticallyChangeLinkTitles = coder.automaticallyChangeLinkTitles
@@ -1060,6 +1072,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			opml.append("  <vertScrollState>\(verticleScrollState)</vertScrollState>\n")
 		}
 		
+		if let numberingStyle {
+			opml.append("  <numberingStyle>\(numberingStyle.rawValue)</numberingStyle>\n")
+		}
+
 		if let automaticallyCreateLinks {
 			opml.append("  <automaticallyCreateLinks>\(automaticallyCreateLinks ? "true" : "false")</automaticallyCreateLinks>\n")
 		}
@@ -1131,7 +1147,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		requestCloudKitUpdate(for: id)
 	}
 	
-	public func update(checkSpellingWhileTyping: Bool,
+	public func update(numberingStyle: NumberingStyle,
+					   checkSpellingWhileTyping: Bool,
 					   correctSpellingAutomatically: Bool,
 					   automaticallyCreateLinks: Bool,
 					   automaticallyChangeLinkTitles: Bool,
@@ -1141,6 +1158,10 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		
 		var textPrefsChanged = false
 		
+		if self.numberingStyle != numberingStyle {
+			textPrefsChanged = true
+		}
+		
 		if self.checkSpellingWhileTyping != checkSpellingWhileTyping {
 			textPrefsChanged = true
 		}
@@ -1148,7 +1169,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		if self.correctSpellingAutomatically != correctSpellingAutomatically {
 			textPrefsChanged = true
 		}
-		
+
+		self.numberingStyle = numberingStyle
 		self.checkSpellingWhileTyping = checkSpellingWhileTyping
 		self.correctSpellingAutomatically = correctSpellingAutomatically
 		
@@ -2814,6 +2836,8 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 							created: created,
 							ancestorUpdated: ancestorUpdated,
 							updated: updated,
+							ancestorNumberingStyle: ancestorNumberingStyle,
+							numberingStyle: numberingStyle,
 							ancestorAutomaticallyCreateLinks: ancestorAutomaticallyCreateLinks,
 							automaticallyCreateLinks: automaticallyCreateLinks,
 							ancestorAutomaticallyChangeLinkTitles: ancestorAutomaticallyChangeLinkTitles,
