@@ -61,6 +61,21 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		case notSearching
 	}
 	
+	public enum NumberingStyle: Int, CustomStringConvertible, CaseIterable {
+		case none = 0
+		case decimal = 1
+
+		public var description: String {
+			switch self {
+				case .none: 
+					return "None"
+				case .decimal: 
+					return "Decimal"
+			}
+		}
+		
+	}
+	
 	public struct UserInfoKeys {
 		public static let replacableLinkTitle = "replacableLinkTitle"
 		public static let searchText = "searchText"

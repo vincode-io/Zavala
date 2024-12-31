@@ -298,8 +298,9 @@ extension String {
 	static let noneControlLabel = String(localized: "None", comment: "Control Label: None")
 	static let normalControlLabel = String(localized: "Normal", comment: "Control Label: Normal")
 	static let noSelectionLabel = String(localized: "No Selection", comment: "Large Label: No Selection")
-	static let noTitleLabel = String(localized: "(No Title)", comment: "Control Label: (No Title)")
-	
+	static let noTitleLabel = String(localized: "(No Title)", comment: "Title Label: (No Title)")
+	static let numberingStyleControlLabel = String(localized: "Numbering Style", comment: "Control Label: Numbering Style")
+
 	static let openQuicklyEllipsisControlLabel = String(localized: "Open Quickly…", comment: "Control Label: Open Quickly…")
 	static let openQuicklySearchPlaceholder = String(localized: "Open Quickly", comment: "Search Field Placeholder: Open Quickly")
 	static let outlineControlLabel = String(localized: "Outline", comment: "Control Label: Outline")

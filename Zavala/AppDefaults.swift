@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import VinOutlineKit
 
 enum UserInterfaceColorPalette: Int, CustomStringConvertible, CaseIterable {
 	case automatic = 0
@@ -106,6 +107,7 @@ final class AppDefaults {
 		static let ownerURL = "ownerURL"
 		static let automaticallyCreateLinks = "automaticallyCreateLinks"
 		static let automaticallyChangeLinkTitles = "autoLinking"
+		static let numberingStyle = "numberingStyle"
 		static let checkSpellingWhileTyping = "checkSpellingWhileTyping"
 		static let correctSpellingAutomatically = "correctSpellingAutomatically"
 		static let lastMainWindowWasClosed = "lastMainWindowWasClosed"
@@ -233,6 +235,15 @@ final class AppDefaults {
 		}
 	}
 	
+	var numberingStyle: Outline.NumberingStyle? {
+		get {
+			return Outline.NumberingStyle(rawValue: Self.int(for: Key.numberingStyle))
+		}
+		set {
+			Self.setInt(for: Key.numberingStyle, newValue?.rawValue ?? 0)
+		}
+	}
+		
 	var checkSpellingWhileTyping: Bool {
 		get {
 			return NSUbiquitousKeyValueStore.default.bool(forKey: Key.checkSpellingWhileTyping)

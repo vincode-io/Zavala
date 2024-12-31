@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import VinOutlineKit
 
 struct SettingsOutlineDefaultsView: View {
 	
@@ -13,9 +14,29 @@ struct SettingsOutlineDefaultsView: View {
 	@State var correctSpellingAutomatically = AppDefaults.shared.correctSpellingAutomatically
 	@State var automaticallyCreateLinks = AppDefaults.shared.automaticallyCreateLinks
 	@State var automaticallyChangeLinkTitles = AppDefaults.shared.automaticallyChangeLinkTitles
+	@State var numberingStyle = AppDefaults.shared.numberingStyle ?? .none
 
 	var body: some View {
 		Section(String.outlineDefaultsControlLabel) {
+			HStack {
+				Text(String.numberingStyleControlLabel)
+					.font(.body)
+				Spacer()
+				Picker(selection: $numberingStyle) {
+					ForEach(Outline.NumberingStyle.allCases, id: \.self) {
+						Text($0.description)
+					}
+				} label: {
+				}
+				#if targetEnvironment(macCatalyst)
+				.frame(width: SettingsView.pickerWidth)
+				#endif
+				.pickerStyle(.menu)
+				.onChange(of: numberingStyle) { old, new in
+					AppDefaults.shared.numberingStyle = new
+				}
+			}
+
 			Toggle(isOn: $checkSpellingWhileTyping) {
 				Text(String.checkSpellingWhileTypingControlLabel)
 			}

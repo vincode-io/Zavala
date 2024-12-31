@@ -5,7 +5,7 @@
 
     },
     "(No Title)" : {
-      "comment" : "Control Label: (No Title)"
+      "comment" : "Title Label: (No Title)"
     },
     "%@ at %@" : {
       "comment" : "Timestame Label: Created\nTimestame Label: Updated",
@@ -754,6 +754,9 @@
     },
     "Note Level %lld" : {
       "comment" : "Font Label: The font for the given Note Level"
+    },
+    "Numbering Style" : {
+      "comment" : "Control Label: Numbering Style"
     },
     "On My Device" : {
 
