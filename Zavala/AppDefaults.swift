@@ -237,10 +237,13 @@ final class AppDefaults {
 	
 	var numberingStyle: Outline.NumberingStyle? {
 		get {
-			return Outline.NumberingStyle(rawValue: Self.int(for: Key.numberingStyle))
+			guard let numberingStyleRawValue = NSUbiquitousKeyValueStore.default.object(forKey: Key.numberingStyle) as? Int else {
+				return Outline.NumberingStyle.none
+			}
+			return Outline.NumberingStyle(rawValue: numberingStyleRawValue)
 		}
 		set {
-			Self.setInt(for: Key.numberingStyle, newValue?.rawValue ?? 0)
+			NSUbiquitousKeyValueStore.default.set(newValue?.rawValue, forKey: Key.numberingStyle)
 		}
 	}
 		
