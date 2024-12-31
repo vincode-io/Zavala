@@ -61,9 +61,9 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		case notSearching
 	}
 	
-	public enum NumberingStyle: Int, CustomStringConvertible, CaseIterable {
-		case none = 0
-		case decimal = 1
+	public enum NumberingStyle: String, CustomStringConvertible, CaseIterable {
+		case none = "none"
+		case decimal = "decimal"
 
 		public var description: String {
 			switch self {
