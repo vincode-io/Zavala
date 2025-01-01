@@ -239,7 +239,7 @@ class EditorRowTextView: UITextView {
         fatalError("textChanged has not been implemented")
     }
 
-	func update(row: Row) {
+	func update(with row: Row) {
 		fatalError("update has not been implemented")
 	}
 	

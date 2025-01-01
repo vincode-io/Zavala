@@ -152,6 +152,23 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		return parentCount
 	}
 	
+	public var decimalNumbering: String {
+		var result = String()
+		var currentRow: Row? = self
+		
+		while currentRow != nil {
+			let index = currentRow!.parent?.firstIndexOfRow(currentRow!) ?? 0
+			result = String(index + 1) + "." + result
+			currentRow = currentRow?.parent as? Row
+		}
+		
+		return result
+	}
+	
+	public var properNumbering: String {
+		return ""
+	}
+	
 	public var isExpandable: Bool {
 		guard rowCount > 0 else { return false }
 		return !isExpanded

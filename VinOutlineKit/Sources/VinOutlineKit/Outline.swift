@@ -2798,7 +2798,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 	
 	func rebuildShadowTable() -> OutlineElementChanges {
 		guard let oldShadowTable = shadowTable else { return OutlineElementChanges(section: adjustedRowsSection) }
-		rebuildTransientData()
+		let reloads = rebuildTransientData()
 		
 		var moves = Set<OutlineElementChanges.Move>()
 		var inserts = Set<Int>()
@@ -2822,7 +2822,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 			}
 		}
 		
-		return OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, inserts: inserts, moves: moves)
+		return OutlineElementChanges(section: adjustedRowsSection, deletes: deletes, inserts: inserts, moves: moves, reloads: reloads)
 	}
 	
 	func toCoder() -> OutlineCoder {
@@ -3220,8 +3220,10 @@ private extension Outline {
 		}
 	}
 	
-	func rebuildTransientData() {
-		let transient = TransientDataVisitor(isCompletedFilterOn: isCompletedFilterOn, isSearching: isSearching)
+	@discardableResult
+	func rebuildTransientData() -> Set<Int> {
+		let reloadMovedRows = (numberingStyle ?? .none) != .none
+		let transient = TransientDataVisitor(isCompletedFilterOn: isCompletedFilterOn, isSearching: isSearching, reloadMovedRows: reloadMovedRows)
 		
 		if let focusRow {
 			focusRow.visit(visitor: transient.visitor(_:))
@@ -3233,6 +3235,8 @@ private extension Outline {
 		}
 		
 		self.shadowTable = transient.shadowTable
+		
+		return transient.reloads
 	}
 	
 	func reloadsForParentAndChildren(rows: [Row]) -> Set<Int> {

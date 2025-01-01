@@ -375,6 +375,7 @@ class EditorViewController: UIViewController, DocumentsActivityItemsConfiguratio
 			cell.rowSpacingSize = self?.rowSpacingSize
 			cell.isNotesHidden = self?.outline?.isNotesFilterOn ?? false
 			cell.isSearching = self?.isSearching ?? false
+			cell.numberingStyle = self?.outline?.numberingStyle
 			cell.delegate = self
 		}
 		

@@ -12,12 +12,17 @@ final class TransientDataVisitor {
 	
 	let isCompletedFilterOn: Bool
 	let isSearching: Outline.SearchState
-	var shadowTable = [Row]()
-	var addingToShadowTable = true
+	let reloadMovedRows: Bool
 	
-	init(isCompletedFilterOn: Bool, isSearching: Outline.SearchState) {
+	var shadowTable = [Row]()
+	var reloads = Set<Int>()
+	
+	private var addingToShadowTable = true
+	
+	init(isCompletedFilterOn: Bool, isSearching: Outline.SearchState, reloadMovedRows: Bool) {
 		self.isCompletedFilterOn = isCompletedFilterOn
 		self.isSearching = isSearching
+		self.reloadMovedRows = reloadMovedRows
 	}
 	
 	func visitor(_ visited: Row) {
@@ -32,7 +37,10 @@ final class TransientDataVisitor {
 			if shouldFilter {
 				visited.shadowTableIndex = nil
 			} else {
-				visited.shadowTableIndex = shadowTable.count
+				if reloadMovedRows && visited.shadowTableIndex != shadowTable.count {
+					reloads.insert(shadowTable.count)
+					visited.shadowTableIndex = shadowTable.count
+				}
 				shadowTable.append(visited)
 			}
 			
