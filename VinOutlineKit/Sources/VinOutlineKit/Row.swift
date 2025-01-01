@@ -34,7 +34,7 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 	
 	public static let typeIdentifier = "io.vincode.Zavala.Row"
 	
-	public var parent: RowContainer?
+	public weak var parent: RowContainer?
 	public var shadowTableIndex: Int?
 	
 	public var isCloudKit: Bool {
