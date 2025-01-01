@@ -96,7 +96,7 @@ class EditorRowNoteTextView: EditorRowTextView, EditorTextInput {
 	override func deleteBackward() {
 		guard let row else { return }
 		if attributedText.length == 0 {
-			isSavingTextUnnecessary = true
+			isTextChanged = false
 			editorDelegate?.deleteRowNote(self, row: row, rowStrings: rowStrings)
 		} else {
 			super.deleteBackward()

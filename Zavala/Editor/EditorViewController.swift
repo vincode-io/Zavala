@@ -2258,7 +2258,7 @@ private extension EditorViewController {
 					let attrString = NSMutableAttributedString(attributedString: topic.cleansedAttributedText)
 					attrString.append(bottomRow.topic ?? NSAttributedString())
 
-					topic.isSavingTextUnnecessary = true
+					topic.isTextChanged = false
 					joinRow(bottomRow, topic: attrString)
 				} else {
 					super.pressesBegan(presses, with: event)
@@ -3548,7 +3548,7 @@ private extension EditorViewController {
 		// If the user is currently editing a note and wants to delete it, the text view will try to save
 		// its current contents to the row after the note data was already cleared.
 		if let noteTextView = currentTextView as? EditorRowNoteTextView {
-			noteTextView.isSavingTextUnnecessary = true
+			noteTextView.isTextChanged = false
 		}
 		
 		guard let undoManager, let outline else { return }

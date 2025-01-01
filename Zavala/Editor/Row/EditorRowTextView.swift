@@ -94,7 +94,6 @@ class EditorRowTextView: UITextView {
 	var inactivityTask: Task<(), Never>?
 	var activityChannel = AsyncChannel<Void>()
     var textViewHeight: CGFloat?
-    var isSavingTextUnnecessary = false
 
 	private var dropInteractionDelegate: EditorRowDropInteractionDelegate!
 	private var stackedUndoManager: UndoManager?
@@ -231,12 +230,7 @@ class EditorRowTextView: UITextView {
 		// Don't save if we are in the middle of entering a multistage character, e.g Japanese
 		guard markedTextRange == nil else { return }
 		
-        if isSavingTextUnnecessary {
-            isSavingTextUnnecessary = false
-        } else {
-            textWasChanged()
-        }
-        
+        textWasChanged()
         restartActivityMonitoring()
         isTextChanged = false
 	}
