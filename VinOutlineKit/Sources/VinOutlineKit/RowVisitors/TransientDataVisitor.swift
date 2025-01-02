@@ -39,8 +39,8 @@ final class TransientDataVisitor {
 			} else {
 				if reloadMovedRows && visited.shadowTableIndex != shadowTable.count {
 					reloads.insert(shadowTable.count)
-					visited.shadowTableIndex = shadowTable.count
 				}
+				visited.shadowTableIndex = shadowTable.count
 				shadowTable.append(visited)
 			}
 			
