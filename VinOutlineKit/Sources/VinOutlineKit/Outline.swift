@@ -1044,7 +1044,7 @@ public final class Outline: RowContainer, Identifiable, Equatable, Hashable {
 		
 		var md = "# \(title ?? "")\n\n"
 		rows.forEach {
-			let visitor = MarkdownListVisitor(useAltLinks: useAltLinks)
+			let visitor = MarkdownListVisitor(useAltLinks: useAltLinks, numberingStyle: numberingStyle ?? .none)
 			$0.visit(visitor: visitor.visitor)
 			md.append(visitor.markdown)
 			md.append("\n")

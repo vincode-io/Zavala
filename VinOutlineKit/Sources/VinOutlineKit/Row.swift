@@ -152,6 +152,11 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		return parentCount
 	}
 	
+	public var markdownNumbering: String {
+		let index = parent?.firstIndexOfRow(self) ?? 0
+		return String(index + 1) + "."
+	}
+	
 	public var decimalNumbering: String {
 		var result = String()
 		var currentRow: Row? = self
@@ -595,8 +600,8 @@ public final class Row: NSObject, NSCopying, RowContainer, Identifiable {
 		return false
 	}
 	
-	public func markdownList() -> String {
-		let visitor = MarkdownListVisitor(useAltLinks: false)
+	public func markdownList(numberingStyle: Outline.NumberingStyle) -> String {
+		let visitor = MarkdownListVisitor(useAltLinks: false, numberingStyle: numberingStyle)
 		visit(visitor: visitor.visitor)
 		return visitor.markdown
 	}

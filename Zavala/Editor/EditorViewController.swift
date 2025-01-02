@@ -3234,7 +3234,7 @@ private extension EditorViewController {
 
 		var markdowns = [String]()
 		for row in rows.sortedWithDecendentsFiltered() {
-			markdowns.append(row.markdownList())
+			markdowns.append(row.markdownList(numberingStyle: .none))
 		}
 		let markdownData = markdowns.joined(separator: "\n").data(using: .utf8)
 

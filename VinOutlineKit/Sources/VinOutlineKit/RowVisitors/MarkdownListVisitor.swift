@@ -11,20 +11,31 @@ import Foundation
 final class MarkdownListVisitor {
 	
 	let useAltLinks: Bool
+	let numberingStyle: Outline.NumberingStyle
+	
 	var indentLevel = 0
 	var markdown = String()
 	
-	init(useAltLinks: Bool) {
+	init(useAltLinks: Bool, numberingStyle: Outline.NumberingStyle) {
 		self.useAltLinks = useAltLinks
+		self.numberingStyle = numberingStyle
 	}
 	
 	func visitor(_ visited: Row) {
 		markdown.append(String(repeating: "\t", count: indentLevel))
 		
-		if visited.isComplete ?? false {
-			markdown.append("* ~~\(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")~~")
+		if numberingStyle == .none {
+			if visited.isComplete ?? false {
+				markdown.append("* ~~\(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")~~")
+			} else {
+				markdown.append("* \(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")")
+			}
 		} else {
-			markdown.append("* \(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")")
+			if visited.isComplete ?? false {
+				markdown.append("\(visited.markdownNumbering) ~~\(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")~~")
+			} else {
+				markdown.append("\(visited.markdownNumbering) \(visited.topicMarkdown(type: .markdown, useAltLinks: useAltLinks) ?? "")")
+			}
 		}
 		
 		if let noteMarkdown = visited.noteMarkdown(type: .markdown, useAltLinks: useAltLinks), !noteMarkdown.isEmpty {
