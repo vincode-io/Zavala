@@ -14,7 +14,7 @@ class EditorRowNumberingLabel: UILabel {
 			NSMutableAttributedString(string: row.legalNumbering)
 		}
 		
-		let fontColor = OutlineFontCache.shared.topicColor(level: row.trueLevel)
+		let fontColor = OutlineFontCache.shared.numberingColor(level: row.trueLevel)
 		
 		var labelAttributes = [NSAttributedString.Key : Any]()
 		if row.isComplete ?? false || row.isAnyParentComplete {
@@ -40,7 +40,7 @@ class EditorRowNumberingLabel: UILabel {
 			labelAttributes[.strikethroughStyle] = 0
 		}
 		
-		labelAttributes[.font] = OutlineFontCache.shared.topicFont(level: row.trueLevel)
+		labelAttributes[.font] = OutlineFontCache.shared.numberingFont(level: row.trueLevel)
 
 		attrString.setAttributes(labelAttributes, range: NSRange(location: 0, length: attrString.length))
 		

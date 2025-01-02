@@ -28,6 +28,8 @@ class OutlineFontCache {
 	var backlinkFont = UIFont.preferredFont(forTextStyle: .footnote).with(traits: .traitItalic)
 	var backlinkColor = UIColor.secondaryLabel
 
+	private var numberingFonts = [UIFont]()
+	private var numberingColors = [UIColor]()
 	private var topicFonts = [UIFont]()
 	private var topicColors = [UIColor]()
 	private var noteFonts = [UIFont]()
@@ -39,6 +41,24 @@ class OutlineFontCache {
 		NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
 	}
 	
+	/// This is a 0 based index lookup
+	func numberingFont(level: Int) -> UIFont {
+		if level < numberingFonts.count {
+			return numberingFonts[level]
+		} else {
+			return numberingFonts.last ?? UIFont.preferredFont(forTextStyle: .body)
+		}
+	}
+	
+	/// This is a 0 based index lookup
+	func numberingColor(level: Int) -> UIColor {
+		if level < numberingColors.count {
+			return numberingColors[level]
+		} else {
+			return numberingColors.last ?? .label
+		}
+	}
+
 	/// This is a 0 based index lookup
 	func topicFont(level: Int) -> UIFont {
 		if level < topicFonts.count {
@@ -98,6 +118,8 @@ extension OutlineFontCache {
 		
 		guard let sortedFields = outlineFonts?.sortedFields else { return }
 		
+		numberingFonts.removeAll()
+		numberingColors.removeAll()
 		topicFonts.removeAll()
 		topicColors.removeAll()
 		noteFonts.removeAll()
@@ -116,6 +138,10 @@ extension OutlineFontCache {
 			case .tags:
 				tagFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font).with(traits: .traitBold)
 				tagColor = config.color.uiColor
+			case .rowNumbering:
+				let numberingFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
+				numberingFonts.append(numberingFont)
+				numberingColors.append(config.color.uiColor)
 			case .rowTopic:
 				let topicFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
 				topicFonts.append(topicFont)
